@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,54 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Character.h"
-#include "commands/FieldSet.h"
-#include "ModelException.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::Character)
+#include "../informationscripting_api.h"
 
-namespace Model {
+#include "QueryNode.h"
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
-Character::Character(Node *parent) : Super(parent), value('\0')
-{}
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, CommandArgument)
 
-Character::Character(Node *parent, PersistentStore &store, bool) : Super(parent)
+namespace InformationScripting {
+
+class INFORMATIONSCRIPTING_API CommandArgument : public Super<QueryNode>
 {
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Creating character node failed. Invalid persistent store data: " + t);
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommandArgument)
 
-	value = t[0];
-}
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, argument, setArgument, QString, const QString&)
+	public:
+		CommandArgument(const QString& argument);
+};
 
-Character* Character::clone() const { return new Character{*this}; }
-
-Character::Character(const QChar& value) : Super(nullptr)
-{
-	set(value);
-}
-
-void Character::set(const QChar& newValue)
-{
-	execute(new FieldSet<QChar> (this, value, newValue));
-}
-
-void Character::save(PersistentStore &store) const
-{
-	store.saveStringValue(QString(value));
-}
-
-void Character::load(PersistentStore &store)
-{
-	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Character node from an incompatible node type " + store.currentNodeType());
-
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Loading character node failed. Invalid persistent store data: " + t);
-
-	set(t[0]);
-}
-
-}
+} /* namespace InformationScripting */

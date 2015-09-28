@@ -301,4 +301,22 @@ QPoint GridLayoutFormElement::focusedElement2DIndex(Item* item) const
 	return {-1, -1};
 }
 
+int GridLayoutFormElement::length(Visualization::Item*) const
+{
+	Q_ASSERT(numColumns_ == 1 || numRows_ == 1);
+	// TODO: is this the right thing? Should we check for null?
+	if (numColumns_ == 1) return numRows_;
+	return numColumns_;
+}
+const Visualization::Item* GridLayoutFormElement::itemAt(Visualization::DeclarativeItemBase* item, int index) const
+{
+	Q_ASSERT(numColumns_ == 1 || numRows_ == 1);
+	FormElement* element = nullptr;
+	if (numColumns_ == 1) element = elementGrid_[0][index];
+	else element = elementGrid_[index][0];
+	auto children = element->allHandledChildPointers();
+	Q_ASSERT(children.size() == 1);
+	return item->*(children.first());
+}
+
 } /* namespace Visualization */

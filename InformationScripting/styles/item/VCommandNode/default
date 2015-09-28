@@ -1,0 +1,5 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../DeclarativeItemBase/default">
+	<name prototypes="../Text/default"/>
+	<arguments prototypes="../VList/default"/>
+</style>

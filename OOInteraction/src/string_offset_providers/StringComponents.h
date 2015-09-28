@@ -50,7 +50,6 @@ class OOINTERACTION_API StringComponents {
 
 		static void initConversions();
 
-	protected:
 		enum UseOptional { USE, AUTO, DO_NOT_USE };
 		struct Optional {
 			Optional(QStringList list) : list(list){}
@@ -69,13 +68,15 @@ class OOINTERACTION_API StringComponents {
 
 		static Optional list(Model::List* listNode, const QString& prefix, const QString& separator,
 				const QString& postfix, bool nothingIfEmpty, bool collapse);
+
+		template <class ...Args> static QStringList c(Args... args);
+
+	protected:
 		static Optional list(Model::List* listNode);
 
 		// TODO: Check completeness statically.
 		template <class E> static Optional choose(E value);
 		template <class E, class ...Args> static Optional choose(E value, E option, Optional str, Args... args);
-
-		template <class ...Args> static QStringList c(Args... args);
 
 	private:
 		Model::Node* node_;

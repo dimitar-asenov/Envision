@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,54 +24,42 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Character.h"
-#include "commands/FieldSet.h"
-#include "ModelException.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::Character)
+#include "../informationscripting_api.h"
 
 namespace Model {
+	class Node;
+}
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
+namespace InformationScripting {
 
-Character::Character(Node *parent) : Super(parent), value('\0')
-{}
+class CommandNode;
+class CompositeQueryNode;
+class OperatorNode;
+class QueryNode;
 
-Character::Character(Node *parent, PersistentStore &store, bool) : Super(parent)
+class INFORMATIONSCRIPTING_API QueryParser
 {
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Creating character node failed. Invalid persistent store data: " + t);
+	public:
+		static QueryParser& instance();
 
-	value = t[0];
-}
+		QueryNode* parse(const QString& text);
 
-Character* Character::clone() const { return new Character{*this}; }
+	private:
+		QueryParser() = default;
+		enum class Type: int {Operator = 0, Command = 1, List = 2};
+		Type typeOf(const QString& text);
+		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
 
-Character::Character(const QChar& value) : Super(nullptr)
-{
-	set(value);
-}
+		CommandNode* parseCommand(const QString& text);
+		CompositeQueryNode* parseList(const QString& text);
+		OperatorNode* parseOperator(const QString& text);
+		QueryNode* parseOperatorPart(const QString& text);
 
-void Character::set(const QChar& newValue)
-{
-	execute(new FieldSet<QChar> (this, value, newValue));
-}
+		static constexpr int SCOPE_SYMBOL_LENGTH_{2};
+		static const QStringList OPEN_SCOPE_SYMBOL;
+		static const QStringList CLOSE_SCOPE_SYMBOL;
+};
 
-void Character::save(PersistentStore &store) const
-{
-	store.saveStringValue(QString(value));
-}
-
-void Character::load(PersistentStore &store)
-{
-	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Character node from an incompatible node type " + store.currentNodeType());
-
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Loading character node failed. Invalid persistent store data: " + t);
-
-	set(t[0]);
-}
-
-}
+} /* namespace InformationScripting  */

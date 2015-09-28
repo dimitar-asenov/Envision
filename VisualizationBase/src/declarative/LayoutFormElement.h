@@ -63,7 +63,6 @@ class VISUALIZATIONBASE_API LayoutFormElement : public FormElement
 		 */
 		LayoutFormElement* setNoInnerCursors(std::function<bool(Item* item)> noInnerCursorsGetter);
 
-	protected:
 		bool hasCursorWhenEmpty(Item* item);
 		bool notLocationEquivalentCursors(Item* item);
 		bool noBoundaryCursors(Item* item);

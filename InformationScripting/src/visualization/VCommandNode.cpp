@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,54 +24,38 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Character.h"
-#include "commands/FieldSet.h"
-#include "ModelException.h"
+#include "VCommandNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::Character)
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-namespace Model {
+namespace InformationScripting {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
+ITEM_COMMON_DEFINITIONS(VCommandNode, "item")
 
-Character::Character(Node *parent) : Super(parent), value('\0')
+VCommandNode::VCommandNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
 {}
 
-Character::Character(Node *parent, PersistentStore &store, bool) : Super(parent)
+void VCommandNode::initializeForms()
 {
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Creating character node failed. Invalid persistent store data: " + t);
+	auto argumentsEl = item<Visualization::VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
+			[](I* v){return &v->style()->arguments();});
 
-	value = t[0];
+	auto nameEl = item<Visualization::VText>(&I::name_, [](I* v){return v->node()->nameNode();},
+			[](I* v){return &v->style()->name();});
+
+	addForm(grid({
+			{nameEl, argumentsEl},
+		})
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
 }
 
-Character* Character::clone() const { return new Character{*this}; }
-
-Character::Character(const QChar& value) : Super(nullptr)
+void VCommandNode::determineChildren()
 {
-	set(value);
+	Super::determineChildren();
+	name_->setEditable(false);
 }
 
-void Character::set(const QChar& newValue)
-{
-	execute(new FieldSet<QChar> (this, value, newValue));
-}
-
-void Character::save(PersistentStore &store) const
-{
-	store.saveStringValue(QString(value));
-}
-
-void Character::load(PersistentStore &store)
-{
-	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Character node from an incompatible node type " + store.currentNodeType());
-
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Loading character node failed. Invalid persistent store data: " + t);
-
-	set(t[0]);
-}
-
-}
+} /* namespace InformationScripting */

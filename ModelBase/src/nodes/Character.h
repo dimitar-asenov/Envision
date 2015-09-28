@@ -41,6 +41,7 @@ class MODELBASE_API Character: public Super<Node>
 		QChar value;
 
 	public:
+		Character(const QChar& value);
 
 		QChar get() const;
 		void set(const QChar& newval);

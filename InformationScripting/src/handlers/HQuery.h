@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,54 +24,32 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Character.h"
-#include "commands/FieldSet.h"
-#include "ModelException.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::Character)
+#include "../informationscripting_api.h"
 
-namespace Model {
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
+namespace InformationScripting {
 
-Character::Character(Node *parent) : Super(parent), value('\0')
-{}
+class QueryNodeContainer;
+class QueryNode;
 
-Character::Character(Node *parent, PersistentStore &store, bool) : Super(parent)
-{
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Creating character node failed. Invalid persistent store data: " + t);
+class HQuery : public Interaction::GenericHandler {
+	protected:
+		HQuery() = default;
 
-	value = t[0];
-}
+	public:
+		static HQuery* instance();
 
-Character* Character::clone() const { return new Character{*this}; }
+		static void initStringComponents();
 
-Character::Character(const QChar& value) : Super(nullptr)
-{
-	set(value);
-}
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
-void Character::set(const QChar& newValue)
-{
-	execute(new FieldSet<QChar> (this, value, newValue));
-}
+	private:
+		QueryNodeContainer* parentContainer(QueryNode* e);
 
-void Character::save(PersistentStore &store) const
-{
-	store.saveStringValue(QString(value));
-}
+		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
+};
 
-void Character::load(PersistentStore &store)
-{
-	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Character node from an incompatible node type " + store.currentNodeType());
-
-	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Loading character node failed. Invalid persistent store data: " + t);
-
-	set(t[0]);
-}
-
-}
+} /* namespace InformationScripting */
