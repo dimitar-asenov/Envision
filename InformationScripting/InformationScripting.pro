@@ -46,7 +46,8 @@ HEADERS += src/precompiled.h \
     src/nodes/QueryNode.h \
     src/nodes/CommandNode.h \
     src/nodes/OperatorNode.h \
-    src/nodes/CommandArgument.h
+    src/nodes/CommandArgument.h \
+    src/parsing/QueryParser.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -77,7 +78,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/nodes/QueryNode.cpp \
     src/nodes/CommandNode.cpp \
     src/nodes/OperatorNode.cpp \
-    src/nodes/CommandArgument.cpp
+    src/nodes/CommandArgument.cpp \
+    src/parsing/QueryParser.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
