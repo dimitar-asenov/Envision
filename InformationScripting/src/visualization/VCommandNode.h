@@ -51,6 +51,8 @@ class INFORMATIONSCRIPTING_API VCommandNode
 
 		static void initializeForms();
 
+		virtual void determineChildren() override;
+
 	private:
 		Visualization::VText* name_{};
 		Visualization::VList* arguments_{};

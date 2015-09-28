@@ -52,4 +52,10 @@ void VCommandNode::initializeForms()
 	);
 }
 
+void VCommandNode::determineChildren()
+{
+	Super::determineChildren();
+	name_->setEditable(false);
+}
+
 } /* namespace InformationScripting */

@@ -32,6 +32,8 @@
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBase.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
 
 namespace OOInteraction {
 
@@ -192,9 +194,15 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 	// None of the cells has the cursor. Try a sequential layout.
 	if (!target)
 	{
+		const Visualization::Item* leftItem = nullptr;
+		const Visualization::Item* rightItem = nullptr;
+
+		bool foundLayout = false;
+
 		auto layout_provider = dynamic_cast<Visualization::LayoutProvider<>*>(item());
 		if (layout_provider && layout_provider->scene()->mainCursor()->owner() == layout_provider->layout())
 		{
+			foundLayout = true;
 			int index = layout_provider->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 
 			// Handle extra cursors that fall outside the shape.
@@ -212,9 +220,47 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 			}
 
 			//Find the cells corresponding to the adjacent items
-			auto leftItem = index > 0 ? layout_provider->layout()->at<Visualization::Item>(index-1) : nullptr;
-			auto rightItem = index < layout_provider->layout()->length() ?
+			leftItem = index > 0 ? layout_provider->layout()->at<Visualization::Item>(index-1) : nullptr;
+			rightItem = index < layout_provider->layout()->length() ?
 					layout_provider->layout()->at<Visualization::Item>(index) : nullptr;
+		}
+		else if (auto declarativeItem = DCast<Visualization::DeclarativeItemBase>(item()))
+		{
+			auto gridLayout = dynamic_cast<Visualization::GridLayoutFormElement*>(declarativeItem->currentForm());
+			if (gridLayout && item()->scene()->mainCursor()->owner() == declarativeItem)
+			{
+				auto cursor = dynamic_cast<Visualization::LayoutCursor*>(item()->scene()->mainCursor());
+				if (cursor && cursor->ownerElement() == gridLayout)
+				{
+					foundLayout = true;
+					int index = cursor->index();
+
+					int length = gridLayout->length(declarativeItem);
+
+					// Handle extra cursors that fall outside the shape.
+					// TODO@Mitko: is this the right check probably not?
+					if ( ! gridLayout->noBoundaryCursors(item()) )
+					{
+						if (index == -1) return 0;
+						if (index > length)
+							return components.join("").length();
+					}
+					else
+					{
+						if (key == Qt::Key_Backspace && index == 0) return 0;
+						if (key == Qt::Key_Delete && index == length)
+							return components.join("").length();
+					}
+
+					//Find the cells corresponding to the adjacent items
+					leftItem = index > 0 ? gridLayout->itemAt(declarativeItem, index-1) : nullptr;
+					rightItem = index < length ? gridLayout->itemAt(declarativeItem, index) : nullptr;
+				}
+			}
+		}
+
+		if (foundLayout)
+		{
 
 			Cell* leftCell = nullptr;
 			Cell* rightCell = nullptr;

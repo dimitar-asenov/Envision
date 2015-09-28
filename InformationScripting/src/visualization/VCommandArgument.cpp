@@ -44,4 +44,10 @@ void VCommandArgument::initializeForms()
 	addForm(argumentEl);
 }
 
+void VCommandArgument::determineChildren()
+{
+	Super::determineChildren();
+	argument_->setEditable(false);
+}
+
 } /* namespace InformationScripting */

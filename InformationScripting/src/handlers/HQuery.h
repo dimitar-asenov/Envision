@@ -28,35 +28,28 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/VList.h"
-
-#include "../nodes/CommandArgument.h"
-#include "VCommandArgumentStyle.h"
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgument
-		: public Super<Visualization::ItemWithNode<VCommandArgument, Visualization::DeclarativeItem<VCommandArgument>,
-		CommandArgument>>
-{
-	ITEM_COMMON(VCommandArgument)
+class QueryNodeContainer;
+class QueryNode;
+
+class HQuery : public Interaction::GenericHandler {
+	protected:
+		HQuery() = default;
+
 	public:
-		VCommandArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		static HQuery* instance();
 
-		Visualization::VText* argument() const;
+		static void initStringComponents();
 
-		static void initializeForms();
-
-		virtual void determineChildren() override;
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
 	private:
-		Visualization::VText* argument_{};
+		QueryNodeContainer* parentContainer(QueryNode* e);
+
+		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
 };
-
-inline Visualization::VText* VCommandArgument::argument() const { return argument_; }
-
 
 } /* namespace InformationScripting */

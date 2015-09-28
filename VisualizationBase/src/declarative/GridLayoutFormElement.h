@@ -186,6 +186,17 @@ class VISUALIZATIONBASE_API GridLayoutFormElement : public LayoutFormElement {
 		 */
 		QPoint focusedElement2DIndex(Item* item) const;
 
+		/**
+		 * Asserts that this is a linear grid and returns the length.
+		 */
+		int length(Item* item) const;
+
+		/**
+		 * Asserts that this is a linear grid and returns the item at \a index.
+		 * If there is not an item but some compound FormElement at that place, that is also an assertion violation!
+		 */
+		const Visualization::Item* itemAt(DeclarativeItemBase* item, int index) const;
+
 	private:
 
 		// Do not forget to update the copy constructor if adding new members.

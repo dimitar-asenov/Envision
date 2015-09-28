@@ -42,6 +42,10 @@
 #include "queries/TagQuery.h"
 #include "nodes/TagExtension.h"
 
+#include "visualization/VCommandNode.h"
+#include "visualization/VCommandArgument.h"
+#include "handlers/HQuery.h"
+
 namespace InformationScripting {
 
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
@@ -55,6 +59,9 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	TagQuery::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();
+	VCommandNode::setDefaultClassHandler(HQuery::instance());
+	VCommandArgument::setDefaultClassHandler(HQuery::instance());
+	HQuery::initStringComponents();
 	return true;
 }
 
