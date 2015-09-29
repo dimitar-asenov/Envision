@@ -44,11 +44,13 @@ class INFORMATIONSCRIPTING_API QueryParser
 	public:
 		static QueryParser& instance();
 
+		void adaptType(QString& text, int index);
+
 		QueryNode* parse(const QString& text);
 
 	private:
 		QueryParser() = default;
-		enum class Type: int {Operator = 0, Command = 1, List = 2};
+		enum class Type: int {Operator = 0, Command = 1, List = 2, Empty = 3};
 		Type typeOf(const QString& text);
 		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
 

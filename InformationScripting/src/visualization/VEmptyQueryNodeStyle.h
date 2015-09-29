@@ -28,17 +28,17 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API VEmptyQueryNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
-		virtual ~VCommandArgumentStyle() override;
+		virtual ~VEmptyQueryNodeStyle() override;
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+	Property<Visualization::StaticStyle> normal{this, "normal"};
 };
 
 } /* namespace InformationScripting */

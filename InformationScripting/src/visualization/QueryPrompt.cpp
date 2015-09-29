@@ -33,7 +33,7 @@
 #include "InteractionBase/src/handlers/GenericHandler.h"
 
 #include "../nodes/QueryNodeContainer.h"
-#include "../nodes/CommandNode.h"
+#include "../nodes/EmptyQueryNode.h"
 
 namespace InformationScripting {
 
@@ -77,10 +77,8 @@ QueryPrompt::QueryPrompt(Visualization::Item* commandReceiver, QString, bool cen
 	if (centerOnPrompt) centerViewOnPrompt();
 
 
-	queryNode_ = new QueryNodeContainer();
-	auto cmd = new CommandNode("fooo");
-	cmd->arguments()->append(new CommandArgument("--scope=global"));
-	queryNode_->setQuery(cmd);
+	queryContainer_ = new QueryNodeContainer();
+	queryContainer_->setQuery(new EmptyQueryNode);
 
 //	if (initialCommandText.isNull())
 //		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
@@ -100,7 +98,7 @@ QueryPrompt::~QueryPrompt()
 
 void QueryPrompt::initializeForms()
 {
-	auto queryNodeEl = item(&I::queryVis_, [](I* v){return v->queryNode_;});
+	auto queryNodeEl = item(&I::queryVis_, [](I* v){return v->queryContainer_;});
 
 	auto errorEl = item(&I::errorText_);
 

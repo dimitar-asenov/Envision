@@ -68,7 +68,7 @@ class INFORMATIONSCRIPTING_API QueryPrompt : public Super<Visualization::Declara
 
 		Visualization::Text* errorText_{};
 
-		QueryNodeContainer* queryNode_{};
+		QueryNodeContainer* queryContainer_{};
 		Visualization::Item* queryVis_{};
 
 		int commandSelectedFirst_{};

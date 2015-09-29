@@ -30,9 +30,11 @@
 #include "../nodes/QueryNodeContainer.h"
 #include "../nodes/CommandNode.h"
 #include "../nodes/CommandArgument.h"
-
+#include "../nodes/EmptyQueryNode.h"
+#include "../parsing/QueryParser.h"
 #include "../visualization/VCommandNode.h"
 #include "../visualization/VCommandArgument.h"
+#include "../visualization/VEmptyQueryNode.h"
 
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
 #include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
@@ -42,6 +44,7 @@
 #include "OOInteraction/src/string_offset_providers/GridBasedOffsetProvider.h"
 #include "OOInteraction/src/string_offset_providers/Cell.h"
 #include "OOInteraction/src/string_offset_providers/ListCell.h"
+#include "OOInteraction/src/handlers/SetExpressionCursorEvent.h"
 
 namespace InformationScripting {
 
@@ -55,21 +58,30 @@ void HQuery::initStringComponents()
 {
 	OOInteraction::StringComponents::add<CommandNode>([](CommandNode* command) {
 		return OOInteraction::StringComponents::c("\"<", command->name(),
-			OOInteraction::StringComponents::list(command->arguments(), " ", " ", " ", true, true), ">\"");
+			OOInteraction::StringComponents::list(command->arguments(), " ", " ", "", true, true), ">\"");
 	});
 	OOInteraction::StringComponents::add<CommandArgument>([](CommandArgument* argument) {
 		return OOInteraction::StringComponents::c(argument->argument());
 	});
 
+	OOInteraction::StringComponents::add<EmptyQueryNode>([](EmptyQueryNode*) {
+		return OOInteraction::StringComponents::c("@<", "", ">@");
+	});
+
 	OOInteraction::GridBasedOffsetProvider::addGridConstructor<VCommandNode>(
 	[](OOInteraction::GridBasedOffsetProvider* grid, VCommandNode* vis){
 		grid->add(new OOInteraction::Cell(0, vis->name(), 1));
-		grid->add(new OOInteraction::ListCell(1, vis->arguments(), 2, " ", " ", " "));
+		grid->add(new OOInteraction::ListCell(1, vis->arguments(), 2, " ", " ", ""));
 	});
 
 	OOInteraction::GridBasedOffsetProvider::addGridConstructor<VCommandArgument>(
 	[](OOInteraction::GridBasedOffsetProvider* grid, VCommandArgument* vis){
 		grid->add(new OOInteraction::Cell(0, vis->argument(), 0));
+	});
+
+	OOInteraction::GridBasedOffsetProvider::addGridConstructor<VEmptyQueryNode>(
+	[](OOInteraction::GridBasedOffsetProvider* grid, VEmptyQueryNode* vis){
+		grid->add(new OOInteraction::Cell(0, vis->empty(), 1));
 	});
 }
 
@@ -78,11 +90,53 @@ void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 	auto key = event->key();
+//	auto modifiers = event->modifiers();
+
+	bool enterPressed = key == Qt::Key_Enter || key == Qt::Key_Return;
+//	bool spacePressed = key == Qt::Key_Space;
 
 	QString str;
 	int index;
-	stringInfo(target, (Qt::Key) key, str, index);
+	auto topMostItem = stringInfo(target, (Qt::Key) key, str, index);
 	qDebug() << str << index;
+	QString newText = str;
+	int newIndex = index;
+
+	switch (key)
+	{
+		// Below we let CompoundObjectDescriptor process Delete and Backspace since it might need to remove
+		// extra characters if those keys are pressed just on the boundary of a compound object
+		case Qt::Key_Delete:
+		{
+			if (index < str.size() )
+			{
+				if (! processDeleteOrBackspace(Qt::Key_Delete, newText, newIndex))
+					newText.remove(index, 1);
+			}
+		} break;
+		case Qt::Key_Backspace:
+		{
+			if (index > 0 )
+			{
+				if (! processDeleteOrBackspace(Qt::Key_Backspace, newText, newIndex))
+				{
+					newText.remove(index-1, 1);
+					--newIndex;
+				}
+			}
+		} break;
+		default:
+		{
+			if (!enterPressed && !event->text().isEmpty())
+			{
+				newText.insert(index, event->text());
+				newIndex += event->text().size();
+			}
+		} break;
+	}
+
+	if (!enterPressed)
+		setNewQuery(target, topMostItem, newText, newIndex);
 }
 
 QueryNodeContainer* HQuery::parentContainer(InformationScripting::QueryNode* e)
@@ -117,6 +171,43 @@ Visualization::Item* HQuery::stringInfo(Visualization::Item* target, Qt::Key key
 	SAFE_DELETE(topMostSP);
 
 	return topMostItem;
+}
+
+void HQuery::setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index)
+{
+	QString newText = text;
+	QueryParser::instance().adaptType(newText, index);
+	qDebug() << "Adapted" << text << "to" << newText;
+	QueryNode* newQuery = QueryParser::instance().parse(newText);
+
+	Model::Node* containerNode = topMostItem->node()->parent();
+	Q_ASSERT(containerNode);
+	containerNode->replaceChild(topMostItem->node(), newQuery);
+
+	// Compute the new offset. This can change in case the string of the new expression is different.
+	QString expString = OOInteraction::StringComponents::stringForNode(newQuery);
+	index += expString.length() - newText.length();
+
+	// Find an item that represents a node, as any intermediate items might disappear when during the update.
+	// E.g. VLoopStatement keeps it's condition inside a wrapper for background color that also get deleted during the
+	// update.
+	auto parent = topMostItem->parent();
+	while (!parent->node() && parent->parent()) parent=parent->parent();
+
+	target->scene()->addPostEventAction( new OOInteraction::SetExpressionCursorEvent(parent, newQuery, index));
+}
+
+bool HQuery::processDeleteOrBackspace(Qt::Key key, QString& exp, int& index)
+{
+	if (key == Qt::Key_Delete)
+	{
+		if ( exp.at(index) != '>') return false;
+	}
+	if (key == Qt::Key_Backspace)
+	{
+		if (exp.at(index-1) != '<') return false;
+	}
+	return true;
 }
 
 }

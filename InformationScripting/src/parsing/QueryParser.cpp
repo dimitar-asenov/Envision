@@ -31,16 +31,47 @@
 #include "../nodes/CommandNode.h"
 #include "../nodes/CompositeQueryNode.h"
 #include "../nodes/OperatorNode.h"
+#include "../nodes/EmptyQueryNode.h"
 
 namespace InformationScripting {
 
-const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
-const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
+const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<", "@<"};
+const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}", ">@"};
 
 QueryParser& QueryParser::instance()
 {
 	static QueryParser instance;
 	return instance;
+}
+
+void QueryParser::adaptType(QString& text, int index)
+{
+	// Search for open scope on left
+	QString scopeSymbol;
+	int openIndex;
+	for (int i = index; i >= SCOPE_SYMBOL_LENGTH_ - 1; --i)
+	{
+		scopeSymbol = text.mid(i - 1, SCOPE_SYMBOL_LENGTH_);
+		if (OPEN_SCOPE_SYMBOL.indexOf(scopeSymbol) > -1)
+		{
+			openIndex = i - 1;
+			break;
+		}
+	}
+	int scopeSymbolIndex = OPEN_SCOPE_SYMBOL.indexOf(scopeSymbol);
+	Q_ASSERT(scopeSymbolIndex > -1);
+	int closeIndex = text.indexOf(CLOSE_SCOPE_SYMBOL[scopeSymbolIndex], index);
+	Q_ASSERT(closeIndex > -1);
+
+	bool isOperator =		text.at(index) == '|'
+							|| text.at(index) == '-'
+							|| text.at(index) == 'U';
+	bool isList = text.at(index) == ',';
+	int newScopeSymbolIndex = static_cast<int>(Type::Command);
+	if (isOperator) newScopeSymbolIndex = static_cast<int>(Type::Operator);
+	else if (isList) newScopeSymbolIndex = static_cast<int>(Type::List);
+	text.replace(openIndex, SCOPE_SYMBOL_LENGTH_, OPEN_SCOPE_SYMBOL[newScopeSymbolIndex]);
+	text.replace(closeIndex, SCOPE_SYMBOL_LENGTH_, CLOSE_SCOPE_SYMBOL[newScopeSymbolIndex]);
 }
 
 QueryNode* QueryParser::parse(const QString& text)
@@ -53,6 +84,8 @@ QueryNode* QueryParser::parse(const QString& text)
 		return parseCommand(text);
 	else if (Type::List == type)
 		return parseList(text);
+	else if (Type::Empty == type)
+		return new EmptyQueryNode();
 	Q_ASSERT(false);
 	return nullptr;
 }
@@ -96,10 +129,11 @@ CommandNode* QueryParser::parseCommand(const QString& text)
 {
 	Q_ASSERT(typeOf(text) == Type::Command);
 	QStringList data = text.mid(SCOPE_SYMBOL_LENGTH_,
-										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ", QString::SkipEmptyParts);
+										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ");
 	Q_ASSERT(data.size()); // TODO empty node needed?
 	QString command = data.takeFirst();
 	auto commandNode = new CommandNode(command);
+	qDebug() << text << "#" << data.size() << "arguments";
 	for (const auto& arg : data)
 		commandNode->arguments()->append(new CommandArgument(arg));
 	return commandNode;

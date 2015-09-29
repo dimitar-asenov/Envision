@@ -24,21 +24,14 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "EmptyQueryNode.h"
 
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(InformationScripting::EmptyQueryNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VCommandArgumentStyle() override;
-
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(EmptyQueryNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(EmptyQueryNode)
 
 } /* namespace InformationScripting */

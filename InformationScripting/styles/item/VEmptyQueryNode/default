@@ -1,0 +1,9 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../DeclarativeItemBase/default">
+	<normal prototypes="item/Symbol/default">
+		<pen>
+			<color>#808080</color>
+		</pen>
+		<symbol></symbol>
+	</normal>
+</style>

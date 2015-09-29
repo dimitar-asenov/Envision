@@ -44,6 +44,7 @@
 
 #include "visualization/VCommandNode.h"
 #include "visualization/VCommandArgument.h"
+#include "visualization/VEmptyQueryNode.h"
 #include "handlers/HQuery.h"
 
 namespace InformationScripting {
@@ -61,6 +62,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	Model::CompositeNode::registerNewExtension<TagExtension>();
 	VCommandNode::setDefaultClassHandler(HQuery::instance());
 	VCommandArgument::setDefaultClassHandler(HQuery::instance());
+	VEmptyQueryNode::setDefaultClassHandler(HQuery::instance());
 	HQuery::initStringComponents();
 	return true;
 }

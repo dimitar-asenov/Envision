@@ -55,7 +55,10 @@ HEADERS += src/precompiled.h \
     src/visualization/VCommandArgument.h \
     src/visualization/VCommandNodeStyle.h \
     src/visualization/VCommandArgumentStyle.h \
-    src/handlers/HQuery.h
+    src/handlers/HQuery.h \
+    src/nodes/EmptyQueryNode.h \
+    src/visualization/VEmptyQueryNode.h \
+    src/visualization/VEmptyQueryNodeStyle.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -95,7 +98,10 @@ SOURCES += src/InformationScriptingException.cpp \
     src/visualization/VCommandArgument.cpp \
     src/visualization/VCommandNodeStyle.cpp \
     src/visualization/VCommandArgumentStyle.cpp \
-    src/handlers/HQuery.cpp
+    src/handlers/HQuery.cpp \
+    src/nodes/EmptyQueryNode.cpp \
+    src/visualization/VEmptyQueryNode.cpp \
+    src/visualization/VEmptyQueryNodeStyle.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

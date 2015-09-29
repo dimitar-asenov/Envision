@@ -50,6 +50,10 @@ class HQuery : public Interaction::GenericHandler {
 		QueryNodeContainer* parentContainer(QueryNode* e);
 
 		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
+
+		void setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index);
+
+		bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
 };
 
 } /* namespace InformationScripting */
