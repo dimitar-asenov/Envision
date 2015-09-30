@@ -89,10 +89,10 @@ QString TestBox::currentText()
 	else return text();
 }
 
-bool TestBox::moveCursor(CursorMoveDirection dir, QPoint reference)
+bool TestBox::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
 {
-	if (dir == MoveDefault) return TextRenderer::moveCursor(MoveOnRight);
-	else return TextRenderer::moveCursor(dir, reference);
+	if (dir == MoveDefault) return TextRenderer::moveCursor(MoveOnRight, reference, options);
+	else return TextRenderer::moveCursor(dir, reference, options);
 }
 
 void TestBox::determineChildren()

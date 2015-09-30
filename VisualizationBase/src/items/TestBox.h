@@ -53,7 +53,8 @@ class VISUALIZATIONBASE_API TestBox : public Super<TextRenderer> {
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 		virtual bool setText(const QString& newText) override;
-		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint(),
+										CursorMoveOptions options = None) override;
 
 	protected:
 		virtual void determineChildren() override;

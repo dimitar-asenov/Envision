@@ -47,8 +47,7 @@ void HViewItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			|| event->key() == Qt::Key_K || event->key() == Qt::Key_L))
 	{
 		auto child = target->focusedChild();
-		//TODO@cyril For some reason it does not work always without this
-		target->scene()->setMainCursor(nullptr);
+
 		QPoint pos;
 		if (event->key() == Qt::Key_I) //Up
 			pos = {(int)(child->xEndInParent() - child->widthInParent()/2), (int)child->y()};
@@ -60,7 +59,7 @@ void HViewItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			pos = {(int)(child->xEndInParent() + 1), (int)(child->yEndInParent() - child->heightInParent()/2)};
 
 		//Move the cursor, open a new command prompt
-		target->moveCursor(Visualization::Item::MoveOnPosition, pos);
+		target->moveCursor(Visualization::Item::MoveOnPosition, pos, Visualization::Item::NoLimitDistance);
 		GenericHandler::showCommandPrompt(target, "add ", true);
 	}
 	else GenericHandler::keyPressEvent(target, event);

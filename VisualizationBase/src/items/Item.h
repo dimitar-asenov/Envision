@@ -191,11 +191,21 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			 	 	 	 	 	  customize this behavior. */
 		};
 
+		enum CursorMoveOption {
+			None = 0,
+			NoLimitDistance = 0x00000001 /**< If set, the cursor can be moved to any other location on the canvas.
+														Otherwise, the move distance is limited to a specific number of pixels,
+														in order to avoid big jumps that disorient the user. */
+		};
+		Q_DECLARE_FLAGS(CursorMoveOptions, CursorMoveOption)
+
 		/**
 		 * \brief Moves the position of the current main scene cursor within the item and returns true on success.
 		 *
 		 * The \a dir parameter determines how the cursor will be moved. Some modes of movement require a reference point
 		 * provided in \a reference in item local coordinates.
+		 *
+		 * The options parameter specifies additional options to control the move.
 		 *
 		 * The method returns false if it is not possible to move the cursor within the borders of the current item given
 		 * the provided movement parameters.
@@ -207,7 +217,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * This method is responsible for creating a corresponding Cursor item and setting it as the main scene cursor.
 		 */
-		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint());
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint(),
+										CursorMoveOptions options = None);
 		void setDefaultMoveCursorProxy(Item* proxy);
 
 		/**
@@ -562,6 +573,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Item::CursorMoveOptions)
 
 inline Item* Item::parent() const {return static_cast<Item*>(parentItem()); }
 

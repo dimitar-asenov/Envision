@@ -206,9 +206,9 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	}
 }
 
-bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
+bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
 {
-	if ( isHtml() ) return Super::moveCursor(dir, reference);
+	if ( isHtml() ) return Super::moveCursor(dir, reference, options);
 
 	if ( dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf )
 	{

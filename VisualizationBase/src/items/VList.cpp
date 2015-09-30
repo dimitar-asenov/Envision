@@ -124,7 +124,7 @@ int VList::determineForm()
 	else return 1;
 }
 
-bool VList::moveCursor(CursorMoveDirection dir, QPoint reference)
+bool VList::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
 {
 	bool startsFocused = hasFocus();
 
@@ -134,7 +134,7 @@ bool VList::moveCursor(CursorMoveDirection dir, QPoint reference)
 			&& dir != MoveOnTopLeft && dir != MoveOnBottomRight && dir != MoveOnCenter)
 		return false;
 
-	bool res = Super::moveCursor(dir, reference);
+	bool res = Super::moveCursor(dir, reference, options);
 
 	if (res && !startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty())
 		setUpdateNeeded(StandardUpdate);

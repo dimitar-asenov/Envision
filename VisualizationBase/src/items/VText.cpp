@@ -50,10 +50,10 @@ QString VText::currentText()
 	return node()->get();
 }
 
-bool VText::moveCursor(CursorMoveDirection dir, QPoint reference)
+bool VText::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
 {
-	if (dir == MoveDefault) return Super::moveCursor(MoveOnRight);
-	else return Super::moveCursor(dir, reference);
+	if (dir == MoveDefault) return Super::moveCursor(MoveOnRight, reference, options);
+	else return Super::moveCursor(dir, reference, options);
 }
 
 }

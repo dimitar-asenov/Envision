@@ -43,7 +43,8 @@ class VISUALIZATIONBASE_API VText : public Super<ItemWithNode<VText, TextRendere
 		VText(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual bool setText(const QString& newText) override;
 
-		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint(),
+										CursorMoveOptions options = None) override;
 
 	protected:
 		virtual QString currentText() override;

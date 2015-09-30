@@ -538,7 +538,7 @@ QList<ItemRegion> Item::regions()
 	return regs;
 }
 
-bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
+bool Item::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
 {
 	// The condition below is only true if this method is called from a parent item, after it was already called for the
 	// item itself. In that case simply return false as the original call returned false too.
@@ -642,7 +642,8 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 	auto currentCursor = scene()->mainCursor();
 	QPointF currentCursorPos;
 
-	if (currentCursor && currentCursor->owner() != this && !currentCursor->owner()->isAncestorOf(this))
+	if (!options.testFlag(NoLimitDistance) &&
+		 currentCursor && currentCursor->owner() != this && !currentCursor->owner()->isAncestorOf(this))
 	{
 		limitCursorJumpDistance = true;
 		currentCursorPos = currentCursor->owner()->mapToItem(this, currentCursor->region().center());
