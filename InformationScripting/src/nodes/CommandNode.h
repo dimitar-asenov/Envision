@@ -43,7 +43,7 @@ class INFORMATIONSCRIPTING_API CommandNode : public Super<QueryNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommandNode)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, name, setName, QString, const QString&)
-	ATTRIBUTE(Model::TypedList<CommandArgument>, arguments, setArguments)
+	ATTRIBUTE(Model::TypedList<QueryNode>, arguments, setArguments)
 	public:
 		CommandNode(const QString& name);
 };

@@ -34,30 +34,41 @@ namespace Model {
 
 namespace InformationScripting {
 
-class CommandNode;
-class CompositeQueryNode;
-class OperatorNode;
-class QueryNode;
+class CompositeQuery;
+class Query;
 
 class INFORMATIONSCRIPTING_API QueryParser
 {
 	public:
-		static QueryParser& instance();
-
-		void adaptType(QString& text, int index);
-
-		QueryNode* parse(const QString& text);
+		/**
+		 * Parses the \a text in the following language:
+		 *
+		 * char			:= a-z
+		 * word			:= char [char|SPACE]+
+		 * query			:= "word"
+		 * queryOrList := query | list
+		 * op				:= | - U
+		 * operator		:= $queryOrList [op queryOrList]+$
+		 * queryOrOp	:= query | operator
+		 * list			:= {queryOrOp [, queryOrOp]+}
+		 */
+		static Query* buildQueryFrom(const QString& text, Model::Node* target);
 
 	private:
 		QueryParser() = default;
-		enum class Type: int {Operator = 0, Command = 1, List = 2, Empty = 3};
+		enum class Type: int {Operator = 0, Query = 1, List = 2};
 		Type typeOf(const QString& text);
 		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
 
-		CommandNode* parseCommand(const QString& text);
-		CompositeQueryNode* parseList(const QString& text);
-		OperatorNode* parseOperator(const QString& text);
-		QueryNode* parseOperatorPart(const QString& text);
+		Query* parseQuery(const QString& text);
+		QList<Query*> parseList(const QString& text);
+		Query* parseOperator(const QString& text, bool connectInput = false);
+		QList<Query*> parseOperatorPart(const QString& text);
+
+		void connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
+										Query* connectionQuery, Query* outputQuery = nullptr);
+
+		Model::Node* target_{};
 
 		static constexpr int SCOPE_SYMBOL_LENGTH_{2};
 		static const QStringList OPEN_SCOPE_SYMBOL;

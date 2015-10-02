@@ -26,66 +26,40 @@
 
 #include "QueryParser.h"
 
-#include "ModelBase/src/nodes/Character.h"
+#include "../queries/CompositeQuery.h"
+#include "../queries/Query.h"
+#include "../queries/SubstractOperator.h"
+#include "../queries/UnionOperator.h"
 
-#include "../nodes/CommandNode.h"
-#include "../nodes/CompositeQueryNode.h"
-#include "../nodes/OperatorNode.h"
-#include "../nodes/EmptyQueryNode.h"
+
+#include "../queries/QueryRegistry.h"
 
 namespace InformationScripting {
 
-const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<", "@<"};
-const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}", ">@"};
+const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
+const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
-QueryParser& QueryParser::instance()
+Query* QueryParser::buildQueryFrom(const QString& text, Model::Node* target)
 {
-	static QueryParser instance;
-	return instance;
-}
-
-void QueryParser::adaptType(QString& text, int index)
-{
-	// Search for open scope on left
-	QString scopeSymbol;
-	int openIndex;
-	for (int i = index; i >= SCOPE_SYMBOL_LENGTH_ - 1; --i)
-	{
-		scopeSymbol = text.mid(i - 1, SCOPE_SYMBOL_LENGTH_);
-		if (OPEN_SCOPE_SYMBOL.indexOf(scopeSymbol) > -1)
-		{
-			openIndex = i - 1;
-			break;
-		}
-	}
-	int scopeSymbolIndex = OPEN_SCOPE_SYMBOL.indexOf(scopeSymbol);
-	Q_ASSERT(scopeSymbolIndex > -1);
-	int closeIndex = text.indexOf(CLOSE_SCOPE_SYMBOL[scopeSymbolIndex], index);
-	Q_ASSERT(closeIndex > -1);
-
-	bool isOperator =		text.at(index) == '|'
-							|| text.at(index) == '-'
-							|| text.at(index) == 'U';
-	bool isList = text.at(index) == ',';
-	int newScopeSymbolIndex = static_cast<int>(Type::Command);
-	if (isOperator) newScopeSymbolIndex = static_cast<int>(Type::Operator);
-	else if (isList) newScopeSymbolIndex = static_cast<int>(Type::List);
-	text.replace(openIndex, SCOPE_SYMBOL_LENGTH_, OPEN_SCOPE_SYMBOL[newScopeSymbolIndex]);
-	text.replace(closeIndex, SCOPE_SYMBOL_LENGTH_, CLOSE_SCOPE_SYMBOL[newScopeSymbolIndex]);
-}
-
-QueryNode* QueryParser::parse(const QString& text)
-{
+	QueryParser parser;
+	parser.target_ = target;
 	Q_ASSERT(text.size());
-	auto type = typeOf(text);
+	auto type = parser.typeOf(text);
 	if (Type::Operator == type)
-		return parseOperator(text);
-	else if (Type::Command == type)
-		return parseCommand(text);
+		return parser.parseOperator(text);
+	else if (Type::Query == type)
+		return parser.parseQuery(text);
 	else if (Type::List == type)
-		return parseList(text);
-	else if (Type::Empty == type)
-		return new EmptyQueryNode();
+	{
+		auto queries = parser.parseList(text);
+		auto result = new CompositeQuery();
+		for (int i = 0; i < queries.size(); ++i)
+		{
+			result->connectInput(i, queries[i]);
+			result->connectToOutput(queries[i], i);
+		}
+		return result;
+	}
 	Q_ASSERT(false);
 	return nullptr;
 }
@@ -125,57 +99,120 @@ QPair<QStringList, QList<QChar>> QueryParser::split(const QString& text, const Q
 	return result;
 }
 
-CommandNode* QueryParser::parseCommand(const QString& text)
+Query* QueryParser::parseQuery(const QString& text)
 {
-	Q_ASSERT(typeOf(text) == Type::Command);
+	Q_ASSERT(typeOf(text) == Type::Query);
 	QStringList data = text.mid(SCOPE_SYMBOL_LENGTH_,
-										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ");
-	Q_ASSERT(data.size()); // TODO empty node needed?
+										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ", QString::SkipEmptyParts);
+	Q_ASSERT(data.size());
 	QString command = data.takeFirst();
-	auto commandNode = new CommandNode(command);
-	qDebug() << text << "#" << data.size() << "arguments";
-	for (const auto& arg : data)
-		commandNode->arguments()->append(new CommandArgument(arg));
-	return commandNode;
+	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
+	Q_ASSERT(q); // TODO this should be an error for the user.
+	return q;
 }
 
-CompositeQueryNode *QueryParser::parseList(const QString& text)
+QList<Query*> QueryParser::parseList(const QString& text)
 {
 	Q_ASSERT(text.size());
 	QStringList parts = split(text, {','}).first;
-	auto result = new CompositeQueryNode();
+	QList<Query*> result;
 	for (QString part : parts)
 	{
 		auto type = typeOf(part);
 		if (Type::Operator == type)
-			result->queries()->append(parseOperator(part));
-		else if (Type::Command == type)
-			result->queries()->append(parseCommand(part));
+			result.push_back(parseOperator(part, true));
+		else if (Type::Query == type)
+			result.push_back(parseQuery(part));
 		else
-			Q_ASSERT(false); // TODO empty node?
+			Q_ASSERT(false); // TODO error for user
 	}
 	return result;
 }
 
-OperatorNode* QueryParser::parseOperator(const QString& text)
+Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 {
+	// TODO it might be better to be able to register operators.
+	// But that need some additional information on how they are used, thus we currently hardcode the operators.
 	auto splitText = split(text, {'|', '-', 'U'});
 	auto parts = splitText.first;
 	auto operators = splitText.second;
-	auto operatorNode = new OperatorNode();
-	for (const auto& part : parts)
-		operatorNode->operands()->append(parseOperatorPart(part));
-	for (const auto& op : operators)
-		operatorNode->operators()->append(new Model::Character(op));
-	return operatorNode;
+	Q_ASSERT(parts.size()); // TODO error for user
+	CompositeQuery* composite = new CompositeQuery();
+	auto previousQueries = parseOperatorPart(parts[0]);
+	if (connectInput)
+	{
+		for (int i = 0; i < previousQueries.size(); ++i)
+			composite->connectInput(i, previousQueries[i]);
+	}
+
+	for (int i = 1; i < parts.size(); ++i)
+	{
+		auto currentQueries = parseOperatorPart(parts[i]);
+		auto currentOperator = operators[i-1];
+		// If left and right are both lists we don't know how to map things:
+		Q_ASSERT(!(previousQueries.size() > 1 && currentQueries.size() > 1)); // TODO error for user
+		if (previousQueries.size() == 1 && currentQueries.size() == 1)
+		{
+			if (currentOperator == '|')
+				composite->connectQuery(previousQueries[0], currentQueries[0]);
+			else if (currentOperator == '-')
+			{
+				auto minus = new SubstractOperator();
+				connectQueriesWith(composite, {previousQueries[0], currentQueries[0]}, minus);
+				currentQueries = {minus};
+			}
+		}
+		else if (previousQueries.size() > currentQueries.size())
+		{
+			Query* unionQuery = nullptr;
+			if (operators[i-1] == '-') unionQuery = new SubstractOperator();
+			else unionQuery = new UnionOperator();
+			connectQueriesWith(composite, previousQueries, unionQuery, currentQueries[0]);
+		}
+		else
+		{
+			// Split the output from the previous query
+			for (auto currentQuery : currentQueries)
+				composite->connectQuery(previousQueries[0], currentQuery);
+		}
+		previousQueries = currentQueries;
+	}
+
+	if (parts.size() > operators.size() || operators.last() == '|')
+		composite->connectToOutput(previousQueries);
+	else
+	{
+		// We have an operator at the end
+		auto lastOperator = operators.last();
+		if (lastOperator == '-' || lastOperator == 'U')
+		{
+			Query* unionQuery = nullptr;
+			if (lastOperator == '-') unionQuery = new SubstractOperator();
+			else unionQuery = new UnionOperator();
+			connectQueriesWith(composite, previousQueries, unionQuery);
+			composite->connectToOutput(unionQuery);
+		}
+		else // No other case allowed
+			Q_ASSERT(false); // TODO error for user
+	}
+	return composite;
 }
 
-QueryNode* QueryParser::parseOperatorPart(const QString& text)
+QList<Query*> QueryParser::parseOperatorPart(const QString& text)
 {
 	auto type = typeOf(text);
-	if (Type::Command == type) return parseCommand(text);
+	if (Type::Query == type) return {parseQuery(text)};
 	else if (Type::List == type) return parseList(text);
 	Q_ASSERT(false);
+}
+
+void QueryParser::connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
+												  Query* connectionQuery, Query* outputQuery)
+{
+	for (int i = 0; i < queries.size(); ++i)
+		composite->connectQuery(queries[i], 0, connectionQuery, i);
+	if (outputQuery)
+		composite->connectQuery(connectionQuery, outputQuery);
 }
 
 } /* namespace InformationScripting  */

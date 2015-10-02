@@ -24,22 +24,41 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#include "VErrorQueryNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
+ITEM_COMMON_DEFINITIONS(VErrorQueryNode, "item")
 
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
+VErrorQueryNode::VErrorQueryNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
 
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+void VErrorQueryNode::initializeForms()
 {
-	setName(name);
+	auto prefixEl = item<Visualization::VText>(&I::prefix_, [](I* v){return v->node()->prefixNode();},
+			[](I* v){return &v->style()->prefix();});
+
+	auto argEl = item(&I::arg_, [](I* v){return v->node()->arg();});
+
+	auto postfixEl = item<Visualization::VText>(&I::postfix_, [](I* v){return v->node()->postfixNode();},
+			[](I* v){return &v->style()->postfix();});
+
+	addForm(grid({
+			{prefixEl, argEl, postfixEl},
+		})
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
+}
+
+void VErrorQueryNode::determineChildren()
+{
+	Super::determineChildren();
+	prefix_->setEditable(false);
+	postfix_->setEditable(false);
 }
 
 } /* namespace InformationScripting */

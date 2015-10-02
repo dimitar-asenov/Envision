@@ -24,22 +24,45 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#include "QueryOperatorDescriptorList.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "QueryOperatorDescriptor.h"
+#include "../nodes/OperatorQueryNode.h"
+#include "../nodes/CommandNode.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
-
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+QueryOperatorDescriptorList* QueryOperatorDescriptorList::instance()
 {
-	setName(name);
+	static QueryOperatorDescriptorList instance;
+	return &instance;
+}
+
+void QueryOperatorDescriptorList::initializeWithDefaultOperators()
+{
+	using QOD = QueryOperatorDescriptor;
+	using OpType = OperatorQueryNode::OperatorTypes;
+	add(new QOD("pipe operator", "expr | expr", 2, QOD::LeftAssociative, QOD::operatorQuery<OpType::Pipe>));
+	add(new QOD("pipe operator", "expr - expr", 2, QOD::LeftAssociative, QOD::operatorQuery<OpType::Substract>));
+	add(new QOD("pipe operator", "expr U expr", 2, QOD::LeftAssociative, QOD::operatorQuery<OpType::Union>));
+
+	add(new QOD("command with arg", "id SPACE expr", 1, QOD::LeftAssociative,
+					[](const QList<QueryNode*>& operands) -> QueryNode* {
+		auto cmd = DCast<CommandNode>(operands.first());
+		if (!cmd) return operands.first();
+
+		for (int i = 1; i < operands.size(); ++i)
+		{
+			qDebug() << operands[i]->typeName();
+			cmd->arguments()->append(operands[i]);
+		}
+		return cmd;
+	}));
+
+	// TODO how to represent arguments?? Maybe use unary minus (-).
+	// But then what to do with an eventual = ??
+	// Arguments often have the form: -argName=someValue or --argumentName=someValue
+	// Where the assignment is optional.
 }
 
 } /* namespace InformationScripting */

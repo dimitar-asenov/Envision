@@ -24,22 +24,38 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "../informationscripting_api.h"
+
+#include "InteractionBase/src/expression_editor/ExpressionVisitor.h"
+
+namespace Interaction {
+	class Expression;
+}
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
+class QueryNode;
 
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+class INFORMATIONSCRIPTING_API QueryNodeBuilder : public Interaction::ExpressionVisitor
 {
-	setName(name);
-}
+	public:
+		static QueryNode* parse(const QString& text);
 
-} /* namespace InformationScripting */
+		QueryNode* buildQuery(Interaction::Expression* expression);
+
+		virtual void visit(Interaction::Empty* empty) override;
+		virtual void visit(Interaction::Value* val) override;
+		virtual void visit(Interaction::Operator* op) override;
+		virtual void visit(Interaction::UnfinishedOperator* unfinished) override;
+
+	private:
+		QueryNodeBuilder() = default;
+
+		void createErrorQuery(Interaction::Operator* op);
+
+		QueryNode* query_{};
+};
+
+} /* namespace InformationScripting  */

@@ -24,22 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
-
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "QueryOperatorDescriptor.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
-
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+QueryOperatorDescriptor::QueryOperatorDescriptor(const QString& name, const QString& signature, int precedence,
+																 Associativity associativity, CreateFunction createFunction)
+	: Interaction::OperatorDescriptor(name, signature, precedence, associativity),
+	  createFunction_(createFunction)
 {
-	setName(name);
+	Q_ASSERT(createFunction_);
+}
+
+QueryNode* QueryOperatorDescriptor::create(const QList<QueryNode*>& operands)
+{
+	return createFunction_(operands);
 }
 
 } /* namespace InformationScripting */

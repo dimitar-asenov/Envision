@@ -64,26 +64,15 @@ QueryPrompt::QueryPrompt(Visualization::Item* commandReceiver, QString, bool cen
 	setZValue(LAYER_COMMAND);
 	setItemCategory(Visualization::Scene::MenuItemCategory);
 
-//	command_->setEditable(true);
-
 	commandReceiver->scene()->addTopLevelItem(this);
 
-//	if (initialCommandText.isNull()) command_->setText(TYPE_HINT);
-//	else command_->setText(initialCommandText);
 	saveReceiverCursor();
 	setPromptPosition();
-//	command_->moveCursor();
 
 	if (centerOnPrompt) centerViewOnPrompt();
 
-
 	queryContainer_ = new QueryNodeContainer();
 	queryContainer_->setQuery(new EmptyQueryNode);
-
-//	if (initialCommandText.isNull())
-//		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
-//	else
-//		command_->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(initialCommandText.size());
 }
 
 QueryPrompt::~QueryPrompt()
@@ -92,7 +81,8 @@ QueryPrompt::~QueryPrompt()
 	commandReceiver_ = nullptr; // This item is completely out of our control, we just know about it.
 
 	// These are deleted by layout's destructor
-	//command_ = nullptr;
+	// TODO this is copied from CommandPrompt is it correct here as well?
+	queryContainer_ = nullptr;
 	errorText_ = nullptr;
 }
 
@@ -122,18 +112,6 @@ void QueryPrompt::showPrompt(QString, bool centerOnPrompt)
 	saveReceiverCursor();
 	setPromptPosition();
 	show();
-//	if (! initialCommandText.isNull()) command_->setText(initialCommandText);
-//	else if (!wasCancelled_) command_->setText(TYPE_HINT);
-//	command_->moveCursor();
-
-//	if (wasCancelled_)
-//		command_->correspondingSceneCursor<Visualization::TextCursor>()
-//			->setSelectedCharacters(commandSelectedFirst_, commandSelectedLast_);
-//	else if (!initialCommandText.isNull())
-//		command_->correspondingSceneCursor<Visualization::TextCursor>()->
-//				setCaretPosition(initialCommandText.length());
-//	else
-//		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
 
 	if (centerOnPrompt) centerViewOnPrompt();
 
@@ -143,11 +121,7 @@ void QueryPrompt::showPrompt(QString, bool centerOnPrompt)
 void QueryPrompt::hidePrompt()
 {
 	hideRequested_ = true;
-//	if (scene()->mainCursor())
-//	{
-//		commandSelectedFirst_ = command_->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
-//		commandSelectedLast_ = command_->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
-//	}
+
 	hide();
 
 	if (scene()->mainCursor()) // If the main cursor was deleted, then do not select anything.

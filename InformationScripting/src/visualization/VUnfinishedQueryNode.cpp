@@ -24,22 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#include "VUnfinishedQueryNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
+ITEM_COMMON_DEFINITIONS(VUnfinishedQueryNode, "item")
 
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
+VUnfinishedQueryNode::VUnfinishedQueryNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
 
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+void VUnfinishedQueryNode::initializeForms()
 {
-	setName(name);
+	// TODO we probably need to set editable to false on the delimeter nodes, no clue how that works:
+	auto listEl = (new Visualization::GridLayoutFormElement())
+			->put(0, 0, (new Visualization::SequentialLayoutFormElement())->setHorizontal()
+			->setListOfNodes([](Item* i){return (static_cast<VUnfinishedQueryNode*>(i))->nodes_;}));
+	addForm(listEl
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
+}
+
+int VUnfinishedQueryNode::determineForm()
+{
+	nodes_.clear();
+	for (int i = 0; i < node()->delimiters()->size(); ++i)
+	{
+		nodes_.append(node()->delimiters()->at(i));
+		if (i < node()->operands()->size())
+			nodes_.append(node()->operands()->at(i));
+	}
+	return 0;
 }
 
 } /* namespace InformationScripting */

@@ -71,12 +71,11 @@ class OOINTERACTION_API StringComponents {
 
 		template <class ...Args> static QStringList c(Args... args);
 
-	protected:
-		static Optional list(Model::List* listNode);
-
 		// TODO: Check completeness statically.
 		template <class E> static Optional choose(E value);
 		template <class E, class ...Args> static Optional choose(E value, E option, Optional str, Args... args);
+	protected:
+		static Optional list(Model::List* listNode);
 
 	private:
 		Model::Node* node_;

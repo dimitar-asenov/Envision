@@ -41,11 +41,14 @@
 #include "queries/AddASTPropertiesAsTuples.h"
 #include "queries/TagQuery.h"
 #include "nodes/TagExtension.h"
-
 #include "visualization/VCommandNode.h"
 #include "visualization/VCommandArgument.h"
 #include "visualization/VEmptyQueryNode.h"
+#include "visualization/VOperatorQueryNode.h"
+#include "visualization/VErrorQueryNode.h"
+#include "visualization/VUnfinishedQueryNode.h"
 #include "handlers/HQuery.h"
+#include "interaction/QueryOperatorDescriptorList.h"
 
 namespace InformationScripting {
 
@@ -63,7 +66,11 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	VCommandNode::setDefaultClassHandler(HQuery::instance());
 	VCommandArgument::setDefaultClassHandler(HQuery::instance());
 	VEmptyQueryNode::setDefaultClassHandler(HQuery::instance());
+	VOperatorQueryNode::setDefaultClassHandler(HQuery::instance());
+	VErrorQueryNode::setDefaultClassHandler(HQuery::instance());
+	VUnfinishedQueryNode::setDefaultClassHandler(HQuery::instance());
 	HQuery::initStringComponents();
+	QueryOperatorDescriptorList::initializeWithDefaultOperators();
 	return true;
 }
 

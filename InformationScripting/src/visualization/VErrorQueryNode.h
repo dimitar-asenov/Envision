@@ -28,19 +28,40 @@
 
 #include "../informationscripting_api.h"
 
-#include "QueryNode.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/Character.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/VList.h"
 
-DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, OperatorNode)
+#include "../nodes/ErrorQueryNode.h"
+#include "VErrorQueryNodeStyle.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API OperatorNode : public Super<QueryNode>
+class INFORMATIONSCRIPTING_API VErrorQueryNode
+		: public Super<Visualization::ItemWithNode<VErrorQueryNode, Visualization::DeclarativeItem<VErrorQueryNode>,
+		ErrorQueryNode>>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(OperatorNode)
-	ATTRIBUTE(Model::TypedList<QueryNode>, operands, setOperands)
-	ATTRIBUTE(Model::TypedList<Model::Character>, operators, setOperators)
+	ITEM_COMMON(VErrorQueryNode)
+	public:
+		VErrorQueryNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+
+		Visualization::VText* prefix() const;
+		Visualization::Item* arg() const;
+		Visualization::VText* postfix() const;
+
+		static void initializeForms();
+
+		virtual void determineChildren() override;
+
+	private:
+		Visualization::VText* prefix_{};
+		Visualization::Item* arg_{};
+		Visualization::VText* postfix_{};
 };
+
+inline Visualization::VText* VErrorQueryNode::prefix() const { return prefix_; }
+inline Visualization::Item* VErrorQueryNode::arg() const { return arg_; }
+inline Visualization::VText* VErrorQueryNode::postfix() const { return postfix_; }
 
 } /* namespace InformationScripting */

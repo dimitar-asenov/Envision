@@ -24,22 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "../informationscripting_api.h"
+
+#include "VisualizationBase/src/items/SymbolStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/VCompositeStyle.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
-
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+class INFORMATIONSCRIPTING_API VOperatorQueryNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	setName(name);
-}
+	public:
+		virtual ~VOperatorQueryNodeStyle() override;
+
+	Property<Visualization::SymbolStyle> pipeOp{this, "pipeOp"};
+	Property<Visualization::SymbolStyle> substractOp{this, "substractOp"};
+	Property<Visualization::SymbolStyle> unionOp{this, "unionOp"};
+};
 
 } /* namespace InformationScripting */

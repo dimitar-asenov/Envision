@@ -31,7 +31,6 @@ HEADERS += src/precompiled.h \
     src/queries/NodePropertyAdder.h \
     src/queries/UnionOperator.h \
     src/queries/ScriptQuery.h \
-    src/parsing/QueryBuilder.h \
     src/dataformat/Tuple.h \
     src/dataformat/TupleSet.h \
     src/dataformat/Property.h \
@@ -45,9 +44,7 @@ HEADERS += src/precompiled.h \
     src/queries/ScopedArgumentQuery.h \
     src/nodes/QueryNode.h \
     src/nodes/CommandNode.h \
-    src/nodes/OperatorNode.h \
     src/nodes/CommandArgument.h \
-    src/parsing/QueryParser.h \
     src/nodes/CompositeQueryNode.h \
     src/visualization/QueryPrompt.h \
     src/nodes/QueryNodeContainer.h \
@@ -58,7 +55,20 @@ HEADERS += src/precompiled.h \
     src/handlers/HQuery.h \
     src/nodes/EmptyQueryNode.h \
     src/visualization/VEmptyQueryNode.h \
-    src/visualization/VEmptyQueryNodeStyle.h
+    src/visualization/VEmptyQueryNodeStyle.h \
+    src/interaction/QueryOperatorDescriptor.h \
+    src/interaction/QueryOperatorDescriptorList.h \
+    src/nodes/UnfinishedQueryNode.h \
+    src/visualization/VUnfinishedQueryNode.h \
+    src/visualization/VUnfinishedQueryNodeStyle.h \
+    src/parsing/QueryNodeBuilder.h \
+    src/parsing/QueryParser.h \
+    src/nodes/OperatorQueryNode.h \
+    src/nodes/ErrorQueryNode.h \
+    src/visualization/VErrorQueryNodeStyle.h \
+    src/visualization/VErrorQueryNode.h \
+    src/visualization/VOperatorQueryNode.h \
+    src/visualization/VOperatorQueryNodeStyle.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -75,7 +85,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \
     src/visitors/AllNodesOfType.cpp \
-    src/parsing/QueryBuilder.cpp \
     src/dataformat/Tuple.cpp \
     src/dataformat/TupleSet.cpp \
     src/dataformat/Property.cpp \
@@ -88,9 +97,7 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/ScopedArgumentQuery.cpp \
     src/nodes/QueryNode.cpp \
     src/nodes/CommandNode.cpp \
-    src/nodes/OperatorNode.cpp \
     src/nodes/CommandArgument.cpp \
-    src/parsing/QueryParser.cpp \
     src/nodes/CompositeQueryNode.cpp \
     src/visualization/QueryPrompt.cpp \
     src/nodes/QueryNodeContainer.cpp \
@@ -101,7 +108,20 @@ SOURCES += src/InformationScriptingException.cpp \
     src/handlers/HQuery.cpp \
     src/nodes/EmptyQueryNode.cpp \
     src/visualization/VEmptyQueryNode.cpp \
-    src/visualization/VEmptyQueryNodeStyle.cpp
+    src/visualization/VEmptyQueryNodeStyle.cpp \
+    src/interaction/QueryOperatorDescriptor.cpp \
+    src/interaction/QueryOperatorDescriptorList.cpp \
+    src/nodes/UnfinishedQueryNode.cpp \
+    src/visualization/VUnfinishedQueryNode.cpp \
+    src/visualization/VUnfinishedQueryNodeStyle.cpp \
+    src/parsing/QueryNodeBuilder.cpp \
+    src/parsing/QueryParser.cpp \
+    src/nodes/OperatorQueryNode.cpp \
+    src/nodes/ErrorQueryNode.cpp \
+    src/visualization/VErrorQueryNode.cpp \
+    src/visualization/VErrorQueryNodeStyle.cpp \
+    src/visualization/VOperatorQueryNode.cpp \
+    src/visualization/VOperatorQueryNodeStyle.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

@@ -24,22 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "../informationscripting_api.h"
+
+#include "QueryNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/Integer.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, OperatorQueryNode)
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
-
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+class INFORMATIONSCRIPTING_API OperatorQueryNode : public Super<QueryNode>
 {
-	setName(name);
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(OperatorQueryNode)
+	ATTRIBUTE(QueryNode, left, setLeft)
+	ATTRIBUTE(QueryNode, right, setRight)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
+
+	public:
+		enum OperatorTypes { Pipe, Substract, Union };
+
+		OperatorTypes op() const;
+		void setOp(const OperatorTypes& oper);
+};
+
+inline OperatorQueryNode::OperatorTypes OperatorQueryNode::op() const { return static_cast<OperatorTypes>(opr()); }
+inline void OperatorQueryNode::setOp(const OperatorQueryNode::OperatorTypes& oper) { setOpr(static_cast<int>(oper)); }
 
 } /* namespace InformationScripting */
