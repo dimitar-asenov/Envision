@@ -28,53 +28,15 @@
 
 #include "../informationscripting_api.h"
 
-#include "ScopedArgumentQuery.h"
-
-namespace Model {
-	class Node;
-	class SymbolMatcher;
-}
-
-namespace OOModel {
-	class Class;
-	class Method;
-}
+#include "Query.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+class INFORMATIONSCRIPTING_API LinearQuery : public Query
 {
 	public:
-		virtual TupleSet execute(TupleSet input) override;
-
-		static void registerDefaultQueries();
-
-	private:
-
-		static const QStringList NODETYPE_ARGUMENT_NAMES;
-		static const QStringList NAME_ARGUMENT_NAMES;
-		static const QStringList ADD_AS_NAMES;
-
-		using ExecuteFunction = std::function<TupleSet (AstQuery*, TupleSet)>;
-		ExecuteFunction exec_{};
-
-		AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args);
-
-		static void setTypeTo(QStringList& args, QString type);
-
-		TupleSet baseClassesQuery(TupleSet input);
-		TupleSet toParentType(TupleSet input);
-		TupleSet callGraph(TupleSet input);
-		TupleSet genericQuery(TupleSet input);
-		TupleSet typeQuery(TupleSet input, QString type);
-		TupleSet nameQuery(TupleSet input, QString name);
-		TupleSet usesQuery(TupleSet input);
-
-		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
-
-		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
+		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+		virtual TupleSet execute(TupleSet) = 0;
 };
 
 } /* namespace InformationScripting */

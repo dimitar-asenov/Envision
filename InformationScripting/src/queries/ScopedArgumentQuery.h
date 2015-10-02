@@ -28,7 +28,7 @@
 
 #include "../informationscripting_api.h"
 
-#include "Query.h"
+#include "LinearQuery.h"
 
 namespace Model {
 	class Node;
@@ -39,7 +39,7 @@ class QCommandLineOption;
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public Query
+class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public LinearQuery
 {
 	protected:
 		enum class Scope : int {Local, Global, Input};
