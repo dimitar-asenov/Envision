@@ -53,6 +53,8 @@ class ScriptQuery : public Query
 		QList<QString> arguments_;
 
 		void importStar(boost::python::dict& main_namespace, boost::python::object apiObject);
+
+		QList<TupleSet> queryExecutor(QString name, boost::python::list args, boost::python::list input);
 };
 
 } /* namespace InformationScripting */

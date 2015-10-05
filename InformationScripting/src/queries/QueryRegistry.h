@@ -46,6 +46,9 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 
 		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
+		QStringList registeredQueries() const;
+		QStringList scriptQueries() const;
+
 	private:
 		QueryRegistry() = default;
 
@@ -60,5 +63,7 @@ inline void QueryRegistry::registerQueryConstructor(const QString& command, Quer
 	Q_ASSERT(constructor);
 	constructors_[command] = constructor;
 }
+
+inline QStringList QueryRegistry::registeredQueries() const { return constructors_.keys(); }
 
 } /* namespace InformationScripting */
