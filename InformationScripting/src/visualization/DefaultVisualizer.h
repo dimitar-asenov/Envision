@@ -28,6 +28,10 @@
 
 #include "../informationscripting_api.h"
 
+namespace Visualization {
+	class ItemStyle;
+}
+
 namespace InformationScripting {
 
 class TupleSet;
@@ -43,6 +47,8 @@ class INFORMATIONSCRIPTING_API DefaultVisualizer
 
 		static const QString HIGHLIGHT_OVERLAY_GROUP;
 		static const QString ARROW_OVERLAY_GROUP;
+
+		Visualization::ItemStyle* createSelectionStyle(const QString& color);
 };
 
 } /* namespace InformationScripting */
