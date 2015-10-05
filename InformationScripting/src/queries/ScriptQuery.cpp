@@ -30,10 +30,12 @@
 #include "../wrappers/DataApi.h"
 #include "../helpers/BoostPythonHelpers.h"
 
+#include "ModelBase/src/nodes/Node.h"
+
 namespace InformationScripting {
 
-ScriptQuery::ScriptQuery(const QString& scriptPath, const QStringList& args)
-	: scriptPath_{scriptPath}, arguments_{args}
+ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args)
+	: scriptPath_{scriptPath}, target_{target}, arguments_{args}
 {}
 
 void ScriptQuery::initPythonEnvironment()
@@ -71,6 +73,7 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 		python::object sys = python::import("sys");
 
 		main_namespace["inputs"] = input;
+		main_namespace["target"] = python::ptr(target_);
 		main_namespace["args"] = arguments_;
 
 		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);

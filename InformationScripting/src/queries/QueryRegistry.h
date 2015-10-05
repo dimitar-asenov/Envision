@@ -49,7 +49,7 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 	private:
 		QueryRegistry() = default;
 
-		Query* tryBuildQueryFromScript(const QString& name, QStringList args);
+		Query* tryBuildQueryFromScript(const QString& name, Model::Node* target, QStringList args);
 
 		QHash<QString, QueryConstructor> constructors_;
 		QString scriptLocation_{"scripts/"};
