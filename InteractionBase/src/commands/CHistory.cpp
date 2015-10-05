@@ -90,13 +90,16 @@ QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualizati
 	// get GitRepository
 	QString path("projects/");
 	path.append(managerName);
-	GitRepository repository(path);
 
 	QStringList names;
-	names.append(repository.localBranches());
-	names.append(repository.tags());
-	names.append(repository.revisions());
+	if (GitRepository::repositoryExists(path))
+	{
+		GitRepository repository(path);
 
+		names.append(repository.localBranches());
+		names.append(repository.tags());
+		names.append(repository.revisions());
+	}
 	return names;
 }
 
