@@ -45,6 +45,7 @@ class VISUALIZATIONBASE_API ItemStyle : public Super<Style>
 
 		Shape* createShape(Item* parent) const;
 		bool hasShape() const;
+		ShapeStyle* shapeStyle() const;
 
 		virtual void load(StyleLoader& sl) override;
 
@@ -60,5 +61,6 @@ class VISUALIZATIONBASE_API ItemStyle : public Super<Style>
 };
 
 inline bool ItemStyle::hasShape() const { return !shapeName_.isEmpty(); }
+inline ShapeStyle* ItemStyle::shapeStyle() const { return shapeStyle_.data(); }
 
 }
