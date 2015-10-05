@@ -35,7 +35,7 @@ EnvisionPPCallbacks::EnvisionPPCallbacks(clang::SourceManager& srcManager, std::
 													  QHash<QString, QString>& privateAttributes)
 	: sourceManager_{srcManager}, fileName_{fileName}, attributes_{attributes}, privateAttributes_{privateAttributes} {}
 
-void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const clang::MacroDirective *,
+void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const clang::MacroDefinition&,
 													clang::SourceRange range, const clang::MacroArgs *Args)
 {
 	// We only care about ATTRIBUTE macros:
