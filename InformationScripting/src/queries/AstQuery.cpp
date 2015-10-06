@@ -28,6 +28,15 @@
 
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/expressions/types/TypeExpression.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
+#include "OOModel/src/expressions/types/ClassTypeExpression.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
+#include "OOModel/src/expressions/types/PointerTypeExpression.h"
+#include "OOModel/src/expressions/types/ReferenceTypeExpression.h"
+#include "OOModel/src/expressions/types/AutoTypeExpression.h"
+#include "OOModel/src/expressions/types/TypeQualifierExpression.h"
+#include "OOModel/src/expressions/types/FunctionTypeExpression.h"
 
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
@@ -83,6 +92,9 @@ void AstQuery::registerDefaultQueries()
 	});
 	registry.registerQueryConstructor("uses", [](Model::Node* target, QStringList args) {
 		return new AstQuery(&AstQuery::usesQuery, target, args);
+	});
+	registry.registerQueryConstructor("type", [](Model::Node* target, QStringList args) {
+		return new AstQuery(&AstQuery::typeFilter, target, args);
 	});
 }
 
@@ -285,6 +297,47 @@ TupleSet AstQuery::usesQuery(TupleSet input)
 	return result;
 }
 
+TupleSet AstQuery::typeFilter(TupleSet input)
+{
+	using SymbolType = Model::Node::SymbolType;
+
+	SymbolType expectedSymbolType = SymbolType::VARIABLE;
+	QString expectedType;
+	QStringList arguments;
+	// NOTE: To use spaces in this argument use quotes!
+	// QCommandLineParser removes the entered spaces automatically
+	// FIXME don't use nodetype argument as it is the actual type:
+	auto typeArgument = argument(NODETYPE_ARGUMENT_NAMES[1]);
+	// Remove quotes if there are
+	if (typeArgument.startsWith("\"")) typeArgument = typeArgument.mid(1);
+	if (typeArgument.endsWith("\"")) typeArgument = typeArgument.left(typeArgument.size()-1);
+
+	auto parts = typeArgument.split("(", QString::SkipEmptyParts);
+	expectedType = parts[0];
+	if (parts.size() > 1)
+	{
+		expectedSymbolType = SymbolType::METHOD;
+		auto writtenArgs = parts[1].left(parts[1].size() - 1); // Drop the closing parent
+		arguments = writtenArgs.split(",", QString::SkipEmptyParts);
+	}
+
+	// Lambda which returns true for all tuples which don't match the expected type.
+	auto toRemove = [expectedSymbolType, expectedType, arguments](const Tuple& t) {
+		if (t.tag() == "ast")
+		{
+			Model::Node* astNode = t["ast"];
+			auto symbolTypes = astNode->symbolType();
+
+			if (symbolTypes.testFlag(expectedSymbolType))
+				return !matchesExpectedType(astNode, expectedSymbolType, expectedType, arguments);
+		}
+		return true;
+	};
+
+	input.take(toRemove);
+	return input;
+}
+
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
 {
 	auto bases = childClass->directBaseClasses();
@@ -330,6 +383,89 @@ void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relatio
 			for (const auto& keepProperty : keepProperties)
 				tupleSet.add({{"ast", tuple[keepProperty]}});
 	}
+}
+
+bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
+											  const QString& expectedType, const QStringList& args)
+{
+	using SymbolType = Model::Node::SymbolType;
+	if (SymbolType::VARIABLE == symbolType)
+	{
+		if (auto varDecl = DCast<OOModel::VariableDeclaration>(node))
+			return stringifyType(varDecl->typeExpression()) == expectedType;
+	}
+	else
+	{
+		if (auto methodDecl = DCast<OOModel::Method>(node))
+		{
+			if (args.size() != methodDecl->arguments()->size()) return false;
+			// TODO: here we support only one return value:
+			if ((methodDecl->results()->size() == 0 && (expectedType.isEmpty() || expectedType == "void"))
+				 || (methodDecl->results()->size() > 0 &&
+					  stringifyType(methodDecl->results()->at(0)->typeExpression()) == expectedType)
+				 || expectedType == "_")
+			{
+				// return type matches check arguments:
+				bool matches = true;
+				for (int i = 0; i < args.size() && matches; ++i)
+				{
+					if (args[i] == "_") continue;
+					matches = stringifyType(methodDecl->arguments()->at(i)->typeExpression()) == args[i];
+				}
+				return matches;
+			}
+		}
+	}
+	return false;
+}
+
+QString AstQuery::stringifyType(OOModel::Expression* expression)
+{
+	using namespace OOModel;
+	if (!expression) return {};
+	if (auto e = DCast<ArrayTypeExpression>(expression))
+		return stringifyType(e->typeExpression()) + "[" + stringifyType(e->fixedSize()) + "]";
+	else if (auto e = DCast<ReferenceTypeExpression>(expression)) return stringifyType(e) + "&";
+	else if (auto e = DCast<PointerTypeExpression>(expression)) return stringifyType(e);
+	else if (auto e = DCast<ClassTypeExpression>(expression)) return stringifyType(e->typeExpression());
+	else if (auto e = DCast<PrimitiveTypeExpression>(expression))
+	{
+		switch (e->typeValue())
+		{
+			case PrimitiveTypeExpression::PrimitiveTypes::INT: return "int";
+			case PrimitiveTypeExpression::PrimitiveTypes::LONG: return "long";
+			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT: return "unsigned int";
+			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG: return "unsigned long";
+			case PrimitiveTypeExpression::PrimitiveTypes::FLOAT: return "float";
+			case PrimitiveTypeExpression::PrimitiveTypes::DOUBLE: return "double";
+			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: return "boolean";
+			case PrimitiveTypeExpression::PrimitiveTypes::CHAR: return "char";
+			case PrimitiveTypeExpression::PrimitiveTypes::VOID: return "void";
+			default: Q_ASSERT(false);
+		}
+	}
+	else if (auto e = DCast<TypeQualifierExpression>(expression))
+	{
+		QString qualifier;
+		switch (e->qualifier())
+		{
+			case TypeQualifierExpression::Qualifier::CONST: qualifier = "const"; break;
+			case TypeQualifierExpression::Qualifier::VOLATILE: qualifier = "volatile"; break;
+			default: Q_ASSERT(false);
+		}
+		return qualifier + " " + stringifyType(e->typeExpression());
+	}
+	else if (DCast<AutoTypeExpression>(expression)) return "auto";
+	else if (DCast<FunctionTypeExpression>(expression)) Q_ASSERT(false);
+	else if (auto e = DCast<ReferenceExpression>(expression))
+	{
+		QString result;
+		if (e->prefix()) result += stringifyType(e->prefix()) + ".";
+		result += e->name();
+		// TODO: handle type arguments
+		return result;
+	}
+	return {};
 }
 
 } /* namespace InformationScripting */
