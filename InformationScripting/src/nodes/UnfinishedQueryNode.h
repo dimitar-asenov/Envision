@@ -28,17 +28,20 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "QueryNode.h"
+
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, UnfinishedQueryNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API UnfinishedQueryNode : public Super<QueryNode>
 {
-	public:
-		virtual ~VCommandArgumentStyle() override;
-
-	Property<Visualization::TextStyle> argument{this, "argument"};
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(UnfinishedQueryNode)
+	ATTRIBUTE(Model::TypedList<Model::Text>, delimiters, setDelimiters)
+	ATTRIBUTE(Model::TypedList<QueryNode>, operands, setOperands)
 };
 
 } /* namespace InformationScripting */

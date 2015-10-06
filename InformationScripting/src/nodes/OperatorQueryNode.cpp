@@ -24,21 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "OperatorQueryNode.h"
 
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(InformationScripting::OperatorQueryNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VCommandArgumentStyle() override;
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(OperatorQueryNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(OperatorQueryNode)
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+REGISTER_ATTRIBUTE(OperatorQueryNode, left, QueryNode, false, false, true)
+REGISTER_ATTRIBUTE(OperatorQueryNode, right, QueryNode, false, false, true)
+REGISTER_ATTRIBUTE(OperatorQueryNode, opr, Character, false, false, true)
 
 } /* namespace InformationScripting */

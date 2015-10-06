@@ -28,17 +28,34 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "InteractionBase/src/expression_editor/ExpressionVisitor.h"
+
+namespace Interaction {
+	class Expression;
+}
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class QueryNode;
+
+class INFORMATIONSCRIPTING_API QueryNodeBuilder : public Interaction::ExpressionVisitor
 {
 	public:
-		virtual ~VCommandArgumentStyle() override;
+		static QueryNode* parse(const QString& text);
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+		QueryNode* buildQuery(Interaction::Expression* expression);
+
+		virtual void visit(Interaction::Empty* empty) override;
+		virtual void visit(Interaction::Value* val) override;
+		virtual void visit(Interaction::Operator* op) override;
+		virtual void visit(Interaction::UnfinishedOperator* unfinished) override;
+
+	private:
+		QueryNodeBuilder() = default;
+
+		void createErrorQuery(Interaction::Operator* op);
+
+		QueryNode* query_{};
 };
 
-} /* namespace InformationScripting */
+} /* namespace InformationScripting  */

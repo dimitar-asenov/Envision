@@ -24,17 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#include "OperatorNode.h"
+#include "VOperatorQueryNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::OperatorNode)
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(OperatorNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(OperatorNode)
+ITEM_COMMON_DEFINITIONS(VOperatorQueryNode, "item")
 
-REGISTER_ATTRIBUTE(OperatorNode, operands, TypedListOfQueryNode, false, false, true)
-REGISTER_ATTRIBUTE(OperatorNode, operators, TypedListOfCharacter, false, false, true)
+VOperatorQueryNode::VOperatorQueryNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
+
+void VOperatorQueryNode::initializeForms()
+{
+	auto leftEl = item(&I::left_, [](I* v){return v->node()->left();});
+
+	auto opEl = item<Visualization::Symbol>(&I::op_, [](I* v) {
+			switch (v->node()->op())
+			{
+				case OperatorQueryNode::OperatorTypes::Pipe : return &v->style()->pipeOp();
+				case OperatorQueryNode::OperatorTypes::Substract : return &v->style()->substractOp();
+				case OperatorQueryNode::OperatorTypes::Union : return &v->style()->unionOp();
+				default: return &v->style()->pipeOp();
+			}
+	});
+
+	auto rightEl = item(&I::right_, [](I* v){return v->node()->right();});
+
+	addForm(grid({
+			{leftEl, opEl, rightEl},
+		})
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
+}
 
 } /* namespace InformationScripting */

@@ -37,6 +37,8 @@
 
 namespace InformationScripting {
 
+// TODO most things here and in the corresponding cpp file are copied from CommandPropmpt.
+
 class QueryNodeContainer;
 
 class INFORMATIONSCRIPTING_API QueryPrompt : public Super<Visualization::DeclarativeItem<QueryPrompt>>
@@ -68,7 +70,7 @@ class INFORMATIONSCRIPTING_API QueryPrompt : public Super<Visualization::Declara
 
 		Visualization::Text* errorText_{};
 
-		QueryNodeContainer* queryNode_{};
+		QueryNodeContainer* queryContainer_{};
 		Visualization::Item* queryVis_{};
 
 		int commandSelectedFirst_{};
@@ -87,7 +89,6 @@ class INFORMATIONSCRIPTING_API QueryPrompt : public Super<Visualization::Declara
 };
 
 inline Visualization::Item* QueryPrompt::commandReceiver() { return commandReceiver_; }
-//inline QString QueryPrompt::text() const {return command_->text();}
 inline const std::unique_ptr<Visualization::Cursor>& QueryPrompt::commandReceiverCursor()
 { return commandReceiverCursor_;}
 

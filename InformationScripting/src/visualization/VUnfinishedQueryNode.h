@@ -28,17 +28,30 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/VList.h"
+
+#include "../nodes/UnfinishedQueryNode.h"
+#include "VUnfinishedQueryNodeStyle.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API VUnfinishedQueryNode
+		: public Super<Visualization::ItemWithNode<VUnfinishedQueryNode, Visualization::DeclarativeItem<VUnfinishedQueryNode>,
+		UnfinishedQueryNode>>
 {
+	ITEM_COMMON(VUnfinishedQueryNode)
 	public:
-		virtual ~VCommandArgumentStyle() override;
+		VUnfinishedQueryNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+		static void initializeForms();
+
+		virtual int determineForm() override;
+
+	private:
+		QList<Model::Node*> nodes_{};
 };
 
 } /* namespace InformationScripting */

@@ -28,17 +28,29 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "QueryNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/Integer.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, OperatorQueryNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API OperatorQueryNode : public Super<QueryNode>
 {
-	public:
-		virtual ~VCommandArgumentStyle() override;
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(OperatorQueryNode)
+	ATTRIBUTE(QueryNode, left, setLeft)
+	ATTRIBUTE(QueryNode, right, setRight)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+	public:
+		enum OperatorTypes { Pipe, Substract, Union };
+
+		OperatorTypes op() const;
+		void setOp(const OperatorTypes& oper);
 };
+
+inline OperatorQueryNode::OperatorTypes OperatorQueryNode::op() const { return static_cast<OperatorTypes>(opr()); }
+inline void OperatorQueryNode::setOp(const OperatorQueryNode::OperatorTypes& oper) { setOpr(static_cast<int>(oper)); }
 
 } /* namespace InformationScripting */

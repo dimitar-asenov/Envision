@@ -24,21 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ErrorQueryNode.h"
 
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(InformationScripting::ErrorQueryNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VCommandArgumentStyle() override;
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ErrorQueryNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ErrorQueryNode)
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+REGISTER_ATTRIBUTE(ErrorQueryNode, prefix, Text, false, false, true)
+REGISTER_ATTRIBUTE(ErrorQueryNode, arg, QueryNode, false, false, true)
+REGISTER_ATTRIBUTE(ErrorQueryNode, postfix, Text, false, false, true)
 
 } /* namespace InformationScripting */

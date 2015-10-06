@@ -24,21 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VUnfinishedQueryNode.h"
 
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VCommandArgumentStyle() override;
+ITEM_COMMON_DEFINITIONS(VUnfinishedQueryNode, "item")
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+VUnfinishedQueryNode::VUnfinishedQueryNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
+
+void VUnfinishedQueryNode::initializeForms()
+{
+	// TODO we probably need to set editable to false on the delimeter nodes, no clue how that works:
+	auto listEl = (new Visualization::GridLayoutFormElement())
+			->put(0, 0, (new Visualization::SequentialLayoutFormElement())->setHorizontal()
+			->setListOfNodes([](Item* i){return (static_cast<VUnfinishedQueryNode*>(i))->nodes_;}));
+	addForm(listEl
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
+}
+
+int VUnfinishedQueryNode::determineForm()
+{
+	nodes_.clear();
+	for (int i = 0; i < node()->delimiters()->size(); ++i)
+	{
+		nodes_.append(node()->delimiters()->at(i));
+		if (i < node()->operands()->size())
+			nodes_.append(node()->operands()->at(i));
+	}
+	return 0;
+}
 
 } /* namespace InformationScripting */

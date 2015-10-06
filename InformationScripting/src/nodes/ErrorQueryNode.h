@@ -28,17 +28,22 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "QueryNode.h"
+
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, ErrorQueryNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API ErrorQueryNode : public Super<QueryNode>
 {
-	public:
-		virtual ~VCommandArgumentStyle() override;
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ErrorQueryNode)
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, prefix, setPrefix, QString, const QString&)
+	ATTRIBUTE(QueryNode, arg, setArg)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, postfix, setPostfix, QString, const QString&)
 };
 
 } /* namespace InformationScripting */

@@ -33,12 +33,13 @@
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API VErrorQueryNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
-		virtual ~VCommandArgumentStyle() override;
+		virtual ~VErrorQueryNodeStyle() override;
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+	Property<Visualization::TextStyle> prefix{this, "prefix"};
+	Property<Visualization::TextStyle> postfix{this, "postfix"};
 };
 
 } /* namespace InformationScripting */

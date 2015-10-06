@@ -28,17 +28,16 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "QueryNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, EmptyQueryNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API EmptyQueryNode : public Super<QueryNode>
 {
-	public:
-		virtual ~VCommandArgumentStyle() override;
-
-	Property<Visualization::TextStyle> argument{this, "argument"};
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(EmptyQueryNode)
 };
 
 } /* namespace InformationScripting */

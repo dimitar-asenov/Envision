@@ -39,7 +39,7 @@
 #include "../queries/UnionOperator.h"
 #include "../queries/AddASTPropertiesAsTuples.h"
 #include "../queries/QueryRegistry.h"
-#include "../parsing/QueryBuilder.h"
+#include "../parsing/QueryParser.h"
 
 #include "../visualization/QueryPrompt.h"
 
@@ -74,7 +74,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	else if (command != "fallback")
 	{
 		args.prepend(command);
-		auto q = QueryBuilder::instance().buildQueryFrom(args.join(""), node);
+		auto q = QueryParser::buildQueryFrom(args.join(""), node);
 		QueryExecutor queryExecutor(q);
 		queryExecutor.execute();
 	}

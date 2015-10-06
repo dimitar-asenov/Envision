@@ -28,17 +28,37 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/Symbol.h"
+
+#include "../nodes/OperatorQueryNode.h"
+#include "VOperatorQueryNodeStyle.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class VOperatorQueryNode
+	: public Super<Visualization::ItemWithNode<VOperatorQueryNode, Visualization::DeclarativeItem<VOperatorQueryNode>,
+		OperatorQueryNode>>
 {
+	ITEM_COMMON(VOperatorQueryNode)
 	public:
-		virtual ~VCommandArgumentStyle() override;
+		VOperatorQueryNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+		Visualization::Item* left() const;
+		Visualization::Symbol* op() const;
+		Visualization::Item* right() const;
+
+		static void initializeForms();
+
+	private:
+		Visualization::Item* left_{};
+		Visualization::Symbol* op_{};
+		Visualization::Item* right_{};
 };
+
+inline Visualization::Item* VOperatorQueryNode::left() const { return left_; }
+inline Visualization::Symbol* VOperatorQueryNode::op() const { return op_; }
+inline Visualization::Item* VOperatorQueryNode::right() const { return right_; }
 
 } /* namespace InformationScripting */

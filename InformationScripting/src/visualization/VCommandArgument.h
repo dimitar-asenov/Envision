@@ -31,7 +31,6 @@
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/VList.h"
 
 #include "../nodes/CommandArgument.h"
 #include "VCommandArgumentStyle.h"

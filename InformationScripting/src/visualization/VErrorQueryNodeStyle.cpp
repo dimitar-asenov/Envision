@@ -24,21 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VErrorQueryNodeStyle.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VCommandArgumentStyle() override;
-
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+VErrorQueryNodeStyle::~VErrorQueryNodeStyle()
+{}
 
 } /* namespace InformationScripting */

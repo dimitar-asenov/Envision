@@ -24,21 +24,45 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "QueryOperatorDescriptorList.h"
 
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "QueryOperatorDescriptor.h"
+#include "../nodes/OperatorQueryNode.h"
+#include "../nodes/CommandNode.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+QueryOperatorDescriptorList* QueryOperatorDescriptorList::instance()
 {
-	public:
-		virtual ~VCommandArgumentStyle() override;
+	static QueryOperatorDescriptorList instance;
+	return &instance;
+}
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+void QueryOperatorDescriptorList::initializeWithDefaultOperators()
+{
+	using QOD = QueryOperatorDescriptor;
+	using OpType = OperatorQueryNode::OperatorTypes;
+	add(new QOD("pipe operator", "expr | expr", 2, QOD::LeftAssociative, QOD::operatorQuery<OpType::Pipe>));
+	add(new QOD("pipe operator", "expr - expr", 2, QOD::LeftAssociative, QOD::operatorQuery<OpType::Substract>));
+	add(new QOD("pipe operator", "expr U expr", 2, QOD::LeftAssociative, QOD::operatorQuery<OpType::Union>));
+
+	add(new QOD("command with arg", "id SPACE expr", 1, QOD::LeftAssociative,
+					[](const QList<QueryNode*>& operands) -> QueryNode* {
+		auto cmd = DCast<CommandNode>(operands.first());
+		if (!cmd) return operands.first();
+
+		for (int i = 1; i < operands.size(); ++i)
+		{
+			qDebug() << operands[i]->typeName();
+			cmd->arguments()->append(operands[i]);
+		}
+		return cmd;
+	}));
+
+	// TODO how to represent arguments?? Maybe use unary minus (-).
+	// But then what to do with an eventual = ??
+	// Arguments often have the form: -argName=someValue or --argumentName=someValue
+	// Where the assignment is optional.
+}
 
 } /* namespace InformationScripting */

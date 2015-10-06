@@ -24,21 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VEmptyQueryNode.h"
 
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VCommandArgumentStyle() override;
+ITEM_COMMON_DEFINITIONS(VEmptyQueryNode, "item")
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+VEmptyQueryNode::VEmptyQueryNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
+
+void VEmptyQueryNode::initializeForms()
+{
+	addForm(item(&I::empty_, &StyleType::normal));
+}
 
 } /* namespace InformationScripting */

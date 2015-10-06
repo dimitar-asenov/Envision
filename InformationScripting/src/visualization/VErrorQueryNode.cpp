@@ -24,21 +24,41 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VErrorQueryNode.h"
 
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VCommandArgumentStyle() override;
+ITEM_COMMON_DEFINITIONS(VErrorQueryNode, "item")
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+VErrorQueryNode::VErrorQueryNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
+
+void VErrorQueryNode::initializeForms()
+{
+	auto prefixEl = item<Visualization::VText>(&I::prefix_, [](I* v){return v->node()->prefixNode();},
+			[](I* v){return &v->style()->prefix();});
+
+	auto argEl = item(&I::arg_, [](I* v){return v->node()->arg();});
+
+	auto postfixEl = item<Visualization::VText>(&I::postfix_, [](I* v){return v->node()->postfixNode();},
+			[](I* v){return &v->style()->postfix();});
+
+	addForm(grid({
+			{prefixEl, argEl, postfixEl},
+		})
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
+}
+
+void VErrorQueryNode::determineChildren()
+{
+	Super::determineChildren();
+	prefix_->setEditable(false);
+	postfix_->setEditable(false);
+}
 
 } /* namespace InformationScripting */

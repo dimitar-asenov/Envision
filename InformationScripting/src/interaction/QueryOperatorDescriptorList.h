@@ -28,17 +28,24 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "InteractionBase/src/expression_editor/OperatorDescriptorList.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class QueryNode;
+
+class QueryOperatorDescriptorList : public Interaction::OperatorDescriptorList
 {
 	public:
-		virtual ~VCommandArgumentStyle() override;
+		static QueryOperatorDescriptorList* instance();
+		static void initializeWithDefaultOperators();
+	private:
+		QueryOperatorDescriptorList() = default;
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+		static void add(Interaction::OperatorDescriptor* descriptor);
 };
+
+inline void QueryOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)
+{ instance()->addDescriptor(descriptor); }
 
 } /* namespace InformationScripting */

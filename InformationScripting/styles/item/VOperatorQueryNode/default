@@ -1,0 +1,12 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../DeclarativeItemBase/default">
+	<pipeOp prototypes="../Symbol/default">
+		<symbol>|</symbol>
+	</pipeOp>
+	<substractOp prototypes="../Symbol/default">
+		<symbol>-</symbol>
+	</substractOp>
+	<unionOp prototypes="../Symbol/default">
+		<symbol>U</symbol>
+	</unionOp>
+</style>

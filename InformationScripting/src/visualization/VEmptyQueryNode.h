@@ -28,17 +28,30 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/Static.h"
+
+#include "../nodes/EmptyQueryNode.h"
+#include "VEmptyQueryNodeStyle.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INFORMATIONSCRIPTING_API VEmptyQueryNode
+		: public Super<Visualization::ItemWithNode<VEmptyQueryNode, Visualization::DeclarativeItem<VEmptyQueryNode>,
+		EmptyQueryNode>>
 {
+	ITEM_COMMON(VEmptyQueryNode)
 	public:
-		virtual ~VCommandArgumentStyle() override;
+		VEmptyQueryNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
+		Visualization::Static* empty() const;
+		static void initializeForms();
+
+	private:
+		Visualization::Static* empty_{};
 };
+
+inline Visualization::Static* VEmptyQueryNode::empty() const { return empty_; }
 
 } /* namespace InformationScripting */

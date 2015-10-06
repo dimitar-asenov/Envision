@@ -28,52 +28,37 @@
 
 #include "../informationscripting_api.h"
 
-namespace Model {
-	class Node;
-}
+#include "../nodes/QueryNode.h"
+#include "../nodes/OperatorQueryNode.h"
+
+#include "InteractionBase/src/expression_editor/OperatorDescriptor.h"
 
 namespace InformationScripting {
 
-class CompositeQuery;
-class Query;
-
-class INFORMATIONSCRIPTING_API QueryBuilder
+class QueryOperatorDescriptor : public Interaction::OperatorDescriptor
 {
 	public:
-		static QueryBuilder& instance();
-		/**
-		 * Parses the \a text in the following language:
-		 *
-		 * char			:= a-z
-		 * word			:= char [char|SPACE]+
-		 * query			:= "word"
-		 * queryOrList := query | list
-		 * op				:= | - U
-		 * operator		:= $queryOrList [op queryOrList]+$
-		 * queryOrOp	:= query | operator
-		 * list			:= {queryOrOp [, queryOrOp]+}
-		 */
-		Query* buildQueryFrom(const QString& text, Model::Node* target);
+		using CreateFunction = std::function<QueryNode*(const QList<QueryNode*>& operands)>;
+		QueryOperatorDescriptor(const QString& name, const QString& signature, int precedence,
+										Associativity associativity, CreateFunction createFunction);
+
+		QueryNode* create(const QList<QueryNode*>& operands);
+
+		template<OperatorQueryNode::OperatorTypes op>
+		static QueryNode* operatorQuery(const QList<QueryNode*>& operands);
 
 	private:
-		QueryBuilder() = default;
-		enum class Type: int {Operator = 0, Query = 1, List = 2};
-		Type typeOf(const QString& text);
-		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
-
-		Query* parseQuery(const QString& text);
-		QList<Query*> parseList(const QString& text);
-		Query* parseOperator(const QString& text, bool connectInput = false);
-		QList<Query*> parseOperatorPart(const QString& text);
-
-		void connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
-										Query* connectionQuery, Query* outputQuery = nullptr);
-
-		Model::Node* target_{};
-
-		static constexpr int SCOPE_SYMBOL_LENGTH_{2};
-		static const QStringList OPEN_SCOPE_SYMBOL;
-		static const QStringList CLOSE_SCOPE_SYMBOL;
+		CreateFunction createFunction_{};
 };
 
-} /* namespace InformationScripting  */
+template<OperatorQueryNode::OperatorTypes op>
+inline QueryNode* QueryOperatorDescriptor::operatorQuery(const QList<QueryNode*>& operands)
+{
+	auto opr = new OperatorQueryNode();
+	opr->setOp(op);
+	opr->setLeft(operands.first());
+	opr->setRight(operands.last());
+	return opr;
+}
+
+} /* namespace InformationScripting */

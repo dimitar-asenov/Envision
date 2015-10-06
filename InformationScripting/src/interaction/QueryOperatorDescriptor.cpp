@@ -24,21 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "QueryOperatorDescriptor.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+QueryOperatorDescriptor::QueryOperatorDescriptor(const QString& name, const QString& signature, int precedence,
+																 Associativity associativity, CreateFunction createFunction)
+	: Interaction::OperatorDescriptor(name, signature, precedence, associativity),
+	  createFunction_(createFunction)
 {
-	public:
-		virtual ~VCommandArgumentStyle() override;
+	Q_ASSERT(createFunction_);
+}
 
-	Property<Visualization::TextStyle> argument{this, "argument"};
-};
+QueryNode* QueryOperatorDescriptor::create(const QList<QueryNode*>& operands)
+{
+	return createFunction_(operands);
+}
 
 } /* namespace InformationScripting */
