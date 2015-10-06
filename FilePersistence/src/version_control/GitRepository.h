@@ -45,6 +45,8 @@ class FILEPERSISTENCE_API GitRepository
 		GitRepository(QString path);
 		~GitRepository();
 
+		static bool repositoryExists(QString path);
+
 		std::shared_ptr<Merge> merge(QString revision, bool fastForward = true);
 
 		Diff diff(QString revisionA, QString revisionB,

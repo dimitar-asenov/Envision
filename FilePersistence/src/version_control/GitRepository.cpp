@@ -165,6 +165,17 @@ GitRepository::~GitRepository()
 	git_libgit2_shutdown();
 }
 
+bool GitRepository::repositoryExists(QString path)
+{
+	git_libgit2_init();
+	git_repository* repo{};
+
+	int error = git_repository_open(&repo, path.toStdString().c_str());
+	git_repository_free(repo);
+	git_libgit2_shutdown();
+	return error == GIT_OK;
+}
+
 std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 {
 	if (merge_.expired())
