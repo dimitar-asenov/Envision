@@ -28,27 +28,26 @@
 
 #include "../informationscripting_api.h"
 
-namespace Visualization {
-	class ItemStyle;
-}
+#include "../queries/ScopedArgumentQuery.h"
 
 namespace InformationScripting {
 
-class TupleSet;
-
-class INFORMATIONSCRIPTING_API DefaultVisualizer
+class Heatmap : public ScopedArgumentQuery
 {
 	public:
-		static DefaultVisualizer& instance();
+		virtual TupleSet execute(TupleSet input) override;
 
-		void visualize(const TupleSet& ts);
+		static void registerDefaultQueries();
+
 	private:
-		DefaultVisualizer() = default;
+		static const QStringList VALUE_ATTRIBUTE_NAME_NAMES;
 
-		static const QString HIGHLIGHT_OVERLAY_GROUP;
-		static const QString ARROW_OVERLAY_GROUP;
+		const QColor baseColor_{150, 255, 0};
+		QPair<int, int> valueRange_; // min, max
 
-		Visualization::ItemStyle* createSelectionStyle(const QString& color);
+		Heatmap(QStringList args);
+
+		QColor colorForValue(int value);
 };
 
 } /* namespace InformationScripting */

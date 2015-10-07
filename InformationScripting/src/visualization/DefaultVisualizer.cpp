@@ -32,6 +32,10 @@
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
+#include "VisualizationBase/src/styles/StyleLoader.h"
+#include "VisualizationBase/src/shapes/BoxStyle.h"
+
+#include "VisualizationBase/src/items/ItemStyle.h"
 
 #include "../dataformat/TupleSet.h"
 
@@ -111,13 +115,35 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 			while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
 			{
 				auto item = *nodeVisualizationIt++;
-				auto overlay = new Visualization::SelectionOverlay(
-							item, Visualization::SelectionOverlay::itemStyles().get(it.value() + "Highlight"));
+				auto style = createSelectionStyle(it.value());
+				auto overlay = new Visualization::SelectionOverlay(item, style);
 				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 			}
 		}
 	}
 }
 
+Visualization::ItemStyle* DefaultVisualizer::createSelectionStyle(const QString& color)
+{
+	auto style = Visualization::StyleLoader().loadStyle<Visualization::ItemStyle>("item/SelectionOverlay",
+																											"redHighlight");
+	auto shapeStyle = style->shapeStyle();
+	if (auto boxStyle = dynamic_cast<Visualization::BoxStyle*>(shapeStyle))
+	{
+		auto background = boxStyle->background();
+		auto currentColor = background.color();
+		auto newColor = QColor(color);
+		newColor.setAlpha(currentColor.alpha());
+		background.setColor(newColor);
+		boxStyle->background = background;
+	}
+	auto outline = shapeStyle->outline();
+	auto currentColor = outline.color();
+	auto newColor = QColor(color);
+	newColor.setAlpha(currentColor.alpha());
+	outline.setColor(newColor);
+	shapeStyle->outline = outline;
+	return style;
+}
 
 } /* namespace InformationScripting */

@@ -70,6 +70,7 @@ BOOST_PYTHON_MODULE(DataApi) {
 		class_<QPair<QString, Property>, boost::noncopyable>("NamedPropertyBaseClass", no_init);
 		class_<NamedProperty, bases<QPair<QString, Property>>>("NamedProperty", init<QString, QString>())
 				.def(init<QString, Model::Node*>())
+				.def(init<QString, int>())
 				.add_property("name",
 								  make_getter(&NamedProperty::first, return_value_policy<return_by_value>()),
 								  make_setter(&NamedProperty::first))

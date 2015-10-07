@@ -41,6 +41,7 @@
 #include "queries/AddASTPropertiesAsTuples.h"
 #include "queries/TagQuery.h"
 #include "nodes/TagExtension.h"
+#include "visualization/Heatmap.h"
 #include "visualization/VCommandNode.h"
 #include "visualization/VCommandArgument.h"
 #include "visualization/VEmptyQueryNode.h"
@@ -61,6 +62,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	AstNameFilter::registerDefaultQueries();
 	AddASTPropertiesAsTuples::registerDefaultQueries();
 	TagQuery::registerDefaultQueries();
+	Heatmap::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();
 	VCommandNode::setDefaultClassHandler(HQuery::instance());

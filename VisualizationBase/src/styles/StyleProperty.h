@@ -42,6 +42,7 @@ class StyleProperty
 			});
 		}
 		inline const T& operator()() const { return value_; }
+		inline T& operator=(const T& rhs) { value_ = rhs; return value_; }
 
 
 	private:
@@ -62,6 +63,7 @@ class StyleProperty<T, typename std::enable_if<std::is_enum<T>::value>::type>
 			});
 		}
 		inline T operator()() const { return value_; }
+		inline T& operator=(const T rhs) { value_ = rhs; return value_; }
 
 	private:
 		T value_{};
@@ -79,6 +81,7 @@ class StyleProperty<T, typename std::enable_if<std::is_integral<T>::value>::type
 			});
 		}
 		inline T operator()() const { return value_; }
+		inline T& operator=(const T rhs) { value_ = rhs; return value_; }
 
 	private:
 		T value_{};
