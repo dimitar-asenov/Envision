@@ -24,57 +24,19 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "ScopedArgumentQuery.h"
-
-namespace Model {
-	class Node;
-	class SymbolMatcher;
-}
-
-namespace OOModel {
-	class Class;
-	class Method;
-}
+#include "LinearQuery.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+QList<TupleSet> LinearQuery::execute(QList<TupleSet> input)
 {
-	public:
-		virtual TupleSet execute(TupleSet input) override;
+	QList<TupleSet> result;
+	// If we have no input just add one default input such that we execute at least once.
+	if (input.isEmpty()) input << TupleSet();
 
-		static void registerDefaultQueries();
-
-	private:
-
-		static const QStringList NODETYPE_ARGUMENT_NAMES;
-		static const QStringList NAME_ARGUMENT_NAMES;
-		static const QStringList ADD_AS_NAMES;
-
-		using ExecuteFunction = std::function<TupleSet (AstQuery*, TupleSet)>;
-		ExecuteFunction exec_{};
-
-		AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args);
-
-		static void setTypeTo(QStringList& args, QString type);
-
-		TupleSet baseClassesQuery(TupleSet input);
-		TupleSet toParentType(TupleSet input);
-		TupleSet callGraph(TupleSet input);
-		TupleSet genericQuery(TupleSet input);
-		TupleSet typeQuery(TupleSet input, QString type);
-		TupleSet nameQuery(TupleSet input, QString name);
-		TupleSet usesQuery(TupleSet input);
-
-		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
-
-		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
-};
+	for (auto ts : input)
+		result.push_back(execute(ts));
+	return result;
+}
 
 } /* namespace InformationScripting */

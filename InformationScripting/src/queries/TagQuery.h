@@ -40,7 +40,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 {
 	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+		virtual TupleSet execute(TupleSet input) override;
 
 		static void registerDefaultQueries();
 
@@ -50,14 +50,15 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		static const QStringList REMOVE_ARGUMENT_NAMES;
 		static const QStringList PERSISTENT_ARGUMENT_NAMES;
 
-		ExecuteFunction<TagQuery> exec_{};
+		using ExecuteFunction = std::function<TupleSet (TagQuery*, TupleSet)>;
+		ExecuteFunction exec_{};
 		bool persistent_{true};
 
-		TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args);
-		QList<TupleSet> tags(QList<TupleSet> input);
-		QList<TupleSet> queryTags(QList<TupleSet> input);
-		QList<TupleSet> addTags(QList<TupleSet> input);
-		QList<TupleSet> removeTags(QList<TupleSet> input);
+		TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args);
+		TupleSet tags(TupleSet input);
+		TupleSet queryTags(TupleSet input);
+		TupleSet addTags(TupleSet input);
+		TupleSet removeTags(TupleSet input);
 
 		void insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
 };
