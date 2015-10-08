@@ -28,26 +28,25 @@
 
 #include "../informationscripting_api.h"
 
+#include "VisualizationBase/src/overlays/SelectionOverlay.h"
+
 namespace InformationScripting {
 
-class HighlightOverlay;
-class TupleSet;
-
-class INFORMATIONSCRIPTING_API DefaultVisualizer
+class INFORMATIONSCRIPTING_API HighlightOverlay : public Super<Visualization::SelectionOverlay>
 {
+	ITEM_COMMON_CUSTOM_STYLENAME(HighlightOverlay, Visualization::ItemStyle)
+
 	public:
-		static DefaultVisualizer& instance();
+		HighlightOverlay(Item* selectedItem, const StyleType* style = itemStyles().get());
 
-		void visualize(const TupleSet& ts);
+		virtual QColor customShapeColor() const override;
+		void setColor(const QColor& color);
+
 	private:
-		DefaultVisualizer() = default;
-
-		static const QString HIGHLIGHT_OVERLAY_GROUP;
-		static const QString ARROW_OVERLAY_GROUP;
-
-		static constexpr int DEFAULT_ALPHA_{60};
-
-		void setColor(HighlightOverlay* overlay, QColor color);
+		QColor color_;
 };
+
+inline QColor HighlightOverlay::customShapeColor() const { return color_; }
+inline void HighlightOverlay::setColor(const QColor& color) { color_ = color; }
 
 } /* namespace InformationScripting */
