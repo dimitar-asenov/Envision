@@ -28,11 +28,22 @@
 
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/expressions/types/TypeExpression.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
+#include "OOModel/src/expressions/types/ClassTypeExpression.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
+#include "OOModel/src/expressions/types/PointerTypeExpression.h"
+#include "OOModel/src/expressions/types/ReferenceTypeExpression.h"
+#include "OOModel/src/expressions/types/AutoTypeExpression.h"
+#include "OOModel/src/expressions/types/TypeQualifierExpression.h"
+#include "OOModel/src/expressions/types/FunctionTypeExpression.h"
+
+#include "OOInteraction/src/string_offset_providers/StringComponents.h"
 
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
 
-#include "../visitors/AllNodesOfType.h"
+#include "../visitors/NodeGetter.h"
 #include "QueryRegistry.h"
 
 namespace InformationScripting {
@@ -83,6 +94,9 @@ void AstQuery::registerDefaultQueries()
 	});
 	registry.registerQueryConstructor("uses", [](Model::Node* target, QStringList args) {
 		return new AstQuery(&AstQuery::usesQuery, target, args);
+	});
+	registry.registerQueryConstructor("type", [](Model::Node* target, QStringList args) {
+		return new AstQuery(&AstQuery::typeFilter, target, args);
 	});
 }
 
@@ -245,15 +259,15 @@ TupleSet AstQuery::usesQuery(TupleSet input)
 	QHash<Model::Node*, QList<Model::Reference*>> references;
 
 	if (scope() == Scope::Local)
-		references[target()] = AllNodesOfType::allNodesOfType<Model::Reference>(target());
+		references[target()] = NodeGetter::allNodesOfType<Model::Reference>(target());
 	else if (scope() == Scope::Global)
-		references[target()->root()] = AllNodesOfType::allNodesOfType<Model::Reference>(target()->root());
+		references[target()->root()] = NodeGetter::allNodesOfType<Model::Reference>(target()->root());
 	else if (scope() == Scope::Input)
 	{
 		auto tuples = input;
 
 		auto tuple = tuples.tuples("ast");
-		for (const auto& t : tuple) references[t["ast"]] = AllNodesOfType::allNodesOfType<Model::Reference>(t["ast"]);
+		for (const auto& t : tuple) references[t["ast"]] = NodeGetter::allNodesOfType<Model::Reference>(t["ast"]);
 
 		// Keep all non ast nodes
 		result = tuples;
@@ -285,6 +299,57 @@ TupleSet AstQuery::usesQuery(TupleSet input)
 	return result;
 }
 
+TupleSet AstQuery::typeFilter(TupleSet input)
+{
+	using SymbolType = Model::Node::SymbolType;
+
+	SymbolType expectedSymbolType = SymbolType::VARIABLE;
+	QString expectedType;
+	QStringList arguments;
+	TupleSet result;
+
+	// NOTE: To use spaces in this argument use quotes!
+	// QCommandLineParser removes the entered spaces automatically
+	// NOTE: here the type argument has a different meaning than in the other queries:
+	auto typeArgument = argument(NODETYPE_ARGUMENT_NAMES[1]);
+	// Remove quotes if there are
+	if (typeArgument.startsWith("\"")) typeArgument = typeArgument.mid(1);
+	if (typeArgument.endsWith("\"")) typeArgument = typeArgument.left(typeArgument.size()-1);
+
+	auto parts = typeArgument.split("(", QString::SkipEmptyParts);
+	expectedType = parts[0];
+	if (parts.size() > 1)
+	{
+		expectedSymbolType = SymbolType::METHOD;
+		auto writtenArgs = parts[1].left(parts[1].size() - 1); // Drop the closing parent
+		arguments = writtenArgs.split(",", QString::SkipEmptyParts);
+	}
+
+	// Lambda which returns true for all nodes which match the expected type.
+	auto keepNode = [expectedSymbolType, expectedType, arguments](Model::Node* node) {
+		auto symbolTypes = node->symbolType();
+
+		if (symbolTypes.testFlag(expectedSymbolType))
+			return matchesExpectedType(node, expectedSymbolType, expectedType, arguments);
+		return false;
+	};
+
+	if (scope() == Scope::Local)
+		addNodesForWhich(result, keepNode, target());
+	else if (scope() == Scope::Global)
+		addNodesForWhich(result, keepNode);
+	else if (scope() == Scope::Input)
+	{
+		result = input;
+
+		// Note here we remove the input nodes.
+		auto tuples = result.take("ast");
+		for (const auto& t : tuples) addNodesForWhich(result, keepNode, t["ast"]);
+	}
+
+	return result;
+}
+
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
 {
 	auto bases = childClass->directBaseClasses();
@@ -312,7 +377,17 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
 {
 	if (!from) from = target()->root();
-	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, matcher);
+	auto allNodeOfType =  NodeGetter::allNodesWhich(from, [matcher](Model::Node* node)
+																			{return matcher.matches(node->typeName());});
+	for (auto node : allNodeOfType)
+		ts.add({{"ast", node}});
+}
+
+template <class Predicate>
+void AstQuery::addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from)
+{
+	if (!from) from = target()->root();
+	auto allNodeOfType =  NodeGetter::allNodesWhich(from, holds);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
 }
@@ -330,6 +405,41 @@ void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relatio
 			for (const auto& keepProperty : keepProperties)
 				tupleSet.add({{"ast", tuple[keepProperty]}});
 	}
+}
+
+bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
+											  const QString& expectedType, const QStringList& args)
+{
+	using namespace OOInteraction;
+	using SymbolType = Model::Node::SymbolType;
+	if (SymbolType::VARIABLE == symbolType)
+	{
+		if (auto varDecl = DCast<OOModel::VariableDeclaration>(node))
+			return StringComponents::stringForNode(varDecl->typeExpression()) == expectedType;
+	}
+	else
+	{
+		if (auto methodDecl = DCast<OOModel::Method>(node))
+		{
+			if (args.size() != methodDecl->arguments()->size()) return false;
+			// TODO: here we support only one return value:
+			if ((methodDecl->results()->size() == 0 && (expectedType.isEmpty() || expectedType == "void"))
+				 || (methodDecl->results()->size() > 0 &&
+					  StringComponents::stringForNode(methodDecl->results()->at(0)->typeExpression()) == expectedType)
+				 || expectedType == "_")
+			{
+				// return type matches check arguments:
+				bool matches = true;
+				for (int i = 0; i < args.size() && matches; ++i)
+				{
+					if (args[i] == "_") continue;
+					matches = StringComponents::stringForNode(methodDecl->arguments()->at(i)->typeExpression()) == args[i];
+				}
+				return matches;
+			}
+		}
+	}
+	return false;
 }
 
 } /* namespace InformationScripting */

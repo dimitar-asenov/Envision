@@ -30,13 +30,15 @@
 
 #include "ScopedArgumentQuery.h"
 
+#include "ModelBase/src/nodes/Node.h"
+
 namespace Model {
-	class Node;
 	class SymbolMatcher;
 }
 
 namespace OOModel {
 	class Class;
+	class Expression;
 	class Method;
 }
 
@@ -69,12 +71,18 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		TupleSet typeQuery(TupleSet input, QString type);
 		TupleSet nameQuery(TupleSet input, QString name);
 		TupleSet usesQuery(TupleSet input);
+		TupleSet typeFilter(TupleSet input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
+		template <class Predicate>
+		void addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from = nullptr);
 		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
 
 		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
+
+		static bool matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
+										 const QString& expectedType, const QStringList& args);
 };
 
 } /* namespace InformationScripting */
