@@ -29,17 +29,25 @@
 #include "../wrappers/AstApi.h"
 #include "../wrappers/DataApi.h"
 #include "../helpers/BoostPythonHelpers.h"
+#include "../queries/QueryRegistry.h"
+
+#include "ModelBase/src/nodes/Node.h"
 
 namespace InformationScripting {
 
-ScriptQuery::ScriptQuery(const QString& scriptPath, const QStringList& args)
-	: scriptPath_{scriptPath}, arguments_{args}
+ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args)
+	: scriptPath_{scriptPath}, target_{target}, arguments_{args}
 {}
+
+// Since we can't create a module in another way, we create an empty one here.
+// We fill it with the methods from the QueryRegistry during execution.
+BOOST_PYTHON_MODULE(Query) {}
 
 void ScriptQuery::initPythonEnvironment()
 {
 	PyImport_AppendInittab("AstApi", PyInit_AstApi);
 	PyImport_AppendInittab("DataApi", PyInit_DataApi);
+	PyImport_AppendInittab("Query", PyInit_Query);
 	Py_Initialize();
 }
 
@@ -71,7 +79,27 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 		python::object sys = python::import("sys");
 
 		main_namespace["inputs"] = input;
+		main_namespace["target"] = python::ptr(target_);
 		main_namespace["args"] = arguments_;
+
+		python::object queryModule = python::import("Query");
+		python::dict queriesDict = python::extract<python::dict>(queryModule.attr("__dict__"));
+		main_namespace["Query"] = queryModule;
+
+		// Expose registered queries to the python environment:
+		// Note when calling python scripts from python scripts:
+		// 1: All data is shared between the scripts,
+		//		this could possibly be changed by calling Py_Initialize here in the execute method.
+		// 2: It allows infinite recursion, e.g. in a script called test.py call test()
+		auto allQueries = QueryRegistry::instance().registeredQueries() + QueryRegistry::instance().scriptQueries();
+		for (const auto& query : allQueries)
+		{
+			auto queryMethod = std::bind(&ScriptQuery::queryExecutor, this, query, std::placeholders::_1,
+												  std::placeholders::_2);
+			auto call_policies = python::default_call_policies();
+			typedef boost::mpl::vector<QList<TupleSet>, python::list, python::list> func_sig;
+			queriesDict[query] = python::make_function(queryMethod, call_policies, func_sig());
+		}
 
 		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);
 		// Workaround to get output
@@ -98,6 +126,20 @@ void ScriptQuery::importStar(boost::python::dict& main_namespace, boost::python:
 		QString key = python::extract<QString>(*keysBegin++);
 		if (!key.startsWith("_")) main_namespace[key] = astApiDict[key];
 	}
+}
+
+QList<TupleSet> ScriptQuery::queryExecutor(QString name, boost::python::list args, boost::python::list input)
+{
+	boost::python::stl_input_iterator<QString> argsBegin(args), argsEnd;
+	QStringList argsConverted = QStringList::fromStdList(std::list<QString>(argsBegin, argsEnd));
+
+	boost::python::stl_input_iterator<TupleSet> inputsBegin(input), inputsEnd;
+	auto inputConverted = QList<TupleSet>::fromStdList(std::list<TupleSet>(inputsBegin, inputsEnd));
+
+	std::unique_ptr<Query> query{QueryRegistry::instance().buildQuery(name, target_, argsConverted)};
+	auto result = query->execute(inputConverted);
+
+	return result;
 }
 
 } /* namespace InformationScripting */

@@ -47,16 +47,25 @@ Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QS
 		// Or eventually decide that we don't allow condition in the property adder
 		return new NodePropertyAdder(command, args[1]);
 	}
-	if (auto script = tryBuildQueryFromScript(command, args))
+	if (auto script = tryBuildQueryFromScript(command, target, args))
 		return script;
 	return nullptr;
 }
 
-Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, QStringList args)
+QStringList QueryRegistry::scriptQueries() const
+{
+	QStringList result;
+	for (const auto& scriptName : QDir(scriptLocation_).entryList(QDir::Files | QDir::NoDotAndDotDot))
+		if (scriptName.endsWith(".py"))
+			result << scriptName.split(".py").takeFirst();
+	return result;
+}
+
+Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, Model::Node* target, QStringList args)
 {
 	QString scriptName{scriptLocation_ + name + ".py"};
 	if (QFile::exists(scriptName))
-		return new ScriptQuery(scriptName, args);
+		return new ScriptQuery(scriptName, target, args);
 	return nullptr;
 }
 
