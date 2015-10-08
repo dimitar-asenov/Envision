@@ -24,30 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
+#include "HighlightOverlay.h"
 
 namespace InformationScripting {
 
-class HighlightOverlay;
-class TupleSet;
+ITEM_COMMON_DEFINITIONS(HighlightOverlay, "item")
 
-class INFORMATIONSCRIPTING_API DefaultVisualizer
-{
-	public:
-		static DefaultVisualizer& instance();
-
-		void visualize(const TupleSet& ts);
-	private:
-		DefaultVisualizer() = default;
-
-		static const QString HIGHLIGHT_OVERLAY_GROUP;
-		static const QString ARROW_OVERLAY_GROUP;
-
-		static constexpr int DEFAULT_ALPHA_{60};
-
-		void setColor(HighlightOverlay* overlay, QColor color);
-};
+HighlightOverlay::HighlightOverlay(Item* selectedItem, const StyleType* style)  : Super{{selectedItem}, style} {}
 
 } /* namespace InformationScripting */

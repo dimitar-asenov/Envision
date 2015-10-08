@@ -69,7 +69,9 @@ HEADERS += src/precompiled.h \
     src/visualization/VErrorQueryNode.h \
     src/visualization/VOperatorQueryNode.h \
     src/visualization/VOperatorQueryNodeStyle.h \
-    src/queries/LinearQuery.h
+    src/queries/LinearQuery.h \
+    src/visualization/HighlightOverlay.h \
+    src/visualization/Heatmap.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -123,7 +125,9 @@ SOURCES += src/InformationScriptingException.cpp \
     src/visualization/VErrorQueryNodeStyle.cpp \
     src/visualization/VOperatorQueryNode.cpp \
     src/visualization/VOperatorQueryNodeStyle.cpp \
-    src/queries/LinearQuery.cpp
+    src/queries/LinearQuery.cpp \
+    src/visualization/HighlightOverlay.cpp \
+    src/visualization/Heatmap.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

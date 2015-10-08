@@ -91,7 +91,14 @@ void BoxStyle::unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int
 		}
 
 	// Draw box.
-	painter->setPen(outline());
+	if (customColor.isValid())
+	{
+		auto pen = outline();
+		pen.setColor(customColor.darker());
+		painter->setPen(pen);
+	}
+	else
+		painter->setPen(outline());
 
 	// Set the brush and fix the gradient if needed.
 	if ( background().style() == Qt::LinearGradientPattern

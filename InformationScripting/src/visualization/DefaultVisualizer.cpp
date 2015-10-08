@@ -31,8 +31,8 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
-#include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
+#include "HighlightOverlay.h"
 #include "../dataformat/TupleSet.h"
 
 namespace InformationScripting {
@@ -111,12 +111,18 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 			while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
 			{
 				auto item = *nodeVisualizationIt++;
-				auto overlay = new Visualization::SelectionOverlay(
-							item, Visualization::SelectionOverlay::itemStyles().get(it.value() + "Highlight"));
+				auto overlay = new HighlightOverlay(item);
+				setColor(overlay, it.value());
 				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 			}
 		}
 	}
+}
+
+void DefaultVisualizer::setColor(HighlightOverlay* overlay, QColor color)
+{
+	color.setAlpha(DEFAULT_ALPHA_);
+	overlay->setColor(color);
 }
 
 
