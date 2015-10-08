@@ -39,10 +39,15 @@ ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target, const Q
 	: scriptPath_{scriptPath}, target_{target}, arguments_{args}
 {}
 
+// Since we can't create a module in another way, we create an empty one here.
+// We fill it with the methods from the QueryRegistry during execution.
+BOOST_PYTHON_MODULE(Query) {}
+
 void ScriptQuery::initPythonEnvironment()
 {
 	PyImport_AppendInittab("AstApi", PyInit_AstApi);
 	PyImport_AppendInittab("DataApi", PyInit_DataApi);
+	PyImport_AppendInittab("Query", PyInit_Query);
 	Py_Initialize();
 }
 
@@ -77,6 +82,10 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 		main_namespace["target"] = python::ptr(target_);
 		main_namespace["args"] = arguments_;
 
+		python::object queryModule = python::import("Query");
+		python::dict queriesDict = python::extract<python::dict>(queryModule.attr("__dict__"));
+		main_namespace["Query"] = queryModule;
+
 		// Expose registered queries to the python environment:
 		// Note when calling python scripts from python scripts:
 		// 1: All data is shared between the scripts,
@@ -89,7 +98,7 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 												  std::placeholders::_2);
 			auto call_policies = python::default_call_policies();
 			typedef boost::mpl::vector<QList<TupleSet>, python::list, python::list> func_sig;
-			main_namespace[query] = python::make_function(queryMethod, call_policies, func_sig());
+			queriesDict[query] = python::make_function(queryMethod, call_policies, func_sig());
 		}
 
 		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);
