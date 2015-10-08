@@ -38,6 +38,8 @@
 #include "OOModel/src/expressions/types/TypeQualifierExpression.h"
 #include "OOModel/src/expressions/types/FunctionTypeExpression.h"
 
+#include "OOInteraction/src/string_offset_providers/StringComponents.h"
+
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
 
@@ -408,11 +410,12 @@ void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relatio
 bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
 											  const QString& expectedType, const QStringList& args)
 {
+	using namespace OOInteraction;
 	using SymbolType = Model::Node::SymbolType;
 	if (SymbolType::VARIABLE == symbolType)
 	{
 		if (auto varDecl = DCast<OOModel::VariableDeclaration>(node))
-			return stringifyType(varDecl->typeExpression()) == expectedType;
+			return StringComponents::stringForNode(varDecl->typeExpression()) == expectedType;
 	}
 	else
 	{
@@ -422,7 +425,7 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 			// TODO: here we support only one return value:
 			if ((methodDecl->results()->size() == 0 && (expectedType.isEmpty() || expectedType == "void"))
 				 || (methodDecl->results()->size() > 0 &&
-					  stringifyType(methodDecl->results()->at(0)->typeExpression()) == expectedType)
+					  StringComponents::stringForNode(methodDecl->results()->at(0)->typeExpression()) == expectedType)
 				 || expectedType == "_")
 			{
 				// return type matches check arguments:
@@ -430,62 +433,13 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 				for (int i = 0; i < args.size() && matches; ++i)
 				{
 					if (args[i] == "_") continue;
-					matches = stringifyType(methodDecl->arguments()->at(i)->typeExpression()) == args[i];
+					matches = StringComponents::stringForNode(methodDecl->arguments()->at(i)->typeExpression()) == args[i];
 				}
 				return matches;
 			}
 		}
 	}
 	return false;
-}
-
-QString AstQuery::stringifyType(OOModel::Expression* expression)
-{
-	using namespace OOModel;
-	if (!expression) return {};
-	if (auto e = DCast<ArrayTypeExpression>(expression))
-		return stringifyType(e->typeExpression()) + "[" + stringifyType(e->fixedSize()) + "]";
-	else if (auto e = DCast<ReferenceTypeExpression>(expression)) return stringifyType(e) + "&";
-	else if (auto e = DCast<PointerTypeExpression>(expression)) return stringifyType(e);
-	else if (auto e = DCast<ClassTypeExpression>(expression)) return stringifyType(e->typeExpression());
-	else if (auto e = DCast<PrimitiveTypeExpression>(expression))
-	{
-		switch (e->typeValue())
-		{
-			case PrimitiveTypeExpression::PrimitiveTypes::INT: return "int";
-			case PrimitiveTypeExpression::PrimitiveTypes::LONG: return "long";
-			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT: return "unsigned int";
-			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG: return "unsigned long";
-			case PrimitiveTypeExpression::PrimitiveTypes::FLOAT: return "float";
-			case PrimitiveTypeExpression::PrimitiveTypes::DOUBLE: return "double";
-			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: return "boolean";
-			case PrimitiveTypeExpression::PrimitiveTypes::CHAR: return "char";
-			case PrimitiveTypeExpression::PrimitiveTypes::VOID: return "void";
-			default: Q_ASSERT(false);
-		}
-	}
-	else if (auto e = DCast<TypeQualifierExpression>(expression))
-	{
-		QString qualifier;
-		switch (e->qualifier())
-		{
-			case TypeQualifierExpression::Qualifier::CONST: qualifier = "const"; break;
-			case TypeQualifierExpression::Qualifier::VOLATILE: qualifier = "volatile"; break;
-			default: Q_ASSERT(false);
-		}
-		return qualifier + " " + stringifyType(e->typeExpression());
-	}
-	else if (DCast<AutoTypeExpression>(expression)) return "auto";
-	else if (DCast<FunctionTypeExpression>(expression)) Q_ASSERT(false);
-	else if (auto e = DCast<ReferenceExpression>(expression))
-	{
-		QString result;
-		if (e->prefix()) result += stringifyType(e->prefix()) + ".";
-		result += e->name();
-		// TODO: handle type arguments
-		return result;
-	}
-	return {};
 }
 
 } /* namespace InformationScripting */
