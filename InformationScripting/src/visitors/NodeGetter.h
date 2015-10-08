@@ -36,17 +36,18 @@ namespace Model {
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AllNodesOfType
+class INFORMATIONSCRIPTING_API NodeGetter
 {
 	public:
-		static QList<Model::Node*> allNodesOfType(Model::Node* from, const Model::SymbolMatcher& matcher);
-
 		template <class NodeType>
-		inline static QList<NodeType*> allNodesOfType(Model::Node* from);
+		static QList<NodeType*> allNodesOfType(Model::Node* from);
+
+		template <class KeepIf>
+		static QList<Model::Node*> allNodesWhich(Model::Node* from, KeepIf keep);
 };
 
 template <class NodeType>
-QList<NodeType*> AllNodesOfType::allNodesOfType(Model::Node* from)
+inline QList<NodeType*> NodeGetter::allNodesOfType(Model::Node* from)
 {
 	QList<NodeType*> result;
 	QList<Model::Node*> workStack{from};
@@ -55,6 +56,21 @@ QList<NodeType*> AllNodesOfType::allNodesOfType(Model::Node* from)
 	{
 		auto node = workStack.takeLast();
 		if (auto castNode = DCast<NodeType>(node)) result.push_back(castNode);
+		workStack << node->children();
+	}
+	return result;
+}
+
+template <class KeepIf>
+inline QList<Model::Node*> NodeGetter::allNodesWhich(Model::Node* from, KeepIf keep)
+{
+	QList<Model::Node*> result;
+	QList<Model::Node*> workStack{from};
+
+	while (!workStack.empty())
+	{
+		auto node = workStack.takeLast();
+		if (keep(node)) result.push_back(node);
 		workStack << node->children();
 	}
 	return result;

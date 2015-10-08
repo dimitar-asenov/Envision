@@ -41,7 +41,7 @@
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
 
-#include "../visitors/AllNodesOfType.h"
+#include "../visitors/NodeGetter.h"
 #include "QueryRegistry.h"
 
 namespace InformationScripting {
@@ -257,15 +257,15 @@ TupleSet AstQuery::usesQuery(TupleSet input)
 	QHash<Model::Node*, QList<Model::Reference*>> references;
 
 	if (scope() == Scope::Local)
-		references[target()] = AllNodesOfType::allNodesOfType<Model::Reference>(target());
+		references[target()] = NodeGetter::allNodesOfType<Model::Reference>(target());
 	else if (scope() == Scope::Global)
-		references[target()->root()] = AllNodesOfType::allNodesOfType<Model::Reference>(target()->root());
+		references[target()->root()] = NodeGetter::allNodesOfType<Model::Reference>(target()->root());
 	else if (scope() == Scope::Input)
 	{
 		auto tuples = input;
 
 		auto tuple = tuples.tuples("ast");
-		for (const auto& t : tuple) references[t["ast"]] = AllNodesOfType::allNodesOfType<Model::Reference>(t["ast"]);
+		for (const auto& t : tuple) references[t["ast"]] = NodeGetter::allNodesOfType<Model::Reference>(t["ast"]);
 
 		// Keep all non ast nodes
 		result = tuples;
@@ -304,9 +304,11 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 	SymbolType expectedSymbolType = SymbolType::VARIABLE;
 	QString expectedType;
 	QStringList arguments;
+	TupleSet result;
+
 	// NOTE: To use spaces in this argument use quotes!
 	// QCommandLineParser removes the entered spaces automatically
-	// FIXME don't use nodetype argument as it is the actual type:
+	// NOTE: here the type argument has a different meaning than in the other queries:
 	auto typeArgument = argument(NODETYPE_ARGUMENT_NAMES[1]);
 	// Remove quotes if there are
 	if (typeArgument.startsWith("\"")) typeArgument = typeArgument.mid(1);
@@ -321,21 +323,29 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 		arguments = writtenArgs.split(",", QString::SkipEmptyParts);
 	}
 
-	// Lambda which returns true for all tuples which don't match the expected type.
-	auto toRemove = [expectedSymbolType, expectedType, arguments](const Tuple& t) {
-		if (t.tag() == "ast")
-		{
-			Model::Node* astNode = t["ast"];
-			auto symbolTypes = astNode->symbolType();
+	// Lambda which returns true for all nodes which match the expected type.
+	auto keepNode = [expectedSymbolType, expectedType, arguments](Model::Node* node) {
+		auto symbolTypes = node->symbolType();
 
-			if (symbolTypes.testFlag(expectedSymbolType))
-				return !matchesExpectedType(astNode, expectedSymbolType, expectedType, arguments);
-		}
-		return true;
+		if (symbolTypes.testFlag(expectedSymbolType))
+			return matchesExpectedType(node, expectedSymbolType, expectedType, arguments);
+		return false;
 	};
 
-	input.take(toRemove);
-	return input;
+	if (scope() == Scope::Local)
+		addNodesForWhich(result, keepNode, target());
+	else if (scope() == Scope::Global)
+		addNodesForWhich(result, keepNode);
+	else if (scope() == Scope::Input)
+	{
+		result = input;
+
+		// Note here we remove the input nodes.
+		auto tuples = result.take("ast");
+		for (const auto& t : tuples) addNodesForWhich(result, keepNode, t["ast"]);
+	}
+
+	return result;
 }
 
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
@@ -365,7 +375,17 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
 {
 	if (!from) from = target()->root();
-	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, matcher);
+	auto allNodeOfType =  NodeGetter::allNodesWhich(from, [matcher](Model::Node* node)
+																			{return matcher.matches(node->typeName());});
+	for (auto node : allNodeOfType)
+		ts.add({{"ast", node}});
+}
+
+template <class Predicate>
+void AstQuery::addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from)
+{
+	if (!from) from = target()->root();
+	auto allNodeOfType =  NodeGetter::allNodesWhich(from, holds);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
 }

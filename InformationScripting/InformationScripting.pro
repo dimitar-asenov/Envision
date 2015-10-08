@@ -24,7 +24,7 @@ HEADERS += src/precompiled.h \
     src/queries/AstQuery.h \
     src/queries/QueryExecutor.h \
     src/visualization/DefaultVisualizer.h \
-    src/visitors/AllNodesOfType.h \
+    src/visitors/NodeGetter.h \
     src/queries/CompositeQuery.h \
     src/queries/GenericFilter.h \
     src/queries/AstNameFilter.h \
@@ -85,7 +85,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/NodePropertyAdder.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \
-    src/visitors/AllNodesOfType.cpp \
     src/dataformat/Tuple.cpp \
     src/dataformat/TupleSet.cpp \
     src/dataformat/Property.cpp \
