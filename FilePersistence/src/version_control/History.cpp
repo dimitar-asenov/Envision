@@ -209,6 +209,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 		Parser::load(startFile->content(), startFile->size_, false, tree->newPersistentUnit(relativePath));
 	}
 
+	tree->buildLookupHash();
 	GenericNode* subtreeRoot = tree->find(rootNodeId_);
 	if (!subtreeRoot)
 		return QSet<Model::NodeIdType>();
