@@ -94,6 +94,7 @@ void MacroImportHelper::macroGeneration()
 		insertArguments(allArgs);
 	}
 
+	// after all other transformations are complete call xMacro transformations
 	xMacroManager_.handleXMacros();
 
 	clear();
@@ -105,6 +106,9 @@ void MacroImportHelper::insertArguments(QVector<MacroArgumentInfo>& allArguments
 	{
 		if (argument.history.empty()) continue;
 
+		/*
+		 * TODO: check whether this is still necessary. the intermediate argument location should be named correctly.
+		 */
 		for (auto i = 0; i < argument.history.size() - 1; i++)
 		{
 			auto currentLoc = argument.history[i];
@@ -118,6 +122,10 @@ void MacroImportHelper::insertArguments(QVector<MacroArgumentInfo>& allArguments
 			currentLoc.expansion->metaCall->arguments()->replaceChild(currentArg, newArg);
 		}
 
+		/*
+		 * the last argument in the argument history is the logically original argument node and location.
+		 * therefore we replace the node at the last argument's location with the stored original node.
+		 */
 		auto lastLoc = argument.history.last();
 		auto lastArg = lastLoc.expansion->metaCall->arguments()->at(lastLoc.argumentNumber);
 
@@ -156,6 +164,7 @@ void MacroImportHelper::calculateFinalizationNodes(QVector<Model::Node*>& genera
 
 void MacroImportHelper::finalize()
 {
+	// insert all top level meta calls
 	for (auto i = finalizationMetaCalls.begin(); i != finalizationMetaCalls.end(); i++)
 		if (DCast<OOModel::Statement>(i.key()))
 			i.key()->parent()->replaceChild(i.key(), new OOModel::ExpressionStatement(i.value()->metaCall));
@@ -167,6 +176,7 @@ void MacroImportHelper::finalize()
 		else
 			qDebug() << "not inserted top level metacall" << i.key()->typeName();
 
+	// remove all top level meta call generated nodes
 	StaticStuff::removeNodes(finalizationNodes);
 }
 
@@ -183,14 +193,18 @@ void MacroImportHelper::setPreprocessor(const clang::Preprocessor* preprocessor)
 void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,
 															MacroExpansion* expansion,
 															NodeMapping* mapping, QVector<MacroArgumentInfo>& arguments,
-																		QHash<MacroExpansion*, Model::Node*>* splices)
+															QHash<MacroExpansion*, Model::Node*>* splices)
 {
+	// handle child macro expansions
 	for (auto childExpansion : expansion->children)
 	{
 		auto tlNodes = expansionManager_.nTLExpansionTLNodes(childExpansion);
 		handleMacroExpansion(mapping->clone(tlNodes), childExpansion, mapping, arguments, splices);
 	}
 
+	// store the original of the first node generated from this expansion as placement information for the meta call
+	// TODO: fix logic when parent does not have nodes (should take over loc from child)
+	// TODO: remove splices map and put info into MacroExpansion
 	if (nodes.size() > 0)
 		splices->insert(expansion, mapping->original(nodes.first()));
 
@@ -249,6 +263,7 @@ OOModel::Declaration* MacroImportHelper::actualContext(MacroExpansion* expansion
 {
 	Q_ASSERT(!expansion->parent);
 
+	// try to find a valid context where the context range contains the expansion range
 	QVector<OOModel::Declaration*> candidates;
 	for (auto i = astMapping_.begin(); i != astMapping_.end(); i++)
 		for (auto range : i.value())
@@ -259,8 +274,8 @@ OOModel::Declaration* MacroImportHelper::actualContext(MacroExpansion* expansion
 					break;
 				}
 
-	if (candidates.empty())
-		return root_;
+	// if we could not find a context return the root project
+	if (candidates.empty()) return root_;
 
 	auto result = candidates.first();
 
@@ -281,6 +296,7 @@ QVector<MacroArgumentLocation> MacroImportHelper::argumentHistory(clang::SourceR
 		QVector<clang::SourceLocation> spellingHistory;
 		clang_.immediateSpellingHistory(range.getBegin(), &spellingHistory);
 
+		// find all expansions with arguments with location equal to an entry in spellingHistory
 		for (auto argumentLoc : spellingHistory)
 			for (auto expansion : expansionManager_.expansions())
 				for (auto i = 0; i < expansion->argumentLocs.size(); i++)

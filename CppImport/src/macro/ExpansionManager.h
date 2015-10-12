@@ -48,15 +48,30 @@ class CPPIMPORT_API ExpansionManager
 															const clang::MacroArgs* args);
 
 		QVector<MacroExpansion*> expansions();
-		void clear();
 
+		/**
+		 * return all registered expansions that are not children of other expansions.
+		 */
 		QVector<MacroExpansion*> topLevelExpansions();
 
 		MacroExpansion* immediateExpansion(clang::SourceLocation loc);
+
+		/**
+		 * return all expansions that node is a part of.
+		 */
 		QSet<MacroExpansion*> expansion(Model::Node* node);
 
+		/**
+		 * return all top level nodes of an expansion that is not a child of another expansion.
+		 */
 		QVector<Model::Node*> tLExpansionTLNodes(MacroExpansion* expansion);
+
+		/**
+		 * return all top level nodes of an expansion that is potentially a child of another expansion.
+		 */
 		QVector<Model::Node*> nTLExpansionTLNodes(MacroExpansion* expansion);
+
+		void clear();
 
 	private:
 		ClangHelper* clang_;
@@ -67,6 +82,9 @@ class CPPIMPORT_API ExpansionManager
 		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;
 		QVector<MacroExpansion*> expansions_;
 
+		/**
+		 * return the top most expansion registered for loc.
+		 */
 		MacroExpansion* expansion(clang::SourceLocation loc);
 
 };

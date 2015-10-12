@@ -40,20 +40,36 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sr,
 {
 	if (definitionManager_->isPartialEnd(md))
 	{
+		/*
+		 * if the to be registered expansion's definition is a partial end macro then we are not going to generate a
+		 * meta definition for this expansion.
+		 * instead we remember that we are currently not in an xMacro body.
+		 */
 		currentXMacroParent = nullptr;
 		return;
 	}
 
+	// build new macro expansion entry from the provided information
 	auto entry = new MacroExpansion();
 	entry->range = sr;
 	entry->definition = md;
 	entry->parent = expansion(sr.getBegin());
 	if (entry->parent) entry->parent->children.append(entry);
 
+	// handle xMacro data members
 	if (definitionManager_->isPartialBegin(md) && !currentXMacroParent)
+		/*
+		 * if the definition of this expansion is a partial begin macro we remember that we are now in a xMacro body.
+		 * we check whether we are not already in a xMacro body because we want to remember the .h part (the first one) of
+		 * the xMacro begins (the potential .cpp part could overwrite the stored information otherwise).
+		 */
 		currentXMacroParent = entry;
 	else if (currentXMacroParent && !entry->parent)
 	{
+		/*
+		 * if we are in a xMacro body and the current expansion is not a top level expansion then this expansion is a
+		 * xMacro child of the stored xMacro expansion.
+		 */
 		entry->xMacroParent = currentXMacroParent;
 		currentXMacroParent->xMacroChildren.append(entry);
 	}
@@ -61,13 +77,15 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sr,
 	entry->metaCall =
 			new OOModel::MetaCallExpression(definitionManager_->definitionName(entry->definition));
 
-	if (!md->getMacroInfo()->isObjectLike())
+	if (!md->getMacroInfo()->isObjectLike()) // only function like macros have braces in their signature to parse
 	{
+		// extract everything in parentheses of the expansion signature using a regular expression
 		QRegularExpression regex ("\\((.*)\\)", QRegularExpression::DotMatchesEverythingOption);
 		auto argumentsString = lexicalHelper_->unexpandedSpelling(sr);
 		auto match = regex.match(argumentsString);
 		auto arguments = match.captured(1).split(",");
 
+		// by default initialize meta call arguments to be reference expressions with the raw spelling at this expansion
 		for (auto i = 0; i < clang_->argumentNames(entry->definition).size(); i++)
 		{
 			auto actualArg = args->getUnexpArgument((unsigned int)i);
@@ -123,6 +141,11 @@ MacroExpansion*ExpansionManager::immediateExpansion(clang::SourceLocation loc)
 	for (auto i = 0; i < expansions_.size(); i++)
 		if (expansions_[i]->range.getBegin() == expansion) return expansions_[i];
 
+	/*
+	 * if we have not found an immediate expansion for loc then we try again using the found immediateExpansionLoc.
+	 * this can happen in case of token concatenation or stringifycation where the first expansion location would point
+	 * to the location of the concatenated token or stringifycation result.
+	 */
 	expansion = clang_->immediateMacroLoc(expansion);
 	for (auto i = 0; i < expansions_.size(); i++)
 		if (expansions_[i]->range.getBegin() == expansion) return expansions_[i];
@@ -155,11 +178,12 @@ QSet<MacroExpansion*> ExpansionManager::expansion(Model::Node* node)
 QVector<Model::Node*> ExpansionManager::tLExpansionTLNodes(MacroExpansion* expansion)
 {
 	Q_ASSERT(expansion);
-	Q_ASSERT(!expansion->parent); // ensure TLExpansion
+	Q_ASSERT(!expansion->parent); // ensure expansion is a top level expansion
 
 	QVector<Model::Node*> allTLExpansionNodes;
 	for (auto node : astMapping_->nodes())
 		for (auto range : astMapping_->get(node))
+			// for all mapped nodes check whether any of their ranges expand to the top level macro range
 			if (clang_->sourceManager()->getExpansionLoc(range.getBegin()) == expansion->range.getBegin())
 			{
 				allTLExpansionNodes.append(node);

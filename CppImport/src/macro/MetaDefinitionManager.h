@@ -61,11 +61,27 @@ class CPPIMPORT_API MetaDefinitionManager
 
 		QHash<QString, OOModel::MetaDefinition*> metaDefinitions_;
 
-		void addChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,	NodeMapping* childMapping,
+		/**
+		 * insert all non-xMacro child meta calls into metaDef.
+		 */
+		void insertChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,	NodeMapping* childMapping,
 										QHash<MacroExpansion*, Model::Node*>* splices);
+
+		/**
+		 * return all children of node that do not belong to expansion.
+		 */
 		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
 																NodeMapping* mapping, QVector<Model::Node*>* result);
+
+		/**
+		 * remove all children of node that do not belong to expansion.
+		 * return true if node itself does not belong to expansion.
+		 */
 		bool removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,	NodeMapping* mapping);
+
+		/**
+		 * insert splices for all nodes in childMapping that are a macro argument.
+		 */
 		void insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping, QVector<MacroArgumentInfo>& arguments);
 
 		void renameMetaCalls(Model::Node* node, QString current, QString replace);

@@ -32,7 +32,8 @@ DefinitionManager::DefinitionManager(ClangHelper* clang) : clang_(clang) {}
 
 void DefinitionManager::addMacroDefinition(QString name, const clang::MacroDirective* md)
 {
-	// TODO: remove
+	// TODO: this is a virtual rename fix for incosistent naming in Envision
+	// TODO: check whether the current implementation requires this renaming
 	if (name == "BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL")
 		name = "BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE";
 	if (name == "BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE")
@@ -64,15 +65,20 @@ void DefinitionManager::clear()
 }
 
 bool DefinitionManager::macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName,
-																QString& fileName)
+																QString& containerName)
 {
 	auto presumedLoc = clang_->sourceManager()->getPresumedLoc(md->getMacroInfo()->getDefinitionLoc());
 	auto path = QDir(presumedLoc.getFilename()).absolutePath();
 
+	/*
+	 * given a path: ../Envision/A/../B.xyz
+	 * this regex captures A (index 1) and B.xyz (index 3)
+	 */
 	QRegularExpression regex ("/Envision/(\\w+)(/.*/|/)(\\w+\\.\\w+)$", QRegularExpression::DotMatchesEverythingOption);
 	auto match = regex.match(path);
 	if (!match.hasMatch()) return false;
 
+	// use the directory name of A as the namespace name
 	namespaceName = match.captured(1);
 
 	// some Envision namespaces don't have the same name as the corresponding directory
@@ -87,7 +93,11 @@ bool DefinitionManager::macroDefinitionLocation(const clang::MacroDirective* md,
 	else if (namespaceName == "HelloWorld")
 		namespaceName = "Hello";
 
-	fileName = match.captured(3).replace(".h", "").replace(".cpp", "_CPP");
+	/*
+	 * the container name should be equal to B therefore we remove .h
+	 * in case of .cpp we append _CPP to the containerName to avoid ambiguity
+	 */
+	containerName = match.captured(3).replace(".h", "").replace(".cpp", "_CPP");
 
 	return true;
 }

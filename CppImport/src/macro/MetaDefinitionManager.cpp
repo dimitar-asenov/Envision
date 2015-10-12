@@ -101,22 +101,26 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 		auto metaDef = new OOModel::MetaDefinition(definitionManager_->definitionName(expansion->definition));
 		metaDefinitions_.insert(definitionManager_->hash(expansion->definition), metaDef);
 
+		// add formal arguments based on the expansion definition
 		for (auto argName : clang_->argumentNames(expansion->definition))
 			metaDef->arguments()->append(new OOModel::FormalMetaArgument(argName));
 
 		auto metaDefParent = metaDefinitionParent(expansion->definition);
 
+		// check whether this expansion is not a potential partial begin macro specialization
 		if (auto beginChild = xMacroManager_->partialBeginChild(expansion))
-		{
 			xMacroManager_->handlePartialBeginSpecialization(metaDefParent, metaDef, expansion, beginChild);
-		}
 		else
 		{
+			// case: meta definition is not a partial begin macro specialization
+
 			if (nodes.size() > 0)
 			{
+				// create a new context with type equal to the first node's context
 				auto actualContext = StaticStuff::actualContext(mapping->original(nodes.first()));
 				metaDef->setContext(StaticStuff::createContext(actualContext));
 
+				// clone and add nodes to the metaDef
 				for (auto n : nodes)
 				{
 					NodeMapping childMapping;
@@ -125,7 +129,7 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 					lexicalHelper_->applyLexicalTransformations(cloned, &childMapping,
 																					 clang_->argumentNames(expansion->definition));
 
-					addChildMetaCalls(metaDef, expansion, &childMapping, splices);
+					insertChildMetaCalls(metaDef, expansion, &childMapping, splices);
 
 					if (removeUnownedNodes(cloned, expansion, &childMapping))
 						continue;
@@ -136,6 +140,7 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 				}
 			}
 
+			// add all child expansion meta calls that are not yet added anywhere else as declaration meta calls
 			for (auto childExpansion : expansion->children)
 				if (!childExpansion->metaCall->parent())
 					metaDef->context()->metaCalls()->append(childExpansion->metaCall);
@@ -144,8 +149,8 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 		metaDefParent->subDeclarations()->append(metaDef);
 	}
 
+	// qualify the meta call
 	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall->callee());
-	Q_ASSERT(callee);
 	callee->setPrefix(definitionManager_->expansionQualifier(expansion->definition));
 }
 
@@ -162,16 +167,21 @@ void MetaDefinitionManager::renameMetaCalls(Model::Node* node, QString current, 
 			renameMetaCalls(child, current, replace);
 }
 
-void MetaDefinitionManager::addChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,
+void MetaDefinitionManager::insertChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,
 															 NodeMapping* childMapping, QHash<MacroExpansion*, Model::Node*>* splices)
 {
 	for (auto childExpansion : expansion->children)
 	{
+		// do not handle xMacro children here
 		if (childExpansion->xMacroParent) continue;
 
+		// retrieve the node that the child meta call should replace
 		if (auto splice = splices->value(childExpansion))
+			// splice is an original node therefore we need to get to the cloned domain first
+			// clonedSplice represents the cloned version of splice
 			if (auto clonedSplice = childMapping->clone(splice))
 			{
+				// TODO: investigate meaning
 				if (DCast<OOModel::Declaration>(clonedSplice))
 				{
 					if (auto parentDecl = clonedSplice->firstAncestorOfType<OOModel::Declaration>())
@@ -192,6 +202,7 @@ void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroE
 {
 	Q_ASSERT(expansion);
 
+	// do not remove child meta calls
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
 	if (expansionManager_->expansion(mapping->original(node)).contains(expansion))
@@ -203,12 +214,13 @@ void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroE
 
 bool MetaDefinitionManager::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion, NodeMapping* mapping)
 {
-	QVector<Model::Node*> tbrs;
-	childrenUnownedByExpansion(cloned, expansion, mapping, &tbrs);
+	QVector<Model::Node*> unownedNodes;
+	childrenUnownedByExpansion(cloned, expansion, mapping, &unownedNodes);
 
-	if (tbrs.contains(cloned)) return true;
+	// if the unowned nodes contain the node itself then the node should not even be added to the meta definition
+	if (unownedNodes.contains(cloned)) return true;
 
-	StaticStuff::removeNodes(StaticStuff::topLevelNodes(tbrs));
+	StaticStuff::removeNodes(StaticStuff::topLevelNodes(unownedNodes));
 
 	return false;
 }
@@ -218,16 +230,19 @@ void MetaDefinitionManager::insertArgumentSplices(NodeMapping* mapping, NodeMapp
 {
 	for (auto argument : arguments)
 	{
+		// map the argument node to the corresponding node in childMapping
 		auto original = mapping->original(argument.node);
 
 		if (auto child = childMapping->clone(original))
 		{
+			// the first entry of the spelling history is where the splice for this argument should be
 			auto spliceLoc = argument.history.first();
 
-			auto argName = clang_->argumentNames(spliceLoc.expansion->definition)
-					.at(spliceLoc.argumentNumber);
+			// the splice name is equal to the formal argument name where the argument is coming from
+			auto argName = clang_->argumentNames(spliceLoc.expansion->definition).at(spliceLoc.argumentNumber);
 			auto newNode = new OOModel::ReferenceExpression(argName);
 
+			// insert the splice into the tree
 			if (child->parent()) child->parent()->replaceChild(child, newNode);
 			childMapping->replaceClone(child, newNode);
 		}

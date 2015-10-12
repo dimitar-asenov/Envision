@@ -45,7 +45,10 @@ class CPPIMPORT_API LexicalHelper
 
 		QString unexpandedSpelling(clang::SourceRange range);
 
+		// TODO: rename method
 		void correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+
+		// TODO: rename method
 		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 
 	private:
@@ -53,8 +56,11 @@ class CPPIMPORT_API LexicalHelper
 		ExpansionManager* expansionManager_;
 		QHash<Model::Node*, QString> transformations_;
 
-		bool isExpansionception(clang::SourceLocation loc);
+		bool isConcatenationStringifycation(clang::SourceLocation loc);
+
+		// TODO: rename method
 		void correctNode(clang::SourceRange range, Model::Node* original);
+
 		void replaceWithReference(Model::Node* current, QString replacement, NodeMapping* mapping);
 
 };

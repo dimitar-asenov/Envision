@@ -49,7 +49,15 @@ class CPPIMPORT_API MacroImportHelper
 	public:
 		MacroImportHelper(OOModel::Project* project);
 
+		/**
+		 * invoked after every imported translation unit to perform macro import.
+		 */
 		void macroGeneration();
+
+		/**
+		 * insert top level meta calls and remove nodes generated from top level expansions.
+		 * invoked after all translation units have been processed.
+		 */
 		void finalize();
 
 		void setSourceManager(const clang::SourceManager* sourceManager);
@@ -80,16 +88,33 @@ class CPPIMPORT_API MacroImportHelper
 
 		bool insertMetaCall(MacroExpansion* expansion);
 
+		/**
+		 * find best actual context matching expansion without nodes.
+		 */
 		OOModel::Declaration* actualContext(MacroExpansion* expansion);
 
 		QVector<MacroArgumentLocation> argumentHistory(clang::SourceRange range);
 		QVector<MacroArgumentLocation> argumentHistory(Model::Node* node);
+
+		/**
+		 * return all arguments which are associated to children of node.
+		 */
 		void allArguments(Model::Node* node, QVector<MacroArgumentInfo>* result, NodeMapping* mapping);
 
+		/**
+		 * insert gathered argument nodes at their original (logical) location.
+		 */
+		void insertArguments(QVector<MacroArgumentInfo>& allArguments);
+
+		/**
+		 * clear all information for the current translation unit.
+		 */
 		void clear();
 
+		/**
+		 * calculate nodes to be removed from the tree after importing.
+		 */
 		void calculateFinalizationNodes(QVector<Model::Node*>& generatedNodes, NodeMapping& mapping);
-		void insertArguments(QVector<MacroArgumentInfo>& allArguments);
 };
 
 }
