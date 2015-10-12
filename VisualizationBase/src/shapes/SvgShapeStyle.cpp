@@ -41,8 +41,7 @@ void SvgShapeStyle::load(StyleLoader& sl)
 
 void SvgShapeStyle::paint(QPainter* painter, int x, int y, int width, int height) const
 {
-	QSvgRenderer& r = const_cast<QSvgRenderer&> (renderer_);
-	r.render(painter, QRectF(x, y, width, height));
+	renderer_.render(painter, QRectF(x, y, width, height));
 }
 
 

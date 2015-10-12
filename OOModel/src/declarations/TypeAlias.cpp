@@ -49,7 +49,7 @@ Model::Node* TypeAlias::target() const
 {
 	Model::Node* ret{};
 
-	auto type = const_cast<TypeAlias*>(this)->typeExpression()->type();
+	auto type = this->typeExpression()->type();
 	if (auto sp = dynamic_cast<SymbolProviderType*>(type))
 		ret = sp->symbolProvider();
 

@@ -46,7 +46,7 @@ class VISUALIZATIONBASE_API SvgShapeStyle : public Super<ShapeStyle>
 		Property<double> rightContentMarginFraction{this, "rightContentMarginFraction"};
 
 	private:
-		QSvgRenderer renderer_;
+		mutable QSvgRenderer renderer_;
 };
 
 } /* namespace Visualization */

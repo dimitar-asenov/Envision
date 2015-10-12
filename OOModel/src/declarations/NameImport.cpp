@@ -55,7 +55,7 @@ Model::Node* NameImport::target() const
 {
 	Model::Node* ret{};
 
-	auto type = const_cast<NameImport*>(this)->importedName()->type();
+	auto type = this->importedName()->type();
 	if (auto sp = dynamic_cast<SymbolProviderType*>(type))
 		ret = sp->symbolProvider();
 
