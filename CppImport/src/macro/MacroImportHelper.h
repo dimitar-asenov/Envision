@@ -114,7 +114,7 @@ class CPPIMPORT_API MacroImportHelper
 		/**
 		 * calculate nodes to be removed from the tree after importing.
 		 */
-		void calculateFinalizationNodes(QVector<Model::Node*>& generatedNodes, NodeMapping& mapping);
+		void calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeMapping& mapping);
 };
 
 }

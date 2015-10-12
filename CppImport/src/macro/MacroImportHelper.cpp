@@ -79,8 +79,8 @@ void MacroImportHelper::macroGeneration()
 					context->metaCalls()->append(expansion->metaCall);
 				else
 				{
-					if (auto splice = expansion->splice_)
-						finalizationMetaCalls.insert(splice, expansion);
+					if (auto replacementNode = expansion->replacementNode_)
+						finalizationMetaCalls.insert(replacementNode, expansion);
 					else
 						qDebug() << "no splice found for expansion"
 									<< definitionManager_.definitionName(expansion->definition);
@@ -138,26 +138,25 @@ void MacroImportHelper::insertArguments(QVector<MacroArgumentInfo>& allArguments
 	}
 }
 
-void MacroImportHelper::calculateFinalizationNodes(QVector<Model::Node*>& generatedNodes, NodeMapping& mapping)
+void MacroImportHelper::calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeMapping& mapping)
 {
-	for (auto node : generatedNodes)
+	for (auto node : nodes)
 	{
 		Q_ASSERT(!node->parent());
 
 		if (astMapping_.contains(mapping.original(node)))
 		{
-			bool found = false;
+			// check whether this node only exists in generated code from macros
+			bool nonMacroInstanceFound = false;
 			for (auto range : astMapping_.get(mapping.original(node)))
 				if (!clang_.isMacroRange(range))
 				{
-					found = true;
+					nonMacroInstanceFound = true;
 					break;
 				}
 
-			if (found) continue;
+			if (!nonMacroInstanceFound) finalizationNodes.append(mapping.original(node));
 		}
-
-		finalizationNodes.append(mapping.original(node));
 	}
 }
 
@@ -201,14 +200,13 @@ void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,
 	}
 
 	// store the original of the first node generated from this expansion as placement information for the meta call
-	// TODO: fix logic when parent does not have nodes (should take over loc from child)
 	if (nodes.size() > 0)
-		expansion->splice_ = mapping->original(nodes.first());
+		expansion->replacementNode_ = mapping->original(nodes.first());
 	else
 		for (auto childExpansion : expansion->children)
-			if (childExpansion->splice_)
+			if (childExpansion->replacementNode_)
 			{
-				expansion->splice_ = childExpansion->splice_;
+				expansion->replacementNode_ = childExpansion->replacementNode_;
 				break;
 			}
 

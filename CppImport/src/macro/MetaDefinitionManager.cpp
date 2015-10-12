@@ -175,16 +175,16 @@ void MetaDefinitionManager::insertChildMetaCalls(MacroExpansion* expansion, Node
 		if (childExpansion->xMacroParent) continue;
 
 		// retrieve the node that the child meta call should replace
-		if (auto splice = childExpansion->splice_)
-			// splice is an original node therefore we need to get to the cloned domain first
-			// clonedSplice represents the cloned version of splice
-			if (auto clonedSplice = childMapping->clone(splice))
-				if (!DCast<OOModel::Declaration>(clonedSplice))
+		if (auto replacementNode = childExpansion->replacementNode_)
+			// replacementNode is an original node therefore we need to get to the cloned domain first
+			// clonedReplacementNode represents the cloned version of replacementNode
+			if (auto clonedReplacementNode = childMapping->clone(replacementNode))
+				if (!DCast<OOModel::Declaration>(clonedReplacementNode))
 				{
-					if (clonedSplice->parent())
-						clonedSplice->parent()->replaceChild(clonedSplice, childExpansion->metaCall);
+					if (clonedReplacementNode->parent())
+						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode, childExpansion->metaCall);
 					else
-						qDebug() << "not inserted metacall" << clonedSplice->typeName();
+						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
 				}
 	}
 }

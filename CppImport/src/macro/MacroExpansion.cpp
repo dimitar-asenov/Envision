@@ -28,4 +28,12 @@
 
 namespace CppImport {
 
+bool MacroExpansion::isChildOf(MacroExpansion* entry)
+{
+	auto current = this;
+	while (current && current != entry)
+		current = current->parent;
+	return current;
+}
+
 }
