@@ -40,10 +40,11 @@ using namespace FilePersistence;
 
 namespace InformationScripting {
 
+const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
+
 TupleSet VersionControlQuery::executeLinear(TupleSet)
 {
-	// FIXME use argument for this value:
-	const int CHANGE_COUNT{10};
+	const int CHANGE_COUNT = argument(COUNT_ARGUMENT_NAMES[0]).toInt();
 	QHash<Model::Node*, int> changeCount;
 
 	Model::TreeManager* treeManager = target()->manager();
@@ -106,7 +107,9 @@ void VersionControlQuery::registerDefaultQueries()
 }
 
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
-	: ScopedArgumentQuery{target, {}, QStringList{"VersionControl"} + args}
+	: ScopedArgumentQuery{target, {
+		{COUNT_ARGUMENT_NAMES, "The amount of revision to look at", COUNT_ARGUMENT_NAMES[1], "10"}
+	}, QStringList{"VersionControl"} + args}
 {}
 
 } /* namespace InformationScripting */

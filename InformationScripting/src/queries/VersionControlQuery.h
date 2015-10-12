@@ -39,6 +39,8 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public ScopedArgumentQuery
 
 		static void registerDefaultQueries();
 	private:
+		static const QStringList COUNT_ARGUMENT_NAMES;
+
 		VersionControlQuery(Model::Node* target, QStringList args);
 };
 
