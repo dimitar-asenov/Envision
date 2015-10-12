@@ -44,7 +44,7 @@ bool LexicalHelper::isConcatenationStringifycation(clang::SourceLocation loc)
 	return false;
 }
 
-QString LexicalHelper::unexpandedSpelling(clang::SourceRange range)
+clang::SourceRange LexicalHelper::unexpandedSourceRange(clang::SourceRange range)
 {
 	clang::SourceLocation start, end;
 
@@ -58,7 +58,12 @@ QString LexicalHelper::unexpandedSpelling(clang::SourceRange range)
 	else
 		end = range.getEnd();
 
-	auto result = clang_->spelling(start, end);
+	return clang::SourceRange(start, end);
+}
+
+QString LexicalHelper::unexpandedSpelling(clang::SourceRange range)
+{
+	auto result = clang_->spelling(unexpandedSourceRange(range));
 	while (result.startsWith("\\")) result = result.right(result.length() - 1);
 
 	return result.trimmed();
@@ -189,6 +194,18 @@ void LexicalHelper::correctNode(clang::SourceRange range, Model::Node* original)
 	}
 
 	transformations_.insert(original, transformed);
+}
+
+bool LexicalHelper::contains(clang::SourceRange r, clang::SourceRange o)
+{
+	auto range = unexpandedSourceRange(r);
+	auto other = unexpandedSourceRange(o);
+
+	auto s = clang_->sourceManager()->getSpellingLoc(range.getBegin()).getPtrEncoding();
+	auto e = clang_->sourceManager()->getSpellingLoc(range.getEnd()).getPtrEncoding();
+	auto os = clang_->sourceManager()->getSpellingLoc(other.getBegin()).getPtrEncoding();
+
+	return s <= os && os <= e;
 }
 
 void LexicalHelper::applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs)

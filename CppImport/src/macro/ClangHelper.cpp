@@ -118,15 +118,6 @@ QVector<QString> ClangHelper::argumentNames(const clang::MacroDirective* definit
 	return result;
 }
 
-bool ClangHelper::contains(clang::SourceRange range, clang::SourceRange other)
-{
-	auto s = sourceManager_->getSpellingLoc(range.getBegin()).getPtrEncoding();
-	auto e = sourceManager_->getSpellingLoc(range.getEnd()).getPtrEncoding();
-	auto os = sourceManager_->getSpellingLoc(other.getBegin()).getPtrEncoding();
-
-	return s <= os && os <= e;
-}
-
 const clang::SourceManager* ClangHelper::sourceManager()
 {
 	return sourceManager_;

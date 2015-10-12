@@ -51,6 +51,8 @@ class CPPIMPORT_API LexicalHelper
 		// TODO: rename method
 		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 
+		bool contains(clang::SourceRange r, clang::SourceRange o);
+
 	private:
 		ClangHelper* clang_;
 		ExpansionManager* expansionManager_;
@@ -62,6 +64,8 @@ class CPPIMPORT_API LexicalHelper
 		void correctNode(clang::SourceRange range, Model::Node* original);
 
 		void replaceWithReference(Model::Node* current, QString replacement, NodeMapping* mapping);
+
+		clang::SourceRange unexpandedSourceRange(clang::SourceRange range);
 
 };
 
