@@ -156,9 +156,9 @@ MacroExpansion*ExpansionManager::immediateExpansion(clang::SourceLocation loc)
 
 QSet<MacroExpansion*> ExpansionManager::expansion(Model::Node* node)
 {
-	if (!node) return {}; //TODO: necessary?
+	Q_ASSERT(node);
 
-	//if (!expansionCache_.contains(node))
+	if (!expansionCache_.contains(node))
 	{
 		expansionCache_[node] = {};
 
