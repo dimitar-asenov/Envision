@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,44 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "ClangHelper.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API DefinitionManager
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		DefinitionManager(ClangHelper* clang);
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		void addMacroDefinition(QString name, const clang::MacroDirective* md);
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+		QString definitionName(const clang::MacroDirective* md);
+
+		bool isPartialBegin(const clang::MacroDirective* md);
+		bool isPartialEnd(const clang::MacroDirective* md);
+
+		void clear();
+
+		/**
+		 * if the location of md is part of Envision's project structure then
+		 *  return true and set namespaceName/fileName
+		 * otherwise
+		 *  return false
+		 */
+		bool macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName, QString& fileName);
+		QString hash(const clang::MacroDirective* md);
+
+		OOModel::ReferenceExpression* expansionQualifier(const clang::MacroDirective* md);
+
+	private:
+		ClangHelper* clang_;
+		QHash<const clang::MacroDirective*, QString> definitions_;
+
+};
 
 }

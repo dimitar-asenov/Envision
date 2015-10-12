@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,47 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "NodeMapping.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API StaticStuff
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		static void orderNodes(QVector<Model::Node*>& input);
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		static bool validContext(Model::Node* node);
+		static OOModel::Declaration* actualContext(Model::Node* node);
+		static OOModel::Declaration* createContext(OOModel::Declaration* actualContext);
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+		static QVector<Model::Node*> topLevelNodes(QVector<Model::Node*> input);
+
+		static Model::Node* cloneWithMapping(Model::Node* node, NodeMapping* mapping);
+
+		static void removeNode(Model::Node* node, bool removeMetaCalls = false);
+		static void removeNodes(QVector<Model::Node*> nodes) { for (auto n : nodes) removeNode(n); }
+
+		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
+
+		static OOModel::Expression* createNameExpressionFromString(QString input);
+		static bool stringMatches(QString regex, QString value);
+
+		/**
+		 * returns the first Declaration* decl in list with decl->name() == name
+		 */
+		static OOModel::Declaration* findDeclaration(Model::List* list, QString name);
+
+	private:
+		static void buildMappingInfo(Model::Node* node, QList<Model::Node*>* info);
+		static void useMappingInfo(Model::Node* node, QList<Model::Node*>* info, NodeMapping* mapping);
+
+		static OOModel::MetaCallExpression* containsMetaCall(Model::Node* node);
+
+};
 
 }

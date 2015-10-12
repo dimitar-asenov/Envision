@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#include "MacroExpansion.h"
 
 namespace CppImport {
-
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
 
 }

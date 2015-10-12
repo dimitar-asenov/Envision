@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,39 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "ClangHelper.h"
+#include "NodeMapping.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+class ExpansionManager;
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API LexicalHelper
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		LexicalHelper(ClangHelper* clang, ExpansionManager* expansionManager);
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		void applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs);
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+		QString unexpandedSpelling(clang::SourceRange range);
+
+		void correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
+
+	private:
+		ClangHelper* clang_;
+		ExpansionManager* expansionManager_;
+		QHash<Model::Node*, QString> transformations_;
+
+		bool isExpansionception(clang::SourceLocation loc);
+		void correctNode(clang::SourceRange range, Model::Node* original);
+		void replaceWithReference(Model::Node* current, QString replacement, NodeMapping* mapping);
+
+};
 
 }

@@ -33,8 +33,8 @@ LIBS += -lclangTooling\
 				-lclangAST\
 				-lclangLex\
 				-lclangBasic\
-                                $$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags \
-                                                            --libs cppbackend analysis codegen bitreader option core)
+                                ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs)"" \
+                                $$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags --libs cppbackend)
 
 ## END LLVM SPECIFIC
 
@@ -53,7 +53,21 @@ HEADERS += src/precompiled.h \
     src/manager/TranslateManager.h \
     src/TranslateFrontendAction.h \
     src/CppImportPlugin.h \
-    src/comments/CommentParser.h
+	src/comments/CommentParser.h \
+    src/macro/AstMapping.h \
+    src/macro/ClangHelper.h \
+    src/macro/DefinitionManager.h \
+    src/macro/ExpansionManager.h \
+    src/macro/LexicalHelper.h \
+    src/macro/MacroArgumentInfo.h \
+    src/macro/MacroArgumentLocation.h \
+    src/macro/MacroExpansion.h \
+    src/macro/MacroImportHelper.h \
+    src/macro/MetaDefinitionManager.h \
+    src/macro/NodeMapping.h \
+    src/macro/StaticStuff.h \
+    src/macro/XMacroManager.h \
+    src/macro/PPCallback.h
 SOURCES += src/CppImportException.cpp \
 	test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
@@ -68,4 +82,18 @@ SOURCES += src/CppImportException.cpp \
     src/manager/TranslateManager.cpp \
     src/TranslateFrontendAction.cpp \
     src/CppImportPlugin.cpp \
-    src/comments/CommentParser.cpp
+	src/comments/CommentParser.cpp \
+    src/macro/AstMapping.cpp \
+    src/macro/ClangHelper.cpp \
+    src/macro/DefinitionManager.cpp \
+    src/macro/ExpansionManager.cpp \
+    src/macro/LexicalHelper.cpp \
+    src/macro/MacroArgumentInfo.cpp \
+    src/macro/MacroArgumentLocation.cpp \
+    src/macro/MacroExpansion.cpp \
+    src/macro/MacroImportHelper.cpp \
+    src/macro/MetaDefinitionManager.cpp \
+    src/macro/NodeMapping.cpp \
+    src/macro/StaticStuff.cpp \
+    src/macro/XMacroManager.cpp \
+    src/macro/PPCallback.cpp

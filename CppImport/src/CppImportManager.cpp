@@ -78,6 +78,9 @@ Model::TreeManager*CppImportManager::createTreeManager(const bool statisticsPerP
 		SAFE_DELETE(frontendActionFactory);
 		SAFE_DELETE(tool);
 	}
+
+	visitor->macroImportHelper_.finalize();
+
 	// statistics
 	if (!statisticsPerProject)
 		log->outputStatistics();

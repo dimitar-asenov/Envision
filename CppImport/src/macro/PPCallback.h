@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,26 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+#include "Core/src/EnvisionException.h"
+#include "MacroImportHelper.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API PPCallback : public clang::PPCallbacks
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		PPCallback(MacroImportHelper& macroImportHelper) : macroImportHelper_(macroImportHelper) { }
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		virtual void MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDirective* MD,
+										  clang::SourceRange range, const clang::MacroArgs* args) override;
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+
+	private:
+		MacroImportHelper& macroImportHelper_;
+
+};
 
 }

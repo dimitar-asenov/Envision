@@ -63,12 +63,18 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 	clang::Expr* base = nullptr;
 	if (!memberExpr->isImplicitAccess())
 		base = memberExpr->getBase();
+
+	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (memberExpr->hasExplicitTemplateArgs())
-		ooExprStack_.push(createRef(name, memberExpr->getLocStart(), memberExpr->getQualifier(),
+		ooReference = createRef(name, memberExpr->getLocStart(), memberExpr->getQualifier(),
 											 memberExpr->getExplicitTemplateArgs().getTemplateArgs(),
-											 memberExpr->getNumTemplateArgs(), base));
+											 memberExpr->getNumTemplateArgs(), base);
 	else
-		ooExprStack_.push(createRef(name, memberExpr->getLocStart(), memberExpr->getQualifier(), nullptr, 0, base));
+		ooReference = createRef(name, memberExpr->getLocStart(), memberExpr->getQualifier(), nullptr, 0, base);
+
+	baseVisitor_->macroImportHelper_.mapAst(memberExpr, ooReference);
+	ooExprStack_.push(ooReference);
+
 	return true;
 }
 
@@ -78,13 +84,19 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 	clang::Expr* base = nullptr;
 	if (!unresolvedMember->isImplicitAccess())
 		base = unresolvedMember->getBase();
+
+	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (unresolvedMember->hasExplicitTemplateArgs())
-		ooExprStack_.push(createRef(name, unresolvedMember->getLocStart(), unresolvedMember->getQualifier(),
+		ooReference = createRef(name, unresolvedMember->getLocStart(), unresolvedMember->getQualifier(),
 											 unresolvedMember->getExplicitTemplateArgs().getTemplateArgs(),
-											 unresolvedMember->getNumTemplateArgs(), base));
+											 unresolvedMember->getNumTemplateArgs(), base);
 	else
-		ooExprStack_.push(createRef(name, unresolvedMember->getLocStart(),
-											 unresolvedMember->getQualifier(), nullptr, 0, base));
+		ooReference = createRef(name, unresolvedMember->getLocStart(),
+											 unresolvedMember->getQualifier(), nullptr, 0, base);
+
+	baseVisitor_->macroImportHelper_.mapAst(unresolvedMember, ooReference);
+	ooExprStack_.push(ooReference);
+
 	return true;
 }
 
@@ -94,37 +106,55 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 	clang::Expr* base = nullptr;
 	if (!dependentScopeMember->isImplicitAccess())
 		base = dependentScopeMember->getBase();
+
+	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (dependentScopeMember->hasExplicitTemplateArgs())
-		ooExprStack_.push(createRef(name, dependentScopeMember->getLocStart(), dependentScopeMember->getQualifier(),
+		ooReference = createRef(name, dependentScopeMember->getLocStart(), dependentScopeMember->getQualifier(),
 											 dependentScopeMember->getExplicitTemplateArgs().getTemplateArgs(),
-											 dependentScopeMember->getNumTemplateArgs(), base));
+											 dependentScopeMember->getNumTemplateArgs(), base);
 	else
-		ooExprStack_.push(createRef(name, dependentScopeMember->getLocStart(),
-											 dependentScopeMember->getQualifier(), nullptr, 0, base));
+		ooReference = createRef(name, dependentScopeMember->getLocStart(),
+											 dependentScopeMember->getQualifier(), nullptr, 0, base);
+
+	baseVisitor_->macroImportHelper_.mapAst(dependentScopeMember, ooReference);
+	ooExprStack_.push(ooReference);
+
 	return true;
 }
 
 bool ExpressionVisitor::TraverseDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
 	QString name = QString::fromStdString(declRefExpr->getDecl()->getNameAsString());
+
+	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (declRefExpr->hasExplicitTemplateArgs())
-		ooExprStack_.push(createRef(name, declRefExpr->getLocStart(), declRefExpr->getQualifier(),
+		ooReference = createRef(name, declRefExpr->getLocStart(), declRefExpr->getQualifier(),
 											 declRefExpr->getExplicitTemplateArgs().getTemplateArgs(),
-											 declRefExpr->getNumTemplateArgs()));
+											 declRefExpr->getNumTemplateArgs());
 	else
-		ooExprStack_.push(createRef(name, declRefExpr->getLocStart(), declRefExpr->getQualifier()));
+		ooReference = createRef(name, declRefExpr->getLocStart(), declRefExpr->getQualifier());
+
+	baseVisitor_->macroImportHelper_.mapAst(declRefExpr, ooReference);
+	ooExprStack_.push(ooReference);
+
 	return true;
 }
 
 bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope)
 {
 	QString name = QString::fromStdString(dependentScope->getDeclName().getAsString());
+
+	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (dependentScope->hasExplicitTemplateArgs())
-		ooExprStack_.push(createRef(name, dependentScope->getLocStart(), dependentScope->getQualifier(),
+		ooReference = createRef(name, dependentScope->getLocStart(), dependentScope->getQualifier(),
 											 dependentScope->getExplicitTemplateArgs().getTemplateArgs(),
-											 dependentScope->getNumTemplateArgs()));
+											 dependentScope->getNumTemplateArgs());
 	else
-		ooExprStack_.push(createRef(name, dependentScope->getLocStart(), dependentScope->getQualifier()));
+		ooReference = createRef(name, dependentScope->getLocStart(), dependentScope->getQualifier());
+
+	baseVisitor_->macroImportHelper_.mapAst(dependentScope, ooReference);
+	ooExprStack_.push(ooReference);
+
 	return true;
 }
 
@@ -158,9 +188,15 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 
+	baseVisitor_->macroImportHelper_.mapAst(callExpr, ooMethodCall);
 	ooExprStack_.push(ooMethodCall);
 
 	return true;
+}
+
+bool ExpressionVisitor::TraverseStmt(clang::Stmt* S)
+{
+	return Base::TraverseStmt(S);
 }
 
 bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr)
@@ -187,6 +223,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			ooUnary->setOp(utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if (!ooExprStack_.empty())
 				ooUnary->setOperand(ooExprStack_.pop());
+			baseVisitor_->macroImportHelper_.mapAst(callExpr, ooUnary);
 			ooExprStack_.push(ooUnary);
 			break;
 		}
@@ -198,6 +235,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 				ooBinary->setRight(ooExprStack_.pop());
 			if (!ooExprStack_.empty())
 				ooBinary->setLeft(ooExprStack_.pop());
+			baseVisitor_->macroImportHelper_.mapAst(callExpr, ooBinary);
 			ooExprStack_.push(ooBinary);
 			break;
 		}
@@ -209,6 +247,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 				ooAssign->setRight(ooExprStack_.pop());
 			if (!ooExprStack_.empty())
 				ooAssign->setLeft(ooExprStack_.pop());
+			baseVisitor_->macroImportHelper_.mapAst(callExpr, ooAssign);
 			ooExprStack_.push(ooAssign);
 			break;
 		}
@@ -223,6 +262,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			if (!ooExprStack_.empty())
 			{
 				ooCall->setCallee(ooExprStack_.pop());
+				baseVisitor_->macroImportHelper_.mapAst(callExpr, ooCall);
 				ooExprStack_.push(ooCall);
 				break;
 			}
@@ -264,6 +304,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 			ooNewExpr->dimensions()->append(ooExprStack_.pop());
 	}
 
+	baseVisitor_->macroImportHelper_.mapAst(newExpr, ooNewExpr);
 	ooExprStack_.push(ooNewExpr);
 	return true;
 }
@@ -274,43 +315,68 @@ bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 	TraverseStmt(deleteExpr->getArgument());
 	if (!ooExprStack_.empty())
 		ooDeleteExpr->setExpr(ooExprStack_.pop());
+	baseVisitor_->macroImportHelper_.mapAst(deleteExpr, ooDeleteExpr);
 	ooExprStack_.push(ooDeleteExpr);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseIntegerLiteral(clang::IntegerLiteral* intLit)
 {
-	ooExprStack_.push(new OOModel::IntegerLiteral(intLit->getValue().getLimitedValue()));
+	auto ooIntegerLiteral = new OOModel::IntegerLiteral(intLit->getValue().getLimitedValue());
+
+	baseVisitor_->macroImportHelper_.mapAst(intLit, ooIntegerLiteral);
+
+	ooExprStack_.push(ooIntegerLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr)
 {
-	ooExprStack_.push(new OOModel::BooleanLiteral(boolLitExpr->getValue()));
+	auto ooBooleanLiteral = new OOModel::BooleanLiteral(boolLitExpr->getValue());
+
+	baseVisitor_->macroImportHelper_.mapAst(boolLitExpr, ooBooleanLiteral);
+
+	ooExprStack_.push(ooBooleanLiteral);
 	return true;
 }
 
-bool ExpressionVisitor::TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr*)
+bool ExpressionVisitor::TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr* nullLitExpr)
 {
-	ooExprStack_.push(new OOModel::NullLiteral());
+	auto ooNullLiteral = new OOModel::NullLiteral();
+
+	baseVisitor_->macroImportHelper_.mapAst(nullLitExpr, ooNullLiteral);
+
+	ooExprStack_.push(ooNullLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseFloatingLiteral(clang::FloatingLiteral* floatLiteral)
 {
-	ooExprStack_.push(new OOModel::FloatLiteral(floatLiteral->getValueAsApproximateDouble()));
+	auto ooFloatLiteral = new OOModel::FloatLiteral(floatLiteral->getValueAsApproximateDouble());
+
+	baseVisitor_->macroImportHelper_.mapAst(floatLiteral, ooFloatLiteral);
+
+	ooExprStack_.push(ooFloatLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLiteral)
 {
-	ooExprStack_.push(new OOModel::CharacterLiteral(QChar(charLiteral->getValue())));
+	auto ooCharLiteral = new OOModel::CharacterLiteral(QChar(charLiteral->getValue()));
+
+	baseVisitor_->macroImportHelper_.mapAst(charLiteral, ooCharLiteral);
+
+	ooExprStack_.push(ooCharLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLiteral)
 {
-	ooExprStack_.push(new OOModel::StringLiteral(QString::fromStdString(stringLiteral->getBytes().str())));
+	auto ooStringLiteral = new OOModel::StringLiteral(QString::fromStdString(stringLiteral->getBytes().str()));
+
+	baseVisitor_->macroImportHelper_.mapAst(stringLiteral, ooStringLiteral);
+
+	ooExprStack_.push(ooStringLiteral);
 	return true;
 }
 
@@ -335,6 +401,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			else
 				log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
 		}
+		baseVisitor_->macroImportHelper_.mapAst(constructExpr, ooMethodCall);
 		ooExprStack_.push(ooMethodCall);
 		return true;
 	}
@@ -380,6 +447,7 @@ bool ExpressionVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 	if (!ooExprStack_.empty())
 		ooParenExpr->setOperand(ooExprStack_.pop());
 
+	baseVisitor_->macroImportHelper_.mapAst(parenthesizedExpr, ooParenExpr);
 	ooExprStack_.push(ooParenExpr);
 	return true;
 }
@@ -589,11 +657,16 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 		log_->writeError(className_, binaryOperator->getRHS(), CppImportLogger::Reason::NOT_SUPPORTED);
 
 	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
+	OOModel::Expression* ooBinaryOp = nullptr;
+
 	if (opcode == clang::BO_Comma)
-		ooExprStack_.push(new OOModel::CommaExpression(ooLeft, ooRight));
+		ooBinaryOp = new OOModel::CommaExpression(ooLeft, ooRight);
 	else
-		ooExprStack_.push(new OOModel::BinaryOperation
-								(utils_->translateBinaryOp(opcode), ooLeft, ooRight));
+		ooBinaryOp = new OOModel::BinaryOperation(utils_->translateBinaryOp(opcode), ooLeft, ooRight);
+
+	baseVisitor_->macroImportHelper_.mapAst(binaryOperator, ooBinaryOp);
+
+	ooExprStack_.push(ooBinaryOp);
 	return true;
 }
 
@@ -610,6 +683,7 @@ bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator
 	if (!ooExprStack_.empty()) ooBinOp->setRight(ooExprStack_.pop());
 	else log_->writeError(className_, binaryOperator->getRHS(), CppImportLogger::Reason::NOT_SUPPORTED);
 
+	baseVisitor_->macroImportHelper_.mapAst(binaryOperator, ooBinOp);
 	ooExprStack_.push(ooBinOp);
 	return true;
 }
@@ -631,6 +705,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	if (!ooExprStack_.empty()) ooUnaryOp->setOperand(ooExprStack_.pop());
 	else log_->writeError(className_, unaryOperator->getSubExpr(), CppImportLogger::Reason::NOT_SUPPORTED);
 
+	baseVisitor_->macroImportHelper_.mapAst(unaryOperator, ooUnaryOp);
 	ooExprStack_.push(ooUnaryOp);
 	return true;
 }
@@ -643,6 +718,8 @@ bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, 
 	// visit subexpr
 	TraverseStmt(castExpr->getSubExprAsWritten());
 	if (!ooExprStack_.empty()) ooCast->setExpr(ooExprStack_.pop());
+
+	baseVisitor_->macroImportHelper_.mapAst(castExpr, ooCast);
 
 	ooExprStack_.push(ooCast);
 	return true;

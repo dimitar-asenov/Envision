@@ -59,6 +59,7 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 
 		bool VisitExpr(clang::Expr* e);
 
+		bool TraverseStmt(clang::Stmt* S);
 		// memberExpr
 		bool TraverseMemberExpr(clang::MemberExpr* memberExpr);
 		bool TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember);
@@ -160,11 +161,12 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		bool TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr* castExpr);
 		bool TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr);
 
+		ClangAstVisitor* baseVisitor_{};
 	private:
 		using Base = clang::RecursiveASTVisitor<ExpressionVisitor>;
 
 		QStack<OOModel::Expression*> ooExprStack_;
-		ClangAstVisitor* baseVisitor_{};
+
 		CppImportLogger* log_{};
 		CppImportUtilities* utils_{};
 		const QString className_{"ExpressionVisitor"};

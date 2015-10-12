@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,51 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#include "AstMapping.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+Model::Node* AstMapping::closestParentWithAstMapping(Model::Node* node)
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
+	if (!node) return nullptr;
+	if (astMapping_.contains(node)) return node;
+	if (node->parent()) return closestParentWithAstMapping(node->parent());
+
+	return nullptr;
 }
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::begin() { return astMapping_.begin(); }
 
-	astVisitor_->macroImportHelper_.macroGeneration();
+QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::end() { return astMapping_.end(); }
+
+void AstMapping::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
+{
+	if (auto bop = clang::dyn_cast<clang::BinaryOperator>(clangAstNode))
+		astMapping_[envisionAstNode]
+				.append(clang::SourceRange(bop->getOperatorLoc(), bop->getOperatorLoc()));
+	else if (auto op = clang::dyn_cast<clang::CXXOperatorCallExpr>(clangAstNode))
+		astMapping_[envisionAstNode]
+				.append(clang::SourceRange(op->getOperatorLoc(), op->getOperatorLoc()));
+	else
+		astMapping_[envisionAstNode].append(clangAstNode->getSourceRange());
 }
+
+void AstMapping::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
+{
+	if (!astMapping_[envisionAstNode].contains(clangAstNode->getSourceRange()))
+		astMapping_[envisionAstNode].append(clangAstNode->getSourceRange());
+}
+
+QList<Model::Node*> AstMapping::nodes() { return astMapping_.keys(); }
+
+QVector<clang::SourceRange> AstMapping::get(Model::Node* node)
+{
+	if (!astMapping_.contains(node)) return {};
+	return astMapping_.value(node);
+}
+
+void AstMapping::clear() { astMapping_.clear(); }
+
+bool AstMapping::contains(Model::Node* node) { return astMapping_.contains(node); }
 
 }

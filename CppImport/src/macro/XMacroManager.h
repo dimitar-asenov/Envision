@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,49 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "ClangHelper.h"
+#include "MacroExpansion.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+class DefinitionManager;
+class ExpansionManager;
+class MetaDefinitionManager;
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API XMacroManager
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		XMacroManager(DefinitionManager* definitionManager, ExpansionManager* expansionManager,
+						  MetaDefinitionManager* metaDefinitionManager);
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		void handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent,
+																						 OOModel::MetaDefinition* metaDef,
+																						 MacroExpansion* expansion,
+																						 MacroExpansion* beginChild);
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+		void handleXMacros();
+
+		MacroExpansion* partialBeginChild(MacroExpansion* expansion);
+
+	private:
+		DefinitionManager* definitionManager_;
+		ExpansionManager* expansionManager_;
+		MetaDefinitionManager* metaDefinitionManager_;
+
+		QHash<QString, OOModel::MetaDefinition*> xMacroMetaDefinitions_;
+		QHash<OOModel::MetaCallExpression*, Model::List*> specializations_;
+
+		OOModel::MetaDefinition* createXMacroMetaDef(MacroExpansion* hExpansion, MacroExpansion* cppExpansion);
+		MacroExpansion* basePartialBegin(MacroExpansion* partialBeginExpansion);
+		void mergeClasses(OOModel::Class* merged, OOModel::Class* mergee);
+		OOModel::MetaDefinition* xMacroMetaDefinition(const clang::MacroDirective* md);
+		MacroExpansion* matchingXMacroExpansion(Model::Node* node);
+
+};
 
 }

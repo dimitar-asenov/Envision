@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,51 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "AstMapping.h"
+#include "ClangHelper.h"
+#include "cppimport_api.h"
+
+#include "MacroExpansion.h"
+#include "clang/Lex/MacroArgs.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+class DefinitionManager;
+class LexicalHelper;
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API ExpansionManager
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		ExpansionManager(ClangHelper* clang, AstMapping* astMapping, DefinitionManager* definitionManager,
+							  LexicalHelper* lexicalHelper);
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		void addMacroExpansion(clang::SourceRange sr, const clang::MacroDirective* md,
+															const clang::MacroArgs* args);
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+		QVector<MacroExpansion*> expansions();
+		void clear();
+
+		QVector<MacroExpansion*> topLevelExpansions();
+
+		MacroExpansion* immediateExpansion(clang::SourceLocation loc);
+		QSet<MacroExpansion*> expansion(Model::Node* node);
+
+		QVector<Model::Node*> tLExpansionTLNodes(MacroExpansion* expansion);
+		QVector<Model::Node*> nTLExpansionTLNodes(MacroExpansion* expansion);
+
+	private:
+		ClangHelper* clang_;
+		AstMapping* astMapping_;
+		DefinitionManager* definitionManager_;
+		LexicalHelper* lexicalHelper_;
+		MacroExpansion* currentXMacroParent {};
+		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;
+		QVector<MacroExpansion*> expansions_;
+
+		MacroExpansion* expansion(clang::SourceLocation loc);
+
+};
 
 }

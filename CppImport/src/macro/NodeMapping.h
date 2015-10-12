@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,59 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include <ModelBase/src/nodes/Node.h>
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API NodeMapping
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		void add(Model::Node* original, Model::Node* clone)
+		{
+			clones_[clone] = original;
+			originals_[original] = clone;
+		}
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		Model::Node* original(Model::Node* clone)
+		{
+			return clones_[clone];
+		}
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+		QVector<Model::Node*> original(QVector<Model::Node*> clones)
+		{
+			QVector<Model::Node*> result;
+			for (auto clone : clones)
+				result.append(original(clone));
+			return result;
+		}
+
+		Model::Node* clone(Model::Node* original)
+		{
+			return originals_[original];
+		}
+
+		QVector<Model::Node*> clone(QVector<Model::Node*> originals)
+		{
+			QVector<Model::Node*> result;
+			for (auto original : originals)
+				result.append(clone(original));
+			return result;
+		}
+
+		void replaceClone(Model::Node* clone, Model::Node* replacement)
+		{
+			auto original = clones_[clone];
+			clones_.remove(clone);
+			add(original, replacement);
+		}
+
+	private:
+		QHash<Model::Node*, Model::Node*> clones_;
+		QHash<Model::Node*, Model::Node*> originals_;
+};
 
 }

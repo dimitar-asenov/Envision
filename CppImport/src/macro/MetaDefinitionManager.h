@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,54 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "ClangHelper.h"
+#include "MacroArgumentInfo.h"
+#include "NodeMapping.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+class DefinitionManager;
+class ExpansionManager;
+class LexicalHelper;
+class XMacroManager;
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+class CPPIMPORT_API MetaDefinitionManager
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	public:
+		MetaDefinitionManager(OOModel::Project* root, ClangHelper* clang, DefinitionManager* definitionManager,
+								ExpansionManager* expansionManager, LexicalHelper* lexicalHelper, XMacroManager* xMacroManager);
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
-{
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
+								 QVector<MacroArgumentInfo>& arguments, QHash<MacroExpansion*, Model::Node*>* splices);
 
-	astVisitor_->macroImportHelper_.macroGeneration();
-}
+		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
+
+	private:
+		OOModel::Project* root_;
+		ClangHelper* clang_;
+		DefinitionManager* definitionManager_;
+		ExpansionManager* expansionManager_;
+		LexicalHelper* lexicalHelper_;
+		XMacroManager* xMacroManager_;
+
+		QHash<QString, OOModel::MetaDefinition*> metaDefinitions_;
+
+		void addChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,	NodeMapping* childMapping,
+										QHash<MacroExpansion*, Model::Node*>* splices);
+		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
+																NodeMapping* mapping, QVector<Model::Node*>* result);
+		bool removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,	NodeMapping* mapping);
+		void insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping, QVector<MacroArgumentInfo>& arguments);
+
+		void renameMetaCalls(Model::Node* node, QString current, QString replace);
+
+		OOModel::Declaration* metaDefinitionParent(const clang::MacroDirective* md);
+
+};
 
 }
