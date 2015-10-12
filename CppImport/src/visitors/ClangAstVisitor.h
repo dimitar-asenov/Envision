@@ -117,13 +117,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 */
 		bool shouldUseDataRecursionfor (clang::Stmt* S);
 
-		const clang::SourceManager* sourceManager_{};
-
-		clang::Preprocessor* preprocessor_{};
-
 		MacroImportHelper macroImportHelper_;
-
-		TranslateManager* trMngr_{};
 
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
@@ -132,10 +126,13 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		QStack<OOModel::Expression*> ooExprStack_;
 
 		CppImportLogger* log_{};
+		TranslateManager* trMngr_{};
 		CppImportUtilities* utils_{};
 		ExpressionVisitor* exprVisitor_{};
 		TemplateArgumentVisitor* templArgVisitor_{};
 		CommentParser* commentParser_{};
+		const clang::SourceManager* sourceManager_{};
+		const clang::Preprocessor* preprocessor_{};
 		bool importSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};
