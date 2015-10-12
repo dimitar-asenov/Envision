@@ -68,8 +68,8 @@ class CPPIMPORT_API XMacroManager
 		MacroExpansion* matchingXMacroExpansion(Model::Node* node);
 
 		MacroExpansion* basePartialBegin(MacroExpansion* partialBeginExpansion);
-		OOModel::MetaCallExpression* partialBeginChild(OOModel::MetaDefinition* metaDef);
 
+		void applyPartialBeginSpecializationTransformation(MacroExpansion* hExpansion, MacroExpansion* cppExpansion);
 };
 
 }

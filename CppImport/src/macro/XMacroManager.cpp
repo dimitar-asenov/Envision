@@ -79,6 +79,39 @@ void XMacroManager::handlePartialBeginSpecialization(OOModel::Declaration* metaD
 	metaDef->context()->metaCalls()->append(beginChild->metaCall);
 }
 
+void XMacroManager::applyPartialBeginSpecializationTransformation(MacroExpansion* hExpansion,
+																						MacroExpansion* cppExpansion)
+{
+	auto hMetaDefinition = metaDefinitionManager_->metaDefinition(hExpansion->definition);
+
+	// if the metaBindingInput was not yet added to this header xMacro begin meta definition then add it
+	if (!StaticStuff::findDeclaration(hMetaDefinition->arguments(), "metaBindingInput"))
+		hMetaDefinition->arguments()->append(new OOModel::FormalMetaArgument("metaBindingInput"));
+
+	/*
+	 * try to find a child meta call of this meta definition and modify it according to the specialization.
+	 * we have to do it over the tree because the inner meta call might originate from an expansion of a
+	 * translation unit prior to this one.
+	 */
+	auto specHash = definitionManager_->hash(cppExpansion->definition);
+	if (specializations_.contains(specHash))
+		for (auto i = 0; i < hMetaDefinition->context()->metaCalls()->size(); i++)
+			if (auto metaCall = DCast<OOModel::MetaCallExpression>(hMetaDefinition->context()->metaCalls()->at(i)))
+				if (auto callee = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
+					if (callee->name().startsWith("BEGIN_"))
+						if (!specialized_.contains(metaCall))
+						{
+							// avoid multiple specialization transformations
+							specialized_.insert(metaCall);
+
+							// apply specialization transformations
+							metaCall->arguments()->append(specializations_.value(specHash)->clone());
+							metaCall->arguments()->append(new OOModel::ReferenceExpression("metaBindingInput"));
+
+							return;
+						}
+}
+
 void XMacroManager::handleXMacros()
 {
 	for (auto expansion : expansionManager_->expansions())
@@ -88,22 +121,7 @@ void XMacroManager::handleXMacros()
 			{
 				if (auto other = matchingXMacroExpansion(node))
 				{
-					{
-						auto expDef = metaDefinitionManager_->metaDefinition(expansion->definition);
-
-						if (!StaticStuff::findDeclaration(expDef->arguments(), "metaBindingInput"))
-							expDef->arguments()->append(new OOModel::FormalMetaArgument("metaBindingInput"));
-
-						if (specializations_.contains(definitionManager_->hash(other->definition)))
-							if (auto pbc = partialBeginChild(expDef))
-								if (!specialized_.contains(pbc))
-								{
-									specialized_.insert(pbc);
-									pbc->arguments()->append(
-												specializations_.value(definitionManager_->hash(other->definition))->clone());
-									pbc->arguments()->append(new OOModel::ReferenceExpression("metaBindingInput"));
-								}
-					}
+					applyPartialBeginSpecializationTransformation(expansion, other);
 
 					StaticStuff::removeNode(other->metaCall, true);
 
@@ -270,17 +288,6 @@ MacroExpansion* XMacroManager::partialBeginChild(MacroExpansion* expansion)
 	for (auto child : expansion->children)
 		if (definitionManager_->isPartialBegin(child->definition))
 			return child;
-
-	return nullptr;
-}
-
-OOModel::MetaCallExpression* XMacroManager::partialBeginChild(OOModel::MetaDefinition* metaDef)
-{
-	for (auto i = 0; i < metaDef->context()->metaCalls()->size(); i++)
-		if (auto metaCall = DCast<OOModel::MetaCallExpression>(metaDef->context()->metaCalls()->at(i)))
-			if (auto callee = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
-				if (callee->name().startsWith("BEGIN_"))
-					return metaCall;
 
 	return nullptr;
 }
