@@ -33,8 +33,8 @@ LIBS += -lclangTooling\
 				-lclangAST\
 				-lclangLex\
 				-lclangBasic\
-                                ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs)"" \
-                                $$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags --libs cppbackend)
+				$$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags \
+											--libs cppbackend analysis codegen bitreader option core)
 
 ## END LLVM SPECIFIC
 
