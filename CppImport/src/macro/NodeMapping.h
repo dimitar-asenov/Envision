@@ -37,13 +37,16 @@ class CPPIMPORT_API NodeMapping
 	public:
 		void add(Model::Node* original, Model::Node* clone)
 		{
+			Q_ASSERT(original);
+			Q_ASSERT(clone);
 			clones_[clone] = original;
 			originals_[original] = clone;
 		}
 
 		Model::Node* original(Model::Node* clone)
 		{
-			return clones_[clone];
+			if (!clones_.contains(clone)) return nullptr;
+			return clones_.value(clone);
 		}
 
 		QVector<Model::Node*> original(QVector<Model::Node*> clones)
@@ -56,7 +59,8 @@ class CPPIMPORT_API NodeMapping
 
 		Model::Node* clone(Model::Node* original)
 		{
-			return originals_[original];
+			if (!originals_.contains(original)) return nullptr;
+			return originals_.value(original);
 		}
 
 		QVector<Model::Node*> clone(QVector<Model::Node*> originals)
@@ -67,11 +71,13 @@ class CPPIMPORT_API NodeMapping
 			return result;
 		}
 
-		void replaceClone(Model::Node* clone, Model::Node* replacement)
+		void replaceClone(Model::Node* old, Model::Node* replacement)
 		{
-			auto original = clones_[clone];
-			clones_.remove(clone);
-			add(original, replacement);
+			if (auto original = clone(old))
+			{
+				clones_.remove(old);
+				add(original, replacement);
+			}
 		}
 
 	private:

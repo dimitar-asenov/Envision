@@ -205,9 +205,12 @@ void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroE
 	// do not remove child meta calls
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
-	if (expansionManager_->expansion(mapping->original(node)).contains(expansion))
-		for (auto child : node->children())
-			childrenUnownedByExpansion(child, expansion, mapping, result);
+	if (auto original = mapping->original(node))
+	{
+		if (expansionManager_->expansion(original).contains(expansion))
+			for (auto child : node->children())
+				childrenUnownedByExpansion(child, expansion, mapping, result);
+	}
 	else
 		result->append(node);
 }

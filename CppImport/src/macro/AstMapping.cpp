@@ -43,6 +43,8 @@ QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::end() { r
 
 void AstMapping::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
+	Q_ASSERT(envisionAstNode);
+
 	if (auto bop = clang::dyn_cast<clang::BinaryOperator>(clangAstNode))
 		astMapping_[envisionAstNode]
 				.append(clang::SourceRange(bop->getOperatorLoc(), bop->getOperatorLoc()));
@@ -55,6 +57,8 @@ void AstMapping::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 
 void AstMapping::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 {
+	Q_ASSERT(envisionAstNode);
+
 	if (!astMapping_[envisionAstNode].contains(clangAstNode->getSourceRange()))
 		astMapping_[envisionAstNode].append(clangAstNode->getSourceRange());
 }
