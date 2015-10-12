@@ -1,0 +1,7 @@
+"Hot Spots - Method";"Self Time [%]";"Self Time";"Total Time";"Invocations"
+"Window.rollup()";"31.74603";"0.04 ms";"0.04 ms";"1"
+"Engine.start()";"19.84127";"0.025 ms";"0.025 ms";"1"
+"Engine.rev()";"15.079365";"0.019 ms";"0.019 ms";"1"
+"Engine.stop()";"15.079365";"0.019 ms";"0.019 ms";"1"
+"Wheel.align()";"11.904762";"0.015 ms";"0.015 ms";"1"
+"CarModel.simulateCarUsage(CarModel)";"6.3492064";"0.008 ms";"0.129 ms";"1"

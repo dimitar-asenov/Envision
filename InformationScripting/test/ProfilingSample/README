@@ -1,0 +1,11 @@
+To run this example do the following:
+0) Download the CarModel source code from: 
+    http://www.eclipse.org/tptp/home/documents/tutorials/profilingtool/profilingexample_32.html
+    Save it as CarModel.java
+1) Import the CarModel.java into Envision.
+2) Optional: If you want to generate your own profiling data:
+    2.1) Compile the program (javac CarModel.java)
+    2.2) Run the program java CarModel
+    2.3) Run visual vm to get profiling data
+    2.4) Store the profiling data
+3) Run the profileSource script as described in the script
