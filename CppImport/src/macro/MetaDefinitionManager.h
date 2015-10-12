@@ -47,7 +47,7 @@ class CPPIMPORT_API MetaDefinitionManager
 								ExpansionManager* expansionManager, LexicalHelper* lexicalHelper, XMacroManager* xMacroManager);
 
 		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
-								 QVector<MacroArgumentInfo>& arguments, QHash<MacroExpansion*, Model::Node*>* splices);
+								 QVector<MacroArgumentInfo>& arguments);
 
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
@@ -64,8 +64,7 @@ class CPPIMPORT_API MetaDefinitionManager
 		/**
 		 * insert all non-xMacro child meta calls into metaDef.
 		 */
-		void insertChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,	NodeMapping* childMapping,
-										QHash<MacroExpansion*, Model::Node*>* splices);
+		void insertChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,	NodeMapping* childMapping);
 
 		/**
 		 * return all children of node that do not belong to expansion.

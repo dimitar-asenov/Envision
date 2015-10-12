@@ -94,7 +94,7 @@ OOModel::MetaDefinition* MetaDefinitionManager::metaDefinition(const clang::Macr
 }
 
 void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
-														QVector<MacroArgumentInfo>& arguments, QHash<MacroExpansion*, Model::Node*>* splices)
+														QVector<MacroArgumentInfo>& arguments)
 {
 	if (!metaDefinition(expansion->definition))
 	{
@@ -129,7 +129,7 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 					lexicalHelper_->applyLexicalTransformations(cloned, &childMapping,
 																					 clang_->argumentNames(expansion->definition));
 
-					insertChildMetaCalls(metaDef, expansion, &childMapping, splices);
+					insertChildMetaCalls(metaDef, expansion, &childMapping);
 
 					if (removeUnownedNodes(cloned, expansion, &childMapping))
 						continue;
@@ -168,7 +168,7 @@ void MetaDefinitionManager::renameMetaCalls(Model::Node* node, QString current, 
 }
 
 void MetaDefinitionManager::insertChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,
-															 NodeMapping* childMapping, QHash<MacroExpansion*, Model::Node*>* splices)
+															 NodeMapping* childMapping)
 {
 	for (auto childExpansion : expansion->children)
 	{
@@ -176,7 +176,7 @@ void MetaDefinitionManager::insertChildMetaCalls(OOModel::MetaDefinition* metaDe
 		if (childExpansion->xMacroParent) continue;
 
 		// retrieve the node that the child meta call should replace
-		if (auto splice = splices->value(childExpansion))
+		if (auto splice = childExpansion->splice_)
 			// splice is an original node therefore we need to get to the cloned domain first
 			// clonedSplice represents the cloned version of splice
 			if (auto clonedSplice = childMapping->clone(splice))

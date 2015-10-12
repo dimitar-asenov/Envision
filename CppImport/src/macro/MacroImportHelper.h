@@ -84,7 +84,7 @@ class CPPIMPORT_API MacroImportHelper
 		QHash<Model::Node*, MacroExpansion*> finalizationMetaCalls;
 
 		void handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
-										  QVector<MacroArgumentInfo>& arguments, QHash<MacroExpansion*, Model::Node*>* splices);
+										  QVector<MacroArgumentInfo>& arguments);
 
 		bool insertMetaCall(MacroExpansion* expansion);
 

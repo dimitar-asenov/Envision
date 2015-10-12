@@ -43,6 +43,7 @@ class CPPIMPORT_API MacroExpansion
 		OOModel::MetaCallExpression* metaCall;
 		MacroExpansion* xMacroParent;
 		QVector<MacroExpansion*> xMacroChildren;
+		Model::Node* splice_{};
 
 		bool isChildOf(MacroExpansion* entry)
 		{

@@ -48,7 +48,6 @@ MacroImportHelper::MacroImportHelper(OOModel::Project* project)
 
 void MacroImportHelper::macroGeneration()
 {
-	QHash<MacroExpansion*, Model::Node*> splices;
 	for (auto expansion : expansionManager_.topLevelExpansions())
 	{
 		NodeMapping mapping;
@@ -63,7 +62,7 @@ void MacroImportHelper::macroGeneration()
 			generatedNodes.append(generatedNode);
 		}
 
-		handleMacroExpansion(generatedNodes, expansion, &mapping, allArgs, &splices);
+		handleMacroExpansion(generatedNodes, expansion, &mapping, allArgs);
 
 		if (insertMetaCall(expansion))
 		{
@@ -80,7 +79,7 @@ void MacroImportHelper::macroGeneration()
 					context->metaCalls()->append(expansion->metaCall);
 				else
 				{
-					if (auto splice = splices.value(expansion))
+					if (auto splice = expansion->splice_)
 						finalizationMetaCalls.insert(splice, expansion);
 					else
 						qDebug() << "no splice found for expansion"
@@ -192,23 +191,21 @@ void MacroImportHelper::setPreprocessor(const clang::Preprocessor* preprocessor)
 
 void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,
 															MacroExpansion* expansion,
-															NodeMapping* mapping, QVector<MacroArgumentInfo>& arguments,
-															QHash<MacroExpansion*, Model::Node*>* splices)
+															NodeMapping* mapping, QVector<MacroArgumentInfo>& arguments)
 {
 	// handle child macro expansions
 	for (auto childExpansion : expansion->children)
 	{
 		auto tlNodes = expansionManager_.nTLExpansionTLNodes(childExpansion);
-		handleMacroExpansion(mapping->clone(tlNodes), childExpansion, mapping, arguments, splices);
+		handleMacroExpansion(mapping->clone(tlNodes), childExpansion, mapping, arguments);
 	}
 
 	// store the original of the first node generated from this expansion as placement information for the meta call
 	// TODO: fix logic when parent does not have nodes (should take over loc from child)
-	// TODO: remove splices map and put info into MacroExpansion
 	if (nodes.size() > 0)
-		splices->insert(expansion, mapping->original(nodes.first()));
+		expansion->splice_ = mapping->original(nodes.first());
 
-	metaDefinitionManager_.createMetaDef(nodes, expansion, mapping, arguments, splices);
+	metaDefinitionManager_.createMetaDef(nodes, expansion, mapping, arguments);
 }
 
 void MacroImportHelper::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
