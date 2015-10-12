@@ -41,7 +41,7 @@ const QStringList TagQuery::ADD_ARGUMENT_NAMES{"a", "add"};
 const QStringList TagQuery::REMOVE_ARGUMENT_NAMES{"r", "remove"};
 const QStringList TagQuery::PERSISTENT_ARGUMENT_NAMES{"p", "persistent"};
 
-TupleSet TagQuery::execute(TupleSet input)
+TupleSet TagQuery::executeLinear(TupleSet input)
 {
 	return exec_(this, input);
 }

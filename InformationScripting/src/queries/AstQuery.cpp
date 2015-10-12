@@ -60,7 +60,7 @@ AstQuery::AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
 		}, QStringList("AstQuery") + args}, exec_{exec}
 {}
 
-TupleSet AstQuery::execute(TupleSet input)
+TupleSet AstQuery::executeLinear(TupleSet input)
 {
 	return exec_(this, input);
 }

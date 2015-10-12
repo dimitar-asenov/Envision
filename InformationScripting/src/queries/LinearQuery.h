@@ -36,7 +36,7 @@ class INFORMATIONSCRIPTING_API LinearQuery : public Query
 {
 	public:
 		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
-		virtual TupleSet execute(TupleSet) = 0;
+		virtual TupleSet executeLinear(TupleSet) = 0;
 };
 
 } /* namespace InformationScripting */

@@ -76,7 +76,6 @@ void QueryNodeBuilder::visit(Interaction::Value* val)
 	query_ = new CommandNode(val->text());
 }
 
-__attribute__((optnone))
 void QueryNodeBuilder::visit(Interaction::Operator* op)
 {
 	qDebug() << "operator";

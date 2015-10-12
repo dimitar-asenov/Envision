@@ -35,7 +35,7 @@ QList<TupleSet> LinearQuery::execute(QList<TupleSet> input)
 	if (input.isEmpty()) input << TupleSet();
 
 	for (auto ts : input)
-		result.push_back(execute(ts));
+		result.push_back(executeLinear(ts));
 	return result;
 }
 

@@ -47,7 +47,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 {
 	public:
-		virtual TupleSet execute(TupleSet input) override;
+		virtual TupleSet executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 
