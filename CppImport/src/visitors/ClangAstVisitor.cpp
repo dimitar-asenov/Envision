@@ -68,9 +68,9 @@ void ClangAstVisitor::setSourceManager(const clang::SourceManager* sourceManager
 void ClangAstVisitor::setPreprocessor(const clang::Preprocessor* preprocessor)
 {
 	Q_ASSERT(preprocessor);
-	preprocessor_= const_cast<clang::Preprocessor*>(preprocessor);
+	preprocessor_= preprocessor;
 	macroImportHelper_.setPreprocessor(preprocessor);
-	preprocessor_->addPPCallbacks(std::make_unique<PPCallback>(macroImportHelper_));
+	const_cast<clang::Preprocessor*>(preprocessor)->addPPCallbacks(std::make_unique<PPCallback>(macroImportHelper_));
 }
 
 Model::Node*ClangAstVisitor::ooStackTop()
