@@ -733,7 +733,7 @@ void GitRepository::newCommit(QString tree, QString message, Signature author, S
 	char* gitMessage = new char[message.size()];
 	strcpy(gitMessage, message.toUtf8().data());
 
-	git_commit** gitParents = new git_commit* [parents.size()];
+	const git_commit** gitParents = new const git_commit* [parents.size()];
 	for (int i = 0; i < parents.size(); i++)
 	{
 		QString revision = parents.at(i);
@@ -745,13 +745,13 @@ void GitRepository::newCommit(QString tree, QString message, Signature author, S
 	git_oid newCommitOid;
 	errorCode = git_commit_create(&newCommitOid, repository_, HEAD, gitAuthor, gitCommitter,
 											nullptr, gitMessage, gitTree, parents.size(),
-											const_cast<const git_commit**>(gitParents));
+											gitParents);
 
 	git_tree_free(gitTree);
 	git_signature_free(gitAuthor);
 	git_signature_free(gitCommitter);
 	for (int i = 0; i < parents.size(); i++)
-		git_commit_free(gitParents[i]);
+		git_commit_free(const_cast<git_commit**>(gitParents)[i]);
 
 	SAFE_DELETE(gitMessage);
 }
