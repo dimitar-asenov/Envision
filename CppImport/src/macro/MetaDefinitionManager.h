@@ -64,7 +64,7 @@ class CPPIMPORT_API MetaDefinitionManager
 		/**
 		 * insert all non-xMacro child meta calls into metaDef.
 		 */
-		void insertChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,	NodeMapping* childMapping);
+		void insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping);
 
 		/**
 		 * return all children of node that do not belong to expansion.

@@ -129,7 +129,7 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 					lexicalHelper_->applyLexicalTransformations(cloned, &childMapping,
 																					 clang_->argumentNames(expansion->definition));
 
-					insertChildMetaCalls(metaDef, expansion, &childMapping);
+					insertChildMetaCalls(expansion, &childMapping);
 
 					if (removeUnownedNodes(cloned, expansion, &childMapping))
 						continue;
@@ -167,8 +167,7 @@ void MetaDefinitionManager::renameMetaCalls(Model::Node* node, QString current, 
 			renameMetaCalls(child, current, replace);
 }
 
-void MetaDefinitionManager::insertChildMetaCalls(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,
-															 NodeMapping* childMapping)
+void MetaDefinitionManager::insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping)
 {
 	for (auto childExpansion : expansion->children)
 	{
@@ -180,20 +179,13 @@ void MetaDefinitionManager::insertChildMetaCalls(OOModel::MetaDefinition* metaDe
 			// splice is an original node therefore we need to get to the cloned domain first
 			// clonedSplice represents the cloned version of splice
 			if (auto clonedSplice = childMapping->clone(splice))
-			{
-				// TODO: investigate meaning
-				if (DCast<OOModel::Declaration>(clonedSplice))
+				if (!DCast<OOModel::Declaration>(clonedSplice))
 				{
-					if (auto parentDecl = clonedSplice->firstAncestorOfType<OOModel::Declaration>())
-						parentDecl->metaCalls()->append(childExpansion->metaCall);
+					if (clonedSplice->parent())
+						clonedSplice->parent()->replaceChild(clonedSplice, childExpansion->metaCall);
 					else
-						metaDef->context()->metaCalls()->append(childExpansion->metaCall);
-
-					StaticStuff::removeNode(clonedSplice);
+						qDebug() << "not inserted metacall" << clonedSplice->typeName();
 				}
-				else
-					qDebug() << "not inserted metacall" << clonedSplice->typeName();
-			}
 	}
 }
 

@@ -73,7 +73,7 @@ void MacroImportHelper::macroGeneration()
 			else
 				context = actualContext(expansion);
 
-			if (!expansion->xMacroParent)
+			if (!expansion->xMacroParent && context)
 			{
 				if (!DCast<OOModel::Method>(context))
 					context->metaCalls()->append(expansion->metaCall);
@@ -204,6 +204,13 @@ void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,
 	// TODO: fix logic when parent does not have nodes (should take over loc from child)
 	if (nodes.size() > 0)
 		expansion->splice_ = mapping->original(nodes.first());
+	else
+		for (auto childExpansion : expansion->children)
+			if (childExpansion->splice_)
+			{
+				expansion->splice_ = childExpansion->splice_;
+				break;
+			}
 
 	metaDefinitionManager_.createMetaDef(nodes, expansion, mapping, arguments);
 }
@@ -264,7 +271,7 @@ OOModel::Declaration* MacroImportHelper::actualContext(MacroExpansion* expansion
 	QVector<OOModel::Declaration*> candidates;
 	for (auto i = astMapping_.begin(); i != astMapping_.end(); i++)
 		for (auto range : i.value())
-			if (clang_.contains(range, expansion->range))
+			if (lexicalHelper_.contains(range, expansion->range))
 				if (StaticStuff::validContext(i.key()))
 				{
 					candidates.append(DCast<OOModel::Declaration>(i.key()));
