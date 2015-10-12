@@ -32,13 +32,6 @@ DefinitionManager::DefinitionManager(ClangHelper* clang) : clang_(clang) {}
 
 void DefinitionManager::addMacroDefinition(QString name, const clang::MacroDirective* md)
 {
-	// TODO: this is a virtual rename fix for incosistent naming in Envision
-	// TODO: check whether the current implementation requires this renaming
-	if (name == "BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL")
-		name = "BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE";
-	if (name == "BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE")
-		name = "BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE";
-
 	definitions_[md] = name;
 }
 
