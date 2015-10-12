@@ -73,7 +73,7 @@ void XMacroManager::handlePartialBeginSpecialization(OOModel::Declaration* metaD
 		}
 
 		beginChild->metaCall->arguments()->append(list);
-		specializations_.insert(expansion->metaCall, list);
+		specializations_.insert(definitionManager_->hash(expansion->definition), list);
 	}
 
 	metaDef->context()->metaCalls()->append(beginChild->metaCall);
@@ -92,16 +92,17 @@ void XMacroManager::handleXMacros()
 						auto expDef = metaDefinitionManager_->metaDefinition(expansion->definition);
 
 						if (!StaticStuff::findDeclaration(expDef->arguments(), "metaBindingInput"))
-						{
-							if (specializations_.contains(other->metaCall))
-								if (auto pbc = partialBeginChild(expansion))
-								{
-									pbc->metaCall->arguments()->append(specializations_[other->metaCall]->clone());
-									pbc->metaCall->arguments()->append(new OOModel::ReferenceExpression("metaBindingInput"));
-								}
-
 							expDef->arguments()->append(new OOModel::FormalMetaArgument("metaBindingInput"));
-						}
+
+						if (specializations_.contains(definitionManager_->hash(other->definition)))
+							if (auto pbc = partialBeginChild(expDef))
+								if (!specialized_.contains(pbc))
+								{
+									specialized_.insert(pbc);
+									pbc->arguments()->append(
+												specializations_.value(definitionManager_->hash(other->definition))->clone());
+									pbc->arguments()->append(new OOModel::ReferenceExpression("metaBindingInput"));
+								}
 					}
 
 					StaticStuff::removeNode(other->metaCall, true);
@@ -269,6 +270,17 @@ MacroExpansion* XMacroManager::partialBeginChild(MacroExpansion* expansion)
 	for (auto child : expansion->children)
 		if (definitionManager_->isPartialBegin(child->definition))
 			return child;
+
+	return nullptr;
+}
+
+OOModel::MetaCallExpression* XMacroManager::partialBeginChild(OOModel::MetaDefinition* metaDef)
+{
+	for (auto i = 0; i < metaDef->context()->metaCalls()->size(); i++)
+		if (auto metaCall = DCast<OOModel::MetaCallExpression>(metaDef->context()->metaCalls()->at(i)))
+			if (auto callee = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
+				if (callee->name().startsWith("BEGIN_"))
+					return metaCall;
 
 	return nullptr;
 }

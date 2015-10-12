@@ -59,13 +59,16 @@ class CPPIMPORT_API XMacroManager
 		MetaDefinitionManager* metaDefinitionManager_;
 
 		QHash<QString, OOModel::MetaDefinition*> xMacroMetaDefinitions_;
-		QHash<OOModel::MetaCallExpression*, Model::List*> specializations_;
+		QHash<QString, Model::List*> specializations_;
+		QSet<OOModel::MetaCallExpression*> specialized_;
 
 		OOModel::MetaDefinition* createXMacroMetaDef(MacroExpansion* hExpansion, MacroExpansion* cppExpansion);
-		MacroExpansion* basePartialBegin(MacroExpansion* partialBeginExpansion);
 		void mergeClasses(OOModel::Class* merged, OOModel::Class* mergee);
 		OOModel::MetaDefinition* xMacroMetaDefinition(const clang::MacroDirective* md);
 		MacroExpansion* matchingXMacroExpansion(Model::Node* node);
+
+		MacroExpansion* basePartialBegin(MacroExpansion* partialBeginExpansion);
+		OOModel::MetaCallExpression* partialBeginChild(OOModel::MetaDefinition* metaDef);
 
 };
 
