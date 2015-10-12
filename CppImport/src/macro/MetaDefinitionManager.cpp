@@ -206,13 +206,15 @@ void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroE
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
 	if (auto original = mapping->original(node))
-	{
 		if (expansionManager_->expansion(original).contains(expansion))
+		{
 			for (auto child : node->children())
 				childrenUnownedByExpansion(child, expansion, mapping, result);
-	}
-	else
-		result->append(node);
+
+			return;
+		}
+
+	result->append(node);
 }
 
 bool MetaDefinitionManager::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion, NodeMapping* mapping)
