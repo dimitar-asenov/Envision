@@ -79,6 +79,7 @@ QColor Heatmap::colorForValue(int value)
 	// First we need to calculate a index (i.e. factor) in the range. This we do with the following formula:
 	// minVal + colorFactor * range == value, thus colorFactor == (value - minVal) / range.
 	auto range = valueRange_.second - valueRange_.first;
+	if (range == 0) return {"red"};
 	double colorFactor = (double (value - valueRange_.first)) / range;
 	// The colorFactor can now be used to return a color based on the baseColor: (red + and green minus)
 	int red = baseColor_.red();
