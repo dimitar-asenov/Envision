@@ -51,7 +51,7 @@ clang::SourceLocation ClangHelper::immediateMacroLoc(clang::SourceLocation Loc)
 {
 	if (Loc.isMacroID())
 	{
-		while (1)
+		while (true)
 		{
 			auto FID = sourceManager_->getFileID(Loc);
 			const clang::SrcMgr::SLocEntry *E = &sourceManager_->getSLocEntry(FID);
