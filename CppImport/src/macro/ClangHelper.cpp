@@ -47,44 +47,44 @@ QString ClangHelper::spelling(clang::SourceLocation start, clang::SourceLocation
 	}
 }
 
-clang::SourceLocation ClangHelper::immediateMacroLocation(clang::SourceLocation Loc)
+clang::SourceLocation ClangHelper::immediateMacroLocation(clang::SourceLocation location)
 {
-	if (Loc.isMacroID())
+	if (location.isMacroID())
 	{
 		while (true)
 		{
-			auto FID = sourceManager_->getFileID(Loc);
+			auto FID = sourceManager_->getFileID(location);
 			const clang::SrcMgr::SLocEntry *E = &sourceManager_->getSLocEntry(FID);
 			if (!E->isExpansion())
 				break;
 			const clang::SrcMgr::ExpansionInfo &Expansion = E->getExpansion();
-			Loc = Expansion.getExpansionLocStart();
+			location = Expansion.getExpansionLocStart();
 			if (!Expansion.isMacroArgExpansion())
 				break;
 
-			Loc = sourceManager_->getImmediateExpansionRange(Loc).first;
+			location = sourceManager_->getImmediateExpansionRange(location).first;
 			auto SpellLoc = Expansion.getSpellingLoc();
 			if (SpellLoc.isFileID())
 				break;
 
-			auto MacroFID = sourceManager_->getFileID(Loc);
+			auto MacroFID = sourceManager_->getFileID(location);
 			if (sourceManager_->isInFileID(SpellLoc, MacroFID))
 				break;
 
-			Loc = SpellLoc;
+			location = SpellLoc;
 		}
 	}
 
-	return Loc;
+	return location;
 }
 
-void ClangHelper::immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>* result)
+void ClangHelper::immediateSpellingHistory(clang::SourceLocation location, QVector<clang::SourceLocation>* result)
 {
-	result->append(loc);
+	result->append(location);
 
-	auto next = sourceManager_->getImmediateSpellingLoc(loc);
+	auto next = sourceManager_->getImmediateSpellingLoc(location);
 
-	if (next != loc)
+	if (next != location)
 		immediateSpellingHistory(next, result);
 }
 
