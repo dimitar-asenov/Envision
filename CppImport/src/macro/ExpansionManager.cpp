@@ -77,7 +77,8 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const c
 	entry->metaCall =
 			new OOModel::MetaCallExpression(definitionManager_->definitionName(entry->definition));
 
-	if (!macroDirective->getMacroInfo()->isObjectLike()) // only function like macros have braces in their signature to parse
+	// only function like macros have braces in their signature to parse
+	if (!macroDirective->getMacroInfo()->isObjectLike())
 	{
 		// extract everything in parentheses of the expansion signature using a regular expression
 		QRegularExpression regex ("\\((.*)\\)", QRegularExpression::DotMatchesEverythingOption);
