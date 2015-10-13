@@ -55,4 +55,14 @@ class CPPIMPORT_API ClangHelper
 
 };
 
+inline void ClangHelper::setSourceManager(const clang::SourceManager* sourceManager) { sourceManager_ = sourceManager; }
+
+inline void ClangHelper::setPreprocessor(const clang::Preprocessor* preprocessor) { preprocessor_ = preprocessor; }
+
+inline QString ClangHelper::spelling(clang::SourceLocation loc) { return spelling(loc, loc); }
+
+inline QString ClangHelper::spelling(clang::SourceRange range) { return spelling(range.getBegin(), range.getEnd()); }
+
+inline const clang::SourceManager* ClangHelper::sourceManager() { return sourceManager_; }
+
 }

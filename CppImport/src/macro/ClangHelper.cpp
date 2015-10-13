@@ -28,26 +28,6 @@
 
 namespace CppImport {
 
-void ClangHelper::setSourceManager(const clang::SourceManager* sourceManager)
-{
-	sourceManager_ = sourceManager;
-}
-
-void ClangHelper::setPreprocessor(const clang::Preprocessor* preprocessor)
-{
-	preprocessor_ = preprocessor;
-}
-
-QString ClangHelper::spelling(clang::SourceLocation loc)
-{
-	return spelling(loc, loc);
-}
-
-QString ClangHelper::spelling(clang::SourceRange range)
-{
-	return spelling(range.getBegin(), range.getEnd());
-}
-
 QString ClangHelper::spelling(clang::SourceLocation start, clang::SourceLocation end)
 {
 	clang::SourceLocation b = sourceManager_->getSpellingLoc(start);
@@ -116,11 +96,6 @@ QVector<QString> ClangHelper::argumentNames(const clang::MacroDirective* definit
 		result.append(QString::fromStdString((*i)->getName().str()));
 
 	return result;
-}
-
-const clang::SourceManager* ClangHelper::sourceManager()
-{
-	return sourceManager_;
 }
 
 }
