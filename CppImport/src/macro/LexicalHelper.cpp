@@ -73,18 +73,18 @@ void LexicalHelper::correctNode(clang::Decl* clangAstNode, Model::Node* envision
 {
 	clang::SourceRange spellingRange = clangAstNode->getSourceRange();
 
-	if (auto fDecl = clang::dyn_cast<clang::FunctionDecl>(clangAstNode))
+	if (auto funcDecl = clang::dyn_cast<clang::FunctionDecl>(clangAstNode))
 	{
-		spellingRange = fDecl->getNameInfo().getSourceRange();
+		spellingRange = funcDecl->getNameInfo().getSourceRange();
 
 		auto ooMethod = DCast<OOModel::Method>(envisionAstNode);
 		Q_ASSERT(ooMethod);
 
 		if (ooMethod->results()->size() > 0)
-			correctNode(fDecl->getReturnTypeSourceRange(), ooMethod->results()->first());
+			correctNode(funcDecl->getReturnTypeSourceRange(), ooMethod->results()->first());
 
 		int i = 0;
-		for (auto it = fDecl->param_begin(); it != fDecl->param_end(); it++)
+		for (auto it = funcDecl->param_begin(); it != funcDecl->param_end(); it++)
 		{
 			auto varDecl = clang::dyn_cast<clang::VarDecl>(*it);
 			Q_ASSERT(varDecl);
