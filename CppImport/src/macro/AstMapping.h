@@ -53,4 +53,14 @@ class CPPIMPORT_API AstMapping
 
 };
 
+inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::begin() { return astMapping_.begin(); }
+
+inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::end() { return astMapping_.end(); }
+
+inline QList<Model::Node*> AstMapping::nodes() { return astMapping_.keys(); }
+
+inline void AstMapping::clear() { astMapping_.clear(); }
+
+inline bool AstMapping::contains(Model::Node* node) { return astMapping_.contains(node); }
+
 }

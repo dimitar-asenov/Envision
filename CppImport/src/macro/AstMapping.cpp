@@ -37,10 +37,6 @@ Model::Node* AstMapping::closestParentWithAstMapping(Model::Node* node)
 	return nullptr;
 }
 
-QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::begin() { return astMapping_.begin(); }
-
-QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::end() { return astMapping_.end(); }
-
 void AstMapping::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
 	Q_ASSERT(envisionAstNode);
@@ -63,16 +59,10 @@ void AstMapping::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 		astMapping_[envisionAstNode].append(clangAstNode->getSourceRange());
 }
 
-QList<Model::Node*> AstMapping::nodes() { return astMapping_.keys(); }
-
 QVector<clang::SourceRange> AstMapping::get(Model::Node* node)
 {
 	if (!astMapping_.contains(node)) return {};
 	return astMapping_.value(node);
 }
-
-void AstMapping::clear() { astMapping_.clear(); }
-
-bool AstMapping::contains(Model::Node* node) { return astMapping_.contains(node); }
 
 }
