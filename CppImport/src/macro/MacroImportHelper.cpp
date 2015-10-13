@@ -240,12 +240,9 @@ bool MacroImportHelper::insertMetaCall(MacroExpansion* expansion)
 	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(expansion->range.getBegin());
 
 	QString hash = QDir(presumedLocation.getFilename()).absolutePath()
-			+ QString("|")
-			+ definitionManager_.hash(expansion->definition)
-			+ QString("|")
-			+ QString::number(presumedLocation.getLine())
-			+ QString("|")
-			+ QString::number(presumedLocation.getColumn());
+			+ "|" + definitionManager_.hash(expansion->definition)
+			+ "|" + QString::number(presumedLocation.getLine())
+			+ "|" + QString::number(presumedLocation.getColumn());
 
 	if (!metaCalls_.contains(hash))
 	{
