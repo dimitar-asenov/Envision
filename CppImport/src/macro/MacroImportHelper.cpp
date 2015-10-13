@@ -240,15 +240,15 @@ void MacroImportHelper::addMacroExpansion(clang::SourceRange sr, const clang::Ma
 
 bool MacroImportHelper::insertMetaCall(MacroExpansion* expansion)
 {
-	auto presumedLoc = clang_.sourceManager()->getPresumedLoc(expansion->range.getBegin());
+	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(expansion->range.getBegin());
 
-	QString hash = QDir(presumedLoc.getFilename()).absolutePath()
+	QString hash = QDir(presumedLocation.getFilename()).absolutePath()
 			+ QString("|")
 			+ definitionManager_.hash(expansion->definition)
 			+ QString("|")
-			+ QString::number(presumedLoc.getLine())
+			+ QString::number(presumedLocation.getLine())
 			+ QString("|")
-			+ QString::number(presumedLoc.getColumn());
+			+ QString::number(presumedLocation.getColumn());
 
 	if (!metaCalls_.contains(hash))
 	{

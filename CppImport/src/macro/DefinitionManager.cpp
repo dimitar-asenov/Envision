@@ -40,8 +40,8 @@ QString DefinitionManager::definitionName(const clang::MacroDirective* md)
 bool DefinitionManager::macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName,
 																QString& containerName)
 {
-	auto presumedLoc = clang_->sourceManager()->getPresumedLoc(md->getMacroInfo()->getDefinitionLoc());
-	auto path = QDir(presumedLoc.getFilename()).absolutePath();
+	auto presumedLocation = clang_->sourceManager()->getPresumedLoc(md->getMacroInfo()->getDefinitionLoc());
+	auto path = QDir(presumedLocation.getFilename()).absolutePath();
 
 	/*
 	 * given a path: ../Envision/A/../B.xyz
