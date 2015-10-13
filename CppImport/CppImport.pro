@@ -88,8 +88,6 @@ SOURCES += src/CppImportException.cpp \
     src/macro/DefinitionManager.cpp \
     src/macro/ExpansionManager.cpp \
     src/macro/LexicalHelper.cpp \
-    src/macro/MacroArgumentInfo.cpp \
-    src/macro/MacroArgumentLocation.cpp \
     src/macro/MacroExpansion.cpp \
     src/macro/MacroImportHelper.cpp \
     src/macro/MetaDefinitionManager.cpp \
