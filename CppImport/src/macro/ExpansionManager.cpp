@@ -141,8 +141,8 @@ MacroExpansion*ExpansionManager::immediateExpansion(clang::SourceLocation loc)
 
 	/*
 	 * if we have not found an immediate expansion for loc then we try again using the found immediateExpansionLoc.
-	 * this can happen in case of token concatenation or stringifycation where the first expansion location would point
-	 * to the location of the concatenated token or stringifycation result.
+	 * this can happen in case of token concatenation or stringification where the first expansion location would point
+	 * to the location of the concatenated token or stringification result.
 	 */
 	expansion = clang_->immediateMacroLocation(expansion);
 	for (auto i = 0; i < expansions_.size(); i++)
