@@ -24,31 +24,55 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "cppimport_api.h"
-
-#include "ModelBase/src/nodes/Node.h"
+#include "NodeMapping.h"
 
 namespace CppImport {
 
-class CPPIMPORT_API NodeMapping
+void NodeMapping::add(Model::Node* original, Model::Node* clone)
 {
-	public:
-		void add(Model::Node* original, Model::Node* clone);
+	Q_ASSERT(original);
+	Q_ASSERT(clone);
+	clones_[clone] = original;
+	originals_[original] = clone;
+}
 
-		Model::Node* original(Model::Node* clone);
-		QVector<Model::Node*> original(QVector<Model::Node*> clones);
+Model::Node*NodeMapping::original(Model::Node* clone)
+{
+	auto it = clones_.find(clone);
 
-		Model::Node* clone(Model::Node* original);
-		QVector<Model::Node*> clone(QVector<Model::Node*> originals);
+	return it != clones_.end() ? *it : nullptr;
+}
 
-		void replaceClone(Model::Node* old, Model::Node* replacement);
+QVector<Model::Node*> NodeMapping::original(QVector<Model::Node*> clones)
+{
+	QVector<Model::Node*> result;
+	for (auto clone : clones)
+		result.append(original(clone));
+	return result;
+}
 
-	private:
-		QHash<Model::Node*, Model::Node*> clones_;
-		QHash<Model::Node*, Model::Node*> originals_;
+Model::Node*NodeMapping::clone(Model::Node* original)
+{
+	auto it = originals_.find(original);
 
-};
+	return it != originals_.end() ? *it : nullptr;
+}
+
+QVector<Model::Node*> NodeMapping::clone(QVector<Model::Node*> originals)
+{
+	QVector<Model::Node*> result;
+	for (auto original : originals)
+		result.append(clone(original));
+	return result;
+}
+
+void NodeMapping::replaceClone(Model::Node* old, Model::Node* replacement)
+{
+	if (auto original = clone(old))
+	{
+		clones_.remove(old);
+		add(original, replacement);
+	}
+}
 
 }

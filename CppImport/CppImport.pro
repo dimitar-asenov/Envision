@@ -40,7 +40,7 @@ LIBS += -lclangTooling\
 
 HEADERS += src/precompiled.h \
     src/CppImportException.h \
-	src/cppimport_api.h \
+    src/cppimport_api.h \
     src/ClangAstConsumer.h \
     src/visitors/ClangAstVisitor.h \
     src/CppImportManager.h \
@@ -53,7 +53,7 @@ HEADERS += src/precompiled.h \
     src/manager/TranslateManager.h \
     src/TranslateFrontendAction.h \
     src/CppImportPlugin.h \
-	src/comments/CommentParser.h \
+    src/comments/CommentParser.h \
     src/macro/AstMapping.h \
     src/macro/ClangHelper.h \
     src/macro/DefinitionManager.h \
@@ -69,7 +69,7 @@ HEADERS += src/precompiled.h \
     src/macro/XMacroManager.h \
     src/macro/PPCallback.h
 SOURCES += src/CppImportException.cpp \
-	test/SimpleTest.cpp \
+    test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
     src/visitors/ClangAstVisitor.cpp \
     src/CppImportManager.cpp \
@@ -82,7 +82,7 @@ SOURCES += src/CppImportException.cpp \
     src/manager/TranslateManager.cpp \
     src/TranslateFrontendAction.cpp \
     src/CppImportPlugin.cpp \
-	src/comments/CommentParser.cpp \
+    src/comments/CommentParser.cpp \
     src/macro/AstMapping.cpp \
     src/macro/ClangHelper.cpp \
     src/macro/DefinitionManager.cpp \
@@ -91,6 +91,7 @@ SOURCES += src/CppImportException.cpp \
     src/macro/MacroExpansion.cpp \
     src/macro/MacroImportHelper.cpp \
     src/macro/MetaDefinitionManager.cpp \
+    src/macro/NodeMapping.cpp \
     src/macro/StaticStuff.cpp \
     src/macro/XMacroManager.cpp \
     src/macro/PPCallback.cpp
