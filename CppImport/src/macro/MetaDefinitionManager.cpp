@@ -149,19 +149,6 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 	callee->setPrefix(definitionManager_->expansionQualifier(expansion->definition));
 }
 
-void MetaDefinitionManager::renameMetaCalls(Model::Node* node, const QString& current, const QString& replace)
-{
-	if (auto metaCall = DCast<OOModel::MetaCallExpression>(node))
-	{
-		if (auto ref = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
-			if (ref->name() == current)
-				ref->setName(replace);
-	}
-	else
-		for (auto child : node->children())
-			renameMetaCalls(child, current, replace);
-}
-
 void MetaDefinitionManager::insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping)
 {
 	for (auto childExpansion : expansion->children)

@@ -83,8 +83,6 @@ class CPPIMPORT_API MetaDefinitionManager
 		 */
 		void insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping, QVector<MacroArgumentInfo>& arguments);
 
-		void renameMetaCalls(Model::Node* node, const QString& current, const QString& replace);
-
 		OOModel::Declaration* metaDefinitionParent(const clang::MacroDirective* md);
 
 };
