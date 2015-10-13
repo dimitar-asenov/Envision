@@ -50,8 +50,8 @@ class CPPIMPORT_API ClangHelper
 		bool isMacroRange(clang::SourceRange range) { return range.getBegin().isMacroID() && range.getEnd().isMacroID(); }
 
 	private:
-		const clang::Preprocessor* preprocessor_;
-		const clang::SourceManager* sourceManager_;
+		const clang::Preprocessor* preprocessor_{};
+		const clang::SourceManager* sourceManager_{};
 
 };
 
