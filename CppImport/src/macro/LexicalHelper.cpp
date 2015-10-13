@@ -34,7 +34,7 @@ namespace CppImport {
 LexicalHelper::LexicalHelper(ClangHelper* clang, ExpansionManager* expansionManager)
 	: clang_(clang), expansionManager_(expansionManager) {}
 
-bool LexicalHelper::isConcatenationStringifycation(clang::SourceLocation loc)
+bool LexicalHelper::isConcatenationOrStringification(clang::SourceLocation loc)
 {
 	if (loc.isMacroID())
 		if (auto immediateExpansion = expansionManager_->immediateExpansion(loc))
@@ -48,12 +48,12 @@ clang::SourceRange LexicalHelper::unexpandedSourceRange(clang::SourceRange range
 {
 	clang::SourceLocation start, end;
 
-	if (isConcatenationStringifycation(range.getBegin()))
+	if (isConcatenationOrStringification(range.getBegin()))
 		start = clang_->sourceManager()->getImmediateExpansionRange(range.getBegin()).first;
 	else
 		start = range.getBegin();
 
-	if (isConcatenationStringifycation(range.getEnd()))
+	if (isConcatenationOrStringification(range.getEnd()))
 		end = clang_->sourceManager()->getImmediateExpansionRange(range.getEnd()).second;
 	else
 		end = range.getEnd();

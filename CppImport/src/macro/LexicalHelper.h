@@ -58,7 +58,7 @@ class CPPIMPORT_API LexicalHelper
 		ExpansionManager* expansionManager_{};
 		QHash<Model::Node*, QString> transformations_;
 
-		bool isConcatenationStringifycation(clang::SourceLocation loc);
+		bool isConcatenationOrStringification(clang::SourceLocation loc);
 
 		// TODO: rename method
 		void correctNode(clang::SourceRange range, Model::Node* original);
