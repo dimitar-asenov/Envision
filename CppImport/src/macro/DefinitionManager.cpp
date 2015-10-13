@@ -82,7 +82,7 @@ QString DefinitionManager::hash(const clang::MacroDirective* md)
 	if (macroDefinitionLocation(md, namespaceName, fileName))
 		return namespaceName + "/" + fileName + "/" + definitionName(md);
 	else
-		return "/notenvision/" + definitionName(md);
+		return "/ExternalMacro/" + definitionName(md);
 }
 
 OOModel::ReferenceExpression* DefinitionManager::expansionQualifier(const clang::MacroDirective* md)
@@ -92,7 +92,7 @@ OOModel::ReferenceExpression* DefinitionManager::expansionQualifier(const clang:
 	if (macroDefinitionLocation(md, namespaceName, fileName))
 		return new OOModel::ReferenceExpression(fileName, new OOModel::ReferenceExpression(namespaceName));
 	else
-		return new OOModel::ReferenceExpression("notenvision");
+		return new OOModel::ReferenceExpression("ExternalMacro");
 }
 
 }
