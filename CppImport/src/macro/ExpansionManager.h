@@ -89,4 +89,6 @@ class CPPIMPORT_API ExpansionManager
 
 };
 
+inline QVector<MacroExpansion*> ExpansionManager::expansions() { return expansions_; }
+
 }

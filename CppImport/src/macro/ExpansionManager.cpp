@@ -97,9 +97,6 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sr,
 	expansions_.append(entry);
 }
 
-QVector<MacroExpansion*> ExpansionManager::expansions() { return expansions_; }
-
-
 void ExpansionManager::clear()
 {
 	expansionCache_.clear();
