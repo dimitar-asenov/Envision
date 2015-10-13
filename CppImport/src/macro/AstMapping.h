@@ -41,9 +41,9 @@ class CPPIMPORT_API AstMapping
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
-		QList<Model::Node*> nodes();
+		const QList<Model::Node*> nodes() const;
 		QVector<clang::SourceRange> get(Model::Node* node);
-		bool contains(Model::Node* node);
+		bool contains(Model::Node* node) const;
 		void clear();
 
 		Model::Node* closestParentWithAstMapping(Model::Node* node);
@@ -57,10 +57,10 @@ inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::be
 
 inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::end() { return astMapping_.end(); }
 
-inline QList<Model::Node*> AstMapping::nodes() { return astMapping_.keys(); }
+inline const QList<Model::Node*> AstMapping::nodes() const { return astMapping_.keys(); }
 
 inline void AstMapping::clear() { astMapping_.clear(); }
 
-inline bool AstMapping::contains(Model::Node* node) { return astMapping_.contains(node); }
+inline bool AstMapping::contains(Model::Node* node) const { return astMapping_.contains(node); }
 
 }
