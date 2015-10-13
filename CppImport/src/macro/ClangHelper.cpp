@@ -49,6 +49,8 @@ QString ClangHelper::spelling(clang::SourceLocation start, clang::SourceLocation
 
 clang::SourceLocation ClangHelper::immediateMacroLocation(clang::SourceLocation location)
 {
+	// this code is an adaptation of clang::lexer::immediateMacroName
+
 	if (location.isMacroID())
 	{
 		while (true)
