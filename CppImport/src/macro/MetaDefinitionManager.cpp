@@ -70,11 +70,11 @@ OOModel::Declaration* MetaDefinitionManager::metaDefinitionParent(const clang::M
 	}
 	else
 	{
-		result = StaticStuff::findDeclaration(root_->modules(), "notenvision");
+		result = StaticStuff::findDeclaration(root_->modules(), "ExternalMacro");
 
 		if (!result)
 		{
-			result = new OOModel::Module("notenvision");
+			result = new OOModel::Module("ExternalMacro");
 			root_->modules()->append(result);
 		}
 	}
