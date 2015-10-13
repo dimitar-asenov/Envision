@@ -215,14 +215,12 @@ void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,
 void MacroImportHelper::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
 	lexicalHelper_.correctNode(clangAstNode, envisionAstNode);
-
 	astMapping_.mapAst(clangAstNode, envisionAstNode);
 }
 
 void MacroImportHelper::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 {
 	lexicalHelper_.correctNode(clangAstNode, envisionAstNode);
-
 	astMapping_.mapAst(clangAstNode, envisionAstNode);
 }
 
