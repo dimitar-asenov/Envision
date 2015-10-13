@@ -35,10 +35,10 @@ ExpansionManager::ExpansionManager(ClangHelper* clang, AstMapping* astMapping, D
 											  LexicalHelper* lexicalHelper)
 	: clang_(clang), astMapping_(astMapping), definitionManager_(definitionManager), lexicalHelper_(lexicalHelper) {}
 
-void ExpansionManager::addMacroExpansion(clang::SourceRange sr,
-													  const clang::MacroDirective* md, const clang::MacroArgs* args)
+void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
+													  const clang::MacroArgs* macroArguments)
 {
-	if (definitionManager_->isPartialEnd(md))
+	if (definitionManager_->isPartialEnd(macroDirective))
 	{
 		/*
 		 * if the to be registered expansion's definition is a partial end macro then we are not going to generate a
@@ -51,13 +51,13 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sr,
 
 	// build new macro expansion entry from the provided information
 	auto entry = new MacroExpansion();
-	entry->range = sr;
-	entry->definition = md;
-	entry->parent = expansion(sr.getBegin());
+	entry->range = sourceRange;
+	entry->definition = macroDirective;
+	entry->parent = expansion(sourceRange.getBegin());
 	if (entry->parent) entry->parent->children.append(entry);
 
 	// handle xMacro data members
-	if (definitionManager_->isPartialBegin(md) && !currentXMacroParent)
+	if (definitionManager_->isPartialBegin(macroDirective) && !currentXMacroParent)
 		/*
 		 * if the definition of this expansion is a partial begin macro we remember that we are now in a xMacro body.
 		 * we check whether we are not already in a xMacro body because we want to remember the .h part (the first one) of
@@ -77,18 +77,18 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sr,
 	entry->metaCall =
 			new OOModel::MetaCallExpression(definitionManager_->definitionName(entry->definition));
 
-	if (!md->getMacroInfo()->isObjectLike()) // only function like macros have braces in their signature to parse
+	if (!macroDirective->getMacroInfo()->isObjectLike()) // only function like macros have braces in their signature to parse
 	{
 		// extract everything in parentheses of the expansion signature using a regular expression
 		QRegularExpression regex ("\\((.*)\\)", QRegularExpression::DotMatchesEverythingOption);
-		auto argumentsString = lexicalHelper_->unexpandedSpelling(sr);
+		auto argumentsString = lexicalHelper_->unexpandedSpelling(sourceRange);
 		auto match = regex.match(argumentsString);
 		auto arguments = match.captured(1).split(",");
 
 		// by default initialize meta call arguments to be reference expressions with the raw spelling at this expansion
 		for (auto i = 0; i < clang_->argumentNames(entry->definition).size(); i++)
 		{
-			auto actualArg = args->getUnexpArgument((unsigned int)i);
+			auto actualArg = macroArguments->getUnexpArgument((unsigned int)i);
 			entry->metaCall->arguments()->append(new OOModel::ReferenceExpression(arguments[i]));
 			entry->argumentLocs.append(actualArg->getLocation());
 		}

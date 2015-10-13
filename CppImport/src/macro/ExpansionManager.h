@@ -44,8 +44,8 @@ class CPPIMPORT_API ExpansionManager
 		ExpansionManager(ClangHelper* clang, AstMapping* astMapping, DefinitionManager* definitionManager,
 							  LexicalHelper* lexicalHelper);
 
-		void addMacroExpansion(clang::SourceRange sr, const clang::MacroDirective* md,
-															const clang::MacroArgs* args);
+		void addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
+									  const clang::MacroArgs* macroArguments);
 
 		QVector<MacroExpansion*> expansions();
 
