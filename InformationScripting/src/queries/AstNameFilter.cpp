@@ -40,14 +40,7 @@ AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 			if (it != t.end())
 			{
 				Model::Node* astNode = it->second;
-				if (auto compositeNode = DCast<Model::CompositeNode>(astNode))
-				{
-					if (compositeNode->hasAttribute("name"))
-					{
-						if (auto nameText = DCast<Model::Text>(compositeNode->get("name")))
-							return matcher.matches(nameText->get());
-					}
-				}
+				return !astNode->symbolName().isEmpty() && matcher.matches(astNode->symbolName());
 			}
 			return false;
 		}
@@ -57,14 +50,8 @@ AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 void AstNameFilter::registerDefaultQueries()
 {
 	QueryRegistry::instance().registerQueryConstructor("filter", [](Model::Node*, QStringList args) {
-		Q_ASSERT(args.size());
-		if (args[0].contains("*"))
-		{
-			QString regexString = args[0];
-			regexString.replace("*", "\\w*");
-			return new AstNameFilter(Model::SymbolMatcher(new QRegExp(regexString)));
-		}
-		return new AstNameFilter(Model::SymbolMatcher(args[0]));
+		Q_ASSERT(args.size() > 0);
+		return new AstNameFilter(Model::SymbolMatcher::guessMatcher(args[0]));
 	});
 }
 
