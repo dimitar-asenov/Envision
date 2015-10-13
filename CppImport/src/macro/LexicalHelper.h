@@ -54,8 +54,8 @@ class CPPIMPORT_API LexicalHelper
 		bool contains(clang::SourceRange r, clang::SourceRange o);
 
 	private:
-		ClangHelper* clang_;
-		ExpansionManager* expansionManager_;
+		ClangHelper* clang_{};
+		ExpansionManager* expansionManager_{};
 		QHash<Model::Node*, QString> transformations_;
 
 		bool isConcatenationStringifycation(clang::SourceLocation loc);
