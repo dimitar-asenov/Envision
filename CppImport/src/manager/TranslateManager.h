@@ -132,8 +132,6 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::TypeAlias* insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 
-		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
-		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 	private:
 		const clang::SourceManager* sourceManager_{};
 
