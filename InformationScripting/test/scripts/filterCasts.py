@@ -1,19 +1,21 @@
-#$<"<ast -s=g -t=CastExpression>" | "<uses -s=of -t=Class>" | "<filterCasts>">$
-import AstApi
-from DataApi import Tuple, NamedProperty
+#script "<filterCasts>"
 
-def checkClass( cl ):
+casts = Query.ast(["-t=CastExpression"] + args, [])
+castTypeAttributes = Query.attribute(["-at=castType", "-s=of"], casts)
+classUses = Query.uses(["-s=of", "-t=Class"], castTypeAttributes)
+
+def hasTypeIdMethod( cl ):
     for method in cl.methods:
         if method.name == "typeIdStatic":
             return True
     return False
 
-results = [];
+result = TupleSet()
 
-for ts in inputs:
-    tuples = ts.tuples("uses")
-    for tuple in tuples:
-        if not checkClass(tuple.used):
-            removeTuple = Tuple([NamedProperty("ast", tuple.user)])
-            ts.remove(removeTuple)
-    results.append(ts) 
+for tuple in classUses[0].tuples("uses"):
+    if hasTypeIdMethod(tuple.used):
+        values = [NamedProperty("ast", tuple.user)]
+        result.add(Tuple(values))
+
+results = Query.toParent(["-t=CastExpression"], [result]) 
+
