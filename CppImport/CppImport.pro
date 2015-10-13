@@ -91,7 +91,6 @@ SOURCES += src/CppImportException.cpp \
     src/macro/MacroExpansion.cpp \
     src/macro/MacroImportHelper.cpp \
     src/macro/MetaDefinitionManager.cpp \
-    src/macro/NodeMapping.cpp \
     src/macro/StaticStuff.cpp \
     src/macro/XMacroManager.cpp \
     src/macro/PPCallback.cpp
