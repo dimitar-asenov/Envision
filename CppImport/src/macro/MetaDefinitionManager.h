@@ -52,12 +52,12 @@ class CPPIMPORT_API MetaDefinitionManager
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
 	private:
-		OOModel::Project* root_;
-		ClangHelper* clang_;
-		DefinitionManager* definitionManager_;
-		ExpansionManager* expansionManager_;
-		LexicalHelper* lexicalHelper_;
-		XMacroManager* xMacroManager_;
+		OOModel::Project* root_{};
+		ClangHelper* clang_{};
+		DefinitionManager* definitionManager_{};
+		ExpansionManager* expansionManager_{};
+		LexicalHelper* lexicalHelper_{};
+		XMacroManager* xMacroManager_{};
 
 		QHash<QString, OOModel::MetaDefinition*> metaDefinitions_;
 
