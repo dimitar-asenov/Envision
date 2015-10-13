@@ -28,7 +28,7 @@
 
 #include "cppimport_api.h"
 
-#include <OOModel/src/expressions/MetaCallExpression.h>
+#include "OOModel/src/expressions/MetaCallExpression.h"
 
 namespace CppImport {
 
