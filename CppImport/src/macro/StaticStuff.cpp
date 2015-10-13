@@ -73,7 +73,7 @@ bool StaticStuff::validContext(Model::Node* node)
 		return false;
 }
 
-OOModel::Declaration*StaticStuff::actualContext(Model::Node* node)
+OOModel::Declaration* StaticStuff::actualContext(Model::Node* node)
 {
 	auto current = node->parent();
 
@@ -94,7 +94,7 @@ OOModel::Declaration*StaticStuff::actualContext(Model::Node* node)
 	Q_ASSERT(false);
 }
 
-OOModel::Declaration*StaticStuff::createContext(OOModel::Declaration* actualContext)
+OOModel::Declaration* StaticStuff::createContext(OOModel::Declaration* actualContext)
 {
 	if (DCast<OOModel::Project>(actualContext))
 		return new OOModel::Project("Context");
@@ -280,7 +280,7 @@ bool StaticStuff::stringMatches(const QString& regex, const QString& value)
 	return regEx.match(value).hasMatch();
 }
 
-OOModel::Declaration*StaticStuff::findDeclaration(Model::List* list, const QString& name)
+OOModel::Declaration* StaticStuff::findDeclaration(Model::List* list, const QString& name)
 {
 	for (auto i = 0; i < list->size(); i++)
 		if (auto decl = DCast<OOModel::Declaration>(list->at(i)))
