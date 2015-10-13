@@ -54,9 +54,9 @@ class CPPIMPORT_API XMacroManager
 		MacroExpansion* partialBeginChild(MacroExpansion* expansion);
 
 	private:
-		DefinitionManager* definitionManager_;
-		ExpansionManager* expansionManager_;
-		MetaDefinitionManager* metaDefinitionManager_;
+		DefinitionManager* definitionManager_{};
+		ExpansionManager* expansionManager_{};
+		MetaDefinitionManager* metaDefinitionManager_{};
 
 		QHash<QString, OOModel::MetaDefinition*> xMacroMetaDefinitions_;
 		QHash<QString, Model::List*> specializations_;
