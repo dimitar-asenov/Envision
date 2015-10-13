@@ -42,7 +42,7 @@ class CPPIMPORT_API ClangHelper
 		QString spelling(clang::SourceLocation loc);
 		QString spelling(clang::SourceLocation start, clang::SourceLocation end);
 
-		clang::SourceLocation immediateMacroLoc(clang::SourceLocation loc);
+		clang::SourceLocation immediateMacroLocation(clang::SourceLocation loc);
 		void immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>* result);
 
 		QVector<QString> argumentNames(const clang::MacroDirective* definition);

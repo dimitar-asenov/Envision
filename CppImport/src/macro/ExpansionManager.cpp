@@ -137,7 +137,7 @@ MacroExpansion*ExpansionManager::expansion(clang::SourceLocation loc)
 
 MacroExpansion*ExpansionManager::immediateExpansion(clang::SourceLocation loc)
 {
-	auto expansion = clang_->immediateMacroLoc(loc);
+	auto expansion = clang_->immediateMacroLocation(loc);
 	for (auto i = 0; i < expansions_.size(); i++)
 		if (expansions_[i]->range.getBegin() == expansion) return expansions_[i];
 
@@ -146,7 +146,7 @@ MacroExpansion*ExpansionManager::immediateExpansion(clang::SourceLocation loc)
 	 * this can happen in case of token concatenation or stringifycation where the first expansion location would point
 	 * to the location of the concatenated token or stringifycation result.
 	 */
-	expansion = clang_->immediateMacroLoc(expansion);
+	expansion = clang_->immediateMacroLocation(expansion);
 	for (auto i = 0; i < expansions_.size(); i++)
 		if (expansions_[i]->range.getBegin() == expansion) return expansions_[i];
 
