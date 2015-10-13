@@ -162,16 +162,16 @@ void MacroImportHelper::calculateFinalizationNodes(QVector<Model::Node*>& nodes,
 void MacroImportHelper::finalize()
 {
 	// insert all top level meta calls
-	for (auto i = finalizationMetaCalls.begin(); i != finalizationMetaCalls.end(); i++)
-		if (DCast<OOModel::Statement>(i.key()))
-			i.key()->parent()->replaceChild(i.key(), new OOModel::ExpressionStatement(i.value()->metaCall));
-		else if (DCast<OOModel::Expression>(i.key()))
-			i.key()->parent()->replaceChild(i.key(), i.value()->metaCall);
-		else if (DCast<OOModel::VariableDeclaration>(i.key()) &&
-					DCast<OOModel::VariableDeclarationExpression>(i.key()->parent()))
-			i.key()->parent()->parent()->replaceChild(i.key()->parent(), i.value()->metaCall);
+	for (auto it = finalizationMetaCalls.begin(); it != finalizationMetaCalls.end(); it++)
+		if (DCast<OOModel::Statement>(it.key()))
+			it.key()->parent()->replaceChild(it.key(), new OOModel::ExpressionStatement(it.value()->metaCall));
+		else if (DCast<OOModel::Expression>(it.key()))
+			it.key()->parent()->replaceChild(it.key(), it.value()->metaCall);
+		else if (DCast<OOModel::VariableDeclaration>(it.key()) &&
+					DCast<OOModel::VariableDeclarationExpression>(it.key()->parent()))
+			it.key()->parent()->parent()->replaceChild(it.key()->parent(), it.value()->metaCall);
 		else
-			qDebug() << "not inserted top level metacall" << i.key()->typeName();
+			qDebug() << "not inserted top level metacall" << it.key()->typeName();
 
 	// remove all top level meta call generated nodes
 	StaticStuff::removeNodes(finalizationNodes);
@@ -261,12 +261,12 @@ OOModel::Declaration* MacroImportHelper::actualContext(MacroExpansion* expansion
 
 	// try to find a valid context where the context range contains the expansion range
 	QVector<OOModel::Declaration*> candidates;
-	for (auto i = astMapping_.begin(); i != astMapping_.end(); i++)
-		for (auto range : i.value())
+	for (auto it = astMapping_.begin(); it != astMapping_.end(); it++)
+		for (auto range : it.value())
 			if (lexicalHelper_.contains(range, expansion->range))
-				if (StaticStuff::validContext(i.key()))
+				if (StaticStuff::validContext(it.key()))
 				{
-					candidates.append(DCast<OOModel::Declaration>(i.key()));
+					candidates.append(DCast<OOModel::Declaration>(it.key()));
 					break;
 				}
 
