@@ -51,12 +51,14 @@ namespace InformationScripting {
 const QStringList AstQuery::NODETYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 const QStringList AstQuery::ADD_AS_NAMES{"a", "addAs"};
+const QStringList AstQuery::ATTRIBUTE_NAME_NAMES{"at", "attribute"};
 
 AstQuery::AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
 	: ScopedArgumentQuery{target, {
 		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
 		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
-		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"}
+		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"},
+		 {ATTRIBUTE_NAME_NAMES, "Attribute to search from", ATTRIBUTE_NAME_NAMES[1]}
 		}, QStringList("AstQuery") + args}, exec_{exec}
 {}
 
@@ -97,6 +99,9 @@ void AstQuery::registerDefaultQueries()
 	});
 	registry.registerQueryConstructor("type", [](Model::Node* target, QStringList args) {
 		return new AstQuery(&AstQuery::typeFilter, target, args);
+	});
+	registry.registerQueryConstructor("attribute", [](Model::Node* target, QStringList args) {
+		return new AstQuery(&AstQuery::attribute, target, args);
 	});
 }
 
@@ -347,6 +352,50 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 		for (const auto& t : tuples) addNodesForWhich(result, keepNode, t["ast"]);
 	}
 
+	return result;
+}
+
+TupleSet AstQuery::attribute(TupleSet input)
+{
+	TupleSet result;
+	std::vector<Model::Node*> foundAttributeNodes;
+	const QString attributeName = argument(ATTRIBUTE_NAME_NAMES[1]);
+	Q_ASSERT(!attributeName.isEmpty());
+
+	auto findAttribute = [&attributeName, &foundAttributeNodes](Model::Node* node) {
+		if (auto compositeNode = DCast<Model::CompositeNode>(node))
+			if (compositeNode->hasAttribute(attributeName))
+				foundAttributeNodes.push_back(compositeNode->get(attributeName));
+	};
+
+	if (scope() == Scope::Local)
+	{
+		findAttribute(target());
+	}
+	else if (scope() == Scope::Global)
+	{
+		auto nodesWithAttribute = NodeGetter::allNodesWhich(target()->root(), [&attributeName](Model::Node* node) {
+			if (auto composite = DCast<Model::CompositeNode>(node))
+				return composite->hasAttribute(attributeName);
+			return false;
+		});
+		for (auto node : nodesWithAttribute)
+			findAttribute(node);
+	}
+	else if (scope() == Scope::Input)
+	{
+		auto tuples = input;
+
+		// remove all existing ast nodes
+		auto tuple = tuples.take("ast");
+		for (const auto& t : tuple)
+			findAttribute(t["ast"]);
+
+		// Keep all non ast nodes
+		result = tuples;
+	}
+	for (auto node : foundAttributeNodes)
+		result.add({{"ast", node}});
 	return result;
 }
 

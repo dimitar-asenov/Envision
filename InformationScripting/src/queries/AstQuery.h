@@ -56,6 +56,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
 		static const QStringList ADD_AS_NAMES;
+		static const QStringList ATTRIBUTE_NAME_NAMES;
 
 		using ExecuteFunction = std::function<TupleSet (AstQuery*, TupleSet)>;
 		ExecuteFunction exec_{};
@@ -72,6 +73,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		TupleSet nameQuery(TupleSet input, QString name);
 		TupleSet usesQuery(TupleSet input);
 		TupleSet typeFilter(TupleSet input);
+		TupleSet attribute(TupleSet input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
