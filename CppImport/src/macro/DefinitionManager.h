@@ -70,7 +70,7 @@ class CPPIMPORT_API DefinitionManager
 		void clear();
 
 	private:
-		ClangHelper* clang_;
+		ClangHelper* clang_{};
 		QHash<const clang::MacroDirective*, QString> definitions_;
 
 };
