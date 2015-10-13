@@ -973,9 +973,7 @@ bool ClangAstVisitor::TraverseBreakStmt(clang::BreakStmt* breakStmt)
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
 		auto ooBreakStmt = new OOModel::BreakStatement();
-
 		macroImportHelper_.mapAst(breakStmt, ooBreakStmt);
-
 		itemList->append(ooBreakStmt);
 	}
 	else
