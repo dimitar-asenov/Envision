@@ -34,8 +34,8 @@ namespace CppImport {
 
 struct CPPIMPORT_API MacroArgumentLocation
 {
-	MacroExpansion* expansion_;
-	int argumentNumber_;
+	MacroExpansion* expansion_{};
+	int argumentNumber_{};
 };
 
 }
