@@ -70,7 +70,7 @@ class CPPIMPORT_API MacroImportHelper
 		void addMacroExpansion(clang::SourceRange sr, const clang::MacroDirective* md, const clang::MacroArgs* args);
 
 	private:
-		OOModel::Project* root_;
+		OOModel::Project* root_{};
 
 		ClangHelper clang_;
 		AstMapping astMapping_;
