@@ -61,8 +61,9 @@ void AstMapping::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 
 QVector<clang::SourceRange> AstMapping::get(Model::Node* node)
 {
-	if (!astMapping_.contains(node)) return {};
-	return astMapping_.value(node);
+	auto it = astMapping_.find(node);
+
+	return it != astMapping_.end() ? *it : QVector<clang::SourceRange>();
 }
 
 }

@@ -210,9 +210,11 @@ bool LexicalHelper::contains(clang::SourceRange r, clang::SourceRange o)
 
 void LexicalHelper::applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs)
 {
-	if (transformations_.contains(mapping->original(node)))
+	auto it = transformations_.find(mapping->original(node));
+
+	if (it != transformations_.end())
 	{
-		auto transformed = transformations_.value(mapping->original(node));
+		auto transformed = *it;
 
 		bool containsArg = false;
 		for (auto arg : formalArgs)

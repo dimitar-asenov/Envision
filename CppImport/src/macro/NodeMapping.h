@@ -45,8 +45,9 @@ class CPPIMPORT_API NodeMapping
 
 		Model::Node* original(Model::Node* clone)
 		{
-			if (!clones_.contains(clone)) return nullptr;
-			return clones_.value(clone);
+			auto it = clones_.find(clone);
+
+			return it != clones_.end() ? *it : nullptr;
 		}
 
 		QVector<Model::Node*> original(QVector<Model::Node*> clones)
@@ -59,8 +60,9 @@ class CPPIMPORT_API NodeMapping
 
 		Model::Node* clone(Model::Node* original)
 		{
-			if (!originals_.contains(original)) return nullptr;
-			return originals_.value(original);
+			auto it = originals_.find(original);
+
+			return it != originals_.end() ? *it : nullptr;
 		}
 
 		QVector<Model::Node*> clone(QVector<Model::Node*> originals)

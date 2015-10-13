@@ -87,10 +87,9 @@ OOModel::MetaDefinition* MetaDefinitionManager::metaDefinition(const clang::Macr
 {
 	QString h = definitionManager_->hash(md);
 
-	if (!metaDefinitions_.contains(h))
-		return nullptr;
+	auto it = metaDefinitions_.find(h);
 
-	return metaDefinitions_.value(h);
+	return it != metaDefinitions_.end() ? *it : nullptr;
 }
 
 void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,

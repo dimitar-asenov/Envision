@@ -94,7 +94,9 @@ void XMacroManager::applyPartialBeginSpecializationTransformation(MacroExpansion
 	 * translation unit prior to this one.
 	 */
 	auto specHash = definitionManager_->hash(cppExpansion->definition);
-	if (specializations_.contains(specHash))
+
+	auto it = specializations_.find(specHash);
+	if (it != specializations_.end())
 		for (auto i = 0; i < hMetaDefinition->context()->metaCalls()->size(); i++)
 			if (auto metaCall = DCast<OOModel::MetaCallExpression>(hMetaDefinition->context()->metaCalls()->at(i)))
 				if (auto callee = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
@@ -105,7 +107,7 @@ void XMacroManager::applyPartialBeginSpecializationTransformation(MacroExpansion
 							specialized_.insert(metaCall);
 
 							// apply specialization transformations
-							metaCall->arguments()->append(specializations_.value(specHash)->clone());
+							metaCall->arguments()->append((*it)->clone());
 							metaCall->arguments()->append(new OOModel::ReferenceExpression("metaBindingInput"));
 
 							return;
@@ -296,10 +298,9 @@ OOModel::MetaDefinition* XMacroManager::xMacroMetaDefinition(const clang::MacroD
 {
 	QString h = definitionManager_->definitionName(md);
 
-	if (!xMacroMetaDefinitions_.contains(h))
-		return nullptr;
+	auto it = xMacroMetaDefinitions_.find(h);
 
-	return xMacroMetaDefinitions_.value(h);
+	return it != xMacroMetaDefinitions_.end() ? *it : nullptr;
 }
 
 MacroExpansion* XMacroManager::matchingXMacroExpansion(Model::Node* node)

@@ -32,9 +32,9 @@ DefinitionManager::DefinitionManager(ClangHelper* clang) : clang_(clang) {}
 
 QString DefinitionManager::definitionName(const clang::MacroDirective* md)
 {
-	if (!definitions_.contains(md)) return nullptr;
+	auto it = definitions_.find(md);
 
-	return definitions_[md];
+	return it != definitions_.end() ? *it : nullptr;
 }
 
 bool DefinitionManager::macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName,
