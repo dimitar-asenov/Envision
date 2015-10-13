@@ -30,31 +30,11 @@ namespace CppImport {
 
 DefinitionManager::DefinitionManager(ClangHelper* clang) : clang_(clang) {}
 
-void DefinitionManager::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
-{
-	definitions_[md] = name;
-}
-
 QString DefinitionManager::definitionName(const clang::MacroDirective* md)
 {
 	if (!definitions_.contains(md)) return nullptr;
 
 	return definitions_[md];
-}
-
-bool DefinitionManager::isPartialBegin(const clang::MacroDirective* md)
-{
-	return definitionName(md).startsWith("BEGIN_");
-}
-
-bool DefinitionManager::isPartialEnd(const clang::MacroDirective* md)
-{
-	return definitionName(md).startsWith("END_");
-}
-
-void DefinitionManager::clear()
-{
-	definitions_.clear();
 }
 
 bool DefinitionManager::macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName,

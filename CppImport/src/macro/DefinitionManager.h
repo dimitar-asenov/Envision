@@ -75,4 +75,21 @@ class CPPIMPORT_API DefinitionManager
 
 };
 
+inline void DefinitionManager::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
+{
+	definitions_[md] = name;
+}
+
+inline bool DefinitionManager::isPartialBegin(const clang::MacroDirective* md)
+{
+	return definitionName(md).startsWith("BEGIN_");
+}
+
+inline bool DefinitionManager::isPartialEnd(const clang::MacroDirective* md)
+{
+	return definitionName(md).startsWith("END_");
+}
+
+inline void DefinitionManager::clear() { definitions_.clear(); }
+
 }
