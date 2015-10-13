@@ -63,7 +63,7 @@ class CPPIMPORT_API LexicalHelper
 		// TODO: rename method
 		void correctNode(clang::SourceRange range, Model::Node* original);
 
-		void replaceWithReference(Model::Node* current, QString replacement, NodeMapping* mapping);
+		void replaceWithReference(Model::Node* current, const QString& replacement, NodeMapping* mapping);
 
 		clang::SourceRange unexpandedSourceRange(clang::SourceRange range);
 

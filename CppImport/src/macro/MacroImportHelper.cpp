@@ -227,7 +227,7 @@ void MacroImportHelper::mapAst(clang::Decl* clangAstNode, Model::Node* envisionA
 	astMapping_.mapAst(clangAstNode, envisionAstNode);
 }
 
-void MacroImportHelper::addMacroDefinition(QString name, const clang::MacroDirective* md)
+void MacroImportHelper::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
 {
 	definitionManager_.addMacroDefinition(name, md);
 }

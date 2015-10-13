@@ -38,7 +38,7 @@ class CPPIMPORT_API DefinitionManager
 	public:
 		DefinitionManager(ClangHelper* clang);
 
-		void addMacroDefinition(QString name, const clang::MacroDirective* md);
+		void addMacroDefinition(const QString& name, const clang::MacroDirective* md);
 
 		QString definitionName(const clang::MacroDirective* md);
 

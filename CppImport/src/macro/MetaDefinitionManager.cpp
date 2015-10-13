@@ -154,7 +154,7 @@ void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpa
 	callee->setPrefix(definitionManager_->expansionQualifier(expansion->definition));
 }
 
-void MetaDefinitionManager::renameMetaCalls(Model::Node* node, QString current, QString replace)
+void MetaDefinitionManager::renameMetaCalls(Model::Node* node, const QString& current, const QString& replace)
 {
 	if (auto metaCall = DCast<OOModel::MetaCallExpression>(node))
 	{

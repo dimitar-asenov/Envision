@@ -274,13 +274,13 @@ OOModel::MetaCallExpression* StaticStuff::containsMetaCall(Model::Node* node)
 	return nullptr;
 }
 
-bool StaticStuff::stringMatches(QString regex, QString value)
+bool StaticStuff::stringMatches(const QString& regex, const QString& value)
 {
 	QRegularExpression regEx(regex);
 	return regEx.match(value).hasMatch();
 }
 
-OOModel::Declaration*StaticStuff::findDeclaration(Model::List* list, QString name)
+OOModel::Declaration*StaticStuff::findDeclaration(Model::List* list, const QString& name)
 {
 	for (auto i = 0; i < list->size(); i++)
 		if (auto decl = DCast<OOModel::Declaration>(list->at(i)))
@@ -290,7 +290,7 @@ OOModel::Declaration*StaticStuff::findDeclaration(Model::List* list, QString nam
 	return nullptr;
 }
 
-OOModel::Expression* StaticStuff::createNameExpressionFromString(QString input)
+OOModel::Expression* StaticStuff::createNameExpressionFromString(const QString& input)
 {
 	QString baseCase = "((::)?(\\w+(::|\\.|->))*\\w+(\\*|&)?)";
 

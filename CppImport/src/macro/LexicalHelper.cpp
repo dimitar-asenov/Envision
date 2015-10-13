@@ -273,7 +273,7 @@ void LexicalHelper::applyLexicalTransformations(Model::Node* node, NodeMapping* 
 		applyLexicalTransformations(child, mapping, formalArgs);
 }
 
-void LexicalHelper::replaceWithReference(Model::Node* current, QString replacement, NodeMapping* mapping)
+void LexicalHelper::replaceWithReference(Model::Node* current, const QString& replacement, NodeMapping* mapping)
 {
 	auto newValue = StaticStuff::createNameExpressionFromString(replacement);
 	current->parent()->replaceChild(current, newValue);

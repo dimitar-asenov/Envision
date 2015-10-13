@@ -66,7 +66,7 @@ class CPPIMPORT_API MacroImportHelper
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
-		void addMacroDefinition(QString name, const clang::MacroDirective* md);
+		void addMacroDefinition(const QString& name, const clang::MacroDirective* md);
 		void addMacroExpansion(clang::SourceRange sr, const clang::MacroDirective* md, const clang::MacroArgs* args);
 
 	private:

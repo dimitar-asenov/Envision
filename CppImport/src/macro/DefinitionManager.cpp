@@ -30,7 +30,7 @@ namespace CppImport {
 
 DefinitionManager::DefinitionManager(ClangHelper* clang) : clang_(clang) {}
 
-void DefinitionManager::addMacroDefinition(QString name, const clang::MacroDirective* md)
+void DefinitionManager::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
 {
 	definitions_[md] = name;
 }

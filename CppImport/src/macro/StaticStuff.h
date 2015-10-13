@@ -51,13 +51,13 @@ class CPPIMPORT_API StaticStuff
 
 		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
 
-		static OOModel::Expression* createNameExpressionFromString(QString input);
-		static bool stringMatches(QString regex, QString value);
+		static OOModel::Expression* createNameExpressionFromString(const QString& input);
+		static bool stringMatches(const QString& regex, const QString& value);
 
 		/**
 		 * returns the first Declaration* decl in list with decl->name() == name
 		 */
-		static OOModel::Declaration* findDeclaration(Model::List* list, QString name);
+		static OOModel::Declaration* findDeclaration(Model::List* list, const QString& name);
 
 	private:
 		static void buildMappingInfo(Model::Node* node, QList<Model::Node*>* info);
