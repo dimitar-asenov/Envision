@@ -32,14 +32,13 @@
 
 namespace CppImport {
 
-class CPPIMPORT_API MacroArgumentLocation
+struct CPPIMPORT_API MacroArgumentLocation
 {
-	public:
-		MacroArgumentLocation() {}
-		MacroArgumentLocation(MacroExpansion* e, int a) : expansion_(e), argumentNumber_(a) {}
+	MacroArgumentLocation() {}
+	MacroArgumentLocation(MacroExpansion* e, int a) : expansion_(e), argumentNumber_(a) {}
 
-		MacroExpansion* expansion_;
-		int argumentNumber_;
+	MacroExpansion* expansion_;
+	int argumentNumber_;
 };
 
 }
