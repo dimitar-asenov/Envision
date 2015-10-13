@@ -69,40 +69,32 @@ TupleSet AstQuery::executeLinear(TupleSet input)
 
 void AstQuery::registerDefaultQueries()
 {
-	auto& registry = QueryRegistry::instance();
-	registry.registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
+	QueryRegistry::instance().registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
 		setTypeTo(args, "Class");
 		return new AstQuery(&AstQuery::genericQuery, target, args);
 	});
-	registry.registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
+	QueryRegistry::instance().registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
 		setTypeTo(args, "Method");
 		return new AstQuery(&AstQuery::genericQuery, target, args);
 	});
-	registry.registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::baseClassesQuery, target, args);
-	});
-	registry.registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
+	QueryRegistry::instance().registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
 		setTypeTo(args, "Class");
 		return new AstQuery(&AstQuery::toParentType, target, args);
 	});
-	registry.registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::callGraph, target, args);
-	});
-	registry.registerQueryConstructor("ast", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::genericQuery, target, args);
-	});
-	registry.registerQueryConstructor("toParent", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::toParentType, target, args);
-	});
-	registry.registerQueryConstructor("uses", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::usesQuery, target, args);
-	});
-	registry.registerQueryConstructor("type", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::typeFilter, target, args);
-	});
-	registry.registerQueryConstructor("attribute", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::attribute, target, args);
-	});
+
+	auto registerQuery = [](const QString& name, auto methodToCall) {
+		QueryRegistry::instance().registerQueryConstructor(name, [methodToCall](Model::Node* target, QStringList args) {
+				return new AstQuery(methodToCall, target, args);
+		});
+	};
+
+	registerQuery("bases", &AstQuery::baseClassesQuery);
+	registerQuery("callgraph", &AstQuery::callGraph);
+	registerQuery("ast", &AstQuery::genericQuery);
+	registerQuery("toParent", &AstQuery::toParentType);
+	registerQuery("uses", &AstQuery::usesQuery);
+	registerQuery("type", &AstQuery::typeFilter);
+	registerQuery("attribute", &AstQuery::attribute);
 }
 
 void AstQuery::setTypeTo(QStringList& args, QString type)
