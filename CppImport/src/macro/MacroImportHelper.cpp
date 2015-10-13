@@ -103,37 +103,36 @@ void MacroImportHelper::insertArguments(QVector<MacroArgumentInfo>& allArguments
 {
 	for (auto argument : allArguments)
 	{
-		if (argument.history.empty()) continue;
+		if (argument.history_.empty()) continue;
 
 		/*
 		 * TODO: check whether this is still necessary. the intermediate argument location should be named correctly.
 		 */
-		for (auto i = 0; i < argument.history.size() - 1; i++)
+		for (auto i = 0; i < argument.history_.size() - 1; i++)
 		{
-			auto currentLoc = argument.history[i];
-			auto nextLoc = argument.history[i + 1];
+			auto currentLoc = argument.history_[i];
+			auto nextLoc = argument.history_[i + 1];
 
-			auto currentArg = currentLoc.expansion->metaCall->arguments()->at(currentLoc.argumentNumber);
-			auto newArgValue = clang_.argumentNames(nextLoc.expansion->definition)
-																			.at(nextLoc.argumentNumber);
+			auto currentArg = currentLoc.expansion_->metaCall->arguments()->at(currentLoc.argumentNumber_);
+			auto newArgValue = clang_.argumentNames(nextLoc.expansion_->definition).at(nextLoc.argumentNumber_);
 			auto newArg = new OOModel::ReferenceExpression(newArgValue);
 
-			currentLoc.expansion->metaCall->arguments()->replaceChild(currentArg, newArg);
+			currentLoc.expansion_->metaCall->arguments()->replaceChild(currentArg, newArg);
 		}
 
 		/*
 		 * the last argument in the argument history is the logically original argument node and location.
 		 * therefore we replace the node at the last argument's location with the stored original node.
 		 */
-		auto lastLoc = argument.history.last();
-		auto lastArg = lastLoc.expansion->metaCall->arguments()->at(lastLoc.argumentNumber);
+		auto lastLoc = argument.history_.last();
+		auto lastArg = lastLoc.expansion_->metaCall->arguments()->at(lastLoc.argumentNumber_);
 
 		if (auto currentArg = DCast<OOModel::ReferenceExpression>(lastArg))
 		{
-			auto newArg = argument.node->clone();
+			auto newArg = argument.node_->clone();
 
 			if (!currentArg->name().startsWith("#"))
-				lastLoc.expansion->metaCall->arguments()->replaceChild(currentArg, newArg);
+				lastLoc.expansion_->metaCall->arguments()->replaceChild(currentArg, newArg);
 		}
 	}
 }

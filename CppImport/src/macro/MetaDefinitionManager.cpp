@@ -227,15 +227,15 @@ void MetaDefinitionManager::insertArgumentSplices(NodeMapping* mapping, NodeMapp
 	for (auto argument : arguments)
 	{
 		// map the argument node to the corresponding node in childMapping
-		auto original = mapping->original(argument.node);
+		auto original = mapping->original(argument.node_);
 
 		if (auto child = childMapping->clone(original))
 		{
 			// the first entry of the spelling history is where the splice for this argument should be
-			auto spliceLoc = argument.history.first();
+			auto spliceLoc = argument.history_.first();
 
 			// the splice name is equal to the formal argument name where the argument is coming from
-			auto argName = clang_->argumentNames(spliceLoc.expansion->definition).at(spliceLoc.argumentNumber);
+			auto argName = clang_->argumentNames(spliceLoc.expansion_->definition).at(spliceLoc.argumentNumber_);
 			auto newNode = new OOModel::ReferenceExpression(argName);
 
 			// insert the splice into the tree
