@@ -55,25 +55,25 @@ clang::SourceLocation ClangHelper::immediateMacroLocation(clang::SourceLocation 
 	{
 		while (true)
 		{
-			auto FID = sourceManager_->getFileID(location);
-			const clang::SrcMgr::SLocEntry *E = &sourceManager_->getSLocEntry(FID);
-			if (!E->isExpansion())
+			auto fileID = sourceManager_->getFileID(location);
+			const clang::SrcMgr::SLocEntry *sourceLocationEntry = &sourceManager_->getSLocEntry(fileID);
+			if (!sourceLocationEntry->isExpansion())
 				break;
-			const clang::SrcMgr::ExpansionInfo &Expansion = E->getExpansion();
-			location = Expansion.getExpansionLocStart();
-			if (!Expansion.isMacroArgExpansion())
+			const clang::SrcMgr::ExpansionInfo &expansion = sourceLocationEntry->getExpansion();
+			location = expansion.getExpansionLocStart();
+			if (!expansion.isMacroArgExpansion())
 				break;
 
 			location = sourceManager_->getImmediateExpansionRange(location).first;
-			auto SpellLoc = Expansion.getSpellingLoc();
-			if (SpellLoc.isFileID())
+			auto spellingLocation = expansion.getSpellingLoc();
+			if (spellingLocation.isFileID())
 				break;
 
-			auto MacroFID = sourceManager_->getFileID(location);
-			if (sourceManager_->isInFileID(SpellLoc, MacroFID))
+			auto macroFileID = sourceManager_->getFileID(location);
+			if (sourceManager_->isInFileID(spellingLocation, macroFileID))
 				break;
 
-			location = SpellLoc;
+			location = spellingLocation;
 		}
 	}
 
