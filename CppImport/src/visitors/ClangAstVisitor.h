@@ -32,10 +32,6 @@
 #include "../CppImportLogger.h"
 #include "../comments/CommentParser.h"
 
-namespace clang {
-	class ParentMap;
-}
-
 namespace CppImport {
 
 class ExpressionVisitor;
