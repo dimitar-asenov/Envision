@@ -74,10 +74,10 @@ class CPPIMPORT_API ExpansionManager
 		void clear();
 
 	private:
-		ClangHelper* clang_;
-		AstMapping* astMapping_;
-		DefinitionManager* definitionManager_;
-		LexicalHelper* lexicalHelper_;
+		ClangHelper* clang_{};
+		AstMapping* astMapping_{};
+		DefinitionManager* definitionManager_{};
+		LexicalHelper* lexicalHelper_{};
 		MacroExpansion* currentXMacroParent {};
 		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;
 		QVector<MacroExpansion*> expansions_;
