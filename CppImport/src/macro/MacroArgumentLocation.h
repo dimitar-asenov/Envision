@@ -36,10 +36,10 @@ class CPPIMPORT_API MacroArgumentLocation
 {
 	public:
 		MacroArgumentLocation() {}
-		MacroArgumentLocation(MacroExpansion* e, int a) : expansion(e), argumentNumber(a) {}
+		MacroArgumentLocation(MacroExpansion* e, int a) : expansion_(e), argumentNumber_(a) {}
 
-		MacroExpansion* expansion;
-		int argumentNumber;
+		MacroExpansion* expansion_;
+		int argumentNumber_;
 };
 
 }

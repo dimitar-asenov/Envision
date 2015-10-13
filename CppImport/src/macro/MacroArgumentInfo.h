@@ -36,10 +36,10 @@ class CPPIMPORT_API MacroArgumentInfo
 {
 	public:
 		MacroArgumentInfo() {}
-		MacroArgumentInfo(QVector<MacroArgumentLocation> h, Model::Node* n) : history(h), node(n) {}
+		MacroArgumentInfo(QVector<MacroArgumentLocation> h, Model::Node* n) : history_(h), node_(n) {}
 
-		QVector<MacroArgumentLocation> history;
-		Model::Node* node;
+		QVector<MacroArgumentLocation> history_;
+		Model::Node* node_;
 };
 
 }
