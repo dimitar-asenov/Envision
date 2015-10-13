@@ -34,9 +34,6 @@ namespace CppImport {
 
 struct CPPIMPORT_API MacroArgumentInfo
 {
-	MacroArgumentInfo() {}
-	MacroArgumentInfo(QVector<MacroArgumentLocation> h, Model::Node* n) : history_(h), node_(n) {}
-
 	QVector<MacroArgumentLocation> history_;
 	Model::Node* node_;
 };

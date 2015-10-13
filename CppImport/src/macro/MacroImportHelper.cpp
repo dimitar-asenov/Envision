@@ -302,7 +302,7 @@ QVector<MacroArgumentLocation> MacroImportHelper::argumentHistory(clang::SourceR
 			for (auto expansion : expansionManager_.expansions())
 				for (auto i = 0; i < expansion->argumentLocs.size(); i++)
 					if (expansion->argumentLocs[i] == argumentLoc)
-						result.append(MacroArgumentLocation(expansion, i));
+						result.append({expansion, i});
 	}
 
 	return result;
@@ -322,7 +322,7 @@ void MacroImportHelper::allArguments(Model::Node* node, QVector<MacroArgumentInf
 
 	if (!argLoc.empty())
 	{
-		result->append(MacroArgumentInfo(argLoc, node));
+		result->append({argLoc, node});
 		return;
 	}
 
