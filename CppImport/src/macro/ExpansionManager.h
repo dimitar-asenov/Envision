@@ -36,13 +36,11 @@
 namespace CppImport {
 
 class DefinitionManager;
-class LexicalHelper;
 
 class CPPIMPORT_API ExpansionManager
 {
 	public:
-		ExpansionManager(ClangHelper* clang, AstMapping* astMapping, DefinitionManager* definitionManager,
-							  LexicalHelper* lexicalHelper);
+		ExpansionManager(ClangHelper* clang, AstMapping* astMapping, DefinitionManager* definitionManager);
 
 		void addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 									  const clang::MacroArgs* macroArguments);
@@ -77,7 +75,6 @@ class CPPIMPORT_API ExpansionManager
 		ClangHelper* clang_{};
 		AstMapping* astMapping_{};
 		DefinitionManager* definitionManager_{};
-		LexicalHelper* lexicalHelper_{};
 		MacroExpansion* currentXMacroParent {};
 		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;
 		QVector<MacroExpansion*> expansions_;
@@ -86,7 +83,6 @@ class CPPIMPORT_API ExpansionManager
 		 * return the top most expansion registered for loc.
 		 */
 		MacroExpansion* expansion(clang::SourceLocation loc);
-
 };
 
 inline QVector<MacroExpansion*> ExpansionManager::expansions() { return expansions_; }

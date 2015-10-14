@@ -29,14 +29,12 @@
 #include "ClangHelper.h"
 #include "AstMapping.h"
 #include "DefinitionManager.h"
-#include "LexicalHelper.h"
 #include "StaticStuff.h"
 
 namespace CppImport {
 
-ExpansionManager::ExpansionManager(ClangHelper* clang, AstMapping* astMapping, DefinitionManager* definitionManager,
-											  LexicalHelper* lexicalHelper)
-	: clang_(clang), astMapping_(astMapping), definitionManager_(definitionManager), lexicalHelper_(lexicalHelper) {}
+ExpansionManager::ExpansionManager(ClangHelper* clang, AstMapping* astMapping, DefinitionManager* definitionManager)
+	: clang_(clang), astMapping_(astMapping), definitionManager_(definitionManager) {}
 
 void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 													  const clang::MacroArgs* macroArguments)
@@ -85,7 +83,7 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const c
 	{
 		// extract everything in parentheses of the expansion signature using a regular expression
 		QRegularExpression regex ("\\((.*)\\)", QRegularExpression::DotMatchesEverythingOption);
-		auto argumentsString = lexicalHelper_->unexpandedSpelling(sourceRange);
+		auto argumentsString = clang_->spelling(sourceRange);
 		auto match = regex.match(argumentsString);
 		auto arguments = match.captured(1).split(",");
 
