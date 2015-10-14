@@ -70,9 +70,9 @@ TupleSet VersionControlQuery::executeLinear(TupleSet)
 
 		for (auto change : changes.values())
 		{
-			// We ignore stationary changes since a node with a stationary change, has a child which was deleted or added,
-			// and this child will appear in the final representation.
-			if (change->isFake() || change->type() == ChangeType::Stationary) continue;
+			// We ignore structure only changes since a node with a structure only change,
+			// has a child which was deleted or added or modified, and this child will appear in the final representation.
+			if (change->isFake() || change->onlyStructureChange()) continue;
 
 			auto id = change->nodeId();
 			// FIXME: here we just use the first StatementItem parent we should solve that better later.
