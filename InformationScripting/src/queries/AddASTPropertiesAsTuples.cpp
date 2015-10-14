@@ -32,10 +32,9 @@
 
 namespace InformationScripting {
 
-QList<TupleSet> AddASTPropertiesAsTuples::execute(QList<TupleSet> input)
+TupleSet AddASTPropertiesAsTuples::executeLinear(TupleSet input)
 {
-	for (auto& ts : input)
-		ts.addPropertiesAsTuples<Model::Node*>("ast");
+	input.addPropertiesAsTuples<Model::Node*>("ast");
 	return input;
 }
 
