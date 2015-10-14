@@ -43,7 +43,6 @@ class CPPIMPORT_API PPCallback : public clang::PPCallbacks
 
 	private:
 		MacroImportHelper& macroImportHelper_;
-
 };
 
 }

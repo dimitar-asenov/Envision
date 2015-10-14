@@ -46,7 +46,6 @@ class CPPIMPORT_API MacroExpansion
 		Model::Node* replacementNode_{};
 
 		bool isChildOf(MacroExpansion* entry);
-
 };
 
 }

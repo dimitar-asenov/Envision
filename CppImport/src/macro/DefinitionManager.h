@@ -72,7 +72,6 @@ class CPPIMPORT_API DefinitionManager
 	private:
 		ClangHelper* clang_{};
 		QHash<const clang::MacroDirective*, QString> definitions_;
-
 };
 
 inline void DefinitionManager::addMacroDefinition(const QString& name, const clang::MacroDirective* md)

@@ -64,7 +64,6 @@ class CPPIMPORT_API StaticStuff
 		static void useMappingInfo(Model::Node* node, QList<Model::Node*>* info, NodeMapping* mapping);
 
 		static OOModel::MetaCallExpression* containsMetaCall(Model::Node* node);
-
 };
 
 inline void StaticStuff::removeNodes(QVector<Model::Node*> nodes) { for (auto n : nodes) removeNode(n); }

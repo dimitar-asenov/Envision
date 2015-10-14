@@ -48,7 +48,6 @@ class CPPIMPORT_API NodeMapping
 	private:
 		QHash<Model::Node*, Model::Node*> clones_;
 		QHash<Model::Node*, Model::Node*> originals_;
-
 };
 
 }

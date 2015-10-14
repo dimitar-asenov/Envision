@@ -52,7 +52,6 @@ class CPPIMPORT_API ClangHelper
 	private:
 		const clang::Preprocessor* preprocessor_{};
 		const clang::SourceManager* sourceManager_{};
-
 };
 
 inline void ClangHelper::setSourceManager(const clang::SourceManager* sourceManager) { sourceManager_ = sourceManager; }

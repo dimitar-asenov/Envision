@@ -50,7 +50,6 @@ class CPPIMPORT_API AstMapping
 
 	private:
 		QHash<Model::Node*, QVector<clang::SourceRange>> astMapping_;
-
 };
 
 inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::begin() { return astMapping_.begin(); }
