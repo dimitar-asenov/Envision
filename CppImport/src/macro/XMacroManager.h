@@ -54,6 +54,7 @@ class CPPIMPORT_API XMacroManager
 		void handleXMacros();
 
 	private:
+		OOModel::Project* root_{};
 		DefinitionManager* definitionManager_{};
 		ExpansionManager* expansionManager_{};
 		MetaDefinitionManager metaDefinitionManager_;
@@ -75,6 +76,7 @@ class CPPIMPORT_API XMacroManager
 		MacroExpansion* partialBeginChild(MacroExpansion* expansion);
 
 		void applyPartialBeginSpecializationTransformation(MacroExpansion* hExpansion, MacroExpansion* cppExpansion);
+		OOModel::Declaration* metaDefinitionParent(const clang::MacroDirective* md);
 };
 
 }

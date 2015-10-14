@@ -36,54 +36,10 @@
 
 namespace CppImport {
 
-MetaDefinitionManager::MetaDefinitionManager(OOModel::Project* root, ClangHelper* clang,
-															DefinitionManager* definitionManager, ExpansionManager* expansionManager,
-															LexicalHelper* lexicalHelper)
-	: root_(root), clang_(clang), definitionManager_(definitionManager), expansionManager_(expansionManager),
+MetaDefinitionManager::MetaDefinitionManager(ClangHelper* clang, DefinitionManager* definitionManager,
+															ExpansionManager* expansionManager, LexicalHelper* lexicalHelper)
+	: clang_(clang), definitionManager_(definitionManager), expansionManager_(expansionManager),
 	  lexicalHelper_(lexicalHelper) {}
-
-OOModel::Declaration* MetaDefinitionManager::metaDefinitionParent(const clang::MacroDirective* md)
-{
-	OOModel::Declaration* result = nullptr;
-
-	QString namespaceName, fileName;
-	if (definitionManager_->macroDefinitionLocation(md, namespaceName, fileName))
-	{
-		// find the namespace module for md
-		OOModel::Module* namespaceModule =
-				DCast<OOModel::Module>(StaticStuff::findDeclaration(root_->modules(), namespaceName));
-
-		// this assertion holds if the project structure matches Envision's project structure
-		// alternatively if no such module could be found (project structure unlike Envision's) one could put it into root_
-		Q_ASSERT(namespaceModule); //if (!namespaceModule) return root_;
-
-		// try to find the module (includes macro containers) to put this macro in
-		result = StaticStuff::findDeclaration(namespaceModule->modules(), fileName);
-
-		// if no module could be found; try to find an appropriate class to put this macro in
-		if (!result) result = StaticStuff::findDeclaration(namespaceModule->classes(), fileName);
-
-		// if no existing place could be found: create a new module (macro container) and put the macro in there
-		if (!result)
-		{
-			result = new OOModel::Module(fileName);
-			namespaceModule->modules()->append(result);
-		}
-	}
-	else
-	{
-		result = StaticStuff::findDeclaration(root_->modules(), "ExternalMacro");
-
-		if (!result)
-		{
-			result = new OOModel::Module("ExternalMacro");
-			root_->modules()->append(result);
-		}
-	}
-
-	Q_ASSERT(result);
-	return result;
-}
 
 OOModel::MetaDefinition* MetaDefinitionManager::createMetaDef(const clang::MacroDirective* md)
 {

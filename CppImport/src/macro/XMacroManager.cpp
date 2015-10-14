@@ -34,15 +34,16 @@ namespace CppImport {
 
 XMacroManager::XMacroManager(DefinitionManager* definitionManager, ExpansionManager* expansionManager,
 									  LexicalHelper* lexicalHelper, ClangHelper* clangHelper, OOModel::Project* project)
-	: definitionManager_(definitionManager), expansionManager_(expansionManager),
-	  metaDefinitionManager_(project, clangHelper, definitionManager, expansionManager, lexicalHelper) {}
+	: root_(project),
+	  definitionManager_(definitionManager), expansionManager_(expansionManager),
+	  metaDefinitionManager_(clangHelper, definitionManager, expansionManager, lexicalHelper) {}
 
 void XMacroManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
 											 QVector<MacroArgumentInfo>& arguments)
 {
 	if (auto metaDef = metaDefinitionManager_.createMetaDef(expansion->definition))
 	{
-		auto metaDefParent = metaDefinitionManager_.metaDefinitionParent(expansion->definition);
+		auto metaDefParent = metaDefinitionParent(expansion->definition);
 
 		// check whether this expansion is not a potential partial begin macro specialization
 		if (auto beginChild = partialBeginChild(expansion))
@@ -56,6 +57,50 @@ void XMacroManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* e
 	// qualify the meta call
 	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall->callee());
 	callee->setPrefix(definitionManager_->expansionQualifier(expansion->definition));
+}
+
+
+OOModel::Declaration* XMacroManager::metaDefinitionParent(const clang::MacroDirective* md)
+{
+	OOModel::Declaration* result = nullptr;
+
+	QString namespaceName, fileName;
+	if (definitionManager_->macroDefinitionLocation(md, namespaceName, fileName))
+	{
+		// find the namespace module for md
+		OOModel::Module* namespaceModule =
+				DCast<OOModel::Module>(StaticStuff::findDeclaration(root_->modules(), namespaceName));
+
+		// this assertion holds if the project structure matches Envision's project structure
+		// alternatively if no such module could be found (project structure unlike Envision's) one could put it into root_
+		Q_ASSERT(namespaceModule); //if (!namespaceModule) return root_;
+
+		// try to find the module (includes macro containers) to put this macro in
+		result = StaticStuff::findDeclaration(namespaceModule->modules(), fileName);
+
+		// if no module could be found; try to find an appropriate class to put this macro in
+		if (!result) result = StaticStuff::findDeclaration(namespaceModule->classes(), fileName);
+
+		// if no existing place could be found: create a new module (macro container) and put the macro in there
+		if (!result)
+		{
+			result = new OOModel::Module(fileName);
+			namespaceModule->modules()->append(result);
+		}
+	}
+	else
+	{
+		result = StaticStuff::findDeclaration(root_->modules(), "ExternalMacro");
+
+		if (!result)
+		{
+			result = new OOModel::Module("ExternalMacro");
+			root_->modules()->append(result);
+		}
+	}
+
+	Q_ASSERT(result);
+	return result;
 }
 
 void XMacroManager::handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent,

@@ -45,8 +45,8 @@ class XMacroManager;
 class CPPIMPORT_API MetaDefinitionManager
 {
 	public:
-		MetaDefinitionManager(OOModel::Project* root, ClangHelper* clang, DefinitionManager* definitionManager,
-								ExpansionManager* expansionManager, LexicalHelper* lexicalHelper);
+		MetaDefinitionManager(ClangHelper* clang, DefinitionManager* definitionManager,
+									 ExpansionManager* expansionManager, LexicalHelper* lexicalHelper);
 
 		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
@@ -56,10 +56,7 @@ class CPPIMPORT_API MetaDefinitionManager
 
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
-		OOModel::Declaration* metaDefinitionParent(const clang::MacroDirective* md);
-
 	private:
-		OOModel::Project* root_{};
 		ClangHelper* clang_{};
 		DefinitionManager* definitionManager_{};
 		ExpansionManager* expansionManager_{};
