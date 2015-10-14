@@ -40,6 +40,7 @@
 #include "queries/AstNameFilter.h"
 #include "queries/AddASTPropertiesAsTuples.h"
 #include "queries/TagQuery.h"
+#include "queries/VersionControlQuery.h"
 #include "nodes/TagExtension.h"
 #include "visualization/Heatmap.h"
 #include "visualization/VCommandNode.h"
@@ -62,6 +63,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	AstNameFilter::registerDefaultQueries();
 	AddASTPropertiesAsTuples::registerDefaultQueries();
 	TagQuery::registerDefaultQueries();
+	VersionControlQuery::registerDefaultQueries();
 	Heatmap::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();

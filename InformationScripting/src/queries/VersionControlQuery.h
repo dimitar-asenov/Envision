@@ -24,12 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "HighlightOverlay.h"
+#pragma once
+
+#include "../informationscripting_api.h"
+
+#include "ScopedArgumentQuery.h"
 
 namespace InformationScripting {
 
-ITEM_COMMON_DEFINITIONS(HighlightOverlay, "item")
+class INFORMATIONSCRIPTING_API VersionControlQuery : public ScopedArgumentQuery
+{
+	public:
+		virtual TupleSet executeLinear(TupleSet input) override;
 
-HighlightOverlay::HighlightOverlay(Item* selectedItem, const StyleType* style)  : Super{selectedItem, style} {}
+		static void registerDefaultQueries();
+	private:
+		static const QStringList COUNT_ARGUMENT_NAMES;
+
+		VersionControlQuery(Model::Node* target, QStringList args);
+};
 
 } /* namespace InformationScripting */

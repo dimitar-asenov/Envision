@@ -296,6 +296,7 @@ git_tree* GitRepository::getCommitTree(QString revision) const
 	auto gitCommit = parseCommit(revision);
 	auto errorCode = git_commit_tree(&gitTree, gitCommit);
 	checkError(errorCode);
+	git_commit_free(gitCommit);
 	return gitTree;
 }
 
