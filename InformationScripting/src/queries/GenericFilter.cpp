@@ -31,16 +31,11 @@ namespace InformationScripting {
 GenericFilter::GenericFilter(GenericFilter::KeepTuple f) : keepTuple_{f}
 {}
 
-QList<TupleSet> GenericFilter::execute(QList<TupleSet> input)
+TupleSet GenericFilter::executeLinear(TupleSet input)
 {
-	for (auto& t : input) applyFilter(t);
+	for (const auto& t : input.tuples())
+		if (!keepTuple_(t)) input.remove(t);
 	return input;
-}
-
-void GenericFilter::applyFilter(TupleSet& set)
-{
-	for (auto t : set.tuples())
-		if (!keepTuple_(t)) set.remove(t);
 }
 
 } /* namespace InformationScripting */

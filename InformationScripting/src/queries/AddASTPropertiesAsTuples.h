@@ -28,14 +28,14 @@
 
 #include "../informationscripting_api.h"
 
-#include "Query.h"
+#include "LinearQuery.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AddASTPropertiesAsTuples : public Query
+class INFORMATIONSCRIPTING_API AddASTPropertiesAsTuples : public LinearQuery
 {
 	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+		virtual TupleSet executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 };

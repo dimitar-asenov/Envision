@@ -51,12 +51,14 @@ namespace InformationScripting {
 const QStringList AstQuery::NODETYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 const QStringList AstQuery::ADD_AS_NAMES{"a", "addAs"};
+const QStringList AstQuery::ATTRIBUTE_NAME_NAMES{"at", "attribute"};
 
 AstQuery::AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
 	: ScopedArgumentQuery{target, {
 		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
 		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
-		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"}
+		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"},
+		 {ATTRIBUTE_NAME_NAMES, "Attribute to search from", ATTRIBUTE_NAME_NAMES[1]}
 		}, QStringList("AstQuery") + args}, exec_{exec}
 {}
 
@@ -67,37 +69,16 @@ TupleSet AstQuery::executeLinear(TupleSet input)
 
 void AstQuery::registerDefaultQueries()
 {
-	auto& registry = QueryRegistry::instance();
-	registry.registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
-		setTypeTo(args, "Class");
-		return new AstQuery(&AstQuery::genericQuery, target, args);
-	});
-	registry.registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
-		setTypeTo(args, "Method");
-		return new AstQuery(&AstQuery::genericQuery, target, args);
-	});
-	registry.registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::baseClassesQuery, target, args);
-	});
-	registry.registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
-		setTypeTo(args, "Class");
-		return new AstQuery(&AstQuery::toParentType, target, args);
-	});
-	registry.registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::callGraph, target, args);
-	});
-	registry.registerQueryConstructor("ast", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::genericQuery, target, args);
-	});
-	registry.registerQueryConstructor("toParent", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::toParentType, target, args);
-	});
-	registry.registerQueryConstructor("uses", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::usesQuery, target, args);
-	});
-	registry.registerQueryConstructor("type", [](Model::Node* target, QStringList args) {
-		return new AstQuery(&AstQuery::typeFilter, target, args);
-	});
+	registerQuery("classes", &AstQuery::genericQuery, "Class");
+	registerQuery("methods", &AstQuery::genericQuery, "Method");
+	registerQuery("toClass", &AstQuery::toParentType, "Class");
+	registerQuery("bases", &AstQuery::baseClassesQuery);
+	registerQuery("callgraph", &AstQuery::callGraph);
+	registerQuery("ast", &AstQuery::genericQuery);
+	registerQuery("toParent", &AstQuery::toParentType);
+	registerQuery("uses", &AstQuery::usesQuery);
+	registerQuery("type", &AstQuery::typeFilter);
+	registerQuery("attribute", &AstQuery::attribute);
 }
 
 void AstQuery::setTypeTo(QStringList& args, QString type)
@@ -112,9 +93,7 @@ void AstQuery::setTypeTo(QStringList& args, QString type)
 		}
 	}
 	if (!set)
-	{
 		args.append(QString("-%1=%2").arg(NODETYPE_ARGUMENT_NAMES[0], type));
-	}
 }
 
 TupleSet AstQuery::baseClassesQuery(TupleSet)
@@ -350,6 +329,50 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 	return result;
 }
 
+TupleSet AstQuery::attribute(TupleSet input)
+{
+	const QString attributeName = argument(ATTRIBUTE_NAME_NAMES[1]);
+	Q_ASSERT(!attributeName.isEmpty());
+
+	std::vector<Model::Node*> foundAttributeNodes;
+	auto findAttribute = [&attributeName, &foundAttributeNodes](Model::Node* node) {
+		if (auto compositeNode = DCast<Model::CompositeNode>(node))
+			if (compositeNode->hasAttribute(attributeName))
+				foundAttributeNodes.push_back(compositeNode->get(attributeName));
+	};
+
+	TupleSet result;
+	if (scope() == Scope::Local)
+	{
+		findAttribute(target());
+	}
+	else if (scope() == Scope::Global)
+	{
+		auto nodesWithAttribute = NodeGetter::allNodesWhich(target()->root(), [&attributeName](Model::Node* node) {
+			if (auto composite = DCast<Model::CompositeNode>(node))
+				return composite->hasAttribute(attributeName);
+			return false;
+		});
+		for (auto node : nodesWithAttribute)
+			findAttribute(node);
+	}
+	else if (scope() == Scope::Input)
+	{
+		auto tuples = input;
+
+		// remove all existing ast nodes
+		auto tuple = tuples.take("ast");
+		for (const auto& t : tuple)
+			findAttribute(t["ast"]);
+
+		// Keep all non ast nodes
+		result = tuples;
+	}
+	for (auto node : foundAttributeNodes)
+		result.add({{"ast", node}});
+	return result;
+}
+
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
 {
 	auto bases = childClass->directBaseClasses();
@@ -440,6 +463,15 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 		}
 	}
 	return false;
+}
+
+void AstQuery::registerQuery(const QString& name, AstQuery::ExecuteFunction methodToCall, const QString& setTypeTo)
+{
+	QueryRegistry::instance().registerQueryConstructor(name,
+		[methodToCall, setTypeTo](Model::Node* target, QStringList args) {
+			if (!setTypeTo.isNull()) AstQuery::setTypeTo(args, setTypeTo);
+			return new AstQuery(methodToCall, target, args);
+	});
 }
 
 } /* namespace InformationScripting */

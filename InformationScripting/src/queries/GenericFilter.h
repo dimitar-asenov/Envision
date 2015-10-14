@@ -28,24 +28,22 @@
 
 #include "../informationscripting_api.h"
 
-#include "Query.h"
+#include "LinearQuery.h"
 
 namespace InformationScripting {
 
 class InformationNode;
 
-class INFORMATIONSCRIPTING_API GenericFilter : public Query
+class INFORMATIONSCRIPTING_API GenericFilter : public LinearQuery
 {
 	public:
 		using KeepTuple = std::function<bool(const Tuple&)>;
 		GenericFilter(KeepTuple f);
 
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+		virtual TupleSet executeLinear(TupleSet input) override;
 
 	private:
 		KeepTuple keepTuple_;
-
-		void applyFilter(TupleSet& set);
 };
 
 } /* namespace InformationScripting */

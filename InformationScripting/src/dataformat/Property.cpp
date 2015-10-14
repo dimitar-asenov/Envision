@@ -30,6 +30,7 @@ namespace InformationScripting {
 
 boost::python::object pythonObject(const Property& p)
 {
+	if (!p.data_) return boost::python::object();
 	return p.data_->pythonObject();
 }
 
