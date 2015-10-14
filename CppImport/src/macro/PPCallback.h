@@ -28,21 +28,25 @@
 
 #include "cppimport_api.h"
 #include "Core/src/EnvisionException.h"
-#include "MacroImportHelper.h"
+
+#include "DefinitionManager.h"
+#include "ExpansionManager.h"
 
 namespace CppImport {
 
 class CPPIMPORT_API PPCallback : public clang::PPCallbacks
 {
 	public:
-		PPCallback(MacroImportHelper& macroImportHelper) : macroImportHelper_(macroImportHelper) { }
+		PPCallback(DefinitionManager& definitionManager, ExpansionManager& expansionManager)
+			: definitionManager_(definitionManager), expansionManager_(expansionManager) { }
 
 		virtual void MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDirective* MD,
 										  clang::SourceRange range, const clang::MacroArgs* args) override;
 
 
 	private:
-		MacroImportHelper& macroImportHelper_;
+		DefinitionManager& definitionManager_;
+		ExpansionManager& expansionManager_;
 };
 
 }

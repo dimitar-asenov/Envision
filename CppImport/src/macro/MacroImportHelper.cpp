@@ -183,7 +183,8 @@ void MacroImportHelper::startTranslationUnit(const clang::SourceManager* sourceM
 {
 	clang_.setSourceManager(sourceManager);
 	clang_.setPreprocessor(preprocessor);
-	const_cast<clang::Preprocessor*>(preprocessor)->addPPCallbacks(std::make_unique<PPCallback>(*this));
+	const_cast<clang::Preprocessor*>(preprocessor)->addPPCallbacks(std::make_unique<PPCallback>(definitionManager_,
+																															  expansionManager_));
 }
 
 void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,
@@ -221,17 +222,6 @@ void MacroImportHelper::mapAst(clang::Decl* clangAstNode, Model::Node* envisionA
 {
 	lexicalHelper_.correctNode(clangAstNode, envisionAstNode);
 	astMapping_.mapAst(clangAstNode, envisionAstNode);
-}
-
-void MacroImportHelper::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
-{
-	definitionManager_.addMacroDefinition(name, md);
-}
-
-void MacroImportHelper::addMacroExpansion(clang::SourceRange sr, const clang::MacroDirective* md,
-														const clang::MacroArgs* args)
-{
-	expansionManager_.addMacroExpansion(sr, md, args);
 }
 
 bool MacroImportHelper::insertMetaCall(MacroExpansion* expansion)
