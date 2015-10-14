@@ -38,9 +38,9 @@ namespace CppImport {
 
 MetaDefinitionManager::MetaDefinitionManager(OOModel::Project* root, ClangHelper* clang,
 															DefinitionManager* definitionManager, ExpansionManager* expansionManager,
-															LexicalHelper* lexicalHelper, XMacroManager* xMacroManager)
+															LexicalHelper* lexicalHelper)
 	: root_(root), clang_(clang), definitionManager_(definitionManager), expansionManager_(expansionManager),
-	  lexicalHelper_(lexicalHelper), xMacroManager_(xMacroManager) {}
+	  lexicalHelper_(lexicalHelper) {}
 
 OOModel::Declaration* MetaDefinitionManager::metaDefinitionParent(const clang::MacroDirective* md)
 {
@@ -85,6 +85,20 @@ OOModel::Declaration* MetaDefinitionManager::metaDefinitionParent(const clang::M
 	return result;
 }
 
+OOModel::MetaDefinition* MetaDefinitionManager::createMetaDef(const clang::MacroDirective* md)
+{
+	if (metaDefinition(md)) return nullptr;
+
+	auto metaDef = new OOModel::MetaDefinition(definitionManager_->definitionName(md));
+	metaDefinitions_.insert(definitionManager_->hash(md), metaDef);
+
+	// add formal arguments based on the expansion definition
+	for (auto argName : clang_->argumentNames(md))
+		metaDef->arguments()->append(new OOModel::FormalMetaArgument(argName));
+
+	return metaDef;
+}
+
 OOModel::MetaDefinition* MetaDefinitionManager::metaDefinition(const clang::MacroDirective* md)
 {
 	QString h = definitionManager_->hash(md);
@@ -94,61 +108,36 @@ OOModel::MetaDefinition* MetaDefinitionManager::metaDefinition(const clang::Macr
 	return it != metaDefinitions_.end() ? *it : nullptr;
 }
 
-void MetaDefinitionManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
-														QVector<MacroArgumentInfo>& arguments)
+void MetaDefinitionManager::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+																	  MacroExpansion* expansion, NodeMapping* mapping,
+																	  QVector<MacroArgumentInfo>& arguments)
 {
-	if (!metaDefinition(expansion->definition))
+	if (nodes.size() > 0)
 	{
-		auto metaDef = new OOModel::MetaDefinition(definitionManager_->definitionName(expansion->definition));
-		metaDefinitions_.insert(definitionManager_->hash(expansion->definition), metaDef);
+		// create a new context with type equal to the first node's context
+		auto actualContext = StaticStuff::actualContext(mapping->original(nodes.first()));
+		metaDef->setContext(StaticStuff::createContext(actualContext));
 
-		// add formal arguments based on the expansion definition
-		for (auto argName : clang_->argumentNames(expansion->definition))
-			metaDef->arguments()->append(new OOModel::FormalMetaArgument(argName));
-
-		auto metaDefParent = metaDefinitionParent(expansion->definition);
-
-		// check whether this expansion is not a potential partial begin macro specialization
-		if (auto beginChild = xMacroManager_->partialBeginChild(expansion))
-			xMacroManager_->handlePartialBeginSpecialization(metaDefParent, metaDef, expansion, beginChild);
-		else
+		// clone and add nodes to the metaDef
+		for (auto n : nodes)
 		{
-			// case: meta definition is not a partial begin macro specialization
+			NodeMapping childMapping;
+			auto cloned = StaticStuff::cloneWithMapping(mapping->original(n), &childMapping);
+			lexicalHelper_->applyLexicalTransformations(cloned, &childMapping,
+																	  clang_->argumentNames(expansion->definition));
 
-			if (nodes.size() > 0)
-			{
-				// create a new context with type equal to the first node's context
-				auto actualContext = StaticStuff::actualContext(mapping->original(nodes.first()));
-				metaDef->setContext(StaticStuff::createContext(actualContext));
+			insertChildMetaCalls(expansion, &childMapping);
+			if (removeUnownedNodes(cloned, expansion, &childMapping)) continue;
+			insertArgumentSplices(mapping, &childMapping, arguments);
 
-				// clone and add nodes to the metaDef
-				for (auto n : nodes)
-				{
-					NodeMapping childMapping;
-					auto cloned = StaticStuff::cloneWithMapping(mapping->original(n), &childMapping);
-					lexicalHelper_->applyLexicalTransformations(cloned, &childMapping,
-																			  clang_->argumentNames(expansion->definition));
-
-					insertChildMetaCalls(expansion, &childMapping);
-					if (removeUnownedNodes(cloned, expansion, &childMapping)) continue;
-					insertArgumentSplices(mapping, &childMapping, arguments);
-
-					StaticStuff::addNodeToDeclaration(cloned, metaDef->context());
-				}
-			}
-
-			// add all child expansion meta calls that are not yet added anywhere else as declaration meta calls
-			for (auto childExpansion : expansion->children)
-				if (!childExpansion->metaCall->parent())
-					metaDef->context()->metaCalls()->append(childExpansion->metaCall);
+			StaticStuff::addNodeToDeclaration(cloned, metaDef->context());
 		}
-
-		metaDefParent->subDeclarations()->append(metaDef);
 	}
 
-	// qualify the meta call
-	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall->callee());
-	callee->setPrefix(definitionManager_->expansionQualifier(expansion->definition));
+	// add all child expansion meta calls that are not yet added anywhere else as declaration meta calls
+	for (auto childExpansion : expansion->children)
+		if (!childExpansion->metaCall->parent())
+			metaDef->context()->metaCalls()->append(childExpansion->metaCall);
 }
 
 void MetaDefinitionManager::insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping)

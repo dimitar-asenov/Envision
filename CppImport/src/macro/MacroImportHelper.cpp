@@ -44,7 +44,7 @@ MacroImportHelper::MacroImportHelper(OOModel::Project* project)
 	  expansionManager_(&clang_, &astMapping_, &definitionManager_),
 	  lexicalHelper_(&clang_, &expansionManager_),
 	  xMacroManager_(&definitionManager_, &expansionManager_, &metaDefinitionManager_),
-	  metaDefinitionManager_(project, &clang_, &definitionManager_, &expansionManager_, &lexicalHelper_, &xMacroManager_)
+	  metaDefinitionManager_(project, &clang_, &definitionManager_, &expansionManager_, &lexicalHelper_)
 	  {}
 
 void MacroImportHelper::endTranslationUnit()
@@ -209,7 +209,7 @@ void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,
 				break;
 			}
 
-	metaDefinitionManager_.createMetaDef(nodes, expansion, mapping, arguments);
+	xMacroManager_.createMetaDef(nodes, expansion, mapping, arguments);
 }
 
 void MacroImportHelper::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)

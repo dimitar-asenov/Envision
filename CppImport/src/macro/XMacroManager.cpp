@@ -39,6 +39,27 @@ XMacroManager::XMacroManager(DefinitionManager* definitionManager, ExpansionMana
 	: definitionManager_(definitionManager), expansionManager_(expansionManager),
 	  metaDefinitionManager_(metaDefinitionManager) {}
 
+void XMacroManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
+											 QVector<MacroArgumentInfo>& arguments)
+{
+	if (auto metaDef = metaDefinitionManager_->createMetaDef(expansion->definition))
+	{
+		auto metaDefParent = metaDefinitionManager_->metaDefinitionParent(expansion->definition);
+
+		// check whether this expansion is not a potential partial begin macro specialization
+		if (auto beginChild = partialBeginChild(expansion))
+			handlePartialBeginSpecialization(metaDefParent, metaDef, expansion, beginChild);
+		else
+			metaDefinitionManager_->createMetaDefinitionBody(metaDef, nodes, expansion, mapping, arguments);
+
+		metaDefParent->subDeclarations()->append(metaDef);
+	}
+
+	// qualify the meta call
+	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall->callee());
+	callee->setPrefix(definitionManager_->expansionQualifier(expansion->definition));
+}
+
 void XMacroManager::handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent,
 																	  OOModel::MetaDefinition* metaDef,
 																	  MacroExpansion* expansion,

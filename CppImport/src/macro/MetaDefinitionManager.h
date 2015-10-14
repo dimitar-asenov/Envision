@@ -46,12 +46,17 @@ class CPPIMPORT_API MetaDefinitionManager
 {
 	public:
 		MetaDefinitionManager(OOModel::Project* root, ClangHelper* clang, DefinitionManager* definitionManager,
-								ExpansionManager* expansionManager, LexicalHelper* lexicalHelper, XMacroManager* xMacroManager);
+								ExpansionManager* expansionManager, LexicalHelper* lexicalHelper);
 
-		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
-								 QVector<MacroArgumentInfo>& arguments);
+		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
+
+		void createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+												MacroExpansion* expansion, NodeMapping* mapping,
+												QVector<MacroArgumentInfo>& arguments);
 
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
+
+		OOModel::Declaration* metaDefinitionParent(const clang::MacroDirective* md);
 
 	private:
 		OOModel::Project* root_{};
@@ -59,7 +64,6 @@ class CPPIMPORT_API MetaDefinitionManager
 		DefinitionManager* definitionManager_{};
 		ExpansionManager* expansionManager_{};
 		LexicalHelper* lexicalHelper_{};
-		XMacroManager* xMacroManager_{};
 
 		QHash<QString, OOModel::MetaDefinition*> metaDefinitions_;
 
@@ -84,8 +88,6 @@ class CPPIMPORT_API MetaDefinitionManager
 		 * insert splices for all nodes in childMapping that are a macro argument.
 		 */
 		void insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping, QVector<MacroArgumentInfo>& arguments);
-
-		OOModel::Declaration* metaDefinitionParent(const clang::MacroDirective* md);
 };
 
 }

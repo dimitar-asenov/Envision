@@ -30,10 +30,12 @@
 
 #include "ClangHelper.h"
 #include "MacroExpansion.h"
+#include "MacroArgumentInfo.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
+class NodeMapping;
 class DefinitionManager;
 class ExpansionManager;
 class MetaDefinitionManager;
@@ -44,14 +46,10 @@ class CPPIMPORT_API XMacroManager
 		XMacroManager(DefinitionManager* definitionManager, ExpansionManager* expansionManager,
 						  MetaDefinitionManager* metaDefinitionManager);
 
-		void handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent,
-																						 OOModel::MetaDefinition* metaDef,
-																						 MacroExpansion* expansion,
-																						 MacroExpansion* beginChild);
+		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
+																QVector<MacroArgumentInfo>& arguments);
 
 		void handleXMacros();
-
-		MacroExpansion* partialBeginChild(MacroExpansion* expansion);
 
 	private:
 		DefinitionManager* definitionManager_{};
@@ -68,6 +66,11 @@ class CPPIMPORT_API XMacroManager
 		MacroExpansion* matchingXMacroExpansion(Model::Node* node);
 
 		MacroExpansion* basePartialBegin(MacroExpansion* partialBeginExpansion);
+
+		void handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent, OOModel::MetaDefinition* metaDef,
+														  MacroExpansion* expansion, MacroExpansion* beginChild);
+
+		MacroExpansion* partialBeginChild(MacroExpansion* expansion);
 
 		void applyPartialBeginSpecializationTransformation(MacroExpansion* hExpansion, MacroExpansion* cppExpansion);
 };
