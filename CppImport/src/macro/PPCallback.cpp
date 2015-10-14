@@ -26,8 +26,6 @@
 
 #include "PPCallback.h"
 
-#include "clang/Lex/MacroArgs.h"
-
 namespace CppImport {
 
 void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDirective* md,

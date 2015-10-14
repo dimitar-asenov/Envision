@@ -31,7 +31,6 @@
 #include "cppimport_api.h"
 
 #include "MacroExpansion.h"
-#include "clang/Lex/MacroArgs.h"
 
 namespace CppImport {
 

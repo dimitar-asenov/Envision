@@ -40,7 +40,6 @@
 #include "XMacroManager.h"
 #include "MetaDefinitionManager.h"
 #include "OOModel/src/allOOModelNodes.h"
-#include "clang/Lex/MacroArgs.h"
 
 namespace CppImport {
 
