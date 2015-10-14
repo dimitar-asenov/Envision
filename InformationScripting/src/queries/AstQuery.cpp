@@ -69,25 +69,9 @@ TupleSet AstQuery::executeLinear(TupleSet input)
 
 void AstQuery::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
-		setTypeTo(args, "Class");
-		return new AstQuery(&AstQuery::genericQuery, target, args);
-	});
-	QueryRegistry::instance().registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
-		setTypeTo(args, "Method");
-		return new AstQuery(&AstQuery::genericQuery, target, args);
-	});
-	QueryRegistry::instance().registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
-		setTypeTo(args, "Class");
-		return new AstQuery(&AstQuery::toParentType, target, args);
-	});
-
-	auto registerQuery = [](const QString& name, auto methodToCall) {
-		QueryRegistry::instance().registerQueryConstructor(name, [methodToCall](Model::Node* target, QStringList args) {
-				return new AstQuery(methodToCall, target, args);
-		});
-	};
-
+	registerQuery("classes", &AstQuery::genericQuery, "Class");
+	registerQuery("methods", &AstQuery::genericQuery, "Method");
+	registerQuery("toClass", &AstQuery::toParentType, "Class");
 	registerQuery("bases", &AstQuery::baseClassesQuery);
 	registerQuery("callgraph", &AstQuery::callGraph);
 	registerQuery("ast", &AstQuery::genericQuery);
@@ -109,9 +93,7 @@ void AstQuery::setTypeTo(QStringList& args, QString type)
 		}
 	}
 	if (!set)
-	{
 		args.append(QString("-%1=%2").arg(NODETYPE_ARGUMENT_NAMES[0], type));
-	}
 }
 
 TupleSet AstQuery::baseClassesQuery(TupleSet)
@@ -349,17 +331,17 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 
 TupleSet AstQuery::attribute(TupleSet input)
 {
-	TupleSet result;
-	std::vector<Model::Node*> foundAttributeNodes;
 	const QString attributeName = argument(ATTRIBUTE_NAME_NAMES[1]);
 	Q_ASSERT(!attributeName.isEmpty());
 
+	std::vector<Model::Node*> foundAttributeNodes;
 	auto findAttribute = [&attributeName, &foundAttributeNodes](Model::Node* node) {
 		if (auto compositeNode = DCast<Model::CompositeNode>(node))
 			if (compositeNode->hasAttribute(attributeName))
 				foundAttributeNodes.push_back(compositeNode->get(attributeName));
 	};
 
+	TupleSet result;
 	if (scope() == Scope::Local)
 	{
 		findAttribute(target());
@@ -481,6 +463,15 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 		}
 	}
 	return false;
+}
+
+void AstQuery::registerQuery(const QString& name, AstQuery::ExecuteFunction methodToCall, const QString& setTypeTo)
+{
+	QueryRegistry::instance().registerQueryConstructor(name,
+		[methodToCall, setTypeTo](Model::Node* target, QStringList args) {
+			if (!setTypeTo.isNull()) AstQuery::setTypeTo(args, setTypeTo);
+			return new AstQuery(methodToCall, target, args);
+	});
 }
 
 } /* namespace InformationScripting */

@@ -85,6 +85,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 
 		static bool matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
 										 const QString& expectedType, const QStringList& args);
+
+		static void registerQuery(const QString& name, ExecuteFunction methodToCall, const QString& setTypeTo = {});
 };
 
 } /* namespace InformationScripting */
