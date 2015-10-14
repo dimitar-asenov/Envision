@@ -26,7 +26,10 @@
 
 #include "ExpansionManager.h"
 
-#include "MacroImportHelper.h"
+#include "ClangHelper.h"
+#include "AstMapping.h"
+#include "DefinitionManager.h"
+#include "LexicalHelper.h"
 #include "StaticStuff.h"
 
 namespace CppImport {
@@ -115,7 +118,7 @@ QVector<MacroExpansion*> ExpansionManager::topLevelExpansions()
 }
 
 
-MacroExpansion*ExpansionManager::expansion(clang::SourceLocation loc)
+MacroExpansion* ExpansionManager::expansion(clang::SourceLocation loc)
 {
 	MacroExpansion* expansion = immediateExpansion(loc);
 	MacroExpansion* last = expansion;
@@ -133,7 +136,7 @@ MacroExpansion*ExpansionManager::expansion(clang::SourceLocation loc)
 	return last;
 }
 
-MacroExpansion*ExpansionManager::immediateExpansion(clang::SourceLocation loc)
+MacroExpansion* ExpansionManager::immediateExpansion(clang::SourceLocation loc)
 {
 	auto expansion = clang_->immediateMacroLocation(loc);
 	for (auto i = 0; i < expansions_.size(); i++)

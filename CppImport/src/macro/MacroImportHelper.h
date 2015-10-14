@@ -49,19 +49,19 @@ class CPPIMPORT_API MacroImportHelper
 	public:
 		MacroImportHelper(OOModel::Project* project);
 
+		void startTranslationUnit(const clang::SourceManager* sourceManager,
+										  const clang::Preprocessor* preprocessor);
+
 		/**
 		 * invoked after every imported translation unit to perform macro import.
 		 */
-		void macroGeneration();
+		void endTranslationUnit();
 
 		/**
 		 * insert top level meta calls and remove nodes generated from top level expansions.
 		 * invoked after all translation units have been processed.
 		 */
-		void finalize();
-
-		void setSourceManager(const clang::SourceManager* sourceManager);
-		void setPreprocessor(const clang::Preprocessor* preprocessor);
+		void endEntireImport();
 
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);

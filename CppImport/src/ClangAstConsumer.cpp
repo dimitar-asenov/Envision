@@ -35,8 +35,7 @@ ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
 {
 	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-
-	astVisitor_->macroImportHelper_.macroGeneration();
+	astVisitor_->macroImportHelper_.endTranslationUnit();
 }
 
 void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
@@ -44,8 +43,7 @@ void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compil
 	Q_ASSERT(compilerInstance);
 	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
 	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
+	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
 }
 
 }

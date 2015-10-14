@@ -47,9 +47,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 	public:
 		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
 		~ClangAstVisitor();
-		void setSourceManager(const clang::SourceManager* sourceManager);
-
-		void setPreprocessor(const clang::Preprocessor* preprocessor);
+		void setSourceManagerAndPreprocessor(const clang::SourceManager* sourceManager,
+														 const clang::Preprocessor* preprocessor);
 
 		// helper functions to interact with the stack from other classes
 		Model::Node* ooStackTop();

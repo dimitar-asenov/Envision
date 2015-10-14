@@ -29,12 +29,14 @@
 #include "cppimport_api.h"
 
 #include "ClangHelper.h"
-#include "MacroArgumentInfo.h"
 #include "NodeMapping.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
+class MacroExpansion;
+class MacroArgumentInfo;
+class MacroArgumentLocation;
 class DefinitionManager;
 class ExpansionManager;
 class LexicalHelper;

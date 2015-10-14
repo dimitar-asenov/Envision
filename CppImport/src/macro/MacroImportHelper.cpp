@@ -27,6 +27,7 @@
 #include "MacroImportHelper.h"
 
 #include "StaticStuff.h"
+#include "PPCallback.h"
 
 namespace CppImport {
 
@@ -46,7 +47,7 @@ MacroImportHelper::MacroImportHelper(OOModel::Project* project)
 	  metaDefinitionManager_(project, &clang_, &definitionManager_, &expansionManager_, &lexicalHelper_, &xMacroManager_)
 	  {}
 
-void MacroImportHelper::macroGeneration()
+void MacroImportHelper::endTranslationUnit()
 {
 	for (auto expansion : expansionManager_.topLevelExpansions())
 	{
@@ -159,7 +160,7 @@ void MacroImportHelper::calculateFinalizationNodes(QVector<Model::Node*>& nodes,
 	}
 }
 
-void MacroImportHelper::finalize()
+void MacroImportHelper::endEntireImport()
 {
 	// insert all top level meta calls
 	for (auto it = finalizationMetaCalls.begin(); it != finalizationMetaCalls.end(); it++)
@@ -177,14 +178,12 @@ void MacroImportHelper::finalize()
 	StaticStuff::removeNodes(finalizationNodes);
 }
 
-void MacroImportHelper::setSourceManager(const clang::SourceManager* sourceManager)
+void MacroImportHelper::startTranslationUnit(const clang::SourceManager* sourceManager,
+															const clang::Preprocessor* preprocessor)
 {
 	clang_.setSourceManager(sourceManager);
-}
-
-void MacroImportHelper::setPreprocessor(const clang::Preprocessor* preprocessor)
-{
 	clang_.setPreprocessor(preprocessor);
+	const_cast<clang::Preprocessor*>(preprocessor)->addPPCallbacks(std::make_unique<PPCallback>(*this));
 }
 
 void MacroImportHelper::handleMacroExpansion(QVector<Model::Node*> nodes,

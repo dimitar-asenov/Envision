@@ -28,7 +28,6 @@
 #include "ExpressionVisitor.h"
 #include "../CppImportUtilities.h"
 #include "TemplateArgumentVisitor.h"
-#include "../macro/PPCallback.h"
 
 #include <clang/AST/Comment.h>
 
@@ -57,20 +56,15 @@ ClangAstVisitor::~ClangAstVisitor()
 	SAFE_DELETE(commentParser_);
 }
 
-void ClangAstVisitor::setSourceManager(const clang::SourceManager* sourceManager)
+void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager* sourceManager,
+																		const clang::Preprocessor* preprocessor)
 {
 	Q_ASSERT(sourceManager);
+	Q_ASSERT(preprocessor);
 	sourceManager_ = sourceManager;
 	trMngr_->setSourceManager(sourceManager);
-	macroImportHelper_.setSourceManager(sourceManager);
-}
-
-void ClangAstVisitor::setPreprocessor(const clang::Preprocessor* preprocessor)
-{
-	Q_ASSERT(preprocessor);
 	preprocessor_= preprocessor;
-	macroImportHelper_.setPreprocessor(preprocessor);
-	const_cast<clang::Preprocessor*>(preprocessor)->addPPCallbacks(std::make_unique<PPCallback>(macroImportHelper_));
+	macroImportHelper_.startTranslationUnit(sourceManager, preprocessor);
 }
 
 Model::Node*ClangAstVisitor::ooStackTop()

@@ -26,6 +26,8 @@
 
 #include "MetaDefinitionManager.h"
 
+#include "MacroExpansion.h"
+#include "MacroArgumentInfo.h"
 #include "DefinitionManager.h"
 #include "ExpansionManager.h"
 #include "LexicalHelper.h"
