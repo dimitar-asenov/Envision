@@ -55,9 +55,9 @@ TupleSet VersionControlQuery::executeLinear(TupleSet)
 	path.append(managerName);
 	// TODO user error later:
 	Q_ASSERT(GitRepository::repositoryExists(path));
-	auto repository = std::make_unique<GitRepository>(path);
+	GitRepository repository{path};
 
-	auto revisions = repository->revisions();
+	auto revisions = repository.revisions();
 	int commitIndexToTake = std::min(revisions.size() - 1, CHANGE_COUNT);
 	for (int i = commitIndexToTake; i > 0; --i)
 	{
@@ -65,7 +65,7 @@ TupleSet VersionControlQuery::executeLinear(TupleSet)
 		QString oldCommitId = revisions[i];
 		QString newCommitId = revisions[i - 1];
 
-		Diff diff = repository->diff(newCommitId, oldCommitId);
+		Diff diff = repository.diff(newCommitId, oldCommitId);
 		auto changes = diff.changes();
 
 		for (auto change : changes.values())
