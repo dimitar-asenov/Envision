@@ -31,6 +31,7 @@
 #include "ClangHelper.h"
 #include "MacroExpansion.h"
 #include "MacroArgumentInfo.h"
+#include "MetaDefinitionManager.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
@@ -38,23 +39,24 @@ namespace CppImport {
 class NodeMapping;
 class DefinitionManager;
 class ExpansionManager;
-class MetaDefinitionManager;
+class LexicalHelper;
+class ClangHelper;
 
 class CPPIMPORT_API XMacroManager
 {
 	public:
 		XMacroManager(DefinitionManager* definitionManager, ExpansionManager* expansionManager,
-						  MetaDefinitionManager* metaDefinitionManager);
+						  LexicalHelper* LexicalHelper, ClangHelper* clangHelper, OOModel::Project* project);
 
 		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
-																QVector<MacroArgumentInfo>& arguments);
+								 QVector<MacroArgumentInfo>& arguments);
 
 		void handleXMacros();
 
 	private:
 		DefinitionManager* definitionManager_{};
 		ExpansionManager* expansionManager_{};
-		MetaDefinitionManager* metaDefinitionManager_{};
+		MetaDefinitionManager metaDefinitionManager_;
 
 		QHash<QString, OOModel::MetaDefinition*> xMacroMetaDefinitions_;
 		QHash<QString, Model::List*> specializations_;

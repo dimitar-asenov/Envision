@@ -28,29 +28,27 @@
 
 #include "ExpansionManager.h"
 #include "DefinitionManager.h"
-#include "MetaDefinitionManager.h"
-
 #include "StaticStuff.h"
 
 namespace CppImport {
 
 XMacroManager::XMacroManager(DefinitionManager* definitionManager, ExpansionManager* expansionManager,
-									  MetaDefinitionManager* metaDefinitionManager)
+									  LexicalHelper* lexicalHelper, ClangHelper* clangHelper, OOModel::Project* project)
 	: definitionManager_(definitionManager), expansionManager_(expansionManager),
-	  metaDefinitionManager_(metaDefinitionManager) {}
+	  metaDefinitionManager_(project, clangHelper, definitionManager, expansionManager, lexicalHelper) {}
 
 void XMacroManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
 											 QVector<MacroArgumentInfo>& arguments)
 {
-	if (auto metaDef = metaDefinitionManager_->createMetaDef(expansion->definition))
+	if (auto metaDef = metaDefinitionManager_.createMetaDef(expansion->definition))
 	{
-		auto metaDefParent = metaDefinitionManager_->metaDefinitionParent(expansion->definition);
+		auto metaDefParent = metaDefinitionManager_.metaDefinitionParent(expansion->definition);
 
 		// check whether this expansion is not a potential partial begin macro specialization
 		if (auto beginChild = partialBeginChild(expansion))
 			handlePartialBeginSpecialization(metaDefParent, metaDef, expansion, beginChild);
 		else
-			metaDefinitionManager_->createMetaDefinitionBody(metaDef, nodes, expansion, mapping, arguments);
+			metaDefinitionManager_.createMetaDefinitionBody(metaDef, nodes, expansion, mapping, arguments);
 
 		metaDefParent->subDeclarations()->append(metaDef);
 	}
@@ -73,7 +71,7 @@ void XMacroManager::handlePartialBeginSpecialization(OOModel::Declaration* metaD
 		auto list = new Model::List();
 		for (auto stmt : statements) list->append(stmt->clone());
 
-		auto childDef = metaDefinitionManager_->metaDefinition(beginChild->definition);
+		auto childDef = metaDefinitionManager_.metaDefinition(beginChild->definition);
 		Q_ASSERT(childDef);
 
 		if (metaDefParent->name().endsWith("_CPP"))
@@ -103,7 +101,7 @@ void XMacroManager::handlePartialBeginSpecialization(OOModel::Declaration* metaD
 void XMacroManager::applyPartialBeginSpecializationTransformation(MacroExpansion* hExpansion,
 																						MacroExpansion* cppExpansion)
 {
-	auto hMetaDefinition = metaDefinitionManager_->metaDefinition(hExpansion->definition);
+	auto hMetaDefinition = metaDefinitionManager_.metaDefinition(hExpansion->definition);
 
 	// if the metaBindingInput was not yet added to this header xMacro begin meta definition then add it
 	if (!StaticStuff::findDeclaration(hMetaDefinition->arguments(), "metaBindingInput"))
@@ -212,8 +210,8 @@ OOModel::MetaDefinition* XMacroManager::createXMacroMetaDef(MacroExpansion* hExp
 	auto mergedMetaDef = xMacroMetaDefinition(hBaseExpansion->definition);
 	if (!mergedMetaDef)
 	{
-		auto hBaseMetaDef = metaDefinitionManager_->metaDefinition(hBaseExpansion->definition);
-		auto cppBaseMetaDef = metaDefinitionManager_->metaDefinition(cppBaseExpansion->definition);
+		auto hBaseMetaDef = metaDefinitionManager_.metaDefinition(hBaseExpansion->definition);
+		auto cppBaseMetaDef = metaDefinitionManager_.metaDefinition(cppBaseExpansion->definition);
 
 		mergedMetaDef = hBaseMetaDef->clone();
 		mergedMetaDef->setName(definitionManager_->definitionName(hBaseExpansion->definition));
@@ -264,8 +262,8 @@ OOModel::MetaDefinition* XMacroManager::createXMacroMetaDef(MacroExpansion* hExp
 		hBaseMetaDef->parent()->replaceChild(hBaseMetaDef, mergedMetaDef);
 	}
 
-	StaticStuff::removeNode(metaDefinitionManager_->metaDefinition(cppExpansion->definition), true);
-	StaticStuff::removeNode(metaDefinitionManager_->metaDefinition(cppBaseExpansion->definition), true);
+	StaticStuff::removeNode(metaDefinitionManager_.metaDefinition(cppExpansion->definition), true);
+	StaticStuff::removeNode(metaDefinitionManager_.metaDefinition(cppBaseExpansion->definition), true);
 
 	return mergedMetaDef;
 }
