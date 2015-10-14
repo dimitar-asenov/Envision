@@ -42,11 +42,11 @@ class CPPIMPORT_API AstMapping
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
 		const QList<Model::Node*> nodes() const;
-		QVector<clang::SourceRange> get(Model::Node* node);
+		QVector<clang::SourceRange> get(Model::Node* node) const;
 		bool contains(Model::Node* node) const;
 		void clear();
 
-		Model::Node* closestParentWithAstMapping(Model::Node* node);
+		Model::Node* closestParentWithAstMapping(Model::Node* node) const;
 
 	private:
 		QHash<Model::Node*, QVector<clang::SourceRange>> astMapping_;

@@ -28,7 +28,7 @@
 
 namespace CppImport {
 
-QString ClangHelper::spelling(clang::SourceLocation start, clang::SourceLocation end)
+QString ClangHelper::spelling(clang::SourceLocation start, clang::SourceLocation end) const
 {
 	clang::SourceLocation b = sourceManager_->getSpellingLoc(start);
 	clang::SourceLocation e = clang::Lexer::getLocForEndOfToken(sourceManager_->getSpellingLoc(end), 0, *sourceManager_,
@@ -47,7 +47,7 @@ QString ClangHelper::spelling(clang::SourceLocation start, clang::SourceLocation
 	}
 }
 
-clang::SourceLocation ClangHelper::immediateMacroLocation(clang::SourceLocation location)
+clang::SourceLocation ClangHelper::immediateMacroLocation(clang::SourceLocation location) const
 {
 	// this code is an adaptation of clang::lexer::immediateMacroName
 
@@ -75,7 +75,7 @@ clang::SourceLocation ClangHelper::immediateMacroLocation(clang::SourceLocation 
 	return location;
 }
 
-void ClangHelper::immediateSpellingHistory(clang::SourceLocation location, QVector<clang::SourceLocation>* result)
+void ClangHelper::immediateSpellingHistory(clang::SourceLocation location, QVector<clang::SourceLocation>* result) const
 {
 	result->append(location);
 
@@ -85,7 +85,7 @@ void ClangHelper::immediateSpellingHistory(clang::SourceLocation location, QVect
 		immediateSpellingHistory(next, result);
 }
 
-QVector<QString> ClangHelper::argumentNames(const clang::MacroDirective* definition)
+QVector<QString> ClangHelper::argumentNames(const clang::MacroDirective* definition) const
 {
 	QVector<QString> result;
 

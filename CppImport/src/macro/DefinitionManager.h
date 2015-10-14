@@ -36,21 +36,21 @@ namespace CppImport {
 class CPPIMPORT_API DefinitionManager
 {
 	public:
-		DefinitionManager(ClangHelper* clang);
+		DefinitionManager(const ClangHelper& clang);
 
 		void addMacroDefinition(const QString& name, const clang::MacroDirective* md);
 
-		QString definitionName(const clang::MacroDirective* md);
+		QString definitionName(const clang::MacroDirective* md) const;
 
 		/**
 		 * return whether md defines a begin incomplete macro.
 		 */
-		bool isPartialBegin(const clang::MacroDirective* md);
+		bool isPartialBegin(const clang::MacroDirective* md) const;
 
 		/**
 		 * return whether md defines an end incomplete macro.
 		 */
-		bool isPartialEnd(const clang::MacroDirective* md);
+		bool isPartialEnd(const clang::MacroDirective* md) const;
 
 		/**
 		 * if the location of md is part of Envision's project structure then
@@ -58,19 +58,19 @@ class CPPIMPORT_API DefinitionManager
 		 * otherwise
 		 *  return false
 		 */
-		bool macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName, QString& fileName);
+		bool macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName, QString& fileName) const;
 
-		QString hash(const clang::MacroDirective* md);
+		QString hash(const clang::MacroDirective* md) const;
 
 		/**
 		 * return a qualifier expression based on the macroDefinitionLocation of md.
 		 */
-		OOModel::ReferenceExpression* expansionQualifier(const clang::MacroDirective* md);
+		OOModel::ReferenceExpression* expansionQualifier(const clang::MacroDirective* md) const;
 
 		void clear();
 
 	private:
-		ClangHelper* clang_{};
+		const ClangHelper& clang_;
 		QHash<const clang::MacroDirective*, QString> definitions_;
 };
 
@@ -79,12 +79,12 @@ inline void DefinitionManager::addMacroDefinition(const QString& name, const cla
 	definitions_[md] = name;
 }
 
-inline bool DefinitionManager::isPartialBegin(const clang::MacroDirective* md)
+inline bool DefinitionManager::isPartialBegin(const clang::MacroDirective* md) const
 {
 	return definitionName(md).startsWith("BEGIN_");
 }
 
-inline bool DefinitionManager::isPartialEnd(const clang::MacroDirective* md)
+inline bool DefinitionManager::isPartialEnd(const clang::MacroDirective* md) const
 {
 	return definitionName(md).startsWith("END_");
 }

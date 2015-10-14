@@ -45,8 +45,8 @@ class XMacroManager;
 class CPPIMPORT_API MetaDefinitionManager
 {
 	public:
-		MetaDefinitionManager(ClangHelper* clang, DefinitionManager* definitionManager,
-									 ExpansionManager* expansionManager, LexicalHelper* lexicalHelper);
+		MetaDefinitionManager(const ClangHelper& clang, const DefinitionManager& definitionManager,
+									 ExpansionManager& expansionManager, const LexicalHelper& lexicalHelper);
 
 		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
@@ -57,10 +57,10 @@ class CPPIMPORT_API MetaDefinitionManager
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
 	private:
-		ClangHelper* clang_{};
-		DefinitionManager* definitionManager_{};
-		ExpansionManager* expansionManager_{};
-		LexicalHelper* lexicalHelper_{};
+		const ClangHelper& clang_;
+		const DefinitionManager& definitionManager_;
+		ExpansionManager& expansionManager_;
+		const LexicalHelper& lexicalHelper_;
 
 		QHash<QString, OOModel::MetaDefinition*> metaDefinitions_;
 

@@ -39,9 +39,9 @@ class ExpansionManager;
 class CPPIMPORT_API LexicalHelper
 {
 	public:
-		LexicalHelper(ClangHelper* clang, ExpansionManager* expansionManager);
+		LexicalHelper(const ClangHelper& clang, const ExpansionManager& expansionManager);
 
-		void applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs);
+		void applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs) const;
 
 		// TODO: rename method
 		void correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
@@ -49,23 +49,23 @@ class CPPIMPORT_API LexicalHelper
 		// TODO: rename method
 		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 
-		bool contains(clang::SourceRange r, clang::SourceRange o);
+		bool contains(clang::SourceRange r, clang::SourceRange o) const;
 
 	private:
-		ClangHelper* clang_{};
-		ExpansionManager* expansionManager_{};
+		const ClangHelper& clang_;
+		const ExpansionManager& expansionManager_;
 		QHash<Model::Node*, QString> transformations_;
 
-		QString unexpandedSpelling(clang::SourceRange range);
+		QString unexpandedSpelling(clang::SourceRange range) const;
 
-		bool isConcatenationOrStringification(clang::SourceLocation loc);
+		bool isConcatenationOrStringification(clang::SourceLocation loc) const;
 
 		// TODO: rename method
 		void correctNode(clang::SourceRange range, Model::Node* original);
 
-		void replaceWithReference(Model::Node* current, const QString& replacement, NodeMapping* mapping);
+		void replaceWithReference(Model::Node* current, const QString& replacement, NodeMapping* mapping) const;
 
-		clang::SourceRange unexpandedSourceRange(clang::SourceRange range);
+		clang::SourceRange unexpandedSourceRange(clang::SourceRange range) const;
 };
 
 }

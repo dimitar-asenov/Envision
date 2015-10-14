@@ -28,7 +28,7 @@
 
 namespace CppImport {
 
-Model::Node* AstMapping::closestParentWithAstMapping(Model::Node* node)
+Model::Node* AstMapping::closestParentWithAstMapping(Model::Node* node) const
 {
 	if (!node) return nullptr;
 	if (astMapping_.contains(node)) return node;
@@ -59,7 +59,7 @@ void AstMapping::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 		astMapping_[envisionAstNode].append(clangAstNode->getSourceRange());
 }
 
-QVector<clang::SourceRange> AstMapping::get(Model::Node* node)
+QVector<clang::SourceRange> AstMapping::get(Model::Node* node) const
 {
 	auto it = astMapping_.find(node);
 

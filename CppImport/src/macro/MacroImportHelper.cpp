@@ -39,10 +39,10 @@ void MacroImportHelper::clear()
 }
 
 MacroImportHelper::MacroImportHelper(OOModel::Project* root)
-	: root_(root), definitionManager_(&clang_),
-	  expansionManager_(&clang_, &astMapping_, &definitionManager_),
-	  lexicalHelper_(&clang_, &expansionManager_),
-	  xMacroManager_(root, &clang_, &definitionManager_, &expansionManager_, &lexicalHelper_)
+	: root_(root), definitionManager_(clang_),
+	  expansionManager_(clang_, astMapping_, definitionManager_),
+	  lexicalHelper_(clang_, expansionManager_),
+	  xMacroManager_(root, clang_, definitionManager_, expansionManager_, lexicalHelper_)
 	  {}
 
 void MacroImportHelper::endTranslationUnit()

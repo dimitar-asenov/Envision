@@ -39,19 +39,20 @@ class DefinitionManager;
 class CPPIMPORT_API ExpansionManager
 {
 	public:
-		ExpansionManager(ClangHelper* clang, AstMapping* astMapping, DefinitionManager* definitionManager);
+		ExpansionManager(const ClangHelper& clang, const AstMapping& astMapping,
+							  const DefinitionManager& definitionManager);
 
 		void addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 									  const clang::MacroArgs* macroArguments);
 
-		QVector<MacroExpansion*> expansions();
+		QVector<MacroExpansion*> expansions() const;
 
 		/**
 		 * return all registered expansions that are not children of other expansions.
 		 */
-		QVector<MacroExpansion*> topLevelExpansions();
+		QVector<MacroExpansion*> topLevelExpansions() const;
 
-		MacroExpansion* immediateExpansion(clang::SourceLocation loc);
+		MacroExpansion* immediateExpansion(clang::SourceLocation loc) const;
 
 		/**
 		 * return all expansions that node is a part of.
@@ -61,7 +62,7 @@ class CPPIMPORT_API ExpansionManager
 		/**
 		 * return all top level nodes of an expansion that is not a child of another expansion.
 		 */
-		QVector<Model::Node*> tLExpansionTLNodes(MacroExpansion* expansion);
+		QVector<Model::Node*> tLExpansionTLNodes(MacroExpansion* expansion) const;
 
 		/**
 		 * return all top level nodes of an expansion that is potentially a child of another expansion.
@@ -71,9 +72,9 @@ class CPPIMPORT_API ExpansionManager
 		void clear();
 
 	private:
-		ClangHelper* clang_{};
-		AstMapping* astMapping_{};
-		DefinitionManager* definitionManager_{};
+		const ClangHelper& clang_;
+		const AstMapping& astMapping_;
+		const DefinitionManager& definitionManager_;
 		MacroExpansion* currentXMacroParent {};
 		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;
 		QVector<MacroExpansion*> expansions_;
@@ -81,9 +82,9 @@ class CPPIMPORT_API ExpansionManager
 		/**
 		 * return the top most expansion registered for loc.
 		 */
-		MacroExpansion* expansion(clang::SourceLocation loc);
+		MacroExpansion* expansion(clang::SourceLocation loc) const;
 };
 
-inline QVector<MacroExpansion*> ExpansionManager::expansions() { return expansions_; }
+inline QVector<MacroExpansion*> ExpansionManager::expansions() const { return expansions_; }
 
 }

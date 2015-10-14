@@ -36,8 +36,8 @@
 
 namespace CppImport {
 
-MetaDefinitionManager::MetaDefinitionManager(ClangHelper* clang, DefinitionManager* definitionManager,
-															ExpansionManager* expansionManager, LexicalHelper* lexicalHelper)
+MetaDefinitionManager::MetaDefinitionManager(const ClangHelper& clang, const DefinitionManager& definitionManager,
+															ExpansionManager& expansionManager, const LexicalHelper& lexicalHelper)
 	: clang_(clang), definitionManager_(definitionManager), expansionManager_(expansionManager),
 	  lexicalHelper_(lexicalHelper) {}
 
@@ -45,11 +45,11 @@ OOModel::MetaDefinition* MetaDefinitionManager::createMetaDef(const clang::Macro
 {
 	if (metaDefinition(md)) return nullptr;
 
-	auto metaDef = new OOModel::MetaDefinition(definitionManager_->definitionName(md));
-	metaDefinitions_.insert(definitionManager_->hash(md), metaDef);
+	auto metaDef = new OOModel::MetaDefinition(definitionManager_.definitionName(md));
+	metaDefinitions_.insert(definitionManager_.hash(md), metaDef);
 
 	// add formal arguments based on the expansion definition
-	for (auto argName : clang_->argumentNames(md))
+	for (auto argName : clang_.argumentNames(md))
 		metaDef->arguments()->append(new OOModel::FormalMetaArgument(argName));
 
 	return metaDef;
@@ -57,7 +57,7 @@ OOModel::MetaDefinition* MetaDefinitionManager::createMetaDef(const clang::Macro
 
 OOModel::MetaDefinition* MetaDefinitionManager::metaDefinition(const clang::MacroDirective* md)
 {
-	QString h = definitionManager_->hash(md);
+	QString h = definitionManager_.hash(md);
 
 	auto it = metaDefinitions_.find(h);
 
@@ -79,8 +79,7 @@ void MetaDefinitionManager::createMetaDefinitionBody(OOModel::MetaDefinition* me
 		{
 			NodeMapping childMapping;
 			auto cloned = StaticStuff::cloneWithMapping(mapping->original(n), &childMapping);
-			lexicalHelper_->applyLexicalTransformations(cloned, &childMapping,
-																	  clang_->argumentNames(expansion->definition));
+			lexicalHelper_.applyLexicalTransformations(cloned, &childMapping, clang_.argumentNames(expansion->definition));
 
 			insertChildMetaCalls(expansion, &childMapping);
 			if (removeUnownedNodes(cloned, expansion, &childMapping)) continue;
@@ -127,7 +126,7 @@ void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroE
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
 	if (auto original = mapping->original(node))
-		if (expansionManager_->expansion(original).contains(expansion))
+		if (expansionManager_.expansion(original).contains(expansion))
 		{
 			for (auto child : node->children())
 				childrenUnownedByExpansion(child, expansion, mapping, result);
@@ -165,7 +164,7 @@ void MetaDefinitionManager::insertArgumentSplices(NodeMapping* mapping, NodeMapp
 			auto spliceLoc = argument.history_.first();
 
 			// the splice name is equal to the formal argument name where the argument is coming from
-			auto argName = clang_->argumentNames(spliceLoc.expansion_->definition).at(spliceLoc.argumentNumber_);
+			auto argName = clang_.argumentNames(spliceLoc.expansion_->definition).at(spliceLoc.argumentNumber_);
 			auto newNode = new OOModel::ReferenceExpression(argName);
 
 			// insert the splice into the tree

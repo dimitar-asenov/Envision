@@ -45,8 +45,8 @@ class ClangHelper;
 class CPPIMPORT_API XMacroManager
 {
 	public:
-		XMacroManager(OOModel::Project* root, ClangHelper* clangHelper, DefinitionManager* definitionManager,
-						  ExpansionManager* expansionManager, LexicalHelper* LexicalHelper);
+		XMacroManager(OOModel::Project* root, const ClangHelper& clangHelper, const DefinitionManager& definitionManager,
+						  ExpansionManager& expansionManager, const LexicalHelper& lexicalHelper);
 
 		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
 								 QVector<MacroArgumentInfo>& arguments);
@@ -55,8 +55,8 @@ class CPPIMPORT_API XMacroManager
 
 	private:
 		OOModel::Project* root_{};
-		DefinitionManager* definitionManager_{};
-		ExpansionManager* expansionManager_{};
+		const DefinitionManager& definitionManager_;
+		ExpansionManager& expansionManager_;
 		MetaDefinitionManager metaDefinitionManager_;
 
 		QHash<QString, OOModel::MetaDefinition*> xMacroMetaDefinitions_;
