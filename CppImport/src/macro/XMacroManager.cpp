@@ -32,10 +32,9 @@
 
 namespace CppImport {
 
-XMacroManager::XMacroManager(DefinitionManager* definitionManager, ExpansionManager* expansionManager,
-									  LexicalHelper* lexicalHelper, ClangHelper* clangHelper, OOModel::Project* project)
-	: root_(project),
-	  definitionManager_(definitionManager), expansionManager_(expansionManager),
+XMacroManager::XMacroManager(OOModel::Project* root, ClangHelper* clangHelper, DefinitionManager* definitionManager,
+									  ExpansionManager* expansionManager, LexicalHelper* lexicalHelper)
+	: root_(root), definitionManager_(definitionManager), expansionManager_(expansionManager),
 	  metaDefinitionManager_(clangHelper, definitionManager, expansionManager, lexicalHelper) {}
 
 void XMacroManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
@@ -58,7 +57,6 @@ void XMacroManager::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* e
 	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall->callee());
 	callee->setPrefix(definitionManager_->expansionQualifier(expansion->definition));
 }
-
 
 OOModel::Declaration* XMacroManager::metaDefinitionParent(const clang::MacroDirective* md)
 {

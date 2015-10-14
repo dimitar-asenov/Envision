@@ -46,7 +46,7 @@ namespace CppImport {
 class CPPIMPORT_API MacroImportHelper
 {
 	public:
-		MacroImportHelper(OOModel::Project* project);
+		MacroImportHelper(OOModel::Project* root);
 
 		void startTranslationUnit(const clang::SourceManager* sourceManager,
 										  const clang::Preprocessor* preprocessor);

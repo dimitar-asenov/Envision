@@ -38,12 +38,11 @@ void MacroImportHelper::clear()
 	expansionManager_.clear();
 }
 
-MacroImportHelper::MacroImportHelper(OOModel::Project* project)
-	:	root_(project),
-	  definitionManager_(&clang_),
+MacroImportHelper::MacroImportHelper(OOModel::Project* root)
+	: root_(root), definitionManager_(&clang_),
 	  expansionManager_(&clang_, &astMapping_, &definitionManager_),
 	  lexicalHelper_(&clang_, &expansionManager_),
-	  xMacroManager_(&definitionManager_, &expansionManager_, &lexicalHelper_, &clang_, project)
+	  xMacroManager_(root, &clang_, &definitionManager_, &expansionManager_, &lexicalHelper_)
 	  {}
 
 void MacroImportHelper::endTranslationUnit()
