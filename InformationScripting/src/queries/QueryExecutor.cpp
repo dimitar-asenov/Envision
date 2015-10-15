@@ -44,8 +44,16 @@ void QueryExecutor::execute()
 	auto results = query_->execute({});
 	if (results.size())
 	{
-		DefaultVisualizer::instance().visualize(results[0]);
-		results.clear();
+		if (results[0])
+		{
+			auto val = results[0].value();
+			DefaultVisualizer::instance().visualize(val);
+			results.clear();
+		}
+		else
+		{
+			qWarning() << results[0].error();
+		}
 	}
 }
 

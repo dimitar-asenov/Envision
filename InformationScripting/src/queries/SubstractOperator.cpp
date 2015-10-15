@@ -30,7 +30,7 @@
 
 namespace InformationScripting {
 
-QList<TupleSet> SubstractOperator::execute(QList<TupleSet> input)
+QList<Optional<TupleSet> > SubstractOperator::execute(QList<TupleSet> input)
 {
 	Q_ASSERT(input.size() == 2);
 	auto setA = input[0];

@@ -35,9 +35,10 @@ CompositeQuery::~CompositeQuery()
 	// Don't delete the outNode_ as that we delete all Graphs which we returned in the execute methods.
 }
 
-QList<TupleSet> CompositeQuery::execute(QList<TupleSet> input)
+QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 {
-	inNode_->calculatedOutputs_ = input;
+	for (const auto& ts: input)
+		inNode_->calculatedOutputs_.push_back(ts);
 	// Nodes for which we have all dependencies calculated:
 	QQueue<QueryNode*> justExecutedQueries;
 	justExecutedQueries.enqueue(inNode_);
@@ -76,7 +77,7 @@ QList<TupleSet> CompositeQuery::execute(QList<TupleSet> input)
 					return m.outputFrom_ == currentNode && m.outputIndex_ == outIndex;
 				});
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
-				auto output = hasOutput ? currentNode->calculatedOutputs_[outIndex] : TupleSet();
+				auto output = hasOutput ? currentNode->calculatedOutputs_[outIndex].value() : TupleSet();
 
 				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
 
@@ -186,7 +187,8 @@ void CompositeQuery::QueryNode::execute()
 	if (q_)
 		calculatedOutputs_ = q_->execute(calculatedInputs_);
 	else
-		calculatedOutputs_ = calculatedInputs_;
+		for (const auto& ts : calculatedInputs_)
+			calculatedOutputs_.push_back(ts);
 }
 
 } /* namespace InformationScripting */

@@ -62,7 +62,7 @@ AstQuery::AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
 		}, QStringList("AstQuery") + args}, exec_{exec}
 {}
 
-TupleSet AstQuery::executeLinear(TupleSet input)
+Optional<TupleSet> AstQuery::executeLinear(TupleSet input)
 {
 	return exec_(this, input);
 }
@@ -96,7 +96,7 @@ void AstQuery::setTypeTo(QStringList& args, QString type)
 		args.append(QString("-%1=%2").arg(NODETYPE_ARGUMENT_NAMES[0], type));
 }
 
-TupleSet AstQuery::baseClassesQuery(TupleSet)
+Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
 {
 	// TODO handle input
 	TupleSet ts;
@@ -119,7 +119,7 @@ TupleSet AstQuery::baseClassesQuery(TupleSet)
 	return ts;
 }
 
-TupleSet AstQuery::toParentType(TupleSet input)
+Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 {
 	QString type = argument(NODETYPE_ARGUMENT_NAMES[0]);
 	Q_ASSERT(type.size() > 0); // TODO should be a warning for the user.
@@ -147,7 +147,7 @@ TupleSet AstQuery::toParentType(TupleSet input)
 	return ts;
 }
 
-TupleSet AstQuery::callGraph(TupleSet)
+Optional<TupleSet> AstQuery::callGraph(TupleSet)
 {
 	TupleSet ts;
 	if (scope() == Scope::Local)
@@ -173,16 +173,16 @@ TupleSet AstQuery::callGraph(TupleSet)
 	return ts;
 }
 
-TupleSet AstQuery::genericQuery(TupleSet input)
+Optional<TupleSet> AstQuery::genericQuery(TupleSet input)
 {
 	QString typeArgument = argument(NODETYPE_ARGUMENT_NAMES[0]);
 	QString nameArgument = argument(NAME_ARGUMENT_NAMES[0]);
 	if (nameArgument.size() > 0) return nameQuery(input, nameArgument);
 	else if (typeArgument.size() > 0) return typeQuery(input, typeArgument);
-	return {};
+	return {"Generic Error"};
 }
 
-TupleSet AstQuery::typeQuery(TupleSet input, QString type)
+Optional<TupleSet> AstQuery::typeQuery(TupleSet input, QString type)
 {
 	TupleSet tuples;
 
@@ -204,7 +204,7 @@ TupleSet AstQuery::typeQuery(TupleSet input, QString type)
 	return tuples;
 }
 
-TupleSet AstQuery::nameQuery(TupleSet input, QString name)
+Optional<TupleSet> AstQuery::nameQuery(TupleSet input, QString name)
 {
 	TupleSet tuples;
 
@@ -232,7 +232,7 @@ TupleSet AstQuery::nameQuery(TupleSet input, QString name)
 	return tuples;
 }
 
-TupleSet AstQuery::usesQuery(TupleSet input)
+Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 {
 	TupleSet result;
 	QHash<Model::Node*, QList<Model::Reference*>> references;
@@ -278,7 +278,7 @@ TupleSet AstQuery::usesQuery(TupleSet input)
 	return result;
 }
 
-TupleSet AstQuery::typeFilter(TupleSet input)
+Optional<TupleSet> AstQuery::typeFilter(TupleSet input)
 {
 	using SymbolType = Model::Node::SymbolType;
 
@@ -329,7 +329,7 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 	return result;
 }
 
-TupleSet AstQuery::attribute(TupleSet input)
+Optional<TupleSet> AstQuery::attribute(TupleSet input)
 {
 	const QString attributeName = argument(ATTRIBUTE_NAME_NAMES[1]);
 	Q_ASSERT(!attributeName.isEmpty());

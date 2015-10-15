@@ -42,7 +42,7 @@ namespace InformationScripting {
 
 const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 
-TupleSet VersionControlQuery::executeLinear(TupleSet)
+Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
 	const int CHANGE_COUNT = argument(COUNT_ARGUMENT_NAMES[0]).toInt();
 

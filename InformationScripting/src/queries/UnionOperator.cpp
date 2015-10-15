@@ -28,9 +28,9 @@
 
 namespace InformationScripting {
 
-QList<TupleSet> UnionOperator::execute(QList<TupleSet> input)
+QList<Optional<TupleSet> > UnionOperator::execute(QList<TupleSet> input)
 {
-	if (input.size() <= 1) return input;
+	if (input.size() <= 1) return {{"Union requires 2 inputs"}};
 
 	auto outTuples = input.takeFirst();
 	for (auto inTuples : input)

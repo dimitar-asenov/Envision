@@ -37,7 +37,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 	public:
 		virtual ~CompositeQuery() override;
 
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 
 		/**
 		 * Connects output 0 from Query \a from to input 0 of Query \a to.
@@ -82,7 +82,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 				QVector<QSet<QueryNode*>> outputMap_;
 
 				QList<TupleSet> calculatedInputs_;
-				QList<TupleSet> calculatedOutputs_;
+				QList<Optional<TupleSet>> calculatedOutputs_;
 
 				void addCalculatedInput(int index, TupleSet g);
 				bool canExecute() const;

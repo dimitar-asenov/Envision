@@ -30,13 +30,15 @@
 
 #include "../dataformat/TupleSet.h"
 
+#include "../misc/Optional.h"
+
 namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API Query
 {
 	public:
 		virtual ~Query() = default;
-		virtual QList<TupleSet> execute(QList<TupleSet>) = 0;
+		virtual QList<Optional<TupleSet>> execute(QList<TupleSet>) = 0;
 };
 
 } /* namespace InformationScripting */

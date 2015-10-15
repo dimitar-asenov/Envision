@@ -40,7 +40,7 @@ class INFORMATIONSCRIPTING_API GenericFilter : public LinearQuery
 		using KeepTuple = std::function<bool(const Tuple&)>;
 		GenericFilter(KeepTuple f);
 
-		virtual TupleSet executeLinear(TupleSet input) override;
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 	private:
 		KeepTuple keepTuple_;

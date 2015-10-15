@@ -41,7 +41,7 @@ const QStringList TagQuery::ADD_ARGUMENT_NAMES{"a", "add"};
 const QStringList TagQuery::REMOVE_ARGUMENT_NAMES{"r", "remove"};
 const QStringList TagQuery::PERSISTENT_ARGUMENT_NAMES{"p", "persistent"};
 
-TupleSet TagQuery::executeLinear(TupleSet input)
+Optional<TupleSet> TagQuery::executeLinear(TupleSet input)
 {
 	return exec_(this, input);
 }
@@ -56,9 +56,9 @@ void TagQuery::registerDefaultQueries()
 		return new TagQuery(&TagQuery::addTags, target, args);
 	});
 	// Alias to "tags -r"
-	QueryRegistry::instance().registerQueryConstructor("removeTags", [](Model::Node* target, QStringList args) {
-		return new TagQuery(&TagQuery::removeTags, target, args);
-	});
+//	QueryRegistry::instance().registerQueryConstructor("removeTags", [](Model::Node* target, QStringList args) {
+//		return new TagQuery(&TagQuery::removeTags, target, args);
+//	});
 }
 
 TagQuery::TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
@@ -72,7 +72,7 @@ TagQuery::TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
 	persistent_ = argument(PERSISTENT_ARGUMENT_NAMES[1]) == "yes";
 }
 
-TupleSet TagQuery::tags(TupleSet input)
+Optional<TupleSet> TagQuery::tags(TupleSet input)
 {
 	bool addSet = isArgumentSet(ADD_ARGUMENT_NAMES[0]);
 	bool removeSet = isArgumentSet(REMOVE_ARGUMENT_NAMES[0]);
@@ -80,12 +80,12 @@ TupleSet TagQuery::tags(TupleSet input)
 	if (addSet)
 		return addTags(input);
 	else if (removeSet)
-		return removeTags(input);
+		return removeTags(input).value();
 	else
 		return queryTags(input);
 }
 
-TupleSet TagQuery::queryTags(TupleSet input)
+Optional<TupleSet> TagQuery::queryTags(TupleSet input)
 {
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
@@ -110,7 +110,7 @@ TupleSet TagQuery::queryTags(TupleSet input)
 	return result;
 }
 
-TupleSet TagQuery::addTags(TupleSet input)
+Optional<TupleSet> TagQuery::addTags(TupleSet input)
 {
 	// Keep stuff in the input
 	TupleSet result = input;
@@ -153,7 +153,7 @@ TupleSet TagQuery::addTags(TupleSet input)
 	return result;
 }
 
-TupleSet TagQuery::removeTags(TupleSet input)
+Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 {
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0); // TODO should be user warning

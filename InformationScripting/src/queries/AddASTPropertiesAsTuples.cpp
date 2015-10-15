@@ -32,7 +32,7 @@
 
 namespace InformationScripting {
 
-TupleSet AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
 {
 	input.addPropertiesAsTuples<Model::Node*>("ast");
 	return input;
