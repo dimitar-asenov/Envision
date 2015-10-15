@@ -70,25 +70,25 @@ OOModel::MetaDefinition* StandardMetaDefinitions::metaDefinition(const clang::Ma
 }
 
 void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
-																	  MacroExpansion* expansion, NodeToCloneMap* mapping,
-																	  QVector<MacroArgumentInfo>& arguments)
+																		 MacroExpansion* expansion, NodeToCloneMap& mapping,
+																		 QVector<MacroArgumentInfo>& arguments)
 {
 	if (nodes.size() > 0)
 	{
 		// create a new context with type equal to the first node's context
-		auto actualContext = NodeHelpers::actualContext(mapping->original(nodes.first()));
+		auto actualContext = NodeHelpers::actualContext(mapping.original(nodes.first()));
 		metaDef->setContext(NodeHelpers::createContext(actualContext));
 
 		// clone and add nodes to the metaDef
 		for (auto n : nodes)
 		{
 			NodeToCloneMap childMapping;
-			auto cloned = NodeHelpers::cloneWithMapping(mapping->original(n), &childMapping);
-			applyLexicalTransformations(cloned, &childMapping, clang_.argumentNames(expansion->definition()));
+			auto cloned = NodeHelpers::cloneWithMapping(mapping.original(n), childMapping);
+			applyLexicalTransformations(cloned, childMapping, clang_.argumentNames(expansion->definition()));
 
-			insertChildMetaCalls(expansion, &childMapping);
-			if (removeUnownedNodes(cloned, expansion, &childMapping)) continue;
-			insertArgumentSplices(mapping, &childMapping, arguments);
+			insertChildMetaCalls(expansion, childMapping);
+			if (removeUnownedNodes(cloned, expansion, childMapping)) continue;
+			insertArgumentSplices(mapping, childMapping, arguments);
 
 			NodeHelpers::addNodeToDeclaration(cloned, metaDef->context());
 		}
@@ -100,7 +100,7 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 			metaDef->context()->metaCalls()->append(childExpansion->metaCall());
 }
 
-void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, NodeToCloneMap* childMapping)
+void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, NodeToCloneMap& childMapping)
 {
 	for (auto childExpansion : expansion->children())
 	{
@@ -111,7 +111,7 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 		if (auto replacementNode = childExpansion->replacementNode())
 			// replacementNode is an original node therefore we need to get to the cloned domain first
 			// clonedReplacementNode represents the cloned version of replacementNode
-			if (auto clonedReplacementNode = childMapping->clone(replacementNode))
+			if (auto clonedReplacementNode = childMapping.clone(replacementNode))
 				if (!DCast<OOModel::Declaration>(clonedReplacementNode))
 				{
 					if (clonedReplacementNode->parent())
@@ -123,14 +123,14 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 }
 
 void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
-																			NodeToCloneMap* mapping, QVector<Model::Node*>* result)
+																			NodeToCloneMap& mapping, QVector<Model::Node*>& result)
 {
 	Q_ASSERT(expansion);
 
 	// do not remove child meta calls
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
-	if (auto original = mapping->original(node))
+	if (auto original = mapping.original(node))
 		if (macroExpansions_.expansions(original).contains(expansion))
 		{
 			for (auto child : node->children())
@@ -139,14 +139,14 @@ void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, Macr
 			return;
 		}
 
-	result->append(node);
+	result.append(node);
 }
 
 bool StandardMetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,
-																 NodeToCloneMap* mapping)
+																 NodeToCloneMap& mapping)
 {
 	QVector<Model::Node*> unownedNodes;
-	childrenUnownedByExpansion(cloned, expansion, mapping, &unownedNodes);
+	childrenUnownedByExpansion(cloned, expansion, mapping, unownedNodes);
 
 	// if the unowned nodes contain the node itself then the node should not even be added to the meta definition
 	if (unownedNodes.contains(cloned)) return true;
@@ -156,15 +156,15 @@ bool StandardMetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpan
 	return false;
 }
 
-void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap* mapping, NodeToCloneMap* childMapping,
-																  QVector<MacroArgumentInfo>& arguments)
+void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, NodeToCloneMap& childMapping,
+																	 QVector<MacroArgumentInfo>& arguments)
 {
 	for (auto argument : arguments)
 	{
 		// map the argument node to the corresponding node in childMapping
-		auto original = mapping->original(argument.node_);
+		auto original = mapping.original(argument.node_);
 
-		if (auto child = childMapping->clone(original))
+		if (auto child = childMapping.clone(original))
 		{
 			// the first entry of the spelling history is where the splice for this argument should be
 			auto spliceLoc = argument.history_.first();
@@ -175,15 +175,15 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap* mapping, Nod
 
 			// insert the splice into the tree
 			if (child->parent()) child->parent()->replaceChild(child, newNode);
-			childMapping->replaceClone(child, newNode);
+			childMapping.replaceClone(child, newNode);
 		}
 	}
 }
 
-void StandardMetaDefinitions::applyLexicalTransformations(Model::Node* node, NodeToCloneMap* mapping,
+void StandardMetaDefinitions::applyLexicalTransformations(Model::Node* node, NodeToCloneMap& mapping,
 																			QVector<QString> formalArgs) const
 {
-	auto transformed = lexicalTransformations_.transformation(mapping->original(node));
+	auto transformed = lexicalTransformations_.transformation(mapping.original(node));
 
 	if (!transformed.isEmpty())
 	{
@@ -247,11 +247,11 @@ void StandardMetaDefinitions::applyLexicalTransformations(Model::Node* node, Nod
 }
 
 void StandardMetaDefinitions::replaceWithReference(Model::Node* current, const QString& replacement,
-																	NodeToCloneMap* mapping) const
+																	NodeToCloneMap& mapping) const
 {
 	auto newValue = NodeHelpers::createNameExpressionFromString(replacement);
 	current->parent()->replaceChild(current, newValue);
-	mapping->replaceClone(current, newValue);
+	mapping.replaceClone(current, newValue);
 }
 
 }

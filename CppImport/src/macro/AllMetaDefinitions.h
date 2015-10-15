@@ -52,10 +52,11 @@ namespace CppImport {
 class CPPIMPORT_API AllMetaDefinitions
 {
 	public:
-		AllMetaDefinitions(OOModel::Project* root, const ClangHelpers& clangHelper, const MacroDefinitions& macroDefinitions,
-						  MacroExpansions& macroExpansions, const LexicalTransformations& lexicalHelper);
+		AllMetaDefinitions(OOModel::Project* root, const ClangHelpers& clangHelper,
+								 const MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions,
+								 const LexicalTransformations& lexicalHelper);
 
-		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap* mapping,
+		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
 								 QVector<MacroArgumentInfo>& arguments);
 
 		void handleXMacros();

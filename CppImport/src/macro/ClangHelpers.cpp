@@ -74,9 +74,9 @@ clang::SourceLocation ClangHelpers::immediateMacroLocation(clang::SourceLocation
 }
 
 void ClangHelpers::immediateSpellingHistory(clang::SourceLocation location,
-														  QVector<clang::SourceLocation>* result) const
+														  QVector<clang::SourceLocation>& result) const
 {
-	result->append(location);
+	result.append(location);
 
 	auto next = sourceManager_->getImmediateSpellingLoc(location);
 

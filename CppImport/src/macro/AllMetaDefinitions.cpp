@@ -42,7 +42,7 @@ AllMetaDefinitions::AllMetaDefinitions(OOModel::Project* root, const ClangHelper
 	: root_(root), macroDefinitions_(macroDefinitions), macroExpansions_(macroExpansions),
 	  standardMetaDefinitions_(clangHelper, macroDefinitions, macroExpansions, lexicalHelper) {}
 
-void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap* mapping,
+void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
 											 QVector<MacroArgumentInfo>& arguments)
 {
 	if (auto metaDef = standardMetaDefinitions_.createMetaDef(expansion->definition()))

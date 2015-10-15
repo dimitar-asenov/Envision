@@ -47,7 +47,7 @@ class CPPIMPORT_API ClangHelpers
 		QString spelling(clang::SourceLocation start, clang::SourceLocation end) const;
 
 		clang::SourceLocation immediateMacroLocation(clang::SourceLocation location) const;
-		void immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>* result) const;
+		void immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>& result) const;
 
 		QVector<QString> argumentNames(const clang::MacroDirective* definition) const;
 

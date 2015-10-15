@@ -78,7 +78,7 @@ class CPPIMPORT_API MacroImporter
 		QVector<Model::Node*> finalizationNodes;
 		QHash<Model::Node*, MacroExpansion*> finalizationMetaCalls;
 
-		void handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap* mapping,
+		void handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
 										  QVector<MacroArgumentInfo>& arguments);
 
 		bool insertMetaCall(MacroExpansion* expansion);
@@ -94,7 +94,7 @@ class CPPIMPORT_API MacroImporter
 		/**
 		 * return all arguments which are associated to children of node.
 		 */
-		void allArguments(Model::Node* node, QVector<MacroArgumentInfo>* result, NodeToCloneMap* mapping);
+		void allArguments(Model::Node* node, QVector<MacroArgumentInfo>& result, NodeToCloneMap& mapping);
 
 		/**
 		 * insert gathered argument nodes at their original (logical) location.

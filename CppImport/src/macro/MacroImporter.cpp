@@ -61,14 +61,14 @@ void MacroImporter::endTranslationUnit()
 		QVector<MacroArgumentInfo> allArgs;
 		for (auto node : macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Transitive))
 		{
-			auto generatedNode = NodeHelpers::cloneWithMapping(node, &mapping);
+			auto generatedNode = NodeHelpers::cloneWithMapping(node, mapping);
 
-			allArguments(generatedNode, &allArgs, &mapping);
+			allArguments(generatedNode, allArgs, mapping);
 
 			generatedNodes.append(generatedNode);
 		}
 
-		handleMacroExpansion(generatedNodes, expansion, &mapping, allArgs);
+		handleMacroExpansion(generatedNodes, expansion, mapping, allArgs);
 
 		if (insertMetaCall(expansion))
 		{
@@ -192,20 +192,19 @@ void MacroImporter::startTranslationUnit(const clang::SourceManager* sourceManag
 																															  macroExpansions_));
 }
 
-void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes,
-															MacroExpansion* expansion,
-															NodeToCloneMap* mapping, QVector<MacroArgumentInfo>& arguments)
+void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion,
+													  NodeToCloneMap& mapping, QVector<MacroArgumentInfo>& arguments)
 {
 	// handle child macro expansions
 	for (auto childExpansion : expansion->children())
 	{
 		auto tlNodes = macroExpansions_.topLevelNodes(childExpansion, MacroExpansions::NodeOriginType::Direct);
-		handleMacroExpansion(mapping->clone(tlNodes), childExpansion, mapping, arguments);
+		handleMacroExpansion(mapping.clone(tlNodes), childExpansion, mapping, arguments);
 	}
 
 	// store the original of the first node generated from this expansion as placement information for the meta call
 	if (nodes.size() > 0)
-		expansion->setReplacementNode(mapping->original(nodes.first()));
+		expansion->setReplacementNode(mapping.original(nodes.first()));
 	else
 		for (auto childExpansion : expansion->children())
 			if (childExpansion->replacementNode())
@@ -283,7 +282,7 @@ QVector<MacroArgumentLocation> MacroImporter::argumentHistory(clang::SourceRange
 		 clang_.sourceManager()->isMacroArgExpansion(range.getEnd()))
 	{
 		QVector<clang::SourceLocation> spellingHistory;
-		clang_.immediateSpellingHistory(range.getBegin(), &spellingHistory);
+		clang_.immediateSpellingHistory(range.getBegin(), spellingHistory);
 
 		// find all expansions with arguments with location equal to an entry in spellingHistory
 		for (auto argumentLoc : spellingHistory)
@@ -304,13 +303,13 @@ QVector<MacroArgumentLocation> MacroImporter::argumentHistory(Model::Node* node)
 	return result;
 }
 
-void MacroImporter::allArguments(Model::Node* node, QVector<MacroArgumentInfo>* result, NodeToCloneMap* mapping)
+void MacroImporter::allArguments(Model::Node* node, QVector<MacroArgumentInfo>& result, NodeToCloneMap& mapping)
 {
-	auto argLoc = argumentHistory(mapping->original(node));
+	auto argLoc = argumentHistory(mapping.original(node));
 
 	if (!argLoc.empty())
 	{
-		result->append({argLoc, node});
+		result.append({argLoc, node});
 		return;
 	}
 

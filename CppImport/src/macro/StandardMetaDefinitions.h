@@ -59,7 +59,7 @@ class CPPIMPORT_API StandardMetaDefinitions
 		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
 		void createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
-												MacroExpansion* expansion, NodeToCloneMap* mapping,
+												MacroExpansion* expansion, NodeToCloneMap& mapping,
 												QVector<MacroArgumentInfo>& arguments);
 
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
@@ -75,29 +75,29 @@ class CPPIMPORT_API StandardMetaDefinitions
 		/**
 		 * insert all non-xMacro child meta calls into metaDef.
 		 */
-		void insertChildMetaCalls(MacroExpansion* expansion, NodeToCloneMap* childMapping);
+		void insertChildMetaCalls(MacroExpansion* expansion, NodeToCloneMap& childMapping);
 
 		/**
 		 * return all children of node that do not belong to expansion.
 		 */
-		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion, NodeToCloneMap* mapping,
-												  QVector<Model::Node*>* result);
+		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion, NodeToCloneMap& mapping,
+												  QVector<Model::Node*>& result);
 
 		/**
 		 * remove all children of node that do not belong to expansion.
 		 * return true if node itself does not belong to expansion.
 		 */
-		bool removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,	NodeToCloneMap* mapping);
+		bool removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,	NodeToCloneMap& mapping);
 
 		/**
 		 * insert splices for all nodes in childMapping that are a macro argument.
 		 */
-		void insertArgumentSplices(NodeToCloneMap* mapping, NodeToCloneMap* childMapping,
+		void insertArgumentSplices(NodeToCloneMap& mapping, NodeToCloneMap& childMapping,
 											QVector<MacroArgumentInfo>& arguments);
 
-		void applyLexicalTransformations(Model::Node* node, NodeToCloneMap* mapping, QVector<QString> formalArgs) const;
+		void applyLexicalTransformations(Model::Node* node, NodeToCloneMap& mapping, QVector<QString> formalArgs) const;
 
-		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap* mapping) const;
+		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap& mapping) const;
 };
 
 }

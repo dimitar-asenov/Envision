@@ -112,13 +112,13 @@ OOModel::Declaration* NodeHelpers::createContext(OOModel::Declaration* actualCon
 	Q_ASSERT(false);
 }
 
-Model::Node* NodeHelpers::cloneWithMapping(Model::Node* node, NodeToCloneMap* mapping)
+Model::Node* NodeHelpers::cloneWithMapping(Model::Node* node, NodeToCloneMap& mapping)
 {
 	auto clone = node->clone();
 
 	QList<Model::Node*> info;
-	buildMappingInfo(node, &info);
-	useMappingInfo(clone, &info, mapping);
+	buildMappingInfo(node, info);
+	useMappingInfo(clone, info, mapping);
 
 	return clone;
 }
@@ -249,18 +249,18 @@ QVector<Model::Node*> NodeHelpers::topLevelNodes(QVector<Model::Node*> input)
 	return result;
 }
 
-void NodeHelpers::buildMappingInfo(Model::Node* node, QList<Model::Node*>* info)
+void NodeHelpers::buildMappingInfo(Model::Node* node, QList<Model::Node*>& info)
 {
-	info->push_back(node);
+	info.push_back(node);
 
 	for (auto child : node->children())
 		buildMappingInfo(child, info);
 }
 
-void NodeHelpers::useMappingInfo(Model::Node* node, QList<Model::Node*>* info, NodeToCloneMap* mapping)
+void NodeHelpers::useMappingInfo(Model::Node* node, QList<Model::Node*>& info, NodeToCloneMap& mapping)
 {
-	mapping->add(info->front(), node);
-	info->pop_front();
+	mapping.add(info.front(), node);
+	info.pop_front();
 
 	for (auto child : node->children())
 		useMappingInfo(child, info, mapping);
