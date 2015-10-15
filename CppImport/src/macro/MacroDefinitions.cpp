@@ -81,7 +81,7 @@ bool MacroDefinitions::macroDefinitionLocation(const clang::MacroDirective* md, 
 	return true;
 }
 
-QString MacroDefinitions::hash(const clang::MacroDirective* md) const
+QString MacroDefinitions::signature(const clang::MacroDirective* md) const
 {
 	QString namespaceName, fileName;
 

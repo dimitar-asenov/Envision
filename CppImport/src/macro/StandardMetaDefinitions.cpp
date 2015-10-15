@@ -51,7 +51,7 @@ OOModel::MetaDefinition* StandardMetaDefinitions::createMetaDef(const clang::Mac
 	if (metaDefinition(md)) return nullptr;
 
 	auto metaDef = new OOModel::MetaDefinition(definitionManager_.definitionName(md));
-	standardMetaDefinitions_.insert(definitionManager_.hash(md), metaDef);
+	standardMetaDefinitions_.insert(definitionManager_.signature(md), metaDef);
 
 	// add formal arguments based on the expansion definition
 	for (auto argName : clang_.argumentNames(md))
@@ -62,7 +62,7 @@ OOModel::MetaDefinition* StandardMetaDefinitions::createMetaDef(const clang::Mac
 
 OOModel::MetaDefinition* StandardMetaDefinitions::metaDefinition(const clang::MacroDirective* md)
 {
-	QString h = definitionManager_.hash(md);
+	QString h = definitionManager_.signature(md);
 
 	auto it = standardMetaDefinitions_.find(h);
 

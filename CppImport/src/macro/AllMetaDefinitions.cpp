@@ -141,7 +141,7 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 		}
 
 		beginChild->metaCall()->arguments()->append(list);
-		specializations_.insert(macroDefinitions_.hash(expansion->definition()), list);
+		specializations_.insert(macroDefinitions_.signature(expansion->definition()), list);
 	}
 
 	metaDef->context()->metaCalls()->append(beginChild->metaCall());
@@ -161,7 +161,7 @@ void AllMetaDefinitions::applyPartialBeginSpecializationTransformation(MacroExpa
 	 * we have to do it over the tree because the inner meta call might originate from an expansion of a
 	 * translation unit prior to this one.
 	 */
-	auto specHash = macroDefinitions_.hash(cppExpansion->definition());
+	auto specHash = macroDefinitions_.signature(cppExpansion->definition());
 
 	auto it = specializations_.find(specHash);
 	if (it != specializations_.end())

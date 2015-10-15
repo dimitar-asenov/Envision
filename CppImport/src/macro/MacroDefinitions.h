@@ -66,7 +66,7 @@ class CPPIMPORT_API MacroDefinitions
 		 */
 		bool macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName, QString& fileName) const;
 
-		QString hash(const clang::MacroDirective* md) const;
+		QString signature(const clang::MacroDirective* md) const;
 
 		/**
 		 * return a qualifier expression based on the macroDefinitionLocation of md.
