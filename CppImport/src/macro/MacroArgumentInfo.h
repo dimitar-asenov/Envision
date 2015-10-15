@@ -28,9 +28,13 @@
 
 #include "cppimport_api.h"
 
-#include "MacroArgumentLocation.h"
+namespace Model {
+	class Node;
+}
 
 namespace CppImport {
+
+class MacroArgumentLocation;
 
 struct CPPIMPORT_API MacroArgumentInfo
 {

@@ -26,6 +26,8 @@
 
 #include "EnvisionToClangMap.h"
 
+#include "ModelBase/src/nodes/Node.h"
+
 namespace CppImport {
 
 Model::Node* EnvisionToClangMap::closestParentWithAstMapping(Model::Node* node) const

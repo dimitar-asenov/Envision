@@ -26,9 +26,13 @@
 
 #include "AllMetaDefinitions.h"
 
-#include "MacroExpansions.h"
 #include "MacroDefinitions.h"
+#include "MacroExpansion.h"
+#include "MacroExpansions.h"
+
 #include "NodeHelpers.h"
+
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 

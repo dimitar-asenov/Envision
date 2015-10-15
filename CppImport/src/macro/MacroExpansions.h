@@ -26,15 +26,18 @@
 
 #pragma once
 
-#include "EnvisionToClangMap.h"
-#include "ClangHelpers.h"
 #include "cppimport_api.h"
 
-#include "MacroExpansion.h"
+namespace Model {
+	class Node;
+}
 
 namespace CppImport {
 
+class ClangHelpers;
 class MacroDefinitions;
+class MacroExpansion;
+class EnvisionToClangMap;
 
 /**
  * creates and stores all MacroExpansions for a translation unit.

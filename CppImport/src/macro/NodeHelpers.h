@@ -28,10 +28,20 @@
 
 #include "cppimport_api.h"
 
-#include "NodeToCloneMap.h"
-#include "OOModel/src/allOOModelNodes.h"
+namespace Model {
+	class Node;
+	class List;
+}
+
+namespace OOModel {
+	class Declaration;
+	class Expression;
+	class MetaCallExpression;
+}
 
 namespace CppImport {
+
+class NodeToCloneMap;
 
 /**
  * constains all relevant methods for macro import that do not depend on Clang or macro import components.

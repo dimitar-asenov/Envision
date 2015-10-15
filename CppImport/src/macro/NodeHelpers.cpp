@@ -26,6 +26,10 @@
 
 #include "NodeHelpers.h"
 
+#include "NodeToCloneMap.h"
+
+#include "OOModel/src/allOOModelNodes.h"
+
 namespace CppImport {
 
 void NodeHelpers::orderNodes(QVector<Model::Node*>& input)

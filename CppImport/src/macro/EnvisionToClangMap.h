@@ -28,7 +28,9 @@
 
 #include "cppimport_api.h"
 
-#include "ModelBase/src/nodes/Node.h"
+namespace Model {
+	class Node;
+}
 
 namespace CppImport {
 

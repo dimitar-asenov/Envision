@@ -28,19 +28,20 @@
 
 #include "cppimport_api.h"
 
-#include "ClangHelpers.h"
-#include "MacroExpansion.h"
-#include "MacroArgumentInfo.h"
 #include "StandardMetaDefinitions.h"
-#include "OOModel/src/allOOModelNodes.h"
+
+namespace Model {
+	class List;
+}
+
+namespace OOModel {
+	class Project;
+	class MetaCallExpression;
+	class Class;
+	class Declaration;
+}
 
 namespace CppImport {
-
-class NodeToCloneMap;
-class MacroDefinitions;
-class MacroExpansions;
-class LexicalTransformations;
-class ClangHelpers;
 
 /**
  * provides the interface to generate all sorts of MetaDefinitions during macro import.

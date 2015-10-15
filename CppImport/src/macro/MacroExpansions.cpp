@@ -27,9 +27,14 @@
 #include "MacroExpansions.h"
 
 #include "ClangHelpers.h"
-#include "EnvisionToClangMap.h"
 #include "MacroDefinitions.h"
+#include "MacroExpansion.h"
+#include "EnvisionToClangMap.h"
+
 #include "NodeHelpers.h"
+
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace CppImport {
 

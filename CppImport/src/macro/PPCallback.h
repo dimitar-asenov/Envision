@@ -27,12 +27,11 @@
 #pragma once
 
 #include "cppimport_api.h"
-#include "Core/src/EnvisionException.h"
-
-#include "MacroDefinitions.h"
-#include "MacroExpansions.h"
 
 namespace CppImport {
+
+class MacroDefinitions;
+class MacroExpansions;
 
 /**
  * used to get all necessary information for macro import from the preprocessor.

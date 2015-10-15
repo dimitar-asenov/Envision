@@ -30,18 +30,14 @@
 
 #include "ClangHelpers.h"
 #include "EnvisionToClangMap.h"
-#include "MacroExpansion.h"
-#include "NodeToCloneMap.h"
-#include "MacroArgumentLocation.h"
-#include "MacroArgumentInfo.h"
-#include "MacroExpansions.h"
 #include "MacroDefinitions.h"
+#include "MacroExpansions.h"
 #include "LexicalTransformations.h"
 #include "AllMetaDefinitions.h"
-#include "StandardMetaDefinitions.h"
-#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
+
+class MacroArgumentLocation;
 
 class CPPIMPORT_API MacroImporter
 {

@@ -26,8 +26,15 @@
 
 #include "MacroImporter.h"
 
-#include "NodeHelpers.h"
+#include "NodeToCloneMap.h"
+#include "MacroExpansion.h"
+#include "MacroArgumentInfo.h"
+#include "MacroArgumentLocation.h"
 #include "PPCallback.h"
+
+#include "NodeHelpers.h"
+
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 

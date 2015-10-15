@@ -28,10 +28,13 @@
 
 #include "cppimport_api.h"
 
-#include "ClangHelpers.h"
-#include "OOModel/src/expressions/ReferenceExpression.h"
+namespace OOModel {
+	class ReferenceExpression;
+}
 
 namespace CppImport {
+
+class ClangHelpers;
 
 /**
  * stores the raw macro definition (not MetaDefinition) information provided by PPCallback for a translation unit.

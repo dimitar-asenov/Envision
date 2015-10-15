@@ -28,9 +28,9 @@
 
 #include "cppimport_api.h"
 
-#include "MacroExpansion.h"
-
 namespace CppImport {
+
+class MacroExpansion;
 
 struct CPPIMPORT_API MacroArgumentLocation
 {

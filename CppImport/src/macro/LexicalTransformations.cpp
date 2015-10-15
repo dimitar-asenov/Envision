@@ -26,8 +26,11 @@
 
 #include "LexicalTransformations.h"
 
+#include "ClangHelpers.h"
+#include "MacroExpansion.h"
 #include "MacroExpansions.h"
-#include "NodeHelpers.h"
+
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 

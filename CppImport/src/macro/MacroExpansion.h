@@ -28,7 +28,13 @@
 
 #include "cppimport_api.h"
 
-#include "OOModel/src/expressions/MetaCallExpression.h"
+namespace Model {
+	class Node;
+}
+
+namespace OOModel {
+	class MetaCallExpression;
+}
 
 namespace CppImport {
 

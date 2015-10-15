@@ -26,6 +26,10 @@
 
 #include "MacroDefinitions.h"
 
+#include "ClangHelpers.h"
+
+#include "OOModel/src/expressions/ReferenceExpression.h"
+
 namespace CppImport {
 
 MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_(clang) {}

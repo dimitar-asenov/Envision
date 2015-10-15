@@ -28,12 +28,13 @@
 
 #include "cppimport_api.h"
 
-#include "ClangHelpers.h"
-#include "NodeToCloneMap.h"
-#include "OOModel/src/allOOModelNodes.h"
+namespace Model {
+	class Node;
+}
 
 namespace CppImport {
 
+class ClangHelpers;
 class MacroExpansions;
 
 /**
