@@ -28,63 +28,45 @@
 
 #include "cppimport_api.h"
 
-#include "ClangHelper.h"
-#include "NodeMapping.h"
-#include "OOModel/src/allOOModelNodes.h"
-
 namespace CppImport {
 
-class MacroExpansion;
-class MacroArgumentInfo;
-class MacroArgumentLocation;
-class MacroDefinitions;
-class MacroExpansions;
-class LexicalHelper;
-class XMacroManager;
-
-class CPPIMPORT_API MetaDefinitions
+class CPPIMPORT_API ClangHelpers
 {
 	public:
-		MetaDefinitions(const ClangHelper& clang, const MacroDefinitions& definitionManager,
-									 MacroExpansions& MacroExpansions, const LexicalHelper& lexicalHelper);
+		void setSourceManager(const clang::SourceManager* sourceManager);
+		void setPreprocessor(const clang::Preprocessor* preprocessor);
 
-		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
+		const clang::SourceManager* sourceManager() const;
 
-		void createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
-												MacroExpansion* expansion, NodeMapping* mapping,
-												QVector<MacroArgumentInfo>& arguments);
+		QString spelling(clang::SourceRange range) const;
+		QString spelling(clang::SourceLocation location) const;
+		QString spelling(clang::SourceLocation start, clang::SourceLocation end) const;
 
-		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
+		clang::SourceLocation immediateMacroLocation(clang::SourceLocation location) const;
+		void immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>* result) const;
+
+		QVector<QString> argumentNames(const clang::MacroDirective* definition) const;
+
+		bool isMacroRange(clang::SourceRange range) const;
 
 	private:
-		const ClangHelper& clang_;
-		const MacroDefinitions& definitionManager_;
-		MacroExpansions& MacroExpansions_;
-		const LexicalHelper& lexicalHelper_;
-
-		QHash<QString, OOModel::MetaDefinition*> metaDefinitions_;
-
-		/**
-		 * insert all non-xMacro child meta calls into metaDef.
-		 */
-		void insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping);
-
-		/**
-		 * return all children of node that do not belong to expansion.
-		 */
-		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
-																NodeMapping* mapping, QVector<Model::Node*>* result);
-
-		/**
-		 * remove all children of node that do not belong to expansion.
-		 * return true if node itself does not belong to expansion.
-		 */
-		bool removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,	NodeMapping* mapping);
-
-		/**
-		 * insert splices for all nodes in childMapping that are a macro argument.
-		 */
-		void insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping, QVector<MacroArgumentInfo>& arguments);
+		const clang::Preprocessor* preprocessor_{};
+		const clang::SourceManager* sourceManager_{};
 };
+
+inline void ClangHelpers::setSourceManager(const clang::SourceManager* sourceManager)
+{ sourceManager_ = sourceManager; }
+
+inline void ClangHelpers::setPreprocessor(const clang::Preprocessor* preprocessor) { preprocessor_ = preprocessor; }
+
+inline QString ClangHelpers::spelling(clang::SourceLocation loc) const { return spelling(loc, loc); }
+
+inline bool ClangHelpers::isMacroRange(clang::SourceRange range) const
+{ return range.getBegin().isMacroID() && range.getEnd().isMacroID(); }
+
+inline QString ClangHelpers::spelling(clang::SourceRange range) const
+{ return spelling(range.getBegin(), range.getEnd()); }
+
+inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }
 
 }

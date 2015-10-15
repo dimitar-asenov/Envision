@@ -24,55 +24,48 @@
  **
  **********************************************************************************************************************/
 
-#include "NodeMapping.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "NodeToCloneMap.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-void NodeMapping::add(Model::Node* original, Model::Node* clone)
+class CPPIMPORT_API NodeHelpers
 {
-	Q_ASSERT(original);
-	Q_ASSERT(clone);
-	clones_[clone] = original;
-	originals_[original] = clone;
-}
+	public:
+		static void orderNodes(QVector<Model::Node*>& input);
 
-Model::Node*NodeMapping::original(Model::Node* clone)
-{
-	auto it = clones_.find(clone);
+		static bool validContext(Model::Node* node);
+		static OOModel::Declaration* actualContext(Model::Node* node);
+		static OOModel::Declaration* createContext(OOModel::Declaration* actualContext);
 
-	return it != clones_.end() ? *it : nullptr;
-}
+		static QVector<Model::Node*> topLevelNodes(QVector<Model::Node*> input);
 
-QVector<Model::Node*> NodeMapping::original(QVector<Model::Node*> clones)
-{
-	QVector<Model::Node*> result;
-	for (auto clone : clones)
-		result.append(original(clone));
-	return result;
-}
+		static Model::Node* cloneWithMapping(Model::Node* node, NodeToCloneMap* mapping);
 
-Model::Node*NodeMapping::clone(Model::Node* original)
-{
-	auto it = originals_.find(original);
+		static void removeNode(Model::Node* node, bool removeMetaCalls = false);
+		static void removeNodes(QVector<Model::Node*> nodes);
 
-	return it != originals_.end() ? *it : nullptr;
-}
+		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
 
-QVector<Model::Node*> NodeMapping::clone(QVector<Model::Node*> originals)
-{
-	QVector<Model::Node*> result;
-	for (auto original : originals)
-		result.append(clone(original));
-	return result;
-}
+		static OOModel::Expression* createNameExpressionFromString(const QString& input);
+		static bool stringMatches(const QString& regex, const QString& value);
 
-void NodeMapping::replaceClone(Model::Node* old, Model::Node* replacement)
-{
-	if (auto original = clone(old))
-	{
-		clones_.remove(old);
-		add(original, replacement);
-	}
-}
+		/**
+		 * returns the first Declaration* decl in list with decl->name() == name
+		 */
+		static OOModel::Declaration* findDeclaration(Model::List* list, const QString& name);
+
+	private:
+		static void buildMappingInfo(Model::Node* node, QList<Model::Node*>* info);
+		static void useMappingInfo(Model::Node* node, QList<Model::Node*>* info, NodeToCloneMap* mapping);
+
+		static OOModel::MetaCallExpression* containsMetaCall(Model::Node* node);
+};
+
+inline void NodeHelpers::removeNodes(QVector<Model::Node*> nodes) { for (auto n : nodes) removeNode(n); }
 
 }

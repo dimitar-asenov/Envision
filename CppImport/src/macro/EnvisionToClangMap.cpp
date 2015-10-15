@@ -24,42 +24,46 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "cppimport_api.h"
-
-#include "ModelBase/src/nodes/Node.h"
+#include "EnvisionToClangMap.h"
 
 namespace CppImport {
 
-class CPPIMPORT_API AstMapping
+Model::Node* EnvisionToClangMap::closestParentWithAstMapping(Model::Node* node) const
 {
-	public:
-		QHash<Model::Node*, QVector<clang::SourceRange>>::iterator begin();
-		QHash<Model::Node*, QVector<clang::SourceRange>>::iterator end();
+	if (!node) return nullptr;
+	if (envisionToClangMap_.contains(node)) return node;
+	if (node->parent()) return closestParentWithAstMapping(node->parent());
 
-		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
-		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+	return nullptr;
+}
 
-		const QList<Model::Node*> nodes() const;
-		QVector<clang::SourceRange> get(Model::Node* node) const;
-		bool contains(Model::Node* node) const;
-		void clear();
+void EnvisionToClangMap::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
+{
+	Q_ASSERT(envisionAstNode);
 
-		Model::Node* closestParentWithAstMapping(Model::Node* node) const;
+	if (auto bop = clang::dyn_cast<clang::BinaryOperator>(clangAstNode))
+		envisionToClangMap_[envisionAstNode]
+				.append(clang::SourceRange(bop->getOperatorLoc(), bop->getOperatorLoc()));
+	else if (auto op = clang::dyn_cast<clang::CXXOperatorCallExpr>(clangAstNode))
+		envisionToClangMap_[envisionAstNode]
+				.append(clang::SourceRange(op->getOperatorLoc(), op->getOperatorLoc()));
+	else
+		envisionToClangMap_[envisionAstNode].append(clangAstNode->getSourceRange());
+}
 
-	private:
-		QHash<Model::Node*, QVector<clang::SourceRange>> astMapping_;
-};
+void EnvisionToClangMap::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
+{
+	Q_ASSERT(envisionAstNode);
 
-inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::begin() { return astMapping_.begin(); }
+	if (!envisionToClangMap_[envisionAstNode].contains(clangAstNode->getSourceRange()))
+		envisionToClangMap_[envisionAstNode].append(clangAstNode->getSourceRange());
+}
 
-inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator AstMapping::end() { return astMapping_.end(); }
+QVector<clang::SourceRange> EnvisionToClangMap::get(Model::Node* node) const
+{
+	auto it = envisionToClangMap_.find(node);
 
-inline const QList<Model::Node*> AstMapping::nodes() const { return astMapping_.keys(); }
-
-inline void AstMapping::clear() { astMapping_.clear(); }
-
-inline bool AstMapping::contains(Model::Node* node) const { return astMapping_.contains(node); }
+	return it != envisionToClangMap_.end() ? *it : QVector<clang::SourceRange>();
+}
 
 }

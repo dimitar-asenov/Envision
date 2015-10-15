@@ -24,29 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#include "MetaDefinitions.h"
+#include "StandardMetaDefinitions.h"
 
 #include "MacroExpansion.h"
 #include "MacroArgumentInfo.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansions.h"
-#include "LexicalHelper.h"
-#include "StaticStuff.h"
-#include "XMacroManager.h"
+#include "LexicalTransformations.h"
+#include "NodeHelpers.h"
+#include "AllMetaDefinitions.h"
 
 namespace CppImport {
 
-MetaDefinitions::MetaDefinitions(const ClangHelper& clang, const MacroDefinitions& definitionManager,
-															MacroExpansions& MacroExpansions, const LexicalHelper& lexicalHelper)
-	: clang_(clang), definitionManager_(definitionManager), MacroExpansions_(MacroExpansions),
-	  lexicalHelper_(lexicalHelper) {}
+StandardMetaDefinitions::StandardMetaDefinitions(const ClangHelpers& clang, const MacroDefinitions& definitionManager,
+															MacroExpansions& macroExpansions, const LexicalTransformations& lexicalHelper)
+	: clang_(clang), definitionManager_(definitionManager), macroExpansions_(macroExpansions),
+	  lexicalTransformations_(lexicalHelper) {}
 
-OOModel::MetaDefinition* MetaDefinitions::createMetaDef(const clang::MacroDirective* md)
+OOModel::MetaDefinition* StandardMetaDefinitions::createMetaDef(const clang::MacroDirective* md)
 {
 	if (metaDefinition(md)) return nullptr;
 
 	auto metaDef = new OOModel::MetaDefinition(definitionManager_.definitionName(md));
-	metaDefinitions_.insert(definitionManager_.hash(md), metaDef);
+	standardMetaDefinitions_.insert(definitionManager_.hash(md), metaDef);
 
 	// add formal arguments based on the expansion definition
 	for (auto argName : clang_.argumentNames(md))
@@ -55,37 +55,38 @@ OOModel::MetaDefinition* MetaDefinitions::createMetaDef(const clang::MacroDirect
 	return metaDef;
 }
 
-OOModel::MetaDefinition* MetaDefinitions::metaDefinition(const clang::MacroDirective* md)
+OOModel::MetaDefinition* StandardMetaDefinitions::metaDefinition(const clang::MacroDirective* md)
 {
 	QString h = definitionManager_.hash(md);
 
-	auto it = metaDefinitions_.find(h);
+	auto it = standardMetaDefinitions_.find(h);
 
-	return it != metaDefinitions_.end() ? *it : nullptr;
+	return it != standardMetaDefinitions_.end() ? *it : nullptr;
 }
 
-void MetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
-																	  MacroExpansion* expansion, NodeMapping* mapping,
+void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+																	  MacroExpansion* expansion, NodeToCloneMap* mapping,
 																	  QVector<MacroArgumentInfo>& arguments)
 {
 	if (nodes.size() > 0)
 	{
 		// create a new context with type equal to the first node's context
-		auto actualContext = StaticStuff::actualContext(mapping->original(nodes.first()));
-		metaDef->setContext(StaticStuff::createContext(actualContext));
+		auto actualContext = NodeHelpers::actualContext(mapping->original(nodes.first()));
+		metaDef->setContext(NodeHelpers::createContext(actualContext));
 
 		// clone and add nodes to the metaDef
 		for (auto n : nodes)
 		{
-			NodeMapping childMapping;
-			auto cloned = StaticStuff::cloneWithMapping(mapping->original(n), &childMapping);
-			lexicalHelper_.applyLexicalTransformations(cloned, &childMapping, clang_.argumentNames(expansion->definition));
+			NodeToCloneMap childMapping;
+			auto cloned = NodeHelpers::cloneWithMapping(mapping->original(n), &childMapping);
+			lexicalTransformations_.applyLexicalTransformations(cloned, &childMapping,
+																				 clang_.argumentNames(expansion->definition));
 
 			insertChildMetaCalls(expansion, &childMapping);
 			if (removeUnownedNodes(cloned, expansion, &childMapping)) continue;
 			insertArgumentSplices(mapping, &childMapping, arguments);
 
-			StaticStuff::addNodeToDeclaration(cloned, metaDef->context());
+			NodeHelpers::addNodeToDeclaration(cloned, metaDef->context());
 		}
 	}
 
@@ -95,7 +96,7 @@ void MetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef,
 			metaDef->context()->metaCalls()->append(childExpansion->metaCall);
 }
 
-void MetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping)
+void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, NodeToCloneMap* childMapping)
 {
 	for (auto childExpansion : expansion->children)
 	{
@@ -117,8 +118,8 @@ void MetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, NodeMappin
 	}
 }
 
-void MetaDefinitions::childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
-																			NodeMapping* mapping, QVector<Model::Node*>* result)
+void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
+																			NodeToCloneMap* mapping, QVector<Model::Node*>* result)
 {
 	Q_ASSERT(expansion);
 
@@ -126,7 +127,7 @@ void MetaDefinitions::childrenUnownedByExpansion(Model::Node* node, MacroExpansi
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
 	if (auto original = mapping->original(node))
-		if (MacroExpansions_.expansion(original).contains(expansion))
+		if (macroExpansions_.expansion(original).contains(expansion))
 		{
 			for (auto child : node->children())
 				childrenUnownedByExpansion(child, expansion, mapping, result);
@@ -137,7 +138,8 @@ void MetaDefinitions::childrenUnownedByExpansion(Model::Node* node, MacroExpansi
 	result->append(node);
 }
 
-bool MetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion, NodeMapping* mapping)
+bool StandardMetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,
+																 NodeToCloneMap* mapping)
 {
 	QVector<Model::Node*> unownedNodes;
 	childrenUnownedByExpansion(cloned, expansion, mapping, &unownedNodes);
@@ -145,12 +147,12 @@ bool MetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpansion* ex
 	// if the unowned nodes contain the node itself then the node should not even be added to the meta definition
 	if (unownedNodes.contains(cloned)) return true;
 
-	StaticStuff::removeNodes(StaticStuff::topLevelNodes(unownedNodes));
+	NodeHelpers::removeNodes(NodeHelpers::topLevelNodes(unownedNodes));
 
 	return false;
 }
 
-void MetaDefinitions::insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping,
+void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap* mapping, NodeToCloneMap* childMapping,
 																  QVector<MacroArgumentInfo>& arguments)
 {
 	for (auto argument : arguments)

@@ -28,44 +28,55 @@
 
 #include "cppimport_api.h"
 
+#include "ClangHelpers.h"
+#include "MacroExpansion.h"
+#include "MacroArgumentInfo.h"
+#include "StandardMetaDefinitions.h"
+#include "OOModel/src/allOOModelNodes.h"
+
 namespace CppImport {
 
-class CPPIMPORT_API ClangHelper
+class NodeToCloneMap;
+class MacroDefinitions;
+class MacroExpansions;
+class LexicalTransformations;
+class ClangHelpers;
+
+class CPPIMPORT_API AllMetaDefinitions
 {
 	public:
-		void setSourceManager(const clang::SourceManager* sourceManager);
-		void setPreprocessor(const clang::Preprocessor* preprocessor);
+		AllMetaDefinitions(OOModel::Project* root, const ClangHelpers& clangHelper, const MacroDefinitions& macroDefinitions,
+						  MacroExpansions& macroExpansions, const LexicalTransformations& lexicalHelper);
 
-		const clang::SourceManager* sourceManager() const;
+		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap* mapping,
+								 QVector<MacroArgumentInfo>& arguments);
 
-		QString spelling(clang::SourceRange range) const;
-		QString spelling(clang::SourceLocation location) const;
-		QString spelling(clang::SourceLocation start, clang::SourceLocation end) const;
-
-		clang::SourceLocation immediateMacroLocation(clang::SourceLocation location) const;
-		void immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>* result) const;
-
-		QVector<QString> argumentNames(const clang::MacroDirective* definition) const;
-
-		bool isMacroRange(clang::SourceRange range) const;
+		void handleXMacros();
 
 	private:
-		const clang::Preprocessor* preprocessor_{};
-		const clang::SourceManager* sourceManager_{};
+		OOModel::Project* root_{};
+		const MacroDefinitions& macroDefinitions_;
+		MacroExpansions& macroExpansions_;
+		StandardMetaDefinitions standardMetaDefinitions_;
+
+		QHash<QString, OOModel::MetaDefinition*> xMacrometaDefinitions_;
+		QHash<QString, Model::List*> specializations_;
+		QSet<OOModel::MetaCallExpression*> specialized_;
+
+		OOModel::MetaDefinition* createXMacroMetaDef(MacroExpansion* hExpansion, MacroExpansion* cppExpansion);
+		void mergeClasses(OOModel::Class* merged, OOModel::Class* mergee);
+		OOModel::MetaDefinition* xMacroMetaDefinition(const clang::MacroDirective* md);
+		MacroExpansion* matchingXMacroExpansion(Model::Node* node);
+
+		MacroExpansion* basePartialBegin(MacroExpansion* partialBeginExpansion);
+
+		void handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent, OOModel::MetaDefinition* metaDef,
+														  MacroExpansion* expansion, MacroExpansion* beginChild);
+
+		MacroExpansion* partialBeginChild(MacroExpansion* expansion);
+
+		void applyPartialBeginSpecializationTransformation(MacroExpansion* hExpansion, MacroExpansion* cppExpansion);
+		OOModel::Declaration* metaDefinitionParent(const clang::MacroDirective* md);
 };
-
-inline void ClangHelper::setSourceManager(const clang::SourceManager* sourceManager) { sourceManager_ = sourceManager; }
-
-inline void ClangHelper::setPreprocessor(const clang::Preprocessor* preprocessor) { preprocessor_ = preprocessor; }
-
-inline QString ClangHelper::spelling(clang::SourceLocation loc) const { return spelling(loc, loc); }
-
-inline bool ClangHelper::isMacroRange(clang::SourceRange range) const
-{ return range.getBegin().isMacroID() && range.getEnd().isMacroID(); }
-
-inline QString ClangHelper::spelling(clang::SourceRange range) const
-{ return spelling(range.getBegin(), range.getEnd()); }
-
-inline const clang::SourceManager* ClangHelper::sourceManager() const { return sourceManager_; }
 
 }

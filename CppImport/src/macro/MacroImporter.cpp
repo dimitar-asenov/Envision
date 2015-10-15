@@ -26,35 +26,35 @@
 
 #include "MacroImporter.h"
 
-#include "StaticStuff.h"
+#include "NodeHelpers.h"
 #include "PPCallback.h"
 
 namespace CppImport {
 
 void MacroImporter::clear()
 {
-	astMapping_.clear();
+	envisionToClangMap_.clear();
 	macroDefinitions_.clear();
 	macroExpansions_.clear();
 }
 
 MacroImporter::MacroImporter(OOModel::Project* root)
 	: root_(root), macroDefinitions_(clang_),
-	  macroExpansions_(clang_, astMapping_, macroDefinitions_),
-	  lexicalHelper_(clang_, macroExpansions_),
-	  xMacroManager_(root, clang_, macroDefinitions_, macroExpansions_, lexicalHelper_)
+	  macroExpansions_(clang_, envisionToClangMap_, macroDefinitions_),
+	  lexicalTransformations_(clang_, macroExpansions_),
+	  allMetaDefinitions_(root, clang_, macroDefinitions_, macroExpansions_, lexicalTransformations_)
 	  {}
 
 void MacroImporter::endTranslationUnit()
 {
 	for (auto expansion : macroExpansions_.topLevelExpansions())
 	{
-		NodeMapping mapping;
+		NodeToCloneMap mapping;
 		QVector<Model::Node*> generatedNodes;
 		QVector<MacroArgumentInfo> allArgs;
 		for (auto node : macroExpansions_.tLExpansionTLNodes(expansion))
 		{
-			auto generatedNode = StaticStuff::cloneWithMapping(node, &mapping);
+			auto generatedNode = NodeHelpers::cloneWithMapping(node, &mapping);
 
 			allArguments(generatedNode, &allArgs, &mapping);
 
@@ -68,7 +68,7 @@ void MacroImporter::endTranslationUnit()
 			OOModel::Declaration* context;
 
 			if (generatedNodes.size() > 0)
-				context = StaticStuff::actualContext(mapping.original(generatedNodes.first()));
+				context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
 			else
 				context = actualContext(expansion);
 
@@ -93,7 +93,7 @@ void MacroImporter::endTranslationUnit()
 	}
 
 	// after all other transformations are complete call xMacro transformations
-	xMacroManager_.handleXMacros();
+	allMetaDefinitions_.handleXMacros();
 
 	clear();
 }
@@ -136,17 +136,17 @@ void MacroImporter::insertArguments(QVector<MacroArgumentInfo>& allArguments)
 	}
 }
 
-void MacroImporter::calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeMapping& mapping)
+void MacroImporter::calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeToCloneMap& mapping)
 {
 	for (auto node : nodes)
 	{
 		Q_ASSERT(!node->parent());
 
-		if (astMapping_.contains(mapping.original(node)))
+		if (envisionToClangMap_.contains(mapping.original(node)))
 		{
 			// check whether this node only exists in generated code from macros
 			bool nonMacroInstanceFound = false;
-			for (auto range : astMapping_.get(mapping.original(node)))
+			for (auto range : envisionToClangMap_.get(mapping.original(node)))
 				if (!clang_.isMacroRange(range))
 				{
 					nonMacroInstanceFound = true;
@@ -173,7 +173,7 @@ void MacroImporter::endEntireImport()
 			qDebug() << "not inserted top level metacall" << it.key()->typeName();
 
 	// remove all top level meta call generated nodes
-	StaticStuff::removeNodes(finalizationNodes);
+	NodeHelpers::removeNodes(finalizationNodes);
 }
 
 void MacroImporter::startTranslationUnit(const clang::SourceManager* sourceManager,
@@ -187,7 +187,7 @@ void MacroImporter::startTranslationUnit(const clang::SourceManager* sourceManag
 
 void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes,
 															MacroExpansion* expansion,
-															NodeMapping* mapping, QVector<MacroArgumentInfo>& arguments)
+															NodeToCloneMap* mapping, QVector<MacroArgumentInfo>& arguments)
 {
 	// handle child macro expansions
 	for (auto childExpansion : expansion->children)
@@ -207,19 +207,19 @@ void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes,
 				break;
 			}
 
-	xMacroManager_.createMetaDef(nodes, expansion, mapping, arguments);
+	allMetaDefinitions_.createMetaDef(nodes, expansion, mapping, arguments);
 }
 
 void MacroImporter::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
-	lexicalHelper_.correctNode(clangAstNode, envisionAstNode);
-	astMapping_.mapAst(clangAstNode, envisionAstNode);
+	lexicalTransformations_.correctNode(clangAstNode, envisionAstNode);
+	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
 void MacroImporter::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 {
-	lexicalHelper_.correctNode(clangAstNode, envisionAstNode);
-	astMapping_.mapAst(clangAstNode, envisionAstNode);
+	lexicalTransformations_.correctNode(clangAstNode, envisionAstNode);
+	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
 bool MacroImporter::insertMetaCall(MacroExpansion* expansion)
@@ -248,10 +248,10 @@ OOModel::Declaration* MacroImporter::actualContext(MacroExpansion* expansion)
 
 	// try to find a valid context where the context range contains the expansion range
 	QVector<OOModel::Declaration*> candidates;
-	for (auto it = astMapping_.begin(); it != astMapping_.end(); it++)
+	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
 		for (auto range : it.value())
-			if (lexicalHelper_.contains(range, expansion->range))
-				if (StaticStuff::validContext(it.key()))
+			if (lexicalTransformations_.contains(range, expansion->range))
+				if (NodeHelpers::validContext(it.key()))
 				{
 					candidates.append(DCast<OOModel::Declaration>(it.key()));
 					break;
@@ -293,12 +293,12 @@ QVector<MacroArgumentLocation> MacroImporter::argumentHistory(clang::SourceRange
 QVector<MacroArgumentLocation> MacroImporter::argumentHistory(Model::Node* node)
 {
 	QVector<MacroArgumentLocation> result;
-	if (astMapping_.contains(node))
-			result = argumentHistory(astMapping_.get(node).first());
+	if (envisionToClangMap_.contains(node))
+			result = argumentHistory(envisionToClangMap_.get(node).first());
 	return result;
 }
 
-void MacroImporter::allArguments(Model::Node* node, QVector<MacroArgumentInfo>* result, NodeMapping* mapping)
+void MacroImporter::allArguments(Model::Node* node, QVector<MacroArgumentInfo>* result, NodeToCloneMap* mapping)
 {
 	auto argLoc = argumentHistory(mapping->original(node));
 

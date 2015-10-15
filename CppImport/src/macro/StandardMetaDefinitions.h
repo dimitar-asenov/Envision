@@ -28,44 +28,64 @@
 
 #include "cppimport_api.h"
 
-#include "NodeMapping.h"
+#include "ClangHelpers.h"
+#include "NodeToCloneMap.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-class CPPIMPORT_API StaticStuff
+class MacroExpansion;
+class MacroArgumentInfo;
+class MacroArgumentLocation;
+class MacroDefinitions;
+class MacroExpansions;
+class LexicalTransformations;
+class AllMetaDefinitions;
+
+class CPPIMPORT_API StandardMetaDefinitions
 {
 	public:
-		static void orderNodes(QVector<Model::Node*>& input);
+		StandardMetaDefinitions(const ClangHelpers& clang, const MacroDefinitions& definitionManager,
+									 MacroExpansions& MacroExpansions, const LexicalTransformations& lexicalHelper);
 
-		static bool validContext(Model::Node* node);
-		static OOModel::Declaration* actualContext(Model::Node* node);
-		static OOModel::Declaration* createContext(OOModel::Declaration* actualContext);
+		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
-		static QVector<Model::Node*> topLevelNodes(QVector<Model::Node*> input);
+		void createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+												MacroExpansion* expansion, NodeToCloneMap* mapping,
+												QVector<MacroArgumentInfo>& arguments);
 
-		static Model::Node* cloneWithMapping(Model::Node* node, NodeMapping* mapping);
-
-		static void removeNode(Model::Node* node, bool removeMetaCalls = false);
-		static void removeNodes(QVector<Model::Node*> nodes);
-
-		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
-
-		static OOModel::Expression* createNameExpressionFromString(const QString& input);
-		static bool stringMatches(const QString& regex, const QString& value);
-
-		/**
-		 * returns the first Declaration* decl in list with decl->name() == name
-		 */
-		static OOModel::Declaration* findDeclaration(Model::List* list, const QString& name);
+		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
 	private:
-		static void buildMappingInfo(Model::Node* node, QList<Model::Node*>* info);
-		static void useMappingInfo(Model::Node* node, QList<Model::Node*>* info, NodeMapping* mapping);
+		const ClangHelpers& clang_;
+		const MacroDefinitions& definitionManager_;
+		MacroExpansions& macroExpansions_;
+		const LexicalTransformations& lexicalTransformations_;
 
-		static OOModel::MetaCallExpression* containsMetaCall(Model::Node* node);
+		QHash<QString, OOModel::MetaDefinition*> standardMetaDefinitions_;
+
+		/**
+		 * insert all non-xMacro child meta calls into metaDef.
+		 */
+		void insertChildMetaCalls(MacroExpansion* expansion, NodeToCloneMap* childMapping);
+
+		/**
+		 * return all children of node that do not belong to expansion.
+		 */
+		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
+																NodeToCloneMap* mapping, QVector<Model::Node*>* result);
+
+		/**
+		 * remove all children of node that do not belong to expansion.
+		 * return true if node itself does not belong to expansion.
+		 */
+		bool removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,	NodeToCloneMap* mapping);
+
+		/**
+		 * insert splices for all nodes in childMapping that are a macro argument.
+		 */
+		void insertArgumentSplices(NodeToCloneMap* mapping, NodeToCloneMap* childMapping,
+											QVector<MacroArgumentInfo>& arguments);
 };
-
-inline void StaticStuff::removeNodes(QVector<Model::Node*> nodes) { for (auto n : nodes) removeNode(n); }
 
 }

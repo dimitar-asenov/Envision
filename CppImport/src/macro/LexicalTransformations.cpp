@@ -24,17 +24,17 @@
  **
  **********************************************************************************************************************/
 
-#include "LexicalHelper.h"
+#include "LexicalTransformations.h"
 
 #include "MacroExpansions.h"
-#include "StaticStuff.h"
+#include "NodeHelpers.h"
 
 namespace CppImport {
 
-LexicalHelper::LexicalHelper(const ClangHelper& clang, const MacroExpansions& macroExpansions)
+LexicalTransformations::LexicalTransformations(const ClangHelpers& clang, const MacroExpansions& macroExpansions)
 	: clang_(clang), macroExpansions_(macroExpansions) {}
 
-bool LexicalHelper::isConcatenationOrStringification(clang::SourceLocation loc) const
+bool LexicalTransformations::isConcatenationOrStringification(clang::SourceLocation loc) const
 {
 	if (loc.isMacroID())
 		if (auto immediateExpansion = macroExpansions_.immediateExpansion(loc))
@@ -44,7 +44,7 @@ bool LexicalHelper::isConcatenationOrStringification(clang::SourceLocation loc) 
 	return false;
 }
 
-clang::SourceRange LexicalHelper::unexpandedSourceRange(clang::SourceRange range) const
+clang::SourceRange LexicalTransformations::unexpandedSourceRange(clang::SourceRange range) const
 {
 	clang::SourceLocation start, end;
 
@@ -61,7 +61,7 @@ clang::SourceRange LexicalHelper::unexpandedSourceRange(clang::SourceRange range
 	return clang::SourceRange(start, end);
 }
 
-QString LexicalHelper::unexpandedSpelling(clang::SourceRange range) const
+QString LexicalTransformations::unexpandedSpelling(clang::SourceRange range) const
 {
 	auto result = clang_.spelling(unexpandedSourceRange(range));
 	while (result.startsWith("\\")) result = result.right(result.length() - 1);
@@ -69,7 +69,7 @@ QString LexicalHelper::unexpandedSpelling(clang::SourceRange range) const
 	return result.trimmed();
 }
 
-void LexicalHelper::correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
+void LexicalTransformations::correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 {
 	clang::SourceRange spellingRange = clangAstNode->getSourceRange();
 
@@ -122,7 +122,7 @@ void LexicalHelper::correctNode(clang::Decl* clangAstNode, Model::Node* envision
 	correctNode(spellingRange, envisionAstNode);
 }
 
-void LexicalHelper::correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
+void LexicalTransformations::correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
 	if (auto callExpr = clang::dyn_cast<clang::CallExpr>(clangAstNode))
 		correctNode(callExpr->getCallee()->getSourceRange(),
@@ -138,7 +138,7 @@ void LexicalHelper::correctNode(clang::Stmt* clangAstNode, Model::Node* envision
 		correctNode(clangAstNode->getSourceRange(), envisionAstNode);
 }
 
-void LexicalHelper::correctNode(clang::SourceRange range, Model::Node* original)
+void LexicalTransformations::correctNode(clang::SourceRange range, Model::Node* original)
 {
 	if (DCast<OOModel::ReturnStatement>(original)) return;
 	if (DCast<OOModel::NewExpression>(original)) return;
@@ -196,7 +196,7 @@ void LexicalHelper::correctNode(clang::SourceRange range, Model::Node* original)
 	transformations_.insert(original, transformed);
 }
 
-bool LexicalHelper::contains(clang::SourceRange r, clang::SourceRange o) const
+bool LexicalTransformations::contains(clang::SourceRange r, clang::SourceRange o) const
 {
 	auto range = unexpandedSourceRange(r);
 	auto other = unexpandedSourceRange(o);
@@ -208,8 +208,8 @@ bool LexicalHelper::contains(clang::SourceRange r, clang::SourceRange o) const
 	return s <= os && os <= e;
 }
 
-void LexicalHelper::applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs)
-const
+void LexicalTransformations::applyLexicalTransformations(Model::Node* node, NodeToCloneMap* mapping,
+																			QVector<QString> formalArgs) const
 {
 	auto it = transformations_.find(mapping->original(node));
 
@@ -238,7 +238,7 @@ const
 			else if (auto strLit = DCast<OOModel::StringLiteral>(node))
 				strLit->setValue(transformed);
 			else if (auto formalResult = DCast<OOModel::FormalResult>(node))
-				formalResult->setTypeExpression(StaticStuff::createNameExpressionFromString(transformed));
+				formalResult->setTypeExpression(NodeHelpers::createNameExpressionFromString(transformed));
 			else if (auto boolLit = DCast<OOModel::BooleanLiteral>(node))
 				replaceWithReference(boolLit, transformed, mapping);
 			else if (auto castExpr = DCast<OOModel::CastExpression>(node))
@@ -276,9 +276,10 @@ const
 		applyLexicalTransformations(child, mapping, formalArgs);
 }
 
-void LexicalHelper::replaceWithReference(Model::Node* current, const QString& replacement, NodeMapping* mapping) const
+void LexicalTransformations::replaceWithReference(Model::Node* current, const QString& replacement,
+																  NodeToCloneMap* mapping) const
 {
-	auto newValue = StaticStuff::createNameExpressionFromString(replacement);
+	auto newValue = NodeHelpers::createNameExpressionFromString(replacement);
 	current->parent()->replaceChild(current, newValue);
 	mapping->replaceClone(current, newValue);
 }

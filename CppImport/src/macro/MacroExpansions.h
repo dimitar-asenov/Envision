@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "AstMapping.h"
-#include "ClangHelper.h"
+#include "EnvisionToClangMap.h"
+#include "ClangHelpers.h"
 #include "cppimport_api.h"
 
 #include "MacroExpansion.h"
@@ -39,7 +39,7 @@ class MacroDefinitions;
 class CPPIMPORT_API MacroExpansions
 {
 	public:
-		MacroExpansions(const ClangHelper& clang, const AstMapping& astMapping,
+		MacroExpansions(const ClangHelpers& clang, const EnvisionToClangMap& astMapping,
 							  const MacroDefinitions& macroDefinitions);
 
 		void addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
@@ -72,8 +72,8 @@ class CPPIMPORT_API MacroExpansions
 		void clear();
 
 	private:
-		const ClangHelper& clang_;
-		const AstMapping& astMapping_;
+		const ClangHelpers& clang_;
+		const EnvisionToClangMap& envisionToClangMap_;
 		const MacroDefinitions& macroDefinitions_;
 		MacroExpansion* currentXMacroParent {};
 		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;

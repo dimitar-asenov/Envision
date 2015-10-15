@@ -24,46 +24,48 @@
  **
  **********************************************************************************************************************/
 
-#include "AstMapping.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "ClangHelpers.h"
+#include "NodeToCloneMap.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-Model::Node* AstMapping::closestParentWithAstMapping(Model::Node* node) const
+class MacroExpansions;
+
+class CPPIMPORT_API LexicalTransformations
 {
-	if (!node) return nullptr;
-	if (astMapping_.contains(node)) return node;
-	if (node->parent()) return closestParentWithAstMapping(node->parent());
+	public:
+		LexicalTransformations(const ClangHelpers& clang, const MacroExpansions& macroExpansions);
 
-	return nullptr;
-}
+		void applyLexicalTransformations(Model::Node* node, NodeToCloneMap* mapping, QVector<QString> formalArgs) const;
 
-void AstMapping::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
-{
-	Q_ASSERT(envisionAstNode);
+		// TODO: rename method
+		void correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
-	if (auto bop = clang::dyn_cast<clang::BinaryOperator>(clangAstNode))
-		astMapping_[envisionAstNode]
-				.append(clang::SourceRange(bop->getOperatorLoc(), bop->getOperatorLoc()));
-	else if (auto op = clang::dyn_cast<clang::CXXOperatorCallExpr>(clangAstNode))
-		astMapping_[envisionAstNode]
-				.append(clang::SourceRange(op->getOperatorLoc(), op->getOperatorLoc()));
-	else
-		astMapping_[envisionAstNode].append(clangAstNode->getSourceRange());
-}
+		// TODO: rename method
+		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 
-void AstMapping::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
-{
-	Q_ASSERT(envisionAstNode);
+		bool contains(clang::SourceRange r, clang::SourceRange o) const;
 
-	if (!astMapping_[envisionAstNode].contains(clangAstNode->getSourceRange()))
-		astMapping_[envisionAstNode].append(clangAstNode->getSourceRange());
-}
+	private:
+		const ClangHelpers& clang_;
+		const MacroExpansions& macroExpansions_;
+		QHash<Model::Node*, QString> transformations_;
 
-QVector<clang::SourceRange> AstMapping::get(Model::Node* node) const
-{
-	auto it = astMapping_.find(node);
+		QString unexpandedSpelling(clang::SourceRange range) const;
 
-	return it != astMapping_.end() ? *it : QVector<clang::SourceRange>();
-}
+		bool isConcatenationOrStringification(clang::SourceLocation loc) const;
+
+		// TODO: rename method
+		void correctNode(clang::SourceRange range, Model::Node* original);
+
+		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap* mapping) const;
+
+		clang::SourceRange unexpandedSourceRange(clang::SourceRange range) const;
+};
 
 }

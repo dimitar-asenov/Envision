@@ -24,71 +24,55 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "cppimport_api.h"
-
-#include "ClangHelpers.h"
-#include "OOModel/src/expressions/ReferenceExpression.h"
+#include "NodeToCloneMap.h"
 
 namespace CppImport {
 
-class CPPIMPORT_API MacroDefinitions
+void NodeToCloneMap::add(Model::Node* original, Model::Node* clone)
 {
-	public:
-		MacroDefinitions(const ClangHelpers& clang);
-
-		void addMacroDefinition(const QString& name, const clang::MacroDirective* md);
-
-		QString definitionName(const clang::MacroDirective* md) const;
-
-		/**
-		 * return whether md defines a begin incomplete macro.
-		 */
-		bool isPartialBegin(const clang::MacroDirective* md) const;
-
-		/**
-		 * return whether md defines an end incomplete macro.
-		 */
-		bool isPartialEnd(const clang::MacroDirective* md) const;
-
-		/**
-		 * if the location of md is part of Envision's project structure then
-		 *  return true and set namespaceName/fileName
-		 * otherwise
-		 *  return false
-		 */
-		bool macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName, QString& fileName) const;
-
-		QString hash(const clang::MacroDirective* md) const;
-
-		/**
-		 * return a qualifier expression based on the macroDefinitionLocation of md.
-		 */
-		OOModel::ReferenceExpression* expansionQualifier(const clang::MacroDirective* md) const;
-
-		void clear();
-
-	private:
-		const ClangHelpers& clang_;
-		QHash<const clang::MacroDirective*, QString> definitions_;
-};
-
-inline void MacroDefinitions::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
-{
-	definitions_[md] = name;
+	Q_ASSERT(original);
+	Q_ASSERT(clone);
+	clones_[clone] = original;
+	originals_[original] = clone;
 }
 
-inline bool MacroDefinitions::isPartialBegin(const clang::MacroDirective* md) const
+Model::Node*NodeToCloneMap::original(Model::Node* clone)
 {
-	return definitionName(md).startsWith("BEGIN_");
+	auto it = clones_.find(clone);
+
+	return it != clones_.end() ? *it : nullptr;
 }
 
-inline bool MacroDefinitions::isPartialEnd(const clang::MacroDirective* md) const
+QVector<Model::Node*> NodeToCloneMap::original(QVector<Model::Node*> clones)
 {
-	return definitionName(md).startsWith("END_");
+	QVector<Model::Node*> result;
+	for (auto clone : clones)
+		result.append(original(clone));
+	return result;
 }
 
-inline void MacroDefinitions::clear() { definitions_.clear(); }
+Model::Node*NodeToCloneMap::clone(Model::Node* original)
+{
+	auto it = originals_.find(original);
+
+	return it != originals_.end() ? *it : nullptr;
+}
+
+QVector<Model::Node*> NodeToCloneMap::clone(QVector<Model::Node*> originals)
+{
+	QVector<Model::Node*> result;
+	for (auto original : originals)
+		result.append(clone(original));
+	return result;
+}
+
+void NodeToCloneMap::replaceClone(Model::Node* old, Model::Node* replacement)
+{
+	if (auto original = clone(old))
+	{
+		clones_.remove(old);
+		add(original, replacement);
+	}
+}
 
 }

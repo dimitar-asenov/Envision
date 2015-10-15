@@ -26,16 +26,16 @@
 
 #include "MacroExpansions.h"
 
-#include "ClangHelper.h"
-#include "AstMapping.h"
+#include "ClangHelpers.h"
+#include "EnvisionToClangMap.h"
 #include "MacroDefinitions.h"
-#include "StaticStuff.h"
+#include "NodeHelpers.h"
 
 namespace CppImport {
 
-MacroExpansions::MacroExpansions(const ClangHelper& clang, const AstMapping& astMapping,
+MacroExpansions::MacroExpansions(const ClangHelpers& clang, const EnvisionToClangMap& astMapping,
 											  const MacroDefinitions& macroDefinitions)
-	: clang_(clang), astMapping_(astMapping), macroDefinitions_(macroDefinitions) {}
+	: clang_(clang), envisionToClangMap_(astMapping), macroDefinitions_(macroDefinitions) {}
 
 void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 													  const clang::MacroArgs* macroArguments)
@@ -161,9 +161,9 @@ QSet<MacroExpansion*> MacroExpansions::expansion(Model::Node* node)
 	{
 		expansionCache_[node] = {};
 
-		if (auto n = astMapping_.closestParentWithAstMapping(node))
-			if (astMapping_.contains(n))
-				for (auto range : astMapping_.get(n))
+		if (auto n = envisionToClangMap_.closestParentWithAstMapping(node))
+			if (envisionToClangMap_.contains(n))
+				for (auto range : envisionToClangMap_.get(n))
 				{
 					auto exp = expansion(range.getBegin());
 					if (exp)	expansionCache_[node].insert(exp);
@@ -180,8 +180,8 @@ QVector<Model::Node*> MacroExpansions::tLExpansionTLNodes(MacroExpansion* expans
 	Q_ASSERT(!expansion->parent); // ensure expansion is a top level expansion
 
 	QVector<Model::Node*> allTLExpansionNodes;
-	for (auto node : astMapping_.nodes())
-		for (auto range : astMapping_.get(node))
+	for (auto node : envisionToClangMap_.nodes())
+		for (auto range : envisionToClangMap_.get(node))
 			// for all mapped nodes check whether any of their ranges expand to the top level macro range
 			if (clang_.sourceManager()->getExpansionLoc(range.getBegin()) == expansion->range.getBegin())
 			{
@@ -189,8 +189,8 @@ QVector<Model::Node*> MacroExpansions::tLExpansionTLNodes(MacroExpansion* expans
 				break;
 			}
 
-	QVector<Model::Node*> result = StaticStuff::topLevelNodes(allTLExpansionNodes);
-	StaticStuff::orderNodes(result);
+	QVector<Model::Node*> result = NodeHelpers::topLevelNodes(allTLExpansionNodes);
+	NodeHelpers::orderNodes(result);
 	return result;
 }
 
@@ -200,12 +200,12 @@ QVector<Model::Node*> MacroExpansions::nTLExpansionTLNodes(MacroExpansion* exp)
 	Q_ASSERT(exp);
 
 	QVector<Model::Node*> allNTLExpansionNodes;
-	for (auto node : astMapping_.nodes())
+	for (auto node : envisionToClangMap_.nodes())
 		if (expansion(node).contains(exp))
 			allNTLExpansionNodes.append(node);
 
-	QVector<Model::Node*> result = StaticStuff::topLevelNodes(allNTLExpansionNodes);
-	StaticStuff::orderNodes(result);
+	QVector<Model::Node*> result = NodeHelpers::topLevelNodes(allNTLExpansionNodes);
+	NodeHelpers::orderNodes(result);
 	return result;
 }
 

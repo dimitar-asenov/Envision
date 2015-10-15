@@ -28,7 +28,7 @@
 
 namespace CppImport {
 
-MacroDefinitions::MacroDefinitions(const ClangHelper& clang) : clang_(clang) {}
+MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_(clang) {}
 
 QString MacroDefinitions::definitionName(const clang::MacroDirective* md) const
 {

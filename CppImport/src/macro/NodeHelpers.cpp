@@ -24,11 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#include "StaticStuff.h"
+#include "NodeHelpers.h"
 
 namespace CppImport {
 
-void StaticStuff::orderNodes(QVector<Model::Node*>& input)
+void NodeHelpers::orderNodes(QVector<Model::Node*>& input)
 {
 	qSort(input.begin(), input.end(),
 			[](Model::Node* e1, Model::Node* e2)
@@ -59,7 +59,7 @@ void StaticStuff::orderNodes(QVector<Model::Node*>& input)
 	});
 }
 
-bool StaticStuff::validContext(Model::Node* node)
+bool NodeHelpers::validContext(Model::Node* node)
 {
 	if (DCast<OOModel::Project>(node))
 		return true;
@@ -73,7 +73,7 @@ bool StaticStuff::validContext(Model::Node* node)
 		return false;
 }
 
-OOModel::Declaration* StaticStuff::actualContext(Model::Node* node)
+OOModel::Declaration* NodeHelpers::actualContext(Model::Node* node)
 {
 	auto current = node->parent();
 
@@ -94,7 +94,7 @@ OOModel::Declaration* StaticStuff::actualContext(Model::Node* node)
 	Q_ASSERT(false);
 }
 
-OOModel::Declaration* StaticStuff::createContext(OOModel::Declaration* actualContext)
+OOModel::Declaration* NodeHelpers::createContext(OOModel::Declaration* actualContext)
 {
 	if (DCast<OOModel::Project>(actualContext))
 		return new OOModel::Project("Context");
@@ -108,7 +108,7 @@ OOModel::Declaration* StaticStuff::createContext(OOModel::Declaration* actualCon
 	Q_ASSERT(false);
 }
 
-Model::Node* StaticStuff::cloneWithMapping(Model::Node* node, NodeMapping* mapping)
+Model::Node* NodeHelpers::cloneWithMapping(Model::Node* node, NodeToCloneMap* mapping)
 {
 	auto clone = node->clone();
 
@@ -119,7 +119,7 @@ Model::Node* StaticStuff::cloneWithMapping(Model::Node* node, NodeMapping* mappi
 	return clone;
 }
 
-void StaticStuff::removeNode(Model::Node* node, bool removeMetaCalls)
+void NodeHelpers::removeNode(Model::Node* node, bool removeMetaCalls)
 {
 	if (!node || !node->parent()) return;
 
@@ -152,7 +152,7 @@ void StaticStuff::removeNode(Model::Node* node, bool removeMetaCalls)
 		qDebug() << "not removed" << node->typeName() << "in" << node->parent()->typeName();
 }
 
-void StaticStuff::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration)
+void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration)
 {
 	if (auto ooExpression = DCast<OOModel::Expression>(node))
 	{
@@ -229,7 +229,7 @@ void StaticStuff::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 		Q_ASSERT(false && "not implemented");
 }
 
-QVector<Model::Node*> StaticStuff::topLevelNodes(QVector<Model::Node*> input)
+QVector<Model::Node*> NodeHelpers::topLevelNodes(QVector<Model::Node*> input)
 {
 	QSet<Model::Node*> topLevel;
 	for (auto node : input) topLevel.insert(node);
@@ -245,7 +245,7 @@ QVector<Model::Node*> StaticStuff::topLevelNodes(QVector<Model::Node*> input)
 	return result;
 }
 
-void StaticStuff::buildMappingInfo(Model::Node* node, QList<Model::Node*>* info)
+void NodeHelpers::buildMappingInfo(Model::Node* node, QList<Model::Node*>* info)
 {
 	info->push_back(node);
 
@@ -253,7 +253,7 @@ void StaticStuff::buildMappingInfo(Model::Node* node, QList<Model::Node*>* info)
 		buildMappingInfo(child, info);
 }
 
-void StaticStuff::useMappingInfo(Model::Node* node, QList<Model::Node*>* info, NodeMapping* mapping)
+void NodeHelpers::useMappingInfo(Model::Node* node, QList<Model::Node*>* info, NodeToCloneMap* mapping)
 {
 	mapping->add(info->front(), node);
 	info->pop_front();
@@ -262,7 +262,7 @@ void StaticStuff::useMappingInfo(Model::Node* node, QList<Model::Node*>* info, N
 		useMappingInfo(child, info, mapping);
 }
 
-OOModel::MetaCallExpression* StaticStuff::containsMetaCall(Model::Node* node)
+OOModel::MetaCallExpression* NodeHelpers::containsMetaCall(Model::Node* node)
 {
 	if (auto metaCall = DCast<OOModel::MetaCallExpression>(node))
 		return metaCall;
@@ -274,13 +274,13 @@ OOModel::MetaCallExpression* StaticStuff::containsMetaCall(Model::Node* node)
 	return nullptr;
 }
 
-bool StaticStuff::stringMatches(const QString& regex, const QString& value)
+bool NodeHelpers::stringMatches(const QString& regex, const QString& value)
 {
 	QRegularExpression regEx(regex);
 	return regEx.match(value).hasMatch();
 }
 
-OOModel::Declaration* StaticStuff::findDeclaration(Model::List* list, const QString& name)
+OOModel::Declaration* NodeHelpers::findDeclaration(Model::List* list, const QString& name)
 {
 	for (auto i = 0; i < list->size(); i++)
 		if (auto decl = DCast<OOModel::Declaration>(list->at(i)))
@@ -290,7 +290,7 @@ OOModel::Declaration* StaticStuff::findDeclaration(Model::List* list, const QStr
 	return nullptr;
 }
 
-OOModel::Expression* StaticStuff::createNameExpressionFromString(const QString& input)
+OOModel::Expression* NodeHelpers::createNameExpressionFromString(const QString& input)
 {
 	QString baseCase = "((::)?(\\w+(::|\\.|->))*\\w+(\\*|&)?)";
 

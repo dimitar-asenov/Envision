@@ -28,17 +28,17 @@
 
 #include "cppimport_api.h"
 
-#include "ClangHelper.h"
-#include "AstMapping.h"
+#include "ClangHelpers.h"
+#include "EnvisionToClangMap.h"
 #include "MacroExpansion.h"
-#include "NodeMapping.h"
+#include "NodeToCloneMap.h"
 #include "MacroArgumentLocation.h"
 #include "MacroArgumentInfo.h"
 #include "MacroExpansions.h"
 #include "MacroDefinitions.h"
-#include "LexicalHelper.h"
-#include "XMacroManager.h"
-#include "MetaDefinitions.h"
+#include "LexicalTransformations.h"
+#include "AllMetaDefinitions.h"
+#include "StandardMetaDefinitions.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
@@ -68,17 +68,17 @@ class CPPIMPORT_API MacroImporter
 	private:
 		OOModel::Project* root_{};
 
-		ClangHelper clang_;
-		AstMapping astMapping_;
+		ClangHelpers clang_;
+		EnvisionToClangMap envisionToClangMap_;
 		MacroDefinitions macroDefinitions_;
 		MacroExpansions macroExpansions_;
-		LexicalHelper lexicalHelper_;
-		XMacroManager xMacroManager_;
+		LexicalTransformations lexicalTransformations_;
+		AllMetaDefinitions allMetaDefinitions_;
 		QHash<QString, OOModel::MetaCallExpression*> metaCalls_;
 		QVector<Model::Node*> finalizationNodes;
 		QHash<Model::Node*, MacroExpansion*> finalizationMetaCalls;
 
-		void handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeMapping* mapping,
+		void handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap* mapping,
 										  QVector<MacroArgumentInfo>& arguments);
 
 		bool insertMetaCall(MacroExpansion* expansion);
@@ -94,7 +94,7 @@ class CPPIMPORT_API MacroImporter
 		/**
 		 * return all arguments which are associated to children of node.
 		 */
-		void allArguments(Model::Node* node, QVector<MacroArgumentInfo>* result, NodeMapping* mapping);
+		void allArguments(Model::Node* node, QVector<MacroArgumentInfo>* result, NodeToCloneMap* mapping);
 
 		/**
 		 * insert gathered argument nodes at their original (logical) location.
@@ -109,7 +109,7 @@ class CPPIMPORT_API MacroImporter
 		/**
 		 * calculate nodes to be removed from the tree after importing.
 		 */
-		void calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeMapping& mapping);
+		void calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeToCloneMap& mapping);
 };
 
 }

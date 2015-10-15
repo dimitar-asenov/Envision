@@ -28,44 +28,40 @@
 
 #include "cppimport_api.h"
 
-#include "ClangHelper.h"
-#include "NodeMapping.h"
-#include "OOModel/src/allOOModelNodes.h"
+#include "ModelBase/src/nodes/Node.h"
 
 namespace CppImport {
 
-class MacroExpansions;
-
-class CPPIMPORT_API LexicalHelper
+class CPPIMPORT_API EnvisionToClangMap
 {
 	public:
-		LexicalHelper(const ClangHelper& clang, const MacroExpansions& macroExpansions);
+		QHash<Model::Node*, QVector<clang::SourceRange>>::iterator begin();
+		QHash<Model::Node*, QVector<clang::SourceRange>>::iterator end();
 
-		void applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs) const;
+		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
+		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
-		// TODO: rename method
-		void correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+		const QList<Model::Node*> nodes() const;
+		QVector<clang::SourceRange> get(Model::Node* node) const;
+		bool contains(Model::Node* node) const;
+		void clear();
 
-		// TODO: rename method
-		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
-
-		bool contains(clang::SourceRange r, clang::SourceRange o) const;
+		Model::Node* closestParentWithAstMapping(Model::Node* node) const;
 
 	private:
-		const ClangHelper& clang_;
-		const MacroExpansions& macroExpansions_;
-		QHash<Model::Node*, QString> transformations_;
-
-		QString unexpandedSpelling(clang::SourceRange range) const;
-
-		bool isConcatenationOrStringification(clang::SourceLocation loc) const;
-
-		// TODO: rename method
-		void correctNode(clang::SourceRange range, Model::Node* original);
-
-		void replaceWithReference(Model::Node* current, const QString& replacement, NodeMapping* mapping) const;
-
-		clang::SourceRange unexpandedSourceRange(clang::SourceRange range) const;
+		QHash<Model::Node*, QVector<clang::SourceRange>> envisionToClangMap_;
 };
+
+inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator EnvisionToClangMap::begin()
+{ return envisionToClangMap_.begin(); }
+
+inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator EnvisionToClangMap::end()
+{ return envisionToClangMap_.end(); }
+
+inline const QList<Model::Node*> EnvisionToClangMap::nodes() const { return envisionToClangMap_.keys(); }
+
+inline void EnvisionToClangMap::clear() { envisionToClangMap_.clear(); }
+
+inline bool EnvisionToClangMap::contains(Model::Node* node) const { return envisionToClangMap_.contains(node); }
 
 }

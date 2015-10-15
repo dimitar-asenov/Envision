@@ -32,7 +32,7 @@
 
 namespace CppImport {
 
-class CPPIMPORT_API NodeMapping
+class CPPIMPORT_API NodeToCloneMap
 {
 	public:
 		void add(Model::Node* original, Model::Node* clone);
