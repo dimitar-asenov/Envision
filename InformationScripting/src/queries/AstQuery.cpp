@@ -147,30 +147,52 @@ TupleSet AstQuery::toParentType(TupleSet input)
 	return ts;
 }
 
-TupleSet AstQuery::callGraph(TupleSet)
+TupleSet AstQuery::callGraph(TupleSet input)
 {
-	TupleSet ts;
+	TupleSet result;
+
+	auto addCallgraphFor = [&result](std::vector<OOModel::Method*> methods)
+	{
+		for (auto method : methods)
+		{
+			Q_ASSERT(method); // TODO user error
+			QSet<OOModel::Method*> seenMethods{method};
+			auto callees = method->callees().toList();
+			addCallInformation(result, method, callees);
+			while (!callees.empty())
+			{
+				auto currentMethod = callees.takeLast();
+				if (seenMethods.contains(currentMethod)) continue;
+				seenMethods.insert(currentMethod);
+				auto newCallees = currentMethod->callees().toList();
+				addCallInformation(result, currentMethod, newCallees);
+				callees << newCallees;
+			}
+		}
+	};
+
 	if (scope() == Scope::Local)
 	{
-		auto methodTarget = target()->firstAncestorOfType<OOModel::Method>();
-		Q_ASSERT(methodTarget);
-		QSet<OOModel::Method*> seenMethods{methodTarget};
-		auto methods = methodTarget->callees().toList();
-		addCallInformation(ts, methodTarget, methods);
-		while (!methods.empty())
-		{
-			auto currentMethod = methods.takeLast();
-			if (seenMethods.contains(currentMethod)) continue;
-			seenMethods.insert(currentMethod);
-			auto newCallees = currentMethod->callees().toList();
-			addCallInformation(ts, currentMethod, newCallees);
-			methods << newCallees;
-		}
-
-		adaptOutputForRelation(ts, "calls", {"caller", "callee"});
+		if (auto method = DCast<OOModel::Method>(target())) addCallgraphFor({method});
+		else return TupleSet::makeError("Callgraph does only work on method nodes");
 	}
-	// TODO handle other cases, global propably doesn't make sense.
-	return ts;
+	else if (scope() == Scope::Global)
+		return TupleSet::makeError("Callgraph does not work globally");
+	else if (scope() == Scope::Input)
+	{
+		// Keep input nodes
+		result = input;
+		std::vector<OOModel::Method*> methodsInInput;
+		for (const auto& astTuple : input.tuples("ast"))
+		{
+			Model::Node* astNode = astTuple["ast"];
+			if (auto method = DCast<OOModel::Method>(astNode)) methodsInInput.push_back(method);
+		}
+		if (methodsInInput.size() == 0) return TupleSet::makeWarning("Called callgraph without methods in input");
+		else addCallgraphFor(std::move(methodsInInput));
+	}
+	adaptOutputForRelation(result, "calls", {"caller", "callee"});
+	return result;
 }
 
 TupleSet AstQuery::genericQuery(TupleSet input)
