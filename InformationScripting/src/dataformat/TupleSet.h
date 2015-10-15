@@ -35,6 +35,12 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API TupleSet
 {
 	public:
+		TupleSet() = default;
+		TupleSet(const Tuple& t);
+
+		static TupleSet makeError(const QString& errorMessage);
+		static TupleSet makeWarning(const QString& warningMessage);
+
 		template<class Condition>
 		QSet<Tuple> tuples(Condition condition) const;
 		/**
@@ -64,6 +70,9 @@ class INFORMATIONSCRIPTING_API TupleSet
 	private:
 		QHash<QString, QSet<Tuple>> tuples_;
 };
+
+inline TupleSet TupleSet::makeError(const QString& errorMessage) { return {{{"error", errorMessage}}}; }
+inline TupleSet TupleSet::makeWarning(const QString& warningMessage) { return {{{"warning", warningMessage}}}; }
 
 template <class Condition>
 inline QSet<Tuple> TupleSet::tuples(Condition condition) const
