@@ -32,7 +32,17 @@
 
 namespace CppImport {
 
-MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_(clang) {}
+MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_(clang)
+{
+	if (directoryToNamespaceMap_.isEmpty())
+	{
+		directoryToNamespaceMap_.insert("ModelBase", "Model");
+		directoryToNamespaceMap_.insert("VisualizationBase", "InteractionBase");
+		directoryToNamespaceMap_.insert("InteractionBase", "Interaction");
+		directoryToNamespaceMap_.insert("AlloyIntegration", "Alloy");
+		directoryToNamespaceMap_.insert("HelloWorld", "Hello");
+	}
+}
 
 QString MacroDefinitions::definitionName(const clang::MacroDirective* md) const
 {
@@ -59,16 +69,8 @@ bool MacroDefinitions::macroDefinitionLocation(const clang::MacroDirective* md, 
 	namespaceName = match.captured(1);
 
 	// some Envision namespaces don't have the same name as the corresponding directory
-	if (namespaceName == "ModelBase")
-		namespaceName = "Model";
-	else if (namespaceName == "VisualizationBase")
-		namespaceName = "Visualization";
-	else if (namespaceName == "InteractionBase")
-		namespaceName = "Interaction";
-	else if (namespaceName == "AlloyIntegration")
-		namespaceName = "Alloy";
-	else if (namespaceName == "HelloWorld")
-		namespaceName = "Hello";
+	auto it = directoryToNamespaceMap_.find(namespaceName);
+	if (it != directoryToNamespaceMap_.end()) namespaceName = *it;
 
 	/*
 	 * the container name should be equal to B therefore we remove .h

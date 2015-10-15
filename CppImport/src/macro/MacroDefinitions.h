@@ -78,6 +78,9 @@ class CPPIMPORT_API MacroDefinitions
 	private:
 		const ClangHelpers& clang_;
 		QHash<const clang::MacroDirective*, QString> definitions_;
+
+		QHash<QString, QString> directoryToNamespaceMap_;
+
 };
 
 inline void MacroDefinitions::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
