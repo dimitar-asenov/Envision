@@ -46,8 +46,16 @@ class CPPIMPORT_API LexicalTransformations
 	public:
 		LexicalTransformations(const ClangHelpers& clang, const MacroExpansions& macroExpansions);
 
+		/**
+		 * extracts the relevant source ranges for lexical transformation from a Clang declaration and delegates
+		 * them to processSourceRange.
+		 */
 		void processDeclaration(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
+		/**
+		 * extracts the relevant source ranges for lexical transformation from a Clang statement and delegates
+		 * them to processSourceRange.
+		 */
 		void processStatement(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 
 		bool contains(clang::SourceRange range1, clang::SourceRange range2) const;
@@ -64,6 +72,11 @@ class CPPIMPORT_API LexicalTransformations
 
 		bool isConcatenationOrStringification(clang::SourceLocation loc) const;
 
+		/**
+		 * uses the source range to get the unexpandedSpelling for lexical transformation.
+		 * depending on the node type the intermediate result is modified further and then stored for transformation
+		 * together with the node.
+		 */
 		void processSourceRange(clang::SourceRange range, Model::Node* original);
 
 		clang::SourceRange unexpandedSourceRange(clang::SourceRange range) const;
