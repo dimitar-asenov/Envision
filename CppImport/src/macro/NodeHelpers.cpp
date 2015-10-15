@@ -196,18 +196,18 @@ void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 
 QVector<Model::Node*> NodeHelpers::topLevelNodes(QVector<Model::Node*> input)
 {
-	QSet<Model::Node*> topLevel;
-	for (auto node : input) topLevel.insert(node);
+	auto end = std::remove_if(input.begin(), input.end(),
+										[=] (auto e)
+										{
+											for (auto other : input)
+												if (other != e && other->isAncestorOf(e))
+													return true;
 
-	for (auto node : input)
-		for (auto other : input)
-			if (node != other)
-				if (node->isAncestorOf(other))
-					topLevel.remove(other);
+											return false;
+										});
 
-	QVector<Model::Node*> result;
-	for (auto node : topLevel) result.append(node);
-	return result;
+	input.erase(end, input.end());
+	return input;
 }
 
 void NodeHelpers::buildMappingInfo(Model::Node* node, QList<Model::Node*>& info)
