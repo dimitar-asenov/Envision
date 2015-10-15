@@ -239,7 +239,7 @@ OOModel::MetaCallExpression* NodeHelpers::containsMetaCall(Model::Node* node)
 	return nullptr;
 }
 
-bool NodeHelpers::stringMatches(const QString& regex, const QString& value)
+bool NodeHelpers::matchesRegex(const QString& regex, const QString& value)
 {
 	QRegularExpression regEx(regex);
 	return regEx.match(value).hasMatch();
@@ -259,7 +259,7 @@ OOModel::Expression* NodeHelpers::createNameExpressionFromString(const QString& 
 {
 	QString baseCase = "((::)?(\\w+(::|\\.|->))*\\w+(\\*|&)?)";
 
-	if (stringMatches("^" + baseCase + "$", input))
+	if (matchesRegex("^" + baseCase + "$", input))
 	{
 		QRegularExpression regEx("(::|\\.)");
 		QStringList parts = input.split(regEx);
@@ -304,7 +304,7 @@ OOModel::Expression* NodeHelpers::createNameExpressionFromString(const QString& 
 
 		return result;
 	}
-	else if (stringMatches("^" + baseCase + "<" + baseCase + ">$", input))
+	else if (matchesRegex("^" + baseCase + "<" + baseCase + ">$", input))
 	{
 		QStringList split = input.split("<");
 		auto baseRef = DCast<OOModel::ReferenceExpression>(createNameExpressionFromString(split[0]));
