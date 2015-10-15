@@ -305,10 +305,14 @@ OOModel::Expression* NodeHelpers::createNameExpressionFromString(const QString& 
 	}
 	else if (matchesRegex("^" + baseCase + "<" + baseCase + ">$", input))
 	{
-		QStringList split = input.split("<");
-		auto baseRef = DCast<OOModel::ReferenceExpression>(createNameExpressionFromString(split[0]));
+		QRegularExpression regEx("^(.*)<(.*)>$", QRegularExpression::DotMatchesEverythingOption);
+		auto match = regEx.match(input);
+		Q_ASSERT(match.hasMatch());
+
+		auto baseRef = DCast<OOModel::ReferenceExpression>(createNameExpressionFromString(match.captured(1)));
 		Q_ASSERT(baseRef);
-		auto typeArg = createNameExpressionFromString(split[1].left(split[1].length() - 1));
+
+		auto typeArg = createNameExpressionFromString(match.captured(2));
 		baseRef->typeArguments()->append(typeArg);
 		return baseRef;
 	}
