@@ -69,7 +69,7 @@ QString LexicalTransformations::unexpandedSpelling(clang::SourceRange range) con
 	return result.trimmed();
 }
 
-void LexicalTransformations::correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
+void LexicalTransformations::processDeclaration(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 {
 	clang::SourceRange spellingRange = clangAstNode->getSourceRange();
 
@@ -81,7 +81,7 @@ void LexicalTransformations::correctNode(clang::Decl* clangAstNode, Model::Node*
 		Q_ASSERT(ooMethod);
 
 		if (ooMethod->results()->size() > 0)
-			correctNode(funcDecl->getReturnTypeSourceRange(), ooMethod->results()->first());
+			processSourceRange(funcDecl->getReturnTypeSourceRange(), ooMethod->results()->first());
 
 		int i = 0;
 		for (auto it = funcDecl->param_begin(); it != funcDecl->param_end(); it++)
@@ -95,9 +95,9 @@ void LexicalTransformations::correctNode(clang::Decl* clangAstNode, Model::Node*
 
 			auto ooVarDecl = DCast<OOModel::VariableDeclaration>(ooMethod->arguments()->at(i));
 
-			correctNode(varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange(),
+			processSourceRange(varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange(),
 												ooVarDecl->typeExpression());
-			correctNode(clang::SourceRange(start, end), ooVarDecl);
+			processSourceRange(clang::SourceRange(start, end), ooVarDecl);
 			i++;
 		}
 	}
@@ -109,7 +109,7 @@ void LexicalTransformations::correctNode(clang::Decl* clangAstNode, Model::Node*
 		auto start = varDecl->getLocation();
 		auto end = varDecl->getSourceRange().getEnd();
 
-		correctNode(varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange(),
+		processSourceRange(varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange(),
 											ooVarDecl->typeExpression());
 
 		spellingRange = clang::SourceRange(start, end);
@@ -119,26 +119,26 @@ void LexicalTransformations::correctNode(clang::Decl* clangAstNode, Model::Node*
 		spellingRange = clang::SourceRange(namedDecl->getLocation(), namedDecl->getSourceRange().getEnd());
 	}
 
-	correctNode(spellingRange, envisionAstNode);
+	processSourceRange(spellingRange, envisionAstNode);
 }
 
-void LexicalTransformations::correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
+void LexicalTransformations::processStatement(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
 	if (auto callExpr = clang::dyn_cast<clang::CallExpr>(clangAstNode))
-		correctNode(callExpr->getCallee()->getSourceRange(),
+		processSourceRange(callExpr->getCallee()->getSourceRange(),
 											envisionAstNode);
 	else if (auto constrExpr = clang::dyn_cast<clang::CXXConstructExpr>(clangAstNode))
 	{
-		correctNode(
+		processSourceRange(
 				clang::SourceRange(constrExpr->getLocStart(),
 										 constrExpr->getParenOrBraceRange().getBegin()),
 											envisionAstNode);
 	}
 	else
-		correctNode(clangAstNode->getSourceRange(), envisionAstNode);
+		processSourceRange(clangAstNode->getSourceRange(), envisionAstNode);
 }
 
-void LexicalTransformations::correctNode(clang::SourceRange range, Model::Node* original)
+void LexicalTransformations::processSourceRange(clang::SourceRange range, Model::Node* original)
 {
 	if (DCast<OOModel::ReturnStatement>(original)) return;
 	if (DCast<OOModel::NewExpression>(original)) return;
@@ -196,16 +196,16 @@ void LexicalTransformations::correctNode(clang::SourceRange range, Model::Node* 
 	transformations_.insert(original, transformed);
 }
 
-bool LexicalTransformations::contains(clang::SourceRange r, clang::SourceRange o) const
+bool LexicalTransformations::contains(clang::SourceRange range1, clang::SourceRange range2) const
 {
-	auto range = unexpandedSourceRange(r);
-	auto other = unexpandedSourceRange(o);
+	auto unexpandedRange1 = unexpandedSourceRange(range1);
+	auto unexpandedRange2 = unexpandedSourceRange(range2);
 
-	auto s = clang_.sourceManager()->getSpellingLoc(range.getBegin()).getPtrEncoding();
-	auto e = clang_.sourceManager()->getSpellingLoc(range.getEnd()).getPtrEncoding();
-	auto os = clang_.sourceManager()->getSpellingLoc(other.getBegin()).getPtrEncoding();
+	auto start1 = clang_.sourceManager()->getSpellingLoc(unexpandedRange1.getBegin()).getPtrEncoding();
+	auto end1 = clang_.sourceManager()->getSpellingLoc(unexpandedRange1.getEnd()).getPtrEncoding();
+	auto start2 = clang_.sourceManager()->getSpellingLoc(unexpandedRange2.getBegin()).getPtrEncoding();
 
-	return s <= os && os <= e;
+	return start1 <= start2 && start2 <= end1;
 }
 
 const QString LexicalTransformations::transformation(Model::Node* node) const

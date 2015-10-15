@@ -41,27 +41,25 @@ class CPPIMPORT_API LexicalTransformations
 	public:
 		LexicalTransformations(const ClangHelpers& clang, const MacroExpansions& macroExpansions);
 
-		// TODO: rename method
-		void correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+		void processDeclaration(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
-		// TODO: rename method
-		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
+		void processStatement(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 
-		bool contains(clang::SourceRange r, clang::SourceRange o) const;
+		bool contains(clang::SourceRange range1, clang::SourceRange range2) const;
 
 		const QString transformation(Model::Node* node) const;
 
 	private:
 		const ClangHelpers& clang_;
 		const MacroExpansions& macroExpansions_;
+
 		QHash<Model::Node*, QString> transformations_;
 
 		QString unexpandedSpelling(clang::SourceRange range) const;
 
 		bool isConcatenationOrStringification(clang::SourceLocation loc) const;
 
-		// TODO: rename method
-		void correctNode(clang::SourceRange range, Model::Node* original);
+		void processSourceRange(clang::SourceRange range, Model::Node* original);
 
 		clang::SourceRange unexpandedSourceRange(clang::SourceRange range) const;
 };
