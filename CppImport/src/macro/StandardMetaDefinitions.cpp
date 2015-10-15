@@ -151,7 +151,7 @@ bool StandardMetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpan
 	// if the unowned nodes contain the node itself then the node should not even be added to the meta definition
 	if (unownedNodes.contains(cloned)) return true;
 
-	NodeHelpers::removeNodes(NodeHelpers::topLevelNodes(unownedNodes));
+	NodeHelpers::removeNodesFromParent(NodeHelpers::topLevelNodes(unownedNodes));
 
 	return false;
 }

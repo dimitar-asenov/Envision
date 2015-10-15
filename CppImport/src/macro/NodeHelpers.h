@@ -59,8 +59,8 @@ class CPPIMPORT_API NodeHelpers
 
 		static Model::Node* cloneWithMapping(Model::Node* node, NodeToCloneMap& mapping);
 
-		static void removeNode(Model::Node* node, bool removeMetaCalls = false);
-		static void removeNodes(QVector<Model::Node*> nodes);
+		static void removeNodeFromParent(Model::Node* node, bool removeMetaCalls = false);
+		static void removeNodesFromParent(QVector<Model::Node*> nodes);
 
 		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
 
@@ -78,7 +78,5 @@ class CPPIMPORT_API NodeHelpers
 
 		static OOModel::MetaCallExpression* containsMetaCall(Model::Node* node);
 };
-
-inline void NodeHelpers::removeNodes(QVector<Model::Node*> nodes) { for (auto n : nodes) removeNode(n); }
 
 }

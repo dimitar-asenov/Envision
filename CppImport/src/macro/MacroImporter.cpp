@@ -180,7 +180,7 @@ void MacroImporter::endEntireImport()
 			qDebug() << "not inserted top level metacall" << it.key()->typeName();
 
 	// remove all top level meta call generated nodes
-	NodeHelpers::removeNodes(finalizationNodes);
+	NodeHelpers::removeNodesFromParent(finalizationNodes);
 }
 
 void MacroImporter::startTranslationUnit(const clang::SourceManager* sourceManager,

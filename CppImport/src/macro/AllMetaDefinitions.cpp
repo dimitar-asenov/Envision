@@ -193,7 +193,7 @@ void AllMetaDefinitions::handleXMacros()
 				{
 					applyPartialBeginSpecializationTransformation(expansion, other);
 
-					NodeHelpers::removeNode(other->metaCall(), true);
+					NodeHelpers::removeNodeFromParent(other->metaCall(), true);
 
 					auto merged = new OOModel::MetaCallExpression();
 					merged->setCallee(new OOModel::ReferenceExpression(
@@ -312,8 +312,8 @@ OOModel::MetaDefinition* AllMetaDefinitions::createXMacroMetaDef(MacroExpansion*
 		hBaseMetaDef->parent()->replaceChild(hBaseMetaDef, mergedMetaDef);
 	}
 
-	NodeHelpers::removeNode(standardMetaDefinitions_.metaDefinition(cppExpansion->definition()), true);
-	NodeHelpers::removeNode(standardMetaDefinitions_.metaDefinition(cppBaseExpansion->definition()), true);
+	NodeHelpers::removeNodeFromParent(standardMetaDefinitions_.metaDefinition(cppExpansion->definition()), true);
+	NodeHelpers::removeNodeFromParent(standardMetaDefinitions_.metaDefinition(cppBaseExpansion->definition()), true);
 
 	return mergedMetaDef;
 }

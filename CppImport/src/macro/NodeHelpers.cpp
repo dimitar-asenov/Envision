@@ -123,7 +123,7 @@ Model::Node* NodeHelpers::cloneWithMapping(Model::Node* node, NodeToCloneMap& ma
 	return clone;
 }
 
-void NodeHelpers::removeNode(Model::Node* node, bool removeMetaCalls)
+void NodeHelpers::removeNodeFromParent(Model::Node* node, bool removeMetaCalls)
 {
 	if (!node || !node->parent()) return;
 
@@ -149,9 +149,9 @@ void NodeHelpers::removeNode(Model::Node* node, bool removeMetaCalls)
 			ooVarDecl->setInitialValue(nullptr);
 	}
 	else if (auto skip = DCast<OOModel::VariableDeclarationExpression>(node->parent()))
-		removeNode(skip, removeMetaCalls);
+		removeNodeFromParent(skip, removeMetaCalls);
 	else if (auto skip = DCast<OOModel::ExpressionStatement>(node->parent()))
-		removeNode(skip, removeMetaCalls);
+		removeNodeFromParent(skip, removeMetaCalls);
 	else
 		qDebug() << "not removed" << node->typeName() << "in" << node->parent()->typeName();
 }
@@ -357,6 +357,12 @@ OOModel::Expression* NodeHelpers::createNameExpressionFromString(const QString& 
 		qDebug() << "createReferenceExpressionFromString failed on input:" << input;
 		return new OOModel::ReferenceExpression(input);
 	}
+}
+
+void CppImport::NodeHelpers::removeNodesFromParent(QVector<Model::Node*> nodes)
+{
+	for (auto n : nodes)
+		removeNodeFromParent(n);
 }
 
 }
