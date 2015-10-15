@@ -45,7 +45,6 @@ const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 TupleSet VersionControlQuery::executeLinear(TupleSet)
 {
 	const int CHANGE_COUNT = argument(COUNT_ARGUMENT_NAMES[0]).toInt();
-	QHash<Model::Node*, int> changeCount;
 
 	Model::TreeManager* treeManager = target()->manager();
 	QString managerName = treeManager->name();
@@ -56,17 +55,19 @@ TupleSet VersionControlQuery::executeLinear(TupleSet)
 	// TODO user error later:
 	Q_ASSERT(GitRepository::repositoryExists(path));
 	GitRepository repository{path};
+	TupleSet result;
 
 	auto revisions = repository.revisions();
 	int commitIndexToTake = std::min(revisions.size() - 1, CHANGE_COUNT);
 	for (int i = commitIndexToTake; i > 0; --i)
 	{
-		QSet<Model::Node*> changedNodes;
 		QString oldCommitId = revisions[i];
 		QString newCommitId = revisions[i - 1];
 
 		Diff diff = repository.diff(newCommitId, oldCommitId);
 		auto changes = diff.changes();
+
+		addCommitMetaInformation(result, repository.getCommitInformation(newCommitId));
 
 		for (auto change : changes.values())
 		{
@@ -78,23 +79,16 @@ TupleSet VersionControlQuery::executeLinear(TupleSet)
 			// FIXME: here we just use the first StatementItem parent we should solve that better later.
 			if (auto node = const_cast<Model::Node*>(treeManager->nodeIdMap().node(id)))
 			{
+				Model::Node* changedNode = nullptr;
 				if (auto statement = node->firstAncestorOfType<OOModel::StatementItem>())
-					changedNodes.insert(statement);
-				else if (auto statement = DCast<OOModel::StatementItem>(node))
-					changedNodes.insert(statement);
+					changedNode = statement;
 				else // The node is hopefully higher up in the node hierarchy thus we take it as is.
-					changedNodes.insert(node);
+					changedNode = node;
+
+				result.add({{newCommitId, changedNode}});
 			}
 		}
-
-		for (auto changedNode : changedNodes)
-			if (changedNode) ++changeCount[changedNode];
 	}
-
-	TupleSet result;
-
-	for (auto it = changeCount.begin(); it != changeCount.end(); ++it)
-		result.add({{"count", it.value()}, {"ast", it.key()}});
 
 	return result;
 }
@@ -109,7 +103,16 @@ void VersionControlQuery::registerDefaultQueries()
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 	: ScopedArgumentQuery{target, {
 		{COUNT_ARGUMENT_NAMES, "The amount of revision to look at", COUNT_ARGUMENT_NAMES[1], "10"}
-	}, QStringList{"VersionControl"} + args}
+}, QStringList{"VersionControl"} + args}
 {}
+
+void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMetaData& metadata)
+{
+		ts.add({{"commit", metadata.sha1_},
+				  {"message", metadata.message_},
+				  {"date", metadata.dateTime_.toString("dd.MM.yyyy hh:mm")},
+				  {"commiter", metadata.committer_.name_ + " " + metadata.committer_.eMail_},
+				  {"author", metadata.author_.name_ + " " + metadata.author_.eMail_}});
+}
 
 } /* namespace InformationScripting */
