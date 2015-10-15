@@ -75,7 +75,8 @@ HEADERS += src/precompiled.h \
     src/queries/VersionControlQuery.h \
     src/interaction/SimpleQueryParser.h \
     src/visualization/VCompositeQueryNode.h \
-    src/visualization/VCompositeQueryNodeStyle.h
+    src/visualization/VCompositeQueryNodeStyle.h \
+    src/misc/Optional.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
