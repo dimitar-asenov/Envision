@@ -99,6 +99,22 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 			entry->metaCall->arguments()->append(new OOModel::ReferenceExpression(arguments[i]));
 			entry->argumentLocs.append(actualArg->getLocation());
 		}
+
+		/* alternative implementation:
+		 * works on individual argument tokens and does not need a regular expression.
+		 * more robust but depends on unexpandedSpelling.
+
+		auto actualArgFirstToken = macroArguments->getUnexpArgument((unsigned int)i);
+
+		auto actualArgLastToken = actualArgFirstToken;
+		for (; actualArgLastToken->isNot(clang::tok::eof); ++actualArgLastToken);
+		if (actualArgFirstToken != actualArgLastToken) --actualArgLastToken;
+
+		auto unexpandedArgument = lexicalTransformation_.unexpandedSpelling(
+					clang::SourceRange(actualArgFirstToken->getLocation(), actualArgLastToken->getLocation()));
+
+		entry->metaCall->arguments()->append(new OOModel::ReferenceExpression(unexpandedArgument));
+		entry->argumentLocs.append(actualArgFirstToken->getLocation());*/
 	}
 
 	expansions_.append(entry);
