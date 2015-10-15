@@ -59,7 +59,12 @@ NamedProperty tuple_getItem(Tuple &t, int index)
 
 std::shared_ptr<Tuple> makeTuple(list args) {
 	stl_input_iterator<NamedProperty> begin(args), end;
-	return std::shared_ptr<Tuple>{new Tuple{QList<NamedProperty>::fromStdList(std::list<NamedProperty>(begin, end))}};
+	return std::make_shared<Tuple>(QList<NamedProperty>::fromStdList(std::list<NamedProperty>(begin, end)));
+}
+
+std::shared_ptr<TupleSet> makeTupleSet(list args) {
+	stl_input_iterator<Tuple> begin(args), end;
+	return std::make_shared<TupleSet>(QList<Tuple>::fromStdList(std::list<Tuple>(begin, end)));
 }
 
 BOOST_PYTHON_MODULE(DataApi) {
@@ -91,7 +96,8 @@ BOOST_PYTHON_MODULE(DataApi) {
 		QSet<Tuple> (TupleSet::*take1)(const QString&) = &TupleSet::take;
 		void (TupleSet::*removeTuple)(const Tuple&) = &TupleSet::remove;
 
-		class_<TupleSet>("TupleSet")
+		class_<TupleSet>("TupleSet", init<>())
+				.def("__init__", make_constructor(makeTupleSet))
 				.def("tuples", tuplesAll)
 				.def("tuples", tuplesString)
 				.def("take", take1)
