@@ -208,80 +208,10 @@ bool LexicalTransformations::contains(clang::SourceRange r, clang::SourceRange o
 	return s <= os && os <= e;
 }
 
-void LexicalTransformations::applyLexicalTransformations(Model::Node* node, NodeToCloneMap* mapping,
-																			QVector<QString> formalArgs) const
+const QString LexicalTransformations::transformation(Model::Node* node) const
 {
-	auto it = transformations_.find(mapping->original(node));
-
-	if (it != transformations_.end())
-	{
-		auto transformed = *it;
-
-		bool containsArg = false;
-		for (auto arg : formalArgs)
-			if (transformed.contains(arg))
-			{
-				containsArg = true;
-				break;
-			}
-
-		if (containsArg)
-		{
-			if (auto ref = DCast<OOModel::ReferenceExpression>(node))
-				ref->setName(transformed);
-			else if (auto decl = DCast<OOModel::Class>(node))
-				decl->setName(transformed);
-			else if (auto decl = DCast<OOModel::Method>(node))
-				decl->setName(transformed);
-			else if (auto decl = DCast<OOModel::VariableDeclaration>(node))
-				decl->setName(transformed);
-			else if (auto strLit = DCast<OOModel::StringLiteral>(node))
-				strLit->setValue(transformed);
-			else if (auto formalResult = DCast<OOModel::FormalResult>(node))
-				formalResult->setTypeExpression(NodeHelpers::createNameExpressionFromString(transformed));
-			else if (auto boolLit = DCast<OOModel::BooleanLiteral>(node))
-				replaceWithReference(boolLit, transformed, mapping);
-			else if (auto castExpr = DCast<OOModel::CastExpression>(node))
-				castExpr->setType(new OOModel::ReferenceExpression(transformed));
-			else if (auto castExpr = DCast<OOModel::PointerTypeExpression>(node))
-				replaceWithReference(castExpr, transformed, mapping);
-			else if (auto methodCall = DCast<OOModel::MethodCallExpression>(node))
-			{
-				if (auto ref = DCast<OOModel::ReferenceExpression>(methodCall->callee()))
-				{
-					if (transformed.startsWith("#"))
-						replaceWithReference(methodCall, transformed, mapping);
-					else
-						replaceWithReference(ref, transformed, mapping);
-				}
-				else
-					qDebug() << "Unhandled transformed node type" << node->typeName() << "transformed" << transformed;
-			}
-			else if (auto templateInst = DCast<OOModel::ExplicitTemplateInstantiation>(node))
-			{
-				QRegularExpression regEx("((\\w+::)?\\w+<(\\w+::)?\\w+>)$");
-
-				auto m = regEx.match(transformed);
-				if (m.hasMatch())
-					replaceWithReference(templateInst->instantiatedClass(), m.captured(1), mapping);
-				else
-					qDebug() << "could not correct explicit template instantiation: " << transformed;
-			}
-			else
-				qDebug() << "Unhandled transformed node type" << node->typeName() << "transformed" << transformed;
-		}
-	}
-
-	for (auto child : node->children())
-		applyLexicalTransformations(child, mapping, formalArgs);
-}
-
-void LexicalTransformations::replaceWithReference(Model::Node* current, const QString& replacement,
-																  NodeToCloneMap* mapping) const
-{
-	auto newValue = NodeHelpers::createNameExpressionFromString(replacement);
-	current->parent()->replaceChild(current, newValue);
-	mapping->replaceClone(current, newValue);
+	auto it = transformations_.find(node);
+	return it != transformations_.end() ? *it : QString();
 }
 
 }

@@ -72,8 +72,8 @@ class CPPIMPORT_API StandardMetaDefinitions
 		/**
 		 * return all children of node that do not belong to expansion.
 		 */
-		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
-																NodeToCloneMap* mapping, QVector<Model::Node*>* result);
+		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion, NodeToCloneMap* mapping,
+												  QVector<Model::Node*>* result);
 
 		/**
 		 * remove all children of node that do not belong to expansion.
@@ -86,6 +86,10 @@ class CPPIMPORT_API StandardMetaDefinitions
 		 */
 		void insertArgumentSplices(NodeToCloneMap* mapping, NodeToCloneMap* childMapping,
 											QVector<MacroArgumentInfo>& arguments);
+
+		void applyLexicalTransformations(Model::Node* node, NodeToCloneMap* mapping, QVector<QString> formalArgs) const;
+
+		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap* mapping) const;
 };
 
 }

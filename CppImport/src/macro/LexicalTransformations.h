@@ -41,8 +41,6 @@ class CPPIMPORT_API LexicalTransformations
 	public:
 		LexicalTransformations(const ClangHelpers& clang, const MacroExpansions& macroExpansions);
 
-		void applyLexicalTransformations(Model::Node* node, NodeToCloneMap* mapping, QVector<QString> formalArgs) const;
-
 		// TODO: rename method
 		void correctNode(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
@@ -50,6 +48,8 @@ class CPPIMPORT_API LexicalTransformations
 		void correctNode(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 
 		bool contains(clang::SourceRange r, clang::SourceRange o) const;
+
+		const QString transformation(Model::Node* node) const;
 
 	private:
 		const ClangHelpers& clang_;
@@ -62,8 +62,6 @@ class CPPIMPORT_API LexicalTransformations
 
 		// TODO: rename method
 		void correctNode(clang::SourceRange range, Model::Node* original);
-
-		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap* mapping) const;
 
 		clang::SourceRange unexpandedSourceRange(clang::SourceRange range) const;
 };
