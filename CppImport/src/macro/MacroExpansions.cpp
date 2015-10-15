@@ -209,7 +209,35 @@ QVector<Model::Node*> MacroExpansions::topLevelNodes(MacroExpansion* expansion, 
 		}
 
 	QVector<Model::Node*> result = NodeHelpers::topLevelNodes(allTLExpansionNodes);
-	NodeHelpers::orderNodesBySourceOrder(result);
+
+	qSort(result.begin(), result.end(),
+			[](Model::Node* e1, Model::Node* e2)
+	{
+		if (auto commonAncestor = e1->lowestCommonAncestor(e2))
+			if (auto list = DCast<Model::List>(commonAncestor))
+			{
+				int index1 = -1;
+				for (auto c : list->children())
+					if (c == e1 || c->isAncestorOf(e1))
+					{
+						index1 = list->indexOf(c);
+						break;
+					}
+
+				int index2 = -1;
+				for (auto c : list->children())
+					if (c == e2 || c->isAncestorOf(e2))
+					{
+						index2 = list->indexOf(c);
+						break;
+					}
+
+				return index1 < index2;
+			}
+
+		return true;
+	});
+
 	return result;
 }
 

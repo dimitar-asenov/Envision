@@ -32,37 +32,6 @@
 
 namespace CppImport {
 
-void NodeHelpers::orderNodesBySourceOrder(QVector<Model::Node*>& input)
-{
-	qSort(input.begin(), input.end(),
-			[](Model::Node* e1, Model::Node* e2)
-	{
-		if (auto commonAncestor = e1->lowestCommonAncestor(e2))
-			if (auto list = DCast<Model::List>(commonAncestor))
-			{
-				int index1 = -1;
-				for (auto c : list->children())
-					if (c == e1 || c->isAncestorOf(e1))
-					{
-						index1 = list->indexOf(c);
-						break;
-					}
-
-				int index2 = -1;
-				for (auto c : list->children())
-					if (c == e2 || c->isAncestorOf(e2))
-					{
-						index2 = list->indexOf(c);
-						break;
-					}
-
-				return index1 < index2;
-			}
-
-		return true;
-	});
-}
-
 bool NodeHelpers::validContext(Model::Node* node)
 {
 	return DCast<OOModel::Project>(node) || DCast<OOModel::Module>(node) || DCast<OOModel::Class>(node) ||
