@@ -34,6 +34,9 @@
 
 namespace CppImport {
 
+/**
+ * used to get all necessary information for macro import from the preprocessor.
+ */
 class CPPIMPORT_API PPCallback : public clang::PPCallbacks
 {
 	public:

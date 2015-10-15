@@ -32,6 +32,10 @@
 
 namespace CppImport {
 
+/**
+ * produced when cloning a tree.
+ * maps from nodes in the original tree to their cloned versions and back.
+ */
 class CPPIMPORT_API NodeToCloneMap
 {
 	public:

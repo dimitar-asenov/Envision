@@ -33,6 +33,9 @@
 
 namespace CppImport {
 
+/**
+ * constains all relevant methods for macro import that do not depend on Clang or macro import components.
+ */
 class CPPIMPORT_API NodeHelpers
 {
 	public:

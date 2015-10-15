@@ -42,6 +42,10 @@ class MacroExpansions;
 class LexicalTransformations;
 class AllMetaDefinitions;
 
+/**
+ * creates and stores all MetaDefinitions that are not x-Macro MetaDefinitions.
+ * processes all syntactically complete macro definitions.
+ */
 class CPPIMPORT_API StandardMetaDefinitions
 {
 	public:

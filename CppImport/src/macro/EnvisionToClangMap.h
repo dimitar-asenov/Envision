@@ -32,6 +32,10 @@
 
 namespace CppImport {
 
+/**
+ * logically holds the mapping from Envision AST nodes to Clang AST nodes.
+ * in practice finds and stores the relevant source range of the Clang AST nodes since that is all information we need.
+ */
 class CPPIMPORT_API EnvisionToClangMap
 {
 	public:

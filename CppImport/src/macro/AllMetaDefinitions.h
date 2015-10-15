@@ -42,6 +42,12 @@ class MacroExpansions;
 class LexicalTransformations;
 class ClangHelpers;
 
+/**
+ * provides the interface to generate all sorts of MetaDefinitions during macro import.
+ * processes special macro types (partial begin macro specialization, x-Macro).
+ * complete syntactic macros are processed in the child component StandardMetaDefinitions.
+ * creates and stores x-Macro MetaDefinitions.
+ */
 class CPPIMPORT_API AllMetaDefinitions
 {
 	public:

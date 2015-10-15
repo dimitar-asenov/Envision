@@ -36,6 +36,10 @@ namespace CppImport {
 
 class MacroExpansions;
 
+/**
+ * used to get the unexpanded spelling of nodes used in lexical transformation when creating MetaDefinition.
+ * finds the relevant source range for Clang AST nodes regarding spelling and stores the unexpanded spelling.
+ */
 class CPPIMPORT_API LexicalTransformations
 {
 	public:

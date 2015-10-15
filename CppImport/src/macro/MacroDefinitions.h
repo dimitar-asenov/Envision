@@ -33,6 +33,9 @@
 
 namespace CppImport {
 
+/**
+ * stores the raw macro definition (not MetaDefinition) information provided by PPCallback for a translation unit.
+ */
 class CPPIMPORT_API MacroDefinitions
 {
 	public:

@@ -36,6 +36,9 @@ namespace CppImport {
 
 class MacroDefinitions;
 
+/**
+ * creates and stores all MacroExpansions for a translation unit.
+ */
 class CPPIMPORT_API MacroExpansions
 {
 	public:
