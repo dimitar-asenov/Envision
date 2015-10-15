@@ -75,6 +75,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		TupleSet typeFilter(TupleSet input);
 		TupleSet attribute(TupleSet input);
 
+		TupleSet modify(TupleSet input);
+
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
 		template <class Predicate>
