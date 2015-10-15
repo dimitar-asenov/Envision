@@ -65,16 +65,8 @@ void NodeHelpers::orderNodesBySourceOrder(QVector<Model::Node*>& input)
 
 bool NodeHelpers::validContext(Model::Node* node)
 {
-	if (DCast<OOModel::Project>(node))
-		return true;
-	else if (DCast<OOModel::Module>(node))
-		return true;
-	else if (DCast<OOModel::Class>(node))
-		return true;
-	else if (DCast<OOModel::Method>(node))
-		return true;
-	else
-		return false;
+	return DCast<OOModel::Project>(node) || DCast<OOModel::Module>(node) || DCast<OOModel::Class>(node) ||
+			 DCast<OOModel::Method>(node);
 }
 
 OOModel::Declaration* NodeHelpers::actualContext(Model::Node* node)
