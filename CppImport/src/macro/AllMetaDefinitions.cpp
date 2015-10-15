@@ -111,7 +111,8 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 																	  MacroExpansion* expansion,
 																	  MacroExpansion* beginChild)
 {
-	QVector<Model::Node*> statements = macroExpansions_.nTLExpansionTLNodes(expansion);
+	QVector<Model::Node*> statements = macroExpansions_.topLevelNodes(expansion,
+																							MacroExpansions::NodeOriginType::Direct);
 
 	if (!statements.empty())
 	{
@@ -186,7 +187,7 @@ void AllMetaDefinitions::handleXMacros()
 	for (auto expansion : macroExpansions_.expansions())
 		if (!expansion->xMacroChildren.empty())
 		{
-			for (auto node : macroExpansions_.tLExpansionTLNodes(expansion))
+			for (auto node : macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Transitive))
 			{
 				if (auto other = matchingXMacroExpansion(node))
 				{

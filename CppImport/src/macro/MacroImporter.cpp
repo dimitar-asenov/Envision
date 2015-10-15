@@ -59,7 +59,7 @@ void MacroImporter::endTranslationUnit()
 		NodeToCloneMap mapping;
 		QVector<Model::Node*> generatedNodes;
 		QVector<MacroArgumentInfo> allArgs;
-		for (auto node : macroExpansions_.tLExpansionTLNodes(expansion))
+		for (auto node : macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Transitive))
 		{
 			auto generatedNode = NodeHelpers::cloneWithMapping(node, &mapping);
 
@@ -199,7 +199,7 @@ void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes,
 	// handle child macro expansions
 	for (auto childExpansion : expansion->children)
 	{
-		auto tlNodes = macroExpansions_.nTLExpansionTLNodes(childExpansion);
+		auto tlNodes = macroExpansions_.topLevelNodes(childExpansion, MacroExpansions::NodeOriginType::Direct);
 		handleMacroExpansion(mapping->clone(tlNodes), childExpansion, mapping, arguments);
 	}
 

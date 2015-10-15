@@ -66,14 +66,17 @@ class CPPIMPORT_API MacroExpansions
 		QSet<MacroExpansion*> expansions(Model::Node* node);
 
 		/**
-		 * return all top level nodes of an expansion that is not a child of another expansion.
+		 * used to change the origin criterium for what nodes are returned by method topLevelNodes.
 		 */
-		QVector<Model::Node*> tLExpansionTLNodes(MacroExpansion* expansion) const;
+		enum NodeOriginType {
+			Transitive, /**< return all nodes created directly by expansion or by one of its child expansions. */
+			Direct /**< return only the nodes created directly by expansion. */
+		};
 
 		/**
-		 * return all top level nodes of an expansion that is potentially a child of another expansion.
+		 * return all top level nodes of expansion matching the origin criterium.
 		 */
-		QVector<Model::Node*> nTLExpansionTLNodes(MacroExpansion* expansion);
+		QVector<Model::Node*> topLevelNodes(MacroExpansion* expansion, NodeOriginType filter);
 
 		void clear();
 
