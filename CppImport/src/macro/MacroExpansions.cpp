@@ -24,23 +24,23 @@
  **
  **********************************************************************************************************************/
 
-#include "ExpansionManager.h"
+#include "MacroExpansions.h"
 
 #include "ClangHelper.h"
 #include "AstMapping.h"
-#include "DefinitionManager.h"
+#include "MacroDefinitions.h"
 #include "StaticStuff.h"
 
 namespace CppImport {
 
-ExpansionManager::ExpansionManager(const ClangHelper& clang, const AstMapping& astMapping,
-											  const DefinitionManager& definitionManager)
-	: clang_(clang), astMapping_(astMapping), definitionManager_(definitionManager) {}
+MacroExpansions::MacroExpansions(const ClangHelper& clang, const AstMapping& astMapping,
+											  const MacroDefinitions& macroDefinitions)
+	: clang_(clang), astMapping_(astMapping), macroDefinitions_(macroDefinitions) {}
 
-void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
+void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 													  const clang::MacroArgs* macroArguments)
 {
-	if (definitionManager_.isPartialEnd(macroDirective))
+	if (macroDefinitions_.isPartialEnd(macroDirective))
 	{
 		/*
 		 * if the to be registered expansion's definition is a partial end macro then we are not going to generate a
@@ -59,7 +59,7 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const c
 	if (entry->parent) entry->parent->children.append(entry);
 
 	// handle xMacro data members
-	if (definitionManager_.isPartialBegin(macroDirective) && !currentXMacroParent)
+	if (macroDefinitions_.isPartialBegin(macroDirective) && !currentXMacroParent)
 		/*
 		 * if the definition of this expansion is a partial begin macro we remember that we are now in a xMacro body.
 		 * we check whether we are not already in a xMacro body because we want to remember the .h part (the first one) of
@@ -76,7 +76,7 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const c
 		currentXMacroParent->xMacroChildren.append(entry);
 	}
 
-	entry->metaCall = new OOModel::MetaCallExpression(definitionManager_.definitionName(entry->definition));
+	entry->metaCall = new OOModel::MetaCallExpression(macroDefinitions_.definitionName(entry->definition));
 
 	// only function like macros have braces in their signature to parse
 	if (!macroDirective->getMacroInfo()->isObjectLike())
@@ -99,13 +99,13 @@ void ExpansionManager::addMacroExpansion(clang::SourceRange sourceRange, const c
 	expansions_.append(entry);
 }
 
-void ExpansionManager::clear()
+void MacroExpansions::clear()
 {
 	expansionCache_.clear();
 	expansions_.clear();
 }
 
-QVector<MacroExpansion*> ExpansionManager::topLevelExpansions() const
+QVector<MacroExpansion*> MacroExpansions::topLevelExpansions() const
 {
 	QVector<MacroExpansion*> result;
 	for (auto expansion : expansions_)
@@ -116,7 +116,7 @@ QVector<MacroExpansion*> ExpansionManager::topLevelExpansions() const
 }
 
 
-MacroExpansion* ExpansionManager::expansion(clang::SourceLocation loc) const
+MacroExpansion* MacroExpansions::expansion(clang::SourceLocation loc) const
 {
 	MacroExpansion* expansion = immediateExpansion(loc);
 	MacroExpansion* last = expansion;
@@ -134,7 +134,7 @@ MacroExpansion* ExpansionManager::expansion(clang::SourceLocation loc) const
 	return last;
 }
 
-MacroExpansion* ExpansionManager::immediateExpansion(clang::SourceLocation loc) const
+MacroExpansion* MacroExpansions::immediateExpansion(clang::SourceLocation loc) const
 {
 	auto expansion = clang_.immediateMacroLocation(loc);
 	for (auto i = 0; i < expansions_.size(); i++)
@@ -153,7 +153,7 @@ MacroExpansion* ExpansionManager::immediateExpansion(clang::SourceLocation loc) 
 }
 
 
-QSet<MacroExpansion*> ExpansionManager::expansion(Model::Node* node)
+QSet<MacroExpansion*> MacroExpansions::expansion(Model::Node* node)
 {
 	Q_ASSERT(node);
 
@@ -174,7 +174,7 @@ QSet<MacroExpansion*> ExpansionManager::expansion(Model::Node* node)
 }
 
 
-QVector<Model::Node*> ExpansionManager::tLExpansionTLNodes(MacroExpansion* expansion) const
+QVector<Model::Node*> MacroExpansions::tLExpansionTLNodes(MacroExpansion* expansion) const
 {
 	Q_ASSERT(expansion);
 	Q_ASSERT(!expansion->parent); // ensure expansion is a top level expansion
@@ -195,7 +195,7 @@ QVector<Model::Node*> ExpansionManager::tLExpansionTLNodes(MacroExpansion* expan
 }
 
 
-QVector<Model::Node*> ExpansionManager::nTLExpansionTLNodes(MacroExpansion* exp)
+QVector<Model::Node*> MacroExpansions::nTLExpansionTLNodes(MacroExpansion* exp)
 {
 	Q_ASSERT(exp);
 

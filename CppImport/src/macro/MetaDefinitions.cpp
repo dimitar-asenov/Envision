@@ -24,24 +24,24 @@
  **
  **********************************************************************************************************************/
 
-#include "MetaDefinitionManager.h"
+#include "MetaDefinitions.h"
 
 #include "MacroExpansion.h"
 #include "MacroArgumentInfo.h"
-#include "DefinitionManager.h"
-#include "ExpansionManager.h"
+#include "MacroDefinitions.h"
+#include "MacroExpansions.h"
 #include "LexicalHelper.h"
 #include "StaticStuff.h"
 #include "XMacroManager.h"
 
 namespace CppImport {
 
-MetaDefinitionManager::MetaDefinitionManager(const ClangHelper& clang, const DefinitionManager& definitionManager,
-															ExpansionManager& expansionManager, const LexicalHelper& lexicalHelper)
-	: clang_(clang), definitionManager_(definitionManager), expansionManager_(expansionManager),
+MetaDefinitions::MetaDefinitions(const ClangHelper& clang, const MacroDefinitions& definitionManager,
+															MacroExpansions& MacroExpansions, const LexicalHelper& lexicalHelper)
+	: clang_(clang), definitionManager_(definitionManager), MacroExpansions_(MacroExpansions),
 	  lexicalHelper_(lexicalHelper) {}
 
-OOModel::MetaDefinition* MetaDefinitionManager::createMetaDef(const clang::MacroDirective* md)
+OOModel::MetaDefinition* MetaDefinitions::createMetaDef(const clang::MacroDirective* md)
 {
 	if (metaDefinition(md)) return nullptr;
 
@@ -55,7 +55,7 @@ OOModel::MetaDefinition* MetaDefinitionManager::createMetaDef(const clang::Macro
 	return metaDef;
 }
 
-OOModel::MetaDefinition* MetaDefinitionManager::metaDefinition(const clang::MacroDirective* md)
+OOModel::MetaDefinition* MetaDefinitions::metaDefinition(const clang::MacroDirective* md)
 {
 	QString h = definitionManager_.hash(md);
 
@@ -64,7 +64,7 @@ OOModel::MetaDefinition* MetaDefinitionManager::metaDefinition(const clang::Macr
 	return it != metaDefinitions_.end() ? *it : nullptr;
 }
 
-void MetaDefinitionManager::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+void MetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
 																	  MacroExpansion* expansion, NodeMapping* mapping,
 																	  QVector<MacroArgumentInfo>& arguments)
 {
@@ -95,7 +95,7 @@ void MetaDefinitionManager::createMetaDefinitionBody(OOModel::MetaDefinition* me
 			metaDef->context()->metaCalls()->append(childExpansion->metaCall);
 }
 
-void MetaDefinitionManager::insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping)
+void MetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping)
 {
 	for (auto childExpansion : expansion->children)
 	{
@@ -117,7 +117,7 @@ void MetaDefinitionManager::insertChildMetaCalls(MacroExpansion* expansion, Node
 	}
 }
 
-void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
+void MetaDefinitions::childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
 																			NodeMapping* mapping, QVector<Model::Node*>* result)
 {
 	Q_ASSERT(expansion);
@@ -126,7 +126,7 @@ void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroE
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
 	if (auto original = mapping->original(node))
-		if (expansionManager_.expansion(original).contains(expansion))
+		if (MacroExpansions_.expansion(original).contains(expansion))
 		{
 			for (auto child : node->children())
 				childrenUnownedByExpansion(child, expansion, mapping, result);
@@ -137,7 +137,7 @@ void MetaDefinitionManager::childrenUnownedByExpansion(Model::Node* node, MacroE
 	result->append(node);
 }
 
-bool MetaDefinitionManager::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion, NodeMapping* mapping)
+bool MetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion, NodeMapping* mapping)
 {
 	QVector<Model::Node*> unownedNodes;
 	childrenUnownedByExpansion(cloned, expansion, mapping, &unownedNodes);
@@ -150,7 +150,7 @@ bool MetaDefinitionManager::removeUnownedNodes(Model::Node* cloned, MacroExpansi
 	return false;
 }
 
-void MetaDefinitionManager::insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping,
+void MetaDefinitions::insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping,
 																  QVector<MacroArgumentInfo>& arguments)
 {
 	for (auto argument : arguments)

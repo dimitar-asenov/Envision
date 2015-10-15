@@ -34,12 +34,12 @@
 
 namespace CppImport {
 
-class ExpansionManager;
+class MacroExpansions;
 
 class CPPIMPORT_API LexicalHelper
 {
 	public:
-		LexicalHelper(const ClangHelper& clang, const ExpansionManager& expansionManager);
+		LexicalHelper(const ClangHelper& clang, const MacroExpansions& macroExpansions);
 
 		void applyLexicalTransformations(Model::Node* node, NodeMapping* mapping, QVector<QString> formalArgs) const;
 
@@ -53,7 +53,7 @@ class CPPIMPORT_API LexicalHelper
 
 	private:
 		const ClangHelper& clang_;
-		const ExpansionManager& expansionManager_;
+		const MacroExpansions& macroExpansions_;
 		QHash<Model::Node*, QString> transformations_;
 
 		QString unexpandedSpelling(clang::SourceRange range) const;

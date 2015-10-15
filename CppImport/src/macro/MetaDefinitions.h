@@ -26,65 +26,65 @@
 
 #pragma once
 
-#include "AstMapping.h"
-#include "ClangHelper.h"
 #include "cppimport_api.h"
 
-#include "MacroExpansion.h"
+#include "ClangHelper.h"
+#include "NodeMapping.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-class DefinitionManager;
+class MacroExpansion;
+class MacroArgumentInfo;
+class MacroArgumentLocation;
+class MacroDefinitions;
+class MacroExpansions;
+class LexicalHelper;
+class XMacroManager;
 
-class CPPIMPORT_API ExpansionManager
+class CPPIMPORT_API MetaDefinitions
 {
 	public:
-		ExpansionManager(const ClangHelper& clang, const AstMapping& astMapping,
-							  const DefinitionManager& definitionManager);
+		MetaDefinitions(const ClangHelper& clang, const MacroDefinitions& definitionManager,
+									 MacroExpansions& MacroExpansions, const LexicalHelper& lexicalHelper);
 
-		void addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
-									  const clang::MacroArgs* macroArguments);
+		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
-		QVector<MacroExpansion*> expansions() const;
+		void createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+												MacroExpansion* expansion, NodeMapping* mapping,
+												QVector<MacroArgumentInfo>& arguments);
 
-		/**
-		 * return all registered expansions that are not children of other expansions.
-		 */
-		QVector<MacroExpansion*> topLevelExpansions() const;
-
-		MacroExpansion* immediateExpansion(clang::SourceLocation loc) const;
-
-		/**
-		 * return all expansions that node is a part of.
-		 */
-		QSet<MacroExpansion*> expansion(Model::Node* node);
-
-		/**
-		 * return all top level nodes of an expansion that is not a child of another expansion.
-		 */
-		QVector<Model::Node*> tLExpansionTLNodes(MacroExpansion* expansion) const;
-
-		/**
-		 * return all top level nodes of an expansion that is potentially a child of another expansion.
-		 */
-		QVector<Model::Node*> nTLExpansionTLNodes(MacroExpansion* expansion);
-
-		void clear();
+		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
 	private:
 		const ClangHelper& clang_;
-		const AstMapping& astMapping_;
-		const DefinitionManager& definitionManager_;
-		MacroExpansion* currentXMacroParent {};
-		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;
-		QVector<MacroExpansion*> expansions_;
+		const MacroDefinitions& definitionManager_;
+		MacroExpansions& MacroExpansions_;
+		const LexicalHelper& lexicalHelper_;
+
+		QHash<QString, OOModel::MetaDefinition*> metaDefinitions_;
 
 		/**
-		 * return the top most expansion registered for loc.
+		 * insert all non-xMacro child meta calls into metaDef.
 		 */
-		MacroExpansion* expansion(clang::SourceLocation loc) const;
-};
+		void insertChildMetaCalls(MacroExpansion* expansion, NodeMapping* childMapping);
 
-inline QVector<MacroExpansion*> ExpansionManager::expansions() const { return expansions_; }
+		/**
+		 * return all children of node that do not belong to expansion.
+		 */
+		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
+																NodeMapping* mapping, QVector<Model::Node*>* result);
+
+		/**
+		 * remove all children of node that do not belong to expansion.
+		 * return true if node itself does not belong to expansion.
+		 */
+		bool removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,	NodeMapping* mapping);
+
+		/**
+		 * insert splices for all nodes in childMapping that are a macro argument.
+		 */
+		void insertArgumentSplices(NodeMapping* mapping, NodeMapping* childMapping, QVector<MacroArgumentInfo>& arguments);
+};
 
 }

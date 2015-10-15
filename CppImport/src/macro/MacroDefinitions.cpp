@@ -24,20 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "DefinitionManager.h"
+#include "MacroDefinitions.h"
 
 namespace CppImport {
 
-DefinitionManager::DefinitionManager(const ClangHelper& clang) : clang_(clang) {}
+MacroDefinitions::MacroDefinitions(const ClangHelper& clang) : clang_(clang) {}
 
-QString DefinitionManager::definitionName(const clang::MacroDirective* md) const
+QString MacroDefinitions::definitionName(const clang::MacroDirective* md) const
 {
 	auto it = definitions_.find(md);
 
 	return it != definitions_.end() ? *it : nullptr;
 }
 
-bool DefinitionManager::macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName,
+bool MacroDefinitions::macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName,
 																QString& containerName) const
 {
 	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(md->getMacroInfo()->getDefinitionLoc());
@@ -75,7 +75,7 @@ bool DefinitionManager::macroDefinitionLocation(const clang::MacroDirective* md,
 	return true;
 }
 
-QString DefinitionManager::hash(const clang::MacroDirective* md) const
+QString MacroDefinitions::hash(const clang::MacroDirective* md) const
 {
 	QString namespaceName, fileName;
 
@@ -85,7 +85,7 @@ QString DefinitionManager::hash(const clang::MacroDirective* md) const
 		return "/ExternalMacro/" + definitionName(md);
 }
 
-OOModel::ReferenceExpression* DefinitionManager::expansionQualifier(const clang::MacroDirective* md) const
+OOModel::ReferenceExpression* MacroDefinitions::expansionQualifier(const clang::MacroDirective* md) const
 {
 	QString namespaceName, fileName;
 

@@ -26,18 +26,18 @@
 
 #include "LexicalHelper.h"
 
-#include "ExpansionManager.h"
+#include "MacroExpansions.h"
 #include "StaticStuff.h"
 
 namespace CppImport {
 
-LexicalHelper::LexicalHelper(const ClangHelper& clang, const ExpansionManager& expansionManager)
-	: clang_(clang), expansionManager_(expansionManager) {}
+LexicalHelper::LexicalHelper(const ClangHelper& clang, const MacroExpansions& macroExpansions)
+	: clang_(clang), macroExpansions_(macroExpansions) {}
 
 bool LexicalHelper::isConcatenationOrStringification(clang::SourceLocation loc) const
 {
 	if (loc.isMacroID())
-		if (auto immediateExpansion = expansionManager_.immediateExpansion(loc))
+		if (auto immediateExpansion = macroExpansions_.immediateExpansion(loc))
 			return clang_.sourceManager()->getImmediateExpansionRange(loc).first !=
 					immediateExpansion->range.getBegin();
 

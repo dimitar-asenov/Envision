@@ -33,10 +33,10 @@
 
 namespace CppImport {
 
-class CPPIMPORT_API DefinitionManager
+class CPPIMPORT_API MacroDefinitions
 {
 	public:
-		DefinitionManager(const ClangHelper& clang);
+		MacroDefinitions(const ClangHelper& clang);
 
 		void addMacroDefinition(const QString& name, const clang::MacroDirective* md);
 
@@ -74,21 +74,21 @@ class CPPIMPORT_API DefinitionManager
 		QHash<const clang::MacroDirective*, QString> definitions_;
 };
 
-inline void DefinitionManager::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
+inline void MacroDefinitions::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
 {
 	definitions_[md] = name;
 }
 
-inline bool DefinitionManager::isPartialBegin(const clang::MacroDirective* md) const
+inline bool MacroDefinitions::isPartialBegin(const clang::MacroDirective* md) const
 {
 	return definitionName(md).startsWith("BEGIN_");
 }
 
-inline bool DefinitionManager::isPartialEnd(const clang::MacroDirective* md) const
+inline bool MacroDefinitions::isPartialEnd(const clang::MacroDirective* md) const
 {
 	return definitionName(md).startsWith("END_");
 }
 
-inline void DefinitionManager::clear() { definitions_.clear(); }
+inline void MacroDefinitions::clear() { definitions_.clear(); }
 
 }

@@ -28,7 +28,7 @@
 
 #include "../cppimport_api.h"
 #include "../manager/TranslateManager.h"
-#include "../macro/MacroImportHelper.h"
+#include "../macro/MacroImporter.h"
 #include "../CppImportLogger.h"
 #include "../comments/CommentParser.h"
 
@@ -112,7 +112,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 */
 		bool shouldUseDataRecursionfor (clang::Stmt* S);
 
-		MacroImportHelper macroImportHelper_;
+		MacroImporter macroImporter_;
 
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;

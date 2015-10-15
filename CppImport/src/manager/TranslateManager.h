@@ -29,7 +29,7 @@
 #include "cppimport_api.h"
 #include "../CppImportUtilities.h"
 #include "NodeHasher.h"
-#include "../macro/MacroImportHelper.h"
+#include "../macro/MacroImporter.h"
 
 namespace CppImport {
 
@@ -40,7 +40,7 @@ namespace CppImport {
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(OOModel::Project* root, MacroImportHelper* macroImportHelper);
+		TranslateManager(OOModel::Project* root, MacroImporter* macroImporter);
 		~TranslateManager();
 		void setSourceManager(const clang::SourceManager* mngr);
 
@@ -154,7 +154,7 @@ class CPPIMPORT_API TranslateManager
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
-		MacroImportHelper* macroImportHelper_{};
+		MacroImporter* macroImporter_{};
 		NodeHasher* nh_{new NodeHasher()};
 };
 

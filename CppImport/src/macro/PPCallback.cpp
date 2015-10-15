@@ -33,8 +33,8 @@ void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::Mac
 {
 	auto name = QString::fromStdString(MacroNameTok.getIdentifierInfo()->getName().str());
 
-	definitionManager_.addMacroDefinition(name, md);
-	expansionManager_.addMacroExpansion(sr, md, args);
+	macroDefinitions_.addMacroDefinition(name, md);
+	macroExpansions_.addMacroExpansion(sr, md, args);
 }
 
 }

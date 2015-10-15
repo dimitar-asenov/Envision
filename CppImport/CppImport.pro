@@ -56,18 +56,18 @@ HEADERS += src/precompiled.h \
     src/comments/CommentParser.h \
     src/macro/AstMapping.h \
     src/macro/ClangHelper.h \
-    src/macro/DefinitionManager.h \
-    src/macro/ExpansionManager.h \
+    src/macro/MacroDefinitions.h \
+    src/macro/MacroExpansions.h \
     src/macro/LexicalHelper.h \
     src/macro/MacroArgumentInfo.h \
     src/macro/MacroArgumentLocation.h \
     src/macro/MacroExpansion.h \
-    src/macro/MacroImportHelper.h \
-    src/macro/MetaDefinitionManager.h \
     src/macro/NodeMapping.h \
     src/macro/StaticStuff.h \
     src/macro/XMacroManager.h \
-    src/macro/PPCallback.h
+    src/macro/PPCallback.h \
+    src/macro/MacroImporter.h \
+    src/macro/MetaDefinitions.h
 SOURCES += src/CppImportException.cpp \
     test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
@@ -85,13 +85,13 @@ SOURCES += src/CppImportException.cpp \
     src/comments/CommentParser.cpp \
     src/macro/AstMapping.cpp \
     src/macro/ClangHelper.cpp \
-    src/macro/DefinitionManager.cpp \
-    src/macro/ExpansionManager.cpp \
+    src/macro/MacroDefinitions.cpp \
+    src/macro/MacroExpansions.cpp \
     src/macro/LexicalHelper.cpp \
     src/macro/MacroExpansion.cpp \
-    src/macro/MacroImportHelper.cpp \
-    src/macro/MetaDefinitionManager.cpp \
     src/macro/NodeMapping.cpp \
     src/macro/StaticStuff.cpp \
     src/macro/XMacroManager.cpp \
-    src/macro/PPCallback.cpp
+    src/macro/PPCallback.cpp \
+    src/macro/MacroImporter.cpp \
+    src/macro/MetaDefinitions.cpp

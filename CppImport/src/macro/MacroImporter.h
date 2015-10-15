@@ -34,19 +34,19 @@
 #include "NodeMapping.h"
 #include "MacroArgumentLocation.h"
 #include "MacroArgumentInfo.h"
-#include "ExpansionManager.h"
-#include "DefinitionManager.h"
+#include "MacroExpansions.h"
+#include "MacroDefinitions.h"
 #include "LexicalHelper.h"
 #include "XMacroManager.h"
-#include "MetaDefinitionManager.h"
+#include "MetaDefinitions.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 
-class CPPIMPORT_API MacroImportHelper
+class CPPIMPORT_API MacroImporter
 {
 	public:
-		MacroImportHelper(OOModel::Project* root);
+		MacroImporter(OOModel::Project* root);
 
 		void startTranslationUnit(const clang::SourceManager* sourceManager,
 										  const clang::Preprocessor* preprocessor);
@@ -70,8 +70,8 @@ class CPPIMPORT_API MacroImportHelper
 
 		ClangHelper clang_;
 		AstMapping astMapping_;
-		DefinitionManager definitionManager_;
-		ExpansionManager expansionManager_;
+		MacroDefinitions macroDefinitions_;
+		MacroExpansions macroExpansions_;
 		LexicalHelper lexicalHelper_;
 		XMacroManager xMacroManager_;
 		QHash<QString, OOModel::MetaCallExpression*> metaCalls_;
