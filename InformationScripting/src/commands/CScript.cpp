@@ -76,7 +76,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		args.prepend(command);
 		auto q = QueryParser::buildQueryFrom(args.join(""), node);
 		QueryExecutor queryExecutor(q);
-		queryExecutor.execute();
+		return queryExecutor.execute();
 	}
 	else
 	{

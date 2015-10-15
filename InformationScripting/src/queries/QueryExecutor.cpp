@@ -30,6 +30,8 @@
 
 #include "visualization/DefaultVisualizer.h"
 
+#include "InteractionBase/src/commands/CommandResult.h"
+
 namespace InformationScripting {
 
 QueryExecutor::QueryExecutor(Query* q) : query_{q} {}
@@ -39,11 +41,14 @@ QueryExecutor::~QueryExecutor()
 	SAFE_DELETE(query_);
 }
 
-void QueryExecutor::execute()
+Interaction::CommandResult* QueryExecutor::execute()
 {
 	auto results = query_->execute({});
 	if (results.size())
 	{
+		// TODO how to handle warnings? CommandResult has no warnings?
+		if (results[0].hasWarnings())
+			qWarning() << results[0].warnings();
 		if (results[0])
 		{
 			auto val = results[0].value();
@@ -52,9 +57,11 @@ void QueryExecutor::execute()
 		}
 		else
 		{
-			qWarning() << results[0].errors();
+			return new Interaction::CommandResult(new Interaction::CommandError(results[0].errors()[0]));
 		}
 	}
+
+	return new Interaction::CommandResult();
 }
 
 } /* namespace InformationScripting */
