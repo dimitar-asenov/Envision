@@ -32,7 +32,7 @@
 
 namespace CppImport {
 
-void NodeHelpers::orderNodes(QVector<Model::Node*>& input)
+void NodeHelpers::orderNodesBySourceOrder(QVector<Model::Node*>& input)
 {
 	qSort(input.begin(), input.end(),
 			[](Model::Node* e1, Model::Node* e2)

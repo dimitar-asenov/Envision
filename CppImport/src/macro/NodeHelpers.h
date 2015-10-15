@@ -49,7 +49,7 @@ class NodeToCloneMap;
 class CPPIMPORT_API NodeHelpers
 {
 	public:
-		static void orderNodes(QVector<Model::Node*>& input);
+		static void orderNodesBySourceOrder(QVector<Model::Node*>& input);
 
 		static bool validContext(Model::Node* node);
 		static OOModel::Declaration* actualContext(Model::Node* node);

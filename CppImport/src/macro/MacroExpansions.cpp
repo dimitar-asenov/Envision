@@ -209,7 +209,7 @@ QVector<Model::Node*> MacroExpansions::topLevelNodes(MacroExpansion* expansion, 
 		}
 
 	QVector<Model::Node*> result = NodeHelpers::topLevelNodes(allTLExpansionNodes);
-	NodeHelpers::orderNodes(result);
+	NodeHelpers::orderNodesBySourceOrder(result);
 	return result;
 }
 
