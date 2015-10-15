@@ -79,7 +79,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
 		template <class Predicate>
 		void addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from = nullptr);
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
+		static void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
 
 		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
 
