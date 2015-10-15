@@ -39,6 +39,10 @@ namespace CppImport {
 
 class MacroArgumentLocation;
 
+/**
+ * uses the information provided by the ClangAstVisitor and the Preprocessor to transform a completely expanded
+ * Envision AST without macros into an Envision AST with MetaDefinitions and MetaCalls.
+ */
 class CPPIMPORT_API MacroImporter
 {
 	public:
