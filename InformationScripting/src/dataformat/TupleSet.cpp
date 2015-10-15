@@ -28,6 +28,11 @@
 
 namespace InformationScripting {
 
+TupleSet::TupleSet(const Tuple& t)
+{
+	add(t);
+}
+
 QSet<Tuple> TupleSet::tuples(const QString& tag) const
 {
 	return tuples_[tag];
