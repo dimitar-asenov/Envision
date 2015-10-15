@@ -32,9 +32,9 @@ Model::Node* EnvisionToClangMap::closestParentWithAstMapping(Model::Node* node) 
 {
 	if (!node) return nullptr;
 	if (envisionToClangMap_.contains(node)) return node;
-	if (node->parent()) return closestParentWithAstMapping(node->parent());
+	if (!node->parent()) return nullptr;
 
-	return nullptr;
+	return closestParentWithAstMapping(node->parent());
 }
 
 void EnvisionToClangMap::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
