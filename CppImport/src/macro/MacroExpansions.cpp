@@ -178,20 +178,18 @@ QSet<MacroExpansion*> MacroExpansions::expansions(Model::Node* node)
 {
 	Q_ASSERT(node);
 
-	if (!expansionCache_.contains(node))
-	{
-		expansionCache_[node] = {};
+	auto it = expansionCache_.find(node);
+	if (it != expansionCache_.end()) return *it;
 
-		if (auto n = envisionToClangMap_.closestParentWithAstMapping(node))
-			if (envisionToClangMap_.contains(n))
-				for (auto range : envisionToClangMap_.get(n))
-				{
-					auto exp = expansion(range.getBegin());
-					if (exp)	expansionCache_[node].insert(exp);
-				}
-	}
+	QSet<MacroExpansion*> result;
+	if (auto n = envisionToClangMap_.closestParentWithAstMapping(node))
+		if (envisionToClangMap_.contains(n))
+			for (auto range : envisionToClangMap_.get(n))
+				if (auto exp = expansion(range.getBegin()))
+					result.insert(exp);
 
-	return expansionCache_[node];
+	expansionCache_.insert(node, result);
+	return result;
 }
 
 
