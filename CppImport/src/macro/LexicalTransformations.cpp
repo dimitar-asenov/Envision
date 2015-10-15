@@ -86,10 +86,9 @@ void LexicalTransformations::processDeclaration(clang::Decl* clangAstNode, Model
 		if (ooMethod->results()->size() > 0)
 			processSourceRange(funcDecl->getReturnTypeSourceRange(), ooMethod->results()->first());
 
-		int i = 0;
-		for (auto it = funcDecl->param_begin(); it != funcDecl->param_end(); it++)
+		for (unsigned i = 0; i < funcDecl->getNumParams(); i++)
 		{
-			auto varDecl = clang::dyn_cast<clang::VarDecl>(*it);
+			auto varDecl = clang::dyn_cast<clang::VarDecl>(funcDecl->getParamDecl(i));
 			Q_ASSERT(varDecl);
 
 			auto ooVarDecl = DCast<OOModel::VariableDeclaration>(ooMethod->arguments()->at(i));
@@ -97,7 +96,6 @@ void LexicalTransformations::processDeclaration(clang::Decl* clangAstNode, Model
 			processSourceRange(varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange(),
 												ooVarDecl->typeExpression());
 			processSourceRange(clang::SourceRange(varDecl->getLocation(), varDecl->getSourceRange().getEnd()), ooVarDecl);
-			i++;
 		}
 	}
 	else if (auto varDecl = clang::dyn_cast<clang::VarDecl>(clangAstNode))
