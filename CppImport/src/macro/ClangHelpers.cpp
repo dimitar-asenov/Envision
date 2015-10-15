@@ -34,17 +34,15 @@ QString ClangHelpers::spelling(clang::SourceLocation start, clang::SourceLocatio
 	clang::SourceLocation e = clang::Lexer::getLocForEndOfToken(sourceManager_->getSpellingLoc(end), 0, *sourceManager_,
 																					preprocessor_->getLangOpts());
 
-	auto length = sourceManager_->getCharacterData(e) - sourceManager_->getCharacterData(b);
-	if (length > 1000000) return "ERROR_IN_GET_SPELLING";
+	bool invalid = true;
+	auto beginPtr = sourceManager_->getCharacterData(b, &invalid);
+	Q_ASSERT(!invalid);
 
-	try
-	{
-		return 0 < length ? QString::fromStdString(std::string(sourceManager_->getCharacterData(b), length)) : "";
-	}
-	catch (...)
-	{
-		return "ERROR_IN_GET_SPELLING";
-	}
+	auto endPtr = sourceManager_->getCharacterData(e, &invalid);
+	Q_ASSERT(!invalid);
+
+	auto length = endPtr - beginPtr;
+	return 0 < length ? QString::fromStdString(std::string(beginPtr, endPtr - beginPtr)) : "";
 }
 
 clang::SourceLocation ClangHelpers::immediateMacroLocation(clang::SourceLocation location) const
