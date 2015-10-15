@@ -92,15 +92,11 @@ void LexicalTransformations::processDeclaration(clang::Decl* clangAstNode, Model
 			auto varDecl = clang::dyn_cast<clang::VarDecl>(*it);
 			Q_ASSERT(varDecl);
 
-			auto start = varDecl->getLocation();
-			auto end = varDecl->hasInit() ? varDecl->getInit()->getSourceRange().getBegin() :
-													  varDecl->getSourceRange().getEnd();
-
 			auto ooVarDecl = DCast<OOModel::VariableDeclaration>(ooMethod->arguments()->at(i));
 
 			processSourceRange(varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange(),
 												ooVarDecl->typeExpression());
-			processSourceRange(clang::SourceRange(start, end), ooVarDecl);
+			processSourceRange(clang::SourceRange(varDecl->getLocation(), varDecl->getSourceRange().getEnd()), ooVarDecl);
 			i++;
 		}
 	}
@@ -109,13 +105,10 @@ void LexicalTransformations::processDeclaration(clang::Decl* clangAstNode, Model
 		auto ooVarDecl = DCast<OOModel::VariableDeclaration>(envisionAstNode);
 		Q_ASSERT(ooVarDecl);
 
-		auto start = varDecl->getLocation();
-		auto end = varDecl->getSourceRange().getEnd();
-
 		processSourceRange(varDecl->getTypeSourceInfo()->getTypeLoc().getSourceRange(),
 											ooVarDecl->typeExpression());
 
-		spellingRange = clang::SourceRange(start, end);
+		spellingRange = clang::SourceRange(varDecl->getLocation(), varDecl->getSourceRange().getEnd());
 	}
 	else if (auto namedDecl = clang::dyn_cast<clang::NamedDecl>(clangAstNode))
 	{
