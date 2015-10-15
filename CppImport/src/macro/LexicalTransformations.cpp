@@ -42,7 +42,7 @@ bool LexicalTransformations::isConcatenationOrStringification(clang::SourceLocat
 	if (loc.isMacroID())
 		if (auto immediateExpansion = macroExpansions_.immediateExpansion(loc))
 			return clang_.sourceManager()->getImmediateExpansionRange(loc).first !=
-					immediateExpansion->range.getBegin();
+					immediateExpansion->range().getBegin();
 
 	return false;
 }

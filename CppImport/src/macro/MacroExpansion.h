@@ -41,17 +41,56 @@ namespace CppImport {
 class CPPIMPORT_API MacroExpansion
 {
 	public:
-		clang::SourceRange range;
-		const clang::MacroDirective* definition;
-		MacroExpansion* parent;
-		QVector<clang::SourceLocation> argumentLocs;
-		QVector<MacroExpansion*> children;
-		OOModel::MetaCallExpression* metaCall;
-		MacroExpansion* xMacroParent;
-		QVector<MacroExpansion*> xMacroChildren;
-		Model::Node* replacementNode_{};
+		MacroExpansion(clang::SourceRange range, const clang::MacroDirective* definition, MacroExpansion* parent,
+							MacroExpansion* xMacroParent);
 
 		bool isChildOf(MacroExpansion* entry);
+
+		clang::SourceRange range();
+		const clang::MacroDirective* definition();
+		MacroExpansion* parent();
+		QVector<clang::SourceLocation> argumentLocs();
+		QVector<MacroExpansion*> children();
+		OOModel::MetaCallExpression* metaCall();
+		MacroExpansion* xMacroParent();
+		QVector<MacroExpansion*> xMacroChildren();
+		Model::Node* replacementNode();
+
+		void setMetaCall(OOModel::MetaCallExpression* metaCall);
+		void setReplacementNode(Model::Node* node);
+
+	private:
+		clang::SourceRange range_;
+		const clang::MacroDirective* definition_;
+		MacroExpansion* parent_{};
+		QVector<clang::SourceLocation> argumentLocs_;
+		QVector<MacroExpansion*> children_;
+		OOModel::MetaCallExpression* metaCall_{};
+		MacroExpansion* xMacroParent_{};
+		QVector<MacroExpansion*> xMacroChildren_;
+		Model::Node* replacementNode_{};
 };
+
+inline clang::SourceRange MacroExpansion::range() { return range_; }
+
+inline const clang::MacroDirective* MacroExpansion::definition() { return definition_; }
+
+inline MacroExpansion* MacroExpansion::parent() { return parent_; }
+
+inline QVector<clang::SourceLocation> MacroExpansion::argumentLocs() { return argumentLocs_; }
+
+inline QVector<MacroExpansion*> MacroExpansion::children() { return children_; }
+
+inline OOModel::MetaCallExpression*MacroExpansion::metaCall() { return metaCall_; }
+
+inline MacroExpansion*MacroExpansion::xMacroParent() { return xMacroParent_; }
+
+inline QVector<MacroExpansion*> MacroExpansion::xMacroChildren() { return xMacroChildren_; }
+
+inline Model::Node*MacroExpansion::replacementNode() { return replacementNode_; }
+
+inline void MacroExpansion::setMetaCall(OOModel::MetaCallExpression* metaCall) { metaCall_ = metaCall; }
+
+inline void MacroExpansion::setReplacementNode(Model::Node* node) { replacementNode_ = node; }
 
 }

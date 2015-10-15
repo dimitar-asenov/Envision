@@ -84,7 +84,7 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 		{
 			NodeToCloneMap childMapping;
 			auto cloned = NodeHelpers::cloneWithMapping(mapping->original(n), &childMapping);
-			applyLexicalTransformations(cloned, &childMapping, clang_.argumentNames(expansion->definition));
+			applyLexicalTransformations(cloned, &childMapping, clang_.argumentNames(expansion->definition()));
 
 			insertChildMetaCalls(expansion, &childMapping);
 			if (removeUnownedNodes(cloned, expansion, &childMapping)) continue;
@@ -95,27 +95,27 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 	}
 
 	// add all child expansion meta calls that are not yet added anywhere else as declaration meta calls
-	for (auto childExpansion : expansion->children)
-		if (!childExpansion->metaCall->parent())
-			metaDef->context()->metaCalls()->append(childExpansion->metaCall);
+	for (auto childExpansion : expansion->children())
+		if (!childExpansion->metaCall()->parent())
+			metaDef->context()->metaCalls()->append(childExpansion->metaCall());
 }
 
 void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, NodeToCloneMap* childMapping)
 {
-	for (auto childExpansion : expansion->children)
+	for (auto childExpansion : expansion->children())
 	{
 		// do not handle xMacro children here
-		if (childExpansion->xMacroParent) continue;
+		if (childExpansion->xMacroParent()) continue;
 
 		// retrieve the node that the child meta call should replace
-		if (auto replacementNode = childExpansion->replacementNode_)
+		if (auto replacementNode = childExpansion->replacementNode())
 			// replacementNode is an original node therefore we need to get to the cloned domain first
 			// clonedReplacementNode represents the cloned version of replacementNode
 			if (auto clonedReplacementNode = childMapping->clone(replacementNode))
 				if (!DCast<OOModel::Declaration>(clonedReplacementNode))
 				{
 					if (clonedReplacementNode->parent())
-						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode, childExpansion->metaCall);
+						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode, childExpansion->metaCall());
 					else
 						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
 				}
@@ -170,7 +170,7 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap* mapping, Nod
 			auto spliceLoc = argument.history_.first();
 
 			// the splice name is equal to the formal argument name where the argument is coming from
-			auto argName = clang_.argumentNames(spliceLoc.expansion_->definition).at(spliceLoc.argumentNumber_);
+			auto argName = clang_.argumentNames(spliceLoc.expansion_->definition()).at(spliceLoc.argumentNumber_);
 			auto newNode = new OOModel::ReferenceExpression(argName);
 
 			// insert the splice into the tree

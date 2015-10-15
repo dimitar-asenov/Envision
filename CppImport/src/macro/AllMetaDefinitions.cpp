@@ -45,9 +45,9 @@ AllMetaDefinitions::AllMetaDefinitions(OOModel::Project* root, const ClangHelper
 void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap* mapping,
 											 QVector<MacroArgumentInfo>& arguments)
 {
-	if (auto metaDef = standardMetaDefinitions_.createMetaDef(expansion->definition))
+	if (auto metaDef = standardMetaDefinitions_.createMetaDef(expansion->definition()))
 	{
-		auto metaDefParent = metaDefinitionParent(expansion->definition);
+		auto metaDefParent = metaDefinitionParent(expansion->definition());
 
 		// check whether this expansion is not a potential partial begin macro specialization
 		if (auto beginChild = partialBeginChild(expansion))
@@ -59,8 +59,8 @@ void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansi
 	}
 
 	// qualify the meta call
-	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall->callee());
-	callee->setPrefix(macroDefinitions_.expansionQualifier(expansion->definition));
+	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall()->callee());
+	callee->setPrefix(macroDefinitions_.expansionQualifier(expansion->definition()));
 }
 
 OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::MacroDirective* md)
@@ -120,7 +120,7 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 		auto list = new Model::List();
 		for (auto stmt : statements) list->append(stmt->clone());
 
-		auto childDef = standardMetaDefinitions_.metaDefinition(beginChild->definition);
+		auto childDef = standardMetaDefinitions_.metaDefinition(beginChild->definition());
 		Q_ASSERT(childDef);
 
 		if (metaDefParent->name().endsWith("_CPP"))
@@ -140,17 +140,17 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 			}
 		}
 
-		beginChild->metaCall->arguments()->append(list);
-		specializations_.insert(macroDefinitions_.hash(expansion->definition), list);
+		beginChild->metaCall()->arguments()->append(list);
+		specializations_.insert(macroDefinitions_.hash(expansion->definition()), list);
 	}
 
-	metaDef->context()->metaCalls()->append(beginChild->metaCall);
+	metaDef->context()->metaCalls()->append(beginChild->metaCall());
 }
 
 void AllMetaDefinitions::applyPartialBeginSpecializationTransformation(MacroExpansion* hExpansion,
 																						MacroExpansion* cppExpansion)
 {
-	auto hMetaDefinition = standardMetaDefinitions_.metaDefinition(hExpansion->definition);
+	auto hMetaDefinition = standardMetaDefinitions_.metaDefinition(hExpansion->definition());
 
 	// if the metaBindingInput was not yet added to this header xMacro begin meta definition then add it
 	if (!NodeHelpers::findDeclaration(hMetaDefinition->arguments(), "metaBindingInput"))
@@ -161,7 +161,7 @@ void AllMetaDefinitions::applyPartialBeginSpecializationTransformation(MacroExpa
 	 * we have to do it over the tree because the inner meta call might originate from an expansion of a
 	 * translation unit prior to this one.
 	 */
-	auto specHash = macroDefinitions_.hash(cppExpansion->definition);
+	auto specHash = macroDefinitions_.hash(cppExpansion->definition());
 
 	auto it = specializations_.find(specHash);
 	if (it != specializations_.end())
@@ -185,7 +185,7 @@ void AllMetaDefinitions::applyPartialBeginSpecializationTransformation(MacroExpa
 void AllMetaDefinitions::handleXMacros()
 {
 	for (auto expansion : macroExpansions_.expansions())
-		if (!expansion->xMacroChildren.empty())
+		if (!expansion->xMacroChildren().empty())
 		{
 			for (auto node : macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Transitive))
 			{
@@ -193,39 +193,39 @@ void AllMetaDefinitions::handleXMacros()
 				{
 					applyPartialBeginSpecializationTransformation(expansion, other);
 
-					NodeHelpers::removeNode(other->metaCall, true);
+					NodeHelpers::removeNode(other->metaCall(), true);
 
 					auto merged = new OOModel::MetaCallExpression();
 					merged->setCallee(new OOModel::ReferenceExpression(
-												macroDefinitions_.definitionName(expansion->definition),
-												macroDefinitions_.expansionQualifier(expansion->definition)));
+												macroDefinitions_.definitionName(expansion->definition()),
+												macroDefinitions_.expansionQualifier(expansion->definition())));
 
-					for (auto i = 0; i < expansion->metaCall->arguments()->size(); i++)
-						merged->arguments()->append(expansion->metaCall->arguments()->at(i)->clone());
+					for (auto i = 0; i < expansion->metaCall()->arguments()->size(); i++)
+						merged->arguments()->append(expansion->metaCall()->arguments()->at(i)->clone());
 
 					auto list = new Model::List();
-					for (auto xMacroChild : expansion->xMacroChildren)
+					for (auto xMacroChild : expansion->xMacroChildren())
 					{
 						auto unbound = new OOModel::MetaCallExpression(
-									macroDefinitions_.definitionName(xMacroChild->definition));
-						for (auto i = 0; i < xMacroChild->metaCall->arguments()->size(); i++)
-							unbound->arguments()->append(xMacroChild->metaCall->arguments()->at(i)->clone());
+									macroDefinitions_.definitionName(xMacroChild->definition()));
+						for (auto i = 0; i < xMacroChild->metaCall()->arguments()->size(); i++)
+							unbound->arguments()->append(xMacroChild->metaCall()->arguments()->at(i)->clone());
 
 						list->append(unbound);
 					}
 
 					merged->arguments()->append(list);
 
-					expansion->metaCall->parent()->replaceChild(expansion->metaCall, merged);
+					expansion->metaCall()->parent()->replaceChild(expansion->metaCall(), merged);
 
 					auto metaDef = createXMacroMetaDef(expansion, other);
 
-					for (auto i = 0; i < expansion->xMacroChildren.size(); i++)
+					for (auto i = 0; i < expansion->xMacroChildren().size(); i++)
 					{
-						auto xMacroChildH = expansion->xMacroChildren[i];
-						auto xMacroChildCpp = other->xMacroChildren[i];
+						auto xMacroChildH = expansion->xMacroChildren().at(i);
+						auto xMacroChildCpp = other->xMacroChildren().at(i);
 
-						auto unboundName = macroDefinitions_.definitionName(xMacroChildH->definition);
+						auto unboundName = macroDefinitions_.definitionName(xMacroChildH->definition());
 
 						auto binding1 = metaDef->metaBindings()->at(0);
 						auto binding2 = metaDef->metaBindings()->at(1);
@@ -234,14 +234,14 @@ void AllMetaDefinitions::handleXMacros()
 
 						auto mapping1 = new OOModel::MetaCallMapping(unboundName);
 						mapping1->setValue(new OOModel::ReferenceExpression(
-													 macroDefinitions_.definitionName(xMacroChildH->definition),
-													 macroDefinitions_.expansionQualifier(xMacroChildH->definition)));
+													 macroDefinitions_.definitionName(xMacroChildH->definition()),
+													 macroDefinitions_.expansionQualifier(xMacroChildH->definition())));
 						binding1->mappings()->append(mapping1);
 
 						auto mapping2 = new OOModel::MetaCallMapping(unboundName);
 						mapping2->setValue(new OOModel::ReferenceExpression(
-													 macroDefinitions_.definitionName(xMacroChildCpp->definition),
-													 macroDefinitions_.expansionQualifier(xMacroChildCpp->definition)));
+													 macroDefinitions_.definitionName(xMacroChildCpp->definition()),
+													 macroDefinitions_.expansionQualifier(xMacroChildCpp->definition())));
 						binding2->mappings()->append(mapping2);
 					}
 
@@ -257,15 +257,15 @@ OOModel::MetaDefinition* AllMetaDefinitions::createXMacroMetaDef(MacroExpansion*
 	auto hBaseExpansion = basePartialBegin(hExpansion);
 	auto cppBaseExpansion = basePartialBegin(cppExpansion);
 
-	auto mergedMetaDef = xMacroMetaDefinition(hBaseExpansion->definition);
+	auto mergedMetaDef = xMacroMetaDefinition(hBaseExpansion->definition());
 	if (!mergedMetaDef)
 	{
-		auto hBaseMetaDef = standardMetaDefinitions_.metaDefinition(hBaseExpansion->definition);
-		auto cppBaseMetaDef = standardMetaDefinitions_.metaDefinition(cppBaseExpansion->definition);
+		auto hBaseMetaDef = standardMetaDefinitions_.metaDefinition(hBaseExpansion->definition());
+		auto cppBaseMetaDef = standardMetaDefinitions_.metaDefinition(cppBaseExpansion->definition());
 
 		mergedMetaDef = hBaseMetaDef->clone();
-		mergedMetaDef->setName(macroDefinitions_.definitionName(hBaseExpansion->definition));
-		xMacrometaDefinitions_.insert(macroDefinitions_.definitionName(hBaseExpansion->definition), mergedMetaDef);
+		mergedMetaDef->setName(macroDefinitions_.definitionName(hBaseExpansion->definition()));
+		xMacrometaDefinitions_.insert(macroDefinitions_.definitionName(hBaseExpansion->definition()), mergedMetaDef);
 
 		for (auto i = 0; i < cppBaseMetaDef->arguments()->size(); i++)
 		{
@@ -312,8 +312,8 @@ OOModel::MetaDefinition* AllMetaDefinitions::createXMacroMetaDef(MacroExpansion*
 		hBaseMetaDef->parent()->replaceChild(hBaseMetaDef, mergedMetaDef);
 	}
 
-	NodeHelpers::removeNode(standardMetaDefinitions_.metaDefinition(cppExpansion->definition), true);
-	NodeHelpers::removeNode(standardMetaDefinitions_.metaDefinition(cppBaseExpansion->definition), true);
+	NodeHelpers::removeNode(standardMetaDefinitions_.metaDefinition(cppExpansion->definition()), true);
+	NodeHelpers::removeNode(standardMetaDefinitions_.metaDefinition(cppBaseExpansion->definition()), true);
 
 	return mergedMetaDef;
 }
@@ -321,10 +321,10 @@ OOModel::MetaDefinition* AllMetaDefinitions::createXMacroMetaDef(MacroExpansion*
 
 MacroExpansion* AllMetaDefinitions::basePartialBegin(MacroExpansion* partialBeginExpansion)
 {
-	Q_ASSERT(macroDefinitions_.isPartialBegin(partialBeginExpansion->definition));
+	Q_ASSERT(macroDefinitions_.isPartialBegin(partialBeginExpansion->definition()));
 
-	for (auto child : partialBeginExpansion->children)
-		if (macroDefinitions_.isPartialBegin(child->definition))
+	for (auto child : partialBeginExpansion->children())
+		if (macroDefinitions_.isPartialBegin(child->definition()))
 		 return basePartialBegin(child);
 
 	return partialBeginExpansion;
@@ -356,8 +356,8 @@ void AllMetaDefinitions::mergeClasses(OOModel::Class* merged, OOModel::Class* me
 
 MacroExpansion* AllMetaDefinitions::partialBeginChild(MacroExpansion* expansion)
 {
-	for (auto child : expansion->children)
-		if (macroDefinitions_.isPartialBegin(child->definition))
+	for (auto child : expansion->children())
+		if (macroDefinitions_.isPartialBegin(child->definition()))
 			return child;
 
 	return nullptr;
@@ -376,8 +376,8 @@ MacroExpansion* AllMetaDefinitions::matchingXMacroExpansion(Model::Node* node)
 {
 	if (auto metaCall = DCast<OOModel::MetaCallExpression>(node))
 		for (auto expansion : macroExpansions_.expansions())
-			if (!expansion->xMacroChildren.empty())
-				if (expansion->metaCall == metaCall)
+			if (!expansion->xMacroChildren().empty())
+				if (expansion->metaCall() == metaCall)
 					return expansion;
 
 	for (auto child : node->children())
