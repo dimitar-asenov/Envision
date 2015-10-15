@@ -174,7 +174,7 @@ MacroExpansion* MacroExpansions::immediateExpansion(clang::SourceLocation loc) c
 }
 
 
-QSet<MacroExpansion*> MacroExpansions::expansion(Model::Node* node)
+QSet<MacroExpansion*> MacroExpansions::expansions(Model::Node* node)
 {
 	Q_ASSERT(node);
 
@@ -222,7 +222,7 @@ QVector<Model::Node*> MacroExpansions::nTLExpansionTLNodes(MacroExpansion* exp)
 
 	QVector<Model::Node*> allNTLExpansionNodes;
 	for (auto node : envisionToClangMap_.nodes())
-		if (expansion(node).contains(exp))
+		if (expansions(node).contains(exp))
 			allNTLExpansionNodes.append(node);
 
 	QVector<Model::Node*> result = NodeHelpers::topLevelNodes(allNTLExpansionNodes);

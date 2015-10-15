@@ -63,7 +63,7 @@ class CPPIMPORT_API MacroExpansions
 		/**
 		 * return all expansions that node is a part of.
 		 */
-		QSet<MacroExpansion*> expansion(Model::Node* node);
+		QSet<MacroExpansion*> expansions(Model::Node* node);
 
 		/**
 		 * return all top level nodes of an expansion that is not a child of another expansion.

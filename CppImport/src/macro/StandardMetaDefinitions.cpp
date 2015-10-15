@@ -131,7 +131,7 @@ void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, Macr
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
 	if (auto original = mapping->original(node))
-		if (macroExpansions_.expansion(original).contains(expansion))
+		if (macroExpansions_.expansions(original).contains(expansion))
 		{
 			for (auto child : node->children())
 				childrenUnownedByExpansion(child, expansion, mapping, result);
