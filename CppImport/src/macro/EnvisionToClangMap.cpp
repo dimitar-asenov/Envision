@@ -55,8 +55,7 @@ void EnvisionToClangMap::mapAst(clang::Decl* clangAstNode, Model::Node* envision
 {
 	Q_ASSERT(envisionAstNode);
 
-	if (!envisionToClangMap_[envisionAstNode].contains(clangAstNode->getSourceRange()))
-		envisionToClangMap_[envisionAstNode].append(clangAstNode->getSourceRange());
+	envisionToClangMap_[envisionAstNode].append(clangAstNode->getSourceRange());
 }
 
 QVector<clang::SourceRange> EnvisionToClangMap::get(Model::Node* node) const
