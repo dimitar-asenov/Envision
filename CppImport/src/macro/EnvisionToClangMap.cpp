@@ -44,27 +44,23 @@ void EnvisionToClangMap::mapAst(clang::Stmt* clangAstNode, Model::Node* envision
 	Q_ASSERT(envisionAstNode);
 
 	if (auto bop = clang::dyn_cast<clang::BinaryOperator>(clangAstNode))
-		envisionToClangMap_[envisionAstNode]
-				.append(clang::SourceRange(bop->getOperatorLoc(), bop->getOperatorLoc()));
+		envisionToClangMap_.insert(envisionAstNode, bop->getOperatorLoc());
 	else if (auto op = clang::dyn_cast<clang::CXXOperatorCallExpr>(clangAstNode))
-		envisionToClangMap_[envisionAstNode]
-				.append(clang::SourceRange(op->getOperatorLoc(), op->getOperatorLoc()));
+		envisionToClangMap_.insert(envisionAstNode, op->getOperatorLoc());
 	else
-		envisionToClangMap_[envisionAstNode].append(clangAstNode->getSourceRange());
+		envisionToClangMap_.insert(envisionAstNode, clangAstNode->getSourceRange());
 }
 
 void EnvisionToClangMap::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 {
 	Q_ASSERT(envisionAstNode);
 
-	envisionToClangMap_[envisionAstNode].append(clangAstNode->getSourceRange());
+	envisionToClangMap_.insert(envisionAstNode, clangAstNode->getSourceRange());
 }
 
-QVector<clang::SourceRange> EnvisionToClangMap::get(Model::Node* node) const
+QList<clang::SourceRange> EnvisionToClangMap::get(Model::Node* node) const
 {
-	auto it = envisionToClangMap_.find(node);
-
-	return it != envisionToClangMap_.end() ? *it : QVector<clang::SourceRange>();
+	return envisionToClangMap_.values(node);
 }
 
 }

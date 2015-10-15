@@ -256,13 +256,12 @@ OOModel::Declaration* MacroImporter::actualContext(MacroExpansion* expansion)
 	// try to find a valid context where the context range contains the expansion range
 	QVector<OOModel::Declaration*> candidates;
 	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
-		for (auto range : it.value())
-			if (lexicalTransformations_.contains(range, expansion->range))
-				if (NodeHelpers::validContext(it.key()))
-				{
-					candidates.append(DCast<OOModel::Declaration>(it.key()));
-					break;
-				}
+		if (lexicalTransformations_.contains(it.value(), expansion->range))
+			if (NodeHelpers::validContext(it.key()))
+			{
+				candidates.append(DCast<OOModel::Declaration>(it.key()));
+				break;
+			}
 
 	// if we could not find a context return the root project
 	if (candidates.empty()) return root_;

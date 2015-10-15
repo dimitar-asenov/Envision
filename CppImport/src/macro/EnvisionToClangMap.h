@@ -41,27 +41,27 @@ namespace CppImport {
 class CPPIMPORT_API EnvisionToClangMap
 {
 	public:
-		QHash<Model::Node*, QVector<clang::SourceRange>>::iterator begin();
-		QHash<Model::Node*, QVector<clang::SourceRange>>::iterator end();
+		QMultiHash<Model::Node*, clang::SourceRange>::iterator begin();
+		QMultiHash<Model::Node*, clang::SourceRange>::iterator end();
 
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
 		const QList<Model::Node*> nodes() const;
-		QVector<clang::SourceRange> get(Model::Node* node) const;
+		QList<clang::SourceRange> get(Model::Node* node) const;
 		bool contains(Model::Node* node) const;
 		void clear();
 
 		Model::Node* closestParentWithAstMapping(Model::Node* node) const;
 
 	private:
-		QHash<Model::Node*, QVector<clang::SourceRange>> envisionToClangMap_;
+		QMultiHash<Model::Node*, clang::SourceRange> envisionToClangMap_;
 };
 
-inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator EnvisionToClangMap::begin()
+inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap::begin()
 { return envisionToClangMap_.begin(); }
 
-inline QHash<Model::Node*, QVector<clang::SourceRange>>::iterator EnvisionToClangMap::end()
+inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap::end()
 { return envisionToClangMap_.end(); }
 
 inline const QList<Model::Node*> EnvisionToClangMap::nodes() const { return envisionToClangMap_.keys(); }
