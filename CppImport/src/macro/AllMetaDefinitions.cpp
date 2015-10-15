@@ -187,14 +187,20 @@ void AllMetaDefinitions::handleXMacros()
 	for (auto expansion : macroExpansions_.expansions())
 		if (!expansion->xMacroChildren().empty())
 		{
+			// case: expansion is a xMacro parent
+
+			// find the .cpp counterpart
 			for (auto node : macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Transitive))
-			{
 				if (auto other = matchingXMacroExpansion(node))
 				{
+					// case: expansion is a .h xMacro parent and other is a .cpp xMacro parent
+
 					applyPartialBeginSpecializationTransformation(expansion, other);
 
+					// remove the .cpp xMacro meta call from the original tree
 					NodeHelpers::removeNodeFromParent(other->metaCall(), true);
 
+					// create the meta call that also contains unbound xMacro children
 					auto merged = new OOModel::MetaCallExpression();
 					merged->setCallee(new OOModel::ReferenceExpression(
 												macroDefinitions_.definitionName(expansion->definition()),
@@ -203,6 +209,7 @@ void AllMetaDefinitions::handleXMacros()
 					for (auto i = 0; i < expansion->metaCall()->arguments()->size(); i++)
 						merged->arguments()->append(expansion->metaCall()->arguments()->at(i)->clone());
 
+					// create the unbound xMacro children list
 					auto list = new Model::List();
 					for (auto xMacroChild : expansion->xMacroChildren())
 					{
@@ -213,13 +220,14 @@ void AllMetaDefinitions::handleXMacros()
 
 						list->append(unbound);
 					}
-
 					merged->arguments()->append(list);
 
+					// replace the .h xMacro meta call with the newly created merged meta call
 					expansion->metaCall()->parent()->replaceChild(expansion->metaCall(), merged);
 
 					auto metaDef = createXMacroMetaDef(expansion, other);
 
+					// check whether to insert meta bindings for all xMacro children
 					for (auto i = 0; i < expansion->xMacroChildren().size(); i++)
 					{
 						auto xMacroChildH = expansion->xMacroChildren().at(i);
@@ -230,8 +238,10 @@ void AllMetaDefinitions::handleXMacros()
 						auto binding1 = metaDef->metaBindings()->at(0);
 						auto binding2 = metaDef->metaBindings()->at(1);
 
+						// if the binding for this xMacro child already exists do nothing
 						if (NodeHelpers::findDeclaration(binding1->mappings(), unboundName)) continue;
 
+						// insert meta bindings for this xMacro child
 						auto mapping1 = new OOModel::MetaCallMapping(unboundName);
 						mapping1->setValue(new OOModel::ReferenceExpression(
 													 macroDefinitions_.definitionName(xMacroChildH->definition()),
@@ -247,7 +257,6 @@ void AllMetaDefinitions::handleXMacros()
 
 					break;
 				}
-			}
 		}
 }
 
