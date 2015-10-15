@@ -220,8 +220,7 @@ void NodeHelpers::buildMappingInfo(Model::Node* node, QList<Model::Node*>& info)
 
 void NodeHelpers::useMappingInfo(Model::Node* node, QList<Model::Node*>& info, NodeToCloneMap& mapping)
 {
-	mapping.add(info.front(), node);
-	info.pop_front();
+	mapping.add(info.takeFirst(), node);
 
 	for (auto child : node->children())
 		useMappingInfo(child, info, mapping);
