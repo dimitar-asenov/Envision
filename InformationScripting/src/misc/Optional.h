@@ -39,26 +39,26 @@ class INFORMATIONSCRIPTING_API Optional
 		// Since the error constructor takes a QString we disallow usage with QString.
 		static_assert(!std::is_same<ValueType, QString>(), "QString is not allowed as paremeter for Optional");
 	public:
-		constexpr Optional(const ValueType& v, const QString& warning = {});
-		constexpr Optional(ValueType&& v, const QString& warning = {});
-		constexpr Optional(const QString& errorMessage);
-		constexpr Optional(QString&& errorMessage);
+		Optional(const ValueType& v, const QString& warning = {});
+		Optional(ValueType&& v, const QString& warning = {});
+		Optional(const QString& errorMessage);
+		Optional(QString&& errorMessage);
 
 		Optional(const Optional& other);
 		Optional(Optional&& other);
 
-		constexpr explicit operator bool() const;
+		explicit operator bool() const;
 
-		constexpr const ValueType& value() const &;
-		constexpr ValueType& value() &;
+		const ValueType& value() const &;
+		ValueType& value() &;
 
-		constexpr ValueType&& value() &&;
-		constexpr const ValueType&& value() const &&;
+		ValueType&& value() &&;
+		const ValueType&& value() const &&;
 
-		constexpr bool hasError() const;
+		bool hasError() const;
 		QString error() const;
 
-		constexpr bool hasWarning() const;
+		bool hasWarning() const;
 		QString warning() const;
 	private:
 		enum class Type : int {Value, Warning, Error};
@@ -68,25 +68,25 @@ class INFORMATIONSCRIPTING_API Optional
 };
 
 template <class ValueType>
-inline constexpr Optional<ValueType>::Optional(const ValueType& v, const QString& warning)
+inline Optional<ValueType>::Optional(const ValueType& v, const QString& warning)
 	: value_{v}, message_{warning}
 {
 	if (!warning.isNull()) type_ = Type::Warning;
 }
 
 template <class ValueType>
-inline constexpr Optional<ValueType>::Optional(ValueType&& v, const QString& warning)
+inline Optional<ValueType>::Optional(ValueType&& v, const QString& warning)
 	: value_{std::move(v)}, message_{warning}
 {
 	if (!warning.isNull()) type_ = Type::Warning;
 }
 
 template <class ValueType>
-inline constexpr Optional<ValueType>::Optional(const QString& errorMessage)
+inline Optional<ValueType>::Optional(const QString& errorMessage)
 	: message_{errorMessage}, type_{Type::Error} {}
 
 template <class ValueType>
-inline constexpr Optional<ValueType>::Optional(QString&& errorMessage)
+inline Optional<ValueType>::Optional(QString&& errorMessage)
 	: message_{std::move(errorMessage)}, type_{Type::Error} {}
 
 template <class ValueType>
@@ -98,24 +98,24 @@ inline Optional<ValueType>::Optional(Optional&& other)
 	: value_{std::move(other.value_)}, message_{std::move(other.message_)}, type_{std::move(other.type_)} {}
 
 template <class ValueType>
-inline constexpr Optional<ValueType>::operator bool() const { return type_ != Type::Error;}
+inline Optional<ValueType>::operator bool() const { return type_ != Type::Error;}
 
 template <class ValueType>
-inline constexpr const ValueType& Optional<ValueType>::value() const & { Q_ASSERT(bool(*this)); return value_; }
+inline const ValueType& Optional<ValueType>::value() const & { Q_ASSERT(bool(*this)); return value_; }
 
 template <class ValueType>
-inline constexpr ValueType& Optional<ValueType>::value() & { Q_ASSERT(bool(*this)); return value_; }
+inline ValueType& Optional<ValueType>::value() & { Q_ASSERT(bool(*this)); return value_; }
 
 template <class ValueType>
-inline constexpr ValueType&& Optional<ValueType>::value() && { Q_ASSERT(bool(*this)); return std::move(value_); }
+inline ValueType&& Optional<ValueType>::value() && { Q_ASSERT(bool(*this)); return std::move(value_); }
 
 template <class ValueType>
-inline constexpr bool Optional<ValueType>::hasError() const { return type_ == Type::Error; }
+inline bool Optional<ValueType>::hasError() const { return type_ == Type::Error; }
 template <class ValueType>
 inline QString Optional<ValueType>::error() const { Q_ASSERT(type_ == Type::Error); return message_; }
 
 template <class ValueType>
-inline constexpr bool Optional<ValueType>::hasWarning() const { return type_ == Type::Warning; }
+inline bool Optional<ValueType>::hasWarning() const { return type_ == Type::Warning; }
 template <class ValueType>
 inline QString Optional<ValueType>::warning() const { Q_ASSERT(type_ == Type::Warning); return message_; }
 
