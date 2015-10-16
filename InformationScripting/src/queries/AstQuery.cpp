@@ -39,6 +39,7 @@
 #include "OOModel/src/expressions/types/FunctionTypeExpression.h"
 
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
+#include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
@@ -79,6 +80,7 @@ void AstQuery::registerDefaultQueries()
 	registerQuery("uses", &AstQuery::usesQuery);
 	registerQuery("type", &AstQuery::typeFilter);
 	registerQuery("attribute", &AstQuery::attribute);
+	registerQuery("modify", &AstQuery::modify);
 }
 
 void AstQuery::setTypeTo(QStringList& args, QString type)
@@ -371,6 +373,56 @@ TupleSet AstQuery::attribute(TupleSet input)
 	for (auto node : foundAttributeNodes)
 		result.add({{"ast", node}});
 	return result;
+}
+
+TupleSet AstQuery::modify(TupleSet input)
+{
+	auto tuples = input.take("replace");
+	auto manager = target()->manager();
+	Q_ASSERT(manager);
+	manager->beginModification(target(), "Modifying ast from query");
+	for (const auto& tuple : tuples)
+	{
+		Model::Node* nodeToReplace = tuple["replace"];
+		auto cNodeToReplace = DCast<Model::CompositeNode>(nodeToReplace);
+		QString newExpression = tuple["with"];
+		auto parent = nodeToReplace->parent();
+		Q_ASSERT(parent);
+		manager->changeModificationTarget(parent);
+		auto newExpressionNode = OOInteraction::OOExpressionBuilder::getOOExpression(newExpression);
+
+		for (int i = 2; i < tuple.size(); ++i)
+		{
+			auto namedProperty = tuple[i];
+			if (namedProperty.first.startsWith("keepAs"))
+			{
+				QString oldAttributeToKeep = namedProperty.second;
+				if (cNodeToReplace->hasAttribute(oldAttributeToKeep))
+				{
+					if (auto nodeToKeep = cNodeToReplace->get(oldAttributeToKeep))
+					{
+						auto newAttributeToModify = namedProperty.first.mid(6);
+						if (newExpressionNode->hasAttribute(newAttributeToModify))
+						{
+							if (auto attr = newExpressionNode->get(newAttributeToModify))
+							{
+								nodeToKeep->setParent(nullptr);
+								if (auto list = DCast<Model::List>(attr))
+									list->append(nodeToKeep);
+								else
+									newExpressionNode->replaceChild(attr, nodeToKeep);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		parent->replaceChild(nodeToReplace, newExpressionNode);
+		input.add({{"ast", parent}});
+	}
+	manager->endModification();
+	return input;
 }
 
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)

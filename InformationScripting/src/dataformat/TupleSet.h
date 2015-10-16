@@ -35,6 +35,9 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API TupleSet
 {
 	public:
+		TupleSet() = default;
+		TupleSet(const QList<Tuple>& initialTuples);
+
 		template<class Condition>
 		QSet<Tuple> tuples(Condition condition) const;
 		/**
