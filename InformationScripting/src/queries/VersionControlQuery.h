@@ -30,6 +30,10 @@
 
 #include "ScopedArgumentQuery.h"
 
+namespace FilePersistence {
+	struct CommitMetaData;
+}
+
 namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API VersionControlQuery : public ScopedArgumentQuery
@@ -42,6 +46,8 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public ScopedArgumentQuery
 		static const QStringList COUNT_ARGUMENT_NAMES;
 
 		VersionControlQuery(Model::Node* target, QStringList args);
+
+		static void addCommitMetaInformation(TupleSet& ts, const FilePersistence::CommitMetaData& metadata);
 };
 
 } /* namespace InformationScripting */

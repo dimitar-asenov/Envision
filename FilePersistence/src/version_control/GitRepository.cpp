@@ -1074,8 +1074,7 @@ git_commit* GitRepository::parseCommit(QString revision) const
 
 QString GitRepository::oidToQString(const git_oid* oid) const
 {
-	char sha1[41];
-	sha1[40] = '\0';
+	char sha1[GIT_OID_HEXSZ + 1] = {0};
 
 	git_oid_fmt(sha1, oid);
 
