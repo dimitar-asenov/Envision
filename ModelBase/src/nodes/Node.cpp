@@ -99,7 +99,7 @@ void Node::execute(UndoCommand *command)
 	}
 }
 
-Node* Node::lowestCommonAncestor(Node* other)
+Node* Node::lowestCommonAncestor(Node* other, Node** thisParent, Node** otherParent)
 {
 	QList<Node*> thisParents;
 	QList<Node*> otherParents;
@@ -128,6 +128,18 @@ Node* Node::lowestCommonAncestor(Node* other)
 
 		thisParents.removeFirst();
 		otherParents.removeFirst();
+	}
+
+	Q_ASSERT(thisParents.isEmpty() == otherParents.isEmpty());
+	if (thisParent)
+	{
+		if (thisParents.isEmpty()) *thisParent = nullptr;
+		else *thisParent = thisParents.first();
+	}
+	if (otherParent)
+	{
+		if (otherParents.isEmpty()) *otherParent = nullptr;
+		else *otherParent = otherParents.first();
 	}
 
 	return n;

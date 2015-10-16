@@ -296,8 +296,13 @@ class MODELBASE_API Node
 
 		/**
 		 * Returns the lowest common ancestor of this node and other.
+		 *
+		 * If \a thisParent and \a otherParent are provided, they will be set to the last ancestors of \a this and
+		 * \a other which are different from each other and have the common ancestor as parent. If there is no common
+		 * parent, these will be set to the roots of the corresponding trees. If \a this == \a other, \a thisParent
+		 * and \a otherParent are set to nullptr.
 		 */
-		Node* lowestCommonAncestor(Node* other);
+		Node* lowestCommonAncestor(Node* other, Node** thisParent = nullptr, Node** otherParent = nullptr);
 
 		/**
 		 * Returns true of this node is an Ancestor of other and false otherwise.
