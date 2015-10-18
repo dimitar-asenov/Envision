@@ -23,38 +23,74 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#include "SimpleQueryParser.h"
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "../nodes/CompositeQueryNode.h"
+#include "../nodes/OperatorQueryNode.h"
+#include "../nodes/CommandNode.h"
 
 namespace InformationScripting {
 
-class QueryNodeContainer;
-class QueryNode;
+QueryNode* SimpleQueryParser::parse(const QString& queryString)
+{
+	qDebug() << "parsing" << queryString;
+	int index = 0;
+	auto query = parseAny(queryString, index);
+	Q_ASSERT(index == queryString.length());
+	return query;
+}
 
-class HQuery : public Interaction::GenericHandler {
-	protected:
-		HQuery() = default;
+QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
+{
+	if (index >= queryString.length()) return new CommandNode();
 
-	public:
-		static HQuery* instance();
+	// Find name and arguments of the command
+	QString commandString;
+	QChar ch;
+	while (index < queryString.length() )
+	{
+		ch = queryString[index];
+		if (ch == ',' || ch == '|' || ch == '{' || ch == '}') break;
+		else ++index;
 
-		static void initStringComponents();
+		commandString += ch;
+	}
 
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+	Q_ASSERT( commandString.isEmpty() || ch != '{');
+	QueryNode* query = nullptr;
 
-	private:
-		QueryNodeContainer* parentContainer(QueryNode* e);
+	if (ch == '{')
+	{
+		query = parseList(queryString, index); // Create list
+		if (index < queryString.length())
+			ch = queryString[index];
+	}
+	else query = new CommandNode(commandString); // Create the command. Note that it could be an empty string.
 
-		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
+	if (ch == ',' || ch == '}' || index >= queryString.length()) return query;
 
-		void setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index);
+	// We must have an operator, create it and keep parsing.
+	Q_ASSERT(ch == '|');
+	auto op = new OperatorQueryNode();
+	op->setOp(OperatorQueryNode::Pipe);
+	op->setLeft(query);
+	op->setRight(parseAny(queryString, ++index));
+	return op;
+}
 
-		bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
-		static int processEnter(QString& exp, int index);
-};
+CompositeQueryNode* SimpleQueryParser::parseList(const QString& queryString, int& index)
+{
+	auto composite = new CompositeQueryNode();
+	QChar ch = ',';
+	while (ch == ',')
+	{
+		composite->queries()->append( parseAny(queryString, ++index) );
+		Q_ASSERT(index < queryString.length());
+		ch = queryString[index];
+	}
+	Q_ASSERT(queryString[index] == '}');
+	++index;
+	return composite;
+}
 
-} /* namespace InformationScripting */
+}

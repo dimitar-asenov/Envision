@@ -30,11 +30,15 @@
 #include "../nodes/QueryNodeContainer.h"
 #include "../nodes/CommandNode.h"
 #include "../nodes/CommandArgument.h"
+#include "../nodes/CompositeQueryNode.h"
 #include "../nodes/EmptyQueryNode.h"
 #include "../nodes/OperatorQueryNode.h"
 #include "../nodes/ErrorQueryNode.h"
 #include "../nodes/UnfinishedQueryNode.h"
-#include "../parsing/QueryNodeBuilder.h"
+
+//#include "../parsing/QueryNodeBuilder.h"
+#include "../interaction/SimpleQueryParser.h"
+
 #include "../visualization/VCommandNode.h"
 #include "../visualization/VCommandArgument.h"
 #include "../visualization/VEmptyQueryNode.h"
@@ -68,6 +72,9 @@ void HQuery::initStringComponents()
 	});
 	StringComponents::add<CommandArgument>([](CommandArgument* argument) {
 		return StringComponents::c(argument->argument());
+	});
+	StringComponents::add<CompositeQueryNode>([](CompositeQueryNode* composite) {
+		return StringComponents::c(StringComponents::list(composite->queries(), "{", ",", "}", true, true));
 	});
 
 	StringComponents::add<EmptyQueryNode>([](EmptyQueryNode*) {
@@ -136,6 +143,7 @@ void HQuery::initStringComponents()
 
 void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 {
+	qDebug() << "keyPressed" << event;
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 	auto key = event->key();
@@ -174,6 +182,12 @@ void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 				}
 			}
 		} break;
+		case Qt::Key_Enter: // Fallthrough
+		case Qt::Key_Return:
+		{
+			if (event->modifiers() == Qt::ControlModifier)
+				newIndex = processEnter(newText, index);
+		} break;
 		default:
 		{
 			if (!enterPressed && !event->text().isEmpty())
@@ -184,7 +198,7 @@ void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 		} break;
 	}
 
-	if (!enterPressed)
+	if (!enterPressed || (enterPressed && event->modifiers() == Qt::ControlModifier))
 		setNewQuery(target, topMostItem, newText, newIndex);
 }
 
@@ -226,7 +240,7 @@ void HQuery::setNewQuery(Visualization::Item* target, Visualization::Item* topMo
 {
 	QString newText = text;
 	qDebug() << "NewText" << text;
-	QueryNode* newQuery = QueryNodeBuilder::parse(newText);
+	QueryNode* newQuery = SimpleQueryParser::parse(newText);
 
 	Model::Node* containerNode = topMostItem->node()->parent();
 	Q_ASSERT(containerNode);
@@ -249,6 +263,61 @@ void HQuery::setNewQuery(Visualization::Item* target, Visualization::Item* topMo
 bool HQuery::processDeleteOrBackspace(Qt::Key, QString&, int&)
 {
 	return false;
+}
+
+int HQuery::processEnter(QString& exp, int index)
+{
+	// Insert a new list delimiter
+	exp.insert(index, ',');
+	int finalIndex = index+1;
+
+	// Check if it is needed to insert the list syntax
+	bool needsListDelimitersFront = false;
+	int subLists = 0;
+	for (int i = index-1; i>=0; --i)
+	{
+		if (subLists == 0)
+		{
+			if (exp[i] == ',' || exp[i] == '{')
+				break; // We already have a list, so nothing to do
+			else if (exp[i] == '|') // We don't have a list, we must insert the list delimiters
+			{
+				needsListDelimitersFront = true;
+				++finalIndex;
+				exp.insert(i+1, '{');
+				break;
+			}
+			else if (exp[i] == '}') {
+				++subLists;
+			}
+		}
+		else if (exp[i] == '{') --subLists;
+	}
+	Q_ASSERT(subLists == 0);
+
+	// We must do the same in the forward direction and make sure we get the same results.
+	bool needsListDelimitersBack = false;
+	for (int i = finalIndex; i<exp.length(); ++i)
+	{
+		if (subLists == 0)
+		{
+			if (exp[i] == ',' || exp[i] == '}')
+				break; // We already have a list, so nothing to do
+			else if (exp[i] == '|') // We don't have a list, we must insert the list delimiters
+			{
+				needsListDelimitersBack = true;
+				exp.insert(i, '}');
+				break;
+			}
+			else if (exp[i] == '{') {
+				++subLists;
+			}
+		}
+		else if (exp[i] == '}') --subLists;
+	}
+
+	Q_ASSERT(needsListDelimitersFront == needsListDelimitersBack);
+	return finalIndex;
 }
 
 }

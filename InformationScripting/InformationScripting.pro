@@ -72,7 +72,10 @@ HEADERS += src/precompiled.h \
     src/queries/LinearQuery.h \
     src/visualization/HighlightOverlay.h \
     src/visualization/Heatmap.h \
-    src/queries/VersionControlQuery.h
+    src/queries/VersionControlQuery.h \
+    src/interaction/SimpleQueryParser.h \
+    src/visualization/VCompositeQueryNode.h \
+    src/visualization/VCompositeQueryNodeStyle.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -128,7 +131,10 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/LinearQuery.cpp \
     src/visualization/HighlightOverlay.cpp \
     src/visualization/Heatmap.cpp \
-    src/queries/VersionControlQuery.cpp
+    src/queries/VersionControlQuery.cpp \
+    src/interaction/SimpleQueryParser.cpp \
+    src/visualization/VCompositeQueryNode.cpp \
+    src/visualization/VCompositeQueryNodeStyle.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

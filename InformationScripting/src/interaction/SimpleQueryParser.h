@@ -28,33 +28,19 @@
 
 #include "../informationscripting_api.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
-
 namespace InformationScripting {
 
-class QueryNodeContainer;
 class QueryNode;
+class CompositeQueryNode;
 
-class HQuery : public Interaction::GenericHandler {
-	protected:
-		HQuery() = default;
-
+class INFORMATIONSCRIPTING_API SimpleQueryParser
+{
 	public:
-		static HQuery* instance();
-
-		static void initStringComponents();
-
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		static QueryNode* parse(const QString& queryString);
 
 	private:
-		QueryNodeContainer* parentContainer(QueryNode* e);
-
-		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
-
-		void setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index);
-
-		bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
-		static int processEnter(QString& exp, int index);
+		static QueryNode* parseAny(const QString& queryString, int& index);
+		static CompositeQueryNode* parseList(const QString& queryString, int& index);
 };
 
-} /* namespace InformationScripting */
+}
