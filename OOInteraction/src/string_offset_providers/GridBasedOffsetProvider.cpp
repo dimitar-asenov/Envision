@@ -68,11 +68,16 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 	if (auto declarativeItem = DCast<Visualization::DeclarativeItemBase>(item()))
 		if (auto gridLayout = dynamic_cast<Visualization::GridLayoutFormElement*>(declarativeItem->currentForm()))
 		{
-			//TODO, do we need the next call? If so we need to trivially extend the components method
-			//setFilterNullAndEmptyComponents();
+			setFilterNullAndEmptyComponents();
 			for (int i = 0; i < gridLayout->length(declarativeItem); ++i)
-				//TODO The const_cast below is a bit fishy. Should the grid layout store mutable objects to begin with?
-				add(new Cell(i, const_cast<Visualization::Item*>(gridLayout->itemAt(declarativeItem, i)), i));
+			{
+				auto cellItem = gridLayout->itemAt(declarativeItem, i);
+				if (cellItem)
+				{
+					//TODO The const_cast below is a bit fishy. Should the grid layout store mutable objects to begin with?
+					add(new Cell(i, const_cast<Visualization::Item*>(cellItem), i));
+				}
+			}
 
 			return;
 		}
@@ -368,16 +373,22 @@ QStringList GridBasedOffsetProvider::components()
 
 	if (filterNullAndEmptyComponents_)
 	{
-		auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(item());
-		Q_ASSERT(layoutProvider);
+		int length = -1;
+		if ( auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(item()) )
+			length = layoutProvider->layout()->length();
+		else if (auto declarativeItem = DCast<Visualization::DeclarativeItemBase>(item()))
+			if (auto gridLayout = dynamic_cast<Visualization::GridLayoutFormElement*>(declarativeItem->currentForm()))
+				length = gridLayout->length(declarativeItem);
 
-		if (components.size() != layoutProvider->layout()->length())
+		Q_ASSERT(length >= 0);
+
+		if (components.size() != length)
 		{
 			for (int i = components.size() - 1; i>=0; --i)
 				if (components[i].isNull())
 					components.removeAt(i);
 		}
-		if (components.size() != layoutProvider->layout()->length())
+		if (components.size() != length)
 			components.removeAll(QString(""));
 	}
 
