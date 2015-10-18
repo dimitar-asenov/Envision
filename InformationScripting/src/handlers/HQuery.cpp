@@ -274,19 +274,21 @@ int HQuery::processEnter(QString& exp, int index)
 	// Check if it is needed to insert the list syntax
 	bool needsListDelimitersFront = false;
 	int subLists = 0;
-	for (int i = index-1; i>=0; --i)
+	for (int i = index-1; i>=-1; --i) // one before start
 	{
+		Q_ASSERT(i>=0 || subLists == 0);
+
 		if (subLists == 0)
 		{
-			if (exp[i] == ',' || exp[i] == '{')
-				break; // We already have a list, so nothing to do
-			else if (exp[i] == '|') // We don't have a list, we must insert the list delimiters
+			if (i < 0 || exp[i] == '|') // We don't have a list, we must insert the list delimiters
 			{
 				needsListDelimitersFront = true;
 				++finalIndex;
 				exp.insert(i+1, '{');
 				break;
 			}
+			else if (exp[i] == ',' || exp[i] == '{')
+				break; // We already have a list, so nothing to do
 			else if (exp[i] == '}') {
 				++subLists;
 			}
@@ -297,18 +299,20 @@ int HQuery::processEnter(QString& exp, int index)
 
 	// We must do the same in the forward direction and make sure we get the same results.
 	bool needsListDelimitersBack = false;
-	for (int i = finalIndex; i<exp.length(); ++i)
+	for (int i = finalIndex; i<=exp.length(); ++i) //one pass length
 	{
+		Q_ASSERT(i< exp.length() || subLists == 0);
+
 		if (subLists == 0)
 		{
-			if (exp[i] == ',' || exp[i] == '}')
-				break; // We already have a list, so nothing to do
-			else if (exp[i] == '|') // We don't have a list, we must insert the list delimiters
+			if (i == exp.length() || exp[i] == '|') // We don't have a list, we must insert the list delimiters
 			{
 				needsListDelimitersBack = true;
 				exp.insert(i, '}');
 				break;
 			}
+			else if (exp[i] == ',' || exp[i] == '}')
+				break; // We already have a list, so nothing to do
 			else if (exp[i] == '{') {
 				++subLists;
 			}
