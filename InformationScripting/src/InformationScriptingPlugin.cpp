@@ -52,6 +52,8 @@
 #include "handlers/HQuery.h"
 #include "interaction/QueryOperatorDescriptorList.h"
 
+#include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
+
 namespace InformationScripting {
 
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
@@ -75,6 +77,11 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	VUnfinishedQueryNode::setDefaultClassHandler(HQuery::instance());
 	HQuery::initStringComponents();
 	QueryOperatorDescriptorList::initializeWithDefaultOperators();
+
+	//Enable the default grid offset string provider for all query nodes:
+	OOInteraction::StringOffsetProvider::allowGridBasedProvider([](Visualization::Item* item)
+		{ return dynamic_cast<QueryNode*>(item->node());});
+
 	return true;
 }
 

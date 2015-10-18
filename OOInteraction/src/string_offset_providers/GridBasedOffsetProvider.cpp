@@ -64,6 +64,19 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 		return;
 	}
 
+	// See if this item uses a declarative grid and use a standard way to handle it
+	if (auto declarativeItem = DCast<Visualization::DeclarativeItemBase>(item()))
+		if (auto gridLayout = dynamic_cast<Visualization::GridLayoutFormElement*>(declarativeItem->currentForm()))
+		{
+			//TODO, do we need the next call? If so we need to trivially extend the components method
+			//setFilterNullAndEmptyComponents();
+			for (int i = 0; i < gridLayout->length(declarativeItem); ++i)
+				//TODO The const_cast below is a bit fishy. Should the grid layout store mutable objects to begin with?
+				add(new Cell(i, const_cast<Visualization::Item*>(gridLayout->itemAt(declarativeItem, i)), i));
+
+			return;
+		}
+
 	throw OOInteractionException("Creating an unknown GridBasedOffsetProvider for a visualization of type " +
 			vis->typeName());
 }

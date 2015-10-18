@@ -117,6 +117,10 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	OOVisualization::VArrayInitializer::setDefaultClassHandler(HArrayInitializer::instance());
 	OOVisualization::VStatementItemList::setDefaultClassHandler(HStatementItemList::instance());
 
+	//Enable the default grid offset string provider for all expressions:
+	StringOffsetProvider::allowGridBasedProvider([](Visualization::Item* item)
+		{ return dynamic_cast<OOModel::Expression*>(item->node());});
+
 	// Register string components that convert an expression to a string list representing its components
 	StringComponents::initConversions();
 	// For debugging purposes, also register a method that converts any node to a string

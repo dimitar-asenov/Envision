@@ -77,12 +77,16 @@ class OOINTERACTION_API StringOffsetProvider {
 
 		static StringOffsetProvider* defaultProvider(Visualization::Item* item);
 
+		using AllowGridBasedProviderFunction = std::function<bool (Visualization::Item*)>;
+		static void allowGridBasedProvider(AllowGridBasedProviderFunction allow);
+
 	protected:
 		// Helper methods
 		virtual QStringList components();
 
 	private:
 		Visualization::Item* vis_;
+		static QList<AllowGridBasedProviderFunction> allowGridBasedProviderFunctions_;
 };
 
 inline Visualization::Item* StringOffsetProvider::item() const { return vis_; }

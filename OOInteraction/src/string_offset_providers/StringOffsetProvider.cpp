@@ -29,15 +29,22 @@
 #include "GridBasedOffsetProvider.h"
 #include "TextRendererStringOffsetProvider.h"
 
-#include "OOModel/src/expressions/Expression.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/TextRenderer.h"
 #include "Core/src/AdapterManager.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBase.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
 
 namespace OOInteraction {
+
+QList<StringOffsetProvider::AllowGridBasedProviderFunction> StringOffsetProvider::allowGridBasedProviderFunctions_;
+void StringOffsetProvider::allowGridBasedProvider(AllowGridBasedProviderFunction allow)
+{
+	allowGridBasedProviderFunctions_.append(allow);
+}
 
 StringOffsetProvider::StringOffsetProvider(Visualization::Item* item) : vis_(item)
 {
@@ -210,10 +217,20 @@ StringOffsetProvider* StringOffsetProvider::defaultProvider(Visualization::Item*
 	if ( GridBasedOffsetProvider::hasGridConstructorfor (item)) return new GridBasedOffsetProvider(item);
 	if ( auto tr = dynamic_cast<Visualization::TextRenderer*>(item)) return new TextRendererStringOffsetProvider(tr);
 
-	// TODO: The next condition is a bit flaky. Find a way to improve that. Perhaps with information regarding the parent
-	// class, which is always a form of VExpression<...>
-	if ( !dynamic_cast<OOModel::Expression*>(item->node()) ) return nullptr;
-	if ( dynamic_cast<Visualization::LayoutProvider<>*>(item) )	return new GridBasedOffsetProvider(item);
+	for (auto f : allowGridBasedProviderFunctions_)
+		if (f(item))
+		{
+			if ( dynamic_cast<Visualization::LayoutProvider<>*>(item) )
+				return new GridBasedOffsetProvider(item);
+
+			if (auto declarativeItem = DCast<Visualization::DeclarativeItemBase>(item))
+			{
+				if (dynamic_cast<Visualization::GridLayoutFormElement*>(declarativeItem->currentForm()))
+					return new GridBasedOffsetProvider(item);
+			}
+
+			break;
+		}
 
 	return nullptr;
 }

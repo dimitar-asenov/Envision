@@ -308,6 +308,7 @@ int GridLayoutFormElement::length(Visualization::Item*) const
 	if (numColumns_ == 1) return numRows_;
 	return numColumns_;
 }
+
 const Visualization::Item* GridLayoutFormElement::itemAt(Visualization::DeclarativeItemBase* item, int index) const
 {
 	Q_ASSERT(numColumns_ == 1 || numRows_ == 1);
