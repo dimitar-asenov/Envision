@@ -43,6 +43,7 @@
 #include "../visualization/VCommandArgument.h"
 #include "../visualization/VEmptyQueryNode.h"
 #include "../visualization/VErrorQueryNode.h"
+#include "../visualization/VCompositeQueryNode.h"
 
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
 #include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
@@ -119,6 +120,11 @@ void HQuery::initStringComponents()
 	[](GridBasedOffsetProvider* grid, VCommandNode* vis){
 		grid->add(new Cell(0, vis->name(), 0));
 		grid->add(new ListCell(1, vis->arguments(), 1, " ", " ", ""));
+	});
+
+	GridBasedOffsetProvider::addGridConstructor<VCompositeQueryNode>(
+	[](GridBasedOffsetProvider* grid, VCompositeQueryNode* vis){
+		grid->add(new ListCell(0, vis->queries(), 0, "{", ",", "}"));
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VCommandArgument>(

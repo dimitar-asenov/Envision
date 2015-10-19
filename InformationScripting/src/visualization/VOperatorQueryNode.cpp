@@ -57,6 +57,7 @@ void VOperatorQueryNode::initializeForms()
 		})
 		->setNoInnerCursors([](Item*){return true;})
 		->setNoBoundaryCursors([](Item*){return true;})
+		->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
 	);
 }
 
