@@ -121,8 +121,9 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
 
 Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 {
+	// TODO require argument
 	QString type = argument(NODETYPE_ARGUMENT_NAMES[0]);
-	Q_ASSERT(type.size() > 0); // TODO should be a warning for the user.
+	Q_ASSERT(type.size() > 0);
 
 	auto ts = input;
 	Model::SymbolMatcher matcher = Model::SymbolMatcher::guessMatcher(type);
@@ -137,6 +138,8 @@ Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 		return false;
 	};
 	auto tuples = ts.tuples(haveMatchingParent);
+	if (tuples.isEmpty()) return {ts, "No input nodes found which have a parent of type: " + type};
+
 	for (auto tuple : tuples)
 	{
 		Model::Node* astNode = tuple["ast"];
@@ -197,10 +200,12 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 
 Optional<TupleSet> AstQuery::genericQuery(TupleSet input)
 {
+	// TODO require one argument!
 	QString typeArgument = argument(NODETYPE_ARGUMENT_NAMES[0]);
 	QString nameArgument = argument(NAME_ARGUMENT_NAMES[0]);
 	if (nameArgument.size() > 0) return nameQuery(input, nameArgument);
 	else if (typeArgument.size() > 0) return typeQuery(input, typeArgument);
+	Q_ASSERT(false);
 	return {"Generic Error"};
 }
 
@@ -228,6 +233,8 @@ Optional<TupleSet> AstQuery::typeQuery(TupleSet input, QString type)
 
 Optional<TupleSet> AstQuery::nameQuery(TupleSet input, QString name)
 {
+	Q_ASSERT(!name.isEmpty());
+
 	TupleSet tuples;
 
 	QList<QPair<QString, Model::Node*>> matchingNodes;
@@ -274,6 +281,7 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 		result = tuples;
 	}
 
+	// TODO require one argument!
 	auto typeMatcher = Model::SymbolMatcher::guessMatcher(argument(NODETYPE_ARGUMENT_NAMES[0]));
 	auto nameMatcher = Model::SymbolMatcher::guessMatcher(argument(NAME_ARGUMENT_NAMES[0]));
 
@@ -309,6 +317,7 @@ Optional<TupleSet> AstQuery::typeFilter(TupleSet input)
 	QStringList arguments;
 	TupleSet result;
 
+	// TODO require argument!
 	// NOTE: To use spaces in this argument use quotes!
 	// QCommandLineParser removes the entered spaces automatically
 	// NOTE: here the type argument has a different meaning than in the other queries:
@@ -468,6 +477,7 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 		{
 			if (args.size() != methodDecl->arguments()->size()) return false;
 			// TODO: here we support only one return value:
+			Q_ASSERT(methodDecl->results()->size() <= 1);
 			if ((methodDecl->results()->size() == 0 && (expectedType.isEmpty() || expectedType == "void"))
 				 || (methodDecl->results()->size() > 0 &&
 					  StringComponents::stringForNode(methodDecl->results()->at(0)->typeExpression()) == expectedType)

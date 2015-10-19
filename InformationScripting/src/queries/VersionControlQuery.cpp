@@ -52,8 +52,8 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 	// get GitRepository
 	QString path("projects/");
 	path.append(managerName);
-	// TODO user error later:
-	Q_ASSERT(GitRepository::repositoryExists(path));
+	if (!GitRepository::repositoryExists(path)) return {"No repository found"};
+
 	GitRepository repository{path};
 	TupleSet result;
 
