@@ -34,7 +34,7 @@ namespace Model {
 
 namespace CppImport {
 
-class MacroArgumentLocation;
+struct MacroArgumentLocation;
 
 struct CPPIMPORT_API MacroArgumentInfo
 {

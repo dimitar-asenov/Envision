@@ -37,7 +37,7 @@
 
 namespace CppImport {
 
-class MacroArgumentLocation;
+struct MacroArgumentLocation;
 
 /**
  * uses the information provided by the ClangAstVisitor and the Preprocessor to transform a completely expanded

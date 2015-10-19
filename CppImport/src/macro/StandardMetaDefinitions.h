@@ -43,7 +43,7 @@ class MacroDefinitions;
 class MacroExpansions;
 class MacroExpansion;
 class NodeToCloneMap;
-class MacroArgumentInfo;
+struct MacroArgumentInfo;
 class LexicalTransformations;
 
 /**
