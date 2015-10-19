@@ -49,11 +49,11 @@ class CPPIMPORT_API MacroExpansion
 		clang::SourceRange range();
 		const clang::MacroDirective* definition();
 		MacroExpansion* parent();
-		QVector<clang::SourceLocation> argumentLocs();
-		QVector<MacroExpansion*> children();
+		QVector<clang::SourceLocation>& argumentLocs();
+		QVector<MacroExpansion*>& children();
 		OOModel::MetaCallExpression* metaCall();
 		MacroExpansion* xMacroParent();
-		QVector<MacroExpansion*> xMacroChildren();
+		QVector<MacroExpansion*>& xMacroChildren();
 		Model::Node* replacementNode();
 
 		void setMetaCall(OOModel::MetaCallExpression* metaCall);
@@ -77,15 +77,15 @@ inline const clang::MacroDirective* MacroExpansion::definition() { return defini
 
 inline MacroExpansion* MacroExpansion::parent() { return parent_; }
 
-inline QVector<clang::SourceLocation> MacroExpansion::argumentLocs() { return argumentLocs_; }
+inline QVector<clang::SourceLocation>& MacroExpansion::argumentLocs() { return argumentLocs_; }
 
-inline QVector<MacroExpansion*> MacroExpansion::children() { return children_; }
+inline QVector<MacroExpansion*>& MacroExpansion::children() { return children_; }
 
 inline OOModel::MetaCallExpression*MacroExpansion::metaCall() { return metaCall_; }
 
 inline MacroExpansion*MacroExpansion::xMacroParent() { return xMacroParent_; }
 
-inline QVector<MacroExpansion*> MacroExpansion::xMacroChildren() { return xMacroChildren_; }
+inline QVector<MacroExpansion*>& MacroExpansion::xMacroChildren() { return xMacroChildren_; }
 
 inline Model::Node*MacroExpansion::replacementNode() { return replacementNode_; }
 
