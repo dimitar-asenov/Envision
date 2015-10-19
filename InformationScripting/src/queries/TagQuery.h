@@ -30,6 +30,8 @@
 
 #include "ScopedArgumentQuery.h"
 
+#include "../misc/Optional.h"
+
 namespace Model {
 	class SymbolMatcher;
 	class Text;
@@ -40,7 +42,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 {
 	public:
-		virtual TupleSet executeLinear(TupleSet input) override;
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 
@@ -50,15 +52,15 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		static const QStringList REMOVE_ARGUMENT_NAMES;
 		static const QStringList PERSISTENT_ARGUMENT_NAMES;
 
-		using ExecuteFunction = std::function<TupleSet (TagQuery*, TupleSet)>;
+		using ExecuteFunction = std::function<Optional<TupleSet> (TagQuery*, TupleSet)>;
 		ExecuteFunction exec_{};
 		bool persistent_{true};
 
 		TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args);
-		TupleSet tags(TupleSet input);
-		TupleSet queryTags(TupleSet input);
-		TupleSet addTags(TupleSet input);
-		TupleSet removeTags(TupleSet input);
+		Optional<TupleSet> tags(TupleSet input);
+		Optional<TupleSet> queryTags(TupleSet input);
+		Optional<TupleSet> addTags(TupleSet input);
+		Optional<TupleSet> removeTags(TupleSet input);
 
 		void insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
 };

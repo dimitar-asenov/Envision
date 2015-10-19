@@ -28,6 +28,10 @@
 
 #include "../informationscripting_api.h"
 
+namespace Interaction {
+	class CommandResult;
+}
+
 namespace InformationScripting {
 
 class Query;
@@ -38,7 +42,7 @@ class INFORMATIONSCRIPTING_API QueryExecutor
 		QueryExecutor(Query* q);
 		~QueryExecutor();
 
-		void execute();
+		Interaction::CommandResult* execute();
 
 	private:
 		Query* query_{};

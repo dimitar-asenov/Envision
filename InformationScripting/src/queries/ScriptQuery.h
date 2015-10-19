@@ -44,7 +44,7 @@ class ScriptQuery : public Query
 		static void initPythonEnvironment();
 		static void unloadPythonEnvironment();
 
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 
 	private:
 		QString scriptPath_;
@@ -54,7 +54,7 @@ class ScriptQuery : public Query
 
 		void importStar(boost::python::dict& main_namespace, boost::python::object apiObject);
 
-		QList<TupleSet> queryExecutor(QString name, boost::python::list args, boost::python::list input);
+		QList<Optional<TupleSet>> queryExecutor(QString name, boost::python::list args, boost::python::list input);
 };
 
 } /* namespace InformationScripting */

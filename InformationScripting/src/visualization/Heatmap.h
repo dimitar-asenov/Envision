@@ -35,7 +35,7 @@ namespace InformationScripting {
 class Heatmap : public ScopedArgumentQuery
 {
 	public:
-		virtual TupleSet executeLinear(TupleSet input) override;
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 

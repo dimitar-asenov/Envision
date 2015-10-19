@@ -62,7 +62,7 @@ AstQuery::AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
 		}, QStringList("AstQuery") + args}, exec_{exec}
 {}
 
-TupleSet AstQuery::executeLinear(TupleSet input)
+Optional<TupleSet> AstQuery::executeLinear(TupleSet input)
 {
 	return exec_(this, input);
 }
@@ -96,7 +96,7 @@ void AstQuery::setTypeTo(QStringList& args, QString type)
 		args.append(QString("-%1=%2").arg(NODETYPE_ARGUMENT_NAMES[0], type));
 }
 
-TupleSet AstQuery::baseClassesQuery(TupleSet)
+Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
 {
 	// TODO handle input
 	TupleSet ts;
@@ -119,10 +119,11 @@ TupleSet AstQuery::baseClassesQuery(TupleSet)
 	return ts;
 }
 
-TupleSet AstQuery::toParentType(TupleSet input)
+Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 {
+	// TODO require argument
 	QString type = argument(NODETYPE_ARGUMENT_NAMES[0]);
-	Q_ASSERT(type.size() > 0); // TODO should be a warning for the user.
+	Q_ASSERT(type.size() > 0);
 
 	auto ts = input;
 	Model::SymbolMatcher matcher = Model::SymbolMatcher::guessMatcher(type);
@@ -137,6 +138,8 @@ TupleSet AstQuery::toParentType(TupleSet input)
 		return false;
 	};
 	auto tuples = ts.tuples(haveMatchingParent);
+	if (tuples.isEmpty()) return {ts, "No input nodes found which have a parent of type: " + type};
+
 	for (auto tuple : tuples)
 	{
 		Model::Node* astNode = tuple["ast"];
@@ -147,42 +150,66 @@ TupleSet AstQuery::toParentType(TupleSet input)
 	return ts;
 }
 
-TupleSet AstQuery::callGraph(TupleSet)
+Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 {
-	TupleSet ts;
+	TupleSet result;
+
+	auto addCallgraphFor = [&result](std::vector<OOModel::Method*> methods)
+	{
+		for (auto method : methods)
+		{
+			Q_ASSERT(method);
+			QSet<OOModel::Method*> seenMethods{method};
+			auto callees = method->callees().toList();
+			addCallInformation(result, method, callees);
+			while (!callees.empty())
+			{
+				auto currentMethod = callees.takeLast();
+				if (seenMethods.contains(currentMethod)) continue;
+				seenMethods.insert(currentMethod);
+				auto newCallees = currentMethod->callees().toList();
+				addCallInformation(result, currentMethod, newCallees);
+				callees << newCallees;
+			}
+		}
+	};
+
 	if (scope() == Scope::Local)
 	{
-		auto methodTarget = target()->firstAncestorOfType<OOModel::Method>();
-		Q_ASSERT(methodTarget);
-		QSet<OOModel::Method*> seenMethods{methodTarget};
-		auto methods = methodTarget->callees().toList();
-		addCallInformation(ts, methodTarget, methods);
-		while (!methods.empty())
-		{
-			auto currentMethod = methods.takeLast();
-			if (seenMethods.contains(currentMethod)) continue;
-			seenMethods.insert(currentMethod);
-			auto newCallees = currentMethod->callees().toList();
-			addCallInformation(ts, currentMethod, newCallees);
-			methods << newCallees;
-		}
-
-		adaptOutputForRelation(ts, "calls", {"caller", "callee"});
+		if (auto method = DCast<OOModel::Method>(target())) addCallgraphFor({method});
+		else return {"Callgraph does only work on method nodes"};
 	}
-	// TODO handle other cases, global propably doesn't make sense.
-	return ts;
+	else if (scope() == Scope::Global)
+		return {"Callgraph does not work globally"};
+	else if (scope() == Scope::Input)
+	{
+		// Keep input nodes
+		result = input;
+		std::vector<OOModel::Method*> methodsInInput;
+		for (const auto& astTuple : input.tuples("ast"))
+		{
+			Model::Node* astNode = astTuple["ast"];
+			if (auto method = DCast<OOModel::Method>(astNode)) methodsInInput.push_back(method);
+		}
+		if (methodsInInput.size() == 0) return {result, "Called callgraph without methods in input"};
+		else addCallgraphFor(std::move(methodsInInput));
+	}
+	adaptOutputForRelation(result, "calls", {"caller", "callee"});
+	return result;
 }
 
-TupleSet AstQuery::genericQuery(TupleSet input)
+Optional<TupleSet> AstQuery::genericQuery(TupleSet input)
 {
+	// TODO require one argument!
 	QString typeArgument = argument(NODETYPE_ARGUMENT_NAMES[0]);
 	QString nameArgument = argument(NAME_ARGUMENT_NAMES[0]);
 	if (nameArgument.size() > 0) return nameQuery(input, nameArgument);
 	else if (typeArgument.size() > 0) return typeQuery(input, typeArgument);
-	return {};
+	Q_ASSERT(false);
+	return {"Generic Error"};
 }
 
-TupleSet AstQuery::typeQuery(TupleSet input, QString type)
+Optional<TupleSet> AstQuery::typeQuery(TupleSet input, QString type)
 {
 	TupleSet tuples;
 
@@ -204,8 +231,10 @@ TupleSet AstQuery::typeQuery(TupleSet input, QString type)
 	return tuples;
 }
 
-TupleSet AstQuery::nameQuery(TupleSet input, QString name)
+Optional<TupleSet> AstQuery::nameQuery(TupleSet input, QString name)
 {
+	Q_ASSERT(!name.isEmpty());
+
 	TupleSet tuples;
 
 	QList<QPair<QString, Model::Node*>> matchingNodes;
@@ -232,7 +261,7 @@ TupleSet AstQuery::nameQuery(TupleSet input, QString name)
 	return tuples;
 }
 
-TupleSet AstQuery::usesQuery(TupleSet input)
+Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 {
 	TupleSet result;
 	QHash<Model::Node*, QList<Model::Reference*>> references;
@@ -252,6 +281,7 @@ TupleSet AstQuery::usesQuery(TupleSet input)
 		result = tuples;
 	}
 
+	// TODO require one argument!
 	auto typeMatcher = Model::SymbolMatcher::guessMatcher(argument(NODETYPE_ARGUMENT_NAMES[0]));
 	auto nameMatcher = Model::SymbolMatcher::guessMatcher(argument(NAME_ARGUMENT_NAMES[0]));
 
@@ -278,7 +308,7 @@ TupleSet AstQuery::usesQuery(TupleSet input)
 	return result;
 }
 
-TupleSet AstQuery::typeFilter(TupleSet input)
+Optional<TupleSet> AstQuery::typeFilter(TupleSet input)
 {
 	using SymbolType = Model::Node::SymbolType;
 
@@ -287,6 +317,7 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 	QStringList arguments;
 	TupleSet result;
 
+	// TODO require argument!
 	// NOTE: To use spaces in this argument use quotes!
 	// QCommandLineParser removes the entered spaces automatically
 	// NOTE: here the type argument has a different meaning than in the other queries:
@@ -329,7 +360,7 @@ TupleSet AstQuery::typeFilter(TupleSet input)
 	return result;
 }
 
-TupleSet AstQuery::attribute(TupleSet input)
+Optional<TupleSet> AstQuery::attribute(TupleSet input)
 {
 	const QString attributeName = argument(ATTRIBUTE_NAME_NAMES[1]);
 	Q_ASSERT(!attributeName.isEmpty());
@@ -446,6 +477,7 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 		{
 			if (args.size() != methodDecl->arguments()->size()) return false;
 			// TODO: here we support only one return value:
+			Q_ASSERT(methodDecl->results()->size() <= 1);
 			if ((methodDecl->results()->size() == 0 && (expectedType.isEmpty() || expectedType == "void"))
 				 || (methodDecl->results()->size() > 0 &&
 					  StringComponents::stringForNode(methodDecl->results()->at(0)->typeExpression()) == expectedType)

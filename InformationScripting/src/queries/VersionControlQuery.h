@@ -39,7 +39,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API VersionControlQuery : public ScopedArgumentQuery
 {
 	public:
-		virtual TupleSet executeLinear(TupleSet input) override;
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 	private:

@@ -32,7 +32,7 @@ NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value
  : name_{propertyName}, value_{value}
 {}
 
-QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
+QList<Optional<TupleSet>> NodePropertyAdder::execute(QList<TupleSet> input)
 {
 	for (auto& ts : input)
 	{
@@ -42,7 +42,9 @@ QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
 			ts.add(node);
 		}
 	}
-	return input;
+	QList<Optional<TupleSet>> result;
+	for (auto&& t : input) result.push_back(t);
+	return result;
 }
 
 } /* namespace InformationScripting */

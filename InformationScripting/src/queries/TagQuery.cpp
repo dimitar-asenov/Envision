@@ -41,7 +41,7 @@ const QStringList TagQuery::ADD_ARGUMENT_NAMES{"a", "add"};
 const QStringList TagQuery::REMOVE_ARGUMENT_NAMES{"r", "remove"};
 const QStringList TagQuery::PERSISTENT_ARGUMENT_NAMES{"p", "persistent"};
 
-TupleSet TagQuery::executeLinear(TupleSet input)
+Optional<TupleSet> TagQuery::executeLinear(TupleSet input)
 {
 	return exec_(this, input);
 }
@@ -72,23 +72,25 @@ TagQuery::TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
 	persistent_ = argument(PERSISTENT_ARGUMENT_NAMES[1]) == "yes";
 }
 
-TupleSet TagQuery::tags(TupleSet input)
+Optional<TupleSet> TagQuery::tags(TupleSet input)
 {
+	// TODO require at most one argument
 	bool addSet = isArgumentSet(ADD_ARGUMENT_NAMES[0]);
 	bool removeSet = isArgumentSet(REMOVE_ARGUMENT_NAMES[0]);
-	Q_ASSERT(!(addSet && removeSet)); // TODO should be user warning
+	Q_ASSERT(!(addSet && removeSet));
 	if (addSet)
 		return addTags(input);
 	else if (removeSet)
-		return removeTags(input);
+		return removeTags(input).value();
 	else
 		return queryTags(input);
 }
 
-TupleSet TagQuery::queryTags(TupleSet input)
+Optional<TupleSet> TagQuery::queryTags(TupleSet input)
 {
+	// TODO require argument
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
-	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
+	Q_ASSERT(tagText.size() > 0);
 	// Keep stuff in the input
 	TupleSet result = input;
 
@@ -110,21 +112,22 @@ TupleSet TagQuery::queryTags(TupleSet input)
 	return result;
 }
 
-TupleSet TagQuery::addTags(TupleSet input)
+Optional<TupleSet> TagQuery::addTags(TupleSet input)
 {
 	// Keep stuff in the input
 	TupleSet result = input;
 	QList<Model::Node*> addTagsTo;
 
+	// TODO require argument
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
-	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
+	Q_ASSERT(tagText.size() > 0);
 
 	if (scope() == Scope::Local)
 		addTagsTo << target();
 	else if (scope() == Scope::Global)
 	{
 		// That doesn't make sense, to which nodes should we add the tags?
-		// TODO: warn user
+		// TODO: don't allow global argument!
 	}
 	else if (scope() == Scope::Input)
 		for (const auto& tuple : input.tuples("ast"))
@@ -153,10 +156,11 @@ TupleSet TagQuery::addTags(TupleSet input)
 	return result;
 }
 
-TupleSet TagQuery::removeTags(TupleSet input)
+Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 {
+	// TODO require argument.
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
-	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
+	Q_ASSERT(tagText.size() > 0);
 
 	// Keep stuff in the input
 	TupleSet result = input;

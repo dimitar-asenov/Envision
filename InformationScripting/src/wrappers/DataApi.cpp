@@ -31,6 +31,8 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
+#include "../misc/Optional.h"
+
 namespace InformationScripting {
 
 using namespace boost::python;
@@ -95,6 +97,8 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.def("take", take1)
 				.def("remove", removeTuple)
 				.def("add", &TupleSet::add);
+
+		class_<Optional<TupleSet>>("OptionalTupleSet", init<TupleSet>());
 }
 
 } /* namespace InformationScripting */
