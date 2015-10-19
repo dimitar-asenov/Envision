@@ -277,56 +277,50 @@ int HQuery::processEnter(QString& exp, int index)
 	exp.insert(index, ',');
 	int finalIndex = index+1;
 
-	// Check if it is needed to insert the list syntax
-	bool needsListDelimitersFront = false;
-	int subLists = 0;
-	for (int i = index-1; i>=-1; --i) // one before start
-	{
-		Q_ASSERT(i>=0 || subLists == 0);
-
-		if (subLists == 0)
+	auto findBoundary = [&exp](int startIndex, bool forward, int& foundIndex) -> bool {
+		// Check if it is needed to insert the list syntax
+		auto needsDelimiter = false;
+		foundIndex = startIndex;
+		int subLists = 0;
+		while ( foundIndex >= -1 && foundIndex <= exp.length()) // +-1 outside of range
 		{
-			if (i < 0 || exp[i] == '|') // We don't have a list, we must insert the list delimiters
-			{
-				needsListDelimitersFront = true;
-				++finalIndex;
-				exp.insert(i+1, '{');
-				break;
-			}
-			else if (exp[i] == ',' || exp[i] == '{')
-				break; // We already have a list, so nothing to do
-			else if (exp[i] == '}') {
-				++subLists;
-			}
-		}
-		else if (exp[i] == '{') --subLists;
-	}
-	Q_ASSERT(subLists == 0);
+			Q_ASSERT( (foundIndex>=0 && foundIndex< exp.length()) || subLists == 0);
 
-	// We must do the same in the forward direction and make sure we get the same results.
-	bool needsListDelimitersBack = false;
-	for (int i = finalIndex; i<=exp.length(); ++i) //one pass length
+			if (subLists == 0)
+			{
+				if (foundIndex < 0 || foundIndex == exp.length() || exp[foundIndex] == '|')
+				{
+					// We don't have a list, we must insert the list delimiters
+					needsDelimiter = true;
+					break;
+				}
+				else if (exp[foundIndex] == ',' || exp[foundIndex] == (forward?'}':'{'))
+					break; // We already have a list, so nothing to do
+				else if (exp[foundIndex] == (forward?'{':'}') ) {
+					++subLists;
+				}
+			}
+			else if (exp[foundIndex] == (forward?'}':'{')) --subLists;
+
+			if (forward) ++foundIndex;
+			else --foundIndex;
+		}
+		Q_ASSERT(subLists == 0);
+
+		return needsDelimiter;
+	};
+
+	int frontIndex, backIndex;
+	auto frontNeedsDelim = findBoundary(index-1, false, frontIndex);
+	auto backNeedsDelim = findBoundary(index+1, true, backIndex);
+
+	if (frontNeedsDelim || backNeedsDelim )
 	{
-		Q_ASSERT(i< exp.length() || subLists == 0);
-
-		if (subLists == 0)
-		{
-			if (i == exp.length() || exp[i] == '|') // We don't have a list, we must insert the list delimiters
-			{
-				needsListDelimitersBack = true;
-				exp.insert(i, '}');
-				break;
-			}
-			else if (exp[i] == ',' || exp[i] == '}')
-				break; // We already have a list, so nothing to do
-			else if (exp[i] == '{') {
-				++subLists;
-			}
-		}
-		else if (exp[i] == '}') --subLists;
+		exp.insert(frontIndex+1, '{');
+		++finalIndex;
+		exp.insert(backIndex+1, '}'); // +1 because the previous insert shifted the text by 1
 	}
 
-	Q_ASSERT(needsListDelimitersFront == needsListDelimitersBack);
 	return finalIndex;
 }
 

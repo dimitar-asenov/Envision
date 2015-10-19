@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "QueryNode.h"
+#include "CommandNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(InformationScripting::QueryNode)
@@ -32,6 +33,6 @@ DEFINE_TYPED_LIST(InformationScripting::QueryNode)
 namespace InformationScripting {
 
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(QueryNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(QueryNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(QueryNode, CommandNode)
 
 } /* namespace InformationScripting */
