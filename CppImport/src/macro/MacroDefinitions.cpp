@@ -37,7 +37,7 @@ MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_(clang)
 	if (directoryToNamespaceMap_.isEmpty())
 	{
 		directoryToNamespaceMap_.insert("ModelBase", "Model");
-		directoryToNamespaceMap_.insert("VisualizationBase", "InteractionBase");
+		directoryToNamespaceMap_.insert("VisualizationBase", "Visualization");
 		directoryToNamespaceMap_.insert("InteractionBase", "Interaction");
 		directoryToNamespaceMap_.insert("AlloyIntegration", "Alloy");
 		directoryToNamespaceMap_.insert("HelloWorld", "Hello");
