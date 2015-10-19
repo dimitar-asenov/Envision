@@ -52,7 +52,7 @@ void QueryExecutor::execute()
 		}
 		else
 		{
-			qWarning() << results[0].error();
+			qWarning() << results[0].errors();
 		}
 	}
 }

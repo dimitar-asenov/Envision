@@ -82,7 +82,7 @@ QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 				{
 					// early abort in case of error:
 					if (currentNode->calculatedOutputs_[outIndex]) output = currentNode->calculatedOutputs_[outIndex].value();
-					else return { currentNode->calculatedOutputs_[outIndex].error() };
+					else return {currentNode->calculatedOutputs_[outIndex]};
 				}
 
 				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
