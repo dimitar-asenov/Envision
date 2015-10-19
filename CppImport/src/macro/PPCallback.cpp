@@ -31,13 +31,13 @@
 
 namespace CppImport {
 
-void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDirective* md,
+void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDefinition& md,
 													clang::SourceRange sr, const clang::MacroArgs* args)
 {
 	auto name = QString::fromStdString(MacroNameTok.getIdentifierInfo()->getName().str());
 
-	macroDefinitions_.addMacroDefinition(name, md);
-	macroExpansions_.addMacroExpansion(sr, md, args);
+	macroDefinitions_.addMacroDefinition(name, md.getLocalDirective());
+	macroExpansions_.addMacroExpansion(sr, md.getLocalDirective(), args);
 }
 
 }
