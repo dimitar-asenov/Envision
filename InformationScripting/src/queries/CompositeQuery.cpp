@@ -32,7 +32,7 @@ CompositeQuery::~CompositeQuery()
 {
 	SAFE_DELETE(inNode_);
 	for (auto node : nodes_) SAFE_DELETE(node);
-	// Don't delete the outNode_ as that we delete all Graphs which we returned in the execute methods.
+	SAFE_DELETE(outNode_);
 }
 
 QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
