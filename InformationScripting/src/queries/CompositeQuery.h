@@ -81,10 +81,10 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 				 */
 				QVector<QSet<QueryNode*>> outputMap_;
 
-				QList<TupleSet> calculatedInputs_;
+				QList<Optional<TupleSet>> calculatedInputs_;
 				QList<Optional<TupleSet>> calculatedOutputs_;
 
-				void addCalculatedInput(int index, TupleSet g);
+				void addCalculatedInput(int index, Optional<TupleSet> g);
 				bool canExecute() const;
 				void execute();
 

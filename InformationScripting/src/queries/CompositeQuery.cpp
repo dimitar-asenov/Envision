@@ -77,15 +77,18 @@ QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 					return m.outputFrom_ == currentNode && m.outputIndex_ == outIndex;
 				});
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
-				TupleSet output;
 				if (hasOutput)
 				{
+					// NOTE if we want to execute in parallel then we probably shouldn't just abort.
 					// early abort in case of error:
-					if (currentNode->calculatedOutputs_[outIndex]) output = currentNode->calculatedOutputs_[outIndex].value();
-					else return {currentNode->calculatedOutputs_[outIndex]};
+					if (!currentNode->calculatedOutputs_[outIndex])
+						return {currentNode->calculatedOutputs_[outIndex]};
+					receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt),
+														  currentNode->calculatedOutputs_[outIndex]);
 				}
+				else
+					receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), TupleSet());
 
-				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
 
 				if (receiver->canExecute())
 				{
@@ -171,11 +174,11 @@ CompositeQuery::QueryNode::~QueryNode()
 	SAFE_DELETE(q_);
 }
 
-void CompositeQuery::QueryNode::addCalculatedInput(int index, TupleSet g)
+void CompositeQuery::QueryNode::addCalculatedInput(int index, Optional<TupleSet> g)
 {
 	// Fill non determined inputs with nullptrs:
 	while (calculatedInputs_.size() - 1 < index)
-		calculatedInputs_.push_back({});
+		calculatedInputs_.push_back({"Not calculated yet"});
 	// Insert current input at correct location
 	calculatedInputs_[index] = g;
 	// Set the inserted flag
@@ -191,10 +194,20 @@ bool CompositeQuery::QueryNode::canExecute() const
 void CompositeQuery::QueryNode::execute()
 {
 	if (q_)
-		calculatedOutputs_ = q_->execute(calculatedInputs_);
+	{
+		QList<TupleSet> input;
+		QStringList allWarnings;
+		for (const auto& opt : calculatedInputs_)
+		{
+			Q_ASSERT(opt);
+			input.push_back(opt.value());
+			if (opt.hasWarnings()) allWarnings << opt.warnings();
+		}
+		calculatedOutputs_ = q_->execute(input);
+		for (auto& opt : calculatedOutputs_) opt.addWarnings(allWarnings);
+	}
 	else
-		for (const auto& ts : calculatedInputs_)
-			calculatedOutputs_.push_back(ts);
+		calculatedOutputs_ = calculatedInputs_;
 }
 
 } /* namespace InformationScripting */
