@@ -34,7 +34,7 @@ namespace InformationScripting {
 
 const QStringList Heatmap::VALUE_ATTRIBUTE_NAME_NAMES{"n", "name"};
 
-TupleSet Heatmap::executeLinear(TupleSet input)
+Optional<TupleSet> Heatmap::executeLinear(TupleSet input)
 {
 	QString valueTag = argument(VALUE_ATTRIBUTE_NAME_NAMES[1]);
 	if (valueTag.isEmpty()) valueTag = "count"; // Use count as default tag for heatmaps

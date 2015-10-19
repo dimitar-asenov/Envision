@@ -28,9 +28,9 @@
 
 namespace InformationScripting {
 
-QList<TupleSet> LinearQuery::execute(QList<TupleSet> input)
+QList<Optional<TupleSet> > LinearQuery::execute(QList<TupleSet> input)
 {
-	QList<TupleSet> result;
+	QList<Optional<TupleSet>> result;
 	// If we have no input just add one default input such that we execute at least once.
 	if (input.isEmpty()) input << TupleSet();
 

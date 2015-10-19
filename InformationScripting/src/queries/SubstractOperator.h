@@ -35,7 +35,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API SubstractOperator : public Query
 {
 	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input);
+		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input);
 };
 
 } /* namespace InformationScripting */

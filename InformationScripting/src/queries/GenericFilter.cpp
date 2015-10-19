@@ -31,7 +31,7 @@ namespace InformationScripting {
 GenericFilter::GenericFilter(GenericFilter::KeepTuple f) : keepTuple_{f}
 {}
 
-TupleSet GenericFilter::executeLinear(TupleSet input)
+Optional<TupleSet> GenericFilter::executeLinear(TupleSet input)
 {
 	for (const auto& t : input.tuples())
 		if (!keepTuple_(t)) input.remove(t);

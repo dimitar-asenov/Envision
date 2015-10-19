@@ -47,7 +47,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 {
 	public:
-		virtual TupleSet executeLinear(TupleSet input) override;
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 
@@ -58,28 +58,28 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		static const QStringList ADD_AS_NAMES;
 		static const QStringList ATTRIBUTE_NAME_NAMES;
 
-		using ExecuteFunction = std::function<TupleSet (AstQuery*, TupleSet)>;
+		using ExecuteFunction = std::function<Optional<TupleSet> (AstQuery*, TupleSet)>;
 		ExecuteFunction exec_{};
 
 		AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args);
 
 		static void setTypeTo(QStringList& args, QString type);
 
-		TupleSet baseClassesQuery(TupleSet input);
-		TupleSet toParentType(TupleSet input);
-		TupleSet callGraph(TupleSet input);
-		TupleSet genericQuery(TupleSet input);
-		TupleSet typeQuery(TupleSet input, QString type);
-		TupleSet nameQuery(TupleSet input, QString name);
-		TupleSet usesQuery(TupleSet input);
-		TupleSet typeFilter(TupleSet input);
-		TupleSet attribute(TupleSet input);
+		Optional<TupleSet> baseClassesQuery(TupleSet input);
+		Optional<TupleSet> toParentType(TupleSet input);
+		Optional<TupleSet> callGraph(TupleSet input);
+		Optional<TupleSet> genericQuery(TupleSet input);
+		Optional<TupleSet> typeQuery(TupleSet input, QString type);
+		Optional<TupleSet> nameQuery(TupleSet input, QString name);
+		Optional<TupleSet> usesQuery(TupleSet input);
+		Optional<TupleSet> typeFilter(TupleSet input);
+		Optional<TupleSet> attribute(TupleSet input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
 		template <class Predicate>
 		void addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from = nullptr);
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
+		static void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
 
 		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
 

@@ -36,7 +36,7 @@ class INFORMATIONSCRIPTING_API NodePropertyAdder : public Query
 {
 	public:
 		NodePropertyAdder(const QString& propertyName, Property value);
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 
 	private:
 		QString name_;

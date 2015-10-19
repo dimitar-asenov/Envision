@@ -56,11 +56,11 @@ void ScriptQuery::unloadPythonEnvironment()
 	Py_Finalize();
 }
 
-QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
+QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 {
 	using namespace boost;
 
-	QList<TupleSet> result;
+	QList<Optional<TupleSet>> result;
 
 	try {
 		python::object main_module = python::import("__main__");
@@ -97,7 +97,7 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 			auto queryMethod = std::bind(&ScriptQuery::queryExecutor, this, query, std::placeholders::_1,
 												  std::placeholders::_2);
 			auto call_policies = python::default_call_policies();
-			typedef boost::mpl::vector<QList<TupleSet>, python::list, python::list> func_sig;
+			using func_sig = boost::mpl::vector<QList<Optional<TupleSet>>, python::list, python::list>;
 			queriesDict[query] = python::make_function(queryMethod, call_policies, func_sig());
 		}
 
@@ -107,7 +107,7 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 
 		python::list results = python::extract<python::list>(main_namespace["results"]);
 		python::stl_input_iterator<TupleSet> begin(results), end;
-		result = QList<TupleSet>::fromStdList(std::list<TupleSet>(begin, end));
+		result = QList<Optional<TupleSet>>::fromStdList(std::list<Optional<TupleSet>>(begin, end));
 	} catch (python::error_already_set ) {
 		qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
 	}
@@ -128,7 +128,7 @@ void ScriptQuery::importStar(boost::python::dict& main_namespace, boost::python:
 	}
 }
 
-QList<TupleSet> ScriptQuery::queryExecutor(QString name, boost::python::list args, boost::python::list input)
+QList<Optional<TupleSet>> ScriptQuery::queryExecutor(QString name, boost::python::list args, boost::python::list input)
 {
 	boost::python::stl_input_iterator<QString> argsBegin(args), argsEnd;
 	QStringList argsConverted = QStringList::fromStdList(std::list<QString>(argsBegin, argsEnd));
