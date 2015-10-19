@@ -31,7 +31,8 @@
 
 namespace Model {
 
-QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& nodeName, int matchLimit, Node* root)
+QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& nodeName, int matchLimit,
+																				 Node* root, IsSuggestable suggestable)
 {
 	QList<QPair<QString, Node*>> matches;
 	auto parts = nodeName.split(".");
@@ -39,11 +40,11 @@ QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& node
 	for (auto part : parts) pattern += part + '*';
 	auto matcher = SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
 
-	if (root) matches.append(findAllMatches(matcher, "", root));
+	if (root) matches.append(findAllMatches(matcher, "", root, suggestable));
 	else
 	{
 		for (auto manager : AllTreeManagers::instance().loadedManagers())
-			matches.append(findAllMatches(matcher, "", manager->root()));
+			matches.append(findAllMatches(matcher, "", manager->root(), suggestable));
 	}
 
 	//Shorter names usually have less parts to the fully qualified name -> suggest them first
@@ -54,21 +55,22 @@ QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& node
 	return matches;
 }
 
-QList<QPair<QString, Node*>> NameResolver::findAllMatches(const SymbolMatcher& matcher, QString nameSoFar, Node* root)
+QList<QPair<QString, Node*>> NameResolver::findAllMatches(const SymbolMatcher& matcher, QString nameSoFar,
+																			 Node* root, IsSuggestable suggestable)
 {
 	QList<QPair<QString, Node*>> result;
 
 	//If it doesn't define a symbol, just pass it on
 	if (!root->definesSymbol())
 		for (auto child : root->children())
-			result.append(findAllMatches(matcher, nameSoFar, child));
+			result.append(findAllMatches(matcher, nameSoFar, child, suggestable));
 
 	//If it defines a symbol, check if the name matches with our SymbolMatcher
-	else if (isSuggestable(root->symbolType()) && root->symbolName().size() > 0)
+	else if (suggestable(root->symbolType()) && root->symbolName().size() > 0)
 	{
 		auto newNameSoFar = nameSoFar + "." + root->symbolName();
 		for (auto child : root->children())
-			result.append(findAllMatches(matcher, newNameSoFar, child));
+			result.append(findAllMatches(matcher, newNameSoFar, child, suggestable));
 		if (matcher.matches(newNameSoFar))
 			//Get rid of initial "."
 			result.append(QPair<QString, Node*>(newNameSoFar.mid(1), root));
