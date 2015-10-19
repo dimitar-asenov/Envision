@@ -34,9 +34,9 @@
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
-:  log_{logger}
+:  macroImporter_(project), log_{logger}
 {
-	trMngr_ = new TranslateManager(project);
+	trMngr_ = new TranslateManager(project, &macroImporter_);
 	exprVisitor_ = new ExpressionVisitor(this, log_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_);
 	exprVisitor_->setUtilities(utils_);
@@ -56,17 +56,15 @@ ClangAstVisitor::~ClangAstVisitor()
 	SAFE_DELETE(commentParser_);
 }
 
-void ClangAstVisitor::setSourceManager(const clang::SourceManager* sourceManager)
+void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager* sourceManager,
+																		const clang::Preprocessor* preprocessor)
 {
 	Q_ASSERT(sourceManager);
+	Q_ASSERT(preprocessor);
 	sourceManager_ = sourceManager;
 	trMngr_->setSourceManager(sourceManager);
-}
-
-void ClangAstVisitor::setPreprocessor(const clang::Preprocessor* preprocessor)
-{
-	Q_ASSERT(preprocessor);
-	preprocessor_ = preprocessor;
+	preprocessor_= preprocessor;
+	macroImporter_.startTranslationUnit(sourceManager, preprocessor);
 }
 
 Model::Node*ClangAstVisitor::ooStackTop()
@@ -144,7 +142,7 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 (clang::ClassTemplateSpecializationDecl* specializationDecl)
 {
-	if (!shouldImport(specializationDecl->getLocation()) || !specializationDecl->isThisDeclarationADefinition())
+	if (!shouldImport(specializationDecl->getLocation()))
 		return true;
 
 	//	explicit instation declaration
@@ -264,7 +262,7 @@ bool ClangAstVisitor::TraverseFunctionTemplateDecl(clang::FunctionTemplateDecl* 
 {
 	// this node does not provide any special information
 	// therefore it is sufficient to just visit the templated function
-	return TraverseFunctionDecl(functionDecl->getTemplatedDecl());
+	return TraverseDecl(functionDecl->getTemplatedDecl());
 }
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
@@ -345,6 +343,8 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			log_->writeError(className_, varDecl->getInit(), CppImportLogger::Reason::NOT_SUPPORTED);
 		inBody_ = inBody;
 	}
+
+	macroImporter_.mapAst(varDecl, ooVarDecl);
 	if (wasDeclared)
 		// we know the rest of the information already
 		return true;
@@ -422,6 +422,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 			ooEnumClass->enumerators()->append(new OOModel::Enumerator(QString::fromStdString(it->getNameAsString())));
 	}
 	inBody_ = inBody;
+	macroImporter_.mapAst(enumDecl, ooEnumClass);
 	return true;
 }
 
@@ -621,6 +622,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		TraverseStmt(ifStmt->getElse());
 		inBody_ = inBody;
 		ooStack_.pop();
+		macroImporter_.mapAst(ifStmt, ooIfStmt);
 	}
 	else
 		log_->writeError(className_, ifStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -648,6 +650,7 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 		TraverseStmt(whileStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
+		macroImporter_.mapAst(whileStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, whileStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -672,6 +675,7 @@ bool ClangAstVisitor::TraverseDoStmt(clang::DoStmt* doStmt)
 		TraverseStmt(doStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
+		macroImporter_.mapAst(doStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, doStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -704,6 +708,7 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		TraverseStmt(forStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
+		macroImporter_.mapAst(forStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, forStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -730,6 +735,7 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 		TraverseStmt(forRangeStmt->getBody());
 		ooStack_.pop();
 		inBody_ = inBody;
+		macroImporter_.mapAst(forRangeStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, forRangeStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -751,6 +757,7 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 		else
 			log_->writeError(className_, returnStmt->getRetValue(), CppImportLogger::Reason::NOT_SUPPORTED);
 		inBody_ = inBody;
+		macroImporter_.mapAst(returnStmt, ooReturn);
 	}
 	else
 		log_->writeError(className_, returnStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -825,6 +832,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 			ooTry->catchClauses()->append(ooStack_.pop());
 		}
 		inBody_ = inBody;
+		macroImporter_.mapAst(tryStmt, ooTry);
 	}
 	else
 		log_->writeError(className_, tryStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -852,6 +860,7 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 	// finish up
 	inBody_ = inBody;
 	ooStack_.push(ooCatch);
+	macroImporter_.mapAst(catchStmt, ooCatch);
 	return true;
 }
 
@@ -895,6 +904,7 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 			SAFE_DELETE(itemList);
 			// pop the body of the switch statement
 			ooStack_.pop();
+			macroImporter_.mapAst(switchStmt, ooSwitchStmt);
 		}
 		else
 			log_->writeError(className_, switchStmt, CppImportLogger::Reason::NOT_SUPPORTED);
@@ -928,6 +938,7 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 	// traverse statements/body
 	ooStack_.push(ooSwitchCase->body());
 	TraverseStmt(caseStmt->getSubStmt());
+	macroImporter_.mapAst(caseStmt, ooSwitchCase);
 	return true;
 }
 
@@ -947,13 +958,18 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 	// traverse statements/body
 	ooStack_.push(ooDefaultCase->body());
 	TraverseStmt(defaultStmt->getSubStmt());
+	macroImporter_.mapAst(defaultStmt, ooDefaultCase);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseBreakStmt(clang::BreakStmt* breakStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-		itemList->append(new OOModel::BreakStatement());
+	{
+		auto ooBreakStmt = new OOModel::BreakStatement();
+		macroImporter_.mapAst(breakStmt, ooBreakStmt);
+		itemList->append(ooBreakStmt);
+	}
 	else
 		log_->writeError(className_, breakStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
@@ -962,7 +978,13 @@ bool ClangAstVisitor::TraverseBreakStmt(clang::BreakStmt* breakStmt)
 bool ClangAstVisitor::TraverseContinueStmt(clang::ContinueStmt* continueStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-		itemList->append(new OOModel::ContinueStatement());
+	{
+		auto ooContinueStmt = new OOModel::ContinueStatement();
+
+		macroImporter_.mapAst(continueStmt, ooContinueStmt);
+
+		itemList->append(ooContinueStmt);
+	}
 	else
 		log_->writeError(className_, continueStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
@@ -1010,6 +1032,8 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 			}
 		}
 	}
+
+	macroImporter_.mapAst(methodDecl, ooMethod);
 
 	return true;
 }

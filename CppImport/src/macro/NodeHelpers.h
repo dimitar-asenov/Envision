@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,57 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+namespace Model {
+	class Node;
+	class List;
+}
+
+namespace OOModel {
+	class Declaration;
+	class Expression;
+	class MetaCallExpression;
+}
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+class NodeToCloneMap;
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+/**
+ * constains all relevant methods for macro import that do not depend on Clang or macro import components.
+ */
+class CPPIMPORT_API NodeHelpers
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
-}
+	public:
+		static bool validContext(Model::Node* node);
+		static OOModel::Declaration* actualContext(Model::Node* node);
+		static OOModel::Declaration* createContext(OOModel::Declaration* actualContext);
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
-}
+		static QVector<Model::Node*> topLevelNodes(QVector<Model::Node*> input);
+
+		static Model::Node* cloneWithMapping(Model::Node* node, NodeToCloneMap& mapping);
+
+		static void removeNodeFromParent(Model::Node* node, bool removeMetaCalls = false);
+		static void removeNodesFromParent(QVector<Model::Node*> nodes);
+
+		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
+
+		static OOModel::Expression* createNameExpressionFromString(const QString& input);
+		static bool matchesRegex(const QString& regex, const QString& value);
+
+		/**
+		 * returns the first Declaration* decl in list with decl->name() == name
+		 */
+		static OOModel::Declaration* findDeclaration(Model::List* list, const QString& name);
+
+	private:
+		static void buildMappingInfo(Model::Node* node, QList<Model::Node*>& info);
+		static void useMappingInfo(Model::Node* node, QList<Model::Node*>& info, NodeToCloneMap& mapping);
+
+		static OOModel::MetaCallExpression* containsMetaCall(Model::Node* node);
+};
 
 }

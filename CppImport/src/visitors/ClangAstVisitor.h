@@ -28,6 +28,7 @@
 
 #include "../cppimport_api.h"
 #include "../manager/TranslateManager.h"
+#include "../macro/MacroImporter.h"
 #include "../CppImportLogger.h"
 #include "../comments/CommentParser.h"
 
@@ -46,9 +47,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 	public:
 		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
 		~ClangAstVisitor();
-		void setSourceManager(const clang::SourceManager* sourceManager);
-
-		void setPreprocessor(const clang::Preprocessor* preprocessor);
+		void setSourceManagerAndPreprocessor(const clang::SourceManager* sourceManager,
+														 const clang::Preprocessor* preprocessor);
 
 		// helper functions to interact with the stack from other classes
 		Model::Node* ooStackTop();
@@ -111,6 +111,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 * In our case this function should return false because we use a custom traversal strategy.
 		 */
 		bool shouldUseDataRecursionfor (clang::Stmt* S);
+
+		MacroImporter macroImporter_;
 
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;

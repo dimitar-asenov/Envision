@@ -42,7 +42,7 @@ class OOMODEL_API MetaCallExpression: public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallExpression)
 
 	ATTRIBUTE(Expression, callee, setCallee)
-	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
+	ATTRIBUTE(Model::List, arguments, setArguments)
 	PRIVATE_ATTRIBUTE(Model::Node, cache, setCache)
 
 	public:

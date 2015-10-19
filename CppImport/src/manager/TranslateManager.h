@@ -29,6 +29,7 @@
 #include "cppimport_api.h"
 #include "../CppImportUtilities.h"
 #include "NodeHasher.h"
+#include "../macro/MacroImporter.h"
 
 namespace CppImport {
 
@@ -39,7 +40,7 @@ namespace CppImport {
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(OOModel::Project* root);
+		TranslateManager(OOModel::Project* root, MacroImporter* macroImporter);
 		~TranslateManager();
 		void setSourceManager(const clang::SourceManager* mngr);
 
@@ -132,6 +133,8 @@ class CPPIMPORT_API TranslateManager
 		OOModel::TypeAlias* insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 
 	private:
+		const clang::SourceManager* sourceManager_{};
+
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
 
@@ -151,6 +154,7 @@ class CPPIMPORT_API TranslateManager
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
+		MacroImporter* macroImporter_{};
 		NodeHasher* nh_{new NodeHasher()};
 };
 

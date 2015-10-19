@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#include "PPCallback.h"
+
+#include "MacroDefinitions.h"
+#include "MacroExpansions.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDirective* md,
+													clang::SourceRange sr, const clang::MacroArgs* args)
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
-}
+	auto name = QString::fromStdString(MacroNameTok.getIdentifierInfo()->getName().str());
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
+	macroDefinitions_.addMacroDefinition(name, md);
+	macroExpansions_.addMacroExpansion(sr, md, args);
 }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,55 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#include "NodeToCloneMap.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+void NodeToCloneMap::add(Model::Node* original, Model::Node* clone)
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
+	Q_ASSERT(original);
+	Q_ASSERT(clone);
+	clones_[clone] = original;
+	originals_[original] = clone;
 }
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+Model::Node*NodeToCloneMap::original(Model::Node* clone)
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
+	auto it = clones_.find(clone);
+
+	return it != clones_.end() ? *it : nullptr;
+}
+
+QVector<Model::Node*> NodeToCloneMap::original(QVector<Model::Node*> clones)
+{
+	QVector<Model::Node*> result;
+	for (auto clone : clones)
+		result.append(original(clone));
+	return result;
+}
+
+Model::Node*NodeToCloneMap::clone(Model::Node* original)
+{
+	auto it = originals_.find(original);
+
+	return it != originals_.end() ? *it : nullptr;
+}
+
+QVector<Model::Node*> NodeToCloneMap::clone(QVector<Model::Node*> originals)
+{
+	QVector<Model::Node*> result;
+	for (auto original : originals)
+		result.append(clone(original));
+	return result;
+}
+
+void NodeToCloneMap::replaceClone(Model::Node* old, Model::Node* replacement)
+{
+	if (auto original = clone(old))
+	{
+		clones_.remove(old);
+		add(original, replacement);
+	}
 }
 
 }

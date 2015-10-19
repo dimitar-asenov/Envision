@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "ModelBase/src/nodes/Node.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+/**
+ * produced when cloning a tree.
+ * maps from nodes in the original tree to their cloned versions and back.
+ */
+class CPPIMPORT_API NodeToCloneMap
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
-}
+	public:
+		void add(Model::Node* original, Model::Node* clone);
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
-}
+		Model::Node* original(Model::Node* clone);
+		QVector<Model::Node*> original(QVector<Model::Node*> clones);
+
+		Model::Node* clone(Model::Node* original);
+		QVector<Model::Node*> clone(QVector<Model::Node*> originals);
+
+		void replaceClone(Model::Node* old, Model::Node* replacement);
+
+	private:
+		QHash<Model::Node*, Model::Node*> clones_;
+		QHash<Model::Node*, Model::Node*> originals_;
+};
 
 }
