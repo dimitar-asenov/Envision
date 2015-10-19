@@ -97,7 +97,7 @@ QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 			auto queryMethod = std::bind(&ScriptQuery::queryExecutor, this, query, std::placeholders::_1,
 												  std::placeholders::_2);
 			auto call_policies = python::default_call_policies();
-			typedef boost::mpl::vector<QList<Optional<TupleSet>>, python::list, python::list> func_sig;
+			using func_sig = boost::mpl::vector<QList<Optional<TupleSet>>, python::list, python::list>;
 			queriesDict[query] = python::make_function(queryMethod, call_policies, func_sig());
 		}
 
