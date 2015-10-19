@@ -36,7 +36,7 @@ namespace Visualization {
 	class Static;
 }
 
-#define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType, styleTypeName)				\
+#define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType, styleTypeName)				\
 class apiSpecification className																													\
 	: public ::Super<::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType>> {			\
 	ITEM_COMMON_CUSTOM_STYLENAME(className, styleTypeName)																				\
@@ -49,11 +49,11 @@ class apiSpecification className																													\
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType)											\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType, ::OOVisualization::OperatorStyle)
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType, ::OOVisualization::OperatorStyle)
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, enumeration)		\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType,											\
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType,											\
 ::OOVisualization::OperatorSequenceStyle)
 //********************************************************************************************************************
 
@@ -77,17 +77,13 @@ BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className,
 #define OPERAND(name) EXPRESSION_PART(::Visualization::Item, name)
 #define WRAPPED_OPERAND(name, wrapId) OPERAND(name)
 
-#define STANDARD_KEYWORD_EXPRESSION(apiSpecification, className, nodeType)															\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType)													\
-PREFIX(true)																																			\
-END_STANDARD_EXPRESSION_VISUALIZATION
 //********************************************************************************************************************
 
 namespace OOVisualization {
 #include "StandardExpressionDefinitions.h"
 }
 
-#undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE
+#undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE
 #undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION
 #undef BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION
 #undef BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION
@@ -99,4 +95,3 @@ namespace OOVisualization {
 #undef POSTFIX
 #undef OPERAND
 #undef WRAPPED_OPERAND
-#undef STANDARD_KEYWORD_EXPRESSION

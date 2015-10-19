@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+class MacroArgumentLocation;
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+struct CPPIMPORT_API MacroArgumentInfo
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
-}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
-}
+	QVector<MacroArgumentLocation> history_;
+	Model::Node* node_{};
+};
 
 }

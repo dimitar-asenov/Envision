@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,43 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#include "EnvisionToClangMap.h"
+
+#include "ModelBase/src/nodes/Node.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+Model::Node* EnvisionToClangMap::closestParentWithAstMapping(Model::Node* node) const
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
+	if (!node) return nullptr;
+	if (envisionToClangMap_.contains(node)) return node;
+	if (!node->parent()) return nullptr;
+
+	return closestParentWithAstMapping(node->parent());
 }
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+void EnvisionToClangMap::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
+	Q_ASSERT(envisionAstNode);
+
+	if (auto bop = clang::dyn_cast<clang::BinaryOperator>(clangAstNode))
+		envisionToClangMap_.insert(envisionAstNode, bop->getOperatorLoc());
+	else if (auto op = clang::dyn_cast<clang::CXXOperatorCallExpr>(clangAstNode))
+		envisionToClangMap_.insert(envisionAstNode, op->getOperatorLoc());
+	else
+		envisionToClangMap_.insert(envisionAstNode, clangAstNode->getSourceRange());
+}
+
+void EnvisionToClangMap::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
+{
+	Q_ASSERT(envisionAstNode);
+
+	envisionToClangMap_.insert(envisionAstNode, clangAstNode->getSourceRange());
+}
+
+QList<clang::SourceRange> EnvisionToClangMap::get(Model::Node* node) const
+{
+	return envisionToClangMap_.values(node);
 }
 
 }

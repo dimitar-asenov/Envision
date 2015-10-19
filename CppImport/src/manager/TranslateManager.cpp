@@ -28,8 +28,8 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(OOModel::Project* root)
-: rootProject_{root}
+TranslateManager::TranslateManager(OOModel::Project* root, MacroImporter* macroImporter)
+: rootProject_{root}, macroImporter_(macroImporter)
 {}
 
 TranslateManager::~TranslateManager()
@@ -55,6 +55,7 @@ OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 		return nameSpaceMap_.value(hash);
 	OOModel::Module* ooModule = new OOModel::Module(QString::fromStdString(namespaceDecl->getNameAsString()));
 	nameSpaceMap_.insert(hash, ooModule);
+	macroImporter_->mapAst(namespaceDecl, ooModule);
 	if (namespaceDecl->getDeclContext()->isTranslationUnit())
 		rootProject_->modules()->append(ooModule);
 	else if (auto p = llvm::dyn_cast<clang::NamespaceDecl>(namespaceDecl->getDeclContext()))
@@ -76,8 +77,10 @@ bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* 
 	if (!classMap_.contains(hash))
 	{
 		classMap_.insert(hash, ooClass);
+		macroImporter_->mapAst(rDecl, ooClass);
 		return true;
 	}
+	macroImporter_->mapAst(rDecl, classMap_.value(hash));
 	return false;
 }
 
@@ -87,8 +90,10 @@ bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTempla
 	if (!classMap_.contains(hash))
 	{
 		classMap_.insert(hash, ooClass);
+		macroImporter_->mapAst(classTemplate, ooClass);
 		return true;
 	}
+	macroImporter_->mapAst(classTemplate, classMap_.value(hash));
 	return false;
 }
 
@@ -99,8 +104,10 @@ bool TranslateManager::insertClassTemplateSpec
 	if (!classMap_.contains(hash))
 	{
 		classMap_.insert(hash, ooClass);
+		macroImporter_->mapAst(classTemplate, ooClass);
 		return true;
 	}
+	macroImporter_->mapAst(classTemplate, classMap_.value(hash));
 	return false;
 }
 
@@ -112,10 +119,14 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 	{
 		const QString hash = nh_->hashMethod(mDecl);
 		if (!methodMap_.contains(hash))
+		{
 			method = addNewMethod(mDecl, kind);
+			macroImporter_->mapAst(mDecl, method);
+		}
 		else
 		{
 			method = methodMap_.value(hash);
+			macroImporter_->mapAst(mDecl, method);
 			// If the method in the map is just a declaration and the method we currently have is a definition
 			// there might be some argument names in the definition which are not yet considered.
 			// Therefore we look at them now.
@@ -138,10 +149,14 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 	OOModel::Method* ooFunction = nullptr;
 	const QString hash = nh_->hashFunction(functionDecl);
 	if (!functionMap_.contains(hash))
+	{
 		ooFunction = addNewFunction(functionDecl);
+		macroImporter_->mapAst(functionDecl, ooFunction);
+	}
 	else
 	{
 		ooFunction = functionMap_.value(hash);
+		macroImporter_->mapAst(functionDecl, ooFunction);
 		if (ooFunction->items()->size())
 			return ooFunction;
 		// the method which is in the map is just a declaration
@@ -165,6 +180,7 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fieldDecl)
 		OOModel::Field* ooField = new OOModel::Field();
 		ooField->setName(QString::fromStdString(fieldDecl->getNameAsString()));
 		classMap_.value(hash)->fields()->append(ooField);
+		macroImporter_->mapAst(fieldDecl, ooField);
 		return ooField;
 	}
 	return nullptr;
@@ -176,6 +192,7 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	if (staticFieldMap_.contains(hash))
 	{
 		wasDeclared = true;
+		macroImporter_->mapAst(varDecl, staticFieldMap_.value(hash));
 		return staticFieldMap_.value(hash);
 	}
 	wasDeclared = false;
@@ -185,6 +202,7 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 		OOModel::Field* ooField = new OOModel::Field(QString::fromStdString(varDecl->getNameAsString()));
 		classMap_.value(parentHash)->fields()->append(ooField);
 		staticFieldMap_.insert(hash, ooField);
+		macroImporter_->mapAst(varDecl, ooField);
 		return ooField;
 	}
 	return nullptr;
@@ -200,6 +218,9 @@ OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplate
 		ooExplicitTemplateInst = new OOModel::ExplicitTemplateInstantiation();
 		explicitTemplateInstMap_.insert(hash, ooExplicitTemplateInst);
 	}
+
+	macroImporter_->mapAst(const_cast<clang::ClassTemplateSpecializationDecl*>(explicitTemplateInst),
+										explicitTemplateInstMap_.value(hash));
 	return ooExplicitTemplateInst;
 }
 

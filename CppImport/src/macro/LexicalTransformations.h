@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,62 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+class ClangHelpers;
+class MacroExpansions;
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+/**
+ * used to get the unexpanded spelling of nodes used in lexical transformation when creating MetaDefinition.
+ * finds the relevant source range for Clang AST nodes regarding spelling and stores the unexpanded spelling.
+ */
+class CPPIMPORT_API LexicalTransformations
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
-}
+	public:
+		LexicalTransformations(const ClangHelpers& clang, const MacroExpansions& macroExpansions);
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
-}
+		/**
+		 * extracts the relevant source ranges for lexical transformation from a Clang declaration and delegates
+		 * them to processSourceRange.
+		 */
+		void processDeclaration(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+
+		/**
+		 * extracts the relevant source ranges for lexical transformation from a Clang statement and delegates
+		 * them to processSourceRange.
+		 */
+		void processStatement(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
+
+		bool contains(clang::SourceRange range1, clang::SourceRange range2) const;
+
+		const QString transformation(Model::Node* node) const;
+
+	private:
+		const ClangHelpers& clang_;
+		const MacroExpansions& macroExpansions_;
+
+		QHash<Model::Node*, QString> transformations_;
+
+		QString unexpandedSpelling(clang::SourceRange range) const;
+
+		bool isConcatenationOrStringification(clang::SourceLocation loc) const;
+
+		/**
+		 * uses the source range to get the unexpandedSpelling for lexical transformation.
+		 * depending on the node type the intermediate result is modified further and then stored for transformation
+		 * together with the node.
+		 */
+		void processSourceRange(clang::SourceRange range, Model::Node* original);
+
+		clang::SourceRange unexpandedSourceRange(clang::SourceRange range) const;
+};
 
 }

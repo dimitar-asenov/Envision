@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,50 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "cppimport_api.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+/**
+ * logically holds the mapping from Envision AST nodes to Clang AST nodes.
+ * in practice finds and stores the relevant source range of the Clang AST nodes since that is all information we need.
+ */
+class CPPIMPORT_API EnvisionToClangMap
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
-}
+	public:
+		QMultiHash<Model::Node*, clang::SourceRange>::iterator begin();
+		QMultiHash<Model::Node*, clang::SourceRange>::iterator end();
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
-}
+		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
+		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+
+		const QSet<Model::Node*> nodes() const;
+		QList<clang::SourceRange> get(Model::Node* node) const;
+		bool contains(Model::Node* node) const;
+		void clear();
+
+		Model::Node* closestParentWithAstMapping(Model::Node* node) const;
+
+	private:
+		QMultiHash<Model::Node*, clang::SourceRange> envisionToClangMap_;
+};
+
+inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap::begin()
+{ return envisionToClangMap_.begin(); }
+
+inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap::end()
+{ return envisionToClangMap_.end(); }
+
+inline const QSet<Model::Node*> EnvisionToClangMap::nodes() const { return envisionToClangMap_.keys().toSet(); }
+
+inline void EnvisionToClangMap::clear() { envisionToClangMap_.clear(); }
+
+inline bool EnvisionToClangMap::contains(Model::Node* node) const { return envisionToClangMap_.contains(node); }
 
 }

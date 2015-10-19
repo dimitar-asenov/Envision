@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#include "MacroExpansion.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_(visitor)
-{}
+MacroExpansion::MacroExpansion(clang::SourceRange range, const clang::MacroDirective* definition,
+										 MacroExpansion* parent, MacroExpansion* xMacroParent)
+	: range_(range), definition_(definition), parent_(parent), xMacroParent_(xMacroParent) {}
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+bool MacroExpansion::isChildOf(MacroExpansion* entry)
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
-}
-
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManagerAndPreprocessor(mngr, &compilerInstance->getPreprocessor());
+	auto current = this;
+	while (current && current != entry)
+		current = current->parent();
+	return current;
 }
 
 }

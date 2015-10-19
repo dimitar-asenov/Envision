@@ -33,14 +33,14 @@ LIBS += -lclangTooling\
 				-lclangAST\
 				-lclangLex\
 				-lclangBasic\
-                                $$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags \
-                                                            --libs cppbackend analysis codegen bitreader option core)
+				$$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags \
+											--libs cppbackend analysis codegen bitreader option core)
 
 ## END LLVM SPECIFIC
 
 HEADERS += src/precompiled.h \
     src/CppImportException.h \
-	src/cppimport_api.h \
+    src/cppimport_api.h \
     src/ClangAstConsumer.h \
     src/visitors/ClangAstVisitor.h \
     src/CppImportManager.h \
@@ -53,9 +53,23 @@ HEADERS += src/precompiled.h \
     src/manager/TranslateManager.h \
     src/TranslateFrontendAction.h \
     src/CppImportPlugin.h \
-    src/comments/CommentParser.h
+    src/comments/CommentParser.h \
+    src/macro/MacroDefinitions.h \
+    src/macro/MacroExpansions.h \
+    src/macro/MacroArgumentInfo.h \
+    src/macro/MacroArgumentLocation.h \
+    src/macro/MacroExpansion.h \
+    src/macro/PPCallback.h \
+    src/macro/MacroImporter.h \
+    src/macro/StandardMetaDefinitions.h \
+    src/macro/AllMetaDefinitions.h \
+    src/macro/NodeHelpers.h \
+    src/macro/ClangHelpers.h \
+    src/macro/EnvisionToClangMap.h \
+    src/macro/NodeToCloneMap.h \
+    src/macro/LexicalTransformations.h
 SOURCES += src/CppImportException.cpp \
-	test/SimpleTest.cpp \
+    test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
     src/visitors/ClangAstVisitor.cpp \
     src/CppImportManager.cpp \
@@ -68,4 +82,16 @@ SOURCES += src/CppImportException.cpp \
     src/manager/TranslateManager.cpp \
     src/TranslateFrontendAction.cpp \
     src/CppImportPlugin.cpp \
-    src/comments/CommentParser.cpp
+    src/comments/CommentParser.cpp \
+    src/macro/MacroDefinitions.cpp \
+    src/macro/MacroExpansions.cpp \
+    src/macro/MacroExpansion.cpp \
+    src/macro/PPCallback.cpp \
+    src/macro/MacroImporter.cpp \
+    src/macro/StandardMetaDefinitions.cpp \
+    src/macro/AllMetaDefinitions.cpp \
+    src/macro/NodeHelpers.cpp \
+    src/macro/ClangHelpers.cpp \
+    src/macro/EnvisionToClangMap.cpp \
+    src/macro/NodeToCloneMap.cpp \
+    src/macro/LexicalTransformations.cpp
