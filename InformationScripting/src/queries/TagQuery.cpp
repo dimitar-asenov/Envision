@@ -56,9 +56,9 @@ void TagQuery::registerDefaultQueries()
 		return new TagQuery(&TagQuery::addTags, target, args);
 	});
 	// Alias to "tags -r"
-//	QueryRegistry::instance().registerQueryConstructor("removeTags", [](Model::Node* target, QStringList args) {
-//		return new TagQuery(&TagQuery::removeTags, target, args);
-//	});
+	QueryRegistry::instance().registerQueryConstructor("removeTags", [](Model::Node* target, QStringList args) {
+		return new TagQuery(&TagQuery::removeTags, target, args);
+	});
 }
 
 TagQuery::TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
