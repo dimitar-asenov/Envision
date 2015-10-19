@@ -29,7 +29,7 @@
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
-#define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeType)									\
+#define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType)									\
 ITEM_COMMON_DEFINITIONS(className, "item")																									\
 																																							\
 className::className(::Visualization::Item* parent, NodeType* node, const StyleType* style)									\
@@ -42,14 +42,14 @@ void className::determineChildren()																												\
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType)											\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeType)												\
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType)												\
 	const ::OOVisualization::OperatorStyle* opStyle = style();																			\
 	layout()->setStyle( &opStyle->layout());																									\
 
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, enumeration)		\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeType)												\
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType)												\
 																																							\
 	const ::OOVisualization::OperatorStyle* opStyle = &style()->op( (int) node()->enumeration() );							\
 	layout()->setStyle( &opStyle->layout());																									\
@@ -57,7 +57,7 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeTyp
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, flag)							\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeType)												\
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType)												\
 																																							\
 	int f = node()->flag();																															\
 	Q_ASSERT(f);																																		\
@@ -100,17 +100,13 @@ if (name##_)																																			\
 #define INFIX2(condition) PREINPOSTFIX(infix2, condition, in2Symbol)
 #define POSTFIX(condition) PREINPOSTFIX(postfix, condition, postSymbol)
 
-#define STANDARD_KEYWORD_EXPRESSION(apiSpecification, className, nodeType)															\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType)													\
-PREFIX(true)																																			\
-END_STANDARD_EXPRESSION_VISUALIZATION
 //********************************************************************************************************************
 
 namespace OOVisualization {
 #include "StandardExpressionDefinitions.h"
 }
 
-#undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL
+#undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE
 #undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION
 #undef BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION
 #undef BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION
@@ -122,4 +118,3 @@ namespace OOVisualization {
 #undef POSTFIX
 #undef OPERAND
 #undef WRAPPED_OPERAND
-#undef STANDARD_KEYWORD_EXPRESSION
