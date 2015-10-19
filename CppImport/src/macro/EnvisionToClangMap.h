@@ -47,7 +47,7 @@ class CPPIMPORT_API EnvisionToClangMap
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
-		const QList<Model::Node*> nodes() const;
+		const QSet<Model::Node*> nodes() const;
 		QList<clang::SourceRange> get(Model::Node* node) const;
 		bool contains(Model::Node* node) const;
 		void clear();
@@ -64,7 +64,7 @@ inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap
 inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap::end()
 { return envisionToClangMap_.end(); }
 
-inline const QList<Model::Node*> EnvisionToClangMap::nodes() const { return envisionToClangMap_.keys(); }
+inline const QSet<Model::Node*> EnvisionToClangMap::nodes() const { return envisionToClangMap_.keys().toSet(); }
 
 inline void EnvisionToClangMap::clear() { envisionToClangMap_.clear(); }
 
