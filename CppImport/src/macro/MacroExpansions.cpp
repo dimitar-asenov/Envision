@@ -210,32 +210,46 @@ QVector<Model::Node*> MacroExpansions::topLevelNodes(MacroExpansion* expansion, 
 
 	QVector<Model::Node*> result = NodeHelpers::topLevelNodes(allTLExpansionNodes);
 
-	qSort(result.begin(), result.end(),
+	std::sort(result.begin(), result.end(),
 			[](Model::Node* e1, Model::Node* e2)
 	{
-		if (auto commonAncestor = e1->lowestCommonAncestor(e2))
-			if (auto list = DCast<Model::List>(commonAncestor))
-			{
-				int index1 = -1;
-				for (auto c : list->children())
-					if (c == e1 || c->isAncestorOf(e1))
-					{
-						index1 = list->indexOf(c);
-						break;
-					}
+		if (e1 == e2) return false;
 
-				int index2 = -1;
-				for (auto c : list->children())
-					if (c == e2 || c->isAncestorOf(e2))
-					{
-						index2 = list->indexOf(c);
-						break;
-					}
+		Model::Node* thisParent = nullptr;
+		Model::Node* otherParent = nullptr;
+		auto commonAncestor = e1->lowestCommonAncestor(e2, &thisParent, &otherParent);
+		Q_ASSERT(commonAncestor);
 
-				return index1 < index2;
-			}
+		if (auto list = DCast<Model::List>(commonAncestor))
+		{
+			int index1 = -1;
+			for (auto c : list->children())
+				if (c == e1 || c->isAncestorOf(e1))
+				{
+					index1 = list->indexOf(c);
+					break;
+				}
 
-		return true;
+			int index2 = -1;
+			for (auto c : list->children())
+				if (c == e2 || c->isAncestorOf(e2))
+				{
+					index2 = list->indexOf(c);
+					break;
+				}
+
+			return index1 < index2;
+		}
+		else if (auto common = DCast<Model::CompositeNode>(commonAncestor))
+		{
+			auto index1 = common->indexOf(thisParent);
+			auto index2 = common->indexOf(otherParent);
+			Q_ASSERT(index1.isValid() && index2.isValid());
+			return index1.level() < index2.level() ||
+					(index1.level()==index2.level() && index1.index() < index2.index());
+		}
+		else
+			Q_ASSERT(false);
 	});
 
 	return result;
