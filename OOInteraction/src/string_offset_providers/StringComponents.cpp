@@ -52,7 +52,7 @@ QStringList StringComponents::components()
 
 	auto iter = componentFunctions().find(node_->typeId());
 	if (iter != componentFunctions().end()) return iter.value()(node_);
-	if (auto listNode = dynamic_cast<Model::List*>(node_)) return c( list(listNode) );
+	if (auto listNode = DCast<Model::List>(node_)) return c( list(listNode) );
 
 	throw OOInteractionException("No string component function registered for node of type " + node_->typeName());
 }

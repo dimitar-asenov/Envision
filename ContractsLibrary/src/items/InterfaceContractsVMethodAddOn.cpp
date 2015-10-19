@@ -49,24 +49,24 @@ QList<Visualization::Item*> InterfaceContractsVMethodAddOn::determineItems(Visua
 	QList<Visualization::Item*> result;
 	if (!contractClassMethod_) return result;
 
-	auto vMet = dynamic_cast<OOVisualization::VMethod*>(vis);
+	auto vMet = DCast<OOVisualization::VMethod>(vis);
 	if ( !vMet ) return result;
 
 	auto p = vMet->node()->parent();
 	while (p && p->typeId() != OOModel::Class::typeIdStatic()) p = p->parent();
-	auto cl = dynamic_cast<OOModel::Class*>(p);
+	auto cl = DCast<OOModel::Class>(p);
 	if (!cl) return result;
 
 
 	for (auto st : *cl->annotations())
 	{
-		if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(st) )
-			if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
+		if ( auto sti = DCast<OOModel::ExpressionStatement>(st) )
+			if (auto call = DCast<OOModel::MethodCallExpression>(sti->expression()) )
 				if (call->methodDefinition() == contractClassMethod_ && call->arguments()->size() == 1)
-					if (auto ref = dynamic_cast<OOModel::ReferenceExpression*> ( call->arguments()->first()) )
-						if (auto contractClass = dynamic_cast<OOModel::Class*> (ref->target()) )
+					if (auto ref = DCast<OOModel::ReferenceExpression> ( call->arguments()->first()) )
+						if (auto contractClass = DCast<OOModel::Class> (ref->target()) )
 							if (contractClass->baseClasses()->size() == 1)
-								if ( auto firstBaseClassExp = dynamic_cast<OOModel::ReferenceExpression*>
+								if ( auto firstBaseClassExp = DCast<OOModel::ReferenceExpression>
 										(contractClass->baseClasses()->first()))
 									if (firstBaseClassExp->target() == cl)
 									{

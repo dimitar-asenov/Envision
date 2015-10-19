@@ -58,9 +58,9 @@ Method* MethodCallExpression::methodDefinition(Type*& calleeType)
 	calleeType = callee()->type();
 	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType))
 	{
-		if (auto m = dynamic_cast<Method*>(spt->symbolProvider()))
+		if (auto m = DCast<Method>(spt->symbolProvider()))
 			ret = m;
-		else if (/*auto c =*/ dynamic_cast<Class*>(spt->symbolProvider()))
+		else if (/*auto c =*/ DCast<Class>(spt->symbolProvider()))
 			{/* TODO: Find the method that implements the () overload and return that*/}
 	}
 

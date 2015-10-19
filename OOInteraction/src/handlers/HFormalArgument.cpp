@@ -42,7 +42,7 @@ HFormalArgument* HFormalArgument::instance()
 
 void HFormalArgument::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto vis = dynamic_cast<OOVisualization::VFormalArgument*> ( target );
+	auto vis = DCast<OOVisualization::VFormalArgument> ( target );
 	bool processed = false;
 
 	if (vis && event->modifiers() == Qt::NoModifier)

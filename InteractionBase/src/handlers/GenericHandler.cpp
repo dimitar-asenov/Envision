@@ -789,7 +789,7 @@ void GenericHandler::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 	if (list.size() > 0)
 	{
 		// Determine if all nodes are elements of a list
-		const Model::List* parent = dynamic_cast<const Model::List*> (list.first()->parent());
+		const Model::List* parent = DCast<const Model::List> (list.first()->parent());
 		if (parent)
 		{
 			for (int i = 1; i<list.size(); ++i)

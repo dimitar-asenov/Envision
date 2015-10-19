@@ -46,7 +46,7 @@ void HComposite::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSce
 {
 	if (event->modifiers() == 0 && event->button() == Qt::LeftButton)
 	{
-		Visualization::VComposite *composite = dynamic_cast<Visualization::VComposite*> (target);
+		Visualization::VComposite *composite = DCast<Visualization::VComposite> (target);
 		composite->setExpanded(! composite->expanded());
 	}
 	else GenericHandler::mouseDoubleClickEvent(target, event);

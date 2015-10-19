@@ -113,7 +113,7 @@ void VListCF::updateGeometry(int, int)
 	// Begin placing the elements in a virtual plane.
 	for (int i = 0; i < items_.size(); ++i)
 	{
-		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (items_[i]);
+		ControlFlowItem* cfi = DCast<ControlFlowItem> (items_[i]);
 		if (cfi)
 		{
 			pos[i] = QPoint( location.x() - cfi->entrance().x(), location.y());
@@ -175,7 +175,7 @@ void VListCF::updateGeometry(int, int)
 		pos[i] -= topLeft;
 		items_[i]->setPos(pos[i]);
 
-		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (items_[i]);
+		ControlFlowItem* cfi = DCast<ControlFlowItem> (items_[i]);
 		if (cfi)
 		{
 			// Add connectors for breaks and continues
@@ -216,7 +216,7 @@ QList< Item* > VListCF::extractSingleItems()
 
 	for (int i = items_.size() - 1; i>=0; --i)
 	{
-		SequentialLayout* seq = dynamic_cast<SequentialLayout*> (items_[i]);
+		SequentialLayout* seq = DCast<SequentialLayout> (items_[i]);
 		if (seq)
 		{
 			for (int k = seq->length()-1; k>=0; --k) result.prepend(seq->at<Item>(k));
@@ -236,7 +236,7 @@ void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 
 	for (int i = 0; i<singleItems.size(); ++i)
 	{
-		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (singleItems[i]);
+		ControlFlowItem* cfi = DCast<ControlFlowItem> (singleItems[i]);
 		if (cfi)
 		{
 			if (seq) seq = nullptr;

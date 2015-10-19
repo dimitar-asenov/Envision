@@ -42,7 +42,7 @@ Type* SuperExpression::type()
 
 	while (p)
 	{
-		auto cl = dynamic_cast<Class*> (p);
+		auto cl = DCast<Class> (p);
 		if (cl)
 		{
 			if (cl->baseClasses()->isEmpty())

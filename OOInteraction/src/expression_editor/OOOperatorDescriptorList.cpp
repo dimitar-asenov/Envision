@@ -340,7 +340,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD( "member", "expr . id", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
-		auto ref = dynamic_cast<ReferenceExpression*>( operands[1]);
+		auto ref = DCast<ReferenceExpression>( operands[1]);
 		Q_ASSERT(ref);
 
 		auto r = new ReferenceExpression( ref->name(), operands.first() );
@@ -351,7 +351,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD( "member", "expr . id < expr >", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 3 );
-		auto ref = dynamic_cast<ReferenceExpression*>( operands[1]);
+		auto ref = DCast<ReferenceExpression>( operands[1]);
 		Q_ASSERT(ref);
 
 		auto r = new ReferenceExpression( ref->name(), operands.first() );
@@ -389,7 +389,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD( "type arguments", "id < expr >", 0, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
-		auto ref = dynamic_cast<ReferenceExpression*>( operands.first());
+		auto ref = DCast<ReferenceExpression>( operands.first());
 		Q_ASSERT(ref);
 
 		extractCommaInto(operands.last(), ref->typeArguments(), true, false);
@@ -469,7 +469,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		auto vd = new VariableDeclarationExpression();
 
 		vd->decl()->setTypeExpression( operands.first() );
-		auto ref = dynamic_cast<ReferenceExpression*>(operands[1]);
+		auto ref = DCast<ReferenceExpression>(operands[1]);
 		vd->decl()->setName( ref->name());
 		SAFE_DELETE(ref);
 

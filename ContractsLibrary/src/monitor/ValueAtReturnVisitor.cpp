@@ -113,7 +113,7 @@ Model::Node* ValueAtReturnVisitor::visitReference(ValueAtReturnVisitor* v, OOMod
 	if (v->inEnsuresCall_)
 	{
 		// Determine if this is an out reference
-		auto arg = dynamic_cast<OOModel::FormalArgument*>(ref->target());
+		auto arg = DCast<OOModel::FormalArgument>(ref->target());
 		v->outReference_ = arg && arg->direction() == OOModel::FormalArgument::OUT;
 
 		if (v->outReference_ && !v->inValueAtReturnCall_)

@@ -38,7 +38,7 @@ MethodAddOn::MethodAddOn(QString methodName)
 QList<Visualization::Item*> MethodAddOn::determineItems(Visualization::Item* vis,
 				const QList<Visualization::Item*>& currentItems)
 {
-	auto vMet = dynamic_cast<VMethod*>(vis);
+	auto vMet = DCast<VMethod>(vis);
 	if ( vMet && vMet->node()->name() == targetMethodName_)
 	{
 		if (!currentItems.isEmpty()) return currentItems;

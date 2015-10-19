@@ -48,7 +48,7 @@ HLoop* HLoop::instance()
 
 void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto vloop = dynamic_cast<OOVisualization::VLoopStatement*> ( target );
+	auto vloop = DCast<OOVisualization::VLoopStatement> ( target );
 	event->ignore();
 
 	bool createDown = event->modifiers() == Qt::NoModifier &&

@@ -39,7 +39,7 @@ ITEM_COMMON_DEFINITIONS(VEmptyExpression, "item")
 VEmptyExpression::VEmptyExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
 	vis_(new Static(this,
-			dynamic_cast<OOModel::ExpressionStatement*>(node->parent()) ? &style->emptyLine() :  &style->emptyLine()))
+			DCast<OOModel::ExpressionStatement>(node->parent()) ? &style->emptyLine() :  &style->emptyLine()))
 {
 }
 
@@ -50,7 +50,7 @@ VEmptyExpression::~VEmptyExpression()
 
 void VEmptyExpression::determineChildren()
 {
-	if (dynamic_cast<OOModel::ExpressionStatement*>(node()->parent()))
+	if (DCast<OOModel::ExpressionStatement>(node()->parent()))
 		vis_->setStyle(&style()->emptyLine());
 	else
 		vis_->setStyle(&style()->normal());

@@ -125,7 +125,7 @@ void ActionPrompt::setReceiverName()
 		QString name;
 		if (currentActionReceiver_->node()->definesSymbol())
 			name = currentActionReceiver_->node()->symbolName();
-		else if (auto cnParent = dynamic_cast<Model::CompositeNode*>(currentActionReceiver_->node()->parent()))
+		else if (auto cnParent = DCast<Model::CompositeNode>(currentActionReceiver_->node()->parent()))
 			name = cnParent->meta().attribute(cnParent->indexOf(currentActionReceiver_->node())).name();
 
 		if (!name.isEmpty()) name = " - <b>" + name + "</b>";

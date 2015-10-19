@@ -50,7 +50,7 @@ HIfStatement* HIfStatement::instance()
 
 void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto vif = dynamic_cast<OOVisualization::VIfStatement*> ( target );
+	auto vif = DCast<OOVisualization::VIfStatement> ( target );
 	event->ignore();
 
 	bool enter = event->modifiers() == Qt::NoModifier &&

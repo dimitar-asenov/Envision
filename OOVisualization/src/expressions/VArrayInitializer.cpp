@@ -48,7 +48,7 @@ void VArrayInitializer::initializeForms()
 
 int VArrayInitializer::determineForm()
 {
-	return (node()->values()->size()  > 0 && dynamic_cast<ArrayInitializer*>(node()->values()->at(0))) ? 1 : 0;
+	return (node()->values()->size()  > 0 && DCast<ArrayInitializer>(node()->values()->at(0))) ? 1 : 0;
 }
 
 void VArrayInitializer::determineChildren()

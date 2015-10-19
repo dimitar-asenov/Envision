@@ -45,7 +45,7 @@ bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*,
 Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Visualization::Item* target,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	auto shape = DCast<VCommentDiagramShape>(target);
 	shape->node()->manager()->beginModification(shape->node(), "Setting color");
 
 	if (commandTokens.first() == "textcolor")

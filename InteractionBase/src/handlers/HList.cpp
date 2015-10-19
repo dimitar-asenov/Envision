@@ -70,7 +70,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (clipboard.numNodes() > 0)
 		{
-			Model::List* listNode = dynamic_cast<Model::List*> (list->node());
+			Model::List* listNode = DCast<Model::List> (list->node());
 			FilePersistence::SystemClipboard clipboard;
 			listNode->beginModification("paste into list");
 			if (listNode) listNode->paste(clipboard, selIndex);
@@ -86,7 +86,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (clipboard.numNodes() > 0 && selIndex >= 0)
 		{
-			Model::List* listNode = dynamic_cast<Model::List*> (list->node());
+			Model::List* listNode = DCast<Model::List> (list->node());
 			FilePersistence::SystemClipboard clipboard;
 			listNode->beginModification("paste into list");
 			if (listNode) listNode->paste(clipboard, selIndex+1);

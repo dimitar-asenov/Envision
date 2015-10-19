@@ -55,7 +55,7 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 	}
 
 	// See if this item uses a sequential layout and use a standard way to handle it
-	if (auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(vis))
+	if (auto layoutProvider = DCast<Visualization::LayoutProvider<>>(vis))
 	{
 		setFilterNullAndEmptyComponents();
 		for (int i = 0; i < layoutProvider->layout()->length(); ++i)
@@ -217,7 +217,7 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 
 		bool foundLayout = false;
 
-		auto layout_provider = dynamic_cast<Visualization::LayoutProvider<>*>(item());
+		auto layout_provider = DCast<Visualization::LayoutProvider<>>(item());
 		if (layout_provider && layout_provider->scene()->mainCursor()->owner() == layout_provider->layout())
 		{
 			foundLayout = true;

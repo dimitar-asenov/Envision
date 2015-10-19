@@ -138,7 +138,7 @@ Method* addTestMethod()
 	exprtest12->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
 	exprtest12->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("int[]") );
 
-	auto exprtest13 = dynamic_cast<AssignmentExpression*>( OOExpressionBuilder::getOOExpression("a=b%=c>>>=d+C"));
+	auto exprtest13 = DCast<AssignmentExpression>( OOExpressionBuilder::getOOExpression("a=b%=c>>>=d+C"));
 	testMethod->items()->append(new ExpressionStatement(exprtest13));
 
 	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int abc")));

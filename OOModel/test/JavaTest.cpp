@@ -97,7 +97,7 @@ TEST(OOModelPlugin, JavaLibraryAndHelloWorldTest)
 
 	CHECK_STR_EQUAL("Java", java->name());
 
-	auto ref = dynamic_cast<ReferenceExpression*>(callPrintln->callee());
+	auto ref = DCast<ReferenceExpression>(callPrintln->callee());
 	CHECK_CONDITION(ref);
 	CHECK_CONDITION(ref->ref()->isResolved());
 	CHECK_CONDITION(callPrintln->methodDefinition() != nullptr);

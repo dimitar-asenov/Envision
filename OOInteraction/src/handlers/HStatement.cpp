@@ -47,7 +47,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	Visualization::VList* lst = nullptr;
 	auto p = target->parent();
-	while (p && !(lst = dynamic_cast<Visualization::VList*>(p))) p = p->parent();
+	while (p && !(lst = DCast<Visualization::VList>(p))) p = p->parent();
 
 	bool processed = false;
 

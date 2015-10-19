@@ -47,7 +47,7 @@ OOModel::Expression* CreateMethodCall::create(const QList<OOModel::Expression*>&
 	auto method = static_cast<OOModel::MethodCallExpression*>(
 			OOInteraction::OOExpressionBuilder::getOOExpression(methodToCreate_ + "()"));
 
-	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(method->callee());
+	auto ref = DCast<OOModel::ReferenceExpression>(method->callee());
 	Q_ASSERT(ref);
 
 	int typeArguments = expectedTypeArguments_;

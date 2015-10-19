@@ -57,15 +57,15 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 {
 	for (auto annotation : *met->annotations())
 	{
-		if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(annotation) )
-			if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
+		if ( auto sti = DCast<OOModel::ExpressionStatement>(annotation) )
+			if (auto call = DCast<OOModel::MethodCallExpression>(sti->expression()) )
 			{
-				if (auto ref = dynamic_cast<OOModel::ReferenceExpression*>(call->callee() ))
+				if (auto ref = DCast<OOModel::ReferenceExpression>(call->callee() ))
 				{
 					if (ref->prefix() == nullptr && ref->name() == "EnvisionKeywordVisualization"
 							&& call->arguments()->size() == 1)
 					{
-						if (auto styleName = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
+						if (auto styleName = DCast<OOModel::StringLiteral>(call->arguments()->first()))
 						{
 
 							// Register Visualizations in the group
@@ -87,12 +87,12 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 					else if (ref->prefix() == nullptr && ref->name() == "EnvisionShortcut"
 							&& call->arguments()->size() >= 1 && call->arguments()->size() <=2)
 					{
-						if (auto keyword = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
+						if (auto keyword = DCast<OOModel::StringLiteral>(call->arguments()->first()))
 						{
 							CommandExpression* command{};
 							if (call->arguments()->size() == 1)
 								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName());
-							else if (auto numArgs = dynamic_cast<OOModel::IntegerLiteral*>(call->arguments()->last()))
+							else if (auto numArgs = DCast<OOModel::IntegerLiteral>(call->arguments()->last()))
 								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName(),
 																		 numArgs->valueAsInt());
 

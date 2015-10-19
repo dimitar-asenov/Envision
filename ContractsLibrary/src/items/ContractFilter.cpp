@@ -87,8 +87,8 @@ int ContractFilter::indexOfLastContractStatement(OOModel::StatementItemList* sta
 
 bool ContractFilter::isDefinitelyAContractStatement(OOModel::StatementItem* statement)
 {
-	if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(statement) )
-		if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
+	if ( auto sti = DCast<OOModel::ExpressionStatement>(statement) )
+		if (auto call = DCast<OOModel::MethodCallExpression>(sti->expression()) )
 			if (call->methodDefinition() && call->methodDefinition()->parent()->parent() == contractClass_)
 				return true;
 
@@ -99,7 +99,7 @@ bool ContractFilter::isPotentiallyAContractStatement(OOModel::StatementItem* sta
 {
 	if (isDefinitelyAContractStatement(statement)) return true;
 
-	if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(statement) )
+	if ( auto sti = DCast<OOModel::ExpressionStatement>(statement) )
 	{
 		if (sti->expression()->typeId() == OOModel::EmptyExpression::typeIdStatic()) return true;
 		if (sti->expression()->typeId() == OOModel::ErrorExpression::typeIdStatic()) return true;

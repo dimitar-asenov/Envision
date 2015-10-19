@@ -40,11 +40,11 @@ Interaction::CommandResult* CCreateShape::executeNamed(Visualization::Item*, Vis
 		const std::unique_ptr<Visualization::Cursor>&,
 		const QString&, const QStringList& attributes)
 {
-	auto vdiagram = dynamic_cast<VCommentDiagram*>(target);
+	auto vdiagram = DCast<VCommentDiagram>(target);
 	auto last = vdiagram->lastRightClick();
 	int x = std::max(0, last.x()-50), y = std::max(0, last.y()-50);
 
-	auto diagram = dynamic_cast<CommentDiagram*> (target->node());
+	auto diagram = DCast<CommentDiagram> (target->node());
 	auto shape = new CommentDiagramShape(x, y, 100, 100, CommentDiagramShape::ShapeType::Rectangle);
 	// what kind of shape?
 	if (attributes.first() == "ellipse") shape->setShapeType(CommentDiagramShape::ShapeType::Ellipse);

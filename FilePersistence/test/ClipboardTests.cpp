@@ -47,7 +47,7 @@ TEST(FilePersistencePlugin, CopyToClipboard)
 	manager.load(&store, "2Children", false);
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
+	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
 	sc.putNode(root);
 
@@ -78,7 +78,7 @@ TEST(FilePersistencePlugin, CopyPartialToClipboard)
 	store.setBaseFolder(testDir);
 
 	manager.load(&store, "partial", false);
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
+	TestNodes::PartialList* root = DCast<TestNodes::PartialList> (manager.root());
 	CHECK_CONDITION(root != nullptr);
 
 	SystemClipboard sc;
@@ -100,7 +100,7 @@ TEST(FilePersistencePlugin, PasteTextFromClipboard)
 	manager.load(&store, "2Children", false);
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
+	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
 	sc.putNode(root->name());
 
@@ -124,14 +124,14 @@ TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
 	manager.load(&store, "2Children", false);
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
+	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
 	sc.putNode(root);
 
 	bool clipboardDataOK = sc.readClipboard() && sc.numNodes() == 1;
 	CHECK_CONDITION(clipboardDataOK);
 
-	TestNodes::BinaryNode* left = dynamic_cast<TestNodes::BinaryNode*> (root->left());
+	TestNodes::BinaryNode* left = DCast<TestNodes::BinaryNode> (root->left());
 
 	manager.beginModification(left, "paste");
 	left->load(sc);

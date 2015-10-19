@@ -119,7 +119,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 
 	//Enable the default grid offset string provider for all expressions:
 	StringOffsetProvider::allowGridBasedProvider([](Visualization::Item* item)
-		{ return dynamic_cast<OOModel::Expression*>(item->node());});
+		{ return DCast<OOModel::Expression>(item->node());});
 
 	// Register string components that convert an expression to a string list representing its components
 	StringComponents::initConversions();

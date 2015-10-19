@@ -60,7 +60,7 @@ FindMethodVis::~FindMethodVis()
 
 void FindMethodVis::determineChildren()
 {
-	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(node()->callee());
+	auto ref = DCast<OOModel::ReferenceExpression>(node()->callee());
 	auto prefixNode = ref ? ref->prefix() : nullptr;
 
 	layout()->synchronizeFirst(prefix_, prefixNode);

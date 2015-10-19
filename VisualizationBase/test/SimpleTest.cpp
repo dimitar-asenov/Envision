@@ -76,7 +76,7 @@ namespace Visualization {
 //	scene->addTopLevelItem( top );
 //	QApplication::processEvents();
 //
-//	VList* l = dynamic_cast<VList*> (top->item());
+//	VList* l = DCast<VList> (top->item());
 //	l->itemAt<VComposite>(1)->setExpanded(false);
 //	scene->scheduleUpdate();
 //	scene->listenToTreeManager(manager);

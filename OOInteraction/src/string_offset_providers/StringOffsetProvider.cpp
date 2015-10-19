@@ -215,12 +215,12 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 StringOffsetProvider* StringOffsetProvider::defaultProvider(Visualization::Item* item)
 {
 	if ( GridBasedOffsetProvider::hasGridConstructorfor (item)) return new GridBasedOffsetProvider(item);
-	if ( auto tr = dynamic_cast<Visualization::TextRenderer*>(item)) return new TextRendererStringOffsetProvider(tr);
+	if ( auto tr = DCast<Visualization::TextRenderer>(item)) return new TextRendererStringOffsetProvider(tr);
 
 	for (auto f : allowGridBasedProviderFunctions_)
 		if (f(item))
 		{
-			if ( dynamic_cast<Visualization::LayoutProvider<>*>(item) )
+			if ( DCast<Visualization::LayoutProvider<>>(item) )
 				return new GridBasedOffsetProvider(item);
 
 			if (auto declarativeItem = DCast<Visualization::DeclarativeItemBase>(item))

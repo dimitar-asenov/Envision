@@ -64,7 +64,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	bool switchHorizontal = event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Tab;
 
 	bool processed = false;
-	auto m = dynamic_cast<OOVisualization::VMethod*> ( target );
+	auto m = DCast<OOVisualization::VMethod> ( target );
 	if (m)
 	{
 		if ( (m->name()->itemOrChildHasFocus() || m->arguments()->itemOrChildHasFocus()) && createDown)

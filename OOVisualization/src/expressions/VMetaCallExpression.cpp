@@ -56,7 +56,7 @@ void VMetaCallExpression::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, true, &style()->prefix());
 
-	if (auto ref = dynamic_cast<ReferenceExpression*>(node()->callee()))
+	if (auto ref = DCast<ReferenceExpression>(node()->callee()))
 	{
 		// TODO: Find a way around that ugly hack. It might eve
 		layout()->synchronizeMid<Item, VReferenceExpression>(callee_, ref, &style()->name(), 1);

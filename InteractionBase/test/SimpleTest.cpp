@@ -77,7 +77,7 @@ TEST(InteractionBasePlugin, TextSelect)
 	scene->addTopLevelNode( list );
 	QApplication::processEvents();
 
-	VList* list2 = dynamic_cast<VList*> (scene->currentViewItem()->findVisualizationOf(list));
+	VList* list2 = DCast<VList> (scene->currentViewItem()->findVisualizationOf(list));
 	Q_ASSERT(list2);
 	list2->itemAt<VComposite>(0)->setExpanded();
 	scene->scheduleUpdate();

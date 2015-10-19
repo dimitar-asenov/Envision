@@ -51,7 +51,7 @@ Type* AutoTypeExpression::type()
 	auto p = parent();
 	Model::Node* current = this;
 	VariableDeclaration* varDecl = nullptr;
-	while (!(varDecl = dynamic_cast<VariableDeclaration*>(p)))
+	while (!(varDecl = DCast<VariableDeclaration>(p)))
 	{
 		current = p;
 		p = p->parent();
@@ -62,9 +62,9 @@ Type* AutoTypeExpression::type()
 	auto initType = varDecl->initialValue()->type();
 	if (varDecl == p)
 		return initType;
-	if (dynamic_cast<ReferenceTypeExpression*>(current))
+	if (DCast<ReferenceTypeExpression>(current))
 		return new ReferenceType(initType, initType->isValueType());
-	if (dynamic_cast<PointerTypeExpression*>(current))
+	if (DCast<PointerTypeExpression>(current))
 		return new PointerType(initType, initType->isValueType());
 	return new ErrorType("Could not find type of auto expression");
 }

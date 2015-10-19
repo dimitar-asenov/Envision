@@ -47,7 +47,7 @@ TEST(FilePersistencePlugin, LoadingTypedList)
 	TreeManager manager;
 	manager.load(store, "typedList", false);
 
-	auto list = dynamic_cast<TypedList<Text>*> (manager.root());
+	auto list = DCast<TypedList<Text>> (manager.root());
 	CHECK_CONDITION(list != nullptr);
 
 	CHECK_STR_EQUAL("TypedListOfText", list->typeName() );

@@ -98,7 +98,7 @@ void VBinaryOperation::determineChildren()
 
 int VBinaryOperation::getExpressionDepth(OOModel::Expression* e, int* op) const
 {
-	auto binary = dynamic_cast<OOModel::BinaryOperation*>(e);
+	auto binary = DCast<OOModel::BinaryOperation>(e);
 	if (!binary) return 0;
 	auto op_id = binary->op();
 	if (op) *op = op_id;

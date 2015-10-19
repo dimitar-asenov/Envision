@@ -55,7 +55,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 
 	//manager->load(&store, "tetris");
 	manager->load(&store, "large", false);
-	auto prj = dynamic_cast<OOModel::Project*> (manager->root());
+	auto prj = DCast<OOModel::Project> (manager->root());
 	Model::Reference::resolvePending();
 
 	Visualization::VisualizationManager::instance().mainScene()->addTopLevelNode(prj);

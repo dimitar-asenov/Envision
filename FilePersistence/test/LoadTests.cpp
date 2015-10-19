@@ -47,7 +47,7 @@ TEST(FilePersistencePlugin, LoadRootOnly)
 
 	Model::TreeManager manager;
 	manager.load(store, "rootOnly", false);
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
+	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
 	CHECK_CONDITION(root);
 	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
@@ -69,7 +69,7 @@ TEST(FilePersistencePlugin, LoadModeNodesSingleUnitOnly)
 
 	Model::TreeManager manager;
 	manager.load(store, "2Children", false);
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
+	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
 	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
 	CHECK_STR_EQUAL("RootNode", root->name()->get() );
@@ -98,7 +98,7 @@ TEST(FilePersistencePlugin, LoadMultipleUnits)
 	Model::TreeManager manager;
 
 	manager.load(store, "units", false);
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
+	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
 	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
 	CHECK_STR_EQUAL("Root", root->name()->get() );

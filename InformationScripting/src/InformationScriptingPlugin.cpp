@@ -80,9 +80,9 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 
 	//Enable the default grid offset string provider for all query nodes:
 	OOInteraction::StringOffsetProvider::allowGridBasedProvider([](Visualization::Item* item)
-		{ return dynamic_cast<QueryNode*>(item->node());});
+		{ return DCast<QueryNode>(item->node());});
 	OOInteraction::StringOffsetProvider::allowGridBasedProvider([](Visualization::Item* item)
-		{ return dynamic_cast<Model::TypedList<QueryNode*>*>(item->node());});
+		{ return DCast<Model::TypedList<QueryNode>>(item->node());});
 
 	return true;
 }

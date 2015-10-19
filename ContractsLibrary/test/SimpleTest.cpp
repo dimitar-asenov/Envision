@@ -463,7 +463,7 @@ Module* createClientModule()
 //	module->methods()->append( createFactorial() );
 //	module->methods()->append( createAppend() );
 
-	auto ref = dynamic_cast<ReferenceExpression*>(OOExpressionBuilder::getOOExpression("CodeContracts.Contract"));
+	auto ref = DCast<ReferenceExpression>(OOExpressionBuilder::getOOExpression("CodeContracts.Contract"));
 	Q_ASSERT(ref);
 	module->subDeclarations()->append(new NameImport(ref));
 

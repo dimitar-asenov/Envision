@@ -149,15 +149,15 @@ Class* addGeneric(Project* parent)
 
 	ExpressionStatement* callFooSt = new ExpressionStatement();
 	MethodCallExpression* callFoo = new MethodCallExpression("foo");
-	dynamic_cast<ReferenceExpression*>(callFoo->callee())->typeArguments()->append(new ReferenceExpression("A"));
+	DCast<ReferenceExpression>(callFoo->callee())->typeArguments()->append(new ReferenceExpression("A"));
 	callFooSt->setExpression(callFoo);
 	foobar->items()->append(callFooSt);
 
 	ExpressionStatement* callBarSt = new ExpressionStatement();
 	MethodCallExpression* callBar = new MethodCallExpression("bar");
-	dynamic_cast<ReferenceExpression*>(callBar->callee())->typeArguments()->append(new ReferenceExpression("A"));
-	dynamic_cast<ReferenceExpression*>(callBar->callee())->typeArguments()->append(new ReferenceExpression("B"));
-	dynamic_cast<ReferenceExpression*>(callBar->callee())->typeArguments()->append(new ReferenceExpression("C"));
+	DCast<ReferenceExpression>(callBar->callee())->typeArguments()->append(new ReferenceExpression("A"));
+	DCast<ReferenceExpression>(callBar->callee())->typeArguments()->append(new ReferenceExpression("B"));
+	DCast<ReferenceExpression>(callBar->callee())->typeArguments()->append(new ReferenceExpression("C"));
 	callBarSt->setExpression(callBar);
 	foobar->items()->append(callBarSt);
 

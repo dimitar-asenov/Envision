@@ -48,7 +48,7 @@ QList<Visualization::Item*> SignatureContractsVMethodAddOn::determineItems(Visua
 	QList<Visualization::Item*> result;
 	if (!contractClassMethod_) return result;
 
-	auto vMet = dynamic_cast<OOVisualization::VMethod*>(vis);
+	auto vMet = DCast<OOVisualization::VMethod>(vis);
 	if ( !vMet ) return result;
 
 	if (!currentItems.isEmpty() && currentItems.first()->node() == vMet->node()->items())

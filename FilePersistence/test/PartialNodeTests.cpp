@@ -46,7 +46,7 @@ TEST(FilePersistencePlugin, LoadingPartialList)
 
 	Model::TreeManager manager;
 	manager.load(store, "partial", true);
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
+	TestNodes::PartialList* root = DCast<TestNodes::PartialList> (manager.root());
 	CHECK_CONDITION(root != nullptr);
 
 	List* list = root->list();
@@ -69,7 +69,7 @@ TEST(FilePersistencePlugin, LoadingFullList)
 
 	Model::TreeManager manager;
 	manager.load(store, "partial", false);
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
+	TestNodes::PartialList* root = DCast<TestNodes::PartialList> (manager.root());
 	CHECK_CONDITION(root != nullptr);
 
 	List* list = root->list();

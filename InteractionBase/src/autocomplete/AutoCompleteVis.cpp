@@ -129,7 +129,7 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 		// Check if this is a command prompt
 		auto root = itemToUseForPosition;
 		while (root->parent()) root = root->parent();
-		if (dynamic_cast<CommandPrompt*>(root))
+		if (DCast<CommandPrompt>(root))
 			itemToUseForPosition = root;
 
 		// The cursor does not belong to a command prompt

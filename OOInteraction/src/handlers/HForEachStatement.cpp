@@ -49,7 +49,7 @@ HForEachStatement* HForEachStatement::instance()
 
 void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto vfor = dynamic_cast<OOVisualization::VForEachStatement*> ( target );
+	auto vfor = DCast<OOVisualization::VForEachStatement> ( target );
 	event->ignore();
 
 	bool createDown = event->modifiers() == Qt::NoModifier &&

@@ -62,7 +62,7 @@ CommandDescriptor::~CommandDescriptor()
 
 OOModel::Expression* CommandDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.first());
+	auto ref = DCast<OOModel::ReferenceExpression>( operands.first());
 	Q_ASSERT(ref);
 	QString name = ref->name();
 	SAFE_DELETE(ref);
@@ -71,13 +71,13 @@ OOModel::Expression* CommandDescriptor::create(const QList<OOModel::Expression*>
 	QList<OOModel::Expression*> arguments;
 	if (operands.size() > 1)
 	{
-		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
+		if (auto comma = DCast<OOModel::CommaExpression>(operands.last()))
 		{
 			for (auto arg : comma->allSubOperands(true)) arguments.append(arg);
 			SAFE_DELETE(comma);
 		}
 		else
-			if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
+			if (!DCast<OOModel::EmptyExpression>(operands.last()) )
 				arguments.append(operands.last());
 	}
 

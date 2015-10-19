@@ -55,7 +55,7 @@ QList<Action*> Action::actions(Node* node)
 
 	if (completeList.isEmpty())
 	{
-		if (auto cn = dynamic_cast<CompositeNode*>(node))
+		if (auto cn = DCast<CompositeNode>(node))
 			createStandardActionsForCompositeNode(cn, completeList);
 
 		createStandardRemoveAction(completeList);
@@ -145,7 +145,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 							Node* nodeToSelect = cn->get(name);
 							if (isList)
 							{
-								auto newList = dynamic_cast<List*>(cn->get(name));
+								auto newList = DCast<List>(cn->get(name));
 								nodeToSelect = newList->createDefaultElement();
 								newList->append(nodeToSelect);
 
@@ -156,7 +156,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 							item->scene()->addPostEventAction(new SetCursorEvent(item, nodeToSelect));
 						}),
 						[name](Node* node){
-							auto cn = dynamic_cast<CompositeNode*>(node);
+							auto cn = DCast<CompositeNode>(node);
 							return cn && cn->get(name) == nullptr;
 						}
 					)
@@ -169,7 +169,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 				list.append( new Action(shortcuts.last(), "+ " + name,
 						Action::ActionFunctionOnItem([name](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
-							auto listInNode = dynamic_cast<List*>(cn->get(name));
+							auto listInNode = DCast<List>(cn->get(name));
 							Q_ASSERT(listInNode);
 							Node* nodeToSelect = nullptr;
 
@@ -182,7 +182,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 							item->scene()->addPostEventAction(new SetCursorEvent(item, nodeToSelect));
 						}),
 						[name](Node* node){
-							auto cn = dynamic_cast<CompositeNode*>(node);
+							auto cn = DCast<CompositeNode>(node);
 							return cn && cn->get(name) != nullptr;
 						}
 					)
@@ -203,13 +203,13 @@ void Action::createStandardRemoveAction(QList<Action*>& list)
 			auto node = item->node();
 			auto parent = node->parent();
 			auto scene = item->scene();
-			if (auto listParent = dynamic_cast<List*>(parent))
+			if (auto listParent = DCast<List>(parent))
 			{
 				listParent->beginModification("remove node");
 				listParent->remove(node);
 				listParent->endModification();
 			}
-			else if (auto cnParent = dynamic_cast<CompositeNode*>(parent))
+			else if (auto cnParent = DCast<CompositeNode>(parent))
 			{
 				cnParent->beginModification("remove node");
 				cnParent->remove(node);
@@ -219,7 +219,7 @@ void Action::createStandardRemoveAction(QList<Action*>& list)
 			scene->addPostEventAction(new SetCursorEvent(scene, parent));
 		}),
 		[](Node* node){
-			return dynamic_cast<CompositeNode*>(node->parent()) || dynamic_cast<List*>(node->parent());
+			return DCast<CompositeNode>(node->parent()) || DCast<List>(node->parent());
 		})
 	);
 }

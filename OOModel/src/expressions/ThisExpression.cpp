@@ -43,7 +43,7 @@ Type* ThisExpression::type()
 
 	while (p)
 	{
-		auto cl = dynamic_cast<Class*> (p);
+		auto cl = DCast<Class> (p);
 		if (cl) return new ClassType(cl, true);
 		p = p->parent();
 	}

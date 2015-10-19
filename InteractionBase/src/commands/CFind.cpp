@@ -55,7 +55,7 @@ CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target,
 	while (!stack.isEmpty())
 	{
 		auto i = stack.takeLast(); // Depth first exploration
-		if (auto text = dynamic_cast<Visualization::TextRenderer*>(i))
+		if (auto text = DCast<Visualization::TextRenderer>(i))
 		{
 			if (text->text().contains(commandTokens.last())) text->setSelected(true);
 		}

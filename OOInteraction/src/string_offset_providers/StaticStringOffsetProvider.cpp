@@ -54,20 +54,20 @@ void StaticStringOffsetProvider::setOffset(int offset)
 
 bool StaticStringOffsetProvider::isIndivisible()
 {
-	auto v = dynamic_cast<Visualization::TextRenderer*> (vis_);
-	if (!v && vis_)
+	Visualization::TextRenderer* tr = nullptr;
+	if (vis_)
 	{
 		auto ci = vis_->childItems();
 		while (ci.length() == 1)
 		{
-			v =  dynamic_cast<Visualization::TextRenderer*> (ci.first());
-			if (v) break;
+			tr =  DCast<Visualization::TextRenderer> (ci.first());
+			if (tr) break;
 
 			ci = ci.first()->childItems();
 		}
 	}
 
-	return !v || v->text().length() != string().length();
+	return !tr || tr->text().length() != string().length();
 }
 
 } /* namespace OOInteraction */

@@ -40,7 +40,7 @@ HReturnStatement* HReturnStatement::instance()
 
 void HReturnStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto vret = dynamic_cast<OOVisualization::VReturnStatement*> ( target );
+	auto vret = DCast<OOVisualization::VReturnStatement> ( target );
 	event->ignore();
 
 	bool symbolHasFocus = vret->returnSymbol()->itemOrChildHasFocus();

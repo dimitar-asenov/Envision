@@ -67,7 +67,7 @@ void SumMethodVis::determineChildren()
 	if ( node()->arguments()->size() > 1 ) toNode = node()->arguments()->at(1);
 	arguments_->synchronizeFirst(to_, toNode);
 
-	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(node()->callee());
+	auto ref = DCast<OOModel::ReferenceExpression>(node()->callee());
 	auto prefixNode = ref ? ref->prefix() : nullptr;
 	layout()->synchronizeLast(prefix_, prefixNode);
 

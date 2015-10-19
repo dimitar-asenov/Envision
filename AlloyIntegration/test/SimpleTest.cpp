@@ -58,7 +58,7 @@ Class* addLinkedList()
 		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
 		auto callContractForAll = new MethodCallExpression("Contract.ForAll");
 		callContractInvariant->arguments()->append(callContractForAll);
-		dynamic_cast<ReferenceExpression*>(callContractForAll->callee())
+		DCast<ReferenceExpression>(callContractForAll->callee())
 				->typeArguments()->append(new ReferenceExpression("Node"));
 		callContractForAll->arguments()->append(new MethodCallExpression("getAllNodes"));
 		auto le = new LambdaExpression();
@@ -73,7 +73,7 @@ Class* addLinkedList()
 		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
 		auto callContractForAll = new MethodCallExpression("Contract.ForAll");
 		callContractInvariant->arguments()->append(callContractForAll);
-		dynamic_cast<ReferenceExpression*>(callContractForAll->callee())
+		DCast<ReferenceExpression>(callContractForAll->callee())
 				->typeArguments()->append(new ReferenceExpression("LinkedList"));
 		callContractForAll->arguments()->append(new MethodCallExpression("getAllLinkedLists"));
 		auto le = new LambdaExpression();
@@ -123,7 +123,7 @@ Class* addNode()
 		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
 		auto callContractExists = new MethodCallExpression("Contract.Exists");
 		callContractInvariant->arguments()->append(callContractExists);
-		dynamic_cast<ReferenceExpression*>(callContractExists->callee())
+		DCast<ReferenceExpression>(callContractExists->callee())
 				->typeArguments()->append(new ReferenceExpression("LinkedList"));
 		callContractExists->arguments()->append(new MethodCallExpression("getAllLinkedLists"));
 		auto le = new LambdaExpression();
@@ -137,7 +137,7 @@ Class* addNode()
 		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
 		auto callContractForAll = new MethodCallExpression("Contract.ForAll");
 		callContractInvariant->arguments()->append(callContractForAll);
-		dynamic_cast<ReferenceExpression*>(callContractForAll->callee())
+		DCast<ReferenceExpression>(callContractForAll->callee())
 				->typeArguments()->append(new ReferenceExpression("Node"));
 		callContractForAll->arguments()->append(new MethodCallExpression("getAllNodes"));
 		auto le = new LambdaExpression();
