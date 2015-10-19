@@ -37,11 +37,11 @@ CppImportManager::~CppImportManager()
 {
 	// clean the maps
 	auto vectors = sourcesMap_.values();
-	foreach(auto sv, vectors)
+	for (auto sv : vectors)
 		SAFE_DELETE(sv);
 	sourcesMap_.clear();
 	auto dbs = compilationDbMap_.values();
-	foreach(auto db, dbs)
+	for (auto db : dbs)
 		SAFE_DELETE(db);
 	compilationDbMap_.clear();
 }
@@ -65,7 +65,7 @@ Model::TreeManager*CppImportManager::createTreeManager(const bool statisticsPerP
 	CppImportLogger* log = new CppImportLogger();
 	ClangAstVisitor* visitor = new ClangAstVisitor(project, log);
 
-	foreach(QString s, projects_)
+	for (QString s : projects_)
 	{
 		qDebug() << "Start processing project :" << s;
 		auto tool = new clang::tooling::ClangTool(*compilationDbMap_.value(s), *sourcesMap_.value(s));
