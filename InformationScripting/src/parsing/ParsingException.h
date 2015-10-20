@@ -24,45 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "ArgumentParser.h"
-#include "ParsingException.h"
+#pragma once
+
+#include "../informationscripting_api.h"
+#include "../InformationScriptingException.h"
 
 namespace InformationScripting {
 
-const QStringList ArgumentParser::SCOPE_ARGUMENT_NAMES{"s", "scope"};
-
-ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
-													  const QStringList& args)
-	: argParser_{std::make_unique<QCommandLineParser>()}
+class INFORMATIONSCRIPTING_API ParsingException : public InformationScriptingException
 {
-	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
-	argParser_->addOptions(options);
-
-	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
-	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
-
-	if (!argParser_->parse(args))
-		throw ParsingException("General parsing error");
-
-	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
-	if (scope == "g") scope_ = Scope::Global;
-	else if (scope == "of") scope_ = Scope::Input;
-}
-
-QString ArgumentParser::argument(const QString& argName) const
-{
-	return argParser_->value(argName);
-}
-
-bool ArgumentParser::isArgumentSet(const QString& argName) const
-{
-	return argParser_->isSet(argName);
-}
-
-void InformationScripting::ArgumentParser::checkRule(const Arguments::ArgumentRule& rule) const
-{
-	if (!rule.check(*this))
-		throw ParsingException(rule.violationMessage);
-}
+		public:
+			ParsingException(const QString& message);
+			const QString& name() const;
+};
 
 } /* namespace InformationScripting */
