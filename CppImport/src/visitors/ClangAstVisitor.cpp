@@ -230,15 +230,20 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 		if (!ooFunction->parent())
 		{
 			// insert in tree
-			if (OOModel::Project* curProject = DCast<OOModel::Project>(ooStack_.top()))
+			if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
 				curProject->methods()->append(ooFunction);
-			else if (OOModel::Module* curModule = DCast<OOModel::Module>(ooStack_.top()))
+			else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
 				curModule->methods()->append(ooFunction);
-			else if (OOModel::Class* curClass = DCast<OOModel::Class>(ooStack_.top()))
+			else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 			{
 				// happens in the case of friend functions
 				log_->writeError(className_, functionDecl, CppImportLogger::Reason::NOT_SUPPORTED);
 				curClass->methods()->append(ooFunction);
+			}
+			else if (auto statements = DCast<OOModel::StatementItemList>(ooStack_.top()))
+			{
+				// This happens in statement lists
+				statements->append(new OOModel::DeclarationStatement(ooFunction));
 			}
 			else
 				log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
