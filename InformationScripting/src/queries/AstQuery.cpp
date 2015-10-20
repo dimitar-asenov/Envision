@@ -53,14 +53,18 @@ const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 const QStringList AstQuery::ADD_AS_NAMES{"a", "addAs"};
 const QStringList AstQuery::ATTRIBUTE_NAME_NAMES{"at", "attribute"};
 
-AstQuery::AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
+AstQuery::AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args,
+						 std::vector<Arguments::ArgumentRule> argumentRules)
 	: target_{target}, arguments_{new ArgumentParser({
 		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
 		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
 		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"},
 		 {ATTRIBUTE_NAME_NAMES, "Attribute to search from", ATTRIBUTE_NAME_NAMES[1]}
 		}, QStringList("AstQuery") + args)}, exec_{exec}
-{}
+{
+	for (const auto& rule : argumentRules)
+		arguments_->checkRule(rule);
+}
 
 Optional<TupleSet> AstQuery::executeLinear(TupleSet input)
 {
@@ -69,16 +73,23 @@ Optional<TupleSet> AstQuery::executeLinear(TupleSet input)
 
 void AstQuery::registerDefaultQueries()
 {
-	registerQuery("classes", &AstQuery::genericQuery, "Class");
-	registerQuery("methods", &AstQuery::genericQuery, "Method");
-	registerQuery("toClass", &AstQuery::toParentType, "Class");
+	registerQuery("classes", &AstQuery::genericQuery, {}, "Class");
+	registerQuery("methods", &AstQuery::genericQuery, {}, "Method");
+	registerQuery("toClass", &AstQuery::toParentType, {}, "Class");
 	registerQuery("bases", &AstQuery::baseClassesQuery);
 	registerQuery("callgraph", &AstQuery::callGraph);
-	registerQuery("ast", &AstQuery::genericQuery);
-	registerQuery("toParent", &AstQuery::toParentType);
-	registerQuery("uses", &AstQuery::usesQuery);
-	registerQuery("type", &AstQuery::typeFilter);
-	registerQuery("attribute", &AstQuery::attribute);
+	registerQuery("ast", &AstQuery::genericQuery,
+		{{Arguments::RequireOneOf(), "ast requires either name or type argument",
+		  {{NODETYPE_ARGUMENT_NAMES[1]}, {NAME_ARGUMENT_NAMES[1]}}}});
+	registerQuery("toParent", &AstQuery::toParentType,
+		{{Arguments::RequireAll(), "toParent requires type argument", {{NODETYPE_ARGUMENT_NAMES[1]}}}});
+	registerQuery("uses", &AstQuery::usesQuery,
+		{{Arguments::RequireOneOf(), "uses requires either name or type argument",
+		  {{NODETYPE_ARGUMENT_NAMES[1]}, {NAME_ARGUMENT_NAMES[1]}}}});
+	registerQuery("type", &AstQuery::typeFilter,
+		{{Arguments::RequireAll(), "typeFilter requires type argument", {{NODETYPE_ARGUMENT_NAMES[1]}}}});
+	registerQuery("attribute", &AstQuery::attribute,
+		{{Arguments::RequireAll(), "attribute requires attribute argument", {{ATTRIBUTE_NAME_NAMES[1]}}}});
 }
 
 void AstQuery::setTypeTo(QStringList& args, QString type)
@@ -121,7 +132,6 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
 
 Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 {
-	// TODO require argument
 	QString type = arguments_->argument(NODETYPE_ARGUMENT_NAMES[0]);
 	Q_ASSERT(type.size() > 0);
 
@@ -200,7 +210,6 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 
 Optional<TupleSet> AstQuery::genericQuery(TupleSet input)
 {
-	// TODO require one argument!
 	QString typeArgument = arguments_->argument(NODETYPE_ARGUMENT_NAMES[0]);
 	QString nameArgument = arguments_->argument(NAME_ARGUMENT_NAMES[0]);
 	if (nameArgument.size() > 0) return nameQuery(input, nameArgument);
@@ -287,7 +296,6 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 		result = tuples;
 	}
 
-	// TODO require one argument!
 	auto typeMatcher = Model::SymbolMatcher::guessMatcher(arguments_->argument(NODETYPE_ARGUMENT_NAMES[0]));
 	auto nameMatcher = Model::SymbolMatcher::guessMatcher(arguments_->argument(NAME_ARGUMENT_NAMES[0]));
 
@@ -323,7 +331,6 @@ Optional<TupleSet> AstQuery::typeFilter(TupleSet input)
 	QStringList arguments;
 	TupleSet result;
 
-	// TODO require argument!
 	// NOTE: To use spaces in this argument use quotes!
 	// QCommandLineParser removes the entered spaces automatically
 	// NOTE: here the type argument has a different meaning than in the other queries:
@@ -503,12 +510,13 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 	return false;
 }
 
-void AstQuery::registerQuery(const QString& name, AstQuery::ExecuteFunction methodToCall, const QString& setTypeTo)
+void AstQuery::registerQuery(const QString& name, AstQuery::ExecuteFunction methodToCall,
+									  std::vector<Arguments::ArgumentRule> argumentRules, const QString& setTypeTo)
 {
 	QueryRegistry::instance().registerQueryConstructor(name,
-		[methodToCall, setTypeTo](Model::Node* target, QStringList args) {
+		[methodToCall, setTypeTo, argumentRules](Model::Node* target, QStringList args) {
 			if (!setTypeTo.isNull()) AstQuery::setTypeTo(args, setTypeTo);
-			return new AstQuery(methodToCall, target, args);
+			return new AstQuery(methodToCall, target, args, argumentRules);
 	});
 }
 
