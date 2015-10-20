@@ -36,8 +36,11 @@ class SymbolMatcher;
 class MODELBASE_API NameResolver {
 
 	public:
-		static QList<QPair<QString, Node*>> findAllMatches(const SymbolMatcher& matcher, QString nameSoFar, Node* root);
-		static QList<QPair<QString, Node*>> mostLikelyMatches(const QString& nodeName, int matchLimit, Node* root = nullptr);
+		using IsSuggestable = std::function<bool (Node::SymbolTypes)>;
+		static QList<QPair<QString, Node*>> findAllMatches(const SymbolMatcher& matcher, QString nameSoFar,
+																			Node* root, IsSuggestable suggestable);
+		static QList<QPair<QString, Node*>> mostLikelyMatches(const QString& nodeName, int matchLimit,
+																				Node* root = nullptr, IsSuggestable suggestable = isSuggestable);
 
 	private:
 		static bool isSuggestable(Node::SymbolTypes symbolType);

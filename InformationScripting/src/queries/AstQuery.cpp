@@ -239,17 +239,23 @@ Optional<TupleSet> AstQuery::nameQuery(TupleSet input, QString name)
 
 	QList<QPair<QString, Model::Node*>> matchingNodes;
 
+	auto suggestable = [](Model::Node::SymbolTypes symbolType) {
+		using SymbolType = Model::Node::SymbolType;
+		return symbolType == SymbolType::METHOD || symbolType == SymbolType::CONTAINER || symbolType == SymbolType::VARIABLE;
+	};
+
 	if (scope() == Scope::Local)
-		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1, target());
+		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1, target(), suggestable);
 	else if (scope() == Scope::Global)
-		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1);
+		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1, nullptr, suggestable);
 	else if (scope() == Scope::Input)
 	{
 		tuples = input;
 
 		// Note here we remove the input nodes.
 		auto tuple = tuples.take("ast");
-		for (const auto& t : tuple) matchingNodes << Model::NameResolver::mostLikelyMatches(name, -1, t["ast"]);
+		for (const auto& t : tuple)
+			matchingNodes << Model::NameResolver::mostLikelyMatches(name, -1, t["ast"], suggestable);
 	}
 	// If we have a type argument filter the results:
 	const QString type = argument(NODETYPE_ARGUMENT_NAMES[0]);
