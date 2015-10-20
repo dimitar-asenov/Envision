@@ -28,7 +28,8 @@
 
 #include "../informationscripting_api.h"
 
-#include "ScopedArgumentQuery.h"
+#include "LinearQuery.h"
+#include "../parsing/ArgumentParser.h"
 
 #include "../misc/Optional.h"
 
@@ -39,7 +40,7 @@ namespace Model {
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
+class INFORMATIONSCRIPTING_API TagQuery : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
@@ -47,6 +48,9 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		static void registerDefaultQueries();
 
 	private:
+		Model::Node* target_{};
+		std::unique_ptr<ArgumentParser> arguments_{};
+
 		static const QStringList NAME_ARGUMENT_NAMES;
 		static const QStringList ADD_ARGUMENT_NAMES;
 		static const QStringList REMOVE_ARGUMENT_NAMES;

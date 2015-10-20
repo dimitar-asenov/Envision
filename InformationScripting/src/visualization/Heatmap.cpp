@@ -36,7 +36,7 @@ const QStringList Heatmap::VALUE_ATTRIBUTE_NAME_NAMES{"n", "name"};
 
 Optional<TupleSet> Heatmap::executeLinear(TupleSet input)
 {
-	QString valueTag = argument(VALUE_ATTRIBUTE_NAME_NAMES[1]);
+	QString valueTag = arguments_->argument(VALUE_ATTRIBUTE_NAME_NAMES[1]);
 	if (valueTag.isEmpty()) valueTag = "count"; // Use count as default tag for heatmaps
 	auto valueTuples = input.tuples(valueTag);
 
@@ -69,9 +69,9 @@ void Heatmap::registerDefaultQueries()
 }
 
 Heatmap::Heatmap(QStringList args)
-	: ScopedArgumentQuery{ nullptr, {
+	: arguments_{new ArgumentParser({
 		{VALUE_ATTRIBUTE_NAME_NAMES, "Name of the attribute that contains the count value", VALUE_ATTRIBUTE_NAME_NAMES[1]}
-		}, QStringList("Heatmap") + args}
+		}, QStringList("Heatmap") + args)}
 {}
 
 QColor Heatmap::colorForValue(int value)

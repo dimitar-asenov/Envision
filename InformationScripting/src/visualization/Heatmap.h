@@ -28,11 +28,12 @@
 
 #include "../informationscripting_api.h"
 
-#include "../queries/ScopedArgumentQuery.h"
+#include "../queries/LinearQuery.h"
+#include "../parsing/ArgumentParser.h"
 
 namespace InformationScripting {
 
-class Heatmap : public ScopedArgumentQuery
+class Heatmap : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
@@ -44,6 +45,7 @@ class Heatmap : public ScopedArgumentQuery
 
 		const QColor baseColor_{150, 255, 0};
 		QPair<int, int> valueRange_; // min, max
+		std::unique_ptr<ArgumentParser> arguments_{};
 
 		Heatmap(QStringList args);
 

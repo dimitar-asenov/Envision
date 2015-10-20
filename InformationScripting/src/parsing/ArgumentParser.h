@@ -28,8 +28,6 @@
 
 #include "../informationscripting_api.h"
 
-#include "LinearQuery.h"
-
 namespace Model {
 	class Node;
 }
@@ -39,14 +37,13 @@ class QCommandLineOption;
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public LinearQuery
+class INFORMATIONSCRIPTING_API ArgumentParser
 {
-	protected:
+	public:
 		enum class Scope : int {Local, Global, Input};
 
-		ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
+		ArgumentParser(std::initializer_list<QCommandLineOption> options,
 								  const QStringList& args);
-		Model::Node* target() const;
 		Scope scope() const;
 
 		QString argument(const QString& argName) const;
@@ -54,12 +51,10 @@ class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public LinearQuery
 
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};
-		Model::Node* target_{};
 		Scope scope_{};
 		static const QStringList SCOPE_ARGUMENT_NAMES;
 };
 
-inline Model::Node* ScopedArgumentQuery::target() const { return target_; }
-inline ScopedArgumentQuery::Scope ScopedArgumentQuery::scope() const { return scope_; }
+inline ArgumentParser::Scope ArgumentParser::scope() const { return scope_; }
 
 } /* namespace InformationScripting */

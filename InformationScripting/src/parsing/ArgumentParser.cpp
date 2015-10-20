@@ -24,15 +24,15 @@
 **
 ***********************************************************************************************************************/
 
-#include "ScopedArgumentQuery.h"
+#include "../parsing/ArgumentParser.h"
 
 namespace InformationScripting {
 
-const QStringList ScopedArgumentQuery::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+const QStringList ArgumentParser::SCOPE_ARGUMENT_NAMES{"s", "scope"};
 
-ScopedArgumentQuery::ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
+ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
 													  const QStringList& args)
-	: argParser_{std::make_unique<QCommandLineParser>()}, target_{target}
+	: argParser_{std::make_unique<QCommandLineParser>()}
 {
 	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
 	argParser_->addOptions(options);
@@ -48,12 +48,12 @@ ScopedArgumentQuery::ScopedArgumentQuery(Model::Node* target, std::initializer_l
 	else if (scope == "of") scope_ = Scope::Input;
 }
 
-QString ScopedArgumentQuery::argument(const QString& argName) const
+QString ArgumentParser::argument(const QString& argName) const
 {
 	return argParser_->value(argName);
 }
 
-bool ScopedArgumentQuery::isArgumentSet(const QString& argName) const
+bool ArgumentParser::isArgumentSet(const QString& argName) const
 {
 	return argParser_->isSet(argName);
 }

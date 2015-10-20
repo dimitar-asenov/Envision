@@ -28,7 +28,8 @@
 
 #include "../informationscripting_api.h"
 
-#include "ScopedArgumentQuery.h"
+#include "LinearQuery.h"
+#include "../parsing/ArgumentParser.h"
 
 namespace FilePersistence {
 	struct CommitMetaData;
@@ -36,13 +37,16 @@ namespace FilePersistence {
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VersionControlQuery : public ScopedArgumentQuery
+class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 	private:
+		Model::Node* target_{};
+		std::unique_ptr<ArgumentParser> arguments_{};
+
 		static const QStringList COUNT_ARGUMENT_NAMES;
 
 		VersionControlQuery(Model::Node* target, QStringList args);

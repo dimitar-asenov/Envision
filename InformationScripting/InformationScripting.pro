@@ -41,7 +41,6 @@ HEADERS += src/precompiled.h \
     src/queries/AddASTPropertiesAsTuples.h \
     src/nodes/TagExtension.h \
     src/queries/TagQuery.h \
-    src/queries/ScopedArgumentQuery.h \
     src/nodes/QueryNode.h \
     src/nodes/CommandNode.h \
     src/nodes/CommandArgument.h \
@@ -76,7 +75,8 @@ HEADERS += src/precompiled.h \
     src/interaction/SimpleQueryParser.h \
     src/visualization/VCompositeQueryNode.h \
     src/visualization/VCompositeQueryNodeStyle.h \
-    src/misc/Optional.h
+    src/misc/Optional.h \
+    src/parsing/ArgumentParser.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -101,7 +101,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/AddASTPropertiesAsTuples.cpp \
     src/nodes/TagExtension.cpp \
     src/queries/TagQuery.cpp \
-    src/queries/ScopedArgumentQuery.cpp \
     src/nodes/QueryNode.cpp \
     src/nodes/CommandNode.cpp \
     src/nodes/CommandArgument.cpp \
@@ -135,7 +134,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/VersionControlQuery.cpp \
     src/interaction/SimpleQueryParser.cpp \
     src/visualization/VCompositeQueryNode.cpp \
-    src/visualization/VCompositeQueryNodeStyle.cpp
+    src/visualization/VCompositeQueryNodeStyle.cpp \
+    src/parsing/ArgumentParser.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

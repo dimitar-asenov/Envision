@@ -28,7 +28,8 @@
 
 #include "../informationscripting_api.h"
 
-#include "ScopedArgumentQuery.h"
+#include "LinearQuery.h"
+#include "../parsing/ArgumentParser.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -44,7 +45,7 @@ namespace OOModel {
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
@@ -52,6 +53,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		static void registerDefaultQueries();
 
 	private:
+		Model::Node* target_{};
+		std::unique_ptr<ArgumentParser> arguments_{};
 
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
