@@ -24,44 +24,50 @@
 **
 ***********************************************************************************************************************/
 
-#include "../parsing/ArgumentParser.h"
+#include "ArgumentRule.h"
+
+#include "ArgumentParser.h"
 
 namespace InformationScripting {
 
-const QStringList ArgumentParser::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+namespace Arguments {
 
-ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
-													  const QStringList& args)
-	: argParser_{std::make_unique<QCommandLineParser>()}
+ArgumentRule::ArgumentRule(ArgumentCheck checkFunction, QString message, std::vector<ArgumentValue> expectedArguments)
+	: violationMessage{message}
 {
-	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
-	argParser_->addOptions(options);
-
-	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
-	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
-
-	if (!argParser_->parse(args))
-		qWarning() << args[0] << "parse failure"; // TODO warn user
-
-	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
-	if (scope == "g") scope_ = Scope::Global;
-	else if (scope == "of") scope_ = Scope::Input;
+	check = std::bind(checkFunction, std::placeholders::_1, expectedArguments);
 }
 
-QString ArgumentParser::argument(const QString& argName) const
+ArgumentValueCheck::ArgumentValueCheck(const ArgumentParser& parser) : parser_{parser} {}
+
+bool ArgumentValueCheck::operator()(const ArgumentValue& value) const
 {
-	return argParser_->value(argName);
+	using ValuePolicy = ArgumentValue::ValuePolicy;
+	return (value.policy == ValuePolicy::NotEmpty && parser_.isArgumentSet(value.name)
+			  && !parser_.argument(value.name).isEmpty())
+			|| (value.policy == ValuePolicy::NotEquals && parser_.isArgumentSet(value.name)
+				 && parser_.argument(value.name) != value.value);
+
 }
 
-bool ArgumentParser::isArgumentSet(const QString& argName) const
+bool RequireAll::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
 {
-	return argParser_->isSet(argName);
+	return std::all_of(values.begin(), values.end(), ArgumentValueCheck{parser});
 }
 
-void InformationScripting::ArgumentParser::checkRule(const Arguments::ArgumentRule& rule) const
+bool RequireOneOf::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
 {
-	if (!rule.check(*this))
-		throw new InformationScriptingException(rule.violationMessage);
+	return std::any_of(values.begin(), values.end(), ArgumentValueCheck{parser});
 }
+
+bool AtMostOneOf::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
+{
+	auto p = ArgumentValueCheck{parser};
+	auto first = std::find_if(values.begin(), values.end(), p);
+	return first != values.end() && std::none_of(first + 1, values.end(), p);
+}
+
+
+} /* namespace Arguments */
 
 } /* namespace InformationScripting */

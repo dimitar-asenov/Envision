@@ -76,7 +76,8 @@ HEADERS += src/precompiled.h \
     src/visualization/VCompositeQueryNode.h \
     src/visualization/VCompositeQueryNodeStyle.h \
     src/misc/Optional.h \
-    src/parsing/ArgumentParser.h
+    src/parsing/ArgumentParser.h \
+    src/parsing/ArgumentRule.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -135,7 +136,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/interaction/SimpleQueryParser.cpp \
     src/visualization/VCompositeQueryNode.cpp \
     src/visualization/VCompositeQueryNodeStyle.cpp \
-    src/parsing/ArgumentParser.cpp
+    src/parsing/ArgumentParser.cpp \
+    src/parsing/ArgumentRule.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

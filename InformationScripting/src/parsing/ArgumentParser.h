@@ -28,6 +28,9 @@
 
 #include "../informationscripting_api.h"
 
+#include "../InformationScriptingException.h"
+#include "ArgumentRule.h"
+
 namespace Model {
 	class Node;
 }
@@ -48,6 +51,8 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 
 		QString argument(const QString& argName) const;
 		bool isArgumentSet(const QString& argName) const;
+
+		void checkRule(const Arguments::ArgumentRule& rule) const;
 
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};

@@ -24,44 +24,54 @@
 **
 ***********************************************************************************************************************/
 
-#include "../parsing/ArgumentParser.h"
+#pragma once
+
+#include "../informationscripting_api.h"
 
 namespace InformationScripting {
 
-const QStringList ArgumentParser::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+class ArgumentParser;
 
-ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
-													  const QStringList& args)
-	: argParser_{std::make_unique<QCommandLineParser>()}
+namespace Arguments {
+
+struct INFORMATIONSCRIPTING_API ArgumentValue {
+	enum ValuePolicy { NotEmpty, NotEquals };
+	QString name;
+	ValuePolicy policy{NotEmpty};
+	QString value{};
+};
+
+struct INFORMATIONSCRIPTING_API ArgumentRule {
+		using ArgumentCheck = std::function<bool (const ArgumentParser&, const std::vector<ArgumentValue>&)>;
+		std::function<bool (const ArgumentParser&)> check;
+		QString violationMessage;
+		ArgumentRule(ArgumentCheck checkFunction, QString message, std::vector<ArgumentValue> expectedArguments);
+};
+
+// Convenience Rules:
+class ArgumentValueCheck {
+	public:
+		ArgumentValueCheck(const ArgumentParser& parser);
+		bool operator() (const ArgumentValue& value) const;
+	private:
+		const ArgumentParser& parser_;
+};
+
+struct RequireAll
 {
-	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
-	argParser_->addOptions(options);
+		bool operator() (const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const;
+};
 
-	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
-	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+struct RequireOneOf {
+	public:
+		bool operator() (const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const;
+};
 
-	if (!argParser_->parse(args))
-		qWarning() << args[0] << "parse failure"; // TODO warn user
+struct AtMostOneOf {
+	public:
+		bool operator() (const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const;
+};
 
-	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
-	if (scope == "g") scope_ = Scope::Global;
-	else if (scope == "of") scope_ = Scope::Input;
-}
-
-QString ArgumentParser::argument(const QString& argName) const
-{
-	return argParser_->value(argName);
-}
-
-bool ArgumentParser::isArgumentSet(const QString& argName) const
-{
-	return argParser_->isSet(argName);
-}
-
-void InformationScripting::ArgumentParser::checkRule(const Arguments::ArgumentRule& rule) const
-{
-	if (!rule.check(*this))
-		throw new InformationScriptingException(rule.violationMessage);
-}
+} /* namespace Arguments */
 
 } /* namespace InformationScripting */
