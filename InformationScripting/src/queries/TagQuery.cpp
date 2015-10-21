@@ -48,35 +48,35 @@ Optional<TupleSet> TagQuery::executeLinear(TupleSet input)
 
 void TagQuery::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("tags", [](Model::Node* target, QStringList args) {
-		return new TagQuery(&TagQuery::tags, target, args);
-	});
+	QueryRegistry::registerQuery<TagQuery>("tags", &TagQuery::tags,
+		{{ArgumentRule::AtMostOneOf, {{ADD_ARGUMENT_NAMES[1], ArgumentValue::IsSet},
+												{REMOVE_ARGUMENT_NAMES[1], ArgumentValue::IsSet}}},
+		 {ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
 	// Alias to "tags -a"
-	QueryRegistry::instance().registerQueryConstructor("addTags", [](Model::Node* target, QStringList args) {
-		return new TagQuery(&TagQuery::addTags, target, args);
-	});
+	QueryRegistry::registerQuery<TagQuery>("addTags", &TagQuery::addTags,
+		{{ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
 	// Alias to "tags -r"
-	QueryRegistry::instance().registerQueryConstructor("removeTags", [](Model::Node* target, QStringList args) {
-		return new TagQuery(&TagQuery::removeTags, target, args);
-	});
+	QueryRegistry::registerQuery<TagQuery>("removeTags", &TagQuery::removeTags,
+		{{ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
 }
 
-TagQuery::TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
-	: ScopedArgumentQuery{target, {
+TagQuery::TagQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)
+	: LinearQuery{target}, arguments_{{
 			{NAME_ARGUMENT_NAMES, "Tag name, or regex to find tag", NAME_ARGUMENT_NAMES[1]},
 			QCommandLineOption{ADD_ARGUMENT_NAMES},
 			QCommandLineOption{REMOVE_ARGUMENT_NAMES},
 			{PERSISTENT_ARGUMENT_NAMES, "Wether the change is persistent, default = yes", PERSISTENT_ARGUMENT_NAMES[1], "yes"}
 }, QStringList("TagQuery") + args}, exec_{exec}
 {
-	persistent_ = argument(PERSISTENT_ARGUMENT_NAMES[1]) == "yes";
+	persistent_ = arguments_.argument(PERSISTENT_ARGUMENT_NAMES[1]) == "yes";
+	for (const auto& rule : argumentRules)
+		rule.check(arguments_);
 }
 
 Optional<TupleSet> TagQuery::tags(TupleSet input)
 {
-	// TODO require at most one argument
-	bool addSet = isArgumentSet(ADD_ARGUMENT_NAMES[0]);
-	bool removeSet = isArgumentSet(REMOVE_ARGUMENT_NAMES[0]);
+	bool addSet = arguments_.isArgumentSet(ADD_ARGUMENT_NAMES[0]);
+	bool removeSet = arguments_.isArgumentSet(REMOVE_ARGUMENT_NAMES[0]);
 	Q_ASSERT(!(addSet && removeSet));
 	if (addSet)
 		return addTags(input);
@@ -88,8 +88,7 @@ Optional<TupleSet> TagQuery::tags(TupleSet input)
 
 Optional<TupleSet> TagQuery::queryTags(TupleSet input)
 {
-	// TODO require argument
-	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
+	QString tagText = arguments_.argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0);
 	// Keep stuff in the input
 	TupleSet result = input;
@@ -97,12 +96,12 @@ Optional<TupleSet> TagQuery::queryTags(TupleSet input)
 	// Querying tags non persistent would just return the tag tuples in the input.
 	if (!persistent_) return input;
 
-	if (scope() == Scope::Local || scope() == Scope::Global)
+	if (arguments_.scope() == ArgumentParser::Scope::Local || arguments_.scope() == ArgumentParser::Scope::Global)
 	{
-		auto targetNode = scope() == Scope::Local ? target() : nullptr;
+		auto targetNode = arguments_.scope() == ArgumentParser::Scope::Local ? target() : nullptr;
 		insertFoundTags(result, Model::SymbolMatcher::guessMatcher(tagText), targetNode);
 	}
-	else if (scope() == Scope::Input)
+	else if (arguments_.scope() == ArgumentParser::Scope::Input)
 	{
 		auto matcher = Model::SymbolMatcher::guessMatcher(tagText);
 		auto astTuples = input.tuples("ast");
@@ -118,18 +117,17 @@ Optional<TupleSet> TagQuery::addTags(TupleSet input)
 	TupleSet result = input;
 	QList<Model::Node*> addTagsTo;
 
-	// TODO require argument
-	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
+	QString tagText = arguments_.argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0);
 
-	if (scope() == Scope::Local)
+	if (arguments_.scope() == ArgumentParser::Scope::Local)
 		addTagsTo << target();
-	else if (scope() == Scope::Global)
+	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 	{
 		// That doesn't make sense, to which nodes should we add the tags?
 		// TODO: don't allow global argument!
 	}
-	else if (scope() == Scope::Input)
+	else if (arguments_.scope() == ArgumentParser::Scope::Input)
 		for (const auto& tuple : input.tuples("ast"))
 			addTagsTo << static_cast<Model::Node*>(tuple["ast"]);
 
@@ -158,8 +156,7 @@ Optional<TupleSet> TagQuery::addTags(TupleSet input)
 
 Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 {
-	// TODO require argument.
-	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
+	QString tagText = arguments_.argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0);
 
 	// Keep stuff in the input
@@ -167,11 +164,11 @@ Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 	auto matcher = Model::SymbolMatcher::guessMatcher(tagText);
 	QString tagName = "tag";
 	TupleSet removedTuples;
-	if (scope() == Scope::Local)
+	if (arguments_.scope() == ArgumentParser::Scope::Local)
 		insertFoundTags(removedTuples, matcher, target());
-	else if (scope() == Scope::Global)
+	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 		insertFoundTags(removedTuples, matcher);
-	else if (scope() == Scope::Input)
+	else if (arguments_.scope() == ArgumentParser::Scope::Input)
 	{
 		auto astTuples = input.tuples("ast");
 		for (auto tuple : astTuples)

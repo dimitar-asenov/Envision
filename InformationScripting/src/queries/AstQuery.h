@@ -28,7 +28,8 @@
 
 #include "../informationscripting_api.h"
 
-#include "ScopedArgumentQuery.h"
+#include "LinearQuery.h"
+#include "../parsing/ArgumentParser.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -44,7 +45,7 @@ namespace OOModel {
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
@@ -52,6 +53,9 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		static void registerDefaultQueries();
 
 	private:
+		friend class QueryRegistry;
+
+		ArgumentParser arguments_;
 
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
@@ -61,7 +65,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		using ExecuteFunction = std::function<Optional<TupleSet> (AstQuery*, TupleSet)>;
 		ExecuteFunction exec_{};
 
-		AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args);
+		AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
 
 		static void setTypeTo(QStringList& args, QString type);
 
@@ -85,8 +89,6 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 
 		static bool matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
 										 const QString& expectedType, const QStringList& args);
-
-		static void registerQuery(const QString& name, ExecuteFunction methodToCall, const QString& setTypeTo = {});
 };
 
 } /* namespace InformationScripting */

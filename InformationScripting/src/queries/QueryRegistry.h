@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "../misc/Optional.h"
+
 namespace Model {
 	class Node;
 }
@@ -35,6 +37,8 @@ namespace Model {
 namespace InformationScripting {
 
 class Query;
+class TupleSet;
+class ArgumentRule;
 
 class INFORMATIONSCRIPTING_API QueryRegistry
 {
@@ -43,6 +47,14 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 
 		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
 		void registerQueryConstructor(const QString& command, QueryConstructor constructor);
+
+		template <class QueryType> using QueryExec = std::function<Optional<TupleSet> (QueryType*, TupleSet)>;
+		template <class QueryType>
+		static void registerQuery(const QString& name, QueryExec<QueryType> exec,
+										  std::function<void (QStringList&)> argAdaption = {});
+
+		template <class QueryType>
+		static void registerQuery(const QString& name, QueryExec<QueryType> exec, std::vector<ArgumentRule> argumentRules);
 
 		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
@@ -62,6 +74,25 @@ inline void QueryRegistry::registerQueryConstructor(const QString& command, Quer
 {
 	Q_ASSERT(constructor);
 	constructors_[command] = constructor;
+}
+
+template <class QueryType>
+inline void QueryRegistry::registerQuery(const QString& name, QueryExec<QueryType> exec,
+													  std::function<void (QStringList&)> argAdaption)
+{
+	instance().registerQueryConstructor(name, [name, exec, argAdaption](Model::Node* target, QStringList args) {
+		if (argAdaption) argAdaption(args);
+		return new QueryType(target, QStringList(name) + args, exec);
+	});
+}
+
+template <class QueryType>
+inline void QueryRegistry::registerQuery(const QString& name, QueryExec<QueryType> exec,
+													  std::vector<ArgumentRule> argumentRules)
+{
+	instance().registerQueryConstructor(name, [name, exec, argumentRules](Model::Node* target, QStringList args) {
+		return new QueryType(target, QStringList(name) + args, exec, argumentRules);
+	});
 }
 
 inline QStringList QueryRegistry::registeredQueries() const { return constructors_.keys(); }

@@ -40,8 +40,10 @@
 #include "../queries/AddASTPropertiesAsTuples.h"
 #include "../queries/QueryRegistry.h"
 #include "../parsing/QueryParser.h"
+#include "../parsing/QueryParsingException.h"
 
 #include "../visualization/QueryPrompt.h"
+
 
 namespace InformationScripting {
 
@@ -74,7 +76,13 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	else if (command != "fallback")
 	{
 		args.prepend(command);
-		auto q = QueryParser::buildQueryFrom(args.join(""), node);
+		Query* q = nullptr;
+		try {
+			q = QueryParser::buildQueryFrom(args.join(""), node);
+		} catch (const QueryParsingException& e) {
+			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
+		}
+		Q_ASSERT(q);
 		QueryExecutor queryExecutor(q);
 		return queryExecutor.execute();
 	}

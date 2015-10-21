@@ -28,38 +28,44 @@
 
 #include "../informationscripting_api.h"
 
-#include "LinearQuery.h"
-
-namespace Model {
-	class Node;
-}
-
-class QCommandLineParser;
-class QCommandLineOption;
-
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public LinearQuery
-{
-	protected:
-		enum class Scope : int {Local, Global, Input};
+class ArgumentParser;
 
-		ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
-								  const QStringList& args);
-		Model::Node* target() const;
-		Scope scope() const;
-
-		QString argument(const QString& argName) const;
-		bool isArgumentSet(const QString& argName) const;
-
-	private:
-		std::unique_ptr<QCommandLineParser> argParser_{};
-		Model::Node* target_{};
-		Scope scope_{};
-		static const QStringList SCOPE_ARGUMENT_NAMES;
+struct INFORMATIONSCRIPTING_API ArgumentValue {
+	enum ValuePolicy { NotEmpty, NotEquals, IsSet };
+	QString name;
+	ValuePolicy policy{NotEmpty};
+	QString value{};
 };
 
-inline Model::Node* ScopedArgumentQuery::target() const { return target_; }
-inline ScopedArgumentQuery::Scope ScopedArgumentQuery::scope() const { return scope_; }
+class INFORMATIONSCRIPTING_API ArgumentRule {
+	public:
+		enum RuleType {RequireAll, RequireOneOf, AtMostOneOf};
+		ArgumentRule(RuleType rule, std::vector<ArgumentValue> expectedArguments);
+
+		/**
+		 * Checks if this rule is satisfied, if not it throws an exception.
+		 */
+		void check(const ArgumentParser& parser) const;
+	private:
+		std::function<bool (const ArgumentParser&)> check_;
+		QString violationMessage_;
+
+		using RuleFunction = std::function<bool (const ArgumentParser&, const std::vector<ArgumentValue>&)>;
+
+		static bool requireAll(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
+		static bool requireOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
+		static bool atMostOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
+
+		// The argument value check used in the rule functions
+		class ArgumentValueCheck {
+			public:
+				ArgumentValueCheck(const ArgumentParser& parser);
+				bool operator() (const ArgumentValue& value) const;
+			private:
+				const ArgumentParser& parser_;
+		};
+};
 
 } /* namespace InformationScripting */

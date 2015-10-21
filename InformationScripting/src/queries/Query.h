@@ -37,8 +37,16 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API Query
 {
 	public:
+		Query(Model::Node* target = nullptr);
 		virtual ~Query() = default;
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet>) = 0;
+		Model::Node* target() const;
+
+	private:
+		Model::Node* target_{};
 };
+
+inline Query::Query(Model::Node *target) : target_{target} {}
+inline Model::Node* Query::target() const { return target_; }
 
 } /* namespace InformationScripting */

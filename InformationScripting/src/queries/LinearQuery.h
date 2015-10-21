@@ -35,6 +35,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API LinearQuery : public Query
 {
 	public:
+		LinearQuery(Model::Node* target = nullptr);
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 		virtual Optional<TupleSet> executeLinear(TupleSet) = 0;
 };

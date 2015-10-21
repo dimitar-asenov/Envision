@@ -27,29 +27,15 @@
 #pragma once
 
 #include "../informationscripting_api.h"
-
-#include "../queries/LinearQuery.h"
-#include "../parsing/ArgumentParser.h"
+#include "../InformationScriptingException.h"
 
 namespace InformationScripting {
 
-class Heatmap : public LinearQuery
+class INFORMATIONSCRIPTING_API QueryParsingException : public InformationScriptingException
 {
-	public:
-		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
-
-		static void registerDefaultQueries();
-
-	private:
-		static const QStringList VALUE_ATTRIBUTE_NAME_NAMES;
-
-		const QColor baseColor_{150, 255, 0};
-		QPair<int, int> valueRange_; // min, max
-		ArgumentParser arguments_;
-
-		Heatmap(QStringList args);
-
-		QColor colorForValue(int value);
+		public:
+			QueryParsingException(const QString& message);
+			const QString& name() const;
 };
 
 } /* namespace InformationScripting */

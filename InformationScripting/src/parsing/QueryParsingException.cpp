@@ -24,38 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "ScopedArgumentQuery.h"
+#include "QueryParsingException.h"
 
 namespace InformationScripting {
 
-const QStringList ScopedArgumentQuery::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+QueryParsingException::QueryParsingException(const QString& message)
+	: InformationScriptingException(message)
+{}
 
-ScopedArgumentQuery::ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
-													  const QStringList& args)
-	: argParser_{std::make_unique<QCommandLineParser>()}, target_{target}
+const QString& QueryParsingException::name() const
 {
-	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
-	argParser_->addOptions(options);
-
-	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
-	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
-
-	if (!argParser_->parse(args))
-		qWarning() << args[0] << "parse failure"; // TODO warn user
-
-	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
-	if (scope == "g") scope_ = Scope::Global;
-	else if (scope == "of") scope_ = Scope::Input;
-}
-
-QString ScopedArgumentQuery::argument(const QString& argName) const
-{
-	return argParser_->value(argName);
-}
-
-bool ScopedArgumentQuery::isArgumentSet(const QString& argName) const
-{
-	return argParser_->isSet(argName);
+	static QString ename("ParsingException");
+	return ename;
 }
 
 } /* namespace InformationScripting */

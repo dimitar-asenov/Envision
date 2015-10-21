@@ -24,32 +24,39 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "../queries/LinearQuery.h"
-#include "../parsing/ArgumentParser.h"
+#include "ArgumentParser.h"
+#include "QueryParsingException.h"
 
 namespace InformationScripting {
 
-class Heatmap : public LinearQuery
+const QStringList ArgumentParser::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+
+ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
+													  const QStringList& args)
+	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
-	public:
-		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
+	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
+	argParser_->addOptions(options);
 
-		static void registerDefaultQueries();
+	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
+	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 
-	private:
-		static const QStringList VALUE_ATTRIBUTE_NAME_NAMES;
+	if (!argParser_->parse(args))
+		throw QueryParsingException("Query arguments parsing error: " + argParser_->errorText());
 
-		const QColor baseColor_{150, 255, 0};
-		QPair<int, int> valueRange_; // min, max
-		ArgumentParser arguments_;
+	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
+	if (scope == "g") scope_ = Scope::Global;
+	else if (scope == "of") scope_ = Scope::Input;
+}
 
-		Heatmap(QStringList args);
+QString ArgumentParser::argument(const QString& argName) const
+{
+	return argParser_->value(argName);
+}
 
-		QColor colorForValue(int value);
-};
+bool ArgumentParser::isArgumentSet(const QString& argName) const
+{
+	return argParser_->isSet(argName);
+}
 
 } /* namespace InformationScripting */

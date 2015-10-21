@@ -28,28 +28,40 @@
 
 #include "../informationscripting_api.h"
 
-#include "../queries/LinearQuery.h"
-#include "../parsing/ArgumentParser.h"
+#include "../InformationScriptingException.h"
+#include "ArgumentRule.h"
+
+namespace Model {
+	class Node;
+}
+
+class QCommandLineParser;
+class QCommandLineOption;
 
 namespace InformationScripting {
 
-class Heatmap : public LinearQuery
+class INFORMATIONSCRIPTING_API ArgumentParser
 {
 	public:
-		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
+		enum class Scope : int {Local, Global, Input};
 
-		static void registerDefaultQueries();
+		ArgumentParser(std::initializer_list<QCommandLineOption> options,
+								  const QStringList& args);
+		Scope scope() const;
+
+		QString argument(const QString& argName) const;
+		bool isArgumentSet(const QString& argName) const;
+
+		QString queryName() const;
 
 	private:
-		static const QStringList VALUE_ATTRIBUTE_NAME_NAMES;
-
-		const QColor baseColor_{150, 255, 0};
-		QPair<int, int> valueRange_; // min, max
-		ArgumentParser arguments_;
-
-		Heatmap(QStringList args);
-
-		QColor colorForValue(int value);
+		std::unique_ptr<QCommandLineParser> argParser_{};
+		Scope scope_{};
+		QString queryName_;
+		static const QStringList SCOPE_ARGUMENT_NAMES;
 };
+
+inline ArgumentParser::Scope ArgumentParser::scope() const { return scope_; }
+inline QString ArgumentParser::queryName() const { return queryName_; }
 
 } /* namespace InformationScripting */
