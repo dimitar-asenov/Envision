@@ -33,7 +33,7 @@ namespace InformationScripting {
 class ArgumentParser;
 
 struct INFORMATIONSCRIPTING_API ArgumentValue {
-	enum ValuePolicy { NotEmpty, NotEquals };
+	enum ValuePolicy { NotEmpty, NotEquals, IsSet };
 	QString name;
 	ValuePolicy policy{NotEmpty};
 	QString value{};

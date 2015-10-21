@@ -86,7 +86,8 @@ bool ArgumentRule::ArgumentValueCheck::operator()(const ArgumentValue& value) co
 	return (value.policy == ValuePolicy::NotEmpty && parser_.isArgumentSet(value.name)
 			  && !parser_.argument(value.name).isEmpty())
 			|| (value.policy == ValuePolicy::NotEquals && parser_.isArgumentSet(value.name)
-				 && parser_.argument(value.name) != value.value);
+				 && parser_.argument(value.name) != value.value)
+			|| (value.policy == ValuePolicy::IsSet && parser_.isArgumentSet(value.name));
 }
 
 } /* namespace InformationScripting */

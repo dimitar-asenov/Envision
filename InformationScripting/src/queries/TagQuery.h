@@ -48,7 +48,9 @@ class INFORMATIONSCRIPTING_API TagQuery : public LinearQuery
 		static void registerDefaultQueries();
 
 	private:
-		std::unique_ptr<ArgumentParser> arguments_{};
+		friend class QueryRegistry;
+
+		ArgumentParser arguments_;
 
 		static const QStringList NAME_ARGUMENT_NAMES;
 		static const QStringList ADD_ARGUMENT_NAMES;
@@ -59,7 +61,7 @@ class INFORMATIONSCRIPTING_API TagQuery : public LinearQuery
 		ExecuteFunction exec_{};
 		bool persistent_{true};
 
-		TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args);
+		TagQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
 		Optional<TupleSet> tags(TupleSet input);
 		Optional<TupleSet> queryTags(TupleSet input);
 		Optional<TupleSet> addTags(TupleSet input);
