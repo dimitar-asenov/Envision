@@ -44,7 +44,7 @@ const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
-	const int CHANGE_COUNT = arguments_->argument(COUNT_ARGUMENT_NAMES[0]).toInt();
+	const int CHANGE_COUNT = arguments_.argument(COUNT_ARGUMENT_NAMES[0]).toInt();
 
 	Model::TreeManager* treeManager = target()->manager();
 	QString managerName = treeManager->name();
@@ -101,9 +101,9 @@ void VersionControlQuery::registerDefaultQueries()
 }
 
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
-	: LinearQuery{target}, arguments_{new ArgumentParser({
+	: LinearQuery{target}, arguments_{{
 		{COUNT_ARGUMENT_NAMES, "The amount of revision to look at", COUNT_ARGUMENT_NAMES[1], "10"}
-}, QStringList{"VersionControl"} + args)}
+}, QStringList{"changes"} + args}
 {}
 
 void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMetaData& metadata)

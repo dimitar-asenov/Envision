@@ -45,7 +45,7 @@ class Heatmap : public LinearQuery
 
 		const QColor baseColor_{150, 255, 0};
 		QPair<int, int> valueRange_; // min, max
-		std::unique_ptr<ArgumentParser> arguments_{};
+		ArgumentParser arguments_;
 
 		Heatmap(QStringList args);
 

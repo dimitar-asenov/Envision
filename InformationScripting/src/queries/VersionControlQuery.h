@@ -44,7 +44,7 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 
 		static void registerDefaultQueries();
 	private:
-		std::unique_ptr<ArgumentParser> arguments_{};
+		ArgumentParser arguments_;
 
 		static const QStringList COUNT_ARGUMENT_NAMES;
 
