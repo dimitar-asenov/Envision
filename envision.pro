@@ -22,7 +22,8 @@ SUBDIRS= Core \
 	AlloyIntegration \
 	OODebug \
 	InformationScripting \
-	PythonWrapperGenerator
+	PythonWrapperGenerator \
+	CppExport
 
 CONFIG+=debug_and_release
 CONFIG+=ordered
