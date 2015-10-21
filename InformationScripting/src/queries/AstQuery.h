@@ -53,6 +53,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		static void registerDefaultQueries();
 
 	private:
+		friend class QueryRegistry;
+
 		ArgumentParser arguments_;
 
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
@@ -63,8 +65,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		using ExecuteFunction = std::function<Optional<TupleSet> (AstQuery*, TupleSet)>;
 		ExecuteFunction exec_{};
 
-		AstQuery(ExecuteFunction exec, Model::Node* target, QStringList args,
-					std::vector<ArgumentRule> argumentRules);
+		AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
 
 		static void setTypeTo(QStringList& args, QString type);
 
@@ -88,9 +89,6 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 
 		static bool matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
 										 const QString& expectedType, const QStringList& args);
-
-		static void registerQuery(const QString& name, ExecuteFunction methodToCall,
-										  std::vector<ArgumentRule> argumentRules = {}, const QString& setTypeTo = {});
 };
 
 } /* namespace InformationScripting */
