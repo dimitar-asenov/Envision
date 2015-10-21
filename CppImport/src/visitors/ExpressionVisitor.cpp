@@ -275,7 +275,6 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		case CppImportUtilities::OverloadKind::ReferenceExpr:
 		{
 			if (!ooExprStack_.empty())
-				if (DCast<OOModel::ReferenceExpression>(ooExprStack_.top()))
 					break;
 			ooExprStack_.push(utils_->createErrorExpression("Could not resolve Reference/Arrow"));
 			break;
