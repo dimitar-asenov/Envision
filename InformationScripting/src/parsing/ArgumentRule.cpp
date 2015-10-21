@@ -47,7 +47,6 @@ bool ArgumentValueCheck::operator()(const ArgumentValue& value) const
 			  && !parser_.argument(value.name).isEmpty())
 			|| (value.policy == ValuePolicy::NotEquals && parser_.isArgumentSet(value.name)
 				 && parser_.argument(value.name) != value.value);
-
 }
 
 bool RequireAll::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
@@ -62,11 +61,8 @@ bool RequireOneOf::operator()(const ArgumentParser& parser, const std::vector<Ar
 
 bool AtMostOneOf::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
 {
-	auto p = ArgumentValueCheck{parser};
-	auto first = std::find_if(values.begin(), values.end(), p);
-	return first != values.end() && std::none_of(first + 1, values.end(), p);
+	return std::count_if(values.begin(), values.end(), ArgumentValueCheck{parser}) <= 1;
 }
-
 
 } /* namespace Arguments */
 
