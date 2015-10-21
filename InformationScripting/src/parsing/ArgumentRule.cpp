@@ -27,13 +27,40 @@
 #include "ArgumentRule.h"
 
 #include "ArgumentParser.h"
+#include "ParsingException.h"
 
 namespace InformationScripting {
 
-ArgumentRule::ArgumentRule(ArgumentCheck checkFunction, QString message, std::vector<ArgumentValue> expectedArguments)
-	: violationMessage{message}
+ArgumentRule::ArgumentRule(RuleType rule, std::vector<ArgumentValue> expectedArguments)
 {
-	check = std::bind(checkFunction, std::placeholders::_1, expectedArguments);
+	// Get the argument names
+	QStringList argumentNames;
+	for (const auto& argument : expectedArguments)
+		argumentNames << argument.name;
+	RuleFunction checkFunction;
+	if (rule == RequireAll)
+	{
+		checkFunction = requireAll;
+		violationMessage_ = " requires: (";
+	}
+	else if (rule == RequireOneOf)
+	{
+		checkFunction = requireOneOf;
+		violationMessage_ = " requires one of: (";
+	}
+	else
+	{
+		checkFunction = atMostOneOf;
+		violationMessage_ = " allows at most one of: (";
+	}
+	violationMessage_.append(argumentNames.join(", ")).append(") arguments to be set");
+	check_ = std::bind(checkFunction, std::placeholders::_1, expectedArguments);
+}
+
+void ArgumentRule::check(const ArgumentParser& parser) const
+{
+	if (!check_(parser))
+		throw ParsingException(parser.queryName() + violationMessage_);
 }
 
 bool ArgumentRule::requireAll(const ArgumentParser& parser, const std::vector<ArgumentValue>& values)

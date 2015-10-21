@@ -41,15 +41,23 @@ struct INFORMATIONSCRIPTING_API ArgumentValue {
 
 class INFORMATIONSCRIPTING_API ArgumentRule {
 	public:
-		using ArgumentCheck = std::function<bool (const ArgumentParser&, const std::vector<ArgumentValue>&)>;
-		std::function<bool (const ArgumentParser&)> check;
-		QString violationMessage;
-		ArgumentRule(ArgumentCheck checkFunction, QString message, std::vector<ArgumentValue> expectedArguments);
+		enum RuleType {RequireAll, RequireOneOf, AtMostOneOf};
+		ArgumentRule(RuleType rule, std::vector<ArgumentValue> expectedArguments);
+
+		/**
+		 * Checks if this rule is satisfied, if not it throws an exception.
+		 */
+		void check(const ArgumentParser& parser) const;
+	private:
+		std::function<bool (const ArgumentParser&)> check_;
+		QString violationMessage_;
+
+		using RuleFunction = std::function<bool (const ArgumentParser&, const std::vector<ArgumentValue>&)>;
 
 		static bool requireAll(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
 		static bool requireOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
 		static bool atMostOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
-	private:
+
 		// The argument value check used in the rule functions
 		class ArgumentValueCheck {
 			public:

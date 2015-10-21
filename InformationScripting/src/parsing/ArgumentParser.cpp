@@ -33,7 +33,7 @@ const QStringList ArgumentParser::SCOPE_ARGUMENT_NAMES{"s", "scope"};
 
 ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
 													  const QStringList& args)
-	: argParser_{std::make_unique<QCommandLineParser>()}
+	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
 	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
 	argParser_->addOptions(options);
@@ -57,12 +57,6 @@ QString ArgumentParser::argument(const QString& argName) const
 bool ArgumentParser::isArgumentSet(const QString& argName) const
 {
 	return argParser_->isSet(argName);
-}
-
-void InformationScripting::ArgumentParser::checkRule(const ArgumentRule& rule) const
-{
-	if (!rule.check(*this))
-		throw ParsingException(rule.violationMessage);
 }
 
 } /* namespace InformationScripting */

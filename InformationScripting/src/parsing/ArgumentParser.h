@@ -52,14 +52,16 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		QString argument(const QString& argName) const;
 		bool isArgumentSet(const QString& argName) const;
 
-		void checkRule(const ArgumentRule& rule) const;
+		QString queryName() const;
 
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};
 		Scope scope_{};
+		QString queryName_;
 		static const QStringList SCOPE_ARGUMENT_NAMES;
 };
 
 inline ArgumentParser::Scope ArgumentParser::scope() const { return scope_; }
+inline QString ArgumentParser::queryName() const { return queryName_; }
 
 } /* namespace InformationScripting */
