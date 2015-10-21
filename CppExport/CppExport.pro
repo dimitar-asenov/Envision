@@ -4,7 +4,8 @@ include(../Core/common_plugin.pri)
 DEFINES += CPPEXPORT_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
-    -lmodelbase
+    -lmodelbase \
+    -loomodel
 
 HEADERS += src/precompiled.h \
     src/CppExportException.h \
