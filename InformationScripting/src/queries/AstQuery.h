@@ -53,8 +53,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		static void registerDefaultQueries();
 
 	private:
-		Model::Node* target_{};
-		std::unique_ptr<ArgumentParser> arguments_{};
+		ArgumentParser arguments_;
 
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;

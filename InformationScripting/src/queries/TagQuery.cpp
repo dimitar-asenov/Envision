@@ -62,7 +62,7 @@ void TagQuery::registerDefaultQueries()
 }
 
 TagQuery::TagQuery(ExecuteFunction exec, Model::Node* target, QStringList args)
-	: target_{target}, arguments_{new ArgumentParser({
+	: LinearQuery{target}, arguments_{new ArgumentParser({
 			{NAME_ARGUMENT_NAMES, "Tag name, or regex to find tag", NAME_ARGUMENT_NAMES[1]},
 			QCommandLineOption{ADD_ARGUMENT_NAMES},
 			QCommandLineOption{REMOVE_ARGUMENT_NAMES},
@@ -99,7 +99,7 @@ Optional<TupleSet> TagQuery::queryTags(TupleSet input)
 
 	if (arguments_->scope() == ArgumentParser::Scope::Local || arguments_->scope() == ArgumentParser::Scope::Global)
 	{
-		auto targetNode = arguments_->scope() == ArgumentParser::Scope::Local ? target_ : nullptr;
+		auto targetNode = arguments_->scope() == ArgumentParser::Scope::Local ? target() : nullptr;
 		insertFoundTags(result, Model::SymbolMatcher::guessMatcher(tagText), targetNode);
 	}
 	else if (arguments_->scope() == ArgumentParser::Scope::Input)
@@ -123,7 +123,7 @@ Optional<TupleSet> TagQuery::addTags(TupleSet input)
 	Q_ASSERT(tagText.size() > 0);
 
 	if (arguments_->scope() == ArgumentParser::Scope::Local)
-		addTagsTo << target_;
+		addTagsTo << target();
 	else if (arguments_->scope() == ArgumentParser::Scope::Global)
 	{
 		// That doesn't make sense, to which nodes should we add the tags?
@@ -135,9 +135,9 @@ Optional<TupleSet> TagQuery::addTags(TupleSet input)
 
 	if (persistent_)
 	{
-		auto treeManager = target_->manager();
+		auto treeManager = target()->manager();
 		Q_ASSERT(treeManager);
-		treeManager->beginModification(target_, "addTags");
+		treeManager->beginModification(target(), "addTags");
 		for (auto node : addTagsTo)
 		{
 			if (auto astNode = DCast<Model::CompositeNode>(node))
@@ -168,7 +168,7 @@ Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 	QString tagName = "tag";
 	TupleSet removedTuples;
 	if (arguments_->scope() == ArgumentParser::Scope::Local)
-		insertFoundTags(removedTuples, matcher, target_);
+		insertFoundTags(removedTuples, matcher, target());
 	else if (arguments_->scope() == ArgumentParser::Scope::Global)
 		insertFoundTags(removedTuples, matcher);
 	else if (arguments_->scope() == ArgumentParser::Scope::Input)
@@ -180,9 +180,9 @@ Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 
 	if (persistent_)
 	{
-		auto treeManager = target_->manager();
+		auto treeManager = target()->manager();
 		Q_ASSERT(treeManager);
-		treeManager->beginModification(target_, "removeTags");
+		treeManager->beginModification(target(), "removeTags");
 		for (const auto& tuple : removedTuples.tuples(tagName))
 		{
 			Model::Node* node = tuple["ast"];
@@ -212,7 +212,7 @@ void TagQuery::insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& mat
 {
 	Q_ASSERT(persistent_);
 
-	if (!from) from = target_->root();
+	if (!from) from = target()->root();
 
 	QList<Model::Node*> workStack{from};
 

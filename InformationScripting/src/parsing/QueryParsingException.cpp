@@ -24,15 +24,15 @@
 **
 ***********************************************************************************************************************/
 
-#include "ParsingException.h"
+#include "QueryParsingException.h"
 
 namespace InformationScripting {
 
-ParsingException::ParsingException(const QString& message)
+QueryParsingException::QueryParsingException(const QString& message)
 	: InformationScriptingException(message)
 {}
 
-const QString& ParsingException::name() const
+const QString& QueryParsingException::name() const
 {
 	static QString ename("ParsingException");
 	return ename;

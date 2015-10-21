@@ -48,7 +48,6 @@ class ScriptQuery : public Query
 
 	private:
 		QString scriptPath_;
-		Model::Node* target_{};
 		// Note since we only register QList<T> to python we don't use QStringList here:
 		QList<QString> arguments_;
 

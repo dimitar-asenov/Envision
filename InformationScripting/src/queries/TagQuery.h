@@ -48,7 +48,6 @@ class INFORMATIONSCRIPTING_API TagQuery : public LinearQuery
 		static void registerDefaultQueries();
 
 	private:
-		Model::Node* target_{};
 		std::unique_ptr<ArgumentParser> arguments_{};
 
 		static const QStringList NAME_ARGUMENT_NAMES;
