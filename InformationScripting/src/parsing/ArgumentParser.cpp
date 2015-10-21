@@ -59,7 +59,7 @@ bool ArgumentParser::isArgumentSet(const QString& argName) const
 	return argParser_->isSet(argName);
 }
 
-void InformationScripting::ArgumentParser::checkRule(const Arguments::ArgumentRule& rule) const
+void InformationScripting::ArgumentParser::checkRule(const ArgumentRule& rule) const
 {
 	if (!rule.check(*this))
 		throw ParsingException(rule.violationMessage);

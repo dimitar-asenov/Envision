@@ -32,8 +32,6 @@ namespace InformationScripting {
 
 class ArgumentParser;
 
-namespace Arguments {
-
 struct INFORMATIONSCRIPTING_API ArgumentValue {
 	enum ValuePolicy { NotEmpty, NotEquals };
 	QString name;
@@ -41,37 +39,25 @@ struct INFORMATIONSCRIPTING_API ArgumentValue {
 	QString value{};
 };
 
-struct INFORMATIONSCRIPTING_API ArgumentRule {
+class INFORMATIONSCRIPTING_API ArgumentRule {
+	public:
 		using ArgumentCheck = std::function<bool (const ArgumentParser&, const std::vector<ArgumentValue>&)>;
 		std::function<bool (const ArgumentParser&)> check;
 		QString violationMessage;
 		ArgumentRule(ArgumentCheck checkFunction, QString message, std::vector<ArgumentValue> expectedArguments);
-};
 
-// Convenience Rules:
-class ArgumentValueCheck {
-	public:
-		ArgumentValueCheck(const ArgumentParser& parser);
-		bool operator() (const ArgumentValue& value) const;
+		static bool requireAll(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
+		static bool requireOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
+		static bool atMostOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values);
 	private:
-		const ArgumentParser& parser_;
+		// The argument value check used in the rule functions
+		class ArgumentValueCheck {
+			public:
+				ArgumentValueCheck(const ArgumentParser& parser);
+				bool operator() (const ArgumentValue& value) const;
+			private:
+				const ArgumentParser& parser_;
+		};
 };
-
-struct RequireAll
-{
-		bool operator() (const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const;
-};
-
-struct RequireOneOf {
-	public:
-		bool operator() (const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const;
-};
-
-struct AtMostOneOf {
-	public:
-		bool operator() (const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const;
-};
-
-} /* namespace Arguments */
 
 } /* namespace InformationScripting */

@@ -30,17 +30,30 @@
 
 namespace InformationScripting {
 
-namespace Arguments {
-
 ArgumentRule::ArgumentRule(ArgumentCheck checkFunction, QString message, std::vector<ArgumentValue> expectedArguments)
 	: violationMessage{message}
 {
 	check = std::bind(checkFunction, std::placeholders::_1, expectedArguments);
 }
 
-ArgumentValueCheck::ArgumentValueCheck(const ArgumentParser& parser) : parser_{parser} {}
+bool ArgumentRule::requireAll(const ArgumentParser& parser, const std::vector<ArgumentValue>& values)
+{
+	return std::all_of(values.begin(), values.end(), ArgumentValueCheck{parser});
+}
 
-bool ArgumentValueCheck::operator()(const ArgumentValue& value) const
+bool ArgumentRule::requireOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values)
+{
+	return std::any_of(values.begin(), values.end(), ArgumentValueCheck{parser});
+}
+
+bool ArgumentRule::atMostOneOf(const ArgumentParser& parser, const std::vector<ArgumentValue>& values)
+{
+	return std::count_if(values.begin(), values.end(), ArgumentValueCheck{parser}) <= 1;
+}
+
+ArgumentRule::ArgumentValueCheck::ArgumentValueCheck(const ArgumentParser& parser) : parser_{parser} {}
+
+bool ArgumentRule::ArgumentValueCheck::operator()(const ArgumentValue& value) const
 {
 	using ValuePolicy = ArgumentValue::ValuePolicy;
 	return (value.policy == ValuePolicy::NotEmpty && parser_.isArgumentSet(value.name)
@@ -48,22 +61,5 @@ bool ArgumentValueCheck::operator()(const ArgumentValue& value) const
 			|| (value.policy == ValuePolicy::NotEquals && parser_.isArgumentSet(value.name)
 				 && parser_.argument(value.name) != value.value);
 }
-
-bool RequireAll::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
-{
-	return std::all_of(values.begin(), values.end(), ArgumentValueCheck{parser});
-}
-
-bool RequireOneOf::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
-{
-	return std::any_of(values.begin(), values.end(), ArgumentValueCheck{parser});
-}
-
-bool AtMostOneOf::operator()(const ArgumentParser& parser, const std::vector<ArgumentValue>& values) const
-{
-	return std::count_if(values.begin(), values.end(), ArgumentValueCheck{parser}) <= 1;
-}
-
-} /* namespace Arguments */
 
 } /* namespace InformationScripting */

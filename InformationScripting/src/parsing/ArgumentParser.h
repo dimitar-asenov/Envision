@@ -52,7 +52,7 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		QString argument(const QString& argName) const;
 		bool isArgumentSet(const QString& argName) const;
 
-		void checkRule(const Arguments::ArgumentRule& rule) const;
+		void checkRule(const ArgumentRule& rule) const;
 
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};
