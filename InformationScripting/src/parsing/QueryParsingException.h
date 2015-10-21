@@ -31,10 +31,10 @@
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API ParsingException : public InformationScriptingException
+class INFORMATIONSCRIPTING_API QueryParsingException : public InformationScriptingException
 {
 		public:
-			ParsingException(const QString& message);
+			QueryParsingException(const QString& message);
 			const QString& name() const;
 };
 

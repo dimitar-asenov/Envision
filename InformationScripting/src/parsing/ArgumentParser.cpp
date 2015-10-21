@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ArgumentParser.h"
-#include "ParsingException.h"
+#include "QueryParsingException.h"
 
 namespace InformationScripting {
 
@@ -42,7 +42,7 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 
 	if (!argParser_->parse(args))
-		throw ParsingException("General parsing error");
+		throw QueryParsingException("Query arguments parsing error: " + argParser_->errorText());
 
 	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
 	if (scope == "g") scope_ = Scope::Global;

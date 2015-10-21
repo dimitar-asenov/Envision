@@ -27,7 +27,7 @@
 #include "ArgumentRule.h"
 
 #include "ArgumentParser.h"
-#include "ParsingException.h"
+#include "QueryParsingException.h"
 
 namespace InformationScripting {
 
@@ -60,7 +60,7 @@ ArgumentRule::ArgumentRule(RuleType rule, std::vector<ArgumentValue> expectedArg
 void ArgumentRule::check(const ArgumentParser& parser) const
 {
 	if (!check_(parser))
-		throw ParsingException(parser.queryName() + violationMessage_);
+		throw QueryParsingException(parser.queryName() + violationMessage_);
 }
 
 bool ArgumentRule::requireAll(const ArgumentParser& parser, const std::vector<ArgumentValue>& values)

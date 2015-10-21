@@ -40,7 +40,7 @@
 #include "../queries/AddASTPropertiesAsTuples.h"
 #include "../queries/QueryRegistry.h"
 #include "../parsing/QueryParser.h"
-#include "../parsing/ParsingException.h"
+#include "../parsing/QueryParsingException.h"
 
 #include "../visualization/QueryPrompt.h"
 
@@ -79,7 +79,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		Query* q = nullptr;
 		try {
 			q = QueryParser::buildQueryFrom(args.join(""), node);
-		} catch (const ParsingException& e) {
+		} catch (const QueryParsingException& e) {
 			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 		}
 		Q_ASSERT(q);
