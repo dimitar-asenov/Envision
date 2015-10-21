@@ -33,6 +33,7 @@
 #include "Logger/src/precompiled.h"
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
+#include "OOModel/src/precompiled.h"
 
 #if defined __cplusplus
 // Add C++ includes here
