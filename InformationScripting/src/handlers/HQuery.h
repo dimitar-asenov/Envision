@@ -53,7 +53,9 @@ class HQuery : public Interaction::GenericHandler {
 
 		void setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index);
 
-		bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
+		static bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
+		static bool canBeRemoved(const QString& exp, int index);
+
 		static int processEnter(QString& exp, int index);
 		static int removeListsWithOneElement(QString& exp, int& index, int iteratorIndex = -1);
 };

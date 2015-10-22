@@ -38,7 +38,8 @@ VCommandNode::VCommandNode(Item* parent, NodeType* node, const StyleType* style)
 
 void VCommandNode::initializeForms()
 {
-	auto argumentsEl = item<Visualization::VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
+	auto argumentsEl = item<Visualization::VList>(&I::arguments_,
+			[](I* v){return v->node()->arguments()->isEmpty() ? nullptr : v->node()->arguments();},
 			[](I* v){return &v->style()->arguments();});
 
 	auto nameEl = item<Visualization::VText>(&I::name_, [](I* v){return v->node()->nameNode();},
