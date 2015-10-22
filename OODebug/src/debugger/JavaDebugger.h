@@ -88,7 +88,8 @@ class OODEBUG_API JavaDebugger
 		void addBreakpoint(Model::Node* location, BreakpointType type);
 
 		using BreakpointListener = std::function<bool (Model::Node*, const BreakpointEvent&)>;
-		void addBreakpointListener(Model::Node* node, BreakpointListener listener);
+		int addBreakpointListener(Model::Node* node, BreakpointListener listener);
+		void removeBreakpointListener(int id);
 
 	private:
 		JavaDebugger();
@@ -134,7 +135,8 @@ class OODEBUG_API JavaDebugger
 		qint64 currentThreadId_{};
 
 		QMultiHash<Model::Node*, std::shared_ptr<VariableObserver>> nodeObservedBy_;
-		QMultiHash<Model::Node*, BreakpointListener> breakpointListeners_;
+		QMultiHash<Model::Node*, std::pair<int, BreakpointListener>> breakpointListeners_;
+		int nextBreakpointListenerId_{0};
 
 		static const QString BREAKPOINT_OVERLAY_GROUP;
 		static const QString PLOT_OVERLAY_GROUP;
@@ -142,8 +144,10 @@ class OODEBUG_API JavaDebugger
 		static const QString MONITOR_OVERLAY_GROUP;
 };
 
-inline void JavaDebugger::addBreakpointListener(Model::Node* node, BreakpointListener listener) {
-	breakpointListeners_.insertMulti(node, listener);
+inline int JavaDebugger::addBreakpointListener(Model::Node* node, BreakpointListener listener) {
+	int id = nextBreakpointListenerId_++;
+	breakpointListeners_.insertMulti(node, {id, listener});
+	return id;
 }
 
 } /* namespace OODebug */

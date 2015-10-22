@@ -279,6 +279,15 @@ void JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
 	}
 }
 
+void JavaDebugger::removeBreakpointListener(int id)
+{
+	for (auto it = breakpointListeners_.begin(); it != breakpointListeners_.end();)
+	{
+		if (it.value().first == id) it = breakpointListeners_.erase(it);
+		else ++it;
+	}
+}
+
 JavaDebugger::JavaDebugger()
 {
 	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});
@@ -450,7 +459,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 	auto listenerIt = breakpointListeners_.find(*it);
 	while (listenerIt != breakpointListeners_.end() && listenerIt.key() == *it)
 	{
-		listenerIt.value()(*it, breakpointEvent);
+		listenerIt.value().second(*it, breakpointEvent);
 		++listenerIt;
 	}
 
