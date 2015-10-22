@@ -262,6 +262,23 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	return new Interaction::CommandResult();
 }
 
+void JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
+{
+	if (BreakpointType::Internal == type)
+		addBreakpointAt(location);
+	else
+	{
+		auto visualizationIt = Visualization::Item::nodeItemsMap().find(location);
+		Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
+		auto visualization = *visualizationIt;
+		if (!visualization->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
+		{
+			addBreakpointOverlay(visualization);
+			addBreakpointAt(location);
+		}
+	}
+}
+
 JavaDebugger::JavaDebugger()
 {
 	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});
@@ -430,6 +447,13 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 			observer->handlerFunc_(this, values, observer->valueCalculators_, observer->observerLocation_);
 		}
 	}
+	auto listenerIt = breakpointListeners_.find(*it);
+	while (listenerIt != breakpointListeners_.end() && listenerIt.key() == *it)
+	{
+		listenerIt.value()(*it, breakpointEvent);
+		++listenerIt;
+	}
+
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
 	currentLineItem_ = visualization;
 	// If we have an overlay, the user wants to stop here, otherwise it is a tracked variable and we can resume.
