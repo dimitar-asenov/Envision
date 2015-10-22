@@ -53,7 +53,7 @@ class INFORMATIONSCRIPTING_API QueryParser
 		 * queryOrOp	:= query | operator
 		 * list			:= {queryOrOp [, queryOrOp]+}
 		 */
-		static Query* buildQueryFrom(const QString& text, Model::Node* target, QueryExecutor* executor);
+		static void buildQueryFrom(const QString& text, Model::Node* target, QueryExecutor* executor);
 
 	private:
 		QueryParser() = default;
@@ -63,7 +63,7 @@ class INFORMATIONSCRIPTING_API QueryParser
 
 		Query* parseQuery(const QString& text);
 		QList<Query*> parseList(const QString& text);
-		Query* parseOperator(const QString& text, bool connectInput = false);
+		Query* parseOperator(const QString& text);
 		QList<Query*> parseOperatorPart(const QString& text);
 
 		void connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
