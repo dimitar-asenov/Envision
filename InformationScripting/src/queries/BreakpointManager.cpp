@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,22 +24,45 @@
 **
 ***********************************************************************************************************************/
 
-#include "EventSet.h"
+#include "BreakpointManager.h"
 
-namespace OODebug {
+#include "../queries/QueryRegistry.h"
 
-VMStart::~VMStart() {}
+#include "OODebug/src/debugger/JavaDebugger.h"
 
-SingleStepEvent::~SingleStepEvent() {}
+namespace InformationScripting {
 
-ClassPrepare::~ClassPrepare() {}
+const QStringList BreakpointManager::VISIBLE_ARGUMENT_NAMES{"v", "visible"};
 
-BreakpointEvent::~BreakpointEvent() {}
+Optional<TupleSet> BreakpointManager::executeLinear(TupleSet input)
+{
+	auto tuples = input;
+	OODebug::JavaDebugger::BreakpointType type = OODebug::JavaDebugger::BreakpointType::Internal;
+	if (arguments_.argument(VISIBLE_ARGUMENT_NAMES[0]) != "no")
+		type = OODebug::JavaDebugger::BreakpointType::User;
 
-Event::~Event() {}
+	auto astTuples = tuples.tuples("ast");
+	for (const auto& t : astTuples)
+	{
+		Model::Node* target = t["ast"];
+		OODebug::JavaDebugger::instance().addBreakpoint(target, type);
+		tuples.add({{"breakpoint", target}, {"visible", arguments_.argument(VISIBLE_ARGUMENT_NAMES[0])}});
+	}
+	return tuples;
+}
 
-int Event::kind() const { return static_cast<int>(eventKind()); }
+void BreakpointManager::registerDefaultQueries()
+{
+	QueryRegistry::instance().registerQueryConstructor("addBreakpoints", [](Model::Node* target, QStringList args) {
+		return new BreakpointManager(target, args);
+	});
+}
 
-CompositeCommand::~CompositeCommand() {}
+BreakpointManager::BreakpointManager(Model::Node* target, QStringList args)
+	: LinearQuery{target}, arguments_{{
+	{VISIBLE_ARGUMENT_NAMES, "Wether the breakpoint is visible, default = no", VISIBLE_ARGUMENT_NAMES[1], "no"}
+}, QStringList("addBreakpoints") + args}
+{}
 
-} /* namespace OODebug */
+
+} /* namespace InformationScripting */

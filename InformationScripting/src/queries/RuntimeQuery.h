@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,22 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "EventSet.h"
+#pragma once
 
-namespace OODebug {
+#include "../informationscripting_api.h"
+#include "LinearQuery.h"
 
-VMStart::~VMStart() {}
+namespace InformationScripting {
 
-SingleStepEvent::~SingleStepEvent() {}
+class INFORMATIONSCRIPTING_API RuntimeQuery : public LinearQuery
+{
+	public:
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
-ClassPrepare::~ClassPrepare() {}
+		static void registerDefaultQueries();
 
-BreakpointEvent::~BreakpointEvent() {}
+	private:
+		RuntimeQuery(Model::Node* target);
+};
 
-Event::~Event() {}
-
-int Event::kind() const { return static_cast<int>(eventKind()); }
-
-CompositeCommand::~CompositeCommand() {}
-
-} /* namespace OODebug */
+} /* namespace InformationScripting */

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,22 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#include "EventSet.h"
+#pragma once
 
-namespace OODebug {
+#include "../informationscripting_api.h"
 
-VMStart::~VMStart() {}
+#include "LinearQuery.h"
+#include "../parsing/ArgumentParser.h"
 
-SingleStepEvent::~SingleStepEvent() {}
+namespace InformationScripting {
 
-ClassPrepare::~ClassPrepare() {}
+class INFORMATIONSCRIPTING_API BreakpointManager : public LinearQuery
+{
+	public:
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
-BreakpointEvent::~BreakpointEvent() {}
+		static void registerDefaultQueries();
 
-Event::~Event() {}
+	private:
+		ArgumentParser arguments_;
+		static const QStringList VISIBLE_ARGUMENT_NAMES;
 
-int Event::kind() const { return static_cast<int>(eventKind()); }
+		BreakpointManager(Model::Node* target, QStringList args);
+};
 
-CompositeCommand::~CompositeCommand() {}
-
-} /* namespace OODebug */
+} /* namespace InformationScripting */

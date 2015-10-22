@@ -75,6 +75,22 @@ class OODEBUG_API JavaDebugger
 
 		using ValueHandler = std::function<void(JavaDebugger*, Values, QList<Probes::ValueCalculator>, Model::Node*)>;
 
+		/**
+		 * Type of a Breakpoint:
+		 * \a Internal means the user will not see the breakpoint.
+		 *			This is useful for breakpoints where one wants to auto resume.
+		 *				(e.g. count how many times a statement is executed)
+		 * \a User means there will be an icon notifying the user about the existince of the user.
+		 */
+		enum class BreakpointType : int { Internal, User };
+		// TODO in the future it might make sense to assign IDs to breakpoints, so that we can have multiple breakpoints
+		// at a single location and still be able to remove only a single one.
+		void addBreakpoint(Model::Node* location, BreakpointType type);
+
+		using BreakpointListener = std::function<bool (Model::Node*, const BreakpointEvent&)>;
+		int addBreakpointListener(Model::Node* node, BreakpointListener listener);
+		void removeBreakpointListener(int id);
+
 	private:
 		JavaDebugger();
 
@@ -119,11 +135,19 @@ class OODEBUG_API JavaDebugger
 		qint64 currentThreadId_{};
 
 		QMultiHash<Model::Node*, std::shared_ptr<VariableObserver>> nodeObservedBy_;
+		QMultiHash<Model::Node*, std::pair<int, BreakpointListener>> breakpointListeners_;
+		int nextBreakpointListenerId_{0};
 
 		static const QString BREAKPOINT_OVERLAY_GROUP;
 		static const QString PLOT_OVERLAY_GROUP;
 		static const QString CURRENT_LINE_OVERLAY_GROUP;
 		static const QString MONITOR_OVERLAY_GROUP;
 };
+
+inline int JavaDebugger::addBreakpointListener(Model::Node* node, BreakpointListener listener) {
+	int id = nextBreakpointListenerId_++;
+	breakpointListeners_.insertMulti(node, {id, listener});
+	return id;
+}
 
 } /* namespace OODebug */
