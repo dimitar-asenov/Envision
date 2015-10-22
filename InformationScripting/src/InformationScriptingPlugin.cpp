@@ -41,6 +41,7 @@
 #include "queries/AddASTPropertiesAsTuples.h"
 #include "queries/TagQuery.h"
 #include "queries/VersionControlQuery.h"
+#include "queries/BreakpointManager.h"
 #include "nodes/TagExtension.h"
 #include "visualization/Heatmap.h"
 #include "visualization/VCommandNode.h"
@@ -64,6 +65,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	TagQuery::registerDefaultQueries();
 	VersionControlQuery::registerDefaultQueries();
 	Heatmap::registerDefaultQueries();
+	BreakpointManager::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();
 	VCommandNode::setDefaultClassHandler(HQuery::instance());
