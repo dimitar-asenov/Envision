@@ -65,6 +65,7 @@ struct ClassPrepare : public MessagePart
 
 struct BreakpointEvent : public MessagePart
 {
+		virtual ~BreakpointEvent() override;
 		MessageField<qint32> requestID{&BreakpointEvent::requestID, this};
 		MessageField<qint64> thread{&BreakpointEvent::thread, this};
 		MessageField<Location> location{&BreakpointEvent::location, this};

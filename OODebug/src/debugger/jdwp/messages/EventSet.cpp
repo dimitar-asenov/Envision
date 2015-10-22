@@ -34,6 +34,8 @@ SingleStepEvent::~SingleStepEvent() {}
 
 ClassPrepare::~ClassPrepare() {}
 
+BreakpointEvent::~BreakpointEvent() {}
+
 Event::~Event() {}
 
 int Event::kind() const { return static_cast<int>(eventKind()); }
