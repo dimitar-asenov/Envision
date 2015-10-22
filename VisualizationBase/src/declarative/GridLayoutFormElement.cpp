@@ -164,8 +164,8 @@ QList<ItemRegion> GridLayoutFormElement::regions(DeclarativeItemBase* item, int 
 				allRegions.append(elementGrid_[x][y]->regions(item, this->x(item) + parentX, this->y(item) + parentY));
 
 	allRegions << GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), GridLayouter::RowMajor,
-													false, true, !noBoundaryCursors(item),
-			item->style()->extraCursorsOutsideShape(), false, true,
+													hasCursorWhenEmpty(item), !noInnerCursors(item), !noBoundaryCursors(item),
+			item->style()->extraCursorsOutsideShape(), false, notLocationEquivalentCursors(item),
 			[this](){return numRows_;},	// numRows
 			[this](){return numColumns_;},	// numColumns
 			[this](int x, int y){return elementGrid_[x][y];},	// has
