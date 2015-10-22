@@ -39,7 +39,7 @@ class INFORMATIONSCRIPTING_API RuntimeQuery : public LinearQuery
 		static void registerDefaultQueries();
 
 	private:
-		RuntimeQuery(Model::Node* target);
+		RuntimeQuery(Query* parent, Model::Node* target);
 };
 
 } /* namespace InformationScripting */

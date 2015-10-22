@@ -28,6 +28,8 @@
 
 namespace InformationScripting {
 
+UnionOperator::UnionOperator(Query* parent) : Query{parent} {}
+
 QList<Optional<TupleSet> > UnionOperator::execute(QList<TupleSet> input)
 {
 	if (input.size() <= 1) return {{"Union requires 2 inputs"}};

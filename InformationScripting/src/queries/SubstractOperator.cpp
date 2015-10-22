@@ -30,6 +30,8 @@
 
 namespace InformationScripting {
 
+SubstractOperator::SubstractOperator(Query* parent) : Query{parent} {}
+
 QList<Optional<TupleSet> > SubstractOperator::execute(QList<TupleSet> input)
 {
 	Q_ASSERT(input.size() == 2);

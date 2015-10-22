@@ -52,8 +52,9 @@ const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 const QStringList AstQuery::ADD_AS_NAMES{"a", "addAs"};
 const QStringList AstQuery::ATTRIBUTE_NAME_NAMES{"at", "attribute"};
 
-AstQuery::AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)
-	: LinearQuery{target}, arguments_{{
+AstQuery::AstQuery(Query* parent, Model::Node* target, QStringList args,
+						 ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)
+	: LinearQuery{parent, target}, arguments_{{
 		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
 		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
 		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"},

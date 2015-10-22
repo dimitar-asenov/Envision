@@ -38,7 +38,7 @@ class INFORMATIONSCRIPTING_API GenericFilter : public LinearQuery
 {
 	public:
 		using KeepTuple = std::function<bool(const Tuple&)>;
-		GenericFilter(KeepTuple f);
+		GenericFilter(Query* parent, KeepTuple f);
 
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 

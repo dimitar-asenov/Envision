@@ -26,7 +26,7 @@
 
 #include "QueryExecutor.h"
 
-#include "Query.h"
+#include "TopLevelQuery.h"
 
 #include "visualization/DefaultVisualizer.h"
 
@@ -34,16 +34,28 @@
 
 namespace InformationScripting {
 
-QueryExecutor::QueryExecutor(Query* q) : query_{q} {}
-
 QueryExecutor::~QueryExecutor()
 {
-	SAFE_DELETE(query_);
+	Q_ASSERT(queries_.empty());
+	qDebug() << "DELETE QUERYEXECUTOR";
+}
+
+void QueryExecutor::addQuery(std::unique_ptr<TopLevelQuery>&& query)
+{
+	queries_.emplace(std::move(query));
 }
 
 Interaction::CommandResult* QueryExecutor::execute()
 {
-	auto results = query_->execute({});
+	Q_ASSERT(!queries_.empty());
+
+	bool hasError = false;
+	QString errorMessage{};
+
+	auto query = std::move(queries_.front());
+	queries_.pop();
+
+	auto results = query->execute({});
 	if (results.size())
 	{
 		// TODO how to handle warnings? CommandResult has no warnings?
@@ -57,11 +69,15 @@ Interaction::CommandResult* QueryExecutor::execute()
 		}
 		else
 		{
-			return new Interaction::CommandResult(new Interaction::CommandError(results[0].errors()[0]));
+			hasError = true;
+			errorMessage = results[0].errors()[0];
 		}
 	}
 
-	return new Interaction::CommandResult();
+	if (hasError)
+		return new Interaction::CommandResult(new Interaction::CommandError(errorMessage));
+	else
+		return new Interaction::CommandResult();
 }
 
 } /* namespace InformationScripting */

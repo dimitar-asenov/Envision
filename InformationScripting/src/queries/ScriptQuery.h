@@ -39,7 +39,7 @@ namespace InformationScripting {
 class ScriptQuery : public Query
 {
 	public:
-		ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args = {});
+		ScriptQuery(Query* parent, const QString& scriptPath, Model::Node* target, const QStringList& args = {});
 
 		static void initPythonEnvironment();
 		static void unloadPythonEnvironment();

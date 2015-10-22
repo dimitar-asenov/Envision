@@ -33,8 +33,8 @@
 
 namespace InformationScripting {
 
-AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
-	: GenericFilter {
+AstNameFilter::AstNameFilter(Query* parent, Model::SymbolMatcher matcher)
+	: GenericFilter {parent,
 		  [matcher](const Tuple& t) {
 			auto it = t.find("ast");
 			if (it != t.end())
@@ -49,9 +49,9 @@ AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 
 void AstNameFilter::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("filter", [](Model::Node*, QStringList args) {
+	QueryRegistry::instance().registerQueryConstructor("filter", [](Query* parent, Model::Node*, QStringList args) {
 		Q_ASSERT(args.size() > 0);
-		return new AstNameFilter(Model::SymbolMatcher::guessMatcher(args[0]));
+		return new AstNameFilter(parent, Model::SymbolMatcher::guessMatcher(args[0]));
 	});
 }
 

@@ -34,18 +34,18 @@ namespace Interaction {
 
 namespace InformationScripting {
 
-class Query;
+class TopLevelQuery;
 
 class INFORMATIONSCRIPTING_API QueryExecutor
 {
 	public:
-		QueryExecutor(Query* q);
 		~QueryExecutor();
+		void addQuery(std::unique_ptr<TopLevelQuery>&& query);
 
 		Interaction::CommandResult* execute();
 
 	private:
-		Query* query_{};
+		std::queue<std::unique_ptr<TopLevelQuery>> queries_{};
 };
 
 } /* namespace InformationScripting */

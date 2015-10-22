@@ -39,6 +39,7 @@
 #include "../queries/UnionOperator.h"
 #include "../queries/AddASTPropertiesAsTuples.h"
 #include "../queries/QueryRegistry.h"
+#include "../queries/TopLevelQuery.h"
 #include "../parsing/QueryParser.h"
 #include "../parsing/QueryParsingException.h"
 
@@ -73,149 +74,19 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	{
 		new QueryPrompt(source);
 	}
-	else if (command != "fallback")
+	else
 	{
 		args.prepend(command);
-		Query* q = nullptr;
+		TopLevelQuery* q = nullptr;
 		try {
 			q = QueryParser::buildQueryFrom(args.join(""), node);
 		} catch (const QueryParsingException& e) {
 			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 		}
 		Q_ASSERT(q);
-		QueryExecutor queryExecutor(q);
-		return queryExecutor.execute();
-	}
-	else
-	{
-		auto query = [](auto... args){return QueryRegistry::instance().buildQuery(args...);};
-
-		QString command = args[0];
-		args = args.mid(1);
-
-		if (command == "script")
-		{
-			if (args.size() > 1)
-			{
-				// $<"<classes g>" | "<script test>">$
-				auto classesQuery = query("classes", node, QStringList("-s=g"));
-				// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
-				auto scriptQuery = query(args.takeFirst(), node, args);
-				auto compositeQuery = new CompositeQuery();
-				compositeQuery->connectQuery(classesQuery, scriptQuery);
-				compositeQuery->connectToOutput(scriptQuery);
-				QueryExecutor queryExecutor(compositeQuery);
-				queryExecutor.execute();
-			}
-		}
-		else if (command == "methods")
-		{
-			// "<methods>"
-			auto methodsQuery = query("methods", node, args);
-			QueryExecutor queryExecutor(methodsQuery);
-			queryExecutor.execute();
-		}
-		else if (command == "bases")
-		{
-			// "<bases>"
-			auto basesQuery = query("bases", node, args);
-			QueryExecutor queryExecutor(basesQuery);
-			queryExecutor.execute();
-		}
-		else if (command == "pipe")
-		{
-			// $<"<methods>" | "<toClass>">$
-			auto methodQuery = query("methods", node, args);
-			auto toBaseQuery = query("toClass", node, args);
-			auto compositeQuery = new CompositeQuery();
-			compositeQuery->connectQuery(methodQuery, toBaseQuery);
-			compositeQuery->connectToOutput(toBaseQuery);
-			QueryExecutor queryExecutor(compositeQuery);
-			queryExecutor.execute();
-		}
-		else if (command == "query21")
-		{
-			// Find all classes for which the name contains X and which have a method named Y
-			// 5 queries seems like a lot for this :S
-
-			// $<"<classes -s=g>" | "<filter *Matcher*>" | "<methods -s=of>" | "<filter matches>" | "<toClass>">$
-			auto classesQuery = query("classes", node, QStringList("-s=g"));
-			auto filterQuery = query("filter", node, QStringList("*Matcher*"));
-			auto methodsOfQuery = query("methods", node, QStringList("-s=of"));
-			auto methodsFilter = query("filter", node, QStringList("matches"));
-			auto toBaseQuery = query("toClass", node, args);
-			auto compositeQuery = new CompositeQuery();
-			compositeQuery->connectQuery(classesQuery, filterQuery);
-			compositeQuery->connectQuery(filterQuery, methodsOfQuery);
-			compositeQuery->connectQuery(methodsOfQuery, methodsFilter);
-			compositeQuery->connectQuery(methodsFilter, toBaseQuery);
-			compositeQuery->connectToOutput(toBaseQuery);
-			QueryExecutor queryExecutor(compositeQuery);
-			queryExecutor.execute();
-		}
-		else if (command == "callgraph")
-		{
-			// "<callgraph>"
-			auto callgraph = query("callgraph", node, args);
-			auto compositeQuery = new CompositeQuery();
-			compositeQuery->connectToOutput(callgraph);
-			QueryExecutor queryExecutor(compositeQuery);
-			queryExecutor.execute();
-		}
-		else if (command == "query19")
-		{
-			// Find all methods that are not called transitively from the TARGET method.
-
-			// $<"<methods -s=g>" - {<$<"<callgraph>" | "<addASTProperties>">$>}>$
-			// or:
-			// $<{<"<methods -s=g>", $<"<callgraph>" | "<addASTProperties>">$>}->$
-			auto allMethodsQuery = query("methods", node, QStringList("-s=g"));
-			auto callGraphQuery = query("callgraph", node, args);
-			auto astAdder = new AddASTPropertiesAsTuples();
-			auto complement = new SubstractOperator();
-			auto compositeQuery = new CompositeQuery();
-			compositeQuery->connectQuery(callGraphQuery, astAdder);
-			compositeQuery->connectQuery(allMethodsQuery, complement);
-			compositeQuery->connectQuery(astAdder, 0, complement, 1);
-			compositeQuery->connectToOutput(complement);
-			QueryExecutor queryExecutor(compositeQuery);
-			queryExecutor.execute();
-		}
-		else if (command == "color")
-		{
-			// $<"<methods>" | {<$<"<filter *quotes*>" | "<color = blue>">$, $<"<filter *brackets*>" | "<color = green>">$>} U>$
-			auto colorQuotes = new NodePropertyAdder("color", QString("blue"));
-			auto colorBrackets = new NodePropertyAdder("color", QString("green"));
-
-			auto quotesFilter = query("filter", node, QStringList("*quotes*"));
-			auto bracketsFilter = query("filter", node, QStringList("*brackets*"));
-
-			auto quotes = new CompositeQuery();
-			quotes->connectInput(0, quotesFilter);
-			quotes->connectQuery(quotesFilter, colorQuotes);
-			quotes->connectToOutput(colorQuotes);
-
-			auto brackets = new CompositeQuery();
-			brackets->connectInput(0, bracketsFilter);
-			brackets->connectQuery(bracketsFilter, colorBrackets);
-			brackets->connectToOutput(colorBrackets);
-
-			auto methods = query("methods", node, QStringList());
-			auto unionOp = new UnionOperator();
-
-			auto composite = new CompositeQuery();
-
-			composite->connectQuery(methods, quotes);
-			composite->connectQuery(methods, brackets);
-
-			composite->connectQuery(quotes, unionOp);
-			composite->connectQuery(brackets, 0, unionOp, 1);
-
-			composite->connectToOutput(unionOp);
-
-			QueryExecutor queryExecutor(composite);
-			queryExecutor.execute();
-		}
+		auto queryExecutor = std::make_shared<QueryExecutor>();
+		queryExecutor->addQuery(std::unique_ptr<TopLevelQuery>(q));
+		return queryExecutor->execute();
 	}
 	return new Interaction::CommandResult();
 }

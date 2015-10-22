@@ -36,6 +36,7 @@ namespace InformationScripting {
 
 class CompositeQuery;
 class Query;
+class TopLevelQuery;
 
 class INFORMATIONSCRIPTING_API QueryParser
 {
@@ -52,7 +53,7 @@ class INFORMATIONSCRIPTING_API QueryParser
 		 * queryOrOp	:= query | operator
 		 * list			:= {queryOrOp [, queryOrOp]+}
 		 */
-		static Query* buildQueryFrom(const QString& text, Model::Node* target);
+		static TopLevelQuery* buildQueryFrom(const QString& text, Model::Node* target);
 
 	private:
 		QueryParser() = default;
@@ -60,10 +61,10 @@ class INFORMATIONSCRIPTING_API QueryParser
 		Type typeOf(const QString& text);
 		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
 
-		Query* parseQuery(const QString& text);
-		QList<Query*> parseList(const QString& text);
-		Query* parseOperator(const QString& text, bool connectInput = false);
-		QList<Query*> parseOperatorPart(const QString& text);
+		Query* parseQuery(Query* parent, const QString& text);
+		QList<Query*> parseList(Query* parent, const QString& text);
+		Query* parseOperator(Query* parent, const QString& text, bool connectInput = false);
+		QList<Query*> parseOperatorPart(Query* parent, const QString& text);
 
 		void connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
 										Query* connectionQuery, Query* outputQuery = nullptr);

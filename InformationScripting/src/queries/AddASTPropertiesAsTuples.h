@@ -35,6 +35,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AddASTPropertiesAsTuples : public LinearQuery
 {
 	public:
+		AddASTPropertiesAsTuples(Query* parent);
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();

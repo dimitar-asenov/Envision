@@ -37,7 +37,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AstNameFilter : public GenericFilter
 {
 	public:
-		AstNameFilter(Model::SymbolMatcher matcher);
+		AstNameFilter(Query* parent, Model::SymbolMatcher matcher);
 
 		static void registerDefaultQueries();
 };

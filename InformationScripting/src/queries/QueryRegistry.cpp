@@ -37,17 +37,17 @@ QueryRegistry& QueryRegistry::instance()
 	return instance;
 }
 
-Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QStringList args)
+Query* QueryRegistry::buildQuery(Query* parent, const QString& command, Model::Node* target, QStringList args)
 {
 	if (auto constructor = constructors_[command])
-		return constructor(target, args);
+		return constructor(parent, target, args);
 	if (args.size() > 1 && args[0] == "=")
 	{
 		// TODO we need some way to specify a condition on the node.
 		// Or eventually decide that we don't allow condition in the property adder
-		return new NodePropertyAdder(command, args[1]);
+		return new NodePropertyAdder(parent, command, args[1]);
 	}
-	if (auto script = tryBuildQueryFromScript(command, target, args))
+	if (auto script = tryBuildQueryFromScript(parent, command, target, args))
 		return script;
 	return nullptr;
 }
@@ -61,11 +61,11 @@ QStringList QueryRegistry::scriptQueries() const
 	return result;
 }
 
-Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, Model::Node* target, QStringList args)
+Query* QueryRegistry::tryBuildQueryFromScript(Query* parent, const QString& name, Model::Node* target, QStringList args)
 {
 	QString scriptName{scriptLocation_ + name + ".py"};
 	if (QFile::exists(scriptName))
-		return new ScriptQuery(scriptName, target, args);
+		return new ScriptQuery(parent, scriptName, target, args);
 	return nullptr;
 }
 

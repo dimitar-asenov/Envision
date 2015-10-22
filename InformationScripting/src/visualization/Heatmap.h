@@ -47,7 +47,7 @@ class Heatmap : public LinearQuery
 		QPair<int, int> valueRange_; // min, max
 		ArgumentParser arguments_;
 
-		Heatmap(QStringList args);
+		Heatmap(Query* parent, QStringList args);
 
 		QColor colorForValue(int value);
 };
