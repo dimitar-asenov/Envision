@@ -55,8 +55,6 @@ void VOperatorQueryNode::initializeForms()
 	addForm(grid({
 			{leftEl, opEl, rightEl},
 		})
-		->setNoInnerCursors([](Item*){return true;})
-		->setNoBoundaryCursors([](Item*){return true;})
 		->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
 	);
 }
