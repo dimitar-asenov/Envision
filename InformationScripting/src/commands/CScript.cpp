@@ -77,15 +77,15 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	else
 	{
 		args.prepend(command);
-		TopLevelQuery* q = nullptr;
+		QList<TopLevelQuery*> queries;
 		try {
-			q = QueryParser::buildQueryFrom(args.join(""), node);
+			queries = QueryParser::buildQueryFrom(args.join(""), node);
 		} catch (const QueryParsingException& e) {
 			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 		}
-		Q_ASSERT(q);
 		auto queryExecutor = std::make_shared<QueryExecutor>();
-		queryExecutor->addQuery(std::unique_ptr<TopLevelQuery>(q));
+		for (auto q : queries)
+			queryExecutor->addQuery(std::unique_ptr<TopLevelQuery>(q));
 		return queryExecutor->execute();
 	}
 	return new Interaction::CommandResult();

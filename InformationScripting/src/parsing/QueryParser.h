@@ -53,7 +53,7 @@ class INFORMATIONSCRIPTING_API QueryParser
 		 * queryOrOp	:= query | operator
 		 * list			:= {queryOrOp [, queryOrOp]+}
 		 */
-		static TopLevelQuery* buildQueryFrom(const QString& text, Model::Node* target);
+		static QList<TopLevelQuery*> buildQueryFrom(const QString& text, Model::Node* target);
 
 	private:
 		QueryParser() = default;

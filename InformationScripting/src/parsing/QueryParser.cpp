@@ -39,29 +39,46 @@ namespace InformationScripting {
 const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
 const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
-TopLevelQuery* QueryParser::buildQueryFrom(const QString& text, Model::Node* target)
+QList<TopLevelQuery*> QueryParser::buildQueryFrom(const QString& text, Model::Node* target)
 {
 	QueryParser parser;
 	parser.target_ = target;
 	Q_ASSERT(text.size());
-	auto type = parser.typeOf(text);
-	if (Type::Operator == type)
-		return new TopLevelQuery(parser.parseOperator(nullptr, text));
-	else if (Type::Query == type)
-		return new TopLevelQuery(parser.parseQuery(nullptr, text));
-	else if (Type::List == type)
+	// For now assume that we only have yield in operator parts:
+	auto parts = text.split("|" + OPEN_SCOPE_SYMBOL[1] + "yield" + CLOSE_SCOPE_SYMBOL[1] + "|",
+			QString::SkipEmptyParts);
+	if (parts.size() > 1)
 	{
-		auto result = new CompositeQuery(nullptr);
-		auto queries = parser.parseList(result, text);
-		for (int i = 0; i < queries.size(); ++i)
+		for (int i = 0; i < parts.size(); ++i)
 		{
-			result->connectInput(i, queries[i]);
-			result->connectToOutput(queries[i], i);
+			if (i + 1 < parts.size()) parts[i].append(CLOSE_SCOPE_SYMBOL[0]);
+			if (i > 0) parts[i].prepend(OPEN_SCOPE_SYMBOL[0]);
 		}
-		return new TopLevelQuery(result);
 	}
-	Q_ASSERT(false);
-	return nullptr;
+	QList<TopLevelQuery*> results;
+	for (auto part : parts)
+	{
+		qDebug() << part;
+		auto type = parser.typeOf(part);
+		if (Type::Operator == type)
+			results << new TopLevelQuery(parser.parseOperator(nullptr, part));
+		else if (Type::Query == type)
+			results << new TopLevelQuery(parser.parseQuery(nullptr, part));
+		else if (Type::List == type)
+		{
+			auto result = new CompositeQuery(nullptr);
+			auto queries = parser.parseList(result, part);
+			for (int i = 0; i < queries.size(); ++i)
+			{
+				result->connectInput(i, queries[i]);
+				result->connectToOutput(queries[i], i);
+			}
+			results << new TopLevelQuery(result);
+		}
+		else
+			Q_ASSERT(false);
+	}
+	return results;
 }
 
 QueryParser::Type QueryParser::typeOf(const QString& text)
