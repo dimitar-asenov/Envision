@@ -33,8 +33,6 @@
 #include "../nodes/CompositeQueryNode.h"
 #include "../nodes/EmptyQueryNode.h"
 #include "../nodes/OperatorQueryNode.h"
-#include "../nodes/ErrorQueryNode.h"
-#include "../nodes/UnfinishedQueryNode.h"
 
 //#include "../parsing/QueryNodeBuilder.h"
 #include "../interaction/SimpleQueryParser.h"
@@ -42,7 +40,6 @@
 #include "../visualization/VCommandNode.h"
 #include "../visualization/VCommandArgument.h"
 #include "../visualization/VEmptyQueryNode.h"
-#include "../visualization/VErrorQueryNode.h"
 #include "../visualization/VCompositeQueryNode.h"
 
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
@@ -91,31 +88,6 @@ void HQuery::initStringComponents()
 					opNode->right());
 	});
 
-	StringComponents::add<ErrorQueryNode>([](ErrorQueryNode* e){ return StringComponents::c(
-		StringComponents::Optional(e->prefix(), !e->prefix().isEmpty()), e->arg(),
-					StringComponents::Optional(e->postfix(), !e->postfix().isEmpty()));
-	});
-
-	StringComponents::add<UnfinishedQueryNode>([](UnfinishedQueryNode* unfinished)
-	{
-		QStringList result;
-
-		for (int i=0; i< unfinished->operands()->size(); ++i)
-		{
-			QString delim = unfinished->delimiters()->at(i)->get();
-
-			result << delim << StringComponents::stringForNode(unfinished->operands()->at(i));
-		}
-
-		if (unfinished->delimiters()->size() > unfinished->operands()->size())
-		{
-			QString delim = unfinished->delimiters()->last()->get();
-			result << delim;
-		}
-
-		return result;
-	});
-
 	GridBasedOffsetProvider::addGridConstructor<VCommandNode>(
 	[](GridBasedOffsetProvider* grid, VCommandNode* vis){
 		grid->add(new Cell(0, vis->name(), 0));
@@ -136,15 +108,6 @@ void HQuery::initStringComponents()
 	[](GridBasedOffsetProvider* grid, VEmptyQueryNode* vis){
 		grid->add(new Cell(0, vis->empty(), 0));
 	});
-
-	GridBasedOffsetProvider::addGridConstructor<VErrorQueryNode>(
-	[](GridBasedOffsetProvider* grid, VErrorQueryNode* vis){
-		grid->add(new Cell(0, vis->prefix(), 0));
-		grid->add(new Cell(1, vis->arg(), 1));
-		grid->add(new Cell(2, vis->postfix(), 2));
-	});
-
-	// TODO: do we need GridBasedOffsetProvider for VUnfinishedQueryNode as well?
 }
 
 void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)

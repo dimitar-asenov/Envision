@@ -55,17 +55,8 @@ HEADERS += src/precompiled.h \
     src/nodes/EmptyQueryNode.h \
     src/visualization/VEmptyQueryNode.h \
     src/visualization/VEmptyQueryNodeStyle.h \
-    src/interaction/QueryOperatorDescriptor.h \
-    src/interaction/QueryOperatorDescriptorList.h \
-    src/nodes/UnfinishedQueryNode.h \
-    src/visualization/VUnfinishedQueryNode.h \
-    src/visualization/VUnfinishedQueryNodeStyle.h \
-    src/parsing/QueryNodeBuilder.h \
     src/parsing/QueryParser.h \
     src/nodes/OperatorQueryNode.h \
-    src/nodes/ErrorQueryNode.h \
-    src/visualization/VErrorQueryNodeStyle.h \
-    src/visualization/VErrorQueryNode.h \
     src/visualization/VOperatorQueryNode.h \
     src/visualization/VOperatorQueryNodeStyle.h \
     src/queries/LinearQuery.h \
@@ -80,8 +71,8 @@ HEADERS += src/precompiled.h \
     src/parsing/ArgumentRule.h \
     src/parsing/QueryParsingException.h
 SOURCES += src/InformationScriptingException.cpp \
-	src/InformationScriptingPlugin.cpp \
-	test/SimpleTest.cpp \
+    src/InformationScriptingPlugin.cpp \
+    test/SimpleTest.cpp \
     src/commands/CScript.cpp \
     src/helpers/BoostPythonHelpers.cpp \
     src/wrappers/AstApi.cpp \
@@ -117,17 +108,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/nodes/EmptyQueryNode.cpp \
     src/visualization/VEmptyQueryNode.cpp \
     src/visualization/VEmptyQueryNodeStyle.cpp \
-    src/interaction/QueryOperatorDescriptor.cpp \
-    src/interaction/QueryOperatorDescriptorList.cpp \
-    src/nodes/UnfinishedQueryNode.cpp \
-    src/visualization/VUnfinishedQueryNode.cpp \
-    src/visualization/VUnfinishedQueryNodeStyle.cpp \
-    src/parsing/QueryNodeBuilder.cpp \
     src/parsing/QueryParser.cpp \
     src/nodes/OperatorQueryNode.cpp \
-    src/nodes/ErrorQueryNode.cpp \
-    src/visualization/VErrorQueryNode.cpp \
-    src/visualization/VErrorQueryNodeStyle.cpp \
     src/visualization/VOperatorQueryNode.cpp \
     src/visualization/VOperatorQueryNodeStyle.cpp \
     src/queries/LinearQuery.cpp \

@@ -47,10 +47,7 @@
 #include "visualization/VCommandArgument.h"
 #include "visualization/VEmptyQueryNode.h"
 #include "visualization/VOperatorQueryNode.h"
-#include "visualization/VErrorQueryNode.h"
-#include "visualization/VUnfinishedQueryNode.h"
 #include "handlers/HQuery.h"
-#include "interaction/QueryOperatorDescriptorList.h"
 
 #include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
 
@@ -73,10 +70,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	VCommandArgument::setDefaultClassHandler(HQuery::instance());
 	VEmptyQueryNode::setDefaultClassHandler(HQuery::instance());
 	VOperatorQueryNode::setDefaultClassHandler(HQuery::instance());
-	VErrorQueryNode::setDefaultClassHandler(HQuery::instance());
-	VUnfinishedQueryNode::setDefaultClassHandler(HQuery::instance());
 	HQuery::initStringComponents();
-	QueryOperatorDescriptorList::initializeWithDefaultOperators();
 
 	//Enable the default grid offset string provider for all query nodes:
 	OOInteraction::StringOffsetProvider::allowGridBasedProvider([](Visualization::Item* item)
