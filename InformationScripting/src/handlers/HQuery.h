@@ -55,6 +55,7 @@ class HQuery : public Interaction::GenericHandler {
 
 		bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
 		static int processEnter(QString& exp, int index);
+		static int removeListsWithOneElement(QString& exp, int& index, int iteratorIndex = -1);
 };
 
 } /* namespace InformationScripting */

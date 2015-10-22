@@ -132,6 +132,7 @@ void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 	qDebug() << str << index;
 	QString newText = str;
 	int newIndex = index;
+	removeListsWithOneElement(newText, newIndex);
 
 	switch (key)
 	{
@@ -139,7 +140,7 @@ void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 		// extra characters if those keys are pressed just on the boundary of a compound object
 		case Qt::Key_Delete:
 		{
-			if (index < str.size() )
+			if (index < newText.size() )
 			{
 				if (! processDeleteOrBackspace(Qt::Key_Delete, newText, newIndex))
 					newText.remove(index, 1);
@@ -150,7 +151,7 @@ void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 			if (index > 0 )
 			{
 				if (! processDeleteOrBackspace(Qt::Key_Backspace, newText, newIndex))
-				{
+				{break;
 					newText.remove(index-1, 1);
 					--newIndex;
 				}
@@ -291,6 +292,42 @@ int HQuery::processEnter(QString& exp, int index)
 	}
 
 	return finalIndex;
+}
+
+int HQuery::removeListsWithOneElement(QString& exp, int& index, int iteratorIndex)
+{
+	int listStart = iteratorIndex;
+	++iteratorIndex;
+	int numDelims = 0;
+
+	while (iteratorIndex < exp.length())
+	{
+		if (exp[iteratorIndex] == SimpleQueryParser::LIST_DELIM)
+		{
+			++numDelims;
+			++iteratorIndex;
+		}
+		else if (exp[iteratorIndex] == SimpleQueryParser::LIST_LEFT)
+			iteratorIndex = removeListsWithOneElement(exp, index, iteratorIndex);
+		else if (exp[iteratorIndex] == SimpleQueryParser::LIST_RIGHT)
+		{
+			if (numDelims == 0) {
+				if (index > iteratorIndex) --index;
+				exp.remove(iteratorIndex, 1);
+				if (index > listStart) --index;
+				exp.remove(listStart, 1);
+				iteratorIndex -= 1;
+			}
+			else
+				++iteratorIndex;
+
+			break;
+		}
+		else ++iteratorIndex;
+	}
+
+	Q_ASSERT(listStart >= 0 || iteratorIndex >= exp.length());
+	return iteratorIndex;
 }
 
 }
