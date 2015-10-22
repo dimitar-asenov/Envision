@@ -31,6 +31,12 @@
 
 namespace InformationScripting {
 
+constexpr QChar SimpleQueryParser::LIST_LEFT;
+constexpr QChar SimpleQueryParser::LIST_RIGHT;
+constexpr QChar SimpleQueryParser::LIST_DELIM;
+constexpr QChar SimpleQueryParser::OP_PIPE;
+
+
 QueryNode* SimpleQueryParser::parse(const QString& queryString)
 {
 	qDebug() << "parsing" << queryString;
@@ -50,16 +56,16 @@ QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
 	while (index < queryString.length() )
 	{
 		ch = queryString[index];
-		if (ch == ',' || ch == '|' || ch == '{' || ch == '}') break;
+		if (ch == LIST_DELIM || ch == OP_PIPE || ch == LIST_LEFT || ch == LIST_RIGHT) break;
 		else ++index;
 
 		commandString += ch;
 	}
 
-	Q_ASSERT( commandString.isEmpty() || ch != '{');
+	Q_ASSERT( commandString.isEmpty() || ch != LIST_LEFT);
 	QueryNode* query = nullptr;
 
-	if (ch == '{')
+	if (ch == LIST_LEFT)
 	{
 		query = parseList(queryString, index); // Create list
 		if (index < queryString.length())
@@ -67,10 +73,10 @@ QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
 	}
 	else query = new CommandNode(commandString); // Create the command. Note that it could be an empty string.
 
-	if (ch == ',' || ch == '}' || index >= queryString.length()) return query;
+	if (ch == LIST_DELIM || ch == LIST_RIGHT || index >= queryString.length()) return query;
 
 	// We must have an operator, create it and keep parsing.
-	Q_ASSERT(ch == '|');
+	Q_ASSERT(ch == OP_PIPE);
 	auto op = new OperatorQueryNode();
 	op->setOp(OperatorQueryNode::Pipe);
 	op->setLeft(query);
@@ -81,14 +87,14 @@ QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
 CompositeQueryNode* SimpleQueryParser::parseList(const QString& queryString, int& index)
 {
 	auto composite = new CompositeQueryNode();
-	QChar ch = ',';
-	while (ch == ',')
+	QChar ch = LIST_DELIM;
+	while (ch == LIST_DELIM)
 	{
 		composite->queries()->append( parseAny(queryString, ++index) );
 		Q_ASSERT(index < queryString.length());
 		ch = queryString[index];
 	}
-	Q_ASSERT(queryString[index] == '}');
+	Q_ASSERT(queryString[index] == LIST_RIGHT);
 	++index;
 	return composite;
 }

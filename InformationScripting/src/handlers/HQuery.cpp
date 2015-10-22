@@ -34,8 +34,7 @@
 #include "../nodes/EmptyQueryNode.h"
 #include "../nodes/OperatorQueryNode.h"
 
-//#include "../parsing/QueryNodeBuilder.h"
-#include "../interaction/SimpleQueryParser.h"
+#include "../parsing/SimpleQueryParser.h"
 
 #include "../visualization/VCommandNode.h"
 #include "../visualization/VCommandArgument.h"
@@ -72,7 +71,10 @@ void HQuery::initStringComponents()
 		return StringComponents::c(argument->argument());
 	});
 	StringComponents::add<CompositeQueryNode>([](CompositeQueryNode* composite) {
-		return StringComponents::c(StringComponents::list(composite->queries(), "{", ",", "}", true, true));
+		return StringComponents::c(StringComponents::list(composite->queries(),
+																		  SimpleQueryParser::LIST_LEFT,
+																		  SimpleQueryParser::LIST_DELIM,
+																		  SimpleQueryParser::LIST_RIGHT, true, true));
 	});
 
 	StringComponents::add<EmptyQueryNode>([](EmptyQueryNode*) {
@@ -96,7 +98,10 @@ void HQuery::initStringComponents()
 
 	GridBasedOffsetProvider::addGridConstructor<VCompositeQueryNode>(
 	[](GridBasedOffsetProvider* grid, VCompositeQueryNode* vis){
-		grid->add(new ListCell(0, vis->queries(), 0, "{", ",", "}"));
+		grid->add(new ListCell(0, vis->queries(), 0,
+									  SimpleQueryParser::LIST_LEFT,
+									  SimpleQueryParser::LIST_DELIM,
+									  SimpleQueryParser::LIST_RIGHT));
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VCommandArgument>(
@@ -237,7 +242,7 @@ bool HQuery::processDeleteOrBackspace(Qt::Key, QString&, int&)
 int HQuery::processEnter(QString& exp, int index)
 {
 	// Insert a new list delimiter
-	exp.insert(index, ',');
+	exp.insert(index, SimpleQueryParser::LIST_DELIM);
 	int finalIndex = index+1;
 
 	auto findBoundary = [&exp](int startIndex, bool forward, int& foundIndex) -> bool {
@@ -251,19 +256,20 @@ int HQuery::processEnter(QString& exp, int index)
 
 			if (subLists == 0)
 			{
-				if (foundIndex < 0 || foundIndex == exp.length() || exp[foundIndex] == '|')
+				if (foundIndex < 0 || foundIndex == exp.length() || exp[foundIndex] == SimpleQueryParser::OP_PIPE)
 				{
 					// We don't have a list, we must insert the list delimiters
 					needsDelimiter = true;
 					break;
 				}
-				else if (exp[foundIndex] == ',' || exp[foundIndex] == (forward?'}':'{'))
+				else if (exp[foundIndex] == SimpleQueryParser::LIST_DELIM ||
+							exp[foundIndex] == (forward?SimpleQueryParser::LIST_RIGHT:SimpleQueryParser::LIST_LEFT))
 					break; // We already have a list, so nothing to do
-				else if (exp[foundIndex] == (forward?'{':'}') ) {
+				else if (exp[foundIndex] == (forward?SimpleQueryParser::LIST_LEFT:SimpleQueryParser::LIST_RIGHT) ) {
 					++subLists;
 				}
 			}
-			else if (exp[foundIndex] == (forward?'}':'{')) --subLists;
+			else if (exp[foundIndex] == (forward?SimpleQueryParser::LIST_RIGHT:SimpleQueryParser::LIST_LEFT)) --subLists;
 
 			if (forward) ++foundIndex;
 			else --foundIndex;
@@ -279,9 +285,9 @@ int HQuery::processEnter(QString& exp, int index)
 
 	if (frontNeedsDelim || backNeedsDelim )
 	{
-		exp.insert(frontIndex+1, '{');
+		exp.insert(frontIndex+1, SimpleQueryParser::LIST_LEFT);
 		++finalIndex;
-		exp.insert(backIndex+1, '}'); // +1 because the previous insert shifted the text by 1
+		exp.insert(backIndex+1, SimpleQueryParser::LIST_RIGHT); // +1 because the previous insert shifted the text by 1
 	}
 
 	return finalIndex;

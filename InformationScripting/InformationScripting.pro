@@ -63,7 +63,7 @@ HEADERS += src/precompiled.h \
     src/visualization/HighlightOverlay.h \
     src/visualization/Heatmap.h \
     src/queries/VersionControlQuery.h \
-    src/interaction/SimpleQueryParser.h \
+    src/parsing/SimpleQueryParser.h \
     src/visualization/VCompositeQueryNode.h \
     src/visualization/VCompositeQueryNodeStyle.h \
     src/misc/Optional.h \
@@ -116,7 +116,7 @@ SOURCES += src/InformationScriptingException.cpp \
     src/visualization/HighlightOverlay.cpp \
     src/visualization/Heatmap.cpp \
     src/queries/VersionControlQuery.cpp \
-    src/interaction/SimpleQueryParser.cpp \
+    src/parsing/SimpleQueryParser.cpp \
     src/visualization/VCompositeQueryNode.cpp \
     src/visualization/VCompositeQueryNodeStyle.cpp \
     src/parsing/ArgumentParser.cpp \

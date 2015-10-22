@@ -38,6 +38,12 @@ class INFORMATIONSCRIPTING_API SimpleQueryParser
 	public:
 		static QueryNode* parse(const QString& queryString);
 
+		static constexpr QChar LIST_LEFT{0x2045};
+		static constexpr QChar LIST_RIGHT{0x2046};
+		static constexpr QChar LIST_DELIM{0x2022};
+
+		static constexpr QChar OP_PIPE{'|'};
+
 	private:
 		static QueryNode* parseAny(const QString& queryString, int& index);
 		static CompositeQueryNode* parseList(const QString& queryString, int& index);
