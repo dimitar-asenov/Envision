@@ -26,44 +26,24 @@
 
 #pragma once
 
-#include "FileDependencies.h"
-
 namespace Model {
 	class Node;
 }
 
+namespace OOModel {
+	class ReferenceExpression;
+}
+
 namespace CppExport {
 
-/**
- * container storing trees to be put in the same physical file when exporting.
- * serves as dependency unit for dependency analysis.
- */
-class File
+class DependencyUnit
 {
 	public:
-		File(QString name, Model::Node* node, File* source = nullptr);
-
-		bool isHeaderFile();
-		void addNode(Model::Node* node);
-
-		const QString& name() const;
-		File* source();
-		QSet<Model::Node*> nodes();
-		FileDependencies& dependencies();
-
-		static QString printFileSet(QString description, QSet<File*> files);
+		DependencyUnit(QString name, Model::Node* node);
 
 	private:
 		QString name_;
-		File* source_{};
-		QSet<Model::Node*> nodes_;
-		FileDependencies dependencies_;
+		Model::Node* node_;
 };
-
-inline bool File::isHeaderFile() { return source_; }
-inline const QString& File::name() const { return name_; }
-inline File* File::source() { return source_; }
-inline QSet<Model::Node*> File::nodes() { return nodes_; }
-inline FileDependencies& File::dependencies() { return dependencies_; }
 
 }

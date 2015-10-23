@@ -26,136 +26,40 @@
 
 #include "DependencyAnalyzer.h"
 
-#include "File.h"
+#include "DependencyUnit.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppExport {
 
-void DependencyAnalyzer::associateNodeWithFile(Model::Node* node, QString name)
+QList<DependencyUnit> DependencyAnalyzer::units(Model::Node* node)
 {
-	// insert custom tree to file adjustments here
-	if (name == "Model/LoadedNode") name = "Model/PersistentStore";
-
-	auto it = nameToFileMap_.find(name);
-	if (it != nameToFileMap_.end())
-	{
-		(*it)->addNode(node);
-		return;
-	}
-
-	auto file = new File(name, node, new File(name, node));
-	nameToFileMap_.insert(name, file);
-	nodeToFileMap_.insert(node, file);
+	QList<DependencyUnit> result;
+	units(node, "", result);
+	return result;
 }
 
-void DependencyAnalyzer::buildNodeToFileMap(Model::Node* name, QString namespaceName)
+void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QList<DependencyUnit>& result)
 {
-	if (auto ooModule = DCast<OOModel::Module>(name))
+	if (auto ooModule = DCast<OOModel::Module>(current))
 	{
 		if (ooModule->classes()->size() > 0)
 			namespaceName = ooModule->name();
 		else
 		{
 			// macro file
-			associateNodeWithFile(ooModule, namespaceName + "/" + ooModule->name());
+			result.append(DependencyUnit(namespaceName + "/" + ooModule->name(), current));
 			return;
 		}
 	}
-	else if (auto ooClass = DCast<OOModel::Class>(name))
+	else if (auto ooClass = DCast<OOModel::Class>(current))
 	{
-		associateNodeWithFile(ooClass, namespaceName + "/" + ooClass->name());
+		result.append(DependencyUnit(namespaceName + "/" + ooClass->name(), current));
 		return;
 	}
 
-	for (auto child : name->children())
-		buildNodeToFileMap(child, namespaceName);
-}
-
-QList<File*> DependencyAnalyzer::files(Model::Node* node)
-{
-	buildNodeToFileMap(node->root(), "");
-
-	auto headerFiles = nodeToFileMap_.values();
-
-	for (File* file : headerFiles)
-	{
-		calculateDependencies(file);
-		calculateDependencies(file->source());
-	}
-
-	return headerFiles;
-}
-
-File* DependencyAnalyzer::headerFileForNode(Model::Node* node)
-{
-	if (!node) return nullptr;
-
-	auto it = nodeToFileMap_.find(node);
-	return it != nodeToFileMap_.end() ? *it : headerFileForNode(node->parent());
-}
-
-void DependencyAnalyzer::calculateDependencies(File* file)
-{
-	QList<OOModel::ReferenceExpression*> allReferenceExpressions;
-	for (auto node : file->nodes())
-		allChildrenOfTypeReferenceExpression(node, allReferenceExpressions);
-
-	for (auto referenceExpression : allReferenceExpressions)
-	{
-		if (file->isHeaderFile())
-		{
-			// do not proceed if referenceExpression is inside a method body
-			if (auto ooMethod = referenceExpression->firstAncestorOfType<OOModel::Method>())
-				if (ooMethod->items()->isAncestorOf(referenceExpression))
-					continue;
-		}
-
-		// friends should not introduce a dependency
-		if (auto ooClass = referenceExpression->firstAncestorOfType<OOModel::Class>())
-			if (ooClass->friends()->isAncestorOf(referenceExpression))
-				continue;
-
-		if (auto target = resolveReference(referenceExpression))
-		{
-			auto targetFile = headerFileForNode(target);
-
-			if (targetFile && targetFile != file)
-				file->dependencies().addDependency(targetFile, isSoftDependency(referenceExpression));
-		}
-	}
-}
-
-Model::Node* DependencyAnalyzer::resolveReference(OOModel::ReferenceExpression* referenceExpression)
-{
-	if (auto target = referenceExpression->target()) return target;
-
-	// insert custom resolution adjustments here
-
-	return nullptr;
-}
-
-bool DependencyAnalyzer::isSoftDependency(OOModel::ReferenceExpression* reference)
-{
-	auto parent = reference->parent();
-	Q_ASSERT(parent);
-
-	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>()) return false;
-
-	if (DCast<OOModel::TypeQualifierExpression>(parent)) parent = parent->parent();
-	if (!DCast<OOModel::PointerTypeExpression>(parent) && !DCast<OOModel::ReferenceTypeExpression>(parent)) return false;
-
-	return true;
-}
-
-void DependencyAnalyzer::allChildrenOfTypeReferenceExpression(Model::Node* node,
-																				  QList<OOModel::ReferenceExpression*>& result)
-{
-	if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(node))
-		result.append(referenceExpression);
-
-	for (auto child : node->children())
-		allChildrenOfTypeReferenceExpression(child, result);
+	for (auto child : current->children())
+		units(child, namespaceName, result);
 }
 
 }

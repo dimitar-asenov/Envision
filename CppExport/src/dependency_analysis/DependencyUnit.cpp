@@ -24,38 +24,12 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "DependencyUnit.h"
+
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppExport {
 
-class File;
-
-/**
- * stores dependencies of a file and calculates the transitive reduction.
- */
-class FileDependencies
-{
-	public:
-		FileDependencies();
-		FileDependencies(QSet<File*> softDependencies, QSet<File*> hardDependencies);
-
-		QSet<File*> softDependencies() const;
-		QSet<File*> hardDependencies() const;
-
-		void addDependency(File* file, bool softDependency);
-
-		FileDependencies transitiveReduction();
-
-	private:
-		QSet<File*> softDependencies_;
-		QSet<File*> hardDependencies_;
-
-		QSet<File*> hardDependencyTransitiveReduction();
-
-		void calculateReachableHardDependencies(File* file, QSet<File*>& reachableHardDependencies);
-};
-
-inline QSet<File*> FileDependencies::softDependencies() const { return softDependencies_; }
-inline QSet<File*> FileDependencies::hardDependencies() const { return hardDependencies_; }
+DependencyUnit::DependencyUnit(QString name, Model::Node* node) : name_(name), node_(node) {}
 
 }

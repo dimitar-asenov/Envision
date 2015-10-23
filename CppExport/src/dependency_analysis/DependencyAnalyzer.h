@@ -30,48 +30,17 @@ namespace Model {
 	class Node;
 }
 
-namespace OOModel {
-	class ReferenceExpression;
-}
-
 namespace CppExport {
 
-class File;
+class DependencyUnit;
 
 class DependencyAnalyzer
 {
 	public:
-		/**
-		 * return node to file association with dependency information.
-		 */
-		QList<File*> files(Model::Node* node);
+		static QList<DependencyUnit> units(Model::Node* node);
 
 	private:
-		QHash<QString, File*> nameToFileMap_;
-		QHash<Model::Node*, File*> nodeToFileMap_;
-
-		void allChildrenOfTypeReferenceExpression(Model::Node* node, QList<OOModel::ReferenceExpression*>& result);
-
-		/**
-		 * associates a node with the file with filename name.
-		 */
-		void associateNodeWithFile(Model::Node* node, QString name);
-
-		/**
-		 * associates the provided tree with files.
-		 */
-		void buildNodeToFileMap(Model::Node* node, QString namespaceName);
-
-		bool isSoftDependency(OOModel::ReferenceExpression* reference);
-
-		/**
-		 * calculates dependency information for file and stores it in file.
-		 */
-		void calculateDependencies(File* file);
-
-		File* headerFileForNode(Model::Node* node);
-
-		Model::Node* resolveReference(OOModel::ReferenceExpression* referenceExpression);
+		static void units(Model::Node* current, QString namespaceName, QList<DependencyUnit>& result);
 };
 
 }
