@@ -58,10 +58,9 @@ QList<TopLevelQuery*> QueryParser::buildQueryFrom(const QString& text, Model::No
 	QList<TopLevelQuery*> results;
 	for (auto part : parts)
 	{
-		qDebug() << part;
 		auto type = parser.typeOf(part);
 		if (Type::Operator == type)
-			results << new TopLevelQuery(parser.parseOperator(nullptr, part));
+			results << new TopLevelQuery(parser.parseOperator(nullptr, part, true));
 		else if (Type::Query == type)
 			results << new TopLevelQuery(parser.parseQuery(nullptr, part));
 		else if (Type::List == type)

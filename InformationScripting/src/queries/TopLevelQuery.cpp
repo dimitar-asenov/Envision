@@ -44,14 +44,14 @@ QList<Optional<TupleSet>> TopLevelQuery::execute(QList<TupleSet> input)
 	return childQuery_->execute(input);
 }
 
-QueryExecutor*TopLevelQuery::executor() const
+QueryExecutor* TopLevelQuery::executor() const
 {
 	return executor_;
 }
 
 void TopLevelQuery::setExecutor(QueryExecutor* executor)
 {
-	Q_ASSERT(executor_);
+	Q_ASSERT(executor);
 	executor_ = executor;
 }
 

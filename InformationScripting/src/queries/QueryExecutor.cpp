@@ -26,8 +26,6 @@
 
 #include "QueryExecutor.h"
 
-#include "TopLevelQuery.h"
-
 #include "visualization/DefaultVisualizer.h"
 
 #include "InteractionBase/src/commands/CommandResult.h"
@@ -37,11 +35,11 @@ namespace InformationScripting {
 QueryExecutor::~QueryExecutor()
 {
 	Q_ASSERT(queries_.empty());
-	qDebug() << "DELETE QUERYEXECUTOR";
 }
 
 void QueryExecutor::addQuery(std::unique_ptr<TopLevelQuery>&& query)
 {
+	query->setExecutor(this);
 	queries_.emplace(std::move(query));
 }
 
@@ -98,7 +96,7 @@ QList<Optional<TupleSet>> QueryExecutor::runContinuation(const QList<TupleSet>& 
 	}
 	if (queries_.empty())
 	{
-		executeLast(q, queryInput);
+		executeLast(query.get(), queryInput);
 		return {{TupleSet()}};	// empty return value no one should care about the last
 	}
 
@@ -125,6 +123,7 @@ QString QueryExecutor::executeLast(Query* q, const QList<TupleSet>& input)
 			errorMessage = results[0].errors()[0];
 		}
 	}
+	delete this;
 	return errorMessage;
 }
 

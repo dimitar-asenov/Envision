@@ -83,7 +83,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		} catch (const QueryParsingException& e) {
 			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 		}
-		auto queryExecutor = std::make_shared<QueryExecutor>();
+		auto queryExecutor = new QueryExecutor();
 		for (auto q : queries)
 			queryExecutor->addQuery(std::unique_ptr<TopLevelQuery>(q));
 		return queryExecutor->execute();

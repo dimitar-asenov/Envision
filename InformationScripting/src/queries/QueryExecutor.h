@@ -29,6 +29,7 @@
 #include "../informationscripting_api.h"
 
 #include "../misc/Optional.h"
+#include "TopLevelQuery.h"
 
 namespace Interaction {
 	class CommandResult;
