@@ -24,31 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_CPPEXPORT_H_
-#define PRECOMPILED_CPPEXPORT_H_
+#pragma once
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
-#include "OOModel/src/precompiled.h"
+#include "cppexport_api.h"
 
-#if defined __cplusplus
-// Add C++ includes here
-#include <QtCore/QDir>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonParseError>
+namespace CppExport {
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+class CPPEXPORT_API Config
+{
+	public:
+		static const Config& instance();
 
-#if defined(CPPEXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#endif
+		/**
+		 * Returns a map of dependency unit name to dependency unit name.
+		 * The key represents the dependency unit that should be merged into the dependency unit represented by the value.
+		 *
+		 * Example:
+		 * key: "Model/NodeToDebugStringAdapter", value: "Model/Node"
+		 * merges NodeToDebugStringAdapter's dependency unit into Node's dependency unit.
+		 *
+		 * ConfigKey: "DependencyUnitMergeMap"
+		 */
+		QHash<QString, QString> dependencyUnitMergeMap() const;
 
-#endif
+	private:
+		Config();
 
-#endif /* PRECOMPILED_CPPEXPORT_H_ */
+		QJsonObject config_;
+};
+
+}

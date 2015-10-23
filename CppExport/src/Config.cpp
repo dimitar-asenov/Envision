@@ -24,31 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_CPPEXPORT_H_
-#define PRECOMPILED_CPPEXPORT_H_
+#include "Config.h"
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
-#include "OOModel/src/precompiled.h"
+namespace CppExport {
 
-#if defined __cplusplus
-// Add C++ includes here
-#include <QtCore/QDir>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonParseError>
+const Config& Config::instance()
+{
+	static Config conf;
+	return conf;
+}
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+QHash<QString, QString> Config::dependencyUnitMergeMap() const
+{
+	QHash<QString, QString> result;
+	auto obj = config_["DependencyUnitMergeMap"].toObject();
+	for (auto it = obj.begin(); it != obj.end(); ++it)
+		result.insert(it.key(), it.value().toString());
+	return result;
+}
 
-#if defined(CPPEXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#endif
+Config::Config()
+{
+	QFile configFile("cpp-export-settings/config.json");
+	bool open = configFile.open(QIODevice::ReadOnly);
+	Q_ASSERT(open);
+	QJsonParseError err;
+	auto doc = QJsonDocument::fromJson(configFile.readAll(), &err);
+	Q_ASSERT(err.error == QJsonParseError::NoError);
+	config_ = doc.object();
+}
 
-#endif
-
-#endif /* PRECOMPILED_CPPEXPORT_H_ */
+}
