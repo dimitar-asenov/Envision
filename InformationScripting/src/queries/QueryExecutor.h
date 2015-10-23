@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "../misc/Optional.h"
+
 namespace Interaction {
 	class CommandResult;
 }
@@ -35,6 +37,8 @@ namespace Interaction {
 namespace InformationScripting {
 
 class TopLevelQuery;
+class TupleSet;
+class Query;
 
 class INFORMATIONSCRIPTING_API QueryExecutor
 {
@@ -44,8 +48,13 @@ class INFORMATIONSCRIPTING_API QueryExecutor
 
 		Interaction::CommandResult* execute();
 
+		QList<Optional<TupleSet> > runContinuation(const QList<TupleSet>& input);
+
 	private:
 		std::queue<std::unique_ptr<TopLevelQuery>> queries_{};
+		QList<TupleSet> firstResult_;
+
+		QString executeLast(Query* q, const QList<TupleSet>& input);
 };
 
 } /* namespace InformationScripting */
