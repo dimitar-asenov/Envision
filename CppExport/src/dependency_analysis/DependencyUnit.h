@@ -38,7 +38,7 @@ namespace OOModel {
 
 namespace CppExport {
 
-class DependencyUnit
+class CPPEXPORT_API DependencyUnit
 {
 	public:
 		DependencyUnit(QString name, Model::Node* node);

@@ -36,7 +36,7 @@ namespace CppExport {
 
 class DependencyUnit;
 
-class DependencyAnalyzer
+class CPPEXPORT_API DependencyAnalyzer
 {
 	public:
 		static QList<DependencyUnit> units(Model::Node* node);
