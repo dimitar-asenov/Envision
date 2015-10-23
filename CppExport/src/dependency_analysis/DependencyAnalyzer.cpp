@@ -75,11 +75,15 @@ QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*
 		if (it != mergeMap.end())
 			compositeNameToMergeeMap.insert(*it, unit);
 		else
-			nameToCompositeMap.insert(unit->name(), new DependencyComposite(unit));
+		{
+			auto composite = new DependencyComposite(unit->name());
+			composite->addUnit(unit);
+			nameToCompositeMap.insert(composite->name(), composite);
+		}
 	}
 
 	for (auto it = compositeNameToMergeeMap.begin(); it != compositeNameToMergeeMap.end(); it++)
-		nameToCompositeMap[it.key()]->addChild(it.value());
+		nameToCompositeMap[it.key()]->addUnit(it.value());
 
 	return nameToCompositeMap.values();
 }

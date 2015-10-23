@@ -28,6 +28,6 @@
 
 namespace CppExport {
 
-DependencyComposite::DependencyComposite(const DependencyUnit* baseUnit) : baseUnit_(baseUnit) {}
+DependencyComposite::DependencyComposite(const QString& name) : name_(name) {}
 
 }
