@@ -296,6 +296,10 @@ JavaDebugger::JavaDebugger()
 	debugConnector_.addEventListener(Protocol::EventKind::VM_START, [this] (Event e) { handleVMStart(e); });
 	debugConnector_.addEventListener(Protocol::EventKind::SINGLE_STEP,
 												[this] (Event e) { handleSingleStep(e.singleStep()); });
+	debugConnector_.addEventListener(Protocol::EventKind::VM_DEATH, [this] (Event) {
+		for (auto listener : exitListeners_) listener();
+		exitListeners_.clear();
+	});
 }
 
 bool JavaDebugger::isParentClassLoaded(Model::Node* node)

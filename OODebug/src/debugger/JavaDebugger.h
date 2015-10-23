@@ -91,6 +91,13 @@ class OODEBUG_API JavaDebugger
 		int addBreakpointListener(Model::Node* node, BreakpointListener listener);
 		void removeBreakpointListener(int id);
 
+		using ProgramExitSingleShot = std::function<void ()>;
+		/**
+		 *	Register a listener for the next program exit. Once the event happened the listener will be destroyed
+		 * and not called in any subsequent event.
+		 */
+		void addProgramExitLister(ProgramExitSingleShot listener);
+
 	private:
 		JavaDebugger();
 
@@ -138,6 +145,8 @@ class OODEBUG_API JavaDebugger
 		QMultiHash<Model::Node*, std::pair<int, BreakpointListener>> breakpointListeners_;
 		int nextBreakpointListenerId_{0};
 
+		QVector<ProgramExitSingleShot> exitListeners_;
+
 		static const QString BREAKPOINT_OVERLAY_GROUP;
 		static const QString PLOT_OVERLAY_GROUP;
 		static const QString CURRENT_LINE_OVERLAY_GROUP;
@@ -148,6 +157,11 @@ inline int JavaDebugger::addBreakpointListener(Model::Node* node, BreakpointList
 	int id = nextBreakpointListenerId_++;
 	breakpointListeners_.insertMulti(node, {id, listener});
 	return id;
+}
+
+inline void JavaDebugger::addProgramExitLister(JavaDebugger::ProgramExitSingleShot listener)
+{
+	exitListeners_.push_back(listener);
 }
 
 } /* namespace OODebug */
