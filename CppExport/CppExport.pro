@@ -12,7 +12,8 @@ HEADERS += src/precompiled.h \
 	src/cppexport_api.h \
 	src/CppExportPlugin.h \
 	src/dependency_analysis/DependencyAnalyzer.h \
-	src/dependency_analysis/DependencyUnit.h
+	src/dependency_analysis/DependencyUnit.h \
+	src/dependency_analysis/DependencyTarget.h
 SOURCES += src/CppExportException.cpp \
 	src/CppExportPlugin.cpp \
 	test/SimpleTest.cpp \

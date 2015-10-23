@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "cppexport_api.h"
+#include "../cppexport_api.h"
 
 namespace Model {
 	class Node;

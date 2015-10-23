@@ -28,31 +28,16 @@
 
 #include "../cppexport_api.h"
 
-#include "DependencyTarget.h"
-
 namespace Model {
 	class Node;
 }
 
-namespace OOModel {
-	class ReferenceExpression;
-}
-
 namespace CppExport {
 
-class CPPEXPORT_API DependencyUnit
+struct CPPEXPORT_API DependencyTarget
 {
-	public:
-		DependencyUnit(QString name, Model::Node* node);
-
-	private:
-		QString name_;
-		Model::Node* node_;
-		QList<DependencyTarget> targets_;
-
-		static QList<DependencyTarget> calculateTargets(Model::Node* node);
-		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
-		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
+	bool nameOnly_{};
+	Model::Node* target_{};
 };
 
 }

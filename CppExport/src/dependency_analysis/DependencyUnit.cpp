@@ -30,6 +30,37 @@
 
 namespace CppExport {
 
-DependencyUnit::DependencyUnit(QString name, Model::Node* node) : name_(name), node_(node) {}
+DependencyUnit::DependencyUnit(QString name, Model::Node* node)
+	: name_(name), node_(node), targets_(calculateTargets(node)) {}
+
+QList<DependencyTarget> DependencyUnit::calculateTargets(Model::Node* node)
+{
+	QList<DependencyTarget> result;
+	for (auto referenceExpression : Model::Node::childrenOfType<OOModel::ReferenceExpression>(node))
+		result.append({isNameOnlyDependency(referenceExpression), fixedTarget(referenceExpression)});
+	return result;
+}
+
+bool DependencyUnit::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
+{
+	auto parent = reference->parent();
+	Q_ASSERT(parent);
+
+	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>()) return false;
+
+	if (DCast<OOModel::TypeQualifierExpression>(parent)) parent = parent->parent();
+	if (!DCast<OOModel::PointerTypeExpression>(parent) && !DCast<OOModel::ReferenceTypeExpression>(parent)) return false;
+
+	return true;
+}
+
+Model::Node* DependencyUnit::fixedTarget(OOModel::ReferenceExpression* referenceExpression)
+{
+	if (auto target = referenceExpression->target()) return target;
+
+	// insert custom resolution adjustments here
+
+	return nullptr;
+}
 
 }
