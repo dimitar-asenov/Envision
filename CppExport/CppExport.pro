@@ -10,7 +10,11 @@ win32:LIBS += -llogger \
 HEADERS += src/precompiled.h \
     src/CppExportException.h \
 	src/cppexport_api.h \
-	src/CppExportPlugin.h
+	src/CppExportPlugin.h \
+	src/dependency_analysis/DependencyAnalyzer.h \
+	src/dependency_analysis/DependencyUnit.h
 SOURCES += src/CppExportException.cpp \
 	src/CppExportPlugin.cpp \
-	test/SimpleTest.cpp
+	test/SimpleTest.cpp \
+	src/dependency_analysis/DependencyAnalyzer.cpp \
+	src/dependency_analysis/DependencyUnit.cpp
