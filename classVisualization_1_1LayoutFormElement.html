@@ -90,7 +90,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classVisualization_1_1LayoutFormElement-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Visualization::LayoutFormElement Class Reference</div>  </div>
@@ -121,6 +120,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae521250259f3014862e30a36c716ed68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fc38d4f5fdc854316ecf4a1afae564c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a3fc38d4f5fdc854316ecf4a1afae564c">~LayoutFormElement</a> ()</td></tr>
 <tr class="separator:a3fc38d4f5fdc854316ecf4a1afae564c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeab9b9ceae18f0075f13789a1815b193"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#aeab9b9ceae18f0075f13789a1815b193">hasCursorWhenEmpty</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
+<tr class="separator:aeab9b9ceae18f0075f13789a1815b193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a690fb082238361e782b785e35d149608"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a690fb082238361e782b785e35d149608">noBoundaryCursors</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
+<tr class="separator:a690fb082238361e782b785e35d149608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a963ad114fb7377cdde59a96061011122"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a963ad114fb7377cdde59a96061011122">noInnerCursors</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
+<tr class="separator:a963ad114fb7377cdde59a96061011122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab69f21a8213b55cbc01eeed10bab3905"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#ab69f21a8213b55cbc01eeed10bab3905">notLocationEquivalentCursors</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
+<tr class="separator:ab69f21a8213b55cbc01eeed10bab3905"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a443b2042d2c7423e1f0aeca885ce9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a3a443b2042d2c7423e1f0aeca885ce9b">operator=</a> (const <a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> &amp;)=delete</td></tr>
 <tr class="separator:a3a443b2042d2c7423e1f0aeca885ce9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae610cd2d3a65f4322797da6dbc3ba482"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#ae610cd2d3a65f4322797da6dbc3ba482">setHasCursorWhenEmpty</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; cursorWhenEmptyGetter)</td></tr>
@@ -232,16 +239,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a25b1279493bb13ec33cf810642dd1bf6 inherit pub_methods_classVisualization_1_1FormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cached position on the y-axis where this form element ends for the specified <em>item</em>.  <a href="#a25b1279493bb13ec33cf810642dd1bf6">More...</a><br /></td></tr>
 <tr class="separator:a25b1279493bb13ec33cf810642dd1bf6 inherit pub_methods_classVisualization_1_1FormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:aeab9b9ceae18f0075f13789a1815b193"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#aeab9b9ceae18f0075f13789a1815b193">hasCursorWhenEmpty</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
-<tr class="separator:aeab9b9ceae18f0075f13789a1815b193"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a690fb082238361e782b785e35d149608"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a690fb082238361e782b785e35d149608">noBoundaryCursors</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
-<tr class="separator:a690fb082238361e782b785e35d149608"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a963ad114fb7377cdde59a96061011122"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a963ad114fb7377cdde59a96061011122">noInnerCursors</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
-<tr class="separator:a963ad114fb7377cdde59a96061011122"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab69f21a8213b55cbc01eeed10bab3905"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#ab69f21a8213b55cbc01eeed10bab3905">notLocationEquivalentCursors</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
-<tr class="separator:ab69f21a8213b55cbc01eeed10bab3905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:acb8050458175ccdbecb79b6d88258b3f"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#acb8050458175ccdbecb79b6d88258b3f">hasCursorWhenEmptyGetter_</a> {}</td></tr>
+<tr class="separator:acb8050458175ccdbecb79b6d88258b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18aeef203350e60a9cea3f450f30b036"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a18aeef203350e60a9cea3f450f30b036">noBoundaryCursorsGetter_</a> {}</td></tr>
+<tr class="separator:a18aeef203350e60a9cea3f450f30b036"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01a4e037c9957318a2e2ab5b599dd13b"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a01a4e037c9957318a2e2ab5b599dd13b">noInnerCursorsGetter_</a> {}</td></tr>
+<tr class="separator:a01a4e037c9957318a2e2ab5b599dd13b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1615e46a7e0e8ff8670a4e47833c90c8"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a1615e46a7e0e8ff8670a4e47833c90c8">notLocationEquivalentCursorsGetter_</a> {}</td></tr>
+<tr class="separator:a1615e46a7e0e8ff8670a4e47833c90c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classVisualization_1_1FormElement"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classVisualization_1_1FormElement')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classVisualization_1_1FormElement.html">Visualization::FormElement</a></td></tr>
 <tr class="memitem:ae078d4f1bcfbf7e07aa33fa48a0df723 inherit pro_methods_classVisualization_1_1FormElement"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#ae078d4f1bcfbf7e07aa33fa48a0df723">addChild</a> (<a class="el" href="classVisualization_1_1FormElement.html">FormElement</a> *child)</td></tr>
 <tr class="memdesc:ae078d4f1bcfbf7e07aa33fa48a0df723 inherit pro_methods_classVisualization_1_1FormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a <em>child</em> to the list of children.  <a href="#ae078d4f1bcfbf7e07aa33fa48a0df723">More...</a><br /></td></tr>
@@ -267,17 +277,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:acd86ac32222a790816c133c3886bc779 inherit pro_methods_classVisualization_1_1FormElement"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#acd86ac32222a790816c133c3886bc779">topMargin</a> ()</td></tr>
 <tr class="memdesc:acd86ac32222a790816c133c3886bc779 inherit pro_methods_classVisualization_1_1FormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the top margin.  <a href="#acd86ac32222a790816c133c3886bc779">More...</a><br /></td></tr>
 <tr class="separator:acd86ac32222a790816c133c3886bc779 inherit pro_methods_classVisualization_1_1FormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:acb8050458175ccdbecb79b6d88258b3f"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#acb8050458175ccdbecb79b6d88258b3f">hasCursorWhenEmptyGetter_</a> {}</td></tr>
-<tr class="separator:acb8050458175ccdbecb79b6d88258b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18aeef203350e60a9cea3f450f30b036"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a18aeef203350e60a9cea3f450f30b036">noBoundaryCursorsGetter_</a> {}</td></tr>
-<tr class="separator:a18aeef203350e60a9cea3f450f30b036"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01a4e037c9957318a2e2ab5b599dd13b"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a01a4e037c9957318a2e2ab5b599dd13b">noInnerCursorsGetter_</a> {}</td></tr>
-<tr class="separator:a01a4e037c9957318a2e2ab5b599dd13b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1615e46a7e0e8ff8670a4e47833c90c8"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a1615e46a7e0e8ff8670a4e47833c90c8">notLocationEquivalentCursorsGetter_</a> {}</td></tr>
-<tr class="separator:a1615e46a7e0e8ff8670a4e47833c90c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for a layout element. </p>
@@ -370,7 +369,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -394,7 +393,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -418,7 +417,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -442,7 +441,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

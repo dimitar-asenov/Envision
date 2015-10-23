@@ -109,9 +109,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0642d02ebc25061d927ea70b4954a729"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FilePersistencePlugin.html#a0642d02ebc25061d927ea70b4954a729">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
 <tr class="memdesc:a0642d02ebc25061d927ea70b4954a729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a0642d02ebc25061d927ea70b4954a729">More...</a><br /></td></tr>
 <tr class="separator:a0642d02ebc25061d927ea70b4954a729"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35db55397fb3ce3718434b9b246ac301"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FilePersistencePlugin.html#a35db55397fb3ce3718434b9b246ac301">selfTest</a> (QString testid) override</td></tr>
-<tr class="memdesc:a35db55397fb3ce3718434b9b246ac301"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a35db55397fb3ce3718434b9b246ac301">More...</a><br /></td></tr>
-<tr class="separator:a35db55397fb3ce3718434b9b246ac301"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30f696cc83b712106692dc221bcfab05"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FilePersistencePlugin.html#a30f696cc83b712106692dc221bcfab05">selfTest</a> (QString testArgs) override</td></tr>
+<tr class="memdesc:a30f696cc83b712106692dc221bcfab05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Syntax for tests: pluginName:testName1[&gt;arg1,arg2,...][:testName2[&gt;arg1,arg2,...]:...] Currently arguments don't work but multiple tests do.  <a href="#a30f696cc83b712106692dc221bcfab05">More...</a><br /></td></tr>
+<tr class="separator:a30f696cc83b712106692dc221bcfab05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa681028102b1a1e8a13349355c297954"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FilePersistencePlugin.html#aa681028102b1a1e8a13349355c297954">unload</a> () override</td></tr>
 <tr class="memdesc:aa681028102b1a1e8a13349355c297954"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#aa681028102b1a1e8a13349355c297954">More...</a><br /></td></tr>
 <tr class="separator:aa681028102b1a1e8a13349355c297954"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,7 +156,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a35db55397fb3ce3718434b9b246ac301"></a>
+<a class="anchor" id="a30f696cc83b712106692dc221bcfab05"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -167,7 +167,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">void FilePersistence::FilePersistencePlugin::selfTest </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>testid</em></td><td>)</td>
+          <td class="paramname"><em>testArgs</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -178,18 +178,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Starts the indicated self-test for this plug-in. </p>
-<p>If the Envision system was started with a command line argument that indicates a particular plug-in should be tested, this method will be invoked for that plug-in. Optionally a particular test can be requested.</p>
-<p>This method will only be invoked once all plug-ins are loaded.</p>
-<p>To request that a plug-in be tested use the &ndash;test option when starting envision.</p>
-<p>E.G. to run all tests of the File persistence module: Envision &ndash;test filepersistence</p>
-<p>to only run the 'load' test: Envision &ndash;test filepersistence:load</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">testid</td><td>The string id of the test to run. If this string is empty all tests should be run. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Syntax for tests: pluginName:testName1[&gt;arg1,arg2,...][:testName2[&gt;arg1,arg2,...]:...] Currently arguments don't work but multiple tests do. </p>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
 

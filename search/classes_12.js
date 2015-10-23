@@ -1,6 +1,8 @@
 var searchData=
 [
+  ['tagextension',['TagExtension',['../classInformationScripting_1_1TagExtension.html',1,'InformationScripting']]],
   ['taggedobjectid',['TaggedObjectId',['../structOODebug_1_1TaggedObjectId.html',1,'OODebug']]],
+  ['tagquery',['TagQuery',['../classInformationScripting_1_1TagQuery.html',1,'InformationScripting']]],
   ['templateargumentvisitor',['TemplateArgumentVisitor',['../classCppImport_1_1TemplateArgumentVisitor.html',1,'CppImport']]],
   ['test',['Test',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['testbox',['TestBox',['../classVisualization_1_1TestBox.html',1,'Visualization']]],
@@ -10,8 +12,8 @@ var searchData=
   ['testresult',['TestResult',['../classSelfTest_1_1TestResult.html',1,'SelfTest']]],
   ['testresults',['TestResults',['../classSelfTest_1_1TestResults.html',1,'SelfTest']]],
   ['testrunner',['TestRunner',['../classCore_1_1TestRunner.html',1,'Core']]],
-  ['text',['Text',['../classVisualization_1_1Text.html',1,'Visualization']]],
   ['text',['Text',['../classModel_1_1Text.html',1,'Model']]],
+  ['text',['Text',['../classVisualization_1_1Text.html',1,'Visualization']]],
   ['textanddescription',['TextAndDescription',['../classInteraction_1_1TextAndDescription.html',1,'Interaction']]],
   ['textanddescriptionstyle',['TextAndDescriptionStyle',['../classInteraction_1_1TextAndDescriptionStyle.html',1,'Interaction']]],
   ['textcursor',['TextCursor',['../classVisualization_1_1TextCursor.html',1,'Visualization']]],
@@ -32,6 +34,8 @@ var searchData=
   ['translatemanager',['TranslateManager',['../classCppImport_1_1TranslateManager.html',1,'CppImport']]],
   ['treemanager',['TreeManager',['../classModel_1_1TreeManager.html',1,'Model']]],
   ['trycatchfinallystatement',['TryCatchFinallyStatement',['../classOOModel_1_1TryCatchFinallyStatement.html',1,'OOModel']]],
+  ['tuple',['Tuple',['../classInformationScripting_1_1Tuple.html',1,'InformationScripting']]],
+  ['tupleset',['TupleSet',['../classInformationScripting_1_1TupleSet.html',1,'InformationScripting']]],
   ['type',['Type',['../classOOModel_1_1Type.html',1,'OOModel']]],
   ['typealias',['TypeAlias',['../classOOModel_1_1TypeAlias.html',1,'OOModel']]],
   ['typediterator',['TypedIterator',['../structModel_1_1TypedList_1_1TypedIterator.html',1,'Model::TypedList']]],

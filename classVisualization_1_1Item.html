@@ -133,6 +133,10 @@ Public Types</h2></td></tr>
 <a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a>
  }</td></tr>
 <tr class="separator:afb37d8f5484655f64919ac1541554c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0dad83a3395063a25c7460ce3db5976"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976">CursorMoveOption</a> { <a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976acc148dc697ae02919c72ee1eb4a50f52">None</a> = 0, 
+<a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976ae15f99d9c10344fbd44a666782270b95">NoLimitDistance</a> = 0x00000001
+ }</td></tr>
+<tr class="separator:ac0dad83a3395063a25c7460ce3db5976"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf6fb87b5d8abed3670d34089aa70fc4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4">PositionConstraint</a> { <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946">NoConstraints</a> = 0x0, 
 <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4aa2bf5cc04534bb9e7ed8773fe2ab1fb9">Below</a> = 0x1, 
 <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a4d5fb7344caa13ade95c57d49b766d3a">Above</a> = 0x2, 
@@ -249,9 +253,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeb5182b37eac642f8964cc7fae9377d7"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aeb5182b37eac642f8964cc7fae9377d7">mainViewScalingFactor</a> () const </td></tr>
 <tr class="memdesc:aeb5182b37eac642f8964cc7fae9377d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the scaling factor applied by the main view associated of this item's scene.  <a href="#aeb5182b37eac642f8964cc7fae9377d7">More...</a><br /></td></tr>
 <tr class="separator:aeb5182b37eac642f8964cc7fae9377d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63cbc3401b35b8ee08c1e5606d4a4d22"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a63cbc3401b35b8ee08c1e5606d4a4d22">moveCursor</a> (<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a> dir=<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a>, QPoint reference=QPoint())</td></tr>
-<tr class="memdesc:a63cbc3401b35b8ee08c1e5606d4a4d22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the position of the current main scene cursor within the item and returns true on success.  <a href="#a63cbc3401b35b8ee08c1e5606d4a4d22">More...</a><br /></td></tr>
-<tr class="separator:a63cbc3401b35b8ee08c1e5606d4a4d22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2f20ac43f5641c6bc02e5250a59d3ab"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aa2f20ac43f5641c6bc02e5250a59d3ab">moveCursor</a> (<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a> dir=<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a>, QPoint reference=QPoint(), CursorMoveOptions options=<a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976acc148dc697ae02919c72ee1eb4a50f52">None</a>)</td></tr>
+<tr class="memdesc:aa2f20ac43f5641c6bc02e5250a59d3ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the position of the current main scene cursor within the item and returns true on success.  <a href="#aa2f20ac43f5641c6bc02e5250a59d3ab">More...</a><br /></td></tr>
+<tr class="separator:aa2f20ac43f5641c6bc02e5250a59d3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5268cdc19bc27d6e17e6dc1297430f25"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890">UpdateType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a5268cdc19bc27d6e17e6dc1297430f25">needsUpdate</a> ()</td></tr>
 <tr class="separator:a5268cdc19bc27d6e17e6dc1297430f25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad3f7ad185d3a8d1d76eef1942faafdf"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a> () const </td></tr>
@@ -622,6 +626,26 @@ Friends</h2></td></tr>
 <tr><td class="fieldname"><a class="anchor" id="afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600"></a>MoveDefault&#160;</td><td class="fielddoc">
 <p>Move the cursor to the default location. </p>
 <p>This is typically used after the item is created. The default behavior is to move the cursor to the top left corner. If a defaultMove cursor proxy is set, it will be selected instead. Subclasses might reimplement moveCursor to customize this behavior. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="ac0dad83a3395063a25c7460ce3db5976"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976">Visualization::Item::CursorMoveOption</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ac0dad83a3395063a25c7460ce3db5976acc148dc697ae02919c72ee1eb4a50f52"></a>None&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac0dad83a3395063a25c7460ce3db5976ae15f99d9c10344fbd44a666782270b95"></a>NoLimitDistance&#160;</td><td class="fielddoc">
+<p>If set, the cursor can be moved to any other location on the canvas. </p>
+<p>Otherwise, the move distance is limited to a specific number of pixels, in order to avoid big jumps that disorient the user. </p>
 </td></tr>
 </table>
 
@@ -2507,7 +2531,7 @@ template&lt;class ItemType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a63cbc3401b35b8ee08c1e5606d4a4d22"></a>
+<a class="anchor" id="aa2f20ac43f5641c6bc02e5250a59d3ab"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -2524,7 +2548,13 @@ template&lt;class ItemType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">QPoint&#160;</td>
-          <td class="paramname"><em>reference</em> = <code>QPoint()</code>&#160;</td>
+          <td class="paramname"><em>reference</em> = <code>QPoint()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CursorMoveOptions&#160;</td>
+          <td class="paramname"><em>options</em> = <code><a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976acc148dc697ae02919c72ee1eb4a50f52">None</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2541,6 +2571,7 @@ template&lt;class ItemType &gt; </div>
 
 <p>Moves the position of the current main scene cursor within the item and returns true on success. </p>
 <p>The <em>dir</em> parameter determines how the cursor will be moved. Some modes of movement require a reference point provided in <em>reference</em> in item local coordinates.</p>
+<p>The options parameter specifies additional options to control the move.</p>
 <p>The method returns false if it is not possible to move the cursor within the borders of the current item given the provided movement parameters.</p>
 <p>The default implementation returns false when <em>dir</em> is any of MoveUp, MoveDown, MoveLeft, MoveRight or when the combination of <em>dir</em> and <em>reference</em> is not satisfiable. The item is assumed to have no children. If the item is focused a default cursor with no visualization will be created whose position is the item's scene position.</p>
 <p>This method is responsible for creating a corresponding <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> item and setting it as the main scene cursor. </p>

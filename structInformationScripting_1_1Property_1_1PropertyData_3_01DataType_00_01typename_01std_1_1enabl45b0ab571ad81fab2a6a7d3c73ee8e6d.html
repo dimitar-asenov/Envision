@@ -111,6 +111,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2ce9916db53a391550dbf2baf3fa368f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a218aa4b3b38c51892a836687afdd46c2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl45b0ab571ad81fab2a6a7d3c73ee8e6d.html#a218aa4b3b38c51892a836687afdd46c2">equals</a> (const std::shared_ptr&lt; <a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html">PropertyDataConcept</a> &gt; &amp;other) const override</td></tr>
 <tr class="separator:a218aa4b3b38c51892a836687afdd46c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf806abec070358f25bc3f8912974b59"><td class="memItemLeft" align="right" valign="top">virtual uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl45b0ab571ad81fab2a6a7d3c73ee8e6d.html#abf806abec070358f25bc3f8912974b59">hash</a> (uint seed) const override</td></tr>
+<tr class="separator:abf806abec070358f25bc3f8912974b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc7f0390f0d493a291a164f543a01e86"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl45b0ab571ad81fab2a6a7d3c73ee8e6d.html#afc7f0390f0d493a291a164f543a01e86">node</a> () const override</td></tr>
 <tr class="separator:afc7f0390f0d493a291a164f543a01e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c6382a7498eef6f19e4caac507f6fc0"><td class="memItemLeft" align="right" valign="top">virtual boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl45b0ab571ad81fab2a6a7d3c73ee8e6d.html#a0c6382a7498eef6f19e4caac507f6fc0">pythonObject</a> () const override</td></tr>
@@ -135,7 +137,7 @@ template&lt;class DataType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;::<a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">PropertyData</a> </td>
+          <td class="memname"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &gt;::type &gt;::<a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">PropertyData</a> </td>
           <td>(</td>
           <td class="paramtype">DataType&#160;</td>
           <td class="paramname"><em>data</em></td><td>)</td>
@@ -162,7 +164,7 @@ template&lt;class DataType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;::equals </td>
+          <td class="memname">virtual bool <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &gt;::type &gt;::equals </td>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html">PropertyDataConcept</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
@@ -180,6 +182,34 @@ template&lt;class DataType &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="abf806abec070358f25bc3f8912974b59"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class DataType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual uint <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &gt;::type &gt;::hash </td>
+          <td>(</td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>seed</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html#a1696cf682955b4e7cb2f3e01d1c4fa89">InformationScripting::Property::PropertyDataConcept</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="afc7f0390f0d493a291a164f543a01e86"></a>
 <div class="memitem">
 <div class="memproto">
@@ -190,7 +220,7 @@ template&lt;class DataType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a>* <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;::node </td>
+          <td class="memname">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a>* <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &gt;::type &gt;::node </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -217,7 +247,7 @@ template&lt;class DataType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual boost::python::object <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;::pythonObject </td>
+          <td class="memname">virtual boost::python::object <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &gt;::type &gt;::pythonObject </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -242,7 +272,7 @@ template&lt;class DataType &gt; </div>
 template&lt;class DataType &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">DataType <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;::data_</td>
+          <td class="memname">DataType <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">InformationScripting::Property::PropertyData</a>&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &amp;&amp;std::is_base_of&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a>, std::remove_pointer_t&lt; DataType &gt; &gt;::<a class="el" href="namespaceInformationScripting.html#a5b8e1b48880376022d2eafda1609e2b6">value</a> &gt;::type &gt;::data_</td>
         </tr>
       </table>
 </div><div class="memdoc">

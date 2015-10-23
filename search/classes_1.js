@@ -18,5 +18,6 @@ var searchData=
   ['breakclassload',['BreakClassLoad',['../structOODebug_1_1BreakClassLoad.html',1,'OODebug']]],
   ['breakpointcommand',['BreakpointCommand',['../structOODebug_1_1BreakpointCommand.html',1,'OODebug']]],
   ['breakpointevent',['BreakpointEvent',['../structOODebug_1_1BreakpointEvent.html',1,'OODebug']]],
+  ['breakpointmanager',['BreakpointManager',['../classInformationScripting_1_1BreakpointManager.html',1,'InformationScripting']]],
   ['breakstatement',['BreakStatement',['../classOOModel_1_1BreakStatement.html',1,'OOModel']]]
 ];

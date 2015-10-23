@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['runsystemcommand',['runSystemCommand',['../classSystemCommandResult.html#a13f163de02125d7719a2efd5be69fda3',1,'SystemCommandResult']]]
+  ['queryregistry',['QueryRegistry',['../classInformationScripting_1_1AstQuery.html#a5186d8fbab86fa26ce5555b047077f8c',1,'InformationScripting::AstQuery::QueryRegistry()'],['../classInformationScripting_1_1TagQuery.html#a5186d8fbab86fa26ce5555b047077f8c',1,'InformationScripting::TagQuery::QueryRegistry()']]]
 ];

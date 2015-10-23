@@ -424,7 +424,8 @@ template&lt;class VisualizationType &gt; </div>
 </div><div class="memdoc">
 
 <p>A factory method to get an item wrapper element with a node only, it takes a pointer to member, where the visualization <em>item</em> should be stored, and a method to get the node (<em>nodeGetter</em>) with which the <em>item</em> should be associated. </p>
-<p>The node gets visualized with its default style. </p>
+<p>The node gets visualized with its default style.</p>
+<p>NOTE: Introducing the ChildItemVisualizationType template argument will require ChildItemVisualizationType::NodeType, which <a class="el" href="classVisualization_1_1Item.html">Item</a> does not have, and thus <a class="el" href="classVisualization_1_1Item.html">Item</a> cannot be the default! </p>
 
 </div>
 </div>

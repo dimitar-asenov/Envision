@@ -1,9 +1,10 @@
 var searchData=
 [
+  ['warnings_5f',['warnings_',['../classInformationScripting_1_1Optional.html#ae134163b0ffc2c365c1cc51eebe1cb2a',1,'InformationScripting::Optional']]],
   ['warnstream_5f',['warnStream_',['../classCppImport_1_1CppImportLogger.html#a8f949ea1b4051bc325d05053479cc644',1,'CppImport::CppImportLogger']]],
-  ['wascancelled_5f',['wasCancelled_',['../classInteraction_1_1CommandPrompt.html#a95c8cfd323f0319b04fe10378e74bbad',1,'Interaction::CommandPrompt']]],
+  ['wascancelled_5f',['wasCancelled_',['../classInformationScripting_1_1QueryPrompt.html#a82e3d5c233da4b8d528ba4f348ec959e',1,'InformationScripting::QueryPrompt::wasCancelled_()'],['../classInteraction_1_1CommandPrompt.html#a95c8cfd323f0319b04fe10378e74bbad',1,'Interaction::CommandPrompt::wasCancelled_()']]],
   ['wholeitemcursor',['wholeItemCursor',['../classVisualization_1_1ItemStyle.html#ad21b119582e295a7e7aeecbb0199dd95',1,'Visualization::ItemStyle']]],
-  ['width',['width',['../classOODebug_1_1PlotOverlayStyle.html#a0a2248216c3a1db5a64d7862a5bfd4ec',1,'OODebug::PlotOverlayStyle::width()'],['../classVisualization_1_1SVGIconStyle.html#a914d7067ca22abbcb73d7e9258a30b29',1,'Visualization::SVGIconStyle::width()'],['../classVisualization_1_1LineStyle.html#a9df0fce284b04724166644af44bcf8e5',1,'Visualization::LineStyle::width()']]],
+  ['width',['width',['../classOODebug_1_1PlotOverlayStyle.html#a0a2248216c3a1db5a64d7862a5bfd4ec',1,'OODebug::PlotOverlayStyle::width()'],['../classVisualization_1_1SVGIconStyle.html#a914d7067ca22abbcb73d7e9258a30b29',1,'Visualization::SVGIconStyle::width()'],['../classVisualization_1_1LineStyle.html#a9df0fce284b04724166644af44bcf8e5',1,'Visualization::LineStyle::width()'],['../classVisualization_1_1ArrowOverlayStyle.html#a319bf32f14602bc0ead3158e1855233e',1,'Visualization::ArrowOverlayStyle::width()']]],
   ['width_5f',['width_',['../classVisualization_1_1Shape.html#a04509f1d8e7d129e733eb8014a70301c',1,'Visualization::Shape']]],
   ['widthwithoutshadow',['widthWithoutShadow',['../classVisualization_1_1Diamond.html#acde911548206cb9a49c31afa89117231',1,'Visualization::Diamond']]],
   ['workdir',['WORKDIR',['../classFilePersistence_1_1GitRepository.html#a58edf8a52076266f27d5acca1d5c4464',1,'FilePersistence::GitRepository']]],

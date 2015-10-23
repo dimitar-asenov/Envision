@@ -113,6 +113,11 @@ Inheritance diagram for Visualization::TextRenderer:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a79b0351c456cf3ee9d040015c463c481"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481">ApproximateUpdate</a> : int { <a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481a024e311d8b045921f76b2f7d01d0a37e">Unknown</a> = 0, 
+<a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481a390a245babcb3ca68958be073d287e23">Approximate</a> = 1, 
+<a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481a07d4ce38e3627f8e1a7e5140e8cfb5e7">Exact</a> = 2
+ }</td></tr>
+<tr class="separator:a79b0351c456cf3ee9d040015c463c481"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c774ee9e5a95c89ba7a30bac661414c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1TextStyle.html">TextStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a6c774ee9e5a95c89ba7a30bac661414c">StyleType</a></td></tr>
 <tr class="separator:a6c774ee9e5a95c89ba7a30bac661414c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -128,8 +133,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afccbfd7dc03a24ebc194a5f9e86a9000"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8461acc1e58899f7675d0ae81cb447f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#af8461acc1e58899f7675d0ae81cb447f">isHtml</a> () const </td></tr>
 <tr class="separator:af8461acc1e58899f7675d0ae81cb447f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2df8cb361eaf684472a2fd07ccd54eea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a2df8cb361eaf684472a2fd07ccd54eea">moveCursor</a> (CursorMoveDirection dir=MoveDefault, QPoint reference=QPoint()) override</td></tr>
-<tr class="separator:a2df8cb361eaf684472a2fd07ccd54eea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b81718cc15e1de2fd8d87fd09cfed22"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a8b81718cc15e1de2fd8d87fd09cfed22">moveCursor</a> (CursorMoveDirection dir=MoveDefault, QPoint reference=QPoint(), CursorMoveOptions options=None) override</td></tr>
+<tr class="separator:a8b81718cc15e1de2fd8d87fd09cfed22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cdde372d77cbe63d9af551af619dbff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a7cdde372d77cbe63d9af551af619dbff">paint</a> (QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override</td></tr>
 <tr class="separator:a7cdde372d77cbe63d9af551af619dbff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4465ca3f30acf6c160dac956cd7b3ce0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a4465ca3f30acf6c160dac956cd7b3ce0">selectedText</a> ()</td></tr>
@@ -190,7 +195,9 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aea4653d333bda3109b5e59908abc340e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#aea4653d333bda3109b5e59908abc340e">editable</a></td></tr>
+<tr class="memitem:a41ae6228e395f2912ce07aa8e206aea4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481">ApproximateUpdate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a41ae6228e395f2912ce07aa8e206aea4">drawApproximately_</a> {<a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481a024e311d8b045921f76b2f7d01d0a37e">Unknown</a>}</td></tr>
+<tr class="separator:a41ae6228e395f2912ce07aa8e206aea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4653d333bda3109b5e59908abc340e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#aea4653d333bda3109b5e59908abc340e">editable</a> {}</td></tr>
 <tr class="separator:aea4653d333bda3109b5e59908abc340e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22e3063cd68ec8090af341a034a841e8"><td class="memItemLeft" align="right" valign="top">QStaticText&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a22e3063cd68ec8090af341a034a841e8">staticText_</a></td></tr>
 <tr class="separator:a22e3063cd68ec8090af341a034a841e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,6 +229,27 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a79b0351c456cf3ee9d040015c463c481"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481">Visualization::TextRenderer::ApproximateUpdate</a> : int</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a79b0351c456cf3ee9d040015c463c481a024e311d8b045921f76b2f7d01d0a37e"></a>Unknown&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a79b0351c456cf3ee9d040015c463c481a390a245babcb3ca68958be073d287e23"></a>Approximate&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a79b0351c456cf3ee9d040015c463c481a07d4ce38e3627f8e1a7e5140e8cfb5e7"></a>Exact&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -471,7 +499,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2df8cb361eaf684472a2fd07ccd54eea"></a>
+<a class="anchor" id="a8b81718cc15e1de2fd8d87fd09cfed22"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -488,7 +516,13 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">QPoint&#160;</td>
-          <td class="paramname"><em>reference</em> = <code>QPoint()</code>&#160;</td>
+          <td class="paramname"><em>reference</em> = <code>QPoint()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CursorMoveOptions&#160;</td>
+          <td class="paramname"><em>options</em> = <code>None</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -919,6 +953,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a41ae6228e395f2912ce07aa8e206aea4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481">ApproximateUpdate</a> Visualization::TextRenderer::drawApproximately_ {<a class="el" href="classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481a024e311d8b045921f76b2f7d01d0a37e">Unknown</a>}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aea4653d333bda3109b5e59908abc340e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -927,7 +981,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Visualization::TextRenderer::editable</td>
+          <td class="memname">bool Visualization::TextRenderer::editable {}</td>
         </tr>
       </table>
   </td>

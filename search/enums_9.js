@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['level',['Level',['../classLogger_1_1Log.html#a44a82549e2466b459440575b3bdc1202',1,'Logger::Log']]],
-  ['loopkind',['LoopKind',['../classOOModel_1_1LoopStatement.html#a03198c46318ed77a6b14ff3eff10bcc8',1,'OOModel::LoopStatement']]]
+  ['kind',['Kind',['../classFilePersistence_1_1Merge.html#a43caa4453b54d144aee86d4141f42627',1,'FilePersistence::Merge']]]
 ];

@@ -131,9 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a24e8ce98784566266a7d11b196f099f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a425cfeead8395b91e7f4b109b5a1a345"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a425cfeead8395b91e7f4b109b5a1a345">comment</a> () const </td></tr>
 <tr class="separator:a425cfeead8395b91e7f4b109b5a1a345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b6f256df4a2c965f229d11156e6554c"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a8b6f256df4a2c965f229d11156e6554c"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a8b6f256df4a2c965f229d11156e6554c">extension</a> ()</td></tr>
-<tr class="separator:a8b6f256df4a2c965f229d11156e6554c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f7a65d863a7a331a6ecf90bcfa2528c"><td class="memTemplParams" colspan="2">template&lt;class ExtensionType &gt; </td></tr>
+<tr class="memitem:a5f7a65d863a7a331a6ecf90bcfa2528c"><td class="memTemplItemLeft" align="right" valign="top">std::unique_ptr&lt; ExtensionType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a5f7a65d863a7a331a6ecf90bcfa2528c">extension</a> ()</td></tr>
+<tr class="separator:a5f7a65d863a7a331a6ecf90bcfa2528c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af71e395c2ee80fffcd49089c438ac182"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#af71e395c2ee80fffcd49089c438ac182">get</a> (const <a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a> &amp;attributeIndex) const </td></tr>
 <tr class="separator:af71e395c2ee80fffcd49089c438ac182"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfaa8adfa444c718cec9383d0e28f67d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#abfaa8adfa444c718cec9383d0e28f67d">get</a> (const QString &amp;attributeName) const </td></tr>
@@ -179,6 +179,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:af23afe0676dd44826a82c0e0c0d37f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06a0d54488f3267c6f7746879ae72888"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a06a0d54488f3267c6f7746879ae72888">registerExtensionId</a> ()</td></tr>
 <tr class="separator:a06a0d54488f3267c6f7746879ae72888"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5fc7e0132642d0fbf38e3bbca42b48f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#ad5fc7e0132642d0fbf38e3bbca42b48f">registerNewAttribute</a> (const <a class="el" href="classModel_1_1Attribute.html">Attribute</a> &amp;attribute)</td></tr>
+<tr class="separator:ad5fc7e0132642d0fbf38e3bbca42b48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eb39b789af55d5c67acd4f9c6ef91a4"><td class="memTemplParams" colspan="2">template&lt;class Extension &gt; </td></tr>
+<tr class="memitem:a3eb39b789af55d5c67acd4f9c6ef91a4"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a3eb39b789af55d5c67acd4f9c6ef91a4">registerNewExtension</a> ()</td></tr>
+<tr class="separator:a3eb39b789af55d5c67acd4f9c6ef91a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -191,8 +196,6 @@ Static Protected Member Functions</h2></td></tr>
 <tr class="separator:aed1b6c17b12f845f72794cfd94ba2e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa489cbaef56c2f944f2690be1fce1d18"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#aa489cbaef56c2f944f2690be1fce1d18">registerNewAttribute</a> (<a class="el" href="classModel_1_1AttributeChain.html">AttributeChain</a> &amp;metaData, const <a class="el" href="classModel_1_1Attribute.html">Attribute</a> &amp;attribute)</td></tr>
 <tr class="separator:aa489cbaef56c2f944f2690be1fce1d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5fc7e0132642d0fbf38e3bbca42b48f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#ad5fc7e0132642d0fbf38e3bbca42b48f">registerNewAttribute</a> (const <a class="el" href="classModel_1_1Attribute.html">Attribute</a> &amp;attribute)</td></tr>
-<tr class="separator:ad5fc7e0132642d0fbf38e3bbca42b48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -583,14 +586,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8b6f256df4a2c965f229d11156e6554c"></a>
+<a class="anchor" id="a5f7a65d863a7a331a6ecf90bcfa2528c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T &gt; </div>
+template&lt;class ExtensionType &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">T * Model::CompositeNode::extension </td>
+          <td class="memname">std::unique_ptr&lt; ExtensionType &gt; Model::CompositeNode::extension </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -797,6 +800,30 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ad5fc7e0132642d0fbf38e3bbca42b48f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a> Model::CompositeNode::registerNewAttribute </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classModel_1_1Attribute.html">Attribute</a> &amp;&#160;</td>
+          <td class="paramname"><em>attribute</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aed1b6c17b12f845f72794cfd94ba2e38"></a>
 <div class="memitem">
 <div class="memproto">
@@ -889,24 +916,25 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad5fc7e0132642d0fbf38e3bbca42b48f"></a>
+<a class="anchor" id="a3eb39b789af55d5c67acd4f9c6ef91a4"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class Extension &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a> Model::CompositeNode::registerNewAttribute </td>
+          <td class="memname">void Model::CompositeNode::registerNewExtension </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1Attribute.html">Attribute</a> &amp;&#160;</td>
-          <td class="paramname"><em>attribute</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

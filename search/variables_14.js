@@ -5,6 +5,7 @@ var searchData=
   ['unfinished_5f',['unfinished_',['../classInteraction_1_1ExpressionTreeBuilder.html#a1d8e79d7d03a34746c138d548f28a77e',1,'Interaction::ExpressionTreeBuilder']]],
   ['uninitializedreferences_5f',['uninitializedReferences_',['../classFilePersistence_1_1SimpleTextFileStore.html#a388a3f3852b12f5ef937cf9a99721bf3',1,'FilePersistence::SimpleTextFileStore']]],
   ['unionicon',['unionIcon',['../classOOVisualization_1_1VClassStyle.html#a21f92f81f8bba18be60c9d135cdb26ec',1,'OOVisualization::VClassStyle::unionIcon()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#a53197d08309d28a6fb18e76fd97334ec',1,'OOVisualization::VClassSzPublicStyle::unionIcon()']]],
+  ['unionop',['unionOp',['../classInformationScripting_1_1VOperatorQueryNodeStyle.html#a352de59c89dc25bc9bc28c06f5ad1b9f',1,'InformationScripting::VOperatorQueryNodeStyle']]],
   ['unmatchedafterend',['unmatchedAfterEnd',['../structInteraction_1_1TokenSplitData.html#a6f16fb5e4780eb38c248dc82f5fbfb91',1,'Interaction::TokenSplitData']]],
   ['unmatchedbeforeend',['unmatchedBeforeEnd',['../structInteraction_1_1TokenSplitData.html#acad7ac294c36c7e0dbdfd2e9d5fd7f7b',1,'Interaction::TokenSplitData']]],
   ['unorderedtypes_5f',['unorderedTypes_',['../classFilePersistence_1_1ListMergeComponent.html#a69740e48c3464ecdafc241ac823f1420',1,'FilePersistence::ListMergeComponent::unorderedTypes_()'],['../classFilePersistence_1_1Merge.html#a446355e2e2a170f0d529f33f1012326b',1,'FilePersistence::Merge::unorderedTypes_()']]],

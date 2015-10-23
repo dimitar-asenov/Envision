@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classCppImport_1_1ClangAstVisitor-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
@@ -121,10 +122,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0799a5ea85c1472fbd6af526af17465f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b5ddfbbd75b01bd310038c945c837d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a4b5ddfbbd75b01bd310038c945c837d6">pushOOStack</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:a4b5ddfbbd75b01bd310038c945c837d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ba778694df67efc364779728dcbd676"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a9ba778694df67efc364779728dcbd676">setPreprocessor</a> (const clang::Preprocessor *preprocessor)</td></tr>
-<tr class="separator:a9ba778694df67efc364779728dcbd676"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7429a0b1262cb2ba98694f519b6f7f16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a7429a0b1262cb2ba98694f519b6f7f16">setSourceManager</a> (const clang::SourceManager *sourceManager)</td></tr>
-<tr class="separator:a7429a0b1262cb2ba98694f519b6f7f16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad20c391f2ba62cbf52600fc23beaaf33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#ad20c391f2ba62cbf52600fc23beaaf33">setSourceManagerAndPreprocessor</a> (const clang::SourceManager *sourceManager, const clang::Preprocessor *preprocessor)</td></tr>
+<tr class="separator:ad20c391f2ba62cbf52600fc23beaaf33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6be41130cb7930233d590a1d730bb74d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a6be41130cb7930233d590a1d730bb74d">shouldUseDataRecursionfor</a> (clang::Stmt *S)</td></tr>
 <tr class="memdesc:a6be41130cb7930233d590a1d730bb74d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A helper function called by RecursiveASTVisitor parent class.  <a href="#a6be41130cb7930233d590a1d730bb74d">More...</a><br /></td></tr>
 <tr class="separator:a6be41130cb7930233d590a1d730bb74d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +200,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac1e6a093ed472b90192a6bc94d43df5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcb948ba8853b86ecbdce0e678ce639d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#afcb948ba8853b86ecbdce0e678ce639d">WalkUpFromTypedefNameDecl</a> (clang::TypedefNameDecl *typedefDecl)</td></tr>
 <tr class="separator:afcb948ba8853b86ecbdce0e678ce639d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a484a92f8432e5b90210f68cb5ca78c86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1MacroImporter.html">MacroImporter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a484a92f8432e5b90210f68cb5ca78c86">macroImporter_</a></td></tr>
+<tr class="separator:a484a92f8432e5b90210f68cb5ca78c86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -472,32 +476,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9ba778694df67efc364779728dcbd676"></a>
+<a class="anchor" id="ad20c391f2ba62cbf52600fc23beaaf33"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CppImport::ClangAstVisitor::setPreprocessor </td>
-          <td>(</td>
-          <td class="paramtype">const clang::Preprocessor *&#160;</td>
-          <td class="paramname"><em>preprocessor</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7429a0b1262cb2ba98694f519b6f7f16"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CppImport::ClangAstVisitor::setSourceManager </td>
+          <td class="memname">void CppImport::ClangAstVisitor::setSourceManagerAndPreprocessor </td>
           <td>(</td>
           <td class="paramtype">const clang::SourceManager *&#160;</td>
-          <td class="paramname"><em>sourceManager</em></td><td>)</td>
+          <td class="paramname"><em>sourceManager</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const clang::Preprocessor *&#160;</td>
+          <td class="paramname"><em>preprocessor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1388,6 +1386,18 @@ Private Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a484a92f8432e5b90210f68cb5ca78c86"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCppImport_1_1MacroImporter.html">MacroImporter</a> CppImport::ClangAstVisitor::macroImporter_</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

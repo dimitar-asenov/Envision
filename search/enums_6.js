@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['headstate',['HEADState',['../classFilePersistence_1_1GitRepository.html#a60e3a5a6b3c4f546132857bac4742d03',1,'FilePersistence::GitRepository']]]
+  ['gitreferencetype',['GitReferenceType',['../classFilePersistence_1_1GitRepository.html#adf116bbd5920ba3e5d31cc9290932e70',1,'FilePersistence::GitRepository']]]
 ];

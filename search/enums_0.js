@@ -1,6 +1,7 @@
 var searchData=
 [
   ['alignment',['Alignment',['../classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31',1,'Visualization::LayoutStyle']]],
+  ['approximateupdate',['ApproximateUpdate',['../classVisualization_1_1TextRenderer.html#a79b0351c456cf3ee9d040015c463c481',1,'Visualization::TextRenderer']]],
   ['arrayreferencecommands',['ArrayReferenceCommands',['../classOODebug_1_1Protocol.html#aa4e3b6ca413a33ff146425482af732d5',1,'OODebug::Protocol']]],
   ['arraytypecommands',['ArrayTypeCommands',['../classOODebug_1_1Protocol.html#a52b8859ebb458066664fd500bfdc2ea6',1,'OODebug::Protocol']]],
   ['arrowdirection',['ArrowDirection',['../classInteraction_1_1AddReferencedToViewCommand.html#af9ebae1eb09266900fc6341a9caa4db5',1,'Interaction::AddReferencedToViewCommand']]],

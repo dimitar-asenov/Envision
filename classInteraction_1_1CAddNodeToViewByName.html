@@ -89,8 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classInteraction_1_1CAddNodeToViewByName-members.html">List of all members</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Interaction::CAddNodeToViewByName Class Reference</div>  </div>
 </div><!--header-->
@@ -124,15 +123,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2919f6861887b502d46528719b5de204 inherit pub_methods_classInteraction_1_1Command"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9369b40b280cd29c84ecb7ba20902526 inherit pub_methods_classInteraction_1_1Command"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#a9369b40b280cd29c84ecb7ba20902526">name</a> () const </td></tr>
 <tr class="separator:a9369b40b280cd29c84ecb7ba20902526 inherit pub_methods_classInteraction_1_1Command"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a887647495675f559f174928e43afdd85"><td class="memItemLeft" align="right" valign="top">QList&lt; QPair&lt; QString, <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CAddNodeToViewByName.html#a887647495675f559f174928e43afdd85">findAllMatches</a> (const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, QString nameSoFar, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *root)</td></tr>
-<tr class="separator:a887647495675f559f174928e43afdd85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a5a46b4d1472ea41e56564048ff5428"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CAddNodeToViewByName.html#a2a5a46b4d1472ea41e56564048ff5428">isSuggestable</a> (Model::Node::SymbolTypes symbolType)</td></tr>
-<tr class="separator:a2a5a46b4d1472ea41e56564048ff5428"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a357e82f366061146ec445ba926d9f229"><td class="memItemLeft" align="right" valign="top">QList&lt; QPair&lt; QString, <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CAddNodeToViewByName.html#a357e82f366061146ec445ba926d9f229">mostLikelyMatches</a> (const QString &amp;nodeName)</td></tr>
-<tr class="separator:a357e82f366061146ec445ba926d9f229"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad369b483475578df1443a23f67978cb9"></a>
@@ -244,94 +234,6 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classInteraction_1_1Command.html#a284e1db244f7af0860f34e34f4816324">Interaction::Command</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a887647495675f559f174928e43afdd85"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QList&lt; QPair&lt; QString, <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &gt; Interaction::CAddNodeToViewByName::findAllMatches </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>nameSoFar</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>root</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a2a5a46b4d1472ea41e56564048ff5428"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Interaction::CAddNodeToViewByName::isSuggestable </td>
-          <td>(</td>
-          <td class="paramtype">Model::Node::SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolType</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a357e82f366061146ec445ba926d9f229"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QList&lt; QPair&lt; QString, <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &gt; Interaction::CAddNodeToViewByName::mostLikelyMatches </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>nodeName</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

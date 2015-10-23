@@ -1,6 +1,7 @@
 var searchData=
 [
   ['label',['label',['../classFilePersistence_1_1GenericNode.html#a4abce809897227f3f2b20af0b6323dc2',1,'FilePersistence::GenericNode']]],
+  ['labelcomparator',['labelComparator',['../classFilePersistence_1_1Parser.html#a2a561a84f0749e502f5b01eee8295a6b',1,'FilePersistence::Parser']]],
   ['lambdalayout',['lambdaLayout',['../classOOVisualization_1_1VFormalArgumentStyle.html#ad3baba24ba52fa3dba59e1cb98e235b0',1,'OOVisualization::VFormalArgumentStyle']]],
   ['last',['last',['../classInteraction_1_1Operator.html#a9ec68f0bfaacd960b3660bb49a8e88ee',1,'Interaction::Operator::last()'],['../classModel_1_1List.html#a0f026c11c09ab4fbc6a035e8de205119',1,'Model::List::last()'],['../classModel_1_1TypedList.html#aa1e32ba68783e07aa0a47d8907170ad7',1,'Model::TypedList::last()']]],
   ['lastassociateditem',['lastAssociatedItem',['../classVisualization_1_1Overlay.html#afc1d2ab7ab0d963f0076d4306094c8a1',1,'Visualization::Overlay']]],
@@ -15,7 +16,7 @@ var searchData=
   ['layoutformelement',['LayoutFormElement',['../classVisualization_1_1LayoutFormElement.html#a12804d5ed4b6a53c14f7f2e60cc1354e',1,'Visualization::LayoutFormElement::LayoutFormElement()=default'],['../classVisualization_1_1LayoutFormElement.html#ae521250259f3014862e30a36c716ed68',1,'Visualization::LayoutFormElement::LayoutFormElement(const LayoutFormElement &amp;)=default']]],
   ['layoutprovider',['LayoutProvider',['../classVisualization_1_1LayoutProvider.html#a13224f591d25af64ebfb556019d458a0',1,'Visualization::LayoutProvider']]],
   ['layoutproviderbase',['LayoutProviderBase',['../classVisualization_1_1LayoutProviderBase.html#a5da78e5a27f455a8f0018ec24f9af845',1,'Visualization::LayoutProviderBase']]],
-  ['left',['left',['../classInteraction_1_1ExpressionTreeBuilder.html#a2e2cabc635784be5226677bd6ec1ed3b',1,'Interaction::ExpressionTreeBuilder::left()'],['../classTestNodes_1_1BinaryNode.html#af1f94791369d4de4b51bd9e96563f86b',1,'TestNodes::BinaryNode::left()'],['../classOOVisualization_1_1VCommaExpression.html#ab1cdfd769f18c323528f7c2ef77912f2',1,'OOVisualization::VCommaExpression::left()'],['../classOOVisualization_1_1VAssignmentExpression.html#a97b1baafb4dbfa41ba488a7077ccdc78',1,'OOVisualization::VAssignmentExpression::left()']]],
+  ['left',['left',['../classInformationScripting_1_1VOperatorQueryNode.html#a999760ec0e921b058fb03b0c18e3fb55',1,'InformationScripting::VOperatorQueryNode::left()'],['../classInteraction_1_1ExpressionTreeBuilder.html#a2e2cabc635784be5226677bd6ec1ed3b',1,'Interaction::ExpressionTreeBuilder::left()'],['../classTestNodes_1_1BinaryNode.html#af1f94791369d4de4b51bd9e96563f86b',1,'TestNodes::BinaryNode::left()'],['../classOOVisualization_1_1VCommaExpression.html#ab1cdfd769f18c323528f7c2ef77912f2',1,'OOVisualization::VCommaExpression::left()'],['../classOOVisualization_1_1VAssignmentExpression.html#a97b1baafb4dbfa41ba488a7077ccdc78',1,'OOVisualization::VAssignmentExpression::left()']]],
   ['leftdelim',['leftDelim',['../classInteraction_1_1ExpressionContext.html#ae8545c51887ca5effe72f81cb0a71fe0',1,'Interaction::ExpressionContext']]],
   ['leftexp',['leftExp',['../classInteraction_1_1ExpressionContext.html#afe215f9b9bcc2d3d68925d0894991b89',1,'Interaction::ExpressionContext']]],
   ['leftmargin',['leftMargin',['../classVisualization_1_1FormElement.html#aa7fbbdda2f223ad296815aa480109ece',1,'Visualization::FormElement']]],
@@ -23,12 +24,14 @@ var searchData=
   ['lefttext',['leftText',['../classInteraction_1_1ExpressionContext.html#ad6a0e03ab85366bb025e6c8a8751478e',1,'Interaction::ExpressionContext']]],
   ['lefttype',['leftType',['../classInteraction_1_1ExpressionContext.html#a643160f69bbfe7eb20f03576d1e0640d',1,'Interaction::ExpressionContext']]],
   ['leftvalue',['leftValue',['../classInteraction_1_1ExpressionContext.html#ab77061679e0a72edcedb6a50721a3528',1,'Interaction::ExpressionContext']]],
-  ['length',['length',['../classInteraction_1_1Expression.html#a0498e251022b95f317e672fd74a153a7',1,'Interaction::Expression::length()'],['../classVisualization_1_1SequentialLayoutFormElement.html#aeb13e1354e0e5310afd0b639ffa469bc',1,'Visualization::SequentialLayoutFormElement::length()'],['../classVisualization_1_1VList.html#a5539a81dd3298028c9bcdb25c3da5587',1,'Visualization::VList::length()'],['../classVisualization_1_1PositionLayout.html#aa4d6d566e121e027f986facbb6bbcbd8',1,'Visualization::PositionLayout::length()'],['../classVisualization_1_1SequentialLayout.html#a1611a7ab16a90d3df04ed90fcdc0d5d0',1,'Visualization::SequentialLayout::length()']]],
+  ['length',['length',['../classInteraction_1_1Expression.html#a0498e251022b95f317e672fd74a153a7',1,'Interaction::Expression::length()'],['../classVisualization_1_1GridLayoutFormElement.html#acc054ad45e7a2f028f0d5a6984f62abb',1,'Visualization::GridLayoutFormElement::length()'],['../classVisualization_1_1SequentialLayoutFormElement.html#aeb13e1354e0e5310afd0b639ffa469bc',1,'Visualization::SequentialLayoutFormElement::length()'],['../classVisualization_1_1VList.html#a5539a81dd3298028c9bcdb25c3da5587',1,'Visualization::VList::length()'],['../classVisualization_1_1PositionLayout.html#aa4d6d566e121e027f986facbb6bbcbd8',1,'Visualization::PositionLayout::length()'],['../classVisualization_1_1SequentialLayout.html#a1611a7ab16a90d3df04ed90fcdc0d5d0',1,'Visualization::SequentialLayout::length()']]],
   ['lengthcommand',['LengthCommand',['../structOODebug_1_1LengthCommand.html#a7c3feb08d51d1b6c85866de97ac76676',1,'OODebug::LengthCommand']]],
   ['level',['level',['../classModel_1_1AttributeChain.html#a725235894f20edfa34db1c9b3f64ac37',1,'Model::AttributeChain::level()'],['../classModel_1_1CompositeIndex.html#ab2030fc2dd836d8eb952f353ee6da7ed',1,'Model::CompositeIndex::level()']]],
+  ['lexicaltransformations',['LexicalTransformations',['../classCppImport_1_1LexicalTransformations.html#a7f1bfa06b7ae0d7cf4dfdc81993325c8',1,'CppImport::LexicalTransformations']]],
   ['librarymanager',['libraryManager',['../classModel_1_1UsedLibrary.html#a22d29b7c086f0bd301d1cc79f3553648',1,'Model::UsedLibrary']]],
   ['libraryroot',['libraryRoot',['../classModel_1_1UsedLibrary.html#ad467096ac5bee62ffe87b3e6d8e023db',1,'Model::UsedLibrary']]],
   ['line',['Line',['../classVisualization_1_1Line.html#a839e9815cd06f266da2c3be444c7f65a',1,'Visualization::Line']]],
+  ['linearquery',['LinearQuery',['../classInformationScripting_1_1LinearQuery.html#af4bff4eff6b7c205a466bfe36f7f7905',1,'InformationScripting::LinearQuery']]],
   ['linenumber',['lineNumber',['../classComments_1_1VCommentImage.html#ab5dbcf62fdca7ec892d1c835cddcfd9a',1,'Comments::VCommentImage::lineNumber()'],['../classOODebug_1_1CompilerMessage.html#a5e5c5a143e93a697ce4d79df701085c9',1,'OODebug::CompilerMessage::lineNumber()']]],
   ['linetable',['lineTable',['../classOODebug_1_1DebugConnector.html#a746e3fc6787ac04f4f751eb25c7b4779',1,'OODebug::DebugConnector']]],
   ['linetablecommand',['LineTableCommand',['../structOODebug_1_1LineTableCommand.html#a06c34df2ffd785345cb58d596acfb926',1,'OODebug::LineTableCommand']]],
@@ -82,5 +85,5 @@ var searchData=
   ['loopkind',['loopKind',['../classOOModel_1_1LoopStatement.html#a1d8c6cb96fd3272bb1d53e26346651aa',1,'OOModel::LoopStatement']]],
   ['loopstatement',['LoopStatement',['../classOOModel_1_1LoopStatement.html#a6f2aed6064e7f39c6e2f026d237abb75',1,'OOModel::LoopStatement']]],
   ['lowertypeboundforelements',['lowerTypeBoundForElements',['../classModel_1_1List.html#a01d5f45981b40ede6b0863ed79902896',1,'Model::List::lowerTypeBoundForElements()'],['../classModel_1_1TypedList.html#a2e451ef38cb52936d545d8ecceeaf22c',1,'Model::TypedList::lowerTypeBoundForElements()']]],
-  ['lowestcommonancestor',['lowestCommonAncestor',['../classModel_1_1Node.html#abb715885b1d1e5cb97aec8ab7888334b',1,'Model::Node']]]
+  ['lowestcommonancestor',['lowestCommonAncestor',['../classModel_1_1Node.html#ae5e3b8c2c318384183aa27971e3ac59f',1,'Model::Node']]]
 ];

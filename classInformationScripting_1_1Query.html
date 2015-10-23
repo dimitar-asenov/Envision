@@ -89,7 +89,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classInformationScripting_1_1Query-members.html">List of all members</a> &#124;
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">InformationScripting::Query Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
@@ -100,25 +101,64 @@ Inheritance diagram for InformationScripting::Query:</div>
  <div class="center">
   <img src="classInformationScripting_1_1Query.png" usemap="#InformationScripting::Query_map" alt=""/>
   <map id="InformationScripting::Query_map" name="InformationScripting::Query_map">
-<area href="classInformationScripting_1_1AstQuery.html" alt="InformationScripting::AstQuery" shape="rect" coords="0,56,270,80"/>
-<area href="classInformationScripting_1_1CompositeQuery.html" alt="InformationScripting::CompositeQuery" shape="rect" coords="280,56,550,80"/>
-<area href="classInformationScripting_1_1GenericFilter.html" alt="InformationScripting::GenericFilter" shape="rect" coords="560,56,830,80"/>
-<area href="classInformationScripting_1_1NodePropertyAdder.html" alt="InformationScripting::NodePropertyAdder" shape="rect" coords="840,56,1110,80"/>
-<area href="classInformationScripting_1_1ScriptQuery.html" alt="InformationScripting::ScriptQuery" shape="rect" coords="1120,56,1390,80"/>
-<area href="classInformationScripting_1_1SubstractNodesOperator.html" alt="InformationScripting::SubstractNodesOperator" shape="rect" coords="1400,56,1670,80"/>
-<area href="classInformationScripting_1_1UnionOperator.html" alt="InformationScripting::UnionOperator" shape="rect" coords="1680,56,1950,80"/>
-<area href="classInformationScripting_1_1AstNameFilter.html" alt="InformationScripting::AstNameFilter" shape="rect" coords="560,112,830,136"/>
+<area href="classInformationScripting_1_1CompositeQuery.html" alt="InformationScripting::CompositeQuery" shape="rect" coords="0,56,287,80"/>
+<area href="classInformationScripting_1_1LinearQuery.html" alt="InformationScripting::LinearQuery" shape="rect" coords="297,56,584,80"/>
+<area href="classInformationScripting_1_1NodePropertyAdder.html" alt="InformationScripting::NodePropertyAdder" shape="rect" coords="594,56,881,80"/>
+<area href="classInformationScripting_1_1ScriptQuery.html" alt="InformationScripting::ScriptQuery" shape="rect" coords="891,56,1178,80"/>
+<area href="classInformationScripting_1_1SubstractOperator.html" alt="InformationScripting::SubstractOperator" shape="rect" coords="1188,56,1475,80"/>
+<area href="classInformationScripting_1_1UnionOperator.html" alt="InformationScripting::UnionOperator" shape="rect" coords="1485,56,1772,80"/>
+<area href="classInformationScripting_1_1AddASTPropertiesAsTuples.html" alt="InformationScripting::AddASTPropertiesAsTuples" shape="rect" coords="594,112,881,136"/>
+<area href="classInformationScripting_1_1AstQuery.html" alt="InformationScripting::AstQuery" shape="rect" coords="594,168,881,192"/>
+<area href="classInformationScripting_1_1BreakpointManager.html" alt="InformationScripting::BreakpointManager" shape="rect" coords="594,224,881,248"/>
+<area href="classInformationScripting_1_1GenericFilter.html" alt="InformationScripting::GenericFilter" shape="rect" coords="594,280,881,304"/>
+<area href="classInformationScripting_1_1Heatmap.html" alt="InformationScripting::Heatmap" shape="rect" coords="594,336,881,360"/>
+<area href="classInformationScripting_1_1RuntimeQuery.html" alt="InformationScripting::RuntimeQuery" shape="rect" coords="594,392,881,416"/>
+<area href="classInformationScripting_1_1TagQuery.html" alt="InformationScripting::TagQuery" shape="rect" coords="594,448,881,472"/>
+<area href="classInformationScripting_1_1VersionControlQuery.html" alt="InformationScripting::VersionControlQuery" shape="rect" coords="594,504,881,528"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a0d6f334ce239a47694ec718f065ec0e1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#a0d6f334ce239a47694ec718f065ec0e1">Query</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a>=nullptr)</td></tr>
+<tr class="separator:a0d6f334ce239a47694ec718f065ec0e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4ba0f7a519f1a8409f1aa8323018800"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#ae4ba0f7a519f1a8409f1aa8323018800">~Query</a> ()=default</td></tr>
 <tr class="separator:ae4ba0f7a519f1a8409f1aa8323018800"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a46995cf225443d96884f90eb861cf3"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classInformationScripting_1_1Graph.html">Graph</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#a9a46995cf225443d96884f90eb861cf3">execute</a> (QList&lt; <a class="el" href="classInformationScripting_1_1Graph.html">Graph</a> * &gt;)=0</td></tr>
-<tr class="separator:a9a46995cf225443d96884f90eb861cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ec456ae239347026f13a9909013437e"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classInformationScripting_1_1Optional.html">Optional</a>&lt; <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#a5ec456ae239347026f13a9909013437e">execute</a> (QList&lt; <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &gt;)=0</td></tr>
+<tr class="separator:a5ec456ae239347026f13a9909013437e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab350ae38ae284053507f1088b0d817b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a> () const </td></tr>
+<tr class="separator:ab350ae38ae284053507f1088b0d817b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a3c790d1e975e531061e9455a1da155b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#a3c790d1e975e531061e9455a1da155b9">target_</a> {}</td></tr>
+<tr class="separator:a3c790d1e975e531061e9455a1da155b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a0d6f334ce239a47694ec718f065ec0e1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">InformationScripting::Query::Query </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>target</em> = <code>nullptr</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae4ba0f7a519f1a8409f1aa8323018800"></a>
 <div class="memitem">
 <div class="memproto">
@@ -143,7 +183,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a9a46995cf225443d96884f90eb861cf3"></a>
+<a class="anchor" id="a5ec456ae239347026f13a9909013437e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -151,9 +191,9 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual QList&lt;<a class="el" href="classInformationScripting_1_1Graph.html">Graph</a>*&gt; InformationScripting::Query::execute </td>
+          <td class="memname">virtual QList&lt;<a class="el" href="classInformationScripting_1_1Optional.html">Optional</a>&lt;<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a>&gt; &gt; InformationScripting::Query::execute </td>
           <td>(</td>
-          <td class="paramtype">QList&lt; <a class="el" href="classInformationScripting_1_1Graph.html">Graph</a> * &gt;&#160;</td>
+          <td class="paramtype">QList&lt; <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &gt;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -165,7 +205,51 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classInformationScripting_1_1AstQuery.html#a10e521ccd5de2b45dfcad1651f7a13ab">InformationScripting::AstQuery</a>, <a class="el" href="classInformationScripting_1_1GenericFilter.html#ad9668683ee983c9d45eb92428651ba9f">InformationScripting::GenericFilter</a>, <a class="el" href="classInformationScripting_1_1ScriptQuery.html#a8753f166f46af169e36249eaef141114">InformationScripting::ScriptQuery</a>, <a class="el" href="classInformationScripting_1_1CompositeQuery.html#a6367212a2f627863cec7213e844a403e">InformationScripting::CompositeQuery</a>, <a class="el" href="classInformationScripting_1_1NodePropertyAdder.html#af519c31e4cdf069f2ff627332472a50c">InformationScripting::NodePropertyAdder</a>, <a class="el" href="classInformationScripting_1_1SubstractNodesOperator.html#ac81d82e0145e358e15b95e367f7b22b8">InformationScripting::SubstractNodesOperator</a>, and <a class="el" href="classInformationScripting_1_1UnionOperator.html#affd253c9189d8e9edf03a2215678303e">InformationScripting::UnionOperator</a>.</p>
+<p>Implemented in <a class="el" href="classInformationScripting_1_1ScriptQuery.html#a287dbad9af6be2bfadc5ac69759c2774">InformationScripting::ScriptQuery</a>, <a class="el" href="classInformationScripting_1_1CompositeQuery.html#a66fff5854a65b53717150f7d3afdd1a2">InformationScripting::CompositeQuery</a>, <a class="el" href="classInformationScripting_1_1LinearQuery.html#a15c85a31827db38f4b7850e8342d492d">InformationScripting::LinearQuery</a>, <a class="el" href="classInformationScripting_1_1NodePropertyAdder.html#a78b0e3ecfbd7bfd806323ed911f62fdf">InformationScripting::NodePropertyAdder</a>, <a class="el" href="classInformationScripting_1_1SubstractOperator.html#a6c7510fcc8061ab1062e7a71ca996433">InformationScripting::SubstractOperator</a>, and <a class="el" href="classInformationScripting_1_1UnionOperator.html#a0cbd93aaf2afed1db7a2361cf4de3f5d">InformationScripting::UnionOperator</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab350ae38ae284053507f1088b0d817b4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Model::Node</a> * InformationScripting::Query::target </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a3c790d1e975e531061e9455a1da155b9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Model::Node</a>* InformationScripting::Query::target_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

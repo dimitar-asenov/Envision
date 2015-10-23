@@ -93,7 +93,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">OOInteraction::StringOffsetProvider Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
@@ -115,6 +116,8 @@ Inheritance diagram for OOInteraction::StringOffsetProvider:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a5774712d3ad9ede7bc0cb12af66df4c4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a5774712d3ad9ede7bc0cb12af66df4c4">AllowGridBasedProviderFunction</a> = std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *)&gt;</td></tr>
+<tr class="separator:a5774712d3ad9ede7bc0cb12af66df4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad11f8c5fdf397b5398c511ee67ef6ad0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#ad11f8c5fdf397b5398c511ee67ef6ad0">BaseAdapteeType</a> = <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a></td></tr>
 <tr class="separator:ad11f8c5fdf397b5398c511ee67ef6ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -138,6 +141,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a732c8b2b219e8c9c8ca7db3776ff6247"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a732c8b2b219e8c9c8ca7db3776ff6247">allowGridBasedProvider</a> (<a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a5774712d3ad9ede7bc0cb12af66df4c4">AllowGridBasedProviderFunction</a> allow)</td></tr>
+<tr class="separator:a732c8b2b219e8c9c8ca7db3776ff6247"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab9693a5d7c878e6511283338fe47c66"><td class="memItemLeft" align="right" valign="top">static QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#aab9693a5d7c878e6511283338fe47c66">components</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:aab9693a5d7c878e6511283338fe47c66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1a4907b7cdb2e66b7f4095dfe0b2255"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classOOInteraction_1_1StringOffsetProvider.html">StringOffsetProvider</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#aa1a4907b7cdb2e66b7f4095dfe0b2255">defaultProvider</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *<a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a279917026618a24a77f948ae0454eadd">item</a>)</td></tr>
@@ -166,8 +171,25 @@ Protected Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab004f4c51ad8dbdae5cbfe2293986ac3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#ab004f4c51ad8dbdae5cbfe2293986ac3">vis_</a></td></tr>
 <tr class="separator:ab004f4c51ad8dbdae5cbfe2293986ac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:abb8c2005b6cec09ad0fe91d2d60025dc"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a5774712d3ad9ede7bc0cb12af66df4c4">AllowGridBasedProviderFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#abb8c2005b6cec09ad0fe91d2d60025dc">allowGridBasedProviderFunctions_</a></td></tr>
+<tr class="separator:abb8c2005b6cec09ad0fe91d2d60025dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a5774712d3ad9ede7bc0cb12af66df4c4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a5774712d3ad9ede7bc0cb12af66df4c4">OOInteraction::StringOffsetProvider::AllowGridBasedProviderFunction</a> =  std::function&lt;bool (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a>*)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ad11f8c5fdf397b5398c511ee67ef6ad0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -221,6 +243,30 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a732c8b2b219e8c9c8ca7db3776ff6247"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OOInteraction::StringOffsetProvider::allowGridBasedProvider </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a5774712d3ad9ede7bc0cb12af66df4c4">AllowGridBasedProviderFunction</a>&#160;</td>
+          <td class="paramname"><em>allow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aab9693a5d7c878e6511283338fe47c66"></a>
 <div class="memitem">
 <div class="memproto">
@@ -673,6 +719,26 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="abb8c2005b6cec09ad0fe91d2d60025dc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#a5774712d3ad9ede7bc0cb12af66df4c4">StringOffsetProvider::AllowGridBasedProviderFunction</a> &gt; OOInteraction::StringOffsetProvider::allowGridBasedProviderFunctions_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab004f4c51ad8dbdae5cbfe2293986ac3"></a>
 <div class="memitem">
 <div class="memproto">

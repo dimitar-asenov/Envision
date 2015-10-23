@@ -102,8 +102,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aee81243ebd4c5204a137e9224189e51a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#aee81243ebd4c5204a137e9224189e51a">TranslateManager</a> (<a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *root)</td></tr>
-<tr class="separator:aee81243ebd4c5204a137e9224189e51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b4b7f898820597485b1f1ab78bb73a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#a64b4b7f898820597485b1f1ab78bb73a">TranslateManager</a> (<a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *root, <a class="el" href="classCppImport_1_1MacroImporter.html">MacroImporter</a> *macroImporter)</td></tr>
+<tr class="separator:a64b4b7f898820597485b1f1ab78bb73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cff2468a2e4097b8fd2524ac205c897"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#a0cff2468a2e4097b8fd2524ac205c897">~TranslateManager</a> ()</td></tr>
 <tr class="separator:a0cff2468a2e4097b8fd2524ac205c897"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa6dee66e7fd973a049656c024942a1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#aaa6dee66e7fd973a049656c024942a1f">containsClass</a> (clang::CXXRecordDecl *recordDecl)</td></tr>
@@ -171,6 +171,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a547c5fc2da528bc2c351b33cc33e3312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afebf2b028887e7de6932e2d1f997467d"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classOOModel_1_1Method.html">OOModel::Method</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#afebf2b028887e7de6932e2d1f997467d">functionMap_</a></td></tr>
 <tr class="separator:afebf2b028887e7de6932e2d1f997467d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac31ec8ff9806864243c76ac6c076d1a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1MacroImporter.html">MacroImporter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#ac31ec8ff9806864243c76ac6c076d1a8">macroImporter_</a> {}</td></tr>
+<tr class="separator:ac31ec8ff9806864243c76ac6c076d1a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16df743a1f2a433248ed19e91ab3cd8c"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classOOModel_1_1Method.html">OOModel::Method</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#a16df743a1f2a433248ed19e91ab3cd8c">methodMap_</a></td></tr>
 <tr class="separator:a16df743a1f2a433248ed19e91ab3cd8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10d270fb5b476bcdc75db1968b2df627"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classOOModel_1_1TypeAlias.html">OOModel::TypeAlias</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#a10d270fb5b476bcdc75db1968b2df627">namespacAliasMap_</a></td></tr>
@@ -181,6 +183,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae8fe468cc04b877afcdafd9ecc3803f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c188e53aa76176e2ad939b973dc51c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#a4c188e53aa76176e2ad939b973dc51c1">rootProject_</a> {}</td></tr>
 <tr class="separator:a4c188e53aa76176e2ad939b973dc51c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67cba9d86bf64a1059930206e42e10e0"><td class="memItemLeft" align="right" valign="top">const clang::SourceManager *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#a67cba9d86bf64a1059930206e42e10e0">sourceManager_</a> {}</td></tr>
+<tr class="separator:a67cba9d86bf64a1059930206e42e10e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a094ad15fdcd0e807f87bd1b60edb26b4"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classOOModel_1_1Field.html">OOModel::Field</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#a094ad15fdcd0e807f87bd1b60edb26b4">staticFieldMap_</a></td></tr>
 <tr class="separator:a094ad15fdcd0e807f87bd1b60edb26b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab19bf397ee09f5ef07bea73b98a26167"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classOOModel_1_1TypeAlias.html">OOModel::TypeAlias</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TranslateManager.html#ab19bf397ee09f5ef07bea73b98a26167">typeAliasMap_</a></td></tr>
@@ -196,7 +200,7 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>This class is to manage the whole translation process. </p>
 <p>It keeps track of nodes already translated and completes them if needed. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aee81243ebd4c5204a137e9224189e51a"></a>
+<a class="anchor" id="a64b4b7f898820597485b1f1ab78bb73a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -204,8 +208,18 @@ Private Attributes</h2></td></tr>
           <td class="memname">CppImport::TranslateManager::TranslateManager </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *&#160;</td>
-          <td class="paramname"><em>root</em></td><td>)</td>
+          <td class="paramname"><em>root</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classCppImport_1_1MacroImporter.html">MacroImporter</a> *&#160;</td>
+          <td class="paramname"><em>macroImporter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -724,6 +738,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac31ec8ff9806864243c76ac6c076d1a8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCppImport_1_1MacroImporter.html">MacroImporter</a>* CppImport::TranslateManager::macroImporter_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a16df743a1f2a433248ed19e91ab3cd8c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -813,6 +847,26 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a>* CppImport::TranslateManager::rootProject_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a67cba9d86bf64a1059930206e42e10e0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const clang::SourceManager* CppImport::TranslateManager::sourceManager_ {}</td>
         </tr>
       </table>
   </td>

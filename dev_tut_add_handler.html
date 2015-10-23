@@ -151,7 +151,7 @@ HIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line"><span class="keywordtype">void</span> <a class="code" href="classOOInteraction_1_1HIfStatement.html#a2eeec5d594a06cf93875a1e6ae502d6b">HIfStatement::keyPressEvent</a>(<a class="code" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event)</div>
 <div class="line">{</div>
-<div class="line">   <span class="keyword">auto</span> vif = <span class="keyword">dynamic_cast&lt;</span><a class="code" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a>*<span class="keyword">&gt;</span> ( target );</div>
+<div class="line">   <span class="keyword">auto</span> vif = DCast&lt;OOVisualization::VIfStatement&gt; ( target );</div>
 <div class="line">   <span class="keyword">event</span>-&gt;ignore();</div>
 <div class="line"></div>
 <div class="line">   <span class="keywordtype">bool</span> enter = <span class="keyword">event</span>-&gt;modifiers() == Qt::NoModifier &amp;&amp;</div>
@@ -221,7 +221,7 @@ HIfStatement.cpp</h1>
 <li>The <em>target</em> visualization. This is the visual item that received this event. It is safe to use <code>static_cast</code> to cast this directly to the item class for which this handler was registered. If you are using a handler for multiple visualizations then you should use <code>dynamic_cast</code> to distinguish between the different target types.</li>
 <li>The <em>event</em> as received by Qt's Graphics View system. This contains info regarding the event (e.g. what key was pressed).</li>
 </ul>
-<p>Since we only use the handler with <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a> it is safe to cast it: <div class="fragment"><div class="line">   <span class="keyword">auto</span> vif = <span class="keyword">dynamic_cast&lt;</span><a class="code" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a>*<span class="keyword">&gt;</span> ( target );</div>
+<p>Since we only use the handler with <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a> it is safe to cast it: <div class="fragment"><div class="line">   <span class="keyword">auto</span> vif = DCast&lt;OOVisualization::VIfStatement&gt; ( target );</div>
 </div><!-- fragment --></p>
 <p>Next, we ignore the current event: <div class="fragment"><div class="line">   <span class="keyword">event</span>-&gt;ignore();</div>
 </div><!-- fragment --> By default, whenever we reimplement a handler method, Qt assumes that the event is handled. We need to mark the event as ignored and then we can try to process it. Only if we do some processing, will we mark it as accepted (handled).</p>

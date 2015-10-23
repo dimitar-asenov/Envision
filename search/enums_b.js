@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['objectreferencecommands',['ObjectReferenceCommands',['../classOODebug_1_1Protocol.html#a5bc471e9b93abfea6b8b748d3396734a',1,'OODebug::Protocol']]],
-  ['operatortypes',['OperatorTypes',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2',1,'OOModel::BinaryOperation::OperatorTypes()'],['../classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1',1,'OOModel::UnaryOperation::OperatorTypes()']]],
-  ['orientation',['Orientation',['../classInformationScripting_1_1InformationEdge.html#a673ce9ba0e2f246590d2c21aed9fc4e2',1,'InformationScripting::InformationEdge::Orientation()'],['../classVisualization_1_1AnchorLayoutAnchor.html#a4ee85516e0e8a644dfd791c96b7a3b98',1,'Visualization::AnchorLayoutAnchor::Orientation()'],['../classVisualization_1_1LayoutStyle.html#a0d5ffd8a7c3eb0ee50536b6413bfd7e2',1,'Visualization::LayoutStyle::Orientation()']]],
-  ['outtype',['OUTTYPE',['../classCppImport_1_1CppImportLogger.html#a81830989ea3ecb79819d98cb96700883',1,'CppImport::CppImportLogger']]],
-  ['overloadkind',['OverloadKind',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542',1,'CppImport::CppImportUtilities']]]
+  ['majoraxis',['MajorAxis',['../classVisualization_1_1GridLayouter.html#a8de41949f680ff7c0f397e13588934f3',1,'Visualization::GridLayouter']]],
+  ['messagetype',['MessageType',['../classOODebug_1_1CompilerMessage.html#a0e71a6998bfecb03c9e0b287d72baf82',1,'OODebug::CompilerMessage']]],
+  ['methodcommands',['MethodCommands',['../classOODebug_1_1Protocol.html#a161924aa2d21cbda6719a9bf6a2a2eab',1,'OODebug::Protocol']]],
+  ['methodkind',['MethodKind',['../classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033ee',1,'OOModel::Method']]],
+  ['modifierflag',['ModifierFlag',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494f',1,'OOModel::Modifier']]]
 ];

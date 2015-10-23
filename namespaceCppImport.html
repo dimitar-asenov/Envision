@@ -90,12 +90,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1AllMetaDefinitions.html">AllMetaDefinitions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">provides the interface to generate all sorts of MetaDefinitions during macro import.  <a href="classCppImport_1_1AllMetaDefinitions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstConsumer.html">ClangAstConsumer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html">ClangAstVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the core visitor of the <a class="el" href="namespaceCppImport.html">CppImport</a> plugin it translates declarations and statements from clang's AST to Envision's AST.  <a href="classCppImport_1_1ClangAstVisitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangFrontendActionFactory.html">ClangFrontendActionFactory</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">holds the clang::SourceManager and clang::Preprocessor during macro import.  <a href="classCppImport_1_1ClangHelpers.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CommentParser.html">CommentParser</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -112,11 +118,44 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html">CppImportUtilities</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a helper class for translation of types operators type arguments and similar simple constructs.  <a href="classCppImport_1_1CppImportUtilities.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1EnvisionToClangMap.html">EnvisionToClangMap</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">logically holds the mapping from Envision AST nodes to Clang AST nodes.  <a href="classCppImport_1_1EnvisionToClangMap.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The expression visitor translates clang expression to envision expression.  <a href="classCppImport_1_1ExpressionVisitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1LexicalTransformations.html">LexicalTransformations</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">used to get the unexpanded spelling of nodes used in lexical transformation when creating MetaDefinition.  <a href="classCppImport_1_1LexicalTransformations.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCppImport_1_1MacroArgumentInfo.html">MacroArgumentInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCppImport_1_1MacroArgumentLocation.html">MacroArgumentLocation</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroDefinitions.html">MacroDefinitions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">stores the raw macro definition (not MetaDefinition) information provided by <a class="el" href="classCppImport_1_1PPCallback.html" title="used to get all necessary information for macro import from the preprocessor. ">PPCallback</a> for a translation unit.  <a href="classCppImport_1_1MacroDefinitions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html">MacroExpansion</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansions.html">MacroExpansions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">creates and stores all <a class="el" href="classCppImport_1_1MacroExpansions.html" title="creates and stores all MacroExpansions for a translation unit. ">MacroExpansions</a> for a translation unit.  <a href="classCppImport_1_1MacroExpansions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroImporter.html">MacroImporter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">uses the information provided by the <a class="el" href="classCppImport_1_1ClangAstVisitor.html" title="This is the core visitor of the CppImport plugin it translates declarations and statements from clang...">ClangAstVisitor</a> and the Preprocessor to transform a completely expanded Envision AST without macros into an Envision AST with MetaDefinitions and MetaCalls.  <a href="classCppImport_1_1MacroImporter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html">NodeHasher</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a helper class which aims to create unique identifiers for clang nodes.  <a href="classCppImport_1_1NodeHasher.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHelpers.html">NodeHelpers</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">constains all relevant methods for macro import that do not depend on Clang or macro import components.  <a href="classCppImport_1_1NodeHelpers.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeToCloneMap.html">NodeToCloneMap</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">produced when cloning a tree.  <a href="classCppImport_1_1NodeToCloneMap.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1PPCallback.html">PPCallback</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">used to get all necessary information for macro import from the preprocessor.  <a href="classCppImport_1_1PPCallback.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1StandardMetaDefinitions.html">StandardMetaDefinitions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">creates and stores all MetaDefinitions that are not x-Macro MetaDefinitions.  <a href="classCppImport_1_1StandardMetaDefinitions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html">TemplateArgumentVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A visitor for template arguments.  <a href="classCppImport_1_1TemplateArgumentVisitor.html#details">More...</a><br /></td></tr>

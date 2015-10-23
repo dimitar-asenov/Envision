@@ -104,8 +104,8 @@ Inheritance diagram for EnvisionPPCallbacks:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a32cb8d8fe5382547807a31aac6d1f905"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionPPCallbacks.html#a32cb8d8fe5382547807a31aac6d1f905">EnvisionPPCallbacks</a> (clang::SourceManager &amp;srcManager, std::string fileName, QHash&lt; QString, QString &gt; &amp;attributes, QHash&lt; QString, QString &gt; &amp;privateAttributes)</td></tr>
 <tr class="separator:a32cb8d8fe5382547807a31aac6d1f905"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f6204cc79b8fcb74cc39cc023e322d6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionPPCallbacks.html#a4f6204cc79b8fcb74cc39cc023e322d6">MacroExpands</a> (const clang::Token &amp;MacroNameTok, const clang::MacroDirective *MD, clang::SourceRange range, const clang::MacroArgs *Args) override</td></tr>
-<tr class="separator:a4f6204cc79b8fcb74cc39cc023e322d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52b110df58f349f45d98ce8607489be2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionPPCallbacks.html#a52b110df58f349f45d98ce8607489be2">MacroExpands</a> (const clang::Token &amp;MacroNameTok, const clang::MacroDefinition &amp;MD, clang::SourceRange range, const clang::MacroArgs *Args) override</td></tr>
+<tr class="separator:a52b110df58f349f45d98ce8607489be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -158,7 +158,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a4f6204cc79b8fcb74cc39cc023e322d6"></a>
+<a class="anchor" id="a52b110df58f349f45d98ce8607489be2"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -174,7 +174,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const clang::MacroDirective *&#160;</td>
+          <td class="paramtype">const clang::MacroDefinition &amp;&#160;</td>
           <td class="paramname"><em>MD</em>, </td>
         </tr>
         <tr>

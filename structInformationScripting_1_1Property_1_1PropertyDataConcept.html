@@ -112,6 +112,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a88475c3d57c7b0d1583f5237fbabcd5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecc6423b5d1b7a5f4f60fdb8d179fb4d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html#aecc6423b5d1b7a5f4f60fdb8d179fb4d">equals</a> (const std::shared_ptr&lt; <a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html">PropertyDataConcept</a> &gt; &amp;other) const =0</td></tr>
 <tr class="separator:aecc6423b5d1b7a5f4f60fdb8d179fb4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1696cf682955b4e7cb2f3e01d1c4fa89"><td class="memItemLeft" align="right" valign="top">virtual uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html#a1696cf682955b4e7cb2f3e01d1c4fa89">hash</a> (uint seed=0) const =0</td></tr>
+<tr class="separator:a1696cf682955b4e7cb2f3e01d1c4fa89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc1770742c898c535ab37e7ef97c92bd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html#acc1770742c898c535ab37e7ef97c92bd">node</a> () const </td></tr>
 <tr class="separator:acc1770742c898c535ab37e7ef97c92bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61dd54a8aa0267fd8c3f08f833f422c2"><td class="memItemLeft" align="right" valign="top">virtual boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html#a61dd54a8aa0267fd8c3f08f833f422c2">pythonObject</a> () const =0</td></tr>
@@ -165,6 +167,32 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl45b0ab571ad81fab2a6a7d3c73ee8e6d.html#a218aa4b3b38c51892a836687afdd46c2">InformationScripting::Property::PropertyData&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; Model::Node, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;</a>, <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enablb2b917a5d1ca9d56d95e896e0d4d30bb.html#a0c5ecb56587a50a5c87c532d9ede337d">InformationScripting::Property::PropertyData&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;!std::is_base_of&lt; Model::Node, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;</a>, and <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html#a5d0bee2d6f7c6f3769cc59e2aaa5b553">InformationScripting::Property::PropertyData&lt; DataType, class &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1696cf682955b4e7cb2f3e01d1c4fa89"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual uint InformationScripting::Property::PropertyDataConcept::hash </td>
+          <td>(</td>
+          <td class="paramtype">uint&#160;</td>
+          <td class="paramname"><em>seed</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl45b0ab571ad81fab2a6a7d3c73ee8e6d.html#abf806abec070358f25bc3f8912974b59">InformationScripting::Property::PropertyData&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; Model::Node, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;</a>, <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enablb2b917a5d1ca9d56d95e896e0d4d30bb.html#a68fe69acf864503ec80fb5ba1872ab9c">InformationScripting::Property::PropertyData&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;!std::is_base_of&lt; Model::Node, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;</a>, and <a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html#a7cc25dd188b1187ddc5e057d4df12576">InformationScripting::Property::PropertyData&lt; DataType, class &gt;</a>.</p>
 
 </div>
 </div>

@@ -122,8 +122,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a858fcba4c114e7f939eb79d520b0bc09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbaf496d64cef5422fa14ac40602d1ea"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#abbaf496d64cef5422fa14ac40602d1ea">handler</a> () const override</td></tr>
 <tr class="separator:abbaf496d64cef5422fa14ac40602d1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe0bdec2d9a6805fa9c3a81d7b8435bb"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#afe0bdec2d9a6805fa9c3a81d7b8435bb">moveCursor</a> (CursorMoveDirection dir=MoveDefault, QPoint reference=QPoint()) override</td></tr>
-<tr class="separator:afe0bdec2d9a6805fa9c3a81d7b8435bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06dd9831194d2112c112e6751677e8fb"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#a06dd9831194d2112c112e6751677e8fb">moveCursor</a> (CursorMoveDirection dir=MoveDefault, QPoint reference=QPoint(), CursorMoveOptions options=None) override</td></tr>
+<tr class="separator:a06dd9831194d2112c112e6751677e8fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fc266f6bc88f915b0a1d002ab7fe090"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#a7fc266f6bc88f915b0a1d002ab7fe090">setStyle</a> (const <a class="el" href="classVisualization_1_1ItemStyle.html">Visualization::ItemStyle</a> *<a class="el" href="classVisualization_1_1VText.html#a6b973e5c451745da65c24c2e1a25dec9">style</a>) override</td></tr>
 <tr class="separator:a7fc266f6bc88f915b0a1d002ab7fe090"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0412ddfb2edbe9a5c7e2aa7979e20ec"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#ab0412ddfb2edbe9a5c7e2aa7979e20ec">setText</a> (const QString &amp;newText) override</td></tr>
@@ -351,7 +351,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afe0bdec2d9a6805fa9c3a81d7b8435bb"></a>
+<a class="anchor" id="a06dd9831194d2112c112e6751677e8fb"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -368,7 +368,13 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">QPoint&#160;</td>
-          <td class="paramname"><em>reference</em> = <code>QPoint()</code>&#160;</td>
+          <td class="paramname"><em>reference</em> = <code>QPoint()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CursorMoveOptions&#160;</td>
+          <td class="paramname"><em>options</em> = <code>None</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

@@ -100,8 +100,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a376ac2b16ff061a2d66f63e740de57ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1DefaultVisualizer.html#a376ac2b16ff061a2d66f63e740de57ba">visualize</a> (<a class="el" href="classInformationScripting_1_1Graph.html">Graph</a> *g)</td></tr>
-<tr class="separator:a376ac2b16ff061a2d66f63e740de57ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d21c2525ce60cfce9f3a006ba97736"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1DefaultVisualizer.html#a38d21c2525ce60cfce9f3a006ba97736">visualize</a> (const <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;ts)</td></tr>
+<tr class="separator:a38d21c2525ce60cfce9f3a006ba97736"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -112,11 +112,15 @@ Static Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:af20fd2d4d672188a08d168c5d6fa3ea3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1DefaultVisualizer.html#af20fd2d4d672188a08d168c5d6fa3ea3">DefaultVisualizer</a> ()=default</td></tr>
 <tr class="separator:af20fd2d4d672188a08d168c5d6fa3ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf2e97a4ecbf1709a0a4208caa4dd7b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1DefaultVisualizer.html#adf2e97a4ecbf1709a0a4208caa4dd7b7">setColor</a> (<a class="el" href="classInformationScripting_1_1HighlightOverlay.html">HighlightOverlay</a> *overlay, QColor color)</td></tr>
+<tr class="separator:adf2e97a4ecbf1709a0a4208caa4dd7b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a088a931f5b05c4ae257a6f3a058e1ef1"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1DefaultVisualizer.html#a088a931f5b05c4ae257a6f3a058e1ef1">ARROW_OVERLAY_GROUP</a> = {&quot;default arrow&quot;}</td></tr>
 <tr class="separator:a088a931f5b05c4ae257a6f3a058e1ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add8d322842a6bdd83ccb12545ddd71c9"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1DefaultVisualizer.html#add8d322842a6bdd83ccb12545ddd71c9">DEFAULT_ALPHA_</a> {60}</td></tr>
+<tr class="separator:add8d322842a6bdd83ccb12545ddd71c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46a424df6d0de2e918867a397045df5d"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1DefaultVisualizer.html#a46a424df6d0de2e918867a397045df5d">HIGHLIGHT_OVERLAY_GROUP</a> = {&quot;default graph highlight&quot;}</td></tr>
 <tr class="separator:a46a424df6d0de2e918867a397045df5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -168,15 +172,49 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a376ac2b16ff061a2d66f63e740de57ba"></a>
+<a class="anchor" id="adf2e97a4ecbf1709a0a4208caa4dd7b7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void InformationScripting::DefaultVisualizer::setColor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classInformationScripting_1_1HighlightOverlay.html">HighlightOverlay</a> *&#160;</td>
+          <td class="paramname"><em>overlay</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QColor&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a38d21c2525ce60cfce9f3a006ba97736"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void InformationScripting::DefaultVisualizer::visualize </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classInformationScripting_1_1Graph.html">Graph</a> *&#160;</td>
-          <td class="paramname"><em>g</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;&#160;</td>
+          <td class="paramname"><em>ts</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -194,6 +232,26 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const QString InformationScripting::DefaultVisualizer::ARROW_OVERLAY_GROUP = {&quot;default arrow&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="add8d322842a6bdd83ccb12545ddd71c9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int InformationScripting::DefaultVisualizer::DEFAULT_ALPHA_ {60}</td>
         </tr>
       </table>
   </td>

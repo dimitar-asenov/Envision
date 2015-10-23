@@ -2,7 +2,6 @@ var searchData=
 [
   ['background',['background',['../classComments_1_1ColorPicker.html#a3e5a410adbf3e0e697cfff1f84d63562acebe4697d8f2cb799611c9f368f98ff7',1,'Comments::ColorPicker']]],
   ['bars',['Bars',['../classOODebug_1_1PlotOverlay.html#a9621a48a550d082eb75ab3289577eb6ba226bea4d132b81f15f1bda87c76c6706',1,'OODebug::PlotOverlay']]],
-  ['baseclasses',['BaseClasses',['../classInformationScripting_1_1AstQuery.html#a46bd845947a3a1ab0b5e45d60f98f7d1a9c2a5af7db2eddd040915c198982ccda',1,'InformationScripting::AstQuery']]],
   ['below',['Below',['../classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4aa2bf5cc04534bb9e7ed8773fe2ab1fb9',1,'Visualization::Item::Below()'],['../classVisualization_1_1ItemRegion.html#a4c5ce94b208c205300fadb4271b9165ba00369f2d8ebf552a1a38ced93acdb623',1,'Visualization::ItemRegion::Below()']]],
   ['binary',['Binary',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a6ce976e8f061b2b5cfe4d0c50c3405dd',1,'CppImport::CppImportUtilities']]],
   ['bit_5fand_5fassign',['BIT_AND_ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a9c70b2e767eed00d2c9ac099dd61aaab',1,'OOModel::AssignmentExpression']]],
