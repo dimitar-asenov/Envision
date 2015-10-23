@@ -68,22 +68,25 @@ QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*
 	QHash<QString, QString> mergeMap = Config::instance().dependencyUnitMergeMap();
 
 	QHash<QString, DependencyComposite*> nameToCompositeMap;
-	QHash<QString, DependencyUnit*> compositeNameToMergeeMap;
 	for (auto unit : units)
 	{
 		auto it = mergeMap.find(unit->name());
-		if (it != mergeMap.end())
-			compositeNameToMergeeMap.insert(*it, unit);
+		auto compositeName = it != mergeMap.end() ? *it : unit->name();
+
+		auto cIt = nameToCompositeMap.find(compositeName);
+		if (cIt != nameToCompositeMap.end())
+		{
+			// case A: the composite that unit is a part of already exists => merge
+			(*cIt)->addUnit(unit);
+		}
 		else
 		{
-			auto composite = new DependencyComposite(unit->name());
+			// case B: the composite that unit is a part of does not yet exist
+			auto composite = new DependencyComposite(compositeName);
 			composite->addUnit(unit);
-			nameToCompositeMap.insert(composite->name(), composite);
+			nameToCompositeMap.insert(compositeName, composite);
 		}
 	}
-
-	for (auto it = compositeNameToMergeeMap.begin(); it != compositeNameToMergeeMap.end(); it++)
-		nameToCompositeMap[it.key()]->addUnit(it.value());
 
 	return nameToCompositeMap.values();
 }
