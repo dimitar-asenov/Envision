@@ -45,7 +45,7 @@ QHash<QString, QString> Config::dependencyUnitMergeMap() const
 
 Config::Config()
 {
-	QFile configFile(QCoreApplication::applicationDirPath() + QDir::separator() + "config.json");
+	QFile configFile("cpp-export-settings/config.json");
 	bool open = configFile.open(QIODevice::ReadOnly);
 	Q_ASSERT(open);
 	QJsonParseError err;
