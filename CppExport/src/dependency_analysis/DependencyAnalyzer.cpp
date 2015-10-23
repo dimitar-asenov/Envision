@@ -26,20 +26,21 @@
 
 #include "DependencyAnalyzer.h"
 
-#include "DependencyUnit.h"
+#include "DependencyComposite.h"
+#include "Config.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppExport {
 
-QList<DependencyUnit> DependencyAnalyzer::units(Model::Node* node)
+QList<DependencyUnit*> DependencyAnalyzer::units(Model::Node* node)
 {
-	QList<DependencyUnit> result;
+	QList<DependencyUnit*> result;
 	units(node, "", result);
 	return result;
 }
 
-void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QList<DependencyUnit>& result)
+void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QList<DependencyUnit*>& result)
 {
 	if (auto ooModule = DCast<OOModel::Module>(current))
 	{
@@ -48,18 +49,44 @@ void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QLis
 		else
 		{
 			// macro file
-			result.append(DependencyUnit(namespaceName + "/" + ooModule->name(), current));
+			result.append(new DependencyUnit(namespaceName + "/" + ooModule->name(), current));
 			return;
 		}
 	}
 	else if (auto ooClass = DCast<OOModel::Class>(current))
 	{
-		result.append(DependencyUnit(namespaceName + "/" + ooClass->name(), current));
+		result.append(new DependencyUnit(namespaceName + "/" + ooClass->name(), current));
 		return;
 	}
 
 	for (auto child : current->children())
 		units(child, namespaceName, result);
+}
+
+QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*>& units)
+{
+	QHash<QString, QString> mergeMap = Config::instance().dependencyUnitMergeMap();
+
+	QHash<QString, DependencyComposite*> nameToCompositeMap;
+	for (auto unit : units)
+	{
+		auto it = mergeMap.find(unit->name());
+		auto compositeName = it != mergeMap.end() ? *it : unit->name();
+
+		auto cIt = nameToCompositeMap.find(compositeName);
+		if (cIt != nameToCompositeMap.end())
+			// case A: the composite that unit is a part of already exists => merge
+			(*cIt)->addUnit(unit);
+		else
+		{
+			// case B: the composite that unit is a part of does not yet exist
+			auto composite = new DependencyComposite(compositeName);
+			composite->addUnit(unit);
+			nameToCompositeMap.insert(composite->name(), composite);
+		}
+	}
+
+	return nameToCompositeMap.values();
 }
 
 }

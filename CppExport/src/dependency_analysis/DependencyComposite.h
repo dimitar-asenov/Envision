@@ -28,25 +28,25 @@
 
 #include "../cppexport_api.h"
 
-namespace Model {
-	class Node;
-}
+#include "DependencyUnit.h"
 
 namespace CppExport {
 
-class DependencyUnit;
-class DependencyComposite;
-
-class CPPEXPORT_API DependencyAnalyzer
+class CPPEXPORT_API DependencyComposite
 {
 	public:
-		static QList<DependencyUnit*> units(Model::Node* node);
+		DependencyComposite(const QString& name);
 
-		static QList<DependencyComposite*> mergeUnits(QList<DependencyUnit*>& units);
+		const QString& name();
+		void addUnit(const DependencyUnit* unit);
 
 	private:
-		static void units(Model::Node* current, QString namespaceName, QList<DependencyUnit*>& result);
-
+		const QString& name_;
+		QList<const DependencyUnit*> units_;
 };
+
+inline const QString& DependencyComposite::name() { return name_; }
+
+inline void DependencyComposite::addUnit(const DependencyUnit* unit) { units_.append(unit); }
 
 }

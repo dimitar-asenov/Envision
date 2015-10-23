@@ -24,29 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../cppexport_api.h"
-
-namespace Model {
-	class Node;
-}
+#include "DependencyComposite.h"
 
 namespace CppExport {
 
-class DependencyUnit;
-class DependencyComposite;
-
-class CPPEXPORT_API DependencyAnalyzer
-{
-	public:
-		static QList<DependencyUnit*> units(Model::Node* node);
-
-		static QList<DependencyComposite*> mergeUnits(QList<DependencyUnit*>& units);
-
-	private:
-		static void units(Model::Node* current, QString namespaceName, QList<DependencyUnit*>& result);
-
-};
+DependencyComposite::DependencyComposite(const QString& name) : name_(name) {}
 
 }
