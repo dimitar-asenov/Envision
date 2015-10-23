@@ -45,6 +45,8 @@ class CPPEXPORT_API DependencyUnit
 	public:
 		DependencyUnit(QString name, Model::Node* node);
 
+		const QString& name() const;
+
 	private:
 		QString name_;
 		Model::Node* node_;
@@ -54,5 +56,7 @@ class CPPEXPORT_API DependencyUnit
 		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
 		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
 };
+
+inline const QString& DependencyUnit::name() const { return name_; }
 
 }
