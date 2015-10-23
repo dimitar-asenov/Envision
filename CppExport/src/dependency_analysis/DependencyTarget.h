@@ -36,8 +36,8 @@ namespace CppExport {
 
 struct CPPEXPORT_API DependencyTarget
 {
-	bool soft_;
-	Model::Node* target_;
+	bool soft_{};
+	Model::Node* target_{};
 };
 
 }
