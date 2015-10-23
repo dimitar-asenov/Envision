@@ -75,16 +75,14 @@ QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*
 
 		auto cIt = nameToCompositeMap.find(compositeName);
 		if (cIt != nameToCompositeMap.end())
-		{
 			// case A: the composite that unit is a part of already exists => merge
 			(*cIt)->addUnit(unit);
-		}
 		else
 		{
 			// case B: the composite that unit is a part of does not yet exist
 			auto composite = new DependencyComposite(compositeName);
 			composite->addUnit(unit);
-			nameToCompositeMap.insert(compositeName, composite);
+			nameToCompositeMap.insert(composite->name(), composite);
 		}
 	}
 
