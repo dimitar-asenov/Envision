@@ -26,7 +26,8 @@
 
 #include "DependencyAnalyzer.h"
 
-#include "DependencyUnit.h"
+#include "DependencyComposite.h"
+#include "Config.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -60,6 +61,27 @@ void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QLis
 
 	for (auto child : current->children())
 		units(child, namespaceName, result);
+}
+
+QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*>& units)
+{
+	QHash<QString, QString> mergeMap = Config::instance().dependencyUnitMergeMap();
+
+	QHash<QString, DependencyComposite*> nameToCompositeMap;
+	QHash<QString, DependencyUnit*> compositeNameToMergeeMap;
+	for (auto unit : units)
+	{
+		auto it = mergeMap.find(unit->name());
+		if (it != mergeMap.end())
+			compositeNameToMergeeMap.insert(*it, unit);
+		else
+			nameToCompositeMap.insert(unit->name(), new DependencyComposite(unit));
+	}
+
+	for (auto it = compositeNameToMergeeMap.begin(); it != compositeNameToMergeeMap.end(); it++)
+		nameToCompositeMap[it.key()]->addChild(it.value());
+
+	return nameToCompositeMap.values();
 }
 
 }
