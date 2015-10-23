@@ -18,7 +18,8 @@ QMAKE_CXXFLAGS += -isystem ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envi
 # The _GLIBCXX_USE_CXX11_ABI=0 macro is needed to fix a compatibility issue with the new C++11 string ABI
 # See: https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
 # It might not be needed in later versions of Clang which take this into consideration
-DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS _GLIBCXX_USE_CXX11_ABI=0
+# Update: it was removed after it was no longer necessary
+DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS
 
 
 LIBS += -lclangTooling\
