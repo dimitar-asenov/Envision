@@ -30,10 +30,8 @@
 
 namespace CppExport {
 
-DependencyUnit::DependencyUnit(QString name, Model::Node* node) : name_(name), node_(node)
-{
-	targets_ = calculateTargets(node);
-}
+DependencyUnit::DependencyUnit(QString name, Model::Node* node)
+	: name_(name), node_(node), targets_(calculateTargets(node)) {}
 
 QList<DependencyTarget> DependencyUnit::calculateTargets(Model::Node* node)
 {
