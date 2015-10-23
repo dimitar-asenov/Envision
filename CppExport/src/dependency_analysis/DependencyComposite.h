@@ -41,7 +41,7 @@ class CPPEXPORT_API DependencyComposite
 		void addChild(const DependencyUnit* childUnit);
 
 	private:
-		const DependencyUnit* baseUnit_;
+		const DependencyUnit* baseUnit_{};
 		QList<const DependencyUnit*> childUnits_;
 };
 

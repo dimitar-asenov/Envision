@@ -49,7 +49,7 @@ class CPPEXPORT_API DependencyUnit
 
 	private:
 		QString name_;
-		Model::Node* node_;
+		Model::Node* node_{};
 		QList<DependencyTarget> targets_;
 
 		static QList<DependencyTarget> calculateTargets(Model::Node* node);
