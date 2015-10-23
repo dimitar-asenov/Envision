@@ -328,6 +328,20 @@ class MODELBASE_API Node
 		Node* childToSubnode(const Node* other) const;
 
 		/**
+		 * Returns all children including the node \a from, which have type \a NodeType.
+		 */
+		template <class NodeType>
+		static QList<NodeType*> childrenOfType(Model::Node* from);
+
+		/**
+		 * Returns all children including the node \a from, which fullfill the \a Predicate \a p,
+		 * i.e. \a p(node) returns true.
+		 */
+		template <class Predicate>
+		static QList<Model::Node*> childrenWhich(Model::Node* from, Predicate p);
+
+
+		/**
 		 * Executes the specified command and pushes it on the undo stack.
 		 *
 		 * This method will fail with an exception if the current thread does not hold the lock for this node's access
@@ -506,19 +520,6 @@ class MODELBASE_API Node
 		static QSet<const Node*>& partiallyLoadedNodes();
 };
 
-template <class NodeType>
-NodeType* Node::firstAncestorOfType()
-{
-	NodeType* ancestor = nullptr;
-	auto p = parent();
-	while (p && !ancestor)
-	{
-		ancestor = DCast<NodeType>(p);
-		p = p->parent();
-	}
-	return ancestor;
-}
-
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
 
 inline TreeManager* Node::manager() const { return manager_; }
@@ -538,6 +539,50 @@ inline Node* Node::parent() const { return parent_; }
 inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes) const
 {
 	return definesSymbol() && (symbolType() & symbolTypes) && matcher.matches(symbolName());
+}
+
+
+template <class NodeType>
+inline NodeType* Node::firstAncestorOfType()
+{
+	NodeType* ancestor = nullptr;
+	auto p = parent();
+	while (p && !ancestor)
+	{
+		ancestor = DCast<NodeType>(p);
+		p = p->parent();
+	}
+	return ancestor;
+}
+
+template <class NodeType>
+inline QList<NodeType*> Node::childrenOfType(Node* from)
+{
+	QList<NodeType*> result;
+	QList<Model::Node*> workStack{from};
+
+	while (!workStack.empty())
+	{
+		auto node = workStack.takeLast();
+		if (auto castNode = DCast<NodeType>(node)) result.push_back(castNode);
+		workStack << node->children();
+	}
+	return result;
+}
+
+template <class Predicate>
+inline QList<Node*> Node::childrenWhich(Node* from, Predicate p)
+{
+	QList<Model::Node*> result;
+	QList<Model::Node*> workStack{from};
+
+	while (!workStack.empty())
+	{
+		auto node = workStack.takeLast();
+		if (p(node)) result.push_back(node);
+		workStack << node->children();
+	}
+	return result;
 }
 
 /**

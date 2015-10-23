@@ -25,7 +25,6 @@ HEADERS += src/precompiled.h \
     src/queries/AstQuery.h \
     src/queries/QueryExecutor.h \
     src/visualization/DefaultVisualizer.h \
-    src/visitors/NodeGetter.h \
     src/queries/CompositeQuery.h \
     src/queries/GenericFilter.h \
     src/queries/AstNameFilter.h \
