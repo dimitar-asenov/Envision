@@ -43,7 +43,6 @@
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
 
-#include "../visitors/NodeGetter.h"
 #include "QueryRegistry.h"
 
 namespace InformationScripting {
@@ -282,15 +281,15 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 	QHash<Model::Node*, QList<Model::Reference*>> references;
 
 	if (arguments_.scope() == ArgumentParser::Scope::Local)
-		references[target()] = NodeGetter::allNodesOfType<Model::Reference>(target());
+		references[target()] = Model::Node::childrenOfType<Model::Reference>(target());
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
-		references[target()->root()] = NodeGetter::allNodesOfType<Model::Reference>(target()->root());
+		references[target()->root()] = Model::Node::childrenOfType<Model::Reference>(target()->root());
 	else if (arguments_.scope() == ArgumentParser::Scope::Input)
 	{
 		auto tuples = input;
 
 		auto tuple = tuples.tuples("ast");
-		for (const auto& t : tuple) references[t["ast"]] = NodeGetter::allNodesOfType<Model::Reference>(t["ast"]);
+		for (const auto& t : tuple) references[t["ast"]] = Model::Node::childrenOfType<Model::Reference>(t["ast"]);
 
 		// Keep all non ast nodes
 		result = tuples;
@@ -392,7 +391,7 @@ Optional<TupleSet> AstQuery::attribute(TupleSet input)
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 	{
-		auto nodesWithAttribute = NodeGetter::allNodesWhich(target()->root(), [&attributeName](Model::Node* node) {
+		auto nodesWithAttribute = Model::Node::childrenWhich(target()->root(), [&attributeName](Model::Node* node) {
 			if (auto composite = DCast<Model::CompositeNode>(node))
 				return composite->hasAttribute(attributeName);
 			return false;
@@ -444,7 +443,7 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
 {
 	if (!from) from = target()->root();
-	auto allNodeOfType =  NodeGetter::allNodesWhich(from, [matcher](Model::Node* node)
+	auto allNodeOfType =  Model::Node::childrenWhich(from, [matcher](Model::Node* node)
 																			{return matcher.matches(node->typeName());});
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
@@ -454,7 +453,7 @@ template <class Predicate>
 void AstQuery::addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from)
 {
 	if (!from) from = target()->root();
-	auto allNodeOfType =  NodeGetter::allNodesWhich(from, holds);
+	auto allNodeOfType =  Model::Node::childrenWhich(from, holds);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
 }
