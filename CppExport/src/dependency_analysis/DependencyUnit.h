@@ -51,7 +51,7 @@ class CPPEXPORT_API DependencyUnit
 		QList<DependencyTarget> targets_;
 
 		static QList<DependencyTarget> calculateTargets(Model::Node* node);
-		static bool isSoftDependency(OOModel::ReferenceExpression* reference);
+		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
 		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
 };
 

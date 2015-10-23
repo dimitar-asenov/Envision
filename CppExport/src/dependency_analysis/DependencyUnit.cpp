@@ -37,11 +37,11 @@ QList<DependencyTarget> DependencyUnit::calculateTargets(Model::Node* node)
 {
 	QList<DependencyTarget> result;
 	for (auto referenceExpression : Model::Node::childrenOfType<OOModel::ReferenceExpression>(node))
-		result.append({isSoftDependency(referenceExpression), fixedTarget(referenceExpression)});
+		result.append({isNameOnlyDependency(referenceExpression), fixedTarget(referenceExpression)});
 	return result;
 }
 
-bool DependencyUnit::isSoftDependency(OOModel::ReferenceExpression* reference)
+bool DependencyUnit::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 {
 	auto parent = reference->parent();
 	Q_ASSERT(parent);
