@@ -43,6 +43,8 @@ class INFORMATIONSCRIPTING_API RuntimeQuery : public LinearQuery
 	private:
 		friend class QueryRegistry;
 
+		QueryExecutor* executor_{};
+
 		RuntimeQuery(Model::Node* target, QStringList, QueryExecutor* executor = nullptr);
 };
 

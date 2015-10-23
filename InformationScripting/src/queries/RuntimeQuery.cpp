@@ -42,16 +42,15 @@ namespace InformationScripting {
 
 Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 {
-	// FIXME change this once we have a yield mechanism:
-	std::unordered_map<Model::Node*, int> execCount;
-	auto listener = [&execCount](Model::Node* target, auto...) {
-		++execCount[target];
+	auto execCount = std::make_shared<std::unordered_map<Model::Node*, int>>();
+	auto listener = [execCount](Model::Node* target, auto...) {
+		++(*execCount)[target];
 		return false;
 	};
 
-	std::vector<int> callbackIds;
+	auto callbackIds = std::make_shared<std::vector<int>>();
 	for (const auto& breakpointTuple : input.tuples("breakpoint"))
-		callbackIds.push_back(
+		callbackIds->push_back(
 					OODebug::JavaDebugger::instance().addBreakpointListener(breakpointTuple["breakpoint"], listener));
 
 	auto manager = target()->manager();
@@ -61,16 +60,21 @@ Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 	if (executionResult->code() == Interaction::CommandResult::Error)
 		return {"errror during exection"};
 
-	// FIXME needs yield here. Doesn't work currently
+	auto queryExecutor = executor_;
+	Q_ASSERT(queryExecutor);
+	OODebug::JavaDebugger::instance().addProgramExitLister([callbackIds, execCount, queryExecutor]()
+		{
+			for (int id : *callbackIds)
+				OODebug::JavaDebugger::instance().removeBreakpointListener(id);
 
-	// FIXME this should happen as a pre resume command once we have yield.
-	for (int id : callbackIds)
-		OODebug::JavaDebugger::instance().removeBreakpointListener(id);
+			TupleSet result;
+			for (const auto& val : *execCount)
+				result.add({{"count", val.second}, {"ast", val.first}});
 
-	TupleSet result;
-	for (const auto& val : execCount)
-		result.add({{"count", val.second}, {"ast", val.first}});
-	return result;
+			queryExecutor->execute({result});
+		}
+	);
+	return TupleSet();
 }
 
 void RuntimeQuery::registerDefaultQueries()
@@ -78,8 +82,8 @@ void RuntimeQuery::registerDefaultQueries()
 	QueryRegistry::registerQuery<RuntimeQuery, QueryRegistry::ExtraArguments::QueryExecutor>("traceExecution");
 }
 
-RuntimeQuery::RuntimeQuery(Model::Node* target, QStringList, QueryExecutor*)
-	: LinearQuery{target}
+RuntimeQuery::RuntimeQuery(Model::Node* target, QStringList, QueryExecutor* executor)
+	: LinearQuery{target}, executor_{executor}
 {}
 
 } /* namespace InformationScripting */
