@@ -36,7 +36,7 @@ PRECOMPILED_HEADER = src/precompiled.h
 QMAKE_CXXFLAGS += -std=c++1y -isystem ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --includedir)"" \
                   -Wall -fno-rtti
 
-DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS _GLIBCXX_USE_CXX11_ABI=0
+DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS
 
 
 LIBS += -lclangTooling\
