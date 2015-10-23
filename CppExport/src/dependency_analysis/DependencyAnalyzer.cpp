@@ -32,14 +32,14 @@
 
 namespace CppExport {
 
-QList<DependencyUnit> DependencyAnalyzer::units(Model::Node* node)
+QList<DependencyUnit*> DependencyAnalyzer::units(Model::Node* node)
 {
-	QList<DependencyUnit> result;
+	QList<DependencyUnit*> result;
 	units(node, "", result);
 	return result;
 }
 
-void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QList<DependencyUnit>& result)
+void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QList<DependencyUnit*>& result)
 {
 	if (auto ooModule = DCast<OOModel::Module>(current))
 	{
@@ -48,13 +48,13 @@ void DependencyAnalyzer::units(Model::Node* current, QString namespaceName, QLis
 		else
 		{
 			// macro file
-			result.append(DependencyUnit(namespaceName + "/" + ooModule->name(), current));
+			result.append(new DependencyUnit(namespaceName + "/" + ooModule->name(), current));
 			return;
 		}
 	}
 	else if (auto ooClass = DCast<OOModel::Class>(current))
 	{
-		result.append(DependencyUnit(namespaceName + "/" + ooClass->name(), current));
+		result.append(new DependencyUnit(namespaceName + "/" + ooClass->name(), current));
 		return;
 	}
 

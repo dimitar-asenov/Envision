@@ -39,10 +39,11 @@ class DependencyUnit;
 class CPPEXPORT_API DependencyAnalyzer
 {
 	public:
-		static QList<DependencyUnit> units(Model::Node* node);
+		static QList<DependencyUnit*> units(Model::Node* node);
 
 	private:
-		static void units(Model::Node* current, QString namespaceName, QList<DependencyUnit>& result);
+		static void units(Model::Node* current, QString namespaceName, QList<DependencyUnit*>& result);
+
 };
 
 }
