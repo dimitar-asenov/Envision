@@ -177,7 +177,7 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fieldDecl)
 	const QString hash = nh_->hashRecord(fieldDecl->getParent());
 	if (classMap_.contains(hash))
 	{
-		OOModel::Field* ooField = new OOModel::Field();
+		auto ooField = new OOModel::Field();
 		ooField->setName(QString::fromStdString(fieldDecl->getNameAsString()));
 		classMap_.value(hash)->fields()->append(ooField);
 		macroImporter_->mapAst(fieldDecl, ooField);
@@ -304,14 +304,14 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	QString name = QString::fromStdString(mDecl->getNameAsString());
 	if (name.endsWith(">"))
 		name = name.left(name.indexOf("<"));
-	OOModel::Method* method = new OOModel::Method(name, kind);
+	auto method = new OOModel::Method(name, kind);
 	if (!llvm::isa<clang::CXXConstructorDecl>(mDecl) && !llvm::isa<clang::CXXDestructorDecl>(mDecl))
 	{
 		// process result type
 		OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getReturnType(), mDecl->getLocStart());
 		if (restype)
 		{
-			OOModel::FormalResult* methodResult = new OOModel::FormalResult();
+			auto methodResult = new OOModel::FormalResult();
 			methodResult->setTypeExpression(restype);
 			method->results()->append(methodResult);
 		}
@@ -320,7 +320,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	clang::FunctionDecl::param_const_iterator it = mDecl->param_begin();
 	for (;it != mDecl->param_end();++it)
 	{
-		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+		auto arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
 		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
 		if (type) arg->setTypeExpression(type);
@@ -343,14 +343,14 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
 {
 	// add a new method
-	OOModel::Method* ooFunction= new OOModel::Method();
+	auto ooFunction= new OOModel::Method();
 	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
 	// process result type
 	OOModel::Expression* restype = utils_->translateQualifiedType(functionDecl->getReturnType(),
 																					  functionDecl->getLocStart());
 	if (restype)
 	{
-		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
+		auto methodResult = new OOModel::FormalResult();
 		methodResult->setTypeExpression(restype);
 		ooFunction->results()->append(methodResult);
 	}
@@ -358,7 +358,7 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	clang::FunctionDecl::param_const_iterator it = functionDecl->param_begin();
 	for (;it != functionDecl->param_end();++it)
 	{
-		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+		auto arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
 		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
 		if (type) arg->setTypeExpression(type);

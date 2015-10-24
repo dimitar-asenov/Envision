@@ -61,15 +61,15 @@ void CppImportManager::setImportPath(const QString& sourcePath, const bool subPr
 
 Model::TreeManager*CppImportManager::createTreeManager(const bool statisticsPerProject)
 {
-	OOModel::Project* project = new OOModel::Project(projectName_);
-	CppImportLogger* log = new CppImportLogger();
-	ClangAstVisitor* visitor = new ClangAstVisitor(project, log);
+	auto project = new OOModel::Project(projectName_);
+	auto log = new CppImportLogger();
+	auto visitor = new ClangAstVisitor(project, log);
 
 	for (QString s : projects_)
 	{
 		qDebug() << "Start processing project :" << s;
 		auto tool = new clang::tooling::ClangTool(*compilationDbMap_.value(s), *sourcesMap_.value(s));
-		ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(visitor, log);
+		auto frontendActionFactory = new ClangFrontendActionFactory(visitor, log);
 		tool->run(frontendActionFactory);
 		// statistics
 		if (statisticsPerProject)
@@ -153,7 +153,7 @@ void CppImportManager::setProjectName(const QString& sourcePath)
 void CppImportManager::readInFiles(const QString& sourcePath)
 {
 	QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
-	std::vector<std::string>* sources = new std::vector<std::string>();
+	auto sources = new std::vector<std::string>();
 	while (dirIterator.hasNext())
 		sources->push_back(dirIterator.next().toStdString());
 	sourcesMap_.insert(sourcePath, sources);

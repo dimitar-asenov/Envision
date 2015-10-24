@@ -603,7 +603,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
+		auto ooIfStmt = new OOModel::IfStatement();
 		// append the if stmt to current stmt list
 		itemList->append(ooIfStmt);
 		// condition
@@ -635,7 +635,7 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
+		auto ooLoop = new OOModel::LoopStatement();
 		// append the loop to current stmt list
 		itemList->append(ooLoop);
 		// condition
@@ -663,7 +663,7 @@ bool ClangAstVisitor::TraverseDoStmt(clang::DoStmt* doStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement(OOModel::LoopStatement::LoopKind::PostCheck);
+		auto ooLoop = new OOModel::LoopStatement(OOModel::LoopStatement::LoopKind::PostCheck);
 		// append the loop to current stmt list
 		itemList->append(ooLoop);
 		// condition
@@ -688,7 +688,7 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
+		auto ooLoop = new OOModel::LoopStatement();
 		itemList->append(ooLoop);
 		bool inBody = inBody_;
 		inBody_ = false;
@@ -721,7 +721,7 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::ForEachStatement* ooLoop = new OOModel::ForEachStatement();
+		auto ooLoop = new OOModel::ForEachStatement();
 		const clang::VarDecl* loopVar = forRangeStmt->getLoopVariable();
 		itemList->append(ooLoop);
 		ooLoop->setVarName(QString::fromStdString(loopVar->getNameAsString()));
@@ -748,7 +748,7 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
+		auto ooReturn = new OOModel::ReturnStatement();
 		itemList->append(ooReturn);
 		// return expression
 		bool inBody = inBody_;
@@ -776,7 +776,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 	}
 	if (!declStmt->isSingleDecl())
 	{
-		OOModel::CommaExpression* ooComma = new OOModel::CommaExpression();
+		auto ooComma = new OOModel::CommaExpression();
 		bool inBody = inBody_;
 		inBody_ = false;
 		QList<OOModel::Expression*> exprList;
@@ -818,7 +818,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::TryCatchFinallyStatement* ooTry = new OOModel::TryCatchFinallyStatement();
+		auto ooTry = new OOModel::TryCatchFinallyStatement();
 		itemList->append(ooTry);
 		bool inBody = inBody_;
 		inBody_ = true;
@@ -843,7 +843,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 
 bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 {
-	OOModel::CatchClause* ooCatch = new OOModel::CatchClause();
+	auto ooCatch = new OOModel::CatchClause();
 	// save inBody var
 	bool inBody = inBody_;
 	inBody_ = false;
@@ -870,7 +870,7 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		OOModel::SwitchStatement* ooSwitchStmt = new OOModel::SwitchStatement();
+		auto ooSwitchStmt = new OOModel::SwitchStatement();
 		itemList->append(ooSwitchStmt);
 		// save inbody var
 		bool inBody = inBody_;
@@ -922,7 +922,7 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 {
 	// pop the body of the previous case
 	ooStack_.pop();
-	OOModel::CaseStatement* ooSwitchCase = new OOModel::CaseStatement();
+	auto ooSwitchCase = new OOModel::CaseStatement();
 	// insert in tree
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(ooSwitchCase);
@@ -948,7 +948,7 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 {
 	// pop the body of the previous case
 	ooStack_.pop();
-	OOModel::CaseStatement* ooDefaultCase = new OOModel::CaseStatement();
+	auto ooDefaultCase = new OOModel::CaseStatement();
 	// insert in tree
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(ooDefaultCase);
