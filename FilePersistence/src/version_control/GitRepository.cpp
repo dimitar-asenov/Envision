@@ -200,6 +200,7 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 
 	git_diff_options diffOptions;
 	errorCode = git_diff_init_options(&diffOptions, GIT_DIFF_OPTIONS_VERSION);
+	checkError(errorCode);
 	diffOptions.context_lines = 0;
 
 	git_commit* gitCommitA = nullptr;
@@ -237,8 +238,6 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 			gitTreeB = getCommitTree(revisionB);
 			errorCode = git_diff_tree_to_tree(&gitDiff, repository_, gitTreeA, gitTreeB, &diffOptions);
 		}
-
-		checkError(errorCode);
 	}
 	else
 	{
@@ -253,9 +252,8 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 			Q_ASSERT(diffKind.first == SourceKind::Index);
 			errorCode = git_diff_tree_to_index(&gitDiff, repository_, gitTreeB, nullptr, &diffOptions);
 		}
-
-		checkError(errorCode);
 	}
+	checkError(errorCode);
 
 	if (!treeA)
 	{
@@ -747,6 +745,7 @@ void GitRepository::newCommit(QString tree, QString message, Signature author, S
 	errorCode = git_commit_create(&newCommitOid, repository_, HEAD, gitAuthor, gitCommitter,
 											nullptr, gitMessage, gitTree, parents.size(),
 											gitParents);
+	checkError(errorCode);
 
 	git_tree_free(gitTree);
 	git_signature_free(gitAuthor);
@@ -754,7 +753,7 @@ void GitRepository::newCommit(QString tree, QString message, Signature author, S
 	for (int i = 0; i < parents.size(); i++)
 		git_commit_free(const_cast<git_commit**>(gitParents)[i]);
 
-	SAFE_DELETE(gitMessage);
+	delete[] gitMessage;
 }
 
 QString GitRepository::findMergeBase(QString branchA, QString branchB) const
@@ -797,8 +796,8 @@ git_signature* GitRepository::createGitSignature(Signature& signature)
 	errorCode = git_signature_new(&gitSignature, name, eMail, time, offset);
 	checkError(errorCode);
 
-	SAFE_DELETE(name);
-	SAFE_DELETE(eMail);
+	delete[] name;
+	delete[] eMail;
 
 	return gitSignature;
 }
