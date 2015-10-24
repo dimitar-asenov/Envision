@@ -151,8 +151,8 @@ MacroExpansion* MacroExpansions::expansion(clang::SourceLocation loc) const
 MacroExpansion* MacroExpansions::immediateExpansion(clang::SourceLocation loc) const
 {
 	auto expansion = clang_.immediateMacroLocation(loc);
-	for (auto i = 0; i < expansions_.size(); i++)
-		if (expansions_[i]->range().getBegin() == expansion) return expansions_[i];
+	for (auto macroExpansion : expansions_)
+		if (macroExpansion->range().getBegin() == expansion) return macroExpansion;
 
 	/*
 	 * if we have not found an immediate expansion for loc then we try again using the found immediateExpansionLoc.
@@ -160,8 +160,8 @@ MacroExpansion* MacroExpansions::immediateExpansion(clang::SourceLocation loc) c
 	 * to the location of the concatenated token or stringification result.
 	 */
 	expansion = clang_.immediateMacroLocation(expansion);
-	for (auto i = 0; i < expansions_.size(); i++)
-		if (expansions_[i]->range().getBegin() == expansion) return expansions_[i];
+	for (auto macroExpansion : expansions_)
+		if (macroExpansion->range().getBegin() == expansion) return macroExpansion;
 
 	return nullptr;
 }

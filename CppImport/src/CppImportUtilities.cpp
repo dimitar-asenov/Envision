@@ -603,8 +603,8 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
 		ooRef->setName(QString::fromStdString(
 								templateSpecialization->getTemplateName().getAsTemplateDecl()->getNameAsString()));
-		for (auto argIt = templateSpecialization->begin(); argIt != templateSpecialization->end(); ++argIt)
-			ooRef->typeArguments()->append(translateTemplateArgument(*argIt, location));
+		for (auto templateArg : *templateSpecialization)
+			ooRef->typeArguments()->append(translateTemplateArgument(templateArg, location));
 		translatedType = ooRef;
 	}
 	else if (auto dependentType = llvm::dyn_cast<clang::DependentNameType>(type))

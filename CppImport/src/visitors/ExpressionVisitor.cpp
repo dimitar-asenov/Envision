@@ -578,9 +578,9 @@ bool ExpressionVisitor::TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObject
 bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 {
 	OOModel::ArrayInitializer* ooArrayInit = new OOModel::ArrayInitializer();
-	for (auto iter = initListExpr->begin(); iter!=initListExpr->end(); ++iter)
+	for (auto initExpr : *initListExpr)
 	{
-		TraverseStmt(*iter);
+		TraverseStmt(initExpr);
 		if (!ooExprStack_.empty()) ooArrayInit->values()->append(ooExprStack_.pop());
 	}
 	ooExprStack_.push(ooArrayInit);

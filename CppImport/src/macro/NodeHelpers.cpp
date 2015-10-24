@@ -246,8 +246,8 @@ bool NodeHelpers::matchesRegex(const QString& regex, const QString& value)
 
 OOModel::Declaration* NodeHelpers::findDeclaration(Model::List* list, const QString& name)
 {
-	for (auto i = 0; i < list->size(); i++)
-		if (auto decl = DCast<OOModel::Declaration>(list->at(i)))
+	for (auto elem : *list)
+		if (auto decl = DCast<OOModel::Declaration>(elem))
 			if (decl->name() == name)
 				return decl;
 

@@ -132,9 +132,8 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 		TraverseClass(recordDecl, ooClass);
 		// visit type arguments if any
 		auto templateParamList = classTemplate->getTemplateParameters();
-		for ( auto templateParam = templateParamList->begin();
-			  templateParam != templateParamList->end(); ++templateParam)
-			ooClass->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
+		for (auto templateParameter : *templateParamList)
+			ooClass->typeArguments()->append(templArgVisitor_->translateTemplateArg(templateParameter));
 	}
 	return true;
 }
@@ -210,9 +209,8 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		if (auto describedTemplate = recordDecl->getDescribedClassTemplate())
 		{
 			auto templateParamList = describedTemplate->getTemplateParameters();
-			for ( auto templateParam = templateParamList->begin();
-				  templateParam != templateParamList->end(); ++templateParam)
-				ooClass->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
+			for (auto templateParameter : *templateParamList)
+				ooClass->typeArguments()->append(templArgVisitor_->translateTemplateArg(templateParameter));
 		}
 	}
 	else
@@ -463,9 +461,8 @@ bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl
 		ooTypeAlias->setName(QString::fromStdString(typeAliasTemplate->getNameAsString()));
 		// type arguments
 		auto templateParamList = typeAliasTemplate->getTemplateParameters();
-		for ( auto templateParam = templateParamList->begin();
-			  templateParam != templateParamList->end(); ++templateParam)
-			ooTypeAlias->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
+		for (auto templateParameter : *templateParamList)
+			ooTypeAlias->typeArguments()->append(templArgVisitor_->translateTemplateArg(templateParameter));
 		// insert in tree
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
@@ -1118,9 +1115,8 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		if (auto functionTemplate = functionDecl->getDescribedFunctionTemplate())
 		{
 			auto templateParamList = functionTemplate->getTemplateParameters();
-			for ( auto templateParam = templateParamList->begin();
-				  templateParam != templateParamList->end(); ++templateParam)
-				ooFunction->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
+			for (auto templateParameter : *templateParamList)
+				ooFunction->typeArguments()->append(templArgVisitor_->translateTemplateArg(templateParameter));
 		}
 		if (auto specArgs = functionDecl->getTemplateSpecializationArgsAsWritten())
 		{
