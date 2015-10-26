@@ -39,10 +39,11 @@ namespace InformationScripting {
 const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
 const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
-Query* QueryParser::buildQueryFrom(const QString& text, Model::Node* target)
+Query* QueryParser::buildQueryFrom(const QString& text, Model::Node* target, QueryExecutor* executor)
 {
 	QueryParser parser;
 	parser.target_ = target;
+	parser.executor_ = executor;
 	Q_ASSERT(text.size());
 	auto type = parser.typeOf(text);
 	if (Type::Operator == type)
@@ -106,7 +107,7 @@ Query* QueryParser::parseQuery(const QString& text)
 										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ", QString::SkipEmptyParts);
 	Q_ASSERT(data.size());
 	QString command = data.takeFirst();
-	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
+	auto q = QueryRegistry::instance().buildQuery(command, target_, data, executor_);
 	Q_ASSERT(q); // TODO this should be an error for the user.
 	return q;
 }

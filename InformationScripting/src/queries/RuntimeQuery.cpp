@@ -36,6 +36,8 @@
 #include "OODebug/src/debugger/JavaDebugger.h"
 #include "OODebug/src/debugger/jdwp/messages/EventSet.h"
 
+#include "QueryExecutor.h"
+
 namespace InformationScripting {
 
 Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
@@ -73,10 +75,10 @@ Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 
 void RuntimeQuery::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<RuntimeQuery>("traceExecution");
+	QueryRegistry::registerQuery<RuntimeQuery, QueryRegistry::ExtraArguments::QueryExecutor>("traceExecution");
 }
 
-RuntimeQuery::RuntimeQuery(Model::Node* target, QStringList)
+RuntimeQuery::RuntimeQuery(Model::Node* target, QStringList, QueryExecutor*)
 	: LinearQuery{target}
 {}
 

@@ -35,8 +35,9 @@
 
 namespace InformationScripting {
 
-ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args)
-	: Query{target}, scriptPath_{scriptPath}, arguments_{args}
+ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target,
+								 const QStringList& args, QueryExecutor* executor)
+	: Query{target}, scriptPath_{scriptPath}, arguments_{args}, executor_{executor}
 {}
 
 // Since we can't create a module in another way, we create an empty one here.
@@ -136,7 +137,7 @@ QList<Optional<TupleSet>> ScriptQuery::queryExecutor(QString name, boost::python
 	boost::python::stl_input_iterator<TupleSet> inputsBegin(input), inputsEnd;
 	auto inputConverted = QList<TupleSet>::fromStdList(std::list<TupleSet>(inputsBegin, inputsEnd));
 
-	std::unique_ptr<Query> query{QueryRegistry::instance().buildQuery(name, target(), argsConverted)};
+	std::unique_ptr<Query> query{QueryRegistry::instance().buildQuery(name, target(), argsConverted, executor_)};
 	auto result = query->execute(inputConverted);
 
 	return result;

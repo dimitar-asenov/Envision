@@ -44,23 +44,24 @@ void QueryRegistry::registerAlias(const QString& alias, const QString& aliasedQu
 	auto constructorIt = registry.constructors_.find(aliasedQuery);
 	Q_ASSERT(constructorIt != registry.constructors_.end()); // Need to register aliasedQuery first!
 	auto aliasedConstructor = *constructorIt;
-	registry.constructors_[alias] = [argAdaption, aliasedConstructor] (Model::Node* target, QStringList args) {
-		if (argAdaption) argAdaption(args);
-		return aliasedConstructor(target, args);
+	registry.constructors_[alias] =
+		[argAdaption, aliasedConstructor] (Model::Node* target, QStringList args, QueryExecutor* executor) {
+			if (argAdaption) argAdaption(args);
+			return aliasedConstructor(target, args, executor);
 	};
 }
 
-Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QStringList args)
+Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QStringList args, QueryExecutor* executor)
 {
 	if (auto constructor = constructors_[command])
-		return constructor(target, args);
+		return constructor(target, args, executor);
 	if (args.size() > 1 && args[0] == "=")
 	{
 		// TODO we need some way to specify a condition on the node.
 		// Or eventually decide that we don't allow condition in the property adder
 		return new NodePropertyAdder(command, args[1]);
 	}
-	if (auto script = tryBuildQueryFromScript(command, target, args))
+	if (auto script = tryBuildQueryFromScript(command, target, args, executor))
 		return script;
 	return nullptr;
 }
@@ -74,11 +75,12 @@ QStringList QueryRegistry::scriptQueries() const
 	return result;
 }
 
-Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, Model::Node* target, QStringList args)
+Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, Model::Node* target,
+															 QStringList args, QueryExecutor* executor)
 {
 	QString scriptName{scriptLocation_ + name + ".py"};
 	if (QFile::exists(scriptName))
-		return new ScriptQuery(scriptName, target, args);
+		return new ScriptQuery(scriptName, target, args, executor);
 	return nullptr;
 }
 

@@ -39,6 +39,7 @@ namespace InformationScripting {
 class Query;
 class TupleSet;
 class ArgumentRule;
+class QueryExecutor;
 
 class INFORMATIONSCRIPTING_API QueryRegistry
 {
@@ -48,10 +49,14 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		template <class QueryType, class ...ForwardArguments>
 		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
 
+		enum class ExtraArguments : int { Default, QueryExecutor };
+		template <class QueryType, ExtraArguments extras, class ...ForwardArguments>
+		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
+
 		static void registerAlias(const QString& alias, const QString& aliasedQuery,
 										  std::function<void (QStringList&)> argAdaption = {});
 
-		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
+		Query* buildQuery(const QString& command, Model::Node* target, QStringList args, QueryExecutor* executor);
 
 		QStringList registeredQueries() const;
 		QStringList scriptQueries() const;
@@ -59,9 +64,10 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 	private:
 		QueryRegistry() = default;
 
-		Query* tryBuildQueryFromScript(const QString& name, Model::Node* target, QStringList args);
+		Query* tryBuildQueryFromScript(const QString& name, Model::Node* target,
+												 QStringList args, QueryExecutor* executor);
 
-		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
+		using QueryConstructor = std::function<Query* (Model::Node*, QStringList, QueryExecutor*)>;
 		QHash<QString, QueryConstructor> constructors_;
 		QString scriptLocation_{"scripts/"};
 };
@@ -69,9 +75,28 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 template <class QueryType, class ...ForwardArguments>
 inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
 {
-	instance().constructors_[name] = [name, forwardArguments...](Model::Node* target, QStringList args) {
-		return new QueryType(target, QStringList(name) + args, forwardArguments...);
+	instance().constructors_[name] =
+			[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor*) {
+				return new QueryType(target, QStringList(name) + args, forwardArguments...);
 	};
+}
+
+template <class QueryType, QueryRegistry::ExtraArguments extras, class ...ForwardArguments>
+inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
+{
+	if (extras == ExtraArguments::Default)
+	{
+		registerQuery<QueryType>(name, forwardArguments...);
+	}
+	else if (extras == ExtraArguments::QueryExecutor)
+	{
+		instance().constructors_[name] =
+				[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor* executor) {
+					return new QueryType(target, QStringList(name) + args, executor, forwardArguments...);
+		};
+	}
+	else
+		Q_ASSERT(false); // Invalid extra argument
 }
 
 inline QStringList QueryRegistry::registeredQueries() const { return constructors_.keys(); }

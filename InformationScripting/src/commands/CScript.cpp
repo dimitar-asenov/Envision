@@ -79,7 +79,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		QueryExecutor queryExecutor;
 		Query* q = nullptr;
 		try {
-			q = QueryParser::buildQueryFrom(args.join(""), node);
+			q = QueryParser::buildQueryFrom(args.join(""), node, &queryExecutor);
 		} catch (const QueryParsingException& e) {
 			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 		}

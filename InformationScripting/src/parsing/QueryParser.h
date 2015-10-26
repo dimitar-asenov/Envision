@@ -36,6 +36,7 @@ namespace InformationScripting {
 
 class CompositeQuery;
 class Query;
+class QueryExecutor;
 
 class INFORMATIONSCRIPTING_API QueryParser
 {
@@ -52,7 +53,7 @@ class INFORMATIONSCRIPTING_API QueryParser
 		 * queryOrOp	:= query | operator
 		 * list			:= {queryOrOp [, queryOrOp]+}
 		 */
-		static Query* buildQueryFrom(const QString& text, Model::Node* target);
+		static Query* buildQueryFrom(const QString& text, Model::Node* target, QueryExecutor* executor);
 
 	private:
 		QueryParser() = default;
@@ -69,6 +70,7 @@ class INFORMATIONSCRIPTING_API QueryParser
 										Query* connectionQuery, Query* outputQuery = nullptr);
 
 		Model::Node* target_{};
+		QueryExecutor* executor_{};
 
 		static constexpr int SCOPE_SYMBOL_LENGTH_{2};
 		static const QStringList OPEN_SCOPE_SYMBOL;
