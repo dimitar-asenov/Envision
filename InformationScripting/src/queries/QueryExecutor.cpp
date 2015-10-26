@@ -31,6 +31,8 @@
 
 #include "InteractionBase/src/commands/CommandResult.h"
 
+#include "VisualizationBase/src/VisualizationManager.h"
+
 namespace InformationScripting {
 
 QueryExecutor::~QueryExecutor()
@@ -72,7 +74,12 @@ Interaction::CommandResult* QueryExecutor::execute(const QList<TupleSet>& input)
 		}
 	}
 
-	if (queries_.empty()) delete this;
+	if (queries_.empty())
+	{
+		// deleteLater
+		QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
+																 new Visualization::CustomSceneEvent([this](){delete this;}));
+	}
 
 	if (hasError)
 		return new Interaction::CommandResult(new Interaction::CommandError(errorMessage));
