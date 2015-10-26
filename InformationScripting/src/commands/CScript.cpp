@@ -76,15 +76,15 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	else if (command != "fallback")
 	{
 		args.prepend(command);
-		QueryExecutor queryExecutor;
+		QueryExecutor* queryExecutor = new QueryExecutor();
 		Query* q = nullptr;
 		try {
-			q = QueryParser::buildQueryFrom(args.join(""), node, &queryExecutor);
+			q = QueryParser::buildQueryFrom(args.join(""), node, queryExecutor);
 		} catch (const QueryParsingException& e) {
 			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 		}
-		queryExecutor.addQuery(q);
-		return queryExecutor.execute();
+		queryExecutor->addQuery(q);
+		return queryExecutor->execute();
 	}
 	return new Interaction::CommandResult();
 }

@@ -43,7 +43,7 @@ void QueryExecutor::addQuery(Query* query)
 	queries_.emplace(std::unique_ptr<Query>(query));
 }
 
-Interaction::CommandResult* QueryExecutor::execute()
+Interaction::CommandResult* QueryExecutor::execute(const QList<TupleSet>& input)
 {
 	Q_ASSERT(!queries_.empty());
 
@@ -53,7 +53,7 @@ Interaction::CommandResult* QueryExecutor::execute()
 	auto query = std::move(queries_.front());
 	queries_.pop();
 
-	auto results = query->execute({});
+	auto results = query->execute(input);
 	if (results.size())
 	{
 		// TODO how to handle warnings? CommandResult has no warnings?
@@ -71,6 +71,8 @@ Interaction::CommandResult* QueryExecutor::execute()
 			errorMessage = results[0].errors()[0];
 		}
 	}
+
+	if (queries_.empty()) delete this;
 
 	if (hasError)
 		return new Interaction::CommandResult(new Interaction::CommandError(errorMessage));

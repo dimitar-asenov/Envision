@@ -35,6 +35,7 @@ namespace Interaction {
 namespace InformationScripting {
 
 class Query;
+class TupleSet;
 
 class INFORMATIONSCRIPTING_API QueryExecutor
 {
@@ -42,7 +43,7 @@ class INFORMATIONSCRIPTING_API QueryExecutor
 		~QueryExecutor();
 		void addQuery(Query* query);
 
-		Interaction::CommandResult* execute();
+		Interaction::CommandResult* execute(const QList<TupleSet>& input = {});
 
 	private:
 		std::queue<std::unique_ptr<Query>> queries_{};
