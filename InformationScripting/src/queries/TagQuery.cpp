@@ -49,7 +49,7 @@ Optional<TupleSet> TagQuery::executeLinear(TupleSet input)
 void TagQuery::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<TagQuery>("tags", &TagQuery::tags,
-		{{ArgumentRule::AtMostOneOf, {{ADD_ARGUMENT_NAMES[1], ArgumentValue::IsSet},
+		std::vector<ArgumentRule>{{ArgumentRule::AtMostOneOf, {{ADD_ARGUMENT_NAMES[1], ArgumentValue::IsSet},
 												{REMOVE_ARGUMENT_NAMES[1], ArgumentValue::IsSet}}},
 		 {ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerAlias("addTags", "tags", [](QStringList& args) {args.append("-" + ADD_ARGUMENT_NAMES[0]);});

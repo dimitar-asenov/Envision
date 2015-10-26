@@ -53,9 +53,8 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 
 		template <class QueryType> using QueryExec = std::function<Optional<TupleSet> (QueryType*, TupleSet)>;
 
-		template <class QueryType>
-		static void registerQuery(const QString& name, QueryExec<QueryType> exec,
-										  std::vector<ArgumentRule> argumentRules = {});
+		template <class QueryType, class ...ForwardArguments>
+		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
 
 		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
@@ -77,12 +76,11 @@ inline void QueryRegistry::registerQueryConstructor(const QString& command, Quer
 	constructors_[command] = constructor;
 }
 
-template <class QueryType>
-inline void QueryRegistry::registerQuery(const QString& name, QueryExec<QueryType> exec,
-													  std::vector<ArgumentRule> argumentRules)
+template <class QueryType, class ...ForwardArguments>
+inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
 {
-	instance().registerQueryConstructor(name, [name, exec, argumentRules](Model::Node* target, QStringList args) {
-		return new QueryType(target, QStringList(name) + args, exec, argumentRules);
+	instance().registerQueryConstructor(name, [name, forwardArguments...](Model::Node* target, QStringList args) {
+		return new QueryType(target, QStringList(name) + args, forwardArguments...);
 	});
 }
 
