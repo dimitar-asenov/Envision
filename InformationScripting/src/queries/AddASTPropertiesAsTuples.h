@@ -38,6 +38,13 @@ class INFORMATIONSCRIPTING_API AddASTPropertiesAsTuples : public LinearQuery
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
+
+	private:
+		friend class QueryRegistry;
+
+		AddASTPropertiesAsTuples(Model::Node*, QStringList);
 };
+
+inline AddASTPropertiesAsTuples::AddASTPropertiesAsTuples(Model::Node*, QStringList) {}
 
 } /* namespace InformationScripting */

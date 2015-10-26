@@ -73,12 +73,10 @@ Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 
 void RuntimeQuery::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("traceExecution", [](Model::Node* target, QStringList) {
-		return new RuntimeQuery(target);
-	});
+	QueryRegistry::registerQuery<RuntimeQuery>("traceExecution");
 }
 
-RuntimeQuery::RuntimeQuery(Model::Node* target)
+RuntimeQuery::RuntimeQuery(Model::Node* target, QStringList)
 	: LinearQuery{target}
 {}
 

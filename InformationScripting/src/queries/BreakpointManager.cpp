@@ -53,15 +53,13 @@ Optional<TupleSet> BreakpointManager::executeLinear(TupleSet input)
 
 void BreakpointManager::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("addBreakpoints", [](Model::Node* target, QStringList args) {
-		return new BreakpointManager(target, args);
-	});
+	QueryRegistry::registerQuery<BreakpointManager>("addBreakpoints");
 }
 
 BreakpointManager::BreakpointManager(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
 	{VISIBLE_ARGUMENT_NAMES, "Wether the breakpoint is visible, default = no", VISIBLE_ARGUMENT_NAMES[1], "no"}
-}, QStringList("addBreakpoints") + args}
+}, args}
 {}
 
 

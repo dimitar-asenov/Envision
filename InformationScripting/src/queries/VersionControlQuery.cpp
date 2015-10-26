@@ -95,15 +95,13 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 
 void VersionControlQuery::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("changes", [](Model::Node* target, QStringList args) {
-		return new VersionControlQuery(target, args);
-	});
+	QueryRegistry::registerQuery<VersionControlQuery>("changes");
 }
 
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
 		{COUNT_ARGUMENT_NAMES, "The amount of revision to look at", COUNT_ARGUMENT_NAMES[1], "10"}
-}, QStringList{"changes"} + args}
+}, args}
 {}
 
 void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMetaData& metadata)

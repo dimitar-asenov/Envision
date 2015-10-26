@@ -37,9 +37,13 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AstNameFilter : public GenericFilter
 {
 	public:
-		AstNameFilter(Model::SymbolMatcher matcher);
-
 		static void registerDefaultQueries();
+
+	private:
+		friend class QueryRegistry;
+
+		AstNameFilter(Model::SymbolMatcher matcher);
+		AstNameFilter(Model::Node* target, QStringList args);
 };
 
 } /* namespace InformationScripting */

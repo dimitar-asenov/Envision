@@ -44,6 +44,8 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 
 		static void registerDefaultQueries();
 	private:
+		friend class QueryRegistry;
+
 		ArgumentParser arguments_;
 
 		static const QStringList COUNT_ARGUMENT_NAMES;

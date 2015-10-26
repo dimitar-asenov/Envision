@@ -40,10 +40,7 @@ Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
 
 void AddASTPropertiesAsTuples::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("addASTProperties", [](Model::Node*, QStringList)
-	{
-		return new AddASTPropertiesAsTuples();
-	});
+	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
 }
 
 } /* namespace InformationScripting */
