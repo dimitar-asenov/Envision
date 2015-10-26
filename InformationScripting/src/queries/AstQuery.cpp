@@ -71,12 +71,6 @@ Optional<TupleSet> AstQuery::executeLinear(TupleSet input)
 
 void AstQuery::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<AstQuery>("classes", &AstQuery::genericQuery,
-														[](QStringList& args) {setTypeTo(args, "Class");});
-	QueryRegistry::registerQuery<AstQuery>("methods", &AstQuery::genericQuery,
-														[](QStringList& args) {setTypeTo(args, "Method");});
-	QueryRegistry::registerQuery<AstQuery>("toClass", &AstQuery::toParentType,
-														[](QStringList& args) {setTypeTo(args, "Class");});
 	QueryRegistry::registerQuery<AstQuery>("bases", &AstQuery::baseClassesQuery);
 	QueryRegistry::registerQuery<AstQuery>("callgraph", &AstQuery::callGraph);
 	QueryRegistry::registerQuery<AstQuery>("ast", &AstQuery::genericQuery,
@@ -89,6 +83,9 @@ void AstQuery::registerDefaultQueries()
 		{{ArgumentRule::RequireAll, {{NODETYPE_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("attribute", &AstQuery::attribute,
 		{{ArgumentRule::RequireAll, {{ATTRIBUTE_NAME_NAMES[1]}}}});
+	QueryRegistry::registerAlias("classes", "ast", [](QStringList& args) {setTypeTo(args, "Class");});
+	QueryRegistry::registerAlias("methods", "ast", [](QStringList& args) {setTypeTo(args, "Method");});
+	QueryRegistry::registerAlias("toClass", "toParent", [](QStringList& args) {setTypeTo(args, "Class");});
 }
 
 void AstQuery::setTypeTo(QStringList& args, QString type)

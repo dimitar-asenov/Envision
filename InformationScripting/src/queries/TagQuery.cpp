@@ -52,12 +52,9 @@ void TagQuery::registerDefaultQueries()
 		{{ArgumentRule::AtMostOneOf, {{ADD_ARGUMENT_NAMES[1], ArgumentValue::IsSet},
 												{REMOVE_ARGUMENT_NAMES[1], ArgumentValue::IsSet}}},
 		 {ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
-	// Alias to "tags -a"
-	QueryRegistry::registerQuery<TagQuery>("addTags", &TagQuery::addTags,
-		{{ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
-	// Alias to "tags -r"
-	QueryRegistry::registerQuery<TagQuery>("removeTags", &TagQuery::removeTags,
-		{{ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
+	QueryRegistry::registerAlias("addTags", "tags", [](QStringList& args) {args.append("-" + ADD_ARGUMENT_NAMES[0]);});
+	QueryRegistry::registerAlias("removeTags", "tags",
+										  [](QStringList& args) {args.append("-" + REMOVE_ARGUMENT_NAMES[0]);});
 }
 
 TagQuery::TagQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)

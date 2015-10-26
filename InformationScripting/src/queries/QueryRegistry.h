@@ -48,13 +48,14 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
 		void registerQueryConstructor(const QString& command, QueryConstructor constructor);
 
-		template <class QueryType> using QueryExec = std::function<Optional<TupleSet> (QueryType*, TupleSet)>;
-		template <class QueryType>
-		static void registerQuery(const QString& name, QueryExec<QueryType> exec,
+		static void registerAlias(const QString& alias, const QString& aliasedQuery,
 										  std::function<void (QStringList&)> argAdaption = {});
 
+		template <class QueryType> using QueryExec = std::function<Optional<TupleSet> (QueryType*, TupleSet)>;
+
 		template <class QueryType>
-		static void registerQuery(const QString& name, QueryExec<QueryType> exec, std::vector<ArgumentRule> argumentRules);
+		static void registerQuery(const QString& name, QueryExec<QueryType> exec,
+										  std::vector<ArgumentRule> argumentRules = {});
 
 		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
@@ -74,16 +75,6 @@ inline void QueryRegistry::registerQueryConstructor(const QString& command, Quer
 {
 	Q_ASSERT(constructor);
 	constructors_[command] = constructor;
-}
-
-template <class QueryType>
-inline void QueryRegistry::registerQuery(const QString& name, QueryExec<QueryType> exec,
-													  std::function<void (QStringList&)> argAdaption)
-{
-	instance().registerQueryConstructor(name, [name, exec, argAdaption](Model::Node* target, QStringList args) {
-		if (argAdaption) argAdaption(args);
-		return new QueryType(target, QStringList(name) + args, exec);
-	});
 }
 
 template <class QueryType>
