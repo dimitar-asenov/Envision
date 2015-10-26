@@ -36,20 +36,21 @@
 #include "OODebug/src/debugger/JavaDebugger.h"
 #include "OODebug/src/debugger/jdwp/messages/EventSet.h"
 
+#include "QueryExecutor.h"
+
 namespace InformationScripting {
 
 Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 {
-	// FIXME change this once we have a yield mechanism:
-	std::unordered_map<Model::Node*, int> execCount;
-	auto listener = [&execCount](Model::Node* target, auto...) {
-		++execCount[target];
+	auto execCount = std::make_shared<std::unordered_map<Model::Node*, int>>();
+	auto listener = [execCount](Model::Node* target, auto...) {
+		++(*execCount)[target];
 		return false;
 	};
 
-	std::vector<int> callbackIds;
+	auto callbackIds = std::make_shared<std::vector<int>>();
 	for (const auto& breakpointTuple : input.tuples("breakpoint"))
-		callbackIds.push_back(
+		callbackIds->push_back(
 					OODebug::JavaDebugger::instance().addBreakpointListener(breakpointTuple["breakpoint"], listener));
 
 	auto manager = target()->manager();
@@ -59,27 +60,33 @@ Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 	if (executionResult->code() == Interaction::CommandResult::Error)
 		return {"errror during exection"};
 
-	// FIXME needs yield here. Doesn't work currently
+	auto queryExecutor = executor();
+	Q_ASSERT(queryExecutor);
+	OODebug::JavaDebugger::instance().addProgramExitLister([callbackIds, execCount, queryExecutor]()
+		{
+			for (int id : *callbackIds)
+				OODebug::JavaDebugger::instance().removeBreakpointListener(id);
 
-	// FIXME this should happen as a pre resume command once we have yield.
-	for (int id : callbackIds)
-		OODebug::JavaDebugger::instance().removeBreakpointListener(id);
+			TupleSet result;
+			for (const auto& val : *execCount)
+				result.add({{"count", val.second}, {"ast", val.first}});
 
-	TupleSet result;
-	for (const auto& val : execCount)
-		result.add({{"count", val.second}, {"ast", val.first}});
-	return result;
+			queryExecutor->runContinuation({result});
+		}
+	);
+	return TupleSet();
 }
 
 void RuntimeQuery::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("traceExecution", [](Model::Node* target, QStringList) {
-		return new RuntimeQuery(target);
+	QueryRegistry::instance().registerQueryConstructor("traceExecution",
+	[](Query* parent, Model::Node* target, QStringList) {
+		return new RuntimeQuery(parent, target);
 	});
 }
 
-RuntimeQuery::RuntimeQuery(Model::Node* target)
-	: LinearQuery{target}
+RuntimeQuery::RuntimeQuery(Query* parent, Model::Node* target)
+	: LinearQuery{parent, target}
 {}
 
 } /* namespace InformationScripting */

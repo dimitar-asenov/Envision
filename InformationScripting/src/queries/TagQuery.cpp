@@ -60,8 +60,9 @@ void TagQuery::registerDefaultQueries()
 		{{ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}}}});
 }
 
-TagQuery::TagQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)
-	: LinearQuery{target}, arguments_{{
+TagQuery::TagQuery(Query* parent, Model::Node* target, QStringList args,
+						 ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)
+	: LinearQuery{parent, target}, arguments_{{
 			{NAME_ARGUMENT_NAMES, "Tag name, or regex to find tag", NAME_ARGUMENT_NAMES[1]},
 			QCommandLineOption{ADD_ARGUMENT_NAMES},
 			QCommandLineOption{REMOVE_ARGUMENT_NAMES},

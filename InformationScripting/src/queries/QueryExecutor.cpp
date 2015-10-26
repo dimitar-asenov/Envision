@@ -26,24 +26,87 @@
 
 #include "QueryExecutor.h"
 
-#include "Query.h"
-
 #include "visualization/DefaultVisualizer.h"
 
 #include "InteractionBase/src/commands/CommandResult.h"
 
 namespace InformationScripting {
 
-QueryExecutor::QueryExecutor(Query* q) : query_{q} {}
-
 QueryExecutor::~QueryExecutor()
 {
-	SAFE_DELETE(query_);
+	Q_ASSERT(queries_.empty());
+}
+
+void QueryExecutor::addQuery(std::unique_ptr<TopLevelQuery>&& query)
+{
+	query->setExecutor(this);
+	queries_.emplace(std::move(query));
 }
 
 Interaction::CommandResult* QueryExecutor::execute()
 {
-	auto results = query_->execute({});
+	Q_ASSERT(!queries_.empty());
+
+	auto query = std::move(queries_.front());
+	queries_.pop();
+
+	QString errorMessage{};
+
+	if (queries_.empty())
+		errorMessage = executeLast(query.get(), {});
+	else
+	{
+		auto results = query->execute({});
+		for (const auto& result : results)
+			if (result)
+				firstResult_.push_back(result.value());
+			else
+				errorMessage = result.errors().join("");
+		// If we had an error we don't store anything for the continuation
+		if (!errorMessage.isNull()) firstResult_.clear();
+	}
+
+	if (!errorMessage.isNull())
+		return new Interaction::CommandResult(new Interaction::CommandError(errorMessage));
+	else
+		return new Interaction::CommandResult();
+}
+
+QList<Optional<TupleSet>> QueryExecutor::runContinuation(const QList<TupleSet>& input)
+{
+	if (queries_.empty()) return {{"No continuation to execute"}};
+
+	auto query = std::move(queries_.front());
+	queries_.pop();
+
+	auto queryInput = input;
+	if (!firstResult_.isEmpty())
+	{
+		// Merge the larger of the lists in the other
+		auto merger = [](TupleSet left, const TupleSet& right) { left.unite(right); return left; };
+		if (firstResult_.size() > input.size())
+			std::transform(input.begin(), input.end(), firstResult_.begin(), queryInput.begin(), merger);
+		else
+		{
+			// make sure there is enough space in queryInput list:
+			queryInput = firstResult_;
+			std::transform(firstResult_.begin(), firstResult_.end(), input.begin(), queryInput.begin(), merger);
+		}
+		firstResult_.clear();
+	}
+	if (queries_.empty())
+	{
+		executeLast(query.get(), queryInput);
+		return {{TupleSet()}};	// empty return value no one should care about the last
+	}
+
+	return query->execute(queryInput);
+}
+
+QString QueryExecutor::executeLast(Query* q, const QList<TupleSet>& input)
+{
+	QString errorMessage{};
+	auto results = q->execute(input);
 	if (results.size())
 	{
 		// TODO how to handle warnings? CommandResult has no warnings?
@@ -57,11 +120,11 @@ Interaction::CommandResult* QueryExecutor::execute()
 		}
 		else
 		{
-			return new Interaction::CommandResult(new Interaction::CommandError(results[0].errors()[0]));
+			errorMessage = results[0].errors()[0];
 		}
 	}
-
-	return new Interaction::CommandResult();
+	delete this;
+	return errorMessage;
 }
 
 } /* namespace InformationScripting */

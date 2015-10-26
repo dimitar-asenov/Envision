@@ -44,7 +44,7 @@ class INFORMATIONSCRIPTING_API BreakpointManager : public LinearQuery
 		ArgumentParser arguments_;
 		static const QStringList VISIBLE_ARGUMENT_NAMES;
 
-		BreakpointManager(Model::Node* target, QStringList args);
+		BreakpointManager(Query* parent, Model::Node* target, QStringList args);
 };
 
 } /* namespace InformationScripting */

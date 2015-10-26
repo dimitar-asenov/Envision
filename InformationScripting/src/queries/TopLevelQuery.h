@@ -32,11 +32,26 @@
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API SubstractOperator : public Query
+/**
+ * Represents a query to be used by the query executor.
+ * This query only has the purpose of providing executor information to it's child queries.
+ */
+class INFORMATIONSCRIPTING_API TopLevelQuery final : public Query
 {
 	public:
-		SubstractOperator(Query* parent);
+		/**
+		 * Takes ownership of \a child.
+		 */
+		TopLevelQuery(Query* child);
+		virtual ~TopLevelQuery() override;
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
+		virtual QueryExecutor* executor() const override;
+
+		void setExecutor(QueryExecutor* executor);
+
+	private:
+		std::unique_ptr<Query> childQuery_{};
+		QueryExecutor* executor_{};
 };
 
 } /* namespace InformationScripting */

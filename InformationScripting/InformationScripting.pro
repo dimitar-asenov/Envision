@@ -71,7 +71,8 @@ HEADERS += src/precompiled.h \
     src/parsing/ArgumentRule.h \
     src/parsing/QueryParsingException.h \
     src/queries/BreakpointManager.h \
-    src/queries/RuntimeQuery.h
+    src/queries/RuntimeQuery.h \
+    src/queries/TopLevelQuery.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -125,7 +126,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/parsing/ArgumentRule.cpp \
     src/parsing/QueryParsingException.cpp \
     src/queries/BreakpointManager.cpp \
-    src/queries/RuntimeQuery.cpp
+    src/queries/RuntimeQuery.cpp \
+    src/queries/TopLevelQuery.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

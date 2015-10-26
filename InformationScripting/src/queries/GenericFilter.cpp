@@ -28,7 +28,8 @@
 
 namespace InformationScripting {
 
-GenericFilter::GenericFilter(GenericFilter::KeepTuple f) : keepTuple_{f}
+GenericFilter::GenericFilter(Query* parent, GenericFilter::KeepTuple f)
+	: LinearQuery{parent}, keepTuple_{f}
 {}
 
 Optional<TupleSet> GenericFilter::executeLinear(TupleSet input)

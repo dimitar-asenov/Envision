@@ -28,8 +28,8 @@
 
 namespace InformationScripting {
 
-NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value)
- : name_{propertyName}, value_{value}
+NodePropertyAdder::NodePropertyAdder(Query* parent, const QString& propertyName, Property value)
+ : Query{parent}, name_{propertyName}, value_{value}
 {}
 
 QList<Optional<TupleSet>> NodePropertyAdder::execute(QList<TupleSet> input)

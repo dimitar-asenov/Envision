@@ -48,7 +48,7 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 
 		static const QStringList COUNT_ARGUMENT_NAMES;
 
-		VersionControlQuery(Model::Node* target, QStringList args);
+		VersionControlQuery(Query* parent, Model::Node* target, QStringList args);
 
 		static void addCommitMetaInformation(TupleSet& ts, const FilePersistence::CommitMetaData& metadata);
 };

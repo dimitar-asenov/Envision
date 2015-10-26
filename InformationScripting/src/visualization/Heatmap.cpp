@@ -62,13 +62,13 @@ Optional<TupleSet> Heatmap::executeLinear(TupleSet input)
 
 void Heatmap::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("heatmap", [](Model::Node*, QStringList args) {
-		return new Heatmap(args);
+	QueryRegistry::instance().registerQueryConstructor("heatmap", [](Query* parent, Model::Node*, QStringList args) {
+		return new Heatmap(parent, args);
 	});
 }
 
-Heatmap::Heatmap(QStringList args)
-	: arguments_{{
+Heatmap::Heatmap(Query* parent, QStringList args)
+	: LinearQuery{parent}, arguments_{{
 		{VALUE_ATTRIBUTE_NAME_NAMES, "Name of the attribute that contains the count value",
 					 VALUE_ATTRIBUTE_NAME_NAMES[1], "count"} // Use count as default tag for heatmaps
 		}, QStringList("heatmap") + args}

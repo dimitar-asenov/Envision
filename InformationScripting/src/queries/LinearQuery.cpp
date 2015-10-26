@@ -28,7 +28,7 @@
 
 namespace InformationScripting {
 
-LinearQuery::LinearQuery(Model::Node* target) : Query{target} {}
+LinearQuery::LinearQuery(Query* parent, Model::Node* target) : Query{parent, target} {}
 
 QList<Optional<TupleSet> > LinearQuery::execute(QList<TupleSet> input)
 {

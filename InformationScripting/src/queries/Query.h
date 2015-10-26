@@ -34,19 +34,30 @@
 
 namespace InformationScripting {
 
+class QueryExecutor;
+
 class INFORMATIONSCRIPTING_API Query
 {
 	public:
-		Query(Model::Node* target = nullptr);
+		Query(Query* parent, Model::Node* target = nullptr);
 		virtual ~Query() = default;
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet>) = 0;
+		virtual QueryExecutor* executor() const;
+
+		Query* parent() const;
+		void setParent(Query* parent);
+
 		Model::Node* target() const;
 
 	private:
+		Query* parent_{};
 		Model::Node* target_{};
 };
 
-inline Query::Query(Model::Node *target) : target_{target} {}
+inline Query::Query(Query* parent, Model::Node *target) : parent_{parent}, target_{target} {}
+inline QueryExecutor* Query::executor() const { return parent()->executor(); }
+inline Query* Query::parent() const { return parent_; }
+inline void Query::setParent(Query *parent) { Q_ASSERT(parent); parent_ = parent;}
 inline Model::Node* Query::target() const { return target_; }
 
 } /* namespace InformationScripting */

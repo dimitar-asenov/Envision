@@ -32,6 +32,8 @@
 
 namespace InformationScripting {
 
+AddASTPropertiesAsTuples::AddASTPropertiesAsTuples(Query* parent) : LinearQuery{parent} {}
+
 Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
 {
 	input.addPropertiesAsTuples<Model::Node*>("ast");
@@ -40,9 +42,9 @@ Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
 
 void AddASTPropertiesAsTuples::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("addASTProperties", [](Model::Node*, QStringList)
+	QueryRegistry::instance().registerQueryConstructor("addASTProperties", [](Query* parent, Model::Node*, QStringList)
 	{
-		return new AddASTPropertiesAsTuples();
+		return new AddASTPropertiesAsTuples(parent);
 	});
 }
 

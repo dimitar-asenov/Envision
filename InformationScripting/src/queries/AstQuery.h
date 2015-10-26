@@ -65,7 +65,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		using ExecuteFunction = std::function<Optional<TupleSet> (AstQuery*, TupleSet)>;
 		ExecuteFunction exec_{};
 
-		AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
+		AstQuery(Query* parent, Model::Node* target, QStringList args,
+					ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
 
 		static void setTypeTo(QStringList& args, QString type);
 

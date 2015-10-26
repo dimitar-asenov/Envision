@@ -30,7 +30,7 @@
 #include "../queries/Query.h"
 #include "../queries/SubstractOperator.h"
 #include "../queries/UnionOperator.h"
-
+#include "../queries/TopLevelQuery.h"
 
 #include "../queries/QueryRegistry.h"
 
@@ -39,29 +39,45 @@ namespace InformationScripting {
 const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
 const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
-Query* QueryParser::buildQueryFrom(const QString& text, Model::Node* target)
+QList<TopLevelQuery*> QueryParser::buildQueryFrom(const QString& text, Model::Node* target)
 {
 	QueryParser parser;
 	parser.target_ = target;
 	Q_ASSERT(text.size());
-	auto type = parser.typeOf(text);
-	if (Type::Operator == type)
-		return parser.parseOperator(text);
-	else if (Type::Query == type)
-		return parser.parseQuery(text);
-	else if (Type::List == type)
+	// For now assume that we only have yield in operator parts:
+	auto parts = text.split("|" + OPEN_SCOPE_SYMBOL[1] + "yield" + CLOSE_SCOPE_SYMBOL[1] + "|",
+			QString::SkipEmptyParts);
+	if (parts.size() > 1)
 	{
-		auto queries = parser.parseList(text);
-		auto result = new CompositeQuery();
-		for (int i = 0; i < queries.size(); ++i)
+		for (int i = 0; i < parts.size(); ++i)
 		{
-			result->connectInput(i, queries[i]);
-			result->connectToOutput(queries[i], i);
+			if (i + 1 < parts.size()) parts[i].append(CLOSE_SCOPE_SYMBOL[0]);
+			if (i > 0) parts[i].prepend(OPEN_SCOPE_SYMBOL[0]);
 		}
-		return result;
 	}
-	Q_ASSERT(false);
-	return nullptr;
+	QList<TopLevelQuery*> results;
+	for (auto part : parts)
+	{
+		auto type = parser.typeOf(part);
+		if (Type::Operator == type)
+			results << new TopLevelQuery(parser.parseOperator(nullptr, part, true));
+		else if (Type::Query == type)
+			results << new TopLevelQuery(parser.parseQuery(nullptr, part));
+		else if (Type::List == type)
+		{
+			auto result = new CompositeQuery(nullptr);
+			auto queries = parser.parseList(result, part);
+			for (int i = 0; i < queries.size(); ++i)
+			{
+				result->connectInput(i, queries[i]);
+				result->connectToOutput(queries[i], i);
+			}
+			results << new TopLevelQuery(result);
+		}
+		else
+			Q_ASSERT(false);
+	}
+	return results;
 }
 
 QueryParser::Type QueryParser::typeOf(const QString& text)
@@ -99,19 +115,19 @@ QPair<QStringList, QList<QChar>> QueryParser::split(const QString& text, const Q
 	return result;
 }
 
-Query* QueryParser::parseQuery(const QString& text)
+Query* QueryParser::parseQuery(Query* parent, const QString& text)
 {
 	Q_ASSERT(typeOf(text) == Type::Query);
 	QStringList data = text.mid(SCOPE_SYMBOL_LENGTH_,
 										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ", QString::SkipEmptyParts);
 	Q_ASSERT(data.size());
 	QString command = data.takeFirst();
-	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
+	auto q = QueryRegistry::instance().buildQuery(parent, command, target_, data);
 	Q_ASSERT(q); // TODO this should be an error for the user.
 	return q;
 }
 
-QList<Query*> QueryParser::parseList(const QString& text)
+QList<Query*> QueryParser::parseList(Query* parent, const QString& text)
 {
 	Q_ASSERT(text.size());
 	QStringList parts = split(text, {','}).first;
@@ -120,16 +136,16 @@ QList<Query*> QueryParser::parseList(const QString& text)
 	{
 		auto type = typeOf(part);
 		if (Type::Operator == type)
-			result.push_back(parseOperator(part, true));
+			result.push_back(parseOperator(parent, part, true));
 		else if (Type::Query == type)
-			result.push_back(parseQuery(part));
+			result.push_back(parseQuery(parent, part));
 		else
 			Q_ASSERT(false); // TODO error for user
 	}
 	return result;
 }
 
-Query* QueryParser::parseOperator(const QString& text, bool connectInput)
+Query* QueryParser::parseOperator(Query* parent, const QString& text, bool connectInput)
 {
 	// TODO it might be better to be able to register operators.
 	// But that need some additional information on how they are used, thus we currently hardcode the operators.
@@ -137,8 +153,8 @@ Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 	auto parts = splitText.first;
 	auto operators = splitText.second;
 	Q_ASSERT(parts.size()); // TODO error for user
-	CompositeQuery* composite = new CompositeQuery();
-	auto previousQueries = parseOperatorPart(parts[0]);
+	CompositeQuery* composite = new CompositeQuery(parent);
+	auto previousQueries = parseOperatorPart(composite, parts[0]);
 	if (connectInput)
 	{
 		for (int i = 0; i < previousQueries.size(); ++i)
@@ -147,7 +163,7 @@ Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 
 	for (int i = 1; i < parts.size(); ++i)
 	{
-		auto currentQueries = parseOperatorPart(parts[i]);
+		auto currentQueries = parseOperatorPart(composite, parts[i]);
 		auto currentOperator = operators[i-1];
 		// If left and right are both lists we don't know how to map things:
 		Q_ASSERT(!(previousQueries.size() > 1 && currentQueries.size() > 1)); // TODO error for user
@@ -157,7 +173,7 @@ Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 				composite->connectQuery(previousQueries[0], currentQueries[0]);
 			else if (currentOperator == '-')
 			{
-				auto minus = new SubstractOperator();
+				auto minus = new SubstractOperator(composite);
 				connectQueriesWith(composite, {previousQueries[0], currentQueries[0]}, minus);
 				currentQueries = {minus};
 			}
@@ -165,8 +181,8 @@ Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 		else if (previousQueries.size() > currentQueries.size())
 		{
 			Query* unionQuery = nullptr;
-			if (operators[i-1] == '-') unionQuery = new SubstractOperator();
-			else unionQuery = new UnionOperator();
+			if (operators[i-1] == '-') unionQuery = new SubstractOperator(composite);
+			else unionQuery = new UnionOperator(composite);
 			connectQueriesWith(composite, previousQueries, unionQuery, currentQueries[0]);
 		}
 		else
@@ -187,8 +203,8 @@ Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 		if (lastOperator == '-' || lastOperator == 'U')
 		{
 			Query* unionQuery = nullptr;
-			if (lastOperator == '-') unionQuery = new SubstractOperator();
-			else unionQuery = new UnionOperator();
+			if (lastOperator == '-') unionQuery = new SubstractOperator(composite);
+			else unionQuery = new UnionOperator(composite);
 			connectQueriesWith(composite, previousQueries, unionQuery);
 			composite->connectToOutput(unionQuery);
 		}
@@ -198,11 +214,11 @@ Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 	return composite;
 }
 
-QList<Query*> QueryParser::parseOperatorPart(const QString& text)
+QList<Query*> QueryParser::parseOperatorPart(Query* parent, const QString& text)
 {
 	auto type = typeOf(text);
-	if (Type::Query == type) return {parseQuery(text)};
-	else if (Type::List == type) return parseList(text);
+	if (Type::Query == type) return {parseQuery(parent, text)};
+	else if (Type::List == type) return parseList(parent, text);
 	Q_ASSERT(false);
 }
 

@@ -24,19 +24,35 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "TopLevelQuery.h"
 
-#include "../informationscripting_api.h"
-
-#include "Query.h"
+#include "QueryExecutor.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API SubstractOperator : public Query
+TopLevelQuery::TopLevelQuery(Query* child)
+	: Query{nullptr}, childQuery_{child}
 {
-	public:
-		SubstractOperator(Query* parent);
-		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
-};
+	Q_ASSERT(childQuery_);
+	childQuery_->setParent(this);
+}
+
+TopLevelQuery::~TopLevelQuery() {}
+
+QList<Optional<TupleSet>> TopLevelQuery::execute(QList<TupleSet> input)
+{
+	return childQuery_->execute(input);
+}
+
+QueryExecutor* TopLevelQuery::executor() const
+{
+	return executor_;
+}
+
+void TopLevelQuery::setExecutor(QueryExecutor* executor)
+{
+	Q_ASSERT(executor);
+	executor_ = executor;
+}
 
 } /* namespace InformationScripting */

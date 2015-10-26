@@ -59,7 +59,8 @@ class INFORMATIONSCRIPTING_API TagQuery : public LinearQuery
 		ExecuteFunction exec_{};
 		bool persistent_{true};
 
-		TagQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
+		TagQuery(Query* parent, Model::Node* target, QStringList args,
+					ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
 		Optional<TupleSet> tags(TupleSet input);
 		Optional<TupleSet> queryTags(TupleSet input);
 		Optional<TupleSet> addTags(TupleSet input);

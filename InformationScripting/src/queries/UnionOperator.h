@@ -35,6 +35,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API UnionOperator : public Query
 {
 	public:
+		UnionOperator(Query* parent);
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 };
 

@@ -28,6 +28,8 @@
 
 namespace InformationScripting {
 
+CompositeQuery::CompositeQuery(Query* parent) : Query{parent} {}
+
 CompositeQuery::~CompositeQuery()
 {
 	SAFE_DELETE(inNode_);

@@ -35,6 +35,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 {
 	public:
+		CompositeQuery(Query* parent);
 		virtual ~CompositeQuery() override;
 
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
