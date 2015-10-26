@@ -31,8 +31,6 @@
 #include "LinearQuery.h"
 #include "../parsing/ArgumentParser.h"
 
-#include "../misc/Optional.h"
-
 namespace Model {
 	class SymbolMatcher;
 	class Text;
