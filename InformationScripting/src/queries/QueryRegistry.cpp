@@ -37,6 +37,19 @@ QueryRegistry& QueryRegistry::instance()
 	return instance;
 }
 
+void QueryRegistry::registerAlias(const QString& alias, const QString& aliasedQuery,
+											 std::function<void (QStringList&)> argAdaption)
+{
+	auto& registry = instance();
+	auto constructorIt = registry.constructors_.find(aliasedQuery);
+	Q_ASSERT(constructorIt != registry.constructors_.end()); // Need to register aliasedQuery first!
+	auto aliasedConstructor = *constructorIt;
+	registry.constructors_[alias] = [argAdaption, aliasedConstructor] (Model::Node* target, QStringList args) {
+		if (argAdaption) argAdaption(args);
+		return aliasedConstructor(target, args);
+	};
+}
+
 Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QStringList args)
 {
 	if (auto constructor = constructors_[command])

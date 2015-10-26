@@ -41,6 +41,8 @@ class INFORMATIONSCRIPTING_API BreakpointManager : public LinearQuery
 		static void registerDefaultQueries();
 
 	private:
+		friend class QueryRegistry;
+
 		ArgumentParser arguments_;
 		static const QStringList VISIBLE_ARGUMENT_NAMES;
 

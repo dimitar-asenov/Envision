@@ -45,16 +45,11 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 	public:
 		static QueryRegistry& instance();
 
-		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
-		void registerQueryConstructor(const QString& command, QueryConstructor constructor);
+		template <class QueryType, class ...ForwardArguments>
+		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
 
-		template <class QueryType> using QueryExec = std::function<Optional<TupleSet> (QueryType*, TupleSet)>;
-		template <class QueryType>
-		static void registerQuery(const QString& name, QueryExec<QueryType> exec,
+		static void registerAlias(const QString& alias, const QString& aliasedQuery,
 										  std::function<void (QStringList&)> argAdaption = {});
-
-		template <class QueryType>
-		static void registerQuery(const QString& name, QueryExec<QueryType> exec, std::vector<ArgumentRule> argumentRules);
 
 		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
@@ -66,33 +61,17 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 
 		Query* tryBuildQueryFromScript(const QString& name, Model::Node* target, QStringList args);
 
+		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
 		QHash<QString, QueryConstructor> constructors_;
 		QString scriptLocation_{"scripts/"};
 };
 
-inline void QueryRegistry::registerQueryConstructor(const QString& command, QueryRegistry::QueryConstructor constructor)
+template <class QueryType, class ...ForwardArguments>
+inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
 {
-	Q_ASSERT(constructor);
-	constructors_[command] = constructor;
-}
-
-template <class QueryType>
-inline void QueryRegistry::registerQuery(const QString& name, QueryExec<QueryType> exec,
-													  std::function<void (QStringList&)> argAdaption)
-{
-	instance().registerQueryConstructor(name, [name, exec, argAdaption](Model::Node* target, QStringList args) {
-		if (argAdaption) argAdaption(args);
-		return new QueryType(target, QStringList(name) + args, exec);
-	});
-}
-
-template <class QueryType>
-inline void QueryRegistry::registerQuery(const QString& name, QueryExec<QueryType> exec,
-													  std::vector<ArgumentRule> argumentRules)
-{
-	instance().registerQueryConstructor(name, [name, exec, argumentRules](Model::Node* target, QStringList args) {
-		return new QueryType(target, QStringList(name) + args, exec, argumentRules);
-	});
+	instance().constructors_[name] = [name, forwardArguments...](Model::Node* target, QStringList args) {
+		return new QueryType(target, QStringList(name) + args, forwardArguments...);
+	};
 }
 
 inline QStringList QueryRegistry::registeredQueries() const { return constructors_.keys(); }

@@ -39,7 +39,9 @@ class INFORMATIONSCRIPTING_API RuntimeQuery : public LinearQuery
 		static void registerDefaultQueries();
 
 	private:
-		RuntimeQuery(Model::Node* target);
+		friend class QueryRegistry;
+
+		RuntimeQuery(Model::Node* target, QStringList);
 };
 
 } /* namespace InformationScripting */

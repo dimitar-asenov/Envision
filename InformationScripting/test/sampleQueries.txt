@@ -1,0 +1,45 @@
+script $<"<methods>" | "<addTags -s=of -n=foo.bar>" | "<addTags -s=of -n=taggingIsFun>" | "<tags -s=of -n=foo*>">$
+
+script $<"<methods>" | "<addTags -s=of -n=foo.bar>" | "<tags -r -s=of -n=foo*>" | "<tags -s=of -n=*>">$
+
+script$<"<methods>" | "<ast -s=of -n=>">$
+
+script "<type -t=int>"
+
+script "<type -t=int()>"
+
+script "<type -t=int(int)>"
+
+script "<type -t=int(Foo*,int)>"
+
+script $<"<ast -s=g -t=Field>" | "<type -t=P>">$
+
+script $<"<methods>" | "<type -t=_()>">$
+
+script $<"<changes>" | "<heatmap>" | "<toParent -t=Method -a=node>">$
+
+script $<"<changes>" | "<heatmap>">$
+
+script $<"<changes>" | "<debug>" | "<heatmap>">$
+
+script $<"<ast -t=ExpressionStatement>" | "<addBreakpoints>">$
+
+script $<"<methods>" | "<addBreakpoints>">$
+
+script $<"<ast -t=ExpressionStatement>" | "<addBreakpoints>" | "<traceExecution>" | "<yield>" | "<heatmap>">$
+
+script $<"<methods>" | "<yield>" | "<methods>">$
+
+script $<"<classes g>" | "<script test>">$
+
+script $<"<methods>" | "<toClass>">$
+
+query 21:
+script $<"<classes -s=g>" | "<filter *Matcher*>" | "<methods -s=of>" | "<filter matches>" | "<toClass>">$
+
+query 19:
+script $<"<methods -s=g>" - {<$<"<callgraph>" | "<addASTProperties>">$>}>$
+or:
+script $<{<"<methods -s=g>", $<"<callgraph>" | "<addASTProperties>">$>}->$
+
+script $<"<methods>" | {<$<"<filter *quotes*>" | "<color = blue>">$, $<"<filter *brackets*>" | "<color = green>">$>} U>$ 

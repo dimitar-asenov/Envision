@@ -33,6 +33,11 @@
 
 namespace InformationScripting {
 
+void AstNameFilter::registerDefaultQueries()
+{
+	QueryRegistry::registerQuery<AstNameFilter>("filter");
+}
+
 AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 	: GenericFilter {
 		  [matcher](const Tuple& t) {
@@ -47,12 +52,8 @@ AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 }
 {}
 
-void AstNameFilter::registerDefaultQueries()
-{
-	QueryRegistry::instance().registerQueryConstructor("filter", [](Model::Node*, QStringList args) {
-		Q_ASSERT(args.size() > 0);
-		return new AstNameFilter(Model::SymbolMatcher::guessMatcher(args[0]));
-	});
-}
+AstNameFilter::AstNameFilter(Model::Node*, QStringList args)
+	: AstNameFilter(Model::SymbolMatcher::guessMatcher(args[1])) // First argument is query name
+{}
 
 } /* namespace InformationScripting */
