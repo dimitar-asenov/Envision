@@ -39,13 +39,13 @@ class Query;
 class INFORMATIONSCRIPTING_API QueryExecutor
 {
 	public:
-		QueryExecutor(Query* q);
 		~QueryExecutor();
+		void addQuery(Query* query);
 
 		Interaction::CommandResult* execute();
 
 	private:
-		Query* query_{};
+		std::queue<std::unique_ptr<Query>> queries_{};
 };
 
 } /* namespace InformationScripting */
