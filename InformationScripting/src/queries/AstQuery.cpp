@@ -442,8 +442,13 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
 {
 	if (!from) from = target()->root();
-	auto allNodeOfType =  Model::Node::childrenWhich(from, [matcher](Model::Node* node)
-																			{return matcher.matches(node->typeName());});
+	auto allNodeOfType =  Model::Node::childrenWhich(from,
+		[matcher](Model::Node* node) {
+				if (matcher.isFixedString())
+					return node->isSubtypeOf(matcher.matchPattern());
+				return matcher.matches(node->typeName());
+		}
+	);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
 }
