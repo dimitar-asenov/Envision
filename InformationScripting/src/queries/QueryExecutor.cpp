@@ -27,23 +27,35 @@
 #include "QueryExecutor.h"
 
 #include "Query.h"
-
 #include "visualization/DefaultVisualizer.h"
 
 #include "InteractionBase/src/commands/CommandResult.h"
 
-namespace InformationScripting {
+#include "VisualizationBase/src/VisualizationManager.h"
 
-QueryExecutor::QueryExecutor(Query* q) : query_{q} {}
+namespace InformationScripting {
 
 QueryExecutor::~QueryExecutor()
 {
-	SAFE_DELETE(query_);
+	Q_ASSERT(queries_.empty());
 }
 
-Interaction::CommandResult* QueryExecutor::execute()
+void QueryExecutor::addQuery(Query* query)
 {
-	auto results = query_->execute({});
+	queries_.emplace(std::unique_ptr<Query>(query));
+}
+
+Interaction::CommandResult* QueryExecutor::execute(const QList<TupleSet>& input)
+{
+	Q_ASSERT(!queries_.empty());
+
+	bool hasError = false;
+	QString errorMessage{};
+
+	auto query = std::move(queries_.front());
+	queries_.pop();
+
+	auto results = query->execute(input);
 	if (results.size())
 	{
 		// TODO how to handle warnings? CommandResult has no warnings?
@@ -57,11 +69,22 @@ Interaction::CommandResult* QueryExecutor::execute()
 		}
 		else
 		{
-			return new Interaction::CommandResult(new Interaction::CommandError(results[0].errors()[0]));
+			hasError = true;
+			errorMessage = results[0].errors()[0];
 		}
 	}
 
-	return new Interaction::CommandResult();
+	if (queries_.empty())
+	{
+		// deleteLater
+		QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
+																 new Visualization::CustomSceneEvent([this](){delete this;}));
+	}
+
+	if (hasError)
+		return new Interaction::CommandResult(new Interaction::CommandError(errorMessage));
+	else
+		return new Interaction::CommandResult();
 }
 
 } /* namespace InformationScripting */

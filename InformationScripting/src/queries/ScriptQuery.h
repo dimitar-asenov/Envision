@@ -36,10 +36,12 @@ namespace Model {
 
 namespace InformationScripting {
 
+class QueryExecutor;
+
 class ScriptQuery : public Query
 {
 	public:
-		ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args = {});
+		ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args, QueryExecutor* executor);
 
 		static void initPythonEnvironment();
 		static void unloadPythonEnvironment();
@@ -50,6 +52,7 @@ class ScriptQuery : public Query
 		QString scriptPath_;
 		// Note since we only register QList<T> to python we don't use QStringList here:
 		QList<QString> arguments_;
+		QueryExecutor* executor_{};
 
 		void importStar(boost::python::dict& main_namespace, boost::python::object apiObject);
 

@@ -37,7 +37,7 @@ const QStringList BreakpointManager::VISIBLE_ARGUMENT_NAMES{"v", "visible"};
 Optional<TupleSet> BreakpointManager::executeLinear(TupleSet input)
 {
 	auto tuples = input;
-	OODebug::JavaDebugger::BreakpointType type = OODebug::JavaDebugger::BreakpointType::Internal;
+	auto type = OODebug::JavaDebugger::BreakpointType::Internal;
 	if (arguments_.argument(VISIBLE_ARGUMENT_NAMES[0]) != "no")
 		type = OODebug::JavaDebugger::BreakpointType::User;
 

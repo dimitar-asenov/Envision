@@ -31,6 +31,8 @@
 
 namespace InformationScripting {
 
+class QueryExecutor;
+
 class INFORMATIONSCRIPTING_API RuntimeQuery : public LinearQuery
 {
 	public:
@@ -41,7 +43,9 @@ class INFORMATIONSCRIPTING_API RuntimeQuery : public LinearQuery
 	private:
 		friend class QueryRegistry;
 
-		RuntimeQuery(Model::Node* target, QStringList);
+		QueryExecutor* executor_{};
+
+		RuntimeQuery(Model::Node* target, QStringList, QueryExecutor* executor = nullptr);
 };
 
 } /* namespace InformationScripting */

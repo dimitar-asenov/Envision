@@ -31,37 +31,52 @@
 #include "../queries/SubstractOperator.h"
 #include "../queries/UnionOperator.h"
 
-
 #include "../queries/QueryRegistry.h"
+#include "../queries/QueryExecutor.h"
 
 namespace InformationScripting {
 
 const QStringList QueryParser::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
 const QStringList QueryParser::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
-Query* QueryParser::buildQueryFrom(const QString& text, Model::Node* target)
+void QueryParser::buildQueryFrom(const QString& text, Model::Node* target, QueryExecutor* executor)
 {
 	QueryParser parser;
 	parser.target_ = target;
+	parser.executor_ = executor;
 	Q_ASSERT(text.size());
-	auto type = parser.typeOf(text);
-	if (Type::Operator == type)
-		return parser.parseOperator(text);
-	else if (Type::Query == type)
-		return parser.parseQuery(text);
-	else if (Type::List == type)
+	// For now assume that we only have yield in operator parts:
+	auto parts = text.split("|" + OPEN_SCOPE_SYMBOL[1] + "yield" + CLOSE_SCOPE_SYMBOL[1] + "|",
+			QString::SkipEmptyParts);
+	if (parts.size() > 1)
 	{
-		auto queries = parser.parseList(text);
-		auto result = new CompositeQuery();
-		for (int i = 0; i < queries.size(); ++i)
+		for (int i = 0; i < parts.size(); ++i)
 		{
-			result->connectInput(i, queries[i]);
-			result->connectToOutput(queries[i], i);
+			if (i + 1 < parts.size()) parts[i].append(CLOSE_SCOPE_SYMBOL[0]);
+			if (i > 0) parts[i].prepend(OPEN_SCOPE_SYMBOL[0]);
 		}
-		return result;
 	}
-	Q_ASSERT(false);
-	return nullptr;
+	for (auto part : parts)
+	{
+		auto type = parser.typeOf(part);
+		if (Type::Operator == type)
+			executor->addQuery(parser.parseOperator(part));
+		else if (Type::Query == type)
+			executor->addQuery(parser.parseQuery(part));
+		else if (Type::List == type)
+		{
+			auto queries = parser.parseList(part);
+			auto result = new CompositeQuery();
+			for (int i = 0; i < queries.size(); ++i)
+			{
+				result->connectInput(i, queries[i]);
+				result->connectToOutput(queries[i], i);
+			}
+			executor->addQuery(result);
+		}
+		else
+			Q_ASSERT(false);
+	}
 }
 
 QueryParser::Type QueryParser::typeOf(const QString& text)
@@ -106,7 +121,7 @@ Query* QueryParser::parseQuery(const QString& text)
 										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ", QString::SkipEmptyParts);
 	Q_ASSERT(data.size());
 	QString command = data.takeFirst();
-	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
+	auto q = QueryRegistry::instance().buildQuery(command, target_, data, executor_);
 	Q_ASSERT(q); // TODO this should be an error for the user.
 	return q;
 }
@@ -120,7 +135,7 @@ QList<Query*> QueryParser::parseList(const QString& text)
 	{
 		auto type = typeOf(part);
 		if (Type::Operator == type)
-			result.push_back(parseOperator(part, true));
+			result.push_back(parseOperator(part));
 		else if (Type::Query == type)
 			result.push_back(parseQuery(part));
 		else
@@ -129,7 +144,7 @@ QList<Query*> QueryParser::parseList(const QString& text)
 	return result;
 }
 
-Query* QueryParser::parseOperator(const QString& text, bool connectInput)
+Query* QueryParser::parseOperator(const QString& text)
 {
 	// TODO it might be better to be able to register operators.
 	// But that need some additional information on how they are used, thus we currently hardcode the operators.
@@ -139,11 +154,9 @@ Query* QueryParser::parseOperator(const QString& text, bool connectInput)
 	Q_ASSERT(parts.size()); // TODO error for user
 	CompositeQuery* composite = new CompositeQuery();
 	auto previousQueries = parseOperatorPart(parts[0]);
-	if (connectInput)
-	{
-		for (int i = 0; i < previousQueries.size(); ++i)
-			composite->connectInput(i, previousQueries[i]);
-	}
+
+	for (int i = 0; i < previousQueries.size(); ++i)
+		composite->connectInput(i, previousQueries[i]);
 
 	for (int i = 1; i < parts.size(); ++i)
 	{
