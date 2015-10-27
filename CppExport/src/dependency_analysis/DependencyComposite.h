@@ -40,6 +40,8 @@ class CPPEXPORT_API DependencyComposite
 		const QString name();
 		void addUnit(const DependencyUnit* unit);
 
+		const QList<const DependencyUnit*> units() const;
+
 	private:
 		const QString name_;
 		QList<const DependencyUnit*> units_;
@@ -48,5 +50,7 @@ class CPPEXPORT_API DependencyComposite
 inline const QString DependencyComposite::name() { return name_; }
 
 inline void DependencyComposite::addUnit(const DependencyUnit* unit) { units_.append(unit); }
+
+inline const QList<const DependencyUnit*> DependencyComposite::units() const { return units_; }
 
 }
