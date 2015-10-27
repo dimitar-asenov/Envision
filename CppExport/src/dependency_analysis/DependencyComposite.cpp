@@ -38,11 +38,11 @@ void DependencyComposite::addUnit(DependencyUnit* unit)
 	unit->setComposite(this);
 }
 
-QSet<const DependencyComposite*> DependencyComposite::dependencies(QList<DependencyUnit*>& allUnits)
+QSet<const DependencyComposite*> DependencyComposite::dependencies()
 {
 	QSet<const DependencyComposite*> compositeDependencies;
-	for (DependencyUnit* unit : units_)
-		for (const DependencyUnit* unitDependency : unit->dependencies(allUnits))
+	for (auto unit : units_)
+		for (auto unitDependency : unit->dependencies())
 			compositeDependencies.insert(unitDependency->composite());
 
 	return compositeDependencies;

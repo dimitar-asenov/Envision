@@ -40,7 +40,7 @@ class CPPEXPORT_API DependencyComposite
 		const QString& name() const;
 		void addUnit(DependencyUnit* unit);
 
-		QSet<const DependencyComposite*> dependencies(QList<DependencyUnit*>& allUnits);
+		QSet<const DependencyComposite*> dependencies();
 
 	private:
 		const QString name_;
