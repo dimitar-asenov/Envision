@@ -41,9 +41,19 @@ void DependencyComposite::addUnit(DependencyUnit* unit)
 QSet<const DependencyComposite*> DependencyComposite::dependencies()
 {
 	QSet<const DependencyComposite*> compositeDependencies;
+	bool orderingNecessary = false;
+
 	for (auto unit : units_)
 		for (auto unitDependency : unit->dependencies())
-			compositeDependencies.insert(unitDependency->composite());
+			if (unitDependency->composite() != this)
+				compositeDependencies.insert(unitDependency->composite());
+			else
+				orderingNecessary = true;
+
+	if (orderingNecessary)
+	{
+		// order units_ topologically
+	}
 
 	return compositeDependencies;
 }
