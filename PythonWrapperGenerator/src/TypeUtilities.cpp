@@ -62,6 +62,13 @@ QString TypeUtilities::templateArgToString(const clang::TemplateArgument& templa
 	}
 }
 
+QString TypeUtilities::qualTypeToString(const clang::QualType& type)
+{
+	QString prefix = "";
+	if (type.isConstQualified()) prefix = "const ";
+	return prefix + typePtrToString(type.getTypePtr());
+}
+
 QString TypeUtilities::typePtrToString(const clang::Type* type)
 {
 	if (auto recordType = llvm::dyn_cast<clang::RecordType>(type))
@@ -92,7 +99,21 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 	}
 	else if (auto ptrType = llvm::dyn_cast<clang::PointerType>(type))
 	{
-		return typePtrToString(ptrType->getPointeeType().getTypePtr());
+		return qualTypeToString(ptrType->getPointeeType()) + "*";
+	}
+	else if (auto builtinType = llvm::dyn_cast<clang::BuiltinType>(type))
+	{
+		clang::PrintingPolicy printintPolicy{clang::LangOptions{}};
+		printintPolicy.Bool = 1;
+		return QString(builtinType->getNameAsCString(printintPolicy));
+	}
+	else if (auto refType = llvm::dyn_cast<clang::ReferenceType>(type))
+	{
+		return qualTypeToString(refType->getPointeeType()) + "&";
+	}
+	else if (auto typeDefType = llvm::dyn_cast<clang::TypedefType>(type))
+	{
+		return QString::fromStdString(typeDefType->getDecl()->getQualifiedNameAsString());
 	}
 	// Implement support for more cases if needed.
 	qWarning() << "###Unsupported type: ###";
