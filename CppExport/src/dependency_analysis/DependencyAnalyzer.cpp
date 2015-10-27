@@ -89,4 +89,43 @@ QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*
 	return nameToCompositeMap.values();
 }
 
+template <class T>
+QList<T*> DependencyAnalyzer::topologicalSort(QHash<T*, QSet<T*>> graph)
+{
+	QHash<T*, QSet<T*>> reverseGraph;
+	for (auto it = graph.begin(); it != graph.end(); it++)
+		for (auto dependency : it.value())
+			reverseGraph[dependency].insert(it.key());
+
+	QList<T*> toBeProcessed;
+	for (auto it = graph.begin(); it != graph.end(); it++)
+		if (!reverseGraph.contains(it.key()))
+			toBeProcessed.append(it.key());
+
+	QList<T*> result;
+	while (!toBeProcessed.empty())
+	{
+		auto n = toBeProcessed.takeFirst();
+		result.append(n);
+
+		for (auto m : graph.value(n))
+		{
+			auto it = reverseGraph.find(m);
+
+			auto oldSize = (*it).size();
+			(*it).remove(n);
+			auto newSize = (*it).size();
+
+			if (oldSize > newSize && newSize == 0)
+				toBeProcessed.append(m);
+		}
+	}
+
+	for (auto it = reverseGraph.begin(); it != reverseGraph.end(); it++)
+		// test graph for cycles
+		Q_ASSERT((*it).empty());
+
+	return result;
+}
+
 }

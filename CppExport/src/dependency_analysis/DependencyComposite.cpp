@@ -26,6 +26,8 @@
 
 #include "DependencyComposite.h"
 
+#include "DependencyAnalyzer.h"
+
 namespace CppExport {
 
 DependencyComposite::DependencyComposite(const QString& name) : name_(name) {}
@@ -38,9 +40,9 @@ void DependencyComposite::addUnit(DependencyUnit* unit)
 	unit->setComposite(this);
 }
 
-QSet<const DependencyComposite*> DependencyComposite::dependencies()
+QSet<DependencyComposite*> DependencyComposite::dependencies()
 {
-	QSet<const DependencyComposite*> compositeDependencies;
+	QSet<DependencyComposite*> compositeDependencies;
 	bool orderingNecessary = false;
 
 	for (auto unit : units_)
@@ -52,7 +54,9 @@ QSet<const DependencyComposite*> DependencyComposite::dependencies()
 
 	if (orderingNecessary)
 	{
-		// order units_ topologically
+		QHash<DependencyUnit*, QSet<DependencyUnit*>> unitDepedencies;
+		for (auto unit : units_) unitDepedencies.insert(unit, unit->dependencies());
+		units_ = DependencyAnalyzer::topologicalSort(unitDepedencies);
 	}
 
 	return compositeDependencies;
