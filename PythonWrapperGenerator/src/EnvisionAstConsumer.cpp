@@ -129,14 +129,14 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			// check if we have some more attributes which don't have an attribute macro:
 			for (auto method : classDecl->methods())
 			{
-				// Ignore non public methods & de-/constructors & templated & deleted methods:
+				// Ignore non public methods & de-/constructors & templated & deleted methods & overloaded methods:
 				if (method->getAccess() != clang::AccessSpecifier::AS_public) continue;
 				if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
 				if (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate) continue;
 				if (method->isDeleted()) continue;
+				if (method->isOverloadedOperator()) continue;
 
 				QString methodName = QString::fromStdString(method->getNameAsString());
-				if (methodName.startsWith("operator")) continue;
 				if (seenMethods.contains(methodName)) continue;
 
 				if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
