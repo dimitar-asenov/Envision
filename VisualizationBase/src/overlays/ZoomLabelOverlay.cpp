@@ -158,6 +158,7 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 			mainView = mv;
 			break;
 		}
+	Q_ASSERT(mainView);
 
 	QList<Item*> stack = scene->topLevelItems();
 	while (!stack.isEmpty())
