@@ -165,7 +165,7 @@ bool ExpressionVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* call
 
 bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 {
-	OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression();
+	auto ooMethodCall = new OOModel::MethodCallExpression();
 	TraverseStmt(callExpr->getCallee());
 	if (!ooExprStack_.empty())
 		ooMethodCall->setCallee(ooExprStack_.pop());
@@ -219,7 +219,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			if (2 == numArguments)
 				// remove dummy expression
 				ooExprStack_.pop();
-			OOModel::UnaryOperation* ooUnary = new OOModel::UnaryOperation();
+			auto ooUnary = new OOModel::UnaryOperation();
 			ooUnary->setOp(utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if (!ooExprStack_.empty())
 				ooUnary->setOperand(ooExprStack_.pop());
@@ -229,7 +229,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::Binary:
 		{
-			OOModel::BinaryOperation* ooBinary = new OOModel::BinaryOperation();
+			auto ooBinary = new OOModel::BinaryOperation();
 			ooBinary->setOp(utils_->translateBinaryOverloadOp(operatorKind));
 			if (!ooExprStack_.empty())
 				ooBinary->setRight(ooExprStack_.pop());
@@ -241,7 +241,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::Assign:
 		{
-			OOModel::AssignmentExpression* ooAssign = new OOModel::AssignmentExpression();
+			auto ooAssign = new OOModel::AssignmentExpression();
 			ooAssign->setOp(utils_->translateAssignOverloadOp(operatorKind));
 			if (!ooExprStack_.empty())
 				ooAssign->setRight(ooExprStack_.pop());
@@ -253,7 +253,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::MethodCall:
 		{
-			OOModel::MethodCallExpression* ooCall = new OOModel::MethodCallExpression();
+			auto ooCall = new OOModel::MethodCallExpression();
 			for (unsigned i = 0; i < numArguments - 1; i++)
 			{
 				if (!ooExprStack_.empty())
@@ -292,7 +292,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
-	OOModel::NewExpression* ooNewExpr = new OOModel::NewExpression();
+	auto ooNewExpr = new OOModel::NewExpression();
 	TraverseStmt(newExpr->getInitializer());
 	if (!ooExprStack_.empty())
 		ooNewExpr->setNewType(ooExprStack_.pop());
@@ -310,7 +310,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 
 bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 {
-	OOModel::DeleteExpression* ooDeleteExpr = new OOModel::DeleteExpression(deleteExpr->isArrayForm());
+	auto ooDeleteExpr = new OOModel::DeleteExpression(deleteExpr->isArrayForm());
 	TraverseStmt(deleteExpr->getArgument());
 	if (!ooExprStack_.empty())
 		ooDeleteExpr->setExpr(ooExprStack_.pop());
@@ -419,7 +419,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 
 bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct)
 {
-	OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression();
+	auto ooMethodCall = new OOModel::MethodCallExpression();
 	ooMethodCall->setCallee(utils_->translateQualifiedType(unresolvedConstruct->getTypeAsWritten(),
 																			 unresolvedConstruct->getLocStart()));
 	// visit arguments
@@ -440,7 +440,7 @@ bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedC
 
 bool ExpressionVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 {
-	OOModel::UnaryOperation* ooParenExpr = new OOModel::UnaryOperation();
+	auto ooParenExpr = new OOModel::UnaryOperation();
 	ooParenExpr->setOp(OOModel::UnaryOperation::PARENTHESIS);
 	TraverseStmt(parenthesizedExpr->getSubExpr());
 	if (!ooExprStack_.empty())
@@ -453,7 +453,7 @@ bool ExpressionVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 
 bool ExpressionVisitor::TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr)
 {
-		OOModel::BinaryOperation* ooArrayAccess = new OOModel::BinaryOperation();
+		auto ooArrayAccess = new OOModel::BinaryOperation();
 		ooArrayAccess->setOp(OOModel::BinaryOperation::ARRAY_INDEX);
 		// visit the base the base is A in the expr A[10]
 		TraverseStmt(arraySubsrciptExpr->getBase());
@@ -477,7 +477,7 @@ bool ExpressionVisitor::TraverseCXXThisExpr(clang::CXXThisExpr* thisExpr)
 
 bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 {
-	OOModel::TypeTraitExpression* ooTypeTrait = new OOModel::TypeTraitExpression
+	auto ooTypeTrait = new OOModel::TypeTraitExpression
 			(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
 	if (typeIdExpr->isTypeOperand())
 		ooTypeTrait->setOperand(utils_->translateQualifiedType(
@@ -514,7 +514,7 @@ bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr
 bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
 	// TODO: handle captions
-	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
+	auto ooLambda = new OOModel::LambdaExpression();
 	// visit body
 	baseVisitor_->pushOOStack(ooLambda->body());
 	baseVisitor_->TraverseStmt(lambdaExpr->getBody());
@@ -523,7 +523,7 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 	clang::CXXMethodDecl* callOperator = lambdaExpr->getCallOperator();
 	for (auto it = callOperator->param_begin(); it != callOperator->param_end(); ++it)
 	{
-		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+		auto arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
 		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
 		if (type) arg->setTypeExpression(type);
@@ -536,7 +536,7 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 
 bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
 {
-	OOModel::ConditionalExpression* ooConditionalExpr = new OOModel::ConditionalExpression();
+	auto ooConditionalExpr = new OOModel::ConditionalExpression();
 	// traverse condition
 	TraverseStmt(conditionalOperator->getCond());
 	if (!ooExprStack_.empty())
@@ -556,7 +556,7 @@ bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* 
 
 bool ExpressionVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
 {
-	OOModel::ThrowExpression* ooThrow = new OOModel::ThrowExpression();
+	auto ooThrow = new OOModel::ThrowExpression();
 	// visit throw expression
 	if (auto subExpr = throwExpr->getSubExpr())
 	{
@@ -577,10 +577,10 @@ bool ExpressionVisitor::TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObject
 
 bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 {
-	OOModel::ArrayInitializer* ooArrayInit = new OOModel::ArrayInitializer();
-	for (auto iter = initListExpr->begin(); iter!=initListExpr->end(); ++iter)
+	auto ooArrayInit = new OOModel::ArrayInitializer();
+	for (auto initExpr : *initListExpr)
 	{
-		TraverseStmt(*iter);
+		TraverseStmt(initExpr);
 		if (!ooExprStack_.empty()) ooArrayInit->values()->append(ooExprStack_.pop());
 	}
 	ooExprStack_.push(ooArrayInit);
@@ -622,7 +622,7 @@ OOModel::ReferenceExpression* ExpressionVisitor::createRef
 (const QString& name, const clang::SourceLocation& location, const clang::NestedNameSpecifier* qualifier,
  const clang::TemplateArgumentLoc* templateArgs, unsigned numTArgs, clang::Expr* base)
 {
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression(name);
+	auto ooRef = new OOModel::ReferenceExpression(name);
 	if (templateArgs)
 		for (unsigned i = 0; i < numTArgs; i++)
 			ooRef->typeArguments()->append(utils_->translateTemplateArgument(templateArgs[i].getArgument(),
@@ -671,7 +671,7 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 
 bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 {
-	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression
+	auto ooBinOp = new OOModel::AssignmentExpression
 			(utils_->translateAssignOp(binaryOperator->getOpcode()));
 	// left
 	TraverseStmt(binaryOperator->getLHS());
@@ -698,7 +698,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 		log_->unaryOpNotSupported(opcode);
 		return TraverseStmt(unaryOperator->getSubExpr());
 	}
-	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation(utils_->translateUnaryOp(opcode));
+	auto ooUnaryOp = new OOModel::UnaryOperation(utils_->translateUnaryOp(opcode));
 	// subexpr
 	TraverseStmt(unaryOperator->getSubExpr());
 	if (!ooExprStack_.empty()) ooUnaryOp->setOperand(ooExprStack_.pop());
@@ -711,7 +711,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 
 bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind)
 {
-	OOModel::CastExpression* ooCast = new OOModel::CastExpression(kind);
+	auto ooCast = new OOModel::CastExpression(kind);
 	// setType to cast to
 	ooCast->setType(utils_->translateQualifiedType(castExpr->getType(), castExpr->getLocStart()));
 	// visit subexpr

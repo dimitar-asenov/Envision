@@ -165,8 +165,8 @@ void AllMetaDefinitions::applyPartialBeginSpecializationTransformation(MacroExpa
 
 	auto it = specializations_.find(specHash);
 	if (it != specializations_.end())
-		for (auto i = 0; i < hMetaDefinition->context()->metaCalls()->size(); i++)
-			if (auto metaCall = DCast<OOModel::MetaCallExpression>(hMetaDefinition->context()->metaCalls()->at(i)))
+		for (auto expr : *hMetaDefinition->context()->metaCalls())
+			if (auto metaCall = DCast<OOModel::MetaCallExpression>(expr))
 				if (auto callee = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
 					if (callee->name().startsWith("BEGIN_"))
 						if (!specialized_.contains(metaCall))
@@ -206,8 +206,8 @@ void AllMetaDefinitions::handleXMacros()
 												macroDefinitions_.definitionName(expansion->definition()),
 												macroDefinitions_.expansionQualifier(expansion->definition())));
 
-					for (auto i = 0; i < expansion->metaCall()->arguments()->size(); i++)
-						merged->arguments()->append(expansion->metaCall()->arguments()->at(i)->clone());
+					for (auto arg : *expansion->metaCall()->arguments())
+						merged->arguments()->append(arg->clone());
 
 					// create the unbound xMacro children list
 					auto list = new Model::List();
@@ -215,8 +215,8 @@ void AllMetaDefinitions::handleXMacros()
 					{
 						auto unbound = new OOModel::MetaCallExpression(
 									macroDefinitions_.definitionName(xMacroChild->definition()));
-						for (auto i = 0; i < xMacroChild->metaCall()->arguments()->size(); i++)
-							unbound->arguments()->append(xMacroChild->metaCall()->arguments()->at(i)->clone());
+						for (auto arg : *xMacroChild->metaCall()->arguments())
+							unbound->arguments()->append(arg->clone());
 
 						list->append(unbound);
 					}
@@ -276,13 +276,9 @@ OOModel::MetaDefinition* AllMetaDefinitions::createXMacroMetaDef(MacroExpansion*
 		mergedMetaDef->setName(macroDefinitions_.definitionName(hBaseExpansion->definition()));
 		xMacrometaDefinitions_.insert(macroDefinitions_.definitionName(hBaseExpansion->definition()), mergedMetaDef);
 
-		for (auto i = 0; i < cppBaseMetaDef->arguments()->size(); i++)
-		{
-			auto cppArg = cppBaseMetaDef->arguments()->at(i);
-
+		for (auto cppArg : *cppBaseMetaDef->arguments())
 			if (!NodeHelpers::findDeclaration(mergedMetaDef->arguments(), cppArg->name()))
 				mergedMetaDef->arguments()->append(cppArg->clone());
-		}
 
 		/* assumptions:
 		 * - the context of hBaseMetaDef is a Module
@@ -341,23 +337,20 @@ MacroExpansion* AllMetaDefinitions::basePartialBegin(MacroExpansion* partialBegi
 
 void AllMetaDefinitions::mergeClasses(OOModel::Class* merged, OOModel::Class* mergee)
 {
-	for (auto i = 0; i < mergee->metaCalls()->size(); i++)
-		merged->metaCalls()->append(mergee->metaCalls()->at(i)->clone());
+	for (auto metaCall : *mergee->metaCalls())
+		merged->metaCalls()->append(metaCall->clone());
 
-	for (auto i = 0; i < merged->methods()->size(); i++)
-		for (auto j = 0; j < mergee->methods()->size(); j++)
+	for (auto mergedMethod : *merged->methods())
+		for (auto mergeeMethod : *mergee->methods())
 		{
-			auto mergedMethod = merged->methods()->at(i);
-			auto mergeeMethod = mergee->methods()->at(j);
-
 			if (mergedMethod->name() == mergeeMethod->name())
 			{
 				for (auto k = 0; k < mergeeMethod->items()->size(); k++)
 					mergedMethod->items()->append(mergeeMethod->items()->at(k)->clone());
 
 				mergedMethod->memberInitializers()->clear();
-				for (auto k = 0; k < mergeeMethod->memberInitializers()->size(); k++)
-					mergedMethod->memberInitializers()->append(mergeeMethod->memberInitializers()->at(k)->clone());
+				for (auto memberInitializer : *mergeeMethod->memberInitializers())
+					mergedMethod->memberInitializers()->append(memberInitializer->clone());
 			}
 		}
 

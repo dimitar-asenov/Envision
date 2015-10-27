@@ -87,13 +87,12 @@ const QString NodeHasher::hashRecord(const clang::RecordDecl* recordDecl)
 		if (auto classTemplate = cxxRecord->getDescribedClassTemplate())
 		{
 			auto templateParamList = classTemplate->getTemplateParameters();
-			for ( auto templateParam = templateParamList->begin();
-				  templateParam != templateParamList->end(); ++templateParam)
+			for (auto templateParameter : *templateParamList)
 			{
 				hash.append("_");
-				if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
+				if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(templateParameter))
 					hash.append(hashTemplateTypeParm(templateType));
-				else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
+				else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(templateParameter))
 					hash.append(hashTemplateTypeParm(nonTemplateType));
 			}
 		}
@@ -107,13 +106,12 @@ const QString NodeHasher::hashClassTemplate(const clang::ClassTemplateDecl* clas
 	if (auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(classTemplate->getTemplatedDecl()->getParent()))
 		hash.prepend("_").prepend(QString::fromStdString(parentNamedDecl->getNameAsString()));
 	auto templateParamList = classTemplate->getTemplateParameters();
-	for ( auto templateParam = templateParamList->begin();
-		  templateParam != templateParamList->end(); ++templateParam)
+	for (auto & elem : *templateParamList)
 	{
 		hash.append("_");
-		if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
+		if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(elem))
 			hash.append(hashTemplateTypeParm(templateType));
-		else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
+		else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(elem))
 			hash.append(hashTemplateTypeParm(nonTemplateType));
 	}
 	return hash;
@@ -215,13 +213,12 @@ const QString NodeHasher::hashTypeAliasTemplate(const clang::TypeAliasTemplateDe
 {
 	QString hash = hashTypeAlias(typeAliasTemplate->getTemplatedDecl());
 	auto templateParamList = typeAliasTemplate->getTemplateParameters();
-	for ( auto templateParam = templateParamList->begin();
-		  templateParam != templateParamList->end(); ++templateParam)
+	for (auto templateParameter : *templateParamList)
 	{
 		hash.append("_");
-		if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
+		if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(templateParameter))
 			hash.append(hashTemplateTypeParm(templateType));
-		else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
+		else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(templateParameter))
 			hash.append(hashTemplateTypeParm(nonTemplateType));
 	}
 	return hash;

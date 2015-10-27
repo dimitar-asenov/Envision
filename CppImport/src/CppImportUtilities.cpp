@@ -401,7 +401,7 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 
 OOModel::Expression* CppImportUtilities::createErrorExpression(const QString& reason)
 {
-	OOModel::ErrorExpression* ooError = new OOModel::ErrorExpression();
+	auto ooError = new OOModel::ErrorExpression();
 	ooError->setPrefix("#");
 	ooError->setArg(new OOModel::StringLiteral(reason));
 	return ooError;
@@ -532,13 +532,13 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 	}
 	else if (auto pointerType = llvm::dyn_cast<clang::PointerType>(type))
 	{
-		OOModel::PointerTypeExpression* ooPtr = new OOModel::PointerTypeExpression();
+		auto ooPtr = new OOModel::PointerTypeExpression();
 		ooPtr->setTypeExpression(translateQualifiedType(pointerType->getPointeeType(), location));
 		translatedType = ooPtr;
 	}
 	else if (auto refType = llvm::dyn_cast<clang::ReferenceType>(type))
 	{
-		OOModel::ReferenceTypeExpression* ooRef = new OOModel::ReferenceTypeExpression();
+		auto ooRef = new OOModel::ReferenceTypeExpression();
 		ooRef->setTypeExpression(translateQualifiedType(refType->getPointeeType(), location));
 		translatedType = ooRef;
 	}
@@ -552,14 +552,14 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 	}
 	else if (auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type))
 	{
-		OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
+		auto ooArrayType = new OOModel::ArrayTypeExpression();
 		ooArrayType->setTypeExpression(translateQualifiedType(constArrayType->getElementType(), location));
 		ooArrayType->setFixedSize(new OOModel::IntegerLiteral(constArrayType->getSize().getLimitedValue()));
 		translatedType = ooArrayType;
 	}
 	else if (auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type))
 	{
-		OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
+		auto ooArrayType = new OOModel::ArrayTypeExpression();
 		ooArrayType->setTypeExpression(translateQualifiedType(incompleteArrayType->getElementType(), location));
 		translatedType = ooArrayType;
 	}
@@ -581,7 +581,7 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 	else if (auto functionProtoType = llvm::dyn_cast<clang::FunctionProtoType>(type))
 	{
 		// TODO: include templates. (and more?)
-		OOModel::FunctionTypeExpression* ooFunctionType = new OOModel::FunctionTypeExpression();
+		auto ooFunctionType = new OOModel::FunctionTypeExpression();
 		ooFunctionType->results()->append(translateQualifiedType(functionProtoType->getReturnType(), location));
 
 		for (auto argIt = functionProtoType->param_type_begin(); argIt != functionProtoType->param_type_end(); ++argIt)
@@ -600,11 +600,11 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 	}
 	else if (auto templateSpecialization = llvm::dyn_cast<clang::TemplateSpecializationType>(type))
 	{
-		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
+		auto ooRef = new OOModel::ReferenceExpression();
 		ooRef->setName(QString::fromStdString(
 								templateSpecialization->getTemplateName().getAsTemplateDecl()->getNameAsString()));
-		for (auto argIt = templateSpecialization->begin(); argIt != templateSpecialization->end(); ++argIt)
-			ooRef->typeArguments()->append(translateTemplateArgument(*argIt, location));
+		for (auto templateArg : *templateSpecialization)
+			ooRef->typeArguments()->append(translateTemplateArgument(templateArg, location));
 		translatedType = ooRef;
 	}
 	else if (auto dependentType = llvm::dyn_cast<clang::DependentNameType>(type))
@@ -615,7 +615,7 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 			ooRef->setPrefix(translateNestedNameSpecifier(qualifier, location));
 		if (dependentType->getKeyword() == clang::ETK_Typename)
 		{
-			OOModel::TypeNameOperator* ooTypeName = new OOModel::TypeNameOperator();
+			auto ooTypeName = new OOModel::TypeNameOperator();
 			ooTypeName->setTypeExpression(ooRef);
 			return ooTypeName;
 		}
