@@ -40,6 +40,8 @@ namespace OOModel {
 
 namespace CppExport {
 
+class DependencyComposite;
+
 class CPPEXPORT_API DependencyUnit
 {
 	public:
@@ -47,12 +49,18 @@ class CPPEXPORT_API DependencyUnit
 
 		const QString& name() const;
 
-		QSet<const DependencyUnit*> dependencies(const QList<const DependencyUnit*>& allUnits) const;
+		QSet<const DependencyUnit*> dependencies(QList<DependencyUnit*>& allUnits);
+
+		const DependencyComposite* composite() const;
+		void setComposite(const DependencyComposite* composite);
 
 	private:
 		QString name_;
 		Model::Node* node_{};
+		const DependencyComposite* composite_{};
 		QList<DependencyTarget> targets_;
+		QSet<const DependencyUnit*> dependencies_;
+		bool dependenciesCacheValid_{};
 
 		static QList<DependencyTarget> calculateTargets(Model::Node* node);
 		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
@@ -60,5 +68,9 @@ class CPPEXPORT_API DependencyUnit
 };
 
 inline const QString& DependencyUnit::name() const { return name_; }
+
+inline const DependencyComposite* DependencyUnit::composite() const { return composite_; }
+
+inline void DependencyUnit::setComposite(const DependencyComposite* composite) { composite_ = composite; }
 
 }

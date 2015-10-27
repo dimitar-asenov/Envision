@@ -35,22 +35,18 @@ namespace CppExport {
 class CPPEXPORT_API DependencyComposite
 {
 	public:
-		DependencyComposite(const QString name);
+		DependencyComposite(const QString& name);
 
-		const QString name();
-		void addUnit(const DependencyUnit* unit);
+		const QString& name() const;
+		void addUnit(DependencyUnit* unit);
 
-		const QList<const DependencyUnit*> units() const;
+		QSet<const DependencyComposite*> dependencies(QList<DependencyUnit*>& allUnits);
 
 	private:
 		const QString name_;
-		QList<const DependencyUnit*> units_;
+		QList<DependencyUnit*> units_;
 };
 
-inline const QString DependencyComposite::name() { return name_; }
-
-inline void DependencyComposite::addUnit(const DependencyUnit* unit) { units_.append(unit); }
-
-inline const QList<const DependencyUnit*> DependencyComposite::units() const { return units_; }
+inline const QString& DependencyComposite::name() const { return name_; }
 
 }

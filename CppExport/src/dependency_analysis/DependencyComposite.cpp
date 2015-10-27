@@ -28,6 +28,24 @@
 
 namespace CppExport {
 
-DependencyComposite::DependencyComposite(const QString name) : name_(name) {}
+DependencyComposite::DependencyComposite(const QString& name) : name_(name) {}
+
+void DependencyComposite::addUnit(DependencyUnit* unit)
+{
+	units_.append(unit);
+	// assert every unit belongs to only one composite
+	Q_ASSERT(!unit->composite());
+	unit->setComposite(this);
+}
+
+QSet<const DependencyComposite*> DependencyComposite::dependencies(QList<DependencyUnit*>& allUnits)
+{
+	QSet<const DependencyComposite*> compositeDependencies;
+	for (DependencyUnit* unit : units_)
+		for (const DependencyUnit* unitDependency : unit->dependencies(allUnits))
+			compositeDependencies.insert(unitDependency->composite());
+
+	return compositeDependencies;
+}
 
 }
