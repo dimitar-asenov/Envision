@@ -44,6 +44,9 @@ class CPPEXPORT_API DependencyAnalyzer
 
 		static QList<DependencyComposite*> mergeUnits(QList<DependencyUnit*>& units);
 
+		static QHash<DependencyComposite*, QSet<DependencyComposite*>>
+		dependencies(const QList<DependencyComposite*>& composites);
+
 	private:
 		static void units(Model::Node* current, QString namespaceName, QList<DependencyUnit*>& result);
 

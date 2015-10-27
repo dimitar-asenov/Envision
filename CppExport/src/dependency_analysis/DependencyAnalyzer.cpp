@@ -89,4 +89,34 @@ QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*
 	return nameToCompositeMap.values();
 }
 
+QHash<DependencyComposite*, QSet<DependencyComposite*>>
+DependencyAnalyzer::dependencies(const QList<DependencyComposite*>& composites)
+{
+	QHash<const DependencyUnit*, DependencyComposite*> unitToCompositeMap;
+	for (auto composite : composites)
+		for (auto unit : composite->units())
+		{
+			// assert every unit belongs to exactly one composite
+			Q_ASSERT(!unitToCompositeMap.contains(unit));
+			unitToCompositeMap.insert(unit, composite);
+		}
+	const QList<const DependencyUnit*> allUnits = unitToCompositeMap.keys();
+
+	QHash<const DependencyUnit*, QSet<const  DependencyUnit*>> allUnitDependencies;
+	for (auto unit : allUnits) allUnitDependencies.insert(unit, unit->dependencies(allUnits));
+
+	QHash<DependencyComposite*, QSet<DependencyComposite*>> result;
+	for (auto composite : composites)
+	{
+		QSet<DependencyComposite*> compositeDependencies;
+		for (auto unit : composite->units())
+			for (auto unitDependency : allUnitDependencies.value(unit))
+				compositeDependencies.insert(unitToCompositeMap.value(unitDependency));
+
+		result[composite] = compositeDependencies;
+	}
+
+	return result;
+}
+
 }
