@@ -94,5 +94,8 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 	{
 		return typePtrToString(ptrType->getPointeeType().getTypePtr());
 	}
-	Q_ASSERT(false); // Implement support for more cases if needed.
+	// Implement support for more cases if needed.
+	qWarning() << "###Unsupported type: ###";
+	type->dump();
+	return {};
 }
