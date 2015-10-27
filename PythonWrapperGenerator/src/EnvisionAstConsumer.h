@@ -67,6 +67,8 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		// All imported nodes have to inherit from Model::Node
 		QStringList allowedBases_{"Model::Node"};
 
+		QString functionStringFor(const QString& methodName, const QString& qualifiedClassName,
+										  const clang::CXXMethodDecl* method);
 		ClassAttribute attribute(const QString& attributeName, const QString& attributeSetterName,
 								const QString& qualifiedClassName, const clang::CXXMethodDecl* method);
 

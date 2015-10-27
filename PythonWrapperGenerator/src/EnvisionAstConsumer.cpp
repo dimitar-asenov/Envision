@@ -164,10 +164,10 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 	}
 }
 
-ClassAttribute EnvisionAstConsumer::attribute(const QString& attributeName, const QString& attributeSetterName,
-													const QString& qualifiedClassName, const clang::CXXMethodDecl* method)
+QString EnvisionAstConsumer::functionStringFor(const QString& methodName, const QString& qualifiedClassName,
+															  const clang::CXXMethodDecl* method)
 {
-	QString getter = QString("&%1::%2").arg(qualifiedClassName, attributeName);
+	QString functionName = QString("&%1::%2").arg(qualifiedClassName, methodName);
 	auto returnTypePtr = method->getReturnType().getTypePtr();
 	if (returnTypePtr->isReferenceType())
 	{
@@ -176,17 +176,23 @@ ClassAttribute EnvisionAstConsumer::attribute(const QString& attributeName, cons
 		if (pointeeType.isConstQualified())
 		{
 			QString pointeeTypeString = TypeUtilities::typePtrToString(pointeeType.getTypePtr());
-			QString newGetter = QString("make_function((const %1& (%2::*)())%3,"
+			functionName = QString("make_function((const %1& (%2::*)())%3,"
 												 " return_value_policy<copy_const_reference>())")
-					.arg(pointeeTypeString, qualifiedClassName, getter);
-			getter = newGetter;
+					.arg(pointeeTypeString, qualifiedClassName, functionName);
 		}
 	}
 	else if (returnTypePtr->isPointerType())
 	{
-		getter = QString("make_function(%1, return_internal_reference<>())").arg(getter);
+		functionName = QString("make_function(%1, return_internal_reference<>())").arg(functionName);
 		checkForTypedList(returnTypePtr);
 	}
+	return functionName;
+}
+
+ClassAttribute EnvisionAstConsumer::attribute(const QString& attributeName, const QString& attributeSetterName,
+													const QString& qualifiedClassName, const clang::CXXMethodDecl* method)
+{
+	QString getter = functionStringFor(attributeName, attributeSetterName, method);
 	QString setter = QString("&%1::%2").arg(qualifiedClassName, attributeSetterName);
 	return {attributeName, getter, setter};
 }
