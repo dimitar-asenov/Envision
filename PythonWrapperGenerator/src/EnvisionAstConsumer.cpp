@@ -128,8 +128,10 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			// check if we have some more attributes which don't have an attribute macro:
 			for (auto method : classDecl->methods())
 			{
-				// Ignore private methods:
-				if (method->getAccess() == clang::AccessSpecifier::AS_private) continue;
+				// Ignore non public methods & de-/constructors & templated methods:
+				if (method->getAccess() != clang::AccessSpecifier::AS_public) continue;
+				if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
+				if (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate) continue;
 
 				QString methodName = QString::fromStdString(method->getNameAsString());
 				if (seenMethods.contains(methodName)) continue;
@@ -146,6 +148,11 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 						seenMethods << setterName << methodName;
 						break;
 					}
+				}
+				if (!seenMethods.contains(methodName))
+				{
+					// found a free standing method to export.
+					cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method)});
 				}
 			}
 			// Add enums which are declared in this class:
@@ -176,9 +183,11 @@ QString EnvisionAstConsumer::functionStringFor(const QString& methodName, const 
 		if (pointeeType.isConstQualified())
 		{
 			QString pointeeTypeString = TypeUtilities::typePtrToString(pointeeType.getTypePtr());
-			functionName = QString("make_function((const %1& (%2::*)())%3,"
+			QString castString = QString("(const %1& (%2::*)())").arg(pointeeTypeString, qualifiedClassName);
+			if (method->isStatic()) castString = "";
+			functionName = QString("make_function(%1%2,"
 												 " return_value_policy<copy_const_reference>())")
-					.arg(pointeeTypeString, qualifiedClassName, functionName);
+					.arg(castString, functionName);
 		}
 	}
 	else if (returnTypePtr->isPointerType())
@@ -192,7 +201,7 @@ QString EnvisionAstConsumer::functionStringFor(const QString& methodName, const 
 ClassAttribute EnvisionAstConsumer::attribute(const QString& attributeName, const QString& attributeSetterName,
 													const QString& qualifiedClassName, const clang::CXXMethodDecl* method)
 {
-	QString getter = functionStringFor(attributeName, attributeSetterName, method);
+	QString getter = functionStringFor(attributeName, qualifiedClassName, method);
 	QString setter = QString("&%1::%2").arg(qualifiedClassName, attributeSetterName);
 	return {attributeName, getter, setter};
 }

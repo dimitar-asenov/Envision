@@ -46,6 +46,12 @@ struct ClassAttribute
 		QString setterQualified_;
 };
 
+struct ClassMethod
+{
+		QString name_;
+		QString wrappedFunctionPointer_;
+};
+
 struct ClassData
 {
 		ClassData() = default;
@@ -54,6 +60,7 @@ struct ClassData
 		QString qualifiedName_;
 		QStringList baseClasses_;
 		QList<ClassAttribute> attributes_;
+		QList<ClassMethod> methods_;
 		QList<EnumData> enums_;
 		bool abstract_{false};
 };

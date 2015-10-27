@@ -114,6 +114,17 @@ void APIPrinter::printClass(const ClassData& cData)
 		}
 		printAttribute(cData.attributes_[propertyCount-1]);
 	}
+	int methodCount = cData.methods_.size();
+	if (methodCount> 0)
+	{
+		out_ << endl;
+		for (int i = 0; i < methodCount - 1; ++i)
+		{
+			printMethod(cData.methods_[i]);
+			out_ << endl;
+		}
+		printMethod(cData.methods_[methodCount-1]);
+	}
 	out_ << ";" << endl;
 	unIndent();
 
@@ -158,6 +169,14 @@ void APIPrinter::printAttribute(const ClassAttribute& attr)
 	printPossiblyLongString(attr.getterQualified_ + ",");
 	out_ << endl;
 	out_ << indent_ << attr.setterQualified_ << ")";
+	unIndent();
+}
+
+void APIPrinter::printMethod(const ClassMethod& method)
+{
+	out_ << indent_ << ".def(\"" << method.name_ << "\"," << endl;
+	indent();
+	printPossiblyLongString(method.wrappedFunctionPointer_ + ")");
 	unIndent();
 }
 
