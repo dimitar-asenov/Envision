@@ -33,6 +33,26 @@ namespace CppExport {
 DependencyUnit::DependencyUnit(QString name, Model::Node* node)
 	: name_(name), node_(node), targets_(calculateTargets(node)) {}
 
+QSet<const DependencyUnit*> DependencyUnit::dependencies(const QList<const DependencyUnit*>& allUnits) const
+{
+	QSet<const DependencyUnit*> result;
+
+	for (auto dependencyTarget : targets_)
+	{
+		// skip name only dependencies
+		if (dependencyTarget.nameOnly_) continue;
+
+		// skip targets pointing into ourself
+		if (node_->isAncestorOf(dependencyTarget.target_)) continue;
+
+		for (auto unit : allUnits)
+			if (unit != this && unit->node_->isAncestorOf(dependencyTarget.target_))
+				result.insert(unit);
+	}
+
+	return result;
+}
+
 QList<DependencyTarget> DependencyUnit::calculateTargets(Model::Node* node)
 {
 	QList<DependencyTarget> result;

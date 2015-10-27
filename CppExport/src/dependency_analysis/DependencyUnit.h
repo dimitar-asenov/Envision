@@ -47,6 +47,8 @@ class CPPEXPORT_API DependencyUnit
 
 		const QString& name() const;
 
+		QSet<const DependencyUnit*> dependencies(const QList<const DependencyUnit*>& allUnits) const;
+
 	private:
 		QString name_;
 		Model::Node* node_{};
