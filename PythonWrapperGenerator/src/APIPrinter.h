@@ -47,6 +47,7 @@ class APIPrinter
 		void printHeaders();
 		void printClasses();
 		void printClass(const ClassData& cData);
+		void printOverload(const OverloadDescriptor& overload);
 		void printEnumsOfClass(const ClassData& cData);
 		void printEnum(const EnumData& eData);
 		void printAttribute(const ClassAttribute& attr);

@@ -125,16 +125,21 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 						possibleAttributeSetters << methodName;
 				}
 			}
+			QMultiHash<QString, clang::CXXMethodDecl*> overloads;
 			// check if we have some more attributes which don't have an attribute macro:
 			for (auto method : classDecl->methods())
 			{
-				// Ignore non public methods & de-/constructors & templated methods:
+				// Ignore non public methods & de-/constructors & templated & deleted methods:
 				if (method->getAccess() != clang::AccessSpecifier::AS_public) continue;
 				if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
 				if (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate) continue;
+				if (method->isDeleted()) continue;
 
 				QString methodName = QString::fromStdString(method->getNameAsString());
+				if (methodName.startsWith("operator")) continue;
 				if (seenMethods.contains(methodName)) continue;
+
+				if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
 
 				if (possibleAttributeSetters.contains(methodName)) continue;
 				for (QString setterName : possibleAttributeSetters)
@@ -152,9 +157,13 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 				if (!seenMethods.contains(methodName))
 				{
 					// found a free standing method to export.
-					cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method)});
+					cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method),
+												  method->isStatic()});
+					overloads.insertMulti(methodName, method);
 				}
 			}
+			resolveOverloads(cData, overloads);
+
 			// Add enums which are declared in this class:
 			for (auto pEnum : processedEnums_)
 			{
@@ -167,6 +176,54 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			APIData::instance().addIncludeFile(QString::fromStdString(currentFile_));
 			cData.abstract_ = classDecl->isAbstract();
 			APIData::instance().insertClassData(cData, bases);
+		}
+	}
+}
+
+void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
+														 const QMultiHash<QString, clang::CXXMethodDecl*>& overloads)
+{
+	auto keys = overloads.uniqueKeys();
+	for (const auto& key : keys)
+	{
+		auto values = overloads.values(key);
+		if (values.size() <= 1) continue;
+		unsigned argumentCount = values[0]->param_size();
+		bool allSameArgumentCount = std::all_of(values.begin(), values.end(),
+			[argumentCount](const clang::CXXMethodDecl* method) {
+				return method->param_size() == argumentCount;
+		});
+		// We want to replace the stored methods in cData thus we first remove everything.
+		cData.methods_.erase(
+			std::remove_if(cData.methods_.begin(), cData.methods_.end(), [key](const ClassMethod& descriptor) {
+				return descriptor.name_ == key;
+		}), cData.methods_.end());
+		if (!allSameArgumentCount)
+		{
+			qWarning() << "Method" << key << "has overloads with different argument counts and is thus ignored!";
+		}
+		else
+		{
+			QString functionAddress = QString("&%1::%2").arg(cData.qualifiedName_, key);
+			for (int i = 0; i < values.size(); ++i)
+			{
+				auto method = values[i];
+				QString overloadName = QString("%1_%2%3").arg(cData.className_, key, QString::number(i+1));
+				QString returnType = TypeUtilities::qualTypeToString(method->getReturnType());
+				QStringList argumentTypes;
+				for (auto arg : method->params())
+					argumentTypes.push_back(TypeUtilities::qualTypeToString(arg->getType()));
+				QString signature = QString("%1 (%2::*%3)(%4)").arg(returnType, cData.qualifiedName_,
+																					 overloadName, argumentTypes.join(", "));
+				if (method->isConst()) signature.append(" const");
+
+				cData.overloadAliases_.append({signature, functionAddress});
+				if (method->getReturnType().getTypePtr()->isPointerType())
+					overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
+				else if(method->getReturnType().getTypePtr()->isReferenceType())
+					overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
+				cData.methods_.append({key, overloadName});
+			}
 		}
 	}
 }
@@ -189,6 +246,8 @@ QString EnvisionAstConsumer::functionStringFor(const QString& methodName, const 
 												 " return_value_policy<copy_const_reference>())")
 					.arg(castString, functionName);
 		}
+		else
+			functionName = QString("make_function(%1, return_internal_reference<>())").arg(functionName);
 	}
 	else if (returnTypePtr->isPointerType())
 	{

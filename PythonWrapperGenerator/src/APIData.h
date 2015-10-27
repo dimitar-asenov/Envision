@@ -50,6 +50,13 @@ struct ClassMethod
 {
 		QString name_;
 		QString wrappedFunctionPointer_;
+		bool static_{false};
+};
+
+struct OverloadDescriptor
+{
+		QString signature_;
+		QString functionAddress_;
 };
 
 struct ClassData
@@ -59,6 +66,7 @@ struct ClassData
 		QString className_;
 		QString qualifiedName_;
 		QStringList baseClasses_;
+		QList<OverloadDescriptor> overloadAliases_;
 		QList<ClassAttribute> attributes_;
 		QList<ClassMethod> methods_;
 		QList<EnumData> enums_;
