@@ -30,4 +30,32 @@ namespace CppExport {
 
 DependencyComposite::DependencyComposite(const QString& name) : name_(name) {}
 
+void DependencyComposite::addUnit(DependencyUnit* unit)
+{
+	units_.append(unit);
+	// assert every unit belongs to only one composite
+	Q_ASSERT(!unit->composite());
+	unit->setComposite(this);
+}
+
+QSet<const DependencyComposite*> DependencyComposite::dependencies()
+{
+	QSet<const DependencyComposite*> compositeDependencies;
+	bool orderingNecessary = false;
+
+	for (auto unit : units_)
+		for (auto unitDependency : unit->dependencies())
+			if (unitDependency->composite() != this)
+				compositeDependencies.insert(unitDependency->composite());
+			else
+				orderingNecessary = true;
+
+	if (orderingNecessary)
+	{
+		// order units_ topologically
+	}
+
+	return compositeDependencies;
+}
+
 }

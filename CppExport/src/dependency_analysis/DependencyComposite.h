@@ -37,16 +37,16 @@ class CPPEXPORT_API DependencyComposite
 	public:
 		DependencyComposite(const QString& name);
 
-		const QString& name();
-		void addUnit(const DependencyUnit* unit);
+		const QString& name() const;
+		void addUnit(DependencyUnit* unit);
+
+		QSet<const DependencyComposite*> dependencies();
 
 	private:
-		const QString& name_;
-		QList<const DependencyUnit*> units_;
+		const QString name_;
+		QList<DependencyUnit*> units_;
 };
 
-inline const QString& DependencyComposite::name() { return name_; }
-
-inline void DependencyComposite::addUnit(const DependencyUnit* unit) { units_.append(unit); }
+inline const QString& DependencyComposite::name() const { return name_; }
 
 }
