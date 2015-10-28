@@ -236,7 +236,7 @@ void APIPrinter::printPossiblyLongString(const QString& data, int additionalLeng
 		QString firstPart = data.mid(0, splitIndex + 1);
 		QString secondPart = data.mid(splitIndex + 1);
 
-		printPossiblyLongString(firstPart + "\n");
+		printPossiblyLongString(firstPart.trimmed() + "\n");
 		printPossiblyLongString("\t" + secondPart);
 	}
 	else
