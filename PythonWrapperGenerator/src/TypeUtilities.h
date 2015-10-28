@@ -35,5 +35,6 @@ class TypeUtilities
 	public:
 		static QString nestedNameSpecifierToString(const clang::NestedNameSpecifier* nestedName);
 		static QString templateArgToString(const clang::TemplateArgument& templateArg);
+		static QString qualTypeToString(const clang::QualType& type);
 		static QString typePtrToString(const clang::Type* type);
 };

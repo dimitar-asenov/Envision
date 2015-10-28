@@ -83,6 +83,9 @@ void APIPrinter::printClass(const ClassData& cData)
 	// each class gets it's own scope:
 	out_ << "{" << endl;
 	indent();
+	for (const auto& overload : cData.overloadAliases_)
+		printOverload(overload);
+
 	QString classString;
 	if (cData.enums_.size()) // We only need a scope variable if we have enums
 		classString = QString("scope %1scope = ").arg(cData.className_);
@@ -114,6 +117,17 @@ void APIPrinter::printClass(const ClassData& cData)
 		}
 		printAttribute(cData.attributes_[propertyCount-1]);
 	}
+	int methodCount = cData.methods_.size();
+	if (methodCount> 0)
+	{
+		out_ << endl;
+		for (int i = 0; i < methodCount - 1; ++i)
+		{
+			printMethod(cData.methods_[i]);
+			out_ << endl;
+		}
+		printMethod(cData.methods_[methodCount-1]);
+	}
 	out_ << ";" << endl;
 	unIndent();
 
@@ -121,6 +135,21 @@ void APIPrinter::printClass(const ClassData& cData)
 	// close scope
 	unIndent();
 	out_ << "}" << endl << endl;
+}
+
+void APIPrinter::printOverload(const OverloadDescriptor& overload)
+{
+	int length = overload.signature_.length() + overload.functionAddress_.length() + 4;
+	out_ << overload.signature_ << " =";
+	if (length > maxLineLength_)
+	{
+		out_ << endl;
+		indent();
+		out_ << indent_ << overload.functionAddress_ << ";" << endl;
+		unIndent();
+	}
+	else
+		out_ << " " << overload.functionAddress_ << ";" << endl;
 }
 
 void APIPrinter::printEnumsOfClass(const ClassData& cData)
@@ -161,6 +190,13 @@ void APIPrinter::printAttribute(const ClassAttribute& attr)
 	unIndent();
 }
 
+void APIPrinter::printMethod(const ClassMethod& method)
+{
+	printPossiblyLongString(QString(".def(\"%1\", %2)").arg(method.name_, method.wrappedFunctionPointer_));
+	if (method.static_)
+		out_ << endl << indent_ << ".staticmethod(\"" << method.name_ << "\")";
+}
+
 void APIPrinter::printTypedListWrappers()
 {
 	auto typedLists = APIData::instance().typedLists();
@@ -184,15 +220,24 @@ void APIPrinter::printTypedListWrappers()
 
 void APIPrinter::printPossiblyLongString(const QString& data, int additionalLength)
 {
+	static const QList<QChar> splitSymbols{' ', ',', '('};
 	if (data.length() + indent_.length() + additionalLength > maxLineLength_)
 	{
-		int commaIndex = data.indexOf(',');
-		QString firstPart = data.mid(0, commaIndex + 1);
-		QString secondPart = data.mid(commaIndex + 1);
-		out_ << indent_ << firstPart << endl;
-		indent();
-		out_ << indent_ << secondPart;
-		unIndent();
+		int mid = maxLineLength_ / 2;
+		int offset = 1;
+		// Search for a position nearest to mid to split:
+		while (std::abs(offset) < mid)
+		{
+			if (splitSymbols.contains(data.at(mid + offset))) break;
+			if (offset > 0) offset *= -1;
+			else offset = offset * -1 + 1;
+		}
+		int splitIndex = mid + offset;
+		QString firstPart = data.mid(0, splitIndex + 1);
+		QString secondPart = data.mid(splitIndex + 1);
+
+		printPossiblyLongString(firstPart.trimmed() + "\n");
+		printPossiblyLongString("\t" + secondPart);
 	}
 	else
 	{
