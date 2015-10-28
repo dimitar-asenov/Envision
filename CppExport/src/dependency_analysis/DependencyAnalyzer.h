@@ -44,6 +44,9 @@ class CPPEXPORT_API DependencyAnalyzer
 
 		static QList<DependencyComposite*> mergeUnits(QList<DependencyUnit*>& units);
 
+		template <class T>
+		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
+
 	private:
 		static void units(Model::Node* current, QString namespaceName, QList<DependencyUnit*>& result);
 
