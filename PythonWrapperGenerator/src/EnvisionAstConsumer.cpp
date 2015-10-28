@@ -202,44 +202,33 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 		}), values.end());
 		if (values.isEmpty()) continue;
 
-		unsigned argumentCount = values[0]->param_size();
-		bool allSameArgumentCount = std::all_of(values.begin(), values.end(),
-			[argumentCount](const clang::CXXMethodDecl* method) {
-				return method->param_size() == argumentCount;
-		});
 		// We want to replace the stored methods in cData thus we first remove everything.
 		cData.methods_.erase(
 			std::remove_if(cData.methods_.begin(), cData.methods_.end(), [key](const ClassMethod& descriptor) {
 				return descriptor.name_ == key;
 		}), cData.methods_.end());
-		if (!allSameArgumentCount)
-		{
-			qWarning() << "Method" << key << "has overloads with different argument counts and is thus ignored!";
-		}
-		else
-		{
-			QString functionAddress = QString("&%1::%2").arg(cData.qualifiedName_, key);
-			for (int i = 0; i < values.size(); ++i)
-			{
-				auto method = values[i];
-				QString overloadName = QString("%1_%2%3").arg(cData.className_, key, QString::number(i+1));
-				QString returnType = TypeUtilities::qualTypeToString(method->getReturnType());
-				QStringList argumentTypes;
-				for (auto arg : method->params())
-					argumentTypes.push_back(TypeUtilities::qualTypeToString(arg->getType()));
-				QString newFunctionName = QString("*%1").arg(overloadName);
-				if (!method->isStatic())
-					newFunctionName.prepend("::").prepend(cData.qualifiedName_);
-				QString signature = QString("%1 (%2)(%3)").arg(returnType, newFunctionName, argumentTypes.join(", "));
-				if (method->isConst()) signature.append(" const");
 
-				cData.overloadAliases_.append({signature, functionAddress});
-				if (method->getReturnType().getTypePtr()->isPointerType())
-					overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
-				else if(method->getReturnType().getTypePtr()->isReferenceType())
-					overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
-				cData.methods_.append({key, overloadName});
-			}
+		QString functionAddress = QString("&%1::%2").arg(cData.qualifiedName_, key);
+		for (int i = 0; i < values.size(); ++i)
+		{
+			auto method = values[i];
+			QString overloadName = QString("%1_%2%3").arg(cData.className_, key, QString::number(i+1));
+			QString returnType = TypeUtilities::qualTypeToString(method->getReturnType());
+			QStringList argumentTypes;
+			for (auto arg : method->params())
+				argumentTypes.push_back(TypeUtilities::qualTypeToString(arg->getType()));
+			QString newFunctionName = QString("*%1").arg(overloadName);
+			if (!method->isStatic())
+				newFunctionName.prepend("::").prepend(cData.qualifiedName_);
+			QString signature = QString("%1 (%2)(%3)").arg(returnType, newFunctionName, argumentTypes.join(", "));
+			if (method->isConst()) signature.append(" const");
+
+			cData.overloadAliases_.append({signature, functionAddress});
+			if (method->getReturnType().getTypePtr()->isPointerType())
+				overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
+			else if(method->getReturnType().getTypePtr()->isReferenceType())
+				overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
+			cData.methods_.append({key, overloadName});
 		}
 	}
 }
