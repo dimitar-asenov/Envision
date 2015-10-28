@@ -128,26 +128,23 @@ void SequentialLayout::synchronizeLast(Item*& item, Model::Node* node)
 
 void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int position)
 {
-	Item* oldItem = item;
+	int oldItemIndex = item ? items.indexOf(item) : -1;
 	Item::synchronizeItem(item, node);
-	placeSynchronized(oldItem, item, position);
+	placeSynchronized(oldItemIndex, item, position);
 }
 
-void SequentialLayout::placeSynchronized(Item* oldItem, Item* newItem, int pos)
+void SequentialLayout::placeSynchronized(int oldItemIndex, Item* newItem, int pos)
 {
 	// Remove the old item
-	if (oldItem)
+	if (oldItemIndex >= 0)
 	{
-		int index = items.indexOf(oldItem);
-		Q_ASSERT(index >= 0);
-
-		if (newItem && (pos == index || (pos >= length() && index == length()-1)))
+		if (newItem && (pos == oldItemIndex || (pos >= length() && oldItemIndex == length()-1)))
 		{
-			items.replace(index, newItem);
+			items.replace(oldItemIndex, newItem);
 			return;
 		}
 		else
-			items.remove(index);
+			items.remove(oldItemIndex);
 	}
 
 	if (newItem)

@@ -111,7 +111,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Super<Layout>
 
 		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool forward, bool first, bool last);
 
-		void placeSynchronized(Item* oldItem, Item* newItem, int pos);
+		void placeSynchronized(int oldItemIndex, Item* newItem, int pos);
 };
 
 inline bool SequentialLayout::isHorizontal() const { return style()->isHorizontal(); }
@@ -138,9 +138,9 @@ template <class FieldType, class VisualizationType>
 void SequentialLayout::synchronizeMid(FieldType*& item, bool present,
 		const typename VisualizationType::StyleType* style, int position)
 {
-	Item* oldItem = item;
+	int oldItemIndex = item ? items.indexOf(item) : -1;
 	Item::synchronizeItem<FieldType, VisualizationType>(item, present, style);
-	placeSynchronized(oldItem, item, position);
+	placeSynchronized(oldItemIndex, item, position);
 }
 
 template <class FieldType, class VisualizationType>
@@ -161,9 +161,9 @@ template  <class FieldType, class VisualizationType>
 void SequentialLayout::synchronizeMid(FieldType*& item, typename VisualizationType::NodeType* node,
 		const typename VisualizationType::StyleType* style, int position)
 {
-	Item* oldItem = item;
+	int oldItemIndex = item ? items.indexOf(item) : -1;
 	Item::synchronizeItem<FieldType, VisualizationType>(item, node, style);
-	placeSynchronized(oldItem, item, position);
+	placeSynchronized(oldItemIndex, item, position);
 }
 
 }
