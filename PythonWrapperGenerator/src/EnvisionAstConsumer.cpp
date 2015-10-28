@@ -129,7 +129,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			// check if we have some more attributes which don't have an attribute macro:
 			for (auto method : classDecl->methods())
 			{
-				// Ignore de-/constructors & deleted methods & overloaded methods:
+				// Ignore de-/constructors & deleted methods & overloaded operators:
 				if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
 				if (method->isDeleted()) continue;
 				if (method->isOverloadedOperator()) continue;
