@@ -129,14 +129,21 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			// check if we have some more attributes which don't have an attribute macro:
 			for (auto method : classDecl->methods())
 			{
-				// Ignore non public methods & de-/constructors & templated & deleted methods & overloaded methods:
-				if (method->getAccess() != clang::AccessSpecifier::AS_public) continue;
+				// Ignore de-/constructors & deleted methods & overloaded methods:
 				if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
-				if (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate) continue;
 				if (method->isDeleted()) continue;
 				if (method->isOverloadedOperator()) continue;
 
 				QString methodName = QString::fromStdString(method->getNameAsString());
+				if (method->getAccess() != clang::AccessSpecifier::AS_public ||
+					 method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate ||
+					 // workaround since we only consider cpp files at the moment:
+					 methodName == "firstAncestorOfType")
+				{
+					// For wrapping methods we should still consider non public and template methods for overload resolution.
+					overloads.insertMulti(methodName, method);
+					continue;
+				}
 				if (seenMethods.contains(methodName)) continue;
 
 				if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
@@ -188,6 +195,13 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 	{
 		auto values = overloads.values(key);
 		if (values.size() <= 1) continue;
+		// Remove non-public and templated methods.
+		values.erase(std::remove_if(values.begin(), values.end(), [](const clang::CXXMethodDecl* method) {
+			return method->getAccess() != clang::AccessSpecifier::AS_public ||
+					method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate;
+		}), values.end());
+		if (values.isEmpty()) continue;
+
 		unsigned argumentCount = values[0]->param_size();
 		bool allSameArgumentCount = std::all_of(values.begin(), values.end(),
 			[argumentCount](const clang::CXXMethodDecl* method) {
@@ -213,8 +227,10 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 				QStringList argumentTypes;
 				for (auto arg : method->params())
 					argumentTypes.push_back(TypeUtilities::qualTypeToString(arg->getType()));
-				QString signature = QString("%1 (%2::*%3)(%4)").arg(returnType, cData.qualifiedName_,
-																					 overloadName, argumentTypes.join(", "));
+				QString newFunctionName = QString("*%1").arg(overloadName);
+				if (!method->isStatic())
+					newFunctionName.prepend("::").prepend(cData.qualifiedName_);
+				QString signature = QString("%1 (%2)(%3)").arg(returnType, newFunctionName, argumentTypes.join(", "));
 				if (method->isConst()) signature.append(" const");
 
 				cData.overloadAliases_.append({signature, functionAddress});
