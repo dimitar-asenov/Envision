@@ -90,40 +90,51 @@ QList<DependencyComposite*> DependencyAnalyzer::mergeUnits(QList<DependencyUnit*
 }
 
 template <class T>
-QList<T*> DependencyAnalyzer::topologicalSort(QHash<T*, QSet<T*>> graph)
+QList<T*> DependencyAnalyzer::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
 {
-	QHash<T*, QSet<T*>> reverseGraph;
-	for (auto it = graph.begin(); it != graph.end(); it++)
-		for (auto dependency : it.value())
-			reverseGraph[dependency].insert(it.key());
-
-	QList<T*> toBeProcessed;
-	for (auto it = graph.begin(); it != graph.end(); it++)
-		if (!reverseGraph.contains(it.key()))
-			toBeProcessed.append(it.key());
+	// calculate a list of elements with no dependencies.
+	// calculate a map that maps from an element to all elements that depend on it.
+	QList<T*> noPendingDependencies;
+	QHash<T*, QSet<T*>> neededFor;
+	for (auto it = dependsOn.begin(); it != dependsOn.end(); it++)
+		if (it.value().empty())
+			// this element depends on no other elements
+			noPendingDependencies.append(it.key());
+		else
+			// for every other element this element depends on add it to the neededFor map for said other element
+			for (auto dependency : it.value())
+				neededFor[dependency].insert(it.key());
 
 	QList<T*> result;
-	while (!toBeProcessed.empty())
+	while (!noPendingDependencies.empty())
 	{
-		auto n = toBeProcessed.takeFirst();
+		// take any item form the list of item with no more dependencies and add it to the result
+		auto n = noPendingDependencies.takeFirst();
 		result.append(n);
 
-		for (auto m : graph.value(n))
+		// check if we are neededFor another node
+		auto it = neededFor.find(n);
+		if (it == neededFor.end()) continue;
+
+		// for every node we are neededFor
+		for (auto m : *it)
 		{
-			auto it = reverseGraph.find(m);
+			// find the nodes the node we are needed for dependsOn
+			auto dIt = dependsOn.find(m);
+			Q_ASSERT(dIt != dependsOn.end());
 
-			auto oldSize = (*it).size();
-			(*it).remove(n);
-			auto newSize = (*it).size();
+			// remove us from its dependencies
+			dIt->remove(n);
 
-			if (oldSize > newSize && newSize == 0)
-				toBeProcessed.append(m);
+			// if this node has no more dependencies add it to the list of items with no more dependencies
+			if (dIt->size() == 0)
+				noPendingDependencies.append(m);
 		}
 	}
 
-	for (auto it = reverseGraph.begin(); it != reverseGraph.end(); it++)
-		// test graph for cycles
-		Q_ASSERT((*it).empty());
+	// test graph for cycles
+	for (auto dependencies : dependsOn.values())
+		Q_ASSERT(dependencies.empty());
 
 	return result;
 }
