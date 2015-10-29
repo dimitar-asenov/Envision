@@ -25,7 +25,34 @@
 ***********************************************************************************************************************/
 
 #include "CommandPromptV2.h"
+#include "CommandPromptShell.h"
 
 namespace Interaction {
+
+CommandPromptShell* CommandPromptV2::shell_{};
+Visualization::Item* CommandPromptV2::commandReceiver_{};
+std::unique_ptr<Visualization::Cursor> CommandPromptV2::commandReceiverCursor_{};
+
+
+void CommandPromptV2::show(Visualization::Item* commandReceiver, QString initialCommandText, PromptOptions options)
+{
+	commandReceiver_ = commandReceiver;
+
+	if (commandReceiver_->scene()->mainCursor() && commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
+		commandReceiverCursor_.reset(commandReceiver_->scene()->mainCursor()->clone());
+
+	shell_ = new CommandPromptShell(initialCommandText, options);
+}
+
+void CommandPromptV2::hide()
+{
+	if (shell_)
+	{
+		SAFE_DELETE_ITEM(shell_);
+
+		commandReceiver_ = nullptr;
+		commandReceiverCursor_.reset();
+	}
+}
 
 }

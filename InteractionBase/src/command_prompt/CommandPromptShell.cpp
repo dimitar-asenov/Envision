@@ -25,18 +25,82 @@
 ***********************************************************************************************************************/
 
 #include "CommandPromptShell.h"
+#include "CommandPromptTextInput.h" //TODO: Remove this
+
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/views/MainView.h"
+
+using namespace Visualization;
 
 namespace Interaction {
 
+/**
+ * Specifies the minimal height of the commandReceiver item which will make a new prompt appear in the center of the
+ * item.
+ *
+ * If the receiver item's height is less than this number, then the prompt will be placed directly under the item.
+ * Otherwise the prompt will be centered inside the item.
+ */
+constexpr int COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT = 50;
+
+/**
+ * The distance between a prompt which is shown under the command receiver item and that item.
+ */
+constexpr int PROMPT_TO_RECEIVER_DISTANCE = 3;
+
 ITEM_COMMON_DEFINITIONS(CommandPromptShell, "item")
 
-CommandPromptShell::CommandPromptShell(Item* parent, const StyleType* style) : Super(parent, style) {
+CommandPromptShell::CommandPromptShell(QString /*initialCommandText*/,
+													CommandPromptV2::PromptOptions options,
+													const StyleType* style)
+	: Super(nullptr, style)
+{
+	setFlag(QGraphicsItem::ItemIsMovable);
+	setFlag(ItemIgnoresTransformations);
+	setZValue(LAYER_COMMAND);
+	setItemCategory(Scene::MenuItemCategory);
+
 	// TODO: construct inputItem_ as it is not synchronized by the declarative mechanism
+	inputItem_ =  new CommandPromptTextInput(this);
+
+	CommandPromptV2::commandReceiver()->scene()->addTopLevelItem(this);
+
+	setShellPosition(options);
 }
 
 void CommandPromptShell::initializeForms()
 {
 	addForm(grid({{item(&I::inputItem_)}}));
+}
+
+void CommandPromptShell::setShellPosition(CommandPromptV2::PromptOptions options)
+{
+	QPointF shellPos = CommandPromptV2::commandReceiver()->mapToScene(0, 0);
+	if (CommandPromptV2::commandReceiver()->heightInScene() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
+	{
+		// Show the prompt under the receiver item.
+		shellPos.setY( shellPos.y() + CommandPromptV2::commandReceiver()->heightInScene()
+							 + PROMPT_TO_RECEIVER_DISTANCE);
+	}
+	else
+	{
+		// If the item is rather large show the prompt at the cursor
+		shellPos += CommandPromptV2::commandReceiverCursorPosition();
+	}
+
+	setPos(shellPos);
+
+	if (options.testFlag(CommandPromptV2::CenterViewOnPrompt)) centerViewOnShell();
+}
+
+void CommandPromptShell::centerViewOnShell() const
+{
+	for (auto v : CommandPromptV2::commandReceiver()->scene()->views())
+		if (auto mainView = dynamic_cast<Visualization::MainView*>(v))
+		{
+			mainView->centerOn(pos());
+			break;
+		}
 }
 
 }

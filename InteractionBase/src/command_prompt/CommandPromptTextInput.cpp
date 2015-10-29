@@ -26,6 +26,8 @@
 
 #include "CommandPromptTextInput.h"
 
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+
 namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(CommandPromptTextInput, "item")
@@ -35,6 +37,12 @@ CommandPromptTextInput::CommandPromptTextInput(Item* parent, const StyleType* st
 void CommandPromptTextInput::initializeForms()
 {
 	addForm(item(&I::text_, [](I* v){return &v->style()->text();}));
+}
+
+void CommandPromptTextInput::determineChildren()
+{
+	Super::determineChildren();
+	text_->setEditable(true);
 }
 
 }

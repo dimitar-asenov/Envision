@@ -43,6 +43,8 @@ class INTERACTIONBASE_API CommandPromptTextInput : public Super<Visualization::D
 
 	static void initializeForms();
 
+	virtual void determineChildren() override;
+
 	private:
 		Visualization::Text* text_{};
 };

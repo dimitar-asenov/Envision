@@ -1,4 +1,16 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>1</width>
+			<color>white</color>
+		</outline>
+		<cornerRadius>5</cornerRadius>
+		<cornerType>0</cornerType>
+		<backgroundBrush>
+			<style>1</style>
+			<color>#205090</color>
+		</backgroundBrush>
+	</shape>
 </style>

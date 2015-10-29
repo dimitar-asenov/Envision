@@ -28,6 +28,7 @@
 
 #include "interactionbase_api.h"
 #include "CommandPromptShellStyle.h"
+#include "CommandPromptV2.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
@@ -38,12 +39,17 @@ class INTERACTIONBASE_API CommandPromptShell  : public Super<Visualization::Decl
 	ITEM_COMMON(CommandPromptShell)
 
 	public:
-		CommandPromptShell(Item* parent, const StyleType* style = itemStyles().get());
+		CommandPromptShell(QString initialCommandText = {},
+								 CommandPromptV2::PromptOptions options = CommandPromptV2::None,
+								 const StyleType* style = itemStyles().get());
 
 	static void initializeForms();
 
 	private:
 		Item* inputItem_{};
+
+		void setShellPosition(CommandPromptV2::PromptOptions options);
+		void centerViewOnShell() const;
 };
 
 }

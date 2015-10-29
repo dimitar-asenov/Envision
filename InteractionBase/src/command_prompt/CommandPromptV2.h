@@ -27,12 +27,41 @@
 #pragma once
 
 #include "interactionbase_api.h"
+#include "VisualizationBase/src/cursor/Cursor.h"
 
 namespace Interaction {
+
+class CommandPromptShell;
 
 class INTERACTIONBASE_API CommandPromptV2
 {
 	public:
+
+		enum PromptOption {
+			None = 0,
+			CenterViewOnPrompt = 0x00000001 /**< If set, the view will be scrolled so that the prompt is in the center. */
+		};
+		Q_DECLARE_FLAGS(PromptOptions, PromptOption)
+
+		static void show(Visualization::Item* commandReceiver, QString initialCommandText = {},
+							  PromptOptions options = None);
+		static void hide();
+
+	private:
+		friend class CommandPromptShell;
+
+		static CommandPromptShell* shell_;
+
+		static Visualization::Item* commandReceiver_;
+		static std::unique_ptr<Visualization::Cursor> commandReceiverCursor_;
+
+		static Visualization::Item* commandReceiver();
+		static QPoint commandReceiverCursorPosition();
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(CommandPromptV2::PromptOptions)
+
+inline Visualization::Item* CommandPromptV2::commandReceiver() { return commandReceiver_; }
+inline QPoint CommandPromptV2::commandReceiverCursorPosition()
+	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0); }
 
 }
