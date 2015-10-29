@@ -24,62 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandPromptV2.h"
-#include "CommandPromptShell.h"
-#include "CommandPromptMode.h"
+#pragma once
+
+#include "interactionbase_api.h"
+
+namespace Visualization {
+	class Item;
+}
 
 namespace Interaction {
 
-CommandPromptShell* CommandPromptV2::shell_{};
-Visualization::Item* CommandPromptV2::commandReceiver_{};
-CommandPromptMode* CommandPromptV2::mode_{};
-std::unique_ptr<Visualization::Cursor> CommandPromptV2::commandReceiverCursor_{};
-
-QMap<QString, QPair<QString, CommandPromptV2::ModeConstructor>>& CommandPromptV2::modeRegistry()
+class INTERACTIONBASE_API CommandPromptMode
 {
-	static QMap<QString, QPair<QString, ModeConstructor>> map;
-	return map;
-}
+	public:
+		virtual ~CommandPromptMode();
 
-const QString& CommandPromptV2::defaultModeName()
-{
-	static QString def{"command"};
-	return def;
-}
-
-void CommandPromptV2::show(Visualization::Item* commandReceiver, QString initialCommandText, PromptOptions options)
-{
-	show({}, commandReceiver, initialCommandText, options );
-}
-
-void CommandPromptV2::show(const QString& modeName, Visualization::Item* commandReceiver, QString initialCommandText,
-									PromptOptions options)
-{
-	Q_ASSERT(!shell_ && !mode_);
-
-	commandReceiver_ = commandReceiver;
-
-	if (commandReceiver_->scene()->mainCursor() && commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
-		commandReceiverCursor_.reset(commandReceiver_->scene()->mainCursor()->clone());
-
-	auto modeEntryIt = modeRegistry().find(modeName.isNull() ? defaultModeName() : modeName);
-	Q_ASSERT(modeEntryIt != modeRegistry().end());
-	mode_ = modeEntryIt->second();
-	Q_ASSERT(mode_);
-
-	shell_ = new CommandPromptShell(mode_->createInputItem(), modeEntryIt->first, initialCommandText, options);
-}
-
-void CommandPromptV2::hide()
-{
-	if (shell_)
-	{
-		SAFE_DELETE_ITEM(shell_);
-		SAFE_DELETE(mode_);
-
-		commandReceiver_ = nullptr;
-		commandReceiverCursor_.reset();
-	}
-}
+		virtual Visualization::Item* createInputItem() const = 0;
+};
 
 }

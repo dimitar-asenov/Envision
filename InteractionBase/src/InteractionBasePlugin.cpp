@@ -46,6 +46,9 @@
 
 #include "events/DetectMainSceneActivated.h"
 
+#include "command_prompt/CommandMode.h"
+#include "command_prompt/CommandPromptV2.h"
+
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
 #include "VisualizationBase/src/items/VComposite.h"
@@ -84,6 +87,9 @@ Log& InteractionBasePlugin::log()
 
 bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 {
+	// Register prompt modes
+	CommandPromptV2::registerMode<CommandMode>(CommandPromptV2::defaultModeName(), "command-prompt-command-mode");
+
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
 	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());
 	Visualization::SceneHandlerItem::setDefaultClassHandler(HSceneHandlerItem::instance());

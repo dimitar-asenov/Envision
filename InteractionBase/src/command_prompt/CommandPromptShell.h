@@ -32,6 +32,11 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
+namespace Visualization {
+	class Static;
+	class StaticStyle;
+}
+
 namespace Interaction {
 
 class INTERACTIONBASE_API CommandPromptShell  : public Super<Visualization::DeclarativeItem<CommandPromptShell>>
@@ -39,7 +44,7 @@ class INTERACTIONBASE_API CommandPromptShell  : public Super<Visualization::Decl
 	ITEM_COMMON(CommandPromptShell)
 
 	public:
-		CommandPromptShell(QString initialCommandText = {},
+		CommandPromptShell(Item* inputItem, const QString& modeSymbolStyleName, QString initialCommandText = {},
 								 CommandPromptV2::PromptOptions options = CommandPromptV2::None,
 								 const StyleType* style = itemStyles().get());
 
@@ -47,6 +52,8 @@ class INTERACTIONBASE_API CommandPromptShell  : public Super<Visualization::Decl
 
 	private:
 		Item* inputItem_{};
+		Visualization::Static* modeIcon_{};
+		Visualization::StaticStyle* modeIconStyle_{};
 
 		void setShellPosition(CommandPromptV2::PromptOptions options);
 		void centerViewOnShell() const;

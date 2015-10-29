@@ -1,4 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<text prototypes="item/VText/white" />
+	<text prototypes="item/Text/default">
+		<pen><color>#FFCC66</color></pen>
+	</text>
 </style>

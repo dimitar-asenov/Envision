@@ -32,6 +32,7 @@
 namespace Interaction {
 
 class CommandPromptShell;
+class CommandPromptMode;
 
 class INTERACTIONBASE_API CommandPromptV2
 {
@@ -43,17 +44,28 @@ class INTERACTIONBASE_API CommandPromptV2
 		};
 		Q_DECLARE_FLAGS(PromptOptions, PromptOption)
 
+		static void show(const QString& modeName, Visualization::Item* commandReceiver, QString initialCommandText = {},
+							  PromptOptions options = None);
 		static void show(Visualization::Item* commandReceiver, QString initialCommandText = {},
 							  PromptOptions options = None);
 		static void hide();
+
+		template <class ModeType>
+		static void registerMode(const QString& modeName, const QString& modeSymbolStyleName);
+
+		static const QString& defaultModeName();
 
 	private:
 		friend class CommandPromptShell;
 
 		static CommandPromptShell* shell_;
+		static CommandPromptMode* mode_;
 
 		static Visualization::Item* commandReceiver_;
 		static std::unique_ptr<Visualization::Cursor> commandReceiverCursor_;
+
+		using ModeConstructor = std::function<CommandPromptMode* ()>;
+		static QMap<QString, QPair<QString, ModeConstructor>>& modeRegistry();
 
 		static Visualization::Item* commandReceiver();
 		static QPoint commandReceiverCursorPosition();
@@ -63,5 +75,12 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CommandPromptV2::PromptOptions)
 inline Visualization::Item* CommandPromptV2::commandReceiver() { return commandReceiver_; }
 inline QPoint CommandPromptV2::commandReceiverCursorPosition()
 	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0); }
+
+template <class ModeType>
+inline void CommandPromptV2::registerMode(const QString& modeName, const QString& modeSymbolStyleName)
+{
+	Q_ASSERT(!modeRegistry().contains(modeName));
+	modeRegistry().insert(modeName, qMakePair(modeSymbolStyleName, []()->CommandPromptMode* {return new ModeType();}));
+}
 
 }

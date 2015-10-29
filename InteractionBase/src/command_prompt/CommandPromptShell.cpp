@@ -25,10 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "CommandPromptShell.h"
-#include "CommandPromptTextInput.h" //TODO: Remove this
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
 
@@ -50,18 +50,20 @@ constexpr int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
 ITEM_COMMON_DEFINITIONS(CommandPromptShell, "item")
 
-CommandPromptShell::CommandPromptShell(QString /*initialCommandText*/,
+CommandPromptShell::CommandPromptShell(Item* inputItem, const QString& modeSymbolStyleName,
+													QString /*initialCommandText*/,
 													CommandPromptV2::PromptOptions options,
 													const StyleType* style)
-	: Super(nullptr, style)
+	: Super(nullptr, style), inputItem_{inputItem},
+	  modeIconStyle_{Visualization::Static::itemStyles().get(modeSymbolStyleName)}
 {
+	Q_ASSERT(inputItem_);
+	inputItem_->setParentItem(this);
+
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
 	setZValue(LAYER_COMMAND);
 	setItemCategory(Scene::MenuItemCategory);
-
-	// TODO: construct inputItem_ as it is not synchronized by the declarative mechanism
-	inputItem_ =  new CommandPromptTextInput(this);
 
 	CommandPromptV2::commandReceiver()->scene()->addTopLevelItem(this);
 
@@ -70,7 +72,9 @@ CommandPromptShell::CommandPromptShell(QString /*initialCommandText*/,
 
 void CommandPromptShell::initializeForms()
 {
-	addForm(grid({{item(&I::inputItem_)}}));
+	auto icon = item(&I::modeIcon_, [](I* v){return v->modeIconStyle_;});
+	auto inputItem = item(&I::inputItem_);
+	addForm(grid({{icon, inputItem}})->setHorizontalSpacing(5)->setVerticalSpacing(10));
 }
 
 void CommandPromptShell::setShellPosition(CommandPromptV2::PromptOptions options)
