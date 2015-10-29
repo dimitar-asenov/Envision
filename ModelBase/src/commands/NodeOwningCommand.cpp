@@ -37,8 +37,13 @@ NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* o
 	// If the target node is not yet owned, do not assume ownership over its subnodes.
 	if (target->manager() == nullptr)
 	{
-		ownedIfDone_ = nullptr;
-		ownedIfUndone_ = nullptr;
+		auto managerOfOwnedIfDone = ownedIfDone_ ?
+			AllTreeManagers::instance().managerOfOwningUndoStack(ownedIfDone_) : nullptr;
+		if (!managerOfOwnedIfDone) ownedIfDone_ = nullptr;
+
+		auto managerOfOwnedIfUnDone = ownedIfUndone_ ?
+			AllTreeManagers::instance().managerOfOwningUndoStack(ownedIfUndone_) : nullptr;
+		if (!managerOfOwnedIfUnDone) ownedIfUndone_ = nullptr;
 	}
 }
 
@@ -50,10 +55,8 @@ NodeOwningCommand::~NodeOwningCommand()
 	// - It is not currently owned by any other command in any undo stack
 	if (n && !n->manager())
 	{
-		for (auto m : AllTreeManagers::instance().loadedManagers())
-			if (m->isOwnedByUndoStack(n, this)) return;
-
-		SAFE_DELETE(n);
+		if (AllTreeManagers::instance().managerOfOwningUndoStack(n, this) == nullptr)
+			SAFE_DELETE(n);
 	}
 }
 

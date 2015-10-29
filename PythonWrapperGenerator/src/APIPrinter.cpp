@@ -139,17 +139,7 @@ void APIPrinter::printClass(const ClassData& cData)
 
 void APIPrinter::printOverload(const OverloadDescriptor& overload)
 {
-	int length = overload.signature_.length() + overload.functionAddress_.length() + 4;
-	out_ << overload.signature_ << " =";
-	if (length > maxLineLength_)
-	{
-		out_ << endl;
-		indent();
-		out_ << indent_ << overload.functionAddress_ << ";" << endl;
-		unIndent();
-	}
-	else
-		out_ << " " << overload.functionAddress_ << ";" << endl;
+	printPossiblyLongString(QString("%1 = %2;\n").arg(overload.signature_, overload.functionAddress_));
 }
 
 void APIPrinter::printEnumsOfClass(const ClassData& cData)
@@ -220,7 +210,7 @@ void APIPrinter::printTypedListWrappers()
 
 void APIPrinter::printPossiblyLongString(const QString& data, int additionalLength)
 {
-	static const QList<QChar> splitSymbols{' ', ',', '('};
+	static const QList<QChar> splitSymbols{' ', ',', '(', '='};
 	if (data.length() + indent_.length() + additionalLength > maxLineLength_)
 	{
 		int mid = maxLineLength_ / 2;

@@ -32,6 +32,7 @@ namespace Model {
 
 class TreeManager;
 class Node;
+class NodeOwningCommand;
 
 /**
  * The AllTreeManagers class contains all existing tree managers.
@@ -65,6 +66,8 @@ class MODELBASE_API AllTreeManagers {
 		 * Returns a list to all currently loaded tree managers.
 		 */
 		const QList<TreeManager*>& loadedManagers() const;
+
+		TreeManager* managerOfOwningUndoStack(Node* node, const NodeOwningCommand* excludeCommand = nullptr) const;
 
 	private:
 		AllTreeManagers();

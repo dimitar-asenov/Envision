@@ -65,6 +65,13 @@ TreeManager* AllTreeManagers::find(Node* root) const
 	return nullptr;
 }
 
+TreeManager* AllTreeManagers::managerOfOwningUndoStack(Node* node,  const NodeOwningCommand* excludeCommand) const
+{
+	for (auto m : loadedManagers_)
+		if (m->isOwnedByUndoStack(node, excludeCommand)) return m;
+	return nullptr;
+}
+
 void AllTreeManagers::add(TreeManager* manager)
 {
 	if (!loadedManagers_.contains(manager)) loadedManagers_.append(manager);
