@@ -44,7 +44,7 @@ class INTERACTIONBASE_API CommandPromptShell  : public Super<Visualization::Decl
 	ITEM_COMMON(CommandPromptShell)
 
 	public:
-		CommandPromptShell(Item* inputItem, const QString& modeSymbolStyleName, QString initialCommandText = {},
+		CommandPromptShell(Item* inputItem, const QString& modeSymbolStyleName,
 								 CommandPromptV2::PromptOptions options = CommandPromptV2::None,
 								 const StyleType* style = itemStyles().get());
 

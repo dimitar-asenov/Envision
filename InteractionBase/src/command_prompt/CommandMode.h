@@ -37,7 +37,7 @@ class INTERACTIONBASE_API CommandMode : public CommandPromptMode
 	public:
 		virtual ~CommandMode() override;
 
-		virtual Visualization::Item* createInputItem() const override;
+		virtual Visualization::Item* createInputItem(const QString& initialCommandText) const override;
 };
 
 }

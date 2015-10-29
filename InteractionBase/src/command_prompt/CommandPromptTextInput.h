@@ -39,7 +39,8 @@ class INTERACTIONBASE_API CommandPromptTextInput : public Super<Visualization::D
 	ITEM_COMMON(CommandPromptTextInput)
 
 	public:
-		CommandPromptTextInput(Item* parent, const StyleType* style = itemStyles().get());
+		CommandPromptTextInput(Item* parent, const QString& initialCommandText = {},
+									  const StyleType* style = itemStyles().get());
 
 	static void initializeForms();
 

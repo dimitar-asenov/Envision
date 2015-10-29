@@ -67,7 +67,7 @@ void CommandPromptV2::show(const QString& modeName, Visualization::Item* command
 	mode_ = modeEntryIt->second();
 	Q_ASSERT(mode_);
 
-	shell_ = new CommandPromptShell(mode_->createInputItem(), modeEntryIt->first, initialCommandText, options);
+	shell_ = new CommandPromptShell(mode_->createInputItem(initialCommandText), modeEntryIt->first, options);
 }
 
 void CommandPromptV2::hide()

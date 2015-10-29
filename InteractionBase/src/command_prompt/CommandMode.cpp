@@ -29,11 +29,15 @@
 
 namespace Interaction {
 
+const QString TYPE_HINT = "Type a command";
+
 CommandMode::~CommandMode() {}
 
-Visualization::Item* CommandMode::createInputItem() const
+Visualization::Item* CommandMode::createInputItem(const QString& initialCommandText) const
 {
-	return new CommandPromptTextInput(nullptr);
+	auto commandText = initialCommandText;
+	if (commandText.isNull()) commandText = TYPE_HINT;
+	return new CommandPromptTextInput(nullptr, commandText);
 }
 
 }

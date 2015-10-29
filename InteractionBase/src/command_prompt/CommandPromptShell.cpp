@@ -51,7 +51,6 @@ constexpr int PROMPT_TO_RECEIVER_DISTANCE = 3;
 ITEM_COMMON_DEFINITIONS(CommandPromptShell, "item")
 
 CommandPromptShell::CommandPromptShell(Item* inputItem, const QString& modeSymbolStyleName,
-													QString /*initialCommandText*/,
 													CommandPromptV2::PromptOptions options,
 													const StyleType* style)
 	: Super(nullptr, style), inputItem_{inputItem},

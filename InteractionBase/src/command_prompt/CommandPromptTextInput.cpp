@@ -32,7 +32,12 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(CommandPromptTextInput, "item")
 
-CommandPromptTextInput::CommandPromptTextInput(Item* parent, const StyleType* style) : Super(parent, style) {}
+CommandPromptTextInput::CommandPromptTextInput(Item* parent, const QString& initialCommandText,
+															  const StyleType* style)
+	: Super{parent, style}, text_{ new Visualization::Text(this, &style->text())}
+{
+	text_->setText(initialCommandText);
+}
 
 void CommandPromptTextInput::initializeForms()
 {

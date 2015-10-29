@@ -39,7 +39,7 @@ class INTERACTIONBASE_API CommandPromptMode
 	public:
 		virtual ~CommandPromptMode();
 
-		virtual Visualization::Item* createInputItem() const = 0;
+		virtual Visualization::Item* createInputItem(const QString& initialCommandText) const = 0;
 };
 
 }
