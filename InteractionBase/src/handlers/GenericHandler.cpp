@@ -32,6 +32,7 @@
 #include "vis/CommandPrompt.h"
 #include "actions/Action.h"
 #include "actions/ActionPrompt.h"
+#include "../command_prompt/CommandPromptV2.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
@@ -152,26 +153,29 @@ void GenericHandler::resetCursorOrigin()
 
 CommandPrompt* GenericHandler::commandPrompt()
 {
-	return commandPrompt_;
+	return nullptr; //commandPrompt_;
 }
 
 void GenericHandler::removeCommandPrompt()
 {
-	SAFE_DELETE_ITEM(commandPrompt_);
+	CommandPromptV2::hide();
+	//SAFE_DELETE_ITEM(commandPrompt_);
 }
 
 void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QString initialCommandText,
 													bool centerViewOnPrompt)
 {
-	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
-	{
-		commandPrompt_->showPrompt(initialCommandText, centerViewOnPrompt);
-	}
-	else
-	{
-		removeCommandPrompt();
-		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText, centerViewOnPrompt);
-	}
+CommandPromptV2::show(commandReceiver, initialCommandText,
+							 centerViewOnPrompt ? CommandPromptV2::CenterViewOnPrompt : CommandPromptV2::None);
+//	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
+//	{
+//		commandPrompt_->showPrompt(initialCommandText, centerViewOnPrompt);
+//	}
+//	else
+//	{
+//		removeCommandPrompt();
+//		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText, centerViewOnPrompt);
+//	}
 }
 
 void GenericHandler::toggleComment(Visualization::Item *itemWithComment, Model::Node *aNode, bool hideOnly)
