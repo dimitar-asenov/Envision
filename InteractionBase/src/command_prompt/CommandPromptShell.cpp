@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "CommandPromptShell.h"
+#include "CommandPromptMode.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/views/MainView.h"
@@ -50,11 +51,11 @@ constexpr int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
 ITEM_COMMON_DEFINITIONS(CommandPromptShell, "item")
 
-CommandPromptShell::CommandPromptShell(Item* inputItem, const QString& modeSymbolStyleName,
+CommandPromptShell::CommandPromptShell(const QString& initialCommandText,
 													CommandPromptV2::PromptOptions options,
 													const StyleType* style)
-	: Super(nullptr, style), inputItem_{inputItem},
-	  modeIconStyle_{Visualization::Static::itemStyles().get(modeSymbolStyleName)}
+	: Super(nullptr, style), inputItem_{CommandPromptV2::mode()->createInputItem(initialCommandText)},
+	  modeIconStyle_{CommandPromptV2::mode()->modeIcon()}
 {
 	Q_ASSERT(inputItem_);
 	inputItem_->setParentItem(this);
@@ -78,6 +79,7 @@ void CommandPromptShell::initializeForms()
 
 void CommandPromptShell::setShellPosition(CommandPromptV2::PromptOptions options)
 {
+	// Set the position
 	QPointF shellPos = CommandPromptV2::commandReceiver()->mapToScene(0, 0);
 	if (CommandPromptV2::commandReceiver()->heightInScene() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
 	{
@@ -90,10 +92,16 @@ void CommandPromptShell::setShellPosition(CommandPromptV2::PromptOptions options
 		// If the item is rather large show the prompt at the cursor
 		shellPos += CommandPromptV2::commandReceiverCursorPosition();
 	}
-
 	setPos(shellPos);
 
+	// Center the view
 	if (options.testFlag(CommandPromptV2::CenterViewOnPrompt)) centerViewOnShell();
+
+	// Select the input
+	if (options.testFlag(CommandPromptV2::InputHasHint))
+		CommandPromptV2::mode()->setSelection(CommandPromptMode::All);
+	else
+		CommandPromptV2::mode()->setSelection(CommandPromptMode::AtEnd);
 }
 
 void CommandPromptShell::centerViewOnShell() const

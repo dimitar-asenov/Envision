@@ -27,6 +27,7 @@
 #include "CommandPromptTextInput.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/cursor/TextCursor.h"
 
 namespace Interaction {
 
@@ -48,6 +49,25 @@ void CommandPromptTextInput::determineChildren()
 {
 	Super::determineChildren();
 	text_->setEditable(true);
+}
+
+void CommandPromptTextInput::setSelection(CommandPromptMode::InputSelection selection)
+{
+	switch (selection){
+		case CommandPromptMode::None: return;
+		case CommandPromptMode::All:
+		{
+			text_->moveCursor();
+			text_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+		} break;
+		case CommandPromptMode::AtEnd:
+		{
+			text_->moveCursor();
+			text_->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(text_->text().size());
+		} break;
+		default:
+			Q_ASSERT(false);
+	}
 }
 
 }

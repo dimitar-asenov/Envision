@@ -30,6 +30,7 @@
 
 namespace Visualization {
 	class Item;
+	class StaticStyle;
 }
 
 namespace Interaction {
@@ -39,7 +40,16 @@ class INTERACTIONBASE_API CommandPromptMode
 	public:
 		virtual ~CommandPromptMode();
 
-		virtual Visualization::Item* createInputItem(const QString& initialCommandText) const = 0;
+		virtual Visualization::Item* createInputItem(const QString& initialCommandText) = 0;
+		virtual Visualization::StaticStyle* modeIcon() const = 0;
+
+		enum InputSelection
+		{
+			None,	/**< The input will not be selected. */
+			All, /**< The entire input will be selected, so that it can be quickly deleted/replaced. */
+			AtEnd /**< The input should have a cursor at the end, ready for additional input. */
+		};
+		virtual void setSelection(InputSelection selection) = 0;
 };
 
 }

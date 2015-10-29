@@ -28,6 +28,7 @@
 
 #include "interactionbase_api.h"
 #include "CommandPromptTextInputStyle.h"
+#include "CommandPromptMode.h"
 
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
@@ -46,8 +47,9 @@ class INTERACTIONBASE_API CommandPromptTextInput : public Super<Visualization::D
 
 	virtual void determineChildren() override;
 
+	void setSelection(CommandPromptMode::InputSelection selection);
+
 	private:
 		Visualization::Text* text_{};
 };
-
 }

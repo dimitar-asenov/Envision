@@ -35,9 +35,9 @@ Visualization::Item* CommandPromptV2::commandReceiver_{};
 CommandPromptMode* CommandPromptV2::mode_{};
 std::unique_ptr<Visualization::Cursor> CommandPromptV2::commandReceiverCursor_{};
 
-QMap<QString, QPair<QString, CommandPromptV2::ModeConstructor>>& CommandPromptV2::modeRegistry()
+QMap<QString, CommandPromptV2::ModeConstructor>& CommandPromptV2::modeRegistry()
 {
-	static QMap<QString, QPair<QString, ModeConstructor>> map;
+	static QMap<QString, ModeConstructor> map;
 	return map;
 }
 
@@ -64,10 +64,10 @@ void CommandPromptV2::show(const QString& modeName, Visualization::Item* command
 
 	auto modeEntryIt = modeRegistry().find(modeName.isNull() ? defaultModeName() : modeName);
 	Q_ASSERT(modeEntryIt != modeRegistry().end());
-	mode_ = modeEntryIt->second();
+	mode_ = (*modeEntryIt)();
 	Q_ASSERT(mode_);
 
-	shell_ = new CommandPromptShell(mode_->createInputItem(initialCommandText), modeEntryIt->first, options);
+	shell_ = new CommandPromptShell(initialCommandText, options);
 }
 
 void CommandPromptV2::hide()

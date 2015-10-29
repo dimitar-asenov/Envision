@@ -32,12 +32,20 @@
 
 namespace Interaction {
 
+class CommandPromptTextInput;
+
 class INTERACTIONBASE_API CommandMode : public CommandPromptMode
 {
 	public:
 		virtual ~CommandMode() override;
 
-		virtual Visualization::Item* createInputItem(const QString& initialCommandText) const override;
+		virtual Visualization::Item* createInputItem(const QString& initialCommandText) override;
+		virtual Visualization::StaticStyle* modeIcon() const override;
+
+		virtual void setSelection(InputSelection selection) override;
+
+	private:
+		CommandPromptTextInput* inputItem_{};
 };
 
 }

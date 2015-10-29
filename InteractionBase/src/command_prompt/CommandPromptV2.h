@@ -40,7 +40,9 @@ class INTERACTIONBASE_API CommandPromptV2
 
 		enum PromptOption {
 			None = 0,
-			CenterViewOnPrompt = 0x00000001 /**< If set, the view will be scrolled so that the prompt is in the center. */
+			CenterViewOnPrompt = 0x00000001, /**< If set, the view will be scrolled so that the prompt is in the center. */
+			InputHasHint = 0x00000002, /**< If set, the entire input will be selected, allowing the user to replace it
+												  with a single keypress. This is useful if the input is a hint message. */
 		};
 		Q_DECLARE_FLAGS(PromptOptions, PromptOption)
 
@@ -51,7 +53,7 @@ class INTERACTIONBASE_API CommandPromptV2
 		static void hide();
 
 		template <class ModeType>
-		static void registerMode(const QString& modeName, const QString& modeSymbolStyleName);
+		static void registerMode(const QString& modeName);
 
 		static const QString& defaultModeName();
 
@@ -65,22 +67,24 @@ class INTERACTIONBASE_API CommandPromptV2
 		static std::unique_ptr<Visualization::Cursor> commandReceiverCursor_;
 
 		using ModeConstructor = std::function<CommandPromptMode* ()>;
-		static QMap<QString, QPair<QString, ModeConstructor>>& modeRegistry();
+		static QMap<QString, ModeConstructor>& modeRegistry();
 
+		static CommandPromptMode* mode();
 		static Visualization::Item* commandReceiver();
 		static QPoint commandReceiverCursorPosition();
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(CommandPromptV2::PromptOptions)
 
+inline CommandPromptMode* CommandPromptV2::mode() { return mode_; }
 inline Visualization::Item* CommandPromptV2::commandReceiver() { return commandReceiver_; }
 inline QPoint CommandPromptV2::commandReceiverCursorPosition()
 	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0); }
 
 template <class ModeType>
-inline void CommandPromptV2::registerMode(const QString& modeName, const QString& modeSymbolStyleName)
+inline void CommandPromptV2::registerMode(const QString& modeName)
 {
 	Q_ASSERT(!modeRegistry().contains(modeName));
-	modeRegistry().insert(modeName, qMakePair(modeSymbolStyleName, []()->CommandPromptMode* {return new ModeType();}));
+	modeRegistry().insert(modeName, []()->CommandPromptMode* {return new ModeType();});
 }
 
 }

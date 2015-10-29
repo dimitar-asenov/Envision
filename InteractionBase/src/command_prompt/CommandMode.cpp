@@ -27,17 +27,30 @@
 #include "CommandMode.h"
 #include "CommandPromptTextInput.h"
 
+#include "VisualizationBase/src/items/Static.h"
+
 namespace Interaction {
 
 const QString TYPE_HINT = "Type a command";
 
 CommandMode::~CommandMode() {}
 
-Visualization::Item* CommandMode::createInputItem(const QString& initialCommandText) const
+Visualization::Item* CommandMode::createInputItem(const QString& initialCommandText)
 {
 	auto commandText = initialCommandText;
 	if (commandText.isNull()) commandText = TYPE_HINT;
-	return new CommandPromptTextInput(nullptr, commandText);
+	inputItem_ = new CommandPromptTextInput(nullptr, commandText);
+	return inputItem_;
+}
+
+Visualization::StaticStyle* CommandMode::modeIcon() const
+{
+	return Visualization::Static::itemStyles().get("command-prompt-command-mode");
+}
+
+void CommandMode::setSelection(InputSelection selection)
+{
+	inputItem_->setSelection(selection);
 }
 
 }

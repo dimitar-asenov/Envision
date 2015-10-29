@@ -165,8 +165,11 @@ void GenericHandler::removeCommandPrompt()
 void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QString initialCommandText,
 													bool centerViewOnPrompt)
 {
-CommandPromptV2::show(commandReceiver, initialCommandText,
-							 centerViewOnPrompt ? CommandPromptV2::CenterViewOnPrompt : CommandPromptV2::None);
+	CommandPromptV2::PromptOptions options = CommandPromptV2::None;
+	if (centerViewOnPrompt) options |= CommandPromptV2::CenterViewOnPrompt;
+	if (initialCommandText.isNull()) options |= CommandPromptV2::InputHasHint;
+
+CommandPromptV2::show(commandReceiver, initialCommandText, options);
 //	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 //	{
 //		commandPrompt_->showPrompt(initialCommandText, centerViewOnPrompt);

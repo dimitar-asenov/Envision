@@ -88,7 +88,7 @@ Log& InteractionBasePlugin::log()
 bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 {
 	// Register prompt modes
-	CommandPromptV2::registerMode<CommandMode>(CommandPromptV2::defaultModeName(), "command-prompt-command-mode");
+	CommandPromptV2::registerMode<CommandMode>(CommandPromptV2::defaultModeName());
 
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
 	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());
