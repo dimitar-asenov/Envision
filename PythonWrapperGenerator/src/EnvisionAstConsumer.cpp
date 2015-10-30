@@ -48,8 +48,7 @@ EnvisionAstConsumer::EnvisionAstConsumer(clang::CompilerInstance& ci, QString cu
 void EnvisionAstConsumer::Initialize(clang::ASTContext&)
 {
 	compilerInstance_.getPreprocessor().addPPCallbacks(
-				std::make_unique<EnvisionPPCallbacks>(compilerInstance_.getSourceManager(),
-																  currentFile_, attributes_, privateAttributes_));
+				std::make_unique<EnvisionPPCallbacks>(compilerInstance_.getSourceManager(), currentFile_, attributes_));
 	compilerInstance_.getPreprocessor().enableIncrementalProcessing();
 }
 
@@ -114,14 +113,9 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 					cData.attributes_.append(attribute(it.key(), it.value(), cData.qualifiedName_, method));
 					seenMethods << it.key() << it.value();
 				}
-				else
+				else if (methodName.startsWith("set"))
 				{
-					// ignore private attributes:
-					auto privateIt = privateAttributes_.find(methodName);
-					if (privateIt != privateAttributes_.end())
-						seenMethods << methodName << privateIt.value();
-					else if (methodName.startsWith("set"))
-						possibleAttributeSetters << methodName;
+					possibleAttributeSetters << methodName;
 				}
 			}
 			QMultiHash<QString, clang::CXXMethodDecl*> overloads;
