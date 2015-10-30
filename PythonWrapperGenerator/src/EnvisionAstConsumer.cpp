@@ -96,75 +96,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			QStringList bases = baseClasses(classDecl);
 			if (!allowedBases_.contains(bases[0])) return; // We only consider classes which have a base that we allow.
 
-			ClassData cData{className, QString::fromStdString(classDecl->getQualifiedNameAsString())};
-
-			addBases(cData, classDecl);
-
-			QSet<QString> seenMethods;
-			QSet<QString> possibleAttributeSetters;
-			for (auto method : classDecl->methods())
-			{
-				QString methodName = QString::fromStdString(method->getNameAsString());
-				if (seenMethods.contains(methodName)) continue;
-
-				auto it = attributes_.find(methodName);
-				if (it != attributes_.end())
-				{
-					cData.attributes_.append(attribute(it.key(), it.value(), cData.qualifiedName_, method));
-					seenMethods << it.key() << it.value();
-				}
-				else if (methodName.size() > 3 && methodName.startsWith("set"))
-				{
-					possibleAttributeSetters << methodName;
-				}
-			}
-			QMultiHash<QString, clang::CXXMethodDecl*> overloads;
-			// check if we have some more attributes which don't have an attribute macro:
-			for (auto method : classDecl->methods())
-			{
-				// Ignore de-/constructors & deleted methods & overloaded operators:
-				if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
-				if (method->isDeleted()) continue;
-				if (method->isOverloadedOperator()) continue;
-
-				QString methodName = QString::fromStdString(method->getNameAsString());
-				if (method->getAccess() != clang::AccessSpecifier::AS_public ||
-					 method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate ||
-					 // workaround since we only consider cpp files at the moment:
-					 methodName == "firstAncestorOfType")
-				{
-					// For wrapping methods we should still consider non public and template methods for overload resolution.
-					overloads.insertMulti(methodName, method);
-					continue;
-				}
-				if (seenMethods.contains(methodName)) continue;
-
-				if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
-
-				if (possibleAttributeSetters.contains(methodName)) continue;
-				bool usedAsAttribute = false;
-				for (const QString& setterName : possibleAttributeSetters)
-				{
-					QString possibleGetterName = setterName.mid(4); // drop set and first letter
-					possibleGetterName.prepend(setterName[3].toLower());
-					if (methodName == possibleGetterName)
-					{
-						// Found another attribute:
-						cData.attributes_.append(attribute(methodName, setterName, cData.qualifiedName_, method));
-						seenMethods << setterName << methodName;
-						usedAsAttribute = true;
-						break;
-					}
-				}
-				if (!usedAsAttribute)
-				{
-					// found a free standing method to export.
-					cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method),
-												  method->isStatic()});
-					overloads.insertMulti(methodName, method);
-				}
-			}
-			resolveOverloads(cData, overloads);
+			auto cData = buildClassInfo(classDecl);
 
 			addClassEnums(cData);
 			// Add class to api structure
@@ -266,6 +198,81 @@ QStringList EnvisionAstConsumer::baseClasses(clang::CXXRecordDecl* classDecl)
 	result << QString::fromStdString(classDecl->getQualifiedNameAsString());
 	result.removeAll("Core::Reflect");
 	return result;
+}
+
+ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
+{
+	ClassData cData{QString::fromStdString(classDecl->getNameAsString()),
+				QString::fromStdString(classDecl->getQualifiedNameAsString())};
+
+	addBases(cData, classDecl);
+
+	QSet<QString> seenMethods;
+	QSet<QString> possibleAttributeSetters;
+	for (auto method : classDecl->methods())
+	{
+		QString methodName = QString::fromStdString(method->getNameAsString());
+		if (seenMethods.contains(methodName)) continue;
+
+		auto it = attributes_.find(methodName);
+		if (it != attributes_.end())
+		{
+			cData.attributes_.append(attribute(it.key(), it.value(), cData.qualifiedName_, method));
+			seenMethods << it.key() << it.value();
+		}
+		else if (methodName.size() > 3 && methodName.startsWith("set"))
+		{
+			possibleAttributeSetters << methodName;
+		}
+	}
+	QMultiHash<QString, clang::CXXMethodDecl*> overloads;
+	// check if we have some more attributes which don't have an attribute macro:
+	for (auto method : classDecl->methods())
+	{
+		// Ignore de-/constructors & deleted methods & overloaded operators:
+		if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
+		if (method->isDeleted()) continue;
+		if (method->isOverloadedOperator()) continue;
+
+		QString methodName = QString::fromStdString(method->getNameAsString());
+		if (method->getAccess() != clang::AccessSpecifier::AS_public ||
+			 method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate ||
+			 // workaround since we only consider cpp files at the moment:
+			 methodName == "firstAncestorOfType")
+		{
+			// For wrapping methods we should still consider non public and template methods for overload resolution.
+			overloads.insertMulti(methodName, method);
+			continue;
+		}
+		if (seenMethods.contains(methodName)) continue;
+
+		if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
+
+		if (possibleAttributeSetters.contains(methodName)) continue;
+		bool usedAsAttribute = false;
+		for (const QString& setterName : possibleAttributeSetters)
+		{
+			QString possibleGetterName = setterName.mid(4); // drop set and first letter
+			possibleGetterName.prepend(setterName[3].toLower());
+			if (methodName == possibleGetterName)
+			{
+				// Found another attribute:
+				cData.attributes_.append(attribute(methodName, setterName, cData.qualifiedName_, method));
+				seenMethods << setterName << methodName;
+				usedAsAttribute = true;
+				break;
+			}
+		}
+		if (!usedAsAttribute)
+		{
+			// found a free standing method to export.
+			cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method),
+										  method->isStatic()});
+			overloads.insertMulti(methodName, method);
+		}
+	}
+	resolveOverloads(cData, overloads);
+	return cData;
 }
 
 void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)

@@ -76,6 +76,7 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 
 		QStringList baseClasses(clang::CXXRecordDecl* classDecl);
 
+		ClassData buildClassInfo(clang::CXXRecordDecl* classDecl);
 		void checkForTypedList(const clang::Type* type);
 		void addClassEnums(ClassData& cData);
 		static void addBases(ClassData& cData, const clang::CXXRecordDecl* classDecl);
