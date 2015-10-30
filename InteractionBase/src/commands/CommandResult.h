@@ -40,25 +40,20 @@ class INTERACTIONBASE_API CommandResult
 
 		CommandResult(Code resultCode = OK);
 		CommandResult(CommandError* error);
-		CommandResult(CommandError* error, CommandSuggestion* suggestion);
 		virtual ~CommandResult();
 
 		Code code() const;
 		const QList<CommandError*>& errors() const;
-		const QList<CommandSuggestion*>& suggestions() const;
 
 		void setCode(Code code);
 		void addError(CommandError* error);
-		void addSuggestion(CommandSuggestion* suggestion);
 
 	private:
 		Code outcomeCode;
 		QList<CommandError*> errors_;
-		QList<CommandSuggestion*> suggestions_;
 };
 
 inline CommandResult::Code CommandResult::code() const { return outcomeCode; }
 inline const QList<CommandError*>& CommandResult::errors() const { return errors_; }
-inline const QList<CommandSuggestion*>& CommandResult::suggestions() const {return suggestions_; }
 
 }

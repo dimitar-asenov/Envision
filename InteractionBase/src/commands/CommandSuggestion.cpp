@@ -25,8 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "CommandSuggestion.h"
-#include "../handlers/GenericHandler.h"
-#include "../vis/CommandPrompt.h"
 
 namespace Interaction {
 

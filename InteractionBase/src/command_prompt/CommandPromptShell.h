@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 #include "CommandPromptShellStyle.h"
 #include "CommandPromptV2.h"
 
@@ -48,12 +48,18 @@ class INTERACTIONBASE_API CommandPromptShell  : public Super<Visualization::Decl
 								 CommandPromptV2::PromptOptions options = CommandPromptV2::None,
 								 const StyleType* style = itemStyles().get());
 
-	static void initializeForms();
+		static void initializeForms();
+
+		void setErrors(QList<Item*> errors);
+
+	protected:
+		virtual void determineChildren() override;
 
 	private:
 		Item* inputItem_{};
 		Visualization::Static* modeIcon_{};
 		Visualization::StaticStyle* modeIconStyle_{};
+		QList<Item*> errors_;
 
 		void setShellPosition(CommandPromptV2::PromptOptions options);
 		void centerViewOnShell() const;

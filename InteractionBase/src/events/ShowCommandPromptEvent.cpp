@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "ShowCommandPromptEvent.h"
-#include "handlers/GenericHandler.h"
+#include "../command_prompt/CommandPromptV2.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
@@ -42,12 +42,8 @@ void ShowCommandPromptEvent::execute()
 {
 	if (scene_ && scene_->mainCursor() && scene_->mainCursor()->owner())
 	{
-		auto handler = dynamic_cast<GenericHandler*>(scene_->mainCursor()->owner()->handler());
-		if (handler)
-		{
-			handler->showCommandPrompt(scene_->mainCursor()->owner());
-			scene_->scheduleUpdate();
-		}
+		CommandPromptV2::show(scene_->mainCursor()->owner());
+		scene_->scheduleUpdate();
 	}
 }
 } /* namespace Interaction */

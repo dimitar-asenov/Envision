@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 namespace Visualization {
 	class Item;
@@ -34,6 +34,9 @@ namespace Visualization {
 }
 
 namespace Interaction {
+
+class CommandSuggestion;
+class CommandResult;
 
 class INTERACTIONBASE_API CommandPromptMode
 {
@@ -50,6 +53,28 @@ class INTERACTIONBASE_API CommandPromptMode
 			AtEnd /**< The input should have a cursor at the end, ready for additional input. */
 		};
 		virtual void setSelection(InputSelection selection) = 0;
+
+		/**
+		 * Called whenever the Prompt shell is about to be updated and repainted.
+		 *
+		 * The default implementation does nothing. Reimplement this in modes which need to update their state when
+		 * the shell is updated. For example to provide auto-completion based on the latest input.
+		 */
+		virtual void onShellUpdate();
+
+	protected:
+
+		/**
+		 * Call this method from derived classes in order to display a list of error item under the prompt.
+		 *
+		 * Ownership of the passed items will be transfered to the Prompt shell.
+		 */
+		void showErrors(QList<Visualization::Item*> errorItems) const;
+
+		/**
+		 * Call this method from derived classes in order to display a list of errors messages under the prompt.
+		 */
+		void showErrors(QList<QString> errorMessages) const;
 };
 
 }

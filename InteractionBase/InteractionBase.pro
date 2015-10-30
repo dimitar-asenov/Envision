@@ -59,15 +59,12 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/expression_editor/tree_builder/FinishOperator.h \
     src/expression_editor/tree_builder/SkipOperatorDelimiter.h \
     src/handlers/GenericHandler.h \
-    src/handlers/HCommandPrompt.h \
     src/handlers/HList.h \
     src/handlers/HPositionLayout.h \
     src/handlers/HSceneHandlerItem.h \
     src/handlers/HText.h \
     src/interactionbase_api.h \
     src/precompiled.h \
-    src/vis/CommandPrompt.h \
-    src/vis/CommandPromptStyle.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h \
@@ -96,9 +93,9 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/command_prompt/CommandPromptShellStyle.h \
     src/command_prompt/CommandPromptTextInput.h \
     src/command_prompt/CommandPromptTextInputStyle.h \
-    src/command_prompt/CommandPromptInputAccessor.h \
     src/command_prompt/CommandPromptMode.h \
-    src/command_prompt/CommandMode.h
+    src/command_prompt/CommandMode.h \
+    src/command_prompt/HCommandMode.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -149,10 +146,7 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CSceneHandlerItemExit.cpp \
     src/handlers/HSceneHandlerItem.cpp \
     src/handlers/GenericHandler.cpp \
-    src/handlers/HCommandPrompt.cpp \
     src/handlers/HText.cpp \
-    src/vis/CommandPromptStyle.cpp \
-    src/vis/CommandPrompt.cpp \
     src/vis/TextAndDescriptionStyle.cpp \
     src/vis/TextAndDescription.cpp \
     src/commands/CommandExecutionEngine.cpp \
@@ -188,4 +182,5 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/command_prompt/CommandPromptTextInput.cpp \
     src/command_prompt/CommandPromptTextInputStyle.cpp \
     src/command_prompt/CommandPromptMode.cpp \
-    src/command_prompt/CommandMode.cpp
+    src/command_prompt/CommandMode.cpp \
+    src/command_prompt/HCommandMode.cpp

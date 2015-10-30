@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 #include "CommandPromptTextInputStyle.h"
 #include "CommandPromptMode.h"
 
@@ -49,7 +49,11 @@ class INTERACTIONBASE_API CommandPromptTextInput : public Super<Visualization::D
 
 	void setSelection(CommandPromptMode::InputSelection selection);
 
+	QString text() const;
+	void setText(const QString& text);
+
 	private:
 		Visualization::Text* text_{};
 };
+
 }

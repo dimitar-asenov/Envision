@@ -26,9 +26,10 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "CommandPromptMode.h"
+#include "../commands/CommandSuggestion.h"
 
 namespace Interaction {
 
@@ -44,8 +45,23 @@ class INTERACTIONBASE_API CommandMode : public CommandPromptMode
 
 		virtual void setSelection(InputSelection selection) override;
 
+		virtual void onShellUpdate() override;
+
+		void updateSuggestions();
+
 	private:
+		friend class HCommandMode;
+
 		CommandPromptTextInput* inputItem_{};
+		std::vector<std::unique_ptr<CommandSuggestion>> suggestions_;
+
+		void showAutocompleteBasedOnSuggestions();
+		void removeSuggestions();
+		void addSuggestions(QList<CommandSuggestion*> suggestions);
+
+		void takeSuggestion(CommandSuggestion* suggestion);
+		void takeFirstSuggestionIfOnlyOne();
+		void executeCurrentText();
 };
 
 }

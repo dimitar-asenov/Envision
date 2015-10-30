@@ -28,17 +28,17 @@
 
 #include "../interactionbase_api.h"
 
-#include "GenericHandler.h"
+#include "../handlers/GenericHandler.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API HCommandPrompt: public GenericHandler
+class INTERACTIONBASE_API HCommandMode: public GenericHandler
 {
 	protected:
-	HCommandPrompt();
+	HCommandMode() = default;
 
 	public:
-		static HCommandPrompt* instance();
+		static HCommandMode* instance();
 
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 };

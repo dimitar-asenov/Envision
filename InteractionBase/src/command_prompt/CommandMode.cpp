@@ -26,6 +26,16 @@
 
 #include "CommandMode.h"
 #include "CommandPromptTextInput.h"
+#include "CommandPromptV2.h"
+#include "HCommandMode.h"
+
+#include "../autocomplete/AutoComplete.h"
+#include "../handlers/GenericHandler.h"
+#include "../commands/CommandExecutionEngine.h"
+#include "../commands/CommandSuggestion.h"
+#include "../commands/CommandResult.h"
+#include "../vis/TextAndDescription.h"
+
 
 #include "VisualizationBase/src/items/Static.h"
 
@@ -40,6 +50,9 @@ Visualization::Item* CommandMode::createInputItem(const QString& initialCommandT
 	auto commandText = initialCommandText;
 	if (commandText.isNull()) commandText = TYPE_HINT;
 	inputItem_ = new CommandPromptTextInput(nullptr, commandText);
+
+	// TODO: This is rather a hack, we shoul set this per instance.
+	CommandPromptTextInput::setDefaultClassHandler(HCommandMode::instance());
 	return inputItem_;
 }
 
@@ -51,6 +64,94 @@ Visualization::StaticStyle* CommandMode::modeIcon() const
 void CommandMode::setSelection(InputSelection selection)
 {
 	inputItem_->setSelection(selection);
+}
+
+void CommandMode::onShellUpdate()
+{
+	updateSuggestions();
+}
+
+void CommandMode::updateSuggestions()
+{
+	removeSuggestions();
+	QString text = inputItem_->text() == TYPE_HINT ? "" : inputItem_->text();
+	addSuggestions( GenericHandler::executionEngine()->autoComplete(
+							 CommandPromptV2::commandReceiver(), text, CommandPromptV2::commandReceiverCursor()));
+}
+
+void CommandMode::addSuggestions(QList<CommandSuggestion*> suggestions)
+{
+	for (auto s : suggestions)
+		suggestions_.emplace_back(s);
+	showAutocompleteBasedOnSuggestions();
+}
+
+void CommandMode::removeSuggestions()
+{
+	suggestions_.clear();
+	AutoComplete::hide();
+}
+
+void CommandMode::showAutocompleteBasedOnSuggestions()
+{
+	auto executeFunction = [this](AutoCompleteEntry* e){
+		if (CommandPromptV2::mode() == this)
+		{
+			takeSuggestion(static_cast<CommandSuggestion*>(e));
+			executeCurrentText();
+		}
+	};
+
+	QList<AutoCompleteEntry*> entries;
+		for (auto& s : suggestions_) entries.append(new AutoCompleteEntry(s->text(), s->description(),
+				s->visualization(), executeFunction));
+
+	if (entries.isEmpty() || CommandPromptV2::mode() != this)
+		AutoComplete::hide();
+	else
+		AutoComplete::show(entries, true);
+}
+
+void CommandMode::takeSuggestion(CommandSuggestion* suggestion)
+{
+	inputItem_->setText(suggestion->text());
+	inputItem_->setSelection(CommandPromptMode::AtEnd);
+}
+
+void CommandMode::takeFirstSuggestionIfOnlyOne()
+{
+	if (suggestions_.size() == 1) takeSuggestion(suggestions_[0].get());
+}
+
+void CommandMode::executeCurrentText()
+{
+	CommandPromptV2::commandReceiver()->execute( inputItem_->text(), CommandPromptV2::commandReceiverCursor());
+
+	auto result = GenericHandler::executionEngine()->result();
+
+	if ( result->code() == CommandResult::OK) CommandPromptV2::hide();
+	else
+	{
+		QList<Visualization::Item*> errorItems;
+
+		for (auto& error : result->errors() )
+		{
+			if (error->visualization() == nullptr)
+			{
+				auto vis = new TextAndDescription(nullptr, TextAndDescription::itemStyles().get("command-prompt-error"));
+				vis->setContents(error->message(), error->resolutionTips().join(" OR "));
+				errorItems.append(vis);
+			}
+			else
+			{
+				//Extract the visualization
+				errorItems.append(error->visualization());
+				error->setVisualization(nullptr);
+			}
+		}
+
+		showErrors(errorItems);
+	}
 }
 
 }

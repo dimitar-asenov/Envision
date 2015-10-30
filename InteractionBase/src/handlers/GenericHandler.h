@@ -62,7 +62,6 @@ class INTERACTIONBASE_API GenericHandlerManagerListener : public QObject
 
 class Command;
 class CommandExecutionEngine;
-class CommandPrompt;
 class ActionPrompt;
 
 class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
@@ -80,11 +79,6 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		 */
 		const QList<Command*>& commands();
 		void addCommand(Command* command);
-
-		CommandPrompt* commandPrompt();
-		void removeCommandPrompt();
-		void showCommandPrompt(Visualization::Item* commandRecevier, QString initialCommandText = QString(),
-									  bool centerViewOnPrompt = false);
 
 		void toggleComment(Visualization::Item* itemWithComment, Model::Node* aNode, bool hideOnly);
 
@@ -134,7 +128,6 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		QList<Command*> supportedCommands;
 
 		static CommandExecutionEngine* executionEngine_;
-		static CommandPrompt* commandPrompt_;
 		static ActionPrompt* actionPrompt_;
 
 		static QPoint cursorOriginMidPoint_;

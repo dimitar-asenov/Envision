@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "HViewItem.h"
+#include "../command_prompt/CommandPromptV2.h"
 
 namespace Interaction {
 
@@ -41,7 +42,7 @@ HViewItem* HViewItem::instance()
 void HViewItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return)
-		GenericHandler::showCommandPrompt(target, "add ");
+		CommandPromptV2::show(target, "add ");
 	else if (target->focusedChild() && event->modifiers() == Qt::ControlModifier
 		&& (event->key() == Qt::Key_I || event->key() == Qt::Key_J
 			|| event->key() == Qt::Key_K || event->key() == Qt::Key_L))
@@ -60,7 +61,7 @@ void HViewItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		//Move the cursor, open a new command prompt
 		target->moveCursor(Visualization::Item::MoveOnPosition, pos, Visualization::Item::NoLimitDistance);
-		GenericHandler::showCommandPrompt(target, "add ", true);
+		CommandPromptV2::show(target, "add ", CommandPromptV2::CenterViewOnPrompt);
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

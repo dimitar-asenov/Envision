@@ -29,6 +29,8 @@
 #include "items/VCommentDiagram.h"
 #include "commands/CCreateShape.h"
 
+#include "InteractionBase/src/command_prompt/CommandPromptV2.h"
+
 namespace Comments {
 
 HCommentDiagram::HCommentDiagram()
@@ -61,7 +63,7 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 		else
 		{
 			diagram->setLastRightClick(event->pos().toPoint());
-			showCommandPrompt(target);
+			Interaction::CommandPromptV2::show(target);
 		}
 	}
 	if (event->button() == Qt::LeftButton)

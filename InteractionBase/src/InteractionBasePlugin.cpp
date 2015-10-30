@@ -30,7 +30,6 @@
 #include "handlers/HText.h"
 #include "handlers/HList.h"
 #include "handlers/HComposite.h"
-#include "handlers/HCommandPrompt.h"
 #include "handlers/HActionPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
 #include "handlers/HPositionLayout.h"
@@ -38,7 +37,6 @@
 #include "handlers/HInfoNode.h"
 #include "handlers/HViewItem.h"
 
-#include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
 #include "vis/VViewSwitcherEntry.h"
 #include "vis/Menu.h"
@@ -99,7 +97,6 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::PositionLayout::setDefaultClassHandler(HPositionLayout::instance());
 	Visualization::VInfoNode::setDefaultClassHandler(HInfoNode::instance());
 	Visualization::ViewItem::setDefaultClassHandler(HViewItem::instance());
-	CommandPrompt::setDefaultClassHandler(HCommandPrompt::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.

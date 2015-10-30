@@ -25,9 +25,30 @@
 ***********************************************************************************************************************/
 
 #include "CommandPromptMode.h"
+#include "CommandPromptV2.h"
+#include "CommandPromptShell.h"
+
+#include "VisualizationBase/src/items/Text.h"
 
 namespace Interaction {
 
-CommandPromptMode::~CommandPromptMode() {}
+CommandPromptMode::~CommandPromptMode(){}
+
+void CommandPromptMode::showErrors(QList<Visualization::Item*> errorItems) const
+{
+	CommandPromptV2::shell()->setErrors(errorItems);
+}
+
+void CommandPromptMode::showErrors(QList<QString> errorMessages) const
+{
+	QList<Visualization::Item*> items;
+	for (auto text : errorMessages)
+		items.append( new Visualization::Text(CommandPromptV2::shell(),
+														  Visualization::Text::itemStyles().get("prompt-error"), text));
+
+	showErrors(items);
+}
+
+void CommandPromptMode::onShellUpdate(){}
 
 }

@@ -1,0 +1,15 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<backgroundBrush>
+			<gradient>
+				<stopPoints>
+					<e1>
+						<second>#c8ffc8</second>
+					</e1>	
+				</stopPoints>
+			</gradient>
+		</backgroundBrush>
+	</shape>
+</style>

@@ -1,0 +1,5 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<shape/>
+	<text><pen><color>#FF8282</color></pen></text>
+</style>

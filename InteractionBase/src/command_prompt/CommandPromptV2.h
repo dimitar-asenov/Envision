@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 
 namespace Interaction {
@@ -43,23 +43,33 @@ class INTERACTIONBASE_API CommandPromptV2
 			CenterViewOnPrompt = 0x00000001, /**< If set, the view will be scrolled so that the prompt is in the center. */
 			InputHasHint = 0x00000002, /**< If set, the entire input will be selected, allowing the user to replace it
 												  with a single keypress. This is useful if the input is a hint message. */
+			AutoHint = 0x00000004, /**< If set, the hint option is automatically assumed if the initial text is not
+												 empty. */
 		};
 		Q_DECLARE_FLAGS(PromptOptions, PromptOption)
 
 		static void show(const QString& modeName, Visualization::Item* commandReceiver, QString initialCommandText = {},
-							  PromptOptions options = None);
+							  PromptOptions options = AutoHint);
 		static void show(Visualization::Item* commandReceiver, QString initialCommandText = {},
-							  PromptOptions options = None);
+							  PromptOptions options = AutoHint);
 		static void hide();
+		static bool isVisible();
 
 		template <class ModeType>
 		static void registerMode(const QString& modeName);
 
 		static const QString& defaultModeName();
 
-	private:
-		friend class CommandPromptShell;
+		static CommandPromptMode* mode();
+		static CommandPromptShell* shell();
 
+		static Visualization::Item* commandReceiver();
+
+		// TODO: change this to return a plain pointer type
+		static const std::unique_ptr<Visualization::Cursor>& commandReceiverCursor();
+		static QPoint commandReceiverCursorPosition();
+
+	private:
 		static CommandPromptShell* shell_;
 		static CommandPromptMode* mode_;
 
@@ -68,15 +78,15 @@ class INTERACTIONBASE_API CommandPromptV2
 
 		using ModeConstructor = std::function<CommandPromptMode* ()>;
 		static QMap<QString, ModeConstructor>& modeRegistry();
-
-		static CommandPromptMode* mode();
-		static Visualization::Item* commandReceiver();
-		static QPoint commandReceiverCursorPosition();
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(CommandPromptV2::PromptOptions)
 
+inline bool CommandPromptV2::isVisible() { return mode_; }
 inline CommandPromptMode* CommandPromptV2::mode() { return mode_; }
+inline CommandPromptShell* CommandPromptV2::shell() { return shell_; }
 inline Visualization::Item* CommandPromptV2::commandReceiver() { return commandReceiver_; }
+inline const std::unique_ptr<Visualization::Cursor>& CommandPromptV2::commandReceiverCursor()
+{ return commandReceiverCursor_; }
 inline QPoint CommandPromptV2::commandReceiverCursorPosition()
 	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0); }
 

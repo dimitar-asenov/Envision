@@ -59,6 +59,7 @@ CommandPromptShell::CommandPromptShell(const QString& initialCommandText,
 {
 	Q_ASSERT(inputItem_);
 	inputItem_->setParentItem(this);
+	setDefaultMoveCursorProxy(inputItem_);
 
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
@@ -74,7 +75,14 @@ void CommandPromptShell::initializeForms()
 {
 	auto icon = item(&I::modeIcon_, [](I* v){return v->modeIconStyle_;});
 	auto inputItem = item(&I::inputItem_);
-	addForm(grid({{icon, inputItem}})->setHorizontalSpacing(5)->setVerticalSpacing(10));
+	auto prompt = grid({{icon, inputItem}})->setHorizontalSpacing(5)->setVerticalSpacing(10);
+
+	auto errors = (new SequentialLayoutFormElement())
+			->setVertical()->setSpaceBetweenElements(3)
+			->setHasCursorWhenEmpty(false)
+			->setListOfItems([](Item* i) { return static_cast<CommandPromptShell*>(i)->errors_; });
+
+	addForm(grid({{prompt}, {errors}}));
 }
 
 void CommandPromptShell::setShellPosition(CommandPromptV2::PromptOptions options)
@@ -112,6 +120,18 @@ void CommandPromptShell::centerViewOnShell() const
 			mainView->centerOn(pos());
 			break;
 		}
+}
+
+void CommandPromptShell::setErrors(QList<Item*> errors)
+{
+	errors_=errors;
+	setUpdateNeeded(StandardUpdate);
+}
+
+void CommandPromptShell::determineChildren()
+{
+	CommandPromptV2::mode()->onShellUpdate();
+	Super::determineChildren();
 }
 
 }

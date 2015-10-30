@@ -32,6 +32,7 @@
 
 #include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"
+#include "InteractionBase/src/command_prompt/CommandPromptV2.h"
 
 namespace OOInteraction {
 
@@ -56,7 +57,7 @@ void HClass::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
-		showCommandPrompt(target);
+		Interaction::CommandPromptV2::show(target);
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

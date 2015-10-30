@@ -27,6 +27,8 @@
 #include "CommandPromptV2.h"
 #include "CommandPromptShell.h"
 #include "CommandPromptMode.h"
+#include "../autocomplete/AutoComplete.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 
 namespace Interaction {
 
@@ -57,6 +59,9 @@ void CommandPromptV2::show(const QString& modeName, Visualization::Item* command
 {
 	Q_ASSERT(!shell_ && !mode_);
 
+	if (options.testFlag(AutoHint) && initialCommandText.isEmpty())
+		options |= InputHasHint;
+
 	commandReceiver_ = commandReceiver;
 
 	if (commandReceiver_->scene()->mainCursor() && commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
@@ -72,13 +77,30 @@ void CommandPromptV2::show(const QString& modeName, Visualization::Item* command
 
 void CommandPromptV2::hide()
 {
-	if (shell_)
+	if (isVisible())
 	{
-		SAFE_DELETE_ITEM(shell_);
-		SAFE_DELETE(mode_);
+		Q_ASSERT(shell_);
 
+		// Delete these two later. We need to copy them so that we still remember the current value.
+		auto shellCopy = shell_;
+		auto modeCopy = mode_;
+		auto scene = Visualization::VisualizationManager::instance().mainScene();
+		QApplication::postEvent(scene, new Visualization::CustomSceneEvent([shellCopy, modeCopy](){
+			delete shellCopy;
+			delete modeCopy;
+		}));
+
+		// Select the item that was selected previously
+		if (scene->mainCursor()) // If the main cursor was deleted, then do not select anything.
+			commandReceiver_->moveCursor(Visualization::Item::MoveOnPosition, commandReceiverCursorPosition());
+
+		shell_->removeFromScene();
+		shell_ = nullptr;
+		mode_ = nullptr;
 		commandReceiver_ = nullptr;
 		commandReceiverCursor_.reset();
+
+		AutoComplete::hide();
 	}
 }
 

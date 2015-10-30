@@ -24,45 +24,28 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HCommandPrompt.h"
+#include "HCommandMode.h"
 
-#include "vis/CommandPrompt.h"
-#include "autocomplete/AutoComplete.h"
-#include "commands/CommandExecutionEngine.h"
-#include "commands/CommandResult.h"
-
-#include "VisualizationBase/src/Scene.h"
+#include "CommandPromptV2.h"
+#include "CommandMode.h"
 
 namespace Interaction {
 
-HCommandPrompt::HCommandPrompt()
+HCommandMode* HCommandMode::instance()
 {
-}
-
-HCommandPrompt* HCommandPrompt::instance()
-{
-	static HCommandPrompt h;
+	static HCommandMode h;
 	return &h;
 }
 
-void HCommandPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+void HCommandMode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	CommandPrompt* prompt = static_cast<CommandPrompt*> (target);
+	auto mode = dynamic_cast<CommandMode*> (CommandPromptV2::mode());
+	Q_ASSERT(mode);
 
-	if (event->key() == Qt::Key_Escape)
-	{
-		prompt->cancelPrompt();
-		AutoComplete::hide();
-	}
-	else if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
-	{
-		prompt->executeCurrentText();
-	}
+	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+		mode->executeCurrentText();
 	else if (event->key() == Qt::Key_Tab)
-	{
-		if ( prompt->suggestions().size()  == 1)
-			prompt->takeSuggestion(prompt->suggestions().first());
-	}
+		mode->takeFirstSuggestionIfOnlyOne();
 	else GenericHandler::keyPressEvent(target, event);
 }
 

@@ -38,6 +38,7 @@ CommandPromptTextInput::CommandPromptTextInput(Item* parent, const QString& init
 	: Super{parent, style}, text_{ new Visualization::Text(this, &style->text())}
 {
 	text_->setText(initialCommandText);
+	setDefaultMoveCursorProxy(text_);
 }
 
 void CommandPromptTextInput::initializeForms()
@@ -68,6 +69,16 @@ void CommandPromptTextInput::setSelection(CommandPromptMode::InputSelection sele
 		default:
 			Q_ASSERT(false);
 	}
+}
+
+QString CommandPromptTextInput::text() const
+{
+	return text_->text();
+}
+
+void CommandPromptTextInput::setText(const QString& text)
+{
+	text_->setText(text);
 }
 
 }
