@@ -45,8 +45,7 @@ APIPrinter::~APIPrinter()
 void APIPrinter::print()
 {
 	printLicense();
-	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl;
-	out_ << endl;
+	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl << endl;
 	printHeaders();
 	out_ << "namespace InformationScripting {" << endl << endl;
 	out_ << "using namespace boost::python;" << endl << endl;
@@ -68,8 +67,8 @@ void APIPrinter::printLicense()
 
 void APIPrinter::printHeaders()
 {
-	for (QString includePath : APIData::instance().includePaths_)
-		out_ << "#include \"" << includePath << "\"" << endl;
+	for (const QString& includePath : APIData::instance().includePaths_)
+		out_ << QString("#include \"%1\"").arg(includePath) << endl;
 	out_ << endl;
 }
 
@@ -89,48 +88,27 @@ void APIPrinter::printClass(const ClassData& cData)
 	for (const auto& overload : cData.overloadAliases_)
 		printOverload(overload);
 
-	QString classString;
+	QString classString = "";
 	if (cData.enums_.size()) // We only need a scope variable if we have enums
 		classString = QString("scope %1scope = ").arg(cData.className_);
-	classString += "class_<" + cData.qualifiedName_;
 	// print bases:
+	QString basesString = "";
 	if (cData.baseClasses_.size())
-		classString += ", bases<" + cData.baseClasses_.join(", ") + ">";
+		basesString = QString(", bases<%1>").arg(cData.baseClasses_.join(", "));
 	else if (cData.abstract_)
-		classString += ", boost::noncopyable";
-	classString += ">";
-	// print name:
-	classString += "(\"" + cData.className_ + "\"";
-	// TODO print constructors:
-	if (cData.abstract_) // abstract classes have no constructor
-		classString += ", no_init";
-	classString += ")";
+		basesString = ", boost::noncopyable";
+
+	QString noInit = "";
+	if (cData.abstract_) noInit = ", no_init";
+	classString += QString("class_<%1%2>(\"%3\"%4)").arg(cData.qualifiedName_, basesString, cData.className_, noInit);
+
 	printPossiblyLongString(classString);
 
-	// printProperties
 	indent();
-	int propertyCount = cData.attributes_.size();
-	if (propertyCount > 0)
-	{
-		out_ << endl;
-		for (int i = 0; i < propertyCount - 1; ++i)
-		{
-			printAttribute(cData.attributes_[i]);
-			out_ << endl;
-		}
-		printAttribute(cData.attributes_[propertyCount-1]);
-	}
-	int methodCount = cData.methods_.size();
-	if (methodCount> 0)
-	{
-		out_ << endl;
-		for (int i = 0; i < methodCount - 1; ++i)
-		{
-			printMethod(cData.methods_[i]);
-			out_ << endl;
-		}
-		printMethod(cData.methods_[methodCount-1]);
-	}
+	for (const auto& attribute : cData.attributes_)
+		printAttribute(attribute);
+	for (const auto& method : cData.methods_)
+		printMethod(method);
 	out_ << ";" << endl;
 	unIndent();
 
@@ -154,20 +132,10 @@ void APIPrinter::printEnum(const EnumData& eData)
 {
 	out_ << indent_ <<"enum_<" << eData.qualifiedName_ << ">(\"" << eData.enumName_ << "\")";
 	indent();
-	int valueCount = eData.values_.size();
-	if (valueCount > 0)
+	for (const auto& enumConstant : eData.values_)
 	{
 		out_ << endl;
-		for (int i = 0; i < valueCount - 1; ++i)
-		{
-			auto enumConstant = eData.values_[i];
-			QString enumValue = ".value(\"" + enumConstant.first + "\", " + enumConstant.second + ")";
-			printPossiblyLongString(enumValue);
-			out_ << endl;
-		}
-		auto enumConstant = eData.values_[valueCount-1];
-		QString enumValue = ".value(\"" + enumConstant.first + "\", " + enumConstant.second + ")";
-		printPossiblyLongString(enumValue, 1);
+		printPossiblyLongString(QString(".value(\"%1\", %2)").arg(enumConstant.first, enumConstant.second));
 	}
 	out_ << ";" << endl;
 	unIndent();
@@ -175,7 +143,7 @@ void APIPrinter::printEnum(const EnumData& eData)
 
 void APIPrinter::printAttribute(const ClassAttribute& attr)
 {
-	out_ << indent_ << ".add_property(\"" << attr.name_ << "\"," << endl;
+	out_ << endl << indent_ << ".add_property(\"" << attr.name_ << "\"," << endl;
 	indent();
 	printPossiblyLongString(attr.getterQualified_ + ",");
 	out_ << endl;
@@ -185,6 +153,7 @@ void APIPrinter::printAttribute(const ClassAttribute& attr)
 
 void APIPrinter::printMethod(const ClassMethod& method)
 {
+	out_ << endl;
 	printPossiblyLongString(QString(".def(\"%1\", %2)").arg(method.name_, method.wrappedFunctionPointer_));
 	if (method.static_)
 		out_ << endl << indent_ << ".staticmethod(\"" << method.name_ << "\")";
