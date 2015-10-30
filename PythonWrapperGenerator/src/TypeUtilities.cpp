@@ -115,6 +115,10 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 	{
 		return QString::fromStdString(typeDefType->getDecl()->getQualifiedNameAsString());
 	}
+	else if (auto enumType = llvm::dyn_cast<clang::EnumType>(type))
+	{
+		return QString::fromStdString(enumType->getDecl()->getQualifiedNameAsString());
+	}
 	// Implement support for more cases if needed.
 	qWarning() << "###Unsupported type: ###";
 	type->dump();
