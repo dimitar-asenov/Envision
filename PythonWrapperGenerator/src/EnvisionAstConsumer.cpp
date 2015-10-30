@@ -99,8 +99,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 
 			ClassData cData{className, QString::fromStdString(classDecl->getQualifiedNameAsString())};
 
-			for (auto base : classDecl->bases())
-				cData.baseClasses_ << TypeUtilities::typePtrToString(base.getType().getTypePtr());
+			addBases(cData, classDecl);
 
 			QSet<QString> seenMethods;
 			QSet<QString> possibleAttributeSetters;
@@ -171,14 +170,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			}
 			resolveOverloads(cData, overloads);
 
-			// Add enums which are declared in this class:
-			for (auto pEnum : processedEnums_)
-			{
-				QStringList names = pEnum.qualifiedName_.split("::");
-				if (names[names.size()-2] == className)
-					cData.enums_ << pEnum;
-			}
-			processedEnums_.clear();
+			addClassEnums(cData);
 			// Add class to api structure
 			APIData::instance().addIncludeFile(QString::fromStdString(currentFile_));
 			cData.abstract_ = classDecl->isAbstract();
@@ -291,4 +283,21 @@ void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)
 		QString itemType = match.captured(2);
 		APIData::instance().insertTypeList(itemType);
 	}
+}
+
+void EnvisionAstConsumer::addClassEnums(ClassData& cData)
+{
+	for (const auto& pEnum : processedEnums_)
+	{
+		QStringList names = pEnum.qualifiedName_.split("::");
+		if (names[names.size()-2] == cData.className_)
+			cData.enums_ << pEnum;
+	}
+	processedEnums_.clear();
+}
+
+void EnvisionAstConsumer::addBases(ClassData& cData, const clang::CXXRecordDecl* classDecl)
+{
+	for (auto base : classDecl->bases())
+		cData.baseClasses_ << TypeUtilities::typePtrToString(base.getType().getTypePtr());
 }
