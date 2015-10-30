@@ -83,6 +83,9 @@ void APIPrinter::printClass(const ClassData& cData)
 	// each class gets it's own scope:
 	out_ << "{" << endl;
 	indent();
+	if (!cData.usingAlias_.isNull())
+		out_ << indent_ << "using " << cData.usingAlias_ << " = " << cData.qualifiedName_ << ";" << endl;
+
 	for (const auto& overload : cData.overloadAliases_)
 		printOverload(overload);
 

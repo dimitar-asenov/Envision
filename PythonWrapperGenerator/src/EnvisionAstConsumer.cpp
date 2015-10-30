@@ -133,7 +133,8 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 		// Remove non-public and templated methods.
 		values.erase(std::remove_if(values.begin(), values.end(), [](const clang::CXXMethodDecl* method) {
 			return method->getAccess() != clang::AccessSpecifier::AS_public ||
-					method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate;
+					(method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate &&
+					 method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_MemberSpecialization);
 		}), values.end());
 		if (values.isEmpty()) continue;
 
@@ -143,7 +144,7 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 				return descriptor.name_ == key;
 		}), cData.methods_.end());
 
-		QString functionAddress = QString("&%1::%2").arg(cData.qualifiedName_, key);
+		QString functionAddress = QString("&%1::%2").arg(cData.methodAddressPrefix(), key);
 		for (int i = 0; i < values.size(); ++i)
 		{
 			auto method = values[i];
@@ -220,6 +221,7 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 	auto className = QString::fromStdString(classDecl->getNameAsString());
 	auto qualifiedName = QString::fromStdString(classDecl->getQualifiedNameAsString());
 
+	bool isTemplate = false;
 	if (auto templatedDecl = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(classDecl))
 	{
 		auto argDecl = templatedDecl->getTemplateInstantiationArgs()[0].getAsType().getTypePtr()->getAsCXXRecordDecl();
@@ -227,9 +229,12 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 		auto qualifiedArg = QString::fromStdString(argDecl->getQualifiedNameAsString());
 		qualifiedName.append(QString("<%1>").arg(qualifiedArg));
 		className.append("Of" + argName);
+		isTemplate = true;
 	}
 
 	ClassData cData{className, qualifiedName};
+	if (isTemplate)
+		cData.usingAlias_ = className;
 
 	addBases(cData, classDecl);
 
@@ -262,7 +267,8 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 
 		QString methodName = QString::fromStdString(method->getNameAsString());
 		if (method->getAccess() != clang::AccessSpecifier::AS_public ||
-			 method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate ||
+			 (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate &&
+			  method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_MemberSpecialization) ||
 			 // workaround since we only consider cpp files at the moment:
 			 methodName == "firstAncestorOfType")
 		{
@@ -292,7 +298,7 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 		if (!usedAsAttribute)
 		{
 			// found a free standing method to export.
-			cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method),
+			cData.methods_.append({methodName, functionStringFor(methodName, cData.methodAddressPrefix(), method),
 										  method->isStatic()});
 			overloads.insertMulti(methodName, method);
 		}
@@ -308,9 +314,11 @@ void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)
 	{
 		static QRegularExpression typedListMatcher("([^<]+)<([\\w<>:]+)>");
 		auto match = typedListMatcher.match(fullName);
-		Q_ASSERT(match.hasMatch());
-		QString itemType = match.captured(2);
-		APIData::instance().insertTypeList(itemType);
+		if (match.hasMatch())
+		{
+			QString itemType = match.captured(2);
+			APIData::instance().insertTypeList(itemType);
+		}
 	}
 }
 
