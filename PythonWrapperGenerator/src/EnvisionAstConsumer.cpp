@@ -113,7 +113,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 					cData.attributes_.append(attribute(it.key(), it.value(), cData.qualifiedName_, method));
 					seenMethods << it.key() << it.value();
 				}
-				else if (methodName.startsWith("set"))
+				else if (methodName.size() > 3 && methodName.startsWith("set"))
 				{
 					possibleAttributeSetters << methodName;
 				}
@@ -142,7 +142,8 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 				if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
 
 				if (possibleAttributeSetters.contains(methodName)) continue;
-				for (QString setterName : possibleAttributeSetters)
+				bool usedAsAttribute = false;
+				for (const QString& setterName : possibleAttributeSetters)
 				{
 					QString possibleGetterName = setterName.mid(4); // drop set and first letter
 					possibleGetterName.prepend(setterName[3].toLower());
@@ -151,10 +152,11 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 						// Found another attribute:
 						cData.attributes_.append(attribute(methodName, setterName, cData.qualifiedName_, method));
 						seenMethods << setterName << methodName;
+						usedAsAttribute = true;
 						break;
 					}
 				}
-				if (!seenMethods.contains(methodName))
+				if (!usedAsAttribute)
 				{
 					// found a free standing method to export.
 					cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method),
