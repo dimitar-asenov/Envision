@@ -28,6 +28,8 @@
 
 #include "CommandHelper.h"
 
+#include "ModelBase/src/model/AllTreeManagers.h"
+
 #include "OOModel/src/declarations/NameImport.h"
 
 namespace OOInteraction {

@@ -26,8 +26,6 @@
 
 #include "VIntegerLiteral.h"
 
-#include "ModelBase/src/model/TreeManager.h"
-
 using namespace OOModel;
 using namespace Visualization;
 

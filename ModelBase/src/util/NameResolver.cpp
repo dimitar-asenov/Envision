@@ -28,6 +28,7 @@
 
 #include "SymbolMatcher.h"
 #include "model/TreeManager.h"
+#include "model/AllTreeManagers.h"
 
 namespace Model {
 

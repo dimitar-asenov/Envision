@@ -35,12 +35,14 @@
 
 #include "Core/src/Profiler.h"
 
+#include "AllTreeManagers.h"
+
 namespace Model {
 
 TreeManager::TreeManager(Node* root)
 {
 	commands.setUndoLimit(100);
-	manager().add(this);
+	AllTreeManagers::instance().add(this);
 
 	if (root) setRoot(root);
 }
@@ -52,7 +54,7 @@ TreeManager::TreeManager(const QString& name, Node* root) : TreeManager{root}
 
 TreeManager::~TreeManager()
 {
-	manager().remove(this);
+	AllTreeManagers::instance().remove(this);
 
 	// TODO Make sure to persist and destroy the tree in a nice way.
 	// TODO Emit a signal that this manager is no longer valid.
