@@ -26,8 +26,6 @@
 
 #include "items/VCharacter.h"
 
-#include "ModelBase/src/model/TreeManager.h"
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VCharacter, "item")

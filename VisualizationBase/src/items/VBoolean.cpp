@@ -26,8 +26,6 @@
 
 #include "items/VBoolean.h"
 
-#include "ModelBase/src/model/TreeManager.h"
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VBoolean, "item")

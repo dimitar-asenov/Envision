@@ -25,7 +25,6 @@
  **********************************************************************************************************************/
 
 #include "TestBox.h"
-#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
