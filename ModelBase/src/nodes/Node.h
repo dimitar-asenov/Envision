@@ -29,7 +29,6 @@
 #include "../modelbase_api.h"
 #include "../persistence/PersistentStore.h"
 #include "../util/SymbolMatcher.h"
-#include "../model/AllTreeManagers.h"
 
 #include "Core/src/reflect/Reflect.h"
 #include "Core/src/reflect/typeIdMacros.h"

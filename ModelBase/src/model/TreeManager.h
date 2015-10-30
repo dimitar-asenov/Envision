@@ -30,7 +30,6 @@
 #include "../nodes/Node.h"
 #include "../concurrent/NodeReadWriteLock.h"
 #include "../persistence/NodeIdMap.h"
-#include "AllTreeManagers.h"
 
 namespace Model {
 
@@ -332,8 +331,6 @@ class MODELBASE_API TreeManager: public QObject
 		 */
 		void emitNodePartiallyLoaded(Node* node);
 
-		AllTreeManagers& manager() const;
-
 		/**
 		 * Returns whether this tree has been partially loaded (as a library).
 		 */
@@ -495,8 +492,6 @@ inline QString TreeManager::name() { return name_; }
 inline void TreeManager::setName(const QString& name) { name_ = name; }
 
 inline PersistentStore* TreeManager::store() { return store_; }
-
-inline AllTreeManagers& TreeManager::manager() const { return AllTreeManagers::instance(); }
 
 inline bool TreeManager::isPartiallyLoaded() const { return partiallyLoaded_; }
 inline const NodeIdMap& TreeManager::nodeIdMap() const { return nodeIdMap_; }

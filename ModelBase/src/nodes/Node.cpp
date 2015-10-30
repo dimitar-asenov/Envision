@@ -27,6 +27,7 @@
 #include "Node.h"
 #include "../ModelBasePlugin.h"
 #include "../model/TreeManager.h"
+#include "../model/AllTreeManagers.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include "Reference.h"
