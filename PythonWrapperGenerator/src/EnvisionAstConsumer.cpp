@@ -90,13 +90,28 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 		auto className = QString::fromStdString(classDecl->getNameAsString());
 		if (namespaceName == APIData::instance().namespaceName_ && className == currentClassName_)
 		{
-			// FIXME: find a better solution for statementitemlist, currently ignore it (because we don't wrap TypedList).
-			if (className == "StatementItemList") return;
-
 			QStringList bases = baseClasses(classDecl);
 			if (!allowedBases_.contains(bases[0])) return; // We only consider classes which have a base that we allow.
 
 			auto cData = buildClassInfo(classDecl);
+			auto typedListIt = std::find_if(classDecl->bases_begin(), classDecl->bases_end(),
+				[](const clang::CXXBaseSpecifier& base)
+				{
+					auto baseName = TypeUtilities::typePtrToString(base.getType().getTypePtr());
+					return baseName.contains("TypedList");
+				});
+			if (typedListIt != classDecl->bases_end())
+			{
+				// Parse TypedList base class as well, this is usually in the form Reclect<TypedList<T>>
+				// Therefore we extract the bases first template parameter and assume that it is the TypedList.
+				auto baseDecl = typedListIt->getType().getTypePtr()->getAsCXXRecordDecl();
+				if (auto templateClass = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(baseDecl))
+				{
+					auto typedListDecl = templateClass->getTemplateInstantiationArgs()[0]
+							.getAsType().getTypePtr()->getAsCXXRecordDecl();
+					APIData::instance().insertClassData(buildClassInfo(typedListDecl), baseClasses(typedListDecl));
+				}
+			}
 
 			addClassEnums(cData);
 			// Add class to api structure
@@ -202,8 +217,19 @@ QStringList EnvisionAstConsumer::baseClasses(clang::CXXRecordDecl* classDecl)
 
 ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 {
-	ClassData cData{QString::fromStdString(classDecl->getNameAsString()),
-				QString::fromStdString(classDecl->getQualifiedNameAsString())};
+	auto className = QString::fromStdString(classDecl->getNameAsString());
+	auto qualifiedName = QString::fromStdString(classDecl->getQualifiedNameAsString());
+
+	if (auto templatedDecl = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(classDecl))
+	{
+		auto argDecl = templatedDecl->getTemplateInstantiationArgs()[0].getAsType().getTypePtr()->getAsCXXRecordDecl();
+		auto argName = QString::fromStdString(argDecl->getNameAsString());
+		auto qualifiedArg = QString::fromStdString(argDecl->getQualifiedNameAsString());
+		qualifiedName.append(QString("<%1>").arg(qualifiedArg));
+		className.append("Of" + argName);
+	}
+
+	ClassData cData{className, qualifiedName};
 
 	addBases(cData, classDecl);
 
