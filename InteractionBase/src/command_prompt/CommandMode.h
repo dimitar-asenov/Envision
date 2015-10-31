@@ -46,8 +46,8 @@ class INTERACTIONBASE_API CommandMode : public CommandPromptMode
 		virtual void setSelection(InputSelection selection) override;
 
 		virtual void onShellUpdate() override;
-
-		void updateSuggestions();
+		virtual void onTabKeyPress() override;
+		virtual void onEnterKeyPress() override;
 
 	private:
 		friend class HCommandMode;
@@ -55,13 +55,11 @@ class INTERACTIONBASE_API CommandMode : public CommandPromptMode
 		CommandPromptTextInput* inputItem_{};
 		std::vector<std::unique_ptr<CommandSuggestion>> suggestions_;
 
+		void updateSuggestions();
 		void showAutocompleteBasedOnSuggestions();
 		void removeSuggestions();
 		void addSuggestions(QList<CommandSuggestion*> suggestions);
-
 		void takeSuggestion(CommandSuggestion* suggestion);
-		void takeFirstSuggestionIfOnlyOne();
-		void executeCurrentText();
 };
 
 }

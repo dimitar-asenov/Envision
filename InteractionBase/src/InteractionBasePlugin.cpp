@@ -46,6 +46,8 @@
 
 #include "command_prompt/CommandMode.h"
 #include "command_prompt/CommandPromptV2.h"
+#include "command_prompt/CommandPromptShell.h"
+#include "command_prompt/HPromptShell.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
@@ -87,6 +89,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 {
 	// Register prompt modes
 	CommandPromptV2::registerMode<CommandMode>(CommandPromptV2::defaultModeName());
+	CommandPromptShell::setDefaultClassHandler(HPromptShell::instance());
 
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
 	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());

@@ -27,7 +27,6 @@
 #include "CommandMode.h"
 #include "CommandPromptTextInput.h"
 #include "CommandPromptV2.h"
-#include "HCommandMode.h"
 
 #include "../autocomplete/AutoComplete.h"
 #include "../handlers/GenericHandler.h"
@@ -50,9 +49,6 @@ Visualization::Item* CommandMode::createInputItem(const QString& initialCommandT
 	auto commandText = initialCommandText;
 	if (commandText.isNull()) commandText = TYPE_HINT;
 	inputItem_ = new CommandPromptTextInput(nullptr, commandText);
-
-	// TODO: This is rather a hack, we shoul set this per instance.
-	CommandPromptTextInput::setDefaultClassHandler(HCommandMode::instance());
 	return inputItem_;
 }
 
@@ -98,7 +94,7 @@ void CommandMode::showAutocompleteBasedOnSuggestions()
 		if (CommandPromptV2::mode() == this)
 		{
 			takeSuggestion(static_cast<CommandSuggestion*>(e));
-			executeCurrentText();
+			onEnterKeyPress();
 		}
 	};
 
@@ -118,12 +114,12 @@ void CommandMode::takeSuggestion(CommandSuggestion* suggestion)
 	inputItem_->setSelection(CommandPromptMode::AtEnd);
 }
 
-void CommandMode::takeFirstSuggestionIfOnlyOne()
+void CommandMode::onTabKeyPress()
 {
 	if (suggestions_.size() == 1) takeSuggestion(suggestions_[0].get());
 }
 
-void CommandMode::executeCurrentText()
+void CommandMode::onEnterKeyPress()
 {
 	CommandPromptV2::commandReceiver()->execute( inputItem_->text(), CommandPromptV2::commandReceiverCursor());
 

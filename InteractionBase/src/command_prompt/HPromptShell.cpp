@@ -24,23 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HPromptShell.h"
 
-#include "../interactionbase_api.h"
-
-#include "../handlers/GenericHandler.h"
+#include "CommandPromptV2.h"
+#include "CommandPromptMode.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API HCommandMode: public GenericHandler
+HPromptShell* HPromptShell::instance()
 {
-	protected:
-	HCommandMode() = default;
+	static HPromptShell h;
+	return &h;
+}
 
-	public:
-		static HCommandMode* instance();
-
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
-};
+void HPromptShell::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+		CommandPromptV2::mode()->onEnterKeyPress();
+	else if (event->key() == Qt::Key_Tab)
+		CommandPromptV2::mode()->onTabKeyPress();
+	else GenericHandler::keyPressEvent(target, event);
+}
 
 }

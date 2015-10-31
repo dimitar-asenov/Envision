@@ -24,29 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#include "HCommandMode.h"
+#pragma once
 
-#include "CommandPromptV2.h"
-#include "CommandMode.h"
+#include "../interactionbase_api.h"
+
+#include "../handlers/GenericHandler.h"
 
 namespace Interaction {
 
-HCommandMode* HCommandMode::instance()
+class INTERACTIONBASE_API HPromptShell: public GenericHandler
 {
-	static HCommandMode h;
-	return &h;
-}
+	protected:
+	HPromptShell() = default;
 
-void HCommandMode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	auto mode = dynamic_cast<CommandMode*> (CommandPromptV2::mode());
-	Q_ASSERT(mode);
+	public:
+		static HPromptShell* instance();
 
-	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
-		mode->executeCurrentText();
-	else if (event->key() == Qt::Key_Tab)
-		mode->takeFirstSuggestionIfOnlyOne();
-	else GenericHandler::keyPressEvent(target, event);
-}
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+};
 
 }

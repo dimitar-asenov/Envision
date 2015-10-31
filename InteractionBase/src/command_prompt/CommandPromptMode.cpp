@@ -50,5 +50,7 @@ void CommandPromptMode::showErrors(QList<QString> errorMessages) const
 }
 
 void CommandPromptMode::onShellUpdate(){}
+void CommandPromptMode::onEnterKeyPress(){}
+void CommandPromptMode::onTabKeyPress(){}
 
 }

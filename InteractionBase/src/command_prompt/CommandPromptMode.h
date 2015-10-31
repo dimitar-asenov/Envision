@@ -62,6 +62,20 @@ class INTERACTIONBASE_API CommandPromptMode
 		 */
 		virtual void onShellUpdate();
 
+		/**
+		 * Called when the handler of the prompt's shell detects and enter key press.
+		 *
+		 * The default implementation does nothing.
+		 */
+		virtual void onEnterKeyPress();
+
+		/**
+		 * Called when the handler of the prompt's shell detects a TAB key press.
+		 *
+		 * The default implementaiton does nothing.
+		 */
+		virtual void onTabKeyPress();
+
 	protected:
 
 		/**

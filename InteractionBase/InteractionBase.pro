@@ -95,7 +95,7 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/command_prompt/CommandPromptTextInputStyle.h \
     src/command_prompt/CommandPromptMode.h \
     src/command_prompt/CommandMode.h \
-    src/command_prompt/HCommandMode.h
+    src/command_prompt/HPromptShell.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -183,4 +183,4 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/command_prompt/CommandPromptTextInputStyle.cpp \
     src/command_prompt/CommandPromptMode.cpp \
     src/command_prompt/CommandMode.cpp \
-    src/command_prompt/HCommandMode.cpp
+    src/command_prompt/HPromptShell.cpp
