@@ -43,6 +43,27 @@ QMap<QString, Prompt::ModeConstructor>& Prompt::modeRegistry()
 	return map;
 }
 
+QMap<Qt::Key, Prompt::PromptShowCall>& Prompt::promptShowShortcuts()
+{
+	static QMap<Qt::Key, PromptShowCall> map;
+	return map;
+}
+
+void Prompt::registerPromptShowShortcut(Qt::Key key, PromptShowCall showFunction)
+{
+	Q_ASSERT(key != Qt::Key_Escape);
+	Q_ASSERT(!promptShowShortcuts().contains(key));
+	Q_ASSERT(showFunction);
+	promptShowShortcuts().insert(key, showFunction);
+}
+
+Prompt::PromptShowCall Prompt::showShortcut(Qt::Key key)
+{
+	auto shortcut = promptShowShortcuts().find(key);
+	if (shortcut == promptShowShortcuts().end()) return {};
+	else return *shortcut;
+}
+
 const QString& Prompt::defaultModeName()
 {
 	static QString def{"command"};

@@ -58,6 +58,10 @@ class INTERACTIONBASE_API Prompt
 		template <class ModeType>
 		static void registerMode(const QString& modeName);
 
+		using PromptShowCall = std::function<void (Visualization::Item*)>;
+		static void registerPromptShowShortcut(Qt::Key key, PromptShowCall showFunction);
+		static PromptShowCall showShortcut(Qt::Key key);
+
 		static const QString& defaultModeName();
 
 		static PromptMode* mode();
@@ -78,6 +82,8 @@ class INTERACTIONBASE_API Prompt
 
 		using ModeConstructor = std::function<PromptMode* ()>;
 		static QMap<QString, ModeConstructor>& modeRegistry();
+
+		static QMap<Qt::Key, PromptShowCall>& promptShowShortcuts();
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Prompt::PromptOptions)
 

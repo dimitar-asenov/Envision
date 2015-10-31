@@ -90,6 +90,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	// Register prompt modes
 	Prompt::registerMode<CommandMode>(Prompt::defaultModeName());
 	PromptShell::setDefaultClassHandler(HPromptShell::instance());
+	Prompt::registerPromptShowShortcut(Qt::Key_F, [](Visualization::Item* target){Prompt::show(target, "find ");});
 
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
 	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());

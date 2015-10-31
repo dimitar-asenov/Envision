@@ -376,7 +376,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		if (AutoComplete::isVisible()) AutoComplete::hide();
 	}
 	else if ( ((event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape) // Regular command prompt
-				  || (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F)) // Find command
+				  || (event->modifiers() == Qt::ControlModifier
+						&& Prompt::showShortcut(static_cast<Qt::Key>(event->key())))) // Custom prompt
 
 			&& !(actionPrompt_ && actionPrompt_->isVisible()) && !Prompt::isVisible())
 	{
@@ -384,7 +385,12 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		// Only show the command prompt if this event was not received within it.
 		if (event->key() == Qt::Key_Escape) Prompt::show(target);
-		else if (event->modifiers() == Qt::ControlModifier) Prompt::show(target, "find ");
+		else if (event->modifiers() == Qt::ControlModifier)
+		{
+			auto show = Prompt::showShortcut(static_cast<Qt::Key>(event->key()));
+			Q_ASSERT(show);
+			show(target);
+		}
 		else Q_ASSERT(false);
 	}
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
