@@ -24,61 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandPromptTextInput.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
-#include "VisualizationBase/src/cursor/TextCursor.h"
+#include "PromptShellStyle.h"
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(CommandPromptTextInput, "item")
-
-CommandPromptTextInput::CommandPromptTextInput(Item* parent, const QString& initialCommandText,
-															  const StyleType* style)
-	: Super{parent, style}, text_{ new Visualization::Text(this, &style->text())}
-{
-	text_->setText(initialCommandText);
-	setDefaultMoveCursorProxy(text_);
-}
-
-void CommandPromptTextInput::initializeForms()
-{
-	addForm(item(&I::text_, [](I* v){return &v->style()->text();}));
-}
-
-void CommandPromptTextInput::determineChildren()
-{
-	Super::determineChildren();
-	text_->setEditable(true);
-}
-
-void CommandPromptTextInput::setSelection(CommandPromptMode::InputSelection selection)
-{
-	switch (selection){
-		case CommandPromptMode::None: return;
-		case CommandPromptMode::All:
-		{
-			text_->moveCursor();
-			text_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
-		} break;
-		case CommandPromptMode::AtEnd:
-		{
-			text_->moveCursor();
-			text_->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(text_->text().size());
-		} break;
-		default:
-			Q_ASSERT(false);
-	}
-}
-
-QString CommandPromptTextInput::text() const
-{
-	return text_->text();
-}
-
-void CommandPromptTextInput::setText(const QString& text)
-{
-	text_->setText(text);
-}
+PromptShellStyle::~PromptShellStyle() {}
 
 }

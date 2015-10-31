@@ -28,67 +28,38 @@
 
 #include "../interactionbase_api.h"
 
-namespace Visualization {
-	class Item;
-	class StaticStyle;
-}
+#include "PromptMode.h"
+#include "../commands/CommandSuggestion.h"
 
 namespace Interaction {
 
-class CommandSuggestion;
-class CommandResult;
+class PromptTextInput;
 
-class INTERACTIONBASE_API CommandPromptMode
+class INTERACTIONBASE_API CommandMode : public PromptMode
 {
 	public:
-		virtual ~CommandPromptMode();
+		virtual ~CommandMode() override;
 
-		virtual Visualization::Item* createInputItem(const QString& initialCommandText) = 0;
-		virtual Visualization::StaticStyle* modeIcon() const = 0;
+		virtual Visualization::Item* createInputItem(const QString& initialCommandText) override;
+		virtual Visualization::StaticStyle* modeIcon() const override;
 
-		enum InputSelection
-		{
-			None,	/**< The input will not be selected. */
-			All, /**< The entire input will be selected, so that it can be quickly deleted/replaced. */
-			AtEnd /**< The input should have a cursor at the end, ready for additional input. */
-		};
-		virtual void setSelection(InputSelection selection) = 0;
+		virtual void setSelection(InputSelection selection) override;
 
-		/**
-		 * Called whenever the Prompt shell is about to be updated and repainted.
-		 *
-		 * The default implementation does nothing. Reimplement this in modes which need to update their state when
-		 * the shell is updated. For example to provide auto-completion based on the latest input.
-		 */
-		virtual void onShellUpdate();
+		virtual void onShellUpdate() override;
+		virtual void onTabKeyPress() override;
+		virtual void onEnterKeyPress() override;
 
-		/**
-		 * Called when the handler of the prompt's shell detects and enter key press.
-		 *
-		 * The default implementation does nothing.
-		 */
-		virtual void onEnterKeyPress();
+	private:
+		friend class HCommandMode;
 
-		/**
-		 * Called when the handler of the prompt's shell detects a TAB key press.
-		 *
-		 * The default implementaiton does nothing.
-		 */
-		virtual void onTabKeyPress();
+		PromptTextInput* inputItem_{};
+		std::vector<std::unique_ptr<CommandSuggestion>> suggestions_;
 
-	protected:
-
-		/**
-		 * Call this method from derived classes in order to display a list of error item under the prompt.
-		 *
-		 * Ownership of the passed items will be transfered to the Prompt shell.
-		 */
-		void showErrors(QList<Visualization::Item*> errorItems) const;
-
-		/**
-		 * Call this method from derived classes in order to display a list of errors messages under the prompt.
-		 */
-		void showErrors(QList<QString> errorMessages) const;
+		void updateSuggestions();
+		void showAutocompleteBasedOnSuggestions();
+		void removeSuggestions();
+		void addSuggestions(QList<CommandSuggestion*> suggestions);
+		void takeSuggestion(CommandSuggestion* suggestion);
 };
 
 }

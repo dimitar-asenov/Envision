@@ -26,7 +26,7 @@
 
 #include "SetCursorEvent.h"
 
-#include "InteractionBase/src/command_prompt/CommandPromptV2.h"
+#include "InteractionBase/src/prompt/Prompt.h"
 #include "VisualizationBase/src/items/Item.h"
 
 namespace Interaction {
@@ -126,7 +126,7 @@ void SetCursorEvent::execute()
 			// shown. It is not clear what the problem exactly is and where it should be fixed but the workaround below
 			// works.
 			// TODO: Investigate the "dirty" pixels further
-			qApp->postEvent(item->scene(), new CustomSceneEvent([=](){ CommandPromptV2::show(it); }));
+			qApp->postEvent(item->scene(), new CustomSceneEvent([=](){ Prompt::show(it); }));
 		}
 	}
 

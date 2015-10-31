@@ -33,7 +33,7 @@
 #include "OOVisualization/src/declarations/VModule.h"
 #include "OOModel/src/declarations/Module.h"
 
-#include "InteractionBase/src/command_prompt/CommandPromptV2.h"
+#include "InteractionBase/src/prompt/Prompt.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
 namespace OOInteraction {
@@ -75,7 +75,7 @@ void HModule::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
-		Interaction::CommandPromptV2::show(target);
+		Interaction::Prompt::show(target);
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

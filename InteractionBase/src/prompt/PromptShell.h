@@ -27,18 +27,42 @@
 #pragma once
 
 #include "../interactionbase_api.h"
+#include "PromptShellStyle.h"
+#include "Prompt.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+
+namespace Visualization {
+	class Static;
+	class StaticStyle;
+}
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommandPromptTextInputStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
 {
-	public:
-		~CommandPromptTextInputStyle();
+	ITEM_COMMON(PromptShell)
 
-		Property<Visualization::TextStyle> text{this, "text"};
+	public:
+		PromptShell(const QString& initialCommandText,
+								 Prompt::PromptOptions options = Prompt::None,
+								 const StyleType* style = itemStyles().get());
+
+		static void initializeForms();
+
+		void setErrors(QList<Item*> errors);
+
+	protected:
+		virtual void determineChildren() override;
+
+	private:
+		Item* inputItem_{};
+		Visualization::Static* modeIcon_{};
+		Visualization::StaticStyle* modeIconStyle_{};
+		QList<Item*> errors_;
+
+		void setShellPosition(Prompt::PromptOptions options);
+		void centerViewOnShell() const;
 };
 
 }

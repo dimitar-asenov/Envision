@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandPromptShell.h"
-#include "CommandPromptMode.h"
+#include "PromptShell.h"
+#include "PromptMode.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/views/MainView.h"
@@ -49,13 +49,13 @@ constexpr int COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT = 50;
  */
 constexpr int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
-ITEM_COMMON_DEFINITIONS(CommandPromptShell, "item")
+ITEM_COMMON_DEFINITIONS(PromptShell, "item")
 
-CommandPromptShell::CommandPromptShell(const QString& initialCommandText,
-													CommandPromptV2::PromptOptions options,
+PromptShell::PromptShell(const QString& initialCommandText,
+													Prompt::PromptOptions options,
 													const StyleType* style)
-	: Super(nullptr, style), inputItem_{CommandPromptV2::mode()->createInputItem(initialCommandText)},
-	  modeIconStyle_{CommandPromptV2::mode()->modeIcon()}
+	: Super(nullptr, style), inputItem_{Prompt::mode()->createInputItem(initialCommandText)},
+	  modeIconStyle_{Prompt::mode()->modeIcon()}
 {
 	Q_ASSERT(inputItem_);
 	inputItem_->setParentItem(this);
@@ -66,12 +66,12 @@ CommandPromptShell::CommandPromptShell(const QString& initialCommandText,
 	setZValue(LAYER_COMMAND);
 	setItemCategory(Scene::MenuItemCategory);
 
-	CommandPromptV2::commandReceiver()->scene()->addTopLevelItem(this);
+	Prompt::commandReceiver()->scene()->addTopLevelItem(this);
 
 	setShellPosition(options);
 }
 
-void CommandPromptShell::initializeForms()
+void PromptShell::initializeForms()
 {
 	auto icon = item(&I::modeIcon_, [](I* v){return v->modeIconStyle_;});
 	auto inputItem = item(&I::inputItem_);
@@ -80,41 +80,41 @@ void CommandPromptShell::initializeForms()
 	auto errors = (new SequentialLayoutFormElement())
 			->setVertical()->setSpaceBetweenElements(3)
 			->setHasCursorWhenEmpty(false)
-			->setListOfItems([](Item* i) { return static_cast<CommandPromptShell*>(i)->errors_; });
+			->setListOfItems([](Item* i) { return static_cast<PromptShell*>(i)->errors_; });
 
 	addForm(grid({{prompt}, {errors}}));
 }
 
-void CommandPromptShell::setShellPosition(CommandPromptV2::PromptOptions options)
+void PromptShell::setShellPosition(Prompt::PromptOptions options)
 {
 	// Set the position
-	QPointF shellPos = CommandPromptV2::commandReceiver()->mapToScene(0, 0);
-	if (CommandPromptV2::commandReceiver()->heightInScene() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
+	QPointF shellPos = Prompt::commandReceiver()->mapToScene(0, 0);
+	if (Prompt::commandReceiver()->heightInScene() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
 	{
 		// Show the prompt under the receiver item.
-		shellPos.setY( shellPos.y() + CommandPromptV2::commandReceiver()->heightInScene()
+		shellPos.setY( shellPos.y() + Prompt::commandReceiver()->heightInScene()
 							 + PROMPT_TO_RECEIVER_DISTANCE);
 	}
 	else
 	{
 		// If the item is rather large show the prompt at the cursor
-		shellPos += CommandPromptV2::commandReceiverCursorPosition();
+		shellPos += Prompt::commandReceiverCursorPosition();
 	}
 	setPos(shellPos);
 
 	// Center the view
-	if (options.testFlag(CommandPromptV2::CenterViewOnPrompt)) centerViewOnShell();
+	if (options.testFlag(Prompt::CenterViewOnPrompt)) centerViewOnShell();
 
 	// Select the input
-	if (options.testFlag(CommandPromptV2::InputHasHint))
-		CommandPromptV2::mode()->setSelection(CommandPromptMode::All);
+	if (options.testFlag(Prompt::InputHasHint))
+		Prompt::mode()->setSelection(PromptMode::All);
 	else
-		CommandPromptV2::mode()->setSelection(CommandPromptMode::AtEnd);
+		Prompt::mode()->setSelection(PromptMode::AtEnd);
 }
 
-void CommandPromptShell::centerViewOnShell() const
+void PromptShell::centerViewOnShell() const
 {
-	for (auto v : CommandPromptV2::commandReceiver()->scene()->views())
+	for (auto v : Prompt::commandReceiver()->scene()->views())
 		if (auto mainView = dynamic_cast<Visualization::MainView*>(v))
 		{
 			mainView->centerOn(pos());
@@ -122,15 +122,15 @@ void CommandPromptShell::centerViewOnShell() const
 		}
 }
 
-void CommandPromptShell::setErrors(QList<Item*> errors)
+void PromptShell::setErrors(QList<Item*> errors)
 {
 	errors_=errors;
 	setUpdateNeeded(StandardUpdate);
 }
 
-void CommandPromptShell::determineChildren()
+void PromptShell::determineChildren()
 {
-	CommandPromptV2::mode()->onShellUpdate();
+	Prompt::mode()->onShellUpdate();
 	Super::determineChildren();
 }
 

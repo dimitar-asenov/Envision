@@ -88,14 +88,14 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CAddNodeToViewByName.h \
     src/commands/CAddNodeToView.h \
     src/handlers/HViewItem.h \
-    src/command_prompt/CommandPromptV2.h \
-    src/command_prompt/CommandPromptShell.h \
-    src/command_prompt/CommandPromptShellStyle.h \
-    src/command_prompt/CommandPromptTextInput.h \
-    src/command_prompt/CommandPromptTextInputStyle.h \
-    src/command_prompt/CommandPromptMode.h \
-    src/command_prompt/CommandMode.h \
-    src/command_prompt/HPromptShell.h
+    src/prompt/CommandMode.h \
+    src/prompt/HPromptShell.h \
+    src/prompt/Prompt.h \
+    src/prompt/PromptShell.h \
+    src/prompt/PromptTextInput.h \
+    src/prompt/PromptTextInputStyle.h \
+    src/prompt/PromptShellStyle.h \
+    src/prompt/PromptMode.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -176,11 +176,11 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CAddNodeToViewByName.cpp \
     src/commands/CAddNodeToView.cpp \
     src/handlers/HViewItem.cpp \
-    src/command_prompt/CommandPromptV2.cpp \
-    src/command_prompt/CommandPromptShell.cpp \
-    src/command_prompt/CommandPromptShellStyle.cpp \
-    src/command_prompt/CommandPromptTextInput.cpp \
-    src/command_prompt/CommandPromptTextInputStyle.cpp \
-    src/command_prompt/CommandPromptMode.cpp \
-    src/command_prompt/CommandMode.cpp \
-    src/command_prompt/HPromptShell.cpp
+    src/prompt/CommandMode.cpp \
+    src/prompt/HPromptShell.cpp \
+    src/prompt/Prompt.cpp \
+    src/prompt/PromptShell.cpp \
+    src/prompt/PromptTextInputStyle.cpp \
+    src/prompt/PromptTextInput.cpp \
+    src/prompt/PromptShellStyle.cpp \
+    src/prompt/PromptMode.cpp

@@ -31,10 +31,10 @@
 
 namespace Interaction {
 
-class CommandPromptShell;
-class CommandPromptMode;
+class PromptShell;
+class PromptMode;
 
-class INTERACTIONBASE_API CommandPromptV2
+class INTERACTIONBASE_API Prompt
 {
 	public:
 
@@ -60,8 +60,8 @@ class INTERACTIONBASE_API CommandPromptV2
 
 		static const QString& defaultModeName();
 
-		static CommandPromptMode* mode();
-		static CommandPromptShell* shell();
+		static PromptMode* mode();
+		static PromptShell* shell();
 
 		static Visualization::Item* commandReceiver();
 
@@ -70,31 +70,31 @@ class INTERACTIONBASE_API CommandPromptV2
 		static QPoint commandReceiverCursorPosition();
 
 	private:
-		static CommandPromptShell* shell_;
-		static CommandPromptMode* mode_;
+		static PromptShell* shell_;
+		static PromptMode* mode_;
 
 		static Visualization::Item* commandReceiver_;
 		static std::unique_ptr<Visualization::Cursor> commandReceiverCursor_;
 
-		using ModeConstructor = std::function<CommandPromptMode* ()>;
+		using ModeConstructor = std::function<PromptMode* ()>;
 		static QMap<QString, ModeConstructor>& modeRegistry();
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(CommandPromptV2::PromptOptions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Prompt::PromptOptions)
 
-inline bool CommandPromptV2::isVisible() { return mode_; }
-inline CommandPromptMode* CommandPromptV2::mode() { return mode_; }
-inline CommandPromptShell* CommandPromptV2::shell() { return shell_; }
-inline Visualization::Item* CommandPromptV2::commandReceiver() { return commandReceiver_; }
-inline const std::unique_ptr<Visualization::Cursor>& CommandPromptV2::commandReceiverCursor()
+inline bool Prompt::isVisible() { return mode_; }
+inline PromptMode* Prompt::mode() { return mode_; }
+inline PromptShell* Prompt::shell() { return shell_; }
+inline Visualization::Item* Prompt::commandReceiver() { return commandReceiver_; }
+inline const std::unique_ptr<Visualization::Cursor>& Prompt::commandReceiverCursor()
 { return commandReceiverCursor_; }
-inline QPoint CommandPromptV2::commandReceiverCursorPosition()
+inline QPoint Prompt::commandReceiverCursorPosition()
 	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0); }
 
 template <class ModeType>
-inline void CommandPromptV2::registerMode(const QString& modeName)
+inline void Prompt::registerMode(const QString& modeName)
 {
 	Q_ASSERT(!modeRegistry().contains(modeName));
-	modeRegistry().insert(modeName, []()->CommandPromptMode* {return new ModeType();});
+	modeRegistry().insert(modeName, []()->PromptMode* {return new ModeType();});
 }
 
 }

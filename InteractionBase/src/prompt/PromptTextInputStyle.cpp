@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "HPromptShell.h"
-
-#include "CommandPromptV2.h"
-#include "CommandPromptMode.h"
+#include "PromptTextInputStyle.h"
 
 namespace Interaction {
 
-HPromptShell* HPromptShell::instance()
-{
-	static HPromptShell h;
-	return &h;
-}
-
-void HPromptShell::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
-		CommandPromptV2::mode()->onEnterKeyPress();
-	else if (event->key() == Qt::Key_Tab)
-		CommandPromptV2::mode()->onTabKeyPress();
-	else GenericHandler::keyPressEvent(target, event);
-}
+PromptTextInputStyle::~PromptTextInputStyle() {}
 
 }

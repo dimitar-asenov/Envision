@@ -36,7 +36,7 @@
 #include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"
 #include "InteractionBase/src/commands/CMerge.h"
-#include "InteractionBase/src/command_prompt/CommandPromptV2.h"
+#include "InteractionBase/src/prompt/Prompt.h"
 
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
@@ -89,7 +89,7 @@ void HProject::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
-		Interaction::CommandPromptV2::show(target);
+		Interaction::Prompt::show(target);
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

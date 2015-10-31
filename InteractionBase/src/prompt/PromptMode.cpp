@@ -24,18 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "PromptMode.h"
+#include "Prompt.h"
+#include "PromptShell.h"
 
-#include "../interactionbase_api.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/Text.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommandPromptShellStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+PromptMode::~PromptMode(){}
+
+void PromptMode::showErrors(QList<Visualization::Item*> errorItems) const
 {
-	public:
-		~CommandPromptShellStyle();
-};
+	Prompt::shell()->setErrors(errorItems);
+}
+
+void PromptMode::showErrors(QList<QString> errorMessages) const
+{
+	QList<Visualization::Item*> items;
+	for (auto text : errorMessages)
+		items.append( new Visualization::Text(Prompt::shell(),
+														  Visualization::Text::itemStyles().get("prompt-error"), text));
+
+	showErrors(items);
+}
+
+void PromptMode::onShellUpdate(){}
+void PromptMode::onEnterKeyPress(){}
+void PromptMode::onTabKeyPress(){}
 
 }

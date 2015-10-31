@@ -24,45 +24,61 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "PromptTextInput.h"
 
-#include "../interactionbase_api.h"
-#include "CommandPromptShellStyle.h"
-#include "CommandPromptV2.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class Static;
-	class StaticStyle;
-}
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/cursor/TextCursor.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommandPromptShell  : public Super<Visualization::DeclarativeItem<CommandPromptShell>>
+ITEM_COMMON_DEFINITIONS(PromptTextInput, "item")
+
+PromptTextInput::PromptTextInput(Item* parent, const QString& initialCommandText,
+															  const StyleType* style)
+	: Super{parent, style}, text_{ new Visualization::Text(this, &style->text())}
 {
-	ITEM_COMMON(CommandPromptShell)
+	text_->setText(initialCommandText);
+	setDefaultMoveCursorProxy(text_);
+}
 
-	public:
-		CommandPromptShell(const QString& initialCommandText,
-								 CommandPromptV2::PromptOptions options = CommandPromptV2::None,
-								 const StyleType* style = itemStyles().get());
+void PromptTextInput::initializeForms()
+{
+	addForm(item(&I::text_, [](I* v){return &v->style()->text();}));
+}
 
-		static void initializeForms();
+void PromptTextInput::determineChildren()
+{
+	Super::determineChildren();
+	text_->setEditable(true);
+}
 
-		void setErrors(QList<Item*> errors);
+void PromptTextInput::setSelection(PromptMode::InputSelection selection)
+{
+	switch (selection){
+		case PromptMode::None: return;
+		case PromptMode::All:
+		{
+			text_->moveCursor();
+			text_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+		} break;
+		case PromptMode::AtEnd:
+		{
+			text_->moveCursor();
+			text_->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(text_->text().size());
+		} break;
+		default:
+			Q_ASSERT(false);
+	}
+}
 
-	protected:
-		virtual void determineChildren() override;
+QString PromptTextInput::text() const
+{
+	return text_->text();
+}
 
-	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-
-		void setShellPosition(CommandPromptV2::PromptOptions options);
-		void centerViewOnShell() const;
-};
+void PromptTextInput::setText(const QString& text)
+{
+	text_->setText(text);
+}
 
 }

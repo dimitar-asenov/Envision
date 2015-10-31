@@ -24,10 +24,36 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandPromptShellStyle.h"
+#pragma once
+
+#include "../interactionbase_api.h"
+#include "PromptTextInputStyle.h"
+#include "PromptMode.h"
+
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Interaction {
 
-CommandPromptShellStyle::~CommandPromptShellStyle() {}
+class INTERACTIONBASE_API PromptTextInput : public Super<Visualization::DeclarativeItem<PromptTextInput>>
+{
+	ITEM_COMMON(PromptTextInput)
+
+	public:
+		PromptTextInput(Item* parent, const QString& initialCommandText = {},
+									  const StyleType* style = itemStyles().get());
+
+	static void initializeForms();
+
+	virtual void determineChildren() override;
+
+	void setSelection(PromptMode::InputSelection selection);
+
+	QString text() const;
+	void setText(const QString& text);
+
+	private:
+		Visualization::Text* text_{};
+};
 
 }

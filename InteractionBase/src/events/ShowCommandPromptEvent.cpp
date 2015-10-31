@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "ShowCommandPromptEvent.h"
-#include "../command_prompt/CommandPromptV2.h"
+#include "../prompt/Prompt.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
@@ -42,7 +42,7 @@ void ShowCommandPromptEvent::execute()
 {
 	if (scene_ && scene_->mainCursor() && scene_->mainCursor()->owner())
 	{
-		CommandPromptV2::show(scene_->mainCursor()->owner());
+		Prompt::show(scene_->mainCursor()->owner());
 		scene_->scheduleUpdate();
 	}
 }

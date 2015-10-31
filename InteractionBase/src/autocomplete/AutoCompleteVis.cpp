@@ -28,7 +28,7 @@
 #include "AutoComplete.h"
 #include "AutoCompleteEntry.h"
 #include "../vis/TextAndDescription.h"
-#include "../command_prompt/CommandPromptShell.h"
+#include "../prompt/PromptShell.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
@@ -129,7 +129,7 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 		// Check if this is a command prompt
 		auto root = itemToUseForPosition;
 		while (root->parent()) root = root->parent();
-		if (DCast<CommandPromptShell>(root))
+		if (DCast<PromptShell>(root))
 			itemToUseForPosition = root;
 
 		setPos(itemToUseForPosition->scenePos().toPoint() +

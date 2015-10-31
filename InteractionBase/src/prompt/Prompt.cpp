@@ -24,37 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandPromptV2.h"
-#include "CommandPromptShell.h"
-#include "CommandPromptMode.h"
+#include "Prompt.h"
+#include "PromptShell.h"
+#include "PromptMode.h"
 #include "../autocomplete/AutoComplete.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
 namespace Interaction {
 
-CommandPromptShell* CommandPromptV2::shell_{};
-Visualization::Item* CommandPromptV2::commandReceiver_{};
-CommandPromptMode* CommandPromptV2::mode_{};
-std::unique_ptr<Visualization::Cursor> CommandPromptV2::commandReceiverCursor_{};
+PromptShell* Prompt::shell_{};
+Visualization::Item* Prompt::commandReceiver_{};
+PromptMode* Prompt::mode_{};
+std::unique_ptr<Visualization::Cursor> Prompt::commandReceiverCursor_{};
 
-QMap<QString, CommandPromptV2::ModeConstructor>& CommandPromptV2::modeRegistry()
+QMap<QString, Prompt::ModeConstructor>& Prompt::modeRegistry()
 {
 	static QMap<QString, ModeConstructor> map;
 	return map;
 }
 
-const QString& CommandPromptV2::defaultModeName()
+const QString& Prompt::defaultModeName()
 {
 	static QString def{"command"};
 	return def;
 }
 
-void CommandPromptV2::show(Visualization::Item* commandReceiver, QString initialCommandText, PromptOptions options)
+void Prompt::show(Visualization::Item* commandReceiver, QString initialCommandText, PromptOptions options)
 {
 	show({}, commandReceiver, initialCommandText, options );
 }
 
-void CommandPromptV2::show(const QString& modeName, Visualization::Item* commandReceiver, QString initialCommandText,
+void Prompt::show(const QString& modeName, Visualization::Item* commandReceiver, QString initialCommandText,
 									PromptOptions options)
 {
 	Q_ASSERT(!shell_ && !mode_);
@@ -72,10 +72,10 @@ void CommandPromptV2::show(const QString& modeName, Visualization::Item* command
 	mode_ = (*modeEntryIt)();
 	Q_ASSERT(mode_);
 
-	shell_ = new CommandPromptShell(initialCommandText, options);
+	shell_ = new PromptShell(initialCommandText, options);
 }
 
-void CommandPromptV2::hide()
+void Prompt::hide()
 {
 	if (isVisible())
 	{

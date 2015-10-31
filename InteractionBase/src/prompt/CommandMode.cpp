@@ -25,8 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "CommandMode.h"
-#include "CommandPromptTextInput.h"
-#include "CommandPromptV2.h"
+#include "PromptTextInput.h"
+#include "Prompt.h"
 
 #include "../autocomplete/AutoComplete.h"
 #include "../handlers/GenericHandler.h"
@@ -48,7 +48,7 @@ Visualization::Item* CommandMode::createInputItem(const QString& initialCommandT
 {
 	auto commandText = initialCommandText;
 	if (commandText.isNull()) commandText = TYPE_HINT;
-	inputItem_ = new CommandPromptTextInput(nullptr, commandText);
+	inputItem_ = new PromptTextInput(nullptr, commandText);
 	return inputItem_;
 }
 
@@ -72,7 +72,7 @@ void CommandMode::updateSuggestions()
 	removeSuggestions();
 	QString text = inputItem_->text() == TYPE_HINT ? "" : inputItem_->text();
 	addSuggestions( GenericHandler::executionEngine()->autoComplete(
-							 CommandPromptV2::commandReceiver(), text, CommandPromptV2::commandReceiverCursor()));
+							 Prompt::commandReceiver(), text, Prompt::commandReceiverCursor()));
 }
 
 void CommandMode::addSuggestions(QList<CommandSuggestion*> suggestions)
@@ -91,7 +91,7 @@ void CommandMode::removeSuggestions()
 void CommandMode::showAutocompleteBasedOnSuggestions()
 {
 	auto executeFunction = [this](AutoCompleteEntry* e){
-		if (CommandPromptV2::mode() == this)
+		if (Prompt::mode() == this)
 		{
 			takeSuggestion(static_cast<CommandSuggestion*>(e));
 			onEnterKeyPress();
@@ -102,7 +102,7 @@ void CommandMode::showAutocompleteBasedOnSuggestions()
 		for (auto& s : suggestions_) entries.append(new AutoCompleteEntry(s->text(), s->description(),
 				s->visualization(), executeFunction));
 
-	if (entries.isEmpty() || CommandPromptV2::mode() != this)
+	if (entries.isEmpty() || Prompt::mode() != this)
 		AutoComplete::hide();
 	else
 		AutoComplete::show(entries, true);
@@ -111,7 +111,7 @@ void CommandMode::showAutocompleteBasedOnSuggestions()
 void CommandMode::takeSuggestion(CommandSuggestion* suggestion)
 {
 	inputItem_->setText(suggestion->text());
-	inputItem_->setSelection(CommandPromptMode::AtEnd);
+	inputItem_->setSelection(PromptMode::AtEnd);
 }
 
 void CommandMode::onTabKeyPress()
@@ -121,11 +121,11 @@ void CommandMode::onTabKeyPress()
 
 void CommandMode::onEnterKeyPress()
 {
-	CommandPromptV2::commandReceiver()->execute( inputItem_->text(), CommandPromptV2::commandReceiverCursor());
+	Prompt::commandReceiver()->execute( inputItem_->text(), Prompt::commandReceiverCursor());
 
 	auto result = GenericHandler::executionEngine()->result();
 
-	if ( result->code() == CommandResult::OK) CommandPromptV2::hide();
+	if ( result->code() == CommandResult::OK) Prompt::hide();
 	else
 	{
 		QList<Visualization::Item*> errorItems;

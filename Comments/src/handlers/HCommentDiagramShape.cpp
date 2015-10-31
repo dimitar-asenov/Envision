@@ -28,7 +28,7 @@
 #include "items/VCommentDiagram.h"
 #include "commands/CShapeSetProperty.h"
 
-#include "InteractionBase/src/command_prompt/CommandPromptV2.h"
+#include "InteractionBase/src/prompt/Prompt.h"
 
 namespace Comments {
 
@@ -116,7 +116,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 		else if (event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier)
 		{
 			event->accept();
-			Interaction::CommandPromptV2::show(target);
+			Interaction::Prompt::show(target);
 		}
 
 		vDiagram->node()->endModification();

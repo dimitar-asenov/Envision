@@ -24,33 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandPromptMode.h"
-#include "CommandPromptV2.h"
-#include "CommandPromptShell.h"
+#pragma once
 
-#include "VisualizationBase/src/items/Text.h"
+#include "../interactionbase_api.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
 
 namespace Interaction {
 
-CommandPromptMode::~CommandPromptMode(){}
-
-void CommandPromptMode::showErrors(QList<Visualization::Item*> errorItems) const
+class INTERACTIONBASE_API PromptTextInputStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	CommandPromptV2::shell()->setErrors(errorItems);
-}
+	public:
+		~PromptTextInputStyle();
 
-void CommandPromptMode::showErrors(QList<QString> errorMessages) const
-{
-	QList<Visualization::Item*> items;
-	for (auto text : errorMessages)
-		items.append( new Visualization::Text(CommandPromptV2::shell(),
-														  Visualization::Text::itemStyles().get("prompt-error"), text));
-
-	showErrors(items);
-}
-
-void CommandPromptMode::onShellUpdate(){}
-void CommandPromptMode::onEnterKeyPress(){}
-void CommandPromptMode::onTabKeyPress(){}
+		Property<Visualization::TextStyle> text{this, "text"};
+};
 
 }

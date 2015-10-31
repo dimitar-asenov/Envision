@@ -31,8 +31,8 @@
 #include "commands/CommandExecutionEngine.h"
 #include "actions/Action.h"
 #include "actions/ActionPrompt.h"
-#include "../command_prompt/CommandPromptV2.h"
-#include "../command_prompt/CommandPromptShell.h"
+#include "../prompt/Prompt.h"
+#include "../prompt/PromptShell.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
@@ -368,27 +368,27 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			if (!moved) InteractionHandler::keyPressEvent(target, event);
 		}
 	}
-	else if (event->key() == Qt::Key_Escape && (AutoComplete::isVisible() || CommandPromptV2::isVisible()))
+	else if (event->key() == Qt::Key_Escape && (AutoComplete::isVisible() || Prompt::isVisible()))
 	{
 		event->accept();
 
-		if (CommandPromptV2::isVisible()) CommandPromptV2::hide();
+		if (Prompt::isVisible()) Prompt::hide();
 		if (AutoComplete::isVisible()) AutoComplete::hide();
 	}
 	else if ( ((event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape) // Regular command prompt
 				  || (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F)) // Find command
 
-			&& !(actionPrompt_ && actionPrompt_->isVisible()) && !CommandPromptV2::isVisible())
+			&& !(actionPrompt_ && actionPrompt_->isVisible()) && !Prompt::isVisible())
 	{
 		event->accept();
 
 		// Only show the command prompt if this event was not received within it.
-		if (event->key() == Qt::Key_Escape) CommandPromptV2::show(target);
-		else if (event->modifiers() == Qt::ControlModifier) CommandPromptV2::show(target, "find ");
+		if (event->key() == Qt::Key_Escape) Prompt::show(target);
+		else if (event->modifiers() == Qt::ControlModifier) Prompt::show(target, "find ");
 		else Q_ASSERT(false);
 	}
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
-			&& !CommandPromptV2::isVisible())
+			&& !Prompt::isVisible())
 	{
 		event->accept();
 
@@ -639,7 +639,7 @@ void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsScene
 
 void GenericHandler::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (isClick(target) && event->button() == Qt::RightButton) CommandPromptV2::show(target);
+	if (isClick(target) && event->button() == Qt::RightButton) Prompt::show(target);
 }
 
 void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
