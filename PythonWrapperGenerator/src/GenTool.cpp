@@ -53,7 +53,7 @@ void GenTool::run()
 {
 	auto pathToNamespaceMap = Config::instance().subdirsToNamespaceMap();
 
-	for (auto project : projects_)
+	for (const auto& project : projects_)
 	{
 		APIData::instance().includePrefix_ = project.split(QDir::separator(),
 																			QString::SplitBehavior::SkipEmptyParts).last();
@@ -62,10 +62,9 @@ void GenTool::run()
 		{
 			APIData::instance().namespaceName_ = it.value();
 			std::cout << "Start processing project :" << project.toStdString() << std::endl;
-			auto tool = std::make_unique<clang::tooling::ClangTool>
-					(*compilationDbMap_.value(project), *sourcesMap_.value(project));
-			auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>();
-			tool->run(frontendActionFactory.get());
+			clang::tooling::ClangTool tool (*compilationDbMap_.value(project), sourcesMap_[project]);
+			ClangFrontEndActionFactory frontendActionFactory;
+			tool.run(&frontendActionFactory);
 		}
 	}
 
@@ -99,9 +98,8 @@ void GenTool::initPath(const QString& sourcePath)
 void GenTool::readInFiles(const QString& sourcePath)
 {
 	QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
-	auto sources = std::make_shared<std::vector<std::string>>();
-	while (dirIterator.hasNext()) sources->push_back(dirIterator.next().toStdString());
-	sourcesMap_.insert(sourcePath, sources);
+	auto& sources = sourcesMap_[sourcePath];
+	while (dirIterator.hasNext()) sources.push_back(dirIterator.next().toStdString());
 }
 
 void GenTool::setCompilationDbPath(const QString& sourcePath)

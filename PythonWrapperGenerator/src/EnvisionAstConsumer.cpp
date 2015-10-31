@@ -48,8 +48,7 @@ EnvisionAstConsumer::EnvisionAstConsumer(clang::CompilerInstance& ci, QString cu
 void EnvisionAstConsumer::Initialize(clang::ASTContext&)
 {
 	compilerInstance_.getPreprocessor().addPPCallbacks(
-				std::make_unique<EnvisionPPCallbacks>(compilerInstance_.getSourceManager(),
-																  currentFile_, attributes_, privateAttributes_));
+				std::make_unique<EnvisionPPCallbacks>(compilerInstance_.getSourceManager(), currentFile_, attributes_));
 	compilerInstance_.getPreprocessor().enableIncrementalProcessing();
 }
 
@@ -91,94 +90,30 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 		auto className = QString::fromStdString(classDecl->getNameAsString());
 		if (namespaceName == APIData::instance().namespaceName_ && className == currentClassName_)
 		{
-			// FIXME: find a better solution for statementitemlist, currently ignore it (because we don't wrap TypedList).
-			if (className == "StatementItemList") return;
-
 			QStringList bases = baseClasses(classDecl);
 			if (!allowedBases_.contains(bases[0])) return; // We only consider classes which have a base that we allow.
 
-			ClassData cData{className, QString::fromStdString(classDecl->getQualifiedNameAsString())};
-
-			for (auto base : classDecl->bases())
-				cData.baseClasses_ << TypeUtilities::typePtrToString(base.getType().getTypePtr());
-
-			QSet<QString> seenMethods;
-			QSet<QString> possibleAttributeSetters;
-			for (auto method : classDecl->methods())
+			auto cData = buildClassInfo(classDecl);
+			auto typedListIt = std::find_if(classDecl->bases_begin(), classDecl->bases_end(),
+				[](const clang::CXXBaseSpecifier& base)
+				{
+					auto baseName = TypeUtilities::typePtrToString(base.getType().getTypePtr());
+					return baseName.contains("TypedList");
+				});
+			if (typedListIt != classDecl->bases_end())
 			{
-				QString methodName = QString::fromStdString(method->getNameAsString());
-				if (seenMethods.contains(methodName)) continue;
-
-				auto it = attributes_.find(methodName);
-				if (it != attributes_.end())
+				// Parse TypedList base class as well, this is usually in the form Reclect<TypedList<T>>
+				// Therefore we extract the bases first template parameter and assume that it is the TypedList.
+				auto baseDecl = typedListIt->getType().getTypePtr()->getAsCXXRecordDecl();
+				if (auto templateClass = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(baseDecl))
 				{
-					cData.attributes_.append(attribute(it.key(), it.value(), cData.qualifiedName_, method));
-					seenMethods << it.key() << it.value();
-				}
-				else
-				{
-					// ignore private attributes:
-					auto privateIt = privateAttributes_.find(methodName);
-					if (privateIt != privateAttributes_.end())
-						seenMethods << methodName << privateIt.value();
-					else if (methodName.startsWith("set"))
-						possibleAttributeSetters << methodName;
+					auto typedListDecl = templateClass->getTemplateInstantiationArgs()[0]
+							.getAsType().getTypePtr()->getAsCXXRecordDecl();
+					APIData::instance().insertClassData(buildClassInfo(typedListDecl), baseClasses(typedListDecl));
 				}
 			}
-			QMultiHash<QString, clang::CXXMethodDecl*> overloads;
-			// check if we have some more attributes which don't have an attribute macro:
-			for (auto method : classDecl->methods())
-			{
-				// Ignore de-/constructors & deleted methods & overloaded operators:
-				if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
-				if (method->isDeleted()) continue;
-				if (method->isOverloadedOperator()) continue;
 
-				QString methodName = QString::fromStdString(method->getNameAsString());
-				if (method->getAccess() != clang::AccessSpecifier::AS_public ||
-					 method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate ||
-					 // workaround since we only consider cpp files at the moment:
-					 methodName == "firstAncestorOfType")
-				{
-					// For wrapping methods we should still consider non public and template methods for overload resolution.
-					overloads.insertMulti(methodName, method);
-					continue;
-				}
-				if (seenMethods.contains(methodName)) continue;
-
-				if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
-
-				if (possibleAttributeSetters.contains(methodName)) continue;
-				for (QString setterName : possibleAttributeSetters)
-				{
-					QString possibleGetterName = setterName.mid(4); // drop set and first letter
-					possibleGetterName.prepend(setterName[3].toLower());
-					if (methodName == possibleGetterName)
-					{
-						// Found another attribute:
-						cData.attributes_.append(attribute(methodName, setterName, cData.qualifiedName_, method));
-						seenMethods << setterName << methodName;
-						break;
-					}
-				}
-				if (!seenMethods.contains(methodName))
-				{
-					// found a free standing method to export.
-					cData.methods_.append({methodName, functionStringFor(methodName, cData.qualifiedName_, method),
-												  method->isStatic()});
-					overloads.insertMulti(methodName, method);
-				}
-			}
-			resolveOverloads(cData, overloads);
-
-			// Add enums which are declared in this class:
-			for (auto pEnum : processedEnums_)
-			{
-				QStringList names = pEnum.qualifiedName_.split("::");
-				if (names[names.size()-2] == className)
-					cData.enums_ << pEnum;
-			}
-			processedEnums_.clear();
+			addClassEnums(cData);
 			// Add class to api structure
 			APIData::instance().addIncludeFile(QString::fromStdString(currentFile_));
 			cData.abstract_ = classDecl->isAbstract();
@@ -198,7 +133,8 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 		// Remove non-public and templated methods.
 		values.erase(std::remove_if(values.begin(), values.end(), [](const clang::CXXMethodDecl* method) {
 			return method->getAccess() != clang::AccessSpecifier::AS_public ||
-					method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate;
+					(method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate &&
+					 method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_MemberSpecialization);
 		}), values.end());
 		if (values.isEmpty()) continue;
 
@@ -208,7 +144,7 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 				return descriptor.name_ == key;
 		}), cData.methods_.end());
 
-		QString functionAddress = QString("&%1::%2").arg(cData.qualifiedName_, key);
+		QString functionAddress = QString("&%1::%2").arg(cData.methodAddressPrefix(), key);
 		for (int i = 0; i < values.size(); ++i)
 		{
 			auto method = values[i];
@@ -280,6 +216,97 @@ QStringList EnvisionAstConsumer::baseClasses(clang::CXXRecordDecl* classDecl)
 	return result;
 }
 
+ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
+{
+	auto className = QString::fromStdString(classDecl->getNameAsString());
+	auto qualifiedName = QString::fromStdString(classDecl->getQualifiedNameAsString());
+
+	bool isTemplate = false;
+	if (auto templatedDecl = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(classDecl))
+	{
+		auto argDecl = templatedDecl->getTemplateInstantiationArgs()[0].getAsType().getTypePtr()->getAsCXXRecordDecl();
+		auto argName = QString::fromStdString(argDecl->getNameAsString());
+		auto qualifiedArg = QString::fromStdString(argDecl->getQualifiedNameAsString());
+		qualifiedName.append(QString("<%1>").arg(qualifiedArg));
+		className.append("Of" + argName);
+		isTemplate = true;
+	}
+
+	ClassData cData{className, qualifiedName};
+	if (isTemplate)
+		cData.usingAlias_ = className;
+
+	addBases(cData, classDecl);
+
+	QSet<QString> seenMethods;
+	QSet<QString> possibleAttributeSetters;
+	for (auto method : classDecl->methods())
+	{
+		QString methodName = QString::fromStdString(method->getNameAsString());
+		if (seenMethods.contains(methodName)) continue;
+
+		auto it = attributes_.find(methodName);
+		if (it != attributes_.end())
+		{
+			cData.attributes_.append(attribute(it.key(), it.value(), cData.qualifiedName_, method));
+			seenMethods << it.key() << it.value();
+		}
+		else if (methodName.size() > 3 && methodName.startsWith("set"))
+		{
+			possibleAttributeSetters << methodName;
+		}
+	}
+	QMultiHash<QString, clang::CXXMethodDecl*> overloads;
+	// check if we have some more attributes which don't have an attribute macro:
+	for (auto method : classDecl->methods())
+	{
+		// Ignore de-/constructors & deleted methods & overloaded operators:
+		if (llvm::isa<clang::CXXConstructorDecl>(method) || llvm::isa<clang::CXXDestructorDecl>(method)) continue;
+		if (method->isDeleted()) continue;
+		if (method->isOverloadedOperator()) continue;
+
+		QString methodName = QString::fromStdString(method->getNameAsString());
+		if (method->getAccess() != clang::AccessSpecifier::AS_public ||
+			 (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate &&
+			  method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_MemberSpecialization) ||
+			 // workaround since we only consider cpp files at the moment:
+			 methodName == "firstAncestorOfType")
+		{
+			// For wrapping methods we should still consider non public and template methods for overload resolution.
+			overloads.insertMulti(methodName, method);
+			continue;
+		}
+		if (seenMethods.contains(methodName)) continue;
+
+		if (TypeUtilities::typePtrToString(method->getReturnType().getTypePtr()).contains("iterator")) continue;
+
+		if (possibleAttributeSetters.contains(methodName)) continue;
+		bool usedAsAttribute = false;
+		for (const QString& setterName : possibleAttributeSetters)
+		{
+			QString possibleGetterName = setterName.mid(4); // drop set and first letter
+			possibleGetterName.prepend(setterName[3].toLower());
+			if (methodName == possibleGetterName)
+			{
+				// Found another attribute:
+				cData.attributes_.append(attribute(methodName, setterName, cData.qualifiedName_, method));
+				seenMethods << setterName << methodName;
+				usedAsAttribute = true;
+				break;
+			}
+		}
+		if (!usedAsAttribute)
+		{
+			// found a free standing method to export.
+			cData.methods_.append({methodName, functionStringFor(methodName, cData.methodAddressPrefix(), method),
+										  method->isStatic()});
+			overloads.insertMulti(methodName, method);
+		}
+	}
+	resolveOverloads(cData, overloads);
+	return cData;
+}
+
 void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)
 {
 	QString fullName = TypeUtilities::typePtrToString(type);
@@ -287,8 +314,27 @@ void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)
 	{
 		static QRegularExpression typedListMatcher("([^<]+)<([\\w<>:]+)>");
 		auto match = typedListMatcher.match(fullName);
-		Q_ASSERT(match.hasMatch());
-		QString itemType = match.captured(2);
-		APIData::instance().insertTypeList(itemType);
+		if (match.hasMatch())
+		{
+			QString itemType = match.captured(2);
+			APIData::instance().insertTypeList(itemType);
+		}
 	}
+}
+
+void EnvisionAstConsumer::addClassEnums(ClassData& cData)
+{
+	for (const auto& pEnum : processedEnums_)
+	{
+		QStringList names = pEnum.qualifiedName_.split("::");
+		if (names[names.size()-2] == cData.className_)
+			cData.enums_ << pEnum;
+	}
+	processedEnums_.clear();
+}
+
+void EnvisionAstConsumer::addBases(ClassData& cData, const clang::CXXRecordDecl* classDecl)
+{
+	for (auto base : classDecl->bases())
+		cData.baseClasses_ << TypeUtilities::typePtrToString(base.getType().getTypePtr());
 }

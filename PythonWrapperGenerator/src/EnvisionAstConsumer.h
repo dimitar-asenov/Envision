@@ -60,7 +60,6 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		std::string currentFile_;
 
 		QHash<QString,QString> attributes_;
-		QHash<QString,QString> privateAttributes_;
 
 		QSet<clang::TagDecl*> seenDecls_;
 		QList<EnumData> processedEnums_;
@@ -77,5 +76,8 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 
 		QStringList baseClasses(clang::CXXRecordDecl* classDecl);
 
+		ClassData buildClassInfo(clang::CXXRecordDecl* classDecl);
 		void checkForTypedList(const clang::Type* type);
+		void addClassEnums(ClassData& cData);
+		static void addBases(ClassData& cData, const clang::CXXRecordDecl* classDecl);
 };

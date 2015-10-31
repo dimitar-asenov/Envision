@@ -31,9 +31,8 @@
 #include <clang/Lex/MacroArgs.h>
 
 EnvisionPPCallbacks::EnvisionPPCallbacks(clang::SourceManager& srcManager, std::string fileName,
-													  QHash<QString, QString>& attributes,
-													  QHash<QString, QString>& privateAttributes)
-	: sourceManager_{srcManager}, fileName_{fileName}, attributes_{attributes}, privateAttributes_{privateAttributes} {}
+													  QHash<QString, QString>& attributes)
+	: sourceManager_{srcManager}, fileName_{fileName}, attributes_{attributes} {}
 
 void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const clang::MacroDefinition&,
 													clang::SourceRange range, const clang::MacroArgs *Args)
@@ -41,9 +40,7 @@ void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const c
 	// We only care about ATTRIBUTE macros:
 	if (MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE" ||
 		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_VALUE_CUSTOM_RETURN" ||
-		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_VALUE" ||
-		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_PRIVATE" ||
-		 MacroNameTok.getIdentifierInfo()->getName() == "PRIVATE_ATTRIBUTE_VALUE")
+		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_VALUE")
 	{
 		// We only care about ATTRIBUTES in the currentFile:
 		if (sourceManager_.getFilename(range.getBegin()) != fileName_) return;
@@ -53,11 +50,7 @@ void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const c
 		auto attributeName = QString::fromStdString(Args->getUnexpArgument(1u)->getIdentifierInfo()->getName().str());
 		auto attributeSetter = QString::fromStdString(Args->getUnexpArgument(2u)->getIdentifierInfo()->getName().str());
 
-		if (MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_PRIVATE" ||
-			 MacroNameTok.getIdentifierInfo()->getName() == "PRIVATE_ATTRIBUTE_VALUE")
-			privateAttributes_.insert(attributeName, attributeSetter);
-		else
-			attributes_.insert(attributeName, attributeSetter);
+		attributes_.insert(attributeName, attributeSetter);
 	}
 	else if (MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_OOP_NAME_SYMBOL")
 	{

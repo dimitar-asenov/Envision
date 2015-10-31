@@ -70,8 +70,13 @@ struct ClassData
 		QList<ClassAttribute> attributes_;
 		QList<ClassMethod> methods_;
 		QList<EnumData> enums_;
+		QString usingAlias_{};
 		bool abstract_{false};
+
+		QString methodAddressPrefix() const;
 };
+
+inline QString ClassData::methodAddressPrefix() const { return usingAlias_.isNull() ? qualifiedName_ : usingAlias_; }
 
 struct ClassDataNode;
 
