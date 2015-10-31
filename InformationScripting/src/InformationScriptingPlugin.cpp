@@ -27,12 +27,6 @@
 #include "InformationScriptingPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
-#include "OOModel/src/declarations/Method.h"
-#include "OOModel/src/declarations/Class.h"
-
 #include "commands/CScript.h"
 #include "helpers/BoostPythonHelpers.h"
 #include "queries/ScriptQuery.h"
@@ -50,13 +44,24 @@
 #include "visualization/VEmptyQueryNode.h"
 #include "visualization/VOperatorQueryNode.h"
 #include "handlers/HQuery.h"
+#include "query_prompt/QueryPromptMode.h"
 
 #include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
+
+#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Class.h"
+
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "InteractionBase/src/prompt/Prompt.h"
+
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace InformationScripting {
 
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 {
+	Core::TypeRegistry::initializeNewTypes();
+
 	BoostPythonHelpers::initializeConverters();
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CScript());
 	ScriptQuery::initPythonEnvironment();
@@ -81,6 +86,11 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 		{ return DCast<QueryNode>(item->node());});
 	OOInteraction::StringOffsetProvider::allowGridBasedProvider([](Visualization::Item* item)
 		{ return DCast<Model::TypedList<QueryNode>>(item->node());});
+
+	// Register the query prompt
+	Interaction::Prompt::registerMode<QueryPromptMode>("query");
+	Interaction::Prompt::registerPromptShowShortcut(Qt::Key_Q,
+		[](Visualization::Item* target){Interaction::Prompt::show("query", target);});
 
 	return true;
 }

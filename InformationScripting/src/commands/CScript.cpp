@@ -42,9 +42,6 @@
 #include "../parsing/QueryParser.h"
 #include "../parsing/QueryParsingException.h"
 
-#include "../visualization/QueryPrompt.h"
-
-
 namespace InformationScripting {
 
 CScript::CScript() : Command{"script"} {}
@@ -69,21 +66,15 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	QString command = args[0];
 	args = args.mid(1);
 
-	if (command == "x")
-	{
-		new QueryPrompt(source);
+	args.prepend(command);
+	QueryExecutor* queryExecutor = new QueryExecutor();
+	try {
+		QueryParser::buildQueryFrom(args.join(""), node, queryExecutor);
+	} catch (const QueryParsingException& e) {
+		return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 	}
-	else
-	{
-		args.prepend(command);
-		QueryExecutor* queryExecutor = new QueryExecutor();
-		try {
-			QueryParser::buildQueryFrom(args.join(""), node, queryExecutor);
-		} catch (const QueryParsingException& e) {
-			return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
-		}
-		return queryExecutor->execute();
-	}
+	return queryExecutor->execute();
+
 	return new Interaction::CommandResult();
 }
 

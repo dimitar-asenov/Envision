@@ -67,14 +67,14 @@ class INTERACTIONBASE_API PromptMode
 		 *
 		 * The default implementation does nothing.
 		 */
-		virtual void onEnterKeyPress();
+		virtual void onEnterKeyPress(Qt::KeyboardModifiers modifiers);
 
 		/**
 		 * Called when the handler of the prompt's shell detects a TAB key press.
 		 *
 		 * The default implementaiton does nothing.
 		 */
-		virtual void onTabKeyPress();
+		virtual void onTabKeyPress(Qt::KeyboardModifiers modifiers);
 
 	protected:
 

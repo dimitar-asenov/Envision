@@ -35,14 +35,11 @@
 #include "../commands/CommandResult.h"
 #include "../vis/TextAndDescription.h"
 
-
 #include "VisualizationBase/src/items/Static.h"
 
 namespace Interaction {
 
 const QString TYPE_HINT = "Type a command";
-
-CommandMode::~CommandMode() {}
 
 Visualization::Item* CommandMode::createInputItem(const QString& initialCommandText)
 {
@@ -94,7 +91,7 @@ void CommandMode::showAutocompleteBasedOnSuggestions()
 		if (Prompt::mode() == this)
 		{
 			takeSuggestion(static_cast<CommandSuggestion*>(e));
-			onEnterKeyPress();
+			onEnterKeyPress(Qt::NoModifier);
 		}
 	};
 
@@ -114,12 +111,12 @@ void CommandMode::takeSuggestion(CommandSuggestion* suggestion)
 	inputItem_->setSelection(PromptMode::AtEnd);
 }
 
-void CommandMode::onTabKeyPress()
+void CommandMode::onTabKeyPress(Qt::KeyboardModifiers)
 {
 	if (suggestions_.size() == 1) takeSuggestion(suggestions_[0].get());
 }
 
-void CommandMode::onEnterKeyPress()
+void CommandMode::onEnterKeyPress(Qt::KeyboardModifiers)
 {
 	Prompt::commandReceiver()->execute( inputItem_->text(), Prompt::commandReceiverCursor());
 

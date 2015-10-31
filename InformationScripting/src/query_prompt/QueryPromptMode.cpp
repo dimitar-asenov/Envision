@@ -23,49 +23,34 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#include "QueryPromptMode.h"
+#include "QueryPromptInput.h"
 
-#pragma once
+#include "VisualizationBase/src/items/Static.h"
 
-#include "../interactionbase_api.h"
-#include "PromptShellStyle.h"
-#include "Prompt.h"
+namespace InformationScripting {
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class Static;
-	class StaticStyle;
+Visualization::Item* QueryPromptMode::createInputItem(const QString&)
+{
+	inputItem_ = new QueryPromptInput(nullptr);
+	return inputItem_;
 }
 
-namespace Interaction {
-
-class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
+Visualization::StaticStyle* QueryPromptMode::modeIcon() const
 {
-	ITEM_COMMON(PromptShell)
+	return Visualization::Static::itemStyles().get("query-prompt-mode");
+}
 
-	public:
-		PromptShell(const QString& initialCommandText,
-								 Prompt::PromptOptions options = Prompt::None,
-								 const StyleType* style = itemStyles().get());
+void QueryPromptMode::setSelection(InputSelection selection)
+{
+	inputItem_->setSelection(selection);
+}
 
-		static void initializeForms();
-
-		void setErrors(QList<Item*> errors);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0) override;
-
-	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-		Prompt::PromptOptions promptOptions_{};
-		bool initialUpdate_{true};
-
-		void setShellPosition();
-		void centerViewOnShell() const;
-};
+void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
+{
+	//TODO@Lukas Implement this. Essentially you'll need to convert the Nodes to a query
+	//Get th nodes from inputItem_->query()
+	qDebug() << "TODO: Execute query";
+}
 
 }

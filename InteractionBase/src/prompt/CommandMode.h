@@ -38,20 +38,16 @@ class PromptTextInput;
 class INTERACTIONBASE_API CommandMode : public PromptMode
 {
 	public:
-		virtual ~CommandMode() override;
-
 		virtual Visualization::Item* createInputItem(const QString& initialCommandText) override;
 		virtual Visualization::StaticStyle* modeIcon() const override;
 
 		virtual void setSelection(InputSelection selection) override;
 
 		virtual void onShellUpdate() override;
-		virtual void onTabKeyPress() override;
-		virtual void onEnterKeyPress() override;
+		virtual void onTabKeyPress(Qt::KeyboardModifiers modifiers) override;
+		virtual void onEnterKeyPress(Qt::KeyboardModifiers modifiers) override;
 
 	private:
-		friend class HCommandMode;
-
 		PromptTextInput* inputItem_{};
 		std::vector<std::unique_ptr<CommandSuggestion>> suggestions_;
 

@@ -45,7 +45,6 @@ HEADERS += src/precompiled.h \
     src/nodes/CommandNode.h \
     src/nodes/CommandArgument.h \
     src/nodes/CompositeQueryNode.h \
-    src/visualization/QueryPrompt.h \
     src/nodes/QueryNodeContainer.h \
     src/visualization/VCommandNode.h \
     src/visualization/VCommandArgument.h \
@@ -72,7 +71,11 @@ HEADERS += src/precompiled.h \
     src/parsing/QueryParsingException.h \
     src/queries/BreakpointManager.h \
     src/queries/RuntimeQuery.h \
-    src/misc/AstModification.h
+    src/misc/AstModification.h \
+    src/query_prompt/QueryPromptInput.h \
+    src/query_prompt/QueryPromptMode.h \
+    src/query_prompt/QueryPromptInputStyle.h \
+    src/query_prompt/VQueryNodeContainer.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -101,7 +104,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/nodes/CommandNode.cpp \
     src/nodes/CommandArgument.cpp \
     src/nodes/CompositeQueryNode.cpp \
-    src/visualization/QueryPrompt.cpp \
     src/nodes/QueryNodeContainer.cpp \
     src/visualization/VCommandNode.cpp \
     src/visualization/VCommandArgument.cpp \
@@ -127,7 +129,11 @@ SOURCES += src/InformationScriptingException.cpp \
     src/parsing/QueryParsingException.cpp \
     src/queries/BreakpointManager.cpp \
     src/queries/RuntimeQuery.cpp \
-    src/misc/AstModification.cpp
+    src/misc/AstModification.cpp \
+    src/query_prompt/QueryPromptInput.cpp \
+    src/query_prompt/QueryPromptMode.cpp \
+    src/query_prompt/QueryPromptInputStyle.cpp \
+    src/query_prompt/VQueryNodeContainer.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

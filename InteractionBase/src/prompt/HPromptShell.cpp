@@ -39,10 +39,10 @@ HPromptShell* HPromptShell::instance()
 
 void HPromptShell::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
-		Prompt::mode()->onEnterKeyPress();
-	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab)
-		Prompt::mode()->onTabKeyPress();
+	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+		Prompt::mode()->onEnterKeyPress(event->modifiers());
+	else if (event->key() == Qt::Key_Tab)
+		Prompt::mode()->onTabKeyPress(event->modifiers());
 	else GenericHandler::keyPressEvent(target, event);
 }
 

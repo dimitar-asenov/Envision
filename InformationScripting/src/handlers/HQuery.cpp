@@ -119,7 +119,8 @@ void HQuery::initStringComponents()
 void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 {
 	auto key = static_cast<Qt::Key>(event->key());
-	if (key == Qt::Key_Right || key == Qt::Key_Left || key == Qt::Key_Up || key == Qt::Key_Down)
+	if (key == Qt::Key_Right || key == Qt::Key_Left || key == Qt::Key_Up || key == Qt::Key_Down ||
+		 (event->modifiers() != Qt::ControlModifier && (key == Qt::Key_Enter || key == Qt::Key_Return)))
 		return GenericHandler::keyPressEvent(target, event);
 
 	qDebug() << "keyPressed" << event;

@@ -23,49 +23,18 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-
 #pragma once
 
-#include "../interactionbase_api.h"
-#include "PromptShellStyle.h"
-#include "Prompt.h"
+#include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
-namespace Visualization {
-	class Static;
-	class StaticStyle;
-}
+namespace InformationScripting {
 
-namespace Interaction {
-
-class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
+class INFORMATIONSCRIPTING_API QueryPromptInputStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	ITEM_COMMON(PromptShell)
-
 	public:
-		PromptShell(const QString& initialCommandText,
-								 Prompt::PromptOptions options = Prompt::None,
-								 const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		void setErrors(QList<Item*> errors);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0) override;
-
-	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-		Prompt::PromptOptions promptOptions_{};
-		bool initialUpdate_{true};
-
-		void setShellPosition();
-		void centerViewOnShell() const;
+		virtual ~QueryPromptInputStyle() override;
 };
 
 }

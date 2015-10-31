@@ -24,48 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VQueryNodeContainer.h"
 
-#include "../interactionbase_api.h"
-#include "PromptShellStyle.h"
-#include "Prompt.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+namespace InformationScripting {
 
-namespace Visualization {
-	class Static;
-	class StaticStyle;
-}
+ITEM_COMMON_DEFINITIONS(VQueryNodeContainer, "item")
 
-namespace Interaction {
+VQueryNodeContainer::VQueryNodeContainer(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
 
-class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
+void VQueryNodeContainer::initializeForms()
 {
-	ITEM_COMMON(PromptShell)
-
-	public:
-		PromptShell(const QString& initialCommandText,
-								 Prompt::PromptOptions options = Prompt::None,
-								 const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		void setErrors(QList<Item*> errors);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0) override;
-
-	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-		Prompt::PromptOptions promptOptions_{};
-		bool initialUpdate_{true};
-
-		void setShellPosition();
-		void centerViewOnShell() const;
-};
-
+	addForm(item(&I::query_, [](I* v){ return v->node()->query();}));
 }
+
+} /* namespace InformationScripting */

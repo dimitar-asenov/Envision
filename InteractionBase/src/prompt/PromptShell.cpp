@@ -55,7 +55,7 @@ PromptShell::PromptShell(const QString& initialCommandText,
 													Prompt::PromptOptions options,
 													const StyleType* style)
 	: Super(nullptr, style), inputItem_{Prompt::mode()->createInputItem(initialCommandText)},
-	  modeIconStyle_{Prompt::mode()->modeIcon()}
+	  modeIconStyle_{Prompt::mode()->modeIcon()}, promptOptions_{options}
 {
 	Q_ASSERT(inputItem_);
 	inputItem_->setParentItem(this);
@@ -68,14 +68,15 @@ PromptShell::PromptShell(const QString& initialCommandText,
 
 	Prompt::commandReceiver()->scene()->addTopLevelItem(this);
 
-	setShellPosition(options);
+	setShellPosition();
 }
 
 void PromptShell::initializeForms()
 {
 	auto icon = item(&I::modeIcon_, [](I* v){return v->modeIconStyle_;});
 	auto inputItem = item(&I::inputItem_);
-	auto prompt = grid({{icon, inputItem}})->setHorizontalSpacing(5)->setVerticalSpacing(10);
+	auto prompt = grid({{icon, inputItem}})->setHorizontalSpacing(5)->setVerticalSpacing(10)
+			->setVerticalAlignment(LayoutStyle::Alignment::Center);
 
 	auto errors = (new SequentialLayoutFormElement())
 			->setVertical()->setSpaceBetweenElements(3)
@@ -85,7 +86,7 @@ void PromptShell::initializeForms()
 	addForm(grid({{prompt}, {errors}}));
 }
 
-void PromptShell::setShellPosition(Prompt::PromptOptions options)
+void PromptShell::setShellPosition()
 {
 	// Set the position
 	QPointF shellPos = Prompt::commandReceiver()->mapToScene(0, 0);
@@ -103,13 +104,7 @@ void PromptShell::setShellPosition(Prompt::PromptOptions options)
 	setPos(shellPos);
 
 	// Center the view
-	if (options.testFlag(Prompt::CenterViewOnPrompt)) centerViewOnShell();
-
-	// Select the input
-	if (options.testFlag(Prompt::InputHasHint))
-		Prompt::mode()->setSelection(PromptMode::All);
-	else
-		Prompt::mode()->setSelection(PromptMode::AtEnd);
+	if (promptOptions_.testFlag(Prompt::CenterViewOnPrompt)) centerViewOnShell();
 }
 
 void PromptShell::centerViewOnShell() const
@@ -132,6 +127,22 @@ void PromptShell::determineChildren()
 {
 	Prompt::mode()->onShellUpdate();
 	Super::determineChildren();
+}
+
+void PromptShell::changeGeometry(int availableWidth, int availableHeight)
+{
+	if (initialUpdate_)
+	{
+		// Select the input
+		if (promptOptions_.testFlag(Prompt::InputHasHint))
+			Prompt::mode()->setSelection(PromptMode::All);
+		else
+			Prompt::mode()->setSelection(PromptMode::AtEnd);
+
+		initialUpdate_ = false;
+	}
+
+	Super::changeGeometry(availableWidth, availableHeight);
 }
 
 }

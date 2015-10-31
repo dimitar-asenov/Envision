@@ -23,49 +23,10 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#include "QueryPromptInputStyle.h"
 
-#pragma once
+namespace InformationScripting {
 
-#include "../interactionbase_api.h"
-#include "PromptShellStyle.h"
-#include "Prompt.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class Static;
-	class StaticStyle;
-}
-
-namespace Interaction {
-
-class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
-{
-	ITEM_COMMON(PromptShell)
-
-	public:
-		PromptShell(const QString& initialCommandText,
-								 Prompt::PromptOptions options = Prompt::None,
-								 const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		void setErrors(QList<Item*> errors);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0) override;
-
-	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-		Prompt::PromptOptions promptOptions_{};
-		bool initialUpdate_{true};
-
-		void setShellPosition();
-		void centerViewOnShell() const;
-};
+QueryPromptInputStyle::~QueryPromptInputStyle(){}
 
 }

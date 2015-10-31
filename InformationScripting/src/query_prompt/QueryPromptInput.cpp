@@ -23,49 +23,33 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#include "QueryPromptInput.h"
 
-#pragma once
+#include "../nodes/QueryNodeContainer.h"
+#include "../nodes/EmptyQueryNode.h"
 
-#include "../interactionbase_api.h"
-#include "PromptShellStyle.h"
-#include "Prompt.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/cursor/TextCursor.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+namespace InformationScripting {
 
-namespace Visualization {
-	class Static;
-	class StaticStyle;
+ITEM_COMMON_DEFINITIONS(QueryPromptInput, "item")
+
+QueryPromptInput::QueryPromptInput(Item* parent, const StyleType* style)
+	: Super{parent, style}, query_ {new QueryNodeContainer()}
+{
+	query_->setQuery(new EmptyQueryNode());
 }
 
-namespace Interaction {
-
-class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
+void QueryPromptInput::initializeForms()
 {
-	ITEM_COMMON(PromptShell)
+	addForm(item(&I::queryVis_, [](I* v) {return v->query_;}));
+}
 
-	public:
-		PromptShell(const QString& initialCommandText,
-								 Prompt::PromptOptions options = Prompt::None,
-								 const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		void setErrors(QList<Item*> errors);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0) override;
-
-	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-		Prompt::PromptOptions promptOptions_{};
-		bool initialUpdate_{true};
-
-		void setShellPosition();
-		void centerViewOnShell() const;
-};
+void QueryPromptInput::setSelection(Interaction::PromptMode::InputSelection)
+{
+	queryVis_->moveCursor();
+}
 
 }

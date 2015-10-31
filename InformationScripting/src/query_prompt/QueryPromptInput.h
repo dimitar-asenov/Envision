@@ -26,46 +26,36 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
-#include "PromptShellStyle.h"
-#include "Prompt.h"
+#include "../informationscripting_api.h"
+#include "QueryPromptInputStyle.h"
 
+#include "InteractionBase/src/prompt/PromptMode.h"
+
+#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-namespace Visualization {
-	class Static;
-	class StaticStyle;
-}
+namespace InformationScripting {
 
-namespace Interaction {
+class QueryNodeContainer;
 
-class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
+class INFORMATIONSCRIPTING_API QueryPromptInput : public Super<Visualization::DeclarativeItem<QueryPromptInput>>
 {
-	ITEM_COMMON(PromptShell)
+	ITEM_COMMON(QueryPromptInput)
 
 	public:
-		PromptShell(const QString& initialCommandText,
-								 Prompt::PromptOptions options = Prompt::None,
-								 const StyleType* style = itemStyles().get());
+		QueryPromptInput(Item* parent, const StyleType* style = itemStyles().get());
 
-		static void initializeForms();
+	static void initializeForms();
 
-		void setErrors(QList<Item*> errors);
+	void setSelection(Interaction::PromptMode::InputSelection selection);
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0) override;
+	QueryNodeContainer* query() const;
 
 	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-		Prompt::PromptOptions promptOptions_{};
-		bool initialUpdate_{true};
-
-		void setShellPosition();
-		void centerViewOnShell() const;
+		QueryNodeContainer* query_{};
+		Visualization::Item* queryVis_{};
 };
+
+inline QueryNodeContainer* QueryPromptInput::query() const { return query_; }
 
 }

@@ -26,46 +26,25 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
-#include "PromptShellStyle.h"
-#include "Prompt.h"
+#include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "InteractionBase/src/prompt/PromptMode.h"
 
-namespace Visualization {
-	class Static;
-	class StaticStyle;
-}
+namespace InformationScripting {
 
-namespace Interaction {
+class QueryPromptInput;
 
-class INTERACTIONBASE_API PromptShell  : public Super<Visualization::DeclarativeItem<PromptShell>>
+class QueryPromptMode : public Interaction::PromptMode
 {
-	ITEM_COMMON(PromptShell)
-
 	public:
-		PromptShell(const QString& initialCommandText,
-								 Prompt::PromptOptions options = Prompt::None,
-								 const StyleType* style = itemStyles().get());
+		virtual Visualization::Item* createInputItem(const QString& initialCommandText) override;
+		virtual Visualization::StaticStyle* modeIcon() const override;
 
-		static void initializeForms();
-
-		void setErrors(QList<Item*> errors);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0) override;
+		virtual void setSelection(InputSelection selection) override;
+		virtual void onEnterKeyPress(Qt::KeyboardModifiers modifiers) override;
 
 	private:
-		Item* inputItem_{};
-		Visualization::Static* modeIcon_{};
-		Visualization::StaticStyle* modeIconStyle_{};
-		QList<Item*> errors_;
-		Prompt::PromptOptions promptOptions_{};
-		bool initialUpdate_{true};
-
-		void setShellPosition();
-		void centerViewOnShell() const;
+		QueryPromptInput* inputItem_{};
 };
 
 }

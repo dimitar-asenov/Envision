@@ -28,71 +28,27 @@
 
 #include "../informationscripting_api.h"
 
-#include "InteractionBase/src/commands/CommandSuggestion.h"
-#include "InteractionBase/src/commands/CommandResult.h"
+#include "../nodes/QueryNodeContainer.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
 
 namespace InformationScripting {
 
-// TODO most things here and in the corresponding cpp file are copied from CommandPropmpt.
-
-class QueryNodeContainer;
-
-class INFORMATIONSCRIPTING_API QueryPrompt : public Super<Visualization::DeclarativeItem<QueryPrompt>>
+class INFORMATIONSCRIPTING_API VQueryNodeContainer
+		: public Super<Visualization::ItemWithNode<	VQueryNodeContainer,
+																	Visualization::DeclarativeItem<VQueryNodeContainer>,
+																	QueryNodeContainer>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(QueryPrompt, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VQueryNodeContainer, Visualization::DeclarativeItemBaseStyle)
 
 	public:
-		QueryPrompt(Visualization::Item* commandReceiver, QString initialCommandText = QString(),
-				bool centerOnPrompt = false, const StyleType* style = itemStyles().get());
-		virtual ~QueryPrompt();
+		VQueryNodeContainer(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
 
-		Visualization::Item* commandReceiver();
-
-		QString text() const;
-		void executeCurrentText();
-		const std::unique_ptr<Visualization::Cursor>& commandReceiverCursor();
-
-		void showPrompt(QString initialCommandText = QString(), bool centerOnPrompt = false);
-		void hidePrompt();
-		void cancelPrompt();
-
-		bool wasCancelled() const;
-
 	private:
-		Visualization::Item* commandReceiver_{};
-		std::unique_ptr<Visualization::Cursor> commandReceiverCursor_{};
-
-		Visualization::Text* errorText_{};
-
-		QueryNodeContainer* queryContainer_{};
-		Visualization::Item* queryVis_{};
-
-		int commandSelectedFirst_{};
-		int commandSelectedLast_{};
-
-		bool hideRequested_{};
-		bool wasCancelled_{}; // Set to true when the prompt was hidden manually by the user
-
-		void saveReceiverCursor();
-		void setPromptPosition();
-		QPoint receiverCursorPosition();
-
-		void centerViewOnPrompt() const;
-
-		static const QString TYPE_HINT;
+		Visualization::Item* query_{};
 };
-
-inline Visualization::Item* QueryPrompt::commandReceiver() { return commandReceiver_; }
-inline const std::unique_ptr<Visualization::Cursor>& QueryPrompt::commandReceiverCursor()
-{ return commandReceiverCursor_;}
-
-inline bool QueryPrompt::wasCancelled() const { return wasCancelled_; }
-inline void QueryPrompt::cancelPrompt() {wasCancelled_ = true; hidePrompt();}
 
 } /* namespace InformationScripting */

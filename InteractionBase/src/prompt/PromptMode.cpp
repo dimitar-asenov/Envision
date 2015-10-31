@@ -50,7 +50,7 @@ void PromptMode::showErrors(QList<QString> errorMessages) const
 }
 
 void PromptMode::onShellUpdate(){}
-void PromptMode::onEnterKeyPress(){}
-void PromptMode::onTabKeyPress(){}
+void PromptMode::onEnterKeyPress(Qt::KeyboardModifiers){}
+void PromptMode::onTabKeyPress(Qt::KeyboardModifiers){}
 
 }
