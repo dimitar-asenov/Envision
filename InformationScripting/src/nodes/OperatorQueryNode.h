@@ -48,6 +48,8 @@ class INFORMATIONSCRIPTING_API OperatorQueryNode : public Super<QueryNode>
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);
+
+		virtual void accept(QueryBuilder* builder) override;
 };
 
 inline OperatorQueryNode::OperatorTypes OperatorQueryNode::op() const { return static_cast<OperatorTypes>(opr()); }

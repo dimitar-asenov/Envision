@@ -35,4 +35,10 @@ namespace InformationScripting {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(QueryNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(QueryNode, CommandNode)
 
+void QueryNode::accept(QueryBuilder*)
+{
+	// Since a node cannot be abstract assert if we try to execute this method.
+	Q_ASSERT(false);
+}
+
 } /* namespace InformationScripting */

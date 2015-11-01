@@ -38,6 +38,9 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API EmptyQueryNode : public Super<QueryNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(EmptyQueryNode)
+
+	public:
+		virtual void accept(QueryBuilder* builder) override;
 };
 
 } /* namespace InformationScripting */

@@ -46,6 +46,8 @@ class INFORMATIONSCRIPTING_API CommandNode : public Super<QueryNode>
 	ATTRIBUTE(Model::TypedList<QueryNode>, arguments, setArguments)
 	public:
 		CommandNode(const QString& name);
+
+		virtual void accept(QueryBuilder* builder) override;
 };
 
 } /* namespace InformationScripting */

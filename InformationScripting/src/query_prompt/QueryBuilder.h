@@ -24,29 +24,45 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#pragma once
 
-#include "../query_prompt/QueryBuilder.h"
+#include "../informationscripting_api.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
+class CommandNode;
+class CompositeQuery;
+class CompositeQueryNode;
+class EmptyQueryNode;
+class OperatorQueryNode;
+class Query;
+class QueryExecutor;
 
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+class QueryBuilder
 {
-	setName(name);
-}
+	public:
+		QueryBuilder(Model::Node* target, QueryExecutor* executor);
 
-void CommandNode::accept(QueryBuilder* builder)
-{
-	builder->visit(this);
-}
+		void visit(CommandNode* command);
+		void visit(CompositeQueryNode* list);
+		void visit(OperatorQueryNode* op);
+		void visit(EmptyQueryNode* empty);
+
+		Query* query() const;
+
+	private:
+		Query* query_{};
+		QueryExecutor* executor_{};
+		Model::Node* target_{};
+
+		void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
+										Query* connectionQuery, Query* outputQuery = nullptr);
+};
+
+inline Query* QueryBuilder::query() const { return query_; }
 
 } /* namespace InformationScripting */

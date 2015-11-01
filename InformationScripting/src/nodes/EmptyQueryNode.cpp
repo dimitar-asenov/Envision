@@ -26,6 +26,8 @@
 
 #include "EmptyQueryNode.h"
 
+#include "../query_prompt/QueryBuilder.h"
+
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(InformationScripting::EmptyQueryNode)
 
@@ -33,5 +35,10 @@ namespace InformationScripting {
 
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(EmptyQueryNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(EmptyQueryNode)
+
+void EmptyQueryNode::accept(QueryBuilder* builder)
+{
+	builder->visit(this);
+}
 
 } /* namespace InformationScripting */
