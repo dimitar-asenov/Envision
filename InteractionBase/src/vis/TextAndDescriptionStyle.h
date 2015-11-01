@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/TextStyle.h"

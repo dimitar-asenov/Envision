@@ -80,7 +80,7 @@ void PromptShell::initializeForms()
 
 	auto errors = (new SequentialLayoutFormElement())
 			->setVertical()->setSpaceBetweenElements(3)
-			->setHasCursorWhenEmpty(false)
+			->setHasCursorWhenEmpty([](auto){return false; })
 			->setListOfItems([](Item* i) { return static_cast<PromptShell*>(i)->errors_; });
 
 	addForm(grid({{prompt}, {errors}}));
