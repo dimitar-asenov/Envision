@@ -77,17 +77,26 @@ QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 					return m.outputFrom_ == currentNode && m.outputIndex_ == outIndex;
 				});
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
-				if (hasOutput)
+				while (inputIt != receiver->inputMap_.end())
 				{
-					// NOTE if we want to execute in parallel then we probably shouldn't just abort.
-					// early abort in case of error:
-					if (!currentNode->calculatedOutputs_[outIndex])
-						return {currentNode->calculatedOutputs_[outIndex]};
-					receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt),
-														  currentNode->calculatedOutputs_[outIndex]);
+					if (hasOutput)
+					{
+						// NOTE if we want to execute in parallel then we probably shouldn't just abort.
+						// early abort in case of error:
+						if (!currentNode->calculatedOutputs_[outIndex])
+							return {currentNode->calculatedOutputs_[outIndex]};
+						receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt),
+															  currentNode->calculatedOutputs_[outIndex]);
+					}
+					else
+						receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), TupleSet());
+
+					// It could be that the receiver expects our output on multiple inputs, thus search on:
+					inputIt = std::find_if(inputIt + 1, receiver->inputMap_.end(),
+										[currentNode, outIndex] (const InputMapping& m) {
+										return m.outputFrom_ == currentNode && m.outputIndex_ == outIndex;
+					});
 				}
-				else
-					receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), TupleSet());
 
 
 				if (receiver->canExecute())
