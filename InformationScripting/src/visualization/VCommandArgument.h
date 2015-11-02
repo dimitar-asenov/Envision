@@ -49,6 +49,7 @@ class INFORMATIONSCRIPTING_API VCommandArgument
 
 		static void initializeForms();
 
+	protected:
 		virtual void determineChildren() override;
 
 	private:

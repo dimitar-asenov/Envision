@@ -188,7 +188,7 @@ void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->matches(QKeySequence::Copy))
+	if (event->matches(QKeySequence::Copy) && !target->ignoresCopyAndPaste())
 	{
 		event->accept();
 
@@ -226,7 +226,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			clipboard.putNodes(nodesToCopy);
 		}
 	}
-	else if (event->matches(QKeySequence::Paste))
+	else if (event->matches(QKeySequence::Paste) && !target->ignoresCopyAndPaste())
 	{
 		event->accept();
 

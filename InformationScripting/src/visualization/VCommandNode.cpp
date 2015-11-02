@@ -57,6 +57,7 @@ void VCommandNode::determineChildren()
 {
 	Super::determineChildren();
 	name_->setEditable(false);
+	name_->setSuppressDefaultCopyPasteHandler(true);
 }
 
 } /* namespace InformationScripting */

@@ -62,6 +62,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 
 		bool isEditable();
 		void setEditable(bool editable);
+		void setSuppressDefaultCopyPasteHandler(bool suppress);
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
@@ -82,6 +83,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 			Exact = 2,
 		};
 
+		virtual bool ignoresCopyAndPaste() override;
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -107,6 +109,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 		ApproximateUpdate drawApproximately_{Unknown};
 
 		bool editable{};
+		bool suppressDefaultCopyPasteHandler_{};
 
 		const static int MIN_TEXT_WIDTH = 10;
 
@@ -117,6 +120,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 inline QString TextRenderer::text() { return staticText_.text(); }
 inline bool TextRenderer::isEditable() { return editable; }
 inline void TextRenderer::setEditable(bool editable_) { editable = editable_; }
+inline void TextRenderer::setSuppressDefaultCopyPasteHandler(bool suppress)
+{suppressDefaultCopyPasteHandler_ = suppress;}
 
 inline qreal TextRenderer::textXOffset() { return textXOffset_; }
 inline qreal TextRenderer::textYOffset() { return textYOffset_; }

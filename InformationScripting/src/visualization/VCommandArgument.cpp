@@ -48,6 +48,7 @@ void VCommandArgument::determineChildren()
 {
 	Super::determineChildren();
 	argument_->setEditable(false);
+	argument_->setSuppressDefaultCopyPasteHandler(true);
 }
 
 } /* namespace InformationScripting */

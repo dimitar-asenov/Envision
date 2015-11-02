@@ -51,6 +51,7 @@ class INFORMATIONSCRIPTING_API VCommandNode
 
 		static void initializeForms();
 
+	protected:
 		virtual void determineChildren() override;
 
 	private:

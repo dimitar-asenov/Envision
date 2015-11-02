@@ -57,6 +57,7 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 
 		bool suppressDefaultRemovalHandler() const;
 		void setSuppressDefaultRemovalHandler(bool suppress);
+		void setSuppressDefaultCopyPasteHandler(bool suppress);
 
 		bool isShowingEmptyTip();
 
@@ -67,6 +68,8 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint(),
 										CursorMoveOptions options = None) override;
 		virtual QList<ItemRegion> regions() override;
+
+		virtual bool ignoresCopyAndPaste() override;
 
 	protected:
 		/**
@@ -89,6 +92,7 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 
 	private:
 		bool suppressDefaultRemovalHandler_{};
+		bool suppressDefaultCopyPasteHandler_{};
 		int rangeBegin_{};
 		int rangeEnd_{};
 		Visualization::Static* emptyTip_{};
@@ -116,6 +120,7 @@ template <class T> inline T* VList::itemAtNodeIndex(int nodeIndex) const
 
 inline bool VList::suppressDefaultRemovalHandler() const { return suppressDefaultRemovalHandler_; }
 inline void VList::setSuppressDefaultRemovalHandler(bool suppress) { suppressDefaultRemovalHandler_ = suppress; }
+inline void VList::setSuppressDefaultCopyPasteHandler(bool suppress) {suppressDefaultCopyPasteHandler_ = suppress; }
 
 inline int VList::rangeBegin() const { return rangeBegin_; }
 inline int VList::rangeEnd() const { return rangeEnd_; }

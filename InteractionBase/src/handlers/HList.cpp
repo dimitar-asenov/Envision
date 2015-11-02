@@ -59,7 +59,8 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	Visualization::VList* list = static_cast<Visualization::VList*> (target);
 	bool processed = false;
 
-	if (event->matches(QKeySequence::Paste) && list->scene()->mainCursor()->owner() == list)
+	if (event->matches(QKeySequence::Paste) && list->scene()->mainCursor()->owner() == list &&
+		 !list->ignoresCopyAndPaste())
 	{
 		processed = true;
 		FilePersistence::SystemClipboard clipboard;
@@ -78,7 +79,8 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 	}
-	else if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)  && event->key() == Qt::Key_V)
+	else if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event->key() == Qt::Key_V &&
+				!list->ignoresCopyAndPaste())
 	{
 		processed = true;
 		FilePersistence::SystemClipboard clipboard;

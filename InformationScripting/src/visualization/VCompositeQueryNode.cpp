@@ -48,4 +48,10 @@ void VCompositeQueryNode::initializeForms()
 	);
 }
 
+void VCompositeQueryNode::determineChildren()
+{
+	Super::determineChildren();
+	queries_->setSuppressDefaultCopyPasteHandler(true);
+}
+
 }

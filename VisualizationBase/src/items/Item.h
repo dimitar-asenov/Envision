@@ -425,6 +425,17 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		template <class OverlayType> OverlayType* addOverlay(OverlayType* overlay, QString groupName);
 
+		/**
+		 * Returns whether this item should ignore copy and paste hanling and let the parent handler take care of this.
+		 *
+		 * This is useful to skip the default copy and paste handlers and let a parent handler implement specialized
+		 * behavior.
+		 *
+		 * The default implementation returns false. Reimplement in derived classes that belong to a special hierarchy
+		 * where some parent object should handle copy and paste (e.g. Expressions or Queries).
+		 */
+		virtual bool ignoresCopyAndPaste();
+
 
 	protected:
 

@@ -52,12 +52,12 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	auto listIsSelected =  target->scene()->selectedItems().size() == 1
 			&& target->scene()->selectedItems().first() == target;
 
-	if (listIsSelected && event->matches(QKeySequence::Copy))
+	if (listIsSelected && event->matches(QKeySequence::Copy)  && !target->ignoresCopyAndPaste())
 	{
 		QString text = tr->selectedText();
 		if (!text.isEmpty()) QApplication::clipboard()->setText(text);
 	}
-	else if (listIsSelected && event->matches(QKeySequence::Paste) && tr->isEditable())
+	else if (listIsSelected && event->matches(QKeySequence::Paste) && tr->isEditable() && !target->ignoresCopyAndPaste())
 	{
 		erase(target, true, true);
 		target->updateSubtree();

@@ -230,4 +230,9 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 }
 
+bool VList::ignoresCopyAndPaste()
+{
+	return suppressDefaultCopyPasteHandler_;
+}
+
 }

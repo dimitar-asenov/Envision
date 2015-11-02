@@ -48,6 +48,9 @@ class INFORMATIONSCRIPTING_API VCompositeQueryNode : public Super<Visualization:
 
 		static void initializeForms();
 
+	protected:
+		virtual void determineChildren() override;
+
 	private:
 		Visualization::VList* queries_{};
 };

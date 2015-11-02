@@ -925,6 +925,11 @@ QList<OverlayAccessor*> Item::overlays(QString overlayGroup) const
 	return result;
 }
 
+bool Item::ignoresCopyAndPaste()
+{
+	return false;
+}
+
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.

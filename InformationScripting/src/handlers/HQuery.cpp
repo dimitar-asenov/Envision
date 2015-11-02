@@ -112,42 +112,37 @@ void HQuery::keyPressEvent(Visualization::Item* target, QKeyEvent* event)
 		 (event->modifiers() != Qt::ControlModifier && (key == Qt::Key_Enter || key == Qt::Key_Return)))
 		return GenericHandler::keyPressEvent(target, event);
 
-	qDebug() << "keyPressed" << event;
-
 	QString str;
 	int index;
 	auto topMostItem = stringInfo(target, (Qt::Key) key, str, index);
-	qDebug() << str << index;
 	QString newText = str;
 	int newIndex = index;
 	removeListsWithOneElement(newText, newIndex);
 
 	bool changed = false;
-	switch (key)
+	if (event->modifiers() == Qt::NoModifier && (key == Qt::Key_Delete || key == Qt::Key_Backspace))
+		changed = processDeleteOrBackspace(key, newText, newIndex);
+	else if (event->modifiers() == Qt::ControlModifier && (key == Qt::Key_Enter || key == Qt::Key_Return))
 	{
-		case Qt::Key_Delete: // Fallthrough
-		case Qt::Key_Backspace:
-		{
-			changed = processDeleteOrBackspace(key, newText, newIndex);
-		} break;
-		case Qt::Key_Enter: // Fallthrough
-		case Qt::Key_Return:
-		{
-			if (event->modifiers() == Qt::ControlModifier)
-			{
-				changed = true;
-				newIndex = processEnter(newText, index);
-			}
-		} break;
-		default:
-		{
-			if (!event->text().isEmpty())
-			{
-				changed = true;
-				newText.insert(index, event->text());
-				newIndex += event->text().size();
-			}
-		} break;
+		changed = true;
+		newIndex = processEnter(newText, index);
+	}
+	else if (event->matches(QKeySequence::Copy) && !target->ignoresCopyAndPaste())
+	{
+		QApplication::clipboard()->setText(newText);
+	}
+	else if (event->matches(QKeySequence::Paste) && !target->ignoresCopyAndPaste())
+	{
+		auto clipboardText = QApplication::clipboard()->text();
+		newText.insert(newIndex, clipboardText);
+		newIndex += clipboardText.size();
+		changed = !clipboardText.isEmpty();
+	}
+	else if (!event->text().isEmpty())
+	{
+		changed = true;
+		newText.insert(index, event->text());
+		newIndex += event->text().size();
 	}
 
 	if (changed)

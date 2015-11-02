@@ -285,4 +285,9 @@ void TextRenderer::setTextFormat(Qt::TextFormat textFormat)
 	}
 }
 
+bool TextRenderer::ignoresCopyAndPaste()
+{
+	return suppressDefaultCopyPasteHandler_;
+}
+
 }
