@@ -29,8 +29,8 @@
 #include "../informationscripting_api.h"
 
 #include "QueryNode.h"
-#include "ModelBase/src/nodes/TypedList.h"
 
+#include "ModelBase/src/nodes/TypedList.h"
 DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, CompositeQueryNode)
 
 namespace InformationScripting {

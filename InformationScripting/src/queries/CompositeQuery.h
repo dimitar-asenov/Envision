@@ -52,6 +52,9 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		void connectToOutput(Query* from, int outIndex = 0);
 		void connectToOutput(const QList<Query*>& outQueries);
 
+		int inputCount() const;
+		int outputCount() const;
+
 	private:
 		struct QueryNode;
 
@@ -101,5 +104,8 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		void addOutputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode);
 		void addInputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode, int inIndex);
 };
+
+inline int CompositeQuery::inputCount() const { return std::max(1, inNode_->outputMap_.size()); }
+inline int CompositeQuery::outputCount() const { return std::max(1, outNode_->inputMap_.size()); }
 
 } /* namespace InformationScripting */

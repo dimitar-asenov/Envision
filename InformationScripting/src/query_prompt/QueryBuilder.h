@@ -28,17 +28,37 @@
 
 #include "../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/StaticStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "ModelBase/src/visitor/VisitorDefinition.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VEmptyQueryNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class CommandNode;
+class CompositeQuery;
+class CompositeQueryNode;
+class OperatorQueryNode;
+class Query;
+class QueryExecutor;
+
+class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder, Query*>
 {
 	public:
-		virtual ~VEmptyQueryNodeStyle() override;
+		QueryBuilder(Model::Node* target, QueryExecutor* executor);
+		static void init();
 
-	Property<Visualization::StaticStyle> normal{this, "normal"};
+	private:
+		QueryExecutor* executor_{};
+		Model::Node* target_{};
+
+		static Query* visitCommand(QueryBuilder* self, CommandNode* command);
+		static Query* visitList(QueryBuilder* self, CompositeQueryNode* list);
+		static Query* visitOperator(QueryBuilder* self, OperatorQueryNode* op);
+
+		static void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
+										Query* connectionQuery, Query* outputQuery = nullptr);
 };
 
 } /* namespace InformationScripting */

@@ -25,8 +25,17 @@
 ***********************************************************************************************************************/
 #include "QueryPromptMode.h"
 #include "QueryPromptInput.h"
+#include "QueryBuilder.h"
+
+#include "../nodes/QueryNodeContainer.h"
+#include "../queries/QueryExecutor.h"
+#include "../queries/Query.h"
 
 #include "VisualizationBase/src/items/Static.h"
+
+#include "InteractionBase/src/prompt/Prompt.h"
+#include "InteractionBase/src/commands/CommandResult.h"
+#include "InteractionBase/src/vis/TextAndDescription.h"
 
 namespace InformationScripting {
 
@@ -48,9 +57,47 @@ void QueryPromptMode::setSelection(InputSelection selection)
 
 void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 {
-	//TODO@Lukas Implement this. Essentially you'll need to convert the Nodes to a query
-	//Get th nodes from inputItem_->query()
-	qDebug() << "TODO: Execute query";
+	Interaction::CommandResult* result = nullptr;
+
+	auto firsAncestosterWithNode = Interaction::Prompt::commandReceiver()->findAncestorWithNode();
+	auto node = firsAncestosterWithNode ? firsAncestosterWithNode->node() : nullptr;
+
+	if (node)
+	{
+		auto queryNode = inputItem_->query()->query();
+		// Note a QueryExecutor should always be allocated with new, it is self destroying:
+		auto executor = new QueryExecutor();
+		QueryBuilder builder{node, executor};
+		executor->addQuery(builder.visit(queryNode));
+		result = executor->execute();
+	}
+	else
+		result = new Interaction::CommandResult(new Interaction::CommandError("Queries only work on nodes"));
+
+	if ( result->code() == Interaction::CommandResult::OK) Interaction::Prompt::hide();
+	else
+	{
+		QList<Visualization::Item*> errorItems;
+
+		for (auto& error : result->errors() )
+		{
+			if (error->visualization() == nullptr)
+			{
+				auto vis = new Interaction::TextAndDescription(nullptr,
+											Interaction::TextAndDescription::itemStyles().get("command-prompt-error"));
+				vis->setContents(error->message(), error->resolutionTips().join(" OR "));
+				errorItems.append(vis);
+			}
+			else
+			{
+				//Extract the visualization
+				errorItems.append(error->visualization());
+				error->setVisualization(nullptr);
+			}
+		}
+
+		showErrors(errorItems);
+	}
 }
 
 }

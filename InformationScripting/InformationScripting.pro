@@ -51,9 +51,6 @@ HEADERS += src/precompiled.h \
     src/visualization/VCommandNodeStyle.h \
     src/visualization/VCommandArgumentStyle.h \
     src/handlers/HQuery.h \
-    src/nodes/EmptyQueryNode.h \
-    src/visualization/VEmptyQueryNode.h \
-    src/visualization/VEmptyQueryNodeStyle.h \
     src/parsing/QueryParser.h \
     src/nodes/OperatorQueryNode.h \
     src/visualization/VOperatorQueryNode.h \
@@ -75,7 +72,8 @@ HEADERS += src/precompiled.h \
     src/query_prompt/QueryPromptInput.h \
     src/query_prompt/QueryPromptMode.h \
     src/query_prompt/QueryPromptInputStyle.h \
-    src/query_prompt/VQueryNodeContainer.h
+    src/query_prompt/VQueryNodeContainer.h \
+    src/query_prompt/QueryBuilder.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -110,9 +108,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/visualization/VCommandNodeStyle.cpp \
     src/visualization/VCommandArgumentStyle.cpp \
     src/handlers/HQuery.cpp \
-    src/nodes/EmptyQueryNode.cpp \
-    src/visualization/VEmptyQueryNode.cpp \
-    src/visualization/VEmptyQueryNodeStyle.cpp \
     src/parsing/QueryParser.cpp \
     src/nodes/OperatorQueryNode.cpp \
     src/visualization/VOperatorQueryNode.cpp \
@@ -133,7 +128,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/query_prompt/QueryPromptInput.cpp \
     src/query_prompt/QueryPromptMode.cpp \
     src/query_prompt/QueryPromptInputStyle.cpp \
-    src/query_prompt/VQueryNodeContainer.cpp
+    src/query_prompt/VQueryNodeContainer.cpp \
+    src/query_prompt/QueryBuilder.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
