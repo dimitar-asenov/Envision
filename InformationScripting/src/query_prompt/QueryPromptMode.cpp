@@ -68,8 +68,7 @@ void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 		// Note a QueryExecutor should always be allocated with new, it is self destroying:
 		auto executor = new QueryExecutor();
 		QueryBuilder builder{node, executor};
-		queryNode->accept(&builder);
-		executor->addQuery(builder.query());
+		executor->addQuery(builder.visit(queryNode));
 		result = executor->execute();
 	}
 	else

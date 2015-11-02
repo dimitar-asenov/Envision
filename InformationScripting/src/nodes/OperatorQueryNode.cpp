@@ -26,8 +26,6 @@
 
 #include "OperatorQueryNode.h"
 
-#include "../query_prompt/QueryBuilder.h"
-
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(InformationScripting::OperatorQueryNode)
 
@@ -39,10 +37,5 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(OperatorQueryNode)
 REGISTER_ATTRIBUTE(OperatorQueryNode, left, QueryNode, false, false, true)
 REGISTER_ATTRIBUTE(OperatorQueryNode, right, QueryNode, false, false, true)
 REGISTER_ATTRIBUTE(OperatorQueryNode, opr, Character, false, false, true)
-
-void OperatorQueryNode::accept(QueryBuilder* builder)
-{
-	builder->visit(this);
-}
 
 } /* namespace InformationScripting */

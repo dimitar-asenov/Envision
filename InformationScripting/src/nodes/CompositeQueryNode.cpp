@@ -26,8 +26,6 @@
 
 #include "CompositeQueryNode.h"
 
-#include "../query_prompt/QueryBuilder.h"
-
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(InformationScripting::CompositeQueryNode)
 
@@ -37,10 +35,5 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CompositeQueryNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CompositeQueryNode)
 
 REGISTER_ATTRIBUTE(CompositeQueryNode, queries, TypedListOfQueryNode, false, false, true)
-
-void CompositeQueryNode::accept(QueryBuilder* builder)
-{
-	builder->visit(this);
-}
 
 } /* namespace InformationScripting */

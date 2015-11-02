@@ -26,8 +26,6 @@
 
 #include "CommandNode.h"
 
-#include "../query_prompt/QueryBuilder.h"
-
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(InformationScripting::CommandNode)
 
@@ -42,11 +40,6 @@ REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, t
 CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
 {
 	setName(name);
-}
-
-void CommandNode::accept(QueryBuilder* builder)
-{
-	builder->visit(this);
 }
 
 } /* namespace InformationScripting */

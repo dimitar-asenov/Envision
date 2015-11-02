@@ -40,7 +40,14 @@ QueryBuilder::QueryBuilder(Model::Node* target, QueryExecutor* executor)
 	: executor_{executor}, target_{target}
 {}
 
-void QueryBuilder::visit(CommandNode* command)
+void QueryBuilder::init()
+{
+	addType<CommandNode>(visitCommand);
+	addType<CompositeQueryNode>(visitList);
+	addType<OperatorQueryNode>(visitOperator);
+}
+
+Query* QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
 {
 	auto text = command->name();
 	// TODO throw
@@ -48,30 +55,28 @@ void QueryBuilder::visit(CommandNode* command)
 	auto parts = text.split(" ", QString::SplitBehavior::SkipEmptyParts);
 	auto cmd = parts.takeFirst();
 	// TODO throw on nullptr, this might be problematic since we might have some memory already allocated.
-	query_ = QueryRegistry::instance().buildQuery(cmd, target_, parts, executor_);
+	return QueryRegistry::instance().buildQuery(cmd, self->target_, parts, self->executor_);
 }
 
-void QueryBuilder::visit(CompositeQueryNode* list)
+Query* QueryBuilder::visitList(QueryBuilder* self, CompositeQueryNode* list)
 {
 	auto composite = new CompositeQuery();
 	for (int i = 0; i < list->queries()->size(); ++i)
 	{
-		list->queries()->at(i)->accept(this);
-		composite->connectInput(i, query_);
-		composite->connectToOutput(query_, i);
+		auto query = self->visit(list->queries()->at(i));
+		composite->connectInput(i, query);
+		composite->connectToOutput(query, i);
 	}
-	query_ = composite;
+	return composite;
 }
 
-void QueryBuilder::visit(OperatorQueryNode* op)
+Query* QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
 {
 	Q_ASSERT(op->op() == OperatorQueryNode::OperatorTypes::Pipe);
 
-	op->left()->accept(this);
-	auto left = query_;
+	auto left = self->visit(op->left());
 	auto leftComposite = dynamic_cast<CompositeQuery*>(left);
-	op->right()->accept(this);
-	auto right = query_;
+	auto right = self->visit(op->right());
 	auto rightComposite = dynamic_cast<CompositeQuery*>(right);
 
 	auto composite = new CompositeQuery();
@@ -102,7 +107,7 @@ void QueryBuilder::visit(OperatorQueryNode* op)
 		composite->connectInput(i, left, i);
 	for (int o = 0; o < outputCount; ++o)
 		composite->connectToOutput(right, o);
-	query_ = composite;
+	return composite;
 }
 
 void QueryBuilder::connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,

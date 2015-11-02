@@ -35,14 +35,9 @@ DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, QueryNode)
 
 namespace InformationScripting {
 
-class QueryBuilder;
-
 class INFORMATIONSCRIPTING_API QueryNode : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(QueryNode)
-
-	public:
-		virtual void accept(QueryBuilder* builder);
 };
 
 } /* namespace InformationScripting */

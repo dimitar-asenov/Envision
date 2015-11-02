@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "ModelBase/src/visitor/VisitorDefinition.h"
+
 namespace Model {
 	class Node;
 }
@@ -41,26 +43,22 @@ class OperatorQueryNode;
 class Query;
 class QueryExecutor;
 
-class QueryBuilder
+class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder, Query*>
 {
 	public:
 		QueryBuilder(Model::Node* target, QueryExecutor* executor);
-
-		void visit(CommandNode* command);
-		void visit(CompositeQueryNode* list);
-		void visit(OperatorQueryNode* op);
-
-		Query* query() const;
+		static void init();
 
 	private:
-		Query* query_{};
 		QueryExecutor* executor_{};
 		Model::Node* target_{};
 
-		void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
+		static Query* visitCommand(QueryBuilder* self, CommandNode* command);
+		static Query* visitList(QueryBuilder* self, CompositeQueryNode* list);
+		static Query* visitOperator(QueryBuilder* self, OperatorQueryNode* op);
+
+		static void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
 										Query* connectionQuery, Query* outputQuery = nullptr);
 };
-
-inline Query* QueryBuilder::query() const { return query_; }
 
 } /* namespace InformationScripting */

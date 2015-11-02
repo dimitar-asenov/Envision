@@ -39,9 +39,6 @@ class INFORMATIONSCRIPTING_API CompositeQueryNode : public Super<QueryNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CompositeQueryNode)
 	ATTRIBUTE(Model::TypedList<QueryNode>, queries, setQueries)
-
-	public:
-		virtual void accept(QueryBuilder* builder) override;
 };
 
 } /* namespace InformationScripting */
