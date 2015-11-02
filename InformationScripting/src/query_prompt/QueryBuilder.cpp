@@ -47,7 +47,7 @@ void QueryBuilder::init()
 	addType<OperatorQueryNode>(visitOperator);
 }
 
-Query* QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
+std::unique_ptr<Query> QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
 {
 	auto text = command->name();
 	// TODO throw
@@ -58,28 +58,29 @@ Query* QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
 	return QueryRegistry::instance().buildQuery(cmd, self->target_, parts, self->executor_);
 }
 
-Query* QueryBuilder::visitList(QueryBuilder* self, CompositeQueryNode* list)
+std::unique_ptr<Query> QueryBuilder::visitList(QueryBuilder* self, CompositeQueryNode* list)
 {
-	auto composite = new CompositeQuery();
+	auto composite = std::make_unique<CompositeQuery>();
 	for (int i = 0; i < list->queries()->size(); ++i)
 	{
-		auto query = self->visit(list->queries()->at(i));
+		auto query = composite->addQuery(self->visit(list->queries()->at(i)));
 		composite->connectInput(i, query);
 		composite->connectToOutput(query, i);
 	}
-	return composite;
+	return std::unique_ptr<Query>(composite.release());
 }
 
-Query* QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
+std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
 {
 	Q_ASSERT(op->op() == OperatorQueryNode::OperatorTypes::Pipe);
 
-	auto left = self->visit(op->left());
+	auto composite = std::make_unique<CompositeQuery>();
+
+	auto left = composite->addQuery(self->visit(op->left()));
 	auto leftComposite = dynamic_cast<CompositeQuery*>(left);
-	auto right = self->visit(op->right());
+	auto right = composite->addQuery(self->visit(op->right()));
 	auto rightComposite = dynamic_cast<CompositeQuery*>(right);
 
-	auto composite = new CompositeQuery();
 	if (leftComposite && rightComposite)
 	{
 		Q_ASSERT(leftComposite->outputCount() == rightComposite->inputCount());
@@ -89,7 +90,7 @@ Query* QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
 	else if (leftComposite)
 	{
 		// union
-		connectQueriesWith(composite, leftComposite, new UnionOperator(), right);
+		connectQueriesWith(composite.get(), leftComposite, new UnionOperator(), right);
 	}
 	else if (rightComposite)
 	{
@@ -107,7 +108,7 @@ Query* QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
 		composite->connectInput(i, left, i);
 	for (int o = 0; o < outputCount; ++o)
 		composite->connectToOutput(right, o);
-	return composite;
+	return std::unique_ptr<Query>(composite.release());
 }
 
 void QueryBuilder::connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,

@@ -110,6 +110,17 @@ QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 	return outNode_->calculatedOutputs_;
 }
 
+Query* CompositeQuery::addQuery(std::unique_ptr<Query> query)
+{
+	auto rawQ = query.get();
+	// A query should only be added once:
+	Q_ASSERT(std::find_if(nodes_.begin(), nodes_.end(), [rawQ](QueryNode* existing) {return existing->q_.get() == rawQ;})
+					== nodes_.end());
+	auto newNode = new QueryNode(std::move(query));
+	nodes_.push_back(newNode);
+	return rawQ;
+}
+
 void CompositeQuery::connectQuery(Query* from, Query* to)
 {
 	connectQuery(from, 0, to, 0);
@@ -148,11 +159,10 @@ void CompositeQuery::connectToOutput(const QList<Query*>& outQueries)
 
 CompositeQuery::QueryNode* CompositeQuery::nodeForQuery(Query* q)
 {
-	auto it = std::find_if(nodes_.begin(), nodes_.end(), [q](QueryNode* d) {return d->q_ == q;});
-	if (it != nodes_.end()) return *it;
-	auto newNode = new QueryNode(q);
-	nodes_.push_back(newNode);
-	return newNode;
+	auto it = std::find_if(nodes_.begin(), nodes_.end(), [q](QueryNode* existing) {return existing->q_.get() == q;});
+	// A query should be added first with addQuery():
+	Q_ASSERT(it != nodes_.end());
+	return *it;
 }
 
 void CompositeQuery::addOutputMapping(CompositeQuery::QueryNode* outNode, int outIndex,
@@ -176,11 +186,6 @@ void CompositeQuery::addInputMapping(CompositeQuery::QueryNode* outNode, int out
 	}
 	existingMapping.outputFrom_ = outNode;
 	existingMapping.outputIndex_ = outIndex;
-}
-
-CompositeQuery::QueryNode::~QueryNode()
-{
-	SAFE_DELETE(q_);
 }
 
 void CompositeQuery::QueryNode::addCalculatedInput(int index, Optional<TupleSet> g)

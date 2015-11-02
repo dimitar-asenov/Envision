@@ -40,9 +40,9 @@ QueryExecutor::~QueryExecutor()
 	Q_ASSERT(queries_.empty());
 }
 
-void QueryExecutor::addQuery(Query* query)
+void QueryExecutor::addQuery(std::unique_ptr<Query> query)
 {
-	queries_.emplace(std::unique_ptr<Query>(query));
+	queries_.emplace(std::move(query));
 }
 
 Interaction::CommandResult* QueryExecutor::execute(const QList<TupleSet>& input)

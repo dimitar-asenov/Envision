@@ -40,6 +40,13 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 
 		/**
+		 * Adds the \a query to this CompositeQuery. This CompositeQuery will take ownership of \a query.
+		 * The returned value is the underlying raw pointer in \a query which can be used to wire \a query with other
+		 * queries.
+		 */
+		Query* addQuery(std::unique_ptr<Query> query);
+
+		/**
 		 * Connects output 0 from Query \a from to input 0 of Query \a to.
 		 *
 		 * If either \a from or \a to was not yet inserted they will be and this query will take ownership of it.
@@ -66,8 +73,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		};
 
 		struct QueryNode {
-				QueryNode(Query* q) : q_{q} {}
-				~QueryNode();
+				QueryNode(std::unique_ptr<Query> q) : q_{std::move(q)} {}
 
 				/**
 				 * Describes an input mapping:
@@ -91,7 +97,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 				bool canExecute() const;
 				void execute();
 
-				Query* q_{};
+				std::unique_ptr<Query> q_{};
 		};
 		// Pseudo node to connect, to get input from execute method
 		QueryNode* inNode_{new QueryNode(nullptr)};
