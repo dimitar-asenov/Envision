@@ -73,7 +73,8 @@ HEADERS += src/precompiled.h \
     src/query_prompt/QueryPromptMode.h \
     src/query_prompt/QueryPromptInputStyle.h \
     src/query_prompt/VQueryNodeContainer.h \
-    src/query_prompt/QueryBuilder.h
+    src/query_prompt/QueryBuilder.h \
+    src/queries/PassthroughQuery.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -129,7 +130,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/query_prompt/QueryPromptMode.cpp \
     src/query_prompt/QueryPromptInputStyle.cpp \
     src/query_prompt/VQueryNodeContainer.cpp \
-    src/query_prompt/QueryBuilder.cpp
+    src/query_prompt/QueryBuilder.cpp \
+    src/queries/PassthroughQuery.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

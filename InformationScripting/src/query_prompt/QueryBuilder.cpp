@@ -31,6 +31,7 @@
 #include "../nodes/OperatorQueryNode.h"
 
 #include "../queries/CompositeQuery.h"
+#include "../queries/PassthroughQuery.h"
 #include "../queries/QueryRegistry.h"
 #include "../queries/SubstractOperator.h"
 #include "../queries/UnionOperator.h"
@@ -54,7 +55,7 @@ std::unique_ptr<Query> QueryBuilder::visitCommand(QueryBuilder* self, CommandNod
 {
 	auto text = command->name();
 	if (text.isEmpty())
-		throw QueryParsingException("Empty command is not allowed");
+		return std::unique_ptr<Query>(new PassthroughQuery());
 	auto parts = text.split(" ", QString::SplitBehavior::SkipEmptyParts);
 	auto cmd = parts.takeFirst();
 	if (auto q = QueryRegistry::instance().buildQuery(cmd, self->target_, parts, self->executor_))
