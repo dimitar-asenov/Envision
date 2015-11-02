@@ -71,7 +71,20 @@ QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
 		if (index < queryString.length())
 			ch = queryString[index];
 	}
-	else query = new CommandNode(commandString); // Create the command. Note that it could be an empty string.
+	else
+	{
+		// Create the command. Note that it could be an empty string.
+		auto parts = commandString.split(" ");
+		if (parts.isEmpty())
+			query = new CommandNode("");
+		else
+		{
+			auto command = new CommandNode(parts.takeFirst());
+			for (auto part : parts)
+				command->arguments()->append(new CommandArgument(part));
+			query = command;
+		}
+	}
 
 	if (ch == LIST_DELIM || ch == LIST_RIGHT || index >= queryString.length()) return query;
 

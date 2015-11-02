@@ -53,12 +53,14 @@ void QueryBuilder::init()
 
 std::unique_ptr<Query> QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
 {
-	auto text = command->name();
-	if (text.isEmpty())
+	auto cmd = command->name();
+	if (cmd.isEmpty())
 		return std::unique_ptr<Query>(new PassthroughQuery());
-	auto parts = text.split(" ", QString::SplitBehavior::SkipEmptyParts);
-	auto cmd = parts.takeFirst();
-	if (auto q = QueryRegistry::instance().buildQuery(cmd, self->target_, parts, self->executor_))
+	QStringList args;
+	for (auto arg : *command->arguments())
+		if (auto argNode = DCast<CommandArgument>(arg))
+			args << argNode->argument();
+	if (auto q = QueryRegistry::instance().buildQuery(cmd, self->target_, args, self->executor_))
 		return q;
 	throw QueryParsingException(QString("%1 is not a valid command").arg(cmd));
 }
