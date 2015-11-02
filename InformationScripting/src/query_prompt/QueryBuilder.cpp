@@ -34,6 +34,8 @@
 #include "../queries/QueryRegistry.h"
 #include "../queries/UnionOperator.h"
 
+#include "../parsing/QueryParsingException.h"
+
 namespace InformationScripting {
 
 QueryBuilder::QueryBuilder(Model::Node* target, QueryExecutor* executor)
@@ -50,12 +52,13 @@ void QueryBuilder::init()
 std::unique_ptr<Query> QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
 {
 	auto text = command->name();
-	// TODO throw
-	Q_ASSERT(!text.isEmpty());
+	if (text.isEmpty())
+		throw QueryParsingException("Empty command is not allowed");
 	auto parts = text.split(" ", QString::SplitBehavior::SkipEmptyParts);
 	auto cmd = parts.takeFirst();
-	// TODO throw on nullptr, this might be problematic since we might have some memory already allocated.
-	return QueryRegistry::instance().buildQuery(cmd, self->target_, parts, self->executor_);
+	if (auto q = QueryRegistry::instance().buildQuery(cmd, self->target_, parts, self->executor_))
+		return q;
+	throw QueryParsingException(QString("%1 is not a valid command").arg(cmd));
 }
 
 std::unique_ptr<Query> QueryBuilder::visitList(QueryBuilder* self, CompositeQueryNode* list)

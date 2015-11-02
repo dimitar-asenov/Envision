@@ -30,6 +30,7 @@
 #include "../nodes/QueryNodeContainer.h"
 #include "../queries/QueryExecutor.h"
 #include "../queries/Query.h"
+#include "../parsing/QueryParsingException.h"
 
 #include "VisualizationBase/src/items/Static.h"
 
@@ -66,8 +67,16 @@ void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 		// Note a QueryExecutor should always be allocated with new, it is self destroying:
 		auto executor = new QueryExecutor();
 		QueryBuilder builder{node, executor};
-		executor->addQuery(builder.visit(queryNode));
-		errors = executor->execute();
+		try
+		{
+			executor->addQuery(builder.visit(queryNode));
+			errors = executor->execute();
+		}
+		catch (const QueryParsingException& parsingException)
+		{
+			errors = {parsingException.message()};
+			SAFE_DELETE(executor);
+		}
 	}
 	else
 		errors = {"Queries only work on nodes"};
