@@ -93,7 +93,8 @@ std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQ
 	else if (leftComposite)
 	{
 		// union
-		connectQueriesWith(composite.get(), leftComposite, new UnionOperator(), right);
+		auto unionQuery = composite->addQuery(std::unique_ptr<Query>(new UnionOperator()));
+		connectQueriesWith(composite.get(), leftComposite, unionQuery, right);
 	}
 	else if (rightComposite)
 	{
