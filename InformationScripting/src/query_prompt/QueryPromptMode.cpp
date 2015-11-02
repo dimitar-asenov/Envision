@@ -57,16 +57,23 @@ void QueryPromptMode::setSelection(InputSelection selection)
 
 void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 {
-	auto node = Interaction::Prompt::commandReceiver()->findAncestorWithNode()->node();
-	Q_ASSERT(node);
+	Interaction::CommandResult* result = nullptr;
 
-	auto queryNode = inputItem_->query()->query();
-	// Note a QueryExecutor should always be allocated with new, it is self destroying:
-	auto executor = new QueryExecutor();
-	QueryBuilder builder{node, executor};
-	queryNode->accept(&builder);
-	executor->addQuery(builder.query());
-	auto result = executor->execute();
+	auto firsAncestosterWithNode = Interaction::Prompt::commandReceiver()->findAncestorWithNode();
+	auto node = firsAncestosterWithNode ? firsAncestosterWithNode->node() : nullptr;
+
+	if (node)
+	{
+		auto queryNode = inputItem_->query()->query();
+		// Note a QueryExecutor should always be allocated with new, it is self destroying:
+		auto executor = new QueryExecutor();
+		QueryBuilder builder{node, executor};
+		queryNode->accept(&builder);
+		executor->addQuery(builder.query());
+		result = executor->execute();
+	}
+	else
+		result = new Interaction::CommandResult(new Interaction::CommandError("Queries only work on nodes"));
 
 	if ( result->code() == Interaction::CommandResult::OK) Interaction::Prompt::hide();
 	else
