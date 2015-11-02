@@ -38,7 +38,7 @@ class CORE_API EnvisionException
 {
 	public:
 		EnvisionException();
-		EnvisionException(const QString& message);
+		EnvisionException(const QString& message, bool throwInDebugMode = true);
 		virtual ~EnvisionException();
 
 		virtual const QString& name() const;
