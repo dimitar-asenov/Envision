@@ -32,6 +32,7 @@
 
 #include "../queries/CompositeQuery.h"
 #include "../queries/QueryRegistry.h"
+#include "../queries/SubstractOperator.h"
 #include "../queries/UnionOperator.h"
 
 #include "../parsing/QueryParsingException.h"
@@ -75,8 +76,6 @@ std::unique_ptr<Query> QueryBuilder::visitList(QueryBuilder* self, CompositeQuer
 
 std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
 {
-	Q_ASSERT(op->op() == OperatorQueryNode::OperatorTypes::Pipe);
-
 	auto composite = std::make_unique<CompositeQuery>();
 
 	auto left = composite->addQuery(self->visit(op->left()));
@@ -93,7 +92,13 @@ std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQ
 	else if (leftComposite)
 	{
 		// union
-		auto unionQuery = composite->addQuery(std::unique_ptr<Query>(new UnionOperator()));
+		Query* unionQuery = nullptr;
+		if (op->op() == OperatorQueryNode::OperatorTypes::Pipe)
+			unionQuery = composite->addQuery(std::unique_ptr<Query>(new UnionOperator()));
+		else if (op->op() == OperatorQueryNode::OperatorTypes::Substract)
+			unionQuery = composite->addQuery(std::unique_ptr<Query>(new SubstractOperator()));
+		else
+			Q_ASSERT(false); // No other case possible
 		connectQueriesWith(composite.get(), leftComposite, unionQuery, right);
 	}
 	else if (rightComposite)
@@ -104,7 +109,15 @@ std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQ
 	}
 	else
 	{
-		composite->connectQuery(left, right);
+		if (op->op() == OperatorQueryNode::OperatorTypes::Pipe)
+			composite->connectQuery(left, right);
+		else if (op->op() == OperatorQueryNode::OperatorTypes::Substract)
+		{
+			auto minus = composite->addQuery(std::unique_ptr<Query>(new SubstractOperator));
+			composite->connectQuery(left, minus);
+			composite->connectQuery(right, 0, minus, 1);
+			right = minus;
+		}
 	}
 	int inputCount = leftComposite ? leftComposite->inputCount() : 1;
 	int outputCount = rightComposite ? rightComposite->outputCount() : 1;

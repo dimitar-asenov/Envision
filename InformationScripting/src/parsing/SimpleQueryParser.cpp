@@ -35,7 +35,7 @@ constexpr QChar SimpleQueryParser::LIST_LEFT;
 constexpr QChar SimpleQueryParser::LIST_RIGHT;
 constexpr QChar SimpleQueryParser::LIST_DELIM;
 constexpr QChar SimpleQueryParser::OP_PIPE;
-
+constexpr QChar SimpleQueryParser::OP_MINUS_POSTFIX;
 
 QueryNode* SimpleQueryParser::parse(const QString& queryString)
 {
@@ -78,7 +78,13 @@ QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
 	// We must have an operator, create it and keep parsing.
 	Q_ASSERT(ch == OP_PIPE);
 	auto op = new OperatorQueryNode();
-	op->setOp(OperatorQueryNode::Pipe);
+	if (index + 1 < queryString.size() && queryString[index + 1] == OP_MINUS_POSTFIX)
+	{
+		op->setOp(OperatorQueryNode::Substract);
+		++index;
+	}
+	else
+		op->setOp(OperatorQueryNode::Pipe);
 	op->setLeft(query);
 	op->setRight(parseAny(queryString, ++index));
 	return op;

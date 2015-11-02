@@ -4,7 +4,7 @@
 		<symbol>|</symbol>
 	</pipeOp>
 	<substractOp prototypes="../Symbol/default">
-		<symbol>-</symbol>
+		<symbol>|-</symbol>
 	</substractOp>
 	<unionOp prototypes="../Symbol/default">
 		<symbol>U</symbol>
