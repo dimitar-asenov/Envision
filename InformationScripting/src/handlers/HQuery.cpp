@@ -31,14 +31,12 @@
 #include "../nodes/CommandNode.h"
 #include "../nodes/CommandArgument.h"
 #include "../nodes/CompositeQueryNode.h"
-#include "../nodes/EmptyQueryNode.h"
 #include "../nodes/OperatorQueryNode.h"
 
 #include "../parsing/SimpleQueryParser.h"
 
 #include "../visualization/VCommandNode.h"
 #include "../visualization/VCommandArgument.h"
-#include "../visualization/VEmptyQueryNode.h"
 #include "../visualization/VCompositeQueryNode.h"
 
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
@@ -77,10 +75,6 @@ void HQuery::initStringComponents()
 																		  SimpleQueryParser::LIST_RIGHT, true, true));
 	});
 
-	StringComponents::add<EmptyQueryNode>([](EmptyQueryNode*) {
-		return StringComponents::c("");
-	});
-
 	StringComponents::add<OperatorQueryNode>([](OperatorQueryNode* opNode) {
 		return StringComponents::c(opNode->left(),
 			StringComponents::choose(opNode->op(),
@@ -108,11 +102,6 @@ void HQuery::initStringComponents()
 	GridBasedOffsetProvider::addGridConstructor<VCommandArgument>(
 	[](GridBasedOffsetProvider* grid, VCommandArgument* vis){
 		grid->add(new Cell(0, vis->argument(), 0));
-	});
-
-	GridBasedOffsetProvider::addGridConstructor<VEmptyQueryNode>(
-	[](GridBasedOffsetProvider* grid, VEmptyQueryNode* vis){
-		grid->add(new Cell(0, vis->empty(), 0));
 	});
 }
 

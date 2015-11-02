@@ -37,7 +37,6 @@ namespace InformationScripting {
 class CommandNode;
 class CompositeQuery;
 class CompositeQueryNode;
-class EmptyQueryNode;
 class OperatorQueryNode;
 class Query;
 class QueryExecutor;
@@ -50,7 +49,6 @@ class QueryBuilder
 		void visit(CommandNode* command);
 		void visit(CompositeQueryNode* list);
 		void visit(OperatorQueryNode* op);
-		void visit(EmptyQueryNode* empty);
 
 		Query* query() const;
 

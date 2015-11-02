@@ -51,9 +51,6 @@ HEADERS += src/precompiled.h \
     src/visualization/VCommandNodeStyle.h \
     src/visualization/VCommandArgumentStyle.h \
     src/handlers/HQuery.h \
-    src/nodes/EmptyQueryNode.h \
-    src/visualization/VEmptyQueryNode.h \
-    src/visualization/VEmptyQueryNodeStyle.h \
     src/parsing/QueryParser.h \
     src/nodes/OperatorQueryNode.h \
     src/visualization/VOperatorQueryNode.h \
@@ -111,9 +108,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/visualization/VCommandNodeStyle.cpp \
     src/visualization/VCommandArgumentStyle.cpp \
     src/handlers/HQuery.cpp \
-    src/nodes/EmptyQueryNode.cpp \
-    src/visualization/VEmptyQueryNode.cpp \
-    src/visualization/VEmptyQueryNodeStyle.cpp \
     src/parsing/QueryParser.cpp \
     src/nodes/OperatorQueryNode.cpp \
     src/visualization/VOperatorQueryNode.cpp \

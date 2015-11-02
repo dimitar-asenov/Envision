@@ -41,7 +41,6 @@
 #include "visualization/Heatmap.h"
 #include "visualization/VCommandNode.h"
 #include "visualization/VCommandArgument.h"
-#include "visualization/VEmptyQueryNode.h"
 #include "visualization/VOperatorQueryNode.h"
 #include "handlers/HQuery.h"
 #include "query_prompt/QueryPromptMode.h"
@@ -77,7 +76,6 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	Model::CompositeNode::registerNewExtension<TagExtension>();
 	VCommandNode::setDefaultClassHandler(HQuery::instance());
 	VCommandArgument::setDefaultClassHandler(HQuery::instance());
-	VEmptyQueryNode::setDefaultClassHandler(HQuery::instance());
 	VOperatorQueryNode::setDefaultClassHandler(HQuery::instance());
 	HQuery::initStringComponents();
 

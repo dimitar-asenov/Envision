@@ -105,13 +105,6 @@ void QueryBuilder::visit(OperatorQueryNode* op)
 	query_ = composite;
 }
 
-void QueryBuilder::visit(EmptyQueryNode*)
-{
-	// TODO: throw
-	Q_ASSERT(false);
-	query_ = nullptr;
-}
-
 void QueryBuilder::connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
 												  Query* connectionQuery, Query* outputQuery)
 {

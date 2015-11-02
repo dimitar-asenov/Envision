@@ -26,7 +26,7 @@
 #include "QueryPromptInput.h"
 
 #include "../nodes/QueryNodeContainer.h"
-#include "../nodes/EmptyQueryNode.h"
+#include "../nodes/CommandNode.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
@@ -39,7 +39,7 @@ ITEM_COMMON_DEFINITIONS(QueryPromptInput, "item")
 QueryPromptInput::QueryPromptInput(Item* parent, const StyleType* style)
 	: Super{parent, style}, query_ {new QueryNodeContainer()}
 {
-	query_->setQuery(new EmptyQueryNode());
+	query_->setQuery(new CommandNode(""));
 }
 
 void QueryPromptInput::initializeForms()
