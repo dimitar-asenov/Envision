@@ -26,10 +26,10 @@
 
 #include "ScriptQuery.h"
 
-#include "../wrappers/AstApi.h"
-#include "../wrappers/DataApi.h"
-#include "../helpers/BoostPythonHelpers.h"
-#include "../queries/QueryRegistry.h"
+#include "../python_bindings/AstApi.h"
+#include "../python_bindings/DataApi.h"
+#include "../python_bindings/BoostPythonHelpers.h"
+#include "../query_framework/QueryRegistry.h"
 
 #include "ModelBase/src/nodes/Node.h"
 

@@ -30,7 +30,7 @@
 
 #include "../dataformat/TupleSet.h"
 
-#include "../misc/Optional.h"
+#include "../query_framework/Optional.h"
 
 namespace InformationScripting {
 

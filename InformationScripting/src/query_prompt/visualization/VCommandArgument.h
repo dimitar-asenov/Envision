@@ -24,23 +24,39 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../../informationscripting_api.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VText.h"
+
+#include "../nodes/CommandArgument.h"
+#include "VCommandArgumentStyle.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class INFORMATIONSCRIPTING_API VCommandArgument
+		: public Super<Visualization::ItemWithNode<VCommandArgument, Visualization::DeclarativeItem<VCommandArgument>,
+		CommandArgument>>
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+	ITEM_COMMON(VCommandArgument)
+	public:
+		VCommandArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+		Visualization::VText* argument() const;
+
+		static void initializeForms();
+
+	protected:
+		virtual void determineChildren() override;
+
+	private:
+		Visualization::VText* argument_{};
+};
+
+inline Visualization::VText* VCommandArgument::argument() const { return argument_; }
+
 
 } /* namespace InformationScripting */

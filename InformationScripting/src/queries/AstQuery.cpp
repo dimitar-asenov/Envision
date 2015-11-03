@@ -43,7 +43,7 @@
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
 
-#include "QueryRegistry.h"
+#include "../query_framework/QueryRegistry.h"
 
 namespace InformationScripting {
 

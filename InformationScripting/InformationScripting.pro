@@ -16,15 +16,10 @@ INCLUDEPATH += /usr/lib/boost
 
 HEADERS += src/precompiled.h \
     src/InformationScriptingException.h \
-	src/informationscripting_api.h \
+    src/informationscripting_api.h \
     src/InformationScriptingPlugin.h \
-    src/commands/CScript.h \
-    src/helpers/BoostPythonHelpers.h \
-    src/wrappers/AstApi.h \
     src/queries/Query.h \
     src/queries/AstQuery.h \
-    src/queries/QueryExecutor.h \
-    src/visualization/DefaultVisualizer.h \
     src/queries/CompositeQuery.h \
     src/queries/GenericFilter.h \
     src/queries/AstNameFilter.h \
@@ -34,56 +29,54 @@ HEADERS += src/precompiled.h \
     src/dataformat/Tuple.h \
     src/dataformat/TupleSet.h \
     src/dataformat/Property.h \
-    src/helpers/PythonSet.h \
-    src/wrappers/DataApi.h \
-    src/queries/QueryRegistry.h \
     src/queries/SubstractOperator.h \
     src/queries/AddASTPropertiesAsTuples.h \
     src/nodes/TagExtension.h \
     src/queries/TagQuery.h \
-    src/nodes/QueryNode.h \
-    src/nodes/CommandNode.h \
-    src/nodes/CommandArgument.h \
-    src/nodes/CompositeQueryNode.h \
-    src/nodes/QueryNodeContainer.h \
-    src/visualization/VCommandNode.h \
-    src/visualization/VCommandArgument.h \
-    src/visualization/VCommandNodeStyle.h \
-    src/visualization/VCommandArgumentStyle.h \
-    src/handlers/HQuery.h \
-    src/parsing/QueryParser.h \
-    src/nodes/OperatorQueryNode.h \
-    src/visualization/VOperatorQueryNode.h \
-    src/visualization/VOperatorQueryNodeStyle.h \
     src/queries/LinearQuery.h \
-    src/visualization/HighlightOverlay.h \
-    src/visualization/Heatmap.h \
     src/queries/VersionControlQuery.h \
-    src/parsing/SimpleQueryParser.h \
-    src/visualization/VCompositeQueryNode.h \
-    src/visualization/VCompositeQueryNodeStyle.h \
-    src/misc/Optional.h \
-    src/parsing/ArgumentParser.h \
-    src/parsing/ArgumentRule.h \
-    src/parsing/QueryParsingException.h \
     src/queries/BreakpointManager.h \
     src/queries/RuntimeQuery.h \
-    src/misc/AstModification.h \
-    src/query_prompt/QueryPromptInput.h \
     src/query_prompt/QueryPromptMode.h \
-    src/query_prompt/QueryPromptInputStyle.h \
-    src/query_prompt/VQueryNodeContainer.h \
-    src/query_prompt/QueryBuilder.h \
-    src/queries/PassthroughQuery.h
+    src/queries/PassthroughQuery.h \
+    src/query_prompt/nodes/CommandArgument.h \
+    src/query_prompt/nodes/CommandNode.h \
+    src/query_prompt/nodes/CompositeQueryNode.h \
+    src/query_prompt/nodes/OperatorQueryNode.h \
+    src/query_prompt/nodes/QueryNode.h \
+    src/query_prompt/nodes/QueryNodeContainer.h \
+    src/query_prompt/parsing/SimpleQueryParser.h \
+    src/query_prompt/visualization/VOperatorQueryNodeStyle.h \
+    src/query_prompt/visualization/VOperatorQueryNode.h \
+    src/query_prompt/visualization/VCompositeQueryNodeStyle.h \
+    src/query_prompt/visualization/VCompositeQueryNode.h \
+    src/query_prompt/visualization/VCommandNode.h \
+    src/query_prompt/visualization/VCommandNodeStyle.h \
+    src/query_prompt/visualization/VCommandArgumentStyle.h \
+    src/query_prompt/visualization/VCommandArgument.h \
+    src/query_prompt/parsing/QueryBuilder.h \
+    src/query_prompt/visualization/VQueryNodeContainer.h \
+    src/query_prompt/visualization/QueryPromptInputStyle.h \
+    src/query_prompt/visualization/QueryPromptInput.h \
+    src/query_prompt/HQuery.h \
+    src/python_bindings/AstApi.h \
+    src/python_bindings/DataApi.h \
+    src/python_bindings/BoostPythonHelpers.h \
+    src/python_bindings/PythonSet.h \
+    src/python_bindings/AstModification.h \
+    src/query_framework/Optional.h \
+    src/query_framework/QueryRegistry.h \
+    src/query_framework/QueryExecutor.h \
+    src/query_framework/ArgumentParser.h \
+    src/query_framework/ArgumentRule.h \
+    src/QueryParsingException.h \
+    src/query_framework/DefaultVisualizer.h \
+    src/query_framework/HighlightOverlay.h \
+    src/queries/Heatmap.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
-    src/commands/CScript.cpp \
-    src/helpers/BoostPythonHelpers.cpp \
-    src/wrappers/AstApi.cpp \
     src/queries/AstQuery.cpp \
-    src/queries/QueryExecutor.cpp \
-    src/visualization/DefaultVisualizer.cpp \
     src/queries/CompositeQuery.cpp \
     src/queries/GenericFilter.cpp \
     src/queries/AstNameFilter.cpp \
@@ -93,55 +86,60 @@ SOURCES += src/InformationScriptingException.cpp \
     src/dataformat/Tuple.cpp \
     src/dataformat/TupleSet.cpp \
     src/dataformat/Property.cpp \
-    src/helpers/PythonSet.cpp \
-    src/queries/QueryRegistry.cpp \
     src/queries/SubstractOperator.cpp \
     src/queries/AddASTPropertiesAsTuples.cpp \
     src/nodes/TagExtension.cpp \
     src/queries/TagQuery.cpp \
-    src/nodes/QueryNode.cpp \
-    src/nodes/CommandNode.cpp \
-    src/nodes/CommandArgument.cpp \
-    src/nodes/CompositeQueryNode.cpp \
-    src/nodes/QueryNodeContainer.cpp \
-    src/visualization/VCommandNode.cpp \
-    src/visualization/VCommandArgument.cpp \
-    src/visualization/VCommandNodeStyle.cpp \
-    src/visualization/VCommandArgumentStyle.cpp \
-    src/handlers/HQuery.cpp \
-    src/parsing/QueryParser.cpp \
-    src/nodes/OperatorQueryNode.cpp \
-    src/visualization/VOperatorQueryNode.cpp \
-    src/visualization/VOperatorQueryNodeStyle.cpp \
     src/queries/LinearQuery.cpp \
-    src/visualization/HighlightOverlay.cpp \
-    src/visualization/Heatmap.cpp \
     src/queries/VersionControlQuery.cpp \
-    src/parsing/SimpleQueryParser.cpp \
-    src/visualization/VCompositeQueryNode.cpp \
-    src/visualization/VCompositeQueryNodeStyle.cpp \
-    src/parsing/ArgumentParser.cpp \
-    src/parsing/ArgumentRule.cpp \
-    src/parsing/QueryParsingException.cpp \
     src/queries/BreakpointManager.cpp \
     src/queries/RuntimeQuery.cpp \
-    src/misc/AstModification.cpp \
-    src/query_prompt/QueryPromptInput.cpp \
     src/query_prompt/QueryPromptMode.cpp \
-    src/query_prompt/QueryPromptInputStyle.cpp \
-    src/query_prompt/VQueryNodeContainer.cpp \
-    src/query_prompt/QueryBuilder.cpp \
-    src/queries/PassthroughQuery.cpp
+    src/queries/PassthroughQuery.cpp \
+    src/query_prompt/nodes/CommandArgument.cpp \
+    src/query_prompt/nodes/CommandNode.cpp \
+    src/query_prompt/nodes/CompositeQueryNode.cpp \
+    src/query_prompt/nodes/OperatorQueryNode.cpp \
+    src/query_prompt/nodes/QueryNode.cpp \
+    src/query_prompt/nodes/QueryNodeContainer.cpp \
+    src/query_prompt/parsing/SimpleQueryParser.cpp \
+    src/query_prompt/visualization/QueryPromptInput.cpp \
+    src/query_prompt/visualization/QueryPromptInputStyle.cpp \
+    src/query_prompt/parsing/QueryBuilder.cpp \
+    src/query_prompt/visualization/VQueryNodeContainer.cpp \
+    src/query_prompt/visualization/VOperatorQueryNodeStyle.cpp \
+    src/query_prompt/visualization/VOperatorQueryNode.cpp \
+    src/query_prompt/visualization/VCompositeQueryNodeStyle.cpp \
+    src/query_prompt/visualization/VCompositeQueryNode.cpp \
+    src/query_prompt/visualization/VCommandNodeStyle.cpp \
+    src/query_prompt/visualization/VCommandArgumentStyle.cpp \
+    src/query_prompt/visualization/VCommandArgument.cpp \
+    src/query_prompt/visualization/VCommandNode.cpp \
+    src/query_prompt/HQuery.cpp \
+    src/python_bindings/AstApi.cpp \
+    src/python_bindings/DataApi.cpp \
+    src/python_bindings/BoostPythonHelpers.cpp \
+    src/python_bindings/PythonSet.cpp \
+    src/python_bindings/AstModification.cpp \
+    src/query_framework/QueryExecutor.cpp \
+    src/query_framework/QueryRegistry.cpp \
+    src/query_framework/ArgumentParser.cpp \
+    src/query_framework/ArgumentRule.cpp \
+    src/QueryParsingException.cpp \
+    src/query_framework/DefaultVisualizer.cpp \
+    src/queries/Heatmap.cpp \
+    src/query_framework/HighlightOverlay.cpp
 
+# The workaround below is currently not needed but might be in the future, thus we leave it as reference.
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
 # see also: http://stackoverflow.com/a/14608296
-dataApiCompiler.input = SOURCES_DATAAPI
-dataApiCompiler.output = ${QMAKE_FILE_BASE}.o
-dataApiCompiler.commands = \$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -Wno-unused-local-typedef ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
-QMAKE_EXTRA_COMPILERS += dataApiCompiler
+#dataApiCompiler.input = SOURCES_DATAAPI
+#dataApiCompiler.output = ${QMAKE_FILE_BASE}.o
+#dataApiCompiler.commands = \$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -Wno-unused-local-typedef ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+#QMAKE_EXTRA_COMPILERS += dataApiCompiler
 
-SOURCES_DATAAPI = src/wrappers/DataApi.cpp
+#SOURCES_DATAAPI = src/wrappers/DataApi.cpp
 
 # HACK to only include the AstApi_Generated file if it exists.
 exists(src/wrappers/AstApi_Generated.cpp): {

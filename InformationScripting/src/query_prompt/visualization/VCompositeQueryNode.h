@@ -23,24 +23,38 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#pragma once
 
-#include "AddASTPropertiesAsTuples.h"
+#include "../../informationscripting_api.h"
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../nodes/CompositeQueryNode.h"
+#include "VCompositeQueryNodeStyle.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VList.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class INFORMATIONSCRIPTING_API VCompositeQueryNode : public Super<Visualization::ItemWithNode<VCompositeQueryNode,
+	Visualization::DeclarativeItem<VCompositeQueryNode>, CompositeQueryNode>>
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+	ITEM_COMMON(VCompositeQueryNode)
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+	public:
+		VCompositeQueryNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-} /* namespace InformationScripting */
+		Visualization::VList* queries() const;
+
+		static void initializeForms();
+
+	protected:
+		virtual void determineChildren() override;
+
+	private:
+		Visualization::VList* queries_{};
+};
+
+inline Visualization::VList* VCompositeQueryNode::queries() const { return queries_; }
+
+}

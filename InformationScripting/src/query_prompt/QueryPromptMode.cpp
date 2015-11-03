@@ -24,13 +24,13 @@
 **
 ***********************************************************************************************************************/
 #include "QueryPromptMode.h"
-#include "QueryPromptInput.h"
-#include "QueryBuilder.h"
 
-#include "../nodes/QueryNodeContainer.h"
-#include "../queries/QueryExecutor.h"
+#include "nodes/QueryNodeContainer.h"
+#include "parsing/QueryBuilder.h"
+#include "visualization/QueryPromptInput.h"
+#include "../QueryParsingException.h"
 #include "../queries/Query.h"
-#include "../parsing/QueryParsingException.h"
+#include "../query_framework//QueryExecutor.h"
 
 #include "VisualizationBase/src/items/Static.h"
 

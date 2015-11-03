@@ -26,7 +26,7 @@
 
 #include "BreakpointManager.h"
 
-#include "../queries/QueryRegistry.h"
+#include "../query_framework/QueryRegistry.h"
 
 #include "OODebug/src/debugger/JavaDebugger.h"
 

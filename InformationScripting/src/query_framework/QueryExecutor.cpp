@@ -24,23 +24,60 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#include "QueryExecutor.h"
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../queries/Query.h"
+#include "DefaultVisualizer.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "InteractionBase/src/commands/CommandResult.h"
+
+#include "VisualizationBase/src/VisualizationManager.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+QueryExecutor::~QueryExecutor()
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
+	Q_ASSERT(queries_.empty());
 }
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
+void QueryExecutor::addQuery(std::unique_ptr<Query>&& query)
 {
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
+	queries_.emplace(std::forward<std::unique_ptr<Query>>(query));
+}
+
+QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
+{
+	Q_ASSERT(!queries_.empty());
+
+	QList<QString> errorMessages;
+
+	auto query = std::move(queries_.front());
+	queries_.pop();
+
+	auto results = query->execute(input);
+	if (results.size())
+	{
+		// TODO how to handle warnings? CommandResult has no warnings?
+		if (results[0].hasWarnings())
+			qWarning() << results[0].warnings();
+		if (results[0])
+		{
+			auto val = results[0].value();
+			DefaultVisualizer::instance().visualize(val);
+			results.clear();
+		}
+		else
+			errorMessages = results[0].errors();
+	}
+
+	if (queries_.empty())
+	{
+		// deleteLater
+		QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
+																 new Visualization::CustomSceneEvent([this](){delete this;}));
+	}
+
+	return errorMessages;
 }
 
 } /* namespace InformationScripting */
