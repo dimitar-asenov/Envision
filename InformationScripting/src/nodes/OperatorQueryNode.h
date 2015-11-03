@@ -44,7 +44,7 @@ class INFORMATIONSCRIPTING_API OperatorQueryNode : public Super<QueryNode>
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
 
 	public:
-		enum OperatorTypes { Pipe, Substract, Union };
+		enum OperatorTypes { Pipe, Substract };
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);

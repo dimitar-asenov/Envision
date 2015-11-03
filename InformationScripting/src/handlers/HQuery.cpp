@@ -79,8 +79,7 @@ void HQuery::initStringComponents()
 		return StringComponents::c(opNode->left(),
 			StringComponents::choose(opNode->op(),
 								OperatorQueryNode::OperatorTypes::Pipe, "|",
-								OperatorQueryNode::OperatorTypes::Substract, "|-",
-								OperatorQueryNode::OperatorTypes::Union, "U"),
+								OperatorQueryNode::OperatorTypes::Substract, "|-"),
 					opNode->right());
 	});
 

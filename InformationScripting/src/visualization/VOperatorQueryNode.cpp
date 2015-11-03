@@ -45,7 +45,6 @@ void VOperatorQueryNode::initializeForms()
 			{
 				case OperatorQueryNode::OperatorTypes::Pipe : return &v->style()->pipeOp();
 				case OperatorQueryNode::OperatorTypes::Substract : return &v->style()->substractOp();
-				case OperatorQueryNode::OperatorTypes::Union : return &v->style()->unionOp();
 				default: return &v->style()->pipeOp();
 			}
 	});
