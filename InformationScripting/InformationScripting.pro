@@ -45,7 +45,6 @@ HEADERS += src/precompiled.h \
     src/query_prompt/nodes/OperatorQueryNode.h \
     src/query_prompt/nodes/QueryNode.h \
     src/query_prompt/nodes/QueryNodeContainer.h \
-    src/query_prompt/parsing/SimpleQueryParser.h \
     src/query_prompt/visualization/VOperatorQueryNodeStyle.h \
     src/query_prompt/visualization/VOperatorQueryNode.h \
     src/query_prompt/visualization/VCompositeQueryNodeStyle.h \
@@ -72,7 +71,8 @@ HEADERS += src/precompiled.h \
     src/QueryParsingException.h \
     src/query_framework/DefaultVisualizer.h \
     src/query_framework/HighlightOverlay.h \
-    src/queries/Heatmap.h
+    src/queries/Heatmap.h \
+    src/query_prompt/parsing/QueryParser.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -102,7 +102,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/query_prompt/nodes/OperatorQueryNode.cpp \
     src/query_prompt/nodes/QueryNode.cpp \
     src/query_prompt/nodes/QueryNodeContainer.cpp \
-    src/query_prompt/parsing/SimpleQueryParser.cpp \
     src/query_prompt/visualization/QueryPromptInput.cpp \
     src/query_prompt/visualization/QueryPromptInputStyle.cpp \
     src/query_prompt/parsing/QueryBuilder.cpp \
@@ -128,7 +127,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/QueryParsingException.cpp \
     src/query_framework/DefaultVisualizer.cpp \
     src/queries/Heatmap.cpp \
-    src/query_framework/HighlightOverlay.cpp
+    src/query_framework/HighlightOverlay.cpp \
+    src/query_prompt/parsing/QueryParser.cpp
 
 # The workaround below is currently not needed but might be in the future, thus we leave it as reference.
 # Workaround to not have any pragma's in NodeApi.cpp

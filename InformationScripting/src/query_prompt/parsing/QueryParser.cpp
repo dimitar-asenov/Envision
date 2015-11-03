@@ -23,7 +23,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#include "SimpleQueryParser.h"
+#include "QueryParser.h"
 
 #include "../nodes/CompositeQueryNode.h"
 #include "../nodes/OperatorQueryNode.h"
@@ -31,13 +31,13 @@
 
 namespace InformationScripting {
 
-constexpr QChar SimpleQueryParser::LIST_LEFT;
-constexpr QChar SimpleQueryParser::LIST_RIGHT;
-constexpr QChar SimpleQueryParser::LIST_DELIM;
-constexpr QChar SimpleQueryParser::OP_PIPE;
-constexpr QChar SimpleQueryParser::OP_MINUS_POSTFIX;
+constexpr QChar QueryParser::LIST_LEFT;
+constexpr QChar QueryParser::LIST_RIGHT;
+constexpr QChar QueryParser::LIST_DELIM;
+constexpr QChar QueryParser::OP_PIPE;
+constexpr QChar QueryParser::OP_MINUS_POSTFIX;
 
-QueryNode* SimpleQueryParser::parse(const QString& queryString)
+QueryNode* QueryParser::parse(const QString& queryString)
 {
 	qDebug() << "parsing" << queryString;
 	int index = 0;
@@ -46,7 +46,7 @@ QueryNode* SimpleQueryParser::parse(const QString& queryString)
 	return query;
 }
 
-QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
+QueryNode* QueryParser::parseAny(const QString& queryString, int& index)
 {
 	if (index >= queryString.length()) return new CommandNode();
 
@@ -103,7 +103,7 @@ QueryNode* SimpleQueryParser::parseAny(const QString& queryString, int& index)
 	return op;
 }
 
-CompositeQueryNode* SimpleQueryParser::parseList(const QString& queryString, int& index)
+CompositeQueryNode* QueryParser::parseList(const QString& queryString, int& index)
 {
 	auto composite = new CompositeQueryNode();
 	QChar ch = LIST_DELIM;

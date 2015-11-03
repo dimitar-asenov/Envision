@@ -33,7 +33,7 @@ namespace InformationScripting {
 class QueryNode;
 class CompositeQueryNode;
 
-class INFORMATIONSCRIPTING_API SimpleQueryParser
+class INFORMATIONSCRIPTING_API QueryParser
 {
 	public:
 		static QueryNode* parse(const QString& queryString);

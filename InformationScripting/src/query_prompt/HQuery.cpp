@@ -33,7 +33,7 @@
 #include "nodes/CompositeQueryNode.h"
 #include "nodes/OperatorQueryNode.h"
 
-#include "parsing/SimpleQueryParser.h"
+#include "parsing/QueryParser.h"
 
 #include "visualization/VCommandNode.h"
 #include "visualization/VCommandArgument.h"
@@ -70,9 +70,9 @@ void HQuery::initStringComponents()
 	});
 	StringComponents::add<CompositeQueryNode>([](CompositeQueryNode* composite) {
 		return StringComponents::c(StringComponents::list(composite->queries(),
-																		  SimpleQueryParser::LIST_LEFT,
-																		  SimpleQueryParser::LIST_DELIM,
-																		  SimpleQueryParser::LIST_RIGHT, true, true));
+																		  QueryParser::LIST_LEFT,
+																		  QueryParser::LIST_DELIM,
+																		  QueryParser::LIST_RIGHT, true, true));
 	});
 
 	StringComponents::add<OperatorQueryNode>([](OperatorQueryNode* opNode) {
@@ -93,9 +93,9 @@ void HQuery::initStringComponents()
 	GridBasedOffsetProvider::addGridConstructor<VCompositeQueryNode>(
 	[](GridBasedOffsetProvider* grid, VCompositeQueryNode* vis){
 		grid->add(new ListCell(0, vis->queries(), 0,
-									  SimpleQueryParser::LIST_LEFT,
-									  SimpleQueryParser::LIST_DELIM,
-									  SimpleQueryParser::LIST_RIGHT));
+									  QueryParser::LIST_LEFT,
+									  QueryParser::LIST_DELIM,
+									  QueryParser::LIST_RIGHT));
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VCommandArgument>(
@@ -189,7 +189,7 @@ void HQuery::setNewQuery(Visualization::Item* target, Visualization::Item* topMo
 {
 	QString newText = text;
 	qDebug() << "NewText" << text;
-	QueryNode* newQuery = SimpleQueryParser::parse(newText);
+	QueryNode* newQuery = QueryParser::parse(newText);
 
 	Model::Node* containerNode = topMostItem->node()->parent();
 	Q_ASSERT(containerNode);
@@ -225,7 +225,7 @@ bool HQuery::processDeleteOrBackspace(Qt::Key key, QString& exp, int& index)
 bool HQuery::canBeRemoved(const QString& exp, int index)
 {
 	if (index >=0 && index < exp.length()
-		 && exp[index] != SimpleQueryParser::LIST_LEFT && exp[index] != SimpleQueryParser::LIST_RIGHT)
+		 && exp[index] != QueryParser::LIST_LEFT && exp[index] != QueryParser::LIST_RIGHT)
 	{
 		QChar before;
 		QChar after;
@@ -233,11 +233,11 @@ bool HQuery::canBeRemoved(const QString& exp, int index)
 		if (index < exp.length()-1) after = exp[index+1];
 
 		// Since all operators start with OP_PIPE it is enough to check for the pipe below:
-		if (before == SimpleQueryParser::LIST_RIGHT)
-			return after.isNull() || after == SimpleQueryParser::LIST_DELIM || after == SimpleQueryParser::OP_PIPE;
+		if (before == QueryParser::LIST_RIGHT)
+			return after.isNull() || after == QueryParser::LIST_DELIM || after == QueryParser::OP_PIPE;
 
-		if (after == SimpleQueryParser::LIST_LEFT)
-			return before.isNull() || before == SimpleQueryParser::LIST_DELIM || isOperatorAtIndex(exp, index - 1);
+		if (after == QueryParser::LIST_LEFT)
+			return before.isNull() || before == QueryParser::LIST_DELIM || isOperatorAtIndex(exp, index - 1);
 
 		return true;
 	}
@@ -248,7 +248,7 @@ bool HQuery::canBeRemoved(const QString& exp, int index)
 int HQuery::processEnter(QString& exp, int index)
 {
 	// Insert a new list delimiter
-	exp.insert(index, SimpleQueryParser::LIST_DELIM);
+	exp.insert(index, QueryParser::LIST_DELIM);
 	int finalIndex = index+1;
 
 	auto findBoundary = [&exp](int startIndex, bool forward, int& foundIndex) -> bool {
@@ -268,14 +268,14 @@ int HQuery::processEnter(QString& exp, int index)
 					needsDelimiter = true;
 					break;
 				}
-				else if (exp[foundIndex] == SimpleQueryParser::LIST_DELIM ||
-							exp[foundIndex] == (forward?SimpleQueryParser::LIST_RIGHT:SimpleQueryParser::LIST_LEFT))
+				else if (exp[foundIndex] == QueryParser::LIST_DELIM ||
+							exp[foundIndex] == (forward?QueryParser::LIST_RIGHT:QueryParser::LIST_LEFT))
 					break; // We already have a list, so nothing to do
-				else if (exp[foundIndex] == (forward?SimpleQueryParser::LIST_LEFT:SimpleQueryParser::LIST_RIGHT) ) {
+				else if (exp[foundIndex] == (forward?QueryParser::LIST_LEFT:QueryParser::LIST_RIGHT) ) {
 					++subLists;
 				}
 			}
-			else if (exp[foundIndex] == (forward?SimpleQueryParser::LIST_RIGHT:SimpleQueryParser::LIST_LEFT)) --subLists;
+			else if (exp[foundIndex] == (forward?QueryParser::LIST_RIGHT:QueryParser::LIST_LEFT)) --subLists;
 
 			if (forward) ++foundIndex;
 			else --foundIndex;
@@ -291,9 +291,9 @@ int HQuery::processEnter(QString& exp, int index)
 
 	if (frontNeedsDelim || backNeedsDelim )
 	{
-		exp.insert(frontIndex+1, SimpleQueryParser::LIST_LEFT);
+		exp.insert(frontIndex+1, QueryParser::LIST_LEFT);
 		++finalIndex;
-		exp.insert(backIndex+1, SimpleQueryParser::LIST_RIGHT); // +1 because the previous insert shifted the text by 1
+		exp.insert(backIndex+1, QueryParser::LIST_RIGHT); // +1 because the previous insert shifted the text by 1
 	}
 
 	return finalIndex;
@@ -307,14 +307,14 @@ int HQuery::removeListsWithOneElement(QString& exp, int& index, int iteratorInde
 
 	while (iteratorIndex < exp.length())
 	{
-		if (exp[iteratorIndex] == SimpleQueryParser::LIST_DELIM)
+		if (exp[iteratorIndex] == QueryParser::LIST_DELIM)
 		{
 			++numDelims;
 			++iteratorIndex;
 		}
-		else if (exp[iteratorIndex] == SimpleQueryParser::LIST_LEFT)
+		else if (exp[iteratorIndex] == QueryParser::LIST_LEFT)
 			iteratorIndex = removeListsWithOneElement(exp, index, iteratorIndex);
-		else if (exp[iteratorIndex] == SimpleQueryParser::LIST_RIGHT)
+		else if (exp[iteratorIndex] == QueryParser::LIST_RIGHT)
 		{
 			if (numDelims == 0) {
 				if (index > iteratorIndex) --index;
@@ -337,9 +337,9 @@ int HQuery::removeListsWithOneElement(QString& exp, int& index, int iteratorInde
 
 bool HQuery::isOperatorAtIndex(const QString& exp, int index)
 {
-	return exp[index] == SimpleQueryParser::OP_PIPE
-			|| (exp[index] == SimpleQueryParser::OP_MINUS_POSTFIX
-				 && index > 0 && exp[index-1] == SimpleQueryParser::OP_PIPE);
+	return exp[index] == QueryParser::OP_PIPE
+			|| (exp[index] == QueryParser::OP_MINUS_POSTFIX
+				 && index > 0 && exp[index-1] == QueryParser::OP_PIPE);
 }
 
 }
