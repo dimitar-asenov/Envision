@@ -28,8 +28,8 @@
 
 namespace InformationScripting {
 
-InformationScriptingException::InformationScriptingException(const QString& message, bool throwInDebugMode)
-	: Core::EnvisionException(message, throwInDebugMode)
+InformationScriptingException::InformationScriptingException(const QString& message, bool assertInDebugMode)
+	: Core::EnvisionException(message, assertInDebugMode)
 {}
 
 const QString& InformationScriptingException::name() const

@@ -34,7 +34,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API InformationScriptingException : public Core::EnvisionException
 {
 		public:
-			InformationScriptingException(const QString& message, bool throwInDebugMode = true);
+			InformationScriptingException(const QString& message, bool assertInDebugMode = true);
 			const QString& name() const;
 };
 
