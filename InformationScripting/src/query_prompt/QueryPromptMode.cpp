@@ -28,9 +28,9 @@
 #include "nodes/QueryNodeContainer.h"
 #include "parsing/QueryBuilder.h"
 #include "visualization/QueryPromptInput.h"
-#include "../QueryParsingException.h"
 #include "../queries/Query.h"
 #include "../query_framework/QueryExecutor.h"
+#include "../query_framework/QueryParsingException.h"
 
 #include "VisualizationBase/src/items/Static.h"
 

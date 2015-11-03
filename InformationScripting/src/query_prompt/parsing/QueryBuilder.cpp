@@ -35,7 +35,7 @@
 #include "../../queries/SubstractOperator.h"
 #include "../../queries/UnionOperator.h"
 #include "../../query_framework/QueryRegistry.h"
-#include "../../QueryParsingException.h"
+#include "../../query_framework/QueryParsingException.h"
 
 namespace InformationScripting {
 
