@@ -26,7 +26,8 @@
 
 #include "RuntimeQuery.h"
 
-#include "../queries/QueryRegistry.h"
+#include "../query_framework/QueryRegistry.h"
+#include "../query_framework/QueryExecutor.h"
 
 #include "InteractionBase/src/commands/CommandResult.h"
 
@@ -35,8 +36,6 @@
 
 #include "OODebug/src/debugger/JavaDebugger.h"
 #include "OODebug/src/debugger/jdwp/messages/EventSet.h"
-
-#include "QueryExecutor.h"
 
 namespace InformationScripting {
 

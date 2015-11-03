@@ -23,24 +23,21 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#pragma once
 
-#include "AddASTPropertiesAsTuples.h"
+#include "../../informationscripting_api.h"
 
-#include "ModelBase/src/nodes/Node.h"
-
-#include "../query_framework/QueryRegistry.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class INFORMATIONSCRIPTING_API VCompositeQueryNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+	public:
+		virtual ~VCompositeQueryNodeStyle() override;
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+		Property<Visualization::VListStyle> queries{this, "queries"};
+};
 
-} /* namespace InformationScripting */
+}

@@ -27,8 +27,8 @@
 #include "InformationScriptingPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "commands/CScript.h"
-#include "helpers/BoostPythonHelpers.h"
+#include "nodes/TagExtension.h"
+#include "python_bindings/BoostPythonHelpers.h"
 #include "queries/ScriptQuery.h"
 #include "queries/AstQuery.h"
 #include "queries/AstNameFilter.h"
@@ -37,21 +37,19 @@
 #include "queries/VersionControlQuery.h"
 #include "queries/BreakpointManager.h"
 #include "queries/RuntimeQuery.h"
-#include "nodes/TagExtension.h"
-#include "visualization/Heatmap.h"
-#include "visualization/VCommandNode.h"
-#include "visualization/VCommandArgument.h"
-#include "visualization/VOperatorQueryNode.h"
-#include "handlers/HQuery.h"
+#include "queries/Heatmap.h"
+#include "query_prompt/HQuery.h"
+#include "query_prompt/visualization/VCommandNode.h"
+#include "query_prompt/visualization/VCommandArgument.h"
+#include "query_prompt/visualization/VOperatorQueryNode.h"
 #include "query_prompt/QueryPromptMode.h"
-#include "query_prompt/QueryBuilder.h"
+#include "query_prompt/parsing/QueryBuilder.h"
 
 #include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
 
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
 
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 #include "InteractionBase/src/prompt/Prompt.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
@@ -63,7 +61,6 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	Core::TypeRegistry::initializeNewTypes();
 
 	BoostPythonHelpers::initializeConverters();
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CScript());
 	ScriptQuery::initPythonEnvironment();
 	AstQuery::registerDefaultQueries();
 	AstNameFilter::registerDefaultQueries();

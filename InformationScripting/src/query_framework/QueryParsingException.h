@@ -24,23 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
-
-#include "../query_framework/QueryRegistry.h"
+#include "informationscripting_api.h"
+#include "InformationScriptingException.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class INFORMATIONSCRIPTING_API QueryParsingException : public InformationScriptingException
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
-
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+		public:
+			QueryParsingException(const QString& message);
+			const QString& name() const;
+};
 
 } /* namespace InformationScripting */

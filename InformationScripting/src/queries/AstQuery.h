@@ -29,7 +29,7 @@
 #include "../informationscripting_api.h"
 
 #include "LinearQuery.h"
-#include "../parsing/ArgumentParser.h"
+#include "../query_framework/ArgumentParser.h"
 
 #include "ModelBase/src/nodes/Node.h"
 

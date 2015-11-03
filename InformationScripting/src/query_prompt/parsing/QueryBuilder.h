@@ -24,23 +24,41 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../../informationscripting_api.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "ModelBase/src/visitor/VisitorDefinition.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
-{
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+class CommandNode;
+class CompositeQuery;
+class CompositeQueryNode;
+class OperatorQueryNode;
+class Query;
+class QueryExecutor;
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
+class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder, std::unique_ptr<Query>>
 {
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+	public:
+		QueryBuilder(Model::Node* target, QueryExecutor* executor);
+		static void init();
+
+	private:
+		QueryExecutor* executor_{};
+		Model::Node* target_{};
+
+		static std::unique_ptr<Query> visitCommand(QueryBuilder* self, CommandNode* command);
+		static std::unique_ptr<Query> visitList(QueryBuilder* self, CompositeQueryNode* list);
+		static std::unique_ptr<Query> visitOperator(QueryBuilder* self, OperatorQueryNode* op);
+
+		static void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
+										Query* connectionQuery, Query* outputQuery = nullptr);
+};
 
 } /* namespace InformationScripting */

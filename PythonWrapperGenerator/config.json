@@ -1,6 +1,6 @@
 {
     "ExportFile": "AstApi_Generated.cpp",
-    "ExportPath": "../../InformationScripting/src/wrappers/",
+    "ExportPath": "../../InformationScripting/src/python_bindings/",
     "EnvisionPath": "../..",
     "MaxLineLength": 120,
     "SubDirs": 

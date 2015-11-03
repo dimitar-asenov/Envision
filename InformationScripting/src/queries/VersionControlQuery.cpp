@@ -26,7 +26,7 @@
 
 #include "VersionControlQuery.h"
 
-#include "QueryRegistry.h"
+#include "../query_framework/QueryRegistry.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 

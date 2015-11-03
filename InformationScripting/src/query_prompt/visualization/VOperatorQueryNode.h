@@ -24,23 +24,41 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../../informationscripting_api.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/Symbol.h"
+
+#include "../nodes/OperatorQueryNode.h"
+#include "VOperatorQueryNodeStyle.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class VOperatorQueryNode
+	: public Super<Visualization::ItemWithNode<VOperatorQueryNode, Visualization::DeclarativeItem<VOperatorQueryNode>,
+		OperatorQueryNode>>
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+	ITEM_COMMON(VOperatorQueryNode)
+	public:
+		VOperatorQueryNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+		Visualization::Item* left() const;
+		Visualization::Symbol* op() const;
+		Visualization::Item* right() const;
+
+		static void initializeForms();
+
+	private:
+		Visualization::Item* left_{};
+		Visualization::Symbol* op_{};
+		Visualization::Item* right_{};
+};
+
+inline Visualization::Item* VOperatorQueryNode::left() const { return left_; }
+inline Visualization::Symbol* VOperatorQueryNode::op() const { return op_; }
+inline Visualization::Item* VOperatorQueryNode::right() const { return right_; }
 
 } /* namespace InformationScripting */

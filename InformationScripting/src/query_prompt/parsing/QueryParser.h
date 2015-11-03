@@ -24,23 +24,30 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
-
-#include "../query_framework/QueryRegistry.h"
+#include "../../informationscripting_api.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
-{
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+class QueryNode;
+class CompositeQueryNode;
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
+class INFORMATIONSCRIPTING_API QueryParser
 {
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+	public:
+		static QueryNode* parse(const QString& queryString);
 
-} /* namespace InformationScripting */
+		static constexpr QChar LIST_LEFT{0x2045};
+		static constexpr QChar LIST_RIGHT{0x2046};
+		static constexpr QChar LIST_DELIM{0x2022};
+
+		static constexpr QChar OP_PIPE{'|'};
+		static constexpr QChar OP_MINUS_POSTFIX{'-'};
+
+	private:
+		static QueryNode* parseAny(const QString& queryString, int& index);
+		static CompositeQueryNode* parseList(const QString& queryString, int& index);
+};
+
+}

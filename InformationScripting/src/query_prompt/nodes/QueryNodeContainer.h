@@ -24,23 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../../informationscripting_api.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "QueryNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, QueryNodeContainer)
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class INFORMATIONSCRIPTING_API QueryNodeContainer : public Super<QueryNode>
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
-
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(QueryNodeContainer)
+	ATTRIBUTE(QueryNode, query, setQuery)
+};
 
 } /* namespace InformationScripting */

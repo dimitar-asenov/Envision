@@ -24,23 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../../informationscripting_api.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class INFORMATIONSCRIPTING_API VCommandNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+	public:
+		virtual ~VCommandNodeStyle() override;
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+	Property<Visualization::TextStyle> name{this, "name"};
+	Property<Visualization::VListStyle> arguments{this, "arguments"};
+};
 
 } /* namespace InformationScripting */

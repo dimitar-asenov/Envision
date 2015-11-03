@@ -24,23 +24,34 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../informationscripting_api.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "LinearQuery.h"
+#include "../query_framework/ArgumentParser.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
+class Heatmap : public LinearQuery
 {
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+	public:
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
-{
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+		static void registerDefaultQueries();
+
+	private:
+		friend class QueryRegistry;
+
+		static const QStringList VALUE_ATTRIBUTE_NAME_NAMES;
+
+		const QColor baseColor_{150, 255, 0};
+		QPair<int, int> valueRange_; // min, max
+		ArgumentParser arguments_;
+
+		Heatmap(Model::Node* target, QStringList args);
+
+		QColor colorForValue(int value);
+};
 
 } /* namespace InformationScripting */

@@ -24,23 +24,38 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddASTPropertiesAsTuples.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../../informationscripting_api.h"
+#include "QueryPromptInputStyle.h"
 
-#include "../query_framework/QueryRegistry.h"
+#include "InteractionBase/src/prompt/PromptMode.h"
+
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> AddASTPropertiesAsTuples::executeLinear(TupleSet input)
-{
-	input.addPropertiesAsTuples<Model::Node*>("ast");
-	return input;
-}
+class QueryNodeContainer;
 
-void AddASTPropertiesAsTuples::registerDefaultQueries()
+class INFORMATIONSCRIPTING_API QueryPromptInput : public Super<Visualization::DeclarativeItem<QueryPromptInput>>
 {
-	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
-}
+	ITEM_COMMON(QueryPromptInput)
 
-} /* namespace InformationScripting */
+	public:
+		QueryPromptInput(Item* parent, const StyleType* style = itemStyles().get());
+
+	static void initializeForms();
+
+	void setSelection(Interaction::PromptMode::InputSelection selection);
+
+	QueryNodeContainer* query() const;
+
+	private:
+		QueryNodeContainer* query_{};
+		Visualization::Item* queryVis_{};
+};
+
+inline QueryNodeContainer* QueryPromptInput::query() const { return query_; }
+
+}
