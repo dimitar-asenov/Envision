@@ -44,7 +44,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		 * The returned value is the underlying raw pointer in \a query which can be used to wire \a query with other
 		 * queries.
 		 */
-		Query* addQuery(std::unique_ptr<Query> query);
+		Query* addQuery(std::unique_ptr<Query>&& query);
 
 		/**
 		 * Connects output 0 from Query \a from to input 0 of Query \a to.
@@ -73,7 +73,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		};
 
 		struct QueryNode {
-				QueryNode(std::unique_ptr<Query> q) : q_{std::move(q)} {}
+				QueryNode(std::unique_ptr<Query>&& q) : q_{std::forward<std::unique_ptr<Query>>(q)} {}
 
 				/**
 				 * Describes an input mapping:

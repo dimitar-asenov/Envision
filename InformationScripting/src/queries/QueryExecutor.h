@@ -41,7 +41,7 @@ class INFORMATIONSCRIPTING_API QueryExecutor
 {
 	public:
 		~QueryExecutor();
-		void addQuery(std::unique_ptr<Query> query);
+		void addQuery(std::unique_ptr<Query>&& query);
 
 		QList<QString> execute(const QList<TupleSet>& input = {});
 

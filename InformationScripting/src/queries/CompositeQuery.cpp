@@ -110,13 +110,13 @@ QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 	return outNode_->calculatedOutputs_;
 }
 
-Query* CompositeQuery::addQuery(std::unique_ptr<Query> query)
+Query* CompositeQuery::addQuery(std::unique_ptr<Query>&& query)
 {
 	auto rawQ = query.get();
 	// A query should only be added once:
 	Q_ASSERT(std::find_if(nodes_.begin(), nodes_.end(), [rawQ](QueryNode* existing) {return existing->q_.get() == rawQ;})
 					== nodes_.end());
-	auto newNode = new QueryNode(std::move(query));
+	auto newNode = new QueryNode(std::forward<std::unique_ptr<Query>>(query));
 	nodes_.push_back(newNode);
 	return rawQ;
 }
