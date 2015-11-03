@@ -64,7 +64,10 @@ void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 	if (node)
 	{
 		auto queryNode = inputItem_->query()->query();
-		// Note a QueryExecutor should always be allocated with new, it is self destroying:
+		// Note a QueryExecutor should always be allocated with new, it is self destroying.
+		// The QueryBuilder below might however throw an exception when building the queries, if that is the case
+		// The executor will not execute and thus will never delete itself, thus we have to manually destroy it
+		// in the catch code.
 		auto executor = new QueryExecutor();
 		QueryBuilder builder{node, executor};
 		try
