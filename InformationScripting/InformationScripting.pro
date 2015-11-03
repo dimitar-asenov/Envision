@@ -147,9 +147,9 @@ exists(src/wrappers/AstApi_Generated.cpp): {
 }
 
 # Install script files into the script directory:
-test_scripts.path = $${BUILD_DIR}/scripts
-test_scripts.files = test/scripts/*
-INSTALLS += test_scripts
+scripts.path = $${BUILD_DIR}/scripts
+scripts.files = scripts/*
+INSTALLS += scripts
 
 # The below piece is borrowed and adapted from: https://github.com/mkeeter/antimony/blob/master/qt/python.pri
 cygwin {
