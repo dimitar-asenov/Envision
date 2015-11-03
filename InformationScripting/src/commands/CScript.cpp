@@ -73,7 +73,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	} catch (const QueryParsingException& e) {
 		return new Interaction::CommandResult(new Interaction::CommandError(e.message()));
 	}
-	return queryExecutor->execute();
+	queryExecutor->execute();
 
 	return new Interaction::CommandResult();
 }

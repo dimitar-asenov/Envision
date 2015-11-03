@@ -56,27 +56,27 @@ void QueryParser::buildQueryFrom(const QString& text, Model::Node* target, Query
 			if (i > 0) parts[i].prepend(OPEN_SCOPE_SYMBOL[0]);
 		}
 	}
-	for (auto part : parts)
-	{
-		auto type = parser.typeOf(part);
-		if (Type::Operator == type)
-			executor->addQuery(parser.parseOperator(part));
-		else if (Type::Query == type)
-			executor->addQuery(parser.parseQuery(part));
-		else if (Type::List == type)
-		{
-			auto queries = parser.parseList(part);
-			auto result = new CompositeQuery();
-			for (int i = 0; i < queries.size(); ++i)
-			{
-				result->connectInput(i, queries[i]);
-				result->connectToOutput(queries[i], i);
-			}
-			executor->addQuery(result);
-		}
-		else
-			Q_ASSERT(false);
-	}
+//	for (auto part : parts)
+//	{
+//		auto type = parser.typeOf(part);
+//		if (Type::Operator == type)
+//			executor->addQuery(parser.parseOperator(part));
+//		else if (Type::Query == type)
+//			executor->addQuery(parser.parseQuery(part));
+//		else if (Type::List == type)
+//		{
+//			auto queries = parser.parseList(part);
+//			auto result = new CompositeQuery();
+//			for (int i = 0; i < queries.size(); ++i)
+//			{
+//				result->connectInput(i, queries[i]);
+//				result->connectToOutput(queries[i], i);
+//			}
+//			executor->addQuery(result);
+//		}
+//		else
+//			Q_ASSERT(false);
+//	}
 }
 
 QueryParser::Type QueryParser::typeOf(const QString& text)
@@ -123,7 +123,7 @@ Query* QueryParser::parseQuery(const QString& text)
 	QString command = data.takeFirst();
 	auto q = QueryRegistry::instance().buildQuery(command, target_, data, executor_);
 	Q_ASSERT(q); // TODO this should be an error for the user.
-	return q;
+	return q.release();
 }
 
 QList<Query*> QueryParser::parseList(const QString& text)

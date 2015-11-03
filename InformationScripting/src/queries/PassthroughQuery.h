@@ -28,38 +28,14 @@
 
 #include "../informationscripting_api.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "Query.h"
 
 namespace InformationScripting {
 
-class QueryNodeContainer;
-class QueryNode;
-
-class HQuery : public Interaction::GenericHandler {
-	protected:
-		HQuery() = default;
-
+class INFORMATIONSCRIPTING_API PassthroughQuery : public Query
+{
 	public:
-		static HQuery* instance();
-
-		static void initStringComponents();
-
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
-
-	private:
-		QueryNodeContainer* parentContainer(QueryNode* e);
-
-		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
-
-		void setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index);
-
-		static bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
-		static bool canBeRemoved(const QString& exp, int index);
-
-		static int processEnter(QString& exp, int index);
-		static int removeListsWithOneElement(QString& exp, int& index, int iteratorIndex = -1);
-
-		static bool isOperatorAtIndex(const QString& exp, int index);
+		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 };
 
 } /* namespace InformationScripting */

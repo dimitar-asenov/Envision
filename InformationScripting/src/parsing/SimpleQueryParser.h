@@ -43,6 +43,7 @@ class INFORMATIONSCRIPTING_API SimpleQueryParser
 		static constexpr QChar LIST_DELIM{0x2022};
 
 		static constexpr QChar OP_PIPE{'|'};
+		static constexpr QChar OP_MINUS_POSTFIX{'-'};
 
 	private:
 		static QueryNode* parseAny(const QString& queryString, int& index);

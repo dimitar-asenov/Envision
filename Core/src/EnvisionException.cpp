@@ -39,13 +39,12 @@ bool& EnvisionException::assertOnThrow()
 }
 
 EnvisionException::EnvisionException()
-{
-	if (assertOnThrow()) Q_ASSERT_X(false, "Exception thrown", "");
-}
+	: EnvisionException("")
+{}
 
-EnvisionException::EnvisionException(const QString& message) : msg_{message}
+EnvisionException::EnvisionException(const QString& message, bool assertInDebugMode) : msg_{message}
 {
-	if (assertOnThrow()) Q_ASSERT_X(false, "Exception thrown", message.toLatin1());
+	if (assertInDebugMode && assertOnThrow()) Q_ASSERT_X(false, "Exception thrown", message.toLatin1());
 }
 
 EnvisionException::~EnvisionException() {}

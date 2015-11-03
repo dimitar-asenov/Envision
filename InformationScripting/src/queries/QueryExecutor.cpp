@@ -40,17 +40,16 @@ QueryExecutor::~QueryExecutor()
 	Q_ASSERT(queries_.empty());
 }
 
-void QueryExecutor::addQuery(Query* query)
+void QueryExecutor::addQuery(std::unique_ptr<Query>&& query)
 {
-	queries_.emplace(std::unique_ptr<Query>(query));
+	queries_.emplace(std::forward<std::unique_ptr<Query>>(query));
 }
 
-Interaction::CommandResult* QueryExecutor::execute(const QList<TupleSet>& input)
+QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
 {
 	Q_ASSERT(!queries_.empty());
 
-	bool hasError = false;
-	QString errorMessage{};
+	QList<QString> errorMessages;
 
 	auto query = std::move(queries_.front());
 	queries_.pop();
@@ -68,10 +67,7 @@ Interaction::CommandResult* QueryExecutor::execute(const QList<TupleSet>& input)
 			results.clear();
 		}
 		else
-		{
-			hasError = true;
-			errorMessage = results[0].errors()[0];
-		}
+			errorMessages = results[0].errors();
 	}
 
 	if (queries_.empty())
@@ -81,10 +77,7 @@ Interaction::CommandResult* QueryExecutor::execute(const QList<TupleSet>& input)
 																 new Visualization::CustomSceneEvent([this](){delete this;}));
 	}
 
-	if (hasError)
-		return new Interaction::CommandResult(new Interaction::CommandError(errorMessage));
-	else
-		return new Interaction::CommandResult();
+	return errorMessages;
 }
 
 } /* namespace InformationScripting */

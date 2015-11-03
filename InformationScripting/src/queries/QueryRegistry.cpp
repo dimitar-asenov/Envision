@@ -51,7 +51,8 @@ void QueryRegistry::registerAlias(const QString& alias, const QString& aliasedQu
 	};
 }
 
-Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QStringList args, QueryExecutor* executor)
+std::unique_ptr<Query> QueryRegistry::buildQuery(const QString& command, Model::Node* target,
+																 QStringList args, QueryExecutor* executor)
 {
 	if (auto constructor = constructors_[command])
 		return constructor(target, args, executor);
@@ -59,11 +60,9 @@ Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QS
 	{
 		// TODO we need some way to specify a condition on the node.
 		// Or eventually decide that we don't allow condition in the property adder
-		return new NodePropertyAdder(command, args[1]);
+		return std::unique_ptr<Query>(new NodePropertyAdder(command, args[1]));
 	}
-	if (auto script = tryBuildQueryFromScript(command, target, args, executor))
-		return script;
-	return nullptr;
+	return tryBuildQueryFromScript(command, target, args, executor);
 }
 
 QStringList QueryRegistry::scriptQueries() const
@@ -75,12 +74,12 @@ QStringList QueryRegistry::scriptQueries() const
 	return result;
 }
 
-Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, Model::Node* target,
-															 QStringList args, QueryExecutor* executor)
+std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromScript(const QString& name, Model::Node* target,
+																				  QStringList args, QueryExecutor* executor)
 {
 	QString scriptName{scriptLocation_ + name + ".py"};
 	if (QFile::exists(scriptName))
-		return new ScriptQuery(scriptName, target, args, executor);
+		return std::unique_ptr<Query>(new ScriptQuery(scriptName, target, args, executor));
 	return nullptr;
 }
 

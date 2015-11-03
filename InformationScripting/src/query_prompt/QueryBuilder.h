@@ -43,7 +43,7 @@ class OperatorQueryNode;
 class Query;
 class QueryExecutor;
 
-class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder, Query*>
+class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder, std::unique_ptr<Query>>
 {
 	public:
 		QueryBuilder(Model::Node* target, QueryExecutor* executor);
@@ -53,9 +53,9 @@ class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder
 		QueryExecutor* executor_{};
 		Model::Node* target_{};
 
-		static Query* visitCommand(QueryBuilder* self, CommandNode* command);
-		static Query* visitList(QueryBuilder* self, CompositeQueryNode* list);
-		static Query* visitOperator(QueryBuilder* self, OperatorQueryNode* op);
+		static std::unique_ptr<Query> visitCommand(QueryBuilder* self, CommandNode* command);
+		static std::unique_ptr<Query> visitList(QueryBuilder* self, CompositeQueryNode* list);
+		static std::unique_ptr<Query> visitOperator(QueryBuilder* self, OperatorQueryNode* op);
 
 		static void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
 										Query* connectionQuery, Query* outputQuery = nullptr);

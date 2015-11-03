@@ -41,7 +41,6 @@ class INFORMATIONSCRIPTING_API VOperatorQueryNodeStyle : public Super<Visualizat
 
 	Property<Visualization::SymbolStyle> pipeOp{this, "pipeOp"};
 	Property<Visualization::SymbolStyle> substractOp{this, "substractOp"};
-	Property<Visualization::SymbolStyle> unionOp{this, "unionOp"};
 };
 
 } /* namespace InformationScripting */

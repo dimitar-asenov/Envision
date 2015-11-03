@@ -79,8 +79,7 @@ void HQuery::initStringComponents()
 		return StringComponents::c(opNode->left(),
 			StringComponents::choose(opNode->op(),
 								OperatorQueryNode::OperatorTypes::Pipe, "|",
-								OperatorQueryNode::OperatorTypes::Substract, "-",
-								OperatorQueryNode::OperatorTypes::Union, "U"),
+								OperatorQueryNode::OperatorTypes::Substract, "|-"),
 					opNode->right());
 	});
 
@@ -233,11 +232,12 @@ bool HQuery::canBeRemoved(const QString& exp, int index)
 		if (index > 0) before = exp[index-1];
 		if (index < exp.length()-1) after = exp[index+1];
 
+		// Since all operators start with OP_PIPE it is enough to check for the pipe below:
 		if (before == SimpleQueryParser::LIST_RIGHT)
 			return after.isNull() || after == SimpleQueryParser::LIST_DELIM || after == SimpleQueryParser::OP_PIPE;
 
 		if (after == SimpleQueryParser::LIST_LEFT)
-			return before.isNull() || before == SimpleQueryParser::LIST_DELIM || before == SimpleQueryParser::OP_PIPE;
+			return before.isNull() || before == SimpleQueryParser::LIST_DELIM || isOperatorAtIndex(exp, index - 1);
 
 		return true;
 	}
@@ -262,7 +262,7 @@ int HQuery::processEnter(QString& exp, int index)
 
 			if (subLists == 0)
 			{
-				if (foundIndex < 0 || foundIndex == exp.length() || exp[foundIndex] == SimpleQueryParser::OP_PIPE)
+				if (foundIndex < 0 || foundIndex == exp.length() || isOperatorAtIndex(exp, foundIndex))
 				{
 					// We don't have a list, we must insert the list delimiters
 					needsDelimiter = true;
@@ -333,6 +333,13 @@ int HQuery::removeListsWithOneElement(QString& exp, int& index, int iteratorInde
 
 	Q_ASSERT(listStart >= 0 || iteratorIndex >= exp.length());
 	return iteratorIndex;
+}
+
+bool HQuery::isOperatorAtIndex(const QString& exp, int index)
+{
+	return exp[index] == SimpleQueryParser::OP_PIPE
+			|| (exp[index] == SimpleQueryParser::OP_MINUS_POSTFIX
+				 && index > 0 && exp[index-1] == SimpleQueryParser::OP_PIPE);
 }
 
 }

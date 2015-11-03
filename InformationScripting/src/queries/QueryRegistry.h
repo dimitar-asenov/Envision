@@ -56,7 +56,8 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		static void registerAlias(const QString& alias, const QString& aliasedQuery,
 										  std::function<void (QStringList&)> argAdaption = {});
 
-		Query* buildQuery(const QString& command, Model::Node* target, QStringList args, QueryExecutor* executor);
+		std::unique_ptr<Query> buildQuery(const QString& command, Model::Node* target,
+													 QStringList args, QueryExecutor* executor);
 
 		QStringList registeredQueries() const;
 		QStringList scriptQueries() const;
@@ -64,10 +65,10 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 	private:
 		QueryRegistry() = default;
 
-		Query* tryBuildQueryFromScript(const QString& name, Model::Node* target,
-												 QStringList args, QueryExecutor* executor);
+		std::unique_ptr<Query> tryBuildQueryFromScript(const QString& name, Model::Node* target,
+																	  QStringList args, QueryExecutor* executor);
 
-		using QueryConstructor = std::function<Query* (Model::Node*, QStringList, QueryExecutor*)>;
+		using QueryConstructor = std::function<std::unique_ptr<Query> (Model::Node*, QStringList, QueryExecutor*)>;
 		QHash<QString, QueryConstructor> constructors_;
 		QString scriptLocation_{"scripts/"};
 };
@@ -77,7 +78,7 @@ inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments..
 {
 	instance().constructors_[name] =
 			[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor*) {
-				return new QueryType(target, QStringList(name) + args, forwardArguments...);
+				return std::unique_ptr<Query>(new QueryType(target, QStringList(name) + args, forwardArguments...));
 	};
 }
 
@@ -92,7 +93,8 @@ inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments..
 	{
 		instance().constructors_[name] =
 				[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor* executor) {
-					return new QueryType(target, QStringList(name) + args, executor, forwardArguments...);
+					return std::unique_ptr<Query>(
+								new QueryType(target, QStringList(name) + args, executor, forwardArguments...));
 		};
 	}
 	else

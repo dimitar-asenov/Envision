@@ -24,42 +24,16 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "PassthroughQuery.h"
 
 namespace InformationScripting {
 
-class QueryNodeContainer;
-class QueryNode;
-
-class HQuery : public Interaction::GenericHandler {
-	protected:
-		HQuery() = default;
-
-	public:
-		static HQuery* instance();
-
-		static void initStringComponents();
-
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
-
-	private:
-		QueryNodeContainer* parentContainer(QueryNode* e);
-
-		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
-
-		void setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index);
-
-		static bool processDeleteOrBackspace(Qt::Key key, QString& exp, int& index);
-		static bool canBeRemoved(const QString& exp, int index);
-
-		static int processEnter(QString& exp, int index);
-		static int removeListsWithOneElement(QString& exp, int& index, int iteratorIndex = -1);
-
-		static bool isOperatorAtIndex(const QString& exp, int index);
-};
+QList<Optional<TupleSet>> PassthroughQuery::execute(QList<TupleSet> input)
+{
+	QList<Optional<TupleSet>> result;
+	for (const auto& in : input)
+		result.push_back(in);
+	return result;
+}
 
 } /* namespace InformationScripting */
