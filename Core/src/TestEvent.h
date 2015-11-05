@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "core_api.h"
+
 namespace Core {
 
 class TestEvent: public QEvent
