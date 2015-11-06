@@ -139,10 +139,10 @@ SOURCES += src/InformationScriptingException.cpp \
 #dataApiCompiler.commands = \$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -Wno-unused-local-typedef ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 #QMAKE_EXTRA_COMPILERS += dataApiCompiler
 
-#SOURCES_DATAAPI = src/wrappers/DataApi.cpp
+#SOURCES_DATAAPI = src/python_bindings/DataApi.cpp
 
 # HACK to only include the AstApi_Generated file if it exists.
-exists(src/wrappers/AstApi_Generated.cpp): {
+exists(src/python_bindings/AstApi_Generated.cpp): {
     DEFINES+=AST_API_GENERATED
 }
 
