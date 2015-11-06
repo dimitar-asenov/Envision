@@ -49,6 +49,22 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 	else if (scope == "of") scope_ = Scope::Input;
 }
 
+void ArgumentParser::setArgTo(QStringList& args, const QStringList& argNames, const QString& type)
+{
+	Q_ASSERT(argNames.size() > 0);
+	bool set = false;
+	for (auto& arg : args)
+	{
+		if (arg.size() > 1 && argNames.contains(arg.mid(1)))
+		{
+			arg.replace(QRegularExpression("=.*"), "=" + type);
+			set = true;
+		}
+	}
+	if (!set)
+		args.append(QString("-%1=%2").arg(argNames[0], type));
+}
+
 QString ArgumentParser::argument(const QString& argName) const
 {
 	return argParser_->value(argName);
