@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.2.2)
 
+# This is specific for using a Make-based build
+# find_program(CCACHE_FOUND ccache)
+# if(CCACHE_FOUND)
+#     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+#     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+# endif(CCACHE_FOUND)
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
@@ -49,6 +56,21 @@ endif()
 
 # ???
 # CONFIG += qt warn_on thread precompile_header debug_and_release depend_includepath
+
+#add_library(precompiled ${PROJECT_SOURCE_DIR}/src/precompiled.h)
+#add_library(precompiled OBJECT src/precompiled.h)
+set(precompiled_cpp ${CMAKE_CURRENT_BINARY_DIR}/precompiled_cpp.cpp)
+FILE(WRITE ${precompiled_cpp} "#include <precompiled.h>\n")
+set_source_files_properties(${precompiled_cpp}  PROPERTIES COMPILE_FLAGS "-include ${CMAKE_CURRENT_SOURCE_DIR}/src/precompiled.h")
+add_library(precompiled OBJECT src/precompiled.h ${precompiled_cpp})
+
+get_target_property(_loc Qt5::Core LOCATION)
+message("Plugin Qt5::Core is at location ${_loc}")
+  
+set_source_files_properties(src/precompiled.h PROPERTIES COMPILE_FLAGS "-x c++-header")
+set_target_properties(precompiled PROPERTIES AUTOMOC OFF)
+set_target_properties(precompiled PROPERTIES OUTPUT_NAME "precompiled.h.gch")
+set_target_properties(precompiled PROPERTIES COMPILE_FLAGS "-x c++-header")
 
 # ???
 # PRECOMPILED_HEADER = src/precompiled.h

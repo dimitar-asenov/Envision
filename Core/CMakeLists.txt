@@ -43,6 +43,7 @@ add_library( core SHARED
     src/PluginManager.cpp
     src/EnvisionWindow.cpp
     src/global.cpp )
+add_dependencies(core precompiled)
 
 install (TARGETS core DESTINATION ${BUILD_DIR})
 
