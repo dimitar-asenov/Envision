@@ -31,7 +31,6 @@
 #include "python_bindings/BoostPythonHelpers.h"
 #include "queries/ScriptQuery.h"
 #include "queries/AstQuery.h"
-#include "queries/AstNameFilter.h"
 #include "queries/AddASTPropertiesAsTuples.h"
 #include "queries/TagQuery.h"
 #include "queries/VersionControlQuery.h"
@@ -63,7 +62,6 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	BoostPythonHelpers::initializeConverters();
 	ScriptQuery::initPythonEnvironment();
 	AstQuery::registerDefaultQueries();
-	AstNameFilter::registerDefaultQueries();
 	AddASTPropertiesAsTuples::registerDefaultQueries();
 	TagQuery::registerDefaultQueries();
 	VersionControlQuery::registerDefaultQueries();

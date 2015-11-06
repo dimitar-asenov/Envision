@@ -21,8 +21,6 @@ HEADERS += src/precompiled.h \
     src/queries/Query.h \
     src/queries/AstQuery.h \
     src/queries/CompositeQuery.h \
-    src/queries/GenericFilter.h \
-    src/queries/AstNameFilter.h \
     src/queries/NodePropertyAdder.h \
     src/queries/UnionOperator.h \
     src/queries/ScriptQuery.h \
@@ -78,8 +76,6 @@ SOURCES += src/InformationScriptingException.cpp \
     test/SimpleTest.cpp \
     src/queries/AstQuery.cpp \
     src/queries/CompositeQuery.cpp \
-    src/queries/GenericFilter.cpp \
-    src/queries/AstNameFilter.cpp \
     src/queries/NodePropertyAdder.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \

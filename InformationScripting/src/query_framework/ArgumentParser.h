@@ -54,11 +54,11 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 
 		QString queryName() const;
 
+		static const QStringList SCOPE_ARGUMENT_NAMES;
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};
 		Scope scope_{};
 		QString queryName_;
-		static const QStringList SCOPE_ARGUMENT_NAMES;
 };
 
 inline ArgumentParser::Scope ArgumentParser::scope() const { return scope_; }

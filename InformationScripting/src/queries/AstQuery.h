@@ -67,7 +67,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 
 		AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules = {});
 
-		static void setTypeTo(QStringList& args, QString type);
+		static void setArgTo(QStringList& args, const QStringList& argNames, const QString& type);
 
 		Optional<TupleSet> baseClassesQuery(TupleSet input);
 		Optional<TupleSet> toParentType(TupleSet input);
