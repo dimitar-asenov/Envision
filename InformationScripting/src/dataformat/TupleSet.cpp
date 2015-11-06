@@ -48,23 +48,22 @@ QSet<Tuple> TupleSet::tuples() const
 
 void TupleSet::remove(const TupleSet& tuples)
 {
-	for (auto key : tuples.tuples_.keys())
-		tuples_[key].subtract(tuples.tuples_[key]);
+	for (auto it = tuples.tuples_.begin(); it != tuples.tuples_.end(); ++it)
+		tuples_[it.key()].subtract(it.value());
 }
 
 QSet<Tuple> TupleSet::takeAll()
 {
 	QSet<Tuple> result;
-	auto keys = tuples_.keys();
-	for (auto key : keys)
-		result.unite(tuples_.take(key));
+	for (auto it = tuples_.begin(); it != tuples_.end(); it = tuples_.erase(it))
+		result.unite(it.value());
 	return result;
 }
 
 void TupleSet::unite(const TupleSet& with)
 {
-	for (auto key : with.tuples_.keys())
-		tuples_[key].unite(with.tuples_[key]);
+	for (auto it = with.tuples_.begin(); it != with.tuples_.end(); ++it)
+		tuples_[it.key()].unite(it.value());
 }
 
 } /* namespace InformationScripting */

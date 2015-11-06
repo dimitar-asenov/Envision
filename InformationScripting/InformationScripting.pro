@@ -21,8 +21,6 @@ HEADERS += src/precompiled.h \
     src/queries/Query.h \
     src/queries/AstQuery.h \
     src/queries/CompositeQuery.h \
-    src/queries/GenericFilter.h \
-    src/queries/AstNameFilter.h \
     src/queries/NodePropertyAdder.h \
     src/queries/UnionOperator.h \
     src/queries/ScriptQuery.h \
@@ -78,8 +76,6 @@ SOURCES += src/InformationScriptingException.cpp \
     test/SimpleTest.cpp \
     src/queries/AstQuery.cpp \
     src/queries/CompositeQuery.cpp \
-    src/queries/GenericFilter.cpp \
-    src/queries/AstNameFilter.cpp \
     src/queries/NodePropertyAdder.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \
@@ -139,10 +135,10 @@ SOURCES += src/InformationScriptingException.cpp \
 #dataApiCompiler.commands = \$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -Wno-unused-local-typedef ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 #QMAKE_EXTRA_COMPILERS += dataApiCompiler
 
-#SOURCES_DATAAPI = src/wrappers/DataApi.cpp
+#SOURCES_DATAAPI = src/python_bindings/DataApi.cpp
 
 # HACK to only include the AstApi_Generated file if it exists.
-exists(src/wrappers/AstApi_Generated.cpp): {
+exists(src/python_bindings/AstApi_Generated.cpp): {
     DEFINES+=AST_API_GENERATED
 }
 

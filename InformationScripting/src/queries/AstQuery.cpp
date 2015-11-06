@@ -85,24 +85,14 @@ void AstQuery::registerDefaultQueries()
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{NODETYPE_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("attribute", &AstQuery::attribute,
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{ATTRIBUTE_NAME_NAMES[1]}}}});
-	QueryRegistry::registerAlias("classes", "ast", [](QStringList& args) {setTypeTo(args, "Class");});
-	QueryRegistry::registerAlias("methods", "ast", [](QStringList& args) {setTypeTo(args, "Method");});
-	QueryRegistry::registerAlias("toClass", "toParent", [](QStringList& args) {setTypeTo(args, "Class");});
-}
-
-void AstQuery::setTypeTo(QStringList& args, QString type)
-{
-	bool set = false;
-	for (auto& arg : args)
-	{
-		if (arg.startsWith("-" + NODETYPE_ARGUMENT_NAMES[0]))
-		{
-			arg.replace(QRegularExpression("=.*"), "=" + type);
-			set = true;
-		}
-	}
-	if (!set)
-		args.append(QString("-%1=%2").arg(NODETYPE_ARGUMENT_NAMES[0], type));
+	QueryRegistry::registerAlias("classes", "ast", [](QStringList& args) {
+		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Class");});
+	QueryRegistry::registerAlias("methods", "ast", [](QStringList& args) {
+		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Method");});
+	QueryRegistry::registerAlias("toClass", "toParent", [](QStringList& args) {
+		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Class");});
+	QueryRegistry::registerAlias("filter", "ast", [](QStringList& args) {
+		ArgumentParser::setArgTo(args, ArgumentParser::SCOPE_ARGUMENT_NAMES, "of");});
 }
 
 Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
