@@ -53,8 +53,7 @@ Optional<TupleSet> Heatmap::executeLinear(TupleSet input)
 		{
 			int count = tuple[valueTag];
 			Model::Node* astNode = tuple["ast"];
-			// TODO change the  color to be a tuple {{color, colorValue}, {ast, node}}
-			input.add({{"ast", astNode}, {"color", colorForValue(count).name()}});
+			input.add({{"color", colorForValue(count).name()}, {"ast", astNode}});
 		}
 	}
 	return input;
