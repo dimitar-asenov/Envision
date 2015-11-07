@@ -44,21 +44,27 @@ const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
-	const int CHANGE_COUNT = arguments_.argument(COUNT_ARGUMENT_NAMES[0]).toInt();
-
 	Model::TreeManager* treeManager = target()->manager();
-	QString managerName = treeManager->name();
 
 	// get GitRepository
-	QString path("projects/");
-	path.append(managerName);
+	QString path("projects/" + treeManager->name());
 	if (!GitRepository::repositoryExists(path)) return {"No repository found"};
 
 	GitRepository repository{path};
 	TupleSet result;
 
 	auto revisions = repository.revisions();
-	int commitIndexToTake = std::min(revisions.size() - 1, CHANGE_COUNT);
+	bool converts = false;
+	auto changeArgument = arguments_.argument(COUNT_ARGUMENT_NAMES[0]);
+	const int CHANGE_COUNT = changeArgument.toInt(&converts);
+	int commitIndexToTake = 0;
+	if (converts)
+		commitIndexToTake = std::min(revisions.size() - 1, CHANGE_COUNT);
+	else if (changeArgument == "all")
+		commitIndexToTake = revisions.size() - 1;
+	else
+		return {"Invalid count argument"};
+
 	for (int i = commitIndexToTake; i > 0; --i)
 	{
 		QString oldCommitId = revisions[i];
