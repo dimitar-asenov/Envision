@@ -1,18 +1,13 @@
 cmake_minimum_required(VERSION 3.2.2)
 
-project(core)
+project(Core)
 include(../CMake/common.cmake)
 
-add_definitions(-DCORE_LIBRARY)
+#add_definitions(-DQT_PLUGIN -DQT_SHARED)
 
-#add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_PLUGIN)
-add_definitions(-DQT_NO_DEBUG)
-add_definitions(-DQT_SHARED)
+find_package(Qt5 REQUIRED Xml)
 
-find_package(Qt5Xml)
-
-add_library( core SHARED
+add_library( Core SHARED
     src/reflect/TypeRegistry.h
     src/Profiler.h
     src/reflect/typeIdMacros.h
@@ -43,8 +38,8 @@ add_library( core SHARED
     src/PluginManager.cpp
     src/EnvisionWindow.cpp
     src/global.cpp )
-add_dependencies(core precompiled)
 
-install (TARGETS core DESTINATION ${BUILD_DIR})
+target_link_libraries(Core Qt5::Core Qt5::Widgets Qt5::Xml Qt5::Gui ${COMMON_LIBS})
+use_precompiled_header(Core)
 
-target_link_libraries(core Qt5::Core Qt5::Widgets Qt5::Xml Qt5::Gui ${COMMON_LIBS})
+install (TARGETS Core DESTINATION ${BUILD_DIR})
