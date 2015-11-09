@@ -90,6 +90,17 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 			if (removeUnownedNodes(cloned, expansion, childMapping)) continue;
 			insertArgumentSplices(mapping, childMapping, arguments);
 
+			// handle predefined meta definition: SET_OVERRIDE_FLAG
+			if (metaDef->arguments()->size() == 1)
+				if (metaDef->arguments()->first()->name() == "OVERRIDE")
+					if (auto ooMethod = DCast<OOModel::Method>(cloned))
+						if (ooMethod->modifiers()->isSet(OOModel::Modifier::Virtual))
+						{
+							auto predefinedMetaCall = new OOModel::MetaCallExpression("SET_OVERRIDE_FLAG");
+							predefinedMetaCall->arguments()->append(new OOModel::ReferenceExpression("OVERRIDE"));
+							ooMethod->metaCalls()->append(predefinedMetaCall);
+						}
+
 			NodeHelpers::addNodeToDeclaration(cloned, metaDef->context());
 		}
 	}
