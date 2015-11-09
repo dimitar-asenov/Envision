@@ -91,7 +91,7 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 				else // The node is hopefully higher up in the node hierarchy thus we take it as is.
 					changedNode = node;
 
-				result.add({{newCommitId, changedNode}});
+				result.add({{"change", newCommitId}, {"ast", changedNode}});
 			}
 		}
 	}
