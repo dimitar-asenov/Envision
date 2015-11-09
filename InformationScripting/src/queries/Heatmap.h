@@ -33,7 +33,7 @@
 
 namespace InformationScripting {
 
-class Heatmap : public LinearQuery
+class INFORMATIONSCRIPTING_API Heatmap : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;

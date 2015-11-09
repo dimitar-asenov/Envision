@@ -38,7 +38,7 @@ namespace InformationScripting {
 
 class QueryExecutor;
 
-class ScriptQuery : public Query
+class INFORMATIONSCRIPTING_API ScriptQuery : public Query
 {
 	public:
 		ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args, QueryExecutor* executor);

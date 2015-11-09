@@ -30,7 +30,7 @@ namespace InformationScripting {
 
 namespace helper {
 
-class PythonSetBase : public boost::python::object
+class INFORMATIONSCRIPTING_API PythonSetBase : public boost::python::object
 {
 	protected:
 		PythonSetBase();
@@ -38,7 +38,7 @@ class PythonSetBase : public boost::python::object
 		void discard(object_cref elem);
 };
 
-class PythonSet : public PythonSetBase
+class INFORMATIONSCRIPTING_API PythonSet : public PythonSetBase
 {
 	public:
 		template <class T>
