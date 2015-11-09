@@ -112,13 +112,23 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 			// replacementNode is an original node therefore we need to get to the cloned domain first
 			// clonedReplacementNode represents the cloned version of replacementNode
 			if (auto clonedReplacementNode = childMapping.clone(replacementNode))
-				if (!DCast<OOModel::Declaration>(clonedReplacementNode))
+			{
+				if (DCast<OOModel::VariableDeclaration>(clonedReplacementNode))
+				{
+					if (clonedReplacementNode->parent()->parent())
+						clonedReplacementNode->parent()->parent()
+								->replaceChild(clonedReplacementNode->parent(), childExpansion->metaCall());
+					else
+						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
+				}
+				else if (!DCast<OOModel::Declaration>(clonedReplacementNode))
 				{
 					if (clonedReplacementNode->parent())
 						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode, childExpansion->metaCall());
 					else
 						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
 				}
+			}
 	}
 }
 
