@@ -152,7 +152,9 @@ void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, Macr
 	if (DCast<OOModel::MetaCallExpression>(node)) return;
 
 	if (auto original = mapping.original(node))
-		if (macroExpansions_.expansions(original).contains(expansion))
+	{
+		if (macroExpansions_.expansions(original).contains(expansion) ||
+			 original->typeName() == "TypedListOfExpression")
 		{
 			for (auto child : node->children())
 				childrenUnownedByExpansion(child, expansion, mapping, result);
@@ -160,7 +162,9 @@ void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, Macr
 			return;
 		}
 
-	result.append(node);
+
+		result.append(node);
+	}
 }
 
 bool StandardMetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,
