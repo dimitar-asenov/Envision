@@ -35,6 +35,7 @@
 
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/expressions/ReferenceExpression.h"
+#include "OOModel/src/expressions/BooleanLiteral.h"
 
 namespace CppImport {
 
@@ -92,6 +93,16 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression(arguments[i]));
 			entry->argumentLocs().append(actualArg->getLocation());
 		}
+
+		// handle predefined meta definition: SET_OVERRIDE_FLAG
+		if (clang_.argumentNames(entry->definition()).size() == 1)
+			if (clang_.argumentNames(entry->definition()).first() == "OVERRIDE")
+			{
+				auto argument = DCast<OOModel::ReferenceExpression>(entry->metaCall()->arguments()->first());
+				entry->metaCall()->arguments()->replaceChild(argument,
+																			new OOModel::BooleanLiteral(argument->name() == "override"));
+				SAFE_DELETE(argument);
+			}
 
 		/* alternative implementation:
 		 * works on individual argument tokens and does not need a regular expression.
