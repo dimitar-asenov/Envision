@@ -68,7 +68,7 @@ Heatmap::Heatmap(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
 		{VALUE_ATTRIBUTE_NAME_NAMES, "Name of the attribute that contains the count value",
 					 VALUE_ATTRIBUTE_NAME_NAMES[1], "count"} // Use count as default tag for heatmaps
-		}, QStringList("heatmap") + args}
+		}, args}
 {}
 
 QColor Heatmap::colorForValue(int value)
