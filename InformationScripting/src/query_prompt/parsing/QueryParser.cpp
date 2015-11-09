@@ -39,7 +39,6 @@ constexpr QChar QueryParser::OP_MINUS_POSTFIX;
 
 QueryNode* QueryParser::parse(const QString& queryString)
 {
-	qDebug() << "parsing" << queryString;
 	int index = 0;
 	auto query = parseAny(queryString, index);
 	Q_ASSERT(index == queryString.length());
