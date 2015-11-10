@@ -88,7 +88,8 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.def("add", &Tuple::add)
 				.def("__getattr__", &Tuple_getAttr)
 				.def("size", &Tuple::size)
-				.def("__getitem__", &tuple_getItem);
+				.def("__getitem__", &tuple_getItem)
+				.def("__hash__", &Tuple::hashValue);
 
 		QSet<Tuple> (TupleSet::*tuplesAll)() const = &TupleSet::tuples;
 		QSet<Tuple> (TupleSet::*tuplesString)(const QString&) const = &TupleSet::tuples;
