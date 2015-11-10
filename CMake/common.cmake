@@ -13,6 +13,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5 REQUIRED Core Gui Widgets)
+add_definitions(-D_REENTRANT)
+add_definitions(-DDEBUG) # -DQT_NO_DEBUG <-- get rid of this
 
 set(ENVISION_ROOT_DIR ${CMAKE_SOURCE_DIR}/..)
 
@@ -25,11 +27,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 set(PLUGINS_DIR ${BUILD_DIR}/plugins)
+include_directories(${ENVISION_ROOT_DIR})
 
 # ???
 # CONFIG(debug, debug|release):DEFINES += DEBUG
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -pedantic-errors -Werror -Wextra -O2 -g -fno-omit-frame-pointer -Woverloaded-virtual -Winvalid-pch")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -pedantic-errors -Wall -W -Werror -Wextra -O2 -g -fno-omit-frame-pointer -Woverloaded-virtual -Winvalid-pch")
 
 # ???
 # clang:QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-private-field

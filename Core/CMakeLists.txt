@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.2.2)
 
 project(Core)
 include(../CMake/common.cmake)
-
-#add_definitions(-DQT_PLUGIN -DQT_SHARED)
+add_definitions(-DQT_PLUGIN)
 
 find_package(Qt5 REQUIRED Xml)
 
