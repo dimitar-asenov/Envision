@@ -41,6 +41,7 @@ using namespace FilePersistence;
 namespace InformationScripting {
 
 const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
+const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
@@ -65,6 +66,8 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 	else
 		return {"Invalid count argument"};
 
+	auto typeMatcher = Model::SymbolMatcher::guessMatcher(arguments_.argument(NODE_TYPE_ARGUMENT_NAMES[1]));
+
 	for (int i = commitIndexToTake; i > 0; --i)
 	{
 		QString oldCommitId = revisions[i];
@@ -82,11 +85,10 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 			if (change->isFake() || change->onlyStructureChange()) continue;
 
 			auto id = change->nodeId();
-			// FIXME: here we just use the first StatementItem parent we should solve that better later.
 			if (auto node = const_cast<Model::Node*>(treeManager->nodeIdMap().node(id)))
 			{
 				Model::Node* changedNode = nullptr;
-				if (auto statement = node->firstAncestorOfType<OOModel::StatementItem>())
+				if (auto statement = node->firstAncestorOfType(typeMatcher))
 					changedNode = statement;
 				else // The node is hopefully higher up in the node hierarchy thus we take it as is.
 					changedNode = node;
@@ -106,7 +108,8 @@ void VersionControlQuery::registerDefaultQueries()
 
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
-		{COUNT_ARGUMENT_NAMES, "The amount of revision to look at", COUNT_ARGUMENT_NAMES[1], "10"}
+		{COUNT_ARGUMENT_NAMES, "The amount of revision to look at", COUNT_ARGUMENT_NAMES[1], "10"},
+		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"}
 }, args}
 {}
 

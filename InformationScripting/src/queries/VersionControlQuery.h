@@ -49,6 +49,7 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 		ArgumentParser arguments_;
 
 		static const QStringList COUNT_ARGUMENT_NAMES;
+		static const QStringList NODE_TYPE_ARGUMENT_NAMES;
 
 		VersionControlQuery(Model::Node* target, QStringList args);
 
