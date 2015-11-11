@@ -28,16 +28,17 @@
 
 namespace InformationScripting {
 
-Tuple::Tuple(std::initializer_list<NamedProperty> initialValues)
-	: values_{initialValues}
+Tuple::Tuple(std::initializer_list<NamedProperty> initialValues, QString tag)
+	: values_{initialValues}, tag_{tag}
 {}
 
-Tuple::Tuple(QList<NamedProperty> initialValues)
-	: values_{initialValues}
+Tuple::Tuple(QList<NamedProperty> initialValues, QString tag)
+	: values_{initialValues}, tag_{tag}
 {}
 
 QString Tuple::tag() const
 {
+	if (!tag_.isNull()) return tag_;
 	if (values_.size()) return values_[0].first;
 	return {};
 }

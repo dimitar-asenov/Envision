@@ -36,8 +36,8 @@ class INFORMATIONSCRIPTING_API Tuple
 {
 	public:
 		Tuple() = default;
-		Tuple(std::initializer_list<NamedProperty> initialValues);
-		Tuple(QList<NamedProperty> initialValues);
+		Tuple(std::initializer_list<NamedProperty> initialValues, QString tag = {});
+		Tuple(QList<NamedProperty> initialValues, QString tag = {});
 
 		QString tag() const;
 
@@ -73,6 +73,7 @@ class INFORMATIONSCRIPTING_API Tuple
 		const_iterator cend() const;
 	private:
 		QList<NamedProperty> values_;
+		QString tag_;
 
 };
 

@@ -101,7 +101,7 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 
 				if (arguments_.argument(SIGNIFICANT_COMMITS_ARGUMENT_NAMES[0]) == "all"
 					 || target()->isAncestorOf(changedNode))
-					result.add({{"change", newCommitId}, {"ast", changedNode}});
+					result.add({{{"id", newCommitId}, {"ast", changedNode}}, "change"});
 			}
 		}
 	}
@@ -126,11 +126,11 @@ VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 
 void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMetaData& metadata)
 {
-		ts.add({{"commit", metadata.sha1_},
+		ts.add({{{"id", metadata.sha1_},
 				  {"message", metadata.message_},
 				  {"date", metadata.dateTime_.toString("dd.MM.yyyy hh:mm")},
 				  {"commiter", metadata.committer_.name_ + " " + metadata.committer_.eMail_},
-				  {"author", metadata.author_.name_ + " " + metadata.author_.eMail_}});
+				  {"author", metadata.author_.name_ + " " + metadata.author_.eMail_}}, "commit"});
 }
 
 QList<QString> VersionControlQuery::nodeHistory(const GitRepository* repository, const QString& startSha1,
