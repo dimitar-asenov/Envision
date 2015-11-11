@@ -43,6 +43,8 @@ class PluginManager
 		QMap<QString, PluginInfo*> idToMetaDataMap;
 		QMap<QString, QPluginLoader*> idToPluginLoaderMap;
 
+		QMap<QString, QString> _allFoundSharedLibraryFiles; //lower to mixed case maps.
+
 	public:
 
 		/**
@@ -87,6 +89,7 @@ class PluginManager
 	private:
 		QString getLibraryFileName(const QString pluginId);
 		void scanAllPluginsMetaData();
+		void scanSharedLibraries();
 		PluginInfo readPluginMetaData(const QString fileName);
 };
 

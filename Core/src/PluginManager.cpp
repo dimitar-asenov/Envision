@@ -34,6 +34,7 @@ namespace Core {
 PluginManager::PluginManager(QString path) :
 	pluginsDir(path)
 {
+	scanSharedLibraries();
 	scanAllPluginsMetaData();
 }
 
@@ -148,13 +149,28 @@ EnvisionPlugin* PluginManager::getLoadedPluginInterface(QString pluginId)
 
 QString PluginManager::getLibraryFileName(const QString pluginId)
 {
-#ifdef Q_OS_LINUX
-	return "lib" + pluginId + ".so";
-#endif
+	// This is purposefully done at run-time to avoid using the preprocessor
+	auto libLoweCaseName = pluginId.toLower();
+	if (QSysInfo::productType() == "windows")
+		libLoweCaseName += ".dll";
+	else if (QSysInfo::productType() == "osx" || QSysInfo::productType() == "darwin")
+		libLoweCaseName = "lib" + libLoweCaseName + ".bundle";
+	else // assume linux
+		libLoweCaseName = "lib" + libLoweCaseName + ".so";
 
-#ifdef Q_OS_WIN
-	return pluginId + ".dll";
-#endif
+	auto nameIt = _allFoundSharedLibraryFiles.find(libLoweCaseName);
+	Q_ASSERT(nameIt != _allFoundSharedLibraryFiles.end());
+	return *nameIt;
+}
+
+void PluginManager::scanSharedLibraries()
+{
+	for (auto entry : pluginsDir.entryList({"*.so", "*.dll"}, QDir::Files) )
+	{
+		auto lowerCase = entry.toLower();
+		Q_ASSERT(!_allFoundSharedLibraryFiles.contains(lowerCase));
+		_allFoundSharedLibraryFiles.insert(lowerCase, entry);
+	}
 }
 
 void PluginManager::scanAllPluginsMetaData()
