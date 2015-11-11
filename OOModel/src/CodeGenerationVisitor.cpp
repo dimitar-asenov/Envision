@@ -53,28 +53,35 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 
 	if (!input.contains("##"))
 	{
-		if (auto argument = v->args_[input])
+		if (input.startsWith("#"))
 		{
-			if (auto argumentReference = DCast<ReferenceExpression>(argument))
-			{
-				// case: there exists a replacement and it is another ReferenceExpression
-				// -> copy name (replacing it would cause child nodes of n to disappear)
-
-				n->setName(argumentReference->name());
-			}
-			else
-			{
-				// case: there exists a replacement and it is not a ReferenceExpression
-				// -> replace node
-
-				auto cloned = argument->clone();
-				n->parent()->replaceChild(n, cloned);
-
-				// visit the cloned tree and return to avoid visiting the children of n
-				v->visitChildren(cloned);
-				return;
-			}
+			if (auto argument = v->args_[input.right(input.length() - 1)])
+				if (auto argumentReference = DCast<ReferenceExpression>(argument))
+					n->parent()->replaceChild(n, new OOModel::StringLiteral(argumentReference->name()));
 		}
+		else
+			if (auto argument = v->args_[input])
+			{
+				if (auto argumentReference = DCast<ReferenceExpression>(argument))
+				{
+					// case: there exists a replacement and it is another ReferenceExpression
+					// -> copy name (replacing it would cause child nodes of n to disappear)
+
+					n->setName(argumentReference->name());
+				}
+				else
+				{
+					// case: there exists a replacement and it is not a ReferenceExpression
+					// -> replace node
+
+					auto cloned = argument->clone();
+					n->parent()->replaceChild(n, cloned);
+
+					// visit the cloned tree and return to avoid visiting the children of n
+					v->visitChildren(cloned);
+					return;
+				}
+			}
 	}
 	else
 	{
