@@ -1184,7 +1184,7 @@ bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 	QString fileName;
 	if (auto file = sourceManager_->getPresumedLoc(location).getFilename())
 		fileName = QString(file);
-	if (sourceManager_->isInSystemHeader(location) || fileName.isEmpty() || fileName.contains("qt"))
+	if (sourceManager_->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
 		return importSysHeader_;
 	return true;
 }
