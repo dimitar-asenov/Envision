@@ -289,7 +289,10 @@ void StandardMetaDefinitions::replaceWithStringificationConcatenation(OOModel::S
 																							 const QString& replacement,
 																							 NodeToCloneMap& mapping) const
 {
-	qDebug() << replacement;
+	if (!(replacement.startsWith('"') || replacement.startsWith('#')))
+		return;
+
+	//TODO: we assume that no regular string starts with #
 	QStringList parts;
 	bool foundStringification = false;
 	bool inQuote = false;
