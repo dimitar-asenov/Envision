@@ -33,6 +33,7 @@
 
 #include "declarations/MetaDefinition.h"
 #include "expressions/BooleanLiteral.h"
+#include "expressions/StringLiteral.h"
 
 namespace OOModel {
 
