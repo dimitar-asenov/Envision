@@ -231,22 +231,27 @@ void StandardMetaDefinitions::applyLexicalTransformations(Model::Node* node, Nod
 			else if (auto decl = DCast<OOModel::VariableDeclaration>(node))
 				decl->setName(transformed);
 			else if (auto strLit = DCast<OOModel::StringLiteral>(node))
-				strLit->setValue(transformed);
+				//TODO: FIX replacing top-level node
+				replaceWithStringificationConcatenation(strLit, transformed, mapping);
 			else if (auto formalResult = DCast<OOModel::FormalResult>(node))
 				formalResult->setTypeExpression(NodeHelpers::createNameExpressionFromString(transformed));
 			else if (auto boolLit = DCast<OOModel::BooleanLiteral>(node))
+				//TODO: FIX replacing top-level node
 				replaceWithReference(boolLit, transformed, mapping);
 			else if (auto castExpr = DCast<OOModel::CastExpression>(node))
 				castExpr->setType(new OOModel::ReferenceExpression(transformed));
 			else if (auto castExpr = DCast<OOModel::PointerTypeExpression>(node))
+				//TODO: FIX replacing top-level node
 				replaceWithReference(castExpr, transformed, mapping);
 			else if (auto methodCall = DCast<OOModel::MethodCallExpression>(node))
 			{
 				if (auto ref = DCast<OOModel::ReferenceExpression>(methodCall->callee()))
 				{
 					if (transformed.startsWith("#"))
+						//TODO: FIX replacing top-level node
 						replaceWithReference(methodCall, transformed, mapping);
 					else
+						//TODO: FIX replacing top-level node
 						replaceWithReference(ref, transformed, mapping);
 				}
 				else
@@ -258,6 +263,7 @@ void StandardMetaDefinitions::applyLexicalTransformations(Model::Node* node, Nod
 
 				auto m = regEx.match(transformed);
 				if (m.hasMatch())
+					//TODO: FIX replacing top-level node
 					replaceWithReference(templateInst->instantiatedClass(), m.captured(1), mapping);
 				else
 					qDebug() << "could not correct explicit template instantiation: " << transformed;
@@ -277,6 +283,78 @@ void StandardMetaDefinitions::replaceWithReference(Model::Node* current, const Q
 	auto newValue = NodeHelpers::createNameExpressionFromString(replacement);
 	current->parent()->replaceChild(current, newValue);
 	mapping.replaceClone(current, newValue);
+}
+
+void StandardMetaDefinitions::replaceWithStringificationConcatenation(OOModel::StringLiteral* current,
+																							 const QString& replacement,
+																							 NodeToCloneMap& mapping) const
+{
+	qDebug() << replacement;
+	QStringList parts;
+	bool foundStringification = false;
+	bool inQuote = false;
+	bool inName = false;
+	bool escaped = false;
+	for (auto ch : replacement)
+	{
+		Q_ASSERT(! (inQuote && inName));
+		if (inQuote)
+		{
+			parts.last().append(ch);
+
+			if (escaped) escaped = false;
+			else if (ch == '\\') escaped = true;
+			else if (ch == '"') inQuote = false;
+		}
+		else // In a name or just before/after a quote name
+		{
+			if (ch == '#')
+			{
+				foundStringification = true;
+				inName = true;
+				parts.append("#");
+			}
+			else if (ch == '"')
+			{
+				inName = false;
+				inQuote = true;
+				parts.append("\"");
+			}
+			else if (ch == '_' || ch.isLetterOrNumber())
+			{
+				parts.last().append(ch);
+				Q_ASSERT(inName);
+			}
+			else Q_ASSERT(ch == ' ');// do nothing
+		}
+	}
+
+	if (foundStringification)
+	{
+		auto newNode = constructStringConcatenation(parts);
+		current->parent()->replaceChild(current, newNode);
+		mapping.replaceClone(current, newNode);
+	}
+}
+
+OOModel::Expression* StandardMetaDefinitions::constructStringConcatenation(QStringList strings) const
+{
+	Q_ASSERT(!strings.isEmpty());
+
+	auto leftString = strings.takeFirst();
+	OOModel::Expression* leftNode = nullptr;
+	if (leftString.startsWith('#')) leftNode = new OOModel::ReferenceExpression(leftString);
+	else
+	{
+		Q_ASSERT(leftString.startsWith('"') && leftString.endsWith('"') && leftString.size() >= 2);
+		leftNode = new OOModel::StringLiteral(leftString.mid(1, leftString.length()-2));
+	}
+
+	if (strings.isEmpty()) return leftNode;
+	else
+		// TODO: We should have a dedicated operator for this. Equivalent to "asf" "something else" in C/C++
+		return new OOModel::BinaryOperation(OOModel::BinaryOperation::PLUS, leftNode,
+														constructStringConcatenation(strings));
 }
 
 }

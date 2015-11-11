@@ -34,6 +34,8 @@ namespace Model {
 
 namespace OOModel {
 	class MetaDefinition;
+	class StringLiteral;
+	class Expression;
 }
 
 namespace CppImport {
@@ -98,6 +100,10 @@ class CPPIMPORT_API StandardMetaDefinitions
 		void applyLexicalTransformations(Model::Node* node, NodeToCloneMap& mapping, QVector<QString> formalArgs) const;
 
 		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap& mapping) const;
+
+		void replaceWithStringificationConcatenation(OOModel::StringLiteral* current, const QString& replacement,
+																	NodeToCloneMap& mapping) const;
+		OOModel::Expression* constructStringConcatenation(QStringList strings) const;
 };
 
 }
