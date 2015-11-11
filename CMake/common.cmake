@@ -16,7 +16,7 @@ find_package(Qt5 REQUIRED Core Gui Widgets)
 add_definitions(-D_REENTRANT)
 add_definitions(-DDEBUG) # -DQT_NO_DEBUG <-- get rid of this
 
-set(ENVISION_ROOT_DIR ${CMAKE_SOURCE_DIR}/..)
+set(ENVISION_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(BUILD_DIR ${ENVISION_ROOT_DIR}/DebugBuild)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -102,7 +102,7 @@ function(use_precompiled_header targetName)
     set(precompiledCopy ${targetName}-Precompiled-Header-CopyAndRename)
     set(precompiledSubDir ${precompiled})
     add_custom_target(${precompiledCopy}
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${precompiled}.dir/precompiled_cpp.cpp.o ${CMAKE_BINARY_DIR}/${precompiledSubDir}/precompiled.h.gch
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${precompiled}.dir/precompiled_cpp.cpp.o ${CMAKE_BINARY_DIR}/${precompiledSubDir}/precompiled.h.gch
         DEPENDS ${precompiled}
     )
         
