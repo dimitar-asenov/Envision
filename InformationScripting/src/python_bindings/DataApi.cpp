@@ -44,6 +44,10 @@ object Tuple_getAttr(const Tuple& self, const QString& name) {
 	return pythonObject(self[name]);
 }
 
+uint Tuple_hash(const Tuple& self) {
+	return self.hashValue();
+}
+
 NamedProperty tuple_getItem(Tuple &t, int index)
 {
 	 if (index >= 0 && index < t.size())
@@ -89,7 +93,7 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.def("__getattr__", &Tuple_getAttr)
 				.def("size", &Tuple::size)
 				.def("__getitem__", &tuple_getItem)
-				.def("__hash__", &Tuple::hashValue);
+				.def("__hash__", &Tuple_hash);
 
 		QSet<Tuple> (TupleSet::*tuplesAll)() const = &TupleSet::tuples;
 		QSet<Tuple> (TupleSet::*tuplesString)(const QString&) const = &TupleSet::tuples;
