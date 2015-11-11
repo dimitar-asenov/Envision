@@ -31,29 +31,23 @@
 #include "LinearQuery.h"
 #include "../query_framework/ArgumentParser.h"
 
-namespace FilePersistence {
-	struct CommitMetaData;
-}
-
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
+class INFORMATIONSCRIPTING_API Count : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
+
 	private:
 		friend class QueryRegistry;
 
+		static const QStringList BY_ATTRIBUTE_NAME_NAMES;
+
 		ArgumentParser arguments_;
 
-		static const QStringList COUNT_ARGUMENT_NAMES;
-		static const QStringList NODE_TYPE_ARGUMENT_NAMES;
-
-		VersionControlQuery(Model::Node* target, QStringList args);
-
-		static void addCommitMetaInformation(TupleSet& ts, const FilePersistence::CommitMetaData& metadata);
+		Count(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);
 };
 
 } /* namespace InformationScripting */

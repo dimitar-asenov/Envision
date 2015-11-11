@@ -178,8 +178,13 @@ bool Node::isAncestorOf(const Node* other) const
 
 Node* Node::firstAncestorOfType(const SymbolMatcher& typeMatch) const
 {
+	auto typeOrSubtypeMatches = [typeMatch](Model::Node* node) {
+		if (typeMatch.isFixedString())
+			return node->isSubtypeOf(typeMatch.matchPattern());
+		return typeMatch.matches(node->typeName());
+	};
 	auto p = parent();
-	while (p && !typeMatch.matches(p->typeName())) p = p->parent();
+	while (p && !typeOrSubtypeMatches(p)) p = p->parent();
 	return p;
 }
 

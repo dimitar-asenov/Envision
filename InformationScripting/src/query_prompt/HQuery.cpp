@@ -188,7 +188,6 @@ Visualization::Item* HQuery::stringInfo(Visualization::Item* target, Qt::Key key
 void HQuery::setNewQuery(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text, int index)
 {
 	QString newText = text;
-	qDebug() << "NewText" << text;
 	QueryNode* newQuery = QueryParser::parse(newText);
 
 	Model::Node* containerNode = topMostItem->node()->parent();
@@ -197,7 +196,6 @@ void HQuery::setNewQuery(Visualization::Item* target, Visualization::Item* topMo
 
 	// Compute the new offset. This can change in case the string of the new expression is different.
 	QString expString = OOInteraction::StringComponents::stringForNode(newQuery);
-	qDebug() << expString;
 	index += expString.length() - newText.length();
 
 	// Find an item that represents a node, as any intermediate items might disappear when during the update.

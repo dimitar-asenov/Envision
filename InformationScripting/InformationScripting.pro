@@ -70,7 +70,8 @@ HEADERS += src/precompiled.h \
     src/query_framework/HighlightOverlay.h \
     src/queries/Heatmap.h \
     src/query_prompt/parsing/QueryParser.h \
-    src/query_framework/QueryParsingException.h
+    src/query_framework/QueryParsingException.h \
+    src/queries/Count.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -124,7 +125,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/Heatmap.cpp \
     src/query_framework/HighlightOverlay.cpp \
     src/query_prompt/parsing/QueryParser.cpp \
-    src/query_framework/QueryParsingException.cpp
+    src/query_framework/QueryParsingException.cpp \
+    src/queries/Count.cpp
 
 # The workaround below is currently not needed but might be in the future, thus we leave it as reference.
 # Workaround to not have any pragma's in NodeApi.cpp

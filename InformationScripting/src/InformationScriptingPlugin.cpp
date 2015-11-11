@@ -37,6 +37,7 @@
 #include "queries/BreakpointManager.h"
 #include "queries/RuntimeQuery.h"
 #include "queries/Heatmap.h"
+#include "queries/Count.h"
 #include "query_prompt/HQuery.h"
 #include "query_prompt/visualization/VCommandNode.h"
 #include "query_prompt/visualization/VCommandArgument.h"
@@ -68,6 +69,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	Heatmap::registerDefaultQueries();
 	BreakpointManager::registerDefaultQueries();
 	RuntimeQuery::registerDefaultQueries();
+	Count::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();
 	VCommandNode::setDefaultClassHandler(HQuery::instance());

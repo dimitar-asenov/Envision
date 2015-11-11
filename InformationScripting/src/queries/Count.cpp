@@ -24,75 +24,74 @@
 **
 ***********************************************************************************************************************/
 
-#include "Heatmap.h"
+#include "Count.h"
 
 #include "../query_framework/QueryRegistry.h"
 
-#include "ModelBase/src/nodes/Node.h"
-
 namespace InformationScripting {
 
-const QStringList Heatmap::VALUE_ATTRIBUTE_NAME_NAMES{"n", "name"};
+const QStringList Count::BY_ATTRIBUTE_NAME_NAMES{"b", "by"};
 
-Optional<TupleSet> Heatmap::executeLinear(TupleSet input)
+Optional<TupleSet> Count::executeLinear(TupleSet input)
 {
-	QString valueTag = arguments_.argument(VALUE_ATTRIBUTE_NAME_NAMES[1]);
-	auto valueTuples = input.tuples(valueTag);
+	auto countByTags = arguments_.argument(BY_ATTRIBUTE_NAME_NAMES[1]).split(",");
+	Q_ASSERT(!countByTags.isEmpty()); // This is checked by the argument rule
 
-	if (valueTuples.size() > 0)
+	QHash<Tuple, int> counts;
+	if (countByTags[0].contains("."))
 	{
-		std::vector<int> values;
-		values.reserve(valueTuples.size());
-		for (const auto& tuple : valueTuples)
-			values.push_back(tuple[valueTag]);
-		auto minMaxIt = std::minmax_element(values.begin(), values.end());
-		valueRange_ = {*minMaxIt.first, *minMaxIt.second};
+		auto parts = countByTags[0].split(".");
+		if (parts.size() > 2) return {"count: by argument can only have a single . (dot)"};
+		QString tag = parts[0];
+		bool allSame = std::all_of(countByTags.begin(), countByTags.end(), [tag](const QString& by) {
+			return by.split(".")[0] == tag;
+		});
+		if (!allSame) return {"count: by argument values should all be from same tuple"};
 
-		input.take("ast"); // remove ast as we add them colored.
-		for (const auto& tuple : valueTuples)
+		auto taggedTuples = input.tuples(tag);
+		for (const auto& tuple : taggedTuples)
 		{
-			int count = tuple[valueTag];
-			Model::Node* astNode = tuple["ast"];
-			input.add({{"color", colorForValue(count).name()}, {"ast", astNode}});
+			Tuple keyTuple;
+			for (const auto& byTag : countByTags)
+			{
+				auto propName = byTag.split(".")[1];
+				auto it = tuple.find(propName);
+				if (it == tuple.end())
+					return {QString("Tuple tagged with %1 does not contain value with tag %2").arg(tuple.tag(), propName)};
+				keyTuple.add(*it);
+			}
+			++counts[keyTuple];
 		}
+
+	}
+	else
+		return {"count: need to specify tag of tuple to extract values from"};
+
+	for (auto it = counts.begin(); it != counts.end(); ++it)
+	{
+		Tuple countTuple({{"count", it.value()}});
+		for (const auto& namedProperty : it.key())
+			countTuple.add(namedProperty);
+		input.add(countTuple);
 	}
 	return input;
 }
 
-void Heatmap::registerDefaultQueries()
+void Count::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<Heatmap>("heatmap");
+	QueryRegistry::registerQuery<Count>("count",
+		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{BY_ATTRIBUTE_NAME_NAMES[1]}}}});
 }
 
-Heatmap::Heatmap(Model::Node* target, QStringList args)
+Count::Count(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
 	: LinearQuery{target}, arguments_{{
-		{VALUE_ATTRIBUTE_NAME_NAMES, "Name of the attribute that contains the count value",
-					 VALUE_ATTRIBUTE_NAME_NAMES[1], "count"} // Use count as default tag for heatmaps
-		}, args}
-{}
-
-QColor Heatmap::colorForValue(int value)
+	{BY_ATTRIBUTE_NAME_NAMES, "Name of the attribute(s) that should be used to count on",
+			 BY_ATTRIBUTE_NAME_NAMES[1]}
+	}, args}
 {
-	// First we need to calculate a index (i.e. factor) in the range. This we do with the following formula:
-	// minVal + colorFactor * range == value, thus colorFactor == (value - minVal) / range.
-	auto range = valueRange_.second - valueRange_.first;
-	if (range == 0) return {"red"};
-	double colorFactor = (double (value - valueRange_.first)) / range;
-	// The colorFactor can now be used to return a color based on the baseColor: (red + and green minus)
-	int red = baseColor_.red();
-	int green = baseColor_.green();
-	int colorRange = 255 - red;
-	colorRange += green;
-	int colorAdd = colorRange * colorFactor;
-	if (red + colorAdd > 255)
-	{
-		green -= (colorAdd - (255 - red));
-		red = 255;
-
-	}
-	else
-		red += colorAdd;
-	return {red, green, 0};
+	for (const auto& rule : argumentRules)
+		rule.check(arguments_);
 }
+
 
 } /* namespace InformationScripting */

@@ -80,26 +80,28 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 	}
 	else
 	{
-		auto astTuples = ts.tuples([](const Tuple& t) { return t.tag() == "ast"; });
-
 		QHash<Model::Node*, QString> colors;
 
-		for (auto t : astTuples)
+		auto astTuples = ts.tuples("ast");
+		auto colorTuples = ts.tuples("color");
+
+		for (const auto& colorTuple : colorTuples)
 		{
-			Model::Node* node = t["ast"];
-			QString& color = colors[node];
-			if (color.isEmpty())
+			auto it = colorTuple.find("ast");
+			if (it != colorTuple.end())
 			{
-				auto colorIt = t.find("color");
-				if (colorIt != t.end())
-				{
-					QString c = colorIt->second;
-					color = c;
-				}
-				else
-					color = "red";
+				QString color = colorTuple["color"];
+				colors[it->second] = color;
 			}
 		}
+
+		// Set default color for non covered ast nodes.
+		for (const auto& astTuple : astTuples)
+		{
+			auto& color = colors[astTuple["ast"]];
+			if (color.isNull()) color = "red";
+		}
+
 
 		for (auto it = colors.begin(); it != colors.end(); ++it)
 		{
