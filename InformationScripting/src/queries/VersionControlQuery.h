@@ -33,6 +33,12 @@
 
 namespace FilePersistence {
 	struct CommitMetaData;
+	class GitRepository;
+}
+
+namespace Model {
+	class Node;
+	class TreeManager;
 }
 
 namespace InformationScripting {
@@ -50,10 +56,14 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 
 		static const QStringList COUNT_ARGUMENT_NAMES;
 		static const QStringList NODE_TYPE_ARGUMENT_NAMES;
+		static const QStringList SIGNIFICANT_COMMITS_ARGUMENT_NAMES;
 
 		VersionControlQuery(Model::Node* target, QStringList args);
 
 		static void addCommitMetaInformation(TupleSet& ts, const FilePersistence::CommitMetaData& metadata);
+
+		static QList<QString> nodeHistory(const FilePersistence::GitRepository* repository, const QString& startSha1,
+													 Model::Node* target, Model::TreeManager* headManager);
 };
 
 } /* namespace InformationScripting */

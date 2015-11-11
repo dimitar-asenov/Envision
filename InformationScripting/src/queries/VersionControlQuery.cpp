@@ -28,10 +28,12 @@
 
 #include "../query_framework/QueryRegistry.h"
 
+#include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "FilePersistence/src/version_control/GitRepository.h"
+#include "FilePersistence/src/version_control/History.h"
 
 #include "ModelBase/src/nodes/Node.h"
 #include "OOModel/src/elements/StatementItem.h"
@@ -42,6 +44,7 @@ namespace InformationScripting {
 
 const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
+const QStringList VersionControlQuery::SIGNIFICANT_COMMITS_ARGUMENT_NAMES{"sc", "significantCommits"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
@@ -55,6 +58,9 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 	TupleSet result;
 
 	auto revisions = repository.revisions();
+	if (arguments_.argument(SIGNIFICANT_COMMITS_ARGUMENT_NAMES[0]) != "all")
+		revisions = nodeHistory(&repository, revisions[revisions.size()-1], target(), treeManager);
+
 	bool converts = false;
 	auto changeArgument = arguments_.argument(COUNT_ARGUMENT_NAMES[0]);
 	const int CHANGE_COUNT = changeArgument.toInt(&converts);
@@ -93,7 +99,9 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 				else // The node is hopefully higher up in the node hierarchy thus we take it as is.
 					changedNode = node;
 
-				result.add({{"change", newCommitId}, {"ast", changedNode}});
+				if (arguments_.argument(SIGNIFICANT_COMMITS_ARGUMENT_NAMES[0]) == "all"
+					 || target()->isAncestorOf(changedNode))
+					result.add({{"change", newCommitId}, {"ast", changedNode}});
 			}
 		}
 	}
@@ -109,7 +117,10 @@ void VersionControlQuery::registerDefaultQueries()
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
 		{COUNT_ARGUMENT_NAMES, "The amount of revisions to look at", COUNT_ARGUMENT_NAMES[1], "10"},
-		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"}
+		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"},
+		{SIGNIFICANT_COMMITS_ARGUMENT_NAMES, "Which commits should be counted, all or affect",
+			SIGNIFICANT_COMMITS_ARGUMENT_NAMES[1], "all"}
+
 }, args}
 {}
 
@@ -120,6 +131,27 @@ void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMet
 				  {"date", metadata.dateTime_.toString("dd.MM.yyyy hh:mm")},
 				  {"commiter", metadata.committer_.name_ + " " + metadata.committer_.eMail_},
 				  {"author", metadata.author_.name_ + " " + metadata.author_.eMail_}});
+}
+
+QList<QString> VersionControlQuery::nodeHistory(const GitRepository* repository, const QString& startSha1,
+																Model::Node* target, Model::TreeManager* headManager)
+{
+	CommitGraph graph = repository->commitGraph(startSha1, "HEAD");
+
+	Model::NodeIdType targetID = headManager->nodeIdMap().id(target);
+
+	QString targetPath = headManager->name();
+	Model::Node* headRoot = headManager->root();
+	Model::Node* persistentUnitNode = target->persistentUnitNode();
+	if (headRoot != persistentUnitNode)
+	{
+		Model::NodeIdType persistentUnitNodeID = headManager->nodeIdMap().id(persistentUnitNode);
+		targetPath = persistentUnitNodeID.toString();
+	}
+
+	History history(targetPath, targetID, &graph, repository);
+
+	return history.relevantCommitsByTime(repository);
 }
 
 } /* namespace InformationScripting */
