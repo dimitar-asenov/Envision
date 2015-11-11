@@ -161,6 +161,8 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 		SAFE_DELETE(file);
 	}
 
+	tree->buildLookupHash();
+
 	GenericNode* rootNode = tree->find(rootNodeId_);
 	if (rootNode)
 		return currentPath;
