@@ -33,6 +33,7 @@
 
 #include "declarations/MetaDefinition.h"
 #include "expressions/BooleanLiteral.h"
+#include "expressions/StringLiteral.h"
 
 namespace OOModel {
 
@@ -43,6 +44,7 @@ void CodeGenerationVisitor::init()
 	addType<ReferenceExpression>(visitReferenceExpression);
 	addType<Model::NameText>(visitNameText);
 	addType<MetaCallExpression>(visitMetaCallExpression);
+	addType<StringLiteral>(visitStringLiteral);
 }
 
 void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, OOModel::ReferenceExpression* n)
@@ -153,6 +155,26 @@ void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, Me
 
 		n->generatedTree();
 	}
+}
+
+void CodeGenerationVisitor::visitStringLiteral(CodeGenerationVisitor* v, StringLiteral* n)
+{
+	auto input = n->value();
+
+	if (input.contains("#"))
+	{
+		for (auto it = v->args_.begin(); it != v->args_.end(); it++)
+		{
+			if (auto argument = DCast<ReferenceExpression>(it.value()))
+			{
+				input.replace("#" + it.key(), argument->name());
+			}
+		}
+
+		n->setValue(input);
+	}
+
+	v->visitChildren(n);
 }
 
 void CodeGenerationVisitor::handlePredefinedFunction(QString function, MetaCallExpression* n)
