@@ -108,7 +108,7 @@ void VersionControlQuery::registerDefaultQueries()
 
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
-		{COUNT_ARGUMENT_NAMES, "The amount of revision to look at", COUNT_ARGUMENT_NAMES[1], "10"},
+		{COUNT_ARGUMENT_NAMES, "The amount of revisions to look at", COUNT_ARGUMENT_NAMES[1], "10"},
 		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"}
 }, args}
 {}
