@@ -28,6 +28,7 @@ endif()
 
 set(PLUGINS_DIR ${BUILD_DIR}/plugins)
 include_directories(${ENVISION_ROOT_DIR})
+link_directories(${BUILD_DIR} ${PLUGINS_DIR})
 
 # ???
 # CONFIG(debug, debug|release):DEFINES += DEBUG
@@ -37,10 +38,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -pedantic-errors -Wall -W -We
 # ???
 # clang:QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-private-field
 
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,'$ORIGIN'") # Used so that the main executable can link link to core
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,'$ORIGIN/qt'") # Used so that the main executable can link to custom built Qt
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,'$ORIGIN/..'") # Used so that plugins can link to core
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,'$ORIGIN/../qt'") # Used so that plugins can link to custom built Qt
+# Enable linking to custom Qt version and libCore from both main executable and plugins
+set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/..:$ORIGIN/qt:$ORIGIN/../qt")
 
 if( WIN32 )
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols'") #Export all symbols in Windows to save a hassle
