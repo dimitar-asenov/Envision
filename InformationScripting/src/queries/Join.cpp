@@ -81,24 +81,21 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 
 	for (const auto& tuple1 : tag1Tuples)
 	{
-		// the id always has to be a string, or some other statically defined value. :(
-		// We should reimplement this in python, there we won't have this limitation
 		auto it = tuple1.find(id1Name);
 		if (it == tuple1.end())
 			return {QString("Tuple %1 does not contain %2 which is required for join").arg(tag1, id1Name)};
-		QString id1 = it->second;
+		Property id1 = it->second;
 
 		bool attributeNotFound = false;
 		auto it2 = std::find_if(tag2Tuples.begin(), tag2Tuples.end(), [id1, &attributeNotFound, id2Name](const Tuple& t)
 		{
 			auto idIt = t.find(id2Name);
-			if (idIt == t.end()) attributeNotFound = true;
-			else
+			if (idIt == t.end())
 			{
-				QString id = idIt->second;
-				return id == id1;
+				attributeNotFound = true;
+				return false;
 			}
-			return false;
+			return idIt->second == id1;
 		});
 
 		if (attributeNotFound)
