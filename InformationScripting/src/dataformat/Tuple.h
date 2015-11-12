@@ -36,8 +36,10 @@ class INFORMATIONSCRIPTING_API Tuple
 {
 	public:
 		Tuple() = default;
-		Tuple(std::initializer_list<NamedProperty> initialValues, QString tag = {});
-		Tuple(QList<NamedProperty> initialValues, QString tag = {});
+		Tuple(const QString& tag, std::initializer_list<NamedProperty> initialValues);
+		Tuple(const QString& tag, QList<NamedProperty> initialValues);
+		Tuple(std::initializer_list<NamedProperty> initialValues);
+		Tuple(QList<NamedProperty> initialValues);
 
 		QString tag() const;
 
@@ -79,6 +81,7 @@ class INFORMATIONSCRIPTING_API Tuple
 
 uint qHash(const Tuple& t, uint seed = 0);
 
+inline QString Tuple::tag() const { return tag_; }
 inline int Tuple::size() const { return values_.size(); }
 inline bool Tuple::contains(const QString& name) const { return find(name) != end(); }
 inline bool Tuple::operator==(const Tuple& other) const { return values_ == other.values_; }

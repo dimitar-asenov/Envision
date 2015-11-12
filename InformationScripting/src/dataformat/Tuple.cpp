@@ -28,19 +28,26 @@
 
 namespace InformationScripting {
 
-Tuple::Tuple(std::initializer_list<NamedProperty> initialValues, QString tag)
+Tuple::Tuple(const QString& tag, std::initializer_list<NamedProperty> initialValues)
 	: values_{initialValues}, tag_{tag}
 {}
 
-Tuple::Tuple(QList<NamedProperty> initialValues, QString tag)
+Tuple::Tuple(const QString& tag, QList<NamedProperty> initialValues)
 	: values_{initialValues}, tag_{tag}
 {}
 
-QString Tuple::tag() const
+Tuple::Tuple(std::initializer_list<NamedProperty> initialValues)
+	: values_{initialValues}
 {
-	if (!tag_.isNull()) return tag_;
-	if (values_.size()) return values_[0].first;
-	return {};
+	Q_ASSERT(values_.size() > 0);
+	tag_ = values_[0].first;
+}
+
+Tuple::Tuple(QList<NamedProperty> initialValues)
+	: values_{initialValues}
+{
+	Q_ASSERT(!initialValues.isEmpty());
+	tag_ = initialValues[0].first;
 }
 
 void Tuple::add(const NamedProperty& p)

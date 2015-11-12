@@ -109,7 +109,7 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 			if (props1.hasErrors()) return props1.errors()[0];
 			auto props2 = extractProperties(*it2, values);
 			if (props2.hasErrors()) return props2.errors()[0];
-			input.add(Tuple(props1.value() + props2.value(), arguments_.argument(AS_ARGUMENT_NAMES[1])));
+			input.add(Tuple(arguments_.argument(AS_ARGUMENT_NAMES[1]), props1.value() + props2.value()));
 		}
 
 	}
