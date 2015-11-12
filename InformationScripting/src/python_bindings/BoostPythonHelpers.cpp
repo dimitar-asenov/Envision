@@ -30,6 +30,7 @@
 #include "../dataformat/Property.h"
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
+#include "../query_framework/Optional.h"
 
 namespace InformationScripting {
 
@@ -165,6 +166,7 @@ void BoostPythonHelpers::initializeConverters()
 
 	python::to_python_converter<QList<QString>, PythonConverters::QList_to_python_list<QString>>();
 	python::to_python_converter<QList<TupleSet>, PythonConverters::QList_to_python_list<TupleSet>>();
+	python::to_python_converter<QList<Optional<TupleSet>>, PythonConverters::QList_to_python_list<Optional<TupleSet>>>();
 	python::to_python_converter<QList<NamedProperty>, PythonConverters::QList_to_python_list<NamedProperty>>();
 
 	// register the from-python converters

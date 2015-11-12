@@ -59,10 +59,10 @@ class INFORMATIONSCRIPTING_API Optional
 		const ValueType&& value() const &&;
 
 		bool hasErrors() const;
-		QStringList errors() const;
+		QList<QString> errors() const;
 
 		bool hasWarnings() const;
-		QStringList warnings() const;
+		QList<QString> warnings() const;
 		void addWarnings(const QStringList& warnings);
 	private:
 		enum class Type : int {Value, Warning, Error};
@@ -153,12 +153,12 @@ inline ValueType&& Optional<ValueType>::value() && { Q_ASSERT(bool(*this)); retu
 template <class ValueType>
 inline bool Optional<ValueType>::hasErrors() const { return type_.testFlag(Type::Error); }
 template <class ValueType>
-inline QStringList Optional<ValueType>::errors() const { Q_ASSERT(hasErrors()); return errors_; }
+inline QList<QString> Optional<ValueType>::errors() const { Q_ASSERT(hasErrors()); return errors_; }
 
 template <class ValueType>
 inline bool Optional<ValueType>::hasWarnings() const { return type_.testFlag(Type::Warning); }
 template <class ValueType>
-inline QStringList Optional<ValueType>::warnings() const { Q_ASSERT(hasWarnings()); return warnings_; }
+inline QList<QString> Optional<ValueType>::warnings() const { Q_ASSERT(hasWarnings()); return warnings_; }
 template <class ValueType>
 inline void Optional<ValueType>::addWarnings(const QStringList& warnings)
 {

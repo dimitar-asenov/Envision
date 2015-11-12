@@ -70,6 +70,16 @@ std::shared_ptr<TupleSet> makeTupleSet(list args) {
 	return std::make_shared<TupleSet>(QList<Tuple>::fromStdList(std::list<Tuple>(begin, end)));
 }
 
+TupleSet optionalValue(const Optional<TupleSet>& self)
+{
+	return self.value();
+}
+
+std::shared_ptr<Optional<TupleSet>> makeErrorOptional(const QString& message)
+{
+	return std::make_shared<Optional<TupleSet>>(message);
+}
+
 BOOST_PYTHON_MODULE(DataApi) {
 		// This class exposure is just a workaround to make the name property of NamedProperty work.
 		// The problem is that if we just expose the NamedProperty::first as property,
@@ -108,7 +118,11 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.def("remove", removeTuple)
 				.def("add", &TupleSet::add);
 
-		class_<Optional<TupleSet>>("OptionalTupleSet", init<TupleSet>());
+		class_<Optional<TupleSet>>("OptionalTupleSet", init<TupleSet>())
+				.def("__init__", make_constructor(makeErrorOptional))
+				.def("value", &optionalValue)
+				.def("hasErrors", &Optional<TupleSet>::hasErrors)
+				.def("errors", &Optional<TupleSet>::errors);
 }
 
 } /* namespace InformationScripting */
