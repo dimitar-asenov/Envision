@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(HELLOWORLD_LIBRARY)
+#if defined(HelloWorld_EXPORTS)
 	#define HELLOWORLD_API Q_DECL_EXPORT
 #else
 	#define HELLOWORLD_API Q_DECL_IMPORT

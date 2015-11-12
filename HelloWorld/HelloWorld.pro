@@ -1,6 +1,6 @@
 TARGET = helloworld
 include(../Core/common_plugin.pri)
-DEFINES += HELLOWORLD_LIBRARY
+DEFINES += HelloWorld_EXPORTS
 QT = core
 
 HEADERS += src/HelloWorldPrinter.h \
