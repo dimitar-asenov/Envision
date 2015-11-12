@@ -1,4 +1,4 @@
-# script $<"<profileSource scripts/carmodel.csv>" | "<heatmap>">$
+# profileSource scripts/carmodel.csv|heatmap
 
 import csv
 
@@ -6,7 +6,7 @@ def findMethod(profileName):
     # This assumes no nested classes/namespaces, i.e. the format is should be:
     # ClassName.methodName(...)
     nameWithoutBracket = profileName.split('(')[0]
-    astTuples = Query.ast(['-s=g', '-t=Method', '-n={}'.format(nameWithoutBracket)], inputs)[0]
+    astTuples = Query.ast(['-s=g', '-t=Method', '-n={}'.format(nameWithoutBracket)], inputs)[0].value()
     # Assume we only have one matching, return the first (set doesn't support indexing thus the loop workaround):
     for astTuple in astTuples.tuples("ast"):
         return astTuple.ast
