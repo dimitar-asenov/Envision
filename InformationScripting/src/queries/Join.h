@@ -24,77 +24,35 @@
 **
 ***********************************************************************************************************************/
 
-#include "Tuple.h"
+#pragma once
+
+#include "../informationscripting_api.h"
+
+#include "LinearQuery.h"
+#include "../query_framework/ArgumentParser.h"
 
 namespace InformationScripting {
 
-Tuple::Tuple(const QString& tag, std::initializer_list<NamedProperty> initialValues)
-	: values_{initialValues}, tag_{tag}
-{}
-
-Tuple::Tuple(const QString& tag, QList<NamedProperty> initialValues)
-	: values_{initialValues}, tag_{tag}
-{}
-
-Tuple::Tuple(std::initializer_list<NamedProperty> initialValues)
-	: values_{initialValues}
+class INFORMATIONSCRIPTING_API Join : public LinearQuery
 {
-	Q_ASSERT(values_.size() > 0);
-	tag_ = values_[0].first;
-}
+	public:
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
-Tuple::Tuple(QList<NamedProperty> initialValues)
-	: values_{initialValues}
-{
-	Q_ASSERT(!initialValues.isEmpty());
-	tag_ = initialValues[0].first;
-}
+		static void registerDefaultQueries();
 
-void Tuple::add(const NamedProperty& p)
-{
-	auto it = std::find_if(begin(), end(), [p](const auto& np) {return np.first == p.first;});
-	Q_ASSERT(it == values_.end()); // TODO what should we do here?
-	values_.append(p);
-}
+	private:
+		friend class QueryRegistry;
 
-uint Tuple::hashValue(uint seed) const
-{
-// FIXME remove this workaround after ubuntu has 5.5 in repos
-#if QT_VERSION >= 0x050500
-	return qHashRange(begin(), end(), seed);
-#else
-	Q_UNUSED(seed);
-	return 0;
-#endif
-}
+		static const QStringList VALUE_ARGUMENT_NAMES;
+		static const QStringList AS_ARGUMENT_NAMES;
+		static const QStringList ON_ARGUMENT_NAMES;
 
-Tuple::const_iterator Tuple::find(const QString& name) const
-{
-	return std::find_if(begin(), end(), [name](const auto& np) { return np.first == name; });
-}
+		ArgumentParser arguments_;
 
-Tuple::iterator Tuple::find(const QString& name)
-{
-	return std::find_if(begin(), end(), [name](const auto& np) { return np.first == name; });
-}
+		Join(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);
 
-uint qHash(const Tuple& t, uint seed)
-{
-	return t.hashValue(seed);
-}
-
-Property& Tuple::operator[](const QString& name)
-{
-	auto it = find(name);
-	Q_ASSERT(it != end());
-	return it->second;
-}
-
-const Property& Tuple::operator[](const QString& name) const
-{
-	auto it = find(name);
-	Q_ASSERT(it != end());
-	return it->second;
-}
+		Optional<QList<NamedProperty>> extractProperties(const Tuple& t,
+																		 const QList<std::pair<QString, QString>>& values);
+};
 
 } /* namespace InformationScripting */

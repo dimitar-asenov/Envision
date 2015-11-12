@@ -36,6 +36,8 @@ class INFORMATIONSCRIPTING_API Tuple
 {
 	public:
 		Tuple() = default;
+		Tuple(const QString& tag, std::initializer_list<NamedProperty> initialValues);
+		Tuple(const QString& tag, QList<NamedProperty> initialValues);
 		Tuple(std::initializer_list<NamedProperty> initialValues);
 		Tuple(QList<NamedProperty> initialValues);
 
@@ -73,11 +75,13 @@ class INFORMATIONSCRIPTING_API Tuple
 		const_iterator cend() const;
 	private:
 		QList<NamedProperty> values_;
+		QString tag_;
 
 };
 
 uint qHash(const Tuple& t, uint seed = 0);
 
+inline QString Tuple::tag() const { return tag_; }
 inline int Tuple::size() const { return values_.size(); }
 inline bool Tuple::contains(const QString& name) const { return find(name) != end(); }
 inline bool Tuple::operator==(const Tuple& other) const { return values_ == other.values_; }

@@ -100,7 +100,8 @@ void APIPrinter::printClass(const ClassData& cData)
 
 	QString noInit = "";
 	if (cData.abstract_) noInit = ", no_init";
-	classString += QString("class_<%1%2>(\"%3\"%4)").arg(cData.qualifiedName_, basesString, cData.className_, noInit);
+	classString += QString("class_<%1%2>(\"%3\"%4)").arg(cData.qualifiedName_.trimmed(),
+																		  basesString, cData.className_, noInit);
 
 	printPossiblyLongString(classString);
 
