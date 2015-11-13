@@ -61,7 +61,9 @@ function(use_precompiled_header targetName)
 	
 	# Create a cpp file which cmake can build to get the precompiled header file
 	set(precompiled_cpp ${CMAKE_CURRENT_BINARY_DIR}/precompiled_cpp.cpp)
-	file(WRITE ${precompiled_cpp} "\n")
+	if(NOT EXISTS ${precompiled_cpp})
+		file(WRITE ${precompiled_cpp} "\n")
+	endif()
 	
 	# The precompiled header target
 	add_library(${precompiled} OBJECT src/precompiled.h ${precompiled_cpp})
@@ -80,7 +82,6 @@ function(use_precompiled_header targetName)
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${precompiled}.dir/precompiled_cpp.cpp.o ${CMAKE_BINARY_DIR}/${precompiledSubDir}/precompiled.h.gch
 		DEPENDS ${precompiled}
 	)
-		
 	
 	add_dependencies(${targetName} ${precompiledCopy})
 	target_compile_options(${targetName} PRIVATE -include ${CMAKE_BINARY_DIR}/${precompiledSubDir}/precompiled.h)
