@@ -1,6 +1,6 @@
 TARGET = modelbase
 include(../Core/common_plugin.pri)
-DEFINES += MODELBASE_LIBRARY
+DEFINES += ModelBase_EXPORTS
 win32:LIBS += -llogger \
     -lselftest
 HEADERS += src/persistence/NodeIdMap.h \

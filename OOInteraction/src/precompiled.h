@@ -48,7 +48,7 @@
 #include <QtCore/QDir>
 #include <QtGui/QDesktopServices>
 
-#if defined(OOINTERACTION_LIBRARY)
+#if defined(OOInteraction_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 #endif

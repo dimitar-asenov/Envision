@@ -1,6 +1,6 @@
 TARGET = custommethodcall
 include(../Core/common_plugin.pri)
-DEFINES += CUSTOMMETHODCALL_LIBRARY
+DEFINES += CustomMethodCall_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

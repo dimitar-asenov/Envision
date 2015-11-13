@@ -46,7 +46,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QTimeZone>
 
-#if defined(FILEPERSISTENCE_LIBRARY)
+#if defined(FilePersistence_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 #include <QtGui/QClipboard>

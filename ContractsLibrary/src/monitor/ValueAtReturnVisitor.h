@@ -28,7 +28,7 @@
 
 #include "../contractslibrary_api.h"
 
-#if defined(CONTRACTSLIBRARY_LIBRARY)
+#if defined(ContractsLibrary_EXPORTS)
 	#include "ModelBase/src/visitor/VisitorDefinition.h"
 #else
 	#include "ModelBase/src/visitor/Visitor.h"

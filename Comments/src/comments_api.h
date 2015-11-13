@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(COMMENTS_LIBRARY)
+#if defined(Comments_EXPORTS)
 	#define COMMENTS_API Q_DECL_EXPORT
 #else
 	#define COMMENTS_API Q_DECL_IMPORT

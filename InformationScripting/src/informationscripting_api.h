@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(INFORMATIONSCRIPTING_LIBRARY)
+#if defined(InformationScripting_EXPORTS)
 	#define INFORMATIONSCRIPTING_API Q_DECL_EXPORT
 #else
 	#define INFORMATIONSCRIPTING_API Q_DECL_IMPORT

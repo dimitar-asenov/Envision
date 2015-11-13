@@ -1,6 +1,6 @@
 TARGET = logger
 include(../Core/common_plugin.pri)
-DEFINES += LOGGER_LIBRARY
+DEFINES += Logger_EXPORTS
 QT = core
 HEADERS += src/Timer.h \
     src/Log.h \

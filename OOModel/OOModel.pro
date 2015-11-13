@@ -1,6 +1,6 @@
 TARGET = oomodel
 include(../Core/common_plugin.pri)
-DEFINES += OOMODEL_LIBRARY
+DEFINES += OOModel_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

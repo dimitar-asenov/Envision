@@ -75,5 +75,5 @@ echo "  - Include additional dependencies on other plug-ins in the .plugin file"
 echo "  - Include the corresponding library dependencies in the .pro file"
 echo "  - If using Eclipse, make the project dependent on the other projects it uses (Project Properties > Referenced Projects)"
 echo "  - Configure the precomliped header 'src/precompiled.h' to include the precompiled headers of libraries it uses"
-echo "  - Add project to the top level envision.pro file"
+echo "  - Add project to the top level envision.pro/CMakeLists.txt files"
 

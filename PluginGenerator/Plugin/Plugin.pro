@@ -1,7 +1,7 @@
 TARGET = PLUGINNAME_LOWERCASE
 include(../Core/common_plugin.pri)
 
-DEFINES += PLUGINNAME_UPPERCASE_LIBRARY
+DEFINES += PLUGINNAME_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase

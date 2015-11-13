@@ -1,6 +1,6 @@
 TARGET = export
 include(../Core/common_plugin.pri)
-DEFINES += EXPORT_LIBRARY
+DEFINES += Export_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase

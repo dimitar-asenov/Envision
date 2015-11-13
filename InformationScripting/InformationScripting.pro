@@ -1,7 +1,7 @@
 TARGET = informationscripting
 include(../Core/common_plugin.pri)
 
-DEFINES += INFORMATIONSCRIPTING_LIBRARY
+DEFINES += InformationScripting_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

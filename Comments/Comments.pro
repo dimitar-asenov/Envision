@@ -1,6 +1,6 @@
 TARGET = comments
 include(../Core/common_plugin.pri)
-DEFINES += COMMENTS_LIBRARY
+DEFINES += Comments_EXPORTS
 QT += webkitwidgets
 win32:LIBS += -llogger \
     -lselftest \

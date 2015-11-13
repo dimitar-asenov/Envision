@@ -43,7 +43,7 @@
 // and will be included in their precompiled headers
 
 
-#if defined(OOVISUALIZATION_LIBRARY)
+#if defined(OOVisualization_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 #include <QtWidgets/QDesktopWidget>

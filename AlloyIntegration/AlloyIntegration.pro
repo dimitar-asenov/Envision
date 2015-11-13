@@ -1,7 +1,7 @@
 TARGET = alloyintegration
 include(../Core/common_plugin.pri)
 
-DEFINES += ALLOYINTEGRATION_LIBRARY
+DEFINES += AlloyIntegration_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

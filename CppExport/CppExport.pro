@@ -1,7 +1,7 @@
 TARGET = cppexport
 include(../Core/common_plugin.pri)
 
-DEFINES += CPPEXPORT_LIBRARY
+DEFINES += CppExport_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

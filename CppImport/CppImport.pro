@@ -1,7 +1,7 @@
 TARGET = cppimport
 include(../Core/common_plugin.pri)
 
-DEFINES += CPPIMPORT_LIBRARY
+DEFINES += CppImport_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

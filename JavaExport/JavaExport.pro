@@ -1,6 +1,6 @@
 TARGET = javaexport
 include(../Core/common_plugin.pri)
-DEFINES += JAVAEXPORT_LIBRARY
+DEFINES += JavaExport_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

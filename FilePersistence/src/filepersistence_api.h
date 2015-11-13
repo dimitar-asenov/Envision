@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(FILEPERSISTENCE_LIBRARY)
+#if defined(FilePersistence_EXPORTS)
 	#define FILEPERSISTENCE_API Q_DECL_EXPORT
 #else
 	#define FILEPERSISTENCE_API Q_DECL_IMPORT

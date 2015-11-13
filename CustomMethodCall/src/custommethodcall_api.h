@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(CUSTOMMETHODCALL_LIBRARY)
+#if defined(CustomMethodCall_EXPORTS)
 	#define CUSTOMMETHODCALL_API Q_DECL_EXPORT
 #else
 	#define CUSTOMMETHODCALL_API Q_DECL_IMPORT

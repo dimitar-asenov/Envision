@@ -1,7 +1,7 @@
 TARGET = oodebug
 include(../Core/common_plugin.pri)
 
-DEFINES += OODEBUG_LIBRARY
+DEFINES += OODebug_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

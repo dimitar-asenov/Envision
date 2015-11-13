@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(SELFTEST_LIBRARY)
+#if defined(SelfTest_EXPORTS)
 	#define SELFTEST_API Q_DECL_EXPORT
 #else
 	#define SELFTEST_API Q_DECL_IMPORT

@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(OOMODEL_LIBRARY)
+#if defined(OOModel_EXPORTS)
 	#define OOMODEL_API Q_DECL_EXPORT
 #else
 	#define OOMODEL_API Q_DECL_IMPORT

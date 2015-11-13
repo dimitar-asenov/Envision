@@ -1,6 +1,6 @@
 TARGET = contractslibrary
 include(../Core/common_plugin.pri)
-DEFINES += CONTRACTSLIBRARY_LIBRARY
+DEFINES += ContractsLibrary_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

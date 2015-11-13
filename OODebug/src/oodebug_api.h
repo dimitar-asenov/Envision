@@ -30,7 +30,7 @@
 #include "Logger/src/Log.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(OODEBUG_LIBRARY)
+#if defined(OODebug_EXPORTS)
 	#define OODEBUG_API Q_DECL_EXPORT
 	namespace OODebug { extern Logger::Log& log; }
 #else

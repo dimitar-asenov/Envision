@@ -1,6 +1,6 @@
 TARGET = oointeraction
 include(../Core/common_plugin.pri)
-DEFINES += OOINTERACTION_LIBRARY
+DEFINES += OOInteraction_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

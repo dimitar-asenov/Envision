@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(ALLOYINTEGRATION_LIBRARY)
+#if defined(AlloyIntegration_EXPORTS)
 	#define ALLOYINTEGRATION_API Q_DECL_EXPORT
 #else
 	#define ALLOYINTEGRATION_API Q_DECL_IMPORT

@@ -1,6 +1,6 @@
 TARGET = interactionbase
 include(../Core/common_plugin.pri)
-DEFINES += INTERACTIONBASE_LIBRARY
+DEFINES += InteractionBase_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

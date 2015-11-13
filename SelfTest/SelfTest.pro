@@ -1,6 +1,6 @@
 TARGET = selftest
 include(../Core/common_plugin.pri)
-DEFINES += SELFTEST_LIBRARY
+DEFINES += SelfTest_EXPORTS
 QT = core
 
 HEADERS += src/SelfTestSuite.h \

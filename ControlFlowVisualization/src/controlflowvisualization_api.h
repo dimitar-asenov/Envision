@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(CONTROLFLOWVISUALIZATION_LIBRARY)
+#if defined(ControlFlowVisualization_EXPORTS)
 	#define CONTROLFLOWVISUALIZATION_API Q_DECL_EXPORT
 #else
 	#define CONTROLFLOWVISUALIZATION_API Q_DECL_IMPORT

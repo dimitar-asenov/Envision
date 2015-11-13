@@ -28,7 +28,7 @@
 
 #include "../oointeraction_api.h"
 
-#if defined(OOINTERACTION_LIBRARY)
+#if defined(OOInteraction_EXPORTS)
 	#include "ModelBase/src/visitor/VisitorDefinition.h"
 #else
 	#include "ModelBase/src/visitor/Visitor.h"

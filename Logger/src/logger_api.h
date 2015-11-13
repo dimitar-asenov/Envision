@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(LOGGER_LIBRARY)
+#if defined(Logger_EXPORTS)
 	#define LOGGER_API Q_DECL_EXPORT
 #else
 	#define LOGGER_API Q_DECL_IMPORT

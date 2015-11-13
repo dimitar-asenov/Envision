@@ -29,7 +29,7 @@
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
-#if defined(JAVAEXPORT_LIBRARY)
+#if defined(JavaExport_EXPORTS)
 	#define JAVAEXPORT_API Q_DECL_EXPORT
 #else
 	#define JAVAEXPORT_API Q_DECL_IMPORT

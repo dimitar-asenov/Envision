@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.2.2)
+
+project(PLUGINNAME)
+include(../CMake/common.cmake)
+
+add_library(PLUGINNAME SHARED
+	src/precompiled.h
+	src/PLUGINNAMEException.h
+	src/PLUGINNAME_LOWERCASE_api.h
+	src/PLUGINNAMEPlugin.h
+	src/PLUGINNAMEException.cpp
+	src/PLUGINNAMEPlugin.cpp
+	test/SimpleTest.cpp
+)
+target_link_libraries(PLUGINNAME ModelBase)
+envision_plugin(PLUGINNAME)

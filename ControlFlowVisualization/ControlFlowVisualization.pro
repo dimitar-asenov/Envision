@@ -1,6 +1,6 @@
 TARGET = controlflowvisualization
 include(../Core/common_plugin.pri)
-DEFINES += CONTROLFLOWVISUALIZATION_LIBRARY
+DEFINES += ControlFlowVisualization_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

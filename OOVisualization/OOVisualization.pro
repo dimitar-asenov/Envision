@@ -1,6 +1,6 @@
 TARGET = oovisualization
 include(../Core/common_plugin.pri)
-DEFINES += OOVISUALIZATION_LIBRARY
+DEFINES += OOVisualization_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
