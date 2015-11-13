@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "model/TreeManager.h"
-#include "nodes/Node.h"
+#include "../src/model/TreeManager.h"
+#include "../src/nodes/Node.h"
 
 namespace Model {
 

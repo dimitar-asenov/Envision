@@ -25,8 +25,8 @@
  **********************************************************************************************************************/
 
 #include "NameText.h"
-#include "commands/NameChange.h"
-#include "ModelException.h"
+#include "../commands/NameChange.h"
+#include "../ModelException.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::NameText)

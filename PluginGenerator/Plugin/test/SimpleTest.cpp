@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "PLUGINNAMEPlugin.h"
+#include "../src/PLUGINNAMEPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 namespace NAMESPACE {

@@ -24,13 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#include "ModelBasePlugin.h"
+#include "../src/ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "model/TreeManager.h"
-#include "nodes/List.h"
-#include "nodes/Integer.h"
-#include "nodes/Text.h"
-#include "visitor/VisitorDefinition.h"
+#include "../src/model/TreeManager.h"
+#include "../src/nodes/List.h"
+#include "../src/nodes/Integer.h"
+#include "../src/nodes/Text.h"
+#include "../src/visitor/VisitorDefinition.h"
 
 namespace Model {
 

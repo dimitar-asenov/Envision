@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "test_nodes/PartialList.h"
+#include "PartialList.h"
 
 namespace TestNodes {
 

@@ -24,10 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Reference.h"
-#include "commands/FieldSet.h"
-#include "model/TreeManager.h"
-#include "ModelException.h"
+#include "Reference.h"
+#include "../commands/FieldSet.h"
+#include "../model/TreeManager.h"
+#include "../ModelException.h"
 #include "NameText.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
@@ -90,7 +90,7 @@ bool Reference::resolveHelper(bool indirect)
 	if (state_ != ReferenceNeedsToBeResolved) return isResolved();
 	state_ = ReferenceIsBeingResolved;
 
-	auto newTarget = computeTarget();
+	Node* newTarget = computeTarget();
 
 	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
 

@@ -10,3 +10,6 @@ add_subdirectory("APIDepTest")
 # Basic utilities
 add_subdirectory("SelfTest")
 add_subdirectory("Logger")
+
+# Generic Layer
+add_subdirectory("ModelBase")

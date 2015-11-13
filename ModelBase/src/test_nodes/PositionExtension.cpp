@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "test_nodes/PositionExtension.h"
+#include "PositionExtension.h"
 
 namespace TestNodes {
 

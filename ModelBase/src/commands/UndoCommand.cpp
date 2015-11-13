@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/UndoCommand.h"
-#include "nodes/Node.h"
+#include "UndoCommand.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

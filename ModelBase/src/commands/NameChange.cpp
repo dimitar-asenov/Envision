@@ -24,10 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/NameChange.h"
-#include "commands/FieldSet.h"
-#include "nodes/NameText.h"
-#include "nodes/Node.h"
+#include "NameChange.h"
+#include "FieldSet.h"
+#include "../nodes/NameText.h"
+#include "../nodes/Node.h"
 #include "../model/TreeManager.h"
 
 namespace Model {

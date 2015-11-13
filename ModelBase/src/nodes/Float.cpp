@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Float.h"
-#include "commands/FieldSet.h"
-#include "ModelException.h"
+#include "Float.h"
+#include "../commands/FieldSet.h"
+#include "../ModelException.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::Float)

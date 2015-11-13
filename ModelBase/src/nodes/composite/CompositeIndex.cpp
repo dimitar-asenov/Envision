@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/composite/CompositeIndex.h"
+#include "CompositeIndex.h"
 
 namespace Model {
 

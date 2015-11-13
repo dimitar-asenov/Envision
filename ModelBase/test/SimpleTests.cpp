@@ -24,14 +24,14 @@
 **
 ***********************************************************************************************************************/
 
-#include "ModelBasePlugin.h"
+#include "../src/ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "test_nodes/BinaryNode.h"
-#include "test_nodes/BinaryNodeAccessUnit.h"
-#include "model/TreeManager.h"
-#include "nodes/NameText.h"
-#include "nodes/Integer.h"
-#include "nodes/Reference.h"
+#include "../src/test_nodes/BinaryNode.h"
+#include "../src/test_nodes/BinaryNodeAccessUnit.h"
+#include "../src/model/TreeManager.h"
+#include "../src/nodes/NameText.h"
+#include "../src/nodes/Integer.h"
+#include "../src/nodes/Reference.h"
 
 namespace Model {
 

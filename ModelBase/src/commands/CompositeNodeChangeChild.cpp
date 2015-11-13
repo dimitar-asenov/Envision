@@ -25,9 +25,9 @@
 ***********************************************************************************************************************/
 
 #include "CompositeNodeChangeChild.h"
-#include "nodes/Node.h"
+#include "../nodes/Node.h"
 
-#include "ModelException.h"
+#include "../ModelException.h"
 
 namespace Model {
 

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "test_nodes/BinaryNode.h"
+#include "BinaryNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(TestNodes::BinaryNode)

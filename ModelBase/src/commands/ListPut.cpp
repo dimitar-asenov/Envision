@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/ListPut.h"
-#include "nodes/Node.h"
+#include "ListPut.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

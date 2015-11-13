@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "test_nodes/BinaryNodePersistenceUnit.h"
+#include "BinaryNodePersistenceUnit.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(TestNodes::BinaryNodePersistenceUnit)

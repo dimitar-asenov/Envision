@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/ListRemove.h"
-#include "nodes/Node.h"
+#include "ListRemove.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

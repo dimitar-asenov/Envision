@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/composite/CompositeNode.h"
+#include "CompositeNode.h"
 #include "../../commands/CompositeNodeChangeChild.h"
 
 namespace Model {

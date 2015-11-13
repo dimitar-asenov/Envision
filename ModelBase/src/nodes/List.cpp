@@ -24,11 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/List.h"
-#include "ModelException.h"
-#include "commands/ListRemove.h"
-#include "commands/ListPut.h"
-#include "nodes/nodeMacros.h"
+#include "List.h"
+#include "../ModelException.h"
+#include "../commands/ListRemove.h"
+#include "../commands/ListPut.h"
+#include "nodeMacros.h"
 
 namespace Model {
 

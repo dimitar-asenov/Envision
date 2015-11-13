@@ -29,7 +29,7 @@
 #include "../model/TreeManager.h"
 #include "../model/AllTreeManagers.h"
 
-#include "TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::UsedLibrary)
 
 namespace Model {

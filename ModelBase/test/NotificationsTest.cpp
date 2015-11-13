@@ -24,12 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#include "ModelBasePlugin.h"
+#include "../src/ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "test_nodes/BinaryNode.h"
-#include "model/TreeManager.h"
+#include "../src/test_nodes/BinaryNode.h"
+#include "../src/model/TreeManager.h"
 #include "NotificationListener.h"
-#include "test_nodes/PositionExtension.h"
+#include "../src/test_nodes/PositionExtension.h"
 
 namespace Model {
 

@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Character.h"
-#include "commands/FieldSet.h"
-#include "ModelException.h"
+#include "Character.h"
+#include "../commands/FieldSet.h"
+#include "../ModelException.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::Character)

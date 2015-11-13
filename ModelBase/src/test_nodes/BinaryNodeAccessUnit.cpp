@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "test_nodes/BinaryNodeAccessUnit.h"
+#include "BinaryNodeAccessUnit.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(TestNodes::BinaryNodeAccessUnit)

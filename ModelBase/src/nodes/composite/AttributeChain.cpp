@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/composite/AttributeChain.h"
-#include "nodes/composite/CompositeNode.h"
+#include "AttributeChain.h"
+#include "CompositeNode.h"
 
 namespace Model {
 

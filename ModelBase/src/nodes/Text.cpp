@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Text.h"
-#include "commands/FieldSet.h"
-#include "ModelException.h"
+#include "Text.h"
+#include "../commands/FieldSet.h"
+#include "../ModelException.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::Text)
