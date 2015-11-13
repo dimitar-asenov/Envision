@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "views/MiniMap.h"
+#include "MiniMap.h"
 #include "../items/Item.h"
 
 #include "Logger/src/Timer.h"

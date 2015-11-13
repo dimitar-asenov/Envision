@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/Static.h"
-#include "VisualizationException.h"
-#include "shapes/Shape.h"
+#include "Static.h"
+#include "../VisualizationException.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 

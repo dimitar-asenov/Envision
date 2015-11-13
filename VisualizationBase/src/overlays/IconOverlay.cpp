@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "IconOverlay.h"
 #include "../items/Static.h"
-#include "shapes/Shape.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 

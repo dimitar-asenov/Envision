@@ -29,7 +29,7 @@
 #include "EmptyItem.h"
 #include "../renderer/ModelRenderer.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItemDef.h"
 
 namespace Visualization {
 

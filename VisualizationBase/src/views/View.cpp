@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "views/View.h"
-#include "Scene.h"
-#include "VisualizationManager.h"
+#include "View.h"
+#include "../Scene.h"
+#include "../VisualizationManager.h"
 
 namespace Visualization {
 

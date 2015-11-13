@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "declarative/DeclarativeItemBaseStyle.h"
-#include "items/SymbolStyle.h"
+#include "../src/declarative/DeclarativeItemBaseStyle.h"
+#include "../src/items/SymbolStyle.h"
 
 namespace Visualization {
 

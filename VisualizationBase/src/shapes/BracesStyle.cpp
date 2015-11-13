@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "shapes/BracesStyle.h"
+#include "BracesStyle.h"
 
 namespace Visualization {
 

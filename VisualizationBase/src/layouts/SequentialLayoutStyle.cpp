@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "layouts/SequentialLayoutStyle.h"
+#include "SequentialLayoutStyle.h"
 
 namespace Visualization {
 

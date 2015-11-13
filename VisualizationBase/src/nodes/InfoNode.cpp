@@ -26,9 +26,9 @@
 
 #include "InfoNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-#include "utils/InfoJavascriptFunctions.h"
+#include "../utils/InfoJavascriptFunctions.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Visualization::InfoNode)
 
 namespace Visualization {

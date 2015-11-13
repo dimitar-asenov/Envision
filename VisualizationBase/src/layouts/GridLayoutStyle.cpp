@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "layouts/GridLayoutStyle.h"
+#include "GridLayoutStyle.h"
 
 namespace Visualization {
 

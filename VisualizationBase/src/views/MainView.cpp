@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "views/MainView.h"
-#include "Scene.h"
+#include "MainView.h"
+#include "../Scene.h"
 #include "../cursor/Cursor.h"
 #include "../items/Item.h"
 

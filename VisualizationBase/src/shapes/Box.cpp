@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "shapes/Box.h"
-#include "VisualizationException.h"
+#include "Box.h"
+#include "../VisualizationException.h"
 
 namespace Visualization {
 

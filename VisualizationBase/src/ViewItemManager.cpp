@@ -28,6 +28,7 @@
 
 #include "items/ViewItem.h"
 #include "Scene.h"
+
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/model/AllTreeManagers.h"
 

@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/StaticStyle.h"
-#include "items/Static.h"
+#include "StaticStyle.h"
+#include "Static.h"
 
 namespace Visualization {
 

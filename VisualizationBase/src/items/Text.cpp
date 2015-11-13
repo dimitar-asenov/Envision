@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/Text.h"
+#include "Text.h"
 
 namespace Visualization {
 ITEM_COMMON_DEFINITIONS(Text, "item")

@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "styles/StyleNode.h"
+#include "StyleNode.h"
 
-#include "VisualizationException.h"
+#include "../VisualizationException.h"
 
 namespace Visualization {
 

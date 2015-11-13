@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/ItemStyle.h"
-#include "shapes/Shape.h"
+#include "ItemStyle.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 

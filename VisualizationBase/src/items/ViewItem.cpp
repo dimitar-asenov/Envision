@@ -25,19 +25,19 @@
  **********************************************************************************************************************/
 #include "ViewItem.h"
 
-#include "../src/declarative/DeclarativeItemDef.h"
-#include "declarative/DynamicGridFormElement.h"
-#include "nodes/ViewItemNode.h"
+#include "../declarative/DeclarativeItemDef.h"
+#include "../declarative/DynamicGridFormElement.h"
+#include "../nodes/ViewItemNode.h"
 #include "VViewItemNode.h"
-#include "overlays/ArrowOverlay.h"
-#include "nodes/InfoNode.h"
+#include "../overlays/ArrowOverlay.h"
+#include "../nodes/InfoNode.h"
 #include "VInfoNode.h"
-#include "Scene.h"
+#include "../Scene.h"
 #include "RootItem.h"
-#include "renderer/ModelRenderer.h"
-#include "utils/JsonUtil.h"
-#include "VisualizationManager.h"
-#include "ViewItemManager.h"
+#include "../renderer/ModelRenderer.h"
+#include "../utils/JsonUtil.h"
+#include "../VisualizationManager.h"
+#include "../ViewItemManager.h"
 
 namespace Visualization {
 

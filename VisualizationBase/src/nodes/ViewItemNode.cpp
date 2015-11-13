@@ -26,11 +26,12 @@
 
 #include "ViewItemNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-#include "nodes/InfoNode.h"
-#include "items/ViewItem.h"
-#include "utils/JsonUtil.h"
 
+#include "../nodes/InfoNode.h"
+#include "../items/ViewItem.h"
+#include "../utils/JsonUtil.h"
+
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 
 namespace Visualization {

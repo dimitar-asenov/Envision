@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VCompositeStyle.h"
+#include "VCompositeStyle.h"
 
 namespace Visualization {
 

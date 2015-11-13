@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "node_extensions/Position.h"
+#include "Position.h"
 
 namespace Visualization {
 

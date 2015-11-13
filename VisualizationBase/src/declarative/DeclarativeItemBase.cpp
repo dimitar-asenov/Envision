@@ -26,8 +26,8 @@
 
 #include "DeclarativeItemBase.h"
 #include "FormElement.h"
-#include "shapes/Shape.h"
-#include "shapes/ShapeStyle.h"
+#include "../shapes/Shape.h"
+#include "../shapes/ShapeStyle.h"
 #include "GridLayoutFormElement.h"
 #include "../cursor/Cursor.h"
 

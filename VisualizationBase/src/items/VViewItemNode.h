@@ -26,10 +26,10 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "../../VisualizationBase/src/items/ItemWithNode.h"
-#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "../../VisualizationBase/src/items/EmptyItem.h"
-#include "../VisualizationBase/src/nodes/ViewItemNode.h"
+#include "ItemWithNode.h"
+#include "EmptyItem.h"
+#include "../declarative/DeclarativeItem.h"
+#include "../nodes/ViewItemNode.h"
 
 
 namespace Visualization {

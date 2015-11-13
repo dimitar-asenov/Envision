@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "cursor/LayoutCursor.h"
-#include "cursor/CursorShapeItem.h"
-#include "layouts/Layout.h"
+#include "LayoutCursor.h"
+#include "CursorShapeItem.h"
+#include "../layouts/Layout.h"
 
 namespace Visualization {
 

@@ -27,12 +27,11 @@
 #include "ModelRenderer.h"
 #include "../VisualizationException.h"
 #include "../items/Item.h"
+#include "../items/RootItem.h"
+#include "../items/ViewItem.h"
+#include "../Scene.h"
 
 #include "ModelBase/src/nodes/Node.h"
-
-#include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/items/RootItem.h"
-#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Visualization {
 

@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 #pragma once
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 namespace Visualization {
 

@@ -24,14 +24,14 @@
 **
 ***********************************************************************************************************************/
 
-#include "VisualizationBasePlugin.h"
-#include "VisualizationManager.h"
-#include "Scene.h"
+#include "../src/VisualizationBasePlugin.h"
+#include "../src/VisualizationManager.h"
+#include "../src/Scene.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "items/VComposite.h"
-#include "items/VList.h"
-#include "items/RootItem.h"
-#include "nodes/TestBoxNode.h"
+#include "../src/items/VComposite.h"
+#include "../src/items/VList.h"
+#include "../src/items/RootItem.h"
+#include "../src/nodes/TestBoxNode.h"
 #include "DeclarativeTest.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"

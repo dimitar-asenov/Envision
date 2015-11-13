@@ -24,8 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#include "cursor/TextCursor.h"
-#include "cursor/CursorShapeItem.h"
+#include "TextCursor.h"
+#include "CursorShapeItem.h"
 
 namespace Visualization {
 

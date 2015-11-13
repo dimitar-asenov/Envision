@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "icons/SVGIconStyle.h"
-#include "VisualizationException.h"
+#include "SVGIconStyle.h"
+#include "../VisualizationException.h"
 
 namespace Visualization {
 

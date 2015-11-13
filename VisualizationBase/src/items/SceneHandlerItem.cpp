@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/SceneHandlerItem.h"
-#include "Scene.h"
-#include "items/ItemStyle.h"
+#include "SceneHandlerItem.h"
+#include "../Scene.h"
+#include "ItemStyle.h"
 
 namespace Visualization {
 

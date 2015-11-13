@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "SvgShape.h"
-#include "VisualizationException.h"
+#include "../VisualizationException.h"
 
 namespace Visualization {
 

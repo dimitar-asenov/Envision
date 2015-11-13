@@ -25,10 +25,10 @@
  **********************************************************************************************************************/
 #include "BoxOverlay.h"
 
-#include "VisualizationBase/src/items/StaticStyle.h"
-#include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/items/TextStyle.h"
+#include "../items/StaticStyle.h"
+#include "../items/Text.h"
+#include "../items/Static.h"
+#include "../items/TextStyle.h"
 #include "../declarative/DeclarativeItemDef.h"
 
 namespace Visualization {

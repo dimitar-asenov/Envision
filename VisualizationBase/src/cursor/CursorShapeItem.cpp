@@ -26,7 +26,7 @@
 
 #include "CursorShapeItem.h"
 #include "Cursor.h"
-#include "shapes/Shape.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 

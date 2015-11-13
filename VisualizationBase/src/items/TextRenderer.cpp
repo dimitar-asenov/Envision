@@ -24,13 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/TextRenderer.h"
+#include "TextRenderer.h"
 
-#include "items/ItemWithNode.h"
-#include "Scene.h"
-#include "VisualizationException.h"
-#include "shapes/Shape.h"
-#include "cursor/TextCursor.h"
+#include "ItemWithNode.h"
+#include "../Scene.h"
+#include "../VisualizationException.h"
+#include "../shapes/Shape.h"
+#include "../cursor/TextCursor.h"
 
 namespace Visualization {
 

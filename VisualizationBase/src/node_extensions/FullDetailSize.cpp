@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "node_extensions/FullDetailSize.h"
+#include "FullDetailSize.h"
 
 namespace Visualization {
 

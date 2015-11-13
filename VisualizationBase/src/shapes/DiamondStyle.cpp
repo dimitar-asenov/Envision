@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "shapes/DiamondStyle.h"
+#include "DiamondStyle.h"
 
 namespace Visualization {
 

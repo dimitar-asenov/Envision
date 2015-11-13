@@ -26,7 +26,7 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../declarative/DeclarativeItem.h"
 
 namespace Visualization {
 

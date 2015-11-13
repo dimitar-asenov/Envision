@@ -26,13 +26,14 @@
 
 #include "InfoJavascriptFunctions.h"
 
+#include "../VisualizationManager.h"
+#include "../Scene.h"
+#include "../items/ViewItem.h"
+#include "../views/MainView.h"
+#include "../nodes/InfoNode.h"
+
 #include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/nodes/Node.h"
-#include "VisualizationManager.h"
-#include "Scene.h"
-#include "items/ViewItem.h"
-#include "views/MainView.h"
-#include "nodes/InfoNode.h"
 
 namespace Visualization {
 

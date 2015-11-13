@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/LayoutProviderBase.h"
+#include "LayoutProviderBase.h"
 
 namespace Visualization {
 

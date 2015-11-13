@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "shapes/ShapeStyle.h"
+#include "ShapeStyle.h"
 
 namespace Visualization {
 

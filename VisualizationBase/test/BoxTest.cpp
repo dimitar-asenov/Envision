@@ -26,8 +26,8 @@
 
 #include "BoxTest.h"
 
-#include "shapes/Box.h"
-#include "items/Text.h"
+#include "../src/shapes/Box.h"
+#include "../src/items/Text.h"
 
 namespace Visualization {
 

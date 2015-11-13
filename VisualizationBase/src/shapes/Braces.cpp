@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "shapes/Braces.h"
-#include "VisualizationException.h"
+#include "Braces.h"
+#include "../VisualizationException.h"
 
 namespace Visualization {
 

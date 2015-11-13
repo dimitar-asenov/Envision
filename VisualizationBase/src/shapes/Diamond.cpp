@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "shapes/Diamond.h"
-#include "VisualizationException.h"
+#include "Diamond.h"
+#include "../VisualizationException.h"
 
 namespace Visualization {
 

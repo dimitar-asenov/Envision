@@ -27,7 +27,7 @@
 #include "AnchorLayoutConstraintSolver.h"
 
 #include "FormElement.h"
-#include "VisualizationException.h"
+#include "../VisualizationException.h"
 
 #include <lpsolve/lp_lib.h>
 

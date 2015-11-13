@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "layouts/PositionLayoutStyle.h"
+#include "PositionLayoutStyle.h"
 
 namespace Visualization {
 

@@ -26,10 +26,10 @@
 
 #pragma once
 
-#include "items/Item.h"
-#include "layouts/SequentialLayoutStyle.h"
-#include "layouts/SequentialLayout.h"
-#include "shapes/BoxStyle.h"
+#include "../src/items/Item.h"
+#include "../src/layouts/SequentialLayoutStyle.h"
+#include "../src/layouts/SequentialLayout.h"
+#include "../src/shapes/BoxStyle.h"
 
 namespace Visualization {
 

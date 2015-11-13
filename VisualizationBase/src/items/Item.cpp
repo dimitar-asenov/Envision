@@ -34,7 +34,7 @@
 #include "../renderer/ModelRenderer.h"
 #include "../views/MainView.h"
 #include "VisualizationAddOn.h"
-#include "ViewItemManager.h"
+#include "../ViewItemManager.h"
 
 #include "../cursor/Cursor.h"
 

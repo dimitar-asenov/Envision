@@ -24,17 +24,17 @@
  **
  **********************************************************************************************************************/
 #include "ZoomLabelOverlay.h"
-#include "shapes/Shape.h"
+#include "../shapes/Shape.h"
 #include "../declarative/DeclarativeItemDef.h"
-#include "VisualizationBase/src/icons/Icon.h"
-#include "VisualizationBase/src/icons/IconStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
-#include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/RootItem.h"
-#include "VisualizationBase/src/overlays/OverlayAccessor.h"
-#include "VisualizationBase/src/views/MainView.h"
+#include "../icons/Icon.h"
+#include "../icons/IconStyle.h"
+#include "../items/StaticStyle.h"
+#include "../items/Text.h"
+#include "../items/Static.h"
+#include "../items/TextStyle.h"
+#include "../items/RootItem.h"
+#include "OverlayAccessor.h"
+#include "../views/MainView.h"
 
 namespace Visualization {
 

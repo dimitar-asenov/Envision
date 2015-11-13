@@ -36,6 +36,8 @@
 #include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
+#include "ViewItemManager.h"
+#include "items/ViewItem.h"
 
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/model/TreeManager.h"
@@ -43,9 +45,6 @@
 #include "Logger/src/Timer.h"
 #include "Core/src/Profiler.h"
 #include "Core/src/EnvisionApplication.h"
-
-#include "ViewItemManager.h"
-#include "items/ViewItem.h"
 
 namespace Visualization {
 

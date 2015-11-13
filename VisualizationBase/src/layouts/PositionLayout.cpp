@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "layouts/PositionLayout.h"
-#include "shapes/Shape.h"
+#include "PositionLayout.h"
+#include "../shapes/Shape.h"
 #include "../renderer/ModelRenderer.h"
 #include "../node_extensions/FullDetailSize.h"
 #include "../views/MainView.h"

@@ -25,10 +25,10 @@
  **********************************************************************************************************************/
 #include "VInfoNode.h"
 
-#include "declarative/DeclarativeItemDef.h"
-#include "nodes/InfoNode.h"
-#include "Comments/src/items/VCommentBrowser.h"
-#include "utils/InfoJavascriptFunctions.h"
+#include "../declarative/DeclarativeItemDef.h"
+#include "../nodes/InfoNode.h"
+#include "Comments/src/items/VCommentBrowser.h" //TODO: Get rid of this dependency
+#include "../utils/InfoJavascriptFunctions.h"
 
 namespace Visualization {
 

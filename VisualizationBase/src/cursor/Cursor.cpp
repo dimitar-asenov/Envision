@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "cursor/Cursor.h"
-#include "items/Item.h"
-#include "items/ItemStyle.h"
+#include "Cursor.h"
+#include "../items/Item.h"
+#include "../items/ItemStyle.h"
 
 namespace Visualization {
 

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/Symbol.h"
+#include "Symbol.h"
 
 namespace Visualization {
 ITEM_COMMON_DEFINITIONS(Symbol, "item")

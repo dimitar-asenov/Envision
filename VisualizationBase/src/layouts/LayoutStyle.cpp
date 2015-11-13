@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "layouts/LayoutStyle.h"
+#include "LayoutStyle.h"
 
 namespace Visualization {
 

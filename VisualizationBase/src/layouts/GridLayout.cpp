@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "layouts/GridLayout.h"
-#include "shapes/Shape.h"
-#include "items/ItemWithNode.h"
+#include "GridLayout.h"
+#include "../shapes/Shape.h"
+#include "../items/ItemWithNode.h"
 #include "../renderer/ModelRenderer.h"
 
 #include "ModelBase/src/nodes/Node.h"

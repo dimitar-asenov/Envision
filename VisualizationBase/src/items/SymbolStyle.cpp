@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/SymbolStyle.h"
+#include "SymbolStyle.h"
 
 namespace Visualization {
 

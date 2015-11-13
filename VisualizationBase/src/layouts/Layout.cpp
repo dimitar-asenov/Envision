@@ -24,11 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#include "layouts/Layout.h"
-#include "VisualizationException.h"
+#include "Layout.h"
+#include "../VisualizationException.h"
 #include "../renderer/ModelRenderer.h"
 
-#include "cursor/LayoutCursor.h"
+#include "../cursor/LayoutCursor.h"
 
 namespace Visualization {
 

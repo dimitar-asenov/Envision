@@ -25,10 +25,10 @@
  **********************************************************************************************************************/
 #include "VViewItemNode.h"
 
-#include "../src/declarative/DeclarativeItemDef.h"
-#include "nodes/ViewItemNode.h"
-#include "declarative/GridLayoutFormElement.h"
-#include "ViewItem.h"
+#include "../declarative/DeclarativeItemDef.h"
+#include "../nodes/ViewItemNode.h"
+#include "../declarative/GridLayoutFormElement.h"
+#include "../items/ViewItem.h"
 
 namespace Visualization {
 

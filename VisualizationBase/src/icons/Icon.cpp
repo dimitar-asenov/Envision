@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "icons/Icon.h"
-#include "shapes/Shape.h"
+#include "Icon.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 

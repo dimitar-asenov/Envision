@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "SelectionOverlay.h"
-#include "shapes/Shape.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 
