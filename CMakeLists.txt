@@ -6,3 +6,7 @@ add_subdirectory("Launcher")
 # These two are just for testing plug-in linking
 add_subdirectory("HelloWorld")
 add_subdirectory("APIDepTest")
+
+# Basic utilities
+add_subdirectory("SelfTest")
+add_subdirectory("Logger")

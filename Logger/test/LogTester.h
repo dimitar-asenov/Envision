@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "Log.h"
+#include "../src/Log.h"
 
 namespace Logger {
 

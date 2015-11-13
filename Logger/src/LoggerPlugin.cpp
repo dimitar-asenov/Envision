@@ -27,7 +27,7 @@
 #include "LoggerPlugin.h"
 #include "Log.h"
 #include "Timer.h"
-#include "LogTester.h"
+#include "../test/LogTester.h"
 
 namespace Logger {
 
