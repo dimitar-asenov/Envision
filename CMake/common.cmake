@@ -50,11 +50,13 @@ if( UNIX )
 	set(COMMON_LIBS "-lprofiler")
 endif()
 
-# ???
-# QMAKE_POST_LINK += $${ENVISION_ROOT_DIR}/checkers/vera++-check-dir $$_PRO_FILE_PWD_
-
 function(use_precompiled_header targetName)
 	message("Using precompiled header for ${targetName} ")
+	
+	#TODO: This shouldn't really belong here, but what's a better place?
+	add_custom_command(TARGET ${targetName} PRE_LINK
+		COMMAND ${ENVISION_ROOT_DIR}/checkers/vera++-check-dir ${CMAKE_CURRENT_SOURCE_DIR}
+	)
     
 	# A custom target name for the precompiled header
 	set(precompiled ${targetName}-Precompiled-Header)
