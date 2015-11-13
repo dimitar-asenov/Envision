@@ -12,5 +12,4 @@ add_library(HelloWorld SHARED
 	src/HelloWorldPlugin.cpp
 )
 
-#target_link_libraries(${targetName} Core Qt5::Core)
 envision_plugin(HelloWorld)

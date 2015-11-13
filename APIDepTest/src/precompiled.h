@@ -38,7 +38,7 @@
 // and will be included in their precompiled headers
 
 
-#if defined(APIDEPTEST_LIBRARY)
+#if defined(APIDepTest_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 #endif
