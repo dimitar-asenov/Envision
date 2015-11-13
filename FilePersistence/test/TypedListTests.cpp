@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "FilePersistencePlugin.h"
-#include "simple/SimpleTextFileStore.h"
+#include "../src/FilePersistencePlugin.h"
+#include "../src/simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/model/TreeManager.h"

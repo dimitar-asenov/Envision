@@ -7,7 +7,7 @@ import fnmatch
 argParser = argparse.ArgumentParser('Generate a qt resource file from a directory')
 argParser.add_argument('sourceDir')
 argParser.add_argument('prefixForResource')
-argParser.add_argument('destQrcFile', type=argparse.FileType('w'))
+argParser.add_argument('destQrcFile')
 
 args = argParser.parse_args()
 
@@ -26,43 +26,15 @@ for root, dirnames, filenames in os.walk(args.sourceDir):
 qrcLines.append('	</qresource>')
 qrcLines.append('</RCC>')
 
-args.destQrcFile.writelines(["%s\n" % line  for line in qrcLines])
+# Read the existing file, if any
+with open(args.destQrcFile, 'a+') as f:
+	oldLines = f.readlines()
 
-#colorComponentRegex = re.compile('^\s*<(red|green|blue|alpha)>(\d+)</(red|green|blue|alpha)>\s*$')
-#endColorTag = re.compile('^\s*(</\w+>)\s*$')
-
-#for fileName in files:
-	#with open(fileName, 'r+') as file:
-		#oldLines = [line.rstrip('\n') for line in file]
-		
-		#newLines = []
-		#foundAtLeastOneColor = False
-		
-		#inColor = False
-		#color = DEFAULT_COLOR.copy()
-		#for line in oldLines:
-			#match = colorComponentRegex.match(line)
-			#if match:
-				#inColor = True
-				#foundAtLeastOneColor = True
-				#color[match.group(1)] = int(match.group(2))
-			#elif inColor:
-				#match = endColorTag.match(line)
-				#assert match
-				
-				#hexColor = "%.2x%.2x%.2x" % (color['red'], color['green'], color['blue'])
-				#if color['alpha'] != 255:
-					#hexColor = "%.2x" % (color['alpha']) + hexColor
-				#newLines[-1] += '#' + hexColor + match.group(1)
-				
-				## Reset vars
-				#inColor = False
-				#color = DEFAULT_COLOR.copy()
-			#else:
-				#newLines.append(line)
-					
-		#if foundAtLeastOneColor:
-			#print 'Converting file ' + fileName
-			#file.seek(0)
-			#file.writelines(["%s\n" % line  for line in newLines])
-			#file.truncate()
+# Check if file needs updating
+newLines = ["%s\n" % line  for line in qrcLines]
+if (oldLines == newLines):
+	print "No new resources in directory " + fullSourceDirPath
+else:
+	with open(args.destQrcFile, 'w') as f:
+		f.writelines(newLines)
+	print "Generated resources file from directory " + fullSourceDirPath

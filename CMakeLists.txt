@@ -13,4 +13,5 @@ add_subdirectory("Logger")
 
 # Generic Layer
 add_subdirectory("ModelBase")
+add_subdirectory("FilePersistence")
 add_subdirectory("VisualizationBase")

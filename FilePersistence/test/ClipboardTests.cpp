@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "FilePersistencePlugin.h"
-#include "simple/SimpleTextFileStore.h"
-#include "SystemClipboard.h"
+#include "../src/FilePersistencePlugin.h"
+#include "../src/simple/SimpleTextFileStore.h"
+#include "../src/SystemClipboard.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/test_nodes/PartialList.h"

@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../../ModelBase/src/persistence/PersistentStore.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 

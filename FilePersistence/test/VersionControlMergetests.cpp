@@ -24,12 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#include "FilePersistencePlugin.h"
+#include "../src/FilePersistencePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "version_control/Diff.h"
-#include "version_control/Merge.h"
-#include "version_control/GitRepository.h"
+#include "../src/version_control/Diff.h"
+#include "../src/version_control/Merge.h"
+#include "../src/version_control/GitRepository.h"
 #include "VCTestProject.h"
 
 
