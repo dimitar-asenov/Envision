@@ -142,7 +142,7 @@ Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 	{
 		Model::Node* astNode = tuple["ast"];
 		auto parentNode = astNode->firstAncestorOfType(matcher);
-		ts.add({{"parentOfType", {}}, {"childNode", astNode}, {"parentNode", parentNode}});
+		ts.add({"parentOfType", {{"childNode", astNode}, {"parentNode", parentNode}}});
 	}
 	adaptOutputForRelation(ts, "parentOfType", {"parentNode"});
 	return ts;
@@ -303,7 +303,7 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 
 	for (auto it = referenceTargets.begin(); it != referenceTargets.end(); ++it)
 		for (auto node : it.value())
-			result.add({{"uses", {}}, {"user", it.key()}, {"used", node}});
+			result.add({"uses", {{"user", it.key()}, {"used", node}}});
 
 	adaptOutputForRelation(result, "uses", {"user"});
 
@@ -412,7 +412,7 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classN
 	{
 		NamedProperty baseNode{"baseClass", base};
 		ts.add({baseNode});
-		ts.add({{"base class", {}}, {classNode}, {baseNode}});
+		ts.add({"base class", {{classNode}, {baseNode}}});
 		addBaseEdgesFor(base, baseNode, ts);
 	}
 }
@@ -425,7 +425,7 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 	{
 		NamedProperty namedCallee{"callee", callee};
 		ts.add({{namedCallee}});
-		ts.add({{"calls", {}}, namedCaller, namedCallee});
+		ts.add({"calls", {namedCaller, namedCallee}});
 	}
 }
 
