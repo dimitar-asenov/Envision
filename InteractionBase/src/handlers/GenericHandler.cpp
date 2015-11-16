@@ -54,8 +54,6 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
-#include "Comments/src/nodes/CommentNode.h" //TODO This dependency is bogus and not in the .plugin file
-
 namespace Interaction {
 
 void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>, QSet<Node*>)
@@ -101,6 +99,8 @@ void GenericHandlerManagerListener::stopListeningToTreeManagerOf(Visualization::
 					  SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)));
 	}
 }
+
+GenericHandler::CommentCreationFunction GenericHandler::createComment_{};
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
 ActionPrompt* GenericHandler::actionPrompt_{};
@@ -433,10 +433,13 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			{
 				if (aCompositeNode->comment() == nullptr)
 				{
-					aCompositeNode->beginModification("add comment");
-					aCompositeNode->setComment(new Comments::CommentNode("Enter comment here"));
-					aCompositeNode->endModification();
-					aNode->updateSubtree();
+					if (createComment_)
+					{
+						aCompositeNode->beginModification("add comment");
+						aCompositeNode->setComment(createComment_());
+						aCompositeNode->endModification();
+						aNode->updateSubtree();
+					}
 				}
 				if (!aNode->findVisualizationOf(aCompositeNode->comment()))
 					toggleComment(aNode, aCompositeNode->comment(), false);

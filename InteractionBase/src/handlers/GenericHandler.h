@@ -116,6 +116,9 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		static void fixCursorPositionForUndoAfterTreeManagerChange();
 
+		using CommentCreationFunction = std::function<Model::Node* ()>;
+		static void setCommentCreationFunction(CommentCreationFunction f);
+
 	protected:
 		GenericHandler();
 
@@ -144,9 +147,12 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		static int cursorUndoIndex_;
 		static void recordCursorPosition(Visualization::Item* target);
 		static GenericHandlerManagerListener& managerListener();
+
+		static CommentCreationFunction createComment_;
 };
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }
 inline void GenericHandler::addCommand(Command* command) { supportedCommands.append(command); }
+inline void GenericHandler::setCommentCreationFunction(CommentCreationFunction f) { createComment_ = f;}
 
 }

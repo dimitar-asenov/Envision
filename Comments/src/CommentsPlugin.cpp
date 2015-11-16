@@ -42,6 +42,7 @@
 #include "items/VCommentFreeNode.h"
 #include "items/VCommentText.h"
 
+#include "InteractionBase/src/handlers/GenericHandler.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 namespace Comments {
@@ -58,6 +59,9 @@ bool CommentsPlugin::initialize(Core::EnvisionManager&)
 	VCommentBrowser::setDefaultClassHandler(HCommentBrowser::instance());
 	VCommentText::setDefaultClassHandler(HCommentText::instance());
 	VCommentFreeNode::setDefaultClassHandler(HCommentFreeNode::instance());
+
+	Interaction::GenericHandler::setCommentCreationFunction([]()
+		{return new Comments::CommentNode("Enter comment here");});
 
 	return true;
 }
