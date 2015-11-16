@@ -1,4 +1,4 @@
-#script "<filterCasts>"
+# filterCasts
 
 casts = Query.ast(["-t=CastExpression"] + args, [])
 castTypeAttributes = Query.attribute(["-at=castType", "-s=of"], casts)

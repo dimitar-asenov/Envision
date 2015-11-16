@@ -24,39 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "Query.h"
-
-namespace Model {
-	class Node;
-}
+#include "QueryRuntimeException.h"
 
 namespace InformationScripting {
 
-class QueryExecutor;
+QueryRuntimeException::QueryRuntimeException(const QString& message)
+	: InformationScriptingException(message, false)
+{}
 
-class INFORMATIONSCRIPTING_API ScriptQuery : public Query
+const QString& QueryRuntimeException::name() const
 {
-	public:
-		ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args, QueryExecutor* executor);
-
-		static void initPythonEnvironment();
-		static void unloadPythonEnvironment();
-
-		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
-
-	private:
-		QString scriptPath_;
-		// Note since we only register QList<T> to python we don't use QStringList here:
-		QList<QString> arguments_;
-		QueryExecutor* executor_{};
-
-		void importStar(boost::python::dict& main_namespace, boost::python::object apiObject);
-
-		QList<TupleSet> executeQueryFromPython(QString name, boost::python::list args, boost::python::list input);
-};
+	static QString ename("QueryRuntimeException");
+	return ename;
+}
 
 } /* namespace InformationScripting */

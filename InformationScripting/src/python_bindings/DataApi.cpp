@@ -28,7 +28,6 @@
 
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
-#include "../query_framework/Optional.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -99,16 +98,18 @@ BOOST_PYTHON_MODULE(DataApi) {
 		QSet<Tuple> (TupleSet::*tuplesString)(const QString&) const = &TupleSet::tuples;
 		QSet<Tuple> (TupleSet::*take1)(const QString&) = &TupleSet::take;
 		void (TupleSet::*removeTuple)(const Tuple&) = &TupleSet::remove;
+		void (TupleSet::*removeTupleSet)(const TupleSet&) = &TupleSet::remove;
 
 		class_<TupleSet>("TupleSet", init<>())
 				.def("__init__", make_constructor(makeTupleSet))
 				.def("tuples", tuplesAll)
 				.def("tuples", tuplesString)
-				.def("take", take1)
+				.def("add", &TupleSet::add)
 				.def("remove", removeTuple)
-				.def("add", &TupleSet::add);
-
-		class_<Optional<TupleSet>>("OptionalTupleSet", init<TupleSet>());
+				.def("remove", removeTupleSet)
+				.def("take", take1)
+				.def("takeAll", &TupleSet::takeAll)
+				.def("unite", &TupleSet::unite);
 }
 
 } /* namespace InformationScripting */

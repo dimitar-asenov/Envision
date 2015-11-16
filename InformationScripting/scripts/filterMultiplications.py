@@ -1,6 +1,6 @@
 # Removes all BinaryOperation nodes from the input which are not Multiplications
 #
-# Test to execute: $<"<ast -s=g -t=BinaryOp*>" | "<filterMultiplications>">$
+# Test to execute: ast -s=g -t=BinaryOp*|filterMultiplications
 
 for ts in inputs:
     tuples = ts.tuples("ast")
