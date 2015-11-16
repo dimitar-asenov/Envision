@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "ExportPlugin.h"
+#include "../src/ExportPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "../src/writer/Exporter.h"

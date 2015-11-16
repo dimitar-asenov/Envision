@@ -26,7 +26,7 @@
 #include "Exporter.h"
 #include "FragmentLayouter.h"
 #include "TextToNodeMap.h"
-#include "ExportPlugin.h"
+#include "../ExportPlugin.h"
 #include "../tree/SourceDir.h"
 #include "../ExportException.h"
 
