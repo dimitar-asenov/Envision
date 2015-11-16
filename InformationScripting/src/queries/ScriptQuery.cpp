@@ -97,7 +97,7 @@ QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 		auto allQueries = QueryRegistry::instance().registeredQueries() + QueryRegistry::instance().scriptQueries();
 		for (const auto& query : allQueries)
 		{
-			auto queryMethod = std::bind(&ScriptQuery::queryExecutor, this, query, std::placeholders::_1,
+			auto queryMethod = std::bind(&ScriptQuery::executeQueryFromPython, this, query, std::placeholders::_1,
 												  std::placeholders::_2);
 			auto call_policies = python::default_call_policies();
 			using func_sig = boost::mpl::vector<QList<TupleSet>, python::list, python::list>;
@@ -134,7 +134,7 @@ void ScriptQuery::importStar(boost::python::dict& main_namespace, boost::python:
 	}
 }
 
-QList<TupleSet> ScriptQuery::queryExecutor(QString name, boost::python::list args, boost::python::list input)
+QList<TupleSet> ScriptQuery::executeQueryFromPython(QString name, boost::python::list args, boost::python::list input)
 {
 	boost::python::stl_input_iterator<QString> argsBegin(args), argsEnd;
 	QStringList argsConverted = QStringList::fromStdList(std::list<QString>(argsBegin, argsEnd));
