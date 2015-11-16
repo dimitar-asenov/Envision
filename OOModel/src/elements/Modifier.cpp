@@ -26,8 +26,8 @@
 
 #include "Modifier.h"
 
+#include "../OOModelException.h"
 #include "ModelBase/src/commands/FieldSet.h"
-#include "OOModelException.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Modifier)

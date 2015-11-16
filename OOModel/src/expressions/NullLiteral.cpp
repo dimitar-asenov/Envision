@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/NullLiteral.h"
+#include "NullLiteral.h"
 #include "../types/NullType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

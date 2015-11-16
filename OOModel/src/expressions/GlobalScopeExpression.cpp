@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/GlobalScopeExpression.h"
-#include "declarations/Declaration.h"
-#include "declarations/Class.h"
+#include "GlobalScopeExpression.h"
+#include "../declarations/Declaration.h"
+#include "../declarations/Class.h"
 #include "../types/ClassType.h"
 #include "../types/SymbolProviderType.h"
 #include "../types/ErrorType.h"

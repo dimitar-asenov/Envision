@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 #include "SuperExpression.h"
-#include "declarations/Class.h"
+#include "../declarations/Class.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
 

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/SynchronizedStatement.h"
+#include "SynchronizedStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::SynchronizedStatement)

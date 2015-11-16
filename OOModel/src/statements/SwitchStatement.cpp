@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/SwitchStatement.h"
+#include "SwitchStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::SwitchStatement)

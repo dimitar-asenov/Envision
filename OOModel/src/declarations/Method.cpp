@@ -29,7 +29,7 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 #include "../types/Type.h"
-#include "expressions/MethodCallExpression.h"
+#include "../expressions/MethodCallExpression.h"
 
 DEFINE_TYPED_LIST(OOModel::Method)
 

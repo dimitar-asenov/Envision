@@ -24,10 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/MethodCallExpression.h"
+#include "MethodCallExpression.h"
 #include "ReferenceExpression.h"
-#include "declarations/Class.h"
-#include "declarations/Method.h"
+#include "../declarations/Class.h"
+#include "../declarations/Method.h"
 #include "../types/PrimitiveType.h"
 #include "../types/SymbolProviderType.h"
 #include "../types/FunctionType.h"

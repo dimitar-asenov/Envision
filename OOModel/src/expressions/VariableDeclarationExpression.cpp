@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VariableDeclarationExpression.h"
+#include "VariableDeclarationExpression.h"
 #include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

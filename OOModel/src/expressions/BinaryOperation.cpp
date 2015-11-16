@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/BinaryOperation.h"
+#include "BinaryOperation.h"
 #include "../types/PrimitiveType.h"
 #include "../types/StringType.h"
 #include "../types/ArrayType.h"

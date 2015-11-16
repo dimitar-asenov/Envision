@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/FloatLiteral.h"
+#include "FloatLiteral.h"
 #include "../types/PrimitiveType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

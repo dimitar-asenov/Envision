@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/Block.h"
+#include "Block.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Block)

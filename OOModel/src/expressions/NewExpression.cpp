@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/NewExpression.h"
+#include "NewExpression.h"
 #include "../types/ArrayType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

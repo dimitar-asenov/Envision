@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "elements/StatementItem.h"
-#include "statements/Statement.h"
+#include "StatementItem.h"
+#include "../statements/Statement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::StatementItem)

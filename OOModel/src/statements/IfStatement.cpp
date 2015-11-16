@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/IfStatement.h"
+#include "IfStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::IfStatement)

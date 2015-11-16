@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/TypeTraitExpression.h"
+#include "TypeTraitExpression.h"
 
 #include "../types/PrimitiveType.h"
 #include "../types/ErrorType.h"

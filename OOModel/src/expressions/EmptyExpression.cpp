@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/EmptyExpression.h"
+#include "EmptyExpression.h"
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

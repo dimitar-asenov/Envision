@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/ConditionalExpression.h"
+#include "ConditionalExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::ConditionalExpression)

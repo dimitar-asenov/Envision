@@ -24,10 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "OOModelPlugin.h"
+#include "../src/OOModelPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "allOOModelNodes.h"
+#include "../src/allOOModelNodes.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 

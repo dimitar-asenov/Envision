@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/UnaryOperation.h"
+#include "UnaryOperation.h"
 #include "../types/PointerType.h"
 #include "../types/ErrorType.h"
 

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/ArrayInitializer.h"
+#include "ArrayInitializer.h"
 #include "../types/ArrayType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

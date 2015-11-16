@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/Statement.h"
-#include "statements/ExpressionStatement.h"
+#include "Statement.h"
+#include "ExpressionStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Statement)

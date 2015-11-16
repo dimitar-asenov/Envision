@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/StringLiteral.h"
+#include "StringLiteral.h"
 #include "../types/StringType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

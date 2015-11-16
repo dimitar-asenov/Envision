@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/CastExpression.h"
+#include "CastExpression.h"
 #include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

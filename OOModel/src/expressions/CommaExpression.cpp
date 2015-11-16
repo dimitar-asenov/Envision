@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/CommaExpression.h"
+#include "CommaExpression.h"
 
-#include "expressions/EmptyExpression.h"
+#include "EmptyExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::CommaExpression)

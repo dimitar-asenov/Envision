@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/UnfinishedOperator.h"
+#include "UnfinishedOperator.h"
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/ErrorExpression.h"
+#include "ErrorExpression.h"
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"

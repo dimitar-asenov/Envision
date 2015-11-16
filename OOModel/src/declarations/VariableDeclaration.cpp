@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "declarations/VariableDeclaration.h"
+#include "VariableDeclaration.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::VariableDeclaration)

@@ -32,7 +32,7 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-#include "CodeGenerationVisitor.h"
+#include "../CodeGenerationVisitor.h"
 
 #include "OOModel/src/declarations/Declaration.h"
 
