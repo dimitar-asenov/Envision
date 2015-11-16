@@ -24,16 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/GenericHandler.h"
+#include "GenericHandler.h"
 
 #include "HList.h"
 #include "../autocomplete/AutoComplete.h"
-#include "commands/CommandExecutionEngine.h"
-#include "actions/Action.h"
-#include "actions/ActionPrompt.h"
+#include "../commands/CommandExecutionEngine.h"
+#include "../actions/Action.h"
+#include "../actions/ActionPrompt.h"
 #include "../prompt/Prompt.h"
 #include "../prompt/PromptShell.h"
+#include "../vis/ViewSwitcherMenu.h"
+#include "../vis/VViewSwitcherEntry.h"
 
+#include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
@@ -50,12 +54,7 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
-#include "Comments/src/nodes/CommentNode.h"
-
-#include "vis/ViewSwitcherMenu.h"
-#include "vis/VViewSwitcherEntry.h"
-#include "VisualizationBase/src/items/ViewItem.h"
-#include "VisualizationBase/src/ViewItemManager.h"
+#include "Comments/src/nodes/CommentNode.h" //TODO This dependency is bogus and not in the .plugin file
 
 namespace Interaction {
 

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/CSceneHandlerItemExit.h"
+#include "CSceneHandlerItemExit.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
 

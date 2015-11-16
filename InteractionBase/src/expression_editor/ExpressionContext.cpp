@@ -24,11 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#include "expression_editor/ExpressionContext.h"
+#include "ExpressionContext.h"
 
-#include "expression_editor/Expression.h"
-#include "expression_editor/Operator.h"
-#include "expression_editor/Value.h"
+#include "Expression.h"
+#include "Operator.h"
+#include "Value.h"
 
 namespace Interaction {
 

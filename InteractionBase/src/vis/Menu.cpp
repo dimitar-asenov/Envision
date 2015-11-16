@@ -27,7 +27,6 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
-#include "QGraphicsColorizeEffect"
 #include "VisualizationBase/src/items/Item.h"
 
 namespace Interaction {

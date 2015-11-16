@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HText.h"
+#include "HText.h"
 
 #include "VisualizationBase/src/items/TextRenderer.h"
 #include "VisualizationBase/src/Scene.h"

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/Command.h"
-#include "precompiled.h"
+#include "Command.h"
 
 namespace Interaction {
 

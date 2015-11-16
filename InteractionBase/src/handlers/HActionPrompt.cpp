@@ -26,9 +26,9 @@
 
 #include "HActionPrompt.h"
 
-#include "actions/ActionPrompt.h"
-#include "actions/Action.h"
-#include "events/SetCursorEvent.h"
+#include "../actions/ActionPrompt.h"
+#include "../actions/Action.h"
+#include "../events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/Scene.h"
 

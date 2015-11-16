@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HComposite.h"
+#include "HComposite.h"
 
 #include "VisualizationBase/src/items/VComposite.h"
 #include "VisualizationBase/src/Scene.h"

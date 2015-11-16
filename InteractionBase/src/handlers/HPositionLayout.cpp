@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HPositionLayout.h"
+#include "HPositionLayout.h"
 
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/Scene.h"

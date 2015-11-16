@@ -25,10 +25,12 @@
  **********************************************************************************************************************/
 #pragma once
 
-#include "interactionbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
+#include "../interactionbase_api.h"
+
 #include "Menu.h"
 #include "MenuStyle.h"
+
+#include "ModelBase/src/nodes/Node.h"
 
 namespace Interaction {
 

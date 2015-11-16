@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expression_editor/ErrorDescriptor.h"
+#include "ErrorDescriptor.h"
 
 namespace Interaction {
 

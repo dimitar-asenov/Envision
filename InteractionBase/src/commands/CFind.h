@@ -28,7 +28,7 @@
 
 #include "../interactionbase_api.h"
 
-#include "../commands/Command.h"
+#include "Command.h"
 
 namespace Interaction {
 

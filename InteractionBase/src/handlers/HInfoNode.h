@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 #include "GenericHandler.h"
 
 namespace Interaction {

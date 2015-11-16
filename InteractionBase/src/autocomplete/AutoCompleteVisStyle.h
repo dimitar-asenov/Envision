@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 

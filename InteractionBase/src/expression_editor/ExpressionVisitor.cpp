@@ -24,10 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/ExpressionVisitor.h"
+#include "ExpressionVisitor.h"
 
-#include "expression_editor/Operator.h"
-#include "expression_editor/UnfinishedOperator.h"
+#include "Operator.h"
+#include "UnfinishedOperator.h"
 
 namespace Interaction {
 

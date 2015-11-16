@@ -24,11 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/tree_builder/AddOperator.h"
+#include "AddOperator.h"
 
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "ExpressionTreeBuilder.h"
+#include "../UnfinishedOperator.h"
+#include "../ExpressionTreeUtils.h"
 
 namespace Interaction {
 

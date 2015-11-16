@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/CommandError.h"
+#include "CommandError.h"
 
 namespace Interaction {
 

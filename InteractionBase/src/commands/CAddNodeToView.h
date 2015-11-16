@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
-#include "commands/CommandWithDefaultArguments.h"
+#include "../interactionbase_api.h"
+#include "CommandWithDefaultArguments.h"
 
 namespace Interaction {
 

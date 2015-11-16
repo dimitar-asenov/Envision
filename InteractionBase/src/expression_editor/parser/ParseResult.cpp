@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/parser/ParseResult.h"
+#include "ParseResult.h"
 
 namespace Interaction {
 

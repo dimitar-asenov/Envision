@@ -24,13 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/Command.h"
-#include "commands/CommandExecutionEngine.h"
-#include "commands/CommandResult.h"
-#include "commands/CommandSuggestion.h"
-#include "handlers/GenericHandler.h"
+#include "Command.h"
+#include "CommandExecutionEngine.h"
+#include "CommandResult.h"
+#include "CommandSuggestion.h"
+#include "../handlers/GenericHandler.h"
 
-#include "InteractionBasePlugin.h"
+#include "../InteractionBasePlugin.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"

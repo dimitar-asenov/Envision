@@ -24,10 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/tree_builder/AddEmptyValue.h"
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/Empty.h"
-#include "expression_editor/UnfinishedOperator.h"
+#include "AddEmptyValue.h"
+#include "ExpressionTreeBuilder.h"
+#include "../Empty.h"
+#include "../UnfinishedOperator.h"
 
 namespace Interaction {
 

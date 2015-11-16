@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "vis/TextAndDescription.h"
+#include "TextAndDescription.h"
 
 namespace Interaction {
 

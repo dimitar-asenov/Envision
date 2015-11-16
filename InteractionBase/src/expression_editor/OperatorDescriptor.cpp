@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expression_editor/OperatorDescriptor.h"
+#include "OperatorDescriptor.h"
 
 namespace Interaction {
 

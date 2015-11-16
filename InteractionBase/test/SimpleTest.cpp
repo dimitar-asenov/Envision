@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "InteractionBasePlugin.h"
+#include "../src/InteractionBasePlugin.h"
 #include "HBinaryNode.h"
 #include "../src/autocomplete/AutoComplete.h"
 

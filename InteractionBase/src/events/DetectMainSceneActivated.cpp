@@ -26,8 +26,8 @@
 
 #include "DetectMainSceneActivated.h"
 
-#include "events/SetCursorEvent.h"
-#include "events/ShowCommandPromptEvent.h"
+#include "SetCursorEvent.h"
+#include "ShowCommandPromptEvent.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"

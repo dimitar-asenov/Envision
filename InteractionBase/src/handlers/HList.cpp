@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HList.h"
-#include "events/SetCursorEvent.h"
+#include "HList.h"
+#include "../events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/Scene.h"

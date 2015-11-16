@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "HRootItem.h"
-#include "events/SetCursorEvent.h"
+#include "../events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/Scene.h"

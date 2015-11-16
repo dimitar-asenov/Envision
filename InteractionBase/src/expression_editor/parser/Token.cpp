@@ -24,10 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/parser/Token.h"
+#include "Token.h"
 
-#include "expression_editor/OperatorDescriptor.h"
-#include "expression_editor/OperatorDescriptorList.h"
+#include "../OperatorDescriptor.h"
+#include "../OperatorDescriptorList.h"
 
 namespace Interaction {
 

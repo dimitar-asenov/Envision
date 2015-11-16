@@ -26,8 +26,8 @@
 
 #include "LeaveUnfinished.h"
 
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
+#include "ExpressionTreeBuilder.h"
+#include "../UnfinishedOperator.h"
 
 namespace Interaction {
 

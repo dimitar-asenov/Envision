@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/CommandResult.h"
+#include "CommandResult.h"
 
 namespace Interaction {
 

@@ -25,10 +25,12 @@
  **********************************************************************************************************************/
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
+
+#include "MenuStyle.h"
+
 #include "ModelBase/src/nodes/Node.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "MenuStyle.h"
 
 namespace Visualization {
 	class Text;

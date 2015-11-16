@@ -24,21 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HSceneHandlerItem.h"
+#include "HSceneHandlerItem.h"
 
-#include "commands/CSceneHandlerItemExit.h"
-#include "commands/CFind.h"
-#include "commands/CSceneHandlerLoad.h"
-#include "commands/CSceneHandlerSave.h"
-#include "commands/CNewView.h"
-#include "commands/CSwitchView.h"
-#include "commands/CRemoveNodeFromView.h"
-#include "commands/CToggleArrowLayer.h"
-#include "commands/CAddInfoNode.h"
-#include "commands/CToggleInfoEntry.h"
-#include "commands/CSaveView.h"
-#include "commands/CAddNodeToViewByName.h"
-#include "commands/CAddNodeToView.h"
+#include "../commands/CSceneHandlerItemExit.h"
+#include "../commands/CFind.h"
+#include "../commands/CSceneHandlerLoad.h"
+#include "../commands/CSceneHandlerSave.h"
+#include "../commands/CNewView.h"
+#include "../commands/CSwitchView.h"
+#include "../commands/CRemoveNodeFromView.h"
+#include "../commands/CToggleArrowLayer.h"
+#include "../commands/CAddInfoNode.h"
+#include "../commands/CToggleInfoEntry.h"
+#include "../commands/CSaveView.h"
+#include "../commands/CAddNodeToViewByName.h"
+#include "../commands/CAddNodeToView.h"
 
 namespace Interaction {
 

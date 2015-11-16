@@ -24,19 +24,19 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/parser/Parser.h"
+#include "Parser.h"
 
-#include "expression_editor/tree_builder/AddEmptyValue.h"
-#include "expression_editor/tree_builder/AddErrorOperator.h"
-#include "expression_editor/tree_builder/AddOperator.h"
-#include "expression_editor/tree_builder/AddValue.h"
-#include "expression_editor/tree_builder/FinishOperator.h"
-#include "expression_editor/tree_builder/LeaveUnfinished.h"
-#include "expression_editor/tree_builder/SkipOperatorDelimiter.h"
-#include "expression_editor/tree_builder/AddSubExpression.h"
+#include "../tree_builder/AddEmptyValue.h"
+#include "../tree_builder/AddErrorOperator.h"
+#include "../tree_builder/AddOperator.h"
+#include "../tree_builder/AddValue.h"
+#include "../tree_builder/FinishOperator.h"
+#include "../tree_builder/LeaveUnfinished.h"
+#include "../tree_builder/SkipOperatorDelimiter.h"
+#include "../tree_builder/AddSubExpression.h"
 
-#include "expression_editor/OperatorDescriptorList.h"
-#include "expression_editor/OperatorDescriptor.h"
+#include "../OperatorDescriptorList.h"
+#include "../OperatorDescriptor.h"
 
 #include "../../InteractionBaseException.h"
 

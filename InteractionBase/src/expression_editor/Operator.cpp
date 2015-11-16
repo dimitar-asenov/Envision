@@ -24,11 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#include "expression_editor/Operator.h"
-#include "InteractionBaseException.h"
+#include "Operator.h"
+#include "../InteractionBaseException.h"
 
-#include "expression_editor/OperatorDescriptor.h"
-#include "expression_editor/ExpressionVisitor.h"
+#include "OperatorDescriptor.h"
+#include "ExpressionVisitor.h"
 
 namespace Interaction {
 

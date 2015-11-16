@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #pragma once
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/items/Text.h"
 

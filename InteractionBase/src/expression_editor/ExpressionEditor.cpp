@@ -24,12 +24,12 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/ExpressionEditor.h"
+#include "ExpressionEditor.h"
 
-#include "expression_editor/parser/Token.h"
-#include "expression_editor/parser/Parser.h"
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "parser/Token.h"
+#include "parser/Parser.h"
+#include "tree_builder/ExpressionTreeBuilder.h"
+#include "ExpressionTreeUtils.h"
 
 namespace Interaction {
 

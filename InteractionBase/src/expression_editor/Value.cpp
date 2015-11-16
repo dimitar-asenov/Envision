@@ -24,8 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/Value.h"
-#include "expression_editor/ExpressionVisitor.h"
+#include "Value.h"
+#include "ExpressionVisitor.h"
 
 namespace Interaction {
 

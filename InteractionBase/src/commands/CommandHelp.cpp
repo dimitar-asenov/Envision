@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/CommandHelp.h"
+#include "CommandHelp.h"
 
 namespace Interaction {
 

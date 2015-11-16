@@ -11,7 +11,8 @@ add_subdirectory("APIDepTest")
 add_subdirectory("SelfTest")
 add_subdirectory("Logger")
 
-# Generic Layer
+# Generic Base Layer
 add_subdirectory("ModelBase")
 add_subdirectory("FilePersistence")
 add_subdirectory("VisualizationBase")
+add_subdirectory("InteractionBase")

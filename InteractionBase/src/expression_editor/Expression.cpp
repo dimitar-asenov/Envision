@@ -24,8 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include "expression_editor/Expression.h"
-#include "expression_editor/Operator.h"
+#include "Expression.h"
+#include "Operator.h"
 
 namespace Interaction {
 

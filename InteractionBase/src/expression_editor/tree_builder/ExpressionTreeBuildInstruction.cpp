@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/tree_builder/ExpressionTreeBuildInstruction.h"
+#include "ExpressionTreeBuildInstruction.h"
 
 namespace Interaction {
 
