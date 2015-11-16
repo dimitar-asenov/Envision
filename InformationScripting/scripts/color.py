@@ -1,5 +1,5 @@
 # Example:
-# $<"<ast -t=Method>" | "<color blue>">$
+# methods|color blue
 
 color = "red"
 if (len(args)):
@@ -8,6 +8,6 @@ if (len(args)):
 for ts in inputs:
     tuples = ts.take("ast")
     for tuple in tuples:
-        tuple.add(NamedProperty("color", color))
-        ts.add(tuple)
+        t = Tuple([NamedProperty("color", color), NamedProperty("ast", tuple.ast)])
+        ts.add(t)
     results.append(ts)

@@ -70,6 +70,16 @@ std::shared_ptr<TupleSet> makeTupleSet(list args) {
 	return std::make_shared<TupleSet>(QList<Tuple>::fromStdList(std::list<Tuple>(begin, end)));
 }
 
+TupleSet optionalValue(const Optional<TupleSet>& self)
+{
+	return self.value();
+}
+
+std::shared_ptr<Optional<TupleSet>> makeErrorOptional(const QString& message)
+{
+	return std::make_shared<Optional<TupleSet>>(message);
+}
+
 BOOST_PYTHON_MODULE(DataApi) {
 		// This class exposure is just a workaround to make the name property of NamedProperty work.
 		// The problem is that if we just expose the NamedProperty::first as property,
@@ -99,16 +109,24 @@ BOOST_PYTHON_MODULE(DataApi) {
 		QSet<Tuple> (TupleSet::*tuplesString)(const QString&) const = &TupleSet::tuples;
 		QSet<Tuple> (TupleSet::*take1)(const QString&) = &TupleSet::take;
 		void (TupleSet::*removeTuple)(const Tuple&) = &TupleSet::remove;
+		void (TupleSet::*removeTupleSet)(const TupleSet&) = &TupleSet::remove;
 
 		class_<TupleSet>("TupleSet", init<>())
 				.def("__init__", make_constructor(makeTupleSet))
 				.def("tuples", tuplesAll)
 				.def("tuples", tuplesString)
-				.def("take", take1)
+				.def("add", &TupleSet::add)
 				.def("remove", removeTuple)
-				.def("add", &TupleSet::add);
+				.def("remove", removeTupleSet)
+				.def("take", take1)
+				.def("takeAll", &TupleSet::takeAll)
+				.def("unite", &TupleSet::unite);
 
-		class_<Optional<TupleSet>>("OptionalTupleSet", init<TupleSet>());
+		class_<Optional<TupleSet>>("OptionalTupleSet", init<TupleSet>())
+				.def("__init__", make_constructor(makeErrorOptional))
+				.def("value", &optionalValue)
+				.def("hasErrors", &Optional<TupleSet>::hasErrors)
+				.def("errors", &Optional<TupleSet>::errors);
 }
 
 } /* namespace InformationScripting */

@@ -107,10 +107,10 @@ QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 		sys.attr("stdout").attr("flush")();
 
 		python::list results = python::extract<python::list>(main_namespace["results"]);
-		python::stl_input_iterator<TupleSet> begin(results), end;
+		python::stl_input_iterator<Optional<TupleSet>> begin(results), end;
 		result = QList<Optional<TupleSet>>::fromStdList(std::list<Optional<TupleSet>>(begin, end));
 	} catch (python::error_already_set ) {
-		qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
+		return {QString("Error in Python: %1").arg(BoostPythonHelpers::parsePythonException())};
 	}
 	return result;
 }

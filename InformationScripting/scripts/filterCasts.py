@@ -1,8 +1,8 @@
-#script "<filterCasts>"
+# filterCasts
 
-casts = Query.ast(["-t=CastExpression"] + args, [])
-castTypeAttributes = Query.attribute(["-at=castType", "-s=of"], casts)
-classUses = Query.uses(["-s=of", "-t=Class"], castTypeAttributes)
+casts = Query.ast(["-t=CastExpression"] + args, [])[0].value()
+castTypeAttributes = Query.attribute(["-at=castType", "-s=of"], [casts])[0].value()
+classUses = Query.uses(["-s=of", "-t=Class"], [castTypeAttributes])[0].value()
 
 def hasTypeIdMethod( cl ):
     for method in cl.methods:
@@ -12,7 +12,7 @@ def hasTypeIdMethod( cl ):
 
 result = TupleSet()
 
-for tuple in classUses[0].tuples("uses"):
+for tuple in classUses.tuples("uses"):
     if hasTypeIdMethod(tuple.used):
         values = [NamedProperty("ast", tuple.user)]
         result.add(Tuple(values))
