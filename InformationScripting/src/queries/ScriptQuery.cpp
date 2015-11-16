@@ -33,6 +33,8 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
+#include "../query_framework/QueryRuntimeException.h"
+
 namespace InformationScripting {
 
 ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target,
@@ -98,7 +100,7 @@ QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 			auto queryMethod = std::bind(&ScriptQuery::queryExecutor, this, query, std::placeholders::_1,
 												  std::placeholders::_2);
 			auto call_policies = python::default_call_policies();
-			using func_sig = boost::mpl::vector<QList<Optional<TupleSet>>, python::list, python::list>;
+			using func_sig = boost::mpl::vector<QList<TupleSet>, python::list, python::list>;
 			queriesDict[query] = python::make_function(queryMethod, call_policies, func_sig());
 		}
 
@@ -108,9 +110,12 @@ QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 
 		python::list results = python::extract<python::list>(main_namespace["results"]);
 		python::stl_input_iterator<TupleSet> begin(results), end;
-		result = QList<Optional<TupleSet>>::fromStdList(std::list<Optional<TupleSet>>(begin, end));
+		std::list<TupleSet> pythonResults(begin, end);
+		for (const auto& r : pythonResults)
+			result.push_back(r);
+
 	} catch (python::error_already_set ) {
-		qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
+		return {QString("Error in Python: %1").arg(BoostPythonHelpers::parsePythonException())};
 	}
 	return result;
 }
@@ -129,7 +134,7 @@ void ScriptQuery::importStar(boost::python::dict& main_namespace, boost::python:
 	}
 }
 
-QList<Optional<TupleSet>> ScriptQuery::queryExecutor(QString name, boost::python::list args, boost::python::list input)
+QList<TupleSet> ScriptQuery::queryExecutor(QString name, boost::python::list args, boost::python::list input)
 {
 	boost::python::stl_input_iterator<QString> argsBegin(args), argsEnd;
 	QStringList argsConverted = QStringList::fromStdList(std::list<QString>(argsBegin, argsEnd));
@@ -140,7 +145,15 @@ QList<Optional<TupleSet>> ScriptQuery::queryExecutor(QString name, boost::python
 	std::unique_ptr<Query> query{QueryRegistry::instance().buildQuery(name, target(), argsConverted, executor_)};
 	auto result = query->execute(inputConverted);
 
-	return result;
+	QList<TupleSet> noErrorResult;
+	for (const auto& r : result)
+	{
+		if (r.hasErrors())
+			throw QueryRuntimeException(QString("Query %1 produced error results: %2").arg(name, r.errors().join(",")));
+		else
+			noErrorResult.push_back(r.value());
+	}
+	return noErrorResult;
 }
 
 } /* namespace InformationScripting */

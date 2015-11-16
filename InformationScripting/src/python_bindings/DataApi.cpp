@@ -28,7 +28,6 @@
 
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
-#include "../query_framework/Optional.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -111,8 +110,6 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.def("take", take1)
 				.def("takeAll", &TupleSet::takeAll)
 				.def("unite", &TupleSet::unite);
-
-		class_<Optional<TupleSet>>("OptionalTupleSet", init<TupleSet>());
 }
 
 } /* namespace InformationScripting */
