@@ -28,10 +28,10 @@
 
 #include "ColorPicker.h"
 #include "OutlineTypePicker.h"
+#include "../nodes/CommentDiagram.h"
+#include "../items/VComment.h"
 
-#include "nodes/CommentDiagram.h"
 #include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
 
 namespace Comments {
 /**

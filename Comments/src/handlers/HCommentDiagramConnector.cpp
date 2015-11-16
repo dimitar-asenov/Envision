@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HCommentDiagramConnector.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramConnector.h"
+#include "HCommentDiagramConnector.h"
+#include "../items/VCommentDiagram.h"
+#include "../items/VCommentDiagramConnector.h"
 
 namespace Comments {
 

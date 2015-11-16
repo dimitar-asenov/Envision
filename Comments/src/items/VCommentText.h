@@ -27,13 +27,12 @@
 #pragma once
 
 #include "../comments_api.h"
+#include "../nodes/CommentText.h"
 
 #include "ModelBase/src/nodes/Text.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/TextRenderer.h"
 #include "VisualizationBase/src/items/TextStyle.h"
-
-#include "../nodes/CommentText.h"
 
 namespace Comments {
 /**

@@ -26,8 +26,8 @@
 
 #include "HCommentFreeNode.h"
 
-#include "nodes/CommentFreeNode.h"
-#include "nodes/CommentText.h"
+#include "../nodes/CommentFreeNode.h"
+#include "../nodes/CommentText.h"
 
 using namespace Visualization;
 

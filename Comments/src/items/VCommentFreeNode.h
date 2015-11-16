@@ -28,12 +28,12 @@
 
 #include "../comments_api.h"
 
+#include "../nodes/CommentFreeNode.h"
+
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
-
-#include "../nodes/CommentFreeNode.h"
 
 namespace Comments {
 /**

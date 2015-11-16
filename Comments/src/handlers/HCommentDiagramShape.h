@@ -26,10 +26,10 @@
 
 #pragma once
 
-#include "comments_api.h"
+#include "../comments_api.h"
+#include "../items/VCommentDiagramShape.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
-#include "items/VCommentDiagramShape.h"
 
 namespace Comments {
 

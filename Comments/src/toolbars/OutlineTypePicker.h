@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "comments_api.h"
+#include "../comments_api.h"
 
 namespace Comments {
 /**

@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HCommentDiagramShape.h"
-#include "items/VCommentDiagram.h"
-#include "commands/CShapeSetProperty.h"
+#include "HCommentDiagramShape.h"
+#include "../items/VCommentDiagram.h"
+#include "../commands/CShapeSetProperty.h"
 
 #include "InteractionBase/src/prompt/Prompt.h"
 

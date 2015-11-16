@@ -25,12 +25,11 @@
 ***********************************************************************************************************************/
 
 #include "HCommentText.h"
-#include "nodes/CommentFreeNode.h"
-
-#include "ModelBase/src/nodes/Node.h"
-#include "OOModel/src/allOOModelNodes.h"
 #include "../items/VCommentText.h"
-#include "items/VCommentDiagramShape.h"
+#include "../items/VCommentDiagramShape.h"
+#include "../nodes/CommentFreeNode.h"
+
+#include "OOModel/src/allOOModelNodes.h"
 
 using namespace OOModel;
 using namespace Visualization;

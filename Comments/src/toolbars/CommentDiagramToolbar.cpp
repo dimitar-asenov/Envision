@@ -26,8 +26,8 @@
 
 #include "CommentDiagramToolbar.h"
 
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
+#include "../items/VCommentDiagramShape.h"
+#include "../items/VCommentDiagramConnector.h"
 
 using namespace Visualization;
 

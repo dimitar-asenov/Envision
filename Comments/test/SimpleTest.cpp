@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentsPlugin.h"
-#include "nodes/CommentNode.h"
-#include "nodes/CommentDiagram.h"
+#include "../src/CommentsPlugin.h"
+#include "../src/nodes/CommentNode.h"
+#include "../src/nodes/CommentDiagram.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"

@@ -24,12 +24,12 @@
  **
  **********************************************************************************************************************/
 
-#include "VisualizationBase/src/items/Item.h"
-#include "handlers/HCommentDiagram.h"
-#include "items/VCommentDiagram.h"
-#include "commands/CCreateShape.h"
+#include "HCommentDiagram.h"
+#include "../items/VCommentDiagram.h"
+#include "../commands/CCreateShape.h"
 
 #include "InteractionBase/src/prompt/Prompt.h"
+#include "VisualizationBase/src/items/Item.h"
 
 namespace Comments {
 

@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "CShapeSetProperty.h"
-#include "items/VCommentDiagramShape.h"
+#include "../items/VCommentDiagramShape.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
 

@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "comments_api.h"
+#include "../comments_api.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HText.h"

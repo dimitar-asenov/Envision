@@ -24,10 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "commands/CCreateShape.h"
-#include "items/VCommentDiagram.h"
-#include "nodes/CommentDiagram.h"
-#include "nodes/CommentDiagramShape.h"
+#include "CCreateShape.h"
+#include "../items/VCommentDiagram.h"
+#include "../nodes/CommentDiagram.h"
+#include "../nodes/CommentDiagramShape.h"
 
 namespace Comments {
 

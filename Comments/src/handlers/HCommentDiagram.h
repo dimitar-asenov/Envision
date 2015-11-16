@@ -26,8 +26,9 @@
 
 #pragma once
 
-#include "comments_api.h"
-#include "nodes/CommentDiagramShape.h"
+#include "../comments_api.h"
+
+#include "../nodes/CommentDiagramShape.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
 

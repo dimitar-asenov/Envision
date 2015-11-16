@@ -28,14 +28,14 @@
 
 #include "../comments_api.h"
 
+#include "../nodes/CommentTable.h"
+#include "VCommentTableStyle.h"
+
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/layouts/GridLayout.h"
-
-#include "../nodes/CommentTable.h"
-#include "VCommentTableStyle.h"
 
 namespace Comments {
 /**

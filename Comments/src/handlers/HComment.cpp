@@ -24,8 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#include "HComment.h"
+#include "../items/VComment.h"
 
 namespace Comments {
 

@@ -24,8 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HCommentImage.h"
-#include "items/VCommentDiagram.h"
+#include "HCommentImage.h"
+#include "../items/VCommentDiagram.h"
 
 namespace Comments {
 

@@ -31,11 +31,11 @@
 #include "../nodes/CommentDiagramShape.h"
 #include "VCommentDiagram.h"
 #include "VCommentDiagramShapeStyle.h"
+#include "VCommentText.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/VText.h"
-#include "items/VCommentText.h"
 
 namespace Comments {
 
