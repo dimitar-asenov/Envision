@@ -1,5 +1,5 @@
 # Example:
-# $<"<ast -t=Method>" | "<heatmapDataGen>" | "<heatmap>">$
+# ast -t=Method|heatmapDataGen|heatmap
 
 import random
 

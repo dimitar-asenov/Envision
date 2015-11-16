@@ -1,4 +1,4 @@
-# script $<"<profileSource scripts/carmodel.csv>" | "<heatmap>">$
+# profileSource scripts/carmodel.csv|heatmap
 
 import csv
 
