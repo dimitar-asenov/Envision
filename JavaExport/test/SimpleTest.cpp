@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "JavaExportPlugin.h"
+#include "../src/JavaExportPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 namespace JavaExport {
