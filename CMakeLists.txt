@@ -32,7 +32,7 @@ add_subdirectory("OODebug") # uses JavaExport
 add_subdirectory("CppExport")
 # add_subdirectory("CppImport")
 # add_subdirectory("PythonWrapperGenerator")
-# add_subdirectory("InformationScripting") # uses the generator and OODebug
+add_subdirectory("InformationScripting") # uses the generator and OODebug
 
 # Object-Oriented layer - Contracts
 add_subdirectory("ContractsLibrary")

@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "informationscripting_api.h"
-#include "InformationScriptingException.h"
+#include "../informationscripting_api.h"
+#include "../InformationScriptingException.h"
 
 namespace InformationScripting {
 

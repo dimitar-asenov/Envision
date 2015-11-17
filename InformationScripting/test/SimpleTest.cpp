@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "InformationScriptingPlugin.h"
+#include "../src/InformationScriptingPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 namespace InformationScripting {
