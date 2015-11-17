@@ -36,7 +36,7 @@ add_subdirectory("CppExport")
 
 # Object-Oriented layer - Contracts
 add_subdirectory("ContractsLibrary")
-# add_subdirectory("AlloyIntegration")
+add_subdirectory("AlloyIntegration")
 
 # Object-Oriented layer - Demos
 # add_subdirectory("CustomMethodCall")

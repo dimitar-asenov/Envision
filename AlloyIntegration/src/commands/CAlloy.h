@@ -27,9 +27,9 @@
 #pragma once
 
 #include "../alloyintegration_api.h"
+#include "../exporter/AlloyExporter.h"
 
 #include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
-#include "exporter/AlloyExporter.h"
 
 namespace Alloy {
 /**

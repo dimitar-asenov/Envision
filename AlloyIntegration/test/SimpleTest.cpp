@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "AlloyIntegrationPlugin.h"
+#include "../src/AlloyIntegrationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "ModelBase/src/model/TreeManager.h"

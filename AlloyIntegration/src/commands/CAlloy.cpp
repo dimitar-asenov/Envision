@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "commands/CAlloy.h"
+#include "CAlloy.h"
 #include "VisualizationBase/src/overlays/BoxOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 #include "Comments/src/nodes/CommentNode.h"

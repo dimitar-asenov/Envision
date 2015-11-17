@@ -24,12 +24,12 @@
  **
  **********************************************************************************************************************/
 #include "AlloyExporter.h"
+#include "../visitors/AlloyVisitor.h"
 
 #include "Export/src/writer/Exporter.h"
 #include "Export/src/writer/FragmentLayouter.h"
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFragment.h"
-#include "visitors/AlloyVisitor.h"
 
 namespace Alloy {
 
