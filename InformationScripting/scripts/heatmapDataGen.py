@@ -3,10 +3,9 @@
 
 import random
 
-for ts in inputs:
-    tuples = ts.tuples("ast")
-    for tuple in tuples:
-        count = random.randrange(100)
-        values = [NamedProperty("count", count), NamedProperty("ast", tuple.ast)]
-        ts.add(Tuple(values))
-    results.append(ts)
+for tuple in Query.input.tuples("ast"):
+    count = random.randrange(100)
+    values = [NamedProperty("count", count), NamedProperty("ast", tuple.ast)]
+    Query.input.add(Tuple(values))
+
+Query.result = Query.input

@@ -1,19 +1,19 @@
 
-if type(target) is IfStatement:
-    parent = target.parent
+if type(Query.target) is IfStatement:
+    parent = Query.target.parent
     parent.beginModification("If to while")
     
-    condition = target.condition
-    thenBranch = target.thenBranch
+    condition = Query.target.condition
+    thenBranch = Query.target.thenBranch
     
-    target.replaceChild(condition, Node.createNewNode("Expression", None))
-    target.replaceChild(thenBranch, Node.createNewNode("StatementItemList", None))
+    Query.target.replaceChild(condition, Node.createNewNode("Expression", None))
+    Query.target.replaceChild(thenBranch, Node.createNewNode("StatementItemList", None))
 
     whileNode = Node.createNewNode("LoopStatement", None)
     whileNode.condition = condition
     whileNode.body = thenBranch
     
-    parent.replaceChild(target, whileNode)
+    parent.replaceChild(Query.target, whileNode)
     parent.endModification()
     
 else:
