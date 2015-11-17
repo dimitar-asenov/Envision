@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VListCF.h"
+#include "VListCF.h"
 
 using namespace Visualization;
 using namespace Model;

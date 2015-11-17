@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VIfStatementCF.h"
+#include "VIfStatementCF.h"
 
 using namespace Visualization;
 using namespace OOModel;

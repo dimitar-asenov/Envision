@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "ControlFlowVisualizationPlugin.h"
+#include "../src/ControlFlowVisualizationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "OOModel/src/allOOModelNodes.h"

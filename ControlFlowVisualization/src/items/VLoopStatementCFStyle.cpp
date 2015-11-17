@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VLoopStatementCFStyle.h"
+#include "VLoopStatementCFStyle.h"
 
 namespace ControlFlowVisualization {
 

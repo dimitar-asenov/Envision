@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VBlockCF.h"
+#include "VBlockCF.h"
 
 using namespace Visualization;
 using namespace OOModel;

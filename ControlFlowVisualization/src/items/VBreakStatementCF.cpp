@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VBreakStatementCF.h"
+#include "VBreakStatementCF.h"
 
 #include "OOModel/src/statements/BreakStatement.h"
 

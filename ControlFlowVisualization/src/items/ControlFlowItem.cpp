@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/ControlFlowItem.h"
+#include "ControlFlowItem.h"
 #include "VisualizationBase/src/shapes/Shape.h"
 
 namespace ControlFlowVisualization {

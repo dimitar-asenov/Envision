@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VBlockCFStyle.h"
+#include "VBlockCFStyle.h"
 
 namespace ControlFlowVisualization {
 

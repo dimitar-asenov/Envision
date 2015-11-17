@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/ControlFlowItemStyle.h"
+#include "ControlFlowItemStyle.h"
 
 namespace ControlFlowVisualization {
 

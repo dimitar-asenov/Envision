@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VIfStatementCFStyle.h"
+#include "VIfStatementCFStyle.h"
 
 namespace ControlFlowVisualization {
 

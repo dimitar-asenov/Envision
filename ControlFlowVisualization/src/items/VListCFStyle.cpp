@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VListCFStyle.h"
+#include "VListCFStyle.h"
 
 namespace ControlFlowVisualization {
 

@@ -40,4 +40,4 @@ add_subdirectory("AlloyIntegration")
 
 # Object-Oriented layer - Demos
 add_subdirectory("CustomMethodCall")
-#  add_subdirectory("ControlFlowVisualization")
+add_subdirectory("ControlFlowVisualization")
