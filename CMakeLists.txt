@@ -35,7 +35,7 @@ add_subdirectory("CppExport")
 # add_subdirectory("InformationScripting") # uses the generator and OODebug
 
 # Object-Oriented layer - Contracts
-# add_subdirectory("ContractsLibrary")
+add_subdirectory("ContractsLibrary")
 # add_subdirectory("AlloyIntegration")
 
 # Object-Oriented layer - Demos

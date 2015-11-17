@@ -24,13 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#include "ContractsLibraryPlugin.h"
+#include "../src/ContractsLibraryPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "items/InterfaceContractsVMethodAddOn.h"
-#include "items/SignatureContractsVMethodAddOn.h"
-#include "items/ContractFilter.h"
-#include "monitor/ValueAtReturnVisitor.h"
+#include "../src/items/InterfaceContractsVMethodAddOn.h"
+#include "../src/items/SignatureContractsVMethodAddOn.h"
+#include "../src/items/ContractFilter.h"
+#include "../src/monitor/ValueAtReturnVisitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 #include "ModelBase/src/model/TreeManager.h"
