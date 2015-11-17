@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "VDeclarationConstantSz.h"
-#include "OOVisualizationException.h"
+#include "../OOVisualizationException.h"
 
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Project.h"

@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "VPrimitiveType.h"
-#include "OOVisualizationException.h"
+#include "../../OOVisualizationException.h"
 
 #include "VisualizationBase/src/items/Static.h"
 

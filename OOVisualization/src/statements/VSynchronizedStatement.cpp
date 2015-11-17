@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VSynchronizedStatement.h"
+#include "VSynchronizedStatement.h"
 
 #include "../elements/VStatementItemList.h"
 

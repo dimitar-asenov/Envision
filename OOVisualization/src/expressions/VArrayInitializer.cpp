@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VArrayInitializer.h"
+#include "VArrayInitializer.h"
 
 #include "VisualizationBase/src/layouts/GridLayout.h"
 #include "VisualizationBase/src/items/VList.h"

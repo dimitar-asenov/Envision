@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/VMetaCallExpressionStyle.h"
+#include "VMetaCallExpressionStyle.h"
 
 namespace OOVisualization {
 

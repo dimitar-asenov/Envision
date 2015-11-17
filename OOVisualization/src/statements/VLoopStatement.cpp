@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VLoopStatement.h"
+#include "VLoopStatement.h"
 
 #include "../elements/VStatementItemList.h"
 

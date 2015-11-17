@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VBlockStyle.h"
+#include "VBlockStyle.h"
 
 namespace OOVisualization {
 

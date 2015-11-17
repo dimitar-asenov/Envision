@@ -26,7 +26,7 @@
 
 #include "VMethodSzPublic.h"
 #include "../elements/VStatementItemList.h"
-#include "OOVisualizationException.h"
+#include "../OOVisualizationException.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VText.h"

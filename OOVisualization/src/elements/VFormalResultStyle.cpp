@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "elements/VFormalResultStyle.h"
+#include "VFormalResultStyle.h"
 
 namespace OOVisualization {
 

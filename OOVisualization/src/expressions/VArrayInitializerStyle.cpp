@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VArrayInitializerStyle.h"
+#include "VArrayInitializerStyle.h"
 
 namespace OOVisualization {
 

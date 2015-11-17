@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VIfStatementStyle.h"
+#include "VIfStatementStyle.h"
 
 namespace OOVisualization {
 

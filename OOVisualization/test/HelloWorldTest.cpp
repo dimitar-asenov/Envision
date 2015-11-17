@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "OOVisualizationPlugin.h"
+#include "../src/OOVisualizationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "MethodAddOn.h"

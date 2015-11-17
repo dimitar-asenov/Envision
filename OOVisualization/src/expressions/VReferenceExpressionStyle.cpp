@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VReferenceExpressionStyle.h"
+#include "VReferenceExpressionStyle.h"
 
 namespace OOVisualization {
 

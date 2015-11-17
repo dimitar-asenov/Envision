@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VContinueStatement.h"
+#include "VContinueStatement.h"
 
 #include "OOModel/src/statements/ContinueStatement.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"

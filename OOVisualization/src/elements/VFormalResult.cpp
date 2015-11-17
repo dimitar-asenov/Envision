@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "elements/VFormalResult.h"
+#include "VFormalResult.h"
 
 #include "VisualizationBase/src/items/VText.h"
 

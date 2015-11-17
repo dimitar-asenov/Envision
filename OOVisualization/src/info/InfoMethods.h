@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 #pragma once
 
-#include "oovisualization_api.h"
+#include "../oovisualization_api.h"
 
 namespace Model {
 	class Node;

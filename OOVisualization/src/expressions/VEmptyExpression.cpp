@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/VEmptyExpression.h"
+#include "VEmptyExpression.h"
 
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"

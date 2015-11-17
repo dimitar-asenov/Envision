@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VIfStatement.h"
+#include "VIfStatement.h"
 #include "../elements/VStatementItemList.h"
 
 #include "VisualizationBase/src/items/Static.h"

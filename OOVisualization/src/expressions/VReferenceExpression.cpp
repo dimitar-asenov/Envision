@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VReferenceExpression.h"
+#include "VReferenceExpression.h"
 
 #include "OOModel/src/types/PointerType.h"
 

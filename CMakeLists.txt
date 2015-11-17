@@ -23,7 +23,7 @@ add_subdirectory("Export")
 
 # Object-Oriented layer - Base
 add_subdirectory("OOModel")
-# add_subdirectory("OOVisualization")
+add_subdirectory("OOVisualization")
 # add_subdirectory("OOInteraction")
 
 # Object-Oriented layer - Extras

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VBinaryOperation.h"
+#include "VBinaryOperation.h"
 
 #include "VisualizationBase/src/items/Static.h"
 

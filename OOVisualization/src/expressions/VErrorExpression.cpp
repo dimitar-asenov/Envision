@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/VErrorExpression.h"
+#include "VErrorExpression.h"
 
 #include "VisualizationBase/src/items/VText.h"
 

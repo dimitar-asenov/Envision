@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VThisExpression.h"
+#include "VThisExpression.h"
 
 #include "OOModel/src/expressions/ThisExpression.h"
 

@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "statements/VExpressionStatement.h"
+#include "VExpressionStatement.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 
 using namespace Visualization;

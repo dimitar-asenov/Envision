@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VReturnStatementStyle.h"
+#include "VReturnStatementStyle.h"
 
 namespace OOVisualization {
 

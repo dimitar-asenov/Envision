@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VForEachStatementStyle.h"
+#include "VForEachStatementStyle.h"
 
 namespace OOVisualization {
 

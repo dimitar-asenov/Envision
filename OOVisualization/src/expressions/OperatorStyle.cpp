@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/OperatorStyle.h"
+#include "OperatorStyle.h"
 
 namespace OOVisualization {
 

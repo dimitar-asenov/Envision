@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/VUnfinishedOperatorStyle.h"
+#include "VUnfinishedOperatorStyle.h"
 
 namespace OOVisualization {
 

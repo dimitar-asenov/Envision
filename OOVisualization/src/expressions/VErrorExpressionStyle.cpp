@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/VErrorExpressionStyle.h"
+#include "VErrorExpressionStyle.h"
 
 namespace OOVisualization {
 

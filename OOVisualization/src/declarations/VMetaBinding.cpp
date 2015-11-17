@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "VMetaBinding.h"
-#include "OOVisualizationException.h"
+#include "../OOVisualizationException.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"

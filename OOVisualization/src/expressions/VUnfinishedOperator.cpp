@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/VUnfinishedOperator.h"
+#include "VUnfinishedOperator.h"
 
 #include "VisualizationBase/src/items/VText.h"
 

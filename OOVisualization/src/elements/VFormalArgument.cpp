@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "elements/VFormalArgument.h"
+#include "VFormalArgument.h"
 
 #include "OOModel/src/expressions/LambdaExpression.h"
 #include "VisualizationBase/src/items/VText.h"

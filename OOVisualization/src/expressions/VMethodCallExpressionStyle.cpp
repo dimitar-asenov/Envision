@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expressions/VMethodCallExpressionStyle.h"
+#include "VMethodCallExpressionStyle.h"
 
 namespace OOVisualization {
 

@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "VClassSzPublic.h"
-#include "OOVisualizationException.h"
+#include "../OOVisualizationException.h"
 
 #include "../elements/VStatementItemList.h"
 

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VLoopStatementStyle.h"
+#include "VLoopStatementStyle.h"
 
 namespace OOVisualization {
 
