@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/InsertMethodVis.h"
+#include "InsertMethodVis.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "VisualizationBase/src/items/Static.h"

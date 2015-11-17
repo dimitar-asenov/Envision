@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/FindMethodVis.h"
+#include "FindMethodVis.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "VisualizationBase/src/items/Text.h"

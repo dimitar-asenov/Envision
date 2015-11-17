@@ -24,13 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#include "CustomMethodCallPlugin.h"
+#include "../src/CustomMethodCallPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "items/FindMethodVis.h"
-#include "items/EmptyMethodVis.h"
-#include "items/InsertMethodVis.h"
-#include "items/SumMethodVis.h"
+#include "../src/items/FindMethodVis.h"
+#include "../src/items/EmptyMethodVis.h"
+#include "../src/items/InsertMethodVis.h"
+#include "../src/items/SumMethodVis.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 

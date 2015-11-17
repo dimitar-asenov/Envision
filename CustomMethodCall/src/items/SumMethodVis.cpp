@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/SumMethodVis.h"
+#include "SumMethodVis.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "VisualizationBase/src/items/Static.h"

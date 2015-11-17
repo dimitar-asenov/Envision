@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/EmptyMethodVis.h"
+#include "EmptyMethodVis.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "VisualizationBase/src/items/Static.h"

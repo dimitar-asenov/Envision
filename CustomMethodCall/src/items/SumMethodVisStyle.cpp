@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/SumMethodVisStyle.h"
+#include "SumMethodVisStyle.h"
 
 namespace CustomMethodCall {
 
