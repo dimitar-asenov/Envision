@@ -28,8 +28,8 @@ add_subdirectory("OOInteraction")
 
 # Object-Oriented layer - Extras
 add_subdirectory("JavaExport")
-add_subdirectory("OODebug")
-# add_subdirectory("CppExport")
+add_subdirectory("OODebug") # uses JavaExport
+add_subdirectory("CppExport")
 # add_subdirectory("CppImport")
 # add_subdirectory("PythonWrapperGenerator")
 # add_subdirectory("InformationScripting") # uses the generator and OODebug

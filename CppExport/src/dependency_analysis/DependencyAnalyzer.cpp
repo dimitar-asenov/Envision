@@ -27,7 +27,7 @@
 #include "DependencyAnalyzer.h"
 
 #include "DependencyComposite.h"
-#include "Config.h"
+#include "../Config.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 

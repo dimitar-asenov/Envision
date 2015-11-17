@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "CppExportPlugin.h"
+#include "../src/CppExportPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 namespace CppExport {

@@ -5,5 +5,6 @@
 		<dependency pluginid="selftest" version="0" />
 		<dependency pluginid="modelbase" version="0" />
 		<dependency pluginid="oomodel" version="1" />
+		<dependency pluginid="export" version="1" />
 	</dependencies>
 </plugin>
