@@ -28,7 +28,7 @@
 
 #include "../informationscripting_api.h"
 
-#include "Query.h"
+#include "LinearQuery.h"
 
 namespace Model {
 	class Node;
@@ -38,7 +38,7 @@ namespace InformationScripting {
 
 class QueryExecutor;
 
-class INFORMATIONSCRIPTING_API ScriptQuery : public Query
+class INFORMATIONSCRIPTING_API ScriptQuery : public LinearQuery
 {
 	public:
 		ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args, QueryExecutor* executor);
@@ -46,7 +46,7 @@ class INFORMATIONSCRIPTING_API ScriptQuery : public Query
 		static void initPythonEnvironment();
 		static void unloadPythonEnvironment();
 
-		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
 	private:
 		QString scriptPath_;

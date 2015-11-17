@@ -1,3 +1,3 @@
 # queryExample
 
-results = Query.ast(["-t=Method"], inputs) 
+Query.result = Query.ast(["-t=Method"], [Query.input])[0]

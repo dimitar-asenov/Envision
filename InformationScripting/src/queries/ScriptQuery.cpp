@@ -39,7 +39,7 @@ namespace InformationScripting {
 
 ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target,
 								 const QStringList& args, QueryExecutor* executor)
-	: Query{target}, scriptPath_{scriptPath}, arguments_{args}, executor_{executor}
+	: LinearQuery{target}, scriptPath_{scriptPath}, arguments_{args}, executor_{executor}
 {}
 
 // Since we can't create a module in another way, we create an empty one here.
@@ -59,11 +59,9 @@ void ScriptQuery::unloadPythonEnvironment()
 	Py_Finalize();
 }
 
-QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
+Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 {
 	using namespace boost;
-
-	QList<Optional<TupleSet>> result;
 
 	try {
 		python::object main_module = python::import("__main__");
@@ -76,18 +74,18 @@ QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 		importStar(main_namespace, astApi);
 		main_namespace["DataApi"] = dataApi;
 		importStar(main_namespace, dataApi);
-		// Provide empty list to store results:
-		main_namespace["results"] = python::list();
 
 		python::object sys = python::import("sys");
-
-		main_namespace["inputs"] = input;
-		main_namespace["target"] = python::ptr(target());
-		main_namespace["args"] = arguments_;
 
 		python::object queryModule = python::import("Query");
 		python::dict queriesDict = python::extract<python::dict>(queryModule.attr("__dict__"));
 		main_namespace["Query"] = queryModule;
+
+		// Provide Query interface:
+		queriesDict["input"] = input;
+		queriesDict["target"] = python::ptr(target());
+		queriesDict["args"] = arguments_;
+		queriesDict["result"] = TupleSet();
 
 		// Expose registered queries to the python environment:
 		// Note when calling python scripts from python scripts:
@@ -108,16 +106,11 @@ QList<Optional<TupleSet> > ScriptQuery::execute(QList<TupleSet> input)
 		// Workaround to get output
 		sys.attr("stdout").attr("flush")();
 
-		python::list results = python::extract<python::list>(main_namespace["results"]);
-		python::stl_input_iterator<TupleSet> begin(results), end;
-		std::list<TupleSet> pythonResults(begin, end);
-		for (const auto& r : pythonResults)
-			result.push_back(r);
+		return python::extract<TupleSet>(queriesDict["result"])();
 
 	} catch (python::error_already_set ) {
 		return {QString("Error in Python: %1").arg(BoostPythonHelpers::parsePythonException())};
 	}
-	return result;
 }
 
 void ScriptQuery::importStar(boost::python::dict& main_namespace, boost::python::object apiObject)
