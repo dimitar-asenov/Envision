@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
+#include "EmptyExpressionStringOffsetProvider.h"
 
 #include "OOVisualization/src/expressions/VEmptyExpression.h"
 

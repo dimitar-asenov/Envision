@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "string_offset_providers/StaticStringOffsetProvider.h"
+#include "StaticStringOffsetProvider.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/TextRenderer.h"

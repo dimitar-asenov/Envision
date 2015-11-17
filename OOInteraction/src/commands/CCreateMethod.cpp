@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "commands/CCreateMethod.h"
+#include "CCreateMethod.h"
 
 #include "CommandHelper.h"
 

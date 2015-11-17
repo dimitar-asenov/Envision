@@ -24,11 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HClass.h"
+#include "HClass.h"
 
-#include "commands/CCreateClass.h"
-#include "commands/CCreateMethod.h"
-#include "commands/CCreateField.h"
+#include "../commands/CCreateClass.h"
+#include "../commands/CCreateMethod.h"
+#include "../commands/CCreateField.h"
 
 #include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"

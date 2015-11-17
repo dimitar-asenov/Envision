@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "string_offset_providers/TextRendererStringOffsetProvider.h"
+#include "TextRendererStringOffsetProvider.h"
 
 #include "VisualizationBase/src/items/TextRenderer.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"

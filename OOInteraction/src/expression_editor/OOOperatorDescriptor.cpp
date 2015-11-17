@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/OOOperatorDescriptor.h"
+#include "OOOperatorDescriptor.h"
 
 namespace OOInteraction {
 

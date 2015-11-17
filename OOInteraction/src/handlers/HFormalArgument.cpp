@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HFormalArgument.h"
+#include "HFormalArgument.h"
 
 #include "OOVisualization/src/elements/VFormalArgument.h"
 #include "VisualizationBase/src/items/VText.h"

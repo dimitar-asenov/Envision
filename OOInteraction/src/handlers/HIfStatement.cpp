@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HIfStatement.h"
+#include "HIfStatement.h"
 
 #include "OOVisualization/src/statements/VIfStatement.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"

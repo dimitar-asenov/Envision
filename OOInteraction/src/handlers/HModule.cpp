@@ -25,10 +25,10 @@
  **********************************************************************************************************************/
 #include "HModule.h"
 
-#include "commands/CCreateModule.h"
-#include "commands/CCreateClass.h"
-#include "commands/CCreateMethod.h"
-#include "commands/CCreateField.h"
+#include "../commands/CCreateModule.h"
+#include "../commands/CCreateClass.h"
+#include "../commands/CCreateMethod.h"
+#include "../commands/CCreateField.h"
 
 #include "OOVisualization/src/declarations/VModule.h"
 #include "OOModel/src/declarations/Module.h"

@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/SetExpressionCursorEvent.h"
+#include "SetExpressionCursorEvent.h"
 
-#include "string_offset_providers/StringOffsetProvider.h"
+#include "../string_offset_providers/StringOffsetProvider.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "Core/src/AdapterManager.h"

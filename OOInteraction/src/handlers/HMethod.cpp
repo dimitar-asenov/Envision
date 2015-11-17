@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HMethod.h"
+#include "HMethod.h"
 
 #include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"

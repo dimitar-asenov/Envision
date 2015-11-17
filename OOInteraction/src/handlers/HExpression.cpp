@@ -28,11 +28,11 @@
 #include "../OOInteractionException.h"
 
 #include "../expression_editor/CompoundObjectDescriptor.h"
-#include "string_offset_providers/StringComponents.h"
-#include "string_offset_providers/StringOffsetProvider.h"
-#include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
-#include "expression_editor/OOExpressionBuilder.h"
-#include "handlers/SetExpressionCursorEvent.h"
+#include "../string_offset_providers/StringComponents.h"
+#include "../string_offset_providers/StringOffsetProvider.h"
+#include "../string_offset_providers/CompoundObjectStringOffsetProvider.h"
+#include "../expression_editor/OOExpressionBuilder.h"
+#include "SetExpressionCursorEvent.h"
 
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/VList.h"

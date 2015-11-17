@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "commands/CDoxygen.h"
+#include "CDoxygen.h"
 
 #include "OOInteraction/src/DoxygenWholeTreeVisitor.h"
 

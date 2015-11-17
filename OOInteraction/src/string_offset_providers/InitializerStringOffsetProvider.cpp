@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "string_offset_providers/InitializerStringOffsetProvider.h"
+#include "InitializerStringOffsetProvider.h"
 
 #include "OOVisualization/src/expressions/VArrayInitializer.h"
 #include "VisualizationBase/src/items/VList.h"

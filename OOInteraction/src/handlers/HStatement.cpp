@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HStatement.h"
+#include "HStatement.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 

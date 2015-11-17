@@ -24,11 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/OOExpressionBuilder.h"
+#include "OOExpressionBuilder.h"
 
-#include "expression_editor/OOOperatorDescriptorList.h"
-#include "expression_editor/OOOperatorDescriptor.h"
-#include "OOInteractionException.h"
+#include "OOOperatorDescriptorList.h"
+#include "OOOperatorDescriptor.h"
+#include "../OOInteractionException.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 #include "InteractionBase/src/expression_editor/Value.h"

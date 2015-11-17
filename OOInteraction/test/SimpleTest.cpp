@@ -24,10 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "OOInteractionPlugin.h"
+#include "../src/OOInteractionPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "expression_editor/OOExpressionBuilder.h"
+#include "../src/expression_editor/OOExpressionBuilder.h"
 #include "../src/string_offset_providers/StringComponents.h"
 #include "../src/expression_editor/OOOperatorDescriptorList.h"
 

@@ -24,14 +24,14 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HProject.h"
+#include "HProject.h"
 
-#include "commands/CCreateProject.h"
-#include "commands/CCreateModule.h"
-#include "commands/CCreateClass.h"
-#include "commands/CCreateMethod.h"
-#include "commands/CCreateField.h"
-#include "commands/CDumpMethodRenderings.h"
+#include "../commands/CCreateProject.h"
+#include "../commands/CCreateModule.h"
+#include "../commands/CCreateClass.h"
+#include "../commands/CCreateMethod.h"
+#include "../commands/CCreateField.h"
+#include "../commands/CDumpMethodRenderings.h"
 
 #include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"

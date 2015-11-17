@@ -24,10 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/OOOperatorDescriptorList.h"
+#include "OOOperatorDescriptorList.h"
 
-#include "expression_editor/CommandDescriptor.h"
-#include "expression_editor/CompoundObjectDescriptor.h"
+#include "CommandDescriptor.h"
+#include "CompoundObjectDescriptor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 

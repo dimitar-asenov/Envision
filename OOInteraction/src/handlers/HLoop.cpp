@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HLoop.h"
+#include "HLoop.h"
 #include "OOVisualization/src/statements/VLoopStatement.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"

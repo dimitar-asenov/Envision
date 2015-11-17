@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "oointeraction_api.h"
+#include "../oointeraction_api.h"
 #include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
 
 namespace Visualization {
