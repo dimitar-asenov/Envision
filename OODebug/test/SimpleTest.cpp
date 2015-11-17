@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "OODebugPlugin.h"
+#include "../src/OODebugPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 namespace OODebug {
