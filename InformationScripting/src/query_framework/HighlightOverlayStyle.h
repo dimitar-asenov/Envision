@@ -24,52 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "HighlightOverlay.h"
+#pragma once
 
-#include "VisualizationBase/src/shapes/Shape.h"
+#include "../informationscripting_api.h"
 
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
-#include "VisualizationBase/src/items/EmptyItem.h"
-
-using namespace Visualization;
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace InformationScripting {
 
-ITEM_COMMON_DEFINITIONS(HighlightOverlay, "item")
-
-HighlightOverlay::HighlightOverlay(Item* selectedItem, const StyleType* style)
-	: Super{{selectedItem}, style}
+class INFORMATIONSCRIPTING_API HighlightOverlayStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	info_ = new Text(this);
-	info_->setTextFormat(Qt::RichText);
-}
+	public:
+		virtual ~HighlightOverlayStyle();
 
-void HighlightOverlay::initializeForms()
-{
-	auto backgroundElement = item<EmptyItem>(&I::background_, &StyleType::background);
-	auto textItem = item<Text>(&I::info_, &StyleType::info);
-	addForm(backgroundElement);
-
-	addForm((new AnchorLayoutFormElement())
-			  ->put(TheVCenterOf, textItem, AtCenterOf, backgroundElement)
-			  ->put(TheHCenterOf, textItem, AtCenterOf, backgroundElement));
-}
-
-int HighlightOverlay::determineForm()
-{
-	return info_->text().size() > 0 ? 1 : 0;
-}
-
-void HighlightOverlay::updateGeometry(int availableWidth, int availableHeight)
-{
-	background_->setCustomSize(associatedItem()->widthInScene(), associatedItem()->heightInScene());
-	Super::updateGeometry(availableWidth, availableHeight);
-	if (hasShape())
-	{
-		QPointF pos{getShape()->contentLeft(), getShape()->contentTop()};
-		setPos(associatedItem()->mapToScene(0, 0) - pos);
-	}
-}
+		Property<Visualization::TextStyle> info{this, "info"};
+		Property<Visualization::ItemStyle> background{this, "background"};
+};
 
 } /* namespace InformationScripting */

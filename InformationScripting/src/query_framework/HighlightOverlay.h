@@ -28,24 +28,44 @@
 
 #include "../informationscripting_api.h"
 
+#include "HighlightOverlayStyle.h"
+
+#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+
+namespace Visualization {
+	class EmptyItem;
+}
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API HighlightOverlay : public Super<Visualization::SelectionOverlay>
+class INFORMATIONSCRIPTING_API HighlightOverlay
+		: public Super<Visualization::Overlay<Visualization::DeclarativeItem<HighlightOverlay>>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(HighlightOverlay, Visualization::ItemStyle)
+	ITEM_COMMON(HighlightOverlay)
 
 	public:
 		HighlightOverlay(Item* selectedItem, const StyleType* style = itemStyles().get());
 
+		static void initializeForms();
+		int determineForm() override;
+
+		void setText(const QString& text);
+
 		virtual QColor customShapeColor() const override;
 		void setColor(const QColor& color);
 
+	protected:
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
 	private:
 		QColor color_;
+		Visualization::Text* info_{};
+		Visualization::EmptyItem* background_{};
 };
 
+inline void HighlightOverlay::setText(const QString& text) { info_->setText(text); }
 inline QColor HighlightOverlay::customShapeColor() const { return color_; }
 inline void HighlightOverlay::setColor(const QColor& color) { color_ = color; }
 
