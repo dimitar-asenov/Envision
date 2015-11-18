@@ -4,9 +4,23 @@ project(InformationScripting)
 include(../CMake/common.cmake)
 
 find_package(PythonLibs 3 REQUIRED)
-find_package(Boost REQUIRED python)
-include_directories(SYSTEM ${PYTHON_INCLUDE_DIRS} ${BoostPython_INCLUDE_DIRS})
-link_directories(${BUILD_DIR} ${Boost_LIBRARY_DIRS})
+
+# Find libboost 3 for Ubuntu
+if(UNIX)
+	execute_process(COMMAND lsb_release -i OUTPUT_VARIABLE distribution_)
+	if( "${distribution_}" MATCHES ".*Ubuntu.*")
+		find_package(Boost REQUIRED python-py34)
+		set(UBUNTU TRUE)
+	endif()
+endif()
+
+# Find libboost for non-ubuntu
+if(NOT UBUNTU)
+	find_package(Boost REQUIRED python3)
+endif()
+
+include_directories(SYSTEM ${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS})
 
 # HACK to only include the AstApi_Generated file if it exists.
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/python_bindings/AstApi_Generated.cpp")
@@ -133,6 +147,6 @@ add_library(InformationScripting SHARED
 	src/query_framework/QueryRuntimeException.cpp
 )
 
-target_link_libraries(InformationScripting OOInteraction OODebug ${PYTHON_LIBRARIES} ${Boost_PYTHON_LIBRARIES})
+target_link_libraries(InformationScripting OOInteraction OODebug ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
 envision_plugin(InformationScripting)
 install(DIRECTORY scripts/ DESTINATION ${BUILD_DIR}/scripts)
