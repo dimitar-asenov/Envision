@@ -26,7 +26,6 @@
 
 #include "CommentParser.h"
 
-
 namespace CppImport {
 
 Comments::CommentNode* CommentParser::parseComment(clang::comments::Comment* comment)

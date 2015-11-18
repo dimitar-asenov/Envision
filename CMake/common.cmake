@@ -65,13 +65,13 @@ function(use_precompiled_header targetName)
 	# Create a cpp file which cmake can build to get the precompiled header file
 	set(precompiled_cpp ${CMAKE_CURRENT_BINARY_DIR}/precompiled_cpp.cpp)
 	if(NOT EXISTS ${precompiled_cpp})
-		file(WRITE ${precompiled_cpp} "\n")
+		file(WRITE ${precompiled_cpp} "#include \"${CMAKE_CURRENT_SOURCE_DIR}/src/precompiled.h\"\n")
 	endif()
 	
 	# The precompiled header target
-	add_library(${precompiled} OBJECT src/precompiled.h ${precompiled_cpp})
+	add_library(${precompiled} OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/precompiled.h ${precompiled_cpp})
 	set_target_properties(${precompiled} PROPERTIES AUTOMOC OFF)
-	target_compile_options(${precompiled} PRIVATE -include ${CMAKE_CURRENT_SOURCE_DIR}/src/precompiled.h -x c++-header)
+	target_compile_options(${precompiled} PRIVATE -x c++-header)
 	target_compile_definitions(${precompiled} PRIVATE ${targetName}_EXPORTS)
 	
 	# Inherited compilation flags

@@ -28,7 +28,15 @@
 
 #include "../cppimport_api.h"
 #include "Comments/src/nodes/CommentNode.h"
-#include <clang/AST/Comment.h>
+
+namespace clang {
+	namespace comments {
+		class Comment;
+		class TextComment;
+		class FullComment;
+		class ParagraphComment;
+	}
+}
 
 namespace CppImport {
 
