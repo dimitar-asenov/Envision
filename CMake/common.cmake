@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.2.2)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS on)
+
 # This is specific for using a Make-based build
 # find_program(CCACHE_FOUND ccache)
 # if(CCACHE_FOUND)
