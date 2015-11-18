@@ -25,12 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include <QtCore/QString>
-#include <QtCore/QHash>
-
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Lex/MacroInfo.h>
+#include "precompiled.h"
 
 class EnvisionPPCallbacks : public clang::PPCallbacks
 {

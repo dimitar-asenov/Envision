@@ -25,10 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include <QtCore/QString>
-
-#include <clang/AST/Type.h>
+#include "precompiled.h"
 
 class TypeUtilities
 {

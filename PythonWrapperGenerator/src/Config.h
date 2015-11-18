@@ -25,8 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include <QtCore/QJsonObject>
+#include "precompiled.h"
 
 class Config
 {
@@ -69,4 +68,3 @@ class Config
 
 		QJsonObject config_;
 };
-

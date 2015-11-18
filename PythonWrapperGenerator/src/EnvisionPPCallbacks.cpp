@@ -26,10 +26,6 @@
 
 #include "EnvisionPPCallbacks.h"
 
-#include <algorithm>
-
-#include <clang/Lex/MacroArgs.h>
-
 EnvisionPPCallbacks::EnvisionPPCallbacks(clang::SourceManager& srcManager, std::string fileName,
 													  QHash<QString, QString>& attributes)
 	: sourceManager_{srcManager}, fileName_{fileName}, attributes_{attributes} {}
@@ -61,4 +57,3 @@ void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const c
 		attributes_.insert("annotations", "setAnnotations");
 	}
 }
-

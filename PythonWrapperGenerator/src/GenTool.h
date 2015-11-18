@@ -25,14 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include <memory>
-
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-
-#include <clang/Tooling/Tooling.h>
+#include "precompiled.h"
 
 class GenTool
 {
@@ -72,4 +65,3 @@ class GenTool
 		QHash<QString, std::vector<std::string>> sourcesMap_;
 		QHash<QString, std::shared_ptr<clang::tooling::CompilationDatabase>> compilationDbMap_;
 };
-

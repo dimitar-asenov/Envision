@@ -25,10 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include <QtCore/QTextStream>
-
-#include <clang/Frontend/FrontendAction.h>
+#include "precompiled.h"
 
 #include "APIData.h"
 

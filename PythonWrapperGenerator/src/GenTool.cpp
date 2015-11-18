@@ -26,16 +26,6 @@
 
 #include "GenTool.h"
 
-#include <iostream>
-#include <memory>
-
-#include <QtCore/QDir>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-
-#include <clang/Tooling/Tooling.h>
-
 #include "GeneratorAction.h"
 #include "APIData.h"
 #include "APIPrinter.h"

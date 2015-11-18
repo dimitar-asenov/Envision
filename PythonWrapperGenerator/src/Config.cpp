@@ -26,12 +26,6 @@
 
 #include "Config.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonParseError>
-#include <QtCore/QCoreApplication>
-
 const Config& Config::instance()
 {
 	static Config conf;
@@ -80,4 +74,3 @@ Config::Config()
 	Q_ASSERT(err.error == QJsonParseError::NoError);
 	config_ = doc.object();
 }
-

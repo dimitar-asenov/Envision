@@ -24,12 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
-
-#if defined __cplusplus
+#ifndef PRECOMPILED_PYTHONWRAPPERGENERATOR_H
+#define PRECOMPILED_PYTHONWRAPPERGENERATOR_H
 
 // std includes
+#include <iostream>
 #include <algorithm>
 #include <memory>
 #include <queue>
@@ -63,7 +62,4 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 
-#endif
-
-#endif // PRECOMPILED_H
-
+#endif // PRECOMPILED_PYTHONWRAPPERGENERATOR_H

@@ -25,11 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
-#include <QtCore/QDir>
+#include "precompiled.h"
 
 struct EnumData
 {

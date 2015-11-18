@@ -26,12 +26,6 @@
 
 #include "EnvisionAstConsumer.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QStringList>
-#include <QtCore/QRegularExpression>
-
-#include <clang/AST/DeclCXX.h>
-
 #include "APIData.h"
 #include "EnvisionPPCallbacks.h"
 #include "TypeUtilities.h"
@@ -162,7 +156,7 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 			cData.overloadAliases_.append({signature, functionAddress});
 			if (method->getReturnType().getTypePtr()->isPointerType())
 				overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
-			else if(method->getReturnType().getTypePtr()->isReferenceType())
+			else if (method->getReturnType().getTypePtr()->isReferenceType())
 				overloadName = QString("make_function(%1, return_internal_reference<>())").arg(overloadName);
 			cData.methods_.append({key, overloadName});
 		}

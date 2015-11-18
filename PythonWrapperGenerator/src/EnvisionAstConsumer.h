@@ -25,14 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QTextStream>
-#include <QtCore/QHash>
-
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/AST/ASTConsumer.h>
+#include "precompiled.h"
 
 namespace clang {
 	class EnumDecl;
@@ -59,7 +52,7 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		QString currentClassName_;
 		std::string currentFile_;
 
-		QHash<QString,QString> attributes_;
+		QHash<QString, QString> attributes_;
 
 		QSet<clang::TagDecl*> seenDecls_;
 		QList<EnumData> processedEnums_;

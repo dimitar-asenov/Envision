@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "GeneratorAction.h"
-
 #include "EnvisionAstConsumer.h"
 
 std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,

@@ -26,8 +26,6 @@
 
 #include "APIData.h"
 
-#include <queue>
-
 struct ClassDataNode
 {
 		ClassDataNode(QString name) : name_{name} {}

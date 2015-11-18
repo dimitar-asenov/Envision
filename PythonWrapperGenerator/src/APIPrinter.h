@@ -24,7 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#include <QtCore/QTextStream>
+#pragma once
+#include "precompiled.h"
 
 #include "APIData.h"
 #include "Config.h"

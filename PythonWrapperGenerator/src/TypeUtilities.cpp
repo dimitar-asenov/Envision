@@ -26,8 +26,6 @@
 
 #include "TypeUtilities.h"
 
-#include <clang/AST/DeclTemplate.h>
-
 QString TypeUtilities::nestedNameSpecifierToString(const clang::NestedNameSpecifier* nestedName)
 {
 	switch (nestedName->getKind())
