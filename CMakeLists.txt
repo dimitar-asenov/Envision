@@ -30,7 +30,7 @@ add_subdirectory("OOInteraction")
 add_subdirectory("JavaExport")
 add_subdirectory("OODebug") # uses JavaExport
 add_subdirectory("CppExport")
-# add_subdirectory("CppImport")
+add_subdirectory("CppImport")
 # add_subdirectory("PythonWrapperGenerator")
 add_subdirectory("InformationScripting") # uses the generator and OODebug
 

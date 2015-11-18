@@ -71,6 +71,7 @@
 #include <clang/AST/Stmt.h>
 #include <clang/AST/Type.h>
 #include <clang/AST/Expr.h>
+#include <clang/AST/Comment.h>
 #include <clang/Lex/MacroArgs.h>
 
 #include <clang/Frontend/CompilerInstance.h>

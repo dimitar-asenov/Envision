@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "cppimport_api.h"
+#include "../cppimport_api.h"
 
 namespace OOModel {
 	class ReferenceExpression;
