@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "oointeraction_api.h"
+
 #include "ModelBase/src/visitor/VisitorDefinition.h"
 
 namespace OOInteraction {
