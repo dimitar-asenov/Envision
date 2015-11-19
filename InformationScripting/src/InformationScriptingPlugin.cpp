@@ -45,6 +45,7 @@
 #include "query_prompt/visualization/VOperatorQueryNode.h"
 #include "query_prompt/QueryPromptMode.h"
 #include "query_prompt/parsing/QueryBuilder.h"
+#include "query_framework/QueryResultVisualizer.h"
 
 #include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
 
@@ -72,6 +73,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	RuntimeQuery::registerDefaultQueries();
 	Count::registerDefaultQueries();
 	Join::registerDefaultQueries();
+	QueryResultVisualizer::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();
 	VCommandNode::setDefaultClassHandler(HQuery::instance());

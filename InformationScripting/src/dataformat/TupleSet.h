@@ -64,6 +64,8 @@ class INFORMATIONSCRIPTING_API TupleSet
 		template<class T>
 		void addPropertiesAsTuples(const QString& tag);
 
+		bool isEmpty() const;
+
 	private:
 		QHash<QString, QSet<Tuple>> tuples_;
 };
@@ -121,5 +123,7 @@ inline void TupleSet::addPropertiesAsTuples(const QString& tag)
 		}
 	}
 }
+
+inline bool TupleSet::isEmpty() const { return tuples_.isEmpty(); }
 
 } /* namespace InformationScripting */

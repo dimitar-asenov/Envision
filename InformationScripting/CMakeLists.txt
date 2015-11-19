@@ -80,7 +80,7 @@ add_library(InformationScripting SHARED
 	src/query_framework/QueryExecutor.h
 	src/query_framework/ArgumentParser.h
 	src/query_framework/ArgumentRule.h
-	src/query_framework/DefaultVisualizer.h
+	src/query_framework/QueryResultVisualizer.h
 	src/query_framework/HighlightOverlay.h
 	src/queries/Heatmap.h
 	src/query_prompt/parsing/QueryParser.h
@@ -137,7 +137,7 @@ add_library(InformationScripting SHARED
 	src/query_framework/QueryRegistry.cpp
 	src/query_framework/ArgumentParser.cpp
 	src/query_framework/ArgumentRule.cpp
-	src/query_framework/DefaultVisualizer.cpp
+	src/query_framework/QueryResultVisualizer.cpp
 	src/queries/Heatmap.cpp
 	src/query_framework/HighlightOverlay.cpp
 	src/query_prompt/parsing/QueryParser.cpp

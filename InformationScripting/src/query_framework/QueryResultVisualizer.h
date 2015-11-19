@@ -28,26 +28,34 @@
 
 #include "../informationscripting_api.h"
 
+#include "../queries/LinearQuery.h"
+
 namespace InformationScripting {
 
 class HighlightOverlay;
-class TupleSet;
 
-class INFORMATIONSCRIPTING_API DefaultVisualizer
+class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 {
 	public:
-		static DefaultVisualizer& instance();
+		QueryResultVisualizer(Model::Node* target = nullptr, QStringList args = {});
+
+		Optional<TupleSet> executeLinear(TupleSet input) override;
+
+		static void registerDefaultQueries();
 
 		void visualize(const TupleSet& ts);
-	private:
-		DefaultVisualizer() = default;
 
+	private:
 		static const QString HIGHLIGHT_OVERLAY_GROUP;
 		static const QString ARROW_OVERLAY_GROUP;
 
 		static constexpr int DEFAULT_ALPHA_{60};
 
-		void setColor(HighlightOverlay* overlay, QColor color);
+		static void cleanScene();
+		static void showASTRelation(const TupleSet& ts, const QString& relationName);
+		static QHash<Model::Node*, QString> extractColors(const TupleSet& ts);
+
+		static void setColor(HighlightOverlay* overlay, QColor color);
 };
 
 } /* namespace InformationScripting */
