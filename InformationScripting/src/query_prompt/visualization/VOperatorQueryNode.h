@@ -30,7 +30,7 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/Symbol.h"
+#include "VisualizationBase/src/items/Static.h"
 
 #include "../nodes/OperatorQueryNode.h"
 #include "VOperatorQueryNodeStyle.h"
@@ -46,19 +46,19 @@ class VOperatorQueryNode
 		VOperatorQueryNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		Visualization::Item* left() const;
-		Visualization::Symbol* op() const;
+		Visualization::Static* op() const;
 		Visualization::Item* right() const;
 
 		static void initializeForms();
 
 	private:
 		Visualization::Item* left_{};
-		Visualization::Symbol* op_{};
+		Visualization::Static* op_{};
 		Visualization::Item* right_{};
 };
 
 inline Visualization::Item* VOperatorQueryNode::left() const { return left_; }
-inline Visualization::Symbol* VOperatorQueryNode::op() const { return op_; }
+inline Visualization::Static* VOperatorQueryNode::op() const { return op_; }
 inline Visualization::Item* VOperatorQueryNode::right() const { return right_; }
 
 } /* namespace InformationScripting */
