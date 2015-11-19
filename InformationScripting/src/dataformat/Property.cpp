@@ -46,6 +46,12 @@ uint Property::hash(uint seed) const
 	return 0;
 }
 
+QString Property::toString() const
+{
+	if (data_) return data_->asString();
+	return {};
+}
+
 uint qHash(const Property& p, uint seed) {
 	return p.hash(seed);
 }
