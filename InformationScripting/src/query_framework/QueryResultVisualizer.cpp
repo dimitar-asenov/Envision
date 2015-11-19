@@ -195,10 +195,7 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const 
 		{
 			auto valIt = infoTuple.find(taggedVal.second);
 			if (valIt != infoTuple.end())
-			{
-				QString value = valIt->second;
-				data << value;
-			}
+				data << valIt->second.toString();
 			else return {QString("info: tuple %1 has no entry named %2").arg(tag, taggedVal.second)};
 		}
 		infos[astNode] = data.join(", ");
