@@ -88,6 +88,7 @@ add_library(InformationScripting SHARED
 	src/queries/Count.h
 	src/queries/Join.h
 	src/query_framework/QueryRuntimeException.h
+	src/query_framework/HighlightOverlayStyle.h
 	src/InformationScriptingException.cpp
 	src/InformationScriptingPlugin.cpp
 	test/SimpleTest.cpp
@@ -145,6 +146,7 @@ add_library(InformationScripting SHARED
 	src/queries/Count.cpp
 	src/queries/Join.cpp
 	src/query_framework/QueryRuntimeException.cpp
+	src/query_framework/HighlightOverlayStyle.cpp
 )
 
 target_link_libraries(InformationScripting OOInteraction OODebug ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
