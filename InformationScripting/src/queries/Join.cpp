@@ -36,34 +36,44 @@ const QStringList Join::ON_ARGUMENT_NAMES{"o", "on"};
 
 Optional<TupleSet> Join::executeLinear(TupleSet input)
 {
-	// First check which values we want to join on
+	QList<TaggedValue> values;
+	QString tag1;
+	QString tag2;
+	std::pair<TaggedValue, TaggedValue> joinOn;
 
 	const QRegularExpression onRegex{"(\\w+)\\.(\\w+)=(\\w+)\\.(\\w+)"};
 	auto onMatches = onRegex.match(arguments_.argument(ON_ARGUMENT_NAMES[1]));
-	if (!onMatches.hasMatch())
-		return {"Join requires the on argument in form tag.value=tag2.value"};
-
-	std::pair<std::pair<QString, QString>, std::pair<QString, QString>> joinOn{
-		{onMatches.captured(1), onMatches.captured(2)}, {onMatches.captured(3), onMatches.captured(4)}};
-
-	QList<std::pair<QString, QString>> values;
-	QString tag1;
-	QString tag2;
-	for (const auto& value : arguments_.argument(VALUE_ARGUMENT_NAMES[1]).split(",", QString::SkipEmptyParts))
+	if (onMatches.hasMatch())
 	{
-		auto parts = value.split(".", QString::SkipEmptyParts);
-		if (parts.size() <= 1)
-			return {"join values need to be fully specified with a dot"};
-		if (parts.size() > 2)
-			return {"join values can only have a single . (dot)"};
-		values.push_back({parts[0], parts[1]});
-
-		if (tag1.isNull() || tag1 == parts[0]) tag1 = parts[0];
-		else if (tag1 != parts[0] && tag2.isNull()) tag2 = parts[0];
-		else if (tag2 != parts[0]) return {"join values can only be from 2 different tuples"};
+		tag1 = onMatches.captured(1);
+		tag2 = onMatches.captured(3);
+		joinOn = {{tag1, onMatches.captured(2)}, {tag2, onMatches.captured(4)}};
 	}
+
+	const QRegularExpression valueMatch("((\\w+)\\.)?(\\w+)");
+	auto valueMatchIt = valueMatch.globalMatch(arguments_.argument(VALUE_ARGUMENT_NAMES[1]));
+	while (valueMatchIt.hasNext())
+	{
+		auto match = valueMatchIt.next();
+		if (!match.hasMatch()) return {"join values need the following format: tag.value"};
+		auto tag = match.captured(2);
+		auto value = match.captured(3);
+
+		values.push_back({tag, value});
+
+		if (!tag.isEmpty())
+		{
+			if (tag1.isNull() || tag1 == tag) tag1 = tag;
+			else if (tag1 != tag && tag2.isNull()) tag2 = tag;
+			else if (tag2 != tag) return {"join values can only be from 2 different tuples"};
+		}
+	}
+
 	if (tag1.isNull() || tag2.isNull())
 		return {"join only works on 2 different tuples"};
+
+	// By default join on id
+	if (joinOn.first.first.isEmpty()) joinOn = {{tag1, "id"}, {tag2, "id"}};
 
 	auto tag1Tuples = input.tuples(tag1);
 	auto tag2Tuples = input.tuples(tag2);
@@ -72,9 +82,6 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 
 	if (tag1 != joinOn.first.first)
 		std::swap(joinOn.first, joinOn.second);
-
-	if (tag1 != joinOn.first.first || tag2 != joinOn.second.first)
-		return {"join: Tags in values have to match with the tags in the on argument"};
 
 	auto id1Name = joinOn.first.second;
 	auto id2Name = joinOn.second.second;
@@ -119,8 +126,7 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 void Join::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<Join>("join",
-		std::vector<ArgumentRule>{{ArgumentRule::RequireAll,
-											{{VALUE_ARGUMENT_NAMES[1]}, {AS_ARGUMENT_NAMES[1]}, {ON_ARGUMENT_NAMES[1]}}}});
+		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{VALUE_ARGUMENT_NAMES[1]}, {AS_ARGUMENT_NAMES[1]}}}});
 }
 
 Join::Join(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
@@ -139,10 +145,11 @@ Optional<QList<NamedProperty>> Join::extractProperties(const Tuple& t, const QLi
 	QList<NamedProperty> result;
 	for (const auto& v : values)
 	{
-		if (v.first == t.tag())
+		if (v.first.isEmpty() || v.first == t.tag())
 		{
 			auto it = t.find(v.second);
-			if (it == t.end()) return QString("Tuple %1 does not have any value %2").arg(t.tag(), v.second);
+			if (it == t.end() && v.first.isEmpty()) continue;
+			else if (it == t.end()) return QString("Tuple %1 does not have any value %2").arg(t.tag(), v.second);
 			else result.push_back(*it);
 		}
 	}
