@@ -29,6 +29,7 @@
 #include "../informationscripting_api.h"
 
 #include "../queries/LinearQuery.h"
+#include "ArgumentParser.h"
 
 namespace InformationScripting {
 
@@ -37,23 +38,29 @@ class HighlightOverlay;
 class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 {
 	public:
-		QueryResultVisualizer(Model::Node* target = nullptr, QStringList args = {});
-
 		Optional<TupleSet> executeLinear(TupleSet input) override;
 
 		static void registerDefaultQueries();
 
-		void visualize(const TupleSet& ts);
+		Optional<int> visualize(const TupleSet& ts);
 
 	private:
+		friend class QueryRegistry;
+		ArgumentParser arguments_;
+
 		static const QString HIGHLIGHT_OVERLAY_GROUP;
 		static const QString ARROW_OVERLAY_GROUP;
 
+		static const QStringList INFO_ARGUMENT_NAMES;
+
 		static constexpr int DEFAULT_ALPHA_{60};
+
+		QueryResultVisualizer(Model::Node* target = nullptr, QStringList args = {});
 
 		static void cleanScene();
 		static void showASTRelation(const TupleSet& ts, const QString& relationName);
 		static QHash<Model::Node*, QString> extractColors(const TupleSet& ts);
+		Optional<QHash<Model::Node*, QString> > extractInfo(const TupleSet& ts);
 
 		static void setColor(HighlightOverlay* overlay, QColor color);
 };

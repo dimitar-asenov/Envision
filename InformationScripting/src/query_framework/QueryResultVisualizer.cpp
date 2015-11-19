@@ -40,14 +40,22 @@ namespace InformationScripting {
 const QString QueryResultVisualizer::HIGHLIGHT_OVERLAY_GROUP = {"default graph highlight"};
 const QString QueryResultVisualizer::ARROW_OVERLAY_GROUP = {"default arrow"};
 
-QueryResultVisualizer::QueryResultVisualizer(Model::Node* target, QStringList)
-	: LinearQuery{target}
+const QStringList QueryResultVisualizer::INFO_ARGUMENT_NAMES{"i", "info"};
+
+QueryResultVisualizer::QueryResultVisualizer(Model::Node* target, QStringList args)
+	: LinearQuery{target}, arguments_{{
+		{INFO_ARGUMENT_NAMES, "Name of info values to be printed", INFO_ARGUMENT_NAMES[1]}
+	}, args}
 {}
 
 Optional<TupleSet> QueryResultVisualizer::executeLinear(TupleSet input)
 {
 	if (!input.isEmpty())
-		visualize(input);
+	{
+		auto result = visualize(input);
+		if (result.hasErrors())
+			return {result.errors()[0]};
+	}
 	// A visualization is always a sink.
 	// If there was an explicit visualization we don't want to have the implicit show anything.
 	return TupleSet();
@@ -56,14 +64,19 @@ Optional<TupleSet> QueryResultVisualizer::executeLinear(TupleSet input)
 void QueryResultVisualizer::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<QueryResultVisualizer>("show");
+	QueryRegistry::registerAlias("info", "show", [](QStringList& args) {args.prepend("-info");});
 }
 
-void QueryResultVisualizer::visualize(const TupleSet& ts)
+Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 {
 	cleanScene();
 	showASTRelation(ts, "calls");
 
 	auto colors = extractColors(ts);
+	auto infoOptional = extractInfo(ts);
+	if (infoOptional.hasErrors())
+		return {infoOptional.errors()[0]};
+	auto infos = infoOptional.value();
 
 	auto astTuples = ts.tuples("ast");
 	// Set default color for non covered ast nodes.
@@ -73,10 +86,19 @@ void QueryResultVisualizer::visualize(const TupleSet& ts)
 		if (color.isNull()) color = "red";
 	}
 
+	for (auto it = infos.begin(); it != infos.end(); ++it)
+	{
+		auto& color = colors[it.key()];
+		if (color.isNull()) color = "red";
+	}
+
 	for (auto it = colors.begin(); it != colors.end(); ++it)
 	{
 		Model::Node* node = it.key();
 		Q_ASSERT(node);
+
+		QString info = infos[node];
+
 		auto nodeVisualizationIt = Visualization::Item::nodeItemsMap().find(node);
 		if (nodeVisualizationIt == Visualization::Item::nodeItemsMap().end())
 			qWarning() << "no visualization for" << node->typeName();
@@ -84,10 +106,12 @@ void QueryResultVisualizer::visualize(const TupleSet& ts)
 		{
 			auto item = *nodeVisualizationIt++;
 			auto overlay = new HighlightOverlay(item);
+			overlay->setText(info);
 			setColor(overlay, it.value());
 			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 		}
 	}
+	return {1};
 }
 
 void QueryResultVisualizer::cleanScene()
@@ -136,6 +160,50 @@ QHash<Model::Node*, QString> QueryResultVisualizer::extractColors(const TupleSet
 		}
 	}
 	return colors;
+}
+
+Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const TupleSet& ts)
+{
+	QHash<Model::Node*, QString> infos;
+
+	std::vector<std::pair<QString, QString>> values;
+	const QRegularExpression valueMatch("((\\w+)\\.)?(\\w+)");
+	auto valueMatchIt = valueMatch.globalMatch(arguments_.argument(INFO_ARGUMENT_NAMES[1]));
+	while (valueMatchIt.hasNext())
+	{
+		auto match = valueMatchIt.next();
+		if (!match.hasMatch()) return {"Info values have to be of form: tag.value"};
+		auto tag = match.captured(2);
+		auto value = match.captured(3);
+
+		values.push_back({tag, value});
+	}
+	if (values.empty()) return infos;
+	const auto tag = values[0].first;
+	bool allSame = std::all_of(values.begin(), values.end(), [&tag](const auto& values) {return values.first == tag;});
+	if (!allSame) return {"Info values have to have same tag"};
+
+	for (const auto& infoTuple : ts.tuples(tag))
+	{
+		auto allAsts = infoTuple.valuesOfType<Model::Node*>();
+		if (allAsts.isEmpty() || allAsts.size() > 1) return {"Infotuple has to have a value which refers to an AST node"};
+		auto astNode = allAsts[0];
+
+		QStringList data;
+
+		for (const auto& taggedVal : values)
+		{
+			auto valIt = infoTuple.find(taggedVal.second);
+			if (valIt != infoTuple.end())
+			{
+				QString value = valIt->second;
+				data << value;
+			}
+			else return {QString("info: tuple %1 has no entry named %2").arg(tag, taggedVal.second)};
+		}
+		infos[astNode] = data.join(", ");
+	}
+	return infos;
 }
 
 void QueryResultVisualizer::setColor(HighlightOverlay* overlay, QColor color)
