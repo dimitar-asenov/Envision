@@ -52,6 +52,7 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 		static const QString ARROW_OVERLAY_GROUP;
 
 		static const QStringList INFO_ARGUMENT_NAMES;
+		static const QStringList SORT_ARGUMENT_NAMES;
 
 		static constexpr int DEFAULT_ALPHA_{60};
 
@@ -60,7 +61,7 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 		static void cleanScene();
 		static void showASTRelation(const TupleSet& ts, const QString& relationName);
 		static QHash<Model::Node*, QString> extractColors(const TupleSet& ts);
-		Optional<QHash<Model::Node*, QString> > extractInfo(const TupleSet& ts);
+		Optional<QHash<Model::Node*, QString>> extractInfo(const TupleSet& ts);
 
 		static void setColor(HighlightOverlay* overlay, QColor color);
 };

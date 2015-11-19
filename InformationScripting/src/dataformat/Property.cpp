@@ -40,6 +40,12 @@ bool Property::operator==(const Property& other) const
 	return !other.data_;
 }
 
+bool Property::operator<(const Property& other) const
+{
+	if (data_) return data_->lessThan(other.data_);
+	return false;
+}
+
 uint Property::hash(uint seed) const
 {
 	if (data_) return data_->hash(seed);

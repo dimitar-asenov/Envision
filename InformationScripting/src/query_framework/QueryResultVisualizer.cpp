@@ -41,10 +41,12 @@ const QString QueryResultVisualizer::HIGHLIGHT_OVERLAY_GROUP = {"default graph h
 const QString QueryResultVisualizer::ARROW_OVERLAY_GROUP = {"default arrow"};
 
 const QStringList QueryResultVisualizer::INFO_ARGUMENT_NAMES{"i", "info"};
+const QStringList QueryResultVisualizer::SORT_ARGUMENT_NAMES{"st", "sort"};
 
 QueryResultVisualizer::QueryResultVisualizer(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
-		{INFO_ARGUMENT_NAMES, "Name of info values to be printed", INFO_ARGUMENT_NAMES[1]}
+		{INFO_ARGUMENT_NAMES, "Name of info values to be printed", INFO_ARGUMENT_NAMES[1]},
+		{SORT_ARGUMENT_NAMES, "Name of info sort key for infos", SORT_ARGUMENT_NAMES[1]}
 	}, args}
 {}
 
@@ -164,7 +166,8 @@ QHash<Model::Node*, QString> QueryResultVisualizer::extractColors(const TupleSet
 
 Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const TupleSet& ts)
 {
-	QHash<Model::Node*, QString> infos;
+	QHash<Model::Node*, QList<Tuple>> infos;
+	QHash<Model::Node*, QString> result;
 
 	std::vector<std::pair<QString, QString>> values;
 	const QRegularExpression valueMatch("((\\w+)\\.)?(\\w+)");
@@ -178,7 +181,7 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const 
 
 		values.push_back({tag, value});
 	}
-	if (values.empty()) return infos;
+	if (values.empty()) return result;
 	const auto tag = values[0].first;
 	bool allSame = std::all_of(values.begin(), values.end(), [&tag](const auto& values) {return values.first == tag;});
 	if (!allSame) return {"Info values have to have same tag"};
@@ -189,18 +192,36 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const 
 		if (allAsts.isEmpty() || allAsts.size() > 1) return {"Infotuple has to have a value which refers to an AST node"};
 		auto astNode = allAsts[0];
 
-		QStringList data;
+		Tuple t;
 
 		for (const auto& taggedVal : values)
 		{
 			auto valIt = infoTuple.find(taggedVal.second);
-			if (valIt != infoTuple.end())
-				data << valIt->second.toString();
+			if (valIt != infoTuple.end()) t.add(*valIt);
 			else return {QString("info: tuple %1 has no entry named %2").arg(tag, taggedVal.second)};
 		}
-		infos[astNode] = data.join(", ");
+		infos[astNode].append(t);
 	}
-	return infos;
+	// Form string from tuples:
+	auto sortKey = arguments_.argument(SORT_ARGUMENT_NAMES[1]);
+	for (auto it = infos.begin(); it != infos.end(); ++it)
+	{
+		auto values = it.value();
+		if (!sortKey.isEmpty())
+			std::sort(values.begin(), values.end(), [sortKey](const Tuple& left, const Tuple& right) {
+				return left[sortKey] < right[sortKey];}); // TODO check if sortkey is contained
+
+		QStringList stringTuples;
+		for (const auto& tuple : values)
+		{
+			QStringList values;
+			for (const auto& value : tuple)
+				values << value.second.toString();
+			stringTuples << values.join(", ");
+		}
+		result[it.key()] = stringTuples.join("<br>");
+	}
+	return result;
 }
 
 void QueryResultVisualizer::setColor(HighlightOverlay* overlay, QColor color)

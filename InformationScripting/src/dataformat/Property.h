@@ -50,6 +50,7 @@ class INFORMATIONSCRIPTING_API Property {
 		template <class ConvertTo> bool isConvertibleTo() const;
 
 		bool operator==(const Property& other) const;
+		bool operator<(const Property& other) const;
 
 		uint hash(uint seed = 0) const;
 
@@ -77,6 +78,7 @@ class INFORMATIONSCRIPTING_API Property {
 				virtual boost::python::object pythonObject() const = 0;
 				virtual Model::Node* node() const { return nullptr; }
 				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
 				virtual uint hash(uint seed = 0) const = 0;
 				virtual QString asString() const = 0;
 		};
@@ -92,6 +94,12 @@ class INFORMATIONSCRIPTING_API Property {
 				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
+					return false;
+				}
+
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ < specificOther->data_;
 					return false;
 				}
 
@@ -119,6 +127,12 @@ class INFORMATIONSCRIPTING_API Property {
 				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
+					return false;
+				}
+
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ < specificOther->data_;
 					return false;
 				}
 
@@ -150,6 +164,12 @@ class INFORMATIONSCRIPTING_API Property {
 					// If we have a nullptr, check if other has the same type and value.
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
+					return false;
+				}
+
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ < specificOther->data_;
 					return false;
 				}
 
