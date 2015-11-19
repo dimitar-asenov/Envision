@@ -53,6 +53,8 @@ class INFORMATIONSCRIPTING_API Join : public LinearQuery
 
 		Optional<QList<NamedProperty>> extractProperties(const Tuple& t,
 																		 const QList<std::pair<QString, QString>>& values);
+
+		using TaggedValue = std::pair<QString, QString>;
 };
 
 } /* namespace InformationScripting */

@@ -50,6 +50,7 @@ void VCommandNode::initializeForms()
 		})
 		->setNoInnerCursors([](Item*){return true;})
 		->setNoBoundaryCursors([](Item*){return true;})
+		->setHorizontalSpacing(5)
 	);
 }
 

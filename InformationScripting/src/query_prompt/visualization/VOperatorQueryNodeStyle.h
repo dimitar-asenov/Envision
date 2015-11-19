@@ -28,7 +28,7 @@
 
 #include "../../informationscripting_api.h"
 
-#include "VisualizationBase/src/items/SymbolStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/VCompositeStyle.h"
 
@@ -39,8 +39,8 @@ class INFORMATIONSCRIPTING_API VOperatorQueryNodeStyle : public Super<Visualizat
 	public:
 		virtual ~VOperatorQueryNodeStyle() override;
 
-	Property<Visualization::SymbolStyle> pipeOp{this, "pipeOp"};
-	Property<Visualization::SymbolStyle> substractOp{this, "substractOp"};
+	Property<Visualization::StaticStyle> pipeOp{this, "pipeOp"};
+	Property<Visualization::StaticStyle> substractOp{this, "substractOp"};
 };
 
 } /* namespace InformationScripting */

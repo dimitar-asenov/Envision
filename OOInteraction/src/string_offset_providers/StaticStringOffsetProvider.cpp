@@ -39,6 +39,7 @@ StaticStringOffsetProvider::StaticStringOffsetProvider(Visualization::Static* v)
 int StaticStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+	if (isIndivisible()) return (key == Qt::Key_Delete ? 0 : 1);
 	return itemOffset(vis_->item(), string().size(), key);
 }
 
@@ -49,7 +50,13 @@ QString StaticStringOffsetProvider::string()
 
 void StaticStringOffsetProvider::setOffset(int offset)
 {
-	setOffsetInItem(offset, vis_->item());
+	bool offsetSet = setOffsetInItem(offset, vis_->item());
+	if (!offsetSet)
+	{
+		// Assume this is an indivisible item (e.g. an icon)
+		if (offset <= 0) vis_->moveCursor(Visualization::Item::MoveOnTopLeft);
+		else vis_->moveCursor(Visualization::Item::MoveOnBottomRight);
+	}
 }
 
 bool StaticStringOffsetProvider::isIndivisible()

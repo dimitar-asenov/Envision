@@ -1,9 +1,14 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="../DeclarativeItemBase/default">
-	<pipeOp prototypes="../Symbol/default">
-		<symbol>|</symbol>
+	<pipeOp prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/pipe.svg</filename>
+		<width>15</width>
+		<height>12</height>
 	</pipeOp>
-	<substractOp prototypes="../Symbol/default">
-		<symbol>|-</symbol>
+	
+	<substractOp prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/pipe-minus.svg</filename>
+		<width>15</width>
+		<height>12</height>
 	</substractOp>
 </style>

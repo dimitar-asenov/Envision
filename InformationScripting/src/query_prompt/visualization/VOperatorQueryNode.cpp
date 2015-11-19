@@ -40,7 +40,7 @@ void VOperatorQueryNode::initializeForms()
 {
 	auto leftEl = item(&I::left_, [](I* v){return v->node()->left();});
 
-	auto opEl = item<Visualization::Symbol>(&I::op_, [](I* v) {
+	auto opEl = item<Visualization::Static>(&I::op_, [](I* v) {
 			switch (v->node()->op())
 			{
 				case OperatorQueryNode::OperatorTypes::Pipe : return &v->style()->pipeOp();
@@ -55,6 +55,7 @@ void VOperatorQueryNode::initializeForms()
 			{leftEl, opEl, rightEl},
 		})
 		->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
+		->setHorizontalSpacing(5)
 	);
 }
 
