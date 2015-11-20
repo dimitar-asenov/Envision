@@ -34,6 +34,7 @@
 namespace InformationScripting {
 
 class HighlightOverlay;
+class QueryExecutor;
 
 class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 {
@@ -47,6 +48,7 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 	private:
 		friend class QueryRegistry;
 		ArgumentParser arguments_;
+		QueryExecutor* executor_;
 
 		static const QString HIGHLIGHT_OVERLAY_GROUP;
 		static const QString ARROW_OVERLAY_GROUP;
@@ -56,7 +58,7 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 
 		static constexpr int DEFAULT_ALPHA_{60};
 
-		QueryResultVisualizer(Model::Node* target = nullptr, QStringList args = {});
+		QueryResultVisualizer(Model::Node* target, QStringList args, QueryExecutor* executor = nullptr);
 
 		static void cleanScene();
 		static void showASTRelation(const TupleSet& ts, const QString& relationName);

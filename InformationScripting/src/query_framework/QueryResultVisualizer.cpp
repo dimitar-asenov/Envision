@@ -34,6 +34,7 @@
 
 #include "HighlightOverlay.h"
 #include "QueryRegistry.h"
+#include "QueryExecutor.h"
 
 namespace InformationScripting {
 
@@ -43,29 +44,28 @@ const QString QueryResultVisualizer::ARROW_OVERLAY_GROUP = {"default arrow"};
 const QStringList QueryResultVisualizer::INFO_ARGUMENT_NAMES{"i", "info"};
 const QStringList QueryResultVisualizer::SORT_ARGUMENT_NAMES{"st", "sort"};
 
-QueryResultVisualizer::QueryResultVisualizer(Model::Node* target, QStringList args)
+QueryResultVisualizer::QueryResultVisualizer(Model::Node* target, QStringList args, QueryExecutor* executor)
 	: LinearQuery{target}, arguments_{{
 		{INFO_ARGUMENT_NAMES, "Name of info values to be printed", INFO_ARGUMENT_NAMES[1]},
 		{SORT_ARGUMENT_NAMES, "Name of info sort key for infos", SORT_ARGUMENT_NAMES[1]}
-	}, args}
+	}, args}, executor_{executor}
 {}
 
 Optional<TupleSet> QueryResultVisualizer::executeLinear(TupleSet input)
 {
-	if (!input.isEmpty())
-	{
-		auto result = visualize(input);
-		if (result.hasErrors())
-			return {result.errors()[0]};
-	}
-	// A visualization is always a sink.
-	// If there was an explicit visualization we don't want to have the implicit show anything.
-	return TupleSet();
+	auto result = visualize(input);
+	if (result.hasErrors())
+		return {result.errors()[0]};
+
+	Q_ASSERT(executor_);
+	executor_->setVisualizationExecuted();
+
+	return input;
 }
 
 void QueryResultVisualizer::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<QueryResultVisualizer>("show");
+	QueryRegistry::registerQuery<QueryResultVisualizer, QueryRegistry::ExtraArguments::QueryExecutor>("show");
 	QueryRegistry::registerAlias("info", "show", [](QStringList& args) {args.prepend("-info");});
 }
 

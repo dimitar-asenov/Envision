@@ -63,9 +63,12 @@ QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
 			qWarning() << results[0].warnings();
 		if (results[0])
 		{
-			auto vis = QueryRegistry::instance().buildQuery("show", nullptr, {}, nullptr);
-			vis->execute({results[0].value()});
-			results.clear();
+			if (defaultVisualize_)
+			{
+				auto vis = QueryRegistry::instance().buildQuery("show", nullptr, {}, this);
+				vis->execute({results[0].value()});
+				results.clear();
+			}
 		}
 		else
 			errorMessages = results[0].errors();

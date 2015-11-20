@@ -45,8 +45,13 @@ class INFORMATIONSCRIPTING_API QueryExecutor
 
 		QList<QString> execute(const QList<TupleSet>& input = {});
 
+		void setVisualizationExecuted();
+
 	private:
 		std::queue<std::unique_ptr<Query>> queries_{};
+		bool defaultVisualize_{true};
 };
+
+inline void QueryExecutor::setVisualizationExecuted() { defaultVisualize_ = false; }
 
 } /* namespace InformationScripting */
