@@ -167,21 +167,13 @@ QHash<Model::Node*, QString> QueryResultVisualizer::extractColors(const TupleSet
 Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const TupleSet& ts)
 {
 	QHash<Model::Node*, QList<Tuple>> infos;
-	QHash<Model::Node*, QString> result;
 
-	std::vector<std::pair<QString, QString>> values;
-	const QRegularExpression valueMatch("((\\w+)\\.)?(\\w+)");
-	auto valueMatchIt = valueMatch.globalMatch(arguments_.argument(INFO_ARGUMENT_NAMES[1]));
-	while (valueMatchIt.hasNext())
-	{
-		auto match = valueMatchIt.next();
-		if (!match.hasMatch()) return {"Info values have to be of form: tag.value"};
-		auto tag = match.captured(2);
-		auto value = match.captured(3);
+	auto infoValues = infoArgumentValues();
+	if (infoValues.hasErrors()) return infoValues.errors()[0];
 
-		values.push_back({tag, value});
-	}
-	if (values.empty()) return result;
+	auto values = infoValues.value();
+	if (values.empty()) return QHash<Model::Node*, QString>();
+
 	const auto tag = values[0].first;
 	bool allSame = std::all_of(values.begin(), values.end(), [&tag](const auto& values) {return values.first == tag;});
 	if (!allSame) return {"Info values have to have same tag"};
@@ -202,7 +194,13 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const 
 		}
 		infos[astNode].append(t);
 	}
-	// Form string from tuples:
+	return convertTuplesToString(infos);
+}
+
+Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::convertTuplesToString(
+		const QHash<Model::Node*, QList<Tuple>>& infos)
+{
+	QHash<Model::Node*, QString> result;
 	auto sortKey = arguments_.argument(SORT_ARGUMENT_NAMES[1]);
 	for (auto it = infos.begin(); it != infos.end(); ++it)
 	{
@@ -222,6 +220,23 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const 
 		result[it.key()] = stringTuples.join("<br>");
 	}
 	return result;
+}
+
+Optional<std::vector<QueryResultVisualizer::TaggedValue>> QueryResultVisualizer::infoArgumentValues()
+{
+	std::vector<QueryResultVisualizer::TaggedValue> values;
+	const QRegularExpression valueMatch("((\\w+)\\.)?(\\w+)");
+	auto valueMatchIt = valueMatch.globalMatch(arguments_.argument(INFO_ARGUMENT_NAMES[1]));
+	while (valueMatchIt.hasNext())
+	{
+		auto match = valueMatchIt.next();
+		if (!match.hasMatch()) return {"Info values have to be of form: tag.value"};
+		auto tag = match.captured(2);
+		auto value = match.captured(3);
+
+		values.push_back({tag, value});
+	}
+	return values;
 }
 
 void QueryResultVisualizer::setColor(HighlightOverlay* overlay, QColor color)

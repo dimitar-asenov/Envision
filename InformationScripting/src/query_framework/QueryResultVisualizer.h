@@ -64,6 +64,9 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 		static void showASTRelation(const TupleSet& ts, const QString& relationName);
 		static QHash<Model::Node*, QString> extractColors(const TupleSet& ts);
 		Optional<QHash<Model::Node*, QString>> extractInfo(const TupleSet& ts);
+		Optional<QHash<Model::Node*, QString>> convertTuplesToString(const QHash<Model::Node*, QList<Tuple>>& infos);
+		using TaggedValue = std::pair<QString, QString>;
+		Optional<std::vector<TaggedValue>> infoArgumentValues();
 
 		static void setColor(HighlightOverlay* overlay, QColor color);
 };
