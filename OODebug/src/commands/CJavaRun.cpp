@@ -53,7 +53,7 @@ bool CJavaRun::canInterpret(Visualization::Item* source, Visualization::Item* ta
 	{
 		// Check if there is a tree manager
 		while (source && !source->node()) source = source->parent();
-		return source->node()->manager();
+		return source && source->node()->manager();
 	}
 	return false;
 }
