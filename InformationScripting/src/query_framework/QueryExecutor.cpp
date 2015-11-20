@@ -27,7 +27,8 @@
 #include "QueryExecutor.h"
 
 #include "../queries/Query.h"
-#include "DefaultVisualizer.h"
+#include "QueryResultVisualizer.h"
+#include "QueryRegistry.h"
 
 #include "InteractionBase/src/commands/CommandResult.h"
 
@@ -62,9 +63,12 @@ QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
 			qWarning() << results[0].warnings();
 		if (results[0])
 		{
-			auto val = results[0].value();
-			DefaultVisualizer::instance().visualize(val);
-			results.clear();
+			if (defaultVisualize_)
+			{
+				auto vis = QueryRegistry::instance().buildQuery("show", nullptr, {}, this);
+				vis->execute({results[0].value()});
+				results.clear();
+			}
 		}
 		else
 			errorMessages = results[0].errors();

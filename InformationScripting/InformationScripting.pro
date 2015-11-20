@@ -66,7 +66,6 @@ HEADERS += src/precompiled.h \
     src/query_framework/QueryExecutor.h \
     src/query_framework/ArgumentParser.h \
     src/query_framework/ArgumentRule.h \
-    src/query_framework/DefaultVisualizer.h \
     src/query_framework/HighlightOverlay.h \
     src/queries/Heatmap.h \
     src/query_prompt/parsing/QueryParser.h \
@@ -74,7 +73,8 @@ HEADERS += src/precompiled.h \
     src/queries/Count.h \
     src/queries/Join.h \
     src/query_framework/QueryRuntimeException.h \
-    src/query_framework/HighlightOverlayStyle.h
+    src/query_framework/HighlightOverlayStyle.h \
+    src/query_framework/QueryResultVisualizer.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -124,7 +124,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/query_framework/QueryRegistry.cpp \
     src/query_framework/ArgumentParser.cpp \
     src/query_framework/ArgumentRule.cpp \
-    src/query_framework/DefaultVisualizer.cpp \
     src/queries/Heatmap.cpp \
     src/query_framework/HighlightOverlay.cpp \
     src/query_prompt/parsing/QueryParser.cpp \
@@ -132,7 +131,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/Count.cpp \
     src/queries/Join.cpp \
     src/query_framework/QueryRuntimeException.cpp \
-    src/query_framework/HighlightOverlayStyle.cpp
+    src/query_framework/HighlightOverlayStyle.cpp \
+    src/query_framework/QueryResultVisualizer.cpp
 
 # The workaround below is currently not needed but might be in the future, thus we leave it as reference.
 # Workaround to not have any pragma's in NodeApi.cpp

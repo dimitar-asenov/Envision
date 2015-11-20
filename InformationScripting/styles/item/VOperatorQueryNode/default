@@ -3,12 +3,12 @@
 	<pipeOp prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/pipe.svg</filename>
 		<width>15</width>
-		<height>12</height>
+		<height>18</height>
 	</pipeOp>
 	
 	<substractOp prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/pipe-minus.svg</filename>
 		<width>15</width>
-		<height>12</height>
+		<height>18</height>
 	</substractOp>
 </style>

@@ -50,16 +50,37 @@ class INFORMATIONSCRIPTING_API Property {
 		template <class ConvertTo> bool isConvertibleTo() const;
 
 		bool operator==(const Property& other) const;
+		bool operator<(const Property& other) const;
 
 		uint hash(uint seed = 0) const;
 
+		QString toString() const;
+
 	private:
+		template <class T>
+		static QString toString(const T* val)
+		{
+			return QString("0x%1").arg((quintptr)val, QT_POINTER_SIZE * 2, 16, QChar('0'));
+		}
+
+		static QString toString(const QString& val)
+		{
+			return val;
+		}
+
+		static QString toString(int val)
+		{
+			return QString::number(val);
+		}
+
 		struct PropertyDataConcept {
 				virtual ~PropertyDataConcept() = default;
 				virtual boost::python::object pythonObject() const = 0;
 				virtual Model::Node* node() const { return nullptr; }
 				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
 				virtual uint hash(uint seed = 0) const = 0;
+				virtual QString asString() const = 0;
 		};
 
 		template <class DataType, class = void>
@@ -76,8 +97,18 @@ class INFORMATIONSCRIPTING_API Property {
 					return false;
 				}
 
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ < specificOther->data_;
+					return false;
+				}
+
 				virtual uint hash(uint seed) const override {
 					return qHash(data_, seed);
+				}
+
+				virtual QString asString() const override {
+					return toString(data_);
 				}
 
 				DataType data_;
@@ -99,8 +130,18 @@ class INFORMATIONSCRIPTING_API Property {
 					return false;
 				}
 
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ < specificOther->data_;
+					return false;
+				}
+
 				virtual uint hash(uint seed) const override {
 					return qHash(data_, seed);
+				}
+
+				virtual QString asString() const override {
+					return toString(data_);
 				}
 
 				DataType data_;
@@ -126,8 +167,18 @@ class INFORMATIONSCRIPTING_API Property {
 					return false;
 				}
 
+				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ < specificOther->data_;
+					return false;
+				}
+
 				virtual uint hash(uint seed) const override {
 					return qHash(data_, seed);
+				}
+
+				virtual QString asString() const override {
+					return toString(data_);
 				}
 
 				DataType data_;

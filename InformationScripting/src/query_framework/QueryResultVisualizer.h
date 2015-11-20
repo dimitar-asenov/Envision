@@ -28,26 +28,47 @@
 
 #include "../informationscripting_api.h"
 
+#include "../queries/LinearQuery.h"
+#include "ArgumentParser.h"
+
 namespace InformationScripting {
 
 class HighlightOverlay;
-class TupleSet;
+class QueryExecutor;
 
-class INFORMATIONSCRIPTING_API DefaultVisualizer
+class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 {
 	public:
-		static DefaultVisualizer& instance();
+		Optional<TupleSet> executeLinear(TupleSet input) override;
 
-		void visualize(const TupleSet& ts);
+		static void registerDefaultQueries();
+
+		Optional<int> visualize(const TupleSet& ts);
+
 	private:
-		DefaultVisualizer() = default;
+		friend class QueryRegistry;
+		ArgumentParser arguments_;
+		QueryExecutor* executor_;
 
 		static const QString HIGHLIGHT_OVERLAY_GROUP;
 		static const QString ARROW_OVERLAY_GROUP;
 
+		static const QStringList INFO_ARGUMENT_NAMES;
+		static const QStringList SORT_ARGUMENT_NAMES;
+
 		static constexpr int DEFAULT_ALPHA_{60};
 
-		void setColor(HighlightOverlay* overlay, QColor color);
+		QueryResultVisualizer(Model::Node* target, QStringList args, QueryExecutor* executor = nullptr);
+
+		static void cleanScene();
+		static void showASTRelation(const TupleSet& ts, const QString& relationName);
+		static QHash<Model::Node*, QString> extractColors(const TupleSet& ts);
+		Optional<QHash<Model::Node*, QString>> extractInfo(const TupleSet& ts);
+		Optional<QHash<Model::Node*, QString>> convertTuplesToString(const QHash<Model::Node*, QList<Tuple>>& infos);
+		using TaggedValue = std::pair<QString, QString>;
+		Optional<std::vector<TaggedValue>> infoArgumentValues();
+
+		static void setColor(HighlightOverlay* overlay, QColor color);
 };
 
 } /* namespace InformationScripting */
