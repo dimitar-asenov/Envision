@@ -59,6 +59,20 @@ class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder
 
 		static void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
 										Query* connectionQuery, Query* outputQuery = nullptr);
+
+		/**
+		 * Connects \a left with \a right queries in the \a composite, using a union operator specified in \a op.
+		 *
+		 * Note that \a left and \a right have to be previously added to \a composite.
+		 */
+		static void connectAsUnion(CompositeQuery* composite, CompositeQuery* left, Query* right, OperatorQueryNode* op);
+
+		/**
+		 * Connects \a left with \a right queries in the \a composite, building a split operation.
+		 *
+		 * Note that \a left and \a right have to be previously added to \a composite.
+		 */
+		static void connectAsSplit(CompositeQuery* composite, Query* left, CompositeQuery* right);
 };
 
 } /* namespace InformationScripting */
