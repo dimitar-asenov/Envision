@@ -102,6 +102,10 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 			queriesDict[query] = python::make_function(queryMethod, call_policies, func_sig());
 		}
 
+		// Per default exec_file does not set argv, thus we set it here manually.
+		wchar_t* argv[] = {Py_DecodeLocale(scriptPath_.toLatin1().data(), nullptr)};
+		PySys_SetArgv(1, argv);
+
 		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);
 		// Workaround to get output
 		sys.attr("stdout").attr("flush")();

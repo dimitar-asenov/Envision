@@ -63,7 +63,7 @@ TagQuery::TagQuery(Model::Node* target, QStringList args, ExecuteFunction exec, 
 			QCommandLineOption{ADD_ARGUMENT_NAMES},
 			QCommandLineOption{REMOVE_ARGUMENT_NAMES},
 			{PERSISTENT_ARGUMENT_NAMES, "Wether the change is persistent, default = yes", PERSISTENT_ARGUMENT_NAMES[1], "yes"}
-}, args}, exec_{exec}
+}, args, true}, exec_{exec}
 {
 	persistent_ = arguments_.argument(PERSISTENT_ARGUMENT_NAMES[1]) == "yes";
 	for (const auto& rule : argumentRules)

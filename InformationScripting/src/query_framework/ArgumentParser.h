@@ -46,7 +46,7 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		enum class Scope : int {Local, Global, Input};
 
 		ArgumentParser(std::initializer_list<QCommandLineOption> options,
-								  const QStringList& args);
+								  const QStringList& args, bool addScopeArguments = false);
 
 		static void setArgTo(QStringList& args, const QStringList& argNames, const QString& type);
 
@@ -57,7 +57,8 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 
 		QString queryName() const;
 
-		static const QStringList SCOPE_ARGUMENT_NAMES;
+		static const QStringList GLOBAL_SCOPE_ARGUMENT_NAMES;
+		static const QStringList INPUT_SCOPE_ARGUMENT_NAMES;
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};
 		Scope scope_{};

@@ -87,27 +87,28 @@ std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQ
 
 	if (leftComposite && rightComposite)
 	{
-		Q_ASSERT(leftComposite->outputCount() == rightComposite->inputCount());
-		for (int i = 0; i < leftComposite->outputCount(); ++i)
-			composite->connectQuery(leftComposite, i, rightComposite, i);
+		if (leftComposite->outputCount() == rightComposite->inputCount())
+		{
+			for (int i = 0; i < leftComposite->outputCount(); ++i)
+				composite->connectQuery(leftComposite, i, rightComposite, i);
+		}
+		else if (leftComposite->outputCount() == 1 && rightComposite->inputCount() > 1)
+		{
+			connectAsSplit(composite.get(), left, rightComposite);
+		}
+		else
+		{
+			Q_ASSERT(rightComposite->inputCount() == 1);
+			connectAsUnion(composite.get(), leftComposite, right, op);
+		}
 	}
 	else if (leftComposite)
 	{
-		// union
-		Query* unionQuery = nullptr;
-		if (op->op() == OperatorQueryNode::OperatorTypes::Pipe)
-			unionQuery = composite->addQuery(std::unique_ptr<Query>(new UnionOperator()));
-		else if (op->op() == OperatorQueryNode::OperatorTypes::Substract)
-			unionQuery = composite->addQuery(std::unique_ptr<Query>(new SubstractOperator()));
-		else
-			Q_ASSERT(false); // No other case possible
-		connectQueriesWith(composite.get(), leftComposite, unionQuery, right);
+		connectAsUnion(composite.get(), leftComposite, right, op);
 	}
 	else if (rightComposite)
 	{
-		// split
-		for (int i = 0; i < rightComposite->inputCount(); ++i)
-			composite->connectQuery(left, 0, rightComposite, i);
+		connectAsSplit(composite.get(), left, rightComposite);
 	}
 	else
 	{
@@ -137,6 +138,24 @@ void QueryBuilder::connectQueriesWith(CompositeQuery* composite, CompositeQuery*
 		composite->connectQuery(queries, i, connectionQuery, i);
 	if (outputQuery)
 		composite->connectQuery(connectionQuery, outputQuery);
+}
+
+void QueryBuilder::connectAsUnion(CompositeQuery* composite, CompositeQuery* left, Query* right, OperatorQueryNode* op)
+{
+	Query* unionQuery = nullptr;
+	if (op->op() == OperatorQueryNode::OperatorTypes::Pipe)
+		unionQuery = composite->addQuery(std::unique_ptr<Query>(new UnionOperator()));
+	else if (op->op() == OperatorQueryNode::OperatorTypes::Substract)
+		unionQuery = composite->addQuery(std::unique_ptr<Query>(new SubstractOperator()));
+	else
+		Q_ASSERT(false); // No other case possible
+	connectQueriesWith(composite, left, unionQuery, right);
+}
+
+void QueryBuilder::connectAsSplit(CompositeQuery* composite, Query* left, CompositeQuery* right)
+{
+	for (int i = 0; i < right->inputCount(); ++i)
+		composite->connectQuery(left, 0, right, i);
 }
 
 } /* namespace InformationScripting */

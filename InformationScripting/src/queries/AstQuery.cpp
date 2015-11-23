@@ -58,7 +58,7 @@ AstQuery::AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, 
 		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
 		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"},
 		 {ATTRIBUTE_NAME_NAMES, "Attribute to search from", ATTRIBUTE_NAME_NAMES[1]}
-		}, args}, exec_{exec}
+		}, args, true}, exec_{exec}
 {
 	for (const auto& rule : argumentRules)
 		rule.check(arguments_);
@@ -91,8 +91,7 @@ void AstQuery::registerDefaultQueries()
 		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Method");});
 	QueryRegistry::registerAlias("toClass", "toParent", [](QStringList& args) {
 		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Class");});
-	QueryRegistry::registerAlias("filter", "ast", [](QStringList& args) {
-		ArgumentParser::setArgTo(args, ArgumentParser::SCOPE_ARGUMENT_NAMES, "of");});
+	QueryRegistry::registerAlias("filter", "ast", [](QStringList& args) {args << "-input";});
 }
 
 Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
@@ -109,7 +108,7 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
 
 		addBaseEdgesFor(parentClass, namedClass, ts);
 
-		adaptOutputForRelation(ts, "base class", {"baseClass"});
+		adaptOutputForRelation(ts, "baseclass", {"baseClass"});
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 	{
@@ -412,7 +411,7 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classN
 	{
 		NamedProperty baseNode{"baseClass", base};
 		ts.add({baseNode});
-		ts.add({"base class", {{classNode}, {baseNode}}});
+		ts.add({"baseclass", {{classNode}, {baseNode}}});
 		addBaseEdgesFor(base, baseNode, ts);
 	}
 }

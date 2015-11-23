@@ -29,13 +29,18 @@
 
 namespace InformationScripting {
 
-const QStringList ArgumentParser::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+const QStringList ArgumentParser::GLOBAL_SCOPE_ARGUMENT_NAMES{"g", "global"};
+const QStringList ArgumentParser::INPUT_SCOPE_ARGUMENT_NAMES{"i", "input"};
 
 ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
-													  const QStringList& args)
+													  const QStringList& args, bool addScopeArguments)
 	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
-	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
+	if (addScopeArguments)
+	{
+		argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES));
+		argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES));
+	}
 	argParser_->addOptions(options);
 
 	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
@@ -44,9 +49,11 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 	if (!argParser_->parse(args))
 		throw QueryParsingException("Query arguments parsing error: " + argParser_->errorText());
 
-	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
-	if (scope == "g") scope_ = Scope::Global;
-	else if (scope == "of") scope_ = Scope::Input;
+	if (addScopeArguments)
+	{
+		if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Global;
+		else if (argParser_->isSet(INPUT_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Input;
+	}
 }
 
 void ArgumentParser::setArgTo(QStringList& args, const QStringList& argNames, const QString& type)
