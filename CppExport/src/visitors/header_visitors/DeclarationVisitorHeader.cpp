@@ -119,6 +119,8 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 	auto fragment = new CompositeFragment(classs);
 	if (Class::ConstructKind::Class == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
+	else if (Class::ConstructKind::Struct == classs->constructKind())
+		*fragment << printAnnotationsAndModifiers(classs) << "struct " << classs->nameNode();
 	else if (Class::ConstructKind::Interface == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "interface " << classs->nameNode();
 	else if (Class::ConstructKind::Enum == classs->constructKind())
@@ -163,12 +165,33 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 
 	notAllowed(classs->friends());
 
-	//TODO
 	auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
-	*sections << list(classs->enumerators(), ElementVisitorHeader(data()), "enumerators");
-	*sections << list(classs->classes(), this, "declarations");
-	*sections << list(classs->methods(), this, "sections");
-	*sections << list(classs->fields(), this, "vertical");
+
+	// TODO: enums
+
+	auto publicPredicate = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
+	auto publicSection = new CompositeFragment(classs, "sections");
+	bool hasPublicSection = false;
+	*publicSection << listWhere(classs->fields(), this,  publicPredicate, "vertical", &hasPublicSection);
+	*publicSection << listWhere(classs->classes(), this, publicPredicate, "declarations", &hasPublicSection);
+	*publicSection << listWhere(classs->methods(), this, publicPredicate, "sections", &hasPublicSection);
+	if (hasPublicSection)
+	{
+		*sections << "public:";
+		sections->append(publicSection);
+	}
+
+	auto privatePredicate = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public); };
+	auto privateSection = new CompositeFragment(classs, "sections");
+	bool hasPrivateSection = false;
+	*privateSection << listWhere(classs->fields(), this,  privatePredicate, "vertical", &hasPrivateSection);
+	*privateSection << listWhere(classs->classes(), this, privatePredicate, "declarations", &hasPrivateSection);
+	*privateSection << listWhere(classs->methods(), this, privatePredicate, "sections", &hasPrivateSection);
+	if (hasPrivateSection)
+	{
+		*sections << "private:";
+		sections->append(privateSection);
+	}
 
 	return fragment;
 }
@@ -202,10 +225,10 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 		*fragment << list(method->throws(), ExpressionVisitorHeader(data()), "comma");
 	}
 
-	*fragment << list(method->items(), StatementVisitorHeader(data()), "body");
-
 	notAllowed(method->subDeclarations());
 	notAllowed(method->memberInitializers());
+
+	*fragment << ";";
 
 	return fragment;
 }
