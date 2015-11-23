@@ -6,7 +6,7 @@ def findMethod(profileName):
     # This assumes no nested classes/namespaces, i.e. the format is should be:
     # ClassName.methodName(...)
     nameWithoutBracket = profileName.split('(')[0]
-    astTuples = Query.ast(['-s=g', '-t=Method', '-n={}'.format(nameWithoutBracket)], [])[0]
+    astTuples = Query.methods(['-global', '-n={}'.format(nameWithoutBracket)], [])[0]
     # Assume we only have one matching, return the first (set doesn't support indexing thus the loop workaround):
     for astTuple in astTuples.tuples("ast"):
         return astTuple.ast
