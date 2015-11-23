@@ -108,7 +108,7 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
 
 		addBaseEdgesFor(parentClass, namedClass, ts);
 
-		adaptOutputForRelation(ts, "base class", {"baseClass"});
+		adaptOutputForRelation(ts, "baseclass", {"baseClass"});
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 	{
@@ -411,7 +411,7 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classN
 	{
 		NamedProperty baseNode{"baseClass", base};
 		ts.add({baseNode});
-		ts.add({"base class", {{classNode}, {baseNode}}});
+		ts.add({"baseclass", {{classNode}, {baseNode}}});
 		addBaseEdgesFor(base, baseNode, ts);
 	}
 }
