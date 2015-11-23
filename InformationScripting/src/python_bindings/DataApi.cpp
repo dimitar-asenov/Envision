@@ -29,6 +29,10 @@
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
 
+#include "AstModification.h"
+#include "OOModel/src/expressions/Expression.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
+
 #include "ModelBase/src/nodes/Node.h"
 
 namespace InformationScripting {
@@ -110,6 +114,12 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.def("take", take1)
 				.def("takeAll", &TupleSet::takeAll)
 				.def("unite", &TupleSet::unite);
+
+		class_<AstModification>("AstModification")
+				.def("buildExpression", &AstModification::buildExpression, return_internal_reference<>())
+				.staticmethod("buildExpression")
+				.def("wrapInStatement", &AstModification::wrapInStatement, return_internal_reference<>())
+				.staticmethod("wrapInStatement");
 }
 
 } /* namespace InformationScripting */
