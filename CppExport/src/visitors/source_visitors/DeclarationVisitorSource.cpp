@@ -94,7 +94,7 @@ SourceDir* DeclarationVisitorSource::visitModule(Module* module, SourceDir* pare
 SourceFile* DeclarationVisitorSource::visitTopLevelClass(Class* classs, SourceDir* parent)
 {
 	Q_ASSERT(parent);
-	auto classFile = &parent->file(classs->name() + ".h");
+	auto classFile = &parent->file(classs->name() + ".cpp");
 
 	auto fragment = classFile->append(new CompositeFragment(classs, "sections"));
 
