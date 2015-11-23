@@ -26,6 +26,7 @@
 
 #include "CppExporter.h"
 #include "../visitors/header_visitors/DeclarationVisitorHeader.h"
+#include "../visitors/source_visitors/DeclarationVisitorSource.h"
 
 #include "OOModel/src/declarations/Project.h"
 
@@ -39,9 +40,6 @@ QList<ExportError> CppExporter::exportTree(Model::TreeManager* manager, const QS
 {
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
-
-	DeclarationVisitorHeader visitor;
-	auto dir = std::unique_ptr<Export::SourceDir>( visitor.visitProject(project) );
 
 	auto layouter = Export::FragmentLayouter{"\t"};
 	layouter.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
@@ -60,8 +58,15 @@ QList<ExportError> CppExporter::exportTree(Model::TreeManager* manager, const QS
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
 
-	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+	DeclarationVisitorHeader visitor;
+	auto dir = std::unique_ptr<Export::SourceDir>( visitor.visitProject(project) );
+	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Headers", dir.get(), &layouter);
 	exportMaps().insert(project, map);
+
+	DeclarationVisitorSource visitor2;
+	auto dir2 = std::unique_ptr<Export::SourceDir>( visitor2.visitProject(project) );
+	auto map2 = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Sources", dir2.get(), &layouter);
+	exportMaps().insert(project, map2);
 
 	return visitor.errors();
 }
