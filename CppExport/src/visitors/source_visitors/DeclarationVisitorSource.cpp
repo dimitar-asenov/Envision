@@ -59,13 +59,9 @@ SourceDir* DeclarationVisitorSource::visitProject(Project* project, SourceDir* p
 {
 	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, "src");
 
-	if (parent) packageStack().append(project->name());
-
 	for (auto node : *project->projects()) visitProject(node, projectDir);
 	for (auto node : *project->modules()) visitModule(node, projectDir);
 	for (auto node : *project->classes()) visitTopLevelClass(node, projectDir);
-
-	if (parent) packageStack().removeLast();
 
 	notAllowed(project->methods());
 	notAllowed(project->fields());
@@ -78,12 +74,8 @@ SourceDir* DeclarationVisitorSource::visitModule(Module* module, SourceDir* pare
 	Q_ASSERT(parent);
 	auto moduleDir = &parent->subDir(module->name());
 
-	packageStack().append(module->name());
-
 	for (auto node : *module->modules()) visitModule(node, moduleDir);
 	for (auto node : *module->classes()) visitTopLevelClass(node, moduleDir);
-
-	packageStack().removeLast();
 
 	notAllowed(module->methods());
 	notAllowed(module->fields());
@@ -97,10 +89,6 @@ SourceFile* DeclarationVisitorSource::visitTopLevelClass(Class* classs, SourceDi
 	auto classFile = &parent->file(classs->name() + ".cpp");
 
 	auto fragment = classFile->append(new CompositeFragment(classs, "sections"));
-
-	auto header = fragment->append(new CompositeFragment(classs));
-	if (!packageStack().isEmpty())
-		*header << "package " << packagesSoFar() << ";";
 
 	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
 	for (auto node : *classs->subDeclarations())

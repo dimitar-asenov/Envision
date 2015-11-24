@@ -37,7 +37,6 @@ namespace CppExport {
 struct VisitorData
 {
 		QList<ExportError> errors_;
-		QStringList packageStack_;
 };
 
 class Visitor
@@ -50,9 +49,6 @@ class Visitor
 
 	protected:
 		std::shared_ptr<VisitorData> data();
-
-		QStringList& packageStack();
-		QString packagesSoFar() const;
 
 		void required(Model::Node* parent, Model::Node* node, const QString& childName);
 		void notAllowed(Model::Node* node);
@@ -88,9 +84,7 @@ class Visitor
 
 inline std::shared_ptr<VisitorData> Visitor::data() { return data_; }
 
-inline QStringList& Visitor::packageStack() { return data_->packageStack_; }
 inline QList<ExportError> Visitor::errors() const { return data_->errors_; }
-inline QString Visitor::packagesSoFar() const { return data_->packageStack_.join("."); }
 
 inline void Visitor::error(const QString& errorMessage) { data_->errors_.append(ExportError(errorMessage)); }
 inline void Visitor::error(Model::Node* node, const QString& errorMessage)
