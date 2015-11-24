@@ -88,7 +88,7 @@ class INTERACTIONBASE_API PromptMode
 		/**
 		 * Call this method from derived classes in order to display a list of errors messages under the prompt.
 		 */
-		void showErrors(QList<QString> errorMessages) const;
+		void showErrors(QList<QString> errorMessages, Qt::TextFormat format = Qt::PlainText) const;
 };
 
 }

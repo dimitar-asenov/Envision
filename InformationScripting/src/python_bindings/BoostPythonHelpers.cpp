@@ -148,8 +148,8 @@ QString BoostPythonHelpers::parsePythonException()
 	{
 		python::handle<> valuePtrHandle(valuePtr);
 		python::extract<QString> valuePtrString(python::str{valuePtrHandle});
-		if (valuePtrString.check()) errorMessage += ": " + valuePtrString();
-		else errorMessage += ": Unparseable Python error: ";
+		if (valuePtrString.check()) errorMessage += ":<br>" + valuePtrString();
+		else errorMessage += ":<br>Unparseable Python error: ";
 	}
 	// Parse lines from the traceback using the Python traceback module
 	if (tracebackPtr != nullptr)
@@ -160,11 +160,11 @@ QString BoostPythonHelpers::parsePythonException()
 		python::object formatTraceback(tb.attr("format_tb"));
 		// Call the format_tb function to get the traceback strings.
 		python::object tracebakList(formatTraceback(tracebackPtrHandle));
-		python::object tracebackString(python::str("\n").join(tracebakList));
+		python::object tracebackString(python::str("<br>").join(tracebakList));
 
 		python::extract<QString> tracebackErrorString(tracebackString);
-		if (tracebackErrorString.check()) errorMessage += ": " + tracebackErrorString();
-		else errorMessage += ": Unparseable Python traceback";
+		if (tracebackErrorString.check()) errorMessage += ":<br>" + tracebackErrorString();
+		else errorMessage += ":<br>Unparseable Python traceback";
 	}
 	return errorMessage;
 }
