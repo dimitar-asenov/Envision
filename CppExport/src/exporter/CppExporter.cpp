@@ -34,6 +34,9 @@
 #include "Export/src/writer/FragmentLayouter.h"
 #include "ModelBase/src/model/TreeManager.h"
 
+#include "CodeUnit.h"
+#include "CodeComposite.h"
+
 namespace CppExport {
 
 QList<ExportError> CppExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
@@ -41,34 +44,88 @@ QList<ExportError> CppExporter::exportTree(Model::TreeManager* manager, const QS
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
 
-	auto layouter = Export::FragmentLayouter{"\t"};
-	layouter.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
-	layouter.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
-	layouter.addRule("sections", Export::FragmentLayouter::NoIndentation, "", "\n\n", "");
-	layouter.addRule("bodySections", Export::FragmentLayouter::NewLineBefore
-						  | Export::FragmentLayouter::IndentChildFragments | Export::FragmentLayouter::NewLineAfterPrefix
-						  | Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n\n", "}");
-	layouter.addRule("space", Export::FragmentLayouter::SpaceAtEnd, "", " ", "");
-	layouter.addRule("comma", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
-	layouter.addRule("initializerList", Export::FragmentLayouter::SpaceAfterSeparator, "{", ",", "}");
-	layouter.addRule("argsList", Export::FragmentLayouter::SpaceAfterSeparator, "(", ",", ")");
-	layouter.addRule("typeArgsList", Export::FragmentLayouter::SpaceAfterSeparator, "<", ",", ">");
+	auto codeComposite = new CodeComposite("Composite");
+	for (auto i = 0; i < project->classes()->size(); i++)
+	{
+		auto c = project->classes()->at(i);
+		//if (c->name() == "HelloWorld" || c->name() == "Generic")
+		{
+			auto unit = new CodeUnit(c->name(), c);
+			codeComposite->addUnit(unit);
+		}
+	}
 
-	layouter.addRule("body", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
-							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
-							"{", "\n", "}");
+	exportCodeComposite(codeComposite);
+
+	return {};
+
+	auto layout = layouter();
 
 	DeclarationVisitorHeader visitor;
 	auto dir = std::unique_ptr<Export::SourceDir>( visitor.visitProject(project) );
-	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Headers", dir.get(), &layouter);
+	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Headers", dir.get(), &layout);
 	exportMaps().insert(project, map);
 
 	DeclarationVisitorSource visitor2;
 	auto dir2 = std::unique_ptr<Export::SourceDir>( visitor2.visitProject(project) );
-	auto map2 = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Sources", dir2.get(), &layouter);
+	auto map2 = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Sources", dir2.get(), &layout);
 	exportMaps().insert(project, map2);
 
 	return visitor.errors();
+}
+
+void CppExporter::exportFragment(Export::SourceFragment* fragment)
+{
+	auto dir = new Export::SourceDir(nullptr, "src");
+	auto file = &dir->file("exported.h");
+	file->append(fragment);
+	auto layout = layouter();
+	Export::Exporter::exportToFileSystem("", dir, &layout);
+}
+
+void CppExporter::calculateSourceFragments(CodeComposite* codeComposite)
+{
+	DeclarationVisitorHeader visitor;
+	for (auto unit : codeComposite->units())
+		if (auto classs = DCast<OOModel::Class>(unit->node()))
+			unit->setSourceFragment(visitor.visitTopLevelClass(classs));
+		else
+			Q_ASSERT(false);
+}
+
+void CppExporter::exportCodeComposite(CodeComposite* codeComposite)
+{
+	calculateSourceFragments(codeComposite);
+
+	auto composite = new Export::CompositeFragment(new Model::Integer());
+	for (auto unit : codeComposite->units())
+		composite->append(unit->sourceFragment());
+
+	exportFragment(composite);
+}
+
+Export::FragmentLayouter CppExporter::layouter()
+{
+	auto result = Export::FragmentLayouter{"\t"};
+	result.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
+	result.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
+	result.addRule("sections", Export::FragmentLayouter::NoIndentation, "", "\n", "");
+	result.addRule("accessorSections", Export::FragmentLayouter::IndentChildFragments, "", "\n", "");
+	result.addRule("bodySections", Export::FragmentLayouter::NewLineBefore
+						  | Export::FragmentLayouter::IndentChildFragments | Export::FragmentLayouter::NewLineAfterPrefix
+						  | Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n", "}");
+	result.addRule("space", Export::FragmentLayouter::SpaceAtEnd, "", " ", "");
+	result.addRule("comma", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
+	result.addRule("baseClasses", Export::FragmentLayouter::SpaceAfterSeparator, "public: ", ",", "");
+	result.addRule("initializerList", Export::FragmentLayouter::SpaceAfterSeparator, "{", ",", "}");
+	result.addRule("argsList", Export::FragmentLayouter::SpaceAfterSeparator, "(", ",", ")");
+	result.addRule("typeArgsList", Export::FragmentLayouter::SpaceAfterSeparator, "<", ",", ">");
+
+	result.addRule("body", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
+							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
+							"{", "\n", "}");
+
+	return result;
 }
 
 Export::ExportMapContainer& CppExporter::exportMaps()

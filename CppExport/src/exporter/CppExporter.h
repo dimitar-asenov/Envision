@@ -38,13 +38,26 @@ namespace Model {
 	class TreeManager;
 }
 
+namespace Export {
+	class FragmentLayouter;
+}
+
 namespace CppExport {
+
+class CodeUnit;
+class CodeComposite;
 
 class CPPEXPORT_API CppExporter {
 	public:
 		static QList<ExportError> exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
-
 		static Export::ExportMapContainer& exportMaps();
+
+		static void calculateSourceFragments(CodeComposite* codeComposite);
+
+	private:
+		static Export::FragmentLayouter layouter();
+		static void exportFragment(Export::SourceFragment* fragment);
+		static void exportCodeComposite(CodeComposite* codeComposite);
 };
 
 }
