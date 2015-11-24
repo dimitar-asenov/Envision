@@ -40,9 +40,11 @@
 
 namespace CppExport {
 
-QList<ExportError> CppExporter::exportTree(Model::TreeManager* treeManager, const QString& pathToProjectContainerDirectory)
+QList<ExportError> CppExporter::exportTree(Model::TreeManager* treeManager,
+														 const QString& pathToProjectContainerDirectory)
 {
-	auto codeUnits = units(treeManager);
+	QList<CodeUnit*> codeUnits;
+	units(treeManager->root(), "", codeUnits);
 	auto codeComposites = mergeUnits(codeUnits);
 
 	calculateSourceFragments(codeComposites);
@@ -54,13 +56,6 @@ QList<ExportError> CppExporter::exportTree(Model::TreeManager* treeManager, cons
 	Export::Exporter::exportToFileSystem("", directory, &layout);
 
 	return {};
-}
-
-QList<CodeUnit*> CppExporter::units(Model::TreeManager* treeManager)
-{
-	QList<CodeUnit*> result;
-	units(treeManager->root(), "", result);
-	return result;
 }
 
 void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
