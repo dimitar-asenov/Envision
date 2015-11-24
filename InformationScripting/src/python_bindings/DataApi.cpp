@@ -89,7 +89,7 @@ BOOST_PYTHON_MODULE(DataApi) {
 								  make_setter(&NamedProperty::first))
 				.add_property("value", &value);
 
-		class_<Tuple>("Tuple", init<>())
+		class_<Tuple>("Tuple", no_init)
 				.def("__init__", make_constructor(makeTuple))
 				.def("tupleTag", &Tuple::tag)
 				.def("add", &Tuple::add)
