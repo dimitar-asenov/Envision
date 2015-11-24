@@ -1,8 +1,6 @@
 # filterCasts
 
-casts = Query.ast(["-t=CastExpression"] + Query.args, [])
-castTypeAttributes = Query.attribute(["-at=castType", "-s=of"], casts)
-classUses = Query.uses(["-s=of", "-t=Class"], castTypeAttributes)
+classUses = Query.executeQuery('ast -t=CastExpression|attribute -at=castType -input|uses -input -t=Class', [])
 
 def hasTypeIdMethod( cl ):
     for method in cl.methods:
