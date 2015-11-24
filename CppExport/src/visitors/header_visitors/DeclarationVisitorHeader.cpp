@@ -59,13 +59,9 @@ SourceDir* DeclarationVisitorHeader::visitProject(Project* project, SourceDir* p
 {
 	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, "src");
 
-	if (parent) packageStack().append(project->name());
-
 	for (auto node : *project->projects()) visitProject(node, projectDir);
 	for (auto node : *project->modules()) visitModule(node, projectDir);
 	for (auto node : *project->classes()) visitTopLevelClass(node, projectDir);
-
-	if (parent) packageStack().removeLast();
 
 	notAllowed(project->methods());
 	notAllowed(project->fields());
@@ -78,12 +74,8 @@ SourceDir* DeclarationVisitorHeader::visitModule(Module* module, SourceDir* pare
 	Q_ASSERT(parent);
 	auto moduleDir = &parent->subDir(module->name());
 
-	packageStack().append(module->name());
-
 	for (auto node : *module->modules()) visitModule(node, moduleDir);
 	for (auto node : *module->classes()) visitTopLevelClass(node, moduleDir);
-
-	packageStack().removeLast();
 
 	notAllowed(module->methods());
 	notAllowed(module->fields());
@@ -96,11 +88,7 @@ SourceFile* DeclarationVisitorHeader::visitTopLevelClass(Class* classs, SourceDi
 	Q_ASSERT(parent);
 	auto classFile = &parent->file(classs->name() + ".h");
 
-	auto fragment = classFile->append(new CompositeFragment(classs, "sections"));
-
-	auto header = fragment->append(new CompositeFragment(classs));
-	if (!packageStack().isEmpty())
-		*header << "package " << packagesSoFar() << ";";
+	CompositeFragment* fragment = classFile->append(new CompositeFragment(classs, "sections"));
 
 	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
 	for (auto node : *classs->subDeclarations())
@@ -111,7 +99,40 @@ SourceFile* DeclarationVisitorHeader::visitTopLevelClass(Class* classs, SourceDi
 
 	*fragment << visit(classs);
 
+	QSet<Model::Node*> nodes;
+	allNodes(fragment, nodes);
+	for (auto n : nodes)
+		if (auto ref = DCast<ReferenceExpression>(n))
+			*fragment << "Reference: " + ref->name();
+		else if (n->definesSymbol())
+			*fragment << "Name: " + n->symbolName();
+
 	return classFile;
+}
+
+SourceFragment* DeclarationVisitorHeader::visitTopLevelClass(Class* classs)
+{
+	CompositeFragment* fragment = new CompositeFragment(classs, "sections");
+
+	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
+	for (auto node : *classs->subDeclarations())
+	{
+		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
+		else notAllowed(node);
+	}
+
+	*fragment << visit(classs);
+
+	return fragment;
+}
+
+void DeclarationVisitorHeader::allNodes(SourceFragment* f, QSet<Model::Node*>& nodes)
+{
+	if (f->node()) nodes.insert(f->node());
+
+	if (CompositeFragment* cf = dynamic_cast<CompositeFragment*>(f))
+		for (auto child : cf->fragments())
+			allNodes(child, nodes);
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
@@ -121,12 +142,8 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 		*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
 	else if (Class::ConstructKind::Struct == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "struct " << classs->nameNode();
-	else if (Class::ConstructKind::Interface == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "interface " << classs->nameNode();
 	else if (Class::ConstructKind::Enum == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "enum " << classs->nameNode();
-	else if (Class::ConstructKind::Annotation == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "@interface " << classs->nameNode();
 	else
 		notAllowed(classs);
 
@@ -134,43 +151,17 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
 
 	if (!classs->baseClasses()->isEmpty())
-	{
-		if (Class::ConstructKind::Interface == classs->constructKind() ||
-			 Class::ConstructKind::Annotation == classs->constructKind())
-		{
-			*fragment << " extends ";
-			*fragment << list(classs->baseClasses(), ExpressionVisitorHeader(data()), "comma");
-		}
-		else if (Class::ConstructKind::Enum == classs->constructKind())
-		{
-			*fragment << " implements ";
-			*fragment << list(classs->baseClasses(), ExpressionVisitorHeader(data()), "comma");
-		}
-		else
-		{
-			// TODO: there might not be an extend and only implements.
-			*fragment << " extends ";
-			*fragment << expression(classs->baseClasses()->at(0));
-
-			if (classs->baseClasses()->size() > 1)
-			{
-				*fragment << " implements ";
-				int i = 1;
-				for (; i < classs->baseClasses()->size() - 1; ++i)
-					*fragment << expression(classs->baseClasses()->at(i)) << ", ";
-				*fragment << expression(classs->baseClasses()->at(i));
-			}
-		}
-	}
+		*fragment << list(classs->baseClasses(), ExpressionVisitorHeader(data()), "baseClasses");
 
 	notAllowed(classs->friends());
 
 	auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
 
-	// TODO: enums
+	if (classs->enumerators()->size() > 0)
+		error(classs->enumerators(), "Enum unhandled"); // TODO
 
 	auto publicPredicate = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
-	auto publicSection = new CompositeFragment(classs, "sections");
+	auto publicSection = new CompositeFragment(classs, "accessorSections");
 	bool hasPublicSection = false;
 	*publicSection << listWhere(classs->fields(), this,  publicPredicate, "vertical", &hasPublicSection);
 	*publicSection << listWhere(classs->classes(), this, publicPredicate, "declarations", &hasPublicSection);
@@ -182,13 +173,15 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 	}
 
 	auto privatePredicate = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public); };
-	auto privateSection = new CompositeFragment(classs, "sections");
+	auto privateSection = new CompositeFragment(classs, "accessorSections");
 	bool hasPrivateSection = false;
 	*privateSection << listWhere(classs->fields(), this,  privatePredicate, "vertical", &hasPrivateSection);
 	*privateSection << listWhere(classs->classes(), this, privatePredicate, "declarations", &hasPrivateSection);
 	*privateSection << listWhere(classs->methods(), this, privatePredicate, "sections", &hasPrivateSection);
 	if (hasPrivateSection)
 	{
+		if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+
 		*sections << "private:";
 		sections->append(privateSection);
 	}
@@ -202,15 +195,20 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 	*fragment << printAnnotationsAndModifiers(method);
 
 	if (method->results()->size() > 1)
-		error(method->results(), "Cannot have more than one return value in Cpp");
-
-	if (!method->results()->isEmpty())
-		*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
-	else if (method->methodKind() != Method::MethodKind::Constructor)
-		*fragment << "void ";
+		error(method->results(), "Cannot have more than one return value in C++");
 
 	if (method->methodKind() == Method::MethodKind::Destructor)
-		error(method, "Can not have a method of type Destructor in Cpp");
+	{
+		if (!method->name().startsWith("~"))
+			*fragment << "~";
+	}
+	else if (method->methodKind() != Method::MethodKind::Constructor)
+	{
+		if (!method->results()->isEmpty())
+			*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
+		else
+			*fragment << "void ";
+	}
 
 	*fragment << method->nameNode();
 
@@ -221,8 +219,9 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 
 	if (!method->throws()->isEmpty())
 	{
-		*fragment << " throws ";
+		*fragment << " throw (";
 		*fragment << list(method->throws(), ExpressionVisitorHeader(data()), "comma");
+		*fragment << ")";
 	}
 
 	notAllowed(method->subDeclarations());
@@ -247,16 +246,8 @@ SourceFragment* DeclarationVisitorHeader::visit(VariableDeclaration* vd)
 
 SourceFragment* DeclarationVisitorHeader::visit(NameImport* nameImport)
 {
-	auto fragment = new CompositeFragment(nameImport);
-	*fragment << printAnnotationsAndModifiers(nameImport);
-
-	notAllowed(nameImport->annotations());
-
-	*fragment << "import " << expression(nameImport->importedName());
-	if (nameImport->importAll()) *fragment << ".*";
-	*fragment << ";";
-
-	return fragment;
+	error(nameImport, "NameImport unhandled"); // TODO
+	return new TextFragment(nameImport);
 }
 
 SourceFragment* DeclarationVisitorHeader::printAnnotationsAndModifiers(Declaration* declaration)
@@ -265,13 +256,6 @@ SourceFragment* DeclarationVisitorHeader::printAnnotationsAndModifiers(Declarati
 	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
 		*fragment << list(declaration->annotations(), StatementVisitorHeader(data()), "vertical");
 	auto header = fragment->append(new CompositeFragment(declaration, "space"));
-
-	if (declaration->modifiers()->isSet(Modifier::Public))
-		*header << new TextFragment(declaration->modifiers(), "public");
-	if (declaration->modifiers()->isSet(Modifier::Private))
-		*header << new TextFragment(declaration->modifiers(), "private");
-	if (declaration->modifiers()->isSet(Modifier::Protected))
-		*header << new TextFragment(declaration->modifiers(), "protected");
 
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment(declaration->modifiers(), "static");
@@ -282,24 +266,24 @@ SourceFragment* DeclarationVisitorHeader::printAnnotationsAndModifiers(Declarati
 		*header << new TextFragment(declaration->modifiers(), "abstract");
 
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
-		error(declaration->modifiers(), "Virtual modifier is invalid in Cpp");
+		*header << new TextFragment(declaration->modifiers(), "virtual");
 	if (declaration->modifiers()->isSet(Modifier::Override))
-		error(declaration->modifiers(), "Override modifier is invalid in Cpp");
+		*header << new TextFragment(declaration->modifiers(), "override");
 	if (declaration->modifiers()->isSet(Modifier::Inline))
-		error(declaration->modifiers(), "Inline modifier is invalid in Cpp");
+		*header << new TextFragment(declaration->modifiers(), "inline");
 
 	return fragment;
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(ExplicitTemplateInstantiation* eti)
 {
-	notAllowed(eti);
+	error(eti, "ExplicitTemplateInstantiation unhandled"); // TODO
 	return new TextFragment(eti);
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(TypeAlias* ta)
 {
-	notAllowed(ta);
+	error(ta, "TypeAlias unhandled"); // TODO
 	return new TextFragment(ta);
 }
 
