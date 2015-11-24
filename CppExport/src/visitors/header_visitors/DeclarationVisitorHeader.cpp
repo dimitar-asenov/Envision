@@ -160,24 +160,19 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 	if (classs->enumerators()->size() > 0)
 		error(classs->enumerators(), "Enum unhandled"); // TODO
 
-	auto publicPredicate = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
 	auto publicSection = new CompositeFragment(classs, "accessorSections");
-	bool hasPublicSection = false;
-	*publicSection << listWhere(classs->fields(), this,  publicPredicate, "vertical", &hasPublicSection);
-	*publicSection << listWhere(classs->classes(), this, publicPredicate, "declarations", &hasPublicSection);
-	*publicSection << listWhere(classs->methods(), this, publicPredicate, "sections", &hasPublicSection);
+	auto publicFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
+	bool hasPublicSection = addFieldsClassesMethods(classs, publicSection, publicFilter);
 	if (hasPublicSection)
 	{
 		*sections << "public:";
 		sections->append(publicSection);
 	}
 
-	auto privatePredicate = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public); };
 	auto privateSection = new CompositeFragment(classs, "accessorSections");
-	bool hasPrivateSection = false;
-	*privateSection << listWhere(classs->fields(), this,  privatePredicate, "vertical", &hasPrivateSection);
-	*privateSection << listWhere(classs->classes(), this, privatePredicate, "declarations", &hasPrivateSection);
-	*privateSection << listWhere(classs->methods(), this, privatePredicate, "sections", &hasPrivateSection);
+	auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
+																				  !declaration->modifiers()->isSet(Modifier::Protected); };
+	bool hasPrivateSection = addFieldsClassesMethods(classs, privateSection, privateFilter);
 	if (hasPrivateSection)
 	{
 		if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
@@ -187,6 +182,17 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 	}
 
 	return fragment;
+}
+
+template<typename Predicate>
+bool DeclarationVisitorHeader::addFieldsClassesMethods(Class* classs, CompositeFragment* section, Predicate filter)
+{
+	auto fields = list(classs->fields(), this, "vertical", filter);
+	auto classes = list(classs->classes(), this, "declarations", filter);
+	auto methods = list(classs->methods(), this, "sections", filter);
+
+	*section << fields << classes << methods;
+	return !fields->fragments().empty() || !classes->fragments().empty() || !methods->fragments().empty();
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(Method* method)

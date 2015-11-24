@@ -57,21 +57,12 @@ class Visitor
 		void error(const QString& errorMessage);
 		void error(Model::Node* node, const QString& errorMessage);
 
-		template<class ListElement, class VisitorClass>
-		Export::SourceFragment* list(Model::TypedList<ListElement>* list, VisitorClass* v,
-											  const QString& fragmentType = QString());
-		template<class ListElement, class VisitorClass>
-		Export::SourceFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
-											  const QString& fragmentType = QString());
-
-		template<class ListElement, class VisitorClass, typename Predicate>
-		Export::SourceFragment* listWhere(Model::TypedList<ListElement>* list, VisitorClass* v,
-											  Predicate predicate, const QString& fragmentType = QString(),
-												bool* found = nullptr);
-		template<class ListElement, class VisitorClass, typename Predicate>
-		Export::SourceFragment* listWhere(Model::TypedList<ListElement>* list, VisitorClass&& v,
-											  Predicate predicate, const QString& fragmentType = QString(),
-												bool* found = nullptr);
+		template<class ListElement, class VisitorClass, typename Predicate = std::function<bool(ListElement*)>>
+		Export::CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass* v,
+												  const QString& fragmentType = QString(), Predicate filter = nullptr);
+		template<class ListElement, class VisitorClass, typename Predicate = std::function<bool(ListElement*)>>
+		Export::CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
+												  const QString& fragmentType = QString(), Predicate filter = nullptr);
 
 		template <class NodeType> Export::SourceFragment* declaration(NodeType* node);
 		template <class NodeType> Export::SourceFragment* statement(NodeType* node);
@@ -90,42 +81,22 @@ inline void Visitor::error(const QString& errorMessage) { data_->errors_.append(
 inline void Visitor::error(Model::Node* node, const QString& errorMessage)
 { data_->errors_.append(ExportError(node, errorMessage)); }
 
-template<class ListElement, class VisitorClass>
-Export::SourceFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass* v, const QString& fragmentType)
-{
-	auto fragment = new Export::CompositeFragment(list, fragmentType);
-	for (auto node : *list) *fragment << v->visit(node);
-	return fragment;
-}
-
-template<class ListElement, class VisitorClass>
-inline Export::SourceFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass&& v,
-												  const QString& fragmentType)
-{
-	return Visitor::list(list, &v, fragmentType);
-}
-
 template<class ListElement, class VisitorClass, typename Predicate>
-Export::SourceFragment* Visitor::listWhere(Model::TypedList<ListElement>* list, VisitorClass* v,
-												  Predicate predicate, const QString& fragmentType,
-														 bool* found)
+Export::CompositeFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass* v,
+													  const QString& fragmentType, Predicate filter)
 {
 	auto fragment = new Export::CompositeFragment(list, fragmentType);
 	for (auto node : *list)
-		if (predicate(node))
-		{
+		if (!filter || filter(node))
 			*fragment << v->visit(node);
-			if (found) *found = true;
-		}
 	return fragment;
 }
 
 template<class ListElement, class VisitorClass, typename Predicate>
-inline Export::SourceFragment* Visitor::listWhere(Model::TypedList<ListElement>* list, VisitorClass&& v,
-															Predicate predicate, const QString& fragmentType,
-																  bool* found)
+inline Export::CompositeFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass&& v,
+															const QString& fragmentType, Predicate filter)
 {
-	return Visitor::list(list, &v, predicate, fragmentType, found);
+	return Visitor::list(list, &v, fragmentType, filter);
 }
 
 }
