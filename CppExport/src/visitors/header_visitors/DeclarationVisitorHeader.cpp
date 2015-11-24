@@ -169,13 +169,24 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 		sections->append(publicSection);
 	}
 
+	auto protectedSection = new CompositeFragment(classs, "accessorSections");
+	auto protectedFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Protected); };
+	bool hasProtectedSection = addFieldsClassesMethods(classs, protectedSection, protectedFilter);
+	if (hasProtectedSection)
+	{
+		if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+
+		*sections << "protected:";
+		sections->append(protectedSection);
+	}
+
 	auto privateSection = new CompositeFragment(classs, "accessorSections");
 	auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
 																				  !declaration->modifiers()->isSet(Modifier::Protected); };
 	bool hasPrivateSection = addFieldsClassesMethods(classs, privateSection, privateFilter);
 	if (hasPrivateSection)
 	{
-		if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+		if (hasPublicSection || hasProtectedSection) *sections << "\n"; // add newline between two accessor sections
 
 		*sections << "private:";
 		sections->append(privateSection);
