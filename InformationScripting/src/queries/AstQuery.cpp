@@ -108,7 +108,8 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
 
 		addBaseEdgesFor(parentClass, namedClass, ts);
 
-		adaptOutputForRelation(ts, "baseclass", {"baseClass"});
+		if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+			outputAsAST(ts, "baseclass", {"baseClass"});
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 	{
@@ -143,7 +144,9 @@ Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 		auto parentNode = astNode->firstAncestorOfType(matcher);
 		ts.add({"parentOfType", {{"childNode", astNode}, {"parentNode", parentNode}}});
 	}
-	adaptOutputForRelation(ts, "parentOfType", {"parentNode"});
+	// Per default we want to parent to output nodes.
+	if (!arguments_.isArgumentSet(ADD_AS_NAMES[1]) || arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+		outputAsAST(ts, "parentOfType", {"parentNode"});
 	return ts;
 }
 
@@ -191,7 +194,8 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 		if (methodsInInput.size() == 0) return {result, "Called callgraph without methods in input"};
 		else addCallgraphFor(std::move(methodsInInput));
 	}
-	adaptOutputForRelation(result, "calls", {"caller", "callee"});
+	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+		outputAsAST(result, "calls", {"caller", "callee"});
 	return result;
 }
 
@@ -304,7 +308,8 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 		for (auto node : it.value())
 			result.add({"uses", {{"user", it.key()}, {"used", node}}});
 
-	adaptOutputForRelation(result, "uses", {"user"});
+	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+		outputAsAST(result, "uses", {"user"});
 
 	return result;
 }
@@ -451,19 +456,16 @@ void AstQuery::addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from
 		ts.add({{"ast", node}});
 }
 
-void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName,
+void AstQuery::outputAsAST(TupleSet& tupleSet, const QString& relationName,
 												  const QStringList& keepProperties)
 {
-	if (arguments_.argument(ADD_AS_NAMES[0]) != "relation")
-	{
-		// remove all ast properties first
-		tupleSet.take("ast");
-		// add the tuples from the relation
-		auto tuples = tupleSet.take(relationName);
-		for (auto tuple : tuples)
-			for (const auto& keepProperty : keepProperties)
-				tupleSet.add({{"ast", tuple[keepProperty]}});
-	}
+	// remove all ast properties first
+	tupleSet.take("ast");
+	// add the tuples from the relation
+	auto tuples = tupleSet.take(relationName);
+	for (auto tuple : tuples)
+		for (const auto& keepProperty : keepProperties)
+			tupleSet.add({{"ast", tuple[keepProperty]}});
 }
 
 bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,

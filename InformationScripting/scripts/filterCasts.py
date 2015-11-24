@@ -13,4 +13,4 @@ for tuple in classUses[0].tuples("uses"):
         values = [("ast", tuple.user)]
         Query.result.add(Tuple(values))
 
-Query.result = Query.toParent(["-t=CastExpression", "-addAs=node"], [Query.result])[0]
+Query.result = Query.toParent(["-t=CastExpression"], [Query.result])[0]
