@@ -24,11 +24,60 @@
  **
  **********************************************************************************************************************/
 
-#include "CodeUnit.h"
+#pragma once
+
+#include "cppexport_api.h"
+
+#include "dependency_analysis/DependencyTarget.h"
+
+namespace OOModel {
+	class ReferenceExpression;
+}
+
+namespace Export {
+	class SourceFragment;
+}
 
 namespace CppExport {
 
-CodeUnit::CodeUnit(QString name, Model::Node* node)
-	: name_(name), node_(node), headerPart_(this), sourcePart_(this) {}
+class CodeUnit;
+struct DependencyTarget;
+
+class CPPEXPORT_API CodeUnitPart
+{
+	public:
+		CodeUnitPart(CodeUnit* parent);
+
+		CodeUnit* parent() const;
+
+		Export::SourceFragment* sourceFragment() const;
+		void setSourceFragment(Export::SourceFragment* fragment);
+
+		const QSet<Model::Node*>& nameNodes() const;
+		const QSet<OOModel::ReferenceExpression*>& referenceNodes() const;
+
+		QSet<CodeUnitPart*> dependencies() const;
+		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
+
+	private:
+		CodeUnit* parent_{};
+		Export::SourceFragment* sourceFragment_{};
+		QSet<Model::Node*> nameNodes_;
+		QSet<OOModel::ReferenceExpression*> referenceNodes_;
+		QList<DependencyTarget> targets_;
+		QSet<CodeUnitPart*> dependencies_;
+
+		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
+		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
+};
+
+inline CodeUnit* CodeUnitPart::parent() const { return parent_; }
+
+inline Export::SourceFragment* CodeUnitPart::sourceFragment() const { return sourceFragment_; }
+
+inline const QSet<Model::Node*>& CodeUnitPart::nameNodes() const { return nameNodes_; }
+inline const QSet<OOModel::ReferenceExpression*>& CodeUnitPart::referenceNodes() const { return referenceNodes_; }
+
+inline QSet<CodeUnitPart*> CodeUnitPart::dependencies() const { return dependencies_; }
 
 }

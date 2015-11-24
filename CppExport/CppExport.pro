@@ -30,7 +30,8 @@ HEADERS += src/precompiled.h \
 	src/visitors/source_visitors/StatementVisitorSource.h \
 	src/visitors/source_visitors/VisitorDefs.h \
 	src/CodeUnit.h \
-	src/CodeComposite.h
+	src/CodeComposite.h \
+	src/CodeUnitPart.h
 SOURCES += src/CppExportException.cpp \
 	src/CppExportPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -50,7 +51,8 @@ SOURCES += src/CppExportException.cpp \
 	src/visitors/source_visitors/ExpressionVisitorSource.cpp \
 	src/visitors/source_visitors/StatementVisitorSource.cpp \
 	src/CodeUnit.cpp \
-	src/CodeComposite.cpp
+	src/CodeComposite.cpp \
+	src/CodeUnitPart.cpp
 
 ## INSTALLING SPECIFICS:
 config.files=config.json
