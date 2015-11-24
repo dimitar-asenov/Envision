@@ -29,6 +29,8 @@
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
 
+#include "../query_framework/QueryRuntimeException.h"
+
 #include "AstModification.h"
 #include "OOModel/src/expressions/Expression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
@@ -63,9 +65,29 @@ NamedProperty tuple_getItem(Tuple &t, int index)
 	 return {};
 }
 
+NamedProperty convertTuple(const tuple& t)
+{
+	int len = extract<int>(t.attr("__len__")())();
+	if (len != 2) throw QueryRuntimeException("Tuple can only have 2 values");
+	extract<QString> nameExtract(t.attr("__getitem__")(0));
+	if (!nameExtract.check()) throw QueryRuntimeException("Tuple should have string as key");
+	auto value = t.attr("__getitem__")(1);
+	extract<QString> valueString(value);
+	if (valueString.check()) return {nameExtract(), valueString()};
+	extract<Model::Node*> valueNode(value);
+	if (valueNode.check()) return {nameExtract(), valueNode()};
+	extract<int> valueInt(value);
+	if (valueInt.check()) return {nameExtract(), valueInt()};
+	Q_ASSERT(false); // implement extraction
+}
+
 std::shared_ptr<Tuple> makeTuple(list args) {
-	stl_input_iterator<NamedProperty> begin(args), end;
-	return std::make_shared<Tuple>(QList<NamedProperty>::fromStdList(std::list<NamedProperty>(begin, end)));
+	stl_input_iterator<tuple> begin(args), end;
+	std::list<tuple> tuples(begin, end);
+	QList<NamedProperty> tupleValues;
+	for (const auto& t : tuples)
+		tupleValues.push_back(convertTuple(t));
+	return std::make_shared<Tuple>(tupleValues);
 }
 
 std::shared_ptr<TupleSet> makeTupleSet(list args) {

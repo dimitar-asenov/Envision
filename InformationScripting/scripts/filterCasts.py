@@ -12,7 +12,7 @@ def hasTypeIdMethod( cl ):
 
 for tuple in classUses[0].tuples("uses"):
     if hasTypeIdMethod(tuple.used):
-        values = [NamedProperty("ast", tuple.user)]
+        values = [("ast", tuple.user)]
         Query.result.add(Tuple(values))
 
 Query.result = Query.toParent(["-t=CastExpression", "-addAs=node"], [Query.result])[0]

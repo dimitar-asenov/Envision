@@ -17,5 +17,5 @@ with open(Query.args[0]) as csvfile:
     for row in profileCSVReader:
         m = findMethod(row[0])
         count = int(float(row[1]))
-        values = [NamedProperty("count", count), NamedProperty("ast", m)]
+        values = [("count", count), ("ast", m)]
         Query.result.add(Tuple(values))

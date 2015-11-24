@@ -12,5 +12,5 @@ tag = parsedArgs.tag
 color = parsedArgs.color
 
 for tuple in Query.input.take(tag):
-    t = Tuple([NamedProperty("color", color), NamedProperty("ast", tuple.ast)])
+    t = Tuple([("color", color), ("ast", tuple.ast)])
     Query.result.add(t)
