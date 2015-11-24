@@ -94,26 +94,35 @@ void AstQuery::registerDefaultQueries()
 	QueryRegistry::registerAlias("filter", "ast", [](QStringList& args) {args << "-input";});
 }
 
-Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
+Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet input)
 {
-	// TODO handle input
+	QList<OOModel::Class*> childClasses;
 	TupleSet ts;
 	if (arguments_.scope() == ArgumentParser::Scope::Local)
 	{
 		OOModel::Class* parentClass = DCast<OOModel::Class>(target());
 		if (!parentClass) parentClass = target()->firstAncestorOfType<OOModel::Class>();
-
-		NamedProperty namedClass{"childClass", parentClass};
-		ts.add({namedClass});
-
-		addBaseEdgesFor(parentClass, namedClass, ts);
-
-		if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
-			outputAsAST(ts, "baseclass", {"baseClass"});
+		childClasses.push_back(parentClass);
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 	{
-		// TODO
+		childClasses = Model::Node::childrenOfType<OOModel::Class>(target()->root());
+	}
+	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	{
+		auto tuple = input.tuples("ast");
+		for (const auto& t : tuple) childClasses << Model::Node::childrenOfType<OOModel::Class>(t["ast"]);
+	}
+
+	for (auto childClass : childClasses)
+	{
+		NamedProperty namedClass{"childClass", childClass};
+		ts.add({namedClass});
+
+		addBaseEdgesFor(childClass, namedClass, ts);
+
+		if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+			outputAsAST(ts, "baseclass", {"baseClass"});
 	}
 	return ts;
 }
