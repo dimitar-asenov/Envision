@@ -34,74 +34,157 @@
 #include "Export/src/writer/FragmentLayouter.h"
 #include "ModelBase/src/model/TreeManager.h"
 
-#include "CodeUnit.h"
-#include "CodeComposite.h"
+#include "../CodeUnit.h"
+#include "../CodeComposite.h"
+#include "../Config.h"
 
 namespace CppExport {
 
 QList<ExportError> CppExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
-	auto project = DCast<OOModel::Project>(manager->root());
-	Q_ASSERT(project);
+	auto us = units(manager);
+	auto cs = mergeUnits(us);
 
-	auto codeComposite = new CodeComposite("Composite");
-	for (auto i = 0; i < project->classes()->size(); i++)
+	calculateSourceFragments(cs);
+	calculateDependencies(cs);
+
+	auto dir = new Export::SourceDir(nullptr, pathToProjectContainerDirectory + "/src");
+	for (auto c : cs) exportCodeComposite(c, dir);
+	auto layout = layouter();
+	Export::Exporter::exportToFileSystem("", dir, &layout);
+
+	return {};
+}
+
+QList<CodeUnit*> CppExporter::units(Model::TreeManager* treeManager)
+{
+	QList<CodeUnit*> result;
+	units(treeManager->root(), "", result);
+	return result;
+}
+
+void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
+{
+	if (auto ooModule = DCast<OOModel::Module>(current))
 	{
-		auto c = project->classes()->at(i);
-		//if (c->name() == "HelloWorld" || c->name() == "Generic")
+		if (ooModule->classes()->size() > 0)
+			namespaceName = ooModule->name();
+		else
 		{
-			auto unit = new CodeUnit(c->name(), c);
-			codeComposite->addUnit(unit);
+			// macro file
+			// TODO: handle non class units
+			//result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooModule->name(), current));
+			return;
+		}
+	}
+	else if (auto ooClass = DCast<OOModel::Class>(current))
+	{
+		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
+		return;
+	}
+
+	for (auto child : current->children())
+		units(child, namespaceName, result);
+}
+
+QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units)
+{
+	QHash<QString, QString> mergeMap = Config::instance().dependencyUnitMergeMap();
+
+	QHash<QString, CodeComposite*> nameToCompositeMap;
+	for (auto unit : units)
+	{
+		auto it = mergeMap.find(unit->name());
+		auto compositeName = it != mergeMap.end() ? *it : unit->name();
+
+		auto cIt = nameToCompositeMap.find(compositeName);
+		if (cIt != nameToCompositeMap.end())
+			// case A: the composite that unit is a part of already exists => merge
+			(*cIt)->addUnit(unit);
+		else
+		{
+			// case B: the composite that unit is a part of does not yet exist
+			auto composite = new CodeComposite(compositeName);
+			composite->addUnit(unit);
+			nameToCompositeMap.insert(composite->name(), composite);
 		}
 	}
 
-	exportCodeComposite(codeComposite);
+	return nameToCompositeMap.values();
+}
 
-	return {};
-
-	auto layout = layouter();
-
+void CppExporter::calculateSourceFragments(QList<CodeComposite*> codeComposites)
+{
 	DeclarationVisitorHeader headerVisitor;
-	auto dir = std::unique_ptr<Export::SourceDir>( headerVisitor.visitProject(project) );
-	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Headers", dir.get(), &layout);
-	exportMaps().insert(project, map);
-
 	DeclarationVisitorSource sourceVisitor;
-	auto dir2 = std::unique_ptr<Export::SourceDir>( sourceVisitor.visitProject(project) );
-	auto map2 = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Sources", dir2.get(), &layout);
-	exportMaps().insert(project, map2);
 
-	return headerVisitor.errors();
+	for (auto codeComposite : codeComposites)
+	{
+		for (auto unit : codeComposite->units())
+			if (auto classs = DCast<OOModel::Class>(unit->node()))
+			{
+				unit->headerPart()->setSourceFragment(headerVisitor.visitTopLevelClass(classs));
+				unit->sourcePart()->setSourceFragment(sourceVisitor.visitTopLevelClass(classs));
+			}
+			else
+				Q_ASSERT(false); // TODO: handle non class units
+	}
 }
 
-void CppExporter::exportFragment(Export::SourceFragment* fragment)
+void CppExporter::calculateDependencies(QList<CodeComposite*> codeComposites)
 {
-	auto dir = new Export::SourceDir(nullptr, "src");
-	auto file = &dir->file("exported.h");
-	file->append(fragment);
-	auto layout = layouter();
-	Export::Exporter::exportToFileSystem("", dir, &layout);
+	QList<CodeUnitPart*> allHeaderParts;
+	for (auto codeComposite : codeComposites)
+		for (auto unit : codeComposite->units())
+			allHeaderParts.append(unit->headerPart());
+
+	for (auto codeComposite : codeComposites)
+		for (CodeUnit* unit : codeComposite->units())
+		{
+			unit->headerPart()->calculateDependencies(allHeaderParts);
+			unit->sourcePart()->calculateDependencies(allHeaderParts);
+		}
 }
 
-void CppExporter::calculateSourceFragments(CodeComposite* codeComposite)
+void CppExporter::exportCodeComposite(CodeComposite* codeComposite, Export::SourceDir* dir)
 {
-	DeclarationVisitorHeader visitor;
-	for (auto unit : codeComposite->units())
-		if (auto classs = DCast<OOModel::Class>(unit->node()))
-			unit->setSourceFragment(visitor.visitTopLevelClass(classs));
-		else
-			Q_ASSERT(false);
-}
+	// output header file
+	{
+		auto composite = new Export::CompositeFragment(new Model::Integer());
+		for (auto unit : codeComposite->units())
+		{
+			for (CodeUnitPart* dep : unit->headerPart()->dependencies())
+			{
+				*composite << "\n";
+				*composite << "#include \"" + dep->parent()->name() + ".h\"";
+			}
+			*composite << "\n";
 
-void CppExporter::exportCodeComposite(CodeComposite* codeComposite)
-{
-	calculateSourceFragments(codeComposite);
+			composite->append(unit->headerPart()->sourceFragment());
+		}
 
-	auto composite = new Export::CompositeFragment(new Model::Integer());
-	for (auto unit : codeComposite->units())
-		composite->append(unit->sourceFragment());
+		auto file = &dir->file(codeComposite->name() + ".h");
+		file->append(composite);
+	}
 
-	exportFragment(composite);
+	// output source file
+	{
+		auto composite = new Export::CompositeFragment(new Model::Integer());
+		for (auto unit : codeComposite->units())
+		{
+			for (CodeUnitPart* dep : unit->sourcePart()->dependencies())
+			{
+				*composite << "\n";
+				*composite << "#include \"" + dep->parent()->name() + ".h\"";
+			}
+			*composite << "\n";
+
+			composite->append(unit->sourcePart()->sourceFragment());
+		}
+
+		auto file = &dir->file(codeComposite->name() + ".cpp");
+		file->append(composite);
+	}
 }
 
 Export::FragmentLayouter CppExporter::layouter()
