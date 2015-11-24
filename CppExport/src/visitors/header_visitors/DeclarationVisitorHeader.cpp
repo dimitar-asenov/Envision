@@ -162,7 +162,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 
 	auto publicSection = new CompositeFragment(classs, "accessorSections");
 	auto publicFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
-	bool hasPublicSection = addFieldsClassesMethods(classs, publicSection, publicFilter);
+	bool hasPublicSection = addMemberDeclarations(classs, publicSection, publicFilter);
 	if (hasPublicSection)
 	{
 		*sections << "public:";
@@ -171,7 +171,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 
 	auto protectedSection = new CompositeFragment(classs, "accessorSections");
 	auto protectedFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Protected); };
-	bool hasProtectedSection = addFieldsClassesMethods(classs, protectedSection, protectedFilter);
+	bool hasProtectedSection = addMemberDeclarations(classs, protectedSection, protectedFilter);
 	if (hasProtectedSection)
 	{
 		if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
@@ -183,7 +183,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 	auto privateSection = new CompositeFragment(classs, "accessorSections");
 	auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
 																				  !declaration->modifiers()->isSet(Modifier::Protected); };
-	bool hasPrivateSection = addFieldsClassesMethods(classs, privateSection, privateFilter);
+	bool hasPrivateSection = addMemberDeclarations(classs, privateSection, privateFilter);
 	if (hasPrivateSection)
 	{
 		if (hasPublicSection || hasProtectedSection) *sections << "\n"; // add newline between two accessor sections
@@ -196,7 +196,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 }
 
 template<typename Predicate>
-bool DeclarationVisitorHeader::addFieldsClassesMethods(Class* classs, CompositeFragment* section, Predicate filter)
+bool DeclarationVisitorHeader::addMemberDeclarations(Class* classs, CompositeFragment* section, Predicate filter)
 {
 	auto fields = list(classs->fields(), this, "vertical", filter);
 	auto classes = list(classs->classes(), this, "declarations", filter);

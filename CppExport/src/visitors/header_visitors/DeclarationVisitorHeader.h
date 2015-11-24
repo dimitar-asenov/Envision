@@ -65,7 +65,7 @@ class CPPEXPORT_API DeclarationVisitorHeader : public Visitor {
 
 	private:
 		template<typename Predicate>
-		bool addFieldsClassesMethods(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
+		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
 };
 
 }
