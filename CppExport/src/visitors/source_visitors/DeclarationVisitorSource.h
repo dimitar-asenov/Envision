@@ -58,6 +58,8 @@ class CPPEXPORT_API DeclarationVisitorSource : public Visitor {
 		Export::SourceFragment* visit(OOModel::TypeAlias* ta);
 
 		Export::SourceFragment* printAnnotationsAndModifiers(OOModel::Declaration* declaration);
+
+		Export::SourceFragment* visitTopLevelClass(OOModel::Class* classs);
 };
 
 }
