@@ -57,10 +57,10 @@ class Visitor
 		void error(const QString& errorMessage);
 		void error(Model::Node* node, const QString& errorMessage);
 
-		template<class ListElement, class VisitorClass, typename Predicate = std::function<bool(ListElement*)>>
+		template<class ListElement, class VisitorClass, typename Predicate = bool (*)(ListElement*)>
 		Export::CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass* v,
 												  const QString& fragmentType = QString(), Predicate filter = nullptr);
-		template<class ListElement, class VisitorClass, typename Predicate = std::function<bool(ListElement*)>>
+		template<class ListElement, class VisitorClass, typename Predicate = bool (*)(ListElement*)>
 		Export::CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
 												  const QString& fragmentType = QString(), Predicate filter = nullptr);
 
