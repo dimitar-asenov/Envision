@@ -61,17 +61,17 @@ QList<ExportError> CppExporter::exportTree(Model::TreeManager* manager, const QS
 
 	auto layout = layouter();
 
-	DeclarationVisitorHeader visitor;
-	auto dir = std::unique_ptr<Export::SourceDir>( visitor.visitProject(project) );
+	DeclarationVisitorHeader headerVisitor;
+	auto dir = std::unique_ptr<Export::SourceDir>( headerVisitor.visitProject(project) );
 	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Headers", dir.get(), &layout);
 	exportMaps().insert(project, map);
 
-	DeclarationVisitorSource visitor2;
-	auto dir2 = std::unique_ptr<Export::SourceDir>( visitor2.visitProject(project) );
+	DeclarationVisitorSource sourceVisitor;
+	auto dir2 = std::unique_ptr<Export::SourceDir>( sourceVisitor.visitProject(project) );
 	auto map2 = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory + "/Sources", dir2.get(), &layout);
 	exportMaps().insert(project, map2);
 
-	return visitor.errors();
+	return headerVisitor.errors();
 }
 
 void CppExporter::exportFragment(Export::SourceFragment* fragment)
