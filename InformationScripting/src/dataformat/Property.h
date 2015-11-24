@@ -34,6 +34,137 @@ namespace Model {
 
 namespace InformationScripting {
 
+namespace detail {
+
+template <class T>
+inline static QString toString(const T* val)
+{
+	return QString("0x%1").arg((quintptr)val, QT_POINTER_SIZE * 2, 16, QChar('0'));
+}
+
+inline static QString toString(const QString& val)
+{
+	return val;
+}
+
+inline static QString toString(int val)
+{
+	return QString::number(val);
+}
+
+struct PropertyDataConcept {
+		virtual ~PropertyDataConcept() = default;
+		virtual boost::python::object pythonObject() const = 0;
+		virtual Model::Node* node() const { return nullptr; }
+		virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
+		virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
+		virtual uint hash(uint seed = 0) const = 0;
+		virtual QString asString() const = 0;
+};
+
+template <class DataType, class = void>
+struct PropertyData : PropertyDataConcept {
+		PropertyData(DataType data) : data_{std::move(data)} {}
+
+		virtual boost::python::object pythonObject() const override {
+			return boost::python::object(data_);
+		}
+
+		virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
+			if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+				return data_ == specificOther->data_;
+			return false;
+		}
+
+		virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+			if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+				return data_ < specificOther->data_;
+			return false;
+		}
+
+		virtual uint hash(uint seed) const override {
+			return qHash(data_, seed);
+		}
+
+		virtual QString asString() const override {
+			return toString(data_);
+		}
+
+		DataType data_;
+};
+// Template overload for general pointer types:
+template <class DataType>
+struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
+						&& !std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
+		: PropertyDataConcept {
+		PropertyData(DataType data) : data_{data} {}
+
+		virtual boost::python::object pythonObject() const override {
+			return boost::python::object(boost::python::ptr(data_));
+		}
+
+		virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
+			if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+				return data_ == specificOther->data_;
+			return false;
+		}
+
+		virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+			if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+				return data_ < specificOther->data_;
+			return false;
+		}
+
+		virtual uint hash(uint seed) const override {
+			return qHash(data_, seed);
+		}
+
+		virtual QString asString() const override {
+			return toString(data_);
+		}
+
+		DataType data_;
+};
+// Template overload for pointer types which inherit from Model::Node
+template <class DataType>
+struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
+						&& std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
+		: PropertyDataConcept {
+		PropertyData(DataType data) : data_{data} {}
+
+		virtual boost::python::object pythonObject() const override {
+			return boost::python::object(boost::python::ptr(data_));
+		}
+		virtual Model::Node* node() const override { return data_; }
+
+		virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
+			// Just compare node pointers since they are unique.
+			if (node()) return node() == other->node();
+			// If we have a nullptr, check if other has the same type and value.
+			if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+				return data_ == specificOther->data_;
+			return false;
+		}
+
+		virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
+			if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+				return data_ < specificOther->data_;
+			return false;
+		}
+
+		virtual uint hash(uint seed) const override {
+			return qHash(data_, seed);
+		}
+
+		virtual QString asString() const override {
+			return toString(data_);
+		}
+
+		DataType data_;
+};
+
+} /* namespace detail */
+
 // Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
 class INFORMATIONSCRIPTING_API Property {
 	public:
@@ -57,134 +188,7 @@ class INFORMATIONSCRIPTING_API Property {
 		QString toString() const;
 
 	private:
-		template <class T>
-		static QString toString(const T* val)
-		{
-			return QString("0x%1").arg((quintptr)val, QT_POINTER_SIZE * 2, 16, QChar('0'));
-		}
-
-		static QString toString(const QString& val)
-		{
-			return val;
-		}
-
-		static QString toString(int val)
-		{
-			return QString::number(val);
-		}
-
-		struct PropertyDataConcept {
-				virtual ~PropertyDataConcept() = default;
-				virtual boost::python::object pythonObject() const = 0;
-				virtual Model::Node* node() const { return nullptr; }
-				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
-				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
-				virtual uint hash(uint seed = 0) const = 0;
-				virtual QString asString() const = 0;
-		};
-
-		template <class DataType, class = void>
-		struct PropertyData : PropertyDataConcept {
-				PropertyData(DataType data) : data_{std::move(data)} {}
-
-				virtual boost::python::object pythonObject() const override {
-					return boost::python::object(data_);
-				}
-
-				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
-					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
-						return data_ == specificOther->data_;
-					return false;
-				}
-
-				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
-					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
-						return data_ < specificOther->data_;
-					return false;
-				}
-
-				virtual uint hash(uint seed) const override {
-					return qHash(data_, seed);
-				}
-
-				virtual QString asString() const override {
-					return toString(data_);
-				}
-
-				DataType data_;
-		};
-		// Template overload for general pointer types:
-		template <class DataType>
-		struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
-								&& !std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
-				: PropertyDataConcept {
-				PropertyData(DataType data) : data_{data} {}
-
-				virtual boost::python::object pythonObject() const override {
-					return boost::python::object(boost::python::ptr(data_));
-				}
-
-				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
-					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
-						return data_ == specificOther->data_;
-					return false;
-				}
-
-				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
-					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
-						return data_ < specificOther->data_;
-					return false;
-				}
-
-				virtual uint hash(uint seed) const override {
-					return qHash(data_, seed);
-				}
-
-				virtual QString asString() const override {
-					return toString(data_);
-				}
-
-				DataType data_;
-		};
-		// Template overload for pointer types which inherit from Model::Node
-		template <class DataType>
-		struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
-								&& std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
-				: PropertyDataConcept {
-				PropertyData(DataType data) : data_{data} {}
-
-				virtual boost::python::object pythonObject() const override {
-					return boost::python::object(boost::python::ptr(data_));
-				}
-				virtual Model::Node* node() const override { return data_; }
-
-				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
-					// Just compare node pointers since they are unique.
-					if (node()) return node() == other->node();
-					// If we have a nullptr, check if other has the same type and value.
-					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
-						return data_ == specificOther->data_;
-					return false;
-				}
-
-				virtual bool lessThan(const std::shared_ptr<PropertyDataConcept>& other) const override {
-					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
-						return data_ < specificOther->data_;
-					return false;
-				}
-
-				virtual uint hash(uint seed) const override {
-					return qHash(data_, seed);
-				}
-
-				virtual QString asString() const override {
-					return toString(data_);
-				}
-
-				DataType data_;
-		};
-
-		std::shared_ptr<PropertyDataConcept> data_;
+		std::shared_ptr<detail::PropertyDataConcept> data_;
 };
 
 struct INFORMATIONSCRIPTING_API NamedProperty : QPair<QString, Property>
@@ -194,12 +198,12 @@ struct INFORMATIONSCRIPTING_API NamedProperty : QPair<QString, Property>
 };
 
 template <class DataType> Property::Property(DataType propertyData)
-	: data_{std::make_shared<PropertyData<DataType>>(std::move(propertyData))} {}
+	: data_{std::make_shared<detail::PropertyData<DataType>>(std::move(propertyData))} {}
 
 template <class ConvertTo>
 inline Property::operator ConvertTo() const
 {
-	if (auto propertyData = std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_))
+	if (auto propertyData = std::dynamic_pointer_cast<detail::PropertyData<ConvertTo>>(data_))
 		return propertyData->data_;
 	throw new std::bad_cast;
 }
@@ -209,7 +213,7 @@ inline Property::operator Model::Node*() const { return data_->node(); }
 template <class ConvertTo>
 inline bool Property::isConvertibleTo() const
 {
-	return std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_) != nullptr;
+	return std::dynamic_pointer_cast<detail::PropertyData<ConvertTo>>(data_) != nullptr;
 }
 
 template <> inline bool Property::isConvertibleTo<Model::Node*>() const { return data_ && data_->node(); }
