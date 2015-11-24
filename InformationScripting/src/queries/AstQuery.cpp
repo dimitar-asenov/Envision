@@ -163,7 +163,7 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 {
 	TupleSet result;
 
-	auto addCallgraphFor = [&result](std::vector<OOModel::Method*> methods)
+	auto addCallgraphFor = [&result](const QList<OOModel::Method*>& methods)
 	{
 		for (auto method : methods)
 		{
@@ -189,19 +189,21 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 		else return {"Callgraph does only work on method nodes"};
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
-		return {"Callgraph does not work globally"};
+	{
+		addCallgraphFor(Model::Node::childrenOfType<OOModel::Method>(target()->root()));
+	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Input)
 	{
 		// Keep input nodes
 		result = input;
-		std::vector<OOModel::Method*> methodsInInput;
+		QList<OOModel::Method*> methodsInInput;
 		for (const auto& astTuple : input.tuples("ast"))
 		{
 			Model::Node* astNode = astTuple["ast"];
 			if (auto method = DCast<OOModel::Method>(astNode)) methodsInInput.push_back(method);
 		}
 		if (methodsInInput.size() == 0) return {result, "Called callgraph without methods in input"};
-		else addCallgraphFor(std::move(methodsInInput));
+		else addCallgraphFor(methodsInInput);
 	}
 	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
 		outputAsAST(result, "calls", {"caller", "callee"});
