@@ -79,7 +79,6 @@ std::unique_ptr<Query> QueryBuilder::visitList(QueryBuilder* self, CompositeQuer
 std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
 {
 	auto composite = std::make_unique<CompositeQuery>();
-
 	auto left = composite->addQuery(self->visit(op->left()));
 	auto leftComposite = dynamic_cast<CompositeQuery*>(left);
 	auto right = composite->addQuery(self->visit(op->right()));
@@ -98,13 +97,17 @@ std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQ
 		}
 		else
 		{
-			Q_ASSERT(rightComposite->inputCount() == 1);
+			if (rightComposite->inputCount() > 1)
+				throw QueryParsingException("Connecting lists with differing sizes is not allowed.");
 			connectAsUnion(composite.get(), leftComposite, right, op);
 		}
 	}
 	else if (leftComposite)
 	{
-		connectAsUnion(composite.get(), leftComposite, right, op);
+		if (leftComposite->outputCount() > 1)
+			connectAsUnion(composite.get(), leftComposite, right, op);
+		else
+			composite->connectQuery(left, right);
 	}
 	else if (rightComposite)
 	{

@@ -42,6 +42,7 @@ QueryNode* QueryParser::parse(const QString& queryString)
 	int index = 0;
 	auto query = parseAny(queryString, index);
 	Q_ASSERT(index == queryString.length());
+	changeToLeftToRightOrder(query);
 	return query;
 }
 
@@ -118,6 +119,30 @@ CompositeQueryNode* QueryParser::parseList(const QString& queryString, int& inde
 	Q_ASSERT(queryString[index] == LIST_RIGHT);
 	++index;
 	return composite;
+}
+
+void QueryParser::changeToLeftToRightOrder(QueryNode*& top)
+{
+	// By default the parser parses a|b|c as a|(b|c) but we want it to be (a|b)|c.
+	// Since we always get a tree that grows down to the right,
+	// we can easily transform it to a tree which grows down left:
+	auto op = DCast<OperatorQueryNode>(top);
+	while (op) {
+		auto rightOp = DCast<OperatorQueryNode>(op->right());
+		if (!rightOp)
+			return;
+
+		top = rightOp;
+
+		auto rightLeftNode = rightOp->left();
+		rightLeftNode->setParent(nullptr);
+
+		op->setRight(rightLeftNode);
+
+		rightOp->setLeft(op);
+
+		op = rightOp;
+	}
 }
 
 }
