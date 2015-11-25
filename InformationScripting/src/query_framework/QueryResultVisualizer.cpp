@@ -184,15 +184,15 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const 
 		if (allAsts.isEmpty() || allAsts.size() > 1) return {"Infotuple has to have a value which refers to an AST node"};
 		auto astNode = allAsts[0];
 
-		Tuple t;
+		QList<NamedProperty> tupleValues;
 
 		for (const auto& taggedVal : values)
 		{
 			auto valIt = infoTuple.find(taggedVal.second);
-			if (valIt != infoTuple.end()) t.add(*valIt);
+			if (valIt != infoTuple.end()) tupleValues.push_back(*valIt);
 			else return {QString("info: tuple %1 has no entry named %2").arg(tag, taggedVal.second)};
 		}
-		infos[astNode].append(t);
+		infos[astNode].append(Tuple(tupleValues));
 	}
 	return convertTuplesToString(infos);
 }

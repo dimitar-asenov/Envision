@@ -35,7 +35,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API Tuple
 {
 	public:
-		Tuple() = default;
+		Tuple() = delete;
 		Tuple(const QString& tag, std::initializer_list<NamedProperty> initialValues);
 		Tuple(const QString& tag, QList<NamedProperty> initialValues);
 		Tuple(std::initializer_list<NamedProperty> initialValues);

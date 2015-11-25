@@ -94,25 +94,35 @@ void AstQuery::registerDefaultQueries()
 	QueryRegistry::registerAlias("filter", "ast", [](QStringList& args) {args << "-input";});
 }
 
-Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet)
+Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet input)
 {
-	// TODO handle input
+	QList<OOModel::Class*> childClasses;
 	TupleSet ts;
 	if (arguments_.scope() == ArgumentParser::Scope::Local)
 	{
 		OOModel::Class* parentClass = DCast<OOModel::Class>(target());
 		if (!parentClass) parentClass = target()->firstAncestorOfType<OOModel::Class>();
-
-		NamedProperty namedClass{"childClass", parentClass};
-		ts.add({namedClass});
-
-		addBaseEdgesFor(parentClass, namedClass, ts);
-
-		adaptOutputForRelation(ts, "baseclass", {"baseClass"});
+		childClasses.push_back(parentClass);
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
 	{
-		// TODO
+		childClasses = Model::Node::childrenOfType<OOModel::Class>(target()->root());
+	}
+	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	{
+		auto tuple = input.tuples("ast");
+		for (const auto& t : tuple) childClasses << Model::Node::childrenOfType<OOModel::Class>(t["ast"]);
+	}
+
+	for (auto childClass : childClasses)
+	{
+		NamedProperty namedClass{"childClass", childClass};
+		ts.add({namedClass});
+
+		addBaseEdgesFor(childClass, namedClass, ts);
+
+		if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+			outputAsAST(ts, "baseclass", {"baseClass"});
 	}
 	return ts;
 }
@@ -143,7 +153,9 @@ Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 		auto parentNode = astNode->firstAncestorOfType(matcher);
 		ts.add({"parentOfType", {{"childNode", astNode}, {"parentNode", parentNode}}});
 	}
-	adaptOutputForRelation(ts, "parentOfType", {"parentNode"});
+	// Per default we want to parent to output nodes.
+	if (!arguments_.isArgumentSet(ADD_AS_NAMES[1]) || arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+		outputAsAST(ts, "parentOfType", {"parentNode"});
 	return ts;
 }
 
@@ -151,7 +163,7 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 {
 	TupleSet result;
 
-	auto addCallgraphFor = [&result](std::vector<OOModel::Method*> methods)
+	auto addCallgraphFor = [&result](const QList<OOModel::Method*>& methods)
 	{
 		for (auto method : methods)
 		{
@@ -177,21 +189,24 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 		else return {"Callgraph does only work on method nodes"};
 	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Global)
-		return {"Callgraph does not work globally"};
+	{
+		addCallgraphFor(Model::Node::childrenOfType<OOModel::Method>(target()->root()));
+	}
 	else if (arguments_.scope() == ArgumentParser::Scope::Input)
 	{
 		// Keep input nodes
 		result = input;
-		std::vector<OOModel::Method*> methodsInInput;
+		QList<OOModel::Method*> methodsInInput;
 		for (const auto& astTuple : input.tuples("ast"))
 		{
 			Model::Node* astNode = astTuple["ast"];
 			if (auto method = DCast<OOModel::Method>(astNode)) methodsInInput.push_back(method);
 		}
 		if (methodsInInput.size() == 0) return {result, "Called callgraph without methods in input"};
-		else addCallgraphFor(std::move(methodsInInput));
+		else addCallgraphFor(methodsInInput);
 	}
-	adaptOutputForRelation(result, "calls", {"caller", "callee"});
+	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+		outputAsAST(result, "calls", {"caller", "callee"});
 	return result;
 }
 
@@ -304,7 +319,8 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 		for (auto node : it.value())
 			result.add({"uses", {{"user", it.key()}, {"used", node}}});
 
-	adaptOutputForRelation(result, "uses", {"user"});
+	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+		outputAsAST(result, "uses", {"user"});
 
 	return result;
 }
@@ -451,19 +467,16 @@ void AstQuery::addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from
 		ts.add({{"ast", node}});
 }
 
-void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName,
+void AstQuery::outputAsAST(TupleSet& tupleSet, const QString& relationName,
 												  const QStringList& keepProperties)
 {
-	if (arguments_.argument(ADD_AS_NAMES[0]) != "relation")
-	{
-		// remove all ast properties first
-		tupleSet.take("ast");
-		// add the tuples from the relation
-		auto tuples = tupleSet.take(relationName);
-		for (auto tuple : tuples)
-			for (const auto& keepProperty : keepProperties)
-				tupleSet.add({{"ast", tuple[keepProperty]}});
-	}
+	// remove all ast properties first
+	tupleSet.take("ast");
+	// add the tuples from the relation
+	auto tuples = tupleSet.take(relationName);
+	for (auto tuple : tuples)
+		for (const auto& keepProperty : keepProperties)
+			tupleSet.add({{"ast", tuple[keepProperty]}});
 }
 
 bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,

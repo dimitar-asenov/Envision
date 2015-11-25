@@ -83,7 +83,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		void addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from = nullptr);
 		static void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
 
-		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
+		void outputAsAST(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
 
 		static bool matchesExpectedType(Model::Node* node, Model::Node::SymbolType symbolType,
 										 const QString& expectedType, const QStringList& args);

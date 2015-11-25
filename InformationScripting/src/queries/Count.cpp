@@ -51,16 +51,16 @@ Optional<TupleSet> Count::executeLinear(TupleSet input)
 		auto taggedTuples = input.tuples(tag);
 		for (const auto& tuple : taggedTuples)
 		{
-			Tuple keyTuple;
+			QList<NamedProperty> keyTuple;
 			for (const auto& byTag : countByTags)
 			{
 				auto propName = byTag.split(".")[1];
 				auto it = tuple.find(propName);
 				if (it == tuple.end())
 					return {QString("Tuple tagged with %1 does not contain value with tag %2").arg(tuple.tag(), propName)};
-				keyTuple.add(*it);
+				keyTuple.push_back(*it);
 			}
-			++counts[keyTuple];
+			++counts[Tuple(keyTuple)];
 		}
 
 	}

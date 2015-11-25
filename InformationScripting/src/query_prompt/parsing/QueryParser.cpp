@@ -78,7 +78,10 @@ QueryNode* QueryParser::parseAny(const QString& queryString, int& index)
 			query = new CommandNode("");
 		else
 		{
-			auto command = new CommandNode(parts.takeFirst());
+			auto commandString = parts.takeFirst();
+			while (commandString.trimmed().isEmpty() && !parts.isEmpty())
+				commandString = parts.takeFirst();
+			auto command = new CommandNode(commandString);
 			for (auto part : parts)
 				command->arguments()->append(new CommandArgument(part));
 			query = command;

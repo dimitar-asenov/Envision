@@ -39,12 +39,16 @@ void PromptMode::showErrors(QList<Visualization::Item*> errorItems) const
 	Prompt::shell()->setErrors(errorItems);
 }
 
-void PromptMode::showErrors(QList<QString> errorMessages) const
+void PromptMode::showErrors(QList<QString> errorMessages, Qt::TextFormat format) const
 {
 	QList<Visualization::Item*> items;
 	for (auto text : errorMessages)
-		items.append( new Visualization::Text(Prompt::shell(),
-														  Visualization::Text::itemStyles().get("prompt-error"), text));
+	{
+		auto visText = new Visualization::Text(Prompt::shell(),
+															Visualization::Text::itemStyles().get("prompt-error"), text);
+		visText->setTextFormat(format);
+		items.append(visText);
+	}
 
 	showErrors(items);
 }

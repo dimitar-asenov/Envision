@@ -57,6 +57,18 @@ class INFORMATIONSCRIPTING_API ScriptQuery : public LinearQuery
 		void importStar(boost::python::dict& main_namespace, boost::python::object apiObject);
 
 		QList<TupleSet> executeQueryFromPython(QString name, boost::python::list args, boost::python::list input);
+		QList<TupleSet> buildAndExecuteQueryFromPython(QString queryString, boost::python::list input);
+
+		/**
+		 * Requires \a input to be a list of TupleSet.
+		 */
+		QList<TupleSet> convertInput(boost::python::list input);
+
+		/**
+		 * Extracts the values in \a result.
+		 * In case a value in \a result has an error the function throws a \a QueryRuntimeException.
+		 */
+		QList<TupleSet> extractResult(QList<Optional<TupleSet>> result, const QString& name);
 };
 
 } /* namespace InformationScripting */

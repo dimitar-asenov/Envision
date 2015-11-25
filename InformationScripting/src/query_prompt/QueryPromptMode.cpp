@@ -85,7 +85,7 @@ void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 		errors = {"Queries only work on nodes"};
 
 	if (errors.isEmpty()) Interaction::Prompt::hide();
-	else showErrors(errors);
+	else showErrors(errors, Qt::RichText);
 }
 
 }
