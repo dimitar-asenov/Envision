@@ -46,6 +46,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Declaration* declaration)
 	if (auto castDeclaration = DCast<Method>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<Class>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<TypeAlias>(declaration)) return visit(castDeclaration);
 
 	notAllowed(declaration);
 
@@ -181,12 +182,16 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 template<typename Predicate>
 bool DeclarationVisitorHeader::addMemberDeclarations(Class* classs, CompositeFragment* section, Predicate filter)
 {
+	auto subDeclarations = list(classs->subDeclarations(), this, "declarations", filter);
 	auto fields = list(classs->fields(), this, "vertical", filter);
 	auto classes = list(classs->classes(), this, "declarations", filter);
 	auto methods = list(classs->methods(), this, "sections", filter);
 
-	*section << fields << classes << methods;
-	return !fields->fragments().empty() || !classes->fragments().empty() || !methods->fragments().empty();
+	*section << subDeclarations << fields << classes << methods;
+	return !subDeclarations->fragments().empty() ||
+			 !fields->fragments().empty() ||
+			 !classes->fragments().empty() ||
+			 !methods->fragments().empty();
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(Method* method)
@@ -282,10 +287,11 @@ SourceFragment* DeclarationVisitorHeader::visit(ExplicitTemplateInstantiation* e
 	return new TextFragment(eti);
 }
 
-SourceFragment* DeclarationVisitorHeader::visit(TypeAlias* ta)
+SourceFragment* DeclarationVisitorHeader::visit(TypeAlias* typeAlias)
 {
-	error(ta, "TypeAlias unhandled"); // TODO
-	return new TextFragment(ta);
+	auto fragment = new CompositeFragment(typeAlias);
+	*fragment << "using " << typeAlias->nameNode() << " = " << expression(typeAlias->typeExpression()) << ";";
+	return fragment;
 }
 
 }

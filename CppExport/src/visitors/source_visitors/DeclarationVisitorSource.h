@@ -55,9 +55,7 @@ class CPPEXPORT_API DeclarationVisitorSource : public Visitor {
 		Export::SourceFragment* visit(OOModel::VariableDeclaration* vd);
 
 		Export::SourceFragment* visit(OOModel::ExplicitTemplateInstantiation* eti);
-		Export::SourceFragment* visit(OOModel::TypeAlias* ta);
-
-		Export::SourceFragment* printAnnotationsAndModifiers(OOModel::Declaration* declaration);
+		Export::SourceFragment* visit(OOModel::TypeAlias* typeAlias);
 
 		Export::SourceFragment* visitTopLevelClass(OOModel::Class* classs);
 };

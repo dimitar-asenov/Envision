@@ -135,7 +135,6 @@ SourceFragment* DeclarationVisitorSource::visit(Class* classs)
 SourceFragment* DeclarationVisitorSource::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
-	*fragment << printAnnotationsAndModifiers(method);
 
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
@@ -184,7 +183,6 @@ SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* vd)
 	auto fragment = new CompositeFragment(vd);
 	if (vd->initialValue())
 	{
-		*fragment << printAnnotationsAndModifiers(vd);
 		*fragment << expression(vd->typeExpression()) << " ";
 
 		if (DCast<Field>(vd))
@@ -202,38 +200,11 @@ SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* vd)
 SourceFragment* DeclarationVisitorSource::visit(NameImport* nameImport)
 {
 	auto fragment = new CompositeFragment(nameImport);
-	*fragment << printAnnotationsAndModifiers(nameImport);
-
 	notAllowed(nameImport->annotations());
 
 	*fragment << "import " << expression(nameImport->importedName());
 	if (nameImport->importAll()) *fragment << ".*";
 	*fragment << ";";
-
-	return fragment;
-}
-
-SourceFragment* DeclarationVisitorSource::printAnnotationsAndModifiers(Declaration* declaration)
-{
-	auto fragment = new CompositeFragment(declaration, "vertical");
-	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
-		*fragment << list(declaration->annotations(), StatementVisitorSource(data()), "vertical");
-	auto header = fragment->append(new CompositeFragment(declaration, "space"));
-
-	if (declaration->modifiers()->isSet(Modifier::Static))
-		*header << new TextFragment(declaration->modifiers(), "static");
-
-	if (declaration->modifiers()->isSet(Modifier::Final))
-		*header << new TextFragment(declaration->modifiers(), "final");
-	if (declaration->modifiers()->isSet(Modifier::Abstract))
-		*header << new TextFragment(declaration->modifiers(), "abstract");
-
-	if (declaration->modifiers()->isSet(Modifier::Virtual))
-		*header << new TextFragment(declaration->modifiers(), "virtual");
-	if (declaration->modifiers()->isSet(Modifier::Override))
-		*header << new TextFragment(declaration->modifiers(), "override");
-	if (declaration->modifiers()->isSet(Modifier::Inline))
-		*header << new TextFragment(declaration->modifiers(), "inline");
 
 	return fragment;
 }
@@ -244,10 +215,10 @@ SourceFragment* DeclarationVisitorSource::visit(ExplicitTemplateInstantiation* e
 	return new TextFragment(eti);
 }
 
-SourceFragment* DeclarationVisitorSource::visit(TypeAlias* ta)
+SourceFragment* DeclarationVisitorSource::visit(TypeAlias* typeAlias)
 {
-	notAllowed(ta);
-	return new TextFragment(ta);
+	auto fragment = new CompositeFragment(typeAlias);
+	*fragment << "using " << typeAlias->nameNode() << " = " << expression(typeAlias->typeExpression()) << ";";
+	return fragment;
 }
-
 }
