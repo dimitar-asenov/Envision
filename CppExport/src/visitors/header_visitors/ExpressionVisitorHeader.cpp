@@ -28,6 +28,9 @@
 #include "../../CppExportException.h"
 #include "VisitorDefs.h"
 
+#include "OOModel/src/types/PointerType.h"
+#include "OOModel/src/types/SymbolProviderType.h"
+
 using namespace Export;
 using namespace OOModel;
 
