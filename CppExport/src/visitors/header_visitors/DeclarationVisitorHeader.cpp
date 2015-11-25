@@ -197,12 +197,8 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 
-	if (method->methodKind() == Method::MethodKind::Destructor)
-	{
-		if (!method->name().startsWith("~"))
-			*fragment << "~";
-	}
-	else if (method->methodKind() != Method::MethodKind::Constructor)
+	if (method->methodKind() != Method::MethodKind::Constructor &&
+		 method->methodKind() != Method::MethodKind::Destructor)
 	{
 		if (!method->results()->isEmpty())
 			*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
@@ -210,6 +206,11 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 			*fragment << "void ";
 	}
 
+	if (method->methodKind() == Method::MethodKind::Destructor)
+	{
+		if (!method->name().startsWith("~"))
+			*fragment << "~";
+	}
 	*fragment << method->nameNode();
 
 	if (!method->typeArguments()->isEmpty())
