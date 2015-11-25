@@ -163,6 +163,9 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 
 	*fragment << list(method->arguments(), ElementVisitorSource(data()), "argsList");
 
+	if (!method->memberInitializers()->isEmpty())
+		*fragment << " : " << list(method->memberInitializers(), ElementVisitorSource(data()));
+
 	if (!method->throws()->isEmpty())
 	{
 		*fragment << " throw (";
