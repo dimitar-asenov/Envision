@@ -51,10 +51,12 @@ class INFORMATIONSCRIPTING_API CanReach : public LinearQuery
 
 		static const QStringList NAME_ARGUMENT_NAMES;
 		static const QStringList RELATION_ARGUMENT_NAMES;
+		static const QStringList SELF_ARGUMENT_NAMES;
 
 		CanReach(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);
 
 		QSet<Tuple> relationTuples_;
+		bool matchSelf_{};
 
 		TupleSet reachableNodesFrom(std::vector<Tuple> startNodes);
 		std::vector<Tuple> neighbors(const Tuple& t);

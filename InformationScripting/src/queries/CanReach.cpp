@@ -35,6 +35,7 @@ namespace InformationScripting {
 
 const QStringList CanReach::NAME_ARGUMENT_NAMES{"n", "name"};
 const QStringList CanReach::RELATION_ARGUMENT_NAMES{"r", "relation"};
+const QStringList CanReach::SELF_ARGUMENT_NAMES{"s", "self"};
 
 Optional<TupleSet> CanReach::executeLinear(TupleSet input)
 {
@@ -52,7 +53,7 @@ Optional<TupleSet> CanReach::executeLinear(TupleSet input)
 		auto nodes = relation.valuesOfType<Model::Node*>();
 		if (nodes.size() != 2)
 			return {QString("%1 works only on relations between Nodes.").arg(arguments_.queryName())};
-		if (nameMatcher.matches(nodes[1]->symbolName()))
+		if (matchSelf_ || nameMatcher.matches(nodes[1]->symbolName()))
 			endNodes.push_back(relation);
 	}
 	return reachableNodesFrom(std::move(endNodes));
@@ -61,7 +62,9 @@ Optional<TupleSet> CanReach::executeLinear(TupleSet input)
 void CanReach::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<CanReach>("canReach",
-		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{NAME_ARGUMENT_NAMES[1]}, {RELATION_ARGUMENT_NAMES[1]}}}});
+		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{RELATION_ARGUMENT_NAMES[1]}}},
+											{ArgumentRule::RequireOneOf, {{NAME_ARGUMENT_NAMES[1]},
+																					{SELF_ARGUMENT_NAMES[1], ArgumentValue::IsSet}}}});
 	QueryRegistry::registerAlias("calls", "canReach", [](QStringList& args) {
 		ArgumentParser::setArgTo(args, RELATION_ARGUMENT_NAMES, "calls");});
 }
@@ -69,11 +72,13 @@ void CanReach::registerDefaultQueries()
 CanReach::CanReach(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
 	: LinearQuery{target}, arguments_{{
 		{NAME_ARGUMENT_NAMES, "Name of the target to reach", NAME_ARGUMENT_NAMES[1]},
-		{RELATION_ARGUMENT_NAMES, "Name of the relation to follow", RELATION_ARGUMENT_NAMES[1]}
+		{RELATION_ARGUMENT_NAMES, "Name of the relation to follow", RELATION_ARGUMENT_NAMES[1]},
+		QCommandLineOption{SELF_ARGUMENT_NAMES}
 	}, args}
 {
 	for (const auto& rule : argumentRules)
 		rule.check(arguments_);
+	matchSelf_ = arguments_.isArgumentSet(SELF_ARGUMENT_NAMES[1]);
 }
 
 TupleSet CanReach::reachableNodesFrom(std::vector<Tuple> startNodes)
@@ -92,7 +97,8 @@ TupleSet CanReach::reachableNodesFrom(std::vector<Tuple> startNodes)
 			if (visited.contains(current)) continue;
 
 			auto nodes = current.valuesOfType<Model::Node*>();
-			result.add({{"ast", nodes[0]}});
+			if (!matchSelf_ || start[1].second == current[0].second)
+				result.add({{"ast", nodes[0]}});
 
 			for (const auto& neighbor : neighbors(current))
 				if (!visited.contains(neighbor))
