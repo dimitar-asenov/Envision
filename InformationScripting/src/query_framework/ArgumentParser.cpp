@@ -36,24 +36,18 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 													  const QStringList& args, bool addScopeArguments)
 	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
-	if (addScopeArguments)
-	{
-		argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES));
-		argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES));
-	}
 	argParser_->addOptions(options);
+	initParser(args, addScopeArguments);
+}
 
-	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
-	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+ArgumentParser::ArgumentParser(std::initializer_list<PositionalArgument> options,
+										 const QStringList& args, bool addScopeArguments)
+	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
+{
+	for (const auto& opt : options)
+		argParser_->addPositionalArgument(opt.name_, opt.description_, opt.syntax_);
 
-	if (!argParser_->parse(args))
-		throw QueryParsingException("Query arguments parsing error: " + argParser_->errorText());
-
-	if (addScopeArguments)
-	{
-		if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Global;
-		else if (argParser_->isSet(INPUT_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Input;
-	}
+	initParser(args, addScopeArguments);
 }
 
 void ArgumentParser::setArgTo(QStringList& args, const QStringList& argNames, const QString& type)
@@ -80,6 +74,39 @@ QString ArgumentParser::argument(const QString& argName) const
 bool ArgumentParser::isArgumentSet(const QString& argName) const
 {
 	return argParser_->isSet(argName);
+}
+
+int ArgumentParser::numPositionalArguments() const
+{
+	return argParser_->positionalArguments().size();
+}
+
+QString ArgumentParser::positionalArgument(int index)
+{
+	auto posArgs = argParser_->positionalArguments();
+	Q_ASSERT(index >= 0 && index < posArgs.size());
+	return posArgs[index];
+}
+
+void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
+{
+	if (addScopeArguments)
+	{
+		argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES));
+		argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES));
+	}
+
+	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
+	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+
+	if (!argParser_->parse(args))
+		throw QueryParsingException("Query arguments parsing error: " + argParser_->errorText());
+
+	if (addScopeArguments)
+	{
+		if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Global;
+		else if (argParser_->isSet(INPUT_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Input;
+	}
 }
 
 } /* namespace InformationScripting */

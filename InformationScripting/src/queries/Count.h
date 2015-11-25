@@ -43,11 +43,9 @@ class INFORMATIONSCRIPTING_API Count : public LinearQuery
 	private:
 		friend class QueryRegistry;
 
-		static const QStringList BY_ATTRIBUTE_NAME_NAMES;
-
 		ArgumentParser arguments_;
 
-		Count(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);
+		Count(Model::Node* target, QStringList args);
 };
 
 } /* namespace InformationScripting */

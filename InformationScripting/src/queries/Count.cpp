@@ -28,13 +28,13 @@
 
 #include "../query_framework/QueryRegistry.h"
 
-namespace InformationScripting {
+#include "../query_framework/QueryParsingException.h"
 
-const QStringList Count::BY_ATTRIBUTE_NAME_NAMES{"b", "by"};
+namespace InformationScripting {
 
 Optional<TupleSet> Count::executeLinear(TupleSet input)
 {
-	auto countByTags = arguments_.argument(BY_ATTRIBUTE_NAME_NAMES[1]).split(",");
+	auto countByTags = arguments_.positionalArgument(0).split(",");
 	Q_ASSERT(!countByTags.isEmpty()); // This is checked by the argument rule
 
 	QHash<Tuple, int> counts;
@@ -79,18 +79,16 @@ Optional<TupleSet> Count::executeLinear(TupleSet input)
 
 void Count::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<Count>("count",
-		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{BY_ATTRIBUTE_NAME_NAMES[1]}}}});
+	QueryRegistry::registerQuery<Count>("count");
 }
 
-Count::Count(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
+Count::Count(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
-	{BY_ATTRIBUTE_NAME_NAMES, "Name of the attribute(s) that should be used to count on",
-			 BY_ATTRIBUTE_NAME_NAMES[1]}
+	PositionalArgument{"by", "Name of the attribute(s) that should be used to count on"}
 	}, args}
 {
-	for (const auto& rule : argumentRules)
-		rule.check(arguments_);
+	if (arguments_.numPositionalArguments() < 1)
+		throw QueryParsingException(arguments_.queryName() + " Requires one argument");
 }
 
 

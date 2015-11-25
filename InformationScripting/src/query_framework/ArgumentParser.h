@@ -40,6 +40,13 @@ class QCommandLineOption;
 
 namespace InformationScripting {
 
+struct PositionalArgument
+{
+		QString name_;
+		QString description_{};
+		QString syntax_{};
+};
+
 class INFORMATIONSCRIPTING_API ArgumentParser
 {
 	public:
@@ -48,12 +55,18 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		ArgumentParser(std::initializer_list<QCommandLineOption> options,
 								  const QStringList& args, bool addScopeArguments = false);
 
+		ArgumentParser(std::initializer_list<PositionalArgument> options,
+							const QStringList& args, bool addScopeArguments = false);
+
 		static void setArgTo(QStringList& args, const QStringList& argNames, const QString& type);
 
 		Scope scope() const;
 
 		QString argument(const QString& argName) const;
 		bool isArgumentSet(const QString& argName) const;
+
+		int numPositionalArguments() const;
+		QString positionalArgument(int index);
 
 		QString queryName() const;
 
@@ -63,6 +76,8 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		std::unique_ptr<QCommandLineParser> argParser_{};
 		Scope scope_{};
 		QString queryName_;
+
+		void initParser(const QStringList& args, bool addScopeArguments);
 };
 
 inline ArgumentParser::Scope ArgumentParser::scope() const { return scope_; }
