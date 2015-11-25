@@ -87,6 +87,7 @@ add_library(InformationScripting SHARED
 	src/query_framework/QueryParsingException.h
 	src/queries/Count.h
 	src/queries/Join.h
+	src/queries/Filter.h
 	src/query_framework/QueryRuntimeException.h
 	src/query_framework/HighlightOverlayStyle.h
 	src/InformationScriptingException.cpp
@@ -145,6 +146,7 @@ add_library(InformationScripting SHARED
 	src/query_framework/QueryParsingException.cpp
 	src/queries/Count.cpp
 	src/queries/Join.cpp
+	src/queries/Filter.cpp
 	src/query_framework/QueryRuntimeException.cpp
 	src/query_framework/HighlightOverlayStyle.cpp
 )

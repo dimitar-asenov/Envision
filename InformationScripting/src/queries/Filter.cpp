@@ -1,0 +1,94 @@
+/***********************************************************************************************************************
+**
+** Copyright (c) 2011, 2015 ETH Zurich
+** All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+** following conditions are met:
+**
+**    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+**      disclaimer.
+**    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+**      following disclaimer in the documentation and/or other materials provided with the distribution.
+**    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
+**      derived from this software without specific prior written permission.
+**
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+** INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+** DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+** SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**
+***********************************************************************************************************************/
+
+#include "Filter.h"
+
+#include "../query_framework/QueryRegistry.h"
+#include "../query_framework/QueryParsingException.h"
+
+#include "ModelBase/src/util/SymbolMatcher.h"
+
+namespace InformationScripting {
+
+Optional<TupleSet> Filter::executeLinear(TupleSet input)
+{
+	auto filterTag = arguments_.positionalArgument(0);
+	auto filterBy = removeOuterQuotes(arguments_.positionalArgument(1));
+
+	if (!filterTag.contains("."))
+		return {"filter: requires tagged value to filter by, i.e. tag.value."};
+
+	auto tagParts = filterTag.split(".");
+	if (tagParts.size() > 2)
+		return {"filter: tagged value should contain a single dot"};
+
+	QString tupleTag = tagParts[0];
+	QString tupleValueTag = tagParts[1];
+
+	TupleSet result;
+
+	for (const auto& candidate : input.take(tupleTag))
+	{
+		auto it = candidate.find(tupleValueTag);
+		if (it == candidate.end())
+			return {QString("Tuple %1 does not contain %2").arg(tupleTag, tupleValueTag)};
+		Property value = it->second;
+		if (!value.isConvertibleTo<QString>())
+			return {"filter only works on string values"};
+		QString valueString = value;
+		auto matcher = Model::SymbolMatcher::guessMatcher(filterBy);
+		if (matcher.matches(valueString))
+			result.add(candidate);
+	}
+	return result;
+}
+
+void Filter::registerDefaultQueries()
+{
+	QueryRegistry::registerQuery<Filter>("filter");
+}
+
+Filter::Filter(Model::Node* target, QStringList args)
+	: LinearQuery{target}, arguments_{{
+			PositionalArgument{"tag", "The tag to filter on"},
+			PositionalArgument{"by", "The value by which we should filter"}
+	}, args}
+{
+	if (arguments_.numPositionalArguments() < 2)
+		throw QueryParsingException(arguments_.queryName() + " Requires two arguments");
+}
+
+QString Filter::removeOuterQuotes(const QString& from)
+{
+	QString result = from;
+	if (result.startsWith("\""))
+		result = result.mid(1);
+	if (result.endsWith("\""))
+		result = result.left(result.size() - 1);
+	return result;
+}
+
+} /* namespace InformationScripting */

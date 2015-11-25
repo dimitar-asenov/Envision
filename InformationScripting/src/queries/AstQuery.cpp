@@ -91,7 +91,7 @@ void AstQuery::registerDefaultQueries()
 		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Method");});
 	QueryRegistry::registerAlias("toClass", "toParent", [](QStringList& args) {
 		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Class");});
-	QueryRegistry::registerAlias("filter", "ast", [](QStringList& args) {args << "-input";});
+	QueryRegistry::registerAlias("astFilter", "ast", [](QStringList& args) {args << "-input";});
 }
 
 Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet input)
