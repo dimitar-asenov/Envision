@@ -77,7 +77,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 		}
 		*fragment << " " << visit(e->typeExpression());
 	}
-	else if (DCast<AutoTypeExpression>(expression)) *fragment << "auto";
+	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
 	else if (auto e = DCast<FunctionTypeExpression>(expression))
 	{
 		*fragment << list(e->results(), ExpressionVisitorHeader(data())) << " "
