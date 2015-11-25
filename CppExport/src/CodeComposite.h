@@ -38,7 +38,6 @@ class CPPEXPORT_API CodeComposite
 		CodeComposite(const QString& name);
 
 		const QString& name() const;
-
 		const QList<CodeUnit*>& units() const;
 		void addUnit(CodeUnit* unit);
 
@@ -49,13 +48,18 @@ class CPPEXPORT_API CodeComposite
 		const QString name_;
 		QList<CodeUnit*> units_;
 
-		Export::SourceFragment* partFragment(CodeUnitPart* (CodeUnit::*part) ());
+		Export::SourceFragment* partFragment(const QList<CodeUnit*>& codeUnits, CodeUnitPart* (CodeUnit::*part) ());
+		QList<CodeUnit*> sortUnits();
+		template <class T>
+		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
 inline const QList<CodeUnit*>& CodeComposite::units() const { return units_; }
 
-inline Export::SourceFragment* CodeComposite::headerFragment() { return partFragment(&CodeUnit::headerPart); }
-inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
+inline Export::SourceFragment* CodeComposite::headerFragment()
+{ return partFragment(sortUnits(), &CodeUnit::headerPart); }
+inline Export::SourceFragment* CodeComposite::sourceFragment()
+{ return partFragment(units(), &CodeUnit::sourcePart); }
 
 }
