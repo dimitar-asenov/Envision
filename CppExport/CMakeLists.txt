@@ -28,6 +28,7 @@ add_library(CppExport SHARED
 	src/visitors/source_visitors/VisitorDefs.h
 	src/CodeUnit.h
 	src/CodeComposite.h
+	src/CodeUnitPart.h
 	src/CppExportException.cpp
 	src/CppExportPlugin.cpp
 	test/SimpleTest.cpp
@@ -48,6 +49,7 @@ add_library(CppExport SHARED
 	src/visitors/source_visitors/StatementVisitorSource.cpp
 	src/CodeUnit.cpp
 	src/CodeComposite.cpp
+	src/CodeUnitPart.cpp
 )
 
 target_link_libraries(CppExport OOModel Export)

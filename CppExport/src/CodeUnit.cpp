@@ -26,9 +26,31 @@
 
 #include "CodeUnit.h"
 
+#include "OOModel/src/declarations/Class.h"
+
+#include "visitors/header_visitors/DeclarationVisitorHeader.h"
+#include "visitors/source_visitors/DeclarationVisitorSource.h"
+
 namespace CppExport {
 
 CodeUnit::CodeUnit(QString name, Model::Node* node)
-	: name_(name), node_(node) {}
+	: name_(name), node_(node), headerPart_(this), sourcePart_(this) {}
+
+void CodeUnit::calculateSourceFragments()
+{
+	if (auto classs = DCast<OOModel::Class>(node()))
+	{
+		headerPart()->setSourceFragment(DeclarationVisitorHeader().visitTopLevelClass(classs));
+		sourcePart()->setSourceFragment(DeclarationVisitorSource().visitTopLevelClass(classs));
+	}
+	else
+		Q_ASSERT(false); // TODO: handle non class units
+}
+
+void CodeUnit::calculateDependencies(QList<CodeUnitPart*>& allHeaderParts)
+{
+	headerPart()->calculateDependencies(allHeaderParts);
+	sourcePart()->calculateDependencies(allHeaderParts);
+}
 
 }

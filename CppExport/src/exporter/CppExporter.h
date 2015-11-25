@@ -52,12 +52,12 @@ class CPPEXPORT_API CppExporter {
 		static QList<ExportError> exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
 		static Export::ExportMapContainer& exportMaps();
 
-		static void calculateSourceFragments(CodeComposite* codeComposite);
-
 	private:
+		static void units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result);
+		static QList<CodeComposite*> mergeUnits(QList<CodeUnit*>& units);
+		static void createFileFromFragment(Export::SourceDir* directory, const QString& fileName,
+													  Export::SourceFragment* sourceFragment);
 		static Export::FragmentLayouter layouter();
-		static void exportFragment(Export::SourceFragment* fragment);
-		static void exportCodeComposite(CodeComposite* codeComposite);
 };
 
 }

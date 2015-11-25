@@ -28,13 +28,7 @@
 
 #include "cppexport_api.h"
 
-namespace Model {
-	class Node;
-}
-
-namespace Export {
-	class SourceFragment;
-}
+#include "CodeUnitPart.h"
 
 namespace CppExport {
 
@@ -47,25 +41,28 @@ class CPPEXPORT_API CodeUnit
 
 		const QString& name() const;
 		Model::Node* node() const;
-
 		CodeComposite* composite() const;
 		void setComposite(CodeComposite* composite);
 
-		Export::SourceFragment* sourceFragment() const;
-		void setSourceFragment(Export::SourceFragment* fragment);
+		CodeUnitPart* headerPart();
+		CodeUnitPart* sourcePart();
+
+		void calculateSourceFragments();
+		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
 
 	private:
 		QString name_;
 		Model::Node* node_{};
 		CodeComposite* composite_{};
-		Export::SourceFragment* sourceFragment_{};
+		CodeUnitPart headerPart_;
+		CodeUnitPart sourcePart_;
 };
 
 inline const QString& CodeUnit::name() const { return name_; }
 inline Model::Node* CodeUnit::node() const { return node_; }
 inline CodeComposite* CodeUnit::composite() const { return composite_; }
 inline void CodeUnit::setComposite(CodeComposite* composite) { composite_ = composite; }
-inline Export::SourceFragment* CodeUnit::sourceFragment() const { return sourceFragment_; }
-inline void CodeUnit::setSourceFragment(Export::SourceFragment* sourceFragment) { sourceFragment_ = sourceFragment; }
+inline CodeUnitPart* CodeUnit::headerPart() { return &headerPart_; }
+inline CodeUnitPart* CodeUnit::sourcePart() { return &sourcePart_; }
 
 }

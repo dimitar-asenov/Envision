@@ -186,6 +186,18 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
 	else if (auto e = DCast<MethodCallExpression>(expression))
 		*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
+	else if (auto e = DCast<MetaCallExpression>(expression))
+	{
+		*fragment << visit(e->callee());
+
+		auto arguments = new Export::CompositeFragment(e->arguments(), "argsList");
+		for (auto node : *e->arguments())
+			if (auto n = DCast<Expression>(node)) *arguments << visit(n);
+			else if (auto n = DCast<Statement>(node)) *arguments << statement(n);
+			else if (auto n = DCast<Declaration>(node)) *arguments << declaration(n);
+			else Q_ASSERT(false);
+		*fragment << arguments;
+	}
 	else if (auto e = DCast<NewExpression>(expression))
 	{
 		*fragment << "new " << visit(e->newType());

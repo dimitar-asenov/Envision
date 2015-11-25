@@ -24,40 +24,60 @@
  **
  **********************************************************************************************************************/
 
-#include "CodeComposite.h"
+#pragma once
 
-#include "Export/src/tree/CompositeFragment.h"
+#include "cppexport_api.h"
+
+#include "dependency_analysis/DependencyTarget.h"
+
+namespace OOModel {
+	class ReferenceExpression;
+}
+
+namespace Export {
+	class SourceFragment;
+}
 
 namespace CppExport {
 
-CodeComposite::CodeComposite(const QString& name) : name_(name) {}
+class CodeUnit;
+struct DependencyTarget;
 
-void CodeComposite::addUnit(CodeUnit* unit)
+class CPPEXPORT_API CodeUnitPart
 {
-	units_.append(unit);
-	// assert every unit belongs to only one composite
-	Q_ASSERT(!unit->composite());
-	unit->setComposite(this);
-}
+	public:
+		CodeUnitPart(CodeUnit* parent);
 
-Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*part) ())
-{
-	Q_ASSERT(!units().empty());
+		CodeUnit* parent() const;
 
-	auto composite = new Export::CompositeFragment(units().first()->node());
-	for (auto unit : units())
-	{
-		for (CodeUnitPart* dep : (unit->*part)()->dependencies())
-		{
-			*composite << "\n";
-			*composite << "#include \"" + dep->parent()->name() + ".h\"";
-		}
-		*composite << "\n";
+		Export::SourceFragment* sourceFragment() const;
+		void setSourceFragment(Export::SourceFragment* fragment);
 
-		composite->append((unit->*part)()->sourceFragment());
-	}
+		const QSet<Model::Node*>& nameNodes() const;
+		const QSet<OOModel::ReferenceExpression*>& referenceNodes() const;
 
-	return composite;
-}
+		QSet<CodeUnitPart*> dependencies() const;
+		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
+
+	private:
+		CodeUnit* parent_{};
+		Export::SourceFragment* sourceFragment_{};
+		QSet<Model::Node*> nameNodes_;
+		QSet<OOModel::ReferenceExpression*> referenceNodes_;
+		QList<DependencyTarget> targets_;
+		QSet<CodeUnitPart*> dependencies_;
+
+		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
+		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
+};
+
+inline CodeUnit* CodeUnitPart::parent() const { return parent_; }
+
+inline Export::SourceFragment* CodeUnitPart::sourceFragment() const { return sourceFragment_; }
+
+inline const QSet<Model::Node*>& CodeUnitPart::nameNodes() const { return nameNodes_; }
+inline const QSet<OOModel::ReferenceExpression*>& CodeUnitPart::referenceNodes() const { return referenceNodes_; }
+
+inline QSet<CodeUnitPart*> CodeUnitPart::dependencies() const { return dependencies_; }
 
 }

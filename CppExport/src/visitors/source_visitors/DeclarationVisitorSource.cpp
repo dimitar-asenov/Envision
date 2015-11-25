@@ -102,6 +102,22 @@ SourceFile* DeclarationVisitorSource::visitTopLevelClass(Class* classs, SourceDi
 	return classFile;
 }
 
+SourceFragment* DeclarationVisitorSource::visitTopLevelClass(Class* classs)
+{
+	CompositeFragment* fragment = new CompositeFragment(classs, "sections");
+
+	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
+	for (auto node : *classs->subDeclarations())
+	{
+		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
+		else notAllowed(node);
+	}
+
+	*fragment << visit(classs);
+
+	return fragment;
+}
+
 SourceFragment* DeclarationVisitorSource::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
