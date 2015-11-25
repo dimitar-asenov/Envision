@@ -26,6 +26,8 @@
 
 #include "CodeComposite.h"
 
+#include "Export/src/tree/CompositeFragment.h"
+
 namespace CppExport {
 
 CodeComposite::CodeComposite(const QString& name) : name_(name) {}
@@ -36,6 +38,26 @@ void CodeComposite::addUnit(CodeUnit* unit)
 	// assert every unit belongs to only one composite
 	Q_ASSERT(!unit->composite());
 	unit->setComposite(this);
+}
+
+Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*part) ())
+{
+	Q_ASSERT(!units().empty());
+
+	auto composite = new Export::CompositeFragment(units().first()->node());
+	for (auto unit : units())
+	{
+		for (CodeUnitPart* dep : (unit->*part)()->dependencies())
+		{
+			*composite << "\n";
+			*composite << "#include \"" + dep->parent()->name() + ".h\"";
+		}
+		*composite << "\n";
+
+		composite->append((unit->*part)()->sourceFragment());
+	}
+
+	return composite;
 }
 
 }

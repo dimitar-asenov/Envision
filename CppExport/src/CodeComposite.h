@@ -42,12 +42,20 @@ class CPPEXPORT_API CodeComposite
 		const QList<CodeUnit*>& units() const;
 		void addUnit(CodeUnit* unit);
 
+		Export::SourceFragment* headerFragment();
+		Export::SourceFragment* sourceFragment();
+
 	private:
 		const QString name_;
 		QList<CodeUnit*> units_;
+
+		Export::SourceFragment* partFragment(CodeUnitPart* (CodeUnit::*part) ());
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
 inline const QList<CodeUnit*>& CodeComposite::units() const { return units_; }
+
+inline Export::SourceFragment* CodeComposite::headerFragment() { return partFragment(&CodeUnit::headerPart); }
+inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
 
 }

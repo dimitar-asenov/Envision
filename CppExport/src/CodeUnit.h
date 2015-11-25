@@ -47,6 +47,9 @@ class CPPEXPORT_API CodeUnit
 		CodeUnitPart* headerPart();
 		CodeUnitPart* sourcePart();
 
+		void calculateSourceFragments();
+		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
+
 	private:
 		QString name_;
 		Model::Node* node_{};
