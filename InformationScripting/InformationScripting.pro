@@ -75,7 +75,8 @@ HEADERS += src/precompiled.h \
     src/query_framework/QueryRuntimeException.h \
     src/query_framework/HighlightOverlayStyle.h \
     src/query_framework/QueryResultVisualizer.h \
-    src/queries/Filter.h
+    src/queries/Filter.h \
+    src/queries/CanReach.h
 SOURCES += src/InformationScriptingException.cpp \
     src/InformationScriptingPlugin.cpp \
     test/SimpleTest.cpp \
@@ -134,7 +135,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/query_framework/QueryRuntimeException.cpp \
     src/query_framework/HighlightOverlayStyle.cpp \
     src/query_framework/QueryResultVisualizer.cpp \
-    src/queries/Filter.cpp
+    src/queries/Filter.cpp \
+    src/queries/CanReach.cpp
 
 # The workaround below is currently not needed but might be in the future, thus we leave it as reference.
 # Workaround to not have any pragma's in NodeApi.cpp
