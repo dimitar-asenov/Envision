@@ -40,13 +40,12 @@ void CodeComposite::addUnit(CodeUnit* unit)
 	unit->setComposite(this);
 }
 
-Export::SourceFragment* CodeComposite::partFragment(const QList<CodeUnit*>& codeUnits,
-																	 CodeUnitPart* (CodeUnit::*part) ())
+Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*part) ())
 {
-	Q_ASSERT(!codeUnits.empty());
+	Q_ASSERT(!units().empty());
 
-	auto composite = new Export::CompositeFragment(codeUnits.first()->node());
-	for (auto unit : codeUnits)
+	auto composite = new Export::CompositeFragment(units().first()->node());
+	for (auto unit : units())
 	{
 		for (CodeUnitPart* dep : (unit->*part)()->dependencies())
 		{
@@ -61,16 +60,15 @@ Export::SourceFragment* CodeComposite::partFragment(const QList<CodeUnit*>& code
 	return composite;
 }
 
-QList<CodeUnit*> CodeComposite::sortUnits()
+void CodeComposite::sortUnits()
 {
-	if (units().size() <= 1) return units();
+	if (units().size() <= 1) return;
 
 	QHash<CodeUnitPart*, QSet<CodeUnitPart*>> headerPartDependencies;
 	for (auto unit : units()) headerPartDependencies.insert(unit->headerPart(), unit->headerPart()->dependencies());
 
-	QList<CodeUnit*> result;
-	for (auto headerPart : topologicalSort(headerPartDependencies)) result.append(headerPart->parent());
-	return result;
+	units_.clear();
+	for (auto headerPart : topologicalSort(headerPartDependencies)) units_.append(headerPart->parent());
 }
 
 template <class T>
