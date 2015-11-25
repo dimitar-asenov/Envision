@@ -192,14 +192,10 @@ SourceFragment* ExpressionVisitorSource::visit(Expression* expression)
 
 		auto arguments = new Export::CompositeFragment(e->arguments(), "argsList");
 		for (auto node : *e->arguments())
-			if (auto n = DCast<Expression>(node))
-				*arguments << visit(n);
-			else if (auto n = DCast<Statement>(node))
-				*arguments << statement(n);
-			else if (auto n = DCast<Declaration>(node))
-				*arguments << declaration(n);
-			else
-				Q_ASSERT(false);
+			if (auto n = DCast<Expression>(node)) *arguments << visit(n);
+			else if (auto n = DCast<Statement>(node)) *arguments << statement(n);
+			else if (auto n = DCast<Declaration>(node)) *arguments << declaration(n);
+			else Q_ASSERT(false);
 		*fragment << arguments;
 	}
 	else if (auto e = DCast<NewExpression>(expression))
