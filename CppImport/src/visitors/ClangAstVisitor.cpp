@@ -1141,6 +1141,8 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		ooFunction->modifiers()->set(OOModel::Modifier::Inline);
 	if (functionDecl->isVirtualAsWritten())
 		ooFunction->modifiers()->set(OOModel::Modifier::Virtual);
+	if (functionDecl->hasAttr<clang::OverrideAttr>())
+		ooFunction->modifiers()->set(OOModel::Modifier::Override);
 }
 
 OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)
