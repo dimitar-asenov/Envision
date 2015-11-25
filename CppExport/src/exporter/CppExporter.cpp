@@ -57,6 +57,7 @@ QList<ExportError> CppExporter::exportTree(Model::TreeManager* treeManager,
 	auto directory = new Export::SourceDir(nullptr, pathToProjectContainerDirectory + "/src");
 	for (auto codeComposite : mergeUnits(codeUnits))
 	{
+		codeComposite->sortUnits();
 		createFileFromFragment(directory, codeComposite->name() + ".h", codeComposite->headerFragment());
 		createFileFromFragment(directory, codeComposite->name() + ".cpp", codeComposite->sourceFragment());
 	}
