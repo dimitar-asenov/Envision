@@ -117,8 +117,6 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet input)
 	for (auto childClass : childClasses)
 	{
 		NamedProperty namedClass{"childClass", childClass};
-		ts.add({namedClass});
-
 		addBaseEdgesFor(childClass, namedClass, ts);
 
 		if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
@@ -426,22 +424,15 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classN
 	for (auto base : bases)
 	{
 		NamedProperty baseNode{"baseClass", base};
-		ts.add({baseNode});
-		ts.add({"baseclass", {{classNode}, {baseNode}}});
+		ts.add({"baseclass", {{classNode}, {"baseClass", base}}});
 		addBaseEdgesFor(base, baseNode, ts);
 	}
 }
 
 void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees)
 {
-	NamedProperty namedCaller{"caller", method};
-	ts.add({{namedCaller}});
 	for (auto callee : callees)
-	{
-		NamedProperty namedCallee{"callee", callee};
-		ts.add({{namedCallee}});
-		ts.add({"calls", {namedCaller, namedCallee}});
-	}
+		ts.add({"calls", {{"caller", method}, {"callee", callee}}});
 }
 
 void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
