@@ -58,8 +58,6 @@ class CPPEXPORT_API DeclarationVisitorHeader : public Visitor {
 		Export::SourceFragment* visit(OOModel::TypeAlias* ta);
 
 		Export::SourceFragment* printAnnotationsAndModifiers(OOModel::Declaration* declaration);
-		void allNodes(Export::SourceFragment* f, QSet<Model::Node*>& nodes);
-
 
 		Export::SourceFragment* visitTopLevelClass(OOModel::Class* classs);
 

@@ -99,14 +99,6 @@ SourceFile* DeclarationVisitorHeader::visitTopLevelClass(Class* classs, SourceDi
 
 	*fragment << visit(classs);
 
-	QSet<Model::Node*> nodes;
-	allNodes(fragment, nodes);
-	for (auto n : nodes)
-		if (auto ref = DCast<ReferenceExpression>(n))
-			*fragment << "Reference: " + ref->name();
-		else if (n->definesSymbol())
-			*fragment << "Name: " + n->symbolName();
-
 	return classFile;
 }
 
@@ -124,15 +116,6 @@ SourceFragment* DeclarationVisitorHeader::visitTopLevelClass(Class* classs)
 	*fragment << visit(classs);
 
 	return fragment;
-}
-
-void DeclarationVisitorHeader::allNodes(SourceFragment* f, QSet<Model::Node*>& nodes)
-{
-	if (f->node()) nodes.insert(f->node());
-
-	if (CompositeFragment* cf = dynamic_cast<CompositeFragment*>(f))
-		for (auto child : cf->fragments())
-			allNodes(child, nodes);
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
