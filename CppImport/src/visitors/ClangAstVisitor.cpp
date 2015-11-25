@@ -439,6 +439,7 @@ bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefD
 		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typedefDecl->getUnderlyingType(),
 																						  typedefDecl->getLocStart()));
 		ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
+		ooTypeAlias->modifiers()->set(utils_->translateAccessSpecifier(typedefDecl->getAccess()));
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
