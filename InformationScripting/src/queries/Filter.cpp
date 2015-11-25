@@ -36,18 +36,21 @@ namespace InformationScripting {
 Optional<TupleSet> Filter::executeLinear(TupleSet input)
 {
 	auto filterTag = arguments_.positionalArgument(0);
-	auto filterBy = removeOuterQuotes(arguments_.positionalArgument(1));
 
 	if (!filterTag.contains("."))
 		return {"filter: requires tagged value to filter by, i.e. tag.value."};
 
 	auto tagParts = filterTag.split(".");
-	if (tagParts.size() > 2)
-		return {"filter: tagged value should contain a single dot"};
-
 	QString tupleTag = tagParts[0];
-	QString tupleValueTag = tagParts[1];
 
+	if (tagParts.size() < 2)
+		return TupleSet(input.take(tupleTag).toList());
+
+	if (arguments_.numPositionalArguments() < 2)
+		return {"filter: when filtering by value, a value is required."};
+
+	auto filterBy = removeOuterQuotes(arguments_.positionalArgument(1));
+	QString tupleValueTag = tagParts[1];
 	TupleSet result;
 
 	for (const auto& candidate : input.take(tupleTag))
@@ -77,8 +80,8 @@ Filter::Filter(Model::Node* target, QStringList args)
 			PositionalArgument{"by", "The value by which we should filter"}
 	}, args}
 {
-	if (arguments_.numPositionalArguments() < 2)
-		throw QueryParsingException(arguments_.queryName() + " Requires two arguments");
+	if (arguments_.numPositionalArguments() < 1)
+		throw QueryParsingException(arguments_.queryName() + " Requires at least one arguments");
 }
 
 QString Filter::removeOuterQuotes(const QString& from)
