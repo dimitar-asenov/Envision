@@ -24,72 +24,74 @@
 **
 ***********************************************************************************************************************/
 
-#include "Count.h"
+#include "Filter.h"
 
 #include "../query_framework/QueryRegistry.h"
-
 #include "../query_framework/QueryParsingException.h"
+
+#include "ModelBase/src/util/SymbolMatcher.h"
 
 namespace InformationScripting {
 
-Optional<TupleSet> Count::executeLinear(TupleSet input)
+Optional<TupleSet> Filter::executeLinear(TupleSet input)
 {
-	auto countByTags = arguments_.positionalArgument(0).split(",");
-	Q_ASSERT(!countByTags.isEmpty()); // This is checked by the argument rule
+	auto filterTag = arguments_.positionalArgument(0);
 
-	QHash<Tuple, int> counts;
-	if (countByTags[0].contains("."))
+	if (!filterTag.contains("."))
+		return {"filter: requires tagged value to filter by, i.e. tag.value."};
+
+	auto tagParts = filterTag.split(".");
+	QString tupleTag = tagParts[0];
+
+	if (tagParts.size() < 2)
+		return TupleSet(input.take(tupleTag).toList());
+
+	if (arguments_.numPositionalArguments() < 2)
+		return {"filter: when filtering by value, a value is required."};
+
+	auto filterBy = removeOuterQuotes(arguments_.positionalArgument(1));
+	QString tupleValueTag = tagParts[1];
+	TupleSet result;
+
+	for (const auto& candidate : input.take(tupleTag))
 	{
-		auto parts = countByTags[0].split(".");
-		if (parts.size() > 2) return {"count: by argument can only have a single . (dot)"};
-		QString tag = parts[0];
-		bool allSame = std::all_of(countByTags.begin(), countByTags.end(), [tag](const QString& by) {
-			return by.split(".")[0] == tag;
-		});
-		if (!allSame) return {"count: by argument values should all be from same tuple"};
-
-		auto taggedTuples = input.tuples(tag);
-		for (const auto& tuple : taggedTuples)
-		{
-			QList<NamedProperty> keyTuple;
-			for (const auto& byTag : countByTags)
-			{
-				auto propName = byTag.split(".")[1];
-				auto it = tuple.find(propName);
-				if (it == tuple.end())
-					return {QString("Tuple tagged with %1 does not contain value with tag %2").arg(tuple.tag(), propName)};
-				keyTuple.push_back(*it);
-			}
-			++counts[Tuple(keyTuple)];
-		}
-
+		auto it = candidate.find(tupleValueTag);
+		if (it == candidate.end())
+			return {QString("Tuple %1 does not contain %2").arg(tupleTag, tupleValueTag)};
+		Property value = it->second;
+		if (!value.isConvertibleTo<QString>())
+			return {"filter only works on string values"};
+		QString valueString = value;
+		auto matcher = Model::SymbolMatcher::guessMatcher(filterBy);
+		if (matcher.matches(valueString))
+			result.add(candidate);
 	}
-	else
-		return {"count: need to specify tag of tuple to extract values from"};
-
-	for (auto it = counts.begin(); it != counts.end(); ++it)
-	{
-		Tuple countTuple({{"count", it.value()}});
-		for (const auto& namedProperty : it.key())
-			countTuple.add(namedProperty);
-		input.add(countTuple);
-	}
-	return input;
+	return result;
 }
 
-void Count::registerDefaultQueries()
+void Filter::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<Count>("count");
+	QueryRegistry::registerQuery<Filter>("filter");
 }
 
-Count::Count(Model::Node* target, QStringList args)
+Filter::Filter(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
-	PositionalArgument{"by", "Name of the attribute(s) that should be used to count on"}
+			PositionalArgument{"tag", "The tag to filter on"},
+			PositionalArgument{"by", "The value by which we should filter"}
 	}, args}
 {
 	if (arguments_.numPositionalArguments() < 1)
-		throw QueryParsingException(arguments_.queryName() + " Requires one argument");
+		throw QueryParsingException(arguments_.queryName() + " Requires at least one arguments");
 }
 
+QString Filter::removeOuterQuotes(const QString& from)
+{
+	QString result = from;
+	if (result.startsWith("\""))
+		result = result.mid(1);
+	if (result.endsWith("\""))
+		result = result.left(result.size() - 1);
+	return result;
+}
 
 } /* namespace InformationScripting */

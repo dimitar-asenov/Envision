@@ -28,59 +28,26 @@
 
 #include "../informationscripting_api.h"
 
-#include "../InformationScriptingException.h"
-#include "ArgumentRule.h"
-
-namespace Model {
-	class Node;
-}
-
-class QCommandLineParser;
-class QCommandLineOption;
+#include "LinearQuery.h"
+#include "../query_framework/ArgumentParser.h"
 
 namespace InformationScripting {
 
-struct PositionalArgument
-{
-		QString name_;
-		QString description_{};
-		QString syntax_{};
-};
-
-class INFORMATIONSCRIPTING_API ArgumentParser
+class INFORMATIONSCRIPTING_API Filter : public LinearQuery
 {
 	public:
-		enum class Scope : int {Local, Global, Input};
+		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
 
-		ArgumentParser(std::initializer_list<QCommandLineOption> options,
-								  const QStringList& args, bool addScopeArguments = false);
+		static void registerDefaultQueries();
 
-		ArgumentParser(std::initializer_list<PositionalArgument> options,
-							const QStringList& args, bool addScopeArguments = false);
-
-		static void setArgTo(QStringList& args, const QStringList& argNames, const QString& type);
-
-		Scope scope() const;
-
-		QString argument(const QString& argName) const;
-		bool isArgumentSet(const QString& argName) const;
-
-		int numPositionalArguments() const;
-		QString positionalArgument(int index);
-
-		QString queryName() const;
-
-		static const QStringList GLOBAL_SCOPE_ARGUMENT_NAMES;
-		static const QStringList INPUT_SCOPE_ARGUMENT_NAMES;
 	private:
-		std::unique_ptr<QCommandLineParser> argParser_{};
-		Scope scope_{};
-		QString queryName_;
+		friend class QueryRegistry;
 
-		void initParser(const QStringList& args, bool addScopeArguments);
+		ArgumentParser arguments_;
+
+		Filter(Model::Node* target, QStringList args);
+
+		static QString removeOuterQuotes(const QString& from);
 };
-
-inline ArgumentParser::Scope ArgumentParser::scope() const { return scope_; }
-inline QString ArgumentParser::queryName() const { return queryName_; }
 
 } /* namespace InformationScripting */

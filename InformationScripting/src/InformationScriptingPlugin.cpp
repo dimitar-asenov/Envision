@@ -39,6 +39,8 @@
 #include "queries/Heatmap.h"
 #include "queries/Count.h"
 #include "queries/Join.h"
+#include "queries/Filter.h"
+#include "queries/CanReach.h"
 #include "query_prompt/HQuery.h"
 #include "query_prompt/visualization/VCommandNode.h"
 #include "query_prompt/visualization/VCommandArgument.h"
@@ -73,6 +75,8 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	RuntimeQuery::registerDefaultQueries();
 	Count::registerDefaultQueries();
 	Join::registerDefaultQueries();
+	Filter::registerDefaultQueries();
+	CanReach::registerDefaultQueries();
 	QueryResultVisualizer::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();
