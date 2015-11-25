@@ -1,6 +1,6 @@
 # filterCasts
 
-classUses = Query.executeQuery('ast -t=CastExpression|attribute -at=castType -input|uses -input -t=Class', [])
+classUses = Query.executeQuery('ast -t=CastExpression | attribute -at=castType -input | uses -input -t=Class', [])
 
 def hasTypeIdMethod( cl ):
     for method in cl.methods:
