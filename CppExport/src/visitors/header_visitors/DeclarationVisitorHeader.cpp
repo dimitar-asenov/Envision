@@ -233,6 +233,9 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 	notAllowed(method->subDeclarations());
 	notAllowed(method->memberInitializers());
 
+	if (method->modifiers()->isSet(Modifier::Override))
+		*fragment << " " << new TextFragment(method->modifiers(), "override");
+
 	*fragment << ";";
 
 	return fragment;
@@ -273,8 +276,6 @@ SourceFragment* DeclarationVisitorHeader::printAnnotationsAndModifiers(Declarati
 
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
-	if (declaration->modifiers()->isSet(Modifier::Override))
-		*header << new TextFragment(declaration->modifiers(), "override");
 	if (declaration->modifiers()->isSet(Modifier::Inline))
 		*header << new TextFragment(declaration->modifiers(), "inline");
 
