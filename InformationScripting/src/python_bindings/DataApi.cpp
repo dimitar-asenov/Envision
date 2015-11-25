@@ -33,7 +33,6 @@
 
 #include "AstModification.h"
 #include "OOModel/src/expressions/Expression.h"
-#include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -139,9 +138,7 @@ BOOST_PYTHON_MODULE(DataApi) {
 
 		class_<AstModification>("AstModification")
 				.def("buildExpression", &AstModification::buildExpression, return_internal_reference<>())
-				.staticmethod("buildExpression")
-				.def("wrapInStatement", &AstModification::wrapInStatement, return_internal_reference<>())
-				.staticmethod("wrapInStatement");
+				.staticmethod("buildExpression");
 }
 
 } /* namespace InformationScripting */

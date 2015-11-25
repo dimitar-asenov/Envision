@@ -34,7 +34,6 @@ namespace Model {
 
 namespace OOModel {
 	class Expression;
-	class ExpressionStatement;
 }
 
 namespace InformationScripting {
@@ -43,7 +42,6 @@ class INFORMATIONSCRIPTING_API AstModification
 {
 	public:
 		static OOModel::Expression* buildExpression(const QString& expressionText);
-		static OOModel::ExpressionStatement* wrapInStatement(OOModel::Expression* expr);
 };
 
 } /* namespace InformationScripting */

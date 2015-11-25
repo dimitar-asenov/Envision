@@ -27,7 +27,6 @@
 #include "AstModification.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
-#include "OOModel/src/statements/ExpressionStatement.h"
 #include "ModelBase/src/nodes/Node.h"
 
 namespace InformationScripting {
@@ -35,11 +34,6 @@ namespace InformationScripting {
 OOModel::Expression* AstModification::buildExpression(const QString& expressionText)
 {
 	return OOInteraction::OOExpressionBuilder::getOOExpression(expressionText);
-}
-
-OOModel::ExpressionStatement* AstModification::wrapInStatement(OOModel::Expression* expr)
-{
-	return new OOModel::ExpressionStatement(expr);
 }
 
 } /* namespace InformationScripting */
