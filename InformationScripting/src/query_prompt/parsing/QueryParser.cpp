@@ -74,7 +74,7 @@ QueryNode* QueryParser::parseAny(const QString& queryString, int& index)
 	else
 	{
 		// Create the command. Note that it could be an empty string.
-		auto parts = commandString.split(" ");
+		auto parts = quoteAwareSplit(commandString);
 		if (parts.isEmpty())
 			query = new CommandNode("");
 		else
@@ -143,6 +143,29 @@ void QueryParser::changeToLeftToRightOrder(QueryNode*& top)
 
 		op = rightOp;
 	}
+}
+
+QStringList QueryParser::quoteAwareSplit(const QString& input)
+{
+	QStringList parts;
+	bool inQuote = false;
+	QString currentPart;
+	for (const QChar c : input)
+	{
+		if (c == ' ' && !inQuote)
+		{
+			parts << currentPart;
+			currentPart.clear();
+		}
+		else
+		{
+			currentPart.append(c);
+			if (c == '"')
+				inQuote = !inQuote;
+		}
+	}
+	parts << currentPart;
+	return parts;
 }
 
 }

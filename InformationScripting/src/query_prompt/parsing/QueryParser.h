@@ -50,6 +50,8 @@ class INFORMATIONSCRIPTING_API QueryParser
 		static CompositeQueryNode* parseList(const QString& queryString, int& index);
 
 		static void changeToLeftToRightOrder(QueryNode*& top);
+
+		static QStringList quoteAwareSplit(const QString& input);
 };
 
 }
