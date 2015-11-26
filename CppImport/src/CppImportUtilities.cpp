@@ -380,11 +380,30 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 
 	if (initializer->isBaseInitializer())
 	{
+		/* old version:
+		 *
+		 * in case of a base init call ExampleBase(a, b) would generate
+		 * memberExpression = "ExampleBase" and initializerExpressions = { ExampleBase(a, b) }
+		 * instead of
+		 * memberExpression = "ExampleBase" and initializerExpressions = { a, b }
+
 		if (auto memberRef = DCast<OOModel::ReferenceExpression>
 				(translateTypePtr(initializer->getBaseClass(), initializer->getSourceLocation())))
 			ooMemberInit = new OOModel::MemberInitializer(memberRef, initializerExpressions);
 		else
-			log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);
+			log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);*/
+
+		Q_ASSERT(initializerExpressions.size() == 1);
+		auto baseInitializerCall = DCast<OOModel::MethodCallExpression>(initializerExpressions.first());
+		Q_ASSERT(baseInitializerCall);
+
+		auto memberExpression = DCast<OOModel::Expression>(baseInitializerCall->callee()->clone());
+		QList<OOModel::Expression*> expressionList;
+		for (auto argument : *baseInitializerCall->arguments())
+			expressionList.append(DCast<OOModel::Expression>(argument->clone()));
+		SAFE_DELETE(baseInitializerCall);
+
+		ooMemberInit = new OOModel::MemberInitializer(memberExpression, expressionList);
 	}
 	else if (initializer->isMemberInitializer())
 		ooMemberInit = new OOModel::MemberInitializer(

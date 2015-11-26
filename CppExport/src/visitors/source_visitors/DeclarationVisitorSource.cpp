@@ -121,54 +121,9 @@ SourceFragment* DeclarationVisitorSource::visitTopLevelClass(Class* classs)
 SourceFragment* DeclarationVisitorSource::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
-	if (Class::ConstructKind::Class == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
-	else if (Class::ConstructKind::Interface == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "interface " << classs->nameNode();
-	else if (Class::ConstructKind::Enum == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "enum " << classs->nameNode();
-	else if (Class::ConstructKind::Annotation == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "@interface " << classs->nameNode();
-	else
-		notAllowed(classs);
-
-	if (!classs->typeArguments()->isEmpty())
-		*fragment << list(classs->typeArguments(), ElementVisitorSource(data()), "typeArgsList");
-
-	if (!classs->baseClasses()->isEmpty())
-	{
-		if (Class::ConstructKind::Interface == classs->constructKind() ||
-			 Class::ConstructKind::Annotation == classs->constructKind())
-		{
-			*fragment << " extends ";
-			*fragment << list(classs->baseClasses(), ExpressionVisitorSource(data()), "comma");
-		}
-		else if (Class::ConstructKind::Enum == classs->constructKind())
-		{
-			*fragment << " implements ";
-			*fragment << list(classs->baseClasses(), ExpressionVisitorSource(data()), "comma");
-		}
-		else
-		{
-			// TODO: there might not be an extend and only implements.
-			*fragment << " extends ";
-			*fragment << expression(classs->baseClasses()->at(0));
-
-			if (classs->baseClasses()->size() > 1)
-			{
-				*fragment << " implements ";
-				int i = 1;
-				for (; i < classs->baseClasses()->size() - 1; ++i)
-					*fragment << expression(classs->baseClasses()->at(i)) << ", ";
-				*fragment << expression(classs->baseClasses()->at(i));
-			}
-		}
-	}
-
-	notAllowed(classs->friends());
 
 	//TODO
-	auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
+	auto sections = fragment->append( new CompositeFragment(classs, "sections"));
 	*sections << list(classs->enumerators(), ElementVisitorSource(data()), "enumerators");
 	*sections << list(classs->classes(), this, "declarations");
 	*sections << list(classs->methods(), this, "sections");
@@ -180,19 +135,24 @@ SourceFragment* DeclarationVisitorSource::visit(Class* classs)
 SourceFragment* DeclarationVisitorSource::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
-	*fragment << printAnnotationsAndModifiers(method);
 
 	if (method->results()->size() > 1)
-		error(method->results(), "Cannot have more than one return value in Cpp");
+		error(method->results(), "Cannot have more than one return value in C++");
 
-	if (!method->results()->isEmpty())
-		*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
-	else if (method->methodKind() != Method::MethodKind::Constructor)
-		*fragment << "void ";
+	if (method->methodKind() != Method::MethodKind::Constructor &&
+		 method->methodKind() != Method::MethodKind::Destructor)
+	{
+		if (!method->results()->isEmpty())
+			*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
+		else
+			*fragment << "void ";
+	}
 
-	if (method->methodKind() == Method::MethodKind::Destructor)
-		error(method, "Can not have a method of type Destructor in Cpp");
+	if (auto parentClass = method->firstAncestorOfType<Class>())
+		*fragment << parentClass->name() << "::";
 
+
+	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
 
 	if (!method->typeArguments()->isEmpty())
@@ -200,10 +160,14 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 
 	*fragment << list(method->arguments(), ElementVisitorSource(data()), "argsList");
 
+	if (!method->memberInitializers()->isEmpty())
+		*fragment << " : " << list(method->memberInitializers(), ElementVisitorSource(data()));
+
 	if (!method->throws()->isEmpty())
 	{
-		*fragment << " throws ";
+		*fragment << " throw (";
 		*fragment << list(method->throws(), ExpressionVisitorSource(data()), "comma");
+		*fragment << ")";
 	}
 
 	*fragment << list(method->items(), StatementVisitorSource(data()), "body");
@@ -214,60 +178,37 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 	return fragment;
 }
 
+SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* variableDeclaration)
 SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* vd)
 {
-	auto fragment = new CompositeFragment(vd);
-	*fragment << printAnnotationsAndModifiers(vd);
-	*fragment << expression(vd->typeExpression()) << " " << vd->nameNode();
-	if (vd->initialValue())
-		*fragment << " = " << expression(vd->initialValue());
+	auto fragment = new CompositeFragment(variableDeclaration);
+	bool isField = DCast<Field>(variableDeclaration);
 
-	if (!DCast<Expression>(vd->parent())) *fragment << ";";
+	if (!isField || variableDeclaration->modifiers()->isSet(Modifier::Static))
+	{
+		*fragment << expression(variableDeclaration->typeExpression()) << " ";
+
+		if (isField)
+			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
+				*fragment << parentClass->name() << "::";
+
+		*fragment << variableDeclaration->nameNode();
+		if (variableDeclaration->initialValue())
+			*fragment << " = " << expression(variableDeclaration->initialValue());
+
+		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
+	}
 	return fragment;
 }
 
 SourceFragment* DeclarationVisitorSource::visit(NameImport* nameImport)
 {
 	auto fragment = new CompositeFragment(nameImport);
-	*fragment << printAnnotationsAndModifiers(nameImport);
-
 	notAllowed(nameImport->annotations());
 
 	*fragment << "import " << expression(nameImport->importedName());
 	if (nameImport->importAll()) *fragment << ".*";
 	*fragment << ";";
-
-	return fragment;
-}
-
-SourceFragment* DeclarationVisitorSource::printAnnotationsAndModifiers(Declaration* declaration)
-{
-	auto fragment = new CompositeFragment(declaration, "vertical");
-	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
-		*fragment << list(declaration->annotations(), StatementVisitorSource(data()), "vertical");
-	auto header = fragment->append(new CompositeFragment(declaration, "space"));
-
-	if (declaration->modifiers()->isSet(Modifier::Public))
-		*header << new TextFragment(declaration->modifiers(), "public");
-	if (declaration->modifiers()->isSet(Modifier::Private))
-		*header << new TextFragment(declaration->modifiers(), "private");
-	if (declaration->modifiers()->isSet(Modifier::Protected))
-		*header << new TextFragment(declaration->modifiers(), "protected");
-
-	if (declaration->modifiers()->isSet(Modifier::Static))
-		*header << new TextFragment(declaration->modifiers(), "static");
-
-	if (declaration->modifiers()->isSet(Modifier::Final))
-		*header << new TextFragment(declaration->modifiers(), "final");
-	if (declaration->modifiers()->isSet(Modifier::Abstract))
-		*header << new TextFragment(declaration->modifiers(), "abstract");
-
-	if (declaration->modifiers()->isSet(Modifier::Virtual))
-		error(declaration->modifiers(), "Virtual modifier is invalid in Cpp");
-	if (declaration->modifiers()->isSet(Modifier::Override))
-		error(declaration->modifiers(), "Override modifier is invalid in Cpp");
-	if (declaration->modifiers()->isSet(Modifier::Inline))
-		error(declaration->modifiers(), "Inline modifier is invalid in Cpp");
 
 	return fragment;
 }
@@ -278,10 +219,10 @@ SourceFragment* DeclarationVisitorSource::visit(ExplicitTemplateInstantiation* e
 	return new TextFragment(eti);
 }
 
-SourceFragment* DeclarationVisitorSource::visit(TypeAlias* ta)
+SourceFragment* DeclarationVisitorSource::visit(TypeAlias* typeAlias)
 {
-	notAllowed(ta);
-	return new TextFragment(ta);
+	auto fragment = new CompositeFragment(typeAlias);
+	*fragment << "using " << typeAlias->nameNode() << " = " << expression(typeAlias->typeExpression()) << ";";
+	return fragment;
 }
-
 }

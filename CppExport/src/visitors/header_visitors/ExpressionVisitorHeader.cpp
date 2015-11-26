@@ -28,6 +28,9 @@
 #include "../../CppExportException.h"
 #include "VisitorDefs.h"
 
+#include "OOModel/src/types/PointerType.h"
+#include "OOModel/src/types/SymbolProviderType.h"
+
 using namespace Export;
 using namespace OOModel;
 
@@ -58,7 +61,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG: notAllowed(e); break;
 			case PrimitiveTypeExpression::PrimitiveTypes::FLOAT: *fragment << "float"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::DOUBLE: *fragment << "double"; break;
-			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: *fragment << "boolean"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: *fragment << "bool"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::CHAR: *fragment << "char"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::VOID: *fragment << "void"; break;
 			default: error(e, "Unkown primitive type");
@@ -74,8 +77,12 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 		}
 		*fragment << " " << visit(e->typeExpression());
 	}
-	else if (auto e = DCast<AutoTypeExpression>(expression)) notAllowed(e);
-	else if (auto e = DCast<FunctionTypeExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
+	else if (auto e = DCast<FunctionTypeExpression>(expression))
+	{
+		*fragment << list(e->results(), ExpressionVisitorHeader(data())) << " "
+					 << list(e->arguments(), ExpressionVisitorHeader(data()), "argsList");
+	}
 
 	// Operators ========================================================================================================
 
@@ -143,8 +150,8 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case UnaryOperation::NOT: *fragment << "!" << visit(e->operand()); break;
 			case UnaryOperation::COMPLEMENT: *fragment << "~" << visit(e->operand()); break;
 			case UnaryOperation::PARENTHESIS: *fragment << "(" << visit(e->operand()) << ")"; break;
-			case UnaryOperation::DEREFERENCE: notAllowed(e); break;
-			case UnaryOperation::ADDRESSOF: notAllowed(e); break;
+			case UnaryOperation::DEREFERENCE: *fragment << "*" << visit(e->operand()); break;
+			case UnaryOperation::ADDRESSOF: *fragment << "&" << visit(e->operand()); break;
 			default: error(e, "Unkown unary operator type");
 		}
 	}
@@ -207,7 +214,15 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 	}
 	else if (auto e = DCast<ReferenceExpression>(expression))
 	{
-		if (e->prefix()) *fragment << visit(e->prefix()) << ".";
+		if (e->prefix())
+		{
+			if (dynamic_cast<PointerType*>(e->prefix()->type()))
+				*fragment << visit(e->prefix()) << "->";
+			else if (dynamic_cast<SymbolProviderType*>(e->prefix()->type()))
+				*fragment << visit(e->prefix()) << "::";
+			else
+				*fragment << visit(e->prefix()) << ".";
+		}
 		*fragment << e->name();
 		if (!e->typeArguments()->isEmpty()) *fragment << list(e->typeArguments(), this, "typeArgsList");
 	}

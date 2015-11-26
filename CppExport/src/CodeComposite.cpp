@@ -44,19 +44,24 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 {
 	Q_ASSERT(!units().empty());
 
-	auto composite = new Export::CompositeFragment(units().first()->node());
+	QSet<CodeComposite*> compositeDependencies;
 	for (auto unit : units())
-	{
-		for (CodeUnitPart* dep : (unit->*part)()->dependencies())
-		{
-			*composite << "\n";
-			*composite << "#include \"" + dep->parent()->name() + ".h\"";
-		}
-		*composite << "\n";
+		for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
+			compositeDependencies.insert(dependency->parent()->composite());
 
-		composite->append((unit->*part)()->sourceFragment());
+	auto composite = new Export::CompositeFragment(units().first()->node());
+	if (!compositeDependencies.empty())
+	{
+		for (auto compositeDependency : compositeDependencies)
+			if (compositeDependency != this)
+				*composite << "#include \"" + compositeDependency->name() + ".h\"\n";
+			else
+				*composite << "not putting itself\n";
+		*composite << "\n";
 	}
 
+	for (auto unit : units())
+		composite->append((unit->*part)()->sourceFragment());
 	return composite;
 }
 

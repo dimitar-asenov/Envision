@@ -439,6 +439,7 @@ bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefD
 		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typedefDecl->getUnderlyingType(),
 																						  typedefDecl->getLocStart()));
 		ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
+		ooTypeAlias->modifiers()->set(utils_->translateAccessSpecifier(typedefDecl->getAccess()));
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
@@ -1140,6 +1141,8 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		ooFunction->modifiers()->set(OOModel::Modifier::Inline);
 	if (functionDecl->isVirtualAsWritten())
 		ooFunction->modifiers()->set(OOModel::Modifier::Virtual);
+	if (functionDecl->hasAttr<clang::OverrideAttr>())
+		ooFunction->modifiers()->set(OOModel::Modifier::Override);
 }
 
 OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)

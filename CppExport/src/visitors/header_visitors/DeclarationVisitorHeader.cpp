@@ -46,6 +46,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Declaration* declaration)
 	if (auto castDeclaration = DCast<Method>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<Class>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<TypeAlias>(declaration)) return visit(castDeclaration);
 
 	notAllowed(declaration);
 
@@ -134,6 +135,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
 
 	if (!classs->baseClasses()->isEmpty())
+		// TODO: inheritance modifiers like private, virtual... (not only public)
 		*fragment << list(classs->baseClasses(), ExpressionVisitorHeader(data()), "baseClasses");
 
 	notAllowed(classs->friends());
@@ -181,12 +183,16 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 template<typename Predicate>
 bool DeclarationVisitorHeader::addMemberDeclarations(Class* classs, CompositeFragment* section, Predicate filter)
 {
+	auto subDeclarations = list(classs->subDeclarations(), this, "declarations", filter);
 	auto fields = list(classs->fields(), this, "vertical", filter);
 	auto classes = list(classs->classes(), this, "declarations", filter);
 	auto methods = list(classs->methods(), this, "sections", filter);
 
-	*section << fields << classes << methods;
-	return !fields->fragments().empty() || !classes->fragments().empty() || !methods->fragments().empty();
+	*section << subDeclarations << fields << classes << methods;
+	return !subDeclarations->fragments().empty() ||
+			 !fields->fragments().empty() ||
+			 !classes->fragments().empty() ||
+			 !methods->fragments().empty();
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(Method* method)
@@ -197,12 +203,8 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 
-	if (method->methodKind() == Method::MethodKind::Destructor)
-	{
-		if (!method->name().startsWith("~"))
-			*fragment << "~";
-	}
-	else if (method->methodKind() != Method::MethodKind::Constructor)
+	if (method->methodKind() != Method::MethodKind::Constructor &&
+		 method->methodKind() != Method::MethodKind::Destructor)
 	{
 		if (!method->results()->isEmpty())
 			*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
@@ -210,6 +212,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 			*fragment << "void ";
 	}
 
+	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
 
 	if (!method->typeArguments()->isEmpty())
@@ -226,6 +229,9 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 
 	notAllowed(method->subDeclarations());
 	notAllowed(method->memberInitializers());
+
+	if (method->modifiers()->isSet(Modifier::Override))
+		*fragment << " " << new TextFragment(method->modifiers(), "override");
 
 	*fragment << ";";
 
@@ -267,8 +273,6 @@ SourceFragment* DeclarationVisitorHeader::printAnnotationsAndModifiers(Declarati
 
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
-	if (declaration->modifiers()->isSet(Modifier::Override))
-		*header << new TextFragment(declaration->modifiers(), "override");
 	if (declaration->modifiers()->isSet(Modifier::Inline))
 		*header << new TextFragment(declaration->modifiers(), "inline");
 
@@ -281,10 +285,11 @@ SourceFragment* DeclarationVisitorHeader::visit(ExplicitTemplateInstantiation* e
 	return new TextFragment(eti);
 }
 
-SourceFragment* DeclarationVisitorHeader::visit(TypeAlias* ta)
+SourceFragment* DeclarationVisitorHeader::visit(TypeAlias* typeAlias)
 {
-	error(ta, "TypeAlias unhandled"); // TODO
-	return new TextFragment(ta);
+	auto fragment = new CompositeFragment(typeAlias);
+	*fragment << "using " << typeAlias->nameNode() << " = " << expression(typeAlias->typeExpression()) << ";";
+	return fragment;
 }
 
 }

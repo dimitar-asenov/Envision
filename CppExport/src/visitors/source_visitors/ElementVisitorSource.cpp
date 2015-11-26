@@ -88,8 +88,10 @@ SourceFragment* ElementVisitorSource::visit(Enumerator* enumerator)
 
 SourceFragment* ElementVisitorSource::visit(MemberInitializer* memberInitializer)
 {
-	notAllowed(memberInitializer);
-	return new TextFragment(memberInitializer);
+	auto fragment = new CompositeFragment(memberInitializer);
+	*fragment << expression(memberInitializer->memberReference())
+				 << list(memberInitializer->arguments(), ExpressionVisitorSource(data()), "initializerList");
+	return fragment;
 }
 
 }
