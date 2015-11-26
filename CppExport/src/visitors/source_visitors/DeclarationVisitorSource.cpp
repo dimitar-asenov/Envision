@@ -126,6 +126,9 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
 
+	if (!method->typeArguments()->isEmpty())
+		*fragment << list(method->typeArguments(), ElementVisitorSource(data()), "templateArgsList");
+
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 

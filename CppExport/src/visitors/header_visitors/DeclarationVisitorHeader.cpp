@@ -188,6 +188,10 @@ bool DeclarationVisitorHeader::addMemberDeclarations(Class* classs, CompositeFra
 SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
+
+	if (!method->typeArguments()->isEmpty())
+		*fragment << list(method->typeArguments(), ElementVisitorHeader(data()), "templateArgsList");
+
 	*fragment << printAnnotationsAndModifiers(method);
 
 	if (method->results()->size() > 1)
@@ -204,9 +208,6 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
-
-	if (!method->typeArguments()->isEmpty())
-		*fragment << list(method->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
 
 	*fragment << list(method->arguments(), ElementVisitorHeader(data()), "argsList");
 
