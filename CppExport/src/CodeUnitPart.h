@@ -57,6 +57,7 @@ class CPPEXPORT_API CodeUnitPart
 		const QSet<OOModel::ReferenceExpression*>& referenceNodes() const;
 
 		QSet<CodeUnitPart*> dependencies() const;
+		QSet<Model::Node*> softDependencies() const;
 		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
 
 	private:
@@ -66,6 +67,7 @@ class CPPEXPORT_API CodeUnitPart
 		QSet<OOModel::ReferenceExpression*> referenceNodes_;
 		QList<DependencyTarget> targets_;
 		QSet<CodeUnitPart*> dependencies_;
+		QSet<Model::Node*> softDependencies_;
 
 		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
 		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
@@ -79,5 +81,6 @@ inline const QSet<Model::Node*>& CodeUnitPart::nameNodes() const { return nameNo
 inline const QSet<OOModel::ReferenceExpression*>& CodeUnitPart::referenceNodes() const { return referenceNodes_; }
 
 inline QSet<CodeUnitPart*> CodeUnitPart::dependencies() const { return dependencies_; }
+inline QSet<Model::Node*> CodeUnitPart::softDependencies() const { return softDependencies_; }
 
 }

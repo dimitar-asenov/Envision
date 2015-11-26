@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "CodeUnitPart.h"
+#include "CodeUnit.h"
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/allOOModelNodes.h"
@@ -85,16 +86,26 @@ Model::Node* CodeUnitPart::fixedTarget(OOModel::ReferenceExpression* referenceEx
 
 void CodeUnitPart::calculateDependencies(QList<CodeUnitPart*>& allHeaderParts)
 {
+	softDependencies_.clear();
 	dependencies_.clear();
+
+	if (this == parent()->sourcePart())
+		dependencies_.insert(parent()->headerPart());
 
 	for (auto dependencyTarget : targets_)
 	{
+		if (!dependencyTarget.target_) continue;
+
 		// skip name only dependencies
-		if (dependencyTarget.nameOnly_) continue;
+		if (dependencyTarget.nameOnly_)
+		{
+			softDependencies_.insert(dependencyTarget.target_);
+			continue;
+		}
 
 		for (auto headerPart : allHeaderParts)
 			if (headerPart != this && headerPart->nameNodes().contains(dependencyTarget.target_))
-				dependencies_.insert(headerPart);
+					dependencies_.insert(headerPart);
 	}
 }
 
