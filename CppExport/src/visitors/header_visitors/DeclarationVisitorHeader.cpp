@@ -105,18 +105,7 @@ SourceFile* DeclarationVisitorHeader::visitTopLevelClass(Class* classs, SourceDi
 
 SourceFragment* DeclarationVisitorHeader::visitTopLevelClass(Class* classs)
 {
-	CompositeFragment* fragment = new CompositeFragment(classs, "sections");
-
-	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
-	for (auto node : *classs->subDeclarations())
-	{
-		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
-		else notAllowed(node);
-	}
-
-	*fragment << visit(classs);
-
-	return fragment;
+	return visit(classs);
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
