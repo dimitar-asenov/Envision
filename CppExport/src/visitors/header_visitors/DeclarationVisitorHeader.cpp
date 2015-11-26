@@ -211,11 +211,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Method* method)
 			*fragment << "void ";
 	}
 
-	if (method->methodKind() == Method::MethodKind::Destructor)
-	{
-		if (!method->name().startsWith("~"))
-			*fragment << "~";
-	}
+	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
 
 	if (!method->typeArguments()->isEmpty())

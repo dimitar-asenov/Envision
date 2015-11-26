@@ -151,11 +151,8 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 	if (auto parentClass = method->firstAncestorOfType<Class>())
 		*fragment << parentClass->name() << "::";
 
-	if (method->methodKind() == Method::MethodKind::Destructor)
-	{
-		if (!method->name().startsWith("~"))
-			*fragment << "~";
-	}
+
+	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
 
 	if (!method->typeArguments()->isEmpty())
