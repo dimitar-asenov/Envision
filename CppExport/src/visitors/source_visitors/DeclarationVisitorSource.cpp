@@ -178,21 +178,25 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 	return fragment;
 }
 
+SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* variableDeclaration)
 SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* vd)
 {
-	auto fragment = new CompositeFragment(vd);
-	if (vd->initialValue())
-	{
-		*fragment << expression(vd->typeExpression()) << " ";
+	auto fragment = new CompositeFragment(variableDeclaration);
+	bool isField = DCast<Field>(variableDeclaration);
 
-		if (DCast<Field>(vd))
-			if (auto parentClass = vd->firstAncestorOfType<Class>())
+	if (!isField || variableDeclaration->modifiers()->isSet(Modifier::Static))
+	{
+		*fragment << expression(variableDeclaration->typeExpression()) << " ";
+
+		if (isField)
+			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
 				*fragment << parentClass->name() << "::";
 
-		*fragment << vd->nameNode();
-		*fragment << " = " << expression(vd->initialValue());
+		*fragment << variableDeclaration->nameNode();
+		if (variableDeclaration->initialValue())
+			*fragment << " = " << expression(variableDeclaration->initialValue());
 
-		if (!DCast<Expression>(vd->parent())) *fragment << ";";
+		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
 	return fragment;
 }
