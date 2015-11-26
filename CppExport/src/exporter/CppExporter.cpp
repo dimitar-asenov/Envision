@@ -25,8 +25,6 @@
  **********************************************************************************************************************/
 
 #include "CppExporter.h"
-#include "../visitors/header_visitors/DeclarationVisitorHeader.h"
-#include "../visitors/source_visitors/DeclarationVisitorSource.h"
 
 #include "OOModel/src/declarations/Project.h"
 
