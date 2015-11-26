@@ -135,6 +135,7 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
 
 	if (!classs->baseClasses()->isEmpty())
+		// TODO: inheritance modifiers like private, virtual... (not only public)
 		*fragment << list(classs->baseClasses(), ExpressionVisitorHeader(data()), "baseClasses");
 
 	notAllowed(classs->friends());
