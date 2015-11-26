@@ -89,7 +89,8 @@ SourceFragment* ElementVisitorSource::visit(Enumerator* enumerator)
 SourceFragment* ElementVisitorSource::visit(MemberInitializer* memberInitializer)
 {
 	auto fragment = new CompositeFragment(memberInitializer);
-	*fragment << list(memberInitializer->arguments(), ExpressionVisitorSource(data()));
+	*fragment << expression(memberInitializer->memberReference())
+				 << list(memberInitializer->arguments(), ExpressionVisitorSource(data()), "initializerList");
 	return fragment;
 }
 
