@@ -30,6 +30,8 @@
 #include "../dataformat/Property.h"
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
+#include "../query_framework/QueryParsingException.h"
+#include "../query_framework/QueryRuntimeException.h"
 
 #include "OOModel/src/declarations/Class.h"
 #include "ModelBase/src/nodes/Node.h"
@@ -186,6 +188,16 @@ void BoostPythonHelpers::initializeConverters()
 
 	// register the from-python converters
 	PythonConverters::QString_from_python_str();
+
+	// register exceptions translators:
+	python::register_exception_translator<QueryParsingException>(&BoostPythonHelpers::translate<QueryParsingException>);
+	python::register_exception_translator<QueryRuntimeException>(&BoostPythonHelpers::translate<QueryRuntimeException>);
+}
+
+template <class Exception>
+void BoostPythonHelpers::translate(const Exception& e)
+{
+	PyErr_SetString(PyExc_RuntimeError, e.message().toLatin1().data());
 }
 
 } /* namespace InformationScripting */

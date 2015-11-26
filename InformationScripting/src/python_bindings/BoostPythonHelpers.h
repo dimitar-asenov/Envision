@@ -35,6 +35,10 @@ class INFORMATIONSCRIPTING_API BoostPythonHelpers
 	public:
 		static QString parsePythonException();
 		static void initializeConverters();
+
+	private:
+		template <class Exception>
+		static void translate(const Exception& e);
 };
 
 } /* namespace InformationScripting */
