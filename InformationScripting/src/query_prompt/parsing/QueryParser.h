@@ -48,6 +48,8 @@ class INFORMATIONSCRIPTING_API QueryParser
 	private:
 		static QueryNode* parseAny(const QString& queryString, int& index);
 		static CompositeQueryNode* parseList(const QString& queryString, int& index);
+
+		static void changeToLeftToRightOrder(QueryNode*& top);
 };
 
 }

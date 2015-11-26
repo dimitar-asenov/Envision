@@ -65,8 +65,6 @@ void CanReach::registerDefaultQueries()
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{RELATION_ARGUMENT_NAMES[1]}}},
 											{ArgumentRule::RequireOneOf, {{NAME_ARGUMENT_NAMES[1]},
 																					{SELF_ARGUMENT_NAMES[1], ArgumentValue::IsSet}}}});
-	QueryRegistry::registerAlias("calls", "canReach", [](QStringList& args) {
-		ArgumentParser::setArgTo(args, RELATION_ARGUMENT_NAMES, "calls");});
 }
 
 CanReach::CanReach(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
