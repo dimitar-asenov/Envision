@@ -168,7 +168,6 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 }
 
 SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* variableDeclaration)
-SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* vd)
 {
 	auto fragment = new CompositeFragment(variableDeclaration);
 	bool isField = DCast<Field>(variableDeclaration);
