@@ -28,10 +28,12 @@
 
 #include "cppexport_api.h"
 
-#include "dependency_analysis/DependencyTarget.h"
-
 namespace OOModel {
 	class ReferenceExpression;
+}
+
+namespace Model {
+	class Node;
 }
 
 namespace Export {
@@ -41,7 +43,6 @@ namespace Export {
 namespace CppExport {
 
 class CodeUnit;
-struct DependencyTarget;
 
 class CPPEXPORT_API CodeUnitPart
 {
@@ -65,9 +66,9 @@ class CPPEXPORT_API CodeUnitPart
 		Export::SourceFragment* sourceFragment_{};
 		QSet<Model::Node*> nameNodes_;
 		QSet<OOModel::ReferenceExpression*> referenceNodes_;
-		QList<DependencyTarget> targets_;
 		QSet<CodeUnitPart*> dependencies_;
-		QSet<Model::Node*> softDependencies_;
+		QSet<Model::Node*> softTargets_;
+		QSet<Model::Node*> hardTargets_;
 
 		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
 		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
@@ -81,6 +82,6 @@ inline const QSet<Model::Node*>& CodeUnitPart::nameNodes() const { return nameNo
 inline const QSet<OOModel::ReferenceExpression*>& CodeUnitPart::referenceNodes() const { return referenceNodes_; }
 
 inline QSet<CodeUnitPart*> CodeUnitPart::dependencies() const { return dependencies_; }
-inline QSet<Model::Node*> CodeUnitPart::softDependencies() const { return softDependencies_; }
+inline QSet<Model::Node*> CodeUnitPart::softDependencies() const { return softTargets_; }
 
 }
