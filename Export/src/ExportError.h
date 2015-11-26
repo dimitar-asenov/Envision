@@ -26,15 +26,15 @@
 
 #pragma once
 
-#include "../cppexport_api.h"
+#include "export_api.h"
 
 namespace Model {
 	class Node;
 }
 
-namespace CppExport {
+namespace Export {
 
-class CPPEXPORT_API ExportError {
+class EXPORT_API ExportError {
 	public:
 		ExportError(const QString& errorMessage);
 		ExportError(Model::Node* node, const QString& errorMessage);

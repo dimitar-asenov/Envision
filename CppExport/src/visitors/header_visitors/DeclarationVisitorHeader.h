@@ -27,8 +27,9 @@
 #pragma once
 
 #include "../../cppexport_api.h"
-#include "../../exporter/ExportError.h"
-#include "../Visitor.h"
+
+#include "Export/src/Visitor.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace Export {
 	class SourceDir;
@@ -43,7 +44,7 @@ class StatementVisitorHeader;
 class ElementVisitorHeader;
 
 class CPPEXPORT_API DeclarationVisitorHeader
-: public Visitor<DeclarationVisitorHeader, ExpressionVisitorHeader, StatementVisitorHeader, ElementVisitorHeader>
+:public Export::Visitor<DeclarationVisitorHeader, ExpressionVisitorHeader, StatementVisitorHeader, ElementVisitorHeader>
 {
 	public:
 		using Visitor::Visitor;

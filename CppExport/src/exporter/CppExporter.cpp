@@ -38,8 +38,8 @@
 
 namespace CppExport {
 
-QList<ExportError> CppExporter::exportTree(Model::TreeManager* treeManager,
-														 const QString& pathToProjectContainerDirectory)
+QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManager,
+																	const QString& pathToProjectContainerDirectory)
 {
 	QList<CodeUnit*> codeUnits;
 	units(treeManager->root(), "", codeUnits);

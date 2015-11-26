@@ -26,7 +26,7 @@
 
 #include "ExportError.h"
 
-namespace CppExport {
+namespace Export {
 
 ExportError::ExportError(const QString& errorMessage) : message_{errorMessage} {}
 ExportError::ExportError(Model::Node* node, const QString& errorMessage) : node_{node}, message_{errorMessage} {}

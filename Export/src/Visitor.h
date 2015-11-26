@@ -26,13 +26,13 @@
 
 #pragma once
 
-#include "../cppexport_api.h"
-#include "../exporter/ExportError.h"
+#include "export_api.h"
+#include "ExportError.h"
+#include "tree/CompositeFragment.h"
 
-#include "OOModel/src/allOOModelNodes.h"
-#include "Export/src/tree/CompositeFragment.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
-namespace CppExport {
+namespace Export {
 
 struct VisitorData
 {
@@ -59,16 +59,16 @@ class Visitor
 		void error(Model::Node* node, const QString& errorMessage);
 
 		template<class ListElement, class VisitorClass, typename Predicate = bool (*)(ListElement*)>
-		Export::CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass* v,
+		CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass* v,
 												  const QString& fragmentType = QString(), Predicate filter = nullptr);
 		template<class ListElement, class VisitorClass, typename Predicate = bool (*)(ListElement*)>
-		Export::CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
+		CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
 												  const QString& fragmentType = QString(), Predicate filter = nullptr);
 
-		template <class NodeType> Export::SourceFragment* declaration(NodeType* node);
-		template <class NodeType> Export::SourceFragment* statement(NodeType* node);
-		template <class NodeType> Export::SourceFragment* expression(NodeType* node);
-		template <class NodeType> Export::SourceFragment* element(NodeType* node);
+		template <class NodeType> SourceFragment* declaration(NodeType* node);
+		template <class NodeType> SourceFragment* statement(NodeType* node);
+		template <class NodeType> SourceFragment* expression(NodeType* node);
+		template <class NodeType> SourceFragment* element(NodeType* node);
 
 	private:
 		std::shared_ptr<VisitorData> data_;
@@ -124,10 +124,10 @@ inline void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, Ele
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
 template<class ListElement, class VisitorClass, typename Predicate>
-Export::CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::list(Model::TypedList<ListElement>* list, VisitorClass* v, const QString& fragmentType, Predicate filter)
 {
-	auto fragment = new Export::CompositeFragment(list, fragmentType);
+	auto fragment = new CompositeFragment(list, fragmentType);
 	for (auto node : *list)
 		if (!filter || filter(node))
 			*fragment << v->visit(node);
@@ -136,29 +136,29 @@ Export::CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, Statem
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
 template<class ListElement, class VisitorClass, typename Predicate>
-inline Export::CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+inline CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::list(Model::TypedList<ListElement>* list, VisitorClass&& v, const QString& fragmentType, Predicate filter)
 {
 	return Visitor::list(list, &v, fragmentType, filter);
 }
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
-template <class NodeType> inline Export::SourceFragment*
+template <class NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::declaration(NodeType* node)
 { return DeclarationVisitor(data_).visit(node); }
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
-template <class NodeType> inline Export::SourceFragment*
+template <class NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::statement(NodeType* node)
 { return StatementVisitor(data_).visit(node); }
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
-template <class NodeType> inline Export::SourceFragment*
+template <class NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::expression(NodeType* node)
 { return ExpressionVisitor(data_).visit(node); }
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
-template <class NodeType> inline Export::SourceFragment*
+template <class NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::element(NodeType* node)
 { return ElementVisitor(data_).visit(node); }
 
