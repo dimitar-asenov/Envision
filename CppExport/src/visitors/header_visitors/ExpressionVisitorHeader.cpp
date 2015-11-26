@@ -24,9 +24,11 @@
 **
 ***********************************************************************************************************************/
 
+#include "DeclarationVisitorHeader.h"
 #include "ExpressionVisitorHeader.h"
+#include "StatementVisitorHeader.h"
+#include "ElementVisitorHeader.h"
 #include "../../CppExportException.h"
-#include "VisitorDefs.h"
 
 #include "OOModel/src/types/PointerType.h"
 #include "OOModel/src/types/SymbolProviderType.h"

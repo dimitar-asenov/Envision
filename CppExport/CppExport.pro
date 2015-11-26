@@ -23,12 +23,10 @@ HEADERS += src/precompiled.h \
 	src/visitors/header_visitors/ExpressionVisitorHeader.h \
 	src/visitors/header_visitors/StatementVisitorHeader.h \
 	src/visitors/Visitor.h \
-	src/visitors/header_visitors/VisitorDefs.h \
 	src/visitors/source_visitors/DeclarationVisitorSource.h \
 	src/visitors/source_visitors/ElementVisitorSource.h \
 	src/visitors/source_visitors/ExpressionVisitorSource.h \
 	src/visitors/source_visitors/StatementVisitorSource.h \
-	src/visitors/source_visitors/VisitorDefs.h \
 	src/CodeUnit.h \
 	src/CodeComposite.h \
 	src/CodeUnitPart.h
@@ -45,7 +43,6 @@ SOURCES += src/CppExportException.cpp \
 	src/visitors/header_visitors/ElementVisitorHeader.cpp \
 	src/visitors/header_visitors/ExpressionVisitorHeader.cpp \
 	src/visitors/header_visitors/StatementVisitorHeader.cpp \
-	src/visitors/Visitor.cpp \
 	src/visitors/source_visitors/DeclarationVisitorSource.cpp \
 	src/visitors/source_visitors/ElementVisitorSource.cpp \
 	src/visitors/source_visitors/ExpressionVisitorSource.cpp \

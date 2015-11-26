@@ -38,7 +38,13 @@ namespace Export {
 
 namespace CppExport {
 
-class CPPEXPORT_API DeclarationVisitorSource : public Visitor {
+class ExpressionVisitorSource;
+class StatementVisitorSource;
+class ElementVisitorSource;
+
+class CPPEXPORT_API DeclarationVisitorSource
+: public Visitor<DeclarationVisitorSource, ExpressionVisitorSource, StatementVisitorSource, ElementVisitorSource>
+{
 	public:
 		using Visitor::Visitor;
 

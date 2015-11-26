@@ -25,8 +25,9 @@
  **********************************************************************************************************************/
 
 #include "DeclarationVisitorSource.h"
-
-#include "VisitorDefs.h"
+#include "ExpressionVisitorSource.h"
+#include "StatementVisitorSource.h"
+#include "ElementVisitorSource.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/NameImport.h"
@@ -139,7 +140,6 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 
 	if (auto parentClass = method->firstAncestorOfType<Class>())
 		*fragment << parentClass->name() << "::";
-
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();

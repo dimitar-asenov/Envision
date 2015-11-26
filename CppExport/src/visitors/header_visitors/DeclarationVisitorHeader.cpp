@@ -25,8 +25,9 @@
  **********************************************************************************************************************/
 
 #include "DeclarationVisitorHeader.h"
-
-#include "VisitorDefs.h"
+#include "ExpressionVisitorHeader.h"
+#include "StatementVisitorHeader.h"
+#include "ElementVisitorHeader.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/NameImport.h"
