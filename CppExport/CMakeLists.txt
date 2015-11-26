@@ -8,11 +8,7 @@ add_library(CppExport SHARED
 	src/CppExportException.h
 	src/cppexport_api.h
 	src/CppExportPlugin.h
-	src/dependency_analysis/DependencyAnalyzer.h
-	src/dependency_analysis/DependencyUnit.h
-	src/dependency_analysis/DependencyTarget.h
 	src/Config.h
-	src/dependency_analysis/DependencyComposite.h
 	src/exporter/CppExporter.h
 	src/visitors/header_visitors/DeclarationVisitorHeader.h
 	src/visitors/header_visitors/ElementVisitorHeader.h
@@ -28,10 +24,7 @@ add_library(CppExport SHARED
 	src/CppExportException.cpp
 	src/CppExportPlugin.cpp
 	test/SimpleTest.cpp
-	src/dependency_analysis/DependencyAnalyzer.cpp
-	src/dependency_analysis/DependencyUnit.cpp
 	src/Config.cpp
-	src/dependency_analysis/DependencyComposite.cpp
 	src/exporter/CppExporter.cpp
 	src/visitors/header_visitors/DeclarationVisitorHeader.cpp
 	src/visitors/header_visitors/ElementVisitorHeader.cpp
