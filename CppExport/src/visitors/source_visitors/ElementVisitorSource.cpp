@@ -24,8 +24,11 @@
 **
 ***********************************************************************************************************************/
 
+#include "DeclarationVisitorSource.h"
+#include "ExpressionVisitorSource.h"
+#include "StatementVisitorSource.h"
 #include "ElementVisitorSource.h"
-#include "VisitorDefs.h"
+
 
 using namespace Export;
 using namespace OOModel;

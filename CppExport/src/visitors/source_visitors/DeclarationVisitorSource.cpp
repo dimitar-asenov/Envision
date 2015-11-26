@@ -25,8 +25,9 @@
  **********************************************************************************************************************/
 
 #include "DeclarationVisitorSource.h"
-
-#include "VisitorDefs.h"
+#include "ExpressionVisitorSource.h"
+#include "StatementVisitorSource.h"
+#include "ElementVisitorSource.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/NameImport.h"
@@ -104,18 +105,7 @@ SourceFile* DeclarationVisitorSource::visitTopLevelClass(Class* classs, SourceDi
 
 SourceFragment* DeclarationVisitorSource::visitTopLevelClass(Class* classs)
 {
-	CompositeFragment* fragment = new CompositeFragment(classs, "sections");
-
-	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
-	for (auto node : *classs->subDeclarations())
-	{
-		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
-		else notAllowed(node);
-	}
-
-	*fragment << visit(classs);
-
-	return fragment;
+	return visit(classs);
 }
 
 SourceFragment* DeclarationVisitorSource::visit(Class* classs)
@@ -126,7 +116,7 @@ SourceFragment* DeclarationVisitorSource::visit(Class* classs)
 	auto sections = fragment->append( new CompositeFragment(classs, "sections"));
 	*sections << list(classs->enumerators(), ElementVisitorSource(data()), "enumerators");
 	*sections << list(classs->classes(), this, "declarations");
-	*sections << list(classs->methods(), this, "sections");
+	*sections << list(classs->methods(), this, "spacedSections");
 	*sections << list(classs->fields(), this, "vertical");
 
 	return fragment;
@@ -150,7 +140,6 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 
 	if (auto parentClass = method->firstAncestorOfType<Class>())
 		*fragment << parentClass->name() << "::";
-
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
@@ -179,7 +168,6 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 }
 
 SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* variableDeclaration)
-SourceFragment* DeclarationVisitorSource::visit(VariableDeclaration* vd)
 {
 	auto fragment = new CompositeFragment(variableDeclaration);
 	bool isField = DCast<Field>(variableDeclaration);

@@ -25,8 +25,6 @@
  **********************************************************************************************************************/
 
 #include "CppExporter.h"
-#include "../visitors/header_visitors/DeclarationVisitorHeader.h"
-#include "../visitors/source_visitors/DeclarationVisitorSource.h"
 
 #include "OOModel/src/declarations/Project.h"
 
@@ -130,6 +128,7 @@ Export::FragmentLayouter CppExporter::layouter()
 	result.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
 	result.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
 	result.addRule("sections", Export::FragmentLayouter::NoIndentation, "", "\n", "");
+	result.addRule("spacedSections", Export::FragmentLayouter::NoIndentation, "", "\n\n", "");
 	result.addRule("accessorSections", Export::FragmentLayouter::IndentChildFragments, "", "\n", "");
 	result.addRule("bodySections", Export::FragmentLayouter::NewLineBefore
 						  | Export::FragmentLayouter::IndentChildFragments | Export::FragmentLayouter::NewLineAfterPrefix

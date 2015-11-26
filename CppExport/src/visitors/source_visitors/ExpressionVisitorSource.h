@@ -31,7 +31,13 @@
 
 namespace CppExport {
 
-class ExpressionVisitorSource : public Visitor
+class DeclarationVisitorSource;
+class ExpressionVisitorSource;
+class StatementVisitorSource;
+class ElementVisitorSource;
+
+class ExpressionVisitorSource
+: public Visitor<DeclarationVisitorSource, ExpressionVisitorSource, StatementVisitorSource, ElementVisitorSource>
 {
 	public:
 		using Visitor::Visitor;

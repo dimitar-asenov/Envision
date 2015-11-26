@@ -24,9 +24,12 @@
 **
 ***********************************************************************************************************************/
 
+#include "DeclarationVisitorSource.h"
 #include "ExpressionVisitorSource.h"
+#include "StatementVisitorSource.h"
+#include "ElementVisitorSource.h"
+
 #include "../../CppExportException.h"
-#include "VisitorDefs.h"
 
 #include "OOModel/src/types/PointerType.h"
 #include "OOModel/src/types/SymbolProviderType.h"

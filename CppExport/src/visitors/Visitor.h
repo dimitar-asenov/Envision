@@ -39,6 +39,7 @@ struct VisitorData
 		QList<ExportError> errors_;
 };
 
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
 class Visitor
 {
 	public:
@@ -73,17 +74,58 @@ class Visitor
 		std::shared_ptr<VisitorData> data_;
 };
 
-inline std::shared_ptr<VisitorData> Visitor::data() { return data_; }
 
-inline QList<ExportError> Visitor::errors() const { return data_->errors_; }
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+inline std::shared_ptr<VisitorData>
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::data() { return data_; }
 
-inline void Visitor::error(const QString& errorMessage) { data_->errors_.append(ExportError(errorMessage)); }
-inline void Visitor::error(Model::Node* node, const QString& errorMessage)
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::required(Model::Node* parent, Model::Node* node, const QString& childName)
+{
+	if (node) return;
+	error(parent, "A required child (" + childName + ") is missing.");
+}
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::notAllowed(Model::Node* node)
+{
+	if (!node) return;
+
+	if (auto list = DCast<Model::List>(node)) notAllowed(list);
+	else error(node, "Node not allowed");
+}
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::notAllowed(Model::List* list)
+{
+	if (list && !list->isEmpty()) error(list, "List must be empty");
+}
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::Visitor() : data_{new VisitorData}{}
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::Visitor(std::shared_ptr<VisitorData> data) : data_{data} {}
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+inline QList<ExportError> Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::errors() const { return data_->errors_; }
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+inline void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::error(const QString& errorMessage) { data_->errors_.append(ExportError(errorMessage)); }
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+inline void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::error(Model::Node* node, const QString& errorMessage)
 { data_->errors_.append(ExportError(node, errorMessage)); }
 
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
 template<class ListElement, class VisitorClass, typename Predicate>
-Export::CompositeFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass* v,
-													  const QString& fragmentType, Predicate filter)
+Export::CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::list(Model::TypedList<ListElement>* list, VisitorClass* v, const QString& fragmentType, Predicate filter)
 {
 	auto fragment = new Export::CompositeFragment(list, fragmentType);
 	for (auto node : *list)
@@ -92,11 +134,32 @@ Export::CompositeFragment* Visitor::list(Model::TypedList<ListElement>* list, Vi
 	return fragment;
 }
 
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
 template<class ListElement, class VisitorClass, typename Predicate>
-inline Export::CompositeFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass&& v,
-															const QString& fragmentType, Predicate filter)
+inline Export::CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::list(Model::TypedList<ListElement>* list, VisitorClass&& v, const QString& fragmentType, Predicate filter)
 {
 	return Visitor::list(list, &v, fragmentType, filter);
 }
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template <class NodeType> inline Export::SourceFragment*
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::declaration(NodeType* node)
+{ return DeclarationVisitor(data_).visit(node); }
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template <class NodeType> inline Export::SourceFragment*
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::statement(NodeType* node)
+{ return StatementVisitor(data_).visit(node); }
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template <class NodeType> inline Export::SourceFragment*
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::expression(NodeType* node)
+{ return ExpressionVisitor(data_).visit(node); }
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template <class NodeType> inline Export::SourceFragment*
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::element(NodeType* node)
+{ return ElementVisitor(data_).visit(node); }
 
 }

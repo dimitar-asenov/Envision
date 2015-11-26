@@ -27,6 +27,7 @@
 #include "CodeComposite.h"
 
 #include "Export/src/tree/CompositeFragment.h"
+#include "OOModel/src/declarations/Class.h"
 
 namespace CppExport {
 
@@ -44,19 +45,45 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 {
 	Q_ASSERT(!units().empty());
 
+	QSet<Model::Node*> softDependencies;
 	QSet<CodeComposite*> compositeDependencies;
 	for (auto unit : units())
 		for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
+		{
+			softDependencies.unite(dependency->softDependencies());
 			compositeDependencies.insert(dependency->parent()->composite());
+		}
 
 	auto composite = new Export::CompositeFragment(units().first()->node());
 	if (!compositeDependencies.empty())
 	{
 		for (auto compositeDependency : compositeDependencies)
-			if (compositeDependency != this)
 				*composite << "#include \"" + compositeDependency->name() + ".h\"\n";
+
+		*composite << "\n";
+	}
+
+	if (!softDependencies.empty())
+	{
+		for (auto softDependency : softDependencies)
+		{
+			if (auto classs = DCast<OOModel::Class>(softDependency))
+			{
+				if (OOModel::Class::ConstructKind::Class == classs->constructKind())
+					*composite << "class ";
+				else if (OOModel::Class::ConstructKind::Struct == classs->constructKind())
+					*composite << "struct ";
+				else if (OOModel::Class::ConstructKind::Enum == classs->constructKind())
+					*composite << "enum ";
+				else
+					Q_ASSERT(false);
+			}
 			else
-				*composite << "not putting itself\n";
+				Q_ASSERT(false);
+
+			*composite << softDependency->symbolName() + ";\n";
+		}
+
 		*composite << "\n";
 	}
 
