@@ -54,7 +54,8 @@ QString CodeComposite::relativePath(CodeComposite* other)
 			otherName.takeFirst();
 		}
 
-		for (auto i = 0; i < thisName.size() - otherName.size(); i++) otherName.prepend("..");
+		int backSteps = thisName.size() - otherName.size();
+		for (auto i = 0; i < backSteps; i++) otherName.prepend("..");
 		return otherName.join("/");
 	}
 
