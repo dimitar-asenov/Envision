@@ -226,7 +226,28 @@ SourceFragment* ExpressionVisitorSource::visit(Expression* expression)
 	// Misc =============================================================================================================
 
 	else if (auto e = DCast<CastExpression>(expression))
-		*fragment << "(" << visit(e->castType()) << ") " << visit(e->expr());
+		switch (e->castKind())
+		{
+			case CastExpression::CastKind::Default:
+				*fragment << "(" << visit(e->castType()) << ") " << visit(e->expr());
+				break;
+			case CastExpression::CastKind::ConstCast:
+				*fragment << "const_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::DynamicCast:
+				*fragment << "dynamic_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::ReinterpretCast:
+				*fragment << "reinterpret_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::StaticCast:
+				*fragment << "static_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::FunctionalCast:
+				*fragment << visit(e->castType()) << "(" << visit(e->expr()) << ")";
+				break;
+			default: error(e, "Unknown cast type");
+		}
 	else if (auto e = DCast<InstanceOfExpression>(expression))
 		*fragment << visit(e->expr()) << " instanceof " << visit(e->typeExpression());
 	else if (auto e = DCast<CommaExpression>(expression)) *fragment << visit(e->left()) << ", " << visit(e->right());
