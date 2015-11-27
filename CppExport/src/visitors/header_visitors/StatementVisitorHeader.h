@@ -30,6 +30,24 @@
 
 #include "Export/src/Visitor.h"
 
+namespace OOModel {
+	class Block;
+	class BreakStatement;
+	class CaseStatement;
+	class ContinueStatement;
+	class DeclarationStatement;
+	class ExpressionStatement;
+	class ForEachStatement;
+	class IfStatement;
+	class LoopStatement;
+	class ReturnStatement;
+	class SwitchStatement;
+	class TryCatchFinallyStatement;
+	class AssertStatement;
+	class SynchronizedStatement;
+	class StatementItem;
+}
+
 namespace CppExport {
 
 class DeclarationVisitorHeader;

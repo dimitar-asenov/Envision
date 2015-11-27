@@ -29,7 +29,18 @@
 #include "../../cppexport_api.h"
 
 #include "Export/src/Visitor.h"
-#include "OOModel/src/allOOModelNodes.h"
+
+namespace OOModel {
+	class Project;
+	class Module;
+	class Class;
+	class Declaration;
+	class Method;
+	class NameImport;
+	class VariableDeclaration;
+	class ExplicitTemplateInstantiation;
+	class TypeAlias;
+}
 
 namespace Export {
 	class SourceDir;

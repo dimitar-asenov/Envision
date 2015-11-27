@@ -30,6 +30,15 @@
 
 #include "Export/src/Visitor.h"
 
+namespace OOModel {
+	class FormalArgument;
+	class FormalResult;
+	class FormalTypeArgument;
+	class CatchClause;
+	class Enumerator;
+	class MemberInitializer;
+}
+
 namespace CppExport {
 
 class DeclarationVisitorSource;

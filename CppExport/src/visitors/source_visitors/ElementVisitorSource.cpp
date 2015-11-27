@@ -29,6 +29,14 @@
 #include "StatementVisitorSource.h"
 #include "ElementVisitorSource.h"
 
+#include "OOModel/src/elements/FormalArgument.h"
+#include "OOModel/src/elements/FormalResult.h"
+#include "OOModel/src/elements/FormalTypeArgument.h"
+#include "OOModel/src/elements/CatchClause.h"
+#include "OOModel/src/elements/Enumerator.h"
+#include "OOModel/src/elements/MemberInitializer.h"
+#include "OOModel/src/expressions/types/PointerTypeExpression.h"
+#include "OOModel/src/expressions/types/FunctionTypeExpression.h"
 
 using namespace Export;
 using namespace OOModel;

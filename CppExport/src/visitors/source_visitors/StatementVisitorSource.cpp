@@ -29,6 +29,22 @@
 #include "StatementVisitorSource.h"
 #include "ElementVisitorSource.h"
 
+#include "OOModel/src/statements/Block.h"
+#include "OOModel/src/statements/BreakStatement.h"
+#include "OOModel/src/statements/CaseStatement.h"
+#include "OOModel/src/statements/ContinueStatement.h"
+#include "OOModel/src/statements/DeclarationStatement.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
+#include "OOModel/src/statements/ForEachStatement.h"
+#include "OOModel/src/statements/IfStatement.h"
+#include "OOModel/src/statements/LoopStatement.h"
+#include "OOModel/src/statements/ReturnStatement.h"
+#include "OOModel/src/statements/SwitchStatement.h"
+#include "OOModel/src/statements/TryCatchFinallyStatement.h"
+#include "OOModel/src/statements/AssertStatement.h"
+#include "OOModel/src/statements/SynchronizedStatement.h"
+#include "OOModel/src/elements/StatementItem.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
 
 using namespace Export;
 using namespace OOModel;

@@ -28,9 +28,17 @@
 #include "ExpressionVisitorHeader.h"
 #include "StatementVisitorHeader.h"
 #include "ElementVisitorHeader.h"
+#include "../source_visitors/DeclarationVisitorSource.h"
 
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/Module.h"
+#include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/Declaration.h"
+#include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/NameImport.h"
+#include "OOModel/src/declarations/VariableDeclaration.h"
+#include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
+#include "OOModel/src/declarations/TypeAlias.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
