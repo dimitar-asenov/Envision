@@ -49,7 +49,7 @@ SourceFragment* ElementVisitorSource::visit(FormalArgument* argument)
 
 	auto pointerTypeExpression = DCast<PointerTypeExpression>(argument->typeExpression());
 	if (pointerTypeExpression && DCast<FunctionTypeExpression>(pointerTypeExpression->typeExpression()))
-		*fragment << ExpressionVisitorHeader(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
+		*fragment << ExpressionVisitorSource(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
 	else
 		*fragment << expression(argument->typeExpression()) << " " << argument->nameNode();
 
