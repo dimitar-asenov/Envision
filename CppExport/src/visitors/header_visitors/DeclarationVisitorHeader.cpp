@@ -136,7 +136,13 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 
 	if (!classs->typeArguments()->isEmpty())
 		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
+	*fragment << printAnnotationsAndModifiers(classs);
+	if (Class::ConstructKind::Class == classs->constructKind()) *fragment << "class ";
+	else if (Class::ConstructKind::Struct == classs->constructKind()) *fragment << "struct ";
+	else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
+	else notAllowed(classs);
 
+	*fragment << classs->nameNode();
 	if (!classs->baseClasses()->isEmpty())
 		// TODO: inheritance modifiers like private, virtual... (not only public)
 		*fragment << list(classs->baseClasses(), ExpressionVisitorHeader(data()), "baseClasses");
