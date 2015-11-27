@@ -25,8 +25,52 @@
 ***********************************************************************************************************************/
 
 #include "ExpressionVisitor.h"
+#include "DeclarationVisitor.h"
+#include "StatementVisitor.h"
+#include "ElementVisitor.h"
 #include "../JavaExportException.h"
-#include "VisitorDefs.h"
+
+#include "OOModel/src/expressions/Expression.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
+#include "OOModel/src/expressions/types/ReferenceTypeExpression.h"
+#include "OOModel/src/expressions/types/PointerTypeExpression.h"
+#include "OOModel/src/expressions/types/FunctionTypeExpression.h"
+#include "OOModel/src/expressions/types/ClassTypeExpression.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
+#include "OOModel/src/expressions/types/TypeQualifierExpression.h"
+#include "OOModel/src/expressions/types/AutoTypeExpression.h"
+#include "OOModel/src/expressions/AssignmentExpression.h"
+#include "OOModel/src/expressions/BinaryOperation.h"
+#include "OOModel/src/expressions/UnaryOperation.h"
+#include "OOModel/src/expressions/TypeTraitExpression.h"
+#include "OOModel/src/expressions/BooleanLiteral.h"
+#include "OOModel/src/expressions/IntegerLiteral.h"
+#include "OOModel/src/expressions/FloatLiteral.h"
+#include "OOModel/src/expressions/NullLiteral.h"
+#include "OOModel/src/expressions/StringLiteral.h"
+#include "OOModel/src/expressions/CharacterLiteral.h"
+#include "OOModel/src/expressions/CastExpression.h"
+#include "OOModel/src/expressions/InstanceOfExpression.h"
+#include "OOModel/src/expressions/CommaExpression.h"
+#include "OOModel/src/expressions/ConditionalExpression.h"
+#include "OOModel/src/expressions/SuperExpression.h"
+#include "OOModel/src/expressions/ThisExpression.h"
+#include "OOModel/src/expressions/GlobalScopeExpression.h"
+#include "OOModel/src/expressions/ThrowExpression.h"
+#include "OOModel/src/expressions/TypeNameOperator.h"
+#include "OOModel/src/expressions/DeleteExpression.h"
+#include "OOModel/src/expressions/VariableDeclarationExpression.h"
+#include "OOModel/src/expressions/LambdaExpression.h"
+#include "OOModel/src/expressions/ArrayInitializer.h"
+#include "OOModel/src/expressions/MethodCallExpression.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/statements/Statement.h"
+#include "OOModel/src/expressions/NewExpression.h"
+#include "OOModel/src/types/PointerType.h"
+#include "OOModel/src/types/SymbolProviderType.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/expressions/ErrorExpression.h"
+#include "OOModel/src/expressions/UnfinishedOperator.h"
 
 using namespace Export;
 using namespace OOModel;
@@ -186,6 +230,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
 	else if (auto e = DCast<MethodCallExpression>(expression))
 		*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
+	else if (auto e = DCast<MetaCallExpression>(expression)) notAllowed(e);
 	else if (auto e = DCast<NewExpression>(expression))
 	{
 		*fragment << "new " << visit(e->newType());

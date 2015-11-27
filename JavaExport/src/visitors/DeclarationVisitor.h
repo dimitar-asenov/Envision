@@ -27,8 +27,20 @@
 #pragma once
 
 #include "../javaexport_api.h"
-#include "../exporter/ExportError.h"
-#include "Visitor.h"
+
+#include "Export/src/Visitor.h"
+
+namespace OOModel {
+	class Project;
+	class Module;
+	class Class;
+	class Declaration;
+	class Method;
+	class NameImport;
+	class VariableDeclaration;
+	class ExplicitTemplateInstantiation;
+	class TypeAlias;
+}
 
 namespace Export {
 	class SourceDir;
@@ -38,7 +50,13 @@ namespace Export {
 
 namespace JavaExport {
 
-class JAVAEXPORT_API DeclarationVisitor : public Visitor {
+class ExpressionVisitor;
+class StatementVisitor;
+class ElementVisitor;
+
+class JAVAEXPORT_API DeclarationVisitor
+: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+{
 	public:
 		using Visitor::Visitor;
 
@@ -58,6 +76,13 @@ class JAVAEXPORT_API DeclarationVisitor : public Visitor {
 		Export::SourceFragment* visit(OOModel::TypeAlias* ta);
 
 		Export::SourceFragment* printAnnotationsAndModifiers(OOModel::Declaration* declaration);
+
+	private:
+		QStringList& packageStack();
+		QString packagesSoFar();
 };
+
+inline QStringList& DeclarationVisitor::packageStack() { return data()->directoryStack_; }
+inline QString DeclarationVisitor::packagesSoFar() { return data()->directoryStack_.join("."); }
 
 } /* namespace JavaExport */

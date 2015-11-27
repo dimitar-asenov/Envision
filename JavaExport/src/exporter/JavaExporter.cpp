@@ -34,7 +34,8 @@
 
 namespace JavaExport {
 
-QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
+QList<Export::ExportError> JavaExporter::exportTree(Model::TreeManager* manager,
+																	 const QString& pathToProjectContainerDirectory)
 {
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
