@@ -69,14 +69,10 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		{
 			if (auto classs = DCast<OOModel::Class>(softDependency))
 			{
-				if (OOModel::Class::ConstructKind::Class == classs->constructKind())
-					*composite << "class ";
-				else if (OOModel::Class::ConstructKind::Struct == classs->constructKind())
-					*composite << "struct ";
-				else if (OOModel::Class::ConstructKind::Enum == classs->constructKind())
-					*composite << "enum ";
-				else
-					Q_ASSERT(false);
+				if (OOModel::Class::ConstructKind::Class == classs->constructKind()) *composite << "class ";
+				else if (OOModel::Class::ConstructKind::Struct == classs->constructKind()) *composite << "struct ";
+				else if (OOModel::Class::ConstructKind::Enum == classs->constructKind()) *composite << "enum ";
+				else Q_ASSERT(false);
 			}
 			else
 				Q_ASSERT(false);
