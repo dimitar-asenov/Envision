@@ -46,8 +46,13 @@ namespace CppExport {
 SourceFragment* ElementVisitorSource::visit(FormalArgument* argument)
 {
 	auto fragment = new CompositeFragment(argument);
-	*fragment << expression(argument->typeExpression()) << " ";
-	*fragment << argument->nameNode();
+
+	auto pointerTypeExpression = DCast<PointerTypeExpression>(argument->typeExpression());
+	if (pointerTypeExpression && DCast<FunctionTypeExpression>(pointerTypeExpression->typeExpression()))
+		*fragment << ExpressionVisitorSource(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
+	else
+		*fragment << expression(argument->typeExpression()) << " " << argument->nameNode();
+
 	return fragment;
 }
 

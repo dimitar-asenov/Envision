@@ -27,11 +27,22 @@
 #pragma once
 
 #include "../javaexport_api.h"
-#include "Visitor.h"
+
+#include "Export/src/Visitor.h"
+
+namespace OOModel {
+	class PointerTypeExpression;
+	class Expression;
+}
 
 namespace JavaExport {
 
-class ExpressionVisitor : public Visitor
+class DeclarationVisitor;
+class StatementVisitor;
+class ElementVisitor;
+
+class ExpressionVisitor
+: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 {
 	public:
 		using Visitor::Visitor;

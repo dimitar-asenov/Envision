@@ -37,6 +37,7 @@ namespace Export {
 struct VisitorData
 {
 		QList<ExportError> errors_;
+		QStringList directoryStack_;
 };
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>

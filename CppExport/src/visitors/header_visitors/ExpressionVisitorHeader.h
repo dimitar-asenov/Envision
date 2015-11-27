@@ -49,6 +49,8 @@ class ExpressionVisitorHeader
 
 		Export::SourceFragment* visit(OOModel::Expression* expression);
 
+		Export::SourceFragment* visitFunctionPointer(OOModel::PointerTypeExpression* expression,
+																	const QString& name = QString());
 	private:
 		template <class T> Export::SourceFragment* optional(T* node);
 };

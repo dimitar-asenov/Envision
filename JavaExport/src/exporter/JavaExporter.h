@@ -27,12 +27,11 @@
 #pragma once
 
 #include "../javaexport_api.h"
-#include "ExportError.h"
 
 #include "Export/src/writer/TextToNodeMap.h"
 #include "Export/src/tree/SourceDir.h"
-
 #include "Export/src/ExportMapContainer.h"
+#include "Export/src/ExportError.h"
 
 namespace Model {
 	class TreeManager;
@@ -42,7 +41,8 @@ namespace JavaExport {
 
 class JAVAEXPORT_API JavaExporter {
 	public:
-		static QList<ExportError> exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
+		static QList<Export::ExportError> exportTree(Model::TreeManager* manager,
+																	const QString& pathToProjectContainerDirectory);
 
 		static Export::ExportMapContainer& exportMaps();
 };

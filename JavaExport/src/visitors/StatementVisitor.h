@@ -27,11 +27,35 @@
 #pragma once
 
 #include "../javaexport_api.h"
-#include "Visitor.h"
+
+#include "Export/src/Visitor.h"
+
+namespace OOModel {
+	class Block;
+	class BreakStatement;
+	class CaseStatement;
+	class ContinueStatement;
+	class DeclarationStatement;
+	class ExpressionStatement;
+	class ForEachStatement;
+	class IfStatement;
+	class LoopStatement;
+	class ReturnStatement;
+	class SwitchStatement;
+	class TryCatchFinallyStatement;
+	class AssertStatement;
+	class SynchronizedStatement;
+	class StatementItem;
+}
 
 namespace JavaExport {
 
-class StatementVisitor : public Visitor
+class DeclarationVisitor;
+class ExpressionVisitor;
+class ElementVisitor;
+
+class StatementVisitor
+: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 {
 	public:
 		using Visitor::Visitor;

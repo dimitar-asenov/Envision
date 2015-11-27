@@ -122,8 +122,10 @@ SourceFragment* DeclarationVisitorSource::visit(Class* classs)
 	//TODO
 	auto sections = fragment->append( new CompositeFragment(classs, "sections"));
 	*sections << list(classs->enumerators(), ElementVisitorSource(data()), "enumerators");
-	*sections << list(classs->classes(), this, "declarations");
-	*sections << list(classs->methods(), this, "spacedSections");
+	*sections << list(classs->classes(), this, "sections");
+
+	auto filter = [](Method* method) { return method->typeArguments()->isEmpty(); };
+	*sections << list(classs->methods(), this, "spacedSections", filter);
 	*sections << list(classs->fields(), this, "vertical");
 
 	return fragment;
@@ -153,9 +155,6 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
-
-	if (!method->typeArguments()->isEmpty())
-		*fragment << list(method->typeArguments(), ElementVisitorSource(data()), "typeArgsList");
 
 	*fragment << list(method->arguments(), ElementVisitorSource(data()), "argsList");
 

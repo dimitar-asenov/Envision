@@ -91,7 +91,13 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 	if (auto e = DCast<ArrayTypeExpression>(expression))
 		*fragment << visit(e->typeExpression()) << "[" << optional(e->fixedSize()) << "]";
 	else if (auto e = DCast<ReferenceTypeExpression>(expression)) *fragment << visit(e->typeExpression()) << "&";
-	else if (auto e = DCast<PointerTypeExpression>(expression)) *fragment << visit(e->typeExpression()) << "*";
+	else if (auto e = DCast<PointerTypeExpression>(expression))
+	{
+		if (DCast<FunctionTypeExpression>(e->typeExpression()))
+			*fragment << visitFunctionPointer(e);
+		else
+			*fragment << visit(e->typeExpression()) << "*";
+	}
 	else if (auto e = DCast<ClassTypeExpression>(expression)) *fragment << visit(e->typeExpression());
 	else if (auto e = DCast<PrimitiveTypeExpression>(expression))
 	{
@@ -106,7 +112,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: *fragment << "bool"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::CHAR: *fragment << "char"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::VOID: *fragment << "void"; break;
-			default: error(e, "Unkown primitive type");
+			default: error(e, "Unknown primitive type");
 		}
 	}
 	else if (auto e = DCast<TypeQualifierExpression>(expression))
@@ -115,16 +121,12 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 		{
 			case TypeQualifierExpression::Qualifier::CONST: notAllowed(e); break;
 			case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
-			default: error(e, "Unkown qualifier");
+			default: error(e, "Unknown qualifier");
 		}
 		*fragment << " " << visit(e->typeExpression());
 	}
 	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
-	else if (auto e = DCast<FunctionTypeExpression>(expression))
-	{
-		*fragment << list(e->results(), ExpressionVisitorHeader(data())) << " "
-					 << list(e->arguments(), ExpressionVisitorHeader(data()), "argsList");
-	}
+	else if (auto e = DCast<FunctionTypeExpression>(expression)) notAllowed(e);
 
 	// Operators ========================================================================================================
 
@@ -145,7 +147,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case AssignmentExpression::LEFT_SHIFT_ASSIGN: *fragment << "<<="; break;
 			case AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN: *fragment << ">>="; break;
 			case AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: *fragment << ">>>="; break;
-			default: error(e, "Unkown assignment type");
+			default: error(e, "Unknown assignment type");
 		}
 		*fragment << " " << visit(e->right());
 	}
@@ -174,7 +176,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case BinaryOperation::CONDITIONAL_AND: *fragment << " && "; break;
 			case BinaryOperation::CONDITIONAL_OR: *fragment << " || "; break;
 			case BinaryOperation::ARRAY_INDEX: *fragment << "["; break;
-			default: error(e, "Unkown binary operator type");
+			default: error(e, "Unknown binary operator type");
 		}
 		*fragment << visit(e->right());
 		if (e->op() == BinaryOperation::ARRAY_INDEX) *fragment << "]";
@@ -194,10 +196,18 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case UnaryOperation::PARENTHESIS: *fragment << "(" << visit(e->operand()) << ")"; break;
 			case UnaryOperation::DEREFERENCE: *fragment << "*" << visit(e->operand()); break;
 			case UnaryOperation::ADDRESSOF: *fragment << "&" << visit(e->operand()); break;
-			default: error(e, "Unkown unary operator type");
+			default: error(e, "Unknown unary operator type");
 		}
 	}
-	else if (auto e = DCast<TypeTraitExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<TypeTraitExpression>(expression))
+	{
+		if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::SizeOf) *fragment << "sizeof";
+		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::AlignOf) *fragment << "alignof";
+		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::TypeId) *fragment << "typeid";
+		else Q_ASSERT(false);
+
+		*fragment << "(" << visit(e->operand()) << ")";
+	}
 
 	// Literals =========================================================================================================
 
@@ -212,7 +222,28 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 	// Misc =============================================================================================================
 
 	else if (auto e = DCast<CastExpression>(expression))
-		*fragment << "(" << visit(e->castType()) << ") " << visit(e->expr());
+		switch (e->castKind())
+		{
+			case CastExpression::CastKind::Default:
+				*fragment << "(" << visit(e->castType()) << ") " << visit(e->expr());
+				break;
+			case CastExpression::CastKind::ConstCast:
+				*fragment << "const_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::DynamicCast:
+				*fragment << "dynamic_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::ReinterpretCast:
+				*fragment << "reinterpret_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::StaticCast:
+				*fragment << "static_cast<" << visit(e->castType()) << ">(" << visit(e->expr()) << ")";
+				break;
+			case CastExpression::CastKind::FunctionalCast:
+				*fragment << visit(e->castType()) << "(" << visit(e->expr()) << ")";
+				break;
+			default: error(e, "Unknown cast type");
+		}
 	else if (auto e = DCast<InstanceOfExpression>(expression))
 		*fragment << visit(e->expr()) << " instanceof " << visit(e->typeExpression());
 	else if (auto e = DCast<CommaExpression>(expression)) *fragment << visit(e->left()) << ", " << visit(e->right());
@@ -222,7 +253,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 	else if (DCast<ThisExpression>(expression)) *fragment << "this";
 	else if (auto e = DCast<GlobalScopeExpression>(expression)) notAllowed(e);
 	else if (auto e = DCast<ThrowExpression>(expression)) *fragment << "throw " << visit(e->expr());
-	else if (auto e = DCast<TypeNameOperator>(expression)) notAllowed(e);
+	else if (auto e = DCast<TypeNameOperator>(expression))  *fragment << "typename " << visit(e->typeExpression());
 	else if (auto e = DCast<DeleteExpression>(expression)) notAllowed(e);
 	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
 	else if (auto e = DCast<LambdaExpression>(expression))
@@ -293,6 +324,19 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 		throw CppExportException("Unhandled expression of type " + expression->typeName());
 	}
 
+	return fragment;
+}
+
+SourceFragment* ExpressionVisitorHeader::visitFunctionPointer(PointerTypeExpression* functionPointer,
+																				  const QString& name)
+{
+	auto functionTypeExpression = DCast<FunctionTypeExpression>(functionPointer->typeExpression());
+	Q_ASSERT(functionTypeExpression);
+
+	auto fragment = new CompositeFragment(functionPointer);
+	*fragment << list(functionTypeExpression->results(), this)
+				 << " (*" << name << ") "
+				 << list(functionTypeExpression->arguments(), this, "argsList");
 	return fragment;
 }
 
