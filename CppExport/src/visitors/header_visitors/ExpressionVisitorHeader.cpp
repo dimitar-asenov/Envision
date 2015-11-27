@@ -91,7 +91,13 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 	if (auto e = DCast<ArrayTypeExpression>(expression))
 		*fragment << visit(e->typeExpression()) << "[" << optional(e->fixedSize()) << "]";
 	else if (auto e = DCast<ReferenceTypeExpression>(expression)) *fragment << visit(e->typeExpression()) << "&";
-	else if (auto e = DCast<PointerTypeExpression>(expression)) *fragment << visit(e->typeExpression()) << "*";
+	else if (auto e = DCast<PointerTypeExpression>(expression))
+	{
+		if (DCast<FunctionTypeExpression>(e->typeExpression()))
+			*fragment << visitFunctionPointer(e);
+		else
+			*fragment << visit(e->typeExpression()) << "*";
+	}
 	else if (auto e = DCast<ClassTypeExpression>(expression)) *fragment << visit(e->typeExpression());
 	else if (auto e = DCast<PrimitiveTypeExpression>(expression))
 	{
@@ -120,11 +126,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 		*fragment << " " << visit(e->typeExpression());
 	}
 	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
-	else if (auto e = DCast<FunctionTypeExpression>(expression))
-	{
-		*fragment << list(e->results(), ExpressionVisitorHeader(data())) << " "
-					 << list(e->arguments(), ExpressionVisitorHeader(data()), "argsList");
-	}
+	else if (auto e = DCast<FunctionTypeExpression>(expression)) notAllowed(e);
 
 	// Operators ========================================================================================================
 
@@ -293,6 +295,19 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 		throw CppExportException("Unhandled expression of type " + expression->typeName());
 	}
 
+	return fragment;
+}
+
+SourceFragment* ExpressionVisitorHeader::visitFunctionPointer(PointerTypeExpression* functionPointer,
+																				  const QString& name)
+{
+	auto functionTypeExpression = DCast<FunctionTypeExpression>(functionPointer->typeExpression());
+	Q_ASSERT(functionTypeExpression);
+
+	auto fragment = new CompositeFragment(functionPointer);
+	*fragment << list(functionTypeExpression->results(), this)
+				 << " (*" << name << ") "
+				 << list(functionTypeExpression->arguments(), this, "argsList");
 	return fragment;
 }
 
