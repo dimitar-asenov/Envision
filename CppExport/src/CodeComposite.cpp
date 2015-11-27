@@ -87,8 +87,27 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		*composite << "\n";
 	}
 
-	for (auto unit : units())
-		composite->append((unit->*part)()->sourceFragment());
+	if (!units().isEmpty())
+	{
+		OOModel::Module* currentNamespace{};
+
+		for (auto unit : units())
+		{
+			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
+
+			if (neededNamespace != currentNamespace)
+			{
+				if (currentNamespace) *composite << "\n}\n\n";
+				if (neededNamespace) *composite << "namespace " << neededNamespace->symbolName() << " {\n\n";
+				currentNamespace = neededNamespace;
+			}
+
+			composite->append((unit->*part)()->sourceFragment());
+		}
+
+		*composite << "\n}";
+	}
+
 	return composite;
 }
 
