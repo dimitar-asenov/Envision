@@ -105,7 +105,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			composite->append((unit->*part)()->sourceFragment());
 		}
 
-		*composite << "\n}";
+		if (currentNamespace) *composite << "\n}";
 	}
 
 	return composite;
