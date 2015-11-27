@@ -56,10 +56,17 @@ void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
 			workStack << compositeFragment->fragments();
 	}
 
-	// calculate dependency targets
-	targets_.clear();
+	// calculate targets
+	softTargets_.clear();
+	hardTargets_.clear();
 	for (auto reference : referenceNodes_)
-		targets_.append({isNameOnlyDependency(reference), fixedTarget(reference)});
+		if (auto target = fixedTarget(reference))
+		{
+			if (isNameOnlyDependency(reference))
+				softTargets_.insert(target);
+			else
+				hardTargets_.insert(target);
+		}
 }
 
 bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
@@ -86,27 +93,14 @@ Model::Node* CodeUnitPart::fixedTarget(OOModel::ReferenceExpression* referenceEx
 
 void CodeUnitPart::calculateDependencies(QList<CodeUnitPart*>& allHeaderParts)
 {
-	softDependencies_.clear();
 	dependencies_.clear();
-
 	if (this == parent()->sourcePart())
 		dependencies_.insert(parent()->headerPart());
 
-	for (auto dependencyTarget : targets_)
-	{
-		if (!dependencyTarget.target_) continue;
-
-		// skip name only dependencies
-		if (dependencyTarget.nameOnly_)
-		{
-			softDependencies_.insert(dependencyTarget.target_);
-			continue;
-		}
-
+	for (auto target : hardTargets_)
 		for (auto headerPart : allHeaderParts)
-			if (headerPart != this && headerPart->nameNodes().contains(dependencyTarget.target_))
+			if (headerPart != this && headerPart->nameNodes().contains(target))
 					dependencies_.insert(headerPart);
-	}
 }
 
 }

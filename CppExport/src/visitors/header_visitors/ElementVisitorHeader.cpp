@@ -52,14 +52,7 @@ SourceFragment* ElementVisitorHeader::visit(FormalResult* result)
 SourceFragment* ElementVisitorHeader::visit(FormalTypeArgument* typeArgument)
 {
 	auto fragment = new CompositeFragment(typeArgument);
-	*fragment << typeArgument->nameNode();
-	if (typeArgument->subTypeOfExpression())
-		*fragment << " extends " << expression(typeArgument->subTypeOfExpression());
-	if (typeArgument->superTypeOfExpression())
-		*fragment << " super " << expression(typeArgument->superTypeOfExpression());
-
-	notAllowed(typeArgument->specializationExpression());
-
+	*fragment << "typename " << typeArgument->nameNode();
 	return fragment;
 }
 

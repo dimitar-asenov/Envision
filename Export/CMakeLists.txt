@@ -21,6 +21,8 @@ add_library(Export SHARED
 	src/export_api.h
 	src/ExportPlugin.h
 	src/ExportMapContainer.h
+	src/ExportError.h
+	src/Visitor.h
 	test/LayoutTests.cpp
 	src/writer/FileWriter.cpp
 	test/GenerationTests.cpp
@@ -35,6 +37,7 @@ add_library(Export SHARED
 	src/ExportException.cpp
 	src/ExportPlugin.cpp
 	src/ExportMapContainer.cpp
+	src/ExportError.cpp
 )
 target_link_libraries(Export ModelBase)
 envision_plugin(Export)

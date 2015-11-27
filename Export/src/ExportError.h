@@ -24,11 +24,30 @@
  **
  **********************************************************************************************************************/
 
-#include "ExportError.h"
+#pragma once
 
-namespace CppExport {
+#include "export_api.h"
 
-ExportError::ExportError(const QString& errorMessage) : message_{errorMessage} {}
-ExportError::ExportError(Model::Node* node, const QString& errorMessage) : node_{node}, message_{errorMessage} {}
+namespace Model {
+	class Node;
+}
+
+namespace Export {
+
+class EXPORT_API ExportError {
+	public:
+		ExportError(const QString& errorMessage);
+		ExportError(Model::Node* node, const QString& errorMessage);
+
+		Model::Node* node() const;
+		const QString& message() const;
+
+	private:
+		Model::Node* node_{};
+		QString message_;
+};
+
+inline Model::Node* ExportError::node() const { return node_; }
+inline const QString& ExportError::message() const { return message_; }
 
 }

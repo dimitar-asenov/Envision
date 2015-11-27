@@ -24,55 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "ExportError.h"
 
-#include "../cppexport_api.h"
+namespace Export {
 
-#include "DependencyTarget.h"
-
-namespace Model {
-	class Node;
-}
-
-namespace OOModel {
-	class ReferenceExpression;
-}
-
-namespace CppExport {
-
-class DependencyComposite;
-
-class CPPEXPORT_API DependencyUnit
-{
-	public:
-		DependencyUnit(QString name, Model::Node* node);
-
-		const QString& name() const;
-
-		QSet<DependencyUnit*> dependencies() const;
-		void calculateDependencies(QList<DependencyUnit*>& allUnits);
-
-		DependencyComposite* composite() const;
-		void setComposite(DependencyComposite* composite);
-
-	private:
-		QString name_;
-		Model::Node* node_{};
-		DependencyComposite* composite_{};
-		QList<DependencyTarget> targets_;
-		QSet<DependencyUnit*> dependencies_;
-
-		static QList<DependencyTarget> calculateTargets(Model::Node* node);
-		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
-		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
-};
-
-inline const QString& DependencyUnit::name() const { return name_; }
-
-inline DependencyComposite* DependencyUnit::composite() const { return composite_; }
-
-inline void DependencyUnit::setComposite(DependencyComposite* composite) { composite_ = composite; }
-
-inline QSet<DependencyUnit*> DependencyUnit::dependencies() const { return dependencies_; }
+ExportError::ExportError(const QString& errorMessage) : message_{errorMessage} {}
+ExportError::ExportError(Model::Node* node, const QString& errorMessage) : node_{node}, message_{errorMessage} {}
 
 }

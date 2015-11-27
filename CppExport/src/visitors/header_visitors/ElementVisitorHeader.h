@@ -27,7 +27,8 @@
 #pragma once
 
 #include "../../cppexport_api.h"
-#include "../Visitor.h"
+
+#include "Export/src/Visitor.h"
 
 namespace CppExport {
 
@@ -36,7 +37,7 @@ class ExpressionVisitorHeader;
 class StatementVisitorHeader;
 
 class ElementVisitorHeader
-: public Visitor<DeclarationVisitorHeader, ExpressionVisitorHeader, StatementVisitorHeader, ElementVisitorHeader>
+:public Export::Visitor<DeclarationVisitorHeader, ExpressionVisitorHeader, StatementVisitorHeader, ElementVisitorHeader>
 {
 	public:
 		using Visitor::Visitor;

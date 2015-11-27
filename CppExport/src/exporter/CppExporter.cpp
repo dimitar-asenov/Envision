@@ -38,8 +38,8 @@
 
 namespace CppExport {
 
-QList<ExportError> CppExporter::exportTree(Model::TreeManager* treeManager,
-														 const QString& pathToProjectContainerDirectory)
+QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManager,
+																	const QString& pathToProjectContainerDirectory)
 {
 	QList<CodeUnit*> codeUnits;
 	units(treeManager->root(), "", codeUnits);
@@ -139,6 +139,8 @@ Export::FragmentLayouter CppExporter::layouter()
 	result.addRule("initializerList", Export::FragmentLayouter::SpaceAfterSeparator, "{", ",", "}");
 	result.addRule("argsList", Export::FragmentLayouter::SpaceAfterSeparator, "(", ",", ")");
 	result.addRule("typeArgsList", Export::FragmentLayouter::SpaceAfterSeparator, "<", ",", ">");
+	result.addRule("templateArgsList", Export::FragmentLayouter::SpaceAfterSeparator
+							| Export::FragmentLayouter::NewLineAfterPostfix, "template<", ",", ">");
 
 	result.addRule("body", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
