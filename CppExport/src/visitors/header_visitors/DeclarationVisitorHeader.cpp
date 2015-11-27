@@ -142,7 +142,11 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 	else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
 	else notAllowed(classs);
 
+	if (auto namespaceModule = classs->firstAncestorOfType<Module>())
+		*fragment << namespaceModule->name().toUpper() + "_API ";
+
 	*fragment << classs->nameNode();
+
 	if (!classs->baseClasses()->isEmpty())
 		// TODO: inheritance modifiers like private, virtual... (not only public)
 		*fragment << list(classs->baseClasses(), ExpressionVisitorHeader(data()), "baseClasses");
