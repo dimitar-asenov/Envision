@@ -112,7 +112,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: *fragment << "bool"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::CHAR: *fragment << "char"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::VOID: *fragment << "void"; break;
-			default: error(e, "Unkown primitive type");
+			default: error(e, "Unknown primitive type");
 		}
 	}
 	else if (auto e = DCast<TypeQualifierExpression>(expression))
@@ -121,7 +121,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 		{
 			case TypeQualifierExpression::Qualifier::CONST: notAllowed(e); break;
 			case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
-			default: error(e, "Unkown qualifier");
+			default: error(e, "Unknown qualifier");
 		}
 		*fragment << " " << visit(e->typeExpression());
 	}
@@ -147,7 +147,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case AssignmentExpression::LEFT_SHIFT_ASSIGN: *fragment << "<<="; break;
 			case AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN: *fragment << ">>="; break;
 			case AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: *fragment << ">>>="; break;
-			default: error(e, "Unkown assignment type");
+			default: error(e, "Unknown assignment type");
 		}
 		*fragment << " " << visit(e->right());
 	}
@@ -176,7 +176,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case BinaryOperation::CONDITIONAL_AND: *fragment << " && "; break;
 			case BinaryOperation::CONDITIONAL_OR: *fragment << " || "; break;
 			case BinaryOperation::ARRAY_INDEX: *fragment << "["; break;
-			default: error(e, "Unkown binary operator type");
+			default: error(e, "Unknown binary operator type");
 		}
 		*fragment << visit(e->right());
 		if (e->op() == BinaryOperation::ARRAY_INDEX) *fragment << "]";
@@ -196,7 +196,7 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			case UnaryOperation::PARENTHESIS: *fragment << "(" << visit(e->operand()) << ")"; break;
 			case UnaryOperation::DEREFERENCE: *fragment << "*" << visit(e->operand()); break;
 			case UnaryOperation::ADDRESSOF: *fragment << "&" << visit(e->operand()); break;
-			default: error(e, "Unkown unary operator type");
+			default: error(e, "Unknown unary operator type");
 		}
 	}
 	else if (auto e = DCast<TypeTraitExpression>(expression)) notAllowed(e);
