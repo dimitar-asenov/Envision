@@ -154,9 +154,6 @@ SourceFragment* DeclarationVisitorSource::visit(Method* method)
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	*fragment << method->nameNode();
 
-	if (!method->typeArguments()->isEmpty())
-		*fragment << list(method->typeArguments(), ElementVisitorSource(data()), "typeArgsList");
-
 	*fragment << list(method->arguments(), ElementVisitorSource(data()), "argsList");
 
 	if (!method->memberInitializers()->isEmpty())
