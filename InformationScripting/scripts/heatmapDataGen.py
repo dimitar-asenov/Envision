@@ -3,9 +3,9 @@
 
 import random
 
-for tuple in Query.input.tuples("ast"):
+for tuple in Query.input.tuples('ast'):
     count = random.randrange(100)
-    values = [("count", count), ("ast", tuple.ast)]
+    values = [('count', count), ('ast', tuple.ast)]
     Query.input.add(Tuple(values))
 
 Query.result = Query.input
