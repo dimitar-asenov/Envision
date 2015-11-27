@@ -30,6 +30,11 @@
 
 #include "Export/src/Visitor.h"
 
+namespace OOModel {
+	class PointerTypeExpression;
+	class Expression;
+}
+
 namespace CppExport {
 
 class DeclarationVisitorSource;
