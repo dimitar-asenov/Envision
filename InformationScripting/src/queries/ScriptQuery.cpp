@@ -113,7 +113,10 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 																			 python::default_call_policies(), func_sig());
 
 		// Per default exec_file does not set argv, thus we set it here manually.
-		wchar_t* argv[] = {Py_DecodeLocale(scriptPath_.toLatin1().data(), nullptr)};
+		std::unique_ptr<wchar_t []> scriptPathArg(new wchar_t[scriptPath_.length() + 1]);
+		int len = scriptPath_.toWCharArray(scriptPathArg.get());
+		scriptPathArg[len] = '\0';
+		wchar_t* argv[] = {scriptPathArg.get()};
 		PySys_SetArgv(1, argv);
 
 		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);
