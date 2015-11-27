@@ -201,14 +201,10 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 	}
 	else if (auto e = DCast<TypeTraitExpression>(expression))
 	{
-		if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::SizeOf)
-			*fragment << "sizeof";
-		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::AlignOf)
-			*fragment << "alignof";
-		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::TypeId)
-			*fragment << "typeid";
-		else
-			Q_ASSERT(false);
+		if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::SizeOf) *fragment << "sizeof";
+		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::AlignOf) *fragment << "alignof";
+		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::TypeId) *fragment << "typeid";
+		else Q_ASSERT(false);
 
 		*fragment << "(" << visit(e->operand()) << ")";
 	}
