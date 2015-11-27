@@ -114,7 +114,12 @@ SourceFile* DeclarationVisitorHeader::visitTopLevelClass(Class* classs, SourceDi
 
 SourceFragment* DeclarationVisitorHeader::visitTopLevelClass(Class* classs)
 {
-	return visit(classs);
+	auto fragment = new CompositeFragment(classs, "spacedSections");
+	*fragment << visit(classs);
+
+	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty(); };
+	*fragment << list(classs->methods(), DeclarationVisitorSource(data()), "spacedSections", filter);
+	return fragment;
 }
 
 SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
