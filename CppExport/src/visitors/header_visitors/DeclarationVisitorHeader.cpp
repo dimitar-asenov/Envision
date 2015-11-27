@@ -127,7 +127,8 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 	auto fragment = new CompositeFragment(classs);
 
 	if (!classs->typeArguments()->isEmpty())
-		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
+		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "templateArgsList");
+
 	*fragment << printAnnotationsAndModifiers(classs);
 	if (Class::ConstructKind::Class == classs->constructKind()) *fragment << "class ";
 	else if (Class::ConstructKind::Struct == classs->constructKind()) *fragment << "struct ";
