@@ -61,7 +61,6 @@ class CPPEXPORT_API CppExporter {
 		static Export::FragmentLayouter layouter();
 
 		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
-		static Export::SourceFragment* addApiIncludes(CodeComposite* composite, Export::SourceFragment* fragment);
 };
 
 }

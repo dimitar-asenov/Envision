@@ -57,10 +57,7 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 	for (auto codeComposite : mergeUnits(codeUnits))
 	{
 		codeComposite->sortUnits();
-		auto headerFragment = codeComposite->headerFragment();
-		headerFragment = addApiIncludes(codeComposite, headerFragment);
-		headerFragment = addPragmaOnce(headerFragment);
-		createFileFromFragment(directory, codeComposite->name() + ".h", headerFragment);
+		createFileFromFragment(directory, codeComposite->name() + ".h", addPragmaOnce(codeComposite->headerFragment()));
 		createFileFromFragment(directory, codeComposite->name() + ".cpp", codeComposite->sourceFragment());
 	}
 	auto layout = layouter();
@@ -73,23 +70,6 @@ Export::SourceFragment* CppExporter::addPragmaOnce(Export::SourceFragment* fragm
 {
 	auto compositeFragment = new Export::CompositeFragment(fragment->node());
 	*compositeFragment << "#pragma once\n\n" << fragment;
-	return compositeFragment;
-}
-
-Export::SourceFragment* CppExporter::addApiIncludes(CodeComposite* composite, Export::SourceFragment* fragment)
-{
-	auto compositeFragment = new Export::CompositeFragment(fragment->node());
-	QSet<OOModel::Module*> namespaces;
-	for (auto unit : composite->units())
-		if (auto unitNamespace = unit->nameSpace())
-			if (!namespaces.contains(unitNamespace))
-			{
-				*compositeFragment << "#include \"" << unitNamespace->name().toLower() << "_api.h\n";
-				namespaces.insert(unitNamespace);
-			}
-	if (!namespaces.isEmpty()) *compositeFragment << "\n";
-
-	*compositeFragment << fragment;
 	return compositeFragment;
 }
 
