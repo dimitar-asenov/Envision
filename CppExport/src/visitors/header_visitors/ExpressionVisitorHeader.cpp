@@ -199,7 +199,19 @@ SourceFragment* ExpressionVisitorHeader::visit(Expression* expression)
 			default: error(e, "Unknown unary operator type");
 		}
 	}
-	else if (auto e = DCast<TypeTraitExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<TypeTraitExpression>(expression))
+	{
+		if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::SizeOf)
+			*fragment << "sizeof";
+		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::AlignOf)
+			*fragment << "alignof";
+		else if (e->typeTraitKind() == TypeTraitExpression::TypeTraitKind::TypeId)
+			*fragment << "typeid";
+		else
+			Q_ASSERT(false);
+
+		*fragment << "(" << visit(e->operand()) << ")";
+	}
 
 	// Literals =========================================================================================================
 
