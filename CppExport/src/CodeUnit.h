@@ -30,6 +30,8 @@
 
 #include "CodeUnitPart.h"
 
+#include "OOModel/src/declarations/Module.h"
+
 namespace CppExport {
 
 class CodeComposite;
@@ -50,6 +52,8 @@ class CPPEXPORT_API CodeUnit
 		void calculateSourceFragments();
 		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
 
+		OOModel::Module* nameSpace();
+
 	private:
 		QString name_;
 		Model::Node* node_{};
@@ -64,5 +68,6 @@ inline CodeComposite* CodeUnit::composite() const { return composite_; }
 inline void CodeUnit::setComposite(CodeComposite* composite) { composite_ = composite; }
 inline CodeUnitPart* CodeUnit::headerPart() { return &headerPart_; }
 inline CodeUnitPart* CodeUnit::sourcePart() { return &sourcePart_; }
+inline OOModel::Module* CodeUnit::nameSpace() { return node()->firstAncestorOfType<OOModel::Module>(); }
 
 }

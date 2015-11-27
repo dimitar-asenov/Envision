@@ -57,8 +57,11 @@ class CPPEXPORT_API CppExporter {
 		static QList<CodeComposite*> mergeUnits(QList<CodeUnit*>& units);
 		static void createFileFromFragment(Export::SourceDir* directory, const QString& fileName,
 													  Export::SourceFragment* sourceFragment);
+
 		static Export::FragmentLayouter layouter();
+
 		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
+		static Export::SourceFragment* addApiIncludes(CodeComposite* composite, Export::SourceFragment* fragment);
 };
 
 }
