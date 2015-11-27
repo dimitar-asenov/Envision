@@ -147,6 +147,9 @@ void QueryParser::changeToLeftToRightOrder(QueryNode*& top)
 
 QStringList QueryParser::quoteAwareSplit(const QString& input)
 {
+	// TODO we should handle quote escaping as well. Note that this is a bit more involved:
+	// Since the parsing is executed whenever a keypress occurs we can not just remove the escape character here.
+	// But once a query is executed the string should not contain any escapes.
 	QStringList parts;
 	bool inQuote = false;
 	QString currentPart;
