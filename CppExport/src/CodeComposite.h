@@ -56,6 +56,8 @@ class CPPEXPORT_API CodeComposite
 
 		template <class T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
+
+		QString relativePath(CodeComposite* other);
 };
 
 inline const QString& CodeComposite::name() const { return name_; }

@@ -41,6 +41,26 @@ void CodeComposite::addUnit(CodeUnit* unit)
 	unit->setComposite(this);
 }
 
+QString CodeComposite::relativePath(CodeComposite* other)
+{
+	QStringList thisName = name().split("/");
+	QStringList otherName = other->name().split("/");
+
+	if (name() != other->name())
+	{
+		while (thisName.first() == otherName.first())
+		{
+			thisName.takeFirst();
+			otherName.takeFirst();
+		}
+
+		for (auto i = 0; i < thisName.size() - otherName.size(); i++) otherName.prepend("..");
+		return otherName.join("/");
+	}
+
+	return otherName.last();
+}
+
 QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
 																			QSet<Model::Node*> softDependencies)
 {
@@ -89,7 +109,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	if (!compositeDependencies.empty())
 	{
 		for (auto compositeDependency : compositeDependencies)
-				*composite << "#include \"" + compositeDependency->name() + ".h\"\n";
+				*composite << "#include \"" + relativePath(compositeDependency) + ".h\"\n";
 
 		*composite << "\n";
 	}
