@@ -4,13 +4,13 @@ classUses = Query.executeQuery('ast -t=CastExpression | attribute -at=castType -
 
 def hasTypeIdMethod( cl ):
     for method in cl.methods:
-        if method.name == "typeIdStatic":
+        if method.name == 'typeIdStatic':
             return True
     return False
 
-for tuple in classUses[0].tuples("uses"):
+for tuple in classUses[0].tuples('uses'):
     if hasTypeIdMethod(tuple.used):
-        values = [("ast", tuple.user)]
+        values = [('ast', tuple.user)]
         Query.result.add(Tuple(values))
 
-Query.result = Query.toParent(["-t=CastExpression"], [Query.result])[0]
+Query.result = Query.toParent(['-t=CastExpression'], [Query.result])[0]
