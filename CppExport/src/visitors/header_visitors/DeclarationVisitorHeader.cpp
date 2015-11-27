@@ -125,14 +125,6 @@ SourceFragment* DeclarationVisitorHeader::visitTopLevelClass(Class* classs)
 SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
-	if (Class::ConstructKind::Class == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
-	else if (Class::ConstructKind::Struct == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "struct " << classs->nameNode();
-	else if (Class::ConstructKind::Enum == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "enum " << classs->nameNode();
-	else
-		notAllowed(classs);
 
 	if (!classs->typeArguments()->isEmpty())
 		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
