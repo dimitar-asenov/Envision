@@ -181,9 +181,9 @@ SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 template<typename Predicate>
 bool DeclarationVisitorHeader::addMemberDeclarations(Class* classs, CompositeFragment* section, Predicate filter)
 {
-	auto subDeclarations = list(classs->subDeclarations(), this, "declarations", filter);
+	auto subDeclarations = list(classs->subDeclarations(), this, "sections", filter);
 	auto fields = list(classs->fields(), this, "vertical", filter);
-	auto classes = list(classs->classes(), this, "declarations", filter);
+	auto classes = list(classs->classes(), this, "sections", filter);
 	auto methods = list(classs->methods(), this, "sections", filter);
 
 	*section << subDeclarations << fields << classes << methods;

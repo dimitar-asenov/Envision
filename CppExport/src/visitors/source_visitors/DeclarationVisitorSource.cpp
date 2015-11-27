@@ -122,7 +122,7 @@ SourceFragment* DeclarationVisitorSource::visit(Class* classs)
 	//TODO
 	auto sections = fragment->append( new CompositeFragment(classs, "sections"));
 	*sections << list(classs->enumerators(), ElementVisitorSource(data()), "enumerators");
-	*sections << list(classs->classes(), this, "declarations");
+	*sections << list(classs->classes(), this, "sections");
 	*sections << list(classs->methods(), this, "spacedSections");
 	*sections << list(classs->fields(), this, "vertical");
 
