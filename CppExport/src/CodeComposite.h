@@ -51,6 +51,9 @@ class CPPEXPORT_API CodeComposite
 
 		Export::SourceFragment* partFragment(CodeUnitPart* (CodeUnit::*part) ());
 
+		QSet<Model::Node*> reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
+																QSet<Model::Node*> softDependencies);
+
 		template <class T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
 };

@@ -41,6 +41,37 @@ void CodeComposite::addUnit(CodeUnit* unit)
 	unit->setComposite(this);
 }
 
+QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
+																			QSet<Model::Node*> softDependencies)
+{
+	auto result = softDependencies;
+	auto workList = QList<CodeComposite*>::fromSet(hardDependencies);
+	QSet<CodeComposite*> processed;
+
+	while (!workList.empty())
+	{
+		auto hardDependency = workList.takeFirst();
+
+		if (!processed.contains(hardDependency))
+		{
+			for (auto unit : hardDependency->units())
+			{
+				for (auto transitiveDependencyHeaderPart : unit->headerPart()->dependencies())
+					workList.append(transitiveDependencyHeaderPart->parent()->composite());
+
+				for (auto softDependency : softDependencies)
+					if (result.contains(softDependency))
+						if (unit->node() == softDependency || unit->node()->isAncestorOf(softDependency))
+							result.remove(softDependency);
+			}
+
+			processed.insert(hardDependency);
+		}
+	}
+
+	return result;
+}
+
 Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*part) ())
 {
 	Q_ASSERT(!units().empty());
@@ -63,9 +94,10 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		*composite << "\n";
 	}
 
-	if (!softDependencies.empty())
+	auto softDependenciesReduced = reduceSoftDependencies(compositeDependencies, softDependencies);
+	if (!softDependenciesReduced.empty())
 	{
-		for (auto softDependency : softDependencies)
+		for (auto softDependency : softDependenciesReduced)
 		{
 			if (auto classs = DCast<OOModel::Class>(softDependency))
 			{
