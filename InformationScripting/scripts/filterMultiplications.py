@@ -1,6 +1,6 @@
 # Removes all BinaryOperation nodes from the input which are not Multiplications
 #
-# Test to execute: ast -s=g -t=BinaryOp*|filterMultiplications
+# Test to execute: ast -global -t=BinaryOp* | filterMultiplications
 
 for tuple in Query.input.tuples('ast'):
     if type(tuple.ast) is BinaryOperation:
