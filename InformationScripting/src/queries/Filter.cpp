@@ -37,9 +37,6 @@ Optional<TupleSet> Filter::executeLinear(TupleSet input)
 {
 	auto filterTag = arguments_.positionalArgument(0);
 
-	if (!filterTag.contains("."))
-		return {"filter: requires tagged value to filter by, i.e. tag.value."};
-
 	auto tagParts = filterTag.split(".");
 	QString tupleTag = tagParts[0];
 
