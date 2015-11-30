@@ -58,6 +58,11 @@ void EnvisionAstConsumer::HandleTagDeclDefinition(clang::TagDecl* tagDecl)
 
 void EnvisionAstConsumer::HandleEnumDecl(clang::EnumDecl* enumDecl)
 {
+	// Only consider enums that are in the current class:
+	auto classContext = llvm::dyn_cast<clang::RecordDecl>(enumDecl->getDeclContext());
+	if (!classContext ||
+		 QString::fromStdString(classContext->getNameAsString()) != currentClassName_)
+		return;
 	// Ignore private enums:
 	if (enumDecl->getAccess() == clang::AccessSpecifier::AS_private) return;
 
