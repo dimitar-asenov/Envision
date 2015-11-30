@@ -265,6 +265,14 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 		if (method->isOverloadedOperator()) continue;
 
 		QString methodName = QString::fromStdString(method->getNameAsString());
+
+		// Ignore registerNodeType, it does not make sense to have this function in Python. Furthermore it takes function
+		// pointers as arguments which does not make sense in Python.
+		// TODO: in general we should exclude functions that take functions pointers and lambdas.
+		// A check would have to check all arguments (maybe also return type) for function pointer type.
+		// Note that they might be hidden behind a typedef type.
+		if (methodName == "registerNodeType") continue;
+
 		if (method->getAccess() != clang::AccessSpecifier::AS_public ||
 			 (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate &&
 			  method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_MemberSpecialization) ||
