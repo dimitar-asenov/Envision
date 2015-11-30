@@ -43,23 +43,20 @@ void CodeComposite::addUnit(CodeUnit* unit)
 
 QString CodeComposite::relativePath(CodeComposite* other)
 {
-	QStringList thisName = name().split("/");
 	QStringList otherName = other->name().split("/");
 
-	if (name() != other->name())
-	{
-		while (thisName.first() == otherName.first())
-		{
-			thisName.takeFirst();
-			otherName.takeFirst();
-		}
+	if (name() == other->name()) return otherName.last();
 
-		int backSteps = thisName.size() - otherName.size();
-		for (auto i = 0; i < backSteps; i++) otherName.prepend("..");
-		return otherName.join("/");
+	QStringList thisName = name().split("/");
+	while (thisName.first() == otherName.first())
+	{
+		thisName.takeFirst();
+		otherName.takeFirst();
 	}
 
-	return otherName.last();
+	int backSteps = thisName.size() - otherName.size();
+	for (auto i = 0; i < backSteps; i++) otherName.prepend("..");
+	return otherName.join("/");
 }
 
 QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
