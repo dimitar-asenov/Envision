@@ -125,17 +125,20 @@ SourceFragment* DeclarationVisitorHeader::visitTopLevelClass(Class* classs)
 SourceFragment* DeclarationVisitorHeader::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
-	if (Class::ConstructKind::Class == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
-	else if (Class::ConstructKind::Struct == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "struct " << classs->nameNode();
-	else if (Class::ConstructKind::Enum == classs->constructKind())
-		*fragment << printAnnotationsAndModifiers(classs) << "enum " << classs->nameNode();
-	else
-		notAllowed(classs);
 
 	if (!classs->typeArguments()->isEmpty())
-		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "typeArgsList");
+		*fragment << list(classs->typeArguments(), ElementVisitorHeader(data()), "templateArgsList");
+
+	*fragment << printAnnotationsAndModifiers(classs);
+	if (Class::ConstructKind::Class == classs->constructKind()) *fragment << "class ";
+	else if (Class::ConstructKind::Struct == classs->constructKind()) *fragment << "struct ";
+	else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
+	else notAllowed(classs);
+
+	if (auto namespaceModule = classs->firstAncestorOfType<Module>())
+		*fragment << namespaceModule->name().toUpper() + "_API ";
+
+	*fragment << classs->nameNode();
 
 	if (!classs->baseClasses()->isEmpty())
 		// TODO: inheritance modifiers like private, virtual... (not only public)

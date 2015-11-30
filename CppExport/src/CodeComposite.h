@@ -40,17 +40,23 @@ class CPPEXPORT_API CodeComposite
 		const QString& name() const;
 		const QList<CodeUnit*>& units() const;
 		void addUnit(CodeUnit* unit);
-		void sortUnits();
 
-		Export::SourceFragment* headerFragment();
-		Export::SourceFragment* sourceFragment();
+		void fragments(Export::SourceFragment*& headerFragment, Export::SourceFragment*& sourceFragment);
 
 	private:
 		const QString name_;
 		QList<CodeUnit*> units_;
 
 		Export::SourceFragment* partFragment(CodeUnitPart* (CodeUnit::*part) ());
+		Export::SourceFragment* headerFragment();
+		Export::SourceFragment* sourceFragment();
 
+		QSet<Model::Node*> reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
+																QSet<Model::Node*> softDependencies);
+		QString relativePath(CodeComposite* other);
+		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
+
+		void sortUnits();
 		template <class T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
 };
@@ -58,7 +64,8 @@ class CPPEXPORT_API CodeComposite
 inline const QString& CodeComposite::name() const { return name_; }
 inline const QList<CodeUnit*>& CodeComposite::units() const { return units_; }
 
-inline Export::SourceFragment* CodeComposite::headerFragment() { return partFragment(&CodeUnit::headerPart); }
+inline Export::SourceFragment* CodeComposite::headerFragment()
+{ return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
 inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
 
 }

@@ -41,6 +41,55 @@ void CodeComposite::addUnit(CodeUnit* unit)
 	unit->setComposite(this);
 }
 
+QString CodeComposite::relativePath(CodeComposite* other)
+{
+	QStringList otherName = other->name().split("/");
+
+	if (name() == other->name()) return otherName.last();
+
+	QStringList thisName = name().split("/");
+	while (thisName.first() == otherName.first())
+	{
+		thisName.takeFirst();
+		otherName.takeFirst();
+	}
+
+	int backSteps = thisName.size() - otherName.size();
+	for (auto i = 0; i < backSteps; i++) otherName.prepend("..");
+	return otherName.join("/");
+}
+
+QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
+																			QSet<Model::Node*> softDependencies)
+{
+	auto result = softDependencies;
+	auto workList = QList<CodeComposite*>::fromSet(hardDependencies);
+	QSet<CodeComposite*> processed;
+
+	while (!workList.empty())
+	{
+		auto hardDependency = workList.takeFirst();
+
+		if (!processed.contains(hardDependency))
+		{
+			for (auto unit : hardDependency->units())
+			{
+				for (auto transitiveDependencyHeaderPart : unit->headerPart()->dependencies())
+					workList.append(transitiveDependencyHeaderPart->parent()->composite());
+
+				for (auto softDependency : softDependencies)
+					if (result.contains(softDependency))
+						if (unit->node() == softDependency || unit->node()->isAncestorOf(softDependency))
+							result.remove(softDependency);
+			}
+
+			processed.insert(hardDependency);
+		}
+	}
+
+	return result;
+}
+
 Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*part) ())
 {
 	Q_ASSERT(!units().empty());
@@ -58,25 +107,22 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	if (!compositeDependencies.empty())
 	{
 		for (auto compositeDependency : compositeDependencies)
-				*composite << "#include \"" + compositeDependency->name() + ".h\"\n";
+				*composite << "#include \"" + relativePath(compositeDependency) + ".h\"\n";
 
 		*composite << "\n";
 	}
 
-	if (!softDependencies.empty())
+	auto softDependenciesReduced = reduceSoftDependencies(compositeDependencies, softDependencies);
+	if (!softDependenciesReduced.empty())
 	{
-		for (auto softDependency : softDependencies)
+		for (auto softDependency : softDependenciesReduced)
 		{
 			if (auto classs = DCast<OOModel::Class>(softDependency))
 			{
-				if (OOModel::Class::ConstructKind::Class == classs->constructKind())
-					*composite << "class ";
-				else if (OOModel::Class::ConstructKind::Struct == classs->constructKind())
-					*composite << "struct ";
-				else if (OOModel::Class::ConstructKind::Enum == classs->constructKind())
-					*composite << "enum ";
-				else
-					Q_ASSERT(false);
+				if (OOModel::Class::ConstructKind::Class == classs->constructKind()) *composite << "class ";
+				else if (OOModel::Class::ConstructKind::Struct == classs->constructKind()) *composite << "struct ";
+				else if (OOModel::Class::ConstructKind::Enum == classs->constructKind()) *composite << "enum ";
+				else Q_ASSERT(false);
 			}
 			else
 				Q_ASSERT(false);
@@ -87,9 +133,35 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		*composite << "\n";
 	}
 
-	for (auto unit : units())
-		composite->append((unit->*part)()->sourceFragment());
+	if (!units().isEmpty())
+	{
+		OOModel::Module* currentNamespace{};
+
+		for (auto unit : units())
+		{
+			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
+
+			if (neededNamespace != currentNamespace)
+			{
+				if (currentNamespace) *composite << "\n}\n\n";
+				if (neededNamespace) *composite << "namespace " << neededNamespace->symbolName() << " {\n\n";
+				currentNamespace = neededNamespace;
+			}
+
+			composite->append((unit->*part)()->sourceFragment());
+		}
+
+		if (currentNamespace) *composite << "\n}";
+	}
+
 	return composite;
+}
+
+Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fragment)
+{
+	auto compositeFragment = new Export::CompositeFragment(fragment->node());
+	*compositeFragment << "#pragma once\n\n" << fragment;
+	return compositeFragment;
 }
 
 void CodeComposite::sortUnits()
@@ -101,6 +173,13 @@ void CodeComposite::sortUnits()
 
 	units_.clear();
 	for (auto headerPart : topologicalSort(headerPartDependencies)) units_.append(headerPart->parent());
+}
+
+void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
+{
+	sortUnits();
+	header = headerFragment();
+	source = sourceFragment();
 }
 
 template <class T>

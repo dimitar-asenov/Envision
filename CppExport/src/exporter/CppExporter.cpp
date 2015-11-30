@@ -30,6 +30,7 @@
 
 #include "Export/src/writer/Exporter.h"
 #include "Export/src/writer/FragmentLayouter.h"
+#include "Export/src/tree/CompositeFragment.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 #include "../CodeUnit.h"
@@ -54,22 +55,23 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 
 	auto directory = new Export::SourceDir(nullptr, pathToProjectContainerDirectory + "/src");
 	for (auto codeComposite : mergeUnits(codeUnits))
-	{
-		codeComposite->sortUnits();
-		createFileFromFragment(directory, codeComposite->name() + ".h", codeComposite->headerFragment());
-		createFileFromFragment(directory, codeComposite->name() + ".cpp", codeComposite->sourceFragment());
-	}
+		createFilesFromComposite(directory, codeComposite);
+
 	auto layout = layouter();
 	Export::Exporter::exportToFileSystem("", directory, &layout);
 
 	return {};
+
 }
 
-void CppExporter::createFileFromFragment(Export::SourceDir* directory, const QString& fileName,
-													  Export::SourceFragment* sourceFragment)
+void CppExporter::createFilesFromComposite(Export::SourceDir* directory, CodeComposite* codeComposite)
 {
-	auto file = &directory->file(fileName);
-	file->append(sourceFragment);
+	Export::SourceFragment* headerFragment{};
+	Export::SourceFragment* sourceFragment{};
+	codeComposite->fragments(headerFragment, sourceFragment);
+
+	directory->file(codeComposite->name() + ".h").append(headerFragment);
+	directory->file(codeComposite->name() + ".cpp").append(sourceFragment);
 }
 
 void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
