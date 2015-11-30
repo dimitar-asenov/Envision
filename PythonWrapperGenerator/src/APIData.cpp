@@ -55,7 +55,13 @@ APIData& APIData::instance()
 
 void APIData::addIncludeFile(QString filePath)
 {
-	if (!includePrefix_.isEmpty()) filePath.prepend(QDir::separator()).prepend(includePrefix_);
+	Q_ASSERT(!includePrefix_.isEmpty());
+	auto parts = filePath.split(includePrefix_);
+	if (parts.size() > 1)
+		filePath = parts.last();
+	if (!filePath.startsWith(QDir::separator()))
+		filePath.prepend(QDir::separator());
+	filePath.prepend(includePrefix_);
 	includePaths_ << filePath;
 }
 

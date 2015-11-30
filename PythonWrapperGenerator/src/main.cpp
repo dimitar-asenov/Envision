@@ -32,8 +32,7 @@ int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
 	GenTool t;
-	t.setSubDirPath(Config::instance().envisionReadPath());
-	t.run();
+	t.run(Config::instance().envisionReadPath());
 	std::cout << "Done!" << std::endl;
 	a.quit();
 	return 0;

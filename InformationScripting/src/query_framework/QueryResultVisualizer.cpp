@@ -42,7 +42,7 @@ const QString QueryResultVisualizer::HIGHLIGHT_OVERLAY_GROUP = {"default graph h
 const QString QueryResultVisualizer::ARROW_OVERLAY_GROUP = {"default arrow"};
 
 const QStringList QueryResultVisualizer::INFO_ARGUMENT_NAMES{"i", "info"};
-const QStringList QueryResultVisualizer::SORT_ARGUMENT_NAMES{"st", "sort"};
+const QStringList QueryResultVisualizer::SORT_ARGUMENT_NAMES{"s", "sort"};
 
 QueryResultVisualizer::QueryResultVisualizer(Model::Node* target, QStringList args, QueryExecutor* executor)
 	: LinearQuery{target}, arguments_{{

@@ -30,29 +30,24 @@
 class GenTool
 {
 	public:
-		void run();
+		void run(const QString& envisionPath);
 
+	private:
 		/**
-		 * Prepares importing a project which is structured in subdirectories.
+		 * Prepares importing Envision which is structured in subdirectories.
+		 * Returns the compilation database for the whole project.
 		 */
-		void setSubDirPath(const QString& path);
+		std::unique_ptr<clang::tooling::CompilationDatabase> setSubDirPath(const QString& path);
 
 		/**
 		 * Prepares everything for the project in \a sourcePath to get imported
 		 */
 		void initPath(const QString& sourcePath);
 
-
-	private:
 		/**
 		 * Collects all source files in \a sourcPath and sub directories and stores them in the sourcesMap_.
 		 */
 		void readInFiles(const QString& sourcePath);
-
-		/**
-		 * Adds the compilation database to compilationDbMap_.
-		 */
-		void setCompilationDbPath(const QString& sourcePath);
 
 		// File endings filter
 		QStringList cppFilter_ = {"*.cpp", "*.cc", "*.cxx"};
@@ -63,5 +58,4 @@ class GenTool
 		// projects we have to import. For single project this list will only contain one entry
 		QStringList projects_;
 		QHash<QString, std::vector<std::string>> sourcesMap_;
-		QHash<QString, std::shared_ptr<clang::tooling::CompilationDatabase>> compilationDbMap_;
 };
