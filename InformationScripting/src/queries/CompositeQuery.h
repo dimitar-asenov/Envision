@@ -56,7 +56,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		void connectQuery(Query* from, int outIndex, Query* to, int inIndex);
 
 		void connectInput(int inputIndex, Query* to, int atInput = 0);
-		void connectToOutput(Query* from, int outIndex = 0);
+		void connectToOutput(int queryOutIndex, Query* from, int compositeOutIndex);
 
 		int inputCount() const;
 		int outputCount() const;
