@@ -40,6 +40,8 @@ class QCommandLineOption;
 
 namespace InformationScripting {
 
+class Query;
+
 struct PositionalArgument
 {
 		QString name_;
@@ -50,7 +52,7 @@ struct PositionalArgument
 class INFORMATIONSCRIPTING_API ArgumentParser
 {
 	public:
-		enum class Scope : int {Local, Global, Input};
+		enum class Scope : int {Undefined, Local, Global, Input};
 
 		ArgumentParser(std::initializer_list<QCommandLineOption> options,
 								  const QStringList& args, bool addScopeArguments = false);
@@ -60,7 +62,7 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 
 		static void setArgTo(QStringList& args, const QStringList& argNames, const QString& type);
 
-		Scope scope() const;
+		Scope scope(const Query* of) const;
 
 		QString argument(const QString& argName) const;
 		bool isArgumentSet(const QString& argName) const;
@@ -70,6 +72,7 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 
 		QString queryName() const;
 
+		static const QStringList LOCAL_SCOPE_ARGUMENT_NAMES;
 		static const QStringList GLOBAL_SCOPE_ARGUMENT_NAMES;
 		static const QStringList INPUT_SCOPE_ARGUMENT_NAMES;
 	private:
@@ -80,7 +83,6 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		void initParser(const QStringList& args, bool addScopeArguments);
 };
 
-inline ArgumentParser::Scope ArgumentParser::scope() const { return scope_; }
 inline QString ArgumentParser::queryName() const { return queryName_; }
 
 } /* namespace InformationScripting */

@@ -98,17 +98,18 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet input)
 {
 	QList<OOModel::Class*> childClasses;
 	TupleSet ts;
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 	{
 		OOModel::Class* parentClass = DCast<OOModel::Class>(target());
 		if (!parentClass) parentClass = target()->firstAncestorOfType<OOModel::Class>();
 		childClasses.push_back(parentClass);
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 	{
 		childClasses = Model::Node::childrenOfType<OOModel::Class>(target()->root());
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		auto tuple = input.tuples("ast");
 		for (const auto& t : tuple) childClasses << Model::Node::childrenOfType<OOModel::Class>(t["ast"]);
@@ -181,16 +182,17 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 		}
 	};
 
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 	{
 		if (auto method = DCast<OOModel::Method>(target())) addCallgraphFor({method});
 		else return {"Callgraph does only work on method nodes"};
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 	{
 		addCallgraphFor(Model::Node::childrenOfType<OOModel::Method>(target()->root()));
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		// Keep input nodes
 		result = input;
@@ -225,11 +227,12 @@ Optional<TupleSet> AstQuery::typeQuery(TupleSet input, QString type)
 	Q_ASSERT(!type.isEmpty());
 	Model::SymbolMatcher matcher = Model::SymbolMatcher::guessMatcher(type);
 
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 		addNodesOfType(tuples, matcher, target());
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 		addNodesOfType(tuples, matcher);
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		tuples = input;
 
@@ -253,11 +256,12 @@ Optional<TupleSet> AstQuery::nameQuery(TupleSet input, QString name)
 		return symbolType == SymbolType::METHOD || symbolType == SymbolType::CONTAINER || symbolType == SymbolType::VARIABLE;
 	};
 
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1, target(), suggestable);
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1, nullptr, suggestable);
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		tuples = input;
 
@@ -281,11 +285,12 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 	TupleSet result;
 	QHash<Model::Node*, QList<Model::Reference*>> references;
 
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 		references[target()] = Model::Node::childrenOfType<Model::Reference>(target());
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 		references[target()->root()] = Model::Node::childrenOfType<Model::Reference>(target()->root());
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		auto tuples = input;
 
@@ -358,11 +363,12 @@ Optional<TupleSet> AstQuery::typeFilter(TupleSet input)
 		return false;
 	};
 
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 		addNodesForWhich(result, keepNode, target());
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 		addNodesForWhich(result, keepNode);
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		result = input;
 
@@ -387,11 +393,12 @@ Optional<TupleSet> AstQuery::attribute(TupleSet input)
 	};
 
 	TupleSet result;
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 	{
 		findAttribute(target());
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 	{
 		auto nodesWithAttribute = Model::Node::childrenWhich(target()->root(), [&attributeName](Model::Node* node) {
 			if (auto composite = DCast<Model::CompositeNode>(node))
@@ -401,7 +408,7 @@ Optional<TupleSet> AstQuery::attribute(TupleSet input)
 		for (auto node : nodesWithAttribute)
 			findAttribute(node);
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		auto tuples = input;
 

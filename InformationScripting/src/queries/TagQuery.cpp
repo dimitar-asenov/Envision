@@ -93,12 +93,13 @@ Optional<TupleSet> TagQuery::queryTags(TupleSet input)
 	// Querying tags non persistent would just return the tag tuples in the input.
 	if (!persistent_) return input;
 
-	if (arguments_.scope() == ArgumentParser::Scope::Local || arguments_.scope() == ArgumentParser::Scope::Global)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local || scope == ArgumentParser::Scope::Global)
 	{
-		auto targetNode = arguments_.scope() == ArgumentParser::Scope::Local ? target() : nullptr;
+		auto targetNode = scope == ArgumentParser::Scope::Local ? target() : nullptr;
 		insertFoundTags(result, Model::SymbolMatcher::guessMatcher(tagText), targetNode);
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		auto matcher = Model::SymbolMatcher::guessMatcher(tagText);
 		auto astTuples = input.tuples("ast");
@@ -117,14 +118,15 @@ Optional<TupleSet> TagQuery::addTags(TupleSet input)
 	QString tagText = arguments_.argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0);
 
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 		addTagsTo << target();
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 	{
 		// That doesn't make sense, to which nodes should we add the tags?
 		// TODO: don't allow global argument!
 	}
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 		for (const auto& tuple : input.tuples("ast"))
 			addTagsTo << static_cast<Model::Node*>(tuple["ast"]);
 
@@ -161,11 +163,12 @@ Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 	auto matcher = Model::SymbolMatcher::guessMatcher(tagText);
 	QString tagName = "tag";
 	TupleSet removedTuples;
-	if (arguments_.scope() == ArgumentParser::Scope::Local)
+	auto scope = arguments_.scope(this);
+	if (scope == ArgumentParser::Scope::Local)
 		insertFoundTags(removedTuples, matcher, target());
-	else if (arguments_.scope() == ArgumentParser::Scope::Global)
+	else if (scope == ArgumentParser::Scope::Global)
 		insertFoundTags(removedTuples, matcher);
-	else if (arguments_.scope() == ArgumentParser::Scope::Input)
+	else if (scope == ArgumentParser::Scope::Input)
 	{
 		auto astTuples = input.tuples("ast");
 		for (auto tuple : astTuples)
