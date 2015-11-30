@@ -58,7 +58,6 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 	{
 		codeComposite->sortUnits();
 		createFileFromFragment(directory, codeComposite->name() + ".h", codeComposite->headerFragment());
-		createFileFromFragment(directory, codeComposite->name() + ".h", addPragmaOnce(codeComposite->headerFragment()));
 		createFileFromFragment(directory, codeComposite->name() + ".cpp", codeComposite->sourceFragment());
 	}
 	auto layout = layouter();
