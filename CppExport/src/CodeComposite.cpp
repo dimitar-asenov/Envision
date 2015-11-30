@@ -175,6 +175,13 @@ void CodeComposite::sortUnits()
 	for (auto headerPart : topologicalSort(headerPartDependencies)) units_.append(headerPart->parent());
 }
 
+void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
+{
+	sortUnits();
+	header = headerFragment();
+	source = sourceFragment();
+}
+
 template <class T>
 QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
 {

@@ -55,8 +55,7 @@ class CPPEXPORT_API CppExporter {
 	private:
 		static void units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result);
 		static QList<CodeComposite*> mergeUnits(QList<CodeUnit*>& units);
-		static void createFileFromFragment(Export::SourceDir* directory, const QString& fileName,
-													  Export::SourceFragment* sourceFragment);
+		static void createFilesFromComposite(Export::SourceDir* directory, CodeComposite* codeComposite);
 
 		static Export::FragmentLayouter layouter();
 };
