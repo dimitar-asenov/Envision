@@ -69,9 +69,10 @@ std::unique_ptr<Query> QueryBuilder::visitList(QueryBuilder* self, CompositeQuer
 	auto composite = std::make_unique<CompositeQuery>();
 	for (int i = 0; i < list->queries()->size(); ++i)
 	{
+		// NOTE: subqueries with multiple inputs/outputs are not supported:
 		auto query = composite->addQuery(self->visit(list->queries()->at(i)));
 		composite->connectInput(i, query);
-		composite->connectToOutput(query, i);
+		composite->connectToOutput(0, query, i);
 	}
 	return std::unique_ptr<Query>(composite.release());
 }
@@ -130,7 +131,7 @@ std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQ
 	for (int i = 0; i < inputCount; ++i)
 		composite->connectInput(i, left, i);
 	for (int o = 0; o < outputCount; ++o)
-		composite->connectToOutput(right, o);
+		composite->connectToOutput(o, right, o);
 	return std::unique_ptr<Query>(composite.release());
 }
 
