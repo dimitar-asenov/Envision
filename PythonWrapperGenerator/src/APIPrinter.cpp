@@ -45,6 +45,7 @@ void APIPrinter::print()
 {
 	printLicense();
 	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl << endl;
+	out_ << "#include \"AstApi.h\"" << endl << endl;
 	printHeaders();
 	out_ << "namespace InformationScripting {" << endl << endl;
 	out_ << "using namespace boost::python;" << endl << endl;

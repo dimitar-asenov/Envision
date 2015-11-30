@@ -117,7 +117,7 @@ SOURCES += src/InformationScriptingException.cpp \
     src/query_prompt/visualization/VCommandArgument.cpp \
     src/query_prompt/visualization/VCommandNode.cpp \
     src/query_prompt/HQuery.cpp \
-    src/python_bindings/AstApi.cpp \
+    src/python_bindings/AstApi_Generated.cpp \
     src/python_bindings/DataApi.cpp \
     src/python_bindings/BoostPythonHelpers.cpp \
     src/python_bindings/PythonSet.cpp \
@@ -148,11 +148,6 @@ SOURCES += src/InformationScriptingException.cpp \
 #QMAKE_EXTRA_COMPILERS += dataApiCompiler
 
 #SOURCES_DATAAPI = src/python_bindings/DataApi.cpp
-
-# HACK to only include the AstApi_Generated file if it exists.
-exists(src/python_bindings/AstApi_Generated.cpp): {
-    DEFINES+=AST_API_GENERATED
-}
 
 # Install script files into the script directory:
 scripts.path = $${BUILD_DIR}/scripts
