@@ -39,8 +39,15 @@ class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 		}
 };
 
-void GenTool::run()
+void GenTool::run(const QString& envisionPath)
 {
+	auto compilationDb = setSubDirPath(envisionPath);
+	if (!compilationDb)
+	{
+		std::cerr << "Could not create compilation database -- aborting!" << std::endl;
+		return;
+	}
+
 	auto pathToNamespaceMap = Config::instance().subdirsToNamespaceMap();
 
 	for (const auto& project : projects_)
@@ -51,8 +58,8 @@ void GenTool::run()
 		if (it != pathToNamespaceMap.end())
 		{
 			APIData::instance().namespaceName_ = it.value();
-			std::cout << "Start processing project :" << project.toStdString() << std::endl;
-			clang::tooling::ClangTool tool (*compilationDbMap_.value(project), sourcesMap_[project]);
+			std::cout << "Start processing subdirectory :" << project.toStdString() << std::endl;
+			clang::tooling::ClangTool tool(*compilationDb, sourcesMap_[project]);
 			ClangFrontEndActionFactory frontendActionFactory;
 			tool.run(&frontendActionFactory);
 		}
@@ -62,27 +69,30 @@ void GenTool::run()
 	printer.print();
 }
 
-void GenTool::setSubDirPath(const QString& path)
+std::unique_ptr<clang::tooling::CompilationDatabase> GenTool::setSubDirPath(const QString& path)
 {
+	// check if there is a compilation db file in this directory otherwise we exclude it
+	QDir curDir(path);
+	if (!curDir.exists("compile_commands.json"))
+	{
+		std::cerr << "Tool requires compile_commands.json file in " << path.toStdString() << " to run!" << std::endl;
+		return nullptr;
+	}
+	// Find all subprojects:
 	QDirIterator dirIterator(path, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
 	while (dirIterator.hasNext()) initPath(dirIterator.next());
+
+	// get compilation db:
+	std::string Error;
+	auto db = clang::tooling::CompilationDatabase::loadFromDirectory(path.toLatin1().data(), Error);
+	return db;
 }
 
 void GenTool::initPath(const QString& sourcePath)
 {
-	// check if there is a compilation db file in this directory otherwise we exclude it
-	QDir curDir(sourcePath);
-	if (!curDir.exists("compile_commands.json"))
-	{
-		std::cout << "Ignoring directory" << sourcePath.toStdString()
-					 << "because there is no compile_commands.json file" << std::endl;
-		return;
-	}
 	// append to the projects
 	projects_ << sourcePath;
-
 	readInFiles(sourcePath);
-	setCompilationDbPath(sourcePath);
 }
 
 void GenTool::readInFiles(const QString& sourcePath)
@@ -90,12 +100,4 @@ void GenTool::readInFiles(const QString& sourcePath)
 	QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
 	auto& sources = sourcesMap_[sourcePath];
 	while (dirIterator.hasNext()) sources.push_back(dirIterator.next().toStdString());
-}
-
-void GenTool::setCompilationDbPath(const QString& sourcePath)
-{
-	std::string Error;
-	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toLatin1().data(), Error);
-	Q_ASSERT(compDB);
-	compilationDbMap_.insert(sourcePath, move(compDB));
 }
