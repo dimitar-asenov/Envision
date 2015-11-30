@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../../cppexport_api.h"
+#include "../cppexport_api.h"
 
 #include "Export/src/Visitor.h"
 
@@ -41,12 +41,12 @@ namespace OOModel {
 
 namespace CppExport {
 
-class DeclarationVisitorSource;
-class ExpressionVisitorSource;
-class StatementVisitorSource;
+class DeclarationVisitor;
+class ExpressionVisitor;
+class StatementVisitor;
 
-class ElementVisitorSource
-:public Export::Visitor<DeclarationVisitorSource, ExpressionVisitorSource, StatementVisitorSource, ElementVisitorSource>
+class ElementVisitor
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 {
 	public:
 		using Visitor::Visitor;

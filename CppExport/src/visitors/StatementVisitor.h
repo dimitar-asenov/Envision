@@ -26,34 +26,56 @@
 
 #pragma once
 
-#include "../../cppexport_api.h"
+#include "../cppexport_api.h"
 
 #include "Export/src/Visitor.h"
 
 namespace OOModel {
-	class PointerTypeExpression;
-	class Expression;
+	class Block;
+	class BreakStatement;
+	class CaseStatement;
+	class ContinueStatement;
+	class DeclarationStatement;
+	class ExpressionStatement;
+	class ForEachStatement;
+	class IfStatement;
+	class LoopStatement;
+	class ReturnStatement;
+	class SwitchStatement;
+	class TryCatchFinallyStatement;
+	class AssertStatement;
+	class SynchronizedStatement;
+	class StatementItem;
 }
 
 namespace CppExport {
 
-class DeclarationVisitorSource;
-class ExpressionVisitorSource;
-class StatementVisitorSource;
-class ElementVisitorSource;
+class DeclarationVisitor;
+class ExpressionVisitor;
+class ElementVisitor;
 
-class ExpressionVisitorSource
-:public Export::Visitor<DeclarationVisitorSource, ExpressionVisitorSource, StatementVisitorSource, ElementVisitorSource>
+class StatementVisitor
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 {
 	public:
 		using Visitor::Visitor;
 
-		Export::SourceFragment* visit(OOModel::Expression* expression);
+		Export::SourceFragment* visit(OOModel::Block* statement);
+		Export::SourceFragment* visit(OOModel::BreakStatement* statement);
+		Export::SourceFragment* visit(OOModel::CaseStatement* statement);
+		Export::SourceFragment* visit(OOModel::ContinueStatement* statement);
+		Export::SourceFragment* visit(OOModel::DeclarationStatement* statement);
+		Export::SourceFragment* visit(OOModel::ExpressionStatement* statement);
+		Export::SourceFragment* visit(OOModel::ForEachStatement* statement);
+		Export::SourceFragment* visit(OOModel::IfStatement* statement);
+		Export::SourceFragment* visit(OOModel::LoopStatement* statement);
+		Export::SourceFragment* visit(OOModel::ReturnStatement* statement);
+		Export::SourceFragment* visit(OOModel::SwitchStatement* statement);
+		Export::SourceFragment* visit(OOModel::TryCatchFinallyStatement* statement);
+		Export::SourceFragment* visit(OOModel::AssertStatement* statement);
+		Export::SourceFragment* visit(OOModel::SynchronizedStatement* statement);
 
-		Export::SourceFragment* visitFunctionPointer(OOModel::PointerTypeExpression* expression,
-																	const QString& name = QString());
-	private:
-		template <class T> Export::SourceFragment* optional(T* node);
+		Export::SourceFragment* visit(OOModel::StatementItem* statementItem);
 };
 
 }

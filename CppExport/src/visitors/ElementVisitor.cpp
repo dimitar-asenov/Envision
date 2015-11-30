@@ -24,10 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "DeclarationVisitorSource.h"
-#include "ExpressionVisitorSource.h"
-#include "StatementVisitorSource.h"
-#include "ElementVisitorSource.h"
+#include "DeclarationVisitor.h"
+#include "ExpressionVisitor.h"
+#include "StatementVisitor.h"
+#include "ElementVisitor.h"
 
 #include "OOModel/src/elements/FormalArgument.h"
 #include "OOModel/src/elements/FormalResult.h"
@@ -43,34 +43,34 @@ using namespace OOModel;
 
 namespace CppExport {
 
-SourceFragment* ElementVisitorSource::visit(FormalArgument* argument)
+SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 {
 	auto fragment = new CompositeFragment(argument);
 
 	auto pointerTypeExpression = DCast<PointerTypeExpression>(argument->typeExpression());
 	if (pointerTypeExpression && DCast<FunctionTypeExpression>(pointerTypeExpression->typeExpression()))
-		*fragment << ExpressionVisitorSource(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
+		*fragment << ExpressionVisitor(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
 	else
 		*fragment << expression(argument->typeExpression()) << " " << argument->nameNode();
 
 	return fragment;
 }
 
-SourceFragment* ElementVisitorSource::visit(FormalResult* result)
+SourceFragment* ElementVisitor::visit(FormalResult* result)
 {
 	auto fragment = new CompositeFragment(result);
 	*fragment << "RESULT";
 	return fragment;
 }
 
-SourceFragment* ElementVisitorSource::visit(FormalTypeArgument* typeArgument)
+SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 {
 	auto fragment = new CompositeFragment(typeArgument);
 	*fragment << "typename " << typeArgument->nameNode();
 	return fragment;
 }
 
-SourceFragment* ElementVisitorSource::visit(CatchClause* catchClause)
+SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 {
 	auto fragment = new CompositeFragment(catchClause);
 
@@ -79,12 +79,12 @@ SourceFragment* ElementVisitorSource::visit(CatchClause* catchClause)
 	*fragment << "catch (";
 	if (catchClause->exceptionToCatch()) *fragment << expression(catchClause->exceptionToCatch());
 	*fragment << ")";
-	*fragment << list(catchClause->body(), StatementVisitorSource(data()), "body");
+	*fragment << list(catchClause->body(), StatementVisitor(data()), "body");
 
 	return fragment;
 }
 
-SourceFragment* ElementVisitorSource::visit(Enumerator* enumerator)
+SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 {
 	auto fragment = new CompositeFragment(enumerator);
 	*fragment << enumerator->name();
@@ -95,11 +95,11 @@ SourceFragment* ElementVisitorSource::visit(Enumerator* enumerator)
 	return fragment;
 }
 
-SourceFragment* ElementVisitorSource::visit(MemberInitializer* memberInitializer)
+SourceFragment* ElementVisitor::visit(MemberInitializer* memberInitializer)
 {
 	auto fragment = new CompositeFragment(memberInitializer);
 	*fragment << expression(memberInitializer->memberReference())
-				 << list(memberInitializer->arguments(), ExpressionVisitorSource(data()), "initializerList");
+				 << list(memberInitializer->arguments(), ExpressionVisitor(data()), "initializerList");
 	return fragment;
 }
 

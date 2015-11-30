@@ -28,8 +28,7 @@
 
 #include "OOModel/src/declarations/Class.h"
 
-#include "visitors/header_visitors/DeclarationVisitorHeader.h"
-#include "visitors/source_visitors/DeclarationVisitorSource.h"
+#include "visitors/DeclarationVisitor.h"
 
 namespace CppExport {
 
@@ -40,8 +39,8 @@ void CodeUnit::calculateSourceFragments()
 {
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
-		headerPart()->setSourceFragment(DeclarationVisitorHeader().visitTopLevelClass(classs));
-		sourcePart()->setSourceFragment(DeclarationVisitorSource().visitTopLevelClass(classs));
+		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visitTopLevelClass(classs));
+		sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visitTopLevelClass(classs));
 	}
 	else
 		Q_ASSERT(false); // TODO: handle non class units
