@@ -157,6 +157,13 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	return composite;
 }
 
+Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fragment)
+{
+	auto compositeFragment = new Export::CompositeFragment(fragment->node());
+	*compositeFragment << "#pragma once\n\n" << fragment;
+	return compositeFragment;
+}
+
 void CodeComposite::sortUnits()
 {
 	if (units().size() <= 1) return;

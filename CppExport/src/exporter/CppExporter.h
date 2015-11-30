@@ -59,8 +59,6 @@ class CPPEXPORT_API CppExporter {
 													  Export::SourceFragment* sourceFragment);
 
 		static Export::FragmentLayouter layouter();
-
-		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
 };
 
 }
