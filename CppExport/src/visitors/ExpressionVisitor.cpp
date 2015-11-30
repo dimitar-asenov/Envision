@@ -24,12 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#include "DeclarationVisitorSource.h"
-#include "ExpressionVisitorSource.h"
-#include "StatementVisitorSource.h"
-#include "ElementVisitorSource.h"
+#include "DeclarationVisitor.h"
+#include "ExpressionVisitor.h"
+#include "StatementVisitor.h"
+#include "ElementVisitor.h"
 
-#include "../../CppExportException.h"
+#include "../CppExportException.h"
 
 #include "OOModel/src/expressions/Expression.h"
 #include "OOModel/src/expressions/types/ArrayTypeExpression.h"
@@ -78,12 +78,12 @@ using namespace OOModel;
 
 namespace CppExport {
 
-template <class T> Export::SourceFragment* ExpressionVisitorSource::optional(T* node)
+template <class T> Export::SourceFragment* ExpressionVisitor::optional(T* node)
 {
 	return node ? visit(node) : nullptr;
 }
 
-SourceFragment* ExpressionVisitorSource::visit(Expression* expression)
+SourceFragment* ExpressionVisitor::visit(Expression* expression)
 {
 	auto fragment = new CompositeFragment(expression);
 
@@ -258,8 +258,8 @@ SourceFragment* ExpressionVisitorSource::visit(Expression* expression)
 	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
 	else if (auto e = DCast<LambdaExpression>(expression))
 	{
-		*fragment << list(e->arguments(), ElementVisitorSource(data()), "argsList") << " -> ";
-		*fragment << list(e->body(), StatementVisitorSource(data()), "body");
+		*fragment << list(e->arguments(), ElementVisitor(data()), "argsList") << " -> ";
+		*fragment << list(e->body(), StatementVisitor(data()), "body");
 
 		if (e->results()->size() > 1) error(e->results(), "Cannot have more than one return value in Cpp");
 	}
@@ -327,7 +327,7 @@ SourceFragment* ExpressionVisitorSource::visit(Expression* expression)
 	return fragment;
 }
 
-SourceFragment* ExpressionVisitorSource::visitFunctionPointer(PointerTypeExpression* functionPointer,
+SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* functionPointer,
 																				  const QString& name)
 {
 	auto functionTypeExpression = DCast<FunctionTypeExpression>(functionPointer->typeExpression());

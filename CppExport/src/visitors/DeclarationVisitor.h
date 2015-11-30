@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../../cppexport_api.h"
+#include "../cppexport_api.h"
 
 #include "Export/src/Visitor.h"
 
@@ -50,12 +50,15 @@ namespace Export {
 
 namespace CppExport {
 
-class ExpressionVisitorHeader;
-class StatementVisitorHeader;
-class ElementVisitorHeader;
+class ExpressionVisitor;
+class StatementVisitor;
+class ElementVisitor;
 
-class CPPEXPORT_API DeclarationVisitorHeader
-:public Export::Visitor<DeclarationVisitorHeader, ExpressionVisitorHeader, StatementVisitorHeader, ElementVisitorHeader>
+const int HEADER_VISITOR = 0;
+const int SOURCE_VISITOR = 1;
+
+class CPPEXPORT_API DeclarationVisitor
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 {
 	public:
 		using Visitor::Visitor;
@@ -82,6 +85,10 @@ class CPPEXPORT_API DeclarationVisitorHeader
 	private:
 		template<typename Predicate>
 		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
+
+		bool headerVisitor();
 };
+
+inline bool DeclarationVisitor::headerVisitor() { return data().get()->mode_ == HEADER_VISITOR; }
 
 }

@@ -38,6 +38,7 @@ struct VisitorData
 {
 		QList<ExportError> errors_;
 		QStringList directoryStack_;
+		int mode_{};
 };
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
@@ -46,6 +47,7 @@ class Visitor
 	public:
 		Visitor();
 		Visitor(std::shared_ptr<VisitorData> data);
+		Visitor(int mode);
 
 		QList<ExportError> errors() const;
 
@@ -109,6 +111,10 @@ Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::Visitor(std::shared_ptr<VisitorData> data) : data_{data} {}
+
+template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::Visitor(int mode) : Visitor() { data_.get()->mode_ = mode; }
 
 template<class DeclarationVisitor, class ExpressionVisitor, class StatementVisitor, class ElementVisitor>
 inline QList<ExportError> Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
