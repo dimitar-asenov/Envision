@@ -131,6 +131,8 @@ void CompositeQuery::connectQuery(Query* from, int outIndex, Query* to, int inIn
 	auto fromNode = nodeForQuery(from);
 	auto toNode = nodeForQuery(to);
 
+	to->setHasInput();
+
 	addOutputMapping(fromNode, outIndex, toNode);
 	addInputMapping(fromNode, outIndex, toNode, inIndex);
 }
@@ -149,6 +151,15 @@ void CompositeQuery::connectToOutput(int queryOutIndex, Query* from, int composi
 
 	addOutputMapping(fromNode, queryOutIndex, outNode_);
 	addInputMapping(fromNode, queryOutIndex, outNode_, compositeOutIndex);
+}
+
+void CompositeQuery::setHasInput()
+{
+	Query::setHasInput();
+	for (const auto& outChannel : inNode_->outputMap_)
+		for (auto queryNode : outChannel)
+			if (auto q = queryNode->q_.get())
+				q->setHasInput();
 }
 
 CompositeQuery::QueryNode* CompositeQuery::nodeForQuery(Query* q)

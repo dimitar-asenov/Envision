@@ -61,6 +61,8 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		int inputCount() const;
 		int outputCount() const;
 
+		virtual void setHasInput() override;
+
 	private:
 		struct QueryNode;
 

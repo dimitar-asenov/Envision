@@ -41,12 +41,17 @@ class INFORMATIONSCRIPTING_API Query
 		virtual ~Query() = default;
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet>) = 0;
 		Model::Node* target() const;
+		virtual void setHasInput();
+		bool hasInput() const;
 
 	private:
 		Model::Node* target_{};
+		bool hasInput_{};
 };
 
 inline Query::Query(Model::Node *target) : target_{target} {}
 inline Model::Node* Query::target() const { return target_; }
+inline void Query::setHasInput() { hasInput_ = true; }
+inline bool Query::hasInput() const { return hasInput_; }
 
 } /* namespace InformationScripting */

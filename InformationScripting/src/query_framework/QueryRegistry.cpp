@@ -45,9 +45,9 @@ void QueryRegistry::registerAlias(const QString& alias, const QString& aliasedQu
 	Q_ASSERT(constructorIt != registry.constructors_.end()); // Need to register aliasedQuery first!
 	auto aliasedConstructor = *constructorIt;
 	registry.constructors_[alias] =
-		[argAdaption, aliasedConstructor] (Model::Node* target, QStringList args, QueryExecutor* executor) {
+		[argAdaption, aliasedConstructor, alias] (Model::Node* target, QStringList args, QueryExecutor* executor, QString) {
 			if (argAdaption) argAdaption(args);
-			return aliasedConstructor(target, args, executor);
+			return aliasedConstructor(target, args, executor, alias);
 	};
 }
 
@@ -55,7 +55,7 @@ std::unique_ptr<Query> QueryRegistry::buildQuery(const QString& command, Model::
 																 QStringList args, QueryExecutor* executor)
 {
 	if (auto constructor = constructors_[command])
-		return constructor(target, args, executor);
+		return constructor(target, args, executor, {});
 	if (args.size() > 1 && args[0] == "=")
 	{
 		// TODO we need some way to specify a condition on the node.

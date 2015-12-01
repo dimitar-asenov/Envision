@@ -26,9 +26,11 @@
 
 #include "ArgumentParser.h"
 #include "QueryParsingException.h"
+#include "../queries/Query.h"
 
 namespace InformationScripting {
 
+const QStringList ArgumentParser::LOCAL_SCOPE_ARGUMENT_NAMES{"l", "local"};
 const QStringList ArgumentParser::GLOBAL_SCOPE_ARGUMENT_NAMES{"g", "global"};
 const QStringList ArgumentParser::INPUT_SCOPE_ARGUMENT_NAMES{"i", "input"};
 
@@ -66,6 +68,15 @@ void ArgumentParser::setArgTo(QStringList& args, const QStringList& argNames, co
 		args.append(QString("-%1=%2").arg(argNames[0], type));
 }
 
+ArgumentParser::Scope ArgumentParser::scope(const Query* of) const
+{
+	Q_ASSERT(of);
+	// Manually defined scope argument is always respected:
+	if (scope_ != Scope::Undefined) return scope_;
+
+	return of->hasInput() ? Scope::Input : Scope::Local;
+}
+
 QString ArgumentParser::argument(const QString& argName) const
 {
 	return argParser_->value(argName);
@@ -92,6 +103,7 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 {
 	if (addScopeArguments)
 	{
+		argParser_->addOption(QCommandLineOption(LOCAL_SCOPE_ARGUMENT_NAMES));
 		argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES));
 		argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES));
 	}
@@ -104,7 +116,8 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 
 	if (addScopeArguments)
 	{
-		if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Global;
+		if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Local;
+		else if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Global;
 		else if (argParser_->isSet(INPUT_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Input;
 	}
 }

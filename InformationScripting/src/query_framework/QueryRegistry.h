@@ -68,7 +68,8 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		std::unique_ptr<Query> tryBuildQueryFromScript(const QString& name, Model::Node* target,
 																	  QStringList args, QueryExecutor* executor);
 
-		using QueryConstructor = std::function<std::unique_ptr<Query> (Model::Node*, QStringList, QueryExecutor*)>;
+		using QueryConstructor = std::function<std::unique_ptr<Query> (Model::Node*, QStringList,
+																							QueryExecutor*, QString)>;
 		QHash<QString, QueryConstructor> constructors_;
 		QString scriptLocation_{"scripts/"};
 };
@@ -77,8 +78,10 @@ template <class QueryType, class ...ForwardArguments>
 inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
 {
 	instance().constructors_[name] =
-			[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor*) {
-				return std::unique_ptr<Query>(new QueryType(target, QStringList(name) + args, forwardArguments...));
+			[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor*, QString alias) {
+				auto queryName = name;
+				if (!alias.isNull()) queryName = alias;
+				return std::unique_ptr<Query>(new QueryType(target, QStringList(queryName) + args, forwardArguments...));
 	};
 }
 
@@ -92,9 +95,11 @@ inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments..
 	else if (extras == ExtraArguments::QueryExecutor)
 	{
 		instance().constructors_[name] =
-				[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor* executor) {
+				[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor* executor, QString alias) {
+					auto queryName = name;
+					if (!alias.isNull()) queryName = alias;
 					return std::unique_ptr<Query>(
-								new QueryType(target, QStringList(name) + args, executor, forwardArguments...));
+								new QueryType(target, QStringList(queryName) + args, executor, forwardArguments...));
 		};
 	}
 	else
