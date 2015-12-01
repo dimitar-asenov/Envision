@@ -116,7 +116,7 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 
 	if (addScopeArguments)
 	{
-		if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Local;
+		if (argParser_->isSet(LOCAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Local;
 		else if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Global;
 		else if (argParser_->isSet(INPUT_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Input;
 	}
