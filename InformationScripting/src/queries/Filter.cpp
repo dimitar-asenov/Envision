@@ -33,6 +33,9 @@
 
 namespace InformationScripting {
 
+const QStringList Filter::EXTRACT_ARGUMENT_NAMES{"e", "extract"};
+const QStringList Filter::AS_ARGUMENT_NAMES{"as"};
+
 Optional<TupleSet> Filter::executeLinear(TupleSet input)
 {
 	auto filterTag = arguments_.positionalArgument(0);
@@ -43,11 +46,18 @@ Optional<TupleSet> Filter::executeLinear(TupleSet input)
 	if (tagParts.size() < 2)
 		return TupleSet(input.take(tupleTag).toList());
 
-	if (arguments_.numPositionalArguments() < 2)
-		return {"filter: when filtering by value, a value is required."};
+	bool extractIsSet = arguments_.isArgumentSet(EXTRACT_ARGUMENT_NAMES[1]);
+
+	if (!extractIsSet && arguments_.numPositionalArguments() < 2)
+		return {"filter: when filtering by value, a value or the extract argument is required."};
+
+	QString tupleValueTag = tagParts[1];
+
+	if (extractIsSet)
+		return extract(tupleTag, tupleValueTag, input);
 
 	auto filterBy = removeOuterQuotes(arguments_.positionalArgument(1));
-	QString tupleValueTag = tagParts[1];
+
 	TupleSet result;
 
 	for (const auto& candidate : input.take(tupleTag))
@@ -72,13 +82,31 @@ void Filter::registerDefaultQueries()
 }
 
 Filter::Filter(Model::Node* target, QStringList args)
-	: LinearQuery{target}, arguments_{{
-			PositionalArgument{"tag", "The tag to filter on"},
-			PositionalArgument{"by", "The value by which we should filter"}
+	: LinearQuery{target}, arguments_{
+	{QCommandLineOption{EXTRACT_ARGUMENT_NAMES},
+	 {AS_ARGUMENT_NAMES, "Tag to put the extracted value in", AS_ARGUMENT_NAMES[0]}
+	},
+	{PositionalArgument{"tag", "The tag to filter on"},
+	 PositionalArgument{"by", "The value by which we should filter"}
 	}, args}
 {
 	if (arguments_.numPositionalArguments() < 1)
 		throw QueryParsingException(arguments_.queryName() + " Requires at least one arguments");
+}
+
+Optional<TupleSet> Filter::extract(const QString& tag, const QString& value, TupleSet& input)
+{
+	TupleSet result;
+	QString as = arguments_.argument(AS_ARGUMENT_NAMES[0]);
+	if (as.isEmpty()) as = value;
+	for (const auto& tuple : input.tuples(tag))
+	{
+		auto it = tuple.find(value);
+		if (it == tuple.end())
+			return {QString("Tuple with tag %1 has no value with name %2").arg(tag, value)};
+		result.add(Tuple({{as, it->second}}));
+	}
+	return result;
 }
 
 QString Filter::removeOuterQuotes(const QString& from)
