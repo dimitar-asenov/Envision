@@ -72,8 +72,8 @@ class Block:
 		match = self.methodRegex.match(self.prefix)
 		if not match:
 			self.children.sort(key = lambda x : x.sortingString())
-		for c in self.children:
-			c.sort()
+			for c in self.children:
+				c.sort()
 			
 	def sortingString(self):
 		return self.prefix
