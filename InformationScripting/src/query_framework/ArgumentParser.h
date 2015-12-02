@@ -60,6 +60,10 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		ArgumentParser(std::initializer_list<PositionalArgument> options,
 							const QStringList& args, bool addScopeArguments = false);
 
+		ArgumentParser(std::initializer_list<QCommandLineOption> options,
+							std::initializer_list<PositionalArgument> positionalArgs,
+							const QStringList& args, bool addScopeArguments = false);
+
 		static void setArgTo(QStringList& args, const QStringList& argNames, const QString& type);
 
 		Scope scope(const Query* of) const;

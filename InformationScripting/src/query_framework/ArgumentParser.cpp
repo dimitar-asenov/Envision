@@ -53,6 +53,19 @@ ArgumentParser::ArgumentParser(std::initializer_list<PositionalArgument> options
 	initParser(args, addScopeArguments);
 }
 
+ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
+										 std::initializer_list<PositionalArgument> positionalArgs,
+										 const QStringList& args, bool addScopeArguments)
+	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
+{
+	if (!argParser_->addOptions(options))
+		Q_ASSERT(false);
+	for (const auto& opt : positionalArgs)
+		argParser_->addPositionalArgument(opt.name_, opt.description_, opt.syntax_);
+
+	initParser(args, addScopeArguments);
+}
+
 void ArgumentParser::setArgTo(QStringList& args, const QStringList& argNames, const QString& type)
 {
 	Q_ASSERT(argNames.size() > 0);
