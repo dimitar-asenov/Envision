@@ -38,7 +38,8 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 													  const QStringList& args, bool addScopeArguments)
 	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
-	argParser_->addOptions(options);
+	if (!argParser_->addOptions(options))
+		Q_ASSERT(false);
 	initParser(args, addScopeArguments);
 }
 
@@ -103,9 +104,12 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 {
 	if (addScopeArguments)
 	{
-		argParser_->addOption(QCommandLineOption(LOCAL_SCOPE_ARGUMENT_NAMES));
-		argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES));
-		argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES));
+		if (!argParser_->addOption(QCommandLineOption(LOCAL_SCOPE_ARGUMENT_NAMES)))
+			Q_ASSERT(false);
+		if (!argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES)))
+			Q_ASSERT(false);
+		if (!argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES)))
+			Q_ASSERT(false);
 	}
 
 	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
