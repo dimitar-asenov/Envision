@@ -38,7 +38,8 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 													  const QStringList& args, bool addScopeArguments)
 	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
-	argParser_->addOptions(options);
+	if (!argParser_->addOptions(options))
+		Q_ASSERT(false);
 	initParser(args, addScopeArguments);
 }
 
@@ -47,6 +48,19 @@ ArgumentParser::ArgumentParser(std::initializer_list<PositionalArgument> options
 	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
 	for (const auto& opt : options)
+		argParser_->addPositionalArgument(opt.name_, opt.description_, opt.syntax_);
+
+	initParser(args, addScopeArguments);
+}
+
+ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options,
+										 std::initializer_list<PositionalArgument> positionalArgs,
+										 const QStringList& args, bool addScopeArguments)
+	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
+{
+	if (!argParser_->addOptions(options))
+		Q_ASSERT(false);
+	for (const auto& opt : positionalArgs)
 		argParser_->addPositionalArgument(opt.name_, opt.description_, opt.syntax_);
 
 	initParser(args, addScopeArguments);
@@ -103,9 +117,12 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 {
 	if (addScopeArguments)
 	{
-		argParser_->addOption(QCommandLineOption(LOCAL_SCOPE_ARGUMENT_NAMES));
-		argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES));
-		argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES));
+		if (!argParser_->addOption(QCommandLineOption(LOCAL_SCOPE_ARGUMENT_NAMES)))
+			Q_ASSERT(false);
+		if (!argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES)))
+			Q_ASSERT(false);
+		if (!argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES)))
+			Q_ASSERT(false);
 	}
 
 	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
@@ -116,7 +133,7 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 
 	if (addScopeArguments)
 	{
-		if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Local;
+		if (argParser_->isSet(LOCAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Local;
 		else if (argParser_->isSet(GLOBAL_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Global;
 		else if (argParser_->isSet(INPUT_SCOPE_ARGUMENT_NAMES[0])) scope_ = Scope::Input;
 	}

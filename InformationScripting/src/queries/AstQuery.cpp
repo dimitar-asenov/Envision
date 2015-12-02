@@ -49,15 +49,17 @@ namespace InformationScripting {
 
 const QStringList AstQuery::NODETYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
-const QStringList AstQuery::ADD_AS_NAMES{"a", "addAs"};
+const QStringList AstQuery::NODES_ARGUMENT_NAMES{"nodes"};
+const QStringList AstQuery::RELATION_ARGUMENT_NAMES{"r", "relation"};
 const QStringList AstQuery::ATTRIBUTE_NAME_NAMES{"at", "attribute"};
 
 AstQuery::AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)
 	: LinearQuery{target}, arguments_{{
 		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
 		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
-		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"},
-		 {ATTRIBUTE_NAME_NAMES, "Attribute to search from", ATTRIBUTE_NAME_NAMES[1]}
+		 {ATTRIBUTE_NAME_NAMES, "Attribute to search from", ATTRIBUTE_NAME_NAMES[1]},
+		 QCommandLineOption{NODES_ARGUMENT_NAMES},
+		 QCommandLineOption{RELATION_ARGUMENT_NAMES}
 		}, args, true}, exec_{exec}
 {
 	for (const auto& rule : argumentRules)
@@ -78,7 +80,7 @@ void AstQuery::registerDefaultQueries()
 											{{NODETYPE_ARGUMENT_NAMES[1]}, {NAME_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("toParent", &AstQuery::toParentType,
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{NODETYPE_ARGUMENT_NAMES[1]}}}});
-	QueryRegistry::registerQuery<AstQuery>("uses", &AstQuery::usesQuery,
+	QueryRegistry::registerQuery<AstQuery>("definitions", &AstQuery::defintionsQuery,
 		std::vector<ArgumentRule>{{ArgumentRule::RequireOneOf,
 											{{NODETYPE_ARGUMENT_NAMES[1]}, {NAME_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("type", &AstQuery::typeFilter,
@@ -120,7 +122,7 @@ Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet input)
 		NamedProperty namedClass{"childClass", childClass};
 		addBaseEdgesFor(childClass, namedClass, ts);
 
-		if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+		if (arguments_.isArgumentSet(NODES_ARGUMENT_NAMES[0]))
 			outputAsAST(ts, "baseclass", {"baseClass"});
 	}
 	return ts;
@@ -153,7 +155,7 @@ Optional<TupleSet> AstQuery::toParentType(TupleSet input)
 		ts.add({"parentOfType", {{"childNode", astNode}, {"parentNode", parentNode}}});
 	}
 	// Per default we want to parent to output nodes.
-	if (!arguments_.isArgumentSet(ADD_AS_NAMES[1]) || arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+	if (!arguments_.isArgumentSet(RELATION_ARGUMENT_NAMES[1]))
 		outputAsAST(ts, "parentOfType", {"parentNode"});
 	return ts;
 }
@@ -205,7 +207,7 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 		if (methodsInInput.size() == 0) return {result, "Called callgraph without methods in input"};
 		else addCallgraphFor(methodsInInput);
 	}
-	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
+	if (arguments_.isArgumentSet(NODES_ARGUMENT_NAMES[0]))
 		outputAsAST(result, "calls", {"caller", "callee"});
 	return result;
 }
@@ -280,7 +282,7 @@ Optional<TupleSet> AstQuery::nameQuery(TupleSet input, QString name)
 	return tuples;
 }
 
-Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
+Optional<TupleSet> AstQuery::defintionsQuery(TupleSet input)
 {
 	TupleSet result;
 	QHash<Model::Node*, QList<Model::Reference*>> references;
@@ -320,10 +322,10 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 
 	for (auto it = referenceTargets.begin(); it != referenceTargets.end(); ++it)
 		for (auto node : it.value())
-			result.add({"uses", {{"user", it.key()}, {"used", node}}});
+			result.add({"definition", {{"reference", it.key()}, {"definition", node}}});
 
-	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
-		outputAsAST(result, "uses", {"user"});
+	if (arguments_.isArgumentSet(NODES_ARGUMENT_NAMES[0]))
+		outputAsAST(result, "definition", {"definition"});
 
 	return result;
 }

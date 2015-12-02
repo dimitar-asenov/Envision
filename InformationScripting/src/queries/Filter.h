@@ -45,8 +45,12 @@ class INFORMATIONSCRIPTING_API Filter : public LinearQuery
 
 		ArgumentParser arguments_;
 
+		static const QStringList EXTRACT_ARGUMENT_NAMES;
+		static const QStringList AS_ARGUMENT_NAMES;
+
 		Filter(Model::Node* target, QStringList args);
 
+		Optional<TupleSet> extract(const QString& tag, const QString& value, TupleSet& input);
 		static QString removeOuterQuotes(const QString& from);
 };
 
