@@ -73,7 +73,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		Optional<TupleSet> genericQuery(TupleSet input);
 		Optional<TupleSet> typeQuery(TupleSet input, QString type);
 		Optional<TupleSet> nameQuery(TupleSet input, QString name);
-		Optional<TupleSet> usesQuery(TupleSet input);
+		Optional<TupleSet> defintionsQuery(TupleSet input);
 		Optional<TupleSet> typeFilter(TupleSet input);
 		Optional<TupleSet> attribute(TupleSet input);
 

@@ -78,7 +78,7 @@ void AstQuery::registerDefaultQueries()
 											{{NODETYPE_ARGUMENT_NAMES[1]}, {NAME_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("toParent", &AstQuery::toParentType,
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{NODETYPE_ARGUMENT_NAMES[1]}}}});
-	QueryRegistry::registerQuery<AstQuery>("uses", &AstQuery::usesQuery,
+	QueryRegistry::registerQuery<AstQuery>("definitions", &AstQuery::defintionsQuery,
 		std::vector<ArgumentRule>{{ArgumentRule::RequireOneOf,
 											{{NODETYPE_ARGUMENT_NAMES[1]}, {NAME_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("type", &AstQuery::typeFilter,
@@ -280,7 +280,7 @@ Optional<TupleSet> AstQuery::nameQuery(TupleSet input, QString name)
 	return tuples;
 }
 
-Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
+Optional<TupleSet> AstQuery::defintionsQuery(TupleSet input)
 {
 	TupleSet result;
 	QHash<Model::Node*, QList<Model::Reference*>> references;
@@ -320,10 +320,10 @@ Optional<TupleSet> AstQuery::usesQuery(TupleSet input)
 
 	for (auto it = referenceTargets.begin(); it != referenceTargets.end(); ++it)
 		for (auto node : it.value())
-			result.add({"uses", {{"user", it.key()}, {"used", node}}});
+			result.add({"definition", {{"reference", it.key()}, {"definition", node}}});
 
 	if (arguments_.argument(ADD_AS_NAMES[1]) != "relation")
-		outputAsAST(result, "uses", {"user"});
+		outputAsAST(result, "definition", {"definition"});
 
 	return result;
 }
