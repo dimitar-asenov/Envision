@@ -29,6 +29,7 @@
 #include "../query_framework/QueryRegistry.h"
 
 #include "OODebug/src/debugger/JavaDebugger.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
 
 namespace InformationScripting {
 
@@ -41,12 +42,13 @@ Optional<TupleSet> BreakpointManager::executeLinear(TupleSet input)
 	if (arguments_.argument(VISIBLE_ARGUMENT_NAMES[0]) != "no")
 		type = OODebug::JavaDebugger::BreakpointType::User;
 
-	auto astTuples = tuples.tuples("ast");
-	for (const auto& t : astTuples)
+	for (const auto& t : tuples.tuples("ast"))
 	{
-		Model::Node* target = t["ast"];
-		OODebug::JavaDebugger::instance().addBreakpoint(target, type);
-		tuples.add({{"breakpoint", target}, {"visible", arguments_.argument(VISIBLE_ARGUMENT_NAMES[0])}});
+		for (auto target : Model::Node::childrenOfType<OOModel::ExpressionStatement>(t["ast"]))
+		{
+			OODebug::JavaDebugger::instance().addBreakpoint(target, type);
+			tuples.add({{"breakpoint", target}, {"visible", arguments_.argument(VISIBLE_ARGUMENT_NAMES[0])}});
+		}
 	}
 	return tuples;
 }
