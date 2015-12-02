@@ -59,7 +59,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
-		static const QStringList ADD_AS_NAMES;
+		static const QStringList NODES_ARGUMENT_NAMES;
+		static const QStringList RELATION_ARGUMENT_NAMES;
 		static const QStringList ATTRIBUTE_NAME_NAMES;
 
 		using ExecuteFunction = std::function<Optional<TupleSet> (AstQuery*, TupleSet)>;
