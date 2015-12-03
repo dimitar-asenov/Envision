@@ -47,7 +47,7 @@ const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList VersionControlQuery::NODES_ARGUMENTS_NAMES{"nodes"};
 const QStringList VersionControlQuery::IN_ARGUMENT_NAMES{"in"};
 
-Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
+Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 {
 	Model::TreeManager* treeManager = target()->manager();
 
@@ -64,10 +64,15 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 		return adaptedRangeOptional.errors()[0];
 	commitIdRange = adaptedRangeOptional.value();
 
+	QList<Model::Node*> nodesToLookAt;
+
 	bool considerLocalCommitsOnly = arguments_.isArgumentSet(ArgumentParser::LOCAL_SCOPE_ARGUMENT_NAMES[0]) &&
 			arguments_.scope(this) == ArgumentParser::Scope::Local;
 	if (considerLocalCommitsOnly)
-		commitIdRange = nodeHistory(&repository, commitIdRange[commitIdRange.size()-1], target(), treeManager);
+		nodesToLookAt << target();
+	else if (arguments_.scope(this) == ArgumentParser::Scope::Input)
+		for (const auto& astTuple : input.tuples("ast"))
+			nodesToLookAt << static_cast<Model::Node*>(astTuple["ast"]);
 
 	bool outputNodesOnly = arguments_.isArgumentSet(NODES_ARGUMENTS_NAMES[0]);
 
@@ -99,8 +104,15 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 				else // The node is hopefully higher up in the node hierarchy thus we take it as is.
 					changedNode = node;
 
-				if (!considerLocalCommitsOnly || target()->isAncestorOf(changedNode))
+				auto ancestorIt = std::find_if(nodesToLookAt.begin(), nodesToLookAt.end(), [changedNode](Model::Node* n) {
+						return n->isAncestorOf(changedNode);
+				});
+				if (nodesToLookAt.isEmpty() || ancestorIt != nodesToLookAt.end())
 				{
+					// If we have input or local node(s) only return the information of the input nodes and not the children:
+					if (!nodesToLookAt.isEmpty())
+						changedNode = *ancestorIt;
+
 					if (outputNodesOnly)
 						result.add({{"ast", changedNode}});
 					else
@@ -139,27 +151,6 @@ void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMet
 				  {"date", metadata.dateTime_.toString("dd.MM.yyyy hh:mm")},
 				  {"commiter", metadata.committer_.name_ + " " + metadata.committer_.eMail_},
 				  {"author", metadata.author_.name_ + " " + metadata.author_.eMail_}}});
-}
-
-QList<QString> VersionControlQuery::nodeHistory(const GitRepository* repository, const QString& startSha1,
-																Model::Node* target, Model::TreeManager* headManager)
-{
-	CommitGraph graph = repository->commitGraph(startSha1, "HEAD");
-
-	Model::NodeIdType targetID = headManager->nodeIdMap().id(target);
-
-	QString targetPath = headManager->name();
-	Model::Node* headRoot = headManager->root();
-	Model::Node* persistentUnitNode = target->persistentUnitNode();
-	if (headRoot != persistentUnitNode)
-	{
-		Model::NodeIdType persistentUnitNodeID = headManager->nodeIdMap().id(persistentUnitNode);
-		targetPath = persistentUnitNodeID.toString();
-	}
-
-	History history(targetPath, targetID, &graph, repository);
-
-	return history.relevantCommitsByTime(repository);
 }
 
 Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringList& commitIdRange) const

@@ -63,9 +63,6 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 
 		static void addCommitMetaInformation(TupleSet& ts, const FilePersistence::CommitMetaData& metadata);
 
-		static QList<QString> nodeHistory(const FilePersistence::GitRepository* repository, const QString& startSha1,
-													 Model::Node* target, Model::TreeManager* headManager);
-
 		Optional<QList<QString>> commitsToConsider(const QStringList& commitIdRange) const;
 };
 
