@@ -44,6 +44,7 @@ namespace InformationScripting {
 
 const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
+const QStringList VersionControlQuery::NODES_ARGUMENTS_NAMES{"nodes"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
@@ -61,6 +62,8 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 			arguments_.scope(this) == ArgumentParser::Scope::Local;
 	if (considerLocalCommitsOnly)
 		revisions = nodeHistory(&repository, revisions[revisions.size()-1], target(), treeManager);
+
+	bool outputNodesOnly = arguments_.isArgumentSet(NODES_ARGUMENTS_NAMES[0]);
 
 	bool converts = false;
 	auto changeArgument = arguments_.argument(COUNT_ARGUMENT_NAMES[0]);
@@ -83,7 +86,8 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 		Diff diff = repository.diff(newCommitId, oldCommitId);
 		auto changes = diff.changes();
 
-		addCommitMetaInformation(result, repository.getCommitInformation(newCommitId));
+		if (!outputNodesOnly)
+			addCommitMetaInformation(result, repository.getCommitInformation(newCommitId));
 
 		for (auto change : changes.values())
 		{
@@ -101,7 +105,12 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 					changedNode = node;
 
 				if (!considerLocalCommitsOnly || target()->isAncestorOf(changedNode))
-					result.add({"change", {{"id", newCommitId}, {"ast", changedNode}}});
+				{
+					if (outputNodesOnly)
+						result.add({{"ast", changedNode}});
+					else
+						result.add({"change", {{"id", newCommitId}, {"ast", changedNode}}});
+				}
 			}
 		}
 	}
@@ -117,7 +126,8 @@ void VersionControlQuery::registerDefaultQueries()
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
 		{COUNT_ARGUMENT_NAMES, "The amount of revisions to look at", COUNT_ARGUMENT_NAMES[1], "10"},
-		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"}
+		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"},
+		QCommandLineOption{NODES_ARGUMENTS_NAMES}
 }, args, true}
 {}
 
