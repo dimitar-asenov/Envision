@@ -56,7 +56,7 @@ QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
 	queries_.pop();
 
 	auto results = query->execute(input);
-	if (results.size())
+	if (queries_.empty() && results.size())
 	{
 		// TODO how to handle warnings? CommandResult has no warnings?
 		if (results[0].hasWarnings())
