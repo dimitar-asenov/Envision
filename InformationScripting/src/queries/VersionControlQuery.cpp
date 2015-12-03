@@ -45,6 +45,7 @@ namespace InformationScripting {
 const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList VersionControlQuery::NODES_ARGUMENTS_NAMES{"nodes"};
+const QStringList VersionControlQuery::IN_ARGUMENT_NAMES{"in"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
@@ -57,31 +58,25 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 	GitRepository repository{path};
 	TupleSet result;
 
-	auto revisions = repository.revisions();
+	auto commitIdRange = repository.revisions();
+	auto adaptedRangeOptional = commitsToConsider(commitIdRange);
+	if (!adaptedRangeOptional)
+		return adaptedRangeOptional.errors()[0];
+	commitIdRange = adaptedRangeOptional.value();
+
 	bool considerLocalCommitsOnly = arguments_.isArgumentSet(ArgumentParser::LOCAL_SCOPE_ARGUMENT_NAMES[0]) &&
 			arguments_.scope(this) == ArgumentParser::Scope::Local;
 	if (considerLocalCommitsOnly)
-		revisions = nodeHistory(&repository, revisions[revisions.size()-1], target(), treeManager);
+		commitIdRange = nodeHistory(&repository, commitIdRange[commitIdRange.size()-1], target(), treeManager);
 
 	bool outputNodesOnly = arguments_.isArgumentSet(NODES_ARGUMENTS_NAMES[0]);
 
-	bool converts = false;
-	auto changeArgument = arguments_.argument(COUNT_ARGUMENT_NAMES[0]);
-	const int CHANGE_COUNT = changeArgument.toInt(&converts);
-	int commitIndexToTake = 0;
-	if (converts)
-		commitIndexToTake = std::min(revisions.size() - 1, CHANGE_COUNT);
-	else if (changeArgument == "all")
-		commitIndexToTake = revisions.size() - 1;
-	else
-		return {"Invalid count argument"};
-
 	auto typeMatcher = Model::SymbolMatcher::guessMatcher(arguments_.argument(NODE_TYPE_ARGUMENT_NAMES[1]));
 
-	for (int i = commitIndexToTake; i > 0; --i)
+	for (int i = commitIdRange.size() - 1; i > 0; --i)
 	{
-		QString oldCommitId = revisions[i];
-		QString newCommitId = revisions[i - 1];
+		QString oldCommitId = commitIdRange[i];
+		QString newCommitId = commitIdRange[i - 1];
 
 		Diff diff = repository.diff(newCommitId, oldCommitId);
 		auto changes = diff.changes();
@@ -120,16 +115,22 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 
 void VersionControlQuery::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<VersionControlQuery>("changes");
+	QueryRegistry::registerQuery<VersionControlQuery>("changes",
+		std::vector<ArgumentRule>{{ArgumentRule::AtMostOneOf, {{COUNT_ARGUMENT_NAMES[1], ArgumentValue::IsSet},
+												{IN_ARGUMENT_NAMES[0], ArgumentValue::IsSet}}}});
 }
 
-VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
+VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
 	: LinearQuery{target}, arguments_{{
 		{COUNT_ARGUMENT_NAMES, "The amount of revisions to look at", COUNT_ARGUMENT_NAMES[1], "10"},
 		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"},
-		QCommandLineOption{NODES_ARGUMENTS_NAMES}
+		QCommandLineOption{NODES_ARGUMENTS_NAMES},
+		{IN_ARGUMENT_NAMES, "Specific commits to look at, either a single one or a range with ..", IN_ARGUMENT_NAMES[0]}
 }, args, true}
-{}
+{
+	for (const auto& rule : argumentRules)
+		rule.check(arguments_);
+}
 
 void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMetaData& metadata)
 {
@@ -159,6 +160,52 @@ QList<QString> VersionControlQuery::nodeHistory(const GitRepository* repository,
 	History history(targetPath, targetID, &graph, repository);
 
 	return history.relevantCommitsByTime(repository);
+}
+
+Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringList& commitIdRange) const
+{
+	if (arguments_.isArgumentSet(IN_ARGUMENT_NAMES[0]))
+	{
+		auto commitRange = arguments_.argument(IN_ARGUMENT_NAMES[0]).split("..");
+		QString startCommit = commitRange[0];
+		auto startIt = std::find_if(commitIdRange.begin(), commitIdRange.end(), [startCommit](QString sha1) {
+				return sha1.startsWith(startCommit);
+		});
+		if (startIt == commitIdRange.end())
+			return {QString("%1 is not a commit id that exists in this repository.").arg(startCommit)};
+
+		QStringList::const_iterator endIt;
+		if (commitRange.size() > 1)
+		{
+			QString endCommit = commitRange[1];
+			endIt = std::find_if(commitIdRange.begin(), commitIdRange.end(), [endCommit](QString sha1) {
+					return sha1.startsWith(endCommit);
+			});
+			if (endIt == commitIdRange.end())
+				return {QString("%1 is not a commit id that exists in this repository.").arg(endCommit)};
+		}
+		else
+		{
+			endIt = startIt + 1;
+		}
+		QStringList result;
+		// We always need one more than the actual end since we compare on two commits:
+		for (auto it = startIt; it != endIt + 1; ++it)
+			result.append(*it);
+		return result;
+	}
+	else
+	{
+		QString countArgument = arguments_.argument(COUNT_ARGUMENT_NAMES[0]);
+		bool converts = false;
+		const int CHANGE_COUNT = countArgument.toInt(&converts);
+		if (converts)
+			return commitIdRange.mid(0, std::min(commitIdRange.size(), CHANGE_COUNT + 1));
+		else if (countArgument != "all")
+			return {"Invalid count argument"};
+		else
+			return commitIdRange;
+	}
 }
 
 } /* namespace InformationScripting */

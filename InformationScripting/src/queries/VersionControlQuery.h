@@ -57,13 +57,16 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 		static const QStringList COUNT_ARGUMENT_NAMES;
 		static const QStringList NODE_TYPE_ARGUMENT_NAMES;
 		static const QStringList NODES_ARGUMENTS_NAMES;
+		static const QStringList IN_ARGUMENT_NAMES;
 
-		VersionControlQuery(Model::Node* target, QStringList args);
+		VersionControlQuery(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);
 
 		static void addCommitMetaInformation(TupleSet& ts, const FilePersistence::CommitMetaData& metadata);
 
 		static QList<QString> nodeHistory(const FilePersistence::GitRepository* repository, const QString& startSha1,
 													 Model::Node* target, Model::TreeManager* headManager);
+
+		Optional<QList<QString>> commitsToConsider(const QStringList& commitIdRange) const;
 };
 
 } /* namespace InformationScripting */
