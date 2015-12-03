@@ -87,6 +87,7 @@ void AstQuery::registerDefaultQueries()
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{NODETYPE_ARGUMENT_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("attribute", &AstQuery::attribute,
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{ATTRIBUTE_NAME_NAMES[1]}}}});
+	QueryRegistry::registerQuery<AstQuery>("usages", &AstQuery::usagesQuery);
 	QueryRegistry::registerAlias("classes", "ast", [](QStringList& args) {
 		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Class");});
 	QueryRegistry::registerAlias("methods", "ast", [](QStringList& args) {
@@ -424,6 +425,32 @@ Optional<TupleSet> AstQuery::attribute(TupleSet input)
 	}
 	for (auto node : foundAttributeNodes)
 		result.add({{"ast", node}});
+	return result;
+}
+
+Optional<TupleSet> AstQuery::usagesQuery(TupleSet input)
+{
+	TupleSet result = input;
+
+	auto symbolDefiningNodeTuples = input.tuples([](const Tuple& t) {
+		return t.tag() == "ast" && static_cast<Model::Node*>(t["ast"])->definesSymbol();
+	});
+
+	// TODO: This is quite an expensive operation, especially if this query is ran often.
+	// We probably need a more general mechanism to compute/cache reverse dependencies in Envision.
+	auto allReferences = Model::Node::childrenOfType<Model::Reference>(target()->root());
+
+	for (const auto& tuple : symbolDefiningNodeTuples)
+	{
+		Model::Node* definitionNode = tuple["ast"];
+		for (auto ref : allReferences)
+			if (ref->target() == definitionNode)
+				result.add({"usage", {{"definition", definitionNode}, {"use", ref}}});
+	}
+
+	if (arguments_.isArgumentSet(NODES_ARGUMENT_NAMES[0]))
+		outputAsAST(result, "usage", {"use"});
+
 	return result;
 }
 

@@ -77,6 +77,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		Optional<TupleSet> defintionsQuery(TupleSet input);
 		Optional<TupleSet> typeFilter(TupleSet input);
 		Optional<TupleSet> attribute(TupleSet input);
+		Optional<TupleSet> usagesQuery(TupleSet input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
