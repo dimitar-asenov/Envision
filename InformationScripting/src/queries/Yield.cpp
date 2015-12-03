@@ -24,55 +24,14 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../informationscripting_api.h"
-
-#include "ModelBase/src/visitor/VisitorDefinition.h"
-
-namespace Model {
-	class Node;
-}
+#include "Yield.h"
 
 namespace InformationScripting {
 
-class CommandNode;
-class CompositeQuery;
-class CompositeQueryNode;
-class OperatorQueryNode;
-class Query;
-class QueryExecutor;
-
-class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder, std::vector<std::unique_ptr<Query>>>
+QList<Optional<TupleSet>> Yield::execute(QList<TupleSet>)
 {
-	public:
-		QueryBuilder(Model::Node* target, QueryExecutor* executor);
-		static void init();
-
-	private:
-		QueryExecutor* executor_{};
-		Model::Node* target_{};
-
-		static std::vector<std::unique_ptr<Query>> visitCommand(QueryBuilder* self, CommandNode* command);
-		static std::vector<std::unique_ptr<Query>> visitList(QueryBuilder* self, CompositeQueryNode* list);
-		static std::vector<std::unique_ptr<Query>> visitOperator(QueryBuilder* self, OperatorQueryNode* op);
-
-		static void connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,
-										Query* connectionQuery, Query* outputQuery = nullptr);
-
-		/**
-		 * Connects \a left with \a right queries in the \a composite, using a union operator specified in \a op.
-		 *
-		 * Note that \a left and \a right have to be previously added to \a composite.
-		 */
-		static void connectAsUnion(CompositeQuery* composite, CompositeQuery* left, Query* right, OperatorQueryNode* op);
-
-		/**
-		 * Connects \a left with \a right queries in the \a composite, building a split operation.
-		 *
-		 * Note that \a left and \a right have to be previously added to \a composite.
-		 */
-		static void connectAsSplit(CompositeQuery* composite, Query* left, CompositeQuery* right);
-};
+	// Yield should never be executed it is only used during building of the queries.
+	Q_ASSERT(false);
+}
 
 } /* namespace InformationScripting */

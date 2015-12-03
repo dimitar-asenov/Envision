@@ -72,7 +72,9 @@ void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 		QueryBuilder builder{node, executor};
 		try
 		{
-			executor->addQuery(builder.visit(queryNode));
+			auto queries = builder.visit(queryNode);
+			for (auto& query : queries)
+				executor->addQuery(std::move(query));
 			errors = executor->execute();
 		}
 		catch (const QueryParsingException& parsingException)
