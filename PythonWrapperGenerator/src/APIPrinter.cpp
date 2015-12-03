@@ -170,7 +170,7 @@ void APIPrinter::printTypedListWrappers()
 	for (auto it = typedLists.begin(); it != typedLists.end(); ++it)
 	{
 		out_ << indent_ << "using " << it.value() << " = " << it.key() << ";" << endl;
-		out_ << indent_ << "class_<" << it.key() << ">" << "(\"" << it.value() << "\")" << endl;
+		out_ << indent_ << "class_<" << it.key() << ", bases<Model::List>>" << "(\"" << it.value() << "\")" << endl;
 		indent();
 		out_ << indent_ << ".def(\"__len__\", &" << it.value() << "::size)" << endl;
 		out_ << indent_ << ".def(\"__iter__\", iterator<" << it.value() << ", return_internal_reference<>>())";
