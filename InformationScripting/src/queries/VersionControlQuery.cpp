@@ -44,7 +44,6 @@ namespace InformationScripting {
 
 const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
-const QStringList VersionControlQuery::SIGNIFICANT_COMMITS_ARGUMENT_NAMES{"sc", "significantCommits"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 {
@@ -58,7 +57,9 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 	TupleSet result;
 
 	auto revisions = repository.revisions();
-	if (arguments_.argument(SIGNIFICANT_COMMITS_ARGUMENT_NAMES[0]) != "all")
+	bool considerLocalCommitsOnly = arguments_.isArgumentSet(ArgumentParser::LOCAL_SCOPE_ARGUMENT_NAMES[0]) &&
+			arguments_.scope(this) == ArgumentParser::Scope::Local;
+	if (considerLocalCommitsOnly)
 		revisions = nodeHistory(&repository, revisions[revisions.size()-1], target(), treeManager);
 
 	bool converts = false;
@@ -99,8 +100,7 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet)
 				else // The node is hopefully higher up in the node hierarchy thus we take it as is.
 					changedNode = node;
 
-				if (arguments_.argument(SIGNIFICANT_COMMITS_ARGUMENT_NAMES[0]) == "all"
-					 || target()->isAncestorOf(changedNode))
+				if (!considerLocalCommitsOnly || target()->isAncestorOf(changedNode))
 					result.add({"change", {{"id", newCommitId}, {"ast", changedNode}}});
 			}
 		}
@@ -117,11 +117,8 @@ void VersionControlQuery::registerDefaultQueries()
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args)
 	: LinearQuery{target}, arguments_{{
 		{COUNT_ARGUMENT_NAMES, "The amount of revisions to look at", COUNT_ARGUMENT_NAMES[1], "10"},
-		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"},
-		{SIGNIFICANT_COMMITS_ARGUMENT_NAMES, "Which commits should be counted, all or affect",
-			SIGNIFICANT_COMMITS_ARGUMENT_NAMES[1], "all"}
-
-}, args}
+		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"}
+}, args, true}
 {}
 
 void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMetaData& metadata)
