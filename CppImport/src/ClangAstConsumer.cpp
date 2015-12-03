@@ -34,8 +34,9 @@ ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
 {
+	astVisitor_->beforeTranslationUnit(astContext);
 	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-	astVisitor_->macroImporter_.endTranslationUnit();
+	astVisitor_->endTranslationUnit();
 }
 
 void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)

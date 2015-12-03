@@ -29,7 +29,7 @@
 #include "ClangHelpers.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansion.h"
-#include "EnvisionToClangMap.h"
+#include "../EnvisionToClangMap.h"
 
 #include "NodeHelpers.h"
 

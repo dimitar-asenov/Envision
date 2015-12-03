@@ -40,14 +40,13 @@ namespace CppImport {
 
 void MacroImporter::clear()
 {
-	envisionToClangMap_.clear();
 	macroDefinitions_.clear();
 	macroExpansions_.clear();
 }
 
-MacroImporter::MacroImporter(OOModel::Project* root)
-	: root_(root), macroDefinitions_(clang_),
-	  macroExpansions_(clang_, envisionToClangMap_, macroDefinitions_),
+MacroImporter::MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap)
+	: root_(root), envisionToClangMap_(envisionToClangMap), macroDefinitions_(clang_),
+	  macroExpansions_(clang_, envisionToClangMap, macroDefinitions_),
 	  lexicalTransformations_(clang_, macroExpansions_),
 	  allMetaDefinitions_(root, clang_, macroDefinitions_, macroExpansions_, lexicalTransformations_)
 	  {}
@@ -219,13 +218,11 @@ void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpan
 void MacroImporter::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
 	lexicalTransformations_.processStatement(clangAstNode, envisionAstNode);
-	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
 void MacroImporter::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
 {
 	lexicalTransformations_.processDeclaration(clangAstNode, envisionAstNode);
-	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
 bool MacroImporter::insertMetaCall(MacroExpansion* expansion)

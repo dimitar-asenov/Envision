@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../cppimport_api.h"
+#include "cppimport_api.h"
 
 namespace Model {
 	class Node;
@@ -50,6 +50,7 @@ class CPPIMPORT_API EnvisionToClangMap
 		const QSet<Model::Node*> nodes() const;
 		QList<clang::SourceRange> get(Model::Node* node) const;
 		bool contains(Model::Node* node) const;
+		void remove(Model::Node* node);
 		void clear();
 
 		Model::Node* closestParentWithAstMapping(Model::Node* node) const;
@@ -69,5 +70,7 @@ inline const QSet<Model::Node*> EnvisionToClangMap::nodes() const { return envis
 inline void EnvisionToClangMap::clear() { envisionToClangMap_.clear(); }
 
 inline bool EnvisionToClangMap::contains(Model::Node* node) const { return envisionToClangMap_.contains(node); }
+
+inline void EnvisionToClangMap::remove(Model::Node* node) { envisionToClangMap_.remove(node); }
 
 }

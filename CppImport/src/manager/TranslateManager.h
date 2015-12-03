@@ -33,6 +33,8 @@
 
 namespace CppImport {
 
+class ClangAstVisitor;
+
 /**
  * This class is to manage the whole translation process.
  * It keeps track of nodes already translated and completes them if needed.
@@ -40,7 +42,7 @@ namespace CppImport {
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(OOModel::Project* root, MacroImporter* macroImporter);
+		TranslateManager(OOModel::Project* root, ClangAstVisitor* visitor);
 		~TranslateManager();
 		void setSourceManager(const clang::SourceManager* mngr);
 
@@ -154,7 +156,7 @@ class CPPIMPORT_API TranslateManager
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
-		MacroImporter* macroImporter_{};
+		ClangAstVisitor* baseVisitor_{};
 		NodeHasher* nh_{new NodeHasher()};
 };
 
