@@ -1376,7 +1376,7 @@ void ClangAstVisitor::deleteNode(Model::Node* node)
 	QList<Model::Node*> workList{node};
 	while (!workList.empty())
 	{
-		auto current = workList.takeFirst();
+		auto current = workList.takeLast();
 		workList << current->children();
 		envisionToClangMap_.remove(current);
 	}
