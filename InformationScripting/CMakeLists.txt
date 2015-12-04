@@ -86,6 +86,7 @@ add_library(InformationScripting SHARED
 	src/queries/CanReach.h
 	src/query_framework/QueryRuntimeException.h
 	src/query_framework/HighlightOverlayStyle.h
+	src/queries/Yield.h
 	src/InformationScriptingException.cpp
 	src/InformationScriptingPlugin.cpp
 	test/SimpleTest.cpp
@@ -146,6 +147,7 @@ add_library(InformationScripting SHARED
 	src/queries/CanReach.cpp
 	src/query_framework/QueryRuntimeException.cpp
 	src/query_framework/HighlightOverlayStyle.cpp
+	src/queries/Yield.cpp
 )
 
 target_link_libraries(InformationScripting OOInteraction OODebug ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})

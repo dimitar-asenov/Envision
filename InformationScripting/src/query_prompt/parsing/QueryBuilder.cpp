@@ -32,6 +32,7 @@
 
 #include "../../queries/CompositeQuery.h"
 #include "../../queries/PassthroughQuery.h"
+#include "../../queries/Yield.h"
 #include "../../queries/SubstractOperator.h"
 #include "../../queries/UnionOperator.h"
 #include "../../query_framework/QueryRegistry.h"
@@ -50,39 +51,75 @@ void QueryBuilder::init()
 	addType<OperatorQueryNode>(visitOperator);
 }
 
-std::unique_ptr<Query> QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
+std::vector<std::unique_ptr<Query>> QueryBuilder::visitCommand(QueryBuilder* self, CommandNode* command)
 {
+	std::vector<std::unique_ptr<Query>> result;
 	auto cmd = command->name();
 	if (cmd.isEmpty())
-		return std::unique_ptr<Query>(new PassthroughQuery());
+	{
+		result.emplace_back(std::unique_ptr<Query>{new PassthroughQuery()});
+		return result;
+	}
 	QStringList args;
 	for (auto arg : *command->arguments())
 		if (auto argNode = DCast<CommandArgument>(arg))
 			args << argNode->argument();
 	if (auto q = QueryRegistry::instance().buildQuery(cmd, self->target_, args, self->executor_))
-		return q;
+	{
+		result.emplace_back(std::move(q));
+		return result;
+	}
 	throw QueryParsingException(QString("%1 is not a valid command").arg(cmd));
 }
 
-std::unique_ptr<Query> QueryBuilder::visitList(QueryBuilder* self, CompositeQueryNode* list)
+std::vector<std::unique_ptr<Query>> QueryBuilder::visitList(QueryBuilder* self, CompositeQueryNode* list)
 {
+	std::vector<std::unique_ptr<Query>> result;
 	auto composite = std::make_unique<CompositeQuery>();
 	for (int i = 0; i < list->queries()->size(); ++i)
 	{
 		// NOTE: subqueries with multiple inputs/outputs are not supported:
-		auto query = composite->addQuery(self->visit(list->queries()->at(i)));
+		auto queries = self->visit(list->queries()->at(i));
+		if (queries.size() > 1)
+			throw QueryParsingException("yield in a list is not allowed");
+		auto query = composite->addQuery(std::move(queries[0]));
 		composite->connectInput(i, query);
 		composite->connectToOutput(0, query, i);
 	}
-	return std::unique_ptr<Query>(composite.release());
+	result.emplace_back(std::unique_ptr<Query>(composite.release()));
+	return result;
 }
 
-std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
+std::vector<std::unique_ptr<Query>> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQueryNode* op)
 {
+	std::vector<std::unique_ptr<Query>> result;
+
 	auto composite = std::make_unique<CompositeQuery>();
-	auto left = composite->addQuery(self->visit(op->left()));
+	auto leftQueries = self->visit(op->left());
+
+	auto rightQueries = self->visit(op->right());
+	// By the order of the tree we should always only have one right side:
+	Q_ASSERT(rightQueries.size() == 1);
+	if (dynamic_cast<Yield*>(rightQueries[0].get()) != nullptr)
+	{
+		result = std::move(leftQueries);
+		result.emplace_back(std::move(rightQueries[0]));
+		return result;
+	}
+
+	auto lastLeftQuery = std::move(leftQueries.back());
+	leftQueries.pop_back();
+	if (dynamic_cast<Yield*>(lastLeftQuery.get()) != nullptr)
+	{
+		result = std::move(leftQueries);
+		result.emplace_back(std::move(rightQueries[0]));
+		return result;
+	}
+
+	auto left = composite->addQuery(std::move(lastLeftQuery));
 	auto leftComposite = dynamic_cast<CompositeQuery*>(left);
-	auto right = composite->addQuery(self->visit(op->right()));
+
+	auto right = composite->addQuery(std::move(rightQueries[0]));
 	auto rightComposite = dynamic_cast<CompositeQuery*>(right);
 
 	if (leftComposite && rightComposite)
@@ -132,7 +169,10 @@ std::unique_ptr<Query> QueryBuilder::visitOperator(QueryBuilder* self, OperatorQ
 		composite->connectInput(i, left, i);
 	for (int o = 0; o < outputCount; ++o)
 		composite->connectToOutput(o, right, o);
-	return std::unique_ptr<Query>(composite.release());
+
+	result = std::move(leftQueries);
+	result.emplace_back(std::unique_ptr<Query>(composite.release()));
+	return result;
 }
 
 void QueryBuilder::connectQueriesWith(CompositeQuery* composite, CompositeQuery* queries,

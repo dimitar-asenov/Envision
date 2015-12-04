@@ -24,64 +24,25 @@
 **
 ***********************************************************************************************************************/
 
-#include "QueryExecutor.h"
+#include "Yield.h"
 
-#include "../queries/Query.h"
-#include "QueryResultVisualizer.h"
-#include "QueryRegistry.h"
-
-#include "InteractionBase/src/commands/CommandResult.h"
-
-#include "VisualizationBase/src/VisualizationManager.h"
+#include "../query_framework/QueryRegistry.h"
 
 namespace InformationScripting {
 
-QueryExecutor::~QueryExecutor()
+QList<Optional<TupleSet>> Yield::execute(QList<TupleSet>)
 {
-	Q_ASSERT(queries_.empty());
+	// Yield should never be executed it is only used during building of the queries.
+	Q_ASSERT(false);
 }
 
-void QueryExecutor::addQuery(std::unique_ptr<Query>&& query)
+void Yield::registerDefaultQueries()
 {
-	queries_.emplace(std::forward<std::unique_ptr<Query>>(query));
+	QueryRegistry::registerQuery<Yield>("yield");
 }
 
-QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
-{
-	Q_ASSERT(!queries_.empty());
-
-	QList<QString> errorMessages;
-
-	auto query = std::move(queries_.front());
-	queries_.pop();
-
-	auto results = query->execute(input);
-	if (queries_.empty() && results.size())
-	{
-		// TODO how to handle warnings? CommandResult has no warnings?
-		if (results[0].hasWarnings())
-			qWarning() << results[0].warnings();
-		if (results[0])
-		{
-			if (defaultVisualize_)
-			{
-				auto vis = QueryRegistry::instance().buildQuery("show", nullptr, {}, this);
-				vis->execute({results[0].value()});
-				results.clear();
-			}
-		}
-		else
-			errorMessages = results[0].errors();
-	}
-
-	if (queries_.empty())
-	{
-		// deleteLater
-		QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-																 new Visualization::CustomSceneEvent([this](){delete this;}));
-	}
-
-	return errorMessages;
-}
+Yield::Yield(Model::Node* target, QStringList)
+	: Query{target}
+{}
 
 } /* namespace InformationScripting */

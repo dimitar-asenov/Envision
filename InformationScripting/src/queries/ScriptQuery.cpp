@@ -158,8 +158,10 @@ QList<TupleSet> ScriptQuery::buildAndExecuteQueryFromPython(QString queryString,
 	// TODO to properly use the parser from python we should probably remove assertions in it.
 	std::unique_ptr<QueryNode> queryNode(QueryParser::parse(queryString));
 	QueryBuilder builder{target(), executor_};
-	auto query = builder.visit(queryNode.get());
-	return extractResult(query->execute(convertInput(input)), "buildQuery");
+	auto queries = builder.visit(queryNode.get());
+	if (queries.size() > 1)
+		throw QueryRuntimeException("Yield is not allowed in queries built in python");
+	return extractResult(queries[0]->execute(convertInput(input)), "buildQuery");
 }
 
 QList<TupleSet> ScriptQuery::convertInput(boost::python::list input)
