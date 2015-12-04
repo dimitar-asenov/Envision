@@ -1335,17 +1335,14 @@ void ClangAstVisitor::endTranslationUnit()
 	 * comments processing 3 of 3.
 	 * process comments which are on the same line as statements.
 	 */
-	for (Comment* comment : comments_)
+	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
 	{
-		if (comment->node()) continue;
+		auto nodePresumedLocation = sourceManager_->getPresumedLoc(it.value().getBegin());
 
-		for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
+		for (Comment* comment : comments_)
 		{
-			if (comment->node()) break;
-			auto nodePresumedLocation = sourceManager_->getPresumedLoc(it.value().getBegin());
-
-			// skip if the file name does not match or the comment does not start on the same line as the current node.
-			if (nodePresumedLocation.getFilename() != comment->fileName() ||
+			if (comment->node() ||
+				 nodePresumedLocation.getFilename() != comment->fileName() ||
 				 nodePresumedLocation.getLine() != comment->lineStart()) continue;
 
 			// calculate the parent of the current node which is a direct child of a statement item list.
