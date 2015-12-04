@@ -69,11 +69,6 @@ std::vector<std::unique_ptr<Query>> QueryBuilder::visitCommand(QueryBuilder* sel
 		result.emplace_back(std::move(q));
 		return result;
 	}
-	else if (cmd == "yield")
-	{
-		result.emplace_back(std::unique_ptr<Query>(new Yield()));
-		return result;
-	}
 	throw QueryParsingException(QString("%1 is not a valid command").arg(cmd));
 }
 

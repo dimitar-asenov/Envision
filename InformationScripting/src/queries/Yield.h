@@ -36,6 +36,13 @@ class INFORMATIONSCRIPTING_API Yield : public Query
 {
 	public:
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
+
+		static void registerDefaultQueries();
+
+	private:
+		friend class QueryRegistry;
+
+		Yield(Model::Node* target, QStringList args);
 };
 
 } /* namespace InformationScripting */

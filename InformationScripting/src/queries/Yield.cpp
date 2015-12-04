@@ -26,6 +26,8 @@
 
 #include "Yield.h"
 
+#include "../query_framework/QueryRegistry.h"
+
 namespace InformationScripting {
 
 QList<Optional<TupleSet>> Yield::execute(QList<TupleSet>)
@@ -33,5 +35,14 @@ QList<Optional<TupleSet>> Yield::execute(QList<TupleSet>)
 	// Yield should never be executed it is only used during building of the queries.
 	Q_ASSERT(false);
 }
+
+void Yield::registerDefaultQueries()
+{
+	QueryRegistry::registerQuery<Yield>("yield");
+}
+
+Yield::Yield(Model::Node* target, QStringList)
+	: Query{target}
+{}
 
 } /* namespace InformationScripting */
