@@ -66,7 +66,7 @@ void Comment::removeFromItemList()
 	auto itemList = DCast<OOModel::StatementItemList>(node());
 	Q_ASSERT(itemList);
 
-	itemList->remove(itemList->indexOf(commentStatementItem_));
+	itemList->remove(commentStatementItem_);
 
 	// in this special case the client can afterwards reassociate the comment.
 	node_ = nullptr;
