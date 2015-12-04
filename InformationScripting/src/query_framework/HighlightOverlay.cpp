@@ -63,6 +63,7 @@ int HighlightOverlay::determineForm()
 
 void HighlightOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
+	background_->setAcceptedMouseButtons(Qt::NoButton);
 	background_->setCustomSize(associatedItem()->widthInScene(), associatedItem()->heightInScene());
 	Super::updateGeometry(availableWidth, availableHeight);
 	if (hasShape())
