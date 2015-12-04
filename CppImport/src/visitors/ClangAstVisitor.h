@@ -31,6 +31,8 @@
 #include "../macro/MacroImporter.h"
 #include "../CppImportLogger.h"
 #include "../comments/CommentParser.h"
+#include "../EnvisionToClangMap.h"
+#include "../Comment.h"
 
 namespace CppImport {
 
@@ -89,6 +91,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		// method only for debugging
 		bool VisitStmt(clang::Stmt* S);
 
+		bool TraverseCompoundStmt(clang::CompoundStmt* compoundStmt);
+
 		bool TraverseIfStmt(clang::IfStmt* ifStmt);
 		bool TraverseWhileStmt(clang::WhileStmt* whileStmt);
 		bool TraverseDoStmt(clang::DoStmt* doStmt);
@@ -112,13 +116,23 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 */
 		bool shouldUseDataRecursionfor (clang::Stmt* S);
 
-		MacroImporter macroImporter_;
+		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
+		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+
+		void beforeTranslationUnit(clang::ASTContext& astContext);
+		void endTranslationUnit();
+		void endEntireImport();
+
+		void deleteNode(Model::Node* node);
 
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
+		QList<Comment*> comments_;
+		MacroImporter macroImporter_;
+		EnvisionToClangMap envisionToClangMap_;
 
 		CppImportLogger* log_{};
 		TranslateManager* trMngr_{};

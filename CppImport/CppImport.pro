@@ -66,9 +66,10 @@ HEADERS += src/precompiled.h \
     src/macro/AllMetaDefinitions.h \
     src/macro/NodeHelpers.h \
     src/macro/ClangHelpers.h \
-    src/macro/EnvisionToClangMap.h \
     src/macro/NodeToCloneMap.h \
-    src/macro/LexicalTransformations.h
+    src/macro/LexicalTransformations.h \
+    src/EnvisionToClangMap.h \
+    src/Comment.h
 SOURCES += src/CppImportException.cpp \
     test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
@@ -93,6 +94,7 @@ SOURCES += src/CppImportException.cpp \
     src/macro/AllMetaDefinitions.cpp \
     src/macro/NodeHelpers.cpp \
     src/macro/ClangHelpers.cpp \
-    src/macro/EnvisionToClangMap.cpp \
     src/macro/NodeToCloneMap.cpp \
-    src/macro/LexicalTransformations.cpp
+    src/macro/LexicalTransformations.cpp \
+    src/EnvisionToClangMap.cpp \
+    src/Comment.cpp

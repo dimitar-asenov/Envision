@@ -34,9 +34,9 @@
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
-:  macroImporter_(project), log_{logger}
+:  macroImporter_(project, envisionToClangMap_), log_{logger}
 {
-	trMngr_ = new TranslateManager(project, &macroImporter_);
+	trMngr_ = new TranslateManager(project, this);
 	exprVisitor_ = new ExpressionVisitor(this, log_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_);
 	exprVisitor_->setUtilities(utils_);
@@ -250,11 +250,6 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			// only visit the body if we have not yet visited it
 			// handle body, typeargs and storage specifier
 			TraverseFunction(functionDecl, ooFunction);
-
-		// Check for comments
-		if (auto comment = commentParser_->parseComment(
-				 functionDecl->getASTContext().getCommentForDecl(functionDecl, preprocessor_)))
-			ooFunction->setComment(comment);
 	}
 	else
 		log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -347,7 +342,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		inBody_ = inBody;
 	}
 
-	macroImporter_.mapAst(varDecl, ooVarDecl);
+	mapAst(varDecl, ooVarDecl);
 	if (wasDeclared)
 		// we know the rest of the information already
 		return true;
@@ -425,7 +420,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 			ooEnumClass->enumerators()->append(new OOModel::Enumerator(QString::fromStdString(it->getNameAsString())));
 	}
 	inBody_ = inBody;
-	macroImporter_.mapAst(enumDecl, ooEnumClass);
+	mapAst(enumDecl, ooEnumClass);
 	return true;
 }
 
@@ -493,7 +488,7 @@ bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* name
 			declaration->subDeclarations()->append(ooTypeAlias);
 		else
 		{
-			SAFE_DELETE(ooTypeAlias);
+			deleteNode(ooTypeAlias);
 			log_->writeError(className_, namespaceAlias, CppImportLogger::Reason::INSERT_PROBLEM);
 		}
 	}
@@ -517,7 +512,7 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 			declaration->subDeclarations()->append(ooNameImport);
 		else
 		{
-			SAFE_DELETE(ooNameImport);
+			deleteNode(ooNameImport);
 			log_->writeError(className_, usingDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		}
 	}
@@ -541,7 +536,7 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 			declaration->subDeclarations()->append(ooNameImport);
 		else
 		{
-			SAFE_DELETE(ooNameImport);
+			deleteNode(ooNameImport);
 			log_->writeError(className_, usingDirectiveDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		}
 	}
@@ -565,7 +560,7 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 			declaration->subDeclarations()->append(ooNameImport);
 		else
 		{
-			SAFE_DELETE(ooNameImport);
+			deleteNode(ooNameImport);
 			log_->writeError(className_, unresolvedUsing, CppImportLogger::Reason::INSERT_PROBLEM);
 		}
 	}
@@ -625,7 +620,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		TraverseStmt(ifStmt->getElse());
 		inBody_ = inBody;
 		ooStack_.pop();
-		macroImporter_.mapAst(ifStmt, ooIfStmt);
+		mapAst(ifStmt, ooIfStmt);
 	}
 	else
 		log_->writeError(className_, ifStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -653,7 +648,7 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 		TraverseStmt(whileStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
-		macroImporter_.mapAst(whileStmt, ooLoop);
+		mapAst(whileStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, whileStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -678,7 +673,7 @@ bool ClangAstVisitor::TraverseDoStmt(clang::DoStmt* doStmt)
 		TraverseStmt(doStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
-		macroImporter_.mapAst(doStmt, ooLoop);
+		mapAst(doStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, doStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -711,7 +706,7 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		TraverseStmt(forStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
-		macroImporter_.mapAst(forStmt, ooLoop);
+		mapAst(forStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, forStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -738,7 +733,7 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 		TraverseStmt(forRangeStmt->getBody());
 		ooStack_.pop();
 		inBody_ = inBody;
-		macroImporter_.mapAst(forRangeStmt, ooLoop);
+		mapAst(forRangeStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, forRangeStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -760,7 +755,7 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 		else
 			log_->writeError(className_, returnStmt->getRetValue(), CppImportLogger::Reason::NOT_SUPPORTED);
 		inBody_ = inBody;
-		macroImporter_.mapAst(returnStmt, ooReturn);
+		mapAst(returnStmt, ooReturn);
 	}
 	else
 		log_->writeError(className_, returnStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -835,7 +830,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 			ooTry->catchClauses()->append(ooStack_.pop());
 		}
 		inBody_ = inBody;
-		macroImporter_.mapAst(tryStmt, ooTry);
+		mapAst(tryStmt, ooTry);
 	}
 	else
 		log_->writeError(className_, tryStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -863,7 +858,7 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 	// finish up
 	inBody_ = inBody;
 	ooStack_.push(ooCatch);
-	macroImporter_.mapAst(catchStmt, ooCatch);
+	mapAst(catchStmt, ooCatch);
 	return true;
 }
 
@@ -904,10 +899,10 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 			// pops the body from the last case statement
 			ooStack_.pop();
 			// delete the dummy list
-			SAFE_DELETE(itemList);
+			deleteNode(itemList);
 			// pop the body of the switch statement
 			ooStack_.pop();
-			macroImporter_.mapAst(switchStmt, ooSwitchStmt);
+			mapAst(switchStmt, ooSwitchStmt);
 		}
 		else
 			log_->writeError(className_, switchStmt, CppImportLogger::Reason::NOT_SUPPORTED);
@@ -941,8 +936,95 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 	// traverse statements/body
 	ooStack_.push(ooSwitchCase->body());
 	TraverseStmt(caseStmt->getSubStmt());
-	macroImporter_.mapAst(caseStmt, ooSwitchCase);
+	mapAst(caseStmt, ooSwitchCase);
 	return true;
+}
+
+bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
+{
+	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
+	{
+		/*
+		 * in case this compound statement gets translated to a statement item list we are manually
+		 * visiting children in order to be able to insert empty lines and comments.
+		 *
+		 * comments processing 1 of 3.
+		 * process comments which are on separate lines.
+		 * we might process some comments which are later reassociated with declarations.
+		 */
+
+		// calculate the presumed locations for the beginning and end of this compound statement.
+		auto presumedLocationStart = sourceManager_->getPresumedLoc(compoundStmt->getLocStart());
+		auto presumedLocationEnd = sourceManager_->getPresumedLoc(compoundStmt->getLocEnd());
+
+		// assert clang behaves as expected.
+		Q_ASSERT(presumedLocationStart.getFilename() == presumedLocationEnd.getFilename());
+		Q_ASSERT(presumedLocationStart.getLine() <= presumedLocationEnd.getLine());
+
+		/*
+		 * to increase performance we precompute a subset of the comments of this translation unit containing
+		 * only the comments which are in range of this compound statement.
+		 */
+		QList<Comment*> listComments;
+		for (auto comment : comments_)
+				if (presumedLocationStart.getFilename() == comment->fileName() &&
+					 presumedLocationStart.getLine() <= comment->lineStart() &&
+					 comment->lineEnd() <= presumedLocationEnd.getLine())
+					listComments.append(comment);
+
+		/*
+		 * keep track of the line the last child has ended on.
+		 * initially this location is the beginning of the compound statement itself.
+		 */
+		auto lastChildEndLine = sourceManager_->getPresumedLineNumber(compoundStmt->getLocStart());
+
+		// traverse children
+		for (auto child : compoundStmt->children())
+		{
+			// calculate the line on which the current child starts
+			auto currentChildStartLine = sourceManager_->getPresumedLineNumber(child->getSourceRange().getBegin());
+
+			// check that we are in a valid case where the end of the last child comes before the start of the current one.
+			if (lastChildEndLine < currentChildStartLine)
+				// "visit" each line between the two children
+				for (auto currentLine = lastChildEndLine; currentLine < currentChildStartLine; currentLine++)
+				{
+					// try to find a comment that was not yet attached to any node located on the current line
+					Comment* commentOnLine = nullptr;
+					bool emptyLine = true;
+					for (auto comment : listComments)
+						if (!comment->node() && comment->lineStart() == currentLine)
+						{
+							commentOnLine = comment;
+							emptyLine = false;
+							break;
+						}
+						else if (comment->lineStart() < currentLine && currentLine <= comment->lineEnd())
+							emptyLine = false;
+
+					if (emptyLine)
+						// if no comment was found that means that the line is empty
+						itemList->append(new OOModel::ExpressionStatement());
+					else if (commentOnLine)
+					{
+						// insert the found comment at the current line
+						commentOnLine->insertIntoItemList(itemList);
+
+						// in case the comment takes up multiple lines we have to skip over the additional lines as well
+						currentLine = commentOnLine->lineEnd();
+					}
+				}
+
+			TraverseStmt(child);
+
+			// update the location on which the last child ended
+			lastChildEndLine = sourceManager_->getPresumedLineNumber(child->getLocEnd()) + 1;
+		}
+
+		return true;
+	}
+
+	return Base::TraverseCompoundStmt(compoundStmt);
 }
 
 bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
@@ -961,7 +1043,7 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 	// traverse statements/body
 	ooStack_.push(ooDefaultCase->body());
 	TraverseStmt(defaultStmt->getSubStmt());
-	macroImporter_.mapAst(defaultStmt, ooDefaultCase);
+	mapAst(defaultStmt, ooDefaultCase);
 	return true;
 }
 
@@ -970,7 +1052,7 @@ bool ClangAstVisitor::TraverseBreakStmt(clang::BreakStmt* breakStmt)
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
 		auto ooBreakStmt = new OOModel::BreakStatement();
-		macroImporter_.mapAst(breakStmt, ooBreakStmt);
+		mapAst(breakStmt, ooBreakStmt);
 		itemList->append(ooBreakStmt);
 	}
 	else
@@ -984,7 +1066,7 @@ bool ClangAstVisitor::TraverseContinueStmt(clang::ContinueStmt* continueStmt)
 	{
 		auto ooContinueStmt = new OOModel::ContinueStatement();
 
-		macroImporter_.mapAst(continueStmt, ooContinueStmt);
+		mapAst(continueStmt, ooContinueStmt);
 
 		itemList->append(ooContinueStmt);
 	}
@@ -1036,7 +1118,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		}
 	}
 
-	macroImporter_.mapAst(methodDecl, ooMethod);
+	mapAst(methodDecl, ooMethod);
 
 	return true;
 }
@@ -1190,6 +1272,116 @@ bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 	if (sourceManager_->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
 		return importSysHeader_;
 	return true;
+}
+
+void ClangAstVisitor::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
+{
+	macroImporter_.mapAst(clangAstNode, envisionAstNode);
+	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
+}
+
+void ClangAstVisitor::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
+{
+	/*
+	 * comments processing 2 of 3.
+	 * process comments which are associated with declarations.
+	 */
+	if (auto compositeNode = DCast<Model::CompositeNode>(envisionAstNode))
+		if (auto commentForDeclaration = clangAstNode->getASTContext().getRawCommentForDeclNoCache(clangAstNode))
+			for (auto comment : comments_)
+				if (comment->rawComment() == commentForDeclaration)
+				{
+					// uncomment the following line to not reassociate comments.
+					// if (comment->node()) break;
+
+					// we found a comment for this declaration
+
+					/*
+					 * if the comment is already associated with a node and it is not the current node then
+					 * assert that it was added to a statement item list and remove it from said list so we can associate
+					 * it with this declaration (that is in general more precise).
+					 */
+					if (comment->node() && comment->node() != envisionAstNode)
+						comment->removeFromItemList();
+
+					// at this point the comment is not associated with a node or it is associated with the current node.
+					Q_ASSERT(!comment->node() || comment->node() == envisionAstNode);
+
+					if (!comment->node())
+					{
+						// if it was not yet associated with any node then associate it with the current node.
+						comment->setNode(envisionAstNode);
+						compositeNode->setComment(new Comments::CommentNode(comment->text()));
+					}
+					break;
+				}
+
+	macroImporter_.mapAst(clangAstNode, envisionAstNode);
+	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
+}
+
+void ClangAstVisitor::beforeTranslationUnit(clang::ASTContext& astContext)
+{
+	auto comments = astContext.getRawCommentList().getComments();
+	for (auto it = comments.begin(); it != comments.end(); it++)
+		comments_.append(new Comment(*it, *sourceManager_));
+}
+
+void ClangAstVisitor::endTranslationUnit()
+{
+	macroImporter_.endTranslationUnit();
+
+	/*
+	 * comments processing 3 of 3.
+	 * process comments which are on the same line as statements.
+	 */
+	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
+	{
+		auto nodePresumedLocation = sourceManager_->getPresumedLoc(it.value().getBegin());
+
+		for (Comment* comment : comments_)
+		{
+			if (comment->node() ||
+				 nodePresumedLocation.getFilename() != comment->fileName() ||
+				 nodePresumedLocation.getLine() != comment->lineStart()) continue;
+
+			// calculate the parent of the current node which is a direct child of a statement item list.
+			auto lastNodeBeforeList = it.key();
+			auto parent = lastNodeBeforeList->parent();
+			while (parent)
+			{
+				if (auto itemList = DCast<OOModel::StatementItemList>(parent))
+				{
+					// add the comment to the parent of the current node which is a direct child of a statement item list.
+					comment->insertIntoItemList(itemList, itemList->indexOf(lastNodeBeforeList));
+					break;
+				}
+
+				lastNodeBeforeList = parent;
+				parent = lastNodeBeforeList->parent();
+			}
+		}
+	}
+
+	envisionToClangMap_.clear();
+}
+
+void ClangAstVisitor::endEntireImport()
+{
+	macroImporter_.endTranslationUnit();
+}
+
+void ClangAstVisitor::deleteNode(Model::Node* node)
+{
+	QList<Model::Node*> workList{node};
+	while (!workList.empty())
+	{
+		auto current = workList.takeLast();
+		workList << current->children();
+		envisionToClangMap_.remove(current);
+	}
+
+	SAFE_DELETE(node);
 }
 
 } // namespace cppimport

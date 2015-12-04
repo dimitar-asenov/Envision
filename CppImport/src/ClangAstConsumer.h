@@ -48,7 +48,6 @@ class CPPIMPORT_API ClangAstConsumer : public clang::ASTConsumer
 
 	private:
 		ClangAstVisitor* astVisitor_{};
-		clang::CompilerInstance* ci_{};
 };
 
 }

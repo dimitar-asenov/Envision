@@ -59,7 +59,7 @@ void CppImportManager::setImportPath(const QString& sourcePath, const bool subPr
 		initPath(sourcePath);
 }
 
-Model::TreeManager*CppImportManager::createTreeManager(const bool statisticsPerProject)
+Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPerProject)
 {
 	auto project = new OOModel::Project(projectName_);
 	auto log = new CppImportLogger();
@@ -79,7 +79,7 @@ Model::TreeManager*CppImportManager::createTreeManager(const bool statisticsPerP
 		SAFE_DELETE(tool);
 	}
 
-	visitor->macroImporter_.endEntireImport();
+	visitor->endEntireImport();
 
 	// statistics
 	if (!statisticsPerProject)

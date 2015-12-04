@@ -72,7 +72,7 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 	else
 		ooReference = createRef(name, memberExpr->getLocStart(), memberExpr->getQualifier(), nullptr, 0, base);
 
-	baseVisitor_->macroImporter_.mapAst(memberExpr, ooReference);
+	baseVisitor_->mapAst(memberExpr, ooReference);
 	ooExprStack_.push(ooReference);
 
 	return true;
@@ -94,7 +94,7 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 		ooReference = createRef(name, unresolvedMember->getLocStart(),
 											 unresolvedMember->getQualifier(), nullptr, 0, base);
 
-	baseVisitor_->macroImporter_.mapAst(unresolvedMember, ooReference);
+	baseVisitor_->mapAst(unresolvedMember, ooReference);
 	ooExprStack_.push(ooReference);
 
 	return true;
@@ -116,7 +116,7 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 		ooReference = createRef(name, dependentScopeMember->getLocStart(),
 											 dependentScopeMember->getQualifier(), nullptr, 0, base);
 
-	baseVisitor_->macroImporter_.mapAst(dependentScopeMember, ooReference);
+	baseVisitor_->mapAst(dependentScopeMember, ooReference);
 	ooExprStack_.push(ooReference);
 
 	return true;
@@ -134,7 +134,7 @@ bool ExpressionVisitor::TraverseDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 	else
 		ooReference = createRef(name, declRefExpr->getLocStart(), declRefExpr->getQualifier());
 
-	baseVisitor_->macroImporter_.mapAst(declRefExpr, ooReference);
+	baseVisitor_->mapAst(declRefExpr, ooReference);
 	ooExprStack_.push(ooReference);
 
 	return true;
@@ -152,7 +152,7 @@ bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeD
 	else
 		ooReference = createRef(name, dependentScope->getLocStart(), dependentScope->getQualifier());
 
-	baseVisitor_->macroImporter_.mapAst(dependentScope, ooReference);
+	baseVisitor_->mapAst(dependentScope, ooReference);
 	ooExprStack_.push(ooReference);
 
 	return true;
@@ -188,7 +188,7 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 
-	baseVisitor_->macroImporter_.mapAst(callExpr, ooMethodCall);
+	baseVisitor_->mapAst(callExpr, ooMethodCall);
 	ooExprStack_.push(ooMethodCall);
 
 	return true;
@@ -223,7 +223,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			ooUnary->setOp(utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if (!ooExprStack_.empty())
 				ooUnary->setOperand(ooExprStack_.pop());
-			baseVisitor_->macroImporter_.mapAst(callExpr, ooUnary);
+			baseVisitor_->mapAst(callExpr, ooUnary);
 			ooExprStack_.push(ooUnary);
 			break;
 		}
@@ -235,7 +235,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 				ooBinary->setRight(ooExprStack_.pop());
 			if (!ooExprStack_.empty())
 				ooBinary->setLeft(ooExprStack_.pop());
-			baseVisitor_->macroImporter_.mapAst(callExpr, ooBinary);
+			baseVisitor_->mapAst(callExpr, ooBinary);
 			ooExprStack_.push(ooBinary);
 			break;
 		}
@@ -247,7 +247,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 				ooAssign->setRight(ooExprStack_.pop());
 			if (!ooExprStack_.empty())
 				ooAssign->setLeft(ooExprStack_.pop());
-			baseVisitor_->macroImporter_.mapAst(callExpr, ooAssign);
+			baseVisitor_->mapAst(callExpr, ooAssign);
 			ooExprStack_.push(ooAssign);
 			break;
 		}
@@ -262,12 +262,12 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			if (!ooExprStack_.empty())
 			{
 				ooCall->setCallee(ooExprStack_.pop());
-				baseVisitor_->macroImporter_.mapAst(callExpr, ooCall);
+				baseVisitor_->mapAst(callExpr, ooCall);
 				ooExprStack_.push(ooCall);
 				break;
 			}
 			// this should not happen
-			SAFE_DELETE(ooCall);
+			baseVisitor_->deleteNode(ooCall);
 			log_->writeError(className_, callExpr, CppImportLogger::Reason::OTHER, "No method callee found (overload)");
 			ooExprStack_.push(utils_->createErrorExpression("METHOD CALL NO NAME FOUND"));
 			break;
@@ -303,7 +303,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 			ooNewExpr->dimensions()->append(ooExprStack_.pop());
 	}
 
-	baseVisitor_->macroImporter_.mapAst(newExpr, ooNewExpr);
+	baseVisitor_->mapAst(newExpr, ooNewExpr);
 	ooExprStack_.push(ooNewExpr);
 	return true;
 }
@@ -314,7 +314,7 @@ bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 	TraverseStmt(deleteExpr->getArgument());
 	if (!ooExprStack_.empty())
 		ooDeleteExpr->setExpr(ooExprStack_.pop());
-	baseVisitor_->macroImporter_.mapAst(deleteExpr, ooDeleteExpr);
+	baseVisitor_->mapAst(deleteExpr, ooDeleteExpr);
 	ooExprStack_.push(ooDeleteExpr);
 	return true;
 }
@@ -323,7 +323,7 @@ bool ExpressionVisitor::TraverseIntegerLiteral(clang::IntegerLiteral* intLit)
 {
 	auto ooIntegerLiteral = new OOModel::IntegerLiteral(intLit->getValue().getLimitedValue());
 
-	baseVisitor_->macroImporter_.mapAst(intLit, ooIntegerLiteral);
+	baseVisitor_->mapAst(intLit, ooIntegerLiteral);
 
 	ooExprStack_.push(ooIntegerLiteral);
 	return true;
@@ -333,7 +333,7 @@ bool ExpressionVisitor::TraverseCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* bo
 {
 	auto ooBooleanLiteral = new OOModel::BooleanLiteral(boolLitExpr->getValue());
 
-	baseVisitor_->macroImporter_.mapAst(boolLitExpr, ooBooleanLiteral);
+	baseVisitor_->mapAst(boolLitExpr, ooBooleanLiteral);
 
 	ooExprStack_.push(ooBooleanLiteral);
 	return true;
@@ -343,7 +343,7 @@ bool ExpressionVisitor::TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralEx
 {
 	auto ooNullLiteral = new OOModel::NullLiteral();
 
-	baseVisitor_->macroImporter_.mapAst(nullLitExpr, ooNullLiteral);
+	baseVisitor_->mapAst(nullLitExpr, ooNullLiteral);
 
 	ooExprStack_.push(ooNullLiteral);
 	return true;
@@ -353,7 +353,7 @@ bool ExpressionVisitor::TraverseFloatingLiteral(clang::FloatingLiteral* floatLit
 {
 	auto ooFloatLiteral = new OOModel::FloatLiteral(floatLiteral->getValueAsApproximateDouble());
 
-	baseVisitor_->macroImporter_.mapAst(floatLiteral, ooFloatLiteral);
+	baseVisitor_->mapAst(floatLiteral, ooFloatLiteral);
 
 	ooExprStack_.push(ooFloatLiteral);
 	return true;
@@ -363,7 +363,7 @@ bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLi
 {
 	auto ooCharLiteral = new OOModel::CharacterLiteral(QChar(charLiteral->getValue()));
 
-	baseVisitor_->macroImporter_.mapAst(charLiteral, ooCharLiteral);
+	baseVisitor_->mapAst(charLiteral, ooCharLiteral);
 
 	ooExprStack_.push(ooCharLiteral);
 	return true;
@@ -373,7 +373,7 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 {
 	auto ooStringLiteral = new OOModel::StringLiteral(QString::fromStdString(stringLiteral->getBytes().str()));
 
-	baseVisitor_->macroImporter_.mapAst(stringLiteral, ooStringLiteral);
+	baseVisitor_->mapAst(stringLiteral, ooStringLiteral);
 
 	ooExprStack_.push(ooStringLiteral);
 	return true;
@@ -400,7 +400,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			else
 				log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
 		}
-		baseVisitor_->macroImporter_.mapAst(constructExpr, ooMethodCall);
+		baseVisitor_->mapAst(constructExpr, ooMethodCall);
 		ooExprStack_.push(ooMethodCall);
 		return true;
 	}
@@ -446,7 +446,7 @@ bool ExpressionVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 	if (!ooExprStack_.empty())
 		ooParenExpr->setOperand(ooExprStack_.pop());
 
-	baseVisitor_->macroImporter_.mapAst(parenthesizedExpr, ooParenExpr);
+	baseVisitor_->mapAst(parenthesizedExpr, ooParenExpr);
 	ooExprStack_.push(ooParenExpr);
 	return true;
 }
@@ -612,7 +612,7 @@ bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeT
 	else
 	{
 		log_->writeError(className_, typeTrait, CppImportLogger::Reason::NOT_SUPPORTED);
-		SAFE_DELETE(argument);
+		baseVisitor_->deleteNode(argument);
 	}
 	return true;
 }
@@ -663,7 +663,7 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 	else
 		ooBinaryOp = new OOModel::BinaryOperation(utils_->translateBinaryOp(opcode), ooLeft, ooRight);
 
-	baseVisitor_->macroImporter_.mapAst(binaryOperator, ooBinaryOp);
+	baseVisitor_->mapAst(binaryOperator, ooBinaryOp);
 
 	ooExprStack_.push(ooBinaryOp);
 	return true;
@@ -682,7 +682,7 @@ bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator
 	if (!ooExprStack_.empty()) ooBinOp->setRight(ooExprStack_.pop());
 	else log_->writeError(className_, binaryOperator->getRHS(), CppImportLogger::Reason::NOT_SUPPORTED);
 
-	baseVisitor_->macroImporter_.mapAst(binaryOperator, ooBinOp);
+	baseVisitor_->mapAst(binaryOperator, ooBinOp);
 	ooExprStack_.push(ooBinOp);
 	return true;
 }
@@ -704,7 +704,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	if (!ooExprStack_.empty()) ooUnaryOp->setOperand(ooExprStack_.pop());
 	else log_->writeError(className_, unaryOperator->getSubExpr(), CppImportLogger::Reason::NOT_SUPPORTED);
 
-	baseVisitor_->macroImporter_.mapAst(unaryOperator, ooUnaryOp);
+	baseVisitor_->mapAst(unaryOperator, ooUnaryOp);
 	ooExprStack_.push(ooUnaryOp);
 	return true;
 }
@@ -718,7 +718,7 @@ bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, 
 	TraverseStmt(castExpr->getSubExprAsWritten());
 	if (!ooExprStack_.empty()) ooCast->setExpr(ooExprStack_.pop());
 
-	baseVisitor_->macroImporter_.mapAst(castExpr, ooCast);
+	baseVisitor_->mapAst(castExpr, ooCast);
 
 	ooExprStack_.push(ooCast);
 	return true;

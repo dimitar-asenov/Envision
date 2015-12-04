@@ -196,6 +196,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			*sections << "private:";
 			sections->append(privateSection);
 		}
+
+		*fragment << ";";
 	}
 
 	return fragment;

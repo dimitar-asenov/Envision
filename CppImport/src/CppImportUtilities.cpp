@@ -27,6 +27,7 @@
 #include "CppImportUtilities.h"
 #include "CppImportException.h"
 #include "visitors/ExpressionVisitor.h"
+#include "visitors/ClangAstVisitor.h"
 
 namespace CppImport {
 
@@ -374,7 +375,7 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 	if (auto commaExpression = DCast<OOModel::CommaExpression>(initExpression))
 	{
 		initializerExpressions = commaExpression->allSubOperands(true);
-		SAFE_DELETE(commaExpression);
+		exprVisitor_->baseVisitor_->deleteNode(commaExpression);
 	}
 	else initializerExpressions.append(initExpression);
 
@@ -401,7 +402,7 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 		QList<OOModel::Expression*> expressionList;
 		for (auto argument : *baseInitializerCall->arguments())
 			expressionList.append(DCast<OOModel::Expression>(argument->clone()));
-		SAFE_DELETE(baseInitializerCall);
+		exprVisitor_->baseVisitor_->deleteNode(baseInitializerCall);
 
 		ooMemberInit = new OOModel::MemberInitializer(memberExpression, expressionList);
 	}
