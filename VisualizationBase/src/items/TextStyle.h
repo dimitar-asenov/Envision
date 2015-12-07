@@ -45,11 +45,14 @@ class VISUALIZATIONBASE_API TextStyle : public Super<ItemStyle>
 		Property<bool> htmlFormat{this, "htmlFormat"};
 
 		const QBrush& selectionBackground() const;
+		bool underline() const;
 
 	private:
 		QBrush selectionBackground_;
+		bool underline_{};
 };
 
 inline const QBrush& TextStyle::selectionBackground() const { return selectionBackground_; }
+inline bool TextStyle::underline() const { return underline_; }
 
 }

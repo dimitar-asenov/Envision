@@ -37,6 +37,14 @@ void TextStyle::load(StyleLoader& sl)
 	QColor col;
 	sl.load("selectionBackground", col);
 	selectionBackground_ = QBrush(col);
+
+	// This is to workaround a bug in QT where underlines are not correctly translated when scaled.
+	if (font().underline())
+	{
+		auto & v = const_cast<QFont&>(font());
+		v.setUnderline(false);
+		underline_ = true;
+	}
 }
 
 }

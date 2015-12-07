@@ -124,7 +124,10 @@ void TextRenderer::updateGeometry(int, int)
 	}
 
 	// Correct underline, otherwise it is drawn in the middle of two pixels and appears fat and transparent.
-	if (style()->font().underline() && (qfm.lineWidth() % 2 == 0))
+	// This was updated when drawing the line manually (in order to workaround qt no translating the line properly when
+	// scaling). The old condition is below
+	// if (style()->font().underline() && (qfm.lineWidth() % 2 == 0))
+	if (style()->underline() && (qfm.lineWidth() % 2 == 1))
 	{
 		textXOffset_ += 0.5;
 		textYOffset_ += 0.5;
@@ -169,6 +172,9 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
 			painter->drawStaticText(QPointF(textXOffset_, textYOffset_), staticText_);
+			if (style()->underline())
+				painter->drawLine(QPointF{textXOffset_, textYOffset_ + staticText_.size().height()},
+					QPointF{textXOffset_ + staticText_.size().width(), textYOffset_ + staticText_.size().height()});
 		}
 	}
 	else
@@ -198,11 +204,24 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		painter->drawText(QPointF(offset.x() + selectionCursor->xBegin(), offset.y()),
 				staticText_.text().mid(start, end - start));
 
+		auto underlineY = textYOffset_ + staticText_.size().height();
+		if (style()->underline())
+			painter->drawLine(QPointF{offset.x() + selectionCursor->xBegin(), underlineY},
+				QPointF{offset.x() + selectionCursor->xEnd(), underlineY});
+
 		// Draw non-selected text
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
 		painter->drawText(offset, staticText_.text().left(start));
 		painter->drawText(QPointF(offset.x() + selectionCursor->xEnd(), offset.y()), staticText_.text().mid(end));
+
+		if (style()->underline())
+		{
+			painter->drawLine(QPointF{textXOffset_, underlineY},
+				QPointF{offset.x() + selectionCursor->xBegin(), underlineY});
+			painter->drawLine(QPointF{offset.x() + selectionCursor->xEnd(), underlineY},
+				QPointF{textXOffset_ + staticText_.size().width(), underlineY});
+		}
 	}
 }
 
