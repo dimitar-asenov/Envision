@@ -45,6 +45,8 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 
 		Optional<int> visualize(const TupleSet& ts);
 
+		static void cleanScene();
+
 	private:
 		friend class QueryRegistry;
 		ArgumentParser arguments_;
@@ -60,7 +62,6 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 
 		QueryResultVisualizer(Model::Node* target, QStringList args, QueryExecutor* executor = nullptr);
 
-		static void cleanScene();
 		static void showASTRelation(const TupleSet& ts, const QString& relationName);
 		static QHash<Model::Node*, QString> extractColors(const TupleSet& ts);
 		Optional<QHash<Model::Node*, QString>> extractInfo(const TupleSet& ts);
