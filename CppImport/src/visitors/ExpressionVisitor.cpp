@@ -66,11 +66,11 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (memberExpr->hasExplicitTemplateArgs())
-		ooReference = createRef(name, memberExpr->getLocStart(), memberExpr->getQualifier(),
+		ooReference = createRef(name, memberExpr->getQualifierLoc(),
 											 memberExpr->getExplicitTemplateArgs().getTemplateArgs(),
 											 memberExpr->getNumTemplateArgs(), base);
 	else
-		ooReference = createRef(name, memberExpr->getLocStart(), memberExpr->getQualifier(), nullptr, 0, base);
+		ooReference = createRef(name, memberExpr->getQualifierLoc(), nullptr, 0, base);
 
 	baseVisitor_->mapAst(memberExpr, ooReference);
 	ooExprStack_.push(ooReference);
@@ -87,12 +87,11 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (unresolvedMember->hasExplicitTemplateArgs())
-		ooReference = createRef(name, unresolvedMember->getLocStart(), unresolvedMember->getQualifier(),
+		ooReference = createRef(name, unresolvedMember->getQualifierLoc(),
 											 unresolvedMember->getExplicitTemplateArgs().getTemplateArgs(),
 											 unresolvedMember->getNumTemplateArgs(), base);
 	else
-		ooReference = createRef(name, unresolvedMember->getLocStart(),
-											 unresolvedMember->getQualifier(), nullptr, 0, base);
+		ooReference = createRef(name, unresolvedMember->getQualifierLoc(), nullptr, 0, base);
 
 	baseVisitor_->mapAst(unresolvedMember, ooReference);
 	ooExprStack_.push(ooReference);
@@ -109,12 +108,11 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (dependentScopeMember->hasExplicitTemplateArgs())
-		ooReference = createRef(name, dependentScopeMember->getLocStart(), dependentScopeMember->getQualifier(),
+		ooReference = createRef(name, dependentScopeMember->getQualifierLoc(),
 											 dependentScopeMember->getExplicitTemplateArgs().getTemplateArgs(),
 											 dependentScopeMember->getNumTemplateArgs(), base);
 	else
-		ooReference = createRef(name, dependentScopeMember->getLocStart(),
-											 dependentScopeMember->getQualifier(), nullptr, 0, base);
+		ooReference = createRef(name, dependentScopeMember->getQualifierLoc(), nullptr, 0, base);
 
 	baseVisitor_->mapAst(dependentScopeMember, ooReference);
 	ooExprStack_.push(ooReference);
@@ -128,11 +126,11 @@ bool ExpressionVisitor::TraverseDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (declRefExpr->hasExplicitTemplateArgs())
-		ooReference = createRef(name, declRefExpr->getLocStart(), declRefExpr->getQualifier(),
+		ooReference = createRef(name, declRefExpr->getQualifierLoc(),
 											 declRefExpr->getExplicitTemplateArgs().getTemplateArgs(),
 											 declRefExpr->getNumTemplateArgs());
 	else
-		ooReference = createRef(name, declRefExpr->getLocStart(), declRefExpr->getQualifier());
+		ooReference = createRef(name, declRefExpr->getQualifierLoc());
 
 	baseVisitor_->mapAst(declRefExpr, ooReference);
 	ooExprStack_.push(ooReference);
@@ -146,11 +144,11 @@ bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeD
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (dependentScope->hasExplicitTemplateArgs())
-		ooReference = createRef(name, dependentScope->getLocStart(), dependentScope->getQualifier(),
+		ooReference = createRef(name, dependentScope->getQualifierLoc(),
 											 dependentScope->getExplicitTemplateArgs().getTemplateArgs(),
 											 dependentScope->getNumTemplateArgs());
 	else
-		ooReference = createRef(name, dependentScope->getLocStart(), dependentScope->getQualifier());
+		ooReference = createRef(name, dependentScope->getQualifierLoc());
 
 	baseVisitor_->mapAst(dependentScope, ooReference);
 	ooExprStack_.push(ooReference);
@@ -420,8 +418,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct)
 {
 	auto ooMethodCall = new OOModel::MethodCallExpression();
-	ooMethodCall->setCallee(utils_->translateQualifiedType(unresolvedConstruct->getTypeAsWritten(),
-																			 unresolvedConstruct->getLocStart()));
+	ooMethodCall->setCallee(utils_->translateQualifiedType(unresolvedConstruct->getTypeSourceInfo()->getTypeLoc()));
 	// visit arguments
 	for (auto argIt = unresolvedConstruct->arg_begin(); argIt!=unresolvedConstruct->arg_end(); ++argIt)
 	{
@@ -480,8 +477,7 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 	auto ooTypeTrait = new OOModel::TypeTraitExpression
 			(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
 	if (typeIdExpr->isTypeOperand())
-		ooTypeTrait->setOperand(utils_->translateQualifiedType(
-				typeIdExpr->getTypeOperandSourceInfo()->getType(), typeIdExpr->getLocStart()));
+		ooTypeTrait->setOperand(utils_->translateQualifiedType(typeIdExpr->getTypeOperandSourceInfo()->getTypeLoc()));
 	else
 	{
 		TraverseStmt(typeIdExpr->getExprOperand());
@@ -504,8 +500,7 @@ bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr
 		unsigned templateArgs = overloadExpr->getNumTemplateArgs();
 		auto astTemplateArgsList = overloadExpr->getExplicitTemplateArgs().getTemplateArgs();
 		for (unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->translateTemplateArgument(astTemplateArgsList[i].getArgument(),
-																								  astTemplateArgsList[i].getLocation()));
+			ooRef->typeArguments()->append(utils_->translateTemplateArgument(astTemplateArgsList[i]));
 	}
 	ooExprStack_.push(ooRef);
 	return true;
@@ -525,7 +520,7 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 	{
 		auto arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc());
 		if (type) arg->setTypeExpression(type);
 		ooLambda->arguments()->append(arg);
 	}
@@ -591,7 +586,7 @@ bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeT
 {
 	OOModel::Expression* argument = nullptr;
 	if (typeTrait->isArgumentType())
-		argument = utils_->translateQualifiedType(typeTrait->getArgumentType(), typeTrait->getLocStart());
+		argument = utils_->translateQualifiedType(typeTrait->getArgumentTypeInfo()->getTypeLoc());
 	else
 	{
 		TraverseStmt(typeTrait->getArgumentExpr());
@@ -619,14 +614,13 @@ bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeT
 
 
 OOModel::ReferenceExpression* ExpressionVisitor::createRef
-(const QString& name, const clang::SourceLocation& location, const clang::NestedNameSpecifier* qualifier,
+(const QString& name, const clang::NestedNameSpecifierLoc qualifier,
  const clang::TemplateArgumentLoc* templateArgs, unsigned numTArgs, clang::Expr* base)
 {
 	auto ooRef = new OOModel::ReferenceExpression(name);
 	if (templateArgs)
 		for (unsigned i = 0; i < numTArgs; i++)
-			ooRef->typeArguments()->append(utils_->translateTemplateArgument(templateArgs[i].getArgument(),
-																								  templateArgs[i].getLocation()));
+			ooRef->typeArguments()->append(utils_->translateTemplateArgument(templateArgs[i]));
 	OOModel::Expression* ooBase = nullptr;
 	if (base)
 	{
@@ -634,7 +628,7 @@ OOModel::ReferenceExpression* ExpressionVisitor::createRef
 		if (!ooExprStack_.empty()) ooBase = ooExprStack_.pop();
 	}
 	if (qualifier)
-		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier, location, ooBase));
+		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier, ooBase));
 	else if (ooBase)
 		ooRef->setPrefix(ooBase);
 	return ooRef;
@@ -713,7 +707,7 @@ bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, 
 {
 	auto ooCast = new OOModel::CastExpression(kind);
 	// setType to cast to
-	ooCast->setType(utils_->translateQualifiedType(castExpr->getType(), castExpr->getLocStart()));
+	ooCast->setType(utils_->translateQualifiedType(castExpr->getTypeInfoAsWritten()->getTypeLoc()));
 	// visit subexpr
 	TraverseStmt(castExpr->getSubExprAsWritten());
 	if (!ooExprStack_.empty()) ooCast->setExpr(ooExprStack_.pop());
