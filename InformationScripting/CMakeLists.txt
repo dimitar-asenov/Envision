@@ -150,6 +150,6 @@ add_library(InformationScripting SHARED
 	src/queries/Yield.cpp
 )
 
-target_link_libraries(InformationScripting OOInteraction OODebug ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
-envision_plugin(InformationScripting)
+target_link_libraries(InformationScripting ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+envision_plugin(InformationScripting OOInteraction OODebug)
 install(DIRECTORY scripts/ DESTINATION ${BUILD_DIR}/scripts)

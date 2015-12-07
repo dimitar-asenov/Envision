@@ -82,6 +82,5 @@ add_library(Comments SHARED
 	src/toolbars/OutlineTypePicker.cpp
 )
 find_package(Qt5 REQUIRED WebKitWidgets)
-target_link_libraries(Comments InteractionBase Qt5::WebKitWidgets)
-
-envision_plugin(Comments)
+target_link_libraries(Comments Qt5::WebKitWidgets)
+envision_plugin(Comments InteractionBase)

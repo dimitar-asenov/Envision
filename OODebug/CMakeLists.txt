@@ -85,5 +85,4 @@ add_library(OODebug SHARED
 	src/debugger/DebugUtils.cpp
 )
 
-target_link_libraries(OODebug JavaExport OOInteraction)
-envision_plugin(OODebug)
+envision_plugin(OODebug JavaExport OOInteraction)

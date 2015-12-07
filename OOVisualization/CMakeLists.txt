@@ -252,5 +252,4 @@ add_library(OOVisualization SHARED
 	src/elements/VFormalMetaArgumentStyle.cpp
 )
 
-target_link_libraries(OOVisualization OOModel InteractionBase)
-envision_plugin(OOVisualization)
+envision_plugin(OOVisualization OOModel InteractionBase)

@@ -12,5 +12,4 @@ add_library(PLUGINNAME SHARED
 	src/PLUGINNAMEPlugin.cpp
 	test/SimpleTest.cpp
 )
-target_link_libraries(PLUGINNAME ModelBase)
-envision_plugin(PLUGINNAME)
+envision_plugin(PLUGINNAME ModelBase)

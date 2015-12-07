@@ -111,6 +111,5 @@ add_library(OOInteraction SHARED
 	src/commands/CInspectMethodInView.cpp
 )
 
-target_link_libraries(OOInteraction OOVisualization)
-envision_plugin(OOInteraction)
+envision_plugin(OOInteraction OOVisualization)
 install(DIRECTORY doxy_data/ DESTINATION ${BUILD_DIR}/doxygen)

@@ -103,5 +103,4 @@ add_library(ModelBase SHARED
 	src/ModelException.cpp
 )
 
-target_link_libraries(ModelBase Logger)
-envision_plugin(ModelBase)
+envision_plugin(ModelBase Logger)

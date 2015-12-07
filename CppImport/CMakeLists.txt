@@ -83,5 +83,5 @@ add_library(CppImport SHARED
 	src/Comment.cpp
 )
 
-target_link_libraries(CppImport OOInteraction ${clangLibs_})
-envision_plugin(CppImport)
+target_link_libraries(CppImport ${clangLibs_})
+envision_plugin(CppImport OOInteraction)

@@ -31,6 +31,5 @@ add_library(CppExport SHARED
 	src/CodeUnitPart.cpp
 )
 
-target_link_libraries(CppExport OOModel Export)
-envision_plugin(CppExport)
+envision_plugin(CppExport OOModel Export)
 install(FILES "config.json" DESTINATION ${BUILD_DIR}/cpp-export-settings)

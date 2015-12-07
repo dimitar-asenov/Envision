@@ -41,5 +41,4 @@ add_library(ControlFlowVisualization SHARED
 
 )
 
-target_link_libraries(ControlFlowVisualization OOInteraction)
-envision_plugin(ControlFlowVisualization)
+envision_plugin(ControlFlowVisualization OOInteraction)

@@ -29,5 +29,4 @@ add_library(CustomMethodCall SHARED
 	src/CustomMethodCallPlugin.cpp
 )
 
-target_link_libraries(CustomMethodCall OOVisualization)
-envision_plugin(CustomMethodCall)
+envision_plugin(CustomMethodCall OOVisualization)

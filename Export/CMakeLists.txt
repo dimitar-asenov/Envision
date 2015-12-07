@@ -39,5 +39,4 @@ add_library(Export SHARED
 	src/ExportMapContainer.cpp
 	src/ExportError.cpp
 )
-target_link_libraries(Export ModelBase)
-envision_plugin(Export)
+envision_plugin(Export ModelBase)

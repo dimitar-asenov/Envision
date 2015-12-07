@@ -25,5 +25,4 @@ add_library(JavaExport SHARED
 	src/visitors/ElementVisitor.cpp
 )
 
-target_link_libraries(JavaExport OOInteraction Export)
-envision_plugin(JavaExport)
+envision_plugin(JavaExport OOInteraction Export)

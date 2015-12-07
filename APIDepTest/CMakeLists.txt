@@ -8,6 +8,4 @@ add_library(APIDepTest SHARED
 	src/APIDepTestPlugin.h
 	src/APIDepTestPlugin.cpp
 )
-target_link_libraries(APIDepTest HelloWorld)
-
-envision_plugin(APIDepTest)
+envision_plugin(APIDepTest HelloWorld)

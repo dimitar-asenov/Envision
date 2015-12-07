@@ -18,5 +18,4 @@ add_library(Logger SHARED
 	src/LoggerPlugin.cpp
 )
 
-target_link_libraries(Logger SelfTest)
-envision_plugin(Logger)
+envision_plugin(Logger SelfTest)

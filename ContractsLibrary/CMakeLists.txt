@@ -23,5 +23,4 @@ add_library(ContractsLibrary SHARED
 	src/ContractsLibraryPlugin.cpp
 )
 
-target_link_libraries(ContractsLibrary OOInteraction)
-envision_plugin(ContractsLibrary)
+envision_plugin(ContractsLibrary OOInteraction)

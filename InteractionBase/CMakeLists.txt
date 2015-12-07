@@ -184,5 +184,4 @@ add_library(InteractionBase SHARED
 	src/prompt/PromptMode.cpp
 )
 
-target_link_libraries(InteractionBase VisualizationBase FilePersistence)
-envision_plugin(InteractionBase)
+envision_plugin(InteractionBase VisualizationBase FilePersistence)

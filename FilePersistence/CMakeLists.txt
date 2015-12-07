@@ -84,6 +84,6 @@ add_library(FilePersistence SHARED
 add_dependencies(FilePersistence FilePersistence_UpdateResources)
 
 find_package(Qt5 REQUIRED Xml)
-target_link_libraries(FilePersistence ModelBase Qt5::Xml -lgit2)
+target_link_libraries(FilePersistence Qt5::Xml -lgit2)
 
-envision_plugin(FilePersistence)
+envision_plugin(FilePersistence ModelBase)

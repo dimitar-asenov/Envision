@@ -206,5 +206,4 @@ add_library(OOModel SHARED
 	src/elements/FormalMetaArgument.cpp
 )
 
-target_link_libraries(OOModel ModelBase Comments)
-envision_plugin(OOModel)
+envision_plugin(OOModel ModelBase Comments)

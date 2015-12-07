@@ -19,6 +19,5 @@ add_library(AlloyIntegration SHARED
 	src/exporter/AlloyExporter.cpp
 )
 
-target_link_libraries(AlloyIntegration ContractsLibrary)
-envision_plugin(AlloyIntegration)
+envision_plugin(AlloyIntegration ContractsLibrary)
 install(DIRECTORY alloy_data/ DESTINATION ${BUILD_DIR}/alloy)

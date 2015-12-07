@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.2.2)
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 
 # This is specific for using a Make-based build
-# find_program(CCACHE_FOUND ccache)
-# if(CCACHE_FOUND)
-# 	set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-# 	set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-# endif(CCACHE_FOUND)
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+	set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+	set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif(CCACHE_FOUND)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -120,6 +120,8 @@ endfunction(get_transitive_link_dependencies_for_precompiled_header)
 function(envision_plugin targetName)
 	message("Configuring Plugin: ${targetName} ")
 	
+	envision_link_libraries(${targetName} ${ARGN})
+	
 	target_link_libraries(${targetName} Core)
 	target_compile_definitions(${targetName} PRIVATE -DQT_PLUGIN)
 	use_precompiled_header(${targetName})
@@ -134,3 +136,11 @@ function(envision_plugin targetName)
 		install(DIRECTORY styles/ DESTINATION ${BUILD_DIR}/styles)
 	endif()
 endfunction(envision_plugin)
+
+function(envision_link_libraries targetName)
+	# Only link the libraries in Windows, where this is required.
+	# Otherwise avoid re-linking to improve compilation time.
+	if( WIN32 )
+		target_link_libraries(${targetName} ${ARGN})
+	endif()
+endfunction(envision_link_libraries)
