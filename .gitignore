@@ -2,7 +2,10 @@
 /doc/generated
 /envision.pro.user
 /envision.pro.user.*
+/CMakeLists.txt.user
 /Makefile
+/compile_commands.json
+
 /*/object_script.*.Debug
 /*/object_script.*.Release
 
@@ -15,4 +18,3 @@
 /*/Makefile.Debug
 
 *.directory
-
