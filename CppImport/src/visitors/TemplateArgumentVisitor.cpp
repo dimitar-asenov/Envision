@@ -57,8 +57,8 @@ bool TemplateArgumentVisitor::TraverseTemplateTypeParmDecl(clang::TemplateTypePa
 {
 	lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument(QString::fromStdString(templateParm->getNameAsString()));
 	if (templateParm->hasDefaultArgument())
-		lastTranslatedTypeArg_->setSubTypeOfExpression(utils_->translateQualifiedType(templateParm->getDefaultArgument(),
-																						 templateParm->getLocStart()));
+		lastTranslatedTypeArg_->setSubTypeOfExpression(
+					utils_->translateQualifiedType(templateParm->getDefaultArgumentInfo()->getTypeLoc()));
 	return true;
 }
 
@@ -66,8 +66,8 @@ bool TemplateArgumentVisitor::TraverseNonTypeTemplateParmDecl(clang::NonTypeTemp
 {
 	lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument
 (QString::fromStdString(nonTypeTemplateParm->getNameAsString()));
-	lastTranslatedTypeArg_->setSubTypeOfExpression(utils_->translateQualifiedType(nonTypeTemplateParm->getType(),
-																					 nonTypeTemplateParm->getLocStart()));
+	lastTranslatedTypeArg_->setSubTypeOfExpression(utils_->translateQualifiedType(
+																	  nonTypeTemplateParm->getTypeSourceInfo()->getTypeLoc()));
 	if (nonTypeTemplateParm->hasDefaultArgument())
 		lastTranslatedTypeArg_->setSuperTypeOfExpression(exprVisitor_->translateExpression
 																		 (nonTypeTemplateParm->getDefaultArgument()));
