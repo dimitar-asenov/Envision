@@ -153,12 +153,13 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 			return true;
 
 		auto ooRef = new OOModel::ReferenceExpression(QString::fromStdString(specializationDecl->getNameAsString()));
-		for (unsigned i = 0; i < specializationDecl->getTemplateArgs().size(); i++)
-		{
-			ooRef->typeArguments()->append(utils_->translateTemplateArgument
-													 (specializationDecl->getTemplateArgs().get(i),
-													  specializationDecl->getLocStart()));
-		}
+
+		auto typeLoc = specializationDecl->getTypeAsWritten()->getTypeLoc()
+							.castAs<clang::TemplateSpecializationTypeLoc>();
+
+		for (unsigned i = 0; i < typeLoc.getNumArgs(); i++)
+			ooRef->typeArguments()->append(utils_->translateTemplateArgument(typeLoc.getArgLoc(i)));
+
 		if (auto p = llvm::dyn_cast<clang::NamedDecl>(specializationDecl->getSpecializedTemplate()->getDeclContext()))
 			ooRef->setPrefix(new OOModel::ReferenceExpression(QString::fromStdString(p->getNameAsString())));
 		ooExplicitTemplateInst->setInstantiatedClass(ooRef);
@@ -180,13 +181,13 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		TraverseClass(specializationDecl, ooClass);
 
 		auto originalParams = specializationDecl->getSpecializedTemplate()->getTemplateParameters();
+		auto typeLoc = specializationDecl->getTypeAsWritten()->getTypeLoc()
+							.castAs<clang::TemplateSpecializationTypeLoc>();
 		// visit type arguments if any
-		for (unsigned i = 0; i < specializationDecl->getTemplateArgs().size(); i++)
+		for (unsigned i = 0; i < typeLoc.getNumArgs(); i++)
 		{
 			auto typeArg = new OOModel::FormalTypeArgument();
-			typeArg->setSpecializationExpression(utils_->translateTemplateArgument
-															 (specializationDecl->getTemplateArgs().get(i),
-																			  specializationDecl->getLocStart()));
+			typeArg->setSpecializationExpression(utils_->translateTemplateArgument(typeLoc.getArgLoc(i)));
 			typeArg->setName(QString::fromStdString(originalParams->getParam(i)->getNameAsString()));
 			ooClass->typeArguments()->append(typeArg);
 		}
@@ -348,7 +349,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		return true;
 
 	// set the type
-	ooVarDecl->setTypeExpression(utils_->translateQualifiedType(varDecl->getType(), varDecl->getLocStart()));
+	ooVarDecl->setTypeExpression(utils_->translateQualifiedType(varDecl->getTypeSourceInfo()->getTypeLoc()));
 	// modifiers
 	ooVarDecl->modifiers()->set(utils_->translateStorageSpecifier(varDecl->getStorageClass()));
 	return true;
@@ -376,7 +377,7 @@ bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 		inBody_ = inBody;
 	}
 
-	field->setTypeExpression(utils_->translateQualifiedType(fieldDecl->getType(), fieldDecl->getLocStart()));
+	field->setTypeExpression(utils_->translateQualifiedType(fieldDecl->getTypeSourceInfo()->getTypeLoc()));
 	// modifiers
 	field->modifiers()->set(utils_->translateAccessSpecifier(fieldDecl->getAccess()));
 	return true;
@@ -431,8 +432,7 @@ bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefD
 		return true;
 	if (auto ooTypeAlias = trMngr_->insertTypeAlias(typedefDecl))
 	{
-		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typedefDecl->getUnderlyingType(),
-																						  typedefDecl->getLocStart()));
+		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typedefDecl->getTypeSourceInfo()->getTypeLoc()));
 		ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
 		ooTypeAlias->modifiers()->set(utils_->translateAccessSpecifier(typedefDecl->getAccess()));
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
@@ -452,8 +452,7 @@ bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl
 	if (auto ooTypeAlias = trMngr_->insertTypeAliasTemplate(typeAliasTemplate))
 	{
 		auto typeAlias = typeAliasTemplate->getTemplatedDecl();
-		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typeAlias->getUnderlyingType(),
-																						  typeAlias->getLocStart()));
+		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typeAlias->getTypeSourceInfo()->getTypeLoc()));
 		ooTypeAlias->setName(QString::fromStdString(typeAliasTemplate->getNameAsString()));
 		// type arguments
 		auto templateParamList = typeAliasTemplate->getTemplateParameters();
@@ -479,8 +478,8 @@ bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* name
 		ooTypeAlias->setName(QString::fromStdString(namespaceAlias->getNameAsString()));
 		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
 				(QString::fromStdString(namespaceAlias->getAliasedNamespace()->getNameAsString()));
-		if (auto prefix = namespaceAlias->getQualifier())
-			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix, namespaceAlias->getLocation()));
+		if (auto prefix = namespaceAlias->getQualifierLoc())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooTypeAlias->setTypeExpression(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
@@ -503,8 +502,8 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 	{
 		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
 				(QString::fromStdString(usingDecl->getNameAsString()));
-		if (auto prefix = usingDecl->getQualifier())
-			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix, usingDecl->getLocStart()));
+		if (auto prefix = usingDecl->getQualifierLoc())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
@@ -527,8 +526,8 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 	{
 		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
 				(QString::fromStdString(usingDirectiveDecl->getNominatedNamespaceAsWritten()->getNameAsString()));
-		if (auto prefix = usingDirectiveDecl->getQualifier())
-			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix, usingDirectiveDecl->getLocStart()));
+		if (auto prefix = usingDirectiveDecl->getQualifierLoc())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
@@ -551,8 +550,8 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 	{
 		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
 				(QString::fromStdString(unresolvedUsing->getNameInfo().getAsString()));
-		if (auto prefix = unresolvedUsing->getQualifier())
-			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix, unresolvedUsing->getLocStart()));
+		if (auto prefix = unresolvedUsing->getQualifierLoc())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
@@ -721,7 +720,7 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 		const clang::VarDecl* loopVar = forRangeStmt->getLoopVariable();
 		itemList->append(ooLoop);
 		ooLoop->setVarName(QString::fromStdString(loopVar->getNameAsString()));
-		ooLoop->setVarType(utils_->translateQualifiedType(loopVar->getType(), loopVar->getLocStart()));
+		ooLoop->setVarType(utils_->translateQualifiedType(loopVar->getTypeSourceInfo()->getTypeLoc()));
 		bool inBody = inBody_;
 		inBody_ = false;
 		TraverseStmt(forRangeStmt->getRangeInit());
@@ -1165,8 +1164,7 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 
 		// visit base classes
 		for (auto base_itr = recordDecl->bases_begin(); base_itr!=recordDecl->bases_end(); ++base_itr)
-			ooClass->baseClasses()->append(utils_->translateQualifiedType(base_itr->getType(),
-																							  recordDecl->getLocStart()));
+			ooClass->baseClasses()->append(utils_->translateQualifiedType(base_itr->getTypeSourceInfo()->getTypeLoc()));
 	}
 
 	// set modifiers
@@ -1210,9 +1208,7 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 			{
 				auto typeArg = new OOModel::FormalTypeArgument();
 				typeArg->setName(QString::fromStdString(templateParamList->getParam(i)->getNameAsString()));
-				typeArg->setSpecializationExpression(utils_->translateTemplateArgument
-																 (astTemplateArgsList[i].getArgument(),
-																  astTemplateArgsList[i].getLocation()));
+				typeArg->setSpecializationExpression(utils_->translateTemplateArgument(astTemplateArgsList[i]));
 				ooFunction->typeArguments()->append(typeArg);
 			}
 		}

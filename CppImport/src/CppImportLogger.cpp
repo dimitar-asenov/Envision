@@ -136,9 +136,9 @@ void CppImportLogger::primitiveTypeNotSupported(const QString& typeName)
 	typeCountMap_.insert(typeName, newCount);
 }
 
-void CppImportLogger::typeNotSupported(const clang::Type* type, const clang::SourceLocation& location)
+void CppImportLogger::typeNotSupported(const clang::TypeLoc typeLoc, const clang::SourceLocation& location)
 {
-	QString typeName = QString(type->getTypeClassName());
+	QString typeName = QString(typeLoc.getTypePtr()->getTypeClassName());
 	int newCount = typeCountMap_.value(typeName) + 1;
 	typeCountMap_.insert(typeName, newCount);
 

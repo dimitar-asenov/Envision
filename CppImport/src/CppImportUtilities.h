@@ -47,8 +47,7 @@ class CPPIMPORT_API CppImportUtilities
 		 * The \a location is used for warnings whenever translation fails,
 		 * to report the file and line of the \a location.
 		 */
-		OOModel::Expression* translateQualifiedType(const clang::QualType qualType,
-																  const clang::SourceLocation& location);
+		OOModel::Expression* translateQualifiedType(clang::TypeLoc qualTypeLoc);
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOp(const clang::BinaryOperatorKind& binaryOpKind);
 		OOModel::AssignmentExpression::AssignmentTypes translateAssignOp(const clang::BinaryOperatorKind& assignOpKind);
 		OOModel::UnaryOperation::OperatorTypes translateUnaryOp(const clang::UnaryOperatorKind& unaryOpKind);
@@ -60,12 +59,10 @@ class CPPIMPORT_API CppImportUtilities
 		 * it will be put as a prefix of the first namespecifier
 		 * e.g. \c { obj.A::ref } here obj would be the \a base and A the \a nestedName
 		 */
-		OOModel::Expression* translateNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName,
-																		  const clang::SourceLocation& location,
+		OOModel::Expression* translateNestedNameSpecifier(const clang::NestedNameSpecifierLoc nestedName,
 																		  OOModel::Expression* base = nullptr);
 
-		OOModel::Expression* translateTemplateArgument(const clang::TemplateArgument& templateArg,
-																	  const clang::SourceLocation& location);
+		OOModel::Expression* translateTemplateArgument(const clang::TemplateArgumentLoc& templateArg);
 
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOverloadOp
 		(const clang::OverloadedOperatorKind& overloadOpKind);
@@ -91,8 +88,8 @@ class CPPIMPORT_API CppImportUtilities
 		/**
 		 * Translates \a type to the nearest primitive OOModel type.
 		 */
-		OOModel::Expression* translateBuiltInClangType(const clang::BuiltinType* type);
-		OOModel::Expression* translateTypePtr(const clang::Type* type, const clang::SourceLocation& location);
+		OOModel::Expression* translateBuiltInClangType(const clang::BuiltinTypeLoc type);
+		OOModel::Expression* translateTypePtr(const clang::TypeLoc typeLoc);
 		const QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};

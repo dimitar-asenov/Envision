@@ -36,20 +36,25 @@ CppImportUtilities::CppImportUtilities(CppImportLogger* logger, ExpressionVisito
 : log_{logger}, exprVisitor_{visitor}
 {}
 
-OOModel::Expression* CppImportUtilities::translateQualifiedType(const clang::QualType qualType,
-																					 const clang::SourceLocation& location)
+OOModel::Expression* CppImportUtilities::translateQualifiedType(clang::TypeLoc typeLoc)
 {
-	OOModel::Expression* translatedType = translateTypePtr(qualType.getTypePtr(), location);
+	if (auto qualifiedTypeLoc = typeLoc.getAs<clang::QualifiedTypeLoc>())
+	{
+		auto translatedType = translateTypePtr(qualifiedTypeLoc.getUnqualifiedLoc());
 
-	if (qualType.isConstQualified() && qualType.isVolatileQualified())
-		return new OOModel::TypeQualifierExpression(OOModel::Type::CONST, new OOModel::TypeQualifierExpression
-																  (OOModel::Type::VOLATILE, translatedType));
-	else if (qualType.isConstQualified())
-		return new OOModel::TypeQualifierExpression(OOModel::Type::CONST, translatedType);
-	else if (qualType.isVolatileQualified())
-		return new OOModel::TypeQualifierExpression(OOModel::Type::VOLATILE, translatedType);
+		auto qualType = qualifiedTypeLoc.getType();
+		if (qualType.isConstQualified() && qualType.isVolatileQualified())
+			return new OOModel::TypeQualifierExpression(OOModel::Type::CONST, new OOModel::TypeQualifierExpression
+																	  (OOModel::Type::VOLATILE, translatedType));
+		else if (qualType.isConstQualified())
+			return new OOModel::TypeQualifierExpression(OOModel::Type::CONST, translatedType);
+		else if (qualType.isVolatileQualified())
+			return new OOModel::TypeQualifierExpression(OOModel::Type::VOLATILE, translatedType);
 
-	return translatedType;
+		return translatedType;
+	}
+
+	return translateTypePtr(typeLoc);
 }
 
 OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOp
@@ -147,10 +152,12 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::translateStorageSpecifier
 }
 
 OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
-(const clang::NestedNameSpecifier* nestedName, const clang::SourceLocation& location, OOModel::Expression* base)
+(const clang::NestedNameSpecifierLoc nestedNameLoc, OOModel::Expression* base)
 {
 	OOModel::ReferenceExpression* currentRef = nullptr;
 	OOModel::Expression* returnExpr = nullptr;
+
+	auto nestedName = nestedNameLoc.getNestedNameSpecifier();
 	switch (nestedName->getKind())
 	{
 		case clang::NestedNameSpecifier::Identifier:
@@ -166,24 +173,22 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 			break;
 		case clang::NestedNameSpecifier::TypeSpec:
 			// TODO: handle the case where this cast is not a reference
-			if (auto typeRef = DCast<OOModel::ReferenceExpression>
-					(translateTypePtr(nestedName->getAsType(), location)))
+			if (auto typeRef = DCast<OOModel::ReferenceExpression>(translateTypePtr(nestedNameLoc.getTypeLoc())))
 				currentRef = typeRef;
 			else
 			{
-				log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
+				log_->writeError(className_, nestedNameLoc.getLocalBeginLoc(), CppImportLogger::Reason::OTHER,
 									  "Unsupported NestedNameSpecifier TypeSpecNameSpecifier");
 				returnExpr = createErrorExpression("TypeSpecNameSpecifier");
 			}
 			break;
 		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
 			// TODO: handle the case where this cast is not a reference
-			if (auto typeRef = DCast<OOModel::ReferenceExpression>
-					(translateTypePtr(nestedName->getAsType(), location)))
+			if (auto typeRef = DCast<OOModel::ReferenceExpression>(translateTypePtr(nestedNameLoc.getTypeLoc())))
 				currentRef = typeRef;
 			else
 			{
-				log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
+				log_->writeError(className_, nestedNameLoc.getLocalBeginLoc(), CppImportLogger::Reason::OTHER,
 									  "Unsupported NestedNameSpecifier TypeSpecWithTemplate");
 				returnExpr = createErrorExpression("Could not translate TypeSpecWithTemplate");
 			}
@@ -198,8 +203,8 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 			throw new CppImportException(QString("Unsupported nested name specifier kind: %1").arg(nestedName->getKind()));
 			break;
 	}
-	if (auto prefix = nestedName->getPrefix())
-		currentRef->setPrefix(translateNestedNameSpecifier(prefix, location, base));
+	if (auto prefix = nestedNameLoc.getPrefix())
+		currentRef->setPrefix(translateNestedNameSpecifier(prefix, base));
 	else if (currentRef && base)
 		currentRef->setPrefix(base);
 	else if (returnExpr && base)
@@ -208,15 +213,15 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 	return returnExpr;
 }
 
-OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::TemplateArgument& templateArg,
-																						 const clang::SourceLocation& location)
+OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::TemplateArgumentLoc& templateArgLoc)
 {
+	auto templateArg = templateArgLoc.getArgument();
 	switch (templateArg.getKind())
 	{
 		case clang::TemplateArgument::ArgKind::Null:
 			return new OOModel::EmptyExpression();
 		case clang::TemplateArgument::ArgKind::Type:
-			return translateQualifiedType(templateArg.getAsType(), location);
+			return translateQualifiedType(templateArgLoc.getTypeSourceInfo()->getTypeLoc());
 		case clang::TemplateArgument::ArgKind::Declaration:
 			return new OOModel::ReferenceExpression(QString::fromStdString(templateArg.getAsDecl()->getNameAsString()));
 		case clang::TemplateArgument::ArgKind::NullPtr:
@@ -228,15 +233,15 @@ OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::
 						QString::fromStdString(templateArg.getAsTemplate().getAsTemplateDecl()->getNameAsString()));
 		case clang::TemplateArgument::ArgKind::TemplateExpansion:
 			// TODO: add support
-			log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
-								  "Unsupported TemplateArgument EXPANSION");
+			log_->writeError(className_, templateArgLoc.getTypeSourceInfo()->getTypeLoc().getLocStart(),
+								  CppImportLogger::Reason::OTHER, "Unsupported TemplateArgument EXPANSION");
 			return createErrorExpression("Unsupported TemplateArgument EXPANSION");
 		case clang::TemplateArgument::ArgKind::Expression:
 			return exprVisitor_->translateExpression(templateArg.getAsExpr());
 		case clang::TemplateArgument::ArgKind::Pack:
 			// TODO: add support
-			log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
-								  "Unsupported TemplateArgument PACK");
+			log_->writeError(className_, templateArgLoc.getTypeSourceInfo()->getTypeLoc().getLocStart(),
+								  CppImportLogger::Reason::OTHER, "Unsupported TemplateArgument PACK");
 			return createErrorExpression("Unsupported TemplateArgument PACK");
 		default:
 			throw CppImportException("Invalid Template Argument kind");
@@ -388,8 +393,8 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 		 * instead of
 		 * memberExpression = "ExampleBase" and initializerExpressions = { a, b }
 
-		if (auto memberRef = DCast<OOModel::ReferenceExpression>
-				(translateTypePtr(initializer->getBaseClass(), initializer->getSourceLocation())))
+		if (auto memberRef = DCast<OOModel::ReferenceExpression>(translateTypePtr(
+																						initializer->getTypeSourceInfo()->getTypeLoc())))
 			ooMemberInit = new OOModel::MemberInitializer(memberRef, initializerExpressions);
 		else
 			log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);*/
@@ -427,9 +432,9 @@ OOModel::Expression* CppImportUtilities::createErrorExpression(const QString& re
 	return ooError;
 }
 
-OOModel::Expression* CppImportUtilities::translateBuiltInClangType(const clang::BuiltinType* type)
+OOModel::Expression* CppImportUtilities::translateBuiltInClangType(const clang::BuiltinTypeLoc type)
 {
-	const clang::BuiltinType* builtinType = type->getAs<clang::BuiltinType>();
+	auto builtinType = type.getTypePtr()->castAs<clang::BuiltinType>();
 	switch (builtinType->getKind())
 	{
 		case clang::BuiltinType::Void:
@@ -525,114 +530,119 @@ OOModel::Expression* CppImportUtilities::translateBuiltInClangType(const clang::
 	}
 }
 
-OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* type,
-																			 const clang::SourceLocation& location)
+OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc type)
 {
 	// Note that llvm::dyn_cast is for clang types in fact as fast as static_cast
 	// We had a version of this function which was using switch case and static_cast
 	// the runtime was the same than this version
 	OOModel::Expression* translatedType = nullptr;
 	Q_ASSERT(type);
-	if (llvm::isa<clang::AutoType>(type))
+	if (type.getAs<clang::AutoTypeLoc>())
 	{
 		translatedType = new OOModel::AutoTypeExpression();
 	}
-	else if (auto typedefType = llvm::dyn_cast<clang::TypedefType>(type))
+	else if (auto typedefType = type.getAs<clang::TypedefTypeLoc>())
 	{
 		translatedType = new OOModel::ReferenceExpression(
-					QString::fromStdString(typedefType->getDecl()->getNameAsString()));
+					QString::fromStdString(typedefType.getTypedefNameDecl()->getNameAsString()));
 	}
-	else if (auto recordType = llvm::dyn_cast<clang::RecordType>(type))
+	else if (auto recordType = type.getAs<clang::RecordTypeLoc>())
 	{
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(recordType->getDecl()->getNameAsString()));
-		if (auto qualifier = recordType->getDecl()->getQualifier())
-			ooRef->setPrefix(translateNestedNameSpecifier(qualifier, location));
+				(QString::fromStdString(recordType.getDecl()->getNameAsString()));
+		if (auto qualifier = recordType.getDecl()->getQualifierLoc())
+			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 		translatedType = ooRef;
 	}
-	else if (auto pointerType = llvm::dyn_cast<clang::PointerType>(type))
+	else if (auto pointerType = type.getAs<clang::PointerTypeLoc>())
 	{
 		auto ooPtr = new OOModel::PointerTypeExpression();
-		ooPtr->setTypeExpression(translateQualifiedType(pointerType->getPointeeType(), location));
+		ooPtr->setTypeExpression(translateQualifiedType(pointerType.getNextTypeLoc()));
 		translatedType = ooPtr;
 	}
-	else if (auto refType = llvm::dyn_cast<clang::ReferenceType>(type))
+	else if (auto refType = type.getAs<clang::ReferenceTypeLoc>())
 	{
 		auto ooRef = new OOModel::ReferenceTypeExpression();
-		ooRef->setTypeExpression(translateQualifiedType(refType->getPointeeType(), location));
+		ooRef->setTypeExpression(translateQualifiedType(refType.getNextTypeLoc()));
 		translatedType = ooRef;
 	}
-	else if (auto enumType = llvm::dyn_cast<clang::EnumType>(type))
+	else if (auto enumType = type.getAs<clang::EnumTypeLoc>())
 	{
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(enumType->getDecl()->getNameAsString()));
-		if (auto qualifier = enumType->getDecl()->getQualifier())
-			ooRef->setPrefix(translateNestedNameSpecifier(qualifier, location));
+				(QString::fromStdString(enumType.getDecl()->getNameAsString()));
+		if (auto qualifier = enumType.getDecl()->getQualifierLoc())
+			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 		translatedType = ooRef;
 	}
-	else if (auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type))
+	else if (auto constArrayType = type.getAs<clang::ConstantArrayTypeLoc>())
 	{
 		auto ooArrayType = new OOModel::ArrayTypeExpression();
-		ooArrayType->setTypeExpression(translateQualifiedType(constArrayType->getElementType(), location));
-		ooArrayType->setFixedSize(new OOModel::IntegerLiteral(constArrayType->getSize().getLimitedValue()));
+		ooArrayType->setTypeExpression(translateQualifiedType(constArrayType.getElementLoc()));
+		ooArrayType->setFixedSize(new OOModel::IntegerLiteral(
+											  llvm::dyn_cast<clang::ConstantArrayType>(constArrayType.getTypePtr())
+											  ->getSize().getLimitedValue()));
 		translatedType = ooArrayType;
 	}
-	else if (auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type))
+	else if (auto incompleteArrayType = type.getAs<clang::IncompleteArrayTypeLoc>())
 	{
 		auto ooArrayType = new OOModel::ArrayTypeExpression();
-		ooArrayType->setTypeExpression(translateQualifiedType(incompleteArrayType->getElementType(), location));
+		ooArrayType->setTypeExpression(translateQualifiedType(incompleteArrayType.getElementLoc()));
 		translatedType = ooArrayType;
 	}
-	else if (auto parenType = llvm::dyn_cast<clang::ParenType>(type))
+	else if (auto parenType = type.getAs<clang::ParenTypeLoc>())
 	{
 		// TODO: this might not always be a nice solution, to just return the inner type of a parenthesized type.
-		translatedType = translateQualifiedType(parenType->getInnerType(), location);
+		translatedType = translateQualifiedType(parenType.getInnerLoc());
 	}
-	else if (auto typeDefType = llvm::dyn_cast<clang::TypedefType>(type))
+	else if (auto typeDefType = type.getAs<clang::TypedefTypeLoc>())
 	{
 		translatedType = new OOModel::ReferenceExpression
-				(QString::fromStdString(typeDefType->getDecl()->getNameAsString()));
+				(QString::fromStdString(typeDefType.getTypedefNameDecl()->getNameAsString()));
 	}
-	else if (auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type))
+	else if (auto templateParmType = type.getAs<clang::TemplateTypeParmTypeLoc>())
 	{
 		translatedType = new OOModel::ReferenceExpression(
-					QString::fromStdString(templateParmType->getDecl()->getNameAsString()));
+					QString::fromStdString(templateParmType.getDecl()->getNameAsString()));
 	}
-	else if (auto functionProtoType = llvm::dyn_cast<clang::FunctionProtoType>(type))
+	else if (auto functionProtoType = type.getAs<clang::FunctionProtoTypeLoc>())
 	{
 		// TODO: include templates. (and more?)
 		auto ooFunctionType = new OOModel::FunctionTypeExpression();
-		ooFunctionType->results()->append(translateQualifiedType(functionProtoType->getReturnType(), location));
+		ooFunctionType->results()->append(translateQualifiedType(functionProtoType.getReturnLoc()));
 
-		for (auto argIt = functionProtoType->param_type_begin(); argIt != functionProtoType->param_type_end(); ++argIt)
+		for (auto argIt = functionProtoType.getParams().begin(); argIt != functionProtoType.getParams().end(); ++argIt)
 		{
-			ooFunctionType->arguments()->append(translateQualifiedType(*argIt, location));
+			ooFunctionType->arguments()->append(translateQualifiedType((*argIt)->getTypeSourceInfo()->getTypeLoc()));
 		}
 		translatedType = ooFunctionType;
 	}
-	else if (auto elaboratedType = llvm::dyn_cast<clang::ElaboratedType>(type))
+	else if (auto elaboratedType = type.getAs<clang::ElaboratedTypeLoc>())
 	{
 		// TODO: this might also have a keyword in front (like e.g. class, typename)
-		translatedType = translateQualifiedType(elaboratedType->getNamedType(), location);
-		if (auto qualifier = elaboratedType->getQualifier())
+		translatedType = translateQualifiedType(elaboratedType.getNamedTypeLoc());
+		if (auto qualifier = elaboratedType.getQualifierLoc())
 			if (auto ooRef = DCast<OOModel::ReferenceExpression>(translatedType))
-				ooRef->setPrefix(translateNestedNameSpecifier(qualifier, location));
+				ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 	}
-	else if (auto templateSpecialization = llvm::dyn_cast<clang::TemplateSpecializationType>(type))
+	else if (auto templateSpecialization = type.getAs<clang::TemplateSpecializationTypeLoc>())
 	{
 		auto ooRef = new OOModel::ReferenceExpression();
-		ooRef->setName(QString::fromStdString(
-								templateSpecialization->getTemplateName().getAsTemplateDecl()->getNameAsString()));
-		for (auto templateArg : *templateSpecialization)
-			ooRef->typeArguments()->append(translateTemplateArgument(templateArg, location));
+		ooRef->setName(QString::fromStdString(templateSpecialization.getTypePtr()
+														  ->castAs<clang::TemplateSpecializationType>()->getTemplateName()
+														  .getAsTemplateDecl()->getNameAsString()));
+
+		for (unsigned i = 0; i < templateSpecialization.getNumArgs(); i++)
+			ooRef->typeArguments()->append(translateTemplateArgument(templateSpecialization.getArgLoc(i)));
+
 		translatedType = ooRef;
 	}
-	else if (auto dependentType = llvm::dyn_cast<clang::DependentNameType>(type))
+	else if (auto dependentTypeLoc = type.getAs<clang::DependentNameTypeLoc>())
 	{
+		auto dependentType = dependentTypeLoc.getTypePtr()->castAs<clang::DependentNameType>();
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 				(QString(dependentType->getIdentifier()->getNameStart()));
-		if (auto qualifier = dependentType->getQualifier())
-			ooRef->setPrefix(translateNestedNameSpecifier(qualifier, location));
+		if (auto qualifier = dependentTypeLoc.getQualifierLoc())
+			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 		if (dependentType->getKeyword() == clang::ETK_Typename)
 		{
 			auto ooTypeName = new OOModel::TypeNameOperator();
@@ -641,21 +651,22 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 		}
 		return ooRef;
 	}
-	else if (auto injectedClass = llvm::dyn_cast<clang::InjectedClassNameType>(type))
+	else if (auto injectedClass = type.getAs<clang::InjectedClassNameTypeLoc>())
 	{
-		translatedType = translateTypePtr(injectedClass->getInjectedTST(), location);
+		translatedType = new OOModel::ReferenceExpression(
+					QString::fromStdString(injectedClass.getDecl()->getNameAsString()));
 	}
-	else if (auto substTemplateParm = llvm::dyn_cast<clang::SubstTemplateTypeParmType>(type))
+	else if (auto substTemplateParm = type.getAs<clang::SubstTemplateTypeParmTypeLoc>())
 	{
-		translatedType = translateQualifiedType(substTemplateParm->getReplacementType(), location);
+		translatedType = translateQualifiedType(substTemplateParm.getNextTypeLoc());
 	}
-	else if (auto builtIn = llvm::dyn_cast<clang::BuiltinType>(type))
+	else if (auto builtIn = type.getAs<clang::BuiltinTypeLoc>())
 	{
 		translatedType = translateBuiltInClangType(builtIn);
 	}
 	else
 	{
-		log_->typeNotSupported(type, location);
+		log_->typeNotSupported(type, type.getLocStart());
 		translatedType = createErrorExpression("Unsupported Type");
 	}
 	return translatedType;
