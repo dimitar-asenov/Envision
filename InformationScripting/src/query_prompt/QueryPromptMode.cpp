@@ -31,6 +31,7 @@
 #include "../queries/Query.h"
 #include "../query_framework/QueryExecutor.h"
 #include "../query_framework/QueryParsingException.h"
+#include "../query_framework/QueryResultVisualizer.h"
 
 #include "VisualizationBase/src/items/Static.h"
 
@@ -40,6 +41,7 @@ namespace InformationScripting {
 
 Visualization::Item* QueryPromptMode::createInputItem(const QString&)
 {
+	QueryResultVisualizer::cleanScene();
 	inputItem_ = new QueryPromptInput(nullptr);
 	return inputItem_;
 }
