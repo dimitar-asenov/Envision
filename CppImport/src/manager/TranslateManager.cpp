@@ -309,7 +309,8 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	if (!llvm::isa<clang::CXXConstructorDecl>(mDecl) && !llvm::isa<clang::CXXDestructorDecl>(mDecl))
 	{
 		// process result type
-		OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getReturnType(), mDecl->getLocStart());
+		auto functionTypeLoc = mDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
+		OOModel::Expression* restype = utils_->translateQualifiedType(functionTypeLoc.getReturnLoc());
 		if (restype)
 		{
 			auto methodResult = new OOModel::FormalResult();
@@ -323,7 +324,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	{
 		auto arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc());
 		if (type) arg->setTypeExpression(type);
 		method->arguments()->append(arg);
 	}
@@ -346,9 +347,11 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	// add a new method
 	auto ooFunction= new OOModel::Method();
 	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
+
+	auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
+
 	// process result type
-	OOModel::Expression* restype = utils_->translateQualifiedType(functionDecl->getReturnType(),
-																					  functionDecl->getLocStart());
+	OOModel::Expression* restype = utils_->translateQualifiedType(functionTypeLoc.getReturnLoc());
 	if (restype)
 	{
 		auto methodResult = new OOModel::FormalResult();
@@ -361,7 +364,7 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	{
 		auto arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc());
 		if (type) arg->setTypeExpression(type);
 		ooFunction->arguments()->append(arg);
 	}
