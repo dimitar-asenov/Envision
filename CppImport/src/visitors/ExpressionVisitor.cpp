@@ -30,8 +30,8 @@
 
 namespace CppImport {
 
-ExpressionVisitor::ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log)
-: baseVisitor_{visitor}, log_{log}
+ExpressionVisitor::ExpressionVisitor(ClangAstVisitor* visitor, ClangHelpers& clang, CppImportLogger* log)
+ : baseVisitor_{visitor}, clang_{clang}, log_{log}
 {}
 
 void ExpressionVisitor::setUtilities(CppImportUtilities* utils)
@@ -44,7 +44,7 @@ OOModel::Expression* ExpressionVisitor::translateExpression(clang::Stmt* s)
 {
 	TraverseStmt(s);
 	if (!ooExprStack_.empty()) return ooExprStack_.pop();
-	return utils_->createErrorExpression("Could not convert last expression");
+	return utils_->createErrorExpression("Could not convert last expression", s->getSourceRange());
 }
 
 bool ExpressionVisitor::VisitExpr(clang::Expr* e)
@@ -167,14 +167,14 @@ bool ExpressionVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* call
 
 bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 {
-	auto ooMethodCall = new OOModel::MethodCallExpression();
+	auto ooMethodCall = baseVisitor_->createNode<OOModel::MethodCallExpression>(callExpr->getSourceRange());
 	TraverseStmt(callExpr->getCallee());
 	if (!ooExprStack_.empty())
 		ooMethodCall->setCallee(ooExprStack_.pop());
 	else
 	{
 		log_->writeError(className_, callExpr->getCallee(), CppImportLogger::Reason::NOT_SUPPORTED);
-		ooMethodCall->setCallee(utils_->createErrorExpression("Could not convert calleee"));
+		ooMethodCall->setCallee(utils_->createErrorExpression("Could not convert calleee", callExpr->getSourceRange()));
 	}
 
 	// visit arguments
@@ -214,14 +214,15 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 	switch (utils_->getOverloadKind(operatorKind, numArguments))
 	{
 		case CppImportUtilities::OverloadKind::Unsupported:
-			ooExprStack_.push(utils_->createErrorExpression("Unsupported Overload Expression"));
+			ooExprStack_.push(utils_->createErrorExpression("Unsupported Overload Expression",
+																			callExpr->getSourceRange()));
 			break;
 		case CppImportUtilities::OverloadKind::Unary:
 		{
 			if (2 == numArguments)
 				// remove dummy expression
 				ooExprStack_.pop();
-			auto ooUnary = new OOModel::UnaryOperation();
+			auto ooUnary = baseVisitor_->createNode<OOModel::UnaryOperation>(callExpr->getSourceRange());
 			ooUnary->setOp(utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if (!ooExprStack_.empty())
 				ooUnary->setOperand(ooExprStack_.pop());
@@ -231,7 +232,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::Binary:
 		{
-			auto ooBinary = new OOModel::BinaryOperation();
+			auto ooBinary = baseVisitor_->createNode<OOModel::BinaryOperation>(callExpr->getSourceRange());
 			ooBinary->setOp(utils_->translateBinaryOverloadOp(operatorKind));
 			if (!ooExprStack_.empty())
 				ooBinary->setRight(ooExprStack_.pop());
@@ -243,7 +244,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::Assign:
 		{
-			auto ooAssign = new OOModel::AssignmentExpression();
+			auto ooAssign = baseVisitor_->createNode<OOModel::AssignmentExpression>(callExpr->getSourceRange());
 			ooAssign->setOp(utils_->translateAssignOverloadOp(operatorKind));
 			if (!ooExprStack_.empty())
 				ooAssign->setRight(ooExprStack_.pop());
@@ -255,7 +256,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::MethodCall:
 		{
-			auto ooCall = new OOModel::MethodCallExpression();
+			auto ooCall = baseVisitor_->createNode<OOModel::MethodCallExpression>(callExpr->getSourceRange());
 			for (unsigned i = 0; i < numArguments - 1; i++)
 			{
 				if (!ooExprStack_.empty())
@@ -270,22 +271,23 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			}
 			// this should not happen
 			baseVisitor_->deleteNode(ooCall);
-			log_->writeError(className_, callExpr, CppImportLogger::Reason::OTHER, "No method callee found (overload)");
-			ooExprStack_.push(utils_->createErrorExpression("METHOD CALL NO NAME FOUND"));
+			ooExprStack_.push(utils_->createErrorExpression("METHOD CALL NO NAME FOUND", callExpr->getSourceRange()));
 			break;
 		}
 		case CppImportUtilities::OverloadKind::ReferenceExpr:
 		{
 			if (!ooExprStack_.empty())
 					break;
-			ooExprStack_.push(utils_->createErrorExpression("Could not resolve Reference/Arrow"));
+			ooExprStack_.push(utils_->createErrorExpression("Could not resolve Reference/Arrow",
+																			callExpr->getSourceRange()));
 			break;
 		}
 		case CppImportUtilities::OverloadKind::Comma:
-			ooExprStack_.push(utils_->createErrorExpression("Unsupported COMMA OVERLOAD"));
+			ooExprStack_.push(utils_->createErrorExpression("Unsupported COMMA OVERLOAD", callExpr->getSourceRange()));
 			break;
 		default:
-			ooExprStack_.push(utils_->createErrorExpression("Unsupported Overload Expression"));
+			ooExprStack_.push(utils_->createErrorExpression("Unsupported Overload Expression",
+																			callExpr->getSourceRange()));
 			break;
 	}
 
@@ -294,7 +296,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
-	auto ooNewExpr = new OOModel::NewExpression();
+	auto ooNewExpr = baseVisitor_->createNode<OOModel::NewExpression>(newExpr->getSourceRange());
 	TraverseStmt(newExpr->getInitializer());
 	if (!ooExprStack_.empty())
 		ooNewExpr->setNewType(ooExprStack_.pop());
@@ -312,7 +314,8 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 
 bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 {
-	auto ooDeleteExpr = new OOModel::DeleteExpression(deleteExpr->isArrayForm());
+	auto ooDeleteExpr = baseVisitor_->createNode<OOModel::DeleteExpression>(deleteExpr->getSourceRange());
+	ooDeleteExpr->setIsArray(deleteExpr->isArrayForm());
 	TraverseStmt(deleteExpr->getArgument());
 	if (!ooExprStack_.empty())
 		ooDeleteExpr->setExpr(ooExprStack_.pop());
@@ -323,60 +326,53 @@ bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 
 bool ExpressionVisitor::TraverseIntegerLiteral(clang::IntegerLiteral* intLit)
 {
-	auto ooIntegerLiteral = new OOModel::IntegerLiteral(intLit->getValue().getLimitedValue());
-
+	auto ooIntegerLiteral = baseVisitor_->createNode<OOModel::IntegerLiteral>(intLit->getSourceRange());
+	ooIntegerLiteral->setValue(QString::number(intLit->getValue().getLimitedValue()));
 	baseVisitor_->mapAst(intLit, ooIntegerLiteral);
-
 	ooExprStack_.push(ooIntegerLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr)
 {
-	auto ooBooleanLiteral = new OOModel::BooleanLiteral(boolLitExpr->getValue());
-
+	auto ooBooleanLiteral = baseVisitor_->createNode<OOModel::BooleanLiteral>(boolLitExpr->getSourceRange());
+	ooBooleanLiteral->setValue(boolLitExpr->getValue());
 	baseVisitor_->mapAst(boolLitExpr, ooBooleanLiteral);
-
 	ooExprStack_.push(ooBooleanLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr* nullLitExpr)
 {
-	auto ooNullLiteral = new OOModel::NullLiteral();
-
+	auto ooNullLiteral = baseVisitor_->createNode<OOModel::NullLiteral>(nullLitExpr->getSourceRange());
 	baseVisitor_->mapAst(nullLitExpr, ooNullLiteral);
-
 	ooExprStack_.push(ooNullLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseFloatingLiteral(clang::FloatingLiteral* floatLiteral)
 {
-	auto ooFloatLiteral = new OOModel::FloatLiteral(floatLiteral->getValueAsApproximateDouble());
-
+	auto ooFloatLiteral = baseVisitor_->createNode<OOModel::FloatLiteral>(floatLiteral->getSourceRange());
+	ooFloatLiteral->setValue(QString::number(floatLiteral->getValueAsApproximateDouble()));
 	baseVisitor_->mapAst(floatLiteral, ooFloatLiteral);
-
 	ooExprStack_.push(ooFloatLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLiteral)
 {
-	auto ooCharLiteral = new OOModel::CharacterLiteral(QChar(charLiteral->getValue()));
-
+	auto ooCharLiteral = baseVisitor_->createNode<OOModel::CharacterLiteral>(charLiteral->getSourceRange());
+	ooCharLiteral->setValue(QChar(charLiteral->getValue()));
 	baseVisitor_->mapAst(charLiteral, ooCharLiteral);
-
 	ooExprStack_.push(ooCharLiteral);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLiteral)
 {
-	auto ooStringLiteral = new OOModel::StringLiteral(QString::fromStdString(stringLiteral->getBytes().str()));
-
+	auto ooStringLiteral = baseVisitor_->createNode<OOModel::StringLiteral>(stringLiteral->getSourceRange());
+	ooStringLiteral->setValue(QString::fromStdString(stringLiteral->getBytes().str()));
 	baseVisitor_->mapAst(stringLiteral, ooStringLiteral);
-
 	ooExprStack_.push(ooStringLiteral);
 	return true;
 }
@@ -389,8 +385,9 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		auto ooMethodCall = new OOModel::MethodCallExpression(QString::fromStdString(constructExpr->getConstructor()
-																											  ->getNameAsString()));
+		auto ooMethodCall = baseVisitor_->createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
+		ooMethodCall->setCallee(new OOModel::ReferenceExpression(
+													  clang_.unexpandedSpelling(constructExpr->getLocation())));
 		baseVisitor_->mapAst(constructExpr->getLocation(), ooMethodCall->callee());
 
 		for (auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
@@ -423,10 +420,10 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 
 bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct)
 {
-	auto ooMethodCall = new OOModel::MethodCallExpression();
+	auto ooMethodCall = baseVisitor_->createNode<OOModel::MethodCallExpression>(unresolvedConstruct->getSourceRange());
 	ooMethodCall->setCallee(utils_->translateQualifiedType(unresolvedConstruct->getTypeSourceInfo()->getTypeLoc()));
 	// visit arguments
-	for (auto argIt = unresolvedConstruct->arg_begin(); argIt!=unresolvedConstruct->arg_end(); ++argIt)
+	for (auto argIt = unresolvedConstruct->arg_begin(); argIt != unresolvedConstruct->arg_end(); ++argIt)
 	{
 		if (llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
 			// this is a default arg and is not written in the source code
@@ -443,7 +440,7 @@ bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedC
 
 bool ExpressionVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 {
-	auto ooParenExpr = new OOModel::UnaryOperation();
+	auto ooParenExpr = baseVisitor_->createNode<OOModel::UnaryOperation>(parenthesizedExpr->getSourceRange());
 	ooParenExpr->setOp(OOModel::UnaryOperation::PARENTHESIS);
 	TraverseStmt(parenthesizedExpr->getSubExpr());
 	if (!ooExprStack_.empty())
@@ -456,7 +453,7 @@ bool ExpressionVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 
 bool ExpressionVisitor::TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr)
 {
-		auto ooArrayAccess = new OOModel::BinaryOperation();
+		auto ooArrayAccess = baseVisitor_->createNode<OOModel::BinaryOperation>(arraySubsrciptExpr->getSourceRange());
 		ooArrayAccess->setOp(OOModel::BinaryOperation::ARRAY_INDEX);
 		// visit the base the base is A in the expr A[10]
 		TraverseStmt(arraySubsrciptExpr->getBase());
@@ -474,14 +471,14 @@ bool ExpressionVisitor::TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* ar
 bool ExpressionVisitor::TraverseCXXThisExpr(clang::CXXThisExpr* thisExpr)
 {
 	if (!thisExpr->isImplicit())
-			ooExprStack_.push(new OOModel::ThisExpression());
+			ooExprStack_.push(baseVisitor_->createNode<OOModel::ThisExpression>(thisExpr->getSourceRange()));
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 {
-	auto ooTypeTrait = new OOModel::TypeTraitExpression
-			(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
+	auto ooTypeTrait = baseVisitor_->createNode<OOModel::TypeTraitExpression>(typeIdExpr->getSourceRange());
+	ooTypeTrait->setTypeTraitKind(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
 	if (typeIdExpr->isTypeOperand())
 		ooTypeTrait->setOperand(utils_->translateQualifiedType(typeIdExpr->getTypeOperandSourceInfo()->getTypeLoc()));
 	else
@@ -515,19 +512,18 @@ bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr
 bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
 	// TODO: handle captions
-	auto ooLambda = new OOModel::LambdaExpression();
+	auto ooLambda = baseVisitor_->createNode<OOModel::LambdaExpression>(lambdaExpr->getSourceRange());
 	// visit body
 	baseVisitor_->pushOOStack(ooLambda->body());
 	baseVisitor_->TraverseStmt(lambdaExpr->getBody());
 	baseVisitor_->popOOStack();
 	// visit arguments
-	clang::CXXMethodDecl* callOperator = lambdaExpr->getCallOperator();
+	auto callOperator = lambdaExpr->getCallOperator();
 	for (auto it = callOperator->param_begin(); it != callOperator->param_end(); ++it)
 	{
-		auto arg = new OOModel::FormalArgument();
-		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc());
-		if (type) arg->setTypeExpression(type);
+		auto arg = baseVisitor_->createNamedNode<OOModel::FormalArgument>(*it);
+		if (auto type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc()))
+			arg->setTypeExpression(type);
 		ooLambda->arguments()->append(arg);
 	}
 
@@ -537,7 +533,8 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 
 bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
 {
-	auto ooConditionalExpr = new OOModel::ConditionalExpression();
+	auto ooConditionalExpr = baseVisitor_->createNode<OOModel::ConditionalExpression>(
+																											conditionalOperator->getSourceRange());
 	// traverse condition
 	TraverseStmt(conditionalOperator->getCond());
 	if (!ooExprStack_.empty())
@@ -557,7 +554,7 @@ bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* 
 
 bool ExpressionVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
 {
-	auto ooThrow = new OOModel::ThrowExpression();
+	auto ooThrow = baseVisitor_->createNode<OOModel::ThrowExpression>(throwExpr->getSourceRange());
 	// visit throw expression
 	if (auto subExpr = throwExpr->getSubExpr())
 	{
@@ -578,7 +575,7 @@ bool ExpressionVisitor::TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObject
 
 bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 {
-	auto ooArrayInit = new OOModel::ArrayInitializer();
+	auto ooArrayInit = baseVisitor_->createNode<OOModel::ArrayInitializer>(initListExpr->getSourceRange());
 	for (auto initExpr : *initListExpr)
 	{
 		TraverseStmt(initExpr);
@@ -590,31 +587,33 @@ bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 
 bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeTraitExpr* typeTrait)
 {
+	OOModel::TypeTraitExpression::TypeTraitKind typeTraitKind;
+	if (clang::UETT_SizeOf == typeTrait->getKind())
+		typeTraitKind = OOModel::TypeTraitExpression::TypeTraitKind::SizeOf;
+	else if (clang::UETT_AlignOf == typeTrait->getKind())
+		typeTraitKind = OOModel::TypeTraitExpression::TypeTraitKind::AlignOf;
+	else
+	{
+		log_->writeError(className_, typeTrait, CppImportLogger::Reason::NOT_SUPPORTED);
+		return true;
+	}
+
 	OOModel::Expression* argument = nullptr;
 	if (typeTrait->isArgumentType())
 		argument = utils_->translateQualifiedType(typeTrait->getArgumentTypeInfo()->getTypeLoc());
 	else
 	{
 		TraverseStmt(typeTrait->getArgumentExpr());
-		if (!ooExprStack_.empty()) argument = ooExprStack_.pop();
+		if (!ooExprStack_.empty())
+			argument = ooExprStack_.pop();
 		else
-		{
-			log_->writeError(className_, typeTrait->getArgumentExpr(), CppImportLogger::Reason::NOT_SUPPORTED);
-			argument = utils_->createErrorExpression("Unsupported argument");
-		}
+			argument = utils_->createErrorExpression("Unsupported argument", typeTrait->getSourceRange());
 	}
-	auto kind = typeTrait->getKind();
-	if (clang::UETT_SizeOf == kind)
-		ooExprStack_.push(new OOModel::TypeTraitExpression
-								(OOModel::TypeTraitExpression::TypeTraitKind::SizeOf, argument));
-	else if (clang::UETT_AlignOf == kind)
-		ooExprStack_.push(new OOModel::TypeTraitExpression
-								(OOModel::TypeTraitExpression::TypeTraitKind::AlignOf, argument));
-	else
-	{
-		log_->writeError(className_, typeTrait, CppImportLogger::Reason::NOT_SUPPORTED);
-		baseVisitor_->deleteNode(argument);
-	}
+	Q_ASSERT(argument);
+	auto typeTraitExpression = baseVisitor_->createNode<OOModel::TypeTraitExpression>(typeTrait->getSourceRange());
+	typeTraitExpression->setOperand(argument);
+	typeTraitExpression->setTypeTraitKind(typeTraitKind);
+	ooExprStack_.push(typeTraitExpression);
 	return true;
 }
 
@@ -659,9 +658,20 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 	OOModel::Expression* ooBinaryOp = nullptr;
 
 	if (opcode == clang::BO_Comma)
-		ooBinaryOp = new OOModel::CommaExpression(ooLeft, ooRight);
+	{
+		auto commaExpression = baseVisitor_->createNode<OOModel::CommaExpression>(binaryOperator->getSourceRange());
+		commaExpression->setLeft(ooLeft);
+		commaExpression->setRight(ooRight);
+		ooBinaryOp = commaExpression;
+	}
 	else
-		ooBinaryOp = new OOModel::BinaryOperation(utils_->translateBinaryOp(opcode), ooLeft, ooRight);
+	{
+		auto binaryOperation = baseVisitor_->createNode<OOModel::BinaryOperation>(binaryOperator->getSourceRange());
+		binaryOperation->setOp(utils_->translateBinaryOp(opcode));
+		binaryOperation->setLeft(ooLeft);
+		binaryOperation->setRight(ooRight);
+		ooBinaryOp = binaryOperation;
+	}
 
 	baseVisitor_->mapAst(binaryOperator, ooBinaryOp);
 
@@ -671,8 +681,8 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 
 bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 {
-	auto ooBinOp = new OOModel::AssignmentExpression
-			(utils_->translateAssignOp(binaryOperator->getOpcode()));
+	auto ooBinOp = baseVisitor_->createNode<OOModel::AssignmentExpression>(binaryOperator->getSourceRange());
+	ooBinOp->setOp(utils_->translateAssignOp(binaryOperator->getOpcode()));
 	// left
 	TraverseStmt(binaryOperator->getLHS());
 	if (!ooExprStack_.empty()) ooBinOp->setLeft(ooExprStack_.pop());
@@ -698,7 +708,8 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 		log_->unaryOpNotSupported(opcode);
 		return TraverseStmt(unaryOperator->getSubExpr());
 	}
-	auto ooUnaryOp = new OOModel::UnaryOperation(utils_->translateUnaryOp(opcode));
+	auto ooUnaryOp = baseVisitor_->createNode<OOModel::UnaryOperation>(unaryOperator->getSourceRange());
+	ooUnaryOp->setOp(utils_->translateUnaryOp(opcode));
 	// subexpr
 	TraverseStmt(unaryOperator->getSubExpr());
 	if (!ooExprStack_.empty()) ooUnaryOp->setOperand(ooExprStack_.pop());
@@ -711,7 +722,8 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 
 bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind)
 {
-	auto ooCast = new OOModel::CastExpression(kind);
+	auto ooCast = baseVisitor_->createNode<OOModel::CastExpression>(castExpr->getSourceRange());
+	ooCast->setCastKind(kind);
 	// setType to cast to
 	ooCast->setType(utils_->translateQualifiedType(castExpr->getTypeInfoAsWritten()->getTypeLoc()));
 	// visit subexpr

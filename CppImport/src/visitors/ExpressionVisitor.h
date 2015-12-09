@@ -28,6 +28,7 @@
 
 #include "../cppimport_api.h"
 #include "../CppImportLogger.h"
+#include "../macro/ClangHelpers.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
@@ -43,7 +44,7 @@ class CppImportUtilities;
 class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 {
 	public:
-		ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log);
+		ExpressionVisitor(ClangAstVisitor* visitor, ClangHelpers& clang, CppImportLogger* log);
 		/**
 		 * This function should be called directly after instantiating this visitor.
 		 * The two classes have a dependency on each other.
@@ -166,6 +167,7 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		using Base = clang::RecursiveASTVisitor<ExpressionVisitor>;
 
 		QStack<OOModel::Expression*> ooExprStack_;
+		ClangHelpers& clang_;
 
 		CppImportLogger* log_{};
 		CppImportUtilities* utils_{};
