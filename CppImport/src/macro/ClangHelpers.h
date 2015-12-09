@@ -37,14 +37,11 @@ namespace CppImport {
 class CPPIMPORT_API ClangHelpers
 {
 	public:
-		void setSourceManager(const clang::SourceManager* sourceManager);
-		void setPreprocessor(const clang::Preprocessor* preprocessor);
-
 		const clang::SourceManager* sourceManager() const;
+		void setSourceManager(const clang::SourceManager* sourceManager);
 
-		QString spelling(clang::SourceRange range) const;
-		QString spelling(clang::SourceLocation location) const;
-		QString spelling(clang::SourceLocation start, clang::SourceLocation end) const;
+		const clang::Preprocessor* preprocessor() const;
+		void setPreprocessor(const clang::Preprocessor* preprocessor);
 
 		clang::SourceLocation immediateMacroLocation(clang::SourceLocation location) const;
 		void immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>& result) const;
@@ -53,24 +50,28 @@ class CPPIMPORT_API ClangHelpers
 
 		bool isMacroRange(clang::SourceRange range) const;
 
+		QString unexpandedSpelling(clang::SourceRange range) const;
+		QString unexpandedSpelling(clang::SourceLocation start, clang::SourceLocation end) const;
+
 	private:
-		const clang::Preprocessor* preprocessor_{};
 		const clang::SourceManager* sourceManager_{};
+		const clang::Preprocessor* preprocessor_{};
+
+		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
+		QString spelling(clang::SourceRange sourceRange) const;
 };
 
+inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }
 inline void ClangHelpers::setSourceManager(const clang::SourceManager* sourceManager)
 { sourceManager_ = sourceManager; }
-
-inline void ClangHelpers::setPreprocessor(const clang::Preprocessor* preprocessor) { preprocessor_ = preprocessor; }
-
-inline QString ClangHelpers::spelling(clang::SourceLocation loc) const { return spelling(loc, loc); }
+inline const clang::Preprocessor* ClangHelpers::preprocessor() const { return preprocessor_; }
+inline void ClangHelpers::setPreprocessor(const clang::Preprocessor* preprocessor)
+{ preprocessor_ = preprocessor; }
 
 inline bool ClangHelpers::isMacroRange(clang::SourceRange range) const
 { return range.getBegin().isMacroID() && range.getEnd().isMacroID(); }
 
-inline QString ClangHelpers::spelling(clang::SourceRange range) const
-{ return spelling(range.getBegin(), range.getEnd()); }
-
-inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }
+inline QString ClangHelpers::unexpandedSpelling(clang::SourceLocation start, clang::SourceLocation end) const
+{ return unexpandedSpelling(clang::SourceRange(start, end)); }
 
 }
