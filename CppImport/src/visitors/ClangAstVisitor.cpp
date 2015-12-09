@@ -163,7 +163,11 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		if (auto decl = DCast<OOModel::Declaration>(ooStack_.top()))
 			decl->subDeclarations()->append(ooExplicitTemplateInst);
 		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(ooExplicitTemplateInst));
+		{
+			auto declarationStatement = createNode<OOModel::DeclarationStatement>(specializationDecl->getSourceRange());
+			declarationStatement->setDeclaration(ooExplicitTemplateInst);
+			itemList->append(declarationStatement);
+		}
 		else
 			log_->writeError(className_, specializationDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		return true;
@@ -174,15 +178,15 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 	{
 		TraverseClass(specializationDecl, ooClass);
 
-		auto originalParams = specializationDecl->getSpecializedTemplate()->getTemplateParameters();
 		auto typeLoc = specializationDecl->getTypeAsWritten()->getTypeLoc()
 							.castAs<clang::TemplateSpecializationTypeLoc>();
 		// visit type arguments if any
 		for (unsigned i = 0; i < typeLoc.getNumArgs(); i++)
 		{
-			auto typeArg = new OOModel::FormalTypeArgument();
-			typeArg->setSpecializationExpression(utils_->translateTemplateArgument(typeLoc.getArgLoc(i)));
-			typeArg->setName(QString::fromStdString(originalParams->getParam(i)->getNameAsString()));
+			auto argLoc = typeLoc.getArgLoc(i);
+			auto typeArg = createNode<OOModel::FormalTypeArgument>(argLoc.getSourceRange());
+			typeArg->setSpecializationExpression(utils_->translateTemplateArgument(argLoc));
+			typeArg->setName(clang_.unexpandedSpelling(argLoc.getLocation()));
 			ooClass->typeArguments()->append(typeArg);
 		}
 	}
@@ -234,7 +238,9 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			else if (auto statements = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			{
 				// This happens in statement lists
-				statements->append(new OOModel::DeclarationStatement(ooFunction));
+				auto declarationStatement = createNode<OOModel::DeclarationStatement>(functionDecl->getSourceRange());
+				declarationStatement->setDeclaration(ooFunction);
+				statements->append(declarationStatement);
 			}
 			else
 				log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -272,8 +278,6 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 	OOModel::VariableDeclaration* ooVarDecl = nullptr;
 	OOModel::VariableDeclarationExpression* ooVarDeclExpr = nullptr;
-	QString varName = QString::fromStdString(varDecl->getNameAsString());
-
 	bool wasDeclared = false;
 	if (varDecl->isStaticDataMember())
 	{
@@ -287,30 +291,32 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	{
 		if (!inBody_)
 		{
-			ooVarDecl = new OOModel::VariableDeclaration(varName);
-			ooVarDeclExpr = new OOModel::VariableDeclarationExpression(ooVarDecl);
+			ooVarDecl = createNamedNode<OOModel::VariableDeclaration>(varDecl);
+			ooVarDeclExpr = createNode<OOModel::VariableDeclarationExpression>(varDecl->getSourceRange());
+			ooVarDeclExpr->setDecl(ooVarDecl);
 			ooExprStack_.push(ooVarDeclExpr);
 		}
 		else if (auto project = DCast<OOModel::Project>(ooStack_.top()))
 		{
-			ooVarDecl = new OOModel::Field(varName);
+			ooVarDecl = createNamedNode<OOModel::Field>(varDecl);
 			project->fields()->append(ooVarDecl);
 		}
 		else if (auto module = DCast<OOModel::Module>(ooStack_.top()))
 		{
-			ooVarDecl = new OOModel::Field(varName);
+			ooVarDecl = createNamedNode<OOModel::Field>(varDecl);
 			module->fields()->append(ooVarDecl);
 		}
 		else if (auto ooClass = DCast<OOModel::Class>(ooStack_.top()))
 		{
-			ooVarDecl = new OOModel::Field(varName);
+			ooVarDecl = createNamedNode<OOModel::Field>(varDecl);
 			ooClass->fields()->append(ooVarDecl);
 		}
 		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		{
-			ooVarDecl = new OOModel::VariableDeclaration(varName);
-			// TODO: remove variabledeclaration expression as soon we have a DeclarationStatement
-			itemList->append(new OOModel::ExpressionStatement(new OOModel::VariableDeclarationExpression(ooVarDecl)));
+			ooVarDecl = createNamedNode<OOModel::Field>(varDecl);
+			auto declarationStatement = createNode<OOModel::DeclarationStatement>(varDecl->getSourceRange());
+			declarationStatement->setDeclaration(ooVarDecl);
+			itemList->append(declarationStatement);
 		}
 		else
 		{
@@ -380,8 +386,8 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	if (!shouldImport(enumDecl->getLocation()))
 		return true;
 
-	auto ooEnumClass = new OOModel::Class(QString::fromStdString(enumDecl->getNameAsString()),
-													  OOModel::Class::ConstructKind::Enum);
+	auto ooEnumClass = createNamedNode<OOModel::Class>(enumDecl);
+	ooEnumClass->setConstructKind(OOModel::Class::ConstructKind::Enum);
 
 	// insert in tree
 	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
@@ -391,27 +397,30 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooEnumClass);
 	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-		itemList->append(new OOModel::DeclarationStatement(ooEnumClass));
+	{
+		auto declarationStatement = createNode<OOModel::DeclarationStatement>(enumDecl->getSourceRange());
+		declarationStatement->setDeclaration(ooEnumClass);
+		itemList->append(declarationStatement);
+	}
 	else
 	{
 		log_->writeWarning(className_, enumDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		// no need to further process this enum
 		return true;
 	}
-	clang::EnumDecl::enumerator_iterator it = enumDecl->enumerator_begin();
+
 	bool inBody = inBody_;
 	inBody_ = false;
-	for (;it!=enumDecl->enumerator_end();++it)
+	for (auto it = enumDecl->enumerator_begin(); it != enumDecl->enumerator_end(); ++it)
 	{
+		auto enumerator = createNamedNode<OOModel::Enumerator>(*it);
 		// check if there is an initializing expression if so visit it first and then add it to the enum
 		if (auto e = it->getInitExpr())
 		{
 			TraverseStmt(e);
-			ooEnumClass->enumerators()->append(new OOModel::Enumerator
-														  (QString::fromStdString(it->getNameAsString()), ooExprStack_.pop()));
+			enumerator->setValue(ooExprStack_.pop());
 		}
-		else
-			ooEnumClass->enumerators()->append(new OOModel::Enumerator(QString::fromStdString(it->getNameAsString())));
+		ooEnumClass->enumerators()->append(enumerator);
 	}
 	inBody_ = inBody;
 	mapAst(enumDecl, ooEnumClass);
@@ -429,7 +438,7 @@ bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefD
 		ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
 		ooTypeAlias->modifiers()->set(utils_->translateAccessSpecifier(typedefDecl->getAccess()));
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+			itemList->append(createDeclarationStatement(ooTypeAlias, typedefDecl->getSourceRange()));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
 			declaration->subDeclarations()->append(ooTypeAlias);
 		else
@@ -453,7 +462,7 @@ bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl
 			ooTypeAlias->typeArguments()->append(templArgVisitor_->translateTemplateArg(templateParameter));
 		// insert in tree
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+			itemList->append(createDeclarationStatement(ooTypeAlias, typeAliasTemplate->getSourceRange()));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
 			declaration->subDeclarations()->append(ooTypeAlias);
 		else
@@ -475,7 +484,7 @@ bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* name
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(namespaceAlias->getQualifierLoc()));
 		ooTypeAlias->setTypeExpression(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+			itemList->append(createDeclarationStatement(ooTypeAlias, namespaceAlias->getSourceRange()));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
 			declaration->subDeclarations()->append(ooTypeAlias);
 		else
@@ -498,7 +507,7 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+			itemList->append(createDeclarationStatement(ooNameImport, usingDecl->getSourceRange()));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
 			declaration->subDeclarations()->append(ooNameImport);
 		else
@@ -521,7 +530,7 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+			itemList->append(createDeclarationStatement(ooNameImport, usingDirectiveDecl->getSourceRange()));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
 			declaration->subDeclarations()->append(ooNameImport);
 		else
@@ -544,7 +553,7 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+			itemList->append(createDeclarationStatement(ooNameImport, unresolvedUsing->getSourceRange()));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
 			declaration->subDeclarations()->append(ooNameImport);
 		else
@@ -566,8 +575,11 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 		if (!inBody_)
 			ooExprStack_.push(expr);
 		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(new OOModel::ExpressionStatement(expr));
-
+		{
+			auto expressionStatement = createNode<OOModel::ExpressionStatement>(S->getSourceRange());
+			expressionStatement->setExpression(expr);
+			itemList->append(expressionStatement);
+		}
 		return true;
 	}
 
@@ -588,7 +600,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooIfStmt = new OOModel::IfStatement();
+		auto ooIfStmt = createNode<OOModel::IfStatement>(ifStmt->getSourceRange());
 		// append the if stmt to current stmt list
 		itemList->append(ooIfStmt);
 		// condition
@@ -620,7 +632,7 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooLoop = new OOModel::LoopStatement();
+		auto ooLoop = createNode<OOModel::LoopStatement>(whileStmt->getSourceRange());
 		// append the loop to current stmt list
 		itemList->append(ooLoop);
 		// condition
@@ -648,7 +660,8 @@ bool ClangAstVisitor::TraverseDoStmt(clang::DoStmt* doStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooLoop = new OOModel::LoopStatement(OOModel::LoopStatement::LoopKind::PostCheck);
+		auto ooLoop = createNode<OOModel::LoopStatement>(doStmt->getSourceRange());
+		ooLoop->setLoopKind(OOModel::LoopStatement::LoopKind::PostCheck);
 		// append the loop to current stmt list
 		itemList->append(ooLoop);
 		// condition
@@ -673,7 +686,7 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooLoop = new OOModel::LoopStatement();
+		auto ooLoop = createNode<OOModel::LoopStatement>(forStmt->getSourceRange());
 		itemList->append(ooLoop);
 		bool inBody = inBody_;
 		inBody_ = false;
@@ -706,8 +719,8 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooLoop = new OOModel::ForEachStatement();
-		const clang::VarDecl* loopVar = forRangeStmt->getLoopVariable();
+		auto ooLoop = createNode<OOModel::ForEachStatement>(forRangeStmt->getSourceRange());
+		auto loopVar = forRangeStmt->getLoopVariable();
 		itemList->append(ooLoop);
 		ooLoop->setVarName(QString::fromStdString(loopVar->getNameAsString()));
 		ooLoop->setVarType(utils_->translateQualifiedType(loopVar->getTypeSourceInfo()->getTypeLoc()));
@@ -733,7 +746,7 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooReturn = new OOModel::ReturnStatement();
+		auto ooReturn = createNode<OOModel::ReturnStatement>(returnStmt->getSourceRange());
 		itemList->append(ooReturn);
 		// return expression
 		bool inBody = inBody_;
@@ -761,7 +774,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 	}
 	if (!declStmt->isSingleDecl())
 	{
-		auto ooComma = new OOModel::CommaExpression();
+		auto ooComma = createNode<OOModel::CommaExpression>(declStmt->getSourceRange());
 		bool inBody = inBody_;
 		inBody_ = false;
 		QList<OOModel::Expression*> exprList;
@@ -780,7 +793,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 			if ((i+2) < size)
 			{
 				currentCommaExpr->setLeft(exprList.at(i));
-				auto next = new OOModel::CommaExpression();
+				auto next = createNode<OOModel::CommaExpression>(declStmt->getSourceRange());
 				currentCommaExpr->setRight(next);
 				currentCommaExpr = next;
 			}
@@ -803,7 +816,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooTry = new OOModel::TryCatchFinallyStatement();
+		auto ooTry = createNode<OOModel::TryCatchFinallyStatement>(tryStmt->getSourceRange());
 		itemList->append(ooTry);
 		bool inBody = inBody_;
 		inBody_ = true;
@@ -828,7 +841,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 
 bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 {
-	auto ooCatch = new OOModel::CatchClause();
+	auto ooCatch = createNode<OOModel::CatchClause>(catchStmt->getSourceRange());
 	// save inBody var
 	bool inBody = inBody_;
 	inBody_ = false;
@@ -855,7 +868,7 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooSwitchStmt = new OOModel::SwitchStatement();
+		auto ooSwitchStmt = createNode<OOModel::SwitchStatement>(switchStmt->getSourceRange());
 		itemList->append(ooSwitchStmt);
 		// save inbody var
 		bool inBody = inBody_;
@@ -879,7 +892,7 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 				TraverseStmt(*bodyIt++);
 
 			// push a dummy itemlist such that at every case/default statement we can first pop the stack
-			auto itemList = new OOModel::StatementItemList();
+			auto itemList = createNode<OOModel::StatementItemList>(body->getSourceRange());
 			ooStack_.push(itemList);
 			// visit the rest
 			while (bodyIt != body->body_end())
@@ -907,7 +920,7 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 {
 	// pop the body of the previous case
 	ooStack_.pop();
-	auto ooSwitchCase = new OOModel::CaseStatement();
+	auto ooSwitchCase = createNode<OOModel::CaseStatement>(caseStmt->getSourceRange());
 	// insert in tree
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(ooSwitchCase);
@@ -1024,7 +1037,7 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 {
 	// pop the body of the previous case
 	ooStack_.pop();
-	auto ooDefaultCase = new OOModel::CaseStatement();
+	auto ooDefaultCase = createNode<OOModel::CaseStatement>(defaultStmt->getSourceRange());
 	// insert in tree
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(ooDefaultCase);
@@ -1044,7 +1057,7 @@ bool ClangAstVisitor::TraverseBreakStmt(clang::BreakStmt* breakStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooBreakStmt = new OOModel::BreakStatement();
+		auto ooBreakStmt = createNode<OOModel::BreakStatement>(breakStmt->getSourceRange());
 		mapAst(breakStmt, ooBreakStmt);
 		itemList->append(ooBreakStmt);
 	}
@@ -1057,10 +1070,8 @@ bool ClangAstVisitor::TraverseContinueStmt(clang::ContinueStmt* continueStmt)
 {
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
-		auto ooContinueStmt = new OOModel::ContinueStatement();
-
+		auto ooContinueStmt = createNode<OOModel::ContinueStatement>(continueStmt->getSourceRange());
 		mapAst(continueStmt, ooContinueStmt);
-
 		itemList->append(ooContinueStmt);
 	}
 	else
@@ -1127,7 +1138,7 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooClass);
 	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-		itemList->append(new OOModel::DeclarationStatement(ooClass));
+		itemList->append(createDeclarationStatement(ooClass, recordDecl->getSourceRange()));
 	else
 		log_->writeError(className_, recordDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 
@@ -1195,14 +1206,12 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		}
 		if (auto specArgs = functionDecl->getTemplateSpecializationArgsAsWritten())
 		{
-			unsigned templateArgs = specArgs->NumTemplateArgs;
-			auto astTemplateArgsList = specArgs->getTemplateArgs();
-			auto templateParamList = functionDecl->getPrimaryTemplate()->getTemplateParameters();
-			for (unsigned i = 0; i < templateArgs; i++)
+			for (unsigned i = 0; i < specArgs->NumTemplateArgs; i++)
 			{
-				auto typeArg = new OOModel::FormalTypeArgument();
-				typeArg->setName(QString::fromStdString(templateParamList->getParam(i)->getNameAsString()));
-				typeArg->setSpecializationExpression(utils_->translateTemplateArgument(astTemplateArgsList[i]));
+				auto templateArg = specArgs->getTemplateArgs()[i];
+				auto typeArg = createNode<OOModel::FormalTypeArgument>(templateArg.getSourceRange());
+				typeArg->setName(clang_.unexpandedSpelling(templateArg.getLocation()));
+				typeArg->setSpecializationExpression(utils_->translateTemplateArgument(templateArg));
 				ooFunction->typeArguments()->append(typeArg);
 			}
 		}
@@ -1219,9 +1228,7 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 
 void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
 {
-	if (clang::CXXRecordDecl* recordDecl = typeInfo->getType().getTypePtr()->getAsCXXRecordDecl())
-		ooClass->friends()->append(new OOModel::ReferenceExpression
-											(QString::fromStdString(recordDecl->getNameAsString())));
+	ooClass->friends()->append(createReference(typeInfo->getTypeLoc().getSourceRange()));
 }
 
 void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass)
@@ -1235,7 +1242,9 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 	}
 	// this should happen anyway that it is clearly visible that there is a friend
 	// TODO: this is not really a method call but rather a reference
-	auto ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(friendFunction->getNameAsString()));
+	auto ooMCall = createNode<OOModel::MethodCallExpression>(friendFunction->getSourceRange());
+	ooMCall->setCallee(new OOModel::ReferenceExpression(clang_.unexpandedSpelling(friendFunction->getLocation())));
+
 	// TODO: handle return type & arguments & type arguments
 	ooClass->friends()->append(ooMCall);
 }
