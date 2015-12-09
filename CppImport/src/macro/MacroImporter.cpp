@@ -69,27 +69,20 @@ void MacroImporter::endTranslationUnit()
 
 		handleMacroExpansion(generatedNodes, expansion, mapping, allArgs);
 
-		if (insertMetaCall(expansion))
+		// TODO: try to find a context without nodes
+		if (insertMetaCall(expansion) && !generatedNodes.empty() && !expansion->xMacroParent())
 		{
-			OOModel::Declaration* context;
+			auto context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
 
-			if (generatedNodes.size() > 0)
-				context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
+			if (!DCast<OOModel::Method>(context))
+				context->metaCalls()->append(expansion->metaCall());
 			else
-				context = actualContext(expansion);
-
-			if (!expansion->xMacroParent() && context)
 			{
-				if (!DCast<OOModel::Method>(context))
-					context->metaCalls()->append(expansion->metaCall());
+				if (auto replacementNode = expansion->replacementNode())
+					finalizationMetaCalls.insert(replacementNode, expansion);
 				else
-				{
-					if (auto replacementNode = expansion->replacementNode())
-						finalizationMetaCalls.insert(replacementNode, expansion);
-					else
-						qDebug() << "no splice found for expansion"
-									<< macroDefinitions_.definitionName(expansion->definition());
-				}
+					qDebug() << "no splice found for expansion"
+								<< macroDefinitions_.definitionName(expansion->definition());
 			}
 		}
 
@@ -230,32 +223,6 @@ bool MacroImporter::insertMetaCall(MacroExpansion* expansion)
 	SAFE_DELETE(expansion->metaCall());
 	expansion->setMetaCall(metaCalls_.value(hash));
 	return false;
-}
-
-OOModel::Declaration* MacroImporter::actualContext(MacroExpansion* expansion)
-{
-	Q_ASSERT(!expansion->parent());
-
-	// try to find a valid context where the context range contains the expansion range
-	QVector<OOModel::Declaration*> candidates;
-	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
-		if (lexicalTransformations_.contains(it.value(), expansion->range()))
-			if (NodeHelpers::validContext(it.key()))
-			{
-				candidates.append(DCast<OOModel::Declaration>(it.key()));
-				break;
-			}
-
-	// if we could not find a context return the root project
-	if (candidates.empty()) return root_;
-
-	auto result = candidates.first();
-
-	for (auto candidate : candidates)
-		if (result->isAncestorOf(candidate))
-			result = candidate;
-
-	return result;
 }
 
 QVector<MacroArgumentLocation> MacroImporter::argumentHistory(clang::SourceRange range)

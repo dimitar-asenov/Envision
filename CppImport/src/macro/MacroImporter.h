@@ -77,11 +77,6 @@ class CPPIMPORT_API MacroImporter
 
 		bool insertMetaCall(MacroExpansion* expansion);
 
-		/**
-		 * find best actual context matching expansion without nodes.
-		 */
-		OOModel::Declaration* actualContext(MacroExpansion* expansion);
-
 		QVector<MacroArgumentLocation> argumentHistory(clang::SourceRange range);
 		QVector<MacroArgumentLocation> argumentHistory(Model::Node* node);
 
