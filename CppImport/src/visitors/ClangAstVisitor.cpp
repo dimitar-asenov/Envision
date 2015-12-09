@@ -61,9 +61,9 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 {
 	Q_ASSERT(sourceManager);
 	Q_ASSERT(preprocessor);
-	sourceManager_ = sourceManager;
+	clang_.setSourceManager(sourceManager);
+	clang_.setPreprocessor(preprocessor);
 	trMngr_->setSourceManager(sourceManager);
-	preprocessor_= preprocessor;
 	macroImporter_.startTranslationUnit(sourceManager, preprocessor);
 }
 
@@ -953,8 +953,8 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 */
 
 		// calculate the presumed locations for the beginning and end of this compound statement.
-		auto presumedLocationStart = sourceManager_->getPresumedLoc(compoundStmt->getLocStart());
-		auto presumedLocationEnd = sourceManager_->getPresumedLoc(compoundStmt->getLocEnd());
+		auto presumedLocationStart = clang_.sourceManager()->getPresumedLoc(compoundStmt->getLocStart());
+		auto presumedLocationEnd = clang_.sourceManager()->getPresumedLoc(compoundStmt->getLocEnd());
 
 		// assert clang behaves as expected.
 		Q_ASSERT(presumedLocationStart.getFilename() == presumedLocationEnd.getFilename());
@@ -975,13 +975,13 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 * keep track of the line the last child has ended on.
 		 * initially this location is the beginning of the compound statement itself.
 		 */
-		auto lastChildEndLine = sourceManager_->getPresumedLineNumber(compoundStmt->getLocStart());
+		auto lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(compoundStmt->getLocStart());
 
 		// traverse children
 		for (auto child : compoundStmt->children())
 		{
 			// calculate the line on which the current child starts
-			auto currentChildStartLine = sourceManager_->getPresumedLineNumber(child->getSourceRange().getBegin());
+			auto currentChildStartLine = clang_.sourceManager()->getPresumedLineNumber(child->getSourceRange().getBegin());
 
 			// check that we are in a valid case where the end of the last child comes before the start of the current one.
 			if (lastChildEndLine < currentChildStartLine)
@@ -1017,7 +1017,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 			TraverseStmt(child);
 
 			// update the location on which the last child ended
-			lastChildEndLine = sourceManager_->getPresumedLineNumber(child->getLocEnd()) + 1;
+			lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(child->getLocEnd()) + 1;
 		}
 
 		return true;
@@ -1263,9 +1263,9 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 {
 	QString fileName;
-	if (auto file = sourceManager_->getPresumedLoc(location).getFilename())
+	if (auto file = clang_.sourceManager()->getPresumedLoc(location).getFilename())
 		fileName = QString(file);
-	if (sourceManager_->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
+	if (clang_.sourceManager()->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
 		return importSysHeader_;
 	return true;
 }
@@ -1320,7 +1320,7 @@ void ClangAstVisitor::beforeTranslationUnit(clang::ASTContext& astContext)
 {
 	auto comments = astContext.getRawCommentList().getComments();
 	for (auto it = comments.begin(); it != comments.end(); it++)
-		comments_.append(new Comment(*it, *sourceManager_));
+		comments_.append(new Comment(*it, *clang_.sourceManager()));
 }
 
 void ClangAstVisitor::endTranslationUnit()
@@ -1333,7 +1333,7 @@ void ClangAstVisitor::endTranslationUnit()
 	 */
 	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
 	{
-		auto nodePresumedLocation = sourceManager_->getPresumedLoc(it.value().getBegin());
+		auto nodePresumedLocation = clang_.sourceManager()->getPresumedLoc(it.value().getBegin());
 
 		for (Comment* comment : comments_)
 		{

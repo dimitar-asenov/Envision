@@ -131,6 +131,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
 		QList<Comment*> comments_;
+		ClangHelpers clang_;
 		MacroImporter macroImporter_;
 		EnvisionToClangMap envisionToClangMap_;
 
@@ -140,8 +141,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		ExpressionVisitor* exprVisitor_{};
 		TemplateArgumentVisitor* templArgVisitor_{};
 		CommentParser* commentParser_{};
-		const clang::SourceManager* sourceManager_{};
-		const clang::Preprocessor* preprocessor_{};
 		bool importSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};
