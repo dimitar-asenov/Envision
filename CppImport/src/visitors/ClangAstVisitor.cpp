@@ -1251,7 +1251,6 @@ bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 
 void ClangAstVisitor::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
 {
-	macroImporter_.mapAst(clangAstNode, envisionAstNode);
 	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
@@ -1291,7 +1290,6 @@ void ClangAstVisitor::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAst
 					break;
 				}
 
-	macroImporter_.mapAst(clangAstNode, envisionAstNode);
 	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 

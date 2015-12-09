@@ -61,9 +61,6 @@ class CPPIMPORT_API MacroImporter
 		 */
 		void endEntireImport();
 
-		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
-		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
-
 	private:
 		OOModel::Project* root_{};
 		ClangHelpers& clang_;

@@ -215,16 +215,6 @@ void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpan
 	allMetaDefinitions_.createMetaDef(nodes, expansion, mapping, arguments);
 }
 
-void MacroImporter::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
-{
-	lexicalTransformations_.processStatement(clangAstNode, envisionAstNode);
-}
-
-void MacroImporter::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
-{
-	lexicalTransformations_.processDeclaration(clangAstNode, envisionAstNode);
-}
-
 bool MacroImporter::insertMetaCall(MacroExpansion* expansion)
 {
 	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(expansion->range().getBegin());
