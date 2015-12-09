@@ -126,6 +126,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		void deleteNode(Model::Node* node);
 
+		OOModel::ReferenceExpression* createReference(clang::SourceRange range);
+
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
 

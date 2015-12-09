@@ -1357,4 +1357,18 @@ void ClangAstVisitor::deleteNode(Model::Node* node)
 	SAFE_DELETE(node);
 }
 
+OOModel::ReferenceExpression* ClangAstVisitor::createReference(clang::SourceRange range)
+{
+	auto spelling = clang_.unexpandedSpelling(range);
+
+	QRegularExpression regex("^\\w+");
+	auto match = regex.match(spelling);
+	if (match.hasMatch())
+		spelling = match.captured();
+
+	auto ref = new OOModel::ReferenceExpression(spelling);
+	envisionToClangMap_.mapAst(range, ref);
+	return ref;
+}
+
 } // namespace cppimport
