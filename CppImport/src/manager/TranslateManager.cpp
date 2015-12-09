@@ -71,27 +71,47 @@ OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 	return ooModule;
 }
 
-bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass)
+OOModel::Class* TranslateManager::createClass(clang::CXXRecordDecl* recordDecl)
+{
+	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
+	OOModel::Class* result = nullptr;
+	if (recordDecl->isClass())
+		result = new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Class);
+	else if (recordDecl->isStruct())
+		result = new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Struct);
+	else if (recordDecl->isUnion())
+		result = new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Union);
+	else
+		Q_ASSERT(false);
+
+	Q_ASSERT(result);
+	baseVisitor_->mapAst(recordDecl->getLocation(), result->nameNode());
+	return result;
+}
+
+bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*& createdClass)
 {
 	const QString hash = nh_->hashRecord(rDecl);
 	// if rdecl is not managed yet add it:
 	if (!classMap_.contains(hash))
 	{
-		classMap_.insert(hash, ooClass);
-		baseVisitor_->mapAst(rDecl, ooClass);
+		createdClass = createClass(rDecl);
+		classMap_.insert(hash, createdClass);
+		baseVisitor_->mapAst(rDecl, createdClass);
 		return true;
 	}
 	baseVisitor_->mapAst(rDecl, classMap_.value(hash));
 	return false;
 }
 
-bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTemplate, OOModel::Class* ooClass)
+bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTemplate, OOModel::Class*& createdClass)
 {
 	const QString hash = nh_->hashClassTemplate(classTemplate);
 	if (!classMap_.contains(hash))
 	{
-		classMap_.insert(hash, ooClass);
-		baseVisitor_->mapAst(classTemplate, ooClass);
+		createdClass = createClass(classTemplate->getTemplatedDecl());
+		classMap_.insert(hash, createdClass);
+		baseVisitor_->mapAst(classTemplate, createdClass);
 		return true;
 	}
 	baseVisitor_->mapAst(classTemplate, classMap_.value(hash));
@@ -99,13 +119,14 @@ bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTempla
 }
 
 bool TranslateManager::insertClassTemplateSpec
-(clang::ClassTemplateSpecializationDecl* classTemplate, OOModel::Class* ooClass)
+(clang::ClassTemplateSpecializationDecl* classTemplate, OOModel::Class*& createdClass)
 {
 	const QString hash = nh_->hashClassTemplateSpec(classTemplate);
 	if (!classMap_.contains(hash))
 	{
-		classMap_.insert(hash, ooClass);
-		baseVisitor_->mapAst(classTemplate, ooClass);
+		createdClass = createClass(classTemplate);
+		classMap_.insert(hash, createdClass);
+		baseVisitor_->mapAst(classTemplate, createdClass);
 		return true;
 	}
 	baseVisitor_->mapAst(classTemplate, classMap_.value(hash));

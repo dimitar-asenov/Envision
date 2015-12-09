@@ -163,13 +163,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		void TraverseFunction(clang::FunctionDecl* functionDecl, OOModel::Method* ooFunction);
 
 		/**
-		 * Creates a class with the name as specified in \a recordDecl.
-		 * It also sets the correct Kind (class, struct or union)
-		 * if the kind is none of this the method returns a nullptr
-		 */
-		OOModel::Class* createClass(clang::CXXRecordDecl* recordDecl);
-
-		/**
 		 * Inserts a friend class with the \a typeInfo in \a ooClass.
 		 */
 		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);

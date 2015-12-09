@@ -123,13 +123,10 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 	if (!shouldImport(classTemplate->getLocation()) || !classTemplate->isThisDeclarationADefinition())
 		return true;
 
-	clang::CXXRecordDecl* recordDecl = classTemplate->getTemplatedDecl();
-	if (auto ooClass = createClass(recordDecl))
+	OOModel::Class* ooClass = nullptr;
+	if (trMngr_->insertClassTemplate(classTemplate, ooClass))
 	{
-		if (!trMngr_->insertClassTemplate(classTemplate, ooClass))
-			// this class is already visited
-			return true;
-		TraverseClass(recordDecl, ooClass);
+		TraverseClass(classTemplate->getTemplatedDecl(), ooClass);
 		// visit type arguments if any
 		auto templateParamList = classTemplate->getTemplateParameters();
 		for (auto templateParameter : *templateParamList)
@@ -173,11 +170,9 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		return true;
 	}
 
-	if (auto ooClass = createClass(specializationDecl))
+	OOModel::Class* ooClass = nullptr;
+	if (trMngr_->insertClassTemplateSpec(specializationDecl, ooClass))
 	{
-		if (!trMngr_->insertClassTemplateSpec(specializationDecl, ooClass))
-			// this class is already visited
-			return true;
 		TraverseClass(specializationDecl, ooClass);
 
 		auto originalParams = specializationDecl->getSpecializedTemplate()->getTemplateParameters();
@@ -200,11 +195,9 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 	if (!shouldImport(recordDecl->getLocation()) || !recordDecl->isThisDeclarationADefinition())
 		return true;
 
-	if (auto ooClass = createClass(recordDecl))
+	OOModel::Class* ooClass = nullptr;
+	if (trMngr_->insertClass(recordDecl, ooClass))
 	{
-		if (!trMngr_->insertClass(recordDecl, ooClass))
-			// this class is already visited
-			return true;
 		TraverseClass(recordDecl, ooClass);
 		// visit type arguments if any
 		if (auto describedTemplate = recordDecl->getDescribedClassTemplate())
@@ -1221,19 +1214,6 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		ooFunction->modifiers()->set(OOModel::Modifier::Virtual);
 	if (functionDecl->hasAttr<clang::OverrideAttr>())
 		ooFunction->modifiers()->set(OOModel::Modifier::Override);
-}
-
-OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)
-{
-	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
-	if (recordDecl->isClass())
-		return new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Class);
-	else if (recordDecl->isStruct())
-		return new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Struct);
-	else if (recordDecl->isUnion())
-		return new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Union);
-	log_->writeError(className_, recordDecl, CppImportLogger::Reason::NOT_SUPPORTED);
-	return nullptr;
 }
 
 void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
