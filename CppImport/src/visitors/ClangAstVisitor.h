@@ -116,6 +116,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 */
 		bool shouldUseDataRecursionfor (clang::Stmt* S);
 
+		void mapAst(clang::SourceRange clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
