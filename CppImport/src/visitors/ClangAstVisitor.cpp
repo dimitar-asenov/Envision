@@ -966,6 +966,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 * initially this location is the beginning of the compound statement itself.
 		 */
 		auto lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(compoundStmt->getLocStart());
+		bool firstLine = true;
 
 		// traverse children
 		for (auto child : compoundStmt->children())
@@ -991,7 +992,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 						else if (comment->lineStart() < currentLine && currentLine <= comment->lineEnd())
 							emptyLine = false;
 
-					if (emptyLine)
+					if (emptyLine && !firstLine)
 						// if no comment was found that means that the line is empty
 						itemList->append(new OOModel::ExpressionStatement());
 					else if (commentOnLine)
@@ -1002,8 +1003,11 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 						// in case the comment takes up multiple lines we have to skip over the additional lines as well
 						currentLine = commentOnLine->lineEnd();
 					}
+
+					firstLine = false;
 				}
 
+			firstLine = false;
 			TraverseStmt(child);
 
 			// update the location on which the last child ended
