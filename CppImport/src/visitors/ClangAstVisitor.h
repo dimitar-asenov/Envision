@@ -128,6 +128,22 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		OOModel::ReferenceExpression* createReference(clang::SourceRange range);
 
+
+		template<class NodeType>
+		NodeType* createNode(clang::SourceRange range);
+
+		OOModel::PrimitiveTypeExpression* createPrimitiveTypeExpression(OOModel::PrimitiveType::PrimitiveTypes type,
+																							 clang::SourceRange range);
+
+		OOModel::DeclarationStatement* createDeclarationStatement(OOModel::Declaration* declaration,
+																					 clang::SourceRange range);
+
+		template<class NodeType>
+		NodeType* createNamedNode(clang::SourceLocation nameLoc, clang::SourceRange range);
+
+		template<class NodeType>
+		NodeType* createNamedNode(clang::NamedDecl* namedDecl);
+
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
 
@@ -191,5 +207,25 @@ inline bool ClangAstVisitor::TraverseCXXDestructorDecl(clang::CXXDestructorDecl 
 inline bool ClangAstVisitor::TraverseCXXConversionDecl(clang::CXXConversionDecl *conversionDecl)
 // TODO: handle explicit keyword
 {return TraverseMethodDecl(conversionDecl, OOModel::Method::MethodKind::Conversion); }
+
+template<class NodeType>
+NodeType* ClangAstVisitor::createNode(clang::SourceRange range)
+{
+	auto node = new NodeType();
+	envisionToClangMap_.mapAst(range, node);
+	return node;
+}
+
+template<class NodeType>
+NodeType* ClangAstVisitor::createNamedNode(clang::SourceLocation nameLoc, clang::SourceRange range)
+{
+	auto node = createNode<NodeType>(range);
+	node->setName(clang_.unexpandedSpelling(nameLoc));
+	return node;
+}
+
+template<class NodeType>
+inline NodeType* ClangAstVisitor::createNamedNode(clang::NamedDecl* namedDecl)
+{ return createNamedNode<NodeType>(namedDecl->getLocation(), namedDecl->getSourceRange()); }
 
 }

@@ -1364,9 +1364,23 @@ void ClangAstVisitor::deleteNode(Model::Node* node)
 
 OOModel::ReferenceExpression* ClangAstVisitor::createReference(clang::SourceRange range)
 {
-	auto ref = new OOModel::ReferenceExpression(clang_.unexpandedSpelling(range.getBegin()));
-	envisionToClangMap_.mapAst(range, ref);
-	return ref;
+	return createNamedNode<OOModel::ReferenceExpression>(range.getBegin(), range);
+}
+
+OOModel::PrimitiveTypeExpression*
+ClangAstVisitor::createPrimitiveTypeExpression(OOModel::PrimitiveType::PrimitiveTypes type, clang::SourceRange range)
+{
+	auto node = createNode<OOModel::PrimitiveTypeExpression>(range);
+	node->setTypeValue(type);
+	return node;
+}
+
+OOModel::DeclarationStatement*
+ClangAstVisitor::createDeclarationStatement(OOModel::Declaration* declaration, clang::SourceRange range)
+{
+	auto declarationStatement = createNode<OOModel::DeclarationStatement>(range);
+	declarationStatement->setDeclaration(declaration);
+	return declarationStatement;
 }
 
 } // namespace cppimport
