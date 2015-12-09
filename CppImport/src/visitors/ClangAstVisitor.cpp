@@ -1346,7 +1346,7 @@ void ClangAstVisitor::endTranslationUnit()
 
 void ClangAstVisitor::endEntireImport()
 {
-	macroImporter_.endTranslationUnit();
+	macroImporter_.endEntireImport();
 }
 
 void ClangAstVisitor::deleteNode(Model::Node* node)
