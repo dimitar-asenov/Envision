@@ -44,7 +44,7 @@ void TranslateManager::setUtils(CppImportUtilities* utils)
 	utils_ = utils;
 }
 
-OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl* namespaceDecl)
+OOModel::Module* TranslateManager::insertNamespace(clang::NamespaceDecl* namespaceDecl)
 {
 	const QString hash = nh_->hashNameSpace(namespaceDecl);
 	if (nameSpaceMap_.contains(hash))
