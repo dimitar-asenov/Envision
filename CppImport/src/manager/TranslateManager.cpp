@@ -313,19 +313,13 @@ OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTe
 	return ooAlias;
 }
 
-OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
+void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* functionDecl,
+																					OOModel::Method* method)
 {
-	const QString hash = nh_->hashMethod(mDecl);
-	// remove type argument from name because clang has that in the name of constructors of template classes.
-	// template<class T> class List{ List();}; results in List<T> as name.
-	QString name = QString::fromStdString(mDecl->getNameAsString());
-	if (name.endsWith(">"))
-		name = name.left(name.indexOf("<"));
-	auto method = new OOModel::Method(name, kind);
-	if (!llvm::isa<clang::CXXConstructorDecl>(mDecl) && !llvm::isa<clang::CXXDestructorDecl>(mDecl))
+	if (!llvm::isa<clang::CXXConstructorDecl>(functionDecl) && !llvm::isa<clang::CXXDestructorDecl>(functionDecl))
 	{
 		// process result type
-		auto functionTypeLoc = mDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
+		auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
 		OOModel::Expression* restype = utils_->translateQualifiedType(functionTypeLoc.getReturnLoc());
 		if (restype)
 		{
@@ -335,8 +329,8 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 		}
 	}
 	// process arguments
-	clang::FunctionDecl::param_const_iterator it = mDecl->param_begin();
-	for (;it != mDecl->param_end();++it)
+	clang::FunctionDecl::param_const_iterator it = functionDecl->param_begin();
+	for (;it != functionDecl->param_end();++it)
 	{
 		auto arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
@@ -344,6 +338,15 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 		if (type) arg->setTypeExpression(type);
 		method->arguments()->append(arg);
 	}
+}
+
+OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
+{
+	const QString hash = nh_->hashMethod(mDecl);
+
+	auto method = new OOModel::Method(clang_.unexpandedSpelling(mDecl->getNameInfo().getSourceRange()), kind);
+	addMethodResultAndArguments(mDecl, method);
+
 	// find the correct class to add the method
 	if (classMap_.contains(nh_->hashRecord(mDecl->getParent())))
 	{
@@ -354,39 +357,14 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 		std::cout << "ERROR TRANSLATEMNGR: METHOD DECL NO PARENT FOUND" << std::endl;
 
 	methodMap_.insert(hash, method);
-
 	return method;
 }
 
 OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
 {
-	// add a new method
-	auto ooFunction= new OOModel::Method();
-	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
-
-	auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
-
-	// process result type
-	OOModel::Expression* restype = utils_->translateQualifiedType(functionTypeLoc.getReturnLoc());
-	if (restype)
-	{
-		auto methodResult = new OOModel::FormalResult();
-		methodResult->setTypeExpression(restype);
-		ooFunction->results()->append(methodResult);
-	}
-	// process arguments
-	clang::FunctionDecl::param_const_iterator it = functionDecl->param_begin();
-	for (;it != functionDecl->param_end();++it)
-	{
-		auto arg = new OOModel::FormalArgument();
-		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc());
-		if (type) arg->setTypeExpression(type);
-		ooFunction->arguments()->append(arg);
-	}
-
+	auto ooFunction = new OOModel::Method(clang_.unexpandedSpelling(functionDecl->getNameInfo().getSourceRange()));
+	addMethodResultAndArguments(functionDecl, ooFunction);
 	functionMap_.insert(nh_->hashFunction(functionDecl), ooFunction);
-
 	return ooFunction;
 }
 

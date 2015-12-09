@@ -165,6 +165,8 @@ class CPPIMPORT_API TranslateManager
 		 * if the kind is none of this the method returns a nullptr
 		 */
 		OOModel::Class* createClass(clang::CXXRecordDecl* recordDecl);
+
+		void addMethodResultAndArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method);
 };
 
 }
