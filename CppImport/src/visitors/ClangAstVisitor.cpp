@@ -1255,7 +1255,7 @@ void ClangAstVisitor::mapAst(clang::SourceRange clangAstNode, Model::Node* envis
 	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
-void ClangAstVisitor::mapAst(clang::Stmt*, Model::Node* envisionAstNode)
+void ClangAstVisitor::mapAst(clang::Stmt*, Model::Node*)
 {
 }
 
