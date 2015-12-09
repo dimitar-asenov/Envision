@@ -29,10 +29,7 @@
 
 namespace CppImport {
 
-void NodeHasher::setSourceManager(const clang::SourceManager* sourceManager)
-{
-	srcMngr_ = sourceManager;
-}
+NodeHasher::NodeHasher(ClangHelpers& clang) : clang_{clang} {}
 
 const QString NodeHasher::hashFunction(const clang::FunctionDecl* functionDecl)
 {
@@ -264,7 +261,7 @@ const QString NodeHasher::hashType(const clang::QualType& type)
 
 const QString NodeHasher::hashTypeSourceInfo(const clang::TypeSourceInfo* info)
 {
-	QString hash(srcMngr_->getCharacterData(info->getTypeLoc().getBeginLoc()));
+	QString hash(clang_.sourceManager()->getCharacterData(info->getTypeLoc().getBeginLoc()));
 	hash.truncate(hash.indexOf(";"));
 	return hash;
 }
@@ -282,7 +279,8 @@ const QString NodeHasher::hashTemplateTypeParm(const clang::NonTypeTemplateParmD
 	QString hash = QString::fromStdString(nonTypeTemplParam->getNameAsString());
 	hash.append("_").append(QString::fromStdString(nonTypeTemplParam->getType().getCanonicalType().getAsString()));
 	if (nonTypeTemplParam->hasDefaultArgument())
-		hash.append("=").append(QString(srcMngr_->getCharacterData(nonTypeTemplParam->getDefaultArgumentLoc())));
+		hash.append("=").append(QString(clang_.sourceManager()->getCharacterData(
+													  nonTypeTemplParam->getDefaultArgumentLoc())));
 	return hash;
 }
 
@@ -312,7 +310,7 @@ const QString NodeHasher::hashTemplateArg(const clang::TemplateArgument& templat
 			// TODO: add support
 			hash = "EXPANSION"; break;
 		case clang::TemplateArgument::ArgKind::Expression:
-			hash = QString(srcMngr_->getCharacterData(templateArg.getAsExpr()->getLocStart()));
+			hash = QString(clang_.sourceManager()->getCharacterData(templateArg.getAsExpr()->getLocStart()));
 			break;
 		case clang::TemplateArgument::ArgKind::Pack:
 			// TODO: add support

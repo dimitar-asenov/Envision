@@ -28,21 +28,57 @@
 
 namespace CppImport {
 
-QString ClangHelpers::spelling(clang::SourceLocation start, clang::SourceLocation end) const
+QString ClangHelpers::spelling(clang::SourceRange sourceRange) const
 {
-	clang::SourceLocation b = sourceManager_->getSpellingLoc(start);
-	clang::SourceLocation e = clang::Lexer::getLocForEndOfToken(sourceManager_->getSpellingLoc(end), 0, *sourceManager_,
-																					preprocessor_->getLangOpts());
+	clang::SourceLocation b = sourceManager_->getSpellingLoc(sourceRange.getBegin());
+	clang::SourceLocation e = clang::Lexer::getLocForEndOfToken(sourceManager_->getSpellingLoc(sourceRange.getEnd()), 0,
+																					*sourceManager_, preprocessor_->getLangOpts());
+
+	// this can help in preventing an uncaught exception due to questionable input
+	//if (sourceManager_->getPresumedLoc(b).getFilename() != sourceManager_->getPresumedLoc(e).getFilename()) return "";
 
 	bool invalid = true;
 	auto beginPtr = sourceManager_->getCharacterData(b, &invalid);
+	if (invalid) return "INVALID_BEGIN"; // TODO: debug purposes
 	Q_ASSERT(!invalid);
 
 	auto endPtr = sourceManager_->getCharacterData(e, &invalid);
+	if (invalid) return "INVALID_END"; // TODO: debug purposes
 	Q_ASSERT(!invalid);
 
 	auto length = endPtr - beginPtr;
 	return 0 < length ? QString::fromStdString(std::string(beginPtr, endPtr - beginPtr)) : "";
+}
+
+QString ClangHelpers::unexpandedSpelling(clang::SourceRange range) const
+{
+	auto result = spelling(getUnexpandedRange(range));
+	while (result.startsWith("\\")) result = result.right(result.length() - 1);
+	return result.trimmed();
+}
+
+clang::SourceRange ClangHelpers::getUnexpandedRange(clang::SourceRange sourceRange) const
+{
+	auto start = sourceRange.getBegin();
+	auto end = sourceRange.getEnd();
+
+	if (// start is a macro location and...
+		 start.isMacroID() &&
+		 // start was expanded from a macro argument or...
+		 (sourceManager_->isMacroArgExpansion(start) ||
+		 // start was expanded from a "virtual" macro i.e. it is not written anywhere (identifier concatentation etc.)
+		 !sourceManager_->getFileEntryForID(sourceManager_->getFileID(sourceManager_->getSpellingLoc(start)))))
+		start = sourceManager_->getImmediateExpansionRange(start).first;
+
+	if (// end is a macro location and...
+		 end.isMacroID() &&
+		 // end was expanded from a macro argument or...
+		 (sourceManager_->isMacroArgExpansion(end) ||
+		 // end was expanded from a "virtual" macro i.e. it is not written anywhere (identifier concatentation etc.)
+		 !sourceManager_->getFileEntryForID(sourceManager_->getFileID(sourceManager_->getSpellingLoc(end)))))
+		end = sourceManager_->getImmediateExpansionRange(end).second;
+
+	return clang::SourceRange(start, end);
 }
 
 clang::SourceLocation ClangHelpers::immediateMacroLocation(clang::SourceLocation location) const

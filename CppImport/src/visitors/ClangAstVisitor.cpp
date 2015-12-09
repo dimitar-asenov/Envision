@@ -34,11 +34,11 @@
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
-:  macroImporter_(project, envisionToClangMap_), log_{logger}
+ : macroImporter_(project, envisionToClangMap_, clang_), log_{logger}
 {
-	trMngr_ = new TranslateManager(project, this);
+	trMngr_ = new TranslateManager(clang_, project, this);
 	exprVisitor_ = new ExpressionVisitor(this, log_);
-	utils_ = new CppImportUtilities(log_, exprVisitor_);
+	utils_ = new CppImportUtilities(log_, exprVisitor_, envisionToClangMap_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
 	templArgVisitor_ = new TemplateArgumentVisitor(exprVisitor_, utils_, log_);
@@ -61,10 +61,9 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 {
 	Q_ASSERT(sourceManager);
 	Q_ASSERT(preprocessor);
-	sourceManager_ = sourceManager;
-	trMngr_->setSourceManager(sourceManager);
-	preprocessor_= preprocessor;
-	macroImporter_.startTranslationUnit(sourceManager, preprocessor);
+	clang_.setSourceManager(sourceManager);
+	clang_.setPreprocessor(preprocessor);
+	macroImporter_.startTranslationUnit();
 }
 
 Model::Node*ClangAstVisitor::ooStackTop()
@@ -123,13 +122,10 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 	if (!shouldImport(classTemplate->getLocation()) || !classTemplate->isThisDeclarationADefinition())
 		return true;
 
-	clang::CXXRecordDecl* recordDecl = classTemplate->getTemplatedDecl();
-	if (auto ooClass = createClass(recordDecl))
+	OOModel::Class* ooClass = nullptr;
+	if (trMngr_->insertClassTemplate(classTemplate, ooClass))
 	{
-		if (!trMngr_->insertClassTemplate(classTemplate, ooClass))
-			// this class is already visited
-			return true;
-		TraverseClass(recordDecl, ooClass);
+		TraverseClass(classTemplate->getTemplatedDecl(), ooClass);
 		// visit type arguments if any
 		auto templateParamList = classTemplate->getTemplateParameters();
 		for (auto templateParameter : *templateParamList)
@@ -152,16 +148,16 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 			// already inserted
 			return true;
 
-		auto ooRef = new OOModel::ReferenceExpression(QString::fromStdString(specializationDecl->getNameAsString()));
-
 		auto typeLoc = specializationDecl->getTypeAsWritten()->getTypeLoc()
 							.castAs<clang::TemplateSpecializationTypeLoc>();
 
+		auto ooRef = createReference(typeLoc.getTemplateNameLoc());
 		for (unsigned i = 0; i < typeLoc.getNumArgs(); i++)
 			ooRef->typeArguments()->append(utils_->translateTemplateArgument(typeLoc.getArgLoc(i)));
 
-		if (auto p = llvm::dyn_cast<clang::NamedDecl>(specializationDecl->getSpecializedTemplate()->getDeclContext()))
-			ooRef->setPrefix(new OOModel::ReferenceExpression(QString::fromStdString(p->getNameAsString())));
+		if (specializationDecl->getQualifier())
+			ooRef->setPrefix(utils_->translateNestedNameSpecifier(specializationDecl->getQualifierLoc()));
+
 		ooExplicitTemplateInst->setInstantiatedClass(ooRef);
 		// add to tree
 		if (auto decl = DCast<OOModel::Declaration>(ooStack_.top()))
@@ -173,11 +169,9 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		return true;
 	}
 
-	if (auto ooClass = createClass(specializationDecl))
+	OOModel::Class* ooClass = nullptr;
+	if (trMngr_->insertClassTemplateSpec(specializationDecl, ooClass))
 	{
-		if (!trMngr_->insertClassTemplateSpec(specializationDecl, ooClass))
-			// this class is already visited
-			return true;
 		TraverseClass(specializationDecl, ooClass);
 
 		auto originalParams = specializationDecl->getSpecializedTemplate()->getTemplateParameters();
@@ -200,11 +194,9 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 	if (!shouldImport(recordDecl->getLocation()) || !recordDecl->isThisDeclarationADefinition())
 		return true;
 
-	if (auto ooClass = createClass(recordDecl))
+	OOModel::Class* ooClass = nullptr;
+	if (trMngr_->insertClass(recordDecl, ooClass))
 	{
-		if (!trMngr_->insertClass(recordDecl, ooClass))
-			// this class is already visited
-			return true;
 		TraverseClass(recordDecl, ooClass);
 		// visit type arguments if any
 		if (auto describedTemplate = recordDecl->getDescribedClassTemplate())
@@ -388,16 +380,17 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	if (!shouldImport(enumDecl->getLocation()))
 		return true;
 
-	OOModel::Class* ooEnumClass = new OOModel::Class
-			(QString::fromStdString(enumDecl->getNameAsString()), OOModel::Class::ConstructKind::Enum);
+	auto ooEnumClass = new OOModel::Class(QString::fromStdString(enumDecl->getNameAsString()),
+													  OOModel::Class::ConstructKind::Enum);
+
 	// insert in tree
-	if (OOModel::Project* curProject = DCast<OOModel::Project>(ooStack_.top()))
+	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
 		curProject->classes()->append(ooEnumClass);
-	else if (OOModel::Module* curModule = DCast<OOModel::Module>(ooStack_.top()))
+	else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
 		curModule->classes()->append(ooEnumClass);
-	else if (OOModel::Class* curClass = DCast<OOModel::Class>(ooStack_.top()))
+	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooEnumClass);
-	else if (OOModel::StatementItemList* itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
+	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(new OOModel::DeclarationStatement(ooEnumClass));
 	else
 	{
@@ -476,10 +469,10 @@ bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* name
 	if (auto ooTypeAlias = trMngr_->insertNamespaceAlias(namespaceAlias))
 	{
 		ooTypeAlias->setName(QString::fromStdString(namespaceAlias->getNameAsString()));
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(namespaceAlias->getAliasedNamespace()->getNameAsString()));
-		if (auto prefix = namespaceAlias->getQualifierLoc())
-			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
+
+		auto nameRef = createReference(namespaceAlias->getAliasLoc());
+		if (namespaceAlias->getQualifier())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(namespaceAlias->getQualifierLoc()));
 		ooTypeAlias->setTypeExpression(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
@@ -500,8 +493,7 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDecl(usingDecl))
 	{
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(usingDecl->getNameAsString()));
+		auto nameRef = createReference(usingDecl->getNameInfo().getSourceRange());
 		if (auto prefix = usingDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
@@ -524,8 +516,7 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDirective(usingDirectiveDecl))
 	{
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(usingDirectiveDecl->getNominatedNamespaceAsWritten()->getNameAsString()));
+		auto nameRef = createReference(usingDirectiveDecl->getIdentLocation());
 		if (auto prefix = usingDirectiveDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
@@ -548,8 +539,7 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 		return true;
 	if (auto ooNameImport = trMngr_->insertUnresolvedUsing(unresolvedUsing))
 	{
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(unresolvedUsing->getNameInfo().getAsString()));
+		auto nameRef = createReference(unresolvedUsing->getNameInfo().getSourceRange());
 		if (auto prefix = unresolvedUsing->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
@@ -953,8 +943,8 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 */
 
 		// calculate the presumed locations for the beginning and end of this compound statement.
-		auto presumedLocationStart = sourceManager_->getPresumedLoc(compoundStmt->getLocStart());
-		auto presumedLocationEnd = sourceManager_->getPresumedLoc(compoundStmt->getLocEnd());
+		auto presumedLocationStart = clang_.sourceManager()->getPresumedLoc(compoundStmt->getLocStart());
+		auto presumedLocationEnd = clang_.sourceManager()->getPresumedLoc(compoundStmt->getLocEnd());
 
 		// assert clang behaves as expected.
 		Q_ASSERT(presumedLocationStart.getFilename() == presumedLocationEnd.getFilename());
@@ -975,13 +965,14 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 * keep track of the line the last child has ended on.
 		 * initially this location is the beginning of the compound statement itself.
 		 */
-		auto lastChildEndLine = sourceManager_->getPresumedLineNumber(compoundStmt->getLocStart());
+		auto lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(compoundStmt->getLocStart());
+		bool firstLine = true;
 
 		// traverse children
 		for (auto child : compoundStmt->children())
 		{
 			// calculate the line on which the current child starts
-			auto currentChildStartLine = sourceManager_->getPresumedLineNumber(child->getSourceRange().getBegin());
+			auto currentChildStartLine = clang_.sourceManager()->getPresumedLineNumber(child->getSourceRange().getBegin());
 
 			// check that we are in a valid case where the end of the last child comes before the start of the current one.
 			if (lastChildEndLine < currentChildStartLine)
@@ -1001,7 +992,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 						else if (comment->lineStart() < currentLine && currentLine <= comment->lineEnd())
 							emptyLine = false;
 
-					if (emptyLine)
+					if (emptyLine && !firstLine)
 						// if no comment was found that means that the line is empty
 						itemList->append(new OOModel::ExpressionStatement());
 					else if (commentOnLine)
@@ -1012,12 +1003,15 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 						// in case the comment takes up multiple lines we have to skip over the additional lines as well
 						currentLine = commentOnLine->lineEnd();
 					}
+
+					firstLine = false;
 				}
 
+			firstLine = false;
 			TraverseStmt(child);
 
 			// update the location on which the last child ended
-			lastChildEndLine = sourceManager_->getPresumedLineNumber(child->getLocEnd()) + 1;
+			lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(child->getLocEnd()) + 1;
 		}
 
 		return true;
@@ -1223,19 +1217,6 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		ooFunction->modifiers()->set(OOModel::Modifier::Override);
 }
 
-OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)
-{
-	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
-	if (recordDecl->isClass())
-		return new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Class);
-	else if (recordDecl->isStruct())
-		return new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Struct);
-	else if (recordDecl->isUnion())
-		return new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Union);
-	log_->writeError(className_, recordDecl, CppImportLogger::Reason::NOT_SUPPORTED);
-	return nullptr;
-}
-
 void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
 {
 	if (clang::CXXRecordDecl* recordDecl = typeInfo->getType().getTypePtr()->getAsCXXRecordDecl())
@@ -1254,8 +1235,7 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 	}
 	// this should happen anyway that it is clearly visible that there is a friend
 	// TODO: this is not really a method call but rather a reference
-	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression(
-				QString::fromStdString(friendFunction->getNameAsString()));
+	auto ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(friendFunction->getNameAsString()));
 	// TODO: handle return type & arguments & type arguments
 	ooClass->friends()->append(ooMCall);
 }
@@ -1263,17 +1243,20 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 {
 	QString fileName;
-	if (auto file = sourceManager_->getPresumedLoc(location).getFilename())
+	if (auto file = clang_.sourceManager()->getPresumedLoc(location).getFilename())
 		fileName = QString(file);
-	if (sourceManager_->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
+	if (clang_.sourceManager()->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
 		return importSysHeader_;
 	return true;
 }
 
-void ClangAstVisitor::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
+void ClangAstVisitor::mapAst(clang::SourceRange clangAstNode, Model::Node* envisionAstNode)
 {
-	macroImporter_.mapAst(clangAstNode, envisionAstNode);
 	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
+}
+
+void ClangAstVisitor::mapAst(clang::Stmt*, Model::Node*)
+{
 }
 
 void ClangAstVisitor::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
@@ -1312,7 +1295,6 @@ void ClangAstVisitor::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAst
 					break;
 				}
 
-	macroImporter_.mapAst(clangAstNode, envisionAstNode);
 	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
@@ -1320,7 +1302,7 @@ void ClangAstVisitor::beforeTranslationUnit(clang::ASTContext& astContext)
 {
 	auto comments = astContext.getRawCommentList().getComments();
 	for (auto it = comments.begin(); it != comments.end(); it++)
-		comments_.append(new Comment(*it, *sourceManager_));
+		comments_.append(new Comment(*it, *clang_.sourceManager()));
 }
 
 void ClangAstVisitor::endTranslationUnit()
@@ -1333,7 +1315,7 @@ void ClangAstVisitor::endTranslationUnit()
 	 */
 	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
 	{
-		auto nodePresumedLocation = sourceManager_->getPresumedLoc(it.value().getBegin());
+		auto nodePresumedLocation = clang_.sourceManager()->getPresumedLoc(it.value().getBegin());
 
 		for (Comment* comment : comments_)
 		{
@@ -1364,7 +1346,7 @@ void ClangAstVisitor::endTranslationUnit()
 
 void ClangAstVisitor::endEntireImport()
 {
-	macroImporter_.endTranslationUnit();
+	macroImporter_.endEntireImport();
 }
 
 void ClangAstVisitor::deleteNode(Model::Node* node)
@@ -1378,6 +1360,13 @@ void ClangAstVisitor::deleteNode(Model::Node* node)
 	}
 
 	SAFE_DELETE(node);
+}
+
+OOModel::ReferenceExpression* ClangAstVisitor::createReference(clang::SourceRange range)
+{
+	auto ref = new OOModel::ReferenceExpression(clang_.unexpandedSpelling(range.getBegin()));
+	envisionToClangMap_.mapAst(range, ref);
+	return ref;
 }
 
 } // namespace cppimport

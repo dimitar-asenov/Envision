@@ -80,18 +80,20 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 	// only function like macros have braces in their signature to parse
 	if (!macroDirective->getMacroInfo()->isObjectLike())
 	{
-		// extract everything in parentheses of the expansion signature using a regular expression
-		QRegularExpression regex ("\\((.*)\\)", QRegularExpression::DotMatchesEverythingOption);
-		auto argumentsString = clang_.spelling(sourceRange);
-		auto match = regex.match(argumentsString);
-		auto arguments = match.captured(1).split(",");
-
 		// by default initialize meta call arguments to be reference expressions with the raw spelling at this expansion
 		for (auto i = 0; i < clang_.argumentNames(entry->definition()).size(); i++)
 		{
-			auto actualArg = macroArguments->getUnexpArgument((unsigned int)i);
-			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression(arguments[i]));
-			entry->argumentLocs().append(actualArg->getLocation());
+			auto actualArgFirstToken = macroArguments->getUnexpArgument((unsigned int)i);
+
+			auto actualArgLastToken = actualArgFirstToken;
+			for (; actualArgLastToken->isNot(clang::tok::eof); ++actualArgLastToken);
+			if (actualArgFirstToken != actualArgLastToken) --actualArgLastToken;
+
+			auto unexpandedArgument = clang_.unexpandedSpelling(
+						clang::SourceRange(actualArgFirstToken->getLocation(), actualArgLastToken->getLocation()));
+
+			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression(unexpandedArgument));
+			entry->argumentLocs().append(actualArgFirstToken->getLocation());
 		}
 
 		// handle predefined meta definition: SET_OVERRIDE_FLAG
@@ -103,22 +105,6 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 																			new OOModel::BooleanLiteral(argument->name() == "override"));
 				SAFE_DELETE(argument);
 			}
-
-		/* alternative implementation:
-		 * works on individual argument tokens and does not need a regular expression.
-		 * more robust but depends on unexpandedSpelling.
-
-		auto actualArgFirstToken = macroArguments->getUnexpArgument((unsigned int)i);
-
-		auto actualArgLastToken = actualArgFirstToken;
-		for (; actualArgLastToken->isNot(clang::tok::eof); ++actualArgLastToken);
-		if (actualArgFirstToken != actualArgLastToken) --actualArgLastToken;
-
-		auto unexpandedArgument = lexicalTransformation_.unexpandedSpelling(
-					clang::SourceRange(actualArgFirstToken->getLocation(), actualArgLastToken->getLocation()));
-
-		entry->metaCall->arguments()->append(new OOModel::ReferenceExpression(unexpandedArgument));
-		entry->argumentLocs.append(actualArgFirstToken->getLocation());*/
 	}
 
 	expansions_.append(entry);

@@ -67,7 +67,6 @@ HEADERS += src/precompiled.h \
     src/macro/NodeHelpers.h \
     src/macro/ClangHelpers.h \
     src/macro/NodeToCloneMap.h \
-    src/macro/LexicalTransformations.h \
     src/EnvisionToClangMap.h \
     src/Comment.h
 SOURCES += src/CppImportException.cpp \
@@ -95,6 +94,5 @@ SOURCES += src/CppImportException.cpp \
     src/macro/NodeHelpers.cpp \
     src/macro/ClangHelpers.cpp \
     src/macro/NodeToCloneMap.cpp \
-    src/macro/LexicalTransformations.cpp \
     src/EnvisionToClangMap.cpp \
     src/Comment.cpp

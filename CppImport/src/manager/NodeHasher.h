@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../cppimport_api.h"
+#include "../macro/ClangHelpers.h"
 
 namespace CppImport {
 
@@ -38,7 +39,7 @@ namespace CppImport {
 class CPPIMPORT_API NodeHasher
 {
 	public:
-		void setSourceManager(const clang::SourceManager* sourceManager);
+		NodeHasher(ClangHelpers& clang);
 
 		const QString hashFunction(const clang::FunctionDecl* functionDecl);
 		const QString hashMethod(const clang::CXXMethodDecl* methodDecl);
@@ -71,9 +72,8 @@ class CPPIMPORT_API NodeHasher
 		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam);
 		const QString hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* nonTypeTemplParam);
 		const QString hashTemplateArg(const clang::TemplateArgument& templateArg);
-
 	private:
-		const clang::SourceManager* srcMngr_{};
+		ClangHelpers& clang_;
 };
 
 }

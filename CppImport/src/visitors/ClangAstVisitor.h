@@ -116,6 +116,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 */
 		bool shouldUseDataRecursionfor (clang::Stmt* S);
 
+		void mapAst(clang::SourceRange clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
 
@@ -125,12 +126,15 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		void deleteNode(Model::Node* node);
 
+		OOModel::ReferenceExpression* createReference(clang::SourceRange range);
+
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
 		QList<Comment*> comments_;
+		ClangHelpers clang_;
 		MacroImporter macroImporter_;
 		EnvisionToClangMap envisionToClangMap_;
 
@@ -140,8 +144,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		ExpressionVisitor* exprVisitor_{};
 		TemplateArgumentVisitor* templArgVisitor_{};
 		CommentParser* commentParser_{};
-		const clang::SourceManager* sourceManager_{};
-		const clang::Preprocessor* preprocessor_{};
 		bool importSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};
@@ -162,13 +164,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 * This includes traversing the body.
 		 */
 		void TraverseFunction(clang::FunctionDecl* functionDecl, OOModel::Method* ooFunction);
-
-		/**
-		 * Creates a class with the name as specified in \a recordDecl.
-		 * It also sets the correct Kind (class, struct or union)
-		 * if the kind is none of this the method returns a nullptr
-		 */
-		OOModel::Class* createClass(clang::CXXRecordDecl* recordDecl);
 
 		/**
 		 * Inserts a friend class with the \a typeInfo in \a ooClass.

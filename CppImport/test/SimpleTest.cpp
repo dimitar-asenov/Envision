@@ -52,8 +52,9 @@ TEST(CppImportPlugin, SimpleTest)
 	Model::TreeManager* treeManager = importManager.createTreeManager();
 	Model::Node* top_level = treeManager->root();
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
-	VisualizationManager::instance().mainScene()->listenToTreeManager(treeManager);
+	auto mainScene = VisualizationManager::instance().mainScene();
+	mainScene->addTopLevelNode(top_level);
+	mainScene->listenToTreeManager(treeManager);
 
 	CHECK_CONDITION(top_level != nullptr);
 }

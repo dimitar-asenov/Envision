@@ -29,6 +29,7 @@
 #include "cppimport_api.h"
 #include "CppImportLogger.h"
 #include "OOModel/src/allOOModelNodes.h"
+#include "EnvisionToClangMap.h"
 
 namespace CppImport {
 
@@ -40,7 +41,8 @@ class ExpressionVisitor;
 class CPPIMPORT_API CppImportUtilities
 {
 	public:
-		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor);
+		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor,
+								 EnvisionToClangMap& envisionToClangMap);
 
 		/**
 		 * Translates a qualified type to the corresponding Envision type expression.
@@ -93,5 +95,6 @@ class CPPIMPORT_API CppImportUtilities
 		const QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};
+		EnvisionToClangMap& envisionToClangMap_;
 };
 }

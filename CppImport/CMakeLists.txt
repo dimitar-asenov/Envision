@@ -51,7 +51,6 @@ add_library(CppImport SHARED
 	src/macro/ClangHelpers.h
 	src/EnvisionToClangMap.h
 	src/macro/NodeToCloneMap.h
-	src/macro/LexicalTransformations.h
 	src/Comment.h
 	src/CppImportException.cpp
 	test/SimpleTest.cpp
@@ -79,7 +78,6 @@ add_library(CppImport SHARED
 	src/macro/ClangHelpers.cpp
 	src/EnvisionToClangMap.cpp
 	src/macro/NodeToCloneMap.cpp
-	src/macro/LexicalTransformations.cpp
 	src/Comment.cpp
 )
 

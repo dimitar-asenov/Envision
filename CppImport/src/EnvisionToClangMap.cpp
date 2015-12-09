@@ -63,4 +63,11 @@ QList<clang::SourceRange> EnvisionToClangMap::get(Model::Node* node) const
 	return envisionToClangMap_.values(node);
 }
 
+void EnvisionToClangMap::mapAst(clang::SourceRange sourceRange, Model::Node* envisionAstNode)
+{
+	Q_ASSERT(envisionAstNode);
+
+	envisionToClangMap_.insert(envisionAstNode, sourceRange);
+}
+
 }

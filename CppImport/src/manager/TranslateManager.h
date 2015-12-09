@@ -42,9 +42,8 @@ class ClangAstVisitor;
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(OOModel::Project* root, ClangAstVisitor* visitor);
+		TranslateManager(ClangHelpers& clang, OOModel::Project* root, ClangAstVisitor* visitor);
 		~TranslateManager();
-		void setSourceManager(const clang::SourceManager* mngr);
 
 		void setUtils(CppImportUtilities* utils);
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* namespaceDecl);
@@ -53,17 +52,18 @@ class CPPIMPORT_API TranslateManager
 		 * Inserts the class \a ooClass to the managed class if it is not yet managed.
 		 * Returns true if the class is not yet managed (insert success) else false
 		 */
-		bool insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass);
+		bool insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*& createdClass);
 		/**
 		 * Inserts the class \a ooClass to the managed class if it is not yet managed.
 		 * Returns true if the class is not yet managed (insert success) else false
 		 */
-		bool insertClassTemplate(clang::ClassTemplateDecl* classTemplate, OOModel::Class* ooClass);
+		bool insertClassTemplate(clang::ClassTemplateDecl* classTemplate, OOModel::Class*& createdClass);
 		/**
 		 * Inserts the class \a ooClass to the managed class if it is not yet managed.
 		 * Returns true if the class is not yet managed (insert success) else false
 		 */
-		bool insertClassTemplateSpec(clang::ClassTemplateSpecializationDecl* classTemplate, OOModel::Class* ooClass);
+		bool insertClassTemplateSpec(clang::ClassTemplateSpecializationDecl* classTemplate,
+											  OOModel::Class*& createdClass);
 		bool containsClass(clang::CXXRecordDecl* recordDecl);
 		/**
 		 * Inserts the method \a mDecl to the manager if not yet managed.
@@ -135,7 +135,7 @@ class CPPIMPORT_API TranslateManager
 		OOModel::TypeAlias* insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 
 	private:
-		const clang::SourceManager* sourceManager_{};
+		ClangHelpers& clang_;
 
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
@@ -157,7 +157,16 @@ class CPPIMPORT_API TranslateManager
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
 		ClangAstVisitor* baseVisitor_{};
-		NodeHasher* nh_{new NodeHasher()};
+		NodeHasher* nh_{};
+
+		/**
+		 * Creates a class with the name as specified in \a recordDecl.
+		 * It also sets the correct Kind (class, struct or union)
+		 * if the kind is none of this the method returns a nullptr
+		 */
+		OOModel::Class* createClass(clang::CXXRecordDecl* recordDecl);
+
+		void addMethodResultAndArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method);
 };
 
 }

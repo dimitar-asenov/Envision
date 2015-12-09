@@ -175,7 +175,7 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		 * Abstracts common code between all kinds of MemberExpr and DeclRefExpr.
 		 * Creates a reference expression with the \a name specified and sets prefixes and type arguments if specified.
 		 */
-		OOModel::ReferenceExpression* createRef(const QString& name,
+		OOModel::ReferenceExpression* createQualifiedReferenceWithTemplateArguments(clang::SourceRange sourceRange,
 															 const clang::NestedNameSpecifierLoc qualifier,
 															 const clang::TemplateArgumentLoc* templateArgs = nullptr,
 															 unsigned numTArgs = 0, clang::Expr* base = nullptr);

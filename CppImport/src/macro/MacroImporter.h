@@ -32,7 +32,6 @@
 #include "../EnvisionToClangMap.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansions.h"
-#include "LexicalTransformations.h"
 #include "AllMetaDefinitions.h"
 
 namespace CppImport {
@@ -46,10 +45,9 @@ struct MacroArgumentLocation;
 class CPPIMPORT_API MacroImporter
 {
 	public:
-		MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap);
+		MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap, ClangHelpers& clang);
 
-		void startTranslationUnit(const clang::SourceManager* sourceManager,
-										  const clang::Preprocessor* preprocessor);
+		void startTranslationUnit();
 
 		/**
 		 * invoked after every imported translation unit to perform macro import.
@@ -62,17 +60,13 @@ class CPPIMPORT_API MacroImporter
 		 */
 		void endEntireImport();
 
-		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
-		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
-
 	private:
 		OOModel::Project* root_{};
+		ClangHelpers& clang_;
 		EnvisionToClangMap& envisionToClangMap_;
 
-		ClangHelpers clang_;
 		MacroDefinitions macroDefinitions_;
 		MacroExpansions macroExpansions_;
-		LexicalTransformations lexicalTransformations_;
 		AllMetaDefinitions allMetaDefinitions_;
 		QHash<QString, OOModel::MetaCallExpression*> metaCalls_;
 		QVector<Model::Node*> finalizationNodes;
@@ -82,11 +76,6 @@ class CPPIMPORT_API MacroImporter
 										  QVector<MacroArgumentInfo>& arguments);
 
 		bool insertMetaCall(MacroExpansion* expansion);
-
-		/**
-		 * find best actual context matching expansion without nodes.
-		 */
-		OOModel::Declaration* actualContext(MacroExpansion* expansion);
 
 		QVector<MacroArgumentLocation> argumentHistory(clang::SourceRange range);
 		QVector<MacroArgumentLocation> argumentHistory(Model::Node* node);

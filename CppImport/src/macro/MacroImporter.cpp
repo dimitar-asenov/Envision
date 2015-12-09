@@ -44,11 +44,11 @@ void MacroImporter::clear()
 	macroExpansions_.clear();
 }
 
-MacroImporter::MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap)
-	: root_(root), envisionToClangMap_(envisionToClangMap), macroDefinitions_(clang_),
-	  macroExpansions_(clang_, envisionToClangMap, macroDefinitions_),
-	  lexicalTransformations_(clang_, macroExpansions_),
-	  allMetaDefinitions_(root, clang_, macroDefinitions_, macroExpansions_, lexicalTransformations_)
+MacroImporter::MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap,
+									  ClangHelpers& clang)
+	: root_(root), clang_{clang}, envisionToClangMap_(envisionToClangMap), macroDefinitions_(clang),
+	  macroExpansions_(clang, envisionToClangMap, macroDefinitions_),
+	  allMetaDefinitions_(root, clang, macroDefinitions_, macroExpansions_)
 	  {}
 
 void MacroImporter::endTranslationUnit()
@@ -69,27 +69,20 @@ void MacroImporter::endTranslationUnit()
 
 		handleMacroExpansion(generatedNodes, expansion, mapping, allArgs);
 
-		if (insertMetaCall(expansion))
+		// TODO: try to find a context without nodes
+		if (insertMetaCall(expansion) && !generatedNodes.empty() && !expansion->xMacroParent())
 		{
-			OOModel::Declaration* context;
+			auto context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
 
-			if (generatedNodes.size() > 0)
-				context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
+			if (!DCast<OOModel::Method>(context))
+				context->metaCalls()->append(expansion->metaCall());
 			else
-				context = actualContext(expansion);
-
-			if (!expansion->xMacroParent() && context)
 			{
-				if (!DCast<OOModel::Method>(context))
-					context->metaCalls()->append(expansion->metaCall());
+				if (auto replacementNode = expansion->replacementNode())
+					finalizationMetaCalls.insert(replacementNode, expansion);
 				else
-				{
-					if (auto replacementNode = expansion->replacementNode())
-						finalizationMetaCalls.insert(replacementNode, expansion);
-					else
-						qDebug() << "no splice found for expansion"
-									<< macroDefinitions_.definitionName(expansion->definition());
-				}
+					qDebug() << "no splice found for expansion"
+								<< macroDefinitions_.definitionName(expansion->definition());
 			}
 		}
 
@@ -182,13 +175,10 @@ void MacroImporter::endEntireImport()
 	NodeHelpers::removeNodesFromParent(finalizationNodes);
 }
 
-void MacroImporter::startTranslationUnit(const clang::SourceManager* sourceManager,
-															const clang::Preprocessor* preprocessor)
+void MacroImporter::startTranslationUnit()
 {
-	clang_.setSourceManager(sourceManager);
-	clang_.setPreprocessor(preprocessor);
-	const_cast<clang::Preprocessor*>(preprocessor)->addPPCallbacks(std::make_unique<PPCallback>(macroDefinitions_,
-																															  macroExpansions_));
+	const_cast<clang::Preprocessor*>(clang_.preprocessor())->addPPCallbacks(
+				std::make_unique<PPCallback>(macroDefinitions_, macroExpansions_));
 }
 
 void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion,
@@ -215,16 +205,6 @@ void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpan
 	allMetaDefinitions_.createMetaDef(nodes, expansion, mapping, arguments);
 }
 
-void MacroImporter::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
-{
-	lexicalTransformations_.processStatement(clangAstNode, envisionAstNode);
-}
-
-void MacroImporter::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
-{
-	lexicalTransformations_.processDeclaration(clangAstNode, envisionAstNode);
-}
-
 bool MacroImporter::insertMetaCall(MacroExpansion* expansion)
 {
 	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(expansion->range().getBegin());
@@ -243,32 +223,6 @@ bool MacroImporter::insertMetaCall(MacroExpansion* expansion)
 	SAFE_DELETE(expansion->metaCall());
 	expansion->setMetaCall(metaCalls_.value(hash));
 	return false;
-}
-
-OOModel::Declaration* MacroImporter::actualContext(MacroExpansion* expansion)
-{
-	Q_ASSERT(!expansion->parent());
-
-	// try to find a valid context where the context range contains the expansion range
-	QVector<OOModel::Declaration*> candidates;
-	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
-		if (lexicalTransformations_.contains(it.value(), expansion->range()))
-			if (NodeHelpers::validContext(it.key()))
-			{
-				candidates.append(DCast<OOModel::Declaration>(it.key()));
-				break;
-			}
-
-	// if we could not find a context return the root project
-	if (candidates.empty()) return root_;
-
-	auto result = candidates.first();
-
-	for (auto candidate : candidates)
-		if (result->isAncestorOf(candidate))
-			result = candidate;
-
-	return result;
 }
 
 QVector<MacroArgumentLocation> MacroImporter::argumentHistory(clang::SourceRange range)

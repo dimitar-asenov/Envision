@@ -46,6 +46,7 @@ class CPPIMPORT_API EnvisionToClangMap
 
 		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
 		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
+		void mapAst(clang::SourceRange sourceRange, Model::Node* envisionAstNode);
 
 		const QSet<Model::Node*> nodes() const;
 		QList<clang::SourceRange> get(Model::Node* node) const;
@@ -54,7 +55,6 @@ class CPPIMPORT_API EnvisionToClangMap
 		void clear();
 
 		Model::Node* closestParentWithAstMapping(Model::Node* node) const;
-
 	private:
 		QMultiHash<Model::Node*, clang::SourceRange> envisionToClangMap_;
 };
