@@ -47,8 +47,7 @@ class CPPIMPORT_API MacroImporter
 	public:
 		MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap, ClangHelpers& clang);
 
-		void startTranslationUnit(const clang::SourceManager* sourceManager,
-										  const clang::Preprocessor* preprocessor);
+		void startTranslationUnit();
 
 		/**
 		 * invoked after every imported translation unit to perform macro import.

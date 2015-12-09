@@ -182,13 +182,10 @@ void MacroImporter::endEntireImport()
 	NodeHelpers::removeNodesFromParent(finalizationNodes);
 }
 
-void MacroImporter::startTranslationUnit(const clang::SourceManager* sourceManager,
-															const clang::Preprocessor* preprocessor)
+void MacroImporter::startTranslationUnit()
 {
-	clang_.setSourceManager(sourceManager);
-	clang_.setPreprocessor(preprocessor);
-	const_cast<clang::Preprocessor*>(preprocessor)->addPPCallbacks(std::make_unique<PPCallback>(macroDefinitions_,
-																															  macroExpansions_));
+	const_cast<clang::Preprocessor*>(clang_.preprocessor())->addPPCallbacks(
+				std::make_unique<PPCallback>(macroDefinitions_, macroExpansions_));
 }
 
 void MacroImporter::handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion,
