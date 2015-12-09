@@ -55,7 +55,7 @@ OOModel::Module* TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 		rootProject_->modules()->append(ooModule);
 	else if (auto p = llvm::dyn_cast<clang::NamespaceDecl>(namespaceDecl->getDeclContext()))
 	{
-		const QString pHash = nh_->hashNameSpace(p);
+		auto pHash = nh_->hashNameSpace(p);
 		if (!nameSpaceMap_.contains(pHash))
 			return nullptr;
 		nameSpaceMap_.value(pHash)->modules()->append(ooModule);

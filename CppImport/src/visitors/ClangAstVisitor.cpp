@@ -1071,7 +1071,7 @@ bool ClangAstVisitor::shouldUseDataRecursionfor (clang::Stmt*)
 
 bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind)
 {
-	OOModel::Method* ooMethod = trMngr_->insertMethodDecl(methodDecl, kind);
+	auto ooMethod = trMngr_->insertMethodDecl(methodDecl, kind);
 	if (!ooMethod)
 	{
 		// TODO: at the moment we only consider a method where the parent has been visited.
