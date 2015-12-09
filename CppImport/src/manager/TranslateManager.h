@@ -42,9 +42,8 @@ class ClangAstVisitor;
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(OOModel::Project* root, ClangAstVisitor* visitor);
+		TranslateManager(ClangHelpers& clang, OOModel::Project* root, ClangAstVisitor* visitor);
 		~TranslateManager();
-		void setSourceManager(const clang::SourceManager* mngr);
 
 		void setUtils(CppImportUtilities* utils);
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* namespaceDecl);
@@ -136,7 +135,7 @@ class CPPIMPORT_API TranslateManager
 		OOModel::TypeAlias* insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 
 	private:
-		const clang::SourceManager* sourceManager_{};
+		ClangHelpers& clang_;
 
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
@@ -158,7 +157,8 @@ class CPPIMPORT_API TranslateManager
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
 		ClangAstVisitor* baseVisitor_{};
-		NodeHasher* nh_{new NodeHasher()};
+		NodeHasher* nh_{};
+
 		/**
 		 * Creates a class with the name as specified in \a recordDecl.
 		 * It also sets the correct Kind (class, struct or union)

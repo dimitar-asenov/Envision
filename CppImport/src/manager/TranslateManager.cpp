@@ -29,18 +29,13 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(OOModel::Project* root, ClangAstVisitor* visitor)
- : rootProject_{root}, baseVisitor_{visitor}
+TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, ClangAstVisitor* visitor)
+ : clang_{clang}, rootProject_{root}, baseVisitor_{visitor}, nh_{new NodeHasher(clang)}
 {}
 
 TranslateManager::~TranslateManager()
 {
 	SAFE_DELETE(nh_);
-}
-
-void TranslateManager::setSourceManager(const clang::SourceManager* mngr)
-{
-	nh_->setSourceManager(mngr);
 }
 
 void TranslateManager::setUtils(CppImportUtilities* utils)

@@ -36,7 +36,7 @@ namespace CppImport {
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
 :  macroImporter_(project, envisionToClangMap_), log_{logger}
 {
-	trMngr_ = new TranslateManager(project, this);
+	trMngr_ = new TranslateManager(clang_, project, this);
 	exprVisitor_ = new ExpressionVisitor(this, log_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_);
 	exprVisitor_->setUtilities(utils_);
@@ -63,7 +63,6 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 	Q_ASSERT(preprocessor);
 	clang_.setSourceManager(sourceManager);
 	clang_.setPreprocessor(preprocessor);
-	trMngr_->setSourceManager(sourceManager);
 	macroImporter_.startTranslationUnit(sourceManager, preprocessor);
 }
 
