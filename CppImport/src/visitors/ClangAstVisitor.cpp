@@ -380,16 +380,17 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	if (!shouldImport(enumDecl->getLocation()))
 		return true;
 
-	OOModel::Class* ooEnumClass = new OOModel::Class
-			(QString::fromStdString(enumDecl->getNameAsString()), OOModel::Class::ConstructKind::Enum);
+	auto ooEnumClass = new OOModel::Class(QString::fromStdString(enumDecl->getNameAsString()),
+													  OOModel::Class::ConstructKind::Enum);
+
 	// insert in tree
-	if (OOModel::Project* curProject = DCast<OOModel::Project>(ooStack_.top()))
+	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
 		curProject->classes()->append(ooEnumClass);
-	else if (OOModel::Module* curModule = DCast<OOModel::Module>(ooStack_.top()))
+	else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
 		curModule->classes()->append(ooEnumClass);
-	else if (OOModel::Class* curClass = DCast<OOModel::Class>(ooStack_.top()))
+	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooEnumClass);
-	else if (OOModel::StatementItemList* itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
+	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(new OOModel::DeclarationStatement(ooEnumClass));
 	else
 	{
@@ -1230,8 +1231,7 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 	}
 	// this should happen anyway that it is clearly visible that there is a friend
 	// TODO: this is not really a method call but rather a reference
-	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression(
-				QString::fromStdString(friendFunction->getNameAsString()));
+	auto ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(friendFunction->getNameAsString()));
 	// TODO: handle return type & arguments & type arguments
 	ooClass->friends()->append(ooMCall);
 }
