@@ -65,12 +65,14 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (memberExpr->hasExplicitTemplateArgs())
-		ooReference = createRef(memberExpr->getMemberNameInfo().getSourceRange(), memberExpr->getQualifierLoc(),
-											 memberExpr->getExplicitTemplateArgs().getTemplateArgs(),
-											 memberExpr->getNumTemplateArgs(), base);
+		ooReference = createQualifiedReferenceWithTemplateArguments(memberExpr->getMemberNameInfo().getSourceRange(),
+																						memberExpr->getQualifierLoc(),
+																						memberExpr->getExplicitTemplateArgs()
+																							.getTemplateArgs(),
+																						memberExpr->getNumTemplateArgs(), base);
 	else
-		ooReference = createRef(memberExpr->getMemberNameInfo().getSourceRange(), memberExpr->getQualifierLoc(), nullptr,
-										0, base);
+		ooReference = createQualifiedReferenceWithTemplateArguments(memberExpr->getMemberNameInfo().getSourceRange(),
+																						memberExpr->getQualifierLoc(), nullptr, 0, base);
 
 	ooExprStack_.push(ooReference);
 
@@ -85,13 +87,17 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (unresolvedMember->hasExplicitTemplateArgs())
-		ooReference = createRef(unresolvedMember->getMemberNameInfo().getSourceRange(),
-										unresolvedMember->getQualifierLoc(),
-											 unresolvedMember->getExplicitTemplateArgs().getTemplateArgs(),
-											 unresolvedMember->getNumTemplateArgs(), base);
+		ooReference = createQualifiedReferenceWithTemplateArguments(unresolvedMember->getMemberNameInfo()
+																							.getSourceRange(),
+																						unresolvedMember->getQualifierLoc(),
+																						unresolvedMember->getExplicitTemplateArgs()
+																							.getTemplateArgs(),
+																						unresolvedMember->getNumTemplateArgs(), base);
 	else
-		ooReference = createRef(unresolvedMember->getMemberNameInfo().getSourceRange(),
-										unresolvedMember->getQualifierLoc(), nullptr, 0, base);
+		ooReference = createQualifiedReferenceWithTemplateArguments(unresolvedMember->getMemberNameInfo()
+																							.getSourceRange(),
+																						unresolvedMember->getQualifierLoc(), nullptr, 0,
+																						base);
 
 	ooExprStack_.push(ooReference);
 	return true;
@@ -105,13 +111,17 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (dependentScopeMember->hasExplicitTemplateArgs())
-		ooReference = createRef(dependentScopeMember->getMemberNameInfo().getSourceRange(),
-										dependentScopeMember->getQualifierLoc(),
-											 dependentScopeMember->getExplicitTemplateArgs().getTemplateArgs(),
-											 dependentScopeMember->getNumTemplateArgs(), base);
+		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScopeMember->getMemberNameInfo()
+																							.getSourceRange(),
+																						dependentScopeMember->getQualifierLoc(),
+																						dependentScopeMember->getExplicitTemplateArgs()
+																							.getTemplateArgs(),
+																						dependentScopeMember->getNumTemplateArgs(), base);
 	else
-		ooReference = createRef(dependentScopeMember->getMemberNameInfo().getSourceRange(),
-										dependentScopeMember->getQualifierLoc(), nullptr, 0, base);
+		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScopeMember->getMemberNameInfo()
+																						.getSourceRange(),
+																						dependentScopeMember->getQualifierLoc(), nullptr, 0,
+																						base);
 
 	ooExprStack_.push(ooReference);
 	return true;
@@ -121,11 +131,13 @@ bool ExpressionVisitor::TraverseDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (declRefExpr->hasExplicitTemplateArgs())
-		ooReference = createRef(declRefExpr->getNameInfo().getSourceRange(), declRefExpr->getQualifierLoc(),
-											 declRefExpr->getExplicitTemplateArgs().getTemplateArgs(),
-											 declRefExpr->getNumTemplateArgs());
+		ooReference = createQualifiedReferenceWithTemplateArguments(declRefExpr->getNameInfo().getSourceRange(),
+																						declRefExpr->getQualifierLoc(),
+																						declRefExpr->getExplicitTemplateArgs().getTemplateArgs(),
+																						declRefExpr->getNumTemplateArgs());
 	else
-		ooReference = createRef(declRefExpr->getNameInfo().getSourceRange(), declRefExpr->getQualifierLoc());
+		ooReference = createQualifiedReferenceWithTemplateArguments(declRefExpr->getNameInfo().getSourceRange(),
+																						declRefExpr->getQualifierLoc());
 
 	ooExprStack_.push(ooReference);
 	return true;
@@ -135,11 +147,14 @@ bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeD
 {
 	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (dependentScope->hasExplicitTemplateArgs())
-		ooReference = createRef(dependentScope->getNameInfo().getSourceRange(), dependentScope->getQualifierLoc(),
-											 dependentScope->getExplicitTemplateArgs().getTemplateArgs(),
-											 dependentScope->getNumTemplateArgs());
+		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScope->getNameInfo().getSourceRange(),
+																						dependentScope->getQualifierLoc(),
+																						dependentScope->getExplicitTemplateArgs()
+																							.getTemplateArgs(),
+																						dependentScope->getNumTemplateArgs());
 	else
-		ooReference = createRef(dependentScope->getNameInfo().getSourceRange(), dependentScope->getQualifierLoc());
+		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScope->getNameInfo().getSourceRange(),
+																						dependentScope->getQualifierLoc());
 
 	ooExprStack_.push(ooReference);
 	return true;
@@ -374,8 +389,10 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression(
-					QString::fromStdString(constructExpr->getConstructor()->getNameAsString()));
+		auto ooMethodCall = new OOModel::MethodCallExpression(QString::fromStdString(constructExpr->getConstructor()
+																											  ->getNameAsString()));
+		baseVisitor_->mapAst(constructExpr->getLocation(), ooMethodCall->callee());
+
 		for (auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
 		{
 			if (llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
@@ -602,7 +619,7 @@ bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeT
 }
 
 
-OOModel::ReferenceExpression* ExpressionVisitor::createRef
+OOModel::ReferenceExpression* ExpressionVisitor::createQualifiedReferenceWithTemplateArguments
 (clang::SourceRange sourceRange, const clang::NestedNameSpecifierLoc qualifier,
  const clang::TemplateArgumentLoc* templateArgs, unsigned numTArgs, clang::Expr* base)
 {
