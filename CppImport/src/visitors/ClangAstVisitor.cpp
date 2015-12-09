@@ -1210,7 +1210,8 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 
 void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
 {
-	ooClass->friends()->append(createReference(typeInfo->getTypeLoc().getSourceRange()));
+	// use nextTypeLoc to skip the 'class' in "class FriendClass"
+	ooClass->friends()->append(createReference(typeInfo->getTypeLoc().getNextTypeLoc().getSourceRange()));
 }
 
 void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass)
