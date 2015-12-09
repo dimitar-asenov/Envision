@@ -57,7 +57,37 @@ class CPPIMPORT_API ClangHelpers
 		const clang::SourceManager* sourceManager_{};
 		const clang::Preprocessor* preprocessor_{};
 
+		/**
+		 * given a source range calculates the source range corresponding to the code expanded there.
+		 *
+		 * Example: Macro argument:
+		 *
+		 *                     start|        |end
+		 *                           1+2 == 3
+		 *                          |        |
+		 *                          |         \
+		 *                           Condition
+		 *	                out_start|         |out_end
+		 *
+		 *
+		 * Example: Concatenated tokens:
+		 *
+		 *                    start|          |end    (start != end)
+		 *                          Door::open
+		 *                         /          \
+		 *                        /            \
+		 *                        Do##or::##open
+		 *                       |out_start     |out_end
+		 *
+		 *                      start||end            (start == end)
+		 *										Door
+		 *                           /\___
+		 *                          |     \
+		 *                           Do##or
+		 *	                out_start|     |out_end
+		 */
 		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
+
 		QString spelling(clang::SourceRange sourceRange) const;
 };
 

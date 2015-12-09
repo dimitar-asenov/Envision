@@ -62,13 +62,19 @@ clang::SourceRange ClangHelpers::getUnexpandedRange(clang::SourceRange sourceRan
 	auto start = sourceRange.getBegin();
 	auto end = sourceRange.getEnd();
 
-	if (start.isMacroID() &&
+	if (// start is a macro location and...
+		 start.isMacroID() &&
+		 // start was expanded from a macro argument or...
 		 (sourceManager_->isMacroArgExpansion(start) ||
+		 // start was expanded from a "virtual" macro i.e. it is not written anywhere (identifier concatentation etc.)
 		 !sourceManager_->getFileEntryForID(sourceManager_->getFileID(sourceManager_->getSpellingLoc(start)))))
 		start = sourceManager_->getImmediateExpansionRange(start).first;
 
-	if (end.isMacroID() &&
+	if (// end is a macro location and...
+		 end.isMacroID() &&
+		 // end was expanded from a macro argument or...
 		 (sourceManager_->isMacroArgExpansion(end) ||
+		 // end was expanded from a "virtual" macro i.e. it is not written anywhere (identifier concatentation etc.)
 		 !sourceManager_->getFileEntryForID(sourceManager_->getFileID(sourceManager_->getSpellingLoc(end)))))
 		end = sourceManager_->getImmediateExpansionRange(end).second;
 
