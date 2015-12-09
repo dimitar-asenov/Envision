@@ -38,7 +38,7 @@ ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* log
 {
 	trMngr_ = new TranslateManager(clang_, project, this);
 	exprVisitor_ = new ExpressionVisitor(this, log_);
-	utils_ = new CppImportUtilities(log_, exprVisitor_);
+	utils_ = new CppImportUtilities(log_, exprVisitor_, envisionToClangMap_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
 	templArgVisitor_ = new TemplateArgumentVisitor(exprVisitor_, utils_, log_);
