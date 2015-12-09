@@ -85,7 +85,7 @@ class CPPIMPORT_API CppImportUtilities
 		 * Creates an error expression which is clearly visible inside envision
 		 * In envision it is represented as a red # and the \a reason string
 		 */
-		OOModel::Expression* createErrorExpression(const QString& reason);
+		OOModel::Expression* createErrorExpression(const QString& reason, clang::SourceRange sourceRange);
 	private:
 		/**
 		 * Translates \a type to the nearest primitive OOModel type.
