@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../cppimport_api.h"
+#include "EnvisionToClangMap.h"
 
 namespace CppImport {
 
@@ -53,7 +54,11 @@ class CPPIMPORT_API ClangHelpers
 		QString unexpandedSpelling(clang::SourceRange range) const;
 		QString unexpandedSpelling(clang::SourceLocation start, clang::SourceLocation end) const;
 
+		EnvisionToClangMap& envisionToClangMap();
+
 	private:
+		EnvisionToClangMap envisionToClangMap_;
+
 		const clang::SourceManager* sourceManager_{};
 		const clang::Preprocessor* preprocessor_{};
 
@@ -103,5 +108,7 @@ inline bool ClangHelpers::isMacroRange(clang::SourceRange range) const
 
 inline QString ClangHelpers::unexpandedSpelling(clang::SourceLocation start, clang::SourceLocation end) const
 { return unexpandedSpelling(clang::SourceRange(start, end)); }
+
+inline EnvisionToClangMap& ClangHelpers::envisionToClangMap() { return envisionToClangMap_; }
 
 }

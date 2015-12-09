@@ -32,9 +32,8 @@
 namespace CppImport {
 
 
-CppImportUtilities::CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor,
-													EnvisionToClangMap& envisionToClangMap)
-	: log_{logger}, exprVisitor_{visitor}, envisionToClangMap_{envisionToClangMap}
+CppImportUtilities::CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor, ClangHelpers& clang)
+	: log_{logger}, exprVisitor_{visitor}, clang_{clang}
 {}
 
 OOModel::Expression* CppImportUtilities::translateQualifiedType(clang::TypeLoc typeLoc)

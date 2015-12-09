@@ -29,7 +29,6 @@
 #include "../cppimport_api.h"
 
 #include "ClangHelpers.h"
-#include "../EnvisionToClangMap.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansions.h"
 #include "AllMetaDefinitions.h"
@@ -45,7 +44,7 @@ struct MacroArgumentLocation;
 class CPPIMPORT_API MacroImporter
 {
 	public:
-		MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap, ClangHelpers& clang);
+		MacroImporter(OOModel::Project* root, ClangHelpers& clang);
 
 		void startTranslationUnit();
 
@@ -63,7 +62,6 @@ class CPPIMPORT_API MacroImporter
 	private:
 		OOModel::Project* root_{};
 		ClangHelpers& clang_;
-		EnvisionToClangMap& envisionToClangMap_;
 
 		MacroDefinitions macroDefinitions_;
 		MacroExpansions macroExpansions_;

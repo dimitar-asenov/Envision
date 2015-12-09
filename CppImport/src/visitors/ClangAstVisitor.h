@@ -31,7 +31,6 @@
 #include "../macro/MacroImporter.h"
 #include "../CppImportLogger.h"
 #include "../comments/CommentParser.h"
-#include "../EnvisionToClangMap.h"
 #include "../Comment.h"
 
 namespace CppImport {
@@ -152,7 +151,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		QList<Comment*> comments_;
 		ClangHelpers clang_;
 		MacroImporter macroImporter_;
-		EnvisionToClangMap envisionToClangMap_;
 
 		CppImportLogger* log_{};
 		TranslateManager* trMngr_{};
@@ -212,7 +210,7 @@ template<class NodeType>
 NodeType* ClangAstVisitor::createNode(clang::SourceRange range)
 {
 	auto node = new NodeType();
-	envisionToClangMap_.mapAst(range, node);
+	clang_.envisionToClangMap().mapAst(range, node);
 	return node;
 }
 

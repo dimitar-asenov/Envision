@@ -37,7 +37,6 @@ namespace CppImport {
 class ClangHelpers;
 class MacroDefinitions;
 class MacroExpansion;
-class EnvisionToClangMap;
 
 /**
  * creates and stores all MacroExpansions for a translation unit.
@@ -45,8 +44,7 @@ class EnvisionToClangMap;
 class CPPIMPORT_API MacroExpansions
 {
 	public:
-		MacroExpansions(const ClangHelpers& clang, const EnvisionToClangMap& astMapping,
-							  const MacroDefinitions& macroDefinitions);
+		MacroExpansions(ClangHelpers& clang, const MacroDefinitions& macroDefinitions);
 
 		void addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 									  const clang::MacroArgs* macroArguments);
@@ -81,8 +79,7 @@ class CPPIMPORT_API MacroExpansions
 		void clear();
 
 	private:
-		const ClangHelpers& clang_;
-		const EnvisionToClangMap& envisionToClangMap_;
+		ClangHelpers& clang_;
 		const MacroDefinitions& macroDefinitions_;
 		MacroExpansion* currentXMacroParent {};
 		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;

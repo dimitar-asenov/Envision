@@ -44,10 +44,9 @@ void MacroImporter::clear()
 	macroExpansions_.clear();
 }
 
-MacroImporter::MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap,
-									  ClangHelpers& clang)
-	: root_(root), clang_{clang}, envisionToClangMap_(envisionToClangMap), macroDefinitions_(clang),
-	  macroExpansions_(clang, envisionToClangMap, macroDefinitions_),
+MacroImporter::MacroImporter(OOModel::Project* root, ClangHelpers& clang)
+	: root_(root), clang_{clang}, macroDefinitions_(clang),
+	  macroExpansions_(clang, macroDefinitions_),
 	  allMetaDefinitions_(root, clang, macroDefinitions_, macroExpansions_)
 	  {}
 
@@ -141,11 +140,11 @@ void MacroImporter::calculateFinalizationNodes(QVector<Model::Node*>& nodes, Nod
 	{
 		Q_ASSERT(!node->parent());
 
-		if (envisionToClangMap_.contains(mapping.original(node)))
+		if (clang_.envisionToClangMap().contains(mapping.original(node)))
 		{
 			// check whether this node only exists in generated code from macros
 			bool nonMacroInstanceFound = false;
-			for (auto range : envisionToClangMap_.get(mapping.original(node)))
+			for (auto range : clang_.envisionToClangMap().get(mapping.original(node)))
 				if (!clang_.isMacroRange(range))
 				{
 					nonMacroInstanceFound = true;
@@ -249,8 +248,8 @@ QVector<MacroArgumentLocation> MacroImporter::argumentHistory(clang::SourceRange
 QVector<MacroArgumentLocation> MacroImporter::argumentHistory(Model::Node* node)
 {
 	QVector<MacroArgumentLocation> result;
-	if (envisionToClangMap_.contains(node))
-			result = argumentHistory(envisionToClangMap_.get(node).first());
+	if (clang_.envisionToClangMap().contains(node))
+			result = argumentHistory(clang_.envisionToClangMap().get(node).first());
 	return result;
 }
 

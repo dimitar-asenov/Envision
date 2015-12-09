@@ -29,7 +29,6 @@
 #include "ClangHelpers.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansion.h"
-#include "../EnvisionToClangMap.h"
 
 #include "NodeHelpers.h"
 
@@ -39,9 +38,8 @@
 
 namespace CppImport {
 
-MacroExpansions::MacroExpansions(const ClangHelpers& clang, const EnvisionToClangMap& astMapping,
-											  const MacroDefinitions& macroDefinitions)
-	: clang_(clang), envisionToClangMap_(astMapping), macroDefinitions_(macroDefinitions) {}
+MacroExpansions::MacroExpansions(ClangHelpers& clang, const MacroDefinitions& macroDefinitions)
+	: clang_(clang), macroDefinitions_(macroDefinitions) {}
 
 void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 													  const clang::MacroArgs* macroArguments)
@@ -172,9 +170,9 @@ QSet<MacroExpansion*> MacroExpansions::expansions(Model::Node* node)
 	if (it != expansionCache_.end()) return *it;
 
 	QSet<MacroExpansion*> result;
-	if (auto n = envisionToClangMap_.closestParentWithAstMapping(node))
-		if (envisionToClangMap_.contains(n))
-			for (auto range : envisionToClangMap_.get(n))
+	if (auto n = clang_.envisionToClangMap().closestParentWithAstMapping(node))
+		if (clang_.envisionToClangMap().contains(n))
+			for (auto range : clang_.envisionToClangMap().get(n))
 				if (auto exp = expansion(range.getBegin()))
 					result.insert(exp);
 
@@ -188,8 +186,8 @@ QVector<Model::Node*> MacroExpansions::topLevelNodes(MacroExpansion* expansion, 
 	Q_ASSERT(expansion);
 
 	QVector<Model::Node*> allTLExpansionNodes;
-	for (auto node : envisionToClangMap_.nodes())
-		for (auto range : envisionToClangMap_.get(node))
+	for (auto node : clang_.envisionToClangMap().nodes())
+		for (auto range : clang_.envisionToClangMap().get(node))
 		{
 			bool isCandidate = filter == Transitive ?
 						// return true if the node ultimately expands to the source location of the expansion either by

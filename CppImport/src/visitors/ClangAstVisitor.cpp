@@ -34,11 +34,11 @@
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
- : macroImporter_(project, envisionToClangMap_, clang_), log_{logger}
+ : macroImporter_(project, clang_), log_{logger}
 {
 	trMngr_ = new TranslateManager(clang_, project, this);
 	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
-	utils_ = new CppImportUtilities(log_, exprVisitor_, envisionToClangMap_);
+	utils_ = new CppImportUtilities(log_, exprVisitor_, clang_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
 	templArgVisitor_ = new TemplateArgumentVisitor(exprVisitor_, utils_, log_);
@@ -1322,7 +1322,7 @@ void ClangAstVisitor::endTranslationUnit()
 	 * comments processing 3 of 3.
 	 * process comments which are on the same line as statements.
 	 */
-	for (auto it = envisionToClangMap_.begin(); it != envisionToClangMap_.end(); it++)
+	for (auto it = clang_.envisionToClangMap().begin(); it != clang_.envisionToClangMap().end(); it++)
 	{
 		auto nodePresumedLocation = clang_.sourceManager()->getPresumedLoc(it.value().getBegin());
 
@@ -1350,7 +1350,7 @@ void ClangAstVisitor::endTranslationUnit()
 		}
 	}
 
-	envisionToClangMap_.clear();
+	clang_.envisionToClangMap().clear();
 }
 
 void ClangAstVisitor::endEntireImport()
@@ -1365,7 +1365,7 @@ void ClangAstVisitor::deleteNode(Model::Node* node)
 	{
 		auto current = workList.takeLast();
 		workList << current->children();
-		envisionToClangMap_.remove(current);
+		clang_.envisionToClangMap().remove(current);
 	}
 
 	SAFE_DELETE(node);
