@@ -341,7 +341,6 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		inBody_ = inBody;
 	}
 
-	mapAst(varDecl, ooVarDecl);
 	if (wasDeclared)
 		// we know the rest of the information already
 		return true;
@@ -423,7 +422,6 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 		ooEnumClass->enumerators()->append(enumerator);
 	}
 	inBody_ = inBody;
-	mapAst(enumDecl, ooEnumClass);
 	return true;
 }
 
@@ -621,7 +619,6 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		TraverseStmt(ifStmt->getElse());
 		inBody_ = inBody;
 		ooStack_.pop();
-		mapAst(ifStmt, ooIfStmt);
 	}
 	else
 		log_->writeError(className_, ifStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -649,7 +646,6 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 		TraverseStmt(whileStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
-		mapAst(whileStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, whileStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -675,7 +671,6 @@ bool ClangAstVisitor::TraverseDoStmt(clang::DoStmt* doStmt)
 		TraverseStmt(doStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
-		mapAst(doStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, doStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -708,7 +703,6 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		TraverseStmt(forStmt->getBody());
 		inBody_ = inBody;
 		ooStack_.pop();
-		mapAst(forStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, forStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -735,7 +729,6 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 		TraverseStmt(forRangeStmt->getBody());
 		ooStack_.pop();
 		inBody_ = inBody;
-		mapAst(forRangeStmt, ooLoop);
 	}
 	else
 		log_->writeError(className_, forRangeStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -757,7 +750,6 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 		else
 			log_->writeError(className_, returnStmt->getRetValue(), CppImportLogger::Reason::NOT_SUPPORTED);
 		inBody_ = inBody;
-		mapAst(returnStmt, ooReturn);
 	}
 	else
 		log_->writeError(className_, returnStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -832,7 +824,6 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 			ooTry->catchClauses()->append(ooStack_.pop());
 		}
 		inBody_ = inBody;
-		mapAst(tryStmt, ooTry);
 	}
 	else
 		log_->writeError(className_, tryStmt, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -860,7 +851,6 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 	// finish up
 	inBody_ = inBody;
 	ooStack_.push(ooCatch);
-	mapAst(catchStmt, ooCatch);
 	return true;
 }
 
@@ -904,7 +894,6 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 			deleteNode(itemList);
 			// pop the body of the switch statement
 			ooStack_.pop();
-			mapAst(switchStmt, ooSwitchStmt);
 		}
 		else
 			log_->writeError(className_, switchStmt, CppImportLogger::Reason::NOT_SUPPORTED);
@@ -938,7 +927,6 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 	// traverse statements/body
 	ooStack_.push(ooSwitchCase->body());
 	TraverseStmt(caseStmt->getSubStmt());
-	mapAst(caseStmt, ooSwitchCase);
 	return true;
 }
 
@@ -1049,7 +1037,6 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 	// traverse statements/body
 	ooStack_.push(ooDefaultCase->body());
 	TraverseStmt(defaultStmt->getSubStmt());
-	mapAst(defaultStmt, ooDefaultCase);
 	return true;
 }
 
@@ -1058,7 +1045,6 @@ bool ClangAstVisitor::TraverseBreakStmt(clang::BreakStmt* breakStmt)
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
 		auto ooBreakStmt = createNode<OOModel::BreakStatement>(breakStmt->getSourceRange());
-		mapAst(breakStmt, ooBreakStmt);
 		itemList->append(ooBreakStmt);
 	}
 	else
@@ -1071,7 +1057,6 @@ bool ClangAstVisitor::TraverseContinueStmt(clang::ContinueStmt* continueStmt)
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
 		auto ooContinueStmt = createNode<OOModel::ContinueStatement>(continueStmt->getSourceRange());
-		mapAst(continueStmt, ooContinueStmt);
 		itemList->append(ooContinueStmt);
 	}
 	else
@@ -1121,9 +1106,6 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 			}
 		}
 	}
-
-	mapAst(methodDecl, ooMethod);
-
 	return true;
 }
 
@@ -1257,54 +1239,6 @@ bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 	if (clang_.sourceManager()->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
 		return importSysHeader_;
 	return true;
-}
-
-void ClangAstVisitor::mapAst(clang::SourceRange clangAstNode, Model::Node* envisionAstNode)
-{
-	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
-}
-
-void ClangAstVisitor::mapAst(clang::Stmt*, Model::Node*)
-{
-}
-
-void ClangAstVisitor::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
-{
-	/*
-	 * comments processing 2 of 3.
-	 * process comments which are associated with declarations.
-	 */
-	if (auto compositeNode = DCast<Model::CompositeNode>(envisionAstNode))
-		if (auto commentForDeclaration = clangAstNode->getASTContext().getRawCommentForDeclNoCache(clangAstNode))
-			for (auto comment : comments_)
-				if (comment->rawComment() == commentForDeclaration)
-				{
-					// uncomment the following line to not reassociate comments.
-					// if (comment->node()) break;
-
-					// we found a comment for this declaration
-
-					/*
-					 * if the comment is already associated with a node and it is not the current node then
-					 * assert that it was added to a statement item list and remove it from said list so we can associate
-					 * it with this declaration (that is in general more precise).
-					 */
-					if (comment->node() && comment->node() != envisionAstNode)
-						comment->removeFromItemList();
-
-					// at this point the comment is not associated with a node or it is associated with the current node.
-					Q_ASSERT(!comment->node() || comment->node() == envisionAstNode);
-
-					if (!comment->node())
-					{
-						// if it was not yet associated with any node then associate it with the current node.
-						comment->setNode(envisionAstNode);
-						compositeNode->setComment(new Comments::CommentNode(comment->text()));
-					}
-					break;
-				}
-
-	envisionToClangMap_.mapAst(clangAstNode, envisionAstNode);
 }
 
 void ClangAstVisitor::beforeTranslationUnit(clang::ASTContext& astContext)

@@ -51,7 +51,6 @@ OOModel::Module* TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 		return nameSpaceMap_.value(hash);
 	auto ooModule = baseVisitor_->createNamedNode<OOModel::Module>(namespaceDecl);
 	nameSpaceMap_.insert(hash, ooModule);
-	baseVisitor_->mapAst(namespaceDecl, ooModule);
 	if (namespaceDecl->getDeclContext()->isTranslationUnit())
 		rootProject_->modules()->append(ooModule);
 	else if (auto p = llvm::dyn_cast<clang::NamespaceDecl>(namespaceDecl->getDeclContext()))
@@ -91,10 +90,9 @@ bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*&
 	{
 		createdClass = createClass(rDecl);
 		classMap_.insert(hash, createdClass);
-		baseVisitor_->mapAst(rDecl, createdClass);
 		return true;
 	}
-	baseVisitor_->mapAst(rDecl, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(rDecl, classMap_.value(hash));
 	return false;
 }
 
@@ -105,10 +103,9 @@ bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTempla
 	{
 		createdClass = createClass(classTemplate->getTemplatedDecl());
 		classMap_.insert(hash, createdClass);
-		baseVisitor_->mapAst(classTemplate, createdClass);
 		return true;
 	}
-	baseVisitor_->mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
 	return false;
 }
 
@@ -120,10 +117,9 @@ bool TranslateManager::insertClassTemplateSpec
 	{
 		createdClass = createClass(classTemplate);
 		classMap_.insert(hash, createdClass);
-		baseVisitor_->mapAst(classTemplate, createdClass);
 		return true;
 	}
-	baseVisitor_->mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
 	return false;
 }
 
@@ -137,12 +133,12 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 		if (!methodMap_.contains(hash))
 		{
 			method = addNewMethod(mDecl, kind);
-			baseVisitor_->mapAst(mDecl, method);
 		}
 		else
 		{
 			method = methodMap_.value(hash);
-			baseVisitor_->mapAst(mDecl, method);
+			clang_.envisionToClangMap().mapAst(mDecl, method);
+
 			// If the method in the map is just a declaration and the method we currently have is a definition
 			// there might be some argument names in the definition which are not yet considered.
 			// Therefore we look at them now.
@@ -167,12 +163,12 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 	if (!functionMap_.contains(hash))
 	{
 		ooFunction = addNewFunction(functionDecl);
-		baseVisitor_->mapAst(functionDecl, ooFunction);
 	}
 	else
 	{
 		ooFunction = functionMap_.value(hash);
-		baseVisitor_->mapAst(functionDecl, ooFunction);
+		clang_.envisionToClangMap().mapAst(functionDecl, ooFunction);
+
 		if (ooFunction->items()->size())
 			return ooFunction;
 		// the method which is in the map is just a declaration
@@ -195,7 +191,6 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fieldDecl)
 	{
 		auto ooField = baseVisitor_->createNamedNode<OOModel::Field>(fieldDecl);
 		classMap_.value(hash)->fields()->append(ooField);
-		baseVisitor_->mapAst(fieldDecl, ooField);
 		return ooField;
 	}
 	return nullptr;
@@ -207,7 +202,7 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	if (staticFieldMap_.contains(hash))
 	{
 		wasDeclared = true;
-		baseVisitor_->mapAst(varDecl, staticFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl, staticFieldMap_.value(hash));
 		return staticFieldMap_.value(hash);
 	}
 	wasDeclared = false;
@@ -217,14 +212,13 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 		auto ooField = baseVisitor_->createNamedNode<OOModel::Field>(varDecl);
 		classMap_.value(parentHash)->fields()->append(ooField);
 		staticFieldMap_.insert(hash, ooField);
-		baseVisitor_->mapAst(varDecl, ooField);
 		return ooField;
 	}
 	return nullptr;
 }
 
 OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplateInstantiation
-(const clang::ClassTemplateSpecializationDecl* explicitTemplateInst)
+(clang::ClassTemplateSpecializationDecl* explicitTemplateInst)
 {
 	OOModel::ExplicitTemplateInstantiation* ooExplicitTemplateInst = nullptr;
 	const QString hash = nh_->hashClassTemplateSpec(explicitTemplateInst);
@@ -234,9 +228,7 @@ OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplate
 																										explicitTemplateInst->getSourceRange());
 		explicitTemplateInstMap_.insert(hash, ooExplicitTemplateInst);
 	}
-
-	baseVisitor_->mapAst(const_cast<clang::ClassTemplateSpecializationDecl*>(explicitTemplateInst),
-										explicitTemplateInstMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(explicitTemplateInst, explicitTemplateInstMap_.value(hash));
 	return ooExplicitTemplateInst;
 }
 

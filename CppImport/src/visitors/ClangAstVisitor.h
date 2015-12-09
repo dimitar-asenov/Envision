@@ -115,10 +115,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 */
 		bool shouldUseDataRecursionfor (clang::Stmt* S);
 
-		void mapAst(clang::SourceRange clangAstNode, Model::Node* envisionAstNode);
-		void mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode);
-		void mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode);
-
 		void beforeTranslationUnit(clang::ASTContext& astContext);
 		void endTranslationUnit();
 		void endEntireImport();
@@ -224,6 +220,44 @@ NodeType* ClangAstVisitor::createNamedNode(clang::SourceLocation nameLoc, clang:
 
 template<class NodeType>
 inline NodeType* ClangAstVisitor::createNamedNode(clang::NamedDecl* namedDecl)
-{ return createNamedNode<NodeType>(namedDecl->getLocation(), namedDecl->getSourceRange()); }
+{
+	auto namedNode = createNamedNode<NodeType>(namedDecl->getLocation(), namedDecl->getSourceRange());
+
+	/*
+	 * comments processing 2 of 3.
+	 * process comments which are associated with declarations.
+	 */
+	if (auto compositeNode = DCast<Model::CompositeNode>(namedNode))
+		if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
+			for (auto comment : comments_)
+				if (comment->rawComment() == commentForDeclaration)
+				{
+					// uncomment the following line to not reassociate comments.
+					if (comment->node()) break;
+
+					// we found a comment for this declaration
+
+					/*
+					 * if the comment is already associated with a node and it is not the current node then
+					 * assert that it was added to a statement item list and remove it from said list so we can associate
+					 * it with this declaration (that is in general more precise).
+					 */
+					if (comment->node() && comment->node() != namedNode)
+						comment->removeFromItemList();
+
+					// at this point the comment is not associated with a node or it is associated with the current node.
+					Q_ASSERT(!comment->node() || comment->node() == namedNode);
+
+					if (!comment->node())
+					{
+						// if it was not yet associated with any node then associate it with the current node.
+						comment->setNode(namedNode);
+						compositeNode->setComment(new Comments::CommentNode(comment->text()));
+					}
+					break;
+				}
+
+	return namedNode;
+}
 
 }
