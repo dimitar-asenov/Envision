@@ -44,11 +44,11 @@ void MacroImporter::clear()
 	macroExpansions_.clear();
 }
 
-MacroImporter::MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap)
-	: root_(root), envisionToClangMap_(envisionToClangMap), macroDefinitions_(clang_),
-	  macroExpansions_(clang_, envisionToClangMap, macroDefinitions_),
-	  lexicalTransformations_(clang_, macroExpansions_),
-	  allMetaDefinitions_(root, clang_, macroDefinitions_, macroExpansions_, lexicalTransformations_)
+MacroImporter::MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap,
+									  ClangHelpers& clang)
+	: root_(root), clang_{clang}, envisionToClangMap_(envisionToClangMap), macroDefinitions_(clang),
+	  macroExpansions_(clang, envisionToClangMap, macroDefinitions_),
+	  allMetaDefinitions_(root, clang, macroDefinitions_, macroExpansions_)
 	  {}
 
 void MacroImporter::endTranslationUnit()

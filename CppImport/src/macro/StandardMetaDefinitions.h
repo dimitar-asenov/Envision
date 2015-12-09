@@ -56,7 +56,7 @@ class CPPIMPORT_API StandardMetaDefinitions
 {
 	public:
 		StandardMetaDefinitions(const ClangHelpers& clang, const MacroDefinitions& definitionManager,
-									 MacroExpansions& MacroExpansions, const LexicalTransformations& lexicalHelper);
+									 MacroExpansions& MacroExpansions);
 
 		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
@@ -70,7 +70,6 @@ class CPPIMPORT_API StandardMetaDefinitions
 		const ClangHelpers& clang_;
 		const MacroDefinitions& definitionManager_;
 		MacroExpansions& macroExpansions_;
-		const LexicalTransformations& lexicalTransformations_;
 
 		QHash<QString, OOModel::MetaDefinition*> standardMetaDefinitions_;
 
@@ -96,8 +95,6 @@ class CPPIMPORT_API StandardMetaDefinitions
 		 */
 		void insertArgumentSplices(NodeToCloneMap& mapping, NodeToCloneMap& childMapping,
 											QVector<MacroArgumentInfo>& arguments);
-
-		void applyLexicalTransformations(Model::Node* node, NodeToCloneMap& mapping, QVector<QString> formalArgs) const;
 
 		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap& mapping) const;
 

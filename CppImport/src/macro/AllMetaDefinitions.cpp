@@ -37,10 +37,9 @@
 namespace CppImport {
 
 AllMetaDefinitions::AllMetaDefinitions(OOModel::Project* root, const ClangHelpers& clangHelper,
-									  const MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions,
-									  const LexicalTransformations& lexicalHelper)
+									  const MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions)
 	: root_(root), macroDefinitions_(macroDefinitions), macroExpansions_(macroExpansions),
-	  standardMetaDefinitions_(clangHelper, macroDefinitions, macroExpansions, lexicalHelper) {}
+	  standardMetaDefinitions_(clangHelper, macroDefinitions, macroExpansions) {}
 
 void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
 											 QVector<MacroArgumentInfo>& arguments)

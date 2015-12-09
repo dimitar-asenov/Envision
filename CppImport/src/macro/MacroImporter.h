@@ -32,7 +32,6 @@
 #include "../EnvisionToClangMap.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansions.h"
-#include "LexicalTransformations.h"
 #include "AllMetaDefinitions.h"
 
 namespace CppImport {
@@ -46,7 +45,7 @@ struct MacroArgumentLocation;
 class CPPIMPORT_API MacroImporter
 {
 	public:
-		MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap);
+		MacroImporter(OOModel::Project* root, EnvisionToClangMap& envisionToClangMap, ClangHelpers& clang);
 
 		void startTranslationUnit(const clang::SourceManager* sourceManager,
 										  const clang::Preprocessor* preprocessor);
@@ -67,12 +66,11 @@ class CPPIMPORT_API MacroImporter
 
 	private:
 		OOModel::Project* root_{};
+		ClangHelpers& clang_;
 		EnvisionToClangMap& envisionToClangMap_;
 
-		ClangHelpers clang_;
 		MacroDefinitions macroDefinitions_;
 		MacroExpansions macroExpansions_;
-		LexicalTransformations lexicalTransformations_;
 		AllMetaDefinitions allMetaDefinitions_;
 		QHash<QString, OOModel::MetaCallExpression*> metaCalls_;
 		QVector<Model::Node*> finalizationNodes;
