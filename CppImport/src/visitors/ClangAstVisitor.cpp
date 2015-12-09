@@ -148,16 +148,16 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 			// already inserted
 			return true;
 
-		auto ooRef = new OOModel::ReferenceExpression(QString::fromStdString(specializationDecl->getNameAsString()));
-
 		auto typeLoc = specializationDecl->getTypeAsWritten()->getTypeLoc()
 							.castAs<clang::TemplateSpecializationTypeLoc>();
 
+		auto ooRef = createReference(typeLoc.getTemplateNameLoc());
 		for (unsigned i = 0; i < typeLoc.getNumArgs(); i++)
 			ooRef->typeArguments()->append(utils_->translateTemplateArgument(typeLoc.getArgLoc(i)));
 
-		if (auto p = llvm::dyn_cast<clang::NamedDecl>(specializationDecl->getSpecializedTemplate()->getDeclContext()))
-			ooRef->setPrefix(new OOModel::ReferenceExpression(QString::fromStdString(p->getNameAsString())));
+		if (specializationDecl->getQualifier())
+			ooRef->setPrefix(utils_->translateNestedNameSpecifier(specializationDecl->getQualifierLoc()));
+
 		ooExplicitTemplateInst->setInstantiatedClass(ooRef);
 		// add to tree
 		if (auto decl = DCast<OOModel::Declaration>(ooStack_.top()))
@@ -468,10 +468,10 @@ bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* name
 	if (auto ooTypeAlias = trMngr_->insertNamespaceAlias(namespaceAlias))
 	{
 		ooTypeAlias->setName(QString::fromStdString(namespaceAlias->getNameAsString()));
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(namespaceAlias->getAliasedNamespace()->getNameAsString()));
-		if (auto prefix = namespaceAlias->getQualifierLoc())
-			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
+
+		auto nameRef = createReference(namespaceAlias->getAliasLoc());
+		if (namespaceAlias->getQualifier())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(namespaceAlias->getQualifierLoc()));
 		ooTypeAlias->setTypeExpression(nameRef);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
@@ -492,8 +492,7 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDecl(usingDecl))
 	{
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(usingDecl->getNameAsString()));
+		auto nameRef = createReference(usingDecl->getNameInfo().getSourceRange());
 		if (auto prefix = usingDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
@@ -516,8 +515,7 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDirective(usingDirectiveDecl))
 	{
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(usingDirectiveDecl->getNominatedNamespaceAsWritten()->getNameAsString()));
+		auto nameRef = createReference(usingDirectiveDecl->getIdentLocation());
 		if (auto prefix = usingDirectiveDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
@@ -540,8 +538,7 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 		return true;
 	if (auto ooNameImport = trMngr_->insertUnresolvedUsing(unresolvedUsing))
 	{
-		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-				(QString::fromStdString(unresolvedUsing->getNameInfo().getAsString()));
+		auto nameRef = createReference(unresolvedUsing->getNameInfo().getSourceRange());
 		if (auto prefix = unresolvedUsing->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
 		ooNameImport->setImportedName(nameRef);
