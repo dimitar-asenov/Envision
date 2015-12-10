@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../cppimport_api.h"
+#include "cppimport_api.h"
 #include "EnvisionToClangMap.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"

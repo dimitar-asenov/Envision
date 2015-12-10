@@ -25,11 +25,9 @@
  **********************************************************************************************************************/
 
 #include "MacroExpansions.h"
-
-#include "ClangHelpers.h"
+#include "../ClangHelpers.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansion.h"
-
 #include "NodeHelpers.h"
 
 #include "OOModel/src/expressions/MetaCallExpression.h"

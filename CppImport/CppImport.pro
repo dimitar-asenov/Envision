@@ -65,7 +65,7 @@ HEADERS += src/precompiled.h \
     src/macro/StandardMetaDefinitions.h \
     src/macro/AllMetaDefinitions.h \
     src/macro/NodeHelpers.h \
-    src/macro/ClangHelpers.h \
+    src/ClangHelpers.h \
     src/macro/NodeToCloneMap.h \
     src/EnvisionToClangMap.h \
     src/Comment.h
@@ -92,7 +92,7 @@ SOURCES += src/CppImportException.cpp \
     src/macro/StandardMetaDefinitions.cpp \
     src/macro/AllMetaDefinitions.cpp \
     src/macro/NodeHelpers.cpp \
-    src/macro/ClangHelpers.cpp \
+    src/ClangHelpers.cpp \
     src/macro/NodeToCloneMap.cpp \
     src/EnvisionToClangMap.cpp \
     src/Comment.cpp

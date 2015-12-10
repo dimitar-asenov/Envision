@@ -29,7 +29,7 @@
 #include "cppimport_api.h"
 #include "CppImportLogger.h"
 #include "OOModel/src/allOOModelNodes.h"
-#include "macro/ClangHelpers.h"
+#include "ClangHelpers.h"
 
 namespace CppImport {
 

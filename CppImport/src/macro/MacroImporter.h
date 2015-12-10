@@ -28,7 +28,7 @@
 
 #include "../cppimport_api.h"
 
-#include "ClangHelpers.h"
+#include "../ClangHelpers.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansions.h"
 #include "AllMetaDefinitions.h"
