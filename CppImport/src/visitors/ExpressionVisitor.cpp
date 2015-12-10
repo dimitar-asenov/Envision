@@ -352,15 +352,33 @@ bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLi
 
 bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLiteral)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::StringLiteral>(stringLiteral->getSourceRange(),
-																				QString::fromStdString(stringLiteral->getBytes().str())));
+	OOModel::Expression* result = nullptr;
+	for (auto it = stringLiteral->tokloc_begin(); it != stringLiteral->tokloc_end(); it++)
+	{
+		auto partSpelling = clang_.unexpandedSpelling(*it);
+
+		OOModel::Expression* part = nullptr;
+		if (partSpelling.startsWith("#"))
+			part = clang_.createReference(*it);
+		else
+			part = clang_.createNode<OOModel::StringLiteral>(*it, partSpelling.mid(1, partSpelling.length() - 2));
+
+		if (!result)
+			result = part;
+		else
+			result = clang_.createNode<OOModel::BinaryOperation>(stringLiteral->getLocStart(),
+																				  OOModel::BinaryOperation::PLUS, result, part);
+	}
+
+	Q_ASSERT(result);
+	ooExprStack_.push(result);
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
 	// if is elidable we can directly visit the children
-	if (constructExpr->isElidable())
+	if (constructExpr->isElidable() || !constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
 		return TraverseStmt(*(constructExpr->child_begin()));
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
