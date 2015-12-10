@@ -62,9 +62,6 @@ class CPPIMPORT_API NodeHelpers
 
 		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
 
-		static OOModel::Expression* createNameExpressionFromString(const QString& input);
-		static bool matchesRegex(const QString& regex, const QString& value);
-
 		/**
 		 * returns the first Declaration* decl in list with decl->name() == name
 		 */

@@ -95,12 +95,6 @@ class CPPIMPORT_API StandardMetaDefinitions
 		 */
 		void insertArgumentSplices(NodeToCloneMap& mapping, NodeToCloneMap& childMapping,
 											QVector<MacroArgumentInfo>& arguments);
-
-		void replaceWithReference(Model::Node* current, const QString& replacement, NodeToCloneMap& mapping) const;
-
-		void replaceWithStringificationConcatenation(OOModel::StringLiteral* current, const QString& replacement,
-																	NodeToCloneMap& mapping) const;
-		OOModel::Expression* constructStringConcatenation(QStringList strings) const;
 };
 
 }

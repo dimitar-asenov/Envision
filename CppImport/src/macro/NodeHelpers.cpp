@@ -248,12 +248,6 @@ OOModel::MetaCallExpression* NodeHelpers::containsMetaCall(Model::Node* node)
 	return nullptr;
 }
 
-bool NodeHelpers::matchesRegex(const QString& regex, const QString& value)
-{
-	QRegularExpression regEx(regex);
-	return regEx.match(value).hasMatch();
-}
-
 OOModel::Declaration* NodeHelpers::findDeclaration(Model::List* list, const QString& name)
 {
 	for (auto elem : *list)
@@ -262,75 +256,6 @@ OOModel::Declaration* NodeHelpers::findDeclaration(Model::List* list, const QStr
 				return decl;
 
 	return nullptr;
-}
-
-OOModel::Expression* NodeHelpers::createNameExpressionFromString(const QString& input)
-{
-	QString baseCase = "((::)?(\\w+(::|\\.|->))*\\w+(\\*|&)?)";
-
-	if (matchesRegex("^" + baseCase + "$", input))
-	{
-		QRegularExpression regEx("(::|\\.)");
-		QStringList parts = input.split(regEx);
-
-		QString basePart = parts.last();
-
-		OOModel::Expression* result = nullptr;
-		OOModel::ReferenceExpression* current = nullptr;
-
-		if (basePart.endsWith("&"))
-		{
-			current = new OOModel::ReferenceExpression(basePart.left(basePart.length() - 1));
-			result = new OOModel::ReferenceTypeExpression(current);
-		}
-		else if (basePart.endsWith("*"))
-		{
-			current = new OOModel::ReferenceExpression(basePart.left(basePart.length() - 1));
-			result = new OOModel::PointerTypeExpression(current);
-		}
-		else
-		{
-			current = new OOModel::ReferenceExpression(basePart);
-			result = current;
-		}
-
-		for (auto i = parts.size() - 2; i >= 0; i--)
-		{
-			QString part = parts[i];
-
-			if (part.isEmpty())
-			{
-				Q_ASSERT(i == 0);
-				current->setPrefix(new OOModel::GlobalScopeExpression());
-			}
-			else
-			{
-				auto next = new OOModel::ReferenceExpression(part);
-				current->setPrefix(next);
-				current = next;
-			}
-		}
-
-		return result;
-	}
-	else if (matchesRegex("^" + baseCase + "<" + baseCase + ">$", input))
-	{
-		QRegularExpression regEx("^(.*)<(.*)>$", QRegularExpression::DotMatchesEverythingOption);
-		auto match = regEx.match(input);
-		Q_ASSERT(match.hasMatch());
-
-		auto baseRef = DCast<OOModel::ReferenceExpression>(createNameExpressionFromString(match.captured(1)));
-		Q_ASSERT(baseRef);
-
-		auto typeArg = createNameExpressionFromString(match.captured(2));
-		baseRef->typeArguments()->append(typeArg);
-		return baseRef;
-	}
-	else
-	{
-		qDebug() << "createReferenceExpressionFromString failed on input:" << input;
-		return new OOModel::ReferenceExpression(input);
-	}
 }
 
 void CppImport::NodeHelpers::removeNodesFromParent(QVector<Model::Node*> nodes)
