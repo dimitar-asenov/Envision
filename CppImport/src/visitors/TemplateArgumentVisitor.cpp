@@ -23,13 +23,15 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+
 #include "TemplateArgumentVisitor.h"
+#include "ClangAstVisitor.h"
 
 namespace CppImport {
 
 TemplateArgumentVisitor::TemplateArgumentVisitor
-(ExpressionVisitor* vis, CppImportUtilities* util, CppImportLogger* log)
-: exprVisitor_{vis}, utils_{util}, log_{log}
+(ClangHelpers& clang, ExpressionVisitor* vis, CppImportUtilities* util, CppImportLogger* log)
+ : clang_{clang}, exprVisitor_{vis}, utils_{util}, log_{log}
 {}
 
 OOModel::FormalTypeArgument* TemplateArgumentVisitor::translateTemplateArg(clang::Decl* d)
@@ -47,7 +49,7 @@ bool TemplateArgumentVisitor::VisitDecl(clang::Decl* decl)
 	{
 		log_->writeError(className_, decl, CppImportLogger::Reason::OTHER,
 							  "Can not handle this decl with this visitor");
-		lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument("#ERROR");
+		lastTranslatedTypeArg_ = clang_.createNode<OOModel::FormalTypeArgument>(decl->getSourceRange(), "#ERROR");
 		return true;
 	}
 	return RecursiveASTVisitor<TemplateArgumentVisitor>::VisitDecl(decl);
@@ -55,7 +57,7 @@ bool TemplateArgumentVisitor::VisitDecl(clang::Decl* decl)
 
 bool TemplateArgumentVisitor::TraverseTemplateTypeParmDecl(clang::TemplateTypeParmDecl* templateParm)
 {
-	lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument(QString::fromStdString(templateParm->getNameAsString()));
+	lastTranslatedTypeArg_ = clang_.createNamedNode<OOModel::FormalTypeArgument>(templateParm);
 	if (templateParm->hasDefaultArgument())
 		lastTranslatedTypeArg_->setSubTypeOfExpression(
 					utils_->translateQualifiedType(templateParm->getDefaultArgumentInfo()->getTypeLoc()));
@@ -64,8 +66,7 @@ bool TemplateArgumentVisitor::TraverseTemplateTypeParmDecl(clang::TemplateTypePa
 
 bool TemplateArgumentVisitor::TraverseNonTypeTemplateParmDecl(clang::NonTypeTemplateParmDecl* nonTypeTemplateParm)
 {
-	lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument
-(QString::fromStdString(nonTypeTemplateParm->getNameAsString()));
+	lastTranslatedTypeArg_ = clang_.createNamedNode<OOModel::FormalTypeArgument>(nonTypeTemplateParm);
 	lastTranslatedTypeArg_->setSubTypeOfExpression(utils_->translateQualifiedType(
 																	  nonTypeTemplateParm->getTypeSourceInfo()->getTypeLoc()));
 	if (nonTypeTemplateParm->hasDefaultArgument())

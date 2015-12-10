@@ -38,7 +38,8 @@ namespace CppImport {
 class CPPIMPORT_API TemplateArgumentVisitor : public clang::RecursiveASTVisitor <TemplateArgumentVisitor>
 {
 	public:
-		TemplateArgumentVisitor(ExpressionVisitor* vis, CppImportUtilities* util, CppImportLogger* log);
+		TemplateArgumentVisitor(ClangHelpers& clang, ExpressionVisitor* vis, CppImportUtilities* util,
+										CppImportLogger* log);
 		/**
 		 * Translates the template argument declaration \a d.
 		 * Returns the translated node.
@@ -48,6 +49,7 @@ class CPPIMPORT_API TemplateArgumentVisitor : public clang::RecursiveASTVisitor 
 		bool TraverseTemplateTypeParmDecl(clang::TemplateTypeParmDecl* templateParm);
 		bool TraverseNonTypeTemplateParmDecl(clang::NonTypeTemplateParmDecl* nonTypeTemplateParm);
 	private:
+		ClangHelpers& clang_;
 		ExpressionVisitor* exprVisitor_{};
 		CppImportUtilities* utils_{};
 		CppImportLogger* log_{};

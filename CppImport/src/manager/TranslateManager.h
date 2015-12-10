@@ -95,7 +95,7 @@ class CPPIMPORT_API TranslateManager
 		OOModel::Field* insertStaticField(clang::VarDecl* varDecl, bool& wasDeclared);
 
 		OOModel::ExplicitTemplateInstantiation* insertExplicitTemplateInstantiation
-		(const clang::ClassTemplateSpecializationDecl* explicitTemplateInst);
+		(clang::ClassTemplateSpecializationDecl* explicitTemplateInst);
 
 		/**
 		 * This function is to make sure that an using declaration is used only once.

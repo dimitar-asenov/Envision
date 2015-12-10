@@ -25,8 +25,7 @@
  **********************************************************************************************************************/
 
 #include "MacroDefinitions.h"
-
-#include "ClangHelpers.h"
+#include "../ClangHelpers.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
 

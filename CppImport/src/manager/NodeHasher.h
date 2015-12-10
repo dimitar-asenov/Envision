@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../cppimport_api.h"
-#include "../macro/ClangHelpers.h"
+#include "../ClangHelpers.h"
 
 namespace CppImport {
 

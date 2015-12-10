@@ -130,4 +130,17 @@ QVector<QString> ClangHelpers::argumentNames(const clang::MacroDirective* defini
 	return result;
 }
 
+void ClangHelpers::deleteNode(Model::Node* node)
+{
+	QList<Model::Node*> workList{node};
+	while (!workList.empty())
+	{
+		auto current = workList.takeLast();
+		workList << current->children();
+		envisionToClangMap_.remove(current);
+	}
+
+	SAFE_DELETE(node);
+}
+
 }

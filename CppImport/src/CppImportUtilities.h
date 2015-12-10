@@ -29,7 +29,7 @@
 #include "cppimport_api.h"
 #include "CppImportLogger.h"
 #include "OOModel/src/allOOModelNodes.h"
-#include "EnvisionToClangMap.h"
+#include "ClangHelpers.h"
 
 namespace CppImport {
 
@@ -41,8 +41,7 @@ class ExpressionVisitor;
 class CPPIMPORT_API CppImportUtilities
 {
 	public:
-		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor,
-								 EnvisionToClangMap& envisionToClangMap);
+		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor, ClangHelpers& clang);
 
 		/**
 		 * Translates a qualified type to the corresponding Envision type expression.
@@ -85,7 +84,7 @@ class CPPIMPORT_API CppImportUtilities
 		 * Creates an error expression which is clearly visible inside envision
 		 * In envision it is represented as a red # and the \a reason string
 		 */
-		OOModel::Expression* createErrorExpression(const QString& reason);
+		OOModel::Expression* createErrorExpression(const QString& reason, clang::SourceRange sourceRange);
 	private:
 		/**
 		 * Translates \a type to the nearest primitive OOModel type.
@@ -95,6 +94,6 @@ class CPPIMPORT_API CppImportUtilities
 		const QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};
-		EnvisionToClangMap& envisionToClangMap_;
+		ClangHelpers& clang_;
 };
 }

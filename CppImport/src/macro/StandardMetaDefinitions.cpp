@@ -25,15 +25,13 @@
  **********************************************************************************************************************/
 
 #include "StandardMetaDefinitions.h"
-
-#include "ClangHelpers.h"
+#include "../ClangHelpers.h"
 #include "MacroDefinitions.h"
 #include "MacroExpansion.h"
 #include "MacroExpansions.h"
 #include "MacroArgumentInfo.h"
 #include "MacroArgumentLocation.h"
 #include "NodeToCloneMap.h"
-
 #include "NodeHelpers.h"
 
 #include "OOModel/src/allOOModelNodes.h"

@@ -190,6 +190,16 @@ void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 				Q_ASSERT(false);
 		}
 	}
+	else if (auto ooFormalResult = DCast<OOModel::FormalResult>(node))
+	{
+		if (auto context = DCast<OOModel::Method>(declaration))
+		{
+			context->results()->clear();
+			context->results()->append(ooFormalResult);
+		}
+		else
+			Q_ASSERT(false);
+	}
 	else
 		Q_ASSERT(false && "not implemented");
 }

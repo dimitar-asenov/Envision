@@ -49,14 +49,13 @@ OOModel::Module* TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 	const QString hash = nh_->hashNameSpace(namespaceDecl);
 	if (nameSpaceMap_.contains(hash))
 		return nameSpaceMap_.value(hash);
-	OOModel::Module* ooModule = new OOModel::Module(QString::fromStdString(namespaceDecl->getNameAsString()));
+	auto ooModule = clang_.createNamedNode<OOModel::Module>(namespaceDecl);
 	nameSpaceMap_.insert(hash, ooModule);
-	baseVisitor_->mapAst(namespaceDecl, ooModule);
 	if (namespaceDecl->getDeclContext()->isTranslationUnit())
 		rootProject_->modules()->append(ooModule);
 	else if (auto p = llvm::dyn_cast<clang::NamespaceDecl>(namespaceDecl->getDeclContext()))
 	{
-		const QString pHash = nh_->hashNameSpace(p);
+		auto pHash = nh_->hashNameSpace(p);
 		if (!nameSpaceMap_.contains(pHash))
 			return nullptr;
 		nameSpaceMap_.value(pHash)->modules()->append(ooModule);
@@ -68,20 +67,16 @@ OOModel::Module* TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 
 OOModel::Class* TranslateManager::createClass(clang::CXXRecordDecl* recordDecl)
 {
-	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
-	OOModel::Class* result = nullptr;
+	OOModel::Class::ConstructKind constructKind;
 	if (recordDecl->isClass())
-		result = new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Class);
+		constructKind = OOModel::Class::ConstructKind::Class;
 	else if (recordDecl->isStruct())
-		result = new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Struct);
+		constructKind = OOModel::Class::ConstructKind::Struct;
 	else if (recordDecl->isUnion())
-		result = new OOModel::Class(recordDeclName, OOModel::Class::ConstructKind::Union);
+		constructKind = OOModel::Class::ConstructKind::Union;
 	else
 		Q_ASSERT(false);
-
-	Q_ASSERT(result);
-	baseVisitor_->mapAst(recordDecl->getLocation(), result->nameNode());
-	return result;
+	return clang_.createNamedNode<OOModel::Class>(recordDecl, constructKind);
 }
 
 bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*& createdClass)
@@ -92,10 +87,9 @@ bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*&
 	{
 		createdClass = createClass(rDecl);
 		classMap_.insert(hash, createdClass);
-		baseVisitor_->mapAst(rDecl, createdClass);
 		return true;
 	}
-	baseVisitor_->mapAst(rDecl, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(rDecl, classMap_.value(hash));
 	return false;
 }
 
@@ -106,10 +100,9 @@ bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTempla
 	{
 		createdClass = createClass(classTemplate->getTemplatedDecl());
 		classMap_.insert(hash, createdClass);
-		baseVisitor_->mapAst(classTemplate, createdClass);
 		return true;
 	}
-	baseVisitor_->mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
 	return false;
 }
 
@@ -121,10 +114,9 @@ bool TranslateManager::insertClassTemplateSpec
 	{
 		createdClass = createClass(classTemplate);
 		classMap_.insert(hash, createdClass);
-		baseVisitor_->mapAst(classTemplate, createdClass);
 		return true;
 	}
-	baseVisitor_->mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
 	return false;
 }
 
@@ -138,12 +130,12 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 		if (!methodMap_.contains(hash))
 		{
 			method = addNewMethod(mDecl, kind);
-			baseVisitor_->mapAst(mDecl, method);
 		}
 		else
 		{
 			method = methodMap_.value(hash);
-			baseVisitor_->mapAst(mDecl, method);
+			clang_.envisionToClangMap().mapAst(mDecl, method);
+
 			// If the method in the map is just a declaration and the method we currently have is a definition
 			// there might be some argument names in the definition which are not yet considered.
 			// Therefore we look at them now.
@@ -168,12 +160,12 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 	if (!functionMap_.contains(hash))
 	{
 		ooFunction = addNewFunction(functionDecl);
-		baseVisitor_->mapAst(functionDecl, ooFunction);
 	}
 	else
 	{
 		ooFunction = functionMap_.value(hash);
-		baseVisitor_->mapAst(functionDecl, ooFunction);
+		clang_.envisionToClangMap().mapAst(functionDecl, ooFunction);
+
 		if (ooFunction->items()->size())
 			return ooFunction;
 		// the method which is in the map is just a declaration
@@ -194,10 +186,8 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fieldDecl)
 	const QString hash = nh_->hashRecord(fieldDecl->getParent());
 	if (classMap_.contains(hash))
 	{
-		auto ooField = new OOModel::Field();
-		ooField->setName(QString::fromStdString(fieldDecl->getNameAsString()));
+		auto ooField = clang_.createNamedNode<OOModel::Field>(fieldDecl);
 		classMap_.value(hash)->fields()->append(ooField);
-		baseVisitor_->mapAst(fieldDecl, ooField);
 		return ooField;
 	}
 	return nullptr;
@@ -209,35 +199,33 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	if (staticFieldMap_.contains(hash))
 	{
 		wasDeclared = true;
-		baseVisitor_->mapAst(varDecl, staticFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl, staticFieldMap_.value(hash));
 		return staticFieldMap_.value(hash);
 	}
 	wasDeclared = false;
 	const QString parentHash = nh_->hashParentOfStaticField(varDecl->getDeclContext());
 	if (classMap_.contains(parentHash))
 	{
-		OOModel::Field* ooField = new OOModel::Field(QString::fromStdString(varDecl->getNameAsString()));
+		auto ooField = clang_.createNamedNode<OOModel::Field>(varDecl);
 		classMap_.value(parentHash)->fields()->append(ooField);
 		staticFieldMap_.insert(hash, ooField);
-		baseVisitor_->mapAst(varDecl, ooField);
 		return ooField;
 	}
 	return nullptr;
 }
 
 OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplateInstantiation
-(const clang::ClassTemplateSpecializationDecl* explicitTemplateInst)
+(clang::ClassTemplateSpecializationDecl* explicitTemplateInst)
 {
 	OOModel::ExplicitTemplateInstantiation* ooExplicitTemplateInst = nullptr;
 	const QString hash = nh_->hashClassTemplateSpec(explicitTemplateInst);
 	if (!explicitTemplateInstMap_.contains(hash))
 	{
-		ooExplicitTemplateInst = new OOModel::ExplicitTemplateInstantiation();
+		ooExplicitTemplateInst = clang_.createNode<OOModel::ExplicitTemplateInstantiation>(
+																										explicitTemplateInst->getSourceRange());
 		explicitTemplateInstMap_.insert(hash, ooExplicitTemplateInst);
 	}
-
-	baseVisitor_->mapAst(const_cast<clang::ClassTemplateSpecializationDecl*>(explicitTemplateInst),
-										explicitTemplateInstMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(explicitTemplateInst, explicitTemplateInstMap_.value(hash));
 	return ooExplicitTemplateInst;
 }
 
@@ -247,7 +235,7 @@ OOModel::NameImport* TranslateManager::insertUsingDecl(clang::UsingDecl* usingDe
 	const QString hash = nh_->hashUsingDecl(usingDecl);
 	if (!usingDeclMap_.contains(hash))
 	{
-		ooName = new OOModel::NameImport();
+		ooName = clang_.createNode<OOModel::NameImport>(usingDecl->getSourceRange());
 		usingDeclMap_.insert(hash, ooName);
 	}
 	return ooName;
@@ -259,7 +247,7 @@ OOModel::NameImport* TranslateManager::insertUsingDirective(clang::UsingDirectiv
 	const QString hash = nh_->hashUsingDirective(usingDirective);
 	if (!usingDirectiveMap_.contains(hash))
 	{
-		ooName = new OOModel::NameImport();
+		ooName = clang_.createNode<OOModel::NameImport>(usingDirective->getSourceRange());
 		usingDirectiveMap_.insert(hash, ooName);
 	}
 	return ooName;
@@ -271,7 +259,7 @@ OOModel::NameImport* TranslateManager::insertUnresolvedUsing(clang::UnresolvedUs
 	const QString hash = nh_->hashUnresolvedUsingDecl(unresolvedUsing);
 	if (!usingDeclMap_.contains(hash))
 	{
-		ooName = new OOModel::NameImport();
+		ooName = clang_.createNode<OOModel::NameImport>(unresolvedUsing->getSourceRange());
 		usingDeclMap_.insert(hash, ooName);
 	}
 	return ooName;
@@ -283,7 +271,7 @@ OOModel::TypeAlias*TranslateManager::insertNamespaceAlias(clang::NamespaceAliasD
 	const QString hash = nh_->hashNameSpaceAlias(namespaceAlias);
 	if (!namespacAliasMap_.contains(hash))
 	{
-		ooAlias = new OOModel::TypeAlias();
+		ooAlias = clang_.createNode<OOModel::TypeAlias>(namespaceAlias->getSourceRange());
 		namespacAliasMap_.insert(hash, ooAlias);
 	}
 	return ooAlias;
@@ -295,7 +283,7 @@ OOModel::TypeAlias*TranslateManager::insertTypeAlias(clang::TypedefNameDecl* typ
 	const QString hash = nh_->hashTypeAlias(typeAlias);
 	if (!typeAliasMap_.contains(hash))
 	{
-		ooAlias = new OOModel::TypeAlias();
+		ooAlias = clang_.createNode<OOModel::TypeAlias>(typeAlias->getSourceRange());
 		typeAliasMap_.insert(hash, ooAlias);
 	}
 	return ooAlias;
@@ -307,7 +295,7 @@ OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTe
 	const QString hash = nh_->hashTypeAliasTemplate(typeAliasTemplate);
 	if (!typeAliasMap_.contains(hash))
 	{
-		ooAlias = new OOModel::TypeAlias();
+		ooAlias = clang_.createNode<OOModel::TypeAlias>(typeAliasTemplate->getSourceRange());
 		typeAliasMap_.insert(hash, ooAlias);
 	}
 	return ooAlias;
@@ -316,41 +304,31 @@ OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTe
 void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* functionDecl,
 																					OOModel::Method* method)
 {
+	// process result type
 	if (!llvm::isa<clang::CXXConstructorDecl>(functionDecl) && !llvm::isa<clang::CXXDestructorDecl>(functionDecl))
 	{
-		// process result type
 		auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
-		OOModel::Expression* restype = utils_->translateQualifiedType(functionTypeLoc.getReturnLoc());
-		if (restype)
-		{
-			auto methodResult = new OOModel::FormalResult();
-			methodResult->setTypeExpression(restype);
-			method->results()->append(methodResult);
-		}
+		method->results()->append(
+					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 	}
 	// process arguments
-	clang::FunctionDecl::param_const_iterator it = functionDecl->param_begin();
-	for (;it != functionDecl->param_end();++it)
-	{
-		auto arg = new OOModel::FormalArgument();
-		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc());
-		if (type) arg->setTypeExpression(type);
-		method->arguments()->append(arg);
-	}
+	for (auto it = functionDecl->param_begin(); it != functionDecl->param_end(); ++it)
+		method->arguments()->append(clang_.createNamedNode<OOModel::FormalArgument>(*it,
+															utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc())));
 }
 
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
-	const QString hash = nh_->hashMethod(mDecl);
+	auto hash = nh_->hashMethod(mDecl);
 
-	auto method = new OOModel::Method(clang_.unexpandedSpelling(mDecl->getNameInfo().getSourceRange()), kind);
+	auto method = clang_.createNamedNode<OOModel::Method>(mDecl, kind);
 	addMethodResultAndArguments(mDecl, method);
 
 	// find the correct class to add the method
 	if (classMap_.contains(nh_->hashRecord(mDecl->getParent())))
 	{
-		OOModel::Class* parent = classMap_.value(nh_->hashRecord(mDecl->getParent()));
+		auto parent = classMap_.value(nh_->hashRecord(mDecl->getParent()));
 		parent->methods()->append(method);
 	}
 	else
@@ -362,7 +340,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 
 OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
 {
-	auto ooFunction = new OOModel::Method(clang_.unexpandedSpelling(functionDecl->getNameInfo().getSourceRange()));
+	auto ooFunction = clang_.createNamedNode<OOModel::Method>(functionDecl);
 	addMethodResultAndArguments(functionDecl, ooFunction);
 	functionMap_.insert(nh_->hashFunction(functionDecl), ooFunction);
 	return ooFunction;

@@ -48,7 +48,7 @@ add_library(CppImport SHARED
 	src/macro/StandardMetaDefinitions.h
 	src/macro/AllMetaDefinitions.h
 	src/macro/NodeHelpers.h
-	src/macro/ClangHelpers.h
+	src/ClangHelpers.h
 	src/EnvisionToClangMap.h
 	src/macro/NodeToCloneMap.h
 	src/Comment.h
@@ -75,7 +75,7 @@ add_library(CppImport SHARED
 	src/macro/StandardMetaDefinitions.cpp
 	src/macro/AllMetaDefinitions.cpp
 	src/macro/NodeHelpers.cpp
-	src/macro/ClangHelpers.cpp
+	src/ClangHelpers.cpp
 	src/EnvisionToClangMap.cpp
 	src/macro/NodeToCloneMap.cpp
 	src/Comment.cpp
