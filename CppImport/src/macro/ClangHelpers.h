@@ -29,6 +29,9 @@
 #include "../cppimport_api.h"
 #include "EnvisionToClangMap.h"
 
+#include "OOModel/src/expressions/ReferenceExpression.h"
+#include "Comments/src/nodes/CommentNode.h"
+
 namespace CppImport {
 
 /**
@@ -55,6 +58,14 @@ class CPPIMPORT_API ClangHelpers
 		QString unexpandedSpelling(clang::SourceLocation start, clang::SourceLocation end) const;
 
 		EnvisionToClangMap& envisionToClangMap();
+
+		void deleteNode(Model::Node* node);
+
+		template<class NodeType, class ... ConstructorArgTypes>
+		NodeType* createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs);
+		template<class NodeType>
+		NodeType* createNamedNode(clang::NamedDecl* namedDecl);
+		OOModel::ReferenceExpression* createReference(clang::SourceRange sourceRange);
 
 	private:
 		EnvisionToClangMap envisionToClangMap_;
@@ -110,5 +121,33 @@ inline QString ClangHelpers::unexpandedSpelling(clang::SourceLocation start, cla
 { return unexpandedSpelling(clang::SourceRange(start, end)); }
 
 inline EnvisionToClangMap& ClangHelpers::envisionToClangMap() { return envisionToClangMap_; }
+
+template<class NodeType, class ... ConstructorArgTypes>
+NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs)
+{
+	 auto node = new NodeType(std::forward<ConstructorArgTypes>(constructorArgs)...);
+	 envisionToClangMap_.mapAst(sourceRange, node);
+	 return node;
+}
+
+template<class NodeType>
+inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl)
+{
+	auto namedNode = createNode<NodeType>(namedDecl->getSourceRange(), unexpandedSpelling(namedDecl->getLocation()));
+
+	/*
+	 * comments processing 2 of 3.
+	 * process comments which are associated with declarations.
+	 */
+	if (auto compositeNode = DCast<Model::CompositeNode>(namedNode))
+		if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
+			compositeNode->setComment(new Comments::CommentNode(QString::fromStdString(
+																				commentForDeclaration->getRawText(*sourceManager_).str())));
+
+	return namedNode;
+}
+
+inline OOModel::ReferenceExpression* ClangHelpers::createReference(clang::SourceRange sourceRange)
+{ return createNode<OOModel::ReferenceExpression>(sourceRange, unexpandedSpelling(sourceRange.getBegin())); }
 
 }

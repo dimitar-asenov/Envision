@@ -119,26 +119,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		void endTranslationUnit();
 		void endEntireImport();
 
-		void deleteNode(Model::Node* node);
-
-		OOModel::ReferenceExpression* createReference(clang::SourceRange range);
-
-
-		template<class NodeType>
-		NodeType* createNode(clang::SourceRange range);
-
-		OOModel::PrimitiveTypeExpression* createPrimitiveTypeExpression(OOModel::PrimitiveType::PrimitiveTypes type,
-																							 clang::SourceRange range);
-
-		OOModel::DeclarationStatement* createDeclarationStatement(OOModel::Declaration* declaration,
-																					 clang::SourceRange range);
-
-		template<class NodeType>
-		NodeType* createNamedNode(clang::SourceLocation nameLoc, clang::SourceRange range);
-
-		template<class NodeType>
-		NodeType* createNamedNode(clang::NamedDecl* namedDecl);
-
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
 
@@ -201,63 +181,5 @@ inline bool ClangAstVisitor::TraverseCXXDestructorDecl(clang::CXXDestructorDecl 
 inline bool ClangAstVisitor::TraverseCXXConversionDecl(clang::CXXConversionDecl *conversionDecl)
 // TODO: handle explicit keyword
 {return TraverseMethodDecl(conversionDecl, OOModel::Method::MethodKind::Conversion); }
-
-template<class NodeType>
-NodeType* ClangAstVisitor::createNode(clang::SourceRange range)
-{
-	auto node = new NodeType();
-	clang_.envisionToClangMap().mapAst(range, node);
-	return node;
-}
-
-template<class NodeType>
-NodeType* ClangAstVisitor::createNamedNode(clang::SourceLocation nameLoc, clang::SourceRange range)
-{
-	auto node = createNode<NodeType>(range);
-	node->setName(clang_.unexpandedSpelling(nameLoc));
-	return node;
-}
-
-template<class NodeType>
-inline NodeType* ClangAstVisitor::createNamedNode(clang::NamedDecl* namedDecl)
-{
-	auto namedNode = createNamedNode<NodeType>(namedDecl->getLocation(), namedDecl->getSourceRange());
-
-	/*
-	 * comments processing 2 of 3.
-	 * process comments which are associated with declarations.
-	 */
-	if (auto compositeNode = DCast<Model::CompositeNode>(namedNode))
-		if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
-			for (auto comment : comments_)
-				if (comment->rawComment() == commentForDeclaration)
-				{
-					// uncomment the following line to not reassociate comments.
-					if (comment->node()) break;
-
-					// we found a comment for this declaration
-
-					/*
-					 * if the comment is already associated with a node and it is not the current node then
-					 * assert that it was added to a statement item list and remove it from said list so we can associate
-					 * it with this declaration (that is in general more precise).
-					 */
-					if (comment->node() && comment->node() != namedNode)
-						comment->removeFromItemList();
-
-					// at this point the comment is not associated with a node or it is associated with the current node.
-					Q_ASSERT(!comment->node() || comment->node() == namedNode);
-
-					if (!comment->node())
-					{
-						// if it was not yet associated with any node then associate it with the current node.
-						comment->setNode(namedNode);
-						compositeNode->setComment(new Comments::CommentNode(comment->text()));
-					}
-					break;
-				}
-
-	return namedNode;
-}
 
 }
