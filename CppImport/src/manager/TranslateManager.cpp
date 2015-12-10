@@ -76,10 +76,7 @@ OOModel::Class* TranslateManager::createClass(clang::CXXRecordDecl* recordDecl)
 		constructKind = OOModel::Class::ConstructKind::Union;
 	else
 		Q_ASSERT(false);
-
-	auto result = clang_.createNamedNode<OOModel::Class>(recordDecl);
-	result->setConstructKind(constructKind);
-	return result;
+	return clang_.createNamedNode<OOModel::Class>(recordDecl, constructKind);
 }
 
 bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*& createdClass)
@@ -311,29 +308,21 @@ void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* function
 	if (!llvm::isa<clang::CXXConstructorDecl>(functionDecl) && !llvm::isa<clang::CXXDestructorDecl>(functionDecl))
 	{
 		auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
-		if (auto restype = utils_->translateQualifiedType(functionTypeLoc.getReturnLoc()))
-		{
-			auto methodResult = clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange());
-			methodResult->setTypeExpression(restype);
-			method->results()->append(methodResult);
-		}
+		method->results()->append(
+					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 	}
 	// process arguments
 	for (auto it = functionDecl->param_begin(); it != functionDecl->param_end(); ++it)
-	{
-		auto arg = clang_.createNamedNode<OOModel::FormalArgument>(*it);
-		if (auto type = utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc()))
-			arg->setTypeExpression(type);
-		method->arguments()->append(arg);
-	}
+		method->arguments()->append(clang_.createNamedNode<OOModel::FormalArgument>(*it,
+															utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc())));
 }
 
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	auto hash = nh_->hashMethod(mDecl);
 
-	auto method = clang_.createNamedNode<OOModel::Method>(mDecl);
-	method->setMethodKind(kind);
+	auto method = clang_.createNamedNode<OOModel::Method>(mDecl, kind);
 	addMethodResultAndArguments(mDecl, method);
 
 	// find the correct class to add the method

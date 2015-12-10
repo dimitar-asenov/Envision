@@ -63,8 +63,8 @@ class CPPIMPORT_API ClangHelpers
 
 		template<class NodeType, class ... ConstructorArgTypes>
 		NodeType* createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs);
-		template<class NodeType>
-		NodeType* createNamedNode(clang::NamedDecl* namedDecl);
+		template<class NodeType, class ... ConstructorArgTypes>
+		NodeType* createNamedNode(clang::NamedDecl* namedDecl, ConstructorArgTypes&&... constructorArgs);
 		OOModel::ReferenceExpression* createReference(clang::SourceRange sourceRange);
 
 	private:
@@ -130,11 +130,11 @@ NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorAr
 	 return node;
 }
 
-template<class NodeType>
-inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl)
+template<class NodeType, class ... ConstructorArgTypes>
+inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, ConstructorArgTypes&&... constructorArgs)
 {
-	auto namedNode = createNode<NodeType>(namedDecl->getSourceRange(), unexpandedSpelling(namedDecl->getLocation()));
-
+	auto namedNode = createNode<NodeType>(namedDecl->getSourceRange(), unexpandedSpelling(namedDecl->getLocation()),
+													  std::forward<ConstructorArgTypes>(constructorArgs)...);
 	/*
 	 * comments processing 2 of 3.
 	 * process comments which are associated with declarations.
@@ -143,7 +143,6 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl)
 		if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
 			compositeNode->setComment(new Comments::CommentNode(QString::fromStdString(
 																				commentForDeclaration->getRawText(*sourceManager_).str())));
-
 	return namedNode;
 }
 
