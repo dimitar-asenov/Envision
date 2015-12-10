@@ -360,7 +360,7 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
 	// if is elidable we can directly visit the children
-	if (constructExpr->isElidable())
+	if (constructExpr->isElidable() || !constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
 		return TraverseStmt(*(constructExpr->child_begin()));
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
