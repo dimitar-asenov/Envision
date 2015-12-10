@@ -361,7 +361,7 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 		if (partSpelling.startsWith("#"))
 			part = clang_.createReference(*it);
 		else
-			part = clang_.createNode<OOModel::StringLiteral>(*it, partSpelling);
+			part = clang_.createNode<OOModel::StringLiteral>(*it, partSpelling.mid(1, partSpelling.length() - 2));
 
 		if (!result)
 			result = part;
