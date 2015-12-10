@@ -352,8 +352,26 @@ bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLi
 
 bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLiteral)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::StringLiteral>(stringLiteral->getSourceRange(),
-																				QString::fromStdString(stringLiteral->getBytes().str())));
+	OOModel::Expression* result = nullptr;
+	for (auto it = stringLiteral->tokloc_begin(); it != stringLiteral->tokloc_end(); it++)
+	{
+		auto partSpelling = clang_.unexpandedSpelling(*it);
+
+		OOModel::Expression* part = nullptr;
+		if (partSpelling.startsWith("#"))
+			part = clang_.createReference(*it);
+		else
+			part = clang_.createNode<OOModel::StringLiteral>(*it, partSpelling);
+
+		if (!result)
+			result = part;
+		else
+			result = clang_.createNode<OOModel::BinaryOperation>(stringLiteral->getLocStart(),
+																				  OOModel::BinaryOperation::PLUS, result, part);
+	}
+
+	Q_ASSERT(result);
+	ooExprStack_.push(result);
 	return true;
 }
 
