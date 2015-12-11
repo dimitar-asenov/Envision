@@ -53,18 +53,8 @@
 // plug-ins which depend on this one will not include these headers.
 #include <QtGui/QClipboard>
 
-#ifdef slots
-#undef slots
-#define PYTHONQT_RESTORE_KEYWORDS
-#endif
-
 #include <boost/python.hpp>
 #include <boost/python/stl_iterator.hpp>
-
-#ifdef PYTHONQT_RESTORE_KEYWORDS
-#define slots Q_SLOTS
-#undef PYTHONQT_RESTORE_KEYWORDS
-#endif
 
 #include <QtCore/QQueue>
 #include <QtCore/QCommandLineParser>

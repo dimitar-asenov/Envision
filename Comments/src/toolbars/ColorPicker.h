@@ -56,7 +56,7 @@ class COMMENTS_API ColorPicker : public QToolButton
 
 		void handleColorPicked(QString aColor);
 
-	signals:
+	Q_SIGNALS:
 		void colorChanged(QString color);
 
 	private:

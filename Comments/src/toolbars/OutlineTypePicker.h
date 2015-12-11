@@ -43,7 +43,7 @@ class COMMENTS_API OutlineTypePicker : public QToolButton
 
 		void handleOutlineTypePicked(int aType);
 
-	signals:
+	Q_SIGNALS:
 		void outlineTypeChanged(int aType);
 
 	private:

@@ -79,7 +79,7 @@ void OutlineTypePicker::handleOutlineTypePicked(int aType)
 {
 	this->setIcon(pixList_.at(aType));
 	this->menu()->close();
-	emit outlineTypeChanged(aType);
+	Q_EMIT outlineTypeChanged(aType);
 }
 
 void OutlineTypePicker::setselectedOutlineType(int aType)

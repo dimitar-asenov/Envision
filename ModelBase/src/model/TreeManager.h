@@ -339,7 +339,7 @@ class MODELBASE_API TreeManager: public QObject
 		const NodeIdMap& nodeIdMap() const;
 		NodeIdMap& nodeIdMap();
 
-	signals:
+	Q_SIGNALS:
 		/**
 		 * Emitted when a new root node was set.
 		 *

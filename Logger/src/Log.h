@@ -128,7 +128,7 @@ class LOGGER_API Log : public QObject
 
 		virtual ~Log();
 
-	signals:
+	Q_SIGNALS:
 		/**
 		 * Emitted when a new log entry (or several) have been added to the log.
 		 */

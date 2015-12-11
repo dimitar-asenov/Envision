@@ -15,7 +15,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5 REQUIRED Core Gui Widgets)
-add_definitions(-D_REENTRANT)
+add_definitions(-D_REENTRANT -DQT_NO_KEYWORDS)
 add_definitions(-DDEBUG) # -DQT_NO_DEBUG <-- get rid of this
 
 set(ENVISION_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)

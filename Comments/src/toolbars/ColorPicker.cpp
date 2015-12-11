@@ -115,7 +115,7 @@ void ColorPicker::handleColorPicked(QString aColor)
 	else
 		setselectedColor(aColor);
 	this->menu()->close();
-	emit colorChanged(aColor);
+	Q_EMIT colorChanged(aColor);
 }
 
 void ColorPicker::setselectedColor(QString aColor)

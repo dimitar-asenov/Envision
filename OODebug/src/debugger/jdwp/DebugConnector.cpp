@@ -221,7 +221,7 @@ void DebugConnector::dispatchEvents()
 			handleComposite(data);
 			// The handling of one event might mess with our iterator so just emit the signal that we get called again
 			// once the handling is done
-			emit tcpSocket_.readyRead();
+			Q_EMIT tcpSocket_.readyRead();
 			break;
 		}
 		else

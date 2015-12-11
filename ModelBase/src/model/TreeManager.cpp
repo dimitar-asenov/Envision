@@ -103,7 +103,7 @@ void TreeManager::endModification(bool resolveReferences)
 	modificationInProgress = false;
 	exclusiveAccess.unlock();
 
-	emit nodesModified(mt, dt);
+	Q_EMIT nodesModified(mt, dt);
 }
 
 void TreeManager::beginExclusiveRead()
@@ -242,13 +242,13 @@ void TreeManager::setRoot(Node* node)
 	Reference::unresolveAll(root_);
 	Reference::resolvePending();
 
-	emit rootNodeSet(root_);
+	Q_EMIT rootNodeSet(root_);
 }
 
 void TreeManager::notifyNodeChange(Node* node)
 {
 	if (modificationInProgress) modifiedTargets.insert(node);
-	else emit nodesModified({node}, {});
+	else Q_EMIT nodesModified({node}, {});
 }
 
 void TreeManager::emitNameModified(NameText* node, const QString &oldName)
@@ -257,7 +257,7 @@ void TreeManager::emitNameModified(NameText* node, const QString &oldName)
 	names << node->get() << oldName;
 	Reference::unresolveNames(root_, names);
 
-	emit nameModified(node, oldName);
+	Q_EMIT nameModified(node, oldName);
 }
 
 }
