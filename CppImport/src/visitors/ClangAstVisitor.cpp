@@ -1066,6 +1066,10 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 			log_->writeError(className_, methodDecl, CppImportLogger::Reason::NO_PARENT);
 		return true;
 	}
+
+	if (methodDecl->isConst())
+		ooMethod->modifiers()->set(OOModel::Modifier::Const);
+
 	if (!ooMethod->items()->size())
 	{
 		// we only translate the following if the method is not yet defined (therefore the body is empty)
