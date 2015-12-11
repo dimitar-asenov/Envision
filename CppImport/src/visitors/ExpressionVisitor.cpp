@@ -162,6 +162,11 @@ bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeD
 
 bool ExpressionVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr)
 {
+	// skip nameless member calls (operator calls etc.)
+	if (auto memberExpr = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
+			if (!memberExpr->getMemberNameInfo().getLoc().getPtrEncoding())
+				return Base::TraverseStmt(callExpr->getImplicitObjectArgument());
+
 	return TraverseCallExpr(callExpr);
 }
 
@@ -384,8 +389,12 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
 		auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
-		ooMethodCall->setCallee(new OOModel::ReferenceExpression(
-													  clang_.unexpandedSpelling(constructExpr->getLocation())));
+		if (auto temporaryObjectExpression = llvm::dyn_cast<clang::CXXTemporaryObjectExpr>(constructExpr))
+			ooMethodCall->setCallee(utils_->translateQualifiedType(
+												temporaryObjectExpression->getTypeSourceInfo()->getTypeLoc()));
+		else
+			ooMethodCall->setCallee(new OOModel::ReferenceExpression(
+												clang_.unexpandedSpelling(constructExpr->getLocation())));
 
 		for (auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
 		{
