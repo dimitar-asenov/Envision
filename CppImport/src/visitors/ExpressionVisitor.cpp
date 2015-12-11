@@ -162,6 +162,11 @@ bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeD
 
 bool ExpressionVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr)
 {
+	// skip nameless member calls (operator calls etc.)
+	if (auto memberExpr = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
+			if (!memberExpr->getMemberNameInfo().getLoc().getPtrEncoding())
+				return Base::TraverseStmt(callExpr->getImplicitObjectArgument());
+
 	return TraverseCallExpr(callExpr);
 }
 
