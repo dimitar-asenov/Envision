@@ -301,7 +301,6 @@ OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTe
 	return ooAlias;
 }
 
-QSet<void*> setty;
 void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* functionDecl,
 																					OOModel::Method* method)
 {
