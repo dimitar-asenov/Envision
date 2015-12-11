@@ -25,12 +25,12 @@
  **********************************************************************************************************************/
 
 #include "TranslateManager.h"
-#include "../visitors/ClangAstVisitor.h"
+#include "../visitors/ExpressionVisitor.h"
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, ClangAstVisitor* visitor)
- : clang_{clang}, rootProject_{root}, baseVisitor_{visitor}, nh_{new NodeHasher(clang)}
+TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, ExpressionVisitor* visitor)
+ : clang_{clang}, rootProject_{root}, exprVisitor_{visitor}, nh_{new NodeHasher(clang)}
 {}
 
 TranslateManager::~TranslateManager()
@@ -314,8 +314,13 @@ void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* function
 	}
 	// process arguments
 	for (auto it = functionDecl->param_begin(); it != functionDecl->param_end(); ++it)
-		method->arguments()->append(clang_.createNamedNode<OOModel::FormalArgument>(*it,
-															utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc())));
+	{
+		auto formalArgument = clang_.createNamedNode<OOModel::FormalArgument>(*it,
+															utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc()));
+		if ((*it)->hasDefaultArg())
+			formalArgument->setInitialValue(exprVisitor_->translateExpression((*it)->getInit()));
+		method->arguments()->append(formalArgument);
+	}
 }
 
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)

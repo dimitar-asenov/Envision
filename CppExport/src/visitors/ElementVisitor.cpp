@@ -53,6 +53,9 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 	else
 		*fragment << expression(argument->typeExpression()) << " " << argument->nameNode();
 
+	if (argument->initialValue())
+		*fragment << " = " << ExpressionVisitor(data()).visit(argument->initialValue());
+
 	return fragment;
 }
 

@@ -247,6 +247,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	*fragment << method->nameNode();
 
 	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
+	if (method->modifiers()->isSet(Modifier::Const))
+		*fragment << " " << new TextFragment(method->modifiers(), "const");
 
 	if (!headerVisitor())
 		if (!method->memberInitializers()->isEmpty())
@@ -263,8 +265,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 				*fragment << " " << new TextFragment(method->modifiers(), "override");
-
-			*fragment << ";";
+		*fragment << ";";
 	}
 	else
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
@@ -293,6 +294,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 
 		if (!isField || variableDeclaration->modifiers()->isSet(Modifier::Static))
 		{
+			*fragment << printAnnotationsAndModifiers(variableDeclaration);
 			*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
 			if (isField)

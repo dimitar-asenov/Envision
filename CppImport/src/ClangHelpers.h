@@ -133,7 +133,9 @@ NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorAr
 template<class NodeType, class ... ConstructorArgTypes>
 inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, ConstructorArgTypes&&... constructorArgs)
 {
-	auto namedNode = createNode<NodeType>(namedDecl->getSourceRange(), unexpandedSpelling(namedDecl->getLocation()),
+	auto name = unexpandedSpelling(namedDecl->getLocation());
+	if (name == "~") name += unexpandedSpelling(namedDecl->getLocation().getLocWithOffset(1));
+	auto namedNode = createNode<NodeType>(namedDecl->getSourceRange(), name,
 													  std::forward<ConstructorArgTypes>(constructorArgs)...);
 	/*
 	 * comments processing 2 of 3.

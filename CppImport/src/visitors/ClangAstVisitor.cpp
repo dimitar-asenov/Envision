@@ -36,8 +36,8 @@ namespace CppImport {
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
  : macroImporter_(project, clang_), log_{logger}
 {
-	trMngr_ = new TranslateManager(clang_, project, this);
 	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
+	trMngr_ = new TranslateManager(clang_, project, exprVisitor_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_, clang_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
@@ -1066,6 +1066,10 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 			log_->writeError(className_, methodDecl, CppImportLogger::Reason::NO_PARENT);
 		return true;
 	}
+
+	if (methodDecl->isConst())
+		ooMethod->modifiers()->set(OOModel::Modifier::Const);
+
 	if (!ooMethod->items()->size())
 	{
 		// we only translate the following if the method is not yet defined (therefore the body is empty)

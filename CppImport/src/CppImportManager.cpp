@@ -40,15 +40,23 @@ CppImportManager::~CppImportManager()
 	for (auto sv : vectors)
 		SAFE_DELETE(sv);
 	sourcesMap_.clear();
-	auto dbs = compilationDbMap_.values();
-	for (auto db : dbs)
-		SAFE_DELETE(db);
-	compilationDbMap_.clear();
+	SAFE_DELETE(compilationDb_);
 }
 
 void CppImportManager::setImportPath(const QString& sourcePath, const bool subProjects)
 {
 	setProjectName(sourcePath);
+
+	QDir dir(sourcePath);
+	do
+	{
+		std::string Error;
+		compilationDb_ = clang::tooling::CompilationDatabase::loadFromDirectory(dir.absolutePath().toLatin1().data(),
+																										Error).release();
+		if (!compilationDb_ && !dir.cdUp())
+			throw CppImportException("No compilation database found: " + QString::fromStdString(Error));
+	} while (!compilationDb_);
+
 	if (subProjects)
 	{
 		QDirIterator dirIterator(sourcePath, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
@@ -68,7 +76,7 @@ Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPer
 	for (QString s : projects_)
 	{
 		qDebug() << "Start processing project :" << s;
-		auto tool = new clang::tooling::ClangTool(*compilationDbMap_.value(s), *sourcesMap_.value(s));
+		auto tool = new clang::tooling::ClangTool(*compilationDb_, *sourcesMap_.value(s));
 		auto frontendActionFactory = new ClangFrontendActionFactory(visitor, log);
 		tool->run(frontendActionFactory);
 		// statistics
@@ -132,8 +140,7 @@ void CppImportManager::setupTest()
 void CppImportManager::initPath(const QString& sourcePath)
 {
 	// check if there is a compilation db file in this directory otherwise we exclude it
-	QDir curDir(sourcePath);
-	if (!curDir.exists("compile_commands.json"))
+	if (!compilationDb_)
 	{
 		qDebug() << "Ignoring directory" << sourcePath << "because there is no compile_commands.json file";
 		return;
@@ -142,7 +149,6 @@ void CppImportManager::initPath(const QString& sourcePath)
 	projects_.append(sourcePath);
 
 	readInFiles(sourcePath);
-	setCompilationDbPath(sourcePath);
 }
 
 void CppImportManager::setProjectName(const QString& sourcePath)
@@ -152,20 +158,23 @@ void CppImportManager::setProjectName(const QString& sourcePath)
 
 void CppImportManager::readInFiles(const QString& sourcePath)
 {
-	QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
-	auto sources = new std::vector<std::string>();
-	while (dirIterator.hasNext())
-		sources->push_back(dirIterator.next().toStdString());
-	sourcesMap_.insert(sourcePath, sources);
+	if (!sourcePath.endsWith(".cpp"))
+	{
+		QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
+		auto sources = new std::vector<std::string>();
+		while (dirIterator.hasNext())
+			sources->push_back(dirIterator.next().toStdString());
+		sourcesMap_.insert(sourcePath, sources);
+	}
+	else
+		sourcesMap_.insert(sourcePath, new std::vector<std::string>{sourcePath.toStdString()});
 }
 
 void CppImportManager::setCompilationDbPath(const QString& sourcePath)
 {
 	std::string Error;
 	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toLatin1().data(), Error);
-	if (!compDB)
-		throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
-	compilationDbMap_.insert(sourcePath, compDB.release());
+	if (!compDB) throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
 }
 
 void CppImportManager::createCompilationDbForTest(const QString& testPath)

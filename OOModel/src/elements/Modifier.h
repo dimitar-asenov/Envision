@@ -56,7 +56,9 @@ class OOMODEL_API Modifier :  public Super<Model::Node>
 			Virtual = 0x00000040,
 			Override = 0x00000080,
 
-			Inline = 0x00000100
+			Inline = 0x00000100,
+
+			Const = 0x00000200
 		};
 		Q_DECLARE_FLAGS(Modifiers, ModifierFlag)
 
