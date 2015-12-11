@@ -263,8 +263,9 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 				*fragment << " " << new TextFragment(method->modifiers(), "override");
-
-			*fragment << ";";
+		if (method->modifiers()->isSet(Modifier::Const))
+				*fragment << " " << new TextFragment(method->modifiers(), "const");
+		*fragment << ";";
 	}
 	else
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
