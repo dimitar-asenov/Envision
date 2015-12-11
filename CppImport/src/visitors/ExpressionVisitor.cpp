@@ -181,19 +181,8 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 		log_->writeError(className_, callExpr->getCallee(), CppImportLogger::Reason::NOT_SUPPORTED);
 		ooMethodCall->setCallee(utils_->createErrorExpression("Could not convert calleee", callExpr->getSourceRange()));
 	}
-
-	// visit arguments
-	for (auto argIt = callExpr->arg_begin(); argIt!=callExpr->arg_end(); ++argIt)
-	{
-		if (llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
-			// this is a default arg and is not written in the source code
-			continue;
-		TraverseStmt(*argIt);
-		if (!ooExprStack_.empty())
-			ooMethodCall->arguments()->append(ooExprStack_.pop());
-		else
-			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
-	}
+	for (auto argument : translateArguments(callExpr->arguments()))
+		ooMethodCall->arguments()->append(argument);
 
 	ooExprStack_.push(ooMethodCall);
 	return true;
@@ -380,10 +369,26 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 	return true;
 }
 
+QList<OOModel::Expression*> ExpressionVisitor::translateArguments(llvm::iterator_range<clang::ExprIterator> arguments)
+{
+	QList<OOModel::Expression*> result;
+	for (auto argIt = arguments.begin(); argIt != arguments.end(); ++argIt)
+	{
+		if (llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
+			// this is a default arg and is not written in the source code
+			continue;
+		TraverseStmt(*argIt);
+		if (!ooExprStack_.empty())
+			result.append(ooExprStack_.pop());
+		else
+			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
+	}
+	return result;
+}
+
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
-	// if is elidable we can directly visit the children
-	if (constructExpr->isElidable() || !constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
+	if (!constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
 		return TraverseStmt(*(constructExpr->child_begin()));
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
@@ -396,17 +401,8 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			ooMethodCall->setCallee(new OOModel::ReferenceExpression(
 												clang_.unexpandedSpelling(constructExpr->getLocation())));
 
-		for (auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
-		{
-			if (llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
-				// this is a default arg and is not written in the source code
-				continue;
-			TraverseStmt(*argIt);
-			if (!ooExprStack_.empty())
-				ooMethodCall->arguments()->append(ooExprStack_.pop());
-			else
-				log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
-		}
+		for (auto argument : translateArguments(constructExpr->arguments()))
+			ooMethodCall->arguments()->append(argument);
 		ooExprStack_.push(ooMethodCall);
 		return true;
 	}
