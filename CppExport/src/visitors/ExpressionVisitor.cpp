@@ -119,7 +119,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	{
 		switch (e->qualifier())
 		{
-			case TypeQualifierExpression::Qualifier::CONST: notAllowed(e); break;
+			case TypeQualifierExpression::Qualifier::CONST: *fragment << "const"; break;
 			case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
 			default: error(e, "Unknown qualifier");
 		}
