@@ -65,7 +65,6 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 
 		CommentDiagramShape::ShapeType nextShapeToAdd_{};
 
-	public slots:
 		void setSelection(bool sel);
 		void createRectangle();
 		void createEllipse();

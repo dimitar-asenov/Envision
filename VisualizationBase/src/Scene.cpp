@@ -234,8 +234,7 @@ QList<Item*> Scene::itemsThatShouldHaveASelection()
 
 void Scene::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
-			  SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, &Model::TreeManager::nodesModified, this, &Scene::nodesUpdated, Qt::QueuedConnection);
 }
 
 void Scene::nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes)

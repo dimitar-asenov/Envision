@@ -42,7 +42,6 @@ class NotificationListener : public QObject
 
 		NotificationListener(TreeManager& manager);
 
-	public slots:
 		void setModifiedNodes( QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 		void rootNodeSet(Node* root);
 };

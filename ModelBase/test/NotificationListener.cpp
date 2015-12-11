@@ -30,9 +30,9 @@ namespace Model {
 
 NotificationListener::NotificationListener(TreeManager& manager) : root(nullptr)
 {
-	QObject::connect(&manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
-						  SLOT(setModifiedNodes(QSet<Node*>, QSet<Node*>)));
-	QObject::connect(&manager, SIGNAL(rootNodeSet(Node*)), this, SLOT(rootNodeSet(Node*)));
+	QObject::connect(&manager, &TreeManager::nodesModified, this,
+						  &NotificationListener::setModifiedNodes);
+	QObject::connect(&manager, &TreeManager::rootNodeSet, this, &NotificationListener::rootNodeSet);
 
 }
 

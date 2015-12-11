@@ -43,8 +43,6 @@ class LogTester: public QObject
 		void runTests();
 		bool allTestsOK();
 
-
-	public slots:
 		void newLogEntryAdded();
 };
 

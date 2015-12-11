@@ -82,8 +82,8 @@ void GenericHandlerManagerListener::listenToTreeManagerOf(Visualization::Item* i
 	if (!managers_.contains(manager))
 	{
 		managers_.append(manager);
-		connect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
-				SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
+		connect(manager, &Model::TreeManager::nodesModified, this,
+				&GenericHandlerManagerListener::nodesUpdated, Qt::QueuedConnection);
 	}
 }
 
@@ -95,8 +95,8 @@ void GenericHandlerManagerListener::stopListeningToTreeManagerOf(Visualization::
 	if (managers_.contains(manager))
 	{
 		managers_.removeAll(manager);
-		disconnect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
-					  SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)));
+		disconnect(manager, &Model::TreeManager::nodesModified, this,
+					  &GenericHandlerManagerListener::nodesUpdated);
 	}
 }
 

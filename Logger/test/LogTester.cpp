@@ -31,7 +31,7 @@ namespace Logger {
 LogTester::LogTester() :
 	correctLogEntries(0), log(Log::getLogger("logger"))
 {
-	QObject::connect(log, SIGNAL(newLogEntry()), this, SLOT(newLogEntryAdded()), Qt::QueuedConnection);
+	QObject::connect(log, &Log::newLogEntry, this, &LogTester::newLogEntryAdded, Qt::QueuedConnection);
 }
 
 void LogTester::runTests()

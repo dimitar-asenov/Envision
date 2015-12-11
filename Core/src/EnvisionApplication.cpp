@@ -39,7 +39,7 @@ EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(
 {
 	idleInputTimer_.setInterval(50);
 	idleInputTimer_.setSingleShot(true);
-	connect(&idleInputTimer_, SIGNAL(timeout()), this, SLOT(userInputIdle()));
+	connect(&idleInputTimer_, &QTimer::timeout, this, &EnvisionApplication::userInputIdle);
 }
 
 bool EnvisionApplication::notify(QObject* receiver, QEvent* event)

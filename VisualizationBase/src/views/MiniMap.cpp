@@ -41,7 +41,7 @@ MiniMap::MiniMap(Scene *scene, View *parent_) : View(scene, parent_), parent(par
 
 	setHiddenItemCategories(Scene::MenuItemCategory | Scene::CursorItemCategory);
 
-	connect(scene, SIGNAL(sceneRectChanged(const QRectF &)), this, SLOT(sceneRectChanged(const QRectF &)));
+	connect(scene, &Scene::sceneRectChanged, this, &MiniMap::sceneRectChanged);
 }
 
 void MiniMap::updatePosition()

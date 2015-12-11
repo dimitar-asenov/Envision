@@ -54,11 +54,10 @@ class COMMENTS_API ColorPicker : public QToolButton
 		 */
 		void setColorPickerType(enum ColorPickerType type);
 
+		void handleColorPicked(QString aColor);
+
 	signals:
 		void colorChanged(QString color);
-
-	public slots:
-		void handleColorPicked(QString aColor);
 
 	private:
 		QMap<QString, QString> mapEnvisionTextColors_;

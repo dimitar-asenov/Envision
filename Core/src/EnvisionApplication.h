@@ -43,7 +43,6 @@ class CORE_API EnvisionApplication : public QApplication {
 		static void addOnUserInputIdleAction(void* actionId, IdleFunction action);
 		static void removeOnUserInputIdleAction(void* actionId);
 
-	private slots:
 		void userInputIdle();
 
 	private:

@@ -126,19 +126,20 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	this->setWindowFlags(Qt::WindowStaysOnTopHint);
 
-	connect(bSelection_, SIGNAL(toggled(bool)), this, SLOT(setSelection(bool)));
-	connect(menu->actions().at(0), SIGNAL(triggered(bool)), this, SLOT(createRectangle()));
-	connect(menu->actions().at(1), SIGNAL(triggered(bool)), this, SLOT(createEllipse()));
-	connect(menu->actions().at(2), SIGNAL(triggered(bool)), this, SLOT(createDiamond()));
-	connect(colorPickerBackground_, SIGNAL(colorChanged(QString)), this, SLOT(applyBackgroundColor(QString)));
-	connect(colorPickerBorder_, SIGNAL(colorChanged(QString)), this, SLOT(applyBorderColor(QString)));
-	connect(colorPickerText_, SIGNAL(colorChanged(QString)), this, SLOT(applyTextColor(QString)));
-	connect(OutlineTypePicker_, SIGNAL(outlineTypeChanged(int)), this, SLOT(applyOutlineType(int)));
-	connect(cbOutlineSize_, SIGNAL(currentIndexChanged(int)), this, SLOT(applyOutlineSize(int)));
-	connect(bConnections_, SIGNAL(toggled(bool)), this, SLOT(showConnectionPoints(bool)));
-	connect(aTimer_, SIGNAL(timeout()), this, SLOT(handleTimerEvent()));
-	connect(boxStartArrow_, SIGNAL(stateChanged(int)), this, SLOT(applyStartArrow()));
-	connect(boxEndArrow_, SIGNAL(stateChanged(int)), this, SLOT(applyEndArrow()));
+	connect(bSelection_, &QToolButton::toggled, this, &CommentDiagramToolbar::setSelection);
+	connect(menu->actions().at(0), &QAction::triggered, this, &CommentDiagramToolbar::createRectangle);
+	connect(menu->actions().at(1), &QAction::triggered, this, &CommentDiagramToolbar::createEllipse);
+	connect(menu->actions().at(2), &QAction::triggered, this, &CommentDiagramToolbar::createDiamond);
+	connect(colorPickerBackground_, &ColorPicker::colorChanged, this, &CommentDiagramToolbar::applyBackgroundColor);
+	connect(colorPickerBorder_, &ColorPicker::colorChanged, this, &CommentDiagramToolbar::applyBorderColor);
+	connect(colorPickerText_, &ColorPicker::colorChanged, this, &CommentDiagramToolbar::applyTextColor);
+	connect(OutlineTypePicker_, &OutlineTypePicker::outlineTypeChanged, this, &CommentDiagramToolbar::applyOutlineType);
+	connect(cbOutlineSize_, (void (QComboBox::*)(int)) &QComboBox::currentIndexChanged,
+			  this, &CommentDiagramToolbar::applyOutlineSize);
+	connect(bConnections_, &QToolButton::toggled, this, &CommentDiagramToolbar::showConnectionPoints);
+	connect(aTimer_, &QTimer::timeout, this, &CommentDiagramToolbar::handleTimerEvent);
+	connect(boxStartArrow_, &QCheckBox::stateChanged, this, &CommentDiagramToolbar::applyStartArrow);
+	connect(boxEndArrow_, &QCheckBox::stateChanged, this, &CommentDiagramToolbar::applyEndArrow);
 }
 
 void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)

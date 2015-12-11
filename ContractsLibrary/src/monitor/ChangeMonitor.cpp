@@ -41,8 +41,8 @@ ChangeMonitor::~ChangeMonitor()
 
 void ChangeMonitor::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
-			  SLOT(nodesModified(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, &Model::TreeManager::nodesModified, this,
+			  &ChangeMonitor::nodesModified, Qt::QueuedConnection);
 }
 
 void ChangeMonitor::nodesModified(QSet<Node*> modifiedNodes, QSet<Node*>)

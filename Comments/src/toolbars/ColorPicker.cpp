@@ -46,7 +46,8 @@ void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 	QWidgetAction* wiAction = new QWidgetAction(this);
 
 	QSignalMapper* signalMapper = new QSignalMapper(this);
-	connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(handleColorPicked(QString)));
+	connect(signalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
+			  this, &ColorPicker::handleColorPicked);
 
 	QPixmap pixmap(100, 100);
 	QWidget* aWidget = new QWidget(this);
@@ -64,7 +65,8 @@ void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 			aButton->setIcon(QIcon(pixmap));
 			aLayout->addWidget(aButton, i/colorsPerRow, i%colorsPerRow);
 			signalMapper->setMapping(aButton, colors.at(i).name());
-			connect(aButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+			connect(aButton, &QToolButton::clicked, signalMapper,
+					  (void (QSignalMapper::*)()) &QSignalMapper::map);
 	}
 	menu->addAction(wiAction);
 	this->setMenu(menu);
@@ -77,7 +79,8 @@ void ColorPicker::setEnvisionTextColors()
 	QWidgetAction* wiAction = new QWidgetAction(this);
 
 	QSignalMapper* signalMapper = new QSignalMapper(this);
-	connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(handleColorPicked(QString)));
+	connect(signalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, this,
+			  &ColorPicker::handleColorPicked);
 
 	QPixmap pixmap(100, 100);
 	QWidget* aWidget = new QWidget(this);
@@ -96,7 +99,8 @@ void ColorPicker::setEnvisionTextColors()
 		aButton->setIcon(QIcon(pixmap));
 		aLayout->addWidget(aButton, 1, std::distance(mapEnvisionTextColors_.begin(), i));
 		signalMapper->setMapping(aButton, i.key());
-		connect(aButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+		connect(aButton, &QToolButton::clicked, signalMapper,
+				  (void (QSignalMapper::*)()) &QSignalMapper::map);
 	}
 
 	menu->addAction(wiAction);

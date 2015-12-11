@@ -41,7 +41,6 @@ class COMMENTS_API OutlineTypePicker : public QToolButton
 		OutlineTypePicker(QWidget *parent = 0);
 		void setselectedOutlineType(int aType);
 
-	public slots:
 		void handleOutlineTypePicked(int aType);
 
 	signals:

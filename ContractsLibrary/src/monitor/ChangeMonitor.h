@@ -56,7 +56,6 @@ class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
 
 		static void expressionModified(OOModel::Expression*& exp, int& cursorIndex);
 
-	public slots:
 		void nodesModified(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 };
 

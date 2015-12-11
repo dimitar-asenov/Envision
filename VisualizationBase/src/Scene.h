@@ -162,7 +162,6 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void setApproximateUpdate(bool b);
 		bool approximateUpdate();
 
-	public slots:
 		void nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 
 	protected:
