@@ -259,12 +259,13 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << ")";
 	}
 
+	if (method->modifiers()->isSet(Modifier::Const))
+		*fragment << " " << new TextFragment(method->modifiers(), "const");
+
 	if (headerVisitor())
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 				*fragment << " " << new TextFragment(method->modifiers(), "override");
-		if (method->modifiers()->isSet(Modifier::Const))
-				*fragment << " " << new TextFragment(method->modifiers(), "const");
 		*fragment << ";";
 	}
 	else
