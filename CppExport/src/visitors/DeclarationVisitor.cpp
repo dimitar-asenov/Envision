@@ -294,6 +294,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 
 		if (!isField || variableDeclaration->modifiers()->isSet(Modifier::Static))
 		{
+			*fragment << printAnnotationsAndModifiers(variableDeclaration);
 			*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
 			if (isField)
