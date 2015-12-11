@@ -39,11 +39,9 @@ QString ClangHelpers::spelling(clang::SourceRange sourceRange) const
 
 	bool invalid = true;
 	auto beginPtr = sourceManager_->getCharacterData(b, &invalid);
-	if (invalid) return "INVALID_BEGIN"; // TODO: debug purposes
 	Q_ASSERT(!invalid);
 
 	auto endPtr = sourceManager_->getCharacterData(e, &invalid);
-	if (invalid) return "INVALID_END"; // TODO: debug purposes
 	Q_ASSERT(!invalid);
 
 	auto length = endPtr - beginPtr;
