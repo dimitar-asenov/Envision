@@ -247,6 +247,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	*fragment << method->nameNode();
 
 	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
+	if (method->modifiers()->isSet(Modifier::Const))
+		*fragment << " " << new TextFragment(method->modifiers(), "const");
 
 	if (!headerVisitor())
 		if (!method->memberInitializers()->isEmpty())
@@ -258,9 +260,6 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << list(method->throws(), ExpressionVisitor(data()), "comma");
 		*fragment << ")";
 	}
-
-	if (method->modifiers()->isSet(Modifier::Const))
-		*fragment << " " << new TextFragment(method->modifiers(), "const");
 
 	if (headerVisitor())
 	{
