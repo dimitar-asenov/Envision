@@ -359,20 +359,16 @@ CppImportUtilities::OverloadKind CppImportUtilities::getOverloadKind
 OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang::CXXCtorInitializer* initializer)
 {
 	auto ooMemberInit = clang_.createNode<OOModel::MemberInitializer>(initializer->getSourceRange());
-	auto initExpression = exprVisitor_->translateExpression(initializer->getInit());
-	if (auto commaExpression = DCast<OOModel::CommaExpression>(initExpression))
-	{
-		auto initializerExpressions = commaExpression->allSubOperands(true);
-		for (auto expression : initializerExpressions) ooMemberInit->arguments()->append(expression);
-		clang_.deleteNode(commaExpression);
-	}
+	if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initializer->getInit()->IgnoreImplicit()))
+		for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
+			ooMemberInit->arguments()->append(argument);
 	else
-		ooMemberInit->arguments()->append(initExpression);
+		ooMemberInit->arguments()->append(exprVisitor_->translateExpression(initializer->getInit()));
 
 	if (initializer->isBaseInitializer())
 	{
-		if (auto memberRef = DCast<OOModel::ReferenceExpression>(translateTypePtr(initializer->getTypeSourceInfo()
-																										  ->getTypeLoc())))
+		if (auto memberRef = DCast<OOModel::ReferenceExpression>(
+				 translateTypePtr(initializer->getTypeSourceInfo()->getTypeLoc())))
 			ooMemberInit->setMemberReference(memberRef);
 		else
 			log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);
