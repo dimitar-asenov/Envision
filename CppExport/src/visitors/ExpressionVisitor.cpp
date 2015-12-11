@@ -126,7 +126,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		*fragment << " " << visit(e->typeExpression());
 	}
 	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
-	else if (auto e = DCast<FunctionTypeExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<FunctionTypeExpression>(expression))
+		*fragment << list(e->results(), this) << " " << list(e->arguments(), this, "argsList");
 
 	// Operators ========================================================================================================
 
