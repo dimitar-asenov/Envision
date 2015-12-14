@@ -66,6 +66,7 @@ class CPPIMPORT_API ClangHelpers
 		template<class NodeType, class ... ConstructorArgTypes>
 		NodeType* createNamedNode(clang::NamedDecl* namedDecl, ConstructorArgTypes&&... constructorArgs);
 		OOModel::ReferenceExpression* createReference(clang::SourceRange sourceRange);
+		QString spelling(clang::SourceRange sourceRange) const;
 
 	private:
 		EnvisionToClangMap envisionToClangMap_;
@@ -103,8 +104,6 @@ class CPPIMPORT_API ClangHelpers
 		 *	                out_start|     |out_end
 		 */
 		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
-
-		QString spelling(clang::SourceRange sourceRange) const;
 };
 
 inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }
@@ -133,10 +132,11 @@ NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorAr
 template<class NodeType, class ... ConstructorArgTypes>
 inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, ConstructorArgTypes&&... constructorArgs)
 {
-	auto name = unexpandedSpelling(namedDecl->getLocation());
-	if (name == "~") name += unexpandedSpelling(namedDecl->getLocation().getLocWithOffset(1));
+	auto name = spelling(namedDecl->getLocation());
+	if (name == "~") name += spelling(namedDecl->getLocation().getLocWithOffset(1));
 	auto namedNode = createNode<NodeType>(namedDecl->getSourceRange(), name,
 													  std::forward<ConstructorArgTypes>(constructorArgs)...);
+	envisionToClangMap_.mapAst(namedDecl->getLocation(), namedNode->nameNode());
 	/*
 	 * comments processing 2 of 3.
 	 * process comments which are associated with declarations.
@@ -149,6 +149,6 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, Cons
 }
 
 inline OOModel::ReferenceExpression* ClangHelpers::createReference(clang::SourceRange sourceRange)
-{ return createNode<OOModel::ReferenceExpression>(sourceRange, unexpandedSpelling(sourceRange.getBegin())); }
+{ return createNode<OOModel::ReferenceExpression>(sourceRange, spelling(sourceRange.getBegin())); }
 
 }
