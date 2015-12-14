@@ -218,11 +218,11 @@ void TreeManager::load(PersistentStore* store, const QString& name, bool loadPar
 	store_ = store;
 	partiallyLoaded_ = loadPartially;
 
-	Core::Profiler::startOnce(name == "java", "Loading the Java library", "load.prof");
+	Core::Profiler::startOnce(name == "jedit", "Loading jEdit", "load.prof");
 	auto root = store->loadTree(this, name, loadPartially);
 	for (auto lib : root->usedLibraries())
 		lib->loadLibrary(store->clone());
-	Core::Profiler::stop("Loading the Java library");
+	Core::Profiler::stop("Loading jEdit");
 
 	Core::Profiler::startOnce(name == "java", "Resolving references", "resolve.prof");
 	setRoot(root);
