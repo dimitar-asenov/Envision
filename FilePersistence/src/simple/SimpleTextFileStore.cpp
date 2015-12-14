@@ -345,6 +345,7 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 	checkIsWorking();
 
 	QList < Model::LoadedNode > result;
+	result.reserve(genericNode_->children().size());
 
 	auto previousPersisted = genericNode_;
 	for (auto c : genericNode_->children())
