@@ -36,7 +36,7 @@
 
 namespace CppImport {
 
-AllMetaDefinitions::AllMetaDefinitions(OOModel::Project* root, const ClangHelpers& clangHelper,
+AllMetaDefinitions::AllMetaDefinitions(OOModel::Project* root, ClangHelpers& clangHelper,
 									  const MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions)
 	: root_(root), macroDefinitions_(macroDefinitions), macroExpansions_(macroExpansions),
 	  standardMetaDefinitions_(clangHelper, macroDefinitions, macroExpansions) {}

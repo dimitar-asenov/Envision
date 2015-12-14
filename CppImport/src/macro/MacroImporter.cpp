@@ -255,8 +255,10 @@ QVector<MacroArgumentLocation> MacroImporter::argumentHistory(Model::Node* node)
 
 void MacroImporter::allArguments(Model::Node* node, QVector<MacroArgumentInfo>& result, NodeToCloneMap& mapping)
 {
-	auto argLoc = argumentHistory(mapping.original(node));
+	// consider name texts as inseparable part of a declaration
+	if (DCast<Model::NameText>(node)) return;
 
+	auto argLoc = argumentHistory(mapping.original(node));
 	if (!argLoc.empty())
 	{
 		result.append({argLoc, node});

@@ -55,8 +55,8 @@ class LexicalTransformations;
 class CPPIMPORT_API StandardMetaDefinitions
 {
 	public:
-		StandardMetaDefinitions(const ClangHelpers& clang, const MacroDefinitions& definitionManager,
-									 MacroExpansions& MacroExpansions);
+		StandardMetaDefinitions(ClangHelpers& clang, const MacroDefinitions& definitionManager,
+										MacroExpansions& MacroExpansions);
 
 		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
@@ -67,7 +67,7 @@ class CPPIMPORT_API StandardMetaDefinitions
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
 	private:
-		const ClangHelpers& clang_;
+		ClangHelpers& clang_;
 		const MacroDefinitions& definitionManager_;
 		MacroExpansions& macroExpansions_;
 

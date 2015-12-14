@@ -52,7 +52,7 @@ namespace CppImport {
 class CPPIMPORT_API AllMetaDefinitions
 {
 	public:
-		AllMetaDefinitions(OOModel::Project* root, const ClangHelpers& clangHelper,
+		AllMetaDefinitions(OOModel::Project* root, ClangHelpers& clangHelper,
 								 const MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions);
 
 		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,

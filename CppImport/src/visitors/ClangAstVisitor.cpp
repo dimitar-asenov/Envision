@@ -1217,7 +1217,7 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 	// this should happen anyway that it is clearly visible that there is a friend
 	// TODO: this is not really a method call but rather a reference
 	auto ooMCall = clang_.createNode<OOModel::MethodCallExpression>(friendFunction->getSourceRange());
-	ooMCall->setCallee(new OOModel::ReferenceExpression(clang_.unexpandedSpelling(friendFunction->getLocation())));
+	ooMCall->setCallee(new OOModel::ReferenceExpression(clang_.spelling(friendFunction->getLocation())));
 
 	// TODO: handle return type & arguments & type arguments
 	ooClass->friends()->append(ooMCall);

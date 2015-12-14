@@ -38,7 +38,7 @@
 
 namespace CppImport {
 
-StandardMetaDefinitions::StandardMetaDefinitions(const ClangHelpers& clang, const MacroDefinitions& definitionManager,
+StandardMetaDefinitions::StandardMetaDefinitions(ClangHelpers& clang, const MacroDefinitions& definitionManager,
 																 MacroExpansions& macroExpansions)
 	: clang_(clang), definitionManager_(definitionManager), macroExpansions_(macroExpansions) {}
 
@@ -80,6 +80,26 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 		{
 			NodeToCloneMap childMapping;
 			auto cloned = NodeHelpers::cloneWithMapping(mapping.original(n), childMapping);
+
+			// use unexpanded spelling for all references and names
+			QList<Model::Node*> workStack{cloned};
+			while (!workStack.empty())
+			{
+				auto current = workStack.takeLast();
+				if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(current))
+				{
+					auto sourceRanges = clang_.envisionToClangMap().get(childMapping.original(referenceExpression));
+					if (!sourceRanges.empty())
+						referenceExpression->setName(clang_.unexpandedSpelling(sourceRanges.first().getBegin()));
+				}
+				else if (auto nameText = DCast<Model::NameText>(current))
+				{
+					auto sourceRanges = clang_.envisionToClangMap().get(childMapping.original(nameText));
+					if (!sourceRanges.empty())
+						nameText->set(clang_.unexpandedSpelling(sourceRanges.first().getBegin()));
+				}
+				workStack << current->children();
+			}
 
 			insertChildMetaCalls(expansion, childMapping);
 			if (removeUnownedNodes(cloned, expansion, childMapping)) continue;
