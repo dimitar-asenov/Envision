@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VMethodCallExpression, "item")
 
 VMethodCallExpression::VMethodCallExpression(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style)
+	Super{parent, node, style}
 {}
 
 VMethodCallExpression::~VMethodCallExpression()

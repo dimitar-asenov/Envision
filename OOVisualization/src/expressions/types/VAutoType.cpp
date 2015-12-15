@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VAutoType, "item")
 
 		VAutoType::VAutoType(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
+	Super{parent, node, style},
 	vis_(new Static(this, style))
 {
 }

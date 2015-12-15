@@ -36,7 +36,7 @@ Super(parent, itemStyles().get("darkGrey"), text)
 }
 
 Text::Text(Item* parent, const StyleType *style, const QString& text) :
-Super(parent, style, text)
+Super{parent, style, text}
 {
 	setEditable(false);
 }

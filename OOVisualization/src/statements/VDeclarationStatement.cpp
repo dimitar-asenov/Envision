@@ -35,7 +35,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VDeclarationStatement, "item")
 
 VDeclarationStatement::VDeclarationStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
+	Super{parent, node, style},
 	decl_{ nullptr }
 {
 }

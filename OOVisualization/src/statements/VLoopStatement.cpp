@@ -40,7 +40,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VLoopStatement, "item")
 
 VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style)
+	Super{parent, node, style}
 {}
 
 void VLoopStatement::initializeForms()

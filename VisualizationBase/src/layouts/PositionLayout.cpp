@@ -45,7 +45,7 @@ constexpr bool ENABLE_AUTOMATIC_SEMANTIC_ZOOM = false;
 constexpr int FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL = 5;
 
 PositionLayout::PositionLayout(Item* parent, const StyleType* style) :
-Super(parent, style)
+Super{parent, style}
 {
 }
 

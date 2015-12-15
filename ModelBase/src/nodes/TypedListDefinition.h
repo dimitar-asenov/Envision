@@ -52,7 +52,7 @@ TypedList<T>::TypedList(::Model::Node* parent) : Super{parent}
 
 template<typename T>
 TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially) :
-Super(parent, store, loadPartially)
+Super{parent, store, loadPartially}
 {
 }
 

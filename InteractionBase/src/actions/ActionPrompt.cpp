@@ -43,7 +43,7 @@ namespace Interaction {
 ITEM_COMMON_DEFINITIONS(ActionPrompt, "item")
 
 ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const StyleType* style) :
-	Super(nullptr, style),
+	Super{nullptr, style},
 	autoExecuteAction_{autoExecuteAction},
 	originalActionReceiver_{actionReceiver},
 	currentActionReceiver_{actionReceiver}

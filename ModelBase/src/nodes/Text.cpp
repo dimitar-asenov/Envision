@@ -44,7 +44,7 @@ Text::Text(Node *parent, PersistentStore &store, bool) :	Super{parent}
 }
 
 Text::Text(const QString& text) :
-	Super(nullptr)
+	Super{nullptr}
 {
 	set(text);
 }

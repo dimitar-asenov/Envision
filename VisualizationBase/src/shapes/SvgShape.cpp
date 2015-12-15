@@ -32,7 +32,7 @@ namespace Visualization {
 SHAPE_COMMON_DEFINITIONS(SvgShape, "shape")
 
 SvgShape::SvgShape(Item *parent, StyleType *style) :
-	Super(parent, style)
+	Super{parent, style}
 {
 }
 

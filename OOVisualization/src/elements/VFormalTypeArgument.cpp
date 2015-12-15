@@ -38,7 +38,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VFormalTypeArgument, "item")
 
 VFormalTypeArgument::VFormalTypeArgument(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style)
+	Super{parent, node, style}
 {}
 
 void VFormalTypeArgument::initializeForms()

@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VContinueStatement, "item")
 
 VContinueStatement::VContinueStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style)
+	Super{parent, node, style}
 {}
 
 void VContinueStatement::initializeForms()

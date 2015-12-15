@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VVariableDeclarationExpression, "item")
 
 VVariableDeclarationExpression::VVariableDeclarationExpression(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
+	Super{parent, node, style},
 	name_(new VText(layout(), node->decl()->nameNode(), &style->name()) ),
 	type_{nullptr},
 	assignmentSymbol_{nullptr},

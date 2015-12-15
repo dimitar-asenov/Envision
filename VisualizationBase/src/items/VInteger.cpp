@@ -31,7 +31,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VInteger, "item")
 
 VInteger::VInteger(Item* parent, NodeType *node, const StyleType *style) :
-	Super(parent, node, style)
+	Super{parent, node, style}
 {
 	TextRenderer::setText( QString::number(node->get()) );
 }

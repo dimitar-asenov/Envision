@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VAssertStatement, "item")
 
 		VAssertStatement::VAssertStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style)
+	Super{parent, node, style}
 {
 }
 

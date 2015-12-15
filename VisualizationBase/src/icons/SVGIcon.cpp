@@ -36,7 +36,7 @@ Super(parent, itemStyles().get(iconStyleName))
 }
 
 SVGIcon::SVGIcon(Item* parent, const SVGIconStyle *style) :
-Super(parent, style)
+Super{parent, style}
 {
 }
 

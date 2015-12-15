@@ -35,7 +35,7 @@ namespace Interaction {
 ITEM_COMMON_DEFINITIONS(VViewSwitcherEntry, "item")
 
 VViewSwitcherEntry::VViewSwitcherEntry(Visualization::Item* parent, QString viewName, const StyleType* style) :
-		Super(parent, style)
+		Super{parent, style}
 {
 	nameField_ = new Visualization::Text(this, viewName);
 	nameField_->setEditable(true);

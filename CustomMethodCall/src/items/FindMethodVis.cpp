@@ -39,7 +39,7 @@ namespace CustomMethodCall {
 ITEM_COMMON_DEFINITIONS(FindMethodVis, "item")
 
 FindMethodVis::FindMethodVis(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
+	Super{parent, node, style},
 	name_(new Text(nullptr, &style->name()) ),
 	separator_{nullptr},
 	prefix_{nullptr},

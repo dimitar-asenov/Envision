@@ -35,7 +35,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VInfoNode, "item")
 
 VInfoNode::VInfoNode(Item* parent, NodeType* node, const StyleType* style) :
-		Super(parent, node, style)
+		Super{parent, node, style}
 {
 	node->fullUpdate();
 	browser_ = new Comments::VCommentBrowser(this, QString());

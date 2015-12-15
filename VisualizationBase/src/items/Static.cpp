@@ -36,7 +36,7 @@ QMap<QString, Static::staticItemConstructorType> Static::itemClasses_;
 QMap<QString, Static::staticItemStyleConstructorType> Static::itemStyles_;
 
 Static::Static(Item* parent, const StyleType *style) :
-		Super(parent, style), item_{nullptr}
+		Super{parent, style}, item_{nullptr}
 {
 	removeShape(); // The shape should only show for the contained static item.
 }

@@ -34,7 +34,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VBooleanLiteral, "item")
 
 VBooleanLiteral::VBooleanLiteral(Item* parent, NodeType *literal, const StyleType *style) :
-	Super(parent, literal, style),
+	Super{parent, literal, style},
 	vis_{nullptr}
 {
 }
