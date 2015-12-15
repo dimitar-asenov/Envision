@@ -285,7 +285,21 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	auto ooNewExpr = clang_.createNode<OOModel::NewExpression>(newExpr->getSourceRange());
-	TraverseStmt(newExpr->getInitializer());
+	if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
+	{
+		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+		for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
+			methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
+		ooExprStack_.push(methodCallExpr);
+	}
+	else
+	{
+		TraverseStmt(newExpr->getInitializer());
+	}
+
 	if (!ooExprStack_.empty())
 		ooNewExpr->setNewType(ooExprStack_.pop());
 	if (newExpr->isArray())
