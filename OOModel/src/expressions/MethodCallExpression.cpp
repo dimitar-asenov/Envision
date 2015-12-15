@@ -43,11 +43,13 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression)
 
 REGISTER_ATTRIBUTE(MethodCallExpression, callee, Expression, false, false, true)
 REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(MethodCallExpression, cKind, Integer, false, false, true)
 
 MethodCallExpression::MethodCallExpression(const QString& name, Expression* referencePrefix)
 : Super(nullptr, MethodCallExpression::getMetaData())
 {
 	setCallee(new ReferenceExpression(name, referencePrefix));
+	setMethodCallKind(MethodCallKind::Call);
 }
 
 Method* MethodCallExpression::methodDefinition(Type*& calleeType)
