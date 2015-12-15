@@ -44,6 +44,8 @@
 #include "Export/src/tree/CompositeFragment.h"
 #include "Export/src/tree/TextFragment.h"
 
+#include "Comments/src/nodes/CommentNode.h"
+
 using namespace Export;
 using namespace OOModel;
 
@@ -221,6 +223,11 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
+
+	if (headerVisitor())
+		if (auto comment = DCast<Comments::CommentNode>(method->comment()))
+			for (auto line : *(comment->lines()))
+				*fragment << line->get() << "\n";
 
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
