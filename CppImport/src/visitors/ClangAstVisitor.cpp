@@ -219,6 +219,8 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 
 	if (auto ooFunction = trMngr_->insertFunctionDecl(functionDecl))
 	{
+		addFunctionModifiers(functionDecl, ooFunction);
+
 		if (!ooFunction->parent())
 		{
 			// insert in tree
@@ -1058,6 +1060,18 @@ bool ClangAstVisitor::shouldUseDataRecursionfor (clang::Stmt*)
 	return false;
 }
 
+void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OOModel::Method* method)
+{
+	if (functionDecl->isInlineSpecified())
+		method->modifiers()->set(OOModel::Modifier::Inline);
+	if (functionDecl->isVirtualAsWritten())
+		method->modifiers()->set(OOModel::Modifier::Virtual);
+	if (functionDecl->hasAttr<clang::OverrideAttr>())
+		method->modifiers()->set(OOModel::Modifier::Override);
+	if (functionDecl->getStorageClass() == clang::SC_Static)
+		method->modifiers()->set(OOModel::Modifier::Static);
+}
+
 bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind)
 {
 	auto ooMethod = trMngr_->insertMethodDecl(methodDecl, kind);
@@ -1071,6 +1085,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 
 	if (methodDecl->isConst())
 		ooMethod->modifiers()->set(OOModel::Modifier::Const);
+	addFunctionModifiers(methodDecl, ooMethod);
 
 	if (!ooMethod->items()->size())
 	{
@@ -1188,14 +1203,6 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 			}
 		}
 	}
-	// modifiers
-	ooFunction->modifiers()->set(utils_->translateStorageSpecifier(functionDecl->getStorageClass()));
-	if (functionDecl->isInlineSpecified())
-		ooFunction->modifiers()->set(OOModel::Modifier::Inline);
-	if (functionDecl->isVirtualAsWritten())
-		ooFunction->modifiers()->set(OOModel::Modifier::Virtual);
-	if (functionDecl->hasAttr<clang::OverrideAttr>())
-		ooFunction->modifiers()->set(OOModel::Modifier::Override);
 }
 
 void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
