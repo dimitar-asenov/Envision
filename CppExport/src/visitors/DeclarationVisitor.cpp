@@ -160,7 +160,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		if (!classs->baseClasses()->isEmpty())
 			// TODO: inheritance modifiers like private, virtual... (not only public)
-			*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "baseClasses");
+			*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 
 		notAllowed(classs->friends());
 
