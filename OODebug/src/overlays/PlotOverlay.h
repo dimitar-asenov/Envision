@@ -49,7 +49,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		void addValue(double xValue, double yValue);
 		void addValues(double xValue, QList<double> yValues);
 
-		template <class ValueType>
+		template <typename ValueType>
 		inline void updateArrayValues(const QList<ValueType>& values, const QList<int>& indices);
 
 	protected:
@@ -96,7 +96,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		int drawnTextHeight();
 };
 
-template <class ValueType>
+template <typename ValueType>
 void PlotOverlay::updateArrayValues(const QList<ValueType>& values, const QList<int>& indices)
 {
 	clear();

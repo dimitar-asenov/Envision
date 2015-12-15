@@ -61,9 +61,9 @@ class CPPIMPORT_API ClangHelpers
 
 		void deleteNode(Model::Node* node);
 
-		template<class NodeType, class ... ConstructorArgTypes>
+		template<typename NodeType, class ... ConstructorArgTypes>
 		NodeType* createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs);
-		template<class NodeType, class ... ConstructorArgTypes>
+		template<typename NodeType, class ... ConstructorArgTypes>
 		NodeType* createNamedNode(clang::NamedDecl* namedDecl, ConstructorArgTypes&&... constructorArgs);
 		OOModel::ReferenceExpression* createReference(clang::SourceRange sourceRange);
 		QString spelling(clang::SourceRange sourceRange) const;
@@ -121,7 +121,7 @@ inline QString ClangHelpers::unexpandedSpelling(clang::SourceLocation start, cla
 
 inline EnvisionToClangMap& ClangHelpers::envisionToClangMap() { return envisionToClangMap_; }
 
-template<class NodeType, class ... ConstructorArgTypes>
+template<typename NodeType, class ... ConstructorArgTypes>
 NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs)
 {
 	 auto node = new NodeType(std::forward<ConstructorArgTypes>(constructorArgs)...);
@@ -129,7 +129,7 @@ NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorAr
 	 return node;
 }
 
-template<class NodeType, class ... ConstructorArgTypes>
+template<typename NodeType, class ... ConstructorArgTypes>
 inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, ConstructorArgTypes&&... constructorArgs)
 {
 	auto name = spelling(namedDecl->getLocation());

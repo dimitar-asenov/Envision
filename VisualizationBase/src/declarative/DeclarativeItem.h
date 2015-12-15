@@ -44,7 +44,7 @@ class Item;
  * To use the declarative API, one needs to inherit from DeclarativeItem, and implement a static method initializeForms
  * in which the list of forms and their properties is set up.
  */
-template <class VisualizationType>
+template <typename VisualizationType>
 class DeclarativeItem : public DeclarativeItemBase
 {
 	public:
@@ -76,7 +76,7 @@ class DeclarativeItem : public DeclarativeItemBase
 		 *
 		 * Returns a pointer to the added element.
 		 */
-		template <class ElementType> static ElementType* addForm(ElementType* element);
+		template <typename ElementType> static ElementType* addForm(ElementType* element);
 
 		/**
 		 * A factory method to get an item wrapper element with a node only, it takes a pointer to member, where the
@@ -95,14 +95,14 @@ class DeclarativeItem : public DeclarativeItemBase
 		 * \a item should be created. To call it, one has to supply the visualization type and the parent type (which is
 		 * always 'I') as the template arguments.
 		 */
-		template <class ChildItemVisualizationType>
+		template <typename ChildItemVisualizationType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>*
 			item(ChildItemVisualizationType* VisualizationType::* item);
-		template <class ChildItemVisualizationType>
+		template <typename ChildItemVisualizationType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
-		template <class ChildItemVisualizationType, class ParentStyleType>
+		template <typename ChildItemVisualizationType, class ParentStyleType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					 Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
@@ -113,17 +113,17 @@ class DeclarativeItem : public DeclarativeItemBase
 		 * get the node (\a nodeGetter). The node then gets visualized using the given visualization and style. To call
 		 * it, one has to supply the visualization type and the parent type (which is always 'I') as template arguments.
 		 */
-		template <class ChildItemVisualizationType>
+		template <typename ChildItemVisualizationType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
-		template <class ChildItemVisualizationType, class ParentStyleType>
+		template <typename ChildItemVisualizationType, class ParentStyleType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
-		template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
+		template <typename ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					ParentNodeSubType* (ParentNodeType::*nodePointer)(),

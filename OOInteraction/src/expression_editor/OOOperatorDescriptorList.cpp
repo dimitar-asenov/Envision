@@ -42,7 +42,7 @@ OOOperatorDescriptorList* OOOperatorDescriptorList::instance()
 	return &theInstance;
 }
 
-template <class T>
+template <typename T>
 void OOOperatorDescriptorList::extractCommaInto (Expression* expression, T* destination, bool ignoreEmpty,
 																 bool convertTrailingCommaErrorsIntoEmptyExpressions)
 {

@@ -49,7 +49,7 @@ class VISUALIZATIONBASE_API OverlayAccessor {
 		OverlayAccessor() = default;
 };
 
-template <class T>
+template <typename T>
 class OverlayAccessorTemplate : public OverlayAccessor
 {
 	public:
@@ -66,7 +66,7 @@ class OverlayAccessorTemplate : public OverlayAccessor
 } /* namespace Visualization */
 
 // Purposefully outside the namespace for easy creation
-template<class T>
+template<typename T>
 inline Visualization::OverlayAccessorTemplate<T>* makeOverlay(T* overlayItem)
 {
 	return new Visualization::OverlayAccessorTemplate<T>(overlayItem);

@@ -33,7 +33,7 @@ namespace Visualization {
 /**
  * This is an item wrapper element, with a specifiable style for the wrapped item, and a node to create the item with.
  */
-template <class ParentType, class VisualizationType>
+template <typename ParentType, class VisualizationType>
 class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElement<ParentType, VisualizationType> {
 		FLUENT_ELEMENT_INTERFACE(NodeWithVisualizationItemWrapperFormElement);
 
@@ -61,21 +61,21 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 		GetStyleTypeFunction styleGetter_;
 };
 
-template <class ParentType, class VisualizationType>
+template <typename ParentType, class VisualizationType>
 NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::NodeWithVisualizationItemWrapperFormElement(
 		ChildItem item, GetNodeTypeFunction nodeGetter, GetStyleTypeFunction styleGetter)
 : ItemWrapperFormElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, styleGetter_{styleGetter}
 {}
 
 
-template <class ParentType, class VisualizationType>
+template <typename ParentType, class VisualizationType>
 NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>*
 NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::clone() const
 {
 	return new NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>(*this);
 }
 
-template <class ParentType, class VisualizationType>
+template <typename ParentType, class VisualizationType>
 void NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();

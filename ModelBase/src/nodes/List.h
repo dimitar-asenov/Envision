@@ -52,9 +52,9 @@ class MODELBASE_API List: public Super<Node>
 
 		int size() const;
 		bool isEmpty() const;
-		template <class T = Node> T* first() const;
-		template <class T = Node> T* last() const;
-		template <class T = Node> T* at(int i) const;
+		template <typename T = Node> T* first() const;
+		template <typename T = Node> T* last() const;
+		template <typename T = Node> T* at(int i) const;
 
 		int indexOf(const Node* item) const;
 		int indexToSubnode(const Node* node) const;
@@ -122,19 +122,19 @@ inline List::iterator List::end() {return nodes_.end();}
 inline List::const_iterator List::end() const {return nodes_.end();}
 inline List::const_iterator List::cend() const {return nodes_.constEnd();}
 
-template <class T> T* List::first() const
+template <typename T> T* List::first() const
 {
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return static_cast<T*> (nodes_.first());
 }
 
-template <class T> T* List::last() const
+template <typename T> T* List::last() const
 {
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return static_cast<T*> (nodes_.last());
 }
 
-template <class T> T* List::at(int i) const
+template <typename T> T* List::at(int i) const
 {
 	return static_cast<T*> (nodes_[i]);
 }

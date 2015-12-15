@@ -30,7 +30,7 @@
 
 namespace Model {
 
-template <class T>
+template <typename T>
 class TypedList: public Super<List>
 {
 	NODE_DECLARE_STANDARD_METHODS(TypedList)

@@ -34,13 +34,13 @@ class CORE_API AdapterManager {
 	public:
 		using AdapterCreationFunction = void* (*)(void* adaptee);
 
-		template <class Adapter, class Adaptee>
+		template <typename Adapter, class Adaptee>
 		static void registerAdapter( Adapter* (*creationFunction)(Adaptee* adaptee) );
 
-		template <class Adapter>
+		template <typename Adapter>
 		static void registerDefaultAdapter( Adapter* (*creationFunction)(typename Adapter::BaseAdapteeType* adaptee) );
 
-		template <class Adapter, class Adaptee>
+		template <typename Adapter, class Adaptee>
 		static Adapter* adapt(Adaptee* object);
 
 		/**
@@ -48,51 +48,51 @@ class CORE_API AdapterManager {
 		 *
 		 * This is a convenience method for creating adapter functions.
 		 */
-		template <class AdapterBase, class Adapter, class Adaptee>
+		template <typename AdapterBase, class Adapter, class Adaptee>
 		static AdapterBase* createFrom(Adaptee* a);
 
-		template <class AdapterBase, class Adapter, class Adaptee>
+		template <typename AdapterBase, class Adapter, class Adaptee>
 		static void registerAdapterViaConstructor( );
 
 	private:
 		using TypeIdType = std::size_t;
 		using AdapterKey =  QPair<TypeIdType, TypeIdType>;
 
-		template <class type>
+		template <typename type>
 		static TypeIdType typeId();
 
-		template <class type>
+		template <typename type>
 		static TypeIdType typeId( type* object);
 
 		static QHash<AdapterKey, AdapterCreationFunction>& adapters();
 		static QHash<TypeIdType, AdapterCreationFunction>& defaultAdapters();
 };
 
-template <class type> AdapterManager::TypeIdType AdapterManager::typeId()
+template <typename type> AdapterManager::TypeIdType AdapterManager::typeId()
 {
 	return typeid(type).hash_code();
 }
 
-template <class type> AdapterManager::TypeIdType AdapterManager::typeId( type* object)
+template <typename type> AdapterManager::TypeIdType AdapterManager::typeId( type* object)
 {
 	if (object)	return typeid(*object).hash_code();
 	else return typeId<type>();
 }
 
-template <class Adapter, class Adaptee>
+template <typename Adapter, class Adaptee>
 void AdapterManager::registerAdapter( Adapter* (*creationFunction)(Adaptee* adaptee) )
 {
 	adapters().insert(qMakePair(typeId<Adapter>(), typeId<Adaptee>()),
 			reinterpret_cast<AdapterCreationFunction>(creationFunction));
 }
 
-template <class Adapter>
+template <typename Adapter>
 void AdapterManager::registerDefaultAdapter( Adapter* (*creationFunction)(typename Adapter::BaseAdapteeType* adaptee) )
 {
 	defaultAdapters().insert( typeId<Adapter>(), reinterpret_cast<AdapterCreationFunction>(creationFunction));
 }
 
-template <class Adapter, class Adaptee> Adapter* AdapterManager::adapt(Adaptee* object)
+template <typename Adapter, class Adaptee> Adapter* AdapterManager::adapt(Adaptee* object)
 {
 	// Try to find a specific adapter
 	auto specific = adapters().find( qMakePair(typeId<Adapter>(), typeId<Adaptee>(object)) );
@@ -112,12 +112,12 @@ template <class Adapter, class Adaptee> Adapter* AdapterManager::adapt(Adaptee* 
 	return nullptr;
 }
 
-template <class AdapterBase, class Adapter, class Adaptee > AdapterBase* AdapterManager::createFrom(Adaptee* a)
+template <typename AdapterBase, class Adapter, class Adaptee > AdapterBase* AdapterManager::createFrom(Adaptee* a)
 {
 	return new Adapter(a);
 }
 
-template <class AdapterBase, class Adapter, class Adaptee> void AdapterManager::registerAdapterViaConstructor( )
+template <typename AdapterBase, class Adapter, class Adaptee> void AdapterManager::registerAdapterViaConstructor( )
 {
 	registerAdapter<AdapterBase, Adaptee>( createFrom<AdapterBase, Adapter, Adaptee> );
 }

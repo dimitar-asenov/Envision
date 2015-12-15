@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(MODELBASE_API, Model, Text)
 
 namespace Model {
 
-template<class T> class FieldSet;
+template<typename T> class FieldSet;
 
 class MODELBASE_API Text: public Super<Node>
 {

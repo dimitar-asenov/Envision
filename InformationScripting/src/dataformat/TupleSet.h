@@ -38,7 +38,7 @@ class INFORMATIONSCRIPTING_API TupleSet
 		TupleSet() = default;
 		TupleSet(const QList<Tuple>& initialTuples);
 
-		template<class Condition>
+		template<typename Condition>
 		QSet<Tuple> tuples(Condition condition) const;
 		/**
 		 * Returns all tuples which are tagged with \a tag.
@@ -53,7 +53,7 @@ class INFORMATIONSCRIPTING_API TupleSet
 		void remove(const TupleSet& tuples);
 		QSet<Tuple> take(const QString& tag);
 		QSet<Tuple> take(const char* tag);
-		template<class Condition>
+		template<typename Condition>
 		QSet<Tuple> take(Condition condition);
 		QSet<Tuple> takeAll();
 		void unite(const TupleSet& with);
@@ -61,7 +61,7 @@ class INFORMATIONSCRIPTING_API TupleSet
 		/**
 		 * Adds all properties of type \a T as single Tuples with tag \a tag.
 		 */
-		template<class T>
+		template<typename T>
 		void addPropertiesAsTuples(const QString& tag);
 
 		bool isEmpty() const;
@@ -70,7 +70,7 @@ class INFORMATIONSCRIPTING_API TupleSet
 		QHash<QString, QSet<Tuple>> tuples_;
 };
 
-template <class Condition>
+template <typename Condition>
 inline QSet<Tuple> TupleSet::tuples(Condition condition) const
 {
 	QSet<Tuple> result;
@@ -87,7 +87,7 @@ inline void TupleSet::remove(const Tuple& t) { tuples_[t.tag()].remove(t); }
 
 inline QSet<Tuple> TupleSet::take(const QString& tag) { return tuples_.take(tag); }
 inline QSet<Tuple> TupleSet::take(const char* tag) { return tuples_.take(tag); }
-template <class Condition>
+template <typename Condition>
 inline QSet<Tuple> TupleSet::take(Condition condition)
 {
 	QSet<Tuple> result;
@@ -109,7 +109,7 @@ inline QSet<Tuple> TupleSet::take(Condition condition)
 	return result;
 }
 
-template <class T>
+template <typename T>
 inline void TupleSet::addPropertiesAsTuples(const QString& tag)
 {
 	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)

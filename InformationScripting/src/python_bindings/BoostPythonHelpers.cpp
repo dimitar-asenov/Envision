@@ -80,7 +80,7 @@ struct QString_from_python_str
 		}
 };
 
-template<class T>
+template<typename T>
 struct QSet_to_python_set
 {
 		static PyObject* convert(QSet<T> toConvert)
@@ -92,7 +92,7 @@ struct QSet_to_python_set
 };
 
 // Specialization for pointer sets:
-template<class T>
+template<typename T>
 struct QSet_to_python_set<T*>
 {
 		static PyObject* convert(QSet<T*> toConvert)
@@ -103,7 +103,7 @@ struct QSet_to_python_set<T*>
 		}
 };
 
-template<class T>
+template<typename T>
 struct QList_to_python_list
 {
 		static PyObject* convert(QList<T> toConvert)
@@ -115,7 +115,7 @@ struct QList_to_python_list
 };
 
 // Specialization for pointer lists:
-template<class T>
+template<typename T>
 struct QList_to_python_list<T*>
 {
 		static PyObject* convert(QList<T*> toConvert)
@@ -194,7 +194,7 @@ void BoostPythonHelpers::initializeConverters()
 	python::register_exception_translator<QueryRuntimeException>(&BoostPythonHelpers::translate<QueryRuntimeException>);
 }
 
-template <class Exception>
+template <typename Exception>
 void BoostPythonHelpers::translate(const Exception& e)
 {
 	PyErr_SetString(PyExc_RuntimeError, e.message().toLatin1().data());

@@ -31,7 +31,7 @@
 
 namespace SelfTest {
 
-template<class T> class TestManager;
+template<typename T> class TestManager;
 
 /**
  * The Test class is the base class for a single test for the Envision testing framework.

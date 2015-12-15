@@ -31,7 +31,7 @@
 
 namespace Model {
 
-template<class T>
+template<typename T>
 class FieldSet: public UndoCommand
 {
 	protected:

@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-template <class Super>
+template <typename Super>
 class Overlay : public Super
 {
 	public:
@@ -48,22 +48,22 @@ class Overlay : public Super
 
 };
 
-template <class Super>
+template <typename Super>
 inline Item* Overlay<Super>::associatedItem() const { return associatedItems_.first(); }
 
-template <class Super>
+template <typename Super>
 inline Item* Overlay<Super>::firstAssociatedItem() const { return associatedItems_.first(); }
 
-template <class Super>
+template <typename Super>
 inline Item* Overlay<Super>::secondAssociatedItem() const { return associatedItems_.at(1); }
 
-template <class Super>
+template <typename Super>
 inline Item* Overlay<Super>::lastAssociatedItem() const { return associatedItems_.last(); }
 
-template <class Super>
+template <typename Super>
 inline const QList<Item*>& Overlay<Super>::associatedItems() const { return associatedItems_; }
 
-template <class Super>
+template <typename Super>
 inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style)
 : Super{nullptr, style}, associatedItems_{associatedItems}
 {

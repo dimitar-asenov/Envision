@@ -47,7 +47,7 @@ class VISUALIZATIONBASE_API StyleLoader
 		StyleLoader();
 		~StyleLoader();
 
-		template <class T> T* loadStyle(const QString& path, const QString& styleName);
+		template <typename T> T* loadStyle(const QString& path, const QString& styleName);
 
 		bool hasProperty(const QString& name);
 
@@ -56,7 +56,7 @@ class VISUALIZATIONBASE_API StyleLoader
 		void load(const QString& propertyName, QString& value);
 		void load(const QString& propertyName, double& value);
 		void load(const QString& propertyName, QColor& value);
-		template <class T> void load(const QString& propertyName, T& value);
+		template <typename T> void load(const QString& propertyName, T& value);
 
 	private:
 		QList< QString > nodePath;
@@ -64,7 +64,7 @@ class VISUALIZATIONBASE_API StyleLoader
 
 		QString getProperty(const QString& name);
 
-		template <class T> void loadComposite(T& value);
+		template <typename T> void loadComposite(T& value);
 
 		void loadComposite(QPointF& value);
 		void loadComposite(QPen& value);
@@ -77,7 +77,7 @@ class VISUALIZATIONBASE_API StyleLoader
 		template <typename F, typename S> void loadComposite(QPair<F, S>& value);
 };
 
-template <class T> T* StyleLoader::loadStyle(const QString& path, const QString& styleName)
+template <typename T> T* StyleLoader::loadStyle(const QString& path, const QString& styleName)
 {
 	rootStyleNode = new StyleNode(styleName, path);
 
@@ -93,16 +93,16 @@ template <class T> T* StyleLoader::loadStyle(const QString& path, const QString&
 	return style;
 }
 
-template <class T> void StyleLoader::load(const QString& propertyName, T& value)
+template <typename T> void StyleLoader::load(const QString& propertyName, T& value)
 {
 	nodePath.append(propertyName);
 	loadComposite(value);
 	nodePath.removeLast();
 }
 
-template <class T> inline void StyleLoader::loadComposite(T& value) { value.load(*this); }
+template <typename T> inline void StyleLoader::loadComposite(T& value) { value.load(*this); }
 
-template <class T> void StyleLoader::loadComposite(QVector<T>& value)
+template <typename T> void StyleLoader::loadComposite(QVector<T>& value)
 {
 	QList<T> list;
 	loadComposite(list);

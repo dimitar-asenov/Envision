@@ -55,7 +55,7 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		 */
 		void setSize(int width, int height);
 
-		template <class T> static void addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item));
+		template <typename T> static void addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item));
 		static bool hasGridConstructorfor (Visualization::Item* item);
 
 		void setFilterNullAndEmptyComponents();
@@ -80,7 +80,7 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		static QMap<int, ItemTypeRegistrationFunction>& gridConstructors();
 };
 
-template <class T>
+template <typename T>
 inline void GridBasedOffsetProvider::addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item))
 {
 	Q_ASSERT(!gridConstructors().contains(T::typeIdStatic()));

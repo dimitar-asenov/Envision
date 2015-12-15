@@ -29,7 +29,7 @@
 
 namespace Core {
 
-template <class Base>
+template <typename Base>
 class Reflect : public Base
 {
 	protected:
@@ -41,9 +41,9 @@ class Reflect : public Base
 }
 
 // This alias is deliberitely outside of the namespace to make using this template less verbose
-template <class Base> using Super = Core::Reflect<Base>;
+template <typename Base> using Super = Core::Reflect<Base>;
 
-template <class Derived, class Base>
+template <typename Derived, class Base>
 inline Derived* DCast(Base* b)
 {
 	if (b && b->isSubtypeOf(Derived::typeIdStatic()))

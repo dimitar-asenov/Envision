@@ -37,7 +37,7 @@ class INFORMATIONSCRIPTING_API BoostPythonHelpers
 		static void initializeConverters();
 
 	private:
-		template <class Exception>
+		template <typename Exception>
 		static void translate(const Exception& e);
 };
 

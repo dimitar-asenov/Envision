@@ -132,11 +132,11 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		static int registerExtensionId();
 
-		template <class ExtensionType> std::unique_ptr<ExtensionType> extension();
+		template <typename ExtensionType> std::unique_ptr<ExtensionType> extension();
 
 		const AttributeChain& meta();
 
-		template <class Extension> static void registerNewExtension();
+		template <typename Extension> static void registerNewExtension();
 
 		static CompositeIndex registerNewAttribute(const Attribute& attribute);
 
@@ -177,7 +177,7 @@ inline Node* CompositeNode::get(const CompositeIndex &attributeIndex) const
 
 inline int CompositeNode::registerExtensionId() { return nextExtensionId_++; }
 
-template <class ExtensionType> std::unique_ptr<ExtensionType> CompositeNode::extension()
+template <typename ExtensionType> std::unique_ptr<ExtensionType> CompositeNode::extension()
 {
 	AttributeChain& topMeta = topLevelMeta();
 	if (topMeta.hasExtensionInHierarchy(ExtensionType::extensionId()))
@@ -187,7 +187,7 @@ template <class ExtensionType> std::unique_ptr<ExtensionType> CompositeNode::ext
 
 inline const AttributeChain& CompositeNode::meta() { return meta_; }
 
-template <class Extension>
+template <typename Extension>
 inline void CompositeNode::registerNewExtension()
 {
 	if (getMetaData().hasExtensionInHierarchy(Extension::extensionId()) == false)

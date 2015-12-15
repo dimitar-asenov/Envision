@@ -44,7 +44,7 @@ class AlloyVisitor : public Model::Visitor<AlloyVisitor, Export::SourceFragment*
 		static bool inFact_;
 		static bool inContract_;
 
-		template<class ListElement>
+		template<typename ListElement>
 		static Export::SourceFragment* list(Model::TypedList<ListElement>* aList, AlloyVisitor* v,
 											  const QString& fragmentType = QString());
 };

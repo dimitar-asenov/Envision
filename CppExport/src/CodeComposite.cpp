@@ -182,7 +182,7 @@ void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFra
 	source = sourceFragment();
 }
 
-template <class T>
+template <typename T>
 QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
 {
 	// calculate a list of elements with no dependencies.

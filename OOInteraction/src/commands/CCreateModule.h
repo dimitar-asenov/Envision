@@ -47,7 +47,7 @@ class OOINTERACTION_API CCreateModule : public Interaction::CreateNamedObjectWit
 					const QString& name, const QStringList& attributes) override;
 
 	private:
-		template <class Parent>
+		template <typename Parent>
 		void addToParent(Parent* p, OOModel::Module module, QVector<Model::Node*> existingChildren,
 				const std::unique_ptr<Visualization::Cursor>& cursor);
 };

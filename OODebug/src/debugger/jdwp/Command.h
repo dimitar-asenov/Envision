@@ -53,14 +53,14 @@ class OODEBUG_API Command : public MessagePart {
 		static void resetIds();
 
 	protected:
-		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
+		template <typename T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
 		Command(Protocol::CommandSet cmdSet, T cmd);
 
 	private:
 		static int nextId_;
 };
 
-template <class T, typename>
+template <typename T, typename>
 Command::Command(Protocol::CommandSet cmdSet, T cmd)
 {
 	id = ++nextId_;

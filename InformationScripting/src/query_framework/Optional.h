@@ -33,7 +33,7 @@ namespace InformationScripting {
 /**
  * Class inspired by std::experimental::optional, but it additionally contains an error/warning message.
  */
-template <class ValueType>
+template <typename ValueType>
 class INFORMATIONSCRIPTING_API Optional
 {
 		// Since the error constructor takes a QString we disallow usage with QString.
@@ -73,7 +73,7 @@ class INFORMATIONSCRIPTING_API Optional
 		Types type_{Type::Value};
 };
 
-template <class ValueType>
+template <typename ValueType>
 inline Optional<ValueType>::Optional(const ValueType& v, const QString& warning)
 	: value_{v}
 {
@@ -84,7 +84,7 @@ inline Optional<ValueType>::Optional(const ValueType& v, const QString& warning)
 	}
 }
 
-template <class ValueType>
+template <typename ValueType>
 inline Optional<ValueType>::Optional(ValueType&& v, const QString& warning)
 	: value_{std::move(v)}
 {
@@ -95,30 +95,30 @@ inline Optional<ValueType>::Optional(ValueType&& v, const QString& warning)
 	}
 }
 
-template <class ValueType>
+template <typename ValueType>
 inline Optional<ValueType>::Optional(const QString& errorMessage)
 	: type_{Type::Error}
 {
 	errors_.push_back(errorMessage);
 }
 
-template <class ValueType>
+template <typename ValueType>
 inline Optional<ValueType>::Optional(QString&& errorMessage)
 	: type_{Type::Error}
 {
 	errors_.push_back(std::move(errorMessage));
 }
 
-template <class ValueType>
+template <typename ValueType>
 inline Optional<ValueType>::Optional(const Optional& other)
 	: value_{other.value_}, warnings_{other.warnings_}, errors_{other.errors_}, type_{other.type_} {}
 
-template <class ValueType>
+template <typename ValueType>
 inline Optional<ValueType>::Optional(Optional&& other)
 	: value_{std::move(other.value_)}, warnings_{std::move(other.warnings_)},
 	  errors_{std::move(other.errors_)}, type_{std::move(other.type_)} {}
 
-template <class ValueType>
+template <typename ValueType>
 Optional<ValueType>& Optional<ValueType>::operator=(const Optional& other)
 {
 	value_ = other.value_;
@@ -128,7 +128,7 @@ Optional<ValueType>& Optional<ValueType>::operator=(const Optional& other)
 	return *this;
 }
 
-template <class ValueType>
+template <typename ValueType>
 Optional<ValueType>& Optional<ValueType>::operator=(Optional&& other)
 {
 	value_ = std::move(other.value_);
@@ -138,28 +138,28 @@ Optional<ValueType>& Optional<ValueType>::operator=(Optional&& other)
 	return *this;
 }
 
-template <class ValueType>
+template <typename ValueType>
 inline Optional<ValueType>::operator bool() const { return !type_.testFlag(Type::Error);}
 
-template <class ValueType>
+template <typename ValueType>
 inline const ValueType& Optional<ValueType>::value() const & { Q_ASSERT(bool(*this)); return value_; }
 
-template <class ValueType>
+template <typename ValueType>
 inline ValueType& Optional<ValueType>::value() & { Q_ASSERT(bool(*this)); return value_; }
 
-template <class ValueType>
+template <typename ValueType>
 inline ValueType&& Optional<ValueType>::value() && { Q_ASSERT(bool(*this)); return std::move(value_); }
 
-template <class ValueType>
+template <typename ValueType>
 inline bool Optional<ValueType>::hasErrors() const { return type_.testFlag(Type::Error); }
-template <class ValueType>
+template <typename ValueType>
 inline QStringList Optional<ValueType>::errors() const { Q_ASSERT(hasErrors()); return errors_; }
 
-template <class ValueType>
+template <typename ValueType>
 inline bool Optional<ValueType>::hasWarnings() const { return type_.testFlag(Type::Warning); }
-template <class ValueType>
+template <typename ValueType>
 inline QStringList Optional<ValueType>::warnings() const { Q_ASSERT(hasWarnings()); return warnings_; }
-template <class ValueType>
+template <typename ValueType>
 inline void Optional<ValueType>::addWarnings(const QStringList& warnings)
 {
 	if (!warnings.isEmpty())

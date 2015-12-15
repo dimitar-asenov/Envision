@@ -46,11 +46,11 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 	public:
 		static QueryRegistry& instance();
 
-		template <class QueryType, class ...ForwardArguments>
+		template <typename QueryType, class ...ForwardArguments>
 		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
 
 		enum class ExtraArguments : int { Default, QueryExecutor };
-		template <class QueryType, ExtraArguments extras, class ...ForwardArguments>
+		template <typename QueryType, ExtraArguments extras, class ...ForwardArguments>
 		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
 
 		static void registerAlias(const QString& alias, const QString& aliasedQuery,
@@ -74,7 +74,7 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		QString scriptLocation_{"scripts/"};
 };
 
-template <class QueryType, class ...ForwardArguments>
+template <typename QueryType, class ...ForwardArguments>
 inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
 {
 	instance().constructors_[name] =
@@ -85,7 +85,7 @@ inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments..
 	};
 }
 
-template <class QueryType, QueryRegistry::ExtraArguments extras, class ...ForwardArguments>
+template <typename QueryType, QueryRegistry::ExtraArguments extras, class ...ForwardArguments>
 inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
 {
 	if (extras == ExtraArguments::Default)

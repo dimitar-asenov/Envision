@@ -40,7 +40,7 @@ namespace SelfTest {
  * 				It is necessary that each plug-in has its own instantiation of the TestManager, since this manager
  * 				contains a list of all test cases that the plug-in has.
  */
-template<class T>
+template<typename T>
 class TestManager
 {
 	private:
@@ -114,6 +114,6 @@ class TestManager
 			return testRes;
 		}
 };
-template<class T> QMap<QString, Test::TestConstructor>* TestManager<T>::testConstructors = nullptr;
+template<typename T> QMap<QString, Test::TestConstructor>* TestManager<T>::testConstructors = nullptr;
 
 }

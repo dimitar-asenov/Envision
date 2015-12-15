@@ -485,7 +485,7 @@ void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher,
 		ts.add({{"ast", node}});
 }
 
-template <class Predicate>
+template <typename Predicate>
 void AstQuery::addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from)
 {
 	if (!from) from = target()->root();

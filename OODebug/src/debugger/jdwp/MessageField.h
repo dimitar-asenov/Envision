@@ -33,13 +33,13 @@ namespace OODebug {
 class Reply;
 class Command;
 
-template <class T>
+template <typename T>
 inline void read(QDataStream& stream, T& val)
 {
 	stream >> val;
 }
 
-template <class T>
+template <typename T>
 inline void write(QDataStream& stream, const T& val)
 {
 	stream << val;
@@ -99,14 +99,14 @@ inline void write(QDataStream& stream, const QString& write)
 	stream.writeBytes(data.constData(), len);
 }
 
-template <class T, int Kind = MessagePart::noKind>
+template <typename T, int Kind = MessagePart::noKind>
 class MessageField
 {
 	public:
 		/**
 		 * Creates a messagefield and adds the corresponding reader and writer functions to the \a containingMessage.
 		 */
-		template <class Container>
+		template <typename Container>
 		inline MessageField(MessageField<T, Kind> Container::*field, MessagePart* containingMessage);
 
 		inline T operator()() const;
@@ -116,8 +116,8 @@ class MessageField
 		T value_{};
 };
 
-template <class T, int Kind>
-template <class Container>
+template <typename T, int Kind>
+template <typename Container>
 inline MessageField<T, Kind>::MessageField(MessageField<T, Kind> Container::*field, MessagePart* containingMessage) {
 	auto reader = [field] (MessagePart* container, QDataStream& stream)
 	{
@@ -132,13 +132,13 @@ inline MessageField<T, Kind>::MessageField(MessageField<T, Kind> Container::*fie
 	containingMessage->addMessageField(reader, writer);
 }
 
-template <class T, int Kind>
+template <typename T, int Kind>
 T MessageField<T, Kind>::operator()() const { return value_; }
 
-template <class T, int Kind>
+template <typename T, int Kind>
 T MessageField<T, Kind>::operator=(const T rhs) { return value_ = rhs; }
 
-template <class T>
+template <typename T>
 typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
 operator>>(QDataStream& stream, T& val)
 {
@@ -149,7 +149,7 @@ operator>>(QDataStream& stream, T& val)
 	return stream;
 }
 
-template <class T>
+template <typename T>
 typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
 operator<<(QDataStream& stream, T& val)
 {

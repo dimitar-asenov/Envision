@@ -30,7 +30,7 @@
 namespace Visualization
 {
 
-template <class T, class > // was template <class T, class = void> but that is now declard in Style.h
+template <typename T, class > // was template <typename T, class = void> but that is now declard in Style.h
 class StyleProperty
 {
 	public:
@@ -48,7 +48,7 @@ class StyleProperty
 		T value_{};
 };
 
-template <class T>
+template <typename T>
 class StyleProperty<T, typename std::enable_if<std::is_enum<T>::value>::type>
 {
 	public:
@@ -67,7 +67,7 @@ class StyleProperty<T, typename std::enable_if<std::is_enum<T>::value>::type>
 		T value_{};
 };
 
-template <class T>
+template <typename T>
 class StyleProperty<T, typename std::enable_if<std::is_integral<T>::value>::type>
 {
 	public:

@@ -44,7 +44,7 @@ QList<SourceFile*> SourceDir::recursiveFiles()
 	return files;
 }
 
-template<class T> T* SourceDir::find(const QString& name, QList<T>& container, bool createIfNotFound)
+template<typename T> T* SourceDir::find(const QString& name, QList<T>& container, bool createIfNotFound)
 {
 	auto found = std::find_if(container.begin(), container.end(),
 			[&name](const T& element){return element.name() == name;});

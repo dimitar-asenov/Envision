@@ -437,7 +437,7 @@ void ViewItem::arrowFromJson(QJsonObject json)
 		addArrow(node1, node2, json["layer"].toString(), parent1, parent2);
 }
 
-template <class NodeType>
+template <typename NodeType>
 inline QList<NodeType*> ViewItem::referencesOfType() const
 {
 	QList<NodeType*> result;

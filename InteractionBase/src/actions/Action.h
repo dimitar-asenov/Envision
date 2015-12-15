@@ -62,7 +62,7 @@ class INTERACTIONBASE_API Action
 		static QList<Action*>& actions(int nodeTypeId);
 		static QList<Action*> actions(Model::Node* node);
 
-		template<class T> static void add(Action* action);
+		template<typename T> static void add(Action* action);
 
 	private:
 		QString shortcut_;
@@ -81,6 +81,6 @@ inline const QString& Action::shortcut() const { return shortcut_; }
 inline const QString& Action::name() const { return name_; }
 inline bool Action::isPrefix(const QString& str) const { return shortcut_.startsWith(str); }
 
-template<class T> inline void Action::add(Action* action) { actions(T::typeIdStatic()).append(action);}
+template<typename T> inline void Action::add(Action* action) { actions(T::typeIdStatic()).append(action);}
 
 } /* namespace Interaction */

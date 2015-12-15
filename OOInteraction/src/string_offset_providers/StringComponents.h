@@ -46,7 +46,7 @@ class OOINTERACTION_API StringComponents {
 		static QString stringForNode(Model::Node* node);
 		static QStringList componentsForNode(Model::Node* node);
 
-		template <class T> static void add(QStringList(*f)(T* node));
+		template <typename T> static void add(QStringList(*f)(T* node));
 
 		static void initConversions();
 
@@ -69,11 +69,11 @@ class OOINTERACTION_API StringComponents {
 		static Optional list(Model::List* listNode, const QString& prefix, const QString& separator,
 				const QString& postfix, bool nothingIfEmpty, bool collapse);
 
-		template <class ...Args> static QStringList c(Args... args);
+		template <typename ...Args> static QStringList c(Args... args);
 
 		// TODO: Check completeness statically.
-		template <class E> static Optional choose(E value);
-		template <class E, class ...Args> static Optional choose(E value, E option, Optional str, Args... args);
+		template <typename E> static Optional choose(E value);
+		template <typename E, class ...Args> static Optional choose(E value, E option, Optional str, Args... args);
 	protected:
 		static Optional list(Model::List* listNode);
 
@@ -83,30 +83,30 @@ class OOINTERACTION_API StringComponents {
 		static QMap<int, QStringList(*)(Model::Node* node)>& componentFunctions();
 
 		static void c_helper(QStringList&);
-		template<class ...Args> static void c_helper(QStringList& result, Optional str, Args... args);
+		template<typename ...Args> static void c_helper(QStringList& result, Optional str, Args... args);
 };
 
-template <class T>
+template <typename T>
 inline void StringComponents::add(QStringList(*f)(T* node))
 {
 	componentFunctions().insert(T::typeIdStatic(), reinterpret_cast<QStringList(*)(Model::Node* node)>(f));
 }
 
-template <class E>
+template <typename E>
 StringComponents::Optional StringComponents::choose(E value)
 {
 	throw OOInteractionException("No matching choice variable " + QString::number(value)
 		+ " when computing string components.");
 }
 
-template <class E, class ...Args>
+template <typename E, class ...Args>
 StringComponents::Optional StringComponents::choose(E value, E option, Optional str, Args... args)
 {
 	if (value == option) return str;
 	return choose(value, args...);
 }
 
-template <class ...Args>
+template <typename ...Args>
 QStringList StringComponents::c(Args... args)
 {
 	QStringList result;
@@ -119,7 +119,7 @@ QStringList StringComponents::c(Args... args)
 inline void StringComponents::c_helper(QStringList&)
 {}
 
-template<class ...Args>
+template<typename ...Args>
 void StringComponents::c_helper(QStringList& result, Optional str, Args... args)
 {
 	if (str.use) result << str.list;

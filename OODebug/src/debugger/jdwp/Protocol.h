@@ -472,7 +472,7 @@ class OODEBUG_API Protocol
 /**
  * A hash function for all our enum classes. It just calls the corresponding qHash function for the underlying type.
  */
-template <class Enum>
+template <typename Enum>
 typename std::enable_if<std::is_enum<Enum>::value, uint>::type
 qHash(const Enum& val) {
 	return ::qHash(static_cast<typename std::underlying_type<Enum>::type>(val)); }

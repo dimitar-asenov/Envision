@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-template <class VisualizationType>
+template <typename VisualizationType>
 DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleType* style) :
 		DeclarativeItemBase(parent, style)
 {
@@ -50,41 +50,41 @@ DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleTyp
 		}
 }
 
-template <class VisualizationType>
+template <typename VisualizationType>
 DeclarativeItem<VisualizationType>::~DeclarativeItem()
 {
 	for (FormElement* form : formsStatic())
 		form->destroyChildItems(this, {});
 }
 
-template <class VisualizationType>
+template <typename VisualizationType>
 QList<FormElement*>& DeclarativeItem<VisualizationType>::formsStatic()
 {
 	static QList<FormElement*> list;
 	return list;
 }
 
-template <class VisualizationType>
+template <typename VisualizationType>
 QList<FormElement*>& DeclarativeItem<VisualizationType>::forms() const
 {
 	return formsStatic();
 }
 
-template <class VisualizationType>
+template <typename VisualizationType>
 QList<QList<FormElement*>>& DeclarativeItem<VisualizationType>::shapeElementsStatic()
 {
 	static QList<QList<FormElement*>> list;
 	return list;
 }
 
-template <class VisualizationType>
+template <typename VisualizationType>
 QList<QList<FormElement*>>& DeclarativeItem<VisualizationType>::shapeElements() const
 {
 	return shapeElementsStatic();
 }
 
-template <class VisualizationType>
-template <class ElementType>
+template <typename VisualizationType>
+template <typename ElementType>
 ElementType* DeclarativeItem<VisualizationType>::addForm(ElementType* element)
 {
 	auto toAdd = static_cast<ElementType*> (element->cloneIfAlreadyUsed());
@@ -93,7 +93,7 @@ ElementType* DeclarativeItem<VisualizationType>::addForm(ElementType* element)
 	return toAdd;
 }
 
-template <class VisualizationType>
+template <typename VisualizationType>
 	NodeItemWrapperFormElement<VisualizationType>*
 	DeclarativeItem<VisualizationType>::item(Item* VisualizationType::* item,
 			std::function<Model::Node* (VisualizationType* v)> nodeGetter)
@@ -101,16 +101,16 @@ template <class VisualizationType>
 	return new NodeItemWrapperFormElement<VisualizationType>(item, nodeGetter);
 }
 
-template <class VisualizationType>
-template <class ChildItemVisualizationType>
+template <typename VisualizationType>
+template <typename ChildItemVisualizationType>
 	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage)
 {
 	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>(itemStorage);
 }
 
-template <class VisualizationType>
-template <class ChildItemVisualizationType>
+template <typename VisualizationType>
+template <typename ChildItemVisualizationType>
 	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 										std::function<const
@@ -120,8 +120,8 @@ template <class ChildItemVisualizationType>
 																																 styleGetter);
 }
 
-template <class VisualizationType>
-template <class ChildItemVisualizationType, class ParentStyleType>
+template <typename VisualizationType>
+template <typename ChildItemVisualizationType, class ParentStyleType>
 	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
@@ -129,8 +129,8 @@ template <class ChildItemVisualizationType, class ParentStyleType>
 	return item<ChildItemVisualizationType>(itemStorage, [=](I* v) { return &((v->style()->*stylePointer)()); });
 }
 
-template <class VisualizationType>
-template <class ChildItemVisualizationType>
+template <typename VisualizationType>
+template <typename ChildItemVisualizationType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
@@ -140,8 +140,8 @@ template <class ChildItemVisualizationType>
 		(itemStorage, nodeGetter, styleGetter);
 }
 
-template <class VisualizationType>
-template <class ChildItemVisualizationType, class ParentStyleType>
+template <typename VisualizationType>
+template <typename ChildItemVisualizationType, class ParentStyleType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
@@ -151,8 +151,8 @@ template <class ChildItemVisualizationType, class ParentStyleType>
 	(itemStorage, nodeGetter, [=](I* v) { return &((v->style()->*stylePointer)()); });
 }
 
-template <class VisualizationType>
-template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
+template <typename VisualizationType>
+template <typename ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			ParentNodeSubType* (ParentNodeType::*nodePointer)(),

@@ -46,7 +46,7 @@ class VISUALIZATIONBASE_API Static : public Super<Item>
 		virtual bool isEmpty() const override;
 		virtual bool sizeDependsOnParent() const override;
 
-		template<class T> static void registerStaticItem();
+		template<typename T> static void registerStaticItem();
 
 		Item* item();
 
@@ -63,26 +63,26 @@ class VISUALIZATIONBASE_API Static : public Super<Item>
 		typedef ItemStyle* (*staticItemStyleConstructorType)();
 		static QMap<QString, staticItemStyleConstructorType> itemStyles_;
 
-		template<class T> static Item* staticItemConstructor(Item* parent, const ItemStyle* style);
-		template<class T> static ItemStyle* staticItemStyleConstructor();
+		template<typename T> static Item* staticItemConstructor(Item* parent, const ItemStyle* style);
+		template<typename T> static ItemStyle* staticItemStyleConstructor();
 
 		static ItemStyle* constructStyle(const QString& itemClass);
 };
 
 inline Item* Static::item() { return item_; }
 
-template<class T> void Static::registerStaticItem()
+template<typename T> void Static::registerStaticItem()
 {
 	itemClasses_.insert(T::typeNameStatic(), staticItemConstructor<T>);
 	itemStyles_.insert(T::typeNameStatic(), staticItemStyleConstructor<T>);
 }
 
-template<class T> Item* Static::staticItemConstructor(Item* parent, const ItemStyle* style)
+template<typename T> Item* Static::staticItemConstructor(Item* parent, const ItemStyle* style)
 {
 	return new T(parent, static_cast<const typename T::StyleType*> (style) );
 }
 
-template<class T> ItemStyle* Static::staticItemStyleConstructor()
+template<typename T> ItemStyle* Static::staticItemStyleConstructor()
 {
 	return new typename T::StyleType();
 }

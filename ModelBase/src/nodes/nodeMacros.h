@@ -88,7 +88,7 @@
 																																							\
 		static ::Model::CompositeIndex registerNewAttribute(const ::Model::Attribute& attribute);								\
 																																							\
-		template <class T> static void registerNewExtension()																				\
+		template <typename T> static void registerNewExtension()																				\
 		{																																					\
 			if (getMetaData().hasExtensionInHierarchy(T::extensionId()) == false) 													\
 				T::template extendNode< className >(getMetaData().addExtension(T::extensionId()));								\
@@ -540,7 +540,7 @@ public:																																					\
 	static void registerExtension();																												\
 	static int extensionId() { return extensionId_; }																						\
 																																							\
-	template <class T> static void extendNode(QVector<Model::CompositeIndex>& extensionAttributes)							\
+	template <typename T> static void extendNode(QVector<Model::CompositeIndex>& extensionAttributes)							\
 	{																																						\
 		for (int i = 0; i<attributesToRegister_().size(); ++i)																			\
 			extensionAttributes.append( T::registerNewAttribute(attributesToRegister_()[i]) );									\

@@ -144,7 +144,7 @@ void Reference::setResolutionNeeded()
 	pendingResolution_.insert(this);
 }
 
-template<class NodeType>
+template<typename NodeType>
 void Reference::forAll(Node* subTree, std::function<void (NodeType*)> function)
 {
 	if (subTree)

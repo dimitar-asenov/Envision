@@ -50,7 +50,7 @@ class ExpressionVisitor
 		Export::SourceFragment* visit(OOModel::Expression* expression);
 
 	private:
-		template <class T> Export::SourceFragment* optional(T* node);
+		template <typename T> Export::SourceFragment* optional(T* node);
 };
 
 } // namespace JavaExport

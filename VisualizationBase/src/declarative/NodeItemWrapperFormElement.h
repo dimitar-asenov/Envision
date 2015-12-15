@@ -36,7 +36,7 @@ namespace Visualization {
 /**
  * This is an item wrapper element, with a specifiable node to create the item with.
  */
-template <class ParentType>
+template <typename ParentType>
 class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
 		FLUENT_ELEMENT_INTERFACE(NodeItemWrapperFormElement);
 
@@ -60,18 +60,18 @@ class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
 		GetNodeFunction nodeGetter_{};
 };
 
-template <class ParentType>
+template <typename ParentType>
 NodeItemWrapperFormElement<ParentType>::NodeItemWrapperFormElement(ChildItem item, GetNodeFunction nodeGetter)
 : ItemWrapperFormElement<ParentType>{item}, nodeGetter_{nodeGetter}
 {}
 
-template <class ParentType>
+template <typename ParentType>
 NodeItemWrapperFormElement<ParentType>* NodeItemWrapperFormElement<ParentType>::clone() const
 {
 		return new NodeItemWrapperFormElement<ParentType>(*this);
 }
 
-template <class ParentType>
+template <typename ParentType>
 void NodeItemWrapperFormElement<ParentType>::synchronizeWithItem(Item* item)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();

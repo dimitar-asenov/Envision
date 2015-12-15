@@ -35,7 +35,7 @@ namespace Visualization {
 /**
  * Base class for an element wrapping an item.
  */
-template <class ParentType, class ChildItemType = Item>
+template <typename ParentType, class ChildItemType = Item>
 class ItemWrapperFormElement : public FormElement
 {
 	public: // Methods executable on element definition
@@ -71,12 +71,12 @@ class ItemWrapperFormElement : public FormElement
 		ChildItem item_{};
 };
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 ItemWrapperFormElement<ParentType, ChildItemType>::ItemWrapperFormElement(ChildItem item)
 : item_(item)
 {}
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 void ItemWrapperFormElement<ParentType, ChildItemType>::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
@@ -93,14 +93,14 @@ void ItemWrapperFormElement<ParentType, ChildItemType>::computeSize(Item* item, 
 	else setSize(item, QSize(0, 0));
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 void ItemWrapperFormElement<ParentType, ChildItemType>::setItemPositions(Item* item, int parentX, int parentY)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if (childItem) childItem->setPos(parentX + x(item) + leftMargin(), parentY + y(item) + topMargin());
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 bool ItemWrapperFormElement<ParentType, ChildItemType>::sizeDependsOnParent(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
@@ -108,7 +108,7 @@ bool ItemWrapperFormElement<ParentType, ChildItemType>::sizeDependsOnParent(cons
 	else return false;
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 QList<ItemRegion> ItemWrapperFormElement<ParentType, ChildItemType>::regions(DeclarativeItemBase* item, int, int)
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
@@ -124,7 +124,7 @@ QList<ItemRegion> ItemWrapperFormElement<ParentType, ChildItemType>::regions(Dec
 	else return QList<ItemRegion>();
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 void ItemWrapperFormElement<ParentType, ChildItemType>::destroyChildItems(Item* item,
 		QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
@@ -138,21 +138,21 @@ void ItemWrapperFormElement<ParentType, ChildItemType>::destroyChildItems(Item* 
 	}
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 QList<const Item* const DeclarativeItemBase::*>
 ItemWrapperFormElement<ParentType, ChildItemType>::allHandledChildPointers()
 {
 	return {reinterpret_cast<const Item* const DeclarativeItemBase::*> (this->item())};
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 typename ItemWrapperFormElement<ParentType, ChildItemType>::ChildItem
 ItemWrapperFormElement<ParentType, ChildItemType>::item() const
 {
 	return item_;
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 bool ItemWrapperFormElement<ParentType, ChildItemType>::elementOrChildHasFocus(Item* item) const
 {
 	if (FormElement::elementOrChildHasFocus(item))
@@ -162,7 +162,7 @@ bool ItemWrapperFormElement<ParentType, ChildItemType>::elementOrChildHasFocus(I
 	else return false;
 }
 
-template <class ParentType, class ChildItemType>
+template <typename ParentType, class ChildItemType>
 bool ItemWrapperFormElement<ParentType, ChildItemType>::isEmpty(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();

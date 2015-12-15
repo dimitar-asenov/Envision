@@ -78,7 +78,7 @@ using namespace OOModel;
 
 namespace CppExport {
 
-template <class T> Export::SourceFragment* ExpressionVisitor::optional(T* node)
+template <typename T> Export::SourceFragment* ExpressionVisitor::optional(T* node)
 {
 	return node ? visit(node) : nullptr;
 }

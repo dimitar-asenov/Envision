@@ -156,7 +156,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void addArrowLayer(QString layer, bool enabled = true);
 		void removeArrowsForItem(Item* parent);
 
-		template <class NodeType>
+		template <typename NodeType>
 		QList<NodeType*> referencesOfType() const;
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);

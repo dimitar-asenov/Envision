@@ -29,7 +29,7 @@
 // included
 
 
-template <class T> inline void SAFE_DELETE( T* & object)
+template <typename T> inline void SAFE_DELETE( T* & object)
 {
 	if (object)
 	{
@@ -38,7 +38,7 @@ template <class T> inline void SAFE_DELETE( T* & object)
 	}
 }
 
-template <class T> inline void SAFE_DELETE( T* && object)
+template <typename T> inline void SAFE_DELETE( T* && object)
 {
 	if (object) delete object;
 }
@@ -50,7 +50,7 @@ class OnScopeExit
 		OnScopeExit(OnScopeExit&& other) = delete;
 		OnScopeExit& operator= (const OnScopeExit other) = delete;
 
-		template<class T>
+		template<typename T>
 		explicit OnScopeExit(T&& functionToCall) : functionToCall_{std::forward<T>(functionToCall)}{}
 
 		~OnScopeExit() {functionToCall_();}

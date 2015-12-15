@@ -57,7 +57,7 @@ class INFORMATIONSCRIPTING_API Tuple
 		NamedProperty& operator[](int index);
 		const NamedProperty& operator[](int index) const;
 
-		template<class T>
+		template<typename T>
 		QList<T> valuesOfType() const;
 
 		// Iterators
@@ -89,7 +89,7 @@ inline bool Tuple::operator==(const Tuple& other) const { return values_ == othe
 inline NamedProperty& Tuple::operator[](int index) { return values_[index]; }
 inline const NamedProperty&Tuple::operator[](int index) const { return values_[index]; }
 
-template<class T>
+template<typename T>
 inline QList<T> Tuple::valuesOfType() const
 {
 	QList<T> result;

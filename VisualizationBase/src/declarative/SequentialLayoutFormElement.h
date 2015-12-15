@@ -142,7 +142,7 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		/**
 		 * Returns the item at \a itemIndex for this \a item.
 		 */
-		template <class T> T* itemAt(const Item* item, int itemIndex) const;
+		template <typename T> T* itemAt(const Item* item, int itemIndex) const;
 
 		// Recursive item destruction
 		virtual void destroyChildItems(Item* item,
@@ -263,7 +263,7 @@ inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeight(in
 	return this;
 }
 
-template <class T> T* SequentialLayoutFormElement::itemAt(const Item* item, int itemIndex) const
+template <typename T> T* SequentialLayoutFormElement::itemAt(const Item* item, int itemIndex) const
 {
 	return static_cast<T*>(dataForItem(item).items_.at(itemIndex));
 }

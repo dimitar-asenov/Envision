@@ -363,7 +363,7 @@ class VISUALIZATIONBASE_API GridLayouter
 		/**
 		 * Does not consider spans.
 		 */
-		template <class NumRows, class NumColumns, class HasElement, class Width, class Height,
+		template <typename NumRows, class NumColumns, class HasElement, class Width, class Height,
 					 class XPos, class YPos, class ChildItem,
 					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
 					 class LeftMargin, class RightMargin>
@@ -628,7 +628,7 @@ class VISUALIZATIONBASE_API GridLayouter
 				bool horizontal, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
 				QRect area);
 
-		template<class Container, class Value>
+		template<typename Container, class Value>
 		static void resizeReplace(Container& container, int majorIndex, int minorIndex, Value value);
 
 		static void pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis,

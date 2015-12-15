@@ -42,7 +42,7 @@ namespace Model {
 /* *********************************************************************************************************************
  * Visitor declaration
  **********************************************************************************************************************/
-template <class ConcreteVisitor, class Result = void>
+template <typename ConcreteVisitor, class Result = void>
 class VISITOR_EXPORT Visitor {
 public:
 	virtual ~Visitor();
@@ -51,7 +51,7 @@ public:
 	typedef ConcreteVisitor BaseVisitorType;
 	typedef std::function<Result (ConcreteVisitor*, Node*)> VisitFunctionInstance;
 
-	template <class NodeType>
+	template <typename NodeType>
 	static void addType(std::function<Result (ConcreteVisitor*, NodeType*)> f)
 	{
 		if (types().size() <= NodeType::typeIdStatic()) types().resize(NodeType::typeIdStatic()+1);
@@ -73,10 +73,10 @@ private:
 /* *********************************************************************************************************************
  * Extended Visitor declaration
  **********************************************************************************************************************/
-template <class ConcreteVisitor, class BaseVisitor>
+template <typename ConcreteVisitor, class BaseVisitor>
 class VISITOR_EXPORT ExtendedVisitor : public BaseVisitor {
 	public:
-		template <class NodeType>
+		template <typename NodeType>
 		static void addType(std::function<typename BaseVisitor::VisitorResultType (ConcreteVisitor*, NodeType*)> f)
 		{
 			if (types().size() <= NodeType::typeIdStatic()) types().resize(NodeType::typeIdStatic()+1);
@@ -97,11 +97,11 @@ class VISITOR_EXPORT ExtendedVisitor : public BaseVisitor {
 /* *********************************************************************************************************************
  * Visitor implementation
  **********************************************************************************************************************/
-template <class ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, class Result>
 Visitor<ConcreteVisitor, Result>::~Visitor()
 {}
 
-template <class ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, class Result>
 Result Visitor<ConcreteVisitor, Result>::visit(Node* n)
 {
 	for (auto id : n->hierarchyTypeIds())
@@ -113,7 +113,7 @@ Result Visitor<ConcreteVisitor, Result>::visit(Node* n)
 	// No user specified function was found. Just visit all children.
 	return visitChildren(n);
 }
-template <class ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, class Result>
 Result Visitor<ConcreteVisitor, Result>::visitChildren(Node* n)
 {
 	auto children = n->children();
@@ -132,7 +132,7 @@ Result Visitor<ConcreteVisitor, Result>::visitChildren(Node* n)
 	return Result ();
 }
 
-template <class ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, class Result>
 typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance
 	Visitor<ConcreteVisitor, Result>::findFunctionForId(int id)
 {
@@ -143,7 +143,7 @@ typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance
 }
 
 
-template <class ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, class Result>
 QVector<typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance>& Visitor<ConcreteVisitor, Result>::types()
 {
 	static QVector<VisitFunctionInstance> t;
@@ -154,7 +154,7 @@ QVector<typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance>& Visit
 /* *********************************************************************************************************************
  * Extended Visitor implementation
  **********************************************************************************************************************/
-template <class ConcreteVisitor, class BaseVisitor>
+template <typename ConcreteVisitor, class BaseVisitor>
 typename BaseVisitor::VisitFunctionInstance
 	ExtendedVisitor<ConcreteVisitor, BaseVisitor>::findFunctionForId(int id)
 {
@@ -164,7 +164,7 @@ typename BaseVisitor::VisitFunctionInstance
 		return BaseVisitor::findFunctionForId(id);
 }
 
-template <class ConcreteVisitor, class BaseVisitor>
+template <typename ConcreteVisitor, class BaseVisitor>
 QVector<typename BaseVisitor::VisitFunctionInstance>&
 	ExtendedVisitor<ConcreteVisitor, BaseVisitor>::types()
 {

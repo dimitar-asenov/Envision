@@ -41,17 +41,17 @@ class INFORMATIONSCRIPTING_API PythonSetBase : public boost::python::object
 class INFORMATIONSCRIPTING_API PythonSet : public PythonSetBase
 {
 	public:
-		template <class T>
+		template <typename T>
 		void add(const T& elem);
 
-		template <class T>
+		template <typename T>
 		void discard(const T& elem);
 };
 
-template <class T>
+template <typename T>
 inline void PythonSet::add(const T& elem) { PythonSetBase::add(object(elem)); }
 
-template <class T>
+template <typename T>
 inline void PythonSet::discard(const T& elem) { PythonSetBase::discard(object(elem));}
 
 } /* namespace helper */

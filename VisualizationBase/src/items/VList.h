@@ -46,8 +46,8 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		VList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		int length() const;
-		template <class T> T* itemAt(int itemIndex) const;
-		template <class T> T* itemAtNodeIndex(int nodeIndex) const;
+		template <typename T> T* itemAt(int itemIndex) const;
+		template <typename T> T* itemAtNodeIndex(int nodeIndex) const;
 		int focusedItemIndex() const;
 		int focusedNodeIndex() const;
 		int rangeBegin() const;
@@ -107,11 +107,11 @@ inline int VList::focusedItemIndex() const
 	return static_cast<SequentialLayoutFormElement*>(currentForm())->focusedElementIndex(this);
 }
 inline int VList::focusedNodeIndex() const { return focusedItemIndex() + rangeBegin_; }
-template <class T> inline T* VList::itemAt(int itemIndex) const
+template <typename T> inline T* VList::itemAt(int itemIndex) const
 {
 		return static_cast<SequentialLayoutFormElement*>(currentForm())->itemAt<T>(this, itemIndex);
 }
-template <class T> inline T* VList::itemAtNodeIndex(int nodeIndex) const
+template <typename T> inline T* VList::itemAtNodeIndex(int nodeIndex) const
 {
 		Q_ASSERT(rangeBegin_ <= nodeIndex);
 		Q_ASSERT(nodeIndex  < rangeEnd_);

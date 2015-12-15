@@ -29,9 +29,9 @@
 
 namespace Model {
 
-DEFINE_TYPE_ID_DERIVED(TypedList<T>, QString("TypedListOf") + T::typeNameStatic(), template<class T>)
+DEFINE_TYPE_ID_DERIVED(TypedList<T>, QString("TypedListOf") + T::typeNameStatic(), template<typename T>)
 
-template<class T>
+template<typename T>
 void TypedList<T>::initType()
 {
 	Node::registerNodeType(typeNameStatic(),
@@ -40,49 +40,49 @@ void TypedList<T>::initType()
 						{ return new TypedList<T>(parent, store, loadPartially);});
 }
 
-template<class T>
+template<typename T>
 TypedList<T>* TypedList<T>::createDefaultInstance(Node* parent)
 {
 	return new TypedList<T>(parent);
 }
 
-template<class T>
+template<typename T>
 TypedList<T>::TypedList(::Model::Node* parent) : Super(parent)
 {}
 
-template<class T>
+template<typename T>
 TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially) :
 Super(parent, store, loadPartially)
 {
 }
 
-template<class T>
+template<typename T>
 TypedList<T>* TypedList<T>::clone() const { return new TypedList{*this}; }
 
-template<class T> T* TypedList<T>::first() const
+template<typename T> T* TypedList<T>::first() const
 {
 	return List::first<T>();
 }
-template<class T> T* TypedList<T>::last() const
+template<typename T> T* TypedList<T>::last() const
 {
 	return List::last<T>();
 }
-template<class T> T* TypedList<T>::at(int i) const
+template<typename T> T* TypedList<T>::at(int i) const
 {
 	return List::at<T>(i);
 }
 
-template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement)
+template<typename T> bool TypedList<T>::replaceChild(Node* child, Node* replacement)
 {
 	if (!dynamic_cast<T*>(replacement)) return false;
 	else return List::replaceChild(child, replacement);
 }
 
-template<class T> Node* TypedList<T>::createDefaultElement()
+template<typename T> Node* TypedList<T>::createDefaultElement()
 {
 	return T::createDefaultInstance(nullptr);
 }
 
-template<class T> int TypedList<T>::lowerTypeBoundForElements() const { return T::typeIdStatic();}
+template<typename T> int TypedList<T>::lowerTypeBoundForElements() const { return T::typeIdStatic();}
 
 }

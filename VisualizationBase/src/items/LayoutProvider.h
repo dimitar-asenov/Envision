@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-template <class LayoutTypeName = SequentialLayout>
+template <typename LayoutTypeName = SequentialLayout>
 class LayoutProvider : public LayoutProviderBase
 {
 	public:
@@ -41,11 +41,11 @@ class LayoutProvider : public LayoutProviderBase
 		LayoutTypeName* layout() const;
 };
 
-template <class LayoutTypeName>
+template <typename LayoutTypeName>
 inline LayoutTypeName* LayoutProvider<LayoutTypeName>::layout()
 	const { return static_cast<LayoutTypeName*> (LayoutProviderBase::layout()); }
 
-template <class LayoutTypeName>
+template <typename LayoutTypeName>
 LayoutProvider<LayoutTypeName>::LayoutProvider(Item* parent, const StyleType *style) :
 LayoutProviderBase(parent, style, new LayoutTypeName(nullptr))
 {

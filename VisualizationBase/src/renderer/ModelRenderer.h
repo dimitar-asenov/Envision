@@ -156,7 +156,7 @@ inline void ModelRenderer::registerGroup(int nodeTypeId, VisualizationGroup* gro
 	registerGroup(nodeTypeId, 0, 0, group);
 }
 
-template<class VIS, class NODE>
+template<typename VIS, class NODE>
 Item* createVisualization(Item* parent, Model::Node* node)
 {
 	return new VIS(parent, static_cast<NODE*> (node));

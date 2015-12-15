@@ -57,7 +57,7 @@ class EXPORT_API SourceDir {
 		QList<SourceDir> directories_;
 		QList<SourceFile> files_;
 
-		template<class T> T* find(const QString& name, QList<T>& container, bool createIfNotFound);
+		template<typename T> T* find(const QString& name, QList<T>& container, bool createIfNotFound);
 		SourceDir* findDirectories(const QString& name, bool createIfNotFound);
 };
 

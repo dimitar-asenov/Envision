@@ -50,7 +50,7 @@ class OODEBUG_API Reply : public MessagePart {
 /**
  * Reads from \a data into a message of type \a MessageType, where \a MessageType is a subtype of MessagePart.
  */
-template <class MessageType>
+template <typename MessageType>
 static MessageType makeReply(QByteArray data)
 {
 	MessageType r;

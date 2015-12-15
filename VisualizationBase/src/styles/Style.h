@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-template <class T, class = void> class StyleProperty;
+template <typename T, class = void> class StyleProperty;
 
 class VISUALIZATIONBASE_API Style
 {
@@ -43,7 +43,7 @@ class VISUALIZATIONBASE_API Style
 		using PropertyLoader = std::function<void (StyleLoader& sl)>;
 		void addPropertyLoader( PropertyLoader loader );
 
-		template <class A, class B = void> using Property = StyleProperty<A, B>;
+		template <typename A, class B = void> using Property = StyleProperty<A, B>;
 
 	private:
 		QList<PropertyLoader> loaders_;

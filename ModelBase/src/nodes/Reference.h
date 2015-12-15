@@ -114,7 +114,7 @@ class MODELBASE_API Reference: public Super<Node>
 
 		static void unresolveReferencesHelper(Node* subTree, bool all, const QSet<QString>& names);
 
-		template<class NodeType>
+		template<typename NodeType>
 		static void forAll(Node* subTree, std::function<void (NodeType* node)> function);
 
 		virtual void targetChanged(Node* oldTarget);

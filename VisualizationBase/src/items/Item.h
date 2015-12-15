@@ -79,7 +79,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		/**
 		 * Returns the first ancestor which is of the given template type, or nullptr if none exists.
 		 */
-		template <class ItemType>
+		template <typename ItemType>
 		ItemType* findAncestorOfType();
 
 		bool itemOrChildHasFocus() const;
@@ -237,7 +237,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		ModelRenderer* renderer();
 
-		template <class T>
+		template <typename T>
 		T* correspondingSceneCursor();
 
 		/**
@@ -391,7 +391,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		/**
 		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
 		 */
-		template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+		template <typename Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
 		static bool synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync);
 
@@ -414,7 +414,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * This method will return the first found overlay, in case there are more than one overlays that match
 		 * \a OverlayType and \a overlayGroup.
 		 */
-		template <class OverlayType> OverlayType* overlay(QString overlayGroup = QString::null);
+		template <typename OverlayType> OverlayType* overlay(QString overlayGroup = QString::null);
 
 		/**
 		 * Adds \a overlay to this item.
@@ -423,7 +423,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * Returns the added overlay.
 		 */
-		template <class OverlayType> OverlayType* addOverlay(OverlayType* overlay, QString groupName);
+		template <typename OverlayType> OverlayType* addOverlay(OverlayType* overlay, QString groupName);
 
 		/**
 		 * Returns whether this item should ignore copy and paste hanling and let the parent handler take care of this.
@@ -465,9 +465,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void updateGeometry(Item* content, int availableWidth, int availableHeight);
 
 		bool synchronizeItem(Item*& item, Model::Node* node);
-		template <class FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, class VisualizationType = FieldType>
 		bool synchronizeItem(FieldType*& item, bool present, const typename VisualizationType::StyleType* style);
-		template <class FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, class VisualizationType = FieldType>
 		bool synchronizeItem(FieldType*& item, typename VisualizationType::NodeType* node,
 				const typename VisualizationType::StyleType* style);
 
@@ -519,11 +519,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		friend class InteractionHandler;
 		friend class SequentialLayoutFormElement;
 		friend class DynamicGridFormElement;
-		template <class ParentType> friend class NodeItemWrapperFormElement;
-		template <class ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
-		template <class ParentType, class VisualizationType, bool externalSynchronization>
+		template <typename ParentType> friend class NodeItemWrapperFormElement;
+		template <typename ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
+		template <typename ParentType, class VisualizationType, bool externalSynchronization>
 			friend class VisualizationItemWrapperFormElement;
-		template <class ChildItem, class Style, bool use>
+		template <typename ChildItem, class Style, bool use>
 			friend struct VisualizationItemWrapperFormElementSyncMethod;
 
 		QRectF boundingRect_;
@@ -627,7 +627,7 @@ inline bool Item::hasSceneCursor() const { auto mc = scene()->mainCursor(); retu
 
 inline bool Item::synchronizeItem(Item*& item, Model::Node* node) { return renderer()->sync(item, this, node); }
 
-template <class FieldType, class VisualizationType>
+template <typename FieldType, class VisualizationType>
 bool Item::synchronizeItem(FieldType*& item, bool present, const typename VisualizationType::StyleType* style)
 {
 	bool changed = false;
@@ -652,7 +652,7 @@ bool Item::synchronizeItem(FieldType*& item, bool present, const typename Visual
 	return changed;
 }
 
-template <class FieldType, class VisualizationType>
+template <typename FieldType, class VisualizationType>
 bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeType* node,
 		const typename VisualizationType::StyleType* style)
 {
@@ -679,7 +679,7 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 	return changed;
 }
 
-template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+template <typename Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
 bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync)
 {
@@ -737,7 +737,7 @@ bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& st
 
 // Do not make this a non-template function since then the reference to pointer won't work as it is not polymorphic.
 // If both this and the function below are made non-template, then always the funcion below will be called.
-template <class T> inline void SAFE_DELETE_ITEM( T* & item)
+template <typename T> inline void SAFE_DELETE_ITEM( T* & item)
 {
 	if (item)
 	{
@@ -746,7 +746,7 @@ template <class T> inline void SAFE_DELETE_ITEM( T* & item)
 	}
 }
 
-template <class T> inline void SAFE_DELETE_ITEM( T* && item)
+template <typename T> inline void SAFE_DELETE_ITEM( T* && item)
 {
 	if (item)
 	{
@@ -755,7 +755,7 @@ template <class T> inline void SAFE_DELETE_ITEM( T* && item)
 	}
 }
 
-template <class T> T* Item::correspondingSceneCursor()
+template <typename T> T* Item::correspondingSceneCursor()
 {
 	//Currently ony the main cursor is supported.
 	T* cursor = dynamic_cast<T*> (scene()->mainCursor());
@@ -781,7 +781,7 @@ inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCatego
 inline void Item::setDefaultClassHandler(InteractionHandler* handler) {defaultClassHandler_ = handler;}
 inline InteractionHandler* Item::defaultClassHandler() {return defaultClassHandler_;}
 
-template <class OverlayType> OverlayType* Item::overlay(QString overlayGroup)
+template <typename OverlayType> OverlayType* Item::overlay(QString overlayGroup)
 {
 	for (auto accessor : overlays(overlayGroup))
 	{
@@ -792,7 +792,7 @@ template <class OverlayType> OverlayType* Item::overlay(QString overlayGroup)
 	return nullptr;
 }
 
-template <class OverlayType> OverlayType* Item::addOverlay(OverlayType* overlay, QString groupName)
+template <typename OverlayType> OverlayType* Item::addOverlay(OverlayType* overlay, QString groupName)
 {
 	Q_ASSERT(overlay);
 	auto overlayGroup = scene()->overlayGroup(groupName);
@@ -802,7 +802,7 @@ template <class OverlayType> OverlayType* Item::addOverlay(OverlayType* overlay,
 	return overlay;
 }
 
-template <class ItemType> ItemType* Item::findAncestorOfType()
+template <typename ItemType> ItemType* Item::findAncestorOfType()
 {
 	auto result = this;
 	while (result && !DCast<ItemType>(result))

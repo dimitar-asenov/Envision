@@ -41,7 +41,7 @@ class CommandHelper
 {
 	public:
 
-		template <class Parent, class ChildContainer, class Child>
+		template <typename Parent, class ChildContainer, class Child>
 		static void addToParent(Parent* p, ChildContainer* container, Child* child,
 				QVector<Model::Node*> existingChildren, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor, bool showPrompt = true)
@@ -65,7 +65,7 @@ class CommandHelper
 					Interaction::SetCursorEvent::CursorDefault, showPrompt));
 		}
 
-		template <class Child>
+		template <typename Child>
 		static void addFreshTree(Child* child, Visualization::Item* target, bool showPrompt = true)
 		{
 			auto manager = new Model::TreeManager();

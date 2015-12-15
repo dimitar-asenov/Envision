@@ -56,7 +56,7 @@ class OODEBUG_API MessagePart
 		/**
 		 * Casts an enum value to its underlying type.
 		 */
-		template<class Enum>
+		template<typename Enum>
 		static constexpr typename
 		std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
 		cast(Enum enumValue);
@@ -67,7 +67,7 @@ class OODEBUG_API MessagePart
 		QList<WriteOperator> writers_;
 };
 
-template<class Enum> constexpr typename
+template<typename Enum> constexpr typename
 std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
 MessagePart::cast(Enum enumValue) { return static_cast<typename std::underlying_type<Enum>::type>(enumValue); }
 

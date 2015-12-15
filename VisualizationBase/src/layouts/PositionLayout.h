@@ -62,8 +62,8 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		void clear(bool deleteItems = true);
 		bool containsNode(Model::Node* node);
 
-		template <class T> T* at(int index);
-		template <class T> T* at(int index) const;
+		template <typename T> T* at(int index);
+		template <typename T> T* at(int index) const;
 
 		int toGrid(const int& pos) const;
 
@@ -92,8 +92,8 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		static void ensureItemHasCompositeNode(const Item* item);
 };
 
-template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }
-template <class T> T* PositionLayout::at(int index) const { return static_cast<T*> (items[index]); }
+template <typename T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }
+template <typename T> T* PositionLayout::at(int index) const { return static_cast<T*> (items[index]); }
 inline std::unique_ptr<Position> PositionLayout::positionOf(Item* item)
 { return (static_cast<Model::CompositeNode*>(item->node()))->extension<Position>();	}
 

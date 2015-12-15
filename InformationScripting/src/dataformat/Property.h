@@ -36,7 +36,7 @@ namespace InformationScripting {
 
 namespace detail {
 
-template <class T>
+template <typename T>
 inline static QString toString(const T* val)
 {
 	return QString("0x%1").arg((quintptr)val, QT_POINTER_SIZE * 2, 16, QChar('0'));
@@ -62,7 +62,7 @@ struct PropertyDataConcept {
 		virtual QString asString() const = 0;
 };
 
-template <class DataType, class = void>
+template <typename DataType, class = void>
 struct PropertyData : PropertyDataConcept {
 		PropertyData(DataType data) : data_{std::move(data)} {}
 
@@ -93,7 +93,7 @@ struct PropertyData : PropertyDataConcept {
 		DataType data_;
 };
 // Template overload for general pointer types:
-template <class DataType>
+template <typename DataType>
 struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
 						&& !std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
 		: PropertyDataConcept {
@@ -126,7 +126,7 @@ struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>:
 		DataType data_;
 };
 // Template overload for pointer types which inherit from Model::Node
-template <class DataType>
+template <typename DataType>
 struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
 						&& std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
 		: PropertyDataConcept {
@@ -171,14 +171,14 @@ class INFORMATIONSCRIPTING_API Property {
 		// TODO: in the future we might need a copy constructor, and clone methods in the PropertyDataConcept.
 		// This depends on how we use Properties, for now data is always shared when copying Properties.
 		Property() = default;
-		template <class DataType> Property(DataType propertyData);
+		template <typename DataType> Property(DataType propertyData);
 
 		friend boost::python::object pythonObject(const Property& p);
 
-		template <class ConvertTo> operator ConvertTo() const;
+		template <typename ConvertTo> operator ConvertTo() const;
 		operator Model::Node*() const;
 
-		template <class ConvertTo> bool isConvertibleTo() const;
+		template <typename ConvertTo> bool isConvertibleTo() const;
 
 		bool operator==(const Property& other) const;
 		bool operator<(const Property& other) const;
@@ -197,10 +197,10 @@ struct INFORMATIONSCRIPTING_API NamedProperty : QPair<QString, Property>
 	NamedProperty(const QString& key, Property value) : QPair<QString, Property>(key, value) {}
 };
 
-template <class DataType> Property::Property(DataType propertyData)
+template <typename DataType> Property::Property(DataType propertyData)
 	: data_{std::make_shared<detail::PropertyData<DataType>>(std::move(propertyData))} {}
 
-template <class ConvertTo>
+template <typename ConvertTo>
 inline Property::operator ConvertTo() const
 {
 	if (auto propertyData = std::dynamic_pointer_cast<detail::PropertyData<ConvertTo>>(data_))
@@ -210,7 +210,7 @@ inline Property::operator ConvertTo() const
 
 inline Property::operator Model::Node*() const { return data_->node(); }
 
-template <class ConvertTo>
+template <typename ConvertTo>
 inline bool Property::isConvertibleTo() const
 {
 	return std::dynamic_pointer_cast<detail::PropertyData<ConvertTo>>(data_) != nullptr;

@@ -55,7 +55,7 @@ class INTERACTIONBASE_API Prompt
 		static void hide();
 		static bool isVisible();
 
-		template <class ModeType>
+		template <typename ModeType>
 		static void registerMode(const QString& modeName);
 
 		using PromptShowCall = std::function<void (Visualization::Item*)>;
@@ -96,7 +96,7 @@ inline const std::unique_ptr<Visualization::Cursor>& Prompt::commandReceiverCurs
 inline QPoint Prompt::commandReceiverCursorPosition()
 	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0); }
 
-template <class ModeType>
+template <typename ModeType>
 inline void Prompt::registerMode(const QString& modeName)
 {
 	Q_ASSERT(!modeRegistry().contains(modeName));

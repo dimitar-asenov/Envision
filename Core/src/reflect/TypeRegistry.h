@@ -34,7 +34,7 @@ class CORE_API TypeRegistry {
 	public:
 		using InitializationFunction = void (*)();
 
-		template <class T> static int add();
+		template <typename T> static int add();
 		static void initializeNewTypes();
 
 	private:
@@ -44,7 +44,7 @@ class CORE_API TypeRegistry {
 		static int initialized_;
 };
 
-template <class T> inline int TypeRegistry::add()
+template <typename T> inline int TypeRegistry::add()
 {
 	return add(T::initType);
 }

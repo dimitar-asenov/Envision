@@ -311,7 +311,7 @@ class MODELBASE_API Node
 		/**
 		 * Returns the first Ancestor which has the type \a NodeType if there is one, otherwise null.
 		 */
-		template <class NodeType>
+		template <typename NodeType>
 		NodeType* firstAncestorOfType();
 
 		/**
@@ -329,14 +329,14 @@ class MODELBASE_API Node
 		/**
 		 * Returns all children including the node \a from, which have type \a NodeType.
 		 */
-		template <class NodeType>
+		template <typename NodeType>
 		static QList<NodeType*> childrenOfType(Model::Node* from);
 
 		/**
 		 * Returns all children including the node \a from, which fullfill the \a Predicate \a p,
 		 * i.e. \a p(node) returns true.
 		 */
-		template <class Predicate>
+		template <typename Predicate>
 		static QList<Model::Node*> childrenWhich(Model::Node* from, Predicate p);
 
 
@@ -541,7 +541,7 @@ inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbol
 }
 
 
-template <class NodeType>
+template <typename NodeType>
 inline NodeType* Node::firstAncestorOfType()
 {
 	NodeType* ancestor = nullptr;
@@ -554,7 +554,7 @@ inline NodeType* Node::firstAncestorOfType()
 	return ancestor;
 }
 
-template <class NodeType>
+template <typename NodeType>
 inline QList<NodeType*> Node::childrenOfType(Node* from)
 {
 	QList<NodeType*> result;
@@ -569,7 +569,7 @@ inline QList<NodeType*> Node::childrenOfType(Node* from)
 	return result;
 }
 
-template <class Predicate>
+template <typename Predicate>
 inline QList<Node*> Node::childrenWhich(Node* from, Predicate p)
 {
 	QList<Model::Node*> result;

@@ -45,7 +45,7 @@ class EXPORT_API CompositeFragment : public SourceFragment {
 		const QString& type() const;
 		QList<SourceFragment*>& fragments();
 
-		template <class T> T* append(T* fragment);
+		template <typename T> T* append(T* fragment);
 		TextFragment* append(Model::Node* node, const QString& text);
 
 		CompositeFragment& operator<<(SourceFragment* childFragment);
@@ -65,7 +65,7 @@ inline const QString& CompositeFragment::type() const { return type_;}
 inline QList<SourceFragment*>& CompositeFragment::fragments() { return fragments_;}
 
 
-template <class T>
+template <typename T>
 inline T* CompositeFragment::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
 inline TextFragment* CompositeFragment::append(Model::Node* node, const QString& text)
 { return append(new TextFragment(node, text)); }

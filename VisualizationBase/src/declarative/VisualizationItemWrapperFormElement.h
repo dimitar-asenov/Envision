@@ -33,7 +33,7 @@ namespace Visualization {
 /**
  * This is an item wrapper element, with a specifiable style for the wrapped item.
  */
-template <class ParentType, class VisualizationType, bool externalSynchronization>
+template <typename ParentType, class VisualizationType, bool externalSynchronization>
 class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<ParentType, VisualizationType> {
 		FLUENT_ELEMENT_INTERFACE(VisualizationItemWrapperFormElement);
 
@@ -68,28 +68,28 @@ class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<Parent
 		IsEnabledFunction enabled_{};
 };
 
-template <class ParentType, class VisualizationType, bool externalSynchronization>
+template <typename ParentType, class VisualizationType, bool externalSynchronization>
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
 ::VisualizationItemWrapperFormElement(
 		ChildItem item)
 : ItemWrapperFormElement<ParentType, VisualizationType>{item}
 {}
 
-template <class ParentType, class VisualizationType, bool externalSynchronization>
+template <typename ParentType, class VisualizationType, bool externalSynchronization>
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
 ::VisualizationItemWrapperFormElement(
 		ChildItem item, GetStyleFunction style)
 : ItemWrapperFormElement<ParentType, VisualizationType>{item}, style_{style}
 {}
 
-template <class ParentType, class VisualizationType, bool externalSynchronization>
+template <typename ParentType, class VisualizationType, bool externalSynchronization>
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>*
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>::clone() const
 {
 	return new VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>(*this);
 }
 
-template <class ParentType, class VisualizationType, bool externalSynchronization>
+template <typename ParentType, class VisualizationType, bool externalSynchronization>
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>*
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
 ::setEnabled(IsEnabledFunction enabled)
@@ -99,20 +99,20 @@ VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynch
 }
 
 // Used below
-template <class ChildItem, class Style, bool use>
+template <typename ChildItem, class Style, bool use>
 struct VisualizationItemWrapperFormElementSyncMethod
 {
 	inline static void sync(Item* item, ChildItem child, bool enabled, Style style)
 	{ item->synchronizeItem(child, enabled, style); }
 };
 
-template <class ChildItem, class Style>
+template <typename ChildItem, class Style>
 struct VisualizationItemWrapperFormElementSyncMethod<ChildItem, Style, true>
 {
 	inline static void sync(Item*, ChildItem, bool, Style){}
 };
 
-template <class ParentType, class VisualizationType, bool externalSynchronization>
+template <typename ParentType, class VisualizationType, bool externalSynchronization>
 void VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
 ::synchronizeWithItem(Item* item)
 {
