@@ -120,7 +120,8 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	auto fragment = new CompositeFragment(classs, "spacedSections");
 	*fragment << visit(classs);
 
-	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty(); };
+	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
+															method->modifiers()->isSet(OOModel::Modifier::Inline); };
 	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR), "spacedSections", filter);
 	return fragment;
 }
@@ -136,7 +137,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
 
-		auto filter = [](Method* method) { return method->typeArguments()->isEmpty(); };
+		auto filter = [](Method* method) { return method->typeArguments()->isEmpty() &&
+																!method->modifiers()->isSet(OOModel::Modifier::Inline); };
 		*sections << list(classs->methods(), this, "spacedSections", filter);
 		*sections << list(classs->fields(), this, "vertical");
 	}
