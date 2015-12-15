@@ -307,8 +307,10 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		}
 		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		{
-			ooVarDecl = clang_.createNamedNode<OOModel::Field>(varDecl);
-			itemList->append(clang_.createNode<OOModel::DeclarationStatement>(varDecl->getSourceRange(), ooVarDecl));
+			ooVarDecl = clang_.createNamedNode<OOModel::VariableDeclaration>(varDecl);
+			ooVarDeclExpr = clang_.createNode<OOModel::VariableDeclarationExpression>(varDecl->getSourceRange(),
+																											  ooVarDecl);
+			itemList->append(clang_.createNode<OOModel::ExpressionStatement>(varDecl->getSourceRange(), ooVarDeclExpr));
 		}
 		else
 		{
