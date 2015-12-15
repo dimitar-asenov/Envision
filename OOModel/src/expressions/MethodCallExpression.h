@@ -28,6 +28,7 @@
 
 #include "Expression.h"
 #include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/Integer.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MethodCallExpression)
 
@@ -41,8 +42,11 @@ class OOMODEL_API MethodCallExpression: public Super<Expression>
 
 	ATTRIBUTE(Expression, callee, setCallee)
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
 
 	public:
+		enum class MethodCallKind : int {Call, Construct};
+
 		MethodCallExpression(const QString& name, Expression* referencePrefix = nullptr);
 
 		/**
@@ -54,8 +58,15 @@ class OOMODEL_API MethodCallExpression: public Super<Expression>
 
 		virtual Type* type() override;
 
+		MethodCallKind methodCallKind() const;
+		void setMethodCallKind(const MethodCallKind& kind);
+
 	private:
 		Method* methodDefinition(Type*& calleeType);
 };
+
+inline MethodCallExpression::MethodCallKind MethodCallExpression::methodCallKind() const
+{ return static_cast<MethodCallKind> (cKind()); }
+inline void MethodCallExpression::setMethodCallKind(const MethodCallKind& kind) { setCKind(static_cast<int> (kind)); }
 
 }

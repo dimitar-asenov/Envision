@@ -44,6 +44,8 @@
 #include "Export/src/tree/CompositeFragment.h"
 #include "Export/src/tree/TextFragment.h"
 
+#include "Comments/src/nodes/CommentNode.h"
+
 using namespace Export;
 using namespace OOModel;
 
@@ -118,7 +120,8 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	auto fragment = new CompositeFragment(classs, "spacedSections");
 	*fragment << visit(classs);
 
-	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty(); };
+	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
+															method->modifiers()->isSet(OOModel::Modifier::Inline); };
 	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR), "spacedSections", filter);
 	return fragment;
 }
@@ -134,7 +137,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
 
-		auto filter = [](Method* method) { return method->typeArguments()->isEmpty(); };
+		auto filter = [](Method* method) { return method->typeArguments()->isEmpty() &&
+																!method->modifiers()->isSet(OOModel::Modifier::Inline); };
 		*sections << list(classs->methods(), this, "spacedSections", filter);
 		*sections << list(classs->fields(), this, "vertical");
 	}
@@ -222,10 +226,19 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
 
+	if (headerVisitor())
+		if (auto comment = DCast<Comments::CommentNode>(method->comment()))
+			for (auto line : *(comment->lines()))
+				*fragment << line->get() << "\n";
+
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
-	if (headerVisitor()) *fragment << printAnnotationsAndModifiers(method);
+	if (headerVisitor())
+		*fragment << printAnnotationsAndModifiers(method);
+	else
+		if (method->modifiers()->isSet(Modifier::Inline))
+			*fragment << new TextFragment(method->modifiers(), "inline") << " ";
 
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
@@ -252,7 +265,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (!headerVisitor())
 		if (!method->memberInitializers()->isEmpty())
-			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(data()));
+			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(data()), "comma");
 
 	if (!method->throws()->isEmpty())
 	{
@@ -328,8 +341,6 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
-	if (declaration->modifiers()->isSet(Modifier::Inline))
-		*header << new TextFragment(declaration->modifiers(), "inline");
 
 	return fragment;
 }

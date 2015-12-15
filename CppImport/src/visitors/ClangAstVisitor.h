@@ -169,6 +169,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 * The decision is based on wheter the \a location is valid and on the value of \a importSysHeader_
 		 */
 		bool shouldImport(const clang::SourceLocation& location);
+
+		void addFunctionModifiers(clang::FunctionDecl* functionDecl, OOModel::Method* method);
 };
 
 // method

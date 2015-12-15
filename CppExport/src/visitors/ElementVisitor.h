@@ -57,6 +57,11 @@ class ElementVisitor
 		Export::SourceFragment* visit(OOModel::CatchClause* catchClause);
 		Export::SourceFragment* visit(OOModel::Enumerator* enumerator);
 		Export::SourceFragment* visit(OOModel::MemberInitializer* memberInitializer);
+
+	private:
+		bool headerVisitor();
 };
+
+inline bool ElementVisitor::headerVisitor() { return data().get()->mode_ == HEADER_VISITOR; }
 
 }

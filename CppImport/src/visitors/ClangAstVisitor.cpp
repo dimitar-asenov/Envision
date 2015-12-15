@@ -182,7 +182,7 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		{
 			auto argLoc = typeLoc.getArgLoc(i);
 			auto typeArg = clang_.createNode<OOModel::FormalTypeArgument>(argLoc.getSourceRange(),
-																					 clang_.unexpandedSpelling(argLoc.getLocation()));
+																							  clang_.spelling(argLoc.getLocation()));
 			typeArg->setSpecializationExpression(utils_->translateTemplateArgument(argLoc));
 			ooClass->typeArguments()->append(typeArg);
 		}
@@ -219,6 +219,8 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 
 	if (auto ooFunction = trMngr_->insertFunctionDecl(functionDecl))
 	{
+		addFunctionModifiers(functionDecl, ooFunction);
+
 		if (!ooFunction->parent())
 		{
 			// insert in tree
@@ -307,8 +309,10 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		}
 		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		{
-			ooVarDecl = clang_.createNamedNode<OOModel::Field>(varDecl);
-			itemList->append(clang_.createNode<OOModel::DeclarationStatement>(varDecl->getSourceRange(), ooVarDecl));
+			ooVarDecl = clang_.createNamedNode<OOModel::VariableDeclaration>(varDecl);
+			ooVarDeclExpr = clang_.createNode<OOModel::VariableDeclarationExpression>(varDecl->getSourceRange(),
+																											  ooVarDecl);
+			itemList->append(clang_.createNode<OOModel::ExpressionStatement>(varDecl->getSourceRange(), ooVarDeclExpr));
 		}
 		else
 		{
@@ -1056,6 +1060,18 @@ bool ClangAstVisitor::shouldUseDataRecursionfor (clang::Stmt*)
 	return false;
 }
 
+void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OOModel::Method* method)
+{
+	if (functionDecl->isInlineSpecified())
+		method->modifiers()->set(OOModel::Modifier::Inline);
+	if (functionDecl->isVirtualAsWritten())
+		method->modifiers()->set(OOModel::Modifier::Virtual);
+	if (functionDecl->hasAttr<clang::OverrideAttr>())
+		method->modifiers()->set(OOModel::Modifier::Override);
+	if (functionDecl->getStorageClass() == clang::SC_Static)
+		method->modifiers()->set(OOModel::Modifier::Static);
+}
+
 bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind)
 {
 	auto ooMethod = trMngr_->insertMethodDecl(methodDecl, kind);
@@ -1069,6 +1085,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 
 	if (methodDecl->isConst())
 		ooMethod->modifiers()->set(OOModel::Modifier::Const);
+	addFunctionModifiers(methodDecl, ooMethod);
 
 	if (!ooMethod->items()->size())
 	{
@@ -1155,11 +1172,8 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 	// only visit the body if we are at the definition
 	if (functionDecl->isThisDeclarationADefinition())
 	{
-		if (ooFunction->items()->size())
-			/* TODO: this is a double defined function this comes from functions defined in the header.
-			* We might need to give this some attention as soon as we support macros
-			* (could be that we include the header with different defines) but for now we just ignore it. */
-			return;
+		if (ooFunction->items()->size()) return;
+
 		ooStack_.push(ooFunction->items());
 		bool inBody = inBody_;
 		inBody_ = true;
@@ -1183,20 +1197,12 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 			{
 				auto templateArg = specArgs->getTemplateArgs()[i];
 				auto typeArg = clang_.createNode<OOModel::FormalTypeArgument>(templateArg.getSourceRange(),
-																						clang_.unexpandedSpelling(templateArg.getLocation()));
+																								  clang_.spelling(templateArg.getLocation()));
 				typeArg->setSpecializationExpression(utils_->translateTemplateArgument(templateArg));
 				ooFunction->typeArguments()->append(typeArg);
 			}
 		}
 	}
-	// modifiers
-	ooFunction->modifiers()->set(utils_->translateStorageSpecifier(functionDecl->getStorageClass()));
-	if (functionDecl->isInlineSpecified())
-		ooFunction->modifiers()->set(OOModel::Modifier::Inline);
-	if (functionDecl->isVirtualAsWritten())
-		ooFunction->modifiers()->set(OOModel::Modifier::Virtual);
-	if (functionDecl->hasAttr<clang::OverrideAttr>())
-		ooFunction->modifiers()->set(OOModel::Modifier::Override);
 }
 
 void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)

@@ -285,7 +285,32 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	auto ooNewExpr = clang_.createNode<OOModel::NewExpression>(newExpr->getSourceRange());
-	TraverseStmt(newExpr->getInitializer());
+	if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
+	{
+		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+		for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
+			methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
+		ooExprStack_.push(methodCallExpr);
+	}
+	else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
+	{
+		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+		methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+		for (auto initExpr : *initListExpr)
+			methodCallExpr->arguments()->append(translateExpression(initExpr));
+		ooExprStack_.push(methodCallExpr);
+	}
+	else
+	{
+		TraverseStmt(newExpr->getInitializer());
+	}
+
 	if (!ooExprStack_.empty())
 		ooNewExpr->setNewType(ooExprStack_.pop());
 	if (newExpr->isArray())
@@ -390,6 +415,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 {
 	if (!constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
 		return TraverseStmt(*(constructExpr->child_begin()));
+
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
@@ -398,8 +424,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			ooMethodCall->setCallee(utils_->translateQualifiedType(
 												temporaryObjectExpression->getTypeSourceInfo()->getTypeLoc()));
 		else
-			ooMethodCall->setCallee(new OOModel::ReferenceExpression(
-												clang_.unexpandedSpelling(constructExpr->getLocation())));
+			ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
 
 		for (auto argument : translateArguments(constructExpr->arguments()))
 			ooMethodCall->arguments()->append(argument);
