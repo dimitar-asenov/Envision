@@ -537,7 +537,9 @@ inline Node* Node::parent() const { return parent_; }
 
 inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes) const
 {
-	return definesSymbol() && (symbolType() & symbolTypes) && matcher.matches(symbolName());
+	return definesSymbol()
+			&& (symbolType() == UNSPECIFIED || (symbolType() & symbolTypes))
+			&& matcher.matches(symbolName());
 }
 
 
