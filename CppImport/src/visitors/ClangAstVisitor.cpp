@@ -182,7 +182,7 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		{
 			auto argLoc = typeLoc.getArgLoc(i);
 			auto typeArg = clang_.createNode<OOModel::FormalTypeArgument>(argLoc.getSourceRange(),
-																					 clang_.unexpandedSpelling(argLoc.getLocation()));
+																							  clang_.spelling(argLoc.getLocation()));
 			typeArg->setSpecializationExpression(utils_->translateTemplateArgument(argLoc));
 			ooClass->typeArguments()->append(typeArg);
 		}
@@ -1197,7 +1197,7 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 			{
 				auto templateArg = specArgs->getTemplateArgs()[i];
 				auto typeArg = clang_.createNode<OOModel::FormalTypeArgument>(templateArg.getSourceRange(),
-																						clang_.unexpandedSpelling(templateArg.getLocation()));
+																								  clang_.spelling(templateArg.getLocation()));
 				typeArg->setSpecializationExpression(utils_->translateTemplateArgument(templateArg));
 				ooFunction->typeArguments()->append(typeArg);
 			}
