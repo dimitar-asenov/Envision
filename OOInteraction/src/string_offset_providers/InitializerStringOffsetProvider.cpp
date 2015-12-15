@@ -33,7 +33,7 @@
 namespace OOInteraction {
 
 InitializerStringOffsetProvider::InitializerStringOffsetProvider(OOVisualization::VArrayInitializer* vis)
-	: StringOffsetProvider(vis), vis_(vis)
+	: StringOffsetProvider{vis}, vis_(vis)
 {
 }
 

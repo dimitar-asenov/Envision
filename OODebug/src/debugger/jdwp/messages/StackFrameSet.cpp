@@ -37,7 +37,7 @@ OODebug::StackVariable::StackVariable(qint32 slot, OODebug::Protocol::Tag type)
 StackVariable::~StackVariable() {}
 
 GetValuesCommand::GetValuesCommand(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
-	: Command(Protocol::CommandSet::StackFrame, Protocol::StackFrameCommands::GetValues)
+	: Command{Protocol::CommandSet::StackFrame, Protocol::StackFrameCommands::GetValues}
 {
 	thread = threadId;
 	frame = frameId;

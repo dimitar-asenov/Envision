@@ -31,12 +31,12 @@ namespace Visualization {
 const QEvent::Type CustomSceneEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 CustomSceneEvent::CustomSceneEvent(QEvent::Type type)
-	: QEvent(type)
+	: QEvent{type}
 {
 }
 
 CustomSceneEvent::CustomSceneEvent(EventFunction f)
-	: QEvent(EventType), f_(f)
+	: QEvent{EventType}, f_(f)
 {
 }
 

@@ -38,7 +38,7 @@ Token::Token()
 }
 
 Token::Token(QString text, Type type)
-	: text_(text), type_(type)
+	: text_{text}, type_(type)
 {}
 
 

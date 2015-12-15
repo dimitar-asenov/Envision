@@ -35,11 +35,11 @@ ITEM_COMMON_DEFINITIONS(VCommentImage, "item")
 const QSize VCommentImage::errorSize_{400, 400};
 
 VCommentImage::VCommentImage(Visualization::Item* parent, const QString& path, const StyleType* style)
-	: Super(parent, style), path_{path}, image_{path}, size_{image_.isNull() ? errorSize_ : image_.size()}
+	: Super{parent, style}, path_{path}, image_{path}, size_{image_.isNull() ? errorSize_ : image_.size()}
 {}
 
 VCommentImage::VCommentImage(Visualization::Item* parent, const QString& path, QSize size, const StyleType* style)
-	: VCommentImage(parent, path, style)
+	: VCommentImage{parent, path, style}
 {
 	Q_ASSERT(size.isValid());
 	updateSize(size);

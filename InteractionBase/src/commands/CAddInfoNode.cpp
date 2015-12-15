@@ -33,7 +33,7 @@
 namespace Interaction {
 
 CAddInfoNode::CAddInfoNode()
-	:CommandWithDefaultArguments("showInfo", {})
+	:CommandWithDefaultArguments{"showInfo", {}}
 {
 }
 

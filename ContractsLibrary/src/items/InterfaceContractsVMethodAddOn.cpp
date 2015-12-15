@@ -39,7 +39,7 @@
 namespace ContractsLibrary {
 
 InterfaceContractsVMethodAddOn::InterfaceContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition)
-: contractClassMethod_(contractsClassMethodDefinition)
+: contractClassMethod_{contractsClassMethodDefinition}
 {
 }
 

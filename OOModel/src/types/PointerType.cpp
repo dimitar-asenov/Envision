@@ -33,7 +33,7 @@ PointerType::PointerType(Type* baseType, bool isValueType) : Type{isValueType}, 
 {}
 
 PointerType::PointerType(const PointerType &other)
-	: Type(other), baseType_(other.baseType()->clone())
+	: Type{other}, baseType_(other.baseType()->clone())
 {}
 
 PointerType::~PointerType()

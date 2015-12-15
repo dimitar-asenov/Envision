@@ -33,7 +33,7 @@
 namespace Interaction {
 
 AddSubExpression::AddSubExpression(const QVector<ExpressionTreeBuildInstruction*>& instructions)
-	: instructions_(instructions)
+	: instructions_{instructions}
 {}
 
 void AddSubExpression::perform(ExpressionTreeBuilder& tb)

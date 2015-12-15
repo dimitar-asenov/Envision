@@ -50,7 +50,7 @@ BoxOverlay::BoxOverlay(Item* associatedItem, const StyleType* style) : Super{{as
 }
 
 BoxOverlay::BoxOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style)
-	: BoxOverlay(associatedItem, style)
+	: BoxOverlay{associatedItem, style}
 {
 	 syncFunction_ = syncFunction;
 }

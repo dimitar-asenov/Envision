@@ -34,7 +34,7 @@
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
- : macroImporter_(project, clang_), log_{logger}
+ : macroImporter_{project, clang_}, log_{logger}
 {
 	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
 	trMngr_ = new TranslateManager(clang_, project, exprVisitor_);

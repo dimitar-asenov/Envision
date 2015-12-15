@@ -31,7 +31,7 @@
 namespace OOInteraction {
 
 EmptyExpressionStringOffsetProvider::EmptyExpressionStringOffsetProvider(OOVisualization::VEmptyExpression* v)
-: StringOffsetProvider(v), vis_(v)
+: StringOffsetProvider{v}, vis_(v)
 {
 }
 

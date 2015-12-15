@@ -162,7 +162,7 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node* parent) : Super{parent} {}																		\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
-		: Super (parent, store, loadPartially) {}																								\
+		: Super {parent, store, loadPartially} {}																								\
 																																							\
 	className* className::clone() const { return new className(*this); }
 /*********************************************************************************************************************/
@@ -186,11 +186,11 @@ template class Model::TypedList<className>;																									\
 	className* className::clone() const { return new className(*this); }																\
 																																							\
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
-		: Super (parent, metaData) {}																												\
+		: Super {parent, metaData} {}																												\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially,						\
 			::Model::AttributeChain& metaData)																									\
-		: Super (parent, store, loadPartially, metaData) {}
+		: Super {parent, store, loadPartially, metaData} {}
 /*********************************************************************************************************************/
 
 /**

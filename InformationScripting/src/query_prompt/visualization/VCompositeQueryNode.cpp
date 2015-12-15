@@ -32,7 +32,7 @@ namespace InformationScripting {
 ITEM_COMMON_DEFINITIONS(VCompositeQueryNode, "item")
 
 VCompositeQueryNode::VCompositeQueryNode(Item* parent, NodeType* node, const StyleType* style)
-	: Super(parent, node, style)
+	: Super{parent, node, style}
 {}
 
 void VCompositeQueryNode::initializeForms()

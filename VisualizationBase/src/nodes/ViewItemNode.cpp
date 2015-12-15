@@ -39,12 +39,12 @@ namespace Visualization {
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
 
 ViewItemNode::ViewItemNode(Model::Node *)
-	:Super()
+	:Super{}
 {
 }
 
 ViewItemNode::ViewItemNode(Model::Node *, Model::PersistentStore &, bool)
-	:Super()
+	:Super{}
 {
 	Q_ASSERT(false);
 }

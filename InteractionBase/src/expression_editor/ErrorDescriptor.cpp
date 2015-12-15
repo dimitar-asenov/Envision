@@ -29,7 +29,7 @@
 namespace Interaction {
 
 ErrorDescriptor::ErrorDescriptor(const QString& prefix_text, const QString& postfix_text)
-	:OperatorDescriptor(prefix_text, postfix_text), errorPrefix_(prefix_text), errorPostfix_(postfix_text)
+	:OperatorDescriptor{prefix_text, postfix_text}, errorPrefix_(prefix_text), errorPostfix_(postfix_text)
 {
 	setTransient(true);
 }

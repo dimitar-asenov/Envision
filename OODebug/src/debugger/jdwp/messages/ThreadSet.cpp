@@ -29,7 +29,7 @@
 namespace OODebug {
 
 ThreadNameCommand::ThreadNameCommand(qint64 threadId)
-: Command(Protocol::CommandSet::ThreadReference, Protocol::ThreadGroupReferenceCommands::Name)
+: Command{Protocol::CommandSet::ThreadReference, Protocol::ThreadGroupReferenceCommands::Name}
 {
 	threadID = threadId;
 }
@@ -38,7 +38,7 @@ ThreadNameCommand::~ThreadNameCommand() {}
 ThreadName::~ThreadName() {}
 
 FramesCommand::FramesCommand(qint64 threadId, qint32 startFrame, qint32 numberOfFrames)
-	: Command(Protocol::CommandSet::ThreadReference, Protocol::ThreadReferenceCommands::Frames)
+	: Command{Protocol::CommandSet::ThreadReference, Protocol::ThreadReferenceCommands::Frames}
 {
 	thread = threadId;
 	this->startFrame = startFrame;

@@ -29,7 +29,7 @@
 namespace OOModel {
 
 SymbolProviderType::SymbolProviderType(Model::Node* symbolProviderNode, bool isValueType)
-: Type(isValueType), symbolProvider_(symbolProviderNode)
+: Type{isValueType}, symbolProvider_(symbolProviderNode)
 {
 	Q_ASSERT(symbolProviderNode);
 }

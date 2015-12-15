@@ -29,17 +29,17 @@
 namespace OOModel {
 
 FunctionType::FunctionType(bool isValueType, QList<const Type*> arguments, QList<const Type*> results)
-: Type(isValueType), arguments_{arguments}, results_{results}
+: Type{isValueType}, arguments_{arguments}, results_{results}
 {}
 
 FunctionType::FunctionType(bool isValueType, QList<const Type*> arguments, Type* result)
-: Type(isValueType), arguments_{arguments}
+: Type{isValueType}, arguments_{arguments}
 {
 	if (result) results_.append(result);
 }
 
 FunctionType::FunctionType(const FunctionType& other)
-: Type(other)
+: Type{other}
 {
 	for (auto a : other.arguments_) arguments_.append(a->clone());
 	for (auto r : other.results_) results_.append(r->clone());

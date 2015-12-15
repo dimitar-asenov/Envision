@@ -35,7 +35,7 @@ namespace Interaction {
 const QEvent::Type ShowCommandPromptEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 ShowCommandPromptEvent::ShowCommandPromptEvent(Visualization::Scene* scene)
-: CustomSceneEvent(EventType), scene_(scene)
+: CustomSceneEvent{EventType}, scene_(scene)
 {}
 
 void ShowCommandPromptEvent::execute()

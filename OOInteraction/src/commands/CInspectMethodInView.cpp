@@ -32,7 +32,7 @@
 namespace OOInteraction {
 
 CInspectMethodInView::CInspectMethodInView()
-	:CommandWithDefaultArguments("inspectMethod", {})
+	:CommandWithDefaultArguments{"inspectMethod", {}}
 {
 }
 

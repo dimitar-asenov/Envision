@@ -31,7 +31,7 @@
 namespace OOVisualization {
 
 MethodAddOn::MethodAddOn(QString methodName)
-	: targetMethodName_(methodName)
+	: targetMethodName_{methodName}
 {
 }
 

@@ -37,18 +37,18 @@ namespace OOModel {
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Modifier)
 
 Modifier::Modifier(Model::Node *parent)
-: Super(parent)
+: Super{parent}
 {
 }
 
 Modifier::Modifier(Model::Node *parent, Model::PersistentStore &store, bool)
-: Super(parent)
+: Super{parent}
 {
 	modifiers_ = fromInt( store.loadIntValue() );
 }
 
 Modifier::Modifier(Modifiers m)
-: Super(nullptr), modifiers_(m)
+: Super{nullptr}, modifiers_(m)
 {}
 
 Modifier* Modifier::clone() const { return new Modifier{*this}; }

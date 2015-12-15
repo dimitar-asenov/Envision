@@ -45,7 +45,7 @@ QMap<int, void (*)(GridBasedOffsetProvider* provider, Visualization::Item* item)
 }
 
 GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
-	: StringOffsetProvider(vis)
+	: StringOffsetProvider{vis}
 {
 	auto gridConstructor = gridConstructors().find(vis->typeId());
 	if (gridConstructor != gridConstructors().end())

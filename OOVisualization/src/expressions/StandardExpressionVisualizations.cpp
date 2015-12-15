@@ -33,7 +33,7 @@
 ITEM_COMMON_DEFINITIONS(className, "item")																									\
 																																							\
 className::className(::Visualization::Item* parent, NodeType* node, const StyleType* style)									\
-	: Super(parent, node, style){}																												\
+	: Super{parent, node, style}{}																												\
 																																							\
 void className::determineChildren()																												\
 {																																							\

@@ -30,7 +30,7 @@
 namespace Model {
 
 ListRemove::ListRemove(Node *target, QVector<Node*>& nodes_, int position)
-: NodeOwningCommand(target, "remove node", nodes_[position], nullptr), nodes(nodes_), removedNode(nodes_[position]),
+: NodeOwningCommand{target, "remove node", nodes_[position], nullptr}, nodes(nodes_), removedNode(nodes_[position]),
   removePosition(position)
 {}
 

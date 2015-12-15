@@ -73,7 +73,7 @@ class ItemWrapperFormElement : public FormElement
 
 template <typename ParentType, typename ChildItemType>
 ItemWrapperFormElement<ParentType, ChildItemType>::ItemWrapperFormElement(ChildItem item)
-: item_(item)
+: item_{item}
 {}
 
 template <typename ParentType, typename ChildItemType>

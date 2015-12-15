@@ -29,7 +29,7 @@
 namespace Visualization {
 
 VisualizationSuitabilityScore::VisualizationSuitabilityScore(int score)
-	:score(score)
+	:score{score}
 {
 }
 

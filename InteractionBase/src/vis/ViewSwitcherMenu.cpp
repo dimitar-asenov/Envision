@@ -70,7 +70,7 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 
 ViewSwitcherMenu::ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* selectedItem,
 											 Visualization::Item* target, StyleType* style)
-	: Super(items, selectedItem, target, style)
+	: Super{items, selectedItem, target, style}
 {
 
 }

@@ -51,7 +51,7 @@ void CommandDescriptor::unregisterCommand(CommandExpression* command)
 
 CommandDescriptor::CommandDescriptor(const QString& name, const QString& signature,
 		int precedence, Associativity associativity)
-		: OOOperatorDescriptor(name, signature, precedence, associativity)
+		: OOOperatorDescriptor{name, signature, precedence, associativity}
 {}
 
 CommandDescriptor::~CommandDescriptor()

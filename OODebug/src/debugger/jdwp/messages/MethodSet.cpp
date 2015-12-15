@@ -29,7 +29,7 @@
 namespace OODebug {
 
 LineTableCommand::LineTableCommand(qint64 classId, qint64 methodId)
-	: Command(Protocol::CommandSet::Method, Protocol::MethodCommands::LineTable)
+	: Command{Protocol::CommandSet::Method, Protocol::MethodCommands::LineTable}
 {
 	refTypeId = classId;
 	methodID = methodId;
@@ -40,7 +40,7 @@ CodeIndexLine::~CodeIndexLine() {}
 LineTable::~LineTable() {}
 
 VariableTableCommand::VariableTableCommand(qint64 classId, qint64 methodId)
-	: Command(Protocol::CommandSet::Method, Protocol::MethodCommands::VariableTable)
+	: Command{Protocol::CommandSet::Method, Protocol::MethodCommands::VariableTable}
 {
 	refTypeId = classId;
 	methodID = methodId;

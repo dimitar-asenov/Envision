@@ -29,7 +29,7 @@
 namespace InformationScripting {
 
 QueryRuntimeException::QueryRuntimeException(const QString& message)
-	: InformationScriptingException(message, false)
+	: InformationScriptingException{message, false}
 {}
 
 const QString& QueryRuntimeException::name() const

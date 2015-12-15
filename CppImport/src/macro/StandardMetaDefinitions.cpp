@@ -40,7 +40,7 @@ namespace CppImport {
 
 StandardMetaDefinitions::StandardMetaDefinitions(ClangHelpers& clang, const MacroDefinitions& definitionManager,
 																 MacroExpansions& macroExpansions)
-	: clang_(clang), definitionManager_(definitionManager), macroExpansions_(macroExpansions) {}
+	: clang_{clang}, definitionManager_(definitionManager), macroExpansions_(macroExpansions) {}
 
 OOModel::MetaDefinition* StandardMetaDefinitions::createMetaDef(const clang::MacroDirective* md)
 {

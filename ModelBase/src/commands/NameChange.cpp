@@ -33,7 +33,7 @@
 namespace Model {
 
 NameChange::NameChange(NameText* target, QString& fieldToSet, QString setTo)
-: FieldSet(target, fieldToSet, setTo){}
+: FieldSet{target, fieldToSet, setTo}{}
 
 void NameChange::redo()
 {

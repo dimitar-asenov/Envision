@@ -54,7 +54,7 @@ ITEM_COMMON_DEFINITIONS(PromptShell, "item")
 PromptShell::PromptShell(const QString& initialCommandText,
 													Prompt::PromptOptions options,
 													const StyleType* style)
-	: Super(nullptr, style), inputItem_{Prompt::mode()->createInputItem(initialCommandText)},
+	: Super{nullptr, style}, inputItem_{Prompt::mode()->createInputItem(initialCommandText)},
 	  modeIconStyle_{Prompt::mode()->modeIcon()}, promptOptions_{options}
 {
 	Q_ASSERT(inputItem_);

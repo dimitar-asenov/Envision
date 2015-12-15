@@ -30,7 +30,7 @@
 namespace Model {
 
 ListPut::ListPut(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position)
-: NodeOwningCommand(target, "insert node", nullptr, newNode_), nodes(nodes_), newNode(newNode_), putPosition(position),
+: NodeOwningCommand{target, "insert node", nullptr, newNode_}, nodes(nodes_), newNode(newNode_), putPosition(position),
   oldSize(nodes_.size())
 {
 	Q_ASSERT(putPosition >= nodes_.size() || nodes_[putPosition] == nullptr);

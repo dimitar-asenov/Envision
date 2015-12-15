@@ -39,7 +39,7 @@ bool& EnvisionException::assertOnThrow()
 }
 
 EnvisionException::EnvisionException()
-	: EnvisionException("")
+	: EnvisionException{""}
 {}
 
 EnvisionException::EnvisionException(const QString& message, bool assertInDebugMode) : msg_{message}

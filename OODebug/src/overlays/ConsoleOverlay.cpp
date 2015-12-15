@@ -37,7 +37,7 @@ namespace OODebug {
 ITEM_COMMON_DEFINITIONS(ConsoleOverlay, "item")
 
 ConsoleOverlay::ConsoleOverlay(Visualization::Item* associatedItem, const StyleType* style)
-	: Super({associatedItem}, style)
+	: Super{{associatedItem}, style}
 {
 	output_ = new Visualization::Text(this);
 	output_->setTextFormat(Qt::RichText);

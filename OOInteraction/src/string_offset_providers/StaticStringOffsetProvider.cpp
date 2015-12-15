@@ -32,7 +32,7 @@
 namespace OOInteraction {
 
 StaticStringOffsetProvider::StaticStringOffsetProvider(Visualization::Static* v)
-: StringOffsetProvider(v), vis_(v)
+: StringOffsetProvider{v}, vis_(v)
 {
 }
 

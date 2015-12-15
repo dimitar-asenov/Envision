@@ -51,7 +51,7 @@ MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : S
 }
 
 MessageOverlay::MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style)
-	: MessageOverlay(associatedItem, style)
+	: MessageOverlay{associatedItem, style}
 {
 	 syncFunction_ = syncFunction;
 }

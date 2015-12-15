@@ -30,7 +30,7 @@
 namespace OODebug {
 
 LengthCommand::LengthCommand(qint64 arrayId)
-: Command(Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::Length)
+: Command{Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::Length}
 {
 	arrayID = arrayId;
 }
@@ -39,7 +39,7 @@ LengthCommand::~LengthCommand() {}
 Length::~Length() {}
 
 GetArrayValuesCommand::GetArrayValuesCommand(qint64 arrayId, qint32 firstIndex, qint32 length)
-: Command(Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::GetValues)
+: Command{Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::GetValues}
 {
 	arrayObject = arrayId;
 	this->firstIndex = firstIndex;

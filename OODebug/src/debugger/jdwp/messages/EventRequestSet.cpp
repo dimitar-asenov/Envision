@@ -79,13 +79,13 @@ Modifier::Modifier(int kind) {
 }
 
 EventSetCommand::EventSetCommand(Protocol::EventKind kind)
-	: Command(Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Set)
+	: Command{Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Set}
 { this->kind = kind; }
 
 EventSetCommand::~EventSetCommand() {}
 
 BreakClassLoad::BreakClassLoad(QString classToBreak)
-	: EventSetCommand(Protocol::EventKind::CLASS_PREPARE)
+	: EventSetCommand{Protocol::EventKind::CLASS_PREPARE}
 {
 	suspendPolicy = Protocol::SuspendPolicy::ALL;
 	modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
@@ -103,7 +103,7 @@ BreakpointCommand::BreakpointCommand(Location breakLocation) : EventSetCommand{P
 BreakpointCommand::~BreakpointCommand() {}
 
 StepCommand::StepCommand(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
-	: EventSetCommand(Protocol::EventKind::SINGLE_STEP)
+	: EventSetCommand{Protocol::EventKind::SINGLE_STEP}
 {
 	suspendPolicy = Protocol::SuspendPolicy::ALL;
 	modifiers = {Modifier::makeSingleStep(threadId, stepSize, stepDepth), Modifier::makeClassExclude("java.*"),
@@ -116,7 +116,7 @@ StepCommand::~StepCommand() {}
 EventSetReply::~EventSetReply() {}
 
 EventClearCommand::EventClearCommand(Protocol::EventKind kind, qint32 requestId)
-	: Command(Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Clear)
+	: Command{Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Clear}
 {
 	eventKind = kind;
 	requestID = requestId;

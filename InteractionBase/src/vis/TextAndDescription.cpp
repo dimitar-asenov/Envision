@@ -33,12 +33,12 @@ ITEM_COMMON_DEFINITIONS(TextAndDescription, "item")
 using namespace Visualization;
 
 TextAndDescription::TextAndDescription(Item* parent, const StyleType* style)
-	: Super(parent, style), textVis_(), descriptionVis_()
+	: Super{parent, style}, textVis_(), descriptionVis_()
 {
 }
 
 TextAndDescription::TextAndDescription(const QString& text, const QString& description, const StyleType* style)
-	: TextAndDescription(nullptr, style)
+	: TextAndDescription{nullptr, style}
 {
 	setContents(text, description);
 }

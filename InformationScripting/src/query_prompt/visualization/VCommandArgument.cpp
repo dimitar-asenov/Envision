@@ -33,7 +33,7 @@ namespace InformationScripting {
 ITEM_COMMON_DEFINITIONS(VCommandArgument, "item")
 
 VCommandArgument::VCommandArgument(Item* parent, NodeType* node, const StyleType* style)
-	: Super(parent, node, style)
+	: Super{parent, node, style}
 {}
 
 void VCommandArgument::initializeForms()

@@ -31,7 +31,7 @@
 namespace Visualization {
 
 Cursor::Cursor(Item* owner, CursorType type, Item* visualization)
-	: owner_(owner), visualization_(nullptr), type_(type), notLocationEquivalent_(false)
+	: owner_{owner}, visualization_(nullptr), type_(type), notLocationEquivalent_(false)
 {
 	if (visualization) setVisualization(visualization);
 }

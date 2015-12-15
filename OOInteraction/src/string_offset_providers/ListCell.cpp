@@ -32,7 +32,7 @@ namespace OOInteraction {
 
 ListCell::ListCell(int x, Visualization::VList* list, int stringComponentsStart,
 				const QString& prefix, const QString& separator, const QString& postfix)
-	: Cell(x, list, stringComponentsStart), prefix_(prefix), separator_(separator), postfix_(postfix)
+	: Cell{x, list, stringComponentsStart}, prefix_(prefix), separator_(separator), postfix_(postfix)
 {
 
 }

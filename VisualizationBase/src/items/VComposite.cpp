@@ -36,7 +36,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VComposite, "item")
 
 VComposite::VComposite(Item* parent, NodeType* node, const StyleType* style)
-	: Super(parent, node, style), expanded_(style->expanded())
+	: Super{parent, node, style}, expanded_(style->expanded())
 {
 	typeName_ = new Text(this, node->typeName());
 }

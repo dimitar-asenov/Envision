@@ -39,7 +39,7 @@ QList<InfoNode*> InfoNode::allInfoNodes;
 QHash<QString, InfoNode::InfoGetterStruct> InfoNode::allInfoGetters;
 
 InfoNode::InfoNode(Model::Node *target)
-	:Super(), target_(target)
+	:Super{}, target_(target)
 {
 	Q_ASSERT(target);
 	for (auto key : allInfoGetters.keys())
@@ -48,7 +48,7 @@ InfoNode::InfoNode(Model::Node *target)
 }
 
 InfoNode::InfoNode(Model::Node *target, QJsonArray enabledInfos)
-	:Super(), target_(target)
+	:Super{}, target_(target)
 {
 	Q_ASSERT(target);
 	for (auto item : enabledInfos)

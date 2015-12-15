@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VExplicitTemplateInstantiation, "item")
 
 VExplicitTemplateInstantiation::VExplicitTemplateInstantiation(Item* parent, NodeType* node, const StyleType* style)
-: Super(parent, node, style)
+: Super{parent, node, style}
 {}
 
 void VExplicitTemplateInstantiation::initializeForms()

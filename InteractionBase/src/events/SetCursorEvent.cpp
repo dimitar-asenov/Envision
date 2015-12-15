@@ -34,31 +34,31 @@ namespace Interaction {
 const QEvent::Type SetCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 SetCursorEvent::SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement, bool showPrompt)
-: CustomSceneEvent(EventType), itemToGetCursor_(itemToGetCursor), placement_(placement), showPrompt_(showPrompt)
+: CustomSceneEvent{EventType}, itemToGetCursor_(itemToGetCursor), placement_(placement), showPrompt_(showPrompt)
 {}
 
 SetCursorEvent::SetCursorEvent(Visualization::Item* itemToGetCursor, QPoint point, bool showPrompt)
-: CustomSceneEvent(EventType), itemToGetCursor_(itemToGetCursor), point_(point), showPrompt_(showPrompt)
+: CustomSceneEvent{EventType}, itemToGetCursor_(itemToGetCursor), point_(point), showPrompt_(showPrompt)
 {}
 
 SetCursorEvent::SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement, bool showPrompt)
-: CustomSceneEvent(EventType), getItemToFocus_(getItemToFocus), placement_(placement), showPrompt_(showPrompt)
+: CustomSceneEvent{EventType}, getItemToFocus_(getItemToFocus), placement_(placement), showPrompt_(showPrompt)
 {}
 
 SetCursorEvent::SetCursorEvent(GetItemFunction getItemToFocus, GetCursorPlacement getCursorPlacement, bool showPrompt)
-: CustomSceneEvent(EventType), getItemToFocus_(getItemToFocus), getCursorPlacement_(getCursorPlacement),
+: CustomSceneEvent{EventType}, getItemToFocus_(getItemToFocus), getCursorPlacement_(getCursorPlacement),
 	showPrompt_(showPrompt)
 {}
 
 SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement,
 		bool showPrompt)
-	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), placement_(placement),
+	: CustomSceneEvent{EventType}, parentContainer_(parentContainer), node_(node), placement_(placement),
 	  showPrompt_(showPrompt)
 {}
 
 SetCursorEvent::SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement,
 		bool showPrompt)
-	: CustomSceneEvent(EventType), scene_(scene), node_(node),  placement_(placement), showPrompt_(showPrompt)
+	: CustomSceneEvent{EventType}, scene_(scene), node_(node),  placement_(placement), showPrompt_(showPrompt)
 {}
 
 void SetCursorEvent::execute()

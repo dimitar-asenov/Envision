@@ -29,14 +29,14 @@
 namespace OODebug {
 
 VersionCommand::VersionCommand()
-	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Version)
+	: Command{Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Version}
 {}
 
 VersionCommand::~VersionCommand() {}
 VersionInfo::~VersionInfo() {}
 
 ClassesBySignatureCommand::ClassesBySignatureCommand(QString signature)
-	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::ClassesBySignature)
+	: Command{Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::ClassesBySignature}
 { this->signature = signature; }
 
 ClassesBySignatureCommand::~ClassesBySignatureCommand() {}
@@ -44,21 +44,21 @@ ClassBySignature::~ClassBySignature() {}
 ClassesBySignature::~ClassesBySignature() {}
 
 AllThreadsCommand::AllThreadsCommand()
-: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::AllThreads)
+: Command{Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::AllThreads}
 {}
 
 AllThreadsCommand::~AllThreadsCommand() {}
 AllThreads::~AllThreads() {}
 
 IDSizeCommand::IDSizeCommand()
-	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::IDSizes)
+	: Command{Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::IDSizes}
 {}
 
 IDSizeCommand::~IDSizeCommand() {}
 IDSizes::~IDSizes() {}
 
 SuspendCommand::SuspendCommand()
-: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Suspend) {}
+: Command{Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Suspend} {}
 
 SuspendCommand::~SuspendCommand() {}
 

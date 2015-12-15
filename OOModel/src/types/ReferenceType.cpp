@@ -29,11 +29,11 @@
 namespace OOModel {
 
 ReferenceType::ReferenceType(Type* baseType, bool isValueType)
-	: Type(isValueType), baseType_(baseType)
+	: Type{isValueType}, baseType_(baseType)
 {}
 
 ReferenceType::ReferenceType(const ReferenceType& other)
-	: Type(other), baseType_(other.baseType()->clone())
+	: Type{other}, baseType_(other.baseType()->clone())
 {}
 
 ReferenceType::~ReferenceType()

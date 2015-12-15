@@ -34,7 +34,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VMemberInitializer, "item")
 
 VMemberInitializer::VMemberInitializer(Item* parent, NodeType* node, const StyleType* style)
-: Super(parent, node, style) {}
+: Super{parent, node, style} {}
 
 void VMemberInitializer::initializeForms()
 {

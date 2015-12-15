@@ -45,7 +45,7 @@ void MacroImporter::clear()
 }
 
 MacroImporter::MacroImporter(OOModel::Project* root, ClangHelpers& clang)
-	: root_(root), clang_{clang}, macroDefinitions_(clang),
+	: root_{root}, clang_{clang}, macroDefinitions_(clang),
 	  macroExpansions_(clang, macroDefinitions_),
 	  allMetaDefinitions_(root, clang, macroDefinitions_, macroExpansions_)
 	  {}

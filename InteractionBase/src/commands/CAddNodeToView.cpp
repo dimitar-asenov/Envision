@@ -31,7 +31,7 @@
 namespace Interaction {
 
 CAddNodeToView::CAddNodeToView()
-	:CommandWithDefaultArguments("addNode", {"current", "0", "0"})
+	:CommandWithDefaultArguments{"addNode", {"current", "0", "0"}}
 {
 }
 

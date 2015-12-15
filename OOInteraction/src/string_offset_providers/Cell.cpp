@@ -29,16 +29,16 @@
 namespace OOInteraction {
 
 Cell::Cell(int x, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd)
-	: Cell(x, 0, 1, 1, item, stringComponentsStart, stringComponentsEnd)
+	: Cell{x, 0, 1, 1, item, stringComponentsStart, stringComponentsEnd}
 {}
 
 Cell::Cell(int x, int y, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd)
-	: Cell(x, y, 1, 1, item, stringComponentsStart, stringComponentsEnd)
+	: Cell{x, y, 1, 1, item, stringComponentsStart, stringComponentsEnd}
 {}
 
 Cell::Cell(int x, int y, int width, int height, Visualization::Item* item, int stringComponentsStart,
 				int stringComponentsEnd)
-: region_(x, y, width, height), item_(item), stringComponentsStart_(stringComponentsStart),
+: region_{x, y, width, height}, item_(item), stringComponentsStart_(stringComponentsStart),
   stringComponentsEnd_(stringComponentsEnd < 0 ? stringComponentsStart : stringComponentsEnd)
 {
 }

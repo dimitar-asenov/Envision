@@ -30,7 +30,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VOOReference, "item")
 
 VOOReference::VOOReference(Item* parent, NodeType* node, const StyleType* style)
-: Super(parent, node, style)
+: Super{parent, node, style}
 {
 	Super::setText(node->name());
 }

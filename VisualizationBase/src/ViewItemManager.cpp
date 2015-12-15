@@ -35,7 +35,7 @@
 namespace Visualization {
 
 ViewItemManager::ViewItemManager(Scene* scene)
-	: scene_(scene)
+	: scene_{scene}
 {
 	viewItems_.resize(VIEW_ITEM_COLUMNS);
 	currentViewItem_ = newViewItem("ProjectView");

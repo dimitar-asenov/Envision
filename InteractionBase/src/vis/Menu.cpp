@@ -37,7 +37,7 @@ Menu* Menu::instance{};
 
 Menu::Menu(QVector<QVector<Visualization::Item*> > items, Visualization::Item* selectedItem,
 			Visualization::Item *target, StyleType *style)
-	: Super(nullptr, style), target_(target), currentItems_(items)
+	: Super{nullptr, style}, target_(target), currentItems_(items)
 {
 	mousePosition_ = target->scene()->lastMouseHoverPosition();
 	setFiltersChildEvents(true);

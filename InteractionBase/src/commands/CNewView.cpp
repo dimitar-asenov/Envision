@@ -31,7 +31,7 @@
 namespace Interaction {
 
 CNewView::CNewView()
-	:CommandWithDefaultArguments("newView", {"name", ""})
+	:CommandWithDefaultArguments{"newView", {"name", ""}}
 {
 }
 

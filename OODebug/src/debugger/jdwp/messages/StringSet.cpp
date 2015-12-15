@@ -29,7 +29,7 @@
 namespace OODebug {
 
 StringValueCommand::StringValueCommand(qint64 stringId)
-	: Command(Protocol::CommandSet::StringReference, Protocol::StringReferenceCommands::Value)
+	: Command{Protocol::CommandSet::StringReference, Protocol::StringReferenceCommands::Value}
 {
 	objectID = stringId;
 }

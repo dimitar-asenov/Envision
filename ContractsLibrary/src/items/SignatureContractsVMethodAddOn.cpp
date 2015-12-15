@@ -38,7 +38,7 @@
 namespace ContractsLibrary {
 
 SignatureContractsVMethodAddOn::SignatureContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition)
-: contractClassMethod_(contractsClassMethodDefinition)
+: contractClassMethod_{contractsClassMethodDefinition}
 {
 }
 
