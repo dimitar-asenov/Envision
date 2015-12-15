@@ -295,6 +295,17 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 			methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
 		ooExprStack_.push(methodCallExpr);
 	}
+	else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
+	{
+		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+		methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+		for (auto initExpr : *initListExpr)
+			methodCallExpr->arguments()->append(translateExpression(initExpr));
+		ooExprStack_.push(methodCallExpr);
+	}
 	else
 	{
 		TraverseStmt(newExpr->getInitializer());
@@ -404,6 +415,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 {
 	if (!constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
 		return TraverseStmt(*(constructExpr->child_begin()));
+
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
