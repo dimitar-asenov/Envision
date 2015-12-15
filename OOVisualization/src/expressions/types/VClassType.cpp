@@ -34,7 +34,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VClassType, "item")
 
 VClassType::VClassType(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style},
-	vis_( new VReferenceExpression(this, node->typeExpression(), style))
+	vis_{ new VReferenceExpression{this, node->typeExpression(), style}}
 {
 }
 

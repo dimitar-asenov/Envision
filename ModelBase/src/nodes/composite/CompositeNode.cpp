@@ -58,19 +58,19 @@ AttributeChain& CompositeNode::topLevelMeta()
 }
 
 CompositeNode::CompositeNode(Node *parent) :
-	Super(parent), meta_(CompositeNode::getMetaData())
+	Super{parent}, meta_{CompositeNode::getMetaData()}
 {
 	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
 }
 
 CompositeNode::CompositeNode(Node *parent, PersistentStore &, bool) :
-	Super(parent), meta_(CompositeNode::getMetaData())
+	Super{parent}, meta_{CompositeNode::getMetaData()}
 {
 	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
 }
 
 CompositeNode::CompositeNode(const CompositeNode& other)
-	: Super{other}, meta_{other.meta_}, subnodes_(meta_.numLevels())
+	: Super{other}, meta_{other.meta_}, subnodes_{meta_.numLevels()}
 {
 	Q_ASSERT(subnodes_.size() == other.subnodes_.size());
 
@@ -92,7 +92,7 @@ CompositeNode::CompositeNode(const CompositeNode& other)
 CompositeNode* CompositeNode::clone() const { return new CompositeNode(*this); }
 
 CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
-	Super(parent), meta_{metaData}, subnodes_(meta_.numLevels())
+	Super{parent}, meta_{metaData}, subnodes_{meta_.numLevels()}
 {
 	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
@@ -106,7 +106,7 @@ CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
 }
 
 CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, AttributeChain& metaData) :
-	Super(parent), meta_{metaData}, subnodes_(meta_.numLevels())
+	Super{parent}, meta_{metaData}, subnodes_{meta_.numLevels()}
 {
 	QSet<QString> partial;
 	for (int level = 0; level < meta_.numLevels(); ++level)

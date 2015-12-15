@@ -38,8 +38,8 @@ ITEM_COMMON_DEFINITIONS(VEmptyExpression, "item")
 
 VEmptyExpression::VEmptyExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},
-	vis_(new Static(this,
-			DCast<OOModel::ExpressionStatement>(node->parent()) ? &style->emptyLine() :  &style->emptyLine()))
+	vis_{new Static{this,
+			DCast<OOModel::ExpressionStatement>(node->parent()) ? &style->emptyLine() :  &style->emptyLine()}}
 {
 }
 

@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VBlock, "item")
 
 VBlock::VBlock(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style},
-	items_( new VStatementItemList(this, node->items()) )
+	items_{ new VStatementItemList{this, node->items()} }
 {
 }
 

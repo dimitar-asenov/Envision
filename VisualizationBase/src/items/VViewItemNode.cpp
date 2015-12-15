@@ -35,7 +35,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VViewItemNode, "item")
 
 VViewItemNode::VViewItemNode(Item* parent, NodeType* node, const StyleType* style) :
-		Super(parent, node, style)
+		Super{parent, node, style}
 {
 	setPurpose(node->purpose());
 }

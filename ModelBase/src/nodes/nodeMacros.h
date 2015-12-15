@@ -572,7 +572,7 @@ int className::addAttributeToRegister_( ::Model::Attribute attribute )										
 }																																							\
 																																							\
 className::className(::Model::CompositeNode* self, const QVector< ::Model::CompositeIndex>& extensionAttributes) :	\
-	self_(self), attr_(extensionAttributes) {}																								\
+	self_{self}, attr_{extensionAttributes} {}																								\
 																																							\
 void className::registerExtension()																												\
 {																																							\
