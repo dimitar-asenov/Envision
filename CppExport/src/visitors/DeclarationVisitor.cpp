@@ -265,7 +265,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (!headerVisitor())
 		if (!method->memberInitializers()->isEmpty())
-			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(data()));
+			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(data()), "comma");
 
 	if (!method->throws()->isEmpty())
 	{
