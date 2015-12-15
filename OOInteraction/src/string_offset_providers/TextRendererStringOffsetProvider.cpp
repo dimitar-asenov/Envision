@@ -32,7 +32,7 @@
 namespace OOInteraction {
 
 TextRendererStringOffsetProvider::TextRendererStringOffsetProvider(Visualization::TextRenderer* v)
-: StringOffsetProvider{v}, vis_(v)
+: StringOffsetProvider{v}, vis_{v}
 {
 }
 

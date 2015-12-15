@@ -33,7 +33,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(CursorShapeItem, "item")
 
 CursorShapeItem::CursorShapeItem(Cursor* cursor, const StyleType* style) :
-Super(nullptr, style), cursor_(cursor), useCenter_(false)
+Super(nullptr, style), cursor_{cursor}, useCenter_{false}
 {
 	setFlags(0);
 	setAcceptedMouseButtons(0);

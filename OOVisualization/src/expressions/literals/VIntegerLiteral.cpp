@@ -35,7 +35,7 @@ ITEM_COMMON_DEFINITIONS(VIntegerLiteral, "item")
 
 VIntegerLiteral::VIntegerLiteral(Item* parent, NodeType *literal, const StyleType *style) :
 	Super(parent, literal, style),
-	vis_(nullptr)
+	vis_{nullptr}
 {
 }
 

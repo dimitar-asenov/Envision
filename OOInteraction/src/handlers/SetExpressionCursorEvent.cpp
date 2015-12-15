@@ -36,7 +36,7 @@ namespace OOInteraction {
 const QEvent::Type SetExpressionCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 SetExpressionCursorEvent::SetExpressionCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset)
-	: CustomSceneEvent{EventType}, parentContainerChain_{}, node_(node), offset_(offset)
+	: CustomSceneEvent{EventType}, parentContainerChain_{}, node_{node}, offset_{offset}
 {
 	while (parentContainer)
 	{

@@ -36,7 +36,7 @@ ITEM_COMMON_DEFINITIONS(VExpressionStatement, "item")
 
 VExpressionStatement::VExpressionStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	expr_( nullptr )
+	expr_{ nullptr }
 {
 }
 

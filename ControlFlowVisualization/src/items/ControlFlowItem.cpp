@@ -33,8 +33,8 @@ ITEM_COMMON_DEFINITIONS(ControlFlowItem, "item")
 
 ControlFlowItem::ControlFlowItem(Item* parent,  const StyleType* style) :
 	Super(parent, style),
-	preferredContinueExit_(EXIT_RIGHT),
-	preferredBreakExit_(EXIT_LEFT)
+	preferredContinueExit_{EXIT_RIGHT},
+	preferredBreakExit_{EXIT_LEFT}
 {
 }
 

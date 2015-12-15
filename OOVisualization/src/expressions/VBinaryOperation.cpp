@@ -37,11 +37,11 @@ ITEM_COMMON_DEFINITIONS(VBinaryOperation, "item")
 
 VBinaryOperation::VBinaryOperation(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	pre_(nullptr),
-	in_(nullptr),
-	post_(nullptr),
-	left_(nullptr),
-	right_(nullptr)
+	pre_{nullptr},
+	in_{nullptr},
+	post_{nullptr},
+	left_{nullptr},
+	right_{nullptr}
 {
 }
 

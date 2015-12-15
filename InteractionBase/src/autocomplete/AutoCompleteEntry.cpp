@@ -31,7 +31,7 @@
 namespace Interaction {
 
 AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description)
-: text_{text}, description_(description)
+: text_{text}, description_{description}
 {}
 
 AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description,
@@ -44,7 +44,7 @@ AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& descrip
 
 AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description,
 		QSharedPointer<Visualization::Item> visualization, ExecuteFunction execFunction)
-: text_{text}, description_(description), vis_(visualization), execFunction_(execFunction)
+: text_{text}, description_{description}, vis_{visualization}, execFunction_{execFunction}
 {
 }
 

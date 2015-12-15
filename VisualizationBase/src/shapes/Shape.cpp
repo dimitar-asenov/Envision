@@ -33,7 +33,7 @@ DEFINE_TYPE_ID_BASE(Shape, "Shape", )
 QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;
 QMap<QString, Shape::ShapeStyleConstructor> Shape::shapeStyleConstructors;
 
-Shape::Shape(Item* parent_, ShapeStyle *style) : parent{parent_}, style_(style) {}
+Shape::Shape(Item* parent_, ShapeStyle *style) : parent{parent_}, style_{style} {}
 
 Shape::~Shape() {}
 

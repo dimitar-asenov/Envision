@@ -30,7 +30,7 @@ namespace CppImport {
 
 MacroExpansion::MacroExpansion(clang::SourceRange range, const clang::MacroDirective* definition,
 										 MacroExpansion* parent, MacroExpansion* xMacroParent)
-	: range_{range}, definition_(definition), parent_(parent), xMacroParent_(xMacroParent) {}
+	: range_{range}, definition_{definition}, parent_{parent}, xMacroParent_{xMacroParent} {}
 
 bool MacroExpansion::isChildOf(MacroExpansion* entry)
 {

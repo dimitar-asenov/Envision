@@ -48,7 +48,7 @@ Modifier::Modifier(Model::Node *parent, Model::PersistentStore &store, bool)
 }
 
 Modifier::Modifier(Modifiers m)
-: Super{nullptr}, modifiers_(m)
+: Super{nullptr}, modifiers_{m}
 {}
 
 Modifier* Modifier::clone() const { return new Modifier{*this}; }

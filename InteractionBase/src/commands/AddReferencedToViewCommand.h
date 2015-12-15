@@ -70,7 +70,7 @@ inline AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	AddReferencedToViewCommand(QString name, const QStringList &defaultArguments,
 							int rightOffset, QString arrowLayer, ArrowDirection direction, int purpose)
 	: CommandWithDefaultArguments{name, defaultArguments},
-		rightOffset_(rightOffset), arrowLayer_(arrowLayer), direction_(direction), purpose_(purpose) {}
+		rightOffset_{rightOffset}, arrowLayer_{arrowLayer}, direction_{direction}, purpose_{purpose} {}
 
 template <typename ReferenceTarget, typename ReferenceResult>
 inline bool AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::

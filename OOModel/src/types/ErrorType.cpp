@@ -28,7 +28,7 @@
 
 namespace OOModel {
 
-ErrorType::ErrorType(const QString& message) : Type{false}, message_(message)
+ErrorType::ErrorType(const QString& message) : Type{false}, message_{message}
 {}
 
 bool ErrorType::isError() const

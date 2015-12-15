@@ -59,7 +59,7 @@ OperatorDescriptor::OperatorDescriptor(const QString& prefixText, const QString&
 
 OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signature, int precedence,
 		Associativity associativity)
-	: name_{name}, precedence_(precedence), associativity_(associativity)
+	: name_{name}, precedence_{precedence}, associativity_{associativity}
 {
 	signature_ = signature.split(" ", QString::SkipEmptyParts);
 	signature_.replaceInStrings("SPACE", " ");

@@ -29,7 +29,7 @@
 namespace Interaction {
 
 CommandHelp::CommandHelp(Visualization::Item* visualization ) :
-	visualization_(visualization)
+	visualization_{visualization}
 {
 }
 

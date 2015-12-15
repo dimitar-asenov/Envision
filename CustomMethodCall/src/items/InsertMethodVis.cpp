@@ -40,8 +40,8 @@ ITEM_COMMON_DEFINITIONS(InsertMethodVis, "item")
 InsertMethodVis::InsertMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
 	icon_(new Static(nullptr, &style->icon()) ),
-	separator_(nullptr),
-	prefix_(nullptr),
+	separator_{nullptr},
+	prefix_{nullptr},
 	arguments_(new VList(nullptr, node->arguments(), &style->arguments()))
 {
 	layout()->append(icon_);

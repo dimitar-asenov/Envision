@@ -31,7 +31,7 @@ namespace Core {
 const QEvent::Type TestEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 TestEvent::TestEvent(QString testTarget, QString testId) :
-		QEvent(EventType), testTarget_(testTarget), testId_(testId)
+		QEvent(EventType), testTarget_{testTarget}, testId_{testId}
 {}
 
 }

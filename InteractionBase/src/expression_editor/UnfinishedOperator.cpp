@@ -34,7 +34,7 @@
 namespace Interaction {
 
 UnfinishedOperator::UnfinishedOperator(OperatorDescriptor* descriptor, Operator* parent)
-	: Operator{descriptor, parent}, num_complete_(0)
+	: Operator{descriptor, parent}, num_complete_{0}
 {
 	for (int i = 0; i<descriptor->numOperands(); ++i)
 		append(new Empty());

@@ -30,7 +30,7 @@ namespace Interaction {
 
 CommandWithFlags::CommandWithFlags(const QString& name, const QList<QStringList>& attributes,
 	bool usePossibleNames, bool limitToMatchingNames)
-: Command{name}, attributes_(attributes), usePossibleNames_{usePossibleNames},
+: Command{name}, attributes_{attributes}, usePossibleNames_{usePossibleNames},
   limitToMatchingNames_{limitToMatchingNames}
 {
 }

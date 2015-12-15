@@ -36,7 +36,7 @@ CustomSceneEvent::CustomSceneEvent(QEvent::Type type)
 }
 
 CustomSceneEvent::CustomSceneEvent(EventFunction f)
-	: QEvent{EventType}, f_(f)
+	: QEvent{EventType}, f_{f}
 {
 }
 

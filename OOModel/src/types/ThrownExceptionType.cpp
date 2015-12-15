@@ -28,7 +28,7 @@
 
 namespace OOModel {
 
-ThrownExceptionType::ThrownExceptionType(Type* exceptionType) : Type{true}, exceptionType_(exceptionType)
+ThrownExceptionType::ThrownExceptionType(Type* exceptionType) : Type{true}, exceptionType_{exceptionType}
 {}
 
 ThrownExceptionType::ThrownExceptionType(const ThrownExceptionType& other)

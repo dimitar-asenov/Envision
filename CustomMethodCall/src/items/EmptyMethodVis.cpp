@@ -39,8 +39,8 @@ ITEM_COMMON_DEFINITIONS(EmptyMethodVis, "item")
 EmptyMethodVis::EmptyMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
 	icon_(new Static(nullptr, &style->icon()) ),
-	separator_(nullptr),
-	prefix_(nullptr)
+	separator_{nullptr},
+	prefix_{nullptr}
 {
 	layout()->append(icon_);
 }

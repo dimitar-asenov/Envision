@@ -30,7 +30,7 @@
 namespace OOInteraction {
 
 CompoundObjectStringOffsetProvider::CompoundObjectStringOffsetProvider(Visualization::Item* v)
-: StringOffsetProvider{v}, vis_(v)
+: StringOffsetProvider{v}, vis_{v}
 {}
 
 int CompoundObjectStringOffsetProvider::offset(Qt::Key /*key*/)

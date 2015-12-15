@@ -33,7 +33,7 @@ VisualizationGroup::VisualizationGroup() : scorePoints_{0}
 }
 
 VisualizationGroup::VisualizationGroup(ConditionFunction condition, int scorePoints)
-	: contextCondition_{condition}, scorePoints_(scorePoints)
+	: contextCondition_{condition}, scorePoints_{scorePoints}
 {
 }
 

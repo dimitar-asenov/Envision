@@ -78,7 +78,7 @@ Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnNod
 
 
 Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnNode action, FilterFunctionOnNode filter)
-: shortcut_{shortcut}, name_{name}, actionOnNode_{action}, filterOnNode_(filter)
+: shortcut_{shortcut}, name_{name}, actionOnNode_{action}, filterOnNode_{filter}
 {}
 
 Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnItem action)
@@ -86,7 +86,7 @@ Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnIte
 {}
 
 Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnItem action, FilterFunctionOnNode filter)
-: shortcut_{shortcut}, name_{name}, actionOnItem_{action}, filterOnNode_(filter)
+: shortcut_{shortcut}, name_{name}, actionOnItem_{action}, filterOnNode_{filter}
 {}
 
 Action::~Action()

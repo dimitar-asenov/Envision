@@ -57,7 +57,7 @@ class ItemWithNode : public Super
 template <typename Derived, typename Super, typename ContainedNode, bool defaultInitialization>
 ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::ItemWithNode(Item* parent, ContainedNode* node,
 		const typename Super::StyleType* style)
-	: Super{parent, style}, node_(node), revision_(-1)
+	: Super{parent, style}, node_{node}, revision_{-1}
 {
 	Super::nodeItemsMap().insert(node, this);
 }

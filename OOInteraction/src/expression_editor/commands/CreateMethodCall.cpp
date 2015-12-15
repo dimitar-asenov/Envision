@@ -34,7 +34,7 @@ namespace OOInteraction {
 
 CreateMethodCall::CreateMethodCall(const QString& name, const QString& methodToCreate,
 		int expectedTypeArguments)
-: name_{name}, methodToCreate_(methodToCreate), expectedTypeArguments_(expectedTypeArguments)
+: name_{name}, methodToCreate_{methodToCreate}, expectedTypeArguments_{expectedTypeArguments}
 {}
 
 const QString& CreateMethodCall::name() const

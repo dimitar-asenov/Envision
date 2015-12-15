@@ -29,7 +29,7 @@
 
 namespace Interaction {
 
-Expression::Expression(const int type, Operator* parent) : type_{type}, parent_(parent)
+Expression::Expression(const int type, Operator* parent) : type_{type}, parent_{parent}
 {
 }
 

@@ -42,9 +42,9 @@ ITEM_COMMON_DEFINITIONS(VReferenceExpression, "item")
 VReferenceExpression::VReferenceExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
 	name_(new VOOReference(layout(), node->ref(), &style->unresolvedName()) ),
-	separator_(),
-	prefix_(),
-	typeArguments_()
+	separator_{},
+	prefix_{},
+	typeArguments_{}
 {
 	layout()->append(name_);
 }

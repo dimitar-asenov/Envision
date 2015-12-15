@@ -37,7 +37,7 @@ OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& s
 OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature,
 		int precedence, Associativity associativity, CreateFunction createFunction)
 	:Interaction::OperatorDescriptor(name, signature, precedence, associativity),
-	 createFunction_(createFunction)
+	 createFunction_{createFunction}
 {}
 
 OOModel::Expression* OOOperatorDescriptor::create(const QList<OOModel::Expression*>& operands)

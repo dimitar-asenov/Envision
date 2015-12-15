@@ -64,15 +64,12 @@ QList<Scene*>& Scene::allScenes()
 }
 
 Scene::Scene()
-	: QGraphicsScene(VisualizationManager::instance().getMainWindow()),
-	  	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)),
-	  	  hiddenItemCategories_(NoItemCategory)
+	: QGraphicsScene{VisualizationManager::instance().getMainWindow()},
+	  renderer_{defaultRenderer()}, sceneHandlerItem_{new SceneHandlerItem{this}},
+		  hiddenItemCategories_{NoItemCategory}
 {
 	setItemIndexMethod(NoIndex);
-
-#if QT_VERSION >= 0x050400
 	setMinimumRenderSize(1.0);
-#endif
 
 	initialized_ = true;
 	allScenes().append(this);

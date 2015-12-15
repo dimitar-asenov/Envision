@@ -71,8 +71,8 @@ QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
 }
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(StandardUpdate), purpose_(-1),
-	semanticZoomLevel_(-1), itemCategory_(Scene::NoItemCategory)
+	QGraphicsItem(parent), style_{nullptr}, shape_{nullptr}, needsUpdate_{StandardUpdate}, purpose_{-1},
+	semanticZoomLevel_{-1}, itemCategory_{Scene::NoItemCategory}
 {
 	// By default no flags in a QGraphicsItem are enabled.
 	GraphicsItemFlags flags;

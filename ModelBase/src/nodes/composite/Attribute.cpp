@@ -34,12 +34,12 @@ Attribute::Attribute()
 }
 
 Attribute::Attribute(QString name, QString type, bool optional, bool partial, bool persistent) :
-	name_(name), type_(type), optional_(optional), partial_(partial), persistent_(persistent)
+	name_{name}, type_{type}, optional_{optional}, partial_{partial}, persistent_{persistent}
 {
 }
 
 Attribute::Attribute(QString name) :
-	name_(name)
+	name_{name}
 {
 }
 

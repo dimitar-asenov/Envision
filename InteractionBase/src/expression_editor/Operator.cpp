@@ -33,7 +33,7 @@
 namespace Interaction {
 
 Operator::Operator(OperatorDescriptor* descriptor, Operator* parent)
-	: Expression(type(), parent), descriptor_(descriptor), do_not_delete_transient_descriptor_(false)
+	: Expression(type(), parent), descriptor_{descriptor}, do_not_delete_transient_descriptor_{false}
 {
 }
 

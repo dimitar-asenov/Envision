@@ -29,7 +29,7 @@
 namespace Interaction {
 
 CommandError::CommandError(const QString& message, Visualization::Item* visualization) :
-	message_(message), visualization_(visualization)
+	message_{message}, visualization_{visualization}
 {
 }
 

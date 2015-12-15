@@ -33,7 +33,7 @@
 namespace CppExport {
 
 CodeUnit::CodeUnit(QString name, Model::Node* node)
-	: name_{name}, node_(node), headerPart_(this), sourcePart_(this) {}
+	: name_{name}, node_{node}, headerPart_{this}, sourcePart_{this} {}
 
 void CodeUnit::calculateSourceFragments()
 {

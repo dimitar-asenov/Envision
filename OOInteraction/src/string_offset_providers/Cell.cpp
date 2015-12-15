@@ -38,8 +38,8 @@ Cell::Cell(int x, int y, Visualization::Item* item, int stringComponentsStart, i
 
 Cell::Cell(int x, int y, int width, int height, Visualization::Item* item, int stringComponentsStart,
 				int stringComponentsEnd)
-: region_{x, y, width, height}, item_(item), stringComponentsStart_(stringComponentsStart),
-  stringComponentsEnd_(stringComponentsEnd < 0 ? stringComponentsStart : stringComponentsEnd)
+: region_{x, y, width, height}, item_{item}, stringComponentsStart_{stringComponentsStart},
+  stringComponentsEnd_{stringComponentsEnd < 0 ? stringComponentsStart : stringComponentsEnd}
 {
 }
 

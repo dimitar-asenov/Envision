@@ -37,9 +37,9 @@ ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
 
 VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
+	prefix_{nullptr},
+	arg_{nullptr},
+	postfix_{nullptr }
 {
 }
 

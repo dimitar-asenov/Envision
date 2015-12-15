@@ -38,7 +38,7 @@
 namespace CppImport {
 
 MacroExpansions::MacroExpansions(ClangHelpers& clang, const MacroDefinitions& macroDefinitions)
-	: clang_{clang}, macroDefinitions_(macroDefinitions) {}
+	: clang_{clang}, macroDefinitions_{macroDefinitions} {}
 
 void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 													  const clang::MacroArgs* macroArguments)

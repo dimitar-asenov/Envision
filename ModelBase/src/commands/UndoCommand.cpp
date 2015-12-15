@@ -30,7 +30,7 @@
 namespace Model {
 
 UndoCommand::UndoCommand(Node* target, const QString & text) :
-	QUndoCommand(text), target_(target), undone(false)
+	QUndoCommand(text), target_{target}, undone(false)
 {
 
 }

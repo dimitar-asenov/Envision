@@ -43,8 +43,8 @@ void ValueAtReturnVisitor::setMethods(OOModel::Method* ensuresMethod, OOModel::M
 	valueAtReturnMethod_ = valueAtReturnMethod;
 }
 
-ValueAtReturnVisitor::ValueAtReturnVisitor() : inEnsuresCall_{false}, inValueAtReturnCall_(false), outReference_(false),
-		numWrapped_(0), numUnwrapped_(0)
+ValueAtReturnVisitor::ValueAtReturnVisitor() : inEnsuresCall_{false}, inValueAtReturnCall_{false}, outReference_{false},
+		numWrapped_{0}, numUnwrapped_{0}
 {
 }
 

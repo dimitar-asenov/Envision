@@ -36,7 +36,7 @@ ITEM_COMMON_DEFINITIONS(VCommentStatementItem, "item")
 
 VCommentStatementItem::VCommentStatementItem(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	comment_( nullptr )
+	comment_{ nullptr }
 {
 }
 

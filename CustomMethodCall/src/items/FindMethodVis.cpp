@@ -41,8 +41,8 @@ ITEM_COMMON_DEFINITIONS(FindMethodVis, "item")
 FindMethodVis::FindMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
 	name_(new Text(nullptr, &style->name()) ),
-	separator_(nullptr),
-	prefix_(nullptr),
+	separator_{nullptr},
+	prefix_{nullptr},
 	arguments_(new VList(nullptr, node->arguments(), &style->arguments()))
 {
 	layout()->append(name_);

@@ -31,7 +31,7 @@
 namespace Visualization {
 
 VisualizationManager::VisualizationManager() :
-	envisionManager_(nullptr), mainScene_(nullptr), mainView_(nullptr)
+	envisionManager_{nullptr}, mainScene_{nullptr}, mainView_{nullptr}
 {
 }
 

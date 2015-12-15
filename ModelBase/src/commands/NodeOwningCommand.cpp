@@ -32,7 +32,7 @@
 namespace Model {
 
 NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* ownedIfDone, Node* ownedIfUndone)
-: UndoCommand{target, text}, ownedIfDone_(ownedIfDone), ownedIfUndone_(ownedIfUndone)
+: UndoCommand{target, text}, ownedIfDone_{ownedIfDone}, ownedIfUndone_{ownedIfUndone}
 {
 	// If the target node is not yet owned, do not assume ownership over its subnodes.
 	if (target->manager() == nullptr)

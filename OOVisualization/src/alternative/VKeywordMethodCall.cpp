@@ -38,8 +38,8 @@ ITEM_COMMON_DEFINITIONS(VKeywordMethodCall, "item")
 
 VKeywordMethodCall::VKeywordMethodCall(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	keyword_(),
-	arguments_()
+	keyword_{},
+	arguments_{}
 {
 }
 

@@ -29,7 +29,7 @@
 namespace Visualization {
 
 ItemRegion::ItemRegion(const QRect& region)
-	: region_{region}, item_(nullptr), cursor_(nullptr)
+	: region_{region}, item_{nullptr}, cursor_{nullptr}
 {
 }
 

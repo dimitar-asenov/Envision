@@ -39,9 +39,9 @@ ITEM_COMMON_DEFINITIONS(SumMethodVis, "item")
 SumMethodVis::SumMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
 	name_(new Static(nullptr, &style->name()) ),
-	prefix_(nullptr),
-	from_(nullptr),
-	to_(nullptr),
+	prefix_{nullptr},
+	from_{nullptr},
+	to_{nullptr},
 	arguments_(new SequentialLayout(nullptr, &style->arguments()))
 {
 	arguments_->append(name_);

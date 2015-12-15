@@ -29,12 +29,12 @@
 namespace Model {
 
 CompositeIndex::CompositeIndex() :
-	level_(-1), index_(-1)
+	level_{-1}, index_{-1}
 {
 }
 
 CompositeIndex::CompositeIndex(int level, int index) :
-	level_(level), index_(index)
+	level_{level}, index_{index}
 {
 }
 

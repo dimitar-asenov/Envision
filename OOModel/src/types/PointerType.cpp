@@ -29,7 +29,7 @@
 
 namespace OOModel {
 
-PointerType::PointerType(Type* baseType, bool isValueType) : Type{isValueType}, baseType_(baseType)
+PointerType::PointerType(Type* baseType, bool isValueType) : Type{isValueType}, baseType_{baseType}
 {}
 
 PointerType::PointerType(const PointerType &other)

@@ -32,7 +32,7 @@ Type::Type(bool isValueType) : isValueType_{isValueType}
 {
 }
 
-Type::Type(const Type& other) : isValueType_{other.isValueType_}, qualifiers_(other.qualifiers_)
+Type::Type(const Type& other) : isValueType_{other.isValueType_}, qualifiers_{other.qualifiers_}
 {
 }
 

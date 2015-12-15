@@ -38,7 +38,7 @@ ITEM_COMMON_DEFINITIONS(VReturnStatementCF, "item")
 
 VReturnStatementCF::VReturnStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	vis_(nullptr)
+	vis_{nullptr}
 {
 }
 
