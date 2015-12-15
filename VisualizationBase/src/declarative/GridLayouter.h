@@ -39,11 +39,14 @@ class VISUALIZATIONBASE_API GridLayouter
 	public:
 
 		enum MajorAxis {NoMajor, ColumnMajor, RowMajor};
-		template < bool mayHaveMergedCells, class NumRows, class NumColumns, class HasElement, class Width, class Height,
-					 class ComputeElementSize, class ChangeGeometry, class IsStretchable, class SetPosition, class SpanGrid,
-					 class RowStretchFactors, class ColumnStretchFactors, class HorizontalAlignment, class VerticalAlignment,
-					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
-					 class LeftMargin, class RightMargin, class MinWidth, class MinHeight>
+		template < bool mayHaveMergedCells, typename NumRows, typename NumColumns, typename HasElement, typename Width,
+					  typename Height,
+					  typename ComputeElementSize, typename ChangeGeometry, typename IsStretchable,
+					  typename SetPosition, typename SpanGrid,
+					  typename RowStretchFactors, typename ColumnStretchFactors,
+					  typename HorizontalAlignment, typename VerticalAlignment,
+					  typename SpaceBetweenRows, typename SpaceBetweenColumns, typename TopMargin, typename BottomMargin,
+					  typename LeftMargin, typename RightMargin, typename MinWidth, typename MinHeight>
 		static QSize computeSize(int availableWidth, int availableHeight, MajorAxis majorAxis,
 										NumRows numRows, NumColumns numColumns,
 										HasElement has, SpanGrid spanGrid, Width width, Height height,
@@ -363,10 +366,10 @@ class VISUALIZATIONBASE_API GridLayouter
 		/**
 		 * Does not consider spans.
 		 */
-		template <typename NumRows, typename NumColumns, class HasElement, class Width, class Height,
-					 class XPos, class YPos, class ChildItem,
-					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
-					 class LeftMargin, class RightMargin>
+		template <typename NumRows, typename NumColumns, typename HasElement, typename Width, typename Height,
+					 typename XPos, typename YPos, typename ChildItem,
+					 typename SpaceBetweenRows, typename SpaceBetweenColumns, typename TopMargin, typename BottomMargin,
+					 typename LeftMargin, typename RightMargin>
 		static QList<ItemRegion> regions(Item* parent, FormElement* formElement, int xOffset, int yOffset,
 										MajorAxis majorAxis, bool showCursorWhenEmpty, bool showInnerCursors,
 										bool showBoundaryCursors, bool extraCursorsAroundParentShape, bool showMajorCursors,

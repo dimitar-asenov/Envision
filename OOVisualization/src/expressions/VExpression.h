@@ -50,7 +50,7 @@ inline Visualization::InteractionHandler* VExpressionStaticData::defaultClassHan
 	{return defaultClassHandler_;}
 
 
-template <typename Derived, typename Super, class ContainedNode, bool defaultInitialization = true>
+template <typename Derived, typename Super, typename ContainedNode, bool defaultInitialization = true>
 class VExpression  : public Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization> {
 	public:
 		VExpression(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style=nullptr);
@@ -58,13 +58,13 @@ class VExpression  : public Visualization::ItemWithNode<Derived, Super, Containe
 		virtual Visualization::InteractionHandler* handler() const override;
 };
 
-template <typename Derived, typename Super, class ContainedNode, bool defaultInitialization>
+template <typename Derived, typename Super, typename ContainedNode, bool defaultInitialization>
 VExpression<Derived, Super, ContainedNode, defaultInitialization>::
 	VExpression(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style)
 	:Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>(parent, node, style)
 {}
 
-template <typename Derived, typename Super, class ContainedNode, bool defaultInitialization>
+template <typename Derived, typename Super, typename ContainedNode, bool defaultInitialization>
 Visualization::InteractionHandler*  VExpression<Derived, Super, ContainedNode, defaultInitialization>::handler() const
 {
 	if (VExpressionStaticData::defaultClassHandler()) return VExpressionStaticData::defaultClassHandler();

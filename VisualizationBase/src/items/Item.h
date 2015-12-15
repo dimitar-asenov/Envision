@@ -391,7 +391,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		/**
 		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
 		 */
-		template <typename Definition, typename Store, class CompareFunction, class CreateFunction, class SyncFunction>
+		template <typename Definition, typename Store, typename CompareFunction, typename CreateFunction,
+					 typename SyncFunction>
 		static bool synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync);
 
@@ -679,7 +680,7 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 	return changed;
 }
 
-template <typename Definition, typename Store, class CompareFunction, class CreateFunction, class SyncFunction>
+template <typename Definition, typename Store, typename CompareFunction, typename CreateFunction, typename SyncFunction>
 bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync)
 {

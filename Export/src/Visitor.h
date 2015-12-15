@@ -41,7 +41,7 @@ struct VisitorData
 		int mode_{};
 };
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 class Visitor
 {
 	public:
@@ -78,11 +78,11 @@ class Visitor
 };
 
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 inline std::shared_ptr<VisitorData>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::data() { return data_; }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::required(Model::Node* parent, Model::Node* node, const QString& childName)
 {
@@ -90,7 +90,7 @@ void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVis
 	error(parent, "A required child (" + childName + ") is missing.");
 }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::notAllowed(Model::Node* node)
 {
 	if (!node) return;
@@ -99,37 +99,37 @@ void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVis
 	else error(node, "Node not allowed");
 }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::notAllowed(Model::List* list)
 {
 	if (list && !list->isEmpty()) error(list, "List must be empty");
 }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::Visitor() : data_{new VisitorData}{}
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::Visitor(std::shared_ptr<VisitorData> data) : data_{data} {}
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::Visitor(int mode) : Visitor() { data_.get()->mode_ = mode; }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 inline QList<ExportError> Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::errors() const { return data_->errors_; }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 inline void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::error(const QString& errorMessage) { data_->errors_.append(ExportError(errorMessage)); }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 inline void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::error(Model::Node* node, const QString& errorMessage)
 { data_->errors_.append(ExportError(node, errorMessage)); }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 template<typename ListElement, typename VisitorClass, typename Predicate>
 CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::list(Model::TypedList<ListElement>* list, VisitorClass* v, const QString& fragmentType, Predicate filter)
@@ -141,7 +141,7 @@ CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisit
 	return fragment;
 }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 template<typename ListElement, typename VisitorClass, typename Predicate>
 inline CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::list(Model::TypedList<ListElement>* list, VisitorClass&& v, const QString& fragmentType, Predicate filter)
@@ -149,22 +149,22 @@ inline CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, Stateme
 	return Visitor::list(list, &v, fragmentType, filter);
 }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::declaration(NodeType* node)
 { return DeclarationVisitor(data_).visit(node); }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::statement(NodeType* node)
 { return StatementVisitor(data_).visit(node); }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::expression(NodeType* node)
 { return ExpressionVisitor(data_).visit(node); }
 
-template<typename DeclarationVisitor, typename ExpressionVisitor, class StatementVisitor, class ElementVisitor>
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::element(NodeType* node)
 { return ElementVisitor(data_).visit(node); }

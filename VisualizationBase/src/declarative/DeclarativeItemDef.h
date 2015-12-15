@@ -152,7 +152,8 @@ template <typename ChildItemVisualizationType, typename ParentStyleType>
 }
 
 template <typename VisualizationType>
-template <typename ChildItemVisualizationType, typename ParentStyleType, class ParentNodeType, class ParentNodeSubType>
+template <typename ChildItemVisualizationType, typename ParentStyleType, typename ParentNodeType,
+			 typename ParentNodeSubType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			ParentNodeSubType* (ParentNodeType::*nodePointer)(),

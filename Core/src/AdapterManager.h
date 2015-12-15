@@ -48,10 +48,10 @@ class CORE_API AdapterManager {
 		 *
 		 * This is a convenience method for creating adapter functions.
 		 */
-		template <typename AdapterBase, typename Adapter, class Adaptee>
+		template <typename AdapterBase, typename Adapter, typename Adaptee>
 		static AdapterBase* createFrom(Adaptee* a);
 
-		template <typename AdapterBase, typename Adapter, class Adaptee>
+		template <typename AdapterBase, typename Adapter, typename Adaptee>
 		static void registerAdapterViaConstructor( );
 
 	private:
@@ -112,12 +112,14 @@ template <typename Adapter, typename Adaptee> Adapter* AdapterManager::adapt(Ada
 	return nullptr;
 }
 
-template <typename AdapterBase, typename Adapter, class Adaptee > AdapterBase* AdapterManager::createFrom(Adaptee* a)
+template <typename AdapterBase, typename Adapter, typename Adaptee >
+AdapterBase* AdapterManager::createFrom(Adaptee* a)
 {
 	return new Adapter(a);
 }
 
-template <typename AdapterBase, typename Adapter, class Adaptee> void AdapterManager::registerAdapterViaConstructor( )
+template <typename AdapterBase, typename Adapter, typename Adaptee>
+void AdapterManager::registerAdapterViaConstructor( )
 {
 	registerAdapter<AdapterBase, Adaptee>( createFrom<AdapterBase, Adapter, Adaptee> );
 }
