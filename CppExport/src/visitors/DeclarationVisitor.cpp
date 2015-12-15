@@ -232,7 +232,11 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
-	if (headerVisitor()) *fragment << printAnnotationsAndModifiers(method);
+	if (headerVisitor())
+		*fragment << printAnnotationsAndModifiers(method);
+	else
+		if (method->modifiers()->isSet(Modifier::Inline))
+			*fragment << new TextFragment(method->modifiers(), "inline") << " ";
 
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
@@ -335,8 +339,6 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
-	if (declaration->modifiers()->isSet(Modifier::Inline))
-		*header << new TextFragment(declaration->modifiers(), "inline");
 
 	return fragment;
 }
