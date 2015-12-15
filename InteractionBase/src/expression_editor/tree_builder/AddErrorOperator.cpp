@@ -34,7 +34,7 @@
 
 namespace Interaction {
 
-AddErrorOperator::AddErrorOperator(const QString& text) : text_(text)
+AddErrorOperator::AddErrorOperator(const QString& text) : text_{text}
 {
 }
 

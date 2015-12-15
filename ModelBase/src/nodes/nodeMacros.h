@@ -159,7 +159,7 @@ template class Model::TypedList<className>;																									\
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_EMPTY_CONSTRUCTORS(className)																							\
-	className::className(::Model::Node* parent) : Super(parent) {}																		\
+	className::className(::Model::Node* parent) : Super{parent} {}																		\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
 		: Super (parent, store, loadPartially) {}																								\

@@ -28,7 +28,7 @@
 
 namespace OOModel {
 
-ArrayType::ArrayType(Type* elementType, bool isValueType) : Type(isValueType), elementType_(elementType)
+ArrayType::ArrayType(Type* elementType, bool isValueType) : Type{isValueType}, elementType_(elementType)
 {}
 
 ArrayType::ArrayType(const ArrayType& other)

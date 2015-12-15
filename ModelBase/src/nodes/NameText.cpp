@@ -38,7 +38,7 @@ NODE_DEFINE_EMPTY_CONSTRUCTORS(NameText)
 
 // The parent constructor will call the virtual getSetCommand, but that's ok, since we don't care which version will
 // run at this point.
-NameText::NameText(const QString& text) : Super(text){}
+NameText::NameText(const QString& text) : Super{text}{}
 
 FieldSet<QString>* NameText::getSetCommand(QString& textField, const QString& newText)
 {

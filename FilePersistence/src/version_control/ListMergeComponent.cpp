@@ -414,7 +414,7 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 	{
 		// first collect boolean variables (complicated for speed)
 		Position posA = findPosition(elem, spanThis, chunk);
-		Position posB = spanOther.contains(elem) ? findPosition(elem, spanOther, chunk) : Position(false, {});
+		Position posB = spanOther.contains(elem) ? findPosition(elem, spanOther, chunk) : Position{false, {}};
 
 		auto changeThis = cdgThis.changes().value(elem);
 		auto changeOther = cdgOther.changes().value(elem);

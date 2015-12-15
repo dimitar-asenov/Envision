@@ -114,7 +114,7 @@ Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
-::Visitor(int mode) : Visitor() { data_.get()->mode_ = mode; }
+::Visitor(int mode) : Visitor{} { data_.get()->mode_ = mode; }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 inline QList<ExportError> Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>

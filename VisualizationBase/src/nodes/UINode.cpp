@@ -34,7 +34,7 @@ namespace Visualization
 
 DEFINE_TYPE_ID_DERIVED(UINode, "UINode", )
 
-UINode::UINode() : Super(nullptr) {}
+UINode::UINode() : Super{nullptr} {}
 
 void UINode::initType(){}
 UINode* UINode::clone() const { Q_ASSERT(false); return nullptr;}

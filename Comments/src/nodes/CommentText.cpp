@@ -34,6 +34,6 @@ namespace Comments {
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentText)
 NODE_DEFINE_EMPTY_CONSTRUCTORS(CommentText)
 
-CommentText::CommentText(const QString& text) : Super(text){}
+CommentText::CommentText(const QString& text) : Super{text}{}
 
 } /* namespace Model */

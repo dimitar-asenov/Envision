@@ -30,7 +30,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VText, "item")
 
-VText::VText(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VText::VText(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
 	TextRenderer::setText(node->get());
 }

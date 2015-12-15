@@ -34,7 +34,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VUsedLibrary, "item")
 
-VUsedLibrary::VUsedLibrary(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style) {}
+VUsedLibrary::VUsedLibrary(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style} {}
 
 void VUsedLibrary::initializeForms()
 {

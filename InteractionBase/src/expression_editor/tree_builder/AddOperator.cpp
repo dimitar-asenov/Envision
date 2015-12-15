@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
+AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_{descriptor}
 {
 }
 

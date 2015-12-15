@@ -87,7 +87,7 @@ class SELFTEST_API Test
 class pluginClass##Test##testName : public SelfTest::Test																				\
 {																																							\
 		static int initTrigger;																														\
-		pluginClass##Test##testName (const QString &name) : Test (name) {}															\
+		pluginClass##Test##testName (const QString &name) : Test {name} {}															\
 																																							\
 	public:																																				\
 		static Test* create##pluginClass##Test##testName ()																				\

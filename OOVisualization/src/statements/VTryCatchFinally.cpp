@@ -37,7 +37,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VTryCatchFinally, "item")
 
-VTryCatchFinally::VTryCatchFinally(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style){}
+VTryCatchFinally::VTryCatchFinally(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}{}
 
 
 int VTryCatchFinally::determineForm()

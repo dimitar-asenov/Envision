@@ -29,7 +29,7 @@
 
 namespace Visualization {
 
-ItemStyle::ItemStyle() : shapeStyle_(nullptr) {}
+ItemStyle::ItemStyle() : shapeStyle_{nullptr} {}
 ItemStyle::~ItemStyle(){}
 
 Shape* ItemStyle::createShape(Item* parent) const

@@ -35,11 +35,11 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer)
 
-Integer::Integer(Node *parent) : Super(parent), integer(0)
+Integer::Integer(Node *parent) : Super{parent}, integer(0)
 {
 }
 
-Integer::Integer(Node *parent, PersistentStore &store, bool) : Super(parent)
+Integer::Integer(Node *parent, PersistentStore &store, bool) : Super{parent}
 {
 	integer = store.loadIntValue();
 }

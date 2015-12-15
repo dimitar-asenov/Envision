@@ -32,7 +32,7 @@
 
 namespace CppExport {
 
-CodeUnitPart::CodeUnitPart(CodeUnit* parent) : parent_(parent) {}
+CodeUnitPart::CodeUnitPart(CodeUnit* parent) : parent_{parent} {}
 
 void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
 {

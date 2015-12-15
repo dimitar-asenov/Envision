@@ -34,11 +34,11 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)
 
-List::List(Node *parent) : Super(parent)
+List::List(Node *parent) : Super{parent}
 {
 }
 
-List::List(Node *parent, PersistentStore &store, bool loadPartially) : Super(parent)
+List::List(Node *parent, PersistentStore &store, bool loadPartially) : Super{parent}
 {
 	if ( loadPartially )
 		setPartiallyLoaded();

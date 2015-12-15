@@ -34,7 +34,7 @@ using namespace Model;
 
 namespace OOInteraction {
 
-CDumpMethodRenderings::CDumpMethodRenderings() : CommandWithFlags("dump-method-renderings", {}, false)
+CDumpMethodRenderings::CDumpMethodRenderings() : CommandWithFlags{"dump-method-renderings", {}, false}
 {}
 
 Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::Item*,

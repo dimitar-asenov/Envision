@@ -35,11 +35,11 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Float)
 
-Float::Float(Node *parent) : Super(parent), value(0.0)
+Float::Float(Node *parent) : Super{parent}, value(0.0)
 {
 }
 
-Float::Float(Node *parent, PersistentStore &store, bool) : Super(parent)
+Float::Float(Node *parent, PersistentStore &store, bool) : Super{parent}
 {
 	value = store.loadDoubleValue();
 }

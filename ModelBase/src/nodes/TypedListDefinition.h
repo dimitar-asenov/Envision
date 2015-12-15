@@ -47,7 +47,7 @@ TypedList<T>* TypedList<T>::createDefaultInstance(Node* parent)
 }
 
 template<typename T>
-TypedList<T>::TypedList(::Model::Node* parent) : Super(parent)
+TypedList<T>::TypedList(::Model::Node* parent) : Super{parent}
 {}
 
 template<typename T>

@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-VisualizationGroup::VisualizationGroup() : scorePoints_(0)
+VisualizationGroup::VisualizationGroup() : scorePoints_{0}
 {
 }
 

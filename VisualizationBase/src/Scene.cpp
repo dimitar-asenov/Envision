@@ -52,7 +52,7 @@ class UpdateSceneEvent : public QEvent
 {
 	public:
 		static const QEvent::Type EventType;
-		UpdateSceneEvent() : QEvent(EventType){};
+		UpdateSceneEvent() : QEvent{EventType}{};
 };
 
 const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());

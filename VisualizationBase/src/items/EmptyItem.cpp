@@ -31,7 +31,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(EmptyItem, "item")
 
-EmptyItem::EmptyItem(Item* parent, const StyleType* style) : Super(parent, style)
+EmptyItem::EmptyItem(Item* parent, const StyleType* style) : Super{parent, style}
 {
 	setZValue(-1);
 }

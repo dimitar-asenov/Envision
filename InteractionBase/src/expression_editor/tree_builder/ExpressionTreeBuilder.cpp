@@ -33,7 +33,7 @@
 
 namespace Interaction {
 
-ExpressionTreeBuilder::ExpressionTreeBuilder() : top_(nullptr), left_(nullptr)
+ExpressionTreeBuilder::ExpressionTreeBuilder() : top_{nullptr}, left_(nullptr)
 {
 }
 

@@ -28,7 +28,7 @@
 
 namespace Comments{
 
-OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton(parent)
+OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton{parent}
 {
 	QMenu* menu = new QMenu;
 	QWidgetAction* wiAction = new QWidgetAction(this);

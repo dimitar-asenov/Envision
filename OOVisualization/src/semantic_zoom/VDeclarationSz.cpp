@@ -44,7 +44,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VDeclarationSz, "item")
 
-VDeclarationSz::VDeclarationSz(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VDeclarationSz::VDeclarationSz(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
 	if (DCast<Method>(node))
 		setStyle(itemStyles().get("method"));

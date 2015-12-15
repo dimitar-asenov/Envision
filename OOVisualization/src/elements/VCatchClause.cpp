@@ -38,7 +38,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VCatchClause, "item")
 
-VCatchClause::VCatchClause(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style) {}
+VCatchClause::VCatchClause(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style} {}
 
 void VCatchClause::initializeForms()
 {

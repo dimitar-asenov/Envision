@@ -28,7 +28,7 @@
 
 namespace Model {
 
-NotificationListener::NotificationListener(TreeManager& manager) : root(nullptr)
+NotificationListener::NotificationListener(TreeManager& manager) : root{nullptr}
 {
 	QObject::connect(&manager, &TreeManager::nodesModified, this,
 						  &NotificationListener::setModifiedNodes);

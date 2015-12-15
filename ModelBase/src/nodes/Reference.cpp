@@ -41,13 +41,13 @@ QList<Reference*> Reference::allReferences_;
 QSet<Reference*> Reference::pendingResolution_;
 QList<std::function<void (Node* subTree)>> Reference::unresolutionSteps_;
 
-Reference::Reference(Node *parent) : Super(parent)
+Reference::Reference(Node *parent) : Super{parent}
 {
 	allReferences_.append(this);
 	if (parent && parent->manager()) pendingResolution_.insert(this);
 }
 
-Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
+Reference::Reference(Node *parent, PersistentStore &store, bool) : Super{parent}
 {
 	allReferences_.append(this);
 	name_ = store.loadReferenceValue(this);

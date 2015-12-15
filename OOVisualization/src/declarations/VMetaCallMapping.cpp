@@ -39,7 +39,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VMetaCallMapping, "item")
 
-VMetaCallMapping::VMetaCallMapping(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VMetaCallMapping::VMetaCallMapping(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
 void VMetaCallMapping::initializeForms()

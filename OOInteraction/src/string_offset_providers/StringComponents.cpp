@@ -39,7 +39,7 @@ QMap<int, QStringList(*)(Model::Node* node)>& StringComponents::componentFunctio
 	return funcs;
 }
 
-StringComponents::StringComponents(Model::Node* node) : node_(node)
+StringComponents::StringComponents(Model::Node* node) : node_{node}
 {}
 
 StringComponents::~StringComponents()

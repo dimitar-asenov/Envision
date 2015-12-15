@@ -35,7 +35,7 @@ QMap<void*, EnvisionApplication::IdleFunction>& EnvisionApplication::idleActions
 	return actions;
 }
 
-EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(argc, argv)
+EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication{argc, argv}
 {
 	idleInputTimer_.setInterval(50);
 	idleInputTimer_.setSingleShot(true);

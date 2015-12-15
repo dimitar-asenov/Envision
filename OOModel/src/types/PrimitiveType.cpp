@@ -28,7 +28,7 @@
 
 namespace OOModel {
 
-PrimitiveType::PrimitiveType(PrimitiveTypes type, bool isValueType) : Type(isValueType), type_(type)
+PrimitiveType::PrimitiveType(PrimitiveTypes type, bool isValueType) : Type{isValueType}, type_(type)
 {
 }
 

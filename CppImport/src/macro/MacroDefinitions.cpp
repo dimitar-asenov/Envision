@@ -31,7 +31,7 @@
 
 namespace CppImport {
 
-MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_(clang)
+MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_{clang}
 {
 	if (directoryToNamespaceMap_.isEmpty())
 	{

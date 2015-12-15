@@ -31,7 +31,7 @@
 
 namespace CppExport {
 
-CodeComposite::CodeComposite(const QString& name) : name_(name) {}
+CodeComposite::CodeComposite(const QString& name) : name_{name} {}
 
 void CodeComposite::addUnit(CodeUnit* unit)
 {

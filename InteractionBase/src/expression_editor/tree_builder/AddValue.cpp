@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-AddValue::AddValue(const QString& text) : text_(text)
+AddValue::AddValue(const QString& text) : text_{text}
 {
 }
 

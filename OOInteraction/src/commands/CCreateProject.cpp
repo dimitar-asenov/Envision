@@ -34,7 +34,7 @@
 
 namespace OOInteraction {
 
-CCreateProject::CCreateProject() : CreateNamedObjectWithAttributes("project", {})
+CCreateProject::CCreateProject() : CreateNamedObjectWithAttributes{"project", {}}
 {
 }
 

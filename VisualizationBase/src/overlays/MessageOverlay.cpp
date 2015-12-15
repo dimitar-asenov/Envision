@@ -36,7 +36,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(MessageOverlay, "item")
 
-MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : Super({associatedItem}, style)
+MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}
 {
 	if (!style->closeIcon().clickHandler())
 	{

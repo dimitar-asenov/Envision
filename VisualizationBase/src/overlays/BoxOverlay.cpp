@@ -35,7 +35,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(BoxOverlay, "item")
 
-BoxOverlay::BoxOverlay(Item* associatedItem, const StyleType* style) : Super({associatedItem}, style)
+BoxOverlay::BoxOverlay(Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}
 {
 	if (!style->closeIcon().clickHandler())
 	{

@@ -36,7 +36,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VNameImport, "item")
 
-VNameImport::VNameImport(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VNameImport::VNameImport(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
 void VNameImport::initializeForms()

@@ -64,7 +64,7 @@ Node::Node(Node* parent) : parent_{parent}, manager_{parent ? parent->manager_ :
 		throw ModelException("Trying to create a node with a non-modifiable parent.");
 }
 
-Node::Node(const Node&) : Node(nullptr) {}
+Node::Node(const Node&) : Node{nullptr} {}
 
 Node::~Node()
 {

@@ -28,7 +28,7 @@
 
 namespace OOModel {
 
-NullType::NullType() : Type(true)
+NullType::NullType() : Type{true}
 {}
 
 bool NullType::equals(const Type* other) const

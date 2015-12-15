@@ -39,7 +39,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
-VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
 void VIfStatement::updateGeometry(int availableWidth, int availableHeight)

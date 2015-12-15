@@ -34,7 +34,7 @@
 
 namespace Interaction {
 
-HText::HText() : doubleClick(false)
+HText::HText() : doubleClick{false}
 {
 }
 

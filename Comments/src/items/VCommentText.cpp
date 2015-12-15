@@ -30,7 +30,7 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentText, "item")
 
-VCommentText::VCommentText(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VCommentText::VCommentText(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
 	TextRenderer::setText(node->get());
 }

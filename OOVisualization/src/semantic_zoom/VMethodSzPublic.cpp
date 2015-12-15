@@ -41,7 +41,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VMethodSzPublic, "item")
 
-VMethodSzPublic::VMethodSzPublic(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VMethodSzPublic::VMethodSzPublic(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
 void VMethodSzPublic::initializeForms()

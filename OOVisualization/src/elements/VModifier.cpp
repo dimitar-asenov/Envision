@@ -33,7 +33,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VModifier, "item")
 
-VModifier::VModifier(Item* parent, NodeType* vis, const StyleType* style) : Super(parent, vis, style)
+VModifier::VModifier(Item* parent, NodeType* vis, const StyleType* style) : Super{parent, vis, style}
 {}
 
 bool VModifier::setText(const QString&)

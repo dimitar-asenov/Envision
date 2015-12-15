@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-MiniMap::MiniMap(Scene *scene, View *parent_) : View(scene, parent_), parent(parent_), margin(DEFAULT_MARGIN)
+MiniMap::MiniMap(Scene *scene, View *parent_) : View{scene, parent_}, parent(parent_), margin(DEFAULT_MARGIN)
 {
 	setInteractive(false);
 	updatePosition();

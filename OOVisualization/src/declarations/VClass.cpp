@@ -44,7 +44,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VClass, "item")
 
-VClass::VClass(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VClass::VClass(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
 }
 

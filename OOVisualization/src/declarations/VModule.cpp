@@ -38,7 +38,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VModule, "item")
 
-VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
 }
 

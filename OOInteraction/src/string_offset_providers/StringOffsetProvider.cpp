@@ -46,7 +46,7 @@ void StringOffsetProvider::allowGridBasedProvider(AllowGridBasedProviderFunction
 	allowGridBasedProviderFunctions_.append(allow);
 }
 
-StringOffsetProvider::StringOffsetProvider(Visualization::Item* item) : vis_(item)
+StringOffsetProvider::StringOffsetProvider(Visualization::Item* item) : vis_{item}
 {
 }
 

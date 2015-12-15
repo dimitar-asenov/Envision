@@ -35,10 +35,10 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Text)
 
-Text::Text(Node *parent) : Super(parent)
+Text::Text(Node *parent) : Super{parent}
 {}
 
-Text::Text(Node *parent, PersistentStore &store, bool) :	Super(parent)
+Text::Text(Node *parent, PersistentStore &store, bool) :	Super{parent}
 {
 	text_ = store.loadStringValue();
 }

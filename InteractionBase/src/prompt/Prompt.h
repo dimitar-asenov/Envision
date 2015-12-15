@@ -94,7 +94,7 @@ inline Visualization::Item* Prompt::commandReceiver() { return commandReceiver_;
 inline const std::unique_ptr<Visualization::Cursor>& Prompt::commandReceiverCursor()
 { return commandReceiverCursor_; }
 inline QPoint Prompt::commandReceiverCursorPosition()
-	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0); }
+	{ return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint{0, 0}; }
 
 template <typename ModeType>
 inline void Prompt::registerMode(const QString& modeName)

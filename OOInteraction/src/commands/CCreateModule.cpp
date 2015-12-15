@@ -29,7 +29,7 @@
 
 namespace OOInteraction {
 
-CCreateModule::CCreateModule(): CreateNamedObjectWithAttributes("module", {{}})
+CCreateModule::CCreateModule(): CreateNamedObjectWithAttributes{"module", {{}}}
 {}
 
 Interaction::CommandResult* CCreateModule::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,

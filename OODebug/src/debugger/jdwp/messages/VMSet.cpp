@@ -62,7 +62,7 @@ SuspendCommand::SuspendCommand()
 
 SuspendCommand::~SuspendCommand() {}
 
-ResumeCommand::ResumeCommand() : Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume)
+ResumeCommand::ResumeCommand() : Command{Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume}
 {}
 
 ResumeCommand::~ResumeCommand() {}

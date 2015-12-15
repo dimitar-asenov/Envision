@@ -40,7 +40,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VProject, "item")
 
-VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :Super(parent, node, style)
+VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :Super{parent, node, style}
 {
 }
 

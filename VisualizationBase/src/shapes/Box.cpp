@@ -31,7 +31,7 @@ namespace Visualization {
 
 SHAPE_COMMON_DEFINITIONS(Box, "shape")
 
-Box::Box(Item *parent, StyleType *style) : Super(parent, style){}
+Box::Box(Item *parent, StyleType *style) : Super{parent, style}{}
 
 int Box::contentToEdgeDistance() const
 {

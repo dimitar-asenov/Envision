@@ -28,7 +28,7 @@
 
 namespace Comments{
 
-ColorPicker::ColorPicker(QWidget *parent) : QToolButton(parent)
+ColorPicker::ColorPicker(QWidget *parent) : QToolButton{parent}
 {
 	mapEnvisionTextColors_.insert("black", "#000000");
 	mapEnvisionTextColors_.insert("blue", "#0000ff");

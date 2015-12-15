@@ -39,7 +39,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VSwitchStatement, "item")
 
-VSwitchStatement::VSwitchStatement(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VSwitchStatement::VSwitchStatement(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
 void VSwitchStatement::initializeForms()

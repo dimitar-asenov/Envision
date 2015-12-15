@@ -35,7 +35,7 @@ inline void initCommentsResources() { Q_INIT_RESOURCE(res); }
 
 namespace Comments{
 
-CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
+CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar{parent}
 {
 	initCommentsResources();
 

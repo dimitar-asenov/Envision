@@ -53,7 +53,7 @@ template<typename T> class StyleSet
 		QString classType_;
 };
 
-template<typename T> StyleSet<T>::StyleSet(const QString& classType) : classType_(classType)
+template<typename T> StyleSet<T>::StyleSet(const QString& classType) : classType_{classType}
 {
 	styleSetMaps_.append(reinterpret_cast<QMap<QString, Style*>*>(&styles_));
 }

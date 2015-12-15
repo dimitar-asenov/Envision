@@ -28,7 +28,7 @@
 
 namespace OOModel {
 
-StringType::StringType() : Type(true)
+StringType::StringType() : Type{true}
 {}
 
 bool StringType::equals(const Type* other) const

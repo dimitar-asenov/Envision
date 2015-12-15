@@ -52,16 +52,16 @@ class OOINTERACTION_API StringComponents {
 
 		enum UseOptional { USE, AUTO, DO_NOT_USE };
 		struct Optional {
-			Optional(QStringList list) : list(list){}
-			Optional(const char* str) : list(str){}
-			Optional(QString str) : list(str){}
-			Optional(QString str, bool use) : list(str), use(use){}
-			Optional(QChar ch) : list(ch){}
+			Optional(QStringList list) : list{list}{}
+			Optional(const char* str) : list{str}{}
+			Optional(QString str) : list{str}{}
+			Optional(QString str, bool use) : list{str}, use(use){}
+			Optional(QChar ch) : list{ch}{}
 			Optional(Model::Node* node) : list{stringForNode(node)} {}
 			Optional(Model::Node* node, UseOptional use)
-			: list{ use==USE || (use==AUTO && node) ? stringForNode(node) : QString() },
+			: list{ use==USE || (use==AUTO && node) ? stringForNode(node) : QString{} },
 			  use { use==USE || (use==AUTO && node && !list.isEmpty() && !list.first().isEmpty())} {}
-			Optional() : use(false){}
+			Optional() : use{false}{}
 			QStringList list;
 			bool use{true};
 		};

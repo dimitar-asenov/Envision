@@ -42,7 +42,7 @@
 
 namespace Interaction {
 
-Parser::Parser(const OperatorDescriptorList* ops) : ops_(ops)
+Parser::Parser(const OperatorDescriptorList* ops) : ops_{ops}
 {
 }
 
