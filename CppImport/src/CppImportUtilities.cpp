@@ -550,8 +550,13 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 		// TODO: include templates. (and more?)
 		auto ooFunctionType = clang_.createNode<OOModel::FunctionTypeExpression>(type.getSourceRange());
 		ooFunctionType->results()->append(translateQualifiedType(functionProtoType.getReturnLoc()));
-		for (auto argIt = functionProtoType.getParams().begin(); argIt != functionProtoType.getParams().end(); ++argIt)
-			ooFunctionType->arguments()->append(translateQualifiedType((*argIt)->getTypeSourceInfo()->getTypeLoc()));
+		for (auto param : functionProtoType.getParams())
+		{
+			auto variableDeclaration = clang_.createNamedNode<OOModel::VariableDeclaration>(param,
+																	translateQualifiedType(param->getTypeSourceInfo()->getTypeLoc()));
+			ooFunctionType->arguments()->append(clang_.createNode<OOModel::VariableDeclarationExpression>(
+																param->getSourceRange(), variableDeclaration));
+		}
 		return ooFunctionType;
 	}
 	else if (auto elaboratedType = type.getAs<clang::ElaboratedTypeLoc>())
