@@ -1155,11 +1155,8 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 	// only visit the body if we are at the definition
 	if (functionDecl->isThisDeclarationADefinition())
 	{
-		if (ooFunction->items()->size())
-			/* TODO: this is a double defined function this comes from functions defined in the header.
-			* We might need to give this some attention as soon as we support macros
-			* (could be that we include the header with different defines) but for now we just ignore it. */
-			return;
+		if (ooFunction->items()->size()) return;
+
 		ooStack_.push(ooFunction->items());
 		bool inBody = inBody_;
 		inBody_ = true;
