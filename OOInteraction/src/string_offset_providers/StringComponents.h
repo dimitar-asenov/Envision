@@ -73,7 +73,7 @@ class OOINTERACTION_API StringComponents {
 
 		// TODO: Check completeness statically.
 		template <typename E> static Optional choose(E value);
-		template <typename E, class ...Args> static Optional choose(E value, E option, Optional str, Args... args);
+		template <typename E, typename ...Args> static Optional choose(E value, E option, Optional str, Args... args);
 	protected:
 		static Optional list(Model::List* listNode);
 
@@ -99,7 +99,7 @@ StringComponents::Optional StringComponents::choose(E value)
 		+ " when computing string components.");
 }
 
-template <typename E, class ...Args>
+template <typename E, typename ...Args>
 StringComponents::Optional StringComponents::choose(E value, E option, Optional str, Args... args)
 {
 	if (value == option) return str;

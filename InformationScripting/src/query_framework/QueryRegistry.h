@@ -46,7 +46,7 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 	public:
 		static QueryRegistry& instance();
 
-		template <typename QueryType, class ...ForwardArguments>
+		template <typename QueryType, typename ...ForwardArguments>
 		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
 
 		enum class ExtraArguments : int { Default, QueryExecutor };
@@ -74,7 +74,7 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		QString scriptLocation_{"scripts/"};
 };
 
-template <typename QueryType, class ...ForwardArguments>
+template <typename QueryType, typename ...ForwardArguments>
 inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments... forwardArguments)
 {
 	instance().constructors_[name] =

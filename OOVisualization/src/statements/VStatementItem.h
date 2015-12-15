@@ -50,7 +50,7 @@ inline Visualization::InteractionHandler* VStatementItemStaticData::defaultClass
 	{return defaultClassHandler_;}
 
 
-template <typename Derived, class Super, class ContainedNode, bool defaultInitialization = true>
+template <typename Derived, typename Super, class ContainedNode, bool defaultInitialization = true>
 class VStatementItem  : public Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization> {
 	public:
 		VStatementItem(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style=nullptr);
@@ -58,13 +58,13 @@ class VStatementItem  : public Visualization::ItemWithNode<Derived, Super, Conta
 		virtual Visualization::InteractionHandler* handler() const override;
 };
 
-template <typename Derived, class Super, class ContainedNode, bool defaultInitialization>
+template <typename Derived, typename Super, class ContainedNode, bool defaultInitialization>
 VStatementItem<Derived, Super, ContainedNode, defaultInitialization>::
 	VStatementItem(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style)
 	:Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>(parent, node, style)
 {}
 
-template <typename Derived, class Super, class ContainedNode, bool defaultInitialization>
+template <typename Derived, typename Super, class ContainedNode, bool defaultInitialization>
 Visualization::InteractionHandler*  VStatementItem<Derived, Super, ContainedNode, defaultInitialization>::handler()
 const
 {

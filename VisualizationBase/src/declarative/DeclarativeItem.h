@@ -102,7 +102,7 @@ class DeclarativeItem : public DeclarativeItemBase
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
-		template <typename ChildItemVisualizationType, class ParentStyleType>
+		template <typename ChildItemVisualizationType, typename ParentStyleType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					 Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
@@ -118,12 +118,13 @@ class DeclarativeItem : public DeclarativeItemBase
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
-		template <typename ChildItemVisualizationType, class ParentStyleType>
+		template <typename ChildItemVisualizationType, typename ParentStyleType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
-		template <typename ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
+		template <typename ChildItemVisualizationType, typename ParentStyleType,
+					 typename ParentNodeType, typename ParentNodeSubType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					ParentNodeSubType* (ParentNodeType::*nodePointer)(),

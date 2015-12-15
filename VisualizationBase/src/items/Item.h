@@ -391,7 +391,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		/**
 		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
 		 */
-		template <typename Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+		template <typename Definition, typename Store, class CompareFunction, class CreateFunction, class SyncFunction>
 		static bool synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync);
 
@@ -465,9 +465,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void updateGeometry(Item* content, int availableWidth, int availableHeight);
 
 		bool synchronizeItem(Item*& item, Model::Node* node);
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 		bool synchronizeItem(FieldType*& item, bool present, const typename VisualizationType::StyleType* style);
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 		bool synchronizeItem(FieldType*& item, typename VisualizationType::NodeType* node,
 				const typename VisualizationType::StyleType* style);
 
@@ -520,10 +520,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		friend class SequentialLayoutFormElement;
 		friend class DynamicGridFormElement;
 		template <typename ParentType> friend class NodeItemWrapperFormElement;
-		template <typename ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
-		template <typename ParentType, class VisualizationType, bool externalSynchronization>
+		template <typename ParentType, typename VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
+		template <typename ParentType, typename VisualizationType, bool externalSynchronization>
 			friend class VisualizationItemWrapperFormElement;
-		template <typename ChildItem, class Style, bool use>
+		template <typename ChildItem, typename Style, bool use>
 			friend struct VisualizationItemWrapperFormElementSyncMethod;
 
 		QRectF boundingRect_;
@@ -627,7 +627,7 @@ inline bool Item::hasSceneCursor() const { auto mc = scene()->mainCursor(); retu
 
 inline bool Item::synchronizeItem(Item*& item, Model::Node* node) { return renderer()->sync(item, this, node); }
 
-template <typename FieldType, class VisualizationType>
+template <typename FieldType, typename VisualizationType>
 bool Item::synchronizeItem(FieldType*& item, bool present, const typename VisualizationType::StyleType* style)
 {
 	bool changed = false;
@@ -652,7 +652,7 @@ bool Item::synchronizeItem(FieldType*& item, bool present, const typename Visual
 	return changed;
 }
 
-template <typename FieldType, class VisualizationType>
+template <typename FieldType, typename VisualizationType>
 bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeType* node,
 		const typename VisualizationType::StyleType* style)
 {
@@ -679,7 +679,7 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 	return changed;
 }
 
-template <typename Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+template <typename Definition, typename Store, class CompareFunction, class CreateFunction, class SyncFunction>
 bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync)
 {

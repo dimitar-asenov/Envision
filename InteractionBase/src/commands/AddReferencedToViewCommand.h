@@ -36,7 +36,7 @@ namespace Visualization {
 }
 namespace Interaction {
 
-template <typename ReferenceTarget, class ReferenceResult>
+template <typename ReferenceTarget, typename ReferenceResult>
 class INTERACTIONBASE_API AddReferencedToViewCommand : public CommandWithDefaultArguments
 {
 	public:
@@ -65,14 +65,14 @@ class INTERACTIONBASE_API AddReferencedToViewCommand : public CommandWithDefault
 		int purpose_{};
 };
 
-template <typename ReferenceTarget, class ReferenceResult>
+template <typename ReferenceTarget, typename ReferenceResult>
 inline AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	AddReferencedToViewCommand(QString name, const QStringList &defaultArguments,
 							int rightOffset, QString arrowLayer, ArrowDirection direction, int purpose)
 	: CommandWithDefaultArguments(name, defaultArguments),
 		rightOffset_(rightOffset), arrowLayer_(arrowLayer), direction_(direction), purpose_(purpose) {}
 
-template <typename ReferenceTarget, class ReferenceResult>
+template <typename ReferenceTarget, typename ReferenceResult>
 inline bool AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	canInterpret(Visualization::Item* source, Visualization::Item* target,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
@@ -88,7 +88,7 @@ inline bool AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 
 }
 
-template <typename ReferenceTarget, class ReferenceResult>
+template <typename ReferenceTarget, typename ReferenceResult>
 CommandResult* AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	executeWithArguments(Visualization::Item* source, Visualization::Item*,
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)

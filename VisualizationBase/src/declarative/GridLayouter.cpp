@@ -54,7 +54,7 @@ ItemRegion GridLayouter::cursorRegion(Item* parent, FormElement* formElement, in
 	return region;
 }
 
-template<typename Container, class Value>
+template<typename Container, typename Value>
 inline void GridLayouter::resizeReplace(Container& container, int majorIndex, int minorIndex, Value value)
 {
 	if (container.size() <= majorIndex) container.resize(majorIndex+1);

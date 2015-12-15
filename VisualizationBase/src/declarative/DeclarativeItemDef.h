@@ -121,7 +121,7 @@ template <typename ChildItemVisualizationType>
 }
 
 template <typename VisualizationType>
-template <typename ChildItemVisualizationType, class ParentStyleType>
+template <typename ChildItemVisualizationType, typename ParentStyleType>
 	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
@@ -141,7 +141,7 @@ template <typename ChildItemVisualizationType>
 }
 
 template <typename VisualizationType>
-template <typename ChildItemVisualizationType, class ParentStyleType>
+template <typename ChildItemVisualizationType, typename ParentStyleType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
@@ -152,7 +152,7 @@ template <typename ChildItemVisualizationType, class ParentStyleType>
 }
 
 template <typename VisualizationType>
-template <typename ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
+template <typename ChildItemVisualizationType, typename ParentStyleType, class ParentNodeType, class ParentNodeSubType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			ParentNodeSubType* (ParentNodeType::*nodePointer)(),

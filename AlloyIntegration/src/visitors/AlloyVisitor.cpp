@@ -294,7 +294,7 @@ void AlloyVisitor::init()
 
 }
 
-template<class ListElement>
+template<typename ListElement>
 Export::SourceFragment* AlloyVisitor::list(Model::TypedList<ListElement>* aList, AlloyVisitor* v,
 const QString& fragmentType)
 {

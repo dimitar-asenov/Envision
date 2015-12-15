@@ -82,26 +82,26 @@ class VISUALIZATIONBASE_API SequentialLayout: public Super<Layout>
 		void synchronizeMid(Item*& item, Model::Node* node, int position);
 
 		// Synchronize methods with a specific Visualization
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 		void synchronizeFirst(FieldType*& item, bool present, const typename VisualizationType::StyleType* style);
 
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 		void synchronizeLast(FieldType*& item, bool present, const typename VisualizationType::StyleType* style);
 
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 		void synchronizeMid(FieldType*& item, bool present,
 				const typename VisualizationType::StyleType* style, int position);
 
 		// Synchronize methods with a specific Visualization for a specific Node
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 		void synchronizeFirst(FieldType*& item, typename VisualizationType::NodeType* node,
 				const typename VisualizationType::StyleType* style);
 
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 		void synchronizeLast(FieldType*& item, typename VisualizationType::NodeType* node,
 				const typename VisualizationType::StyleType* style);
 
-		template <typename FieldType, class VisualizationType = FieldType>
+		template <typename FieldType, typename VisualizationType = FieldType>
 			void synchronizeMid(FieldType*& item, typename VisualizationType::NodeType* node,
 				const typename VisualizationType::StyleType* style, int position);
 
@@ -120,21 +120,21 @@ inline bool SequentialLayout::isForward() const { return style()->isForward(); }
 template <typename T> inline T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }
 template <typename T> inline T* SequentialLayout::at(int index) const { return static_cast<T*> (items[index]); }
 
-template <typename FieldType, class VisualizationType>
+template <typename FieldType, typename VisualizationType>
 void SequentialLayout::synchronizeFirst(FieldType*& item, bool present,
 		const typename VisualizationType::StyleType* style)
 {
 	synchronizeMid<FieldType, VisualizationType>(item, present, style, 0);
 }
 
-template <typename FieldType, class VisualizationType>
+template <typename FieldType, typename VisualizationType>
 void SequentialLayout::synchronizeLast(FieldType*& item, bool present,
 		const typename VisualizationType::StyleType* style)
 {
 	synchronizeMid<FieldType, VisualizationType>(item, present, style, length());
 }
 
-template <typename FieldType, class VisualizationType>
+template <typename FieldType, typename VisualizationType>
 void SequentialLayout::synchronizeMid(FieldType*& item, bool present,
 		const typename VisualizationType::StyleType* style, int position)
 {
@@ -143,21 +143,21 @@ void SequentialLayout::synchronizeMid(FieldType*& item, bool present,
 	placeSynchronized(oldItemIndex, item, position);
 }
 
-template <typename FieldType, class VisualizationType>
+template <typename FieldType, typename VisualizationType>
 void SequentialLayout::synchronizeFirst(FieldType*& item, typename VisualizationType::NodeType* node,
 		const typename VisualizationType::StyleType* style)
 {
 	synchronizeMid<FieldType, VisualizationType>(item, node, style, 0);
 }
 
-template <typename FieldType, class VisualizationType>
+template <typename FieldType, typename VisualizationType>
 void SequentialLayout::synchronizeLast(FieldType*& item, typename VisualizationType::NodeType* node,
 		const typename VisualizationType::StyleType* style)
 {
 	synchronizeMid<FieldType, VisualizationType>(item, node, style, length());
 }
 
-template  <typename FieldType, class VisualizationType>
+template  <typename FieldType, typename VisualizationType>
 void SequentialLayout::synchronizeMid(FieldType*& item, typename VisualizationType::NodeType* node,
 		const typename VisualizationType::StyleType* style, int position)
 {

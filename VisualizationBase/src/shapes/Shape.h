@@ -99,8 +99,8 @@ class VISUALIZATIONBASE_API Shape
 		typedef ShapeStyle* (*ShapeStyleConstructor)();
 		static QMap<QString, ShapeConstructor> shapeConstructors;
 		static QMap<QString, ShapeStyleConstructor> shapeStyleConstructors;
-		template <typename Base, class Actual> static Base* makeDefaultStyle();
-		template <typename Base, class Actual> static Base* makeDefaultShape(Item* parent);
+		template <typename Base, typename Actual> static Base* makeDefaultStyle();
+		template <typename Base, typename Actual> static Base* makeDefaultShape(Item* parent);
 };
 
 inline const Shape::StyleType* Shape::style() const { return style_; }
@@ -117,8 +117,9 @@ inline QSize Shape::innerSize(int outterWidth, int outterHeight) const
 inline QSize Shape::outterSize(int innerWidth, int innerHeight) const
 { return outterSize(QSize(innerWidth, innerHeight)); }
 
-template <typename Base, class Actual> inline Base* Shape::makeDefaultStyle() { return new Actual(); }
-template <typename Base, class Actual> inline Base* Shape::makeDefaultShape(Item* parent) {return new Actual(parent); }
+template <typename Base, typename Actual> inline Base* Shape::makeDefaultStyle() { return new Actual(); }
+template <typename Base, typename Actual> inline Base* Shape::makeDefaultShape(Item* parent)
+{return new Actual(parent);}
 
 template <typename ShapeClass> inline void Shape::registerShape()
 {

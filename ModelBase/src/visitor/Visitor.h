@@ -42,7 +42,7 @@ namespace Model {
 /* *********************************************************************************************************************
  * Visitor declaration
  **********************************************************************************************************************/
-template <typename ConcreteVisitor, class Result = void>
+template <typename ConcreteVisitor, typename Result = void>
 class VISITOR_EXPORT Visitor {
 public:
 	virtual ~Visitor();
@@ -73,7 +73,7 @@ private:
 /* *********************************************************************************************************************
  * Extended Visitor declaration
  **********************************************************************************************************************/
-template <typename ConcreteVisitor, class BaseVisitor>
+template <typename ConcreteVisitor, typename BaseVisitor>
 class VISITOR_EXPORT ExtendedVisitor : public BaseVisitor {
 	public:
 		template <typename NodeType>
@@ -97,11 +97,11 @@ class VISITOR_EXPORT ExtendedVisitor : public BaseVisitor {
 /* *********************************************************************************************************************
  * Visitor implementation
  **********************************************************************************************************************/
-template <typename ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, typename Result>
 Visitor<ConcreteVisitor, Result>::~Visitor()
 {}
 
-template <typename ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, typename Result>
 Result Visitor<ConcreteVisitor, Result>::visit(Node* n)
 {
 	for (auto id : n->hierarchyTypeIds())
@@ -113,7 +113,7 @@ Result Visitor<ConcreteVisitor, Result>::visit(Node* n)
 	// No user specified function was found. Just visit all children.
 	return visitChildren(n);
 }
-template <typename ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, typename Result>
 Result Visitor<ConcreteVisitor, Result>::visitChildren(Node* n)
 {
 	auto children = n->children();
@@ -132,7 +132,7 @@ Result Visitor<ConcreteVisitor, Result>::visitChildren(Node* n)
 	return Result ();
 }
 
-template <typename ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, typename Result>
 typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance
 	Visitor<ConcreteVisitor, Result>::findFunctionForId(int id)
 {
@@ -143,7 +143,7 @@ typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance
 }
 
 
-template <typename ConcreteVisitor, class Result>
+template <typename ConcreteVisitor, typename Result>
 QVector<typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance>& Visitor<ConcreteVisitor, Result>::types()
 {
 	static QVector<VisitFunctionInstance> t;
@@ -154,7 +154,7 @@ QVector<typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance>& Visit
 /* *********************************************************************************************************************
  * Extended Visitor implementation
  **********************************************************************************************************************/
-template <typename ConcreteVisitor, class BaseVisitor>
+template <typename ConcreteVisitor, typename BaseVisitor>
 typename BaseVisitor::VisitFunctionInstance
 	ExtendedVisitor<ConcreteVisitor, BaseVisitor>::findFunctionForId(int id)
 {
@@ -164,7 +164,7 @@ typename BaseVisitor::VisitFunctionInstance
 		return BaseVisitor::findFunctionForId(id);
 }
 
-template <typename ConcreteVisitor, class BaseVisitor>
+template <typename ConcreteVisitor, typename BaseVisitor>
 QVector<typename BaseVisitor::VisitFunctionInstance>&
 	ExtendedVisitor<ConcreteVisitor, BaseVisitor>::types()
 {

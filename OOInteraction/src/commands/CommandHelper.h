@@ -41,7 +41,7 @@ class CommandHelper
 {
 	public:
 
-		template <typename Parent, class ChildContainer, class Child>
+		template <typename Parent, typename ChildContainer, class Child>
 		static void addToParent(Parent* p, ChildContainer* container, Child* child,
 				QVector<Model::Node*> existingChildren, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor, bool showPrompt = true)

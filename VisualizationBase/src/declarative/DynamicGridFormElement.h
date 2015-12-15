@@ -135,7 +135,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 
 		ItemData& dataForItem(const Item* item) const;
 
-		template <typename Definition, class CompareFunction, class CreateFunction, class SyncFunction>
+		template <typename Definition, typename CompareFunction, class CreateFunction, class SyncFunction>
 		void synchronizeGrids(ItemData& data, const Definition& def, CompareFunction compare,
 										 CreateFunction create, SyncFunction sync);
 };

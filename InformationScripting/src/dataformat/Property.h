@@ -62,7 +62,7 @@ struct PropertyDataConcept {
 		virtual QString asString() const = 0;
 };
 
-template <typename DataType, class = void>
+template <typename DataType, typename = void>
 struct PropertyData : PropertyDataConcept {
 		PropertyData(DataType data) : data_{std::move(data)} {}
 

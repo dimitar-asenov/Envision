@@ -30,7 +30,7 @@
 namespace Visualization
 {
 
-template <typename T, class > // was template <typename T, class = void> but that is now declard in Style.h
+template <typename T, typename > // was template <typename T, typename = void> but that is now declard in Style.h
 class StyleProperty
 {
 	public:
