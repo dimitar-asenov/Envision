@@ -578,7 +578,7 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 	else if (auto dependentTypeLoc = type.getAs<clang::DependentNameTypeLoc>())
 	{
 		auto dependentType = dependentTypeLoc.getTypePtr()->castAs<clang::DependentNameType>();
-		auto ooRef = clang_.createReference(type.getSourceRange());
+		auto ooRef = clang_.createReference(dependentTypeLoc.getNameLoc());
 		if (auto qualifier = dependentTypeLoc.getQualifierLoc())
 			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 		if (dependentType->getKeyword() == clang::ETK_Typename)
