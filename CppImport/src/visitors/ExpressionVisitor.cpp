@@ -398,8 +398,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			ooMethodCall->setCallee(utils_->translateQualifiedType(
 												temporaryObjectExpression->getTypeSourceInfo()->getTypeLoc()));
 		else
-			ooMethodCall->setCallee(new OOModel::ReferenceExpression(
-												clang_.unexpandedSpelling(constructExpr->getLocation())));
+			ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
 
 		for (auto argument : translateArguments(constructExpr->arguments()))
 			ooMethodCall->arguments()->append(argument);
