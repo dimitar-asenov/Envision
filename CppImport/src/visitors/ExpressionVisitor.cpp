@@ -419,16 +419,21 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
-		if (auto temporaryObjectExpression = llvm::dyn_cast<clang::CXXTemporaryObjectExpr>(constructExpr))
-			ooMethodCall->setCallee(utils_->translateQualifiedType(
-												temporaryObjectExpression->getTypeSourceInfo()->getTypeLoc()));
-		else
-			ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
+		if (!constructExpr->isListInitialization() || !clang_.spelling(constructExpr->getLocation()).startsWith("{"))
+		{
+			auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
+			if (auto temporaryObjectExpression = llvm::dyn_cast<clang::CXXTemporaryObjectExpr>(constructExpr))
+				ooMethodCall->setCallee(utils_->translateQualifiedType(
+													temporaryObjectExpression->getTypeSourceInfo()->getTypeLoc()));
+			else
+				ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
 
-		for (auto argument : translateArguments(constructExpr->arguments()))
-			ooMethodCall->arguments()->append(argument);
-		ooExprStack_.push(ooMethodCall);
+			for (auto argument : translateArguments(constructExpr->arguments()))
+				ooMethodCall->arguments()->append(argument);
+			ooExprStack_.push(ooMethodCall);
+		}
+		else
+			ooExprStack_.push(clang_.createNode<OOModel::ArrayInitializer>(constructExpr->getSourceRange()));
 		return true;
 	}
 	// clang implements lambda construct expressions weirdly, the name of the lambda is in the first argument
@@ -520,7 +525,6 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr)
 {
 	auto ooRef = clang_.createReference(overloadExpr->getNameInfo().getSourceRange());
-
 	// template args
 	if (overloadExpr->hasExplicitTemplateArgs())
 	{
