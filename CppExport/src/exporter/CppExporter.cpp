@@ -130,6 +130,8 @@ Export::FragmentLayouter CppExporter::layouter()
 	result.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
 	result.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
 	result.addRule("sections", Export::FragmentLayouter::NoIndentation, "", "\n", "");
+	result.addRule("declarationComment", Export::FragmentLayouter::NoIndentation
+							| Export::FragmentLayouter::NewLineAfterPostfix, "", "\n", "");
 	result.addRule("spacedSections", Export::FragmentLayouter::NoIndentation, "", "\n\n", "");
 	result.addRule("accessorSections", Export::FragmentLayouter::IndentChildFragments, "", "\n", "");
 	result.addRule("bodySections", Export::FragmentLayouter::NewLineBefore

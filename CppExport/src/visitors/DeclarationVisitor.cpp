@@ -60,7 +60,6 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 
 	notAllowed(declaration);
 
-	// TODO: handle comments
 	auto fragment = new CompositeFragment(declaration);
 	*fragment << "Invalid Declaration";
 	return fragment;
@@ -144,6 +143,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	}
 	else
 	{
+		*fragment << declarationComments(classs);
+
 		if (!classs->typeArguments()->isEmpty())
 			*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
@@ -227,9 +228,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto fragment = new CompositeFragment(method);
 
 	if (headerVisitor())
-		if (auto comment = DCast<Comments::CommentNode>(method->comment()))
-			for (auto line : *(comment->lines()))
-				*fragment << line->get() << "\n";
+		*fragment << declarationComments(method);
 
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
@@ -289,11 +288,25 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	return fragment;
 }
 
+SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration)
+{
+	if (auto commentNode = DCast<Comments::CommentNode>(declaration->comment()))
+	{
+		auto commentFragment = new CompositeFragment(commentNode->lines(), "declarationComment");
+		for (auto line : *(commentNode->lines()))
+			*commentFragment << line;
+		return commentFragment;
+	}
+
+	return nullptr;
+}
+
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment(variableDeclaration);
 	if (headerVisitor())
 	{
+		*fragment << declarationComments(variableDeclaration);
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
 		*fragment << expression(variableDeclaration->typeExpression()) << " " << variableDeclaration->nameNode();
 		if (variableDeclaration->initialValue())
