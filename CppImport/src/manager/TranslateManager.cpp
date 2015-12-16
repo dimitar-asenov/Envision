@@ -326,9 +326,16 @@ void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* function
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	auto hash = nh_->hashMethod(mDecl);
-	auto method = kind == OOModel::Method::MethodKind::Conversion ?
-				clang_.createNode<OOModel::Method>(mDecl->getSourceRange(), QString(), kind) :
-				clang_.createNamedNode<OOModel::Method>(mDecl, kind);
+	OOModel::Method* method = nullptr;
+	if (kind == OOModel::Method::MethodKind::Conversion)
+		method = clang_.createNode<OOModel::Method>(mDecl->getSourceRange(), QString(),
+																  OOModel::Method::MethodKind::Conversion);
+	else if (mDecl->isOverloadedOperator())
+		method = clang_.createNode<OOModel::Method>(mDecl->getSourceRange(),
+																  utils_->overloadOperatorToString(mDecl->getOverloadedOperator()),
+																  OOModel::Method::MethodKind::OperatorOverload);
+	else
+		method = clang_.createNamedNode<OOModel::Method>(mDecl, kind);
 	addMethodResultAndArguments(mDecl, method);
 
 	// find the correct class to add the method
@@ -346,7 +353,10 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 
 OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
 {
-	auto ooFunction = clang_.createNamedNode<OOModel::Method>(functionDecl);
+	auto ooFunction = functionDecl->isOverloadedOperator() ?
+				clang_.createNode<OOModel::Method>(functionDecl->getSourceRange(), "operatoRZ",
+															  OOModel::Method::MethodKind::OperatorOverload) :
+				clang_.createNamedNode<OOModel::Method>(functionDecl);
 	addMethodResultAndArguments(functionDecl, ooFunction);
 	functionMap_.insert(nh_->hashFunction(functionDecl), ooFunction);
 	return ooFunction;
