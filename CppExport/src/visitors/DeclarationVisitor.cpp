@@ -295,6 +295,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << parentClass->name() << "::";
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
+	if (method->methodKind() == Method::MethodKind::OperatorOverload) *fragment << "operator";
 	*fragment << method->nameNode();
 
 	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
