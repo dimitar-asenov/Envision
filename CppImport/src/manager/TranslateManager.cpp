@@ -354,7 +354,8 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
 {
 	auto ooFunction = functionDecl->isOverloadedOperator() ?
-				clang_.createNode<OOModel::Method>(functionDecl->getSourceRange(), "operatoRZ",
+				clang_.createNode<OOModel::Method>(functionDecl->getSourceRange(),
+															  utils_->overloadOperatorToString(functionDecl->getOverloadedOperator()),
 															  OOModel::Method::MethodKind::OperatorOverload) :
 				clang_.createNamedNode<OOModel::Method>(functionDecl);
 	addMethodResultAndArguments(functionDecl, ooFunction);
