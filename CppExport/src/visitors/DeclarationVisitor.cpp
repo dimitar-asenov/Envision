@@ -316,6 +316,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 				*fragment << " " << new TextFragment(method->modifiers(), "override");
+		if (method->modifiers()->isSet(Modifier::Defaulted))
+				*fragment << " = " << new TextFragment(method->modifiers(), "default");
+		if (method->modifiers()->isSet(Modifier::Deleted))
+				*fragment << " = " << new TextFragment(method->modifiers(), "delete");
 		*fragment << ";";
 	}
 	else
