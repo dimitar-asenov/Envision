@@ -242,6 +242,14 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 
+	if (method->methodKind() == Method::MethodKind::Conversion)
+	{
+		if (!headerVisitor())
+			if (auto parentClass = method->firstAncestorOfType<Class>())
+				*fragment << parentClass->name() << "::";
+		*fragment << "operator ";
+	}
+
 	if (method->methodKind() != Method::MethodKind::Constructor &&
 		 method->methodKind() != Method::MethodKind::Destructor)
 	{
@@ -251,7 +259,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
-	if (!headerVisitor())
+	if (!headerVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
 			*fragment << parentClass->name() << "::";
 
