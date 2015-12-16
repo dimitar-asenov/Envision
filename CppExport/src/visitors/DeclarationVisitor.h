@@ -87,6 +87,7 @@ class CPPEXPORT_API DeclarationVisitor
 		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
 
 		bool headerVisitor();
+		Export::SourceFragment* declarationComments(OOModel::Declaration* declaration);
 };
 
 inline bool DeclarationVisitor::headerVisitor() { return data().get()->mode_ == HEADER_VISITOR; }
