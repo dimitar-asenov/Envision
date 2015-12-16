@@ -88,6 +88,12 @@ class CPPEXPORT_API DeclarationVisitor
 
 		bool headerVisitor();
 		Export::SourceFragment* declarationComments(OOModel::Declaration* declaration);
+
+		/**
+		 * used to prevent exporting of declarations already provided in a meta call of the parent.
+		 */
+		bool shouldExportMethod(OOModel::Method* method);
+		bool methodSignaturesMatch(OOModel::Method* method, OOModel::Method* other);
 };
 
 inline bool DeclarationVisitor::headerVisitor() { return data().get()->mode_ == HEADER_VISITOR; }

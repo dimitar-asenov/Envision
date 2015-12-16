@@ -38,6 +38,7 @@
 #include "OOModel/src/declarations/VariableDeclaration.h"
 #include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 #include "OOModel/src/declarations/TypeAlias.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
@@ -223,8 +224,38 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 			 !methods->fragments().empty();
 }
 
+bool DeclarationVisitor::shouldExportMethod(Method* method)
+{
+	if (headerVisitor())
+	{
+		auto parentDeclaration = method->firstAncestorOfType<Declaration>();
+		Q_ASSERT(parentDeclaration);
+
+		for (auto expression : *(parentDeclaration->metaCalls()))
+			if (auto metaCall = DCast<OOModel::MetaCallExpression>(expression))
+				for (auto generatedMethod : Model::Node::childrenOfType<Method>(metaCall->generatedTree()))
+					if (methodSignaturesMatch(method, generatedMethod))
+						return false;
+	}
+	return true;
+}
+
+bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
+{
+	if (method->arguments()->size() != other->arguments()->size() || method->symbolName() != other->symbolName())
+		return false;
+
+	for (auto i = 0; i < method->arguments()->size(); i++)
+		if (method->arguments()->at(i)->name() != other->arguments()->at(i)->name())
+			return false;
+
+	return true;
+}
+
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
+	if (!shouldExportMethod(method)) return nullptr;
+
 	auto fragment = new CompositeFragment(method);
 
 	if (headerVisitor())
