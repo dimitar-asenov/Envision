@@ -37,6 +37,11 @@
 		<width>30</width>
 		<height>30</height>
 	</conversionIcon>
+	<operatorOverloadIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/gears.svg</filename>
+		<width>30</width>
+		<height>30</height>
+	</operatorOverloadIcon>
 	
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>10</spaceBetweenElements>
