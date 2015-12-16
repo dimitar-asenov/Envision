@@ -326,8 +326,9 @@ void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* function
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	auto hash = nh_->hashMethod(mDecl);
-
-	auto method = clang_.createNamedNode<OOModel::Method>(mDecl, kind);
+	auto method = kind == OOModel::Method::MethodKind::Conversion ?
+				clang_.createNode<OOModel::Method>(mDecl->getSourceRange(), QString(), kind) :
+				clang_.createNamedNode<OOModel::Method>(mDecl, kind);
 	addMethodResultAndArguments(mDecl, method);
 
 	// find the correct class to add the method
