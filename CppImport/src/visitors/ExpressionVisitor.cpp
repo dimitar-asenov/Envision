@@ -358,8 +358,9 @@ bool ExpressionVisitor::TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralEx
 
 bool ExpressionVisitor::TraverseFloatingLiteral(clang::FloatingLiteral* floatLiteral)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::FloatLiteral>(floatLiteral->getSourceRange(),
-																				  floatLiteral->getValueAsApproximateDouble()));
+	if (floatLiteral->getLocation().getPtrEncoding())
+		ooExprStack_.push(clang_.createNode<OOModel::FloatLiteral>(floatLiteral->getSourceRange(),
+																				  clang_.spelling(floatLiteral->getLocation())));
 	return true;
 }
 
