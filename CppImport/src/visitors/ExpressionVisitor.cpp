@@ -366,8 +366,12 @@ bool ExpressionVisitor::TraverseFloatingLiteral(clang::FloatingLiteral* floatLit
 
 bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLiteral)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::CharacterLiteral>(charLiteral->getSourceRange(),
-																						QChar(charLiteral->getValue())));
+	if (charLiteral->getLocation().getPtrEncoding())
+	{
+		auto value = clang_.spelling(charLiteral->getLocation());
+		ooExprStack_.push(clang_.createNode<OOModel::CharacterLiteral>(charLiteral->getSourceRange(),
+																							value.mid(1, value.length() - 2)));
+	}
 	return true;
 }
 
