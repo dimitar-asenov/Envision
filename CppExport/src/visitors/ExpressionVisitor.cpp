@@ -218,15 +218,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (DCast<NullLiteral>(expression)) *fragment << "nullptr";
 	else if (auto e = DCast<StringLiteral>(expression))
 		*fragment << "\"" << QString(e->value()).replace(QRegExp("\\n"), "\\n") << "\""; // TODO: also consider \r
-	else if (auto e = DCast<CharacterLiteral>(expression))
-	{
-		*fragment << "'";
-		if (e->value() == QChar::SpecialCharacter::Null)
-			*fragment << "\\0";
-		else
-			*fragment << e->value();
-		*fragment << "'";
-	}
+	else if (auto e = DCast<CharacterLiteral>(expression)) *fragment << "'" << e->value() << "'";
 
 	// Misc =============================================================================================================
 
