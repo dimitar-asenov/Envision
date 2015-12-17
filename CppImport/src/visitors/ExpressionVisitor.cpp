@@ -337,8 +337,9 @@ bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 
 bool ExpressionVisitor::TraverseIntegerLiteral(clang::IntegerLiteral* intLit)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::IntegerLiteral>(intLit->getSourceRange(),
-																					 intLit->getValue().getLimitedValue()));
+	if (intLit->getLocation().getPtrEncoding())
+		ooExprStack_.push(clang_.createNode<OOModel::IntegerLiteral>(intLit->getSourceRange(),
+																						 clang_.spelling(intLit->getLocation())));
 	return true;
 }
 
