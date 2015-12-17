@@ -56,6 +56,8 @@ void VMethod::initializeForms()
 						case Method::MethodKind::Default: return &v->style()->defaultIcon();
 						case Method::MethodKind::Constructor: return &v->style()->constructorIcon();
 						case Method::MethodKind::Destructor: return &v->style()->destructorIcon();
+						case Method::MethodKind::Conversion: return &v->style()->conversionIcon();
+						case Method::MethodKind::OperatorOverload: return &v->style()->operatorOverloadIcon();
 						default: return &v->style()->defaultIcon();
 					}
 				}))
