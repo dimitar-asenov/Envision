@@ -39,7 +39,7 @@ using namespace Model;
 
 namespace Export {
 
-TEST(ExportPlugin, CompositeFragment)
+class CompositeFragmentTest : public Test<ExportPlugin, CompositeFragmentTest> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 
@@ -283,6 +283,6 @@ TEST(ExportPlugin, CompositeFragment)
 	CHECK_CONDITION(map->node("composite/composite", 9, 0) == nullptr);
 
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/composite/composite", testDir +"/composite/composite");
-}
+}};
 
 }

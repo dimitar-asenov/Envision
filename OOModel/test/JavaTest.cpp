@@ -33,7 +33,7 @@
 
 namespace OOModel {
 
-TEST(OOModelPlugin, JavaLibraryAndHelloWorldTest)
+class JavaLibraryAndHelloWorldTest : public Test<OOModelPlugin, JavaLibraryAndHelloWorldTest> { public: void test()
 {
 	auto prj = new Project("HelloWorld");
 	Model::TreeManager manager(prj);
@@ -102,6 +102,6 @@ TEST(OOModelPlugin, JavaLibraryAndHelloWorldTest)
 	CHECK_CONDITION(ref->ref()->isResolved());
 	CHECK_CONDITION(callPrintln->methodDefinition() != nullptr);
 	CHECK_CONDITION(callPrintln->methodDefinition() == println);
-}
+}};
 
 }

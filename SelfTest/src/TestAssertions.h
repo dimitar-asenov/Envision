@@ -30,6 +30,7 @@
 #define CHECK_GENERIC_EQUAL(expected, actual)																								\
 	try																																					\
 	{																																						\
+		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
 		if ( (expected) == (actual) ) testResults.addPassedCheck();																		\
 		else																																				\
 		{																																					\
@@ -50,6 +51,7 @@
 #define CHECK_INT_EQUAL(expected, actual)																										\
 	try																																					\
 	{																																						\
+		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
 		if ( (expected) == (actual) ) testResults.addPassedCheck();																		\
 		else																																				\
 		{																																					\
@@ -71,6 +73,7 @@
 #define CHECK_STR_EQUAL(expected, actual)																										\
 	try																																					\
 	{																																						\
+		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
 		if ( (expected) == (actual) ) testResults.addPassedCheck();																		\
 		else																																				\
 		{																																					\
@@ -91,6 +94,7 @@
 #define CHECK_TEXT_FILES_EQUAL(expectedFileName, actualFileName)																		\
 	try																																					\
 	{																																						\
+		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
 		QFile exp(expectedFileName);																												\
 		QFile act(actualFileName);																													\
 		if (exp.open(QIODevice::ReadOnly | QIODevice::Text))																				\
@@ -139,6 +143,7 @@
 #define CHECK_CONDITION( condition )																											\
 	try																																					\
 	{																																						\
+		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
 		if ( (condition) ) testResults.addPassedCheck();																					\
 		else																																				\
 		{																																					\
@@ -158,6 +163,7 @@
 /**********************************************************************************************************************/
 #define CHECK_FOR_EXCEPTION( exception, statement )																						\
 {																																							\
+	Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */									\
 	bool oldAssertOnThrow = exception::assertOnThrow();																					\
 	exception::assertOnThrow() = false;																											\
 	try																																					\

@@ -204,7 +204,7 @@ Class* addCollection(Project* parent)
 	return col;
 }
 
-TEST(CustomMethodCallPlugin, CustomVisTest)
+class CustomVisTest : public Test<CustomMethodCallPlugin, CustomVisTest> { public: void test()
 {
 	auto collection = addCollection(nullptr);
 	auto manager = new Model::TreeManager(collection);
@@ -213,6 +213,6 @@ TEST(CustomMethodCallPlugin, CustomVisTest)
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(collection != nullptr);
-}
+}};
 
 }

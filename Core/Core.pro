@@ -35,4 +35,5 @@ SOURCES += src/reflect/TypeRegistry.cpp \
     src/TestRunner.cpp \
     src/PluginManager.cpp \
     src/EnvisionWindow.cpp \
+    src/reflect/Reflect.cpp \
     src/global.cpp

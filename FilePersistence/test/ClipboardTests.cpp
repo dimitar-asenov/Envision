@@ -37,7 +37,7 @@
 
 namespace FilePersistence {
 
-TEST(FilePersistencePlugin, CopyToClipboard)
+class CopyToClipboard : public Test<FilePersistencePlugin, CopyToClipboard> { public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -68,9 +68,9 @@ TEST(FilePersistencePlugin, CopyToClipboard)
 	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <NameText name=\"0\">S_RootNode</NameText> "
 			"<BinaryNode name=\"1\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode> </clipboard>",
 						 clipboardText);
-}
+}};
 
-TEST(FilePersistencePlugin, CopyPartialToClipboard)
+class CopyPartialToClipboard : public Test<FilePersistencePlugin, CopyPartialToClipboard> { public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -88,9 +88,9 @@ TEST(FilePersistencePlugin, CopyPartialToClipboard)
 	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <PartialList name=\"0\"> <List name=\"list\"> "
 			"<Text name=\"0\">S_one</Text> <Text name=\"1\">S_two</Text> <Text name=\"2\">S_three</Text> "
 			"<Text name=\"3\">S_four</Text> </List> </PartialList> </clipboard>", clipboardText);
-}
+}};
 
-TEST(FilePersistencePlugin, PasteTextFromClipboard)
+class PasteTextFromClipboard : public Test<FilePersistencePlugin, PasteTextFromClipboard> { public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -112,9 +112,9 @@ TEST(FilePersistencePlugin, PasteTextFromClipboard)
 	root->left()->name()->load(sc);
 	manager.endModification();
 	CHECK_STR_EQUAL("RootNode", root->left()->name()->get());
-}
+}};
 
-TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
+class PasteBinaryFromClipboard : public Test<FilePersistencePlugin, PasteBinaryFromClipboard> { public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -142,9 +142,9 @@ TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
 	CHECK_CONDITION(left->right());
 	CHECK_STR_EQUAL("Left child", left->left()->name()->get());
 	CHECK_STR_EQUAL("Right child", left->right()->name()->get());
-}
+}};
 
-TEST(FilePersistencePlugin, PasteListFromClipboard)
+class PasteListFromClipboard : public Test<FilePersistencePlugin, PasteListFromClipboard> { public: void test()
 {
 	auto root = new Model::List;
 	Model::TreeManager manager("test", root);
@@ -173,9 +173,9 @@ TEST(FilePersistencePlugin, PasteListFromClipboard)
 
 	CHECK_INT_EQUAL(1, root->size());
 	CHECK_STR_EQUAL("third", root->at<Model::Text>(0)->get());
-}
+}};
 
-TEST(FilePersistencePlugin, PasteInListFromClipboard)
+class PasteInListFromClipboard : public Test<FilePersistencePlugin, PasteInListFromClipboard> { public: void test()
 {
 	auto root = new Model::List;
 	Model::TreeManager manager("test", root);
@@ -209,6 +209,6 @@ TEST(FilePersistencePlugin, PasteInListFromClipboard)
 	CHECK_STR_EQUAL("first", root->at<Model::Text>(3)->get());
 	CHECK_INT_EQUAL(1, root->at<Model::List>(4)->size());
 	CHECK_STR_EQUAL("third", root->at<Model::List>(4)->at<Model::Text>(0)->get());
-}
+}};
 
 }

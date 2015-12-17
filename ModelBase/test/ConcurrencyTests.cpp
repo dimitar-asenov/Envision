@@ -34,7 +34,7 @@
 
 namespace Model {
 
-TEST(ModelBasePlugin, SingleWriteUnitCheck)
+class SingleWriteUnitCheck : public Test<ModelBasePlugin, SingleWriteUnitCheck> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
 	TreeManager manager(root);
@@ -92,6 +92,6 @@ TEST(ModelBasePlugin, SingleWriteUnitCheck)
 	CHECK_STR_EQUAL(QString(), right->name()->get());
 	CHECK_STR_EQUAL("one set", one->name()->get());
 	CHECK_STR_EQUAL(QString(), two->name()->get());
-}
+}};
 
 }

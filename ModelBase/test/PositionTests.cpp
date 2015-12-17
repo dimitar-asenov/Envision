@@ -33,7 +33,7 @@
 
 namespace Model {
 
-TEST(ModelBasePlugin, PositionExtension)
+class PositionExtension : public Test<ModelBasePlugin, PositionExtension> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
 	TreeManager manager(root);
@@ -53,6 +53,6 @@ TEST(ModelBasePlugin, PositionExtension)
 
 	CHECK_INT_EQUAL( 42, pos->x() );
 	CHECK_INT_EQUAL( -18, pos->y() );
-}
+}};
 
 }

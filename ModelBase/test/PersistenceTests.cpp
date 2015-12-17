@@ -34,15 +34,15 @@
 
 namespace Model {
 
-TEST(ModelBasePlugin, PersistenceSave)
+class PersistenceSave : public Test<ModelBasePlugin, PersistenceSave> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
 	TreeManager manager("root", root);
 	PersistentStoreMock store;
 	manager.save(&store);
 
-	CHECK_STR_EQUAL("BinaryNode,root,NameText,name,,Integer,_ext_PositionExtension_x,0,Integer,"
-						 "_ext_PositionExtension_y,0,",
+	CHECK_STR_EQUAL("BinaryNode,root,TypedListOfText,_ext_TagExtension_tags,NameText,name,"
+						 ",Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
 			store.getSaved());
 
 	manager.beginModification(root, "make tree");
@@ -56,11 +56,12 @@ TEST(ModelBasePlugin, PersistenceSave)
 	store.clear();
 	manager.save();
 
-	CHECK_STR_EQUAL("BinaryNode,root,NameText,name,Troot,BinaryNode,left,NameText,name,Tleft,Integer,"
-						 "_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,BinaryNode,right,NameText,"
-						 "name,Tright,Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,Integer,"
-						 "_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
+	CHECK_STR_EQUAL("BinaryNode,root,TypedListOfText,_ext_TagExtension_tags,NameText,name,Troot,BinaryNode,left,"
+						 "TypedListOfText,_ext_TagExtension_tags,NameText,name,Tleft,Integer,_ext_PositionExtension_x,0,"
+						 "Integer,_ext_PositionExtension_y,0,BinaryNode,right,TypedListOfText,_ext_TagExtension_tags,"
+						 "NameText,name,Tright,Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,"
+						 "Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
 			store.getSaved());
-}
+}};
 
 }

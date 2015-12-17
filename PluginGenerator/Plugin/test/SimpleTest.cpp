@@ -29,9 +29,9 @@
 
 namespace NAMESPACE {
 
-TEST(PLUGINNAMEPlugin, SimpleTest)
+class SimpleTest : public Test<PLUGINNAMEPlugin, SimpleTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
-}
+}};
 
 }

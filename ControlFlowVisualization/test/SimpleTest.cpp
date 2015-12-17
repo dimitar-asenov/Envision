@@ -227,7 +227,7 @@ Method* addDivBySix(Class* parent)
 	return divbysix;
 }
 
-TEST(ControlFlowVisualizationPlugin, SimpleTest)
+class SimpleTest : public Test<ControlFlowVisualizationPlugin, SimpleTest> { public: void test()
 {
 	auto cl = new Class("SomeClass");
 
@@ -240,6 +240,6 @@ TEST(ControlFlowVisualizationPlugin, SimpleTest)
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(cl != nullptr);
-}
+}};
 
 }

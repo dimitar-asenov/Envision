@@ -43,7 +43,7 @@ using namespace Visualization;
 
 namespace CppImport {
 
-TEST(CppImportPlugin, SimpleTest)
+class SimpleTest : public Test<CppImportPlugin, SimpleTest> { public: void test()
 {
 	CppImportManager importManager;
 
@@ -57,6 +57,6 @@ TEST(CppImportPlugin, SimpleTest)
 	mainScene->listenToTreeManager(treeManager);
 
 	CHECK_CONDITION(top_level != nullptr);
-}
+}};
 
 }

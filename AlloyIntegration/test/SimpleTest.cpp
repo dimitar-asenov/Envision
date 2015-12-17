@@ -169,7 +169,7 @@ Class* addNode()
 	return aNode;
 }
 
-TEST(AlloyIntegrationPlugin, AlloyTest)
+class AlloyTest : public Test<AlloyIntegrationPlugin, AlloyTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
 	auto aLinkedList = addLinkedList();
@@ -182,6 +182,6 @@ TEST(AlloyIntegrationPlugin, AlloyTest)
 	VisualizationManager::instance().mainScene()->addTopLevelNode(aLinkedList);
 
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-}
+}};
 
 }

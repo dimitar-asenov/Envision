@@ -33,7 +33,7 @@
 
 namespace Model {
 
-TEST(ModelBasePlugin, ModificationNotificationTests)
+class ModificationNotificationTests : public Test<ModelBasePlugin, ModificationNotificationTests> { public: void test()
 {
 	TreeManager manager;
 	NotificationListener nl(manager);
@@ -84,7 +84,7 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	CHECK_CONDITION(nl.modifiedNodes.contains( left->name()));
 	CHECK_CONDITION(nl.modifiedNodes.contains( root));
 
-	CHECK_INT_EQUAL(8, nl.removedNodes.size());
+	CHECK_INT_EQUAL(10, nl.removedNodes.size());
 	CHECK_CONDITION(nl.removedNodes.contains( right));
 	CHECK_CONDITION(nl.removedNodes.contains( right->name()));
 	CHECK_CONDITION(nl.removedNodes.contains( left));
@@ -111,11 +111,11 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	root->removeRightNode();
 	manager.endModification();
 
-	CHECK_INT_EQUAL(4, nl.removedNodes.size());
+	CHECK_INT_EQUAL(5, nl.removedNodes.size());
 	CHECK_CONDITION(nl.removedNodes.contains( right));
 	CHECK_CONDITION(nl.removedNodes.contains( right->name()));
 	CHECK_CONDITION(nl.removedNodes.contains( posRight->xNode()) );
 	CHECK_CONDITION(nl.removedNodes.contains( posRight->yNode()) );
-}
+}};
 
 }

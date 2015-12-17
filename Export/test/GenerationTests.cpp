@@ -39,7 +39,7 @@ using namespace Model;
 
 namespace Export {
 
-TEST(ExportPlugin, ExportJustText)
+class ExportJustText : public Test<ExportPlugin, ExportJustText> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -51,9 +51,9 @@ TEST(ExportPlugin, ExportJustText)
 	Exporter::exportToFileSystem(testDir, &root, &layouter);
 
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
-}
+}};
 
-TEST(ExportPlugin, ExportAndModify)
+class ExportAndModify : public Test<ExportPlugin, ExportAndModify> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -69,9 +69,9 @@ TEST(ExportPlugin, ExportAndModify)
 
 	Exporter::exportToFileSystem(testDir, &root, &layouter);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text_modified", testDir +"/text/text");
-}
+}};
 
-TEST(ExportPlugin, ExportAndDeleteFile)
+class ExportAndDeleteFile : public Test<ExportPlugin, ExportAndDeleteFile> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -90,9 +90,9 @@ TEST(ExportPlugin, ExportAndDeleteFile)
 	Exporter::exportToFileSystem(testDir, &root2, &layouter);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text_modified", testDir +"/text/text2");
 	CHECK_CONDITION(!QFile{testDir +"/text/text"}.exists());
-}
+}};
 
-TEST(ExportPlugin, ExportAndDeleteDir)
+class ExportAndDeleteDir : public Test<ExportPlugin, ExportAndDeleteDir> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -114,7 +114,7 @@ TEST(ExportPlugin, ExportAndDeleteDir)
 	Exporter::exportToFileSystem(testDir, &root2, &layouter);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
 	CHECK_CONDITION(!QDir{testDir +"/text/sub"}.exists());
-}
+}};
 
 // From http://codeblog.vurdalakov.net/2010/04/how-to-make-qt-thread-sleep.html
 class Sleep
@@ -133,7 +133,7 @@ class Sleep
 	 }
 };
 
-TEST(ExportPlugin, ExportIdentical)
+class ExportIdentical : public Test<ExportPlugin, ExportIdentical> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -160,6 +160,6 @@ TEST(ExportPlugin, ExportIdentical)
 
 	CHECK_CONDITION(firstFileModifiedTime < secondFileModifiedTime);
 	CHECK_CONDITION(secondFileModifiedTime == thirdFileModifiedTime);
-}
+}};
 
 }

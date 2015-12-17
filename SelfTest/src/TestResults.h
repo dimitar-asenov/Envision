@@ -41,22 +41,9 @@ namespace SelfTest {
  * Typically a check is only logged if it fails, providing failure details.
  * A test should be logged in all cases (failure or success).
  */
-class SELFTEST_API TestResults
+class SELFTEST_API TestResults final
 {
-	private:
-		QList<TestResult> testResults;
-		QList<TestResult> checkResults;
-
-		int numPassedTests;
-		int numFailedTests;
-
-		int numPassedChecks;
-		int numFailedChecks;
-
 	public:
-		TestResults();
-		virtual ~TestResults();
-
 		void addPassedTest(const QString& testName);
 		void addFailedTest(const QString& testName);
 
@@ -78,6 +65,27 @@ class SELFTEST_API TestResults
 		 * Prints a summary of the test results to the standard output.
 		 */
 		void printResultStatistics() const;
+
+		void merge(const TestResults& other);
+
+	private:
+		QList<TestResult> testResults_;
+		QList<TestResult> checkResults_;
+
+		int numPassedTests_{};
+		int numFailedTests_{};
+
+		int numPassedChecks_{};
+		int numFailedChecks_{};
 };
+
+inline int TestResults::getNumExecutedTests() const { return numPassedTests_ + numFailedTests_; }
+inline int TestResults::getNumPassedTests() const { return numPassedTests_; }
+inline int TestResults::getNumFailedTests() const { return numFailedTests_; }
+inline int TestResults::getNumExecutedChecks() const { return numPassedChecks_ + numFailedChecks_; }
+inline int TestResults::getNumPassedChecks() const { return numPassedChecks_; }
+inline int TestResults::getNumFailedChecks() const { return numFailedChecks_; }
+inline const QList<TestResult>& TestResults::getTestResults() const { return testResults_; }
+inline const QList<TestResult>& TestResults::getCheckResults() const { return checkResults_; }
 
 }

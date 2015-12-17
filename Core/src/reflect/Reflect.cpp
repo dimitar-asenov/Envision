@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,14 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "../src/JavaExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "Reflect.h"
 
-namespace JavaExport {
+namespace Core {
 
-class SimpleTest : public Test<JavaExportPlugin, SimpleTest> { public: void test()
+QString readNamePart(const char* part, const char*& nextPart)
 {
-	CHECK_INT_EQUAL(1, 1);
-}};
+	size_t len = 0;
+	while (*part >='0' && *part <='9')
+	{
+		len = len*10 + (*part - '0');
+		++part;
+	}
+	nextPart = part + len;
+	return QString::fromLatin1(part, len);
+}
 
 }

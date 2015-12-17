@@ -28,6 +28,7 @@
 
 #include "selftest_api.h"
 #include "TestResults.h"
+#include "Core/src/reflect/Reflect.h"
 
 namespace SelfTest {
 
@@ -42,7 +43,7 @@ class SELFTEST_API Test
 		QString name;
 
 	public:
-		typedef Test* (*TestConstructor)();
+		using TestConstructor = std::function<Test* ()>;
 
 		Test(const QString &name);
 		virtual ~Test();
@@ -73,7 +74,9 @@ class SELFTEST_API Test
 }
 
 /**
- * The TEST macro is used to define a new test.
+ * The Test template class is used to define a new test.
+ *
+ * Purposefully outside of the namespace for easy access
  *
  * @param pluginClass
  * 				the name of the class of the current plugin. This is the class that implements the EnvisionPlugin
@@ -82,27 +85,32 @@ class SELFTEST_API Test
  *					the name of this test. This name can be used at the command line to request that this specific test be
  *					started.
  */
-/**********************************************************************************************************************/
-#define TEST(pluginClass, testName)																												\
-class pluginClass##Test##testName : public SelfTest::Test																				\
-{																																							\
-		static int initTrigger;																														\
-		pluginClass##Test##testName (const QString &name) : Test {name} {}															\
-																																							\
-	public:																																				\
-		static Test* create##pluginClass##Test##testName ()																				\
-		{																																					\
-			return new pluginClass##Test##testName (#testName);																			\
-		}																																					\
-																																							\
-		static int init ()																															\
-		{																																					\
-			SelfTest::TestManager<pluginClass>::add(create##pluginClass##Test##testName, #testName);							\
-			return 0;																																	\
-		}																																					\
-																																							\
-		void runCustom(SelfTest::TestResults& testResults, bool &passed);																\
-};																																							\
-int pluginClass##Test##testName::initTrigger = pluginClass##Test##testName::init();												\
-void pluginClass##Test##testName::runCustom(SelfTest::TestResults& testResults, bool &allChecksPassedFlag)
-/**********************************************************************************************************************/
+template <typename PluginClass, typename TestName>
+class Test : public SelfTest::Test {
+	public:
+
+		virtual void runCustom(SelfTest::TestResults& testResults, bool &allChecksPassedFlag) override
+		{
+			this->allChecksPassedFlag = true;
+			this->testResults = {};
+
+			static_cast<TestName*>(this)->test();
+			testResults.merge(this->testResults);
+			allChecksPassedFlag = this->allChecksPassedFlag;
+		}
+	protected:
+		SelfTest::TestResults testResults;
+		bool allChecksPassedFlag{true};
+		static bool initTrigger;
+		Test() : SelfTest::Test{typeName<TestName>().className_} {}
+
+	private:
+		static bool init ()
+		{
+			SelfTest::TestManager<PluginClass>::add([](){return new TestName();}, typeName<TestName>().className_);
+			return true;
+		}
+};
+
+template <typename PluginClass, typename TestName>
+bool Test<PluginClass, TestName>::initTrigger = Test::init();

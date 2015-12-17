@@ -996,7 +996,8 @@ Method* addExtraMethod(Class* parent)
 	return extra;
 }
 
-TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
+class JavaLibraryAndHelloWorldTest : public Test<OOVisualizationPlugin, JavaLibraryAndHelloWorldTest> {
+public: void test()
 {
 	// Create project
 	auto prj = new Project("HelloWorld");
@@ -1117,6 +1118,6 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 	QObject::connect(watcher, &QFileSystemWatcher::fileChanged, onFileChange);
 
 	CHECK_CONDITION(top_level != nullptr);
-}
+}};
 
 }

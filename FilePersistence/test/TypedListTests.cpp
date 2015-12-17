@@ -36,7 +36,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistencePlugin, LoadingTypedList)
+class LoadingTypedList : public Test<FilePersistencePlugin, LoadingTypedList> { public: void test()
 {
 	PersistentStore* store{};
 
@@ -63,9 +63,9 @@ TEST(FilePersistencePlugin, LoadingTypedList)
 	CHECK_STR_EQUAL("two", two->get());
 
 	SAFE_DELETE(store);
-}
+}};
 
-TEST(FilePersistencePlugin, SavingTypedList)
+class SavingTypedList : public Test<FilePersistencePlugin, SavingTypedList> { public: void test()
 {
 	PersistentStore* store{};
 	QString testDir;
@@ -97,6 +97,6 @@ TEST(FilePersistencePlugin, SavingTypedList)
 									  testDir +"/typedList/typedList");
 
 	SAFE_DELETE(store);
-}
+}};
 
 }

@@ -38,6 +38,7 @@ class Reflect : public Base
 		using Base::Base;
 };
 
+QString readNamePart(const char* part, const char*& nextPart);
 }
 
 // This alias is deliberitely outside of the namespace to make using this template less verbose
@@ -51,3 +52,30 @@ inline Derived* DCast(Base* b)
 	else
 		return nullptr;
 }
+
+class TypeName {
+	public:
+		QString className_;
+		QString namespace_;
+};
+
+template <typename T>
+TypeName typeName()
+{
+	TypeName name;
+
+	auto nextPart = typeid(T).name();
+
+	// For now we only support namespaces and plain classes
+	Q_ASSERT(nextPart[0] == 'N' || (nextPart[0] >='0' && nextPart[0] <='9'));
+
+	if (*nextPart == 'N')
+		name.namespace_ = Core::readNamePart(nextPart+1, nextPart);
+
+	//Only one namespace is supported for now
+	name.className_ = Core::readNamePart(nextPart, nextPart);
+
+	if (!name.namespace_.isEmpty()) Q_ASSERT(*nextPart == 'E');
+
+	return name;
+};

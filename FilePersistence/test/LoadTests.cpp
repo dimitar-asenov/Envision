@@ -36,7 +36,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistencePlugin, LoadRootOnly)
+class LoadRootOnly : public Test<FilePersistencePlugin, LoadRootOnly> { public: void test()
 {
 
 	PersistentStore* store{};
@@ -56,9 +56,10 @@ TEST(FilePersistencePlugin, LoadRootOnly)
 	CHECK_CONDITION(root->right() == nullptr);
 
 	SAFE_DELETE(store);
-}
+}};
 
-TEST(FilePersistencePlugin, LoadModeNodesSingleUnitOnly)
+class LoadModeNodesSingleUnitOnly : public Test<FilePersistencePlugin, LoadModeNodesSingleUnitOnly> {
+public: void test()
 {
 
 	PersistentStore* store{};
@@ -85,9 +86,9 @@ TEST(FilePersistencePlugin, LoadModeNodesSingleUnitOnly)
 	CHECK_CONDITION(root->right()->right() == nullptr);
 
 	SAFE_DELETE(store);
-}
+}};
 
-TEST(FilePersistencePlugin, LoadMultipleUnits)
+class LoadMultipleUnits : public Test<FilePersistencePlugin, LoadMultipleUnits> { public: void test()
 {
 	PersistentStore* store{};
 
@@ -118,6 +119,6 @@ TEST(FilePersistencePlugin, LoadMultipleUnits)
 	CHECK_CONDITION(root->right()->right() == nullptr);
 
 	SAFE_DELETE(store);
-}
+}};
 
 }

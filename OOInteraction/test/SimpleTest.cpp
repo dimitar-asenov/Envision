@@ -275,7 +275,7 @@ Method* addMainMethod()
 	return method;
 }
 
-TEST(OOInteractionPlugin, SimpleTest)
+class SimpleTest : public Test<OOInteractionPlugin, SimpleTest> { public: void test()
 {
 	auto pr = new Project("NewProject");
 	auto cl = new Class("SomeClass");
@@ -290,9 +290,9 @@ TEST(OOInteractionPlugin, SimpleTest)
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(top_level != nullptr);
-}
+}};
 
-//TEST(OOInteractionPlugin, ExpressionParsingTest)
+//class ExpressionParsingTest : public Test<OOInteractionPlugin, ExpressionParsingTest> { public: void test()
 //{
 //	// Try specific strings which have been problematic in the past
 //	QStringList problematicStrings = {"SPACE<(> ", "x<>", "\\x ", "@@@@", "new [", "+=", "\\)", "new# "};
@@ -380,6 +380,6 @@ TEST(OOInteractionPlugin, SimpleTest)
 //	}
 
 //	CHECK_CONDITION(true);
-//}
+//}};
 
 }

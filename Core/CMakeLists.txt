@@ -11,6 +11,7 @@ add_library( Core SHARED
     src/Profiler.h
     src/reflect/typeIdMacros.h
     src/reflect/Reflect.h
+    src/reflect/Reflect.cpp
     src/AdapterManager.h
     src/core_api.h
     src/core.h

@@ -36,7 +36,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistencePlugin, LoadingPartialList)
+class LoadingPartialList : public Test<FilePersistencePlugin, LoadingPartialList> { public: void test()
 {
 	PersistentStore* store{};
 
@@ -57,9 +57,9 @@ TEST(FilePersistencePlugin, LoadingPartialList)
 	CHECK_INT_EQUAL(0, list->size());
 
 	SAFE_DELETE(store);
-}
+}};
 
-TEST(FilePersistencePlugin, LoadingFullList)
+class LoadingFullList : public Test<FilePersistencePlugin, LoadingFullList> { public: void test()
 {
 	PersistentStore* store{};
 
@@ -98,6 +98,6 @@ TEST(FilePersistencePlugin, LoadingFullList)
 	CHECK_STR_EQUAL("four", four->get());
 
 	SAFE_DELETE(store);
-}
+}};
 
 }

@@ -35,7 +35,7 @@
 
 namespace Model {
 
-TEST(ModelBasePlugin, CompositeMetaData)
+class CompositeMetaData : public Test<ModelBasePlugin, CompositeMetaData> { public: void test()
 {
 	AttributeChain& metaExt = TestNodes::BinaryNode::getMetaData();
 	AttributeChain& metaUnit = TestNodes::BinaryNodeAccessUnit::getMetaData();
@@ -71,9 +71,9 @@ TEST(ModelBasePlugin, CompositeMetaData)
 	CHECK_CONDITION(metaExt[2].partial() == false);
 	CHECK_CONDITION(metaExt[3].partial() == false);
 	CHECK_CONDITION(metaExt[4].partial() == false);
-}
+}};
 
-TEST(ModelBasePlugin, SimpleTreeManagerCreation)
+class SimpleTreeManagerCreation : public Test<ModelBasePlugin, SimpleTreeManagerCreation> { public: void test()
 {
 	TreeManager manager;
 	CHECK_CONDITION( manager.root() == nullptr );
@@ -85,9 +85,9 @@ TEST(ModelBasePlugin, SimpleTreeManagerCreation)
 	CHECK_CONDITION( root->manager() == &manager );
 
 	CHECK_CONDITION( root->name()->manager() == &manager );
-}
+}};
 
-TEST(ModelBasePlugin, RemoveOptional)
+class RemoveOptional : public Test<ModelBasePlugin, RemoveOptional> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
 	TreeManager manager(root);
@@ -109,9 +109,9 @@ TEST(ModelBasePlugin, RemoveOptional)
 	manager.endModification();
 	CHECK_CONDITION( root->left() != left );
 	CHECK_CONDITION( root->left() != nullptr );
-}
+}};
 
-TEST(ModelBasePlugin, ChildNodeRetrieval)
+class ChildNodeRetrieval : public Test<ModelBasePlugin, ChildNodeRetrieval> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
 	TreeManager manager(root);
@@ -132,9 +132,9 @@ TEST(ModelBasePlugin, ChildNodeRetrieval)
 	CHECK_CONDITION(root->get("name") == root->name());
 	CHECK_CONDITION(root->get("left") == left);
 	CHECK_CONDITION(root->get("right") == right);
-}
+}};
 
-TEST(ModelBasePlugin, ProperRegistration)
+class ProperRegistration : public Test<ModelBasePlugin, ProperRegistration> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
 	TreeManager manager(root);
@@ -153,6 +153,6 @@ TEST(ModelBasePlugin, ProperRegistration)
 	CHECK_CONDITION(i->typeId() > 0);
 	CHECK_CONDITION(i->typeId() != root->typeId());
 	CHECK_CONDITION(i->typeId() != t->typeId());
-}
+}};
 
 }

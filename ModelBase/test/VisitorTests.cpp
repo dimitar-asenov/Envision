@@ -85,7 +85,7 @@ class VisitorC : public Visitor<VisitorC>{
 		QString text;
 };
 
-TEST(ModelBasePlugin, VisitorSample)
+class VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
 {
 	auto root = new List();
 	TreeManager manager(root);
@@ -119,6 +119,6 @@ TEST(ModelBasePlugin, VisitorSample)
 	CHECK_STR_EQUAL("List(hello,42,)", valB);
 	CHECK_STR_EQUAL("hello42", valC);
 	CHECK_CONDITION( true );
-}
+}};
 
 }

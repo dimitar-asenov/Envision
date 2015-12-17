@@ -45,7 +45,7 @@ namespace Interaction {
 
 using namespace Visualization;
 
-TEST(InteractionBasePlugin, TextSelect)
+class TextSelect : public Test<InteractionBasePlugin, TextSelect> { public: void test()
 {
 	Visualization::VComposite::setDefaultClassHandler(HBinaryNode::instance());
 
@@ -84,6 +84,6 @@ TEST(InteractionBasePlugin, TextSelect)
 	scene->listenToTreeManager(manager);
 
 	CHECK_CONDITION(scene);
-}
+}};
 
 }

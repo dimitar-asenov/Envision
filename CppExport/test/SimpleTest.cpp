@@ -29,9 +29,9 @@
 
 namespace CppExport {
 
-TEST(CppExportPlugin, SimpleTest)
+class SimpleTest : public Test<CppExportPlugin, SimpleTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
-}
+}};
 
 }

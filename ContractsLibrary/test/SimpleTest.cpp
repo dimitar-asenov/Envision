@@ -470,7 +470,7 @@ Module* createClientModule()
 	return module;
 }
 
-TEST(ContractsLibraryPlugin, ContractsLibraryTest)
+class ContractsLibraryTest : public Test<ContractsLibraryPlugin, ContractsLibraryTest> { public: void test()
 {
 	////////////////////////////////////////////////// Create Manager
 
@@ -496,6 +496,6 @@ TEST(ContractsLibraryPlugin, ContractsLibraryTest)
 	customizations.visit(prj);
 
 	CHECK_CONDITION(prj != nullptr);
-}
+}};
 
 }

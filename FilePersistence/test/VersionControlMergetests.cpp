@@ -35,7 +35,7 @@
 
 namespace FilePersistence {
 
-TEST(FilePersistencePlugin, TwoDeletesNoConflict)
+class TwoDeletesNoConflict : public Test<FilePersistencePlugin, TwoDeletesNoConflict> { public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -46,9 +46,10 @@ TEST(FilePersistencePlugin, TwoDeletesNoConflict)
 	merge->commit(sig, sig, "This is the result of merge test \"twodeletesNoConflict\"");
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000032}")));
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000042}")));
-}
+}};
 
-TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
+class TwoDeletesInSameListResolvable : public Test<FilePersistencePlugin, TwoDeletesInSameListResolvable> {
+public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -63,9 +64,10 @@ TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
 	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000002}"));
 	for (int idx = 0; idx < listContainer->children().size(); ++idx)
 		CHECK_CONDITION(listContainer->child(QString::number(idx)));
-}
+}};
 
-TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
+class UnorderedAndUnitsConflicting : public Test<FilePersistencePlugin, UnorderedAndUnitsConflicting> {
+public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -84,9 +86,10 @@ TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
 		expected.remove(change->nodeId());
 	}
 	CHECK_CONDITION(expected.isEmpty());
-}
+}};
 
-TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
+class ListsReorderInsertDeleteResolvable : public Test<FilePersistencePlugin, ListsReorderInsertDeleteResolvable> {
+public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -116,9 +119,9 @@ TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
 						 ->parent()->id().toString().endsWith("300}"));
 	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000011507}"))
 						 ->parent()->id().toString().endsWith("507}"));
-}
+}};
 
-TEST(FilePersistencePlugin, EvalClassMove)
+class EvalClassMove : public Test<FilePersistencePlugin, EvalClassMove> { public: void test()
 {
 	VCTestProject p{"Eval_ClassMove", "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -127,16 +130,16 @@ TEST(FilePersistencePlugin, EvalClassMove)
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "Merged master and dev");
-}
+}};
 
-TEST(FilePersistencePlugin, EvalLoopFix)
+class EvalLoopFix : public Test<FilePersistencePlugin, EvalLoopFix> { public: void test()
 {
 	VCTestProject p{"Eval_LoopFix", "TestMerge"};
 	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(merge->hasConflicts());
-}
+}};
 
-TEST(FilePersistencePlugin, EvalMethodInsert)
+class EvalMethodInsert : public Test<FilePersistencePlugin, EvalMethodInsert> { public: void test()
 {
 	VCTestProject p{"Eval_MethodInsert", "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -145,14 +148,14 @@ TEST(FilePersistencePlugin, EvalMethodInsert)
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "Merged master and dev");
-}
+}};
 
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
  * This test should probably eventually be replaced by a command line interface.
  */
-TEST(FilePersistencePlugin, RunMerge)
+class RunMerge : public Test<FilePersistencePlugin, RunMerge> { public: void test()
 {
 	if (!QFile("/tmp/EnvisionVC/TestMerge/.git").exists())
 	{
@@ -170,6 +173,6 @@ TEST(FilePersistencePlugin, RunMerge)
 	}
 	CHECK_CONDITION(true);
 	exit(0);
-}
+}};
 
 } /* namespace FilePersistence */

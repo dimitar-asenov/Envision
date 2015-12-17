@@ -29,9 +29,9 @@
 
 namespace OODebug {
 
-TEST(OODebugPlugin, SimpleTest)
+class SimpleTest : public Test<OODebugPlugin, SimpleTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
-}
+}};
 
 }

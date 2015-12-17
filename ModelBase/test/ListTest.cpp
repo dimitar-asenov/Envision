@@ -34,7 +34,7 @@
 
 namespace Model {
 
-TEST(ModelBasePlugin, ListCreation)
+class ListCreation : public Test<ModelBasePlugin, ListCreation> { public: void test()
 {
 	auto root = new List();
 	TreeManager manager(root);
@@ -60,9 +60,9 @@ TEST(ModelBasePlugin, ListCreation)
 	CHECK_CONDITION(root->at<Node>(0) == a);
 	CHECK_CONDITION(root->at<Node>(1) == b);
 	CHECK_CONDITION(root->at<Node>(2) == c);
-}
+}};
 
-TEST(ModelBasePlugin, ListInsertion)
+class ListInsertion : public Test<ModelBasePlugin, ListInsertion> { public: void test()
 {
 	auto root = new List();
 	TreeManager manager(root);
@@ -93,9 +93,9 @@ TEST(ModelBasePlugin, ListInsertion)
 	CHECK_CONDITION(root->at<Node>(4) == f);
 	CHECK_CONDITION(root->at<Node>(5) == a);
 	CHECK_CONDITION(root->last<Node>() == c);
-}
+}};
 
-TEST(ModelBasePlugin, ListRemoval)
+class ListRemoval : public Test<ModelBasePlugin, ListRemoval> { public: void test()
 {
 	auto root = new List();
 	TreeManager manager(root);
@@ -132,9 +132,9 @@ TEST(ModelBasePlugin, ListRemoval)
 	CHECK_CONDITION(root->first<Node>() == c);
 	CHECK_CONDITION(root->at<Node>(1) == e);
 	CHECK_CONDITION(root->last<Node>() == f);
-}
+}};
 
-TEST(ModelBasePlugin, ListUndo)
+class ListUndo : public Test<ModelBasePlugin, ListUndo> { public: void test()
 {
 	auto root = new List();
 	TreeManager manager(root);
@@ -221,6 +221,6 @@ TEST(ModelBasePlugin, ListUndo)
 	CHECK_CONDITION(root->at<Node>(3) == f);
 	CHECK_CONDITION(root->at<Node>(4) == g);
 
-}
+}};
 
 }

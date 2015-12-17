@@ -46,7 +46,7 @@ using namespace Visualization;
 
 namespace Comments {
 
-TEST(CommentsPlugin, SimpleTest)
+class SimpleTest : public Test<CommentsPlugin, SimpleTest> { public: void test()
 {
 	auto list = new Model::List();
 	auto manager = new Model::TreeManager(list);
@@ -147,6 +147,6 @@ TEST(CommentsPlugin, SimpleTest)
 	scene->listenToTreeManager(manager);
 
 	CHECK_CONDITION(scene);
-}
+}};
 
 }
