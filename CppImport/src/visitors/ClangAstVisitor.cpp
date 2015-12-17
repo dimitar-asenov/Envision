@@ -1071,7 +1071,7 @@ void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OO
 	if (functionDecl->getStorageClass() == clang::SC_Static)
 		method->modifiers()->set(OOModel::Modifier::Static);
 	if (functionDecl->isDefaulted())
-		method->modifiers()->set(OOModel::Modifier::Defaulted);
+		method->modifiers()->set(OOModel::Modifier::Default);
 	if (functionDecl->isDeleted())
 		method->modifiers()->set(OOModel::Modifier::Deleted);
 }

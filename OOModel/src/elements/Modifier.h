@@ -58,7 +58,7 @@ class OOMODEL_API Modifier :  public Super<Model::Node>
 			Inline = 0x00000100,
 			Const = 0x00000200,
 
-			Defaulted = 0x00000400,
+			Default = 0x00000400,
 			Deleted = 0x00000800
 		};
 		Q_DECLARE_FLAGS(Modifiers, ModifierFlag)
