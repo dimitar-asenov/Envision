@@ -53,6 +53,17 @@ class EXPORT_API FileWriter {
 		 */
 		QString fileContents();
 
+		/**
+		 * returns the amount of bytes written to the buffer of this writer so far.
+		 * used to add backslashes to all lines of the buffer after this value when exporting C++ macros.
+		 */
+		int bytesWrittenSoFar();
+
+		/**
+		 * adds backslashes to all lines of the part of the buffer after \a bytes bytes.
+		 */
+		void appendBackslashToLinesAfter(int bytes);
+
 	private:
 		QString fileName_;
 		TextToNodeMap* map_{};
