@@ -539,8 +539,17 @@ bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr
 
 bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
-	// TODO: handle captions
+	// TODO: handle captures
 	auto ooLambda = clang_.createNode<OOModel::LambdaExpression>(lambdaExpr->getSourceRange());
+	// visit result
+	if (lambdaExpr->hasExplicitResultType())
+	{
+		auto functionTypeLoc = lambdaExpr->getCallOperator()->getTypeSourceInfo()->getTypeLoc()
+											.castAs<clang::FunctionTypeLoc>();
+		ooLambda->results()->append(clang_.createNode<OOModel::FormalResult>(
+																	functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+																	utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
+	}
 	// visit body
 	baseVisitor_->pushOOStack(ooLambda->body());
 	baseVisitor_->TraverseStmt(lambdaExpr->getBody());
