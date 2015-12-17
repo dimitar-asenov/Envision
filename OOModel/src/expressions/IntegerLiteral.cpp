@@ -37,13 +37,12 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(IntegerLiteral)
 
 REGISTER_ATTRIBUTE(IntegerLiteral, value, Text, false, false, true)
 
-IntegerLiteral::IntegerLiteral(int value)
-: Super(nullptr, IntegerLiteral::getMetaData())
+IntegerLiteral::IntegerLiteral(int value) : Super{nullptr, IntegerLiteral::getMetaData()}
 {
 	setValue(QString::number(value));
 }
 
-IntegerLiteral::IntegerLiteral(const QString& value)
+IntegerLiteral::IntegerLiteral(const QString& value) : Super{nullptr, IntegerLiteral::getMetaData()}
 {
 	setValue(value);
 }
