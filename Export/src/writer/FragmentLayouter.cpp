@@ -92,6 +92,7 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	auto firstSubFragment = true;
 	QString childFragmentIndentation = indentationSoFar
 			+ (rule.first.testFlag(IndentChildFragments) ? indentation_ : "");
+	int bytesWrittenSoFar = writer_->bytesWrittenSoFar();
 	for ( auto subFragment : composite->fragments())
 	{
 		// Separator, after first child
@@ -118,6 +119,7 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	if (rule.first.testFlag(SpaceAtEnd) && !writer_->lastCharacterIsWhiteSpace()) writer_->write(" ");
 	if (rule.first.testFlag(NewLineAfterPostfix)) writer_->finishLine();
 	if (rule.first.testFlag(EmptyLineAtEnd)) writer_->writeEmptyLine();
+	if (rule.first.testFlag(BackslashAfterLines)) writer_->appendBackslashToLinesAfter(bytesWrittenSoFar);
 }
 
 } /* namespace Export */

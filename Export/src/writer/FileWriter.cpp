@@ -56,6 +56,17 @@ void FileWriter::flushPending()
 	}
 }
 
+int FileWriter::bytesWrittenSoFar()
+{
+	return renderedFile_.size();
+}
+
+void FileWriter::appendBackslashToLinesAfter(int bytes)
+{
+	auto unchanged = renderedFile_.left(bytes);
+	renderedFile_ = unchanged + renderedFile_.right(renderedFile_.length() - bytes).replace("\n", "\\\n");
+}
+
 void FileWriter::write(const QString& str)
 {
 	if (str.isEmpty()) return;
