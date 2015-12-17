@@ -242,6 +242,7 @@ bool DeclarationVisitor::shouldExportMethod(Method* method)
 
 bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
 {
+	// TODO: this method can be made more specific and relocated to generic method overload resolution
 	if (method->arguments()->size() != other->arguments()->size() || method->symbolName() != other->symbolName())
 		return false;
 
