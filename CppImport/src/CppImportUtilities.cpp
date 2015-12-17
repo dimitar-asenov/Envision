@@ -261,6 +261,57 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverl
 	}
 }
 
+QString CppImportUtilities::overloadOperatorToString(const clang::OverloadedOperatorKind& overloadOpKind)
+{
+	switch (overloadOpKind)
+	{
+		case clang::OO_New: return "new";
+		case clang::OO_Delete: return "delete";
+		case clang::OO_Array_New: return "new[]";
+		case clang::OO_Array_Delete: return "delete[]";
+		case clang::OO_Plus: return "+";
+		case clang::OO_Minus: return "-";
+		case clang::OO_Star: return "*";
+		case clang::OO_Slash: return "/";
+		case clang::OO_Percent: return "%";
+		case clang::OO_Caret: return "^";
+		case clang::OO_Amp: return "&";
+		case clang::OO_Pipe: return "|";
+		case clang::OO_Tilde: return "~";
+		case clang::OO_Exclaim: return "!";
+		case clang::OO_Equal: return "=";
+		case clang::OO_Less: return "<";
+		case clang::OO_Greater: return ">";
+		case clang::OO_PlusEqual: return "+=";
+		case clang::OO_MinusEqual: return "-=";
+		case clang::OO_StarEqual: return "*=";
+		case clang::OO_SlashEqual: return "/=";
+		case clang::OO_PercentEqual: return "%=";
+		case clang::OO_CaretEqual: return "^=";
+		case clang::OO_AmpEqual: return "&=";
+		case clang::OO_PipeEqual: return "|=";
+		case clang::OO_LessLess: return "<<";
+		case clang::OO_GreaterGreater: return ">>";
+		case clang::OO_LessLessEqual: return "<<=";
+		case clang::OO_GreaterGreaterEqual: return ">>=";
+		case clang::OO_EqualEqual: return "==";
+		case clang::OO_ExclaimEqual: return "!=";
+		case clang::OO_LessEqual: return "<=";
+		case clang::OO_GreaterEqual: return ">=";
+		case clang::OO_AmpAmp: return "&&";
+		case clang::OO_PipePipe: return "||";
+		case clang::OO_PlusPlus: return "++";
+		case clang::OO_MinusMinus: return "--";
+		case clang::OO_Comma: return ",";
+		case clang::OO_ArrowStar: return "->*";
+		case clang::OO_Arrow: return "->";
+		case clang::OO_Call: return "()";
+		case clang::OO_Subscript: return "[]";
+		case clang::OO_Conditional: return "?";
+		default: throw new CppImportException("Invalid overload operator");
+	}
+}
+
 OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::translateAssignOverloadOp
 (const clang::OverloadedOperatorKind& overloadOpKind)
 {

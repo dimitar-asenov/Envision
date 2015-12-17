@@ -71,6 +71,7 @@ class CPPIMPORT_API CppImportUtilities
 		(const clang::OverloadedOperatorKind& overloadOpKind);
 		OOModel::UnaryOperation::OperatorTypes translateUnaryOverloadOp
 		(const clang::OverloadedOperatorKind& overloadOpKind, const unsigned numArgs);
+		static QString overloadOperatorToString(const clang::OverloadedOperatorKind& overloadOpKind);
 
 		enum class OverloadKind : int {Unsupported, Unary, Binary, Assign, MethodCall, ReferenceExpr, Comma};
 		/**

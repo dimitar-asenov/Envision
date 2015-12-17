@@ -61,7 +61,7 @@ class OOMODEL_API Method : public Super<Declaration>
 		Method(const QString& name);
 		Method(const QString& name, Modifier::Modifiers mod);
 
-		enum class MethodKind : int {Default, Constructor, Destructor, Conversion};
+		enum class MethodKind : int {Default, Constructor, Destructor, Conversion, OperatorOverload};
 
 		Method(const QString& name, MethodKind kind);
 		Method(const QString& name, Modifier::Modifiers mod, MethodKind kind);

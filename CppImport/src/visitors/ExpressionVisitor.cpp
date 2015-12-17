@@ -337,8 +337,9 @@ bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 
 bool ExpressionVisitor::TraverseIntegerLiteral(clang::IntegerLiteral* intLit)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::IntegerLiteral>(intLit->getSourceRange(),
-																					 intLit->getValue().getLimitedValue()));
+	if (intLit->getLocation().getPtrEncoding())
+		ooExprStack_.push(clang_.createNode<OOModel::IntegerLiteral>(intLit->getSourceRange(),
+																						 clang_.spelling(intLit->getLocation())));
 	return true;
 }
 
@@ -357,15 +358,20 @@ bool ExpressionVisitor::TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralEx
 
 bool ExpressionVisitor::TraverseFloatingLiteral(clang::FloatingLiteral* floatLiteral)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::FloatLiteral>(floatLiteral->getSourceRange(),
-																				  floatLiteral->getValueAsApproximateDouble()));
+	if (floatLiteral->getLocation().getPtrEncoding())
+		ooExprStack_.push(clang_.createNode<OOModel::FloatLiteral>(floatLiteral->getSourceRange(),
+																				  clang_.spelling(floatLiteral->getLocation())));
 	return true;
 }
 
 bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLiteral)
 {
-	ooExprStack_.push(clang_.createNode<OOModel::CharacterLiteral>(charLiteral->getSourceRange(),
-																						QChar(charLiteral->getValue())));
+	if (charLiteral->getLocation().getPtrEncoding())
+	{
+		auto value = clang_.spelling(charLiteral->getLocation());
+		ooExprStack_.push(clang_.createNode<OOModel::CharacterLiteral>(charLiteral->getSourceRange(),
+																							value.mid(1, value.length() - 2)));
+	}
 	return true;
 }
 
@@ -419,16 +425,21 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
-		if (auto temporaryObjectExpression = llvm::dyn_cast<clang::CXXTemporaryObjectExpr>(constructExpr))
-			ooMethodCall->setCallee(utils_->translateQualifiedType(
-												temporaryObjectExpression->getTypeSourceInfo()->getTypeLoc()));
-		else
-			ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
+		if (!constructExpr->isListInitialization() || !clang_.spelling(constructExpr->getLocation()).startsWith("{"))
+		{
+			auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
+			if (auto temporaryObjectExpression = llvm::dyn_cast<clang::CXXTemporaryObjectExpr>(constructExpr))
+				ooMethodCall->setCallee(utils_->translateQualifiedType(
+													temporaryObjectExpression->getTypeSourceInfo()->getTypeLoc()));
+			else
+				ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
 
-		for (auto argument : translateArguments(constructExpr->arguments()))
-			ooMethodCall->arguments()->append(argument);
-		ooExprStack_.push(ooMethodCall);
+			for (auto argument : translateArguments(constructExpr->arguments()))
+				ooMethodCall->arguments()->append(argument);
+			ooExprStack_.push(ooMethodCall);
+		}
+		else
+			ooExprStack_.push(clang_.createNode<OOModel::ArrayInitializer>(constructExpr->getSourceRange()));
 		return true;
 	}
 	// clang implements lambda construct expressions weirdly, the name of the lambda is in the first argument
@@ -520,7 +531,6 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr)
 {
 	auto ooRef = clang_.createReference(overloadExpr->getNameInfo().getSourceRange());
-
 	// template args
 	if (overloadExpr->hasExplicitTemplateArgs())
 	{
@@ -535,8 +545,17 @@ bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr
 
 bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
-	// TODO: handle captions
+	// TODO: handle captures
 	auto ooLambda = clang_.createNode<OOModel::LambdaExpression>(lambdaExpr->getSourceRange());
+	// visit result
+	if (lambdaExpr->hasExplicitResultType())
+	{
+		auto functionTypeLoc = lambdaExpr->getCallOperator()->getTypeSourceInfo()->getTypeLoc()
+											.castAs<clang::FunctionTypeLoc>();
+		ooLambda->results()->append(clang_.createNode<OOModel::FormalResult>(
+																	functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+																	utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
+	}
 	// visit body
 	baseVisitor_->pushOOStack(ooLambda->body());
 	baseVisitor_->TraverseStmt(lambdaExpr->getBody());

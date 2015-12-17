@@ -259,10 +259,10 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
 	else if (auto e = DCast<LambdaExpression>(expression))
 	{
-		*fragment << list(e->arguments(), ElementVisitor(data()), "argsList") << " -> ";
-		*fragment << list(e->body(), StatementVisitor(data()), "body");
-
+		*fragment << "[]" << list(e->arguments(), ElementVisitor(data()), "argsList");
 		if (e->results()->size() > 1) error(e->results(), "Cannot have more than one return value in Cpp");
+		if (e->results()->size() == 1) *fragment << " -> " << visit(e->results()->first()->typeExpression());
+		*fragment << list(e->body(), StatementVisitor(data()), "body");
 	}
 	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
 	else if (auto e = DCast<MethodCallExpression>(expression))

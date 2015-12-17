@@ -38,6 +38,7 @@
 #include "OOModel/src/declarations/VariableDeclaration.h"
 #include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 #include "OOModel/src/declarations/TypeAlias.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
@@ -60,7 +61,6 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 
 	notAllowed(declaration);
 
-	// TODO: handle comments
 	auto fragment = new CompositeFragment(declaration);
 	*fragment << "Invalid Declaration";
 	return fragment;
@@ -144,6 +144,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	}
 	else
 	{
+		*fragment << declarationComments(classs);
+
 		if (!classs->typeArguments()->isEmpty())
 			*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
@@ -160,7 +162,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		if (!classs->baseClasses()->isEmpty())
 			// TODO: inheritance modifiers like private, virtual... (not only public)
-			*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "baseClasses");
+			*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 
 		notAllowed(classs->friends());
 
@@ -222,14 +224,43 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 			 !methods->fragments().empty();
 }
 
+bool DeclarationVisitor::shouldExportMethod(Method* method)
+{
+	if (headerVisitor())
+	{
+		auto parentDeclaration = method->firstAncestorOfType<Declaration>();
+		Q_ASSERT(parentDeclaration);
+
+		for (auto expression : *(parentDeclaration->metaCalls()))
+			if (auto metaCall = DCast<OOModel::MetaCallExpression>(expression))
+				for (auto generatedMethod : Model::Node::childrenOfType<Method>(metaCall->generatedTree()))
+					if (methodSignaturesMatch(method, generatedMethod))
+						return false;
+	}
+	return true;
+}
+
+bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
+{
+	// TODO: this method can be made more specific and relocated to generic method overload resolution
+	if (method->arguments()->size() != other->arguments()->size() || method->symbolName() != other->symbolName())
+		return false;
+
+	for (auto i = 0; i < method->arguments()->size(); i++)
+		if (method->arguments()->at(i)->name() != other->arguments()->at(i)->name())
+			return false;
+
+	return true;
+}
+
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
+	if (!shouldExportMethod(method)) return nullptr;
+
 	auto fragment = new CompositeFragment(method);
 
 	if (headerVisitor())
-		if (auto comment = DCast<Comments::CommentNode>(method->comment()))
-			for (auto line : *(comment->lines()))
-				*fragment << line->get() << "\n";
+		*fragment << declarationComments(method);
 
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
@@ -243,6 +274,14 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 
+	if (method->methodKind() == Method::MethodKind::Conversion)
+	{
+		if (!headerVisitor())
+			if (auto parentClass = method->firstAncestorOfType<Class>())
+				*fragment << parentClass->name() << "::";
+		*fragment << "operator ";
+	}
+
 	if (method->methodKind() != Method::MethodKind::Constructor &&
 		 method->methodKind() != Method::MethodKind::Destructor)
 	{
@@ -252,11 +291,12 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
-	if (!headerVisitor())
+	if (!headerVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
 			*fragment << parentClass->name() << "::";
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
+	if (method->methodKind() == Method::MethodKind::OperatorOverload) *fragment << "operator";
 	*fragment << method->nameNode();
 
 	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
@@ -278,6 +318,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 				*fragment << " " << new TextFragment(method->modifiers(), "override");
+		if (method->modifiers()->isSet(Modifier::Default))
+				*fragment << " = " << new TextFragment(method->modifiers(), "default");
+		if (method->modifiers()->isSet(Modifier::Deleted))
+				*fragment << " = " << new TextFragment(method->modifiers(), "delete");
 		*fragment << ";";
 	}
 	else
@@ -289,11 +333,25 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	return fragment;
 }
 
+SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration)
+{
+	if (auto commentNode = DCast<Comments::CommentNode>(declaration->comment()))
+	{
+		auto commentFragment = new CompositeFragment(commentNode->lines(), "declarationComment");
+		for (auto line : *(commentNode->lines()))
+			*commentFragment << line;
+		return commentFragment;
+	}
+
+	return nullptr;
+}
+
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment(variableDeclaration);
 	if (headerVisitor())
 	{
+		*fragment << declarationComments(variableDeclaration);
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
 		*fragment << expression(variableDeclaration->typeExpression()) << " " << variableDeclaration->nameNode();
 		if (variableDeclaration->initialValue())

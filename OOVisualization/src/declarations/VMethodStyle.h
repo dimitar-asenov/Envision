@@ -53,6 +53,7 @@ class OOVISUALIZATION_API VMethodStyle : public Super<Visualization::Declarative
 		Property<Visualization::StaticStyle> constructorIcon{this, "constructorIcon"};
 		Property<Visualization::StaticStyle> destructorIcon{this, "destructorIcon"};
 		Property<Visualization::StaticStyle> conversionIcon{this, "conversionIcon"};
+		Property<Visualization::StaticStyle> operatorOverloadIcon{this, "operatorOverloadIcon"};
 		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
 		Property<Visualization::LineStyle> signatureLine{this, "signatureLine"};
 		Property<Visualization::VListStyle> annotations{this, "annotations"};

@@ -1070,6 +1070,10 @@ void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OO
 		method->modifiers()->set(OOModel::Modifier::Override);
 	if (functionDecl->getStorageClass() == clang::SC_Static)
 		method->modifiers()->set(OOModel::Modifier::Static);
+	if (functionDecl->isDefaulted())
+		method->modifiers()->set(OOModel::Modifier::Default);
+	if (functionDecl->isDeleted())
+		method->modifiers()->set(OOModel::Modifier::Deleted);
 }
 
 bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind)

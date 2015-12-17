@@ -29,7 +29,7 @@
 namespace Model {
 
 ModelException::ModelException(const QString& message) :
-	Core::EnvisionException(message)
+	EnvisionException(message)
 {
 }
 
