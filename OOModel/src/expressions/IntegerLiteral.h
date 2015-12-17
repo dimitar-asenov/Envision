@@ -42,6 +42,7 @@ class OOMODEL_API IntegerLiteral: public Super<Expression>
 
 	public:
 		IntegerLiteral(int value);
+		IntegerLiteral(const QString& value);
 
 		int valueAsInt() const;
 

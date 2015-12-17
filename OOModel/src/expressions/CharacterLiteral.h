@@ -28,7 +28,7 @@
 
 #include "Expression.h"
 
-#include "ModelBase/src/nodes/Character.h"
+#include "ModelBase/src/nodes/Text.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CharacterLiteral)
 
@@ -38,10 +38,11 @@ class OOMODEL_API CharacterLiteral: public Super<Expression>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CharacterLiteral)
 
-	ATTRIBUTE_VALUE(::Model::Character, value, setValue, QChar)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, value, setValue, QString, const QString&)
 
 	public:
 		CharacterLiteral(const QChar& value);
+		CharacterLiteral(const QString& value);
 
 		virtual Type* type() override;
 };

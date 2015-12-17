@@ -43,6 +43,11 @@ IntegerLiteral::IntegerLiteral(int value)
 	setValue(QString::number(value));
 }
 
+IntegerLiteral::IntegerLiteral(const QString& value)
+{
+	setValue(value);
+}
+
 Type* IntegerLiteral::type()
 {
 	return new PrimitiveType(PrimitiveType::INT, true);

@@ -65,17 +65,15 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 {
 	if (val->text().isEmpty()) throw OOInteractionException("Trying to create an expression from an empty Value");
 
-	bool isInt = false;
-	int intValue = val->text().toInt(&isInt);
-	bool isChar = false;
-	QChar charValue = toChar(val->text(), isChar);
-
-	if (isInt)
-		expression = new OOModel::IntegerLiteral(intValue);
-	else if (val->text().startsWith('"'))
-		expression = new OOModel::StringLiteral(val->text().mid(1, val->text().size()-2));
-	else if (isChar)
-		expression = new OOModel::CharacterLiteral(charValue);
+	if (val->text().startsWith('"'))
+		  expression = new OOModel::StringLiteral(val->text().mid(1, val->text().size()-2));
+	else 	if (val->text().startsWith('\''))
+		expression = new OOModel::CharacterLiteral(val->text().mid(1, val->text().size()-2));
+	else if (val->text().at(0).isDigit() &&
+				(val->text().contains('.') || val->text().contains('E') || val->text().contains('e')))
+		expression = new OOModel::FloatLiteral(val->text());
+	else if (val->text().at(0).isDigit() )
+		 expression = new OOModel::IntegerLiteral(val->text());
 	else
 		expression = new OOModel::ReferenceExpression(val->text());
 }

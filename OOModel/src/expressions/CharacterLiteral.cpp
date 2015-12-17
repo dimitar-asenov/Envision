@@ -35,9 +35,16 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CharacterLiteral)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CharacterLiteral)
 
-REGISTER_ATTRIBUTE(CharacterLiteral, value, Character, false, false, true)
+REGISTER_ATTRIBUTE(CharacterLiteral, value, Text, false, false, true)
 
 CharacterLiteral::CharacterLiteral(const QChar& value)
+: Super(nullptr, CharacterLiteral::getMetaData())
+{
+	setValue(value);
+}
+
+
+CharacterLiteral::CharacterLiteral(const QString& value)
 : Super(nullptr, CharacterLiteral::getMetaData())
 {
 	setValue(value);

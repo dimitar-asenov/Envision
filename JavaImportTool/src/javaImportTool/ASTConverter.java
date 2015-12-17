@@ -930,7 +930,7 @@ public class ASTConverter {
 		{
 			CharacterLiteral cl = (CharacterLiteral) e;
 			node = new Node(null, "CharacterLiteral", name);
-			node.child("value").setStringValue(Character.toString(cl.charValue()));
+			node.child("value").setStringValue(cl.getEscapedValue());
 		} else if (e instanceof ClassInstanceCreation)
 		{
 			ClassInstanceCreation cic = (ClassInstanceCreation) e;

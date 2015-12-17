@@ -37,10 +37,14 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FloatLiteral)
 
 REGISTER_ATTRIBUTE(FloatLiteral, value, Text, false, false, true)
 
-FloatLiteral::FloatLiteral(double value)
-: Super(nullptr, FloatLiteral::getMetaData())
+FloatLiteral::FloatLiteral(double value) : Super{nullptr, FloatLiteral::getMetaData()}
 {
 	setValue(QString::number(value));
+}
+
+FloatLiteral::FloatLiteral(const QString& value) : Super{nullptr, FloatLiteral::getMetaData()}
+{
+	setValue(value);
 }
 
 Type* FloatLiteral::type()

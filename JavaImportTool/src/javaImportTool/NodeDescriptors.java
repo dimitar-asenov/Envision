@@ -217,6 +217,7 @@ public class NodeDescriptors {
 				{"Expression","typeExpression"}
 		}));
 		add( new NodeInitializer("MethodCallExpression", new String[][]{
+				{"Integer","cKind"},
 				{"Expression","callee"},
 				{"TypedListOfExpression","arguments"}
 		}));
@@ -231,7 +232,7 @@ public class NodeDescriptors {
 				{"Boolean","value"}
 		}));
 		add( new NodeInitializer("CharacterLiteral", new String[][]{
-				{"Character","value"}
+				{"Text","value"}
 		}));
 		add( new NodeInitializer("IntegerLiteral", new String[][]{
 				{"Text","value"}

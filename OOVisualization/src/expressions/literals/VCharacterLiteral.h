@@ -32,7 +32,7 @@
 
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/VCharacter.h"
+#include "VisualizationBase/src/items/VText.h"
 
 #include "OOModel/src/expressions/CharacterLiteral.h"
 
@@ -58,7 +58,7 @@ class OOVISUALIZATION_API VCharacterLiteral
 	private:
 		Visualization::Static* pre_{};
 		Visualization::Static* post_{};
-		Visualization::VCharacter* vis_{};
+		Visualization::VText* vis_{};
 };
 
 }
