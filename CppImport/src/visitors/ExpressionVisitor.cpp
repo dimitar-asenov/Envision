@@ -307,9 +307,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 		ooExprStack_.push(methodCallExpr);
 	}
 	else
-	{
 		TraverseStmt(newExpr->getInitializer());
-	}
 
 	if (!ooExprStack_.empty())
 		ooNewExpr->setNewType(ooExprStack_.pop());
