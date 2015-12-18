@@ -144,9 +144,12 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, Cons
 	 */
 	if (auto compositeNode = DCast<Model::CompositeNode>(namedNode))
 		if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
-			compositeNode->setComment(new Comments::CommentNode(QString::fromStdString(
-																				commentForDeclaration->getRawText(*sourceManager_).str())
-																				 .trimmed()));
+		{
+			auto lines = QString::fromStdString(commentForDeclaration->getRawText(*sourceManager_).str()).split('\n');
+			for (auto i = 0; i < lines.length(); i++)
+				lines[i] = lines[i].trimmed();
+			compositeNode->setComment(new Comments::CommentNode(lines.join('\n')));
+		}
 	return namedNode;
 }
 
