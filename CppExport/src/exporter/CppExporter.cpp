@@ -70,8 +70,8 @@ void CppExporter::createFilesFromComposite(Export::SourceDir* directory, CodeCom
 	Export::SourceFragment* sourceFragment{};
 	codeComposite->fragments(headerFragment, sourceFragment);
 
-	directory->file(codeComposite->name() + ".h").append(headerFragment);
-	directory->file(codeComposite->name() + ".cpp").append(sourceFragment);
+	if (headerFragment) directory->file(codeComposite->name() + ".h").append(headerFragment);
+	if (sourceFragment) directory->file(codeComposite->name() + ".cpp").append(sourceFragment);
 }
 
 void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
