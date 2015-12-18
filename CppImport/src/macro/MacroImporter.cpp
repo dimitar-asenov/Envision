@@ -232,7 +232,7 @@ QVector<MacroArgumentLocation> MacroImporter::argumentHistory(clang::SourceRange
 		 clang_.sourceManager()->isMacroArgExpansion(range.getEnd()))
 	{
 		QVector<clang::SourceLocation> spellingHistory;
-		clang_.immediateSpellingHistory(range.getBegin(), spellingHistory);
+		clang_.immediateSpellingHistory(range.getEnd(), spellingHistory);
 
 		// find all expansions with arguments with location equal to an entry in spellingHistory
 		for (auto argumentLoc : spellingHistory)
