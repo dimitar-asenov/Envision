@@ -380,13 +380,14 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 	OOModel::Expression* result = nullptr;
 	for (auto it = stringLiteral->tokloc_begin(); it != stringLiteral->tokloc_end(); it++)
 	{
-		auto partSpelling = clang_.unexpandedSpelling(*it);
-
 		OOModel::Expression* part = nullptr;
-		if (partSpelling.startsWith("#"))
+		if (clang_.unexpandedSpelling(*it).startsWith("#"))
 			part = clang_.createReference(*it);
 		else
+		{
+			auto partSpelling = clang_.spelling(*it);
 			part = clang_.createNode<OOModel::StringLiteral>(*it, partSpelling.mid(1, partSpelling.length() - 2));
+		}
 
 		if (!result)
 			result = part;
