@@ -204,8 +204,11 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 
 OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::TemplateArgumentLoc& templateArgLoc)
 {
-	auto sourceRange = templateArgLoc.getTypeSourceInfo()->getTypeLoc().getSourceRange();
 	auto templateArg = templateArgLoc.getArgument();
+	if (templateArg.getKind() == clang::TemplateArgument::ArgKind::Expression)
+		return exprVisitor_->translateExpression(templateArg.getAsExpr());
+
+	auto sourceRange = templateArgLoc.getTypeSourceInfo()->getTypeLoc().getSourceRange();
 	switch (templateArg.getKind())
 	{
 		case clang::TemplateArgument::ArgKind::Null:
@@ -222,8 +225,6 @@ OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::
 		case clang::TemplateArgument::ArgKind::TemplateExpansion:
 			// TODO: add support
 			return createErrorExpression("Unsupported TemplateArgument EXPANSION", sourceRange);
-		case clang::TemplateArgument::ArgKind::Expression:
-			return exprVisitor_->translateExpression(templateArg.getAsExpr());
 		case clang::TemplateArgument::ArgKind::Pack:
 			// TODO: add support
 			return createErrorExpression("Unsupported TemplateArgument PACK", sourceRange);
