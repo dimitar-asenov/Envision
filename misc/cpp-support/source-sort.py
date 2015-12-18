@@ -31,7 +31,9 @@ with open(args.inputFile, 'r') as inputFile:
 		if not initialComment(line) and not includeOrForwardDeclaration(line) and not emptyLine(line):
 			if not sourceText.endswith('\n'):
 				sourceText += '\n'
-			sourceText += line
+			while "\t " in line:
+				line = line.replace("\t ", "\t")
+			sourceText += line.lstrip(' ')
 
 
 # Block class used to store and various fragments of the file
