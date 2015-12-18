@@ -52,6 +52,10 @@ class CPPEXPORT_API CodeUnitPart
 		CodeUnit* parent() const;
 
 		Export::SourceFragment* sourceFragment() const;
+		/**
+		 * returns whether there is at least one text fragment inside sourceFragment.
+		 */
+		bool isSourceFragmentEmpty() const;
 		void setSourceFragment(Export::SourceFragment* fragment);
 
 		const QSet<Model::Node*>& nameNodes() const;
