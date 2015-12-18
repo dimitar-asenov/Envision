@@ -394,12 +394,8 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment(declaration->modifiers(), "static");
-
 	if (declaration->modifiers()->isSet(Modifier::Final))
 		*header << new TextFragment(declaration->modifiers(), "final");
-	if (declaration->modifiers()->isSet(Modifier::Abstract))
-		*header << new TextFragment(declaration->modifiers(), "abstract");
-
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
 
