@@ -133,14 +133,17 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		*composite << "\n";
 	}
 
+	bool hasMeaningfulContent = false;
 	if (!units().isEmpty())
 	{
 		OOModel::Module* currentNamespace{};
 
 		for (auto unit : units())
 		{
-			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
+			auto codeUnitPart = (unit->*part)();
+			if (codeUnitPart->isSourceFragmentEmpty()) continue;
 
+			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
 			if (neededNamespace != currentNamespace)
 			{
 				if (currentNamespace) *composite << "\n}\n\n";
@@ -148,12 +151,18 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				currentNamespace = neededNamespace;
 			}
 
-			composite->append((unit->*part)()->sourceFragment());
+			composite->append(codeUnitPart->sourceFragment());
+			hasMeaningfulContent = true;
 		}
 
 		if (currentNamespace) *composite << "\n}";
 	}
 
+	if (!hasMeaningfulContent)
+	{
+		SAFE_DELETE(composite);
+		return nullptr;
+	}
 	return composite;
 }
 

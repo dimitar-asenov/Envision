@@ -138,7 +138,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->classes(), this, "sections");
 
 		auto filter = [](Method* method) { return method->typeArguments()->isEmpty() &&
-																!method->modifiers()->isSet(OOModel::Modifier::Inline); };
+																!method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+																!method->modifiers()->isSet(OOModel::Modifier::Abstract); };
 		*sections << list(classs->methods(), this, "spacedSections", filter);
 		*sections << list(classs->fields(), this, "vertical");
 	}
@@ -317,11 +318,13 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (headerVisitor())
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
-				*fragment << " " << new TextFragment(method->modifiers(), "override");
+			*fragment << new TextFragment(method->modifiers(), " override");
 		if (method->modifiers()->isSet(Modifier::Default))
-				*fragment << " = " << new TextFragment(method->modifiers(), "default");
+			*fragment << new TextFragment(method->modifiers(), " = default");
 		if (method->modifiers()->isSet(Modifier::Deleted))
-				*fragment << " = " << new TextFragment(method->modifiers(), "delete");
+			*fragment << new TextFragment(method->modifiers(), " = delete");
+		if (method->modifiers()->isSet(Modifier::Abstract))
+			*fragment << new TextFragment(method->modifiers(), " = 0");
 		*fragment << ";";
 	}
 	else
@@ -391,12 +394,8 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment(declaration->modifiers(), "static");
-
 	if (declaration->modifiers()->isSet(Modifier::Final))
 		*header << new TextFragment(declaration->modifiers(), "final");
-	if (declaration->modifiers()->isSet(Modifier::Abstract))
-		*header << new TextFragment(declaration->modifiers(), "abstract");
-
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
 

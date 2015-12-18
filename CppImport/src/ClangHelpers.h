@@ -134,6 +134,7 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, Cons
 {
 	auto name = spelling(namedDecl->getLocation());
 	if (name == "~") name += spelling(namedDecl->getLocation().getLocWithOffset(1));
+	else if (name == "," || name == ")") name = ""; // if there is no name we sometimes pick up the next token
 	auto namedNode = createNode<NodeType>(namedDecl->getSourceRange(), name,
 													  std::forward<ConstructorArgTypes>(constructorArgs)...);
 	envisionToClangMap_.mapAst(namedDecl->getLocation(), namedNode->nameNode());
@@ -143,8 +144,12 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, Cons
 	 */
 	if (auto compositeNode = DCast<Model::CompositeNode>(namedNode))
 		if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
-			compositeNode->setComment(new Comments::CommentNode(QString::fromStdString(
-																				commentForDeclaration->getRawText(*sourceManager_).str())));
+		{
+			auto lines = QString::fromStdString(commentForDeclaration->getRawText(*sourceManager_).str()).split('\n');
+			for (auto i = 0; i < lines.length(); i++)
+				lines[i] = lines[i].trimmed();
+			compositeNode->setComment(new Comments::CommentNode(lines.join('\n')));
+		}
 	return namedNode;
 }
 

@@ -5,18 +5,35 @@ import argparse
 import re
 import sys
 
+# Input filtering
+def initialComment(line):
+	return line.startswith("/***") or line.startswith(" **") or line.startswith("**")
+
+def includeOrForwardDeclaration(line):
+	forwardDeclarationRegex = re.compile('^class \w+;$')
+	return line.startswith("#include ") or forwardDeclarationRegex.match(line);
+
+def emptyLine(line):
+	emptyLineRegex = re.compile('^\s*$')
+	return emptyLineRegex.match(line)
+
 # Argument parsers
 argParser = argparse.ArgumentParser('Sort the declarations in a source file')
 argParser.add_argument('inputFile')
 argParser.add_argument('outputFile')
 
 args = argParser.parse_args()
+sourceText = ''
 
 # Read entire file in a single string
 with open(args.inputFile, 'r') as inputFile:
-	sourceText = inputFile.read()
-	if not sourceText.endswith('\n'):
-		sourceText.append('\n')
+	for line in inputFile:
+		if not initialComment(line) and not includeOrForwardDeclaration(line) and not emptyLine(line):
+			if not sourceText.endswith('\n'):
+				sourceText += '\n'
+			while "\t " in line:
+				line = line.replace("\t ", "\t")
+			sourceText += line.lstrip(' ')
 
 
 # Block class used to store and various fragments of the file

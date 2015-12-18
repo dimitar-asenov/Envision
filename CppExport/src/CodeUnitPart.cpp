@@ -34,6 +34,22 @@ namespace CppExport {
 
 CodeUnitPart::CodeUnitPart(CodeUnit* parent) : parent_{parent} {}
 
+bool CodeUnitPart::isSourceFragmentEmpty() const
+{
+	if (!sourceFragment_) return true;
+
+	QList<Export::SourceFragment*> workList{sourceFragment_};
+	while (!workList.empty())
+	{
+		auto current = workList.takeLast();
+		if (dynamic_cast<Export::TextFragment*>(current))
+			return false;
+		else if (auto compositeFragment = dynamic_cast<Export::CompositeFragment*>(current))
+			workList << compositeFragment->fragments();
+	}
+	return true;
+}
+
 void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
 {
 	sourceFragment_ = sourceFragment;
