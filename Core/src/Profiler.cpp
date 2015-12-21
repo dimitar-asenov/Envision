@@ -108,4 +108,4 @@ ProfileJob* Profiler::findJob(const QString& jobName, const QString& fileName)
 	return job;
 }
 
-} /* namespace Core */
+}

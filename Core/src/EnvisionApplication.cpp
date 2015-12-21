@@ -89,4 +89,4 @@ void EnvisionApplication::userInputIdle()
 	for (auto& a : idleActions().values()) a();
 }
 
-} /* namespace Core */
+}

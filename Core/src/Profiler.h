@@ -53,4 +53,4 @@ class CORE_API Profiler {
 		static void startProfiling();
 };
 
-} /* namespace Core */
+}

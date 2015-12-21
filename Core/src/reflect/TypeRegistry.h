@@ -49,4 +49,4 @@ template <typename T> inline int TypeRegistry::add()
 	return add(T::initType);
 }
 
-} /* namespace Core */
+}

@@ -50,4 +50,4 @@ class CORE_API EnvisionApplication : public QApplication {
 		static QMap<void*, IdleFunction>& idleActions();
 };
 
-} /* namespace Core */
+}

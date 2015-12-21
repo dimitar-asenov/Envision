@@ -48,4 +48,4 @@ int TypeRegistry::add(InitializationFunction func)
 }
 
 
-} /* namespace Core */
+}
