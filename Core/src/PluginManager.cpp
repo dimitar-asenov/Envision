@@ -140,9 +140,7 @@ bool PluginManager::isPluginLoaded(QString pluginId)
 EnvisionPlugin* PluginManager::getLoadedPluginInterface(QString pluginId)
 {
 	if ( isPluginLoaded(pluginId) )
-	{
 		return qobject_cast<EnvisionPlugin*> (idToPluginLoaderMap.value(pluginId)->instance());
-	}
 	else
 		return nullptr;
 }
@@ -256,9 +254,7 @@ QList<PluginInfo> PluginManager::getAllLoadedPluginsInfo()
 	QList<PluginInfo> result;
 
 	for (QList<PluginInfo>::iterator p = pluginMetaData.begin(); p != pluginMetaData.end(); p++)
-	{
 		if ( idToPluginLoaderMap.contains(p->id) ) result.append(*p);
-	}
 
 	return result;
 }

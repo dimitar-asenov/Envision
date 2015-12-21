@@ -64,9 +64,8 @@ bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
 			  || event->type() == QEvent::MouseMove
 			  || event->type() == QEvent::NativeGesture
 			  || event->type() == QEvent::Wheel
-		  )) {
+		  ))
 		idleInputTimer_.start();
-	}
 
 	EnvisionManager::processPreEventActions(receiver, event);
 	auto res = QApplication::notify(receiver, event);
