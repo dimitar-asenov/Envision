@@ -62,7 +62,7 @@ class PluginManager
 		 * dependencies are loaded first. Each plug-in is given a reference to the EnvisionManager object to communicate
 		 * to the core.
 		 */
-		void loadAllPlugins(EnvisionManager&);
+		void loadAllPlugins(EnvisionManager& envisionManager);
 
 		/**
 		 * Unloads all currently loaded plug-ins.
