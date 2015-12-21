@@ -34,7 +34,7 @@ namespace Core
 
 class EnvisionManager;
 
-class PluginManager
+class CORE_API PluginManager
 {
 	public:
 

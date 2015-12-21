@@ -29,7 +29,7 @@
 
 namespace Core {
 
-struct ProfileJob
+struct CORE_API ProfileJob
 {
 	QString jobName;
 	QString fileName;
