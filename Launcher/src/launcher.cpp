@@ -41,18 +41,5 @@ using namespace Core;
  */
 int main(int argc, char *argv[])
 {
-	// Enable core dumps of debug builds on Linux
-#ifdef Q_OS_LINUX
-#ifdef DEBUG
-	struct rlimit core_limit;
-	core_limit.rlim_cur = RLIM_INFINITY;
-	core_limit.rlim_max = RLIM_INFINITY;
-
-	if (setrlimit(RLIMIT_CORE, &core_limit) < 0)
-		qDebug() << "Error while enabling core dumps:" << strerror(errno);
-	else QFile::remove("./core");
-#endif
-#endif
-
 	return Core::coreMain(argc, argv);
 }

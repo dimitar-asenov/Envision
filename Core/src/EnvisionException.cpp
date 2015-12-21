@@ -29,12 +29,7 @@ namespace Core {
 
 bool& EnvisionException::assertOnThrow()
 {
-#if defined(DEBUG)
-	// This helps with debugging duing development
 	static bool aot = true;
-#else
-	static bool aot = false;
-#endif
 	return aot;
 }
 
