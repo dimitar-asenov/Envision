@@ -78,4 +78,4 @@ TypeName typeName()
 	if (!name.namespace_.isEmpty()) Q_ASSERT(*nextPart == 'E');
 
 	return name;
-};
+}
