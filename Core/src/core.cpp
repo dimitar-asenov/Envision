@@ -38,7 +38,7 @@ namespace Core {
  */
 int coreMain(int argc, char *argv[])
 {
-	EnvisionApplication a(argc, argv);
+	EnvisionApplication a{argc, argv};
 
 	EnvisionWindow w;
 	w.show();
@@ -60,7 +60,7 @@ int coreMain(int argc, char *argv[])
 
 		testr.enqueueSelfTests(pm);
 
-		QTextStream out(stdout);
+		QTextStream out{stdout};
 		out << "==============================" << endl;
 
 		retCode = a.exec();

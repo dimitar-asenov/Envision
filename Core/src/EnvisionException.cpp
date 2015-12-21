@@ -46,7 +46,7 @@ EnvisionException::~EnvisionException() {}
 
 const QString& EnvisionException::name() const
 {
-	static QString ename("EnvisionException");
+	static QString ename{"EnvisionException"};
 	return ename;
 }
 
@@ -57,7 +57,7 @@ const QString& EnvisionException::message() const
 
 void EnvisionException::printError() const
 {
-	QTextStream err(stderr);
+	QTextStream err{stderr};
 	err << "Exception " << qPrintable( name() ) << ": " << qPrintable( message() ) << endl;
 }
 
