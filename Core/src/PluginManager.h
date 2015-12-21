@@ -36,15 +36,6 @@ class EnvisionManager;
 
 class PluginManager
 {
-	private:
-		QDir pluginsDir;
-		QList<PluginInfo> pluginMetaData;
-		QList<QPluginLoader*> loadedPlugins;
-		QMap<QString, PluginInfo*> idToMetaDataMap;
-		QMap<QString, QPluginLoader*> idToPluginLoaderMap;
-
-		QMap<QString, QString> _allFoundSharedLibraryFiles; //lower to mixed case maps.
-
 	public:
 
 		/**
@@ -87,6 +78,13 @@ class PluginManager
 		EnvisionPlugin* getLoadedPluginInterface(QString pluginId);
 
 	private:
+		QDir pluginsDir;
+		QList<PluginInfo> pluginMetaData;
+		QList<QPluginLoader*> loadedPlugins;
+		QMap<QString, PluginInfo*> idToMetaDataMap;
+		QMap<QString, QPluginLoader*> idToPluginLoaderMap;
+		QMap<QString, QString> _allFoundSharedLibraryFiles; // lower to mixed case maps.
+
 		QString getLibraryFileName(const QString pluginId);
 		void scanAllPluginsMetaData();
 		void scanSharedLibraries();
