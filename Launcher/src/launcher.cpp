@@ -26,13 +26,6 @@
 #include "precompiled.h"
 #include "Core/src/core.h"
 
-// Enable core dumps of debug builds on Linux
-#ifdef Q_OS_LINUX
-#ifdef DEBUG
-#include <sys/resource.h>
-#endif
-#endif
-
 using namespace Core;
 
 /**
