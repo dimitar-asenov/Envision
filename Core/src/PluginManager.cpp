@@ -32,7 +32,7 @@
 namespace Core {
 
 PluginManager::PluginManager(QString path) :
-	pluginsDir(path)
+	pluginsDir{path}
 {
 	scanSharedLibraries();
 	scanAllPluginsMetaData();
@@ -52,7 +52,7 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 	for (auto p_meta : pluginMetaData)
 		plugins.append(p_meta.id);
 
-	QTextStream out(stdout);
+	QTextStream out{stdout};
 
 	while ( lastCountLoaded != loadedPlugins.length() && loadedPlugins.length() < pluginMetaData.length() )
 	{
@@ -113,7 +113,7 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 
 void PluginManager::unloadAllPlugins()
 {
-	QTextStream out(stdout);
+	QTextStream out{stdout};
 	while ( !loadedPlugins.isEmpty() )
 	{
 		auto plugin = loadedPlugins.takeLast();
@@ -140,9 +140,7 @@ bool PluginManager::isPluginLoaded(QString pluginId)
 EnvisionPlugin* PluginManager::getLoadedPluginInterface(QString pluginId)
 {
 	if ( isPluginLoaded(pluginId) )
-	{
 		return qobject_cast<EnvisionPlugin*> (idToPluginLoaderMap.value(pluginId)->instance());
-	}
 	else
 		return nullptr;
 }
@@ -190,15 +188,15 @@ void PluginManager::scanAllPluginsMetaData()
 
 PluginInfo PluginManager::readPluginMetaData(const QString fileName)
 {
-	QDomDocument pluginDoc("EnvisionPlugin");
-	QFile file(fileName);
+	QDomDocument pluginDoc{"EnvisionPlugin"};
+	QFile file{fileName};
 
 	if ( !file.open(QIODevice::ReadOnly) )
 		throw EnvisionException("Can not open file for reading: " + fileName);
 	if ( !pluginDoc.setContent(&file) )
 		throw EnvisionException("File is not a valid Envision Plugin descriptor: " + fileName);
 
-	QDomElement root = pluginDoc.documentElement();
+	QDomElement root{pluginDoc.documentElement()};
 	if ( root.tagName() != "plugin" )
 		throw EnvisionException("File is not a valid Envision Plugin descriptor - Root element is invalid: " + fileName);
 
@@ -216,16 +214,16 @@ PluginInfo PluginManager::readPluginMetaData(const QString fileName)
 	if ( pinfo.version == QString::null )
 		throw EnvisionException("File is not a valid Envision Plugin descriptor - Version is invalid: " + fileName);
 
-	QDomNode node = root.firstChild();
+	QDomNode node{root.firstChild()};
 	while ( !node.isNull() )
 	{
-		QDomElement elem = node.toElement();
+		QDomElement elem{node.toElement()};
 		if ( !elem.isNull() && elem.tagName() == "dependencies" )
 		{
-			QDomNode dep = elem.firstChild();
+			QDomNode dep{elem.firstChild()};
 			while ( !dep.isNull() )
 			{
-				QDomElement depElem = dep.toElement();
+				QDomElement depElem{dep.toElement()};
 				if ( depElem.tagName() == "dependency" )
 				{
 					PluginDependency pd;
@@ -255,10 +253,8 @@ QList<PluginInfo> PluginManager::getAllLoadedPluginsInfo()
 {
 	QList<PluginInfo> result;
 
-	for (QList<PluginInfo>::iterator p = pluginMetaData.begin(); p != pluginMetaData.end(); p++)
-	{
+	for (QList<PluginInfo>::iterator p{pluginMetaData.begin()}; p != pluginMetaData.end(); p++)
 		if ( idToPluginLoaderMap.contains(p->id) ) result.append(*p);
-	}
 
 	return result;
 }

@@ -97,9 +97,9 @@ class CORE_API EnvisionManager
 
 		// The methods below are meant for use by Core only
 		friend int coreMain(int argc, char *argv[]);
-		void setPluginManager(PluginManager*);
-		void setMainWindow(QMainWindow*);
-		void setTestRunner(TestRunner*);
+		void setPluginManager(PluginManager* pm);
+		void setMainWindow(QMainWindow* mainWindow);
+		void setTestRunner(TestRunner* tr);
 };
 
 }

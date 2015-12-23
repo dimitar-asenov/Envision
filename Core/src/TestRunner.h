@@ -32,7 +32,7 @@ namespace Core {
 
 class TestEvent;
 
-class TestRunner: public QObject
+class CORE_API TestRunner: public QObject
 {
 	Q_OBJECT
 

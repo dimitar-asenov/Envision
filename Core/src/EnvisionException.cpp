@@ -29,12 +29,7 @@ namespace Core {
 
 bool& EnvisionException::assertOnThrow()
 {
-#if defined(DEBUG)
-	// This helps with debugging duing development
 	static bool aot = true;
-#else
-	static bool aot = false;
-#endif
 	return aot;
 }
 
@@ -51,7 +46,7 @@ EnvisionException::~EnvisionException() {}
 
 const QString& EnvisionException::name() const
 {
-	static QString ename("EnvisionException");
+	static QString ename{"EnvisionException"};
 	return ename;
 }
 
@@ -62,7 +57,7 @@ const QString& EnvisionException::message() const
 
 void EnvisionException::printError() const
 {
-	QTextStream err(stderr);
+	QTextStream err{stderr};
 	err << "Exception " << qPrintable( name() ) << ": " << qPrintable( message() ) << endl;
 }
 

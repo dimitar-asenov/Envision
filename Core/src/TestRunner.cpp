@@ -32,10 +32,10 @@ namespace Core {
 
 TestRunner::TestRunner()
 {
-	QStringList arguments = qApp->arguments();
+	QStringList arguments{qApp->arguments()};
 
 	bool tests = false;
-	for (QStringList::iterator arg = arguments.begin(); arg != arguments.end(); arg++)
+	for (QStringList::iterator arg{arguments.begin()}; arg != arguments.end(); arg++)
 	{
 		if ( *arg == "--test" )
 		{
@@ -47,12 +47,12 @@ TestRunner::TestRunner()
 
 		if ( tests )
 		{
-			QStringList parts = arg->split(":");
+			QStringList parts{arg->split(":")};
 
 			if ( parts.length() > 2 ) throw EnvisionException("Incorrectly specified test target and/or test id.");
 
-			QString target = parts[0];
-			QString id = QString::null;
+			QString target{parts[0]};
+			QString id{QString::null};
 			if ( parts.length() > 1 ) id = parts[1];
 
 			requestedTests_.append(new TestEvent(target, id));
@@ -77,7 +77,7 @@ void TestRunner::customEvent( QEvent * event )
 	TestEvent* ev = dynamic_cast<TestEvent *>(event);
 	if (ev)
 	{
-		QTextStream out(stdout);
+		QTextStream out{stdout};
 		if ( ev->id().isEmpty())
 			out << "Running all tests for plug-in " + ev->target() << endl;
 		else

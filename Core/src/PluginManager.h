@@ -34,17 +34,8 @@ namespace Core
 
 class EnvisionManager;
 
-class PluginManager
+class CORE_API PluginManager
 {
-	private:
-		QDir pluginsDir;
-		QList<PluginInfo> pluginMetaData;
-		QList<QPluginLoader*> loadedPlugins;
-		QMap<QString, PluginInfo*> idToMetaDataMap;
-		QMap<QString, QPluginLoader*> idToPluginLoaderMap;
-
-		QMap<QString, QString> _allFoundSharedLibraryFiles; //lower to mixed case maps.
-
 	public:
 
 		/**
@@ -62,7 +53,7 @@ class PluginManager
 		 * dependencies are loaded first. Each plug-in is given a reference to the EnvisionManager object to communicate
 		 * to the core.
 		 */
-		void loadAllPlugins(EnvisionManager&);
+		void loadAllPlugins(EnvisionManager& envisionManager);
 
 		/**
 		 * Unloads all currently loaded plug-ins.
@@ -87,6 +78,13 @@ class PluginManager
 		EnvisionPlugin* getLoadedPluginInterface(QString pluginId);
 
 	private:
+		QDir pluginsDir;
+		QList<PluginInfo> pluginMetaData;
+		QList<QPluginLoader*> loadedPlugins;
+		QMap<QString, PluginInfo*> idToMetaDataMap;
+		QMap<QString, QPluginLoader*> idToPluginLoaderMap;
+		QMap<QString, QString> _allFoundSharedLibraryFiles; // lower to mixed case maps.
+
 		QString getLibraryFileName(const QString pluginId);
 		void scanAllPluginsMetaData();
 		void scanSharedLibraries();

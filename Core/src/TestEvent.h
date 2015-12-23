@@ -30,7 +30,7 @@
 
 namespace Core {
 
-class TestEvent: public QEvent
+class CORE_API TestEvent: public QEvent
 {
 	public:
 		static const QEvent::Type EventType;

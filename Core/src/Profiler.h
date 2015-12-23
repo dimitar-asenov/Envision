@@ -29,7 +29,7 @@
 
 namespace Core {
 
-struct ProfileJob
+struct CORE_API ProfileJob
 {
 	QString jobName;
 	QString fileName;
@@ -53,4 +53,4 @@ class CORE_API Profiler {
 		static void startProfiling();
 };
 
-} /* namespace Core */
+}

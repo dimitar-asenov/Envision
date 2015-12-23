@@ -39,7 +39,7 @@ void TypeRegistry::initializeNewTypes()
 int TypeRegistry::add(InitializationFunction func)
 {
 	static QMutex mutex;
-	QMutexLocker locker(&mutex);
+	QMutexLocker locker{&mutex};
 
 	Q_ASSERT(!initializationFunctions_.contains(func));
 	initializationFunctions_.append(func);
@@ -48,4 +48,4 @@ int TypeRegistry::add(InitializationFunction func)
 }
 
 
-} /* namespace Core */
+}

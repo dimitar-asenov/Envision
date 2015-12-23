@@ -65,15 +65,11 @@ void Profiler::startOnce(bool condition, const QString& jobName, const QString& 
 
 void Profiler::startProfiling()
 {
-#ifdef Q_OS_LINUX
 	Q_ASSERT(currentJob_);
 	currentJob_->startedAtLeastOnce = true;
 	qDebug() << "Profiling" << currentJob_->jobName;
 	if (!DISABLE_TIME_MEASUREMENT) currentJob_->timer.start();
 	if (!DISABLE_CALL_PROFILING) ProfilerStart(currentJob_->fileName.toStdString().c_str());
-#else
-	Q_ASSERT(false && "Profiling only works in Linux for now.");
-#endif
 }
 
 void Profiler::stop(const QString& jobName)
@@ -82,9 +78,7 @@ void Profiler::stop(const QString& jobName)
 
 	if (currentJob_ && currentJob_->jobName == jobName)
 	{
-#ifdef Q_OS_LINUX
 		if (!DISABLE_CALL_PROFILING) ProfilerStop();
-#endif
 
 		if (!DISABLE_TIME_MEASUREMENT)
 		{
@@ -108,4 +102,4 @@ ProfileJob* Profiler::findJob(const QString& jobName, const QString& fileName)
 	return job;
 }
 
-} /* namespace Core */
+}
