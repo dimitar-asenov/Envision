@@ -38,6 +38,7 @@
 #include "OOModel/src/elements/MemberInitializer.h"
 #include "OOModel/src/expressions/types/PointerTypeExpression.h"
 #include "OOModel/src/expressions/types/FunctionTypeExpression.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 
 using namespace Export;
 using namespace OOModel;
@@ -51,6 +52,8 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 	auto pointerTypeExpression = DCast<PointerTypeExpression>(argument->typeExpression());
 	if (pointerTypeExpression && DCast<FunctionTypeExpression>(pointerTypeExpression->typeExpression()))
 		*fragment << ExpressionVisitor(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
+	else if (auto arrayTypeExpression = DCast<ArrayTypeExpression>(argument->typeExpression()))
+		*fragment << expression(arrayTypeExpression->typeExpression()) << " " << argument->nameNode() << "[]";
 	else
 		*fragment << expression(argument->typeExpression()) << " " << argument->nameNode();
 
