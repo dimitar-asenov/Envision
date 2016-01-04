@@ -45,6 +45,8 @@
 #include "OOModel/src/statements/SynchronizedStatement.h"
 #include "OOModel/src/elements/StatementItem.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/elements/CommentStatementItem.h"
+#include "Comments/src/nodes/CommentNode.h"
 
 using namespace Export;
 using namespace OOModel;
@@ -66,6 +68,7 @@ SourceFragment* StatementVisitor::visit(StatementItem* statementItem)
 	if (auto castStatement = DCast<SwitchStatement>(statementItem)) return visit(castStatement);
 	if (auto castStatement = DCast<TryCatchFinallyStatement>(statementItem)) return visit(castStatement);
 	if (auto castStatement = DCast<AssertStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<CommentStatementItem>(statementItem)) return visit(castStatement);
 
 	// TODO: handle comments
 	auto fragment = new CompositeFragment(statementItem);
@@ -225,6 +228,14 @@ SourceFragment* StatementVisitor::visit(OOModel::SynchronizedStatement* statemen
 	auto fragment = new CompositeFragment(statement);
 	*fragment << "synchronized (" << expression(statement->expression()) << ")";
 	*fragment << list(statement->body(), StatementVisitor(data()), "body");
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(OOModel::CommentStatementItem* statement)
+{
+	auto fragment = new CompositeFragment(statement, "sections");
+	for (auto line : *statement->commentNode()->lines())
+		*fragment << line;
 	return fragment;
 }
 
