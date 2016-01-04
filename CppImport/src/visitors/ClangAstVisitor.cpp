@@ -516,6 +516,8 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDecl(usingDecl))
 	{
+		ooNameImport->modifiers()->set(utils_->translateAccessSpecifier(usingDecl->getAccess()));
+
 		auto nameRef = clang_.createReference(usingDecl->getNameInfo().getSourceRange());
 		if (auto prefix = usingDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
@@ -539,6 +541,8 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDirective(usingDirectiveDecl))
 	{
+		ooNameImport->modifiers()->set(utils_->translateAccessSpecifier(usingDirectiveDecl->getAccess()));
+
 		auto nameRef = clang_.createReference(usingDirectiveDecl->getIdentLocation());
 		if (auto prefix = usingDirectiveDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
@@ -563,6 +567,8 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 		return true;
 	if (auto ooNameImport = trMngr_->insertUnresolvedUsing(unresolvedUsing))
 	{
+		ooNameImport->modifiers()->set(utils_->translateAccessSpecifier(unresolvedUsing->getAccess()));
+
 		auto nameRef = clang_.createReference(unresolvedUsing->getNameInfo().getSourceRange());
 		if (auto prefix = unresolvedUsing->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
