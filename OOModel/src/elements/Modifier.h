@@ -59,7 +59,9 @@ class OOMODEL_API Modifier :  public Super<Model::Node>
 			Const = 0x00000200,
 
 			Default = 0x00000400,
-			Deleted = 0x00000800
+			Deleted = 0x00000800,
+
+			ConstExpr = 0x00001000
 		};
 		Q_DECLARE_FLAGS(Modifiers, ModifierFlag)
 
