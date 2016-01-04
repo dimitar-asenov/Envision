@@ -415,8 +415,13 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 		for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
 			ooMemberInit->arguments()->append(argument);
 	else
-		ooMemberInit->arguments()->append(exprVisitor_->translateExpression(initializer->getInit()));
-
+	{
+		auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(initializer->getInit()->IgnoreImplicit());
+		if (initListExpr && initListExpr->getNumInits() == 1)
+			ooMemberInit->arguments()->append(exprVisitor_->translateExpression(initListExpr->getInit(0)));
+		else
+			ooMemberInit->arguments()->append(exprVisitor_->translateExpression(initializer->getInit()));
+	}
 	if (initializer->isBaseInitializer())
 	{
 		if (auto memberRef = DCast<OOModel::ReferenceExpression>(
