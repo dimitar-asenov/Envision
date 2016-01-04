@@ -142,7 +142,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		auto filter = [](Method* method) { return method->typeArguments()->isEmpty() &&
 																!method->modifiers()->isSet(OOModel::Modifier::Inline) &&
-																!method->modifiers()->isSet(OOModel::Modifier::Abstract); };
+																!method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
+																!method->modifiers()->isSet(OOModel::Modifier::Deleted); };
 		*sections << list(classs->methods(), this, "spacedSections", filter);
 		*sections << list(classs->fields(), this, "vertical");
 	}
