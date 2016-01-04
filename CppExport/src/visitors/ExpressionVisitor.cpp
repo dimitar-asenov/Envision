@@ -303,6 +303,27 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 			else
 				*fragment << visit(e->prefix()) << ".";
 		}
+
+		if (!e->prefix() && !headerVisitor() && e->target())
+		{
+			bool addPrefix = false;
+			if (auto parentMethod = e->firstAncestorOfType<Method>())
+			{
+				if (parentMethod->results()->isAncestorOf(e))
+					addPrefix = true;
+			}
+			else if (auto parentField = e->firstAncestorOfType<Field>())
+				if (parentField->typeExpression()->isAncestorOf(e))
+					addPrefix = true;
+
+			if (addPrefix)
+				if (auto parentClass = e->firstAncestorOfType<Class>())
+					if (parentClass->isAncestorOf(e->target()) && !parentClass->friends()->isAncestorOf(e->target()))
+						// if e has no prefix and is in the result of a method or the type of a field
+						// and the resolved target is inside the parent class then we qualifiy it
+						*fragment << parentClass->name() << "::";
+		}
+
 		*fragment << e->name();
 		if (!e->typeArguments()->isEmpty()) *fragment << list(e->typeArguments(), this, "typeArgsList");
 	}
