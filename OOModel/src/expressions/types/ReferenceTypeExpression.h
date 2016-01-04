@@ -28,6 +28,8 @@
 
 #include "TypeExpression.h"
 
+#include "ModelBase/src/nodes/Boolean.h"
+
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReferenceTypeExpression)
 
 namespace OOModel {
@@ -37,10 +39,11 @@ class OOMODEL_API ReferenceTypeExpression : public Super<TypeExpression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReferenceTypeExpression)
 
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+	ATTRIBUTE_VALUE(Model::Boolean, isRValueReference, setIsRValueReference, bool)
 
 	public:
 
-		ReferenceTypeExpression(Expression* ref);
+		ReferenceTypeExpression(Expression* ref, bool rValue = false);
 
 		virtual Type* type() override;
 };
