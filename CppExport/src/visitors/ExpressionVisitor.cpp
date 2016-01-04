@@ -257,7 +257,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<GlobalScopeExpression>(expression)) notAllowed(e);
 	else if (auto e = DCast<ThrowExpression>(expression)) *fragment << "throw " << visit(e->expr());
 	else if (auto e = DCast<TypeNameOperator>(expression))  *fragment << "typename " << visit(e->typeExpression());
-	else if (auto e = DCast<DeleteExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<DeleteExpression>(expression))
+		*fragment << "delete" << (e->isArray() ? "[] " : " ") << visit(e->expr());
 	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
 	else if (auto e = DCast<LambdaExpression>(expression))
 	{
