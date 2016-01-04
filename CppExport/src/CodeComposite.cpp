@@ -133,11 +133,13 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		*composite << "\n";
 	}
 
-	bool hasMeaningfulContent = false;
+
+	Export::CompositeFragment* unitsComposite = nullptr;
 	if (!units().isEmpty())
 	{
-		OOModel::Module* currentNamespace{};
+		unitsComposite = new Export::CompositeFragment(units().first()->node(), "spacedSections");
 
+		OOModel::Module* currentNamespace{};
 		for (auto unit : units())
 		{
 			auto codeUnitPart = (unit->*part)();
@@ -146,24 +148,30 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
 			if (neededNamespace != currentNamespace)
 			{
-				if (currentNamespace) *composite << "\n}\n\n";
-				if (neededNamespace) *composite << "namespace " << neededNamespace->symbolName() << " {\n\n";
+				if (currentNamespace) *unitsComposite << "\n}\n\n";
+				if (neededNamespace)
+				{
+					auto namespaceComposite = new Export::CompositeFragment(unitsComposite->node());
+					*namespaceComposite << "namespace " << neededNamespace->symbolName() << " {\n\n";
+					unitsComposite->append(namespaceComposite);
+				}
 				currentNamespace = neededNamespace;
 			}
 
-			composite->append(codeUnitPart->sourceFragment());
-			hasMeaningfulContent = true;
+			unitsComposite->append(codeUnitPart->sourceFragment());
 		}
 
-		if (currentNamespace) *composite << "\n}";
+		if (currentNamespace) *unitsComposite << "\n}";
 	}
 
-	if (!hasMeaningfulContent)
+	if (unitsComposite && !unitsComposite->fragments().empty())
 	{
-		SAFE_DELETE(composite);
-		return nullptr;
+		composite->append(unitsComposite);
+		return composite;
 	}
-	return composite;
+	SAFE_DELETE(unitsComposite);
+	SAFE_DELETE(composite);
+	return nullptr;
 }
 
 Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fragment)
