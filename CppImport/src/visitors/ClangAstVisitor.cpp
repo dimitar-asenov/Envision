@@ -344,6 +344,8 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	// set the type
 	ooVarDecl->setTypeExpression(utils_->translateQualifiedType(varDecl->getTypeSourceInfo()->getTypeLoc()));
 	// modifiers
+
+	if (varDecl->isConstexpr()) ooVarDecl->modifiers()->set(OOModel::Modifier::ConstExpr);
 	ooVarDecl->modifiers()->set(utils_->translateStorageSpecifier(varDecl->getStorageClass()));
 	return true;
 }
