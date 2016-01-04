@@ -72,6 +72,7 @@
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/expressions/ErrorExpression.h"
 #include "OOModel/src/expressions/UnfinishedOperator.h"
+#include "OOModel/src/declarations/Class.h"
 
 using namespace Export;
 using namespace OOModel;
