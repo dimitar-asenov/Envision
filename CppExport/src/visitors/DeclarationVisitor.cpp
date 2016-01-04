@@ -39,6 +39,7 @@
 #include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 #include "OOModel/src/declarations/TypeAlias.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/declarations/MetaDefinition.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
@@ -55,6 +56,7 @@ namespace CppExport {
 SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 {
 	if (auto castDeclaration = DCast<Method>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<MetaDefinition>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<Class>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<TypeAlias>(declaration)) return visit(castDeclaration);
@@ -268,6 +270,28 @@ bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
 			return false;
 
 	return true;
+}
+
+SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
+{
+	auto oldMode = data().get()->mode_;
+	data().get()->mode_ = MACRO_VISITOR;
+	auto fragment = new CompositeFragment(metaDefinition, "emptyLineAtEnd");
+	auto macro = new CompositeFragment(metaDefinition, "macro");
+	*macro << "#define " << metaDefinition->nameNode();
+	*macro << list(metaDefinition->arguments(), ElementVisitor(data()), "argsList");
+	auto body = new CompositeFragment(metaDefinition->context(), "macroBody");
+	if (auto context = DCast<Module>(metaDefinition->context()))
+		*body << list(context->classes(), this, "spacedSections");
+	else if (auto context = DCast<Class>(metaDefinition->context()))
+	{
+		*body << list(context->metaCalls(), ExpressionVisitor(data()), "sections");
+		*body << list(context->methods(), this, "spacedSections");
+	}
+	*macro << body;
+	*fragment << macro;
+	data().get()->mode_ = oldMode;
+	return fragment;
 }
 
 SourceFragment* DeclarationVisitor::visit(Method* method)

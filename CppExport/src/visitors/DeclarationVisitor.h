@@ -40,6 +40,7 @@ namespace OOModel {
 	class VariableDeclaration;
 	class ExplicitTemplateInstantiation;
 	class TypeAlias;
+	class MetaDefinition;
 }
 
 namespace Export {
@@ -72,6 +73,7 @@ class CPPEXPORT_API DeclarationVisitor
 
 		Export::SourceFragment* visit(OOModel::Class* classs);
 		Export::SourceFragment* visit(OOModel::Method* method);
+		Export::SourceFragment* visit(OOModel::MetaDefinition* metaDefinition);
 
 		Export::SourceFragment* visit(OOModel::NameImport* nameImport);
 		Export::SourceFragment* visit(OOModel::VariableDeclaration* vd);

@@ -30,6 +30,7 @@
 #include "ElementVisitor.h"
 
 #include "OOModel/src/elements/FormalArgument.h"
+#include "OOModel/src/elements/FormalMetaArgument.h"
 #include "OOModel/src/elements/FormalResult.h"
 #include "OOModel/src/elements/FormalTypeArgument.h"
 #include "OOModel/src/elements/CatchClause.h"
@@ -56,6 +57,13 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 	if (headerVisitor() && argument->initialValue())
 		*fragment << " = " << ExpressionVisitor(data()).visit(argument->initialValue());
 
+	return fragment;
+}
+
+SourceFragment* ElementVisitor::visit(FormalMetaArgument* argument)
+{
+	auto fragment = new CompositeFragment(argument);
+	*fragment << argument->nameNode();
 	return fragment;
 }
 

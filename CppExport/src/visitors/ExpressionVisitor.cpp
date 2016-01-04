@@ -289,7 +289,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<ReferenceExpression>(expression))
 	{
-		if (e->prefix())
+		if (e->prefix() && !DCast<MetaCallExpression>(expression->parent()))
 		{
 			if (dynamic_cast<PointerType*>(e->prefix()->type()))
 				*fragment << visit(e->prefix()) << "->";
