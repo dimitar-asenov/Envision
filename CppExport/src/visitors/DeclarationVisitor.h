@@ -56,6 +56,7 @@ class ElementVisitor;
 
 const int HEADER_VISITOR = 0;
 const int SOURCE_VISITOR = 1;
+const int MACRO_VISITOR = 2;
 
 class CPPEXPORT_API DeclarationVisitor
 :public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
@@ -87,6 +88,7 @@ class CPPEXPORT_API DeclarationVisitor
 		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
 
 		bool headerVisitor();
+		bool sourceVisitor();
 		Export::SourceFragment* declarationComments(OOModel::Declaration* declaration);
 
 		/**
@@ -97,5 +99,6 @@ class CPPEXPORT_API DeclarationVisitor
 };
 
 inline bool DeclarationVisitor::headerVisitor() { return data().get()->mode_ == HEADER_VISITOR; }
+inline bool DeclarationVisitor::sourceVisitor() { return data().get()->mode_ == SOURCE_VISITOR; }
 
 }

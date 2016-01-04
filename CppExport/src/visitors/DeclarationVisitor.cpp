@@ -130,7 +130,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
 
-	if (!headerVisitor())
+	if (sourceVisitor())
 	{
 		//TODO
 		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
@@ -276,19 +276,21 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	auto fragment = new CompositeFragment(method);
 
-	if (headerVisitor())
+	if (!sourceVisitor())
 		*fragment << declarationComments(method);
 
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
-	if (headerVisitor())
+	if (!sourceVisitor())
 		if (auto parentClass = method->firstAncestorOfType<Class>())
 			if (parentClass->friends()->isAncestorOf(method))
 				*fragment << "friend ";
 
+	if (!sourceVisitor())
 		*fragment << printAnnotationsAndModifiers(method);
-	else
+
+	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment(method->modifiers(), "inline") << " ";
 
@@ -297,7 +299,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
-		if (!headerVisitor())
+		if (sourceVisitor())
 			if (auto parentClass = method->firstAncestorOfType<Class>())
 				*fragment << parentClass->name() << "::";
 		*fragment << "operator ";
@@ -312,7 +314,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
-	if (!headerVisitor() && method->methodKind() != Method::MethodKind::Conversion)
+	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == method->firstAncestorOfType<Module>())
+		*fragment << "CORE_API ";
+
+	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
 			*fragment << parentClass->name() << "::";
 
@@ -335,7 +340,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << ")";
 	}
 
-	if (headerVisitor())
+	if (!sourceVisitor())
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 			*fragment << new TextFragment(method->modifiers(), " override");
@@ -347,7 +352,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << new TextFragment(method->modifiers(), " = 0");
 		*fragment << ";";
 	}
-	else
+
+	if (!headerVisitor())
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
 
 	notAllowed(method->subDeclarations());
@@ -372,7 +378,7 @@ SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment(variableDeclaration);
-	if (headerVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
+	if (!sourceVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 	{
 		*fragment << declarationComments(variableDeclaration);
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
@@ -382,7 +388,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 
 		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
-	else if (!headerVisitor() && (!DCast<Field>(variableDeclaration) ||
+	else if (sourceVisitor() && (!DCast<Field>(variableDeclaration) ||
 										  variableDeclaration->modifiers()->isSet(Modifier::Static) ||
 										  variableDeclaration->modifiers()->isSet(Modifier::ConstExpr)))
 	{
