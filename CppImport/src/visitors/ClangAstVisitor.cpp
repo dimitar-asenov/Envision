@@ -1130,6 +1130,9 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		{
 			if (constructor->getNumCtorInitializers() && !ooMethod->memberInitializers()->size())
 			{
+				if (constructor->isExplicit())
+					ooMethod->modifiers()->set(OOModel::Modifier::Explicit);
+
 				// if the method already has member initializer we do not have to consider them anymore
 				for (auto initIt = constructor->init_begin(); initIt != constructor->init_end(); ++initIt)
 				{
