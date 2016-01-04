@@ -211,9 +211,6 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			break;
 		case CppImportUtilities::OverloadKind::Unary:
 		{
-			if (2 == numArguments)
-				// remove dummy expression
-				ooExprStack_.pop();
 			auto ooUnary = clang_.createNode<OOModel::UnaryOperation>(callExpr->getSourceRange(),
 																			utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if (!ooExprStack_.empty())
