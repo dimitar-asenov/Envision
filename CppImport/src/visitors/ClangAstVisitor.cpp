@@ -323,18 +323,38 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 	if (varDecl->hasInit())
 	{
-		bool inBody = inBody_;
-		inBody_ = false;
-		TraverseStmt(varDecl->getInit()->IgnoreImplicit());
-		if (!ooExprStack_.empty())
+		auto initExpr = varDecl->getInit()->IgnoreImplicit();
+
+		auto initSpelling = clang_.unexpandedSpelling(initExpr->getSourceRange());
+		auto varDeclNameToEndSpelling = clang_.unexpandedSpelling(varDecl->getLocation(),
+																					 varDecl->getSourceRange().getEnd());
+		if (varDeclNameToEndSpelling.contains("=") || initSpelling.contains("(") || initSpelling.contains("{"))
 		{
-			// make sure we have not ourself as init (if init couldn't be converted)
-			if (ooVarDeclExpr != ooExprStack_.top())
-				ooVarDecl->setInitialValue(ooExprStack_.pop());
+			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr);
+			if (constructExpr && initSpelling.contains("{"))
+			{
+				auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(initExpr->getSourceRange());
+				for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
+					arrayInitializer->values()->append(argument);
+				ooVarDecl->setInitialValue(arrayInitializer);
+			}
+			else
+			{
+				bool inBody = inBody_;
+				inBody_ = false;
+
+				TraverseStmt(initExpr);
+				if (!ooExprStack_.empty())
+				{
+					// make sure we have not ourself as init (if init couldn't be converted)
+					if (ooVarDeclExpr != ooExprStack_.top())
+						ooVarDecl->setInitialValue(ooExprStack_.pop());
+				}
+				else
+					log_->writeError(className_, varDecl->getInit(), CppImportLogger::Reason::NOT_SUPPORTED);
+				inBody_ = inBody;
+			}
 		}
-		else
-			log_->writeError(className_, varDecl->getInit(), CppImportLogger::Reason::NOT_SUPPORTED);
-		inBody_ = inBody;
 	}
 
 	if (wasDeclared)
