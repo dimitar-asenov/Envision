@@ -418,8 +418,16 @@ QList<OOModel::Expression*> ExpressionVisitor::translateArguments(llvm::iterator
 
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
+	if (!constructExpr)
+		return true;
+
 	if (!constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
-		return TraverseStmt(*(constructExpr->child_begin()));
+	{
+		if (constructExpr->getNumArgs() > 0)
+			return TraverseStmt(*(constructExpr->child_begin()));
+		else
+			return true;
+	}
 
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
