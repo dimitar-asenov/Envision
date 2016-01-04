@@ -567,7 +567,8 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 																					translateQualifiedType(pointerType.getNextTypeLoc()));
 	else if (auto refType = type.getAs<clang::ReferenceTypeLoc>())
 		return clang_.createNode<OOModel::ReferenceTypeExpression>(type.getSourceRange(),
-																					  translateQualifiedType(refType.getNextTypeLoc()));
+																					  translateQualifiedType(refType.getNextTypeLoc()),
+																					  !type.getAs<clang::RValueReferenceTypeLoc>().isNull());
 	else if (auto enumType = type.getAs<clang::EnumTypeLoc>())
 	{
 		auto ooRef = clang_.createReference(type.getSourceRange());
