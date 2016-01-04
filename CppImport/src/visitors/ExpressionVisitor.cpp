@@ -432,7 +432,8 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		if (!constructExpr->isListInitialization() || !clang_.spelling(constructExpr->getLocation()).startsWith("{"))
+		if ((!constructExpr->isListInitialization() || !clang_.spelling(constructExpr->getLocation()).startsWith("{"))
+			  && !clang_.spelling(constructExpr->getLocation()).startsWith("="))
 		{
 			auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
 			if (auto temporaryObjectExpression = llvm::dyn_cast<clang::CXXTemporaryObjectExpr>(constructExpr))
