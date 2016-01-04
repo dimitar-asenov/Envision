@@ -39,7 +39,7 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Class)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class)
 
 REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(Class, friends, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(Class, friends, TypedListOfDeclaration, false, false, true)
 REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)

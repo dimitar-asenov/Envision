@@ -41,7 +41,7 @@ class OOMODEL_API Class : public Super<Declaration>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Class)
 
 	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
-	ATTRIBUTE(Model::TypedList<Expression>, friends, setFriends)
+	ATTRIBUTE(Model::TypedList<Declaration>, friends, setFriends)
 	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
