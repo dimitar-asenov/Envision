@@ -40,6 +40,8 @@
 #include "OOModel/src/declarations/TypeAlias.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/MetaDefinition.h"
+#include "OOModel/src/expressions/ArrayInitializer.h"
+#include "OOModel/src/expressions/types/AutoTypeExpression.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
@@ -409,9 +411,11 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		*fragment << declarationComments(variableDeclaration);
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
 		*fragment << expression(variableDeclaration->typeExpression()) << " " << variableDeclaration->nameNode();
-		if (variableDeclaration->initialValue())
-			*fragment << " = " << expression(variableDeclaration->initialValue());
-
+		if (variableDeclaration->initialValue() && !variableDeclaration->modifiers()->isSet(Modifier::Static))
+		{
+			if (!DCast<ArrayInitializer>(variableDeclaration->initialValue())) *fragment << " = ";
+			*fragment << expression(variableDeclaration->initialValue());
+		}
 		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
 	else if (sourceVisitor() && (!DCast<Field>(variableDeclaration) ||
