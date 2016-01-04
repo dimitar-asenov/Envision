@@ -145,12 +145,22 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	}
 	else
 	{
-		*fragment << declarationComments(classs);
+		bool friendClass = false;
+		if (auto parentClass = classs->firstAncestorOfType<Class>())
+			friendClass = parentClass->friends()->isAncestorOf(classs);
 
-		if (!classs->typeArguments()->isEmpty())
-			*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
+		if (!friendClass)
+		{
+			*fragment << declarationComments(classs);
 
-		*fragment << printAnnotationsAndModifiers(classs);
+			if (!classs->typeArguments()->isEmpty())
+				*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
+			*fragment << printAnnotationsAndModifiers(classs);
+		}
+		else
+			*fragment << "friend ";
+
 		if (Class::ConstructKind::Class == classs->constructKind()) *fragment << "class ";
 		else if (Class::ConstructKind::Struct == classs->constructKind()) *fragment << "struct ";
 		else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
@@ -161,47 +171,51 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		*fragment << classs->nameNode();
 
-		if (!classs->baseClasses()->isEmpty())
-			// TODO: inheritance modifiers like private, virtual... (not only public)
-			*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
-
-		notAllowed(classs->friends());
-
-		auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
-
-		if (classs->enumerators()->size() > 0)
-			error(classs->enumerators(), "Enum unhandled"); // TODO
-
-		auto publicSection = new CompositeFragment(classs, "accessorSections");
-		auto publicFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
-		bool hasPublicSection = addMemberDeclarations(classs, publicSection, publicFilter);
-		if (hasPublicSection)
+		if (!friendClass)
 		{
-			*sections << "public:";
-			sections->append(publicSection);
-		}
+			if (!classs->baseClasses()->isEmpty())
+				// TODO: inheritance modifiers like private, virtual... (not only public)
+				*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 
-		auto protectedSection = new CompositeFragment(classs, "accessorSections");
-		auto protectedFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Protected); };
-		bool hasProtectedSection = addMemberDeclarations(classs, protectedSection, protectedFilter);
-		if (hasProtectedSection)
-		{
-			if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
+			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections");
 
-			*sections << "protected:";
-			sections->append(protectedSection);
-		}
+			if (classs->enumerators()->size() > 0)
+				error(classs->enumerators(), "Enum unhandled"); // TODO
 
-		auto privateSection = new CompositeFragment(classs, "accessorSections");
-		auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
-																					  !declaration->modifiers()->isSet(Modifier::Protected); };
-		bool hasPrivateSection = addMemberDeclarations(classs, privateSection, privateFilter);
-		if (hasPrivateSection)
-		{
-			if (hasPublicSection || hasProtectedSection) *sections << "\n"; // add newline between two accessor sections
+			auto publicSection = new CompositeFragment(classs, "accessorSections");
+			auto publicFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
+			bool hasPublicSection = addMemberDeclarations(classs, publicSection, publicFilter);
 
-			*sections << "private:";
-			sections->append(privateSection);
+			auto protectedSection = new CompositeFragment(classs, "accessorSections");
+			auto protectedFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Protected); };
+			bool hasProtectedSection = addMemberDeclarations(classs, protectedSection, protectedFilter);
+
+			auto privateSection = new CompositeFragment(classs, "accessorSections");
+			auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
+																						  !declaration->modifiers()->isSet(Modifier::Protected); };
+			bool hasPrivateSection = addMemberDeclarations(classs, privateSection, privateFilter);
+
+			if (hasPublicSection)
+			{
+				if (hasProtectedSection || hasPrivateSection || classs->constructKind() != Class::ConstructKind::Struct)
+					*sections << "public:";
+				sections->append(publicSection);
+			}
+			if (hasProtectedSection)
+			{
+				if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+
+				*sections << "protected:";
+				sections->append(protectedSection);
+			}
+			if (hasPrivateSection)
+			{
+				if (hasPublicSection || hasProtectedSection) *sections << "\n"; // add newline between two accessor sections
+
+				*sections << "private:";
+				sections->append(privateSection);
+			}
 		}
 
 		*fragment << ";";
@@ -215,12 +229,14 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 {
 	auto subDeclarations = list(classs->subDeclarations(), this, "sections", filter);
 	auto fields = list(classs->fields(), this, "vertical", filter);
+	auto friends = list(classs->friends(), this, "sections", filter);
 	auto classes = list(classs->classes(), this, "sections", filter);
 	auto methods = list(classs->methods(), this, "sections", filter);
 
-	*section << subDeclarations << fields << classes << methods;
+	*section << subDeclarations << fields << friends << classes << methods;
 	return !subDeclarations->fragments().empty() ||
 			 !fields->fragments().empty() ||
+			 !friends->fragments().empty() ||
 			 !classes->fragments().empty() ||
 			 !methods->fragments().empty();
 }
@@ -267,6 +283,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
 	if (headerVisitor())
+		if (auto parentClass = method->firstAncestorOfType<Class>())
+			if (parentClass->friends()->isAncestorOf(method))
+				*fragment << "friend ";
+
 		*fragment << printAnnotationsAndModifiers(method);
 	else
 		if (method->modifiers()->isSet(Modifier::Inline))
