@@ -60,6 +60,7 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 	if (auto castDeclaration = DCast<Class>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<TypeAlias>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<NameImport>(declaration)) return visit(castDeclaration);
 
 	notAllowed(declaration);
 
@@ -461,10 +462,8 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	auto fragment = new CompositeFragment(nameImport);
 	notAllowed(nameImport->annotations());
 
-	*fragment << "import " << expression(nameImport->importedName());
-	if (nameImport->importAll()) *fragment << ".*";
-	*fragment << ";";
-
+	Q_ASSERT(!nameImport->importAll());
+	*fragment << "using " << expression(nameImport->importedName()) << ";";
 	return fragment;
 }
 
