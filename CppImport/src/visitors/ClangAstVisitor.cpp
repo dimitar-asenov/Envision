@@ -1149,16 +1149,11 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 			if (auto fDecl = llvm::dyn_cast<clang::FriendDecl>(*declIt))
 			{
 				// Class type
-				if (auto type = fDecl->getFriendType())
-					insertFriendClass(type, ooClass);
+				if (fDecl->getFriendType())
+					insertFriendClass(fDecl, ooClass);
 				// Functions
-				if (auto friendDecl = fDecl->getFriendDecl())
-				{
-					if (!llvm::isa<clang::FunctionDecl>(friendDecl))
-						log_->writeError(className_, friendDecl, CppImportLogger::Reason::NOT_SUPPORTED);
-					else
-						insertFriendFunction(llvm::dyn_cast<clang::FunctionDecl>(friendDecl), ooClass);
-				}
+				if (fDecl->getFriendDecl())
+					insertFriendFunction(fDecl, ooClass);
 			}
 			else
 				TraverseDecl(*declIt);
@@ -1213,28 +1208,34 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 	}
 }
 
-void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
+void ClangAstVisitor::insertFriendClass(clang::FriendDecl* friendDecl, OOModel::Class* ooClass)
 {
-	// use nextTypeLoc to skip the 'class' in "class FriendClass"
-	ooClass->friends()->append(clang_.createReference(typeInfo->getTypeLoc().getNextTypeLoc().getSourceRange()));
+	auto friendClass = friendDecl->getFriendType()->getType().getTypePtr()->getAsCXXRecordDecl();
+	Q_ASSERT(friendClass);
+	ooClass->friends()->append(clang_.createNamedNode<OOModel::Class>(friendClass));
 }
 
-void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass)
+void ClangAstVisitor::insertFriendFunction(clang::FriendDecl* friendDecl, OOModel::Class* ooClass)
 {
-	if (friendFunction->isThisDeclarationADefinition())
+	if (auto friendFunction = llvm::dyn_cast<clang::FunctionDecl>(friendDecl->getFriendDecl()))
 	{
-		// TODO: this is at the moment the only solution to handle this
-		ooStack_.push(ooClass);
-		TraverseDecl(friendFunction);
-		ooStack_.pop();
+		auto ooMethod = clang_.createNode<OOModel::Method>(friendDecl->getSourceRange(),
+																			clang_.spelling(friendFunction->getLocation()));
+		auto functionTypeLoc = friendFunction->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
+		ooMethod->results()->append(
+					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
+		// process arguments
+		for (auto it = friendFunction->param_begin(); it != friendFunction->param_end(); ++it)
+		{
+			auto formalArgument = clang_.createNamedNode<OOModel::FormalArgument>(*it,
+																utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc()));
+			if ((*it)->hasDefaultArg())
+				formalArgument->setInitialValue(exprVisitor_->translateExpression((*it)->getInit()));
+			ooMethod->arguments()->append(formalArgument);
+		}
+		ooClass->friends()->append(ooMethod);
 	}
-	// this should happen anyway that it is clearly visible that there is a friend
-	// TODO: this is not really a method call but rather a reference
-	auto ooMCall = clang_.createNode<OOModel::MethodCallExpression>(friendFunction->getSourceRange());
-	ooMCall->setCallee(new OOModel::ReferenceExpression(clang_.spelling(friendFunction->getLocation())));
-
-	// TODO: handle return type & arguments & type arguments
-	ooClass->friends()->append(ooMCall);
 }
 
 bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)

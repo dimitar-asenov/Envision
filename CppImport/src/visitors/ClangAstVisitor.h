@@ -158,11 +158,11 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		/**
 		 * Inserts a friend class with the \a typeInfo in \a ooClass.
 		 */
-		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);
+		void insertFriendClass(clang::FriendDecl* friendDecl, OOModel::Class* ooClass);
 		/**
 		 * Inserts the friend function \a friendFunction in \a ooClass.
 		 */
-		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
+		void insertFriendFunction(clang::FriendDecl* friendDecl, OOModel::Class* ooClass);
 
 		/**
 		 * Returns if it is intended to import the code at the \a location.
