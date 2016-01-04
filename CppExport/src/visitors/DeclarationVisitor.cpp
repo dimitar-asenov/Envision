@@ -352,7 +352,7 @@ SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment(variableDeclaration);
-	if (headerVisitor())
+	if (headerVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 	{
 		*fragment << declarationComments(variableDeclaration);
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
@@ -363,9 +363,10 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
 	else if (!headerVisitor() && (!DCast<Field>(variableDeclaration) ||
-										  variableDeclaration->modifiers()->isSet(Modifier::Static)))
+										  variableDeclaration->modifiers()->isSet(Modifier::Static) ||
+										  variableDeclaration->modifiers()->isSet(Modifier::ConstExpr)))
 	{
-		if (!DCast<Field>(variableDeclaration))
+		if (!DCast<Field>(variableDeclaration) || variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 			*fragment << printAnnotationsAndModifiers(variableDeclaration);
 		*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
@@ -393,6 +394,8 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 		*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
 	auto header = fragment->append(new CompositeFragment(declaration, "space"));
 
+	if (declaration->modifiers()->isSet(Modifier::ConstExpr))
+		*header << new TextFragment(declaration->modifiers(), "constexpr");
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment(declaration->modifiers(), "static");
 	if (declaration->modifiers()->isSet(Modifier::Final))

@@ -117,12 +117,13 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<TypeQualifierExpression>(expression))
 	{
-		switch (e->qualifier())
-		{
-			case TypeQualifierExpression::Qualifier::CONST: *fragment << "const"; break;
-			case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
-			default: error(e, "Unknown qualifier");
-		}
+		if (!parentVariableDeclaration || !parentVariableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
+			switch (e->qualifier())
+			{
+				case TypeQualifierExpression::Qualifier::CONST: *fragment << "const"; break;
+				case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
+				default: error(e, "Unknown qualifier");
+			}
 		*fragment << " " << visit(e->typeExpression());
 	}
 	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
