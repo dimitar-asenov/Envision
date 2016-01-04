@@ -117,6 +117,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<TypeQualifierExpression>(expression))
 	{
+		auto parentVariableDeclaration = e->firstAncestorOfType<VariableDeclaration>();
 		if (!parentVariableDeclaration || !parentVariableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 			switch (e->qualifier())
 			{
