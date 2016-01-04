@@ -362,25 +362,26 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 
 		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
-	else
+	else if (!headerVisitor() && (!DCast<Field>(variableDeclaration) ||
+										  variableDeclaration->modifiers()->isSet(Modifier::Static)))
 	{
-		bool isField = DCast<Field>(variableDeclaration);
-
-		if (!isField || variableDeclaration->modifiers()->isSet(Modifier::Static))
-		{
+		if (!DCast<Field>(variableDeclaration))
 			*fragment << printAnnotationsAndModifiers(variableDeclaration);
-			*fragment << expression(variableDeclaration->typeExpression()) << " ";
+		*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
-			if (isField)
-				if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
-					*fragment << parentClass->name() << "::";
+		if (DCast<Field>(variableDeclaration))
+			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
+				*fragment << parentClass->name() << "::";
 
-			*fragment << variableDeclaration->nameNode();
-			if (variableDeclaration->initialValue())
-				*fragment << " = " << expression(variableDeclaration->initialValue());
-
-			if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
+		*fragment << variableDeclaration->nameNode();
+		if (variableDeclaration->initialValue())
+		{
+			if (!DCast<ArrayInitializer>(variableDeclaration->initialValue()) ||
+				 DCast<AutoTypeExpression>(variableDeclaration->typeExpression())) *fragment << " = ";
+			*fragment << expression(variableDeclaration->initialValue());
 		}
+
+		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
 	return fragment;
 }
