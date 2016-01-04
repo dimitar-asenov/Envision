@@ -282,37 +282,40 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	auto ooNewExpr = clang_.createNode<OOModel::NewExpression>(newExpr->getSourceRange());
-	if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
+	if (newExpr->getInitializer())
 	{
-		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
-		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
-		for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
-			methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
-		ooExprStack_.push(methodCallExpr);
-	}
-	else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
-	{
-		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
-		methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
-		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
-		for (auto initExpr : *initListExpr)
-			methodCallExpr->arguments()->append(translateExpression(initExpr));
-		ooExprStack_.push(methodCallExpr);
-	}
-	else
-		TraverseStmt(newExpr->getInitializer());
+		if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
+		{
+			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+			for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
+				methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
+			ooExprStack_.push(methodCallExpr);
+		}
+		else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
+		{
+			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+			for (auto initExpr : *initListExpr)
+				methodCallExpr->arguments()->append(translateExpression(initExpr));
+			ooExprStack_.push(methodCallExpr);
+		}
+		else
+			TraverseStmt(newExpr->getInitializer());
 
-	if (!ooExprStack_.empty())
-		ooNewExpr->setNewType(ooExprStack_.pop());
-	if (newExpr->isArray())
-	{
-		TraverseStmt(newExpr->getArraySize());
 		if (!ooExprStack_.empty())
-			ooNewExpr->dimensions()->append(ooExprStack_.pop());
+			ooNewExpr->setNewType(ooExprStack_.pop());
+		if (newExpr->isArray())
+		{
+			TraverseStmt(newExpr->getArraySize());
+			if (!ooExprStack_.empty())
+				ooNewExpr->dimensions()->append(ooExprStack_.pop());
+		}
 	}
 
 	ooExprStack_.push(ooNewExpr);
