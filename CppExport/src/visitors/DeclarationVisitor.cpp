@@ -458,6 +458,8 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 		*header << new TextFragment(declaration->modifiers(), "final");
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
+	if (declaration->modifiers()->isSet(Modifier::Explicit))
+		*header << new TextFragment(declaration->modifiers(), "explicit");
 
 	return fragment;
 }
