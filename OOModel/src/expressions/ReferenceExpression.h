@@ -29,6 +29,8 @@
 #include "Expression.h"
 #include "../elements/OOReference.h"
 
+#include "ModelBase/src/nodes/Integer.h"
+
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReferenceExpression)
 
 namespace OOModel {
@@ -43,8 +45,20 @@ class OOMODEL_API ReferenceExpression: public Super<Expression>
 	ATTRIBUTE(OOReference, ref, setRef)
 	ATTRIBUTE(Model::TypedList<Expression>, typeArguments, setTypeArguments)
 
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, memKind, setMemKind, int)
+
 	public:
-		ReferenceExpression(const QString& name, Expression* prefix = nullptr);
+		/**
+		 * The kind of member relationship between the prefix and the ref.
+		 *
+		 * These correspond to the . -> and :: operators.
+		 */
+		enum class MemberKind : int {Dot, Pointer, Static};
+
+		ReferenceExpression(const QString& name, Expression* prefix = nullptr, MemberKind kind = MemberKind::Dot);
+
+		MemberKind memberKind() const;
+		void setMemberKind(MemberKind kind);
 
 		Model::Node* target();
 		virtual Type* type() override;
@@ -56,5 +70,11 @@ class OOMODEL_API ReferenceExpression: public Super<Expression>
 inline Model::Node* ReferenceExpression::target() { return ref()->target(); }
 inline void ReferenceExpression::setName(const QString& name) {ref()->setName(name);}
 inline const QString& ReferenceExpression::name() {return ref()->name();}
+
+inline ReferenceExpression::MemberKind ReferenceExpression::memberKind() const
+{ return static_cast<MemberKind> (memKind()); }
+
+inline void ReferenceExpression::setMemberKind(MemberKind kind)
+{ setMemKind(static_cast<int> (kind)); }
 
 }

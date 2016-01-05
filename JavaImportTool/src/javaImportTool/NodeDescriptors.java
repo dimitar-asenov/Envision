@@ -174,7 +174,8 @@ public class NodeDescriptors {
 		// Expressions
 		add( new NodeInitializer("ReferenceExpression", new String[][]{
 				{"OOReference","ref"},
-				{"TypedListOfExpression","typeArguments"}
+				{"TypedListOfExpression","typeArguments"},
+				{"Integer","memKind"}
 		}));
 		add( new NodeInitializer("CommaExpression", new String[][]{
 				{"Expression","left"},

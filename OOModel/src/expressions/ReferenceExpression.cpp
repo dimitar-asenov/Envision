@@ -50,11 +50,13 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression)
 REGISTER_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
 REGISTER_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
 REGISTER_ATTRIBUTE(ReferenceExpression, typeArguments, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(ReferenceExpression, memKind, Integer, false, false, true)
 
-ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix)
+ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix, MemberKind kind)
 : Super(nullptr, ReferenceExpression::getMetaData())
 {
 	ref()->setName(name);
+	setMemberKind(kind);
 	if (prefix != nullptr) setPrefix(prefix);
 }
 
