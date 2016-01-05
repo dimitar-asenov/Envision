@@ -12,10 +12,13 @@
 	<thisIdentifier prototypes="item/Symbol/keyword" />
 	<classIdentifier prototypes="item/Symbol/keyword" />
 	
-	<nonPointerSeparator prototypes="item/Symbol/default" />
+	<standardSeparator prototypes="item/Symbol/default" />
 	<pointerSeparator prototypes="item/Symbol/default">
 		<symbol>→</symbol>
 	</pointerSeparator>
+	<staticSeparator prototypes="item/Symbol/default">
+		<symbol>::</symbol>
+	</staticSeparator>
 	<typeArguments prototypes="item/VList/default">
 		<shape prototypes="shape/Braces/default">
 			Braces

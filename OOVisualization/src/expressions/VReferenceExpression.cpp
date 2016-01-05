@@ -63,14 +63,11 @@ void VReferenceExpression::determineChildren()
 	layout()->synchronizeFirst(prefix_, node()->prefix());
 
 	// TODO: In C++ we should have this->... In Java it should be this. ...
-	auto* separatorStyle = &style()->nonPointerSeparator();
-	if (node()->prefix())
-	{
-		auto prefixType = node()->prefix()->type();
-		if (dynamic_cast<PointerType*> (prefixType) )
-			separatorStyle = &style()->pointerSeparator();
-		SAFE_DELETE(prefixType);
-	}
+	auto* separatorStyle = &style()->standardSeparator();
+	if (node()->memberKind() == OOModel::ReferenceExpression::MemberKind::Pointer)
+		separatorStyle = &style()->pointerSeparator();
+	else if (node()->memberKind() == OOModel::ReferenceExpression::MemberKind::Static)
+		separatorStyle = &style()->staticSeparator();
 
 
 	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, separatorStyle, 1);

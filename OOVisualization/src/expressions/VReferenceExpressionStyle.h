@@ -45,8 +45,9 @@ class OOVISUALIZATION_API VReferenceExpressionStyle : public Super<Visualization
 		Property<Visualization::TextStyle> unresolvedName{this, "unresolvedName"};
 		Property<Visualization::TextStyle> thisIdentifier{this, "thisIdentifier"};
 		Property<Visualization::TextStyle> classIdentifier{this, "classIdentifier"};
-		Property<Visualization::StaticStyle> nonPointerSeparator{this, "nonPointerSeparator"};
+		Property<Visualization::StaticStyle> standardSeparator{this, "standardSeparator"};
 		Property<Visualization::StaticStyle> pointerSeparator{this, "pointerSeparator"};
+		Property<Visualization::StaticStyle> staticSeparator{this, "staticSeparator"};
 		Property<Visualization::VListStyle> typeArguments{this, "typeArguments"};
 		Property<bool> showUnresolved{this, "showUnresolved"};
 };
