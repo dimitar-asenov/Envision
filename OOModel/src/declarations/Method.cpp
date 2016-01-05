@@ -118,6 +118,8 @@ bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matche
 		// Don't search in scopes we've already searched in
 		if (arguments() != ignore)
 			found = arguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+		if (typeArguments() != ignore)
+			found = typeArguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		if (results() != ignore)
 			found = results()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		if (subDeclarations() != ignore)
