@@ -142,11 +142,14 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
 
-		auto filter = [](Method* method) { return method->typeArguments()->isEmpty() &&
-																!method->modifiers()->isSet(OOModel::Modifier::Inline) &&
-																!method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
-																!method->modifiers()->isSet(OOModel::Modifier::Deleted); };
-		*sections << list(classs->methods(), this, "spacedSections", filter);
+		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
+		{
+			return method->typeArguments()->isEmpty() &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Default);
+		});
 		*sections << list(classs->fields(), this, "vertical");
 	}
 	else
