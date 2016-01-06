@@ -337,13 +337,33 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return expr;
 	}));
 
-	add(new OD( "member", "expr . id", 1, OD::LeftAssociative,
+	add(new OD( "member dot", "expr . id", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 		auto ref = DCast<ReferenceExpression>( operands[1]);
 		Q_ASSERT(ref);
 
 		auto r = new ReferenceExpression( ref->name(), operands.first() );
+		SAFE_DELETE(ref);
+		return r;
+	}));
+	add(new OD( "member pointer", "expr -> id", 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+		auto ref = DCast<ReferenceExpression>( operands[1]);
+		Q_ASSERT(ref);
+
+		auto r = new ReferenceExpression( ref->name(), operands.first(), ReferenceExpression::MemberKind::Pointer );
+		SAFE_DELETE(ref);
+		return r;
+	}));
+	add(new OD( "member static", "expr :: id", 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+		auto ref = DCast<ReferenceExpression>( operands[1]);
+		Q_ASSERT(ref);
+
+		auto r = new ReferenceExpression( ref->name(), operands.first(), ReferenceExpression::MemberKind::Static );
 		SAFE_DELETE(ref);
 		return r;
 	}));
