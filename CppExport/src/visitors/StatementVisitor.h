@@ -46,6 +46,7 @@ namespace OOModel {
 	class AssertStatement;
 	class SynchronizedStatement;
 	class StatementItem;
+	class CommentStatementItem;
 }
 
 namespace CppExport {
@@ -74,6 +75,7 @@ class StatementVisitor
 		Export::SourceFragment* visit(OOModel::TryCatchFinallyStatement* statement);
 		Export::SourceFragment* visit(OOModel::AssertStatement* statement);
 		Export::SourceFragment* visit(OOModel::SynchronizedStatement* statement);
+		Export::SourceFragment* visit(OOModel::CommentStatementItem* statement);
 
 		Export::SourceFragment* visit(OOModel::StatementItem* statementItem);
 };

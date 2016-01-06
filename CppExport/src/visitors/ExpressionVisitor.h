@@ -54,6 +54,10 @@ class ExpressionVisitor
 																	const QString& name = QString());
 	private:
 		template <typename T> Export::SourceFragment* optional(T* node);
+
+		bool headerVisitor();
 };
+
+inline bool ExpressionVisitor::headerVisitor() { return data().get()->mode_ == HEADER_VISITOR; }
 
 }

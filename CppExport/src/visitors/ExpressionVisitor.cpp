@@ -72,6 +72,7 @@
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/expressions/ErrorExpression.h"
 #include "OOModel/src/expressions/UnfinishedOperator.h"
+#include "OOModel/src/declarations/Class.h"
 
 using namespace Export;
 using namespace OOModel;
@@ -90,7 +91,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	// Types ============================================================================================================
 	if (auto e = DCast<ArrayTypeExpression>(expression))
 		*fragment << visit(e->typeExpression()) << "[" << optional(e->fixedSize()) << "]";
-	else if (auto e = DCast<ReferenceTypeExpression>(expression)) *fragment << visit(e->typeExpression()) << "&";
+	else if (auto e = DCast<ReferenceTypeExpression>(expression))
+		*fragment << visit(e->typeExpression()) << (e->isRValueReference() ? "&&" : "&");
 	else if (auto e = DCast<PointerTypeExpression>(expression))
 	{
 		if (DCast<FunctionTypeExpression>(e->typeExpression()))
@@ -117,12 +119,14 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<TypeQualifierExpression>(expression))
 	{
-		switch (e->qualifier())
-		{
-			case TypeQualifierExpression::Qualifier::CONST: *fragment << "const"; break;
-			case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
-			default: error(e, "Unknown qualifier");
-		}
+		auto parentVariableDeclaration = e->firstAncestorOfType<VariableDeclaration>();
+		if (!parentVariableDeclaration || !parentVariableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
+			switch (e->qualifier())
+			{
+				case TypeQualifierExpression::Qualifier::CONST: *fragment << "const"; break;
+				case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
+				default: error(e, "Unknown qualifier");
+			}
 		*fragment << " " << visit(e->typeExpression());
 	}
 	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
@@ -255,7 +259,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<GlobalScopeExpression>(expression)) notAllowed(e);
 	else if (auto e = DCast<ThrowExpression>(expression)) *fragment << "throw " << visit(e->expr());
 	else if (auto e = DCast<TypeNameOperator>(expression))  *fragment << "typename " << visit(e->typeExpression());
-	else if (auto e = DCast<DeleteExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<DeleteExpression>(expression))
+		*fragment << "delete" << (e->isArray() ? "[] " : " ") << visit(e->expr());
 	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
 	else if (auto e = DCast<LambdaExpression>(expression))
 	{
@@ -270,14 +275,17 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<MetaCallExpression>(expression))
 	{
 		*fragment << visit(e->callee());
-
-		auto arguments = new Export::CompositeFragment(e->arguments(), "argsList");
-		for (auto node : *e->arguments())
-			if (auto n = DCast<Expression>(node)) *arguments << visit(n);
-			else if (auto n = DCast<Statement>(node)) *arguments << statement(n);
-			else if (auto n = DCast<Declaration>(node)) *arguments << declaration(n);
-			else Q_ASSERT(false);
-		*fragment << arguments;
+		if (!e->arguments()->isEmpty())
+		{
+			auto arguments = new Export::CompositeFragment(e->arguments(), "argsList");
+			for (auto node : *e->arguments())
+				if (auto n = DCast<Expression>(node)) *arguments << visit(n);
+				else if (auto n = DCast<Statement>(node)) *arguments << statement(n);
+				else if (auto n = DCast<Declaration>(node)) *arguments << declaration(n);
+				else if (auto n = DCast<FormalResult>(node)) *arguments << element(n);
+				else Q_ASSERT(false);
+			*fragment << arguments;
+		}
 	}
 	else if (auto e = DCast<NewExpression>(expression))
 	{
@@ -288,7 +296,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<ReferenceExpression>(expression))
 	{
-		if (e->prefix())
+		if (e->prefix() && !DCast<MetaCallExpression>(expression->parent()))
 		{
 			if (dynamic_cast<PointerType*>(e->prefix()->type()))
 				*fragment << visit(e->prefix()) << "->";
@@ -297,6 +305,27 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 			else
 				*fragment << visit(e->prefix()) << ".";
 		}
+
+		if (!e->prefix() && !headerVisitor() && e->target())
+		{
+			bool addPrefix = false;
+			if (auto parentMethod = e->firstAncestorOfType<Method>())
+			{
+				if (parentMethod->results()->isAncestorOf(e))
+					addPrefix = true;
+			}
+			else if (auto parentField = e->firstAncestorOfType<Field>())
+				if (parentField->typeExpression()->isAncestorOf(e))
+					addPrefix = true;
+
+			if (addPrefix)
+				if (auto parentClass = e->firstAncestorOfType<Class>())
+					if (parentClass->isAncestorOf(e->target()) && !parentClass->friends()->isAncestorOf(e->target()))
+						// if e has no prefix and is in the result of a method or the type of a field
+						// and the resolved target is inside the parent class then we qualifiy it
+						*fragment << parentClass->name() << "::";
+		}
+
 		*fragment << e->name();
 		if (!e->typeArguments()->isEmpty()) *fragment << list(e->typeArguments(), this, "typeArgsList");
 	}

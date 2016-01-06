@@ -133,11 +133,13 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		*composite << "\n";
 	}
 
-	bool hasMeaningfulContent = false;
+
+	Export::CompositeFragment* unitsComposite = nullptr;
 	if (!units().isEmpty())
 	{
-		OOModel::Module* currentNamespace{};
+		unitsComposite = new Export::CompositeFragment(units().first()->node(), "spacedSections");
 
+		OOModel::Module* currentNamespace{};
 		for (auto unit : units())
 		{
 			auto codeUnitPart = (unit->*part)();
@@ -146,24 +148,30 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
 			if (neededNamespace != currentNamespace)
 			{
-				if (currentNamespace) *composite << "\n}\n\n";
-				if (neededNamespace) *composite << "namespace " << neededNamespace->symbolName() << " {\n\n";
+				if (currentNamespace) *unitsComposite << "\n}\n\n";
+				if (neededNamespace)
+				{
+					auto namespaceComposite = new Export::CompositeFragment(unitsComposite->node());
+					*namespaceComposite << "namespace " << neededNamespace->symbolName() << " {\n\n";
+					unitsComposite->append(namespaceComposite);
+				}
 				currentNamespace = neededNamespace;
 			}
 
-			composite->append(codeUnitPart->sourceFragment());
-			hasMeaningfulContent = true;
+			unitsComposite->append(codeUnitPart->sourceFragment());
 		}
 
-		if (currentNamespace) *composite << "\n}";
+		if (currentNamespace) *unitsComposite << "\n}";
 	}
 
-	if (!hasMeaningfulContent)
+	if (unitsComposite && !unitsComposite->fragments().empty())
 	{
-		SAFE_DELETE(composite);
-		return nullptr;
+		composite->append(unitsComposite);
+		return composite;
 	}
-	return composite;
+	SAFE_DELETE(unitsComposite);
+	SAFE_DELETE(composite);
+	return nullptr;
 }
 
 Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fragment)
@@ -203,10 +211,17 @@ QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
 			// this element depends on no other elements
 			noPendingDependencies.append(it.key());
 		else
+		{
 			// for every other element this element depends on add it to the neededFor map for said other element
+			bool notNeededForAnything = true;
 			for (auto dependency : it.value())
-				neededFor[dependency].insert(it.key());
-
+				if (dependsOn.contains(dependency))
+				{
+					neededFor[dependency].insert(it.key());
+					notNeededForAnything = false;
+				}
+			if (notNeededForAnything) noPendingDependencies.append(it.key());
+		}
 	QList<T*> result;
 	while (!noPendingDependencies.empty())
 	{
@@ -229,8 +244,15 @@ QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
 			dIt->remove(n);
 
 			// if this node has no more dependencies add it to the list of items with no more dependencies
-			if (dIt->size() == 0)
-				noPendingDependencies.append(m);
+
+			bool noPendingDependency = true;
+			for (auto d : *dIt)
+				if (dependsOn.contains(d))
+				{
+					noPendingDependency = false;
+					break;
+				}
+			if (noPendingDependency) noPendingDependencies.append(m);
 		}
 	}
 

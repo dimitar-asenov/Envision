@@ -34,6 +34,7 @@ namespace OOModel {
 	class FormalArgument;
 	class FormalResult;
 	class FormalTypeArgument;
+	class FormalMetaArgument;
 	class CatchClause;
 	class Enumerator;
 	class MemberInitializer;
@@ -52,6 +53,7 @@ class ElementVisitor
 		using Visitor::Visitor;
 
 		Export::SourceFragment* visit(OOModel::FormalArgument* argument);
+		Export::SourceFragment* visit(OOModel::FormalMetaArgument* argument);
 		Export::SourceFragment* visit(OOModel::FormalResult* result);
 		Export::SourceFragment* visit(OOModel::FormalTypeArgument* typeArgument);
 		Export::SourceFragment* visit(OOModel::CatchClause* catchClause);

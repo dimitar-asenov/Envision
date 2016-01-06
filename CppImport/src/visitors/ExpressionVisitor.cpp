@@ -211,9 +211,6 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			break;
 		case CppImportUtilities::OverloadKind::Unary:
 		{
-			if (2 == numArguments)
-				// remove dummy expression
-				ooExprStack_.pop();
 			auto ooUnary = clang_.createNode<OOModel::UnaryOperation>(callExpr->getSourceRange(),
 																			utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if (!ooExprStack_.empty())
@@ -285,37 +282,40 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	auto ooNewExpr = clang_.createNode<OOModel::NewExpression>(newExpr->getSourceRange());
-	if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
+	if (newExpr->getInitializer())
 	{
-		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
-		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
-		for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
-			methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
-		ooExprStack_.push(methodCallExpr);
-	}
-	else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
-	{
-		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-					clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
-		methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
-		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
-		for (auto initExpr : *initListExpr)
-			methodCallExpr->arguments()->append(translateExpression(initExpr));
-		ooExprStack_.push(methodCallExpr);
-	}
-	else
-		TraverseStmt(newExpr->getInitializer());
+		if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
+		{
+			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+			for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
+				methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
+			ooExprStack_.push(methodCallExpr);
+		}
+		else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
+		{
+			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+			for (auto initExpr : *initListExpr)
+				methodCallExpr->arguments()->append(translateExpression(initExpr));
+			ooExprStack_.push(methodCallExpr);
+		}
+		else
+			TraverseStmt(newExpr->getInitializer());
 
-	if (!ooExprStack_.empty())
-		ooNewExpr->setNewType(ooExprStack_.pop());
-	if (newExpr->isArray())
-	{
-		TraverseStmt(newExpr->getArraySize());
 		if (!ooExprStack_.empty())
-			ooNewExpr->dimensions()->append(ooExprStack_.pop());
+			ooNewExpr->setNewType(ooExprStack_.pop());
+		if (newExpr->isArray())
+		{
+			TraverseStmt(newExpr->getArraySize());
+			if (!ooExprStack_.empty())
+				ooNewExpr->dimensions()->append(ooExprStack_.pop());
+		}
 	}
 
 	ooExprStack_.push(ooNewExpr);
@@ -418,13 +418,22 @@ QList<OOModel::Expression*> ExpressionVisitor::translateArguments(llvm::iterator
 
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
+	if (!constructExpr)
+		return true;
+
 	if (!constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding())
-		return TraverseStmt(*(constructExpr->child_begin()));
+	{
+		if (constructExpr->getNumArgs() > 0)
+			return TraverseStmt(*(constructExpr->child_begin()));
+		else
+			return true;
+	}
 
 	// check for lambda
 	if (!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		if (!constructExpr->isListInitialization() || !clang_.spelling(constructExpr->getLocation()).startsWith("{"))
+		if ((!constructExpr->isListInitialization() || !clang_.spelling(constructExpr->getLocation()).startsWith("{"))
+			  && !clang_.spelling(constructExpr->getLocation()).startsWith("="))
 		{
 			auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(constructExpr->getSourceRange());
 			if (auto temporaryObjectExpression = llvm::dyn_cast<clang::CXXTemporaryObjectExpr>(constructExpr))

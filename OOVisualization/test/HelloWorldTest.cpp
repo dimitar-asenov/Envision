@@ -178,8 +178,8 @@ Class* addAnnotatedWithFriends(Project* parent)
 	ann->annotations()->append( new ExpressionStatement(new ReferenceExpression("SomeAnnotation")));
 
 	// Add some friends classes
-	ann->friends()->append(new ReferenceExpression("Generic"));
-	ann->friends()->append(new ReferenceExpression("System", new ReferenceExpression("Java")));
+	ann->friends()->append(new Class("Generic"));
+	ann->friends()->append(new Class("System.Java"));
 
 	// Add methods
 	Method* foo = new Method("foo", Modifier::Public);

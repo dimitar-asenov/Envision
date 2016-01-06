@@ -415,8 +415,13 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 		for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
 			ooMemberInit->arguments()->append(argument);
 	else
-		ooMemberInit->arguments()->append(exprVisitor_->translateExpression(initializer->getInit()));
-
+	{
+		auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(initializer->getInit()->IgnoreImplicit());
+		if (initListExpr && initListExpr->getNumInits() == 1)
+			ooMemberInit->arguments()->append(exprVisitor_->translateExpression(initListExpr->getInit(0)));
+		else
+			ooMemberInit->arguments()->append(exprVisitor_->translateExpression(initializer->getInit()));
+	}
 	if (initializer->isBaseInitializer())
 	{
 		if (auto memberRef = DCast<OOModel::ReferenceExpression>(
@@ -567,7 +572,8 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 																					translateQualifiedType(pointerType.getNextTypeLoc()));
 	else if (auto refType = type.getAs<clang::ReferenceTypeLoc>())
 		return clang_.createNode<OOModel::ReferenceTypeExpression>(type.getSourceRange(),
-																					  translateQualifiedType(refType.getNextTypeLoc()));
+																					  translateQualifiedType(refType.getNextTypeLoc()),
+																					  !type.getAs<clang::RValueReferenceTypeLoc>().isNull());
 	else if (auto enumType = type.getAs<clang::EnumTypeLoc>())
 	{
 		auto ooRef = clang_.createReference(type.getSourceRange());

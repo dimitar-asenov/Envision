@@ -39,6 +39,9 @@
 #include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 #include "OOModel/src/declarations/TypeAlias.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/declarations/MetaDefinition.h"
+#include "OOModel/src/expressions/ArrayInitializer.h"
+#include "OOModel/src/expressions/types/AutoTypeExpression.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
@@ -55,9 +58,11 @@ namespace CppExport {
 SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 {
 	if (auto castDeclaration = DCast<Method>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<MetaDefinition>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<Class>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<TypeAlias>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<NameImport>(declaration)) return visit(castDeclaration);
 
 	notAllowed(declaration);
 
@@ -130,27 +135,41 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
 
-	if (!headerVisitor())
+	if (sourceVisitor())
 	{
 		//TODO
 		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
 
-		auto filter = [](Method* method) { return method->typeArguments()->isEmpty() &&
-																!method->modifiers()->isSet(OOModel::Modifier::Inline) &&
-																!method->modifiers()->isSet(OOModel::Modifier::Abstract); };
-		*sections << list(classs->methods(), this, "spacedSections", filter);
+		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
+		{
+			return method->typeArguments()->isEmpty() &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
+						 !method->modifiers()->isSet(OOModel::Modifier::Default);
+		});
 		*sections << list(classs->fields(), this, "vertical");
 	}
 	else
 	{
-		*fragment << declarationComments(classs);
+		bool friendClass = false;
+		if (auto parentClass = classs->firstAncestorOfType<Class>())
+			friendClass = parentClass->friends()->isAncestorOf(classs);
 
-		if (!classs->typeArguments()->isEmpty())
-			*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
+		if (!friendClass)
+		{
+			*fragment << declarationComments(classs);
 
-		*fragment << printAnnotationsAndModifiers(classs);
+			if (!classs->typeArguments()->isEmpty())
+				*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
+			*fragment << printAnnotationsAndModifiers(classs);
+		}
+		else
+			*fragment << "friend ";
+
 		if (Class::ConstructKind::Class == classs->constructKind()) *fragment << "class ";
 		else if (Class::ConstructKind::Struct == classs->constructKind()) *fragment << "struct ";
 		else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
@@ -161,47 +180,51 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		*fragment << classs->nameNode();
 
-		if (!classs->baseClasses()->isEmpty())
-			// TODO: inheritance modifiers like private, virtual... (not only public)
-			*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
-
-		notAllowed(classs->friends());
-
-		auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
-
-		if (classs->enumerators()->size() > 0)
-			error(classs->enumerators(), "Enum unhandled"); // TODO
-
-		auto publicSection = new CompositeFragment(classs, "accessorSections");
-		auto publicFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
-		bool hasPublicSection = addMemberDeclarations(classs, publicSection, publicFilter);
-		if (hasPublicSection)
+		if (!friendClass)
 		{
-			*sections << "public:";
-			sections->append(publicSection);
-		}
+			if (!classs->baseClasses()->isEmpty())
+				// TODO: inheritance modifiers like private, virtual... (not only public)
+				*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 
-		auto protectedSection = new CompositeFragment(classs, "accessorSections");
-		auto protectedFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Protected); };
-		bool hasProtectedSection = addMemberDeclarations(classs, protectedSection, protectedFilter);
-		if (hasProtectedSection)
-		{
-			if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
+			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections");
 
-			*sections << "protected:";
-			sections->append(protectedSection);
-		}
+			if (classs->enumerators()->size() > 0)
+				error(classs->enumerators(), "Enum unhandled"); // TODO
 
-		auto privateSection = new CompositeFragment(classs, "accessorSections");
-		auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
-																					  !declaration->modifiers()->isSet(Modifier::Protected); };
-		bool hasPrivateSection = addMemberDeclarations(classs, privateSection, privateFilter);
-		if (hasPrivateSection)
-		{
-			if (hasPublicSection || hasProtectedSection) *sections << "\n"; // add newline between two accessor sections
+			auto publicSection = new CompositeFragment(classs, "accessorSections");
+			auto publicFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
+			bool hasPublicSection = addMemberDeclarations(classs, publicSection, publicFilter);
 
-			*sections << "private:";
-			sections->append(privateSection);
+			auto protectedSection = new CompositeFragment(classs, "accessorSections");
+			auto protectedFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Protected); };
+			bool hasProtectedSection = addMemberDeclarations(classs, protectedSection, protectedFilter);
+
+			auto privateSection = new CompositeFragment(classs, "accessorSections");
+			auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
+																						  !declaration->modifiers()->isSet(Modifier::Protected); };
+			bool hasPrivateSection = addMemberDeclarations(classs, privateSection, privateFilter);
+
+			if (hasPublicSection)
+			{
+				if (hasProtectedSection || hasPrivateSection || classs->constructKind() != Class::ConstructKind::Struct)
+					*sections << "public:";
+				sections->append(publicSection);
+			}
+			if (hasProtectedSection)
+			{
+				if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+
+				*sections << "protected:";
+				sections->append(protectedSection);
+			}
+			if (hasPrivateSection)
+			{
+				if (hasPublicSection || hasProtectedSection) *sections << "\n"; // add newline between two accessor sections
+
+				*sections << "private:";
+				sections->append(privateSection);
+			}
 		}
 
 		*fragment << ";";
@@ -215,12 +238,14 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 {
 	auto subDeclarations = list(classs->subDeclarations(), this, "sections", filter);
 	auto fields = list(classs->fields(), this, "vertical", filter);
+	auto friends = list(classs->friends(), this, "sections", filter);
 	auto classes = list(classs->classes(), this, "sections", filter);
 	auto methods = list(classs->methods(), this, "sections", filter);
 
-	*section << subDeclarations << fields << classes << methods;
+	*section << subDeclarations << fields << friends << classes << methods;
 	return !subDeclarations->fragments().empty() ||
 			 !fields->fragments().empty() ||
+			 !friends->fragments().empty() ||
 			 !classes->fragments().empty() ||
 			 !methods->fragments().empty();
 }
@@ -254,21 +279,49 @@ bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
 	return true;
 }
 
+SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
+{
+	auto oldMode = data().get()->mode_;
+	data().get()->mode_ = MACRO_VISITOR;
+	auto fragment = new CompositeFragment(metaDefinition, "emptyLineAtEnd");
+	auto macro = new CompositeFragment(metaDefinition, "macro");
+	*macro << "#define " << metaDefinition->nameNode();
+	*macro << list(metaDefinition->arguments(), ElementVisitor(data()), "argsList");
+	auto body = new CompositeFragment(metaDefinition->context(), "macroBody");
+	if (auto context = DCast<Module>(metaDefinition->context()))
+		*body << list(context->classes(), this, "spacedSections");
+	else if (auto context = DCast<Class>(metaDefinition->context()))
+	{
+		*body << list(context->metaCalls(), ExpressionVisitor(data()), "sections");
+		*body << list(context->methods(), this, "spacedSections");
+	}
+	*macro << body;
+	*fragment << macro;
+	data().get()->mode_ = oldMode;
+	return fragment;
+}
+
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
 	if (!shouldExportMethod(method)) return nullptr;
 
 	auto fragment = new CompositeFragment(method);
 
-	if (headerVisitor())
+	if (!sourceVisitor())
 		*fragment << declarationComments(method);
 
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
-	if (headerVisitor())
+	if (!sourceVisitor())
+		if (auto parentClass = method->firstAncestorOfType<Class>())
+			if (parentClass->friends()->isAncestorOf(method))
+				*fragment << "friend ";
+
+	if (!sourceVisitor())
 		*fragment << printAnnotationsAndModifiers(method);
-	else
+
+	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment(method->modifiers(), "inline") << " ";
 
@@ -277,7 +330,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
-		if (!headerVisitor())
+		if (sourceVisitor())
 			if (auto parentClass = method->firstAncestorOfType<Class>())
 				*fragment << parentClass->name() << "::";
 		*fragment << "operator ";
@@ -292,7 +345,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
-	if (!headerVisitor() && method->methodKind() != Method::MethodKind::Conversion)
+	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == method->firstAncestorOfType<Module>())
+		*fragment << "CORE_API ";
+
+	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
 			*fragment << parentClass->name() << "::";
 
@@ -315,7 +371,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << ")";
 	}
 
-	if (headerVisitor())
+	if (!sourceVisitor())
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 			*fragment << new TextFragment(method->modifiers(), " override");
@@ -327,7 +383,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << new TextFragment(method->modifiers(), " = 0");
 		*fragment << ";";
 	}
-	else
+
+	if (!headerVisitor())
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
 
 	notAllowed(method->subDeclarations());
@@ -352,35 +409,40 @@ SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment(variableDeclaration);
-	if (headerVisitor())
+	if (!sourceVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 	{
 		*fragment << declarationComments(variableDeclaration);
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
 		*fragment << expression(variableDeclaration->typeExpression()) << " " << variableDeclaration->nameNode();
-		if (variableDeclaration->initialValue())
-			*fragment << " = " << expression(variableDeclaration->initialValue());
-
+		if (variableDeclaration->initialValue() && !variableDeclaration->modifiers()->isSet(Modifier::Static))
+		{
+			//TODO: Use {} instead of =
+			if (!DCast<ArrayInitializer>(variableDeclaration->initialValue())) *fragment << " = ";
+			*fragment << expression(variableDeclaration->initialValue());
+		}
 		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
-	else
+	else if (sourceVisitor() && (!DCast<Field>(variableDeclaration) ||
+										  variableDeclaration->modifiers()->isSet(Modifier::Static) ||
+										  variableDeclaration->modifiers()->isSet(Modifier::ConstExpr)))
 	{
-		bool isField = DCast<Field>(variableDeclaration);
-
-		if (!isField || variableDeclaration->modifiers()->isSet(Modifier::Static))
-		{
+		if (!DCast<Field>(variableDeclaration) || variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 			*fragment << printAnnotationsAndModifiers(variableDeclaration);
-			*fragment << expression(variableDeclaration->typeExpression()) << " ";
+		*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
-			if (isField)
-				if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
-					*fragment << parentClass->name() << "::";
+		if (DCast<Field>(variableDeclaration))
+			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
+				*fragment << parentClass->name() << "::";
 
-			*fragment << variableDeclaration->nameNode();
-			if (variableDeclaration->initialValue())
-				*fragment << " = " << expression(variableDeclaration->initialValue());
-
-			if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
+		*fragment << variableDeclaration->nameNode();
+		if (variableDeclaration->initialValue())
+		{
+			if (!DCast<ArrayInitializer>(variableDeclaration->initialValue()) ||
+				 DCast<AutoTypeExpression>(variableDeclaration->typeExpression())) *fragment << " = ";
+			*fragment << expression(variableDeclaration->initialValue());
 		}
+
+		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
 	return fragment;
 }
@@ -392,12 +454,16 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 		*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
 	auto header = fragment->append(new CompositeFragment(declaration, "space"));
 
+	if (declaration->modifiers()->isSet(Modifier::ConstExpr))
+		*header << new TextFragment(declaration->modifiers(), "constexpr");
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment(declaration->modifiers(), "static");
 	if (declaration->modifiers()->isSet(Modifier::Final))
 		*header << new TextFragment(declaration->modifiers(), "final");
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
+	if (declaration->modifiers()->isSet(Modifier::Explicit))
+		*header << new TextFragment(declaration->modifiers(), "explicit");
 
 	return fragment;
 }
@@ -407,10 +473,8 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	auto fragment = new CompositeFragment(nameImport);
 	notAllowed(nameImport->annotations());
 
-	*fragment << "import " << expression(nameImport->importedName());
-	if (nameImport->importAll()) *fragment << ".*";
-	*fragment << ";";
-
+	Q_ASSERT(!nameImport->importAll());
+	*fragment << "using " << expression(nameImport->importedName()) << ";";
 	return fragment;
 }
 
@@ -423,6 +487,10 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* eti)
 SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)
 {
 	auto fragment = new CompositeFragment(typeAlias);
+
+	if (!typeAlias->typeArguments()->isEmpty())
+		*fragment << list(typeAlias->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
 	*fragment << "using " << typeAlias->nameNode() << " = " << expression(typeAlias->typeExpression()) << ";";
 	return fragment;
 }

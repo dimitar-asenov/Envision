@@ -30,6 +30,7 @@
 #include "ElementVisitor.h"
 
 #include "OOModel/src/elements/FormalArgument.h"
+#include "OOModel/src/elements/FormalMetaArgument.h"
 #include "OOModel/src/elements/FormalResult.h"
 #include "OOModel/src/elements/FormalTypeArgument.h"
 #include "OOModel/src/elements/CatchClause.h"
@@ -37,6 +38,7 @@
 #include "OOModel/src/elements/MemberInitializer.h"
 #include "OOModel/src/expressions/types/PointerTypeExpression.h"
 #include "OOModel/src/expressions/types/FunctionTypeExpression.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 
 using namespace Export;
 using namespace OOModel;
@@ -50,12 +52,21 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 	auto pointerTypeExpression = DCast<PointerTypeExpression>(argument->typeExpression());
 	if (pointerTypeExpression && DCast<FunctionTypeExpression>(pointerTypeExpression->typeExpression()))
 		*fragment << ExpressionVisitor(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
+	else if (auto arrayTypeExpression = DCast<ArrayTypeExpression>(argument->typeExpression()))
+		*fragment << expression(arrayTypeExpression->typeExpression()) << " " << argument->nameNode() << "[]";
 	else
 		*fragment << expression(argument->typeExpression()) << " " << argument->nameNode();
 
 	if (headerVisitor() && argument->initialValue())
 		*fragment << " = " << ExpressionVisitor(data()).visit(argument->initialValue());
 
+	return fragment;
+}
+
+SourceFragment* ElementVisitor::visit(FormalMetaArgument* argument)
+{
+	auto fragment = new CompositeFragment(argument);
+	*fragment << argument->nameNode();
 	return fragment;
 }
 

@@ -323,18 +323,38 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 	if (varDecl->hasInit())
 	{
-		bool inBody = inBody_;
-		inBody_ = false;
-		TraverseStmt(varDecl->getInit()->IgnoreImplicit());
-		if (!ooExprStack_.empty())
+		auto initExpr = varDecl->getInit()->IgnoreImplicit();
+
+		auto initSpelling = clang_.unexpandedSpelling(initExpr->getSourceRange());
+		auto varDeclNameToEndSpelling = clang_.unexpandedSpelling(varDecl->getLocation(),
+																					 varDecl->getSourceRange().getEnd());
+		if (varDeclNameToEndSpelling.contains("=") || initSpelling.contains("(") || initSpelling.contains("{"))
 		{
-			// make sure we have not ourself as init (if init couldn't be converted)
-			if (ooVarDeclExpr != ooExprStack_.top())
-				ooVarDecl->setInitialValue(ooExprStack_.pop());
+			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr);
+			if (constructExpr && initSpelling.contains("{"))
+			{
+				auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(initExpr->getSourceRange());
+				for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
+					arrayInitializer->values()->append(argument);
+				ooVarDecl->setInitialValue(arrayInitializer);
+			}
+			else
+			{
+				bool inBody = inBody_;
+				inBody_ = false;
+
+				TraverseStmt(initExpr);
+				if (!ooExprStack_.empty())
+				{
+					// make sure we have not ourself as init (if init couldn't be converted)
+					if (ooVarDeclExpr != ooExprStack_.top())
+						ooVarDecl->setInitialValue(ooExprStack_.pop());
+				}
+				else
+					log_->writeError(className_, varDecl->getInit(), CppImportLogger::Reason::NOT_SUPPORTED);
+				inBody_ = inBody;
+			}
 		}
-		else
-			log_->writeError(className_, varDecl->getInit(), CppImportLogger::Reason::NOT_SUPPORTED);
-		inBody_ = inBody;
 	}
 
 	if (wasDeclared)
@@ -344,6 +364,8 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	// set the type
 	ooVarDecl->setTypeExpression(utils_->translateQualifiedType(varDecl->getTypeSourceInfo()->getTypeLoc()));
 	// modifiers
+
+	if (varDecl->isConstexpr()) ooVarDecl->modifiers()->set(OOModel::Modifier::ConstExpr);
 	ooVarDecl->modifiers()->set(utils_->translateStorageSpecifier(varDecl->getStorageClass()));
 	return true;
 }
@@ -494,6 +516,8 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDecl(usingDecl))
 	{
+		ooNameImport->modifiers()->set(utils_->translateAccessSpecifier(usingDecl->getAccess()));
+
 		auto nameRef = clang_.createReference(usingDecl->getNameInfo().getSourceRange());
 		if (auto prefix = usingDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
@@ -517,6 +541,8 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDirective(usingDirectiveDecl))
 	{
+		ooNameImport->modifiers()->set(utils_->translateAccessSpecifier(usingDirectiveDecl->getAccess()));
+
 		auto nameRef = clang_.createReference(usingDirectiveDecl->getIdentLocation());
 		if (auto prefix = usingDirectiveDecl->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
@@ -541,6 +567,8 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 		return true;
 	if (auto ooNameImport = trMngr_->insertUnresolvedUsing(unresolvedUsing))
 	{
+		ooNameImport->modifiers()->set(utils_->translateAccessSpecifier(unresolvedUsing->getAccess()));
+
 		auto nameRef = clang_.createReference(unresolvedUsing->getNameInfo().getSourceRange());
 		if (auto prefix = unresolvedUsing->getQualifierLoc())
 			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
@@ -685,9 +713,8 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		if (!ooExprStack_.empty())
 		ooLoop->setCondition(ooExprStack_.pop());
 		// update
-		TraverseStmt(forStmt->getInc());
-		if (!ooExprStack_.empty())
-		ooLoop->setUpdateStep(ooExprStack_.pop());
+		auto dd = exprVisitor_->translateExpression(forStmt->getInc());
+		ooLoop->setUpdateStep(dd);
 		inBody_ = true;
 		// body
 		ooStack_.push(ooLoop->body());
@@ -1109,6 +1136,9 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		{
 			if (constructor->getNumCtorInitializers() && !ooMethod->memberInitializers()->size())
 			{
+				if (constructor->isExplicit())
+					ooMethod->modifiers()->set(OOModel::Modifier::Explicit);
+
 				// if the method already has member initializer we do not have to consider them anymore
 				for (auto initIt = constructor->init_begin(); initIt != constructor->init_end(); ++initIt)
 				{
@@ -1147,16 +1177,11 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 			if (auto fDecl = llvm::dyn_cast<clang::FriendDecl>(*declIt))
 			{
 				// Class type
-				if (auto type = fDecl->getFriendType())
-					insertFriendClass(type, ooClass);
+				if (fDecl->getFriendType())
+					insertFriendClass(fDecl, ooClass);
 				// Functions
-				if (auto friendDecl = fDecl->getFriendDecl())
-				{
-					if (!llvm::isa<clang::FunctionDecl>(friendDecl))
-						log_->writeError(className_, friendDecl, CppImportLogger::Reason::NOT_SUPPORTED);
-					else
-						insertFriendFunction(llvm::dyn_cast<clang::FunctionDecl>(friendDecl), ooClass);
-				}
+				if (fDecl->getFriendDecl())
+					insertFriendFunction(fDecl, ooClass);
 			}
 			else
 				TraverseDecl(*declIt);
@@ -1211,28 +1236,34 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 	}
 }
 
-void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
+void ClangAstVisitor::insertFriendClass(clang::FriendDecl* friendDecl, OOModel::Class* ooClass)
 {
-	// use nextTypeLoc to skip the 'class' in "class FriendClass"
-	ooClass->friends()->append(clang_.createReference(typeInfo->getTypeLoc().getNextTypeLoc().getSourceRange()));
+	auto friendClass = friendDecl->getFriendType()->getType().getTypePtr()->getAsCXXRecordDecl();
+	Q_ASSERT(friendClass);
+	ooClass->friends()->append(clang_.createNamedNode<OOModel::Class>(friendClass));
 }
 
-void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass)
+void ClangAstVisitor::insertFriendFunction(clang::FriendDecl* friendDecl, OOModel::Class* ooClass)
 {
-	if (friendFunction->isThisDeclarationADefinition())
+	if (auto friendFunction = llvm::dyn_cast<clang::FunctionDecl>(friendDecl->getFriendDecl()))
 	{
-		// TODO: this is at the moment the only solution to handle this
-		ooStack_.push(ooClass);
-		TraverseDecl(friendFunction);
-		ooStack_.pop();
+		auto ooMethod = clang_.createNode<OOModel::Method>(friendDecl->getSourceRange(),
+																			clang_.spelling(friendFunction->getLocation()));
+		auto functionTypeLoc = friendFunction->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
+		ooMethod->results()->append(
+					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
+		// process arguments
+		for (auto it = friendFunction->param_begin(); it != friendFunction->param_end(); ++it)
+		{
+			auto formalArgument = clang_.createNamedNode<OOModel::FormalArgument>(*it,
+																utils_->translateQualifiedType((*it)->getTypeSourceInfo()->getTypeLoc()));
+			if ((*it)->hasDefaultArg())
+				formalArgument->setInitialValue(exprVisitor_->translateExpression((*it)->getInit()));
+			ooMethod->arguments()->append(formalArgument);
+		}
+		ooClass->friends()->append(ooMethod);
 	}
-	// this should happen anyway that it is clearly visible that there is a friend
-	// TODO: this is not really a method call but rather a reference
-	auto ooMCall = clang_.createNode<OOModel::MethodCallExpression>(friendFunction->getSourceRange());
-	ooMCall->setCallee(new OOModel::ReferenceExpression(clang_.spelling(friendFunction->getLocation())));
-
-	// TODO: handle return type & arguments & type arguments
-	ooClass->friends()->append(ooMCall);
 }
 
 bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
