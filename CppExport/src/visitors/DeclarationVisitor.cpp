@@ -416,6 +416,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		*fragment << expression(variableDeclaration->typeExpression()) << " " << variableDeclaration->nameNode();
 		if (variableDeclaration->initialValue() && !variableDeclaration->modifiers()->isSet(Modifier::Static))
 		{
+			//TODO: Use {} instead of =
 			if (!DCast<ArrayInitializer>(variableDeclaration->initialValue())) *fragment << " = ";
 			*fragment << expression(variableDeclaration->initialValue());
 		}
