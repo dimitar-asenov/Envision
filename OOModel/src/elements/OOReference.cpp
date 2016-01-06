@@ -36,6 +36,8 @@
 #include "../expressions/CastExpression.h"
 
 #include "../types/SymbolProviderType.h"
+#include "../types/PointerType.h"
+#include "../types/ReferenceType.h"
 #include "../types/ErrorType.h"
 #include "../typesystem/TypeSystem.h"
 
@@ -116,7 +118,17 @@ Model::Node* OOReference::computeTarget() const
 	{
 		// Perform a downward search starting from the target of the prefix
 		auto t = parent->prefix()->type();
-		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
+		auto sp = dynamic_cast<const SymbolProviderType*>(t);
+
+		if (!sp)
+			if (auto pt = dynamic_cast<PointerType*>(t))
+				sp = dynamic_cast<const SymbolProviderType*>(pt->baseType());
+
+		if (!sp)
+			if (auto rt = dynamic_cast<ReferenceType*>(t))
+				sp = dynamic_cast<const SymbolProviderType*>(rt->baseType());
+
+		if (sp)
 		{
 			if (sp->symbolProvider())
 			{
