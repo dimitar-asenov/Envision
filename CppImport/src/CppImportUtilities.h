@@ -55,13 +55,17 @@ class CPPIMPORT_API CppImportUtilities
 		OOModel::Modifier::ModifierFlag translateAccessSpecifier(const clang::AccessSpecifier& acessSpecifier);
 		OOModel::Modifier::ModifierFlag translateStorageSpecifier(const clang::StorageClass& storageClass);
 
+		OOModel::ReferenceExpression* setReferencePrefix(OOModel::ReferenceExpression* reference,
+																		 clang::NestedNameSpecifierLoc nestedNameSpecifierLoc,
+																		 clang::Expr* base = nullptr);
+
 		/**
 		 * Translates nested name specifiers. If there is a\a base specified
 		 * it will be put as a prefix of the first namespecifier
 		 * e.g. \c { obj.A::ref } here obj would be the \a base and A the \a nestedName
 		 */
 		OOModel::Expression* translateNestedNameSpecifier(const clang::NestedNameSpecifierLoc nestedName,
-																		  OOModel::Expression* base = nullptr);
+																		  clang::Expr* base = nullptr);
 
 		OOModel::Expression* translateTemplateArgument(const clang::TemplateArgumentLoc& templateArg);
 

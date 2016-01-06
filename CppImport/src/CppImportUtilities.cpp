@@ -158,8 +158,28 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::translateStorageSpecifier
 	}
 }
 
+OOModel::ReferenceExpression* CppImportUtilities::setReferencePrefix(OOModel::ReferenceExpression* reference,
+																						clang::NestedNameSpecifierLoc nestedNameSpecifierLoc,
+																						clang::Expr* base)
+{
+	Q_ASSERT(reference);
+	if (nestedNameSpecifierLoc)
+	{
+		Q_ASSERT(!base); // just testing whether this can ever happen, remove if seen but never occured
+		reference->setPrefix(translateNestedNameSpecifier(nestedNameSpecifierLoc, base));
+		reference->setMemberKind(OOModel::ReferenceExpression::MemberKind::Static);
+	}
+	else if (base)
+	{
+		reference->setPrefix(exprVisitor_->translateExpression(base));
+		if (base->getType().getTypePtr()->isPointerType())
+			reference->setMemberKind(OOModel::ReferenceExpression::MemberKind::Pointer);
+	}
+	return reference;
+}
+
 OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
-(const clang::NestedNameSpecifierLoc nestedNameLoc, OOModel::Expression* base)
+(const clang::NestedNameSpecifierLoc nestedNameLoc, clang::Expr* base)
 {
 	OOModel::ReferenceExpression* currentRef = nullptr;
 	switch (nestedNameLoc.getNestedNameSpecifier()->getKind())
@@ -193,13 +213,7 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 			throw new CppImportException(QString("Unsupported nested name specifier kind: %1")
 												  .arg(nestedNameLoc.getNestedNameSpecifier()->getKind()));
 	}
-
-	Q_ASSERT(currentRef);
-	if (auto prefix = nestedNameLoc.getPrefix())
-		currentRef->setPrefix(translateNestedNameSpecifier(prefix, base));
-	else if (base)
-		currentRef->setPrefix(base);
-	return currentRef;
+	return setReferencePrefix(currentRef, nestedNameLoc.getPrefix(), base);
 }
 
 OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::TemplateArgumentLoc& templateArgLoc)
@@ -561,12 +575,8 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 	else if (type.getAs<clang::TypedefTypeLoc>())
 		return clang_.createReference(type.getSourceRange());
 	else if (auto recordTypeLoc = type.getAs<clang::RecordTypeLoc>())
-	{
-		auto ooRef = clang_.createReference(type.getSourceRange());
-		if (auto qualifier = recordTypeLoc.getDecl()->getQualifierLoc())
-			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
-		return ooRef;
-	}
+		return setReferencePrefix(clang_.createReference(type.getSourceRange()),
+										  recordTypeLoc.getDecl()->getQualifierLoc());
 	else if (auto pointerType = type.getAs<clang::PointerTypeLoc>())
 		return clang_.createNode<OOModel::PointerTypeExpression>(type.getSourceRange(),
 																					translateQualifiedType(pointerType.getNextTypeLoc()));
@@ -575,12 +585,7 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 																					  translateQualifiedType(refType.getNextTypeLoc()),
 																					  !type.getAs<clang::RValueReferenceTypeLoc>().isNull());
 	else if (auto enumType = type.getAs<clang::EnumTypeLoc>())
-	{
-		auto ooRef = clang_.createReference(type.getSourceRange());
-		if (auto qualifier = enumType.getDecl()->getQualifierLoc())
-			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
-		return ooRef;
-	}
+		return setReferencePrefix(clang_.createReference(type.getSourceRange()), enumType.getDecl()->getQualifierLoc());
 	else if (auto constArrayType = type.getAs<clang::ConstantArrayTypeLoc>())
 	{
 		auto ooArrayType = clang_.createNode<OOModel::ArrayTypeExpression>(type.getSourceRange());
@@ -621,9 +626,8 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 	{
 		// TODO: this might also have a keyword in front (like e.g. class, typename)
 		auto translatedElaboratedType = translateQualifiedType(elaboratedType.getNamedTypeLoc());
-		if (auto qualifier = elaboratedType.getQualifierLoc())
-			if (auto ooRef = DCast<OOModel::ReferenceExpression>(translatedElaboratedType))
-				ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
+		if (auto ooRef = DCast<OOModel::ReferenceExpression>(translatedElaboratedType))
+			return setReferencePrefix(ooRef, elaboratedType.getQualifierLoc());
 		return translatedElaboratedType;
 	}
 	else if (auto templateSpecialization = type.getAs<clang::TemplateSpecializationTypeLoc>())
@@ -635,9 +639,8 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 	}
 	else if (auto dependentTypeLoc = type.getAs<clang::DependentNameTypeLoc>())
 	{
-		auto ooRef = clang_.createReference(dependentTypeLoc.getNameLoc());
-		if (auto qualifier = dependentTypeLoc.getQualifierLoc())
-			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
+		auto ooRef = setReferencePrefix(clang_.createReference(dependentTypeLoc.getNameLoc()),
+												  dependentTypeLoc.getQualifierLoc());
 		if (dependentTypeLoc.getTypePtr()->castAs<clang::DependentNameType>()->getKeyword() == clang::ETK_Typename)
 		{
 			auto ooTypeName = clang_.createNode<OOModel::TypeNameOperator>(type.getSourceRange());

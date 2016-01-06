@@ -670,20 +670,10 @@ OOModel::ReferenceExpression* ExpressionVisitor::createQualifiedReferenceWithTem
 (clang::SourceRange sourceRange, const clang::NestedNameSpecifierLoc qualifier,
  const clang::TemplateArgumentLoc* templateArgs, unsigned numTArgs, clang::Expr* base)
 {
-	auto ooRef = clang_.createReference(sourceRange);
+	auto ooRef = utils_->setReferencePrefix(clang_.createReference(sourceRange), qualifier, base);
 	if (templateArgs)
 		for (unsigned i = 0; i < numTArgs; i++)
 			ooRef->typeArguments()->append(utils_->translateTemplateArgument(templateArgs[i]));
-	OOModel::Expression* ooBase = nullptr;
-	if (base)
-	{
-		TraverseStmt(base);
-		if (!ooExprStack_.empty()) ooBase = ooExprStack_.pop();
-	}
-	if (qualifier)
-		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier, ooBase));
-	else if (ooBase)
-		ooRef->setPrefix(ooBase);
 	return ooRef;
 }
 
