@@ -538,16 +538,18 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 
 bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr)
 {
-	auto ooRef = clang_.createReference(overloadExpr->getNameInfo().getSourceRange());
-	// template args
+	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (overloadExpr->hasExplicitTemplateArgs())
-	{
-		unsigned templateArgs = overloadExpr->getNumTemplateArgs();
-		auto astTemplateArgsList = overloadExpr->getExplicitTemplateArgs().getTemplateArgs();
-		for (unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->translateTemplateArgument(astTemplateArgsList[i]));
-	}
-	ooExprStack_.push(ooRef);
+		ooReference = createQualifiedReferenceWithTemplateArguments(overloadExpr->getNameInfo().getSourceRange(),
+																						overloadExpr->getQualifierLoc(),
+																						overloadExpr->getExplicitTemplateArgs()
+																							.getTemplateArgs(),
+																						overloadExpr->getNumTemplateArgs());
+	else
+		ooReference = createQualifiedReferenceWithTemplateArguments(overloadExpr->getNameInfo().getSourceRange(),
+																						overloadExpr->getQualifierLoc());
+
+	ooExprStack_.push(ooReference);
 	return true;
 }
 
