@@ -73,7 +73,7 @@ SourceFragment* ElementVisitor::visit(FormalMetaArgument* argument)
 SourceFragment* ElementVisitor::visit(FormalResult* result)
 {
 	auto fragment = new CompositeFragment(result);
-	*fragment << "RESULT";
+	*fragment << expression(result->typeExpression());
 	return fragment;
 }
 

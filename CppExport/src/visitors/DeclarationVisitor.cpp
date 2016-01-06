@@ -127,7 +127,7 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 
 	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
 															method->modifiers()->isSet(OOModel::Modifier::Inline); };
-	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR), "spacedSections", filter);
+	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
 	return fragment;
 }
 
@@ -281,23 +281,20 @@ bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
-	auto oldMode = data().get()->mode_;
-	data().get()->mode_ = MACRO_VISITOR;
 	auto fragment = new CompositeFragment(metaDefinition, "emptyLineAtEnd");
 	auto macro = new CompositeFragment(metaDefinition, "macro");
 	*macro << "#define " << metaDefinition->nameNode();
 	*macro << list(metaDefinition->arguments(), ElementVisitor(data()), "argsList");
 	auto body = new CompositeFragment(metaDefinition->context(), "macroBody");
 	if (auto context = DCast<Module>(metaDefinition->context()))
-		*body << list(context->classes(), this, "spacedSections");
+		*body << list(context->classes(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
 	else if (auto context = DCast<Class>(metaDefinition->context()))
 	{
 		*body << list(context->metaCalls(), ExpressionVisitor(data()), "sections");
-		*body << list(context->methods(), this, "spacedSections");
+		*body << list(context->methods(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
 	}
 	*macro << body;
 	*fragment << macro;
-	data().get()->mode_ = oldMode;
 	return fragment;
 }
 

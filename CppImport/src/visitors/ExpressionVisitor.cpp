@@ -538,16 +538,18 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 
 bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr)
 {
-	auto ooRef = clang_.createReference(overloadExpr->getNameInfo().getSourceRange());
-	// template args
+	OOModel::ReferenceExpression* ooReference = nullptr;
 	if (overloadExpr->hasExplicitTemplateArgs())
-	{
-		unsigned templateArgs = overloadExpr->getNumTemplateArgs();
-		auto astTemplateArgsList = overloadExpr->getExplicitTemplateArgs().getTemplateArgs();
-		for (unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->translateTemplateArgument(astTemplateArgsList[i]));
-	}
-	ooExprStack_.push(ooRef);
+		ooReference = createQualifiedReferenceWithTemplateArguments(overloadExpr->getNameInfo().getSourceRange(),
+																						overloadExpr->getQualifierLoc(),
+																						overloadExpr->getExplicitTemplateArgs()
+																							.getTemplateArgs(),
+																						overloadExpr->getNumTemplateArgs());
+	else
+		ooReference = createQualifiedReferenceWithTemplateArguments(overloadExpr->getNameInfo().getSourceRange(),
+																						overloadExpr->getQualifierLoc());
+
+	ooExprStack_.push(ooReference);
 	return true;
 }
 
@@ -670,20 +672,10 @@ OOModel::ReferenceExpression* ExpressionVisitor::createQualifiedReferenceWithTem
 (clang::SourceRange sourceRange, const clang::NestedNameSpecifierLoc qualifier,
  const clang::TemplateArgumentLoc* templateArgs, unsigned numTArgs, clang::Expr* base)
 {
-	auto ooRef = clang_.createReference(sourceRange);
+	auto ooRef = utils_->setReferencePrefix(clang_.createReference(sourceRange), qualifier, base);
 	if (templateArgs)
 		for (unsigned i = 0; i < numTArgs; i++)
 			ooRef->typeArguments()->append(utils_->translateTemplateArgument(templateArgs[i]));
-	OOModel::Expression* ooBase = nullptr;
-	if (base)
-	{
-		TraverseStmt(base);
-		if (!ooExprStack_.empty()) ooBase = ooExprStack_.pop();
-	}
-	if (qualifier)
-		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier, ooBase));
-	else if (ooBase)
-		ooRef->setPrefix(ooBase);
 	return ooRef;
 }
 
