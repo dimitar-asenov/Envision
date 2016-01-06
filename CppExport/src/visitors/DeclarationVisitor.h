@@ -100,7 +100,7 @@ class CPPEXPORT_API DeclarationVisitor
 		bool methodSignaturesMatch(OOModel::Method* method, OOModel::Method* other);
 };
 
-inline bool DeclarationVisitor::headerVisitor() { return data().get()->mode_ == HEADER_VISITOR; }
-inline bool DeclarationVisitor::sourceVisitor() { return data().get()->mode_ == SOURCE_VISITOR; }
+inline bool DeclarationVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
+inline bool DeclarationVisitor::sourceVisitor() { return data().get()->modeStack_.last() == SOURCE_VISITOR; }
 
 }

@@ -38,7 +38,7 @@ struct VisitorData
 {
 		QList<ExportError> errors_;
 		QStringList directoryStack_;
-		int mode_{};
+		QList<int> modeStack_;
 };
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
@@ -48,6 +48,8 @@ class Visitor
 		Visitor();
 		Visitor(std::shared_ptr<VisitorData> data);
 		Visitor(int mode);
+		Visitor(int mode, std::shared_ptr<VisitorData> data);
+		~Visitor();
 
 		QList<ExportError> errors() const;
 
@@ -101,20 +103,27 @@ void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVis
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::notAllowed(Model::List* list)
-{
-	if (list && !list->isEmpty()) error(list, "List must be empty");
-}
+{ if (list && !list->isEmpty()) error(list, "List must be empty"); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>::Visitor() : data_{new VisitorData}{}
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
-::Visitor(std::shared_ptr<VisitorData> data) : data_{data} {}
+::Visitor(std::shared_ptr<VisitorData> data) : data_{data}
+{ if (!data_.get()->modeStack_.empty()) data_.get()->modeStack_.append(data_.get()->modeStack_.last()); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
-::Visitor(int mode) : Visitor{} { data_.get()->mode_ = mode; }
+::Visitor(int mode) : Visitor{} { data_.get()->modeStack_.append(mode); }
+
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::Visitor(int mode, std::shared_ptr<VisitorData> data) : Visitor{data} { data_.get()->modeStack_.append(mode); }
+
+template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
+Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+::~Visitor() { if (!data_.get()->modeStack_.empty()) data_.get()->modeStack_.pop_back(); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor>
 inline QList<ExportError> Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
