@@ -298,12 +298,14 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	{
 		if (e->prefix() && !DCast<MetaCallExpression>(expression->parent()))
 		{
-			if (dynamic_cast<PointerType*>(e->prefix()->type()))
+			if (e->memberKind() == ReferenceExpression::MemberKind::Dot)
+				*fragment << visit(e->prefix()) << ".";
+			else if (e->memberKind() == ReferenceExpression::MemberKind::Pointer)
 				*fragment << visit(e->prefix()) << "->";
-			else if (dynamic_cast<SymbolProviderType*>(e->prefix()->type()))
+			else if (e->memberKind() == ReferenceExpression::MemberKind::Static)
 				*fragment << visit(e->prefix()) << "::";
 			else
-				*fragment << visit(e->prefix()) << ".";
+				Q_ASSERT(false);
 		}
 
 		if (!e->prefix() && !headerVisitor() && e->target())
