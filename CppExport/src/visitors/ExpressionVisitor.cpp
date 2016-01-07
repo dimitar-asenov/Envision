@@ -322,7 +322,9 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 			if (addPrefix)
 				if (auto parentClass = e->firstAncestorOfType<Class>())
-					if (parentClass->isAncestorOf(e->target()) && !parentClass->friends()->isAncestorOf(e->target()))
+					if (parentClass->isAncestorOf(e->target()) &&
+						 !parentClass->friends()->isAncestorOf(e->target()) &&
+						 !DCast<FormalTypeArgument>(e->target()))
 						// if e has no prefix and is in the result of a method or the type of a field
 						// and the resolved target is inside the parent class then we qualifiy it
 						*fragment << parentClass->name() << "::";

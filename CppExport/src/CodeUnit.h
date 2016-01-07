@@ -50,7 +50,7 @@ class CPPEXPORT_API CodeUnit
 		CodeUnitPart* sourcePart();
 
 		void calculateSourceFragments();
-		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
+		void calculateDependencies(QList<CodeUnit*>& allUnits);
 
 		OOModel::Module* nameSpace();
 

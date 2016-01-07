@@ -136,16 +136,16 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 			method = methodMap_.value(hash);
 			clang_.envisionToClangMap().mapAst(mDecl, method);
 
-			// If the method in the map is just a declaration and the method we currently have is a definition
-			// there might be some argument names in the definition which are not yet considered.
-			// Therefore we look at them now.
-			if (method->items()->size() || !mDecl->isThisDeclarationADefinition())
-				return method;
 			for (int i = 0; i< method->arguments()->size(); i++)
 			{
-				OOModel::FormalArgument* ooArg = method->arguments()->at(i);
-				// note that this never should/can be out of range otherwise the hash would be different
-				ooArg->setName(QString::fromStdString(mDecl->getParamDecl(i)->getNameAsString()));
+				auto argName = QString::fromStdString(mDecl->getParamDecl(i)->getNameAsString());
+				if (argName.isEmpty()) continue;
+
+				auto ooArg = method->arguments()->at(i);
+				if (ooArg->name().isEmpty())
+					ooArg->setName(argName);
+				else if (argName != ooArg->name())
+					Q_ASSERT(false && "multiple different argument names for the same argument");
 			}
 			return method;
 		}
@@ -209,6 +209,27 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 		auto ooField = clang_.createNamedNode<OOModel::Field>(varDecl);
 		classMap_.value(parentHash)->fields()->append(ooField);
 		staticFieldMap_.insert(hash, ooField);
+		return ooField;
+	}
+	return nullptr;
+}
+
+OOModel::Field* TranslateManager::insertNamespaceField(clang::VarDecl* varDecl, bool& wasDeclared)
+{
+	const QString hash = nh_->hashNamespaceField(varDecl);
+	if (namespaceFieldMap_.contains(hash))
+	{
+		wasDeclared = true;
+		clang_.envisionToClangMap().mapAst(varDecl, namespaceFieldMap_.value(hash));
+		return namespaceFieldMap_.value(hash);
+	}
+	wasDeclared = false;
+	const QString parentHash = nh_->hashNameSpace(llvm::dyn_cast<clang::NamespaceDecl>(varDecl->getDeclContext()));
+	if (nameSpaceMap_.contains(parentHash))
+	{
+		auto ooField = clang_.createNamedNode<OOModel::Field>(varDecl);
+		nameSpaceMap_.value(parentHash)->fields()->append(ooField);
+		namespaceFieldMap_.insert(hash, ooField);
 		return ooField;
 	}
 	return nullptr;

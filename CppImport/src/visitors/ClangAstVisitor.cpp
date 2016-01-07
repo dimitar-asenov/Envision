@@ -282,6 +282,14 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			return true;
 		}
 	}
+	else if (llvm::dyn_cast<clang::NamespaceDecl>(varDecl->getDeclContext()))
+	{
+		if (!(ooVarDecl = trMngr_->insertNamespaceField(varDecl, wasDeclared)))
+		{
+			log_->writeError(className_, varDecl, CppImportLogger::Reason::NO_PARENT);
+			return true;
+		}
+	}
 	else
 	{
 		if (!inBody_)
@@ -332,10 +340,16 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr);
 			if (constructExpr && initSpelling.contains("{"))
 			{
-				auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(initExpr->getSourceRange());
-				for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
-					arrayInitializer->values()->append(argument);
-				ooVarDecl->setInitialValue(arrayInitializer);
+				auto arguments = exprVisitor_->translateArguments(constructExpr->arguments());
+				if (arguments.size() == 1 && DCast<OOModel::ArrayInitializer>(arguments.first()))
+					ooVarDecl->setInitialValue(arguments.first());
+				else
+				{
+					auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(initExpr->getSourceRange());
+					for (auto argument : arguments)
+						arrayInitializer->values()->append(argument);
+					ooVarDecl->setInitialValue(arrayInitializer);
+				}
 			}
 			else
 			{
@@ -1084,7 +1098,7 @@ bool ClangAstVisitor::shouldUseDataRecursionfor (clang::Stmt*)
 
 void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OOModel::Method* method)
 {
-	if (functionDecl->isInlineSpecified())
+	if (functionDecl->isInlined())
 		method->modifiers()->set(OOModel::Modifier::Inline);
 	if (functionDecl->isVirtualAsWritten())
 		method->modifiers()->set(OOModel::Modifier::Virtual);

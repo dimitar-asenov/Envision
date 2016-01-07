@@ -28,6 +28,7 @@
 #include "ExpressionVisitor.h"
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
+#include "../Config.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Module.h"
@@ -126,9 +127,18 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	*fragment << visit(classs);
 
 	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
-															method->modifiers()->isSet(OOModel::Modifier::Inline); };
+															(method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
+															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
 	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
 	return fragment;
+}
+
+bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
+{
+	 auto metaCall = DCast<MetaCallExpression>(expression);
+	 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
+	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
 }
 
 SourceFragment* DeclarationVisitor::visit(Class* classs)
@@ -137,11 +147,11 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 	if (sourceVisitor())
 	{
-		//TODO
 		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
+		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections",
+								[](Expression* expression) { return metaCallFilter(expression, true); });
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
-
 		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
 		{
 			return method->typeArguments()->isEmpty() &&
@@ -175,8 +185,9 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
 		else notAllowed(classs);
 
-		if (auto namespaceModule = classs->firstAncestorOfType<Module>())
-			*fragment << namespaceModule->name().toUpper() + "_API ";
+		auto potentialNamespace = classs->firstAncestorOfType<Module>();
+		if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace)
+			*fragment << pluginName(potentialNamespace, classs).toUpper() << "_API ";
 
 		*fragment << classs->nameNode();
 
@@ -187,7 +198,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 				*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 
 			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
-			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections");
+			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
+									[](Expression* expression) { return metaCallFilter(expression, false); });
 
 			if (classs->enumerators()->size() > 0)
 				error(classs->enumerators(), "Enum unhandled"); // TODO
@@ -279,12 +291,30 @@ bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
 	return true;
 }
 
+QString DeclarationVisitor::pluginName(Module* namespaceModule, Declaration* declaration)
+{
+	auto value = Config::instance().exportFlagMap().value(namespaceModule->name() + "/" + declaration->name());
+	if (!value.isEmpty()) return value;
+
+	if (namespaceModule->name() == "Model")
+		return "ModelBase";
+	else if (namespaceModule->name() == "Visualization")
+		return "VisualizationBase";
+	else if (namespaceModule->name() == "Interaction")
+		return "InteractionBase";
+	else if (namespaceModule->name() == "Alloy")
+		return "AlloyIntegration";
+	else if (namespaceModule->name() == "Hello")
+		return "HelloWorld";
+	return namespaceModule->name();
+}
+
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
 	auto fragment = new CompositeFragment(metaDefinition, "emptyLineAtEnd");
 	auto macro = new CompositeFragment(metaDefinition, "macro");
 	*macro << "#define " << metaDefinition->nameNode();
-	*macro << list(metaDefinition->arguments(), ElementVisitor(data()), "argsList");
+	*macro << list(metaDefinition->arguments(), ElementVisitor(MACRO_VISITOR, data()), "argsList");
 	auto body = new CompositeFragment(metaDefinition->context(), "macroBody");
 	if (auto context = DCast<Module>(metaDefinition->context()))
 		*body << list(context->classes(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
@@ -306,6 +336,12 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (!sourceVisitor())
 		*fragment << declarationComments(method);
+
+	if (!headerVisitor())
+		if (method->modifiers()->isSet(Modifier::Inline))
+			if (auto parentClass = method->firstAncestorOfType<Class>())
+				if (!parentClass->typeArguments()->isEmpty())
+					*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
@@ -342,12 +378,23 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
-	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == method->firstAncestorOfType<Module>())
-		*fragment << "CORE_API ";
+	auto potentialNamespace = method->firstAncestorOfType<Module>();
+	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace)
+		*fragment << pluginName(potentialNamespace, method).toUpper() << "_API ";
 
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
-			*fragment << parentClass->name() << "::";
+		{
+			*fragment << parentClass->name();
+			if (!parentClass->typeArguments()->isEmpty())
+			{
+				auto typeArgumentComposite = new CompositeFragment(method, "typeArgsList");
+				for (auto typeArgument : *parentClass->typeArguments())
+					*typeArgumentComposite << typeArgument->nameNode();
+				*fragment << typeArgumentComposite;
+			}
+			*fragment << "::";
+		}
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	if (method->methodKind() == Method::MethodKind::OperatorOverload) *fragment << "operator";

@@ -29,6 +29,9 @@
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/allOOModelNodes.h"
+#include "OOModel/src/types/ClassType.h"
+#include "OOModel/src/types/PointerType.h"
+#include "OOModel/src/types/ReferenceType.h"
 
 namespace CppExport {
 
@@ -81,7 +84,31 @@ void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
 			if (isNameOnlyDependency(reference))
 				softTargets_.insert(target);
 			else
+			{
 				hardTargets_.insert(target);
+
+				// member access
+				auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
+				if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
+				{
+					const OOModel::Type* baseType{};
+					if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
+						baseType = parentMethodCall->type();
+					else
+						baseType = reference->type();
+
+					auto finalType = baseType;
+					if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(baseType))
+						finalType = pointerType->baseType();
+					else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(baseType))
+						finalType = referenceType->baseType();
+
+					if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
+						hardTargets_.insert(classType->classDefinition());
+
+					SAFE_DELETE(baseType);
+				}
+			}
 		}
 }
 
@@ -94,6 +121,8 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 
 	if (DCast<OOModel::TypeQualifierExpression>(parent)) parent = parent->parent();
 	if (!DCast<OOModel::PointerTypeExpression>(parent) && !DCast<OOModel::ReferenceTypeExpression>(parent)) return false;
+	if (auto tryCatchFinally = reference->firstAncestorOfType<OOModel::TryCatchFinallyStatement>())
+		if (tryCatchFinally->catchClauses()->isAncestorOf(reference)) return false;
 
 	return true;
 }
@@ -107,16 +136,28 @@ Model::Node* CodeUnitPart::fixedTarget(OOModel::ReferenceExpression* referenceEx
 	return nullptr;
 }
 
-void CodeUnitPart::calculateDependencies(QList<CodeUnitPart*>& allHeaderParts)
+void CodeUnitPart::calculateDependencies(QList<CodeUnit*>& allUnits)
 {
 	dependencies_.clear();
 	if (this == parent()->sourcePart())
 		dependencies_.insert(parent()->headerPart());
 
 	for (auto target : hardTargets_)
-		for (auto headerPart : allHeaderParts)
-			if (headerPart != this && headerPart->nameNodes().contains(target))
-					dependencies_.insert(headerPart);
+		for (auto unit : allUnits)
+			if (unit->headerPart() != this && unit->headerPart()->nameNodes().contains(target))
+					dependencies_.insert(unit->headerPart());
+}
+
+QSet<CodeUnitPart*> CodeUnitPart::sourceDependencies(QList<CodeUnit*> units)
+{
+	QSet<CodeUnitPart*> result;
+	for (auto referenceNode : referenceNodes_)
+		if (auto target = referenceNode->target())
+			for (auto unit : units)
+				if (unit->sourcePart() != this &&
+					 unit->sourcePart()->nameNodes().contains(target))
+						result.insert(unit->sourcePart());
+	return result;
 }
 
 }

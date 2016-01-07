@@ -27,6 +27,8 @@
 #include "CppExporter.h"
 
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/declarations/TypeAlias.h"
 
 #include "Export/src/writer/Exporter.h"
 #include "Export/src/writer/FragmentLayouter.h"
@@ -45,13 +47,8 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 	QList<CodeUnit*> codeUnits;
 	units(treeManager->root(), "", codeUnits);
 
-	QList<CodeUnitPart*> allHeaderParts;
-	for (auto unit : codeUnits)
-	{
-		unit->calculateSourceFragments();
-		allHeaderParts.append(unit->headerPart());
-	}
-	for (auto unit : codeUnits) unit->calculateDependencies(allHeaderParts);
+	for (auto unit : codeUnits) unit->calculateSourceFragments();
+	for (auto unit : codeUnits) unit->calculateDependencies(codeUnits);
 
 	auto directory = new Export::SourceDir(nullptr, pathToProjectContainerDirectory + "/src");
 	for (auto codeComposite : mergeUnits(codeUnits))
@@ -76,22 +73,28 @@ void CppExporter::createFilesFromComposite(Export::SourceDir* directory, CodeCom
 
 void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
 {
-	if (auto ooModule = DCast<OOModel::Module>(current))
+	if (!DCast<OOModel::Project>(current))
 	{
-		if (ooModule->classes()->size() > 0)
-			namespaceName = ooModule->name();
-		else
+		if (auto ooModule = DCast<OOModel::Module>(current))
 		{
-			// macro file
-			// TODO: handle non class units
-			//result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooModule->name(), current));
+			// ignore the "ExternalMacro" module
+			if (ooModule->name() == "ExternalMacro") return;
+
+			namespaceName = ooModule->name();
+		}
+		else if (auto ooClass = DCast<OOModel::Declaration>(current))
+		{
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
 			return;
 		}
-	}
-	else if (auto ooClass = DCast<OOModel::Class>(current))
-	{
-		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
-		return;
+		else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
+		{
+			auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
+			Q_ASSERT(ooCalleeReference);
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name(),
+												current));
+			return;
+		}
 	}
 
 	for (auto child : current->children())

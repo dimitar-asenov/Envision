@@ -72,6 +72,8 @@ class CPPIMPORT_API NodeHasher
 		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam);
 		const QString hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* nonTypeTemplParam);
 		const QString hashTemplateArg(const clang::TemplateArgument& templateArg);
+
+		const QString hashNamespaceField(const clang::VarDecl* varDecl);
 	private:
 		ClangHelpers& clang_;
 };

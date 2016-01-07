@@ -126,10 +126,15 @@ void MacroImporter::insertArguments(QVector<MacroArgumentInfo>& allArguments)
 
 		if (auto currentArg = DCast<OOModel::ReferenceExpression>(lastArg))
 		{
-			auto newArg = argument.node_->clone();
+			QRegularExpression regex("^[A-Z]\\w*$");
+			auto match = regex.match(currentArg->name());
+			if (!match.hasMatch())
+			{
+				auto newArg = argument.node_->clone();
 
-			if (!currentArg->name().startsWith("#"))
-				lastLoc.expansion_->metaCall()->arguments()->replaceChild(currentArg, newArg);
+				if (!currentArg->name().startsWith("#"))
+					lastLoc.expansion_->metaCall()->arguments()->replaceChild(currentArg, newArg);
+			}
 		}
 	}
 }
