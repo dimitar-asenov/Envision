@@ -1090,7 +1090,7 @@ bool ClangAstVisitor::shouldUseDataRecursionfor (clang::Stmt*)
 
 void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OOModel::Method* method)
 {
-	if (functionDecl->isInlineSpecified())
+	if (functionDecl->isInlined())
 		method->modifiers()->set(OOModel::Modifier::Inline);
 	if (functionDecl->isVirtualAsWritten())
 		method->modifiers()->set(OOModel::Modifier::Virtual);
