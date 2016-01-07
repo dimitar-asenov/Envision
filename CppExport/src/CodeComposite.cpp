@@ -98,7 +98,9 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	for (auto unit : units())
 		for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
 		{
-			compositeDependencies.insert(dependency->parent()->composite());
+			if (!dependency->parent()->composite()->name().isEmpty())
+				// skip ExternalMacros
+				compositeDependencies.insert(dependency->parent()->composite());
 		}
 
 	auto composite = new Export::CompositeFragment(units().first()->node());
