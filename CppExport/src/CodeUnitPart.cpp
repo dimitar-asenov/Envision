@@ -131,16 +131,17 @@ Model::Node* CodeUnitPart::fixedTarget(OOModel::ReferenceExpression* referenceEx
 	return nullptr;
 }
 
-void CodeUnitPart::calculateDependencies(QList<CodeUnitPart*>& allHeaderParts)
+void CodeUnitPart::calculateDependencies(QList<CodeUnit*>& allUnits)
 {
 	dependencies_.clear();
 	if (this == parent()->sourcePart())
 		dependencies_.insert(parent()->headerPart());
 
 	for (auto target : hardTargets_)
-		for (auto headerPart : allHeaderParts)
-			if (headerPart != this && headerPart->nameNodes().contains(target))
-					dependencies_.insert(headerPart);
+		for (auto unit : allUnits)
+			if (unit->headerPart() != this && unit->headerPart()->nameNodes().contains(target))
+					dependencies_.insert(unit->headerPart());
+}
 
 QSet<CodeUnitPart*> CodeUnitPart::sourceDependencies(QList<CodeUnit*> units)
 {

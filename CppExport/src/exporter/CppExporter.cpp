@@ -47,13 +47,8 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 	QList<CodeUnit*> codeUnits;
 	units(treeManager->root(), "", codeUnits);
 
-	QList<CodeUnitPart*> allHeaderParts;
-	for (auto unit : codeUnits)
-	{
-		unit->calculateSourceFragments();
-		allHeaderParts.append(unit->headerPart());
-	}
-	for (auto unit : codeUnits) unit->calculateDependencies(allHeaderParts);
+	for (auto unit : codeUnits) unit->calculateSourceFragments();
+	for (auto unit : codeUnits) unit->calculateDependencies(codeUnits);
 
 	auto directory = new Export::SourceDir(nullptr, pathToProjectContainerDirectory + "/src");
 	for (auto codeComposite : mergeUnits(codeUnits))

@@ -91,10 +91,10 @@ void CodeUnit::calculateSourceFragments()
 		Q_ASSERT(false);
 }
 
-void CodeUnit::calculateDependencies(QList<CodeUnitPart*>& allHeaderParts)
+void CodeUnit::calculateDependencies(QList<CodeUnit*>& allUnits)
 {
-	headerPart()->calculateDependencies(allHeaderParts);
-	sourcePart()->calculateDependencies(allHeaderParts);
+	headerPart()->calculateDependencies(allUnits);
+	sourcePart()->calculateDependencies(allUnits);
 }
 
 }
