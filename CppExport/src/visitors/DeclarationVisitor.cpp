@@ -28,6 +28,7 @@
 #include "ExpressionVisitor.h"
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
+#include "../Config.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Module.h"
@@ -141,6 +142,12 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	{
 		//TODO
 		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
+		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections", [](Expression* expression)
+		{
+			 auto metaCall = DCast<MetaCallExpression>(expression);
+			 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
+			 return Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp";
+		});
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
 
@@ -189,7 +196,12 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 				*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 
 			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
-			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections");
+			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections", [](Expression* expression)
+			{
+				auto metaCall = DCast<MetaCallExpression>(expression);
+				auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
+				return Config::instance().metaCallLocationMap().value(ooReference->name()) != "cpp";
+			});
 
 			if (classs->enumerators()->size() > 0)
 				error(classs->enumerators(), "Enum unhandled"); // TODO
