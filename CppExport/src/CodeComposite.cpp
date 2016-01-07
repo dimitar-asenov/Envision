@@ -28,6 +28,7 @@
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Class.h"
+#include "Config.h"
 
 namespace CppExport {
 
