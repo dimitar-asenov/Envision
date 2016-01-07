@@ -29,6 +29,8 @@
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/allOOModelNodes.h"
+#include "OOModel/src/types/ClassType.h"
+#include "OOModel/src/types/PointerType.h"
 
 namespace CppExport {
 
@@ -81,7 +83,27 @@ void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
 			if (isNameOnlyDependency(reference))
 				softTargets_.insert(target);
 			else
+			{
 				hardTargets_.insert(target);
+
+				// member access
+				auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
+				if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
+				{
+					const OOModel::Type* type{};
+
+					if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
+						type = parentMethodCall->type();
+					else
+						type = reference->type();
+
+					if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(type))
+						type = pointerType->baseType();
+
+					if (auto classType = dynamic_cast<const OOModel::ClassType*>(type))
+						hardTargets_.insert(classType->classDefinition());
+				}
+			}
 		}
 }
 
