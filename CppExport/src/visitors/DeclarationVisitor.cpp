@@ -314,7 +314,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	auto fragment = new CompositeFragment(metaDefinition, "emptyLineAtEnd");
 	auto macro = new CompositeFragment(metaDefinition, "macro");
 	*macro << "#define " << metaDefinition->nameNode();
-	*macro << list(metaDefinition->arguments(), ElementVisitor(data()), "argsList");
+	*macro << list(metaDefinition->arguments(), ElementVisitor(MACRO_VISITOR, data()), "argsList");
 	auto body = new CompositeFragment(metaDefinition->context(), "macroBody");
 	if (auto context = DCast<Module>(metaDefinition->context()))
 		*body << list(context->classes(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
