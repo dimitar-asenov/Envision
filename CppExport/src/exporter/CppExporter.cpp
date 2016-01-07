@@ -27,6 +27,8 @@
 #include "CppExporter.h"
 
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/declarations/TypeAlias.h"
 
 #include "Export/src/writer/Exporter.h"
 #include "Export/src/writer/FragmentLayouter.h"
@@ -84,13 +86,36 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 		{
 			// macro file
 			// TODO: handle non class units
-			//result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooModule->name(), current));
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooModule->name(), current));
 			return;
 		}
 	}
 	else if (auto ooClass = DCast<OOModel::Class>(current))
 	{
 		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
+		return;
+	}
+	else if (auto ooMethod = DCast<OOModel::Method>(current))
+	{
+		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooMethod->name(), current));
+		return;
+	}
+	else if (auto ooField = DCast<OOModel::Field>(current))
+	{
+		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooField->name(), current));
+		return;
+	}
+	else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
+	{
+		auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
+		Q_ASSERT(ooCalleeReference);
+		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name(),
+											current));
+		return;
+	}
+	else if (auto ooNameImport = DCast<OOModel::TypeAlias>(current))
+	{
+		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooNameImport->name(), current));
 		return;
 	}
 
