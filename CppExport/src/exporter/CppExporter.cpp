@@ -79,17 +79,7 @@ void CppExporter::createFilesFromComposite(Export::SourceDir* directory, CodeCom
 void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
 {
 	if (auto ooModule = DCast<OOModel::Module>(current))
-	{
-		if (ooModule->classes()->size() > 0)
-			namespaceName = ooModule->name();
-		else
-		{
-			// macro file
-			// TODO: handle non class units
-			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooModule->name(), current));
-			return;
-		}
-	}
+		namespaceName = ooModule->name();
 	else if (auto ooClass = DCast<OOModel::Class>(current))
 	{
 		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
