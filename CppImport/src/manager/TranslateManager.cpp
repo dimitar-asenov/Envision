@@ -136,16 +136,16 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 			method = methodMap_.value(hash);
 			clang_.envisionToClangMap().mapAst(mDecl, method);
 
-			// If the method in the map is just a declaration and the method we currently have is a definition
-			// there might be some argument names in the definition which are not yet considered.
-			// Therefore we look at them now.
-			if (method->items()->size() || !mDecl->isThisDeclarationADefinition())
-				return method;
 			for (int i = 0; i< method->arguments()->size(); i++)
 			{
-				OOModel::FormalArgument* ooArg = method->arguments()->at(i);
-				// note that this never should/can be out of range otherwise the hash would be different
-				ooArg->setName(QString::fromStdString(mDecl->getParamDecl(i)->getNameAsString()));
+				auto argName = QString::fromStdString(mDecl->getParamDecl(i)->getNameAsString());
+				if (argName.isEmpty()) continue;
+
+				auto ooArg = method->arguments()->at(i);
+				if (ooArg->name().isEmpty())
+					ooArg->setName(argName);
+				else if (argName != ooArg->name())
+					Q_ASSERT(false && "multiple different argument names for the same argument");
 			}
 			return method;
 		}
