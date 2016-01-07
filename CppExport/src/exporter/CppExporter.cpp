@@ -73,35 +73,28 @@ void CppExporter::createFilesFromComposite(Export::SourceDir* directory, CodeCom
 
 void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
 {
-	if (auto ooModule = DCast<OOModel::Module>(current))
-		namespaceName = ooModule->name();
-	else if (auto ooClass = DCast<OOModel::Class>(current))
+	if (!DCast<OOModel::Project>(current))
 	{
-		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
-		return;
-	}
-	else if (auto ooMethod = DCast<OOModel::Method>(current))
-	{
-		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooMethod->name(), current));
-		return;
-	}
-	else if (auto ooField = DCast<OOModel::Field>(current))
-	{
-		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooField->name(), current));
-		return;
-	}
-	else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
-	{
-		auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
-		Q_ASSERT(ooCalleeReference);
-		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name(),
-											current));
-		return;
-	}
-	else if (auto ooNameImport = DCast<OOModel::TypeAlias>(current))
-	{
-		result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooNameImport->name(), current));
-		return;
+		if (auto ooModule = DCast<OOModel::Module>(current))
+		{
+			// ignore the "ExternalMacro" module
+			if (ooModule->name() == "ExternalMacro") return;
+
+			namespaceName = ooModule->name();
+		}
+		else if (auto ooClass = DCast<OOModel::Declaration>(current))
+		{
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
+			return;
+		}
+		else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
+		{
+			auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
+			Q_ASSERT(ooCalleeReference);
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name(),
+												current));
+			return;
+		}
 	}
 
 	for (auto child : current->children())
