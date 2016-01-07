@@ -41,6 +41,7 @@ namespace OOModel {
 	class ExplicitTemplateInstantiation;
 	class TypeAlias;
 	class MetaDefinition;
+	class Expression;
 }
 
 namespace Export {
@@ -100,6 +101,7 @@ class CPPEXPORT_API DeclarationVisitor
 		bool methodSignaturesMatch(OOModel::Method* method, OOModel::Method* other);
 
 		QString pluginName(OOModel::Module* namespaceModule, OOModel::Declaration* declaration);
+		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 };
 
 inline bool DeclarationVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }

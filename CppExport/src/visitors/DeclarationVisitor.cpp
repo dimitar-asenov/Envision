@@ -134,6 +134,13 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	return fragment;
 }
 
+bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
+{
+	 auto metaCall = DCast<MetaCallExpression>(expression);
+	 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
+	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
+}
+
 SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
@@ -141,12 +148,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	if (sourceVisitor())
 	{
 		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
-		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections", [](Expression* expression)
-		{
-			 auto metaCall = DCast<MetaCallExpression>(expression);
-			 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
-			 return Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp";
-		});
+		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections",
+								[](Expression* expression) { return metaCallFilter(expression, true); });
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
 		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
@@ -195,12 +198,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 				*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 
 			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
-			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections", [](Expression* expression)
-			{
-				auto metaCall = DCast<MetaCallExpression>(expression);
-				auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
-				return Config::instance().metaCallLocationMap().value(ooReference->name()) != "cpp";
-			});
+			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
+									[](Expression* expression) { return metaCallFilter(expression, false); });
 
 			if (classs->enumerators()->size() > 0)
 				error(classs->enumerators(), "Enum unhandled"); // TODO
