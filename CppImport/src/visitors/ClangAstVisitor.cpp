@@ -332,10 +332,16 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr);
 			if (constructExpr && initSpelling.contains("{"))
 			{
-				auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(initExpr->getSourceRange());
-				for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
-					arrayInitializer->values()->append(argument);
-				ooVarDecl->setInitialValue(arrayInitializer);
+				auto arguments = exprVisitor_->translateArguments(constructExpr->arguments());
+				if (arguments.size() == 1 && DCast<OOModel::ArrayInitializer>(arguments.first()))
+					ooVarDecl->setInitialValue(arguments.first());
+				else
+				{
+					auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(initExpr->getSourceRange());
+					for (auto argument : arguments)
+						arrayInitializer->values()->append(argument);
+					ooVarDecl->setInitialValue(arrayInitializer);
+				}
 			}
 			else
 			{
