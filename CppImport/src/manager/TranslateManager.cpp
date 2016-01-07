@@ -214,6 +214,27 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	return nullptr;
 }
 
+OOModel::Field* TranslateManager::insertNamespaceField(clang::VarDecl* varDecl, bool& wasDeclared)
+{
+	const QString hash = nh_->hashNamespaceField(varDecl);
+	if (namespaceFieldMap_.contains(hash))
+	{
+		wasDeclared = true;
+		clang_.envisionToClangMap().mapAst(varDecl, namespaceFieldMap_.value(hash));
+		return namespaceFieldMap_.value(hash);
+	}
+	wasDeclared = false;
+	const QString parentHash = nh_->hashNameSpace(llvm::dyn_cast<clang::NamespaceDecl>(varDecl->getDeclContext()));
+	if (nameSpaceMap_.contains(parentHash))
+	{
+		auto ooField = clang_.createNamedNode<OOModel::Field>(varDecl);
+		nameSpaceMap_.value(parentHash)->fields()->append(ooField);
+		namespaceFieldMap_.insert(hash, ooField);
+		return ooField;
+	}
+	return nullptr;
+}
+
 OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplateInstantiation
 (clang::ClassTemplateSpecializationDecl* explicitTemplateInst)
 {

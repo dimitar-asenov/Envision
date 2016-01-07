@@ -132,6 +132,14 @@ const QString NodeHasher::hashStaticField(const clang::VarDecl* varDecl)
 	return hash;
 }
 
+const QString NodeHasher::hashNamespaceField(const clang::VarDecl* varDecl)
+{
+	QString hash = QString::fromStdString(varDecl->getNameAsString()).prepend("_");
+	hash.prepend(hashNameSpace(llvm::dyn_cast<clang::NamespaceDecl>(varDecl->getDeclContext())));
+	hash.append("_").append(hashType(varDecl->getType()));
+	return hash;
+}
+
 const QString NodeHasher::hashParentOfStaticField(const clang::DeclContext* context)
 {
 	if (auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))

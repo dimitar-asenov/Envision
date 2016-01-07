@@ -282,6 +282,14 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			return true;
 		}
 	}
+	else if (llvm::dyn_cast<clang::NamespaceDecl>(varDecl->getDeclContext()))
+	{
+		if (!(ooVarDecl = trMngr_->insertNamespaceField(varDecl, wasDeclared)))
+		{
+			log_->writeError(className_, varDecl, CppImportLogger::Reason::NO_PARENT);
+			return true;
+		}
+	}
 	else
 	{
 		if (!inBody_)

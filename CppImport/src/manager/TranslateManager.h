@@ -134,6 +134,7 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::TypeAlias* insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 
+		OOModel::Field* insertNamespaceField(clang::VarDecl* varDecl, bool& wasDeclared);
 	private:
 		ClangHelpers& clang_;
 
@@ -145,6 +146,7 @@ class CPPIMPORT_API TranslateManager
 		QHash<QString, OOModel::Method*> methodMap_;
 		QHash<QString, OOModel::Method*> functionMap_;
 		QHash<QString, OOModel::Field*> staticFieldMap_;
+		QHash<QString, OOModel::Field*> namespaceFieldMap_;
 
 		QHash<QString, OOModel::ExplicitTemplateInstantiation*> explicitTemplateInstMap_{};
 
