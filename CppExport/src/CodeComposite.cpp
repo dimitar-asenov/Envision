@@ -90,6 +90,29 @@ QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> ha
 	return result;
 }
 
+QString CodeComposite::pluginName(OOModel::Declaration* declaration)
+{
+	auto namespaceModule = declaration->firstAncestorOfType<OOModel::Module>();
+	auto moduleName = namespaceModule ? namespaceModule->name() : QString();
+	auto value = Config::instance().exportFlagMap().value(moduleName + "/" + declaration->name());
+	if (!value.isEmpty() || !namespaceModule) return value;
+	return namespaceModule->name();
+}
+
+CodeComposite* CodeComposite::apiInclude()
+{
+	QString plugin;
+	for (auto unit : units())
+			if (auto declaration = DCast<OOModel::Declaration>(unit->node()))
+			{
+				plugin = pluginName(declaration);
+				if (!plugin.isEmpty()) break;
+			}
+
+	if (plugin.isEmpty()) return nullptr;
+	return new CodeComposite(plugin + "/src/" + plugin.toLower() + "_api");
+}
+
 Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*part) ())
 {
 	Q_ASSERT(!units().empty());
@@ -101,7 +124,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 	if ((units().first()->*part)() == units().first()->headerPart())
 	{
-		compositeDependencies.insert(new CodeComposite("Core/src/core_api"));
+		if (auto api = apiInclude()) compositeDependencies.insert(api);
 		compositeDependencies.remove(this);
 	}
 

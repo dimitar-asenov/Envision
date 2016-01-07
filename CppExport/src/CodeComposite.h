@@ -60,6 +60,8 @@ class CPPEXPORT_API CodeComposite
 		void sortUnitsBySourcePartDependencies();
 		template <typename T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
+		QString pluginName(OOModel::Declaration* declaration);
+		CodeComposite* apiInclude();
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
