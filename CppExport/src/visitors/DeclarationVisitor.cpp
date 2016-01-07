@@ -126,7 +126,9 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	*fragment << visit(classs);
 
 	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
-															method->modifiers()->isSet(OOModel::Modifier::Inline); };
+															(method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
+															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
 	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
 	return fragment;
 }
