@@ -94,12 +94,10 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 {
 	Q_ASSERT(!units().empty());
 
-	QSet<Model::Node*> softDependencies;
 	QSet<CodeComposite*> compositeDependencies;
 	for (auto unit : units())
 		for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
 		{
-			softDependencies.unite(dependency->softDependencies());
 			compositeDependencies.insert(dependency->parent()->composite());
 		}
 
@@ -111,28 +109,6 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 		*composite << "\n";
 	}
-
-	auto softDependenciesReduced = reduceSoftDependencies(compositeDependencies, softDependencies);
-	if (!softDependenciesReduced.empty())
-	{
-		for (auto softDependency : softDependenciesReduced)
-		{
-			if (auto classs = DCast<OOModel::Class>(softDependency))
-			{
-				if (OOModel::Class::ConstructKind::Class == classs->constructKind()) *composite << "class ";
-				else if (OOModel::Class::ConstructKind::Struct == classs->constructKind()) *composite << "struct ";
-				else if (OOModel::Class::ConstructKind::Enum == classs->constructKind()) *composite << "enum ";
-				else Q_ASSERT(false);
-			}
-			else
-				Q_ASSERT(false);
-
-			*composite << softDependency->symbolName() + ";\n";
-		}
-
-		*composite << "\n";
-	}
-
 
 	Export::CompositeFragment* unitsComposite = nullptr;
 	if (!units().isEmpty())
@@ -156,6 +132,29 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 					unitsComposite->append(namespaceComposite);
 				}
 				currentNamespace = neededNamespace;
+			}
+
+			auto softDependenciesReduced = reduceSoftDependencies(compositeDependencies, codeUnitPart->softDependencies());
+			if (!softDependenciesReduced.empty())
+			{
+				auto softDependencyComposite = new Export::CompositeFragment(units().first()->node());
+				for (auto softDependency : softDependenciesReduced)
+				{
+					if (auto classs = DCast<OOModel::Class>(softDependency))
+					{
+						if (OOModel::Class::ConstructKind::Class == classs->constructKind())
+							*softDependencyComposite << "class ";
+						else if (OOModel::Class::ConstructKind::Struct == classs->constructKind())
+							*softDependencyComposite << "struct ";
+						else if (OOModel::Class::ConstructKind::Enum == classs->constructKind())
+							*softDependencyComposite << "enum ";
+						else Q_ASSERT(false);
+
+						*softDependencyComposite << softDependency->symbolName() + ";\n";
+					}
+				}
+
+				*unitsComposite << softDependencyComposite;
 			}
 
 			unitsComposite->append(codeUnitPart->sourceFragment());
