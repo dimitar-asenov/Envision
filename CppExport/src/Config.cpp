@@ -34,10 +34,10 @@ const Config& Config::instance()
 	return conf;
 }
 
-QHash<QString, QString> Config::dependencyUnitMergeMap() const
+QHash<QString, QString> Config::createMap(QJsonObject config, const QString& key) const
 {
 	QHash<QString, QString> result;
-	auto obj = config_["DependencyUnitMergeMap"].toObject();
+	auto obj = config[key].toObject();
 	for (auto it = obj.begin(); it != obj.end(); ++it)
 		result.insert(it.key(), it.value().toString());
 	return result;
@@ -51,7 +51,10 @@ Config::Config()
 	QJsonParseError err;
 	auto doc = QJsonDocument::fromJson(configFile.readAll(), &err);
 	Q_ASSERT(err.error == QJsonParseError::NoError);
-	config_ = doc.object();
+
+	dependencyUnitMergeMap_ = createMap(doc.object(), "DependencyUnitMergeMap");
+	exportFlagMap_ = createMap(doc.object(), "ExportFlagMap");
+	metaCallLocationMap_ = createMap(doc.object(), "MetaCallLocationMap");
 }
 
 }
