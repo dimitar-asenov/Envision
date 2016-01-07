@@ -87,6 +87,11 @@ void CodeUnit::calculateSourceFragments()
 		else
 			sourcePart()->setSourceFragment(ExpressionVisitor(SOURCE_VISITOR).visit(metaCall));
 	}
+	else if (auto metaDefinition = DCast<OOModel::MetaDefinition>(node()))
+	{
+		// TODO: add a similar map to the metaCallLocationMap (maybe even unify them?)
+		headerPart()->setSourceFragment(DeclarationVisitor(MACRO_VISITOR).visit(metaDefinition));
+	}
 	else
 		Q_ASSERT(false);
 }
