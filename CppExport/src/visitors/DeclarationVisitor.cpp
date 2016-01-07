@@ -309,6 +309,12 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (!sourceVisitor())
 		*fragment << declarationComments(method);
 
+	if (!headerVisitor())
+		if (method->modifiers()->isSet(Modifier::Inline))
+			if (auto parentClass = method->firstAncestorOfType<Class>())
+				if (!parentClass->typeArguments()->isEmpty())
+					*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
