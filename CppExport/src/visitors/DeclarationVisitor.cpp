@@ -184,8 +184,9 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
 		else notAllowed(classs);
 
-		if (auto namespaceModule = classs->firstAncestorOfType<Module>())
-			*fragment << namespaceModule->name().toUpper() + "_API ";
+		auto potentialNamespace = classs->firstAncestorOfType<Module>();
+		if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace)
+			*fragment << pluginName(potentialNamespace, classs).toUpper() << "_API ";
 
 		*fragment << classs->nameNode();
 
@@ -293,6 +294,24 @@ bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
 	return true;
 }
 
+QString DeclarationVisitor::pluginName(Module* namespaceModule, Declaration* declaration)
+{
+	auto value = Config::instance().exportFlagMap().value(namespaceModule->name() + "/" + declaration->name());
+	if (!value.isEmpty()) return value;
+
+	if (namespaceModule->name() == "Model")
+		return "ModelBase";
+	else if (namespaceModule->name() == "Visualization")
+		return "VisualizationBase";
+	else if (namespaceModule->name() == "Interaction")
+		return "InteractionBase";
+	else if (namespaceModule->name() == "Alloy")
+		return "AlloyIntegration";
+	else if (namespaceModule->name() == "Hello")
+		return "HelloWorld";
+	return namespaceModule->name();
+}
+
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
 	auto fragment = new CompositeFragment(metaDefinition, "emptyLineAtEnd");
@@ -362,8 +381,9 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
-	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == method->firstAncestorOfType<Module>())
-		*fragment << "CORE_API ";
+	auto potentialNamespace = method->firstAncestorOfType<Module>();
+	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace)
+		*fragment << pluginName(potentialNamespace, method).toUpper() << "_API ";
 
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
