@@ -188,7 +188,7 @@ Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fra
 	return compositeFragment;
 }
 
-void CodeComposite::sortUnits()
+void CodeComposite::sortUnitsByHeaderPartDependencies()
 {
 	if (units().size() <= 1) return;
 
@@ -201,7 +201,7 @@ void CodeComposite::sortUnits()
 
 void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
 {
-	sortUnits();
+	sortUnitsByHeaderPartDependencies();
 	header = headerFragment();
 	source = sourceFragment();
 }
