@@ -48,7 +48,7 @@ QString CodeComposite::relativePath(CodeComposite* other)
 	if (name() == other->name()) return otherName.last();
 
 	QStringList thisName = name().split("/");
-	while (thisName.first() == otherName.first())
+	while (!thisName.empty() && !otherName.empty() && thisName.first() == otherName.first())
 	{
 		thisName.takeFirst();
 		otherName.takeFirst();
