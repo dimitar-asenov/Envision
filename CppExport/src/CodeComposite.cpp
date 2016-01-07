@@ -97,11 +97,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	QSet<CodeComposite*> compositeDependencies;
 	for (auto unit : units())
 		for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
-		{
-			if (!dependency->parent()->composite()->name().isEmpty())
-				// skip ExternalMacros
-				compositeDependencies.insert(dependency->parent()->composite());
-		}
+			compositeDependencies.insert(dependency->parent()->composite());
 
 	if ((units().first()->*part)() == units().first()->headerPart())
 	{
