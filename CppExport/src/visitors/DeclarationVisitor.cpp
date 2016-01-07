@@ -140,7 +140,6 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 	if (sourceVisitor())
 	{
-		//TODO
 		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
 		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections", [](Expression* expression)
 		{
@@ -150,7 +149,6 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		});
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
-
 		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
 		{
 			return method->typeArguments()->isEmpty() &&
