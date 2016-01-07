@@ -116,6 +116,8 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 
 	if (DCast<OOModel::TypeQualifierExpression>(parent)) parent = parent->parent();
 	if (!DCast<OOModel::PointerTypeExpression>(parent) && !DCast<OOModel::ReferenceTypeExpression>(parent)) return false;
+	if (auto tryCatchFinally = reference->firstAncestorOfType<OOModel::TryCatchFinallyStatement>())
+		if (tryCatchFinally->catchClauses()->isAncestorOf(reference)) return false;
 
 	return true;
 }
