@@ -65,6 +65,8 @@ class CPPEXPORT_API CodeUnitPart
 		QSet<Model::Node*> softDependencies() const;
 		void calculateDependencies(QList<CodeUnitPart*>& allHeaderParts);
 
+		QSet<CodeUnitPart*> sourceDependencies(QList<CodeUnit*> units);
+
 	private:
 		CodeUnit* parent_{};
 		Export::SourceFragment* sourceFragment_{};

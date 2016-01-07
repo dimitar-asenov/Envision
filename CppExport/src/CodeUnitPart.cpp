@@ -141,6 +141,17 @@ void CodeUnitPart::calculateDependencies(QList<CodeUnitPart*>& allHeaderParts)
 		for (auto headerPart : allHeaderParts)
 			if (headerPart != this && headerPart->nameNodes().contains(target))
 					dependencies_.insert(headerPart);
+
+QSet<CodeUnitPart*> CodeUnitPart::sourceDependencies(QList<CodeUnit*> units)
+{
+	QSet<CodeUnitPart*> result;
+	for (auto referenceNode : referenceNodes_)
+		if (auto target = referenceNode->target())
+			for (auto unit : units)
+				if (unit->sourcePart() != this &&
+					 unit->sourcePart()->nameNodes().contains(target))
+						result.insert(unit->sourcePart());
+	return result;
 }
 
 }

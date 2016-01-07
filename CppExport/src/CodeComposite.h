@@ -56,12 +56,12 @@ class CPPEXPORT_API CodeComposite
 		QString relativePath(CodeComposite* other);
 		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
 
-		void sortUnitsByHeaderPartDependencies();
-		void sortUnitsBySourcePartDependencies();
 		template <typename T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
 		QString pluginName(OOModel::Declaration* declaration);
 		CodeComposite* apiInclude();
+		void sortUnits(CodeUnitPart*(CodeUnit::*part)(),
+							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
 };
 
 inline const QString& CodeComposite::name() const { return name_; }

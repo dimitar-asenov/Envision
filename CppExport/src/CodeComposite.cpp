@@ -208,43 +208,24 @@ Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fra
 	return compositeFragment;
 }
 
-void CodeComposite::sortUnitsByHeaderPartDependencies()
+void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
+										std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies)
 {
 	if (units().size() <= 1) return;
 
-	QHash<CodeUnitPart*, QSet<CodeUnitPart*>> headerPartDependencies;
-	for (auto unit : units()) headerPartDependencies.insert(unit->headerPart(), unit->headerPart()->dependencies());
-
-	units_.clear();
-	for (auto headerPart : topologicalSort(headerPartDependencies)) units_.append(headerPart->parent());
-}
-
-void CodeComposite::sortUnitsBySourcePartDependencies()
-{
-	if (units().size() <= 1) return;
-
-	QHash<CodeUnitPart*, QSet<CodeUnitPart*>> sourcePartDependencies;
+	QHash<CodeUnitPart*, QSet<CodeUnitPart*>> partDependencies;
 	for (auto unit : units())
-	{
-		sourcePartDependencies[unit->sourcePart()] = {};
-
-		for (auto referenceNode : unit->sourcePart()->referenceNodes())
-			if (auto target = referenceNode->target())
-				for (auto otherUnit : units())
-					if (otherUnit->sourcePart() != unit->sourcePart() &&
-						 otherUnit->sourcePart()->nameNodes().contains(target))
-							sourcePartDependencies[unit->sourcePart()].insert(otherUnit->sourcePart());
-	}
+		partDependencies.insert((unit->*part)(), dependencies((unit->*part)()));
 
 	units_.clear();
-	for (auto sourcePart : topologicalSort(sourcePartDependencies)) units_.append(sourcePart->parent());
+	for (auto part : topologicalSort(partDependencies)) units_.append(part->parent());
 }
 
 void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
 {
-	sortUnitsByHeaderPartDependencies();
+	sortUnits(&CodeUnit::headerPart, [](CodeUnitPart* p) { return p->dependencies(); });
 	header = headerFragment();
-	sortUnitsBySourcePartDependencies();
+	sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->sourceDependencies(units()); });
 	source = sourceFragment();
 }
 
