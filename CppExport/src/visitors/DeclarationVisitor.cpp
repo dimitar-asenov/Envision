@@ -355,7 +355,17 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
-			*fragment << parentClass->name() << "::";
+		{
+			*fragment << parentClass->name();
+			if (!parentClass->typeArguments()->isEmpty())
+			{
+				auto typeArgumentComposite = new CompositeFragment(method, "typeArgsList");
+				for (auto typeArgument : *parentClass->typeArguments())
+					*typeArgumentComposite << typeArgument->nameNode();
+				*fragment << typeArgumentComposite;
+			}
+			*fragment << "::";
+		}
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	if (method->methodKind() == Method::MethodKind::OperatorOverload) *fragment << "operator";
