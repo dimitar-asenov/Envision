@@ -103,6 +103,11 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				compositeDependencies.insert(dependency->parent()->composite());
 		}
 
+	if ((units().first()->*part)() == units().first()->headerPart())
+	{
+		compositeDependencies.insert(new CodeComposite("Core/src/core_api"));
+	}
+
 	auto composite = new Export::CompositeFragment(units().first()->node());
 	if (!compositeDependencies.empty())
 	{
