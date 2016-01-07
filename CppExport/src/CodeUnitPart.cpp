@@ -31,6 +31,7 @@
 #include "OOModel/src/allOOModelNodes.h"
 #include "OOModel/src/types/ClassType.h"
 #include "OOModel/src/types/PointerType.h"
+#include "OOModel/src/types/ReferenceType.h"
 
 namespace CppExport {
 
@@ -90,18 +91,22 @@ void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
 				auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
 				if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
 				{
-					const OOModel::Type* type{};
-
+					const OOModel::Type* baseType{};
 					if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
-						type = parentMethodCall->type();
+						baseType = parentMethodCall->type();
 					else
-						type = reference->type();
+						baseType = reference->type();
 
-					if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(type))
-						type = pointerType->baseType();
+					auto finalType = baseType;
+					if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(baseType))
+						finalType = pointerType->baseType();
+					else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(baseType))
+						finalType = referenceType->baseType();
 
-					if (auto classType = dynamic_cast<const OOModel::ClassType*>(type))
+					if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
 						hardTargets_.insert(classType->classDefinition());
+
+					SAFE_DELETE(baseType);
 				}
 			}
 		}
