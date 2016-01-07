@@ -57,6 +57,7 @@ class CPPEXPORT_API CodeComposite
 		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
 
 		void sortUnitsByHeaderPartDependencies();
+		void sortUnitsBySourcePartDependencies();
 		template <typename T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies);
 };

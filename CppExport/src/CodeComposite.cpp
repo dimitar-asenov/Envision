@@ -199,10 +199,32 @@ void CodeComposite::sortUnitsByHeaderPartDependencies()
 	for (auto headerPart : topologicalSort(headerPartDependencies)) units_.append(headerPart->parent());
 }
 
+void CodeComposite::sortUnitsBySourcePartDependencies()
+{
+	if (units().size() <= 1) return;
+
+	QHash<CodeUnitPart*, QSet<CodeUnitPart*>> sourcePartDependencies;
+	for (auto unit : units())
+	{
+		sourcePartDependencies[unit->sourcePart()] = {};
+
+		for (auto referenceNode : unit->sourcePart()->referenceNodes())
+			if (auto target = referenceNode->target())
+				for (auto otherUnit : units())
+					if (otherUnit->sourcePart() != unit->sourcePart() &&
+						 otherUnit->sourcePart()->nameNodes().contains(target))
+							sourcePartDependencies[unit->sourcePart()].insert(otherUnit->sourcePart());
+	}
+
+	units_.clear();
+	for (auto sourcePart : topologicalSort(sourcePartDependencies)) units_.append(sourcePart->parent());
+}
+
 void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
 {
 	sortUnitsByHeaderPartDependencies();
 	header = headerFragment();
+	sortUnitsBySourcePartDependencies();
 	source = sourceFragment();
 }
 
