@@ -31,7 +31,7 @@
 
 namespace Model {
 
-class NotificationListener : public QObject
+class MODELBASE_API NotificationListener : public QObject
 {
 	Q_OBJECT
 

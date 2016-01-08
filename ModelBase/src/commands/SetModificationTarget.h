@@ -32,7 +32,7 @@ namespace Model {
 
 class NodeReadWriteLock;
 
-class SetModificationTarget: public UndoCommand
+class MODELBASE_API SetModificationTarget: public UndoCommand
 {
 	private:
 		Node* &field;

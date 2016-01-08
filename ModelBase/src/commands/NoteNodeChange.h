@@ -30,7 +30,7 @@
 
 namespace Model {
 
-class NoteNodeChange: public UndoCommand
+class MODELBASE_API NoteNodeChange: public UndoCommand
 {
 	public:
 		NoteNodeChange(QSet<Node*>& modifiedTargets, QSet<Node*>& removedTargets, const UndoCommand* command);

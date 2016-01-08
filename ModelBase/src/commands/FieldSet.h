@@ -32,7 +32,7 @@
 namespace Model {
 
 template<typename T>
-class FieldSet: public UndoCommand
+class MODELBASE_API FieldSet: public UndoCommand
 {
 	protected:
 		T& field;
