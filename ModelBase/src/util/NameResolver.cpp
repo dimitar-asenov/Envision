@@ -63,10 +63,10 @@ QList<QPair<QString, Node*>> NameResolver::findAllMatches(const SymbolMatcher& m
 	if (!root->definesSymbol())
 		for (auto child : root->children())
 			result.append(findAllMatches(matcher, nameSoFar, child, suggestable));
-
-	//If it defines a symbol, check if the name matches with our SymbolMatcher
 	else if (suggestable(root->symbolType()) && root->symbolName().size() > 0)
 	{
+		//If it defines a symbol, check if the name matches with our SymbolMatcher
+
 		auto newNameSoFar = nameSoFar + "." + root->symbolName();
 		for (auto child : root->children())
 			result.append(findAllMatches(matcher, newNameSoFar, child, suggestable));
