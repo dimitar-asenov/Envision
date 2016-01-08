@@ -44,7 +44,6 @@ UsedLibrary::UsedLibrary(const QString& name) : Super(nullptr, UsedLibrary::getM
 	setName(name);
 }
 
-
 QList<const UsedLibrary*> UsedLibrary::usedLibraries() const
 {
 	return {this};
@@ -53,9 +52,11 @@ QList<const UsedLibrary*> UsedLibrary::usedLibraries() const
 void UsedLibrary::loadLibrary(PersistentStore* store) const
 {
 	if (libraryManager() == nullptr)
-		(new TreeManager())->load(store, name(), true); // Automatically ends up in the ModelManager
+	{
+		// Automatically ends up in the ModelManager
+		(new TreeManager())->load(store, name(), true);
+	}
 }
-
 
 TreeManager* UsedLibrary::libraryManager() const
 {
