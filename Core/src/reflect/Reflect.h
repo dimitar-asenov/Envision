@@ -30,7 +30,7 @@
 namespace Core {
 
 template <typename Base>
-class Reflect : public Base
+class CORE_API Reflect : public Base
 {
 	protected:
 		using Super = Reflect<Base>;
@@ -38,7 +38,7 @@ class Reflect : public Base
 		using Base::Base;
 };
 
-QString readNamePart(const char* part, const char*& nextPart);
+QString CORE_API readNamePart(const char* part, const char*& nextPart);
 }
 
 // This alias is deliberitely outside of the namespace to make using this template less verbose
