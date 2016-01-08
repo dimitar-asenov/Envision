@@ -44,8 +44,8 @@ EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication{
 
 bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
 {
+	// This list is meant to represent user interaction events
 	if ( event->spontaneous() && (
-			  // This list is meant to represent user interaction events
 			  event->type() == QEvent::KeyPress
 			  || event->type() == QEvent::KeyRelease
 			  || event->type() == QEvent::DragEnter
