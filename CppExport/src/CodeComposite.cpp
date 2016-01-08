@@ -29,6 +29,7 @@
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
 
 namespace CppExport {
 
@@ -218,7 +219,18 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 		partDependencies.insert((unit->*part)(), dependencies((unit->*part)()));
 
 	units_.clear();
-	for (auto part : topologicalSort(partDependencies)) units_.append(part->parent());
+	std::function<CodeUnitPart*(QList<CodeUnitPart*>&)> selector = [](QList<CodeUnitPart*>& parts)
+	{
+		auto result = parts.first();
+
+		for (auto part : parts)
+			if (DCast<OOModel::MetaCallExpression>(part->parent()->node()))
+				result = part;
+
+		parts.removeOne(result);
+		return result;
+	};
+	for (auto part : topologicalSort(partDependencies, selector)) units_.append(part->parent());
 }
 
 void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
