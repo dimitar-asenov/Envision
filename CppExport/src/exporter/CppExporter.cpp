@@ -142,7 +142,6 @@ Export::FragmentLayouter CppExporter::layouter()
 						  | Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n", "}");
 	result.addRule("space", Export::FragmentLayouter::SpaceAtEnd, "", " ", "");
 	result.addRule("comma", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
-	result.addRule("baseClasses", Export::FragmentLayouter::SpaceAfterSeparator, " : public ", ",", "");
 	result.addRule("initializerList", Export::FragmentLayouter::SpaceAfterSeparator, "{", ",", "}");
 	result.addRule("argsList", Export::FragmentLayouter::SpaceAfterSeparator, "(", ",", ")");
 	result.addRule("typeArgsList", Export::FragmentLayouter::SpaceAfterSeparator, "<", ",", ">");
