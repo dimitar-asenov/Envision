@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "precompiled.h"
-#include "core.h"
 
 QString SystemCommandResult::stdoutOneLine() const {
 	Q_ASSERT(stdout_.size() == 1);
