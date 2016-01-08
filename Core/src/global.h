@@ -84,4 +84,4 @@ inline QStringList SystemCommandResult::stdout() const { return stdout_; }
 inline QStringList SystemCommandResult::stderr() const { return stderr_; }
 
 SystemCommandResult runSystemCommand(const QString& program, const QStringList& arguments = {},
-									  const QString& workingDirectory = QString());
+												 const QString& workingDirectory = {});
