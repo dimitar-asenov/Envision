@@ -30,7 +30,7 @@
 namespace Core {
 
 template <typename Base>
-class CORE_API Reflect : public Base
+class Reflect : public Base
 {
 	protected:
 		using Super = Reflect<Base>;
