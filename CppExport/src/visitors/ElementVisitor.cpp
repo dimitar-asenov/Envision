@@ -60,24 +60,7 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 		else
 			*fragment << expression(argument->typeExpression());
 
-		if (!headerVisitor())
-		{
-			auto method = argument->firstAncestorOfType<OOModel::Method>();
-			Q_ASSERT(method);
-			QList<Model::Node*> workStack{method->items(), method->memberInitializers()};
-			while (!workStack.empty())
-			{
-				auto currentNode = workStack.takeLast();
-				if (auto reference = DCast<OOModel::ReferenceExpression>(currentNode))
-					if (reference->target() == argument)
-					{
-						*fragment << " " << argument->nameNode();
-						break;
-					}
-				workStack << currentNode->children();
-			}
-		}
-		else
+		if (headerVisitor() || argument->isUsedInParentMethod())
 			*fragment << " " << argument->nameNode();
 
 		if (DCast<ArrayTypeExpression>(argument->typeExpression()))
