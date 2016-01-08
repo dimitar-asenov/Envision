@@ -86,7 +86,7 @@ class VISUALIZATIONBASE_API Shape
 		virtual void update() = 0;
 
 	private:
-		Item* parent{};
+		Item* parent_{};
 		const ShapeStyle* style_{};
 
 		SizeType sizeToUse{};
@@ -95,7 +95,7 @@ class VISUALIZATIONBASE_API Shape
 		int xOffset_{};
 		int yOffset_{};
 
-		typedef Shape* (*ShapeConstructor)(Item* parent);
+		typedef Shape* (*ShapeConstructor)(Item* parent_);
 		typedef ShapeStyle* (*ShapeStyleConstructor)();
 		static QMap<QString, ShapeConstructor> shapeConstructors;
 		static QMap<QString, ShapeStyleConstructor> shapeStyleConstructors;
@@ -110,7 +110,7 @@ inline int Shape::height() const { return height_; }
 inline int Shape::xOffset() const { return xOffset_; }
 inline int Shape::yOffset() const { return yOffset_; }
 inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
-inline Item* Shape::parentItem() const { return parent; }
+inline Item* Shape::parentItem() const { return parent_; }
 
 inline QSize Shape::innerSize(int outterWidth, int outterHeight) const
 { return innerSize(QSize(outterWidth, outterHeight)); }
