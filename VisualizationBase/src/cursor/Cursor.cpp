@@ -120,7 +120,7 @@ bool Cursor::allowEquivalentCursorsAcrossBoundaries(Item* parent, Item* child)
 	{
 		if (!child->style()->allowEquivalentCursorsThroughBoundary()) return false;
 		child = child->parent();
-	};
+	}
 	return true;
 }
 
