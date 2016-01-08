@@ -234,4 +234,4 @@ void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 	}
 }
 
-} /* namespace Visualization */
+}

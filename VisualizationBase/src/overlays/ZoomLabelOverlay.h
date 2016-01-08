@@ -78,4 +78,4 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 		static constexpr double OVERLAY_MIN_HEIGHT = 20;
 };
 
-} /* namespace Visualization */
+}

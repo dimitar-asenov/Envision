@@ -49,4 +49,4 @@ class VISUALIZATIONBASE_API SvgShapeStyle : public Super<ShapeStyle>
 		mutable QSvgRenderer renderer_;
 };
 
-} /* namespace Visualization */
+}

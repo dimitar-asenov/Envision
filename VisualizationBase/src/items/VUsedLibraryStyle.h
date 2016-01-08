@@ -44,4 +44,4 @@ class VISUALIZATIONBASE_API VUsedLibraryStyle : public Super<DeclarativeItemBase
 		Property<TextStyle> name{this, "name"};
 };
 
-} /* namespace Visualization */
+}

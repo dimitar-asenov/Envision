@@ -29,4 +29,4 @@ namespace Visualization {
 
 BoxOverlayStyle::~BoxOverlayStyle(){}
 
-} /* namespace Visualization */
+}

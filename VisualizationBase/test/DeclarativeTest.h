@@ -69,6 +69,5 @@ class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
 		Item* fourthItem_{};
 };
 
-} /* namespace Visualization */
-
+}
 #endif /* VisualizationBase_DECLARATIVETEST_H_ */

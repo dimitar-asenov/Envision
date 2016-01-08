@@ -30,4 +30,4 @@ namespace Visualization {
 
 MessageOverlayStyle::~MessageOverlayStyle(){}
 
-} /* namespace Visualization */
+}

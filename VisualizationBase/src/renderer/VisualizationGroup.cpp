@@ -91,4 +91,4 @@ void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor vi
 	addSubGroup(g);
 }
 
-} /* namespace Visualization */
+}

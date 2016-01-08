@@ -96,4 +96,4 @@ void CursorShapeItem::setCursorTopLeft(const QPoint& topLeft)
 	useCenter_=false;
 }
 
-} /* namespace Visualization */
+}

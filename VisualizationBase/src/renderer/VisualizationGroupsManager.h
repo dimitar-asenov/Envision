@@ -89,4 +89,4 @@ class VISUALIZATIONBASE_API VisualizationGroupsManager
 		void prepareAddingVisualizationGroupOrVisualization(int nodeTypeId, int purpose, int semanticZoomLevel);
 };
 
-} /* namespace Visualization */
+}

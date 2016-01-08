@@ -145,4 +145,4 @@ bool TextCursor::isAtBoundary() const
 	return selectionEnd_ == 0 || selectionEnd_ == owner()->text().length();
 }
 
-} /* namespace Visualization */
+}

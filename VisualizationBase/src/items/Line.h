@@ -46,4 +46,4 @@ class VISUALIZATIONBASE_API Line : public Super<Item> {
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
-} /* namespace Visualization */
+}

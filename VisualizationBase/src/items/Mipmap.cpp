@@ -88,4 +88,4 @@ bool Mipmap::containsImageForScale(qreal scaleFactor)
 	else return scaleFactorImagesMap_.find(scaleFactor) != scaleFactorImagesMap_.end();
 }
 
-} /* namespace Visualization */
+}

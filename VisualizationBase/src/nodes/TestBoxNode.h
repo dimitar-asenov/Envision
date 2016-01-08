@@ -53,4 +53,4 @@ class VISUALIZATIONBASE_API TestBoxNode : public Super<Model::CompositeNode> {
 		TestBoxNode(const QString& label, bool sizeDependsOnParent, bool isHtml);
 };
 
-} /* namespace Visualization */
+}

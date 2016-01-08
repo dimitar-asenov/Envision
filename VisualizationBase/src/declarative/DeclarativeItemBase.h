@@ -119,4 +119,4 @@ inline FormElement* DeclarativeItemBase::currentForm() const {return forms().at(
 inline QList<FormElement*> DeclarativeItemBase::currentShapeElements() const
 {return shapeElements().at(currentFormIndex_);}
 
-} /* namespace Visualization */
+}

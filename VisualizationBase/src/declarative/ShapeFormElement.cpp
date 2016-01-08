@@ -59,4 +59,4 @@ bool ShapeFormElement::isEmpty(const Item* /*item*/) const
 	return true;
 }
 
-} /* namespace Visualization */
+}

@@ -45,5 +45,4 @@ void VUsedLibrary::initializeForms()
 	);
 }
 
-
-} /* namespace Visualization */
+}

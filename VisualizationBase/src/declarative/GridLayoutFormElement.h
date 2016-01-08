@@ -372,4 +372,4 @@ inline GridLayoutFormElement* GridLayoutFormElement::setStretchFactors(float str
 	return this;
 }
 
-} /* namespace Visualization */
+}

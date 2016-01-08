@@ -30,4 +30,4 @@ namespace Visualization {
 
 DeclarativeItemBaseStyle::~DeclarativeItemBaseStyle(){}
 
-} /* namespace Visualization */
+}

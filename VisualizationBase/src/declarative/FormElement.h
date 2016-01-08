@@ -340,7 +340,7 @@ inline bool FormElement::isFormRoot() const {return isFormRoot_;}
 
 inline const QVector<FormElement*>& FormElement::children() const {return children_;}
 
-} /* namespace Visualization */
+}
 
 #define FLUENT_ELEMENT_INTERFACE(ClassName)																									\
 public:																																					\

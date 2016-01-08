@@ -77,4 +77,4 @@ inline void VisualizationGroup::setConditionFunction(ConditionFunction condition
 bool operator< (const QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>& left,
 		const QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>& right);
 
-} /* namespace Visualization */
+}

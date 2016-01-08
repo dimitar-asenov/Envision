@@ -40,4 +40,4 @@ class VISUALIZATIONBASE_API RootItem : public Super<NodeWrapper> {
 		RootItem(NodeType* node, int purpose = 0, int semanticZoomLevel = 0);
 };
 
-} /* namespace Visualization */
+}

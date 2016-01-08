@@ -53,4 +53,4 @@ class VISUALIZATIONBASE_API ShapeFormElement : public Visualization::FormElement
 		// Do not forget to update the copy constructor if adding new members.
 };
 
-} /* namespace Visualization */
+}

@@ -42,4 +42,4 @@ class VISUALIZATIONBASE_API LineStyle : public Super<ItemStyle>
 		Property<QPen> pen{this, "pen"};
 };
 
-} /* namespace Visualization */
+}

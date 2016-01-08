@@ -92,4 +92,4 @@ void SzLevelOrderingManager::clear()
 	orderingNumberToId_.clear();
 }
 
-} /* namespace Visualization */
+}

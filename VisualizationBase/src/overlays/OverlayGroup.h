@@ -99,4 +99,4 @@ inline Scene* OverlayGroup::scene() const {return scene_;}
 inline const QList<OverlayAccessor*>& OverlayGroup::overlays() const { return overlays_; }
 inline bool OverlayGroup::isVisible() const { return !hidden_; }
 
-} /* namespace Visualization */
+}

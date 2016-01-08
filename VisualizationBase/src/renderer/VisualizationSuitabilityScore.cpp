@@ -38,4 +38,4 @@ bool operator< (const VisualizationSuitabilityScore& left, const VisualizationSu
 	return left.score < right.score;
 }
 
-} /* namespace Visualization */
+}

@@ -64,4 +64,4 @@ TestBoxNode::TestBoxNode(const QString& label, bool sizeDependsOnParent, bool is
 	setIsHtml(isHtml);
 }
 
-} /* namespace Visualization */
+}

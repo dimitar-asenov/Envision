@@ -80,4 +80,4 @@ void NodeItemWrapperFormElement<ParentType>::synchronizeWithItem(Item* item)
 	item->synchronizeItem(childItem, node);
 }
 
-} /* namespace Visualization */
+}

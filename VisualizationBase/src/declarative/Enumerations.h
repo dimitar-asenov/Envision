@@ -32,4 +32,4 @@ namespace DeclarativeEnumerations {
 	enum PlaceEdge {TheLeftOf, TheRightOf, TheCenterOf, TheVCenterOf, TheHCenterOf, TheTopOf, TheBottomOf};
 	enum AtEdge {AtLeftOf, AtRightOf, AtCenterOf, AtVCenterOf, AtHCenterOf, AtTopOf, AtBottomOf};
 	enum FromEdge {FromLeftOf, FromRightOf, FromCenterOf, FromVCenterOf, FromHCenterOf, FromTopOf, FromBottomOf};
-} /* namespace DeclarativeEnumerations */
+}

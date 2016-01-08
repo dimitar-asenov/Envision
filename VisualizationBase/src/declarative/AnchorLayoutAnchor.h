@@ -121,4 +121,4 @@ inline int AnchorLayoutAnchor::offset() const
 inline void AnchorLayoutAnchor::setPlaceElement(FormElement* el) {placeElement_ = el;}
 inline void AnchorLayoutAnchor::setFixedElement(FormElement* el) {fixedElement_ = el;}
 
-} /* namespace Visualization */
+}

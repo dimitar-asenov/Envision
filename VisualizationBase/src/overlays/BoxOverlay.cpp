@@ -93,4 +93,4 @@ void BoxOverlay::initializeForms()
 	addForm(container);
 }
 
-} /* namespace Visualization */
+}

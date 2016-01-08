@@ -122,4 +122,4 @@ void TestBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 	TextRenderer::paint(painter, option, widget);
 }
 
-} /* namespace Visualization */
+}

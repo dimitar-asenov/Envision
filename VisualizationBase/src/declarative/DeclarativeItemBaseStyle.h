@@ -39,4 +39,4 @@ class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public Super<ItemStyle>
 		Property<bool> extraCursorsOutsideShape{this, "extraCursorsOutsideShape"};
 };
 
-} /* namespace Visualization */
+}

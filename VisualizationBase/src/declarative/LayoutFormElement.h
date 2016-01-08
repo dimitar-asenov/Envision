@@ -120,7 +120,7 @@ inline bool LayoutFormElement::noInnerCursors(Item* item)
 	return false;
 }
 
-} /* namespace Visualization */
+}
 
 #define FLUENT_LAYOUT_INTERFACE(ClassName)																									\
 public:																																					\

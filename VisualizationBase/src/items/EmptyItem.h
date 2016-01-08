@@ -68,4 +68,4 @@ class VISUALIZATIONBASE_API EmptyItem : public Super<Item>
 
 };
 
-} /* namespace Interaction */
+}

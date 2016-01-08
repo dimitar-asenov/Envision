@@ -30,4 +30,4 @@ namespace Visualization {
 
 LineStyle::~LineStyle(){}
 
-} /* namespace Visualization */
+}

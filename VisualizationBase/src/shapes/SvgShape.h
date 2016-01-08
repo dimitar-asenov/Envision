@@ -55,4 +55,4 @@ class VISUALIZATIONBASE_API SvgShape : public Super<Shape>
 		qreal svgHeight;
 };
 
-} /* namespace Visualization */
+}

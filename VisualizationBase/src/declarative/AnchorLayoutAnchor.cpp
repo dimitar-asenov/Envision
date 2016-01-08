@@ -99,4 +99,4 @@ bool AnchorLayoutAnchor::dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayout
 	return false;
 }
 
-} /* namespace Visualization */
+}

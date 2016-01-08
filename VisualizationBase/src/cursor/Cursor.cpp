@@ -129,4 +129,4 @@ QRect Cursor::sceneRegion()
 	return owner()->mapToScene(region()).boundingRect().toRect();
 }
 
-} /* namespace Visualization */
+}

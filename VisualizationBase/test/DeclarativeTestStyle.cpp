@@ -30,4 +30,4 @@ namespace Visualization {
 
 DeclarativeTestStyle::~DeclarativeTestStyle(){}
 
-} /* namespace Visualization */
+}

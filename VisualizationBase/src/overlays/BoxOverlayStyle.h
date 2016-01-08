@@ -43,4 +43,4 @@ class VISUALIZATIONBASE_API BoxOverlayStyle : public Super<Visualization::Declar
 		Property<Visualization::StaticStyle> closeIcon{this, "closeIcon"};
 };
 
-} /* namespace Visualization */
+}

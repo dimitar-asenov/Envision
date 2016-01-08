@@ -51,4 +51,4 @@ void IconOverlay::updateGeometry(int availableWidth, int availableHeight)
 		setPos(associatedItem()->mapToScene(-icon_->widthInParent(), 0) - pos);
 }
 
-} /* namespace Visualization */
+}
