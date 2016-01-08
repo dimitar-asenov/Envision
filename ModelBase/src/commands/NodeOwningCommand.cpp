@@ -56,10 +56,8 @@ NodeOwningCommand::~NodeOwningCommand()
 	 *  - It is not currently owned by any other command in any undo stack
 	 */
 	if (n && !n->manager())
-	{
 		if (AllTreeManagers::instance().managerOfOwningUndoStack(n, this) == nullptr)
 			SAFE_DELETE(n);
-	}
 }
 
 Node* NodeOwningCommand::owned() const
