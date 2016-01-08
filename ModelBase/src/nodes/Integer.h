@@ -41,9 +41,8 @@ class MODELBASE_API Integer: public Super<Node>
 		int integer;
 
 	public:
-
 		int  get() const;
-		void set(const int& newval);
+		void set(const int& newValue);
 
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;

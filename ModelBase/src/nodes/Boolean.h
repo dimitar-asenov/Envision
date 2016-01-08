@@ -43,7 +43,7 @@ class MODELBASE_API Boolean: public Super<Node>
 	public:
 
 		bool get() const;
-		void set(const bool& newval);
+		void set(const bool& newValue);
 
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;

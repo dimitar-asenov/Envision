@@ -28,7 +28,7 @@
 
 namespace Model {
 
-NotificationListener::NotificationListener(TreeManager& manager) : root{nullptr}
+NotificationListener::NotificationListener(TreeManager& manager) : root_{nullptr}
 {
 	QObject::connect(&manager, &TreeManager::nodesModified, this,
 						  &NotificationListener::setModifiedNodes);
@@ -42,9 +42,9 @@ void NotificationListener::setModifiedNodes( QSet<Node*> modifiedNodes, QSet<Nod
 	this->removedNodes = removedNodes;
 }
 
-void NotificationListener::rootNodeSet(Node* root_)
+void NotificationListener::rootNodeSet(Node* root)
 {
-	root = root_;
+	root_ = root;
 }
 
 }

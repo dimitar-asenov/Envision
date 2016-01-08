@@ -38,7 +38,7 @@ class MODELBASE_API NotificationListener : public QObject
 	public:
 		QSet<Node*> modifiedNodes;
 		QSet<Node*> removedNodes;
-		Node* root;
+		Node* root_;
 
 		NotificationListener(TreeManager& manager);
 

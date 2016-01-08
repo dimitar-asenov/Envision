@@ -46,9 +46,9 @@ Integer::Integer(Node *parent, PersistentStore &store, bool) : Super{parent}
 
 Integer* Integer::clone() const { return new Integer{*this}; }
 
-void Integer::set(const int& value)
+void Integer::set(const int& newValue)
 {
-	execute(new FieldSet<int> (this, integer, value));
+	execute(new FieldSet<int> (this, integer, newValue));
 }
 
 void Integer::save(PersistentStore &store) const

@@ -77,15 +77,14 @@ class MODELBASE_API AllTreeManagers {
 		 *
 		 * Newly created instances of TreeManager call this method in their constructors.
 		 */
-		void add(TreeManager* treeManager);
+		void add(TreeManager* manager);
 
 		/**
 		 * Removes \a treeManager from the list of tree managers. This manager will give up ownership of \a treeManager.
 		 *
 		 * The removed tree manager is returned. This method is called in the desctructor of TreeManager.
-		 *
 		 */
-		TreeManager* remove(TreeManager* treeManager);
+		TreeManager* remove(TreeManager* manager);
 
 		/**
 		 * A list of all TreeManager objects that are currently instantiated. This is used to find the TreeManager

@@ -43,7 +43,7 @@ class MODELBASE_API Float: public Super<Node>
 	public:
 
 		double  get() const;
-		void set(const double& newval);
+		void set(const double& newValue);
 
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;

@@ -38,14 +38,14 @@ class ModificationNotificationTests : public Test<ModelBasePlugin, ModificationN
 	TreeManager manager;
 	NotificationListener nl(manager);
 
-	CHECK_CONDITION(nl.root == nullptr);
+	CHECK_CONDITION(nl.root_ == nullptr);
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());
 	CHECK_INT_EQUAL(0, nl.removedNodes.size());
 
 	auto root = new TestNodes::BinaryNode();
 	manager.setRoot(root);
 
-	CHECK_CONDITION(root == nl.root);
+	CHECK_CONDITION(root == nl.root_);
 
 	manager.beginModification(root, "make tree");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();

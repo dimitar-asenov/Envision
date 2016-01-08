@@ -29,9 +29,9 @@
 
 namespace Model {
 
-ListRemove::ListRemove(Node *target, QVector<Node*>& nodes_, int position)
-: NodeOwningCommand{target, "remove node", nodes_[position], nullptr}, nodes(nodes_), removedNode(nodes_[position]),
-  removePosition(position)
+ListRemove::ListRemove(Node *target, QVector<Node*>& nodes, int position)
+	: NodeOwningCommand{target, "remove node", nodes[position], nullptr}, nodes{nodes}, removedNode{nodes[position]},
+	  removePosition{position}
 {}
 
 void ListRemove::redo()

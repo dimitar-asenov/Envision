@@ -30,9 +30,9 @@
 
 namespace Model {
 
-ListInsert::ListInsert(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position) :
-		NodeOwningCommand(target, "insert node", nullptr, newNode_), nodes(nodes_), newNode(newNode_),
-		insertPosition(position)
+ListInsert::ListInsert(Node *target, QVector<Node*>& nodes, Node* newNode, int position) :
+		NodeOwningCommand{target, "insert node", nullptr, newNode}, nodes{nodes}, newNode{newNode},
+		insertPosition{position}
 {
 	if (newNode && newNode->parent()) throw ModelException("Inserting a node that already has a parent into a List.");
 }

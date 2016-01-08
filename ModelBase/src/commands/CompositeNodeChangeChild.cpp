@@ -31,13 +31,13 @@
 
 namespace Model {
 
-CompositeNodeChangeChild::CompositeNodeChangeChild(Node* target, Node* newValue_,
-		const CompositeIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
-		NodeOwningCommand(target, "set node", (*subnodes_)[attributeIndex_.level()][attributeIndex_.index()], newValue_),
-		newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
-	attributeIndex(attributeIndex_), subnodes(subnodes_)
+CompositeNodeChangeChild::CompositeNodeChangeChild(Node* target, Node* newValue, const CompositeIndex& attributeIndex,
+																	QVector< QVector<Node*> >* subnodes) :
+		NodeOwningCommand{target, "set node", (*subnodes)[attributeIndex.level()][attributeIndex.index()], newValue},
+		newVal{newValue}, oldVal{(*subnodes)[attributeIndex.level()][attributeIndex.index()]},
+		attributeIndex{attributeIndex}, subnodes{subnodes}
 {
-	if (newValue_ && newValue_->parent())
+	if (newValue && newValue->parent())
 		throw ModelException("Set as a child of CompositeNode a node that already has a parent.");
 }
 
