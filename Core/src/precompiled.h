@@ -72,6 +72,8 @@
 #endif
 #include <QtCore/QElapsedTimer>
 
+// Note that this file is assumed to be loaded after all the system headers in Core/src/precompiled.h have been already
+// included
 #include "global.h"
 
 #if defined(Core_EXPORTS)
