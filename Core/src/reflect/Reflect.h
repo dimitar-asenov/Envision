@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #pragma once
-#include "TypeRegistry.h" // Convenience include header
+#include "TypeRegistry.h"
 
 namespace Core {
 
@@ -38,7 +38,7 @@ class Reflect : public Base
 		using Base::Base;
 };
 
-QString readNamePart(const char* part, const char*& nextPart);
+QString CORE_API readNamePart(const char* part, const char*& nextPart);
 }
 
 // This alias is deliberitely outside of the namespace to make using this template less verbose

@@ -83,7 +83,8 @@ class CORE_API PluginManager
 		QList<QPluginLoader*> loadedPlugins;
 		QMap<QString, PluginInfo*> idToMetaDataMap;
 		QMap<QString, QPluginLoader*> idToPluginLoaderMap;
-		QMap<QString, QString> _allFoundSharedLibraryFiles; // lower to mixed case maps.
+		// lower to mixed case maps.
+		QMap<QString, QString> _allFoundSharedLibraryFiles;
 
 		QString getLibraryFileName(const QString pluginId);
 		void scanAllPluginsMetaData();
