@@ -153,8 +153,11 @@ QString PluginManager::getLibraryFileName(const QString pluginId)
 		libLoweCaseName += ".dll";
 	else if (QSysInfo::productType() == "osx" || QSysInfo::productType() == "darwin")
 		libLoweCaseName = "lib" + libLoweCaseName + ".bundle";
-	else // assume linux
+	else
+	{
+		// assume linux
 		libLoweCaseName = "lib" + libLoweCaseName + ".so";
+	}
 
 	auto nameIt = _allFoundSharedLibraryFiles.find(libLoweCaseName);
 	Q_ASSERT(nameIt != _allFoundSharedLibraryFiles.end());
