@@ -59,10 +59,10 @@ int PositionLayout::length() const
 	return items.size();
 }
 
-bool PositionLayout::containsNode(Model::Node* node_)
+bool PositionLayout::containsNode(Model::Node* node)
 {
 	for (int i=0; i<items.size(); ++i)
-		if (items[i]->node() == node_) return true;
+		if (items[i]->node() == node) return true;
 
 	return false;
 }
