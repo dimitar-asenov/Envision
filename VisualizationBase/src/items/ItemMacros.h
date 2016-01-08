@@ -43,7 +43,7 @@ public:																																					\
 	typedef StyleTypeName StyleType;																												\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Item::style()); }									\
-	virtual void setStyle(const Visualization::ItemStyle* style) override;															\
+	virtual void setStyle(const Visualization::ItemStyle* itemStyle) override;															\
 	static Visualization::StyleSet<ItemClass>& itemStyles();																				\
 																																							\
 	virtual Visualization::InteractionHandler* handler() const override;																\
@@ -83,12 +83,12 @@ void ItemClass::initType() { Super::initType(); }																							\
 																																							\
 Visualization::InteractionHandler* ItemClass::defaultClassHandler_ =	 nullptr;													\
 																																							\
-void ItemClass::setStyle(const Visualization::ItemStyle* style_)																		\
+void ItemClass::setStyle(const Visualization::ItemStyle* itemStyle)																		\
 {																																							\
-	Q_ASSERT(style_);																																	\
-	if (style_ == style()) return;																												\
-	const StyleType* s = dynamic_cast<const StyleType*> (style_);																		\
-	if (!s) throw Visualization::VisualizationException("Invalid style (" + QString(typeid(*style_).name())				\
+	Q_ASSERT(itemStyle);																																	\
+	if (itemStyle == style()) return;																												\
+	const StyleType* s = dynamic_cast<const StyleType*> (itemStyle);																		\
+	if (!s) throw Visualization::VisualizationException("Invalid style (" + QString(typeid(*itemStyle).name())				\
 		+ ") type when calling " #ItemClass "::setStyle");																					\
 	Item::setStyle(s);																																\
 }																																							\
