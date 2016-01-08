@@ -29,4 +29,4 @@ namespace Visualization {
 
 IconOverlayStyle::~IconOverlayStyle() {}
 
-} /* namespace Visualization */
+}

@@ -80,9 +80,9 @@ void SequentialLayout::swap(int i, int j)
 	setUpdateNeeded(StandardUpdate);
 }
 
-void SequentialLayout::remove(int index, bool deleteItem_)
+void SequentialLayout::remove(int index, bool deleteItem)
 {
-	if (deleteItem_) SAFE_DELETE_ITEM( items[index]);
+	if (deleteItem) SAFE_DELETE_ITEM( items[index]);
 	else items[index]->setParentItem(nullptr);
 	items.remove(index);
 	setUpdateNeeded(StandardUpdate);

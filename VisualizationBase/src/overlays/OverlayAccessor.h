@@ -63,7 +63,7 @@ class OverlayAccessorTemplate : public OverlayAccessor
 		T* overlayItem_{};
 };
 
-} /* namespace Visualization */
+}
 
 // Purposefully outside the namespace for easy creation
 template<typename T>

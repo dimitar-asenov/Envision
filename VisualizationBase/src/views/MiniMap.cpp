@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-MiniMap::MiniMap(Scene *scene, View *parent_) : View{scene, parent_}, parent(parent_), margin(DEFAULT_MARGIN)
+MiniMap::MiniMap(Scene* scene, View* parent) : View{scene, parent}, parent_{parent}, margin_(DEFAULT_MARGIN)
 {
 	setInteractive(false);
 	updatePosition();
@@ -64,7 +64,7 @@ void MiniMap::sceneRectChanged(const QRectF & /*rect*/)
 
 void MiniMap::visibleRectChanged()
 {
-	visibleRect = parent->visibleRect();
+	visibleRect = parent_->visibleRect();
 	updateMap();
 }
 
@@ -117,13 +117,13 @@ void MiniMap::mouseMoveEvent(QMouseEvent *event)
 	//   mouse tracking is disabled.
 	if (event->buttons() == Qt::NoButton) return;
 	View::mouseMoveEvent(event);
-	parent->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
+	parent_->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
 }
 
 void MiniMap::mousePressEvent(QMouseEvent *event)
 {
 	View::mousePressEvent(event);
-	parent->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
+	parent_->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
 }
 
 void MiniMap::updateMap()
@@ -136,21 +136,21 @@ void MiniMap::updateMap()
 	maxRect.setBottom( (sceneRect().y() + sceneRect().height()) > (visibleRect.y()+visibleRect.height())
 			? (sceneRect().y() + sceneRect().height()) : (visibleRect.y()+visibleRect.height()));
 
-	qreal xScale = (width() - 2*frameWidth() - 2*margin) / maxRect.width();
-	qreal yScale = (height() - 2*frameWidth() - 2*margin) / maxRect.height();
+	qreal xScale = (width() - 2*frameWidth() - 2*margin_) / maxRect.width();
+	qreal yScale = (height() - 2*frameWidth() - 2*margin_) / maxRect.height();
 	qreal scale = xScale < yScale ? xScale : yScale;
 
-	qreal rectX = margin + (visibleRect.x() - maxRect.x())*scale;
-	qreal rectY = margin + (visibleRect.y() - maxRect.y())*scale;
+	qreal rectX = margin_ + (visibleRect.x() - maxRect.x())*scale;
+	qreal rectY = margin_ + (visibleRect.y() - maxRect.y())*scale;
 
-	if (xScale < yScale) rectY += (height() - 2*(frameWidth() + margin) - maxRect.height()*scale) / 2;
-	else rectX += (width() - 2*(frameWidth() + margin) - maxRect.width()*scale) / 2;
+	if (xScale < yScale) rectY += (height() - 2*(frameWidth() + margin_) - maxRect.height()*scale) / 2;
+	else rectX += (width() - 2*(frameWidth() + margin_) - maxRect.width()*scale) / 2;
 
 	// Below we subtract 0.5 and take the ceiling. This rounds the number. We further subtract 1 in order to compensate
 	// for the pen width of the drawn rectangle.
 	drawnRect.setRect(rectX, rectY, ceil(visibleRect.width()*scale - 1.5), ceil(visibleRect.height()*scale - 1.5));
 
-	setTransform(QTransform::fromScale(scale, scale).translate(margin, margin));
+	setTransform(QTransform::fromScale(scale, scale).translate(margin_, margin_));
 
 	viewport()->update();
 }

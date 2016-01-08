@@ -63,4 +63,4 @@ class VISUALIZATIONBASE_API MessageOverlay : public Super<Overlay<DeclarativeIte
 
 inline Item*& MessageOverlay::content() { return content_; }
 
-} /* namespace Visualization */
+}

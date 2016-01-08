@@ -156,4 +156,4 @@ class VISUALIZATIONBASE_API AnchorLayoutFormElement : public LayoutFormElement {
 				const QList<AnchorLayoutAnchor*>& otherConstraints, QMap<FormElement*, FormElement*>& matching);
 };
 
-} /* namespace Visualization */
+}

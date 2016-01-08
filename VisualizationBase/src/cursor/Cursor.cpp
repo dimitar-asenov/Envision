@@ -120,7 +120,7 @@ bool Cursor::allowEquivalentCursorsAcrossBoundaries(Item* parent, Item* child)
 	{
 		if (!child->style()->allowEquivalentCursorsThroughBoundary()) return false;
 		child = child->parent();
-	};
+	}
 	return true;
 }
 
@@ -129,4 +129,4 @@ QRect Cursor::sceneRegion()
 	return owner()->mapToScene(region()).boundingRect().toRect();
 }
 
-} /* namespace Visualization */
+}

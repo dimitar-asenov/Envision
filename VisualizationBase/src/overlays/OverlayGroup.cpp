@@ -210,4 +210,4 @@ void OverlayGroup::update()
 	}
 }
 
-} /* namespace Visualization */
+}

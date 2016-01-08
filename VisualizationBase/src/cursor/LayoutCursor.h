@@ -77,4 +77,4 @@ inline FormElement* LayoutCursor::ownerElement() { return ownerElement_; }
 
 inline void LayoutCursor::setIsAtBoundary(bool isAtBoundary) { isAtBoundary_ = isAtBoundary; }
 
-} /* namespace Visualization */
+}

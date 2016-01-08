@@ -38,4 +38,4 @@ class DeclarativeTestStyle : public Super<DeclarativeItemBaseStyle>
 		Property<SymbolStyle> symbol{this, "symbol"};
 };
 
-} /* namespace Visualization */
+}

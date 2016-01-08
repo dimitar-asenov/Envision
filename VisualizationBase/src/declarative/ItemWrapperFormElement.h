@@ -170,4 +170,4 @@ bool ItemWrapperFormElement<ParentType, ChildItemType>::isEmpty(const Item* item
 	else return true;
 }
 
-} /* namespace Visualization */
+}

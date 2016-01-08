@@ -123,12 +123,10 @@ QPoint ViewItem::positionOfNode(Model::Node *node) const
 {
 	if (!node) return QPoint(-1, -1);
 	for (int col = 0; col < nodes_.size(); col++)
-	{
 		for (int row = 0; row < nodes_[col].size(); row++)
 			if (nodes_[col][row] == node ||
 					DCast<ViewItemNode>(nodes_[col][row])->reference() == node)
 				return QPoint(col, row);
-	}
 	return QPoint(-1, -1);
 }
 

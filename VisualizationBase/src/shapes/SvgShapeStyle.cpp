@@ -44,5 +44,4 @@ void SvgShapeStyle::paint(QPainter* painter, int x, int y, int width, int height
 	renderer_.render(painter, QRectF(x, y, width, height));
 }
 
-
-} /* namespace Visualization */
+}

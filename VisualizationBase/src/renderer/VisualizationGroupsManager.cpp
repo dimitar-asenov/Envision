@@ -135,5 +135,4 @@ bool VisualizationGroupsManager::hasVisualization(int nodeTypeId, int purpose, i
 	//TODO: One could also check whether there are any registered visualizations/subgroups.
 }
 
-
-} /* namespace Visualization */
+}

@@ -39,4 +39,4 @@ RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel)
 	setSemanticZoomLevel(semanticZoomLevel);
 }
 
-} /* namespace Visualization */
+}

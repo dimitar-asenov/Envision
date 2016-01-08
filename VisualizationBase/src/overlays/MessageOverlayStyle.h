@@ -44,4 +44,4 @@ class VISUALIZATIONBASE_API MessageOverlayStyle : public Super<DeclarativeItemBa
 		Property<StaticStyle> closeIcon{this, "closeIcon"};
 };
 
-} /* namespace Visualization */
+}

@@ -39,4 +39,4 @@ VisualizationAddOn::~VisualizationAddOn()
 	// TODO Auto-generated destructor stub
 }
 
-} /* namespace Visualization */
+}

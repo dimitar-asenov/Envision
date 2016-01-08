@@ -49,4 +49,4 @@ void CustomSceneEvent::execute()
 	if (f_) f_();
 }
 
-} /* namespace Visualization */
+}

@@ -442,7 +442,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		void setWidth(int width);
 		void setHeight(int height);
-		void setSize(int widht, int height);
+		void setSize(int width, int height);
 		void setSize(const QSizeF& size);
 
 		virtual void determineChildren() = 0;

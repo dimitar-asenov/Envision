@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_DECLARATIVETEST_H_
-#define VisualizationBase_DECLARATIVETEST_H_
+#pragma once
 
 #include "../src/declarative/DeclarativeItem.h"
 #include "DeclarativeTestStyle.h"
@@ -69,6 +68,4 @@ class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
 		Item* fourthItem_{};
 };
 
-} /* namespace Visualization */
-
-#endif /* VisualizationBase_DECLARATIVETEST_H_ */
+}

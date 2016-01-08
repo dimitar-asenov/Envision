@@ -30,4 +30,4 @@ namespace Visualization {
 
 VUsedLibraryStyle::~VUsedLibraryStyle(){}
 
-} /* namespace Visualization */
+}

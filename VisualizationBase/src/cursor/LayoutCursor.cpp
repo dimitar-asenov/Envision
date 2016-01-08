@@ -85,4 +85,4 @@ bool LayoutCursor::isAtBoundary() const
 	return isAtBoundary_;
 }
 
-} /* namespace Visualization */
+}

@@ -108,7 +108,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 
 		ApproximateUpdate drawApproximately_{Unknown};
 
-		bool editable{};
+		bool editable_{};
 		bool suppressDefaultCopyPasteHandler_{};
 
 		const static int MIN_TEXT_WIDTH = 10;
@@ -118,8 +118,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 };
 
 inline QString TextRenderer::text() { return staticText_.text(); }
-inline bool TextRenderer::isEditable() { return editable; }
-inline void TextRenderer::setEditable(bool editable_) { editable = editable_; }
+inline bool TextRenderer::isEditable() { return editable_; }
+inline void TextRenderer::setEditable(bool editable) { editable_ = editable; }
 inline void TextRenderer::setSuppressDefaultCopyPasteHandler(bool suppress)
 {suppressDefaultCopyPasteHandler_ = suppress;}
 

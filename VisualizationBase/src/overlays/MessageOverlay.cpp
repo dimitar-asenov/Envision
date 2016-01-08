@@ -89,4 +89,4 @@ void MessageOverlay::initializeForms()
 	addForm(container);
 }
 
-} /* namespace Visualization */
+}

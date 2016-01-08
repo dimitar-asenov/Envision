@@ -320,4 +320,4 @@ const Visualization::Item* GridLayoutFormElement::itemAt(Visualization::Declarat
 	return item->*(children.first());
 }
 
-} /* namespace Visualization */
+}

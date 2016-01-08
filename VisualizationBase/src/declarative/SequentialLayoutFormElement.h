@@ -252,9 +252,9 @@ inline SequentialLayoutFormElement* SequentialLayoutFormElement::setForward(bool
 	forward_ = forward;
 	return this;
 }
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinWidth(int minWidht)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinWidth(int minWidth)
 {
-	minWidth_ = minWidht;
+	minWidth_ = minWidth;
 	return this;
 }
 inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeight(int minHeight)
@@ -268,4 +268,4 @@ template <typename T> T* SequentialLayoutFormElement::itemAt(const Item* item, i
 	return static_cast<T*>(dataForItem(item).items_.at(itemIndex));
 }
 
-} /* namespace Visualization */
+}

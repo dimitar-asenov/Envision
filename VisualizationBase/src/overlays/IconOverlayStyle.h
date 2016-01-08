@@ -40,4 +40,4 @@ class VISUALIZATIONBASE_API IconOverlayStyle : public Super<ItemStyle> {
 		Property<QString> placement{this, "placement"};
 };
 
-} /* namespace Visualization */
+}

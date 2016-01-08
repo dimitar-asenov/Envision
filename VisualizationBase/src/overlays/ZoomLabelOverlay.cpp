@@ -307,4 +307,4 @@ void ZoomLabelOverlay::adjustPositionOrHide()
 	if (visible != isVisible()) setVisible(visible);
 }
 
-} /* namespace Visualization */
+}

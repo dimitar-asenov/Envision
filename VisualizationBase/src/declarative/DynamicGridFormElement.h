@@ -64,15 +64,15 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 		 */
 		DynamicGridFormElement* setSpacing(int spaceBetweenColumns, int spaceBetweenRows);
 		/**
-		 * Sets the horizontal alignment to \a horizontalAlignment for all the cells in the grid.
+		 * Sets the horizontal alignment to \a alignment for all the cells in the grid.
 		 * Returns a pointer to this DynamicGridFormElement.
 		 */
-		DynamicGridFormElement* setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
+		DynamicGridFormElement* setHorizontalAlignment(LayoutStyle::Alignment alignment);
 		/**
-		 * Sets the vertical alignment to \a verticalAlignment for all the cells in the grid.
+		 * Sets the vertical alignment to \a alignment for all the cells in the grid.
 		 * Returns a pointer to this DynamicGridFormElement.
 		 */
-		DynamicGridFormElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
+		DynamicGridFormElement* setVerticalAlignment(LayoutStyle::Alignment alignment);
 
 		/**
 		 * Sets the major axis of this layout.
@@ -173,15 +173,15 @@ inline DynamicGridFormElement* DynamicGridFormElement::setMajorAxis(GridLayouter
 	return this;
 }
 
-inline DynamicGridFormElement* DynamicGridFormElement::setHorizontalAlignment(LayoutStyle::Alignment hAlignment)
+inline DynamicGridFormElement* DynamicGridFormElement::setHorizontalAlignment(LayoutStyle::Alignment alignment)
 {
-	horizontalAlignment_ = hAlignment;
+	horizontalAlignment_ = alignment;
 	return this;
 }
 
-inline DynamicGridFormElement* DynamicGridFormElement::setVerticalAlignment(LayoutStyle::Alignment vAlignment)
+inline DynamicGridFormElement* DynamicGridFormElement::setVerticalAlignment(LayoutStyle::Alignment alignment)
 {
-	verticalAlignment_ = vAlignment;
+	verticalAlignment_ = alignment;
 	return this;
 }
 

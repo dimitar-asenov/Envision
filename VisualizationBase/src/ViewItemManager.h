@@ -101,7 +101,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 		friend class Scene;
 
 		void cleanupRemovedItem(Visualization::Item* removedItem);
-		void cleanupRemovedNode(Model::Node* removedNodee);
+		void cleanupRemovedNode(Model::Node* removedNode);
 
 		QPoint nextEmptyPosition() const;
 

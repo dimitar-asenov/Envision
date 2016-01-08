@@ -36,7 +36,7 @@ class VISUALIZATIONBASE_API TestBox : public Super<TextRenderer> {
 	ITEM_COMMON_CUSTOM_STYLENAME(TestBox, TextStyle)
 
 	public:
-		typedef TestBoxNode NodeType;
+		using NodeType = TestBoxNode;
 
 		TestBox(Item* parent, NodeType* node);
 		TestBox(NodeType* node);
@@ -70,4 +70,4 @@ class VISUALIZATIONBASE_API TestBox : public Super<TextRenderer> {
 		bool isHtml_{};
 };
 
-} /* namespace Visualization */
+}

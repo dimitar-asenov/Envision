@@ -89,4 +89,4 @@ ItemRegion::PositionConstraints ItemRegion::satisfiedPositionConstraints(const Q
 	return constraints;
 }
 
-} /* namespace Visualization */
+}

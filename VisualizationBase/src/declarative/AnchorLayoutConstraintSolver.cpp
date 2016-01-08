@@ -194,7 +194,8 @@ QVector<float> AnchorLayoutConstraintSolver::solveConstraints()
 	set_add_rowmode(lp_, false);
 
 	set_verbose(lp_, CRITICAL);
-	default_basis(lp_); // Make sure to reset the basis between calls in order to get the correct result
+	// Make sure to reset the basis between calls in order to get the correct result
+	default_basis(lp_);
 	int success = solve(lp_);
 	if (success != OPTIMAL) throw VisualizationException("Failed to solve anchor constraints.");
 	get_variables(lp_, rowValues_);
@@ -234,4 +235,4 @@ void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 	}
 }
 
-} /* namespace Visualization */
+}

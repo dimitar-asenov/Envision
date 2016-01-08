@@ -47,7 +47,8 @@ void VisualizationManager::init(Core::EnvisionManager *manager)
 	{
 		envisionManager_ = manager;
 		mainScene_ = new Scene();
-		mainView_ = new MainView(mainScene_); // It gets automatically added as a top level view.
+		// It gets automatically added as a top level view.
+		mainView_ = new MainView(mainScene_);
 	}
 }
 

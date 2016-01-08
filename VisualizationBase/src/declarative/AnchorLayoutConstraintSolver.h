@@ -73,4 +73,4 @@ class VISUALIZATIONBASE_API AnchorLayoutConstraintSolver {
 
 };
 
-} /* namespace Visualization */
+}

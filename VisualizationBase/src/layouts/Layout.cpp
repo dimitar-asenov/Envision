@@ -41,22 +41,22 @@ Super{parent, style}
 	setAcceptedMouseButtons(Qt::LeftButton);
 }
 
-void Layout::setInnerSize(int width_, int height_)
+void Layout::setInnerSize(int width, int height)
 {
 	if (isEmpty() && !style()->drawShapeWhenEmpty()) setSize(0, 0);
 	else
 	{
-		if ( hasShape() )
+		if (hasShape())
 		{
 			getShape()->setOffset(style()->leftMargin(), style()->topMargin());
-			getShape()->setInnerSize(width_, height_);
+			getShape()->setInnerSize(width, height);
 			setWidth(widthInLocal() + style()->rightMargin());
 			setHeight(heightInLocal() + style()->bottomMargin());
 		}
 		else
 		{
-			setWidth(width_ + style()->leftMargin() + style()->rightMargin());
-			setHeight(height_ + style()->topMargin() + style()->bottomMargin());
+			setWidth(width + style()->leftMargin() + style()->rightMargin());
+			setHeight(height + style()->topMargin() + style()->bottomMargin());
 		}
 	}
 }

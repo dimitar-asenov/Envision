@@ -62,4 +62,4 @@ class VISUALIZATIONBASE_API BoxOverlay : public Super<Overlay<DeclarativeItem<Bo
 
 inline Item*& BoxOverlay::content() { return content_; }
 
-} /* namespace Visualization */
+}

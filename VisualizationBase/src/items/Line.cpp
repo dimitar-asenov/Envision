@@ -67,4 +67,4 @@ bool Line::sizeDependsOnParent() const
 	return style()->width() == 0 || style()->height() == 0;
 }
 
-} /* namespace Visualization */
+}

@@ -80,53 +80,54 @@ class DeclarativeItem : public DeclarativeItemBase
 
 		/**
 		 * A factory method to get an item wrapper element with a node only, it takes a pointer to member, where the
-		 * visualization \a item should be stored, and a method to get the node (\a nodeGetter) with which the \a item
-		 * should be associated. The node gets visualized with its default style.
+		 * visualization \a itemStorage should be stored, and a method to get the node (\a nodeGetter) with which the
+		 * \a itemStorage should be associated. The node gets visualized with its default style.
 		 *
 		 * NOTE: Introducing the ChildItemVisualizationType template argument will require
 		 *			ChildItemVisualizationType::NodeType, which Item does not have, and thus Item cannot be the default!
 		 */
 		static NodeItemWrapperFormElement<VisualizationType>*
-			item(Item* VisualizationType::* item, std::function<Model::Node* (VisualizationType* v)> nodeGetter);
+			item(Item* VisualizationType::* itemStorage, std::function<Model::Node* (VisualizationType* v)> nodeGetter);
 
 		/**
 		 * A factory method to get an item wrapper element with a visualization only, it takes a pointer to member, where
-		 * the visualization \a item should be stored, and a method to get the style (\a styleGetter) with which the
-		 * \a item should be created. To call it, one has to supply the visualization type and the parent type (which is
-		 * always 'I') as the template arguments.
+		 * the visualization \a itemStorage should be stored, and a method to get the style (\a styleGetter) with which
+		 * the \a itemStorage should be created. To call it, one has to supply the visualization type and the parent type
+		 * (which is always 'I') as the template arguments.
 		 */
 		template <typename ChildItemVisualizationType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>*
-			item(ChildItemVisualizationType* VisualizationType::* item);
+			item(ChildItemVisualizationType* VisualizationType::* itemStorage);
 		template <typename ChildItemVisualizationType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
-			item(ChildItemVisualizationType* VisualizationType::* item,
+			item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
 		template <typename ChildItemVisualizationType, typename ParentStyleType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
-			item(ChildItemVisualizationType* VisualizationType::* item,
+			item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 					 Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
 
 		/**
 		 * A factory method to get an item wrapper element with a node and a visualization, it takes a pointer to member,
-		 * where the visualization \a item should be stored, a method to get the style (\a styleGetter), and a method to
-		 * get the node (\a nodeGetter). The node then gets visualized using the given visualization and style. To call
-		 * it, one has to supply the visualization type and the parent type (which is always 'I') as template arguments.
+		 * where the visualization \a itemStorage should be stored, a method to get the style (\a styleGetter), and a
+		 * method to get the node (\a nodeGetter). The node then gets visualized using the given visualization and style.
+		 * To call it, one has to supply the visualization type and the parent type (which is always 'I') as template
+		 * arguments.
 		 */
 		template <typename ChildItemVisualizationType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
-			item(ChildItemVisualizationType* VisualizationType::* item,
+			item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
 		template <typename ChildItemVisualizationType, typename ParentStyleType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
-			item(ChildItemVisualizationType* VisualizationType::* item,
+			item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
 		template <typename ChildItemVisualizationType, typename ParentStyleType,
 					 typename ParentNodeType, typename ParentNodeSubType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
-			item(ChildItemVisualizationType* VisualizationType::* item,
+			item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 					ParentNodeSubType* (ParentNodeType::*nodePointer)(),
 					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
 };

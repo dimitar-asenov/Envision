@@ -42,9 +42,9 @@ VisualizationGroup::~VisualizationGroup()
 	clear();
 }
 
-bool VisualizationGroup::matchesContext(Item* item, Model::Node* node)
+bool VisualizationGroup::matchesContext(Item* parent, Model::Node* node)
 {
-	if (contextCondition_) return contextCondition_(item, node);
+	if (contextCondition_) return contextCondition_(parent, node);
 	else return true;
 }
 
@@ -91,4 +91,4 @@ void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor vi
 	addSubGroup(g);
 }
 
-} /* namespace Visualization */
+}

@@ -75,4 +75,4 @@ class VISUALIZATIONBASE_API NodeWrapper : public Super<ItemWithNode<NodeWrapper,
 inline void NodeWrapper::setStretchable(bool stretchable) {stretchable_ = stretchable;}
 inline Item* NodeWrapper::wrappedItem() const { return wrappedItem_; }
 
-} /* namespace Visualization */
+}

@@ -436,31 +436,31 @@ ModelRenderer* Item::renderer()
 	throw VisualizationException("The scene of an Item has no renderer.");
 }
 
-int Item::distanceTo(const QPoint& p) const
+int Item::distanceTo(const QPoint& point) const
 {
-	if (p.y() < 0)
+	if (point.y() < 0)
 	{
 		// Above
-		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
-		else if (p.x() > widthInLocal())
-			return std::sqrt(p.y()*p.y() + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
-		else return -p.y(); // Directly above
+		if (point.x() < 0) return std::sqrt(point.y()*point.y() + point.x()*point.x()); // To the left
+		else if (point.x() > widthInLocal())
+			return std::sqrt(point.y()*point.y() + (point.x()-widthInLocal())*(point.x()-widthInLocal())); // To the right
+		else return -point.y(); // Directly above
 	}
-	else if (p.y() > heightInLocal())
+	else if (point.y() > heightInLocal())
 	{
 		// Below
-		if (p.x() < 0)
-			return std::sqrt((p.y()-heightInLocal())*(p.y()-heightInLocal()) + p.x()*p.x()); // To the left
-		else if (p.x() > widthInLocal())
-			return std::sqrt((p.y()-heightInLocal())*(p.y()-heightInLocal())
-								  + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
-		else return p.y()-heightInLocal(); // Directly below
+		if (point.x() < 0)
+			return std::sqrt((point.y()-heightInLocal())*(point.y()-heightInLocal()) + point.x()*point.x()); // To the left
+		else if (point.x() > widthInLocal())
+			return std::sqrt((point.y()-heightInLocal())*(point.y()-heightInLocal())
+								  + (point.x()-widthInLocal())*(point.x()-widthInLocal())); // To the right
+		else return point.y()-heightInLocal(); // Directly below
 	}
 	else
 	{
 		// Within the same height
-		if (p.x() < 0) return -p.x(); // To the left
-		else if (p.x() > widthInLocal()) return p.x()-widthInLocal(); // To the right
+		if (point.x() < 0) return -point.x(); // To the left
+		else if (point.x() > widthInLocal()) return point.x()-widthInLocal(); // To the right
 		else return 0; // Inside
 	}
 }
@@ -488,17 +488,17 @@ Item* Item::childClosestTo(const QPoint& point, PositionConstraints childConstra
 	return closest;
 }
 
-Item::PositionConstraints Item::satisfiedPositionConstraints(const QPoint& p) const
+Item::PositionConstraints Item::satisfiedPositionConstraints(const QPoint& point) const
 {
 	PositionConstraints constraints = NoConstraints;
 
-	if ( p.y() < heightInLocal() - 1) constraints |= Below;
-	if ( p.y() > 0) constraints |= Above;
+	if ( point.y() < heightInLocal() - 1) constraints |= Below;
+	if ( point.y() > 0) constraints |= Above;
 
-	if ( p.x() < widthInLocal() - 1) constraints |= RightOf;
-	if ( p.x() > 0) constraints |= LeftOf;
+	if ( point.x() < widthInLocal() - 1) constraints |= RightOf;
+	if ( point.x() > 0) constraints |= LeftOf;
 
-	if ( p.y() >= 0 && p.y() < heightInLocal() &&  p.x() >= 0 && p.x() < widthInLocal())
+	if ( point.y() >= 0 && point.y() < heightInLocal() &&  point.x() >= 0 && point.x() < widthInLocal())
 		constraints |= Overlap;
 
 	return constraints;

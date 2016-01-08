@@ -47,7 +47,7 @@ TextRenderer* TextCursor::owner() const
 
 void TextCursor::update()
 {
-	QFontMetrics qfm(owner()->style()->font());
+	QFontMetrics qfm{owner()->style()->font()};
 	update(qfm);
 }
 
@@ -99,7 +99,7 @@ void TextCursor::setSelectedByDrag(int xBegin, int xEnd)
 	selectionBegin_ = 0;
 	selectionEnd_ = 0;
 
-	QFontMetrics qfm(owner()->style()->font());
+	QFontMetrics qfm{owner()->style()->font()};
 	int width = 0;
 	for (int i = 1; i <= owner()->text().length(); ++i)
 	{
@@ -128,7 +128,7 @@ int TextCursor::cursorAtX(int x) const
 {
 	int pos = 0;
 
-	QFontMetrics qfm(owner()->style()->font());
+	QFontMetrics qfm{owner()->style()->font()};
 	int width = 0;
 	for (int i = 1; i <= owner()->text().length(); ++i)
 	{
@@ -145,4 +145,4 @@ bool TextCursor::isAtBoundary() const
 	return selectionEnd_ == 0 || selectionEnd_ == owner()->text().length();
 }
 
-} /* namespace Visualization */
+}

@@ -54,4 +54,4 @@ class VISUALIZATIONBASE_API VUsedLibrary
 		VText* name_{};
 };
 
-} /* namespace Visualization */
+}

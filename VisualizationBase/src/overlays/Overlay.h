@@ -75,4 +75,4 @@ inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Supe
 	Super::setItemCategory(Scene::SelectionItemCategory);
 }
 
-} /* namespace Visualization */
+}

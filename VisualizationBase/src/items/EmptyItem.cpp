@@ -77,4 +77,4 @@ void EmptyItem::updateGeometry(int availableWidth, int availableHeight)
 		setSize(1, 1);
 }
 
-} /* namespace Interaction */
+}

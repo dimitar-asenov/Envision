@@ -85,4 +85,4 @@ void NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>:
 	item->synchronizeItem(childItem, node, style);
 }
 
-} /* namespace Visualization */
+}

@@ -50,4 +50,3 @@ class VISUALIZATIONBASE_API IconOverlay : public Super<Overlay<Item>>
 };
 
 }
- /* namespace Visualization */

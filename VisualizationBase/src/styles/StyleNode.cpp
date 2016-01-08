@@ -32,37 +32,37 @@ namespace Visualization {
 
 const QString XML_DOM_TYPE = "EnvisionVisualizationStyle";
 
-QString StyleNode::baseFolder = "styles";
+QString StyleNode::baseFolder_ = "styles";
 
-void StyleNode::setBaseFolder(const QString &baseFolder_)
+void StyleNode::setBaseFolder(const QString &baseFolder)
 {
-	baseFolder = baseFolder_;
+	baseFolder_ = baseFolder;
 }
 
-StyleNode::StyleNode(StyleNode* parent_, QDomElement elem_) :
-	parent(parent_), elem(elem_)
+StyleNode::StyleNode(StyleNode* parent, QDomElement elem) :
+	parent_{parent}, elem_{elem}
 {
 	init();
 }
 
-StyleNode::StyleNode(StyleNode* parent_, const QString& prototypeName, const QString& currentFolder) :
-	parent(parent_)
+StyleNode::StyleNode(StyleNode* parent, const QString& prototypeName, const QString& currentFolder) :
+	parent_{parent}
 {
 	folder = currentFolder + "/" + prototypeName; // Try relative address
 	if (!QFile::exists(folder))
-		folder = baseFolder + "/" + prototypeName; // Try absolute path (rooted at the styles folder)
+		folder = baseFolder_ + "/" + prototypeName; // Try absolute path (rooted at the styles folder)
 	if (!QFile::exists(folder)) throw VisualizationException("Could not find the prototype style " + prototypeName);
 
 	QString fileName = QFileInfo(folder).fileName();
 	folder = QFileInfo(folder).path();
 	doc = openStyleDoc(folder + "/" + fileName);
-	elem = doc.documentElement();
+	elem_ = doc.documentElement();
 
 	init();
 }
 
 StyleNode::StyleNode(const QString& rootStyleNameAndPath, const QString& folderWithinStyles) :
-	parent(nullptr)
+	parent_(nullptr)
 {
 	QString styleFileName = rootStyleNameAndPath;
 	QString subNodeName;
@@ -73,14 +73,14 @@ StyleNode::StyleNode(const QString& rootStyleNameAndPath, const QString& folderW
 		styleFileName = styleFileName.left(subPathIndex);
 	}
 
-	folder = QDir::current().absoluteFilePath(baseFolder + "/" + folderWithinStyles);
+	folder = QDir::current().absoluteFilePath(baseFolder_ + "/" + folderWithinStyles);
 	doc = openStyleDoc(folder + "/" + styleFileName);
-	elem = doc.documentElement();
+	elem_ = doc.documentElement();
 
 	if (!subNodeName.isEmpty())
 	{
-		elem = elem.firstChildElement(subNodeName);
-		if (elem.isNull())
+		elem_ = elem_.firstChildElement(subNodeName);
+		if (elem_.isNull())
 			throw VisualizationException("Could not find the substyle " + subNodeName + " within the style file "
 					+ folder + "/" + styleFileName);
 	}
@@ -91,7 +91,7 @@ StyleNode::StyleNode(const QString& rootStyleNameAndPath, const QString& folderW
 void StyleNode::init()
 {
 	// Initialize children
-	QDomElement e = elem.firstChildElement();
+	QDomElement e = elem_.firstChildElement();
 	while ( !e.isNull() )
 	{
 		children.append(new StyleNode(this, e));
@@ -99,9 +99,9 @@ void StyleNode::init()
 	}
 
 	// Initialize prototypes
-	if ( elem.hasAttribute("prototypes") )
+	if ( elem_.hasAttribute("prototypes") )
 	{
-		QStringList proto = elem.attribute("prototypes", QString()).split(',');
+		QStringList proto = elem_.attribute("prototypes", QString()).split(',');
 		for (int i = 0; i < proto.size(); ++i)
 		{
 			prototypes.append(new StyleNode(this, proto[i], getFolder()));
@@ -139,15 +139,15 @@ QDomDocument StyleNode::openStyleDoc(const QString& path)
 
 QString StyleNode::getFolder()
 {
-	if ( folder.isNull() && parent ) return parent->getFolder();
+	if ( folder.isNull() && parent_ ) return parent_->getFolder();
 	else return folder;
 }
 
 QDomElement StyleNode::getElement(QStringList path)
 {
-	if (path.size() < 1 || path.first() != elem.tagName() ) return QDomElement();
+	if (path.size() < 1 || path.first() != elem_.tagName() ) return QDomElement();
 
-	if ( path.size() == 1) return elem;
+	if ( path.size() == 1) return elem_;
 
 	// Try to find this element among the children
 	QDomElement e;

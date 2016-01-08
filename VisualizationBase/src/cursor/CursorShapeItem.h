@@ -71,4 +71,4 @@ inline QPoint CursorShapeItem::cursorCenter() const { return center_; }
 inline QPoint CursorShapeItem::cursorTopLeft() const { return topLeft_; }
 inline bool CursorShapeItem::useCenter() const { return useCenter_; }
 
-} /* namespace Visualization */
+}

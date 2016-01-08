@@ -179,4 +179,4 @@ int DeclarativeTest::determineForm()
 	return 8;
 }
 
-} /* namespace Visualization */
+}

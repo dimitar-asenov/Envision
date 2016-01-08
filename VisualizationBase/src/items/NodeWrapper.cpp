@@ -80,4 +80,4 @@ void NodeWrapper::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-} /* namespace Visualization */
+}

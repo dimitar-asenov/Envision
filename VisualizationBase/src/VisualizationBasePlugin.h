@@ -31,14 +31,14 @@
 
 namespace Visualization {
 
-class VisualizationBasePlugin : public QObject, public Core::EnvisionPlugin
+class VISUALIZATIONBASE_API VisualizationBasePlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual bool initialize(Core::EnvisionManager& manager) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };

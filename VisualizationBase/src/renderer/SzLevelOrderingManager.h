@@ -52,4 +52,4 @@ class VISUALIZATIONBASE_API SzLevelOrderingManager
 		QMap<int, int> orderingNumberToId_;
 };
 
-} /* namespace Visualization */
+}

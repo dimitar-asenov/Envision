@@ -106,4 +106,4 @@ void SvgShape::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
 	style()->paint(painter, x, y, svgWidth, svgHeight);
 }
 
-} /* namespace Visualization */
+}

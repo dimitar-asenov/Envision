@@ -33,16 +33,16 @@ DEFINE_TYPE_ID_BASE(Shape, "Shape", )
 QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;
 QMap<QString, Shape::ShapeStyleConstructor> Shape::shapeStyleConstructors;
 
-Shape::Shape(Item* parent_, ShapeStyle *style) : parent{parent_}, style_{style} {}
+Shape::Shape(Item* parent, ShapeStyle *style) : parent_{parent}, style_{style} {}
 
 Shape::~Shape() {}
 
-void Shape::setStyle(const Visualization::ShapeStyle* newStyle)
+void Shape::setStyle(const Visualization::ShapeStyle* style)
 {
-	if (style_ == newStyle) return;
+	if (style_ == style) return;
 	else
 	{
-		style_ = newStyle;
+		style_ = style;
 		setParentNeedsUpdate();
 	}
 }
@@ -55,7 +55,7 @@ StyleSet<Shape>& Shape::itemStyles()
 
 void Shape::setItemSize(int width, int height)
 {
-	parent->setSize(width, height);
+	parent_->setSize(width, height);
 	setParentNeedsUpdate();
 }
 
@@ -123,8 +123,8 @@ ShapeStyle* Shape::createNewShapeStyle(const QString& shapeName)
 
 void Shape::setParentNeedsUpdate()
 {
-	if (parent->needsUpdate() == Item::NoUpdate)
-		parent->setUpdateNeeded(Item::StandardUpdate);
+	if (parent_->needsUpdate() == Item::NoUpdate)
+		parent_->setUpdateNeeded(Item::StandardUpdate);
 }
 
 }
