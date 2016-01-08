@@ -29,7 +29,7 @@
 		"Core/PluginManager" : "Core/src/PluginManager" ,
 		"Core/ProfileJob" : "Core/src/Profiler" ,
 		"Super" : "Core/src/reflect/Reflect" ,
-		"Q_DECLARE_INTERFACE" : "Core/src/EnvisionPlugin" ,
+		"Q_DECLARE_INTERFACE" : "Core/src/EnvisionPlugin"
 	},
 	"ExportFlagMap": 
 	{
