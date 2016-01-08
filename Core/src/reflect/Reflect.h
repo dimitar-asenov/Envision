@@ -41,6 +41,7 @@ class CORE_API Reflect : public Base
 QString CORE_API readNamePart(const char* part, const char*& nextPart);
 }
 
+// This alias is deliberitely outside of the namespace to make using this template less verbose
 template <typename Base> using Super = Core::Reflect<Base>;
 
 template <typename Derived, typename Base>
