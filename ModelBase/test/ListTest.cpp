@@ -37,7 +37,7 @@ namespace Model {
 class ListCreation : public Test<ModelBasePlugin, ListCreation> { public: void test()
 {
 	auto root = new List();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	CHECK_INT_EQUAL(0, root->size());
 
@@ -65,7 +65,7 @@ class ListCreation : public Test<ModelBasePlugin, ListCreation> { public: void t
 class ListInsertion : public Test<ModelBasePlugin, ListInsertion> { public: void test()
 {
 	auto root = new List();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	manager.beginModification(root, "add elements to list");
 	Text* a = new Text();
@@ -98,7 +98,7 @@ class ListInsertion : public Test<ModelBasePlugin, ListInsertion> { public: void
 class ListRemoval : public Test<ModelBasePlugin, ListRemoval> { public: void test()
 {
 	auto root = new List();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	manager.beginModification(root, "add elements to list");
 	Text* a = new Text();
@@ -137,7 +137,7 @@ class ListRemoval : public Test<ModelBasePlugin, ListRemoval> { public: void tes
 class ListUndo : public Test<ModelBasePlugin, ListUndo> { public: void test()
 {
 	auto root = new List();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	manager.beginModification(root, "add elements to list");
 	Text* a = new Text();

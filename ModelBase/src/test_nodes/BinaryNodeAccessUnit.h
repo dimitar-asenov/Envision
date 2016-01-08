@@ -39,12 +39,12 @@ class MODELBASE_API BinaryNodeAccessUnit: public Super<BinaryNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryNodeAccessUnit)
 
-	private:
-		Model::NodeReadWriteLock accessLock_;
-
 	public:
 		BinaryNodeAccessUnit(const BinaryNodeAccessUnit& other);
 		virtual Model::NodeReadWriteLock* accessLock() const override;
+
+	private:
+		Model::NodeReadWriteLock accessLock_;
 };
 
 }

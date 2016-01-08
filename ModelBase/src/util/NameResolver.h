@@ -46,4 +46,4 @@ class MODELBASE_API NameResolver {
 		static bool isSuggestable(Node::SymbolTypes symbolType);
 };
 
-} /* namespace Model */
+}

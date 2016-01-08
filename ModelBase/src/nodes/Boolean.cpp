@@ -45,9 +45,9 @@ Boolean::Boolean(Node *parent, PersistentStore &store, bool) : Super{parent}
 
 Boolean* Boolean::clone() const { return new Boolean{*this}; }
 
-void Boolean::set(const bool& newVal)
+void Boolean::set(const bool& newValue)
 {
-	execute(new FieldSet<bool> (this, value, newVal));
+	execute(new FieldSet<bool> (this, value, newValue));
 }
 
 void Boolean::save(PersistentStore &store) const

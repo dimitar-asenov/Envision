@@ -36,7 +36,7 @@ namespace Model {
 class PositionExtension : public Test<ModelBasePlugin, PositionExtension> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_x"));
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_y"));

@@ -37,16 +37,15 @@ class MODELBASE_API Integer: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Integer)
 
-	private:
-		int integer;
-
 	public:
-
 		int  get() const;
-		void set(const int& newval);
+		void set(const int& newValue);
 
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;
+
+	private:
+		int integer;
 };
 
 inline int Integer::get() const { return integer; }

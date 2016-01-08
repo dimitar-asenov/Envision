@@ -83,4 +83,4 @@ TreeManager* AllTreeManagers::remove(TreeManager* manager)
 	return manager;
 }
 
-} /* namespace Model */
+}

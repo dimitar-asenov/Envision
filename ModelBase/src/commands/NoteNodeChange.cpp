@@ -62,16 +62,12 @@ void NoteNodeChange::markNodeAndChildrenAsRemoved(Node* node) const
 	}
 }
 
-/**
- * It could happen than a subtree which is removed earlier in the undostack, is reinserted at a later time in the
- * command stack. In such cases we should not report these nodes as removed. (MAYBE)
- */
-void NoteNodeChange::unmarkRemovals(Node* /*insertedNode*/) const
+void NoteNodeChange::unmarkRemovals(Node*) const
 {
 	//TODO: Think about whether we:
 	// - should not report nodes which have been essentially moved in any way
 	// - should report moved nodes in some special way
-	// - should report mvoed nodes as a pair of deletion/insertion
+	// - should report moved nodes as a pair of deletion/insertion
 }
 
 }

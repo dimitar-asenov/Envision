@@ -74,4 +74,4 @@ inline QString SymbolMatcher::matchPattern() const
 	return regExpMatch_ ? regExpMatch_->pattern() : stringMatch_;
 }
 
-} /* namespace Model */
+}

@@ -34,4 +34,4 @@ SymbolMatcher SymbolMatcher::guessMatcher(const QString& from)
 	return {from};
 }
 
-} /* namespace Model */
+}

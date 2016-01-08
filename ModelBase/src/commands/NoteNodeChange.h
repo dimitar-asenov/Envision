@@ -30,7 +30,7 @@
 
 namespace Model {
 
-class NoteNodeChange: public UndoCommand
+class MODELBASE_API NoteNodeChange: public UndoCommand
 {
 	public:
 		NoteNodeChange(QSet<Node*>& modifiedTargets, QSet<Node*>& removedTargets, const UndoCommand* command);
@@ -45,6 +45,11 @@ class NoteNodeChange: public UndoCommand
 		Node* removedNode_{};
 
 		void markNodeAndChildrenAsRemoved(Node* node) const;
+
+		/**
+		 * It could happen than a subtree which is removed earlier in the undostack, is reinserted at a later time in the
+		 * command stack. In such cases we should not report these nodes as removed. (MAYBE)
+		 */
 		void unmarkRemovals(Node* insertedNode) const;
 };
 

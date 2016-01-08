@@ -44,4 +44,4 @@ class MODELBASE_API NameText: public Super<Text>
 		virtual FieldSet<QString>* getSetCommand(QString& textField, const QString& newText) override;
 };
 
-} /* namespace Model */
+}

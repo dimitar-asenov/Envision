@@ -45,4 +45,4 @@ FieldSet<QString>* NameText::getSetCommand(QString& textField, const QString& ne
 	return new NameChange(this, textField, newText);
 }
 
-} /* namespace Model */
+}

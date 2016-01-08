@@ -37,7 +37,7 @@ namespace Model {
 class SingleWriteUnitCheck : public Test<ModelBasePlugin, SingleWriteUnitCheck> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	manager.beginModification(root, "make tree");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();

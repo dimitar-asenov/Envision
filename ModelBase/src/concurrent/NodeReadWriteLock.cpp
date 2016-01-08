@@ -30,7 +30,7 @@
 namespace Model {
 
 NodeReadWriteLock::NodeReadWriteLock() :
-	lock(QReadWriteLock::Recursive)
+	lock{QReadWriteLock::Recursive}
 {
 }
 
@@ -44,7 +44,7 @@ void NodeReadWriteLock::lockForRead()
 
 	if ( interruptibleThread )
 	{
-		QMutexLocker locker(&readersAccess);
+		QMutexLocker locker{&readersAccess};
 		interruptibleReaders.append(interruptibleThread);
 	}
 
@@ -54,8 +54,8 @@ void NodeReadWriteLock::lockForRead()
 void NodeReadWriteLock::lockForWrite(Node* targetNode)
 {
 	{
-		QMutexLocker locker(&readersAccess);
-		for (QList<InterruptibleThread*>::iterator r = interruptibleReaders.begin(); r != interruptibleReaders.end(); ++r)
+		QMutexLocker locker{&readersAccess};
+		for (QList<InterruptibleThread*>::iterator r{interruptibleReaders.begin()}; r != interruptibleReaders.end(); ++r)
 			(*r)->requestInterrupt(targetNode);
 	}
 	lock.lockForWrite();
@@ -66,7 +66,7 @@ void NodeReadWriteLock::unlock()
 	InterruptibleThread* interruptibleThread = dynamic_cast<InterruptibleThread*> (QThread::currentThread());
 	if ( interruptibleThread )
 	{
-		QMutexLocker locker(&readersAccess);
+		QMutexLocker locker{&readersAccess};
 		interruptibleReaders.removeOne(interruptibleThread);
 	}
 

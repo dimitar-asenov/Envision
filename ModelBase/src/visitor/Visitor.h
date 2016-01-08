@@ -173,4 +173,4 @@ QVector<typename BaseVisitor::VisitFunctionInstance>&
 }
 #endif
 
-} /* namespace Model */
+}

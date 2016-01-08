@@ -52,4 +52,4 @@ class MODELBASE_API UsedLibrary : public Super<CompositeNode>
 
 inline Node* UsedLibrary::libraryRoot() const { if (auto m = libraryManager()) return m->root(); else return nullptr;}
 
-} /* namespace Model */
+}

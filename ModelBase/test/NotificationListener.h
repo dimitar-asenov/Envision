@@ -31,14 +31,14 @@
 
 namespace Model {
 
-class NotificationListener : public QObject
+class MODELBASE_API NotificationListener : public QObject
 {
 	Q_OBJECT
 
 	public:
 		QSet<Node*> modifiedNodes;
 		QSet<Node*> removedNodes;
-		Node* root;
+		Node* root_;
 
 		NotificationListener(TreeManager& manager);
 

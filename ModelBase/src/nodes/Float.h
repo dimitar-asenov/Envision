@@ -37,16 +37,15 @@ class MODELBASE_API Float: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Float)
 
-	private:
-		double value;
-
 	public:
-
 		double  get() const;
-		void set(const double& newval);
+		void set(const double& newValue);
 
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;
+
+	private:
+		double value;
 };
 
 inline double Float::get() const { return value; }

@@ -37,17 +37,17 @@ class MODELBASE_API Character: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Character)
 
-	private:
-		QChar value;
-
 	public:
 		Character(const QChar& value);
 
 		QChar get() const;
-		void set(const QChar& newval);
+		void set(const QChar& newValue);
 
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;
+
+	private:
+		QChar value;
 };
 
 inline QChar Character::get() const { return value; }

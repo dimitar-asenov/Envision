@@ -30,7 +30,7 @@
 
 namespace Model {
 
-class PersistentStoreMock: public PersistentStore
+class MODELBASE_API PersistentStoreMock: public PersistentStore
 {
 	private:
 		QString savedData;

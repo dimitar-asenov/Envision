@@ -214,8 +214,11 @@ bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 	{
 		auto ignore = childToSubnode(source);
 		for (auto c : nodes_)
-			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
+		{
+			// Optimize the search by skipping this scope, since we've already searched there
+			if (c != ignore)
 				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+		}
 
 		if ((exhaustAllScopes || !found) && parent())
 			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;

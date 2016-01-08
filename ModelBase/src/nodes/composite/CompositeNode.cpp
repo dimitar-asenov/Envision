@@ -211,12 +211,10 @@ Node* CompositeNode::get(const QString &attributeName) const
 CompositeIndex CompositeNode::indexOf(Node* node) const
 {
 	if (node)
-	{
 		for (int level = 0; level < subnodes_.size(); ++level)
 			for (int i = 0; i < subnodes_[level].size(); ++i)
 				if (subnodes_[level][i] == node)
 					return CompositeIndex(level, i);
-	}
 
 	return CompositeIndex();
 }

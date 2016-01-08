@@ -28,14 +28,11 @@
 
 namespace Model {
 
-ModelException::ModelException(const QString& message) :
-	EnvisionException(message)
-{
-}
+ModelException::ModelException(const QString& message) : EnvisionException{message} {}
 
 const QString& ModelException::name() const
 {
-	static QString ename("ModelException");
+	static QString ename{"ModelException"};
 	return ename;
 }
 

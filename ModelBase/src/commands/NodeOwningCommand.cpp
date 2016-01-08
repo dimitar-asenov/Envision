@@ -50,14 +50,14 @@ NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* o
 NodeOwningCommand::~NodeOwningCommand()
 {
 	auto n = owned();
-	// Only delete a node if:
-	// - It is not part of a manager
-	// - It is not currently owned by any other command in any undo stack
+	/*
+	 *  Only delete a node if:
+	 *  - It is not part of a manager
+	 *  - It is not currently owned by any other command in any undo stack
+	 */
 	if (n && !n->manager())
-	{
 		if (AllTreeManagers::instance().managerOfOwningUndoStack(n, this) == nullptr)
 			SAFE_DELETE(n);
-	}
 }
 
 Node* NodeOwningCommand::owned() const
@@ -75,4 +75,4 @@ Node* NodeOwningCommand::removedNode() const
 	return ownedIfDone_;
 }
 
-} /* namespace Model */
+}

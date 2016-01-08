@@ -73,19 +73,18 @@ class MODELBASE_API AllTreeManagers {
 		AllTreeManagers();
 
 		/**
-		 * Adds \a treeManager the list of tree managers. This manager will take ownership of \a treeManager.
+		 * Adds \a manager the list of tree managers. This manager will take ownership of \a manager.
 		 *
 		 * Newly created instances of TreeManager call this method in their constructors.
 		 */
-		void add(TreeManager* treeManager);
+		void add(TreeManager* manager);
 
 		/**
-		 * Removes \a treeManager from the list of tree managers. This manager will give up ownership of \a treeManager.
+		 * Removes \a manager from the list of tree managers. This manager will give up ownership of \a manager.
 		 *
 		 * The removed tree manager is returned. This method is called in the desctructor of TreeManager.
-		 *
 		 */
-		TreeManager* remove(TreeManager* treeManager);
+		TreeManager* remove(TreeManager* manager);
 
 		/**
 		 * A list of all TreeManager objects that are currently instantiated. This is used to find the TreeManager
@@ -96,4 +95,4 @@ class MODELBASE_API AllTreeManagers {
 
 inline const QList<TreeManager*>& AllTreeManagers::loadedManagers() const { return loadedManagers_; }
 
-} /* namespace Model */
+}
