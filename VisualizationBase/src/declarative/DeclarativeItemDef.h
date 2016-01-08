@@ -98,7 +98,7 @@ template <typename VisualizationType>
 	DeclarativeItem<VisualizationType>::item(Item* VisualizationType::* itemStorage,
 			std::function<Model::Node* (VisualizationType* v)> nodeGetter)
 {
-	return new NodeItemWrapperFormElement<VisualizationType>(item, nodeGetter);
+	return new NodeItemWrapperFormElement<VisualizationType>(itemStorage, nodeGetter);
 }
 
 template <typename VisualizationType>
