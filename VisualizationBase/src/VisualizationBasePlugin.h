@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class VisualizationBasePlugin : public QObject, public Core::EnvisionPlugin
+class VISUALIZATIONBASE_API VisualizationBasePlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
