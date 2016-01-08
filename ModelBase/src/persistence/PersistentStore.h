@@ -45,8 +45,7 @@ struct MODELBASE_API LoadedNode
 
 class MODELBASE_API PersistentStore
 {
-	private:
-		friend class TreeManager;
+	friend class TreeManager;
 
 	protected:
 		virtual void saveTree(TreeManager* manager, const QString &name) = 0;
