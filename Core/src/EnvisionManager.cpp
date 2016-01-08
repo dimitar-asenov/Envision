@@ -26,7 +26,6 @@
 
 #include "EnvisionManager.h"
 #include "EnvisionException.h"
-#include "PluginManager.h"
 #include "TestRunner.h"
 
 namespace Core {
