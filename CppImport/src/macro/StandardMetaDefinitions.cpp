@@ -139,21 +139,21 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 			// clonedReplacementNode represents the cloned version of replacementNode
 			if (auto clonedReplacementNode = childMapping.clone(replacementNode))
 			{
-				if (DCast<OOModel::VariableDeclaration>(clonedReplacementNode))
+				if (clonedReplacementNode->parent())
 				{
-					if (clonedReplacementNode->parent()->parent())
-						clonedReplacementNode->parent()->parent()
-								->replaceChild(clonedReplacementNode->parent(), childExpansion->metaCall());
-					else
-						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
-				}
-				else if (!DCast<OOModel::Declaration>(clonedReplacementNode))
-				{
-					if (clonedReplacementNode->parent())
+					if (DCast<OOModel::VariableDeclaration>(clonedReplacementNode))
+					{
+						if (clonedReplacementNode->parent()->parent())
+							clonedReplacementNode->parent()->parent()
+									->replaceChild(clonedReplacementNode->parent(), childExpansion->metaCall());
+						else
+							qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
+					}
+					else if (!DCast<OOModel::Declaration>(clonedReplacementNode))
 						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode, childExpansion->metaCall());
-					else
-						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
 				}
+				else
+					qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
 			}
 	}
 }
