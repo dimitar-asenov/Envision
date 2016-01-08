@@ -32,7 +32,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
 	public:
-		typedef std::function<void ()> EventFunction;
+		using EventFunction = std::function<void()>;
 
 		static const QEvent::Type EventType;
 
