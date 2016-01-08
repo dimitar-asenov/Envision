@@ -39,7 +39,7 @@ class VISUALIZATIONBASE_API MiniMap : public View
 	Q_OBJECT
 
 	public:
-		MiniMap(Scene *scene, View *parent);
+		MiniMap(Scene* scene, View* parent);
 
 		void updatePosition();
 
@@ -57,8 +57,8 @@ class VISUALIZATIONBASE_API MiniMap : public View
 		virtual void mousePressEvent(QMouseEvent* event) override;
 
 	private:
-		View *parent;
-		int margin;
+		View *parent_;
+		int margin_;
 
 		QRectF visibleRect;
 		QRect drawnRect;
@@ -66,6 +66,6 @@ class VISUALIZATIONBASE_API MiniMap : public View
 		void updateMap();
 };
 
-inline void MiniMap::setMargin(qreal margin_) { margin = margin_; }
+inline void MiniMap::setMargin(qreal margin) { margin_ = margin; }
 
 }
