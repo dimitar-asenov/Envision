@@ -53,9 +53,11 @@ void NodeReadWriteLock::lockForRead()
 
 void NodeReadWriteLock::lockForWrite(Node* targetNode)
 {
-	QMutexLocker locker{&readersAccess};
-	for (QList<InterruptibleThread*>::iterator r{interruptibleReaders.begin()}; r != interruptibleReaders.end(); ++r)
-		(*r)->requestInterrupt(targetNode);
+	{
+		QMutexLocker locker{&readersAccess};
+		for (QList<InterruptibleThread*>::iterator r{interruptibleReaders.begin()}; r != interruptibleReaders.end(); ++r)
+			(*r)->requestInterrupt(targetNode);
+	}
 	lock.lockForWrite();
 }
 
