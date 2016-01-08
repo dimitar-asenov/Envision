@@ -56,13 +56,11 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 //	else
 //	{
 		if (!mipmap_.paint(painter, x, y))
-		{
 			if (drawScaledPixmapInMipmap(painter->worldTransform().m11()))
 			{
 				auto painted = mipmap_.paint(painter, x, y);
 				Q_ASSERT(painted);
 			}
-		}
 //	}
 }
 

@@ -77,9 +77,7 @@ void Static::determineChildren()
 	else
 	{
 		if (item_ && item_->style() != &style()->itemStyle())
-		{
 			SAFE_DELETE_ITEM(item_);
-		}
 
 		if (!item_)
 		{

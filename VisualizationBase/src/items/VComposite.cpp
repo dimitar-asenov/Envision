@@ -110,13 +110,11 @@ QList<Item*> VComposite::attributes()
 	{
 		bool found = false;
 		for (int k = 0; k<attr.size(); ++k)
-		{
 			if (attr[k].second == static_cast<SequentialLayout*>(attributes_[i])->at<Item>(1)->node())
 			{
 				found = true;
 				break;
 			}
-		}
 
 		if (!found) attributes_.removeAt(i);
 	}
