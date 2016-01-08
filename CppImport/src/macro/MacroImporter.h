@@ -98,6 +98,10 @@ class CPPIMPORT_API MacroImporter
 		 */
 		void calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeToCloneMap& mapping);
 
+		/**
+		 * if a macro expansion does not generate any nodes this method can be used to infer the best context
+		 * the corresponding meta call can be put in based on its presumed location.
+		 */
 		Model::Node* bestContext(MacroExpansion* expansion);
 };
 
