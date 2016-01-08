@@ -77,7 +77,7 @@ class VISUALIZATIONBASE_API Cursor {
 		void setRegion(const QRect& region);
 
 		/**
-		 * \brief Returns true if this cursor is the same as the cursor \a c.
+		 * \brief Returns true if this cursor is the same as the cursor \a other.
 		 *
 		 * Two cursors are the same if they have the same owner and if they represent the same location within that owner.
 		 */

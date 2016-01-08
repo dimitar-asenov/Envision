@@ -91,9 +91,9 @@ class DeclarativeItem : public DeclarativeItemBase
 
 		/**
 		 * A factory method to get an item wrapper element with a visualization only, it takes a pointer to member, where
-		 * the visualization \a item should be stored, and a method to get the style (\a styleGetter) with which the
-		 * \a item should be created. To call it, one has to supply the visualization type and the parent type (which is
-		 * always 'I') as the template arguments.
+		 * the visualization \a itemStorage should be stored, and a method to get the style (\a styleGetter) with which
+		 * the \a itemStorage should be created. To call it, one has to supply the visualization type and the parent type
+		 * (which is always 'I') as the template arguments.
 		 */
 		template <typename ChildItemVisualizationType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>*
@@ -109,9 +109,10 @@ class DeclarativeItem : public DeclarativeItemBase
 
 		/**
 		 * A factory method to get an item wrapper element with a node and a visualization, it takes a pointer to member,
-		 * where the visualization \a item should be stored, a method to get the style (\a styleGetter), and a method to
-		 * get the node (\a nodeGetter). The node then gets visualized using the given visualization and style. To call
-		 * it, one has to supply the visualization type and the parent type (which is always 'I') as template arguments.
+		 * where the visualization \a itemStorage should be stored, a method to get the style (\a styleGetter), and a
+		 * method to get the node (\a nodeGetter). The node then gets visualized using the given visualization and style.
+		 * To call it, one has to supply the visualization type and the parent type (which is always 'I') as template
+		 * arguments.
 		 */
 		template <typename ChildItemVisualizationType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
