@@ -34,6 +34,7 @@
 #include "OOModel/src/declarations/MetaDefinition.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/TypeAlias.h"
+#include "OOModel/src/declarations/NameImport.h"
 
 namespace CppExport {
 
@@ -91,6 +92,10 @@ void CodeUnit::calculateSourceFragments()
 	{
 		// TODO: add a similar map to the metaCallLocationMap (maybe even unify them?)
 		headerPart()->setSourceFragment(DeclarationVisitor(MACRO_VISITOR).visit(metaDefinition));
+	}
+	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
+	{
+		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(nameImport));
 	}
 	else
 		Q_ASSERT(false);
