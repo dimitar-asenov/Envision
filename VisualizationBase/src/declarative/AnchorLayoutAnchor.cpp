@@ -61,8 +61,9 @@ int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 		placeElementPosition = placeElement_->x(item);
 		placeElementSize = placeElement_->width(item);
 	}
-	else // orientation == Orientation::Vertical
+	else
 	{
+		// orientation == Orientation::Vertical
 		fixedElementPosition = fixedElement_->y(item);
 		fixedElementSize = fixedElement_->height(item);
 		placeElementPosition = placeElement_->y(item);
@@ -75,8 +76,11 @@ int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 	{
 		if (orientation == Orientation::Horizontal)
 			placeElement_->setPos(item, QPoint(newPosition, placeElement_->y(item)));
-		else // orientation == Orientation::Vertical
+		else
+		{
+			// orientation == Orientation::Vertical
 			placeElement_->setPos(item, QPoint(placeElement_->x(item), newPosition));
+		}
 	}
 	return newPosition;
 }
