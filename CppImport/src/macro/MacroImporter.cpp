@@ -84,7 +84,7 @@ void MacroImporter::endTranslationUnit()
 									<< macroDefinitions_.definitionName(expansion->definition());
 				}
 			}
-			/*else if (auto context = bestContext(expansion))
+			else if (auto context = bestContext(expansion))
 			{
 				if (auto declaration = DCast<OOModel::Declaration>(context))
 				{
@@ -95,7 +95,7 @@ void MacroImporter::endTranslationUnit()
 					qDebug() << context->typeName();
 					Q_ASSERT(false);
 				}
-			}*/
+			}
 		}
 
 		calculateFinalizationNodes(generatedNodes, mapping);
