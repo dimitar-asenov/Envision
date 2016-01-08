@@ -73,7 +73,7 @@ class MODELBASE_API AllTreeManagers {
 		AllTreeManagers();
 
 		/**
-		 * Adds \a treeManager the list of tree managers. This manager will take ownership of \a treeManager.
+		 * Adds \a manager the list of tree managers. This manager will take ownership of \a manager.
 		 *
 		 * Newly created instances of TreeManager call this method in their constructors.
 		 */
