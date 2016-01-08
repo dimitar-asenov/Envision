@@ -57,10 +57,10 @@ class VISUALIZATIONBASE_API Static : public Super<Item>
 	private:
 		Item* item_;
 
-		typedef Item* (*staticItemConstructorType)(Item* parent, const ItemStyle* style);
+		using staticItemConstructorType = Item* (*)(Item* parent, const ItemStyle* style);
 		static QMap<QString, staticItemConstructorType> itemClasses_;
 
-		typedef ItemStyle* (*staticItemStyleConstructorType)();
+		using staticItemStyleConstructorType = ItemStyle* (*)();
 		static QMap<QString, staticItemStyleConstructorType> itemStyles_;
 
 		template<typename T> static Item* staticItemConstructor(Item* parent, const ItemStyle* style);

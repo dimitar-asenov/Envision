@@ -39,7 +39,7 @@ template <typename Derived, typename Super, typename ContainedNode, bool default
 class ItemWithNode : public Super
 {
 	public:
-		typedef ContainedNode NodeType;
+		using NodeType = ContainedNode;
 		ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style = nullptr);
 		~ItemWithNode();
 
