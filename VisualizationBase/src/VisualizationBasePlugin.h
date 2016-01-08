@@ -38,7 +38,7 @@ class VISUALIZATIONBASE_API VisualizationBasePlugin : public QObject, public Cor
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual bool initialize(Core::EnvisionManager& manager) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };
