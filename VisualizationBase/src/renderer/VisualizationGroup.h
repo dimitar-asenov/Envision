@@ -55,7 +55,7 @@ class VISUALIZATIONBASE_API VisualizationGroup {
 
 		void setConditionFunction(ConditionFunction condition, int scorePoints = 1);
 
-		bool matchesContext(Item* parent, Model::Node* node);
+		bool matchesContext(Item* item, Model::Node* node);
 
 		QList<QPair<VisualizationSuitabilityScore, QPair<int, ItemConstructor>>> visualizationsForContext(Item* parent,
 				Model::Node* node);
