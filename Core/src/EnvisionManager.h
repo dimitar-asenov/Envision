@@ -95,7 +95,6 @@ class CORE_API EnvisionManager
 		static QList<EventPrePostAction>& preEventActions();
 		static QList<EventPrePostAction>& postEventActions();
 
-		// The methods below are meant for use by Core only
 		friend int coreMain(int argc, char *argv[]);
 		void setPluginManager(PluginManager* pm);
 		void setMainWindow(QMainWindow* mainWindow);
