@@ -194,8 +194,17 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		if (!friendClass)
 		{
 			if (!classs->baseClasses()->isEmpty())
+			{
 				// TODO: inheritance modifiers like private, virtual... (not only public)
-				*fragment << " : public " << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
+				auto baseClassesFragment = new CompositeFragment(classs->baseClasses(), "comma");
+				for (auto baseClass : *classs->baseClasses())
+				{
+					auto baseClassFragment = new CompositeFragment(baseClass);
+					*baseClassFragment << "public " << expression(baseClass);
+					*baseClassesFragment << baseClassFragment;
+				}
+				*fragment << " : " << baseClassesFragment;
+			}
 
 			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
 			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
