@@ -43,7 +43,7 @@ public:																																					\
 	typedef StyleTypeName StyleType;																												\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Shape::style()); }									\
-	virtual void setStyle(const Visualization::ShapeStyle* style) override;															\
+	virtual void setStyle(const Visualization::ShapeStyle* shapeStyle) override;															\
 	static StyleSet<ShapeClass>& itemStyles();																								\
 																																							\
 private:
@@ -75,10 +75,10 @@ void ShapeClass::initType()																														\
 	Shape::registerShape<ShapeClass>();																											\
 }																																							\
 																																							\
-void ShapeClass::setStyle(const Visualization::ShapeStyle* style_)																	\
+void ShapeClass::setStyle(const Visualization::ShapeStyle* shapeStyle)																	\
 {																																							\
-	if (style_ == style()) return;																												\
-	const StyleType* s = dynamic_cast<const StyleType*> (style_);																		\
+	if (shapeStyle == style()) return;																												\
+	const StyleType* s = dynamic_cast<const StyleType*> (shapeStyle);																		\
 	if (!s) throw Visualization::VisualizationException("Invalid style type when calling " #ShapeClass "::setStyle");	\
 	Shape::setStyle(s);																																\
 }																																							\
