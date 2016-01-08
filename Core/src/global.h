@@ -51,13 +51,17 @@ class OnScopeExit
 		OnScopeExit& operator= (const OnScopeExit other) = delete;
 
 		template<typename T>
-		explicit OnScopeExit(T&& functionToCall) : functionToCall_{std::forward<T>(functionToCall)}{}
+		explicit OnScopeExit(T&& functionToCall);
 
-		~OnScopeExit() {functionToCall_();}
+		~OnScopeExit();
 
 	private:
 		std::function<void ()> functionToCall_;
 };
+
+template <typename T>
+inline OnScopeExit::OnScopeExit(T&& functionToCall) : functionToCall_{std::forward<T>(functionToCall)}{}
+inline OnScopeExit::~OnScopeExit() { functionToCall_(); }
 
 class SystemCommandResult {
 	public:
@@ -83,4 +87,4 @@ inline QStringList SystemCommandResult::stdout() const { return stdout_; }
 inline QStringList SystemCommandResult::stderr() const { return stderr_; }
 
 SystemCommandResult runSystemCommand(const QString& program, const QStringList& arguments = {},
-									  const QString& workingDirectory = QString{});
+									  const QString& workingDirectory = QString());
