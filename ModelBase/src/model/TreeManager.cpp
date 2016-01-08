@@ -81,11 +81,11 @@ void TreeManager::changeModificationTarget(Node* modificationTarget)
 			modifiedTargets, modificationTarget));
 }
 
-void TreeManager::endModification(bool resolveReferences)
+void TreeManager::endModification(bool tryResolvingReferences)
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
-		if (resolveReferences) Reference::resolvePending();
+		if (tryResolvingReferences) Reference::resolvePending();
 
 		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock,
 				modifiedTargets, nullptr));

@@ -131,7 +131,7 @@ class MODELBASE_API TreeManager: public QObject
 		 *
 		 * If \a tryResolvingReferences is true, then an attempt will be made to resolve all unresolved references.
 		 */
-		void endModification(bool resolveReferences = true);
+		void endModification(bool tryResolvingReferences = true);
 
 		bool isBeingModified() const;
 
