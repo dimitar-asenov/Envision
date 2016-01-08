@@ -37,16 +37,15 @@ class MODELBASE_API Boolean: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Boolean)
 
-	private:
-		bool value;
-
 	public:
-
 		bool get() const;
 		void set(const bool& newValue);
 
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;
+
+	private:
+		bool value;
 };
 
 inline bool Boolean::get() const { return value; }
