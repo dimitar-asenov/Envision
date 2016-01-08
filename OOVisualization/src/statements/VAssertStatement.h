@@ -58,4 +58,4 @@ class OOVISUALIZATION_API VAssertStatement
 		Visualization::Item* expression_{};
 };
 
-} /* namespace OOVisualization */
+}

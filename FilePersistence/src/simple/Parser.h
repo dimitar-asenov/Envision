@@ -69,4 +69,4 @@ class FILEPERSISTENCE_API Parser {
 		static bool nextHeaderPart(const char* data, int& start, int&endInclusive, int lineEnd);
 };
 
-} /* namespace FilePersistence */
+}

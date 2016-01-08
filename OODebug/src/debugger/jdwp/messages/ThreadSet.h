@@ -74,4 +74,4 @@ struct Frames : public Reply {
 		MessageField<QList<Frame>> frames{&Frames::frames, this};
 };
 
-} /* namespace OODebug */
+}

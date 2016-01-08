@@ -68,4 +68,4 @@ class INFORMATIONSCRIPTING_API TagQuery : public LinearQuery
 		void insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
 };
 
-} /* namespace InformationScripting */
+}

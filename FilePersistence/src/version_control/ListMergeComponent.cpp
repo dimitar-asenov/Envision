@@ -652,4 +652,4 @@ void ListMergeComponent::markAsResolved(QSet<std::shared_ptr<ChangeDescription> 
 	markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
 }
 
-} /* namespace FilePersistence */
+}

@@ -43,4 +43,4 @@ class OOMODEL_API SynchronizedStatement: public Super<Statement>
 	ATTRIBUTE(StatementItemList, body, setBody)
 };
 
-} /* namespace OOModel */
+}

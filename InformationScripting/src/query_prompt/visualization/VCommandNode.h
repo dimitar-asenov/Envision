@@ -63,4 +63,4 @@ inline Visualization::VText* VCommandNode::name() const { return name_; }
 inline Visualization::VList* VCommandNode::arguments() const { return arguments_; }
 
 
-} /* namespace InformationScripting */
+}

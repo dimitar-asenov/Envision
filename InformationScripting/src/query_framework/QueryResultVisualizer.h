@@ -72,4 +72,4 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 		static void setColor(HighlightOverlay* overlay, QColor color);
 };
 
-} /* namespace InformationScripting */
+}

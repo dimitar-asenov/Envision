@@ -66,4 +66,4 @@ inline Visualization::Static* VCatchClause::icon() const {return icon_; }
 inline Visualization::NodeWrapper* VCatchClause::expressionToCatch() const {return expressionToCatch_; }
 inline Visualization::Item* VCatchClause::body() const {return body_; }
 
-} /* namespace OOVisualization */
+}

@@ -93,4 +93,4 @@ inline CompositeFragment& CompositeFragment::operator<<(const QList<SourceFragme
 	return *this;
 }
 
-} /* namespace Export */
+}

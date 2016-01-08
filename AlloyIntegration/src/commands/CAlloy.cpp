@@ -100,4 +100,4 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	return new Interaction::CommandResult();
 }
 
-} /* namespace Alloy */
+}

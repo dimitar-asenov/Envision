@@ -67,4 +67,4 @@ inline void VCommentImage::setLineNumber(int lineNumber) { Q_ASSERT(lineNumber>=
 inline QSize VCommentImage::imageSize() const { return size_; }
 inline int VCommentImage::lineNumber() const {return lineNumber_;}
 
-} /* namespace Comments */
+}

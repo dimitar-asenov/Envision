@@ -68,4 +68,4 @@ Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*so
 	return new Interaction::CommandResult();
 }
 
-} /* namespace OOInteraction */
+}

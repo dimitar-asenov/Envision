@@ -71,4 +71,4 @@ void VErrorExpression::determineChildren()
 	layout()->setStyle( &style()->layout());
 }
 
-} /* namespace OOVisualization */
+}

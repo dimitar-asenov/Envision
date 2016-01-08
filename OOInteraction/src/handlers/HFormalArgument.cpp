@@ -67,4 +67,4 @@ void HFormalArgument::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 	if (!processed) GenericHandler::keyPressEvent(target, event);
 }
 
-} /* namespace OOInteraction */
+}

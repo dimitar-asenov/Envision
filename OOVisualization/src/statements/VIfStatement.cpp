@@ -164,4 +164,4 @@ void VIfStatement::initializeForms()
 			->put(TheRightOf, elseContentElement, AtRightOf, shapeElement));
 }
 
-} /* namespace OOVisualization */
+}

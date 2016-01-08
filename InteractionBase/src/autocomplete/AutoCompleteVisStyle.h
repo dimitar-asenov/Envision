@@ -43,4 +43,4 @@ class INTERACTIONBASE_API AutoCompleteVisStyle : public Super<Visualization::Ite
 		Property<int> distanceToCursor{this, "distanceToCursor"};
 };
 
-} /* namespace Interaction */
+}

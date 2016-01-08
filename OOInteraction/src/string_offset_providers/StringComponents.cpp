@@ -283,4 +283,4 @@ void StringComponents::initConversions()
 	});
 }
 
-} /* namespace OOInteraction */
+}

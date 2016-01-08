@@ -69,4 +69,4 @@ void VSwitchStatement::initializeForms()
 			->put(TheBottomOf, shapeElement, 2, FromBottomOf, casesContainer));
 }
 
-} /* namespace OOVisualization */
+}

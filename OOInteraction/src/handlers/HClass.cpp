@@ -62,4 +62,4 @@ void HClass::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	else GenericHandler::keyPressEvent(target, event);
 }
 
-} /* namespace OOInteraction */
+}

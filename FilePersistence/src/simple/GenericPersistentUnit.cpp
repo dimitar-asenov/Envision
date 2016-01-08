@@ -169,4 +169,4 @@ GenericNode* GenericPersistentUnit::nodeWithNullParent() const
 	return nullptr;
 }
 
-} /* namespace FilePersistence */
+}

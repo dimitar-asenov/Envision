@@ -70,4 +70,4 @@ QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization
 	return availableProjectsOnDisk();
 }
 
-} /* namespace Interaction */
+}

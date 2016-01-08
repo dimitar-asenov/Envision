@@ -42,4 +42,4 @@ class INTERACTIONBASE_API AddSubExpression : public ExpressionTreeBuildInstructi
 		QVector<ExpressionTreeBuildInstruction*> instructions_;
 };
 
-} /* namespace Interaction */
+}

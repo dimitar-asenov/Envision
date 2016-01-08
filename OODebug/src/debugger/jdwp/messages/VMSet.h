@@ -105,4 +105,4 @@ struct ResumeCommand : public Command {
 		virtual ~ResumeCommand() override;
 };
 
-} /* namespace OODebug */
+}

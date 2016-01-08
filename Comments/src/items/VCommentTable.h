@@ -59,4 +59,4 @@ class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCom
 		Visualization::GridLayout* aGrid_{};
 };
 
-} /* namespace Comments */
+}

@@ -56,4 +56,4 @@ inline const Visualization::VListStyle& VLambdaExpressionStyle::arguments() cons
 inline const Visualization::StaticStyle& VLambdaExpressionStyle::icon() const { return icon_; }
 inline const Visualization::VListStyle& VLambdaExpressionStyle::body() const { return body_; }
 
-} /* namespace OOVisualization */
+}

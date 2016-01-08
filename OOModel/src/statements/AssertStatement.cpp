@@ -34,4 +34,4 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(AssertStatement)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AssertStatement)
 
 REGISTER_ATTRIBUTE(AssertStatement, expression, Expression, false, true, true)
-} /* namespace OOVisualization */
+}

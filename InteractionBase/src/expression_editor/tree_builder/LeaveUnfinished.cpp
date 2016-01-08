@@ -38,4 +38,4 @@ void LeaveUnfinished::perform(ExpressionTreeBuilder& tb)
 	tb.left() = unf;
 }
 
-} /* namespace Interaction */
+}

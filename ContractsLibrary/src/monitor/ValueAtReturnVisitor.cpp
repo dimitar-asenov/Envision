@@ -128,4 +128,4 @@ Model::Node* ValueAtReturnVisitor::visitReference(ValueAtReturnVisitor* v, OOMod
 	return ref;
 }
 
-} /* namespace ContractsLibrary */
+}

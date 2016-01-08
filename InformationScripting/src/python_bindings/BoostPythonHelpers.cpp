@@ -200,4 +200,4 @@ void BoostPythonHelpers::translate(const Exception& e)
 	PyErr_SetString(PyExc_RuntimeError, e.message().toLatin1().data());
 }
 
-} /* namespace InformationScripting */
+}

@@ -60,4 +60,4 @@ void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 	Export::Exporter::exportToFileSystem(path, dir, &layouter);
 }
 
-} /* namespace Alloy */
+}

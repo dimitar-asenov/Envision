@@ -72,4 +72,4 @@ inline QSharedPointer<Visualization::Item> AutoCompleteEntry::visualization() { 
 inline void AutoCompleteEntry::setText(const QString& text) { text_ = text; }
 inline void AutoCompleteEntry::setDescription(const QString& description) { description_ = description; }
 
-} /* namespace Interaction */
+}

@@ -68,4 +68,4 @@ inline int CompilerMessage::lineNumber() const { return lineNumber_;}
 inline int CompilerMessage::columnNumber() const { return columnNumber_;}
 inline std::shared_ptr<CompilerMessage> CompilerMessage::rootMessage() const { return rootMessage_;}
 
-} /* namespace OODebug */
+}

@@ -181,4 +181,4 @@ QList<Model::NodeIdType> Diff3Parse::backtrackLCS(int** data, const QList<Model:
 			return backtrackLCS(data, listA, listB, posA-1, posB);
 }
 
-} /* namespace FilePersistence */
+}

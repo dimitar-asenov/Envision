@@ -57,4 +57,4 @@ inline const QList<const Type*>& FunctionType::results() const { return results_
 inline const Type* FunctionType::result() const
 	{Q_ASSERT(results_.size() <= 1); return results_.isEmpty() ? nullptr : results_.first();}
 
-} /* namespace OOModel */
+}

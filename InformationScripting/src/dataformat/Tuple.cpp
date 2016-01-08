@@ -97,4 +97,4 @@ const Property& Tuple::operator[](const QString& name) const
 	return it->second;
 }
 
-} /* namespace InformationScripting */
+}

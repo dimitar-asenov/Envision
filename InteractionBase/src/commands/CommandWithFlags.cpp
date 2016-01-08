@@ -201,4 +201,4 @@ QStringList CommandWithFlags::matchingNames(Visualization::Item* source, Visuali
 	return result;
 }
 
-} /* namespace OOInteraction */
+}

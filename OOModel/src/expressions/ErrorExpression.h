@@ -46,4 +46,4 @@ class OOMODEL_API ErrorExpression : public Super<Expression> {
 		virtual Type* type() override;
 };
 
-} /* namespace OOModel */
+}

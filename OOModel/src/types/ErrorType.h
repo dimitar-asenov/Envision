@@ -46,4 +46,4 @@ class OOMODEL_API ErrorType : public Type {
 
 inline const QString& ErrorType::message() const { return message_; }
 
-} /* namespace OOModel */
+}

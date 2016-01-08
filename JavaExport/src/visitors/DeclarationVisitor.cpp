@@ -288,4 +288,4 @@ SourceFragment* DeclarationVisitor::visit(TypeAlias* ta)
 	return new TextFragment(ta);
 }
 
-} /* namespace JavaExport */
+}

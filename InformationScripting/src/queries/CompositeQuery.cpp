@@ -229,4 +229,4 @@ void CompositeQuery::QueryNode::execute()
 		calculatedOutputs_ = calculatedInputs_;
 }
 
-} /* namespace InformationScripting */
+}

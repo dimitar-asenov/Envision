@@ -40,4 +40,4 @@ class OOINTERACTION_API CommandExpression {
 		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments) = 0;
 };
 
-} /* namespace OOInteraction */
+}

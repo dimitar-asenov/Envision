@@ -48,4 +48,4 @@ SymbolProviderType* SymbolProviderType::clone() const
 	return new SymbolProviderType(*this);
 }
 
-} /* namespace OOModel */
+}

@@ -61,4 +61,4 @@ class OODEBUG_API ConsoleOverlay : public Super<Visualization::Overlay<Visualiza
 
 inline Visualization::Item*& ConsoleOverlay::content() { return content_; }
 
-} /* namespace OODebug */
+}

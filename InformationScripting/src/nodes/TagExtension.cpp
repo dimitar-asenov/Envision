@@ -32,4 +32,4 @@ DEFINE_EXTENSION(TagExtension)
 
 REGISTER_EXTENSION_ATTRIBUTE(TagExtension, tags, TypedListOfText, false, false, true)
 
-} /* namespace InformationScripting */
+}

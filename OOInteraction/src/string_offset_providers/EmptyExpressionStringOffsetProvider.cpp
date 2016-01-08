@@ -45,4 +45,4 @@ void EmptyExpressionStringOffsetProvider::setOffset(int)
 	vis_->moveCursor(Visualization::Item::MoveOnLeft);
 }
 
-} /* namespace OOInteraction */
+}

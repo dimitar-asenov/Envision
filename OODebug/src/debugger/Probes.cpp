@@ -103,4 +103,4 @@ Probes::ValueOperator Probes::operatorFromString(QString operatorString)
 	Q_ASSERT(false);
 }
 
-} /* namespace OODebug */
+}

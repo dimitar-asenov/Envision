@@ -41,4 +41,4 @@ class OOMODEL_API ClassType : public SymbolProviderType {
 		Class* classDefinition() const;
 };
 
-} /* namespace OOModel */
+}

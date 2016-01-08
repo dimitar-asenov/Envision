@@ -53,4 +53,4 @@ inline const Visualization::StaticStyle& VSwitchStatementStyle::icon() const { r
 inline const Visualization::ItemStyle& VSwitchStatementStyle::condition() const { return condition_; }
 inline const Visualization::VListStyle& VSwitchStatementStyle::body() const { return body_; }
 
-} /* namespace OOVisualization */
+}

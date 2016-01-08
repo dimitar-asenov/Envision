@@ -49,4 +49,4 @@ class INTERACTIONBASE_API CMerge : public CommandWithFlags
 
 };
 
-} /* namespace Interaction */
+}

@@ -62,4 +62,4 @@ uint qHash(const Property& p, uint seed) {
 	return p.hash(seed);
 }
 
-} /* namespace InformationScripting */
+}

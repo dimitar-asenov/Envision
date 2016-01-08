@@ -53,4 +53,4 @@ void VTypeAlias::initializeForms()
 	);
 }
 
-} /* namespace OOVisualization */
+}

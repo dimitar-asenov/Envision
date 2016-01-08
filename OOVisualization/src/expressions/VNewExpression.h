@@ -66,4 +66,4 @@ Visualization::LayoutProvider<>,	OOModel::NewExpression>>
 
 inline Visualization::VList* VNewExpression::dimensions() const { return dimensions_; }
 
-} /* namespace OOVisualization */
+}

@@ -68,4 +68,4 @@ Command::Command(Protocol::CommandSet cmdSet, T cmd)
 	command = static_cast<typename std::underlying_type<T>::type>(cmd);
 }
 
-} /* namespace OODebug */
+}

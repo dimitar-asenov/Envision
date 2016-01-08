@@ -106,4 +106,4 @@ inline Tuple::iterator Tuple::end() { return values_.end(); }
 inline Tuple::const_iterator Tuple::end() const { return values_.end(); }
 inline Tuple::const_iterator Tuple::cend() const { return values_.cend(); }
 
-} /* namespace InformationScripting */
+}

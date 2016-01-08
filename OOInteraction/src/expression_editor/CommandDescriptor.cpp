@@ -113,4 +113,4 @@ OOModel::UnfinishedOperator* CommandDescriptor::createUnfinished(const QString& 
 	return unf;
 }
 
-} /* namespace OOInteraction */
+}

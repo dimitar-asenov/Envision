@@ -169,4 +169,4 @@ inline void Optional<ValueType>::addWarnings(const QStringList& warnings)
 	}
 }
 
-} /* namespace InformationScripting */
+}

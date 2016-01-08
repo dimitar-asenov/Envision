@@ -74,4 +74,4 @@ void VFunctionType::determineChildren()
 	}
 }
 
-} /* namespace OOVisualization */
+}

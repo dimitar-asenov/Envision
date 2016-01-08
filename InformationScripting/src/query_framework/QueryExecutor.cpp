@@ -84,4 +84,4 @@ QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
 	return errorMessages;
 }
 
-} /* namespace InformationScripting */
+}

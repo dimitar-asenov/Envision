@@ -44,4 +44,4 @@ class OOMODEL_API InstanceOfExpression: public Super<Expression>
 
 };
 
-} /* namespace OOVisualization */
+}

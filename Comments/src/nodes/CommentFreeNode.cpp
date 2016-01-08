@@ -44,4 +44,4 @@ CommentFreeNode::CommentFreeNode(Node *parent, QString name) : Super(parent, Com
 	setNode(new CommentText());
 }
 
-} /* namespace Comments */
+}

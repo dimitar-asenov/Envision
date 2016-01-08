@@ -70,4 +70,4 @@ class Diff3Parse
 
 inline Chunk::Chunk() : noConflicts_{true} {}
 
-} /* namespace FilePersistence */
+}

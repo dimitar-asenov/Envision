@@ -35,4 +35,4 @@ void VContinueStatementStyle::load(Visualization::StyleLoader& sl)
 	sl.load("icon", icon_);
 }
 
-} /* namespace OOVisualization */
+}

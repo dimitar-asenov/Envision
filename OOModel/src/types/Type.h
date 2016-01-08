@@ -82,4 +82,4 @@ inline Type::Qualifiers Type::qualifiers() const { return qualifiers_;}
 inline void Type::setQualifiers(Qualifiers q, bool enable) {if (enable) qualifiers_ |= q; else qualifiers_ &= (~q);}
 
 
-} /* namespace OOModel */
+}

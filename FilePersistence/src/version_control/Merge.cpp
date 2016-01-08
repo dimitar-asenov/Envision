@@ -405,4 +405,4 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 	}
 }
 
-} /* namespace FilePersistence */
+}

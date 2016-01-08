@@ -65,4 +65,4 @@ class COMMENTS_API ColorPicker : public QToolButton
 
 };
 
-} /* namespace Comments */
+}

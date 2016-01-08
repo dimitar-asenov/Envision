@@ -54,4 +54,4 @@ void VMemberInitializer::initializeForms()
 
 }
 
-} /* namespace OOVisualization */
+}

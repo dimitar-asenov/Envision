@@ -377,4 +377,4 @@ void DebugConnector::handleComposite(QByteArray data)
 	if (resumeRequest_ == ResumeRequest::RESUME) resume();
 }
 
-} /* namespace OODebug */
+}

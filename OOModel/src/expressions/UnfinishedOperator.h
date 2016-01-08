@@ -46,4 +46,4 @@ class OOMODEL_API UnfinishedOperator : public Super<Expression>
 
 };
 
-} /* namespace OOModel */
+}

@@ -90,4 +90,4 @@ void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMo
 	}
 }
 
-} /* namespace Comments */
+}

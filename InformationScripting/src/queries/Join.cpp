@@ -156,4 +156,4 @@ Optional<QList<NamedProperty>> Join::extractProperties(const Tuple& t, const QLi
 	return result;
 }
 
-} /* namespace InformationScripting */
+}

@@ -52,4 +52,4 @@ Type* LambdaExpression::type()
 	return new FunctionType(true, args, res);
 }
 
-} /* namespace OOModel */
+}

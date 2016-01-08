@@ -38,4 +38,4 @@ class INFORMATIONSCRIPTING_API PassthroughQuery : public Query
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input) override;
 };
 
-} /* namespace InformationScripting */
+}

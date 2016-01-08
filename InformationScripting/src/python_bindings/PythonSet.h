@@ -54,6 +54,6 @@ inline void PythonSet::add(const T& elem) { PythonSetBase::add(object(elem)); }
 template <typename T>
 inline void PythonSet::discard(const T& elem) { PythonSetBase::discard(object(elem));}
 
-} /* namespace helper */
+}
 
-} /* namespace InformationScripting */
+}

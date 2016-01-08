@@ -137,4 +137,4 @@ void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 	}
 }
 
-} /* namespace Comments */
+}

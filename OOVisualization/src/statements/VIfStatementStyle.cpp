@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VIfStatementStyle::~VIfStatementStyle(){}
 
-} /* namespace OOVisualization */
+}

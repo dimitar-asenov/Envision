@@ -54,4 +54,4 @@ Visualization::Item* VAssertStatement::icon() const
 	return icon_->item();
 }
 
-} /* namespace OOVisualization */
+}

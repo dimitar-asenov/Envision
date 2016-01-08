@@ -333,4 +333,4 @@ void CommentDiagramToolbar::applyEndArrow()
 	connector->node()->endModification();
 }
 
-} /* namespace Comments */
+}

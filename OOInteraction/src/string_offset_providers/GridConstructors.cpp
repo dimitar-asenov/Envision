@@ -209,4 +209,4 @@ void GridConstructors::initializeAll()
 	});
 }
 
-} /* namespace OOInteraction */
+}

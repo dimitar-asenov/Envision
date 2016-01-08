@@ -60,4 +60,4 @@ PrimitiveType* PrimitiveType::clone() const
 	return new PrimitiveType(*this);
 }
 
-} /* namespace OOModel */
+}

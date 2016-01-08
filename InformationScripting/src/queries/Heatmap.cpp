@@ -95,4 +95,4 @@ QColor Heatmap::colorForValue(int value)
 	return {red, green, 0};
 }
 
-} /* namespace InformationScripting */
+}

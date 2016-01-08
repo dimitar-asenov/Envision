@@ -91,4 +91,4 @@ class OOINTERACTION_API StringOffsetProvider {
 
 inline Visualization::Item* StringOffsetProvider::item() const { return vis_; }
 
-} /* namespace OOInteraction */
+}

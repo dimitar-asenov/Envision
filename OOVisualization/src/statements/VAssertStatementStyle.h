@@ -43,4 +43,4 @@ class OOVISUALIZATION_API VAssertStatementStyle : public Super<Visualization::De
 		Property<Visualization::StaticStyle> icon{this, "icon"};
 };
 
-} /* namespace OOVisualization */
+}

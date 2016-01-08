@@ -59,4 +59,4 @@ class INFORMATIONSCRIPTING_API VCommandArgument
 inline Visualization::VText* VCommandArgument::argument() const { return argument_; }
 
 
-} /* namespace InformationScripting */
+}

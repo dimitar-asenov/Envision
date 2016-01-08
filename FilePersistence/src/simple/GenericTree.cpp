@@ -136,4 +136,4 @@ void GenericTree::buildLookupHash()
 	}
 }
 
-} /* namespace FilePersistence */
+}

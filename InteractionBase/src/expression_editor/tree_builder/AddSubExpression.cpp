@@ -45,4 +45,4 @@ void AddSubExpression::perform(ExpressionTreeBuilder& tb)
 	tb.left() = exp;
 }
 
-} /* namespace Interaction */
+}

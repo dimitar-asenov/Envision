@@ -60,4 +60,4 @@ class OOVISUALIZATION_API VTypeAlias
 		Visualization::Static* equivalenceSymbol_{};
 		Visualization::Item* originalType_{};
 };
-} /* namespace OOVisualization */
+}

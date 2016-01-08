@@ -41,4 +41,4 @@ class OOVISUALIZATION_API VExplicitTemplateInstantiationStyle : public Super<Vis
 		Property<Visualization::StaticStyle> icon{this, "icon"};
 };
 
-} /* namespace OOVisualization */
+}

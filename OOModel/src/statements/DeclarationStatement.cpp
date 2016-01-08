@@ -60,4 +60,4 @@ DeclarationStatement::SymbolTypes DeclarationStatement::symbolType() const
 	return decl ? decl->symbolType() : UNSPECIFIED;
 }
 
-} /* namespace OOModel */
+}

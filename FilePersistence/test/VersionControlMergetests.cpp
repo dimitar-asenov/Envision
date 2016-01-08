@@ -175,4 +175,4 @@ class RunMerge : public Test<FilePersistencePlugin, RunMerge> { public: void tes
 	exit(0);
 }};
 
-} /* namespace FilePersistence */
+}

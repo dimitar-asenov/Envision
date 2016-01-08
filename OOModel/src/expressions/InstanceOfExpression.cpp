@@ -42,4 +42,4 @@ Type* InstanceOfExpression::type()
 	return new PrimitiveType(PrimitiveType::BOOLEAN, true);
 }
 
-}/* namespace OOVisualization */
+}

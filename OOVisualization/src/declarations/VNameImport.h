@@ -56,4 +56,4 @@ class OOVISUALIZATION_API VNameImport
 		Visualization::Item* imported_{};
 };
 
-} /* namespace OOVisualization */
+}

@@ -43,4 +43,4 @@ class INFORMATIONSCRIPTING_API NodePropertyAdder : public Query
 		Property value_{};
 };
 
-} /* namespace InformationScripting */
+}

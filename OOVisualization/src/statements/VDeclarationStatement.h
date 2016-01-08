@@ -51,4 +51,4 @@ class OOVISUALIZATION_API VDeclarationStatement
 		Visualization::Item* decl_;
 };
 
-} /* namespace OOVisualization */
+}

@@ -48,4 +48,4 @@ void VNameImport::initializeForms()
 	);
 }
 
-} /* namespace OOVisualization */
+}

@@ -67,4 +67,4 @@ ResumeCommand::ResumeCommand() : Command{Protocol::CommandSet::VirtualMachine, P
 
 ResumeCommand::~ResumeCommand() {}
 
-} /* namespace OODebug */
+}

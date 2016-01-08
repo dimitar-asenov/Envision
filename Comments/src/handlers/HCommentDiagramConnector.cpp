@@ -74,4 +74,4 @@ void HCommentDiagramConnector::mousePressEvent(Visualization::Item *target, QGra
 	}
 }
 
-} /* namespace Comments */
+}

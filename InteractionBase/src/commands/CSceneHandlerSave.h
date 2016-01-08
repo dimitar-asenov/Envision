@@ -44,4 +44,4 @@ class INTERACTIONBASE_API CSceneHandlerSave : public Command
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
-} /* namespace Interaction */
+}

@@ -59,4 +59,4 @@ void HBinaryNode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	else HComposite::keyPressEvent(target, event);
 }
 
-} /* namespace Interaction */
+}

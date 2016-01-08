@@ -77,4 +77,4 @@ class EXPORT_API TextToNodeMap {
 
 inline QStringList TextToNodeMap::files() const { return mappedFiles_; }
 
-} /* namespace Export */
+}

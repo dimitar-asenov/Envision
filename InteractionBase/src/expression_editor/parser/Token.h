@@ -88,4 +88,4 @@ struct TokenSplitData {
 };
 bool operator< (const TokenSplitData& left, const TokenSplitData& right);
 
-} /* namespace InteractionBase */
+}

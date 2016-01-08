@@ -69,4 +69,4 @@ class OODEBUG_API JavaCompiler
 		static void visualizeMessage(Visualization::Item* item, const QString& message, const QString& type = "default");
 };
 
-} /* namespace OODebug */
+}

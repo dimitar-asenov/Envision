@@ -85,4 +85,4 @@ OOModel::Method* MainMethodFinder::visitMethod(MainMethodFinder*, OOModel::Metho
 	return nullptr;
 }
 
-} /* namespace OODebug */
+}

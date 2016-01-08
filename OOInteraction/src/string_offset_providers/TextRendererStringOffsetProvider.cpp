@@ -61,4 +61,4 @@ void TextRendererStringOffsetProvider::setOffset(int offset)
 	tc->setCaretPosition(offset);
 }
 
-} /* namespace OOInteraction */
+}

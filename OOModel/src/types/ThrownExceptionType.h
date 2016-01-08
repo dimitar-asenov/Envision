@@ -47,4 +47,4 @@ class OOMODEL_API ThrownExceptionType : public Type {
 
 inline const Type* ThrownExceptionType::exceptionType() const { return exceptionType_; }
 
-} /* namespace OOModel */
+}

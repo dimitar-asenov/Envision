@@ -75,4 +75,4 @@ class FILEPERSISTENCE_API History
 };
 
 inline QSet<QString> History::relevantCommits() const { return relevantCommits_; }
-} /* namespace FilePersistence */
+}

@@ -58,4 +58,4 @@ class OOVISUALIZATION_API VErrorExpression : public Super<VExpression<VErrorExpr
 		Visualization::VText* postfix_;
 };
 
-} /* namespace OOVisualization */
+}

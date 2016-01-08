@@ -43,4 +43,4 @@ class INTERACTIONBASE_API ActionPromptStyle : public Super<Visualization::Declar
 		Property<TextAndDescriptionStyle> actionStyle{this, "actionStyle"};
 };
 
-} /* namespace Interaction */
+}

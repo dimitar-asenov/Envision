@@ -54,4 +54,4 @@ class OOVISUALIZATION_API VOOReference
 		virtual QString currentText() override;
 };
 
-} /* namespace OOVisualization */
+}

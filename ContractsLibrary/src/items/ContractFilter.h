@@ -58,4 +58,4 @@ class CONTRACTSLIBRARY_API ContractFilter {
 
 inline void ContractFilter::setContractsClass(OOModel::Class* contractClass) { contractClass_ = contractClass; }
 
-} /* namespace ContractsLibrary */
+}

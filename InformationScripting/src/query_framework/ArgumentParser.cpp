@@ -139,4 +139,4 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 	}
 }
 
-} /* namespace InformationScripting */
+}

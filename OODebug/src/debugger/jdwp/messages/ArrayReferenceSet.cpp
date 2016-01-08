@@ -57,4 +57,4 @@ int ArrayValues::kind() const
 	return cast(type());
 }
 
-} /* namespace OODebug */
+}

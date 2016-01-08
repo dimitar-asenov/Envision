@@ -69,4 +69,4 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 };
 
 inline bool VComment::editing() const { return editing_; }
-} /* namespace Comments */
+}

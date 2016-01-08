@@ -53,4 +53,4 @@ Interaction::CommandResult* CCreateModule::executeNamed(Visualization::Item* /*s
 	return new Interaction::CommandResult();
 }
 
-} /* namespace OOInteraction */
+}

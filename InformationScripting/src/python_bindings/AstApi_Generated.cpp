@@ -3915,4 +3915,4 @@ BOOST_PYTHON_MODULE(AstApi) {
 
 }
 
-} /* namespace InformationScripting */
+}

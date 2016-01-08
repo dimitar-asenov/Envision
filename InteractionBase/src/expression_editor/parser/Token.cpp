@@ -314,4 +314,4 @@ bool operator< (const TokenSplitData& left, const TokenSplitData& right)
 	return left.unmatchedAfterEnd < right.unmatchedAfterEnd;
 }
 
-} /* namespace InteractionBase */
+}

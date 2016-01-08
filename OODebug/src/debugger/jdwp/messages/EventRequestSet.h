@@ -116,4 +116,4 @@ struct EventClearCommand : public Command {
 		MessageField<qint32> requestID{&EventClearCommand::requestID, this};
 };
 
-} /* namespace OODebug */
+}

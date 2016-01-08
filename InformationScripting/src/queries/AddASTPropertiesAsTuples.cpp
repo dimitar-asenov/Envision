@@ -43,4 +43,4 @@ void AddASTPropertiesAsTuples::registerDefaultQueries()
 	QueryRegistry::registerQuery<AddASTPropertiesAsTuples>("addASTProperties");
 }
 
-} /* namespace InformationScripting */
+}

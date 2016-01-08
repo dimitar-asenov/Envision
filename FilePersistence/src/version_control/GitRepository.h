@@ -151,4 +151,4 @@ class FILEPERSISTENCE_API GitRepository
 inline QString GitRepository::workdirPath() const { return path_; }
 inline QString GitRepository::projectName() const { return QFileInfo(path_).fileName(); }
 
-} /* namespace FilePersistence */
+}

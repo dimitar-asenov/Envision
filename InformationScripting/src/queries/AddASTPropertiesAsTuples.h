@@ -47,4 +47,4 @@ class INFORMATIONSCRIPTING_API AddASTPropertiesAsTuples : public LinearQuery
 
 inline AddASTPropertiesAsTuples::AddASTPropertiesAsTuples(Model::Node*, QStringList) {}
 
-} /* namespace InformationScripting */
+}

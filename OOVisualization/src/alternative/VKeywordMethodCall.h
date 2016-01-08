@@ -65,4 +65,4 @@ class OOVISUALIZATION_API VKeywordMethodCall
 inline Visualization::Static* VKeywordMethodCall::keyword() const { return keyword_; }
 inline Visualization::VList* VKeywordMethodCall::arguments() const { return arguments_; }
 
-} /* namespace OOVisualization */
+}

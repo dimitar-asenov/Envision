@@ -48,4 +48,4 @@ class INFORMATIONSCRIPTING_API RuntimeQuery : public LinearQuery
 		RuntimeQuery(Model::Node* target, QStringList, QueryExecutor* executor = nullptr);
 };
 
-} /* namespace InformationScripting */
+}

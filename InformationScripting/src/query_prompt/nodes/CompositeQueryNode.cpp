@@ -36,4 +36,4 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CompositeQueryNode)
 
 REGISTER_ATTRIBUTE(CompositeQueryNode, queries, TypedListOfQueryNode, false, false, true)
 
-} /* namespace InformationScripting */
+}

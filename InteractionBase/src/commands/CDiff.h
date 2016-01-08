@@ -47,4 +47,4 @@ class INTERACTIONBASE_API CDiff : public CommandWithFlags
 
 };
 
-} /* namespace Interaction */
+}

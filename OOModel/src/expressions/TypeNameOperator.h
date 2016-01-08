@@ -43,4 +43,4 @@ class OOMODEL_API TypeNameOperator : public Super<Expression>
 };
 
 
-} /* namespace OOModel */
+}

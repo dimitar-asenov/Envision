@@ -41,4 +41,4 @@ NullType* NullType::clone() const
 	return new NullType(*this);
 }
 
-} /* namespace OOModel */
+}

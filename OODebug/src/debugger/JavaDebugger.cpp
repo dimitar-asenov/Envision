@@ -614,4 +614,4 @@ void JavaDebugger::removeObserverOverlaysAt(Model::Node* node, Visualization::It
 	}
 }
 
-} /* namespace OODebug */
+}

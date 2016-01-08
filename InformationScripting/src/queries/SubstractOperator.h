@@ -38,4 +38,4 @@ class INFORMATIONSCRIPTING_API SubstractOperator : public Query
 		virtual QList<Optional<TupleSet>> execute(QList<TupleSet> input);
 };
 
-} /* namespace InformationScripting */
+}

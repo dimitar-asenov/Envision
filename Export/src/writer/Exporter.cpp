@@ -122,4 +122,4 @@ void Exporter::saveFile(QDir& fileSystemDir, SourceFile* sourceFile, FragmentLay
 	if (written != data.size()) throw ExportException("Error writing to file " + fileName);
 }
 
-} /* namespace Export */
+}

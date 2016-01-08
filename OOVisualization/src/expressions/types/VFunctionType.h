@@ -72,4 +72,4 @@ inline Visualization::VList* VFunctionType::arguments() const { return arguments
 inline Visualization::Static* VFunctionType::resultSymbol() const { return resultSymbol_; }
 inline Visualization::VList* VFunctionType::results() const { return results_; }
 
-} /* namespace OOVisualization */
+}

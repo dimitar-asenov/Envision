@@ -78,4 +78,4 @@ struct TaggedObjectId : public MessagePart {
 		MessageField<qint64> objectId{&TaggedObjectId::objectId, this};
 };
 
-} /* namespace OODebug */
+}

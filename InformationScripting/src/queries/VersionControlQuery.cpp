@@ -199,4 +199,4 @@ Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringLis
 	}
 }
 
-} /* namespace InformationScripting */
+}

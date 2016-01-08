@@ -202,4 +202,4 @@ void QueryBuilder::connectAsSplit(CompositeQuery* composite, Query* left, Compos
 		composite->connectQuery(left, 0, right, i);
 }
 
-} /* namespace InformationScripting */
+}

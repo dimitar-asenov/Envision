@@ -109,4 +109,4 @@ inline Visualization::Text* ActionPrompt::text() {return actionText_;}
 inline int ActionPrompt::numActions() { return numActions_; }
 inline bool ActionPrompt::autoExecuteAction() const { return autoExecuteAction_; }
 
-} /* namespace Interaction */
+}

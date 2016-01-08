@@ -104,4 +104,4 @@ const LinkedChangesSet LinkedChangesTransition::getNewState() const
 	return set;
 }
 
-} /* namespace FilePersistence */
+}

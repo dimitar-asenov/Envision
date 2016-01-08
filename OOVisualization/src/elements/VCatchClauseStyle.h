@@ -44,4 +44,4 @@ class OOVISUALIZATION_API VCatchClauseStyle : public Super<Visualization::Declar
 };
 
 
-} /* namespace OOVisualization */
+}

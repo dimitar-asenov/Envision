@@ -38,4 +38,4 @@ class INFORMATIONSCRIPTING_API QueryRuntimeException : public InformationScripti
 			const QString& name() const;
 };
 
-} /* namespace InformationScripting */
+}

@@ -49,4 +49,4 @@ class OOMODEL_API SymbolProviderType : public Type {
 
 inline Model::Node* SymbolProviderType::symbolProvider() const {return symbolProvider_;}
 
-} /* namespace OOModel */
+}

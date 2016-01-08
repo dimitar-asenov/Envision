@@ -37,4 +37,4 @@ void VKeywordMethodCallStyle::load(Visualization::StyleLoader& sl)
 	sl.load("arguments", arguments_);
 }
 
-} /* namespace OOVisualization */
+}

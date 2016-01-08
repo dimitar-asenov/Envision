@@ -30,4 +30,4 @@ namespace Export {
 TextFragment::TextFragment(Model::Node* node, const QString& text) : SourceFragment{node}, text_{text}{}
 TextFragment::~TextFragment(){}
 
-} /* namespace Export */
+}

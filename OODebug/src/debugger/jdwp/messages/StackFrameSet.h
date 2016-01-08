@@ -62,4 +62,4 @@ struct Values : public Reply {
 		MessageField<QList<Value>> values{&Values::values, this};
 };
 
-} /* namespace OODebug */
+}

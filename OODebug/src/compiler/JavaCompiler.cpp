@@ -172,4 +172,4 @@ void JavaCompiler::visualizeMessage(Visualization::Item* item, const QString& me
 	item->addOverlay(overlay, COMPILER_MESSAGE_GROUP);
 }
 
-} /* namespace OODebug */
+}

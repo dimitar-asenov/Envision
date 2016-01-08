@@ -50,4 +50,4 @@ class OOMODEL_API PrimitiveType : public Type {
 
 inline PrimitiveType::PrimitiveTypes PrimitiveType::type() const { return type_; }
 
-} /* namespace OOModel */
+}

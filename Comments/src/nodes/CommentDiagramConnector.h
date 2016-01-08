@@ -63,4 +63,4 @@ inline Qt::PenStyle CommentDiagramConnector::outlineType() const
 inline void CommentDiagramConnector::setOutlineType(const Qt::PenStyle& outlineType)
 { setOutlineTypeStore(outlineType); }
 
-} /* namespace Comments */
+}

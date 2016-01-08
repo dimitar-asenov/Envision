@@ -286,4 +286,4 @@ void ActionPrompt::downParentActionsLevel()
 	}
 }
 
-} /* namespace Interaction */
+}

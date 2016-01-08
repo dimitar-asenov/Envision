@@ -40,4 +40,4 @@ class COMMENTS_API VCommentStyle : public Super<Visualization::DeclarativeItemBa
 		Property<Visualization::VListStyle> editList{this, "editList"};
 };
 
-} /* namespace Comments */
+}

@@ -62,4 +62,4 @@ void Expression::removeFromParent()
 	if (parent_) parent_->remove(this);
 }
 
-} /* namespace InteractionBase */
+}

@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VMetaCallExpressionStyle::~VMetaCallExpressionStyle() {}
 
-} /* namespace OOVisualization */
+}

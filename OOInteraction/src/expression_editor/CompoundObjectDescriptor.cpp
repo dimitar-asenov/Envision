@@ -191,4 +191,4 @@ bool CompoundObjectDescriptor::isInQuotes(int index, const QString& string, cons
 	return inQuote;
 }
 
-} /* namespace OOVisualization */
+}

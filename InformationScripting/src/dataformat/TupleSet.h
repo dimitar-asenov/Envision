@@ -126,4 +126,4 @@ inline void TupleSet::addPropertiesAsTuples(const QString& tag)
 
 inline bool TupleSet::isEmpty() const { return tuples_.isEmpty(); }
 
-} /* namespace InformationScripting */
+}

@@ -44,4 +44,4 @@ class INFORMATIONSCRIPTING_API AstModification
 		static OOModel::Expression* buildExpression(const QString& expressionText);
 };
 
-} /* namespace InformationScripting */
+}

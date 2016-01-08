@@ -71,4 +71,4 @@ inline const QList<qint64> Timer::values() const { return values_; }
 inline double Timer::totalAverage() const { return (double) totalSum_/totalCount_; }
 inline void Timer::setIgnoreZeroValues(bool ignore) { ignoreZeroValues_ = ignore; }
 
-} /* namespace Logger */
+}

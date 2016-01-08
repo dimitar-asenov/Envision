@@ -61,4 +61,4 @@ void VCommandNode::determineChildren()
 	name_->setSuppressDefaultCopyPasteHandler(true);
 }
 
-} /* namespace InformationScripting */
+}

@@ -102,4 +102,4 @@ inline QPoint CommentDiagramShape::connectorPoint(int index) const
 inline Qt::PenStyle CommentDiagramShape::outlineType() const { return static_cast<Qt::PenStyle> (outlineTypeStore()); }
 inline void CommentDiagramShape::setOutlineType(const Qt::PenStyle& outlineType) { setOutlineTypeStore(outlineType); }
 
-} /* namespace Comments */
+}

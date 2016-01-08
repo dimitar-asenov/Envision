@@ -91,4 +91,4 @@ bool GitPiecewiseLoader::isPersistenceUnit(const QString& nodeLine)
 	return nodeLine.midRef(space+1).startsWith(GenericNode::PERSISTENT_UNIT_TYPE);
 }
 
-} /* namespace FilePersistence */
+}

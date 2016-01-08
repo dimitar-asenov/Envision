@@ -37,4 +37,4 @@ void VEnumeratorStyle::load(Visualization::StyleLoader& sl)
 	sl.load("assignmentSymbol", assignmentSymbol_);
 }
 
-} /* namespace OOVisualization */
+}

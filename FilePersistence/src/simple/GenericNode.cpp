@@ -330,4 +330,4 @@ void GenericNode::detachFromParent()
 	setParentId({});
 }
 
-} /* namespace FilePersistence */
+}

@@ -59,4 +59,4 @@ void VOperatorQueryNode::initializeForms()
 	);
 }
 
-} /* namespace InformationScripting */
+}

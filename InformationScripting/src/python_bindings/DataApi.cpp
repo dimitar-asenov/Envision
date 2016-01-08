@@ -141,4 +141,4 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.staticmethod("buildExpression");
 }
 
-} /* namespace InformationScripting */
+}

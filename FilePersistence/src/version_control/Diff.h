@@ -80,4 +80,4 @@ inline std::shared_ptr<GenericTree> Diff::treeA() const { return treeA_; }
 inline std::shared_ptr<GenericTree> Diff::treeB() const { return treeB_; }
 inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}
 
-} /* namespace FilePersistence */
+}

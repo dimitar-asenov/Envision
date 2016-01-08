@@ -37,4 +37,4 @@ void Command::resetIds()
 
 int Command::nextId_ = 0;
 
-} /* namespace OODebug */
+}

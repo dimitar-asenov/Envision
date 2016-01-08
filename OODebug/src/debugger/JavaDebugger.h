@@ -164,4 +164,4 @@ inline void JavaDebugger::addProgramExitLister(JavaDebugger::ProgramExitSingleSh
 	exitListeners_.push_back(listener);
 }
 
-} /* namespace OODebug */
+}

@@ -55,4 +55,4 @@ class OOMODEL_API NameImport : public Super<Declaration>
 		Node* target() const;
 };
 
-} /* namespace OOModel */
+}

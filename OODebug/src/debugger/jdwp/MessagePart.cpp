@@ -52,4 +52,4 @@ void MessagePart::addMessageField(ReadOperator reader, WriteOperator writer)
 
 int MessagePart::kind() const { return noKind; }
 
-} /* namespace OODebug */
+}

@@ -46,4 +46,4 @@ class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
 		Property<int> margin{this, "margin"};
 };
 
-} /* namespace OODebug */
+}

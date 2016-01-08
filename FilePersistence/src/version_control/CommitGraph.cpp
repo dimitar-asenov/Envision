@@ -70,4 +70,4 @@ const CommitGraphItem* CommitGraph::find(QString commit) const
 		return &iter.value();
 }
 
-} /* namespace FilePersistence */
+}

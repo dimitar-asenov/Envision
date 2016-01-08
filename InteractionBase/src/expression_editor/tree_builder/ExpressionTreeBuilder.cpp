@@ -85,4 +85,4 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 }
 
 
-} /* namespace InteractionBase */
+}

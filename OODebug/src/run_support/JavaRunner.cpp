@@ -141,4 +141,4 @@ RunProcess& JavaRunner::runProcess()
 	return process;
 }
 
-} /* namespace OODebug */
+}

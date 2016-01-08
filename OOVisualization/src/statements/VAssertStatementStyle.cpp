@@ -29,4 +29,4 @@ namespace OOVisualization {
 
 VAssertStatementStyle::~VAssertStatementStyle() {}
 
-} /* namespace OOVisualization */
+}

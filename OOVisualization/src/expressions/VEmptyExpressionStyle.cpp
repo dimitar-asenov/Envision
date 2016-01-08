@@ -36,4 +36,4 @@ void VEmptyExpressionStyle::load(Visualization::StyleLoader& sl)
 	sl.load("emptyLine", emptyLine_);
 }
 
-} /* namespace OOVisualization */
+}

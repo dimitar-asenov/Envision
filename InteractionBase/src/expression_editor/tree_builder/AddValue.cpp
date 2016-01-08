@@ -45,4 +45,4 @@ void AddValue::perform(ExpressionTreeBuilder& tb)
 	tb.left() = val;
 }
 
-} /* namespace InteractionBase */
+}

@@ -60,4 +60,4 @@ class OOMODEL_API JavaTypeSystem : public TypeSystem {
 		TypeRelations relationNullToOther(const NullType* nullType, const Type* other);
 };
 
-} /* namespace OOModel */
+}

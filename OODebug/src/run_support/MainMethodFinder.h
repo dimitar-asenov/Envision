@@ -50,4 +50,4 @@ class OODEBUG_API MainMethodFinder : public Model::Visitor<MainMethodFinder, OOM
 
 };
 
-} /* namespace OODebug */
+}

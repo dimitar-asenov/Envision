@@ -35,4 +35,4 @@ namespace InformationScripting {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(QueryNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(QueryNode, CommandNode)
 
-} /* namespace InformationScripting */
+}

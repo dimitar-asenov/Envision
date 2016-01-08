@@ -59,4 +59,4 @@ void VCommentFreeNode::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(content_, availableWidth, availableHeight);
 }
 
-} /* namespace Comments */
+}

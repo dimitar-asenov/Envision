@@ -92,4 +92,4 @@ void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphi
 					   node()->startArrow(), node()->endArrow(), outlineSize_);
 }
 
-} /* namespace Comments */
+}

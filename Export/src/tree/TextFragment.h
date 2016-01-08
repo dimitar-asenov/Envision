@@ -46,4 +46,4 @@ class EXPORT_API TextFragment : public SourceFragment {
 inline void TextFragment::setText(const QString& text) { text_ = text; }
 inline const QString& TextFragment::text() const { return text_; }
 
-} /* namespace Export */
+}

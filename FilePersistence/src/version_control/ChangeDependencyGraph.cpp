@@ -104,4 +104,4 @@ void ChangeDependencyGraph::removeDependency(std::shared_ptr<ChangeDescription>&
 	dependencies_.remove(changeA, changeB);
 }
 
-} /* namespace FilePersistence */
+}

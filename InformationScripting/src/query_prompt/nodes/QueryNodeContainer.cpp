@@ -36,4 +36,4 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(QueryNodeContainer)
 
 REGISTER_ATTRIBUTE(QueryNodeContainer, query, QueryNode, false, false, true)
 
-} /* namespace InformationScripting */
+}

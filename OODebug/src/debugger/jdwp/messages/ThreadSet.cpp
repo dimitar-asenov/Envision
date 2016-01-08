@@ -49,4 +49,4 @@ FramesCommand::~FramesCommand() {}
 Frame::~Frame() {}
 Frames::~Frames() {}
 
-} /* namespace OODebug */
+}

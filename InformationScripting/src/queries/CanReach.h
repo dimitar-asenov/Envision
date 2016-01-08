@@ -62,4 +62,4 @@ class INFORMATIONSCRIPTING_API CanReach : public LinearQuery
 		std::vector<Tuple> neighbors(const Tuple& t);
 };
 
-} /* namespace InformationScripting */
+}

@@ -68,4 +68,4 @@ class INFORMATIONSCRIPTING_API ArgumentRule {
 		};
 };
 
-} /* namespace InformationScripting */
+}

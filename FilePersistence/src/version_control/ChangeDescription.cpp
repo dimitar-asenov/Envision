@@ -256,4 +256,4 @@ std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<Gener
 	return newChange;
 }
 
-} /* namespace FilePersistence */
+}

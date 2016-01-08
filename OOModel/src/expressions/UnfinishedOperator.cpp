@@ -43,4 +43,4 @@ Type* UnfinishedOperator::type()
 	return new ErrorType("Unfinished Operator");
 }
 
-} /* namespace OOModel */
+}

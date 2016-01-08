@@ -1161,4 +1161,4 @@ void GitRepository::checkError(int errorCode)
 
 const char* GitRepository::HEAD = "HEAD";
 
-} /* namespace FilePersistence */
+}

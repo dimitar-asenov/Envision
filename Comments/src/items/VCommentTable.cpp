@@ -61,4 +61,4 @@ void VCommentTable::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(aGrid_, availableWidth, availableHeight);
 }
 
-} /* namespace Comments */
+}

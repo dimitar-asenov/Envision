@@ -49,4 +49,4 @@ class OOVISUALIZATION_API VStatementItemList : public Super<Visualization::VList
 		static QList<RangeFilter>& rangeFilters();
 };
 
-} /* namespace OOVisualization */
+}

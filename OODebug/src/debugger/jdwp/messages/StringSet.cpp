@@ -37,4 +37,4 @@ StringValueCommand::StringValueCommand(qint64 stringId)
 StringValueCommand::~StringValueCommand() {}
 StringValue::~StringValue() {}
 
-} /* namespace OODebug */
+}

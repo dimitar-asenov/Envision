@@ -56,4 +56,4 @@ void HReturnStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *eve
 	if (!event->isAccepted()) HStatement::keyPressEvent(target, event);
 }
 
-} /* namespace OOInteraction */
+}

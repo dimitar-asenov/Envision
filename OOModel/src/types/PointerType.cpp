@@ -54,4 +54,4 @@ PointerType* PointerType::clone() const
 	return new PointerType(*this);
 }
 
-} /* namespace OOModel */
+}

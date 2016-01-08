@@ -90,4 +90,4 @@ bool ArgumentRule::ArgumentValueCheck::operator()(const ArgumentValue& value) co
 			|| (value.policy == ValuePolicy::IsSet && parser_.isArgumentSet(value.name));
 }
 
-} /* namespace InformationScripting */
+}

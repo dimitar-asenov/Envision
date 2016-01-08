@@ -45,4 +45,4 @@ Yield::Yield(Model::Node* target, QStringList)
 	: Query{target}
 {}
 
-} /* namespace InformationScripting */
+}

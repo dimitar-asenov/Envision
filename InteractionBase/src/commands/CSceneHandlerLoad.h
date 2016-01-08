@@ -47,4 +47,4 @@ class INTERACTIONBASE_API CSceneHandlerLoad : public CommandWithFlags
 		QStringList availableProjectsOnDisk();
 };
 
-} /* namespace Interaction */
+}

@@ -96,4 +96,4 @@ void VTryCatchFinally::initializeForms()
 			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
 }
 
-} /* namespace OOVisualization */
+}

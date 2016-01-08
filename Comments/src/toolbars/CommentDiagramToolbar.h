@@ -106,4 +106,4 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		QTimer* aTimer_{};
 };
 
-} /* namespace Comments */
+}

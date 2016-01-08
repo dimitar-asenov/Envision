@@ -432,4 +432,4 @@ void Parser::processSubExpression(bool& error, QList<ExpectedToken>& expected, Q
 	else error = true;
 }
 
-} /* namespace InteractionBase */
+}

@@ -45,4 +45,4 @@ class OOMODEL_API TryCatchFinallyStatement: public Super<Statement>
 	ATTRIBUTE(StatementItemList, finallyBody, setFinallyBody)
 };
 
-} /* namespace OOModel */
+}

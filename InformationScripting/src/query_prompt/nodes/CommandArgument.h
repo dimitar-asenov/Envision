@@ -46,4 +46,4 @@ class INFORMATIONSCRIPTING_API CommandArgument : public Super<QueryNode>
 		CommandArgument(const QString& argument);
 };
 
-} /* namespace InformationScripting */
+}

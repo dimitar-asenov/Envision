@@ -43,4 +43,4 @@ class INFORMATIONSCRIPTING_API VOperatorQueryNodeStyle : public Super<Visualizat
 	Property<Visualization::StaticStyle> substractOp{this, "substractOp"};
 };
 
-} /* namespace InformationScripting */
+}

@@ -56,4 +56,4 @@ SourceFileCommand::SourceFileCommand(qint64 referenceId)
 SourceFileCommand::~SourceFileCommand() {}
 SourceFile::~SourceFile() {}
 
-} /* namespace OODebug */
+}

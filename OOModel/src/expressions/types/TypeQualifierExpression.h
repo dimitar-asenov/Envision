@@ -57,4 +57,4 @@ inline TypeQualifierExpression::Qualifier TypeQualifierExpression::qualifier()
 	const { return static_cast<Qualifier> (qualifierVal()); }
 inline void TypeQualifierExpression::setQualifier(Qualifier q){ setQualifierVal(q);}
 
-} /* namespace OOModel */
+}

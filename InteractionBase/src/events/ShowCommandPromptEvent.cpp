@@ -46,4 +46,4 @@ void ShowCommandPromptEvent::execute()
 		scene_->scheduleUpdate();
 	}
 }
-} /* namespace Interaction */
+}

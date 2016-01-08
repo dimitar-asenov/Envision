@@ -41,4 +41,4 @@ void VQueryNodeContainer::initializeForms()
 	addForm(item(&I::query_, [](I* v){ return v->node()->query();}));
 }
 
-} /* namespace InformationScripting */
+}

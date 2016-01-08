@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VTryCatchFinallyStyle::~VTryCatchFinallyStyle() {}
 
-} /* namespace OOVisualization */
+}

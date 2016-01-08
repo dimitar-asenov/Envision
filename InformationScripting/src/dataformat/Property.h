@@ -163,7 +163,7 @@ struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>:
 		DataType data_;
 };
 
-} /* namespace detail */
+}
 
 // Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
 class INFORMATIONSCRIPTING_API Property {
@@ -221,4 +221,4 @@ template <> inline bool Property::isConvertibleTo<Model::Node*>() const { return
 // qHash functions have to accessible outside:
 uint qHash(const Property& p, uint seed = 0);
 
-} /* namespace InformationScripting */
+}

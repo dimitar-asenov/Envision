@@ -51,4 +51,4 @@ class COMMENTS_API CommentFreeNode : public Super<Model::CompositeNode>
 		CommentFreeNode(Node *parent, QString name);
 };
 
-} /* namespace Comments */
+}

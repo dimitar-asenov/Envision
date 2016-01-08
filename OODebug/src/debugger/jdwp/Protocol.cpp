@@ -30,4 +30,4 @@ namespace OODebug {
 
 const QByteArray Protocol::handshake{"JDWP-Handshake"};
 
-} /* namespace OODebug */
+}

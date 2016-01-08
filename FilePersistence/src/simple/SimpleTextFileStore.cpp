@@ -440,4 +440,4 @@ bool SimpleTextFileStore::isLoadingPartially() const
 	return partiallyLoadingATree_;
 }
 
-} /* namespace FilePersistence */
+}

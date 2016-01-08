@@ -44,4 +44,4 @@ class OOINTERACTION_API HStatementItemList : public Interaction::HList
 		HStatementItemList();
 };
 
-} /* namespace OOInteraction */
+}

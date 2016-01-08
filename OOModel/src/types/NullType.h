@@ -38,4 +38,4 @@ class OOMODEL_API NullType : public Type {
 		virtual NullType* clone() const override;
 };
 
-} /* namespace OOModel */
+}

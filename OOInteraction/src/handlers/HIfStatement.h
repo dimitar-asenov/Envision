@@ -42,4 +42,4 @@ class OOINTERACTION_API HIfStatement : public HStatement {
 		HIfStatement();
 };
 
-} /* namespace OOInteraction */
+}

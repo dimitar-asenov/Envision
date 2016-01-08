@@ -79,4 +79,4 @@ struct ArrayValues : public Reply {
 		virtual int kind() const override;
 };
 
-} /* namespace OODebug */
+}

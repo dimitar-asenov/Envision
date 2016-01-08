@@ -32,4 +32,4 @@ namespace InformationScripting {
 
 extern "C" PyObject* PyInit_AstApi();
 
-} /* namespace InformationScripting */
+}

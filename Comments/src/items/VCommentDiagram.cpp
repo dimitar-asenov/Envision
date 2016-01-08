@@ -176,4 +176,4 @@ void VCommentDiagram::selectLastShape()
 
 CommentDiagramToolbar* VCommentDiagram::toolbar_ = new CommentDiagramToolbar();
 
-} /* namespace Comments */
+}

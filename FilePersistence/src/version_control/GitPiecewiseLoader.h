@@ -53,4 +53,4 @@ class GitPiecewiseLoader : public PiecewiseLoader
 		QString workDir_;
 };
 
-} /* namespace FilePersistence */
+}

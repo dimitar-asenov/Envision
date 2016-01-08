@@ -47,4 +47,4 @@ class OOVISUALIZATION_API VFormalTypeArgumentStyle : public Super<Visualization:
 };
 
 
-} /* namespace OOVisualization */
+}

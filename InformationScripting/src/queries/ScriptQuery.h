@@ -71,4 +71,4 @@ class INFORMATIONSCRIPTING_API ScriptQuery : public LinearQuery
 		QList<TupleSet> extractResult(QList<Optional<TupleSet>> result, const QString& name);
 };
 
-} /* namespace InformationScripting */
+}

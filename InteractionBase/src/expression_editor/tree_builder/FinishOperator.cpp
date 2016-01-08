@@ -46,4 +46,4 @@ void FinishOperator::perform(ExpressionTreeBuilder& tb)
 	tb.left() = finished;
 }
 
-} /* namespace InteractionBase */
+}

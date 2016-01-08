@@ -41,4 +41,4 @@ StringType* StringType::clone() const
 	return new StringType(*this);
 }
 
-} /* namespace OOModel */
+}

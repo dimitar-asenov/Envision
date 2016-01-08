@@ -40,4 +40,4 @@ class OOMODEL_API GlobalScopeExpression : public Super<Expression>
 		virtual Type* type() override;
 };
 
-} /* namespace OOModel */
+}

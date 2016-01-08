@@ -58,4 +58,4 @@ QString VModifier::currentText()
 	return text;
 }
 
-} /* namespace OOVisualization */
+}

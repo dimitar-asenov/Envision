@@ -41,4 +41,4 @@ class INFORMATIONSCRIPTING_API BoostPythonHelpers
 		static void translate(const Exception& e);
 };
 
-} /* namespace InformationScripting */
+}

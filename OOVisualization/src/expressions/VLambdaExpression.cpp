@@ -67,4 +67,4 @@ void VLambdaExpression::determineChildren()
 	body_->setStyle( &style()->body() );
 }
 
-} /* namespace OOVisualization */
+}

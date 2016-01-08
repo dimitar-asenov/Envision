@@ -44,4 +44,4 @@ Type* ErrorExpression::type()
 	return new ErrorType("Syntax error in expression");
 }
 
-} /* namespace OOModel */
+}

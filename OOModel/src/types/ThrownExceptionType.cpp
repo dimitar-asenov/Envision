@@ -54,4 +54,4 @@ ThrownExceptionType* ThrownExceptionType::clone() const
 	return new ThrownExceptionType(*this);
 }
 
-} /* namespace OOModel */
+}

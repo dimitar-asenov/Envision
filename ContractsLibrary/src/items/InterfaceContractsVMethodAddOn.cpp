@@ -92,4 +92,4 @@ QList<Visualization::Item*> InterfaceContractsVMethodAddOn::determineItems(Visua
 	return result;
 }
 
-} /* namespace ContractsLibrary */
+}

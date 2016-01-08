@@ -38,4 +38,4 @@ const QString& QueryRuntimeException::name() const
 	return ename;
 }
 
-} /* namespace InformationScripting */
+}

@@ -48,4 +48,4 @@ class OOINTERACTION_API CDumpMethodRenderings : public Interaction::CommandWithF
 		static void printItem(Visualization::Item* item, int itemNumber, int& numPrinted);
 };
 
-} /* namespace OOInteraction */
+}

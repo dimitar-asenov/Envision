@@ -73,4 +73,4 @@ void HighlightOverlay::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-} /* namespace InformationScripting */
+}

@@ -47,4 +47,4 @@ class OOMODEL_API DeclarationStatement : public Super<Statement>
 		virtual SymbolTypes symbolType() const override;
 };
 
-}/* namespace OOModel */
+}

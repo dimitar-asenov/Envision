@@ -49,4 +49,4 @@ class INFORMATIONSCRIPTING_API BreakpointManager : public LinearQuery
 		BreakpointManager(Model::Node* target, QStringList args);
 };
 
-} /* namespace InformationScripting */
+}

@@ -45,4 +45,4 @@ Expression* ExpressionEditor::parse(const QString& expression_text)
 	return top;
 }
 
-} /* namespace InteractionBase */
+}

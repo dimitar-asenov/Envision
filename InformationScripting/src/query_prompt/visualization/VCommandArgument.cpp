@@ -51,4 +51,4 @@ void VCommandArgument::determineChildren()
 	argument_->setSuppressDefaultCopyPasteHandler(true);
 }
 
-} /* namespace InformationScripting */
+}

@@ -42,4 +42,4 @@ class OOVISUALIZATION_API VNameImportStyle : public Super<Visualization::Declara
 		Property<Visualization::StaticStyle> importAllIcon{this, "importAllIcon"};
 };
 
-} /* namespace OOVisualization */
+}

@@ -48,4 +48,4 @@ class INFORMATIONSCRIPTING_API Count : public LinearQuery
 		Count(Model::Node* target, QStringList args);
 };
 
-} /* namespace InformationScripting */
+}

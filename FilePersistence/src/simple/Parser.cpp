@@ -440,4 +440,4 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 			QString::fromUtf8(line+start, lineEnd-start+1));
 }
 
-} /* namespace FilePersistence */
+}

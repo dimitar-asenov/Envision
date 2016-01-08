@@ -59,4 +59,4 @@ Interaction::CommandResult* CProbe::execute(Visualization::Item*, Visualization:
 	return JavaDebugger::instance().probe(itemList, arguments, itemIndex);
 }
 
-} /* namespace OODebug */
+}

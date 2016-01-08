@@ -30,4 +30,4 @@ namespace OODebug {
 
 Reply::~Reply() {}
 
-} /* namespace OODebug */
+}

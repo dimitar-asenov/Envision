@@ -42,4 +42,4 @@ class INFORMATIONSCRIPTING_API TagExtension
 
 };
 
-} /* namespace InformationScripting */
+}

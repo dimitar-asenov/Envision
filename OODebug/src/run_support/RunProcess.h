@@ -53,4 +53,4 @@ class OODEBUG_API RunProcess {
 
 inline QProcess* RunProcess::process() const { return managedProcess_; }
 
-} /* namespace OODebug */
+}

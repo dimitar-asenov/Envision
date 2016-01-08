@@ -59,4 +59,4 @@ static MessageType makeReply(QByteArray data)
 	return r;
 }
 
-} /* namespace OODebug */
+}

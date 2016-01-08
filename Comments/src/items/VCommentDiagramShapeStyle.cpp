@@ -42,4 +42,4 @@ const QColor VCommentDiagramShapeSequenceStyle::colorFromName(const QString& col
 	return QColor(colorName);
 }
 
-} /* namespace Comments */
+}

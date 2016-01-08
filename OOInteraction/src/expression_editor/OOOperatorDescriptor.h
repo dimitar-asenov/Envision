@@ -91,4 +91,4 @@ OOModel::Expression* OOOperatorDescriptor::assignment(const QList<OOModel::Expre
 	return opr;
 }
 
-} /* namespace OOInteraction */
+}

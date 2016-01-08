@@ -72,4 +72,4 @@ Export::ExportMapContainer& JavaExporter::exportMaps()
 	return *container;
 }
 
-} /* namespace JavaExport */
+}

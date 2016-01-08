@@ -64,4 +64,4 @@ inline T* SourceFile::append(T* fragment) { Q_ASSERT(fragment); fragments_.appen
 inline TextFragment* SourceFile::append(Model::Node* node, const QString& text)
 { return append(new TextFragment(node, text)); }
 
-} /* namespace Export */
+}

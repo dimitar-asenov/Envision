@@ -71,4 +71,4 @@ template<typename Enum> constexpr typename
 std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
 MessagePart::cast(Enum enumValue) { return static_cast<typename std::underlying_type<Enum>::type>(enumValue); }
 
-} /* namespace OODebug */
+}

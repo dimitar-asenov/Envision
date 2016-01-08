@@ -61,4 +61,4 @@ void ExportMapContainer::remove(Model::Node* node)
 	map_.remove(node);
 }
 
-} /* namespace Export */
+}

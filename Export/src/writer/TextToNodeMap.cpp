@@ -53,4 +53,4 @@ void TextToNodeMap::add(Model::Node* node, SourceLocation location)
 		mappedFiles_ << location.filename_;
 }
 
-} /* namespace Export */
+}

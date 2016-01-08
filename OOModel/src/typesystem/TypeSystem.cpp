@@ -48,4 +48,4 @@ TypeSystem::TypeRelations TypeSystem::invert(TypeRelations relation)
 	return ret;
 }
 
-} /* namespace OOModel */
+}

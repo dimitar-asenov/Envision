@@ -55,4 +55,4 @@ void VCommentStatementItem::updateGeometry(int availableWidth, int availableHeig
 	Item::updateGeometry(comment_, availableWidth, availableHeight);
 }
 
-} /* namespace OOVisualization */
+}

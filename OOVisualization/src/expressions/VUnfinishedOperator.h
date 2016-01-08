@@ -56,4 +56,4 @@ class OOVISUALIZATION_API VUnfinishedOperator : public Super<VExpression<VUnfini
 		QVector<Visualization::Item*> operands_;
 };
 
-} /* namespace OOVisualization */
+}

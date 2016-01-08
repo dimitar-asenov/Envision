@@ -59,4 +59,4 @@ void ChangeMonitor::expressionModified(OOModel::Expression*& exp, int& cursorInd
 	cursorIndex += (v.numWrapped() - v.numUnwrapped())*length;
 }
 
-} /* namespace ContractsLibrary */
+}

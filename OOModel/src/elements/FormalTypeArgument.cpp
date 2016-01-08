@@ -47,4 +47,4 @@ FormalTypeArgument::FormalTypeArgument(const QString& name, Expression* subtype,
 	if (supertype) setSuperTypeOfExpression(supertype);
 }
 
-} /* namespace OOModel */
+}

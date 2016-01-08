@@ -58,4 +58,4 @@ Interaction::CommandResult* CCreateShape::executeNamed(Visualization::Item*, Vis
 	return new Interaction::CommandResult();
 }
 
-} /* namespace OOInteraction */
+}

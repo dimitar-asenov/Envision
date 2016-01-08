@@ -65,4 +65,4 @@ void VCatchClause::initializeForms()
 			->put(TheBottomOf, shapeElement, 2, FromBottomOf, body));
 }
 
-} /* namespace OOVisualization */
+}

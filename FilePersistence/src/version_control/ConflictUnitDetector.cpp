@@ -369,4 +369,4 @@ void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<Chang
 	}
 }
 
-} /* namespace FilePersistence */
+}

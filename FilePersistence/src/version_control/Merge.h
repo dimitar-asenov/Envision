@@ -132,4 +132,4 @@ inline bool Merge::hasConflicts() const { return !conflictingChanges_.isEmpty();
 
 inline const QSet<std::shared_ptr<ChangeDescription>> Merge::getConflicts() const { return conflictingChanges_; }
 
-} /* namespace FilePersistence */
+}

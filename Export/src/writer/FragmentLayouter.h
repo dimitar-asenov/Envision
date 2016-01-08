@@ -80,4 +80,4 @@ class EXPORT_API FragmentLayouter {
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FragmentLayouter::IndentationFlags)
 
-} /* namespace Export */
+}

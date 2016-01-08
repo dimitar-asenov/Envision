@@ -51,4 +51,4 @@ Type* GlobalScopeExpression::type()
 		return new ErrorType("Global scope expression used in a tree without a root declaration");
 }
 
-} /* namespace OOModel */
+}

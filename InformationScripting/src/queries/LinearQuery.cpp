@@ -41,4 +41,4 @@ QList<Optional<TupleSet> > LinearQuery::execute(QList<TupleSet> input)
 	return result;
 }
 
-} /* namespace InformationScripting */
+}

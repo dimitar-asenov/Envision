@@ -395,4 +395,4 @@ QStringList GridBasedOffsetProvider::components()
 	return components;
 }
 
-} /* namespace OOInteraction */
+}

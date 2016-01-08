@@ -71,4 +71,4 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 
 inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}
 
-} /* namespace Comments */
+}

@@ -73,4 +73,4 @@ QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualizat
 	return s;
 }
 
-} /* namespace OOInteraction */
+}

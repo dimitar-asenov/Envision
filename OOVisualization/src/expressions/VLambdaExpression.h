@@ -68,4 +68,4 @@ inline Visualization::VList* VLambdaExpression::arguments() const { return argum
 inline Visualization::Static* VLambdaExpression::icon() const { return icon_; }
 inline VStatementItemList* VLambdaExpression::body() const { return body_; }
 
-} /* namespace OOVisualization */
+}

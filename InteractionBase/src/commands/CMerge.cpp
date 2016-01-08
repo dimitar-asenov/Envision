@@ -111,4 +111,4 @@ QStringList CMerge::possibleNames(Visualization::Item* /*source*/, Visualization
 	return QStringList();
 }
 
-} /* namespace Interaction */
+}

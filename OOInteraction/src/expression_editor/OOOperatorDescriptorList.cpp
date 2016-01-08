@@ -510,4 +510,4 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 }
 
 
-} /* namespace OOInteraction */
+}

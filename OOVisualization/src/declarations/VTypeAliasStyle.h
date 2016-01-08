@@ -47,4 +47,4 @@ class OOVISUALIZATION_API VTypeAliasStyle : public Super<Visualization::Declarat
 };
 
 
-} /* namespace OOVisualization */
+}

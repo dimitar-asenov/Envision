@@ -66,4 +66,4 @@ Type* SuperExpression::type()
 	return new ErrorType("Invalid position for 'super' expression. Not within a class.");
 }
 
-} /* namespace OOModel */
+}

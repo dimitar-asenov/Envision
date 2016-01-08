@@ -235,4 +235,4 @@ StringOffsetProvider* StringOffsetProvider::defaultProvider(Visualization::Item*
 	return nullptr;
 }
 
-} /* namespace OOInteraction */
+}

@@ -55,4 +55,4 @@ class COMMENTS_API CommentDiagram : public Super<Model::CompositeNode> {
 		void removeShape(CommentDiagramShape* shape);
 };
 
-} /* namespace Comments */
+}

@@ -43,4 +43,4 @@ class JAVAEXPORT_API CJavaExport : public Interaction::CommandWithFlags
 				const QString& name, const QStringList& attributes) override;
 };
 
-} /* namespace JavaExport */
+}

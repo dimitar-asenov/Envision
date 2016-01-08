@@ -69,4 +69,4 @@ inline void HighlightOverlay::setText(const QString& text) { info_->setText(text
 inline QColor HighlightOverlay::customShapeColor() const { return color_; }
 inline void HighlightOverlay::setColor(const QColor& color) { color_ = color; }
 
-} /* namespace InformationScripting */
+}

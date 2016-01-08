@@ -47,4 +47,4 @@ class JAVAEXPORT_API JavaExporter {
 		static Export::ExportMapContainer& exportMaps();
 };
 
-} /* namespace JavaExport */
+}

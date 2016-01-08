@@ -54,4 +54,4 @@ class INFORMATIONSCRIPTING_API QueryExecutor
 
 inline void QueryExecutor::setVisualizationExecuted() { defaultVisualize_ = false; }
 
-} /* namespace InformationScripting */
+}

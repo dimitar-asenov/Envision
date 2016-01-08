@@ -59,4 +59,4 @@ inline const Visualization::VListStyle& VFunctionTypeStyle::arguments() const { 
 inline const Visualization::StaticStyle& VFunctionTypeStyle::resultSymbol() const {return resultSymbol_;}
 inline const Visualization::VListStyle& VFunctionTypeStyle::results() const {return results_;}
 
-} /* namespace OOVisualization */
+}

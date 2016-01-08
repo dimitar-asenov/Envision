@@ -155,4 +155,4 @@ void ColorPicker::setColorPickerType(ColorPickerType type)
 	type_ = type;
 }
 
-} /* namespace Comments */
+}

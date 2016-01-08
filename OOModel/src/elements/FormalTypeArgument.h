@@ -51,4 +51,4 @@ class OOMODEL_API FormalTypeArgument : public Super<Model::CompositeNode>
 		FormalTypeArgument(const QString& name, Expression* subtype = nullptr, Expression* supertype = nullptr);
 };
 
-} /* namespace OOModel */
+}

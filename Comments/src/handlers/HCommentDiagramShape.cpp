@@ -203,4 +203,4 @@ void HCommentDiagramShape::resizeBy(VCommentDiagramShape* shape, QSize size)
 	shape->node()->endModification();
 }
 
-} /* namespace Comments */
+}

@@ -46,4 +46,4 @@ QString SourceFile::path() const
 	return (parent_? parent_->path() : "") + name_;
 }
 
-} /* namespace Export */
+}

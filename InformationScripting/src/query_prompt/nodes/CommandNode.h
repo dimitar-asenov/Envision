@@ -48,4 +48,4 @@ class INFORMATIONSCRIPTING_API CommandNode : public Super<QueryNode>
 		CommandNode(const QString& name);
 };
 
-} /* namespace InformationScripting */
+}

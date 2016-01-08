@@ -60,4 +60,4 @@ class COMMENTS_API VCommentDiagramConnector: public Super<Visualization::ItemWit
 		bool endArrow_{};
 };
 
-} /* namespace Comments */
+}

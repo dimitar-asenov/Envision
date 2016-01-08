@@ -52,4 +52,4 @@ OOModel::EmptyExpression>>
 		Visualization::Static* vis_;
 };
 
-} /* namespace OOVisualization */
+}

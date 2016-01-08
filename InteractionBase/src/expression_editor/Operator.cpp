@@ -290,4 +290,4 @@ Expression* Operator::findCutExpression(bool leftside, QString cut_string)
 	return result;
 }
 
-} /* namespace InteractionBase */
+}

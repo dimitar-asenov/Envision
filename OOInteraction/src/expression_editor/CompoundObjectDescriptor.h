@@ -54,4 +54,4 @@ class OOINTERACTION_API CompoundObjectDescriptor : public OOOperatorDescriptor {
 		static constexpr int NUM_SIGNATURE_SYMBOLS = 8;
 };
 
-} /* namespace OOInteraction */
+}

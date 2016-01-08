@@ -47,4 +47,4 @@ class ConflictPipelineComponent
 
 inline ConflictPipelineComponent::~ConflictPipelineComponent() {}
 
-} /* namespace FilePersistence */
+}

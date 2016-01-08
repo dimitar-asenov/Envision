@@ -110,4 +110,4 @@ bool ContractFilter::isPotentiallyAContractStatement(OOModel::StatementItem* sta
 	return false;
 }
 
-} /* namespace ContractsLibrary */
+}

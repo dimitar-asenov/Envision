@@ -57,4 +57,4 @@ class INFORMATIONSCRIPTING_API Join : public LinearQuery
 		using TaggedValue = std::pair<QString, QString>;
 };
 
-} /* namespace InformationScripting */
+}

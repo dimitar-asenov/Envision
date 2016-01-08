@@ -57,4 +57,4 @@ class COMMENTS_API VCommentFreeNode : public Super<Visualization::ItemWithNode<V
 		QGraphicsColorizeEffect* anEffect_{};
 };
 
-} /* namespace Comments */
+}

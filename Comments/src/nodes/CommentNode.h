@@ -62,4 +62,4 @@ class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
 		void synchronizeItem(QString aString, T aList, AppendFunction appendFunction);
 };
 
-} /* namespace Comments */
+}

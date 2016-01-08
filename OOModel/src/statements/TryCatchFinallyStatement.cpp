@@ -39,4 +39,4 @@ REGISTER_ATTRIBUTE(TryCatchFinallyStatement, catchClauses, TypedListOfCatchClaus
 REGISTER_ATTRIBUTE(TryCatchFinallyStatement, finallyBody, StatementItemList, false, false, true)
 
 
-} /* namespace OOModel */
+}

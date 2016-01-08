@@ -82,4 +82,4 @@ class INTERACTIONBASE_API Parser {
 		const OperatorDescriptorList* ops_;
 };
 
-} /* namespace InteractionBase */
+}

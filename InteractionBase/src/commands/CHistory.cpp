@@ -112,4 +112,4 @@ void CHistory::printCommitMetaData(CommitMetaData& data) const
 	std::cout << std::endl;
 }
 
-} /* namespace Interaction */
+}

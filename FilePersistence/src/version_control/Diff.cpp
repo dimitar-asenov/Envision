@@ -154,4 +154,4 @@ void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 	}
 }
 
-} /* namespace FilePersistence */
+}

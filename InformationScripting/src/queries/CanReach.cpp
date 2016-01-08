@@ -117,4 +117,4 @@ std::vector<Tuple> CanReach::neighbors(const Tuple& t)
 	return neighbors;
 }
 
-} /* namespace InformationScripting */
+}

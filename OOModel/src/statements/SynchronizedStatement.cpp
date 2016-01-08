@@ -37,4 +37,4 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SynchronizedStatement)
 REGISTER_ATTRIBUTE(SynchronizedStatement, expression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(SynchronizedStatement, body, StatementItemList, false, false, true)
 
-} /* namespace OOModel */
+}

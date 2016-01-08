@@ -52,4 +52,4 @@ class OOINTERACTION_API CCreateModule : public Interaction::CreateNamedObjectWit
 				const std::unique_ptr<Visualization::Cursor>& cursor);
 };
 
-} /* namespace OOInteraction */
+}

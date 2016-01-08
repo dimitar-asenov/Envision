@@ -84,4 +84,4 @@ Modifier::Modifiers Modifier::fromInt(int val)
 	return static_cast<Modifiers>(val);
 }
 
-} /* namespace OOModel */
+}

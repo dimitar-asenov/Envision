@@ -36,4 +36,4 @@ void VUnfinishedOperatorStyle::load(Visualization::StyleLoader& sl)
 	sl.load("delimiters", delimiters_);
 }
 
-} /* namespace OOVisualization */
+}

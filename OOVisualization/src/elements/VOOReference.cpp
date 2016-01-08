@@ -46,4 +46,4 @@ bool VOOReference::setText(const QString&)
 	return false;
 }
 
-} /* namespace OOVisualization */
+}

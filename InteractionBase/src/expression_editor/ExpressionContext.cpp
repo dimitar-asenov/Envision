@@ -77,4 +77,4 @@ bool ExpressionContext::isRightDelimPostfix()
 	return right_delim_ == rightOp()->size();
 }
 
-} /* namespace InteractionBase */
+}

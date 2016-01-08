@@ -53,4 +53,4 @@ class COMMENTS_API VCommentDiagramSequenceStyle : public Super<Visualization::It
 		Property<QVector<VCommentDiagramStyle>> colors{this, "colors"};
 };
 
-} /* namespace Comments */
+}

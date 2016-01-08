@@ -30,4 +30,4 @@ namespace Interaction {
 
 AutoCompleteVisStyle::~AutoCompleteVisStyle(){}
 
-} /* namespace Interaction */
+}

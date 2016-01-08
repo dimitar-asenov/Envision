@@ -75,4 +75,4 @@ class INFORMATIONSCRIPTING_API QueryBuilder : public Model::Visitor<QueryBuilder
 		static void connectAsSplit(CompositeQuery* composite, Query* left, CompositeQuery* right);
 };
 
-} /* namespace InformationScripting */
+}

@@ -57,4 +57,4 @@ class OOVISUALIZATION_API VMemberInitializer
 		Visualization::VList* arguments_{};
 };
 
-} /* namespace OOVisualization */
+}

@@ -46,4 +46,4 @@ class OODEBUG_API CJavaRun : public Interaction::CommandWithFlags
 										  const std::unique_ptr<Visualization::Cursor> &cursor) override;
 };
 
-} /* namespace OODebug */
+}

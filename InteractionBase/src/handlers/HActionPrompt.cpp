@@ -130,4 +130,4 @@ bool HActionPrompt::tryExecutingAction(ActionPrompt *prompt, bool requirePrecise
 	return false;
 }
 
-} /* namespace Interaction */
+}

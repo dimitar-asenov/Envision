@@ -59,4 +59,4 @@ QList<Visualization::Item*> SignatureContractsVMethodAddOn::determineItems(Visua
 	return result;
 }
 
-} /* namespace ContractsLibrary */
+}

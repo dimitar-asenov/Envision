@@ -97,4 +97,4 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }
 inline const QString& GenericPersistentUnit::name() const { return name_; }
 
-} /* namespace FilePersistence */
+}

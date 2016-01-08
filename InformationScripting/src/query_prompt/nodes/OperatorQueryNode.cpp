@@ -38,4 +38,4 @@ REGISTER_ATTRIBUTE(OperatorQueryNode, left, QueryNode, false, false, true)
 REGISTER_ATTRIBUTE(OperatorQueryNode, right, QueryNode, false, false, true)
 REGISTER_ATTRIBUTE(OperatorQueryNode, opr, Character, false, false, true)
 
-} /* namespace InformationScripting */
+}

@@ -53,4 +53,4 @@ QProcess* RunProcess::replaceProcess()
 }
 
 
-} /* namespace OODebug */
+}

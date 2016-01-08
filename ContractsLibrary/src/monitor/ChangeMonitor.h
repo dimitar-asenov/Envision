@@ -59,4 +59,4 @@ class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
 		void nodesModified(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 };
 
-} /* namespace ContractsLibrary */
+}

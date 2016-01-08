@@ -43,4 +43,4 @@ class COMMENTS_API CCreateShape : public Interaction::CreateNamedObjectWithAttri
 			const QString& name, const QStringList& attributes) override;
 };
 
-} /* namespace Comments */
+}

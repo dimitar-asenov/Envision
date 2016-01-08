@@ -46,4 +46,4 @@ OOModel::Expression* OOOperatorDescriptor::create(const QList<OOModel::Expressio
 	return createFunction_(operands);
 }
 
-} /* namespace OOInteraction */
+}

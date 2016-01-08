@@ -127,4 +127,4 @@ void CustomizationVisitor::onSceneRefresh(Visualization::Scene* scene)
 				customizations.visit(viewItemNode->reference());
 }
 
-} /* namespace OOInteraction */
+}

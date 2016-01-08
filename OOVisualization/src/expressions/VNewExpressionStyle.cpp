@@ -29,4 +29,4 @@ namespace OOVisualization {
 
 VNewExpressionStyle::~VNewExpressionStyle() {}
 
-} /* namespace OOVisualization */
+}

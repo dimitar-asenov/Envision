@@ -344,4 +344,4 @@ int PlotOverlay::drawnTextHeight()
 	return qfm.height();
 }
 
-} /* namespace OODebug */
+}

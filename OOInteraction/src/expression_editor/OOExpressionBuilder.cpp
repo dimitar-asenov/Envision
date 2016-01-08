@@ -183,4 +183,4 @@ void OOExpressionBuilder::createErrorExpression(Interaction::Operator* op)
 	expression = error;
 }
 
-} /* namespace InteractionBase */
+}

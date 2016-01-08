@@ -54,4 +54,4 @@ inline Model::Node* Query::target() const { return target_; }
 inline void Query::setHasInput() { hasInput_ = true; }
 inline bool Query::hasInput() const { return hasInput_; }
 
-} /* namespace InformationScripting */
+}

@@ -66,4 +66,4 @@ void TupleSet::unite(const TupleSet& with)
 		tuples_[it.key()].unite(it.value());
 }
 
-} /* namespace InformationScripting */
+}

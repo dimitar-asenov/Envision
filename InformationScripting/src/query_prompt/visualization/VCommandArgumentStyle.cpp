@@ -31,4 +31,4 @@ namespace InformationScripting {
 VCommandArgumentStyle::~VCommandArgumentStyle()
 {}
 
-} /* namespace InformationScripting */
+}

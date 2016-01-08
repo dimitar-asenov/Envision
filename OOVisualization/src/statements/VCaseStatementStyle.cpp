@@ -38,4 +38,4 @@ void VCaseStatementStyle::load(Visualization::StyleLoader& sl)
 	sl.load("statements", statements_);
 }
 
-} /* namespace OOVisualization */
+}

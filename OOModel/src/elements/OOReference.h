@@ -68,4 +68,4 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 
 };
 
-} /* namespace OOModel */
+}

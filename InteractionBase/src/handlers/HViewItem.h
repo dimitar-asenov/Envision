@@ -43,4 +43,4 @@ class INTERACTIONBASE_API HViewItem : public GenericHandler
 		HViewItem();
 };
 
-} /* namespace Interaction */
+}

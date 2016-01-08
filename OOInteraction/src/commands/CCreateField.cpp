@@ -75,4 +75,4 @@ Interaction::CommandResult* CCreateField::executeNamed(Visualization::Item* /*so
 	return new Interaction::CommandResult();
 }
 
-} /* namespace OOInteraction */
+}

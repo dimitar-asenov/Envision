@@ -59,4 +59,4 @@ class OOVISUALIZATION_API VExplicitTemplateInstantiation
 		Visualization::Item* reference_{};
 };
 
-} /* namespace OOVisualization */
+}

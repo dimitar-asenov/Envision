@@ -85,4 +85,4 @@ RuntimeQuery::RuntimeQuery(Model::Node* target, QStringList, QueryExecutor* exec
 	: LinearQuery{target}, executor_{executor}
 {}
 
-} /* namespace InformationScripting */
+}

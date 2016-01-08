@@ -41,4 +41,4 @@ class OOINTERACTION_API HArrayInitializer : public HExpression {
 		static HArrayInitializer* instance();
 };
 
-} /* namespace Interaction */
+}

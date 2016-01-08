@@ -54,4 +54,4 @@ class INFORMATIONSCRIPTING_API Heatmap : public LinearQuery
 		QColor colorForValue(int value);
 };
 
-} /* namespace InformationScripting */
+}

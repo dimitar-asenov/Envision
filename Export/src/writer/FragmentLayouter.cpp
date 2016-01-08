@@ -122,4 +122,4 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	if (rule.first.testFlag(BackslashAfterLines)) writer_->appendBackslashToLinesAfter(bytesWrittenSoFar);
 }
 
-} /* namespace Export */
+}

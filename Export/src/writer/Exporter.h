@@ -45,4 +45,4 @@ class EXPORT_API Exporter {
 		static void saveFile(QDir& fileSystemDir, SourceFile* sourceFile, FragmentLayouter* layouter, TextToNodeMap* map);
 };
 
-} /* namespace Export */
+}

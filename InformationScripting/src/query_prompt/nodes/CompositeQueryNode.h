@@ -41,4 +41,4 @@ class INFORMATIONSCRIPTING_API CompositeQueryNode : public Super<QueryNode>
 	ATTRIBUTE(Model::TypedList<QueryNode>, queries, setQueries)
 };
 
-} /* namespace InformationScripting */
+}

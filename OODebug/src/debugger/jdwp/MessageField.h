@@ -158,4 +158,4 @@ operator<<(QDataStream& stream, T& val)
 	return stream << rawValue;
 }
 
-} /* namespace OODebug */
+}

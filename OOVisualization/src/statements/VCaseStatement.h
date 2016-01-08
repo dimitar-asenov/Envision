@@ -69,4 +69,4 @@ inline Visualization::Static* VCaseStatement::icon() const {return icon_;}
 inline Visualization::NodeWrapper* VCaseStatement::caseExpression() const { return caseExpression_; }
 inline VStatementItemList* VCaseStatement::statements() const { return statements_; }
 
-} /* namespace OOVisualization */
+}

@@ -148,4 +148,4 @@ void CommentNode::synchronizeTablesToText()
 		tables()->append(new CommentTable(nullptr, newTable, mapRows.value(newTable), mapColumns.value(newTable)));
 }
 
-} /* namespace Comments */
+}

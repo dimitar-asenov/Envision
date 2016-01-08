@@ -51,4 +51,4 @@ void ExpressionVisitor::visitChildren(Operator* op)
 		e->accept(this);
 }
 
-} /* namespace InteractionBase */
+}

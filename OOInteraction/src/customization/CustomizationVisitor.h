@@ -65,4 +65,4 @@ class OOINTERACTION_API CustomizationVisitor : public Model::Visitor<Customizati
 		static QList<CommandExpression*> registeredCommands_;
 };
 
-} /* namespace OOInteraction */
+}

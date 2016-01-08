@@ -105,4 +105,4 @@ QString FileWriter::fileContents()
 	return renderedFile_;
 }
 
-} /* namespace Export */
+}

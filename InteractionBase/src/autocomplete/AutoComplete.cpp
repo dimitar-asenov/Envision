@@ -86,4 +86,4 @@ AutoCompleteVis* AutoComplete::visualization()
 	return vis_;
 }
 
-} /* namespace Interaction */
+}

@@ -73,4 +73,4 @@ inline uint qHash(const LinkedChanges& linkedChanges, uint seed = 0)
 	return ::qHash(linkedChanges.get(), seed);
 }
 
-} /* namespace FilePersistence */
+}

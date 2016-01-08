@@ -86,4 +86,4 @@ CompilerFeedback CompilerOutputParser::parseJavacErrorFormat(const QString& outp
 	return CompilerFeedback(messages);
 }
 
-} /* namespace OODebug */
+}

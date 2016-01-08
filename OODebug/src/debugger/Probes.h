@@ -41,4 +41,4 @@ class OODEBUG_API Probes {
 		static ValueOperator operatorFromString(QString operatorString);
 };
 
-} /* namespace OODebug */
+}

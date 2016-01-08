@@ -55,4 +55,4 @@ void VDeclarationStatement::updateGeometry(int availableWidth, int availableHeig
 	Item::updateGeometry(decl_, availableWidth, availableHeight);
 }
 
-} /* namespace OOVisualization */
+}

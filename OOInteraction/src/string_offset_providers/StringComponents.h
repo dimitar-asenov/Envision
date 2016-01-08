@@ -126,4 +126,4 @@ void StringComponents::c_helper(QStringList& result, Optional str, Args... args)
 	c_helper(result, args...);
 }
 
-} /* namespace OOInteraction */
+}

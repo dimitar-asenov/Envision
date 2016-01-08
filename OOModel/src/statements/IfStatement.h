@@ -48,4 +48,4 @@ class OOMODEL_API IfStatement: public Super<Statement>
 				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 };
 
-} /* namespace OOModel */
+}

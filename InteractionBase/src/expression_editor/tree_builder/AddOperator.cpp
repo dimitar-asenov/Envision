@@ -59,4 +59,4 @@ void AddOperator::perform(ExpressionTreeBuilder& tb)
 }
 
 
-} /* namespace InteractionBase */
+}

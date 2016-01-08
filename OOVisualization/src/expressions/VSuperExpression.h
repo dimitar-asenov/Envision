@@ -55,4 +55,4 @@ OOModel::SuperExpression>>
 
 inline Visualization::Static* VSuperExpression::item() const { return vis_;}
 
-} /* namespace OOVisualization */
+}

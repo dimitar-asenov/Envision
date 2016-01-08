@@ -268,4 +268,4 @@ QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization:
 	return names;
 }
 
-} /* namespace Interaction */
+}

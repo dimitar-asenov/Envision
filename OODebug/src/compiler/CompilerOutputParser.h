@@ -43,4 +43,4 @@ class OODEBUG_API CompilerOutputParser
 
 };
 
-} /* namespace OODebug */
+}

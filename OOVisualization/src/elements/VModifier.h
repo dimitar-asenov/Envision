@@ -49,4 +49,4 @@ class OOVISUALIZATION_API VModifier
 		virtual QString currentText() override;
 };
 
-} /* namespace OOVisualization */
+}

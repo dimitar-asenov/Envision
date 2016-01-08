@@ -158,4 +158,4 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	if (!event->isAccepted()) HStatement::keyPressEvent(target, event);
 }
 
-} /* namespace OOInteraction */
+}

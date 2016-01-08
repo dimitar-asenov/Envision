@@ -87,4 +87,4 @@ void OutlineTypePicker::setselectedOutlineType(int aType)
 	this->setIcon(pixList_.at(aType));
 }
 
-} /* namespace Comments */
+}

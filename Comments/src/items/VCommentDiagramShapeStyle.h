@@ -49,4 +49,4 @@ class COMMENTS_API VCommentDiagramShapeSequenceStyle : public Super<Visualizatio
 		Property<QVector<VCommentDiagramShapeStyle>> colors{this, "colors"};
 };
 
-} /* namespace Comments */
+}

@@ -42,4 +42,4 @@ int Event::kind() const { return static_cast<int>(eventKind()); }
 
 CompositeCommand::~CompositeCommand() {}
 
-} /* namespace OODebug */
+}

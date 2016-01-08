@@ -56,4 +56,4 @@ void ListCell::setOffset(int newOffset)
 			prefix_, separator_, postfix_);
 }
 
-} /* namespace OOInteraction */
+}

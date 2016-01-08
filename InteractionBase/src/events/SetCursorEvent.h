@@ -76,4 +76,4 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 		bool showPrompt_{false};
 };
 
-} /* namespace Interaction */
+}

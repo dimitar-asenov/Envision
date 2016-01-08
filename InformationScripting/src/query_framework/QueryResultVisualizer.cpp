@@ -246,4 +246,4 @@ void QueryResultVisualizer::setColor(HighlightOverlay* overlay, QColor color)
 }
 
 
-} /* namespace InformationScripting */
+}

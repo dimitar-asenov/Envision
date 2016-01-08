@@ -47,4 +47,4 @@ class OOMODEL_API PointerType : public Type {
 };
 
 inline const Type* PointerType::baseType() const { return baseType_; }
-} /* namespace OOModel */
+}

@@ -58,4 +58,4 @@ class COMMENTS_API CommentTable : public Super<Model::CompositeNode>
 		void resize(int m, int n);
 };
 
-} /* namespace Comments */
+}

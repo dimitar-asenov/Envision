@@ -48,4 +48,4 @@ void ConflictPairs::remove(std::shared_ptr<ChangeDescription>& changeA,
 	pairs_.remove(changeB, changeA);
 }
 
-} /* namespace FilePersistence */
+}

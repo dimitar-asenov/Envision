@@ -183,4 +183,4 @@ QList<TupleSet> ScriptQuery::extractResult(QList<Optional<TupleSet>> result, con
 	return noErrorResult;
 }
 
-} /* namespace InformationScripting */
+}

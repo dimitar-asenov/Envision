@@ -108,4 +108,4 @@ inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments..
 
 inline QStringList QueryRegistry::registeredQueries() const { return constructors_.keys(); }
 
-} /* namespace InformationScripting */
+}

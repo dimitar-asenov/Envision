@@ -61,4 +61,4 @@ inline Visualization::Item* VOperatorQueryNode::left() const { return left_; }
 inline Visualization::Static* VOperatorQueryNode::op() const { return op_; }
 inline Visualization::Item* VOperatorQueryNode::right() const { return right_; }
 
-} /* namespace InformationScripting */
+}

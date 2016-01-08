@@ -32,4 +32,4 @@ ExpressionTreeBuildInstruction::~ExpressionTreeBuildInstruction()
 {
 }
 
-} /* namespace InteractionBase */
+}

@@ -295,4 +295,4 @@ void AutoCompleteVis::updateSelection()
 	}
 }
 
-} /* namespace Interaction */
+}

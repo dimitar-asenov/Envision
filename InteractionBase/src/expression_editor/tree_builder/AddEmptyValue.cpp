@@ -38,4 +38,4 @@ void AddEmptyValue::perform(ExpressionTreeBuilder& tb)
 	else tb.top() = tb.left();
 }
 
-} /* namespace InteractionBase */
+}

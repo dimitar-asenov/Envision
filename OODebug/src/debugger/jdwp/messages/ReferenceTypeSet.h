@@ -74,4 +74,4 @@ struct SourceFile : public Reply {
 		MessageField<QString> sourceFile{&SourceFile::sourceFile, this};
 };
 
-} /* namespace OODebug */
+}

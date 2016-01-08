@@ -46,4 +46,4 @@ class INTERACTIONBASE_API CFind : public Command
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
-} /* namespace Interaction */
+}

@@ -30,4 +30,4 @@ namespace Interaction {
 
 ActionPromptStyle::~ActionPromptStyle(){} // Put the VTable here
 
-} /* namespace Interaction */
+}

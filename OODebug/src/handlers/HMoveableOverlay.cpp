@@ -61,4 +61,4 @@ void HMoveableOverlay::move(Visualization::Item* overlay, const QPointF& to)
 	overlay->setPos(dest);
 }
 
-} /* namespace OODebug */
+}

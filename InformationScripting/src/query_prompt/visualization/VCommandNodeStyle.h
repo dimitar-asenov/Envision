@@ -42,4 +42,4 @@ class INFORMATIONSCRIPTING_API VCommandNodeStyle : public Super<Visualization::D
 	Property<Visualization::VListStyle> arguments{this, "arguments"};
 };
 
-} /* namespace InformationScripting */
+}

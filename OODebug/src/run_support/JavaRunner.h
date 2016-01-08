@@ -65,4 +65,4 @@ class OODEBUG_API JavaRunner
 		static RunProcess& runProcess();
 };
 
-} /* namespace OODebug */
+}

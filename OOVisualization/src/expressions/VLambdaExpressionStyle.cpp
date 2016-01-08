@@ -38,4 +38,4 @@ void VLambdaExpressionStyle::load(Visualization::StyleLoader& sl)
 	sl.load("body", body_);
 }
 
-} /* namespace OOVisualization */
+}

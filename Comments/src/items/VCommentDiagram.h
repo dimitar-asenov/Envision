@@ -99,4 +99,4 @@ inline QPair<int, int> VCommentDiagram::lastConnector() const { return lastConne
 inline void VCommentDiagram::setLastConnector(int shape, int point) { lastConnector_ = qMakePair(shape, point); }
 inline VCommentDiagramShape* VCommentDiagram::diagramShape(int index) { return shapes_.at(index);}
 
-} /* namespace Comments */
+}

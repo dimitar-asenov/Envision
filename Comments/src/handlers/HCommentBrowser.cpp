@@ -51,4 +51,4 @@ void HCommentBrowser::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
 	//Propagating at least some events is necessary for updating an InfoNode
 }
 
-} /* namespace Comments */
+}

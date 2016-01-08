@@ -44,4 +44,4 @@ class OOINTERACTION_API CreateMethodCall : public CommandExpression {
 
 };
 
-} /* namespace OOInteraction */
+}

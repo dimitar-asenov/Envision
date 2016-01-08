@@ -125,4 +125,4 @@ UnfinishedOperator* UnfinishedOperator::replaceFinishedWithUnfinished(Expression
 	return unf;
 }
 
-} /* namespace InteractionBase */
+}

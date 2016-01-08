@@ -83,4 +83,4 @@ inline bool Action::isPrefix(const QString& str) const { return shortcut_.starts
 
 template<typename T> inline void Action::add(Action* action) { actions(T::typeIdStatic()).append(action);}
 
-} /* namespace Interaction */
+}

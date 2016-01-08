@@ -65,4 +65,4 @@ BreakpointManager::BreakpointManager(Model::Node* target, QStringList args)
 {}
 
 
-} /* namespace InformationScripting */
+}

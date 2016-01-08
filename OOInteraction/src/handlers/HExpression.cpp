@@ -689,4 +689,4 @@ void HExpression::doAutoComplete(Item* target, const QString& autoCompleteStr)
 	setNewExpression(target, topMostItem, newText, newIndex);
 }
 
-} /* namespace OOInteraction */
+}

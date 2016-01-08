@@ -428,4 +428,4 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 	Q_ASSERT(!methods.isEmpty());
 }
 
-} /* namespace OOModel */
+}

@@ -48,4 +48,4 @@ class OODEBUG_API HMoveableOverlay : public Interaction::GenericHandler
 		void move(Visualization::Item* overlay, const QPointF& to);
 };
 
-} /* namespace OODebug */
+}

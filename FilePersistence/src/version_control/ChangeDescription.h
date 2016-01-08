@@ -143,4 +143,4 @@ inline uint qHash(const std::shared_ptr<const ChangeDescription> change, uint se
 
 inline bool ChangeDescription::debugHasNodes() { return nodeA_ || nodeB_; }
 
-} /* namespace FilePersistence */
+}

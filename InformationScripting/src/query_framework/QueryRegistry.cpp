@@ -83,4 +83,4 @@ std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromScript(const QString& nam
 	return nullptr;
 }
 
-} /* namespace InformationScripting */
+}

@@ -53,4 +53,4 @@ class INFORMATIONSCRIPTING_API OperatorQueryNode : public Super<QueryNode>
 inline OperatorQueryNode::OperatorTypes OperatorQueryNode::op() const { return static_cast<OperatorTypes>(opr()); }
 inline void OperatorQueryNode::setOp(const OperatorQueryNode::OperatorTypes& oper) { setOpr(static_cast<int>(oper)); }
 
-} /* namespace InformationScripting */
+}

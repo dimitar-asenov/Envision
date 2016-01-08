@@ -51,4 +51,4 @@ class OOVISUALIZATION_API VCommentStatementItem
 		Visualization::Item* comment_;
 };
 
-} /* namespace OOVisualization */
+}

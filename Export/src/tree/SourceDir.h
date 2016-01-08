@@ -66,4 +66,4 @@ inline QList<SourceDir>& SourceDir::directories() { return directories_; }
 inline QList<SourceFile>& SourceDir::files() { return files_; }
 inline QString SourceDir::path() const { return (parent_? parent_->path() : "") + name_ + "/";}
 
-} /* namespace Export */
+}

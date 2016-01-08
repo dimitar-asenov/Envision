@@ -89,4 +89,4 @@ void VUnfinishedOperator::determineChildren()
 	}
 }
 
-} /* namespace OOVisualization */
+}

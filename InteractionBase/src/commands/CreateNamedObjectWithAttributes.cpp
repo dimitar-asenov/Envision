@@ -46,4 +46,4 @@ QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggestNamed(Visualiz
 	return {new CommandSuggestion(commandText, explanation)};
 }
 
-} /* namespace OOInteraction */
+}

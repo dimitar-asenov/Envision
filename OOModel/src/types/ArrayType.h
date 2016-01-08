@@ -48,4 +48,4 @@ class OOMODEL_API ArrayType : public Type {
 };
 
 inline const Type* ArrayType::elementType() const { return elementType_; }
-} /* namespace OOModel */
+}

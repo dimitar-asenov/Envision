@@ -71,4 +71,4 @@ ExpressionContext Value::findContext(int cursor_pos)
 	return c;
 }
 
-} /* namespace InteractionBase */
+}

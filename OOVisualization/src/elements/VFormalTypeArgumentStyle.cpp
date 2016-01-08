@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VFormalTypeArgumentStyle::~VFormalTypeArgumentStyle(){}
 
-} /* namespace OOVisualization */
+}

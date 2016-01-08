@@ -85,4 +85,4 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		return false;
 }
 
-} /* namespace FilePersistence */
+}

@@ -43,4 +43,4 @@ class OODEBUG_API CProbe : public Interaction::Command
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
-} /* namespace OODebug */
+}

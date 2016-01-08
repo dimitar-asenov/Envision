@@ -92,4 +92,4 @@ inline QList<CommitFile*> Commit::files() const { return files_.values(); }
 inline void Commit::setMetaData(CommitMetaData data) { information_ = data; }
 inline CommitMetaData Commit::metaData() const { return information_; }
 
-} /* namespace FilePersistence */
+}

@@ -49,4 +49,4 @@ void VExplicitTemplateInstantiation::initializeForms()
 	);
 }
 
-} /* namespace OOVisualization */
+}

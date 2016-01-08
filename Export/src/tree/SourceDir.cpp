@@ -103,4 +103,4 @@ SourceFile& SourceDir::file(const QString& fileName)
 	return * (foundDir->find(fileName.mid(splitIndex+1), foundDir->files_, true));
 }
 
-} /* namespace Export */
+}

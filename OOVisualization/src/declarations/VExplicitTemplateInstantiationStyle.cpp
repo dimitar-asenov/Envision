@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VExplicitTemplateInstantiationStyle::~VExplicitTemplateInstantiationStyle(){}
 
-} /* namespace OOVisualization */
+}

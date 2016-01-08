@@ -46,4 +46,4 @@ GetValuesCommand::GetValuesCommand(qint64 threadId, qint64 frameId, QList<StackV
 
 GetValuesCommand::~GetValuesCommand() {}
 
-} /* namespace OODebug */
+}

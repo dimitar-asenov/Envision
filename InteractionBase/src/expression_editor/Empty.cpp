@@ -62,4 +62,4 @@ ExpressionContext Empty::findContext(int cursor_pos)
 	return c;
 }
 
-} /* namespace InteractionBase */
+}

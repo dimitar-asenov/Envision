@@ -62,4 +62,4 @@ ExpressionStatement::SymbolTypes ExpressionStatement::symbolType() const
 	return e ? e->symbolType() : UNSPECIFIED;
 }
 
-} /* namespace OOModel */
+}

@@ -37,4 +37,4 @@ void VErrorExpressionStyle::load(Visualization::StyleLoader& sl)
 	sl.load("postfix", postfix_);
 }
 
-} /* namespace OOVisualization */
+}

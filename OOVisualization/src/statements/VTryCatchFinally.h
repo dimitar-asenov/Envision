@@ -67,4 +67,4 @@ class OOVISUALIZATION_API VTryCatchFinally
 		Item* finallyBody_{};
 };
 
-} /* namespace OOVisualization */
+}

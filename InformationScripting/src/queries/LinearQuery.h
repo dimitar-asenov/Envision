@@ -40,4 +40,4 @@ class INFORMATIONSCRIPTING_API LinearQuery : public Query
 		virtual Optional<TupleSet> executeLinear(TupleSet) = 0;
 };
 
-} /* namespace InformationScripting */
+}

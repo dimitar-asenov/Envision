@@ -43,4 +43,4 @@ Type* ConditionalExpression::type()
 	return trueExpression()->type();
 }
 
-} /* namespace OOModel */
+}

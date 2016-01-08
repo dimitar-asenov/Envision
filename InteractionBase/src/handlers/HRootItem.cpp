@@ -76,4 +76,4 @@ void HRootItem::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseE
 	target->setPos(event->scenePos() + offset);
 }
 
-} /* namespace Interaction */
+}

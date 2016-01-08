@@ -57,4 +57,4 @@ class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::Declar
 		Property<Visualization::LineStyle> elseVerticalLine{this, "elseVerticalLine"};
 };
 
-} /* namespace OOVisualization */
+}

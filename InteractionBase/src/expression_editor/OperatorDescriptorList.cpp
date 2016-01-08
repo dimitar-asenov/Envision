@@ -97,4 +97,4 @@ QList<OperatorDescriptor*> OperatorDescriptorList::findByPostfixWithoutPreInfix(
 	return list;
 }
 
-} /* namespace InteractionBase */
+}

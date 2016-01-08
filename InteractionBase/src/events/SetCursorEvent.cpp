@@ -132,4 +132,4 @@ void SetCursorEvent::execute()
 
 }
 
-} /* namespace Interaction */
+}

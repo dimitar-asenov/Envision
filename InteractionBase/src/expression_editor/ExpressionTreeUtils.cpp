@@ -351,4 +351,4 @@ void ExpressionTreeUtils::fixWrongIds(Expression*& top)
 	}
 }
 
-} /* namespace InteractionBase */
+}

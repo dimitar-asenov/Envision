@@ -46,4 +46,4 @@ class OOVISUALIZATION_API VContinueStatementStyle : public Super<Visualization::
 
 inline const Visualization::StaticStyle& VContinueStatementStyle::icon() const { return icon_; }
 
-} /* namespace OOVisualization */
+}

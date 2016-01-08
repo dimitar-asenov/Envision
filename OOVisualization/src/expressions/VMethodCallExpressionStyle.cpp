@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VMethodCallExpressionStyle::~VMethodCallExpressionStyle() {}
 
-} /* namespace OOVisualization */
+}

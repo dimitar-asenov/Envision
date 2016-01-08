@@ -124,4 +124,4 @@ EventClearCommand::EventClearCommand(Protocol::EventKind kind, qint32 requestId)
 
 EventClearCommand::~EventClearCommand() {}
 
-} /* namespace OODebug */
+}

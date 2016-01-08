@@ -542,4 +542,4 @@ bool AstQuery::matchesExpectedType(Model::Node* node, Model::Node::SymbolType sy
 	return false;
 }
 
-} /* namespace InformationScripting */
+}

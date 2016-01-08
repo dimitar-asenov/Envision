@@ -43,4 +43,4 @@ class EXPORT_API SourceFragment {
 
 inline Model::Node* SourceFragment::node() const { return node_; }
 
-} /* namespace Export */
+}

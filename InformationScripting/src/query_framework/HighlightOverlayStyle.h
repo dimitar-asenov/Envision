@@ -42,4 +42,4 @@ class INFORMATIONSCRIPTING_API HighlightOverlayStyle : public Super<Visualizatio
 		Property<Visualization::ItemStyle> background{this, "background"};
 };
 
-} /* namespace InformationScripting */
+}

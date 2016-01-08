@@ -63,4 +63,4 @@ inline void ReferenceFinder::setSearchNode(Model::Node* searchNode) { searchNode
 inline QList<OOModel::ReferenceExpression*> ReferenceFinder::references() const { return references_; }
 inline void ReferenceFinder::clearReferences() { references_.clear(); }
 
-} /* namespace OODebug */
+}

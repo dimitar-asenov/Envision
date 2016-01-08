@@ -247,4 +247,4 @@ QString Action::calculateSuitableShortcut(const QString& name, const QStringList
 	return QString();
 }
 
-} /* namespace Interaction */
+}

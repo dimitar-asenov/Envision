@@ -85,4 +85,4 @@ double Timer::latestValuesAverage() const
 	return sum / values_.size();
 }
 
-} /* namespace Logger */
+}

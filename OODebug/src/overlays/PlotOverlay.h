@@ -107,4 +107,4 @@ void PlotOverlay::updateArrayValues(const QList<ValueType>& values, const QList<
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
-} /* namespace OODebug */
+}

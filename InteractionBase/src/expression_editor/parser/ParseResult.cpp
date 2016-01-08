@@ -55,4 +55,4 @@ bool operator< (const ParseResult& left, const ParseResult& right)
 	return false;
 }
 
-} /* namespace InteractionBase */
+}

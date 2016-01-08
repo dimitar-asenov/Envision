@@ -73,4 +73,4 @@ class INTERACTIONBASE_API AutoComplete {
 		static void hideNow();
 };
 
-} /* namespace Interaction */
+}

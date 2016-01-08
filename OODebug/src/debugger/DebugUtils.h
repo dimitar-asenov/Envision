@@ -94,4 +94,4 @@ class OODEBUG_API DebugUtils
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 };
 
-} /* namespace OODebug */
+}

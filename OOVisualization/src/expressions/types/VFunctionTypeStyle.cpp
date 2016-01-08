@@ -39,4 +39,4 @@ void VFunctionTypeStyle::load(Visualization::StyleLoader& sl)
 	sl.load("results", results_);
 }
 
-} /* namespace OOVisualization */
+}

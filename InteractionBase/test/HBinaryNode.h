@@ -41,4 +41,4 @@ class HBinaryNode : public HComposite
 		HBinaryNode();
 };
 
-} /* namespace Interaction */
+}

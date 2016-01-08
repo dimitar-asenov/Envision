@@ -128,4 +128,4 @@ void InitializerStringOffsetProvider::setOffset(int offset)
 	else Q_ASSERT(false);
 }
 
-} /* namespace OOInteraction */
+}

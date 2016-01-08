@@ -252,4 +252,4 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 	return trackedIDs;
 }
 
-} /* namespace FilePersistence */
+}

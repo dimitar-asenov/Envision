@@ -90,4 +90,4 @@ struct VariableTable : public Reply {
 		MessageField<QList<VariableDetails>> variables{&VariableTable::variables, this};
 };
 
-} /* namespace OODebug */
+}

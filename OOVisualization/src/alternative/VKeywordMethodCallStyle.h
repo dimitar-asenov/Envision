@@ -53,4 +53,4 @@ inline const Visualization::SequentialLayoutStyle& VKeywordMethodCallStyle::layo
 inline const Visualization::StaticStyle& VKeywordMethodCallStyle::keyword() const { return keyword_; }
 inline const Visualization::VListStyle& VKeywordMethodCallStyle::arguments() const { return arguments_; }
 
-} /* namespace OOVisualization */
+}

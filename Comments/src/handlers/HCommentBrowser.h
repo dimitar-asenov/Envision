@@ -43,4 +43,4 @@ class COMMENTS_API HCommentBrowser : public Interaction::GenericHandler {
 		HCommentBrowser();
 };
 
-} /* namespace Comments */
+}

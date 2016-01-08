@@ -40,4 +40,4 @@ Type* EmptyExpression::type()
 	return new ErrorType("Empty expression");
 }
 
-} /* namespace InteractionBase */
+}

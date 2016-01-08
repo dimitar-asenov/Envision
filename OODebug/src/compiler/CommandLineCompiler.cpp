@@ -56,4 +56,4 @@ CompilerFeedback CommandLineCompiler::compileFile(const QString& workingDirector
 	return parseFunction_(QString(compilerProcess.readAllStandardOutput()));
 }
 
-} /* namespace OODebug */
+}

@@ -40,4 +40,4 @@ class OOMODEL_API EmptyExpression : public Super<Expression>
 		virtual Type* type() override;
 };
 
-} /* namespace InteractionBase */
+}

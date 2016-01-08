@@ -53,4 +53,4 @@ QList<Visualization::Item*> MethodAddOn::determineItems(Visualization::Item* vis
 	return QList<Visualization::Item*>();
 }
 
-} /* namespace OOVisualization */
+}

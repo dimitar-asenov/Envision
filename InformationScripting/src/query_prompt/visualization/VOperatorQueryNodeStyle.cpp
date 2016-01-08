@@ -31,4 +31,4 @@ namespace InformationScripting {
 VOperatorQueryNodeStyle::~VOperatorQueryNodeStyle()
 {}
 
-} /* namespace InformationScripting */
+}

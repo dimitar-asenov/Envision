@@ -51,4 +51,4 @@ class OOINTERACTION_API CommandDescriptor : public OOOperatorDescriptor {
 		static QMap<QString, CommandExpression*> commands;
 };
 
-} /* namespace OOInteraction */
+}

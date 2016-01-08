@@ -65,4 +65,4 @@ class OOINTERACTION_API SetExpressionCursorEvent : public Visualization::CustomS
 		bool reposted_{};
 };
 
-} /* namespace OOInteraction */
+}

@@ -44,4 +44,4 @@ class COMMENTS_API CommentText: public Super<Model::Text>
 		CommentText(const QString& text);
 };
 
-} /* namespace Model */
+}

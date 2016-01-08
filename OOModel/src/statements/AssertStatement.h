@@ -40,4 +40,4 @@ class OOMODEL_API AssertStatement : public Super<Statement>
 
 	ATTRIBUTE(Expression, expression, setExpression)
 };
-} /* namespace OOVisualization */
+}

@@ -42,4 +42,4 @@ class OOVISUALIZATION_API VNewExpressionStyle : public Super<Visualization::Item
 		Property<Visualization::VListStyle> dimensions{this, "dimensions"};
 };
 
-} /* namespace OOVisualization */
+}

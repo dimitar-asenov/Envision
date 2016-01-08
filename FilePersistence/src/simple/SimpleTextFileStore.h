@@ -132,4 +132,4 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		static const QString NULL_STRING;
 };
 
-} /* namespace FilePersistence */
+}

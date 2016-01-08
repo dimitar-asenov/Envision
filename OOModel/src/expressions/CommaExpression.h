@@ -56,4 +56,4 @@ class OOMODEL_API CommaExpression: public Super<Expression>
 
 };
 
-} /* namespace OOModel */
+}

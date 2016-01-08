@@ -86,4 +86,4 @@ inline bool FileWriter::lastCharacterIsWhiteSpace() const
 inline void FileWriter::appendNodeToStack(Model::Node* node) { nodeStack_.append(node); }
 inline void FileWriter::popLastNodeFromStack() { nodeStack_.removeLast(); }
 
-} /* namespace Export */
+}

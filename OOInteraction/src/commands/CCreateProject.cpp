@@ -71,4 +71,4 @@ Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*
 	return new Interaction::CommandResult();
 }
 
-} /* namespace OOInteraction */
+}

@@ -55,4 +55,4 @@ void HComment::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
 }
 
-} /* namespace Comments */
+}

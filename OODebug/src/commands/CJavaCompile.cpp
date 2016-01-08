@@ -58,4 +58,4 @@ bool CJavaCompile::canInterpret(Visualization::Item* source, Visualization::Item
 	return false;
 }
 
-} /* namespace OODebug */
+}

@@ -39,4 +39,4 @@ QList<Optional<TupleSet> > UnionOperator::execute(QList<TupleSet> input)
 	return {outTuples};
 }
 
-} /* namespace InformationScripting */
+}

@@ -38,4 +38,4 @@ class OOMODEL_API StringType : public Type {
 		virtual StringType* clone() const override;
 };
 
-} /* namespace OOModel */
+}

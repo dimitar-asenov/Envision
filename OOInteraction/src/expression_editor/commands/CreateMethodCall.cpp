@@ -65,4 +65,4 @@ OOModel::Expression* CreateMethodCall::create(const QList<OOModel::Expression*>&
 	return method;
 }
 
-} /* namespace OOInteraction */
+}

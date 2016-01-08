@@ -91,4 +91,4 @@ inline void LinkedChangesTransition::insert(Model::NodeIdType oldChangeId, bool 
 														  const std::shared_ptr<const ChangeDescription>& change)
 { return insert(oldChangeId, oldInBranchA, change, oldInBranchA); }
 
-} /* namespace FilePersistence */
+}

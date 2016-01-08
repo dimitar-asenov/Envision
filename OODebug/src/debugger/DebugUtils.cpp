@@ -339,4 +339,4 @@ QHash<QString, OOModel::VariableDeclaration*> DebugUtils::findVariableDetailsIn(
 	return declarationMap;
 }
 
-} /* namespace OODebug */
+}

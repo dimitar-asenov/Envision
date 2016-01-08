@@ -84,4 +84,4 @@ void SetExpressionCursorEvent::execute()
 	}
 }
 
-} /* namespace OOInteraction */
+}

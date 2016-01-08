@@ -94,4 +94,4 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		std::shared_ptr<GenericTree> treeBase_;
 };
 
-} /* namespace FilePersistence */
+}

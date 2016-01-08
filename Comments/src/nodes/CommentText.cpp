@@ -36,4 +36,4 @@ NODE_DEFINE_EMPTY_CONSTRUCTORS(CommentText)
 
 CommentText::CommentText(const QString& text) : Super{text}{}
 
-} /* namespace Model */
+}

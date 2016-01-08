@@ -69,4 +69,4 @@ inline Visualization::Static* VSwitchStatement::icon() const {return icon_;}
 inline Visualization::NodeWrapper* VSwitchStatement::condition() const { return condition_; }
 inline VStatementItemList* VSwitchStatement::body() const { return body_; }
 
-} /* namespace OOVisualization */
+}

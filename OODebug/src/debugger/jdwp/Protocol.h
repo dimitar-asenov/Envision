@@ -477,4 +477,4 @@ typename std::enable_if<std::is_enum<Enum>::value, uint>::type
 qHash(const Enum& val) {
 	return ::qHash(static_cast<typename std::underlying_type<Enum>::type>(val)); }
 
-} /* namespace OODebug */
+}

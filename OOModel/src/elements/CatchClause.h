@@ -45,4 +45,4 @@ class OOMODEL_API CatchClause : public Super<Model::CompositeNode>
 				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 };
 
-} /* namespace OOModel */
+}

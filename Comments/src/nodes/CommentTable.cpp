@@ -83,4 +83,4 @@ void CommentTable::resize(int m, int n)
 	setColumnCount(n);
 }
 
-} /* namespace Comments */
+}

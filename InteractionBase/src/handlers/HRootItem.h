@@ -50,4 +50,4 @@ class INTERACTIONBASE_API HRootItem : public GenericHandler
 		QPoint offset{};
 };
 
-} /* namespace Interaction */
+}

@@ -51,4 +51,4 @@ inline QList<std::shared_ptr<ChangeDescription>> ConflictPairs::values(
 	return pairs_.values(change);
 }
 
-} /* namespace FilePersistence */
+}

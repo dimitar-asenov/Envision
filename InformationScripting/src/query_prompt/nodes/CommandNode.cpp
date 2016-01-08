@@ -42,4 +42,4 @@ CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getM
 	setName(name);
 }
 
-} /* namespace InformationScripting */
+}

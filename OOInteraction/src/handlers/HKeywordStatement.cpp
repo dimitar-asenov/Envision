@@ -51,4 +51,4 @@ void HKeywordStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 	if (!event->isAccepted()) HStatement::keyPressEvent(target, event);
 }
 
-} /* namespace OOInteraction */
+}

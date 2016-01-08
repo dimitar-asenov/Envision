@@ -62,4 +62,4 @@ class OODEBUG_API CommandLineCompiler
 		std::function<CompilerFeedback(const QString&)> parseFunction_;
 };
 
-} /* namespace OODebug */
+}

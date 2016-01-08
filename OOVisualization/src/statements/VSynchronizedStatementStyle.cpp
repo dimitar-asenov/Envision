@@ -29,4 +29,4 @@ namespace OOVisualization {
 
 VSynchronizedStatementStyle::~VSynchronizedStatementStyle() {}
 
-} /* namespace OOVisualization */
+}

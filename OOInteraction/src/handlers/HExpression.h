@@ -68,4 +68,4 @@ inline void HExpression::appendExpressionMonitor(ExpressionChangeMonitorFunction
 	expressionMonitors_.append(monitor);
 }
 
-} /* namespace OOInteraction */
+}

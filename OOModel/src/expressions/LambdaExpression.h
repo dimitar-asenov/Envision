@@ -48,4 +48,4 @@ class OOMODEL_API LambdaExpression: public Super<Expression>
 		virtual Type* type() override;
 };
 
-} /* namespace OOModel */
+}

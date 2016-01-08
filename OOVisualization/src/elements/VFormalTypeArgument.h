@@ -61,4 +61,4 @@ class OOVISUALIZATION_API VFormalTypeArgument : public Super<Visualization::Item
 		Visualization::Static* specializeSymbol_{};
 };
 
-} /* namespace OOVisualization */
+}

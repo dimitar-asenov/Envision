@@ -46,4 +46,4 @@ int VCommentDiagramSequenceStyle::getColorsPerRow() const
 	return colorsPerRow();
 }
 
-} /* namespace Comments */
+}

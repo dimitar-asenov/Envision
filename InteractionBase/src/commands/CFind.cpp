@@ -84,4 +84,4 @@ QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::It
 	return s;
 }
 
-} /* namespace Interaction */
+}

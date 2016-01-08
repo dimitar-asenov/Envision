@@ -47,4 +47,4 @@ class OOMODEL_API ReferenceType : public Type {
 };
 
 inline const Type* ReferenceType::baseType() const { return baseType_; }
-} /* namespace OOModel */
+}

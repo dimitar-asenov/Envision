@@ -47,4 +47,4 @@ struct StringValue : public Reply {
 		MessageField<QString> stringValue{&StringValue::stringValue, this};
 };
 
-} /* namespace OODebug */
+}

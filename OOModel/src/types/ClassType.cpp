@@ -42,4 +42,4 @@ ClassType* ClassType::clone() const
 	return new ClassType(*this);
 }
 
-} /* namespace OOModel */
+}

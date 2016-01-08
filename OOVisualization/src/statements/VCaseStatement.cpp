@@ -61,4 +61,4 @@ void VCaseStatement::initializeForms()
 
 }
 
-} /* namespace OOVisualization */
+}

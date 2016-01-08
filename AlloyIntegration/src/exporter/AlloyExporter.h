@@ -39,4 +39,4 @@ class ALLOYINTEGRATION_API AlloyExporter {
 		static void exportTree(Model::Node* aNode, const QString& path);
 };
 
-} /* namespace JavaExport */
+}

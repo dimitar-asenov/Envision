@@ -46,4 +46,4 @@ class OOVISUALIZATION_API VTryCatchFinallyStyle : public Super<Visualization::De
 
 };
 
-} /* namespace OOVisualization */
+}

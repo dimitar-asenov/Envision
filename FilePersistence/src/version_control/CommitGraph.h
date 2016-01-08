@@ -63,4 +63,4 @@ class FILEPERSISTENCE_API CommitGraph
 inline const CommitGraphItem& CommitGraph::start() const { return *start_; }
 inline const CommitGraphItem& CommitGraph::end() const { return *end_; }
 
-} /* namespace FilePersistence */
+}

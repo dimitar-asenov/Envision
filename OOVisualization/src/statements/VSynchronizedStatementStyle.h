@@ -43,4 +43,4 @@ class OOVISUALIZATION_API VSynchronizedStatementStyle : public Super<Visualizati
 		Property<Visualization::VListStyle> body{this, "body"};
 };
 
-} /* namespace OOVisualization */
+}

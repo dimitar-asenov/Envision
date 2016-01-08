@@ -61,4 +61,4 @@ void VEmptyExpression::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-} /* namespace OOVisualization */
+}

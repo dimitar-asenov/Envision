@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 Visualization::InteractionHandler* VStatementItemStaticData::defaultClassHandler_ = nullptr;
 
-} /* namespace OOVisualization */
+}

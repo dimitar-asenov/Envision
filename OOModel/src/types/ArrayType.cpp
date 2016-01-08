@@ -53,4 +53,4 @@ ArrayType* ArrayType::clone() const
 	return new ArrayType(*this);
 }
 
-} /* namespace OOModel */
+}

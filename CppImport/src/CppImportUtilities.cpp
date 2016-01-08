@@ -659,4 +659,4 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 	return createErrorExpression("Unsupported Type", type.getSourceRange());
 }
 
-} /* namespace CppImport */
+}

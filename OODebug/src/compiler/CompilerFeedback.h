@@ -49,4 +49,4 @@ class OODEBUG_API CompilerFeedback
 
 inline QList<std::shared_ptr<CompilerMessage>>& CompilerFeedback::messages() { return messages_;}
 
-} /* namespace OODebug */
+}

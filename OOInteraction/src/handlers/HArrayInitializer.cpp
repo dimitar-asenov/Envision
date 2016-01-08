@@ -64,4 +64,4 @@ void HArrayInitializer::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 	else HExpression::keyPressEvent(target, event);
 }
 
-} /* namespace Interaction */
+}

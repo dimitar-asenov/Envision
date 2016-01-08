@@ -41,4 +41,4 @@ class INFORMATIONSCRIPTING_API QueryNodeContainer : public Super<QueryNode>
 	ATTRIBUTE(QueryNode, query, setQuery)
 };
 
-} /* namespace InformationScripting */
+}

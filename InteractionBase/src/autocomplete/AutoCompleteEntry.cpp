@@ -70,4 +70,4 @@ void AutoCompleteEntry::execute()
 	if (execFunction_) execFunction_(this);
 }
 
-} /* namespace Interaction */
+}

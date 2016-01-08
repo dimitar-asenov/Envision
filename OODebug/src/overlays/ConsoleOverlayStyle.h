@@ -43,4 +43,4 @@ class OODEBUG_API ConsoleOverlayStyle : public Super<Visualization::DeclarativeI
 		Property<Visualization::StaticStyle> closeIcon{this, "closeIcon"};
 };
 
-} /* namespace OODebug */
+}

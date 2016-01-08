@@ -34,4 +34,4 @@ ErrorDescriptor::ErrorDescriptor(const QString& prefix_text, const QString& post
 	setTransient(true);
 }
 
-} /* namespace InteractionBase */
+}

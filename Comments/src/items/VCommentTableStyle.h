@@ -43,4 +43,4 @@ class COMMENTS_API VCommentTableStyle : public Super<Visualization::ItemStyle> {
 		Property<Visualization::GridLayoutStyle> grid{this, "grid"};
 };
 
-} /* namespace Comments */
+}

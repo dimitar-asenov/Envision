@@ -42,4 +42,4 @@ OOModel::ReferenceExpression* ReferenceFinder::visitReferenceExpression(Referenc
 	return m;
 }
 
-} /* namespace OODebug */
+}

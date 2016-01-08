@@ -92,4 +92,4 @@ Count::Count(Model::Node* target, QStringList args)
 }
 
 
-} /* namespace InformationScripting */
+}

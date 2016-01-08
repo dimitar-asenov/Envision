@@ -87,4 +87,4 @@ inline QList<std::shared_ptr<ChangeDescription>> ChangeDependencyGraph::getDepen
 inline QList<std::shared_ptr<ChangeDescription>> ChangeDependencyGraph::getDependendingChanges(
 		std::shared_ptr<ChangeDescription> change) const { return dependencies_.keys(change); }
 
-} /* namespace FilePersistence */
+}

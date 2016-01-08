@@ -85,4 +85,4 @@ class INTERACTIONBASE_API AutoCompleteVis : public Super<Visualization::LayoutPr
 		void resetSelection();
 };
 
-} /* namespace Interaction */
+}

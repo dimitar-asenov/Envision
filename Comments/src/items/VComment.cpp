@@ -404,4 +404,4 @@ int VComment::determineForm()
 	return editing_ ? 1 : 0;
 }
 
-} /* namespace Comments */
+}

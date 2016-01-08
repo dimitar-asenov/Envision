@@ -57,4 +57,4 @@ int Value::kind() const { return cast(type()); }
 
 TaggedObjectId::~TaggedObjectId() {}
 
-} /* namespace OODebug */
+}

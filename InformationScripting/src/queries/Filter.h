@@ -54,4 +54,4 @@ class INFORMATIONSCRIPTING_API Filter : public LinearQuery
 		static QString removeOuterQuotes(const QString& from);
 };
 
-} /* namespace InformationScripting */
+}

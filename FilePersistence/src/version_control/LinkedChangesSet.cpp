@@ -78,4 +78,4 @@ LinkedChanges copyLinkedChanges(const LinkedChanges& changesToCopy,
 	return linkedChanges;
 }
 
-} /* namespace FilePersistence */
+}

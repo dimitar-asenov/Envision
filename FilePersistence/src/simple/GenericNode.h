@@ -203,4 +203,4 @@ inline bool GenericNode::equalTo(const GenericNode* other)
 			  parentId_ == other->parentId_);
 }
 
-} /* namespace FilePersistence */
+}

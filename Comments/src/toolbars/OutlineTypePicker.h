@@ -50,4 +50,4 @@ class COMMENTS_API OutlineTypePicker : public QToolButton
 		QList<QPixmap> pixList_{};
 };
 
-} /* namespace Comments */
+}

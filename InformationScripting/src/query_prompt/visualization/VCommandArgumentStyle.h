@@ -41,4 +41,4 @@ class INFORMATIONSCRIPTING_API VCommandArgumentStyle : public Super<Visualizatio
 	Property<Visualization::TextStyle> argument{this, "argument"};
 };
 
-} /* namespace InformationScripting */
+}

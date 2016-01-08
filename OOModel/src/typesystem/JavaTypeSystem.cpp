@@ -259,4 +259,4 @@ TypeSystem::TypeRelations JavaTypeSystem::relationClassToOther(const ClassType* 
 	return None;
 }
 
-} /* namespace OOModel */
+}

@@ -61,4 +61,4 @@ Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, 
 	return new Interaction::CommandResult();
 }
 
-} /* namespace OOInteraction */
+}

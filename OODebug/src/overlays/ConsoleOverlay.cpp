@@ -88,4 +88,4 @@ void ConsoleOverlay::initializeForms()
 	addForm(container);
 }
 
-} /* namespace OODebug */
+}

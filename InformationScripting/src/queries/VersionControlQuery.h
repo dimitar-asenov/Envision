@@ -66,4 +66,4 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 		Optional<QList<QString>> commitsToConsider(const QStringList& commitIdRange) const;
 };
 
-} /* namespace InformationScripting */
+}

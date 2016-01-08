@@ -95,4 +95,4 @@ QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString
 	return {new CommandSuggestion(commandString, text)};
 }
 
-} /* namespace Interaction */
+}

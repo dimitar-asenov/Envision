@@ -115,4 +115,4 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 inline int CompositeQuery::inputCount() const { return std::max(1, inNode_->outputMap_.size()); }
 inline int CompositeQuery::outputCount() const { return std::max(1, outNode_->inputMap_.size()); }
 
-} /* namespace InformationScripting */
+}

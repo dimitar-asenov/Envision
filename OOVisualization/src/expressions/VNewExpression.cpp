@@ -70,4 +70,4 @@ void VNewExpression::determineChildren()
 	}
 }
 
-} /* namespace OOVisualization */
+}

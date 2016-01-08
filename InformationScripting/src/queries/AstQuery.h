@@ -91,4 +91,4 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 										 const QString& expectedType, const QStringList& args);
 };
 
-} /* namespace InformationScripting */
+}

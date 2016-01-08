@@ -38,4 +38,4 @@ QList<Optional<TupleSet> > SubstractOperator::execute(QList<TupleSet> input)
 	return {setA};
 }
 
-} /* namespace InformationScripting */
+}

@@ -53,4 +53,4 @@ class INTERACTIONBASE_API CHistory : public CommandWithFlags
 		FilePersistence::GitRepository* repository;
 };
 
-} /* namespace Interaction */
+}

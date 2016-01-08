@@ -171,4 +171,4 @@ void CDumpMethodRenderings::printItem(Visualization::Item* item, int itemNumber,
 		image.save("item_dump/" + zeroPadded + "_" + QString::number(numPrinted) + ".png");
 }
 
-} /* namespace OOInteraction */
+}

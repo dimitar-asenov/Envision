@@ -36,4 +36,4 @@ OOModel::Expression* AstModification::buildExpression(const QString& expressionT
 	return OOInteraction::OOExpressionBuilder::getOOExpression(expressionText);
 }
 
-} /* namespace InformationScripting */
+}

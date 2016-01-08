@@ -119,4 +119,4 @@ void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg));
 }
 
-} /* namespace OOInteraction */
+}

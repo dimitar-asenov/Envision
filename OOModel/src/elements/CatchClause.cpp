@@ -60,4 +60,4 @@ bool CatchClause::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& m
 	else return false;
 }
 
-} /* namespace OOModel */
+}

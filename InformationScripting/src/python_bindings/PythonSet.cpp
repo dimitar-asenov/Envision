@@ -62,6 +62,6 @@ static struct register_set_pytype_ptr
 	 }
 } register_set_pytype_ptr_;
 
-} /* namespace helper */
+}
 
-} /* namespace InformationScripting */
+}

@@ -57,4 +57,4 @@ void AddErrorOperator::perform(ExpressionTreeBuilder& tb)
 		tb.unfinished().append(unf);
 	}
 }
-} /* namespace InteractionBase */
+}

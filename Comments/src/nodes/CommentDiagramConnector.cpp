@@ -57,4 +57,4 @@ CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint,
 	setEndArrow(false);
 }
 
-} /* namespace Comments */
+}

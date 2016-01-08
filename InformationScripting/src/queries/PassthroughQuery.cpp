@@ -36,4 +36,4 @@ QList<Optional<TupleSet>> PassthroughQuery::execute(QList<TupleSet> input)
 	return result;
 }
 
-} /* namespace InformationScripting */
+}

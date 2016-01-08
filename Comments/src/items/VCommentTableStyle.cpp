@@ -30,4 +30,4 @@ namespace Comments {
 
 VCommentTableStyle::~VCommentTableStyle(){} // Put the VTable here
 
-} /* namespace Comments */
+}

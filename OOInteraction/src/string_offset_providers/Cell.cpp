@@ -62,4 +62,4 @@ void Cell::setOffset(int newOffset)
 	StringOffsetProvider::setOffsetInItem(newOffset, item());
 }
 
-} /* namespace OOInteraction */
+}

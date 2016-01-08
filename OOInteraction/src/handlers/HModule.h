@@ -42,4 +42,4 @@ class HModule : public Interaction::GenericHandler {
 		static HModule* instance();
 };
 
-} /* namespace OOInteraction */
+}

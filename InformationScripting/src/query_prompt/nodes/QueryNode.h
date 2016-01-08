@@ -40,4 +40,4 @@ class INFORMATIONSCRIPTING_API QueryNode : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(QueryNode)
 };
 
-} /* namespace InformationScripting */
+}

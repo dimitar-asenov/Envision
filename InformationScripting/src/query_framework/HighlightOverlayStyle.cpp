@@ -30,4 +30,4 @@ namespace InformationScripting {
 
 HighlightOverlayStyle::~HighlightOverlayStyle() {}
 
-} /* namespace InformationScripting */
+}

@@ -54,4 +54,4 @@ ReferenceType* ReferenceType::clone() const
 	return new ReferenceType(*this);
 }
 
-} /* namespace OOModel */
+}

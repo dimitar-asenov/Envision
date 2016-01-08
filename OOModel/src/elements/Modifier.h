@@ -86,4 +86,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Modifier::Modifiers)
 inline Modifier::Modifiers Modifier::get() const { return modifiers_; }
 inline bool Modifier::isSet(ModifierFlag flag) const { return modifiers_.testFlag(flag);}
 
-} /* namespace OOModel */
+}

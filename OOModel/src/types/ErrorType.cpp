@@ -46,4 +46,4 @@ ErrorType* ErrorType::clone() const
 	return new ErrorType(*this);
 }
 
-} /* namespace OOModel */
+}

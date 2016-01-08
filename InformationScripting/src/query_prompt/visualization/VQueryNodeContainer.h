@@ -51,4 +51,4 @@ class INFORMATIONSCRIPTING_API VQueryNodeContainer
 		Visualization::Item* query_{};
 };
 
-} /* namespace InformationScripting */
+}

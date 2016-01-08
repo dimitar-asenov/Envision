@@ -165,4 +165,4 @@ int CommentDiagramShape::connectorPointNear(QPoint pos) const
 	return index;
 }
 
-} /* namespace Comments */
+}

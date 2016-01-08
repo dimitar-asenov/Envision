@@ -227,4 +227,4 @@ void TagQuery::insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& mat
 	}
 }
 
-} /* namespace InformationScripting */
+}

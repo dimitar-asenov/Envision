@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VNameImportStyle::~VNameImportStyle() {}
 
-} /* namespace OOVisualization */
+}

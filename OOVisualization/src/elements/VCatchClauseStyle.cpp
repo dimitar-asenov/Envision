@@ -30,4 +30,4 @@ namespace OOVisualization {
 
 VCatchClauseStyle::~VCatchClauseStyle(){}
 
-} /* namespace OOVisualization */
+}

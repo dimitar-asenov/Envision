@@ -31,4 +31,4 @@ namespace OOVisualization {
 VTypeAliasStyle::~VTypeAliasStyle() {}
 
 
-} /* namespace OOVisualization */
+}

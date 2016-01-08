@@ -45,4 +45,4 @@ class INFORMATIONSCRIPTING_API Yield : public Query
 		Yield(Model::Node* target, QStringList args);
 };
 
-} /* namespace InformationScripting */
+}

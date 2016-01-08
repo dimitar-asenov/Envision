@@ -51,4 +51,4 @@ class OOVISUALIZATION_API VExpressionStatement
 		Visualization::Item* expr_;
 };
 
-} /* namespace OOVisualization */
+}

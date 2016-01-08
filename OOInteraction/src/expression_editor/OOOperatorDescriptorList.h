@@ -53,4 +53,4 @@ inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descr
 { instance()->addDescriptor(descriptor); }
 
 
-} /* namespace OOInteraction */
+}

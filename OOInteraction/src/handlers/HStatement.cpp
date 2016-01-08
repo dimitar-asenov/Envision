@@ -82,4 +82,4 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		GenericHandler::keyPressEvent(target, event);
 }
 
-} /* namespace OOInteraction */
+}

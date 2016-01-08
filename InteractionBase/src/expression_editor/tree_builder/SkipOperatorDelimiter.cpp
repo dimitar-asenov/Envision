@@ -37,4 +37,4 @@ void SkipOperatorDelimiter::perform(ExpressionTreeBuilder& tb)
 	tb.left() = nullptr;
 }
 
-} /* namespace InteractionBase */
+}

@@ -135,4 +135,4 @@ class typeChange : public Test<FilePersistencePlugin, typeChange> { public: void
 	CHECK_CONDITION(diff.changes().size() == 1);
 }};
 
-} /* namespace FilePersistence */
+}

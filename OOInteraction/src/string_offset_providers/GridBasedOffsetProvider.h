@@ -90,4 +90,4 @@ inline void GridBasedOffsetProvider::addGridConstructor(void(*constructor)(GridB
 inline void GridBasedOffsetProvider::setFilterNullAndEmptyComponents() { filterNullAndEmptyComponents_ = true;}
 inline void GridBasedOffsetProvider::setSize(int width, int height) { size_.setWidth(width); size_.setHeight(height); }
 
-} /* namespace OOInteraction */
+}

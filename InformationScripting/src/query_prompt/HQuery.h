@@ -62,4 +62,4 @@ class HQuery : public Interaction::GenericHandler {
 		static bool isOperatorAtIndex(const QString& exp, int index);
 };
 
-} /* namespace InformationScripting */
+}

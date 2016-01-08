@@ -47,4 +47,4 @@ QList<Optional<TupleSet>> NodePropertyAdder::execute(QList<TupleSet> input)
 	return result;
 }
 
-} /* namespace InformationScripting */
+}

@@ -157,4 +157,4 @@ inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConn
 { eventListeners_[kind] = listener; }
 inline bool DebugConnector::vmAlive() { return vmAlive_; }
 
-} /* namespace OODebug */
+}

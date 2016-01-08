@@ -89,4 +89,4 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 
 inline QString ArgumentParser::queryName() const { return queryName_; }
 
-} /* namespace InformationScripting */
+}

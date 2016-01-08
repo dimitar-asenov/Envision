@@ -47,4 +47,4 @@ void CompoundObjectStringOffsetProvider::setOffset(int offset)
 	else vis_->moveCursor( Visualization::Item::MoveOnBottomRight );
 }
 
-} /* namespace OOInteraction */
+}

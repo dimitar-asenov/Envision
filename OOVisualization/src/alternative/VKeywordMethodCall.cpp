@@ -65,4 +65,4 @@ void VKeywordMethodCall::determineChildren()
 	keyword_->setStyle( &style()->keyword());
 }
 
-} /* namespace OOVisualization */
+}

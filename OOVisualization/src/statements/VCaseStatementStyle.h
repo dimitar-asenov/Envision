@@ -56,4 +56,4 @@ inline const Visualization::StaticStyle& VCaseStatementStyle::defaultCaseIcon() 
 inline const Visualization::ItemStyle& VCaseStatementStyle::caseExpression() const { return caseExpression_; }
 inline const Visualization::VListStyle& VCaseStatementStyle::statements() const { return statements_; }
 
-} /* namespace OOVisualization */
+}

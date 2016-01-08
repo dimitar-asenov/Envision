@@ -30,4 +30,4 @@ namespace OODebug {
 
 ConsoleOverlayStyle::~ConsoleOverlayStyle(){}
 
-} /* namespace OODebug */
+}

@@ -71,4 +71,4 @@ Visualization::InteractionHandler*  VExpression<Derived, Super, ContainedNode, d
 	return Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::handler();
 }
 
-} /* namespace OOVisualization */
+}

@@ -51,4 +51,4 @@ bool DetectMainSceneActivated::eventFilter(QObject* /*watched*/, QEvent* event)
 	return false;
 }
 
-} /* namespace Interaction */
+}

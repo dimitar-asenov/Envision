@@ -81,4 +81,4 @@ void CommentDiagram::removeShape(CommentDiagramShape *shape)
 	shapes()->remove(shapeIndex);
 }
 
-} /* namespace Comments */
+}

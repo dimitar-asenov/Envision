@@ -40,4 +40,4 @@ class OOMODEL_API SuperExpression: public Super<Expression>
 		virtual Type* type() override;
 };
 
-} /* namespace OOModel */
+}

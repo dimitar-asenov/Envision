@@ -170,4 +170,4 @@ VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) cons
 	return RECT_NONE;
 }
 
-} /* namespace Comments */
+}

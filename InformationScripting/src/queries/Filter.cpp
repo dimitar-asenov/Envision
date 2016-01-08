@@ -119,4 +119,4 @@ QString Filter::removeOuterQuotes(const QString& from)
 	return result;
 }
 
-} /* namespace InformationScripting */
+}

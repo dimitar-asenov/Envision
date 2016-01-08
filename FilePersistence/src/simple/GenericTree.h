@@ -107,4 +107,4 @@ inline const std::shared_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() co
 inline QMultiHash<Model::NodeIdType, GenericNode*>& GenericTree::nodesWithoutParents() { return nodesWithoutParents_;}
 inline QList<std::shared_ptr<GenericPersistentUnit>> GenericTree::persistentUnits() const
 	{return persistentUnits_.values();}
-} /* namespace FilePersistence */
+}

@@ -54,4 +54,4 @@ class OOMODEL_API TypeSystem {
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(TypeSystem::TypeRelations)
 
-} /* namespace OOModel */
+}

@@ -77,4 +77,4 @@ bool StaticStringOffsetProvider::isIndivisible()
 	return !tr || tr->text().length() != string().length();
 }
 
-} /* namespace OOInteraction */
+}

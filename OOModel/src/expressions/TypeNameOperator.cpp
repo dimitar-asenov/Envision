@@ -41,4 +41,4 @@ Type* TypeNameOperator::type()
 	return typeExpression()->type();
 }
 
-}  /* namespace OOModel */
+}

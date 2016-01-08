@@ -85,4 +85,4 @@ class JAVAEXPORT_API DeclarationVisitor
 inline QStringList& DeclarationVisitor::packageStack() { return data()->directoryStack_; }
 inline QString DeclarationVisitor::packagesSoFar() { return data()->directoryStack_.join("."); }
 
-} /* namespace JavaExport */
+}

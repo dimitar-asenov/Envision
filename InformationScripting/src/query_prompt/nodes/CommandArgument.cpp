@@ -41,4 +41,4 @@ CommandArgument::CommandArgument(const QString& argument) : Super(nullptr, Comma
 	setArgument(argument);
 }
 
-} /* namespace InformationScripting */
+}

@@ -47,4 +47,4 @@ CompositeFragment& CompositeFragment::operator<<(Model::Text* textNode)
 	return *this;
 }
 
-} /* namespace Export */
+}
