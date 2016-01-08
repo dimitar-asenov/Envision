@@ -254,6 +254,8 @@ QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn, std::fun
 			noPendingDependencies.append(it.key());
 		else
 		{
+			it.value() = it.value().intersect(dependsOn.keys().toSet());
+
 			// for every other element this element depends on add it to the neededFor map for said other element
 			bool notNeededForAnything = true;
 			for (auto dependency : it.value())
