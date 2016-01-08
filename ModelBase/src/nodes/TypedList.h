@@ -43,11 +43,9 @@ class TypedList: public Super<List>
 		virtual bool replaceChild(Node* child, Node* replacement) override;
 
 		virtual Node* createDefaultElement() override;
-
 		virtual int lowerTypeBoundForElements() const override;
 
-	// Iterator
-	public:
+		// Iterator
 		struct TypedIterator : public std::iterator<std::bidirectional_iterator_tag, T*> {
 			TypedIterator() = default;
 			TypedIterator(const TypedIterator& other) = default;
@@ -88,12 +86,25 @@ class TypedList: public Super<List>
 		using iterator = TypedIterator;
 		using const_iterator = ConstTypedIterator;
 
-		iterator begin(){return TypedIterator(List::begin());}
-		const_iterator begin() const {return ConstTypedIterator(List::cbegin());}
-		const_iterator cbegin() const {return ConstTypedIterator(List::cbegin());}
-		iterator end() {return TypedIterator(List::end());}
-		const_iterator end() const {return ConstTypedIterator(List::cend());}
-		const_iterator cend() const {return ConstTypedIterator(List::cend());}
+		iterator begin();
+		const_iterator begin() const;
+		const_iterator cbegin() const;
+		iterator end();
+		const_iterator end() const;
+		const_iterator cend() const;
 };
+
+template <typename T>
+inline typename TypedList<T>::const_iterator TypedList<T>::begin() const { return ConstTypedIterator(List::cbegin()); }
+template <typename T>
+inline typename TypedList<T>::const_iterator TypedList<T>::cbegin() const { return ConstTypedIterator(List::cbegin()); }
+template <typename T>
+inline typename TypedList<T>::const_iterator TypedList<T>::cend() const { return ConstTypedIterator(List::cend()); }
+template <typename T>
+inline typename TypedList<T>::const_iterator TypedList<T>::end() const { return ConstTypedIterator(List::cend()); }
+template <typename T>
+inline typename TypedList<T>::iterator TypedList<T>::begin() { return TypedIterator(List::begin()); }
+template <typename T>
+inline typename TypedList<T>::iterator TypedList<T>::end() { return TypedIterator(List::end()); }
 
 }
