@@ -211,7 +211,11 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, Nod
 
 			// the splice name is equal to the formal argument name where the argument is coming from
 			auto argName = clang_.argumentNames(spliceLoc.expansion_->definition()).at(spliceLoc.argumentNumber_);
-			auto newNode = new OOModel::ReferenceExpression(argName);
+			Model::Node* newNode = new OOModel::ReferenceExpression(argName);
+
+			// in case the node to replace is not an expression we have to wrap the splice
+			if (DCast<OOModel::FormalResult>(child))
+				newNode = new OOModel::FormalResult(QString(), DCast<OOModel::Expression>(newNode));
 
 			// insert the splice into the tree
 			if (child->parent()) child->parent()->replaceChild(child, newNode);
