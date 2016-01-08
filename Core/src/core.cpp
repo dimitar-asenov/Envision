@@ -32,10 +32,7 @@
 #include "TestRunner.h"
 
 namespace Core {
-/**
- * This function is executed when Envision is started. It shows the main window, loads all plug-ins and starts the event
- * loop.
- */
+
 int coreMain(int argc, char *argv[])
 {
 	EnvisionApplication a{argc, argv};
