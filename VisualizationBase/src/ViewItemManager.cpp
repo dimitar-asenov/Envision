@@ -84,8 +84,11 @@ void ViewItemManager::addViewItem(ViewItem *view, QPoint position)
 	//If there already is an item -> use insert
 	if (viewItems_[position.x()][position.y()])
 		viewItems_[position.x()].insert(position.y(), view);
-	//Else just overwrite the nullptr
-	else viewItems_[position.x()][position.y()] = view;
+	else
+	{
+		//Else just overwrite the nullptr
+		viewItems_[position.x()][position.y()] = view;
+	}
 	scene_->addTopLevelItem(view, false);
 }
 
