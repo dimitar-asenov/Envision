@@ -65,4 +65,4 @@ TreeManager* UsedLibrary::libraryManager() const
 	return nullptr;
 }
 
-} /* namespace Model */
+}

@@ -75,4 +75,4 @@ Node* NodeOwningCommand::removedNode() const
 	return ownedIfDone_;
 }
 
-} /* namespace Model */
+}

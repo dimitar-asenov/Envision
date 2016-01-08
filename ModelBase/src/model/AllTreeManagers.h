@@ -96,4 +96,4 @@ class MODELBASE_API AllTreeManagers {
 
 inline const QList<TreeManager*>& AllTreeManagers::loadedManagers() const { return loadedManagers_; }
 
-} /* namespace Model */
+}
