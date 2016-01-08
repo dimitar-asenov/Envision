@@ -29,7 +29,6 @@
 
 namespace Model {
 
-//Only for CompositeNode
 AttributeChain::AttributeChain(const QString& typeName)
 : typeName_{typeName}
 {}

@@ -43,6 +43,7 @@ class MODELBASE_API AttributeChain: public QVector<Attribute>
 
 		QString typeName_;
 
+		//Only for CompositeNode
 		AttributeChain(const QString& typeName);
 
 	public:
