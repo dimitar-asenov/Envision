@@ -37,7 +37,7 @@ namespace Model {
 class PersistenceSave : public Test<ModelBasePlugin, PersistenceSave> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
-	TreeManager manager("root", root);
+	TreeManager manager{"root", root};
 	PersistentStoreMock store;
 	manager.save(&store);
 

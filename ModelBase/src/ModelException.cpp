@@ -32,7 +32,7 @@ ModelException::ModelException(const QString& message) : EnvisionException{messa
 
 const QString& ModelException::name() const
 {
-	static QString ename("ModelException");
+	static QString ename{"ModelException"};
 	return ename;
 }
 

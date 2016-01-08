@@ -36,7 +36,7 @@ namespace Model {
 class ModificationNotificationTests : public Test<ModelBasePlugin, ModificationNotificationTests> { public: void test()
 {
 	TreeManager manager;
-	NotificationListener nl(manager);
+	NotificationListener nl{manager};
 
 	CHECK_CONDITION(nl.root_ == nullptr);
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());

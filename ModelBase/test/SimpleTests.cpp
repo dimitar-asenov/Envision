@@ -90,7 +90,7 @@ class SimpleTreeManagerCreation : public Test<ModelBasePlugin, SimpleTreeManager
 class RemoveOptional : public Test<ModelBasePlugin, RemoveOptional> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	manager.beginModification(root, "Making left node");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
@@ -114,7 +114,7 @@ class RemoveOptional : public Test<ModelBasePlugin, RemoveOptional> { public: vo
 class ChildNodeRetrieval : public Test<ModelBasePlugin, ChildNodeRetrieval> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	manager.beginModification(root, "Making nodes");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
@@ -137,7 +137,7 @@ class ChildNodeRetrieval : public Test<ModelBasePlugin, ChildNodeRetrieval> { pu
 class ProperRegistration : public Test<ModelBasePlugin, ProperRegistration> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode();
-	TreeManager manager(root);
+	TreeManager manager{root};
 	CHECK_CONDITION(root->typeId() > 0);
 
 	TreeManager manager2;

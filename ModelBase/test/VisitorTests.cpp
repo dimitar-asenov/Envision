@@ -88,7 +88,7 @@ class VisitorC : public Visitor<VisitorC>{
 class VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
 {
 	auto root = new List();
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	manager.setName("root");
 

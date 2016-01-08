@@ -30,7 +30,7 @@ namespace Model {
 
 NodeIdType NodeIdMap::id(const Node* node)
 {
-	QHash<const Node*, NodeIdType>::const_iterator iter = nodeToId.find(node);
+	QHash<const Node*, NodeIdType>::const_iterator iter{nodeToId.find(node)};
 	if ( iter != nodeToId.end() ) return *iter;
 
 	NodeIdType id = generateNewId();
