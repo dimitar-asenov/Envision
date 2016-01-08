@@ -96,9 +96,9 @@ void GridLayout::swap(int x1, int y1, int x2, int y2)
 	setUpdateNeeded(StandardUpdate);
 }
 
-void GridLayout::remove(int x, int y, bool deleteItem_)
+void GridLayout::remove(int x, int y, bool deleteItem)
 {
-	if (deleteItem_) SAFE_DELETE_ITEM( items_[x][y]);
+	if (deleteItem) SAFE_DELETE_ITEM( items_[x][y]);
 	else if (items_[x][y]) items_[x][y]->setParentItem(nullptr);
 	items_[x][y] = nullptr;
 	setUpdateNeeded(StandardUpdate);
