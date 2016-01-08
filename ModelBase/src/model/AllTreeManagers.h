@@ -80,7 +80,7 @@ class MODELBASE_API AllTreeManagers {
 		void add(TreeManager* manager);
 
 		/**
-		 * Removes \a treeManager from the list of tree managers. This manager will give up ownership of \a treeManager.
+		 * Removes \a manager from the list of tree managers. This manager will give up ownership of \a manager.
 		 *
 		 * The removed tree manager is returned. This method is called in the desctructor of TreeManager.
 		 */
