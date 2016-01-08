@@ -50,14 +50,14 @@ class VISUALIZATIONBASE_API StyleNode
 		bool hasProperty(QStringList path);
 
 	private:
-		static QString baseFolder;
+		static QString baseFolder_;
 
-		StyleNode* parent;
+		StyleNode* parent_;
 
 		QDomDocument doc;
 		QString folder;
 
-		QDomElement elem;
+		QDomElement elem_;
 		QList< StyleNode* > prototypes;
 		QList< StyleNode* > children;
 
