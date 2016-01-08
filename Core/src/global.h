@@ -25,9 +25,6 @@
 ***********************************************************************************************************************/
 
 #pragma once
-// Note that this file is assumed to be loaded after all the system headers in Core/src/precompiled.h have been already
-// included
-
 
 template <typename T> inline void SAFE_DELETE( T* & object)
 {
