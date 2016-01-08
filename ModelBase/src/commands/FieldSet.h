@@ -40,22 +40,30 @@ class FieldSet: public UndoCommand
 		T newValue;
 
 	public:
-		FieldSet(Node *target, T& fieldToSet, T setTo) :
-			UndoCommand(target, "Set field"), field(fieldToSet), oldValue(fieldToSet), newValue(setTo)
-		{
-		}
+		FieldSet(Node *target, T& fieldToSet, T setTo);
 
-		virtual void redo()
-		{
-			field = newValue;
-			UndoCommand::redo();
-		}
-
-		virtual void undo()
-		{
-			field = oldValue;
-			UndoCommand::undo();
-		}
+		virtual void redo();
+		virtual void undo();
 };
+
+template<typename T>
+inline FieldSet<T>::FieldSet(Node* target, T& fieldToSet, T setTo)
+	: UndoCommand{target, "Set field"}, field{fieldToSet}, oldValue{fieldToSet}, newValue{setTo}
+{
+}
+
+template<typename T>
+inline void FieldSet<T>::redo()
+{
+	field = newValue;
+	UndoCommand::redo();
+}
+
+template<typename T>
+inline void FieldSet<T>::undo()
+{
+	field = oldValue;
+	UndoCommand::undo();
+}
 
 }
