@@ -81,7 +81,7 @@ class VISUALIZATIONBASE_API Cursor {
 		 *
 		 * Two cursors are the same if they have the same owner and if they represent the same location within that owner.
 		 */
-		virtual bool isSame(Cursor* c);
+		virtual bool isSame(Cursor* other);
 
 		/**
 		 * \brief Returns true if this cursor is equivalent with respect to its location to the cursor \a c.
@@ -95,7 +95,8 @@ class VISUALIZATIONBASE_API Cursor {
 		 *	- The inner item's style allows for cursors equivalent through a boundary.
 		 */
 		virtual bool isLocationEquivalent(Cursor* c);
-		virtual bool isLocationEquivalent(bool notLocationEquivalent, CursorType type, bool isAtBoundary, Item* owner);
+		virtual bool isLocationEquivalent(bool otherNotLocationEquivalent, CursorType otherType, bool otherIsAtBoundary,
+													 Item* otherOwner);
 
 		bool notLocationEquivalent() const;
 		void setNotLocationEquivalent(bool notEquivalent);
