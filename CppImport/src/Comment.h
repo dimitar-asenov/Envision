@@ -104,7 +104,6 @@ class CPPIMPORT_API Comment
 
 inline Model::Node* Comment::node() { return node_; }
 inline clang::RawComment* Comment::rawComment() { return rawComment_; }
-inline QString Comment::text() { return text_; }
 inline QString Comment::fileName() { return fileName_; }
 inline unsigned Comment::lineStart() { return lineStart_; }
 inline unsigned Comment::lineEnd() { return lineEnd_; }

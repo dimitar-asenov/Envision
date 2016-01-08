@@ -52,6 +52,8 @@ class OOMODEL_API FormalArgument : public Super<VariableDeclaration>
 
 		Direction direction() const;
 		void setDirection(const Direction& direction);
+
+		bool isUsedInParentMethod();
 };
 
 inline FormalArgument::Direction FormalArgument::direction() const { return static_cast<Direction> (directionInt()); }

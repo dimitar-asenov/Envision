@@ -75,4 +75,12 @@ void Comment::removeFromItemList()
 	commentStatementItem_ = nullptr;
 }
 
+QString Comment::text()
+{
+	auto lines = text_.split('\n');
+	for (auto i = 0; i < lines.length(); i++)
+		lines[i] = lines[i].trimmed();
+	return lines.join('\n');
+}
+
 }

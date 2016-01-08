@@ -139,21 +139,21 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 			// clonedReplacementNode represents the cloned version of replacementNode
 			if (auto clonedReplacementNode = childMapping.clone(replacementNode))
 			{
-				if (DCast<OOModel::VariableDeclaration>(clonedReplacementNode))
+				if (clonedReplacementNode->parent())
 				{
-					if (clonedReplacementNode->parent()->parent())
-						clonedReplacementNode->parent()->parent()
-								->replaceChild(clonedReplacementNode->parent(), childExpansion->metaCall());
-					else
-						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
-				}
-				else if (!DCast<OOModel::Declaration>(clonedReplacementNode))
-				{
-					if (clonedReplacementNode->parent())
+					if (DCast<OOModel::VariableDeclaration>(clonedReplacementNode))
+					{
+						if (clonedReplacementNode->parent()->parent())
+							clonedReplacementNode->parent()->parent()
+									->replaceChild(clonedReplacementNode->parent(), childExpansion->metaCall());
+						else
+							qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
+					}
+					else if (!DCast<OOModel::Declaration>(clonedReplacementNode))
 						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode, childExpansion->metaCall());
-					else
-						qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
 				}
+				else
+					qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
 			}
 	}
 }
@@ -211,7 +211,11 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, Nod
 
 			// the splice name is equal to the formal argument name where the argument is coming from
 			auto argName = clang_.argumentNames(spliceLoc.expansion_->definition()).at(spliceLoc.argumentNumber_);
-			auto newNode = new OOModel::ReferenceExpression(argName);
+			Model::Node* newNode = new OOModel::ReferenceExpression(argName);
+
+			// in case the node to replace is not an expression we have to wrap the splice
+			if (DCast<OOModel::FormalResult>(child))
+				newNode = new OOModel::FormalResult(QString(), DCast<OOModel::Expression>(newNode));
 
 			// insert the splice into the tree
 			if (child->parent()) child->parent()->replaceChild(child, newNode);

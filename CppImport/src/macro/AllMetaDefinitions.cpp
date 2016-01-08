@@ -74,8 +74,9 @@ OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::Macr
 				DCast<OOModel::Module>(NodeHelpers::findDeclaration(root_->modules(), namespaceName));
 
 		// this assertion holds if the project structure matches Envision's project structure
-		// alternatively if no such module could be found (project structure unlike Envision's) one could put it into root_
-		Q_ASSERT(namespaceModule); //if (!namespaceModule) return root_;
+		// alternatively if no such module could be found (project structure unlike Envision's) one could put it into root
+		// Q_ASSERT(namespaceModule);
+		if (!namespaceModule) return root_;
 
 		// try to find the module (includes macro containers) to put this macro in
 		result = NodeHelpers::findDeclaration(namespaceModule->modules(), fileName);

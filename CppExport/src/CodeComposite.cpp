@@ -25,10 +25,11 @@
  **********************************************************************************************************************/
 
 #include "CodeComposite.h"
+#include "Config.h"
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Class.h"
-#include "Config.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
 
 namespace CppExport {
 
@@ -218,7 +219,18 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 		partDependencies.insert((unit->*part)(), dependencies((unit->*part)()));
 
 	units_.clear();
-	for (auto part : topologicalSort(partDependencies)) units_.append(part->parent());
+	std::function<CodeUnitPart*(QList<CodeUnitPart*>&)> selector = [](QList<CodeUnitPart*>& parts)
+	{
+		auto result = parts.first();
+
+		for (auto part : parts)
+			if (DCast<OOModel::MetaCallExpression>(part->parent()->node()))
+				result = part;
+
+		parts.removeOne(result);
+		return result;
+	};
+	for (auto part : topologicalSort(partDependencies, selector)) units_.append(part->parent());
 }
 
 void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
@@ -230,7 +242,7 @@ void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFra
 }
 
 template <typename T>
-QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
+QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn, std::function<T*(QList<T*>&)> selector)
 {
 	// calculate a list of elements with no dependencies.
 	// calculate a map that maps from an element to all elements that depend on it.
@@ -242,6 +254,8 @@ QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
 			noPendingDependencies.append(it.key());
 		else
 		{
+			it.value() = it.value().intersect(dependsOn.keys().toSet());
+
 			// for every other element this element depends on add it to the neededFor map for said other element
 			bool notNeededForAnything = true;
 			for (auto dependency : it.value())
@@ -256,7 +270,7 @@ QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn)
 	while (!noPendingDependencies.empty())
 	{
 		// take any item form the list of item with no more dependencies and add it to the result
-		auto n = noPendingDependencies.takeFirst();
+		auto n = selector ? selector(noPendingDependencies) : noPendingDependencies.takeFirst();
 		result.append(n);
 
 		// check if we are neededFor another node

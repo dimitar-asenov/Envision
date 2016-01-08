@@ -26,7 +26,10 @@
 
 #include "FormalArgument.h"
 
+#include "../declarations/Method.h"
+
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+
 DEFINE_TYPED_LIST(OOModel::FormalArgument)
 
 namespace OOModel {
@@ -49,6 +52,24 @@ FormalArgument::FormalArgument(const QString& name, const Direction& direction)
 {
 	setName(name);
 	setDirection(direction);
+}
+
+bool FormalArgument::isUsedInParentMethod()
+{
+	Q_ASSERT(parent());
+	auto method = DCast<OOModel::Method>(parent()->parent());
+	Q_ASSERT(method);
+
+	QList<Model::Node*> workStack{method->items(), method->memberInitializers()};
+	while (!workStack.empty())
+	{
+		auto currentNode = workStack.takeLast();
+		if (auto reference = DCast<OOModel::ReferenceExpression>(currentNode))
+			if (reference->target() == this)
+				return true;
+		workStack << currentNode->children();
+	}
+	return false;
 }
 
 }

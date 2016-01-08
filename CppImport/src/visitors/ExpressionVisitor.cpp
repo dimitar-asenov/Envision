@@ -447,7 +447,13 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			ooExprStack_.push(ooMethodCall);
 		}
 		else
-			ooExprStack_.push(clang_.createNode<OOModel::ArrayInitializer>(constructExpr->getSourceRange()));
+		{
+			auto arrayInit = clang_.createNode<OOModel::ArrayInitializer>(constructExpr->getSourceRange());
+			for (auto argument : translateArguments(constructExpr->arguments()))
+				arrayInit->values()->append(argument);
+
+			ooExprStack_.push(arrayInit);
+		}
 		return true;
 	}
 	// clang implements lambda construct expressions weirdly, the name of the lambda is in the first argument
