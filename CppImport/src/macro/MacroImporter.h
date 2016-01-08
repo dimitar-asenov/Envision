@@ -97,6 +97,8 @@ class CPPIMPORT_API MacroImporter
 		 * calculate nodes to be removed from the tree after importing.
 		 */
 		void calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeToCloneMap& mapping);
+
+		Model::Node* bestContext(MacroExpansion* expansion);
 };
 
 }

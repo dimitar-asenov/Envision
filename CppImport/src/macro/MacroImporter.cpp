@@ -68,7 +68,6 @@ void MacroImporter::endTranslationUnit()
 
 		handleMacroExpansion(generatedNodes, expansion, mapping, allArgs);
 
-		// TODO: try to find a context without nodes
 		if (insertMetaCall(expansion) && !expansion->xMacroParent())
 		{
 			if (!generatedNodes.empty())
@@ -85,6 +84,18 @@ void MacroImporter::endTranslationUnit()
 									<< macroDefinitions_.definitionName(expansion->definition());
 				}
 			}
+			/*else if (auto context = bestContext(expansion))
+			{
+				if (auto declaration = DCast<OOModel::Declaration>(context))
+				{
+					declaration->metaCalls()->append(expansion->metaCall());
+				}
+				else
+				{
+					qDebug() << context->typeName();
+					Q_ASSERT(false);
+				}
+			}*/
 		}
 
 		calculateFinalizationNodes(generatedNodes, mapping);
@@ -96,6 +107,31 @@ void MacroImporter::endTranslationUnit()
 	allMetaDefinitions_.handleXMacros();
 
 	clear();
+}
+
+Model::Node* MacroImporter::bestContext(MacroExpansion* expansion)
+{
+	auto expansionBegin = clang_.sourceManager()->getPresumedLoc(expansion->range().getBegin());
+	auto expansionEnd = clang_.sourceManager()->getPresumedLoc(expansion->range().getEnd());
+
+	for (auto node : clang_.envisionToClangMap().nodes())
+		for (auto range : clang_.envisionToClangMap().get(node))
+		{
+			auto begin = clang_.sourceManager()->getPresumedLoc(range.getBegin());
+			if (begin.getFilename() != expansionBegin.getFilename() ||
+				 begin.getLine() < expansionBegin.getLine() ||
+				 (begin.getLine() == expansionBegin.getLine() &&
+				  begin.getColumn() < expansionBegin.getColumn())) continue;
+
+			auto end = clang_.sourceManager()->getPresumedLoc(range.getEnd());
+			if (expansionEnd.getLine() < end.getLine() ||
+				(expansionEnd.getLine() == end.getLine() && expansionEnd.getColumn() < end.getColumn()))
+					continue;
+
+			return node;
+		}
+
+	return nullptr;
 }
 
 void MacroImporter::insertArguments(QVector<MacroArgumentInfo>& allArguments)
