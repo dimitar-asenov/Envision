@@ -69,19 +69,21 @@ void MacroImporter::endTranslationUnit()
 		handleMacroExpansion(generatedNodes, expansion, mapping, allArgs);
 
 		// TODO: try to find a context without nodes
-		if (insertMetaCall(expansion) && !generatedNodes.empty() && !expansion->xMacroParent())
+		if (insertMetaCall(expansion) && !expansion->xMacroParent())
 		{
-			auto context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
-
-			if (!DCast<OOModel::Method>(context))
-				context->metaCalls()->append(expansion->metaCall());
-			else
+			if (!generatedNodes.empty())
 			{
-				if (auto replacementNode = expansion->replacementNode())
-					finalizationMetaCalls.insert(replacementNode, expansion);
+				auto context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
+				if (!DCast<OOModel::Method>(context))
+					context->metaCalls()->append(expansion->metaCall());
 				else
-					qDebug() << "no splice found for expansion"
-								<< macroDefinitions_.definitionName(expansion->definition());
+				{
+					if (auto replacementNode = expansion->replacementNode())
+						finalizationMetaCalls.insert(replacementNode, expansion);
+					else
+						qDebug() << "no splice found for expansion"
+									<< macroDefinitions_.definitionName(expansion->definition());
+				}
 			}
 		}
 
