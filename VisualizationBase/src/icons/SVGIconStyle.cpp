@@ -71,7 +71,7 @@ bool SVGIconStyle::drawScaledPixmapInMipmap(qreal scaleFactor) const
 	{
 		QImage img = QImage(size, QImage::Format_ARGB32);
 		img.fill(0);
-		QPainter pai(&img);
+		QPainter pai{&img};
 		renderer_.render(&pai);
 
 		mipmap_.setImage(img, scaleFactor);

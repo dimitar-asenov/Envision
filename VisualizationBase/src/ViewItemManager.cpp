@@ -134,9 +134,9 @@ void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) cons
 	auto json = view->toJson().toJson();
 	if (!QDir(DIRECTORY_NAME).exists())
 		QDir().mkdir(DIRECTORY_NAME);
-	QFile file(fileName(view->name(), manager->name()));
+	QFile file{fileName(view->name(), manager->name())};
 	file.open(QIODevice::WriteOnly);
-	QTextStream write(&file);
+	QTextStream write{&file};
 	write << json;
 }
 
@@ -153,10 +153,10 @@ ViewItem* ViewItemManager::loadView(QString name, QPoint position)
 
 ViewItem* ViewItemManager::loadView(QString name, Model::TreeManager* manager)
 {
-	QFile file(fileName(name, manager->name()));
+	QFile file{fileName(name, manager->name())};
 	if (!file.exists()) return nullptr;
 	file.open(QIODevice::ReadOnly);
-	QTextStream read(&file);
+	QTextStream read{&file};
 	QString json;
 	while (!read.atEnd()) json = json + read.readLine();
 	ViewItem* view = new ViewItem(nullptr);

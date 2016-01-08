@@ -29,13 +29,13 @@
 namespace Visualization {
 
 VisualizationException::VisualizationException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 
 const QString& VisualizationException::name() const
 {
-	static QString ename("VisualizationException");
+	static QString ename{"VisualizationException"};
 	return ename;
 }
 

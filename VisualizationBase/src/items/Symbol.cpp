@@ -30,7 +30,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(Symbol, "item")
 
 Symbol::Symbol(Item* parent, const StyleType *style) :
-Super(parent, style, style->symbol())
+Super{parent, style, style->symbol()}
 {
 	setEditable(false);
 }

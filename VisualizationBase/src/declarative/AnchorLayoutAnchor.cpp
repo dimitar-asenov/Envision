@@ -87,7 +87,7 @@ int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 
 bool AnchorLayoutAnchor::dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayoutAnchor*>& allConstraints)
 {
-	QList<AnchorLayoutAnchor*> dependsOn = {this};
+	QList<AnchorLayoutAnchor*> dependsOn{this};
 
 	while (!dependsOn.empty())
 	{
