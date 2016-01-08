@@ -95,7 +95,7 @@ ElementType* DeclarativeItem<VisualizationType>::addForm(ElementType* element)
 
 template <typename VisualizationType>
 	NodeItemWrapperFormElement<VisualizationType>*
-	DeclarativeItem<VisualizationType>::item(Item* VisualizationType::* item,
+	DeclarativeItem<VisualizationType>::item(Item* VisualizationType::* itemStorage,
 			std::function<Model::Node* (VisualizationType* v)> nodeGetter)
 {
 	return new NodeItemWrapperFormElement<VisualizationType>(item, nodeGetter);
