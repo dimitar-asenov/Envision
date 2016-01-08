@@ -83,7 +83,7 @@ class CORE_API EnvisionPlugin
 		 */
 		virtual void selfTest(QString testid) = 0;
 
-		virtual ~EnvisionPlugin() {};
+		virtual ~EnvisionPlugin() = default;
 };
 
 }
