@@ -50,7 +50,7 @@ class CPPIMPORT_API CppImportManager
 		 * If the project has subproject please specify this with setting \a subProject to true
 		 * All subprojects that contain a compile_commands file will be translated
 		 */
-		void setImportPath(const QString& sourcePath, const bool subProjects = false);
+		void setImportPaths(QStringList sourcePaths, const bool subProjects = false);
 
 		/**
 		 * Creates a clang tool and translates the sourcecode to Envision's AST and returns the root
