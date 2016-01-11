@@ -103,6 +103,14 @@ class CPPIMPORT_API MacroImporter
 		 * the corresponding meta call can be put in based on its presumed location.
 		 */
 		Model::Node* bestContext(MacroExpansion* expansion);
+
+		/**
+		 * adds predefined meta calls to all signaling methods in classContext.
+		 * a method is determined to be signaling if it appears after the signalsLocation and there is no other
+		 * class access specifier (private:, protected:, public:) on a separate line between the signalsLocation and
+		 * the candidate method.
+		 */
+		void handleQSignals(clang::SourceLocation signalsLocation, OOModel::Class* classContext);
 };
 
 }

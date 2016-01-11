@@ -88,7 +88,19 @@ void MacroImporter::endTranslationUnit()
 			{
 				if (auto declaration = DCast<OOModel::Declaration>(context))
 				{
-					declaration->metaCalls()->append(expansion->metaCall());
+					if (macroDefinitions_.definitionName(expansion->definition()) == "Q_SIGNALS")
+					{
+						// delete the meta call for this expansion it is never going to be used
+						SAFE_DELETE(expansion->metaCall());
+
+						if (auto classContext = DCast<OOModel::Class>(declaration))
+							handleQSignals(expansion->range().getBegin(), classContext);
+						else
+							// TODO: for debug purposes only
+							qDebug() << "unhandled Q_SIGNALS in a" << declaration->typeName() << "instead of a class";
+					}
+					else
+						declaration->metaCalls()->append(expansion->metaCall());
 				}
 				else
 					qDebug() << "unhandled infered context type: " << context->typeName(); // TODO: for debug purposes only
@@ -104,6 +116,41 @@ void MacroImporter::endTranslationUnit()
 	allMetaDefinitions_.handleXMacros();
 
 	clear();
+}
+
+void MacroImporter::handleQSignals(clang::SourceLocation signalsLocation, OOModel::Class* classContext)
+{
+	auto signalsPresumedLocation = clang_.sourceManager()->getPresumedLoc(signalsLocation);
+	unsigned classContextEndLine = 0;
+	for (auto range : clang_.envisionToClangMap().get(classContext))
+	{
+		auto classContextEndLocation = clang_.sourceManager()->getPresumedLoc(range.getEnd());
+		if (signalsPresumedLocation.getFilename() != classContextEndLocation.getFilename() ||
+			 classContextEndLocation.getLine() < signalsPresumedLocation.getLine()) continue;
+		classContextEndLine = classContextEndLocation.getLine();
+		break;
+	}
+	Q_ASSERT(classContextEndLine > 0);
+
+	for (auto method : *classContext->methods())
+		for (auto range : clang_.envisionToClangMap().get(method))
+		{
+			auto methodLocationBegin = clang_.sourceManager()->getPresumedLoc(range.getBegin());
+			auto methodLocationEnd = clang_.sourceManager()->getPresumedLoc(range.getEnd());
+			if (methodLocationBegin.getFilename() != methodLocationEnd.getFilename() ||
+				 methodLocationBegin.getFilename() != signalsPresumedLocation.getFilename() ||
+				 methodLocationBegin.getLine() < signalsPresumedLocation.getLine() ||
+				 classContextEndLine < methodLocationBegin.getLine()) continue;
+
+			auto codeBetweenSignalsAndMethod = clang_.unexpandedSpelling(signalsLocation, range.getBegin());
+
+			QRegularExpression regex("^\\s*(private|protected|public):\\s*$");
+			regex.setPatternOptions(QRegularExpression::MultilineOption);
+			if (!regex.match(codeBetweenSignalsAndMethod).hasMatch())
+				method->metaCalls()->append(new OOModel::MetaCallExpression("PREDEF_SIGNAL"));
+
+			break;
+		}
 }
 
 Model::Node* MacroImporter::bestContext(MacroExpansion* expansion)
