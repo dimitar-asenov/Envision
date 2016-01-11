@@ -195,7 +195,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		else notAllowed(classs);
 
 		auto potentialNamespace = classs->firstAncestorOfType<Module>();
-		if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace)
+		if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace &&
+			 classs->typeArguments()->isEmpty())
 			*fragment << pluginName(potentialNamespace, classs).toUpper() << "_API ";
 
 		*fragment << classs->nameNode();
@@ -416,7 +417,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	auto potentialNamespace = method->firstAncestorOfType<Module>();
-	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace)
+	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace &&
+		 method->typeArguments()->isEmpty())
 		*fragment << pluginName(potentialNamespace, method).toUpper() << "_API ";
 
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
