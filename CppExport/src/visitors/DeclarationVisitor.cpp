@@ -313,6 +313,8 @@ bool DeclarationVisitor::shouldExportMethod(Method* method)
 					if (methodSignaturesMatch(method, generatedMethod))
 						return false;
 	}
+	if (sourceVisitor())
+		return !isSignalingDeclaration(method);
 	return true;
 }
 
