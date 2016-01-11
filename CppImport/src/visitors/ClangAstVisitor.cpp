@@ -418,6 +418,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 
 	auto ooEnumClass = clang_.createNamedNode<OOModel::Class>(enumDecl);
 	ooEnumClass->setConstructKind(OOModel::Class::ConstructKind::Enum);
+	ooEnumClass->modifiers()->set(utils_->translateAccessSpecifier(enumDecl->getAccess()));
 
 	// insert in tree
 	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
@@ -1249,7 +1250,8 @@ void ClangAstVisitor::insertFriendClass(clang::FriendDecl* friendDecl, OOModel::
 {
 	auto friendClass = friendDecl->getFriendType()->getType().getTypePtr()->getAsCXXRecordDecl();
 	Q_ASSERT(friendClass);
-	ooClass->friends()->append(clang_.createNamedNode<OOModel::Class>(friendClass));
+	ooClass->friends()->append(clang_.createNode<OOModel::Class>(friendDecl->getFriendType()->getTypeLoc()
+																					 .getNextTypeLoc().getSourceRange()));
 }
 
 void ClangAstVisitor::insertFriendFunction(clang::FriendDecl* friendDecl, OOModel::Class* ooClass)

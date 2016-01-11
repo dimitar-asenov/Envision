@@ -26,14 +26,14 @@
 
 #include "CodeGenerationVisitor.h"
 
+#include "declarations/MetaDefinition.h"
+#include "expressions/BooleanLiteral.h"
+#include "expressions/StringLiteral.h"
 #include "expressions/ReferenceExpression.h"
 #include "expressions/MetaCallExpression.h"
 
 #include "ModelBase/src/nodes/NameText.h"
-
-#include "declarations/MetaDefinition.h"
-#include "expressions/BooleanLiteral.h"
-#include "expressions/StringLiteral.h"
+#include "OOModel/src/elements/FormalResult.h"
 
 namespace OOModel {
 
@@ -73,7 +73,15 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 					// case: there exists a replacement and it is not a ReferenceExpression
 					// -> replace node
 
-					auto cloned = argument->clone();
+					Model::Node* cloned = nullptr;
+					if (DCast<OOModel::Expression>(n) && DCast<OOModel::FormalResult>(argument))
+					{
+						// n is an expression but the argument is a formal result so we have to use
+						// the expression inside the formal result
+						cloned = DCast<OOModel::FormalResult>(argument)->typeExpression()->clone();
+					}
+					else // default case: use whole argument
+						cloned = argument->clone();
 					n->parent()->replaceChild(n, cloned);
 
 					// visit the cloned tree and return to avoid visiting the children of n

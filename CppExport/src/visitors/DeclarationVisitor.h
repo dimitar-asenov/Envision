@@ -102,6 +102,8 @@ class CPPEXPORT_API DeclarationVisitor
 
 		QString pluginName(OOModel::Module* namespaceModule, OOModel::Declaration* declaration);
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
+
+		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
 };
 
 inline bool DeclarationVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }

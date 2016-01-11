@@ -27,6 +27,7 @@
 #include "FormalArgument.h"
 
 #include "../declarations/Method.h"
+#include "../expressions/LambdaExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
@@ -57,10 +58,14 @@ FormalArgument::FormalArgument(const QString& name, const Direction& direction)
 bool FormalArgument::isUsedInParentMethod()
 {
 	Q_ASSERT(parent());
-	auto method = DCast<OOModel::Method>(parent()->parent());
-	Q_ASSERT(method);
+	QList<Model::Node*> workStack;
+	if (auto method = DCast<OOModel::Method>(parent()->parent()))
+		workStack << method->items() << method->memberInitializers();
+	else if (auto lambdaExpression = DCast<OOModel::LambdaExpression>(parent()->parent()))
+		workStack << lambdaExpression->body();
+	else
+		Q_ASSERT(false);
 
-	QList<Model::Node*> workStack{method->items(), method->memberInitializers()};
 	while (!workStack.empty())
 	{
 		auto currentNode = workStack.takeLast();
