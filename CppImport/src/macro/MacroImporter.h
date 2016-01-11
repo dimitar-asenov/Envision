@@ -111,6 +111,8 @@ class CPPIMPORT_API MacroImporter
 		 * the candidate method.
 		 */
 		void handleQSignals(clang::SourceLocation signalsLocation, OOModel::Class* classContext);
+
+		void handleQEmit(MacroExpansion* emitExpansion, OOModel::Method* methodContext);
 };
 
 }

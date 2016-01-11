@@ -49,16 +49,23 @@ QString CodeComposite::relativePath(CodeComposite* other)
 
 	if (name() == other->name()) return otherName.last();
 
+	bool nothingInCommon = true;
 	QStringList thisName = name().split("/");
 	while (!thisName.empty() && !otherName.empty() && thisName.first() == otherName.first())
 	{
 		thisName.takeFirst();
 		otherName.takeFirst();
+		nothingInCommon = false;
 	}
 
-	int backSteps = thisName.size() - otherName.size();
-	for (auto i = 0; i < backSteps; i++) otherName.prepend("..");
-	return otherName.join("/");
+	if (nothingInCommon)
+		return other->name();
+	else
+	{
+		int backSteps = thisName.size() - 1;
+		for (auto i = 0; i < backSteps; i++) otherName.prepend("..");
+		return otherName.join("/");
+	}
 }
 
 QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,

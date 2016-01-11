@@ -43,11 +43,13 @@ CppImportManager::~CppImportManager()
 	SAFE_DELETE(compilationDb_);
 }
 
-void CppImportManager::setImportPath(const QString& sourcePath, const bool subProjects)
+void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subProjects)
 {
-	setProjectName(sourcePath);
+	setProjectName(sourcePaths.first());
 
-	QDir dir(sourcePath);
+
+	QDir dir(sourcePaths.first());
+	qDebug() << "Ua" << dir.absolutePath();
 	do
 	{
 		std::string Error;
@@ -57,14 +59,18 @@ void CppImportManager::setImportPath(const QString& sourcePath, const bool subPr
 			throw CppImportException("No compilation database found: " + QString::fromStdString(Error));
 	} while (!compilationDb_);
 
-	if (subProjects)
+	for (auto relativeSourcePath : sourcePaths)
 	{
-		QDirIterator dirIterator(sourcePath, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
-		while (dirIterator.hasNext())
-			initPath(dirIterator.next());
+		auto sourcePath = QDir(relativeSourcePath).absolutePath();
+		if (subProjects)
+		{
+			QDirIterator dirIterator(sourcePath, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
+			while (dirIterator.hasNext())
+				initPath(dirIterator.next());
+		}
+		else
+			initPath(sourcePath);
 	}
-	else
-		initPath(sourcePath);
 }
 
 Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPerProject)
@@ -120,18 +126,18 @@ void CppImportManager::setupTest()
 		else if (testDir.startsWith("path:"))
 		{
 			testDir.replace(0, 5, "");
-			return setImportPath(QDir(QCoreApplication::applicationDirPath() + "/test" + testDir).absolutePath());
+			return setImportPaths(testDir.split(':'));
 		}
 		else if (testDir.startsWith("spath:"))
 		{
 			testDir.replace(0, 6, "");
-			return setImportPath(QDir(QCoreApplication::applicationDirPath() + "/test" + testDir).absolutePath(), true);
+			return setImportPaths(testDir.split(':'), true);
 		}
 		else if (!testDir.startsWith("#"))
 		{
 			rootPath.append(QDir::separator()).append(testDir);
 			createCompilationDbForTest(rootPath);
-			return setImportPath(rootPath);
+			return setImportPaths({rootPath});
 		}
 	}
 	throw CppImportException("No test case set in the testSelector file");
