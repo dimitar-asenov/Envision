@@ -141,6 +141,16 @@ bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
 	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
 }
 
+bool DeclarationVisitor::isSignalingDeclaration(Declaration* declaration)
+{
+	for (auto expression : *declaration->metaCalls())
+		if (auto metaCall = DCast<MetaCallExpression>(expression))
+			if (auto reference = DCast<ReferenceExpression>(metaCall->callee()))
+				if (reference->name() == "PREDEF_SIGNAL")
+					return true;
+	return false;
+}
+
 SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
@@ -214,34 +224,55 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 				error(classs->enumerators(), "Enum unhandled"); // TODO
 
 			auto publicSection = new CompositeFragment(classs, "accessorSections");
-			auto publicFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Public); };
-			bool hasPublicSection = addMemberDeclarations(classs, publicSection, publicFilter);
-
+			bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
+			{
+					if (isSignalingDeclaration(declaration)) return false;
+					return declaration->modifiers()->isSet(Modifier::Public);
+			});
+			auto signalingSection = new CompositeFragment(classs, "accessorSections");
+			bool hasSignalingSection = addMemberDeclarations(classs, signalingSection, [](Declaration* declaration)
+			{
+					return isSignalingDeclaration(declaration);
+			});
 			auto protectedSection = new CompositeFragment(classs, "accessorSections");
-			auto protectedFilter = [](Declaration* declaration) { return declaration->modifiers()->isSet(Modifier::Protected); };
-			bool hasProtectedSection = addMemberDeclarations(classs, protectedSection, protectedFilter);
-
+			bool hasProtectedSection = addMemberDeclarations(classs, protectedSection,  [](Declaration* declaration)
+			{
+					if (isSignalingDeclaration(declaration)) return false;
+					return declaration->modifiers()->isSet(Modifier::Protected);
+			});
 			auto privateSection = new CompositeFragment(classs, "accessorSections");
-			auto privateFilter = [](Declaration* declaration) { return !declaration->modifiers()->isSet(Modifier::Public) &&
-																						  !declaration->modifiers()->isSet(Modifier::Protected); };
-			bool hasPrivateSection = addMemberDeclarations(classs, privateSection, privateFilter);
+			bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
+			{
+					if (isSignalingDeclaration(declaration)) return false;
+					return !declaration->modifiers()->isSet(Modifier::Public) &&
+					!declaration->modifiers()->isSet(Modifier::Protected);
+			});
 
 			if (hasPublicSection)
 			{
-				if (hasProtectedSection || hasPrivateSection || classs->constructKind() != Class::ConstructKind::Struct)
+				if (hasSignalingSection || hasProtectedSection || hasPrivateSection ||
+					 classs->constructKind() != Class::ConstructKind::Struct)
 					*sections << "public:";
 				sections->append(publicSection);
 			}
-			if (hasProtectedSection)
+			if (hasSignalingSection)
 			{
 				if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+
+				*sections << "Q_SIGNALS:";
+				sections->append(signalingSection);
+			}
+			if (hasProtectedSection)
+			{
+				if (hasSignalingSection || hasSignalingSection) *sections << "\n"; // add newline between two accessor sections
 
 				*sections << "protected:";
 				sections->append(protectedSection);
 			}
 			if (hasPrivateSection)
 			{
-				if (hasPublicSection || hasProtectedSection) *sections << "\n"; // add newline between two accessor sections
+				if (hasPublicSection || hasSignalingSection || hasProtectedSection)
+					*sections << "\n"; // add newline between two accessor sections
 
 				*sections << "private:";
 				sections->append(privateSection);
