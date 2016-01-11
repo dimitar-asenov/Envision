@@ -50,7 +50,7 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 	for (auto unit : codeUnits) unit->calculateSourceFragments();
 	for (auto unit : codeUnits) unit->calculateDependencies(codeUnits);
 
-	auto directory = new Export::SourceDir(nullptr, pathToProjectContainerDirectory + "/src");
+	auto directory = new Export::SourceDir(nullptr, pathToProjectContainerDirectory);
 	for (auto codeComposite : mergeUnits(codeUnits))
 		createFilesFromComposite(directory, codeComposite);
 
