@@ -418,6 +418,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 
 	auto ooEnumClass = clang_.createNamedNode<OOModel::Class>(enumDecl);
 	ooEnumClass->setConstructKind(OOModel::Class::ConstructKind::Enum);
+	ooEnumClass->modifiers()->set(utils_->translateAccessSpecifier(enumDecl->getAccess()));
 
 	// insert in tree
 	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
