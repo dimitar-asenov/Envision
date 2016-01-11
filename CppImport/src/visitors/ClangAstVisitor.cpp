@@ -1250,7 +1250,8 @@ void ClangAstVisitor::insertFriendClass(clang::FriendDecl* friendDecl, OOModel::
 {
 	auto friendClass = friendDecl->getFriendType()->getType().getTypePtr()->getAsCXXRecordDecl();
 	Q_ASSERT(friendClass);
-	ooClass->friends()->append(clang_.createNamedNode<OOModel::Class>(friendClass));
+	ooClass->friends()->append(clang_.createNode<OOModel::Class>(friendDecl->getFriendType()->getTypeLoc()
+																					 .getNextTypeLoc().getSourceRange()));
 }
 
 void ClangAstVisitor::insertFriendFunction(clang::FriendDecl* friendDecl, OOModel::Class* ooClass)
