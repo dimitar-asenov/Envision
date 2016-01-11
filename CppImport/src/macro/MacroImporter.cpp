@@ -91,10 +91,7 @@ void MacroImporter::endTranslationUnit()
 					declaration->metaCalls()->append(expansion->metaCall());
 				}
 				else
-				{
-					qDebug() << context->typeName();
-					Q_ASSERT(false);
-				}
+					qDebug() << "unhandled infered context type: " << context->typeName(); // TODO: for debug purposes only
 			}
 		}
 
