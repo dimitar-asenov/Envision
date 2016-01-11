@@ -160,7 +160,6 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
 		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections",
 								[](Expression* expression) { return metaCallFilter(expression, true); });
-		*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 		*sections << list(classs->classes(), this, "sections");
 		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
 		{
@@ -219,9 +218,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
 			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
 									[](Expression* expression) { return metaCallFilter(expression, false); });
-
-			if (classs->enumerators()->size() > 0)
-				error(classs->enumerators(), "Enum unhandled"); // TODO
+			*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 
 			auto publicSection = new CompositeFragment(classs, "accessorSections");
 			bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
