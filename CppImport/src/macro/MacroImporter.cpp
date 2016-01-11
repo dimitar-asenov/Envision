@@ -99,6 +99,14 @@ void MacroImporter::endTranslationUnit()
 							// TODO: for debug purposes only
 							qDebug() << "unhandled Q_SIGNALS in a" << declaration->typeName() << "instead of a class";
 					}
+					else if (macroDefinitions_.definitionName(expansion->definition()) == "Q_EMIT")
+					{
+						if (auto methodContext = DCast<OOModel::Method>(declaration))
+							handleQEmit(expansion, methodContext);
+						else
+							// TODO: for debug purposes only
+							qDebug() << "unhandled Q_EMIT in a" << declaration->typeName() << "instead of a method";
+					}
 					else
 						declaration->metaCalls()->append(expansion->metaCall());
 				}
@@ -151,6 +159,45 @@ void MacroImporter::handleQSignals(clang::SourceLocation signalsLocation, OOMode
 
 			break;
 		}
+}
+
+void MacroImporter::handleQEmit(MacroExpansion* emitExpansion, OOModel::Method* methodContext)
+{
+	auto emitPresumedLocation = clang_.sourceManager()->getPresumedLoc(emitExpansion->range().getBegin());
+
+	QList<Model::Node*> workStack{methodContext->items()};
+	QList<Model::Node*> candidates;
+	while (!workStack.empty())
+	{
+		auto currentNode = workStack.takeLast();
+		bool isCandidate = false;
+		for (auto range : clang_.envisionToClangMap().get(currentNode))
+		{
+			auto nodePresumedLocation = clang_.sourceManager()->getPresumedLoc(range.getBegin());
+			if (nodePresumedLocation.getFilename() == emitPresumedLocation.getFilename() &&
+				 nodePresumedLocation.getLine() == emitPresumedLocation.getLine())
+			{
+				isCandidate = true;
+				break;
+			}
+		}
+
+		if (isCandidate)
+			candidates.append(currentNode);
+		else
+			workStack << currentNode->children();
+	}
+
+	Q_ASSERT(candidates.size() == 1);
+	OOModel::MethodCallExpression* signalsMethodCall{};
+	if (auto expressionStatement = DCast<OOModel::ExpressionStatement>(candidates.first()))
+		signalsMethodCall = DCast<OOModel::MethodCallExpression>(expressionStatement->expression());
+	else
+		signalsMethodCall = DCast<OOModel::MethodCallExpression>(candidates.first());
+	Q_ASSERT(signalsMethodCall);
+
+	signalsMethodCall->parent()->replaceChild(signalsMethodCall, emitExpansion->metaCall());
+	emitExpansion->metaCall()->arguments()->append(signalsMethodCall);
 }
 
 Model::Node* MacroImporter::bestContext(MacroExpansion* expansion)
