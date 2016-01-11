@@ -158,24 +158,29 @@ Model::Node* MacroImporter::bestContext(MacroExpansion* expansion)
 	auto expansionBegin = clang_.sourceManager()->getPresumedLoc(expansion->range().getBegin());
 	auto expansionEnd = clang_.sourceManager()->getPresumedLoc(expansion->range().getEnd());
 
+	Model::Node* bestContext{};
+	unsigned bestContextLine{};
 	for (auto node : clang_.envisionToClangMap().nodes())
 		for (auto range : clang_.envisionToClangMap().get(node))
 		{
 			auto begin = clang_.sourceManager()->getPresumedLoc(range.getBegin());
 			if (begin.getFilename() != expansionBegin.getFilename() ||
-				 begin.getLine() < expansionBegin.getLine() ||
+				 begin.getLine() > expansionBegin.getLine() ||
 				 (begin.getLine() == expansionBegin.getLine() &&
-				  begin.getColumn() < expansionBegin.getColumn())) continue;
+				  begin.getColumn() > expansionBegin.getColumn())) continue;
 
 			auto end = clang_.sourceManager()->getPresumedLoc(range.getEnd());
-			if (expansionEnd.getLine() < end.getLine() ||
-				(expansionEnd.getLine() == end.getLine() && expansionEnd.getColumn() < end.getColumn()))
+			if (expansionEnd.getLine() > end.getLine() ||
+				(expansionEnd.getLine() == end.getLine() && expansionEnd.getColumn() > end.getColumn()))
 					continue;
 
-			return node;
+			if (!bestContext || bestContextLine < begin.getLine())
+			{
+				bestContext = node;
+				bestContextLine = begin.getLine();
+			}
 		}
-
-	return nullptr;
+	return bestContext;
 }
 
 void MacroImporter::insertArguments(QVector<MacroArgumentInfo>& allArguments)
