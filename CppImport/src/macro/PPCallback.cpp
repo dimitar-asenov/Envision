@@ -37,7 +37,7 @@ void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::Mac
 	auto name = QString::fromStdString(MacroNameTok.getIdentifierInfo()->getName().str());
 
 	// ignore export flags
-	if (name.endsWith("_API") || name == "Q_DECL_EXPORT") return;
+	if (name.endsWith("_API") || name == "Q_DECL_EXPORT" || name == "Q_DECL_IMPORT") return;
 
 	macroDefinitions_.addMacroDefinition(name, md.getLocalDirective());
 	macroExpansions_.addMacroExpansion(sr, md.getLocalDirective(), args);
