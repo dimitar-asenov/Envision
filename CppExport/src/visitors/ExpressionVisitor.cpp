@@ -274,17 +274,28 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
 	else if (auto e = DCast<MetaCallExpression>(expression))
 	{
-		*fragment << visit(e->callee());
-		if (!e->arguments()->isEmpty())
+		auto calleeReference = DCast<OOModel::ReferenceExpression>(e->callee());
+		if (calleeReference && calleeReference->name() == "Q_EMIT")
 		{
-			auto arguments = new Export::CompositeFragment(e->arguments(), "argsList");
-			for (auto node : *e->arguments())
-				if (auto n = DCast<Expression>(node)) *arguments << visit(n);
-				else if (auto n = DCast<Statement>(node)) *arguments << statement(n);
-				else if (auto n = DCast<Declaration>(node)) *arguments << declaration(n);
-				else if (auto n = DCast<FormalResult>(node)) *arguments << element(n);
-				else Q_ASSERT(false);
-			*fragment << arguments;
+			*fragment << visit(e->callee());
+			auto signalsMethodCall = DCast<OOModel::MethodCallExpression>(e->arguments()->first());
+			Q_ASSERT(signalsMethodCall);
+			*fragment << " " << visit(signalsMethodCall);
+		}
+		else
+		{
+			*fragment << visit(e->callee());
+			if (!e->arguments()->isEmpty())
+			{
+				auto arguments = new Export::CompositeFragment(e->arguments(), "argsList");
+				for (auto node : *e->arguments())
+					if (auto n = DCast<Expression>(node)) *arguments << visit(n);
+					else if (auto n = DCast<Statement>(node)) *arguments << statement(n);
+					else if (auto n = DCast<Declaration>(node)) *arguments << declaration(n);
+					else if (auto n = DCast<FormalResult>(node)) *arguments << element(n);
+					else Q_ASSERT(false);
+				*fragment << arguments;
+			}
 		}
 	}
 	else if (auto e = DCast<NewExpression>(expression))
