@@ -29,7 +29,12 @@
 		"Core/PluginManager" : "Core/src/PluginManager" ,
 		"Core/ProfileJob" : "Core/src/Profiler" ,
 		"Super" : "Core/src/reflect/Reflect" ,
-		"Q_DECLARE_INTERFACE" : "Core/src/EnvisionPlugin"
+		"Q_DECLARE_INTERFACE" : "Core/src/EnvisionPlugin",
+		"Logger/DefaultLog" : "Logger/src/DefaultLog" ,
+		"Logger/LoggerPlugin" : "Logger/src/LoggerPlugin" ,
+		"Logger/Timer" : "Logger/src/Timer" ,
+		"Logger/LogTester" : "Logger/test/LogTester" ,
+		"Logger/Log" : "Logger/src/Log"
 	},
 	"ExportFlagMap": 
 	{
