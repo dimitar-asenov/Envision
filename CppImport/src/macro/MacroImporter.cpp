@@ -132,6 +132,8 @@ void MacroImporter::handleQSignals(clang::SourceLocation signalsLocation, OOMode
 	}
 	Q_ASSERT(classContextEndLine > 0);
 
+	QRegularExpression regex("^\\s*(private|protected|public):\\s*$");
+	regex.setPatternOptions(QRegularExpression::MultilineOption);
 	for (auto method : *classContext->methods())
 		for (auto range : clang_.envisionToClangMap().get(method))
 		{
@@ -144,8 +146,6 @@ void MacroImporter::handleQSignals(clang::SourceLocation signalsLocation, OOMode
 
 			auto codeBetweenSignalsAndMethod = clang_.unexpandedSpelling(signalsLocation, range.getBegin());
 
-			QRegularExpression regex("^\\s*(private|protected|public):\\s*$");
-			regex.setPatternOptions(QRegularExpression::MultilineOption);
 			if (!regex.match(codeBetweenSignalsAndMethod).hasMatch())
 				method->metaCalls()->append(new OOModel::MetaCallExpression("PREDEF_SIGNAL"));
 
