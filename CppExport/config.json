@@ -34,7 +34,8 @@
 		"Logger/LoggerPlugin" : "Logger/src/LoggerPlugin" ,
 		"Logger/Timer" : "Logger/src/Timer" ,
 		"Logger/LogTester" : "Logger/test/LogTester" ,
-		"Logger/Log" : "Logger/src/Log"
+		"Logger/Log" : "Logger/src/Log",
+		"main" : "Launcher/src/launcher"
 	},
 	"ExportFlagMap": 
 	{
