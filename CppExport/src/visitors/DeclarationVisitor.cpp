@@ -344,8 +344,6 @@ QString DeclarationVisitor::pluginName(Module* namespaceModule, Declaration* dec
 		return "InteractionBase";
 	else if (namespaceModule->name() == "Alloy")
 		return "AlloyIntegration";
-	else if (namespaceModule->name() == "Hello")
-		return "HelloWorld";
 	return namespaceModule->name();
 }
 

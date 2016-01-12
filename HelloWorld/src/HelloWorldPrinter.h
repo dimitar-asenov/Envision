@@ -28,7 +28,7 @@
 
 #include "helloworld_api.h"
 
-namespace Hello {
+namespace HelloWorld {
 
 /**
  * Class that contains a static "Hello World" method.

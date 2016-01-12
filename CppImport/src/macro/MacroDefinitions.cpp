@@ -39,7 +39,6 @@ MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_{clang}
 		directoryToNamespaceMap_.insert("VisualizationBase", "Visualization");
 		directoryToNamespaceMap_.insert("InteractionBase", "Interaction");
 		directoryToNamespaceMap_.insert("AlloyIntegration", "Alloy");
-		directoryToNamespaceMap_.insert("HelloWorld", "Hello");
 	}
 }
 

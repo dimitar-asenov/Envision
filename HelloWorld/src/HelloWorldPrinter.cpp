@@ -26,7 +26,7 @@
 
 #include "HelloWorldPrinter.h"
 
-namespace Hello {
+namespace HelloWorld {
 
 void HelloWorldPrinter::sayHello(QString fromWho)
 {

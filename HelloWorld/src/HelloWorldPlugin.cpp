@@ -27,7 +27,7 @@
 #include "HelloWorldPlugin.h"
 #include "HelloWorldPrinter.h"
 
-namespace Hello {
+namespace HelloWorld {
 
 bool HelloWorldPlugin::initialize(Core::EnvisionManager&)
 {

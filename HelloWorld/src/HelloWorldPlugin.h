@@ -29,7 +29,7 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
 
-namespace Hello {
+namespace HelloWorld {
 
 /**
  * Implements the interface between the HelloWorld plug-in and Envision.
