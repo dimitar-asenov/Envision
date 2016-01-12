@@ -73,7 +73,7 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 				std::make_unique<IncludesPPCallback>(*it, clang_.sourceManager()));
 }
 
-Model::Node*ClangAstVisitor::ooStackTop()
+Model::Node* ClangAstVisitor::ooStackTop()
 {
 	return ooStack_.top();
 }
@@ -84,7 +84,7 @@ void ClangAstVisitor::pushOOStack(Model::Node* node)
 	ooStack_.push(node);
 }
 
-Model::Node*ClangAstVisitor::popOOStack()
+Model::Node* ClangAstVisitor::popOOStack()
 {
 	return ooStack_.pop();
 }
