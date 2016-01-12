@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 import os, re, shutil
 
-envisionDirectory = '/home/patrick/Envision/'
+envisionDirectory = os.path.dirname( os.path.dirname( os.path.dirname(os.path.realpath(__file__)))) + '/'
 
 hOrCppRegex = re.compile(r'^.*\.(h|cpp)$', re.DOTALL)
 
