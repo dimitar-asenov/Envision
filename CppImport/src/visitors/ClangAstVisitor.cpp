@@ -82,6 +82,22 @@ Model::Node*ClangAstVisitor::popOOStack()
 	return ooStack_.pop();
 }
 
+bool ClangAstVisitor::TraverseDecl(clang::Decl* decl)
+{
+	if (auto project = DCast<OOModel::Project>(ooStack_.top()))
+	{
+		auto parentProject = trMngr_->projectForDeclaration(decl);
+
+		if (project != parentProject)
+		{
+			 ooStack_.pop();
+			 ooStack_.push(parentProject);
+		}
+	}
+
+	return Base::TraverseDecl(decl);
+}
+
 bool ClangAstVisitor::VisitDecl(clang::Decl* decl)
 {
 	if (!shouldImport(decl->getLocation()))

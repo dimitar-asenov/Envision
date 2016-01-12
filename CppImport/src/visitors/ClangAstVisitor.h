@@ -58,6 +58,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		// method only for debugging
 		bool VisitDecl(clang::Decl* decl);
+		bool TraverseDecl(clang::Decl* decl);
 
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
 		bool TraverseClassTemplateDecl(clang::ClassTemplateDecl* classTemplate);

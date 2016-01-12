@@ -135,6 +135,11 @@ class CPPIMPORT_API TranslateManager
 		OOModel::TypeAlias* insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 
 		OOModel::Field* insertNamespaceField(clang::VarDecl* varDecl, bool& wasDeclared);
+
+		OOModel::Project* projectForDeclaration(clang::Decl* decl);
+		OOModel::Project* projectByName(const QString& name);
+		QString projectNameFromPath(QString path);
+
 	private:
 		ClangHelpers& clang_;
 
@@ -156,6 +161,8 @@ class CPPIMPORT_API TranslateManager
 		QHash<QString, OOModel::TypeAlias*> namespacAliasMap_;
 		QHash<QString, OOModel::TypeAlias*> typeAliasMap_;
 
+		QHash<QString, OOModel::Project*> projects_;
+
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
 		ExpressionVisitor* exprVisitor_{};
@@ -170,5 +177,7 @@ class CPPIMPORT_API TranslateManager
 
 		void addMethodResultAndArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method);
 };
+
+inline OOModel::Project*TranslateManager::projectByName(const QString& name) { return projects_[name]; }
 
 }
