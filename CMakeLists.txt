@@ -36,7 +36,7 @@ add_subdirectory("InformationScripting") # uses the generator and OODebug
 
 # Object-Oriented layer - Contracts
 add_subdirectory("ContractsLibrary")
-add_subdirectory("AlloyIntegration")
+add_subdirectory("Alloy")
 
 # Object-Oriented layer - Demos
 add_subdirectory("CustomMethodCall")

@@ -24,18 +24,19 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "alloyintegration_api.h"
-#include "Core/src/EnvisionException.h"
+#include "AlloyException.h"
 
 namespace Alloy {
 
-class ALLOYINTEGRATION_API AlloyIntegrationException : public Core::EnvisionException
+AlloyException::AlloyException(const QString& message) :
+	Core::EnvisionException(message)
 {
-		public:
-			AlloyIntegrationException(const QString& message);
-			const QString& name() const;
-};
+}
+
+const QString& AlloyException::name() const
+{
+	static QString ename("AlloyException");
+	return ename;
+}
 
 }

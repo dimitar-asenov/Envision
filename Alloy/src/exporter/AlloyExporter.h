@@ -26,27 +26,17 @@
 
 #pragma once
 
-#include "../alloyintegration_api.h"
-#include "../exporter/AlloyExporter.h"
-
-#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
+#include "../alloy_api.h"
+#include "ModelBase/src/nodes/Node.h"
 
 namespace Alloy {
 /**
- * The CAlloy class offers the command line interaction to execute the Alloy generation.
+ * The AlloyExporter class saves the generated Alloy code to disk.
+ * It also defines some layout rules used in the export.
  */
-class ALLOYINTEGRATION_API CAlloy : public Interaction::CreateNamedObjectWithAttributes
-{
+class ALLOY_API AlloyExporter {
 	public:
-		CAlloy();
-
-	protected:
-		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-				const std::unique_ptr<Visualization::Cursor>& cursor,
-				const QString& name, const QStringList& attributes) override;
-
-	private:
-		const int MAX_IMAGES = 100;
+		static void exportTree(Model::Node* aNode, const QString& path);
 };
 
 }

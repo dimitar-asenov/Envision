@@ -26,17 +26,29 @@
 
 #pragma once
 
-#include "../alloyintegration_api.h"
-#include "ModelBase/src/nodes/Node.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "alloy_api.h"
 
 namespace Alloy {
+
 /**
- * The AlloyExporter class saves the generated Alloy code to disk.
- * It also defines some layout rules used in the export.
+ * Implements the interface between the Alloy plug-in and Envision.
+ *
+ * The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before
+ * any other operations are performed.
+ *
+ * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class ALLOYINTEGRATION_API AlloyExporter {
+class AlloyPlugin : public QObject, public Core::EnvisionPlugin
+{
+	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
+	Q_INTERFACES(Core::EnvisionPlugin)
+
 	public:
-		static void exportTree(Model::Node* aNode, const QString& path);
+		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual void unload() override;
+		virtual void selfTest(QString testid) override;
 };
 
 }

@@ -24,30 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_ALLOYINTEGRATION_H_
-#define PRECOMPILED_ALLOYINTEGRATION_H_
+#pragma once
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ContractsLibrary/src/precompiled.h"
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+#include "precompiled.h"
 
-#if defined __cplusplus
-// Add C++ includes here
-
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
-
-
-#if defined(AlloyIntegration_EXPORTS)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtWebKitWidgets/QGraphicsWebView>
+// This should be defined in the project file of the plug-in that exports symbols
+#if defined(Alloy_EXPORTS)
+	#define ALLOY_API Q_DECL_EXPORT
+#else
+	#define ALLOY_API Q_DECL_IMPORT
 #endif
-
-#endif
-
-#endif /* PRECOMPILED_ALLOYINTEGRATION_H_ */

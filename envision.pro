@@ -19,7 +19,7 @@ SUBDIRS= Core \
 	VisualizationBase \
 	CppImport \
 	Comments \
-	AlloyIntegration \
+	Alloy \
 	OODebug \
 	InformationScripting \
 	PythonWrapperGenerator \

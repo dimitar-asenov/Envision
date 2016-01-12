@@ -24,31 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "AlloyPlugin.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
-#include "Core/src/EnvisionPlugin.h"
-#include "alloyintegration_api.h"
+#include "commands/CAlloy.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+
+#include "visitors/AlloyVisitor.h"
 
 namespace Alloy {
 
-/**
- * Implements the interface between the AlloyIntegration plug-in and Envision.
- *
- * The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before
- * any other operations are performed.
- *
- * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
- */
-class AlloyIntegrationPlugin : public QObject, public Core::EnvisionPlugin
+bool AlloyPlugin::initialize(Core::EnvisionManager&)
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
-	Q_INTERFACES(Core::EnvisionPlugin)
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAlloy());
 
-	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
-		virtual void unload() override;
-		virtual void selfTest(QString testid) override;
-};
+	Alloy::AlloyVisitor::init();
+
+	return true;
+}
+
+void AlloyPlugin::unload()
+{
+}
+
+void AlloyPlugin::selfTest(QString testid)
+{
+	if (testid.isEmpty()) SelfTest::TestManager<AlloyPlugin>::runAllTests().printResultStatistics();
+	else SelfTest::TestManager<AlloyPlugin>::runTest(testid).printResultStatistics();
+}
 
 }

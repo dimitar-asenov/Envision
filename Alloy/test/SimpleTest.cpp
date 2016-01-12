@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "../src/AlloyIntegrationPlugin.h"
+#include "../src/AlloyPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "ModelBase/src/model/TreeManager.h"
@@ -169,7 +169,7 @@ Class* addNode()
 	return aNode;
 }
 
-class AlloyTest : public Test<AlloyIntegrationPlugin, AlloyTest> { public: void test()
+class AlloyTest : public Test<AlloyPlugin, AlloyTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
 	auto aLinkedList = addLinkedList();

@@ -24,19 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#include "AlloyIntegrationException.h"
+#pragma once
+
+#include "../alloy_api.h"
+#include "../exporter/AlloyExporter.h"
+
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
 namespace Alloy {
-
-AlloyIntegrationException::AlloyIntegrationException(const QString& message) :
-	Core::EnvisionException(message)
+/**
+ * The CAlloy class offers the command line interaction to execute the Alloy generation.
+ */
+class ALLOY_API CAlloy : public Interaction::CreateNamedObjectWithAttributes
 {
-}
+	public:
+		CAlloy();
 
-const QString& AlloyIntegrationException::name() const
-{
-	static QString ename("AlloyIntegrationException");
-	return ename;
-}
+	protected:
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor,
+				const QString& name, const QStringList& attributes) override;
+
+	private:
+		const int MAX_IMAGES = 100;
+};
 
 }

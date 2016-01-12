@@ -24,33 +24,18 @@
  **
  **********************************************************************************************************************/
 
-#include "AlloyIntegrationPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#pragma once
 
-#include "commands/CAlloy.h"
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
-
-#include "visitors/AlloyVisitor.h"
+#include "alloy_api.h"
+#include "Core/src/EnvisionException.h"
 
 namespace Alloy {
 
-bool AlloyIntegrationPlugin::initialize(Core::EnvisionManager&)
+class ALLOY_API AlloyException : public Core::EnvisionException
 {
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAlloy());
-
-	Alloy::AlloyVisitor::init();
-
-	return true;
-}
-
-void AlloyIntegrationPlugin::unload()
-{
-}
-
-void AlloyIntegrationPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<AlloyIntegrationPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<AlloyIntegrationPlugin>::runTest(testid).printResultStatistics();
-}
+		public:
+			AlloyException(const QString& message);
+			const QString& name() const;
+};
 
 }
