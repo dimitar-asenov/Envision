@@ -35,7 +35,10 @@
 		"Logger/Timer" : "Logger/src/Timer" ,
 		"Logger/LogTester" : "Logger/test/LogTester" ,
 		"Logger/Log" : "Logger/src/Log",
-		"main" : "Launcher/src/launcher"
+		"main" : "Launcher/src/launcher",
+		"Hello/HelloWorldPrinter" : "HelloWorld/src/HelloWorldPrinter" ,
+		"Hello/HelloWorldPlugin" : "HelloWorld/src/HelloWorldPlugin",
+		"APIDepTest/APIDepTestPlugin" : "APIDepTest/src/APIDepTestPlugin"
 	},
 	"ExportFlagMap": 
 	{
