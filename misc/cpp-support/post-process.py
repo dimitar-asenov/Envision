@@ -1,28 +1,30 @@
 #!/usr/bin/python2
-
-import os
-import shutil
+import os, re, shutil
 
 envisionDirectory = '/home/patrick/Envision/'
 
-def copy(file):
-	filePath = envisionDirectory + 'DebugBuild/cpp_export/' + file
-	if not os.path.exists(os.path.dirname(filePath)):
-		os.makedirs(os.path.dirname(filePath))
-	shutil.copyfile(envisionDirectory + file, filePath)
+hOrCppRegex = re.compile(r'^.*\.(h|cpp)$', re.DOTALL)
 
+def copyFileAndCreateDirIfNotExist(src, dst):
+	if not os.path.exists(os.path.dirname(dst)):
+		os.makedirs(os.path.dirname(dst))
+	shutil.copyfile(src, dst)
+	
+def copyIfExists(file):
+	if os.path.exists(envisionDirectory + file):
+		copyFileAndCreateDirIfNotExist(envisionDirectory + file, envisionDirectory + 'DebugBuild/cpp_export/' + file)
 
-def cMakeListsAndPrecompiled(name):
-	copy(name + '/CMakeLists.txt')
-	copy(name + '/src/precompiled.h')
-
-def corePlugin(name):
-	cMakeListsAndPrecompiled(name)
-	copy(name + '/src/' + name.lower() + '_api.h')
+def copyAllFilesButHAndCpp(src, dst):
+	for root, dirs, files in os.walk(src):
+		for basename in files:
+			if not hOrCppRegex.match(basename):
+				filename = os.path.join(root, basename)
+				copyFileAndCreateDirIfNotExist(filename, filename.replace(src, dst))
 
 def plugin(name):
-	corePlugin(name)
-	copy(name + '/' + name.lower() + '.plugin')
+	copyIfExists(name + '/src/precompiled.h')
+	copyIfExists(name + '/src/' + name.lower() + '_api.h')
+	copyAllFilesButHAndCpp(envisionDirectory + name, envisionDirectory + 'DebugBuild/cpp_export/' + name)
 
 def createCMakeLists(lines):
 	f = open(envisionDirectory + 'DebugBuild/cpp_export/CMakeLists.txt','w+')
@@ -47,13 +49,14 @@ def createCommonCmake():
 			skipLine = False
 	f.close()
 
-
-corePlugin('Core')
-copy('Core/src/reflect/typeIdMacros.h')
-cMakeListsAndPrecompiled('Launcher')
+plugin('Core')
+copyIfExists('Core/src/reflect/typeIdMacros.h')
+plugin('Launcher')
+plugin('HelloWorld')
+plugin('APIDepTest')
 plugin('Logger')
 plugin('SelfTest')
 
-createCMakeLists(['Core', 'Launcher', 'Logger'])
+createCMakeLists(['Core', 'Launcher', 'HelloWorld', 'APIDepTest'])
 createCommonCmake()
 
