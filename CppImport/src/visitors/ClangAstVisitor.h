@@ -46,7 +46,7 @@ class TemplateArgumentVisitor;
 class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	public:
-		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
+		ClangAstVisitor(OOModel::Project* project, const QString& projectPath,  CppImportLogger* logger);
 		~ClangAstVisitor();
 		void setSourceManagerAndPreprocessor(const clang::SourceManager* sourceManager,
 														 const clang::Preprocessor* preprocessor);

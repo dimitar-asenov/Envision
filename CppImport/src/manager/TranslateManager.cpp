@@ -29,8 +29,10 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, ExpressionVisitor* visitor)
- : clang_{clang}, rootProject_{root}, exprVisitor_{visitor}, nh_{new NodeHasher(clang)}
+TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, const QString& rootProjectPath,
+											  ExpressionVisitor* visitor)
+ : clang_{clang}, rootProject_{root}, rootProjectPath_{rootProjectPath}, exprVisitor_{visitor},
+	nh_{new NodeHasher(clang)}
 {}
 
 TranslateManager::~TranslateManager()
@@ -85,7 +87,7 @@ OOModel::Project* TranslateManager::projectForDeclaration(clang::Decl* decl)
 
 QString TranslateManager::projectNameFromPath(QString path)
 {
-	QRegularExpression regex("/Envision/(\\w+)/");
+	QRegularExpression regex(rootProjectPath_ + "/(\\w+)/");
 	auto m = regex.match(path);
 	if (m.hasMatch())
 		return m.captured(1);

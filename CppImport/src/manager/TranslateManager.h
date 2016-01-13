@@ -42,7 +42,8 @@ class ClangAstVisitor;
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(ClangHelpers& clang, OOModel::Project* root, ExpressionVisitor* visitor);
+		TranslateManager(ClangHelpers& clang, OOModel::Project* root, const QString& projectPath,
+							  ExpressionVisitor* visitor);
 		~TranslateManager();
 
 		void setUtils(CppImportUtilities* utils);
@@ -165,6 +166,7 @@ class CPPIMPORT_API TranslateManager
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
+		const QString& rootProjectPath_{};
 		ExpressionVisitor* exprVisitor_{};
 		NodeHasher* nh_{};
 

@@ -83,7 +83,7 @@ Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPer
 {
 	auto project = new OOModel::Project(projectPath_.split(QDir::separator()).last());
 	auto log = new CppImportLogger();
-	auto visitor = new ClangAstVisitor(project, log);
+	auto visitor = new ClangAstVisitor(project, projectPath_, log);
 
 	for (QString s : projects_)
 	{

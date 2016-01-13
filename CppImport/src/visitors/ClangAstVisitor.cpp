@@ -34,11 +34,11 @@
 
 namespace CppImport {
 
-ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
+ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, const QString& projectPath, CppImportLogger* logger)
  : macroImporter_{project, clang_}, log_{logger}
 {
 	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
-	trMngr_ = new TranslateManager(clang_, project, exprVisitor_);
+	trMngr_ = new TranslateManager(clang_, project, projectPath, exprVisitor_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_, clang_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
