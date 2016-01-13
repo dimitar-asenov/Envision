@@ -48,7 +48,7 @@ class HELLOWORLD_API HelloWorldPlugin : public QObject, public Core::EnvisionPlu
 	public:
 		bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
-		void selfTest(QString testid) override;
+		void selfTest(QString testId) override;
 };
 
 }
