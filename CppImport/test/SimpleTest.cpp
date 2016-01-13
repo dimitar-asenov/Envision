@@ -37,6 +37,8 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
+#include "OOVisualization/src/AutoLayouter.h"
+
 using namespace OOModel;
 using namespace OOInteraction;
 using namespace Visualization;
@@ -55,6 +57,8 @@ class SimpleTest : public Test<CppImportPlugin, SimpleTest> { public: void test(
 	auto mainScene = VisualizationManager::instance().mainScene();
 	mainScene->addTopLevelNode(top_level);
 	mainScene->listenToTreeManager(treeManager);
+
+	OOVisualization::AutoLayouter::arrange(top_level, OOVisualization::AutoLayouter::Mode::Estimated);
 
 	CHECK_CONDITION(top_level != nullptr);
 }};

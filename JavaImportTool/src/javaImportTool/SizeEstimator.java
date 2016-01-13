@@ -177,7 +177,6 @@ public class SizeEstimator {
 		size.addHorizontally(cl.childOrNull("name"));
 		size.addHorizontally(cl.childOrNull("baseClasses"));
 		size.addHorizontally(cl.childOrNull("typeArguments"));
-		size.addHorizontally(cl.childOrNull("results"));
 		
 		size.addVertically(cl.childOrNull("annotations"));
 		size.addVertically(cl.childOrNull("subDeclarations"));
@@ -211,7 +210,7 @@ public class SizeEstimator {
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
 		bodyElement = mo.childOrNull("classes");
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
-		bodyElement = mo.childOrNull("mehtods");
+		bodyElement = mo.childOrNull("methods");
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
 		
 		Size bodySize = arrangeNodesInGrid(bodyNodes, Major.ColumnMajor);
@@ -236,7 +235,7 @@ public class SizeEstimator {
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
 		bodyElement = pr.childOrNull("classes");
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
-		bodyElement = pr.childOrNull("mehtods");
+		bodyElement = pr.childOrNull("methods");
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
 
 		Size bodySize = arrangeNodesInGrid(bodyNodes, Major.ColumnMajor);
