@@ -28,16 +28,17 @@
 #include "ExpressionVisitor.h"
 #include "../CppImportUtilities.h"
 #include "TemplateArgumentVisitor.h"
+#include "../IncludesPPCallback.h"
 
 #include <clang/AST/Comment.h>
 
 namespace CppImport {
 
-ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
+ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, const QString& projectPath, CppImportLogger* logger)
  : macroImporter_{project, clang_}, log_{logger}
 {
 	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
-	trMngr_ = new TranslateManager(clang_, project, exprVisitor_);
+	trMngr_ = new TranslateManager(clang_, project, projectPath, exprVisitor_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_, clang_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
@@ -64,9 +65,15 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 	clang_.setSourceManager(sourceManager);
 	clang_.setPreprocessor(preprocessor);
 	macroImporter_.startTranslationUnit();
+
+	auto it = projectIncludes_.insert(trMngr_->projectNameFromPath(
+													clang_.sourceManager()->getFileEntryForID(
+															 clang_.sourceManager()->getMainFileID())->getName()), {});
+	const_cast<clang::Preprocessor*>(clang_.preprocessor())->addPPCallbacks(
+				std::make_unique<IncludesPPCallback>(*it, clang_.sourceManager()));
 }
 
-Model::Node*ClangAstVisitor::ooStackTop()
+Model::Node* ClangAstVisitor::ooStackTop()
 {
 	return ooStack_.top();
 }
@@ -77,9 +84,25 @@ void ClangAstVisitor::pushOOStack(Model::Node* node)
 	ooStack_.push(node);
 }
 
-Model::Node*ClangAstVisitor::popOOStack()
+Model::Node* ClangAstVisitor::popOOStack()
 {
 	return ooStack_.pop();
+}
+
+bool ClangAstVisitor::TraverseDecl(clang::Decl* decl)
+{
+	if (auto project = DCast<OOModel::Project>(ooStack_.top()))
+	{
+		auto parentProject = trMngr_->projectForDeclaration(decl);
+
+		if (project != parentProject)
+		{
+			 ooStack_.pop();
+			 ooStack_.push(parentProject);
+		}
+	}
+
+	return Base::TraverseDecl(decl);
 }
 
 bool ClangAstVisitor::VisitDecl(clang::Decl* decl)
@@ -1335,6 +1358,15 @@ void ClangAstVisitor::endTranslationUnit()
 
 void ClangAstVisitor::endEntireImport()
 {
+	for (auto it = projectIncludes_.begin(); it != projectIncludes_.end(); it++)
+	{
+		auto project = trMngr_->projectByName(it.key());
+		for (auto dependency : it.value())
+			if (auto otherProject = trMngr_->projectByName(dependency))
+				project->subDeclarations()->append(new OOModel::NameImport(
+																  new OOModel::ReferenceExpression(otherProject->name()), true));
+	}
+
 	macroImporter_.endEntireImport();
 }
 

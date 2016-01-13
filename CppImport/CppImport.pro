@@ -68,7 +68,8 @@ HEADERS += src/precompiled.h \
     src/ClangHelpers.h \
     src/macro/NodeToCloneMap.h \
     src/EnvisionToClangMap.h \
-    src/Comment.h
+    src/Comment.h \
+    src/IncludesPPCallback.h
 SOURCES += src/CppImportException.cpp \
     test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
@@ -95,4 +96,5 @@ SOURCES += src/CppImportException.cpp \
     src/ClangHelpers.cpp \
     src/macro/NodeToCloneMap.cpp \
     src/EnvisionToClangMap.cpp \
-    src/Comment.cpp
+    src/Comment.cpp \
+    src/IncludesPPCallback.cpp

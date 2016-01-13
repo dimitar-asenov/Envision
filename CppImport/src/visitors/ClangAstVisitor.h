@@ -46,7 +46,7 @@ class TemplateArgumentVisitor;
 class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	public:
-		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
+		ClangAstVisitor(OOModel::Project* project, const QString& projectPath,  CppImportLogger* logger);
 		~ClangAstVisitor();
 		void setSourceManagerAndPreprocessor(const clang::SourceManager* sourceManager,
 														 const clang::Preprocessor* preprocessor);
@@ -58,6 +58,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		// method only for debugging
 		bool VisitDecl(clang::Decl* decl);
+		bool TraverseDecl(clang::Decl* decl);
 
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
 		bool TraverseClassTemplateDecl(clang::ClassTemplateDecl* classTemplate);
@@ -121,6 +122,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
+
+		QHash<QString, QSet<QString>> projectIncludes_;
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;

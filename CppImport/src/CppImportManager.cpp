@@ -45,19 +45,8 @@ CppImportManager::~CppImportManager()
 
 void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subProjects)
 {
-	setProjectName(sourcePaths.first());
-
-
-	QDir dir(sourcePaths.first());
-	qDebug() << "Ua" << dir.absolutePath();
-	do
-	{
-		std::string Error;
-		compilationDb_ = clang::tooling::CompilationDatabase::loadFromDirectory(dir.absolutePath().toLatin1().data(),
-																										Error).release();
-		if (!compilationDb_ && !dir.cdUp())
-			throw CppImportException("No compilation database found: " + QString::fromStdString(Error));
-	} while (!compilationDb_);
+	projectPath_ = mainProjectPath(sourcePaths.first());
+	compilationDb_ = findCompilationDatabase(sourcePaths.first());
 
 	for (auto relativeSourcePath : sourcePaths)
 	{
@@ -73,11 +62,28 @@ void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subPro
 	}
 }
 
+clang::tooling::CompilationDatabase* CppImportManager::findCompilationDatabase(const QString& path)
+{
+	clang::tooling::CompilationDatabase* result{};
+
+	QDir dir{path};
+	do
+	{
+		std::string Error;
+		result = clang::tooling::CompilationDatabase::loadFromDirectory(dir.absolutePath().toLatin1().data(),
+																										Error).release();
+		if (!result && !dir.cdUp())
+			throw CppImportException("No compilation database found: " + QString::fromStdString(Error));
+	} while (!result);
+
+	return result;
+}
+
 Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPerProject)
 {
-	auto project = new OOModel::Project(projectName_);
+	auto project = new OOModel::Project(projectPath_.split(QDir::separator()).last());
 	auto log = new CppImportLogger();
-	auto visitor = new ClangAstVisitor(project, log);
+	auto visitor = new ClangAstVisitor(project, projectPath_, log);
 
 	for (QString s : projects_)
 	{
@@ -157,9 +163,19 @@ void CppImportManager::initPath(const QString& sourcePath)
 	readInFiles(sourcePath);
 }
 
-void CppImportManager::setProjectName(const QString& sourcePath)
+QString CppImportManager::mainProjectPath(const QString& path)
 {
-	projectName_ = sourcePath.split(QDir::separator()).last();
+	QDir dir{path};
+	auto result = dir.absolutePath();
+
+	do
+	{
+		auto currentPath = dir.absolutePath();
+		if (QFile::exists(currentPath + QDir::separator() + "CMakeLists.txt"))
+			result = currentPath;
+	} while (dir.cdUp());
+
+	return result;
 }
 
 void CppImportManager::readInFiles(const QString& sourcePath)
