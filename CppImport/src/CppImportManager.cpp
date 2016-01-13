@@ -45,8 +45,7 @@ CppImportManager::~CppImportManager()
 
 void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subProjects)
 {
-	setProjectName(sourcePaths.first());
-
+	projectPath_ = mainProjectPath(sourcePaths.first());
 
 	QDir dir(sourcePaths.first());
 	qDebug() << "Ua" << dir.absolutePath();
@@ -75,7 +74,7 @@ void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subPro
 
 Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPerProject)
 {
-	auto project = new OOModel::Project(projectName_);
+	auto project = new OOModel::Project(projectPath_.split(QDir::separator()).last());
 	auto log = new CppImportLogger();
 	auto visitor = new ClangAstVisitor(project, log);
 
@@ -157,9 +156,19 @@ void CppImportManager::initPath(const QString& sourcePath)
 	readInFiles(sourcePath);
 }
 
-void CppImportManager::setProjectName(const QString& sourcePath)
+QString CppImportManager::mainProjectPath(const QString& path)
 {
-	projectName_ = sourcePath.split(QDir::separator()).last();
+	QDir dir{path};
+	auto result = dir.absolutePath();
+
+	do
+	{
+		auto currentPath = dir.absolutePath();
+		if (QFile::exists(currentPath + QDir::separator() + "CMakeLists.txt"))
+			result = currentPath;
+	} while (dir.cdUp());
+
+	return result;
 }
 
 void CppImportManager::readInFiles(const QString& sourcePath)

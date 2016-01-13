@@ -73,9 +73,9 @@ class CPPIMPORT_API CppImportManager
 		void initPath(const QString& sourcePath);
 
 		/**
-		 * Sets the project name based on the \a sourcePath
+		 * Calculates the shortest subpath of \a subProjectPath containing a CMakeLists.txt file.
 		 */
-		void setProjectName(const QString& sourcePath);
+		QString mainProjectPath(const QString& path);
 
 		/**
 		 * Collects all source files in \a sourcPath and sub directories and stores them in the sourcesMap_.
@@ -96,9 +96,10 @@ class CPPIMPORT_API CppImportManager
 		// File endings filter
 		QStringList cppFilter_ = {"*.cpp", "*.cc", "*.cxx"};
 
-		// the project name which is shown in Envision
-		// we set this to the innermost directory of the sourcepath
-		QString projectName_;
+		/**
+		 * the path to the main CMakeLists.txt of the project to import.
+		 */
+		QString projectPath_;
 		// projects we have to import. For single project this list will only contain one entry
 		QStringList projects_;
 		QHash<QString, std::vector<std::string>* > sourcesMap_;
