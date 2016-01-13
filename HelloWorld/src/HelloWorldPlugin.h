@@ -27,7 +27,7 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "helloworld_api.h"
 
 namespace HelloWorld {
 
@@ -39,7 +39,7 @@ namespace HelloWorld {
  *
  * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class HelloWorldPlugin : public QObject, public Core::EnvisionPlugin
+class HELLOWORLD_API HelloWorldPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
@@ -48,7 +48,7 @@ class HelloWorldPlugin : public QObject, public Core::EnvisionPlugin
 	public:
 		bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
-		void selfTest(QString testid) override;
+		void selfTest(QString testId) override;
 };
 
 }
