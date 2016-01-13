@@ -166,7 +166,7 @@ class CPPIMPORT_API TranslateManager
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
-		const QString& rootProjectPath_{};
+		const QString& rootProjectPath_;
 		ExpressionVisitor* exprVisitor_{};
 		NodeHasher* nh_{};
 
