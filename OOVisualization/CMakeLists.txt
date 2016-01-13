@@ -129,6 +129,7 @@ add_library(OOVisualization SHARED
 	src/declarations/VMetaBindingStyle.h
 	src/elements/VFormalMetaArgument.h
 	src/elements/VFormalMetaArgumentStyle.h
+	src/AutoLayouter.h
 	src/statements/VAssertStatementStyle.cpp
 	src/statements/VAssertStatement.cpp
 	src/expressions/VSuperExpression.cpp
@@ -250,6 +251,7 @@ add_library(OOVisualization SHARED
 	src/declarations/VMetaBindingStyle.cpp
 	src/elements/VFormalMetaArgument.cpp
 	src/elements/VFormalMetaArgumentStyle.cpp
+	src/AutoLayouter.cpp
 )
 
 envision_plugin(OOVisualization OOModel InteractionBase)
