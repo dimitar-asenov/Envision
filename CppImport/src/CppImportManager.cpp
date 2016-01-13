@@ -46,17 +46,7 @@ CppImportManager::~CppImportManager()
 void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subProjects)
 {
 	projectPath_ = mainProjectPath(sourcePaths.first());
-
-	QDir dir(sourcePaths.first());
-	qDebug() << "Ua" << dir.absolutePath();
-	do
-	{
-		std::string Error;
-		compilationDb_ = clang::tooling::CompilationDatabase::loadFromDirectory(dir.absolutePath().toLatin1().data(),
-																										Error).release();
-		if (!compilationDb_ && !dir.cdUp())
-			throw CppImportException("No compilation database found: " + QString::fromStdString(Error));
-	} while (!compilationDb_);
+	compilationDb_ = findCompilationDatabase(sourcePaths.first());
 
 	for (auto relativeSourcePath : sourcePaths)
 	{
@@ -70,6 +60,23 @@ void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subPro
 		else
 			initPath(sourcePath);
 	}
+}
+
+clang::tooling::CompilationDatabase* CppImportManager::findCompilationDatabase(const QString& path)
+{
+	clang::tooling::CompilationDatabase* result{};
+
+	QDir dir{path};
+	do
+	{
+		std::string Error;
+		result = clang::tooling::CompilationDatabase::loadFromDirectory(dir.absolutePath().toLatin1().data(),
+																										Error).release();
+		if (!result && !dir.cdUp())
+			throw CppImportException("No compilation database found: " + QString::fromStdString(Error));
+	} while (!result);
+
+	return result;
 }
 
 Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPerProject)

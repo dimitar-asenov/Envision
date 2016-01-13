@@ -105,6 +105,7 @@ class CPPIMPORT_API CppImportManager
 		QHash<QString, std::vector<std::string>* > sourcesMap_;
 		clang::tooling::CompilationDatabase* compilationDb_;
 
+		clang::tooling::CompilationDatabase*findCompilationDatabase(const QString& path);
 };
 
 }
