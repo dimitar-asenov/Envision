@@ -27,7 +27,7 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "helloworld_api.h"
 
 namespace Hello {
 
