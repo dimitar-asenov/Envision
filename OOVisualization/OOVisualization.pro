@@ -131,7 +131,8 @@ HEADERS += src/statements/VAssertStatementStyle.h \
     src/declarations/VMetaBinding.h \
     src/declarations/VMetaBindingStyle.h \
     src/elements/VFormalMetaArgument.h \
-    src/elements/VFormalMetaArgumentStyle.h
+    src/elements/VFormalMetaArgumentStyle.h \
+    src/AutoLayouter.h
 SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/statements/VAssertStatement.cpp \
     src/expressions/VSuperExpression.cpp \
@@ -252,4 +253,5 @@ SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/declarations/VMetaBinding.cpp \
     src/declarations/VMetaBindingStyle.cpp \
     src/elements/VFormalMetaArgument.cpp \
-    src/elements/VFormalMetaArgumentStyle.cpp
+    src/elements/VFormalMetaArgumentStyle.cpp \
+    src/AutoLayouter.cpp
