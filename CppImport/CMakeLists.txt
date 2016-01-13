@@ -52,6 +52,7 @@ add_library(CppImport SHARED
 	src/EnvisionToClangMap.h
 	src/macro/NodeToCloneMap.h
 	src/Comment.h
+	src/IncludesPPCallback.h
 	src/CppImportException.cpp
 	test/SimpleTest.cpp
 	src/ClangAstConsumer.cpp
@@ -79,6 +80,7 @@ add_library(CppImport SHARED
 	src/EnvisionToClangMap.cpp
 	src/macro/NodeToCloneMap.cpp
 	src/Comment.cpp
+	src/IncludesPPCallback.cpp
 )
 
 target_link_libraries(CppImport ${clangLibs_})
