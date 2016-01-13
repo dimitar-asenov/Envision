@@ -32,17 +32,17 @@ namespace CppImport {
 
 class IncludesPPCallback : public clang::PPCallbacks
 {
-    public:
-        IncludesPPCallback(QSet<QString>& includes, const clang::SourceManager* sourceManager);
+	public:
+		IncludesPPCallback(QSet<QString>& includes, const clang::SourceManager* sourceManager);
 
-        virtual void InclusionDirective (clang::SourceLocation location, const clang::Token&,
-                                         clang::StringRef FileName, bool, clang::CharSourceRange,
-                                         const clang::FileEntry*, clang::StringRef, clang::StringRef,
-                                         const clang::Module*) override;
+		virtual void InclusionDirective (clang::SourceLocation location, const clang::Token&,
+													clang::StringRef FileName, bool, clang::CharSourceRange,
+													const clang::FileEntry*, clang::StringRef, clang::StringRef,
+													const clang::Module*) override;
 
-    private:
-        QSet<QString>& includes_;
-        const clang::SourceManager* sourceManager_;
+	private:
+		QSet<QString>& projectsFromIncludes_;
+		const clang::SourceManager* sourceManager_;
 };
 
 }

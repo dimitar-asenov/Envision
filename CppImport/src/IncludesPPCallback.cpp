@@ -29,19 +29,19 @@
 namespace CppImport {
 
 CppImport::IncludesPPCallback::IncludesPPCallback(QSet<QString>& includes, const clang::SourceManager* sourceManager)
-    : includes_{includes}, sourceManager_{sourceManager} {}
+	: projectsFromIncludes_{includes}, sourceManager_{sourceManager} {}
 
 void IncludesPPCallback::InclusionDirective(clang::SourceLocation location, const clang::Token&,
                                             clang::StringRef FileName, bool, clang::CharSourceRange,
                                             const clang::FileEntry*, clang::StringRef, clang::StringRef,
                                             const clang::Module*)
 {
-    auto slashPosition = FileName.find('/');
-    if (slashPosition == std::string::npos) return;
-    if (sourceManager_->isInSystemHeader(location)) return;
-    auto part = FileName.substr(0, slashPosition);
-    if (part.find('.') != std::string::npos) return;
-    includes_.insert(QString::fromStdString(part.str()));
+	auto slashPosition = FileName.find('/');
+	if (slashPosition == std::string::npos) return;
+	if (sourceManager_->isInSystemHeader(location)) return;
+	auto part = FileName.substr(0, slashPosition);
+	if (part.find('.') != std::string::npos) return;
+	projectsFromIncludes_.insert(QString::fromStdString(part.str()));
 }
 
 }
