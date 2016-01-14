@@ -26,23 +26,23 @@
 
 #include "precompiled.h"
 
-QString SystemCommandResult::stdoutOneLine() const {
-	Q_ASSERT(stdout_.size() == 1);
-	return stdout_.first();
+QString SystemCommandResult::standardoutOneLine() const {
+	Q_ASSERT(standardout_.size() == 1);
+	return standardout_.first();
 }
 
 SystemCommandResult::operator QString() const
 {
 	Q_ASSERT(exitCode() == 0);
-	Q_ASSERT(stderr_.size() == 0);
-	return stdoutOneLine();
+	Q_ASSERT(standarderr_.size() == 0);
+	return standardoutOneLine();
 }
 
 SystemCommandResult::operator QStringList() const
 {
 	Q_ASSERT(exitCode() == 0);
-	Q_ASSERT(stderr_.size() == 0);
-	return stdout_;
+	Q_ASSERT(standarderr_.size() == 0);
+	return standardout_;
 }
 
 SystemCommandResult runSystemCommand(const QString& program, const QStringList& arguments,
@@ -60,10 +60,10 @@ SystemCommandResult runSystemCommand(const QString& program, const QStringList& 
 	result.exitCode_ = process.exitCode();
 
 	auto EOLRegex = QRegularExpression("(\\r\\n|\\r|\\n)");
-	result.stdout_ = QString(process.readAllStandardOutput()).split(EOLRegex);
-	if (!result.stdout_.isEmpty() && result.stdout_.last().isEmpty())  result.stdout_.removeLast();
-	result.stderr_ = QString(process.readAllStandardError()).split(EOLRegex);
-	if (!result.stderr_.isEmpty() && result.stderr_.last().isEmpty())  result.stderr_.removeLast();
+	result.standardout_ = QString(process.readAllStandardOutput()).split(EOLRegex);
+	if (!result.standardout_.isEmpty() && result.standardout_.last().isEmpty())  result.standardout_.removeLast();
+	result.standarderr_ = QString(process.readAllStandardError()).split(EOLRegex);
+	if (!result.standarderr_.isEmpty() && result.standarderr_.last().isEmpty())  result.standarderr_.removeLast();
 
 	return result;
 }
