@@ -173,7 +173,6 @@ void CppImportLogger::storageClassNotSupported(const clang::StorageClass& sc)
 	{
 		case clang::SC_Extern: missing = "SC_Extern"; break;
 		case clang::SC_PrivateExtern: missing = "SC_PrivateExtern"; break;
-		case clang::SC_OpenCLWorkGroupLocal: missing = "SC_OpenCLWorkGroupLocal"; break;
 		case clang::SC_Auto: missing = "SC_Auto"; break;
 		case clang::SC_Register: missing = "SC_Register"; break;
 		default: missing = "uknown sc"; break;

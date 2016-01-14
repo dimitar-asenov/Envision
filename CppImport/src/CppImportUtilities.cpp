@@ -426,7 +426,7 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 {
 	auto ooMemberInit = clang_.createNode<OOModel::MemberInitializer>(initializer->getSourceRange());
 	if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initializer->getInit()->IgnoreImplicit()))
-		for (auto argument : exprVisitor_->translateArguments(constructExpr->arguments()))
+		for (auto argument : exprVisitor_->translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 			ooMemberInit->arguments()->append(argument);
 	else
 	{
