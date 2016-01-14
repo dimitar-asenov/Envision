@@ -67,8 +67,7 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 	if (memberExpr->hasExplicitTemplateArgs())
 		ooReference = createQualifiedReferenceWithTemplateArguments(memberExpr->getMemberNameInfo().getSourceRange(),
 																						memberExpr->getQualifierLoc(),
-																						memberExpr->getExplicitTemplateArgs()
-																							.getTemplateArgs(),
+																						memberExpr->getTemplateArgs(),
 																						memberExpr->getNumTemplateArgs(), base);
 	else
 		ooReference = createQualifiedReferenceWithTemplateArguments(memberExpr->getMemberNameInfo().getSourceRange(),
@@ -90,8 +89,7 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 		ooReference = createQualifiedReferenceWithTemplateArguments(unresolvedMember->getMemberNameInfo()
 																							.getSourceRange(),
 																						unresolvedMember->getQualifierLoc(),
-																						unresolvedMember->getExplicitTemplateArgs()
-																							.getTemplateArgs(),
+																						unresolvedMember->getTemplateArgs(),
 																						unresolvedMember->getNumTemplateArgs(), base);
 	else
 		ooReference = createQualifiedReferenceWithTemplateArguments(unresolvedMember->getMemberNameInfo()
@@ -114,8 +112,7 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScopeMember->getMemberNameInfo()
 																							.getSourceRange(),
 																						dependentScopeMember->getQualifierLoc(),
-																						dependentScopeMember->getExplicitTemplateArgs()
-																							.getTemplateArgs(),
+																						dependentScopeMember->getTemplateArgs(),
 																						dependentScopeMember->getNumTemplateArgs(), base);
 	else
 		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScopeMember->getMemberNameInfo()
@@ -133,7 +130,7 @@ bool ExpressionVisitor::TraverseDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 	if (declRefExpr->hasExplicitTemplateArgs())
 		ooReference = createQualifiedReferenceWithTemplateArguments(declRefExpr->getNameInfo().getSourceRange(),
 																						declRefExpr->getQualifierLoc(),
-																						declRefExpr->getExplicitTemplateArgs().getTemplateArgs(),
+																						declRefExpr->getTemplateArgs(),
 																						declRefExpr->getNumTemplateArgs());
 	else
 		ooReference = createQualifiedReferenceWithTemplateArguments(declRefExpr->getNameInfo().getSourceRange(),
@@ -149,8 +146,7 @@ bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeD
 	if (dependentScope->hasExplicitTemplateArgs())
 		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScope->getNameInfo().getSourceRange(),
 																						dependentScope->getQualifierLoc(),
-																						dependentScope->getExplicitTemplateArgs()
-																							.getTemplateArgs(),
+																						dependentScope->getTemplateArgs(),
 																						dependentScope->getNumTemplateArgs());
 	else
 		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScope->getNameInfo().getSourceRange(),
@@ -181,7 +177,7 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 		log_->writeError(className_, callExpr->getCallee(), CppImportLogger::Reason::NOT_SUPPORTED);
 		ooMethodCall->setCallee(utils_->createErrorExpression("Could not convert calleee", callExpr->getSourceRange()));
 	}
-	for (auto argument : translateArguments(callExpr->arguments()))
+	for (auto argument : translateArguments(callExpr->getArgs(), callExpr->getNumArgs()))
 		ooMethodCall->arguments()->append(argument);
 
 	ooExprStack_.push(ooMethodCall);
@@ -399,19 +395,19 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 	return true;
 }
 
-QList<OOModel::Expression*> ExpressionVisitor::translateArguments(llvm::iterator_range<clang::ExprIterator> arguments)
+QList<OOModel::Expression*> ExpressionVisitor::translateArguments(clang::Expr** arguments, int numArguments)
 {
 	QList<OOModel::Expression*> result;
-	for (auto argIt = arguments.begin(); argIt != arguments.end(); ++argIt)
+	for (auto i = 0; i < numArguments; i++)
 	{
-		if (llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
+		if (llvm::isa<clang::CXXDefaultArgExpr>(arguments[i]))
 			// this is a default arg and is not written in the source code
 			continue;
-		TraverseStmt(*argIt);
+		TraverseStmt(arguments[i]);
 		if (!ooExprStack_.empty())
 			result.append(ooExprStack_.pop());
 		else
-			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
+			log_->writeError(className_, arguments[i], CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 	return result;
 }
@@ -442,14 +438,14 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			else
 				ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
 
-			for (auto argument : translateArguments(constructExpr->arguments()))
+			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 				ooMethodCall->arguments()->append(argument);
 			ooExprStack_.push(ooMethodCall);
 		}
 		else
 		{
 			auto arrayInit = clang_.createNode<OOModel::ArrayInitializer>(constructExpr->getSourceRange());
-			for (auto argument : translateArguments(constructExpr->arguments()))
+			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 				arrayInit->values()->append(argument);
 
 			ooExprStack_.push(arrayInit);
@@ -548,8 +544,7 @@ bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr
 	if (overloadExpr->hasExplicitTemplateArgs())
 		ooReference = createQualifiedReferenceWithTemplateArguments(overloadExpr->getNameInfo().getSourceRange(),
 																						overloadExpr->getQualifierLoc(),
-																						overloadExpr->getExplicitTemplateArgs()
-																							.getTemplateArgs(),
+																						overloadExpr->getTemplateArgs(),
 																						overloadExpr->getNumTemplateArgs());
 	else
 		ooReference = createQualifiedReferenceWithTemplateArguments(overloadExpr->getNameInfo().getSourceRange(),

@@ -363,7 +363,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr);
 			if (constructExpr && initSpelling.contains("{"))
 			{
-				auto arguments = exprVisitor_->translateArguments(constructExpr->arguments());
+				auto arguments = exprVisitor_->translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs());
 				if (arguments.size() == 1 && DCast<OOModel::ArrayInitializer>(arguments.first()))
 					ooVarDecl->setInitialValue(arguments.first());
 				else

@@ -162,7 +162,7 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		bool TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr* castExpr);
 		bool TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr);
 
-		QList<OOModel::Expression*> translateArguments(llvm::iterator_range<clang::ExprIterator> arguments);
+		QList<OOModel::Expression*> translateArguments(clang::Expr** arguments, int numArguments);
 
 		ClangAstVisitor* baseVisitor_{};
 	private:

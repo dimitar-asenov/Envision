@@ -66,6 +66,7 @@ template <typename Derived, typename Super, typename ContainedNode, bool default
 ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::~ItemWithNode()
 {
 	auto removed = Super::nodeItemsMap().remove(node_, this);
+	(void)removed;
 	Q_ASSERT(removed == 1);
 }
 

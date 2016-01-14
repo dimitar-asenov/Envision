@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SUPPORTED_VERSION="3.7"
+SUPPORTED_VERSION="3.8"
 COMMAND_TO_USE=""
 
 #This checks whether a particular llvm-config command exists in the system and if it works with the supported version
