@@ -63,9 +63,9 @@ inline OnScopeExit::~OnScopeExit() { functionToCall_(); }
 class SystemCommandResult {
 	public:
 		int exitCode() const;
-		QStringList stdout() const;
-		QString stdoutOneLine() const;
-		QStringList stderr() const;
+		QStringList standardout() const;
+		QString standardoutOneLine() const;
+		QStringList standarderr() const;
 
 		operator QString() const;
 		operator QStringList() const;
@@ -75,13 +75,13 @@ class SystemCommandResult {
 																  const QString& workingDirectory);
 
 		int exitCode_{};
-		QStringList stdout_;
-		QStringList stderr_;
+		QStringList standardout_;
+		QStringList standarderr_;
 };
 
 inline int SystemCommandResult::exitCode() const { return exitCode_; }
-inline QStringList SystemCommandResult::stdout() const { return stdout_; }
-inline QStringList SystemCommandResult::stderr() const { return stderr_; }
+inline QStringList SystemCommandResult::standardout() const { return standardout_; }
+inline QStringList SystemCommandResult::standarderr() const { return standarderr_; }
 
 SystemCommandResult runSystemCommand(const QString& program, const QStringList& arguments = {},
 												 const QString& workingDirectory = {});

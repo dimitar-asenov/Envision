@@ -40,12 +40,12 @@ NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 	auto result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
 
 	Q_ASSERT(result.exitCode() == 0);
-	Q_ASSERT(!result.stdout().isEmpty());
+	Q_ASSERT(!result.standardout().isEmpty());
 
-	Q_ASSERT(result.stdout().size() == 1 ||
-				result.stdout().size() == 2);
+	Q_ASSERT(result.standardout().size() == 1 ||
+				result.standardout().size() == 2);
 
-	for (auto line : result.stdout())
+	for (auto line : result.standardout())
 	{
 		if (!isPersistenceUnit(line))
 			return parseGrepLine(line);
@@ -59,11 +59,11 @@ QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 	auto result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
 
 	Q_ASSERT(result.exitCode() == 0 || result.exitCode() == 1);
-	Q_ASSERT(result.stderr().isEmpty());
+	Q_ASSERT(result.standarderr().isEmpty());
 
 	QList<NodeData> children;
 
-	for (auto line : result.stdout())
+	for (auto line : result.standardout())
 	{
 		if (!isPersistenceUnit(line))
 		{
