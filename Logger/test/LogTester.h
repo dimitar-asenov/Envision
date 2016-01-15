@@ -34,16 +34,16 @@ class LOGGER_API LogTester: public QObject
 {
 	Q_OBJECT
 
-	private:
-		int correctLogEntries;
-		Log* log;
-
 	public:
 		LogTester();
 		void runTests();
 		bool allTestsOK();
 
 		void newLogEntryAdded();
+
+	private:
+		int correctLogEntries;
+		Log* log;
 };
 
 }
