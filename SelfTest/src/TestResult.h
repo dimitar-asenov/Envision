@@ -42,10 +42,6 @@ class SELFTEST_API TestResult
 	public:
 		enum TestOutcome {TestPassed, TestFailed};
 
-	private:
-		TestOutcome outcome;
-		QString message;
-
 	public:
 		TestResult(TestOutcome outcome, const QString& message);
 		virtual ~TestResult();
@@ -56,6 +52,11 @@ class SELFTEST_API TestResult
 		bool isFailed() const;
 
 		TestOutcome getOutcome() const;
+
+	private:
+		TestOutcome outcome;
+		QString message;
+
 };
 
 }
