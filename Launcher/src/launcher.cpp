@@ -23,9 +23,8 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "Core/src/core.h"
 
-using namespace Core;
+#include "Core/src/core.h"
 
 /**
  * This is the main executed when Envision is started. It shows the main window, loads all plug-ins and starts the event
