@@ -32,7 +32,7 @@
 
 namespace SelfTest {
 
-class SelfTestPlugin : public QObject, public Core::EnvisionPlugin
+class SELFTEST_API SelfTestPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
