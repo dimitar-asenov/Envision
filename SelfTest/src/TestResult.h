@@ -42,7 +42,6 @@ class SELFTEST_API TestResult
 	public:
 		enum TestOutcome {TestPassed, TestFailed};
 
-	public:
 		TestResult(TestOutcome outcome, const QString& message);
 		virtual ~TestResult();
 
