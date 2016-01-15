@@ -32,8 +32,9 @@ namespace APIDepTest {
 bool APIDepTestPlugin::initialize(Core::EnvisionManager& em)
 {
 	QString size = QString::number(em.getAllLoadedPluginsInfo().length());
-	HelloWorld::HelloWorldPrinter::sayHello("the initialization method of the APIDepTest plug-in."
-												  " The number of loaded plug-ins so far is " + size);
+
+	HelloWorld::HelloWorldPrinter::sayHello(
+				"the initialization method of the APIDepTest plug-in. The number of loaded plug-ins so far is " + size);
 
 	return true;
 }
