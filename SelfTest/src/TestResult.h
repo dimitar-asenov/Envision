@@ -40,13 +40,8 @@ namespace SelfTest {
 class SELFTEST_API TestResult
 {
 	public:
-		typedef enum {TestPassed, TestFailed} TestOutcome;
+		enum TestOutcome {TestPassed, TestFailed};
 
-	private:
-		TestOutcome outcome;
-		QString message;
-
-	public:
 		TestResult(TestOutcome outcome, const QString& message);
 		virtual ~TestResult();
 
@@ -56,6 +51,11 @@ class SELFTEST_API TestResult
 		bool isFailed() const;
 
 		TestOutcome getOutcome() const;
+
+	private:
+		TestOutcome outcome;
+		QString message;
+
 };
 
 }

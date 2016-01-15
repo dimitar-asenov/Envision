@@ -28,8 +28,8 @@
 
 namespace SelfTest {
 
-TestResult::TestResult(TestOutcome outcome_, const QString& message_) :
-		outcome(outcome_), message(message_)
+TestResult::TestResult(TestOutcome outcome, const QString& message) :
+		outcome{outcome}, message{message}
 {
 }
 

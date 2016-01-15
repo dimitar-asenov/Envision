@@ -56,7 +56,9 @@ plugin('HelloWorld')
 plugin('APIDepTest')
 plugin('Logger')
 plugin('SelfTest')
+copyIfExists('SelfTest/src/SelfTestSuite.h')
+copyIfExists('SelfTest/src/TestAssertions.h')
 
-createCMakeLists(['Core', 'Launcher', 'HelloWorld', 'APIDepTest'])
+createCMakeLists(['Core', 'Launcher', 'HelloWorld', 'APIDepTest', 'SelfTest'])
 createCommonCmake()
 

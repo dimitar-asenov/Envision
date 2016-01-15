@@ -43,19 +43,6 @@ namespace SelfTest {
 template<typename T>
 class TestManager
 {
-	private:
-		/**
-		 * This is a static class. Object of this class can not be created.
-		 */
-		TestManager()
-		{
-		}
-
-		/**
-		 * A list of all test constructors. Test classes are not created unless requested.
-		 */
-		static QMap<QString, Test::TestConstructor>* testConstructors;
-
 	public:
 
 		/**
@@ -67,33 +54,12 @@ class TestManager
 		 * @param name
 		 * 				The name of this test.
 		 */
-		static void add(Test::TestConstructor test, const QString &name)
-		{
-			static QMap<QString, Test::TestConstructor> constructors;
-			testConstructors = &constructors;
-			testConstructors->insert(name, test);
-		}
+		static void add(Test::TestConstructor test, const QString &name);
 
 		/**
 		 * Runs all tests registered for this plug-in.
 		 */
-		static TestResults runAllTests()
-		{
-			TestResults testRes;
-
-			if (testConstructors)
-			{
-				for (QMap<QString, Test::TestConstructor>::iterator testConstructor = testConstructors->begin();
-					  testConstructor != testConstructors->end(); testConstructor++)
-				{
-					Test* test = (*testConstructor)();
-					test->run(testRes);
-					SAFE_DELETE(test);
-				}
-			}
-
-			return testRes;
-		}
+		static TestResults runAllTests();
 
 		/**
 		 * Runs the specified test for this plug-in.
@@ -101,19 +67,64 @@ class TestManager
 		 * @param name
 		 * 				The string id of the test to run.
 		 */
-		static TestResults runTest(const QString &name)
-		{
-			TestResults testRes;
-			if (testConstructors->contains(name))
-			{
-				Test* test = testConstructors->value(name)();
-				test->run(testRes);
-				SAFE_DELETE(test);
-			}
+		static TestResults runTest(const QString &name);
 
-			return testRes;
-		}
+	private:
+		/**
+		 * This is a static class. Object of this class can not be created.
+		 */
+		TestManager();
+
+		/**
+		 * A list of all test constructors. Test classes are not created unless requested.
+		 */
+		static QMap<QString, Test::TestConstructor>* testConstructors;
 };
+
+template<typename T>
+inline void TestManager<T>::add(Test::TestConstructor test, const QString& name)
+{
+	static QMap<QString, Test::TestConstructor> constructors;
+	testConstructors = &constructors;
+	testConstructors->insert(name, test);
+}
+
+template<typename T>
+inline TestResults TestManager<T>::runAllTests()
+{
+	TestResults testRes;
+
+	if (testConstructors)
+		for (QMap<QString, Test::TestConstructor>::iterator testConstructor = testConstructors->begin();
+			  testConstructor != testConstructors->end(); testConstructor++)
+		{
+			Test* test = (*testConstructor)();
+			test->run(testRes);
+			SAFE_DELETE(test);
+		}
+
+	return testRes;
+}
+
+template<typename T>
+inline TestResults TestManager<T>::runTest(const QString& name)
+{
+	TestResults testRes;
+	if (testConstructors->contains(name))
+	{
+		Test* test = testConstructors->value(name)();
+		test->run(testRes);
+		SAFE_DELETE(test);
+	}
+
+	return testRes;
+}
+
+template<typename T>
+inline TestManager<T>::TestManager()
+{
+}
+
 template<typename T> QMap<QString, Test::TestConstructor>* TestManager<T>::testConstructors = nullptr;
 
 }

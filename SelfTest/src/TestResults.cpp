@@ -64,8 +64,8 @@ void TestResults::merge(const TestResults& other)
 
 void TestResults::printResultStatistics() const
 {
-	QTextStream out(stdout);
-	QTextStream err(stderr);
+	QTextStream out{stdout};
+	QTextStream err{stderr};
 	out << "--------------------------" << endl;
 	out << "Total executed tests : " << getNumExecutedTests() << "\t(" << getNumExecutedChecks() << ")" << endl;
 	out << "Passed               : " << numPassedTests_ << "\t(" << getNumPassedChecks() << ")" << endl;

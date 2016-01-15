@@ -39,9 +39,6 @@ template<typename T> class TestManager;
  */
 class SELFTEST_API Test
 {
-	private:
-		QString name;
-
 	public:
 		using TestConstructor = std::function<Test* ()>;
 
@@ -69,6 +66,9 @@ class SELFTEST_API Test
 		 *					must be set to false if the test failed.
 		 */
 		virtual void runCustom(TestResults& testResults, bool &passed) = 0;
+
+	private:
+		QString name;
 };
 
 }
@@ -88,29 +88,40 @@ class SELFTEST_API Test
 template <typename PluginClass, typename TestName>
 class Test : public SelfTest::Test {
 	public:
+		virtual void runCustom(SelfTest::TestResults& testResults, bool &allChecksPassedFlag) override;
 
-		virtual void runCustom(SelfTest::TestResults& testResults, bool &allChecksPassedFlag) override
-		{
-			this->allChecksPassedFlag = true;
-			this->testResults = {};
-
-			static_cast<TestName*>(this)->test();
-			testResults.merge(this->testResults);
-			allChecksPassedFlag = this->allChecksPassedFlag;
-		}
 	protected:
 		SelfTest::TestResults testResults;
 		bool allChecksPassedFlag{true};
 		static bool initTrigger;
-		Test() : SelfTest::Test{typeName<TestName>().className_} {}
+		Test();
 
 	private:
-		static bool init ()
-		{
-			SelfTest::TestManager<PluginClass>::add([](){return new TestName();}, typeName<TestName>().className_);
-			return true;
-		}
+		static bool init();
 };
+
+template<typename PluginClass, typename TestName>
+inline void Test<PluginClass, TestName>::runCustom(SelfTest::TestResults& testResults, bool& allChecksPassedFlag)
+{
+	this->allChecksPassedFlag = true;
+	this->testResults = {};
+
+	static_cast<TestName*>(this)->test();
+	testResults.merge(this->testResults);
+	allChecksPassedFlag = this->allChecksPassedFlag;
+}
+
+template<typename PluginClass, typename TestName>
+inline Test<PluginClass, TestName>::Test() : SelfTest::Test{typeName<TestName>().className_}
+{
+}
+
+template<typename PluginClass, typename TestName>
+inline bool Test<PluginClass, TestName>::init()
+{
+	SelfTest::TestManager<PluginClass>::add([](){return new TestName();}, typeName<TestName>().className_);
+	return true;
+}
 
 template <typename PluginClass, typename TestName>
 bool Test<PluginClass, TestName>::initTrigger = Test::init();
