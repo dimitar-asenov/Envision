@@ -65,7 +65,7 @@ void LoggerPlugin::selfTest(QString)
 	lt.runTests();
 	qApp->processEvents();
 
-	QTextStream out(stdout);
+	QTextStream out{stdout};
 
 	if (lt.allTestsOK())
 		out << "LOGGER: All tests passed" << endl;

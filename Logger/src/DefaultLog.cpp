@@ -32,7 +32,7 @@ QVector<Log::LogEntry> DefaultLog::loggedEvents;
 QMutex DefaultLog::logAccess;
 
 DefaultLog::DefaultLog(QString requestingPluginId) :
-	pluginId(requestingPluginId), loggedEntriesSeen(0)
+	pluginId{requestingPluginId}, loggedEntriesSeen{0}
 {
 }
 
@@ -46,10 +46,10 @@ void DefaultLog::add(QString message)
 
 void DefaultLog::add(Level level, QString message)
 {
-	QMutexLocker locker(&logAccess);
+	QMutexLocker locker{&logAccess};
 
-	QTextStream out(stdout);
-	QTextStream err(stderr);
+	QTextStream out{stdout};
+	QTextStream err{stderr};
 
 	if (level == LOGERROR) err<<	"ERROR   " << pluginId << ": " << message << endl;
 	if (level == LOGDEBUG) out<<	"DEBUG   " << pluginId << ": " << message << endl;
@@ -66,14 +66,14 @@ void DefaultLog::add(Level level, QString message)
 
 bool DefaultLog::hasUnreadEntries()
 {
-	QMutexLocker locker(&logAccess);
+	QMutexLocker locker{&logAccess};
 
 	return loggedEvents.size() > loggedEntriesSeen;
 }
 
 Log::LogEntry DefaultLog::getNextEntry()
 {
-	QMutexLocker locker(&logAccess);
+	QMutexLocker locker{&logAccess};
 
 	if ( loggedEvents.size() == loggedEntriesSeen ) return LogEntry();
 
@@ -83,7 +83,7 @@ Log::LogEntry DefaultLog::getNextEntry()
 
 QList<Log::LogEntry> DefaultLog::getUnreadEntries()
 {
-	QMutexLocker locker(&logAccess);
+	QMutexLocker locker{&logAccess};
 
 	QList<Log::LogEntry> result;
 	while ( loggedEntriesSeen < loggedEvents.size() )
