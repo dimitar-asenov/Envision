@@ -26,8 +26,9 @@
 
 #pragma once
 
+#include "logger_api.h"
+
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
 
 namespace Logger {
 
