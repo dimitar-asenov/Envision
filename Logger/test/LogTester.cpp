@@ -29,7 +29,7 @@
 namespace Logger {
 
 LogTester::LogTester() :
-	correctLogEntries(0), log(Log::getLogger("logger"))
+	correctLogEntries{0}, log{Log::getLogger("logger")}
 {
 	QObject::connect(log, &Log::newLogEntry, this, &LogTester::newLogEntryAdded, Qt::QueuedConnection);
 }

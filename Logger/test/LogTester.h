@@ -30,13 +30,9 @@
 
 namespace Logger {
 
-class LogTester: public QObject
+class LOGGER_API LogTester: public QObject
 {
 	Q_OBJECT
-
-	private:
-		int correctLogEntries;
-		Log* log;
 
 	public:
 		LogTester();
@@ -44,6 +40,10 @@ class LogTester: public QObject
 		bool allTestsOK();
 
 		void newLogEntryAdded();
+
+	private:
+		int correctLogEntries;
+		Log* log;
 };
 
 }

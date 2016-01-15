@@ -26,19 +26,20 @@
 
 #pragma once
 
+#include "logger_api.h"
+
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
 
 namespace Logger {
 
-class LoggerPlugin : public QObject, public Core::EnvisionPlugin
+class LOGGER_API LoggerPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual bool initialize(Core::EnvisionManager& m) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };
