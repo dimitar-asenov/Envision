@@ -26,8 +26,9 @@
 
 #pragma once
 
+#include "apideptest_api.h"
+
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
 
 namespace APIDepTest {
 
@@ -39,7 +40,7 @@ namespace APIDepTest {
  *
  * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class APIDepTestPlugin : public QObject, public Core::EnvisionPlugin
+class APIDEPTEST_API APIDepTestPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")

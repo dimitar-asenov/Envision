@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,27 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#include "APIDepTestPlugin.h"
-#include "HelloWorld/src/HelloWorldPrinter.h"
+#pragma once
 
-namespace APIDepTest {
+#include "precompiled.h"
 
-bool APIDepTestPlugin::initialize(Core::EnvisionManager& em)
-{
-	QString size = QString::number(em.getAllLoadedPluginsInfo().length());
-
-	HelloWorld::HelloWorldPrinter::sayHello(
-				"the initialization method of the APIDepTest plug-in. The number of loaded plug-ins so far is " + size);
-
-	return true;
-}
-
-void APIDepTestPlugin::unload()
-{
-}
-
-void APIDepTestPlugin::selfTest(QString)
-{
-}
-
-}
+// This should be defined in the project file of the plug-in that exports symbols
+#if defined(APIDepTest_EXPORTS)
+	#define APIDEPTEST_API Q_DECL_EXPORT
+#else
+	#define APIDEPTEST_API Q_DECL_IMPORT
+#endif
