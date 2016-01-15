@@ -43,19 +43,6 @@ namespace SelfTest {
 template<typename T>
 class TestManager
 {
-	private:
-		/**
-		 * This is a static class. Object of this class can not be created.
-		 */
-		TestManager()
-		{
-		}
-
-		/**
-		 * A list of all test constructors. Test classes are not created unless requested.
-		 */
-		static QMap<QString, Test::TestConstructor>* testConstructors;
-
 	public:
 
 		/**
@@ -102,6 +89,17 @@ class TestManager
 		 * 				The string id of the test to run.
 		 */
 		static TestResults runTest(const QString &name)
+
+	private:
+		/**
+		 * This is a static class. Object of this class can not be created.
+		 */
+		TestManager();
+
+		/**
+		 * A list of all test constructors. Test classes are not created unless requested.
+		 */
+		static QMap<QString, Test::TestConstructor>* testConstructors;
 		{
 			TestResults testRes;
 			if (testConstructors->contains(name))
