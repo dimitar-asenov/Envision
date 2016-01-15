@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,30 +26,11 @@
 
 #pragma once
 
-#include "apideptest_api.h"
+#include "precompiled.h"
 
-#include "Core/src/EnvisionPlugin.h"
-
-namespace APIDepTest {
-
-/**
- * Implements the interface between the HelloWorld plug-in and Envision.
- *
- * The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before
- * any other operations are performed.
- *
- * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
- */
-class APIDepTestPlugin : public QObject, public Core::EnvisionPlugin
-{
-	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
-	Q_INTERFACES(Core::EnvisionPlugin)
-
-	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
-		virtual void unload() override;
-		virtual void selfTest(QString testid) override;
-};
-
-}
+// This should be defined in the project file of the plug-in that exports symbols
+#if defined(APIDepTest_EXPORTS)
+	#define APIDEPTEST_API Q_DECL_EXPORT
+#else
+	#define APIDEPTEST_API Q_DECL_IMPORT
+#endif

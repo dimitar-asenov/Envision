@@ -5,6 +5,7 @@ include(../CMake/common.cmake)
 
 add_library(APIDepTest SHARED
 	src/precompiled.h
+	src/apideptest_api.h
 	src/APIDepTestPlugin.h
 	src/APIDepTestPlugin.cpp
 )
