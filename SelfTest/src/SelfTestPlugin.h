@@ -26,8 +26,9 @@
 
 #pragma once
 
+#include "selftest_api.h"
+
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
 
 namespace SelfTest {
 
