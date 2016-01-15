@@ -30,7 +30,7 @@
 
 namespace Logger {
 
-class DefaultLog: public Log
+class LOGGER_API DefaultLog: public Log
 {
 	private:
 		QString pluginId;

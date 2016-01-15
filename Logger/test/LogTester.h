@@ -30,7 +30,7 @@
 
 namespace Logger {
 
-class LogTester: public QObject
+class LOGGER_API LogTester: public QObject
 {
 	Q_OBJECT
 
