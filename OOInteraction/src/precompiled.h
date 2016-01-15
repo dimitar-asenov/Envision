@@ -27,8 +27,8 @@
 #ifndef PRECOMPILED_OOINTERACTION_H_
 #define PRECOMPILED_OOINTERACTION_H_
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
+// Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
+// those headers will be included here
 #include "OOVisualization/src/precompiled.h"
 #include "OOModel/src/precompiled.h"
 #include "VisualizationBase/src/precompiled.h"
@@ -38,8 +38,6 @@
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
 
-#if defined __cplusplus
-// Add C++ includes here
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
@@ -48,10 +46,11 @@
 #include <QtCore/QDir>
 #include <QtGui/QDesktopServices>
 
+
 #if defined(OOInteraction_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
-#endif
+
 
 #endif
 

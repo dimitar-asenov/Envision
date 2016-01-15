@@ -47,18 +47,17 @@
 #include <QtWidgets/QWidgetAction>
 #include <QtWidgets/QCheckBox>
 
-#if defined __cplusplus
-// Add C++ includes here
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
+
 
 #if defined(Comments_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 #include <QtWebKitWidgets/QGraphicsWebView>
 #include <QtWebKitWidgets/QWebFrame>
-#endif
+
 
 #endif
 

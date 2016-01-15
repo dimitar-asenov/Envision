@@ -35,12 +35,11 @@
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
 
-#if defined __cplusplus
-// Add C++ includes here
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
 #include <QtWidgets/QGraphicsEffect>
+
 
 #if defined(InteractionBase_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
@@ -50,7 +49,7 @@
 #include <QtGui/QClipboard>
 
 #include <iostream>
-#endif
+
 
 #endif
 
