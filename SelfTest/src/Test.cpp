@@ -30,8 +30,8 @@
 
 namespace SelfTest {
 
-Test::Test(const QString &name_) :
-	name(name_)
+Test::Test(const QString& name) :
+	name{name}
 {
 }
 
