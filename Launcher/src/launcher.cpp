@@ -23,7 +23,6 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "precompiled.h"
 #include "Core/src/core.h"
 
 using namespace Core;
