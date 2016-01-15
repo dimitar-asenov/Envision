@@ -38,7 +38,13 @@
 		"main" : "Launcher/src/launcher",
 		"Hello/HelloWorldPrinter" : "HelloWorld/src/HelloWorldPrinter" ,
 		"Hello/HelloWorldPlugin" : "HelloWorld/src/HelloWorldPlugin",
-		"APIDepTest/APIDepTestPlugin" : "APIDepTest/src/APIDepTestPlugin"
+		"APIDepTest/APIDepTestPlugin" : "APIDepTest/src/APIDepTestPlugin",
+		"SelfTest/TestResult" : "SelfTest/src/TestResult" ,
+		"Test" : "SelfTest/src/Test" ,
+		"SelfTest/TestResults" : "SelfTest/src/TestResults" ,
+		"SelfTest/SelfTestPlugin" : "SelfTest/src/SelfTestPlugin" ,
+		"SelfTest/Test" : "SelfTest/src/Test" ,
+		"SelfTest/TestManager" : "SelfTest/src/TestManager"
 	},
 	"ExportFlagMap": 
 	{
