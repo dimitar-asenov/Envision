@@ -39,9 +39,6 @@ template<typename T> class TestManager;
  */
 class SELFTEST_API Test
 {
-	private:
-		QString name;
-
 	public:
 		using TestConstructor = std::function<Test* ()>;
 
@@ -69,6 +66,9 @@ class SELFTEST_API Test
 		 *					must be set to false if the test failed.
 		 */
 		virtual void runCustom(TestResults& testResults, bool &passed) = 0;
+
+	private:
+		QString name;
 };
 
 }
