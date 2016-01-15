@@ -39,7 +39,7 @@ class LOGGER_API LoggerPlugin : public QObject, public Core::EnvisionPlugin
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual bool initialize(Core::EnvisionManager& m) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };
