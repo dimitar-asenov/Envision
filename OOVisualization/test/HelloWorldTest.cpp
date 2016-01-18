@@ -77,7 +77,7 @@ Class* addHelloWorld(Project* parent)
 	if (parent) parent->classes()->append(hello);
 
 	hello->subDeclarations()->append(new NameImport(
-		new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java")))));
+		new ReferenceExpression("out", new ReferenceExpression("System"))));
 	// TODO: BUG: If the two lines below are uncommented this will trigger an infinite loop.
 	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression("Java")));
 	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression("Java")));
@@ -97,7 +97,7 @@ Class* addHelloWorld(Project* parent)
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
 	MethodCallExpression* callPrintln = new MethodCallExpression("println",
-			new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
+			new ReferenceExpression("out", new ReferenceExpression("System")));
 	callPrintln->arguments()->append(new StringLiteral("Hello World"));
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
@@ -179,7 +179,7 @@ Class* addAnnotatedWithFriends(Project* parent)
 
 	// Add some friends classes
 	ann->friends()->append(new Class("Generic"));
-	ann->friends()->append(new Class("System.Java"));
+	ann->friends()->append(new Class("Boo.Foo"));
 
 	// Add methods
 	Method* foo = new Method("foo", Modifier::Public);
@@ -456,7 +456,7 @@ Method* addLongMethod(Class* parent)
 
 	auto var0 = new VariableDeclarationExpression("pSystem");
 	var0->decl()->setTypeExpression(new PointerTypeExpression(new ClassTypeExpression(
-			new ReferenceExpression("System", new ReferenceExpression("Java")))));
+			new ReferenceExpression("System"))));
 	longMethod->items()->append(new ExpressionStatement(var0));
 	longMethod->items()->append(new ExpressionStatement(
 			new ReferenceExpression("out", new ReferenceExpression("pSystem"))));

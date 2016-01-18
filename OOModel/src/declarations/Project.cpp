@@ -49,6 +49,11 @@ Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 	setName(name);
 }
 
+bool Project::isTransparentForNameResolution() const
+{
+	return true;
+}
+
 Project::SymbolTypes Project::symbolType() const
 {
 	return CONTAINER;

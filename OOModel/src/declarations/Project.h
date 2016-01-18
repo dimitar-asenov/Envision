@@ -34,6 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Project)
 
 namespace OOModel {
 
+// TODO: Project should not be a declaration.
 class OOMODEL_API Project : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Project)
@@ -52,6 +53,7 @@ class OOMODEL_API Project : public Super<Declaration>
 	public:
 		Project(const QString& name);
 
+		virtual bool isTransparentForNameResolution() const override;
 		virtual SymbolTypes symbolType() const override;
 		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
 };

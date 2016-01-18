@@ -221,7 +221,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 {
 	bool found{};
 
-	if (direction == SEARCH_HERE)
+	if (direction == SEARCH_HERE && !isTransparentForNameResolution())
 	{
 		if (symbolMatches(matcher, symbolTypes))
 		{
@@ -229,7 +229,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 			result.insert(const_cast<Node*>(this));
 		}
 	}
-	else if (direction == SEARCH_DOWN)
+	else if (direction == SEARCH_DOWN || (direction == SEARCH_HERE && isTransparentForNameResolution()))
 	{
 		for (auto c : childrenInScope())
 			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
@@ -241,7 +241,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
 				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 
-		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
+		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes) && !isTransparentForNameResolution())
 		{
 			found = true;
 			result.insert(const_cast<Node*>(this));
@@ -334,6 +334,11 @@ QList<Node*> Node::children() const
 }
 
 bool Node::definesSymbol() const
+{
+	return false;
+}
+
+bool Node::isTransparentForNameResolution() const
 {
 	return false;
 }

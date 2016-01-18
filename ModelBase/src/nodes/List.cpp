@@ -198,9 +198,18 @@ void List::paste(ClipboardStore& clipboard, int position)
 	}
 }
 
+bool List::isTransparentForNameResolution() const
+{
+	return true;
+}
+
 bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
+	// TODO: The code below is technically unnecessary and we can directly call the implementation in Node.
+	// which does the exact same thing, except that it uses childrenInScope() instead of nodes_ directly
+	// and this will decrease performance as childrenInScope() will convert nodes_ to a QList on every call.
+
 	Q_ASSERT(direction != SEARCH_DOWN);
 
 	bool found{};

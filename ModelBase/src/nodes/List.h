@@ -88,6 +88,8 @@ class MODELBASE_API List: public Super<Node>
 
 		const QVector<Node*>& nodes();
 
+		bool isTransparentForNameResolution() const override;
+
 		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
 				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 

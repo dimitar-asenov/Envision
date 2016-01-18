@@ -171,6 +171,15 @@ class MODELBASE_API Node
 		virtual bool definesSymbol() const;
 
 		/**
+		 * Returns true if this node should propagate name resolution requests through it, as if were not there.
+		 *
+		 * The default implementaion returns false. Reimplement this method in sub classes that are not part of name
+		 * resolution, but are involved in the process (e.g. lists or projects). By default, a non-transparent object
+		 * will prevent name resolution from propagating past it, if it does not match the name being searched for.
+		 */
+		virtual bool isTransparentForNameResolution() const;
+
+		/**
 		 * Returns the name of the symbol defined by this node.
 		 *
 		 * The default implementaion returns a null QString value. Reimplement this method, definesSymbol(), and
