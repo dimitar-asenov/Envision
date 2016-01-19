@@ -131,6 +131,14 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
 	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
+
+	*fragment << list(classs->fields(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", [](Field* field)
+	{
+		if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
+			return !parentClass->typeArguments()->isEmpty();
+		return false;
+	});
+
 	return fragment;
 }
 
@@ -169,7 +177,12 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Default);
 		});
-		*sections << list(classs->fields(), this, "vertical");
+		*sections << list(classs->fields(), this, "vertical", [](Field* field)
+		{
+			if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
+				return parentClass->typeArguments()->isEmpty();
+			return true;
+		});
 	}
 	else
 	{
