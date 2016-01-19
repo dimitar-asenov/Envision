@@ -1137,6 +1137,8 @@ void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OO
 		method->modifiers()->set(OOModel::Modifier::Virtual);
 	if (functionDecl->hasAttr<clang::OverrideAttr>())
 		method->modifiers()->set(OOModel::Modifier::Override);
+	if (functionDecl->hasAttr<clang::FinalAttr>())
+		method->modifiers()->set(OOModel::Modifier::Final);
 	if (functionDecl->getStorageClass() == clang::SC_Static)
 		method->modifiers()->set(OOModel::Modifier::Static);
 	if (functionDecl->isDefaulted())
