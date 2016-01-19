@@ -34,6 +34,8 @@
 #include "Export/src/writer/FragmentLayouter.h"
 #include "Export/src/tree/CompositeFragment.h"
 #include "ModelBase/src/model/TreeManager.h"
+#include "OOModel/src/declarations/NameImport.h"
+#include "OOInteraction/src/string_offset_providers/StringComponents.h"
 
 #include "../CodeUnit.h"
 #include "../CodeComposite.h"
