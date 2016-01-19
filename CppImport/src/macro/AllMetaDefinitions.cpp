@@ -38,7 +38,7 @@ namespace CppImport {
 
 AllMetaDefinitions::AllMetaDefinitions(OOModel::Project* root, ClangHelpers& clangHelper,
 									  const MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions)
-	: root_{root}, macroDefinitions_{macroDefinitions}, macroExpansions_{macroExpansions},
+	: root_{root}, clang_{clangHelper}, macroDefinitions_{macroDefinitions}, macroExpansions_{macroExpansions},
 	  standardMetaDefinitions_{clangHelper, macroDefinitions, macroExpansions} {}
 
 void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
@@ -64,34 +64,8 @@ void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansi
 
 OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::MacroDirective* md)
 {
-	OOModel::Declaration* result = nullptr;
-
-	QString namespaceName, fileName;
-	if (macroDefinitions_.macroDefinitionLocation(md, namespaceName, fileName))
-	{
-		// find the namespace module for md
-		OOModel::Module* namespaceModule =
-				DCast<OOModel::Module>(NodeHelpers::findDeclaration(root_->modules(), namespaceName));
-
-		// this assertion holds if the project structure matches Envision's project structure
-		// alternatively if no such module could be found (project structure unlike Envision's) one could put it into root
-		// Q_ASSERT(namespaceModule);
-		if (!namespaceModule) return root_;
-
-		// try to find the module (includes macro containers) to put this macro in
-		result = NodeHelpers::findDeclaration(namespaceModule->modules(), fileName);
-
-		// if no module could be found; try to find an appropriate class to put this macro in
-		if (!result) result = NodeHelpers::findDeclaration(namespaceModule->classes(), fileName);
-
-		// if no existing place could be found: create a new module (macro container) and put the macro in there
-		if (!result)
-		{
-			result = new OOModel::Module(fileName);
-			namespaceModule->modules()->append(result);
-		}
-	}
-	else
+	OOModel::Declaration* result = clang_.projectForLocation(md->getLocation());
+	if (result == clang_.rootProject())
 	{
 		result = NodeHelpers::findDeclaration(root_->modules(), "ExternalMacro");
 

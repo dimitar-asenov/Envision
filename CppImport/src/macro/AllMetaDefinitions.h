@@ -62,6 +62,7 @@ class CPPIMPORT_API AllMetaDefinitions
 
 	private:
 		OOModel::Project* root_{};
+		ClangHelpers& clang_;
 		const MacroDefinitions& macroDefinitions_;
 		MacroExpansions& macroExpansions_;
 		StandardMetaDefinitions standardMetaDefinitions_;
