@@ -32,7 +32,7 @@ LinkedChangesSet::LinkedChangesSet() : QSet<LinkedChanges>() {}
 
 LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const ChangeDependencyGraph &cdgB)
 {
-	std::shared_ptr<GenericTree> tree = std::shared_ptr<GenericTree>(new GenericTree("AllocatorForChanges"));
+	std::shared_ptr<GenericTree> tree = std::shared_ptr<GenericTree>(new GenericTree{"AllocatorForChanges"});
 	for (auto change : cdgA.changes().values())
 	{
 		auto linkedChanges = newLinkedChanges();

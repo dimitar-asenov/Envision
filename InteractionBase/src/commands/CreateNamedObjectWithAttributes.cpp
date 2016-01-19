@@ -43,7 +43,7 @@ QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggestNamed(Visualiz
 	for (auto attr : attributes)
 		if (!attr.isEmpty()) explanation += attr + " ";
 	explanation += this->name() + (name.isEmpty() ? "" : " called '" + name + "'");
-	return {new CommandSuggestion(commandText, explanation)};
+	return {new CommandSuggestion{commandText, explanation}};
 }
 
 }

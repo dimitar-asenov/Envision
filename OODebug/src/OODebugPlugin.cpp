@@ -54,10 +54,10 @@ Logger::Log& OODebugPlugin::log()
 
 bool OODebugPlugin::initialize(Core::EnvisionManager&)
 {
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaRun());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug());
-	OOInteraction::HStatementItemList::instance()->addCommand(new CProbe());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaRun{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug{});
+	OOInteraction::HStatementItemList::instance()->addCommand(new CProbe{});
 
 	ConsoleOverlay::setDefaultClassHandler(HMoveableOverlay::instance());
 	PlotOverlay::setDefaultClassHandler(HMoveableOverlay::instance());

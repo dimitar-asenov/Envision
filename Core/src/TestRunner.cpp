@@ -55,7 +55,7 @@ TestRunner::TestRunner()
 			QString id{QString::null};
 			if ( parts.length() > 1 ) id = parts[1];
 
-			requestedTests_.append(new TestEvent(target, id));
+			requestedTests_.append(new TestEvent{target, id});
 		}
 	}
 }

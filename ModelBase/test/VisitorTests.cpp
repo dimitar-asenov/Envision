@@ -87,30 +87,30 @@ class VisitorC : public Visitor<VisitorC>{
 
 class VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
 {
-	auto root = new List();
+	auto root = new List{};
 	TreeManager manager{root};
 
 	manager.setName("root");
 
 	manager.beginModification(root, "make tree");
-	root->append(new Text("hello"));
-	auto i = new Integer();
+	root->append(new Text{"hello"});
+	auto i = new Integer{};
 	i->set(42);
 	root->append( i);
 	manager.endModification();
 
 	VisitorA::init();
-	auto visA = new VisitorA();
+	auto visA = new VisitorA{};
 	QString valA = visA->visit(root);
 	delete visA;
 
 	VisitorB::init();
-	auto visB = new VisitorB();
+	auto visB = new VisitorB{};
 	QString valB = visB->visit(root);
 	delete visB;
 
 	VisitorC::init();
-	auto visC = new VisitorC();
+	auto visC = new VisitorC{};
 	visC->visit(root);
 	QString valC = visC->text;
 	delete visC;

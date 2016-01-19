@@ -199,7 +199,7 @@ Merge::~Merge()
 void Merge::initializeComponents()
 {
 	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(
-				new ConflictUnitDetector(conflictTypes_, USE_LINKED_SETS));
+				new ConflictUnitDetector{conflictTypes_, USE_LINKED_SETS});
 
 	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes_, listTypes_, unorderedTypes_);
 	conflictPipeline_.append(listMergeComponent);
@@ -210,11 +210,11 @@ void Merge::performTrueMerge()
 	initializeComponents();
 
 	treeA_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
-	new GitPiecewiseLoader(treeA_, repository_, headCommitId_);
+	new GitPiecewiseLoader{treeA_, repository_, headCommitId_};
 	treeB_ = std::unique_ptr<GenericTree>(new GenericTree(repository_->projectName()));
-	new GitPiecewiseLoader(treeB_, repository_, revisionCommitId_);
+	new GitPiecewiseLoader{treeB_, repository_, revisionCommitId_};
 	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree(repository_->projectName()));
-	new GitPiecewiseLoader(treeBase_, repository_, baseCommitId_);
+	new GitPiecewiseLoader{treeBase_, repository_, baseCommitId_};
 
 	Diff diffA = repository_->diff(baseCommitId_, headCommitId_, treeBase_, treeA_);
 	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_, treeBase_, treeB_);

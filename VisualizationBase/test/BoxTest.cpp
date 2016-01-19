@@ -48,11 +48,11 @@ Super{parent}, items(this)
 //	setShapeStyle(&boxStyle);
 
 	for (int i = 0; i < sub; ++i)
-		items.append(new BoxTest(&items, sub - 1 - i));
+		items.append(new BoxTest{&items, sub - 1 - i});
 
 	if (sub == 0)
 	{
-		items.append(new Text(&items, "Test"));
+		items.append(new Text{&items, "Test"});
 	}
 }
 

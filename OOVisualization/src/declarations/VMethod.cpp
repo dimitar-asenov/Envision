@@ -46,7 +46,7 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : Super{p
 
 void VMethod::initializeForms()
 {
-	auto headerElement = (new GridLayoutFormElement())
+	auto headerElement = (new GridLayoutFormElement{})
 		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
 		->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 		->put(0, 0, item<Static>(&I::icon_, [](I* v)
@@ -87,7 +87,7 @@ void VMethod::initializeForms()
 		->put(4, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
 											[](I* v){return &v->style()->arguments();}));
 
-	auto addonsElement = (new SequentialLayoutFormElement())
+	auto addonsElement = (new SequentialLayoutFormElement{})
 								->setVertical()
 								->setListOfItems([](Item* i){return (static_cast<VMethod*>(i))->addOnItems().values();});
 
@@ -111,11 +111,11 @@ void VMethod::initializeForms()
 	auto metaCallsElement = item<VList>(&I::metaCalls_, [](I* v){return v->node()->metaCalls();},
 			[](I* v){return &v->style()->metaCalls();});
 
-	auto contentElement = (new GridLayoutFormElement())
+	auto contentElement = (new GridLayoutFormElement{})
 			->setVerticalSpacing(3)->setColumnStretchFactors(1)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->put(0, 0, addonsElement)
-			->put(0, 1, (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)->setHorizontalSpacing(3)
+			->put(0, 1, (new GridLayoutFormElement{})->setColumnStretchFactor(1, 1)->setHorizontalSpacing(3)
 					->put(0, 0, item<Static>(&I::annotationsIcon_,
 							 [](I* v){return &v->style()->annotationsIcon();})->setEnabled(
 									 [](I* v){return v->node()->annotations()->size() > 0;}))
@@ -130,9 +130,9 @@ void VMethod::initializeForms()
 			->put(0, 6, metaCallsElement)
 			->put(0, 7, bodyElement);
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
 			->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
 			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)

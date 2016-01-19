@@ -100,7 +100,7 @@ template <typename ModeType>
 inline void Prompt::registerMode(const QString& modeName)
 {
 	Q_ASSERT(!modeRegistry().contains(modeName));
-	modeRegistry().insert(modeName, []()->PromptMode* {return new ModeType();});
+	modeRegistry().insert(modeName, []()->PromptMode* {return new ModeType{};});
 }
 
 }

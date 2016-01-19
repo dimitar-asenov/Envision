@@ -42,14 +42,14 @@ class ModificationNotificationTests : public Test<ModelBasePlugin, ModificationN
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());
 	CHECK_INT_EQUAL(0, nl.removedNodes.size());
 
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	manager.setRoot(root);
 
 	CHECK_CONDITION(root == nl.root_);
 
 	manager.beginModification(root, "make tree");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 	root->setLeft(left);
 	root->setRight(right);
 	manager.endModification();

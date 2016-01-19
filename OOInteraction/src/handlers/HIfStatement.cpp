@@ -68,15 +68,15 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
-			auto es = new OOModel::ExpressionStatement();
+			auto empty = new OOModel::EmptyExpression{};
+			auto es = new OOModel::ExpressionStatement{};
 			es->setExpression(empty);
 			vif->node()->beginModification("create then branch");
 			vif->node()->thenBranch()->append(es);
 			vif->node()->endModification();
 
 			vif->thenBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 	}
 	else if (vif->thenBranch()->itemOrChildHasFocus() && tab )
@@ -90,15 +90,15 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
-			auto es = new OOModel::ExpressionStatement();
+			auto empty = new OOModel::EmptyExpression{};
+			auto es = new OOModel::ExpressionStatement{};
 			es->setExpression(empty);
 			vif->node()->beginModification("create else branch");
 			vif->node()->elseBranch()->append(es);
 			vif->node()->endModification();
 
 			vif->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 	}
 	else if (event->modifiers() == Qt::NoModifier

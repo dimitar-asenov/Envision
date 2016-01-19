@@ -55,7 +55,7 @@ QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)
 	else
 	{
 		operands.append(left());
-		if (detachOperands) replaceChild(left(), new EmptyExpression());
+		if (detachOperands) replaceChild(left(), new EmptyExpression{});
 	}
 
 	if (auto right_comma = DCast<CommaExpression>(right()))
@@ -63,7 +63,7 @@ QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)
 	else
 	{
 		operands.append(right());
-		if (detachOperands) replaceChild(right(), new EmptyExpression());
+		if (detachOperands) replaceChild(right(), new EmptyExpression{});
 	}
 	return operands;
 }

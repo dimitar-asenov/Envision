@@ -51,7 +51,7 @@ OOModel::MetaDefinition* StandardMetaDefinitions::createMetaDef(const clang::Mac
 
 	// add formal arguments based on the expansion definition
 	for (auto argName : clang_.argumentNames(md))
-		metaDef->arguments()->append(new OOModel::FormalMetaArgument(argName));
+		metaDef->arguments()->append(new OOModel::FormalMetaArgument{argName});
 
 	return metaDef;
 }
@@ -111,8 +111,8 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 					if (auto ooMethod = DCast<OOModel::Method>(cloned))
 						if (ooMethod->modifiers()->isSet(OOModel::Modifier::Virtual))
 						{
-							auto predefinedMetaCall = new OOModel::MetaCallExpression("SET_OVERRIDE_FLAG");
-							predefinedMetaCall->arguments()->append(new OOModel::ReferenceExpression("OVERRIDE"));
+							auto predefinedMetaCall = new OOModel::MetaCallExpression{"SET_OVERRIDE_FLAG"};
+							predefinedMetaCall->arguments()->append(new OOModel::ReferenceExpression{"OVERRIDE"});
 							ooMethod->metaCalls()->append(predefinedMetaCall);
 						}
 
@@ -211,7 +211,7 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, Nod
 
 			// the splice name is equal to the formal argument name where the argument is coming from
 			auto argName = clang_.argumentNames(spliceLoc.expansion_->definition()).at(spliceLoc.argumentNumber_);
-			Model::Node* newNode = new OOModel::ReferenceExpression(argName);
+			Model::Node* newNode = new OOModel::ReferenceExpression{argName};
 
 			// in case the node to replace is not an expression we have to wrap the splice
 			if (DCast<OOModel::FormalResult>(child))

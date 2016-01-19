@@ -42,20 +42,20 @@ VCatchClause::VCatchClause(Item* parent, NodeType* node, const StyleType* style)
 
 void VCatchClause::initializeForms()
 {
-	auto header = (new GridLayoutFormElement())
+	auto header = (new GridLayoutFormElement{})
 			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
 			->setHorizontalSpacing(5)
 			->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
 			->put(1, 0, item<NodeWrapper>(&I::expressionToCatch_, [](I* v){return v->node()->exceptionToCatch();},
 																[](I* v){return &v->style()->expressionToCatch();}));
 
-	auto body = (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)
+	auto body = (new GridLayoutFormElement{})->setColumnStretchFactor(1, 1)
 					->put(0, 0, item(&I::body_, [](I* v){return v->node()->body();}));
 
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheLeftOf, header, AtLeftOf, body)
 			->put(TheLeftOf, shapeElement, 2, FromLeftOf, body)
 			->put(TheRightOf, header, AtRightOf, body)

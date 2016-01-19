@@ -47,9 +47,9 @@ CommandResult* CSaveView::execute(Item* source, Item*, const QStringList&,
 	{
 		source->scene()->viewItems()->saveView(source->scene()->currentViewItem(),
 					source->findAncestorWithNode()->node()->manager());
-		return new CommandResult();
+		return new CommandResult{};
 	}
-	else return new CommandResult(new CommandError("Could not save view"));
+	else return new CommandResult(new CommandError{"Could not save view"});
 }
 
 QList<CommandSuggestion*> CSaveView::suggest(Item*, Item*, const QString& textSoFar,

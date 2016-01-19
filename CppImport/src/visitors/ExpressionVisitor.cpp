@@ -624,7 +624,7 @@ bool ExpressionVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
 			ooThrow->setExpr(ooExprStack_.pop());
 	}
 	else
-		ooThrow->setExpr(new OOModel::EmptyExpression());
+		ooThrow->setExpr(new OOModel::EmptyExpression{});
 	ooExprStack_.push(ooThrow);
 	return true;
 }

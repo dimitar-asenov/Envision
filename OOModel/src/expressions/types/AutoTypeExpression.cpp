@@ -58,7 +58,7 @@ Type* AutoTypeExpression::type()
 		Q_ASSERT(p);
 	}
 	if (!varDecl->initialValue())
-		return new ErrorType("No initial value in auto type");
+		return new ErrorType{"No initial value in auto type"};
 	auto initType = varDecl->initialValue()->type();
 	if (varDecl == p)
 		return initType;
@@ -66,7 +66,7 @@ Type* AutoTypeExpression::type()
 		return new ReferenceType(initType, initType->isValueType());
 	if (DCast<PointerTypeExpression>(current))
 		return new PointerType(initType, initType->isValueType());
-	return new ErrorType("Could not find type of auto expression");
+	return new ErrorType{"Could not find type of auto expression"};
 }
 
 }

@@ -47,7 +47,7 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	if (commandTokens.size() < 2)
-		return new CommandResult(new CommandError("Please specify a node to add"));
+		return new CommandResult(new CommandError{"Please specify a node to add"});
 
 	auto currentView = target->scene()->currentViewItem();
 	QPoint posToInsert;
@@ -79,9 +79,9 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 	if (matches.size() > 0)
 	{
 		currentView->insertNode(matches[0].second, posToInsert.x(), posToInsert.y());
-		return new CommandResult();
+		return new CommandResult{};
 	}
-	return new CommandResult(new CommandError("Could not find node with name " + commandTokens[1]));
+	return new CommandResult(new CommandError{"Could not find node with name " + commandTokens[1]});
 }
 
 QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Visualization::Item*,
@@ -93,10 +93,10 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 	{
 		auto matches = Model::NameResolver::mostLikelyMatches(textSoFar.trimmed().mid(4), 10);
 		for (auto match : matches)
-			suggestions.append(new CommandSuggestion("add " + match.first, "Add node " + match.first + " to the view"));
+			suggestions.append(new CommandSuggestion{"add " + match.first, "Add node " + match.first + " to the view"});
 	}
 	else if (QString("add ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
-			suggestions.append(new CommandSuggestion("add ", "Add nodes to the current view"));
+			suggestions.append(new CommandSuggestion{"add ", "Add nodes to the current view"});
 
 	return suggestions;
 }

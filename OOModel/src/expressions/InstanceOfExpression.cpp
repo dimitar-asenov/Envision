@@ -39,7 +39,7 @@ REGISTER_ATTRIBUTE(InstanceOfExpression, expr, Expression, false, false, true)
 
 Type* InstanceOfExpression::type()
 {
-	return new PrimitiveType(PrimitiveType::BOOLEAN, true);
+	return new PrimitiveType{PrimitiveType::BOOLEAN, true};
 }
 
 }

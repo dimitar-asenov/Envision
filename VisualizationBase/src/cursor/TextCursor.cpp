@@ -30,14 +30,14 @@
 namespace Visualization {
 
 TextCursor::TextCursor(TextRenderer* owner)
-	: Cursor(owner, VerticalCursor, new CursorShapeItem(this)),
+	: Cursor(owner, VerticalCursor, new CursorShapeItem{this}),
 	  selectionBegin_{0},  selectionEnd_{0}, xBegin_{0}, xEnd_{0}
 {
 }
 
 TextCursor* TextCursor::clone() const
 {
-	return new TextCursor(*this);
+	return new TextCursor{*this};
 }
 
 TextRenderer* TextCursor::owner() const

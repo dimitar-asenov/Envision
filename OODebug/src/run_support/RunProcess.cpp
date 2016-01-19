@@ -37,7 +37,7 @@ QProcess* RunProcess::replaceProcess()
 {
 	if (managedProcess_)
 		managedProcess_->kill();
-	auto newProcess = new QProcess();
+	auto newProcess = new QProcess{};
 
 	// We have to make a copy here of the pointer such that we do not delete the new instance.
 	// By using the kill slot we know that we will always clean the memory of the old process.

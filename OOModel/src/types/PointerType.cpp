@@ -51,7 +51,7 @@ bool PointerType::equals(const Type* other) const
 
 PointerType* PointerType::clone() const
 {
-	return new PointerType(*this);
+	return new PointerType{*this};
 }
 
 }

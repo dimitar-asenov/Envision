@@ -42,7 +42,7 @@ ITEM_COMMON_DEFINITIONS(VAssertStatement, "item")
 
 void VAssertStatement::initializeForms()
 {
-	addForm((new GridLayoutFormElement())
+	addForm((new GridLayoutFormElement{})
 				->setTopMargin(1)->setBottomMargin(1)->setHorizontalSpacing(5)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))

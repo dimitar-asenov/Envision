@@ -135,7 +135,7 @@ QList<ItemRegion> DeclarativeItemBase::regions()
 
 GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<Merge>> elements)
 {
-	auto grid = new GridLayoutFormElement();
+	auto grid = new GridLayoutFormElement{};
 
 	for (int y = 0; y < elements.size(); ++y)
 	{

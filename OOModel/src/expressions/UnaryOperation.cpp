@@ -60,7 +60,7 @@ Type* UnaryOperation::type()
 		} else
 		{
 			SAFE_DELETE(t);
-			return new ErrorType("dereferencing a value that is not a pointer");
+			return new ErrorType{"dereferencing a value that is not a pointer"};
 		}
 	}
 	else if (opr() == ADDRESSOF)

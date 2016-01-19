@@ -36,16 +36,16 @@ namespace Model {
 
 class ListCreation : public Test<ModelBasePlugin, ListCreation> { public: void test()
 {
-	auto root = new List();
+	auto root = new List{};
 	TreeManager manager{root};
 
 	CHECK_INT_EQUAL(0, root->size());
 
 	manager.beginModification(root, "add elements to list");
 
-	Text* a = new Text();
-	Text* b = new Text();
-	Integer* c = new Integer();
+	Text* a = new Text{};
+	Text* b = new Text{};
+	Integer* c = new Integer{};
 
 	a->set("first");
 	b->set("second");
@@ -64,17 +64,17 @@ class ListCreation : public Test<ModelBasePlugin, ListCreation> { public: void t
 
 class ListInsertion : public Test<ModelBasePlugin, ListInsertion> { public: void test()
 {
-	auto root = new List();
+	auto root = new List{};
 	TreeManager manager{root};
 
 	manager.beginModification(root, "add elements to list");
-	Text* a = new Text();
-	Text* b = new Text();
-	Text* c = new Text();
-	Text* d = new Text();
-	Text* e = new Text();
-	Text* f = new Text();
-	Text* g = new Text();
+	Text* a = new Text{};
+	Text* b = new Text{};
+	Text* c = new Text{};
+	Text* d = new Text{};
+	Text* e = new Text{};
+	Text* f = new Text{};
+	Text* g = new Text{};
 
 	root->append(a);
 	root->prepend(b);
@@ -97,17 +97,17 @@ class ListInsertion : public Test<ModelBasePlugin, ListInsertion> { public: void
 
 class ListRemoval : public Test<ModelBasePlugin, ListRemoval> { public: void test()
 {
-	auto root = new List();
+	auto root = new List{};
 	TreeManager manager{root};
 
 	manager.beginModification(root, "add elements to list");
-	Text* a = new Text();
-	Text* b = new Text();
-	Text* c = new Text();
-	Text* d = new Text();
-	Text* e = new Text();
-	Text* f = new Text();
-	Text* g = new Text();
+	Text* a = new Text{};
+	Text* b = new Text{};
+	Text* c = new Text{};
+	Text* d = new Text{};
+	Text* e = new Text{};
+	Text* f = new Text{};
+	Text* g = new Text{};
 
 	root->append(a);
 	root->append(b);
@@ -136,17 +136,17 @@ class ListRemoval : public Test<ModelBasePlugin, ListRemoval> { public: void tes
 
 class ListUndo : public Test<ModelBasePlugin, ListUndo> { public: void test()
 {
-	auto root = new List();
+	auto root = new List{};
 	TreeManager manager{root};
 
 	manager.beginModification(root, "add elements to list");
-	Text* a = new Text();
-	Text* b = new Text();
-	Text* c = new Text();
-	Text* d = new Text();
-	Text* e = new Text();
-	Text* f = new Text();
-	Text* g = new Text();
+	Text* a = new Text{};
+	Text* b = new Text{};
+	Text* c = new Text{};
+	Text* d = new Text{};
+	Text* e = new Text{};
+	Text* f = new Text{};
+	Text* g = new Text{};
 
 	root->append(a);
 	root->append(b);

@@ -269,7 +269,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				auto undoData = cursorPositionsForUndo_.at(--cursorUndoIndex_);
 				if (scene->topLevelItems().contains(undoData.first))
 				{
-					scene->addPostEventAction( new SetCursorEvent(undoData.first, undoData.second));
+					scene->addPostEventAction( new SetCursorEvent{undoData.first, undoData.second});
 
 					undoData.first->moveCursor(Visualization::Item::MoveOnPosition, undoData.second);
 				}
@@ -297,7 +297,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				auto undoData = cursorPositionsForUndo_.at(++cursorUndoIndex_);
 				if (scene->topLevelItems().contains(undoData.first))
 				{
-					scene->addPostEventAction( new SetCursorEvent(undoData.first, undoData.second));
+					scene->addPostEventAction( new SetCursorEvent{undoData.first, undoData.second});
 
 					undoData.first->moveCursor(Visualization::Item::MoveOnPosition, undoData.second);
 				}
@@ -702,7 +702,7 @@ void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheel
 			}
 		}
 
-		if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent(parent, node));
+		if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent{parent, node});
 	} else InteractionHandler::wheelEvent(target, event);
 }
 
@@ -837,7 +837,7 @@ void GenericHandler::showActionPrompt(Visualization::Item *actionRecevier, bool 
 	else
 	{
 		removeActionPrompt();
-		actionPrompt_ = new ActionPrompt(actionRecevier, autoExecuteAction);
+		actionPrompt_ = new ActionPrompt{actionRecevier, autoExecuteAction};
 	}
 }
 

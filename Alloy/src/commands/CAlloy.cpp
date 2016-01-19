@@ -60,13 +60,13 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	aProcess.waitForFinished();
 
 	QDir dir(outputDirectory);
-	QString jsArray = "var pictureArray = new Array();\n";
+	QString jsArray = "var pictureArray = new Array{};\n";
 	int i = 0;
 	for (auto dirFile: dir.entryList())
 	{
 		if (dirFile.endsWith(".png"))
 		{
-			jsArray += "pictureArray[" + QString::number(i) + "] = new Image()\n";
+			jsArray += "pictureArray[" + QString::number(i) + "] = new Image{}\n";
 			jsArray += "pictureArray[" + QString::number(i) + "].src = '" + dirFile + "'\n";
 			i = i+1;
 		}
@@ -86,7 +86,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	alloyModelGroup->clear();
 
 	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
-	auto aBrowserComment = new Comments::VCommentBrowser(nullptr, anURl);
+	auto aBrowserComment = new Comments::VCommentBrowser{nullptr, anURl};
 	aBrowserComment->updateSize(QSize(720, 540));
 	aBrowserComment->browser()->settings()->setObjectCacheCapacities(0, 0, 0); //disable the cache
 
@@ -97,7 +97,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 		return QString("AlloyModels");
 	})));
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

@@ -60,7 +60,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 	// xMacro child of the stored xMacro expansion.
 	MacroExpansion* xMacroParent = currentXMacroParent && !parent ? currentXMacroParent : nullptr;
 
-	auto entry = new MacroExpansion(sourceRange, macroDirective, parent, xMacroParent);
+	auto entry = new MacroExpansion{sourceRange, macroDirective, parent, xMacroParent};
 	if (parent) parent->children().append(entry);
 	if (xMacroParent) xMacroParent->xMacroChildren().append(entry);
 
@@ -89,7 +89,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 												clang_.unexpandedSpelling(clang::SourceRange(actualArgFirstToken->getLocation(),
 																											actualArgLastToken->getLocation()));
 
-			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression(unexpandedArgument));
+			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression{unexpandedArgument});
 			entry->argumentLocs().append(actualArgLastToken->getLocation());
 		}
 

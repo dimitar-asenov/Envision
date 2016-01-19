@@ -132,8 +132,8 @@ Export::CompositeFragment* CodeComposite::addNamespaceFragment(Export::Composite
 {
 	if (!namespaceNode) return parentFragment;
 
-	auto namespaceComposite = new Export::CompositeFragment(namespaceNode, "namespace");
-	auto namespaceBody = new Export::CompositeFragment(namespaceNode, "body");
+	auto namespaceComposite = new Export::CompositeFragment{namespaceNode, "namespace"};
+	auto namespaceBody = new Export::CompositeFragment{namespaceNode, "body"};
 	*namespaceComposite << namespaceNode->name() << namespaceBody;
 	*parentFragment << namespaceComposite;
 	return namespaceBody;
@@ -195,7 +195,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 							*currentNamespaceFragment << ElementVisitor(HEADER_VISITOR)
 																  .visitTemplateArguments(classs->typeArguments());
 
-						auto softDependencyComposite = new Export::CompositeFragment(classs);
+						auto softDependencyComposite = new Export::CompositeFragment{classs};
 						if (OOModel::Class::ConstructKind::Class == classs->constructKind())
 							*softDependencyComposite << "class ";
 						else if (OOModel::Class::ConstructKind::Struct == classs->constructKind())

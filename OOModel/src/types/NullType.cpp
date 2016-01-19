@@ -38,7 +38,7 @@ bool NullType::equals(const Type* other) const
 
 NullType* NullType::clone() const
 {
-	return new NullType(*this);
+	return new NullType{*this};
 }
 
 }

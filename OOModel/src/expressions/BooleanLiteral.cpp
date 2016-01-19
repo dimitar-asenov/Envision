@@ -45,7 +45,7 @@ BooleanLiteral::BooleanLiteral(bool value)
 
 Type* BooleanLiteral::type()
 {
-	return new PrimitiveType(PrimitiveType::BOOLEAN, true);
+	return new PrimitiveType{PrimitiveType::BOOLEAN, true};
 }
 
 }

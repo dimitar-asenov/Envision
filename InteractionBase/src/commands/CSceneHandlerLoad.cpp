@@ -42,8 +42,8 @@ CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}, 
 CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
 		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
 {
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+	auto manager = new Model::TreeManager{};
+	manager->load(new FilePersistence::SimpleTextFileStore{"projects/"}, name, attributes.first() == "library");
 
 	if (!attributes.contains("library"))
 	{
@@ -55,7 +55,7 @@ CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualizati
 	if (attributes.contains("quick"))
 		VisualizationManager::instance().mainScene()->setApproximateUpdate(true);
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QStringList CSceneHandlerLoad::availableProjectsOnDisk()

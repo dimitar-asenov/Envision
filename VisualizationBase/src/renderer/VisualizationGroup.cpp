@@ -86,7 +86,7 @@ void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor vi
 void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization, int itemTypeId,
 		ConditionFunction condition)
 {
-	auto g = new VisualizationGroup(condition);
+	auto g = new VisualizationGroup{condition};
 	g->addVisualization(visualization, itemTypeId);
 	addSubGroup(g);
 }

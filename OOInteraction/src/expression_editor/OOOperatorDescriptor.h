@@ -65,7 +65,7 @@ class OOINTERACTION_API OOOperatorDescriptor : public Interaction::OperatorDescr
 template<OOModel::UnaryOperation::OperatorTypes op>
 OOModel::Expression* OOOperatorDescriptor::unary(const QList<OOModel::Expression*>& operands)
 {
-	auto opr = new OOModel::UnaryOperation();
+	auto opr = new OOModel::UnaryOperation{};
 	opr->setOp(op);
 	opr->setOperand(operands.first());
 	return opr;
@@ -74,7 +74,7 @@ OOModel::Expression* OOOperatorDescriptor::unary(const QList<OOModel::Expression
 template<OOModel::BinaryOperation::OperatorTypes op>
 OOModel::Expression* OOOperatorDescriptor::binary(const QList<OOModel::Expression*>& operands)
 {
-	auto opr = new OOModel::BinaryOperation();
+	auto opr = new OOModel::BinaryOperation{};
 	opr->setOp(op);
 	opr->setLeft(operands.first());
 	opr->setRight(operands.last());
@@ -84,7 +84,7 @@ OOModel::Expression* OOOperatorDescriptor::binary(const QList<OOModel::Expressio
 template<OOModel::AssignmentExpression::AssignmentTypes op>
 OOModel::Expression* OOOperatorDescriptor::assignment(const QList<OOModel::Expression*>& operands)
 {
-	auto opr = new OOModel::AssignmentExpression();
+	auto opr = new OOModel::AssignmentExpression{};
 	opr->setOp(op);
 	opr->setLeft(operands.first());
 	opr->setRight(operands.last());

@@ -47,7 +47,7 @@ std::shared_ptr<TextToNodeMap> Exporter::exportToFileSystem(const QString& pathT
 	if (!(QFileInfo{dir.absolutePath()}).isWritable())
 		throw ExportException("Trying to export to a non writable directory : " + dir.absolutePath());
 
-	auto map = std::shared_ptr<TextToNodeMap>(new TextToNodeMap());
+	auto map = std::shared_ptr<TextToNodeMap>(new TextToNodeMap{});
 	saveDir(dir, projectDir, layouter, map.get());
 	return map;
 }

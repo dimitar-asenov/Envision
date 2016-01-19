@@ -30,7 +30,7 @@
 namespace CppImport {
 
 TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, ExpressionVisitor* visitor)
- : clang_{clang}, rootProject_{root}, exprVisitor_{visitor}, nh_{new NodeHasher(clang)}
+ : clang_{clang}, rootProject_{root}, exprVisitor_{visitor}, nh_{new NodeHasher{clang}}
 {}
 
 TranslateManager::~TranslateManager()

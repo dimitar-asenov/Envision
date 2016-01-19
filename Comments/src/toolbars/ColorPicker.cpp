@@ -43,14 +43,14 @@ ColorPicker::ColorPicker(QWidget *parent) : QToolButton{parent}
 void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 {
 	QMenu* menu = new QMenu;
-	QWidgetAction* wiAction = new QWidgetAction(this);
+	QWidgetAction* wiAction = new QWidgetAction{this};
 
-	QSignalMapper* signalMapper = new QSignalMapper(this);
+	QSignalMapper* signalMapper = new QSignalMapper{this};
 	connect(signalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
 			  this, &ColorPicker::handleColorPicked);
 
 	QPixmap pixmap(100, 100);
-	QWidget* aWidget = new QWidget(this);
+	QWidget* aWidget = new QWidget{this};
 	QGridLayout* aLayout = new QGridLayout;
 	aLayout->setSpacing(0);
 	aWidget->setLayout(aLayout);
@@ -76,14 +76,14 @@ void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 void ColorPicker::setEnvisionTextColors()
 {
 	QMenu* menu = new QMenu;
-	QWidgetAction* wiAction = new QWidgetAction(this);
+	QWidgetAction* wiAction = new QWidgetAction{this};
 
-	QSignalMapper* signalMapper = new QSignalMapper(this);
+	QSignalMapper* signalMapper = new QSignalMapper{this};
 	connect(signalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, this,
 			  &ColorPicker::handleColorPicked);
 
 	QPixmap pixmap(100, 100);
-	QWidget* aWidget = new QWidget(this);
+	QWidget* aWidget = new QWidget{this};
 	QGridLayout* aLayout = new QGridLayout;
 	aLayout->setSpacing(0);
 	aWidget->setLayout(aLayout);
@@ -123,7 +123,7 @@ void ColorPicker::setselectedColor(QString aColor)
 	QPixmap pixmap(24, 24);
 	QColor selectedColor = QColor(aColor);
 	pixmap.fill(Qt::transparent);
-	QPainter* aPainter = new QPainter(&pixmap);
+	QPainter* aPainter = new QPainter{&pixmap};
 	aPainter->setPen(selectedColor);
 	aPainter->setBrush(QBrush(selectedColor));
 	aPainter->drawRect(12, 12, 12, 12);

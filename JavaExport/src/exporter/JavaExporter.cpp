@@ -68,7 +68,7 @@ QList<Export::ExportError> JavaExporter::exportTree(Model::TreeManager* manager,
 
 Export::ExportMapContainer& JavaExporter::exportMaps()
 {
-	static Export::ExportMapContainer* container = new Export::ExportMapContainer();
+	static Export::ExportMapContainer* container = new Export::ExportMapContainer{};
 	return *container;
 }
 

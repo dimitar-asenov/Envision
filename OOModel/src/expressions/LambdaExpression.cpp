@@ -49,7 +49,7 @@ Type* LambdaExpression::type()
 	for (auto rit = results()->begin(); rit != results()->end(); ++rit)
 		res.append( (*rit)->typeExpression()->type());
 
-	return new FunctionType(true, args, res);
+	return new FunctionType{true, args, res};
 }
 
 }

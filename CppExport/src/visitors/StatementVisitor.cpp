@@ -71,14 +71,14 @@ SourceFragment* StatementVisitor::visit(StatementItem* statementItem)
 	if (auto castStatement = DCast<CommentStatementItem>(statementItem)) return visit(castStatement);
 
 	// TODO: handle comments
-	auto fragment = new CompositeFragment(statementItem);
+	auto fragment = new CompositeFragment{statementItem};
 	*fragment << "UNKNOWN STATEMENT TYPE";
 	return fragment;
 }
 
 SourceFragment* StatementVisitor::visit(Block* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	*fragment << list(statement->items(), StatementVisitor(data()),
 							statement->items()->size() > 1 ? "body" : "bodyNoBraces");
 	return fragment;
@@ -86,12 +86,12 @@ SourceFragment* StatementVisitor::visit(Block* statement)
 
 SourceFragment* StatementVisitor::visit(BreakStatement* statement)
 {
-	return new TextFragment(statement, "break;");
+	return new TextFragment{statement, "break;"};
 }
 
 SourceFragment* StatementVisitor::visit(CaseStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	if (statement->caseExpression())
 		*fragment << "case " << expression(statement->caseExpression()) << ":";
 	else *fragment << "default:";
@@ -104,7 +104,7 @@ SourceFragment* StatementVisitor::visit(CaseStatement* statement)
 
 SourceFragment* StatementVisitor::visit(ContinueStatement* statement)
 {
-	return new TextFragment(statement, "continue;");
+	return new TextFragment{statement, "continue;"};
 }
 
 SourceFragment* StatementVisitor::visit(DeclarationStatement* statement)
@@ -114,7 +114,7 @@ SourceFragment* StatementVisitor::visit(DeclarationStatement* statement)
 
 SourceFragment* StatementVisitor::visit(ExpressionStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	if (DCast<EmptyExpression>(statement->expression()))
 		*fragment << "\n";
 	else
@@ -124,7 +124,7 @@ SourceFragment* StatementVisitor::visit(ExpressionStatement* statement)
 
 SourceFragment* StatementVisitor::visit(ForEachStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 
 	required(statement, statement->varType(), "explicit loop variable type");
 	*fragment << "for (";
@@ -137,7 +137,7 @@ SourceFragment* StatementVisitor::visit(ForEachStatement* statement)
 
 SourceFragment* StatementVisitor::visit(IfStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	*fragment << "if (" << expression(statement->condition()) << ")";
 	*fragment << list(statement->thenBranch(), StatementVisitor(data()), blockStyle(statement->thenBranch()));
 	if (!statement->elseBranch()->isEmpty())
@@ -150,7 +150,7 @@ SourceFragment* StatementVisitor::visit(IfStatement* statement)
 
 SourceFragment* StatementVisitor::visit(LoopStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 
 	if (statement->loopKind() == LoopStatement::LoopKind::PreCheck) // for and while loops
 	{
@@ -216,7 +216,7 @@ QString StatementVisitor::blockStyle(Model::List* block)
 
 SourceFragment* StatementVisitor::visit(ReturnStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 
 	if (statement->values()->size() > 1)
 		error(statement->values(), "Cannot have more than one return value in Cpp");
@@ -229,7 +229,7 @@ SourceFragment* StatementVisitor::visit(ReturnStatement* statement)
 
 SourceFragment* StatementVisitor::visit(SwitchStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	*fragment << "switch (" << expression(statement->switchExpression()) << ")";
 	*fragment << list(statement->body(), StatementVisitor(data()), "body");
 	return fragment;
@@ -237,7 +237,7 @@ SourceFragment* StatementVisitor::visit(SwitchStatement* statement)
 
 SourceFragment* StatementVisitor::visit(TryCatchFinallyStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	*fragment << "try";
 	*fragment << list(statement->tryBody(), StatementVisitor(data()), "body");
 	*fragment << list(statement->catchClauses(), ElementVisitor(data()), "vertical");
@@ -251,14 +251,14 @@ SourceFragment* StatementVisitor::visit(TryCatchFinallyStatement* statement)
 
 SourceFragment* StatementVisitor::visit(AssertStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	*fragment << "assert " << expression(statement->expression()) << ";";
 	return fragment;
 }
 
 SourceFragment* StatementVisitor::visit(OOModel::SynchronizedStatement* statement)
 {
-	auto fragment = new CompositeFragment(statement);
+	auto fragment = new CompositeFragment{statement};
 	*fragment << "synchronized (" << expression(statement->expression()) << ")";
 	*fragment << list(statement->body(), StatementVisitor(data()), "body");
 	return fragment;
@@ -266,7 +266,7 @@ SourceFragment* StatementVisitor::visit(OOModel::SynchronizedStatement* statemen
 
 SourceFragment* StatementVisitor::visit(OOModel::CommentStatementItem* statement)
 {
-	auto fragment = new CompositeFragment(statement, "sections");
+	auto fragment = new CompositeFragment{statement, "sections"};
 	for (auto line : *statement->commentNode()->lines())
 		*fragment << line;
 	return fragment;

@@ -59,7 +59,7 @@ struct VariableObserver {
 			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
 			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators} {}
 
-		// The function which handles new value(s).
+		// The function which handles new value{s}.
 		JavaDebugger::ValueHandler handlerFunc_;
 		// The declarations of the variables we are observing.
 		QList<OOModel::VariableDeclaration*> observedVariables_;
@@ -108,7 +108,7 @@ Interaction::CommandResult* JavaDebugger::debugTree(Model::TreeManager* manager,
 
 	utils_.setExportMap(JavaExport::JavaExporter::exportMaps().map(project));
 	debugConnector_.connect();
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* event)
@@ -232,7 +232,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	{
 		removeObserverOverlaysAt(observedNode, vItem);
 		removeBreakpointAt(observedNode);
-		return new Interaction::CommandResult();
+		return new Interaction::CommandResult{};
 	}
 
 	auto parsedArgs = Probes::parseProbeArguments(arguments);
@@ -259,7 +259,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"),
 												  defaultTypeAndHandler.first, variableNames);
 	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 void JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)

@@ -38,7 +38,7 @@ VUsedLibrary::VUsedLibrary(Item* parent, NodeType* node, const StyleType* style)
 
 void VUsedLibrary::initializeForms()
 {
-	addForm((new GridLayoutFormElement())->setHorizontalSpacing(3)
+	addForm((new GridLayoutFormElement{})->setHorizontalSpacing(3)
 		->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
 		->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();},
 				[](I* v){return &v->style()->name();} ))

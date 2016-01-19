@@ -48,8 +48,8 @@ namespace Comments {
 
 class SimpleTest : public Test<CommentsPlugin, SimpleTest> { public: void test()
 {
-	auto list = new Model::List();
-	auto manager = new Model::TreeManager(list);
+	auto list = new Model::List{};
+	auto manager = new Model::TreeManager{list};
 
 	manager->beginModification(list, "set");
 
@@ -93,46 +93,46 @@ class SimpleTest : public Test<CommentsPlugin, SimpleTest> { public: void test()
 
 	);
 
-	auto diagram = new CommentDiagram(nullptr, "main");
+	auto diagram = new CommentDiagram{nullptr, "main"};
 
-	auto shape1 = new CommentDiagramShape(0, 50, 200, 50, CommentDiagramShape::ShapeType::Rectangle);
-	shape1->setLabel(new CommentText("First shape"));
+	auto shape1 = new CommentDiagramShape{0, 50, 200, 50, CommentDiagramShape::ShapeType::Rectangle};
+	shape1->setLabel(new CommentText{"First shape"});
 	shape1->setShapeColor("blue");
 	shape1->setTextColor("red");
 	diagram->shapes()->append(shape1);
 
-	auto shape2 = new CommentDiagramShape(100, 150, 200,  50, CommentDiagramShape::ShapeType::Ellipse);
-	shape2->setLabel(new CommentText("Another shape"));
+	auto shape2 = new CommentDiagramShape{100, 150, 200,  50, CommentDiagramShape::ShapeType::Ellipse};
+	shape2->setLabel(new CommentText{"Another shape"});
 	shape2->setShapeColor("magenta");
 	shape2->setTextColor("yellow");
 	diagram->shapes()->append(shape2);
 
-	auto shape3 = new CommentDiagramShape(0, 150, 100, 150, CommentDiagramShape::ShapeType::Diamond);
-	shape3->setLabel(new CommentText("Diamond"));
+	auto shape3 = new CommentDiagramShape{0, 150, 100, 150, CommentDiagramShape::ShapeType::Diamond};
+	shape3->setLabel(new CommentText{"Diamond"});
 	diagram->shapes()->append(shape3);
 
-	diagram->connectors()->append(new CommentDiagramConnector(0, 6, 1, 0));
-	diagram->connectors()->append(new CommentDiagramConnector(1, 0,  2, 0));
-	diagram->connectors()->append(new CommentDiagramConnector(2, 0,  0, 10));
+	diagram->connectors()->append(new CommentDiagramConnector{0, 6, 1, 0});
+	diagram->connectors()->append(new CommentDiagramConnector{1, 0,  2, 0});
+	diagram->connectors()->append(new CommentDiagramConnector{2, 0,  0, 10});
 
 	node->diagrams()->append(diagram);
 
-	auto code = new CommentFreeNode(nullptr, "aCode");
-	auto aClass = new Class("HelloWorld");
+	auto code = new CommentFreeNode{nullptr, "aCode"};
+	auto aClass = new Class{"HelloWorld"};
 	code->setNode(aClass);
 	node->codes()->append(code);
 
-	auto table = new CommentTable(nullptr, "aTable", 3, 4);
-	table->setNodeAt(0, 0, new CommentNode("##Column 1"));
-	table->setNodeAt(0, 1, new CommentNode("##Column 2"));
-	table->setNodeAt(0, 2, new CommentNode("##Column 3"));
-	table->setNodeAt(0, 3, new CommentNode("##Column 4"));
-	table->setNodeAt(1, 0, new Class("ClassA"));
-	table->setNodeAt(1, 1, new Class("ClassB"));
-	table->setNodeAt(1, 2, new Class("ClassC"));
-	table->setNodeAt(1, 3, new Class("ClassD"));
-	table->setNodeAt(2, 0, new CommentText("just text"));
-	table->setNodeAt(2, 1, new CommentText("more text"));
+	auto table = new CommentTable{nullptr, "aTable", 3, 4};
+	table->setNodeAt(0, 0, new CommentNode{"##Column 1"});
+	table->setNodeAt(0, 1, new CommentNode{"##Column 2"});
+	table->setNodeAt(0, 2, new CommentNode{"##Column 3"});
+	table->setNodeAt(0, 3, new CommentNode{"##Column 4"});
+	table->setNodeAt(1, 0, new Class{"ClassA"});
+	table->setNodeAt(1, 1, new Class{"ClassB"});
+	table->setNodeAt(1, 2, new Class{"ClassC"});
+	table->setNodeAt(1, 3, new Class{"ClassD"});
+	table->setNodeAt(2, 0, new CommentText{"just text"});
+	table->setNodeAt(2, 1, new CommentText{"more text"});
 	node->tables()->append(table);
 
 	list->append(node);

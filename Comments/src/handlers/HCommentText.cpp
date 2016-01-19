@@ -55,17 +55,17 @@ void HCommentText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (aNode)
 		{
 			Model::Node* newNode = nullptr;
-			if (aText->get() == "comment") newNode = new CommentNode();
-			else if (aText->get() == "class") newNode = new Class();
-			else if (aText->get() == "method") newNode = new Method();
-			else if (aText->get() == "statement") newNode = new Statement();
-			else if (aText->get() == "block") newNode = new Block();
-			else if (aText->get() == "foreach") newNode = new ForEachStatement();
-			else if (aText->get() == "if") newNode = new IfStatement();
-			else if (aText->get() == "loop") newNode = new LoopStatement();
-			else if (aText->get() == "switch") newNode = new SwitchStatement();
-			else if (aText->get() == "expression") newNode = new ExpressionStatement();
-			else newNode = new CommentText();
+			if (aText->get() == "comment") newNode = new CommentNode{};
+			else if (aText->get() == "class") newNode = new Class{};
+			else if (aText->get() == "method") newNode = new Method{};
+			else if (aText->get() == "statement") newNode = new Statement{};
+			else if (aText->get() == "block") newNode = new Block{};
+			else if (aText->get() == "foreach") newNode = new ForEachStatement{};
+			else if (aText->get() == "if") newNode = new IfStatement{};
+			else if (aText->get() == "loop") newNode = new LoopStatement{};
+			else if (aText->get() == "switch") newNode = new SwitchStatement{};
+			else if (aText->get() == "expression") newNode = new ExpressionStatement{};
+			else newNode = new CommentText{};
 
 			aNode->beginModification("set node");
 			aNode->setNode(newNode);

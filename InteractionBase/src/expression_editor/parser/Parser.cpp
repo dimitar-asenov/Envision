@@ -63,7 +63,7 @@ QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens, Pa
 
 	if (tokens.isEmpty())
 	{
-		instructions.append( new AddEmptyValue() );
+		instructions.append( new AddEmptyValue{} );
 		return instructions;
 	}
 	else
@@ -82,7 +82,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	while (!expected.isEmpty() && expected.first().type == ExpectedToken::END)
 	{
 		expected.removeFirst();
-		instructions.append(new FinishOperator());
+		instructions.append(new FinishOperator{});
 		result.numOperators++;
 		hasLeft = true;
 	}
@@ -260,14 +260,14 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 				if (exp.type == ExpectedToken::VALUE || exp.type == ExpectedToken::ID
 						|| exp.type == ExpectedToken::TYPE  || exp.type == ExpectedToken::ANY )
 				{
-					if (fillMissingWithEmptyExpressions) new_instructions.append( new AddEmptyValue() );
+					if (fillMissingWithEmptyExpressions) new_instructions.append( new AddEmptyValue{} );
 					++pr.emptyExpressions;
 				}
 				else if (exp.type == ExpectedToken::END)
 				{
 					// If the expectation is not one of the above then it must be either an end or a delimiter
 					new_instructions.append(fillMissingWithEmptyExpressions ?
-							(ExpressionTreeBuildInstruction*)new FinishOperator() : new LeaveUnfinished());
+							(ExpressionTreeBuildInstruction*)new FinishOperator{} : new LeaveUnfinished{});
 					++pr.numOperators;
 				}
 				else // The expectation is a delimiter.
@@ -282,7 +282,7 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 
 			// Finish the actual delimiter
 			new_expected.removeFirst();
-			new_instructions.append(new SkipOperatorDelimiter());
+			new_instructions.append(new SkipOperatorDelimiter{});
 
 			// Assume the finished delimiter was an infix one, therefore there is no 'left' expression
 			// If the finished delimiter is a postfix the last unfinished operator will be finished
@@ -380,7 +380,7 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<Ex
 
 
 			QVector<ExpressionTreeBuildInstruction*> new_instructions = instructions;
-			new_instructions.append( new AddOperator(oi) );
+			new_instructions.append( new AddOperator{oi} );
 			ParseResult pr = parse(token + (unexpectedIdentifierOrLiteral ? 0 : 1), result, new_expected,
 										  false, new_instructions, bestParseSoFar);
 
@@ -409,7 +409,7 @@ void Parser::processSubExpression(bool& error, QList<ExpectedToken>& expected, Q
 		{
 			// If this is the first time this token was encountered, parse the sub expression
 			if (token->subExpressionTokens_.isEmpty())
-				token->subExpressionResult_.instructions.append( new AddEmptyValue() );
+				token->subExpressionResult_.instructions.append( new AddEmptyValue{} );
 			else
 			{
 				//A new parser must be created since we need a new endTokens_ field.
@@ -419,7 +419,7 @@ void Parser::processSubExpression(bool& error, QList<ExpectedToken>& expected, Q
 
 		// The sub expression is already parsed, use its result
 
-		instructions.append( new AddSubExpression(token->subExpressionResult_.instructions));
+		instructions.append( new AddSubExpression{token->subExpressionResult_.instructions});
 		result.errors += token->subExpressionResult_.errors;
 		result.emptyExpressions += token->subExpressionResult_.emptyExpressions;
 		result.missingInnerTokens += token->subExpressionResult_.missingInnerTokens;

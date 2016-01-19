@@ -104,7 +104,7 @@ QPair<int, VisualizationGroup::ItemConstructor> ModelRenderer::bestVisualization
 	//Always render as RootItem in a view
 	if (parent && DCast<ViewItem>(parent))
 		return qMakePair(RootItem::typeIdStatic(),
-						 [=](Item* parent, Model::Node* n) { auto root = new RootItem(n, purpose, semanticZoomLevel);
+						 [=](Item* parent, Model::Node* n) { auto root = new RootItem{n, purpose, semanticZoomLevel};
 															root->setParentItem(parent);
 															return root; });
 
@@ -270,7 +270,7 @@ int ModelRenderer::getFinerSemanticZoomLevel(int currentSemanticZoomLevel)
 
 QImage ModelRenderer::renderToImage(Model::Node* aNode)
 {
-	auto aScene = new Scene();
+	auto aScene = new Scene{};
 	aScene->addTopLevelNode(aNode);
 	aScene->updateNow();
 	auto anItem = aScene->currentViewItem()->findVisualizationOf(aNode);
@@ -287,7 +287,7 @@ QImage ModelRenderer::renderToImage(Model::Node* aNode)
 
 void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
 {
-	auto aScene = new Scene();
+	auto aScene = new Scene{};
 	aScene->addTopLevelNode(aNode);
 	aScene->updateNow();
 	auto anItem = aScene->currentViewItem()->findVisualizationOf(aNode);

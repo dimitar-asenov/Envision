@@ -74,14 +74,14 @@ Scene::Scene()
 	initialized_ = true;
 	allScenes().append(this);
 
-	viewItemManager_ = new ViewItemManager(this);
+	viewItemManager_ = new ViewItemManager{this};
 
 	auto selectionGroup = addOverlayGroup("User Selected Items");
-	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay(item));});
+	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay{item});});
 	selectionGroup->setDynamic1Item([this](){return itemsThatShouldHaveASelection();});
 
 	auto zoomLabelGroup = addOverlayGroup("Zoom labels");
-	zoomLabelGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new ZoomLabelOverlay(item));});
+	zoomLabelGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new ZoomLabelOverlay{item});});
 	zoomLabelGroup->setDynamic1Item([this](){return ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(this);});
 	zoomLabelGroup->setPostUpdateFunction(ZoomLabelOverlay::setItemPositionsAndHideOverlapped);
 
@@ -150,7 +150,7 @@ void Scene::scheduleUpdate()
 	if (!needsUpdate_)
 	{
 		needsUpdate_ = true;
-		if (!inEventHandler_) QApplication::postEvent(this, new UpdateSceneEvent());
+		if (!inEventHandler_) QApplication::postEvent(this, new UpdateSceneEvent{});
 	}
 }
 
@@ -358,7 +358,7 @@ void Scene::addPostEventAction(QEvent* action)
 void Scene::addPostEventAction(CustomSceneEvent::EventFunction function)
 {
 	Q_ASSERT(inEventHandler_);
-	postEventActions_.append(new CustomSceneEvent(function));
+	postEventActions_.append(new CustomSceneEvent{function});
 }
 
 void Scene::keyPressEvent (QKeyEvent *event)
@@ -523,7 +523,7 @@ OverlayGroup* Scene::addOverlayGroup(const QString& name)
 	Q_ASSERT(!name.isEmpty());
 	Q_ASSERT(!overlayGroups_.contains(name));
 	scheduleUpdate();
-	return overlayGroups_.insert(name, new OverlayGroup(this, name)).value();
+	return overlayGroups_.insert(name, new OverlayGroup{this, name}).value();
 }
 
 OverlayGroup* Scene::overlayGroup(const QString& name)

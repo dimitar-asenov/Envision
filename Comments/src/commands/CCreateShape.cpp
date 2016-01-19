@@ -45,7 +45,7 @@ Interaction::CommandResult* CCreateShape::executeNamed(Visualization::Item*, Vis
 	int x = std::max(0, last.x()-50), y = std::max(0, last.y()-50);
 
 	auto diagram = DCast<CommentDiagram> (target->node());
-	auto shape = new CommentDiagramShape(x, y, 100, 100, CommentDiagramShape::ShapeType::Rectangle);
+	auto shape = new CommentDiagramShape{x, y, 100, 100, CommentDiagramShape::ShapeType::Rectangle};
 	// what kind of shape?
 	if (attributes.first() == "ellipse") shape->setShapeType(CommentDiagramShape::ShapeType::Ellipse);
 	else if (attributes.first() == "diamond") shape->setShapeType(CommentDiagramShape::ShapeType::Diamond);
@@ -55,7 +55,7 @@ Interaction::CommandResult* CCreateShape::executeNamed(Visualization::Item*, Vis
 	diagram->endModification();
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

@@ -59,7 +59,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	if ( !doQuotesMatch(command, QUOTE_SYMBOLS, ESCAPE_SYMBOLS) )
 	{
 		lastCommandResult_ = QSharedPointer<CommandResult>(
-				new CommandResult(new CommandError("A quoted string expands past the end of the command.")));
+				new CommandResult(new CommandError{"A quoted string expands past the end of the command."}));
 		lastCommandResult_->errors().first()->addResolutionTip("Try inserting a matching quote.");
 		return;
 	}
@@ -134,7 +134,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	if (!processed)
 	{
 		lastCommandResult_ = QSharedPointer<CommandResult>(
-				new CommandResult(new CommandError("Unknown command '" + command + "' ")));
+				new CommandResult(new CommandError{"Unknown command '" + command + "' "}));
 		log.warning("Unknown command: " + command);
 	}
 }

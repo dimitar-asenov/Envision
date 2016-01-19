@@ -71,13 +71,13 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->collection()));
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
+			auto empty = new OOModel::EmptyExpression{};
 			vfor->node()->beginModification("create collection");
 			vfor->node()->setCollection(empty);
 			vfor->node()->endModification();
 
 			vfor->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 	}
 	else if (vfor->collection() && vfor->collection()->itemOrChildHasFocus() && (switchHorizontal || createRight))
@@ -87,13 +87,13 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->varType()));
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
+			auto empty = new OOModel::EmptyExpression{};
 			vfor->node()->beginModification("create variable type");
 			vfor->node()->setVarType(empty);
 			vfor->node()->endModification();
 
 			vfor->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 
 	}
@@ -107,13 +107,13 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 		}
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
+			auto empty = new OOModel::EmptyExpression{};
 			vfor->node()->beginModification("create loop body");
-			vfor->node()->body()->append( new OOModel::ExpressionStatement(empty) );
+			vfor->node()->body()->append( new OOModel::ExpressionStatement{empty} );
 			vfor->node()->endModification();
 
 			vfor->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 
 	}else if (event->modifiers() == Qt::NoModifier

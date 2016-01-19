@@ -61,7 +61,7 @@ bool CommentsPlugin::initialize(Core::EnvisionManager&)
 	VCommentFreeNode::setDefaultClassHandler(HCommentFreeNode::instance());
 
 	Interaction::GenericHandler::setCommentCreationFunction([]()
-		{return new Comments::CommentNode("Enter comment here");});
+		{return new Comments::CommentNode{"Enter comment here"};});
 
 	return true;
 }

@@ -50,7 +50,7 @@ SystemClipboard::~SystemClipboard()
 
 SystemClipboard* SystemClipboard::clone() const
 {
-	return new SystemClipboard();
+	return new SystemClipboard{};
 }
 
 // Methods from Persistent Store
@@ -59,7 +59,7 @@ void SystemClipboard::saveTree(::Model::TreeManager* manager, const QString &nam
 	if (manager->root())
 	{
 		SAFE_DELETE(xml);
-		xml = new XMLModel();
+		xml = new XMLModel{};
 
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
 		saveNode(manager->root(), name);
@@ -188,7 +188,7 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 	if (nodes.size() > 0)
 	{
 		SAFE_DELETE(xml);
-		xml = new XMLModel();
+		xml = new XMLModel{};
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
 
 		for (int i = 0; i<nodes.size(); ++i)
@@ -221,7 +221,7 @@ bool SystemClipboard::readClipboard()
 		FilePersistenceException::assertOnThrow() = false;
 		try
 		{
-			xml = new XMLModel();
+			xml = new XMLModel{};
 			xml->setDocumentText(QApplication::clipboard()->text());
 			xml->goToRoot();
 			numNodes_ = xml->getChildrenNames().size();

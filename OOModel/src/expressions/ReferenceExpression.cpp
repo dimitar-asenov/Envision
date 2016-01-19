@@ -64,20 +64,20 @@ Type* ReferenceExpression::type()
 {
 	auto resolvedTarget = ref()->target();
 
-	if (!resolvedTarget) return new ErrorType("Unresolved Reference");
+	if (!resolvedTarget) return new ErrorType{"Unresolved Reference"};
 
 	if ( auto project = DCast<Project>( resolvedTarget ) )
-		return new SymbolProviderType(project, false);
+		return new SymbolProviderType{project, false};
 	else if ( auto module = DCast<Module>( resolvedTarget ) )
-		return new SymbolProviderType(module, false);
+		return new SymbolProviderType{module, false};
 	else if ( auto cl = DCast<Class>( resolvedTarget ) )
-		return new ClassType(cl, false);
+		return new ClassType{cl, false};
 	else if ( auto method = DCast<Method>( resolvedTarget ) )
-		return new SymbolProviderType(method, false);
+		return new SymbolProviderType{method, false};
 	else if ( auto metaDefinition = DCast<MetaDefinition> (resolvedTarget ))
-		return new SymbolProviderType(metaDefinition, false);
+		return new SymbolProviderType{metaDefinition, false};
 	else if ( auto alias = DCast<TypeAlias>( resolvedTarget ) )
-		return new SymbolProviderType(alias, false);
+		return new SymbolProviderType{alias, false};
 	else if ( auto vdecl = DCast<VariableDeclarationExpression>( resolvedTarget ) )
 	{
 		auto t = vdecl->type();
@@ -98,7 +98,7 @@ Type* ReferenceExpression::type()
 			t->setValueType(true);
 			return t;
 		}
-		else return new ErrorType("Unknown type for target of reference");
+		else return new ErrorType{"Unknown type for target of reference"};
 	}
 	else if ( auto field = DCast<Field>( resolvedTarget ) )
 	{
@@ -118,7 +118,7 @@ Type* ReferenceExpression::type()
 		t->setValueType(true);
 		return t;
 	}
-	else return new ErrorType("Unknown type for target of reference");
+	else return new ErrorType{"Unknown type for target of reference"};
 }
 
 }

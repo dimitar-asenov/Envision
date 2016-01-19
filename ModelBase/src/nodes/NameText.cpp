@@ -42,7 +42,7 @@ NameText::NameText(const QString& text) : Super{text}{}
 
 FieldSet<QString>* NameText::getSetCommand(QString& textField, const QString& newText)
 {
-	return new NameChange(this, textField, newText);
+	return new NameChange{this, textField, newText};
 }
 
 }

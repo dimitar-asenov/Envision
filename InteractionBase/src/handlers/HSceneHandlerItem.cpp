@@ -45,19 +45,19 @@ namespace Interaction {
 HSceneHandlerItem::HSceneHandlerItem()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CSceneHandlerItemExit());
-	addCommand(new CFind());
-	addCommand(new CSceneHandlerLoad());
-	addCommand(new CSceneHandlerSave());
-	addCommand(new CNewView());
-	addCommand(new CSwitchView());
-	addCommand(new CRemoveNodeFromView());
-	addCommand(new CToggleArrowLayer());
-	addCommand(new CAddInfoNode());
-	addCommand(new CToggleInfoEntry());
-	addCommand(new CSaveView());
-	addCommand(new CAddNodeToViewByName());
-	addCommand(new CAddNodeToView());
+	addCommand(new CSceneHandlerItemExit{});
+	addCommand(new CFind{});
+	addCommand(new CSceneHandlerLoad{});
+	addCommand(new CSceneHandlerSave{});
+	addCommand(new CNewView{});
+	addCommand(new CSwitchView{});
+	addCommand(new CRemoveNodeFromView{});
+	addCommand(new CToggleArrowLayer{});
+	addCommand(new CAddInfoNode{});
+	addCommand(new CToggleInfoEntry{});
+	addCommand(new CSaveView{});
+	addCommand(new CAddNodeToViewByName{});
+	addCommand(new CAddNodeToView{});
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()

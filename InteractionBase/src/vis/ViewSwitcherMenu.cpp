@@ -50,10 +50,10 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 			if (viewItems[col][row])
 				items[col].append(new VViewSwitcherEntry(nullptr, viewItems[col][row]->name()));
 			else
-				items[col].append(new VViewSwitcherEntry(nullptr, "Empty slot"));
+				items[col].append(new VViewSwitcherEntry{nullptr, "Empty slot"});
 	for (int col = 0; col < items.size(); col++)
 		for (int row = items[col].size(); row < 3; row++)
-			items[col].append(new VViewSwitcherEntry(nullptr, "Empty slot"));
+			items[col].append(new VViewSwitcherEntry{nullptr, "Empty slot"});
 
 	//Find the item to initially select (this is the current view item)
 	Visualization::Item* selected{};
@@ -64,7 +64,7 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 				selected = item;
 
 	Menu::hideNow();
-	Menu::instance = new ViewSwitcherMenu(items, selected, target);
+	Menu::instance = new ViewSwitcherMenu{items, selected, target};
 	target->scene()->addTopLevelItem(Menu::instance);
 }
 

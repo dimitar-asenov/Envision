@@ -36,7 +36,7 @@ TranslateFrontendAction::TranslateFrontendAction(ClangAstVisitor* visitor, CppIm
 std::unique_ptr<clang::ASTConsumer> TranslateFrontendAction::CreateASTConsumer
 	(clang::CompilerInstance& compilerInstance, llvm::StringRef)
 {
-	auto consumer = new ClangAstConsumer(visitor_);
+	auto consumer = new ClangAstConsumer{visitor_};
 	// set new compiler instance
 	log_->setSourceManager(&compilerInstance.getSourceManager());
 	consumer ->setCompilerInstance(&compilerInstance);

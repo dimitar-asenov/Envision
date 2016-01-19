@@ -44,7 +44,7 @@ CommandResult* CToggleArrowLayer::execute(Visualization::Item*, Visualization::I
 	auto fullName = target->scene()->currentViewItem()->fullLayerName(commandTokens[1]);
 	if (auto overlay = target->scene()->overlayGroup(fullName))
 		overlay->toggle();
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QList<CommandSuggestion*> CToggleArrowLayer::suggest(Visualization::Item* source, Visualization::Item*,

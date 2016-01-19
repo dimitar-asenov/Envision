@@ -34,7 +34,7 @@
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :
-	View(scene, nullptr), miniMap(new MiniMap(scene, this)), scaleLevel(SCALING_FACTOR)
+	View(scene, nullptr), miniMap(new MiniMap{scene, this}), scaleLevel(SCALING_FACTOR)
 {
 	setRenderHint(QPainter::Antialiasing);
 	setRenderHint(QPainter::TextAntialiasing);
@@ -285,7 +285,7 @@ void MainView::updateInfoLabels()
 
 		if (infoLabels_.size() <= labelIndex)
 		{
-			label = new QLabel(this);
+			label = new QLabel{this};
 			label->setAttribute(Qt::WA_TransparentForMouseEvents);
 			infoLabels_.append(label);
 			label->show();

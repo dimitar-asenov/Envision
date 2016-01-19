@@ -45,22 +45,22 @@ VSynchronizedStatement::VSynchronizedStatement(Item* parent, NodeType* node, con
 
 void VSynchronizedStatement::initializeForms()
 {
-	auto header = (new GridLayoutFormElement())
+	auto header = (new GridLayoutFormElement{})
 					->setHorizontalSpacing(5)->setColumnStretchFactor(3, 1)
 					->setVerticalAlignment(LayoutStyle::Alignment::Center)
 					->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
 					->put(1, 0, item<NodeWrapper>(&I::expression_, [](I* v){return v->node()->expression();},
 																					[](I* v){return &v->style()->expression();}));
 
-	auto body = (new GridLayoutFormElement())
+	auto body = (new GridLayoutFormElement{})
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
 			->put(0, 0, item<VStatementItemList>(&I::body_, [](I* v){return v->node()->body();},
 							[](I* v){return &v->style()->body();}));
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 		->put(TheTopOf, body, 3, FromBottomOf, header)
 		->put(TheTopOf, shapeElement, AtCenterOf, header)
 		->put(TheLeftOf, shapeElement, AtLeftOf, header)

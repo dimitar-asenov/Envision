@@ -78,7 +78,7 @@ void PromptShell::initializeForms()
 	auto prompt = grid({{icon, inputItem}})->setHorizontalSpacing(5)->setVerticalSpacing(10)
 			->setVerticalAlignment(LayoutStyle::Alignment::Center);
 
-	auto errors = (new SequentialLayoutFormElement())
+	auto errors = (new SequentialLayoutFormElement{})
 			->setVertical()->setSpaceBetweenElements(3)
 			->setHasCursorWhenEmpty([](auto){return false; })
 			->setListOfItems([](Item* i) { return static_cast<PromptShell*>(i)->errors_; });

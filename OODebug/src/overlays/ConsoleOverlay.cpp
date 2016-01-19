@@ -39,7 +39,7 @@ ITEM_COMMON_DEFINITIONS(ConsoleOverlay, "item")
 ConsoleOverlay::ConsoleOverlay(Visualization::Item* associatedItem, const StyleType* style)
 	: Super{{associatedItem}, style}
 {
-	output_ = new Visualization::Text(this);
+	output_ = new Visualization::Text{this};
 	output_->setTextFormat(Qt::RichText);
 	// We don't want the text to grab away the buttons, but we want them on the overlay.
 	output_->setAcceptedMouseButtons(Qt::NoButton);
@@ -75,13 +75,13 @@ void ConsoleOverlay::appendError(const QString& errorText)
 
 void ConsoleOverlay::initializeForms()
 {
-	auto header = (new Visualization::GridLayoutFormElement())
+	auto header = (new Visualization::GridLayoutFormElement{})
 			->setSpacing(3)->setColumnStretchFactor(1, 1)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Visualization::Item*){return true;})
 			->put(0, 0, item<Visualization::Text>(&I::output_, &StyleType::output))
 			->put(2, 0, item<Visualization::Static>(&I::closeIcon_, &StyleType::closeIcon));
 
-	auto container = (new Visualization::GridLayoutFormElement())
+	auto container = (new Visualization::GridLayoutFormElement{})
 			->put(0, 0, header)
 			->put(0, 1, item<Visualization::Item>(&I::content_));
 

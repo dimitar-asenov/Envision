@@ -40,10 +40,10 @@ namespace OOInteraction {
 
 HModule::HModule()
 {
-	addCommand(new CCreateModule());
-	addCommand(new CCreateClass());
-	addCommand(new CCreateMethod());
-	addCommand(new CCreateField());
+	addCommand(new CCreateModule{});
+	addCommand(new CCreateClass{});
+	addCommand(new CCreateMethod{});
+	addCommand(new CCreateField{});
 }
 
 HModule* HModule::instance()
@@ -63,7 +63,7 @@ void HModule::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			{
 				auto module = static_cast<OOVisualization::VModule*>(target);
 				module->node()->beginModification("paste a module");
-				auto newModule = new OOModel::Module();
+				auto newModule = new OOModel::Module{};
 				module->node()->modules()->append(newModule);
 				newModule->load(clipboard);
 				module->node()->endModification();

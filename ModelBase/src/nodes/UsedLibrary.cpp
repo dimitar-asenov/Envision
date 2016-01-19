@@ -54,7 +54,7 @@ void UsedLibrary::loadLibrary(PersistentStore* store) const
 	if (libraryManager() == nullptr)
 	{
 		// Automatically ends up in the ModelManager
-		(new TreeManager())->load(store, name(), true);
+		(new TreeManager{})->load(store, name(), true);
 	}
 }
 

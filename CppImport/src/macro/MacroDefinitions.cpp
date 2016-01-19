@@ -64,7 +64,7 @@ OOModel::ReferenceExpression* MacroDefinitions::expansionQualifier(const clang::
 {
 	auto parentProject = clang_.projectForLocation(md->getLocation());
 	if (parentProject == clang_.rootProject())
-		return new OOModel::ReferenceExpression("ExternalMacro");
+		return new OOModel::ReferenceExpression{"ExternalMacro"};
 
 	return {};
 }

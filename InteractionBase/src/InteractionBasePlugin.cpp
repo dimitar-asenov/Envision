@@ -107,7 +107,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	if (!envisionManager.areSelfTestsPending())
 	{
 		auto mainScene = Visualization::VisualizationManager::instance().mainScene();
-		mainScene->installEventFilter(new DetectMainSceneActivated());
+		mainScene->installEventFilter(new DetectMainSceneActivated{});
 	}
 
 	return true;

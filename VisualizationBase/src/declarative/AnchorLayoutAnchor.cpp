@@ -42,7 +42,7 @@ AnchorLayoutAnchor::~AnchorLayoutAnchor()
 
 AnchorLayoutAnchor* AnchorLayoutAnchor::clone() const
 {
-	return new AnchorLayoutAnchor(*this);
+	return new AnchorLayoutAnchor{*this};
 }
 
 int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)

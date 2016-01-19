@@ -82,14 +82,14 @@ clang::tooling::CompilationDatabase* CppImportManager::findCompilationDatabase(c
 Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPerProject)
 {
 	auto project = new OOModel::Project(projectPath_.split(QDir::separator()).last());
-	auto log = new CppImportLogger();
-	auto visitor = new ClangAstVisitor(project, projectPath_, log);
+	auto log = new CppImportLogger{};
+	auto visitor = new ClangAstVisitor{project, projectPath_, log};
 
 	for (QString s : projects_)
 	{
 		qDebug() << "Start processing project :" << s;
 		auto tool = new clang::tooling::ClangTool(*compilationDb_, *sourcesMap_.value(s));
-		auto frontendActionFactory = new ClangFrontendActionFactory(visitor, log);
+		auto frontendActionFactory = new ClangFrontendActionFactory{visitor, log};
 		tool->run(frontendActionFactory);
 		// statistics
 		if (statisticsPerProject)
@@ -108,7 +108,7 @@ Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPer
 	SAFE_DELETE(log);
 	// reset the path (because clang tool changes it)
 	QDir::setCurrent(qApp->applicationDirPath());
-	return new Model::TreeManager("CppImport", project);
+	return new Model::TreeManager{"CppImport", project};
 }
 
 void CppImportManager::setupTest()

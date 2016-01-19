@@ -35,7 +35,7 @@ namespace Comments {
 
 HCommentDiagram::HCommentDiagram()
 {
-	addCommand(new CCreateShape());
+	addCommand(new CCreateShape{});
 }
 
 HCommentDiagram* HCommentDiagram::instance()

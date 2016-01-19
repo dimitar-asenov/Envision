@@ -57,9 +57,9 @@ void VTryCatchFinally::initializeForms()
 	auto contentElement = grid({{tryBody}, {catchClauses}})
 				->setColumnStretchFactor(1, 1);
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)
 			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
 			->put(TheRightOf, tryIcon, AtRightOf, contentElement)
@@ -74,7 +74,7 @@ void VTryCatchFinally::initializeForms()
 		->setColumnStretchFactor(1, 1);
 	auto finallyOutline = item<EmptyItem>(&I::finallyOutline_, [](I* v){return &v->style()->finallyOutline();});
 
-	auto finallyCombined = (new AnchorLayoutFormElement())
+	auto finallyCombined = (new AnchorLayoutFormElement{})
 		->put(TheLeftOf, finallyIcon, AtLeftOf, finallyBody)
 		->put(TheLeftOf, finallyOutline, 2, FromLeftOf, finallyBody)
 		->put(TheRightOf, finallyIcon, AtRightOf, finallyBody)
@@ -86,7 +86,7 @@ void VTryCatchFinally::initializeForms()
 	contentElement = grid({{tryBody}, {catchClauses}, {finallyCombined}})
 				->setColumnStretchFactor(1, 1)->setVerticalSpacing(3);
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)
 			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
 			->put(TheRightOf, tryIcon, AtRightOf, contentElement)

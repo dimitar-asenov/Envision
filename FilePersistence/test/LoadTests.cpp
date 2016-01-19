@@ -41,7 +41,7 @@ class LoadRootOnly : public Test<FilePersistencePlugin, LoadRootOnly> { public: 
 
 	PersistentStore* store{};
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
@@ -64,7 +64,7 @@ public: void test()
 
 	PersistentStore* store{};
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
@@ -92,7 +92,7 @@ class LoadMultipleUnits : public Test<FilePersistencePlugin, LoadMultipleUnits> 
 {
 	PersistentStore* store{};
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 

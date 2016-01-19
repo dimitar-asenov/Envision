@@ -65,7 +65,7 @@ List::~List()
 		SAFE_DELETE( nodes_[i] );
 }
 
-List* List::clone() const { return new List(*this); }
+List* List::clone() const { return new List{*this}; }
 
 void List::loadSubNodes(QList<LoadedNode>& nodeList)
 {
@@ -112,7 +112,7 @@ void List::load(PersistentStore &store)
 		int index = ln->name.toInt(&ok);
 		if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
 
-		execute(new ListPut(this, nodes_, ln->node, index));
+		execute(new ListPut{this, nodes_, ln->node, index});
 	}
 }
 
@@ -149,7 +149,7 @@ void List::insert(int position, Node* node)
 		}
 	Q_ASSERT(typeToInsertRespectsLowerBound);
 
-	execute(new ListInsert(this, nodes_, node, position));
+	execute(new ListInsert{this, nodes_, node, position});
 }
 
 int List::lowerTypeBoundForElements() const
@@ -159,7 +159,7 @@ int List::lowerTypeBoundForElements() const
 
 void List::remove(int index)
 {
-	execute(new ListRemove(this, nodes_, index));
+	execute(new ListRemove{this, nodes_, index});
 }
 
 void List::remove(Node* instance )
@@ -192,7 +192,7 @@ void List::paste(ClipboardStore& clipboard, int position)
 		// We provide a null parent as this will be set in the instruction below.
 		Node* newNode = clipboard.create(manager(), nullptr);
 
-		execute(new ListInsert(this, nodes_, newNode, position+i));
+		execute(new ListInsert{this, nodes_, newNode, position+i});
 
 		if (clipboard.hasNext() ) clipboard.next();
 	}

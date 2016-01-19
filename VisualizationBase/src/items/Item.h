@@ -642,8 +642,8 @@ bool Item::synchronizeItem(FieldType*& item, bool present, const typename Visual
 	if (!item && present)
 	{
 		changed = true;
-		if (style) item = new VisualizationType(this, style);
-		else item = new VisualizationType(this);
+		if (style) item = new VisualizationType{this, style};
+		else item = new VisualizationType{this};
 
 		setUpdateNeeded(StandardUpdate);
 	}
@@ -669,8 +669,8 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 	if (!item && node)
 	{
 		changed = true;
-		if (style) item = new VisualizationType(this, node, style);
-		else item = new VisualizationType(this, node);
+		if (style) item = new VisualizationType{this, node, style};
+		else item = new VisualizationType{this, node};
 
 		setUpdateNeeded(StandardUpdate);
 	}

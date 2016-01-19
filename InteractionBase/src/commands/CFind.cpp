@@ -42,7 +42,7 @@ bool CFind::canInterpret(Visualization::Item*, Visualization::Item*, const QStri
 CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
-	if (commandTokens.size() < 2) return new CommandResult(new CommandError("Please specify a search string"));
+	if (commandTokens.size() < 2) return new CommandResult(new CommandError{"Please specify a search string"});
 
 	auto scene = target->scene();
 	scene->clearFocus();
@@ -65,7 +65,7 @@ CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target,
 
 	scene->scheduleUpdate();
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
@@ -76,10 +76,10 @@ QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::It
 	if (textSoFar.trimmed().startsWith("find ", Qt::CaseInsensitive))
 	{
 		auto searchText = textSoFar.trimmed().mid(5);
-		s.append(new CommandSuggestion("find " + searchText, "Search for " + searchText));
+		s.append(new CommandSuggestion{"find " + searchText, "Search for " + searchText});
 	}
 	else if (QString("find ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-			s.append(new CommandSuggestion("find ", "Search for text"));
+			s.append(new CommandSuggestion{"find ", "Search for text"});
 
 	return s;
 }

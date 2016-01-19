@@ -33,7 +33,7 @@ namespace Interaction {
 
 void AddEmptyValue::perform(ExpressionTreeBuilder& tb)
 {
-	tb.left() = new Empty();
+	tb.left() = new Empty{};
 	if (tb.top()) tb.unfinished().last()->addNext(tb.left());
 	else tb.top() = tb.left();
 }

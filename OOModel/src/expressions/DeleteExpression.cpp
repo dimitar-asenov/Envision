@@ -47,7 +47,7 @@ DeleteExpression::DeleteExpression(bool isArrayType)
 
 Type* DeleteExpression::type()
 {
-	return new PrimitiveType(PrimitiveType::VOID, true);
+	return new PrimitiveType{PrimitiveType::VOID, true};
 }
 
 }

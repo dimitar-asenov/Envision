@@ -52,7 +52,7 @@ CharacterLiteral::CharacterLiteral(const QString& value)
 
 Type* CharacterLiteral::type()
 {
-	return new PrimitiveType(PrimitiveType::CHAR, true);
+	return new PrimitiveType{PrimitiveType::CHAR, true};
 }
 
 }

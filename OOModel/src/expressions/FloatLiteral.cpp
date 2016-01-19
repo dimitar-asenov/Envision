@@ -49,7 +49,7 @@ FloatLiteral::FloatLiteral(const QString& value) : Super{nullptr, FloatLiteral::
 
 Type* FloatLiteral::type()
 {
-	return new PrimitiveType(PrimitiveType::DOUBLE, true);
+	return new PrimitiveType{PrimitiveType::DOUBLE, true};
 }
 
 }

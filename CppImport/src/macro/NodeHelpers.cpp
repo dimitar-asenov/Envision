@@ -62,13 +62,13 @@ OOModel::Declaration* NodeHelpers::actualContext(Model::Node* node)
 OOModel::Declaration* NodeHelpers::createContext(OOModel::Declaration* actualContext)
 {
 	if (DCast<OOModel::Project>(actualContext))
-		return new OOModel::Project("Context");
+		return new OOModel::Project{"Context"};
 	else if (DCast<OOModel::Module>(actualContext))
-		return new OOModel::Module("Context");
+		return new OOModel::Module{"Context"};
 	else if (DCast<OOModel::Class>(actualContext))
-		return new OOModel::Class("Context");
+		return new OOModel::Class{"Context"};
 	else if (DCast<OOModel::Method>(actualContext))
-		return new OOModel::Method("Context");
+		return new OOModel::Method{"Context"};
 
 	Q_ASSERT(false);
 }
@@ -122,7 +122,7 @@ void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 	if (auto ooExpression = DCast<OOModel::Expression>(node))
 	{
 		if (auto context = DCast<OOModel::Method>(declaration))
-			context->items()->append(new OOModel::ExpressionStatement(ooExpression));
+			context->items()->append(new OOModel::ExpressionStatement{ooExpression});
 		else
 			qDebug() << "can not insert expression" << ooExpression->typeName() << "into a" << declaration->typeName();
 	}
@@ -161,7 +161,7 @@ void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 		{
 			if (auto context = DCast<OOModel::Method>(declaration))
 				context->items()->append(new OOModel::ExpressionStatement(
-													 new OOModel::VariableDeclarationExpression(ooVarDecl)));
+													 new OOModel::VariableDeclarationExpression{ooVarDecl}));
 			else
 				Q_ASSERT(false);
 		}

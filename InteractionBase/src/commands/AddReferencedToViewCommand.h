@@ -118,7 +118,7 @@ CommandResult* AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 				view->addArrow(actualRef, referencedNode, arrowLayer_, nullptr, topLevelAncestor->node());
 		}
 	}
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

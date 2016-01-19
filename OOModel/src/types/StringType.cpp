@@ -38,7 +38,7 @@ bool StringType::equals(const Type* other) const
 
 StringType* StringType::clone() const
 {
-	return new StringType(*this);
+	return new StringType{*this};
 }
 
 }

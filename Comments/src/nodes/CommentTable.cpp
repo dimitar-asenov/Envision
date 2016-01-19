@@ -69,7 +69,7 @@ void CommentTable::resize(int m, int n)
 			if (j < rowCount() && i < columnCount())
 			{
 				CommentFreeNode* aFreeNode = nodeAt(j, i);
-				nodes()->replaceChild(aFreeNode, new CommentFreeNode(nullptr, ""));
+				nodes()->replaceChild(aFreeNode, new CommentFreeNode{nullptr, ""});
 				aFreeNode->setName(name()+"_"+QString::number(j)+"_"+QString::number(i));
 				aList->append(aFreeNode);
 			}

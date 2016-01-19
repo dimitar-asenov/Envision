@@ -45,7 +45,7 @@ Interaction::CommandResult* CJavaExport::executeNamed(Visualization::Item* sourc
 		}
 	}
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

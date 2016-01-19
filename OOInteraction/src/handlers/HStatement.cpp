@@ -59,15 +59,15 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			int index = lst->focusedNodeIndex() + 1;
 
-			auto empty = new OOModel::EmptyExpression();
-			auto es = new OOModel::ExpressionStatement();
+			auto empty = new OOModel::EmptyExpression{};
+			auto es = new OOModel::ExpressionStatement{};
 			es->setExpression(empty);
 			lst->node()->beginModification( "add empty statement");
 			lst->node()->insert(index, es);
 			lst->node()->endModification();
 
 			lst->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{lst, empty});
 	}
 
 	if (!processed)

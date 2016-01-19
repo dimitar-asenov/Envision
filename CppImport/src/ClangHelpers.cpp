@@ -155,7 +155,7 @@ OOModel::Project* ClangHelpers::projectForLocation(clang::SourceLocation locatio
 		auto project = projectByName(parentName);
 		if (!project)
 		{
-			project = new OOModel::Project(parentName);
+			project = new OOModel::Project{parentName};
 			rootProject_->projects()->append(project);
 			projects_.insert(parentName, project);
 		}

@@ -50,20 +50,20 @@ class TextSelect : public Test<InteractionBasePlugin, TextSelect> { public: void
 	Visualization::VComposite::setDefaultClassHandler(HBinaryNode::instance());
 
 	auto list = new Model::List;
-	auto manager = new Model::TreeManager(list);
+	auto manager = new Model::TreeManager{list};
 
 	manager->beginModification(list, "set");
-	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* first = new TestNodes::BinaryNode{};
 	list->append(first);
-	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* second = new TestNodes::BinaryNode{};
 	list->append(second);
-	Model::Text* third = new Model::Text();
+	Model::Text* third = new Model::Text{};
 	list->append(third);
 
 	first->name()->set("First node");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
 	first->setLeft(left);
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 	first->setRight(right);
 	left->name()->set("left node");
 	right->name()->set("right node");

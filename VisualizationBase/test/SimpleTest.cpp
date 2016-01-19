@@ -43,21 +43,21 @@ namespace Visualization {
 
 //class CompositeTest : public Test<VisualizationBasePlugin, CompositeTest> { public: void test()
 //{
-//	Model::TreeManager* manager = new Model::TreeManager();
+//	Model::TreeManager* manager = new Model::TreeManager{};
 //	Model::List* list = static_cast<Model::List*> (manager->createRoot("List"));
 //
 //	manager->beginModification(list, "set");
-//	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
+//	TestNodes::BinaryNode* first = new TestNodes::BinaryNode{};
 //	list->append(first);
-//	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
+//	TestNodes::BinaryNode* second = new TestNodes::BinaryNode{};
 //	list->append(second);
-//	Model::Text* third = new Model::Text();
+//	Model::Text* third = new Model::Text{};
 //	list->append(third);
 //
 //	first->name()->set("First node");
-//	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+//	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
 //	first->setLeft(left);
-//	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+//	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 //	first->setRight(right);
 //	left->name()->set("left node");
 //	right->name()->set("right node");
@@ -66,12 +66,12 @@ namespace Visualization {
 //
 //	third->set("Some independent text");
 //
-//	list->append(new TestBoxNode("someText"));
-//	list->append(new TestBoxNode("stretch", true));
+//	list->append(new TestBoxNode{"someText"});
+//	list->append(new TestBoxNode{"stretch", true});
 //
 //	manager->endModification();
 //
-//	auto top = new RootItem(list);
+//	auto top = new RootItem{list};
 //	auto scene = VisualizationManager::instance().mainScene();
 //	scene->addTopLevelItem( top );
 //	QApplication::processEvents();
@@ -86,21 +86,21 @@ namespace Visualization {
 
 class CompositeTest : public Test<VisualizationBasePlugin, CompositeTest> { public: void test()
 {
-	auto list = new Model::List();
-	auto manager = new Model::TreeManager(list);
+	auto list = new Model::List{};
+	auto manager = new Model::TreeManager{list};
 
 	manager->beginModification(list, "set");
-	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* first = new TestNodes::BinaryNode{};
 	list->append(first);
-	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* second = new TestNodes::BinaryNode{};
 	list->append(second);
-	Model::Text* third = new Model::Text();
+	Model::Text* third = new Model::Text{};
 	list->append(third);
 
 	first->name()->set("First node");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
 	first->setLeft(left);
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 	first->setRight(right);
 	left->name()->set("left node");
 	right->name()->set("right node");
@@ -109,17 +109,17 @@ class CompositeTest : public Test<VisualizationBasePlugin, CompositeTest> { publ
 
 	third->set("Some independent text");
 
-	list->append(new TestBoxNode("someText", false, false));
-	list->append(new TestBoxNode("stretch", true, false));
-	list->append(new TestBoxNode("An html node with <b>bold text</b><br/> next html line", false, true));
-	list->append(new TestBoxNode("An html node with no formatting", false, true));
+	list->append(new TestBoxNode{"someText", false, false});
+	list->append(new TestBoxNode{"stretch", true, false});
+	list->append(new TestBoxNode{"An html node with <b>bold text</b><br/> next html line", false, true});
+	list->append(new TestBoxNode{"An html node with no formatting", false, true});
 
 	manager->endModification();
 
-	auto it = new DeclarativeTest(nullptr, first, list, //new TestBoxNode("first", true),
-																new TestBoxNode("second", Qt::darkGreen, true, false),
-																new TestBoxNode("third", Qt::darkRed, true, false),
-																new TestBoxNode("fourth", Qt::white, true, false));
+	auto it = new DeclarativeTest(nullptr, first, list, //new TestBoxNode{"first", true},
+																new TestBoxNode{"second", Qt::darkGreen, true, false},
+																new TestBoxNode{"third", Qt::darkRed, true, false},
+																new TestBoxNode{"fourth", Qt::white, true, false});
 	auto scene = VisualizationManager::instance().mainScene();
 	scene->addTopLevelItem(it);
 	scene->scheduleUpdate();

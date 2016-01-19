@@ -34,7 +34,7 @@ namespace Model {
 
 class UndoRedoTextSet : public Test<ModelBasePlugin, UndoRedoTextSet> { public: void test()
 {
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager(root);
 
 	CHECK_CONDITION(root->name()->get().isNull());
@@ -80,7 +80,7 @@ class UndoRedoTextSet : public Test<ModelBasePlugin, UndoRedoTextSet> { public: 
 
 class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes> { public: void test()
 {
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager(root);
 
 	CHECK_INT_EQUAL(0, root->name()->revision());
@@ -89,7 +89,7 @@ class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes
 	CHECK_CONDITION(root->right() == nullptr);
 
 	manager.beginModification(root, "testing");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
 	root->setLeft(left);
 	manager.endModification();
 	CHECK_INT_EQUAL(0, root->name()->revision());
@@ -101,7 +101,7 @@ class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes
 	CHECK_INT_EQUAL(0, left->revision());
 
 	manager.beginModification(root, "testing");
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 	root->setRight(right);
 	manager.endModification();
 	CHECK_INT_EQUAL(0, root->name()->revision());
@@ -161,7 +161,7 @@ class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes
 
 class UndoRedoGroupTextSet : public Test<ModelBasePlugin, UndoRedoGroupTextSet> { public: void test()
 {
-	auto root = new Text();
+	auto root = new Text{};
 	TreeManager manager(root);
 
 	CHECK_INT_EQUAL(0, root->revision());

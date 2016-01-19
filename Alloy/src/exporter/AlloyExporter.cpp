@@ -35,11 +35,11 @@ namespace Alloy {
 
 void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 {
-	auto dir = new Export::SourceDir(nullptr, path);
+	auto dir = new Export::SourceDir{nullptr, path};
 	dir->subDir("output");
 
 	auto file = &dir->file("model.als");
-	auto anAlloyVisitor = new AlloyVisitor();
+	auto anAlloyVisitor = new AlloyVisitor{};
 	file->append(anAlloyVisitor->visit(aNode));
 	delete anAlloyVisitor;
 

@@ -180,7 +180,7 @@ std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 {
 	if (merge_.expired())
 	{
-		auto merge = std::shared_ptr<Merge>(new Merge(revision, fastForward, this));
+		auto merge = std::shared_ptr<Merge>(new Merge{revision, fastForward, this});
 		merge_ = merge;
 		return merge;
 	}
@@ -259,13 +259,13 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	{
 		QString sha1A = getSHA1(revisionA);
 		treeA = std::shared_ptr<GenericTree>(new GenericTree(projectName()));
-		new GitPiecewiseLoader(treeA, this, sha1A);
+		new GitPiecewiseLoader{treeA, this, sha1A};
 	}
 	if (!treeB)
 	{
 		QString sha1B = getSHA1(revisionB);
 		treeB = std::shared_ptr<GenericTree>(new GenericTree(projectName()));
-		new GitPiecewiseLoader(treeB, this, sha1B);
+		new GitPiecewiseLoader{treeB, this, sha1B};
 	}
 
 	// Use callback on diff to extract node information
@@ -330,7 +330,7 @@ const Commit* GitRepository::getCommit(QString revision) const
 
 	GitCommitExtract treeWalkData;
 	treeWalkData.repository_ = repository_;
-	treeWalkData.commit_ = new Commit();
+	treeWalkData.commit_ = new Commit{};
 
 	CommitMetaData info = getCommitInformation(revision);
 	treeWalkData.commit_->setMetaData(info);
@@ -895,7 +895,7 @@ const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) 
 	fullRelativePath.append(relativePath);
 
 	if (!QFile::exists(fullRelativePath))
-		return new CommitFile();
+		return new CommitFile{};
 
 	QFile file(fullRelativePath);
 	if ( !file.open(QIODevice::ReadOnly) )
@@ -928,7 +928,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 
 	if (entry == nullptr)
 	{
-		return new CommitFile();
+		return new CommitFile{};
 	}
 
 	git_checkout_options options;
@@ -997,7 +997,7 @@ const CommitFile* GitRepository::getCommitFileFromTree(QString revision, QString
 	git_tree_entry* treeEntry = nullptr;
 	errorCode = git_tree_entry_bypath(&treeEntry, tree, relativePath.toStdString().c_str());
 	if (errorCode == GIT_ENOTFOUND)
-		return new CommitFile();
+		return new CommitFile{};
 	checkError(errorCode);
 
 	git_object* obj = nullptr;
@@ -1006,7 +1006,7 @@ const CommitFile* GitRepository::getCommitFileFromTree(QString revision, QString
 
 
 	if (git_object_type(obj) != GIT_OBJ_BLOB)
-		return new CommitFile();
+		return new CommitFile{};
 
 
 	git_blob* blob = (git_blob*)obj;

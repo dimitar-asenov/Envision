@@ -169,7 +169,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 void HList::scheduleSetCursor(Visualization::VList* list, Model::Node* listNodeToSelect,
 		SetCursorEvent::CursorPlacement howToSelectItem)
 {
-	list->scene()->addPostEventAction( new SetCursorEvent(list, listNodeToSelect, howToSelectItem));
+	list->scene()->addPostEventAction( new SetCursorEvent{list, listNodeToSelect, howToSelectItem});
 }
 
 void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex)

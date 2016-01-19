@@ -41,7 +41,7 @@ REGISTER_ATTRIBUTE(ErrorExpression, postfix, Text, false, false, true)
 
 Type* ErrorExpression::type()
 {
-	return new ErrorType("Syntax error in expression");
+	return new ErrorType{"Syntax error in expression"};
 }
 
 }

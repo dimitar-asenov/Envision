@@ -47,17 +47,17 @@ namespace OOInteraction {
 HProject::HProject()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CCreateProject());
-	addCommand(new CCreateModule());
-	addCommand(new CCreateClass());
-	addCommand(new CCreateMethod());
-	addCommand(new CCreateField());
+	addCommand(new CCreateProject{});
+	addCommand(new CCreateModule{});
+	addCommand(new CCreateClass{});
+	addCommand(new CCreateMethod{});
+	addCommand(new CCreateField{});
 
-	addCommand(new Interaction::CDiff());
-	addCommand(new Interaction::CHistory());
-	addCommand(new Interaction::CMerge());
+	addCommand(new Interaction::CDiff{});
+	addCommand(new Interaction::CHistory{});
+	addCommand(new Interaction::CMerge{});
 
-	addCommand(new CDumpMethodRenderings());
+	addCommand(new CDumpMethodRenderings{});
 }
 
 HProject* HProject::instance()
@@ -77,7 +77,7 @@ void HProject::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			{
 				auto proj = static_cast<OOVisualization::VProject*>(target);
 				proj->node()->beginModification("paste a project");
-				auto newProj = new OOModel::Project();
+				auto newProj = new OOModel::Project{};
 				proj->node()->projects()->append(newProj);
 				newProj->load(clipboard);
 				proj->node()->endModification();

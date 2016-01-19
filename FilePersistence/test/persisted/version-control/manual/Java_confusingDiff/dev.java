@@ -42,7 +42,7 @@ InformationEdge addEdge(InformationNode a,
 			return existingEdge;
 		}
 	}
-	auto edge = new InformationEdge(a, b, name, Undirected);
+	auto edge = new InformationEdge{a, b, name, Undirected};
 	edges_.push_back(edge);
 	return edge;
 }

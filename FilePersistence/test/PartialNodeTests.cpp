@@ -40,7 +40,7 @@ class LoadingPartialList : public Test<FilePersistencePlugin, LoadingPartialList
 {
 	PersistentStore* store{};
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
@@ -63,7 +63,7 @@ class LoadingFullList : public Test<FilePersistencePlugin, LoadingFullList> { pu
 {
 	PersistentStore* store{};
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 

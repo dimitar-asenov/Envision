@@ -96,7 +96,7 @@ Interaction::CommandResult* JavaRunner::runTree(Model::TreeManager* manager,
 	process->start("java", args);
 	if (debug) // Wait for the listening on port signal
 		process->waitForReadyRead();
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 void JavaRunner::handleOutput()
@@ -130,7 +130,7 @@ void JavaRunner::addConsole(Model::Node* node)
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
 
-	console_ = new ConsoleOverlay(item);
+	console_ = new ConsoleOverlay{item};
 
 	overlayGroup->addOverlay(makeOverlay(console_));
 }

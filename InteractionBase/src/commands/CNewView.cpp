@@ -42,8 +42,8 @@ CommandResult* CNewView::executeWithArguments(Visualization::Item *, Visualizati
 	auto view = target->scene()->viewItems()->newViewItem(arguments.at(0));
 	if (open && view)
 		target->scene()->viewItems()->switchToView(view);
-	if (view) return new CommandResult();
-	else return new CommandResult(new CommandError("Could not create view"));
+	if (view) return new CommandResult{};
+	else return new CommandResult(new CommandError{"Could not create view"});
 }
 
 QString CNewView::description(Visualization::Item *, Visualization::Item *,

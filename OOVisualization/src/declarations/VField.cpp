@@ -49,7 +49,7 @@ int VField::determineForm()
 
 void VField::initializeForms()
 {
-	auto typeAndName = (new GridLayoutFormElement())
+	auto typeAndName = (new GridLayoutFormElement{})
 		->setHorizontalSpacing(3)
 		->setNoBoundaryCursors([](Item*){return true;})
 		->setNoInnerCursors([](Item*){return true;})

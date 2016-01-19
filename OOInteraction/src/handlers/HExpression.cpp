@@ -212,8 +212,8 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 								StatementItem* st = nullptr;
 								Model::Node* toFocus = nullptr;
 
-								auto ifs =  new IfStatement();
-								ifs->setCondition(new EmptyExpression());
+								auto ifs =  new IfStatement{};
+								ifs->setCondition(new EmptyExpression{});
 
 								toFocus = ifs->condition();
 								st = ifs;
@@ -235,7 +235,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 								auto parent = topMostItem->parent();
 								while (! DCast<VList>(parent) && parent->parent()) parent = parent->parent();
 
-								target->scene()->addPostEventAction(new SetCursorEvent(parent, toFocus));
+								target->scene()->addPostEventAction(new SetCursorEvent{parent, toFocus});
 								return;
 							}
 						}
@@ -260,64 +260,64 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			Model::Node* toFocus = nullptr;
 			if (trimmedText == "for")
 			{
-				auto loop =  new LoopStatement();
-				loop->setInitStep(new EmptyExpression());
+				auto loop =  new LoopStatement{};
+				loop->setInitStep(new EmptyExpression{});
 
 				toFocus = loop->initStep();
 				st = loop;
 			}
 			else if (trimmedText == "foreach")
 			{
-				auto loop =  new ForEachStatement();
-				loop->setCollection(new EmptyExpression());
+				auto loop =  new ForEachStatement{};
+				loop->setCollection(new EmptyExpression{});
 
 				toFocus = loop->varNameNode();
 				st = loop;
 			}
 			else if (trimmedText == "if")
 			{
-				auto ifs =  new IfStatement();
-				ifs->setCondition(new EmptyExpression());
+				auto ifs =  new IfStatement{};
+				ifs->setCondition(new EmptyExpression{});
 
 				toFocus = ifs->condition();
 				st = ifs;
 			}
 			else if (trimmedText == "continue")
 			{
-				st = new ContinueStatement();
+				st = new ContinueStatement{};
 				toFocus = st;
 			}
 			else if (trimmedText == "break")
 			{
-				st = new BreakStatement();
+				st = new BreakStatement{};
 				toFocus = st;
 			}
 			else if (trimmedText == "return")
 			{
-				auto ret =  new ReturnStatement();
-				ret->values()->append(new EmptyExpression());
+				auto ret =  new ReturnStatement{};
+				ret->values()->append(new EmptyExpression{});
 
 				toFocus = ret->values()->at(0);
 				st = ret;
 			}
 			else if (trimmedText == "class")
 			{
-				auto ret =  new Class();
+				auto ret =  new Class{};
 				toFocus = ret;
-				st = new DeclarationStatement(ret);
+				st = new DeclarationStatement{ret};
 			}
 			else if (trimmedText == "do")
 			{
-				auto loop =  new LoopStatement(LoopStatement::LoopKind::PostCheck);
-				auto empty = new EmptyExpression();
-				loop->body()->append(new ExpressionStatement(empty));
+				auto loop =  new LoopStatement{LoopStatement::LoopKind::PostCheck};
+				auto empty = new EmptyExpression{};
+				loop->body()->append(new ExpressionStatement{empty});
 
 				toFocus = empty;
 				st = loop;
 			}
 			else if (trimmedText == "//")
 			{
-				auto comment = new CommentStatementItem();
+				auto comment = new CommentStatementItem{};
 				auto line = comment->commentNode()->lines()->createDefaultElement();
 				comment->commentNode()->lines()->append(line);
 				toFocus = line;
@@ -325,41 +325,41 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			}
 			else if (trimmedText == "switch")
 			{
-				auto switchs =  new SwitchStatement();
-				switchs->setSwitchExpression(new EmptyExpression());
+				auto switchs =  new SwitchStatement{};
+				switchs->setSwitchExpression(new EmptyExpression{});
 
 				toFocus = switchs->switchExpression();
 				st = switchs;
 			}
 			else if (trimmedText == "case")
 			{
-				auto cases =  new CaseStatement();
-				cases->setCaseExpression(new EmptyExpression());
+				auto cases =  new CaseStatement{};
+				cases->setCaseExpression(new EmptyExpression{});
 
 				toFocus = cases->caseExpression();
 				st = cases;
 			}
 			else if (trimmedText == "try")
 			{
-				auto trys =  new TryCatchFinallyStatement();
-				auto empty = new EmptyExpression();
-				trys->tryBody()->append(new ExpressionStatement(empty));
+				auto trys =  new TryCatchFinallyStatement{};
+				auto empty = new EmptyExpression{};
+				trys->tryBody()->append(new ExpressionStatement{empty});
 
 				toFocus = empty;
 				st = trys;
 			}
 			else if (trimmedText == "assert")
 			{
-				auto asserts =  new AssertStatement();
-				asserts->setExpression(new EmptyExpression());
+				auto asserts =  new AssertStatement{};
+				asserts->setExpression(new EmptyExpression{});
 
 				toFocus = asserts->expression();
 				st = asserts;
 			}
 			else if (trimmedText == "synchronized")
 			{
-				auto sync =  new SynchronizedStatement();
-				sync->setExpression(new EmptyExpression());
+				auto sync =  new SynchronizedStatement{};
+				sync->setExpression(new EmptyExpression{});
 
 				toFocus = sync->expression();
 				st = sync;
@@ -374,7 +374,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			auto parent = topMostItem->parent();
 			while (! DCast<VList>(parent) && parent->parent()) parent = parent->parent();
 
-			target->scene()->addPostEventAction(new SetCursorEvent(parent, toFocus));
+			target->scene()->addPostEventAction(new SetCursorEvent{parent, toFocus});
 			return;
 		}
 
@@ -438,7 +438,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			}
 			else
 			{
-				target->scene()->addPostEventAction(new CustomSceneEvent(AutoComplete::hide));
+				target->scene()->addPostEventAction(new CustomSceneEvent{AutoComplete::hide});
 			}
 
 			return;
@@ -512,7 +512,7 @@ void HExpression::setNewExpression(Item* target, Item* topMostItem, const QStrin
 	auto parent = topMostItem->parent();
 	while (!parent->node() && parent->parent()) parent=parent->parent();
 
-	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
+	target->scene()->addPostEventAction( new SetExpressionCursorEvent{parent, newExpression, index});
 
 	// Clear any compound objects that were stored during this expression processing
 	// TODO: This is not always what we want. For example if we type a quote when trying to make a new string argument
@@ -597,7 +597,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 
 	QSet<Model::Node*> foundSymbols;
 
-	Model::SymbolMatcher matcher{new QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard)};
+	Model::SymbolMatcher matcher{new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard}};
 	if (afterDot)
 		searchNode->findSymbols(foundSymbols, matcher, searchNode, Model::Node::SEARCH_DOWN,
 										Model::Node::ANY_SYMBOL, true);
@@ -605,7 +605,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 		searchNode->findSymbols(foundSymbols, matcher, target->node(), Model::Node::SEARCH_UP,
 										Model::Node::ANY_SYMBOL, true);
 
-	searchNode->findSymbols(foundSymbols, new QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard),
+	searchNode->findSymbols(foundSymbols, new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard},
 			target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
 			afterDot == false);
 

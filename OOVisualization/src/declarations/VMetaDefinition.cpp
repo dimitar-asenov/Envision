@@ -52,7 +52,7 @@ void VMetaDefinition::determineChildren()
 
 void VMetaDefinition::initializeForms()
 {
-	auto headerElement = (new GridLayoutFormElement())
+	auto headerElement = (new GridLayoutFormElement{})
 				->setHorizontalSpacing(10)
 				->setColumnStretchFactor(0, 1)
 				->setColumnStretchFactor(3, 1)
@@ -63,7 +63,7 @@ void VMetaDefinition::initializeForms()
 				->put(3, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
 						&StyleType::arguments));
 
-	auto contentElement = (new GridLayoutFormElement())
+	auto contentElement = (new GridLayoutFormElement{})
 				->setSpacing(5)
 				->setColumnStretchFactor(1, 1)
 				->setNoBoundaryCursors([](Item*){return true;})
@@ -73,7 +73,7 @@ void VMetaDefinition::initializeForms()
 						[](I* v) {return v->node()->metaBindings()->size() > 0 ?
 									 v->node()->metaBindings() : nullptr;},
 						&StyleType::declarations))
-				->put(0, 3, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+				->put(0, 3, (new DynamicGridFormElement{})->setSpacing(10, 10)->setMargins(10)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 							[](Item* v)->QVector<QVector<Model::Node*>>{
@@ -82,9 +82,9 @@ void VMetaDefinition::initializeForms()
 											Visualization::GridLayouter::ColumnMajor);
 						}));
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 		// place the top left corner of the content element
 		->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
 		->put(TheTopOf, contentElement, AtBottomOf, headerElement)

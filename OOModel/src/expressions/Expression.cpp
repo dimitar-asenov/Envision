@@ -38,7 +38,7 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(Expression, Em
 
 Type* Expression::type()
 {
-	return new ErrorType("Uninitialized expression type");
+	return new ErrorType{"Uninitialized expression type"};
 }
 
 Expression* Expression::topMostExpressionParent() const

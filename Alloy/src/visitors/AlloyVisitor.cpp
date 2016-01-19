@@ -54,7 +54,7 @@ void AlloyVisitor::init()
 	Visitor::addType<Class>( [](AlloyVisitor* v, Class* t) -> Export::SourceFragment*
 	{
 		currentClass_ = t->name();
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		*fragment << "sig " << t->name();
 		*fragment << list(t->fields(), v, "fieldList");
 		for (auto node : *t->methods()) *fragment << v->visit(node);
@@ -65,7 +65,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<Method>( [](AlloyVisitor* v, Method* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (t->name() == "ObjectInvariant")
 			for (auto node : *t->items()) *fragment << v->visit(node);
 		else if (!t->name().startsWith("~"))
@@ -79,7 +79,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<Field>( [](AlloyVisitor*, Field* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (!DCast<PrimitiveTypeExpression>(t->typeExpression()))
 			*fragment << t->name() << ": lone " << StringComponents::stringForNode(t->typeExpression());
 		else
@@ -93,7 +93,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<MethodCallExpression>( [](AlloyVisitor* v, MethodCallExpression* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (StringComponents::stringForNode(t->callee()).startsWith("Contract.Invariant"))
 		{
 			inFact_ = true;
@@ -164,7 +164,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<BinaryOperation>( [](AlloyVisitor* v, BinaryOperation* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (inContract_ || inFact_)
 		{
 			*fragment << "(";
@@ -209,7 +209,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<UnaryOperation>( [](AlloyVisitor* v, UnaryOperation* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (inContract_ || inFact_)
 		{
 			switch (t->op())
@@ -227,7 +227,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<ThisExpression>( [](AlloyVisitor*, ThisExpression* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (inFact_)
 			*fragment << "a" << currentClass_;
 		else if (inContract_)
@@ -237,7 +237,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<ReferenceExpression>( [](AlloyVisitor* v, ReferenceExpression* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (t->prefix() != nullptr && (inContract_ || inFact_))
 			*fragment << v->visit(t->prefix());
 		if (t->prefix() != nullptr && t->ref() != nullptr && (inContract_ || inFact_))
@@ -249,7 +249,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<OOReference>( [](AlloyVisitor*, OOReference* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (inContract_ || inFact_)
 			*fragment << t->name();
 		return fragment;
@@ -257,7 +257,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<IntegerLiteral>( [](AlloyVisitor*, IntegerLiteral* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (inContract_ || inFact_)
 			*fragment << t->value();
 		return fragment;
@@ -265,7 +265,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<NullLiteral>( [](AlloyVisitor*, NullLiteral* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (inContract_ || inFact_)
 			*fragment << "none";
 		return fragment;
@@ -273,7 +273,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<FormalArgument>( [](AlloyVisitor*, FormalArgument* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		if (!DCast<PrimitiveTypeExpression>(t->typeExpression()))
 			*fragment << t->name() << ":" << StringComponents::stringForNode(t->typeExpression());
 		else
@@ -287,7 +287,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<LambdaExpression>( [](AlloyVisitor* v, LambdaExpression* t) -> Export::SourceFragment*
 	{
-		auto fragment = new Export::CompositeFragment(t);
+		auto fragment = new Export::CompositeFragment{t};
 		*fragment << v->visit(t->body()->last());
 		return fragment;
 	});
@@ -298,7 +298,7 @@ template<typename ListElement>
 Export::SourceFragment* AlloyVisitor::list(Model::TypedList<ListElement>* aList, AlloyVisitor* v,
 const QString& fragmentType)
 {
-	auto fragment = new Export::CompositeFragment(aList, fragmentType);
+	auto fragment = new Export::CompositeFragment{aList, fragmentType};
 	for (auto node : *aList) *fragment << v->visit(node);
 	return fragment;
 }

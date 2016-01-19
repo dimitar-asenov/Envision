@@ -68,10 +68,10 @@ CommandResult* CSceneHandlerSave::execute(Item* source, Item*, const QStringList
 	{
 		// Save the tree at a particular location and with a particular name
 		manager->setName(commandTokens[1]);
-		manager->save(new FilePersistence::SimpleTextFileStore("projects/"));
+		manager->save(new FilePersistence::SimpleTextFileStore{"projects/"});
 	}
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString& textSoFar,
@@ -92,7 +92,7 @@ QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString
 		text += " with the name " + name;
 	}
 
-	return {new CommandSuggestion(commandString, text)};
+	return {new CommandSuggestion{commandString, text}};
 }
 
 }

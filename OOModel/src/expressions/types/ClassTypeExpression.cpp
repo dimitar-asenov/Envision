@@ -48,8 +48,8 @@ ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
 Type* ClassTypeExpression::type()
 {
 	auto cl = DCast<Class> (typeExpression()->target());
-	if (cl) return new ClassType(cl, false);
-	else return new ErrorType("Unresolved class reference in a class type expression");
+	if (cl) return new ClassType{cl, false};
+	else return new ErrorType{"Unresolved class reference in a class type expression"};
 }
 
 }

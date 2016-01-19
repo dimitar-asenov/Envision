@@ -51,7 +51,7 @@ void CppImport::Comment::setNode(Model::Node* node)
 void Comment::insertIntoItemList(OOModel::StatementItemList* itemList, int index)
 {
 	setNode(itemList);
-	commentStatementItem_ = new OOModel::CommentStatementItem();
+	commentStatementItem_ = new OOModel::CommentStatementItem{};
 	commentStatementItem_->setCommentNode(new Comments::CommentNode(text()));
 
 	if (index >= 0)

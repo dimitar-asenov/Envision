@@ -105,6 +105,6 @@ void DoxygenWholeTreeVisitor::init()
 
 }
 
-DoxygenCommentsOnlyVisitor* DoxygenWholeTreeVisitor::aDoxyCommentVisitor_ = new DoxygenCommentsOnlyVisitor();
+DoxygenCommentsOnlyVisitor* DoxygenWholeTreeVisitor::aDoxyCommentVisitor_ = new DoxygenCommentsOnlyVisitor{};
 
 }

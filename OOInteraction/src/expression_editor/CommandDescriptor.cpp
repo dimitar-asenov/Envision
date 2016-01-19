@@ -92,23 +92,23 @@ OOModel::Expression* CommandDescriptor::create(const QList<OOModel::Expression*>
 OOModel::UnfinishedOperator* CommandDescriptor::createUnfinished(const QString& name,
 		const QList<OOModel::Expression*>& arguments)
 {
-	auto unf = new OOModel::UnfinishedOperator();
-	unf->delimiters()->append(new Model::Text("\\"));
-	unf->operands()->append(new OOModel::ReferenceExpression(name));
+	auto unf = new OOModel::UnfinishedOperator{};
+	unf->delimiters()->append(new Model::Text{"\\"});
+	unf->operands()->append(new OOModel::ReferenceExpression{name});
 
 	if (!arguments.isEmpty())
 	{
-		unf->delimiters()->append(new Model::Text("("));
+		unf->delimiters()->append(new Model::Text{"("});
 
 		for (int i = 0; i< arguments.size(); ++i)
 		{
-			if (i > 0) unf->delimiters()->append(new Model::Text(","));
+			if (i > 0) unf->delimiters()->append(new Model::Text{","});
 			unf->operands()->append(arguments[i]);
 		}
 
-		unf->delimiters()->append(new Model::Text(")"));
+		unf->delimiters()->append(new Model::Text{")"});
 	}
-	else unf->delimiters()->append(new Model::Text(QString())); // append an empty postfix if there are no arguments
+	else unf->delimiters()->append(new Model::Text{QString()}); // append an empty postfix if there are no arguments
 
 	return unf;
 }

@@ -43,7 +43,7 @@ class SaveRootOnly : public Test<FilePersistencePlugin, SaveRootOnly> { public: 
 	QString testDir;
 
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
 	s->setBaseFolder(testDir);
 	store = s;
@@ -71,7 +71,7 @@ public: void test()
 	PersistentStore* store{};
 	QString testDir;
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
 	s->setBaseFolder(testDir);
 	store = s;
@@ -81,9 +81,9 @@ public: void test()
 
 	manager.beginModification(root, "set title");
 	root->name()->set("RootNode");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
 	root->setLeft(left);
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 	root->setRight(right);
 
 	left->name()->set("Left child");
@@ -111,7 +111,7 @@ class SaveMultipleUnits : public Test<FilePersistencePlugin, SaveMultipleUnits> 
 	PersistentStore* store{};
 	QString testDir;
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
 	s->setBaseFolder(testDir);
 	store = s;
@@ -121,13 +121,13 @@ class SaveMultipleUnits : public Test<FilePersistencePlugin, SaveMultipleUnits> 
 
 	manager.beginModification(root, "set title");
 	root->name()->set("Root");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNodePersistenceUnit();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNodePersistenceUnit{};
 	root->setLeft(left);
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 	root->setRight(right);
 
 	left->name()->set("Left child");
-	TestNodes::BinaryNode* leftleft = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* leftleft = new TestNodes::BinaryNode{};
 	left->setLeft(leftleft);
 	leftleft->name()->set("in a new unit");
 	right->name()->set("Right child");

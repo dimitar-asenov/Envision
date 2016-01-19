@@ -57,7 +57,7 @@ DynamicGridFormElement::~DynamicGridFormElement()
 
 DynamicGridFormElement* DynamicGridFormElement::clone() const
 {
-	return new DynamicGridFormElement(*this);
+	return new DynamicGridFormElement{*this};
 }
 
 bool DynamicGridFormElement::sizeDependsOnParent(const Item*) const

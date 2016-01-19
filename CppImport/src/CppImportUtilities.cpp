@@ -272,7 +272,7 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverl
 		case clang::OO_PipePipe: return OOModel::BinaryOperation::CONDITIONAL_OR;
 		case clang::OO_ArrowStar: return OOModel::BinaryOperation::POINTER_POINTER_TO_MEMBER;
 		case clang::OO_Subscript: return OOModel::BinaryOperation::ARRAY_INDEX;
-		default: throw new CppImportException("Invalid binary overload operator");
+		default: throw new CppImportException{"Invalid binary overload operator"};
 	}
 }
 
@@ -323,7 +323,7 @@ QString CppImportUtilities::overloadOperatorToString(const clang::OverloadedOper
 		case clang::OO_Call: return "()";
 		case clang::OO_Subscript: return "[]";
 		case clang::OO_Conditional: return "?";
-		default: throw new CppImportException("Invalid overload operator");
+		default: throw new CppImportException{"Invalid overload operator"};
 	}
 }
 
@@ -343,7 +343,7 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::translateAssi
 		case clang::OO_PipeEqual: return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
 		case clang::OO_LessLessEqual: return OOModel::AssignmentExpression::LEFT_SHIFT_ASSIGN;
 		case clang::OO_GreaterGreaterEqual: return OOModel::AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN;
-		default: throw new CppImportException("Invalid assign overload operator");
+		default: throw new CppImportException{"Invalid assign overload operator"};
 	}
 }
 
@@ -362,7 +362,7 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::translateUnaryOverloa
 			return OOModel::UnaryOperation::POSTINCREMENT;
 		case clang::OO_MinusMinus: if (1 == numArgs) return OOModel::UnaryOperation::PREDECREMENT;
 			return OOModel::UnaryOperation::POSTDECREMENT;
-		default: throw new CppImportException("Invalid unary overload operator");
+		default: throw new CppImportException{"Invalid unary overload operator"};
 	}
 }
 

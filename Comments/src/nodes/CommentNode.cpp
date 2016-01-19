@@ -44,7 +44,7 @@ CommentNode::CommentNode(const QString& text)
 {
 	QStringList linesList = text.split(QRegExp("\\r?\\n"));
 	for (auto line : linesList)
-		lines()->append(new Model::Text(line));
+		lines()->append(new Model::Text{line});
 }
 
 CommentDiagram* CommentNode::diagram(const QString& name)
@@ -100,13 +100,13 @@ void CommentNode::synchronizeItem(QString aString, T aList, AppendFunction appen
 void CommentNode::synchronizeDiagramsToText()
 {
 	synchronizeItem("[diagram#", diagrams(),
-		[this](QString itemName){diagrams()->append(new CommentDiagram(nullptr, itemName));});
+		[this](QString itemName){diagrams()->append(new CommentDiagram{nullptr, itemName});});
 }
 
 void CommentNode::synchronizeCodesToText()
 {
 	synchronizeItem("[code#", codes(),
-		[this](QString itemName){codes()->append(new CommentFreeNode(nullptr, itemName));});
+		[this](QString itemName){codes()->append(new CommentFreeNode{nullptr, itemName});});
 }
 
 void CommentNode::synchronizeTablesToText()

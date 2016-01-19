@@ -75,7 +75,7 @@ void Menu::hideNow()
 
 void Menu::initializeForms()
 {
-	auto nodeGrid = (new Visualization::DynamicGridFormElement())
+	auto nodeGrid = (new Visualization::DynamicGridFormElement{})
 			->setSpacing(5, 5)
 			->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 			->setItemsGetter([](Visualization::Item* v)
@@ -93,7 +93,7 @@ void Menu::selectItem(Visualization::Item* item)
 		if (focusedItem())
 			focusedItem()->setGraphicsEffect(nullptr);
 		if (item)
-			item->setGraphicsEffect(new QGraphicsColorizeEffect());
+			item->setGraphicsEffect(new QGraphicsColorizeEffect{});
 
 		item->moveCursor();
 		focusedItem_ = item;

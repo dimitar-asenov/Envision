@@ -94,7 +94,7 @@ void StyleNode::init()
 	QDomElement e = elem_.firstChildElement();
 	while ( !e.isNull() )
 	{
-		children.append(new StyleNode(this, e));
+		children.append(new StyleNode{this, e});
 		e = e.nextSiblingElement();
 	}
 

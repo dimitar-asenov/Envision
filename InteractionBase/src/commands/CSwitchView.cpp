@@ -43,7 +43,7 @@ CommandResult* CSwitchView::execute(Visualization::Item*, Visualization::Item* t
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
 	if (target->scene()->viewItems()->switchToView(commandTokens[1]))
-		return new CommandResult();
+		return new CommandResult{};
 	else
 		return new CommandResult(new CommandError(
 				"View with name " + commandTokens[1] + " does not exist"));

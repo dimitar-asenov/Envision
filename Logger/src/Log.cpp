@@ -31,7 +31,7 @@ namespace Logger {
 
 Log* Log::getLogger(QString requestingPluginId)
 {
-	return new DefaultLog(requestingPluginId);
+	return new DefaultLog{requestingPluginId};
 }
 
 Log::~Log()

@@ -58,14 +58,14 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 	notAllowed(declaration);
 
 	// TODO: handle comments
-	auto fragment = new CompositeFragment(declaration);
+	auto fragment = new CompositeFragment{declaration};
 	*fragment << "Invalid Declaration";
 	return fragment;
 }
 
 SourceDir* DeclarationVisitor::visitProject(Project* project, SourceDir* parent)
 {
-	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, "src");
+	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir{nullptr, "src"};
 
 	if (parent) packageStack().append(project->name());
 
@@ -104,13 +104,13 @@ SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* par
 	Q_ASSERT(parent);
 	auto classFile = &parent->file(classs->name() + ".java");
 
-	auto fragment = classFile->append(new CompositeFragment(classs, "sections"));
+	auto fragment = classFile->append(new CompositeFragment{classs, "sections"});
 
-	auto header = fragment->append(new CompositeFragment(classs));
+	auto header = fragment->append(new CompositeFragment{classs});
 	if (!packageStack().isEmpty())
 		*header << "package " << packagesSoFar() << ";";
 
-	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
+	auto imports = fragment->append(new CompositeFragment{classs, "vertical"});
 	for (auto node : *classs->subDeclarations())
 	{
 		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
@@ -124,7 +124,7 @@ SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* par
 
 SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
-	auto fragment = new CompositeFragment(classs);
+	auto fragment = new CompositeFragment{classs};
 	if (Class::ConstructKind::Class == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
 	else if (Class::ConstructKind::Interface == classs->constructKind())
@@ -172,7 +172,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	notAllowed(classs->friends());
 
 	//TODO
-	auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
+	auto sections = fragment->append( new CompositeFragment{classs, "bodySections"});
 	*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 	*sections << list(classs->classes(), this, "declarations");
 	*sections << list(classs->methods(), this, "sections");
@@ -183,7 +183,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
-	auto fragment = new CompositeFragment(method);
+	auto fragment = new CompositeFragment{method};
 	*fragment << printAnnotationsAndModifiers(method);
 
 	if (method->results()->size() > 1)
@@ -220,7 +220,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* vd)
 {
-	auto fragment = new CompositeFragment(vd);
+	auto fragment = new CompositeFragment{vd};
 	*fragment << printAnnotationsAndModifiers(vd);
 	*fragment << expression(vd->typeExpression()) << " " << vd->nameNode();
 	if (vd->initialValue())
@@ -232,7 +232,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* vd)
 
 SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 {
-	auto fragment = new CompositeFragment(nameImport);
+	auto fragment = new CompositeFragment{nameImport};
 	*fragment << printAnnotationsAndModifiers(nameImport);
 
 	notAllowed(nameImport->annotations());
@@ -246,10 +246,10 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 
 SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* declaration)
 {
-	auto fragment = new CompositeFragment(declaration, "vertical");
+	auto fragment = new CompositeFragment{declaration, "vertical"};
 	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
 		*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
-	auto header = fragment->append(new CompositeFragment(declaration, "space"));
+	auto header = fragment->append(new CompositeFragment{declaration, "space"});
 
 	if (declaration->modifiers()->isSet(Modifier::Public))
 		*header << new TextFragment(declaration->modifiers(), "public");
@@ -279,13 +279,13 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* eti)
 {
 	notAllowed(eti);
-	return new TextFragment(eti);
+	return new TextFragment{eti};
 }
 
 SourceFragment* DeclarationVisitor::visit(TypeAlias* ta)
 {
 	notAllowed(ta);
-	return new TextFragment(ta);
+	return new TextFragment{ta};
 }
 
 }

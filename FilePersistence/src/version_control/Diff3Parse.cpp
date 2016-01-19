@@ -81,7 +81,7 @@ QList<Chunk*> Diff3Parse::computeChunks(const QList<Model::NodeIdType> idListA,
 			}
 			else
 			{
-				chunks.append(new Chunk(isStable, *iterA, *iterB, *iterBase));
+				chunks.append(new Chunk{isStable, *iterA, *iterB, *iterBase});
 			}
 			lastWasEmpty = false;
 		}

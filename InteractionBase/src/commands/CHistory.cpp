@@ -53,7 +53,7 @@ CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualiza
 	// get GitRepository
 	QString path("projects/");
 	path.append(managerName);
-	repository = new GitRepository(path);
+	repository = new GitRepository{path};
 
 	CommitGraph graph = repository->commitGraph(name, "HEAD");
 
@@ -78,7 +78,7 @@ CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualiza
 		printCommitMetaData(info);
 	}
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualization::Item* target,

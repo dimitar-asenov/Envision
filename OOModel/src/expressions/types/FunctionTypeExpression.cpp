@@ -67,7 +67,7 @@ Type* FunctionTypeExpression::type()
 		if (args.last()->isError())
 		{
 			for (auto t : args) SAFE_DELETE(t);
-			return new ErrorType("Invalid argument type for FunctionTypeExpression");
+			return new ErrorType{"Invalid argument type for FunctionTypeExpression"};
 		}
 	}
 
@@ -79,11 +79,11 @@ Type* FunctionTypeExpression::type()
 		{
 			for (auto t : args) SAFE_DELETE(t);
 			for (auto t : res) SAFE_DELETE(t);
-			return new ErrorType("Invalid result type for FunctionTypeExpression");
+			return new ErrorType{"Invalid result type for FunctionTypeExpression"};
 		}
 	}
 
-	return new FunctionType(false, args, res);
+	return new FunctionType{false, args, res};
 }
 
 }

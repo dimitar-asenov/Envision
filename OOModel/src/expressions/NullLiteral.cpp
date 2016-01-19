@@ -37,7 +37,7 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NullLiteral)
 
 Type* NullLiteral::type()
 {
-	return new NullType();
+	return new NullType{};
 }
 
 }

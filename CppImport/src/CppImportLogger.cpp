@@ -211,8 +211,8 @@ void CppImportLogger::initStreams()
 	}
 	else
 	{
-		errStream_ = new QTextStream(stderr);
-		warnStream_ = new QTextStream(stdout);
+		errStream_ = new QTextStream{stderr};
+		warnStream_ = new QTextStream{stdout};
 	}
 }
 

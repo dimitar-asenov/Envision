@@ -43,7 +43,7 @@ REGISTER_ATTRIBUTE(MetaDefinition, context, Declaration, false, false, true)
 MetaDefinition::MetaDefinition(const QString& name) : Super(nullptr, MetaDefinition::getMetaData())
 {
 	setName(name);
-	setContext(new OOModel::Class("Context"));
+	setContext(new OOModel::Class{"Context"});
 }
 
 MetaDefinition::SymbolTypes MetaDefinition::symbolType() const

@@ -44,8 +44,8 @@ namespace OOInteraction {
 
 HMethod::HMethod()
 {
-	addCommand(new Interaction::CDiff());
-	addCommand(new Interaction::CHistory());
+	addCommand(new Interaction::CDiff{});
+	addCommand(new Interaction::CHistory{});
 }
 
 HMethod* HMethod::instance()
@@ -76,15 +76,15 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			}
 			else
 			{
-				auto empty = new OOModel::EmptyExpression();
-				auto es = new OOModel::ExpressionStatement();
+				auto empty = new OOModel::EmptyExpression{};
+				auto es = new OOModel::ExpressionStatement{};
 				es->setExpression(empty);
 				m->node()->beginModification("add empty statement");
 				m->node()->items()->append(es);
 				m->node()->endModification();
 
 				m->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 			}
 		}
 		else if (m->name()->itemOrChildHasFocus() && switchHorizontal)
@@ -109,14 +109,14 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 {
-	auto arg = new OOModel::FormalArgument();
-	arg->setTypeExpression(new OOModel::EmptyExpression());
+	auto arg = new OOModel::FormalArgument{};
+	arg->setTypeExpression(new OOModel::EmptyExpression{});
 	method->node()->beginModification("add new argument");
 	method->node()->arguments()->insert(position, arg);
 	method->node()->endModification();
 
 	method->arguments()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg));
+	method->scene()->addPostEventAction( new Interaction::SetCursorEvent{method, arg});
 }
 
 }

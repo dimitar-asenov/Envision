@@ -43,7 +43,7 @@ bool ErrorType::equals(const Type*) const
 
 ErrorType* ErrorType::clone() const
 {
-	return new ErrorType(*this);
+	return new ErrorType{*this};
 }
 
 }

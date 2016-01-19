@@ -50,7 +50,7 @@ bool ArrayType::equals(const Type* other) const
 
 ArrayType* ArrayType::clone() const
 {
-	return new ArrayType(*this);
+	return new ArrayType{*this};
 }
 
 }

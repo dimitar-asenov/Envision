@@ -68,7 +68,7 @@ class CommandHelper
 		template <typename Child>
 		static void addFreshTree(Child* child, Visualization::Item* target, bool showPrompt = true)
 		{
-			auto manager = new Model::TreeManager();
+			auto manager = new Model::TreeManager{};
 			manager->setRoot(child);
 
 			target->scene()->currentViewItem()->insertNode(child);
