@@ -5,8 +5,7 @@
 	editor and is used for large-scale software development. 
 
 	Envision is an open-source project using the BSD license. The project is based on the
-	<a href="http://qt-project.org/">Qt</a> framework and is cross-platform. Envision is mainly being developed in the
-	context of <a href="http://www.pm.inf.ethz.ch/people/dasenov">Dimitar Asenov's PhD studies at ETH Zurich</a>.
+	<a href="http://qt-project.org/">Qt</a> framework and is cross-platform. <a href="http://www.pm.inf.ethz.ch/research/envision.html">Envision is developed at ETH Zurich</a> in the context of <a href="http://www.pm.inf.ethz.ch/people/person-detail.html?persid=167548">Dimitar Asenov's PhD studies</a>.
 
 	To read about the motivation for building Envision and find out what are some of the key ideas for the IDE, please
 	see \ref motivation "the motivation page".

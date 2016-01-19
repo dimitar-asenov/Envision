@@ -15,7 +15,7 @@ Other dependencies are:
 	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
-	- <b>Clang 3.7</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
+	- <b>Clang 3.8</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
 	importing C++ is preliminary and incomplete.
 	- <b>libgit2</b>: https://libgit2.github.com/ <br /> Used for Envision's git-based version control.
 	- <b>Python 3</b>: https://www.python.org/ <br /> Used for various scripts during building, testing and run-time execution (e.g. for information scripting).
@@ -35,8 +35,8 @@ To install the dependencies on Ubuntu 15.04, do the following:
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
 		-# Make the following symbolic link:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
-	-# Install Clang 3.7:
-		\verbatim sudo apt-get install libclang-3.7-dev clang-3.7 llvm-3.7\endverbatim
+	-# Install Clang 3.8:
+		\verbatim sudo apt-get install libclang-3.8-dev clang-3.8 llvm-3.8\endverbatim
 	-# Install libgit2:
 		\verbatim sudo apt-get install libgit2-dev\endverbatim
 	-# Install the Google Performance Tools:

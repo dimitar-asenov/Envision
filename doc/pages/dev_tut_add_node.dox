@@ -17,10 +17,7 @@ for declaring nodes that makes it really easy to define new node types.
 \section if_header IfStatement.h
 
 Here is \c IfStatement.h :
-\dontinclude OOModel/src/statements/IfStatement.h
-\skip pragma
-\until } /\* namespace OOModel
-\dontinclude OOModel/src/statements/IfStatement.h
+\include OOModel/src/statements/IfStatement.h
 
 Let's examine it starting from the top. The first noteworthy bit is:
 
@@ -92,10 +89,7 @@ consists of. The rest of the code is just boilerplate.
 \section if_cpp IfStatement.cpp
 
 Here is \c IfStatement.cpp :
-\dontinclude OOModel/src/statements/IfStatement.cpp
-\skip include
-\until } /\* namespace OOModel
-\dontinclude OOModel/src/statements/IfStatement.cpp
+\include OOModel/src/statements/IfStatement.cpp
 
 All of the things here are just the corresponding definition macros. The only interesting bit is:
 \skip REGISTER

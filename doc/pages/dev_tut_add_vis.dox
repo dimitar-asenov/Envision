@@ -21,17 +21,14 @@ also does not draw anything itself. Instead it creates a number of child items a
 The easiest way to arrange child items is to use the services of Visualization::DeclarativeItem. Items inheriting from
 it have at their disposal a powerful and fast layout manager inspired by GUI frameworks. For detailed information
 on this declarative framework please see
-<a href="http://www.pm.inf.ethz.ch/education/theses/student_docs/Andrea_Helfenstein/BA_report_Andrea_Helfenstein">
+<a href="http://www.pm.inf.ethz.ch/content/dam/ethz/special-interest/infk/chair-program-method/pm/documents/Education/Theses/Andrea_Helfenstein_BA_report.pdf">
 Andrea Helfenstein's Bachelor Thesis Report</a>. Below we will only cover parts of it that are relevant for our
 example.
 
 \section vif_header VIfStatement.h
 
 Here is \c VIfStatement.h :
-\dontinclude OOVisualization/src/statements/VIfStatement.h
-\skip pragma
-\until } /\* namespace OOVisualization
-\dontinclude OOVisualization/src/statements/VIfStatement.h
+\include OOVisualization/src/statements/VIfStatement.h
 
 Let's examine it starting from the top. The first interesting bit after the includes is:
 \skip OOVISUALIZATION_API VIfStatement
@@ -190,10 +187,7 @@ form will be used to arrange the children. Let's see how it all works in the .cp
 \section vif_cpp VIfStatement.cpp
 
 Here is \c VIfStatement.cpp :
-\dontinclude OOVisualization/src/statements/VIfStatement.cpp
-\skip VIfStatement.h"
-\until } /\* namespace OOVisualization
-\dontinclude OOVisualization/src/statements/VIfStatement.cpp
+\include OOVisualization/src/statements/VIfStatement.cpp
 
 The first thing to notice is this inlcude:
 \skipline DeclarativeItemDef.h"
@@ -235,9 +229,9 @@ decision is based only on the node that is represented, and not on any visual in
 Finally let's see the real work that we need to do in order to use Visualization::DeclarativeItem - defining the 
 \c initializeForms() method:
 \skip VIfStatement::initializeForms
-\until } /\* namespace OOVisualization
+\until ->put(TheRightOf, elseContentElement, AtRightOf, shapeElement));
 We won't go into detail here, please refer to
-<a href="http://www.pm.inf.ethz.ch/education/theses/student_docs/Andrea_Helfenstein/BA_report_Andrea_Helfenstein">
+<a href="http://www.pm.inf.ethz.ch/content/dam/ethz/special-interest/infk/chair-program-method/pm/documents/Education/Theses/Andrea_Helfenstein_BA_report.pdf">
 Andrea Helfenstein's Bachelor Thesis Report</a> for the various ways to use Visualization::DeclarativeItem. In short:
 	- We create a \e header consisting of an \e icon an the \e condition. The \e condition is wrapped in a visual item
 	that draws a background.
@@ -268,9 +262,7 @@ default. For the OOVisualization::VIfStatement this file is \c /OOVisualization/
 
 Creating a style class is straight forward, all you really need to do is list the properties of the style. Here is the
 header of the style class for if statements \c (VIfStatementStyle.h):
-\dontinclude OOVisualization/src/statements/VIfStatementStyle.h
-\skip pragma
-\until } /\* namespace OOVisualization
+\include OOVisualization/src/statements/VIfStatementStyle.h
 
 There are three things to notice here:
 	- The style must ultimately inherit from Visualization::ItemStyle. If your item inherits from
@@ -287,9 +279,7 @@ There are three things to notice here:
 	this should be the same as the name of the property.
 
 The corresponding \c .cpp file is trivial and the same for most styles:
-\dontinclude OOVisualization/src/statements/VIfStatementStyle.cpp
-\skip include
-\until } /\* namespace OOVisualization
+\include OOVisualization/src/statements/VIfStatementStyle.cpp
 
 And here is the corresponding default XML file \c (OOVisualization/styles/item/VIfStatement/default). Things here can
 get a bit clunky, but the important thing to see is that each top-level tag corresponds to a property of the style

@@ -29,9 +29,7 @@ Now let's see how to write the handler.
 
 \section hif_header HIfStatement.h
 First, we'll have a look at the header file. Here is \c HIfStatement.h :
-\dontinclude OOInteraction/src/handlers/HIfStatement.h
-\skip pragma
-\until } /\* namespace OOInteraction
+\include OOInteraction/src/handlers/HIfStatement.h
 
 Each handler must inherit from Visualization::InteractionHandler. In practice the only handler that directly inherits
 from it is Interaction::GenericHandler. This is where a lot of common functionality is implemented. Therefore it is
@@ -51,10 +49,7 @@ Let's look at the \c .cpp file to see what this handler does exactly.
 \section hif_cpp HIfStatement.cpp
 
 Here is the complete contents of the \c HIfStatement.cpp :
-\dontinclude OOInteraction/src/handlers/HIfStatement.cpp
-\skip include
-\until } /\* namespace OOInteraction
-\dontinclude OOInteraction/src/handlers/HIfStatement.cpp
+\include OOInteraction/src/handlers/HIfStatement.cpp
 
 As the rest is trivial we'll jump directly to the \c keyPressEvent() method and examine it piece by piece:
 \skipline HIfStatement::keyPressEvent
