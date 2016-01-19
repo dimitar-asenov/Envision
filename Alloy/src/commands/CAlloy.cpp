@@ -60,13 +60,13 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	aProcess.waitForFinished();
 
 	QDir dir(outputDirectory);
-	QString jsArray = "var pictureArray = new Array{};\n";
+	QString jsArray = "var pictureArray = new Array();\n";
 	int i = 0;
 	for (auto dirFile: dir.entryList())
 	{
 		if (dirFile.endsWith(".png"))
 		{
-			jsArray += "pictureArray[" + QString::number(i) + "] = new Image{}\n";
+			jsArray += "pictureArray[" + QString::number(i) + "] = new Image()\n";
 			jsArray += "pictureArray[" + QString::number(i) + "].src = '" + dirFile + "'\n";
 			i = i+1;
 		}
