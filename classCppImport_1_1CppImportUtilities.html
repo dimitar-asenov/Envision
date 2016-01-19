@@ -91,6 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classCppImport_1_1CppImportUtilities-members.html">List of all members</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -115,14 +116,16 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4de4b85c2db048bfe8b4e5218532fbb5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a4de4b85c2db048bfe8b4e5218532fbb5">CppImportUtilities</a> (<a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *logger, <a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *visitor)</td></tr>
-<tr class="separator:a4de4b85c2db048bfe8b4e5218532fbb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9af2441b75877468b429b294f4f662fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a9af2441b75877468b429b294f4f662fb">createErrorExpression</a> (const QString &amp;reason)</td></tr>
-<tr class="memdesc:a9af2441b75877468b429b294f4f662fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an error expression which is clearly visible inside envision In envision it is represented as a red # and the <em>reason</em> string.  <a href="#a9af2441b75877468b429b294f4f662fb">More...</a><br /></td></tr>
-<tr class="separator:a9af2441b75877468b429b294f4f662fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a912a80e79927c37855cc256450d408e7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a912a80e79927c37855cc256450d408e7">CppImportUtilities</a> (<a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *logger, <a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *visitor, <a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;clang)</td></tr>
+<tr class="separator:a912a80e79927c37855cc256450d408e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c3d7b49a2e01eb373974dcf6849c500"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a5c3d7b49a2e01eb373974dcf6849c500">createErrorExpression</a> (const QString &amp;reason, clang::SourceRange sourceRange)</td></tr>
+<tr class="memdesc:a5c3d7b49a2e01eb373974dcf6849c500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an error expression which is clearly visible inside envision In envision it is represented as a red # and the <em>reason</em> string.  <a href="#a5c3d7b49a2e01eb373974dcf6849c500">More...</a><br /></td></tr>
+<tr class="separator:a5c3d7b49a2e01eb373974dcf6849c500"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55d2b7c04e6cc82791e76906a483044b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542">OverloadKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a55d2b7c04e6cc82791e76906a483044b">getOverloadKind</a> (const clang::OverloadedOperatorKind &amp;overloadOpKind, unsigned numArgs)</td></tr>
 <tr class="memdesc:a55d2b7c04e6cc82791e76906a483044b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the kind of an overload operation.  <a href="#a55d2b7c04e6cc82791e76906a483044b">More...</a><br /></td></tr>
 <tr class="separator:a55d2b7c04e6cc82791e76906a483044b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03b30a6ef40760bffde52af5bcb3a8a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a03b30a6ef40760bffde52af5bcb3a8a9">setReferencePrefix</a> (<a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> *reference, clang::NestedNameSpecifierLoc nestedNameSpecifierLoc, clang::Expr *base=nullptr)</td></tr>
+<tr class="separator:a03b30a6ef40760bffde52af5bcb3a8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9dec0a3ac7fcf7c8ffd7c74f97be2c02"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494f">OOModel::Modifier::ModifierFlag</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a9dec0a3ac7fcf7c8ffd7c74f97be2c02">translateAccessSpecifier</a> (const clang::AccessSpecifier &amp;acessSpecifier)</td></tr>
 <tr class="separator:a9dec0a3ac7fcf7c8ffd7c74f97be2c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a894a4d1da427e63337ec595d8de60c46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4">OOModel::AssignmentExpression::AssignmentTypes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a894a4d1da427e63337ec595d8de60c46">translateAssignOp</a> (const clang::BinaryOperatorKind &amp;assignOpKind)</td></tr>
@@ -135,31 +138,38 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2ee4271dc145b97e13adbbed9e40aef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94b8f38604534a84d38ce29a2ffb9d85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1MemberInitializer.html">OOModel::MemberInitializer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a94b8f38604534a84d38ce29a2ffb9d85">translateMemberInit</a> (const clang::CXXCtorInitializer *initializer)</td></tr>
 <tr class="separator:a94b8f38604534a84d38ce29a2ffb9d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa34acc80b73d60d86c7905d0ff496ae5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#aa34acc80b73d60d86c7905d0ff496ae5">translateNestedNameSpecifier</a> (const clang::NestedNameSpecifier *nestedName, const clang::SourceLocation &amp;location, <a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *base=nullptr)</td></tr>
-<tr class="memdesc:aa34acc80b73d60d86c7905d0ff496ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates nested name specifiers.  <a href="#aa34acc80b73d60d86c7905d0ff496ae5">More...</a><br /></td></tr>
-<tr class="separator:aa34acc80b73d60d86c7905d0ff496ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88ec107c913c51be8b2d5941087a49f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a88ec107c913c51be8b2d5941087a49f5">translateQualifiedType</a> (const clang::QualType qualType, const clang::SourceLocation &amp;location)</td></tr>
-<tr class="memdesc:a88ec107c913c51be8b2d5941087a49f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates a qualified type to the corresponding Envision type expression.  <a href="#a88ec107c913c51be8b2d5941087a49f5">More...</a><br /></td></tr>
-<tr class="separator:a88ec107c913c51be8b2d5941087a49f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21e6ebcf65be99efb13dabca210baaaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a21e6ebcf65be99efb13dabca210baaaa">translateNestedNameSpecifier</a> (const clang::NestedNameSpecifierLoc nestedName, clang::Expr *base=nullptr)</td></tr>
+<tr class="memdesc:a21e6ebcf65be99efb13dabca210baaaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates nested name specifiers.  <a href="#a21e6ebcf65be99efb13dabca210baaaa">More...</a><br /></td></tr>
+<tr class="separator:a21e6ebcf65be99efb13dabca210baaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6e316f845aa493e6b567d6d98b799fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#af6e316f845aa493e6b567d6d98b799fa">translateQualifiedType</a> (clang::TypeLoc qualTypeLoc)</td></tr>
+<tr class="memdesc:af6e316f845aa493e6b567d6d98b799fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates a qualified type to the corresponding Envision type expression.  <a href="#af6e316f845aa493e6b567d6d98b799fa">More...</a><br /></td></tr>
+<tr class="separator:af6e316f845aa493e6b567d6d98b799fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7786617509aae3ab0678fbc0cef358ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494f">OOModel::Modifier::ModifierFlag</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a7786617509aae3ab0678fbc0cef358ef">translateStorageSpecifier</a> (const clang::StorageClass &amp;storageClass)</td></tr>
 <tr class="separator:a7786617509aae3ab0678fbc0cef358ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a653c812cdec5155f007c1af2b6d4d33d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a653c812cdec5155f007c1af2b6d4d33d">translateTemplateArgument</a> (const clang::TemplateArgument &amp;templateArg, const clang::SourceLocation &amp;location)</td></tr>
-<tr class="separator:a653c812cdec5155f007c1af2b6d4d33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0786fee0f40762f91b4b23913cc1ef3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#ac0786fee0f40762f91b4b23913cc1ef3">translateTemplateArgument</a> (const clang::TemplateArgumentLoc &amp;templateArg)</td></tr>
+<tr class="separator:ac0786fee0f40762f91b4b23913cc1ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38b07166915777e6fa9d79628f1774da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1">OOModel::UnaryOperation::OperatorTypes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a38b07166915777e6fa9d79628f1774da">translateUnaryOp</a> (const clang::UnaryOperatorKind &amp;unaryOpKind)</td></tr>
 <tr class="separator:a38b07166915777e6fa9d79628f1774da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af32e7d61a04a5ea6bbee31050d8f8663"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1">OOModel::UnaryOperation::OperatorTypes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#af32e7d61a04a5ea6bbee31050d8f8663">translateUnaryOverloadOp</a> (const clang::OverloadedOperatorKind &amp;overloadOpKind, const unsigned numArgs)</td></tr>
 <tr class="separator:af32e7d61a04a5ea6bbee31050d8f8663"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:abb4d225be0feafe20c7b2409ea8ee44b"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#abb4d225be0feafe20c7b2409ea8ee44b">overloadOperatorToString</a> (const clang::OverloadedOperatorKind &amp;overloadOpKind)</td></tr>
+<tr class="separator:abb4d225be0feafe20c7b2409ea8ee44b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a457f59fa3a60a1fcfc28266ceeb27630"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a457f59fa3a60a1fcfc28266ceeb27630">translateBuiltInClangType</a> (const clang::BuiltinType *type)</td></tr>
-<tr class="memdesc:a457f59fa3a60a1fcfc28266ceeb27630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates <em>type</em> to the nearest primitive <a class="el" href="namespaceOOModel.html">OOModel</a> type.  <a href="#a457f59fa3a60a1fcfc28266ceeb27630">More...</a><br /></td></tr>
-<tr class="separator:a457f59fa3a60a1fcfc28266ceeb27630"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41395c8a8ae4f7efb3cc892239cc6f16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a41395c8a8ae4f7efb3cc892239cc6f16">translateTypePtr</a> (const clang::Type *type, const clang::SourceLocation &amp;location)</td></tr>
-<tr class="separator:a41395c8a8ae4f7efb3cc892239cc6f16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e7c762f4b4f63b8b014073b4da9e865"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a9e7c762f4b4f63b8b014073b4da9e865">translateBuiltInClangType</a> (const clang::BuiltinTypeLoc type)</td></tr>
+<tr class="memdesc:a9e7c762f4b4f63b8b014073b4da9e865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates <em>type</em> to the nearest primitive <a class="el" href="namespaceOOModel.html">OOModel</a> type.  <a href="#a9e7c762f4b4f63b8b014073b4da9e865">More...</a><br /></td></tr>
+<tr class="separator:a9e7c762f4b4f63b8b014073b4da9e865"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84678a91fc15aa62033ffb445d3edb1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a84678a91fc15aa62033ffb445d3edb1f">translateTypePtr</a> (const clang::TypeLoc typeLoc)</td></tr>
+<tr class="separator:a84678a91fc15aa62033ffb445d3edb1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:afae86d824a16364013a148e7c6df47af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#afae86d824a16364013a148e7c6df47af">clang_</a></td></tr>
+<tr class="separator:afae86d824a16364013a148e7c6df47af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f8636de8fcbdadca956f72928945d08"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a5f8636de8fcbdadca956f72928945d08">className_</a> {&quot;CppImportUtilities&quot;}</td></tr>
 <tr class="separator:a5f8636de8fcbdadca956f72928945d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89c796b6b7589dcd8c1355cbaaeb4aba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportUtilities.html#a89c796b6b7589dcd8c1355cbaaeb4aba">exprVisitor_</a> {}</td></tr>
@@ -207,7 +217,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a4de4b85c2db048bfe8b4e5218532fbb5"></a>
+<a class="anchor" id="a912a80e79927c37855cc256450d408e7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -221,7 +231,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *&#160;</td>
-          <td class="paramname"><em>visitor</em>&#160;</td>
+          <td class="paramname"><em>visitor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td>
+          <td class="paramname"><em>clang</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -234,7 +250,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a9af2441b75877468b429b294f4f662fb"></a>
+<a class="anchor" id="a5c3d7b49a2e01eb373974dcf6849c500"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -242,8 +258,18 @@ Private Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * CppImport::CppImportUtilities::createErrorExpression </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>reason</em></td><td>)</td>
+          <td class="paramname"><em>reason</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">clang::SourceRange&#160;</td>
+          <td class="paramname"><em>sourceRange</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -278,6 +304,62 @@ Private Attributes</h2></td></tr>
 
 <p>Determines the kind of an overload operation. </p>
 <p>e.g. an arrow will return ReferenceExpr </p>
+
+</div>
+</div>
+<a class="anchor" id="abb4d225be0feafe20c7b2409ea8ee44b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString CppImport::CppImportUtilities::overloadOperatorToString </td>
+          <td>(</td>
+          <td class="paramtype">const clang::OverloadedOperatorKind &amp;&#160;</td>
+          <td class="paramname"><em>overloadOpKind</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a03b30a6ef40760bffde52af5bcb3a8a9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> * CppImport::CppImportUtilities::setReferencePrefix </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> *&#160;</td>
+          <td class="paramname"><em>reference</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">clang::NestedNameSpecifierLoc&#160;</td>
+          <td class="paramname"><em>nestedNameSpecifierLoc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">clang::Expr *&#160;</td>
+          <td class="paramname"><em>base</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -361,7 +443,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a457f59fa3a60a1fcfc28266ceeb27630"></a>
+<a class="anchor" id="a9e7c762f4b4f63b8b014073b4da9e865"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -371,7 +453,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * CppImport::CppImportUtilities::translateBuiltInClangType </td>
           <td>(</td>
-          <td class="paramtype">const clang::BuiltinType *&#160;</td>
+          <td class="paramtype">const clang::BuiltinTypeLoc&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
           <td></td>
         </tr>
@@ -403,26 +485,20 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa34acc80b73d60d86c7905d0ff496ae5"></a>
+<a class="anchor" id="a21e6ebcf65be99efb13dabca210baaaa"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * CppImport::CppImportUtilities::translateNestedNameSpecifier </td>
           <td>(</td>
-          <td class="paramtype">const clang::NestedNameSpecifier *&#160;</td>
+          <td class="paramtype">const clang::NestedNameSpecifierLoc&#160;</td>
           <td class="paramname"><em>nestedName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const clang::SourceLocation &amp;&#160;</td>
-          <td class="paramname"><em>location</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td>
+          <td class="paramtype">clang::Expr *&#160;</td>
           <td class="paramname"><em>base</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
@@ -438,26 +514,16 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a88ec107c913c51be8b2d5941087a49f5"></a>
+<a class="anchor" id="af6e316f845aa493e6b567d6d98b799fa"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * CppImport::CppImportUtilities::translateQualifiedType </td>
           <td>(</td>
-          <td class="paramtype">const clang::QualType&#160;</td>
-          <td class="paramname"><em>qualType</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">clang::TypeLoc&#160;</td>
+          <td class="paramname"><em>qualTypeLoc</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const clang::SourceLocation &amp;&#160;</td>
-          <td class="paramname"><em>location</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -483,33 +549,23 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a653c812cdec5155f007c1af2b6d4d33d"></a>
+<a class="anchor" id="ac0786fee0f40762f91b4b23913cc1ef3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * CppImport::CppImportUtilities::translateTemplateArgument </td>
           <td>(</td>
-          <td class="paramtype">const clang::TemplateArgument &amp;&#160;</td>
-          <td class="paramname"><em>templateArg</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const clang::TemplateArgumentLoc &amp;&#160;</td>
+          <td class="paramname"><em>templateArg</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const clang::SourceLocation &amp;&#160;</td>
-          <td class="paramname"><em>location</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a41395c8a8ae4f7efb3cc892239cc6f16"></a>
+<a class="anchor" id="a84678a91fc15aa62033ffb445d3edb1f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -519,19 +575,9 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * CppImport::CppImportUtilities::translateTypePtr </td>
           <td>(</td>
-          <td class="paramtype">const clang::Type *&#160;</td>
-          <td class="paramname"><em>type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const clang::TypeLoc&#160;</td>
+          <td class="paramname"><em>typeLoc</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const clang::SourceLocation &amp;&#160;</td>
-          <td class="paramname"><em>location</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -586,6 +632,26 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="afae86d824a16364013a148e7c6df47af"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a>&amp; CppImport::CppImportUtilities::clang_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5f8636de8fcbdadca956f72928945d08"></a>
 <div class="memitem">
 <div class="memproto">

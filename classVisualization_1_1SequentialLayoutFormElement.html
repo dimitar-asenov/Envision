@@ -152,7 +152,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2467d26bd147bcd2e058307a6914b644"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a2467d26bd147bcd2e058307a6914b644">isEmpty</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const override</td></tr>
 <tr class="memdesc:a2467d26bd147bcd2e058307a6914b644"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> isEmpty method, and by some layout form elements.  <a href="#a2467d26bd147bcd2e058307a6914b644">More...</a><br /></td></tr>
 <tr class="separator:a2467d26bd147bcd2e058307a6914b644"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3380ab568e214c474480a6809392681f"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a3380ab568e214c474480a6809392681f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3380ab568e214c474480a6809392681f"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a3380ab568e214c474480a6809392681f">itemAt</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int itemIndex) const </td></tr>
 <tr class="memdesc:a3380ab568e214c474480a6809392681f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the item at <em>itemIndex</em> for this <em>item</em>.  <a href="#a3380ab568e214c474480a6809392681f">More...</a><br /></td></tr>
 <tr class="separator:a3380ab568e214c474480a6809392681f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,8 +172,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abcfc590a22d87c084d4c43e5f528001c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#abcfc590a22d87c084d4c43e5f528001c">setForward</a> (bool forward)</td></tr>
 <tr class="memdesc:abcfc590a22d87c084d4c43e5f528001c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines if this layout should be displayed forwards (true) or backwards (false).  <a href="#abcfc590a22d87c084d4c43e5f528001c">More...</a><br /></td></tr>
 <tr class="separator:abcfc590a22d87c084d4c43e5f528001c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4326c80ea80d4858e4cfa80151392e09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a4326c80ea80d4858e4cfa80151392e09">setHasCursorWhenEmpty</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; cursorWhenEmptyGetter)</td></tr>
-<tr class="separator:a4326c80ea80d4858e4cfa80151392e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a395569a19acc7da9167a5db1fc81264b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a395569a19acc7da9167a5db1fc81264b">setHasCursorWhenEmpty</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; hasCursorWhenEmptyGetter)</td></tr>
+<tr class="separator:a395569a19acc7da9167a5db1fc81264b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9c14c8dfe68db05ec84b0ce91ca6a80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#ad9c14c8dfe68db05ec84b0ce91ca6a80">setHorizontal</a> ()</td></tr>
 <tr class="memdesc:ad9c14c8dfe68db05ec84b0ce91ca6a80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets this sequential layout to be horizontal, also sets the alignment to the default (bottom)  <a href="#ad9c14c8dfe68db05ec84b0ce91ca6a80">More...</a><br /></td></tr>
 <tr class="separator:ad9c14c8dfe68db05ec84b0ce91ca6a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,8 +205,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a65d09b7d66c098ce8dfb6be3918452a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf8819e77c43c407035666d958b38ef1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#abf8819e77c43c407035666d958b38ef1">setNoInnerCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; noInnerCursorsGetter)</td></tr>
 <tr class="separator:abf8819e77c43c407035666d958b38ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8dcfb8d667d1149f8b64299008ef26c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a8dcfb8d667d1149f8b64299008ef26c8">setNotLocationEquivalentCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; notLocationEquivalentGetter)</td></tr>
-<tr class="separator:a8dcfb8d667d1149f8b64299008ef26c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad748962575977bafe3414af6e2e98beb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#ad748962575977bafe3414af6e2e98beb">setNotLocationEquivalentCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; notLocationEquivalentCursorsGetter)</td></tr>
+<tr class="separator:ad748962575977bafe3414af6e2e98beb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc86efe34a2f42c5e5711e51bb53dc51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#acc86efe34a2f42c5e5711e51bb53dc51">setOrientation</a> (Qt::Orientation orientation)</td></tr>
 <tr class="memdesc:acc86efe34a2f42c5e5711e51bb53dc51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <em>orientation</em> of this sequential layout.  <a href="#acc86efe34a2f42c5e5711e51bb53dc51">More...</a><br /></td></tr>
 <tr class="separator:acc86efe34a2f42c5e5711e51bb53dc51"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -246,18 +246,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab69f21a8213b55cbc01eeed10bab3905 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a443b2042d2c7423e1f0aeca885ce9b inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a3a443b2042d2c7423e1f0aeca885ce9b">operator=</a> (const <a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> &amp;)=delete</td></tr>
 <tr class="separator:a3a443b2042d2c7423e1f0aeca885ce9b inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae610cd2d3a65f4322797da6dbc3ba482 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#ae610cd2d3a65f4322797da6dbc3ba482">setHasCursorWhenEmpty</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; cursorWhenEmptyGetter)</td></tr>
-<tr class="memdesc:ae610cd2d3a65f4322797da6dbc3ba482 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>cursorWhenEmptyGetter</em>) for checking if the element should have cursors when empty dynamically while rendering.  <a href="#ae610cd2d3a65f4322797da6dbc3ba482">More...</a><br /></td></tr>
-<tr class="separator:ae610cd2d3a65f4322797da6dbc3ba482 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a968af197a0aa0d30aa02544f3eb9b647 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a968af197a0aa0d30aa02544f3eb9b647">setHasCursorWhenEmpty</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; hasCursorWhenEmptyGetter)</td></tr>
+<tr class="memdesc:a968af197a0aa0d30aa02544f3eb9b647 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>hasCursorWhenEmptyGetter</em>) for checking if the element should have cursors when empty dynamically while rendering.  <a href="#a968af197a0aa0d30aa02544f3eb9b647">More...</a><br /></td></tr>
+<tr class="separator:a968af197a0aa0d30aa02544f3eb9b647 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a801d3e7d5ec1cc877b3b1814c43b22e9 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a801d3e7d5ec1cc877b3b1814c43b22e9">setNoBoundaryCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; noBoundaryCursorsGetter)</td></tr>
 <tr class="memdesc:a801d3e7d5ec1cc877b3b1814c43b22e9 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>noBoundaryCursorsGetter</em>) for checking if the element should not have any boundary cursors dynamically while rendering.  <a href="#a801d3e7d5ec1cc877b3b1814c43b22e9">More...</a><br /></td></tr>
 <tr class="separator:a801d3e7d5ec1cc877b3b1814c43b22e9 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5379dd431565ee06144353ac327a232 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#aa5379dd431565ee06144353ac327a232">setNoInnerCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; noInnerCursorsGetter)</td></tr>
 <tr class="memdesc:aa5379dd431565ee06144353ac327a232 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>noInnerCursorsGetter</em>) for checking if the element should not have any inner cursors dynamically while rendering.  <a href="#aa5379dd431565ee06144353ac327a232">More...</a><br /></td></tr>
 <tr class="separator:aa5379dd431565ee06144353ac327a232 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1822b9fae5029b6d2d8633b1972f94a2 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a1822b9fae5029b6d2d8633b1972f94a2">setNotLocationEquivalentCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; notLocationEquivalentGetter)</td></tr>
-<tr class="memdesc:a1822b9fae5029b6d2d8633b1972f94a2 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>notLocationEquivalentGetter</em>) for checking if the element's cursors are not location equivalent dynamically while rendering.  <a href="#a1822b9fae5029b6d2d8633b1972f94a2">More...</a><br /></td></tr>
-<tr class="separator:a1822b9fae5029b6d2d8633b1972f94a2 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85da3cd84164ffe03b39640333fa9563 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1LayoutFormElement.html">LayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a85da3cd84164ffe03b39640333fa9563">setNotLocationEquivalentCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; notLocationEquivalentCursorsGetter)</td></tr>
+<tr class="memdesc:a85da3cd84164ffe03b39640333fa9563 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>notLocationEquivalentCursorsGetter</em>) for checking if the element's cursors are not location equivalent dynamically while rendering.  <a href="#a85da3cd84164ffe03b39640333fa9563">More...</a><br /></td></tr>
+<tr class="separator:a85da3cd84164ffe03b39640333fa9563 inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classVisualization_1_1FormElement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classVisualization_1_1FormElement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classVisualization_1_1FormElement.html">Visualization::FormElement</a></td></tr>
 <tr class="memitem:ad4530b4e6f76cb6a078fa2ce9fc076a6 inherit pub_methods_classVisualization_1_1FormElement"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#ad4530b4e6f76cb6a078fa2ce9fc076a6">FormElement</a> ()=default</td></tr>
 <tr class="separator:ad4530b4e6f76cb6a078fa2ce9fc076a6 inherit pub_methods_classVisualization_1_1FormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -721,7 +721,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T &gt; </div>
+template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">T * Visualization::SequentialLayoutFormElement::itemAt </td>
@@ -915,7 +915,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a4326c80ea80d4858e4cfa80151392e09"></a>
+<a class="anchor" id="a395569a19acc7da9167a5db1fc81264b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -926,7 +926,7 @@ template&lt;class T &gt; </div>
           <td class="memname"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a>* Visualization::SequentialLayoutFormElement::setHasCursorWhenEmpty </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td>
-          <td class="paramname"><em>cursorWhenEmptyGetter</em></td><td>)</td>
+          <td class="paramname"><em>hasCursorWhenEmptyGetter</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1301,7 +1301,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a8dcfb8d667d1149f8b64299008ef26c8"></a>
+<a class="anchor" id="ad748962575977bafe3414af6e2e98beb"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1312,7 +1312,7 @@ template&lt;class T &gt; </div>
           <td class="memname"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a>* Visualization::SequentialLayoutFormElement::setNotLocationEquivalentCursors </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td>
-          <td class="paramname"><em>notLocationEquivalentGetter</em></td><td>)</td>
+          <td class="paramname"><em>notLocationEquivalentCursorsGetter</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

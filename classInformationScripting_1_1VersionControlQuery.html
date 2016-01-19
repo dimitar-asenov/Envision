@@ -94,7 +94,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">InformationScripting::VersionControlQuery Class Reference</div>  </div>
 </div><!--header-->
@@ -124,6 +125,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0d6f334ce239a47694ec718f065ec0e1 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4ba0f7a519f1a8409f1aa8323018800 inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#ae4ba0f7a519f1a8409f1aa8323018800">~Query</a> ()=default</td></tr>
 <tr class="separator:ae4ba0f7a519f1a8409f1aa8323018800 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8669aebe07754cccb4cf3bab714a175 inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#af8669aebe07754cccb4cf3bab714a175">hasInput</a> () const </td></tr>
+<tr class="separator:af8669aebe07754cccb4cf3bab714a175 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ad009b096cdb480ed0263e576f6fa3e inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#a0ad009b096cdb480ed0263e576f6fa3e">setHasInput</a> ()</td></tr>
+<tr class="separator:a0ad009b096cdb480ed0263e576f6fa3e inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab350ae38ae284053507f1088b0d817b4 inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a> () const </td></tr>
 <tr class="separator:ab350ae38ae284053507f1088b0d817b4 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -134,13 +139,15 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a718b313a27a486a76be1db784702e5f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a718b313a27a486a76be1db784702e5f0">VersionControlQuery</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a>, <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a> <a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>)</td></tr>
-<tr class="separator:a718b313a27a486a76be1db784702e5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0f19c7b2cc74d56563e30a1c3a77cd5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#ad0f19c7b2cc74d56563e30a1c3a77cd5">VersionControlQuery</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a>, QStringList <a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, std::vector&lt; <a class="el" href="classInformationScripting_1_1ArgumentRule.html">ArgumentRule</a> &gt; argumentRules)</td></tr>
+<tr class="separator:ad0f19c7b2cc74d56563e30a1c3a77cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4727a0c9e5b33bdebbae1974db1a9490"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInformationScripting_1_1Optional.html">Optional</a>&lt; QList&lt; QString &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a4727a0c9e5b33bdebbae1974db1a9490">commitsToConsider</a> (const QStringList &amp;commitIdRange) const </td></tr>
+<tr class="separator:a4727a0c9e5b33bdebbae1974db1a9490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a288f850b18436039aa67ca0e007b6448"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a288f850b18436039aa67ca0e007b6448">addCommitMetaInformation</a> (<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;ts, const <a class="el" href="structFilePersistence_1_1CommitMetaData.html">FilePersistence::CommitMetaData</a> &amp;metadata)</td></tr>
-<tr class="separator:a288f850b18436039aa67ca0e007b6448"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11c58cb8f762dd65d2e5b96aabb5590d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a11c58cb8f762dd65d2e5b96aabb5590d">addCommitMetaInformation</a> (<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;ts, const <a class="el" href="structFilePersistence_1_1CommitMetaData.html">FilePersistence::CommitMetaData</a> &amp;metadata)</td></tr>
+<tr class="separator:a11c58cb8f762dd65d2e5b96aabb5590d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -149,11 +156,22 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:af7ea1be78a1380a99304ff481e069b9b"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#af7ea1be78a1380a99304ff481e069b9b">COUNT_ARGUMENT_NAMES</a> {&quot;c&quot;, &quot;count&quot;}</td></tr>
+<tr class="memitem:af7ea1be78a1380a99304ff481e069b9b"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#af7ea1be78a1380a99304ff481e069b9b">COUNT_ARGUMENT_NAMES</a> {&quot;c&quot;, &quot;count&quot;}</td></tr>
 <tr class="separator:af7ea1be78a1380a99304ff481e069b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5df819ca0f719e6031be0bd548341235"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a5df819ca0f719e6031be0bd548341235">IN_ARGUMENT_NAMES</a> {&quot;in&quot;}</td></tr>
+<tr class="separator:a5df819ca0f719e6031be0bd548341235"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79c4505c2ba9d8d32d204908e065c1da"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a79c4505c2ba9d8d32d204908e065c1da">NODE_TYPE_ARGUMENT_NAMES</a> {&quot;t&quot;, &quot;<a class="el" href="namespaceInformationScripting.html#a818921006a3a8aa07d0249ffab438751">type</a>&quot;}</td></tr>
+<tr class="separator:a79c4505c2ba9d8d32d204908e065c1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a678a1e606e034ea7fb658299bcb8dab0"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a678a1e606e034ea7fb658299bcb8dab0">NODES_ARGUMENTS_NAMES</a> {&quot;nodes&quot;}</td></tr>
+<tr class="separator:a678a1e606e034ea7fb658299bcb8dab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a5186d8fbab86fa26ce5555b047077f8c"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1VersionControlQuery.html#a5186d8fbab86fa26ce5555b047077f8c">QueryRegistry</a></td></tr>
+<tr class="separator:a5186d8fbab86fa26ce5555b047077f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a718b313a27a486a76be1db784702e5f0"></a>
+<a class="anchor" id="ad0f19c7b2cc74d56563e30a1c3a77cd5"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -169,8 +187,14 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a>&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
+          <td class="paramtype">QStringList&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="classInformationScripting_1_1ArgumentRule.html">ArgumentRule</a> &gt;&#160;</td>
+          <td class="paramname"><em>argumentRules</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -188,7 +212,7 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a288f850b18436039aa67ca0e007b6448"></a>
+<a class="anchor" id="a11c58cb8f762dd65d2e5b96aabb5590d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -196,7 +220,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void InformationScripting::VersionControlQuery::addCommitMetaInformation </td>
+          <td class="memname">void InformationScripting::VersionControlQuery::addCommitMetaInformation </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;&#160;</td>
           <td class="paramname"><em>ts</em>, </td>
@@ -216,6 +240,30 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4727a0c9e5b33bdebbae1974db1a9490"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInformationScripting_1_1Optional.html">Optional</a>&lt; QList&lt; QString &gt; &gt; InformationScripting::VersionControlQuery::commitsToConsider </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>commitIdRange</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -271,6 +319,27 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="a5186d8fbab86fa26ce5555b047077f8c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classInformationScripting_1_1QueryRegistry.html">QueryRegistry</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="ade66249cb4803d6472cd4fdcab8cead8"></a>
 <div class="memitem">
@@ -300,7 +369,67 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a> InformationScripting::VersionControlQuery::COUNT_ARGUMENT_NAMES {&quot;c&quot;, &quot;count&quot;}</td>
+          <td class="memname">const QStringList InformationScripting::VersionControlQuery::COUNT_ARGUMENT_NAMES {&quot;c&quot;, &quot;count&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5df819ca0f719e6031be0bd548341235"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QStringList InformationScripting::VersionControlQuery::IN_ARGUMENT_NAMES {&quot;in&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a79c4505c2ba9d8d32d204908e065c1da"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QStringList InformationScripting::VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES {&quot;t&quot;, &quot;<a class="el" href="namespaceInformationScripting.html#a818921006a3a8aa07d0249ffab438751">type</a>&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a678a1e606e034ea7fb658299bcb8dab0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QStringList InformationScripting::VersionControlQuery::NODES_ARGUMENTS_NAMES {&quot;nodes&quot;}</td>
         </tr>
       </table>
   </td>

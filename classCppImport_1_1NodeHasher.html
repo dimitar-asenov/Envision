@@ -101,6 +101,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a7ad85090ace7a5acf5ba0e1ee6d3c23a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#a7ad85090ace7a5acf5ba0e1ee6d3c23a">NodeHasher</a> (<a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;clang)</td></tr>
+<tr class="separator:a7ad85090ace7a5acf5ba0e1ee6d3c23a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92d2237259830115bbb8b9ced1ccf309"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#a92d2237259830115bbb8b9ced1ccf309">hashClassTemplate</a> (const clang::ClassTemplateDecl *classTemplate)</td></tr>
 <tr class="separator:a92d2237259830115bbb8b9ced1ccf309"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45a66aedf95d77db29b393d5f973683f"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#a45a66aedf95d77db29b393d5f973683f">hashClassTemplateSpec</a> (const clang::ClassTemplateSpecializationDecl *classTemplateSpec)</td></tr>
@@ -113,6 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af718c089f09a6536da0787a1541d3318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bd86a455bff8c87ac24cead73d9ff04"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#a0bd86a455bff8c87ac24cead73d9ff04">hashNameSpaceAlias</a> (const clang::NamespaceAliasDecl *namespaceAlias)</td></tr>
 <tr class="separator:a0bd86a455bff8c87ac24cead73d9ff04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7af5397968903d985b584a67d33a09d"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#ad7af5397968903d985b584a67d33a09d">hashNamespaceField</a> (const clang::VarDecl *varDecl)</td></tr>
+<tr class="separator:ad7af5397968903d985b584a67d33a09d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec02914d4ec0efb0b3952e7861154168"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#aec02914d4ec0efb0b3952e7861154168">hashNestedNameSpecifier</a> (const clang::NestedNameSpecifier *nestedName)</td></tr>
 <tr class="separator:aec02914d4ec0efb0b3952e7861154168"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a15a36da3e811a60976a1b323dd3ca1"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#a2a15a36da3e811a60976a1b323dd3ca1">hashParentOfStaticField</a> (const clang::DeclContext *context)</td></tr>
@@ -145,18 +149,33 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a747aa2c58813b9e4d35f5d1f8234dcbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb75a7da8378ebba8675ababb73515b5"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#abb75a7da8378ebba8675ababb73515b5">hashUsingParent</a> (const clang::DeclContext *context)</td></tr>
 <tr class="separator:abb75a7da8378ebba8675ababb73515b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaef64b53324dde952dc023717aebf6e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#aaef64b53324dde952dc023717aebf6e3">setSourceManager</a> (const clang::SourceManager *sourceManager)</td></tr>
-<tr class="separator:aaef64b53324dde952dc023717aebf6e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a47728fd146d048b94f653d8ff4960359"><td class="memItemLeft" align="right" valign="top">const clang::SourceManager *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#a47728fd146d048b94f653d8ff4960359">srcMngr_</a> {}</td></tr>
-<tr class="separator:a47728fd146d048b94f653d8ff4960359"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24efb59b03ebb9e89d7d6ab491b4c857"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1NodeHasher.html#a24efb59b03ebb9e89d7d6ab491b4c857">clang_</a></td></tr>
+<tr class="separator:a24efb59b03ebb9e89d7d6ab491b4c857"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This is a helper class which aims to create unique identifiers for clang nodes. </p>
 <p>The methods should return the same value for full defined clang nodes and declarations. The user of this class has to make sure that the source manager is set and valid. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a7ad85090ace7a5acf5ba0e1ee6d3c23a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CppImport::NodeHasher::NodeHasher </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td>
+          <td class="paramname"><em>clang</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a92d2237259830115bbb8b9ced1ccf309"></a>
 <div class="memitem">
 <div class="memproto">
@@ -246,6 +265,22 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const clang::NamespaceAliasDecl *&#160;</td>
           <td class="paramname"><em>namespaceAlias</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad7af5397968903d985b584a67d33a09d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString CppImport::NodeHasher::hashNamespaceField </td>
+          <td>(</td>
+          <td class="paramtype">const clang::VarDecl *&#160;</td>
+          <td class="paramname"><em>varDecl</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -499,24 +534,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aaef64b53324dde952dc023717aebf6e3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CppImport::NodeHasher::setSourceManager </td>
-          <td>(</td>
-          <td class="paramtype">const clang::SourceManager *&#160;</td>
-          <td class="paramname"><em>sourceManager</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a47728fd146d048b94f653d8ff4960359"></a>
+<a class="anchor" id="a24efb59b03ebb9e89d7d6ab491b4c857"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -524,7 +543,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const clang::SourceManager* CppImport::NodeHasher::srcMngr_ {}</td>
+          <td class="memname"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a>&amp; CppImport::NodeHasher::clang_</td>
         </tr>
       </table>
   </td>

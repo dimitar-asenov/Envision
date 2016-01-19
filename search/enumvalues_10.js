@@ -25,7 +25,7 @@ var searchData=
   ['spacebeforeseparator',['SpaceBeforeSeparator',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aa0f6307e2b9f362508ad975393cf23721',1,'Export::FragmentLayouter']]],
   ['stackframe',['StackFrame',['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622eaab867380f3439b3354e11f30fb3bfeff',1,'OODebug::Protocol']]],
   ['standardupdate',['StandardUpdate',['../classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890ab11a8971e9791d4e2f1af5e91337805a',1,'Visualization::Item']]],
-  ['static',['Static',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494fad8ba40bdcb3b15ab1555e1e14558637a',1,'OOModel::Modifier']]],
+  ['static',['Static',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494fad8ba40bdcb3b15ab1555e1e14558637a',1,'OOModel::Modifier::Static()'],['../classOOModel_1_1ReferenceExpression.html#a416c4460d5cfc0b651e4a9b453014402a84a8921b25f505d0d2077aeb5db4bc16',1,'OOModel::ReferenceExpression::Static()']]],
   ['staticcast',['StaticCast',['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faa5faef872533f3e47ef0fc0185fbb894f',1,'OOModel::CastExpression']]],
   ['stationary',['Stationary',['../namespaceFilePersistence.html#a22f599a7e5cc21a83101c6b6a2e1abfea5146a957bfa51752bd6020691fda598e',1,'FilePersistence']]],
   ['status',['Status',['../classOODebug_1_1Protocol.html#aa2e27d2dd0cf680d8168ae01bd06ecfcaec53a8c4f07baed5d8825072c89799be',1,'OODebug::Protocol::Status()'],['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36aec53a8c4f07baed5d8825072c89799be',1,'OODebug::Protocol::Status()']]],

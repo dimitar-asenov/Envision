@@ -91,8 +91,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classInformationScripting_1_1ArgumentParser-members.html">List of all members</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">InformationScripting::ArgumentParser Class Reference</div>  </div>
 </div><!--header-->
@@ -100,7 +102,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a3aa49c4975dddd498b2e171a99ee3e55"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55">Scope</a> : int { <a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55a509820290d57f333403f490dde7316f4">Scope::Local</a>, 
+<tr class="memitem:a3aa49c4975dddd498b2e171a99ee3e55"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55">Scope</a> : int { <a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55aec0fc0100c4fc1ce4eea230c3dc10360">Scope::Undefined</a>, 
+<a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55a509820290d57f333403f490dde7316f4">Scope::Local</a>, 
 <a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55a4cc6684df7b4a92b1dec6fce3264fac8">Scope::Global</a>, 
 <a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55a324118a6721dd6b8a9b9f4e327df2bf5">Scope::Input</a>
  }</td></tr>
@@ -108,16 +111,43 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a31c3c09743c5092ca45de248e54e52b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a31c3c09743c5092ca45de248e54e52b9">ArgumentParser</a> (std::initializer_list&lt; QCommandLineOption &gt; options, const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a> &amp;<a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>)</td></tr>
-<tr class="separator:a31c3c09743c5092ca45de248e54e52b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e581b071a4bf237cad7ec2b43685e94"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a7e581b071a4bf237cad7ec2b43685e94">ArgumentParser</a> (std::initializer_list&lt; QCommandLineOption &gt; options, const QStringList &amp;<a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, bool addScopeArguments=false)</td></tr>
+<tr class="separator:a7e581b071a4bf237cad7ec2b43685e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a830a6efa4f8599bd5bf007c5a3669fad"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a830a6efa4f8599bd5bf007c5a3669fad">ArgumentParser</a> (std::initializer_list&lt; <a class="el" href="structInformationScripting_1_1PositionalArgument.html">PositionalArgument</a> &gt; options, const QStringList &amp;<a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, bool addScopeArguments=false)</td></tr>
+<tr class="separator:a830a6efa4f8599bd5bf007c5a3669fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3533b19a9362650c6ad103fcfead728d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3533b19a9362650c6ad103fcfead728d">ArgumentParser</a> (std::initializer_list&lt; QCommandLineOption &gt; options, std::initializer_list&lt; <a class="el" href="structInformationScripting_1_1PositionalArgument.html">PositionalArgument</a> &gt; positionalArgs, const QStringList &amp;<a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, bool addScopeArguments=false)</td></tr>
+<tr class="separator:a3533b19a9362650c6ad103fcfead728d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25d0302b4f88d732cfc58307b9ec3050"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a25d0302b4f88d732cfc58307b9ec3050">argument</a> (const QString &amp;argName) const </td></tr>
 <tr class="separator:a25d0302b4f88d732cfc58307b9ec3050"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90bc5a98beb56c0e902d21448c9b29c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a90bc5a98beb56c0e902d21448c9b29c2">isArgumentSet</a> (const QString &amp;argName) const </td></tr>
 <tr class="separator:a90bc5a98beb56c0e902d21448c9b29c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f9f043ebac0aa296badad14f9314656"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a1f9f043ebac0aa296badad14f9314656">numPositionalArguments</a> () const </td></tr>
+<tr class="separator:a1f9f043ebac0aa296badad14f9314656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24904d2c322cdd1801b7f8bff76672c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#ad24904d2c322cdd1801b7f8bff76672c">positionalArgument</a> (int index)</td></tr>
+<tr class="separator:ad24904d2c322cdd1801b7f8bff76672c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98cc2b0bc35cc1e1a9cfa432b2e6f209"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a98cc2b0bc35cc1e1a9cfa432b2e6f209">queryName</a> () const </td></tr>
 <tr class="separator:a98cc2b0bc35cc1e1a9cfa432b2e6f209"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9705ad7ded15c6951c6dd938fee279c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55">Scope</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a9705ad7ded15c6951c6dd938fee279c1">scope</a> () const </td></tr>
-<tr class="separator:a9705ad7ded15c6951c6dd938fee279c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6dee0b4d47152c9d5ba2055d30e7fca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55">Scope</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#af6dee0b4d47152c9d5ba2055d30e7fca">scope</a> (const <a class="el" href="classInformationScripting_1_1Query.html">Query</a> *of) const </td></tr>
+<tr class="separator:af6dee0b4d47152c9d5ba2055d30e7fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a537476d5d6235778e0947982a56e0be3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a537476d5d6235778e0947982a56e0be3">setArgTo</a> (QStringList &amp;<a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, const QStringList &amp;argNames, const QString &amp;<a class="el" href="namespaceInformationScripting.html#a818921006a3a8aa07d0249ffab438751">type</a>)</td></tr>
+<tr class="separator:a537476d5d6235778e0947982a56e0be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:aa3363239dc1f809deee1ed7b26836476"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#aa3363239dc1f809deee1ed7b26836476">GLOBAL_SCOPE_ARGUMENT_NAMES</a> {&quot;g&quot;, &quot;global&quot;}</td></tr>
+<tr class="separator:aa3363239dc1f809deee1ed7b26836476"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff25d9f95e119e816da5975ca3f5e9a4"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#aff25d9f95e119e816da5975ca3f5e9a4">INPUT_SCOPE_ARGUMENT_NAMES</a> {&quot;i&quot;, &quot;input&quot;}</td></tr>
+<tr class="separator:aff25d9f95e119e816da5975ca3f5e9a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fabdb87638d158b1a3d3af96742319c"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a5fabdb87638d158b1a3d3af96742319c">LOCAL_SCOPE_ARGUMENT_NAMES</a> {&quot;l&quot;, &quot;local&quot;}</td></tr>
+<tr class="separator:a5fabdb87638d158b1a3d3af96742319c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a478483bee251f25628300b7470a4f9fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a478483bee251f25628300b7470a4f9fd">initParser</a> (const QStringList &amp;<a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, bool addScopeArguments)</td></tr>
+<tr class="separator:a478483bee251f25628300b7470a4f9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -127,11 +157,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a962cb432e6bf8f1f90da0edf2eca5130"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9099a5519a64fca1f696b5d6108ff492"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55">Scope</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a9099a5519a64fca1f696b5d6108ff492">scope_</a> {}</td></tr>
 <tr class="separator:a9099a5519a64fca1f696b5d6108ff492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:a17d02a3e31341b9d13c2727c7233438b"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a17d02a3e31341b9d13c2727c7233438b">SCOPE_ARGUMENT_NAMES</a> {&quot;s&quot;, &quot;<a class="el" href="classInformationScripting_1_1ArgumentParser.html#a9705ad7ded15c6951c6dd938fee279c1">scope</a>&quot;}</td></tr>
-<tr class="separator:a17d02a3e31341b9d13c2727c7233438b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a3aa49c4975dddd498b2e171a99ee3e55"></a>
@@ -152,7 +177,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a3aa49c4975dddd498b2e171a99ee3e55a509820290d57f333403f490dde7316f4"></a>Local&#160;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a3aa49c4975dddd498b2e171a99ee3e55aec0fc0100c4fc1ce4eea230c3dc10360"></a>Undefined&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a3aa49c4975dddd498b2e171a99ee3e55a509820290d57f333403f490dde7316f4"></a>Local&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a3aa49c4975dddd498b2e171a99ee3e55a4cc6684df7b4a92b1dec6fce3264fac8"></a>Global&#160;</td><td class="fielddoc">
 </td></tr>
@@ -163,7 +190,7 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a31c3c09743c5092ca45de248e54e52b9"></a>
+<a class="anchor" id="a7e581b071a4bf237cad7ec2b43685e94"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -176,8 +203,84 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a> &amp;&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>addScopeArguments</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a830a6efa4f8599bd5bf007c5a3669fad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">InformationScripting::ArgumentParser::ArgumentParser </td>
+          <td>(</td>
+          <td class="paramtype">std::initializer_list&lt; <a class="el" href="structInformationScripting_1_1PositionalArgument.html">PositionalArgument</a> &gt;&#160;</td>
+          <td class="paramname"><em>options</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>addScopeArguments</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3533b19a9362650c6ad103fcfead728d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">InformationScripting::ArgumentParser::ArgumentParser </td>
+          <td>(</td>
+          <td class="paramtype">std::initializer_list&lt; QCommandLineOption &gt;&#160;</td>
+          <td class="paramname"><em>options</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::initializer_list&lt; <a class="el" href="structInformationScripting_1_1PositionalArgument.html">PositionalArgument</a> &gt;&#160;</td>
+          <td class="paramname"><em>positionalArgs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>addScopeArguments</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -206,6 +309,40 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a478483bee251f25628300b7470a4f9fd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void InformationScripting::ArgumentParser::initParser </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>addScopeArguments</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a90bc5a98beb56c0e902d21448c9b29c2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -216,6 +353,37 @@ Static Private Attributes</h2></td></tr>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>argName</em></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1f9f043ebac0aa296badad14f9314656"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int InformationScripting::ArgumentParser::numPositionalArguments </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad24904d2c322cdd1801b7f8bff76672c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString InformationScripting::ArgumentParser::positionalArgument </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -245,7 +413,23 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9705ad7ded15c6951c6dd938fee279c1"></a>
+<a class="anchor" id="af6dee0b4d47152c9d5ba2055d30e7fca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55">ArgumentParser::Scope</a> InformationScripting::ArgumentParser::scope </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classInformationScripting_1_1Query.html">Query</a> *&#160;</td>
+          <td class="paramname"><em>of</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a537476d5d6235778e0947982a56e0be3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -253,15 +437,32 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classInformationScripting_1_1ArgumentParser.html#a3aa49c4975dddd498b2e171a99ee3e55">ArgumentParser::Scope</a> InformationScripting::ArgumentParser::scope </td>
+          <td class="memname">void InformationScripting::ArgumentParser::setArgTo </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">QStringList &amp;&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>argNames</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -283,6 +484,66 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa3363239dc1f809deee1ed7b26836476"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QStringList InformationScripting::ArgumentParser::GLOBAL_SCOPE_ARGUMENT_NAMES {&quot;g&quot;, &quot;global&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aff25d9f95e119e816da5975ca3f5e9a4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QStringList InformationScripting::ArgumentParser::INPUT_SCOPE_ARGUMENT_NAMES {&quot;i&quot;, &quot;input&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5fabdb87638d158b1a3d3af96742319c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QStringList InformationScripting::ArgumentParser::LOCAL_SCOPE_ARGUMENT_NAMES {&quot;l&quot;, &quot;local&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -323,26 +584,6 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a17d02a3e31341b9d13c2727c7233438b"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a> InformationScripting::ArgumentParser::SCOPE_ARGUMENT_NAMES {&quot;s&quot;, &quot;<a class="el" href="classInformationScripting_1_1ArgumentParser.html#a9705ad7ded15c6951c6dd938fee279c1">scope</a>&quot;}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

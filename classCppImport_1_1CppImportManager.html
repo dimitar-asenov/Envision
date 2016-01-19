@@ -107,9 +107,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1eeb35028605e1de00e9140ed2698fe2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a1eeb35028605e1de00e9140ed2698fe2">createTreeManager</a> (const bool statisticsPerProject=false)</td></tr>
 <tr class="memdesc:a1eeb35028605e1de00e9140ed2698fe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a clang tool and translates the sourcecode to Envision's AST and returns the root Be sure to have set the sourcePath before calling this method Set <em>statisticsPerProject</em> if you want statistics output for each subproject.  <a href="#a1eeb35028605e1de00e9140ed2698fe2">More...</a><br /></td></tr>
 <tr class="separator:a1eeb35028605e1de00e9140ed2698fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a381a639f82e7f76324235b7584aefeff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a381a639f82e7f76324235b7584aefeff">setImportPath</a> (const QString &amp;sourcePath, const bool subProjects=false)</td></tr>
-<tr class="memdesc:a381a639f82e7f76324235b7584aefeff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this function to set <em>sourcePath</em> which you want to import.  <a href="#a381a639f82e7f76324235b7584aefeff">More...</a><br /></td></tr>
-<tr class="separator:a381a639f82e7f76324235b7584aefeff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5980fb693e7e2b58040ac80101ec45c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a5980fb693e7e2b58040ac80101ec45c5">setImportPaths</a> (QStringList sourcePaths, const bool subProjects=false)</td></tr>
+<tr class="memdesc:a5980fb693e7e2b58040ac80101ec45c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this function to set <em>sourcePath</em> which you want to import.  <a href="#a5980fb693e7e2b58040ac80101ec45c5">More...</a><br /></td></tr>
+<tr class="separator:a5980fb693e7e2b58040ac80101ec45c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac770fb081a05550b1a4affb4b2879eb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#ac770fb081a05550b1a4affb4b2879eb9">setupTest</a> ()</td></tr>
 <tr class="memdesc:ac770fb081a05550b1a4affb4b2879eb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imports code from a test.cpp file in a subdirectory of ENVISION_ROOT/CppImport/test Specify the directory in the testSelector file.  <a href="#ac770fb081a05550b1a4affb4b2879eb9">More...</a><br /></td></tr>
 <tr class="separator:ac770fb081a05550b1a4affb4b2879eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,27 +119,30 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:afa1d30c0686498021affc098e5f9c31b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#afa1d30c0686498021affc098e5f9c31b">createCompilationDbForTest</a> (const QString &amp;testPath)</td></tr>
 <tr class="memdesc:afa1d30c0686498021affc098e5f9c31b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a compile_commands file inside <em>testPath</em> Use this method only for simple test.cpp files.  <a href="#afa1d30c0686498021affc098e5f9c31b">More...</a><br /></td></tr>
 <tr class="separator:afa1d30c0686498021affc098e5f9c31b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abec03fbb90f41fcd90ae310a92178909"><td class="memItemLeft" align="right" valign="top">clang::tooling::CompilationDatabase *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#abec03fbb90f41fcd90ae310a92178909">findCompilationDatabase</a> (const QString &amp;path)</td></tr>
+<tr class="separator:abec03fbb90f41fcd90ae310a92178909"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedca40bbe2ec7034759a74476e9d4d6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#aedca40bbe2ec7034759a74476e9d4d6c">initPath</a> (const QString &amp;sourcePath)</td></tr>
 <tr class="memdesc:aedca40bbe2ec7034759a74476e9d4d6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares everything for the project in <em>sourcePath</em> to get imported.  <a href="#aedca40bbe2ec7034759a74476e9d4d6c">More...</a><br /></td></tr>
 <tr class="separator:aedca40bbe2ec7034759a74476e9d4d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33a03d978596b9b97ef6f10b25cb090c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a33a03d978596b9b97ef6f10b25cb090c">mainProjectPath</a> (const QString &amp;path)</td></tr>
+<tr class="memdesc:a33a03d978596b9b97ef6f10b25cb090c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the shortest subpath of <em>subProjectPath</em> containing a CMakeLists.txt file.  <a href="#a33a03d978596b9b97ef6f10b25cb090c">More...</a><br /></td></tr>
+<tr class="separator:a33a03d978596b9b97ef6f10b25cb090c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2e7eefa3835a30eb07a8539b71a24e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#ad2e7eefa3835a30eb07a8539b71a24e1">readInFiles</a> (const QString &amp;sourcePath)</td></tr>
 <tr class="memdesc:ad2e7eefa3835a30eb07a8539b71a24e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects all source files in <em>sourcPath</em> and sub directories and stores them in the sourcesMap_.  <a href="#ad2e7eefa3835a30eb07a8539b71a24e1">More...</a><br /></td></tr>
 <tr class="separator:ad2e7eefa3835a30eb07a8539b71a24e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf218c026d982cb82871e50d090e7634"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#adf218c026d982cb82871e50d090e7634">setCompilationDbPath</a> (const QString &amp;sourcePath)</td></tr>
 <tr class="memdesc:adf218c026d982cb82871e50d090e7634"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the compilation database to compilationDbMap_.  <a href="#adf218c026d982cb82871e50d090e7634">More...</a><br /></td></tr>
 <tr class="separator:adf218c026d982cb82871e50d090e7634"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e4abda00a2624e3fefac06c14df815a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a6e4abda00a2624e3fefac06c14df815a">setProjectName</a> (const QString &amp;sourcePath)</td></tr>
-<tr class="memdesc:a6e4abda00a2624e3fefac06c14df815a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the project name based on the <em>sourcePath</em>.  <a href="#a6e4abda00a2624e3fefac06c14df815a">More...</a><br /></td></tr>
-<tr class="separator:a6e4abda00a2624e3fefac06c14df815a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a6e1d8c02bd21b494096e0f5899719c29"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, clang::tooling::CompilationDatabase * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a6e1d8c02bd21b494096e0f5899719c29">compilationDbMap_</a></td></tr>
-<tr class="separator:a6e1d8c02bd21b494096e0f5899719c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefb2f5ba5095cce69ef7a62786b9989b"><td class="memItemLeft" align="right" valign="top">clang::tooling::CompilationDatabase *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#aefb2f5ba5095cce69ef7a62786b9989b">compilationDb_</a></td></tr>
+<tr class="separator:aefb2f5ba5095cce69ef7a62786b9989b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5951f9260410692e4dae885b3e6123f"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#ad5951f9260410692e4dae885b3e6123f">cppFilter_</a> = {&quot;*.cpp&quot;, &quot;*.cc&quot;, &quot;*.cxx&quot;}</td></tr>
 <tr class="separator:ad5951f9260410692e4dae885b3e6123f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1ba9fee1870587ba5d59715612b2a42"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#ab1ba9fee1870587ba5d59715612b2a42">projectName_</a></td></tr>
-<tr class="separator:ab1ba9fee1870587ba5d59715612b2a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a762b9c509b8de41967b96fd8f14f698b"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a762b9c509b8de41967b96fd8f14f698b">projectPath_</a></td></tr>
+<tr class="memdesc:a762b9c509b8de41967b96fd8f14f698b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the path to the main CMakeLists.txt of the project to import.  <a href="#a762b9c509b8de41967b96fd8f14f698b">More...</a><br /></td></tr>
+<tr class="separator:a762b9c509b8de41967b96fd8f14f698b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0453fd015f1cf73aed49bbddcdfce655"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a0453fd015f1cf73aed49bbddcdfce655">projects_</a></td></tr>
 <tr class="separator:a0453fd015f1cf73aed49bbddcdfce655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4cd03e0fc1be9d8276c369b9bfe7426"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, std::vector&lt; std::string &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#ae4cd03e0fc1be9d8276c369b9bfe7426">sourcesMap_</a></td></tr>
@@ -210,6 +213,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abec03fbb90f41fcd90ae310a92178909"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">clang::tooling::CompilationDatabase * CppImport::CppImportManager::findCompilationDatabase </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aedca40bbe2ec7034759a74476e9d4d6c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -233,6 +260,32 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Prepares everything for the project in <em>sourcePath</em> to get imported. </p>
+
+</div>
+</div>
+<a class="anchor" id="a33a03d978596b9b97ef6f10b25cb090c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString CppImport::CppImportManager::mainProjectPath </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the shortest subpath of <em>subProjectPath</em> containing a CMakeLists.txt file. </p>
 
 </div>
 </div>
@@ -288,15 +341,15 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a381a639f82e7f76324235b7584aefeff"></a>
+<a class="anchor" id="a5980fb693e7e2b58040ac80101ec45c5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CppImport::CppImportManager::setImportPath </td>
+          <td class="memname">void CppImport::CppImportManager::setImportPaths </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>sourcePath</em>, </td>
+          <td class="paramtype">QStringList&#160;</td>
+          <td class="paramname"><em>sourcePaths</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -314,32 +367,6 @@ Private Attributes</h2></td></tr>
 
 <p>Use this function to set <em>sourcePath</em> which you want to import. </p>
 <p>If the project has subproject please specify this with setting <em>subProject</em> to true All subprojects that contain a compile_commands file will be translated </p>
-
-</div>
-</div>
-<a class="anchor" id="a6e4abda00a2624e3fefac06c14df815a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CppImport::CppImportManager::setProjectName </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>sourcePath</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the project name based on the <em>sourcePath</em>. </p>
 
 </div>
 </div>
@@ -362,7 +389,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a6e1d8c02bd21b494096e0f5899719c29"></a>
+<a class="anchor" id="aefb2f5ba5095cce69ef7a62786b9989b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -370,7 +397,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QHash&lt;QString, clang::tooling::CompilationDatabase*&gt; CppImport::CppImportManager::compilationDbMap_</td>
+          <td class="memname">clang::tooling::CompilationDatabase* CppImport::CppImportManager::compilationDb_</td>
         </tr>
       </table>
   </td>
@@ -402,7 +429,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab1ba9fee1870587ba5d59715612b2a42"></a>
+<a class="anchor" id="a762b9c509b8de41967b96fd8f14f698b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -410,7 +437,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QString CppImport::CppImportManager::projectName_</td>
+          <td class="memname">QString CppImport::CppImportManager::projectPath_</td>
         </tr>
       </table>
   </td>
@@ -419,6 +446,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>the path to the main CMakeLists.txt of the project to import. </p>
 
 </div>
 </div>

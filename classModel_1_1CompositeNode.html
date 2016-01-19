@@ -131,7 +131,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a24e8ce98784566266a7d11b196f099f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a425cfeead8395b91e7f4b109b5a1a345"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a425cfeead8395b91e7f4b109b5a1a345">comment</a> () const </td></tr>
 <tr class="separator:a425cfeead8395b91e7f4b109b5a1a345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f7a65d863a7a331a6ecf90bcfa2528c"><td class="memTemplParams" colspan="2">template&lt;class ExtensionType &gt; </td></tr>
+<tr class="memitem:a5f7a65d863a7a331a6ecf90bcfa2528c"><td class="memTemplParams" colspan="2">template&lt;typename ExtensionType &gt; </td></tr>
 <tr class="memitem:a5f7a65d863a7a331a6ecf90bcfa2528c"><td class="memTemplItemLeft" align="right" valign="top">std::unique_ptr&lt; ExtensionType &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a5f7a65d863a7a331a6ecf90bcfa2528c">extension</a> ()</td></tr>
 <tr class="separator:a5f7a65d863a7a331a6ecf90bcfa2528c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af71e395c2ee80fffcd49089c438ac182"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#af71e395c2ee80fffcd49089c438ac182">get</a> (const <a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a> &amp;attributeIndex) const </td></tr>
@@ -181,7 +181,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a06a0d54488f3267c6f7746879ae72888"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5fc7e0132642d0fbf38e3bbca42b48f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#ad5fc7e0132642d0fbf38e3bbca42b48f">registerNewAttribute</a> (const <a class="el" href="classModel_1_1Attribute.html">Attribute</a> &amp;attribute)</td></tr>
 <tr class="separator:ad5fc7e0132642d0fbf38e3bbca42b48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3eb39b789af55d5c67acd4f9c6ef91a4"><td class="memTemplParams" colspan="2">template&lt;class Extension &gt; </td></tr>
+<tr class="memitem:a3eb39b789af55d5c67acd4f9c6ef91a4"><td class="memTemplParams" colspan="2">template&lt;typename Extension &gt; </td></tr>
 <tr class="memitem:a3eb39b789af55d5c67acd4f9c6ef91a4"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a3eb39b789af55d5c67acd4f9c6ef91a4">registerNewExtension</a> ()</td></tr>
 <tr class="separator:a3eb39b789af55d5c67acd4f9c6ef91a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -221,8 +221,8 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:ac8506c765ddb67efc6aa89608d5707bc"><td class="memItemLeft" align="right" valign="top">::<a class="el" href="classModel_1_1CompositeIndex.html">Model::CompositeIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#ac8506c765ddb67efc6aa89608d5707bc">commentIndex</a></td></tr>
-<tr class="separator:ac8506c765ddb67efc6aa89608d5707bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ffb87532986ed8c3f57ce68ee16a6ae"><td class="memItemLeft" align="right" valign="top">::<a class="el" href="classModel_1_1CompositeIndex.html">Model::CompositeIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a8ffb87532986ed8c3f57ce68ee16a6ae">commentIndex</a> = <a class="el" href="classModel_1_1CompositeNode.html#abd435fa37489c0051e2f8363c821d90a">addAttributeToInitialRegistrationList_</a>( commentIndex, &quot;comment&quot;, &quot;<a class="el" href="classModel_1_1Node.html">Node</a>&quot;, false , true , true )</td></tr>
+<tr class="separator:a8ffb87532986ed8c3f57ce68ee16a6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5627b890191053c5bfb12cfc0c80f04"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#ae5627b890191053c5bfb12cfc0c80f04">nextExtensionId_</a> = 0</td></tr>
 <tr class="separator:ae5627b890191053c5bfb12cfc0c80f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -590,7 +590,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class ExtensionType &gt; </div>
+template&lt;typename ExtensionType &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::unique_ptr&lt; ExtensionType &gt; Model::CompositeNode::extension </td>
@@ -920,7 +920,7 @@ template&lt;class ExtensionType &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Extension &gt; </div>
+template&lt;typename Extension &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1171,7 +1171,7 @@ template&lt;class Extension &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ac8506c765ddb67efc6aa89608d5707bc"></a>
+<a class="anchor" id="a8ffb87532986ed8c3f57ce68ee16a6ae"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1179,7 +1179,7 @@ template&lt;class Extension &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">::<a class="el" href="classModel_1_1CompositeIndex.html">Model::CompositeIndex</a> Model::CompositeNode::commentIndex</td>
+          <td class="memname"><a class="el" href="classModel_1_1CompositeIndex.html">Model::CompositeIndex</a> Model::CompositeNode::commentIndex = <a class="el" href="classModel_1_1CompositeNode.html#abd435fa37489c0051e2f8363c821d90a">addAttributeToInitialRegistrationList_</a>( commentIndex, &quot;comment&quot;, &quot;<a class="el" href="classModel_1_1Node.html">Node</a>&quot;, false , true , true )</td>
         </tr>
       </table>
   </td>

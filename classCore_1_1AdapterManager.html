@@ -105,20 +105,20 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a4f091707c8d14f3d70f80917fe3be76b"><td class="memTemplParams" colspan="2">template&lt;class Adapter , class Adaptee &gt; </td></tr>
+<tr class="memitem:a4f091707c8d14f3d70f80917fe3be76b"><td class="memTemplParams" colspan="2">template&lt;typename Adapter , typename Adaptee &gt; </td></tr>
 <tr class="memitem:a4f091707c8d14f3d70f80917fe3be76b"><td class="memTemplItemLeft" align="right" valign="top">static Adapter *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#a4f091707c8d14f3d70f80917fe3be76b">adapt</a> (Adaptee *object)</td></tr>
 <tr class="separator:a4f091707c8d14f3d70f80917fe3be76b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4b0658360022c6ccd5b381173c8e230"><td class="memTemplParams" colspan="2">template&lt;class AdapterBase , class Adapter , class Adaptee &gt; </td></tr>
+<tr class="memitem:aa4b0658360022c6ccd5b381173c8e230"><td class="memTemplParams" colspan="2">template&lt;typename AdapterBase , typename Adapter , typename Adaptee &gt; </td></tr>
 <tr class="memitem:aa4b0658360022c6ccd5b381173c8e230"><td class="memTemplItemLeft" align="right" valign="top">static AdapterBase *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#aa4b0658360022c6ccd5b381173c8e230">createFrom</a> (Adaptee *a)</td></tr>
 <tr class="memdesc:aa4b0658360022c6ccd5b381173c8e230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance of <em>Adapter</em> using it's Adapter::Adapter(Adaptee* a) constructor.  <a href="#aa4b0658360022c6ccd5b381173c8e230">More...</a><br /></td></tr>
 <tr class="separator:aa4b0658360022c6ccd5b381173c8e230"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1928b86156c5c72e5505a2a47a2f2fe"><td class="memTemplParams" colspan="2">template&lt;class Adapter , class Adaptee &gt; </td></tr>
+<tr class="memitem:ac1928b86156c5c72e5505a2a47a2f2fe"><td class="memTemplParams" colspan="2">template&lt;typename Adapter , typename Adaptee &gt; </td></tr>
 <tr class="memitem:ac1928b86156c5c72e5505a2a47a2f2fe"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#ac1928b86156c5c72e5505a2a47a2f2fe">registerAdapter</a> (Adapter *(*creationFunction)(Adaptee *adaptee))</td></tr>
 <tr class="separator:ac1928b86156c5c72e5505a2a47a2f2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac19cfe6c53998ce49ff46c3aabc598dd"><td class="memTemplParams" colspan="2">template&lt;class AdapterBase , class Adapter , class Adaptee &gt; </td></tr>
+<tr class="memitem:ac19cfe6c53998ce49ff46c3aabc598dd"><td class="memTemplParams" colspan="2">template&lt;typename AdapterBase , typename Adapter , typename Adaptee &gt; </td></tr>
 <tr class="memitem:ac19cfe6c53998ce49ff46c3aabc598dd"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#ac19cfe6c53998ce49ff46c3aabc598dd">registerAdapterViaConstructor</a> ()</td></tr>
 <tr class="separator:ac19cfe6c53998ce49ff46c3aabc598dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af64b25bf113b0551273b43eeb26f5baf"><td class="memTemplParams" colspan="2">template&lt;class Adapter &gt; </td></tr>
+<tr class="memitem:af64b25bf113b0551273b43eeb26f5baf"><td class="memTemplParams" colspan="2">template&lt;typename Adapter &gt; </td></tr>
 <tr class="memitem:af64b25bf113b0551273b43eeb26f5baf"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#af64b25bf113b0551273b43eeb26f5baf">registerDefaultAdapter</a> (Adapter *(*creationFunction)(typename Adapter::BaseAdapteeType *adaptee))</td></tr>
 <tr class="separator:af64b25bf113b0551273b43eeb26f5baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -135,10 +135,10 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:abfb043a98ee448794b85fa447585bf2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cc73df5aa9b170b7f3928aec332487e"><td class="memItemLeft" align="right" valign="top">static QHash&lt; <a class="el" href="classCore_1_1AdapterManager.html#ac8cef5e857a992a2e5f7997334751039">TypeIdType</a>, <a class="el" href="classCore_1_1AdapterManager.html#a0a857d839d5bb21539d6f5d5417fd853">AdapterCreationFunction</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#a2cc73df5aa9b170b7f3928aec332487e">defaultAdapters</a> ()</td></tr>
 <tr class="separator:a2cc73df5aa9b170b7f3928aec332487e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7cb6b6e8a99dd79de5d26864cc3808d"><td class="memTemplParams" colspan="2">template&lt;class type &gt; </td></tr>
+<tr class="memitem:aa7cb6b6e8a99dd79de5d26864cc3808d"><td class="memTemplParams" colspan="2">template&lt;typename type &gt; </td></tr>
 <tr class="memitem:aa7cb6b6e8a99dd79de5d26864cc3808d"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classCore_1_1AdapterManager.html#ac8cef5e857a992a2e5f7997334751039">TypeIdType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#aa7cb6b6e8a99dd79de5d26864cc3808d">typeId</a> ()</td></tr>
 <tr class="separator:aa7cb6b6e8a99dd79de5d26864cc3808d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a897c06667247122e77b66c7b0f32c086"><td class="memTemplParams" colspan="2">template&lt;class type &gt; </td></tr>
+<tr class="memitem:a897c06667247122e77b66c7b0f32c086"><td class="memTemplParams" colspan="2">template&lt;typename type &gt; </td></tr>
 <tr class="memitem:a897c06667247122e77b66c7b0f32c086"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classCore_1_1AdapterManager.html#ac8cef5e857a992a2e5f7997334751039">TypeIdType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCore_1_1AdapterManager.html#a897c06667247122e77b66c7b0f32c086">typeId</a> (type *object)</td></tr>
 <tr class="separator:a897c06667247122e77b66c7b0f32c086"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -200,7 +200,7 @@ Static Private Member Functions</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Adapter , class Adaptee &gt; </div>
+template&lt;typename Adapter , typename Adaptee &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -249,7 +249,7 @@ template&lt;class Adapter , class Adaptee &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class AdapterBase , class Adapter , class Adaptee &gt; </div>
+template&lt;typename AdapterBase , typename Adapter , typename Adaptee &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -301,7 +301,7 @@ template&lt;class AdapterBase , class Adapter , class Adaptee &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Adapter , class Adaptee &gt; </div>
+template&lt;typename Adapter , typename Adaptee &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -327,7 +327,7 @@ template&lt;class Adapter , class Adaptee &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class AdapterBase , class Adapter , class Adaptee &gt; </div>
+template&lt;typename AdapterBase , typename Adapter , typename Adaptee &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -352,7 +352,7 @@ template&lt;class AdapterBase , class Adapter , class Adaptee &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Adapter &gt; </div>
+template&lt;typename Adapter &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -378,7 +378,7 @@ template&lt;class Adapter &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class type &gt; </div>
+template&lt;typename type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -403,7 +403,7 @@ template&lt;class type &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class type &gt; </div>
+template&lt;typename type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

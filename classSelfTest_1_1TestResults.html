@@ -92,7 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
-<div class="title">SelfTest::TestResults Class Reference</div>  </div>
+<div class="title">SelfTest::TestResults Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -101,10 +101,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aba7cf70762ebbb3907be6aa38d0bcbde"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#aba7cf70762ebbb3907be6aa38d0bcbde">TestResults</a> ()</td></tr>
-<tr class="separator:aba7cf70762ebbb3907be6aa38d0bcbde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8e9bdde380f32aa8a2ae6271829baf"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#aec8e9bdde380f32aa8a2ae6271829baf">~TestResults</a> ()</td></tr>
-<tr class="separator:aec8e9bdde380f32aa8a2ae6271829baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12da2df00f67826fb6831b60f2a6ff91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a12da2df00f67826fb6831b60f2a6ff91">addFailedCheck</a> (const QString &amp;message)</td></tr>
 <tr class="separator:a12da2df00f67826fb6831b60f2a6ff91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f8ff2fea508e6cfd4ff1143758d1a2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a8f8ff2fea508e6cfd4ff1143758d1a2d">addFailedTest</a> (const QString &amp;testName)</td></tr>
@@ -129,24 +125,26 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5463fc4cd5e10de91cf970ef042a1936"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dd73b3504210be99cfd8f13286af962"><td class="memItemLeft" align="right" valign="top">const QList&lt; <a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a0dd73b3504210be99cfd8f13286af962">getTestResults</a> () const </td></tr>
 <tr class="separator:a0dd73b3504210be99cfd8f13286af962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b8ebef1d899e74dc009539ec185fba8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a0b8ebef1d899e74dc009539ec185fba8">merge</a> (const <a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;other)</td></tr>
+<tr class="separator:a0b8ebef1d899e74dc009539ec185fba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ed9d0a160a3c0c8022fb1deddd1dbd1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a0ed9d0a160a3c0c8022fb1deddd1dbd1">printResultStatistics</a> () const </td></tr>
 <tr class="memdesc:a0ed9d0a160a3c0c8022fb1deddd1dbd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a summary of the test results to the standard output.  <a href="#a0ed9d0a160a3c0c8022fb1deddd1dbd1">More...</a><br /></td></tr>
 <tr class="separator:a0ed9d0a160a3c0c8022fb1deddd1dbd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a9205b85b32578f27fe7105c5e46df40e"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a9205b85b32578f27fe7105c5e46df40e">checkResults</a></td></tr>
-<tr class="separator:a9205b85b32578f27fe7105c5e46df40e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72cc5ebfc51848c832e3c7eaa56f6568"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a72cc5ebfc51848c832e3c7eaa56f6568">numFailedChecks</a></td></tr>
-<tr class="separator:a72cc5ebfc51848c832e3c7eaa56f6568"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cee1ad608a5dfd89b0b5b1395be16c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a4cee1ad608a5dfd89b0b5b1395be16c4">numFailedTests</a></td></tr>
-<tr class="separator:a4cee1ad608a5dfd89b0b5b1395be16c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8bb967b2b61dda784a9b3241650ec18"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#ad8bb967b2b61dda784a9b3241650ec18">numPassedChecks</a></td></tr>
-<tr class="separator:ad8bb967b2b61dda784a9b3241650ec18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ed91f59f893394a09ec49a468536795"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a7ed91f59f893394a09ec49a468536795">numPassedTests</a></td></tr>
-<tr class="separator:a7ed91f59f893394a09ec49a468536795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae69870dbf69da3cda3cb170c3f5069b8"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#ae69870dbf69da3cda3cb170c3f5069b8">testResults</a></td></tr>
-<tr class="separator:ae69870dbf69da3cda3cb170c3f5069b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac460df9a91b4dcef352df862a4b8806e"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#ac460df9a91b4dcef352df862a4b8806e">checkResults_</a></td></tr>
+<tr class="separator:ac460df9a91b4dcef352df862a4b8806e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80eb1250db6d0fd5bb4ba4ebbf1dd3f4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a80eb1250db6d0fd5bb4ba4ebbf1dd3f4">numFailedChecks_</a> {}</td></tr>
+<tr class="separator:a80eb1250db6d0fd5bb4ba4ebbf1dd3f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a703b1deff3a7d892f41ea6c2d730c372"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#a703b1deff3a7d892f41ea6c2d730c372">numFailedTests_</a> {}</td></tr>
+<tr class="separator:a703b1deff3a7d892f41ea6c2d730c372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3399c917dc19bb03c3a746d874b92d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#ac3399c917dc19bb03c3a746d874b92d0">numPassedChecks_</a> {}</td></tr>
+<tr class="separator:ac3399c917dc19bb03c3a746d874b92d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7a701885a73baa3eb686e713428432b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#aa7a701885a73baa3eb686e713428432b">numPassedTests_</a> {}</td></tr>
+<tr class="separator:aa7a701885a73baa3eb686e713428432b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab552f731001a4043bac2260eda25f2b0"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestResults.html#ab552f731001a4043bac2260eda25f2b0">testResults_</a></td></tr>
+<tr class="separator:ab552f731001a4043bac2260eda25f2b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classSelfTest_1_1TestResults.html" title="The TestResults class describes the outcome of series of tests run consecutively. ...">TestResults</a> class describes the outcome of series of tests run consecutively. </p>
@@ -155,46 +153,7 @@ Private Attributes</h2></td></tr>
 <li>Coarse-grained: tests.</li>
 </ul>
 <p>Typically a check is only logged if it fails, providing failure details. A test should be logged in all cases (failure or success). </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aba7cf70762ebbb3907be6aa38d0bcbde"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SelfTest::TestResults::TestResults </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aec8e9bdde380f32aa8a2ae6271829baf"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">SelfTest::TestResults::~TestResults </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a12da2df00f67826fb6831b60f2a6ff91"></a>
 <div class="memitem">
 <div class="memproto">
@@ -262,6 +221,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a4d5603dd291c78983eb2f7a9af106b1c"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">const QList&lt; <a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a> &gt; &amp; SelfTest::TestResults::getCheckResults </td>
@@ -270,6 +232,11 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -277,6 +244,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="af67b5d4d3ab265528a7e1ffb243e2c34"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int SelfTest::TestResults::getNumExecutedChecks </td>
@@ -285,6 +255,11 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -292,6 +267,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a34cf7cd9bb1a8d8add19f81124bf91ee"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int SelfTest::TestResults::getNumExecutedTests </td>
@@ -300,6 +278,11 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -307,6 +290,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a5be60f49f8b7567ecc97a13da51cd1fb"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int SelfTest::TestResults::getNumFailedChecks </td>
@@ -315,6 +301,11 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -322,6 +313,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a09a972ddc353e4beb539b0d427c98593"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int SelfTest::TestResults::getNumFailedTests </td>
@@ -330,6 +324,11 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -337,6 +336,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a12ac74ce522db7e25efb97a1fe05c7d3"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int SelfTest::TestResults::getNumPassedChecks </td>
@@ -345,6 +347,11 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -352,6 +359,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a5463fc4cd5e10de91cf970ef042a1936"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int SelfTest::TestResults::getNumPassedTests </td>
@@ -360,6 +370,11 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -367,12 +382,36 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a0dd73b3504210be99cfd8f13286af962"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">const QList&lt; <a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a> &gt; &amp; SelfTest::TestResults::getTestResults </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0b8ebef1d899e74dc009539ec185fba8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SelfTest::TestResults::merge </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -397,7 +436,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a9205b85b32578f27fe7105c5e46df40e"></a>
+<a class="anchor" id="ac460df9a91b4dcef352df862a4b8806e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -405,7 +444,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a>&gt; SelfTest::TestResults::checkResults</td>
+          <td class="memname">QList&lt;<a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a>&gt; SelfTest::TestResults::checkResults_</td>
         </tr>
       </table>
   </td>
@@ -417,7 +456,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a72cc5ebfc51848c832e3c7eaa56f6568"></a>
+<a class="anchor" id="a80eb1250db6d0fd5bb4ba4ebbf1dd3f4"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -425,7 +464,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int SelfTest::TestResults::numFailedChecks</td>
+          <td class="memname">int SelfTest::TestResults::numFailedChecks_ {}</td>
         </tr>
       </table>
   </td>
@@ -437,7 +476,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4cee1ad608a5dfd89b0b5b1395be16c4"></a>
+<a class="anchor" id="a703b1deff3a7d892f41ea6c2d730c372"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -445,7 +484,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int SelfTest::TestResults::numFailedTests</td>
+          <td class="memname">int SelfTest::TestResults::numFailedTests_ {}</td>
         </tr>
       </table>
   </td>
@@ -457,7 +496,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad8bb967b2b61dda784a9b3241650ec18"></a>
+<a class="anchor" id="ac3399c917dc19bb03c3a746d874b92d0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -465,7 +504,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int SelfTest::TestResults::numPassedChecks</td>
+          <td class="memname">int SelfTest::TestResults::numPassedChecks_ {}</td>
         </tr>
       </table>
   </td>
@@ -477,7 +516,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7ed91f59f893394a09ec49a468536795"></a>
+<a class="anchor" id="aa7a701885a73baa3eb686e713428432b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -485,7 +524,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int SelfTest::TestResults::numPassedTests</td>
+          <td class="memname">int SelfTest::TestResults::numPassedTests_ {}</td>
         </tr>
       </table>
   </td>
@@ -497,7 +536,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae69870dbf69da3cda3cb170c3f5069b8"></a>
+<a class="anchor" id="ab552f731001a4043bac2260eda25f2b0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -505,7 +544,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a>&gt; SelfTest::TestResults::testResults</td>
+          <td class="memname">QList&lt;<a class="el" href="classSelfTest_1_1TestResult.html">TestResult</a>&gt; SelfTest::TestResults::testResults_</td>
         </tr>
       </table>
   </td>

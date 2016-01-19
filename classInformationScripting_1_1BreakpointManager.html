@@ -93,7 +93,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">InformationScripting::BreakpointManager Class Reference</div>  </div>
 </div><!--header-->
@@ -123,6 +124,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0d6f334ce239a47694ec718f065ec0e1 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4ba0f7a519f1a8409f1aa8323018800 inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#ae4ba0f7a519f1a8409f1aa8323018800">~Query</a> ()=default</td></tr>
 <tr class="separator:ae4ba0f7a519f1a8409f1aa8323018800 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8669aebe07754cccb4cf3bab714a175 inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#af8669aebe07754cccb4cf3bab714a175">hasInput</a> () const </td></tr>
+<tr class="separator:af8669aebe07754cccb4cf3bab714a175 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ad009b096cdb480ed0263e576f6fa3e inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#a0ad009b096cdb480ed0263e576f6fa3e">setHasInput</a> ()</td></tr>
+<tr class="separator:a0ad009b096cdb480ed0263e576f6fa3e inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab350ae38ae284053507f1088b0d817b4 inherit pub_methods_classInformationScripting_1_1Query"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a> () const </td></tr>
 <tr class="separator:ab350ae38ae284053507f1088b0d817b4 inherit pub_methods_classInformationScripting_1_1Query"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -133,7 +138,7 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a3ebef54af91a54bf06a35c98a5ce70de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1BreakpointManager.html#a3ebef54af91a54bf06a35c98a5ce70de">BreakpointManager</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a>, <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a> <a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>)</td></tr>
+<tr class="memitem:a3ebef54af91a54bf06a35c98a5ce70de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1BreakpointManager.html#a3ebef54af91a54bf06a35c98a5ce70de">BreakpointManager</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classInformationScripting_1_1Query.html#ab350ae38ae284053507f1088b0d817b4">target</a>, QStringList <a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>)</td></tr>
 <tr class="separator:a3ebef54af91a54bf06a35c98a5ce70de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -143,8 +148,13 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a79e6be62c177f8916f66711f53fc83af"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1BreakpointManager.html#a79e6be62c177f8916f66711f53fc83af">VISIBLE_ARGUMENT_NAMES</a> {&quot;v&quot;, &quot;visible&quot;}</td></tr>
+<tr class="memitem:a79e6be62c177f8916f66711f53fc83af"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1BreakpointManager.html#a79e6be62c177f8916f66711f53fc83af">VISIBLE_ARGUMENT_NAMES</a> {&quot;v&quot;, &quot;visible&quot;}</td></tr>
 <tr class="separator:a79e6be62c177f8916f66711f53fc83af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a5186d8fbab86fa26ce5555b047077f8c"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1BreakpointManager.html#a5186d8fbab86fa26ce5555b047077f8c">QueryRegistry</a></td></tr>
+<tr class="separator:a5186d8fbab86fa26ce5555b047077f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a3ebef54af91a54bf06a35c98a5ce70de"></a>
@@ -163,7 +173,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a>&#160;</td>
+          <td class="paramtype">QStringList&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -231,6 +241,27 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="a5186d8fbab86fa26ce5555b047077f8c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classInformationScripting_1_1QueryRegistry.html">QueryRegistry</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a2d1ccb182393f00d8497003e31d672f0"></a>
 <div class="memitem">
@@ -260,7 +291,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="namespaceInformationScripting.html#a3f8839a45aaacad1f71b287159938536">QStringList</a> InformationScripting::BreakpointManager::VISIBLE_ARGUMENT_NAMES {&quot;v&quot;, &quot;visible&quot;}</td>
+          <td class="memname">const QStringList InformationScripting::BreakpointManager::VISIBLE_ARGUMENT_NAMES {&quot;v&quot;, &quot;visible&quot;}</td>
         </tr>
       </table>
   </td>

@@ -112,11 +112,13 @@ Inheritance diagram for CppImport::ExpressionVisitor:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad3feb6411d1edee2bd144e053717b397"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#ad3feb6411d1edee2bd144e053717b397">ExpressionVisitor</a> (<a class="el" href="classCppImport_1_1ClangAstVisitor.html">ClangAstVisitor</a> *visitor, <a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *log)</td></tr>
-<tr class="separator:ad3feb6411d1edee2bd144e053717b397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4b8680e871964cb207e0855276bc36d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#af4b8680e871964cb207e0855276bc36d">ExpressionVisitor</a> (<a class="el" href="classCppImport_1_1ClangAstVisitor.html">ClangAstVisitor</a> *visitor, <a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;clang, <a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *log)</td></tr>
+<tr class="separator:af4b8680e871964cb207e0855276bc36d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9afbd5d17ea28bd58580638d1cc96a56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#a9afbd5d17ea28bd58580638d1cc96a56">setUtilities</a> (<a class="el" href="classCppImport_1_1CppImportUtilities.html">CppImportUtilities</a> *utils)</td></tr>
 <tr class="memdesc:a9afbd5d17ea28bd58580638d1cc96a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function should be called directly after instantiating this visitor.  <a href="#a9afbd5d17ea28bd58580638d1cc96a56">More...</a><br /></td></tr>
 <tr class="separator:a9afbd5d17ea28bd58580638d1cc96a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb54ecd15110850c1af9cd67ed91db57"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#adb54ecd15110850c1af9cd67ed91db57">translateArguments</a> (clang::Expr **arguments, int numArguments)</td></tr>
+<tr class="separator:adb54ecd15110850c1af9cd67ed91db57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac2f7e4d53e41f6aec3909d55a2902f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#aac2f7e4d53e41f6aec3909d55a2902f0">translateExpression</a> (clang::Stmt *s)</td></tr>
 <tr class="memdesc:aac2f7e4d53e41f6aec3909d55a2902f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates the expression <em>s</em>.  <a href="#aac2f7e4d53e41f6aec3909d55a2902f0">More...</a><br /></td></tr>
 <tr class="separator:aac2f7e4d53e41f6aec3909d55a2902f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -293,9 +295,9 @@ Private Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a5ac7e76ebfb3b854b26ed04ab5de4150"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#a5ac7e76ebfb3b854b26ed04ab5de4150">createRef</a> (const QString &amp;name, const clang::SourceLocation &amp;location, const clang::NestedNameSpecifier *qualifier=nullptr, const clang::TemplateArgumentLoc *templateArgs=nullptr, unsigned numTArgs=0, clang::Expr *base=nullptr)</td></tr>
-<tr class="memdesc:a5ac7e76ebfb3b854b26ed04ab5de4150"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracts common code between all kinds of MemberExpr and DeclRefExpr.  <a href="#a5ac7e76ebfb3b854b26ed04ab5de4150">More...</a><br /></td></tr>
-<tr class="separator:a5ac7e76ebfb3b854b26ed04ab5de4150"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64d458a57fa6ec7a10ab5f00cf811631"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#a64d458a57fa6ec7a10ab5f00cf811631">createQualifiedReferenceWithTemplateArguments</a> (clang::SourceRange sourceRange, const clang::NestedNameSpecifierLoc qualifier, const clang::TemplateArgumentLoc *templateArgs=nullptr, unsigned numTArgs=0, clang::Expr *base=nullptr)</td></tr>
+<tr class="memdesc:a64d458a57fa6ec7a10ab5f00cf811631"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracts common code between all kinds of MemberExpr and DeclRefExpr.  <a href="#a64d458a57fa6ec7a10ab5f00cf811631">More...</a><br /></td></tr>
+<tr class="separator:a64d458a57fa6ec7a10ab5f00cf811631"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8254c2e889c7bdb6b910a68f4fd4636a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#a8254c2e889c7bdb6b910a68f4fd4636a">TraverseAssignment</a> (clang::BinaryOperator *binaryOperator)</td></tr>
 <tr class="memdesc:a8254c2e889c7bdb6b910a68f4fd4636a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper Function for all assign operations as clang has for each operator an own Traverse method.  <a href="#a8254c2e889c7bdb6b910a68f4fd4636a">More...</a><br /></td></tr>
 <tr class="separator:a8254c2e889c7bdb6b910a68f4fd4636a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -311,6 +313,8 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a6e113de58e31f688ac5f5d77e0e8fd5f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#a6e113de58e31f688ac5f5d77e0e8fd5f">clang_</a></td></tr>
+<tr class="separator:a6e113de58e31f688ac5f5d77e0e8fd5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae286706f7a18fe0dacb7446091885893"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#ae286706f7a18fe0dacb7446091885893">className_</a> {&quot;ExpressionVisitor&quot;}</td></tr>
 <tr class="separator:ae286706f7a18fe0dacb7446091885893"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19f401e97c26a0b66c878fdda048882f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ExpressionVisitor.html#a19f401e97c26a0b66c878fdda048882f">log_</a> {}</td></tr>
@@ -345,7 +349,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ad3feb6411d1edee2bd144e053717b397"></a>
+<a class="anchor" id="af4b8680e871964cb207e0855276bc36d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -354,6 +358,12 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCppImport_1_1ClangAstVisitor.html">ClangAstVisitor</a> *&#160;</td>
           <td class="paramname"><em>visitor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td>
+          <td class="paramname"><em>clang</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -372,7 +382,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a5ac7e76ebfb3b854b26ed04ab5de4150"></a>
+<a class="anchor" id="a64d458a57fa6ec7a10ab5f00cf811631"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -380,22 +390,16 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> * CppImport::ExpressionVisitor::createRef </td>
+          <td class="memname"><a class="el" href="classOOModel_1_1ReferenceExpression.html">OOModel::ReferenceExpression</a> * CppImport::ExpressionVisitor::createQualifiedReferenceWithTemplateArguments </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
+          <td class="paramtype">clang::SourceRange&#160;</td>
+          <td class="paramname"><em>sourceRange</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const clang::SourceLocation &amp;&#160;</td>
-          <td class="paramname"><em>location</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const clang::NestedNameSpecifier *&#160;</td>
-          <td class="paramname"><em>qualifier</em> = <code>nullptr</code>, </td>
+          <td class="paramtype">const clang::NestedNameSpecifierLoc&#160;</td>
+          <td class="paramname"><em>qualifier</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -449,6 +453,32 @@ Private Attributes</h2></td></tr>
 
 <p>This function should be called directly after instantiating this visitor. </p>
 <p>The two classes have a dependency on each other. </p>
+
+</div>
+</div>
+<a class="anchor" id="adb54ecd15110850c1af9cd67ed91db57"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * &gt; CppImport::ExpressionVisitor::translateArguments </td>
+          <td>(</td>
+          <td class="paramtype">clang::Expr **&#160;</td>
+          <td class="paramname"><em>arguments</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numArguments</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2266,6 +2296,26 @@ Private Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classCppImport_1_1ClangAstVisitor.html">ClangAstVisitor</a>* CppImport::ExpressionVisitor::baseVisitor_ {}</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6e113de58e31f688ac5f5d77e0e8fd5f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a>&amp; CppImport::ExpressionVisitor::clang_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

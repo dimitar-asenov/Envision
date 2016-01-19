@@ -99,7 +99,33 @@ Associating a handler class with an item class</h1>
 <p>Now let's see how to write the handler.</p>
 <h1><a class="anchor" id="hif_header"></a>
 HIfStatement.h</h1>
-<p>First, we'll have a look at the header file. Here is <code>HIfStatement.h</code> :  <div class="fragment"><div class="line"><span class="preprocessor">#pragma once</span></div>
+<p>First, we'll have a look at the header file. Here is <code>HIfStatement.h</code> : </p><div class="fragment"><div class="line"><span class="comment">/***********************************************************************************************************************</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> ** Copyright (c) 2011, 2014 ETH Zurich</span></div>
+<div class="line"><span class="comment"> ** All rights reserved.</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the</span></div>
+<div class="line"><span class="comment"> ** following conditions are met:</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the</span></div>
+<div class="line"><span class="comment"> **      following disclaimer.</span></div>
+<div class="line"><span class="comment"> **    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the</span></div>
+<div class="line"><span class="comment"> **      following disclaimer in the documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><span class="comment"> **    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><span class="comment"> **      derived from this software without specific prior written permission.</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES,</span></div>
+<div class="line"><span class="comment"> ** INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><span class="comment"> ** DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span></div>
+<div class="line"><span class="comment"> ** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</span></div>
+<div class="line"><span class="comment"> ** SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,</span></div>
+<div class="line"><span class="comment"> ** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span></div>
+<div class="line"><span class="comment"> ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> **********************************************************************************************************************/</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#pragma once</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;../oointeraction_api.h&quot;</span></div>
 <div class="line"></div>
@@ -117,15 +143,40 @@ HIfStatement.h</h1>
 <div class="line">      HIfStatement();</div>
 <div class="line">};</div>
 <div class="line"></div>
-<div class="line">} <span class="comment">/* namespace OOInteraction */</span></div>
-</div><!-- fragment --></p>
-<p>Each handler must inherit from <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a>. In practice the only handler that directly inherits from it is <a class="el" href="classInteraction_1_1GenericHandler.html">Interaction::GenericHandler</a>. This is where a lot of common functionality is implemented. Therefore it is recommended that all new handlers inherit from <a class="el" href="classInteraction_1_1GenericHandler.html">Interaction::GenericHandler</a>. In our case the base handler is <a class="el" href="classOOInteraction_1_1HStatement.html">OOInteraction::HStatement</a> which is the default handler for all statement items. It implements some functionality regarding creating new statements in statement lists and itself inherits from <a class="el" href="classInteraction_1_1GenericHandler.html">Interaction::GenericHandler</a>.</p>
+<div class="line">}</div>
+</div><!-- fragment --><p>Each handler must inherit from <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a>. In practice the only handler that directly inherits from it is <a class="el" href="classInteraction_1_1GenericHandler.html">Interaction::GenericHandler</a>. This is where a lot of common functionality is implemented. Therefore it is recommended that all new handlers inherit from <a class="el" href="classInteraction_1_1GenericHandler.html">Interaction::GenericHandler</a>. In our case the base handler is <a class="el" href="classOOInteraction_1_1HStatement.html">OOInteraction::HStatement</a> which is the default handler for all statement items. It implements some functionality regarding creating new statements in statement lists and itself inherits from <a class="el" href="classInteraction_1_1GenericHandler.html">Interaction::GenericHandler</a>.</p>
 <p>Each handler is a singleton and needs a public <code>instance()</code> method that returns a pointer to the only instance. The constructor is protected. This make it possible to create inherited handlers.</p>
 <p>In the custom handler for if statements, we'll only customize keyboard interaction. Thus the only method that is overridden is <code>keyPressEvent()</code>. For a list of all possible methods that can be overridden have a look at <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a>.</p>
 <p>Let's look at the <code></code>.cpp file to see what this handler does exactly.</p>
 <h1><a class="anchor" id="hif_cpp"></a>
 HIfStatement.cpp</h1>
-<p>Here is the complete contents of the <code>HIfStatement.cpp</code> :  <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;handlers/HIfStatement.h&quot;</span></div>
+<p>Here is the complete contents of the <code>HIfStatement.cpp</code> : </p><div class="fragment"><div class="line"><span class="comment">/***********************************************************************************************************************</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> ** Copyright (c) 2011, 2014 ETH Zurich</span></div>
+<div class="line"><span class="comment"> ** All rights reserved.</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the</span></div>
+<div class="line"><span class="comment"> ** following conditions are met:</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the</span></div>
+<div class="line"><span class="comment"> **      following disclaimer.</span></div>
+<div class="line"><span class="comment"> **    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the</span></div>
+<div class="line"><span class="comment"> **      following disclaimer in the documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><span class="comment"> **    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><span class="comment"> **      derived from this software without specific prior written permission.</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES,</span></div>
+<div class="line"><span class="comment"> ** INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><span class="comment"> ** DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span></div>
+<div class="line"><span class="comment"> ** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</span></div>
+<div class="line"><span class="comment"> ** SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,</span></div>
+<div class="line"><span class="comment"> ** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span></div>
+<div class="line"><span class="comment"> ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><span class="comment"> **</span></div>
+<div class="line"><span class="comment"> **********************************************************************************************************************/</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &quot;HIfStatement.h&quot;</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;OOVisualization/src/statements/VIfStatement.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;OOVisualization/src/elements/VStatementItemList.h&quot;</span></div>
@@ -169,15 +220,15 @@ HIfStatement.cpp</h1>
 <div class="line">      }</div>
 <div class="line">      <span class="keywordflow">else</span></div>
 <div class="line">      {</div>
-<div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>();</div>
-<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>();</div>
+<div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>{};</div>
+<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>{};</div>
 <div class="line">         es-&gt;setExpression(empty);</div>
 <div class="line">         vif-&gt;node()-&gt;beginModification(<span class="stringliteral">&quot;create then branch&quot;</span>);</div>
 <div class="line">         vif-&gt;node()-&gt;thenBranch()-&gt;append(es);</div>
 <div class="line">         vif-&gt;node()-&gt;endModification();</div>
 <div class="line"></div>
 <div class="line">         vif-&gt;thenBranch()-&gt;setUpdateNeeded(<a class="code" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890ab11a8971e9791d4e2f1af5e91337805a">Visualization::Item::StandardUpdate</a>);</div>
-<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target, empty));</div>
+<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target, empty});</div>
 <div class="line">      }</div>
 <div class="line">   }</div>
 <div class="line">   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (vif-&gt;thenBranch()-&gt;itemOrChildHasFocus() &amp;&amp; tab )</div>
@@ -191,15 +242,15 @@ HIfStatement.cpp</h1>
 <div class="line">      }</div>
 <div class="line">      <span class="keywordflow">else</span></div>
 <div class="line">      {</div>
-<div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>();</div>
-<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>();</div>
+<div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>{};</div>
+<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>{};</div>
 <div class="line">         es-&gt;setExpression(empty);</div>
 <div class="line">         vif-&gt;node()-&gt;beginModification(<span class="stringliteral">&quot;create else branch&quot;</span>);</div>
 <div class="line">         vif-&gt;node()-&gt;elseBranch()-&gt;append(es);</div>
 <div class="line">         vif-&gt;node()-&gt;endModification();</div>
 <div class="line"></div>
 <div class="line">         vif-&gt;setUpdateNeeded(<a class="code" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890ab11a8971e9791d4e2f1af5e91337805a">Visualization::Item::StandardUpdate</a>);</div>
-<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target, empty));</div>
+<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target, empty});</div>
 <div class="line">      }</div>
 <div class="line">   }</div>
 <div class="line">   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event-&gt;modifiers() == Qt::NoModifier</div>
@@ -215,8 +266,8 @@ HIfStatement.cpp</h1>
 <div class="line">   <span class="keywordflow">if</span> (!event-&gt;isAccepted()) <a class="code" href="classOOInteraction_1_1HStatement.html#ac5d5a96cd4990d6d652615a89c2b0a10">HStatement::keyPressEvent</a>(target, event);</div>
 <div class="line">}</div>
 <div class="line"></div>
-<div class="line">} <span class="comment">/* namespace OOInteraction */</span></div>
-</div><!-- fragment --> <p>As the rest is trivial we'll jump directly to the <code>keyPressEvent()</code> method and examine it piece by piece: <div class="fragment"><div class="line"><span class="keywordtype">void</span> HIfStatement::keyPressEvent(<a class="code" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event)</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>As the rest is trivial we'll jump directly to the <code>keyPressEvent()</code> method and examine it piece by piece: <div class="fragment"><div class="line"><span class="keywordtype">void</span> HIfStatement::keyPressEvent(<a class="code" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event)</div>
 </div><!-- fragment --> Each handler method receives two parameters:</p><ul>
 <li>The <em>target</em> visualization. This is the visual item that received this event. It is safe to use <code>static_cast</code> to cast this directly to the item class for which this handler was registered. If you are using a handler for multiple visualizations then you should use <code>dynamic_cast</code> to distinguish between the different target types.</li>
 <li>The <em>event</em> as received by Qt's Graphics View system. This contains info regarding the event (e.g. what key was pressed).</li>
@@ -237,15 +288,15 @@ HIfStatement.cpp</h1>
 <p>Next we need to check whether the <em>then</em> branch already exists (has items) or not: <div class="fragment"><div class="line">      <span class="keywordflow">if</span> (vif-&gt;node()-&gt;thenBranch()-&gt;size() &gt; 0)</div>
 </div><!-- fragment --> If there are already some items, simply switch to the first one: <div class="fragment"><div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>(</div>
 <div class="line">               <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target, vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;thenBranch()-&gt;at(0)));</div>
-</div><!-- fragment --> otherwise create a new empty expression and focus it: <div class="fragment"><div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>();</div>
-<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>();</div>
+</div><!-- fragment --> otherwise create a new empty expression and focus it: <div class="fragment"><div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>{};</div>
+<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>{};</div>
 <div class="line">         es-&gt;setExpression(empty);</div>
 <div class="line">         vif-&gt;node()-&gt;beginModification(<span class="stringliteral">&quot;create then branch&quot;</span>);</div>
 <div class="line">         vif-&gt;node()-&gt;thenBranch()-&gt;append(es);</div>
 <div class="line">         vif-&gt;node()-&gt;endModification();</div>
 <div class="line"></div>
 <div class="line">         vif-&gt;thenBranch()-&gt;setUpdateNeeded(<a class="code" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890ab11a8971e9791d4e2f1af5e91337805a">Visualization::Item::StandardUpdate</a>);</div>
-<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target, empty));</div>
+<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target, empty});</div>
 </div><!-- fragment --> Notice how we explicitly request an update on the current item since we made a change to the tree.</p>
 <p>The code for switching to the <em>else</em> branch when the <em>then</em> branch is selected is almost identical: <div class="fragment"><div class="line">   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (vif-&gt;thenBranch()-&gt;itemOrChildHasFocus() &amp;&amp; tab )</div>
 <div class="line">   {</div>
@@ -258,17 +309,16 @@ HIfStatement.cpp</h1>
 <div class="line">      }</div>
 <div class="line">      <span class="keywordflow">else</span></div>
 <div class="line">      {</div>
-<div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>();</div>
-<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>();</div>
+<div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>{};</div>
+<div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>{};</div>
 <div class="line">         es-&gt;setExpression(empty);</div>
 <div class="line">         vif-&gt;node()-&gt;beginModification(<span class="stringliteral">&quot;create else branch&quot;</span>);</div>
 <div class="line">         vif-&gt;node()-&gt;elseBranch()-&gt;append(es);</div>
 <div class="line">         vif-&gt;node()-&gt;endModification();</div>
 <div class="line"></div>
 <div class="line">         vif-&gt;setUpdateNeeded(<a class="code" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890ab11a8971e9791d4e2f1af5e91337805a">Visualization::Item::StandardUpdate</a>);</div>
-<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target, empty));</div>
+<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target, empty});</div>
 <div class="line">      }</div>
-<div class="line">   }</div>
 </div><!-- fragment --></p>
 <p>Finally, the last action we react on is pressing <em>Backspace</em> or <em>Delete</em> when the icon is selected, or pressing <em>Backspace</em> when the condition is selected: <div class="fragment"><div class="line">   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event-&gt;modifiers() == Qt::NoModifier</div>
 <div class="line">         &amp;&amp; ((<span class="keyword">event</span>-&gt;key() == Qt::Key_Backspace &amp;&amp; vif-&gt;condition()-&gt;itemOrChildHasFocus())</div>

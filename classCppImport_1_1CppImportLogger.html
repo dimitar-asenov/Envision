@@ -124,8 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a76ec83a079fb60022383c9262642a903"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3d1403537fb4b1c5a79b50ee42ba13e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportLogger.html#af3d1403537fb4b1c5a79b50ee42ba13e">storageClassNotSupported</a> (const clang::StorageClass &amp;sc)</td></tr>
 <tr class="separator:af3d1403537fb4b1c5a79b50ee42ba13e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90777f439c9b82e19f0cba6aaee747a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportLogger.html#a90777f439c9b82e19f0cba6aaee747a9">typeNotSupported</a> (const clang::Type *type, const clang::SourceLocation &amp;location)</td></tr>
-<tr class="separator:a90777f439c9b82e19f0cba6aaee747a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acba119d3b974f675f5b80cfc8e71294d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportLogger.html#acba119d3b974f675f5b80cfc8e71294d">typeNotSupported</a> (const clang::TypeLoc typeloc, const clang::SourceLocation &amp;location)</td></tr>
+<tr class="separator:acba119d3b974f675f5b80cfc8e71294d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a1d2f694fc3871f433c1a2da9d578a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportLogger.html#a3a1d2f694fc3871f433c1a2da9d578a9">unaryOpNotSupported</a> (const clang::UnaryOperatorKind &amp;kind)</td></tr>
 <tr class="separator:a3a1d2f694fc3871f433c1a2da9d578a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad77009ca39a844d90001f21979fdab15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportLogger.html#ad77009ca39a844d90001f21979fdab15">writeError</a> (const QString &amp;inWhichClass, const clang::Decl *decl, const <a class="el" href="classCppImport_1_1CppImportLogger.html#a0a0d5e2dcef9bc6a9431a9690ee37bc7">Reason</a> &amp;r, const QString &amp;reason=QString())</td></tr>
@@ -441,15 +441,15 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a90777f439c9b82e19f0cba6aaee747a9"></a>
+<a class="anchor" id="acba119d3b974f675f5b80cfc8e71294d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void CppImport::CppImportLogger::typeNotSupported </td>
           <td>(</td>
-          <td class="paramtype">const clang::Type *&#160;</td>
-          <td class="paramname"><em>type</em>, </td>
+          <td class="paramtype">const clang::TypeLoc&#160;</td>
+          <td class="paramname"><em>typeloc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

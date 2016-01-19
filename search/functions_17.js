@@ -4,7 +4,7 @@ var searchData=
   ['xbegin',['xBegin',['../classVisualization_1_1TextCursor.html#abafcd39766244e57e3fda1806ef186a6',1,'Visualization::TextCursor']]],
   ['xend',['xEnd',['../classVisualization_1_1TextCursor.html#a58e2745151b31bdf4aadf3957dc43cb6',1,'Visualization::TextCursor::xEnd()'],['../classVisualization_1_1FormElement.html#a71f5de7b877ff3c36817b0bcbb8dbe91',1,'Visualization::FormElement::xEnd()']]],
   ['xendinparent',['xEndInParent',['../classVisualization_1_1Item.html#a60ab885ab41427cfd34317359311920e',1,'Visualization::Item']]],
-  ['xmacrochildren',['xMacroChildren',['../classCppImport_1_1MacroExpansion.html#a2d87a48f21919f861a9f590d03ef1b09',1,'CppImport::MacroExpansion']]],
+  ['xmacrochildren',['xMacroChildren',['../classCppImport_1_1MacroExpansion.html#a82ad16521405877d94004030accdd689',1,'CppImport::MacroExpansion']]],
   ['xmacrometadefinition',['xMacroMetaDefinition',['../classCppImport_1_1AllMetaDefinitions.html#a83daa5b16c281fe291b3c60e537b8891',1,'CppImport::AllMetaDefinitions']]],
   ['xmacroparent',['xMacroParent',['../classCppImport_1_1MacroExpansion.html#a188a4b4e96031801aa2370e99fafde87',1,'CppImport::MacroExpansion']]],
   ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html#a551c3ea11ac089c0e5b2962c3ddd05f0',1,'FilePersistence::XMLModel::XMLModel()'],['../classFilePersistence_1_1XMLModel.html#aedc66313f6a7e1e964c7cace7902f224',1,'FilePersistence::XMLModel::XMLModel(const QString &amp;filename)']]],

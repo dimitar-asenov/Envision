@@ -109,6 +109,8 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:acaf9159568d33ec27e076a58269df413"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of a Breakpoint: <em>Internal</em> means the user will not see the breakpoint.  <a href="classOODebug_1_1JavaDebugger.html#acaf9159568d33ec27e076a58269df413">More...</a><br /></td></tr>
 <tr class="separator:acaf9159568d33ec27e076a58269df413"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a126dbecba8bbe2235ceb0f7a16626709"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">ProgramExitSingleShot</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="separator:a126dbecba8bbe2235ceb0f7a16626709"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6def3ae59fb99d1693186ef17636c9db"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a6def3ae59fb99d1693186ef17636c9db">ValueHandler</a> = std::function&lt; void(<a class="el" href="classOODebug_1_1JavaDebugger.html">JavaDebugger</a> *, <a class="el" href="structOODebug_1_1Values.html">Values</a>, QList&lt; <a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a> &gt;, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *)&gt;</td></tr>
 <tr class="separator:a6def3ae59fb99d1693186ef17636c9db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -118,6 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a163b7fc51ca3221d270d73803da4ba7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafde2c6bb01d1f71fcfc0cf262029bf2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#aafde2c6bb01d1f71fcfc0cf262029bf2">addBreakpointListener</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">BreakpointListener</a> listener)</td></tr>
 <tr class="separator:aafde2c6bb01d1f71fcfc0cf262029bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefe7e52cd1d6ab0c3683f3fd0571c9f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#aefe7e52cd1d6ab0c3683f3fd0571c9f4">addProgramExitLister</a> (<a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">ProgramExitSingleShot</a> listener)</td></tr>
+<tr class="memdesc:aefe7e52cd1d6ab0c3683f3fd0571c9f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a listener for the next program exit.  <a href="#aefe7e52cd1d6ab0c3683f3fd0571c9f4">More...</a><br /></td></tr>
+<tr class="separator:aefe7e52cd1d6ab0c3683f3fd0571c9f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a341ff8371d4825af939e47a6de687bd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1CommandResult.html">Interaction::CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a341ff8371d4825af939e47a6de687bd9">debugTree</a> (<a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *manager, const QString &amp;pathToProjectContainerDirectory)</td></tr>
 <tr class="memdesc:a341ff8371d4825af939e47a6de687bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts a debug session for the current project.  <a href="#a341ff8371d4825af939e47a6de687bd9">More...</a><br /></td></tr>
 <tr class="separator:a341ff8371d4825af939e47a6de687bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,6 +199,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6a6b59eff440f8e5b193e67eebea98a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af129869b0e07d842ee01998e66a0c211"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1DebugConnector.html">DebugConnector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#af129869b0e07d842ee01998e66a0c211">debugConnector_</a></td></tr>
 <tr class="separator:af129869b0e07d842ee01998e66a0c211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a9395b3bbfd27dc2857f3a8111466b1"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">ProgramExitSingleShot</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a4a9395b3bbfd27dc2857f3a8111466b1">exitListeners_</a></td></tr>
+<tr class="separator:a4a9395b3bbfd27dc2857f3a8111466b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5681d81e00f68af15d2f5f4630fd80e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a5681d81e00f68af15d2f5f4630fd80e4">nextBreakpointListenerId_</a> {0}</td></tr>
 <tr class="separator:a5681d81e00f68af15d2f5f4630fd80e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8fa84900af24c4551511fad3019c584"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, std::shared_ptr&lt; <a class="el" href="structOODebug_1_1VariableObserver.html">VariableObserver</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ac8fa84900af24c4551511fad3019c584">nodeObservedBy_</a></td></tr>
@@ -223,6 +230,18 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">OODebug::JavaDebugger::BreakpointListener</a> =  std::function&lt;bool (<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, const <a class="el" href="structOODebug_1_1BreakpointEvent.html">BreakpointEvent</a>&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a126dbecba8bbe2235ceb0f7a16626709"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">OODebug::JavaDebugger::ProgramExitSingleShot</a> =  std::function&lt;void ()&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -401,6 +420,33 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aefe7e52cd1d6ab0c3683f3fd0571c9f4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OODebug::JavaDebugger::addProgramExitLister </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">JavaDebugger::ProgramExitSingleShot</a>&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Register a listener for the next program exit. </p>
+<p>Once the event happened the listener will be destroyed and not called in any subsequent event. </p>
 
 </div>
 </div>
@@ -1203,6 +1249,26 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classOODebug_1_1DebugConnector.html">DebugConnector</a> OODebug::JavaDebugger::debugConnector_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4a9395b3bbfd27dc2857f3a8111466b1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;<a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">ProgramExitSingleShot</a>&gt; OODebug::JavaDebugger::exitListeners_</td>
         </tr>
       </table>
   </td>

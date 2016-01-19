@@ -132,11 +132,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeff52ddb91971ed88a22df65acb436a9"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#aeff52ddb91971ed88a22df65acb436a9">isLocationEquivalent</a> (<a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *c)</td></tr>
 <tr class="memdesc:aeff52ddb91971ed88a22df65acb436a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this cursor is equivalent with respect to its location to the cursor <em>c</em>.  <a href="#aeff52ddb91971ed88a22df65acb436a9">More...</a><br /></td></tr>
 <tr class="separator:aeff52ddb91971ed88a22df65acb436a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf70f2b8cef6c609ccd20865e3ef1e0a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#acf70f2b8cef6c609ccd20865e3ef1e0a">isLocationEquivalent</a> (bool <a class="el" href="classVisualization_1_1Cursor.html#a8ac3678893f4b70a15ad9b94e62dd20b">notLocationEquivalent</a>, <a class="el" href="classVisualization_1_1Cursor.html#a3ddd666facd79a96de99bbed8c9bd706">CursorType</a> <a class="el" href="classVisualization_1_1Cursor.html#a72246b7b78a1e7086881fc7f0a6e6e7d">type</a>, bool <a class="el" href="classVisualization_1_1Cursor.html#ac175180d1b1e05430943901928659f16">isAtBoundary</a>, <a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Cursor.html#a5e4d8979f8d9d93b27e2847ce7c5de8d">owner</a>)</td></tr>
-<tr class="separator:acf70f2b8cef6c609ccd20865e3ef1e0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab75b091b699b68d3a860f8898f828661"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#ab75b091b699b68d3a860f8898f828661">isSame</a> (<a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *c)</td></tr>
-<tr class="memdesc:ab75b091b699b68d3a860f8898f828661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this cursor is the same as the cursor <em>c</em>.  <a href="#ab75b091b699b68d3a860f8898f828661">More...</a><br /></td></tr>
-<tr class="separator:ab75b091b699b68d3a860f8898f828661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab723f0367021a1d1e8432c04ca28cd29"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#ab723f0367021a1d1e8432c04ca28cd29">isLocationEquivalent</a> (bool otherNotLocationEquivalent, <a class="el" href="classVisualization_1_1Cursor.html#a3ddd666facd79a96de99bbed8c9bd706">CursorType</a> otherType, bool otherIsAtBoundary, <a class="el" href="classVisualization_1_1Item.html">Item</a> *otherOwner)</td></tr>
+<tr class="separator:ab723f0367021a1d1e8432c04ca28cd29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348f99abab6c5396a422c117b309cc76"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a348f99abab6c5396a422c117b309cc76">isSame</a> (<a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *other)</td></tr>
+<tr class="memdesc:a348f99abab6c5396a422c117b309cc76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this cursor is the same as the cursor <em>other</em>.  <a href="#a348f99abab6c5396a422c117b309cc76">More...</a><br /></td></tr>
+<tr class="separator:a348f99abab6c5396a422c117b309cc76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ac3678893f4b70a15ad9b94e62dd20b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a8ac3678893f4b70a15ad9b94e62dd20b">notLocationEquivalent</a> () const </td></tr>
 <tr class="separator:a8ac3678893f4b70a15ad9b94e62dd20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52ff82b27672ed779f0bda0ce15f3448"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a52ff82b27672ed779f0bda0ce15f3448">operator=</a> (const <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> &amp;other)=delete</td></tr>
@@ -402,7 +402,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acf70f2b8cef6c609ccd20865e3ef1e0a"></a>
+<a class="anchor" id="ab723f0367021a1d1e8432c04ca28cd29"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -413,25 +413,25 @@ Private Attributes</h2></td></tr>
           <td class="memname">bool Visualization::Cursor::isLocationEquivalent </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>notLocationEquivalent</em>, </td>
+          <td class="paramname"><em>otherNotLocationEquivalent</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Cursor.html#a3ddd666facd79a96de99bbed8c9bd706">CursorType</a>&#160;</td>
-          <td class="paramname"><em>type</em>, </td>
+          <td class="paramname"><em>otherType</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isAtBoundary</em>, </td>
+          <td class="paramname"><em>otherIsAtBoundary</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>owner</em>&#160;</td>
+          <td class="paramname"><em>otherOwner</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -448,7 +448,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab75b091b699b68d3a860f8898f828661"></a>
+<a class="anchor" id="a348f99abab6c5396a422c117b309cc76"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -459,7 +459,7 @@ Private Attributes</h2></td></tr>
           <td class="memname">bool Visualization::Cursor::isSame </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td>
-          <td class="paramname"><em>c</em></td><td>)</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -470,7 +470,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns true if this cursor is the same as the cursor <em>c</em>. </p>
+<p>Returns true if this cursor is the same as the cursor <em>other</em>. </p>
 <p>Two cursors are the same if they have the same owner and if they represent the same location within that owner. </p>
 
 <p>Reimplemented in <a class="el" href="classVisualization_1_1TextCursor.html#a8cf6aef4afdea54d4604e3b547338970">Visualization::TextCursor</a>, and <a class="el" href="classVisualization_1_1LayoutCursor.html#a64e45628c6e609442816c1c1889eb10c">Visualization::LayoutCursor</a>.</p>

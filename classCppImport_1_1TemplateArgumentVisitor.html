@@ -109,8 +109,8 @@ Inheritance diagram for CppImport::TemplateArgumentVisitor:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0795813ee3718d091bd1835a7dcc7e36"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html#a0795813ee3718d091bd1835a7dcc7e36">TemplateArgumentVisitor</a> (<a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *vis, <a class="el" href="classCppImport_1_1CppImportUtilities.html">CppImportUtilities</a> *util, <a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *log)</td></tr>
-<tr class="separator:a0795813ee3718d091bd1835a7dcc7e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a537e24c54d250408f91a3647d7534bc4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html#a537e24c54d250408f91a3647d7534bc4">TemplateArgumentVisitor</a> (<a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;clang, <a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *vis, <a class="el" href="classCppImport_1_1CppImportUtilities.html">CppImportUtilities</a> *util, <a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *log)</td></tr>
+<tr class="separator:a537e24c54d250408f91a3647d7534bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4386136e617f4fddc3986e95e5be911b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1FormalTypeArgument.html">OOModel::FormalTypeArgument</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html#a4386136e617f4fddc3986e95e5be911b">translateTemplateArg</a> (clang::Decl *d)</td></tr>
 <tr class="memdesc:a4386136e617f4fddc3986e95e5be911b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates the template argument declaration <em>d</em>.  <a href="#a4386136e617f4fddc3986e95e5be911b">More...</a><br /></td></tr>
 <tr class="separator:a4386136e617f4fddc3986e95e5be911b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,6 +123,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a6051eaeb2c20318aed4eb9d5989dc1fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html#a6051eaeb2c20318aed4eb9d5989dc1fd">clang_</a></td></tr>
+<tr class="separator:a6051eaeb2c20318aed4eb9d5989dc1fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15de08f938534af76bcad2aa364efded"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html#a15de08f938534af76bcad2aa364efded">className_</a> {&quot;TemplateArgumentVisitor&quot;}</td></tr>
 <tr class="separator:a15de08f938534af76bcad2aa364efded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23cc207e1527da43e24f2ccd76c16bbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html#a23cc207e1527da43e24f2ccd76c16bbf">exprVisitor_</a> {}</td></tr>
@@ -137,13 +139,19 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A visitor for template arguments. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a0795813ee3718d091bd1835a7dcc7e36"></a>
+<a class="anchor" id="a537e24c54d250408f91a3647d7534bc4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">CppImport::TemplateArgumentVisitor::TemplateArgumentVisitor </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a> &amp;&#160;</td>
+          <td class="paramname"><em>clang</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *&#160;</td>
           <td class="paramname"><em>vis</em>, </td>
         </tr>
@@ -238,6 +246,26 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a6051eaeb2c20318aed4eb9d5989dc1fd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCppImport_1_1ClangHelpers.html">ClangHelpers</a>&amp; CppImport::TemplateArgumentVisitor::clang_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a15de08f938534af76bcad2aa364efded"></a>
 <div class="memitem">
 <div class="memproto">

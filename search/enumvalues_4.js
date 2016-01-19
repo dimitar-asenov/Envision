@@ -9,6 +9,7 @@ var searchData=
   ['equal',['Equal',['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a5184adf1a10d22bf7dbce6ebdfa750c1',1,'OOModel::TypeSystem']]],
   ['equals',['EQUALS',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a468512e647e074a671360840bcfca31e',1,'OOModel::BinaryOperation']]],
   ['error',['ERROR',['../classCppImport_1_1CppImportLogger.html#a81830989ea3ecb79819d98cb96700883a69fbcfdd88b0fdf1abdbc3d24d5445f9',1,'CppImport::CppImportLogger::ERROR()'],['../classOODebug_1_1Protocol.html#a8241fd0155f9b7da46da853409574edeabb1ca97ec761fc37101737ba0aa2e7c5',1,'OODebug::Protocol::ERROR()'],['../classInteraction_1_1CommandResult.html#a3a0031a9567c97241132101924a2d2a4a6caf67c7489db3c3f3215dbb6206a2cc',1,'Interaction::CommandResult::Error()'],['../classOODebug_1_1CompilerMessage.html#a0e71a6998bfecb03c9e0b287d72baf82a3374e2910c1bc637c244fccc0c51fd24',1,'OODebug::CompilerMessage::Error()'],['../classInformationScripting_1_1Optional.html#acb54c41dfe7676761ff8c5837283a3f3a902b0d55fddef6f8d651fe1035b7d4bd',1,'InformationScripting::Optional::Error()']]],
+  ['estimated',['Estimated',['../classOOVisualization_1_1AutoLayouter.html#a51c5fd18a8e7459b09be57cf56eeb537a7f7a8f2bc3a143c3689377a3226f4e89',1,'OOVisualization::AutoLayouter']]],
   ['event',['Event',['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622eaa4ecfc70574394990cf17bd83df499f7',1,'OODebug::Protocol']]],
   ['event_5fthread',['EVENT_THREAD',['../classOODebug_1_1Protocol.html#aefb04555c52a3c09796c7c2bb446d765a659870169c9f80bb65e5fcbf2c0380dc',1,'OODebug::Protocol']]],
   ['eventrequest',['EventRequest',['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622ea9f2b2d29ab5e29421ab63a90ab6374bb',1,'OODebug::Protocol']]],
@@ -18,5 +19,6 @@ var searchData=
   ['exit',['Exit',['../classOODebug_1_1Protocol.html#a2d4b5a37f7e72646c20b20c16fa57e8aafef46e5063ce3dc78b8ae64fa474241d',1,'OODebug::Protocol']]],
   ['exit_5fleft',['EXIT_LEFT',['../classControlFlowVisualization_1_1ControlFlowItem.html#accb2dc84dec14ed40aa6ef2188d9ad88a5469525f4dbe2a5f2323185392e38df9',1,'ControlFlowVisualization::ControlFlowItem']]],
   ['exit_5fright',['EXIT_RIGHT',['../classControlFlowVisualization_1_1ControlFlowItem.html#accb2dc84dec14ed40aa6ef2188d9ad88a324b44fe2540db8a875a8c565f2bb611',1,'ControlFlowVisualization::ControlFlowItem']]],
+  ['explicit',['Explicit',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494faa958d3d488c90d57a140c5c6e13923b9',1,'OOModel::Modifier']]],
   ['expr',['Expr',['../classInteraction_1_1ExpressionContext.html#a529359d500858ebf0bf8984e1790926ba73629b75a0971ce140a0c6ff16449a5d',1,'Interaction::ExpressionContext']]]
 ];

@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['default',['Default',['../classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033eea7a1920d61156abc05a60135aefe8bc67',1,'OOModel::Method::Default()'],['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faa7a1920d61156abc05a60135aefe8bc67',1,'OOModel::CastExpression::Default()']]],
+  ['default',['Default',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494faa4c052d7350397afef990808c6202262',1,'OOModel::Modifier::Default()'],['../classInformationScripting_1_1QueryRegistry.html#a98640749bf24f86cab2753016e81a893a7a1920d61156abc05a60135aefe8bc67',1,'InformationScripting::QueryRegistry::Default()'],['../classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033eea7a1920d61156abc05a60135aefe8bc67',1,'OOModel::Method::Default()'],['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faa7a1920d61156abc05a60135aefe8bc67',1,'OOModel::CastExpression::Default()']]],
   ['delete_5fmethod_5fnot_5fimplemented',['DELETE_METHOD_NOT_IMPLEMENTED',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daa88ec11ee4104d86f76d58c0871e08bc0',1,'OODebug::Protocol']]],
+  ['deleted',['Deleted',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494fa550932f1b27805bf934fe1a16ffec955',1,'OOModel::Modifier']]],
   ['deletion',['Deletion',['../namespaceFilePersistence.html#a22f599a7e5cc21a83101c6b6a2e1abfeaa1998652b01bdc9e7128734efb804780',1,'FilePersistence']]],
   ['dereference',['DEREFERENCE',['../classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1a7e83537c5bfd797182e52de5a4fe6814',1,'OOModel::UnaryOperation']]],
   ['destructor',['Destructor',['../classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033eea22a8ec108d963f279c6a6a95aa960a57',1,'OOModel::Method']]],
@@ -15,6 +16,7 @@ var searchData=
   ['divide_5fassign',['DIVIDE_ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a0fb2bb3caac3da8e56904520f25dbbed',1,'OOModel::AssignmentExpression']]],
   ['do_5fnot_5fuse',['DO_NOT_USE',['../classOOInteraction_1_1StringComponents.html#af8e6a3c10cba6eb6e59718009709fb95a03bbaf0455702de84b78ad6f6e4d90de',1,'OOInteraction::StringComponents']]],
   ['dontresume',['DONTRESUME',['../classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1a85d83e172f678d71cb923c0b978a03e8',1,'OODebug::DebugConnector']]],
+  ['dot',['Dot',['../classOOModel_1_1ReferenceExpression.html#a416c4460d5cfc0b651e4a9b453014402aaf6c6cf7a454b4ef4a850ac4d960a2cc',1,'OOModel::ReferenceExpression']]],
   ['double',['DOUBLE',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a2d2610889fc221441003d7d0b98d6233',1,'OOModel::PrimitiveType::DOUBLE()'],['../classOODebug_1_1Protocol.html#aae559917558dc3975d095acc7557f051afd3e4ece78a7d422280d5ed379482229',1,'OODebug::Protocol::DOUBLE()']]],
   ['double_5fvalue',['DOUBLE_VALUE',['../classFilePersistence_1_1GenericNode.html#abc7da14fae84133c449f8dd12f11f344a4105fb045bf138370bcbfa08a84f2ad0',1,'FilePersistence::GenericNode']]],
   ['down',['Down',['../classOOInteraction_1_1GridBasedOffsetProvider.html#aa27e76c8253b9f36103cef8c2af571b5aaf2ab6dfeab1c9b2fafa646a008ce5d3',1,'OOInteraction::GridBasedOffsetProvider']]],

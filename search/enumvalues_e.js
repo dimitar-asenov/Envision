@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['query',['Query',['../classInformationScripting_1_1QueryParser.html#ab12a5d4fcb30faeefaca57ae321eb539a66c1b4c7f3dc385b68a9fa903ccd016d',1,'InformationScripting::QueryParser']]]
+  ['queryexecutor',['QueryExecutor',['../classInformationScripting_1_1QueryRegistry.html#a98640749bf24f86cab2753016e81a893ad3f039442c7d141427f60d5f76e827ec',1,'InformationScripting::QueryRegistry']]]
 ];

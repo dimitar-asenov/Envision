@@ -98,35 +98,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa296d9e4a9401fd9b715a807738774cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#aa296d9e4a9401fd9b715a807738774cc">QueryExecutor</a> (<a class="el" href="classInformationScripting_1_1Query.html">Query</a> *q)</td></tr>
-<tr class="separator:aa296d9e4a9401fd9b715a807738774cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a589864cd6f9d5f664724319d63a365"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a1a589864cd6f9d5f664724319d63a365">~QueryExecutor</a> ()</td></tr>
 <tr class="separator:a1a589864cd6f9d5f664724319d63a365"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a851903a1dfa1664cd8542c5b321dfdc1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1CommandResult.html">Interaction::CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a851903a1dfa1664cd8542c5b321dfdc1">execute</a> ()</td></tr>
-<tr class="separator:a851903a1dfa1664cd8542c5b321dfdc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a719b0cd49e1f63b52c7c4cebced13401"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a719b0cd49e1f63b52c7c4cebced13401">addQuery</a> (std::unique_ptr&lt; <a class="el" href="classInformationScripting_1_1Query.html">Query</a> &gt; &amp;&amp;query)</td></tr>
+<tr class="separator:a719b0cd49e1f63b52c7c4cebced13401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2394e1ac6dd0071865e460a8b4c9b789"><td class="memItemLeft" align="right" valign="top">QList&lt; QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a2394e1ac6dd0071865e460a8b4c9b789">execute</a> (const QList&lt; <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &gt; &amp;input={})</td></tr>
+<tr class="separator:a2394e1ac6dd0071865e460a8b4c9b789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b086af1261dfd88a857cc2335529a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a8b086af1261dfd88a857cc2335529a67">setVisualizationExecuted</a> ()</td></tr>
+<tr class="separator:a8b086af1261dfd88a857cc2335529a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a80c7f7ec3658d16e0e6331f8379a3e6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInformationScripting_1_1Query.html">Query</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a80c7f7ec3658d16e0e6331f8379a3e6b">query_</a> {}</td></tr>
-<tr class="separator:a80c7f7ec3658d16e0e6331f8379a3e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55a69d8b792e44908465429b99ffcd24"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a55a69d8b792e44908465429b99ffcd24">defaultVisualize_</a> {<a class="el" href="namespaceInformationScripting.html#a8beafb96d60a58453ff9e36c353e0397">true</a>}</td></tr>
+<tr class="separator:a55a69d8b792e44908465429b99ffcd24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89c178dc745079562ec251a867cac7f9"><td class="memItemLeft" align="right" valign="top">std::queue&lt; std::unique_ptr&lt; <a class="el" href="classInformationScripting_1_1Query.html">Query</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryExecutor.html#a89c178dc745079562ec251a867cac7f9">queries_</a> {}</td></tr>
+<tr class="separator:a89c178dc745079562ec251a867cac7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa296d9e4a9401fd9b715a807738774cc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">InformationScripting::QueryExecutor::QueryExecutor </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classInformationScripting_1_1Query.html">Query</a> *&#160;</td>
-          <td class="paramname"><em>q</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a1a589864cd6f9d5f664724319d63a365"></a>
 <div class="memitem">
 <div class="memproto">
@@ -143,14 +131,15 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a851903a1dfa1664cd8542c5b321dfdc1"></a>
+<a class="anchor" id="a719b0cd49e1f63b52c7c4cebced13401"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classInteraction_1_1CommandResult.html">Interaction::CommandResult</a> * InformationScripting::QueryExecutor::execute </td>
+          <td class="memname">void InformationScripting::QueryExecutor::addQuery </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classInformationScripting_1_1Query.html">Query</a> &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -158,8 +147,23 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a80c7f7ec3658d16e0e6331f8379a3e6b"></a>
+<a class="anchor" id="a2394e1ac6dd0071865e460a8b4c9b789"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; QString &gt; InformationScripting::QueryExecutor::execute </td>
+          <td>(</td>
+          <td class="paramtype">const QList&lt; <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>input</em> = <code>{}</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8b086af1261dfd88a857cc2335529a67"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -167,7 +171,51 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classInformationScripting_1_1Query.html">Query</a>* InformationScripting::QueryExecutor::query_ {}</td>
+          <td class="memname">void InformationScripting::QueryExecutor::setVisualizationExecuted </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a55a69d8b792e44908465429b99ffcd24"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool InformationScripting::QueryExecutor::defaultVisualize_ {<a class="el" href="namespaceInformationScripting.html#a8beafb96d60a58453ff9e36c353e0397">true</a>}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a89c178dc745079562ec251a867cac7f9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::queue&lt;std::unique_ptr&lt;<a class="el" href="classInformationScripting_1_1Query.html">Query</a>&gt; &gt; InformationScripting::QueryExecutor::queries_ {}</td>
         </tr>
       </table>
   </td>

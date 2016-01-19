@@ -110,7 +110,7 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4a99d78aa0472a0b691845fe5aeb0d56"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a4a99d78aa0472a0b691845fe5aeb0d56">Shape</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Shape.html#ad0dc777207865e27165ab5c39aaf281b">parent</a>, <a class="el" href="classVisualization_1_1ShapeStyle.html">ShapeStyle</a> *<a class="el" href="classVisualization_1_1Shape.html#a684e1e6f853316931136165ecd2922a0">style</a>=nullptr)</td></tr>
+<tr class="memitem:a4a99d78aa0472a0b691845fe5aeb0d56"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a4a99d78aa0472a0b691845fe5aeb0d56">Shape</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, <a class="el" href="classVisualization_1_1ShapeStyle.html">ShapeStyle</a> *<a class="el" href="classVisualization_1_1Shape.html#a684e1e6f853316931136165ecd2922a0">style</a>=nullptr)</td></tr>
 <tr class="separator:a4a99d78aa0472a0b691845fe5aeb0d56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37936cb92914a14e1523b8318abd1b05"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a37936cb92914a14e1523b8318abd1b05">~Shape</a> ()</td></tr>
 <tr class="separator:a37936cb92914a14e1523b8318abd1b05"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,13 +143,13 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aedb992a8b3f2129d8fe01d96017aefa5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1Shape.html">Shape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#aedb992a8b3f2129d8fe01d96017aefa5">createNewShape</a> (const QString &amp;shapeName, <a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Shape.html#ad0dc777207865e27165ab5c39aaf281b">parent</a>)</td></tr>
+<tr class="memitem:aedb992a8b3f2129d8fe01d96017aefa5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1Shape.html">Shape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#aedb992a8b3f2129d8fe01d96017aefa5">createNewShape</a> (const QString &amp;shapeName, <a class="el" href="classVisualization_1_1Item.html">Item</a> *parent)</td></tr>
 <tr class="separator:aedb992a8b3f2129d8fe01d96017aefa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a8c2f5a3f5cdce09bbecee31cf845f3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1ShapeStyle.html">ShapeStyle</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a1a8c2f5a3f5cdce09bbecee31cf845f3">createNewShapeStyle</a> (const QString &amp;shapeName)</td></tr>
 <tr class="separator:a1a8c2f5a3f5cdce09bbecee31cf845f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92906ff77c604683581ae61c620e2517"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1StyleSet.html">StyleSet</a>&lt; <a class="el" href="classVisualization_1_1Shape.html">Shape</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a92906ff77c604683581ae61c620e2517">itemStyles</a> ()</td></tr>
 <tr class="separator:a92906ff77c604683581ae61c620e2517"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ca67e458a730efbaabb903f0a303abc"><td class="memTemplParams" colspan="2">template&lt;class ShapeClass &gt; </td></tr>
+<tr class="memitem:a3ca67e458a730efbaabb903f0a303abc"><td class="memTemplParams" colspan="2">template&lt;typename ShapeClass &gt; </td></tr>
 <tr class="memitem:a3ca67e458a730efbaabb903f0a303abc"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a3ca67e458a730efbaabb903f0a303abc">registerShape</a> ()</td></tr>
 <tr class="separator:a3ca67e458a730efbaabb903f0a303abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -183,17 +183,17 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:a28d80f20809a7a72c5eab355357bafee"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1Shape.html">Shape</a> *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a28d80f20809a7a72c5eab355357bafee">ShapeConstructor</a>) (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Shape.html#ad0dc777207865e27165ab5c39aaf281b">parent</a>)</td></tr>
-<tr class="separator:a28d80f20809a7a72c5eab355357bafee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a45de2e87ff5abdab024f7140b4e594"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1Shape.html">Shape</a> *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a4a45de2e87ff5abdab024f7140b4e594">ShapeConstructor</a>) (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Shape.html#ac402f490c80e318ff98d5aac4aac51dc">parent_</a>)</td></tr>
+<tr class="separator:a4a45de2e87ff5abdab024f7140b4e594"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a268544f68b9062074c5f754f8ab57f10"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1ShapeStyle.html">ShapeStyle</a> *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a268544f68b9062074c5f754f8ab57f10">ShapeStyleConstructor</a>) ()</td></tr>
 <tr class="separator:a268544f68b9062074c5f754f8ab57f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a9a6dce3c23b26c5f96611a4cb2121c3b"><td class="memTemplParams" colspan="2">template&lt;class Base , class Actual &gt; </td></tr>
-<tr class="memitem:a9a6dce3c23b26c5f96611a4cb2121c3b"><td class="memTemplItemLeft" align="right" valign="top">static Base *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a9a6dce3c23b26c5f96611a4cb2121c3b">makeDefaultShape</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Shape.html#ad0dc777207865e27165ab5c39aaf281b">parent</a>)</td></tr>
+<tr class="memitem:a9a6dce3c23b26c5f96611a4cb2121c3b"><td class="memTemplParams" colspan="2">template&lt;typename Base , typename Actual &gt; </td></tr>
+<tr class="memitem:a9a6dce3c23b26c5f96611a4cb2121c3b"><td class="memTemplItemLeft" align="right" valign="top">static Base *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a9a6dce3c23b26c5f96611a4cb2121c3b">makeDefaultShape</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent)</td></tr>
 <tr class="separator:a9a6dce3c23b26c5f96611a4cb2121c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc3f658b46daa5724360290c409a9214"><td class="memTemplParams" colspan="2">template&lt;class Base , class Actual &gt; </td></tr>
+<tr class="memitem:afc3f658b46daa5724360290c409a9214"><td class="memTemplParams" colspan="2">template&lt;typename Base , typename Actual &gt; </td></tr>
 <tr class="memitem:afc3f658b46daa5724360290c409a9214"><td class="memTemplItemLeft" align="right" valign="top">static Base *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#afc3f658b46daa5724360290c409a9214">makeDefaultStyle</a> ()</td></tr>
 <tr class="separator:afc3f658b46daa5724360290c409a9214"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -201,8 +201,8 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a3d936657991425378bca940b8e30bfb2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a3d936657991425378bca940b8e30bfb2">height_</a> {}</td></tr>
 <tr class="separator:a3d936657991425378bca940b8e30bfb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0dc777207865e27165ab5c39aaf281b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#ad0dc777207865e27165ab5c39aaf281b">parent</a> {}</td></tr>
-<tr class="separator:ad0dc777207865e27165ab5c39aaf281b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac402f490c80e318ff98d5aac4aac51dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#ac402f490c80e318ff98d5aac4aac51dc">parent_</a> {}</td></tr>
+<tr class="separator:ac402f490c80e318ff98d5aac4aac51dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a418eff8cd9536cfdf95aa71375c7def0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Shape.html#aeeb6d777da51835e0d8ed44689e1015d">SizeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a418eff8cd9536cfdf95aa71375c7def0">sizeToUse</a> {}</td></tr>
 <tr class="separator:a418eff8cd9536cfdf95aa71375c7def0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a554c807149de6de08265069de8a4fd5a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1ShapeStyle.html">ShapeStyle</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a554c807149de6de08265069de8a4fd5a">style_</a> {}</td></tr>
@@ -216,13 +216,13 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a5de8a9cf4f64a41ecb3129c94a7151f5"><td class="memItemLeft" align="right" valign="top">static QMap&lt; QString, <a class="el" href="classVisualization_1_1Shape.html#a28d80f20809a7a72c5eab355357bafee">ShapeConstructor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a5de8a9cf4f64a41ecb3129c94a7151f5">shapeConstructors</a></td></tr>
+<tr class="memitem:a5de8a9cf4f64a41ecb3129c94a7151f5"><td class="memItemLeft" align="right" valign="top">static QMap&lt; QString, <a class="el" href="classVisualization_1_1Shape.html#a4a45de2e87ff5abdab024f7140b4e594">ShapeConstructor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a5de8a9cf4f64a41ecb3129c94a7151f5">shapeConstructors</a></td></tr>
 <tr class="separator:a5de8a9cf4f64a41ecb3129c94a7151f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43082c099a54f744a3b100ca25891d7e"><td class="memItemLeft" align="right" valign="top">static QMap&lt; QString, <a class="el" href="classVisualization_1_1Shape.html#a268544f68b9062074c5f754f8ab57f10">ShapeStyleConstructor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Shape.html#a43082c099a54f744a3b100ca25891d7e">shapeStyleConstructors</a></td></tr>
 <tr class="separator:a43082c099a54f744a3b100ca25891d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="a28d80f20809a7a72c5eab355357bafee"></a>
+<a class="anchor" id="a4a45de2e87ff5abdab024f7140b4e594"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -230,7 +230,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classVisualization_1_1Shape.html">Shape</a>*(* Visualization::Shape::ShapeConstructor) (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Shape.html#ad0dc777207865e27165ab5c39aaf281b">parent</a>)</td>
+          <td class="memname">typedef <a class="el" href="classVisualization_1_1Shape.html">Shape</a>*(* Visualization::Shape::ShapeConstructor) (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Shape.html#ac402f490c80e318ff98d5aac4aac51dc">parent_</a>)</td>
         </tr>
       </table>
   </td>
@@ -587,7 +587,7 @@ Static Private Attributes</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Base , class Actual &gt; </div>
+template&lt;typename Base , typename Actual &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -613,7 +613,7 @@ template&lt;class Base , class Actual &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Base , class Actual &gt; </div>
+template&lt;typename Base , typename Actual &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -759,7 +759,7 @@ template&lt;class Base , class Actual &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class ShapeClass &gt; </div>
+template&lt;typename ShapeClass &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1098,7 +1098,7 @@ template&lt;class ShapeClass &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad0dc777207865e27165ab5c39aaf281b"></a>
+<a class="anchor" id="ac402f490c80e318ff98d5aac4aac51dc"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1106,7 +1106,7 @@ template&lt;class ShapeClass &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Item</a>* Visualization::Shape::parent {}</td>
+          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Item</a>* Visualization::Shape::parent_ {}</td>
         </tr>
       </table>
   </td>
@@ -1126,7 +1126,7 @@ template&lt;class ShapeClass &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QMap&lt; QString, <a class="el" href="classVisualization_1_1Shape.html#a28d80f20809a7a72c5eab355357bafee">Shape::ShapeConstructor</a> &gt; Visualization::Shape::shapeConstructors</td>
+          <td class="memname">QMap&lt; QString, <a class="el" href="classVisualization_1_1Shape.html#a4a45de2e87ff5abdab024f7140b4e594">Shape::ShapeConstructor</a> &gt; Visualization::Shape::shapeConstructors</td>
         </tr>
       </table>
   </td>

@@ -87,6 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classEnvisionAstConsumer-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">EnvisionAstConsumer Class Reference</div>  </div>
@@ -116,27 +117,38 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a833d926188e573e616fb96ab20e6b3ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a833d926188e573e616fb96ab20e6b3ff">addClassEnums</a> (<a class="el" href="structClassData.html">ClassData</a> &amp;cData)</td></tr>
+<tr class="separator:a833d926188e573e616fb96ab20e6b3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66ddbd39218ad3c541592ddad108efd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structClassAttribute.html">ClassAttribute</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a66ddbd39218ad3c541592ddad108efd4">attribute</a> (const QString &amp;attributeName, const QString &amp;attributeSetterName, const QString &amp;qualifiedClassName, const clang::CXXMethodDecl *method)</td></tr>
 <tr class="separator:a66ddbd39218ad3c541592ddad108efd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96d1949b50c3cb8fd51bb01c7cfd50df"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a96d1949b50c3cb8fd51bb01c7cfd50df">baseClasses</a> (clang::CXXRecordDecl *classDecl)</td></tr>
 <tr class="separator:a96d1949b50c3cb8fd51bb01c7cfd50df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ef0f55f9089294aace2b768fa0edc67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structClassData.html">ClassData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a5ef0f55f9089294aace2b768fa0edc67">buildClassInfo</a> (clang::CXXRecordDecl *classDecl)</td></tr>
+<tr class="separator:a5ef0f55f9089294aace2b768fa0edc67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf492f55914960ffe98f654af538242a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#adf492f55914960ffe98f654af538242a">checkForTypedList</a> (const clang::Type *type)</td></tr>
 <tr class="separator:adf492f55914960ffe98f654af538242a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9cb04964161d61c52da8a8fe398086c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#ae9cb04964161d61c52da8a8fe398086c">functionStringFor</a> (const QString &amp;methodName, const QString &amp;qualifiedClassName, const clang::CXXMethodDecl *method)</td></tr>
+<tr class="separator:ae9cb04964161d61c52da8a8fe398086c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aa2cb63bde6459540f1ec4590d28e93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a8aa2cb63bde6459540f1ec4590d28e93">resolveOverloads</a> (<a class="el" href="structClassData.html">ClassData</a> &amp;cData, const QMultiHash&lt; QString, clang::CXXMethodDecl * &gt; &amp;overloads)</td></tr>
+<tr class="separator:a8aa2cb63bde6459540f1ec4590d28e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a2d054471e6fa90fcd4ef53ccc50c81b4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a2d054471e6fa90fcd4ef53ccc50c81b4">addBases</a> (<a class="el" href="structClassData.html">ClassData</a> &amp;cData, const clang::CXXRecordDecl *classDecl)</td></tr>
+<tr class="separator:a2d054471e6fa90fcd4ef53ccc50c81b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a323fe4bbb0c0ae1a1d56e49d3a45cb43"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a323fe4bbb0c0ae1a1d56e49d3a45cb43">allowedBases_</a> {&quot;Model::Node&quot;}</td></tr>
 <tr class="separator:a323fe4bbb0c0ae1a1d56e49d3a45cb43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad38d06d440a785bad48e13152907a57d"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#ad38d06d440a785bad48e13152907a57d">attributes_</a></td></tr>
-<tr class="separator:ad38d06d440a785bad48e13152907a57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab86f081e231b0563752c9c4a643c0345"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#ab86f081e231b0563752c9c4a643c0345">attributes_</a></td></tr>
+<tr class="separator:ab86f081e231b0563752c9c4a643c0345"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a418840a04f342b50d6358776b9e8af8e"><td class="memItemLeft" align="right" valign="top">clang::CompilerInstance &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a418840a04f342b50d6358776b9e8af8e">compilerInstance_</a></td></tr>
 <tr class="separator:a418840a04f342b50d6358776b9e8af8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e22f6e68b5255934d51002d20cb66c8"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a8e22f6e68b5255934d51002d20cb66c8">currentClassName_</a></td></tr>
 <tr class="separator:a8e22f6e68b5255934d51002d20cb66c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaecfbbac6344d15be9bfa09159532138"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#aaecfbbac6344d15be9bfa09159532138">currentFile_</a></td></tr>
 <tr class="separator:aaecfbbac6344d15be9bfa09159532138"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee17b7661700f4564a59f43eb965ea72"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#aee17b7661700f4564a59f43eb965ea72">privateAttributes_</a></td></tr>
-<tr class="separator:aee17b7661700f4564a59f43eb965ea72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cf3e5de62299924bd33366227155ef3"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structEnumData.html">EnumData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a3cf3e5de62299924bd33366227155ef3">processedEnums_</a></td></tr>
 <tr class="separator:a3cf3e5de62299924bd33366227155ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ed4c5f812e66e14e2ca1b74c5f58bc5"><td class="memItemLeft" align="right" valign="top">QSet&lt; clang::TagDecl * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEnvisionAstConsumer.html#a6ed4c5f812e66e14e2ca1b74c5f58bc5">seenDecls_</a></td></tr>
@@ -170,6 +182,64 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a2d054471e6fa90fcd4ef53ccc50c81b4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnvisionAstConsumer::addBases </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structClassData.html">ClassData</a> &amp;&#160;</td>
+          <td class="paramname"><em>cData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const clang::CXXRecordDecl *&#160;</td>
+          <td class="paramname"><em>classDecl</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a833d926188e573e616fb96ab20e6b3ff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnvisionAstConsumer::addClassEnums </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structClassData.html">ClassData</a> &amp;&#160;</td>
+          <td class="paramname"><em>cData</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a66ddbd39218ad3c541592ddad108efd4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -240,6 +310,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5ef0f55f9089294aace2b768fa0edc67"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structClassData.html">ClassData</a> EnvisionAstConsumer::buildClassInfo </td>
+          <td>(</td>
+          <td class="paramtype">clang::CXXRecordDecl *&#160;</td>
+          <td class="paramname"><em>classDecl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="adf492f55914960ffe98f654af538242a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -253,6 +347,46 @@ Private Attributes</h2></td></tr>
           <td class="paramtype">const clang::Type *&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae9cb04964161d61c52da8a8fe398086c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString EnvisionAstConsumer::functionStringFor </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>methodName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>qualifiedClassName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const clang::CXXMethodDecl *&#160;</td>
+          <td class="paramname"><em>method</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -344,6 +478,40 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8aa2cb63bde6459540f1ec4590d28e93"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnvisionAstConsumer::resolveOverloads </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structClassData.html">ClassData</a> &amp;&#160;</td>
+          <td class="paramname"><em>cData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QMultiHash&lt; QString, clang::CXXMethodDecl * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>overloads</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a323fe4bbb0c0ae1a1d56e49d3a45cb43"></a>
 <div class="memitem">
@@ -365,7 +533,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad38d06d440a785bad48e13152907a57d"></a>
+<a class="anchor" id="ab86f081e231b0563752c9c4a643c0345"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -373,7 +541,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QHash&lt;QString,QString&gt; EnvisionAstConsumer::attributes_</td>
+          <td class="memname">QHash&lt;QString, QString&gt; EnvisionAstConsumer::attributes_</td>
         </tr>
       </table>
   </td>
@@ -434,26 +602,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::string EnvisionAstConsumer::currentFile_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aee17b7661700f4564a59f43eb965ea72"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QHash&lt;QString,QString&gt; EnvisionAstConsumer::privateAttributes_</td>
         </tr>
       </table>
   </td>

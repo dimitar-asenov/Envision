@@ -84,7 +84,8 @@ var searchData=
   ['modelbaseplugin',['ModelBasePlugin',['../classModel_1_1ModelBasePlugin.html',1,'Model']]],
   ['modelexception',['ModelException',['../classModel_1_1ModelException.html',1,'Model']]],
   ['modelrenderer',['ModelRenderer',['../classVisualization_1_1ModelRenderer.html',1,'Visualization']]],
-  ['modifier',['Modifier',['../classOOModel_1_1Modifier.html',1,'OOModel']]],
+  ['modificationnotificationtests',['ModificationNotificationTests',['../classModel_1_1ModificationNotificationTests.html',1,'Model']]],
   ['modifier',['Modifier',['../classOODebug_1_1Modifier.html',1,'OODebug']]],
+  ['modifier',['Modifier',['../classOOModel_1_1Modifier.html',1,'OOModel']]],
   ['module',['Module',['../classOOModel_1_1Module.html',1,'OOModel']]]
 ];

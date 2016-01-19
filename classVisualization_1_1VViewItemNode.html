@@ -89,9 +89,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classVisualization_1_1VViewItemNode-members.html">List of all members</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Visualization::VViewItemNode Class Reference</div>  </div>
 </div><!--header-->
@@ -109,19 +112,47 @@ Inheritance diagram for Visualization::VViewItemNode:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:aaa064b612ea60883e8e372350ce8bfd2"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1DeclarativeItemBaseStyle.html">DeclarativeItemBaseStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#aaa064b612ea60883e8e372350ce8bfd2">StyleType</a></td></tr>
+<tr class="separator:aaa064b612ea60883e8e372350ce8bfd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab049ba5be4433ab1efe207507725423f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#ab049ba5be4433ab1efe207507725423f">VViewItemNode</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, NodeType *node, const StyleType *<a class="el" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>=itemStyles().get())</td></tr>
+<tr class="memitem:ab049ba5be4433ab1efe207507725423f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#ab049ba5be4433ab1efe207507725423f">VViewItemNode</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, NodeType *node, const <a class="el" href="classVisualization_1_1VViewItemNode.html#aaa064b612ea60883e8e372350ce8bfd2">StyleType</a> *<a class="el" href="classVisualization_1_1VViewItemNode.html#ae1a20f1e22a0cdfea09d9451d08cd30e">style</a>=<a class="el" href="classVisualization_1_1VViewItemNode.html#aba74d59dfc9831883492bcdf773f192e">itemStyles</a>().get())</td></tr>
 <tr class="separator:ab049ba5be4433ab1efe207507725423f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafbc77c6cb2ee2c0a2da49361d7c39bd"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#aafbc77c6cb2ee2c0a2da49361d7c39bd">addOns</a> () override</td></tr>
+<tr class="separator:aafbc77c6cb2ee2c0a2da49361d7c39bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeebe90e1e11f525f6ac987c058b0245f"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#aeebe90e1e11f525f6ac987c058b0245f">determineForm</a> () override</td></tr>
 <tr class="separator:aeebe90e1e11f525f6ac987c058b0245f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b6aa82437393b8a1dc803ea510d77f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a7b6aa82437393b8a1dc803ea510d77f4">determineSpacing</a> ()</td></tr>
 <tr class="separator:a7b6aa82437393b8a1dc803ea510d77f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77958dbbce6ab2d93df89ae9c54f69f5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a77958dbbce6ab2d93df89ae9c54f69f5">handler</a> () const override</td></tr>
+<tr class="separator:a77958dbbce6ab2d93df89ae9c54f69f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ae2d41d99ad6b60194bdb26dd42f285"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a4ae2d41d99ad6b60194bdb26dd42f285">setStyle</a> (const <a class="el" href="classVisualization_1_1ItemStyle.html">Visualization::ItemStyle</a> *itemStyle) override</td></tr>
+<tr class="separator:a4ae2d41d99ad6b60194bdb26dd42f285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1a20f1e22a0cdfea09d9451d08cd30e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1VViewItemNode.html#aaa064b612ea60883e8e372350ce8bfd2">StyleType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#ae1a20f1e22a0cdfea09d9451d08cd30e">style</a> () const </td></tr>
+<tr class="separator:ae1a20f1e22a0cdfea09d9451d08cd30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3907c7ee8a10795e321fd18d3fc303d0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a3907c7ee8a10795e321fd18d3fc303d0">addAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr class="separator:a3907c7ee8a10795e321fd18d3fc303d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95e57b0a9acae662f40905ba9a4e6201"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a95e57b0a9acae662f40905ba9a4e6201">defaultClassHandler</a> ()</td></tr>
+<tr class="separator:a95e57b0a9acae662f40905ba9a4e6201"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93ddacabbd77a31eff1af4ff711d86bb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a93ddacabbd77a31eff1af4ff711d86bb">initializeForms</a> ()</td></tr>
 <tr class="separator:a93ddacabbd77a31eff1af4ff711d86bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba74d59dfc9831883492bcdf773f192e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1StyleSet.html">Visualization::StyleSet</a>&lt; <a class="el" href="classVisualization_1_1VViewItemNode.html">VViewItemNode</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#aba74d59dfc9831883492bcdf773f192e">itemStyles</a> ()</td></tr>
+<tr class="separator:aba74d59dfc9831883492bcdf773f192e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a031435999759c296f030bac661cc1677"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a031435999759c296f030bac661cc1677">removeAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr class="separator:a031435999759c296f030bac661cc1677"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf26582957bdda90b543621ade4812fa"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#aaf26582957bdda90b543621ade4812fa">setDefaultClassHandler</a> (<a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *<a class="el" href="classVisualization_1_1VViewItemNode.html#a77958dbbce6ab2d93df89ae9c54f69f5">handler</a>)</td></tr>
+<tr class="separator:aaf26582957bdda90b543621ade4812fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:afccb74eda2607951af435d595cc65074"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#afccb74eda2607951af435d595cc65074">staticAddOns</a> ()</td></tr>
+<tr class="separator:afccb74eda2607951af435d595cc65074"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -132,6 +163,11 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a71f25b5234ec3cffcbad89ef6875e8e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1EmptyItem.html">EmptyItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#a71f25b5234ec3cffcbad89ef6875e8e0">spacing_</a> {}</td></tr>
 <tr class="separator:a71f25b5234ec3cffcbad89ef6875e8e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aef1c66fb8fbb6dd57a0b45653ba17cdb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VViewItemNode.html#aef1c66fb8fbb6dd57a0b45653ba17cdb">defaultClassHandler_</a> = nullptr</td></tr>
+<tr class="separator:aef1c66fb8fbb6dd57a0b45653ba17cdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_types_classCore_1_1Reflect"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classCore_1_1Reflect')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classCore_1_1Reflect.html">Core::Reflect&lt; Base &gt;</a></td></tr>
@@ -140,7 +176,20 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The VVIewItemNode class visualizes a <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a>, either by visualizing its reference if it exists, or else rendering an empty item for spacing. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="aaa064b612ea60883e8e372350ce8bfd2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classVisualization_1_1DeclarativeItemBaseStyle.html">DeclarativeItemBaseStyle</a> <a class="el" href="classVisualization_1_1VViewItemNode.html#aaa064b612ea60883e8e372350ce8bfd2">Visualization::VViewItemNode::StyleType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ab049ba5be4433ab1efe207507725423f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -160,8 +209,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const StyleType *&#160;</td>
-          <td class="paramname"><em>style</em> = <code>itemStyles().get()</code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classVisualization_1_1VViewItemNode.html#aaa064b612ea60883e8e372350ce8bfd2">StyleType</a> *&#160;</td>
+          <td class="paramname"><em>style</em> = <code><a class="el" href="classVisualization_1_1VViewItemNode.html#aba74d59dfc9831883492bcdf773f192e">itemStyles</a>().get()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -174,6 +223,76 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a3907c7ee8a10795e321fd18d3fc303d0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::VViewItemNode::addAddOn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aafbc77c6cb2ee2c0a2da49361d7c39bd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt; Visualization::VViewItemNode::addOns </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a95e57b0a9acae662f40905ba9a4e6201"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a>* Visualization::VViewItemNode::defaultClassHandler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aeebe90e1e11f525f6ac987c058b0245f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -212,6 +331,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a77958dbbce6ab2d93df89ae9c54f69f5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> * Visualization::VViewItemNode::handler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a93ddacabbd77a31eff1af4ff711d86bb"></a>
 <div class="memitem">
 <div class="memproto">
@@ -235,6 +377,147 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aba74d59dfc9831883492bcdf773f192e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1StyleSet.html">Visualization::StyleSet</a>&lt; <a class="el" href="classVisualization_1_1VViewItemNode.html">VViewItemNode</a> &gt; &amp; Visualization::VViewItemNode::itemStyles </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a031435999759c296f030bac661cc1677"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::VViewItemNode::removeAddOn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aaf26582957bdda90b543621ade4812fa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Visualization::VViewItemNode::setDefaultClassHandler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4ae2d41d99ad6b60194bdb26dd42f285"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::VViewItemNode::setStyle </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classVisualization_1_1ItemStyle.html">Visualization::ItemStyle</a> *&#160;</td>
+          <td class="paramname"><em>itemStyle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afccb74eda2607951af435d595cc65074"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt; &amp; Visualization::VViewItemNode::staticAddOns </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae1a20f1e22a0cdfea09d9451d08cd30e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classVisualization_1_1VViewItemNode.html#aaa064b612ea60883e8e372350ce8bfd2">StyleType</a>* Visualization::VViewItemNode::style </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="aa0d87d4247f9021af2602f893a429492"></a>
 <div class="memitem">
@@ -250,6 +533,26 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aef1c66fb8fbb6dd57a0b45653ba17cdb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> * Visualization::VViewItemNode::defaultClassHandler_ = nullptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

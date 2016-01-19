@@ -98,6 +98,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:add8b1e12f4893b1517b8892247ebf0f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7730454872a5c3af9dcf60e721dfca9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClassData.html#ad7730454872a5c3af9dcf60e721dfca9">ClassData</a> (QString name, QString qualifiedName)</td></tr>
 <tr class="separator:ad7730454872a5c3af9dcf60e721dfca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad578f856898839b0e7d1fee9f6443c86"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClassData.html#ad578f856898839b0e7d1fee9f6443c86">methodAddressPrefix</a> () const </td></tr>
+<tr class="separator:ad578f856898839b0e7d1fee9f6443c86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -111,8 +113,14 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a653d53454f829ef6f2340111b1fb2455"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47a77fdb278b2615570871e59314d847"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structEnumData.html">EnumData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClassData.html#a47a77fdb278b2615570871e59314d847">enums_</a></td></tr>
 <tr class="separator:a47a77fdb278b2615570871e59314d847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54d801f4a941ddb94414c36198632e07"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structClassMethod.html">ClassMethod</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClassData.html#a54d801f4a941ddb94414c36198632e07">methods_</a></td></tr>
+<tr class="separator:a54d801f4a941ddb94414c36198632e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c075094bd4d9f08607e0e7d75fee577"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structOverloadDescriptor.html">OverloadDescriptor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClassData.html#a4c075094bd4d9f08607e0e7d75fee577">overloadAliases_</a></td></tr>
+<tr class="separator:a4c075094bd4d9f08607e0e7d75fee577"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbae81f639346452fc06277d11b3a64"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClassData.html#adbbae81f639346452fc06277d11b3a64">qualifiedName_</a></td></tr>
 <tr class="separator:adbbae81f639346452fc06277d11b3a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cdb3a6935aea26290aa9e7d6ca4da03"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClassData.html#a9cdb3a6935aea26290aa9e7d6ca4da03">usingAlias_</a> {}</td></tr>
+<tr class="separator:a9cdb3a6935aea26290aa9e7d6ca4da03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="add8b1e12f4893b1517b8892247ebf0f3"></a>
@@ -161,6 +169,30 @@ Public Attributes</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad578f856898839b0e7d1fee9f6443c86"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString ClassData::methodAddressPrefix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -233,12 +265,48 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a54d801f4a941ddb94414c36198632e07"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt;<a class="el" href="structClassMethod.html">ClassMethod</a>&gt; ClassData::methods_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4c075094bd4d9f08607e0e7d75fee577"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt;<a class="el" href="structOverloadDescriptor.html">OverloadDescriptor</a>&gt; ClassData::overloadAliases_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="adbbae81f639346452fc06277d11b3a64"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">QString ClassData::qualifiedName_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9cdb3a6935aea26290aa9e7d6ca4da03"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString ClassData::usingAlias_ {}</td>
         </tr>
       </table>
 </div><div class="memdoc">

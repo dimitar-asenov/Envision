@@ -1,7 +1,6 @@
 var searchData=
 [
   ['generatoraction',['GeneratorAction',['../classGeneratorAction.html',1,'']]],
-  ['genericfilter',['GenericFilter',['../classInformationScripting_1_1GenericFilter.html',1,'InformationScripting']]],
   ['generichandler',['GenericHandler',['../classInteraction_1_1GenericHandler.html',1,'Interaction']]],
   ['generichandlermanagerlistener',['GenericHandlerManagerListener',['../classInteraction_1_1GenericHandlerManagerListener.html',1,'Interaction']]],
   ['genericnode',['GenericNode',['../classFilePersistence_1_1GenericNode.html',1,'FilePersistence']]],

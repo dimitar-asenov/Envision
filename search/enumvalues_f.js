@@ -33,6 +33,6 @@ var searchData=
   ['rightof',['RightOf',['../classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a5568a7b643119bcc0967e8b9dd47bc67',1,'Visualization::Item::RightOf()'],['../classVisualization_1_1ItemRegion.html#a4c5ce94b208c205300fadb4271b9165baf99e6a0b280ff652a2daab3f4653dfa2',1,'Visualization::ItemRegion::RightOf()']]],
   ['righttoleft',['RightToLeft',['../classVisualization_1_1LayoutStyle.html#a1b3aa8687e4ef411466637b201eaef0bab7b0ea3028791689ea070674776855e2',1,'Visualization::LayoutStyle']]],
   ['round',['Round',['../classVisualization_1_1BoxStyle.html#a34873df385d4000d55252672b7178af0ab7f41fc1412ad2ee75e9b2635d3b9d5c',1,'Visualization::BoxStyle']]],
-  ['rowmajor',['RowMajor',['../classVisualization_1_1GridLayouter.html#a8de41949f680ff7c0f397e13588934f3a2b1f9eec760936d66cc1a5019fefeb46',1,'Visualization::GridLayouter']]],
+  ['rowmajor',['RowMajor',['../classOOVisualization_1_1AutoLayouter.html#a7299c58e69cc18eb0169fad94ecf6e8fa8f1dcd4116ab9b112b425298ff2a0d3c',1,'OOVisualization::AutoLayouter::RowMajor()'],['../classVisualization_1_1GridLayouter.html#a8de41949f680ff7c0f397e13588934f3a2b1f9eec760936d66cc1a5019fefeb46',1,'Visualization::GridLayouter::RowMajor()']]],
   ['running',['RUNNING',['../classOODebug_1_1Protocol.html#aa2d0eddd888a1c7ffc717bccfdcf22cca43491564ebcfd38568918efbd6e840fd',1,'OODebug::Protocol']]]
 ];

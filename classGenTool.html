@@ -95,41 +95,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2d6cec03e3c54acd8762edb3c3fd39f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a2d6cec03e3c54acd8762edb3c3fd39f6">initPath</a> (const QString &amp;sourcePath)</td></tr>
-<tr class="memdesc:a2d6cec03e3c54acd8762edb3c3fd39f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares everything for the project in <em>sourcePath</em> to get imported.  <a href="#a2d6cec03e3c54acd8762edb3c3fd39f6">More...</a><br /></td></tr>
-<tr class="separator:a2d6cec03e3c54acd8762edb3c3fd39f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1417cb14b2f86564b2d5c200503da9d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a1417cb14b2f86564b2d5c200503da9d7">run</a> ()</td></tr>
-<tr class="separator:a1417cb14b2f86564b2d5c200503da9d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab426aa4b91b120505f02b69c77935b4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#ab426aa4b91b120505f02b69c77935b4e">setSubDirPath</a> (const QString &amp;path)</td></tr>
-<tr class="memdesc:ab426aa4b91b120505f02b69c77935b4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares importing a project which is structured in subdirectories.  <a href="#ab426aa4b91b120505f02b69c77935b4e">More...</a><br /></td></tr>
-<tr class="separator:ab426aa4b91b120505f02b69c77935b4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4a39ca40bafa1846326b98170129f08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#af4a39ca40bafa1846326b98170129f08">run</a> (const QString &amp;envisionPath)</td></tr>
+<tr class="separator:af4a39ca40bafa1846326b98170129f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a2d6cec03e3c54acd8762edb3c3fd39f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a2d6cec03e3c54acd8762edb3c3fd39f6">initPath</a> (const QString &amp;sourcePath)</td></tr>
+<tr class="memdesc:a2d6cec03e3c54acd8762edb3c3fd39f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares everything for the project in <em>sourcePath</em> to get imported.  <a href="#a2d6cec03e3c54acd8762edb3c3fd39f6">More...</a><br /></td></tr>
+<tr class="separator:a2d6cec03e3c54acd8762edb3c3fd39f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab58baae9b694163600a0b2da0729d346"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#ab58baae9b694163600a0b2da0729d346">readInFiles</a> (const QString &amp;sourcePath)</td></tr>
 <tr class="memdesc:ab58baae9b694163600a0b2da0729d346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects all source files in <em>sourcPath</em> and sub directories and stores them in the sourcesMap_.  <a href="#ab58baae9b694163600a0b2da0729d346">More...</a><br /></td></tr>
 <tr class="separator:ab58baae9b694163600a0b2da0729d346"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52607995dc56a794d97b9e3daa0967c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a52607995dc56a794d97b9e3daa0967c5">setCompilationDbPath</a> (const QString &amp;sourcePath)</td></tr>
-<tr class="memdesc:a52607995dc56a794d97b9e3daa0967c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the compilation database to compilationDbMap_.  <a href="#a52607995dc56a794d97b9e3daa0967c5">More...</a><br /></td></tr>
-<tr class="separator:a52607995dc56a794d97b9e3daa0967c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e1e58dd5cea4e7ae7c9aa0718a81899"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; clang::tooling::CompilationDatabase &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a1e1e58dd5cea4e7ae7c9aa0718a81899">setSubDirPath</a> (const QString &amp;path)</td></tr>
+<tr class="memdesc:a1e1e58dd5cea4e7ae7c9aa0718a81899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares importing Envision which is structured in subdirectories.  <a href="#a1e1e58dd5cea4e7ae7c9aa0718a81899">More...</a><br /></td></tr>
+<tr class="separator:a1e1e58dd5cea4e7ae7c9aa0718a81899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ac4e2f47630c8457ef4b2ae7987b783e4"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, std::shared_ptr&lt; clang::tooling::CompilationDatabase &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#ac4e2f47630c8457ef4b2ae7987b783e4">compilationDbMap_</a></td></tr>
-<tr class="separator:ac4e2f47630c8457ef4b2ae7987b783e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3faadd17a9d663a225888e60a2f835d"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#ab3faadd17a9d663a225888e60a2f835d">cppFilter_</a> = {&quot;*.cpp&quot;, &quot;*.cc&quot;, &quot;*.cxx&quot;}</td></tr>
 <tr class="separator:ab3faadd17a9d663a225888e60a2f835d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a679539fdad39fc0ac260cb1b3fa1d8f5"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a679539fdad39fc0ac260cb1b3fa1d8f5">projectName_</a></td></tr>
 <tr class="separator:a679539fdad39fc0ac260cb1b3fa1d8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a156c0400df00f0b3b925910fc371bbe3"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a156c0400df00f0b3b925910fc371bbe3">projects_</a></td></tr>
 <tr class="separator:a156c0400df00f0b3b925910fc371bbe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0967d11ecfebcb5a0f39d26d0217e133"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, std::shared_ptr&lt; std::vector&lt; std::string &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a0967d11ecfebcb5a0f39d26d0217e133">sourcesMap_</a></td></tr>
-<tr class="separator:a0967d11ecfebcb5a0f39d26d0217e133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a6ab0414d15357751c6b6f6835d662b"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGenTool.html#a1a6ab0414d15357751c6b6f6835d662b">sourcesMap_</a></td></tr>
+<tr class="separator:a1a6ab0414d15357751c6b6f6835d662b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a2d6cec03e3c54acd8762edb3c3fd39f6"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GenTool::initPath </td>
@@ -139,6 +137,11 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Prepares everything for the project in <em>sourcePath</em> to get imported. </p>
@@ -171,14 +174,15 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1417cb14b2f86564b2d5c200503da9d7"></a>
+<a class="anchor" id="af4a39ca40bafa1846326b98170129f08"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void GenTool::run </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>envisionPath</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -186,7 +190,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a52607995dc56a794d97b9e3daa0967c5"></a>
+<a class="anchor" id="a1e1e58dd5cea4e7ae7c9aa0718a81899"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -194,54 +198,13 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void GenTool::setCompilationDbPath </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>sourcePath</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Adds the compilation database to compilationDbMap_. </p>
-
-</div>
-</div>
-<a class="anchor" id="ab426aa4b91b120505f02b69c77935b4e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GenTool::setSubDirPath </td>
+          <td class="memname">std::unique_ptr&lt; clang::tooling::CompilationDatabase &gt; GenTool::setSubDirPath </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-<p>Prepares importing a project which is structured in subdirectories. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ac4e2f47630c8457ef4b2ae7987b783e4"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QHash&lt;QString, std::shared_ptr&lt;clang::tooling::CompilationDatabase&gt; &gt; GenTool::compilationDbMap_</td>
-        </tr>
-      </table>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
@@ -249,8 +212,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Prepares importing Envision which is structured in subdirectories. </p>
+<p>Returns the compilation database for the whole project. </p>
+
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="ab3faadd17a9d663a225888e60a2f835d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -311,7 +278,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0967d11ecfebcb5a0f39d26d0217e133"></a>
+<a class="anchor" id="a1a6ab0414d15357751c6b6f6835d662b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -319,7 +286,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QHash&lt;QString, std::shared_ptr&lt;std::vector&lt;std::string&gt; &gt; &gt; GenTool::sourcesMap_</td>
+          <td class="memname">QHash&lt;QString, std::vector&lt;std::string&gt; &gt; GenTool::sourcesMap_</td>
         </tr>
       </table>
   </td>

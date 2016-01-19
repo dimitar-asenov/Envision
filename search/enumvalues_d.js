@@ -6,6 +6,7 @@ var searchData=
   ['pipe',['Pipe',['../classInformationScripting_1_1OperatorQueryNode.html#ac0aa5949da690e5403dbb346d4e3318bac3ac7b3d6754c9ba08fc2011aafbcd48',1,'InformationScripting::OperatorQueryNode']]],
   ['plus',['PLUS',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a343ed43ac646ed0b6c6b976e6498a7ba',1,'OOModel::BinaryOperation::PLUS()'],['../classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1adbcfe3dcbf913594b8f893baab8c9f47',1,'OOModel::UnaryOperation::PLUS()']]],
   ['plus_5fassign',['PLUS_ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a524a7ad6db1fa0e653c30588bd82f874',1,'OOModel::AssignmentExpression']]],
+  ['pointer',['Pointer',['../classOOModel_1_1ReferenceExpression.html#a416c4460d5cfc0b651e4a9b453014402a61cf8510205077b6f5491d38cd44c0f7',1,'OOModel::ReferenceExpression']]],
   ['pointer_5fpointer_5fto_5fmember',['POINTER_POINTER_TO_MEMBER',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2acf42f4e6904358ecbd3b864083dfddc8',1,'OOModel::BinaryOperation']]],
   ['pointer_5fto_5fmember',['POINTER_TO_MEMBER',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a3ff6b3b0886d4541a5a0e1ef86d6fdab',1,'OOModel::BinaryOperation']]],
   ['popframes',['PopFrames',['../classOODebug_1_1Protocol.html#a44ea1e126659108dbd323485055df7b3a419dd20c1758ba091ef64f5703e3f3d7',1,'OODebug::Protocol']]],

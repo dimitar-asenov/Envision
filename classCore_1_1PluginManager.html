@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5238cbaecec576bd03b7aac3997bb461"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a5238cbaecec576bd03b7aac3997bb461">isPluginLoaded</a> (QString pluginId)</td></tr>
 <tr class="memdesc:a5238cbaecec576bd03b7aac3997bb461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the specified plugin is loaded.  <a href="#a5238cbaecec576bd03b7aac3997bb461">More...</a><br /></td></tr>
 <tr class="separator:a5238cbaecec576bd03b7aac3997bb461"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae22795d6cdb28f25ff6f0a3b17a1c16c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#ae22795d6cdb28f25ff6f0a3b17a1c16c">loadAllPlugins</a> (<a class="el" href="classCore_1_1EnvisionManager.html">EnvisionManager</a> &amp;)</td></tr>
-<tr class="memdesc:ae22795d6cdb28f25ff6f0a3b17a1c16c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads and initializes all plug-ins found in the plug-ins folder.  <a href="#ae22795d6cdb28f25ff6f0a3b17a1c16c">More...</a><br /></td></tr>
-<tr class="separator:ae22795d6cdb28f25ff6f0a3b17a1c16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33fb91ee3f359da028a8cc8adf1679f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a33fb91ee3f359da028a8cc8adf1679f5">loadAllPlugins</a> (<a class="el" href="classCore_1_1EnvisionManager.html">EnvisionManager</a> &amp;envisionManager)</td></tr>
+<tr class="memdesc:a33fb91ee3f359da028a8cc8adf1679f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads and initializes all plug-ins found in the plug-ins folder.  <a href="#a33fb91ee3f359da028a8cc8adf1679f5">More...</a><br /></td></tr>
+<tr class="separator:a33fb91ee3f359da028a8cc8adf1679f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a2e01a4ffeb0ccfeed8f5a547b9f3ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a5a2e01a4ffeb0ccfeed8f5a547b9f3ca">unloadAllPlugins</a> ()</td></tr>
 <tr class="memdesc:a5a2e01a4ffeb0ccfeed8f5a547b9f3ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads all currently loaded plug-ins.  <a href="#a5a2e01a4ffeb0ccfeed8f5a547b9f3ca">More...</a><br /></td></tr>
 <tr class="separator:a5a2e01a4ffeb0ccfeed8f5a547b9f3ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,9 +129,13 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a33d54431854df40386f5ed5cca7b3f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94a2fe0089ebeeb0750436ecac2510ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a94a2fe0089ebeeb0750436ecac2510ea">scanAllPluginsMetaData</a> ()</td></tr>
 <tr class="separator:a94a2fe0089ebeeb0750436ecac2510ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c8c5bf1a0508cc8f1c9b55dc5e35777"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a2c8c5bf1a0508cc8f1c9b55dc5e35777">scanSharedLibraries</a> ()</td></tr>
+<tr class="separator:a2c8c5bf1a0508cc8f1c9b55dc5e35777"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a731c125e0dfce125e919f441524241d8"><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a731c125e0dfce125e919f441524241d8">_allFoundSharedLibraryFiles</a></td></tr>
+<tr class="separator:a731c125e0dfce125e919f441524241d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9946e1477371177270dd8b962fcac1d"><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, <a class="el" href="structCore_1_1PluginInfo.html">PluginInfo</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#ad9946e1477371177270dd8b962fcac1d">idToMetaDataMap</a></td></tr>
 <tr class="separator:ad9946e1477371177270dd8b962fcac1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab29cb196c7af587f27b63af4f9538f21"><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, QPluginLoader * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#ab29cb196c7af587f27b63af4f9538f21">idToPluginLoaderMap</a></td></tr>
@@ -258,7 +262,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae22795d6cdb28f25ff6f0a3b17a1c16c"></a>
+<a class="anchor" id="a33fb91ee3f359da028a8cc8adf1679f5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -324,6 +328,29 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2c8c5bf1a0508cc8f1c9b55dc5e35777"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::PluginManager::scanSharedLibraries </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5a2e01a4ffeb0ccfeed8f5a547b9f3ca"></a>
 <div class="memitem">
 <div class="memproto">
@@ -343,6 +370,26 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a731c125e0dfce125e919f441524241d8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt;QString, QString&gt; Core::PluginManager::_allFoundSharedLibraryFiles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ad9946e1477371177270dd8b962fcac1d"></a>
 <div class="memitem">
 <div class="memproto">

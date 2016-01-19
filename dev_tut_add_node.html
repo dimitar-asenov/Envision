@@ -92,7 +92,33 @@ Introduction</h1>
 <p>To create a new node all you need to do is create a new class that inherits from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Model::Node</a>. It is possible to inherit directly from it, but then you'll have more work to do. The recommended approach, that we'll demonstrate below, is to inherit from <a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> (either directly or indirectly). <a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> provides a whole infrastructure for declaring nodes that makes it really easy to define new node types.</p>
 <h1><a class="anchor" id="if_header"></a>
 IfStatement.h</h1>
-<p>Here is <code>IfStatement.h</code> :  <div class="fragment"><div class="line"><span class="preprocessor">#pragma once</span></div>
+<p>Here is <code>IfStatement.h</code> : </p><div class="fragment"><div class="line"><span class="comment">/***********************************************************************************************************************</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">** Copyright (c) 2011, 2014 ETH Zurich</span></div>
+<div class="line"><span class="comment">** All rights reserved.</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the</span></div>
+<div class="line"><span class="comment">** following conditions are met:</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">**    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following</span></div>
+<div class="line"><span class="comment">**      disclaimer.</span></div>
+<div class="line"><span class="comment">**    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the</span></div>
+<div class="line"><span class="comment">**      following disclaimer in the documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><span class="comment">**    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><span class="comment">**      derived from this software without specific prior written permission.</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES,</span></div>
+<div class="line"><span class="comment">** INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><span class="comment">** DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span></div>
+<div class="line"><span class="comment">** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</span></div>
+<div class="line"><span class="comment">** SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,</span></div>
+<div class="line"><span class="comment">** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span></div>
+<div class="line"><span class="comment">** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">***********************************************************************************************************************/</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#pragma once</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;Statement.h&quot;</span></div>
 <div class="line"></div>
@@ -116,8 +142,8 @@ IfStatement.h</h1>
 <div class="line">            FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) const override;</div>
 <div class="line">};</div>
 <div class="line"></div>
-<div class="line">} <span class="comment">/* namespace OOModel */</span></div>
-</div><!-- fragment --> <p>Let's examine it starting from the top. The first noteworthy bit is:</p>
+<div class="line">}</div>
+</div><!-- fragment --><p>Let's examine it starting from the top. The first noteworthy bit is:</p>
 <p><div class="fragment"><div class="line">DECLARE_TYPED_LIST(OOMODEL_API, OOModel, IfStatement)</div>
 </div><!-- fragment --> In order to be able to put a node into a list of nodes, it is necessary to explicitly instantiate the <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a> template. Doing this properly in a cross-platform setting can be a bit involved and we use the <code>DECLARE_TYPED_LIST</code> macro to help with that. You need to provide:</p><ul>
 <li>the API macro which will expand to import/export directives in Windows</li>
@@ -152,7 +178,33 @@ IfStatement.h</h1>
 <p>This is it really. The essential thing for any <a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> derivative is to declare what attribute nodes it consists of. The rest of the code is just boilerplate.</p>
 <h1><a class="anchor" id="if_cpp"></a>
 IfStatement.cpp</h1>
-<p>Here is <code>IfStatement.cpp</code> :  <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;statements/IfStatement.h&quot;</span></div>
+<p>Here is <code>IfStatement.cpp</code> : </p><div class="fragment"><div class="line"><span class="comment">/***********************************************************************************************************************</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">** Copyright (c) 2011, 2014 ETH Zurich</span></div>
+<div class="line"><span class="comment">** All rights reserved.</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the</span></div>
+<div class="line"><span class="comment">** following conditions are met:</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">**    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following</span></div>
+<div class="line"><span class="comment">**      disclaimer.</span></div>
+<div class="line"><span class="comment">**    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the</span></div>
+<div class="line"><span class="comment">**      following disclaimer in the documentation and/or other materials provided with the distribution.</span></div>
+<div class="line"><span class="comment">**    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products</span></div>
+<div class="line"><span class="comment">**      derived from this software without specific prior written permission.</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES,</span></div>
+<div class="line"><span class="comment">** INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span></div>
+<div class="line"><span class="comment">** DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span></div>
+<div class="line"><span class="comment">** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</span></div>
+<div class="line"><span class="comment">** SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,</span></div>
+<div class="line"><span class="comment">** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span></div>
+<div class="line"><span class="comment">** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div>
+<div class="line"><span class="comment">**</span></div>
+<div class="line"><span class="comment">***********************************************************************************************************************/</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &quot;IfStatement.h&quot;</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;ModelBase/src/nodes/TypedListDefinition.h&quot;</span></div>
 <div class="line">DEFINE_TYPED_LIST(<a class="code" href="classOOModel_1_1IfStatement.html">OOModel::IfStatement</a>)</div>
@@ -190,8 +242,8 @@ IfStatement.cpp</h1>
 <div class="line">   <span class="keywordflow">else</span> <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line">}</div>
 <div class="line"></div>
-<div class="line">} <span class="comment">/* namespace OOModel */</span></div>
-</div><!-- fragment --> <p>All of the things here are just the corresponding definition macros. The only interesting bit is: <div class="fragment"><div class="line">REGISTER_ATTRIBUTE(IfStatement, condition, Expression, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">true</span>)</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>All of the things here are just the corresponding definition macros. The only interesting bit is: <div class="fragment"><div class="line">REGISTER_ATTRIBUTE(IfStatement, condition, Expression, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">true</span>)</div>
 <div class="line">REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)</div>
 <div class="line">REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)</div>
 </div><!-- fragment --> When defining the registered nodes you need to provide the following information:</p><ul>
