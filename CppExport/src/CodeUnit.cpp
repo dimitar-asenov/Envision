@@ -74,10 +74,9 @@ void CodeUnit::calculateSourceFragments()
 			headerPart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(method));
 		}
 	}
-	else if (auto method = DCast<OOModel::Field>(node()))
+	else if (auto field = DCast<OOModel::Field>(node()))
 	{
-		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(method));
-		sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(method));
+		sourcePart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(field));
 	}
 	else if (auto typeAlias = DCast<OOModel::TypeAlias>(node()))
 	{
