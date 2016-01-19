@@ -521,13 +521,29 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 										  variableDeclaration->modifiers()->isSet(Modifier::Static) ||
 										  variableDeclaration->modifiers()->isSet(Modifier::ConstExpr)))
 	{
+		if (DCast<Field>(variableDeclaration))
+			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
+				if (!parentClass->typeArguments()->isEmpty())
+					*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
 		if (!DCast<Field>(variableDeclaration) || variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 			*fragment << printAnnotationsAndModifiers(variableDeclaration);
+
 		*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
 		if (DCast<Field>(variableDeclaration))
 			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
-				*fragment << parentClass->name() << "::";
+			{
+				*fragment << parentClass->name();
+				if (!parentClass->typeArguments()->isEmpty())
+				{
+					auto typeArgumentComposite = new CompositeFragment(parentClass->typeArguments(), "typeArgsList");
+					for (auto typeArgument : *parentClass->typeArguments())
+						*typeArgumentComposite << typeArgument->nameNode();
+					*fragment << typeArgumentComposite;
+				}
+				*fragment << "::";
+			}
 
 		*fragment << variableDeclaration->nameNode();
 		if (variableDeclaration->initialValue())
