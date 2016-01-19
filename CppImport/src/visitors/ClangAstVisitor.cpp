@@ -1371,15 +1371,6 @@ void ClangAstVisitor::endTranslationUnit()
 
 void ClangAstVisitor::endEntireImport()
 {
-	for (auto it = projectIncludes_.begin(); it != projectIncludes_.end(); it++)
-	{
-		auto project = trMngr_->projectByName(it.key());
-		for (auto dependency : it.value())
-			if (auto otherProject = trMngr_->projectByName(dependency))
-				project->subDeclarations()->append(new OOModel::NameImport(
-																  new OOModel::ReferenceExpression(otherProject->name()), true));
-	}
-
 	macroImporter_.endEntireImport();
 }
 
