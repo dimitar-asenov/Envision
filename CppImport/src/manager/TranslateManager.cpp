@@ -76,7 +76,11 @@ OOModel::Class* TranslateManager::createClass(clang::CXXRecordDecl* recordDecl)
 		constructKind = OOModel::Class::ConstructKind::Union;
 	else
 		Q_ASSERT(false);
-	return clang_.createNamedNode<OOModel::Class>(recordDecl, constructKind);
+
+	auto result = clang_.createNamedNode<OOModel::Class>(recordDecl, constructKind);
+	if (recordDecl->hasAttr<clang::FinalAttr>())
+		result->modifiers()->set(OOModel::Modifier::Final);
+	return result;
 }
 
 bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*& createdClass)
