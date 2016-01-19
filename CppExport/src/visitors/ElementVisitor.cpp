@@ -91,8 +91,8 @@ SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 {
 	auto fragment = new CompositeFragment(typeArgument);
 	*fragment << "typename " << typeArgument->nameNode();
-	if (headerVisitor() && typeArgument->defaultValue())
-		*fragment << " = " << expression(typeArgument->defaultValue());
+	if (headerVisitor() && typeArgument->defaultType())
+		*fragment << " = " << expression(typeArgument->defaultType());
 	return fragment;
 }
 
