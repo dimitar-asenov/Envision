@@ -55,8 +55,8 @@ class CPPIMPORT_API AllMetaDefinitions
 		AllMetaDefinitions(OOModel::Project* root, ClangHelpers& clangHelper,
 								 const MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions);
 
-		void createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
-								 QVector<MacroArgumentInfo>& arguments);
+		void createMetaDef(QList<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
+								 QList<MacroArgumentInfo>& arguments);
 
 		void handleXMacros();
 

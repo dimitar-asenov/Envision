@@ -65,9 +65,9 @@ OOModel::MetaDefinition* StandardMetaDefinitions::metaDefinition(const clang::Ma
 	return it != standardMetaDefinitions_.end() ? *it : nullptr;
 }
 
-void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QList<Model::Node*> nodes,
 																		 MacroExpansion* expansion, NodeToCloneMap& mapping,
-																		 QVector<MacroArgumentInfo>& arguments)
+																		 QList<MacroArgumentInfo>& arguments)
 {
 	if (nodes.size() > 0)
 	{
@@ -159,7 +159,7 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 }
 
 void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion,
-																			NodeToCloneMap& mapping, QVector<Model::Node*>& result)
+																			NodeToCloneMap& mapping, QList<Model::Node*>& result)
 {
 	Q_ASSERT(expansion);
 
@@ -185,7 +185,7 @@ void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, Macr
 bool StandardMetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpansion* expansion,
 																 NodeToCloneMap& mapping)
 {
-	QVector<Model::Node*> unownedNodes;
+	QList<Model::Node*> unownedNodes;
 	childrenUnownedByExpansion(cloned, expansion, mapping, unownedNodes);
 
 	// if the unowned nodes contain the node itself then the node should not even be added to the meta definition
@@ -197,7 +197,7 @@ bool StandardMetaDefinitions::removeUnownedNodes(Model::Node* cloned, MacroExpan
 }
 
 void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, NodeToCloneMap& childMapping,
-																	 QVector<MacroArgumentInfo>& arguments)
+																	 QList<MacroArgumentInfo>& arguments)
 {
 	for (auto argument : arguments)
 	{

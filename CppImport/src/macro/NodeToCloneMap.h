@@ -42,10 +42,10 @@ class CPPIMPORT_API NodeToCloneMap
 		void add(Model::Node* original, Model::Node* clone);
 
 		Model::Node* original(Model::Node* clone);
-		QVector<Model::Node*> original(QVector<Model::Node*> clones);
+		QList<Model::Node*> original(QList<Model::Node*> clones);
 
 		Model::Node* clone(Model::Node* original);
-		QVector<Model::Node*> clone(QVector<Model::Node*> originals);
+		QList<Model::Node*> clone(QList<Model::Node*> originals);
 
 		void replaceClone(Model::Node* old, Model::Node* replacement);
 

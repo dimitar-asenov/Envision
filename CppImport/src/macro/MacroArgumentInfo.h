@@ -38,7 +38,7 @@ struct MacroArgumentLocation;
 
 struct CPPIMPORT_API MacroArgumentInfo
 {
-	QVector<MacroArgumentLocation> history_;
+	QList<MacroArgumentLocation> history_;
 	Model::Node* node_{};
 };
 

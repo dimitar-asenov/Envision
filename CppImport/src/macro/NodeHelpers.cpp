@@ -204,7 +204,7 @@ void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 		Q_ASSERT(false && "not implemented");
 }
 
-QVector<Model::Node*> NodeHelpers::topLevelNodes(QVector<Model::Node*> input)
+QList<Model::Node*> NodeHelpers::topLevelNodes(QList<Model::Node*> input)
 {
 	auto end = std::remove_if(input.begin(), input.end(),
 										[=] (auto e)
@@ -258,7 +258,7 @@ OOModel::Declaration* NodeHelpers::findDeclaration(Model::List* list, const QStr
 	return nullptr;
 }
 
-void CppImport::NodeHelpers::removeNodesFromParent(QVector<Model::Node*> nodes)
+void CppImport::NodeHelpers::removeNodesFromParent(QList<Model::Node*> nodes)
 {
 	for (auto n : nodes)
 		removeNodeFromParent(n);

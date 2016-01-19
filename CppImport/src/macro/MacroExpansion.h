@@ -49,11 +49,11 @@ class CPPIMPORT_API MacroExpansion
 		clang::SourceRange range();
 		const clang::MacroDirective* definition();
 		MacroExpansion* parent();
-		QVector<clang::SourceLocation>& argumentLocs();
-		QVector<MacroExpansion*>& children();
+		QList<clang::SourceLocation>& argumentLocs();
+		QList<MacroExpansion*>& children();
 		OOModel::MetaCallExpression* metaCall();
 		MacroExpansion* xMacroParent();
-		QVector<MacroExpansion*>& xMacroChildren();
+		QList<MacroExpansion*>& xMacroChildren();
 		Model::Node* replacementNode();
 
 		void setMetaCall(OOModel::MetaCallExpression* metaCall);
@@ -63,11 +63,11 @@ class CPPIMPORT_API MacroExpansion
 		clang::SourceRange range_;
 		const clang::MacroDirective* definition_;
 		MacroExpansion* parent_{};
-		QVector<clang::SourceLocation> argumentLocs_;
-		QVector<MacroExpansion*> children_;
+		QList<clang::SourceLocation> argumentLocs_;
+		QList<MacroExpansion*> children_;
 		OOModel::MetaCallExpression* metaCall_{};
 		MacroExpansion* xMacroParent_{};
-		QVector<MacroExpansion*> xMacroChildren_;
+		QList<MacroExpansion*> xMacroChildren_;
 		Model::Node* replacementNode_{};
 };
 
@@ -77,15 +77,15 @@ inline const clang::MacroDirective* MacroExpansion::definition() { return defini
 
 inline MacroExpansion* MacroExpansion::parent() { return parent_; }
 
-inline QVector<clang::SourceLocation>& MacroExpansion::argumentLocs() { return argumentLocs_; }
+inline QList<clang::SourceLocation>& MacroExpansion::argumentLocs() { return argumentLocs_; }
 
-inline QVector<MacroExpansion*>& MacroExpansion::children() { return children_; }
+inline QList<MacroExpansion*>& MacroExpansion::children() { return children_; }
 
 inline OOModel::MetaCallExpression*MacroExpansion::metaCall() { return metaCall_; }
 
 inline MacroExpansion*MacroExpansion::xMacroParent() { return xMacroParent_; }
 
-inline QVector<MacroExpansion*>& MacroExpansion::xMacroChildren() { return xMacroChildren_; }
+inline QList<MacroExpansion*>& MacroExpansion::xMacroChildren() { return xMacroChildren_; }
 
 inline Model::Node*MacroExpansion::replacementNode() { return replacementNode_; }
 

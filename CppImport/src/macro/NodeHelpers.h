@@ -53,12 +53,12 @@ class CPPIMPORT_API NodeHelpers
 		static OOModel::Declaration* actualContext(Model::Node* node);
 		static OOModel::Declaration* createContext(OOModel::Declaration* actualContext);
 
-		static QVector<Model::Node*> topLevelNodes(QVector<Model::Node*> input);
+		static QList<Model::Node*> topLevelNodes(QList<Model::Node*> input);
 
 		static Model::Node* cloneWithMapping(Model::Node* node, NodeToCloneMap& mapping);
 
 		static void removeNodeFromParent(Model::Node* node, bool removeMetaCalls = false);
-		static void removeNodesFromParent(QVector<Model::Node*> nodes);
+		static void removeNodesFromParent(QList<Model::Node*> nodes);
 
 		static void addNodeToDeclaration(Model::Node* node, OOModel::Declaration* declaration);
 

@@ -113,9 +113,9 @@ void MacroExpansions::clear()
 	expansions_.clear();
 }
 
-QVector<MacroExpansion*> MacroExpansions::topLevelExpansions() const
+QList<MacroExpansion*> MacroExpansions::topLevelExpansions() const
 {
-	QVector<MacroExpansion*> result;
+	QList<MacroExpansion*> result;
 	for (auto expansion : expansions_)
 		if (!expansion->parent())
 			result.append(expansion);
@@ -180,11 +180,11 @@ QSet<MacroExpansion*> MacroExpansions::expansions(Model::Node* node)
 }
 
 
-QVector<Model::Node*> MacroExpansions::topLevelNodes(MacroExpansion* expansion, NodeOriginType filter)
+QList<Model::Node*> MacroExpansions::topLevelNodes(MacroExpansion* expansion, NodeOriginType filter)
 {
 	Q_ASSERT(expansion);
 
-	QVector<Model::Node*> allTLExpansionNodes;
+	QList<Model::Node*> allTLExpansionNodes;
 	for (auto node : clang_.envisionToClangMap().nodes())
 		// consider name texts as inseparable part of a declaration
 		if (!DCast<Model::NameText>(node))
@@ -205,7 +205,7 @@ QVector<Model::Node*> MacroExpansions::topLevelNodes(MacroExpansion* expansion, 
 				}
 			}
 
-	QVector<Model::Node*> result = NodeHelpers::topLevelNodes(allTLExpansionNodes);
+	QList<Model::Node*> result = NodeHelpers::topLevelNodes(allTLExpansionNodes);
 
 	std::sort(result.begin(), result.end(),
 			[](Model::Node* e1, Model::Node* e2)

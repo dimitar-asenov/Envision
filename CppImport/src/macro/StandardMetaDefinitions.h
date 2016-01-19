@@ -60,9 +60,9 @@ class CPPIMPORT_API StandardMetaDefinitions
 
 		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 
-		void createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QVector<Model::Node*> nodes,
+		void createMetaDefinitionBody(OOModel::MetaDefinition* metaDef, QList<Model::Node*> nodes,
 												MacroExpansion* expansion, NodeToCloneMap& mapping,
-												QVector<MacroArgumentInfo>& arguments);
+												QList<MacroArgumentInfo>& arguments);
 
 		OOModel::MetaDefinition* metaDefinition(const clang::MacroDirective* md);
 
@@ -82,7 +82,7 @@ class CPPIMPORT_API StandardMetaDefinitions
 		 * return all children of node that do not belong to expansion.
 		 */
 		void childrenUnownedByExpansion(Model::Node* node, MacroExpansion* expansion, NodeToCloneMap& mapping,
-												  QVector<Model::Node*>& result);
+												  QList<Model::Node*>& result);
 
 		/**
 		 * remove all children of node that do not belong to expansion.
@@ -94,7 +94,7 @@ class CPPIMPORT_API StandardMetaDefinitions
 		 * insert splices for all nodes in childMapping that are a macro argument.
 		 */
 		void insertArgumentSplices(NodeToCloneMap& mapping, NodeToCloneMap& childMapping,
-											QVector<MacroArgumentInfo>& arguments);
+											QList<MacroArgumentInfo>& arguments);
 };
 
 }

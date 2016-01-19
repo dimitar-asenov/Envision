@@ -113,7 +113,7 @@ clang::SourceLocation ClangHelpers::immediateMacroLocation(clang::SourceLocation
 }
 
 void ClangHelpers::immediateSpellingHistory(clang::SourceLocation location,
-														  QVector<clang::SourceLocation>& result) const
+														  QList<clang::SourceLocation>& result) const
 {
 	result.append(location);
 
@@ -123,9 +123,9 @@ void ClangHelpers::immediateSpellingHistory(clang::SourceLocation location,
 		immediateSpellingHistory(next, result);
 }
 
-QVector<QString> ClangHelpers::argumentNames(const clang::MacroDirective* definition) const
+QList<QString> ClangHelpers::argumentNames(const clang::MacroDirective* definition) const
 {
-	QVector<QString> result;
+	QList<QString> result;
 
 	for (auto i = definition->getMacroInfo()->arg_begin(); i != definition->getMacroInfo()->arg_end(); i++)
 		result.append(QString::fromStdString((*i)->getName().str()));

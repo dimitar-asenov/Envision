@@ -31,6 +31,7 @@
 #include "MacroExpansions.h"
 
 #include "NodeHelpers.h"
+#include "ClangHelpers.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -41,8 +42,8 @@ AllMetaDefinitions::AllMetaDefinitions(OOModel::Project* root, ClangHelpers& cla
 	: root_{root}, clang_{clangHelper}, macroDefinitions_{macroDefinitions}, macroExpansions_{macroExpansions},
 	  standardMetaDefinitions_{clangHelper, macroDefinitions, macroExpansions} {}
 
-void AllMetaDefinitions::createMetaDef(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
-											 QVector<MacroArgumentInfo>& arguments)
+void AllMetaDefinitions::createMetaDef(QList<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
+											 QList<MacroArgumentInfo>& arguments)
 {
 	if (auto metaDef = standardMetaDefinitions_.createMetaDef(expansion->definition()))
 	{
@@ -85,8 +86,7 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 																	  MacroExpansion* expansion,
 																	  MacroExpansion* beginChild)
 {
-	QVector<Model::Node*> statements = macroExpansions_.topLevelNodes(expansion,
-																							MacroExpansions::NodeOriginType::Direct);
+	QList<Model::Node*> statements = macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Direct);
 
 	if (!statements.empty())
 	{

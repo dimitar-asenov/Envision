@@ -54,9 +54,9 @@ class CPPIMPORT_API ClangHelpers
 		void setPreprocessor(const clang::Preprocessor* preprocessor);
 
 		clang::SourceLocation immediateMacroLocation(clang::SourceLocation location) const;
-		void immediateSpellingHistory(clang::SourceLocation loc, QVector<clang::SourceLocation>& result) const;
+		void immediateSpellingHistory(clang::SourceLocation loc, QList<clang::SourceLocation>& result) const;
 
-		QVector<QString> argumentNames(const clang::MacroDirective* definition) const;
+		QList<QString> argumentNames(const clang::MacroDirective* definition) const;
 
 		bool isMacroRange(clang::SourceRange range) const;
 
