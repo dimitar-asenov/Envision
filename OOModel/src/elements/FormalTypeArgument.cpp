@@ -38,6 +38,7 @@ REGISTER_OONAME_SYMBOL_ATTRIBUTE(FormalTypeArgument, VARIABLE)
 REGISTER_ATTRIBUTE(FormalTypeArgument, subTypeOfExpression, Expression, false, true, true)
 REGISTER_ATTRIBUTE(FormalTypeArgument, superTypeOfExpression, Expression, false, true, true)
 REGISTER_ATTRIBUTE(FormalTypeArgument, specializationExpression, Expression, false, true, true)
+REGISTER_ATTRIBUTE(FormalTypeArgument, defaultValue, Expression, false, true, true)
 
 FormalTypeArgument::FormalTypeArgument(const QString& name, Expression* subtype, Expression* supertype)
 : Super(nullptr, FormalTypeArgument::getMetaData())
