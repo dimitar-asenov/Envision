@@ -82,17 +82,32 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 
 			namespaceName = ooModule->name();
 		}
-		else if (auto ooClass = DCast<OOModel::Declaration>(current))
+		else if (auto ooNameImport = DCast<OOModel::NameImport>(current))
 		{
-			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
+			auto referenceExpression = DCast<OOModel::ReferenceExpression>(ooNameImport->importedName());
+			Q_ASSERT(referenceExpression);
+
+			if (!referenceExpression->target() || !DCast<OOModel::Project>(referenceExpression->target()))
+				result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") +
+													referenceExpression->name(), current));
+			return;
+		}
+		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))		{
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") +
+												ooDeclaration->name(), current));
 			return;
 		}
 		else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
 		{
 			auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
 			Q_ASSERT(ooCalleeReference);
-			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name(),
-												current));
+
+			QStringList arguments;
+			for (auto argument : *ooMetaCall->arguments())
+				arguments.append(OOInteraction::StringComponents::stringForNode(argument));
+
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name() +
+												"(" + arguments.join(",") + ")", current));
 			return;
 		}
 	}
