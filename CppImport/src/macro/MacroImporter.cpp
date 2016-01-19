@@ -86,30 +86,29 @@ void MacroImporter::endTranslationUnit()
 			}
 			else if (auto context = bestContext(expansion))
 			{
-				if (auto declaration = DCast<OOModel::Declaration>(context))
+				if (macroDefinitions_.definitionName(expansion->definition()) == "Q_SIGNALS")
 				{
-					if (macroDefinitions_.definitionName(expansion->definition()) == "Q_SIGNALS")
-					{
-						// delete the meta call for this expansion it is never going to be used
-						SAFE_DELETE(expansion->metaCall());
+					// delete the meta call for this expansion it is never going to be used
+					SAFE_DELETE(expansion->metaCall());
 
-						if (auto classContext = DCast<OOModel::Class>(declaration))
-							handleQSignals(expansion->range().getBegin(), classContext);
-						else
-							// TODO: for debug purposes only
-							qDebug() << "unhandled Q_SIGNALS in a" << declaration->typeName() << "instead of a class";
-					}
-					else if (macroDefinitions_.definitionName(expansion->definition()) == "Q_EMIT")
-					{
-						if (auto methodContext = DCast<OOModel::Method>(declaration))
-							handleQEmit(expansion, methodContext);
-						else
-							// TODO: for debug purposes only
-							qDebug() << "unhandled Q_EMIT in a" << declaration->typeName() << "instead of a method";
-					}
+					if (auto classContext = DCast<OOModel::Class>(context))
+						handleQSignals(expansion->range().getBegin(), classContext);
 					else
-						declaration->metaCalls()->append(expansion->metaCall());
+						// TODO: for debug purposes only
+						qDebug() << "unhandled Q_SIGNALS in a" << context->typeName() << "instead of a class";
 				}
+				else if (macroDefinitions_.definitionName(expansion->definition()) == "Q_EMIT")
+				{
+					if (auto methodContext = DCast<OOModel::Method>(context))
+						handleQEmit(expansion, methodContext->items());
+					else if (auto ifContext = DCast<OOModel::IfStatement>(context))
+						handleQEmit(expansion, {ifContext});
+					else
+						// TODO: for debug purposes only
+						qDebug() << "unhandled Q_EMIT in a" << context->typeName();
+				}
+				else if (auto declaration = DCast<OOModel::Declaration>(context))
+					declaration->metaCalls()->append(expansion->metaCall());
 				else
 					qDebug() << "unhandled infered context type: " << context->typeName(); // TODO: for debug purposes only
 			}
@@ -161,11 +160,11 @@ void MacroImporter::handleQSignals(clang::SourceLocation signalsLocation, OOMode
 		}
 }
 
-void MacroImporter::handleQEmit(MacroExpansion* emitExpansion, OOModel::Method* methodContext)
+void MacroImporter::handleQEmit(MacroExpansion* emitExpansion, Model::Node* context)
 {
 	auto emitPresumedLocation = clang_.sourceManager()->getPresumedLoc(emitExpansion->range().getBegin());
 
-	QList<Model::Node*> workStack{methodContext->items()};
+	QList<Model::Node*> workStack{context};
 	QList<Model::Node*> candidates;
 	while (!workStack.empty())
 	{

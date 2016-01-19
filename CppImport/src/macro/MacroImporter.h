@@ -112,7 +112,7 @@ class CPPIMPORT_API MacroImporter
 		 */
 		void handleQSignals(clang::SourceLocation signalsLocation, OOModel::Class* classContext);
 
-		void handleQEmit(MacroExpansion* emitExpansion, OOModel::Method* methodContext);
+		void handleQEmit(MacroExpansion* emitExpansion, Model::Node* context);
 };
 
 }
