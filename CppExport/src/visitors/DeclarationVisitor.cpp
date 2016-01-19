@@ -216,6 +216,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		if (!friendClass)
 		{
+			if (classs->modifiers()->isSet(Modifier::Final))
+				*fragment << " " << new TextFragment(classs->modifiers(), "final");
 			if (!classs->baseClasses()->isEmpty())
 			{
 				// TODO: inheritance modifiers like private, virtual... (not only public)
