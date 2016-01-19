@@ -5,7 +5,8 @@ DEFINES += CppExport_EXPORTS
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
-    -loomodel
+    -loomodel \
+    -loointeraction
 
 HEADERS += src/precompiled.h \
     src/CppExportException.h \
