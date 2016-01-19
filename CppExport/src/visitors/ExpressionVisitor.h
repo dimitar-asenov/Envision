@@ -58,6 +58,4 @@ class ExpressionVisitor
 		bool headerVisitor();
 };
 
-inline bool ExpressionVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
-
 }

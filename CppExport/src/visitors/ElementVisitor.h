@@ -66,6 +66,4 @@ class ElementVisitor
 		bool headerVisitor();
 };
 
-inline bool ElementVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
-
 }

@@ -135,4 +135,6 @@ SourceFragment* ElementVisitor::visitTemplateArguments(Model::TypedList<FormalTy
 	return list(typeArguments, this, "templateArgsList");
 }
 
+bool ElementVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
+
 }

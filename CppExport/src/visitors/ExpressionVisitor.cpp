@@ -385,4 +385,6 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 	return fragment;
 }
 
+bool ExpressionVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
+
 }
