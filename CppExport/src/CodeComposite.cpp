@@ -214,6 +214,8 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fragment)
 {
+	if (!fragment) return nullptr;
+
 	auto compositeFragment = new Export::CompositeFragment(fragment->node());
 	*compositeFragment << "#pragma once\n\n" << fragment;
 	return compositeFragment;
