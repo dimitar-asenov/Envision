@@ -151,15 +151,18 @@ Export::FragmentLayouter CppExporter::layouter()
 	result.addRule("body", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
-	result.addRule("bodyNoBraces", Export::FragmentLayouter::NewLineBefore
-							| Export::FragmentLayouter::IndentChildFragments | Export::FragmentLayouter::NewLineAfterPrefix
-							| Export::FragmentLayouter::NewLineBeforePostfix, "", "\n", "");
+	result.addRule("bodyNoBraces", Export::FragmentLayouter::IndentChildFragments
+							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
+							"", "\n", "");
+	result.addRule("sameLineIf", Export::FragmentLayouter::NewLineBeforePostfix, " ", "\n", "");
 	result.addRule("macroBody", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"", "\n", "");
 	result.addRule("macro", Export::FragmentLayouter::BackslashAfterLines
 						| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix);
 	result.addRule("emptyLineAtEnd", Export::FragmentLayouter::EmptyLineAtEnd);
+	result.addRule("namespace", Export::FragmentLayouter::NoIndentation | Export::FragmentLayouter::SpaceAfterPrefix,
+						"namespace", "", "");
 
 	return result;
 }
