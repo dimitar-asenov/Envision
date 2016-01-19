@@ -102,7 +102,7 @@ void MacroImporter::endTranslationUnit()
 					if (auto methodContext = DCast<OOModel::Method>(context))
 						handleQEmit(expansion, methodContext->items());
 					else if (auto ifContext = DCast<OOModel::IfStatement>(context))
-						handleQEmit(expansion, {ifContext});
+						handleQEmit(expansion, ifContext);
 					else
 						// TODO: for debug purposes only
 						qDebug() << "unhandled Q_EMIT in a" << context->typeName();
