@@ -59,7 +59,7 @@ struct VariableObserver {
 			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
 			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators} {}
 
-		// The function which handles new value{s}.
+		// The function which handles new value(s).
 		JavaDebugger::ValueHandler handlerFunc_;
 		// The declarations of the variables we are observing.
 		QList<OOModel::VariableDeclaration*> observedVariables_;
