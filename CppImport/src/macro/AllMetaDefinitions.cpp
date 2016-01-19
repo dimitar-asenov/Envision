@@ -31,7 +31,7 @@
 #include "MacroExpansions.h"
 
 #include "NodeHelpers.h"
-#include "ClangHelpers.h"
+#include "../ClangHelpers.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
