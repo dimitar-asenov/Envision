@@ -60,10 +60,10 @@ class ElementVisitor
 		Export::SourceFragment* visit(OOModel::Enumerator* enumerator);
 		Export::SourceFragment* visit(OOModel::MemberInitializer* memberInitializer);
 
+		Export::SourceFragment* visitTemplateArguments(Model::TypedList<OOModel::FormalTypeArgument>* typeArguments);
+
 	private:
 		bool headerVisitor();
 };
-
-inline bool ElementVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
 
 }

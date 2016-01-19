@@ -91,6 +91,8 @@ SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 {
 	auto fragment = new CompositeFragment(typeArgument);
 	*fragment << "typename " << typeArgument->nameNode();
+	if (headerVisitor() && typeArgument->defaultType())
+		*fragment << " = " << expression(typeArgument->defaultType());
 	return fragment;
 }
 
@@ -101,7 +103,10 @@ SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 	required(catchClause, catchClause->exceptionToCatch(), "Exception type to catch");
 
 	*fragment << "catch (";
-	if (catchClause->exceptionToCatch()) *fragment << expression(catchClause->exceptionToCatch());
+	if (catchClause->exceptionToCatch())
+		*fragment << expression(catchClause->exceptionToCatch());
+	else
+		*fragment << "...";
 	*fragment << ")";
 	*fragment << list(catchClause->body(), StatementVisitor(data()), "body");
 
@@ -126,5 +131,12 @@ SourceFragment* ElementVisitor::visit(MemberInitializer* memberInitializer)
 				 << list(memberInitializer->arguments(), ExpressionVisitor(data()), "initializerList");
 	return fragment;
 }
+
+SourceFragment* ElementVisitor::visitTemplateArguments(Model::TypedList<FormalTypeArgument>* typeArguments)
+{
+	return list(typeArguments, this, "templateArgsList");
+}
+
+bool ElementVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
 
 }

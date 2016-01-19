@@ -85,10 +85,13 @@ void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
 				softTargets_.insert(target);
 			else
 			{
-				hardTargets_.insert(target);
+				auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
+				auto prefixReference = DCast<OOModel::ReferenceExpression>(reference->prefix());
+
+				if (!parentMethodCall || !prefixReference || prefixReference->typeArguments()->isEmpty())
+					hardTargets_.insert(target);
 
 				// member access
-				auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
 				if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
 				{
 					const OOModel::Type* baseType{};
@@ -116,6 +119,11 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 {
 	auto parent = reference->parent();
 	Q_ASSERT(parent);
+
+	auto parentClass = reference->firstAncestorOfType<OOModel::Class>();
+	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>() &&
+		 !reference->typeArguments()->isEmpty() && parentClass && !parentClass->typeArguments()->isEmpty())
+		return true;
 
 	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>()) return false;
 

@@ -26,6 +26,8 @@
 
 #include "ClangHelpers.h"
 
+#include "OOModel/src/declarations/Project.h"
+
 namespace CppImport {
 
 QString ClangHelpers::spelling(clang::SourceRange sourceRange) const
@@ -79,6 +81,9 @@ clang::SourceRange ClangHelpers::getUnexpandedRange(clang::SourceRange sourceRan
 	return clang::SourceRange(start, end);
 }
 
+ClangHelpers::ClangHelpers(OOModel::Project* rootProject, QString rootProjectPath)
+	: rootProject_{rootProject}, rootProjectPath_{rootProjectPath} {}
+
 clang::SourceLocation ClangHelpers::immediateMacroLocation(clang::SourceLocation location) const
 {
 	// this code is an adaptation of clang::lexer::immediateMacroName
@@ -108,7 +113,7 @@ clang::SourceLocation ClangHelpers::immediateMacroLocation(clang::SourceLocation
 }
 
 void ClangHelpers::immediateSpellingHistory(clang::SourceLocation location,
-														  QVector<clang::SourceLocation>& result) const
+														  QList<clang::SourceLocation>& result) const
 {
 	result.append(location);
 
@@ -118,9 +123,9 @@ void ClangHelpers::immediateSpellingHistory(clang::SourceLocation location,
 		immediateSpellingHistory(next, result);
 }
 
-QVector<QString> ClangHelpers::argumentNames(const clang::MacroDirective* definition) const
+QList<QString> ClangHelpers::argumentNames(const clang::MacroDirective* definition) const
 {
-	QVector<QString> result;
+	QList<QString> result;
 
 	for (auto i = definition->getMacroInfo()->arg_begin(); i != definition->getMacroInfo()->arg_end(); i++)
 		result.append(QString::fromStdString((*i)->getName().str()));
@@ -139,6 +144,33 @@ void ClangHelpers::deleteNode(Model::Node* node)
 	}
 
 	SAFE_DELETE(node);
+}
+
+OOModel::Project* ClangHelpers::projectForLocation(clang::SourceLocation location)
+{
+	auto presumedLocation = sourceManager()->getPresumedLoc(location);
+	auto parentName = projectNameFromPath(presumedLocation.getFilename());
+	if (!parentName.isEmpty())
+	{
+		auto project = projectByName(parentName);
+		if (!project)
+		{
+			project = new OOModel::Project(parentName);
+			rootProject_->projects()->append(project);
+			projects_.insert(parentName, project);
+		}
+		return project;
+	}
+	return rootProject_;
+}
+
+QString ClangHelpers::projectNameFromPath(QString path)
+{
+	QRegularExpression regex(rootProjectPath_ + "/(\\w+)/");
+	auto m = regex.match(QDir(path).absolutePath());
+	if (m.hasMatch())
+		return m.captured(1);
+	return {};
 }
 
 }

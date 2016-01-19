@@ -131,8 +131,7 @@ SourceFragment* StatementVisitor::visit(ForEachStatement* statement)
 	if (statement->varType()) *fragment << expression(statement->varType()) << " ";
 	*fragment << statement->varNameNode() << " : ";
 	*fragment << expression(statement->collection()) << ")";
-	*fragment << list(statement->body(), StatementVisitor(data()),
-							statement->body()->size() > 1 ? "body" : "bodyNoBraces");
+	*fragment << list(statement->body(), StatementVisitor(data()), blockStyle(statement->body()));
 	return fragment;
 }
 
@@ -140,13 +139,11 @@ SourceFragment* StatementVisitor::visit(IfStatement* statement)
 {
 	auto fragment = new CompositeFragment(statement);
 	*fragment << "if (" << expression(statement->condition()) << ")";
-	*fragment << list(statement->thenBranch(), StatementVisitor(data()),
-							statement->thenBranch()->size() > 1 ? "body" : "bodyNoBraces");
+	*fragment << list(statement->thenBranch(), StatementVisitor(data()), blockStyle(statement->thenBranch()));
 	if (!statement->elseBranch()->isEmpty())
 	{
 		*fragment << "else";
-		*fragment << list(statement->elseBranch(), StatementVisitor(data()),
-								statement->elseBranch()->size() > 1 ? "body" : "bodyNoBraces");
+		*fragment << list(statement->elseBranch(), StatementVisitor(data()), blockStyle(statement->elseBranch()));
 	}
 	return fragment;
 }
@@ -161,8 +158,7 @@ SourceFragment* StatementVisitor::visit(LoopStatement* statement)
 		{
 			*fragment << "while (";
 			if (statement->condition()) *fragment << expression(statement->condition());
-			*fragment << ")" << list(statement->body(), StatementVisitor(data()),
-											 statement->body()->size() > 1 ? "body" : "bodyNoBraces");
+			*fragment << ")" << list(statement->body(), StatementVisitor(data()), blockStyle(statement->body()));
 		}
 		else // for loop
 		{
@@ -172,19 +168,50 @@ SourceFragment* StatementVisitor::visit(LoopStatement* statement)
 			if (statement->condition()) *fragment << expression(statement->condition());
 			*fragment << " ; ";
 			if (statement->updateStep()) *fragment << expression(statement->updateStep());
-			*fragment << ")" << list(statement->body(), StatementVisitor(data()),
-											 statement->body()->size() > 1 ? "body" : "bodyNoBraces");
+			*fragment << ")" << list(statement->body(), StatementVisitor(data()), blockStyle(statement->body()));
 		}
 	}
 	else	// do loop
 	{
-		*fragment << "do" << list(statement->body(), StatementVisitor(data()),
-										  statement->body()->size() > 1 ? "body" : "bodyNoBraces") << "while (";
+		*fragment << "do" << list(statement->body(), StatementVisitor(data()), blockStyle(statement->body())) << "while (";
 		if (statement->condition()) *fragment << expression(statement->condition());
 		*fragment << ");";
 	}
 
 	return fragment;
+}
+
+QString StatementVisitor::blockStyle(Model::List* block)
+{
+	if (block->size() == 1)
+	{
+		if (auto parentIf = DCast<OOModel::IfStatement>(block->parent()))
+		{
+			if (block == parentIf->thenBranch())
+			{
+				/* TODO: if parent else branch is not empty and there is ANY if statement in block->first we have to add {}
+				 * example:
+				 * if (..)
+				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< need {
+				 *		for (..)
+				 *			if (..)
+				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< need }
+				 * else
+				 *		something();
+				 */
+				if (auto ifStatement = DCast<OOModel::IfStatement>(block->first()))
+					if (!ifStatement->elseBranch()->isEmpty() || !parentIf->elseBranch()->isEmpty())
+						return "body";
+			}
+			else if (block == parentIf->elseBranch())
+					if (DCast<OOModel::IfStatement>(block->first()))
+							return "sameLineIf";
+		}
+
+		return "bodyNoBraces";
+	}
+
+	return "body";
 }
 
 SourceFragment* StatementVisitor::visit(ReturnStatement* statement)

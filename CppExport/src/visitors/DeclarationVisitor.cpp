@@ -131,6 +131,14 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
 	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
+
+	*fragment << list(classs->fields(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", [](Field* field)
+	{
+		if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
+			return !parentClass->typeArguments()->isEmpty();
+		return false;
+	});
+
 	return fragment;
 }
 
@@ -169,7 +177,12 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Default);
 		});
-		*sections << list(classs->fields(), this, "vertical");
+		*sections << list(classs->fields(), this, "vertical", [](Field* field)
+		{
+			if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
+				return parentClass->typeArguments()->isEmpty();
+			return true;
+		});
 	}
 	else
 	{
@@ -203,6 +216,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		if (!friendClass)
 		{
+			if (classs->modifiers()->isSet(Modifier::Final))
+				*fragment << " " << new TextFragment(classs->modifiers(), "final");
 			if (!classs->baseClasses()->isEmpty())
 			{
 				// TODO: inheritance modifiers like private, virtual... (not only public)
@@ -220,6 +235,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
 									[](Expression* expression) { return metaCallFilter(expression, false); });
 			*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
+			*sections << list(classs->friends(), this, "sections");
 
 			auto publicSection = new CompositeFragment(classs, "accessorSections");
 			bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
@@ -288,14 +304,12 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 {
 	auto subDeclarations = list(classs->subDeclarations(), this, "sections", filter);
 	auto fields = list(classs->fields(), this, "vertical", filter);
-	auto friends = list(classs->friends(), this, "sections", filter);
 	auto classes = list(classs->classes(), this, "sections", filter);
 	auto methods = list(classs->methods(), this, "sections", filter);
 
-	*section << subDeclarations << fields << friends << classes << methods;
+	*section << subDeclarations << fields << classes << methods;
 	return !subDeclarations->fragments().empty() ||
 			 !fields->fragments().empty() ||
-			 !friends->fragments().empty() ||
 			 !classes->fragments().empty() ||
 			 !methods->fragments().empty();
 }
@@ -507,13 +521,29 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 										  variableDeclaration->modifiers()->isSet(Modifier::Static) ||
 										  variableDeclaration->modifiers()->isSet(Modifier::ConstExpr)))
 	{
+		if (DCast<Field>(variableDeclaration))
+			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
+				if (!parentClass->typeArguments()->isEmpty())
+					*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
 		if (!DCast<Field>(variableDeclaration) || variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 			*fragment << printAnnotationsAndModifiers(variableDeclaration);
+
 		*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
 		if (DCast<Field>(variableDeclaration))
 			if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
-				*fragment << parentClass->name() << "::";
+			{
+				*fragment << parentClass->name();
+				if (!parentClass->typeArguments()->isEmpty())
+				{
+					auto typeArgumentComposite = new CompositeFragment(parentClass->typeArguments(), "typeArgsList");
+					for (auto typeArgument : *parentClass->typeArguments())
+						*typeArgumentComposite << typeArgument->nameNode();
+					*fragment << typeArgumentComposite;
+				}
+				*fragment << "::";
+			}
 
 		*fragment << variableDeclaration->nameNode();
 		if (variableDeclaration->initialValue())
@@ -539,7 +569,7 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 		*header << new TextFragment(declaration->modifiers(), "constexpr");
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment(declaration->modifiers(), "static");
-	if (declaration->modifiers()->isSet(Modifier::Final))
+	if (declaration->modifiers()->isSet(Modifier::Final) && !DCast<OOModel::Class>(declaration))
 		*header << new TextFragment(declaration->modifiers(), "final");
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");

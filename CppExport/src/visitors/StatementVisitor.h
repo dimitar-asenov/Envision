@@ -78,6 +78,8 @@ class StatementVisitor
 		Export::SourceFragment* visit(OOModel::CommentStatementItem* statement);
 
 		Export::SourceFragment* visit(OOModel::StatementItem* statementItem);
+	private:
+		QString blockStyle(Model::List* block);
 };
 
 }

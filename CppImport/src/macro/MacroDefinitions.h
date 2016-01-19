@@ -42,7 +42,7 @@ class ClangHelpers;
 class CPPIMPORT_API MacroDefinitions
 {
 	public:
-		MacroDefinitions(const ClangHelpers& clang);
+		MacroDefinitions(ClangHelpers& clang);
 
 		void addMacroDefinition(const QString& name, const clang::MacroDirective* md);
 
@@ -58,14 +58,6 @@ class CPPIMPORT_API MacroDefinitions
 		 */
 		bool isPartialEnd(const clang::MacroDirective* md) const;
 
-		/**
-		 * if the location of md is part of Envision's project structure then
-		 *  return true and set namespaceName/fileName
-		 * otherwise
-		 *  return false
-		 */
-		bool macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName, QString& fileName) const;
-
 		QString signature(const clang::MacroDirective* md) const;
 
 		/**
@@ -76,7 +68,7 @@ class CPPIMPORT_API MacroDefinitions
 		void clear();
 
 	private:
-		const ClangHelpers& clang_;
+		ClangHelpers& clang_;
 		QHash<const clang::MacroDirective*, QString> definitions_;
 
 		QHash<QString, QString> directoryToNamespaceMap_;

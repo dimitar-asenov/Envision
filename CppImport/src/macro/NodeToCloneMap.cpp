@@ -43,9 +43,9 @@ Model::Node*NodeToCloneMap::original(Model::Node* clone)
 	return it != clones_.end() ? *it : nullptr;
 }
 
-QVector<Model::Node*> NodeToCloneMap::original(QVector<Model::Node*> clones)
+QList<Model::Node*> NodeToCloneMap::original(QList<Model::Node*> clones)
 {
-	QVector<Model::Node*> result;
+	QList<Model::Node*> result;
 	for (auto clone : clones)
 		result.append(original(clone));
 	return result;
@@ -58,9 +58,9 @@ Model::Node*NodeToCloneMap::clone(Model::Node* original)
 	return it != originals_.end() ? *it : nullptr;
 }
 
-QVector<Model::Node*> NodeToCloneMap::clone(QVector<Model::Node*> originals)
+QList<Model::Node*> NodeToCloneMap::clone(QList<Model::Node*> originals)
 {
-	QVector<Model::Node*> result;
+	QList<Model::Node*> result;
 	for (auto original : originals)
 		result.append(clone(original));
 	return result;

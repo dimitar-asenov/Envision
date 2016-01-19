@@ -67,36 +67,32 @@ class CPPIMPORT_API MacroImporter
 		MacroExpansions macroExpansions_;
 		AllMetaDefinitions allMetaDefinitions_;
 		QHash<QString, OOModel::MetaCallExpression*> metaCalls_;
-		QVector<Model::Node*> finalizationNodes;
+		QSet<Model::Node*> nodesToBeRemoved_;
+		QSet<Model::Node*> nodesToBeRetained_;
 		QHash<Model::Node*, MacroExpansion*> finalizationMetaCalls;
 
-		void handleMacroExpansion(QVector<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
-										  QVector<MacroArgumentInfo>& arguments);
+		void handleMacroExpansion(QList<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
+										  QList<MacroArgumentInfo>& arguments);
 
 		bool insertMetaCall(MacroExpansion* expansion);
 
-		QVector<MacroArgumentLocation> argumentHistory(clang::SourceRange range);
-		QVector<MacroArgumentLocation> argumentHistory(Model::Node* node);
+		QList<MacroArgumentLocation> argumentHistory(clang::SourceRange range);
+		QList<MacroArgumentLocation> argumentHistory(Model::Node* node);
 
 		/**
 		 * return all arguments which are associated to children of node.
 		 */
-		void allArguments(Model::Node* node, QVector<MacroArgumentInfo>& result, NodeToCloneMap& mapping);
+		void allArguments(Model::Node* node, QList<MacroArgumentInfo>& result, NodeToCloneMap& mapping);
 
 		/**
 		 * insert gathered argument nodes at their original (logical) location.
 		 */
-		void insertArguments(QVector<MacroArgumentInfo>& allArguments);
+		void insertArguments(QList<MacroArgumentInfo>& allArguments);
 
 		/**
 		 * clear all information for the current translation unit.
 		 */
 		void clear();
-
-		/**
-		 * calculate nodes to be removed from the tree after importing.
-		 */
-		void calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeToCloneMap& mapping);
 
 		/**
 		 * if a macro expansion does not generate any nodes this method can be used to infer the best context
@@ -112,7 +108,7 @@ class CPPIMPORT_API MacroImporter
 		 */
 		void handleQSignals(clang::SourceLocation signalsLocation, OOModel::Class* classContext);
 
-		void handleQEmit(MacroExpansion* emitExpansion, OOModel::Method* methodContext);
+		void handleQEmit(MacroExpansion* emitExpansion, Model::Node* context);
 };
 
 }

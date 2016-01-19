@@ -35,10 +35,10 @@
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, const QString& projectPath, CppImportLogger* logger)
- : macroImporter_{project, clang_}, log_{logger}
+ : clang_{project, projectPath}, macroImporter_{project, clang_}, log_{logger}
 {
 	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
-	trMngr_ = new TranslateManager(clang_, project, projectPath, exprVisitor_);
+	trMngr_ = new TranslateManager(clang_, project, exprVisitor_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_, clang_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
@@ -66,7 +66,7 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 	clang_.setPreprocessor(preprocessor);
 	macroImporter_.startTranslationUnit();
 
-	auto it = projectIncludes_.insert(trMngr_->projectNameFromPath(
+	auto it = projectIncludes_.insert(clang_.projectNameFromPath(
 													clang_.sourceManager()->getFileEntryForID(
 															 clang_.sourceManager()->getMainFileID())->getName()), {});
 	const_cast<clang::Preprocessor*>(clang_.preprocessor())->addPPCallbacks(
@@ -93,7 +93,7 @@ bool ClangAstVisitor::TraverseDecl(clang::Decl* decl)
 {
 	if (auto project = DCast<OOModel::Project>(ooStack_.top()))
 	{
-		auto parentProject = trMngr_->projectForDeclaration(decl);
+		auto parentProject = clang_.projectForLocation(decl->getLocation());
 
 		if (project != parentProject)
 		{
@@ -1060,7 +1060,16 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 				}
 
 			firstLine = false;
-			TraverseStmt(child);
+			if (llvm::dyn_cast<clang::CompoundStmt>(child))
+			{
+				auto block = new OOModel::Block();
+				itemList->append(block);
+				ooStack_.push(block->items());
+				TraverseStmt(child);
+				ooStack_.pop();
+			}
+			else
+				TraverseStmt(child);
 
 			// update the location on which the last child ended
 			lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(child->getLocEnd()) + 1;
@@ -1128,6 +1137,8 @@ void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OO
 		method->modifiers()->set(OOModel::Modifier::Virtual);
 	if (functionDecl->hasAttr<clang::OverrideAttr>())
 		method->modifiers()->set(OOModel::Modifier::Override);
+	if (functionDecl->hasAttr<clang::FinalAttr>())
+		method->modifiers()->set(OOModel::Modifier::Final);
 	if (functionDecl->getStorageClass() == clang::SC_Static)
 		method->modifiers()->set(OOModel::Modifier::Static);
 	if (functionDecl->isDefaulted())
@@ -1273,8 +1284,10 @@ void ClangAstVisitor::insertFriendClass(clang::FriendDecl* friendDecl, OOModel::
 {
 	auto friendClass = friendDecl->getFriendType()->getType().getTypePtr()->getAsCXXRecordDecl();
 	Q_ASSERT(friendClass);
-	ooClass->friends()->append(clang_.createNode<OOModel::Class>(friendDecl->getFriendType()->getTypeLoc()
-																					 .getNextTypeLoc().getSourceRange()));
+
+	auto friendClassNameSourceRange = friendDecl->getFriendType()->getTypeLoc().getNextTypeLoc().getSourceRange();
+	ooClass->friends()->append(clang_.createNode<OOModel::Class>(friendClassNameSourceRange,
+																					 clang_.spelling(friendClassNameSourceRange)));
 }
 
 void ClangAstVisitor::insertFriendFunction(clang::FriendDecl* friendDecl, OOModel::Class* ooClass)
@@ -1358,15 +1371,6 @@ void ClangAstVisitor::endTranslationUnit()
 
 void ClangAstVisitor::endEntireImport()
 {
-	for (auto it = projectIncludes_.begin(); it != projectIncludes_.end(); it++)
-	{
-		auto project = trMngr_->projectByName(it.key());
-		for (auto dependency : it.value())
-			if (auto otherProject = trMngr_->projectByName(dependency))
-				project->subDeclarations()->append(new OOModel::NameImport(
-																  new OOModel::ReferenceExpression(otherProject->name()), true));
-	}
-
 	macroImporter_.endEntireImport();
 }
 

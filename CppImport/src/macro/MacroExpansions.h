@@ -49,12 +49,12 @@ class CPPIMPORT_API MacroExpansions
 		void addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 									  const clang::MacroArgs* macroArguments);
 
-		QVector<MacroExpansion*> expansions() const;
+		QList<MacroExpansion*> expansions() const;
 
 		/**
 		 * return all registered expansions that are not children of other expansions.
 		 */
-		QVector<MacroExpansion*> topLevelExpansions() const;
+		QList<MacroExpansion*> topLevelExpansions() const;
 
 		MacroExpansion* immediateExpansion(clang::SourceLocation loc) const;
 
@@ -74,7 +74,7 @@ class CPPIMPORT_API MacroExpansions
 		/**
 		 * return all top level nodes of expansion matching the origin criterium.
 		 */
-		QVector<Model::Node*> topLevelNodes(MacroExpansion* expansion, NodeOriginType filter);
+		QList<Model::Node*> topLevelNodes(MacroExpansion* expansion, NodeOriginType filter);
 
 		void clear();
 
@@ -83,7 +83,7 @@ class CPPIMPORT_API MacroExpansions
 		const MacroDefinitions& macroDefinitions_;
 		MacroExpansion* currentXMacroParent {};
 		QHash<Model::Node*, QSet<MacroExpansion*>> expansionCache_;
-		QVector<MacroExpansion*> expansions_;
+		QList<MacroExpansion*> expansions_;
 
 		/**
 		 * return the top most expansion registered for loc.
@@ -91,6 +91,6 @@ class CPPIMPORT_API MacroExpansions
 		MacroExpansion* expansion(clang::SourceLocation loc) const;
 };
 
-inline QVector<MacroExpansion*> MacroExpansions::expansions() const { return expansions_; }
+inline QList<MacroExpansion*> MacroExpansions::expansions() const { return expansions_; }
 
 }

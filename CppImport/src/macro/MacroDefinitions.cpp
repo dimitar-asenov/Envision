@@ -28,10 +28,11 @@
 #include "../ClangHelpers.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
+#include "OOModel/src/declarations/Project.h"
 
 namespace CppImport {
 
-MacroDefinitions::MacroDefinitions(const ClangHelpers& clang) : clang_{clang}
+MacroDefinitions::MacroDefinitions(ClangHelpers& clang) : clang_{clang}
 {
 	if (directoryToNamespaceMap_.isEmpty())
 	{
@@ -48,54 +49,24 @@ QString MacroDefinitions::definitionName(const clang::MacroDirective* md) const
 	return it != definitions_.end() ? *it : nullptr;
 }
 
-bool MacroDefinitions::macroDefinitionLocation(const clang::MacroDirective* md, QString& namespaceName,
-																QString& containerName) const
-{
-	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(md->getMacroInfo()->getDefinitionLoc());
-	auto path = QDir(presumedLocation.getFilename()).absolutePath();
-
-	/*
-	 * given a path: ../Envision/A/../B.xyz
-	 * this regex captures A (index 1) and B.xyz (index 3)
-	 */
-	QRegularExpression regex ("/Envision/(\\w+)(/.*/|/)(\\w+\\.\\w+)$", QRegularExpression::DotMatchesEverythingOption);
-	auto match = regex.match(path);
-	if (!match.hasMatch()) return false;
-
-	// use the directory name of A as the namespace name
-	namespaceName = match.captured(1);
-
-	// some Envision namespaces don't have the same name as the corresponding directory
-	auto it = directoryToNamespaceMap_.find(namespaceName);
-	if (it != directoryToNamespaceMap_.end()) namespaceName = *it;
-
-	/*
-	 * the container name should be equal to B therefore we remove .h
-	 * in case of .cpp we append _CPP to the containerName to avoid ambiguity
-	 */
-	containerName = match.captured(3).replace(".h", "").replace(".cpp", "_CPP");
-
-	return true;
-}
-
 QString MacroDefinitions::signature(const clang::MacroDirective* md) const
 {
 	QString namespaceName, fileName;
 
-	if (macroDefinitionLocation(md, namespaceName, fileName))
-		return namespaceName + "/" + fileName + "/" + definitionName(md);
+	auto parentProject = clang_.projectForLocation(md->getLocation());
+	if (parentProject != clang_.rootProject())
+		return parentProject->name() + "/" + definitionName(md);
 	else
 		return "/ExternalMacro/" + definitionName(md);
 }
 
 OOModel::ReferenceExpression* MacroDefinitions::expansionQualifier(const clang::MacroDirective* md) const
 {
-	QString namespaceName, fileName;
-
-	if (macroDefinitionLocation(md, namespaceName, fileName))
-		return new OOModel::ReferenceExpression(fileName, new OOModel::ReferenceExpression(namespaceName));
-	else
+	auto parentProject = clang_.projectForLocation(md->getLocation());
+	if (parentProject == clang_.rootProject())
 		return new OOModel::ReferenceExpression("ExternalMacro");
+
+	return {};
 }
 
 }

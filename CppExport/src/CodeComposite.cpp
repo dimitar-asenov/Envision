@@ -26,6 +26,8 @@
 
 #include "CodeComposite.h"
 #include "Config.h"
+#include "visitors/DeclarationVisitor.h"
+#include "visitors/ElementVisitor.h"
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Class.h"
@@ -33,7 +35,10 @@
 
 namespace CppExport {
 
-CodeComposite::CodeComposite(const QString& name) : name_{name} {}
+CodeComposite::CodeComposite(const QString& name) : name_{name}
+{
+	Q_ASSERT(!name.isEmpty());
+}
 
 void CodeComposite::addUnit(CodeUnit* unit)
 {
@@ -122,6 +127,18 @@ CodeComposite* CodeComposite::apiInclude()
 	return new CodeComposite(plugin + "/src/" + plugin.toLower() + "_api");
 }
 
+Export::CompositeFragment* CodeComposite::addNamespaceFragment(Export::CompositeFragment* parentFragment,
+																					OOModel::Module* namespaceNode)
+{
+	if (!namespaceNode) return parentFragment;
+
+	auto namespaceComposite = new Export::CompositeFragment(namespaceNode, "namespace");
+	auto namespaceBody = new Export::CompositeFragment(namespaceNode, "body");
+	*namespaceComposite << namespaceNode->name() << namespaceBody;
+	*parentFragment << namespaceComposite;
+	return namespaceBody;
+}
+
 Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*part) ())
 {
 	Q_ASSERT(!units().empty());
@@ -152,32 +169,33 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		unitsComposite = new Export::CompositeFragment(units().first()->node(), "spacedSections");
 
 		OOModel::Module* currentNamespace{};
+		auto currentNamespaceFragment = unitsComposite;
 		for (auto unit : units())
 		{
 			auto codeUnitPart = (unit->*part)();
 			if (codeUnitPart->isSourceFragmentEmpty()) continue;
 
-			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
-			if (neededNamespace != currentNamespace)
-			{
-				if (currentNamespace) *unitsComposite << "\n}\n\n";
-				if (neededNamespace)
-				{
-					auto namespaceComposite = new Export::CompositeFragment(unitsComposite->node());
-					*namespaceComposite << "namespace " << neededNamespace->symbolName() << " {\n\n";
-					unitsComposite->append(namespaceComposite);
-				}
-				currentNamespace = neededNamespace;
-			}
-
 			auto softDependenciesReduced = reduceSoftDependencies(compositeDependencies, codeUnitPart->softDependencies());
 			if (!softDependenciesReduced.empty())
 			{
-				auto softDependencyComposite = new Export::CompositeFragment(units().first()->node());
 				for (auto softDependency : softDependenciesReduced)
 				{
 					if (auto classs = DCast<OOModel::Class>(softDependency))
 					{
+						if (classs == codeUnitPart->parent()->node()) continue;
+
+						auto neededNamespace = classs->firstAncestorOfType<OOModel::Module>();
+						if (neededNamespace != currentNamespace)
+						{
+							currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);
+							currentNamespace = neededNamespace;
+						}
+
+						if (!classs->typeArguments()->isEmpty())
+							*currentNamespaceFragment << ElementVisitor(HEADER_VISITOR)
+																  .visitTemplateArguments(classs->typeArguments());
+
+						auto softDependencyComposite = new Export::CompositeFragment(classs);
 						if (OOModel::Class::ConstructKind::Class == classs->constructKind())
 							*softDependencyComposite << "class ";
 						else if (OOModel::Class::ConstructKind::Struct == classs->constructKind())
@@ -185,18 +203,22 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 						else if (OOModel::Class::ConstructKind::Enum == classs->constructKind())
 							*softDependencyComposite << "enum ";
 						else Q_ASSERT(false);
+						*softDependencyComposite << softDependency->symbolName() + ";";
 
-						*softDependencyComposite << softDependency->symbolName() + ";\n";
+						*currentNamespaceFragment << softDependencyComposite;
 					}
 				}
-
-				*unitsComposite << softDependencyComposite;
 			}
 
-			unitsComposite->append(codeUnitPart->sourceFragment());
-		}
+			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
+			if (neededNamespace != currentNamespace)
+			{
+				currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);
+				currentNamespace = neededNamespace;
+			}
 
-		if (currentNamespace) *unitsComposite << "\n}";
+			*currentNamespaceFragment << codeUnitPart->sourceFragment();
+		}
 	}
 
 	if (unitsComposite && !unitsComposite->fragments().empty())
@@ -211,6 +233,8 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fragment)
 {
+	if (!fragment) return nullptr;
+
 	auto compositeFragment = new Export::CompositeFragment(fragment->node());
 	*compositeFragment << "#pragma once\n\n" << fragment;
 	return compositeFragment;

@@ -6,5 +6,6 @@
 		<dependency pluginid="modelbase" version="0" />
 		<dependency pluginid="oomodel" version="1" />
 		<dependency pluginid="export" version="1" />
+                <dependency pluginid="oointeraction" version="1" />
 	</dependencies>
 </plugin>

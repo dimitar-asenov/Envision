@@ -34,6 +34,8 @@
 #include "Export/src/writer/FragmentLayouter.h"
 #include "Export/src/tree/CompositeFragment.h"
 #include "ModelBase/src/model/TreeManager.h"
+#include "OOModel/src/declarations/NameImport.h"
+#include "OOInteraction/src/string_offset_providers/StringComponents.h"
 
 #include "../CodeUnit.h"
 #include "../CodeComposite.h"
@@ -82,17 +84,32 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 
 			namespaceName = ooModule->name();
 		}
-		else if (auto ooClass = DCast<OOModel::Declaration>(current))
+		else if (auto ooNameImport = DCast<OOModel::NameImport>(current))
 		{
-			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooClass->name(), current));
+			auto referenceExpression = DCast<OOModel::ReferenceExpression>(ooNameImport->importedName());
+			Q_ASSERT(referenceExpression);
+
+			if (!referenceExpression->target() || !DCast<OOModel::Project>(referenceExpression->target()))
+				result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") +
+													referenceExpression->name(), current));
+			return;
+		}
+		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))		{
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") +
+												ooDeclaration->name(), current));
 			return;
 		}
 		else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
 		{
 			auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
 			Q_ASSERT(ooCalleeReference);
-			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name(),
-												current));
+
+			QStringList arguments;
+			for (auto argument : *ooMetaCall->arguments())
+				arguments.append(OOInteraction::StringComponents::stringForNode(argument));
+
+			result.append(new CodeUnit((namespaceName.isEmpty() ? "" : namespaceName + "/") + ooCalleeReference->name() +
+												"(" + arguments.join(",") + ")", current));
 			return;
 		}
 	}
@@ -151,15 +168,18 @@ Export::FragmentLayouter CppExporter::layouter()
 	result.addRule("body", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
-	result.addRule("bodyNoBraces", Export::FragmentLayouter::NewLineBefore
-							| Export::FragmentLayouter::IndentChildFragments | Export::FragmentLayouter::NewLineAfterPrefix
-							| Export::FragmentLayouter::NewLineBeforePostfix, "", "\n", "");
+	result.addRule("bodyNoBraces", Export::FragmentLayouter::IndentChildFragments
+							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
+							"", "\n", "");
+	result.addRule("sameLineIf", Export::FragmentLayouter::NewLineBeforePostfix, " ", "\n", "");
 	result.addRule("macroBody", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"", "\n", "");
 	result.addRule("macro", Export::FragmentLayouter::BackslashAfterLines
 						| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix);
 	result.addRule("emptyLineAtEnd", Export::FragmentLayouter::EmptyLineAtEnd);
+	result.addRule("namespace", Export::FragmentLayouter::NoIndentation | Export::FragmentLayouter::SpaceAfterPrefix,
+						"namespace", "", "");
 
 	return result;
 }

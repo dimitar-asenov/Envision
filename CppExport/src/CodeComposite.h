@@ -30,6 +30,10 @@
 
 #include "CodeUnit.h"
 
+namespace Export {
+	class CompositeFragment;
+}
+
 namespace CppExport {
 
 class CPPEXPORT_API CodeComposite
@@ -63,6 +67,8 @@ class CPPEXPORT_API CodeComposite
 		CodeComposite* apiInclude();
 		void sortUnits(CodeUnitPart*(CodeUnit::*part)(),
 							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
+		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
+																		OOModel::Module* namespaceNode);
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
