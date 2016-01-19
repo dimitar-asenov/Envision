@@ -1060,7 +1060,16 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 				}
 
 			firstLine = false;
-			TraverseStmt(child);
+			if (llvm::dyn_cast<clang::CompoundStmt>(child))
+			{
+				auto block = new OOModel::Block();
+				itemList->append(block);
+				ooStack_.push(block->items());
+				TraverseStmt(child);
+				ooStack_.pop();
+			}
+			else
+				TraverseStmt(child);
 
 			// update the location on which the last child ended
 			lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(child->getLocEnd()) + 1;
