@@ -235,6 +235,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
 									[](Expression* expression) { return metaCallFilter(expression, false); });
 			*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
+			*sections << list(classs->friends(), this, "sections");
 
 			auto publicSection = new CompositeFragment(classs, "accessorSections");
 			bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
@@ -303,14 +304,12 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 {
 	auto subDeclarations = list(classs->subDeclarations(), this, "sections", filter);
 	auto fields = list(classs->fields(), this, "vertical", filter);
-	auto friends = list(classs->friends(), this, "sections", filter);
 	auto classes = list(classs->classes(), this, "sections", filter);
 	auto methods = list(classs->methods(), this, "sections", filter);
 
-	*section << subDeclarations << fields << friends << classes << methods;
+	*section << subDeclarations << fields << classes << methods;
 	return !subDeclarations->fragments().empty() ||
 			 !fields->fragments().empty() ||
-			 !friends->fragments().empty() ||
 			 !classes->fragments().empty() ||
 			 !methods->fragments().empty();
 }
@@ -554,7 +553,7 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 		*header << new TextFragment(declaration->modifiers(), "constexpr");
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment(declaration->modifiers(), "static");
-	if (declaration->modifiers()->isSet(Modifier::Final))
+	if (declaration->modifiers()->isSet(Modifier::Final) && !DCast<OOModel::Class>(declaration))
 		*header << new TextFragment(declaration->modifiers(), "final");
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		*header << new TextFragment(declaration->modifiers(), "virtual");
