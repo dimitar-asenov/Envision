@@ -29,10 +29,8 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, const QString& rootProjectPath,
-											  ExpressionVisitor* visitor)
- : clang_{clang}, rootProject_{root}, rootProjectPath_{rootProjectPath}, exprVisitor_{visitor},
-	nh_{new NodeHasher(clang)}
+TranslateManager::TranslateManager(ClangHelpers& clang, OOModel::Project* root, ExpressionVisitor* visitor)
+ : clang_{clang}, rootProject_{root}, exprVisitor_{visitor}, nh_{new NodeHasher(clang)}
 {}
 
 TranslateManager::~TranslateManager()
@@ -54,7 +52,7 @@ OOModel::Module* TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 	auto ooModule = clang_.createNamedNode<OOModel::Module>(namespaceDecl);
 	nameSpaceMap_.insert(hash, ooModule);
 	if (namespaceDecl->getDeclContext()->isTranslationUnit())
-		projectForDeclaration(namespaceDecl)->modules()->append(ooModule);
+		clang_.projectForLocation(namespaceDecl->getLocation())->modules()->append(ooModule);
 	else if (auto p = llvm::dyn_cast<clang::NamespaceDecl>(namespaceDecl->getDeclContext()))
 	{
 		auto pHash = nh_->hashNameSpace(p);
@@ -65,33 +63,6 @@ OOModel::Module* TranslateManager::insertNamespace(clang::NamespaceDecl* namespa
 	else
 		return nullptr;
 	return ooModule;
-}
-
-OOModel::Project* TranslateManager::projectForDeclaration(clang::Decl* decl)
-{
-	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(decl->getLocation());
-	auto parentName = projectNameFromPath(presumedLocation.getFilename());
-	if (!parentName.isEmpty())
-	{
-		auto project = projectByName(parentName);
-		if (!project)
-		{
-			project = new OOModel::Project(parentName);
-			rootProject_->projects()->append(project);
-			projects_.insert(parentName, project);
-		}
-		return project;
-	}
-	return rootProject_;
-}
-
-QString TranslateManager::projectNameFromPath(QString path)
-{
-	QRegularExpression regex(rootProjectPath_ + "/(\\w+)/");
-	auto m = regex.match(path);
-	if (m.hasMatch())
-		return m.captured(1);
-	return {};
 }
 
 OOModel::Class* TranslateManager::createClass(clang::CXXRecordDecl* recordDecl)

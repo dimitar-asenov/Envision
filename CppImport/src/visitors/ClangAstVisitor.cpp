@@ -35,10 +35,10 @@
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, const QString& projectPath, CppImportLogger* logger)
- : macroImporter_{project, clang_}, log_{logger}
+ : clang_{project, projectPath}, macroImporter_{project, clang_}, log_{logger}
 {
 	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
-	trMngr_ = new TranslateManager(clang_, project, projectPath, exprVisitor_);
+	trMngr_ = new TranslateManager(clang_, project, exprVisitor_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_, clang_);
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
@@ -66,7 +66,7 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 	clang_.setPreprocessor(preprocessor);
 	macroImporter_.startTranslationUnit();
 
-	auto it = projectIncludes_.insert(trMngr_->projectNameFromPath(
+	auto it = projectIncludes_.insert(clang_.projectNameFromPath(
 													clang_.sourceManager()->getFileEntryForID(
 															 clang_.sourceManager()->getMainFileID())->getName()), {});
 	const_cast<clang::Preprocessor*>(clang_.preprocessor())->addPPCallbacks(
@@ -93,7 +93,7 @@ bool ClangAstVisitor::TraverseDecl(clang::Decl* decl)
 {
 	if (auto project = DCast<OOModel::Project>(ooStack_.top()))
 	{
-		auto parentProject = trMngr_->projectForDeclaration(decl);
+		auto parentProject = clang_.projectForLocation(decl->getLocation());
 
 		if (project != parentProject)
 		{

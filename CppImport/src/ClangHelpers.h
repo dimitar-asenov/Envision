@@ -32,6 +32,10 @@
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "Comments/src/nodes/CommentNode.h"
 
+namespace OOModel {
+	class Project;
+}
+
 namespace CppImport {
 
 /**
@@ -41,6 +45,8 @@ namespace CppImport {
 class CPPIMPORT_API ClangHelpers
 {
 	public:
+		ClangHelpers(OOModel::Project* rootProject, QString rootProjectPath);
+
 		const clang::SourceManager* sourceManager() const;
 		void setSourceManager(const clang::SourceManager* sourceManager);
 
@@ -68,11 +74,22 @@ class CPPIMPORT_API ClangHelpers
 		OOModel::ReferenceExpression* createReference(clang::SourceRange sourceRange);
 		QString spelling(clang::SourceRange sourceRange) const;
 
+		OOModel::Project* projectForLocation(clang::SourceLocation location);
+		OOModel::Project* projectByName(const QString& name);
+		QString projectNameFromPath(QString path);
+
+		OOModel::Project* rootProject();
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 
 		const clang::SourceManager* sourceManager_{};
 		const clang::Preprocessor* preprocessor_{};
+
+		QHash<QString, OOModel::Project*> projects_;
+
+		OOModel::Project* rootProject_{};
+		QString rootProjectPath_{};
 
 		/**
 		 * given a source range calculates the source range corresponding to the code expanded there.
@@ -155,5 +172,9 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, Cons
 
 inline OOModel::ReferenceExpression* ClangHelpers::createReference(clang::SourceRange sourceRange)
 { return createNode<OOModel::ReferenceExpression>(sourceRange, spelling(sourceRange.getBegin())); }
+
+inline OOModel::Project* ClangHelpers::projectByName(const QString& name) { return projects_[name]; }
+
+inline OOModel::Project* ClangHelpers::rootProject() { return rootProject_; }
 
 }
