@@ -9,4 +9,4 @@ Envision is an open-source project using the BSD license. The project is based o
 
 You can find more information about the project and the developer documentation on [Envision's GitHub Project Page](http://dimitar-asenov.github.com/Envision/).
 
-Envision is mainly being developed in the context of [Dimitar Asenov's PhD studies at ETH Zurich](http://www.pm.inf.ethz.ch/research/envision.html).
+[Envision is developed at ETH Zurich](http://www.pm.inf.ethz.ch/research/envision.html) in the context of Dimitar Asenov's PhD studies.
