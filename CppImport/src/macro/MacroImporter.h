@@ -67,7 +67,8 @@ class CPPIMPORT_API MacroImporter
 		MacroExpansions macroExpansions_;
 		AllMetaDefinitions allMetaDefinitions_;
 		QHash<QString, OOModel::MetaCallExpression*> metaCalls_;
-		QVector<Model::Node*> finalizationNodes;
+		QSet<Model::Node*> nodesToBeRemoved_;
+		QSet<Model::Node*> nodesToBeRetained_;
 		QHash<Model::Node*, MacroExpansion*> finalizationMetaCalls;
 
 		void handleMacroExpansion(QList<Model::Node*> nodes, MacroExpansion* expansion, NodeToCloneMap& mapping,
@@ -92,11 +93,6 @@ class CPPIMPORT_API MacroImporter
 		 * clear all information for the current translation unit.
 		 */
 		void clear();
-
-		/**
-		 * calculate nodes to be removed from the tree after importing.
-		 */
-		void calculateFinalizationNodes(QVector<Model::Node*>& nodes, NodeToCloneMap& mapping);
 
 		/**
 		 * if a macro expansion does not generate any nodes this method can be used to infer the best context
