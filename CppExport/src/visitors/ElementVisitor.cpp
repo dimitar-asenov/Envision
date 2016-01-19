@@ -101,7 +101,10 @@ SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 	required(catchClause, catchClause->exceptionToCatch(), "Exception type to catch");
 
 	*fragment << "catch (";
-	if (catchClause->exceptionToCatch()) *fragment << expression(catchClause->exceptionToCatch());
+	if (catchClause->exceptionToCatch())
+		*fragment << expression(catchClause->exceptionToCatch());
+	else
+		*fragment << "...";
 	*fragment << ")";
 	*fragment << list(catchClause->body(), StatementVisitor(data()), "body");
 
