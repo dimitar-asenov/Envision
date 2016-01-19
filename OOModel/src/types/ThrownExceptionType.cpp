@@ -51,7 +51,7 @@ bool ThrownExceptionType::equals(const Type* other) const
 
 ThrownExceptionType* ThrownExceptionType::clone() const
 {
-	return new ThrownExceptionType(*this);
+	return new ThrownExceptionType{*this};
 }
 
 }

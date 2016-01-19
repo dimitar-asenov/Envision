@@ -36,14 +36,14 @@ namespace Model {
 
 class SingleWriteUnitCheck : public Test<ModelBasePlugin, SingleWriteUnitCheck> { public: void test()
 {
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
 
 	manager.beginModification(root, "make tree");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNodeAccessUnit();
-	TestNodes::BinaryNode* one = new TestNodes::BinaryNodeAccessUnit();
-	TestNodes::BinaryNode* two = new TestNodes::BinaryNodeAccessUnit();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNodeAccessUnit{};
+	TestNodes::BinaryNode* one = new TestNodes::BinaryNodeAccessUnit{};
+	TestNodes::BinaryNode* two = new TestNodes::BinaryNodeAccessUnit{};
 	root->setLeft(left);
 	root->setRight(right);
 	root->left()->setLeft(one);

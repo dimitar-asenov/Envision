@@ -52,7 +52,7 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 	for (auto unit : codeUnits) unit->calculateSourceFragments();
 	for (auto unit : codeUnits) unit->calculateDependencies(codeUnits);
 
-	auto directory = new Export::SourceDir(nullptr, pathToProjectContainerDirectory);
+	auto directory = new Export::SourceDir{nullptr, pathToProjectContainerDirectory};
 	for (auto codeComposite : mergeUnits(codeUnits))
 		createFilesFromComposite(directory, codeComposite);
 
@@ -135,7 +135,7 @@ QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units)
 		else
 		{
 			// case B: the composite that unit is a part of does not yet exist
-			auto composite = new CodeComposite(compositeName);
+			auto composite = new CodeComposite{compositeName};
 			composite->addUnit(unit);
 			nameToCompositeMap.insert(composite->name(), composite);
 		}
@@ -186,7 +186,7 @@ Export::FragmentLayouter CppExporter::layouter()
 
 Export::ExportMapContainer& CppExporter::exportMaps()
 {
-	static Export::ExportMapContainer* container = new Export::ExportMapContainer();
+	static Export::ExportMapContainer* container = new Export::ExportMapContainer{};
 	return *container;
 }
 

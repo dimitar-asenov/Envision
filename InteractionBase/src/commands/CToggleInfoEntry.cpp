@@ -49,7 +49,7 @@ CommandResult* CToggleInfoEntry::execute(Visualization::Item* source, Visualizat
 	info->setEnabled(commandTokens[1], !(info->isEnabled(commandTokens[1])));
 	info->automaticUpdate();
 	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QList<CommandSuggestion*> CToggleInfoEntry::suggest(Visualization::Item*, Visualization::Item*,

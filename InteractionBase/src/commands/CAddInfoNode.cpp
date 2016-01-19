@@ -64,8 +64,8 @@ Interaction::CommandResult* CAddInfoNode::executeWithArguments(Visualization::It
 	auto pos = source->scene()->currentViewItem()->positionOfItem(
 				source->findAncestorOfType<Visualization::VViewItemNode>());
 	source->scene()->currentViewItem()->insertNode(
-			new Visualization::InfoNode(node), pos.x(), pos.y());
-	return new Interaction::CommandResult();
+			new Visualization::InfoNode{node}, pos.x(), pos.y());
+	return new Interaction::CommandResult{};
 }
 
 

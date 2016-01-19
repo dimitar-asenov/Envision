@@ -44,11 +44,11 @@ Type* ThisExpression::type()
 	while (p)
 	{
 		auto cl = DCast<Class> (p);
-		if (cl) return new ClassType(cl, true);
+		if (cl) return new ClassType{cl, true};
 		p = p->parent();
 	}
 
-	return new ErrorType("Invalid position for 'this' expression. Not within a class.");
+	return new ErrorType{"Invalid position for 'this' expression. Not within a class."};
 }
 
 }

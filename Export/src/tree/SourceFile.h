@@ -62,6 +62,6 @@ inline QList<SourceFragment*> SourceFile::fragments() { return fragments_; }
 template <typename T>
 inline T* SourceFile::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
 inline TextFragment* SourceFile::append(Model::Node* node, const QString& text)
-{ return append(new TextFragment(node, text)); }
+{ return append(new TextFragment{node, text}); }
 
 }

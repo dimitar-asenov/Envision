@@ -41,7 +41,7 @@ Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, 
 	QDir dir(QDir::currentPath());
 	dir.mkpath("doxygen/html/images");
 
-	auto aDoxyVisitor = new OOInteraction::DoxygenWholeTreeVisitor();
+	auto aDoxyVisitor = new OOInteraction::DoxygenWholeTreeVisitor{};
 	QString valDoxy = aDoxyVisitor->visit(source->node()->root());
 	delete aDoxyVisitor;
 
@@ -58,7 +58,7 @@ Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, 
 
 	QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/doxygen/html/index.html"));
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

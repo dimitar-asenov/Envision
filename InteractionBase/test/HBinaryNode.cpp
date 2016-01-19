@@ -51,8 +51,8 @@ void HBinaryNode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		else
 		{
 			QList<AutoCompleteEntry*> entr;
-			entr.append( new AutoCompleteEntry("foo", "will foo") );
-			entr.append( new AutoCompleteEntry("bar", "will bar") );
+			entr.append( new AutoCompleteEntry{"foo", "will foo"} );
+			entr.append( new AutoCompleteEntry{"bar", "will bar"} );
 			AutoComplete::show(entr);
 		}
 	}

@@ -146,20 +146,20 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
 
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateModule());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateMethod());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CDoxygen());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCalleesToView());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddBaseClassesToView());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCallersToView());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddSubClassesToView());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CInspectMethodInView());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateModule{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateMethod{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CDoxygen{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCalleesToView{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddBaseClassesToView{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCallersToView{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddSubClassesToView{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CInspectMethodInView{});
 
 	// Initialize customization support
-	auto customizationGroup = new Visualization::VisualizationGroup();
+	auto customizationGroup = new Visualization::VisualizationGroup{};
 	customizationGroup->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
 	{
 		auto call = static_cast<OOModel::MethodCallExpression*>(node);
@@ -193,7 +193,7 @@ Model::NodeToDebugStringAdapter* OOInteractionPlugin::nodeToDebugString(Model::N
 {
 	Q_ASSERT(node);
 
-	auto ntds = new ::Model::NodeToDebugStringAdapter();
+	auto ntds = new ::Model::NodeToDebugStringAdapter{};
 	if (DCast<OOModel::Expression>(node))
 		ntds->str = StringComponents::stringForNode(node);
 	else

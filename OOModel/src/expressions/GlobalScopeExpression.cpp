@@ -44,11 +44,11 @@ Type* GlobalScopeExpression::type()
 	auto root = this->root();
 
 	if (auto cl = DCast<Class> (root))
-		return new ClassType(cl, true);
+		return new ClassType{cl, true};
 	else if (auto decl = DCast<Declaration> (root))
-		return new SymbolProviderType(decl, true);
+		return new SymbolProviderType{decl, true};
 	else
-		return new ErrorType("Global scope expression used in a tree without a root declaration");
+		return new ErrorType{"Global scope expression used in a tree without a root declaration"};
 }
 
 }

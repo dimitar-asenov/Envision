@@ -157,7 +157,7 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 		}
 	}
 	if (compilationOk)
-		return new Interaction::CommandResult();
+		return new Interaction::CommandResult{};
 	else
 		return new Interaction::CommandResult(new Interaction::CommandError("Compilation failed, check error messages!"));
 }

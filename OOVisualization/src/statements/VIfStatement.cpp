@@ -67,7 +67,7 @@ int VIfStatement::determineForm()
 
 void VIfStatement::initializeForms()
 {
-	auto header = (new GridLayoutFormElement())
+	auto header = (new GridLayoutFormElement{})
 			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
 			->setHorizontalSpacing(3)
 			->put(0, 0, item<Static>(&I::icon_, [](I* v){
@@ -88,15 +88,15 @@ void VIfStatement::initializeForms()
 	auto elseBranch = item<VStatementItemList>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
 																[](I* v){return &v->style()->elseBranch();});
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
 	// Form 0: no else branch
-	auto contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
+	auto contentElement = (new GridLayoutFormElement{})->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
 			->setHorizontalSpacing(5)
 			->put(0, 0, thenBranch)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheTopOf, contentElement, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
 			->put(TheLeftOf, shapeElement, AtLeftOf, header)
@@ -108,12 +108,12 @@ void VIfStatement::initializeForms()
 	// Form 1: then and else branch arranged horizontally
 	auto elseVerticalLineElement = item<Line>(&I::elseLine_, [](I* v){return &v->style()->elseVerticalLine();});
 
-	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
+	contentElement = (new GridLayoutFormElement{})->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
 			->setHorizontalSpacing(5)
 			->put(0, 0, thenBranch)->put(1, 0, elseVerticalLineElement)->put(2, 0, elseBranch)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheTopOf, contentElement, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
 			->put(TheLeftOf, shapeElement, AtLeftOf, header)
@@ -125,12 +125,12 @@ void VIfStatement::initializeForms()
 	// Form 2: then and else branch arranged vertically
 	auto elseHorizontalLineElement = item<Line>(&I::elseLine_, [](I* v){return &v->style()->elseHorizontalLine();});
 
-	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
+	contentElement = (new GridLayoutFormElement{})->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
 			->setVerticalSpacing(5)
 			->put(0, 0, thenBranch)->put(0, 1, elseHorizontalLineElement)->put(0, 2, elseBranch)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheTopOf, contentElement, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
 			->put(TheLeftOf, shapeElement, AtLeftOf, header)
@@ -140,18 +140,18 @@ void VIfStatement::initializeForms()
 			->put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));
 
 	// Form 3: then branch and then a following if else statement
-	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
+	contentElement = (new GridLayoutFormElement{})->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
 			->put(0, 0, thenBranch)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	auto elseIfBranch = item<VStatementItemList>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
 																[](I* v){return &v->style()->elseIfBranch();});
 
-	auto elseContentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
+	auto elseContentElement = (new GridLayoutFormElement{})->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
 			->put(0, 0, elseIfBranch)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheTopOf, contentElement, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
 			->put(TheLeftOf, shapeElement, AtLeftOf, header)

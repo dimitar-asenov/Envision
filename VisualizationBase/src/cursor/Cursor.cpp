@@ -47,7 +47,7 @@ Cursor::~Cursor()
 
 Cursor* Cursor::clone() const
 {
-	return new Cursor(*this);
+	return new Cursor{*this};
 }
 
 void Cursor::update()

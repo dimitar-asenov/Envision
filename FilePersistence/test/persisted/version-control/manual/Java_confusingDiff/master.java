@@ -40,7 +40,7 @@ InformationEdge addDirectedEdge(InformationNode from, InformationNode to, QStrin
 			return existingEdge;
 		}
 	}
-	auto edge = new InformationEdge(from, to, name);
+	auto edge = new InformationEdge{from, to, name};
 	edges_.push_back(edge);
 	return edge;
 }
@@ -60,7 +60,7 @@ InformationEdge addEdge(InformationNode a, InformationNode b, QString name)
 			return existingEdge;
 		}
 	}
-	auto edge = new InformationEdge(a, b, name, Undirected);
+	auto edge = new InformationEdge{a, b, name, Undirected};
 	edges_.push_back(edge);
 	return edge;
 }

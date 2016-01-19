@@ -40,7 +40,7 @@ CCreateClass::CCreateClass() : CreateNamedObjectWithAttributes("class",
 Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
 {
-	OOModel::Class* cl = new OOModel::Class();
+	OOModel::Class* cl = new OOModel::Class{};
 	if (!name.isEmpty()) cl->setName(name);
 
 	// Set visibility
@@ -65,7 +65,7 @@ Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*so
 	}
 	else CommandHelper::addFreshTree(cl, target);
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

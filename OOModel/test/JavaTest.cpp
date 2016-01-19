@@ -35,59 +35,59 @@ namespace OOModel {
 
 class JavaLibraryAndHelloWorldTest : public Test<OOModelPlugin, JavaLibraryAndHelloWorldTest> { public: void test()
 {
-	auto prj = new Project("HelloWorld");
+	auto prj = new Project{"HelloWorld"};
 	Model::TreeManager manager(prj);
 
 	manager.beginModification(prj, "build simple java library and a hello world app");
 
 	// Build a simple Java Library
-	Project* java = new Project();
+	Project* java = new Project{};
 	prj->projects()->append(java);
 	java->setName("Java");
 
-	Class* string = new Class("String", Modifier::Public);
+	Class* string = new Class{"String", Modifier::Public};
 	java->classes()->append(string);
 
-	Module* io = new Module();
+	Module* io = new Module{};
 	java->modules()->append(io);
 	io->setName("io");
 
-	Class* printstream = new Class("PrintStream", Modifier::Public);
+	Class* printstream = new Class{"PrintStream", Modifier::Public};
 	io->classes()->append(printstream);
 
-	Method* println = new Method("println", Modifier::Public);
+	Method* println = new Method{"println", Modifier::Public};
 	printstream->methods()->append(println);
 
-	FormalArgument* arg = new FormalArgument();
+	FormalArgument* arg = new FormalArgument{};
 	println->arguments()->append(arg);
 	arg->setName("x");
-	ClassTypeExpression* argType = new ClassTypeExpression();
+	ClassTypeExpression* argType = new ClassTypeExpression{};
 	arg->setTypeExpression(argType);
 	argType->typeExpression()->ref()->setName("String");
 
-	Class* system = new Class("System", Modifier::Public);
+	Class* system = new Class{"System", Modifier::Public};
 	java->classes()->append(system);
-	Field* out = new Field("out", nullptr, Modifier::Public | Modifier::Static);
+	Field* out = new Field{"out", nullptr, Modifier::Public | Modifier::Static};
 	system->fields()->append(out);
-	ClassTypeExpression* outtype = new ClassTypeExpression();
+	ClassTypeExpression* outtype = new ClassTypeExpression{};
 	out->setTypeExpression(outtype);
 	outtype->typeExpression()->ref()->setName("PrintStream");
-	ReferenceExpression* prefix = new ReferenceExpression();
+	ReferenceExpression* prefix = new ReferenceExpression{};
 	outtype->typeExpression()->setPrefix(prefix);
 	prefix->ref()->setName("io");
 
 	// Build a simple HelloWorld Application
-	Class* hello = new Class("HelloWorld", Modifier::Public);
+	Class* hello = new Class{"HelloWorld", Modifier::Public};
 	prj->classes()->append(hello);
-	Method* main = new Method("main", Modifier::Public | Modifier::Static);
+	Method* main = new Method{"main", Modifier::Public | Modifier::Static};
 	hello->methods()->append(main);
 
 	//TODO make an array argument
 
-	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
+	ExpressionStatement* callPrintlnSt = new ExpressionStatement{};
 	MethodCallExpression* callPrintln = new MethodCallExpression("println",
 			new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
-	StringLiteral* helloStr = new StringLiteral();
+	StringLiteral* helloStr = new StringLiteral{};
 	callPrintln->arguments()->append(helloStr);
 	helloStr->setValue("Hello World");
 	callPrintlnSt->setExpression(callPrintln);

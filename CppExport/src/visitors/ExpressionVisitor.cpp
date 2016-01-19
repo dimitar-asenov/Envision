@@ -86,7 +86,7 @@ template <typename T> Export::SourceFragment* ExpressionVisitor::optional(T* nod
 
 SourceFragment* ExpressionVisitor::visit(Expression* expression)
 {
-	auto fragment = new CompositeFragment(expression);
+	auto fragment = new CompositeFragment{expression};
 
 	// Types ============================================================================================================
 	if (auto e = DCast<ArrayTypeExpression>(expression))
@@ -129,7 +129,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 			}
 		*fragment << " " << visit(e->typeExpression());
 	}
-	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment(e, "auto");
+	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment{e, "auto"};
 	else if (auto e = DCast<FunctionTypeExpression>(expression))
 		*fragment << list(e->results(), this) << " " << list(e->arguments(), this, "argsList");
 
@@ -378,7 +378,7 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 	auto functionTypeExpression = DCast<FunctionTypeExpression>(functionPointer->typeExpression());
 	Q_ASSERT(functionTypeExpression);
 
-	auto fragment = new CompositeFragment(functionPointer);
+	auto fragment = new CompositeFragment{functionPointer};
 	*fragment << list(functionTypeExpression->results(), this)
 				 << " (*" << name << ") "
 				 << list(functionTypeExpression->arguments(), this, "argsList");

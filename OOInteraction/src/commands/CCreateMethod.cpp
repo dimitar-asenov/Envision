@@ -40,7 +40,7 @@ CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
 Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
 {
-	auto m = new OOModel::Method();
+	auto m = new OOModel::Method{};
 	if (!name.isEmpty()) m->setName(name);
 
 	// Set visibility
@@ -69,7 +69,7 @@ Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*s
 	}
 	else CommandHelper::addFreshTree(m, target, false);
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

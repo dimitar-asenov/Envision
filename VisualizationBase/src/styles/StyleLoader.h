@@ -79,13 +79,13 @@ class VISUALIZATIONBASE_API StyleLoader
 
 template <typename T> T* StyleLoader::loadStyle(const QString& path, const QString& styleName)
 {
-	rootStyleNode = new StyleNode(styleName, path);
+	rootStyleNode = new StyleNode{styleName, path};
 
 	QString styleRootNodeName = "style";
 	auto subNodeIndex = styleName.indexOf('/');
 	if (subNodeIndex > 0) styleRootNodeName = styleName.mid(subNodeIndex+1);
 
-	T* style = new T();
+	T* style = new T{};
 	load(styleRootNodeName, *style);
 
 	SAFE_DELETE(rootStyleNode);

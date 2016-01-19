@@ -32,13 +32,13 @@
 namespace Visualization {
 
 AnchorLayoutFormElement::AnchorLayoutFormElement()
-	: horizontalSolver_{new AnchorLayoutConstraintSolver()}, verticalSolver_{new AnchorLayoutConstraintSolver()}
+	: horizontalSolver_{new AnchorLayoutConstraintSolver{}}, verticalSolver_{new AnchorLayoutConstraintSolver{}}
 {}
 
 AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& other) : LayoutFormElement{other},
 	needsHorizontalSolver_{other.needsHorizontalSolver_},
 	needsVerticalSolver_{other.needsVerticalSolver_},
-	horizontalSolver_{new AnchorLayoutConstraintSolver()}, verticalSolver_{new AnchorLayoutConstraintSolver()},
+	horizontalSolver_{new AnchorLayoutConstraintSolver{}}, verticalSolver_{new AnchorLayoutConstraintSolver{}},
 	externalMatches_{} // Will be adjusted later
 {
 	QMap<FormElement*, FormElement*> matching;
@@ -96,7 +96,7 @@ AnchorLayoutFormElement::~AnchorLayoutFormElement()
 
 AnchorLayoutFormElement* AnchorLayoutFormElement::clone() const
 {
-	return new AnchorLayoutFormElement(*this);
+	return new AnchorLayoutFormElement{*this};
 }
 
 AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement, AtEdge atEdge,

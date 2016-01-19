@@ -60,7 +60,7 @@ VDeclarationSz::VDeclarationSz(Item* parent, NodeType* node, const StyleType* st
 
 void VDeclarationSz::initializeForms()
 {
-	auto content = (new GridLayoutFormElement())
+	auto content = (new GridLayoutFormElement{})
 				->setHorizontalSpacing(5)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
@@ -71,9 +71,9 @@ void VDeclarationSz::initializeForms()
 						return &v->style()->name();
 					}));
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 				->put(TheTopOf, content, 10, FromTopOf, shapeElement)
 				->put(TheLeftOf, shapeElement, 10, FromLeftOf, content)
 				->put(TheBottomOf, content, 10, FromBottomOf, shapeElement)

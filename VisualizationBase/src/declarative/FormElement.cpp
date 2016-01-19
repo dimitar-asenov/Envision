@@ -50,7 +50,7 @@ FormElement::FormElement(const FormElement& other) : marginTop_{other.marginTop_
 ElementCache& FormElement::getCache(const Item* item) const
 {
 	if (!elementCache_.contains(item))
-		elementCache_.insert(item, new ElementCache());
+		elementCache_.insert(item, new ElementCache{});
 	return *elementCache_.value(item);
 }
 

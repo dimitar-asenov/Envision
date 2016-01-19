@@ -145,7 +145,7 @@ void TreeManager::pushCommandOnUndoStack(UndoCommand* command)
 	}
 
 	commands.push(command);
-	commands.push(new NoteNodeChange(modifiedTargets, removedTargets_, command));
+	commands.push(new NoteNodeChange{modifiedTargets, removedTargets_, command});
 }
 
 void TreeManager::undo()

@@ -167,7 +167,7 @@ void MacroImporter::handleQSignals(clang::SourceLocation signalsLocation, OOMode
 			auto codeBetweenSignalsAndMethod = clang_.unexpandedSpelling(signalsLocation, range.getBegin());
 
 			if (!regex.match(codeBetweenSignalsAndMethod).hasMatch())
-				method->metaCalls()->append(new OOModel::MetaCallExpression("PREDEF_SIGNAL"));
+				method->metaCalls()->append(new OOModel::MetaCallExpression{"PREDEF_SIGNAL"});
 
 			break;
 		}
@@ -258,7 +258,7 @@ void MacroImporter::insertArguments(QList<MacroArgumentInfo>& allArguments)
 
 			auto currentArg = currentLoc.expansion_->metaCall()->arguments()->at(currentLoc.argumentNumber_);
 			auto newArgValue = clang_.argumentNames(nextLoc.expansion_->definition()).at(nextLoc.argumentNumber_);
-			auto newArg = new OOModel::ReferenceExpression(newArgValue);
+			auto newArg = new OOModel::ReferenceExpression{newArgValue};
 
 			currentLoc.expansion_->metaCall()->arguments()->replaceChild(currentArg, newArg);
 		}

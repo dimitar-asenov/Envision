@@ -72,7 +72,7 @@ OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::Macr
 
 		if (!result)
 		{
-			result = new OOModel::Module("ExternalMacro");
+			result = new OOModel::Module{"ExternalMacro"};
 			root_->modules()->append(result);
 		}
 	}
@@ -91,7 +91,7 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 	if (!statements.empty())
 	{
 		// create a new list containing all the additional statements defined in expansion (the specialization)
-		auto list = new Model::List();
+		auto list = new Model::List{};
 		for (auto stmt : statements) list->append(stmt->clone());
 
 		auto childDef = standardMetaDefinitions_.metaDefinition(beginChild->definition());
@@ -103,7 +103,7 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 
 			if (!NodeHelpers::findDeclaration(childDef->arguments(), cppSpecializationSpliceName))
 			{
-				childDef->arguments()->append(new OOModel::FormalMetaArgument(cppSpecializationSpliceName));
+				childDef->arguments()->append(new OOModel::FormalMetaArgument{cppSpecializationSpliceName});
 
 				auto classContext = DCast<OOModel::Class>(childDef->context());
 				Q_ASSERT(classContext);
@@ -128,7 +128,7 @@ void AllMetaDefinitions::applyPartialBeginSpecializationTransformation(MacroExpa
 
 	// if the metaBindingInput was not yet added to this header xMacro begin meta definition then add it
 	if (!NodeHelpers::findDeclaration(hMetaDefinition->arguments(), "metaBindingInput"))
-		hMetaDefinition->arguments()->append(new OOModel::FormalMetaArgument("metaBindingInput"));
+		hMetaDefinition->arguments()->append(new OOModel::FormalMetaArgument{"metaBindingInput"});
 
 	/*
 	 * try to find a child meta call of this meta definition and modify it according to the specialization.
@@ -150,7 +150,7 @@ void AllMetaDefinitions::applyPartialBeginSpecializationTransformation(MacroExpa
 
 							// apply specialization transformations
 							metaCall->arguments()->append((*it)->clone());
-							metaCall->arguments()->append(new OOModel::ReferenceExpression("metaBindingInput"));
+							metaCall->arguments()->append(new OOModel::ReferenceExpression{"metaBindingInput"});
 
 							return;
 						}
@@ -175,7 +175,7 @@ void AllMetaDefinitions::handleXMacros()
 					NodeHelpers::removeNodeFromParent(other->metaCall(), true);
 
 					// create the meta call that also contains unbound xMacro children
-					auto merged = new OOModel::MetaCallExpression();
+					auto merged = new OOModel::MetaCallExpression{};
 					merged->setCallee(new OOModel::ReferenceExpression(
 												macroDefinitions_.definitionName(expansion->definition()),
 												macroDefinitions_.expansionQualifier(expansion->definition())));
@@ -184,7 +184,7 @@ void AllMetaDefinitions::handleXMacros()
 						merged->arguments()->append(arg->clone());
 
 					// create the unbound xMacro children list
-					auto list = new Model::List();
+					auto list = new Model::List{};
 					for (auto xMacroChild : expansion->xMacroChildren())
 					{
 						auto unbound = new OOModel::MetaCallExpression(
@@ -216,13 +216,13 @@ void AllMetaDefinitions::handleXMacros()
 						if (NodeHelpers::findDeclaration(binding1->mappings(), unboundName)) continue;
 
 						// insert meta bindings for this xMacro child
-						auto mapping1 = new OOModel::MetaCallMapping(unboundName);
+						auto mapping1 = new OOModel::MetaCallMapping{unboundName};
 						mapping1->setValue(new OOModel::ReferenceExpression(
 													 macroDefinitions_.definitionName(xMacroChildH->definition()),
 													 macroDefinitions_.expansionQualifier(xMacroChildH->definition())));
 						binding1->mappings()->append(mapping1);
 
-						auto mapping2 = new OOModel::MetaCallMapping(unboundName);
+						auto mapping2 = new OOModel::MetaCallMapping{unboundName};
 						mapping2->setValue(new OOModel::ReferenceExpression(
 													 macroDefinitions_.definitionName(xMacroChildCpp->definition()),
 													 macroDefinitions_.expansionQualifier(xMacroChildCpp->definition())));
@@ -270,21 +270,21 @@ OOModel::MetaDefinition* AllMetaDefinitions::createXMacroMetaDef(MacroExpansion*
 		QString statementSpliceName = "list2";
 
 		// add an argument for the input to the MetaBindings
-		mergedMetaDef->arguments()->append(new OOModel::FormalMetaArgument(metaBindingInputName));
+		mergedMetaDef->arguments()->append(new OOModel::FormalMetaArgument{metaBindingInputName});
 
 		// add splices for the MetaBinding results
-		mergedClass->metaCalls()->append(new OOModel::ReferenceExpression(declarationSpliceName));
+		mergedClass->metaCalls()->append(new OOModel::ReferenceExpression{declarationSpliceName});
 		mergedClass->methods()->last()->items()->append(new OOModel::ExpressionStatement(
-																			new OOModel::ReferenceExpression(statementSpliceName)));
+																			new OOModel::ReferenceExpression{statementSpliceName}));
 
 		// MetaBinding for declarations splice
-		auto declarationsSpliceMetaBinding = new OOModel::MetaBinding(declarationSpliceName);
-		declarationsSpliceMetaBinding->setInput(new OOModel::ReferenceExpression(metaBindingInputName));
+		auto declarationsSpliceMetaBinding = new OOModel::MetaBinding{declarationSpliceName};
+		declarationsSpliceMetaBinding->setInput(new OOModel::ReferenceExpression{metaBindingInputName});
 		mergedMetaDef->metaBindings()->append(declarationsSpliceMetaBinding);
 
 		// MetaBinding for statements splice
-		auto statementsSpliceMetaBinding = new OOModel::MetaBinding(statementSpliceName);
-		statementsSpliceMetaBinding->setInput(new OOModel::ReferenceExpression(metaBindingInputName));
+		auto statementsSpliceMetaBinding = new OOModel::MetaBinding{statementSpliceName};
+		statementsSpliceMetaBinding->setInput(new OOModel::ReferenceExpression{metaBindingInputName});
 		mergedMetaDef->metaBindings()->append(statementsSpliceMetaBinding);
 
 		// add the merged MetaDefinition to the tree

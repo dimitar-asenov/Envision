@@ -40,13 +40,13 @@ VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, c
 {}
 
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size, const StyleType* style)
-	: Super{parent, style}, browser_{new QGraphicsWebView(this)}, size_{size}
+	: Super{parent, style}, browser_{new QGraphicsWebView{this}}, size_{size}
 {
 	browser_->setUrl(url);
 }
 
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style)
-	: Super{parent, style}, browser_{new QGraphicsWebView(this)}, size_{defaultSize}
+	: Super{parent, style}, browser_{new QGraphicsWebView{this}}, size_{defaultSize}
 {
 	setContent(content);
 }

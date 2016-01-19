@@ -37,7 +37,7 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(EmptyExpression)
 
 Type* EmptyExpression::type()
 {
-	return new ErrorType("Empty expression");
+	return new ErrorType{"Empty expression"};
 }
 
 }

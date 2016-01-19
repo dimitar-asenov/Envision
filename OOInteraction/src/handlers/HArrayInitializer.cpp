@@ -49,8 +49,8 @@ void HArrayInitializer::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 	{
 
 		auto focus = vArray->grid()->focusedElementIndex();
-		auto newSubArray = new OOModel::ArrayInitializer();
-		auto empty = new OOModel::EmptyExpression();
+		auto newSubArray = new OOModel::ArrayInitializer{};
+		auto empty = new OOModel::EmptyExpression{};
 		newSubArray->values()->append(empty);
 
 		vArray->node()->beginModification("create condition");
@@ -58,7 +58,7 @@ void HArrayInitializer::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 		vArray->node()->endModification();
 
 		vArray->setUpdateNeeded(Visualization::Item::StandardUpdate);
-		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+		target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 
 	}
 	else HExpression::keyPressEvent(target, event);

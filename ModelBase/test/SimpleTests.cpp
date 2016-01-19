@@ -78,7 +78,7 @@ class SimpleTreeManagerCreation : public Test<ModelBasePlugin, SimpleTreeManager
 	TreeManager manager;
 	CHECK_CONDITION( manager.root() == nullptr );
 
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	manager.setRoot(root);
 	CHECK_CONDITION( manager.root() == root );
 
@@ -89,11 +89,11 @@ class SimpleTreeManagerCreation : public Test<ModelBasePlugin, SimpleTreeManager
 
 class RemoveOptional : public Test<ModelBasePlugin, RemoveOptional> { public: void test()
 {
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
 
 	manager.beginModification(root, "Making left node");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
 	root->setLeft(left);
 	manager.endModification();
 	CHECK_CONDITION( root->left() == left );
@@ -105,7 +105,7 @@ class RemoveOptional : public Test<ModelBasePlugin, RemoveOptional> { public: vo
 	CHECK_CONDITION( root->left() == nullptr);
 
 	manager.beginModification(root, "Making left node");
-	root->setLeft(new TestNodes::BinaryNode());
+	root->setLeft(new TestNodes::BinaryNode{});
 	manager.endModification();
 	CHECK_CONDITION( root->left() != left );
 	CHECK_CONDITION( root->left() != nullptr );
@@ -113,13 +113,13 @@ class RemoveOptional : public Test<ModelBasePlugin, RemoveOptional> { public: vo
 
 class ChildNodeRetrieval : public Test<ModelBasePlugin, ChildNodeRetrieval> { public: void test()
 {
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
 
 	manager.beginModification(root, "Making nodes");
-	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode{};
 	root->setLeft(left);
-	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode{};
 	root->setRight(right);
 	manager.endModification();
 
@@ -136,19 +136,19 @@ class ChildNodeRetrieval : public Test<ModelBasePlugin, ChildNodeRetrieval> { pu
 
 class ProperRegistration : public Test<ModelBasePlugin, ProperRegistration> { public: void test()
 {
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
 	CHECK_CONDITION(root->typeId() > 0);
 
 	TreeManager manager2;
-	auto t = new Text();
+	auto t = new Text{};
 	manager2.setRoot(t);
 
 	CHECK_CONDITION(t->typeId() > 0);
 	CHECK_CONDITION(t->typeId() != root->typeId());
 
 	TreeManager manager3;
-	auto i = new Integer();
+	auto i = new Integer{};
 	manager3.setRoot(i);
 	CHECK_CONDITION(i->typeId() > 0);
 	CHECK_CONDITION(i->typeId() != root->typeId());

@@ -45,8 +45,8 @@ Interaction::CommandResult* CCreateField::executeNamed(Visualization::Item* /*so
 	const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
 {
 	Q_ASSERT(target->node());
-	auto f = new OOModel::Field();
-	f->setTypeExpression(new OOModel::EmptyExpression());
+	auto f = new OOModel::Field{};
+	f->setTypeExpression(new OOModel::EmptyExpression{});
 	if (!name.isEmpty()) f->setName(name);
 
 	// Set visibility
@@ -72,7 +72,7 @@ Interaction::CommandResult* CCreateField::executeNamed(Visualization::Item* /*so
 			(name.isEmpty() ? static_cast<Model::Node*>(f->nameNode()) : f->typeExpression()),
 			Interaction::SetCursorEvent::CursorDefault, false));
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

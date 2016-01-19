@@ -45,118 +45,118 @@ namespace CustomMethodCall {
 
 Class* addCollection(Project* parent)
 {
-	auto col = new Class("Collection", Modifier::Public);
+	auto col = new Class{"Collection", Modifier::Public};
 	if (parent) parent->classes()->append(col);
 
 
-	Method* find = new Method();
+	Method* find = new Method{};
 	col->methods()->append(find);
 	find->setName("find");
 	find->extension<Position>()->set(0, 0);
-	FormalArgument* findArg = new FormalArgument();
+	FormalArgument* findArg = new FormalArgument{};
 	find->arguments()->append(findArg);
-	findArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	findArg->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	findArg->setName("x");
-	FormalResult* findResult = new FormalResult();
-	findResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	FormalResult* findResult = new FormalResult{};
+	findResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	find->results()->append(findResult);
 
-	Method* insert = new Method();
+	Method* insert = new Method{};
 	col->methods()->append(insert);
 	insert->setName("insert");
 	insert->extension<Position>()->set(0, 1);
-	FormalArgument* insertArg = new FormalArgument();
+	FormalArgument* insertArg = new FormalArgument{};
 	insert->arguments()->append(insertArg);
-	insertArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	insertArg->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	insertArg->setName("x");
 
-	Method* empty = new Method();
+	Method* empty = new Method{};
 	col->methods()->append(empty);
 	empty->setName("empty");
 	empty->extension<Position>()->set(0, 2);
-	FormalResult* emptyResult = new FormalResult();
-	emptyResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	FormalResult* emptyResult = new FormalResult{};
+	emptyResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN});
 	empty->results()->append(emptyResult);
 
-	Method* exists = new Method();
+	Method* exists = new Method{};
 	col->methods()->append(exists);
 	exists->setName(QChar(0x2203));
 	exists->extension<Position>()->set(0, 3);
-	FormalArgument* existsArg = new FormalArgument();
+	FormalArgument* existsArg = new FormalArgument{};
 	exists->arguments()->append(existsArg);
-	existsArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	existsArg->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	existsArg->setName("x");
-	FormalResult* existsResult = new FormalResult();
-	existsResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	FormalResult* existsResult = new FormalResult{};
+	existsResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN});
 	exists->results()->append(existsResult);
 
-	Method* sum = new Method();
+	Method* sum = new Method{};
 	col->methods()->append(sum);
 	sum->setName("sum");
 	sum->extension<Position>()->set(0, 4);
-	FormalArgument* sumArgFrom = new FormalArgument();
+	FormalArgument* sumArgFrom = new FormalArgument{};
 	sum->arguments()->append(sumArgFrom);
-	sumArgFrom->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	sumArgFrom->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	sumArgFrom->setName("from");
-	FormalArgument* sumArgTo = new FormalArgument();
+	FormalArgument* sumArgTo = new FormalArgument{};
 	sum->arguments()->append(sumArgTo);
-	sumArgTo->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	sumArgTo->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	sumArgTo->setName("to");
-	FormalResult* sumResult = new FormalResult();
-	sumResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	FormalResult* sumResult = new FormalResult{};
+	sumResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	sum->results()->append(sumResult);
 
-	Method* test = new Method();
+	Method* test = new Method{};
 	col->methods()->append(test);
 	test->setName("test");
 	test->extension<Position>()->set(1, 0);
 
-	IfStatement* ifs = new IfStatement();
+	IfStatement* ifs = new IfStatement{};
 	test->items()->append(ifs);
-	BinaryOperation* orIf = new BinaryOperation();
+	BinaryOperation* orIf = new BinaryOperation{};
 	ifs->setCondition(orIf);
 	orIf->setOp(BinaryOperation::CONDITIONAL_OR);
-	MethodCallExpression* emptyCall = new MethodCallExpression("empty");
+	MethodCallExpression* emptyCall = new MethodCallExpression{"empty"};
 	orIf->setLeft(emptyCall);
 
-	UnaryOperation* negation = new UnaryOperation();
+	UnaryOperation* negation = new UnaryOperation{};
 	orIf->setRight(negation);
 	negation->setOp(UnaryOperation::NOT);
 	MethodCallExpression* existsCall = new MethodCallExpression(QChar(0x2203));
 	negation->setOperand(existsCall);
-	existsCall->arguments()->append( new IntegerLiteral(42));
+	existsCall->arguments()->append( new IntegerLiteral{42});
 
-	ExpressionStatement* insertCallSt = new ExpressionStatement();
-	MethodCallExpression* insertCall = new MethodCallExpression("insert");
-	insertCall->arguments()->append( new IntegerLiteral(42));
+	ExpressionStatement* insertCallSt = new ExpressionStatement{};
+	MethodCallExpression* insertCall = new MethodCallExpression{"insert"};
+	insertCall->arguments()->append( new IntegerLiteral{42});
 	insertCallSt->setExpression(insertCall);
 	ifs->thenBranch()->append(insertCallSt);
 
-	VariableDeclarationExpression* indexVar = new VariableDeclarationExpression("index");
-	test->items()->append(new ExpressionStatement(indexVar));
-	indexVar->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	MethodCallExpression* findCall = new MethodCallExpression("find");
+	VariableDeclarationExpression* indexVar = new VariableDeclarationExpression{"index"};
+	test->items()->append(new ExpressionStatement{indexVar});
+	indexVar->decl()->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
+	MethodCallExpression* findCall = new MethodCallExpression{"find"};
 	indexVar->decl()->setInitialValue(findCall);
-	findCall->arguments()->append( new IntegerLiteral(42));
+	findCall->arguments()->append( new IntegerLiteral{42});
 
-	VariableDeclarationExpression* resultVar = new VariableDeclarationExpression("result");
-	test->items()->append(new ExpressionStatement(resultVar));
-	resultVar->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	VariableDeclarationExpression* resultVar = new VariableDeclarationExpression{"result"};
+	test->items()->append(new ExpressionStatement{resultVar});
+	resultVar->decl()->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	MethodCallExpression* sumCall = new MethodCallExpression("sum", new ThisExpression());
 	resultVar->decl()->setInitialValue(sumCall);
-	sumCall->arguments()->append( new IntegerLiteral(0));
-	sumCall->arguments()->append( new ReferenceExpression("index"));
+	sumCall->arguments()->append( new IntegerLiteral{0});
+	sumCall->arguments()->append( new ReferenceExpression{"index"});
 
-	ReturnStatement* testReturn = new ReturnStatement();
-	testReturn->values()->append(new ReferenceExpression("result"));
+	ReturnStatement* testReturn = new ReturnStatement{};
+	testReturn->values()->append(new ReferenceExpression{"result"});
 	test->items()->append(testReturn);
 
-	FormalResult* testFormalResult = new FormalResult();
-	testFormalResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	FormalResult* testFormalResult = new FormalResult{};
+	testFormalResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	test->results()->append(testFormalResult);
 
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Collection class?
-	auto g = new VisualizationGroup();
+	auto g = new VisualizationGroup{};
 	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
 	{
 		auto call = static_cast<OOModel::MethodCallExpression*>(node);
@@ -207,7 +207,7 @@ Class* addCollection(Project* parent)
 class CustomVisTest : public Test<CustomMethodCallPlugin, CustomVisTest> { public: void test()
 {
 	auto collection = addCollection(nullptr);
-	auto manager = new Model::TreeManager(collection);
+	auto manager = new Model::TreeManager{collection};
 
 	VisualizationManager::instance().mainScene()->addTopLevelNode(collection);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);

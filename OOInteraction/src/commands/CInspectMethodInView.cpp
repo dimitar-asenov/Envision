@@ -73,7 +73,7 @@ Interaction::CommandResult* CInspectMethodInView::executeWithArguments(Visualiza
 		view->addArrow(method, callee, "callees", methodInView, calleeInView);
 	}
 	source->scene()->viewItems()->switchToView(view);
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 QString CInspectMethodInView::description(Visualization::Item *, Visualization::Item *,

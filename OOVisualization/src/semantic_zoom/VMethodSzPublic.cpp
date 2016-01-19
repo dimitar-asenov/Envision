@@ -46,7 +46,7 @@ VMethodSzPublic::VMethodSzPublic(Item* parent, NodeType* node, const StyleType* 
 
 void VMethodSzPublic::initializeForms()
 {
-	auto headerElement = (new GridLayoutFormElement())
+	auto headerElement = (new GridLayoutFormElement{})
 		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
 		->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 		->put(0, 0, item<Static>(&I::icon_, [](I* v)
@@ -74,9 +74,9 @@ void VMethodSzPublic::initializeForms()
 		->put(4, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
 											[](I* v){return &v->style()->arguments();}));
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
 			->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
 			->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement)

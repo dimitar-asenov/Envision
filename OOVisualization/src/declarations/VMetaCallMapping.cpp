@@ -44,7 +44,7 @@ VMetaCallMapping::VMetaCallMapping(Item* parent, NodeType* node, const StyleType
 
 void VMetaCallMapping::initializeForms()
 {
-	addForm(new GridLayoutFormElement())
+	addForm(new GridLayoutFormElement{})
 		->setHorizontalSpacing(3)
 		->setNoBoundaryCursors([](Item*){return true;})
 		->setNoInnerCursors([](Item*){return true;})

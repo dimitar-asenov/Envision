@@ -363,7 +363,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, forward, !extraCursors && i==0, false);
 
 		// Note below, that a horizontal layout, means a vertical cursor
-		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		auto lc = new LayoutCursor{this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor};
 		cursorRegion.setCursor(lc);
 		lc->setIndex(i);
 		lc->setVisualizationPosition(cursorRegion.region().topLeft());
@@ -392,7 +392,7 @@ QList<ItemRegion> SequentialLayout::regions()
 
 		regs.append(ItemRegion(trailing));
 		// Note below, that a horizontal layout, means a vertical cursor
-		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		auto lc = new LayoutCursor{this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor};
 		regs.last().setCursor(lc);
 		lc->setIndex(items.size());
 		lc->setVisualizationPosition(regs.last().region().topLeft());
@@ -418,7 +418,7 @@ QList<ItemRegion> SequentialLayout::regions()
 
 		regs.append(ItemRegion(extra));
 		// Note below, that a horizontal layout, means a vertical cursor
-		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		auto lc = new LayoutCursor{this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor};
 		regs.last().setCursor(lc);
 		lc->setIndex(-1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
@@ -439,7 +439,7 @@ QList<ItemRegion> SequentialLayout::regions()
 
 		regs.append(ItemRegion(extra));
 		// Note below, that a horizontal layout, means a vertical cursor
-		lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		lc = new LayoutCursor{this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor};
 		regs.last().setCursor(lc);
 		lc->setIndex(items.size()+1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());

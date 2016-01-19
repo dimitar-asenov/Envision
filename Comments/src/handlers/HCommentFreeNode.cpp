@@ -48,7 +48,7 @@ void HCommentFreeNode::keyPressEvent(Visualization::Item *target, QKeyEvent *eve
 	{
 		auto aNode = DCast<CommentFreeNode>(target->node());
 		aNode->beginModification("set node");
-		aNode->setNode(new CommentText());
+		aNode->setNode(new CommentText{});
 		aNode->endModification();
 	}
 	else

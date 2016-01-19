@@ -37,15 +37,15 @@ namespace CppImport {
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, const QString& projectPath, CppImportLogger* logger)
  : clang_{project, projectPath}, macroImporter_{project, clang_}, log_{logger}
 {
-	exprVisitor_ = new ExpressionVisitor(this, clang_, log_);
-	trMngr_ = new TranslateManager(clang_, project, exprVisitor_);
-	utils_ = new CppImportUtilities(log_, exprVisitor_, clang_);
+	exprVisitor_ = new ExpressionVisitor{this, clang_, log_};
+	trMngr_ = new TranslateManager{clang_, project, exprVisitor_};
+	utils_ = new CppImportUtilities{log_, exprVisitor_, clang_};
 	exprVisitor_->setUtilities(utils_);
 	trMngr_->setUtils(utils_);
-	templArgVisitor_ = new TemplateArgumentVisitor(clang_, exprVisitor_, utils_, log_);
+	templArgVisitor_ = new TemplateArgumentVisitor{clang_, exprVisitor_, utils_, log_};
 	ooStack_.push(project);
 
-	commentParser_ = new CommentParser();
+	commentParser_ = new CommentParser{};
 }
 
 ClangAstVisitor::~ClangAstVisitor()
@@ -1046,7 +1046,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 
 					if (emptyLine && !firstLine)
 						// if no comment was found that means that the line is empty
-						itemList->append(new OOModel::ExpressionStatement());
+						itemList->append(new OOModel::ExpressionStatement{});
 					else if (commentOnLine)
 					{
 						// insert the found comment at the current line
@@ -1062,7 +1062,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 			firstLine = false;
 			if (llvm::dyn_cast<clang::CompoundStmt>(child))
 			{
-				auto block = new OOModel::Block();
+				auto block = new OOModel::Block{};
 				itemList->append(block);
 				ooStack_.push(block->items());
 				TraverseStmt(child);

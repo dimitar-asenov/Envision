@@ -62,7 +62,7 @@ void AutoComplete::showNow(const QList<AutoCompleteEntry*>& entries, bool explic
 		else
 		{
 			if (vis_) hideNow();
-			vis_ = new AutoCompleteVis(entries);
+			vis_ = new AutoCompleteVis{entries};
 			vis_->setExplicitSelection(explicitSelection);
 			Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem(vis_);
 		}

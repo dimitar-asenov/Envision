@@ -190,7 +190,7 @@ void VComment::parseLines()
 			auto diagram = node()->diagram(name);
 			Q_ASSERT(diagram);
 
-			commentElements_.append( new VCommentDiagram(nullptr, diagram) );
+			commentElements_.append( new VCommentDiagram{nullptr, diagram} );
 			continue;
 		}
 
@@ -208,7 +208,7 @@ void VComment::parseLines()
 			auto code = node()->code(name);
 			Q_ASSERT(code);
 
-			commentElements_.append(new VCommentFreeNode(nullptr, code) );
+			commentElements_.append(new VCommentFreeNode{nullptr, code} );
 
 			continue;
 		}
@@ -231,7 +231,7 @@ void VComment::parseLines()
 			auto table = node()->table(name);
 
 			if (table != nullptr)
-				commentElements_.append(new VCommentTable(nullptr, table) );
+				commentElements_.append(new VCommentTable{nullptr, table} );
 			continue;
 		}
 
@@ -351,7 +351,7 @@ Item* VComment::createTextualCommentElement(QStringList& contents, bool asHtml)
 
 		if (asHtml)
 		{
-			auto browser = new VCommentBrowser(this, joined);
+			auto browser = new VCommentBrowser{this, joined};
 			commentElements_.append(browser);
 			item = browser;
 		}
@@ -387,7 +387,7 @@ void VComment::toggleEditing()
 
 void VComment::initializeForms()
 {
-	addForm((new SequentialLayoutFormElement())
+	addForm((new SequentialLayoutFormElement{})
 				->setVertical()
 				->setListOfItems([](Item* i) {
 					auto vc = static_cast<VComment*>(i);

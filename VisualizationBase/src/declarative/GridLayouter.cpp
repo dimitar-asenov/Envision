@@ -39,7 +39,7 @@ ItemRegion GridLayouter::cursorRegion(Item* parent, FormElement* formElement, in
 	if (horizontal && area.height() == 0 ) area.adjust(0, (mayExpandFront?-1:0), 0, (mayExpandBack?1:0));
 	if (!horizontal && area.width() == 0) area.adjust((mayExpandFront?-1:0), 0, (mayExpandBack?1:0), 0);
 
-	auto lc = new LayoutCursor(parent, horizontal ? Cursor::HorizontalCursor : Cursor::VerticalCursor);
+	auto lc = new LayoutCursor{parent, horizontal ? Cursor::HorizontalCursor : Cursor::VerticalCursor};
 	lc->setOwnerElement(formElement);
 	lc->set2DIndex(xIndex, yIndex);
 	lc->setIndex( horizontal ? yIndex : xIndex); // Works for 1D sequences

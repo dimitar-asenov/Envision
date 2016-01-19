@@ -67,14 +67,14 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 
 	notAllowed(declaration);
 
-	auto fragment = new CompositeFragment(declaration);
+	auto fragment = new CompositeFragment{declaration};
 	*fragment << "Invalid Declaration";
 	return fragment;
 }
 
 SourceDir* DeclarationVisitor::visitProject(Project* project, SourceDir* parent)
 {
-	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, "src");
+	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir{nullptr, "src"};
 
 	for (auto node : *project->projects()) visitProject(node, projectDir);
 	for (auto node : *project->modules()) visitModule(node, projectDir);
@@ -105,9 +105,9 @@ SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* par
 	Q_ASSERT(parent);
 	auto classFile = &parent->file(classs->name() + ".cpp");
 
-	auto fragment = classFile->append(new CompositeFragment(classs, "sections"));
+	auto fragment = classFile->append(new CompositeFragment{classs, "sections"});
 
-	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
+	auto imports = fragment->append(new CompositeFragment{classs, "vertical"});
 	for (auto node : *classs->subDeclarations())
 	{
 		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
@@ -123,7 +123,7 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 {
 	if (!headerVisitor()) return visit(classs);
 
-	auto fragment = new CompositeFragment(classs, "spacedSections");
+	auto fragment = new CompositeFragment{classs, "spacedSections"};
 	*fragment << visit(classs);
 
 	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
@@ -161,11 +161,11 @@ bool DeclarationVisitor::isSignalingDeclaration(Declaration* declaration)
 
 SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
-	auto fragment = new CompositeFragment(classs);
+	auto fragment = new CompositeFragment{classs};
 
 	if (sourceVisitor())
 	{
-		auto sections = fragment->append( new CompositeFragment(classs, "sections"));
+		auto sections = fragment->append( new CompositeFragment{classs, "sections"});
 		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections",
 								[](Expression* expression) { return metaCallFilter(expression, true); });
 		*sections << list(classs->classes(), this, "sections");
@@ -224,37 +224,37 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 				auto baseClassesFragment = new CompositeFragment(classs->baseClasses(), "comma");
 				for (auto baseClass : *classs->baseClasses())
 				{
-					auto baseClassFragment = new CompositeFragment(baseClass);
+					auto baseClassFragment = new CompositeFragment{baseClass};
 					*baseClassFragment << "public " << expression(baseClass);
 					*baseClassesFragment << baseClassFragment;
 				}
 				*fragment << " : " << baseClassesFragment;
 			}
 
-			auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
+			auto sections = fragment->append( new CompositeFragment{classs, "bodySections"});
 			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
 									[](Expression* expression) { return metaCallFilter(expression, false); });
 			*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
 			*sections << list(classs->friends(), this, "sections");
 
-			auto publicSection = new CompositeFragment(classs, "accessorSections");
+			auto publicSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
 			{
 					if (isSignalingDeclaration(declaration)) return false;
 					return declaration->modifiers()->isSet(Modifier::Public);
 			});
-			auto signalingSection = new CompositeFragment(classs, "accessorSections");
+			auto signalingSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasSignalingSection = addMemberDeclarations(classs, signalingSection, [](Declaration* declaration)
 			{
 					return isSignalingDeclaration(declaration);
 			});
-			auto protectedSection = new CompositeFragment(classs, "accessorSections");
+			auto protectedSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasProtectedSection = addMemberDeclarations(classs, protectedSection,  [](Declaration* declaration)
 			{
 					if (isSignalingDeclaration(declaration)) return false;
 					return declaration->modifiers()->isSet(Modifier::Protected);
 			});
-			auto privateSection = new CompositeFragment(classs, "accessorSections");
+			auto privateSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
 			{
 					if (isSignalingDeclaration(declaration)) return false;
@@ -361,8 +361,8 @@ QString DeclarationVisitor::pluginName(Module* namespaceModule, Declaration* dec
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
-	auto fragment = new CompositeFragment(metaDefinition, "emptyLineAtEnd");
-	auto macro = new CompositeFragment(metaDefinition, "macro");
+	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
+	auto macro = new CompositeFragment{metaDefinition, "macro"};
 	*macro << "#define " << metaDefinition->nameNode();
 	*macro << list(metaDefinition->arguments(), ElementVisitor(MACRO_VISITOR, data()), "argsList");
 	auto body = new CompositeFragment(metaDefinition->context(), "macroBody");
@@ -382,7 +382,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 {
 	if (!shouldExportMethod(method)) return nullptr;
 
-	auto fragment = new CompositeFragment(method);
+	auto fragment = new CompositeFragment{method};
 
 	if (!sourceVisitor())
 		*fragment << declarationComments(method);
@@ -439,7 +439,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << parentClass->name();
 			if (!parentClass->typeArguments()->isEmpty())
 			{
-				auto typeArgumentComposite = new CompositeFragment(method, "typeArgsList");
+				auto typeArgumentComposite = new CompositeFragment{method, "typeArgsList"};
 				for (auto typeArgument : *parentClass->typeArguments())
 					*typeArgumentComposite << typeArgument->nameNode();
 				*fragment << typeArgumentComposite;
@@ -503,7 +503,7 @@ SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration
 
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
-	auto fragment = new CompositeFragment(variableDeclaration);
+	auto fragment = new CompositeFragment{variableDeclaration};
 	if (!sourceVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 	{
 		*fragment << declarationComments(variableDeclaration);
@@ -560,10 +560,10 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 
 SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* declaration)
 {
-	auto fragment = new CompositeFragment(declaration, "vertical");
+	auto fragment = new CompositeFragment{declaration, "vertical"};
 	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
 		*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
-	auto header = fragment->append(new CompositeFragment(declaration, "space"));
+	auto header = fragment->append(new CompositeFragment{declaration, "space"});
 
 	if (declaration->modifiers()->isSet(Modifier::ConstExpr))
 		*header << new TextFragment(declaration->modifiers(), "constexpr");
@@ -581,7 +581,7 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 
 SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 {
-	auto fragment = new CompositeFragment(nameImport);
+	auto fragment = new CompositeFragment{nameImport};
 	notAllowed(nameImport->annotations());
 
 	Q_ASSERT(!nameImport->importAll());
@@ -592,12 +592,12 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* eti)
 {
 	notAllowed(eti);
-	return new TextFragment(eti);
+	return new TextFragment{eti};
 }
 
 SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)
 {
-	auto fragment = new CompositeFragment(typeAlias);
+	auto fragment = new CompositeFragment{typeAlias};
 
 	if (!typeAlias->typeArguments()->isEmpty())
 		*fragment << list(typeAlias->typeArguments(), ElementVisitor(data()), "templateArgsList");

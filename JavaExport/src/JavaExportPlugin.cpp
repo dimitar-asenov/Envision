@@ -34,7 +34,7 @@ namespace JavaExport {
 
 bool JavaExportPlugin::initialize(Core::EnvisionManager&)
 {
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaExport());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaExport{});
 
 	return true;
 }

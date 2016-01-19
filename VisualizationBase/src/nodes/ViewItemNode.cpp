@@ -53,7 +53,7 @@ ViewItemNode* ViewItemNode::clone() const { return new ViewItemNode{*this}; }
 
 ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
 {
-	auto result = new ViewItemNode();
+	auto result = new ViewItemNode{};
 	result->setSpacingTarget(spacingTarget);
 	result->setSpacingParent(spacingParent);
 	return result;
@@ -61,7 +61,7 @@ ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewIt
 
 ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
 {
-	auto result = new ViewItemNode();
+	auto result = new ViewItemNode{};
 	result->setReference(reference);
 	result->setPurpose(purpose);
 	return result;
@@ -69,7 +69,7 @@ ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
 
 ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *view)
 {
-	auto result = new ViewItemNode();
+	auto result = new ViewItemNode{};
 	if (!json.contains("type"))
 		return result;
 	result->setPurpose(json["purpose"].toInt());

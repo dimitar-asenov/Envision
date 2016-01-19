@@ -44,7 +44,7 @@ VSwitchStatement::VSwitchStatement(Item* parent, NodeType* node, const StyleType
 
 void VSwitchStatement::initializeForms()
 {
-	auto header = (new GridLayoutFormElement())
+	auto header = (new GridLayoutFormElement{})
 			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
 			->setHorizontalSpacing(3)
 			->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
@@ -57,9 +57,9 @@ void VSwitchStatement::initializeForms()
 	// We need something stretchable
 	auto casesContainer = grid({{cases}})->setColumnStretchFactor(1, 1);
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheLeftOf, header, 10, FromLeftOf, casesContainer)
 			->put(TheLeftOf, shapeElement, 2, FromLeftOf, header)
 			->put(TheRightOf, header, AtRightOf, casesContainer)

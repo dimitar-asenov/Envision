@@ -39,7 +39,7 @@ Class* ClassType::classDefinition() const
 
 ClassType* ClassType::clone() const
 {
-	return new ClassType(*this);
+	return new ClassType{*this};
 }
 
 }

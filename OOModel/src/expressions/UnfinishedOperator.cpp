@@ -40,7 +40,7 @@ REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, f
 
 Type* UnfinishedOperator::type()
 {
-	return new ErrorType("Unfinished Operator");
+	return new ErrorType{"Unfinished Operator"};
 }
 
 }

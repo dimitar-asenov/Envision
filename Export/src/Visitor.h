@@ -143,7 +143,7 @@ template<typename ListElement, typename VisitorClass, typename Predicate>
 CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
 ::list(Model::TypedList<ListElement>* list, VisitorClass* v, const QString& fragmentType, Predicate filter)
 {
-	auto fragment = new CompositeFragment(list, fragmentType);
+	auto fragment = new CompositeFragment{list, fragmentType};
 	for (auto node : *list)
 		if (!filter || filter(node))
 			*fragment << v->visit(node);

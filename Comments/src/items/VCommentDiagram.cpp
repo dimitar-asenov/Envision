@@ -174,6 +174,6 @@ void VCommentDiagram::selectLastShape()
 	this->toolbar_->setCurrentShape(shapes_.last());
 }
 
-CommentDiagramToolbar* VCommentDiagram::toolbar_ = new CommentDiagramToolbar();
+CommentDiagramToolbar* VCommentDiagram::toolbar_ = new CommentDiagramToolbar{};
 
 }

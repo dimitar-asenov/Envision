@@ -48,7 +48,7 @@ namespace CppExport {
 
 SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 {
-	auto fragment = new CompositeFragment(argument);
+	auto fragment = new CompositeFragment{argument};
 
 	auto pointerTypeExpression = DCast<PointerTypeExpression>(argument->typeExpression());
 	if (pointerTypeExpression && DCast<FunctionTypeExpression>(pointerTypeExpression->typeExpression()))
@@ -75,21 +75,21 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 
 SourceFragment* ElementVisitor::visit(FormalMetaArgument* argument)
 {
-	auto fragment = new CompositeFragment(argument);
+	auto fragment = new CompositeFragment{argument};
 	*fragment << argument->nameNode();
 	return fragment;
 }
 
 SourceFragment* ElementVisitor::visit(FormalResult* result)
 {
-	auto fragment = new CompositeFragment(result);
+	auto fragment = new CompositeFragment{result};
 	*fragment << expression(result->typeExpression());
 	return fragment;
 }
 
 SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 {
-	auto fragment = new CompositeFragment(typeArgument);
+	auto fragment = new CompositeFragment{typeArgument};
 	*fragment << "typename " << typeArgument->nameNode();
 	if (headerVisitor() && typeArgument->defaultType())
 		*fragment << " = " << expression(typeArgument->defaultType());
@@ -98,7 +98,7 @@ SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 
 SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 {
-	auto fragment = new CompositeFragment(catchClause);
+	auto fragment = new CompositeFragment{catchClause};
 
 	required(catchClause, catchClause->exceptionToCatch(), "Exception type to catch");
 
@@ -115,7 +115,7 @@ SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 
 SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 {
-	auto fragment = new CompositeFragment(enumerator);
+	auto fragment = new CompositeFragment{enumerator};
 	*fragment << enumerator->name();
 	if (auto value = enumerator->value())
 	{
@@ -126,7 +126,7 @@ SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 
 SourceFragment* ElementVisitor::visit(MemberInitializer* memberInitializer)
 {
-	auto fragment = new CompositeFragment(memberInitializer);
+	auto fragment = new CompositeFragment{memberInitializer};
 	*fragment << expression(memberInitializer->memberReference())
 				 << list(memberInitializer->arguments(), ExpressionVisitor(data()), "initializerList");
 	return fragment;

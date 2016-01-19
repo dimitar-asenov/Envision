@@ -58,7 +58,7 @@ SequentialLayoutFormElement::~SequentialLayoutFormElement()
 
 SequentialLayoutFormElement* SequentialLayoutFormElement::clone() const
 {
-	return new SequentialLayoutFormElement(*this);
+	return new SequentialLayoutFormElement{*this};
 }
 
 void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)

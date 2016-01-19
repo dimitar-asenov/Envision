@@ -36,7 +36,7 @@ namespace Model {
 
 class PersistenceSave : public Test<ModelBasePlugin, PersistenceSave> { public: void test()
 {
-	auto root = new TestNodes::BinaryNode();
+	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{"root", root};
 	PersistentStoreMock store;
 	manager.save(&store);
@@ -46,8 +46,8 @@ class PersistenceSave : public Test<ModelBasePlugin, PersistenceSave> { public: 
 			store.getSaved());
 
 	manager.beginModification(root, "make tree");
-	root->setLeft(new TestNodes::BinaryNode());
-	root->setRight( new TestNodes::BinaryNode());
+	root->setLeft(new TestNodes::BinaryNode{});
+	root->setRight( new TestNodes::BinaryNode{});
 	root->name()->set("Troot");
 	root->left()->name()->set("Tleft");
 	root->right()->name()->set("Tright");

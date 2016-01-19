@@ -57,7 +57,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar{parent}
 	bSelectShape_->setFixedSize(QSize(42, 36));
 	this->addWidget(bSelectShape_);
 
-	QMenu* menu = new QMenu();
+	QMenu* menu = new QMenu{};
 	menu->addAction(QIcon(":/icons/rectangle.png"), "Rectangle")->setIconVisibleInMenu(true);
 	menu->addAction(QIcon(":/icons/ellipse.png"), "Ellipse")->setIconVisibleInMenu(true);
 	menu->addAction(QIcon(":/icons/diamond.png"), "Diamond")->setIconVisibleInMenu(true);

@@ -63,7 +63,7 @@ SimpleTextFileStore::~SimpleTextFileStore()
 
 SimpleTextFileStore* SimpleTextFileStore::clone() const
 {
-	auto ss = new SimpleTextFileStore();
+	auto ss = new SimpleTextFileStore{};
 	ss->baseFolder_ = baseFolder_;
 	ss->externalTree_ = externalTree_;
 	return ss;
@@ -110,7 +110,7 @@ void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &n
 
 		if ( !treeDir_.exists() ) throw FilePersistenceException("Error opening tree folder " + treeDir_.path());
 
-		genericTree_ = new GenericTree(name);
+		genericTree_ = new GenericTree{name};
 		saveNewPersistenceUnit(manager->root(), name);
 
 		SAFE_DELETE(genericTree_);
@@ -272,7 +272,7 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager* manager, const QS
 						throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
 				}
 
-				genericTree_ = new GenericTree(name);
+				genericTree_ = new GenericTree{name};
 		}
 
 		ln = loadNewPersistenceUnit(name, nullptr, loadPartially);

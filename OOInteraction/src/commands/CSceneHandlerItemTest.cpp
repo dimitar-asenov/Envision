@@ -49,7 +49,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 	//Test code goes here
 
 	QString testDir = "projects/";
-	Model::TreeManager* manager = new Model::TreeManager();
+	Model::TreeManager* manager = new Model::TreeManager{};
 	FilePersistence::SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
@@ -61,7 +61,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 	Visualization::VisualizationManager::instance().mainScene()->addTopLevelNode(prj);
 	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualization::Item*, Visualization::Item*,
@@ -69,7 +69,7 @@ QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualizat
 {
 	QList<Interaction::CommandSuggestion*> s;
 	if (QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-			s.append(new Interaction::CommandSuggestion("test", "Loads and visualizes a large project"));
+			s.append(new Interaction::CommandSuggestion{"test", "Loads and visualizes a large project"});
 	return s;
 }
 

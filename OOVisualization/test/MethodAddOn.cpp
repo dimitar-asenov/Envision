@@ -45,7 +45,7 @@ QList<Visualization::Item*> MethodAddOn::determineItems(Visualization::Item* vis
 		else
 		{
 			QList<Visualization::Item*> result;
-			result.append( new Visualization::Text(nullptr, "This is an add-on text") );
+			result.append( new Visualization::Text{nullptr, "This is an add-on text"} );
 			return result;
 		}
 	}

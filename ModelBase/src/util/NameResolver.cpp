@@ -39,7 +39,7 @@ QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& node
 	auto parts = nodeName.split(".");
 	QString pattern{"*"};
 	for (auto part : parts) pattern += part + '*';
-	auto matcher = SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::WildcardUnix));
+	auto matcher = SymbolMatcher(new QRegExp{pattern, Qt::CaseInsensitive, QRegExp::WildcardUnix});
 
 	if (root) matches.append(findAllMatches(matcher, "", root, suggestable));
 	else

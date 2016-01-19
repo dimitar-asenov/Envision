@@ -58,7 +58,7 @@ OOModel::Expression* OOExpressionBuilder::getOOExpression(Interaction::Expressio
 
 void OOExpressionBuilder::visit(Interaction::Empty*)
 {
-	expression = new OOModel::EmptyExpression();
+	expression = new OOModel::EmptyExpression{};
 }
 
 void OOExpressionBuilder::visit(Interaction::Value* val)
@@ -145,7 +145,7 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 	else
 	{
 		QString lastDelimiter;
-		OOModel::UnfinishedOperator* unf = new OOModel::UnfinishedOperator();
+		OOModel::UnfinishedOperator* unf = new OOModel::UnfinishedOperator{};
 		int operand_index = 0;
 		for (int i = 0; i <unfinished->numComplete(); ++i)
 		{
@@ -156,7 +156,7 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 				// If there are two expressions next to each other without an operator in between, put a space.
 				if (lastDelimiter.isEmpty() && operand_index > 0) lastDelimiter = ' ';
 
-				unf->delimiters()->append(new Model::Text(lastDelimiter));
+				unf->delimiters()->append(new Model::Text{lastDelimiter});
 				lastDelimiter.clear();
 				unfinished->at(operand_index)->accept(this);
 				++operand_index;
@@ -165,14 +165,14 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 			else
 				lastDelimiter += current;
 		}
-		unf->delimiters()->append(new Model::Text(lastDelimiter)); // append the postfix, even if empty
+		unf->delimiters()->append(new Model::Text{lastDelimiter}); // append the postfix, even if empty
 		expression = unf;
 	}
 }
 
 void OOExpressionBuilder::createErrorExpression(Interaction::Operator* op)
 {
-	OOModel::ErrorExpression* error = new OOModel::ErrorExpression();
+	OOModel::ErrorExpression* error = new OOModel::ErrorExpression{};
 	auto desc = dynamic_cast<Interaction::ErrorDescriptor*>(op->descriptor());
 	error->setPrefix(desc->errorPrefix());
 	error->setPostfix(desc->errorPostfix());

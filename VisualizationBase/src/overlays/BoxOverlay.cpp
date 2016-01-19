@@ -80,13 +80,13 @@ void BoxOverlay::updateGeometry(int availableWidth, int availableHeight)
 
 void BoxOverlay::initializeForms()
 {
-	auto header = (new GridLayoutFormElement())
+	auto header = (new GridLayoutFormElement{})
 			->setSpacing(3)->setColumnStretchFactor(1, 1)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->put(0, 0, item<Text>(&I::caption_, &StyleType::caption))
 			->put(2, 0, item<Static>(&I::closeIcon_, &StyleType::closeIcon));
 
-	auto container = (new GridLayoutFormElement())
+	auto container = (new GridLayoutFormElement{})
 			->put(0, 0, header)
 			->put(0, 1, item<Item>(&I::content_));
 

@@ -115,7 +115,7 @@ template <typename Adapter, typename Adaptee> Adapter* AdapterManager::adapt(Ada
 template <typename AdapterBase, typename Adapter, typename Adaptee >
 AdapterBase* AdapterManager::createFrom(Adaptee* a)
 {
-	return new Adapter(a);
+	return new Adapter{a};
 }
 
 template <typename AdapterBase, typename Adapter, typename Adaptee>

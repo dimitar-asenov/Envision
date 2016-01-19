@@ -43,7 +43,7 @@ CommandResult* CSceneHandlerItemExit::execute(Visualization::Item*, Visualizatio
 {
 	Visualization::VisualizationManager::instance().getMainWindow()->close();
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, Visualization::Item*,
@@ -51,7 +51,7 @@ QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, V
 {
 	QList<CommandSuggestion*> s;
 	if (QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-			s.append(new CommandSuggestion("exit", "Closes Envision"));
+			s.append(new CommandSuggestion{"exit", "Closes Envision"});
 	return s;
 }
 

@@ -31,14 +31,14 @@ namespace Comments{
 OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton{parent}
 {
 	QMenu* menu = new QMenu;
-	QWidgetAction* wiAction = new QWidgetAction(this);
+	QWidgetAction* wiAction = new QWidgetAction{this};
 
-	QSignalMapper* signalMapper = new QSignalMapper(this);
+	QSignalMapper* signalMapper = new QSignalMapper{this};
 	connect(signalMapper,  (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
 			  this, &OutlineTypePicker::handleOutlineTypePicked);
 
 	QPixmap pixmap(96, 24);
-	QWidget* aWidget = new QWidget(this);
+	QWidget* aWidget = new QWidget{this};
 	QVBoxLayout* aLayout = new QVBoxLayout;
 	aLayout->setSpacing(0);
 	aWidget->setLayout(aLayout);
@@ -46,7 +46,7 @@ OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton{parent}
 
 	QToolButton* aButton;
 	pixmap.fill(Qt::transparent);
-	QPainter* aPainter = new QPainter(&pixmap);
+	QPainter* aPainter = new QPainter{&pixmap};
 	QPen aPen;
 	aPen.setColor(Qt::black);
 	aPen.setWidth(4);

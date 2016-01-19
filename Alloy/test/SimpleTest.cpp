@@ -45,56 +45,56 @@ namespace Alloy {
 
 Class* addLinkedList()
 {
-	auto aLinkedList = new Class("LinkedList");
+	auto aLinkedList = new Class{"LinkedList"};
 
-	auto *linkedListRoot = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
+	auto *linkedListRoot = new Field( "root", new ReferenceExpression{"Node"}, Modifier::Private);
 	aLinkedList->fields()->append(linkedListRoot);
 
-	auto invariantMethod = new Method("ObjectInvariant");
+	auto invariantMethod = new Method{"ObjectInvariant"};
 	aLinkedList->methods()->append(invariantMethod);
 
 	{
-		auto callContractInvariant = new MethodCallExpression("Contract.Invariant");
-		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
-		auto callContractForAll = new MethodCallExpression("Contract.ForAll");
+		auto callContractInvariant = new MethodCallExpression{"Contract.Invariant"};
+		invariantMethod->items()->append(new ExpressionStatement{callContractInvariant});
+		auto callContractForAll = new MethodCallExpression{"Contract.ForAll"};
 		callContractInvariant->arguments()->append(callContractForAll);
 		DCast<ReferenceExpression>(callContractForAll->callee())
-				->typeArguments()->append(new ReferenceExpression("Node"));
-		callContractForAll->arguments()->append(new MethodCallExpression("getAllNodes"));
-		auto le = new LambdaExpression();
+				->typeArguments()->append(new ReferenceExpression{"Node"});
+		callContractForAll->arguments()->append(new MethodCallExpression{"getAllNodes"});
+		auto le = new LambdaExpression{};
 		callContractForAll->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("n", new ReferenceExpression("Node")));
+		le->arguments()->append(new FormalArgument("n", new ReferenceExpression{"Node"}));
 		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
 			"this.root==null||n.next==null||n.next!=this.root")));
 	}
 
 	{
-		auto callContractInvariant = new MethodCallExpression("Contract.Invariant");
-		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
-		auto callContractForAll = new MethodCallExpression("Contract.ForAll");
+		auto callContractInvariant = new MethodCallExpression{"Contract.Invariant"};
+		invariantMethod->items()->append(new ExpressionStatement{callContractInvariant});
+		auto callContractForAll = new MethodCallExpression{"Contract.ForAll"};
 		callContractInvariant->arguments()->append(callContractForAll);
 		DCast<ReferenceExpression>(callContractForAll->callee())
-				->typeArguments()->append(new ReferenceExpression("LinkedList"));
-		callContractForAll->arguments()->append(new MethodCallExpression("getAllLinkedLists"));
-		auto le = new LambdaExpression();
+				->typeArguments()->append(new ReferenceExpression{"LinkedList"});
+		callContractForAll->arguments()->append(new MethodCallExpression{"getAllLinkedLists"});
+		auto le = new LambdaExpression{};
 		callContractForAll->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("ll", new ReferenceExpression("LinkedList")));
+		le->arguments()->append(new FormalArgument("ll", new ReferenceExpression{"LinkedList"}));
 		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
 			"this.root==null||ll.root==null||this==ll||this.root!=ll.root")));
 	}
 
-	auto containsMethod = new Method("contains");
+	auto containsMethod = new Method{"contains"};
 	aLinkedList->methods()->append(containsMethod);
 
-	FormalArgument* containsMethodArgument = new FormalArgument();
+	FormalArgument* containsMethodArgument = new FormalArgument{};
 	containsMethod->arguments()->append(containsMethodArgument);
 	containsMethodArgument->setName("aNode");
-	ClassTypeExpression* argType = new ClassTypeExpression();
+	ClassTypeExpression* argType = new ClassTypeExpression{};
 	containsMethodArgument->setTypeExpression(argType);
 	argType->typeExpression()->ref()->setName("Node");
 
-	FormalResult* containsResult  = new FormalResult();
-	containsResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	FormalResult* containsResult  = new FormalResult{};
+	containsResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN});
 	containsMethod->results()->append(containsResult);
 
 	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
@@ -107,58 +107,58 @@ Class* addLinkedList()
 
 Class* addNode()
 {
-	auto aNode = new Class("Node");
+	auto aNode = new Class{"Node"};
 
-	auto *nodeNext = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
+	auto *nodeNext = new Field( "next", new ReferenceExpression{"Node"}, Modifier::Private);
 	aNode->fields()->append(nodeNext);
 
-	auto invariantMethod = new Method("ObjectInvariant");
+	auto invariantMethod = new Method{"ObjectInvariant"};
 	aNode->methods()->append(invariantMethod);
 
 	invariantMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
 		"Contract.Invariant(this!=this.next)")));
 
 	{
-		auto callContractInvariant = new MethodCallExpression("Contract.Invariant");
-		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
-		auto callContractExists = new MethodCallExpression("Contract.Exists");
+		auto callContractInvariant = new MethodCallExpression{"Contract.Invariant"};
+		invariantMethod->items()->append(new ExpressionStatement{callContractInvariant});
+		auto callContractExists = new MethodCallExpression{"Contract.Exists"};
 		callContractInvariant->arguments()->append(callContractExists);
 		DCast<ReferenceExpression>(callContractExists->callee())
-				->typeArguments()->append(new ReferenceExpression("LinkedList"));
-		callContractExists->arguments()->append(new MethodCallExpression("getAllLinkedLists"));
-		auto le = new LambdaExpression();
+				->typeArguments()->append(new ReferenceExpression{"LinkedList"});
+		callContractExists->arguments()->append(new MethodCallExpression{"getAllLinkedLists"});
+		auto le = new LambdaExpression{};
 		callContractExists->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("ll", new ReferenceExpression("LinkedList")));
+		le->arguments()->append(new FormalArgument("ll", new ReferenceExpression{"LinkedList"}));
 		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression("ll.contains(this)")));
 	}
 
 	{
-		auto callContractInvariant = new MethodCallExpression("Contract.Invariant");
-		invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
-		auto callContractForAll = new MethodCallExpression("Contract.ForAll");
+		auto callContractInvariant = new MethodCallExpression{"Contract.Invariant"};
+		invariantMethod->items()->append(new ExpressionStatement{callContractInvariant});
+		auto callContractForAll = new MethodCallExpression{"Contract.ForAll"};
 		callContractInvariant->arguments()->append(callContractForAll);
 		DCast<ReferenceExpression>(callContractForAll->callee())
-				->typeArguments()->append(new ReferenceExpression("Node"));
-		callContractForAll->arguments()->append(new MethodCallExpression("getAllNodes"));
-		auto le = new LambdaExpression();
+				->typeArguments()->append(new ReferenceExpression{"Node"});
+		callContractForAll->arguments()->append(new MethodCallExpression{"getAllNodes"});
+		auto le = new LambdaExpression{};
 		callContractForAll->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("n", new ReferenceExpression("Node")));
+		le->arguments()->append(new FormalArgument("n", new ReferenceExpression{"Node"}));
 		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
 			"this.next==null||n.next==null||this==n||this.next!=n.next")));
 	}
 
-	auto containsMethod = new Method("contains");
+	auto containsMethod = new Method{"contains"};
 	aNode->methods()->append(containsMethod);
 
-	FormalArgument* containsMethodArgument = new FormalArgument();
+	FormalArgument* containsMethodArgument = new FormalArgument{};
 	containsMethod->arguments()->append(containsMethodArgument);
 	containsMethodArgument->setName("aNode");
-	ClassTypeExpression* argType = new ClassTypeExpression();
+	ClassTypeExpression* argType = new ClassTypeExpression{};
 	containsMethodArgument->setTypeExpression(argType);
 	argType->typeExpression()->ref()->setName("Node");
 
-	FormalResult* containsResult  = new FormalResult();
-	containsResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	FormalResult* containsResult  = new FormalResult{};
+	containsResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN});
 	containsMethod->results()->append(containsResult);
 
 	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
@@ -177,7 +177,7 @@ class AlloyTest : public Test<AlloyPlugin, AlloyTest> { public: void test()
 	auto aNode = addNode();
 	aLinkedList->classes()->append(aNode);
 
-	auto manager = new Model::TreeManager(aLinkedList);
+	auto manager = new Model::TreeManager{aLinkedList};
 
 	VisualizationManager::instance().mainScene()->addTopLevelNode(aLinkedList);
 

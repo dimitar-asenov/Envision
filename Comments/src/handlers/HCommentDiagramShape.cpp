@@ -34,7 +34,7 @@ namespace Comments {
 
 HCommentDiagramShape::HCommentDiagramShape()
 {
-	addCommand(new CShapeSetProperty());
+	addCommand(new CShapeSetProperty{});
 }
 
 HCommentDiagramShape* HCommentDiagramShape::instance()
@@ -105,7 +105,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 				else if (last.first != -1 && last.second != -1 && last.first != shapeIndex)
 				{
 					vDiagram->node()->connectors()->append(
-								new CommentDiagramConnector(last.first, last.second, shapeIndex, connectorIndex));
+								new CommentDiagramConnector{last.first, last.second, shapeIndex, connectorIndex});
 					shapeIndex = -1;
 					connectorIndex = -1;
 				}

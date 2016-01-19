@@ -56,7 +56,7 @@ GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, 
 	Q_ASSERT(!data || !piecewiseLoader_);
 
 	return *persistentUnits_.insert(name, std::shared_ptr<GenericPersistentUnit>
-		{new GenericPersistentUnit(this, name, data, dataSize)}).value();
+		{new GenericPersistentUnit{this, name, data, dataSize}}).value();
 }
 
 GenericPersistentUnit* GenericTree::persistentUnit(const QString& name) const

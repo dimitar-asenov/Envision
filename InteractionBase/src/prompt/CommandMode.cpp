@@ -45,7 +45,7 @@ Visualization::Item* CommandMode::createInputItem(const QString& initialCommandT
 {
 	auto commandText = initialCommandText;
 	if (commandText.isNull()) commandText = TYPE_HINT;
-	inputItem_ = new PromptTextInput(nullptr, commandText);
+	inputItem_ = new PromptTextInput{nullptr, commandText};
 	return inputItem_;
 }
 

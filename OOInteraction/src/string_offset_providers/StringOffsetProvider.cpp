@@ -214,19 +214,19 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 
 StringOffsetProvider* StringOffsetProvider::defaultProvider(Visualization::Item* item)
 {
-	if ( GridBasedOffsetProvider::hasGridConstructorfor (item)) return new GridBasedOffsetProvider(item);
-	if ( auto tr = DCast<Visualization::TextRenderer>(item)) return new TextRendererStringOffsetProvider(tr);
+	if ( GridBasedOffsetProvider::hasGridConstructorfor (item)) return new GridBasedOffsetProvider{item};
+	if ( auto tr = DCast<Visualization::TextRenderer>(item)) return new TextRendererStringOffsetProvider{tr};
 
 	for (auto f : allowGridBasedProviderFunctions_)
 		if (f(item))
 		{
 			if ( DCast<Visualization::LayoutProvider<>>(item) )
-				return new GridBasedOffsetProvider(item);
+				return new GridBasedOffsetProvider{item};
 
 			if (auto declarativeItem = DCast<Visualization::DeclarativeItemBase>(item))
 			{
 				if (dynamic_cast<Visualization::GridLayoutFormElement*>(declarativeItem->currentForm()))
-					return new GridBasedOffsetProvider(item);
+					return new GridBasedOffsetProvider{item};
 			}
 
 			break;

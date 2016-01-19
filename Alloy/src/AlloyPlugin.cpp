@@ -36,7 +36,7 @@ namespace Alloy {
 
 bool AlloyPlugin::initialize(Core::EnvisionManager&)
 {
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAlloy());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAlloy{});
 
 	Alloy::AlloyVisitor::init();
 

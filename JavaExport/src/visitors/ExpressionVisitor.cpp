@@ -84,7 +84,7 @@ template <typename T> Export::SourceFragment* ExpressionVisitor::optional(T* nod
 
 SourceFragment* ExpressionVisitor::visit(Expression* expression)
 {
-	auto fragment = new CompositeFragment(expression);
+	auto fragment = new CompositeFragment{expression};
 
 	// Types ============================================================================================================
 	if (auto e = DCast<ArrayTypeExpression>(expression))

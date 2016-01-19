@@ -70,7 +70,7 @@ bool FunctionType::equals(const Type* other) const
 
 FunctionType* FunctionType::clone() const
 {
-	return new FunctionType(*this);
+	return new FunctionType{*this};
 }
 
 }

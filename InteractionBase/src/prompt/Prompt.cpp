@@ -93,7 +93,7 @@ void Prompt::show(const QString& modeName, Visualization::Item* commandReceiver,
 	mode_ = (*modeEntryIt)();
 	Q_ASSERT(mode_);
 
-	shell_ = new PromptShell(initialCommandText, options);
+	shell_ = new PromptShell{initialCommandText, options};
 }
 
 void Prompt::hide()

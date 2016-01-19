@@ -100,7 +100,7 @@ GridLayoutFormElement::~GridLayoutFormElement()
 
 GridLayoutFormElement* GridLayoutFormElement::clone() const
 {
-	return new GridLayoutFormElement(*this);
+	return new GridLayoutFormElement{*this};
 }
 
 GridLayoutFormElement* GridLayoutFormElement::put(int column, int row, FormElement* element)

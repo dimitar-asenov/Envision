@@ -43,7 +43,7 @@ VComposite::VComposite(Item* parent, NodeType* node, const StyleType* style)
 
 void VComposite::initializeForms()
 {
-	auto headerContent = (new GridLayoutFormElement())
+	auto headerContent = (new GridLayoutFormElement{})
 		->setHorizontalSpacing(3)
 		->setColumnStretchFactor(3, 1)
 		->setVerticalAlignment(LayoutStyle::Alignment::Center)
@@ -54,7 +54,7 @@ void VComposite::initializeForms()
 
 	auto headerBackground = item<EmptyItem>(&I::headerBackground_, [](I* v){ return &v->style()->headerBackground();});
 
-	auto completeHeader = grid({{(new AnchorLayoutFormElement())
+	auto completeHeader = grid({{(new AnchorLayoutFormElement{})
 			->put(TheLeftOf, headerBackground, 2, FromLeftOf, headerContent)
 			->put(TheTopOf, headerBackground, 2, FromTopOf, headerContent)
 			->put(TheBottomOf, headerBackground, 2, FromBottomOf, headerContent)
@@ -62,15 +62,15 @@ void VComposite::initializeForms()
 
 	addForm(completeHeader);
 
-	auto shapeElement = new ShapeFormElement();
-	auto attr = grid({{(new SequentialLayoutFormElement())->setVertical()
+	auto shapeElement = new ShapeFormElement{};
+	auto attr = grid({{(new SequentialLayoutFormElement{})->setVertical()
 			->setListOfItems([](Item* i){return (static_cast<VComposite*>(i))->attributes();})}})
 		->setColumnStretchFactor(1, 1);
 
 	auto completeHeader2 = completeHeader->clone();
 	completeHeader2->setColumnStretchFactor(1, 1);
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 		// place the top left corner of the content element
 		->put(TheLeftOf, completeHeader2, 10, FromLeftOf, attr)
 		->put(TheTopOf, attr, AtBottomOf, completeHeader2)
@@ -127,8 +127,8 @@ QList<Item*> VComposite::attributes()
 		if (	attributes_.size() <= attributeIndex
 				|| static_cast<SequentialLayout*>(attributes_[attributeIndex])->at<Item>(1)->node() != attr[i].second)
 		{
-			auto s = new SequentialLayout(nullptr);
-			s->append(new Text(s, attr[i].first));
+			auto s = new SequentialLayout{nullptr};
+			s->append(new Text{s, attr[i].first});
 			s->append(renderer()->render(s, attr[i].second));
 			attributes_.insert(attributeIndex, s);
 		}

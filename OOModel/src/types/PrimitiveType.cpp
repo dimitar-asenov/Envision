@@ -57,7 +57,7 @@ PrimitiveType::PrimitiveTypes PrimitiveType::resultFromBinaryOperation(Primitive
 
 PrimitiveType* PrimitiveType::clone() const
 {
-	return new PrimitiveType(*this);
+	return new PrimitiveType{*this};
 }
 
 }

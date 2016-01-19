@@ -117,9 +117,9 @@ inline QSize Shape::innerSize(int outterWidth, int outterHeight) const
 inline QSize Shape::outterSize(int innerWidth, int innerHeight) const
 { return outterSize(QSize(innerWidth, innerHeight)); }
 
-template <typename Base, typename Actual> inline Base* Shape::makeDefaultStyle() { return new Actual(); }
+template <typename Base, typename Actual> inline Base* Shape::makeDefaultStyle() { return new Actual{}; }
 template <typename Base, typename Actual> inline Base* Shape::makeDefaultShape(Item* parent)
-{return new Actual(parent);}
+{return new Actual{parent};}
 
 template <typename ShapeClass> inline void Shape::registerShape()
 {

@@ -64,7 +64,7 @@ void VDeclarationConstantSz::initializeForms()
 {
 	auto stretchItem = item<EmptyItem>(&I::stretchItem_, [](I* v){return &v->style()->stretchItem();});
 
-	auto content = (new GridLayoutFormElement())
+	auto content = (new GridLayoutFormElement{})
 				->setHorizontalSpacing(5)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
@@ -75,7 +75,7 @@ void VDeclarationConstantSz::initializeForms()
 						return &v->style()->name();
 					}));
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 				->put(TheVCenterOf, content, AtVCenterOf, stretchItem)
 				->put(TheHCenterOf, content, AtHCenterOf, stretchItem));
 }

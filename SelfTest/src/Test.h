@@ -119,7 +119,7 @@ inline Test<PluginClass, TestName>::Test() : SelfTest::Test{typeName<TestName>()
 template<typename PluginClass, typename TestName>
 inline bool Test<PluginClass, TestName>::init()
 {
-	SelfTest::TestManager<PluginClass>::add([](){return new TestName();}, typeName<TestName>().className_);
+	SelfTest::TestManager<PluginClass>::add([](){return new TestName{};}, typeName<TestName>().className_);
 	return true;
 }
 

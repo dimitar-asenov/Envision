@@ -37,7 +37,7 @@ ClangFrontendActionFactory::ClangFrontendActionFactory(ClangAstVisitor* visitor,
 
 clang::FrontendAction* ClangFrontendActionFactory::create()
 {
-	return new TranslateFrontendAction(visitor_, log_);
+	return new TranslateFrontendAction{visitor_, log_};
 }
 
 }

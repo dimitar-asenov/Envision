@@ -187,7 +187,7 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 											 && !(rightside && parent->descriptor()->postfix().isEmpty()));
 	if (wrap_parent)
 	{
-		Expression* placeholder = new Empty();
+		Expression* placeholder = new Empty{};
 		replace(top, parent, placeholder);
 		replace(top, op, leftside ? op->first(true) : op->last(true));
 		if (leftside) op->prepend(parent);
@@ -213,7 +213,7 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 
 	// Disconnect top_op from the the entire tree and from it's first and last
 	// Note that if we've reached this point then first and last must be two different nodes
-	Expression* top_op_placeholder = new Empty();
+	Expression* top_op_placeholder = new Empty{};
 	replace(top, top_op, top_op_placeholder);
 	Expression* top_op_last = top_op->last(true);   // Special case when rightside: top_op_last == to_wrap
 	Expression* top_op_first = top_op->first(true); // Special case when leftside: top_op_first == to_wrap
@@ -222,7 +222,7 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 	Expression* to_wrap_placeholder = nullptr;
 	if ( (leftside && to_wrap != top_op_first) || (rightside && to_wrap != top_op_last) )
 	{
-		to_wrap_placeholder = new Empty();
+		to_wrap_placeholder = new Empty{};
 		replace(top, to_wrap, to_wrap_placeholder);
 	}
 

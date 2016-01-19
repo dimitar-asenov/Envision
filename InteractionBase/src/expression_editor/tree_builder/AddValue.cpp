@@ -38,7 +38,7 @@ AddValue::AddValue(const QString& text) : text_{text}
 
 void AddValue::perform(ExpressionTreeBuilder& tb)
 {
-	Value* val = new Value(text_);
+	Value* val = new Value{text_};
 	if (tb.top() ) tb.unfinished().last()->addNext(val);
 	else	tb.top() = val;
 

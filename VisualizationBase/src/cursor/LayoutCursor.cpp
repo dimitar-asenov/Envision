@@ -31,14 +31,14 @@
 namespace Visualization {
 
 LayoutCursor::LayoutCursor(Item* owner, CursorType type)
-	: Cursor(owner, type, new CursorShapeItem(this)), x_{0}, y_{0}, index_{0}, isAtBoundary_{false},
+	: Cursor(owner, type, new CursorShapeItem{this}), x_{0}, y_{0}, index_{0}, isAtBoundary_{false},
 	  ownerElement_{nullptr}
 {
 }
 
 LayoutCursor* LayoutCursor::clone() const
 {
-	return new LayoutCursor(*this);
+	return new LayoutCursor{*this};
 }
 
 void LayoutCursor::update()

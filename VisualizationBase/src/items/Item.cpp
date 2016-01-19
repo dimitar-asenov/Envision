@@ -528,7 +528,7 @@ QList<ItemRegion> Item::regions()
 		{
 			regs.append(ItemRegion(boundingRect_.toRect()));
 
-			Cursor* cur = new Cursor(this, Cursor::BoxCursor);
+			Cursor* cur = new Cursor{this, Cursor::BoxCursor};
 			cur->setRegion( boundingRect_.toRect() );
 			cur->setPosition( boundingRect_.center().toPoint() );
 			regs.last().setCursor(cur);

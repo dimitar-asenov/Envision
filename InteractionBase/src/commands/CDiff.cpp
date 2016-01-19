@@ -63,7 +63,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 	// get GitRepository
 	QString path("projects/");
 	path.append(managerName);
-	std::shared_ptr<FilePersistence::GitRepository> repository(new GitRepository(path));
+	std::shared_ptr<FilePersistence::GitRepository> repository(new GitRepository{path});
 
 	headManager->setName("HEAD");
 
@@ -75,7 +75,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 				{ return commit->getFileContent(filename, data, size); }
 			);
 
-	auto revisionManager = new Model::TreeManager();
+	auto revisionManager = new Model::TreeManager{};
 	revisionManager->load(fileStore, managerName, false);
 	revisionManager->setName(name);
 
@@ -243,7 +243,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 
 	} ) );
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization::Item* target,

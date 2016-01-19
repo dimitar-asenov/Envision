@@ -40,7 +40,7 @@ Timer* Timer::timer(const QString& timer)
 	if (timers().contains(timer))
 		return timers().value(timer);
 
-	auto t = new Timer();
+	auto t = new Timer{};
 	timers().insert(timer, t);
 	return t;
 }

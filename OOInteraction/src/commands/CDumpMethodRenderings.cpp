@@ -47,10 +47,10 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 	{
 		QFile methodSpecificationFile{name};
 		if (!methodSpecificationFile.exists())
-			return new CommandResult( new CommandError("Could not find file " + name));
+			return new CommandResult( new CommandError{"Could not find file " + name});
 
 		if (!methodSpecificationFile.open(QIODevice::ReadOnly | QIODevice::Text))
-			return new CommandResult( new CommandError("Could not open file " + name));
+			return new CommandResult( new CommandError{"Could not open file " + name});
 
 		QTextStream textStream(&methodSpecificationFile);
 
@@ -70,7 +70,7 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 	{
 		bool matched = reg.exactMatch(methodSig);
 		if (!matched)
-			return new CommandResult( new CommandError("Format mismatch on line: " + methodSig));
+			return new CommandResult( new CommandError{"Format mismatch on line: " + methodSig});
 
 		if (reg.capturedTexts()[1] == "skip")
 		{
@@ -112,7 +112,7 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 			return new CommandResult( new CommandError("Target path not found: " + path.join(".")));
 	}
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 void CDumpMethodRenderings::printPath(Visualization::Item* item, QStringList path, int itemNumber, int& numPrinted,

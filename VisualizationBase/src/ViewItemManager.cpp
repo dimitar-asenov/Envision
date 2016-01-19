@@ -114,7 +114,7 @@ ViewItem* ViewItemManager::newViewItem(const QString name, QPoint position)
 {
 	//If the name is invalid, don't create a new view
 	if (!ViewItem::isValidName(name)) return nullptr;
-	auto result = new ViewItem(nullptr, name);
+	auto result = new ViewItem{nullptr, name};
 	addViewItem(result, position);
 	return result;
 }
@@ -159,7 +159,7 @@ ViewItem* ViewItemManager::loadView(QString name, Model::TreeManager* manager)
 	QTextStream read{&file};
 	QString json;
 	while (!read.atEnd()) json = json + read.readLine();
-	ViewItem* view = new ViewItem(nullptr);
+	ViewItem* view = new ViewItem{nullptr};
 	view->fromJson(QJsonDocument::fromJson(json.toUtf8()));
 	return view;
 }

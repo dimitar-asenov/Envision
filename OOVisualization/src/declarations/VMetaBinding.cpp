@@ -43,7 +43,7 @@ VMetaBinding::VMetaBinding(Item* parent, NodeType* node, const StyleType* style)
 
 void VMetaBinding::initializeForms()
 {
-	addForm(new GridLayoutFormElement())
+	addForm(new GridLayoutFormElement{})
 		->setHorizontalSpacing(3)
 		->setVerticalAlignment(LayoutStyle::Alignment::Center)
 		->setNoBoundaryCursors([](Item*){return true;})

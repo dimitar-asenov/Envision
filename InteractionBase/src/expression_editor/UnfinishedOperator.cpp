@@ -37,7 +37,7 @@ UnfinishedOperator::UnfinishedOperator(OperatorDescriptor* descriptor, Operator*
 	: Operator{descriptor, parent}, num_complete_{0}
 {
 	for (int i = 0; i<descriptor->numOperands(); ++i)
-		append(new Empty());
+		append(new Empty{});
 }
 
 bool UnfinishedOperator::isComplete()
@@ -97,7 +97,7 @@ Operator* UnfinishedOperator::createFinished()
 	for (int i = 0; i<size(); ++i)
 	{
 		op->append(first(true));
-		append( new Empty() );
+		append( new Empty{} );
 	}
 
 	num_complete_ = 0;
@@ -114,7 +114,7 @@ UnfinishedOperator* UnfinishedOperator::replaceFinishedWithUnfinished(Expression
 	{
 		if ( !op->descriptor()->isDelimiter(i) )
 		{
-			auto e = op->replaceOperand(op->operands().at(operandIndex), new Empty());
+			auto e = op->replaceOperand(op->operands().at(operandIndex), new Empty{});
 			unf->addNext(e);
 			++operandIndex;
 		}

@@ -48,7 +48,7 @@ REGISTER_ATTRIBUTE(MethodCallExpression, cKind, Integer, false, false, true)
 MethodCallExpression::MethodCallExpression(const QString& name, Expression* referencePrefix)
 : Super(nullptr, MethodCallExpression::getMetaData())
 {
-	setCallee(new ReferenceExpression(name, referencePrefix));
+	setCallee(new ReferenceExpression{name, referencePrefix});
 	setMethodCallKind(MethodCallKind::Call);
 }
 
@@ -90,19 +90,19 @@ Type* MethodCallExpression::type()
 		if (auto ft = dynamic_cast<FunctionType*>(calleeType))
 		{
 			// TODO: handle multiple return values
-			if (ft->results().isEmpty()) ret = new PrimitiveType(PrimitiveType::VOID, true);
+			if (ft->results().isEmpty()) ret = new PrimitiveType{PrimitiveType::VOID, true};
 			else ret = ft->results().first()->clone();
 		}
 
 		SAFE_DELETE(calleeType);
 
 		if (ret) return ret;
-		else return new ErrorType("Unresolved reference to a method");
+		else return new ErrorType{"Unresolved reference to a method"};
 	}
 
 
 	if (mdef->results()->size() == 0)
-		return new PrimitiveType(PrimitiveType::VOID, true);
+		return new PrimitiveType{PrimitiveType::VOID, true};
 	else
 	{
 		// TODO: handle multiple return values

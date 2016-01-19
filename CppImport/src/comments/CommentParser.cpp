@@ -34,7 +34,7 @@ Comments::CommentNode* CommentParser::parseComment(clang::comments::Comment* com
 	collectedText_.clear();
 	// handle the current comment
 	processComment(comment);
-	return new Comments::CommentNode(collectedText_);
+	return new Comments::CommentNode{collectedText_};
 }
 
 void CommentParser::processComment(clang::comments::Comment* comment)

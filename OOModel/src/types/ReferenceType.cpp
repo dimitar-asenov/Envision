@@ -51,7 +51,7 @@ bool ReferenceType::equals(const Type* other) const
 
 ReferenceType* ReferenceType::clone() const
 {
-	return new ReferenceType(*this);
+	return new ReferenceType{*this};
 }
 
 }

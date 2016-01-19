@@ -95,7 +95,7 @@ ProfileJob* Profiler::findJob(const QString& jobName, const QString& fileName)
 	auto jobEntry = jobMap_.find(jobName);
 	if (jobEntry != jobMap_.end()) return *jobEntry;
 
-	auto job = new ProfileJob();
+	auto job = new ProfileJob{};
 	job->jobName = jobName;
 	job->fileName = fileName;
 	jobMap_.insert(jobName, job);

@@ -40,7 +40,7 @@ void CompositeNode::initType()
 	Node::registerNodeType("CompositeNode",
 			[](Node* parent) -> Node* { return CompositeNode::createDefaultInstance(parent);},
 			[](Node *parent, PersistentStore &store, bool partialLoadHint) -> Node*
-			{ return new CompositeNode(parent, store, partialLoadHint);});
+			{ return new CompositeNode{parent, store, partialLoadHint};});
 
 	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)
 		attributesToRegisterAtInitialization_().at(i).first =
@@ -49,7 +49,7 @@ void CompositeNode::initType()
 
 CompositeNode* CompositeNode::createDefaultInstance( Node* parent)
 {
-	return new CompositeNode(parent);
+	return new CompositeNode{parent};
 }
 
 AttributeChain& CompositeNode::topLevelMeta()
@@ -89,7 +89,7 @@ CompositeNode::CompositeNode(const CompositeNode& other)
 	}
 }
 
-CompositeNode* CompositeNode::clone() const { return new CompositeNode(*this); }
+CompositeNode* CompositeNode::clone() const { return new CompositeNode{*this}; }
 
 CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
 	Super{parent}, meta_{metaData}, subnodes_{meta_.numLevels()}
@@ -198,7 +198,7 @@ void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 	auto attribute = meta_.attribute(attributeIndex);
 	Q_ASSERT( node || attribute.optional());
 	Q_ASSERT( !node || node->isSubtypeOf(attribute.type()));
-	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes_));
+	execute(new CompositeNodeChangeChild{this, node, attributeIndex, &subnodes_});
 }
 
 Node* CompositeNode::get(const QString &attributeName) const
@@ -243,7 +243,7 @@ bool CompositeNode::replaceChild(Node* child, Node* replacement)
 	CompositeIndex index = indexOf(child);
 	Q_ASSERT(index.isValid());
 	Q_ASSERT( !replacement || replacement->isSubtypeOf(meta_.attribute(index).type()));
-	execute(new CompositeNodeChangeChild(this, replacement, index, &subnodes_));
+	execute(new CompositeNodeChangeChild{this, replacement, index, &subnodes_});
 	return true;
 }
 
@@ -361,7 +361,7 @@ void CompositeNode::remove(const CompositeIndex &attributeIndex)
 	Q_ASSERT(attributeIndex.isValid());
 
 	if ( meta_.attribute(attributeIndex).optional() )
-		execute(new CompositeNodeChangeChild(	this, nullptr, attributeIndex, &subnodes_));
+		execute(new CompositeNodeChangeChild{	this, nullptr, attributeIndex, &subnodes_});
 	else
 		execute(new CompositeNodeChangeChild(	this, Node::createNewNode(meta_.attribute(attributeIndex).type(), nullptr),
 				attributeIndex, &subnodes_));

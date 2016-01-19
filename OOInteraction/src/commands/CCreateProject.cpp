@@ -41,7 +41,7 @@ CCreateProject::CCreateProject() : CreateNamedObjectWithAttributes{"project", {}
 Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& /*attributes*/)
 {
-	auto project = new OOModel::Project();
+	auto project = new OOModel::Project{};
 	if (!name.isEmpty()) project->setName(name);
 
 	if (auto parent = DCast<OOModel::Project> (target->node()))
@@ -58,7 +58,7 @@ Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*
 			{
 				project->libraries()->append(new Model::UsedLibrary(manager->name()));
 				auto import = new OOModel::NameImport( new OOModel::ReferenceExpression("lang",
-																		new OOModel::ReferenceExpression("java")));
+																		new OOModel::ReferenceExpression{"java"}));
 				import->setImportAll(true);
 				project->subDeclarations()->append(import);
 				break;
@@ -68,7 +68,7 @@ Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*
 		CommandHelper::addFreshTree(project, target);
 	}
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

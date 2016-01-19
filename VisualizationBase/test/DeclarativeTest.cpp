@@ -65,23 +65,23 @@ void DeclarativeTest::initializeForms()
 	addForm(testNodeItemElement);
 
 	// Test 3: GridLayoutElement
-	addForm((new GridLayoutFormElement())
+	addForm((new GridLayoutFormElement{})
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setHorizontalAlignment(LayoutStyle::Alignment::Right)
 				->put(0, 0, firstElement)
 				->put(0, 1, testNodeItemElement)
-				->put(1, 1, (new GridLayoutFormElement())
+				->put(1, 1, (new GridLayoutFormElement{})
 									->put(0, 0, secondElement)
 									->put(1, 1, thirdElement))
 				->put(2, 0, fourthElement));
 
 	// Test 4: GridLayoutElement with merged cells
-	addForm((new GridLayoutFormElement())
+	addForm((new GridLayoutFormElement{})
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setHorizontalAlignment(LayoutStyle::Alignment::Center)
 				->setColumnStretchFactor(1, 1)
 				->setRowStretchFactors(1)
-				->put(0, 0, (new GridLayoutFormElement())
+				->put(0, 0, (new GridLayoutFormElement{})
 									->setHorizontalSpacing(10)
 									->put(0, 0, firstElement)
 									->put(1, 0, secondElement)
@@ -93,13 +93,13 @@ void DeclarativeTest::initializeForms()
 				);
 
 	// Test 5: Size dependencies inside the grid & alignment
-	addForm((new GridLayoutFormElement())
+	addForm((new GridLayoutFormElement{})
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
-				->put(0, 0, (new GridLayoutFormElement())
+				->put(0, 0, (new GridLayoutFormElement{})
 									->setHorizontalSpacing(300)
 									->put(0, 0, firstElement)
 									->put(1, 0, secondElement)))
-				->put(0, 1, (new GridLayoutFormElement())
+				->put(0, 1, (new GridLayoutFormElement{})
 									->setColumnStretchFactor(1, 1)
 									->put(0, 0, testNodeItemElement)
 									->put(2, 0, thirdElement)
@@ -108,7 +108,7 @@ void DeclarativeTest::initializeForms()
 				->setCellSpanning(1, 2);
 
 	// Test 6: Anchor layout
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 				->put(TheBottomOf, firstElement, 20, FromTopOf, testNodeItemElement)
 				->put(TheLeftOf, firstElement, AtLeftOf, testNodeItemElement)
 				->put(TheVCenterOf, secondElement, AtCenterOf, firstElement)
@@ -134,14 +134,14 @@ void DeclarativeTest::initializeForms()
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Top)
 										->put(0, 1, testNodeItemElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 				->put(TheTopOf, verticalGrid1, AtTopOf, verticalGrid2)
 				->put(TheBottomOf, verticalGrid1, AtBottomOf, verticalGrid2)
 				->put(TheLeftOf, verticalGrid1, 20, FromRightOf, verticalGrid2));
 
 	// Test 8: Anchor Layout out of order specification with more elements, circular dependencies + shape element test
-	auto shapeElement = new ShapeFormElement();
-	addForm((new AnchorLayoutFormElement())
+	auto shapeElement = new ShapeFormElement{};
+	addForm((new AnchorLayoutFormElement{})
 				// arrange them on top of each other
 				->put(TheTopOf, firstElement, 20, FromBottomOf, secondElement)
 				->put(TheTopOf, secondElement, 20, FromBottomOf, thirdElement)
@@ -160,17 +160,17 @@ void DeclarativeTest::initializeForms()
 				->put(TheBottomOf, shapeElement, 10, FromBottomOf, secondElement));
 
 	// Test 9: Test sequential layout
-	FormElement* horizontalSequential = (new SequentialLayoutFormElement())
+	FormElement* horizontalSequential = (new SequentialLayoutFormElement{})
 			->setSpaceBetweenElements(5)
-			->setListOfItems([](Item*){return QList<Item*>{new TestBox("a", false, false), new TestBox("b", false, false),
-				new TestBox("cde", false, false)};});
-	FormElement* verticalSequential = (new SequentialLayoutFormElement())
+			->setListOfItems([](Item*){return QList<Item*>{new TestBox{"a", false, false}, new TestBox{"b", false, false},
+				new TestBox{"cde", false, false}};});
+	FormElement* verticalSequential = (new SequentialLayoutFormElement{})
 			->setSpaceBetweenElements(5)
-			->setListOfNodes([](Item*){return QList<Model::Node*>{new TestBoxNode("dfsdfs", true, false),
-																					new TestBoxNode("sfsdfsdf", false, false)};})
+			->setListOfNodes([](Item*){return QList<Model::Node*>{new TestBoxNode{"dfsdfs", true, false},
+																					new TestBoxNode{"sfsdfsdf", false, false}};})
 			->setVertical();
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			->put(TheLeftOf, horizontalSequential, 20, FromRightOf, verticalSequential));
 }
 

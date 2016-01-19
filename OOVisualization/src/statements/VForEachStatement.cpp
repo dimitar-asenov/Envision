@@ -47,7 +47,7 @@ VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleTy
 
 void VForEachStatement::initializeForms()
 {
-	auto header = (new GridLayoutFormElement())
+	auto header = (new GridLayoutFormElement{})
 					->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 					->setVerticalAlignment(LayoutStyle::Alignment::Center)
 					->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
@@ -58,14 +58,14 @@ void VForEachStatement::initializeForms()
 					->put(3, 0, item<NodeWrapper>(&I::collection_, [](I* v){return v->node()->collection();},
 																					[](I* v){return &v->style()->collection();}));
 
-	auto body = (new GridLayoutFormElement())
+	auto body = (new GridLayoutFormElement{})
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
 			->put(0, 0, item(&I::body_, [](I* v){return v->node()->body();}));
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 		->put(TheTopOf, body, 3, FromBottomOf, header)
 		->put(TheTopOf, shapeElement, AtCenterOf, header)
 		->put(TheLeftOf, shapeElement, AtLeftOf, header)

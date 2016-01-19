@@ -35,7 +35,7 @@ CCreateModule::CCreateModule(): CreateNamedObjectWithAttributes{"module", {{}}}
 Interaction::CommandResult* CCreateModule::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList&)
 {
-	auto newModule = new OOModel::Module();
+	auto newModule = new OOModel::Module{};
 	if (!name.isEmpty()) newModule->setName(name);
 
 	if (auto parent = DCast<OOModel::Project> (target->node()))
@@ -50,7 +50,7 @@ Interaction::CommandResult* CCreateModule::executeNamed(Visualization::Item* /*s
 	}
 	else CommandHelper::addFreshTree(newModule, target);
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

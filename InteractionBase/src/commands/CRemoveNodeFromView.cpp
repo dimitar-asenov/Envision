@@ -53,7 +53,7 @@ CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *so
 	//Go to the first parent of the source which has a node, which is a top-level item (as canInterpret checks)
 	auto ancestor = potentialTopLevelParent(source);
 	ancestor->scene()->currentViewItem()->removeNode(ancestor->node());
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QString CRemoveNodeFromView::description(Visualization::Item *, Visualization::Item *,

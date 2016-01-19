@@ -164,7 +164,7 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
 		: Super {parent, store, loadPartially} {}																								\
 																																							\
-	className* className::clone() const { return new className(*this); }
+	className* className::clone() const { return new className{*this}; }
 /*********************************************************************************************************************/
 
 /**
@@ -183,7 +183,7 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
 		: Super (parent, store, loadPartially, className::getMetaData()) {}															\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
-	className* className::clone() const { return new className(*this); }																\
+	className* className::clone() const { return new className{*this}; }																\
 																																							\
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
 		: Super {parent, metaData} {}																												\
@@ -205,7 +205,7 @@ void className::initType()																															\
 		#className,																																		\
 		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
 		[](::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)-> ::Model::Node*						\
-			{ return new className(parent, store, loadPartially);}																		\
+			{ return new className{parent, store, loadPartially};}																		\
 	);																																						\
 }																																							\
 
@@ -220,7 +220,7 @@ void className::initType()																															\
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
 NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																					\
-className* className::createDefaultInstance( Node* parent) { return new className(parent); }									\
+className* className::createDefaultInstance( Node* parent) { return new className{parent}; }									\
 
 /*********************************************************************************************************************/
 
@@ -254,7 +254,7 @@ void className::initType()																															\
 		#className,																																		\
 		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
 		[](::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)	-> ::Model::Node* 				\
-			{ return new className(parent, store, loadPartially);}																		\
+			{ return new className{parent, store, loadPartially};}																		\
 	);																																						\
 																																							\
 	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
@@ -311,7 +311,7 @@ QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& className::attribu
  */
 #define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																		\
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
-className* className::createDefaultInstance( Node* parent) { return new className(parent); }									\
+className* className::createDefaultInstance( Node* parent) { return new className{parent}; }									\
 
 /**
  * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
@@ -383,7 +383,7 @@ private:																																					\
 	type* node = static_cast<type*> (get(name##Index));																					\
 	if (!node)																																			\
 	{																																						\
-		node = new type();																															\
+		node = new type{};																															\
 		set(name##Index, node);																														\
 	}																																						\
 	node->set(val);
@@ -398,7 +398,7 @@ private:																																					\
 	type* node = static_cast<type*> (self_->get(attr_[name##Index]));																	\
 	if (!node)																																			\
 	{																																						\
-		node = new type();																															\
+		node = new type{};																															\
 		self_->set(attr_[name##Index], node);																									\
 	}																																						\
 	node->set(val);

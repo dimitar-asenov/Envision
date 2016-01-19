@@ -45,7 +45,7 @@ StringLiteral::StringLiteral(const QString& value)
 
 Type* StringLiteral::type()
 {
-	return new StringType();
+	return new StringType{};
 }
 
 }

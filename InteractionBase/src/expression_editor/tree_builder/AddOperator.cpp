@@ -38,7 +38,7 @@ AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_{descripto
 
 void AddOperator::perform(ExpressionTreeBuilder& tb)
 {
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
+	UnfinishedOperator* unf = new UnfinishedOperator{descriptor_};
 
 	if (tb.left())
 	{

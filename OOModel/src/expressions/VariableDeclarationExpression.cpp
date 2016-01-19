@@ -44,17 +44,17 @@ VariableDeclarationExpression::VariableDeclarationExpression(VariableDeclaration
 }
 
 VariableDeclarationExpression::VariableDeclarationExpression(const QString& name, Expression* type)
-: VariableDeclarationExpression(new VariableDeclaration(name, type))
+: VariableDeclarationExpression(new VariableDeclaration{name, type})
 {}
 
 VariableDeclarationExpression::VariableDeclarationExpression
 		(const QString& name, Expression* type, Expression* initialValue)
-: VariableDeclarationExpression(new VariableDeclaration(name, type, initialValue))
+: VariableDeclarationExpression(new VariableDeclaration{name, type, initialValue})
 {}
 
 VariableDeclarationExpression::VariableDeclarationExpression
 		(const QString& name, Expression* type, Modifier::Modifiers mod, Expression* initialValue)
-: VariableDeclarationExpression(new VariableDeclaration(name, type, mod, initialValue))
+: VariableDeclarationExpression(new VariableDeclaration{name, type, mod, initialValue})
 {}
 
 bool VariableDeclarationExpression::definesSymbol() const

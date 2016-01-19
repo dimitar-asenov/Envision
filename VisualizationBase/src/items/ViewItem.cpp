@@ -51,7 +51,7 @@ ViewItem::ViewItem(Item* parent, QString name, StyleType* style) :
 
 void ViewItem::initializeForms()
 {
-	addForm((new DynamicGridFormElement())
+	addForm((new DynamicGridFormElement{})
 			->setSpacing(10, 10)->setMargins(10)
 			->setMajorAxis(GridLayouter::ColumnMajor)
 			->setNodesGetter([](Item* v)
@@ -291,7 +291,7 @@ void ViewItem::addArrowLayer(QString layer, bool enabled)
 	auto layerName = fullLayerName(layer);
 	auto arrowLayer = scene()->overlayGroup(layerName);
 	if (!arrowLayer) arrowLayer = scene()->addOverlayGroup(layerName);
-	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay(from, to));});
+	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay{from, to});});
 	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
 	if (enabled) arrowLayer->show();
 	else arrowLayer->hide();

@@ -88,7 +88,7 @@ void VList::initializeForms()
 							{return static_cast<VList*>(i)->style()->itemsStyle().noInnerCursors();};
 
 	// Form 0: horizontal orientation
-	addForm((new SequentialLayoutFormElement())
+	addForm((new SequentialLayoutFormElement{})
 			->setHorizontal()->setSpaceBetweenElements(spaceBetweenElementsGetter)
 			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
 			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
@@ -97,7 +97,7 @@ void VList::initializeForms()
 			->setListOfNodes(listOfNodesGetter)
 			->setMinWidth(3)->setMinHeight(10));
 	// Form 1: vertical orientation
-	addForm((new SequentialLayoutFormElement())
+	addForm((new SequentialLayoutFormElement{})
 			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
 			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
 			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
@@ -161,7 +161,7 @@ QList<ItemRegion> VList::regions()
 	//Otherwise return a whole item region
 	auto ir = ItemRegion(boundingRect().toRect());
 
-	Cursor* cur = new Cursor(this, Cursor::BoxCursor);
+	Cursor* cur = new Cursor{this, Cursor::BoxCursor};
 	cur->setRegion( ir.region() );
 	cur->setPosition( ir.region().center() );
 	ir.setCursor(cur);

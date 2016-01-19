@@ -52,7 +52,7 @@ void VProject::determineChildren()
 
 void VProject::initializeForms()
 {
-	auto headerElement = (new GridLayoutFormElement())
+	auto headerElement = (new GridLayoutFormElement{})
 				->setHorizontalSpacing(10)
 				->setColumnStretchFactor(0, 1)
 				->setColumnStretchFactor(3, 1)
@@ -61,7 +61,7 @@ void VProject::initializeForms()
 				->put(1, 0, item<Static>(&I::icon_, &StyleType::icon))
 				->put(2, 0, item<VText>(&I::name_, &NodeType::nameNode, &StyleType::name));
 
-	auto contentElement = (new GridLayoutFormElement())
+	auto contentElement = (new GridLayoutFormElement{})
 				->setSpacing(5)
 				->setColumnStretchFactor(1, 1)
 				->setNoBoundaryCursors([](Item*){return true;})
@@ -79,7 +79,7 @@ void VProject::initializeForms()
 						[](I* v) {return v->node()->metaCalls();},
 						&StyleType::metaCalls))
 				->put(0, 4, item(&I::comment_, [](I* v){return v->node()->comment();}))
-				->put(0, 5, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+				->put(0, 5, (new DynamicGridFormElement{})->setSpacing(10, 10)->setMargins(10)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 							[](Item* v)->QVector<QVector<Model::Node*>>{
@@ -90,9 +90,9 @@ void VProject::initializeForms()
 									Visualization::GridLayouter::ColumnMajor);
 						}));
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 		// place the top left corner of the content element
 		->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
 		->put(TheTopOf, contentElement, AtBottomOf, headerElement)

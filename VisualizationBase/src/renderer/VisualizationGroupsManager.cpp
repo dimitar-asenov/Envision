@@ -118,7 +118,7 @@ void VisualizationGroupsManager::prepareAddingVisualizationGroupOrVisualization(
 
 	if (!groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel])
 	{
-		auto newVisualizationGroup = new VisualizationGroup();
+		auto newVisualizationGroup = new VisualizationGroup{};
 
 		groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel] = newVisualizationGroup;
 		groupsTypeSzPurpose_[nodeTypeId][semanticZoomLevel][purpose] = newVisualizationGroup;

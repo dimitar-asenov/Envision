@@ -83,7 +83,7 @@ void ActionPrompt::initializeForms()
 	},
 	{
 		Merge(
-		(new SequentialLayoutFormElement())->setListOfItems([](Item* item) -> QList<Item*> {
+		(new SequentialLayoutFormElement{})->setListOfItems([](Item* item) -> QList<Item*> {
 			QList<Item*> ret;
 			auto self = static_cast<ActionPrompt*>(item);
 
@@ -111,7 +111,7 @@ void ActionPrompt::setHighlight(bool show)
 
 	if (show && currentActionReceiver_)
 	{
-		highlight_ = new Visualization::SelectionOverlay(currentActionReceiver_);
+		highlight_ = new Visualization::SelectionOverlay{currentActionReceiver_};
 		Q_ASSERT(scene());
 		scene()->addTopLevelItem(highlight_);
 	}

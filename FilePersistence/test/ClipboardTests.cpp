@@ -150,15 +150,15 @@ class PasteListFromClipboard : public Test<FilePersistencePlugin, PasteListFromC
 	Model::TreeManager manager("test", root);
 
 	manager.beginModification(root, "elems");
-	Model::Text* first = new Model::Text();
+	Model::Text* first = new Model::Text{};
 	first->set("first");
 	root->append(first);
-	Model::Text* second = new Model::Text();
+	Model::Text* second = new Model::Text{};
 	second->set("second");
 	root->append(second);
-	Model::List* list = new Model::List();
+	Model::List* list = new Model::List{};
 	root->append(list);
-	Model::Text* third = new Model::Text();
+	Model::Text* third = new Model::Text{};
 	third->set("third");
 	list->append(third);
 	manager.endModification();
@@ -181,15 +181,15 @@ class PasteInListFromClipboard : public Test<FilePersistencePlugin, PasteInListF
 	Model::TreeManager manager("test", root);
 
 	manager.beginModification(root, "elems");
-	Model::Text* first = new Model::Text();
+	Model::Text* first = new Model::Text{};
 	first->set("first");
 	root->append(first);
-	Model::Text* second = new Model::Text();
+	Model::Text* second = new Model::Text{};
 	second->set("second");
 	root->append(second);
-	Model::List* list = new Model::List();
+	Model::List* list = new Model::List{};
 	root->append(list);
-	Model::Text* third = new Model::Text();
+	Model::Text* third = new Model::Text{};
 	third->set("third");
 	list->append(third);
 	manager.endModification();

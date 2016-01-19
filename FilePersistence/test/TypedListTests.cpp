@@ -40,7 +40,7 @@ class LoadingTypedList : public Test<FilePersistencePlugin, LoadingTypedList> { 
 {
 	PersistentStore* store{};
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
@@ -70,7 +70,7 @@ class SavingTypedList : public Test<FilePersistencePlugin, SavingTypedList> { pu
 	PersistentStore* store{};
 	QString testDir;
 
-	auto s = new SimpleTextFileStore();
+	auto s = new SimpleTextFileStore{};
 	testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
 	s->setBaseFolder(testDir);
 	store = s;
@@ -79,10 +79,10 @@ class SavingTypedList : public Test<FilePersistencePlugin, SavingTypedList> { pu
 	Model::TreeManager manager(list);
 
 	manager.beginModification(list, "create");
-	auto one = new Text();
+	auto one = new Text{};
 	one->set("one");
 	list->append(one);
-	auto two = new Text();
+	auto two = new Text{};
 	two->set("two");
 	list->append(two);
 	manager.endModification();

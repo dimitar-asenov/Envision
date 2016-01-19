@@ -86,7 +86,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	alloyModelGroup->clear();
 
 	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
-	auto aBrowserComment = new Comments::VCommentBrowser(nullptr, anURl);
+	auto aBrowserComment = new Comments::VCommentBrowser{nullptr, anURl};
 	aBrowserComment->updateSize(QSize(720, 540));
 	aBrowserComment->browser()->settings()->setObjectCacheCapacities(0, 0, 0); //disable the cache
 
@@ -97,7 +97,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 		return QString("AlloyModels");
 	})));
 
-	return new Interaction::CommandResult();
+	return new Interaction::CommandResult{};
 }
 
 }

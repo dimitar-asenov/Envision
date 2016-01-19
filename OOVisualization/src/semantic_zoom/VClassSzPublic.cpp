@@ -57,7 +57,7 @@ void VClassSzPublic::determineChildren()
 
 void VClassSzPublic::initializeForms()
 {
-	auto headerElement = (new GridLayoutFormElement())
+	auto headerElement = (new GridLayoutFormElement{})
 				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
@@ -87,10 +87,10 @@ void VClassSzPublic::initializeForms()
 				->put(3, 0, item<VList>(&I::baseClasses_, [](I* v){return v->node()->baseClasses();},
 																			[](I* v){return &v->style()->baseClasses();}));
 
-	auto contentElement = (new GridLayoutFormElement())
+	auto contentElement = (new GridLayoutFormElement{})
 				->setSpacing(3)->setColumnStretchFactor(1, 1)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(1, 0, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+				->put(1, 0, (new DynamicGridFormElement{})->setSpacing(10, 10)->setMargins(10)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 						[](Item* v)->QVector<QVector<Model::Node*>>{
@@ -101,16 +101,16 @@ void VClassSzPublic::initializeForms()
 						return Visualization::GridLayouter::arrange(bodyNodes, Visualization::GridLayouter::ColumnMajor);
 					}));
 
-	auto fieldContainerElement = (new GridLayoutFormElement())
+	auto fieldContainerElement = (new GridLayoutFormElement{})
 				->setVerticalSpacing(3)
-				->put(0, 0, (new SequentialLayoutFormElement())->setVertical()
+				->put(0, 0, (new SequentialLayoutFormElement{})->setVertical()
 								->setListOfNodes([](Item* i){return (static_cast<VClassSzPublic*>(i))->publicFields_;}));
 
-	auto shapeElement = new ShapeFormElement();
+	auto shapeElement = new ShapeFormElement{};
 	auto backgroundElement = item<EmptyItem>(&I::fieldBackground_, &StyleType::fieldContainer);
 
 	// Form 0: with field nodes
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 				// place the top left corner of the field container element
 				->put(TheLeftOf, fieldContainerElement, 10, FromLeftOf, headerElement)
 				->put(TheTopOf, fieldContainerElement, 5, FromBottomOf, headerElement)
@@ -131,7 +131,7 @@ void VClassSzPublic::initializeForms()
 				->put(TheBottomOf, backgroundElement, 3, FromBottomOf, fieldContainerElement));
 
 	// Form 1: without field nodes
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 				// place the top left corner of the content element
 				->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
 				->put(TheTopOf, contentElement, AtBottomOf, headerElement)

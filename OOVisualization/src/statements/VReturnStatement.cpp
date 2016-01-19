@@ -44,7 +44,7 @@ VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType
 
 void VReturnStatement::initializeForms()
 {
-	addForm((new GridLayoutFormElement())
+	addForm((new GridLayoutFormElement{})
 				->setTopMargin(5)->setBottomMargin(5)->setHorizontalSpacing(5)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->put(0, 0, item<Static>(&I::symbol_, [](I* v){return &v->style()->symbol();}))

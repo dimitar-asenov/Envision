@@ -204,7 +204,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 							executed = true;
 							entries_.at(selectionIndex_)->execute();
 						}
-						scene()->addPostEventAction(new Visualization::CustomSceneEvent( AutoComplete::hide ));
+						scene()->addPostEventAction(new Visualization::CustomSceneEvent{ AutoComplete::hide });
 						return executed || !explicitSelection_;
 					}
 					break;
@@ -218,7 +218,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			if (entry->visualization()->isAncestorOf(watched))
 			{
 				entry->execute();
-				scene()->addPostEventAction(new Visualization::CustomSceneEvent( AutoComplete::hide ));
+				scene()->addPostEventAction(new Visualization::CustomSceneEvent{ AutoComplete::hide });
 				break;
 			}
 		return true;
@@ -270,7 +270,7 @@ void AutoCompleteVis::updateSelection()
 	{
 		// There is a selected item.
 		if (!selectionEffect_)
-			selectionEffect_ = new QGraphicsColorizeEffect();	// Note we must renew this every time since it will be
+			selectionEffect_ = new QGraphicsColorizeEffect{};	// Note we must renew this every time since it will be
 																				// automatically deleted by the item that owns it.
 
 		entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);

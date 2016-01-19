@@ -55,7 +55,7 @@ Type* BinaryOperation::type()
 	auto op = this->op();
 
 	if (op == EQUALS || op == NOT_EQUALS || op == CONDITIONAL_AND || op == CONDITIONAL_OR)
-		return new PrimitiveType(PrimitiveType::BOOLEAN, true);
+		return new PrimitiveType{PrimitiveType::BOOLEAN, true};
 
 	if (op == ARRAY_INDEX)
 	{
@@ -65,7 +65,7 @@ Type* BinaryOperation::type()
 		if ( auto lat = dynamic_cast<ArrayType*>(lt) )
 			res = lat->elementType()->clone();
 		else
-			res = new ErrorType("Indexing a non array expression");
+			res = new ErrorType{"Indexing a non array expression"};
 
 		SAFE_DELETE(lt);
 		return res;
@@ -81,7 +81,7 @@ Type* BinaryOperation::type()
 
 	Type* res = nullptr;
 	if (((ltp && rtp) || (lts && rts))   &&   (op == GREATER || op == LESS || op == GREATER_EQUALS || op == LESS_EQUALS))
-		res = new PrimitiveType(PrimitiveType::BOOLEAN, true);
+		res = new PrimitiveType{PrimitiveType::BOOLEAN, true};
 	else if (ltp && rtp)
 	{
 		PrimitiveType::PrimitiveTypes primitive = PrimitiveType::resultFromBinaryOperation(ltp->type(), rtp->type());
@@ -89,10 +89,10 @@ Type* BinaryOperation::type()
 		res = new PrimitiveType(primitive, ltp->isValueType());
 	}
 	else if (op == PLUS && ((lts && rts) || (lts && rtp) || (ltp && rts)))
-		res = new StringType();
+		res = new StringType{};
 
 	//TODO: handle operator overloading.
-	if (!res) res = new ErrorType("Incompatible types for binary operation");
+	if (!res) res = new ErrorType{"Incompatible types for binary operation"};
 
 	SAFE_DELETE(lt);
 	SAFE_DELETE(rt);

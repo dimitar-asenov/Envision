@@ -82,7 +82,7 @@ void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMo
 					"|" + QString::number(newSize.width()) + "x" + QString::number(newSize.height()) + "]";
 
 			node->beginModification("Updating image dimensions");
-			node->lines()->replaceChild(child, new Model::Text(updated));
+			node->lines()->replaceChild(child, new Model::Text{updated});
 			node->endModification();
 
 			image->setUpdateNeeded(VCommentImage::StandardUpdate);

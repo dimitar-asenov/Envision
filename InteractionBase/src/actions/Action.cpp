@@ -153,7 +153,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 							cn->endModification();
 
 							item->setUpdateNeededForChildItem(Item::StandardUpdate, nodeToSelect);
-							item->scene()->addPostEventAction(new SetCursorEvent(item, nodeToSelect));
+							item->scene()->addPostEventAction(new SetCursorEvent{item, nodeToSelect});
 						}),
 						[name](Node* node){
 							auto cn = DCast<CompositeNode>(node);
@@ -179,7 +179,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 							cn->endModification();
 
 							item->setUpdateNeededForChildItem(Item::StandardUpdate, nodeToSelect);
-							item->scene()->addPostEventAction(new SetCursorEvent(item, nodeToSelect));
+							item->scene()->addPostEventAction(new SetCursorEvent{item, nodeToSelect});
 						}),
 						[name](Node* node){
 							auto cn = DCast<CompositeNode>(node);
@@ -216,7 +216,7 @@ void Action::createStandardRemoveAction(QList<Action*>& list)
 				cnParent->endModification();
 			}
 
-			scene->addPostEventAction(new SetCursorEvent(scene, parent));
+			scene->addPostEventAction(new SetCursorEvent{scene, parent});
 		}),
 		[](Node* node){
 			return DCast<CompositeNode>(node->parent()) || DCast<List>(node->parent());

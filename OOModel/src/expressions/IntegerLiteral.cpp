@@ -49,7 +49,7 @@ IntegerLiteral::IntegerLiteral(const QString& value) : Super{nullptr, IntegerLit
 
 Type* IntegerLiteral::type()
 {
-	return new PrimitiveType(PrimitiveType::INT, true);
+	return new PrimitiveType{PrimitiveType::INT, true};
 }
 
 int IntegerLiteral::valueAsInt() const

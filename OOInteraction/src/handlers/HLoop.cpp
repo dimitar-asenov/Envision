@@ -65,13 +65,13 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->condition()));
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
+			auto empty = new OOModel::EmptyExpression{};
 			vloop->node()->beginModification("create condition");
 			vloop->node()->setCondition(empty);
 			vloop->node()->endModification();
 
 			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 	}
 	else if (vloop->condition() && vloop->condition()->itemOrChildHasFocus() && (switchHorizontal || createRight))
@@ -83,13 +83,13 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->updateStep()));
 			else
 			{
-				auto empty = new OOModel::EmptyExpression();
+				auto empty = new OOModel::EmptyExpression{};
 				vloop->node()->beginModification("create updateStep");
 				vloop->node()->setUpdateStep(empty);
 				vloop->node()->endModification();
 
 				vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 			}
 		}
 	}
@@ -100,13 +100,13 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->initStep()));
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
+			auto empty = new OOModel::EmptyExpression{};
 			vloop->node()->beginModification("create initStep");
 			vloop->node()->setInitStep(empty);
 			vloop->node()->endModification();
 
 			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 
 	}
@@ -120,13 +120,13 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
+			auto empty = new OOModel::EmptyExpression{};
 			vloop->node()->beginModification("create loop body");
-			vloop->node()->body()->append( new OOModel::ExpressionStatement(empty) );
+			vloop->node()->body()->append( new OOModel::ExpressionStatement{empty} );
 			vloop->node()->endModification();
 
 			vloop->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 
 	}else if (vloop->body() && vloop->body()->itemOrChildHasFocus() && (createDown || createRight))
@@ -136,13 +136,13 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->condition()));
 		else
 		{
-			auto empty = new OOModel::EmptyExpression();
+			auto empty = new OOModel::EmptyExpression{};
 			vloop->node()->beginModification("create condition");
 			vloop->node()->setCondition(empty);
 			vloop->node()->endModification();
 
 			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, empty});
 		}
 
 	}else if (event->modifiers() == Qt::NoModifier

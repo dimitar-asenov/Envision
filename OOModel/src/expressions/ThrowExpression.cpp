@@ -41,7 +41,7 @@ Type* ThrowExpression::type()
 {
 	auto t = expr()->type();
 	t->setValueType(true);
-	return new ThrownExceptionType(t);
+	return new ThrownExceptionType{t};
 }
 
 }

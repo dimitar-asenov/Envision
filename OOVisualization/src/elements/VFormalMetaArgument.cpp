@@ -45,7 +45,7 @@ VFormalMetaArgument::VFormalMetaArgument(Item* parent, NodeType* node, const Sty
 
 void VFormalMetaArgument::initializeForms()
 {
-	addForm(new GridLayoutFormElement())
+	addForm(new GridLayoutFormElement{})
 		->setHorizontalSpacing(3)
 		->setNoBoundaryCursors([](Item*){return true;})
 		->setNoInnerCursors([](Item*){return true;})

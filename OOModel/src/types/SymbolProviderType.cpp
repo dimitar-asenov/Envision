@@ -45,7 +45,7 @@ bool SymbolProviderType::equals(const Type* other) const
 
 SymbolProviderType* SymbolProviderType::clone() const
 {
-	return new SymbolProviderType(*this);
+	return new SymbolProviderType{*this};
 }
 
 }

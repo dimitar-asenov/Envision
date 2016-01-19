@@ -238,7 +238,7 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference, CursorM
 				|| (dir == MoveRightOf && (pc & RightOf))
 				)
 		{
-			TextCursor* tc = new TextCursor(this);
+			TextCursor* tc = new TextCursor{this};
 			tc->setSelectedByDrag(reference.x(), reference.x());
 			scene()->setMainCursor(tc);
 			return true;
@@ -249,7 +249,7 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference, CursorM
 			|| dir == MoveOnRight || dir == MoveOnTopLeft || dir == MoveOnBottomRight || dir == MoveOnCenter)
 	{
 		setFocus();
-		TextCursor* tc = new TextCursor(this);
+		TextCursor* tc = new TextCursor{this};
 
 		auto xEnd = widthInLocal() - 1;
 		auto xMid = widthInLocal()/2;

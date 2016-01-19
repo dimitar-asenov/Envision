@@ -58,7 +58,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 	// get GitRepository
 	QString path("projects/");
 	path.append(managerName);
-	std::shared_ptr<GitRepository> repository(new GitRepository(path));
+	std::shared_ptr<GitRepository> repository(new GitRepository{path});
 
 	bool useFastForward = false;
 
@@ -75,13 +75,13 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 					{ return commit->getFileContent(filename, data, size); }
 				);
 
-		auto revisionManager = new Model::TreeManager();
+		auto revisionManager = new Model::TreeManager{};
 		revisionManager->load(fileStoreRevision, managerName, false);
 		revisionManager->setName(name);
 		headManager->setName(managerName);
 
 
-		auto mergeManager = new Model::TreeManager();
+		auto mergeManager = new Model::TreeManager{};
 		auto fileStoreMerge = new SimpleTextFileStore(merge->mergedTree().get());
 		mergeManager->load(fileStoreMerge, managerName, false);
 		mergeManager->setName("Merge");
@@ -102,7 +102,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 	else
 		Q_ASSERT(false);
 
-	return new CommandResult();
+	return new CommandResult{};
 }
 
 QStringList CMerge::possibleNames(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
