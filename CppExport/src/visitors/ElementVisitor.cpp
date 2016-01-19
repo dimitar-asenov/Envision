@@ -130,4 +130,9 @@ SourceFragment* ElementVisitor::visit(MemberInitializer* memberInitializer)
 	return fragment;
 }
 
+SourceFragment* ElementVisitor::visitTemplateArguments(Model::TypedList<FormalTypeArgument>* typeArguments)
+{
+	return list(typeArguments, this, "templateArgsList");
+}
+
 }
