@@ -90,11 +90,6 @@ void List::save(PersistentStore &store) const
 
 	for (int i = 0; i < nodes_.size(); ++i)
 		store.saveNode(nodes_[i], QString::number(i));
-
-	// TODO Document this somewhere useful. Like in the Persistent store interface.
-	// If the node is partially loaded the Store will automatically fill in the missing fields by taking the old version
-	// of every subnode whose name is not specified here.
-
 }
 
 void List::load(PersistentStore &store)
