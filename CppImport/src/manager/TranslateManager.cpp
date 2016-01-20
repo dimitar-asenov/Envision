@@ -290,25 +290,25 @@ OOModel::NameImport* TranslateManager::insertUnresolvedUsing(clang::UnresolvedUs
 	return ooName;
 }
 
-OOModel::TypeAlias*TranslateManager::insertNamespaceAlias(clang::NamespaceAliasDecl* namespaceAlias)
+OOModel::TypeAlias* TranslateManager::insertNamespaceAlias(clang::NamespaceAliasDecl* namespaceAlias)
 {
 	OOModel::TypeAlias* ooAlias = nullptr;
 	const QString hash = nh_->hashNameSpaceAlias(namespaceAlias);
 	if (!namespacAliasMap_.contains(hash))
 	{
-		ooAlias = clang_.createNode<OOModel::TypeAlias>(namespaceAlias->getSourceRange());
+		ooAlias = clang_.createNamedNode<OOModel::TypeAlias>(namespaceAlias);
 		namespacAliasMap_.insert(hash, ooAlias);
 	}
 	return ooAlias;
 }
 
-OOModel::TypeAlias*TranslateManager::insertTypeAlias(clang::TypedefNameDecl* typeAlias)
+OOModel::TypeAlias* TranslateManager::insertTypeAlias(clang::TypedefNameDecl* typeAlias)
 {
 	OOModel::TypeAlias* ooAlias = nullptr;
 	const QString hash = nh_->hashTypeAlias(typeAlias);
 	if (!typeAliasMap_.contains(hash))
 	{
-		ooAlias = clang_.createNode<OOModel::TypeAlias>(typeAlias->getSourceRange());
+		ooAlias = clang_.createNamedNode<OOModel::TypeAlias>(typeAlias);
 		typeAliasMap_.insert(hash, ooAlias);
 	}
 	return ooAlias;
@@ -320,7 +320,7 @@ OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTe
 	const QString hash = nh_->hashTypeAliasTemplate(typeAliasTemplate);
 	if (!typeAliasMap_.contains(hash))
 	{
-		ooAlias = clang_.createNode<OOModel::TypeAlias>(typeAliasTemplate->getSourceRange());
+		ooAlias = clang_.createNamedNode<OOModel::TypeAlias>(typeAliasTemplate);
 		typeAliasMap_.insert(hash, ooAlias);
 	}
 	return ooAlias;
