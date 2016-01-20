@@ -30,6 +30,10 @@
 
 #include "Export/src/Visitor.h"
 
+namespace Model {
+	class CompositeNode;
+}
+
 namespace OOModel {
 	class Project;
 	class Module;
@@ -86,13 +90,14 @@ class CPPEXPORT_API DeclarationVisitor
 
 		Export::SourceFragment* visitTopLevelClass(OOModel::Class* classs);
 
+		static Export::SourceFragment* compositeNodeComments(Model::CompositeNode* compositeNode, const QString& style);
+
 	private:
 		template<typename Predicate>
 		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
 
 		bool headerVisitor();
 		bool sourceVisitor();
-		Export::SourceFragment* declarationComments(OOModel::Declaration* declaration);
 
 		/**
 		 * used to prevent exporting of declarations already provided in a meta call of the parent.

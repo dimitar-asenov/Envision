@@ -124,13 +124,7 @@ SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 		*fragment << " = " << expression(value);
 	}
 
-	if (auto commentNode = DCast<Comments::CommentNode>(enumerator->comment()))
-	{
-		auto commentFragment = new CompositeFragment{commentNode->lines()};
-		for (auto line : *(commentNode->lines()))
-			*commentFragment << line;
-		*fragment << commentFragment;
-	}
+	*fragment << DeclarationVisitor::compositeNodeComments(enumerator, "");
 
 	return fragment;
 }
