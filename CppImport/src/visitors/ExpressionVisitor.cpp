@@ -285,6 +285,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
 			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
 						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
 			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 			for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
 				methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
@@ -306,6 +307,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
 			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
 						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
 			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 				methodCallExpr->arguments()->append(argument);

@@ -41,6 +41,8 @@
 #include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 #include "OOModel/src/declarations/Method.h"
 
+#include "Comments/src/nodes/CommentNode.h"
+
 using namespace Export;
 using namespace OOModel;
 
@@ -121,6 +123,9 @@ SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 	{
 		*fragment << " = " << expression(value);
 	}
+
+	*fragment << DeclarationVisitor::compositeNodeComments(enumerator, "");
+
 	return fragment;
 }
 

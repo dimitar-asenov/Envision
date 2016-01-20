@@ -192,7 +192,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		if (!friendClass)
 		{
-			*fragment << declarationComments(classs);
+			*fragment << compositeNodeComments(classs, "declarationComment");
 
 			if (!classs->typeArguments()->isEmpty())
 				*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
@@ -385,7 +385,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto fragment = new CompositeFragment{method};
 
 	if (!sourceVisitor())
-		*fragment << declarationComments(method);
+		*fragment << compositeNodeComments(method, "declarationComment");
 
 	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
@@ -488,11 +488,11 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	return fragment;
 }
 
-SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration)
+SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* compositeNode, const QString& style)
 {
-	if (auto commentNode = DCast<Comments::CommentNode>(declaration->comment()))
+	if (auto commentNode = DCast<Comments::CommentNode>(compositeNode->comment()))
 	{
-		auto commentFragment = new CompositeFragment{commentNode->lines(), "declarationComment"};
+		auto commentFragment = new CompositeFragment{commentNode->lines(), style};
 		for (auto line : *(commentNode->lines()))
 			*commentFragment << line;
 		return commentFragment;
@@ -506,7 +506,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 	auto fragment = new CompositeFragment{variableDeclaration};
 	if (!sourceVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 	{
-		*fragment << declarationComments(variableDeclaration);
+		*fragment << compositeNodeComments(variableDeclaration, "declarationComment");
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
 		*fragment << expression(variableDeclaration->typeExpression()) << " " << variableDeclaration->nameNode();
 		if (variableDeclaration->initialValue() && !variableDeclaration->modifiers()->isSet(Modifier::Static))
