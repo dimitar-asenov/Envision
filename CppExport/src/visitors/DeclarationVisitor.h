@@ -109,6 +109,7 @@ class CPPEXPORT_API DeclarationVisitor
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 
 		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
+		bool isEnumWithQtFlags(OOModel::Class* candidate);
 };
 
 inline bool DeclarationVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }

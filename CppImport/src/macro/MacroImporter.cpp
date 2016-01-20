@@ -73,15 +73,40 @@ void MacroImporter::endTranslationUnit()
 			if (!generatedNodes.empty())
 			{
 				auto context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
-				if (!DCast<OOModel::Method>(context))
-					context->metaCalls()->append(expansion->metaCall());
+
+				if (macroDefinitions_.definitionName(expansion->definition()) == "Q_DECLARE_FLAGS")
+				{
+					Q_ASSERT(expansion->metaCall()->arguments()->size() == 2);
+					auto enumReference = DCast<OOModel::ReferenceExpression>(expansion->metaCall()->arguments()->last());
+					Q_ASSERT(enumReference);
+					OOModel::Class* flagsEnumClass{};
+					for (auto potentialEnumClass : Model::Node::childrenOfType<OOModel::Class>(context))
+						if (potentialEnumClass->constructKind() == OOModel::Class::ConstructKind::Enum &&
+							 potentialEnumClass->name() == enumReference->name())
+						{
+							flagsEnumClass = potentialEnumClass;
+							break;
+						}
+					Q_ASSERT(flagsEnumClass);
+					flagsEnumClass->metaCalls()->append(new OOModel::MetaCallExpression("QT_Flags"));
+				}
+				else if (macroDefinitions_.definitionName(expansion->definition()) == "Q_DECLARE_OPERATORS_FOR_FLAGS")
+				{
+					// Q_DECLARE_OPERATORS_FOR_FLAGS is handled by the predefined metacall "QT_Flags"
+					// therefore we must not add it to the tree.
+				}
 				else
 				{
-					if (auto replacementNode = expansion->replacementNode())
-						finalizationMetaCalls.insert(replacementNode, expansion);
+					if (!DCast<OOModel::Method>(context))
+						context->metaCalls()->append(expansion->metaCall());
 					else
-						qDebug() << "no splice found for expansion"
-									<< macroDefinitions_.definitionName(expansion->definition());
+					{
+						if (auto replacementNode = expansion->replacementNode())
+							finalizationMetaCalls.insert(replacementNode, expansion);
+						else
+							qDebug() << "no splice found for expansion"
+										<< macroDefinitions_.definitionName(expansion->definition());
+					}
 				}
 			}
 			else if (auto context = bestContext(expansion))
