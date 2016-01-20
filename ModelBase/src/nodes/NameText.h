@@ -37,6 +37,10 @@ class MODELBASE_API NameText: public Super<Text>
 	NODE_DECLARE_STANDARD_METHODS(NameText)
 
 	public:
+		/**
+		 * The parent constructor will call the virtual getSetCommand, but that's ok, since we don't care which version
+		 * will run at this point.
+		 */
 		NameText(const QString& text);
 
 	private:
