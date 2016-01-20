@@ -35,7 +35,7 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Boolean)
 
-Boolean::Boolean(Node *parent) : Super{parent}, value(false)
+Boolean::Boolean(Node *parent) : Super{parent}, value{false}
 {}
 
 Boolean::Boolean(Node *parent, PersistentStore &store, bool) : Super{parent}

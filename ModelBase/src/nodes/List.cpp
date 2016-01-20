@@ -44,7 +44,7 @@ List::List(Node *parent, PersistentStore &store, bool loadPartially) : Super{par
 		setPartiallyLoaded();
 	else
 	{
-		QList<LoadedNode> children = store.loadAllSubNodes(this, {});
+		QList<LoadedNode> children{store.loadAllSubNodes(this, {})};
 		loadSubNodes(children);
 	}
 
@@ -104,7 +104,7 @@ void List::load(PersistentStore &store)
 
 	clear();
 
-	QList<LoadedNode> children = store.loadAllSubNodes(this, {});
+	QList<LoadedNode> children{store.loadAllSubNodes(this, {})};
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
 		Q_ASSERT(ln->node->hierarchyTypeIds().contains(lowerTypeBoundForElements()));
