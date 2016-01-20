@@ -26,5 +26,81 @@
 
 #pragma once
 
-#define ModelBase_VisitorDefinition
 #include "Visitor.h"
+#include "../nodes/Node.h"
+#include "../ModelException.h"
+
+namespace Model {
+
+template <typename ConcreteVisitor, typename Result>
+Visitor<ConcreteVisitor, Result>::~Visitor()
+{}
+
+template <typename ConcreteVisitor, typename Result>
+Result Visitor<ConcreteVisitor, Result>::visit(Node* n)
+{
+	for (auto id : n->hierarchyTypeIds())
+	{
+		auto f = findFunctionForId(id);
+		if (f) return f(static_cast<ConcreteVisitor*>(this), n);
+	}
+
+	// No user specified function was found. Just visit all children.
+	return visitChildren(n);
+}
+template <typename ConcreteVisitor, typename Result>
+Result Visitor<ConcreteVisitor, Result>::visitChildren(Node* n)
+{
+	auto children = n->children();
+	auto it = children.begin();
+	if (!children.isEmpty())
+	{
+		while (true)
+		{
+			if (it+1 == children.end()) return visit(*it);
+			else visit(*it);
+			++it;
+		}
+	}
+
+	// Return default value otherwise.
+	return Result ();
+}
+
+template <typename ConcreteVisitor, typename Result>
+typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance
+	Visitor<ConcreteVisitor, Result>::findFunctionForId(int id)
+{
+	if (types().size() > id && types()[id])
+		return types()[id];
+	else
+		return nullptr;
+}
+
+
+template <typename ConcreteVisitor, typename Result>
+QVector<typename Visitor<ConcreteVisitor, Result>::VisitFunctionInstance>& Visitor<ConcreteVisitor, Result>::types()
+{
+	static QVector<VisitFunctionInstance> t;
+	return t;
+}
+
+template <typename ConcreteVisitor, typename BaseVisitor>
+typename BaseVisitor::VisitFunctionInstance
+	ExtendedVisitor<ConcreteVisitor, BaseVisitor>::findFunctionForId(int id)
+{
+	if (types().size() > id && types()[id])
+		return types()[id];
+	else
+		return BaseVisitor::findFunctionForId(id);
+}
+
+template <typename ConcreteVisitor, typename BaseVisitor>
+QVector<typename BaseVisitor::VisitFunctionInstance>&
+	ExtendedVisitor<ConcreteVisitor, BaseVisitor>::types()
+{
+	static QVector<typename BaseVisitor::VisitFunctionInstance> t;
+	return t;
+}
+
+}
