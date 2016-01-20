@@ -144,23 +144,6 @@ void Reference::setResolutionNeeded()
 	pendingResolution_.insert(this);
 }
 
-template<typename NodeType>
-void Reference::forAll(Node* subTree, std::function<void (NodeType*)> function)
-{
-	if (subTree)
-	{
-		QList<Node*> stack;
-		stack << subTree;
-		while (!stack.isEmpty())
-		{
-			auto top = stack.takeLast();
-
-			if (auto node = DCast<NodeType>(top) ) function(node);
-			else stack.append(top->children());
-		}
-	}
-}
-
 void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 	const QSet<QString>& names)
 {
