@@ -282,7 +282,12 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
 	else if (auto e = DCast<MethodCallExpression>(expression))
-		*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
+	{
+		if (e->methodCallKind() == MethodCallExpression::MethodCallKind::Call)
+			*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
+		else
+			*fragment << visit(e->callee()) << list(e->arguments(), this, "initializerList");
+	}
 	else if (auto e = DCast<MetaCallExpression>(expression))
 	{
 		auto calleeReference = DCast<OOModel::ReferenceExpression>(e->callee());

@@ -152,6 +152,8 @@ bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeD
 		ooReference = createQualifiedReferenceWithTemplateArguments(dependentScope->getNameInfo().getSourceRange(),
 																						dependentScope->getQualifierLoc());
 
+	if (dependentScope->hasTemplateKeyword())
+		ooReference->setMemberKind(OOModel::ReferenceExpression::MemberKind::Template);
 	ooExprStack_.push(ooReference);
 	return true;
 }

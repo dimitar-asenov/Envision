@@ -355,7 +355,14 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	{
 		auto initExpr = varDecl->getInit()->IgnoreImplicit();
 
-		auto initSpelling = clang_.unexpandedSpelling(initExpr->getSourceRange());
+		auto rangeBeforeFirstArgument = initExpr->getSourceRange();
+		if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr))
+		{
+			if (constructExpr->getNumArgs() > 0)
+				rangeBeforeFirstArgument = clang::SourceRange(initExpr->getSourceRange().getBegin(),
+															constructExpr->getArg(0)->getExprLoc());
+		}
+		auto initSpelling = clang_.unexpandedSpelling(rangeBeforeFirstArgument);
 		auto varDeclNameToEndSpelling = clang_.unexpandedSpelling(varDecl->getLocation(),
 																					 varDecl->getSourceRange().getEnd());
 		if (varDeclNameToEndSpelling.contains("=") || initSpelling.contains("(") || initSpelling.contains("{"))
@@ -1372,6 +1379,32 @@ void ClangAstVisitor::endTranslationUnit()
 void ClangAstVisitor::endEntireImport()
 {
 	macroImporter_.endEntireImport();
+
+	QList<Model::Node*> workStack{clang_.rootProject()};
+	while (!workStack.empty())
+	{
+		auto current = workStack.takeLast();
+
+		if (auto reference = DCast<OOModel::ReferenceExpression>(current))
+		{
+			if (auto prefix = DCast<OOModel::ReferenceExpression>(reference->prefix()))
+			{
+				if (DCast<OOModel::Module>(prefix->target()))
+				{
+					QSet<Model::Node*> foundSymbols;
+					Model::SymbolMatcher matcher{reference->name()};
+					reference->parent()->findSymbols(foundSymbols, matcher, reference, Model::Node::SEARCH_UP,
+																Model::Node::ANY_SYMBOL, false);
+
+					if ((foundSymbols.size() > 1 && !reference->target()) ||
+						 (foundSymbols.size() == 1 && foundSymbols.contains(reference->target())))
+						reference->setPrefix(nullptr);
+				}
+			}
+		}
+		else if (!DCast<OOModel::MetaCallExpression>(current))
+			workStack << current->children();
+	}
 }
 
 } // namespace cppimport
