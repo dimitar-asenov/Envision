@@ -37,6 +37,8 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(LambdaExpression)
 
 REGISTER_ATTRIBUTE(LambdaExpression, body, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(LambdaExpression, arguments, TypedListOfFormalArgument, false, false, true)
+REGISTER_ATTRIBUTE(LambdaExpression, captures, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(LambdaExpression, dCaptureType, Integer, false, false, true)
 REGISTER_ATTRIBUTE(LambdaExpression, results, TypedListOfFormalResult, false, false, true)
 
 Type* LambdaExpression::type()

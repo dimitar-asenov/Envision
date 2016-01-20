@@ -264,7 +264,18 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
 	else if (auto e = DCast<LambdaExpression>(expression))
 	{
-		*fragment << "[]" << list(e->arguments(), ElementVisitor(data()), "argsList");
+		*fragment << "[";
+		if (e->defaultCaptureType() == LambdaExpression::DefaultCaptureType::Value)
+			*fragment << "=";
+		else if (e->defaultCaptureType() == LambdaExpression::DefaultCaptureType::Reference)
+			*fragment << "&";
+
+		if (!e->captures()->isEmpty())
+		{
+			if (e->defaultCaptureType() != LambdaExpression::DefaultCaptureType::None) *fragment << ", ";
+			*fragment << list(e->captures(), ExpressionVisitor(data()), "comma");
+		}
+		*fragment << "]" << list(e->arguments(), ElementVisitor(data()), "argsList");
 		if (e->results()->size() > 1) error(e->results(), "Cannot have more than one return value in Cpp");
 		if (e->results()->size() == 1) *fragment << " -> " << visit(e->results()->first()->typeExpression());
 		*fragment << list(e->body(), StatementVisitor(data()), "body");
