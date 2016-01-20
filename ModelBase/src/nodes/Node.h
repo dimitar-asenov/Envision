@@ -339,14 +339,14 @@ class MODELBASE_API Node
 		 * Returns all children including the node \a from, which have type \a NodeType.
 		 */
 		template <typename NodeType>
-		static QList<NodeType*> childrenOfType(Model::Node* from);
+		static QList<NodeType*> childrenOfType(Node* from);
 
 		/**
 		 * Returns all children including the node \a from, which fullfill the \a Predicate \a p,
 		 * i.e. \a p(node) returns true.
 		 */
 		template <typename Predicate>
-		static QList<Model::Node*> childrenWhich(Model::Node* from, Predicate p);
+		static QList<Node*> childrenWhich(Node* from, Predicate p);
 
 
 		/**
