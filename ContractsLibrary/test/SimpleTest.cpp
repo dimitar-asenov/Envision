@@ -168,7 +168,7 @@ Module* createContractsLibrary()
 //	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 //			{
 //				return new VKeywordMethodCall{parent, static_cast<MethodCallExpression*> (node),
-//						VKeywordMethodCall::itemStyles().get("requires"));
+//						VKeywordMethodCall::itemStyles().get("requires")};
 //			},
 //			[=](Visualization::Item*, Model::Node* node) -> bool
 //			{
@@ -178,7 +178,7 @@ Module* createContractsLibrary()
 //	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 //			{
 //				return new VKeywordMethodCall{parent, static_cast<MethodCallExpression*> (node),
-//						VKeywordMethodCall::itemStyles().get("ensures"));
+//						VKeywordMethodCall::itemStyles().get("ensures")};
 //			},
 //			[=](Visualization::Item*, Model::Node* node) -> bool
 //			{
@@ -188,7 +188,7 @@ Module* createContractsLibrary()
 //	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 //			{
 //				return new VKeywordMethodCall{parent, static_cast<MethodCallExpression*> (node),
-//						VKeywordMethodCall::itemStyles().get("old"));
+//						VKeywordMethodCall::itemStyles().get("old")};
 //			},
 //			[=](Visualization::Item*, Model::Node* node) -> bool
 //			{
@@ -198,7 +198,7 @@ Module* createContractsLibrary()
 //	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 //			{
 //				return new VKeywordMethodCall{parent, static_cast<MethodCallExpression*> (node),
-//						VKeywordMethodCall::itemStyles().get("result"));
+//						VKeywordMethodCall::itemStyles().get("result")};
 //			},
 //			[=](Visualization::Item*, Model::Node* node) -> bool
 //			{
@@ -208,7 +208,7 @@ Module* createContractsLibrary()
 //	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 //			{
 //				return new VKeywordMethodCall{parent, static_cast<MethodCallExpression*> (node),
-//						VKeywordMethodCall::itemStyles().get("out"));
+//						VKeywordMethodCall::itemStyles().get("out")};
 //			},
 //			[=](Visualization::Item*, Model::Node* node) -> bool
 //			{

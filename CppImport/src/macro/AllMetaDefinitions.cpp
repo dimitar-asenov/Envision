@@ -90,7 +90,7 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 
 	if (!statements.empty())
 	{
-		// create a new list containing all the additional statements defined in expansion {the specialization)
+		// create a new list containing all the additional statements defined in expansion (the specialization)
 		auto list = new Model::List{};
 		for (auto stmt : statements) list->append(stmt->clone());
 

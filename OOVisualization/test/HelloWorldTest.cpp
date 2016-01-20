@@ -79,8 +79,8 @@ Class* addHelloWorld(Project* parent)
 	hello->subDeclarations()->append(new NameImport{
 		new ReferenceExpression{"out", new ReferenceExpression{"System"}}});
 	// TODO: BUG: If the two lines below are uncommented this will trigger an infinite loop.
-	// hello->subDeclarations()->append(new NameImport{new ReferenceExpression{"Java"}));
-	// hello->subDeclarations()->append(new NameImport{new ReferenceExpression{"Java"}));
+	// hello->subDeclarations()->append(new NameImport{new ReferenceExpression{"Java"}});
+	// hello->subDeclarations()->append(new NameImport{new ReferenceExpression{"Java"}});
 
 	Method* main = new Method{"main", Modifier::Public | Modifier::Static};
 	std::unique_ptr<Position>(main->extension<Position>())->set(0, 0);
