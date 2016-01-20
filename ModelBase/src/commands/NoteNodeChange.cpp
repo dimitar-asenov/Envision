@@ -64,10 +64,6 @@ void NoteNodeChange::markNodeAndChildrenAsRemoved(Node* node) const
 
 void NoteNodeChange::unmarkRemovals(Node*) const
 {
-	//TODO: Think about whether we:
-	// - should not report nodes which have been essentially moved in any way
-	// - should report moved nodes in some special way
-	// - should report moved nodes as a pair of deletion/insertion
 }
 
 }

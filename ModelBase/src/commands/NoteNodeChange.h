@@ -49,6 +49,11 @@ class MODELBASE_API NoteNodeChange: public UndoCommand
 		/**
 		 * It could happen than a subtree which is removed earlier in the undostack, is reinserted at a later time in the
 		 * command stack. In such cases we should not report these nodes as removed. (MAYBE)
+		 *
+		 * TODO: Think about whether we:
+		 *  - should not report nodes which have been essentially moved in any way
+		 *  - should report moved nodes in some special way
+		 *  - should report moved nodes as a pair of deletion/insertion
 		 */
 		void unmarkRemovals(Node* insertedNode) const;
 };
