@@ -598,6 +598,7 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* eti)
 SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)
 {
 	auto fragment = new CompositeFragment{typeAlias};
+	*fragment << compositeNodeComments(typeAlias, "declarationComment");
 
 	if (!typeAlias->typeArguments()->isEmpty())
 		*fragment << list(typeAlias->typeArguments(), ElementVisitor(data()), "templateArgsList");

@@ -42,10 +42,22 @@ class OOMODEL_API LambdaExpression: public Super<Expression>
 
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
+	ATTRIBUTE(Model::TypedList<Expression>, captures, setCaptures)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, dCaptureType, setDCaptureType, int)
 	ATTRIBUTE(StatementItemList, body, setBody)
 
 	public:
+		enum class DefaultCaptureType : int {None, Value, Reference};
+
 		virtual Type* type() override;
+
+		DefaultCaptureType defaultCaptureType() const;
+		void setDefaultCaptureType(const DefaultCaptureType& type);
 };
+
+inline LambdaExpression::DefaultCaptureType LambdaExpression::defaultCaptureType() const
+{ return static_cast<DefaultCaptureType>(dCaptureType()); }
+inline void LambdaExpression::setDefaultCaptureType(const DefaultCaptureType& type)
+{ setDCaptureType(static_cast<int>(type)); }
 
 }

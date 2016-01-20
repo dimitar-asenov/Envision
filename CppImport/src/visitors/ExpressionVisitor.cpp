@@ -577,6 +577,45 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 																	functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
 																	utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 	}
+
+	switch (lambdaExpr->getCaptureDefault())
+	{
+		case clang::LambdaCaptureDefault::LCD_None:
+			ooLambda->setDefaultCaptureType(OOModel::LambdaExpression::DefaultCaptureType::None);
+			break;
+		case clang::LambdaCaptureDefault::LCD_ByCopy:
+			ooLambda->setDefaultCaptureType(OOModel::LambdaExpression::DefaultCaptureType::Value);
+			break;
+		case clang::LambdaCaptureDefault::LCD_ByRef:
+			ooLambda->setDefaultCaptureType(OOModel::LambdaExpression::DefaultCaptureType::Reference);
+			break;
+	}
+
+	for (auto it = lambdaExpr->explicit_capture_begin(); it != lambdaExpr->explicit_capture_end(); it++)
+	{
+		switch (it->getCaptureKind())
+		{
+			case clang::LambdaCaptureKind::LCK_This:
+				ooLambda->captures()->append(clang_.createNode<OOModel::ThisExpression>(it->getLocation()));
+				break;
+			case clang::LambdaCaptureKind::LCK_ByCopy:
+				ooLambda->captures()->append(clang_.createReference(it->getLocation()));
+				break;
+			case clang::LambdaCaptureKind::LCK_ByRef:
+				{
+					auto reference = clang_.createReference(it->getLocation());
+					if (lambdaExpr->getCaptureDefault() != clang::LambdaCaptureDefault::LCD_ByRef)
+						ooLambda->captures()->append(new OOModel::UnaryOperation(
+																  OOModel::UnaryOperation::OperatorTypes::ADDRESSOF, reference));
+					else
+						ooLambda->captures()->append(reference);
+				}
+				break;
+			default:
+				Q_ASSERT(false);
+		}
+	}
+
 	// visit body
 	baseVisitor_->pushOOStack(ooLambda->body());
 	baseVisitor_->TraverseStmt(lambdaExpr->getBody());
