@@ -17,7 +17,7 @@ win32:QMAKE_LFLAGS += '-Wl,--export-all-symbols' #Export all symbols in Windows 
 unix:LIBS += -lprofiler
 
 INCLUDEPATH += ./src ./test $${ENVISION_ROOT_DIR}
-CONFIG += qt warn_on thread precompile_header debug_and_release depend_includepath
+CONFIG += qt warn_on thread precompile_header debug_and_release depend_includepath no_keywords
 QT = core gui widgets
 PRECOMPILED_HEADER = src/precompiled.h
 QMAKE_POST_LINK += $${ENVISION_ROOT_DIR}/checkers/vera++-check-dir $$_PRO_FILE_PWD_
