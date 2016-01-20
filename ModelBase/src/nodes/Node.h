@@ -79,7 +79,7 @@ class MODELBASE_API Node
 		 * @param parent
 		 * 				The parent node of the newly created node. This may be 'nullptr'.
 		 */
-		typedef Node* (*NodeConstructor)(Node* parent);
+		using NodeConstructor = Node* (*)(Node* parent);
 
 		/**
 		 * This function pointer type is used to register the constructor for nodes that are being loaded from a
@@ -97,7 +97,7 @@ class MODELBASE_API Node
 		 * 				A flag that hints whether this node should be fully or partially loaded. The constructor of the
 		 * 				node is allowed to ignore this flag.
 		 */
-		typedef Node* (*NodePersistenceConstructor)(Node *parent, PersistentStore &store, bool partialLoadHint);
+		using NodePersistenceConstructor = Node* (*)(Node* parent, PersistentStore& store, bool partialLoadHint);
 
 
 		/**
