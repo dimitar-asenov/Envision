@@ -189,16 +189,10 @@ QString StatementVisitor::blockStyle(Model::List* block)
 		{
 			if (block == parentIf->thenBranch())
 			{
-				/* TODO: if parent else branch is not empty and there is ANY if statement in block->first we have to add {}
-				 * example:
-				 * if (..)
-				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< need {
-				 *		for (..)
-				 *			if (..)
-				 * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< need }
-				 * else
-				 *		something();
-				 */
+				if (!parentIf->elseBranch()->isEmpty() &&
+					 !Model::Node::childrenOfType<OOModel::IfStatement>(block).isEmpty())
+					return "body";
+
 				if (auto ifStatement = DCast<OOModel::IfStatement>(block->first()))
 					if (!ifStatement->elseBranch()->isEmpty() || !parentIf->elseBranch()->isEmpty())
 						return "body";
