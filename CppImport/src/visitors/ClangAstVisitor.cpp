@@ -355,7 +355,14 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	{
 		auto initExpr = varDecl->getInit()->IgnoreImplicit();
 
-		auto initSpelling = clang_.unexpandedSpelling(initExpr->getSourceRange());
+		auto rangeBeforeFirstArgument = initExpr->getSourceRange();
+		if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr))
+		{
+			if (constructExpr->getNumArgs() > 0)
+				rangeBeforeFirstArgument = clang::SourceRange(initExpr->getSourceRange().getBegin(),
+															constructExpr->getArg(0)->getExprLoc());
+		}
+		auto initSpelling = clang_.unexpandedSpelling(rangeBeforeFirstArgument);
 		auto varDeclNameToEndSpelling = clang_.unexpandedSpelling(varDecl->getLocation(),
 																					 varDecl->getSourceRange().getEnd());
 		if (varDeclNameToEndSpelling.contains("=") || initSpelling.contains("(") || initSpelling.contains("{"))
