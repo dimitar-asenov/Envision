@@ -124,7 +124,9 @@ QList<Node*> List::children() const
 int List::indexOf(const Node* item) const
 {
 	// TODO: is this a QT bug, this is fishy
-	Node *i = const_cast<Node *> (item); // <--- Workaround, since the call below can't be made with item.
+
+	// Workaround, since the call after this line can't be made with item.
+	Node *i = const_cast<Node *> (item);
 	return nodes_.indexOf(i);
 }
 
