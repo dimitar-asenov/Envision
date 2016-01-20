@@ -212,10 +212,8 @@ bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 	bool found{};
 
 	if (direction == SEARCH_HERE)
-	{
 		for (auto c : nodes_)
 			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-	}
 	else if (direction == SEARCH_UP)
 	{
 		auto ignore = childToSubnode(source);
