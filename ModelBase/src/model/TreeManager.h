@@ -57,7 +57,6 @@ class NameText;
 class MODELBASE_API TreeManager: public QObject
 {
 	Q_OBJECT
-	// The moc compiler is used only to support signals and slots.
 
 	public:
 
