@@ -62,8 +62,8 @@ QList<CommandSuggestion*> CToggleInfoEntry::suggest(Visualization::Item*, Visual
 		auto nameSoFar = parts.size() > 1 ? parts[1] : "";
 		for (auto layerName : Visualization::InfoNode::registeredInfoGetters())
 			if (layerName.startsWith(nameSoFar))
-				suggestions.append(new CommandSuggestion(name() + " " + layerName,
-														"Toggle info layer " + layerName));
+				suggestions.append(new CommandSuggestion{name() + " " + layerName,
+														"Toggle info layer " + layerName});
 	}
 	return suggestions;
 }

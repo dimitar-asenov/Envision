@@ -44,10 +44,10 @@ Menu::Menu(QVector<QVector<Visualization::Item*> > items, Visualization::Item* s
 
 	// Select the middle item
 	QApplication::postEvent(target_->scene(),
-		new Visualization::CustomSceneEvent( [this, selectedItem]()
+		new Visualization::CustomSceneEvent{ [this, selectedItem]()
 			{
 				selectItem(selectedItem);
-			}));
+			}});
 }
 
 Menu::~Menu()
@@ -64,7 +64,7 @@ void Menu::hide()
 {
 	if (instance)
 		QApplication::postEvent(instance->scene(),
-								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
+								new Visualization::CustomSceneEvent{ [&]() { hideNow(); }});
 }
 
 void Menu::hideNow()

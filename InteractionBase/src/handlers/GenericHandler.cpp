@@ -159,11 +159,11 @@ void GenericHandler::toggleComment(Visualization::Item *itemWithComment, Model::
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup("PopupComments");
 
-	overlayGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(itemWithComment,
+	overlayGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay{itemWithComment,
 		[aNode](Visualization::BoxOverlay* self){
 		self->renderer()->sync(self->content(), self, aNode);
 		return QString("comment");
-	})));
+	}}));
 }
 
 void GenericHandler::command(Visualization::Item *target, const QString& command,

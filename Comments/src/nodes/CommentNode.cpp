@@ -145,7 +145,7 @@ void CommentNode::synchronizeTablesToText()
 
 	// Add new tables
 	for (auto newTable : tableNamesFromText)
-		tables()->append(new CommentTable(nullptr, newTable, mapRows.value(newTable), mapColumns.value(newTable)));
+		tables()->append(new CommentTable{nullptr, newTable, mapRows.value(newTable), mapColumns.value(newTable)});
 }
 
 }

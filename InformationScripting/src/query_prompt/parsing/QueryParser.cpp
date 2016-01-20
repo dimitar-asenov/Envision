@@ -48,7 +48,7 @@ QueryNode* QueryParser::parse(const QString& queryString)
 
 QueryNode* QueryParser::parseAny(const QString& queryString, int& index)
 {
-	if (index >= queryString.length()) return new CommandNode();
+	if (index >= queryString.length()) return new CommandNode{};
 
 	// Find name and arguments of the command
 	QString commandString;
@@ -76,15 +76,15 @@ QueryNode* QueryParser::parseAny(const QString& queryString, int& index)
 		// Create the command. Note that it could be an empty string.
 		auto parts = quoteAwareSplit(commandString);
 		if (parts.isEmpty())
-			query = new CommandNode("");
+			query = new CommandNode{""};
 		else
 		{
 			auto commandString = parts.takeFirst();
 			while (commandString.trimmed().isEmpty() && !parts.isEmpty())
 				commandString = parts.takeFirst();
-			auto command = new CommandNode(commandString);
+			auto command = new CommandNode{commandString};
 			for (auto part : parts)
-				command->arguments()->append(new CommandArgument(part));
+				command->arguments()->append(new CommandArgument{part});
 			query = command;
 		}
 	}
@@ -93,7 +93,7 @@ QueryNode* QueryParser::parseAny(const QString& queryString, int& index)
 
 	// We must have an operator, create it and keep parsing.
 	Q_ASSERT(ch == OP_PIPE);
-	auto op = new OperatorQueryNode();
+	auto op = new OperatorQueryNode{};
 	if (index + 1 < queryString.size() && queryString[index + 1] == OP_MINUS_POSTFIX)
 	{
 		op->setOp(OperatorQueryNode::Substract);
@@ -108,7 +108,7 @@ QueryNode* QueryParser::parseAny(const QString& queryString, int& index)
 
 CompositeQueryNode* QueryParser::parseList(const QString& queryString, int& index)
 {
-	auto composite = new CompositeQueryNode();
+	auto composite = new CompositeQueryNode{};
 	QChar ch = LIST_DELIM;
 	while (ch == LIST_DELIM)
 	{

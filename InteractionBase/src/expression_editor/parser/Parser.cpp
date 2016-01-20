@@ -168,7 +168,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 			result.errors += token->subExpressionTokens_.size();
 		else
 			++result.errors;
-		instructions.append( new AddErrorOperator(token->text()) );
+		instructions.append( new AddErrorOperator{token->text()} );
 
 		if (!hasLeft) expected.insert(1, ExpectedToken(ExpectedToken::END));
 	}
@@ -187,7 +187,7 @@ void Parser::processIdentifiersAndLiterals(bool& error, QList<ExpectedToken>& ex
 			// might be a postfix operator that converts a literal to a type (e.g. 123 <typeof)
 			|| (expected.first().type == ExpectedToken::ID && token->type() == Token::Identifier)))
 	{
-		instructions.append( new AddValue(token->text()) );
+		instructions.append( new AddValue{token->text()} );
 		hasLeft = true;
 		expected.removeFirst();
 		error = false;

@@ -106,10 +106,10 @@ void Prompt::hide()
 		auto shellCopy = shell_;
 		auto modeCopy = mode_;
 		auto scene = Visualization::VisualizationManager::instance().mainScene();
-		QApplication::postEvent(scene, new Visualization::CustomSceneEvent([shellCopy, modeCopy](){
+		QApplication::postEvent(scene, new Visualization::CustomSceneEvent{[shellCopy, modeCopy](){
 			delete shellCopy;
 			delete modeCopy;
-		}));
+		}});
 
 		// Select the item that was selected previously
 		if (scene->mainCursor()) // If the main cursor was deleted, then do not select anything.

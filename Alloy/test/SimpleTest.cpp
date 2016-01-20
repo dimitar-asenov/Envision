@@ -47,7 +47,7 @@ Class* addLinkedList()
 {
 	auto aLinkedList = new Class{"LinkedList"};
 
-	auto *linkedListRoot = new Field( "root", new ReferenceExpression{"Node"}, Modifier::Private);
+	auto *linkedListRoot = new Field{ "root", new ReferenceExpression{"Node"}, Modifier::Private};
 	aLinkedList->fields()->append(linkedListRoot);
 
 	auto invariantMethod = new Method{"ObjectInvariant"};
@@ -63,9 +63,9 @@ Class* addLinkedList()
 		callContractForAll->arguments()->append(new MethodCallExpression{"getAllNodes"});
 		auto le = new LambdaExpression{};
 		callContractForAll->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("n", new ReferenceExpression{"Node"}));
-		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
-			"this.root==null||n.next==null||n.next!=this.root")));
+		le->arguments()->append(new FormalArgument{"n", new ReferenceExpression{"Node"}});
+		le->body()->append(new ReturnStatement{OOExpressionBuilder::getOOExpression(
+			"this.root==null||n.next==null||n.next!=this.root")});
 	}
 
 	{
@@ -78,9 +78,9 @@ Class* addLinkedList()
 		callContractForAll->arguments()->append(new MethodCallExpression{"getAllLinkedLists"});
 		auto le = new LambdaExpression{};
 		callContractForAll->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("ll", new ReferenceExpression{"LinkedList"}));
-		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
-			"this.root==null||ll.root==null||this==ll||this.root!=ll.root")));
+		le->arguments()->append(new FormalArgument{"ll", new ReferenceExpression{"LinkedList"}});
+		le->body()->append(new ReturnStatement{OOExpressionBuilder::getOOExpression(
+			"this.root==null||ll.root==null||this==ll||this.root!=ll.root")});
 	}
 
 	auto containsMethod = new Method{"contains"};
@@ -97,10 +97,10 @@ Class* addLinkedList()
 	containsResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN});
 	containsMethod->results()->append(containsResult);
 
-	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-		"Contract.Requires(aNode!=null)")));
-	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-		"Contract.Ensures(this.root.contains(aNode))")));
+	containsMethod->items()->append(new ExpressionStatement{OOExpressionBuilder::getOOExpression(
+		"Contract.Requires(aNode!=null)")});
+	containsMethod->items()->append(new ExpressionStatement{OOExpressionBuilder::getOOExpression(
+		"Contract.Ensures(this.root.contains(aNode))")});
 
 	return aLinkedList;
 }
@@ -109,14 +109,14 @@ Class* addNode()
 {
 	auto aNode = new Class{"Node"};
 
-	auto *nodeNext = new Field( "next", new ReferenceExpression{"Node"}, Modifier::Private);
+	auto *nodeNext = new Field{ "next", new ReferenceExpression{"Node"}, Modifier::Private};
 	aNode->fields()->append(nodeNext);
 
 	auto invariantMethod = new Method{"ObjectInvariant"};
 	aNode->methods()->append(invariantMethod);
 
-	invariantMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-		"Contract.Invariant(this!=this.next)")));
+	invariantMethod->items()->append(new ExpressionStatement{OOExpressionBuilder::getOOExpression(
+		"Contract.Invariant(this!=this.next)")});
 
 	{
 		auto callContractInvariant = new MethodCallExpression{"Contract.Invariant"};
@@ -128,8 +128,8 @@ Class* addNode()
 		callContractExists->arguments()->append(new MethodCallExpression{"getAllLinkedLists"});
 		auto le = new LambdaExpression{};
 		callContractExists->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("ll", new ReferenceExpression{"LinkedList"}));
-		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression("ll.contains(this)")));
+		le->arguments()->append(new FormalArgument{"ll", new ReferenceExpression{"LinkedList"}});
+		le->body()->append(new ReturnStatement{OOExpressionBuilder::getOOExpression("ll.contains(this)")});
 	}
 
 	{
@@ -142,9 +142,9 @@ Class* addNode()
 		callContractForAll->arguments()->append(new MethodCallExpression{"getAllNodes"});
 		auto le = new LambdaExpression{};
 		callContractForAll->arguments()->append(le);
-		le->arguments()->append(new FormalArgument("n", new ReferenceExpression{"Node"}));
-		le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
-			"this.next==null||n.next==null||this==n||this.next!=n.next")));
+		le->arguments()->append(new FormalArgument{"n", new ReferenceExpression{"Node"}});
+		le->body()->append(new ReturnStatement{OOExpressionBuilder::getOOExpression(
+			"this.next==null||n.next==null||this==n||this.next!=n.next")});
 	}
 
 	auto containsMethod = new Method{"contains"};
@@ -161,10 +161,10 @@ Class* addNode()
 	containsResult->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN});
 	containsMethod->results()->append(containsResult);
 
-	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-		"Contract.Requires(aNode!=null)")));
-	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-		"Contract.Ensures(this==aNode||(this.next!=null&&this.next.contains(aNode)))")));
+	containsMethod->items()->append(new ExpressionStatement{OOExpressionBuilder::getOOExpression(
+		"Contract.Requires(aNode!=null)")});
+	containsMethod->items()->append(new ExpressionStatement{OOExpressionBuilder::getOOExpression(
+		"Contract.Ensures(this==aNode||(this.next!=null&&this.next.contains(aNode)))")});
 
 	return aNode;
 }

@@ -101,9 +101,9 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 				std::unique_ptr<Query> q_{};
 		};
 		// Pseudo node to connect, to get input from execute method
-		QueryNode* inNode_{new QueryNode(nullptr)};
+		QueryNode* inNode_{new QueryNode{nullptr}};
 		// Pseudo node to connect, to map the output
-		QueryNode* outNode_{new QueryNode(nullptr)};
+		QueryNode* outNode_{new QueryNode{nullptr}};
 		QList<QueryNode*> nodes_;
 
 		QueryNode* nodeForQuery(Query* q);

@@ -38,7 +38,7 @@ ITEM_COMMON_DEFINITIONS(VFunctionType, "item")
 
 VFunctionType::VFunctionType(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
-	icon_ = new Static(layout(), &style->icon());
+	icon_ = new Static{layout(), &style->icon()};
 	layout()->append(icon_);
 }
 

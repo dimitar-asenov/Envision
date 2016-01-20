@@ -56,7 +56,7 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 		{
 			if (auto argument = v->args_[input.right(input.length() - 1)])
 				if (auto argumentReference = DCast<ReferenceExpression>(argument))
-					n->parent()->replaceChild(n, new OOModel::StringLiteral(argumentReference->name()));
+					n->parent()->replaceChild(n, new OOModel::StringLiteral{argumentReference->name()});
 		}
 		else
 			if (auto argument = v->args_[input])

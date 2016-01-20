@@ -242,8 +242,8 @@ void AnchorLayoutFormElement::addConstraint(QList<AnchorLayoutAnchor*>& constrai
 		AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition, FormElement* placeElement,
 		int offset, float relativeFixedEdgePosition, FormElement* fixedElement)
 {
-	constraints.append(new AnchorLayoutAnchor(relativePlaceEdgePosition, placeElement, offset,
-																	relativeFixedEdgePosition, fixedElement));
+	constraints.append(new AnchorLayoutAnchor{relativePlaceEdgePosition, placeElement, offset,
+																	relativeFixedEdgePosition, fixedElement});
 	sortConstraints(constraints, orientation);
 }
 

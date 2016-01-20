@@ -104,7 +104,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 		{
 			auto parent = topMostItem->parent();
 			index = (key == Qt::Key_Home ) ? 0 : str.length();
-			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, topMostItem->node(), index));
+			target->scene()->addPostEventAction( new SetExpressionCursorEvent{parent, topMostItem->node(), index});
 			return;
 		}
 
@@ -387,7 +387,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				auto stList = DCast<StatementItemList>(expSt->parent());
 				if (stList)
 				{
-					auto es = new ExpressionStatement(new EmptyExpression());
+					auto es = new ExpressionStatement{new EmptyExpression{}};
 					stList->beginModification("add empty statement");
 					stList->insert(stList->indexOf(expSt) + (index==0 && !str.isEmpty()?0:1), es);
 					stList->endModification();
@@ -397,8 +397,8 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 					{
 						// For the current item
 						target->scene()->addPostEventAction(
-							new SetCursorEvent(topMostItem->parent(), target->node(),
-								SetCursorEvent::CursorOnLeft));
+							new SetCursorEvent{topMostItem->parent(), target->node(),
+								SetCursorEvent::CursorOnLeft});
 					}
 					else
 					{
@@ -406,7 +406,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 						auto p = target;
 						while (p->parent()) p = p->parent(); // Using topMostItem->parent() does not work.
 						target->scene()->addPostEventAction(
-							new SetCursorEvent(p, es->expression(), SetCursorEvent::CursorOnLeft));
+							new SetCursorEvent{p, es->expression(), SetCursorEvent::CursorOnLeft});
 					}
 					return;
 				}
@@ -424,7 +424,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				)
 			{
 				auto s = target->scene();
-				s->addPostEventAction(new CustomSceneEvent(
+				s->addPostEventAction(new CustomSceneEvent{
 						[s, this]() {
 							auto mc = s->mainCursor();
 							if (mc) // This will be null if 'target' was deleted, e.g. because the new expression
@@ -434,7 +434,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 								while (o && o->handler() != this) o = o->parent();
 								if (o) showAutoComplete(o, false, false);
 							}
-						}));
+						}});
 			}
 			else
 			{
@@ -620,8 +620,8 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 
 		if ( insertionPoint == entries.end() || (*insertionPoint)->text() != candidate)
 		{
-			entries.insert(insertionPoint, new AutoCompleteEntry(candidate, QString(), nullptr,
-				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
+			entries.insert(insertionPoint, new AutoCompleteEntry{candidate, QString(), nullptr,
+				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }});
 		}
 	}
 

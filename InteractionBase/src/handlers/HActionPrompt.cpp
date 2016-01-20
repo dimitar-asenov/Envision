@@ -65,14 +65,14 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		prompt->text()->setText("remove");
 		auto executed = tryExecutingAction(prompt, true);
 		if (!executed)
-			prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
+			prompt->scene()->addPostEventAction(new SetCursorEvent{prompt->text(), SetCursorEvent::CursorOnRight});
 	}
 	else if (event->key() == Qt::Key_Backspace)
 	{
 		if (!prompt->text()->text().isEmpty())
 		{
 			prompt->text()->setText(prompt->text()->text().left(prompt->text()->text().length() - 1));
-			prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
+			prompt->scene()->addPostEventAction(new SetCursorEvent{prompt->text(), SetCursorEvent::CursorOnRight});
 		}
 	}
 	else if (!event->text().isEmpty())
@@ -87,7 +87,7 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		// If execution failed and the prompt is still visible, focus the end of the text.
 		if (!executed)
-			prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
+			prompt->scene()->addPostEventAction(new SetCursorEvent{prompt->text(), SetCursorEvent::CursorOnRight});
 
 	} else if ( event->key() == Qt::Key_Up )
 	{

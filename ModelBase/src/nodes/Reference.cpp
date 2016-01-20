@@ -72,7 +72,7 @@ void Reference::setName(const QString &name)
 {
 	if (name != name_)
 	{
-		execute(new FieldSet<QString> (this, name_, name));
+		execute(new FieldSet<QString> {this, name_, name});
 		target_ = nullptr;
 		setResolutionNeeded();
 	}

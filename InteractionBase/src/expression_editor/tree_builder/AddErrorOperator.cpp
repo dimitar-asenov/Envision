@@ -42,14 +42,14 @@ void AddErrorOperator::perform(ExpressionTreeBuilder& tb)
 {
 	if (tb.left())
 	{
-		Operator* err = new Operator(new ErrorDescriptor{"", text_});
+		Operator* err = new Operator{new ErrorDescriptor{"", text_}};
 		ExpressionTreeUtils::replace(tb.top(), tb.left(), err);
 		err->append(tb.left());
 		tb.left() = err;
 	}
 	else
 	{
-		UnfinishedOperator* unf = new UnfinishedOperator(new ErrorDescriptor{text_, ""});
+		UnfinishedOperator* unf = new UnfinishedOperator{new ErrorDescriptor{text_, ""}};
 		unf->addNext();
 		if (tb.top()) tb.unfinished().last()->addNext(unf);
 		else tb.top() = unf;

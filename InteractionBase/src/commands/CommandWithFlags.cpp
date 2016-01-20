@@ -63,9 +63,9 @@ CommandResult* CommandWithFlags::execute(Visualization::Item* source,
 	{
 		auto matching = matchingNames(source, target, cursor, name);
 		if (matching.isEmpty())
-			return new CommandResult(new CommandError(name + " is not a valid name for " + this->name()));
+			return new CommandResult{new CommandError{name + " is not a valid name for " + this->name()}};
 		if (matching.size() > 1 && !matching.contains(name)) // No exact match, but multiple options => ambigious
-			return new CommandResult(new CommandError(name + " is ambiguous for " + this->name()));
+			return new CommandResult{new CommandError{name + " is ambiguous for " + this->name()}};
 
 		name = matching.first();
 	}
@@ -108,11 +108,11 @@ QList<CommandSuggestion*> CommandWithFlags::suggestNamed(Visualization::Item* so
 
 	if (usePossibleNames_)
 		for (auto matching : matchingNames(source, target, cursor, name))
-			s.append(new CommandSuggestion(commandText + (name.isEmpty() ? " " + matching : ""),
-					explanation + " " + matching));
+			s.append(new CommandSuggestion{commandText + (name.isEmpty() ? " " + matching : ""),
+					explanation + " " + matching});
 
 	if (!usePossibleNames_ || !limitToMatchingNames_)
-		s.append( new CommandSuggestion(commandText, explanation + (name.isEmpty() ? "" : " " + name)) );
+		s.append( new CommandSuggestion{commandText, explanation + (name.isEmpty() ? "" : " " + name)} );
 
 	return s;
 }

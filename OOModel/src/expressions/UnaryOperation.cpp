@@ -64,7 +64,7 @@ Type* UnaryOperation::type()
 		}
 	}
 	else if (opr() == ADDRESSOF)
-		return new PointerType(operand()->type(), false);
+		return new PointerType{operand()->type(), false};
 	else
 		return operand()->type();
 }

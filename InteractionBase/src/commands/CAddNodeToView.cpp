@@ -66,11 +66,11 @@ CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source,
 		return new CommandResult{};
 	}
 	else if (!view)
-		return new CommandResult(new CommandError{"The view with name " + name + " does not exist"});
+		return new CommandResult{new CommandError{"The view with name " + name + " does not exist"}};
 	else if (!colOk)
-		return new CommandResult(new CommandError(arguments.at(1) + " is not an integer"));
+		return new CommandResult{new CommandError{arguments.at(1) + " is not an integer"}};
 	else
-		return new CommandResult(new CommandError(arguments.at(2) + " is not an integer"));
+		return new CommandResult{new CommandError{arguments.at(2) + " is not an integer"}};
 
 }
 

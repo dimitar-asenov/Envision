@@ -104,7 +104,7 @@ void StyleNode::init()
 		QStringList proto = elem_.attribute("prototypes", QString()).split(',');
 		for (int i = 0; i < proto.size(); ++i)
 		{
-			prototypes.append(new StyleNode(this, proto[i], getFolder()));
+			prototypes.append(new StyleNode{this, proto[i], getFolder()});
 		}
 	}
 }

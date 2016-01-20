@@ -141,7 +141,7 @@ inline EnvisionToClangMap& ClangHelpers::envisionToClangMap() { return envisionT
 template<typename NodeType, typename ... ConstructorArgTypes>
 NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs)
 {
-	 auto node = new NodeType(std::forward<ConstructorArgTypes>(constructorArgs)...);
+	 auto node = new NodeType{std::forward<ConstructorArgTypes>(constructorArgs)...};
 	 envisionToClangMap_.mapAst(sourceRange, node);
 	 return node;
 }
@@ -165,7 +165,7 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, Cons
 			auto lines = QString::fromStdString(commentForDeclaration->getRawText(*sourceManager_).str()).split('\n');
 			for (auto i = 0; i < lines.length(); i++)
 				lines[i] = lines[i].trimmed();
-			compositeNode->setComment(new Comments::CommentNode(lines.join('\n')));
+			compositeNode->setComment(new Comments::CommentNode{lines.join('\n')});
 		}
 	return namedNode;
 }

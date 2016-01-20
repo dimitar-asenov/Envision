@@ -250,7 +250,7 @@ void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 		{
 			if (!seq)
 			{
-				seq = new SequentialLayout(this, &style()->sequence());
+				seq = new SequentialLayout{this, &style()->sequence()};
 				items_.append(seq);
 			}
 

@@ -47,7 +47,7 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	if (commandTokens.size() < 2)
-		return new CommandResult(new CommandError{"Please specify a node to add"});
+		return new CommandResult{new CommandError{"Please specify a node to add"}};
 
 	auto currentView = target->scene()->currentViewItem();
 	QPoint posToInsert;
@@ -81,7 +81,7 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 		currentView->insertNode(matches[0].second, posToInsert.x(), posToInsert.y());
 		return new CommandResult{};
 	}
-	return new CommandResult(new CommandError{"Could not find node with name " + commandTokens[1]});
+	return new CommandResult{new CommandError{"Could not find node with name " + commandTokens[1]}};
 }
 
 QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Visualization::Item*,

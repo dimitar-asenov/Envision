@@ -43,9 +43,9 @@ bool DetectMainSceneActivated::eventFilter(QObject* /*watched*/, QEvent* event)
 	// We use this roundabout way to show the prompt. It can only be shown once the Scene is activated.
 
 	auto mainScene = Visualization::VisualizationManager::instance().mainScene();
-	QApplication::postEvent(mainScene, new SetCursorEvent(mainScene->sceneHandlerItem()));
+	QApplication::postEvent(mainScene, new SetCursorEvent{mainScene->sceneHandlerItem()});
 	QApplication::postEvent(mainScene, new ShowCommandPromptEvent{mainScene});
-	QApplication::postEvent(mainScene, new Visualization::CustomSceneEvent([=](){delete this;}));
+	QApplication::postEvent(mainScene, new Visualization::CustomSceneEvent{[=](){delete this;}});
 
 	mainScene->removeEventFilter(this);
 	return false;

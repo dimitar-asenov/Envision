@@ -53,7 +53,7 @@ class SimpleTest : public Test<CommentsPlugin, SimpleTest> { public: void test()
 
 	manager->beginModification(list, "set");
 
-	auto node = new CommentNode(
+	auto node = new CommentNode{
 		"Comments support *quite* some stuff by **now**. For example...\n"
 
 		"# Diagrams!\n"
@@ -91,7 +91,7 @@ class SimpleTest : public Test<CommentsPlugin, SimpleTest> { public: void test()
 		"	<button onclick=\"hi()\">Try it</button>\n"
 		"</html>"
 
-	);
+	};
 
 	auto diagram = new CommentDiagram{nullptr, "main"};
 

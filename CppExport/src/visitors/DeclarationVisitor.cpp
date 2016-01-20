@@ -217,11 +217,11 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		if (!friendClass)
 		{
 			if (classs->modifiers()->isSet(Modifier::Final))
-				*fragment << " " << new TextFragment(classs->modifiers(), "final");
+				*fragment << " " << new TextFragment{classs->modifiers(), "final"};
 			if (!classs->baseClasses()->isEmpty())
 			{
 				// TODO: inheritance modifiers like private, virtual... (not only public)
-				auto baseClassesFragment = new CompositeFragment(classs->baseClasses(), "comma");
+				auto baseClassesFragment = new CompositeFragment{classs->baseClasses(), "comma"};
 				for (auto baseClass : *classs->baseClasses())
 				{
 					auto baseClassFragment = new CompositeFragment{baseClass};
@@ -365,7 +365,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	auto macro = new CompositeFragment{metaDefinition, "macro"};
 	*macro << "#define " << metaDefinition->nameNode();
 	*macro << list(metaDefinition->arguments(), ElementVisitor(MACRO_VISITOR, data()), "argsList");
-	auto body = new CompositeFragment(metaDefinition->context(), "macroBody");
+	auto body = new CompositeFragment{metaDefinition->context(), "macroBody"};
 	if (auto context = DCast<Module>(metaDefinition->context()))
 		*body << list(context->classes(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
 	else if (auto context = DCast<Class>(metaDefinition->context()))
@@ -406,7 +406,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
-			*fragment << new TextFragment(method->modifiers(), "inline") << " ";
+			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
@@ -453,7 +453,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
 	if (method->modifiers()->isSet(Modifier::Const))
-		*fragment << " " << new TextFragment(method->modifiers(), "const");
+		*fragment << " " << new TextFragment{method->modifiers(), "const"};
 
 	if (!headerVisitor())
 		if (!method->memberInitializers()->isEmpty())
@@ -469,13 +469,13 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (!sourceVisitor())
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
-			*fragment << new TextFragment(method->modifiers(), " override");
+			*fragment << new TextFragment{method->modifiers(), " override"};
 		if (method->modifiers()->isSet(Modifier::Default))
-			*fragment << new TextFragment(method->modifiers(), " = default");
+			*fragment << new TextFragment{method->modifiers(), " = default"};
 		if (method->modifiers()->isSet(Modifier::Deleted))
-			*fragment << new TextFragment(method->modifiers(), " = delete");
+			*fragment << new TextFragment{method->modifiers(), " = delete"};
 		if (method->modifiers()->isSet(Modifier::Abstract))
-			*fragment << new TextFragment(method->modifiers(), " = 0");
+			*fragment << new TextFragment{method->modifiers(), " = 0"};
 		*fragment << ";";
 	}
 
@@ -492,7 +492,7 @@ SourceFragment* DeclarationVisitor::declarationComments(Declaration* declaration
 {
 	if (auto commentNode = DCast<Comments::CommentNode>(declaration->comment()))
 	{
-		auto commentFragment = new CompositeFragment(commentNode->lines(), "declarationComment");
+		auto commentFragment = new CompositeFragment{commentNode->lines(), "declarationComment"};
 		for (auto line : *(commentNode->lines()))
 			*commentFragment << line;
 		return commentFragment;
@@ -537,7 +537,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 				*fragment << parentClass->name();
 				if (!parentClass->typeArguments()->isEmpty())
 				{
-					auto typeArgumentComposite = new CompositeFragment(parentClass->typeArguments(), "typeArgsList");
+					auto typeArgumentComposite = new CompositeFragment{parentClass->typeArguments(), "typeArgsList"};
 					for (auto typeArgument : *parentClass->typeArguments())
 						*typeArgumentComposite << typeArgument->nameNode();
 					*fragment << typeArgumentComposite;
@@ -566,15 +566,15 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 	auto header = fragment->append(new CompositeFragment{declaration, "space"});
 
 	if (declaration->modifiers()->isSet(Modifier::ConstExpr))
-		*header << new TextFragment(declaration->modifiers(), "constexpr");
+		*header << new TextFragment{declaration->modifiers(), "constexpr"};
 	if (declaration->modifiers()->isSet(Modifier::Static))
-		*header << new TextFragment(declaration->modifiers(), "static");
+		*header << new TextFragment{declaration->modifiers(), "static"};
 	if (declaration->modifiers()->isSet(Modifier::Final) && !DCast<OOModel::Class>(declaration))
-		*header << new TextFragment(declaration->modifiers(), "final");
+		*header << new TextFragment{declaration->modifiers(), "final"};
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
-		*header << new TextFragment(declaration->modifiers(), "virtual");
+		*header << new TextFragment{declaration->modifiers(), "virtual"};
 	if (declaration->modifiers()->isSet(Modifier::Explicit))
-		*header << new TextFragment(declaration->modifiers(), "explicit");
+		*header << new TextFragment{declaration->modifiers(), "explicit"};
 
 	return fragment;
 }

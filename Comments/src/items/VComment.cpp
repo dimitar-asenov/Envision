@@ -159,7 +159,7 @@ void VComment::parseLines()
 				default: Q_ASSERT_X(false, "", "Unknown line character");
 			}
 
-			commentElements_.append(new Line(this, Line::itemStyles().get(style)));
+			commentElements_.append(new Line{this, Line::itemStyles().get(style)});
 			continue;
 		}
 
@@ -247,7 +247,7 @@ void VComment::parseLines()
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
 			QString url = items.at(0).second;
-			auto browser = new VCommentBrowser(nullptr, QUrl(url));
+			auto browser = new VCommentBrowser{nullptr, QUrl(url)};
 
 			if (items.size() > 1)
 			{
@@ -277,7 +277,7 @@ void VComment::parseLines()
 			if (items.size() > 1)
 				size = parseSize(items.at(1).second);
 
-			auto image = new VCommentImage(nullptr, items.at(0).second, size);
+			auto image = new VCommentImage{nullptr, items.at(0).second, size};
 			image->setLineNumber(lineNumber);
 			commentElements_.append( image );
 
@@ -357,7 +357,7 @@ Item* VComment::createTextualCommentElement(QStringList& contents, bool asHtml)
 		}
 		else
 		{
-			auto text = new Text(this, Text::itemStyles().get("comment"), replaceMarkdown(joined));
+			auto text = new Text{this, Text::itemStyles().get("comment"), replaceMarkdown(joined)};
 			text->setTextFormat(Qt::RichText);
 			commentElements_.append(text);
 			item = text;

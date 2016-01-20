@@ -70,10 +70,10 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 	// load name into tree
 	std::unique_ptr<const Commit> commit(repository->getCommit(name));
 
-	auto fileStore = new SimpleTextFileStore(
+	auto fileStore = new SimpleTextFileStore{
 				[this, &commit](QString filename, const char*& data, int& size)
 				{ return commit->getFileContent(filename, data, size); }
-			);
+			};
 
 	auto revisionManager = new Model::TreeManager{};
 	revisionManager->load(fileStore, managerName, false);
@@ -85,14 +85,14 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 	Item* headRoot = target;
 	while (headRoot->parent()) headRoot = headRoot->parent();
 
-	Item* revisionRoot = new RootItem(revisionManager->root());
+	Item* revisionRoot = new RootItem{revisionManager->root()};
 	revisionRoot->setPos(-400.f, 0.f);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem(revisionRoot);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(revisionManager);
 
 	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-		new Visualization::CustomSceneEvent([headRoot, headManager, revisionRoot, revisionManager,
+		new Visualization::CustomSceneEvent{[headRoot, headManager, revisionRoot, revisionManager,
 														name, target, repository]()
 	{
 			Diff diff = repository->diff(name, GitRepository::WORKDIR);
@@ -172,16 +172,16 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									{
 										auto parentChange = iter.value();
 										if (parentChange->type() != ChangeType::Insertion)
-											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-												Visualization::SelectionOverlay::itemStyles().get("insert"))));
+											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+												Visualization::SelectionOverlay::itemStyles().get("insert")}));
 									}
 									else
-										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-											Visualization::SelectionOverlay::itemStyles().get("insert"))));
+										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+											Visualization::SelectionOverlay::itemStyles().get("insert")}));
 								}
 								else
-									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-										Visualization::SelectionOverlay::itemStyles().get("insert"))));
+									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+										Visualization::SelectionOverlay::itemStyles().get("insert")}));
 							}
 							break;
 
@@ -198,29 +198,29 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									{
 										auto parentChange = iter.value();
 										if (parentChange->type() != ChangeType::Deletion)
-											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-												Visualization::SelectionOverlay::itemStyles().get("delete"))));
+											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+												Visualization::SelectionOverlay::itemStyles().get("delete")}));
 									}
 									else
-										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-											Visualization::SelectionOverlay::itemStyles().get("delete"))));
+										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+											Visualization::SelectionOverlay::itemStyles().get("delete")}));
 								}
 								else
-									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-										Visualization::SelectionOverlay::itemStyles().get("delete"))));
+									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+										Visualization::SelectionOverlay::itemStyles().get("delete")}));
 							}
 							break;
 
 						case ChangeType::Move:
 							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
 							if (auto item = headRoot->findVisualizationOf(node))
-								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-									Visualization::SelectionOverlay::itemStyles().get("move"))));
+								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+									Visualization::SelectionOverlay::itemStyles().get("move")}));
 
 							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
 							if (auto item = revisionRoot->findVisualizationOf(node))
-								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-									Visualization::SelectionOverlay::itemStyles().get("move"))));
+								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+									Visualization::SelectionOverlay::itemStyles().get("move")}));
 							break;
 
 						default:
@@ -231,8 +231,8 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 					node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
 					if (auto item = headRoot->findVisualizationOf(node))
 						if (change->flags().testFlag(ChangeDescription::UpdateType::Value))
-							overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
-								Visualization::SelectionOverlay::itemStyles().get("update"))));
+							overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
+								Visualization::SelectionOverlay::itemStyles().get("update")}));
 
 
 				}
@@ -241,7 +241,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 			}
 
 
-	} ) );
+	} } );
 
 	return new CommandResult{};
 }

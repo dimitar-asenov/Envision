@@ -44,7 +44,7 @@ PrimitiveTypeExpression::PrimitiveTypeExpression(const PrimitiveTypes& type)
 
 Type* PrimitiveTypeExpression::type()
 {
-	return new PrimitiveType(typeValue(), false);
+	return new PrimitiveType{typeValue(), false};
 }
 
 }

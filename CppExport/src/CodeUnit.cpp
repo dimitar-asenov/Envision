@@ -53,7 +53,7 @@ void CodeUnit::calculateSourceFragments()
 	}
 	else if (auto module = DCast<OOModel::Module>(node()))
 	{
-		auto fragment = new Export::CompositeFragment(node());
+		auto fragment = new Export::CompositeFragment{node()};
 		for (auto metaDefinition : Model::Node::childrenOfType<OOModel::MetaDefinition>(module))
 			*fragment << DeclarationVisitor(HEADER_VISITOR).visit(metaDefinition);
 		headerPart()->setSourceFragment(fragment);

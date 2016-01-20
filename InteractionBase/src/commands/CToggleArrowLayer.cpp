@@ -57,8 +57,8 @@ QList<CommandSuggestion*> CToggleArrowLayer::suggest(Visualization::Item* source
 		auto nameSoFar = parts.size() > 1 ? parts[1] : "";
 		for (auto layerName : source->scene()->currentViewItem()->arrowLayers())
 			if (layerName.startsWith(nameSoFar))
-				suggestions.append(new CommandSuggestion(name() + " " + layerName,
-										"Toggle the arrow layer " + layerName));
+				suggestions.append(new CommandSuggestion{name() + " " + layerName,
+										"Toggle the arrow layer " + layerName});
 	}
 	return suggestions;
 }

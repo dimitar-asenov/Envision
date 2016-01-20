@@ -37,13 +37,13 @@ void TypedList<T>::initType()
 	Node::registerNodeType(typeNameStatic(),
 			[](Node* parent) -> Node* { return TypedList<T>::createDefaultInstance(parent);},
 			[](Node *parent, PersistentStore &store, bool loadPartially) -> Node*
-						{ return new TypedList<T>(parent, store, loadPartially);});
+						{ return new TypedList<T>{parent, store, loadPartially};});
 }
 
 template<typename T>
 TypedList<T>* TypedList<T>::createDefaultInstance(Node* parent)
 {
-	return new TypedList<T>(parent);
+	return new TypedList<T>{parent};
 }
 
 template<typename T>

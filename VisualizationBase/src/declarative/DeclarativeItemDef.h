@@ -98,7 +98,7 @@ template <typename VisualizationType>
 	DeclarativeItem<VisualizationType>::item(Item* VisualizationType::* itemStorage,
 			std::function<Model::Node* (VisualizationType* v)> nodeGetter)
 {
-	return new NodeItemWrapperFormElement<VisualizationType>(itemStorage, nodeGetter);
+	return new NodeItemWrapperFormElement<VisualizationType>{itemStorage, nodeGetter};
 }
 
 template <typename VisualizationType>
@@ -106,7 +106,7 @@ template <typename ChildItemVisualizationType>
 	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage)
 {
-	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>(itemStorage);
+	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>{itemStorage};
 }
 
 template <typename VisualizationType>
@@ -116,8 +116,8 @@ template <typename ChildItemVisualizationType>
 										std::function<const
 											typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter)
 {
-	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>(itemStorage,
-																																 styleGetter);
+	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>{itemStorage,
+																																 styleGetter};
 }
 
 template <typename VisualizationType>

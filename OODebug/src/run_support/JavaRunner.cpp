@@ -65,7 +65,7 @@ Interaction::CommandResult* JavaRunner::runTree(Model::TreeManager* manager,
 	MainMethodFinder finder;
 	auto mainMethod = finder.visit(lastProject_);
 	if (!mainMethod)
-		return new Interaction::CommandResult(new Interaction::CommandError("No main method found to run!"));
+		return new Interaction::CommandResult{new Interaction::CommandError{"No main method found to run!"}};
 
 	auto compileResult = JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug);
 	if (compileResult->code() != Interaction::CommandResult::OK) return compileResult;

@@ -42,7 +42,7 @@ bool CFind::canInterpret(Visualization::Item*, Visualization::Item*, const QStri
 CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
-	if (commandTokens.size() < 2) return new CommandResult(new CommandError{"Please specify a search string"});
+	if (commandTokens.size() < 2) return new CommandResult{new CommandError{"Please specify a search string"}};
 
 	auto scene = target->scene();
 	scene->clearFocus();

@@ -85,7 +85,7 @@ void AutoCompleteVis::updateEntries()
 
 	for (auto e : entries_)
 			if (!e->visualization())
-				e->setVisualization( new TextAndDescription(e->text(), e->description()));
+				e->setVisualization( new TextAndDescription{e->text(), e->description()});
 
 	if (entries_.isEmpty()) layout()->synchronizeFirst(noProposals_, true, &style()->noProposals());
 	else for (auto e : entries_) layout()->append(e->visualization().data());

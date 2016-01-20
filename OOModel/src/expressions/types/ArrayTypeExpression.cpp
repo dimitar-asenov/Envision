@@ -40,7 +40,7 @@ REGISTER_ATTRIBUTE(ArrayTypeExpression, fixedSize, Expression, false, true, true
 
 Type* ArrayTypeExpression::type()
 {
-	return new ArrayType(typeExpression()->type(), false);
+	return new ArrayType{typeExpression()->type(), false};
 }
 
 }

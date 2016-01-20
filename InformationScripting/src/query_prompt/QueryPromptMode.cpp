@@ -42,7 +42,7 @@ namespace InformationScripting {
 Visualization::Item* QueryPromptMode::createInputItem(const QString&)
 {
 	QueryResultVisualizer::cleanScene();
-	inputItem_ = new QueryPromptInput(nullptr);
+	inputItem_ = new QueryPromptInput{nullptr};
 	return inputItem_;
 }
 
@@ -70,7 +70,7 @@ void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 		// The QueryBuilder below might however throw an exception when building the queries, if that is the case
 		// The executor will not execute and thus will never delete itself, thus we have to manually destroy it
 		// in the catch code.
-		auto executor = new QueryExecutor();
+		auto executor = new QueryExecutor{};
 		QueryBuilder builder{node, executor};
 		try
 		{

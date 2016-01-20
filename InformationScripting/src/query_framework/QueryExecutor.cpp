@@ -78,7 +78,7 @@ QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
 	{
 		// deleteLater
 		QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-																 new Visualization::CustomSceneEvent([this](){delete this;}));
+																 new Visualization::CustomSceneEvent{[this](){delete this;}});
 	}
 
 	return errorMessages;

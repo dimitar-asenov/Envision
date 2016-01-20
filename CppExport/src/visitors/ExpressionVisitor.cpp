@@ -287,7 +287,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 			*fragment << visit(e->callee());
 			if (!e->arguments()->isEmpty())
 			{
-				auto arguments = new Export::CompositeFragment(e->arguments(), "argsList");
+				auto arguments = new Export::CompositeFragment{e->arguments(), "argsList"};
 				for (auto node : *e->arguments())
 					if (auto n = DCast<Expression>(node)) *arguments << visit(n);
 					else if (auto n = DCast<Statement>(node)) *arguments << statement(n);

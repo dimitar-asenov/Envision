@@ -73,9 +73,9 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 							customizationGroup_->addVisualization(
 									[=](Visualization::Item* parent, Model::Node* node) -> Visualization::Item*
 									{
-										return new OOVisualization::VKeywordMethodCall(
+										return new OOVisualization::VKeywordMethodCall{
 												parent, static_cast<OOModel::MethodCallExpression*> (node),
-												OOVisualization::VKeywordMethodCall::itemStyles().get(styleNameString));
+												OOVisualization::VKeywordMethodCall::itemStyles().get(styleNameString)};
 									}, OOVisualization::VKeywordMethodCall::typeIdStatic(),
 									[=](Visualization::Item*, Model::Node* node) -> bool
 									{
@@ -91,10 +91,10 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 						{
 							CommandExpression* command{};
 							if (call->arguments()->size() == 1)
-								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName());
+								command = new CreateMethodCall{keyword->value(), met->fullyQualifiedName()};
 							else if (auto numArgs = DCast<OOModel::IntegerLiteral>(call->arguments()->last()))
-								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName(),
-																		 numArgs->valueAsInt());
+								command = new CreateMethodCall{keyword->value(), met->fullyQualifiedName(),
+																		 numArgs->valueAsInt()};
 
 							if (command)
 							{

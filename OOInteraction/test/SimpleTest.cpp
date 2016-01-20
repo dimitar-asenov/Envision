@@ -63,14 +63,14 @@ Method* addTestMethod()
 	testMethod->items()->append(es);
 
 	//Errors
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("{{b}{}")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a[,,]")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("++{{c,d}")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("++{{a,b},{c,d}")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("{{b}{}")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("a[,,]")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("++{{c,d}")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("++{{a,b},{c,d}")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("true")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("123456")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("int")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("true")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("123456")});
 
 	VariableDeclarationExpression* exprtest = new VariableDeclarationExpression{"exprtest"};
 	testMethod->items()->append(new ExpressionStatement{exprtest});
@@ -93,10 +93,10 @@ Method* addTestMethod()
 	exprtest4->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("new value[5]") );
 
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int[] foo=new int[10]")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("new int[5,3,2]")));
-	testMethod->items()->append(new ExpressionStatement(
-										  OOExpressionBuilder::getOOExpression("new int[2,2]{{a,b},{c,d}}")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("int[] foo=new int[10]")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("new int[5,3,2]")});
+	testMethod->items()->append(new ExpressionStatement{
+										  OOExpressionBuilder::getOOExpression("new int[2,2]{{a,b},{c,d}}")});
 
 	VariableDeclarationExpression* exprtest5 = new VariableDeclarationExpression{"exprtest5"};
 	testMethod->items()->append(new ExpressionStatement{exprtest5});
@@ -141,57 +141,57 @@ Method* addTestMethod()
 	auto exprtest13 = DCast<AssignmentExpression>( OOExpressionBuilder::getOOExpression("a=b%=c>>>=d+C"));
 	testMethod->items()->append(new ExpressionStatement{exprtest13});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int abc")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("int abc")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int abc=5+3")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("int abc=5+3")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int cond=abc<50?42:b+c")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("int cond=abc<50?42:b+c")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("Generic<T,U> instance")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("Generic<T,U> instance")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int a=method<T,S>(x)")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a||b||c||d-a+b+c+d")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a+b+c+d-d||a||b||c||d")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("int a=method<T,S>(x)")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("a||b||c||d-a+b+c+d")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("a+b+c+d-d||a||b||c||d")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("SomeClass var")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("var.a")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("SomeClass var")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("var.a")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int d=(a+b)/42")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("throw BadException")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("delete aPointer")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("delete[] anArrayPointer")));
-
-
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("const int xc=42")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("volatile int xv")));
-	testMethod->items()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("const volatile int vcx=1")));
-
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("auto aa=SomeClass")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("int d=(a+b)/42")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("throw BadException")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("delete aPointer")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("delete[] anArrayPointer")});
 
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("[]() f")));
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("[](int) g")));
-	testMethod->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("[](int arg,long arg2) h")));
-	testMethod->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int) h")));
-	testMethod->items()->append(new ExpressionStatement(
-					OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int x) h")));
-	testMethod->items()->append(new ExpressionStatement(
-					OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int x,int y) h")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("const int xc=42")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("volatile int xv")});
+	testMethod->items()->append(new ExpressionStatement{
+		OOExpressionBuilder::getOOExpression("const volatile int vcx=1")});
 
-	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a.b[42]()+x()()")));
-	testMethod->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("::.globalVar=::.globalFunct(42)")));
-	testMethod->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("typename ::.Vis.StyleType var=\"value\"")));
-	testMethod->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("int size=sizeof(int)")));
-	testMethod->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("int align=alignof(float)")));
-	testMethod->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("auto tid=typeid(double)")));
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("auto aa=SomeClass")});
+
+
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("[]() f")});
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("[](int) g")});
+	testMethod->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("[](int arg,long arg2) h")});
+	testMethod->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int) h")});
+	testMethod->items()->append(new ExpressionStatement{
+					OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int x) h")});
+	testMethod->items()->append(new ExpressionStatement{
+					OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int x,int y) h")});
+
+	testMethod->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression("a.b[42]()+x()()")});
+	testMethod->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("::.globalVar=::.globalFunct(42)")});
+	testMethod->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("typename ::.Vis.StyleType var=\"value\"")});
+	testMethod->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("int size=sizeof(int)")});
+	testMethod->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("int align=alignof(float)")});
+	testMethod->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("auto tid=typeid(double)")});
 
 	VariableDeclarationExpression* result = new VariableDeclarationExpression{"result"};
 	testMethod->items()->append( new ExpressionStatement{result} );
@@ -208,7 +208,7 @@ Method* addTestMethod()
 	sixloop->setCondition(sixLoopCond);
 	sixLoopCond->setLeft(new ReferenceExpression{"i"});
 	sixLoopCond->setOp(BinaryOperation::LESS);
-	MethodCallExpression* sizeCall = new MethodCallExpression("size", new ReferenceExpression("numbers"));
+	MethodCallExpression* sizeCall = new MethodCallExpression{"size", new ReferenceExpression{"numbers"}};
 	sixLoopCond->setRight(sizeCall);
 
 	//TODO test the visualization without the remaining parts of this method
@@ -270,8 +270,8 @@ Method* addMainMethod()
 {
 	auto method = new Method{"Main"};
 
-	method->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("System.out.println(\"Hello world\")")));
+	method->items()->append(new ExpressionStatement{
+			OOExpressionBuilder::getOOExpression("System.out.println(\"Hello world\")")});
 	return method;
 }
 

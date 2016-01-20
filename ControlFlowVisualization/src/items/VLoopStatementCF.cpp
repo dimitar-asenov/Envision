@@ -98,21 +98,21 @@ void VLoopStatementCF::determineChildren()
 	// Create nodes which are present in the tree
 	if (!initStep && node()->initStep())
 	{
-		initStepBackground = new SequentialLayout(this, &style()->initStep());
+		initStepBackground = new SequentialLayout{this, &style()->initStep()};
 		initStep = renderer()->render(initStepBackground, node()->initStep());
 		initStepBackground->append(initStep);
 	}
 
 	if (!updateStep && node()->updateStep())
 	{
-		updateStepBackground = new SequentialLayout(this, &style()->updateStep());
+		updateStepBackground = new SequentialLayout{this, &style()->updateStep()};
 		updateStep = renderer()->render(updateStepBackground, node()->updateStep());
 		updateStepBackground->append(updateStep);
 	}
 
 	if (!condition && node()->condition())
 	{
-		conditionBackground = new SequentialLayout(this, &style()->condition());
+		conditionBackground = new SequentialLayout{this, &style()->condition()};
 		condition = renderer()->render(conditionBackground, node()->condition());
 		conditionBackground->append(condition);
 	}

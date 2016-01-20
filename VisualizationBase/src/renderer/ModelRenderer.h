@@ -159,7 +159,7 @@ inline void ModelRenderer::registerGroup(int nodeTypeId, VisualizationGroup* gro
 template<typename VIS, typename NODE>
 Item* createVisualization(Item* parent, Model::Node* node)
 {
-	return new VIS(parent, static_cast<NODE*> (node));
+	return new VIS{parent, static_cast<NODE*>(node)};
 }
 
 inline int ModelRenderer::numRegisteredPurposes() const { return purposes_.size(); }

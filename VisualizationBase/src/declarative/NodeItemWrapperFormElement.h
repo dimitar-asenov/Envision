@@ -68,7 +68,7 @@ NodeItemWrapperFormElement<ParentType>::NodeItemWrapperFormElement(ChildItem ite
 template <typename ParentType>
 NodeItemWrapperFormElement<ParentType>* NodeItemWrapperFormElement<ParentType>::clone() const
 {
-		return new NodeItemWrapperFormElement<ParentType>(*this);
+		return new NodeItemWrapperFormElement<ParentType>{*this};
 }
 
 template <typename ParentType>

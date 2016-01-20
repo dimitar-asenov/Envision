@@ -46,7 +46,7 @@ OOModel::MetaDefinition* StandardMetaDefinitions::createMetaDef(const clang::Mac
 {
 	if (metaDefinition(md)) return nullptr;
 
-	auto metaDef = new OOModel::MetaDefinition(definitionManager_.definitionName(md));
+	auto metaDef = new OOModel::MetaDefinition{definitionManager_.definitionName(md)};
 	standardMetaDefinitions_.insert(definitionManager_.signature(md), metaDef);
 
 	// add formal arguments based on the expansion definition
@@ -215,7 +215,7 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, Nod
 
 			// in case the node to replace is not an expression we have to wrap the splice
 			if (DCast<OOModel::FormalResult>(child))
-				newNode = new OOModel::FormalResult(QString(), DCast<OOModel::Expression>(newNode));
+				newNode = new OOModel::FormalResult{QString(), DCast<OOModel::Expression>(newNode)};
 
 			// insert the splice into the tree
 			if (child->parent()) child->parent()->replaceChild(child, newNode);

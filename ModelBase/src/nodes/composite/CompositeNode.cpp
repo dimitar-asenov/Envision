@@ -310,8 +310,8 @@ void CompositeNode::load(PersistentStore &store)
 
 		// Skip loading partial optional children.
 		if (!store.isLoadingPartially() || !attribute.optional() || !attribute.partial())
-			execute(new CompositeNodeChangeChild(this, ln->node,
-															 CompositeIndex(index.level(), index.index()), &subnodes_));
+			execute(new CompositeNodeChangeChild{this, ln->node,
+															 CompositeIndex(index.level(), index.index()), &subnodes_});
 	}
 
 	checkOrCreateMandatoryAttributes(true);
@@ -322,7 +322,7 @@ void CompositeNode::removeAllNodes()
 	for (int level = 0; level < subnodes_.size(); ++level)
 		for (int i = 0; i < subnodes_[level].size(); ++i)
 			if ( subnodes_[level][i] )
-				execute(new CompositeNodeChangeChild(this, nullptr, CompositeIndex(level, i), &subnodes_));
+				execute(new CompositeNodeChangeChild{this, nullptr, CompositeIndex(level, i), &subnodes_});
 }
 
 void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
@@ -340,8 +340,8 @@ void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
 					auto newNode = Node::createNewNode(nodeType);
 					if (useUndoableAction)
 					{
-						execute(new CompositeNodeChangeChild(this, newNode,
-																			CompositeIndex(level, i), &subnodes_));
+						execute(new CompositeNodeChangeChild{this, newNode,
+																			CompositeIndex(level, i), &subnodes_});
 					}
 					else {
 						subnodes_[level][i] = newNode;
@@ -363,8 +363,8 @@ void CompositeNode::remove(const CompositeIndex &attributeIndex)
 	if ( meta_.attribute(attributeIndex).optional() )
 		execute(new CompositeNodeChangeChild{	this, nullptr, attributeIndex, &subnodes_});
 	else
-		execute(new CompositeNodeChangeChild(	this, Node::createNewNode(meta_.attribute(attributeIndex).type(), nullptr),
-				attributeIndex, &subnodes_));
+		execute(new CompositeNodeChangeChild{	this, Node::createNewNode(meta_.attribute(attributeIndex).type(), nullptr),
+				attributeIndex, &subnodes_});
 }
 
 void CompositeNode::remove(Node* childNode)

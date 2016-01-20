@@ -72,7 +72,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 		 */
 		currentXMacroParent = entry;
 
-	entry->setMetaCall(new OOModel::MetaCallExpression(macroDefinitions_.definitionName(entry->definition())));
+	entry->setMetaCall(new OOModel::MetaCallExpression{macroDefinitions_.definitionName(entry->definition())});
 
 	// only function like macros have braces in their signature to parse
 	if (!macroDirective->getMacroInfo()->isObjectLike())
@@ -99,7 +99,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 			{
 				auto argument = DCast<OOModel::ReferenceExpression>(entry->metaCall()->arguments()->first());
 				entry->metaCall()->arguments()->replaceChild(argument,
-																			new OOModel::BooleanLiteral(argument->name() == "override"));
+																			new OOModel::BooleanLiteral{argument->name() == "override"});
 				SAFE_DELETE(argument);
 			}
 	}

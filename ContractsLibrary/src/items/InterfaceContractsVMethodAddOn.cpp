@@ -79,8 +79,8 @@ QList<Visualization::Item*> InterfaceContractsVMethodAddOn::determineItems(Visua
 												if (!currentItems.isEmpty() && currentItems.first()->node() == contracts)
 													return currentItems;
 												else
-													result.append(new OOVisualization::VStatementItemList(nullptr, contracts,
-															Visualization::VList::itemStyles().get("contracts")));
+													result.append(new OOVisualization::VStatementItemList{nullptr, contracts,
+															Visualization::VList::itemStyles().get("contracts")});
 												break;
 											}
 										}

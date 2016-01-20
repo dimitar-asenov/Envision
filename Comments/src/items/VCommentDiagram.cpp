@@ -48,13 +48,13 @@ void VCommentDiagram::determineChildren()
 	Visualization::Item::synchronizeCollections(this, node()->shapes()->nodes(), shapes_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node)
-			{return new VCommentDiagramShape(parent, static_cast<CommentDiagramShape*>(node));},
+			{return new VCommentDiagramShape{parent, static_cast<CommentDiagramShape*>(node)};},
 		[](Item*, Model::Node*, VCommentDiagramShape*&){return false;});
 
 	Visualization::Item::synchronizeCollections(this, node()->connectors()->nodes(), connectors_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node)
-			{return new VCommentDiagramConnector(parent, static_cast<CommentDiagramConnector*>(node));},
+			{return new VCommentDiagramConnector{parent, static_cast<CommentDiagramConnector*>(node)};},
 		[](Item*, Model::Node*, VCommentDiagramConnector*&){return false;});
 
 	// Always update children

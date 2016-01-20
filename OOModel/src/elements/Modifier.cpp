@@ -55,13 +55,13 @@ Modifier* Modifier::clone() const { return new Modifier{*this}; }
 
 void Modifier::set(Modifiers modifiers, bool enable)
 {
-	execute(new Model::FieldSet<Modifiers>(this, modifiers_,
-			enable ? modifiers_ | modifiers : modifiers_ & (~modifiers)));
+	execute(new Model::FieldSet<Modifiers>{this, modifiers_,
+			enable ? modifiers_ | modifiers : modifiers_ & (~modifiers)});
 }
 
 void Modifier::clear()
 {
-	execute(new Model::FieldSet<Modifiers>(this, modifiers_, None));
+	execute(new Model::FieldSet<Modifiers>{this, modifiers_, None});
 }
 
 void Modifier::save(Model::PersistentStore &store) const

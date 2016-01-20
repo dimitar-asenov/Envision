@@ -70,10 +70,10 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 		// load name into tree
 		const Commit* commit = repository->getCommit(name);
 
-		auto fileStoreRevision = new SimpleTextFileStore(
+		auto fileStoreRevision = new SimpleTextFileStore{
 					[this, &commit](QString filename, const char*& data, int& size)
 					{ return commit->getFileContent(filename, data, size); }
-				);
+				};
 
 		auto revisionManager = new Model::TreeManager{};
 		revisionManager->load(fileStoreRevision, managerName, false);
@@ -82,15 +82,15 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 
 
 		auto mergeManager = new Model::TreeManager{};
-		auto fileStoreMerge = new SimpleTextFileStore(merge->mergedTree().get());
+		auto fileStoreMerge = new SimpleTextFileStore{merge->mergedTree().get()};
 		mergeManager->load(fileStoreMerge, managerName, false);
 		mergeManager->setName("Merge");
 
 
-		Item* mergeRoot = new RootItem(mergeManager->root());
+		Item* mergeRoot = new RootItem{mergeManager->root()};
 		mergeRoot->setPos(400.f, 0.f);
 
-		Item* revisionRoot = new RootItem(revisionManager->root());
+		Item* revisionRoot = new RootItem{revisionManager->root()};
 		revisionRoot->setPos(800.f, 0.f);
 
 		VisualizationManager::instance().mainScene()->addTopLevelItem(mergeRoot);

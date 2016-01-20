@@ -62,13 +62,13 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 	if (vfor->varType() && vfor->varType()->itemOrChildHasFocus() && (switchHorizontal || createRight) )
 	{
 		event->accept();
-		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->varNameNode()));
+		target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, vfor->node()->varNameNode()});
 	}
 	else if (vfor->varName() && vfor->varName()->itemOrChildHasFocus() && (switchHorizontal || createRight))
 	{
 		event->accept();
 		if (vfor->node()->collection()->typeId() != OOModel::Expression::typeIdStatic())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->collection()));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, vfor->node()->collection()});
 		else
 		{
 			auto empty = new OOModel::EmptyExpression{};
@@ -84,7 +84,7 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 	{
 		event->accept();
 		if (vfor->node()->varType())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->varType()));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, vfor->node()->varType()});
 		else
 		{
 			auto empty = new OOModel::EmptyExpression{};
@@ -103,7 +103,7 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 		if (vfor->node()->body()->size() > 0)
 		{
 			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(target, vfor->node()->body()->at(0)));
+					new Interaction::SetCursorEvent{target, vfor->node()->body()->at(0)});
 		}
 		else
 		{

@@ -79,12 +79,12 @@ template<typename T> void Static::registerStaticItem()
 
 template<typename T> Item* Static::staticItemConstructor(Item* parent, const ItemStyle* style)
 {
-	return new T(parent, static_cast<const typename T::StyleType*> (style) );
+	return new T{parent, static_cast<const typename T::StyleType*> (style) };
 }
 
 template<typename T> ItemStyle* Static::staticItemStyleConstructor()
 {
-	return new typename T::StyleType();
+	return new typename T::StyleType{};
 }
 
 }

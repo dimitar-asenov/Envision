@@ -137,7 +137,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD{"unary minus", "- expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::MINUS>});
 	add(new OD{"not", "! expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::NOT>});
 	add(new OD{"complement", "~ expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::COMPLEMENT>});
-	add(new OD("parenthesis", "( typeOrExpr )", 1, OD::NotAssociative, OD::unary<UnaryOperation::PARENTHESIS>));
+	add(new OD{"parenthesis", "( typeOrExpr )", 1, OD::NotAssociative, OD::unary<UnaryOperation::PARENTHESIS>});
 	add(new OD{"dereference", "* expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::DEREFERENCE>});
 	add(new OD{"addressof", "& expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::ADDRESSOF>});
 
@@ -148,84 +148,84 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD{"plus", "expr + expr", 4, OD::LeftAssociative, OD::binary<BinaryOperation::PLUS>});
 	add(new OD{"minus", "expr - expr", 4, OD::LeftAssociative, OD::binary<BinaryOperation::MINUS>});
 	add(new OD{"left shift", "expr << expr", 5, OD::LeftAssociative, OD::binary<BinaryOperation::LEFT_SHIFT>});
-	add(new OD("right shift signed", "expr >> expr", 5, OD::LeftAssociative,
-			OD::binary<BinaryOperation::RIGHT_SHIFT_SIGNED>));
-	add(new OD("righ shift unsigned", "expr >>> expr", 5, OD::LeftAssociative,
-			OD::binary<BinaryOperation::RIGHT_SHIFT_UNSIGNED>));
+	add(new OD{"right shift signed", "expr >> expr", 5, OD::LeftAssociative,
+			OD::binary<BinaryOperation::RIGHT_SHIFT_SIGNED>});
+	add(new OD{"righ shift unsigned", "expr >>> expr", 5, OD::LeftAssociative,
+			OD::binary<BinaryOperation::RIGHT_SHIFT_UNSIGNED>});
 	add(new OD{"less", "expr < expr", 6, OD::LeftAssociative, OD::binary<BinaryOperation::LESS>});
 	add(new OD{"greater", "expr > expr", 6, OD::LeftAssociative, OD::binary<BinaryOperation::GREATER>});
 	add(new OD{"less equals", "expr <= expr", 6, OD::LeftAssociative, OD::binary<BinaryOperation::LESS_EQUALS>});
-	add(new OD("greater equals", "expr >= expr", 6, OD::LeftAssociative,
-			OD::binary<BinaryOperation::GREATER_EQUALS>));
+	add(new OD{"greater equals", "expr >= expr", 6, OD::LeftAssociative,
+			OD::binary<BinaryOperation::GREATER_EQUALS>});
 	add(new OD{"equals", "expr == expr", 7, OD::LeftAssociative, OD::binary<BinaryOperation::EQUALS>});
 	add(new OD{"not equals", "expr != expr", 7, OD::LeftAssociative, OD::binary<BinaryOperation::NOT_EQUALS>});
 	add(new OD{"bitwise xor", "expr ^ expr", 9, OD::LeftAssociative, OD::binary<BinaryOperation::XOR>});
 	add(new OD{"bitwise and", "expr & expr", 8, OD::LeftAssociative, OD::binary<BinaryOperation::AND>});
 	add(new OD{"bitwise or", "expr | expr", 10, OD::LeftAssociative, OD::binary<BinaryOperation::OR>});
-	add(new OD("conditional and", "expr && expr", 11, OD::LeftAssociative,
-			OD::binary<BinaryOperation::CONDITIONAL_AND>));
-	add(new OD("conditional or", "expr || expr", 12, OD::LeftAssociative,
-			OD::binary<BinaryOperation::CONDITIONAL_OR>));
+	add(new OD{"conditional and", "expr && expr", 11, OD::LeftAssociative,
+			OD::binary<BinaryOperation::CONDITIONAL_AND>});
+	add(new OD{"conditional or", "expr || expr", 12, OD::LeftAssociative,
+			OD::binary<BinaryOperation::CONDITIONAL_OR>});
 	add(new OD{"array index", "expr [ expr ]", 1, OD::LeftAssociative, OD::binary<BinaryOperation::ARRAY_INDEX>});
 
 	// Ternary operator
-	add(new OD("conditional expression", "expr ? expr : expr", 13, OD::RightAssociative,
+	add(new OD{"conditional expression", "expr ? expr : expr", 13, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new ConditionalExpression{};
 		opr->setCondition(operands.first());
 		opr->setTrueExpression(operands.at(1));
 		opr->setFalseExpression(operands.last());
 		return opr;
-	}));
+	}});
 
 	// Assignment
-	add(new OD("assign", "expr = expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::ASSIGN>));
-	add(new OD("assign", "expr += expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::PLUS_ASSIGN>));
-	add(new OD("assign", "expr -= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::MINUS_ASSIGN>));
-	add(new OD("assign", "expr *= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::TIMES_ASSIGN>));
-	add(new OD("assign", "expr /= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::DIVIDE_ASSIGN>));
-	add(new OD("assign", "expr &= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::BIT_AND_ASSIGN>));
-	add(new OD("assign", "expr |= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::BIT_OR_ASSIGN>));
-	add(new OD("assign", "expr ^= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::BIT_XOR_ASSIGN>));
-	add(new OD("assign", "expr %= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::REMAINDER_ASSIGN>));
-	add(new OD("assign", "expr <<= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::LEFT_SHIFT_ASSIGN>));
-	add(new OD("assign", "expr >>= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN>));
-	add(new OD("assign", "expr >>>= expr", 14, OD::RightAssociative,
-			OD::assignment<AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN>));
+	add(new OD{"assign", "expr = expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::ASSIGN>});
+	add(new OD{"assign", "expr += expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::PLUS_ASSIGN>});
+	add(new OD{"assign", "expr -= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::MINUS_ASSIGN>});
+	add(new OD{"assign", "expr *= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::TIMES_ASSIGN>});
+	add(new OD{"assign", "expr /= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::DIVIDE_ASSIGN>});
+	add(new OD{"assign", "expr &= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::BIT_AND_ASSIGN>});
+	add(new OD{"assign", "expr |= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::BIT_OR_ASSIGN>});
+	add(new OD{"assign", "expr ^= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::BIT_XOR_ASSIGN>});
+	add(new OD{"assign", "expr %= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::REMAINDER_ASSIGN>});
+	add(new OD{"assign", "expr <<= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::LEFT_SHIFT_ASSIGN>});
+	add(new OD{"assign", "expr >>= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN>});
+	add(new OD{"assign", "expr >>>= expr", 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN>});
 
 	// Primitive Types
-	add(new OD( "int", "int", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}; }));
-	add(new OD( "long", "long", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::LONG}; }));
-	add(new OD( "uint", "uint", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT}; }));
-	add(new OD( "ulong", "ulong", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG}; }));
-	add(new OD( "float", "float", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::FLOAT}; }));
-	add(new OD( "double", "double", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::DOUBLE}; }));
-	add(new OD( "bool", "bool", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN}; }));
-	add(new OD( "char", "char", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::CHAR}; }));
-	add(new OD( "void", "void", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::VOID}; }));
+	add(new OD{ "int", "int", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}; }});
+	add(new OD{ "long", "long", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::LONG}; }});
+	add(new OD{ "uint", "uint", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT}; }});
+	add(new OD{ "ulong", "ulong", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG}; }});
+	add(new OD{ "float", "float", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::FLOAT}; }});
+	add(new OD{ "double", "double", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::DOUBLE}; }});
+	add(new OD{ "bool", "bool", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN}; }});
+	add(new OD{ "char", "char", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::CHAR}; }});
+	add(new OD{ "void", "void", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::VOID}; }});
 
 	// Function Type
-	add(new OD( "void function type", "[] ( expr )", 1, OD::NotAssociative,
+	add(new OD{ "void function type", "[] ( expr )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 1);
 		auto fte = new FunctionTypeExpression{};
@@ -233,8 +233,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		extractCommaInto(operands.first(), fte->arguments(), false, false);
 
 		return fte;
-	}));
-	add(new OD( "non-void function type", "[] ( expr ) -> ( type )", 1, OD::NotAssociative,
+	}});
+	add(new OD{ "non-void function type", "[] ( expr ) -> ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 		auto fte = new FunctionTypeExpression{};
@@ -243,146 +243,146 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		extractCommaInto(operands.last(), fte->results(), false, false);
 
 		return fte;
-	}));
+	}});
 
 
 	// Keywords
-	add(new OD( "super", "super", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new SuperExpression{}; }));
-	add(new OD( "this", "this", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new ThisExpression{}; }));
-	add(new OD( "::", "::", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-			return new GlobalScopeExpression{}; }));
-	add(new OD( "auto", "auto", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new AutoTypeExpression{}; }));
-	add(new OD( "null", "null", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new NullLiteral{}; }));
-	add(new OD( "true", "true", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new BooleanLiteral{true}; }));
-	add(new OD( "false", "false", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
-		return new BooleanLiteral{false}; }));
+	add(new OD{ "super", "super", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new SuperExpression{}; }});
+	add(new OD{ "this", "this", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new ThisExpression{}; }});
+	add(new OD{ "::", "::", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+			return new GlobalScopeExpression{}; }});
+	add(new OD{ "auto", "auto", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new AutoTypeExpression{}; }});
+	add(new OD{ "null", "null", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new NullLiteral{}; }});
+	add(new OD{ "true", "true", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new BooleanLiteral{true}; }});
+	add(new OD{ "false", "false", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new BooleanLiteral{false}; }});
 
 	// Others
-	add(new OD( "cast", "( type ) expr", 2, OD::RightAssociative,
+	add(new OD{ "cast", "( type ) expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new CastExpression{};
 		opr->setType(operands.first());
 		opr->setExpr(operands.last());
 		return opr;
-	}));
+	}});
 
-	add(new OD( "instanceof", "expr instanceof type", 6, OD::LeftAssociative,
+	add(new OD{ "instanceof", "expr instanceof type", 6, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new InstanceOfExpression{};
 		opr->setExpr(operands.first());
 		opr->setTypeExpression(operands.last());
 		return opr;
-	}));
+	}});
 
-	add(new OD( "comma", "typeOrExpr , typeOrExpr", 50, OD::LeftAssociative,
+	add(new OD{ "comma", "typeOrExpr , typeOrExpr", 50, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new CommaExpression{};
 		opr->setLeft(operands.first());
 		opr->setRight(operands.last());
 		return opr;
-	}));
+	}});
 
-	add(new OD( "initializer", "{ expr }", 0, OD::NotAssociative,
+	add(new OD{ "initializer", "{ expr }", 0, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new ArrayInitializer{};
 
 		for (auto e: operands) extractCommaInto(e, opr->values(), false, false);
 
 		return opr;
-	}));
+	}});
 
-	add(new OD( "new object", "new expr", 2, OD::RightAssociative,
+	add(new OD{ "new object", "new expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression{};
 		//TODO: not quite right, we need to set the operand as the initializer expression and the new type as the
 		// first part of the expression. For primitive types, the current implementation is fine.
 		opr->setNewType( operands.first());
 		return opr;
-	}));
+	}});
 
-	add(new OD( "new array", "new expr [ expr ]", 2, OD::RightAssociative,
+	add(new OD{ "new array", "new expr [ expr ]", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression{};
 		opr->setNewType( operands.first());
 		extractCommaInto( operands.last(), opr->dimensions(), false, true);
 		return opr;
-	}));
+	}});
 
-	add(new OD( "new array with init", "new expr [ expr ] expr", 2, OD::RightAssociative,
+	add(new OD{ "new array with init", "new expr [ expr ] expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression{};
 		opr->setNewType( operands.first());
 		extractCommaInto( operands.at(1), opr->dimensions(), false, true);
 		opr->setInitializer(operands.last());
 		return opr;
-	}));
+	}});
 
-	add(new OD( "delete object", "delete expr", 2, OD::RightAssociative,
+	add(new OD{ "delete object", "delete expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new DeleteExpression{};
 		expr->setExpr( operands.first());
 		return expr;
-	}));
+	}});
 
-	add(new OD( "delete array", "delete [] expr", 2, OD::RightAssociative,
+	add(new OD{ "delete array", "delete [] expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new DeleteExpression{};
 		expr->setIsArray(true);
 		expr->setExpr( operands.first());
 		return expr;
-	}));
+	}});
 
-	add(new OD( "member dot", "expr . id", 1, OD::LeftAssociative,
+	add(new OD{ "member dot", "expr . id", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 		auto ref = DCast<ReferenceExpression>( operands[1]);
 		Q_ASSERT(ref);
 
-		auto r = new ReferenceExpression( ref->name(), operands.first() );
+		auto r = new ReferenceExpression{ ref->name(), operands.first() };
 		SAFE_DELETE(ref);
 		return r;
-	}));
-	add(new OD( "member pointer", "expr -> id", 1, OD::LeftAssociative,
+	}});
+	add(new OD{ "member pointer", "expr -> id", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 		auto ref = DCast<ReferenceExpression>( operands[1]);
 		Q_ASSERT(ref);
 
-		auto r = new ReferenceExpression( ref->name(), operands.first(), ReferenceExpression::MemberKind::Pointer );
+		auto r = new ReferenceExpression{ ref->name(), operands.first(), ReferenceExpression::MemberKind::Pointer };
 		SAFE_DELETE(ref);
 		return r;
-	}));
-	add(new OD( "member static", "expr :: id", 1, OD::LeftAssociative,
+	}});
+	add(new OD{ "member static", "expr :: id", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 		auto ref = DCast<ReferenceExpression>( operands[1]);
 		Q_ASSERT(ref);
 
-		auto r = new ReferenceExpression( ref->name(), operands.first(), ReferenceExpression::MemberKind::Static );
+		auto r = new ReferenceExpression{ ref->name(), operands.first(), ReferenceExpression::MemberKind::Static };
 		SAFE_DELETE(ref);
 		return r;
-	}));
+	}});
 
-	add(new OD( "member", "expr . id < expr >", 1, OD::LeftAssociative,
+	add(new OD{ "member", "expr . id < expr >", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 3 );
 		auto ref = DCast<ReferenceExpression>( operands[1]);
 		Q_ASSERT(ref);
 
-		auto r = new ReferenceExpression( ref->name(), operands.first() );
+		auto r = new ReferenceExpression{ ref->name(), operands.first() };
 		SAFE_DELETE(ref);
 
 		extractCommaInto(operands.last(), r->typeArguments(), true, false);
 
 		return r;
-	}));
+	}});
 
-	add(new OD( "call", "expr ( expr )", 1, OD::LeftAssociative,
+	add(new OD{ "call", "expr ( expr )", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 
@@ -392,9 +392,9 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		extractCommaInto(operands.last(), opr->arguments(), true, false);
 
 		return opr;
-	}));
+	}});
 
-	add(new OD( "meta call", "# expr ( expr )", 1, OD::LeftAssociative,
+	add(new OD{ "meta call", "# expr ( expr )", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 
@@ -404,9 +404,9 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		extractCommaInto(operands.last(), opr->arguments(), true, false);
 
 		return opr;
-	}));
+	}});
 
-	add(new OD( "type arguments", "id < expr >", 0, OD::LeftAssociative,
+	add(new OD{ "type arguments", "id < expr >", 0, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 		auto ref = DCast<ReferenceExpression>( operands.first());
@@ -415,73 +415,73 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		extractCommaInto(operands.last(), ref->typeArguments(), true, false);
 
 		return ref;
-	}));
+	}});
 
-	add(new OD( "array type", "type []", 1, OD::LeftAssociative,
+	add(new OD{ "array type", "type []", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new ArrayTypeExpression{};
 		at->setTypeExpression(operands.first());
 		return at;
-	}));
+	}});
 
-	add(new OD( "pointer type", "type *", 1, OD::LeftAssociative,
+	add(new OD{ "pointer type", "type *", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new PointerTypeExpression{};
 		at->setTypeExpression(operands.first());
 		return at;
-	}));
+	}});
 
-	add(new OD( "reference type", "type &", 1, OD::LeftAssociative,
+	add(new OD{ "reference type", "type &", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new ReferenceTypeExpression{};
 		at->setTypeExpression(operands.first());
 		return at;
-	}));
+	}});
 
-	add(new OD( "const qualifier", "const type", 1, OD::RightAssociative,
+	add(new OD{ "const qualifier", "const type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new TypeQualifierExpression{};
 		at->setQualifier(Type::CONST);
 		at->setTypeExpression(operands.first());
 		return at;
-	}));
+	}});
 
-	add(new OD( "volatile qualifier", "volatile type", 1, OD::RightAssociative,
+	add(new OD{ "volatile qualifier", "volatile type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new TypeQualifierExpression{};
 		at->setQualifier(Type::VOLATILE);
 		at->setTypeExpression(operands.first());
 		return at;
-	}));
+	}});
 
-	add(new OD( "throw", "throw expr", 30, OD::RightAssociative,
+	add(new OD{ "throw", "throw expr", 30, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new ThrowExpression{};
 		expr->setExpr( operands.first());
 		return expr;
-	}));
+	}});
 
-	add(new OD( "typename", "typename type", 1, OD::RightAssociative,
+	add(new OD{ "typename", "typename type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new TypeNameOperator{};
 		expr->setTypeExpression( operands.first());
 		return expr;
-	}));
+	}});
 
 
 	// Type traits operators
-	add(new OD( "sizeof", "sizeof ( type )", 1, OD::NotAssociative,
+	add(new OD{ "sizeof", "sizeof ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
-		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::SizeOf, operands.first());
-	}));
-	add(new OD( "alignof", "alignof ( type )", 1, OD::NotAssociative,
+		return new TypeTraitExpression{TypeTraitExpression::TypeTraitKind::SizeOf, operands.first()};
+	}});
+	add(new OD{ "alignof", "alignof ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
-		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::AlignOf, operands.first());
-	}));
-	add(new OD( "typeid", "typeid ( type )", 1, OD::NotAssociative,
+		return new TypeTraitExpression{TypeTraitExpression::TypeTraitKind::AlignOf, operands.first()};
+	}});
+	add(new OD{ "typeid", "typeid ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
-		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::TypeId, operands.first());
-	}));
+		return new TypeTraitExpression{TypeTraitExpression::TypeTraitKind::TypeId, operands.first()};
+	}});
 
 	// Variable declaration
 	auto varDeclFunction = [](const QList<Expression*>& operands) -> Expression*
@@ -497,16 +497,16 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return vd;
 	};
 	add(new OD{ "variable decl", "type id", 40, OD::RightAssociative, varDeclFunction});
-	add(new OD( "variable decl and initialization", "type id = expr", 40,
-			OD::RightAssociative, varDeclFunction));
+	add(new OD{ "variable decl and initialization", "type id = expr", 40,
+			OD::RightAssociative, varDeclFunction});
 
 
 	// Command descriptors
 	add(new CommandDescriptor{ "command without params", "\\ id SPACE", 0, OD::NotAssociative});
-	add(new CommandDescriptor( "command with params", "\\ id ( typeOrExpr )", 0, OD::NotAssociative));
+	add(new CommandDescriptor{ "command with params", "\\ id ( typeOrExpr )", 0, OD::NotAssociative});
 
-	add(new CompoundObjectDescriptor( "compound object",
-			CompoundObjectDescriptor::compoundSignature(), 0, OD::NotAssociative));
+	add(new CompoundObjectDescriptor{ "compound object",
+			CompoundObjectDescriptor::compoundSignature(), 0, OD::NotAssociative});
 }
 
 

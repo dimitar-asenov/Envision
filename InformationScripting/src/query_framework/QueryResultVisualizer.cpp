@@ -107,7 +107,7 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 		while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
 		{
 			auto item = *nodeVisualizationIt++;
-			auto overlay = new HighlightOverlay(item);
+			auto overlay = new HighlightOverlay{item};
 			overlay->setText(info);
 			setColor(overlay, it.value());
 			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
@@ -142,8 +142,8 @@ void QueryResultVisualizer::showASTRelation(const TupleSet& ts, const QString& r
 			Q_ASSERT(toVisualization != Visualization::Item::nodeItemsMap().end());
 			auto fromVisualizationItem = *fromVisualization;
 
-			auto overlay = new Visualization::ArrowOverlay(
-						fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get());
+			auto overlay = new Visualization::ArrowOverlay{
+						fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get()};
 			fromVisualizationItem->addOverlay(overlay, ARROW_OVERLAY_GROUP);
 		}
 	}

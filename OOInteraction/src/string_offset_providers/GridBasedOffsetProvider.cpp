@@ -59,7 +59,7 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 	{
 		setFilterNullAndEmptyComponents();
 		for (int i = 0; i < layoutProvider->layout()->length(); ++i)
-			add(new Cell(i, layoutProvider->layout()->at<Visualization::Item>(i), i));
+			add(new Cell{i, layoutProvider->layout()->at<Visualization::Item>(i), i});
 
 		return;
 	}
@@ -75,7 +75,7 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 				if (cellItem)
 				{
 					//TODO The const_cast below is a bit fishy. Should the grid layout store mutable objects to begin with?
-					add(new Cell(i, const_cast<Visualization::Item*>(cellItem), i));
+					add(new Cell{i, const_cast<Visualization::Item*>(cellItem), i});
 				}
 			}
 

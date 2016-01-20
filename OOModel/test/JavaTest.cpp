@@ -85,8 +85,8 @@ class JavaLibraryAndHelloWorldTest : public Test<OOModelPlugin, JavaLibraryAndHe
 	//TODO make an array argument
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement{};
-	MethodCallExpression* callPrintln = new MethodCallExpression("println",
-			new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
+	MethodCallExpression* callPrintln = new MethodCallExpression{"println",
+			new ReferenceExpression{"out", new ReferenceExpression{"System", new ReferenceExpression{"Java"}}}};
 	StringLiteral* helloStr = new StringLiteral{};
 	callPrintln->arguments()->append(helloStr);
 	helloStr->setValue("Hello World");

@@ -35,7 +35,7 @@ ITEM_COMMON_DEFINITIONS(PromptTextInput, "item")
 
 PromptTextInput::PromptTextInput(Item* parent, const QString& initialCommandText,
 															  const StyleType* style)
-	: Super{parent, style}, text_{ new Visualization::Text(this, &style->text())}
+	: Super{parent, style}, text_{ new Visualization::Text{this, &style->text()}}
 {
 	text_->setText(initialCommandText);
 	setDefaultMoveCursorProxy(text_);

@@ -61,8 +61,8 @@ class CommandHelper
 			p->endModification();
 
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, child,
-					Interaction::SetCursorEvent::CursorDefault, showPrompt));
+			target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target, child,
+					Interaction::SetCursorEvent::CursorDefault, showPrompt});
 		}
 
 		template <typename Child>
@@ -75,7 +75,7 @@ class CommandHelper
 			target->scene()->listenToTreeManager(manager);
 
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), child,
-					Interaction::SetCursorEvent::CursorDefault, showPrompt));
+			target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target->scene(), child,
+					Interaction::SetCursorEvent::CursorDefault, showPrompt});
 		}
 };

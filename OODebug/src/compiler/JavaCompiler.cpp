@@ -93,7 +93,7 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 	Q_ASSERT(map);
 
 	if (!compilationOk) // If export failed we can exit here.
-		return new Interaction::CommandResult(new Interaction::CommandError("Export failed, check error messages!"));
+		return new Interaction::CommandResult{new Interaction::CommandError{"Export failed, check error messages!"}};
 
 	// Create a build folder and setup the compiler
 	static const QString buildFolder("build");
@@ -159,15 +159,15 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 	if (compilationOk)
 		return new Interaction::CommandResult{};
 	else
-		return new Interaction::CommandResult(new Interaction::CommandError("Compilation failed, check error messages!"));
+		return new Interaction::CommandResult{new Interaction::CommandError{"Compilation failed, check error messages!"}};
 }
 
 void JavaCompiler::visualizeMessage(Visualization::Item* item, const QString& message, const QString& type)
 {
-	auto overlay = new Visualization::MessageOverlay(item,
+	auto overlay = new Visualization::MessageOverlay{item,
 		[message](Visualization::MessageOverlay *){
 		return message;
-	}, Visualization::MessageOverlay::itemStyles().get(type));
+	}, Visualization::MessageOverlay::itemStyles().get(type)};
 
 	item->addOverlay(overlay, COMPILER_MESSAGE_GROUP);
 }

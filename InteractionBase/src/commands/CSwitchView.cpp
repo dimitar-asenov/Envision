@@ -45,8 +45,8 @@ CommandResult* CSwitchView::execute(Visualization::Item*, Visualization::Item* t
 	if (target->scene()->viewItems()->switchToView(commandTokens[1]))
 		return new CommandResult{};
 	else
-		return new CommandResult(new CommandError(
-				"View with name " + commandTokens[1] + " does not exist"));
+		return new CommandResult{new CommandError{
+				"View with name " + commandTokens[1] + " does not exist"}};
 }
 
 QList<CommandSuggestion*> CSwitchView::suggest(Visualization::Item* source, Visualization::Item*,
@@ -60,8 +60,8 @@ QList<CommandSuggestion*> CSwitchView::suggest(Visualization::Item* source, Visu
 		for (auto vector : source->scene()->viewItems()->viewItems())
 			for (auto view : vector)
 				if (view && view->name().startsWith(nameSoFar) && view != source->scene()->currentViewItem())
-					suggestions.append(new CommandSuggestion(name() + " " + view->name(),
-															 "Open view " + view->name()));
+					suggestions.append(new CommandSuggestion{name() + " " + view->name(),
+															 "Open view " + view->name()});
 	}
 	return suggestions;
 }

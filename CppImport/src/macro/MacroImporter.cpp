@@ -290,7 +290,7 @@ void MacroImporter::endEntireImport()
 	// insert all top level meta calls
 	for (auto it = finalizationMetaCalls.begin(); it != finalizationMetaCalls.end(); it++)
 		if (DCast<OOModel::Statement>(it.key()))
-			it.key()->parent()->replaceChild(it.key(), new OOModel::ExpressionStatement(it.value()->metaCall()));
+			it.key()->parent()->replaceChild(it.key(), new OOModel::ExpressionStatement{it.value()->metaCall()});
 		else if (DCast<OOModel::Expression>(it.key()))
 			it.key()->parent()->replaceChild(it.key(), it.value()->metaCall());
 		else if (DCast<OOModel::VariableDeclaration>(it.key()) &&

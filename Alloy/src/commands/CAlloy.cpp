@@ -90,12 +90,12 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	aBrowserComment->updateSize(QSize(720, 540));
 	aBrowserComment->browser()->settings()->setObjectCacheCapacities(0, 0, 0); //disable the cache
 
-	alloyModelGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(source,
+	alloyModelGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay{source,
 		[aBrowserComment](Visualization::BoxOverlay* self){
 		self->content() = aBrowserComment;
 		aBrowserComment->setParentItem(self);
 		return QString("AlloyModels");
-	})));
+	}}));
 
 	return new Interaction::CommandResult{};
 }

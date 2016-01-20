@@ -85,22 +85,22 @@ void HQuery::initStringComponents()
 
 	GridBasedOffsetProvider::addGridConstructor<VCommandNode>(
 	[](GridBasedOffsetProvider* grid, VCommandNode* vis){
-		grid->add(new Cell(0, vis->name(), 0));
+		grid->add(new Cell{0, vis->name(), 0});
 		if ( !vis->node()->arguments()->isEmpty())
-			grid->add(new ListCell(1, vis->arguments(), 1, " ", " ", ""));
+			grid->add(new ListCell{1, vis->arguments(), 1, " ", " ", ""});
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VCompositeQueryNode>(
 	[](GridBasedOffsetProvider* grid, VCompositeQueryNode* vis){
-		grid->add(new ListCell(0, vis->queries(), 0,
+		grid->add(new ListCell{0, vis->queries(), 0,
 									  QueryParser::LIST_LEFT,
 									  QueryParser::LIST_DELIM,
-									  QueryParser::LIST_RIGHT));
+									  QueryParser::LIST_RIGHT});
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VCommandArgument>(
 	[](GridBasedOffsetProvider* grid, VCommandArgument* vis){
-		grid->add(new Cell(0, vis->argument(), 0));
+		grid->add(new Cell{0, vis->argument(), 0});
 	});
 }
 
@@ -204,7 +204,7 @@ void HQuery::setNewQuery(Visualization::Item* target, Visualization::Item* topMo
 	auto parent = topMostItem->parent();
 	while (!parent->node() && parent->parent()) parent=parent->parent();
 
-	target->scene()->addPostEventAction(new OOInteraction::SetExpressionCursorEvent(parent, newQuery, index));
+	target->scene()->addPostEventAction(new OOInteraction::SetExpressionCursorEvent{parent, newQuery, index});
 }
 
 bool HQuery::processDeleteOrBackspace(Qt::Key key, QString& exp, int& index)

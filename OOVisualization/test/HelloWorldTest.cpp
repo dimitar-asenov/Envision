@@ -58,14 +58,14 @@ namespace OOVisualization {
 void addConstructorAndDestructor(Class* cl)
 {
 
-	auto con = new Method(cl->name(), Modifier::Public, Method::MethodKind::Constructor);
+	auto con = new Method{cl->name(), Modifier::Public, Method::MethodKind::Constructor};
 	cl->methods()->append(con);
 	std::unique_ptr<Position>(con->extension<Position>())->set(0, 1);
-	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression{"Super"}, {new IntegerLiteral{42}}));
-	con->memberInitializers()->append(new MemberInitializer(
-					new ReferenceExpression{"name"}, {new StringLiteral{"hi"}, new IntegerLiteral{10}}));
+	con->memberInitializers()->append(new MemberInitializer{new ReferenceExpression{"Super"}, {new IntegerLiteral{42}}});
+	con->memberInitializers()->append(new MemberInitializer{
+					new ReferenceExpression{"name"}, {new StringLiteral{"hi"}, new IntegerLiteral{10}}});
 
-	auto des = new Method("~" + cl->name(), Modifier::Public, Method::MethodKind::Destructor);
+	auto des = new Method{"~" + cl->name(), Modifier::Public, Method::MethodKind::Destructor};
 	cl->methods()->append(des);
 	std::unique_ptr<Position>(des->extension<Position>())->set(0, 2);
 }
@@ -76,11 +76,11 @@ Class* addHelloWorld(Project* parent)
 	std::unique_ptr<Position>(hello->extension<Position>())->set(0, 0);
 	if (parent) parent->classes()->append(hello);
 
-	hello->subDeclarations()->append(new NameImport(
-		new ReferenceExpression("out", new ReferenceExpression("System"))));
+	hello->subDeclarations()->append(new NameImport{
+		new ReferenceExpression{"out", new ReferenceExpression{"System"}}});
 	// TODO: BUG: If the two lines below are uncommented this will trigger an infinite loop.
-	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression{"Java"}));
-	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression{"Java"}));
+	// hello->subDeclarations()->append(new NameImport{new ReferenceExpression{"Java"}});
+	// hello->subDeclarations()->append(new NameImport{new ReferenceExpression{"Java"}});
 
 	Method* main = new Method{"main", Modifier::Public | Modifier::Static};
 	std::unique_ptr<Position>(main->extension<Position>())->set(0, 0);
@@ -96,8 +96,8 @@ Class* addHelloWorld(Project* parent)
 	mainArgElementType->typeExpression()->ref()->setName("String");
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement{};
-	MethodCallExpression* callPrintln = new MethodCallExpression("println",
-			new ReferenceExpression("out", new ReferenceExpression("System")));
+	MethodCallExpression* callPrintln = new MethodCallExpression{"println",
+			new ReferenceExpression{"out", new ReferenceExpression{"System"}}};
 	callPrintln->arguments()->append(new StringLiteral{"Hello World"});
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
@@ -114,16 +114,16 @@ Class* addGeneric(Project* parent)
 	if (parent) parent->classes()->append(gen);
 
 	gen->typeArguments()->append(new FormalTypeArgument{"P"});
-	gen->typeArguments()->append(new FormalTypeArgument("Q", new ReferenceExpression{"P"}));
-	gen->typeArguments()->append(new FormalTypeArgument("R", nullptr, new ReferenceExpression("P")));
+	gen->typeArguments()->append(new FormalTypeArgument{"Q", new ReferenceExpression{"P"}});
+	gen->typeArguments()->append(new FormalTypeArgument{"R", nullptr, new ReferenceExpression{"P"}});
 	auto specialized = new FormalTypeArgument{"Specialized"};
 	specialized->setSpecializationExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	gen->typeArguments()->append(specialized);
 
 	// Add some fields
-	gen->fields()->append(new Field("index", new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT},
-			new IntegerLiteral{42}));
-	gen->fields()->append(new Field("data", new ClassTypeExpression(new ReferenceExpression("P"))));
+	gen->fields()->append(new Field{"index", new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT},
+			new IntegerLiteral{42}});
+	gen->fields()->append(new Field{"data", new ClassTypeExpression{new ReferenceExpression{"P"}}});
 
 	Method* foo = new Method{"foo", Modifier::Public};
 	gen->methods()->append(foo);
@@ -132,8 +132,8 @@ Class* addGeneric(Project* parent)
 	Method* bar = new Method{"bar", Modifier::Public | Modifier::Static};
 	gen->methods()->append(bar);
 	bar->typeArguments()->append(new FormalTypeArgument{"S"});
-	bar->typeArguments()->append(new FormalTypeArgument("U", new ReferenceExpression{"S"}));
-	bar->typeArguments()->append(new FormalTypeArgument("V", nullptr, new ReferenceExpression("S")));
+	bar->typeArguments()->append(new FormalTypeArgument{"U", new ReferenceExpression{"S"}});
+	bar->typeArguments()->append(new FormalTypeArgument{"V", nullptr, new ReferenceExpression{"S"}});
 
 	Method* foobar = new Method{"foobar", Modifier::Public};
 	gen->methods()->append(foobar);
@@ -175,7 +175,7 @@ Class* addAnnotatedWithFriends(Project* parent)
 	auto ann = new Class{"AnnotatedWithFriends", Modifier::Public};
 	if (parent) parent->classes()->append(ann);
 
-	ann->annotations()->append( new ExpressionStatement(new ReferenceExpression("SomeAnnotation")));
+	ann->annotations()->append( new ExpressionStatement{new ReferenceExpression{"SomeAnnotation"}});
 
 	// Add some friends classes
 	ann->friends()->append(new Class{"Generic"});
@@ -184,8 +184,8 @@ Class* addAnnotatedWithFriends(Project* parent)
 	// Add methods
 	Method* foo = new Method{"foo", Modifier::Public};
 	ann->methods()->append(foo);
-	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation2")));
-	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation3")));
+	foo->annotations()->append(new ExpressionStatement{new ReferenceExpression{"SomeAnnotation2"}});
+	foo->annotations()->append(new ExpressionStatement{new ReferenceExpression{"SomeAnnotation3"}});
 
 	VariableDeclarationExpression* var = new VariableDeclarationExpression{"bodyVar"};
 	foo->items()->append(new ExpressionStatement{var});
@@ -205,7 +205,7 @@ Class* addEnumeration(Project* parent)
 
 	en->enumerators()->append( new Enumerator{"RED"});
 	en->enumerators()->append( new Enumerator{"GREEN"});
-	en->enumerators()->append( new Enumerator("BLUE", new IntegerLiteral{5}));
+	en->enumerators()->append( new Enumerator{"BLUE", new IntegerLiteral{5}});
 
 	// Set positions
 	std::unique_ptr<Position>(en->extension<Position>())->set(1, 2);
@@ -240,16 +240,16 @@ Class* addInner()
 Module* addLambda()
 {
 	auto mod = new Module{"Lambda"};
-	mod->fields()->append(new Field("common",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
+	mod->fields()->append(new Field{"common",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 
-	auto lambdaCommentNode = new CommentNode("This is the *Lambda*-Module. The following classes are available\n"
+	auto lambdaCommentNode = new CommentNode{"This is the *Lambda*-Module. The following classes are available\n"
 														  " * IUnary\n"
 														  " * IBinary\n"
 														  " * INoReturn\n"
 														  " * LambdaTest\n"
 														  "Here you find some more information about **Classes**\n"
-														  "[table#someTable#2#1]\n");
+														  "[table#someTable#2#1]\n"};
 
 	auto aTable = new CommentTable{nullptr, "someTable", 2, 1};
 	aTable->setNodeAt(0, 0, new CommentNode{"#english wikipedia"});
@@ -262,46 +262,46 @@ Module* addLambda()
 	mod->classes()->append(iUnary);
 	auto unMet = new Method{"op"};
 	iUnary->methods()->append(unMet);
-	unMet->results()->append(new FormalResult("",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
-	unMet->arguments()->append(new FormalArgument("x",
-				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
+	unMet->results()->append(new FormalResult{"",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
+	unMet->arguments()->append(new FormalArgument{"x",
+				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 
 	auto iBinary = new Class{"IBinary", Modifier::Public};
 	mod->classes()->append(iBinary);
 	auto binMet = new Method{"op"};
 	iBinary->methods()->append(binMet);
-	binMet->results()->append(new FormalResult("",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
-	binMet->arguments()->append(new FormalArgument("x",
-				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
-	binMet->arguments()->append(new FormalArgument("y",
-				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
+	binMet->results()->append(new FormalResult{"",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
+	binMet->arguments()->append(new FormalArgument{"x",
+				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
+	binMet->arguments()->append(new FormalArgument{"y",
+				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 
 	auto iNoRet = new Class{"INoReturn", Modifier::Public};
 	mod->classes()->append(iNoRet);
 	auto noRetMet = new Method{"op"};
 	iNoRet->methods()->append(noRetMet);
-	noRetMet->arguments()->append(new FormalArgument("x",
-				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
+	noRetMet->arguments()->append(new FormalArgument{"x",
+				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 
 	auto test = new Class{"LambdaTest", Modifier::Public};
 	mod->classes()->append(test);
 
 	auto acceptUnary =  new Method{"unary"};
 	test->methods()->append(acceptUnary);
-	acceptUnary->arguments()->append(new FormalArgument("x",
-					new ClassTypeExpression(new ReferenceExpression("IUnary"))));
+	acceptUnary->arguments()->append(new FormalArgument{"x",
+					new ClassTypeExpression{new ReferenceExpression{"IUnary"}}});
 
 	auto acceptBinary =  new Method{"binary"};
 	test->methods()->append(acceptBinary);
-	acceptBinary->arguments()->append(new FormalArgument("x",
-					new ClassTypeExpression(new ReferenceExpression("IBinary"))));
+	acceptBinary->arguments()->append(new FormalArgument{"x",
+					new ClassTypeExpression{new ReferenceExpression{"IBinary"}}});
 
 	auto acceptNoReturn =  new Method{"noreturn"};
 	test->methods()->append(acceptNoReturn);
-	acceptNoReturn->arguments()->append(new FormalArgument("x",
-					new ClassTypeExpression(new ReferenceExpression("INoReturn"))));
+	acceptNoReturn->arguments()->append(new FormalArgument{"x",
+					new ClassTypeExpression{new ReferenceExpression{"INoReturn"}}});
 
 	auto testMet = new Method{"test"};
 	test->methods()->append(testMet);
@@ -310,28 +310,28 @@ Module* addLambda()
 	testMet->items()->append(new ExpressionStatement{callUnary});
 	auto le = new LambdaExpression{};
 	callUnary->arguments()->append(le);
-	le->arguments()->append(new FormalArgument("x",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
-	le->body()->append(new ReturnStatement(new BinaryOperation(BinaryOperation::PLUS,
-			new ReferenceExpression{"x"}, new IntegerLiteral{1})));
+	le->arguments()->append(new FormalArgument{"x",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
+	le->body()->append(new ReturnStatement{new BinaryOperation{BinaryOperation::PLUS,
+			new ReferenceExpression{"x"}, new IntegerLiteral{1}}});
 
 	auto callBinary= new MethodCallExpression{"binary"};
 	testMet->items()->append(new ExpressionStatement{callBinary});
 	le = new LambdaExpression{};
 	callBinary->arguments()->append(le);
-	le->arguments()->append(new FormalArgument("x",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
-	le->arguments()->append(new FormalArgument("y",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
-	le->body()->append(new ReturnStatement(new BinaryOperation(BinaryOperation::PLUS,
-			new ReferenceExpression{"x"}, new ReferenceExpression{"y"})));
+	le->arguments()->append(new FormalArgument{"x",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
+	le->arguments()->append(new FormalArgument{"y",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
+	le->body()->append(new ReturnStatement{new BinaryOperation{BinaryOperation::PLUS,
+			new ReferenceExpression{"x"}, new ReferenceExpression{"y"}}});
 
 	auto callNoRet= new MethodCallExpression{"noreturn"};
 	testMet->items()->append(new ExpressionStatement{callNoRet});
 	le = new LambdaExpression{};
 	callNoRet->arguments()->append(le);
-	le->arguments()->append(new FormalArgument("x",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
+	le->arguments()->append(new FormalArgument{"x",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 	auto someOpCall = new MethodCallExpression{"someOp"};
 	someOpCall->arguments()->append(new ReferenceExpression{"x"});
 	le->body()->append(new ExpressionStatement{someOpCall});
@@ -404,8 +404,8 @@ Method* addLongMethod(Class* parent)
 	result->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	longMethod->results()->append(result);
 
-	auto resultComment = new CommentNode("**Nested tables example**\n"
-													 "[table#outerTable#2#2]");
+	auto resultComment = new CommentNode{"**Nested tables example**\n"
+													 "[table#outerTable#2#2]"};
 	result->setComment(resultComment);
 
 	auto InnerTableComment1 = new CommentNode{"[table#innerTable1#2#1]"};
@@ -455,11 +455,11 @@ Method* addLongMethod(Class* parent)
 	assertSt->setExpression(new ReferenceExpression{"someValue"});
 
 	auto var0 = new VariableDeclarationExpression{"pSystem"};
-	var0->decl()->setTypeExpression(new PointerTypeExpression(new ClassTypeExpression(
-			new ReferenceExpression{"System"})));
+	var0->decl()->setTypeExpression(new PointerTypeExpression{new ClassTypeExpression{
+			new ReferenceExpression{"System"}}});
 	longMethod->items()->append(new ExpressionStatement{var0});
-	longMethod->items()->append(new ExpressionStatement(
-			new ReferenceExpression("out", new ReferenceExpression("pSystem"))));
+	longMethod->items()->append(new ExpressionStatement{
+			new ReferenceExpression{"out", new ReferenceExpression{"pSystem"}}});
 
 
 	VariableDeclarationExpression* var1 = new VariableDeclarationExpression{"var1"};
@@ -557,8 +557,8 @@ Method* addLongMethod(Class* parent)
 
 	VariableDeclarationExpression* var14 = new VariableDeclarationExpression{"var14"};
 	longMethod->items()->append(new ExpressionStatement{var14});
-	var14->decl()->setTypeExpression(new TypeQualifierExpression ( Type::CONST,
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
+	var14->decl()->setTypeExpression(new TypeQualifierExpression { Type::CONST,
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 	UnaryOperation* uOp2 = new UnaryOperation{};
 	var14->decl()->setInitialValue(uOp2);
 	uOp2->setOp(UnaryOperation::POSTINCREMENT);
@@ -566,8 +566,8 @@ Method* addLongMethod(Class* parent)
 
 	VariableDeclarationExpression* var15 = new VariableDeclarationExpression{"var15"};
 	longMethod->items()->append(new ExpressionStatement{var15});
-	var15->decl()->setTypeExpression(new TypeQualifierExpression ( Type::VOLATILE,
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
+	var15->decl()->setTypeExpression(new TypeQualifierExpression { Type::VOLATILE,
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 	BinaryOperation* binOp0 = new BinaryOperation{};
 	var15->decl()->setInitialValue(binOp0);
 	binOp0->setOp(BinaryOperation::DIVIDE);
@@ -583,9 +583,9 @@ Method* addLongMethod(Class* parent)
 
 	VariableDeclarationExpression* var16 = new VariableDeclarationExpression{"var16"};
 	longMethod->items()->append(new ExpressionStatement{var16});
-	var16->decl()->setTypeExpression(new TypeQualifierExpression ( Type::CONST,
-			new TypeQualifierExpression ( Type::VOLATILE,
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN})));
+	var16->decl()->setTypeExpression(new TypeQualifierExpression { Type::CONST,
+			new TypeQualifierExpression { Type::VOLATILE,
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN}}});
 	BinaryOperation* binOp2 = new BinaryOperation{};
 	var16->decl()->setInitialValue(binOp2);
 	binOp2->setOp(BinaryOperation::LESS_EQUALS);
@@ -670,47 +670,47 @@ Method* addLongMethod(Class* parent)
 	deleteArrayExpr->setExpr(new ReferenceExpression{"pSystem"});
 	longMethod->items()->append(new ExpressionStatement{deleteArrayExpr});
 
-	auto var20 = new VariableDeclarationExpression("var20", new AutoTypeExpression());
+	auto var20 = new VariableDeclarationExpression{"var20", new AutoTypeExpression{}};
 	longMethod->items()->append(new ExpressionStatement{var20});
-	var20->decl()->setInitialValue( new NewExpression( new ClassTypeExpression(
-			new ReferenceExpression{"HelloWorld"})));
+	var20->decl()->setInitialValue( new NewExpression{ new ClassTypeExpression{
+			new ReferenceExpression{"HelloWorld"}}});
 
-	auto var21 = new VariableDeclarationExpression("var21", new FunctionTypeExpression());
+	auto var21 = new VariableDeclarationExpression{"var21", new FunctionTypeExpression{}};
 	longMethod->items()->append(new ExpressionStatement{var21});
 
-	auto var22 = new VariableDeclarationExpression("var22", new FunctionTypeExpression(
-			{new VariableDeclarationExpression("val",
-					new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}),
-			 new VariableDeclarationExpression("name", new ClassTypeExpression(new ReferenceExpression("String")))}));
+	auto var22 = new VariableDeclarationExpression{"var22", new FunctionTypeExpression{
+			{new VariableDeclarationExpression{"val",
+					new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}},
+			 new VariableDeclarationExpression{"name", new ClassTypeExpression{new ReferenceExpression{"String"}}}}}};
 	longMethod->items()->append(new ExpressionStatement{var22});
 
-	auto var23 = new VariableDeclarationExpression("var23", new FunctionTypeExpression( {},
-				{new VariableDeclarationExpression("",
-						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT})}));
+	auto var23 = new VariableDeclarationExpression{"var23", new FunctionTypeExpression{ {},
+				{new VariableDeclarationExpression{"",
+						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}}}}};
 		longMethod->items()->append(new ExpressionStatement{var23});
 
-	auto var24 = new VariableDeclarationExpression("var24", new FunctionTypeExpression(
-				{new VariableDeclarationExpression("val",
-						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}),
-				 new VariableDeclarationExpression("name",
-						new ClassTypeExpression(new ReferenceExpression("String")))},
-				{new VariableDeclarationExpression("x",
-						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}),
-				 new VariableDeclarationExpression("y",
-						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT})}));
+	auto var24 = new VariableDeclarationExpression{"var24", new FunctionTypeExpression{
+				{new VariableDeclarationExpression{"val",
+						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}},
+				 new VariableDeclarationExpression{"name",
+						new ClassTypeExpression{new ReferenceExpression{"String"}}}},
+				{new VariableDeclarationExpression{"x",
+						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}},
+				 new VariableDeclarationExpression{"y",
+						new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}}}}};
 		longMethod->items()->append(new ExpressionStatement{var24});
 
-	auto var25 = new VariableDeclarationExpression("var25", new AutoTypeExpression());
+	auto var25 = new VariableDeclarationExpression{"var25", new AutoTypeExpression{}};
 	longMethod->items()->append(new ExpressionStatement{var25});
-	auto ne = new NewExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT} );
+	auto ne = new NewExpression{new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}};
 	var25->decl()->setInitialValue( ne );
 	ne->dimensions()->append(new IntegerLiteral{42});
 	ne->dimensions()->append(new IntegerLiteral{3});
 	ne->dimensions()->append(new IntegerLiteral{6});
 
-	auto var26 = new VariableDeclarationExpression("var26", new AutoTypeExpression());
+	auto var26 = new VariableDeclarationExpression{"var26", new AutoTypeExpression{}};
 	longMethod->items()->append(new ExpressionStatement{var26});
-	ne = new NewExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT} );
+	ne = new NewExpression{new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}};
 	var26->decl()->setInitialValue( ne );
 	ne->dimensions()->append(new IntegerLiteral{2});
 	ne->dimensions()->append(new IntegerLiteral{2});
@@ -837,21 +837,21 @@ Method* addLongMethod(Class* parent)
 	assignEach->setRight(new ReferenceExpression{"elem"});
 
 	auto trycatch = new TryCatchFinallyStatement{};
-	trycatch->tryBody()->append(new ExpressionStatement(new ReferenceExpression("var1")));
+	trycatch->tryBody()->append(new ExpressionStatement{new ReferenceExpression{"var1"}});
 	auto catch1 = new CatchClause{};
 	trycatch->catchClauses()->append(catch1);
 	catch1->setExceptionToCatch(new ReferenceExpression{"someExpDecl"});
-	catch1->body()->append(new ExpressionStatement(new ReferenceExpression("var2")));
+	catch1->body()->append(new ExpressionStatement{new ReferenceExpression{"var2"}});
 	auto catch2 = new CatchClause{};
 	trycatch->catchClauses()->append(catch2);
 	catch2->setExceptionToCatch(new ReferenceExpression{"someOtherExpDecl"});
-	catch2->body()->append(new ExpressionStatement(new ReferenceExpression("var3")));
-	trycatch->finallyBody()->append(new ExpressionStatement(new ReferenceExpression("var4")));
+	catch2->body()->append(new ExpressionStatement{new ReferenceExpression{"var3"}});
+	trycatch->finallyBody()->append(new ExpressionStatement{new ReferenceExpression{"var4"}});
 	longMethod->items()->append(trycatch);
 
 	auto sync = new SynchronizedStatement{};
 	sync->setExpression(new ReferenceExpression{"someMonitor"});
-	sync->body()->append(new ExpressionStatement(new ReferenceExpression("var22")));
+	sync->body()->append(new ExpressionStatement{new ReferenceExpression{"var22"}});
 	longMethod->items()->append(sync);
 
 	ReturnStatement* longMethodReturn = new ReturnStatement{};
@@ -883,13 +883,13 @@ Method* addFactorial(Class* parent)
 	factorialArgument->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
 	factorialArgument->setName("x");
 
-	auto factorialArgumentCommentNode = new CommentNode("Inline HTML to Browser\n"
+	auto factorialArgumentCommentNode = new CommentNode{"Inline HTML to Browser\n"
 													"<html>\n"
 													"	<script type=\"text/javascript\">\n"
 													"		function hi() { alert(\"Hello World!\"); } \n"
 													"	</script>\n"
 													"	<button onclick=\"hi()\">Try it</button>\n"
-													"</html>");
+													"</html>"};
 
 	factorialArgument->setComment(factorialArgumentCommentNode);
 
@@ -953,8 +953,8 @@ Method* addExtraMethod(Class* parent)
 	auto extra = new Method{"additional"};
 	if (parent) parent->methods()->append(extra);
 
-	extra->items()->append(new DeclarationStatement(new TypeAlias("newTypeName",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT})));
+	extra->items()->append(new DeclarationStatement{new TypeAlias{"newTypeName",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}}});
 
 	auto templateRefExpr = new ReferenceExpression{"Template"};
 	templateRefExpr->typeArguments()->append(new ReferenceExpression{"S"});
@@ -964,16 +964,16 @@ Method* addExtraMethod(Class* parent)
 
 	auto explicitRef = new ReferenceExpression{"templateAlias"};
 	explicitRef->typeArguments()->append(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::LONG});
-	extra->items()->append(new DeclarationStatement(new ExplicitTemplateInstantiation(explicitRef)));
+	extra->items()->append(new DeclarationStatement{new ExplicitTemplateInstantiation{explicitRef}});
 
-	extra->items()->append(new ExpressionStatement(
-					new ReferenceExpression("someGlobalVariable", new GlobalScopeExpression())));
-	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::SizeOf,
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT})));
-	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::AlignOf,
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::FLOAT})));
-	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::TypeId,
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::DOUBLE})));
+	extra->items()->append(new ExpressionStatement{
+					new ReferenceExpression{"someGlobalVariable", new GlobalScopeExpression{}}});
+	extra->items()->append(new ExpressionStatement{ new TypeTraitExpression{TypeTraitExpression::TypeTraitKind::SizeOf,
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}}});
+	extra->items()->append(new ExpressionStatement{ new TypeTraitExpression{TypeTraitExpression::TypeTraitKind::AlignOf,
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::FLOAT}}});
+	extra->items()->append(new ExpressionStatement{ new TypeTraitExpression{TypeTraitExpression::TypeTraitKind::TypeId,
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::DOUBLE}}});
 
 	auto loop = new LoopStatement{LoopStatement::LoopKind::PostCheck};
 	extra->items()->append(loop);
@@ -1003,16 +1003,16 @@ public: void test()
 	auto prj = new Project{"HelloWorld"};
 	prj->libraries()->append(new Model::UsedLibrary{"java"});
 
-	prj->subDeclarations()->append(new NameImport(
-			new ReferenceExpression("Code", new ReferenceExpression("SomeLibrary"))));
-	prj->subDeclarations()->append(new NameImport(
-			new ReferenceExpression{"AnotherLibrary"}));
-	prj->subDeclarations()->append(new NameImport(
-				new ReferenceExpression("All", new ReferenceExpression("Import")), true));
-	prj->fields()->append(new Field("global",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}));
-	prj->fields()->append(new Field("global2",
-			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG}));
+	prj->subDeclarations()->append(new NameImport{
+			new ReferenceExpression{"Code", new ReferenceExpression{"SomeLibrary"}}});
+	prj->subDeclarations()->append(new NameImport{
+			new ReferenceExpression{"AnotherLibrary"}});
+	prj->subDeclarations()->append(new NameImport{
+				new ReferenceExpression{"All", new ReferenceExpression{"Import"}}, true});
+	prj->fields()->append(new Field{"global",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
+	prj->fields()->append(new Field{"global2",
+			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG}});
 
 	Project* java = nullptr;
 	java = addJavaLibrary(prj);
@@ -1108,8 +1108,8 @@ public: void test()
 	{
 		watcher->addPath(fileName);
 
-		QKeyEvent *eventPress = new QKeyEvent ( QEvent::KeyPress, Qt::Key_F5, Qt::NoModifier);
-		QKeyEvent *eventRelease = new QKeyEvent ( QEvent::KeyRelease, Qt::Key_F5, Qt::NoModifier);
+		QKeyEvent *eventPress = new QKeyEvent { QEvent::KeyPress, Qt::Key_F5, Qt::NoModifier};
+		QKeyEvent *eventRelease = new QKeyEvent { QEvent::KeyRelease, Qt::Key_F5, Qt::NoModifier};
 		QCoreApplication::postEvent (VisualizationManager::instance().mainScene(), eventPress);
 		QCoreApplication::postEvent (VisualizationManager::instance().mainScene(), eventRelease);
 	};

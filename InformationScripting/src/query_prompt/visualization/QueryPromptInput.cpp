@@ -37,9 +37,9 @@ namespace InformationScripting {
 ITEM_COMMON_DEFINITIONS(QueryPromptInput, "item")
 
 QueryPromptInput::QueryPromptInput(Item* parent, const StyleType* style)
-	: Super{parent, style}, query_ {new QueryNodeContainer()}
+	: Super{parent, style}, query_ {new QueryNodeContainer{}}
 {
-	query_->setQuery(new CommandNode(""));
+	query_->setQuery(new CommandNode{""});
 }
 
 void QueryPromptInput::initializeForms()

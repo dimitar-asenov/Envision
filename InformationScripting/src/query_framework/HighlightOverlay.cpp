@@ -41,7 +41,7 @@ ITEM_COMMON_DEFINITIONS(HighlightOverlay, "item")
 HighlightOverlay::HighlightOverlay(Item* selectedItem, const StyleType* style)
 	: Super{{selectedItem}, style}
 {
-	info_ = new Text(this);
+	info_ = new Text{this};
 	info_->setTextFormat(Qt::RichText);
 }
 
@@ -51,7 +51,7 @@ void HighlightOverlay::initializeForms()
 	auto textItem = item<Text>(&I::info_, &StyleType::info);
 	addForm(backgroundElement);
 
-	addForm((new AnchorLayoutFormElement())
+	addForm((new AnchorLayoutFormElement{})
 			  ->put(TheVCenterOf, textItem, AtCenterOf, backgroundElement)
 			  ->put(TheHCenterOf, textItem, AtCenterOf, backgroundElement));
 }

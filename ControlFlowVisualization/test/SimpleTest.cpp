@@ -167,7 +167,7 @@ Method* addDivBySix(Class* parent)
 	sixloop->setCondition(sixLoopCond);
 	sixLoopCond->setLeft(new ReferenceExpression{"i"});
 	sixLoopCond->setOp(BinaryOperation::LESS);
-	MethodCallExpression* sizeCall = new MethodCallExpression("size", new ReferenceExpression("numbers"));
+	MethodCallExpression* sizeCall = new MethodCallExpression{"size", new ReferenceExpression{"numbers"}};
 	sixLoopCond->setRight(sizeCall);
 
 	//TODO test the visualization without the remaining parts of this method

@@ -72,7 +72,7 @@ template <typename ParentType, typename VisualizationType>
 NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>*
 NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::clone() const
 {
-	return new NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>(*this);
+	return new NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>{*this};
 }
 
 template <typename ParentType, typename VisualizationType>
