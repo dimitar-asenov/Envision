@@ -79,7 +79,7 @@ class MODELBASE_API Node
 		 * @param parent
 		 * 				The parent node of the newly created node. This may be 'nullptr'.
 		 */
-		typedef Node* (*NodeConstructor)(Node* parent);
+		using NodeConstructor = Node* (*)(Node* parent);
 
 		/**
 		 * This function pointer type is used to register the constructor for nodes that are being loaded from a
@@ -97,7 +97,7 @@ class MODELBASE_API Node
 		 * 				A flag that hints whether this node should be fully or partially loaded. The constructor of the
 		 * 				node is allowed to ignore this flag.
 		 */
-		typedef Node* (*NodePersistenceConstructor)(Node *parent, PersistentStore &store, bool partialLoadHint);
+		using NodePersistenceConstructor = Node* (*)(Node* parent, PersistentStore& store, bool partialLoadHint);
 
 
 		/**
@@ -339,14 +339,14 @@ class MODELBASE_API Node
 		 * Returns all children including the node \a from, which have type \a NodeType.
 		 */
 		template <typename NodeType>
-		static QList<NodeType*> childrenOfType(Model::Node* from);
+		static QList<NodeType*> childrenOfType(Node* from);
 
 		/**
 		 * Returns all children including the node \a from, which fullfill the \a Predicate \a p,
 		 * i.e. \a p(node) returns true.
 		 */
 		template <typename Predicate>
-		static QList<Model::Node*> childrenWhich(Model::Node* from, Predicate p);
+		static QList<Node*> childrenWhich(Node* from, Predicate p);
 
 
 		/**
@@ -598,7 +598,7 @@ inline QList<Node*> Node::childrenWhich(Node* from, Predicate p)
 /**
  * This class is only used for debugging purposes, to convert a Node to a string
  */
-class NodeToDebugStringAdapter {
+class MODELBASE_API NodeToDebugStringAdapter {
 	public:
 		using BaseAdapteeType = Node;
 		QString str;

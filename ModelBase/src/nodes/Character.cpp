@@ -35,7 +35,7 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
 
-Character::Character(Node *parent) : Super{parent}, value('\0')
+Character::Character(Node *parent) : Super{parent}, value{'\0'}
 {}
 
 Character::Character(Node *parent, PersistentStore &store, bool) : Super{parent}

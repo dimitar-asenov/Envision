@@ -57,7 +57,6 @@ class NameText;
 class MODELBASE_API TreeManager: public QObject
 {
 	Q_OBJECT
-	// The moc compiler is used only to support signals and slots.
 
 	public:
 
@@ -314,22 +313,6 @@ class MODELBASE_API TreeManager: public QObject
 		 * 				What was the old name of the node
 		 */
 		void emitNameModified(NameText* node, const QString &oldName);
-
-		/**
-		 * Causes a nodeFullyLoaded signal to be emitted.
-		 *
-		 * @param node
-		 * 				The node which is now fully loaded.
-		 */
-		void emitNodeFullyLoaded(Node* node);
-
-		/**
-		 * Causes a nodePartiallyLoaded signal to be emitted.
-		 *
-		 * @param node
-		 * 				The node which is now partially loaded.
-		 */
-		void emitNodePartiallyLoaded(Node* node);
 
 		/**
 		 * Returns whether this tree has been partially loaded (as a library).

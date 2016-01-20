@@ -44,7 +44,7 @@ List::List(Node *parent, PersistentStore &store, bool loadPartially) : Super{par
 		setPartiallyLoaded();
 	else
 	{
-		QList<LoadedNode> children = store.loadAllSubNodes(this, {});
+		QList<LoadedNode> children{store.loadAllSubNodes(this, {})};
 		loadSubNodes(children);
 	}
 
@@ -90,11 +90,6 @@ void List::save(PersistentStore &store) const
 
 	for (int i = 0; i < nodes_.size(); ++i)
 		store.saveNode(nodes_[i], QString::number(i));
-
-	// TODO Document this somewhere useful. Like in the Persistent store interface.
-	// If the node is partially loaded the Store will automatically fill in the missing fields by taking the old version
-	// of every subnode whose name is not specified here.
-
 }
 
 void List::load(PersistentStore &store)
@@ -104,7 +99,7 @@ void List::load(PersistentStore &store)
 
 	clear();
 
-	QList<LoadedNode> children = store.loadAllSubNodes(this, {});
+	QList<LoadedNode> children{store.loadAllSubNodes(this, {})};
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
 		Q_ASSERT(ln->node->hierarchyTypeIds().contains(lowerTypeBoundForElements()));
@@ -124,7 +119,9 @@ QList<Node*> List::children() const
 int List::indexOf(const Node* item) const
 {
 	// TODO: is this a QT bug, this is fishy
-	Node *i = const_cast<Node *> (item); // <--- Workaround, since the call below can't be made with item.
+
+	// Workaround, since the call after this line can't be made with item.
+	Node *i = const_cast<Node *> (item);
 	return nodes_.indexOf(i);
 }
 
@@ -215,10 +212,8 @@ bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 	bool found{};
 
 	if (direction == SEARCH_HERE)
-	{
 		for (auto c : nodes_)
 			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-	}
 	else if (direction == SEARCH_UP)
 	{
 		auto ignore = childToSubnode(source);

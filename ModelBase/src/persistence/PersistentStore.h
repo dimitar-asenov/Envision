@@ -47,12 +47,6 @@ class MODELBASE_API PersistentStore
 {
 	friend class TreeManager;
 
-	protected:
-		virtual void saveTree(TreeManager* manager, const QString &name) = 0;
-		virtual Node* loadTree(TreeManager* manager, const QString &name, bool loadPartially) = 0;
-
-		void setReferenceTargetr(Reference* r, Node* target);
-
 	public:
 		virtual void saveStringValue(const QString &value) = 0;
 		virtual void saveIntValue(int value) = 0;
@@ -80,6 +74,12 @@ class MODELBASE_API PersistentStore
 
 		virtual ~PersistentStore();
 		virtual PersistentStore* clone() const = 0;
+
+	protected:
+		virtual void saveTree(TreeManager* manager, const QString &name) = 0;
+		virtual Node* loadTree(TreeManager* manager, const QString &name, bool loadPartially) = 0;
+
+		void setReferenceTargetr(Reference* r, Node* target);
 };
 
 }

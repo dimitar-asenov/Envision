@@ -26,12 +26,13 @@
 
 #pragma once
 
-#include "Core/src/EnvisionPlugin.h"
 #include "modelbase_api.h"
+
+#include "Core/src/EnvisionPlugin.h"
 
 namespace Model {
 
-class ModelBasePlugin : public QObject, public Core::EnvisionPlugin
+class MODELBASE_API ModelBasePlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")

@@ -45,6 +45,11 @@ class MODELBASE_API List: public Super<Node>
 		List(const List& other);
 		virtual ~List();
 
+		/**
+		 * TODO Document this somewhere useful. Like in the Persistent store interface.
+		 * If the node is partially loaded the Store will automatically fill in the missing fields by taking the old
+		 * version of every subnode whose name is not specified here.
+		 */
 		virtual void save(PersistentStore &store) const override;
 		virtual void load(PersistentStore &store) override;
 

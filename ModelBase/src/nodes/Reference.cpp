@@ -144,23 +144,6 @@ void Reference::setResolutionNeeded()
 	pendingResolution_.insert(this);
 }
 
-template<typename NodeType>
-void Reference::forAll(Node* subTree, std::function<void (NodeType*)> function)
-{
-	if (subTree)
-	{
-		QList<Node*> stack;
-		stack << subTree;
-		while (!stack.isEmpty())
-		{
-			auto top = stack.takeLast();
-
-			if (auto node = DCast<NodeType>(top) ) function(node);
-			else stack.append(top->children());
-		}
-	}
-}
-
 void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 	const QSet<QString>& names)
 {
@@ -171,52 +154,51 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 
 	std::function<void (Reference*)> f;
 	if (all)
-	{
 		f = [](Reference* ref) { ref->setResolutionNeeded();};
+	else if (names.size() == 2)
+	{
+		//This case occurs when changing a name. This happens when the user is typing and therefore it is very
+		//performance sensitive. Thus we optimize it specially.
+
+		QString first = *names.begin();
+		QString second = *++names.begin();
+
+		// Removing this if, and just leaving the statement at the of this method to handle the updates using the
+		// defined f function is slow. In one test an additional 4-5ms were needed on top of the 10-13ms processing
+		// time on a 3.4GHz CPU. Therefore there is a significant cost associated with calling the f function, and
+		// it's betterto just process this case here directly.
+		// If needed this optimization could also be used in the other cases.
+		if (isRoot)
+		{
+			for (auto ref : allReferences_)
+				if (targetManager == ref->manager())
+				{
+					auto& refName = ref->name();
+					if (refName == first || refName == second)
+						ref->setResolutionNeeded();
+				}
+			return;
+		}
+
+		f = [=](Reference* ref)
+			{ auto& refName = ref->name(); if (refName == first || refName == second) ref->setResolutionNeeded();};
+	}
+	else if (names.size() < 20)
+	{
+		// Optimize in the case of just a few names, by avoiding hasing.
+
+		// TODO: Find out what's a good value for the magick number 20 above.
+		QMap<QString, int> mapNames;
+		for (auto n : names)
+		{
+			// TODO: isn't there a way to put void here?
+			mapNames.insert(n, 0);
+		}
+
+		f = [=](Reference* ref) { if (mapNames.contains(ref->name())) ref->setResolutionNeeded();};
 	}
 	else
-	{
-		if (names.size() == 2)
-		{
-			//This case occurs when changing a name. This happens when the user is typing and therefore it is very
-			//performance sensitive. Thus we optimize it specially.
-
-			QString first = *names.begin();
-			QString second = *++names.begin();
-
-			// Removing this if, and just leaving the statement at the of this method to handle the updates using the
-			// defined f function is slow. In one test an additional 4-5ms were needed on top of the 10-13ms processing
-			// time on a 3.4GHz CPU. Therefore there is a significant cost associated with calling the f function, and
-			// it's betterto just process this case here directly.
-			// If needed this optimization could also be used in the other cases.
-			if (isRoot)
-			{
-				for (auto ref : allReferences_)
-					if (targetManager == ref->manager())
-					{
-						auto& refName = ref->name();
-						if (refName == first || refName == second)
-							ref->setResolutionNeeded();
-					}
-				return;
-			}
-
-			f = [=](Reference* ref)
-				{ auto& refName = ref->name(); if (refName == first || refName == second) ref->setResolutionNeeded();};
-		}
-		else if (names.size() < 20) // Optimize in the case of just a few names, by avoiding hasing.
-		{
-			// TODO: Find out what's a good value for the magick number 20 above.
-			QMap<QString, int> mapNames;
-			for (auto n : names) mapNames.insert(n, 0); // TODO: isn't there a way to put void here?
-
-			f = [=](Reference* ref) { if (mapNames.contains(ref->name())) ref->setResolutionNeeded();};
-		}
-		else
-		{
-			f = [=](Reference* ref) { if (names.contains(ref->name())) ref->setResolutionNeeded();};
-		}
-	}
+		f = [=](Reference* ref) { if (names.contains(ref->name())) ref->setResolutionNeeded();};
 
 	if (isRoot)
 	{
@@ -227,8 +209,6 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 		// If this is not the root, then explore the references only in the specified subTree, which is faster
 		forAll<Reference>(subTree, f);
 	}
-
-
 }
 
 void Reference::unresolveAll(Node* subTree)

@@ -124,4 +124,21 @@ inline const QString& Reference::name() const { return name_; }
 inline bool Reference::isResolved() const { return (state_ == ReferenceEstablished) && target_; }
 inline bool Reference::resolve() { return resolveHelper(false); }
 
+template <typename NodeType>
+void Reference::forAll(Node* subTree, std::function<void(NodeType* node)> function)
+{
+	if (subTree)
+	{
+		QList<Node*> stack;
+		stack << subTree;
+		while (!stack.isEmpty())
+		{
+			auto top = stack.takeLast();
+
+			if (auto node = DCast<NodeType>(top) ) function(node);
+			else stack.append(top->children());
+		}
+	}
+}
+
 }
