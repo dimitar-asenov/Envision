@@ -72,7 +72,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			processed = true;
 			if (m->node()->items()->size() > 0)
 			{
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, m->node()->items()->at(0)));
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, m->node()->items()->at(0)});
 			}
 			else
 			{
@@ -93,8 +93,8 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			if (m->node()->arguments()->size() > 0)
 			{
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-						m->node()->arguments()->at(0)));
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target,
+						m->node()->arguments()->at(0)});
 			}
 		}
 		else if ( (m->name()->itemOrChildHasFocus()) && createRight)

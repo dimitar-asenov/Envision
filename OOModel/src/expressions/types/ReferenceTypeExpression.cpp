@@ -48,7 +48,7 @@ ReferenceTypeExpression::ReferenceTypeExpression(Expression* ref, bool rValue)
 
 Type* ReferenceTypeExpression::type()
 {
-	return new ReferenceType(typeExpression()->type(), false);
+	return new ReferenceType{typeExpression()->type(), false};
 }
 
 }

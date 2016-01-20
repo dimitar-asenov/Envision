@@ -63,12 +63,12 @@ Commit::~Commit()
 
 void Commit::addFile(QString relativePath, qint64 size, std::unique_ptr<char[]> content)
 {
-	files_.insert(relativePath, new CommitFile(relativePath, size, std::move(content)));
+	files_.insert(relativePath, new CommitFile{relativePath, size, std::move(content)});
 }
 
 void Commit::addFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content)
 {
-	files_.insert(relativePath, new CommitFile(relativePath, size, std::move(content)));
+	files_.insert(relativePath, new CommitFile{relativePath, size, std::move(content)});
 }
 
 bool Commit::getFileContent(QString fileName, const char*& content, int& contentSize) const

@@ -210,8 +210,8 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 			return clang_.createNode<OOModel::GlobalScopeExpression>(nestedNameLoc.getSourceRange());
 		default:
 			// In version 3.6 this is only NestedNameSpecifier::Super, which is a Microsoft specific extension (_super).
-			throw new CppImportException(QString("Unsupported nested name specifier kind: %1")
-												  .arg(nestedNameLoc.getNestedNameSpecifier()->getKind()));
+			throw new CppImportException{QString("Unsupported nested name specifier kind: %1")
+												  .arg(nestedNameLoc.getNestedNameSpecifier()->getKind())};
 	}
 	return setReferencePrefix(currentRef, nestedNameLoc.getPrefix(), base);
 }
@@ -235,7 +235,8 @@ OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::
 		case clang::TemplateArgument::ArgKind::NullPtr:
 			return clang_.createNode<OOModel::NullLiteral>(sourceRange);
 		case clang::TemplateArgument::ArgKind::Integral:
-			return clang_.createNode<OOModel::IntegerLiteral>(sourceRange, templateArg.getAsIntegral().getLimitedValue());
+			return clang_.createNode<OOModel::IntegerLiteral>(sourceRange,
+																			  (int)templateArg.getAsIntegral().getLimitedValue());
 		case clang::TemplateArgument::ArgKind::TemplateExpansion:
 			// TODO: add support
 			return createErrorExpression("Unsupported TemplateArgument EXPANSION", sourceRange);
@@ -591,7 +592,7 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 		auto ooArrayType = clang_.createNode<OOModel::ArrayTypeExpression>(type.getSourceRange());
 		ooArrayType->setTypeExpression(translateQualifiedType(constArrayType.getElementLoc()));
 		auto integerLiteral = clang_.createNode<OOModel::IntegerLiteral>(type.getSourceRange(),
-						llvm::dyn_cast<clang::ConstantArrayType>(constArrayType.getTypePtr())->getSize().getLimitedValue());
+					(int)llvm::dyn_cast<clang::ConstantArrayType>(constArrayType.getTypePtr())->getSize().getLimitedValue());
 		ooArrayType->setFixedSize(integerLiteral);
 		return ooArrayType;
 	}

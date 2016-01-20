@@ -45,7 +45,7 @@ PointerTypeExpression::PointerTypeExpression(Expression* expr)
 
 Type* PointerTypeExpression::type()
 {
-	return new PointerType(typeExpression()->type(), false);
+	return new PointerType{typeExpression()->type(), false};
 }
 
 }

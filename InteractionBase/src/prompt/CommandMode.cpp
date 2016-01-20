@@ -96,8 +96,8 @@ void CommandMode::showAutocompleteBasedOnSuggestions()
 	};
 
 	QList<AutoCompleteEntry*> entries;
-		for (auto& s : suggestions_) entries.append(new AutoCompleteEntry(s->text(), s->description(),
-				s->visualization(), executeFunction));
+		for (auto& s : suggestions_) entries.append(new AutoCompleteEntry{s->text(), s->description(),
+				s->visualization(), executeFunction});
 
 	if (entries.isEmpty() || Prompt::mode() != this)
 		AutoComplete::hide();
@@ -131,7 +131,7 @@ void CommandMode::onEnterKeyPress(Qt::KeyboardModifiers)
 		{
 			if (error->visualization() == nullptr)
 			{
-				auto vis = new TextAndDescription(nullptr, TextAndDescription::itemStyles().get("command-prompt-error"));
+				auto vis = new TextAndDescription{nullptr, TextAndDescription::itemStyles().get("command-prompt-error")};
 				vis->setContents(error->message(), error->resolutionTips().join(" OR "));
 				errorItems.append(vis);
 			}

@@ -78,7 +78,7 @@ void SetExpressionCursorEvent::execute()
 	// handling makes our life harder.
 	if (!reposted_)
 	{
-		auto event = new SetExpressionCursorEvent(parentContainerChain_.at(mostSpecificContainer), node_, offset_);
+		auto event = new SetExpressionCursorEvent{parentContainerChain_.at(mostSpecificContainer), node_, offset_};
 		event->reposted_ = true;
 		qApp->postEvent(parentContainerChain_.first()->scene(), event);
 	}

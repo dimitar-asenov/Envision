@@ -47,7 +47,7 @@ QString FragmentLayouter::render(SourceFile* file, TextToNodeMap* map)
 {
 	Q_ASSERT(file);
 
-	writer_ = new FileWriter(file->path(), map);
+	writer_ = new FileWriter{file->path(), map};
 	std::unique_ptr<FileWriter> deleter{writer_};
 
 	for (auto fragment : file->fragments())

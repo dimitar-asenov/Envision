@@ -54,8 +54,8 @@ QList<Visualization::Item*> SignatureContractsVMethodAddOn::determineItems(Visua
 	if (!currentItems.isEmpty() && currentItems.first()->node() == vMet->node()->items())
 		return currentItems;
 
-	result.append(new OOVisualization::VStatementItemList(nullptr, vMet->node()->items(),
-																Visualization::VList::itemStyles().get("contracts")));
+	result.append(new OOVisualization::VStatementItemList{nullptr, vMet->node()->items(),
+																Visualization::VList::itemStyles().get("contracts")});
 	return result;
 }
 

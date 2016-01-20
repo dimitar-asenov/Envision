@@ -57,7 +57,7 @@ std::vector<std::unique_ptr<Query>> QueryBuilder::visitCommand(QueryBuilder* sel
 	auto cmd = command->name();
 	if (cmd.isEmpty())
 	{
-		result.emplace_back(std::unique_ptr<Query>{new PassthroughQuery()});
+		result.emplace_back(std::unique_ptr<Query>{new PassthroughQuery{}});
 		return result;
 	}
 	QStringList args;
@@ -188,9 +188,9 @@ void QueryBuilder::connectAsUnion(CompositeQuery* composite, CompositeQuery* lef
 {
 	Query* unionQuery = nullptr;
 	if (op->op() == OperatorQueryNode::OperatorTypes::Pipe)
-		unionQuery = composite->addQuery(std::unique_ptr<Query>(new UnionOperator()));
+		unionQuery = composite->addQuery(std::unique_ptr<Query>(new UnionOperator{}));
 	else if (op->op() == OperatorQueryNode::OperatorTypes::Substract)
-		unionQuery = composite->addQuery(std::unique_ptr<Query>(new SubstractOperator()));
+		unionQuery = composite->addQuery(std::unique_ptr<Query>(new SubstractOperator{}));
 	else
 		Q_ASSERT(false); // No other case possible
 	connectQueriesWith(composite, left, unionQuery, right);

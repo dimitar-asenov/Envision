@@ -40,14 +40,14 @@ void AutoComplete::show(const QList<AutoCompleteEntry*> entries, bool explicitSe
 {
 	hideRequested_ = false;
 	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-		new Visualization::CustomSceneEvent( [=](){ showNow(entries, explicitSelection);	} ) );
+		new Visualization::CustomSceneEvent{ [=](){ showNow(entries, explicitSelection);	} } );
 }
 
 void AutoComplete::hide()
 {
 	hideRequested_ = true;
 	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-			new Visualization::CustomSceneEvent( [&](){ if (hideRequested_) hideNow();	} ) );
+			new Visualization::CustomSceneEvent{ [&](){ if (hideRequested_) hideNow();	} } );
 }
 
 void AutoComplete::showNow(const QList<AutoCompleteEntry*>& entries, bool explicitSelection)

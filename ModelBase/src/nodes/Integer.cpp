@@ -48,7 +48,7 @@ Integer* Integer::clone() const { return new Integer{*this}; }
 
 void Integer::set(const int& newValue)
 {
-	execute(new FieldSet<int> (this, integer, newValue));
+	execute(new FieldSet<int> {this, integer, newValue});
 }
 
 void Integer::save(PersistentStore &store) const

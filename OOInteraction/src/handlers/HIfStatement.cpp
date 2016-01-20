@@ -64,7 +64,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (vif->node()->thenBranch()->size() > 0)
 		{
 			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(target, vif->node()->thenBranch()->at(0)));
+					new Interaction::SetCursorEvent{target, vif->node()->thenBranch()->at(0)});
 		}
 		else
 		{
@@ -85,8 +85,8 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (vif->node()->elseBranch()->size() > 0)
 		{
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-					vif->node()->elseBranch()->at(0)));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target,
+					vif->node()->elseBranch()->at(0)});
 		}
 		else
 		{

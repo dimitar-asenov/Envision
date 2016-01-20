@@ -124,7 +124,7 @@ CodeComposite* CodeComposite::apiInclude()
 			}
 
 	if (plugin.isEmpty()) return nullptr;
-	return new CodeComposite(plugin + "/src/" + plugin.toLower() + "_api");
+	return new CodeComposite{plugin + "/src/" + plugin.toLower() + "_api"};
 }
 
 Export::CompositeFragment* CodeComposite::addNamespaceFragment(Export::CompositeFragment* parentFragment,
@@ -154,7 +154,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		compositeDependencies.remove(this);
 	}
 
-	auto composite = new Export::CompositeFragment(units().first()->node());
+	auto composite = new Export::CompositeFragment{units().first()->node()};
 	if (!compositeDependencies.empty())
 	{
 		for (auto compositeDependency : compositeDependencies)
@@ -166,7 +166,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	Export::CompositeFragment* unitsComposite = nullptr;
 	if (!units().isEmpty())
 	{
-		unitsComposite = new Export::CompositeFragment(units().first()->node(), "spacedSections");
+		unitsComposite = new Export::CompositeFragment{units().first()->node(), "spacedSections"};
 
 		OOModel::Module* currentNamespace{};
 		auto currentNamespaceFragment = unitsComposite;
@@ -235,7 +235,7 @@ Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fra
 {
 	if (!fragment) return nullptr;
 
-	auto compositeFragment = new Export::CompositeFragment(fragment->node());
+	auto compositeFragment = new Export::CompositeFragment{fragment->node()};
 	*compositeFragment << "#pragma once\n\n" << fragment;
 	return compositeFragment;
 }

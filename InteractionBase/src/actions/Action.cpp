@@ -135,7 +135,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 			{
 				// Add create optional, if it is a list, also create an element
 				shortcuts << calculateSuitableShortcut(name, shortcuts);
-				list.append( new Action(shortcuts.last(), "+ " + name,
+				list.append( new Action{shortcuts.last(), "+ " + name,
 						Action::ActionFunctionOnItem([name, isList](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
 							Q_ASSERT( cn->get(name) == nullptr);
@@ -159,14 +159,14 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 							auto cn = DCast<CompositeNode>(node);
 							return cn && cn->get(name) == nullptr;
 						}
-					)
+					}
 				);
 			}
 			else if ( isList )
 			{
 				// Add create list entry
 				shortcuts << calculateSuitableShortcut(name, shortcuts);
-				list.append( new Action(shortcuts.last(), "+ " + name,
+				list.append( new Action{shortcuts.last(), "+ " + name,
 						Action::ActionFunctionOnItem([name](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
 							auto listInNode = DCast<List>(cn->get(name));
@@ -185,7 +185,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 							auto cn = DCast<CompositeNode>(node);
 							return cn && cn->get(name) != nullptr;
 						}
-					)
+					}
 				);
 			}
 		}
@@ -195,7 +195,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 void Action::createStandardRemoveAction(QList<Action*>& list)
 {
 	// Remove optional element or remove an element from a list or reset a mandatory element to its default value.
-	list.append( new Action("remove", "",
+	list.append( new Action{"remove", "",
 		Action::ActionFunctionOnItem([](Item* item){
 
 			item->setUpdateNeeded(Item::StandardUpdate); // Request an update before deleting any nodes.
@@ -220,7 +220,7 @@ void Action::createStandardRemoveAction(QList<Action*>& list)
 		}),
 		[](Node* node){
 			return DCast<CompositeNode>(node->parent()) || DCast<List>(node->parent());
-		})
+		}}
 	);
 }
 

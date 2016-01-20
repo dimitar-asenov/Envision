@@ -73,8 +73,8 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 		{
 			event->accept();
 			auto diagramNode = DCast<CommentDiagram>(target->node());
-			newShape_ = new CommentDiagramShape(event->pos().x(),
-															event->pos().y(), 1, 1, diagram->toolbar()->nextShapeToAdd_);
+			newShape_ = new CommentDiagramShape{(int)event->pos().x(),
+															(int)event->pos().y(), 1, 1, diagram->toolbar()->nextShapeToAdd_};
 			diagramNode->beginModification("create shape");
 			diagramNode->shapes()->append(newShape_);
 			diagramNode->endModification();

@@ -69,5 +69,5 @@ class OverlayAccessorTemplate : public OverlayAccessor
 template<typename T>
 inline Visualization::OverlayAccessorTemplate<T>* makeOverlay(T* overlayItem)
 {
-	return new Visualization::OverlayAccessorTemplate<T>(overlayItem);
+	return new Visualization::OverlayAccessorTemplate<T>{overlayItem};
 }

@@ -82,7 +82,7 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 			{
 				out << "Loading plug-in " << plugins.at(i) << "... " << endl;
 
-				QPluginLoader* plugin = new QPluginLoader(pluginsDir.absoluteFilePath(getLibraryFileName(plugins.at(i))));
+				QPluginLoader* plugin = new QPluginLoader{pluginsDir.absoluteFilePath(getLibraryFileName(plugins.at(i)))};
 				plugin->setLoadHints(QLibrary::ExportExternalSymbolsHint);
 
 				plugin->load();

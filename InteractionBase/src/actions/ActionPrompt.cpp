@@ -58,10 +58,10 @@ ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const 
 	setHighlight(true);
 
 	setPromptPosition();
-	scene()->addPostEventAction(new CustomSceneEvent( [this](){
+	scene()->addPostEventAction(new CustomSceneEvent{ [this](){
 		this->acquireCursor();
 		this->setReceiverName();
-	}));
+	}});
 }
 
 ActionPrompt::~ActionPrompt()
@@ -91,7 +91,7 @@ void ActionPrompt::initializeForms()
 				for (auto a : self->actions())
 				{
 					if (a->shortcut().startsWith(self->actionText_->text()))
-						ret.append(new TextAndDescription(a->shortcut(), a->name(), &self->style()->actionStyle()));
+						ret.append(new TextAndDescription{a->shortcut(), a->name(), &self->style()->actionStyle()});
 				}
 
 			self->numActions_ = ret.size();

@@ -74,7 +74,7 @@ void CommentTable::resize(int m, int n)
 				aList->append(aFreeNode);
 			}
 			else
-				aList->append(new CommentFreeNode(nullptr, name()+"_"+QString::number(j)+"_"+QString::number(i)));
+				aList->append(new CommentFreeNode{nullptr, name()+"_"+QString::number(j)+"_"+QString::number(i)});
 		}
 	}
 

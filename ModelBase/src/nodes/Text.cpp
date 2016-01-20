@@ -71,7 +71,7 @@ void Text::load(PersistentStore &store)
 
 FieldSet<QString>* Text::getSetCommand(QString& textField, const QString& newText)
 {
-	return new FieldSet<QString> (this, textField, newText);
+	return new FieldSet<QString> {this, textField, newText};
 }
 
 }

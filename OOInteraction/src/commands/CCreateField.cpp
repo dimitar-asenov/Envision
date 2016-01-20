@@ -68,9 +68,9 @@ Interaction::CommandResult* CCreateField::executeNamed(Visualization::Item* /*so
 	target->node()->endModification();
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target,
+	target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target,
 			(name.isEmpty() ? static_cast<Model::Node*>(f->nameNode()) : f->typeExpression()),
-			Interaction::SetCursorEvent::CursorDefault, false));
+			Interaction::SetCursorEvent::CursorDefault, false});
 
 	return new Interaction::CommandResult{};
 }

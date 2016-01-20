@@ -39,7 +39,7 @@ REGISTER_ATTRIBUTE(ArrayInitializer, values, TypedListOfExpression, false, false
 
 Type* ArrayInitializer::type()
 {
-	return new ArrayType(values()->size() > 0 ? values()->first()->type(): nullptr, true);
+	return new ArrayType{values()->size() > 0 ? values()->first()->type(): nullptr, true};
 }
 
 }

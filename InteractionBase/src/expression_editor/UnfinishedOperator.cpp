@@ -93,7 +93,7 @@ Operator* UnfinishedOperator::createFinished()
 {
 	if (descriptor()->isTransient()) setDoNotDeleteTransientDescriptor(true);
 
-	Operator* op = new Operator(descriptor(), nullptr);
+	Operator* op = new Operator{descriptor(), nullptr};
 	for (int i = 0; i<size(); ++i)
 	{
 		op->append(first(true));
@@ -107,7 +107,7 @@ Operator* UnfinishedOperator::createFinished()
 
 UnfinishedOperator* UnfinishedOperator::replaceFinishedWithUnfinished(Expression*& top, Operator* op)
 {
-	auto unf = new UnfinishedOperator(op->descriptor());
+	auto unf = new UnfinishedOperator{op->descriptor()};
 
 	int operandIndex = 0;
 	for (int i = 0; i< op->descriptor()->signature().size(); ++i)

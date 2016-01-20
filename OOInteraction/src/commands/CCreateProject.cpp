@@ -56,9 +56,9 @@ Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*
 		{
 			if (manager->isPartiallyLoaded() && manager->name().contains("java", Qt::CaseInsensitive))
 			{
-				project->libraries()->append(new Model::UsedLibrary(manager->name()));
-				auto import = new OOModel::NameImport( new OOModel::ReferenceExpression("lang",
-																		new OOModel::ReferenceExpression{"java"}));
+				project->libraries()->append(new Model::UsedLibrary{manager->name()});
+				auto import = new OOModel::NameImport{ new OOModel::ReferenceExpression{"lang",
+																		new OOModel::ReferenceExpression{"java"}}};
 				import->setImportAll(true);
 				project->subDeclarations()->append(import);
 				break;

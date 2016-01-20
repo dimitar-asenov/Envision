@@ -78,7 +78,7 @@ inline CompositeFragment& CompositeFragment::operator<<(SourceFragment* childFra
 
 inline CompositeFragment& CompositeFragment::operator<<(const QString& text)
 {
-	fragments_.append( new TextFragment(node(), text) );
+	fragments_.append( new TextFragment{node(), text} );
 	return *this;
 }
 

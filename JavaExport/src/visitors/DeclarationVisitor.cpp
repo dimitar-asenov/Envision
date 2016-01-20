@@ -252,19 +252,19 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 	auto header = fragment->append(new CompositeFragment{declaration, "space"});
 
 	if (declaration->modifiers()->isSet(Modifier::Public))
-		*header << new TextFragment(declaration->modifiers(), "public");
+		*header << new TextFragment{declaration->modifiers(), "public"};
 	if (declaration->modifiers()->isSet(Modifier::Private))
-		*header << new TextFragment(declaration->modifiers(), "private");
+		*header << new TextFragment{declaration->modifiers(), "private"};
 	if (declaration->modifiers()->isSet(Modifier::Protected))
-		*header << new TextFragment(declaration->modifiers(), "protected");
+		*header << new TextFragment{declaration->modifiers(), "protected"};
 
 	if (declaration->modifiers()->isSet(Modifier::Static))
-		*header << new TextFragment(declaration->modifiers(), "static");
+		*header << new TextFragment{declaration->modifiers(), "static"};
 
 	if (declaration->modifiers()->isSet(Modifier::Final))
-		*header << new TextFragment(declaration->modifiers(), "final");
+		*header << new TextFragment{declaration->modifiers(), "final"};
 	if (declaration->modifiers()->isSet(Modifier::Abstract))
-		*header << new TextFragment(declaration->modifiers(), "abstract");
+		*header << new TextFragment{declaration->modifiers(), "abstract"};
 
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
 		error(declaration->modifiers(), "Virtual modifier is invalid in Java");

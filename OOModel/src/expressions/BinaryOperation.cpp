@@ -86,7 +86,7 @@ Type* BinaryOperation::type()
 	{
 		PrimitiveType::PrimitiveTypes primitive = PrimitiveType::resultFromBinaryOperation(ltp->type(), rtp->type());
 		if (primitive != PrimitiveType::VOID)
-		res = new PrimitiveType(primitive, ltp->isValueType());
+		res = new PrimitiveType{primitive, ltp->isValueType()};
 	}
 	else if (op == PLUS && ((lts && rts) || (lts && rtp) || (ltp && rts)))
 		res = new StringType{};

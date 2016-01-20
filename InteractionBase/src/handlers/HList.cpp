@@ -146,16 +146,16 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					list->node()->endModification();
 
 					list->setUpdateNeeded(Visualization::Item::StandardUpdate);
-					target->scene()->addPostEventAction( new SetCursorEvent(list, newElem,
+					target->scene()->addPostEventAction( new SetCursorEvent{list, newElem,
 							list->style()->itemsStyle().isHorizontal()
-							? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
+							? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop});
 
 					// If this was not an enter key and not a tab, then it must have been a letter.
 					// Add a keyboard event for this letter
 					if (!enter && event->key() != Qt::Key_Tab )
 					{
-						qApp->postEvent(target->scene(),  new QKeyEvent(QEvent::KeyPress, event->key(),
-							event->modifiers(), event->text(), event->isAutoRepeat(), event->count()));
+						qApp->postEvent(target->scene(),  new QKeyEvent{QEvent::KeyPress, event->key(),
+							event->modifiers(), event->text(), event->isAutoRepeat(), (ushort)event->count()});
 					}
 				}
 			}
@@ -176,7 +176,7 @@ void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex
 {
 	Q_ASSERT(setCursorNodeIndex >= 0 && setCursorNodeIndex <= list->node()->size());
 
-	list->scene()->addPostEventAction(new SetCursorEvent(
+	list->scene()->addPostEventAction(new SetCursorEvent{
 		[=](){
 			int setCursorItemIndex = 0;
 			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
@@ -199,7 +199,7 @@ void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex
 				return (list->style()->itemsStyle().isHorizontal()
 						? SetCursorEvent::CursorRightOf : SetCursorEvent::CursorBelowOf);
 		}
-	));
+	});
 }
 
 void HList::removeNodeAndSetCursor(Visualization::VList* list, int removeAtNodeIndex, bool setCursorDown,

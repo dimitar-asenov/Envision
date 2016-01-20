@@ -38,7 +38,7 @@ ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
 
 VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
-	aGrid_ = new Visualization::GridLayout(this, &style()->grid());
+	aGrid_ = new Visualization::GridLayout{this, &style()->grid()};
 }
 
 void VCommentTable::determineChildren()

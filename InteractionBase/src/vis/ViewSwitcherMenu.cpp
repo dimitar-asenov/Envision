@@ -37,7 +37,7 @@ ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 void ViewSwitcherMenu::show(Visualization::Item* target)
 {
 	QApplication::postEvent(target->scene(),
-							new Visualization::CustomSceneEvent( [=]() { showNow(target); }));
+							new Visualization::CustomSceneEvent{ [=]() { showNow(target); }});
 }
 
 void ViewSwitcherMenu::showNow(Visualization::Item* target)
@@ -48,7 +48,7 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 	for (int col = 0; col < viewItems.size(); col++)
 		for (int row = 0; row < viewItems[col].size(); row++)
 			if (viewItems[col][row])
-				items[col].append(new VViewSwitcherEntry(nullptr, viewItems[col][row]->name()));
+				items[col].append(new VViewSwitcherEntry{nullptr, viewItems[col][row]->name()});
 			else
 				items[col].append(new VViewSwitcherEntry{nullptr, "Empty slot"});
 	for (int col = 0; col < items.size(); col++)

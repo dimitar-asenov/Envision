@@ -52,7 +52,7 @@ void Comment::insertIntoItemList(OOModel::StatementItemList* itemList, int index
 {
 	setNode(itemList);
 	commentStatementItem_ = new OOModel::CommentStatementItem{};
-	commentStatementItem_->setCommentNode(new Comments::CommentNode(text()));
+	commentStatementItem_->setCommentNode(new Comments::CommentNode{text()});
 
 	if (index >= 0)
 		itemList->insert(index, commentStatementItem_);

@@ -116,10 +116,10 @@ class CompositeTest : public Test<VisualizationBasePlugin, CompositeTest> { publ
 
 	manager->endModification();
 
-	auto it = new DeclarativeTest(nullptr, first, list, //new TestBoxNode{"first", true},
+	auto it = new DeclarativeTest{nullptr, first, list, //new TestBoxNode{"first", true},
 																new TestBoxNode{"second", Qt::darkGreen, true, false},
 																new TestBoxNode{"third", Qt::darkRed, true, false},
-																new TestBoxNode{"fourth", Qt::white, true, false});
+																new TestBoxNode{"fourth", Qt::white, true, false}};
 	auto scene = VisualizationManager::instance().mainScene();
 	scene->addTopLevelItem(it);
 	scene->scheduleUpdate();

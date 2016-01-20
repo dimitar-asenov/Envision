@@ -1327,7 +1327,7 @@ void ClangAstVisitor::beforeTranslationUnit(clang::ASTContext& astContext)
 {
 	auto comments = astContext.getRawCommentList().getComments();
 	for (auto it = comments.begin(); it != comments.end(); it++)
-		comments_.append(new Comment(*it, *clang_.sourceManager()));
+		comments_.append(new Comment{*it, *clang_.sourceManager()});
 }
 
 void ClangAstVisitor::endTranslationUnit()

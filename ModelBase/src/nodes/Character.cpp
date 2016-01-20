@@ -55,7 +55,7 @@ Character::Character(const QChar& value) : Super{nullptr}
 
 void Character::set(const QChar& newValue)
 {
-	execute(new FieldSet<QChar> (this, value, newValue));
+	execute(new FieldSet<QChar> {this, value, newValue});
 }
 
 void Character::save(PersistentStore &store) const

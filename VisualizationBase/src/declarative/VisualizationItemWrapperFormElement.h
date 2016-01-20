@@ -86,7 +86,7 @@ template <typename ParentType, typename VisualizationType, bool externalSynchron
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>*
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>::clone() const
 {
-	return new VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>(*this);
+	return new VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>{*this};
 }
 
 template <typename ParentType, typename VisualizationType, bool externalSynchronization>

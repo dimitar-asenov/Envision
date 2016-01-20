@@ -77,8 +77,8 @@ void TreeManager::changeModificationTarget(Node* modificationTarget)
 	if ( !modificationInProgress )
 		throw ModelException("Switching modification targets without calling TreeManager.beginModification() first");
 
-	pushCommandOnUndoStack( new SetModificationTarget(currentModificationTarget, currentModificationLock,
-			modifiedTargets, modificationTarget));
+	pushCommandOnUndoStack( new SetModificationTarget{currentModificationTarget, currentModificationLock,
+			modifiedTargets, modificationTarget});
 }
 
 void TreeManager::endModification(bool tryResolvingReferences)
@@ -87,8 +87,8 @@ void TreeManager::endModification(bool tryResolvingReferences)
 	{
 		if (tryResolvingReferences) Reference::resolvePending();
 
-		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock,
-				modifiedTargets, nullptr));
+		pushCommandOnUndoStack(new SetModificationTarget{currentModificationTarget, currentModificationLock,
+				modifiedTargets, nullptr});
 		pushedNewCommandsOnTheStack = false;
 		commands.endMacro();
 	}

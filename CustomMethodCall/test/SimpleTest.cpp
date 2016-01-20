@@ -122,7 +122,7 @@ Class* addCollection(Project* parent)
 	UnaryOperation* negation = new UnaryOperation{};
 	orIf->setRight(negation);
 	negation->setOp(UnaryOperation::NOT);
-	MethodCallExpression* existsCall = new MethodCallExpression(QChar(0x2203));
+	MethodCallExpression* existsCall = new MethodCallExpression{QChar(0x2203)};
 	negation->setOperand(existsCall);
 	existsCall->arguments()->append( new IntegerLiteral{42});
 
@@ -142,7 +142,7 @@ Class* addCollection(Project* parent)
 	VariableDeclarationExpression* resultVar = new VariableDeclarationExpression{"result"};
 	test->items()->append(new ExpressionStatement{resultVar});
 	resultVar->decl()->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
-	MethodCallExpression* sumCall = new MethodCallExpression("sum", new ThisExpression());
+	MethodCallExpression* sumCall = new MethodCallExpression{"sum", new ThisExpression{}};
 	resultVar->decl()->setInitialValue(sumCall);
 	sumCall->arguments()->append( new IntegerLiteral{0});
 	sumCall->arguments()->append( new ReferenceExpression{"index"});

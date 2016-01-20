@@ -126,7 +126,7 @@ void SetCursorEvent::execute()
 			// shown. It is not clear what the problem exactly is and where it should be fixed but the workaround below
 			// works.
 			// TODO: Investigate the "dirty" pixels further
-			qApp->postEvent(item->scene(), new CustomSceneEvent([=](){ Prompt::show(it); }));
+			qApp->postEvent(item->scene(), new CustomSceneEvent{[=](){ Prompt::show(it); }});
 		}
 	}
 

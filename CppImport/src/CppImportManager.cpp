@@ -81,14 +81,14 @@ clang::tooling::CompilationDatabase* CppImportManager::findCompilationDatabase(c
 
 Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPerProject)
 {
-	auto project = new OOModel::Project(projectPath_.split(QDir::separator()).last());
+	auto project = new OOModel::Project{projectPath_.split(QDir::separator()).last()};
 	auto log = new CppImportLogger{};
 	auto visitor = new ClangAstVisitor{project, projectPath_, log};
 
 	for (QString s : projects_)
 	{
 		qDebug() << "Start processing project :" << s;
-		auto tool = new clang::tooling::ClangTool(*compilationDb_, *sourcesMap_.value(s));
+		auto tool = new clang::tooling::ClangTool{*compilationDb_, *sourcesMap_.value(s)};
 		auto frontendActionFactory = new ClangFrontendActionFactory{visitor, log};
 		tool->run(frontendActionFactory);
 		// statistics
@@ -183,7 +183,7 @@ void CppImportManager::readInFiles(const QString& sourcePath)
 	if (!sourcePath.endsWith(".cpp"))
 	{
 		QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
-		auto sources = new std::vector<std::string>();
+		auto sources = new std::vector<std::string>{};
 		while (dirIterator.hasNext())
 			sources->push_back(dirIterator.next().toStdString());
 		sourcesMap_.insert(sourcePath, sources);

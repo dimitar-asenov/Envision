@@ -35,7 +35,7 @@ class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 {
 	public:
 		virtual clang::FrontendAction* create() override {
-			return new GeneratorAction();
+			return new GeneratorAction{};
 		}
 };
 

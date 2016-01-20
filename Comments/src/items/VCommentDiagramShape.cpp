@@ -35,7 +35,7 @@ namespace Comments {
 ITEM_COMMON_DEFINITIONS(VCommentDiagramShape, "item")
 
 VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const StyleType* style)
-	: Super{parent, node, style}, text_{new VCommentText(this, node->label())}
+	: Super{parent, node, style}, text_{new VCommentText{this, node->label()}}
 {
 	setAcceptHoverEvents(true);
 	setZValue(1);

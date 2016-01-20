@@ -190,7 +190,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		refFinder.visit(containingMethod);
 
 		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({variableDeclaration});
-		auto overlay = new PlotOverlay(target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first);
+		auto overlay = new PlotOverlay{target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first};
 		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 		auto observer = std::make_shared<VariableObserver>
 				(VariableObserver(defaultTypeAndHandler.second, {variableDeclaration}, node,
@@ -242,7 +242,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 																		variableNames, itemIndex);
 
 	if (declarationMap.size() < variableNames.size())
-		return new Interaction::CommandResult(new Interaction::CommandError("Not all declarations found for probe"));
+		return new Interaction::CommandResult{new Interaction::CommandError{"Not all declarations found for probe"}};
 
 	QList<OOModel::VariableDeclaration*> vars;
 	for (auto varName : variableNames) vars << declarationMap[varName];
@@ -253,11 +253,11 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	nodeObservedBy_.insertMulti(observedNode, observer);
 	addBreakpointAt(observedNode);
 
-	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
+	auto overlay = new Visualization::IconOverlay{vItem, Visualization::IconOverlay::itemStyles().get("monitor")};
 	vItem->addOverlay(overlay, MONITOR_OVERLAY_GROUP);
 
-	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"),
-												  defaultTypeAndHandler.first, variableNames);
+	auto plotOverlay = new PlotOverlay{vItem, PlotOverlay::itemStyles().get("default"),
+												  defaultTypeAndHandler.first, variableNames};
 	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
 	return new Interaction::CommandResult{};
 }
@@ -552,7 +552,7 @@ void JavaDebugger::handleArray(Values values, QList<Probes::ValueCalculator>, Mo
 
 void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
 {
-	auto overlay = new Visualization::IconOverlay(target, Visualization::IconOverlay::itemStyles().get("breakpoint"));
+	auto overlay = new Visualization::IconOverlay{target, Visualization::IconOverlay::itemStyles().get("breakpoint")};
 	target->addOverlay(overlay, BREAKPOINT_OVERLAY_GROUP);
 }
 
@@ -566,15 +566,15 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 		if (closingBracket)
 		{
 			if (existingBracketOverlay) return;
-			auto overlay = new Visualization::IconOverlay(
-						item, Visualization::IconOverlay::itemStyles().get("endOfMethod"));
+			auto overlay = new Visualization::IconOverlay{
+						item, Visualization::IconOverlay::itemStyles().get("endOfMethod")};
 			item->addOverlay(overlay, CURRENT_LINE_OVERLAY_GROUP);
 		}
 		else
 		{
 			if (existingLineOverlay) return;
-			auto overlay = new Visualization::SelectionOverlay(
-						item, Visualization::SelectionOverlay::itemStyles().get("currentStatement"));
+			auto overlay = new Visualization::SelectionOverlay{
+						item, Visualization::SelectionOverlay::itemStyles().get("currentStatement")};
 			item->addOverlay(overlay, CURRENT_LINE_OVERLAY_GROUP);
 		}
 

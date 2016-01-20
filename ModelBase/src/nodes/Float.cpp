@@ -48,7 +48,7 @@ Float* Float::clone() const { return new Float{*this}; }
 
 void Float::set(const double& newValue)
 {
-	execute(new FieldSet<double> (this, value, newValue));
+	execute(new FieldSet<double> {this, value, newValue});
 }
 
 void Float::save(PersistentStore &store) const

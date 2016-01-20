@@ -89,7 +89,7 @@ ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *view)
 	else if (json["type"] == "INFO")
 	{
 		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
-			result->setReference(new InfoNode(target, json["content"].toArray()));
+			result->setReference(new InfoNode{target, json["content"].toArray()});
 	}
 	return result;
 }

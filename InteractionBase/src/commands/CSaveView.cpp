@@ -49,14 +49,14 @@ CommandResult* CSaveView::execute(Item* source, Item*, const QStringList&,
 					source->findAncestorWithNode()->node()->manager());
 		return new CommandResult{};
 	}
-	else return new CommandResult(new CommandError{"Could not save view"});
+	else return new CommandResult{new CommandError{"Could not save view"}};
 }
 
 QList<CommandSuggestion*> CSaveView::suggest(Item*, Item*, const QString& textSoFar,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
 	if (textSoFar.startsWith(name()) || name().startsWith(textSoFar))
-		return {new CommandSuggestion(name(), "Save the current view")};
+		return {new CommandSuggestion{name(), "Save the current view"}};
 	else return {};
 }
 

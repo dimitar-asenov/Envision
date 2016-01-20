@@ -62,7 +62,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	{
 		event->accept();
 		if (vloop->node()->condition())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->condition()));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, vloop->node()->condition()});
 		else
 		{
 			auto empty = new OOModel::EmptyExpression{};
@@ -80,7 +80,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (vloop->node()->loopKind() == OOModel::LoopStatement::LoopKind::PreCheck)
 		{
 			if (vloop->node()->updateStep())
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->updateStep()));
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, vloop->node()->updateStep()});
 			else
 			{
 				auto empty = new OOModel::EmptyExpression{};
@@ -97,7 +97,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	{
 		event->accept();
 		if (vloop->node()->initStep())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->initStep()));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, vloop->node()->initStep()});
 		else
 		{
 			auto empty = new OOModel::EmptyExpression{};
@@ -116,7 +116,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (vloop->node()->body()->size() > 0)
 		{
 			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(target, vloop->node()->body()->at(0)));
+					new Interaction::SetCursorEvent{target, vloop->node()->body()->at(0)});
 		}
 		else
 		{
@@ -133,7 +133,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	{
 		event->accept();
 		if (vloop->node()->condition())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->condition()));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent{target, vloop->node()->condition()});
 		else
 		{
 			auto empty = new OOModel::EmptyExpression{};

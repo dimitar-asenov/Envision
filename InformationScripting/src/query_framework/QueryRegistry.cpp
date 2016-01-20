@@ -60,7 +60,7 @@ std::unique_ptr<Query> QueryRegistry::buildQuery(const QString& command, Model::
 	{
 		// TODO we need some way to specify a condition on the node.
 		// Or eventually decide that we don't allow condition in the property adder
-		return std::unique_ptr<Query>(new NodePropertyAdder(command, args[1]));
+		return std::unique_ptr<Query>(new NodePropertyAdder{command, args[1]});
 	}
 	return tryBuildQueryFromScript(command, target, args, executor);
 }
@@ -79,7 +79,7 @@ std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromScript(const QString& nam
 {
 	QString scriptName{scriptLocation_ + name + ".py"};
 	if (QFile::exists(scriptName))
-		return std::unique_ptr<Query>(new ScriptQuery(scriptName, target, args, executor));
+		return std::unique_ptr<Query>(new ScriptQuery{scriptName, target, args, executor});
 	return nullptr;
 }
 

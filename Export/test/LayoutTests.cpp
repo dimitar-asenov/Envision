@@ -46,28 +46,28 @@ class CompositeFragmentTest : public Test<ExportPlugin, CompositeFragmentTest> {
 	SourceDir root{nullptr, "composite"};
 	auto& file = root.file("composite");
 
-	auto header = file.append(new CompositeFragment( reinterpret_cast<Node*>(1)));
+	auto header = file.append(new CompositeFragment{ reinterpret_cast<Node*>(1)});
 	header->append( reinterpret_cast<Node*>(2), "type");
 	header->append( reinterpret_cast<Node*>(1), " ");
 	header->append( reinterpret_cast<Node*>(3), "name");
 
-	auto argsList = header->append(new CompositeFragment(reinterpret_cast<Node*>(4), "arguments"));
+	auto argsList = header->append(new CompositeFragment{reinterpret_cast<Node*>(4), "arguments"});
 
-	auto arg1 = argsList->append(new CompositeFragment(reinterpret_cast<Node*>(5)));
+	auto arg1 = argsList->append(new CompositeFragment{reinterpret_cast<Node*>(5)});
 	arg1->append(reinterpret_cast<Node*>(6), "type1");
 	arg1->append(reinterpret_cast<Node*>(5), " ");
 	arg1->append(reinterpret_cast<Node*>(7), "arg1");
 
-	auto arg2 = argsList->append(new CompositeFragment(reinterpret_cast<Node*>(8)));
+	auto arg2 = argsList->append(new CompositeFragment{reinterpret_cast<Node*>(8)});
 	arg2->append(reinterpret_cast<Node*>(9), "type2");
 	arg2->append(reinterpret_cast<Node*>(8), " ");
 	arg2->append(reinterpret_cast<Node*>(10), "arg2");
 
-	auto body = file.append(new CompositeFragment( reinterpret_cast<Node*>(11), "body"));
+	auto body = file.append(new CompositeFragment{ reinterpret_cast<Node*>(11), "body"});
 	body->append(reinterpret_cast<Node*>(12), "statement1");
 	body->append(reinterpret_cast<Node*>(13), "statement2");
 
-	auto body2 = body->append(new CompositeFragment( reinterpret_cast<Node*>(14), "body"));
+	auto body2 = body->append(new CompositeFragment{ reinterpret_cast<Node*>(14), "body"});
 	body2->append(reinterpret_cast<Node*>(15), "subStatement1");
 	body2->append(reinterpret_cast<Node*>(16), "subStatement2");
 

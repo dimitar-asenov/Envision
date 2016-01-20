@@ -76,7 +76,7 @@ void VIfStatementCF::determineChildren()
 	// Create nodes which are present in the tree
 	if (!condition && node()->condition())
 	{
-		conditionBackground = new SequentialLayout(this, &style()->condition());
+		conditionBackground = new SequentialLayout{this, &style()->condition()};
 		condition = renderer()->render(conditionBackground, node()->condition());
 		conditionBackground->append(condition);
 	}

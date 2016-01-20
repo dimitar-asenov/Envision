@@ -72,11 +72,11 @@ void APIData::insertClassData(ClassData data, QStringList classHierarchy)
 	if (!classRoot_)
 	{
 		// No root so we just insert the new hierarchy
-		classRoot_ = new ClassDataNode(classHierarchy[0]);
+		classRoot_ = new ClassDataNode{classHierarchy[0]};
 		insertNode = classRoot_;
 		for (int i = 1; i < classHierarchy.size(); ++i)
 		{
-			ClassDataNode* nextNode = new ClassDataNode(classHierarchy[i]);
+			ClassDataNode* nextNode = new ClassDataNode{classHierarchy[i]};
 			insertNode->children_ << nextNode;
 			insertNode = nextNode;
 		}

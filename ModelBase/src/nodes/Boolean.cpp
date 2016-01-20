@@ -47,7 +47,7 @@ Boolean* Boolean::clone() const { return new Boolean{*this}; }
 
 void Boolean::set(const bool& newValue)
 {
-	execute(new FieldSet<bool> (this, value, newValue));
+	execute(new FieldSet<bool> {this, value, newValue});
 }
 
 void Boolean::save(PersistentStore &store) const

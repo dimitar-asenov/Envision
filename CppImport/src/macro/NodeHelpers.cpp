@@ -160,8 +160,8 @@ void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 		else if (auto ooVarDecl = DCast<OOModel::VariableDeclaration>(node))
 		{
 			if (auto context = DCast<OOModel::Method>(declaration))
-				context->items()->append(new OOModel::ExpressionStatement(
-													 new OOModel::VariableDeclarationExpression{ooVarDecl}));
+				context->items()->append(new OOModel::ExpressionStatement{
+													 new OOModel::VariableDeclarationExpression{ooVarDecl}});
 			else
 				Q_ASSERT(false);
 		}
