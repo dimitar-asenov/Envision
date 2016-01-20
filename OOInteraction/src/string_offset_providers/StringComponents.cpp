@@ -253,7 +253,9 @@ void StringComponents::initConversions()
 	add<ReferenceExpression>([](ReferenceExpression* e){ return c(
 		Optional(e->prefix(), AUTO), Optional(
 						(e->memberKind() == ReferenceExpression::MemberKind::Dot ? "." :
-						 e->memberKind() == ReferenceExpression::MemberKind::Pointer ? "->" : "::"), e->prefix()), e->name(),
+						 e->memberKind() == ReferenceExpression::MemberKind::Pointer ? "->" :
+						 e->memberKind() == ReferenceExpression::MemberKind::Static ? "::" : "::template"),
+						e->prefix()), e->name(),
 		list(e->typeArguments(), "<", ",", ">", true, true) ); });
 
 	add<OOReference>([](OOReference* e){ return c( e->name() ); });

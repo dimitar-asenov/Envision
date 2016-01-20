@@ -19,6 +19,9 @@
 	<staticSeparator prototypes="item/Symbol/default">
 		<symbol>::</symbol>
 	</staticSeparator>
+	<templateSeparator prototypes="item/Symbol/default">
+		<symbol>::template</symbol>
+	</templateSeparator>
 	<typeArguments prototypes="item/VList/default">
 		<shape prototypes="shape/Braces/default">
 			Braces

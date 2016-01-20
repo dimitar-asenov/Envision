@@ -68,6 +68,8 @@ void VReferenceExpression::determineChildren()
 		separatorStyle = &style()->pointerSeparator();
 	else if (node()->memberKind() == OOModel::ReferenceExpression::MemberKind::Static)
 		separatorStyle = &style()->staticSeparator();
+	else if (node()->memberKind() == OOModel::ReferenceExpression::MemberKind::Template)
+		separatorStyle = &style()->templateSeparator();
 
 
 	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, separatorStyle, 1);

@@ -367,6 +367,16 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		SAFE_DELETE(ref);
 		return r;
 	}});
+	add(new OD{ "member template", "expr :: template id", 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+		auto ref = DCast<ReferenceExpression>( operands[1]);
+		Q_ASSERT(ref);
+
+		auto r = new ReferenceExpression{ ref->name(), operands.first(), ReferenceExpression::MemberKind::Template };
+		SAFE_DELETE(ref);
+		return r;
+	}});
 
 	add(new OD{ "member", "expr . id < expr >", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {

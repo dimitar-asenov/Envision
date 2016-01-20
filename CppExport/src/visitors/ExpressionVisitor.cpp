@@ -315,6 +315,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				*fragment << visit(e->prefix()) << "->";
 			else if (e->memberKind() == ReferenceExpression::MemberKind::Static)
 				*fragment << visit(e->prefix()) << "::";
+			else if (e->memberKind() == ReferenceExpression::MemberKind::Template)
+				*fragment << visit(e->prefix()) << "::template ";
 			else
 				Q_ASSERT(false);
 		}

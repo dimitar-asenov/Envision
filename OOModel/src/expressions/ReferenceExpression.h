@@ -51,9 +51,9 @@ class OOMODEL_API ReferenceExpression: public Super<Expression>
 		/**
 		 * The kind of member relationship between the prefix and the ref.
 		 *
-		 * These correspond to the . -> and :: operators.
+		 * These correspond to the . -> :: and ::template operators.
 		 */
-		enum class MemberKind : int {Dot, Pointer, Static};
+		enum class MemberKind : int {Dot, Pointer, Static, Template};
 
 		ReferenceExpression(const QString& name, Expression* prefix = nullptr, MemberKind kind = MemberKind::Dot);
 
