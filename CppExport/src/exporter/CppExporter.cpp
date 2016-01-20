@@ -147,7 +147,7 @@ QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units)
 Export::FragmentLayouter CppExporter::layouter()
 {
 	auto result = Export::FragmentLayouter{"\t"};
-	result.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
+	result.addRule("enumerators", Export::FragmentLayouter::IndentChildFragments, "", ",\n", "");
 	result.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
 	result.addRule("sections", Export::FragmentLayouter::NoIndentation, "", "\n", "");
 	result.addRule("declarationComment", Export::FragmentLayouter::NoIndentation
