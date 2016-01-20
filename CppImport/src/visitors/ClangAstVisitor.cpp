@@ -1379,6 +1379,35 @@ void ClangAstVisitor::endTranslationUnit()
 void ClangAstVisitor::endEntireImport()
 {
 	macroImporter_.endEntireImport();
+
+	QList<Model::Node*> workStack{clang_.rootProject()};
+	while (!workStack.empty())
+	{
+		auto current = workStack.takeLast();
+
+		if (auto reference = DCast<OOModel::ReferenceExpression>(current))
+		{
+			if (auto prefix = DCast<OOModel::ReferenceExpression>(reference->prefix()))
+			{
+				if (DCast<OOModel::Module>(prefix->target()))
+				{
+					QSet<Model::Node*> foundSymbols;
+					Model::SymbolMatcher matcher{reference->name()};
+					reference->parent()->findSymbols(foundSymbols, matcher, reference, Model::Node::SEARCH_UP,
+																Model::Node::ANY_SYMBOL, false);
+
+					if ((foundSymbols.size() > 1 && !reference->target()) ||
+						 (foundSymbols.size() == 1 && foundSymbols.contains(reference->target())))
+					{
+						reference->setPrefix(nullptr);
+						SAFE_DELETE(prefix);
+					}
+				}
+			}
+		}
+		else if (!DCast<OOModel::MetaCallExpression>(current))
+			workStack << current->children();
+	}
 }
 
 } // namespace cppimport

@@ -133,7 +133,8 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 	{
 		auto ignore = childToSubnode(source);
 		for (auto c : childrenInScope())
-			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
+			if (c != ignore && c != friends())
+				// Optimize the search by skipping this scope, since we've already searched there
 				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 
 		// Look in base classes, but only if we are not trying to resolve a base class name
