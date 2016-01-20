@@ -598,7 +598,7 @@ inline QList<Node*> Node::childrenWhich(Node* from, Predicate p)
 /**
  * This class is only used for debugging purposes, to convert a Node to a string
  */
-class NodeToDebugStringAdapter {
+class MODELBASE_API NodeToDebugStringAdapter {
 	public:
 		using BaseAdapteeType = Node;
 		QString str;
