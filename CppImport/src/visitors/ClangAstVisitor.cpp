@@ -1398,10 +1398,7 @@ void ClangAstVisitor::endEntireImport()
 
 					if ((foundSymbols.size() > 1 && !reference->target()) ||
 						 (foundSymbols.size() == 1 && foundSymbols.contains(reference->target())))
-					{
 						reference->setPrefix(nullptr);
-						SAFE_DELETE(prefix);
-					}
 				}
 			}
 		}
