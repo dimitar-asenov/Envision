@@ -56,7 +56,7 @@ public class Node {
 	private SizeEstimator.Size estimatedSize_ = null;
 	
 	// These are used when writing the nodes to a stream
-	private static String outputDir_ = null;
+	private static Stack<String> outputDir_ = new Stack<String>();
 	private static Stack<PrintStream> out_ = new Stack<PrintStream>();
 	private static OutputFormat format_ = OutputFormat.XML;
 	private static String suffix = null;
@@ -229,11 +229,11 @@ public class Node {
 	public void renderRootTree(String dir, String projectName, OutputFormat format)
 		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
 	{
-		outputDir_ = dir;
+		outputDir_.push(dir);
 		format_ = format;
 		suffix = (format_ == OutputFormat.XML) ? ".xml" : "";
 		
-		out_.push( new PrintStream(new File(outputDir_ + projectName + suffix), "UTF-8") );
+		out_.push( new PrintStream(new File(outputDir_.peek() + projectName + suffix), "UTF-8") );
 		
 		if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
 			out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
@@ -253,6 +253,11 @@ public class Node {
 		
 		if (considerPersistenceUnits && isPersistenceUnit() && format_ != OutputFormat.CLIPBOARD)
 		{
+			String relativeDirectoryPath = relativeDirectoryPathForPersistenceUnit();
+			String relativeFilePath = relativeDirectoryPath + symbol() + " {" + id_ + "}" + suffix;
+			String fullDirectoryPath = outputDir_.peek() + relativeDirectoryPath;
+			String fullFilePath = outputDir_.peek() + relativeFilePath;
+					
 			// Create a new file for this persistence unit
 			if (format_ == OutputFormat.XML)
 			{
@@ -263,12 +268,16 @@ public class Node {
 			else if (format_ == OutputFormat.SIMPLE)
 			{
 				out_.peek().print(indentation + name_ + " persistencenewunit {" + id_ +"}");
-				out_.peek().println(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
+				out_.peek().print(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
+				out_.peek().println(". S_" + relativeFilePath );
 			}
 			
-			out_.push( new PrintStream(new File(outputDir_ + "{" + id_ + "}" + suffix), "UTF-8") );
+			(new File(fullDirectoryPath)).mkdirs(); // Make the directory if it doesn't exist.
+			out_.push( new PrintStream(new File(fullFilePath), "UTF-8") );
+			outputDir_.push(fullDirectoryPath);
 			if (format_ == OutputFormat.XML) out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
 			renderTree("", false);
+			outputDir_.pop();
 			out_.pop().close();
 		}
 		else
@@ -312,9 +321,21 @@ public class Node {
 				if (text_ != null) out_.peek().print(". " + escape(text_));
 				out_.peek().println();
 				for (Node child : children_)
-					child.renderTree(indentation + "\t", considerPersistenceUnits);
+					child.renderTree(indentation + "\t", true);
 			}
 		}
+	}
+	
+	String relativeDirectoryPathForPersistenceUnit()
+	{
+		Node ancestor = parent_;
+		while (ancestor != null && ancestor.symbol() == null)
+			ancestor = ancestor.parent_;
+		
+		if (ancestor != null && ancestor.parent_ != null)
+			return ancestor.symbol() + "/";
+		
+		return "";
 	}
 	
 	String escape(String s)

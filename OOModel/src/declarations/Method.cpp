@@ -227,4 +227,9 @@ QSet<Method*> Method::callers()
 	return result;
 }
 
+bool Method::isNewPersistenceUnit() const
+{
+	return true;
+}
+
 }

@@ -80,6 +80,8 @@ class OOMODEL_API Class : public Super<Declaration>
 
 		QSet<Class*> directSubClasses();
 
+		virtual bool isNewPersistenceUnit() const override;
+
 	private:
 		Expression* defaultImplicitBaseFromProject() const;
 		bool findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,

@@ -50,6 +50,8 @@ class OOMODEL_API Module : public Super<Declaration>
 
 		virtual SymbolTypes symbolType() const override;
 		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
+
+		virtual bool isNewPersistenceUnit() const override;
 };
 
 }

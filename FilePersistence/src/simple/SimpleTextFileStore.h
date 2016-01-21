@@ -94,16 +94,17 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		bool partiallyLoadingATree_{};
 
 		/**
-		 * This is the folder where the current tree is being saved to or loaded from. This is only valid if working is
-		 * true.
+		 * This is a stack of the the folder where the current tree is being saved to or loaded from.
+		 * This is only valid if working is true.
 		 */
-		QDir treeDir_;
+		QStack<QDir> treeDirs_;
 
 		static QList<GenericNode*> writeGenericNodeToFile(GenericNode* node, const QString& destDir,
 																			const QString& fileName,
 																			const QStringList& persistentUnitTypes);
 		void saveNewPersistenceUnit(const Model::Node *node, const QString &name);
-		Model::LoadedNode loadNewPersistenceUnit(const QString& name, Model::Node* parent, bool loadPartially);
+		Model::LoadedNode loadNewPersistenceUnit(const QString& name, Model::Node* parent,
+															  QString relativeFilePath, bool loadPartially);
 		Model::LoadedNode loadNode(Model::Node* parent, bool loadPartially);
 		void saveNodeDirectly(const Model::Node *node, const QString &name);
 
@@ -114,6 +115,11 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		 * Returns the name of the persistent unit that corresponds to the specified node.
 		 */
 		QString getPersistenceUnitName(const Model::Node *node);
+
+		/**
+		 * Returns the relative directory path to a persistent unit
+		 */
+		static QString relativeDirectoryPathForPersistenceUnit(const Model::Node* node);
 
 		void checkIsWorking() const;
 

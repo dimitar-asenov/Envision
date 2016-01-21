@@ -84,6 +84,8 @@ class OOMODEL_API Method : public Super<Declaration>
 
 		QSet<Method*> callees();
 		QSet<Method*> callers();
+
+		virtual bool isNewPersistenceUnit() const override;
 };
 
 inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }

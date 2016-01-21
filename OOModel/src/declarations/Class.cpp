@@ -258,4 +258,9 @@ QSet<Class*> Class::directSubClasses()
 	return result;
 }
 
+bool Class::isNewPersistenceUnit() const
+{
+	return true;
+}
+
 }

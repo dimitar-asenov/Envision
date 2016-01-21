@@ -56,6 +56,8 @@ class OOMODEL_API Project : public Super<Declaration>
 		virtual bool isTransparentForNameResolution() const override;
 		virtual SymbolTypes symbolType() const override;
 		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
+
+		virtual bool isNewPersistenceUnit() const override;
 };
 
 }

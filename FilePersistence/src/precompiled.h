@@ -38,11 +38,10 @@
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
 #include <QtXml/QDomDocument>
-
 #include <QtCore/QDir>
-
 #include <QtCore/QDateTime>
 #include <QtCore/QTimeZone>
+#include <QtCore/QStack>
 
 
 #if defined(FilePersistence_EXPORTS)

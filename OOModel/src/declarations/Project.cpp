@@ -69,4 +69,10 @@ QList<const Model::UsedLibrary*> Project::usedLibraries() const
 	return all;
 }
 
+bool Project::isNewPersistenceUnit() const
+{
+	return true;
+}
+
+
 }

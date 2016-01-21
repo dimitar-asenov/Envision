@@ -40,10 +40,6 @@ public class NodeDescriptors {
 	{
 		NodeInitializer initializer = initializerMap.get(initializeAsType);
 		if (initializer != null) initializer.initialize(node);
-		else
-		{
-			assert initializeAsType.startsWith("TypedListOf");
-		}
 	}
 	
 	public static boolean isPersistenceUnit(Node node)
@@ -83,14 +79,14 @@ public class NodeDescriptors {
 				{"TypedListOfModule","modules"},
 				{"TypedListOfUsedLibrary","libraries"}
 		}));
-		add( new NodeInitializer("Class", "-class-level-container", new String[][]{
+		add( new NodeInitializer("Class", true, "-class-level-container", new String[][]{
 				{"TypedListOfExpression","baseClasses"},
 				{"TypedListOfEnumerator","enumerators"},
 				{"TypedListOfFormalTypeArgument","typeArguments"},
-				{"TypedListOfExpression","friends"},
+				{"TypedListOfDeclaration","friends"},
 				{"Integer","cKind"}
 		}));
-		add( new NodeInitializer("Method", "Declaration", new String[][]{
+		add( new NodeInitializer("Method", true, "Declaration", new String[][]{
 				{"StatementItemList","items"},
 				{"TypedListOfFormalTypeArgument","typeArguments"},
 				{"TypedListOfFormalArgument","arguments"},
@@ -172,6 +168,7 @@ public class NodeDescriptors {
 		}));
 		
 		// Expressions
+		
 		add( new NodeInitializer("ReferenceExpression", new String[][]{
 				{"OOReference","ref"},
 				{"TypedListOfExpression","typeArguments"},
