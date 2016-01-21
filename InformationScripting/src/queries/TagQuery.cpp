@@ -141,6 +141,8 @@ Optional<TupleSet> TagQuery::addTags(TupleSet input)
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
 				treeManager->changeModificationTarget(astNode);
+				if (!tagExtension->tags())
+					tagExtension->setTags(new Model::TypedList<Model::Text>{});
 				tagExtension->tags()->append(new Model::Text{tagText});
 			}
 		}
@@ -187,12 +189,15 @@ Optional<TupleSet> TagQuery::removeTags(TupleSet input)
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
 				auto tagsList = tagExtension->tags();
-				treeManager->changeModificationTarget(tagsList);
-				auto tagsIndex = 0;
-				while (tagsIndex < tagsList->size())
+				if (tagsList)
 				{
-					if (matcher.matches(tagsList->at(tagsIndex)->get())) tagsList->remove(tagsIndex);
-					else ++tagsIndex;
+					treeManager->changeModificationTarget(tagsList);
+					auto tagsIndex = 0;
+					while (tagsIndex < tagsList->size())
+					{
+						if (matcher.matches(tagsList->at(tagsIndex)->get())) tagsList->remove(tagsIndex);
+						else ++tagsIndex;
+					}
 				}
 			}
 		}
@@ -219,9 +224,11 @@ void TagQuery::insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& mat
 		if (auto astNode = DCast<Model::CompositeNode>(node))
 		{
 			auto tagExtension = astNode->extension<TagExtension>();
-			for (auto tag : *(tagExtension->tags()))
-				if (matcher.matches(tag->get()))
-					tuples.add({{"tag", tag->get()}, {"ast", astNode}});
+			auto tags = tagExtension->tags();
+			if (tags)
+				for (auto tag : *tags)
+					if (matcher.matches(tag->get()))
+						tuples.add({{"tag", tag->get()}, {"ast", astNode}});
 		}
 		workStack << node->children();
 	}
