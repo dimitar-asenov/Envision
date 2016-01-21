@@ -296,11 +296,24 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		*fragment << ";";
 
-		if (isEnumWithQtFlags(classs)) *fragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
-		for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
-			if (potentialEnumWithQtFlags != classs && isEnumWithQtFlags(potentialEnumWithQtFlags))
-				*fragment << "\nQ_DECLARE_OPERATORS_FOR_FLAGS("
-							 << classs->name() << "::" << potentialEnumWithQtFlags->name() << ")";
+		auto qtFlagsComposite = new CompositeFragment{classs, "sections"};
+		*qtFlagsComposite << fragment;
+		if (isEnumWithQtFlags(classs))
+		{
+			auto qDeclareFlagsFragment = new CompositeFragment{classs};
+			*qDeclareFlagsFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
+			*qtFlagsComposite << qDeclareFlagsFragment;
+		}
+		else
+			for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
+				if (potentialEnumWithQtFlags != classs && isEnumWithQtFlags(potentialEnumWithQtFlags))
+				{
+					auto qDeclareOperatorsForFlagsFragment = new CompositeFragment{classs};
+					*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
+												  << classs->name() << "::" << potentialEnumWithQtFlags->name() << ")";
+					*qtFlagsComposite << qDeclareOperatorsForFlagsFragment;
+				}
+		return qtFlagsComposite;
 	}
 
 	return fragment;
