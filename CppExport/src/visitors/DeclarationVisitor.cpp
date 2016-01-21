@@ -235,7 +235,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			auto sections = fragment->append( new CompositeFragment{classs, "bodySections"});
 			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
 									[](Expression* expression) { return metaCallFilter(expression, false); });
-			*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
+			*sections << list(classs->enumerators(), ElementVisitor(data()), "sections");
 			*sections << list(classs->friends(), this, "sections");
 
 			auto publicSection = new CompositeFragment{classs, "accessorSections"};
@@ -296,11 +296,24 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		*fragment << ";";
 
-		if (isEnumWithQtFlags(classs)) *fragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
-		for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
-			if (potentialEnumWithQtFlags != classs && isEnumWithQtFlags(potentialEnumWithQtFlags))
-				*fragment << "\nQ_DECLARE_OPERATORS_FOR_FLAGS("
-							 << classs->name() << "::" << potentialEnumWithQtFlags->name() << ")";
+		auto qtFlagsComposite = new CompositeFragment{classs, "sections"};
+		*qtFlagsComposite << fragment;
+		if (isEnumWithQtFlags(classs))
+		{
+			auto qDeclareFlagsFragment = new CompositeFragment{classs};
+			*qDeclareFlagsFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
+			*qtFlagsComposite << qDeclareFlagsFragment;
+		}
+		else
+			for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
+				if (potentialEnumWithQtFlags != classs && isEnumWithQtFlags(potentialEnumWithQtFlags))
+				{
+					auto qDeclareOperatorsForFlagsFragment = new CompositeFragment{classs};
+					*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
+												  << classs->name() << "::" << potentialEnumWithQtFlags->name() << ")";
+					*qtFlagsComposite << qDeclareOperatorsForFlagsFragment;
+				}
+		return qtFlagsComposite;
 	}
 
 	return fragment;

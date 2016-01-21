@@ -120,9 +120,12 @@ SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 	auto fragment = new CompositeFragment{enumerator};
 	*fragment << enumerator->name();
 	if (auto value = enumerator->value())
-	{
 		*fragment << " = " << expression(value);
-	}
+
+	// TODO: do not print the comma here, use a list layout instead
+	if (auto parentList = DCast<Model::List>(enumerator->parent()))
+		if (parentList->last() != enumerator)
+			*fragment << ",";
 
 	*fragment << DeclarationVisitor::compositeNodeComments(enumerator, "");
 
