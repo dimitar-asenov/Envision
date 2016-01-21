@@ -146,6 +146,7 @@ bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
 {
 	 auto metaCall = DCast<MetaCallExpression>(expression);
 	 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
+	 if (ooReference->name() == "QT_Flags") return false;
 	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
 }
 
@@ -294,9 +295,26 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		}
 
 		*fragment << ";";
+
+		if (isEnumWithQtFlags(classs)) *fragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
+		for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
+			if (potentialEnumWithQtFlags != classs && isEnumWithQtFlags(potentialEnumWithQtFlags))
+				*fragment << "\nQ_DECLARE_OPERATORS_FOR_FLAGS("
+							 << classs->name() << "::" << potentialEnumWithQtFlags->name() << ")";
 	}
 
 	return fragment;
+}
+
+bool DeclarationVisitor::isEnumWithQtFlags(OOModel::Class* candidate)
+{
+	if (candidate->constructKind() == Class::ConstructKind::Enum)
+		for (auto entry : *candidate->metaCalls())
+			if (auto metaCall = DCast<OOModel::MetaCallExpression>(entry))
+				if (auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
+					if (reference->name() == "QT_Flags")
+						return true;
+	return false;
 }
 
 template<typename Predicate>
