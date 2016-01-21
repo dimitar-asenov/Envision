@@ -146,8 +146,8 @@ class SaveMultipleUnits : public Test<FilePersistencePlugin, SaveMultipleUnits> 
 
 
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/units", testDir +"/units/units");
-	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/{00000000-0000-0000-0000-000000000003}",
-			testDir +"/units/{00000000-0000-0000-0000-000000000003}");
+	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/ {00000000-0000-0000-0000-000000000003}",
+			testDir +"/units/ {00000000-0000-0000-0000-000000000003}");
 
 	SAFE_DELETE(store);
 }};
