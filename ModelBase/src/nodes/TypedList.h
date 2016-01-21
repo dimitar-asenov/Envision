@@ -49,17 +49,17 @@ class TypedList: public Super<List>
 		struct TypedIterator : public std::iterator<std::bidirectional_iterator_tag, T*> {
 			TypedIterator() = default;
 			TypedIterator(const TypedIterator& other) = default;
-			TypedIterator(List::iterator it): it_{it}{}
+			TypedIterator(List::iterator it);
 			TypedIterator& operator=(const TypedIterator&) = default;
 
-			TypedIterator& operator++() {++it_;return *this;}
-			TypedIterator operator++(int) {TypedIterator old(*this); ++it_; return old;}
-			TypedIterator& operator--() {--it_;return *this;}
-			TypedIterator operator--(int) {TypedIterator old(*this); --it_; return old;}
-			bool operator==(const TypedIterator& other) const {return it_==other.it_;}
-			bool operator!=(const TypedIterator& other) const {return it_!=other.it_;}
-			T* & operator*() const { return reinterpret_cast<T*&>(*it_); }
-			T*   operator->() const { return reinterpret_cast<T*&>(*it_); }
+			TypedIterator& operator++();
+			TypedIterator operator++(int);
+			TypedIterator& operator--();
+			TypedIterator operator--(int);
+			bool operator==(const TypedIterator& other) const;
+			bool operator!=(const TypedIterator& other) const;
+			T* & operator*() const;
+			T*   operator->() const;
 
 			List::iterator it_{};
 		};
@@ -67,18 +67,18 @@ class TypedList: public Super<List>
 		struct ConstTypedIterator : public std::iterator<std::bidirectional_iterator_tag, const T*> {
 			ConstTypedIterator() = default;
 			ConstTypedIterator(const ConstTypedIterator& other) = default;
-			ConstTypedIterator(List::const_iterator it): it_{it}{}
+			ConstTypedIterator(List::const_iterator it);
 			ConstTypedIterator& operator=(const ConstTypedIterator&) = default;
-			ConstTypedIterator(TypedIterator& it) : it_{it.it_}{}
+			ConstTypedIterator(TypedIterator& it);
 
-			ConstTypedIterator& operator++() {++it_;return *this;}
-			ConstTypedIterator operator++(int) {ConstTypedIterator old(*this); ++it_; return old;}
-			ConstTypedIterator& operator--() {--it_;return *this;}
-			ConstTypedIterator operator--(int) {ConstTypedIterator old(*this); --it_; return old;}
-			bool operator==(const ConstTypedIterator& other) const {return it_==other.it_;}
-			bool operator!=(const ConstTypedIterator& other) const {return it_!=other.it_;}
-			T* const& operator*() const {return reinterpret_cast<T* const &>(*it_);}
-			T* operator->() const { return reinterpret_cast<T* const &>(*it_); }
+			ConstTypedIterator& operator++();
+			ConstTypedIterator operator++(int);
+			ConstTypedIterator& operator--();
+			ConstTypedIterator operator--(int);
+			bool operator==(const ConstTypedIterator& other) const;
+			bool operator!=(const ConstTypedIterator& other) const;
+			T* const& operator*() const;
+			T* operator->() const;
 
 			List::const_iterator it_{};
 		};
@@ -106,5 +106,122 @@ template <typename T>
 inline typename TypedList<T>::iterator TypedList<T>::begin() { return TypedIterator(List::begin()); }
 template <typename T>
 inline typename TypedList<T>::iterator TypedList<T>::end() { return TypedIterator(List::end()); }
+
+template<typename T>
+inline TypedList<T>::TypedIterator::TypedIterator(List::iterator it): it_{it}{}
+
+template<typename T>
+inline typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator++(int)
+{
+	TypedIterator old(*this);
+	++it_;
+	return old;
+}
+
+template<typename T>
+inline typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator--(int)
+{
+	TypedIterator old(*this);
+	--it_;
+	return old;
+}
+
+template<typename T>
+inline bool TypedList<T>::TypedIterator::operator==(const TypedList<T>::TypedIterator& other) const
+{
+	return it_ == other.it_;
+}
+
+template<typename T>
+inline bool TypedList<T>::TypedIterator::operator!=(const TypedList<T>::TypedIterator& other) const
+{
+	return it_ != other.it_;
+}
+
+template<typename T>
+inline T*& TypedList<T>::TypedIterator::operator*() const
+{
+	return reinterpret_cast<T*&>(*it_);
+}
+
+template<typename T>
+inline T* TypedList<T>::TypedIterator::operator->() const
+{
+	return reinterpret_cast<T*&>(*it_);
+}
+
+template<typename T>
+inline typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator--()
+{
+	--it_;
+	return *this;
+}
+
+template<typename T>
+inline typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator++()
+{
+	++it_;
+	return *this;
+}
+
+template<typename T>
+inline TypedList<T>::ConstTypedIterator::ConstTypedIterator(List::const_iterator it): it_{it}{}
+
+template<typename T>
+inline TypedList<T>::ConstTypedIterator::ConstTypedIterator(TypedIterator& it) : it_{it.it_}{}
+
+template<typename T>
+inline typename TypedList<T>::ConstTypedIterator TypedList<T>::ConstTypedIterator::operator++(int)
+{
+	ConstTypedIterator old(*this);
+	++it_;
+	return old;
+}
+
+template<typename T>
+inline typename TypedList<T>::ConstTypedIterator TypedList<T>::ConstTypedIterator::operator--(int)
+{
+	ConstTypedIterator old(*this);
+	--it_;
+	return old;
+}
+
+template<typename T>
+inline bool TypedList<T>::ConstTypedIterator::operator==(const TypedList<T>::ConstTypedIterator& other) const
+{
+	return it_ == other.it_;
+}
+
+template<typename T>
+inline bool TypedList<T>::ConstTypedIterator::operator!=(const TypedList<T>::ConstTypedIterator& other) const
+{
+	return it_ != other.it_;
+}
+
+template<typename T>
+inline T* const& TypedList<T>::ConstTypedIterator::operator*() const
+{
+	return reinterpret_cast<T* const &>(*it_);
+}
+
+template<typename T>
+inline T* TypedList<T>::ConstTypedIterator::operator->() const
+{
+	return reinterpret_cast<T* const &>(*it_);
+}
+
+template<typename T>
+inline typename TypedList<T>::ConstTypedIterator& TypedList<T>::ConstTypedIterator::operator--()
+{
+	--it_;
+	return *this;
+}
+
+template<typename T>
+inline typename TypedList<T>::ConstTypedIterator& TypedList<T>::ConstTypedIterator::operator++()
+{
+	++it_;
+	return *this;
+}
 
 }
