@@ -49,17 +49,17 @@ class TypedList: public Super<List>
 		struct TypedIterator : public std::iterator<std::bidirectional_iterator_tag, T*> {
 			TypedIterator() = default;
 			TypedIterator(const TypedIterator& other) = default;
-			TypedIterator(List::iterator it): it_{it}{}
+			TypedIterator(List::iterator it);
 			TypedIterator& operator=(const TypedIterator&) = default;
 
-			TypedIterator& operator++() {++it_;return *this;}
-			TypedIterator operator++(int) {TypedIterator old(*this); ++it_; return old;}
-			TypedIterator& operator--() {--it_;return *this;}
-			TypedIterator operator--(int) {TypedIterator old(*this); --it_; return old;}
-			bool operator==(const TypedIterator& other) const {return it_==other.it_;}
-			bool operator!=(const TypedIterator& other) const {return it_!=other.it_;}
-			T* & operator*() const { return reinterpret_cast<T*&>(*it_); }
-			T*   operator->() const { return reinterpret_cast<T*&>(*it_); }
+			TypedIterator& operator++();
+			TypedIterator operator++(int);
+			TypedIterator& operator--();
+			TypedIterator operator--(int);
+			bool operator==(const TypedIterator& other) const;
+			bool operator!=(const TypedIterator& other) const;
+			T* & operator*() const;
+			T*   operator->() const;
 
 			List::iterator it_{};
 		};
