@@ -85,4 +85,37 @@ template<typename T> Node* TypedList<T>::createDefaultElement()
 
 template<typename T> int TypedList<T>::lowerTypeBoundForElements() const { return T::typeIdStatic();}
 
+template<typename T>
+TypedList<T>::TypedIterator::TypedIterator(List::iterator it): it_{it}{}
+
+template<typename T>
+typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator++(int)
+{
+	TypedIterator old(*this); ++it_; return old;
+}
+
+template<typename T>
+typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator--(int)
+{
+	TypedIterator old(*this); --it_; return old;
+}
+
+template<typename T>
+bool TypedList<T>::TypedIterator::operator==(const TypedList<T>::TypedIterator& other) const {return it_==other.it_;}
+
+template<typename T>
+bool TypedList<T>::TypedIterator::operator!=(const TypedList<T>::TypedIterator& other) const {return it_!=other.it_;}
+
+template<typename T>
+T*& TypedList<T>::TypedIterator::operator*() const { return reinterpret_cast<T*&>(*it_); }
+
+template<typename T>
+T* TypedList<T>::TypedIterator::operator->() const { return reinterpret_cast<T*&>(*it_); }
+
+template<typename T>
+typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator--() {--it_;return *this;}
+
+template<typename T>
+typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator++() {++it_;return *this;}
+
 }
