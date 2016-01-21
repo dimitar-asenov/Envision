@@ -91,33 +91,64 @@ TypedList<T>::TypedIterator::TypedIterator(List::iterator it): it_{it}{}
 template<typename T>
 typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator++(int)
 {
-	TypedIterator old(*this); ++it_; return old;
+	TypedIterator old(*this);
+	++it_;
+	return old;
 }
 
 template<typename T>
 typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator--(int)
 {
-	TypedIterator old(*this); --it_; return old;
-template<typename T>
-template<typename T>
-template<typename T>
-template<typename T>
+	TypedIterator old(*this);
+	--it_;
+	return old;
 }
 
 template<typename T>
-bool TypedList<T>::TypedIterator::operator==(const TypedList<T>::TypedIterator& other) const {return it_==other.it_;}
-template<typename T>
+bool TypedList<T>::TypedIterator::operator==(const TypedList<T>::TypedIterator& other) const
+{
+	return it_ == other.it_;
+}
 
 template<typename T>
-bool TypedList<T>::TypedIterator::operator!=(const TypedList<T>::TypedIterator& other) const {return it_!=other.it_;}
+bool TypedList<T>::TypedIterator::operator!=(const TypedList<T>::TypedIterator& other) const
+{
+	return it_ != other.it_;
+}
+
+template<typename T>
+T*& TypedList<T>::TypedIterator::operator*() const
+{
+	return reinterpret_cast<T*&>(*it_);
+}
+
+template<typename T>
+T* TypedList<T>::TypedIterator::operator->() const
+{
+	return reinterpret_cast<T*&>(*it_);
+}
+
+template<typename T>
+typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator--()
+{
+	--it_;
+	return *this;
+}
+
+template<typename T>
+typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator++()
+{
+	++it_;
+	return *this;
+}
+
+template<typename T>
 TypedList<T>::ConstTypedIterator::ConstTypedIterator(List::const_iterator it): it_{it}{}
 
 template<typename T>
-T*& TypedList<T>::TypedIterator::operator*() const { return reinterpret_cast<T*&>(*it_); }
 TypedList<T>::ConstTypedIterator::ConstTypedIterator(TypedIterator& it) : it_{it.it_}{}
 
 template<typename T>
-T* TypedList<T>::TypedIterator::operator->() const { return reinterpret_cast<T*&>(*it_); }
 typename TypedList<T>::ConstTypedIterator TypedList<T>::ConstTypedIterator::operator++(int)
 {
 	ConstTypedIterator old(*this);
@@ -146,7 +177,6 @@ bool TypedList<T>::ConstTypedIterator::operator!=(const TypedList<T>::ConstTyped
 }
 
 template<typename T>
-typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator--() {--it_;return *this;}
 T* const& TypedList<T>::ConstTypedIterator::operator*() const
 {
 	return reinterpret_cast<T* const &>(*it_);
@@ -159,7 +189,6 @@ T* TypedList<T>::ConstTypedIterator::operator->() const
 }
 
 template<typename T>
-typename TypedList<T>::TypedIterator& TypedList<T>::TypedIterator::operator++() {++it_;return *this;}
 typename TypedList<T>::ConstTypedIterator& TypedList<T>::ConstTypedIterator::operator--()
 {
 	--it_;
