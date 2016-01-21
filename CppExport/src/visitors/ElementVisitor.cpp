@@ -120,9 +120,11 @@ SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 	auto fragment = new CompositeFragment{enumerator};
 	*fragment << enumerator->name();
 	if (auto value = enumerator->value())
-	{
 		*fragment << " = " << expression(value);
-	}
+
+	if (auto parentList = DCast<Model::List>(enumerator->parent()))
+		if (parentList->last() != enumerator)
+			*fragment << ",";
 
 	*fragment << DeclarationVisitor::compositeNodeComments(enumerator, "");
 

@@ -235,7 +235,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			auto sections = fragment->append( new CompositeFragment{classs, "bodySections"});
 			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
 									[](Expression* expression) { return metaCallFilter(expression, false); });
-			*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
+			*sections << list(classs->enumerators(), ElementVisitor(data()), "sections");
 			*sections << list(classs->friends(), this, "sections");
 
 			auto publicSection = new CompositeFragment{classs, "accessorSections"};
