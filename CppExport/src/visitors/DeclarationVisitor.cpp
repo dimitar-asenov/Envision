@@ -422,7 +422,16 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	// assertions
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
+
 	if (!shouldExportMethod(method)) return nullptr;
+
+	QList<Class*> parentClasses;
+	auto parentClass = method->firstAncestorOfType<Class>();
+	while (parentClass)
+	{
+		parentClasses.prepend(parentClass);
+		parentClass = parentClass->firstAncestorOfType<Class>();
+	}
 
 	auto fragment = new CompositeFragment{method};
 
@@ -433,17 +442,16 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	// template<typename ...>
 	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
-			if (auto parentClass = method->firstAncestorOfType<Class>())
-				if (!parentClass->typeArguments()->isEmpty())
-					*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
-
+			for (auto i = 0; i < parentClasses.size(); i++)
+				if (!parentClasses.at(i)->typeArguments()->isEmpty())
+					*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor(data()), "templateArgsList");
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
 	// friend keyword
 	if (!sourceVisitor())
-		if (auto parentClass = method->firstAncestorOfType<Class>())
-			if (parentClass->friends()->isAncestorOf(method))
+		if (!parentClasses.empty())
+			if (parentClasses.last()->friends()->isAncestorOf(method))
 				*fragment << "friend ";
 
 	// private, public, ...
@@ -456,16 +464,14 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
 	// operator
-
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
 		if (sourceVisitor())
-			if (auto parentClass = method->firstAncestorOfType<Class>())
-				*fragment << parentClass->name() << "::";
+			if (!parentClasses.empty())
+				*fragment << parentClasses.last()->name() << "::";
 		*fragment << "operator ";
 	}
 	// return type
-
 	if (method->methodKind() != Method::MethodKind::Constructor &&
 		 method->methodKind() != Method::MethodKind::Destructor)
 	{
@@ -483,13 +489,13 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	// method name qualifier
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
-		if (auto parentClass = method->firstAncestorOfType<Class>())
+		for (auto i = 0; i < parentClasses.size(); i++)
 		{
-			*fragment << parentClass->name();
-			if (!parentClass->typeArguments()->isEmpty())
+			*fragment << parentClasses.at(i)->name();
+			if (!parentClasses.at(i)->typeArguments()->isEmpty())
 			{
-				auto typeArgumentComposite = new CompositeFragment{method, "typeArgsList"};
-				for (auto typeArgument : *parentClass->typeArguments())
+				auto typeArgumentComposite = new CompositeFragment{parentClasses.at(i)->typeArguments(), "typeArgsList"};
+				for (auto typeArgument : *parentClasses.at(i)->typeArguments())
 					*typeArgumentComposite << typeArgument->nameNode();
 				*fragment << typeArgumentComposite;
 			}
