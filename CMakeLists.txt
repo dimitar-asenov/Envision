@@ -31,7 +31,12 @@ add_subdirectory("JavaExport")
 add_subdirectory("OODebug") # uses JavaExport
 add_subdirectory("CppExport")
 add_subdirectory("CppImport")
-add_subdirectory("PythonWrapperGenerator")
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	# This project uses C++11 ABI tags which were introduced with GCC 5 and are currently not
+	# supported by Clang.
+	add_subdirectory("PythonWrapperGenerator")
+endif()
 add_subdirectory("InformationScripting") # uses the generator and OODebug
 
 # Object-Oriented layer - Contracts
