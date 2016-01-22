@@ -1,9 +1,11 @@
 /*! \page compilation Compiling Envision from source
 
-Envision is written in C++14. You will need GCC version 5.1 or newer to compile the sources.
-You can check your current compiler version with:
+Envision is written in C++14 and uses the CMake build system.
+You will need GCC version 5.1 or newer and at least CMake 3.2.2 to compile the sources.
+You can check your current versions with:
 \verbatim
 g++ --version
+cmake --version
 \endverbatim
 In Ubuntu, you can easily get compiler updates by adding the following PPA:
 \verbatim
@@ -11,7 +13,7 @@ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt-get update && sudo apt-get upgrade
 \endverbatim
 Other dependencies are:
-	- <b>Qt 5</b>: http://qt.io <br/> This is the underlying framework that we use to build Envision's
+	- <b>Qt 5.4 or later</b>: http://qt.io <br/> This is the underlying framework that we use to build Envision's
 	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
@@ -25,7 +27,7 @@ Other dependencies are:
 	- <b>For development only: Vera ++ </b>: https://bitbucket.org/verateam/vera <br /> Used for checking the code formatting style.
 	Boost python is used to provide bindings for the python scripting.
 
-To install the dependencies on Ubuntu 15.04, do the following:
+To install the dependencies on Ubuntu 15.10, do the following:
 	-# Install the Qt SDK:
 		\verbatim sudo apt-get install qt-sdk \endverbatim
 		You will also need to install additional packages for SVG compatibility and WebKit:
@@ -55,16 +57,17 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 
 \section qtcreator Qt Creator (recommended for C++; does not work with Java)
 	-# Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process
-	Qt Creator will create additional directories alongside the repository clone.
+	Qt Creator will create additional directories alongside the repository clone (for the out-of-source build).
 	-# Start Qt Creator and configure the version of Qt that you want to use:
 		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.
 			This could be either Qt in PATH, or a Qt version that
 			you compiled yourself. Qt 5.4 or later is required. See below for manual Qt compilation instructions.
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
-	-# Open the \c envision.pro file with Qt Creator.
+	-# Open the top-level \c CMakeLists.txt file with Qt Creator.
+	-# Use the following arguments for CMake \verbatim -DCMAKE_BUILD_TYPE=Debug \endverbatim
+	  or alternatively, if you want to compile with clang:  \verbatim -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-3.8 \endverbatim
 	-# In the Projects view, under *build* make sure that:
-		- Shadow build is enabled
 		- The build directory points to a directory that is a peer of Envision's directory. e.g.
 			\verbatim../build-envision-Desktop-Debug\endverbatim
 	-# Also in the Projects view, change the arguments of make to specify parallel compilation and the *install* target:
@@ -108,9 +111,9 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 
 \section latestqt Using the latest build of Qt
 
-In order to make Envision's visualizations scale to very large projects, we made several enhancements to the Graphics
-View framework. If you want to use Envision with a large amount of visual objects displayed at once you must use
-Qt 5.4 (released in December 2014) or compile the latest development version.
+In order to make Envision's visualizations scale to very large projects (with millions of visual items), we made
+several enhancements to Qt's Graphics View framework. Therefore Envision requires Qt 5.4 or later (released in December 2014).
+Alternatively you could compile the latest Qt development branch yourself.
 
 If you want to compile and use the latest development version of Qt, you can simply run the \c misc/use-qt5-dev.sh
 script. It is designed for and tested with Ubuntu 14.04. Running the script will:
@@ -119,7 +122,7 @@ script. It is designed for and tested with Ubuntu 14.04. Running the script will
 	-# Configure the build for a release version of Qt and WebKit with separate debug symbols.
 	-# Compile all Qt modules including WebKit using 8 threads. Note that this could take a few hours even on high end
 		machines.
-	-# Install the compiled files it \c qt/qt5-build.
+	-# Install the compiled files in \c qt/qt5-build.
 	-# Make a symbolic link: \c DebugBuild/qt -> \c qt/qt5-build/lib. This is needed for Envision to use the correct Qt
 		version at run-time.
 

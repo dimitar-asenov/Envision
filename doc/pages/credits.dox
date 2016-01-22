@@ -30,6 +30,9 @@ Andrea Helfenstein - https://github.com/helandre
 Patrick Lüthi - https://github.com/patrick-luethi
 		- Initial work on semantic zoom
 		- Code-generation and preprocessing support
+		- Improved C++ import, including macro import
+		- C++ export plug-in
+		- Self-hosting support
 
 <br>
 Martin Otth - https://github.com/motth
@@ -47,7 +50,7 @@ Jonas Trappenberg - https://github.com/teeberg
 
 <br>
 Lukas Vogel - https://github.com/lukedirtwalker
-		- C++ import plug-in
+		- Initial C++ import plug-in
 		- Enhancements to the object-oriented model
 		- Improvements to the build process and style guides
 		- Java debugging support
