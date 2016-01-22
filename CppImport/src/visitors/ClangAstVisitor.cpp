@@ -588,6 +588,7 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 		auto nameRef = utils_->setReferencePrefix(clang_.createReference(usingDirectiveDecl->getIdentLocation()),
 																usingDirectiveDecl->getQualifierLoc());
 		ooNameImport->setImportedName(nameRef);
+		ooNameImport->setImportAll(true);
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(clang_.createNode<OOModel::DeclarationStatement>(usingDirectiveDecl->getSourceRange(),
 																									ooNameImport));
