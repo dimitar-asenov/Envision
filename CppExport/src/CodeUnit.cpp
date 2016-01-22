@@ -98,6 +98,7 @@ void CodeUnit::calculateSourceFragments()
 	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
 	{
 		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(nameImport));
+		sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(nameImport));
 	}
 	else
 		Q_ASSERT(false);
