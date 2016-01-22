@@ -354,19 +354,20 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	if (varDecl->hasInit())
 	{
 		auto initExpr = varDecl->getInit()->IgnoreImplicit();
-
-		auto rangeBeforeFirstArgument = initExpr->getSourceRange();
-		if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr))
-		{
-			if (constructExpr->getNumArgs() > 0)
-				rangeBeforeFirstArgument = clang::SourceRange(initExpr->getSourceRange().getBegin(),
-															constructExpr->getArg(0)->getExprLoc());
-		}
-		auto initSpelling = clang_.unexpandedSpelling(rangeBeforeFirstArgument);
+		auto initSpelling = clang_.unexpandedSpelling(initExpr->getSourceRange());
 		auto varDeclNameToEndSpelling = clang_.unexpandedSpelling(varDecl->getLocation(),
 																					 varDecl->getSourceRange().getEnd());
-		if (varDeclNameToEndSpelling.contains("=") || initSpelling.contains("(") || initSpelling.contains("{"))
+		auto parenthesesIndex = initSpelling.indexOf('(');
+		auto braceIndex = initSpelling.indexOf('{');
+		if (varDeclNameToEndSpelling.contains("=") || parenthesesIndex >= 0 || braceIndex >= 0)
 		{
+			if (parenthesesIndex >= 0 && braceIndex >= 0)
+				initSpelling = initSpelling.left(parenthesesIndex < braceIndex ? parenthesesIndex + 1 : braceIndex + 1);
+			else if (parenthesesIndex >= 0)
+				initSpelling = initSpelling.left(parenthesesIndex + 1);
+			else if (braceIndex >= 0)
+				initSpelling = initSpelling.left(braceIndex + 1);
+
 			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr);
 			if (constructExpr && initSpelling.contains("{"))
 			{
