@@ -300,8 +300,21 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
 			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
 			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
-			for (auto initExpr : *initListExpr)
-				methodCallExpr->arguments()->append(translateExpression(initExpr));
+			for (auto initExpr : initListExpr->inits())
+				/*
+				 * it is necessary to check whether the argument was actually written.
+				 *
+				 * example:
+				 * struct FooBar {
+				 *		int a_;
+				 *		int b_;
+				 * }
+				 * v = new FooBar{};
+				 *						^--- initialization list expression will tell us there are 2 arguments
+				 *                     when there are no written arguments.
+				 */
+				if (initExpr->getExprLoc() != initListExpr->getLocEnd())
+					methodCallExpr->arguments()->append(translateExpression(initExpr));
 			ooExprStack_.push(methodCallExpr);
 		}
 		else if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(newExpr->getInitializer()))
