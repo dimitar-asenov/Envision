@@ -119,6 +119,10 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<TypeQualifierExpression>(expression))
 	{
+		// for pointer type expressions the const is printed after the expression
+		if (DCast<PointerTypeExpression>(e->typeExpression()))
+			*fragment << " " << visit(e->typeExpression());
+
 		auto parentVariableDeclaration = e->firstAncestorOfType<VariableDeclaration>();
 		if (!parentVariableDeclaration || !parentVariableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 			switch (e->qualifier())
@@ -127,7 +131,10 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
 				default: error(e, "Unknown qualifier");
 			}
-		*fragment << " " << visit(e->typeExpression());
+
+		// for non-pointer type expressions the const is printed before the expression
+		if (!DCast<PointerTypeExpression>(e->typeExpression()))
+			*fragment << " " << visit(e->typeExpression());
 	}
 	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment{e, "auto"};
 	else if (auto e = DCast<FunctionTypeExpression>(expression))
@@ -340,10 +347,13 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		if (!e->prefix() && !headerVisitor() && e->target())
 		{
 			bool addPrefix = false;
+			bool inBodyOfMethod = false;
 			if (auto parentMethod = e->firstAncestorOfType<Method>())
 			{
 				if (parentMethod->results()->isAncestorOf(e))
 					addPrefix = true;
+				if (parentMethod->items()->isAncestorOf(e))
+					inBodyOfMethod = true;
 			}
 			else if (auto parentField = e->firstAncestorOfType<Field>())
 				if (parentField->typeExpression()->isAncestorOf(e))
@@ -351,12 +361,49 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 			if (addPrefix)
 				if (auto parentClass = e->firstAncestorOfType<Class>())
+				{
 					if (parentClass->isAncestorOf(e->target()) &&
 						 !parentClass->friends()->isAncestorOf(e->target()) &&
 						 !DCast<FormalTypeArgument>(e->target()))
 						// if e has no prefix and is in the result of a method or the type of a field
 						// and the resolved target is inside the parent class then we qualifiy it
-						*fragment << parentClass->name() << "::";
+					{
+						if (!parentClass->typeArguments()->isEmpty())
+							*fragment << "typename ";
+						*fragment << parentClass->name();
+						if (!parentClass->typeArguments()->isEmpty())
+						{
+							auto typeArgumentComposite = new CompositeFragment{parentClass->typeArguments(), "typeArgsList"};
+							for (auto typeArgument : *parentClass->typeArguments())
+								*typeArgumentComposite << typeArgument->nameNode();
+							*fragment << typeArgumentComposite;
+						}
+						*fragment << "::";
+					}
+				}
+
+			if (auto parentClass = e->firstAncestorOfType<Class>())
+				if (e->target() == parentClass && !inBodyOfMethod)
+				{
+					auto currentParent = parentClass->firstAncestorOfType<Class>();
+					while (currentParent)
+					{
+						if (!currentParent->typeArguments()->isEmpty() && addPrefix)
+							*fragment << "typename ";
+						*fragment << currentParent->name();
+						if (!currentParent->typeArguments()->isEmpty())
+						{
+							auto typeArgumentComposite =
+									new CompositeFragment{currentParent->typeArguments(), "typeArgsList"};
+							for (auto typeArgument : *currentParent->typeArguments())
+								*typeArgumentComposite << typeArgument->nameNode();
+							*fragment << typeArgumentComposite;
+						}
+						*fragment << "::";
+
+						currentParent = currentParent->firstAncestorOfType<Class>();
+					}
+				}
 		}
 
 		*fragment << e->name();

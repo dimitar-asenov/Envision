@@ -74,9 +74,15 @@ void CodeUnit::calculateSourceFragments()
 			headerPart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(method));
 		}
 	}
-	else if (auto field = DCast<OOModel::Field>(node()))
+	else if (auto variableDeclaration = DCast<OOModel::VariableDeclaration>(node()))
 	{
-		sourcePart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(field));
+		if (variableDeclaration->firstAncestorOfType<OOModel::Class>())
+		{
+			headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(variableDeclaration));
+			sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(variableDeclaration));
+		}
+		else
+			sourcePart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(variableDeclaration));
 	}
 	else if (auto typeAlias = DCast<OOModel::TypeAlias>(node()))
 	{
@@ -98,6 +104,7 @@ void CodeUnit::calculateSourceFragments()
 	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
 	{
 		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(nameImport));
+		sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(nameImport));
 	}
 	else
 		Q_ASSERT(false);

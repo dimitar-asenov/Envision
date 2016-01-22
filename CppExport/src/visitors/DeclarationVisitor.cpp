@@ -130,14 +130,22 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 															(method->modifiers()->isSet(OOModel::Modifier::Inline) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
-	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
-
-	*fragment << list(classs->fields(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", [](Field* field)
+	QList<Class*> classes{classs};
+	while (!classes.empty())
 	{
-		if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
-			return !parentClass->typeArguments()->isEmpty();
-		return false;
-	});
+		auto currentClass = classes.takeLast();
+		*fragment << list(currentClass->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
+		*fragment << list(currentClass->fields(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections",
+		[](Field* field)
+		{
+			if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
+				return !parentClass->typeArguments()->isEmpty();
+			return false;
+		});
+
+		for (auto innerClass : *currentClass->classes())
+			classes.append(innerClass);
+	}
 
 	return fragment;
 }
@@ -411,45 +419,59 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
+	// assertions
+	if (method->results()->size() > 1)
+		error(method->results(), "Cannot have more than one return value in C++");
+
 	if (!shouldExportMethod(method)) return nullptr;
+
+	QList<Class*> parentClasses;
+	auto parentClass = method->firstAncestorOfType<Class>();
+	while (parentClass)
+	{
+		parentClasses.prepend(parentClass);
+		parentClass = parentClass->firstAncestorOfType<Class>();
+	}
 
 	auto fragment = new CompositeFragment{method};
 
+	// comments
 	if (!sourceVisitor())
 		*fragment << compositeNodeComments(method, "declarationComment");
 
+	// template<typename ...>
 	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
-			if (auto parentClass = method->firstAncestorOfType<Class>())
-				if (!parentClass->typeArguments()->isEmpty())
-					*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
-
+			for (auto i = 0; i < parentClasses.size(); i++)
+				if (!parentClasses.at(i)->typeArguments()->isEmpty())
+					*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor(data()), "templateArgsList");
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
+	// friend keyword
 	if (!sourceVisitor())
-		if (auto parentClass = method->firstAncestorOfType<Class>())
-			if (parentClass->friends()->isAncestorOf(method))
+		if (!parentClasses.empty())
+			if (parentClasses.last()->friends()->isAncestorOf(method))
 				*fragment << "friend ";
 
+	// private, public, ...
 	if (!sourceVisitor())
 		*fragment << printAnnotationsAndModifiers(method);
 
+	// inline
 	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
-	if (method->results()->size() > 1)
-		error(method->results(), "Cannot have more than one return value in C++");
-
+	// operator
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
 		if (sourceVisitor())
-			if (auto parentClass = method->firstAncestorOfType<Class>())
-				*fragment << parentClass->name() << "::";
+			if (!parentClasses.empty())
+				*fragment << parentClasses.last()->name() << "::";
 		*fragment << "operator ";
 	}
-
+	// return type
 	if (method->methodKind() != Method::MethodKind::Constructor &&
 		 method->methodKind() != Method::MethodKind::Destructor)
 	{
@@ -459,19 +481,21 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
+	// export flag
 	auto potentialNamespace = method->firstAncestorOfType<Module>();
 	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace &&
 		 method->typeArguments()->isEmpty())
 		*fragment << pluginName(potentialNamespace, method).toUpper() << "_API ";
 
+	// method name qualifier
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
-		if (auto parentClass = method->firstAncestorOfType<Class>())
+		for (auto i = 0; i < parentClasses.size(); i++)
 		{
-			*fragment << parentClass->name();
-			if (!parentClass->typeArguments()->isEmpty())
+			*fragment << parentClasses.at(i)->name();
+			if (!parentClasses.at(i)->typeArguments()->isEmpty())
 			{
-				auto typeArgumentComposite = new CompositeFragment{method, "typeArgsList"};
-				for (auto typeArgument : *parentClass->typeArguments())
+				auto typeArgumentComposite = new CompositeFragment{parentClasses.at(i)->typeArguments(), "typeArgsList"};
+				for (auto typeArgument : *parentClasses.at(i)->typeArguments())
 					*typeArgumentComposite << typeArgument->nameNode();
 				*fragment << typeArgumentComposite;
 			}
@@ -535,7 +559,7 @@ SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* 
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment{variableDeclaration};
-	if (!sourceVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
+	if (!sourceVisitor())
 	{
 		*fragment << compositeNodeComments(variableDeclaration, "declarationComment");
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
@@ -615,8 +639,9 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	auto fragment = new CompositeFragment{nameImport};
 	notAllowed(nameImport->annotations());
 
-	Q_ASSERT(!nameImport->importAll());
-	*fragment << "using " << expression(nameImport->importedName()) << ";";
+	*fragment << "using ";
+	if (nameImport->importAll()) *fragment << "namespace ";
+	*fragment << expression(nameImport->importedName()) << ";";
 	return fragment;
 }
 
