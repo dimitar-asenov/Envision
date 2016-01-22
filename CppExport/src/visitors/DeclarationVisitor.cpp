@@ -639,8 +639,9 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	auto fragment = new CompositeFragment{nameImport};
 	notAllowed(nameImport->annotations());
 
-	Q_ASSERT(!nameImport->importAll());
-	*fragment << "using " << expression(nameImport->importedName()) << ";";
+	*fragment << "using ";
+	if (nameImport->importAll()) *fragment << "namespace ";
+	*fragment << expression(nameImport->importedName()) << ";";
 	return fragment;
 }
 
