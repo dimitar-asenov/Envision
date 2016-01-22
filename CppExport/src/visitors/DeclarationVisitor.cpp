@@ -419,6 +419,8 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
+	if (method->results()->size() > 1)
+		error(method->results(), "Cannot have more than one return value in C++");
 	if (!shouldExportMethod(method)) return nullptr;
 
 	auto fragment = new CompositeFragment{method};
@@ -447,8 +449,6 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
-	if (method->results()->size() > 1)
-		error(method->results(), "Cannot have more than one return value in C++");
 
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
