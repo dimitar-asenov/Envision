@@ -419,15 +419,18 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
+	// assertions
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 	if (!shouldExportMethod(method)) return nullptr;
 
 	auto fragment = new CompositeFragment{method};
 
+	// comments
 	if (!sourceVisitor())
 		*fragment << compositeNodeComments(method, "declarationComment");
 
+	// template<typename ...>
 	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			if (auto parentClass = method->firstAncestorOfType<Class>())
@@ -437,18 +440,22 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
+	// friend keyword
 	if (!sourceVisitor())
 		if (auto parentClass = method->firstAncestorOfType<Class>())
 			if (parentClass->friends()->isAncestorOf(method))
 				*fragment << "friend ";
 
+	// private, public, ...
 	if (!sourceVisitor())
 		*fragment << printAnnotationsAndModifiers(method);
 
+	// inline
 	if (!headerVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
+	// operator
 
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
@@ -457,6 +464,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 				*fragment << parentClass->name() << "::";
 		*fragment << "operator ";
 	}
+	// return type
 
 	if (method->methodKind() != Method::MethodKind::Constructor &&
 		 method->methodKind() != Method::MethodKind::Destructor)
@@ -467,11 +475,13 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << "void ";
 	}
 
+	// export flag
 	auto potentialNamespace = method->firstAncestorOfType<Module>();
 	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace &&
 		 method->typeArguments()->isEmpty())
 		*fragment << pluginName(potentialNamespace, method).toUpper() << "_API ";
 
+	// method name qualifier
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		if (auto parentClass = method->firstAncestorOfType<Class>())
 		{
