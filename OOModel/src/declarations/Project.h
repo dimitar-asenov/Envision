@@ -30,7 +30,8 @@
 
 #include "Module.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Project)
+namespace OOModel { class Project; }
+extern template class OOMODEL_API Model::TypedList<OOModel::Project>;
 
 namespace OOModel {
 

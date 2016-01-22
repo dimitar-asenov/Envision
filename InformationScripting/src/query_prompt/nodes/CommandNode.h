@@ -34,7 +34,8 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
-DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, CommandNode)
+namespace InformationScripting { class CommandNode; }
+extern template class INFORMATIONSCRIPTING_API Model::TypedList<InformationScripting::CommandNode>;
 
 namespace InformationScripting {
 

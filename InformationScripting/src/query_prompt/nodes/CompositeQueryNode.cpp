@@ -27,7 +27,7 @@
 #include "CompositeQueryNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CompositeQueryNode)
+template class Model::TypedList<InformationScripting::CompositeQueryNode>;
 
 namespace InformationScripting {
 

@@ -31,7 +31,8 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeQualifierExpression)
+namespace OOModel { class TypeQualifierExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::TypeQualifierExpression>;
 
 namespace OOModel {
 

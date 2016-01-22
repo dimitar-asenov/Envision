@@ -28,7 +28,7 @@
 #include "../types/ArrayType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::NewExpression)
+template class Model::TypedList<OOModel::NewExpression>;
 
 namespace OOModel {
 

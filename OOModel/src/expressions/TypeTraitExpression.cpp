@@ -30,7 +30,7 @@
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::TypeTraitExpression)
+template class Model::TypedList<OOModel::TypeTraitExpression>;
 
 namespace OOModel {
 

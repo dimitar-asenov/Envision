@@ -27,7 +27,7 @@
 #include "TypeNameOperator.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::TypeNameOperator)
+template class Model::TypedList<OOModel::TypeNameOperator>;
 
 namespace OOModel {
 

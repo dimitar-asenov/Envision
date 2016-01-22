@@ -35,7 +35,8 @@
 #include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalTypeArgument)
+namespace OOModel { class FormalTypeArgument; }
+extern template class OOMODEL_API Model::TypedList<OOModel::FormalTypeArgument>;
 
 namespace OOModel {
 

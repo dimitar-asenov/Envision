@@ -28,7 +28,7 @@
 #include "../../types/PointerType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::PointerTypeExpression)
+template class Model::TypedList<OOModel::PointerTypeExpression>;
 
 namespace OOModel {
 

@@ -27,7 +27,7 @@
 #include "BinaryNodeAccessUnit.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(TestNodes::BinaryNodeAccessUnit)
+template class Model::TypedList<TestNodes::BinaryNodeAccessUnit>;
 
 namespace TestNodes {
 

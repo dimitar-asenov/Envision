@@ -28,7 +28,7 @@
 #include "../types/ThrownExceptionType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ThrowExpression)
+template class Model::TypedList<OOModel::ThrowExpression>;
 
 namespace OOModel {
 

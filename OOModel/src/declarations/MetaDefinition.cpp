@@ -29,7 +29,7 @@
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 #include "Class.h"
 
-DEFINE_TYPED_LIST(OOModel::MetaDefinition)
+template class Model::TypedList<OOModel::MetaDefinition>;
 
 namespace OOModel {
 

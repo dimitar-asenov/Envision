@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, GlobalScopeExpression)
+namespace OOModel { class GlobalScopeExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::GlobalScopeExpression>;
 
 namespace OOModel {
 

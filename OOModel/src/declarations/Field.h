@@ -30,7 +30,8 @@
 
 #include "VariableDeclaration.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
+namespace OOModel { class Field; }
+extern template class OOMODEL_API Model::TypedList<OOModel::Field>;
 
 namespace OOModel {
 

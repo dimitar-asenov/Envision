@@ -27,7 +27,7 @@
 #include "CatchClause.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CatchClause)
+template class Model::TypedList<OOModel::CatchClause>;
 
 namespace OOModel {
 

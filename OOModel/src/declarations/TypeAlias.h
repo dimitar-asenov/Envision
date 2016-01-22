@@ -32,7 +32,8 @@
 #include "../expressions/Expression.h"
 #include "../elements/FormalTypeArgument.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeAlias)
+namespace OOModel { class TypeAlias; }
+extern template class OOMODEL_API Model::TypedList<OOModel::TypeAlias>;
 
 namespace OOModel {
 

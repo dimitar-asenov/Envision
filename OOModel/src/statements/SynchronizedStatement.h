@@ -31,7 +31,8 @@
 #include "../expressions/Expression.h"
 #include "../elements/StatementItemList.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SynchronizedStatement)
+namespace OOModel { class SynchronizedStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::SynchronizedStatement>;
 
 namespace OOModel {
 

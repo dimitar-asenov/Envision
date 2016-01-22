@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ConditionalExpression)
+namespace OOModel { class ConditionalExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ConditionalExpression>;
 
 namespace OOModel {
 

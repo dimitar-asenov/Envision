@@ -27,7 +27,7 @@
 #include "TryCatchFinallyStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::TryCatchFinallyStatement)
+template class Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 namespace OOModel {
 

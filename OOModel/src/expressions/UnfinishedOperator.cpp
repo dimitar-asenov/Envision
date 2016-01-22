@@ -28,7 +28,7 @@
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::UnfinishedOperator)
+template class Model::TypedList<OOModel::UnfinishedOperator>;
 
 namespace OOModel {
 

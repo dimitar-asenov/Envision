@@ -27,7 +27,7 @@
 #include "TestBoxNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Visualization::TestBoxNode)
+template class Model::TypedList<Visualization::TestBoxNode>;
 
 namespace Visualization {
 

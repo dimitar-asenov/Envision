@@ -32,7 +32,7 @@
 #include "../utils/JsonUtil.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Visualization::ViewItemNode)
+template class Model::TypedList<Visualization::ViewItemNode>;
 
 namespace Visualization {
 

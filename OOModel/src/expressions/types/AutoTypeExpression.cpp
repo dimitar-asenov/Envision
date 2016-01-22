@@ -34,7 +34,7 @@
 #include "ReferenceTypeExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::AutoTypeExpression)
+template class Model::TypedList<OOModel::AutoTypeExpression>;
 
 namespace OOModel {
 

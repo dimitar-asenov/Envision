@@ -29,7 +29,7 @@
 #include "types/PrimitiveTypeExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::DeleteExpression)
+template class Model::TypedList<OOModel::DeleteExpression>;
 
 namespace OOModel {
 

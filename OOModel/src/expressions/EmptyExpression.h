@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, EmptyExpression)
+namespace OOModel { class EmptyExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::EmptyExpression>;
 
 namespace OOModel {
 

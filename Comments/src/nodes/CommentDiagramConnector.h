@@ -34,7 +34,8 @@
 #include "ModelBase/src/nodes/Boolean.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramConnector)
+namespace Comments { class CommentDiagramConnector; }
+extern template class COMMENTS_API Model::TypedList<Comments::CommentDiagramConnector>;
 
 namespace Comments {
 

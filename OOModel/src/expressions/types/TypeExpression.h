@@ -29,7 +29,8 @@
 #include "../Expression.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeExpression)
+namespace OOModel { class TypeExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::TypeExpression>;
 
 namespace OOModel {
 

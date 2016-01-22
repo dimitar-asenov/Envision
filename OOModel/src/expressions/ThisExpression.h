@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ThisExpression)
+namespace OOModel { class ThisExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ThisExpression>;
 
 namespace OOModel {
 

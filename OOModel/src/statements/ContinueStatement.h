@@ -28,7 +28,8 @@
 
 #include "Statement.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ContinueStatement)
+namespace OOModel { class ContinueStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ContinueStatement>;
 
 namespace OOModel {
 

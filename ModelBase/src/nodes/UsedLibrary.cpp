@@ -30,7 +30,7 @@
 #include "../model/AllTreeManagers.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::UsedLibrary)
+template class Model::TypedList<Model::UsedLibrary>;
 
 namespace Model {
 

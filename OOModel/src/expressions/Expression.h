@@ -32,7 +32,8 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Expression)
+namespace OOModel { class Expression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::Expression>;
 
 namespace OOModel {
 

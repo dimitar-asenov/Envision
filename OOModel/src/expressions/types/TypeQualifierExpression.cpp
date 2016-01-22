@@ -27,7 +27,7 @@
 #include "TypeQualifierExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::TypeQualifierExpression)
+template class Model::TypedList<OOModel::TypeQualifierExpression>;
 
 namespace OOModel {
 

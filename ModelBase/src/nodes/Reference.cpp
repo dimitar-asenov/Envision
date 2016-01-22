@@ -31,7 +31,7 @@
 #include "NameText.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::Reference)
+template class Model::TypedList<Model::Reference>;
 
 namespace Model {
 

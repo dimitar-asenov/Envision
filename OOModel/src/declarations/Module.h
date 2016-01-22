@@ -31,7 +31,8 @@
 #include "Class.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Module)
+namespace OOModel { class Module; }
+extern template class OOMODEL_API Model::TypedList<OOModel::Module>;
 
 namespace OOModel {
 

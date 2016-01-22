@@ -30,7 +30,8 @@
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, AssertStatement)
+namespace OOModel { class AssertStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::AssertStatement>;
 
 namespace OOModel {
 

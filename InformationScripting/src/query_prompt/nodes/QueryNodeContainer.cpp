@@ -27,7 +27,7 @@
 #include "QueryNodeContainer.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::QueryNodeContainer)
+template class Model::TypedList<InformationScripting::QueryNodeContainer>;
 
 namespace InformationScripting {
 

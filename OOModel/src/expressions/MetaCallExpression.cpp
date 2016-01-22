@@ -36,7 +36,7 @@
 
 #include "OOModel/src/declarations/Declaration.h"
 
-DEFINE_TYPED_LIST(OOModel::MetaCallExpression)
+template class Model::TypedList<OOModel::MetaCallExpression>;
 
 namespace OOModel {
 

@@ -27,7 +27,7 @@
 #include "BreakStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::BreakStatement)
+template class Model::TypedList<OOModel::BreakStatement>;
 
 namespace OOModel {
 

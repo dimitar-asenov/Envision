@@ -28,7 +28,7 @@
 #include "CommentDiagram.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Comments::CommentDiagramShape)
+template class Model::TypedList<Comments::CommentDiagramShape>;
 
 namespace Comments {
 

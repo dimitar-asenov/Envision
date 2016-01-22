@@ -27,7 +27,7 @@
 #include "FormalResult.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::FormalResult)
+template class Model::TypedList<OOModel::FormalResult>;
 
 namespace OOModel {
 

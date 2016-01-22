@@ -27,7 +27,7 @@
 #include "BinaryNodePersistenceUnit.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(TestNodes::BinaryNodePersistenceUnit)
+template class Model::TypedList<TestNodes::BinaryNodePersistenceUnit>;
 
 namespace TestNodes {
 

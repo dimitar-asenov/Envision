@@ -42,7 +42,7 @@
 #include "../typesystem/TypeSystem.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::OOReference)
+template class Model::TypedList<OOModel::OOReference>;
 
 namespace OOModel {
 

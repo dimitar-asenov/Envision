@@ -31,7 +31,7 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-DEFINE_TYPED_LIST(OOModel::FormalArgument)
+template class Model::TypedList<OOModel::FormalArgument>;
 
 namespace OOModel {
 

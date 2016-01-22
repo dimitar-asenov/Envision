@@ -31,7 +31,7 @@
 #include "Project.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Class)
+template class Model::TypedList<OOModel::Class>;
 
 namespace OOModel {
 

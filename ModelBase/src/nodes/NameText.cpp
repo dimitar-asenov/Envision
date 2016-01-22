@@ -29,7 +29,7 @@
 #include "../ModelException.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::NameText)
+template class Model::TypedList<Model::NameText>;
 
 namespace Model {
 

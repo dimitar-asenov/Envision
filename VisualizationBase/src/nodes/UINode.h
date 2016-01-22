@@ -30,7 +30,8 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, UINode)
+namespace Visualization { class UINode; }
+extern template class VISUALIZATIONBASE_API Model::TypedList<Visualization::UINode>;
 
 namespace Visualization
 {

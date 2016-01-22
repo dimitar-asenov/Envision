@@ -27,7 +27,7 @@
 #include "CommandArgument.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandArgument)
+template class Model::TypedList<InformationScripting::CommandArgument>;
 
 namespace InformationScripting {
 

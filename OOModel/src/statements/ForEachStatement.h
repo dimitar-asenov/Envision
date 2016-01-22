@@ -32,7 +32,8 @@
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ForEachStatement)
+namespace OOModel { class ForEachStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ForEachStatement>;
 
 namespace OOModel {
 

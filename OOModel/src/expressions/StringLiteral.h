@@ -30,7 +30,8 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StringLiteral)
+namespace OOModel { class StringLiteral; }
+extern template class OOMODEL_API Model::TypedList<OOModel::StringLiteral>;
 
 namespace OOModel {
 

@@ -27,7 +27,7 @@
 #include "ConditionalExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ConditionalExpression)
+template class Model::TypedList<OOModel::ConditionalExpression>;
 
 namespace OOModel {
 

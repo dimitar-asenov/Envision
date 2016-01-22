@@ -30,7 +30,8 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BinaryOperation)
+namespace OOModel { class BinaryOperation; }
+extern template class OOMODEL_API Model::TypedList<OOModel::BinaryOperation>;
 
 namespace OOModel {
 

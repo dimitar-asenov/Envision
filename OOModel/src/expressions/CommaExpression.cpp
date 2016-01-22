@@ -29,7 +29,7 @@
 #include "EmptyExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CommaExpression)
+template class Model::TypedList<OOModel::CommaExpression>;
 
 namespace OOModel {
 

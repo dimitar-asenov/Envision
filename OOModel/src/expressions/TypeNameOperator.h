@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeNameOperator)
+namespace OOModel { class TypeNameOperator; }
+extern template class OOMODEL_API Model::TypedList<OOModel::TypeNameOperator>;
 
 namespace OOModel {
 
