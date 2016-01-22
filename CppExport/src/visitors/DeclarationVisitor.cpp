@@ -559,7 +559,7 @@ SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* 
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment{variableDeclaration};
-	if (!sourceVisitor() && !variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
+	if (!sourceVisitor())
 	{
 		*fragment << compositeNodeComments(variableDeclaration, "declarationComment");
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
