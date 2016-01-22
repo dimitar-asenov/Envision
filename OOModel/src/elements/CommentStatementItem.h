@@ -30,7 +30,8 @@
 #include "../elements/StatementItem.h"
 #include "Comments/src/nodes/CommentNode.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CommentStatementItem)
+namespace OOModel { class CommentStatementItem; }
+extern template class OOMODEL_API Model::TypedList<OOModel::CommentStatementItem>;
 
 namespace OOModel {
 

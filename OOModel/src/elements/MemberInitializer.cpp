@@ -27,7 +27,7 @@
 #include "MemberInitializer.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::MemberInitializer)
+template class Model::TypedList<OOModel::MemberInitializer>;
 
 namespace OOModel {
 

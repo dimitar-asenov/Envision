@@ -28,7 +28,8 @@
 
 #include "Statement.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BreakStatement)
+namespace OOModel { class BreakStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::BreakStatement>;
 
 namespace OOModel {
 

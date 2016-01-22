@@ -27,7 +27,7 @@
 #include "ForEachStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ForEachStatement)
+template class Model::TypedList<OOModel::ForEachStatement>;
 
 namespace OOModel {
 

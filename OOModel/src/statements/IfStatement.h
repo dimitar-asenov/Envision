@@ -31,7 +31,8 @@
 #include "../expressions/Expression.h"
 #include "../elements/StatementItemList.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, IfStatement)
+namespace OOModel { class IfStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::IfStatement>;
 
 namespace OOModel {
 

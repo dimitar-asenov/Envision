@@ -27,7 +27,7 @@
 #include "PrimitiveTypeExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::PrimitiveTypeExpression)
+template class Model::TypedList<OOModel::PrimitiveTypeExpression>;
 
 namespace OOModel {
 

@@ -35,7 +35,8 @@
 #include "CommentFreeNode.h"
 #include "CommentTable.h"
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentNode)
+namespace Comments { class CommentNode; }
+extern template class COMMENTS_API Model::TypedList<Comments::CommentNode>;
 
 namespace Comments {
 

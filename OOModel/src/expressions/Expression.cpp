@@ -29,7 +29,7 @@
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Expression)
+template class Model::TypedList<OOModel::Expression>;
 
 namespace OOModel {
 

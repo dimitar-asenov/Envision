@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SuperExpression)
+namespace OOModel { class SuperExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::SuperExpression>;
 
 namespace OOModel {
 

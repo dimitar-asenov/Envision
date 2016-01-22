@@ -28,7 +28,7 @@
 #include "../types/PrimitiveType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::IntegerLiteral)
+template class Model::TypedList<OOModel::IntegerLiteral>;
 
 namespace OOModel {
 

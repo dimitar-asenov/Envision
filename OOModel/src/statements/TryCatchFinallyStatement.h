@@ -32,7 +32,8 @@
 #include "../elements/StatementItemList.h"
 #include "../elements/CatchClause.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TryCatchFinallyStatement)
+namespace OOModel { class TryCatchFinallyStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 namespace OOModel {
 

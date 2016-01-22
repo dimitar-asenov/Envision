@@ -31,7 +31,8 @@
 #include "BinaryNode.h"
 #include "../concurrent/NodeReadWriteLock.h"
 
-DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNodeAccessUnit)
+namespace TestNodes { class BinaryNodeAccessUnit; }
+extern template class MODELBASE_API Model::TypedList<TestNodes::BinaryNodeAccessUnit>;
 
 namespace TestNodes {
 

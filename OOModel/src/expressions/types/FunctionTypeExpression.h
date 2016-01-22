@@ -28,7 +28,8 @@
 
 #include "TypeExpression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FunctionTypeExpression)
+namespace OOModel { class FunctionTypeExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::FunctionTypeExpression>;
 
 namespace OOModel {
 

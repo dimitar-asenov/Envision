@@ -27,7 +27,7 @@
 #include "ExpressionStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ExpressionStatement)
+template class Model::TypedList<OOModel::ExpressionStatement>;
 
 namespace OOModel {
 

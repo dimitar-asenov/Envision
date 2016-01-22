@@ -30,7 +30,8 @@
 #include "../elements/FormalResult.h"
 #include "../elements/StatementItemList.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LambdaExpression)
+namespace OOModel { class LambdaExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::LambdaExpression>;
 
 namespace OOModel {
 

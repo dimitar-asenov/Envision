@@ -27,7 +27,7 @@
 #include "ContinueStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ContinueStatement)
+template class Model::TypedList<OOModel::ContinueStatement>;
 
 namespace OOModel {
 

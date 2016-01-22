@@ -27,7 +27,7 @@
 #include "CommentStatementItem.h"
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-DEFINE_TYPED_LIST(OOModel::CommentStatementItem)
+template class Model::TypedList<OOModel::CommentStatementItem>;
 
 namespace OOModel {
 

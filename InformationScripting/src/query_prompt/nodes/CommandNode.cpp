@@ -27,7 +27,7 @@
 #include "CommandNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+template class Model::TypedList<InformationScripting::CommandNode>;
 
 namespace InformationScripting {
 

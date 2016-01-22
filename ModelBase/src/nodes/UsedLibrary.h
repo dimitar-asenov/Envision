@@ -32,7 +32,8 @@
 #include "Text.h"
 #include "nodeMacros.h"
 
-DECLARE_TYPED_LIST(MODELBASE_API, Model, UsedLibrary)
+namespace Model { class UsedLibrary; }
+extern template class MODELBASE_API Model::TypedList<Model::UsedLibrary>;
 
 namespace Model {
 

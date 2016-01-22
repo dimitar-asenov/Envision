@@ -30,7 +30,8 @@
 
 #include "ModelBase/src/nodes/Boolean.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, DeleteExpression)
+namespace OOModel { class DeleteExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::DeleteExpression>;
 
 namespace OOModel {
 

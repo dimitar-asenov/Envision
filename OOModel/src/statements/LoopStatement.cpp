@@ -27,7 +27,7 @@
 #include "LoopStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::LoopStatement)
+template class Model::TypedList<OOModel::LoopStatement>;
 
 namespace OOModel {
 

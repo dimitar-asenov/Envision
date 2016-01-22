@@ -28,7 +28,8 @@
 
 #include "TypeExpression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, AutoTypeExpression)
+namespace OOModel { class AutoTypeExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::AutoTypeExpression>;
 
 namespace OOModel {
 

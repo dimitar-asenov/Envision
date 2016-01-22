@@ -28,7 +28,7 @@
 #include "../types/SymbolProviderType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::TypeAlias)
+template class Model::TypedList<OOModel::TypeAlias>;
 
 namespace OOModel {
 

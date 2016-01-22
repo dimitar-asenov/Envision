@@ -28,7 +28,8 @@
 #include "Expression.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, InstanceOfExpression)
+namespace OOModel { class InstanceOfExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::InstanceOfExpression>;
 
 namespace OOModel {
 

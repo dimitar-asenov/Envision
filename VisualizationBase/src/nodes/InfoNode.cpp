@@ -29,7 +29,7 @@
 #include "../utils/InfoJavascriptFunctions.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Visualization::InfoNode)
+template class Model::TypedList<Visualization::InfoNode>;
 
 namespace Visualization {
 

@@ -27,7 +27,7 @@
 #include "Project.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Project)
+template class Model::TypedList<OOModel::Project>;
 
 namespace OOModel {
 

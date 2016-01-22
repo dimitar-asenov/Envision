@@ -28,7 +28,8 @@
 
 #include "TypeExpression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ArrayTypeExpression)
+namespace OOModel { class ArrayTypeExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ArrayTypeExpression>;
 
 namespace OOModel {
 

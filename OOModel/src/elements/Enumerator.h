@@ -35,7 +35,8 @@
 #include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
+namespace OOModel { class Enumerator; }
+extern template class OOMODEL_API Model::TypedList<OOModel::Enumerator>;
 
 namespace OOModel {
 

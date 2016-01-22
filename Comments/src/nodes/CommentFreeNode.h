@@ -33,7 +33,8 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Node.h"
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentFreeNode)
+namespace Comments { class CommentFreeNode; }
+extern template class COMMENTS_API Model::TypedList<Comments::CommentFreeNode>;
 
 namespace Comments {
 /**

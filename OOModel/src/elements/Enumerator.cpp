@@ -27,7 +27,7 @@
 #include "Enumerator.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Enumerator)
+template class Model::TypedList<OOModel::Enumerator>;
 
 namespace OOModel {
 

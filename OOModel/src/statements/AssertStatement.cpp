@@ -26,7 +26,7 @@
 #include "AssertStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::AssertStatement)
+template class Model::TypedList<OOModel::AssertStatement>;
 
 namespace OOModel {
 

@@ -27,7 +27,7 @@
 #include "Block.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Block)
+template class Model::TypedList<OOModel::Block>;
 
 namespace OOModel {
 

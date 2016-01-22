@@ -27,7 +27,7 @@
 #include "ExplicitTemplateInstantiation.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ExplicitTemplateInstantiation)
+template class Model::TypedList<OOModel::ExplicitTemplateInstantiation>;
 
 namespace OOModel {
 

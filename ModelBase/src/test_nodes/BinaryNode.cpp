@@ -27,7 +27,7 @@
 #include "BinaryNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(TestNodes::BinaryNode)
+template class Model::TypedList<TestNodes::BinaryNode>;
 
 namespace TestNodes {
 

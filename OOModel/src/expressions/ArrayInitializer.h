@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ArrayInitializer)
+namespace OOModel { class ArrayInitializer; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ArrayInitializer>;
 
 namespace OOModel {
 

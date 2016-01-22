@@ -30,7 +30,7 @@
 #include "ModelBase/src/commands/FieldSet.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Modifier)
+template class Model::TypedList<OOModel::Modifier>;
 
 namespace OOModel {
 

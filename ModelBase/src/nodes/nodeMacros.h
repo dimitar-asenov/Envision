@@ -106,51 +106,6 @@
 /*********************************************************************************************************************/
 
 /**
- * Declares an exported/imported extern specialization of TypedList for a yet to be defined node type.
- *
- * @param importExportSpec
- * 			The macro that specifies whether this should be an imported or an exported specialization. Typically this
- * 			is of the form PLUGINNAME_API.
- *
-  * @param namespaceName
- * 			The name of the namespace that contains the node type for which we are specializing the TypedList template.
- *
-  * @param className
- * 			The name of the class being defined. This class must inherit from Node, directly or indirectly.
- *
- * This macro should appear just before a class declaration, outside of a namespace e.g. :
- *
- * DECLARE_TYPED_LIST( MYMODEL_API, MyModel, MyNewNode)
- * namespace MyModel {
- * 	class MyNewNode : public Node
- * 	{
- * 		...
- */
-#define DECLARE_TYPED_LIST( importExportSpec, namespaceName, className)																\
-namespace namespaceName { class className; }																									\
-extern template class importExportSpec Model::TypedList<namespaceName::className>;												\
-
-/*********************************************************************************************************************/
-
-/**
- * Defines an exported explicit specialization of TypedList for a node type.
- *
- * @param className
- * 			The name of the class being defined including its namespace. This class must inherit from Node, directly
- * 			or indirectly.
- *
- * Use this in the .cpp file that defines the node type, just before the namespace.
- *
- * DEFINE_TYPED_LIST(MyModel::MyNewNode)
- * namespace MyModel {
- * 		...
- */
-#define DEFINE_TYPED_LIST(className)																											\
-template class Model::TypedList<className>;																									\
-
-/*********************************************************************************************************************/
-
-/**
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
  *
  * @param className

@@ -35,7 +35,8 @@
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalMetaArgument)
+namespace OOModel { class FormalMetaArgument; }
+extern template class OOMODEL_API Model::TypedList<OOModel::FormalMetaArgument>;
 
 namespace OOModel {
 

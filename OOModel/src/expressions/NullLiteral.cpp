@@ -28,7 +28,7 @@
 #include "../types/NullType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::NullLiteral)
+template class Model::TypedList<OOModel::NullLiteral>;
 
 namespace OOModel {
 

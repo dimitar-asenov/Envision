@@ -30,7 +30,8 @@
 
 #include "ModelBase/src/nodes/Boolean.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReferenceTypeExpression)
+namespace OOModel { class ReferenceTypeExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ReferenceTypeExpression>;
 
 namespace OOModel {
 

@@ -28,7 +28,7 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-DEFINE_TYPED_LIST(Comments::CommentFreeNode)
+template class Model::TypedList<Comments::CommentFreeNode>;
 
 namespace Comments {
 

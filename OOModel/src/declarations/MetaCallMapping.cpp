@@ -28,7 +28,7 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-DEFINE_TYPED_LIST(OOModel::MetaCallMapping)
+template class Model::TypedList<OOModel::MetaCallMapping>;
 
 namespace OOModel {
 

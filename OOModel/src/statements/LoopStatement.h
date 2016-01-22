@@ -33,7 +33,8 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LoopStatement)
+namespace OOModel { class LoopStatement; }
+extern template class OOMODEL_API Model::TypedList<OOModel::LoopStatement>;
 
 namespace OOModel {
 

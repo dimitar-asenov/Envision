@@ -32,7 +32,8 @@
 
 #include "../declarations/VariableDeclaration.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, VariableDeclarationExpression)
+namespace OOModel { class VariableDeclarationExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::VariableDeclarationExpression>;
 
 namespace OOModel {
 

@@ -27,7 +27,7 @@
 #include "CaseStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CaseStatement)
+template class Model::TypedList<OOModel::CaseStatement>;
 
 namespace OOModel {
 

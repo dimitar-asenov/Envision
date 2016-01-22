@@ -28,7 +28,8 @@
 
 #include "Text.h"
 
-DECLARE_TYPED_LIST(MODELBASE_API, Model, NameText)
+namespace Model { class NameText; }
+extern template class MODELBASE_API Model::TypedList<Model::NameText>;
 
 namespace Model {
 

@@ -27,7 +27,7 @@
 #include "OperatorQueryNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::OperatorQueryNode)
+template class Model::TypedList<InformationScripting::OperatorQueryNode>;
 
 namespace InformationScripting {
 

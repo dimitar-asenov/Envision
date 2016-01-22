@@ -34,7 +34,7 @@
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::MethodCallExpression)
+template class Model::TypedList<OOModel::MethodCallExpression>;
 
 namespace OOModel {
 

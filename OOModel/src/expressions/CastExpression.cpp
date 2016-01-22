@@ -28,7 +28,7 @@
 #include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CastExpression)
+template class Model::TypedList<OOModel::CastExpression>;
 
 namespace OOModel {
 

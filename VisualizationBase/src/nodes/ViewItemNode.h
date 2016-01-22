@@ -31,7 +31,8 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/Node.h"
 
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
+namespace Visualization { class ViewItemNode; }
+extern template class VISUALIZATIONBASE_API Model::TypedList<Visualization::ViewItemNode>;
 
 namespace Visualization {
 

@@ -29,7 +29,8 @@
 #include "Statement.h"
 #include "../elements/StatementItemList.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Block)
+namespace OOModel { class Block; }
+extern template class OOMODEL_API Model::TypedList<OOModel::Block>;
 
 namespace OOModel {
 

@@ -29,7 +29,7 @@
 #include "../expressions/ReferenceExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::NameImport)
+template class Model::TypedList<OOModel::NameImport>;
 
 namespace OOModel {
 

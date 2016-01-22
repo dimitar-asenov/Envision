@@ -28,7 +28,7 @@
 #include "../types/FunctionType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::LambdaExpression)
+template class Model::TypedList<OOModel::LambdaExpression>;
 
 namespace OOModel {
 

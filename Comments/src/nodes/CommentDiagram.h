@@ -36,7 +36,8 @@
 #include "CommentDiagramShape.h"
 #include "CommentDiagramConnector.h"
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagram)
+namespace Comments { class CommentDiagram; }
+extern template class COMMENTS_API Model::TypedList<Comments::CommentDiagram>;
 
 namespace Comments {
 

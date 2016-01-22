@@ -28,7 +28,7 @@
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ErrorExpression)
+template class Model::TypedList<OOModel::ErrorExpression>;
 
 namespace OOModel {
 

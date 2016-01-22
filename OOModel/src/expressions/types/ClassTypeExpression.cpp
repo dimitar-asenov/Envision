@@ -30,7 +30,7 @@
 #include "../../declarations/Class.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ClassTypeExpression)
+template class Model::TypedList<OOModel::ClassTypeExpression>;
 
 namespace OOModel {
 

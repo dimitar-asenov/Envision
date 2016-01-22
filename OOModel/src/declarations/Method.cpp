@@ -31,7 +31,7 @@
 #include "../types/Type.h"
 #include "../expressions/MethodCallExpression.h"
 
-DEFINE_TYPED_LIST(OOModel::Method)
+template class Model::TypedList<OOModel::Method>;
 
 namespace OOModel {
 

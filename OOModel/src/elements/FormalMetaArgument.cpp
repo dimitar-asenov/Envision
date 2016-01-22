@@ -27,7 +27,7 @@
 #include "FormalMetaArgument.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::FormalMetaArgument)
+template class Model::TypedList<OOModel::FormalMetaArgument>;
 
 namespace OOModel {
 

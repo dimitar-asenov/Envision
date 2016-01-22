@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ThrowExpression)
+namespace OOModel { class ThrowExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ThrowExpression>;
 
 namespace OOModel {
 

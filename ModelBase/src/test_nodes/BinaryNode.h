@@ -32,7 +32,8 @@
 #include "../nodes/nodeMacros.h"
 #include "../nodes/NameText.h"
 
-DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNode)
+namespace TestNodes { class BinaryNode; }
+extern template class MODELBASE_API Model::TypedList<TestNodes::BinaryNode>;
 
 namespace TestNodes {
 

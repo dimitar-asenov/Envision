@@ -28,7 +28,8 @@
 
 #include "Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CommaExpression)
+namespace OOModel { class CommaExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::CommaExpression>;
 
 namespace OOModel {
 

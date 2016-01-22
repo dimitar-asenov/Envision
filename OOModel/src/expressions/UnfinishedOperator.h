@@ -30,7 +30,8 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnfinishedOperator)
+namespace OOModel { class UnfinishedOperator; }
+extern template class OOMODEL_API Model::TypedList<OOModel::UnfinishedOperator>;
 
 namespace OOModel {
 

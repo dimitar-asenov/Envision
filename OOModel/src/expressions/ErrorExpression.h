@@ -30,7 +30,8 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ErrorExpression)
+namespace OOModel { class ErrorExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::ErrorExpression>;
 
 namespace OOModel {
 

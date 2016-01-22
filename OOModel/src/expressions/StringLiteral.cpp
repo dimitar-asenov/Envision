@@ -28,7 +28,7 @@
 #include "../types/StringType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::StringLiteral)
+template class Model::TypedList<OOModel::StringLiteral>;
 
 namespace OOModel {
 

@@ -30,7 +30,8 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MethodCallExpression)
+namespace OOModel { class MethodCallExpression; }
+extern template class OOMODEL_API Model::TypedList<OOModel::MethodCallExpression>;
 
 namespace OOModel {
 

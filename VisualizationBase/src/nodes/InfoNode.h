@@ -31,7 +31,8 @@
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "UINode.h"
 
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, InfoNode)
+namespace Visualization { class InfoNode; }
+extern template class VISUALIZATIONBASE_API Model::TypedList<Visualization::InfoNode>;
 
 namespace Visualization {
 
