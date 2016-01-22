@@ -119,6 +119,10 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<TypeQualifierExpression>(expression))
 	{
+		// for pointer type expressions the const is printed after the expression
+		if (DCast<PointerTypeExpression>(e->typeExpression()))
+			*fragment << " " << visit(e->typeExpression());
+
 		auto parentVariableDeclaration = e->firstAncestorOfType<VariableDeclaration>();
 		if (!parentVariableDeclaration || !parentVariableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 			switch (e->qualifier())
@@ -127,7 +131,10 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
 				default: error(e, "Unknown qualifier");
 			}
-		*fragment << " " << visit(e->typeExpression());
+
+		// for non-pointer type expressions the const is printed before the expression
+		if (!DCast<PointerTypeExpression>(e->typeExpression()))
+			*fragment << " " << visit(e->typeExpression());
 	}
 	else if (auto e = DCast<AutoTypeExpression>(expression)) *fragment << new TextFragment{e, "auto"};
 	else if (auto e = DCast<FunctionTypeExpression>(expression))
