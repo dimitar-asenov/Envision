@@ -130,14 +130,22 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 															(method->modifiers()->isSet(OOModel::Modifier::Inline) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
-	*fragment << list(classs->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
-
-	*fragment << list(classs->fields(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", [](Field* field)
+	QList<Class*> classes{classs};
+	while (!classes.empty())
 	{
-		if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
-			return !parentClass->typeArguments()->isEmpty();
-		return false;
-	});
+		auto currentClass = classes.takeLast();
+		*fragment << list(currentClass->methods(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections", filter);
+		*fragment << list(currentClass->fields(), DeclarationVisitor(SOURCE_VISITOR, data()), "spacedSections",
+		[](Field* field)
+		{
+			if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
+				return !parentClass->typeArguments()->isEmpty();
+			return false;
+		});
+
+		for (auto innerClass : *currentClass->classes())
+			classes.append(innerClass);
+	}
 
 	return fragment;
 }
