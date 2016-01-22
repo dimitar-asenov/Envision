@@ -216,7 +216,7 @@ HIfStatement.cpp</h1>
 <div class="line">      <span class="keywordflow">if</span> (vif-&gt;node()-&gt;thenBranch()-&gt;size() &gt; 0)</div>
 <div class="line">      {</div>
 <div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>(</div>
-<div class="line">               <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target, vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;thenBranch()-&gt;at(0)));</div>
+<div class="line">               <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target, vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;thenBranch()-&gt;at(0)});</div>
 <div class="line">      }</div>
 <div class="line">      <span class="keywordflow">else</span></div>
 <div class="line">      {</div>
@@ -237,8 +237,8 @@ HIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line">      <span class="keywordflow">if</span> (vif-&gt;node()-&gt;elseBranch()-&gt;size() &gt; 0)</div>
 <div class="line">      {</div>
-<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target,</div>
-<div class="line">               vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;elseBranch()-&gt;at(0)));</div>
+<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target,</div>
+<div class="line">               vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;elseBranch()-&gt;at(0)});</div>
 <div class="line">      }</div>
 <div class="line">      <span class="keywordflow">else</span></div>
 <div class="line">      {</div>
@@ -287,7 +287,7 @@ HIfStatement.cpp</h1>
 </div><!-- fragment --></p>
 <p>Next we need to check whether the <em>then</em> branch already exists (has items) or not: <div class="fragment"><div class="line">      <span class="keywordflow">if</span> (vif-&gt;node()-&gt;thenBranch()-&gt;size() &gt; 0)</div>
 </div><!-- fragment --> If there are already some items, simply switch to the first one: <div class="fragment"><div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>(</div>
-<div class="line">               <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target, vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;thenBranch()-&gt;at(0)));</div>
+<div class="line">               <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target, vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;thenBranch()-&gt;at(0)});</div>
 </div><!-- fragment --> otherwise create a new empty expression and focus it: <div class="fragment"><div class="line">         <span class="keyword">auto</span> empty = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1EmptyExpression.html">OOModel::EmptyExpression</a>{};</div>
 <div class="line">         <span class="keyword">auto</span> es = <span class="keyword">new</span> <a class="code" href="classOOModel_1_1ExpressionStatement.html">OOModel::ExpressionStatement</a>{};</div>
 <div class="line">         es-&gt;setExpression(empty);</div>
@@ -304,8 +304,8 @@ HIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line">      <span class="keywordflow">if</span> (vif-&gt;node()-&gt;elseBranch()-&gt;size() &gt; 0)</div>
 <div class="line">      {</div>
-<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>(target,</div>
-<div class="line">               vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;elseBranch()-&gt;at(0)));</div>
+<div class="line">         target-&gt;<a class="code" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>()-&gt;<a class="code" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a>( <span class="keyword">new</span> <a class="code" href="classInteraction_1_1SetCursorEvent.html">Interaction::SetCursorEvent</a>{target,</div>
+<div class="line">               vif-&gt;<a class="code" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>()-&gt;elseBranch()-&gt;at(0)});</div>
 <div class="line">      }</div>
 <div class="line">      <span class="keywordflow">else</span></div>
 <div class="line">      {</div>

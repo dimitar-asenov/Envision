@@ -101,75 +101,75 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a381fad23987574482f120c073cee0764"><td class="memItemLeft" align="right" valign="top">typedef ConcreteVisitor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a381fad23987574482f120c073cee0764">BaseVisitorType</a></td></tr>
-<tr class="separator:a381fad23987574482f120c073cee0764"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7369fbcc4dc4bfe322abe2cab8df0da3"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; Result(ConcreteVisitor *, <a class="el" href="classModel_1_1Node.html">Node</a> *)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a7369fbcc4dc4bfe322abe2cab8df0da3">VisitFunctionInstance</a></td></tr>
-<tr class="separator:a7369fbcc4dc4bfe322abe2cab8df0da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a217a90b2bdc2eae6fb08ac96251682ec"><td class="memItemLeft" align="right" valign="top">typedef Result&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a217a90b2bdc2eae6fb08ac96251682ec">VisitorResultType</a></td></tr>
-<tr class="separator:a217a90b2bdc2eae6fb08ac96251682ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbd8217c28177f07a495e3428c96d0c8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#abbd8217c28177f07a495e3428c96d0c8">BaseVisitorType</a> = ConcreteVisitor</td></tr>
+<tr class="separator:abbd8217c28177f07a495e3428c96d0c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45f263fb6dda97594ab99bebde7e71ea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a45f263fb6dda97594ab99bebde7e71ea">VisitFunctionInstance</a> = std::function&lt; Result(ConcreteVisitor *, <a class="el" href="classModel_1_1Node.html">Node</a> *)&gt;</td></tr>
+<tr class="separator:a45f263fb6dda97594ab99bebde7e71ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab65352a131dbb71eb2ba05122359fb07"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#ab65352a131dbb71eb2ba05122359fb07">VisitorResultType</a> = Result</td></tr>
+<tr class="separator:ab65352a131dbb71eb2ba05122359fb07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a805adb77f49495f1b84702d2f96e81c1"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a805adb77f49495f1b84702d2f96e81c1">~Visitor</a> ()</td></tr>
-<tr class="separator:a805adb77f49495f1b84702d2f96e81c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a749bd73d778a5211327be1b9eea94aec"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a749bd73d778a5211327be1b9eea94aec">~Visitor</a> ()</td></tr>
+<tr class="separator:a749bd73d778a5211327be1b9eea94aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a419cc9f24cb8c96d7d37fbe2d4597bbe"><td class="memItemLeft" align="right" valign="top">Result&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a419cc9f24cb8c96d7d37fbe2d4597bbe">visit</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *n)</td></tr>
 <tr class="separator:a419cc9f24cb8c96d7d37fbe2d4597bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed80669e0b9f028d077225f07a68fd59"><td class="memItemLeft" align="right" valign="top">virtual Result&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#aed80669e0b9f028d077225f07a68fd59">visitChildren</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *n)</td></tr>
-<tr class="separator:aed80669e0b9f028d077225f07a68fd59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48e72b70a0a0cf5ed16313e3ffab0212"><td class="memItemLeft" align="right" valign="top">virtual Result&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a48e72b70a0a0cf5ed16313e3ffab0212">visitChildren</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *n)</td></tr>
+<tr class="separator:a48e72b70a0a0cf5ed16313e3ffab0212"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aa8715359615002c12a932e8da1715f27"><td class="memTemplParams" colspan="2">template&lt;typename NodeType &gt; </td></tr>
-<tr class="memitem:aa8715359615002c12a932e8da1715f27"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#aa8715359615002c12a932e8da1715f27">addType</a> (std::function&lt; Result(ConcreteVisitor *, NodeType *)&gt; f)</td></tr>
-<tr class="separator:aa8715359615002c12a932e8da1715f27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ad72550d4986fceea75ee8606cbfa7b"><td class="memTemplParams" colspan="2">template&lt;typename NodeType &gt; </td></tr>
+<tr class="memitem:a7ad72550d4986fceea75ee8606cbfa7b"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a7ad72550d4986fceea75ee8606cbfa7b">addType</a> (std::function&lt; Result(ConcreteVisitor *, NodeType *)&gt; f)</td></tr>
+<tr class="separator:a7ad72550d4986fceea75ee8606cbfa7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a48bef1b921b9686a060ff9fb525dfb42"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Visitor.html#a7369fbcc4dc4bfe322abe2cab8df0da3">VisitFunctionInstance</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a48bef1b921b9686a060ff9fb525dfb42">findFunctionForId</a> (int id)</td></tr>
-<tr class="separator:a48bef1b921b9686a060ff9fb525dfb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bd670fa42a754fb3be71776083f4323"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Visitor.html#a45f263fb6dda97594ab99bebde7e71ea">VisitFunctionInstance</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a4bd670fa42a754fb3be71776083f4323">findFunctionForId</a> (int id)</td></tr>
+<tr class="separator:a4bd670fa42a754fb3be71776083f4323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a2bce803ce9ea97836a797c5158a3b751"><td class="memItemLeft" align="right" valign="top">static QVector&lt; <a class="el" href="classModel_1_1Visitor.html#a7369fbcc4dc4bfe322abe2cab8df0da3">VisitFunctionInstance</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a2bce803ce9ea97836a797c5158a3b751">types</a> ()</td></tr>
-<tr class="separator:a2bce803ce9ea97836a797c5158a3b751"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a800ae27ded53d2f05a84b85fd1c379b6"><td class="memItemLeft" align="right" valign="top">static QVector&lt; <a class="el" href="classModel_1_1Visitor.html#a45f263fb6dda97594ab99bebde7e71ea">VisitFunctionInstance</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Visitor.html#a800ae27ded53d2f05a84b85fd1c379b6">types</a> ()</td></tr>
+<tr class="separator:a800ae27ded53d2f05a84b85fd1c379b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="a381fad23987574482f120c073cee0764"></a>
+<a class="anchor" id="abbd8217c28177f07a495e3428c96d0c8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef ConcreteVisitor <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#a381fad23987574482f120c073cee0764">BaseVisitorType</a></td>
+          <td class="memname">using <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#abbd8217c28177f07a495e3428c96d0c8">BaseVisitorType</a> =  ConcreteVisitor</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a7369fbcc4dc4bfe322abe2cab8df0da3"></a>
+<a class="anchor" id="a45f263fb6dda97594ab99bebde7e71ea"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::function&lt;Result (ConcreteVisitor*, <a class="el" href="classModel_1_1Node.html">Node</a>*)&gt; <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#a7369fbcc4dc4bfe322abe2cab8df0da3">VisitFunctionInstance</a></td>
+          <td class="memname">using <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#a45f263fb6dda97594ab99bebde7e71ea">VisitFunctionInstance</a> =  std::function&lt;Result(ConcreteVisitor*, <a class="el" href="classModel_1_1Node.html">Node</a>*)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a217a90b2bdc2eae6fb08ac96251682ec"></a>
+<a class="anchor" id="ab65352a131dbb71eb2ba05122359fb07"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef Result <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#a217a90b2bdc2eae6fb08ac96251682ec">VisitorResultType</a></td>
+          <td class="memname">using <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#ab65352a131dbb71eb2ba05122359fb07">VisitorResultType</a> =  Result</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -177,17 +177,17 @@ template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a805adb77f49495f1b84702d2f96e81c1"></a>
+<a class="anchor" id="a749bd73d778a5211327be1b9eea94aec"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
+template&lt;typename ConcreteVisitor , typename Result &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::~<a class="el" href="classModel_1_1Visitor.html">Visitor</a> </td>
+          <td class="memname"><a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::~<a class="el" href="classModel_1_1Visitor.html">Visitor</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -203,11 +203,11 @@ template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa8715359615002c12a932e8da1715f27"></a>
+<a class="anchor" id="a7ad72550d4986fceea75ee8606cbfa7b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
+template&lt;typename ConcreteVisitor, typename Result&gt; </div>
 <div class="memtemplate">
 template&lt;typename NodeType &gt; </div>
 <table class="mlabels">
@@ -215,7 +215,7 @@ template&lt;typename NodeType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::addType </td>
+          <td class="memname">void <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::addType </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; Result(ConcreteVisitor&lt; ConcreteVisitor, Result &gt; *, NodeType *)&gt;&#160;</td>
           <td class="paramname"><em>f</em></td><td>)</td>
@@ -231,17 +231,17 @@ template&lt;typename NodeType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a48bef1b921b9686a060ff9fb525dfb42"></a>
+<a class="anchor" id="a4bd670fa42a754fb3be71776083f4323"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
+template&lt;typename ConcreteVisitor , typename Result &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classModel_1_1Visitor.html#a7369fbcc4dc4bfe322abe2cab8df0da3">VisitFunctionInstance</a> <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::findFunctionForId </td>
+          <td class="memname"><a class="el" href="classModel_1_1Visitor.html">Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#a45f263fb6dda97594ab99bebde7e71ea">VisitFunctionInstance</a> <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::findFunctionForId </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
@@ -255,21 +255,21 @@ template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classModel_1_1ExtendedVisitor.html#a09afcf4982644065c619faca4d92b619">Model::ExtendedVisitor&lt; VisitorB, VisitorA &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="classModel_1_1ExtendedVisitor.html#a7b1397613816f4c5eac8808633f22e57">Model::ExtendedVisitor&lt; VisitorB, VisitorA &gt;</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2bce803ce9ea97836a797c5158a3b751"></a>
+<a class="anchor" id="a800ae27ded53d2f05a84b85fd1c379b6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
+template&lt;typename ConcreteVisitor , typename Result &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static QVector&lt;<a class="el" href="classModel_1_1Visitor.html#a7369fbcc4dc4bfe322abe2cab8df0da3">VisitFunctionInstance</a>&gt;&amp; <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::types </td>
+          <td class="memname">QVector&lt; typename <a class="el" href="classModel_1_1Visitor.html">Visitor</a>&lt; ConcreteVisitor, Result &gt;::<a class="el" href="classModel_1_1Visitor.html#a45f263fb6dda97594ab99bebde7e71ea">VisitFunctionInstance</a> &gt; &amp; <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::types </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -288,7 +288,7 @@ template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
+template&lt;typename ConcreteVisitor , typename Result &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">Result <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::visit </td>
@@ -302,17 +302,17 @@ template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aed80669e0b9f028d077225f07a68fd59"></a>
+<a class="anchor" id="a48e72b70a0a0cf5ed16313e3ffab0212"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ConcreteVisitor, typename Result = void&gt; </div>
+template&lt;typename ConcreteVisitor , typename Result &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual Result <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::visitChildren </td>
+          <td class="memname">Result <a class="el" href="classModel_1_1Visitor.html">Model::Visitor</a>&lt; ConcreteVisitor, Result &gt;::visitChildren </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
           <td class="paramname"><em>n</em></td><td>)</td>

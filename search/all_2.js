@@ -18,7 +18,7 @@ var searchData=
   ['basetype',['baseType',['../classOOModel_1_1PointerType.html#aa824c42409c9121c46b4780cd6496a13',1,'OOModel::PointerType::baseType()'],['../classOOModel_1_1ReferenceType.html#a5fe1a0c804564a63f9b0d5dc3cc963bb',1,'OOModel::ReferenceType::baseType()']]],
   ['basetype_5f',['baseType_',['../classOOModel_1_1PointerType.html#a82a88c83f4a9580789e2c4b3c0313996',1,'OOModel::PointerType::baseType_()'],['../classOOModel_1_1ReferenceType.html#a6bf3429ad3e9d7498b06ccb00f967252',1,'OOModel::ReferenceType::baseType_()']]],
   ['basevisitor_5f',['baseVisitor_',['../classCppImport_1_1ExpressionVisitor.html#a431e37357dfcda420c721067c16174de',1,'CppImport::ExpressionVisitor']]],
-  ['basevisitortype',['BaseVisitorType',['../classModel_1_1Visitor.html#a381fad23987574482f120c073cee0764',1,'Model::Visitor']]],
+  ['basevisitortype',['BaseVisitorType',['../classModel_1_1Visitor.html#abbd8217c28177f07a495e3428c96d0c8',1,'Model::Visitor']]],
   ['basicstrategy',['basicStrategy',['../classVisualization_1_1ModelRenderer.html#a1194f81d36e8550d3df50be3b57e1c17',1,'Visualization::ModelRenderer']]],
   ['bconnections_5f',['bConnections_',['../classComments_1_1CommentDiagramToolbar.html#a7f24ae1d9dce376df4e9e9abc00a25a2',1,'Comments::CommentDiagramToolbar']]],
   ['beforeevent',['beforeEvent',['../classInteraction_1_1GenericHandler.html#aff4641c4a8c0ef23a635bbfd6dcb20ad',1,'Interaction::GenericHandler::beforeEvent()'],['../classVisualization_1_1InteractionHandler.html#a7cbc0d5280745fddc108704f36825f3a',1,'Visualization::InteractionHandler::beforeEvent()']]],

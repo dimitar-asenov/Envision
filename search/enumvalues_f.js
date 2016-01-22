@@ -7,6 +7,7 @@ var searchData=
   ['rect_5ftop_5fright',['RECT_TOP_RIGHT',['../namespaceComments.html#ad438aaa3f4c2e370672679af227970caae9e50722cde7bec2f2da9870c3c51e7e',1,'Comments']]],
   ['rectangle',['Rectangle',['../classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64ace9291906a4c3b042650b70d7f3b152e',1,'Comments::CommentDiagramShape']]],
   ['redefineclasses',['RedefineClasses',['../classOODebug_1_1Protocol.html#a2d4b5a37f7e72646c20b20c16fa57e8aa285dd43b1af29e97ddf79b526cb672dd',1,'OODebug::Protocol']]],
+  ['reference',['Reference',['../classOOModel_1_1LambdaExpression.html#aefd0511b43c5edc70b3b69174596d9b1a63d5049791d9d79d86e9a108b0a999ca',1,'OOModel::LambdaExpression']]],
   ['referenceestablished',['ReferenceEstablished',['../classModel_1_1Reference.html#a5ae9a8f4e834da6e7b211c001d7882b1a93c2e74365f1de99b7d7ec4f122e8ff3',1,'Model::Reference']]],
   ['referenceexpr',['ReferenceExpr',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a0bbd874f7f6d03edb6c2ff049f1cf842',1,'CppImport::CppImportUtilities']]],
   ['referenceisbeingresolved',['ReferenceIsBeingResolved',['../classModel_1_1Reference.html#a5ae9a8f4e834da6e7b211c001d7882b1a1af2d79df638cb34d7996a3548467a32',1,'Model::Reference']]],

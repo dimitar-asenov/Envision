@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classCppExport_1_1DeclarationVisitor-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a>  </div>
   <div class="headertitle">
@@ -148,15 +149,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad615e10a81cbc671e2e898d31ec33f70 inherit pub_methods_classExport_1_1Visitor"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classExport_1_1ExportError.html">ExportError</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Visitor.html#ad615e10a81cbc671e2e898d31ec33f70">errors</a> () const </td></tr>
 <tr class="separator:ad615e10a81cbc671e2e898d31ec33f70 inherit pub_methods_classExport_1_1Visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:af601d6bf1e08675177d887dba8542f04"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classExport_1_1SourceFragment.html">Export::SourceFragment</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppExport_1_1DeclarationVisitor.html#af601d6bf1e08675177d887dba8542f04">compositeNodeComments</a> (<a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> *compositeNode, const QString &amp;style)</td></tr>
+<tr class="separator:af601d6bf1e08675177d887dba8542f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a1700354ec933ddf4204f206afdf70b86"><td class="memTemplParams" colspan="2">template&lt;typename Predicate &gt; </td></tr>
 <tr class="memitem:a1700354ec933ddf4204f206afdf70b86"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCppExport_1_1DeclarationVisitor.html#a1700354ec933ddf4204f206afdf70b86">addMemberDeclarations</a> (<a class="el" href="classOOModel_1_1Class.html">OOModel::Class</a> *classs, <a class="el" href="classExport_1_1CompositeFragment.html">Export::CompositeFragment</a> *section, Predicate filter)</td></tr>
 <tr class="separator:a1700354ec933ddf4204f206afdf70b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5a443d637823049633ae22f09b2188b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classExport_1_1SourceFragment.html">Export::SourceFragment</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppExport_1_1DeclarationVisitor.html#af5a443d637823049633ae22f09b2188b">declarationComments</a> (<a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *<a class="el" href="classExport_1_1Visitor.html#a57fac3e6187e581872d8eac0cd1d08f7">declaration</a>)</td></tr>
-<tr class="separator:af5a443d637823049633ae22f09b2188b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af914001c6695465c83a318500572f881"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppExport_1_1DeclarationVisitor.html#af914001c6695465c83a318500572f881">headerVisitor</a> ()</td></tr>
 <tr class="separator:af914001c6695465c83a318500572f881"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc400647d0a11bc52e783000c06eeeff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppExport_1_1DeclarationVisitor.html#abc400647d0a11bc52e783000c06eeeff">isEnumWithQtFlags</a> (<a class="el" href="classOOModel_1_1Class.html">OOModel::Class</a> *candidate)</td></tr>
+<tr class="separator:abc400647d0a11bc52e783000c06eeeff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58487c4255294460e052fe69603d5af7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppExport_1_1DeclarationVisitor.html#a58487c4255294460e052fe69603d5af7">methodSignaturesMatch</a> (<a class="el" href="classOOModel_1_1Method.html">OOModel::Method</a> *method, <a class="el" href="classOOModel_1_1Method.html">OOModel::Method</a> *other)</td></tr>
 <tr class="separator:a58487c4255294460e052fe69603d5af7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af651c6792babae7b073661e6bc25bdcc"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppExport_1_1DeclarationVisitor.html#af651c6792babae7b073661e6bc25bdcc">pluginName</a> (<a class="el" href="classOOModel_1_1Module.html">OOModel::Module</a> *namespaceModule, <a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *<a class="el" href="classExport_1_1Visitor.html#a57fac3e6187e581872d8eac0cd1d08f7">declaration</a>)</td></tr>
@@ -251,7 +257,7 @@ template&lt;typename Predicate &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="af5a443d637823049633ae22f09b2188b"></a>
+<a class="anchor" id="af601d6bf1e08675177d887dba8542f04"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -259,16 +265,26 @@ template&lt;typename Predicate &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classExport_1_1SourceFragment.html">SourceFragment</a> * CppExport::DeclarationVisitor::declarationComments </td>
+          <td class="memname"><a class="el" href="classExport_1_1SourceFragment.html">SourceFragment</a> * CppExport::DeclarationVisitor::compositeNodeComments </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *&#160;</td>
-          <td class="paramname"><em>declaration</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> *&#160;</td>
+          <td class="paramname"><em>compositeNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>style</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -292,6 +308,30 @@ template&lt;typename Predicate &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abc400647d0a11bc52e783000c06eeeff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CppExport::DeclarationVisitor::isEnumWithQtFlags </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Class.html">OOModel::Class</a> *&#160;</td>
+          <td class="paramname"><em>candidate</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

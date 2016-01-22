@@ -32,7 +32,7 @@ var searchData=
   ['threadnamecommand',['ThreadNameCommand',['../structOODebug_1_1ThreadNameCommand.html#aa2f4a90d63492343037061edb06104f8',1,'OODebug::ThreadNameCommand']]],
   ['thrownexceptiontype',['ThrownExceptionType',['../classOOModel_1_1ThrownExceptionType.html#aa05338c6688c750e4a69f6a34da8ec9b',1,'OOModel::ThrownExceptionType::ThrownExceptionType(Type *exceptionType)'],['../classOOModel_1_1ThrownExceptionType.html#a5d1db52fa99888da4c8f0d184d4c8e36',1,'OOModel::ThrownExceptionType::ThrownExceptionType(const ThrownExceptionType &amp;other)']]],
   ['tick',['tick',['../classLogger_1_1Timer.html#afa760af13cb1e83bbc29c7ba9dde6842',1,'Logger::Timer::tick(const QString &amp;timer)'],['../classLogger_1_1Timer.html#a887ff6016bb7a68d52bb589f76ec9205',1,'Logger::Timer::tick()']]],
-  ['timer',['Timer',['../classLogger_1_1Timer.html#a696ed342c3852a0697af935932aba3da',1,'Logger::Timer::Timer()'],['../classLogger_1_1Timer.html#a7e31306971773eca3ffd00e0dde7f284',1,'Logger::Timer::timer(const QString &amp;timer)']]],
+  ['timer',['timer',['../classLogger_1_1Timer.html#a7e31306971773eca3ffd00e0dde7f284',1,'Logger::Timer::timer(const QString &amp;timer)'],['../classLogger_1_1Timer.html#a696ed342c3852a0697af935932aba3da',1,'Logger::Timer::Timer()']]],
   ['timernames',['timerNames',['../classLogger_1_1Timer.html#a170868768e2ae446d580ff6952a0fd9a',1,'Logger::Timer']]],
   ['timers',['timers',['../classLogger_1_1Timer.html#aaeb9941b0076b7a7e4cb5b236d70cac2',1,'Logger::Timer']]],
   ['tochar',['toChar',['../classOOInteraction_1_1OOExpressionBuilder.html#ae2cd8c15eb0f68de0a7435c9cb5087b3',1,'OOInteraction::OOExpressionBuilder']]],
@@ -241,7 +241,7 @@ var searchData=
   ['typeptrtostring',['typePtrToString',['../classTypeUtilities.html#ad8cbd03104fe6aefdb0dffc7f6a8f591',1,'TypeUtilities']]],
   ['typequalifierexpression',['TypeQualifierExpression',['../classOOModel_1_1TypeQualifierExpression.html#ac085a2dd919cedae60470845a4a0d5e7',1,'OOModel::TypeQualifierExpression']]],
   ['typequery',['typeQuery',['../classInformationScripting_1_1AstQuery.html#aca83e46df38ca0ab7f89ea61802d50b7',1,'InformationScripting::AstQuery']]],
-  ['types',['types',['../classModel_1_1Visitor.html#a2bce803ce9ea97836a797c5158a3b751',1,'Model::Visitor::types()'],['../classModel_1_1ExtendedVisitor.html#a11d5ef901c1b2d3b755ffdedbd734a04',1,'Model::ExtendedVisitor::types()']]],
+  ['types',['types',['../classModel_1_1Visitor.html#a800ae27ded53d2f05a84b85fd1c379b6',1,'Model::Visitor::types()'],['../classModel_1_1ExtendedVisitor.html#a3734a6133d70a6549ff370fee6e53286',1,'Model::ExtendedVisitor::types()']]],
   ['typetraitexpression',['TypeTraitExpression',['../classOOModel_1_1TypeTraitExpression.html#afc7f5a40647bd9a87c18d7d3a1b5badd',1,'OOModel::TypeTraitExpression']]],
   ['typetraitkind',['typeTraitKind',['../classOOModel_1_1TypeTraitExpression.html#a7752c5925b2705f61f4e320eb9e0f366',1,'OOModel::TypeTraitExpression']]],
   ['typevalue',['typeValue',['../classOOModel_1_1PrimitiveTypeExpression.html#a26754f7254cd222cbb1a52a255d22941',1,'OOModel::PrimitiveTypeExpression']]]

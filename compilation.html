@@ -80,12 +80,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Compiling Envision from source </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Envision is written in C++14.</p>
-<p>You will need GCC version 5.1 or newer to compile the sources. You can check your current compiler version with: </p><pre class="fragment">g++ --version
+<div class="textblock"><p>Envision is written in C++14 and uses the CMake build system.</p>
+<p>You will need GCC version 5.1 or newer and at least CMake 3.2.2 to compile the sources. You can check your current versions with: </p><pre class="fragment">g++ --version
+cmake --version
 </pre><p> In Ubuntu, you can easily get compiler updates by adding the following PPA: </p><pre class="fragment">sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt-get update &amp;&amp; sudo apt-get upgrade
 </pre><p> Other dependencies are:</p><ul>
-<li><b>Qt 5</b>: <a href="http://qt.io">http://qt.io</a> <br />
+<li><b>Qt 5.4 or later</b>: <a href="http://qt.io">http://qt.io</a> <br />
  This is the underlying framework that we use to build Envision's visualizations and cross-platform support.</li>
 <li><b>lp_solve 5.5</b>: <a href="http://lpsolve.sourceforge.net/">http://lpsolve.sourceforge.net/</a> <br />
  Lp Solve is used for calculating some of the more complex visualization layouts.</li>
@@ -104,7 +105,7 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
 <li><b>For development only: Vera ++ </b>: <a href="https://bitbucket.org/verateam/vera">https://bitbucket.org/verateam/vera</a> <br />
  Used for checking the code formatting style. Boost python is used to provide bindings for the python scripting.</li>
 </ul>
-<p>To install the dependencies on Ubuntu 15.04, do the following:</p><ol type="1">
+<p>To install the dependencies on Ubuntu 15.10, do the following:</p><ol type="1">
 <li>Install the Qt SDK: <pre class="fragment">sudo apt-get install qt-sdk </pre> You will also need to install additional packages for SVG compatibility and WebKit: <pre class="fragment">sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev </pre></li>
 <li>Install the lp_solve development library version 5.5:<ol type="a">
 <li>Install the packages <code>lp-solve</code> (for the shared library) and <code>liblpsolve55-dev</code> (for the header files): <pre class="fragment">sudo apt-get install lp-solve liblpsolve55-dev </pre></li>
@@ -123,15 +124,15 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
 <h1><a class="anchor" id="qtcreator"></a>
 Qt Creator (recommended for C++; does not work with Java)</h1>
 <ol type="1">
-<li>Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process Qt Creator will create additional directories alongside the repository clone.</li>
+<li>Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process Qt Creator will create additional directories alongside the repository clone (for the out-of-source build).</li>
 <li>Start Qt Creator and configure the version of Qt that you want to use:<ul>
 <li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Qt Versions. Make sure that you are using Qt 5. This could be either Qt in PATH, or a Qt version that you compiled yourself. Qt 5.4 or later is required. See below for manual Qt compilation instructions.</li>
 <li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Kits. Make sure that the default desktop kit uses the appropriate version of Qt.</li>
 </ul>
 </li>
-<li>Open the <code>envision.pro</code> file with Qt Creator.</li>
+<li>Open the top-level <code>CMakeLists.txt</code> file with Qt Creator.</li>
+<li>Use the following arguments for CMake<pre class="fragment">-DCMAKE_BUILD_TYPE=Debug </pre> or alternatively, if you want to compile with clang:<pre class="fragment">-DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-3.8 </pre></li>
 <li>In the Projects view, under <em>build</em> make sure that:<ul>
-<li>Shadow build is enabled</li>
 <li>The build directory points to a directory that is a peer of Envision's directory. e.g. <pre class="fragment">../build-envision-Desktop-Debug</pre></li>
 </ul>
 </li>
@@ -160,13 +161,13 @@ Eclipse (recommended for Java; works for C++, but could require a lot of tweakin
 </ol>
 <h1><a class="anchor" id="latestqt"></a>
 Using the latest build of Qt</h1>
-<p>In order to make Envision's visualizations scale to very large projects, we made several enhancements to the Graphics View framework. If you want to use Envision with a large amount of visual objects displayed at once you must use Qt 5.4 (released in December 2014) or compile the latest development version.</p>
+<p>In order to make Envision's visualizations scale to very large projects (with millions of visual items), we made several enhancements to Qt's Graphics View framework. Therefore Envision requires Qt 5.4 or later (released in December 2014). Alternatively you could compile the latest Qt development branch yourself.</p>
 <p>If you want to compile and use the latest development version of Qt, you can simply run the <code>misc/use-qt5-dev.sh</code> script. It is designed for and tested with Ubuntu 14.04. Running the script will:</p><ol type="1">
 <li>Install all dependencies required to compile Qt5 and Qt WebKit.</li>
 <li>Download the latest Qt 5 development branches of all Qt modules in <code>qt/qt5-dev</code>.</li>
 <li>Configure the build for a release version of Qt and WebKit with separate debug symbols.</li>
 <li>Compile all Qt modules including WebKit using 8 threads. Note that this could take a few hours even on high end machines.</li>
-<li>Install the compiled files it <code>qt/qt5-build</code>.</li>
+<li>Install the compiled files in <code>qt/qt5-build</code>.</li>
 <li>Make a symbolic link: <code>DebugBuild/qt</code> -&gt; <code>qt/qt5-build/lib</code>. This is needed for Envision to use the correct Qt version at run-time.</li>
 </ol>
 <p>After you run the script you will need to configure Qt Creator to the the newly built version of Qt and rebuild Envision.</p>

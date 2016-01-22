@@ -2006,7 +2006,7 @@ template&lt;typename T &gt; </div>
 <div class="line">VisualizationItemWrapperFormElement&lt;ParentType, VisualizationType, externalSynchronization&gt;*</div>
 <div class="line">VisualizationItemWrapperFormElement&lt;ParentType, VisualizationType, externalSynchronization&gt;::clone()<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword"></span>{</div>
-<div class="line">   <span class="keywordflow">return</span> <span class="keyword">new</span> VisualizationItemWrapperFormElement&lt;ParentType, VisualizationType, externalSynchronization&gt;(*this);</div>
+<div class="line">   <span class="keywordflow">return</span> <span class="keyword">new</span> VisualizationItemWrapperFormElement&lt;ParentType, VisualizationType, externalSynchronization&gt;{*<span class="keyword">this</span>};</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ParentType, <span class="keyword">typename</span> VisualizationType, <span class="keywordtype">bool</span> externalSynchronization&gt;</div>

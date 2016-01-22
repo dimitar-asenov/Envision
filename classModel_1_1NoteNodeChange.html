@@ -286,7 +286,12 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>It could happen than a subtree which is removed earlier in the undostack, is reinserted at a later time in the command stack. </p>
-<p>In such cases we should not report these nodes as removed. (MAYBE) </p>
+<p>In such cases we should not report these nodes as removed. (MAYBE)</p>
+<p>TODO: Think about whether we:</p><ul>
+<li>should not report nodes which have been essentially moved in any way</li>
+<li>should report moved nodes in some special way</li>
+<li>should report moved nodes as a pair of deletion/insertion </li>
+</ul>
 
 </div>
 </div>
