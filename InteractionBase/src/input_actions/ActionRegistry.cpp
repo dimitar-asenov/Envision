@@ -36,12 +36,13 @@ ActionRegistry* ActionRegistry::instance()
 ActionRegistry::ActionRegistry()
 {
 	//Read the JSON string
-	QFile file("inputs.json");
+	QFile file{"inputs.json"};
 	file.open(QIODevice::ReadOnly);
-	QTextStream read(&file);
+	QTextStream read{&file};
 	QString json;
 	while (!read.atEnd()) json = json + read.readLine();
 	auto doc = QJsonDocument::fromJson(json.toUtf8());
+
 	//Interpret the JSON, set the shortcuts for all possible events
 	auto obj = doc.object();
 	for (auto key : obj.keys())
@@ -56,7 +57,6 @@ ActionRegistry::ActionRegistry()
 			else if (shortcut.isDouble())
 				handler->keys_.append(QKeySequence((QKeySequence::StandardKey)shortcut.toInt()));
 
-		qDebug() << "here";
 		handlers_.append(handler);
 	}
 }
@@ -106,9 +106,10 @@ bool ActionRegistry::handleKeyInput(Visualization::Item* target, QKeySequence ke
 
 void ActionRegistry::saveShortcuts()
 {
-	QFile file("inputs.json");
+	QFile file{"inputs.json"};
 	file.open(QIODevice::WriteOnly);
-	QTextStream write(&file);
+	QTextStream write{&file};
+
 	//Store the JSON
 	QJsonObject main;
 	for (auto handler : handlers_)
@@ -121,7 +122,7 @@ void ActionRegistry::saveShortcuts()
 		info["keys"] = shortcuts;
 		main[handler->eventName_] = info;
 	}
-	write << (QJsonDocument(main)).toJson();
+	write << (QJsonDocument{main}).toJson();
 }
 
 }
