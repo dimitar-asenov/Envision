@@ -47,7 +47,6 @@ class ActionRegistry
 		using InputHandler = bool (*) (Visualization::Item* target, QKeySequence keys, InputState state);
 
 		void registerInputHandler(const QString& eventName, const InputHandler handler);
-		QStringList inputHandlers() const;
 
 		bool handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName);
 

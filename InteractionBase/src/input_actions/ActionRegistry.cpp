@@ -162,21 +162,18 @@ void ActionRegistry::registerInputHandler(const QString &eventName, const InputH
 {
 	for (auto h : handlers_)
 		if (h->eventName_ == eventName)
+		{
 			h->handler_ = handler;
-}
+			return;
+		}
 
-QStringList ActionRegistry::inputHandlers() const
-{
-	QStringList result;
-	for (auto handler : handlers_)
-		result.append(handler->eventName_);
-	return result;
+	Q_ASSERT(false && "Handler has no input keys defined in input.json");
 }
-
 
 bool ActionRegistry::handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName)
 {
 	bool handled = false;
+
 	//If we find an exact match, execute that
 	for (auto handler : handlers_)
 		if (handler->eventName_.startsWith(handlerName))

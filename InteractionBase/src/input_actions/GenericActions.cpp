@@ -34,28 +34,27 @@ namespace Interaction {
 
 bool GenericActions::deleteItem(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
 {
-	if (DCast<Visualization::Icon>(target))
-	{
-		auto p = target;
-		while (!p->node() && p->parent()) p = p->parent();
+	if (!DCast<Visualization::Icon>(target)) return false;
 
-		if (auto node = p->node())
+	auto p = target;
+	while (!p->node() && p->parent()) p = p->parent();
+
+	if (auto node = p->node())
+	{
+		// Check if the parent of the node is a list and if so, delete this node
+		if (auto list = DCast<Model::List>(node->parent()))
 		{
-			// Check if the parent of the node is a list and if so, delete this node
-			if (auto list = DCast<Model::List>(node->parent()))
-			{
-				list->beginModification("removeChild");
-				list->remove(node);
-				list->endModification();
-				p->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			}
-			// Check if this is a root item and remove it from the scene. The corresponding model is not removed.
-			else if (p->parent() && DCast<Visualization::RootItem>(p->parent()))
-				p->scene()->removeTopLevelItem(p->parent());
+			list->beginModification("removeChild");
+			list->remove(node);
+			list->endModification();
+			p->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
-		return true;
+		// Check if this is a root item and remove it from the scene. The corresponding model is not removed.
+		else if (p->parent() && DCast<Visualization::RootItem>(p->parent()))
+			p->scene()->removeTopLevelItem(p->parent());
 	}
-	return false;
+
+	return true;
 }
 
 bool GenericActions::changePurpose(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
