@@ -23,7 +23,7 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "KeyInputEventFunctions.h"
+#include "GenericActions.h"
 
 #include "VisualizationBase/src/icons/Icon.h"
 #include "ModelBase/src/nodes/List.h"
@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-bool KeyInputEventFunctions::deleteItem(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
+bool GenericActions::deleteItem(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
 {
 	if (DCast<Visualization::Icon>(target))
 	{
@@ -58,7 +58,7 @@ bool KeyInputEventFunctions::deleteItem(Visualization::Item *target, QKeySequenc
 	return false;
 }
 
-bool KeyInputEventFunctions::changePurpose(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
+bool GenericActions::changePurpose(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
 {
 	auto n = target;
 	while (n && ! n->node()) n = n->parent();
@@ -81,10 +81,9 @@ bool KeyInputEventFunctions::changePurpose(Visualization::Item *target, QKeySequ
 	return true;
 }
 
-bool KeyInputEventFunctions::copy(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
+bool GenericActions::copy(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
 {
 	if (!target->ignoresCopyAndPaste()) return false;
-	qDebug() << "Copying";
 	QList<const Model::Node*> nodesToCopy;
 	auto selected = target->scene()->selectedItems();
 
@@ -121,7 +120,7 @@ bool KeyInputEventFunctions::copy(Visualization::Item *target, QKeySequence, Key
 	return true;
 }
 
-void KeyInputEventFunctions::arrangeNodesForClipboard(QList<const Model::Node*>& list)
+void GenericActions::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 {
 	if (list.size() > 0)
 	{

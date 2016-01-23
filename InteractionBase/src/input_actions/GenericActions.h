@@ -27,6 +27,11 @@
 #pragma once
 
 #include "interactionbase_api.h"
+#include "ActionRegistry.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace Visualization {
 	class Item;
@@ -34,51 +39,16 @@ namespace Visualization {
 
 namespace Interaction {
 
-class KeyInputHandler
+class GenericActions
 {
 	public:
-		enum InputState {
-			DefaultState,
-			AnyState,
-			ChangeShortcutState
-		};
-
-		static KeyInputHandler* instance();
-
-		using InputHandler = bool (*) (Visualization::Item* target, QKeySequence keys, InputState state);
-
-		void registerInputHandler(const QString& eventName, const InputHandler handler);
-		QStringList inputHandlers() const;
-		void setDefaultHandler(const InputHandler handler, InputState state);
-
-		bool handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName);
-
-		void enterChangeShortcutState(const QString& eventName);
-
-		void saveShortcuts();
-
-		InputState state() const;
-		void setState(InputState state);
+		static bool deleteItem(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);
+		static bool changePurpose(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);
+		static bool copy(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);
 
 	private:
-		KeyInputHandler();
+		static void arrangeNodesForClipboard(QList<const Model::Node*>& list);
 
-		struct RegisteredHandler {
-			QString eventName_;
-			QList<QKeySequence> keys_;
-			InputState state_;
-			InputHandler handler_;
-		};
-		QList<RegisteredHandler*> handlers_;
-		QHash<InputState, InputHandler> defaultHandlers_;
-
-		QString shortcutToChange_;
-		static bool changeShortcut(Visualization::Item* target, QKeySequence keys, InputState state);
-
-		InputState state_{DefaultState};
 };
-
-inline KeyInputHandler::InputState KeyInputHandler::state() const { return state_; }
-inline void KeyInputHandler::setState(InputState state) { state_ = state; }
 
 }

@@ -23,17 +23,17 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "KeyInputHandler.h"
+#include "ActionRegistry.h"
 
 namespace Interaction {
 
-KeyInputHandler* KeyInputHandler::instance()
+ActionRegistry* ActionRegistry::instance()
 {
-	static KeyInputHandler instance;
+	static ActionRegistry instance;
 	return &instance;
 }
 
-KeyInputHandler::KeyInputHandler()
+ActionRegistry::ActionRegistry()
 {
 	//Read the JSON string
 	QFile file("inputs.json");
@@ -55,20 +55,22 @@ KeyInputHandler::KeyInputHandler()
 				handler->keys_.append(QKeySequence(shortcut.toString()));
 			else if (shortcut.isDouble())
 				handler->keys_.append(QKeySequence((QKeySequence::StandardKey)shortcut.toInt()));
+
+		qDebug() << "here";
 		handlers_.append(handler);
 	}
 
 	setDefaultHandler(changeShortcut, ChangeShortcutState);
 }
 
-void KeyInputHandler::registerInputHandler(const QString &eventName, const InputHandler handler)
+void ActionRegistry::registerInputHandler(const QString &eventName, const InputHandler handler)
 {
 	for (auto h : handlers_)
 		if (h->eventName_ == eventName)
 			h->handler_ = handler;
 }
 
-QStringList KeyInputHandler::inputHandlers() const
+QStringList ActionRegistry::inputHandlers() const
 {
 	QStringList result;
 	for (auto handler : handlers_)
@@ -76,12 +78,12 @@ QStringList KeyInputHandler::inputHandlers() const
 	return result;
 }
 
-void KeyInputHandler::setDefaultHandler(const InputHandler handler, InputState state)
+void ActionRegistry::setDefaultHandler(const InputHandler handler, InputState state)
 {
 	defaultHandlers_[state] = handler;
 }
 
-bool KeyInputHandler::handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName)
+bool ActionRegistry::handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName)
 {
 	bool handled = false;
 	//If we find an exact match, execute that
@@ -111,13 +113,13 @@ bool KeyInputHandler::handleKeyInput(Visualization::Item* target, QKeySequence k
 	return handled;
 }
 
-void KeyInputHandler::enterChangeShortcutState(const QString &eventName)
+void ActionRegistry::enterChangeShortcutState(const QString &eventName)
 {
 	state_ = ChangeShortcutState;
 	shortcutToChange_ = eventName;
 }
 
-void KeyInputHandler::saveShortcuts()
+void ActionRegistry::saveShortcuts()
 {
 	QFile file("inputs.json");
 	file.open(QIODevice::WriteOnly);
@@ -137,7 +139,7 @@ void KeyInputHandler::saveShortcuts()
 	write << (QJsonDocument(main)).toJson();
 }
 
-bool KeyInputHandler::changeShortcut(Visualization::Item *, QKeySequence keys, InputState)
+bool ActionRegistry::changeShortcut(Visualization::Item *, QKeySequence keys, InputState)
 {
 	qDebug() << "Change to " << keys.toString();
 	auto ih = instance();

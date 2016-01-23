@@ -182,10 +182,10 @@ add_library(InteractionBase SHARED
 	src/prompt/PromptTextInput.cpp
 	src/prompt/PromptShellStyle.cpp
 	src/prompt/PromptMode.cpp
-	src/events/KeyInputHandler.h
-	src/events/KeyInputHandler.cpp
-	src/events/KeyInputEventFunctions.h
-	src/events/KeyInputEventFunctions.cpp
+	src/input_actions/ActionRegistry.h
+	src/input_actions/ActionRegistry.cpp
+	src/input_actions/GenericActions.h
+	src/input_actions/GenericActions.cpp
 	src/commands/CChangeShortcut.h
 	src/commands/CChangeShortcut.cpp
 )

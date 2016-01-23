@@ -54,10 +54,8 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
-#include "events/KeyInputHandler.h"
-#include "events/KeyInputEventFunctions.h"
-
-#include "events/KeyInputHandler.h"
+#include "input_actions/ActionRegistry.h"
+#include "input_actions/GenericActions.h"
 
 namespace Interaction {
 
@@ -139,10 +137,10 @@ GenericHandler* GenericHandler::instance()
 	if (!initialized)
 	{
 		initialized = true;
-		KeyInputHandler::instance()->registerInputHandler("GenericHandler.Delete", KeyInputEventFunctions::deleteItem);
-		KeyInputHandler::instance()->registerInputHandler("GenericHandler.Change Purpose",
-														  KeyInputEventFunctions::changePurpose);
-		KeyInputHandler::instance()->registerInputHandler("GenericHandler.Copy", KeyInputEventFunctions::copy);
+		ActionRegistry::instance()->registerInputHandler("GenericHandler.Delete", GenericActions::deleteItem);
+		ActionRegistry::instance()->registerInputHandler("GenericHandler.ChangePurpose",
+														  GenericActions::changePurpose);
+		ActionRegistry::instance()->registerInputHandler("GenericHandler.Copy", GenericActions::copy);
 	}
 	return &h;
 }
@@ -459,7 +457,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		if (view) target->scene()->viewItems()->switchToView(view);
 	}
-	else if (KeyInputHandler::instance()->handleKeyInput(target,
+	else if (ActionRegistry::instance()->handleKeyInput(target,
 			 QKeySequence(event->modifiers()|event->key()), "GenericHandler"))
 			{}
 	else InteractionHandler::keyPressEvent(target, event);
