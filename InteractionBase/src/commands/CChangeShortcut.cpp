@@ -44,7 +44,9 @@ CommandResult* CChangeShortcut::execute(Visualization::Item*, Visualization::Ite
 	if (commandTokens.size() < 2)
 		return new CommandResult(new CommandError("Please specify a shortcut to change"));
 
-	auto shortcutName = commandTokens[1] + "." + commandTokens[3];
+	QString shortcutName;
+	for (auto part : commandTokens.mid(1))
+		shortcutName += part;
 	KeyInputHandler::instance()->enterChangeShortcutState(shortcutName);
 	return new CommandResult();
 }
