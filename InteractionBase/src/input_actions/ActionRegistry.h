@@ -39,8 +39,7 @@ class ActionRegistry
 	public:
 		enum InputState {
 			DefaultState,
-			AnyState,
-			ChangeShortcutState
+			AnyState
 		};
 
 		static ActionRegistry* instance();
@@ -49,7 +48,6 @@ class ActionRegistry
 
 		void registerInputHandler(const QString& eventName, const InputHandler handler);
 		QStringList inputHandlers() const;
-		void setDefaultHandler(const InputHandler handler, InputState state);
 
 		bool handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName);
 
@@ -70,10 +68,6 @@ class ActionRegistry
 			InputHandler handler_;
 		};
 		QList<RegisteredHandler*> handlers_;
-		QHash<InputState, InputHandler> defaultHandlers_;
-
-		QString shortcutToChange_;
-		static bool changeShortcut(Visualization::Item* target, QKeySequence keys, InputState state);
 
 		InputState state_{DefaultState};
 };

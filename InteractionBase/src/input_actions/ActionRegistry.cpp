@@ -59,8 +59,6 @@ ActionRegistry::ActionRegistry()
 		qDebug() << "here";
 		handlers_.append(handler);
 	}
-
-	setDefaultHandler(changeShortcut, ChangeShortcutState);
 }
 
 void ActionRegistry::registerInputHandler(const QString &eventName, const InputHandler handler)
@@ -78,10 +76,6 @@ QStringList ActionRegistry::inputHandlers() const
 	return result;
 }
 
-void ActionRegistry::setDefaultHandler(const InputHandler handler, InputState state)
-{
-	defaultHandlers_[state] = handler;
-}
 
 bool ActionRegistry::handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName)
 {
@@ -107,16 +101,7 @@ bool ActionRegistry::handleKeyInput(Visualization::Item* target, QKeySequence ke
 					handled = handled || handler->handler_(target, keys, state());
 			}
 
-	//If no match, use the default handler
-	if (!handled && defaultHandlers_[state()])
-		handled = defaultHandlers_[state()](target, keys, state());
 	return handled;
-}
-
-void ActionRegistry::enterChangeShortcutState(const QString &eventName)
-{
-	state_ = ChangeShortcutState;
-	shortcutToChange_ = eventName;
 }
 
 void ActionRegistry::saveShortcuts()
@@ -137,21 +122,6 @@ void ActionRegistry::saveShortcuts()
 		main[handler->eventName_] = info;
 	}
 	write << (QJsonDocument(main)).toJson();
-}
-
-bool ActionRegistry::changeShortcut(Visualization::Item *, QKeySequence keys, InputState)
-{
-	qDebug() << "Change to " << keys.toString();
-	auto ih = instance();
-	ih->state_ = DefaultState;
-	for (auto handler : ih->handlers_)
-		if (handler->eventName_ == ih->shortcutToChange_)
-		{
-			if (handler->keys_.size() == 0)	handler->keys_.append(keys);
-			else handler->keys_[handler->keys_.size() - 1] = keys;
-		}
-	ih->saveShortcuts();
-	return true;
 }
 
 }

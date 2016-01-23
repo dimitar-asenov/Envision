@@ -186,8 +186,6 @@ add_library(InteractionBase SHARED
 	src/input_actions/ActionRegistry.cpp
 	src/input_actions/GenericActions.h
 	src/input_actions/GenericActions.cpp
-	src/commands/CChangeShortcut.h
-	src/commands/CChangeShortcut.cpp
 )
 
 envision_plugin(InteractionBase VisualizationBase FilePersistence)
