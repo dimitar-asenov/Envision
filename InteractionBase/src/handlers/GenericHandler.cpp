@@ -54,6 +54,8 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
+#include "events/KeyInputHandler.h"
+
 namespace Interaction {
 
 void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>, QSet<Node*>)
@@ -187,6 +189,7 @@ void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
+	KeyInputHandler::instance()->handleKeyInput(target, QKeySequence(event->modifiers()|event->key()));
 	if (event->matches(QKeySequence::Copy) && !target->ignoresCopyAndPaste())
 	{
 		event->accept();
@@ -311,28 +314,6 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
-	else if (event->modifiers() == 0 && event->key() == Qt::Key_F3)
-	{
-		event->accept();
-		auto n = target;
-		while (n && ! n->node()) n = n->parent();
-
-		auto p = n->parent();
-		if ( p )
-		{
-			int purpose = 0;
-			if (p->definesChildNodePurpose(n->node()))
-			{
-				purpose = n->purpose() + 1;
-				if ( purpose == target->scene()->renderer()->numRegisteredPurposes())
-					purpose = -1; // Undefine
-
-			}
-
-			if (purpose >= 0) p->setChildNodePurpose(n->node(), purpose);
-			else p->clearChildNodePurpose(n->node());
-		}
-	}
 	else if (event->modifiers() == 0
 			&& (	event->key() == Qt::Key_Up
 					|| event->key() == Qt::Key_Down
@@ -399,29 +380,6 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		// Only show the action prompt if none of the other "menu items" are visible
 		showActionPrompt(target, true);
-	}
-	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete
-			&& DCast<Visualization::Icon>(target))
-	{
-		event->accept();
-
-		auto p = target;
-		while (!p->node() && p->parent()) p = p->parent();
-
-		if (auto node = p->node())
-		{
-			// Check if the parent of the node is a list and if so, delete this node
-			if (auto list = DCast<Model::List>(node->parent()))
-			{
-				list->beginModification("removeChild");
-				list->remove(node);
-				list->endModification();
-				p->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			}
-			// Check if this is a root item and remove it from the scene. The corresponding model is not removed.
-			else if (p->parent() && DCast<Visualization::RootItem>(p->parent()))
-				p->scene()->removeTopLevelItem(p->parent());
-		}
 	}
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F1)
 	{

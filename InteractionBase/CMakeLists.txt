@@ -182,6 +182,10 @@ add_library(InteractionBase SHARED
 	src/prompt/PromptTextInput.cpp
 	src/prompt/PromptShellStyle.cpp
 	src/prompt/PromptMode.cpp
+	src/events/KeyInputHandler.h
+	src/events/KeyInputHandler.cpp
+	src/events/KeyInputEventFunctions.h
+	src/events/KeyInputEventFunctions.cpp
 )
 
 envision_plugin(InteractionBase VisualizationBase FilePersistence)
