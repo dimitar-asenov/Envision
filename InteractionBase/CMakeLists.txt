@@ -186,6 +186,8 @@ add_library(InteractionBase SHARED
 	src/events/KeyInputHandler.cpp
 	src/events/KeyInputEventFunctions.h
 	src/events/KeyInputEventFunctions.cpp
+	src/commands/CChangeShortcut.h
+	src/commands/CChangeShortcut.cpp
 )
 
 envision_plugin(InteractionBase VisualizationBase FilePersistence)

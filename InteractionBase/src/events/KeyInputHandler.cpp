@@ -57,6 +57,8 @@ KeyInputHandler::KeyInputHandler()
 				handler->keys_.append(QKeySequence((QKeySequence::StandardKey)shortcut.toInt()));
 		handlers_.append(handler);
 	}
+
+	setDefaultHandler(changeShortcut, ChangeShortcutState);
 }
 
 void KeyInputHandler::registerInputHandler(const QString &eventName, const InputHandler handler)
@@ -64,6 +66,19 @@ void KeyInputHandler::registerInputHandler(const QString &eventName, const Input
 	for (auto h : handlers_)
 		if (h->eventName_ == eventName)
 			h->handler_ = handler;
+}
+
+QStringList KeyInputHandler::inputHandlers() const
+{
+	QStringList result;
+	for (auto handler : handlers_)
+		result.append(handler->eventName_);
+	return result;
+}
+
+void KeyInputHandler::setDefaultHandler(const InputHandler handler, InputState state)
+{
+	defaultHandlers_[state] = handler;
 }
 
 bool KeyInputHandler::handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName)
@@ -91,9 +106,30 @@ bool KeyInputHandler::handleKeyInput(Visualization::Item* target, QKeySequence k
 			}
 
 	//If no match, use the default handler
-	if (!handled && defaultHandler_)
-		handled = defaultHandler_(target, keys, state());
+	if (!handled && defaultHandlers_[state()])
+		handled = defaultHandlers_[state()](target, keys, state());
 	return handled;
+}
+
+void KeyInputHandler::enterChangeShortcutState(const QString &eventName)
+{
+	qDebug() << eventName;
+	state_ = ChangeShortcutState;
+	shortcutToChange_ = eventName;
+}
+
+bool KeyInputHandler::changeShortcut(Visualization::Item *, QKeySequence keys, InputState)
+{
+	qDebug() << "Change to " << keys.toString();
+	auto ih = instance();
+	ih->state_ = DefaultState;
+	for (auto handler : ih->handlers_)
+		if (handler->eventName_ == ih->shortcutToChange_)
+		{
+			if (handler->keys_.size() == 0)	handler->keys_.append(keys);
+			else handler->keys_[handler->keys_.size() - 1] = keys;
+		}
+	return true;
 }
 
 }

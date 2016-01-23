@@ -201,10 +201,6 @@ void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (KeyInputHandler::instance()->handleKeyInput(target,
-			QKeySequence(event->modifiers()|event->key()), "GenericHandler"))
-		return;
-
 	if (event->matches(QKeySequence::Paste) && !target->ignoresCopyAndPaste())
 	{
 		event->accept();
@@ -463,6 +459,9 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		if (view) target->scene()->viewItems()->switchToView(view);
 	}
+	else if (KeyInputHandler::instance()->handleKeyInput(target,
+			 QKeySequence(event->modifiers()|event->key()), "GenericHandler"))
+			{}
 	else InteractionHandler::keyPressEvent(target, event);
 }
 
