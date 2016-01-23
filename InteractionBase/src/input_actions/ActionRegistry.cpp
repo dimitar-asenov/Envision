@@ -114,47 +114,51 @@ ActionRegistry* ActionRegistry::instance()
 
 ActionRegistry::ActionRegistry()
 {
-	//Read the JSON string
-	QFile file{"inputs.json"};
-	file.open(QIODevice::ReadOnly);
-	QTextStream read{&file};
-	QString json;
-	while (!read.atEnd()) json = json + read.readLine();
-	auto doc = QJsonDocument::fromJson(json.toUtf8());
-
-	//Interpret the JSON, set the shortcuts for all possible events
-	auto obj = doc.object();
-	for (auto key : obj.keys())
+	//Read all JSON keyboard binding files
+	QDir bindingsDir{"key-bindings"};
+	for (auto fileName : bindingsDir.entryList(QStringList() << "*.json", QDir::Files))
 	{
-		QJsonObject current = obj[key].toObject();
-		auto state = (InputState) current["state"].toInt();
-		auto shortcuts = current["keys"].toArray();
-		auto handler = new RegisteredHandler{key, {}, state, nullptr};
-		for (auto shortcut : shortcuts)
-		{
-			// We only support strings
-			if (shortcut.isString())
-			{
-				auto shortcutString = shortcut.toString();
-				if (shortcutString.startsWith("Standard-"))
-				{
-					auto sequence = standardKeysMap().find(shortcutString);
-					if (sequence != standardKeysMap().end())
-						handler->keys_.append(QKeySequence(*sequence));
-					else
-						throw InteractionBaseException("Unrecognized standard key sequence name: " + shortcutString);
-				}
-				else
-				{
-					handler->keys_.append(QKeySequence(shortcutString));
-					if (handler->keys_.last().isEmpty())
-						throw InteractionBaseException("Unrecognized key: " + shortcutString);
-				}
-			}
-			else throw InteractionBaseException("Key names in input.json should be strings.");
-		}
+		QFile file{bindingsDir.absoluteFilePath(fileName)};
+		file.open(QIODevice::ReadOnly);
+		QTextStream read{&file};
+		QString json;
+		while (!read.atEnd()) json = json + read.readLine();
+		auto doc = QJsonDocument::fromJson(json.toUtf8());
 
-		handlers_.append(handler);
+		//Interpret the JSON, set the shortcuts for all possible events
+		auto obj = doc.object();
+		for (auto key : obj.keys())
+		{
+			QJsonObject current = obj[key].toObject();
+			auto state = (InputState) current["state"].toInt();
+			auto shortcuts = current["keys"].toArray();
+			auto handler = new RegisteredHandler{key, {}, state, nullptr};
+			for (auto shortcut : shortcuts)
+			{
+				// We only support strings
+				if (shortcut.isString())
+				{
+					auto shortcutString = shortcut.toString();
+					if (shortcutString.startsWith("Standard-"))
+					{
+						auto sequence = standardKeysMap().find(shortcutString);
+						if (sequence != standardKeysMap().end())
+							handler->keys_.append(QKeySequence(*sequence));
+						else
+							throw InteractionBaseException("Unrecognized standard key sequence name: " + shortcutString);
+					}
+					else
+					{
+						handler->keys_.append(QKeySequence(shortcutString));
+						if (handler->keys_.last().isEmpty())
+							throw InteractionBaseException("Unrecognized key: " + shortcutString);
+					}
+				}
+				else throw InteractionBaseException("Key names in " + fileName + " should be strings.");
+			}
+
+			handlers_.append(handler);
+		}
 	}
 }
 
@@ -167,7 +171,7 @@ void ActionRegistry::registerInputHandler(const QString &eventName, const InputH
 			return;
 		}
 
-	Q_ASSERT(false && "Handler has no input keys defined in input.json");
+	Q_ASSERT(false && "Handler has no input keys defined in any key binding file");
 }
 
 bool ActionRegistry::handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName)

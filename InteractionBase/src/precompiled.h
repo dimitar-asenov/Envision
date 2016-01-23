@@ -52,6 +52,7 @@
 #include <QtCore/QJsonArray>
 #include <QtCore/QJsonValue>
 #include <QtCore/QJsonObject>
+#include <QtCore/QDir>
 
 #include <iostream>
 

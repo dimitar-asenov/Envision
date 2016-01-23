@@ -135,6 +135,11 @@ function(envision_plugin targetName)
 		message("Plugin ${targetName} contains styles")
 		install(DIRECTORY styles/ DESTINATION ${BUILD_DIR}/styles)
 	endif()
+	
+        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/key-bindings")
+		message("Plugin ${targetName} contains key bindings")
+		install(DIRECTORY key-bindings/ DESTINATION ${BUILD_DIR}/key-bindings)
+	endif()
 endfunction(envision_plugin)
 
 function(envision_link_libraries targetName)
