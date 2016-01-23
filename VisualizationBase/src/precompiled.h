@@ -90,10 +90,10 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 
-#include "QJsonDocument"
-#include "QJsonArray"
-#include "QJsonValue"
-#include "QJsonObject"
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonValue>
+#include <QtCore/QJsonObject>
 
 
 #endif

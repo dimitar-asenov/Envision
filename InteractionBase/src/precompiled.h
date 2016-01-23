@@ -48,6 +48,11 @@
 
 #include <QtGui/QClipboard>
 
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonValue>
+#include <QtCore/QJsonObject>
+
 #include <iostream>
 
 
