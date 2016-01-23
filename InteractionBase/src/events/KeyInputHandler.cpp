@@ -113,9 +113,28 @@ bool KeyInputHandler::handleKeyInput(Visualization::Item* target, QKeySequence k
 
 void KeyInputHandler::enterChangeShortcutState(const QString &eventName)
 {
-	qDebug() << eventName;
 	state_ = ChangeShortcutState;
 	shortcutToChange_ = eventName;
+}
+
+void KeyInputHandler::saveShortcuts()
+{
+	QFile file("inputs.json");
+	file.open(QIODevice::WriteOnly);
+	QTextStream write(&file);
+	//Store the JSON
+	QJsonObject main;
+	for (auto handler : handlers_)
+	{
+		QJsonObject info;
+		info["state"] = (int) handler->state_;
+		QJsonArray shortcuts;
+		for (auto keys : handler->keys_)
+			shortcuts.append(keys.toString());
+		info["keys"] = shortcuts;
+		main[handler->eventName_] = info;
+	}
+	write << (QJsonDocument(main)).toJson();
 }
 
 bool KeyInputHandler::changeShortcut(Visualization::Item *, QKeySequence keys, InputState)
@@ -129,6 +148,7 @@ bool KeyInputHandler::changeShortcut(Visualization::Item *, QKeySequence keys, I
 			if (handler->keys_.size() == 0)	handler->keys_.append(keys);
 			else handler->keys_[handler->keys_.size() - 1] = keys;
 		}
+	ih->saveShortcuts();
 	return true;
 }
 

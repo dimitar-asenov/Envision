@@ -39,6 +39,7 @@
 #include "../commands/CSaveView.h"
 #include "../commands/CAddNodeToViewByName.h"
 #include "../commands/CAddNodeToView.h"
+#include "commands/CChangeShortcut.h"
 
 namespace Interaction {
 
@@ -58,6 +59,7 @@ HSceneHandlerItem::HSceneHandlerItem()
 	addCommand(new CSaveView{});
 	addCommand(new CAddNodeToViewByName{});
 	addCommand(new CAddNodeToView{});
+	addCommand(new CChangeShortcut());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()
