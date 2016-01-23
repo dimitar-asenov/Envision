@@ -73,9 +73,6 @@
 
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "events/KeyInputHandler.h"
-#include "events/KeyInputEventFunctions.h"
-
 using namespace Logger;
 
 namespace Interaction {
@@ -105,9 +102,6 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::VInfoNode::setDefaultClassHandler(HInfoNode::instance());
 	Visualization::ViewItem::setDefaultClassHandler(HViewItem::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
-
-	KeyInputHandler::instance()->registerInputHandler("delete", QKeySequence(Qt::Key_At),
-			KeyInputHandler::AnyState, KeyInputEventFunctions::deleteItem);
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.
 	if (!envisionManager.areSelfTestsPending())

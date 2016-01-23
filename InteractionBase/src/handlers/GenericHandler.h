@@ -122,7 +122,6 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		GenericHandler();
 
 		virtual void filterSelectedItems(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
-		virtual void arrangeNodesForClipboard(QList<const Model::Node*>& list);
 
 		bool moveCursor(Visualization::Item *target, int key);
 

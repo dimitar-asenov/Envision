@@ -55,6 +55,9 @@
 #include "ModelBase/src/nodes/Text.h"
 
 #include "events/KeyInputHandler.h"
+#include "events/KeyInputEventFunctions.h"
+
+#include "events/KeyInputHandler.h"
 
 namespace Interaction {
 
@@ -132,6 +135,15 @@ GenericHandler::GenericHandler()
 GenericHandler* GenericHandler::instance()
 {
 	static GenericHandler h;
+	static bool initialized = false;
+	if (!initialized)
+	{
+		initialized = true;
+		KeyInputHandler::instance()->registerInputHandler("GenericHandler.Delete", KeyInputEventFunctions::deleteItem);
+		KeyInputHandler::instance()->registerInputHandler("GenericHandler.Change Purpose",
+														  KeyInputEventFunctions::changePurpose);
+		KeyInputHandler::instance()->registerInputHandler("GenericHandler.Copy", KeyInputEventFunctions::copy);
+	}
 	return &h;
 }
 
@@ -189,46 +201,11 @@ void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	KeyInputHandler::instance()->handleKeyInput(target, QKeySequence(event->modifiers()|event->key()));
-	if (event->matches(QKeySequence::Copy) && !target->ignoresCopyAndPaste())
-	{
-		event->accept();
+	if (KeyInputHandler::instance()->handleKeyInput(target,
+			QKeySequence(event->modifiers()|event->key()), "GenericHandler"))
+		return;
 
-		QList<const Model::Node*> nodesToCopy;
-		auto selected = target->scene()->selectedItems();
-
-		// Get all items from the current selection that have a node
-		for (int i = 0; i<selected.size(); ++i)
-		{
-			auto item = selected.at(i);
-			if (item->hasNode()) nodesToCopy.append(item->node());
-		}
-
-		// In case there is exactly one selected item and it has no node, try to find the first parent that has a node
-		if (nodesToCopy.size() == 0 && selected.size() == 1)
-		{
-			auto item = selected.at(0);
-			while (item)
-			{
-				if (item->hasNode())
-				{
-					nodesToCopy.append(item->node());
-					break;
-				}
-
-				item = item->parent();
-			}
-		}
-
-		if (nodesToCopy.size() > 0)
-		{
-
-			FilePersistence::SystemClipboard clipboard;
-			arrangeNodesForClipboard(nodesToCopy);
-			clipboard.putNodes(nodesToCopy);
-		}
-	}
-	else if (event->matches(QKeySequence::Paste) && !target->ignoresCopyAndPaste())
+	if (event->matches(QKeySequence::Paste) && !target->ignoresCopyAndPaste())
 	{
 		event->accept();
 
@@ -724,36 +701,6 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 				selection.at(i)->setSelected(false);
 				selection.removeAt(i);
 			}
-}
-
-void GenericHandler::arrangeNodesForClipboard(QList<const Model::Node*>& list)
-{
-	if (list.size() > 0)
-	{
-		// Determine if all nodes are elements of a list
-		const Model::List* parent = DCast<const Model::List> (list.first()->parent());
-		if (parent)
-		{
-			for (int i = 1; i<list.size(); ++i)
-			{
-				if (list[i]->parent() != parent)
-				{
-					parent = nullptr;
-					break;
-				}
-			}
-		}
-
-		if (parent)
-		{
-			// The selection consists only of nodes which are elements of the same list. Arrange them properly
-			// according to the list's order.
-			// Bubble sort
-			for (int i = list.size() - 1; i > 0; --i)
-				for (int k = 0; k < i; ++k)
-					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swap(k, k+1);
-		}
-	}
 }
 
 bool GenericHandler::removeFromList(Visualization::Item* target)

@@ -28,10 +28,11 @@
 #include "VisualizationBase/src/icons/Icon.h"
 #include "ModelBase/src/nodes/List.h"
 #include "VisualizationBase/src/items/RootItem.h"
+#include "FilePersistence/src/SystemClipboard.h"
 
 namespace Interaction {
 
-void KeyInputEventFunctions::deleteItem(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
+bool KeyInputEventFunctions::deleteItem(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
 {
 	if (DCast<Visualization::Icon>(target))
 	{
@@ -52,10 +53,12 @@ void KeyInputEventFunctions::deleteItem(Visualization::Item *target, QKeySequenc
 			else if (p->parent() && DCast<Visualization::RootItem>(p->parent()))
 				p->scene()->removeTopLevelItem(p->parent());
 		}
+		return true;
 	}
+	return false;
 }
 
-void KeyInputEventFunctions::changePurpose(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
+bool KeyInputEventFunctions::changePurpose(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
 {
 	auto n = target;
 	while (n && ! n->node()) n = n->parent();
@@ -74,6 +77,77 @@ void KeyInputEventFunctions::changePurpose(Visualization::Item *target, QKeySequ
 
 		if (purpose >= 0) p->setChildNodePurpose(n->node(), purpose);
 		else p->clearChildNodePurpose(n->node());
+	}
+	return true;
+}
+
+bool KeyInputEventFunctions::copy(Visualization::Item *target, QKeySequence, KeyInputHandler::InputState)
+{
+	if (!target->ignoresCopyAndPaste()) return false;
+	qDebug() << "Copying";
+	QList<const Model::Node*> nodesToCopy;
+	auto selected = target->scene()->selectedItems();
+
+	// Get all items from the current selection that have a node
+	for (int i = 0; i<selected.size(); ++i)
+	{
+		auto item = selected.at(i);
+		if (item->hasNode()) nodesToCopy.append(item->node());
+	}
+
+	// In case there is exactly one selected item and it has no node, try to find the first parent that has a node
+	if (nodesToCopy.size() == 0 && selected.size() == 1)
+	{
+		auto item = selected.at(0);
+		while (item)
+		{
+			if (item->hasNode())
+			{
+				nodesToCopy.append(item->node());
+				break;
+			}
+
+			item = item->parent();
+		}
+	}
+
+	if (nodesToCopy.size() > 0)
+	{
+
+		FilePersistence::SystemClipboard clipboard;
+		arrangeNodesForClipboard(nodesToCopy);
+		clipboard.putNodes(nodesToCopy);
+	}
+	return true;
+}
+
+void KeyInputEventFunctions::arrangeNodesForClipboard(QList<const Model::Node*>& list)
+{
+	if (list.size() > 0)
+	{
+		// Determine if all nodes are elements of a list
+		const Model::List* parent = DCast<const Model::List> (list.first()->parent());
+		if (parent)
+		{
+			for (int i = 1; i<list.size(); ++i)
+			{
+				if (list[i]->parent() != parent)
+				{
+					parent = nullptr;
+					break;
+				}
+			}
+		}
+
+		if (parent)
+		{
+			// The selection consists only of nodes which are elements of the same list. Arrange them properly
+			// according to the list's order.
+			// Bubble sort
+			for (int i = list.size() - 1; i > 0; --i)
+				for (int k = 0; k < i; ++k)
+					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swap(k, k+1);
+		}
 	}
 }
 

@@ -44,27 +44,26 @@ class KeyInputHandler
 
 		static KeyInputHandler* instance();
 
-		using InputHandler = void (*) (Visualization::Item* target, QKeySequence keys, InputState state);
+		using InputHandler = bool (*) (Visualization::Item* target, QKeySequence keys, InputState state);
 
-		void registerInputHandler(const QString& eventName, QList<QKeySequence> keys, InputState state,
-								  const InputHandler handler);
-		void registerInputHandler(const QString& eventName, QKeySequence keys, InputState state,
-								  const InputHandler handler);
+		void registerInputHandler(const QString& eventName, const InputHandler handler);
 		void setDefaultHandler(const InputHandler handler);
 
-		void handleKeyInput(Visualization::Item* target, QKeySequence keys);
+		bool handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName);
 
 		InputState state() const;
 		void setState(InputState state);
 
 	private:
+		KeyInputHandler();
+
 		struct RegisteredHandler {
-			const QString& eventName_;
+			QString eventName_;
 			QList<QKeySequence> keys_;
 			InputState state_;
-			const InputHandler handler_;
+			InputHandler handler_;
 		};
-		QList<RegisteredHandler> handlers_;
+		QList<RegisteredHandler*> handlers_;
 		InputHandler defaultHandler_;
 
 		InputState state_{DefaultState};
