@@ -70,6 +70,8 @@ class ActionRegistry
 		QList<RegisteredHandler*> handlers_;
 
 		InputState state_{DefaultState};
+
+		static const QHash<const QString, QKeySequence::StandardKey>& standardKeysMap();
 };
 
 inline ActionRegistry::InputState ActionRegistry::state() const { return state_; }

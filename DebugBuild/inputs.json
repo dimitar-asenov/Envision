@@ -1,5 +1,5 @@
 {
 	"GenericHandler.Delete"				: {"keys":["Del"], "state":"1"},
 	"GenericHandler.ChangePurpose"	: {"keys":["F3"], "state":"1"},
-	"GenericHandler.Copy"				: {"keys":[9], "state":"1"}
+	"GenericHandler.Copy"				: {"keys":["Standard-Copy"], "state":"1"}
 }

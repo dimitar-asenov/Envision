@@ -25,7 +25,86 @@
  **********************************************************************************************************************/
 #include "ActionRegistry.h"
 
+#include "../InteractionBaseException.h"
+
 namespace Interaction {
+
+const QHash<const QString, QKeySequence::StandardKey>& ActionRegistry::standardKeysMap()
+{
+	static const QHash<const QString, QKeySequence::StandardKey> map {
+		{"Standard-AddTab", QKeySequence::AddTab},
+		{"Standard-Back", QKeySequence::Back},
+		{"Standard-Bold", QKeySequence::Bold},
+		{"Standard-Close", QKeySequence::Close},
+		{"Standard-Copy", QKeySequence::Copy},
+		{"Standard-Cut", QKeySequence::Cut},
+		{"Standard-Delete", QKeySequence::Delete},
+		{"Standard-DeleteEndOfLine", QKeySequence::DeleteEndOfLine},
+		{"Standard-DeleteEndOfWord", QKeySequence::DeleteEndOfWord},
+		{"Standard-DeleteStartOfWord", QKeySequence::DeleteStartOfWord},
+		{"Standard-DeleteCompleteLine", QKeySequence::DeleteCompleteLine},
+		{"Standard-Find", QKeySequence::Find},
+		{"Standard-FindNext", QKeySequence::FindNext},
+		{"Standard-FindPrevious", QKeySequence::FindPrevious},
+		{"Standard-Forward", QKeySequence::Forward},
+		{"Standard-HelpContents", QKeySequence::HelpContents},
+		{"Standard-InsertLineSeparator", QKeySequence::InsertLineSeparator},
+		{"Standard-InsertParagraphSeparator", QKeySequence::InsertParagraphSeparator},
+		{"Standard-Italic", QKeySequence::Italic},
+		{"Standard-MoveToEndOfBlock", QKeySequence::MoveToEndOfBlock},
+		{"Standard-MoveToEndOfDocument", QKeySequence::MoveToEndOfDocument},
+		{"Standard-MoveToEndOfLine", QKeySequence::MoveToEndOfLine},
+		{"Standard-MoveToNextChar", QKeySequence::MoveToNextChar},
+		{"Standard-MoveToNextLine", QKeySequence::MoveToNextLine},
+		{"Standard-MoveToNextPage", QKeySequence::MoveToNextPage},
+		{"Standard-MoveToNextWord", QKeySequence::MoveToNextWord},
+		{"Standard-MoveToPreviousChar", QKeySequence::MoveToPreviousChar},
+		{"Standard-MoveToPreviousLine", QKeySequence::MoveToPreviousLine},
+		{"Standard-MoveToPreviousPage", QKeySequence::MoveToPreviousPage},
+		{"Standard-MoveToPreviousWord", QKeySequence::MoveToPreviousWord},
+		{"Standard-MoveToStartOfBlock", QKeySequence::MoveToStartOfBlock},
+		{"Standard-MoveToStartOfDocument", QKeySequence::MoveToStartOfDocument},
+		{"Standard-MoveToStartOfLine", QKeySequence::MoveToStartOfLine},
+		{"Standard-New", QKeySequence::New},
+		{"Standard-NextChild", QKeySequence::NextChild},
+		{"Standard-Open", QKeySequence::Open},
+		{"Standard-Paste", QKeySequence::Paste},
+		{"Standard-Preferences", QKeySequence::Preferences},
+		{"Standard-PreviousChild", QKeySequence::PreviousChild},
+		{"Standard-Print", QKeySequence::Print},
+		{"Standard-Quit", QKeySequence::Quit},
+		{"Standard-Redo", QKeySequence::Redo},
+		{"Standard-Refresh", QKeySequence::Refresh},
+		{"Standard-Replace", QKeySequence::Replace},
+		{"Standard-SaveAs", QKeySequence::SaveAs},
+		{"Standard-Save", QKeySequence::Save},
+		{"Standard-SelectAll", QKeySequence::SelectAll},
+		{"Standard-Deselect", QKeySequence::Deselect},
+		{"Standard-SelectEndOfBlock", QKeySequence::SelectEndOfBlock},
+		{"Standard-SelectEndOfDocument", QKeySequence::SelectEndOfDocument},
+		{"Standard-SelectEndOfLine", QKeySequence::SelectEndOfLine},
+		{"Standard-SelectNextChar", QKeySequence::SelectNextChar},
+		{"Standard-SelectNextLine", QKeySequence::SelectNextLine},
+		{"Standard-SelectNextPage", QKeySequence::SelectNextPage},
+		{"Standard-SelectNextWord", QKeySequence::SelectNextWord},
+		{"Standard-SelectPreviousChar", QKeySequence::SelectPreviousChar},
+		{"Standard-SelectPreviousLine", QKeySequence::SelectPreviousLine},
+		{"Standard-SelectPreviousPage", QKeySequence::SelectPreviousPage},
+		{"Standard-SelectPreviousWord", QKeySequence::SelectPreviousWord},
+		{"Standard-SelectStartOfBlock", QKeySequence::SelectStartOfBlock},
+		{"Standard-SelectStartOfDocument", QKeySequence::SelectStartOfDocument},
+		{"Standard-SelectStartOfLine", QKeySequence::SelectStartOfLine},
+		{"Standard-Underline", QKeySequence::Underline},
+		{"Standard-Undo", QKeySequence::Undo},
+		{"Standard-UnknownKey", QKeySequence::UnknownKey},
+		{"Standard-WhatsThis", QKeySequence::WhatsThis},
+		{"Standard-ZoomIn", QKeySequence::ZoomIn},
+		{"Standard-ZoomOut", QKeySequence::ZoomOut},
+		{"Standard-FullScreen", QKeySequence::FullScreen}
+	};
+
+	return map;
+}
 
 ActionRegistry* ActionRegistry::instance()
 {
@@ -52,10 +131,28 @@ ActionRegistry::ActionRegistry()
 		auto shortcuts = current["keys"].toArray();
 		auto handler = new RegisteredHandler{key, {}, state, nullptr};
 		for (auto shortcut : shortcuts)
+		{
+			// We only support strings
 			if (shortcut.isString())
-				handler->keys_.append(QKeySequence(shortcut.toString()));
-			else if (shortcut.isDouble())
-				handler->keys_.append(QKeySequence((QKeySequence::StandardKey)shortcut.toInt()));
+			{
+				auto shortcutString = shortcut.toString();
+				if (shortcutString.startsWith("Standard-"))
+				{
+					auto sequence = standardKeysMap().find(shortcutString);
+					if (sequence != standardKeysMap().end())
+						handler->keys_.append(QKeySequence(*sequence));
+					else
+						throw InteractionBaseException("Unrecognized standard key sequence name: " + shortcutString);
+				}
+				else
+				{
+					handler->keys_.append(QKeySequence(shortcutString));
+					if (handler->keys_.last().isEmpty())
+						throw InteractionBaseException("Unrecognized key: " + shortcutString);
+				}
+			}
+			else throw InteractionBaseException("Key names in input.json should be strings.");
+		}
 
 		handlers_.append(handler);
 	}
