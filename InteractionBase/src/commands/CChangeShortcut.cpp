@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "CChangeShortcut.h"
-#include "events/KeyInputHandler.h"
+#include "../input_actions/ActionRegistry.h"
 
 
 namespace Interaction {
@@ -47,7 +47,7 @@ CommandResult* CChangeShortcut::execute(Visualization::Item*, Visualization::Ite
 	QString shortcutName;
 	for (auto part : commandTokens.mid(1))
 		shortcutName += part;
-	KeyInputHandler::instance()->enterChangeShortcutState(shortcutName);
+    ActionRegistry::instance()->enterChangeShortcutState(shortcutName);
 	return new CommandResult();
 }
 
@@ -58,7 +58,7 @@ QList<CommandSuggestion*> CChangeShortcut::suggest(Visualization::Item*, Visuali
 	if (textSoFar.trimmed().startsWith("changeShortcut ", Qt::CaseInsensitive))
 	{
 		auto name = textSoFar.trimmed().mid(15);
-		for (auto eventName : KeyInputHandler::instance()->inputHandlers())
+        for (auto eventName : ActionRegistry::instance()->inputHandlers())
 			if (eventName.startsWith(name))
 				results.append(new CommandSuggestion("changeShortcut " + eventName,
 					"Change shortcut of " + eventName));

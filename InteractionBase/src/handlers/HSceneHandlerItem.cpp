@@ -39,7 +39,7 @@
 #include "../commands/CSaveView.h"
 #include "../commands/CAddNodeToViewByName.h"
 #include "../commands/CAddNodeToView.h"
-#include "commands/CChangeShortcut.h"
+#include "../commands/CChangeShortcut.h"
 
 namespace Interaction {
 

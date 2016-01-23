@@ -35,6 +35,8 @@
 #include "../prompt/PromptShell.h"
 #include "../vis/ViewSwitcherMenu.h"
 #include "../vis/VViewSwitcherEntry.h"
+#include "../input_actions/ActionRegistry.h"
+#include "../input_actions/GenericActions.h"
 
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/ViewItemManager.h"
@@ -54,8 +56,6 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
-#include "input_actions/ActionRegistry.h"
-#include "input_actions/GenericActions.h"
 
 namespace Interaction {
 

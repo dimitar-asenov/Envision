@@ -26,9 +26,8 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
-
-#include "commands/Command.h"
+#include "../interactionbase_api.h"
+#include "Command.h"
 
 namespace Model {
 	class SymbolMatcher;
