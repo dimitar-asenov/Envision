@@ -83,7 +83,7 @@ bool GenericActions::changePurpose(Visualization::Item *target, QKeySequence, Ac
 
 bool GenericActions::copy(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
 {
-	if (!target->ignoresCopyAndPaste()) return false;
+	if (target->ignoresCopyAndPaste()) return false;
 	QList<const Model::Node*> nodesToCopy;
 	auto selected = target->scene()->selectedItems();
 
