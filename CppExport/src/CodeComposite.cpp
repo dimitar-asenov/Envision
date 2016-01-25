@@ -254,15 +254,29 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 	std::function<CodeUnitPart*(QList<CodeUnitPart*>&)> selector = [](QList<CodeUnitPart*>& parts)
 	{
 		CodeUnitPart* result = {};
+		int resultPriority = 0;
+		const int NAME_IMPORT_PRIORITY = 3;
+		const int EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY = 2;
+		const int META_CALL_EXPRESSION_PRIORITY = 1;
 
 		for (auto part : parts)
-			if (DCast<OOModel::NameImport>(part->parent()->node()))
+			if (DCast<OOModel::NameImport>(part->parent()->node()) && resultPriority < NAME_IMPORT_PRIORITY)
 			{
 				result = part;
-				break;
+				resultPriority = NAME_IMPORT_PRIORITY;
 			}
-			else if (!result && DCast<OOModel::MetaCallExpression>(part->parent()->node()))
+			else if (DCast<OOModel::ExplicitTemplateInstantiation>(part->parent()->node()) &&
+						resultPriority < EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY)
+			{
 				result = part;
+				resultPriority = EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY;
+			}
+			else if (!result && DCast<OOModel::MetaCallExpression>(part->parent()->node()) &&
+						resultPriority < META_CALL_EXPRESSION_PRIORITY)
+			{
+				result = part;
+				resultPriority = META_CALL_EXPRESSION_PRIORITY;
+			}
 		if (!result) result = parts.first();
 
 		parts.removeOne(result);
