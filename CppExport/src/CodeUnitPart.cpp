@@ -39,9 +39,9 @@ CodeUnitPart::CodeUnitPart(CodeUnit* parent) : parent_{parent} {}
 
 bool CodeUnitPart::isSourceFragmentEmpty() const
 {
-	if (!sourceFragment_) return true;
+	if (!fragment_) return true;
 
-	QList<Export::SourceFragment*> workList{sourceFragment_};
+	QList<Export::SourceFragment*> workList{fragment_};
 	while (!workList.empty())
 	{
 		auto current = workList.takeLast();
@@ -53,9 +53,9 @@ bool CodeUnitPart::isSourceFragmentEmpty() const
 	return true;
 }
 
-void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
+void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 {
-	sourceFragment_ = sourceFragment;
+	fragment_ = sourceFragment;
 
 	// calculate name and reference nodes
 	nameNodes_.clear();

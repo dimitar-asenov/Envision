@@ -218,7 +218,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				currentNamespace = neededNamespace;
 			}
 
-			*currentNamespaceFragment << codeUnitPart->sourceFragment();
+			*currentNamespaceFragment << codeUnitPart->fragment();
 		}
 	}
 

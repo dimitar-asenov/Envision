@@ -51,12 +51,12 @@ class CPPEXPORT_API CodeUnitPart
 
 		CodeUnit* parent() const;
 
-		Export::SourceFragment* sourceFragment() const;
+		Export::SourceFragment* fragment() const;
 		/**
 		 * returns whether there is at least one text fragment inside sourceFragment.
 		 */
 		bool isSourceFragmentEmpty() const;
-		void setSourceFragment(Export::SourceFragment* fragment);
+		void setFragment(Export::SourceFragment* fragment);
 
 		const QSet<Model::Node*>& nameNodes() const;
 		const QSet<OOModel::ReferenceExpression*>& referenceNodes() const;
@@ -69,7 +69,7 @@ class CPPEXPORT_API CodeUnitPart
 
 	private:
 		CodeUnit* parent_{};
-		Export::SourceFragment* sourceFragment_{};
+		Export::SourceFragment* fragment_{};
 		QSet<Model::Node*> nameNodes_;
 		QSet<OOModel::ReferenceExpression*> referenceNodes_;
 		QSet<CodeUnitPart*> dependencies_;
@@ -82,7 +82,7 @@ class CPPEXPORT_API CodeUnitPart
 
 inline CodeUnit* CodeUnitPart::parent() const { return parent_; }
 
-inline Export::SourceFragment* CodeUnitPart::sourceFragment() const { return sourceFragment_; }
+inline Export::SourceFragment* CodeUnitPart::fragment() const { return fragment_; }
 
 inline const QSet<Model::Node*>& CodeUnitPart::nameNodes() const { return nameNodes_; }
 inline const QSet<OOModel::ReferenceExpression*>& CodeUnitPart::referenceNodes() const { return referenceNodes_; }
