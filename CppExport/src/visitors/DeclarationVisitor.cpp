@@ -273,7 +273,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 				{
 					auto qDeclareOperatorsForFlagsFragment = new CompositeFragment{classs};
 					*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
-												  << classs->name() << "::" << potentialEnumWithQtFlags->name() << ")";
+												  << classs->name() << "::" << potentialEnumWithQtFlags->name() << "s)";
 					*qtFlagsComposite << qDeclareOperatorsForFlagsFragment;
 				}
 		return qtFlagsComposite;
