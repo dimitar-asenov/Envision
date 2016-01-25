@@ -157,7 +157,7 @@ void CodeUnitPart::calculateDependencies(QList<CodeUnit*>& allUnits)
 	for (auto target : hardTargets_)
 		for (auto unit : allUnits)
 			if (unit->headerPart() != this && unit->headerPart()->nameNodes().contains(target))
-					dependencies_.insert(unit->headerPart());
+				dependencies_.insert(unit->headerPart());
 }
 
 QSet<CodeUnitPart*> CodeUnitPart::dependenciesWithinFile(QList<CodeUnit*> units)
