@@ -164,7 +164,7 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		 specializationDecl->getExternLoc().getPtrEncoding())
 		return true;
 
-	//	explicit instation declaration
+	//	explicit instantiation declaration
 	if (!specializationDecl->isExplicitSpecialization() && specializationDecl->isExplicitInstantiationOrSpecialization())
 	{
 		auto ooExplicitTemplateInst = trMngr_->insertExplicitTemplateInstantiation(specializationDecl);
