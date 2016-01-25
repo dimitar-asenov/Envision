@@ -35,6 +35,7 @@
 #include "Export/src/tree/CompositeFragment.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "OOModel/src/declarations/NameImport.h"
+#include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
 
 #include "../CodeUnit.h"
@@ -92,6 +93,13 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 			if (!referenceExpression->target() || !DCast<OOModel::Project>(referenceExpression->target()))
 				result.append(new CodeUnit{(namespaceName.isEmpty() ? "" : namespaceName + "/") +
 													referenceExpression->name(), current});
+			return;
+		}
+		else if (auto ooExplicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(current))
+		{
+			result.append(new CodeUnit{(namespaceName.isEmpty() ? "" : namespaceName + "/") +
+												OOInteraction::StringComponents::stringForNode(
+													ooExplicitTemplateInstantiation->instantiatedClass()), current});
 			return;
 		}
 		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))		{

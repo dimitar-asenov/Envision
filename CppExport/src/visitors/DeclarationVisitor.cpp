@@ -64,6 +64,7 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<TypeAlias>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<NameImport>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<ExplicitTemplateInstantiation>(declaration)) return visit(castDeclaration);
 
 	notAllowed(declaration);
 
@@ -266,6 +267,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			auto privateSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
 			{
+					if (DCast<OOModel::ExplicitTemplateInstantiation>(declaration)) return false;
 					if (isSignalingDeclaration(declaration)) return false;
 					return !declaration->modifiers()->isSet(Modifier::Public) &&
 					!declaration->modifiers()->isSet(Modifier::Protected);
@@ -645,10 +647,18 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	return fragment;
 }
 
-SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* eti)
+SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explicitTemplateInstantiation)
 {
-	notAllowed(eti);
-	return new TextFragment{eti};
+	auto fragment = new CompositeFragment{explicitTemplateInstantiation};
+
+	if (headerVisitor())
+		*fragment << "extern template class "
+					 << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Project>()->name().toUpper() << "_API ";
+	else
+		*fragment << "template class ";
+
+	*fragment << ExpressionVisitor(data()).visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
+	return fragment;
 }
 
 SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)

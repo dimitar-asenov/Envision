@@ -34,6 +34,7 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/NameImport.h"
+#include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 
 namespace CppExport {
 
@@ -205,7 +206,8 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				}
 			}
 
-			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
+			auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) ? nullptr :
+					unit->node()->firstAncestorOfType<OOModel::Module>();
 			if (neededNamespace != currentNamespace)
 			{
 				currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);

@@ -119,6 +119,8 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 {
 	auto parent = reference->parent();
 	Q_ASSERT(parent);
+	if (DCast<OOModel::ExplicitTemplateInstantiation>(parent)) return false;
+	else if (reference->firstAncestorOfType<OOModel::ExplicitTemplateInstantiation>()) return true;
 
 	auto parentClass = reference->firstAncestorOfType<OOModel::Class>();
 	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>() &&

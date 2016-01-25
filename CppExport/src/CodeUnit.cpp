@@ -35,6 +35,7 @@
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/TypeAlias.h"
 #include "OOModel/src/declarations/NameImport.h"
+#include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 
 namespace CppExport {
 
@@ -105,6 +106,11 @@ void CodeUnit::calculateSourceFragments()
 	{
 		headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(nameImport));
 		sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visit(nameImport));
+	}
+	else if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(node()))
+	{
+		headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(explicitTemplateInstantiation));
+		sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visit(explicitTemplateInstantiation));
 	}
 	else
 		Q_ASSERT(false);
