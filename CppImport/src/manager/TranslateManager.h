@@ -136,6 +136,8 @@ class CPPIMPORT_API TranslateManager
 
 		OOModel::Field* insertNamespaceField(clang::VarDecl* varDecl, bool& wasDeclared);
 
+		OOModel::Class* lookupClass(clang::CXXRecordDecl* rDecl);
+
 	private:
 		ClangHelpers& clang_;
 
