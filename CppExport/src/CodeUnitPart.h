@@ -70,11 +70,13 @@ class CPPEXPORT_API CodeUnitPart
 	private:
 		CodeUnit* parent_{};
 		Export::SourceFragment* fragment_{};
+
 		QSet<Model::Node*> nameNodes_;
 		QSet<OOModel::ReferenceExpression*> referenceNodes_;
-		QSet<CodeUnitPart*> dependencies_;
 		QSet<Model::Node*> softTargets_;
 		QSet<Model::Node*> hardTargets_;
+
+		QSet<CodeUnitPart*> dependencies_;
 
 		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
 		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
