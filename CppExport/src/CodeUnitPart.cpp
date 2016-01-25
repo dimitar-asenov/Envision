@@ -160,7 +160,7 @@ void CodeUnitPart::calculateDependencies(QList<CodeUnit*>& allUnits)
 					dependencies_.insert(unit->headerPart());
 }
 
-QSet<CodeUnitPart*> CodeUnitPart::sourceDependencies(QList<CodeUnit*> units)
+QSet<CodeUnitPart*> CodeUnitPart::dependenciesWithinFile(QList<CodeUnit*> units)
 {
 	QSet<CodeUnitPart*> result;
 	for (auto referenceNode : referenceNodes_)

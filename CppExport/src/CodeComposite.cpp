@@ -285,7 +285,7 @@ void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFra
 {
 	sortUnits(&CodeUnit::headerPart, [](CodeUnitPart* p) { return p->dependencies(); });
 	header = headerFragment();
-	sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->sourceDependencies(units()); });
+	sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->dependenciesWithinFile(units()); });
 	source = sourceFragment();
 }
 
