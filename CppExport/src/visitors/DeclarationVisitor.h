@@ -70,10 +70,6 @@ class CPPEXPORT_API DeclarationVisitor
 	public:
 		using Visitor::Visitor;
 
-		Export::SourceDir* visitProject(OOModel::Project* project, Export::SourceDir* parent = nullptr);
-		Export::SourceDir* visitModule(OOModel::Module* module, Export::SourceDir* parent);
-		Export::SourceFile* visitTopLevelClass(OOModel::Class* classs, Export::SourceDir* parent);
-
 		Export::SourceFragment* visit(OOModel::Declaration* declaration);
 
 		Export::SourceFragment* visit(OOModel::Class* classs);

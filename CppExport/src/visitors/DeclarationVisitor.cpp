@@ -73,53 +73,6 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 	return fragment;
 }
 
-SourceDir* DeclarationVisitor::visitProject(Project* project, SourceDir* parent)
-{
-	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir{nullptr, "src"};
-
-	for (auto node : *project->projects()) visitProject(node, projectDir);
-	for (auto node : *project->modules()) visitModule(node, projectDir);
-	for (auto node : *project->classes()) visitTopLevelClass(node, projectDir);
-
-	notAllowed(project->methods());
-	notAllowed(project->fields());
-
-	return projectDir;
-}
-
-SourceDir* DeclarationVisitor::visitModule(Module* module, SourceDir* parent)
-{
-	Q_ASSERT(parent);
-	auto moduleDir = &parent->subDir(module->name());
-
-	for (auto node : *module->modules()) visitModule(node, moduleDir);
-	for (auto node : *module->classes()) visitTopLevelClass(node, moduleDir);
-
-	notAllowed(module->methods());
-	notAllowed(module->fields());
-
-	return moduleDir;
-}
-
-SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* parent)
-{
-	Q_ASSERT(parent);
-	auto classFile = &parent->file(classs->name() + ".cpp");
-
-	auto fragment = classFile->append(new CompositeFragment{classs, "sections"});
-
-	auto imports = fragment->append(new CompositeFragment{classs, "vertical"});
-	for (auto node : *classs->subDeclarations())
-	{
-		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
-		else notAllowed(node);
-	}
-
-	*fragment << visit(classs);
-
-	return classFile;
-}
-
 SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 {
 	if (!headerVisitor()) return visit(classs);
