@@ -30,6 +30,7 @@
 #include "visitors/ElementVisitor.h"
 
 #include "Export/src/tree/CompositeFragment.h"
+#include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/NameImport.h"
@@ -116,14 +117,7 @@ QString CodeComposite::pluginName(OOModel::Declaration* declaration)
 
 CodeComposite* CodeComposite::apiInclude()
 {
-	QString plugin;
-	for (auto unit : units())
-			if (auto declaration = DCast<OOModel::Declaration>(unit->node()))
-			{
-				plugin = pluginName(declaration);
-				if (!plugin.isEmpty()) break;
-			}
-
+	QString plugin = units().first()->node()->firstAncestorOfType<OOModel::Project>()->name();
 	if (plugin.isEmpty()) return nullptr;
 	return new CodeComposite{plugin + "/src/" + plugin.toLower() + "_api"};
 }
