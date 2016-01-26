@@ -27,6 +27,7 @@
 #include "ExportHelpers.h"
 
 #include "Config.h"
+#include "CodeComposite.h"
 
 #include "OOModel/src/declarations/Declaration.h"
 #include "OOModel/src/declarations/Method.h"
@@ -82,6 +83,11 @@ QString ExportHelpers::exportFlag(Model::Node* node)
 	return {};
 }
 
+CodeComposite* ExportHelpers::apiInclude(Model::Node* node)
+{
+	auto name = pluginName(node);
+	if (name.isEmpty()) return nullptr;
+	return new CodeComposite{name + "/src/" + name.toLower() + "_api"};
 }
 
 bool ExportHelpers::isSignalingDeclaration(OOModel::Declaration* declaration)

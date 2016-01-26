@@ -26,6 +26,7 @@
 
 #include "CodeComposite.h"
 #include "Config.h"
+#include "ExportHelpers.h"
 #include "visitors/DeclarationVisitor.h"
 #include "visitors/ElementVisitor.h"
 
@@ -116,13 +117,6 @@ QString CodeComposite::pluginName(OOModel::Declaration* declaration)
 	return namespaceModule->name();
 }
 
-CodeComposite* CodeComposite::apiInclude()
-{
-	QString plugin = units().first()->node()->firstAncestorOfType<OOModel::Project>()->name();
-	if (plugin.isEmpty()) return nullptr;
-	return new CodeComposite{plugin + "/src/" + plugin.toLower() + "_api"};
-}
-
 Export::CompositeFragment* CodeComposite::addNamespaceFragment(Export::CompositeFragment* parentFragment,
 																					OOModel::Module* namespaceNode)
 {
@@ -145,7 +139,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 	if ((units().first()->*part)() == units().first()->headerPart())
 	{
-		if (auto api = apiInclude()) compositeDependencies.insert(api);
+		if (auto api = ExportHelpers::apiInclude(units().first()->node())) compositeDependencies.insert(api);
 		compositeDependencies.remove(this);
 	}
 

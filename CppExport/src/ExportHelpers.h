@@ -42,6 +42,8 @@ namespace OOModel
 
 namespace CppExport {
 
+class CodeComposite;
+
 class CPPEXPORT_API ExportHelpers
 {
 	public:
@@ -53,6 +55,7 @@ class CPPEXPORT_API ExportHelpers
 
 		static QString pluginName(Model::Node* node);
 		static QString exportFlag(Model::Node* node);
+		static CodeComposite* apiInclude(Model::Node* node);
 
 		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
 		static bool isEnumWithQtFlags(OOModel::Class* candidate);
