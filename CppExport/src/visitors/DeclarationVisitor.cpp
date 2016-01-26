@@ -475,7 +475,8 @@ SourceFragment* DeclarationVisitor::variableDeclarationCommonEnd(VariableDeclara
 {
 	auto fragment = new CompositeFragment{variableDeclaration};
 	*fragment << variableDeclaration->nameNode();
-	if (variableDeclaration->initialValue())
+	if (variableDeclaration->initialValue() &&
+		 (!variableDeclaration->modifiers()->isSet(Modifier::Static) || !isHeaderVisitor()))
 	{
 		if (!DCast<ArrayInitializer>(variableDeclaration->initialValue()) ||
 			 DCast<AutoTypeExpression>(variableDeclaration->typeExpression())) *fragment << " = ";
