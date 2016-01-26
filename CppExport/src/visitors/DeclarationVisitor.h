@@ -46,6 +46,7 @@ namespace OOModel {
 	class TypeAlias;
 	class MetaDefinition;
 	class Expression;
+	class Field;
 }
 
 namespace Export {
@@ -96,8 +97,13 @@ class CPPEXPORT_API DeclarationVisitor
 		bool isSourceVisitor();
 
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
+
 		Export::SourceFragment* visitHeaderPart(OOModel::Class* classs);
 		Export::SourceFragment* visitSourcePart(OOModel::Class* classs);
+		Export::SourceFragment* visitHeaderPart(OOModel::VariableDeclaration* variableDeclaration);
+		Export::SourceFragment* visitSourcePart(OOModel::VariableDeclaration* variableDeclaration);
+		Export::SourceFragment* visitSourcePart(OOModel::Field* field);
+		Export::SourceFragment* variableDeclarationCommonEnd(OOModel::VariableDeclaration* variableDeclaration);
 };
 
 inline bool DeclarationVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
