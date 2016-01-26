@@ -28,9 +28,9 @@
 
 #include "cppimport_api.h"
 
-namespace CppExport {
+namespace CppImport {
 
-class CPPIMPORT_API SpecialCasesExport
+class CPPIMPORT_API SpecialCases
 {
 	public:
 

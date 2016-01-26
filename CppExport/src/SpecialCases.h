@@ -40,7 +40,7 @@ namespace Export
 
 namespace CppExport {
 
-class CPPEXPORT_API SpecialCasesExport
+class CPPEXPORT_API SpecialCases
 {
 	public:
 		static void handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment);

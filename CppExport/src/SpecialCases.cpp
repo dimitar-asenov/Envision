@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "SpecialCasesExport.h"
+#include "SpecialCases.h"
 
 #include "ExportHelpers.h"
 
@@ -33,7 +33,7 @@
 
 namespace CppExport {
 
-void SpecialCasesExport::handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment)
+void SpecialCases::handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment)
 {
 	if (ExportHelpers::isEnumWithQtFlags(classs))
 	{

@@ -53,7 +53,7 @@ add_library(CppImport SHARED
 	src/macro/NodeToCloneMap.h
 	src/Comment.h
 	src/IncludesPPCallback.h
-	src/SpecialCasesImport.h
+	src/SpecialCases.h
 	src/CppImportException.cpp
 	test/SimpleTest.cpp
 	src/ClangAstConsumer.cpp
@@ -82,7 +82,7 @@ add_library(CppImport SHARED
 	src/macro/NodeToCloneMap.cpp
 	src/Comment.cpp
 	src/IncludesPPCallback.cpp
-	src/SpecialCasesImport.cpp
+	src/SpecialCases.cpp
 )
 
 target_link_libraries(CppImport ${clangLibs_})

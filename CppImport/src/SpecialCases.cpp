@@ -24,8 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#include "SpecialCasesImport.h"
+#include "SpecialCases.h"
 
-namespace CppExport {
+namespace CppImport {
 
 }

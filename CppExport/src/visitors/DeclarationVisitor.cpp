@@ -30,7 +30,7 @@
 #include "ElementVisitor.h"
 #include "../Config.h"
 #include "../ExportHelpers.h"
-#include "../SpecialCasesExport.h"
+#include "../SpecialCases.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Module.h"
@@ -248,7 +248,7 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 	}
 	*classFragment << ";";
 
-	SpecialCasesExport::handleQT_Flags(classs, fragment);
+	SpecialCases::handleQT_Flags(classs, fragment);
 
 	return fragment;
 }
