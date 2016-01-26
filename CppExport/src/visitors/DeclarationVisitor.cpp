@@ -166,7 +166,7 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 	auto potentialNamespace = classs->firstAncestorOfType<Module>();
 	if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace &&
 		 classs->typeArguments()->isEmpty())
-		*classFragment << ExportHelpers::pluginName(potentialNamespace, classs).toUpper() << "_API ";
+		*classFragment << ExportHelpers::exportFlag(classs);
 
 	*classFragment << classs->nameNode();
 
@@ -362,7 +362,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto potentialNamespace = method->firstAncestorOfType<Module>();
 	if (isHeaderVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace &&
 		 method->typeArguments()->isEmpty())
-		*fragment << ExportHelpers::pluginName(potentialNamespace, method).toUpper() << "_API ";
+		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
 	if (isSourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
@@ -528,7 +528,7 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 
 	if (isHeaderVisitor())
 		*fragment << "extern template class "
-					 << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Project>()->name().toUpper() << "_API ";
+					 << ExportHelpers::exportFlag(explicitTemplateInstantiation);
 	else
 		*fragment << "template class ";
 

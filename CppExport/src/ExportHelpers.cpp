@@ -75,6 +75,13 @@ QString ExportHelpers::pluginName(Model::Node* node)
 	return {};
 }
 
+QString ExportHelpers::exportFlag(Model::Node* node)
+{
+	auto name = pluginName(node);
+	if (!name.isEmpty()) return name.toUpper() + "_API ";
+	return {};
+}
+
 }
 
 bool ExportHelpers::isSignalingDeclaration(OOModel::Declaration* declaration)

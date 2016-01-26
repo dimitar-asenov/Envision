@@ -52,6 +52,7 @@ class CPPEXPORT_API ExportHelpers
 		static bool methodSignaturesMatch(OOModel::Method* method, OOModel::Method* other);
 
 		static QString pluginName(Model::Node* node);
+		static QString exportFlag(Model::Node* node);
 
 		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
 		static bool isEnumWithQtFlags(OOModel::Class* candidate);
