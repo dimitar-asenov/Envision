@@ -37,18 +37,16 @@ void SpecialCasesExport::handleQT_Flags(OOModel::Class* classs, Export::Composit
 {
 	if (ExportHelpers::isEnumWithQtFlags(classs))
 	{
-		auto qDeclareFlagsFragment = new Export::CompositeFragment{classs};
-		*qDeclareFlagsFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
-		*fragment << qDeclareFlagsFragment;
+		auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});
+		*specialCaseFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
 	}
 	else
 		for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
 			if (potentialEnumWithQtFlags != classs && ExportHelpers::isEnumWithQtFlags(potentialEnumWithQtFlags))
 			{
-				auto qDeclareOperatorsForFlagsFragment = new Export::CompositeFragment{classs};
-				*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
-															  << classs->name() << "::" << potentialEnumWithQtFlags->name() << "s)";
-				*fragment << qDeclareOperatorsForFlagsFragment;
+				auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});
+				*specialCaseFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS(" << classs->name() << "::"
+											<< potentialEnumWithQtFlags->name() << "s)";
 			}
 }
 
