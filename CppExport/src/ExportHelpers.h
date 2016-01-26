@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,53 +28,37 @@
 
 #include "cppexport_api.h"
 
-#include "CodeUnit.h"
+namespace Model
+{
+	class Node;
+}
 
-namespace Export {
-	class CompositeFragment;
+namespace OOModel
+{
+	class Declaration;
+	class Method;
+	class Class;
 }
 
 namespace CppExport {
 
-class CPPEXPORT_API CodeComposite
+class CodeComposite;
+
+class CPPEXPORT_API ExportHelpers
 {
 	public:
-		CodeComposite(const QString& name);
+		/**
+		 * used to prevent exporting of declarations already provided in a meta call of the parent.
+		 */
+		static bool shouldExportMethod(OOModel::Method* method, bool isHeaderVisitor, bool isSourceVisitor);
+		static bool methodSignaturesMatch(OOModel::Method* method, OOModel::Method* other);
 
-		const QString& name() const;
-		const QList<CodeUnit*>& units() const;
-		void addUnit(CodeUnit* unit);
+		static QString pluginName(Model::Node* node);
+		static QString exportFlag(Model::Node* node);
+		static CodeComposite* apiInclude(Model::Node* node);
 
-		void fragments(Export::SourceFragment*& headerFragment, Export::SourceFragment*& sourceFragment);
-
-	private:
-		const QString name_;
-		QList<CodeUnit*> units_;
-
-		Export::SourceFragment* partFragment(CodeUnitPart* (CodeUnit::*part) ());
-		Export::SourceFragment* headerFragment();
-		Export::SourceFragment* sourceFragment();
-
-		QSet<Model::Node*> reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
-																QSet<Model::Node*> softDependencies);
-		QString relativePath(CodeComposite* other);
-		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
-
-		template <typename T>
-		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
-													std::function<T*(QList<T*>&)> selector = nullptr);
-		QString pluginName(OOModel::Declaration* declaration);
-		void sortUnits(CodeUnitPart*(CodeUnit::*part)(),
-							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
-		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
-																		OOModel::Module* namespaceNode);
+		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
+		static bool isEnumWithQtFlags(OOModel::Class* candidate);
 };
-
-inline const QString& CodeComposite::name() const { return name_; }
-inline const QList<CodeUnit*>& CodeComposite::units() const { return units_; }
-
-inline Export::SourceFragment* CodeComposite::headerFragment()
-{ return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
-inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
 
 }

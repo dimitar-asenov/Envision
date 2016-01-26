@@ -17,6 +17,8 @@ add_library(CppExport SHARED
 	src/CodeUnit.h
 	src/CodeComposite.h
 	src/CodeUnitPart.h
+	src/ExportHelpers.h
+	src/SpecialCases.h
 	src/CppExportException.cpp
 	src/CppExportPlugin.cpp
 	test/SimpleTest.cpp
@@ -29,6 +31,8 @@ add_library(CppExport SHARED
 	src/CodeUnit.cpp
 	src/CodeComposite.cpp
 	src/CodeUnitPart.cpp
+	src/ExportHelpers.cpp
+	src/SpecialCases.cpp
 )
 
 envision_plugin(CppExport OOModel Export OOInteraction)

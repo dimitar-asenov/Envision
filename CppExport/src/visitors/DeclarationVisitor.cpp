@@ -29,6 +29,8 @@
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
 #include "../Config.h"
+#include "../ExportHelpers.h"
+#include "../SpecialCases.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Module.h"
@@ -75,7 +77,7 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 
 SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 {
-	if (!headerVisitor()) return visit(classs);
+	if (!isHeaderVisitor()) return visit(classs);
 
 	auto fragment = new CompositeFragment{classs, "spacedSections"};
 	*fragment << visit(classs);
@@ -112,185 +114,149 @@ bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
 	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
 }
 
-bool DeclarationVisitor::isSignalingDeclaration(Declaration* declaration)
+SourceFragment* DeclarationVisitor::visitSourcePart(Class* classs)
 {
-	for (auto expression : *declaration->metaCalls())
-		if (auto metaCall = DCast<MetaCallExpression>(expression))
-			if (auto reference = DCast<ReferenceExpression>(metaCall->callee()))
-				if (reference->name() == "PREDEF_SIGNAL")
-					return true;
-	return false;
+	auto fragment = new CompositeFragment{classs, "sections"};
+	auto sections = fragment->append( new CompositeFragment{classs, "sections"});
+	*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections",
+							[](Expression* expression) { return metaCallFilter(expression, true); });
+	*sections << list(classs->classes(), this, "sections");
+	*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
+	{
+		return method->typeArguments()->isEmpty() &&
+					 !method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+					 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
+					 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
+					 !method->modifiers()->isSet(OOModel::Modifier::Default);
+	});
+	*sections << list(classs->fields(), this, "vertical", [](Field* field)
+	{
+		if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
+			return parentClass->typeArguments()->isEmpty();
+		return true;
+	});
+	return fragment;
 }
 
-SourceFragment* DeclarationVisitor::visit(Class* classs)
+SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 {
 	auto fragment = new CompositeFragment{classs};
+	auto classFragment = fragment->append(new CompositeFragment{classs});
 
-	if (sourceVisitor())
+	bool isFriendClass = false;
+	if (auto parentClass = classs->firstAncestorOfType<Class>())
+		isFriendClass = parentClass->friends()->isAncestorOf(classs);
+
+	if (!isFriendClass)
 	{
-		auto sections = fragment->append( new CompositeFragment{classs, "sections"});
-		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections",
-								[](Expression* expression) { return metaCallFilter(expression, true); });
-		*sections << list(classs->classes(), this, "sections");
-		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
-		{
-			return method->typeArguments()->isEmpty() &&
-						 !method->modifiers()->isSet(OOModel::Modifier::Inline) &&
-						 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
-						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
-						 !method->modifiers()->isSet(OOModel::Modifier::Default);
-		});
-		*sections << list(classs->fields(), this, "vertical", [](Field* field)
-		{
-			if (auto parentClass = field->firstAncestorOfType<OOModel::Class>())
-				return parentClass->typeArguments()->isEmpty();
-			return true;
-		});
+		*classFragment << compositeNodeComments(classs, "declarationComment");
+
+		if (!classs->typeArguments()->isEmpty())
+			*classFragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
+		*classFragment << printAnnotationsAndModifiers(classs);
 	}
 	else
+		*classFragment << "friend ";
+
+	if (Class::ConstructKind::Class == classs->constructKind()) *classFragment << "class ";
+	else if (Class::ConstructKind::Struct == classs->constructKind()) *classFragment << "struct ";
+	else if (Class::ConstructKind::Enum == classs->constructKind()) *classFragment << "enum ";
+	else notAllowed(classs);
+
+	if (!isFriendClass && classs->typeArguments()->isEmpty())
+		*classFragment << ExportHelpers::exportFlag(classs);
+
+	*classFragment << classs->nameNode();
+
+	if (!isFriendClass)
 	{
-		bool friendClass = false;
-		if (auto parentClass = classs->firstAncestorOfType<Class>())
-			friendClass = parentClass->friends()->isAncestorOf(classs);
-
-		if (!friendClass)
+		if (classs->modifiers()->isSet(Modifier::Final))
+			*classFragment << " " << new TextFragment{classs->modifiers(), "final"};
+		if (!classs->baseClasses()->isEmpty())
 		{
-			*fragment << compositeNodeComments(classs, "declarationComment");
-
-			if (!classs->typeArguments()->isEmpty())
-				*fragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
-
-			*fragment << printAnnotationsAndModifiers(classs);
-		}
-		else
-			*fragment << "friend ";
-
-		if (Class::ConstructKind::Class == classs->constructKind()) *fragment << "class ";
-		else if (Class::ConstructKind::Struct == classs->constructKind()) *fragment << "struct ";
-		else if (Class::ConstructKind::Enum == classs->constructKind()) *fragment << "enum ";
-		else notAllowed(classs);
-
-		auto potentialNamespace = classs->firstAncestorOfType<Module>();
-		if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace &&
-			 classs->typeArguments()->isEmpty())
-			*fragment << pluginName(potentialNamespace, classs).toUpper() << "_API ";
-
-		*fragment << classs->nameNode();
-
-		if (!friendClass)
-		{
-			if (classs->modifiers()->isSet(Modifier::Final))
-				*fragment << " " << new TextFragment{classs->modifiers(), "final"};
-			if (!classs->baseClasses()->isEmpty())
+			// TODO: inheritance modifiers like private, virtual... (not only public)
+			auto baseClassesFragment = classFragment->append(new CompositeFragment{classs->baseClasses(), "comma"});
+			for (auto baseClass : *classs->baseClasses())
 			{
-				// TODO: inheritance modifiers like private, virtual... (not only public)
-				auto baseClassesFragment = new CompositeFragment{classs->baseClasses(), "comma"};
-				for (auto baseClass : *classs->baseClasses())
-				{
-					auto baseClassFragment = new CompositeFragment{baseClass};
-					*baseClassFragment << "public " << expression(baseClass);
-					*baseClassesFragment << baseClassFragment;
-				}
-				*fragment << " : " << baseClassesFragment;
-			}
-
-			auto sections = fragment->append( new CompositeFragment{classs, "bodySections"});
-			*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
-									[](Expression* expression) { return metaCallFilter(expression, false); });
-			*sections << list(classs->enumerators(), ElementVisitor(data()), "sections");
-			*sections << list(classs->friends(), this, "sections");
-
-			auto publicSection = new CompositeFragment{classs, "accessorSections"};
-			bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
-			{
-					if (isSignalingDeclaration(declaration)) return false;
-					return declaration->modifiers()->isSet(Modifier::Public);
-			});
-			auto signalingSection = new CompositeFragment{classs, "accessorSections"};
-			bool hasSignalingSection = addMemberDeclarations(classs, signalingSection, [](Declaration* declaration)
-			{
-					return isSignalingDeclaration(declaration);
-			});
-			auto protectedSection = new CompositeFragment{classs, "accessorSections"};
-			bool hasProtectedSection = addMemberDeclarations(classs, protectedSection,  [](Declaration* declaration)
-			{
-					if (isSignalingDeclaration(declaration)) return false;
-					return declaration->modifiers()->isSet(Modifier::Protected);
-			});
-			auto privateSection = new CompositeFragment{classs, "accessorSections"};
-			bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
-			{
-					if (DCast<OOModel::ExplicitTemplateInstantiation>(declaration)) return false;
-					if (isSignalingDeclaration(declaration)) return false;
-					return !declaration->modifiers()->isSet(Modifier::Public) &&
-					!declaration->modifiers()->isSet(Modifier::Protected);
-			});
-
-			if (hasPublicSection)
-			{
-				if (hasSignalingSection || hasProtectedSection || hasPrivateSection ||
-					 classs->constructKind() != Class::ConstructKind::Struct)
-					*sections << "public:";
-				sections->append(publicSection);
-			}
-			if (hasSignalingSection)
-			{
-				if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
-
-				*sections << "Q_SIGNALS:";
-				sections->append(signalingSection);
-			}
-			if (hasProtectedSection)
-			{
-				if (hasSignalingSection || hasSignalingSection) *sections << "\n"; // add newline between two accessor sections
-
-				*sections << "protected:";
-				sections->append(protectedSection);
-			}
-			if (hasPrivateSection)
-			{
-				if (hasPublicSection || hasSignalingSection || hasProtectedSection)
-					*sections << "\n"; // add newline between two accessor sections
-
-				*sections << "private:";
-				sections->append(privateSection);
+				auto baseClassFragment = baseClassesFragment->append(new CompositeFragment{baseClass});
+				*baseClassFragment << "public " << expression(baseClass);
 			}
 		}
 
-		*fragment << ";";
+		auto sections = classFragment->append(new CompositeFragment{classs, "bodySections"});
+		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
+								[](Expression* expression) { return metaCallFilter(expression, false); });
+		*sections << list(classs->enumerators(), ElementVisitor(data()), "sections");
+		*sections << list(classs->friends(), this, "sections");
 
-		auto qtFlagsComposite = new CompositeFragment{classs, "sections"};
-		*qtFlagsComposite << fragment;
-		if (isEnumWithQtFlags(classs))
+		auto publicSection = new CompositeFragment{classs, "accessorSections"};
+		bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
 		{
-			auto qDeclareFlagsFragment = new CompositeFragment{classs};
-			*qDeclareFlagsFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
-			*qtFlagsComposite << qDeclareFlagsFragment;
+				if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
+				return declaration->modifiers()->isSet(Modifier::Public);
+		});
+		auto signalingSection = new CompositeFragment{classs, "accessorSections"};
+		bool hasSignalingSection = addMemberDeclarations(classs, signalingSection, [](Declaration* declaration)
+		{
+				return ExportHelpers::isSignalingDeclaration(declaration);
+		});
+		auto protectedSection = new CompositeFragment{classs, "accessorSections"};
+		bool hasProtectedSection = addMemberDeclarations(classs, protectedSection,  [](Declaration* declaration)
+		{
+				if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
+				return declaration->modifiers()->isSet(Modifier::Protected);
+		});
+		auto privateSection = new CompositeFragment{classs, "accessorSections"};
+		bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
+		{
+				if (DCast<OOModel::ExplicitTemplateInstantiation>(declaration)) return false;
+				if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
+				return !declaration->modifiers()->isSet(Modifier::Public) &&
+				!declaration->modifiers()->isSet(Modifier::Protected);
+		});
+
+		if (hasPublicSection)
+		{
+			if (hasSignalingSection || hasProtectedSection || hasPrivateSection ||
+				 classs->constructKind() != Class::ConstructKind::Struct)
+				*sections << "public:";
+			sections->append(publicSection);
 		}
-		else
-			for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
-				if (potentialEnumWithQtFlags != classs && isEnumWithQtFlags(potentialEnumWithQtFlags))
-				{
-					auto qDeclareOperatorsForFlagsFragment = new CompositeFragment{classs};
-					*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
-												  << classs->name() << "::" << potentialEnumWithQtFlags->name() << "s)";
-					*qtFlagsComposite << qDeclareOperatorsForFlagsFragment;
-				}
-		return qtFlagsComposite;
+		if (hasSignalingSection)
+		{
+			if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
+
+			*sections << "Q_SIGNALS:";
+			sections->append(signalingSection);
+		}
+		if (hasProtectedSection)
+		{
+			if (hasSignalingSection || hasSignalingSection) *sections << "\n"; // add newline between two accessor sections
+
+			*sections << "protected:";
+			sections->append(protectedSection);
+		}
+		if (hasPrivateSection)
+		{
+			if (hasPublicSection || hasSignalingSection || hasProtectedSection)
+				*sections << "\n"; // add newline between two accessor sections
+
+			*sections << "private:";
+			sections->append(privateSection);
+		}
 	}
+	*classFragment << ";";
+
+	SpecialCases::handleQT_Flags(classs, fragment);
 
 	return fragment;
 }
 
-bool DeclarationVisitor::isEnumWithQtFlags(OOModel::Class* candidate)
+SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
-	if (candidate->constructKind() == Class::ConstructKind::Enum)
-		for (auto entry : *candidate->metaCalls())
-			if (auto metaCall = DCast<OOModel::MetaCallExpression>(entry))
-				if (auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
-					if (reference->name() == "QT_Flags")
-						return true;
-	return false;
+	if (isSourceVisitor()) return visitSourcePart(classs);
+	return visitHeaderPart(classs);
 }
 
 template<typename Predicate>
@@ -306,51 +272,6 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 			 !fields->fragments().empty() ||
 			 !classes->fragments().empty() ||
 			 !methods->fragments().empty();
-}
-
-bool DeclarationVisitor::shouldExportMethod(Method* method)
-{
-	if (headerVisitor())
-	{
-		auto parentDeclaration = method->firstAncestorOfType<Declaration>();
-		Q_ASSERT(parentDeclaration);
-
-		for (auto expression : *(parentDeclaration->metaCalls()))
-			if (auto metaCall = DCast<OOModel::MetaCallExpression>(expression))
-				for (auto generatedMethod : Model::Node::childrenOfType<Method>(metaCall->generatedTree()))
-					if (methodSignaturesMatch(method, generatedMethod))
-						return false;
-	}
-	if (sourceVisitor())
-		return !isSignalingDeclaration(method);
-	return true;
-}
-
-bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
-{
-	// TODO: this method can be made more specific and relocated to generic method overload resolution
-	if (method->arguments()->size() != other->arguments()->size() || method->symbolName() != other->symbolName())
-		return false;
-
-	for (auto i = 0; i < method->arguments()->size(); i++)
-		if (method->arguments()->at(i)->name() != other->arguments()->at(i)->name())
-			return false;
-
-	return true;
-}
-
-QString DeclarationVisitor::pluginName(Module* namespaceModule, Declaration* declaration)
-{
-	auto value = Config::instance().exportFlagMap().value(namespaceModule->name() + "/" + declaration->name());
-	if (!value.isEmpty()) return value;
-
-	if (namespaceModule->name() == "Model")
-		return "ModelBase";
-	else if (namespaceModule->name() == "Visualization")
-		return "VisualizationBase";
-	else if (namespaceModule->name() == "Interaction")
-		return "InteractionBase";
-	return namespaceModule->name();
 }
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
@@ -378,7 +299,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 
-	if (!shouldExportMethod(method)) return nullptr;
+	if (!ExportHelpers::shouldExportMethod(method, isHeaderVisitor(), isSourceVisitor())) return nullptr;
 
 	QList<Class*> parentClasses;
 	auto parentClass = method->firstAncestorOfType<Class>();
@@ -391,11 +312,11 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto fragment = new CompositeFragment{method};
 
 	// comments
-	if (!sourceVisitor())
+	if (!isSourceVisitor())
 		*fragment << compositeNodeComments(method, "declarationComment");
 
 	// template<typename ...>
-	if (!headerVisitor())
+	if (!isHeaderVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			for (auto i = 0; i < parentClasses.size(); i++)
 				if (!parentClasses.at(i)->typeArguments()->isEmpty())
@@ -404,24 +325,24 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
 	// friend keyword
-	if (!sourceVisitor())
+	if (!isSourceVisitor())
 		if (!parentClasses.empty())
 			if (parentClasses.last()->friends()->isAncestorOf(method))
 				*fragment << "friend ";
 
 	// private, public, ...
-	if (!sourceVisitor())
+	if (!isSourceVisitor())
 		*fragment << printAnnotationsAndModifiers(method);
 
 	// inline
-	if (!headerVisitor())
+	if (!isHeaderVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
 	// operator
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
-		if (sourceVisitor())
+		if (isSourceVisitor())
 			if (!parentClasses.empty())
 				*fragment << parentClasses.last()->name() << "::";
 		*fragment << "operator ";
@@ -437,13 +358,11 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	auto potentialNamespace = method->firstAncestorOfType<Module>();
-	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace &&
-		 method->typeArguments()->isEmpty())
-		*fragment << pluginName(potentialNamespace, method).toUpper() << "_API ";
+	if (isHeaderVisitor() && method->typeArguments()->isEmpty())
+		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
-	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
+	if (isSourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)
 		for (auto i = 0; i < parentClasses.size(); i++)
 		{
 			*fragment << parentClasses.at(i)->name();
@@ -465,7 +384,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->modifiers()->isSet(Modifier::Const))
 		*fragment << " " << new TextFragment{method->modifiers(), "const"};
 
-	if (!headerVisitor())
+	if (!isHeaderVisitor())
 		if (!method->memberInitializers()->isEmpty())
 			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(data()), "comma");
 
@@ -476,7 +395,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << ")";
 	}
 
-	if (!sourceVisitor())
+	if (!isSourceVisitor())
 	{
 		if (method->modifiers()->isSet(Modifier::Override))
 			*fragment << new TextFragment{method->modifiers(), " override"};
@@ -489,7 +408,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << ";";
 	}
 
-	if (!headerVisitor())
+	if (!isHeaderVisitor())
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
 
 	notAllowed(method->subDeclarations());
@@ -514,7 +433,7 @@ SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* 
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment{variableDeclaration};
-	if (!sourceVisitor())
+	if (!isSourceVisitor())
 	{
 		*fragment << compositeNodeComments(variableDeclaration, "declarationComment");
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
@@ -527,7 +446,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		}
 		if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	}
-	else if (sourceVisitor() && (!DCast<Field>(variableDeclaration) ||
+	else if (isSourceVisitor() && (!DCast<Field>(variableDeclaration) ||
 										  variableDeclaration->modifiers()->isSet(Modifier::Static) ||
 										  variableDeclaration->modifiers()->isSet(Modifier::ConstExpr)))
 	{
@@ -604,9 +523,9 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 {
 	auto fragment = new CompositeFragment{explicitTemplateInstantiation};
 
-	if (headerVisitor())
+	if (isHeaderVisitor())
 		*fragment << "extern template class "
-					 << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Project>()->name().toUpper() << "_API ";
+					 << ExportHelpers::exportFlag(explicitTemplateInstantiation);
 	else
 		*fragment << "template class ";
 

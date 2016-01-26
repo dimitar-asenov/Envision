@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,57 +24,30 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "SpecialCases.h"
 
-#include "cppexport_api.h"
+#include "ExportHelpers.h"
 
-#include "CodeUnit.h"
-
-namespace Export {
-	class CompositeFragment;
-}
+#include "Export/src/tree/CompositeFragment.h"
+#include "OOModel/src/declarations/Class.h"
 
 namespace CppExport {
 
-class CPPEXPORT_API CodeComposite
+void SpecialCases::handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment)
 {
-	public:
-		CodeComposite(const QString& name);
-
-		const QString& name() const;
-		const QList<CodeUnit*>& units() const;
-		void addUnit(CodeUnit* unit);
-
-		void fragments(Export::SourceFragment*& headerFragment, Export::SourceFragment*& sourceFragment);
-
-	private:
-		const QString name_;
-		QList<CodeUnit*> units_;
-
-		Export::SourceFragment* partFragment(CodeUnitPart* (CodeUnit::*part) ());
-		Export::SourceFragment* headerFragment();
-		Export::SourceFragment* sourceFragment();
-
-		QSet<Model::Node*> reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
-																QSet<Model::Node*> softDependencies);
-		QString relativePath(CodeComposite* other);
-		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
-
-		template <typename T>
-		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
-													std::function<T*(QList<T*>&)> selector = nullptr);
-		QString pluginName(OOModel::Declaration* declaration);
-		void sortUnits(CodeUnitPart*(CodeUnit::*part)(),
-							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
-		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
-																		OOModel::Module* namespaceNode);
-};
-
-inline const QString& CodeComposite::name() const { return name_; }
-inline const QList<CodeUnit*>& CodeComposite::units() const { return units_; }
-
-inline Export::SourceFragment* CodeComposite::headerFragment()
-{ return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
-inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
+	if (ExportHelpers::isEnumWithQtFlags(classs))
+	{
+		auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});
+		*specialCaseFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
+	}
+	else
+		for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
+			if (potentialEnumWithQtFlags != classs && ExportHelpers::isEnumWithQtFlags(potentialEnumWithQtFlags))
+			{
+				auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});
+				*specialCaseFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS(" << classs->name() << "::"
+											<< potentialEnumWithQtFlags->name() << "s)";
+			}
+}
 
 }

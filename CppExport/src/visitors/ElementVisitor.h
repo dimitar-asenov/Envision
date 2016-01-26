@@ -63,7 +63,7 @@ class ElementVisitor
 		Export::SourceFragment* visitTemplateArguments(Model::TypedList<OOModel::FormalTypeArgument>* typeArguments);
 
 	private:
-		bool headerVisitor();
+		bool isHeaderVisitor();
 };
 
 }

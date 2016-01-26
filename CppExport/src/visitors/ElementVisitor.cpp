@@ -62,14 +62,14 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 		else
 			*fragment << expression(argument->typeExpression());
 
-		if (headerVisitor() || argument->isUsedInParentMethod())
+		if (isHeaderVisitor() || argument->isUsedInParentMethod())
 			*fragment << " " << argument->nameNode();
 
 		if (DCast<ArrayTypeExpression>(argument->typeExpression()))
 			*fragment << "[]";
 	}
 
-	if (headerVisitor() && argument->initialValue())
+	if (isHeaderVisitor() && argument->initialValue())
 		*fragment << " = " << ExpressionVisitor(data()).visit(argument->initialValue());
 
 	return fragment;
@@ -93,7 +93,7 @@ SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 {
 	auto fragment = new CompositeFragment{typeArgument};
 	*fragment << "typename " << typeArgument->nameNode();
-	if (headerVisitor() && typeArgument->defaultType())
+	if (isHeaderVisitor() && typeArgument->defaultType())
 		*fragment << " = " << expression(typeArgument->defaultType());
 	return fragment;
 }
@@ -145,6 +145,6 @@ SourceFragment* ElementVisitor::visitTemplateArguments(Model::TypedList<FormalTy
 	return list(typeArguments, this, "templateArgsList");
 }
 
-bool ElementVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
+bool ElementVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
 
 }

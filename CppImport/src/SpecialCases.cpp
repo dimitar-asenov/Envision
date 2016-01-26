@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,41 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "SpecialCases.h"
 
-#include "../cppexport_api.h"
-
-#include "Export/src/writer/TextToNodeMap.h"
-#include "Export/src/tree/SourceDir.h"
-#include "Export/src/ExportMapContainer.h"
-#include "Export/src/ExportError.h"
-
-namespace Model {
-	class TreeManager;
-}
-
-namespace Export {
-	class FragmentLayouter;
-}
-
-namespace CppExport {
-
-class CodeUnit;
-class CodeComposite;
-
-class CPPEXPORT_API CppExporter {
-	public:
-		static QList<Export::ExportError> exportTree(Model::TreeManager* manager,
-																	const QString& pathToProjectContainerDirectory);
-		static Export::ExportMapContainer& exportMaps();
-
-	private:
-		static void units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result,
-								QHash<QString, QString>& mergeMap);
-		static QList<CodeComposite*> mergeUnits(QList<CodeUnit*>& units, QHash<QString, QString>& mergeMap);
-		static void createFilesFromComposite(Export::SourceDir* directory, CodeComposite* codeComposite);
-
-		static Export::FragmentLayouter layouter();
-};
+namespace CppImport {
 
 }
