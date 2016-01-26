@@ -346,6 +346,27 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 		if (!e->prefix() && !isHeaderVisitor() && e->target())
 		{
+			/* export problem
+			 * ==============
+			 * in case we have a resolved reference without prefix and we are printing the source part we might have
+			 * to qualify the reference depending on the target context.
+			 *
+			 * for example the "AdapterManager::AdapterKey" in AdapterManager.cpp:
+			 * QHash<AdapterManager::AdapterKey, AdapterManager::AdapterCreationFunction>& AdapterManager::adapters()
+			 *
+			 * the imported code would be printed like this:
+			 * QHash<AdapterKey, AdapterCreationFunction>& AdapterManager::adapters()
+			 * because AdapterKey is defined inside AdapterManager and therefore we do not need the qualification in
+			 * the header part or Envision's tree model. However when it appears in the public interface and the is used
+			 * in a method definition outside the declaration of AdapterManager we have to compute this prefix.
+			 */
+
+			/*
+			 * addPrefix is true if the reference occurs inside the results of the parent method or
+			 * in the type of the parent field.
+			 *
+			 * inBodyOfMethod is true if the reference occurs inside the parent method body
+			 */
 			bool addPrefix = false;
 			bool inBodyOfMethod = false;
 			if (auto parentMethod = e->firstAncestorOfType<Method>())
@@ -362,14 +383,19 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 			if (addPrefix)
 				if (auto parentClass = e->firstAncestorOfType<Class>())
 				{
+					/*
+					 * if the target of the reference is inside the parent class and it does not target a friend declaration
+					 * or a formal type argument then add the parent class name as prefix.
+					 */
 					if (parentClass->isAncestorOf(e->target()) &&
 						 !parentClass->friends()->isAncestorOf(e->target()) &&
 						 !DCast<FormalTypeArgument>(e->target()))
-						// if e has no prefix and is in the result of a method or the type of a field
-						// and the resolved target is inside the parent class then we qualifiy it
 					{
+						// in case the parent class is a template class specifiy it as a typename
 						if (!parentClass->typeArguments()->isEmpty())
 							*fragment << "typename ";
+
+						// prefix with parent class name and type arguments
 						*fragment << parentClass->name();
 						if (!parentClass->typeArguments()->isEmpty())
 						{
@@ -382,14 +408,24 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 					}
 				}
 
+			/*
+			 * in case where the target is the parent class and the reference is not inside the body of a method
+			 * qualify the reference with all ancestor classes.
+			 */
 			if (auto parentClass = e->firstAncestorOfType<Class>())
 				if (e->target() == parentClass && !inBodyOfMethod)
 				{
 					auto currentParent = parentClass->firstAncestorOfType<Class>();
 					while (currentParent)
 					{
+						/*
+						 * if the current ancestor is a template class and the reference is in the results of a method or the
+						 * type of a field add "typename"
+						 */
 						if (!currentParent->typeArguments()->isEmpty() && addPrefix)
 							*fragment << "typename ";
+
+						// prefix with ancestor class name and type arguments
 						*fragment << currentParent->name();
 						if (!currentParent->typeArguments()->isEmpty())
 						{
@@ -406,6 +442,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				}
 		}
 
+		// reference name and type arguments
 		*fragment << e->name();
 		if (!e->typeArguments()->isEmpty()) *fragment << list(e->typeArguments(), this, "typeArgsList");
 	}
