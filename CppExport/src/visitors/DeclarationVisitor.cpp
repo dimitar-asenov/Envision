@@ -141,54 +141,51 @@ SourceFragment* DeclarationVisitor::visitSourcePart(Class* classs)
 SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 {
 	auto fragment = new CompositeFragment{classs};
-	auto classDeclarationFragment = new CompositeFragment{classs};
-	*fragment << classDeclarationFragment;
+	auto classFragment = fragment->append(new CompositeFragment{classs});
 	bool friendClass = false;
 	if (auto parentClass = classs->firstAncestorOfType<Class>())
 		friendClass = parentClass->friends()->isAncestorOf(classs);
 
 	if (!friendClass)
 	{
-		*classDeclarationFragment << compositeNodeComments(classs, "declarationComment");
+		*classFragment << compositeNodeComments(classs, "declarationComment");
 
 		if (!classs->typeArguments()->isEmpty())
-			*classDeclarationFragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
+			*classFragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
-		*classDeclarationFragment << printAnnotationsAndModifiers(classs);
+		*classFragment << printAnnotationsAndModifiers(classs);
 	}
 	else
-		*classDeclarationFragment << "friend ";
+		*classFragment << "friend ";
 
-	if (Class::ConstructKind::Class == classs->constructKind()) *classDeclarationFragment << "class ";
-	else if (Class::ConstructKind::Struct == classs->constructKind()) *classDeclarationFragment << "struct ";
-	else if (Class::ConstructKind::Enum == classs->constructKind()) *classDeclarationFragment << "enum ";
+	if (Class::ConstructKind::Class == classs->constructKind()) *classFragment << "class ";
+	else if (Class::ConstructKind::Struct == classs->constructKind()) *classFragment << "struct ";
+	else if (Class::ConstructKind::Enum == classs->constructKind()) *classFragment << "enum ";
 	else notAllowed(classs);
 
 	auto potentialNamespace = classs->firstAncestorOfType<Module>();
 	if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace &&
 		 classs->typeArguments()->isEmpty())
-		*classDeclarationFragment << ExportHelpers::pluginName(potentialNamespace, classs).toUpper() << "_API ";
+		*classFragment << ExportHelpers::pluginName(potentialNamespace, classs).toUpper() << "_API ";
 
-	*classDeclarationFragment << classs->nameNode();
+	*classFragment << classs->nameNode();
 
 	if (!friendClass)
 	{
 		if (classs->modifiers()->isSet(Modifier::Final))
-			*classDeclarationFragment << " " << new TextFragment{classs->modifiers(), "final"};
+			*classFragment << " " << new TextFragment{classs->modifiers(), "final"};
 		if (!classs->baseClasses()->isEmpty())
 		{
 			// TODO: inheritance modifiers like private, virtual... (not only public)
-			auto baseClassesFragment = new CompositeFragment{classs->baseClasses(), "comma"};
+			auto baseClassesFragment = classFragment->append(new CompositeFragment{classs->baseClasses(), "comma"});
 			for (auto baseClass : *classs->baseClasses())
 			{
-				auto baseClassFragment = new CompositeFragment{baseClass};
+				auto baseClassFragment = baseClassesFragment->append(new CompositeFragment{baseClass});
 				*baseClassFragment << "public " << expression(baseClass);
-				*baseClassesFragment << baseClassFragment;
 			}
-			*classDeclarationFragment << " : " << baseClassesFragment;
 		}
 
-		auto sections = classDeclarationFragment->append( new CompositeFragment{classs, "bodySections"});
+		auto sections = classFragment->append(new CompositeFragment{classs, "bodySections"});
 		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
 								[](Expression* expression) { return metaCallFilter(expression, false); });
 		*sections << list(classs->enumerators(), ElementVisitor(data()), "sections");
@@ -250,8 +247,7 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 			sections->append(privateSection);
 		}
 	}
-
-	*classDeclarationFragment << ";";
+	*classFragment << ";";
 
 	SpecialCasesExport::handleQT_Flags(classs, fragment);
 
