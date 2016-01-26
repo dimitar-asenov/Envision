@@ -164,7 +164,8 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 	else if (Class::ConstructKind::Enum == classs->constructKind()) *classFragment << "enum ";
 	else notAllowed(classs);
 
-	if (!isFriendClass && classs->typeArguments()->isEmpty())
+	if (!isFriendClass && DCast<Module>(classs->firstAncestorOfType<Declaration>()) &&
+		 classs->typeArguments()->isEmpty())
 		*classFragment << ExportHelpers::exportFlag(classs);
 
 	*classFragment << classs->nameNode();
@@ -359,7 +360,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	if (isHeaderVisitor() && method->typeArguments()->isEmpty())
+	if (isHeaderVisitor() && DCast<Module>(method->firstAncestorOfType<Declaration>()) &&
+		 method->typeArguments()->isEmpty())
 		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
