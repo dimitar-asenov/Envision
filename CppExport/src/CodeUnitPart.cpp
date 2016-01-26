@@ -81,6 +81,33 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 	for (auto reference : referenceNodes_)
 		if (auto target = fixedTarget(reference))
 		{
+			/*
+			 * when comparing two pointers of different types the compiler has to know the full structure of the
+			 * classes in order to compute comparable pointers. we compute these hard dependencies here.
+			 */
+			if (auto parentBinaryOperation = DCast<OOModel::BinaryOperation>(reference->parent()))
+				if (auto leftType = parentBinaryOperation->left()->type())
+				{
+					if (auto rightType = parentBinaryOperation->right()->type())
+					{
+						auto leftPointerType = dynamic_cast<const OOModel::PointerType*>(leftType);
+						auto rightPointerType = dynamic_cast<const OOModel::PointerType*>(rightType);
+						if (leftPointerType && rightPointerType)
+						{
+							auto leftClassType = dynamic_cast<const OOModel::ClassType*>(leftPointerType->baseType());
+							auto rightClassType = dynamic_cast<const OOModel::ClassType*>(rightPointerType->baseType());
+							if (leftClassType && rightClassType)
+								if (leftClassType->classDefinition() != rightClassType->classDefinition())
+								{
+									hardTargets_.insert(leftClassType->classDefinition());
+									hardTargets_.insert(rightClassType->classDefinition());
+								}
+						}
+						SAFE_DELETE(rightType);
+					}
+					SAFE_DELETE(leftType);
+				}
+
 			if (isNameOnlyDependency(reference))
 				softTargets_.insert(target);
 			else
