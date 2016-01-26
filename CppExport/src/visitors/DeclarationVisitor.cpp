@@ -432,10 +432,10 @@ SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* 
 SourceFragment* DeclarationVisitor::visitHeaderPart(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment{variableDeclaration};
-	*fragment << compositeNodeComments(variableDeclaration, "declarationComment");
-	*fragment << printAnnotationsAndModifiers(variableDeclaration);
-	*fragment << expression(variableDeclaration->typeExpression()) << " ";
-	*fragment << variableDeclarationCommonEnd(variableDeclaration);
+	*fragment << compositeNodeComments(variableDeclaration, "declarationComment")
+				 << printAnnotationsAndModifiers(variableDeclaration)
+				 << expression(variableDeclaration->typeExpression()) << " "
+				 << variableDeclarationCommonEnd(variableDeclaration);
 	return fragment;
 }
 
@@ -492,9 +492,9 @@ SourceFragment* DeclarationVisitor::visitSourcePart(VariableDeclaration* variabl
 	Q_ASSERT(!DCast<Field>(variableDeclaration));
 
 	auto fragment = new CompositeFragment{variableDeclaration};
-	*fragment << printAnnotationsAndModifiers(variableDeclaration);
-	*fragment << expression(variableDeclaration->typeExpression()) << " ";
-	*fragment << variableDeclarationCommonEnd(variableDeclaration);
+	*fragment << printAnnotationsAndModifiers(variableDeclaration)
+				 << expression(variableDeclaration->typeExpression()) << " "
+				 << variableDeclarationCommonEnd(variableDeclaration);
 	return fragment;
 }
 
