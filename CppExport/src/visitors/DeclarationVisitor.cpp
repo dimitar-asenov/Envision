@@ -142,11 +142,12 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 {
 	auto fragment = new CompositeFragment{classs};
 	auto classFragment = fragment->append(new CompositeFragment{classs});
-	bool friendClass = false;
-	if (auto parentClass = classs->firstAncestorOfType<Class>())
-		friendClass = parentClass->friends()->isAncestorOf(classs);
 
-	if (!friendClass)
+	bool isFriendClass = false;
+	if (auto parentClass = classs->firstAncestorOfType<Class>())
+		isFriendClass = parentClass->friends()->isAncestorOf(classs);
+
+	if (!isFriendClass)
 	{
 		*classFragment << compositeNodeComments(classs, "declarationComment");
 
@@ -163,14 +164,12 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 	else if (Class::ConstructKind::Enum == classs->constructKind()) *classFragment << "enum ";
 	else notAllowed(classs);
 
-	auto potentialNamespace = classs->firstAncestorOfType<Module>();
-	if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace &&
-		 classs->typeArguments()->isEmpty())
+	if (!isFriendClass && classs->typeArguments()->isEmpty())
 		*classFragment << ExportHelpers::exportFlag(classs);
 
 	*classFragment << classs->nameNode();
 
-	if (!friendClass)
+	if (!isFriendClass)
 	{
 		if (classs->modifiers()->isSet(Modifier::Final))
 			*classFragment << " " << new TextFragment{classs->modifiers(), "final"};
@@ -359,9 +358,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	auto potentialNamespace = method->firstAncestorOfType<Module>();
-	if (isHeaderVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace &&
-		 method->typeArguments()->isEmpty())
+	if (isHeaderVisitor() && method->typeArguments()->isEmpty())
 		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
