@@ -252,10 +252,8 @@ SourceFragment* StatementVisitor::visit(AssertStatement* statement)
 
 SourceFragment* StatementVisitor::visit(OOModel::SynchronizedStatement* statement)
 {
-	auto fragment = new CompositeFragment{statement};
-	*fragment << "synchronized (" << expression(statement->expression()) << ")";
-	*fragment << list(statement->body(), StatementVisitor(data()), "body");
-	return fragment;
+	notAllowed(statement);
+	return {};
 }
 
 SourceFragment* StatementVisitor::visit(OOModel::CommentStatementItem* statement)

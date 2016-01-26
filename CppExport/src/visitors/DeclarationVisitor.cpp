@@ -64,59 +64,13 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<TypeAlias>(declaration)) return visit(castDeclaration);
 	if (auto castDeclaration = DCast<NameImport>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<ExplicitTemplateInstantiation>(declaration)) return visit(castDeclaration);
 
 	notAllowed(declaration);
 
 	auto fragment = new CompositeFragment{declaration};
 	*fragment << "Invalid Declaration";
 	return fragment;
-}
-
-SourceDir* DeclarationVisitor::visitProject(Project* project, SourceDir* parent)
-{
-	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir{nullptr, "src"};
-
-	for (auto node : *project->projects()) visitProject(node, projectDir);
-	for (auto node : *project->modules()) visitModule(node, projectDir);
-	for (auto node : *project->classes()) visitTopLevelClass(node, projectDir);
-
-	notAllowed(project->methods());
-	notAllowed(project->fields());
-
-	return projectDir;
-}
-
-SourceDir* DeclarationVisitor::visitModule(Module* module, SourceDir* parent)
-{
-	Q_ASSERT(parent);
-	auto moduleDir = &parent->subDir(module->name());
-
-	for (auto node : *module->modules()) visitModule(node, moduleDir);
-	for (auto node : *module->classes()) visitTopLevelClass(node, moduleDir);
-
-	notAllowed(module->methods());
-	notAllowed(module->fields());
-
-	return moduleDir;
-}
-
-SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* parent)
-{
-	Q_ASSERT(parent);
-	auto classFile = &parent->file(classs->name() + ".cpp");
-
-	auto fragment = classFile->append(new CompositeFragment{classs, "sections"});
-
-	auto imports = fragment->append(new CompositeFragment{classs, "vertical"});
-	for (auto node : *classs->subDeclarations())
-	{
-		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
-		else notAllowed(node);
-	}
-
-	*fragment << visit(classs);
-
-	return classFile;
 }
 
 SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
@@ -266,6 +220,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			auto privateSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
 			{
+					if (DCast<OOModel::ExplicitTemplateInstantiation>(declaration)) return false;
 					if (isSignalingDeclaration(declaration)) return false;
 					return !declaration->modifiers()->isSet(Modifier::Public) &&
 					!declaration->modifiers()->isSet(Modifier::Protected);
@@ -318,7 +273,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 				{
 					auto qDeclareOperatorsForFlagsFragment = new CompositeFragment{classs};
 					*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
-												  << classs->name() << "::" << potentialEnumWithQtFlags->name() << ")";
+												  << classs->name() << "::" << potentialEnumWithQtFlags->name() << "s)";
 					*qtFlagsComposite << qDeclareOperatorsForFlagsFragment;
 				}
 		return qtFlagsComposite;
@@ -645,10 +600,18 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	return fragment;
 }
 
-SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* eti)
+SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explicitTemplateInstantiation)
 {
-	notAllowed(eti);
-	return new TextFragment{eti};
+	auto fragment = new CompositeFragment{explicitTemplateInstantiation};
+
+	if (headerVisitor())
+		*fragment << "extern template class "
+					 << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Project>()->name().toUpper() << "_API ";
+	else
+		*fragment << "template class ";
+
+	*fragment << ExpressionVisitor(data()).visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
+	return fragment;
 }
 
 SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)

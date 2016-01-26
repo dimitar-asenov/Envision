@@ -39,9 +39,9 @@ CodeUnitPart::CodeUnitPart(CodeUnit* parent) : parent_{parent} {}
 
 bool CodeUnitPart::isSourceFragmentEmpty() const
 {
-	if (!sourceFragment_) return true;
+	if (!fragment_) return true;
 
-	QList<Export::SourceFragment*> workList{sourceFragment_};
+	QList<Export::SourceFragment*> workList{fragment_};
 	while (!workList.empty())
 	{
 		auto current = workList.takeLast();
@@ -53,9 +53,9 @@ bool CodeUnitPart::isSourceFragmentEmpty() const
 	return true;
 }
 
-void CodeUnitPart::setSourceFragment(Export::SourceFragment* sourceFragment)
+void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 {
-	sourceFragment_ = sourceFragment;
+	fragment_ = sourceFragment;
 
 	// calculate name and reference nodes
 	nameNodes_.clear();
@@ -119,6 +119,8 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 {
 	auto parent = reference->parent();
 	Q_ASSERT(parent);
+	if (DCast<OOModel::ExplicitTemplateInstantiation>(parent)) return false;
+	else if (reference->firstAncestorOfType<OOModel::ExplicitTemplateInstantiation>()) return true;
 
 	auto parentClass = reference->firstAncestorOfType<OOModel::Class>();
 	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>() &&
@@ -155,18 +157,19 @@ void CodeUnitPart::calculateDependencies(QList<CodeUnit*>& allUnits)
 	for (auto target : hardTargets_)
 		for (auto unit : allUnits)
 			if (unit->headerPart() != this && unit->headerPart()->nameNodes().contains(target))
-					dependencies_.insert(unit->headerPart());
+				dependencies_.insert(unit->headerPart());
 }
 
-QSet<CodeUnitPart*> CodeUnitPart::sourceDependencies(QList<CodeUnit*> units)
+QSet<CodeUnitPart*> CodeUnitPart::dependenciesWithinFile(QList<CodeUnit*> units)
 {
 	QSet<CodeUnitPart*> result;
 	for (auto referenceNode : referenceNodes_)
-		if (auto target = referenceNode->target())
-			for (auto unit : units)
-				if (unit->sourcePart() != this &&
-					 unit->sourcePart()->nameNodes().contains(target))
-						result.insert(unit->sourcePart());
+		if (!referenceNode->firstAncestorOfType<OOModel::ExplicitTemplateInstantiation>())
+			if (auto target = referenceNode->target())
+				for (auto unit : units)
+					if (unit->sourcePart() != this &&
+						 unit->sourcePart()->nameNodes().contains(target))
+							result.insert(unit->sourcePart());
 	return result;
 }
 

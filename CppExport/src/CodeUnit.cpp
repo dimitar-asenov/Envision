@@ -35,6 +35,7 @@
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/TypeAlias.h"
 #include "OOModel/src/declarations/NameImport.h"
+#include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 
 namespace CppExport {
 
@@ -48,63 +49,68 @@ void CodeUnit::calculateSourceFragments()
 {
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
-		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visitTopLevelClass(classs));
-		sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visitTopLevelClass(classs));
+		headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visitTopLevelClass(classs));
+		sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visitTopLevelClass(classs));
 	}
 	else if (auto module = DCast<OOModel::Module>(node()))
 	{
 		auto fragment = new Export::CompositeFragment{node()};
 		for (auto metaDefinition : Model::Node::childrenOfType<OOModel::MetaDefinition>(module))
 			*fragment << DeclarationVisitor(HEADER_VISITOR).visit(metaDefinition);
-		headerPart()->setSourceFragment(fragment);
+		headerPart()->setFragment(fragment);
 	}
 	else if (auto method = DCast<OOModel::Method>(node()))
 	{
 		if (method->typeArguments()->isEmpty() &&
 			 !method->modifiers()->isSet(OOModel::Modifier::Inline))
 		{
-			headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(method));
+			headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(method));
 
 			if (!method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 				 !method->modifiers()->isSet(OOModel::Modifier::Deleted))
-				sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(method));
+				sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visit(method));
 		}
 		else
 		{
-			headerPart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(method));
+			headerPart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visit(method));
 		}
 	}
 	else if (auto variableDeclaration = DCast<OOModel::VariableDeclaration>(node()))
 	{
 		if (variableDeclaration->firstAncestorOfType<OOModel::Class>())
 		{
-			headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(variableDeclaration));
-			sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(variableDeclaration));
+			headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(variableDeclaration));
+			sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visit(variableDeclaration));
 		}
 		else
-			sourcePart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(variableDeclaration));
+			sourcePart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(variableDeclaration));
 	}
 	else if (auto typeAlias = DCast<OOModel::TypeAlias>(node()))
 	{
-		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(typeAlias));
+		headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(typeAlias));
 	}
 	else if (auto metaCall = DCast<OOModel::MetaCallExpression>(node()))
 	{
 		auto ooReference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
 		if (Config::instance().metaCallLocationMap().value(ooReference->name()) != "cpp")
-			headerPart()->setSourceFragment(ExpressionVisitor(SOURCE_VISITOR).visit(metaCall));
+			headerPart()->setFragment(ExpressionVisitor(SOURCE_VISITOR).visit(metaCall));
 		else
-			sourcePart()->setSourceFragment(ExpressionVisitor(SOURCE_VISITOR).visit(metaCall));
+			sourcePart()->setFragment(ExpressionVisitor(SOURCE_VISITOR).visit(metaCall));
 	}
 	else if (auto metaDefinition = DCast<OOModel::MetaDefinition>(node()))
 	{
 		// TODO: add a similar map to the metaCallLocationMap (maybe even unify them?)
-		headerPart()->setSourceFragment(DeclarationVisitor(MACRO_VISITOR).visit(metaDefinition));
+		headerPart()->setFragment(DeclarationVisitor(MACRO_VISITOR).visit(metaDefinition));
 	}
 	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
 	{
-		headerPart()->setSourceFragment(DeclarationVisitor(HEADER_VISITOR).visit(nameImport));
-		sourcePart()->setSourceFragment(DeclarationVisitor(SOURCE_VISITOR).visit(nameImport));
+		headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(nameImport));
+		sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visit(nameImport));
+	}
+	else if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(node()))
+	{
+		headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visit(explicitTemplateInstantiation));
+		sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visit(explicitTemplateInstantiation));
 	}
 	else
 		Q_ASSERT(false);

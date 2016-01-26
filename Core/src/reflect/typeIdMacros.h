@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "TypeRegistry.h"
+
 /***********************************************************************************************************************
  * Declares standard methods for querying a classes's type statically or at run-time.
  *

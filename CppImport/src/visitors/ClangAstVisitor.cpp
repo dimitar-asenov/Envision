@@ -160,10 +160,11 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 (clang::ClassTemplateSpecializationDecl* specializationDecl)
 {
-	if (!shouldImport(specializationDecl->getLocation()))
+	if (!shouldImport(specializationDecl->getLocation()) ||
+		 specializationDecl->getExternLoc().getPtrEncoding())
 		return true;
 
-	//	explicit instation declaration
+	//	explicit instantiation declaration
 	if (!specializationDecl->isExplicitSpecialization() && specializationDecl->isExplicitInstantiationOrSpecialization())
 	{
 		auto ooExplicitTemplateInst = trMngr_->insertExplicitTemplateInstantiation(specializationDecl);
@@ -182,7 +183,23 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 
 		ooExplicitTemplateInst->setInstantiatedClass(ooRef);
 		// add to tree
-		if (auto decl = DCast<OOModel::Declaration>(ooStack_.top()))
+		if (QString::fromStdString(specializationDecl->getNameAsString()) == "TypedList")
+		{
+			/*
+			 * TypedList import specialization:
+			 * whenever we encounter an explicit template instantiation for a class called "TypedList" we look at its only
+			 * argument e.g. "OOModel::Boolean" in Model::TypedList<OOModel::Boolean> and then insert the explicit template
+			 * instantiation inside the class referred to by the argument.
+			 */
+			Q_ASSERT(specializationDecl->getTemplateArgs().size() == 1);
+			auto templateArgument = specializationDecl->getTemplateArgs().get(0);
+			Q_ASSERT(templateArgument.getKind() == clang::TemplateArgument::ArgKind::Type);
+			auto typedListOfType = templateArgument.getAsType().getTypePtr();
+			Q_ASSERT(typedListOfType);
+			auto ooClassParentForTemplateInstantiation = trMngr_->lookupClass(typedListOfType->getAsCXXRecordDecl());
+			ooClassParentForTemplateInstantiation->subDeclarations()->append(ooExplicitTemplateInst);
+		}
+		else if (auto decl = DCast<OOModel::Declaration>(ooStack_.top()))
 			decl->subDeclarations()->append(ooExplicitTemplateInst);
 		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(clang_.createNode<OOModel::DeclarationStatement>(specializationDecl->getSourceRange(),

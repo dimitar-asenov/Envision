@@ -83,6 +83,15 @@ OOModel::Class* TranslateManager::createClass(clang::CXXRecordDecl* recordDecl)
 	return result;
 }
 
+OOModel::Class* TranslateManager::lookupClass(clang::CXXRecordDecl* rDecl)
+{
+	const QString hash = nh_->hashRecord(rDecl);
+	auto it = classMap_.find(hash);
+	if (it != classMap_.end())
+		return *it;
+	return {};
+}
+
 bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*& createdClass)
 {
 	const QString hash = nh_->hashRecord(rDecl);

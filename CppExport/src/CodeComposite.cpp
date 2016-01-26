@@ -30,9 +30,11 @@
 #include "visitors/ElementVisitor.h"
 
 #include "Export/src/tree/CompositeFragment.h"
+#include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/NameImport.h"
+#include "OOModel/src/declarations/ExplicitTemplateInstantiation.h"
 
 namespace CppExport {
 
@@ -116,14 +118,7 @@ QString CodeComposite::pluginName(OOModel::Declaration* declaration)
 
 CodeComposite* CodeComposite::apiInclude()
 {
-	QString plugin;
-	for (auto unit : units())
-			if (auto declaration = DCast<OOModel::Declaration>(unit->node()))
-			{
-				plugin = pluginName(declaration);
-				if (!plugin.isEmpty()) break;
-			}
-
+	QString plugin = units().first()->node()->firstAncestorOfType<OOModel::Project>()->name();
 	if (plugin.isEmpty()) return nullptr;
 	return new CodeComposite{plugin + "/src/" + plugin.toLower() + "_api"};
 }
@@ -211,14 +206,15 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				}
 			}
 
-			auto neededNamespace = unit->node()->firstAncestorOfType<OOModel::Module>();
+			auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) ? nullptr :
+					unit->node()->firstAncestorOfType<OOModel::Module>();
 			if (neededNamespace != currentNamespace)
 			{
 				currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);
 				currentNamespace = neededNamespace;
 			}
 
-			*currentNamespaceFragment << codeUnitPart->sourceFragment();
+			*currentNamespaceFragment << codeUnitPart->fragment();
 		}
 	}
 
@@ -254,15 +250,29 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 	std::function<CodeUnitPart*(QList<CodeUnitPart*>&)> selector = [](QList<CodeUnitPart*>& parts)
 	{
 		CodeUnitPart* result = {};
+		int resultPriority = 0;
+		const int NAME_IMPORT_PRIORITY = 3;
+		const int EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY = 2;
+		const int META_CALL_EXPRESSION_PRIORITY = 1;
 
 		for (auto part : parts)
-			if (DCast<OOModel::NameImport>(part->parent()->node()))
+			if (DCast<OOModel::NameImport>(part->parent()->node()) && resultPriority < NAME_IMPORT_PRIORITY)
 			{
 				result = part;
-				break;
+				resultPriority = NAME_IMPORT_PRIORITY;
 			}
-			else if (!result && DCast<OOModel::MetaCallExpression>(part->parent()->node()))
+			else if (DCast<OOModel::ExplicitTemplateInstantiation>(part->parent()->node()) &&
+						resultPriority < EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY)
+			{
 				result = part;
+				resultPriority = EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY;
+			}
+			else if (!result && DCast<OOModel::MetaCallExpression>(part->parent()->node()) &&
+						resultPriority < META_CALL_EXPRESSION_PRIORITY)
+			{
+				result = part;
+				resultPriority = META_CALL_EXPRESSION_PRIORITY;
+			}
 		if (!result) result = parts.first();
 
 		parts.removeOne(result);
@@ -275,7 +285,7 @@ void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFra
 {
 	sortUnits(&CodeUnit::headerPart, [](CodeUnitPart* p) { return p->dependencies(); });
 	header = headerFragment();
-	sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->sourceDependencies(units()); });
+	sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->dependenciesWithinFile(units()); });
 	source = sourceFragment();
 }
 
