@@ -28,12 +28,16 @@
 
 #include "cppexport_api.h"
 
+namespace Model
+{
+	class Node;
+}
+
 namespace OOModel
 {
 	class Declaration;
 	class Method;
 	class Class;
-	class Module;
 }
 
 namespace CppExport {
@@ -47,7 +51,7 @@ class CPPEXPORT_API ExportHelpers
 		static bool shouldExportMethod(OOModel::Method* method, bool isHeaderVisitor, bool isSourceVisitor);
 		static bool methodSignaturesMatch(OOModel::Method* method, OOModel::Method* other);
 
-		static QString pluginName(OOModel::Module* namespaceModule, OOModel::Declaration* declaration);
+		static QString pluginName(Model::Node* node);
 
 		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
 		static bool isEnumWithQtFlags(OOModel::Class* candidate);

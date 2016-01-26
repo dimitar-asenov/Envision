@@ -31,7 +31,7 @@
 #include "OOModel/src/declarations/Declaration.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Module.h"
+#include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 
 namespace CppExport {
@@ -68,18 +68,13 @@ bool ExportHelpers::methodSignaturesMatch(OOModel::Method* method, OOModel::Meth
 	return true;
 }
 
-QString ExportHelpers::pluginName(OOModel::Module* namespaceModule, OOModel::Declaration* declaration)
+QString ExportHelpers::pluginName(Model::Node* node)
 {
-	auto value = Config::instance().exportFlagMap().value(namespaceModule->name() + "/" + declaration->name());
-	if (!value.isEmpty()) return value;
+	if (auto parentProject = node->firstAncestorOfType<OOModel::Project>())
+		return parentProject->name();
+	return {};
+}
 
-	if (namespaceModule->name() == "Model")
-		return "ModelBase";
-	else if (namespaceModule->name() == "Visualization")
-		return "VisualizationBase";
-	else if (namespaceModule->name() == "Interaction")
-		return "InteractionBase";
-	return namespaceModule->name();
 }
 
 bool ExportHelpers::isSignalingDeclaration(OOModel::Declaration* declaration)
