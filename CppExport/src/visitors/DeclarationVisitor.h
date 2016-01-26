@@ -103,6 +103,7 @@ class CPPEXPORT_API DeclarationVisitor
 		Export::SourceFragment* visitHeaderPart(OOModel::VariableDeclaration* variableDeclaration);
 		Export::SourceFragment* visitSourcePart(OOModel::VariableDeclaration* variableDeclaration);
 		Export::SourceFragment* visitSourcePart(OOModel::Field* field);
+		Export::SourceFragment* variableDeclarationCommonEnd(OOModel::VariableDeclaration* variableDeclaration);
 };
 
 inline bool DeclarationVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }

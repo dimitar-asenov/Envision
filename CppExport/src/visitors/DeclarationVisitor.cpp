@@ -434,14 +434,8 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(VariableDeclaration* variabl
 	auto fragment = new CompositeFragment{variableDeclaration};
 	*fragment << compositeNodeComments(variableDeclaration, "declarationComment");
 	*fragment << printAnnotationsAndModifiers(variableDeclaration);
-	*fragment << expression(variableDeclaration->typeExpression()) << " " << variableDeclaration->nameNode();
-	if (variableDeclaration->initialValue() && !variableDeclaration->modifiers()->isSet(Modifier::Static))
-	{
-		//TODO: Use {} instead of =
-		if (!DCast<ArrayInitializer>(variableDeclaration->initialValue())) *fragment << " = ";
-		*fragment << expression(variableDeclaration->initialValue());
-	}
-	if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
+	*fragment << expression(variableDeclaration->typeExpression()) << " ";
+	*fragment << variableDeclarationCommonEnd(variableDeclaration);
 	return fragment;
 }
 
@@ -473,6 +467,13 @@ SourceFragment* DeclarationVisitor::visitSourcePart(Field* field)
 		*fragment << "::";
 	}
 
+	*fragment << variableDeclarationCommonEnd(field);
+	return fragment;
+}
+
+SourceFragment* DeclarationVisitor::variableDeclarationCommonEnd(VariableDeclaration* variableDeclaration)
+{
+	auto fragment = new CompositeFragment{variableDeclaration};
 	*fragment << variableDeclaration->nameNode();
 	if (variableDeclaration->initialValue())
 	{
@@ -492,15 +493,7 @@ SourceFragment* DeclarationVisitor::visitSourcePart(VariableDeclaration* variabl
 	auto fragment = new CompositeFragment{variableDeclaration};
 	*fragment << printAnnotationsAndModifiers(variableDeclaration);
 	*fragment << expression(variableDeclaration->typeExpression()) << " ";
-	*fragment << variableDeclaration->nameNode();
-	if (variableDeclaration->initialValue())
-	{
-		if (!DCast<ArrayInitializer>(variableDeclaration->initialValue()) ||
-			 DCast<AutoTypeExpression>(variableDeclaration->typeExpression())) *fragment << " = ";
-		*fragment << expression(variableDeclaration->initialValue());
-	}
-
-	if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
+	*fragment << variableDeclarationCommonEnd(variableDeclaration);
 	return fragment;
 }
 
