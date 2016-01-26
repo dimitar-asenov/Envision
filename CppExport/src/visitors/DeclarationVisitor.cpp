@@ -441,10 +441,13 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(VariableDeclaration* variabl
 
 SourceFragment* DeclarationVisitor::visitSourcePart(Field* field)
 {
+	// non-static and not constexpr fields are not printed in the source part
 	if (!field->modifiers()->isSet(Modifier::Static) &&
 		 !field->modifiers()->isSet(Modifier::ConstExpr)) return {};
 
 	auto fragment = new CompositeFragment{field};
+
+	// template<typename T...>
 	if (auto parentClass = field->firstAncestorOfType<Class>())
 		if (!parentClass->typeArguments()->isEmpty())
 			*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
@@ -452,8 +455,10 @@ SourceFragment* DeclarationVisitor::visitSourcePart(Field* field)
 	if (field->modifiers()->isSet(Modifier::ConstExpr))
 		*fragment << printAnnotationsAndModifiers(field);
 
+	// field type
 	*fragment << expression(field->typeExpression()) << " ";
 
+	// parent class name qualifier
 	if (auto parentClass = field->firstAncestorOfType<Class>())
 	{
 		*fragment << parentClass->name();
@@ -474,10 +479,15 @@ SourceFragment* DeclarationVisitor::visitSourcePart(Field* field)
 SourceFragment* DeclarationVisitor::variableDeclarationCommonEnd(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment{variableDeclaration};
+
+	// name
 	*fragment << variableDeclaration->nameNode();
+
+	// initial value
 	if (variableDeclaration->initialValue() &&
 		 (!variableDeclaration->modifiers()->isSet(Modifier::Static) || !isHeaderVisitor()))
 	{
+		// if auto type then print equals ("=")
 		if (!DCast<ArrayInitializer>(variableDeclaration->initialValue()) ||
 			 DCast<AutoTypeExpression>(variableDeclaration->typeExpression())) *fragment << " = ";
 		*fragment << expression(variableDeclaration->initialValue());
