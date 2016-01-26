@@ -187,7 +187,7 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		{
 			/*
 			 * TypedList import specialization:
-			 * whenever we encounter an explicit template instantiation for a class called "TypedList" we look at it's only
+			 * whenever we encounter an explicit template instantiation for a class called "TypedList" we look at its only
 			 * argument e.g. "OOModel::Boolean" in Model::TypedList<OOModel::Boolean> and then insert the explicit template
 			 * instantiation inside the class referred to by the argument.
 			 */
