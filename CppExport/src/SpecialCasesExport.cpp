@@ -26,6 +26,30 @@
 
 #include "SpecialCasesExport.h"
 
+#include "ExportHelpers.h"
+
+#include "Export/src/tree/CompositeFragment.h"
+#include "OOModel/src/declarations/Class.h"
+
 namespace CppExport {
+
+void SpecialCasesExport::handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment)
+{
+	if (ExportHelpers::isEnumWithQtFlags(classs))
+	{
+		auto qDeclareFlagsFragment = new Export::CompositeFragment{classs};
+		*qDeclareFlagsFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
+		*fragment << qDeclareFlagsFragment;
+	}
+	else
+		for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
+			if (potentialEnumWithQtFlags != classs && ExportHelpers::isEnumWithQtFlags(potentialEnumWithQtFlags))
+			{
+				auto qDeclareOperatorsForFlagsFragment = new Export::CompositeFragment{classs};
+				*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
+															  << classs->name() << "::" << potentialEnumWithQtFlags->name() << "s)";
+				*fragment << qDeclareOperatorsForFlagsFragment;
+			}
+}
 
 }

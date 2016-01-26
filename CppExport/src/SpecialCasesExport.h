@@ -28,12 +28,22 @@
 
 #include "cppexport_api.h"
 
+namespace OOModel
+{
+	class Class;
+}
+
+namespace Export
+{
+	class CompositeFragment;
+}
+
 namespace CppExport {
 
 class CPPEXPORT_API SpecialCasesExport
 {
 	public:
-
+		static void handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment);
 };
 
 }
