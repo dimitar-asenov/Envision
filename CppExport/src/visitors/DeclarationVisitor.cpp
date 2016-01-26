@@ -389,11 +389,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(data()), "comma");
 
 	if (!method->throws()->isEmpty())
-	{
-		*fragment << " throw (";
-		*fragment << list(method->throws(), ExpressionVisitor(data()), "comma");
-		*fragment << ")";
-	}
+		*fragment << " throw (" << list(method->throws(), ExpressionVisitor(data()), "comma") << ")";
 
 	if (!isSourceVisitor())
 	{
