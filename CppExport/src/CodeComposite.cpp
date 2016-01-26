@@ -128,10 +128,9 @@ Export::CompositeFragment* CodeComposite::addNamespaceFragment(Export::Composite
 {
 	if (!namespaceNode) return parentFragment;
 
-	auto namespaceComposite = new Export::CompositeFragment{namespaceNode, "namespace"};
+	auto namespaceComposite = parentFragment->append(new Export::CompositeFragment{namespaceNode, "namespace"});
 	auto namespaceBody = new Export::CompositeFragment{namespaceNode, "body"};
 	*namespaceComposite << namespaceNode->name() << namespaceBody;
-	*parentFragment << namespaceComposite;
 	return namespaceBody;
 }
 
@@ -191,7 +190,8 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 							*currentNamespaceFragment << ElementVisitor(HEADER_VISITOR)
 																  .visitTemplateArguments(classs->typeArguments());
 
-						auto softDependencyComposite = new Export::CompositeFragment{classs};
+						auto softDependencyComposite = currentNamespaceFragment->append(
+																											new Export::CompositeFragment{classs});
 						if (OOModel::Class::ConstructKind::Class == classs->constructKind())
 							*softDependencyComposite << "class ";
 						else if (OOModel::Class::ConstructKind::Struct == classs->constructKind())
@@ -200,8 +200,6 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 							*softDependencyComposite << "enum ";
 						else Q_ASSERT(false);
 						*softDependencyComposite << softDependency->symbolName() + ";";
-
-						*currentNamespaceFragment << softDependencyComposite;
 					}
 				}
 			}
