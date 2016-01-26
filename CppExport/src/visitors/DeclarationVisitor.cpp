@@ -29,6 +29,7 @@
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
 #include "../Config.h"
+#include "../ExportHelpers.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Module.h"
@@ -112,16 +113,6 @@ bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
 	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
 }
 
-bool DeclarationVisitor::isSignalingDeclaration(Declaration* declaration)
-{
-	for (auto expression : *declaration->metaCalls())
-		if (auto metaCall = DCast<MetaCallExpression>(expression))
-			if (auto reference = DCast<ReferenceExpression>(metaCall->callee()))
-				if (reference->name() == "PREDEF_SIGNAL")
-					return true;
-	return false;
-}
-
 SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment{classs};
@@ -173,7 +164,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		auto potentialNamespace = classs->firstAncestorOfType<Module>();
 		if (!friendClass && classs->firstAncestorOfType<Declaration>() == potentialNamespace &&
 			 classs->typeArguments()->isEmpty())
-			*fragment << pluginName(potentialNamespace, classs).toUpper() << "_API ";
+			*fragment << ExportHelpers::pluginName(potentialNamespace, classs).toUpper() << "_API ";
 
 		*fragment << classs->nameNode();
 
@@ -203,25 +194,25 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			auto publicSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
 			{
-					if (isSignalingDeclaration(declaration)) return false;
+					if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
 					return declaration->modifiers()->isSet(Modifier::Public);
 			});
 			auto signalingSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasSignalingSection = addMemberDeclarations(classs, signalingSection, [](Declaration* declaration)
 			{
-					return isSignalingDeclaration(declaration);
+					return ExportHelpers::isSignalingDeclaration(declaration);
 			});
 			auto protectedSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasProtectedSection = addMemberDeclarations(classs, protectedSection,  [](Declaration* declaration)
 			{
-					if (isSignalingDeclaration(declaration)) return false;
+					if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
 					return declaration->modifiers()->isSet(Modifier::Protected);
 			});
 			auto privateSection = new CompositeFragment{classs, "accessorSections"};
 			bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
 			{
 					if (DCast<OOModel::ExplicitTemplateInstantiation>(declaration)) return false;
-					if (isSignalingDeclaration(declaration)) return false;
+					if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
 					return !declaration->modifiers()->isSet(Modifier::Public) &&
 					!declaration->modifiers()->isSet(Modifier::Protected);
 			});
@@ -261,7 +252,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		auto qtFlagsComposite = new CompositeFragment{classs, "sections"};
 		*qtFlagsComposite << fragment;
-		if (isEnumWithQtFlags(classs))
+		if (ExportHelpers::isEnumWithQtFlags(classs))
 		{
 			auto qDeclareFlagsFragment = new CompositeFragment{classs};
 			*qDeclareFlagsFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
@@ -269,7 +260,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		}
 		else
 			for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
-				if (potentialEnumWithQtFlags != classs && isEnumWithQtFlags(potentialEnumWithQtFlags))
+				if (potentialEnumWithQtFlags != classs && ExportHelpers::isEnumWithQtFlags(potentialEnumWithQtFlags))
 				{
 					auto qDeclareOperatorsForFlagsFragment = new CompositeFragment{classs};
 					*qDeclareOperatorsForFlagsFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS("
@@ -280,17 +271,6 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	}
 
 	return fragment;
-}
-
-bool DeclarationVisitor::isEnumWithQtFlags(OOModel::Class* candidate)
-{
-	if (candidate->constructKind() == Class::ConstructKind::Enum)
-		for (auto entry : *candidate->metaCalls())
-			if (auto metaCall = DCast<OOModel::MetaCallExpression>(entry))
-				if (auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
-					if (reference->name() == "QT_Flags")
-						return true;
-	return false;
 }
 
 template<typename Predicate>
@@ -306,51 +286,6 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 			 !fields->fragments().empty() ||
 			 !classes->fragments().empty() ||
 			 !methods->fragments().empty();
-}
-
-bool DeclarationVisitor::shouldExportMethod(Method* method)
-{
-	if (headerVisitor())
-	{
-		auto parentDeclaration = method->firstAncestorOfType<Declaration>();
-		Q_ASSERT(parentDeclaration);
-
-		for (auto expression : *(parentDeclaration->metaCalls()))
-			if (auto metaCall = DCast<OOModel::MetaCallExpression>(expression))
-				for (auto generatedMethod : Model::Node::childrenOfType<Method>(metaCall->generatedTree()))
-					if (methodSignaturesMatch(method, generatedMethod))
-						return false;
-	}
-	if (sourceVisitor())
-		return !isSignalingDeclaration(method);
-	return true;
-}
-
-bool DeclarationVisitor::methodSignaturesMatch(Method* method, Method* other)
-{
-	// TODO: this method can be made more specific and relocated to generic method overload resolution
-	if (method->arguments()->size() != other->arguments()->size() || method->symbolName() != other->symbolName())
-		return false;
-
-	for (auto i = 0; i < method->arguments()->size(); i++)
-		if (method->arguments()->at(i)->name() != other->arguments()->at(i)->name())
-			return false;
-
-	return true;
-}
-
-QString DeclarationVisitor::pluginName(Module* namespaceModule, Declaration* declaration)
-{
-	auto value = Config::instance().exportFlagMap().value(namespaceModule->name() + "/" + declaration->name());
-	if (!value.isEmpty()) return value;
-
-	if (namespaceModule->name() == "Model")
-		return "ModelBase";
-	else if (namespaceModule->name() == "Visualization")
-		return "VisualizationBase";
-	else if (namespaceModule->name() == "Interaction")
-		return "InteractionBase";
-	return namespaceModule->name();
 }
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
@@ -378,7 +313,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 
-	if (!shouldExportMethod(method)) return nullptr;
+	if (!ExportHelpers::shouldExportMethod(method, isHeaderVisitor(), isSourceVisitor())) return nullptr;
 
 	QList<Class*> parentClasses;
 	auto parentClass = method->firstAncestorOfType<Class>();
@@ -440,7 +375,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto potentialNamespace = method->firstAncestorOfType<Module>();
 	if (headerVisitor() && method->firstAncestorOfType<Declaration>() == potentialNamespace &&
 		 method->typeArguments()->isEmpty())
-		*fragment << pluginName(potentialNamespace, method).toUpper() << "_API ";
+		*fragment << ExportHelpers::pluginName(potentialNamespace, method).toUpper() << "_API ";
 
 	// method name qualifier
 	if (sourceVisitor() && method->methodKind() != Method::MethodKind::Conversion)

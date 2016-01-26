@@ -95,17 +95,7 @@ class CPPEXPORT_API DeclarationVisitor
 		bool headerVisitor();
 		bool sourceVisitor();
 
-		/**
-		 * used to prevent exporting of declarations already provided in a meta call of the parent.
-		 */
-		bool shouldExportMethod(OOModel::Method* method);
-		bool methodSignaturesMatch(OOModel::Method* method, OOModel::Method* other);
-
-		QString pluginName(OOModel::Module* namespaceModule, OOModel::Declaration* declaration);
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
-
-		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
-		bool isEnumWithQtFlags(OOModel::Class* candidate);
 };
 
 inline bool DeclarationVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
