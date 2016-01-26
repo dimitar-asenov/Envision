@@ -47,14 +47,17 @@ namespace CppExport {
 QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManager,
 																	const QString& pathToProjectContainerDirectory)
 {
+	QHash<QString, QString> mergeMap = Config::instance().dependencyUnitMergeMap();
+
 	QList<CodeUnit*> codeUnits;
-	units(treeManager->root(), "", codeUnits);
+	units(treeManager->root(), "", codeUnits, mergeMap);
+
 
 	for (auto unit : codeUnits) unit->calculateSourceFragments();
 	for (auto unit : codeUnits) unit->calculateDependencies(codeUnits);
 
 	auto directory = new Export::SourceDir{nullptr, pathToProjectContainerDirectory};
-	for (auto codeComposite : mergeUnits(codeUnits))
+	for (auto codeComposite : mergeUnits(codeUnits, mergeMap))
 		createFilesFromComposite(directory, codeComposite);
 
 	auto layout = layouter();
@@ -74,7 +77,8 @@ void CppExporter::createFilesFromComposite(Export::SourceDir* directory, CodeCom
 	if (sourceFragment) directory->file(codeComposite->name() + ".cpp").append(sourceFragment);
 }
 
-void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result)
+void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result,
+								QHash<QString, QString>& mergeMap)
 {
 	if (!DCast<OOModel::Project>(current))
 	{
@@ -102,9 +106,18 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 													ooExplicitTemplateInstantiation->instantiatedClass()), current});
 			return;
 		}
-		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))		{
-			result.append(new CodeUnit{(namespaceName.isEmpty() ? "" : namespaceName + "/") +
-												ooDeclaration->name(), current});
+		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))
+		{
+			auto codeUnitName = (namespaceName.isEmpty() ? "" : namespaceName + "/") + ooDeclaration->name();
+			result.append(new CodeUnit{codeUnitName, current});
+
+			for (auto subDeclaration : *ooDeclaration->subDeclarations())
+				if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(subDeclaration))
+				{
+					auto typedListCodeUnitName = codeUnitName + "|ExplicitTemplateInstantiationInClass";
+					mergeMap.insert(typedListCodeUnitName, mergeMap.value(codeUnitName));
+					result.append(new CodeUnit{typedListCodeUnitName, explicitTemplateInstantiation});
+				}
 			return;
 		}
 		else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
@@ -123,13 +136,11 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 	}
 
 	for (auto child : current->children())
-		units(child, namespaceName, result);
+		units(child, namespaceName, result, mergeMap);
 }
 
-QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units)
+QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units, QHash<QString, QString>& mergeMap)
 {
-	QHash<QString, QString> mergeMap = Config::instance().dependencyUnitMergeMap();
-
 	QHash<QString, CodeComposite*> nameToCompositeMap;
 	for (auto unit : units)
 	{
