@@ -445,17 +445,19 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(VariableDeclaration* variabl
 SourceFragment* DeclarationVisitor::visitSourcePart(VariableDeclaration* variableDeclaration)
 {
 	auto fragment = new CompositeFragment{variableDeclaration};
-	if (DCast<Field>(variableDeclaration))
+
+	bool isField = DCast<Field>(variableDeclaration);
+	if (isField)
 		if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
 			if (!parentClass->typeArguments()->isEmpty())
 				*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
 
-	if (!DCast<Field>(variableDeclaration) || variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
+	if (!isField || variableDeclaration->modifiers()->isSet(Modifier::ConstExpr))
 		*fragment << printAnnotationsAndModifiers(variableDeclaration);
 
 	*fragment << expression(variableDeclaration->typeExpression()) << " ";
 
-	if (DCast<Field>(variableDeclaration))
+	if (isField)
 		if (auto parentClass = variableDeclaration->firstAncestorOfType<Class>())
 		{
 			*fragment << parentClass->name();
