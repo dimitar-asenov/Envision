@@ -147,7 +147,9 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 	if (auto parentClass = classs->firstAncestorOfType<Class>())
 		isFriendClass = parentClass->friends()->isAncestorOf(classs);
 
-	if (!isFriendClass)
+	if (isFriendClass)
+		*classFragment << "friend ";
+	else
 	{
 		*classFragment << compositeNodeComments(classs, "declarationComment");
 
@@ -156,8 +158,6 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 
 		*classFragment << printAnnotationsAndModifiers(classs);
 	}
-	else
-		*classFragment << "friend ";
 
 	if (Class::ConstructKind::Class == classs->constructKind()) *classFragment << "class ";
 	else if (Class::ConstructKind::Struct == classs->constructKind()) *classFragment << "struct ";
