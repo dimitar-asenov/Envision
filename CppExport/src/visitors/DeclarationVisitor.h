@@ -92,13 +92,13 @@ class CPPEXPORT_API DeclarationVisitor
 		template<typename Predicate>
 		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
 
-		bool headerVisitor();
-		bool sourceVisitor();
+		bool isHeaderVisitor();
+		bool isSourceVisitor();
 
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 };
 
-inline bool DeclarationVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
-inline bool DeclarationVisitor::sourceVisitor() { return data().get()->modeStack_.last() == SOURCE_VISITOR; }
+inline bool DeclarationVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
+inline bool DeclarationVisitor::isSourceVisitor() { return data().get()->modeStack_.last() == SOURCE_VISITOR; }
 
 }

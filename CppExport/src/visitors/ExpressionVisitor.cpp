@@ -344,7 +344,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				Q_ASSERT(false);
 		}
 
-		if (!e->prefix() && !headerVisitor() && e->target())
+		if (!e->prefix() && !isHeaderVisitor() && e->target())
 		{
 			bool addPrefix = false;
 			bool inBodyOfMethod = false;
@@ -450,6 +450,6 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 	return fragment;
 }
 
-bool ExpressionVisitor::headerVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
+bool ExpressionVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
 
 }
