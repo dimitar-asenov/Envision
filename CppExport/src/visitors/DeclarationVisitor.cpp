@@ -176,6 +176,7 @@ SourceFragment* DeclarationVisitor::visitHeaderPart(Class* classs)
 		if (!classs->baseClasses()->isEmpty())
 		{
 			// TODO: inheritance modifiers like private, virtual... (not only public)
+			*classFragment << " : ";
 			auto baseClassesFragment = classFragment->append(new CompositeFragment{classs->baseClasses(), "comma"});
 			for (auto baseClass : *classs->baseClasses())
 			{
