@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -39,10 +39,12 @@ REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Module, libraries, TypedListOfUsedLibrary, false, false, true)
+REGISTER_ATTRIBUTE(Module, modKind, Integer, false, false, true)
 
-Module::Module(const QString& name) : Super(nullptr, Module::getMetaData())
+Module::Module(const QString& name, ModuleKind kind) : Super(nullptr, Module::getMetaData())
 {
 	setName(name);
+	setKind(kind);
 }
 
 Module::SymbolTypes Module::symbolType() const
@@ -61,6 +63,11 @@ QList<const Model::UsedLibrary*> Module::usedLibraries() const
 bool Module::isNewPersistenceUnit() const
 {
 	return true;
+}
+
+bool Module::isTransparentForNameResolution() const
+{
+	return kind() == ModuleKind::Folder;
 }
 
 }

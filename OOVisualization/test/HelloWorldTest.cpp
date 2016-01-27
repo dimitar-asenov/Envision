@@ -70,7 +70,7 @@ void addConstructorAndDestructor(Class* cl)
 	std::unique_ptr<Position>(des->extension<Position>())->set(0, 2);
 }
 
-Class* addHelloWorld(Project* parent)
+Class* addHelloWorld(Module* parent)
 {
 	auto hello = new Class{"HelloWorld", Modifier::Public};
 	std::unique_ptr<Position>(hello->extension<Position>())->set(0, 0);
@@ -108,7 +108,7 @@ Class* addHelloWorld(Project* parent)
 	return hello;
 }
 
-Class* addGeneric(Project* parent)
+Class* addGeneric(Module* parent)
 {
 	auto gen = new Class{"Generic", Modifier::Public};
 	if (parent) parent->classes()->append(gen);
@@ -170,7 +170,7 @@ Class* addGeneric(Project* parent)
 	return gen;
 }
 
-Class* addAnnotatedWithFriends(Project* parent)
+Class* addAnnotatedWithFriends(Module* parent)
 {
 	auto ann = new Class{"AnnotatedWithFriends", Modifier::Public};
 	if (parent) parent->classes()->append(ann);
@@ -198,7 +198,7 @@ Class* addAnnotatedWithFriends(Project* parent)
 	return ann;
 }
 
-Class* addEnumeration(Project* parent)
+Class* addEnumeration(Module* parent)
 {
 	auto en = new Class{"Colors", Modifier::Public, Class::ConstructKind::Enum};
 	if (parent) parent->classes()->append(en);
@@ -213,7 +213,7 @@ Class* addEnumeration(Project* parent)
 	return en;
 }
 
-Class* addAnnotation(Project* parent)
+Class* addAnnotation(Module* parent)
 {
 	auto ann = new Class{"Annotation", Modifier::Public, Class::ConstructKind::Annotation};
 	if (parent) parent->classes()->append(ann);
@@ -337,7 +337,7 @@ Module* addLambda()
 	le->body()->append(new ExpressionStatement{someOpCall});
 
 	// Positions
-	mod->extension<Position>()->set(2, 0);
+	mod->extension<Position>()->set(1, 0);
 	iUnary->extension<Position>()->set(0, 0);
 	iBinary->extension<Position>()->set(0, 1);
 	iNoRet->extension<Position>()->set(0, 2);
@@ -387,7 +387,7 @@ Project* addJavaLibrary(Project* parent)
 	prefix->ref()->setName("io");
 
 	// Set positions
-	java->extension<Position>()->set(2, 1);
+	java->extension<Position>()->set(1, 1);
 	string->extension<Position>()->set(0, 0);
 	system->extension<Position>()->set(0, 1);
 	io->extension<Position>()->set(1, 0);
@@ -1017,24 +1017,28 @@ public: void test()
 	Project* java = nullptr;
 	java = addJavaLibrary(prj);
 
+	Module* folder1 = new Module("MainFunctionality", Module::ModuleKind::Folder);
+	std::unique_ptr<Position>(folder1->extension<Position>())->set(0, 0);
+	prj->modules()->append(folder1);
+
 	// Build a simple HelloWorld Application
 	Class* hello = nullptr;
-	hello = addHelloWorld(prj);
+	hello = addHelloWorld(folder1);
 
 	// Build a simple Generic Class
 	Class* gen = nullptr;
-	gen = addGeneric(prj);
+	gen = addGeneric(folder1);
 
 	// Build a simple Class that has annotations and friends
 	Class* ann = nullptr;
-	ann = addAnnotatedWithFriends(prj);
+	ann = addAnnotatedWithFriends(folder1);
 
 	// Build a simple enumeration
 	Class* en = nullptr;
-	en = addEnumeration(prj);
+	en = addEnumeration(folder1);
 
 	// Add an annotation class
-	addAnnotation(prj);
+	addAnnotation(folder1);
 
 //	// Add a second method
 	Method* longMethod = nullptr;
@@ -1048,7 +1052,7 @@ public: void test()
 	addExtraMethod(hello);
 
 	prj->modules()->append(addLambda());
-	prj->classes()->append(addInner());
+	folder1->classes()->append(addInner());
 
 // Add a method Add-on
 	VMethod::addAddOn(new MethodAddOn{"foo"});

@@ -12,11 +12,16 @@
 		</backgroundBrush>
 		<cornerRadius>10</cornerRadius>
 	</shape>
-	<icon prototypes="icon/SVGIcon/default">
+	<standardIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/module.svg</filename>
 		<width>40</width>
 		<height>40</height>
-	</icon>
+	</standardIcon>
+	<folderIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/folder.svg</filename>
+		<width>40</width>
+		<height>40</height>
+	</folderIcon>
 	<name prototypes="item/Text/default">
 		<shape prototypes="shape/Box/default">
 			Box

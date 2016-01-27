@@ -40,7 +40,8 @@ class OOVISUALIZATION_API VModuleStyle : public Super<Visualization::Declarative
 	public:
 		virtual ~VModuleStyle() override;
 		Property<Visualization::TextStyle> name{this, "name"};
-		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::StaticStyle> standardIcon{this, "standardIcon"};
+		Property<Visualization::StaticStyle> folderIcon{this, "folderIcon"};
 		Property<Visualization::VListStyle> fields{this, "fields"};
 		Property<Visualization::VListStyle> declarations{this, "declarations"};
 		Property<Visualization::VListStyle> libraries{this, "libraries"};

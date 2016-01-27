@@ -56,7 +56,14 @@ void VModule::initializeForms()
 				->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(1, 0, item<Static>(&I::icon_, [](I* v) { return &v->style()->icon(); }))
+				->put(1, 0, item<Static>(&I::icon_, [](I* v) -> const Visualization::StaticStyle* {
+							switch (v->node()->kind())
+							{
+								case OOModel::Module::ModuleKind::Standard : return &v->style()->standardIcon();
+								case OOModel::Module::ModuleKind::Folder : return &v->style()->folderIcon();
+								default: Q_ASSERT(false);
+							}
+						}))
 				->put(2, 0, item<VText>(&I::name_,	[](I* v){return v->node()->nameNode();},
 																[](I* v) { return &v->style()->name();	}));
 

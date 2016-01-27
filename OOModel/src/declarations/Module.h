@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -46,13 +46,25 @@ class OOMODEL_API Module : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Model::UsedLibrary>, libraries, setLibraries)
 
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, modKind, setModKind, int)
+
 	public:
-		Module(const QString& name);
+		enum class ModuleKind : int {Standard /**< Used for namespaces or packages. */,
+											  Folder /**< Used for grouping declarations in sub-directories. */};
+
+		Module(const QString& name, ModuleKind kind = ModuleKind::Standard);
 
 		virtual SymbolTypes symbolType() const override;
 		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
 
 		virtual bool isNewPersistenceUnit() const override;
+		virtual bool isTransparentForNameResolution() const override;
+
+		ModuleKind kind() const;
+		void setKind(ModuleKind kind);
 };
+
+inline Module::ModuleKind Module::kind() const { return static_cast<ModuleKind> (modKind()); }
+inline void Module::setKind(ModuleKind kind) { setModKind(static_cast<int> (kind)); }
 
 }
