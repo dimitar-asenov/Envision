@@ -48,7 +48,7 @@ class ExportJustText : public Test<ExportPlugin, ExportJustText> { public: void 
 	auto& file = root.file("text");
 	file.append( reinterpret_cast<Node*>(1), "Test text" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
 }};
@@ -62,12 +62,12 @@ class ExportAndModify : public Test<ExportPlugin, ExportAndModify> { public: voi
 	auto& file = root.file("text");
 	file.append( reinterpret_cast<Node*>(1), "Test text" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
 
 	file.append( reinterpret_cast<Node*>(2), ". Now modified" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text_modified", testDir +"/text/text");
 }};
 
@@ -80,14 +80,14 @@ class ExportAndDeleteFile : public Test<ExportPlugin, ExportAndDeleteFile> { pub
 	auto& file = root.file("text");
 	file.append( reinterpret_cast<Node*>(1), "Test text" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
 
 	SourceDir root2{nullptr, "text"};
 	auto& file2 = root2.file("text2");
 	file2.append( reinterpret_cast<Node*>(2), "Test text. Now modified" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root2, &layouter);
+	Exporter::exportToFileSystem(testDir, &root2, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text_modified", testDir +"/text/text2");
 	CHECK_CONDITION(!QFile{testDir +"/text/text"}.exists());
 }};
@@ -102,16 +102,15 @@ class ExportAndDeleteDir : public Test<ExportPlugin, ExportAndDeleteDir> { publi
 	auto& file = subDir.file("text");
 	file.append( reinterpret_cast<Node*>(1), "Test text" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/sub/text");
-	CHECK_CONDITION(!QFile{testDir +"/text/text"}.exists());
 	CHECK_CONDITION(QDir{testDir +"/text/sub"}.exists());
 
 	SourceDir root2{nullptr, "text"};
 	auto& file2 = root2.file("text");
 	file2.append( reinterpret_cast<Node*>(2), "Test text" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root2, &layouter);
+	Exporter::exportToFileSystem(testDir, &root2, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
 	CHECK_CONDITION(!QDir{testDir +"/text/sub"}.exists());
 }};
@@ -142,19 +141,19 @@ class ExportIdentical : public Test<ExportPlugin, ExportIdentical> { public: voi
 	auto& file = root.file("text");
 	file.append( reinterpret_cast<Node*>(1), "Test text" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
 	auto firstFileModifiedTime = QFileInfo{testDir +"/text/text"}.lastModified();
 	Sleep::msleep(1010);
 
 	file.append( reinterpret_cast<Node*>(2), ". Now modified" ); // The pointer is irrelevant for now
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text_modified", testDir +"/text/text");
 	auto secondFileModifiedTime = QFileInfo{testDir +"/text/text"}.lastModified();
 	Sleep::msleep(1010);
 
-	Exporter::exportToFileSystem(testDir, &root, &layouter);
+	Exporter::exportToFileSystem(testDir, &root, &layouter, Exporter::ExportSpan::AllFiles);
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text_modified", testDir +"/text/text");
 	auto thirdFileModifiedTime = QFileInfo{testDir +"/text/text"}.lastModified();
 

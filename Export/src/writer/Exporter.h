@@ -37,12 +37,40 @@ class TextToNodeMap;
 
 class EXPORT_API Exporter {
 	public:
+		enum class ExportSpan : int {AllFiles,		/**< Use this option to indicate that all files are exported. If
+																there is an existing envision_exported_files file, it will be used
+																to match the newly exported file names to the old ones and any
+																obsolete filenames from previous exports will be deleted. */
+												SomeFiles	/**< Use this option to indicate that only some files are exported.
+																New files will be added to the list of exported files in the
+																envision_exported_files file but no existing files will be deleted
+																(only overwritten if needed). */};
+
 		static std::shared_ptr<TextToNodeMap> exportToFileSystem(const QString& pathToProjectContainerDir,
-																					SourceDir* projectDir, FragmentLayouter* layouter);
+																					SourceDir* exportTree, FragmentLayouter* layouter,
+																					ExportSpan span);
 
 	private:
-		static void saveDir(QDir& fileSystemDir, SourceDir* sourceDir, FragmentLayouter* layouter, TextToNodeMap* map);
-		static void saveFile(QDir& fileSystemDir, SourceFile* sourceFile, FragmentLayouter* layouter, TextToNodeMap* map);
+		Exporter(QDir projectDirOnFilesystem, SourceDir* exportTree, FragmentLayouter* layouter,
+					ExportSpan span);
+
+		void saveDir(QDir& fileSystemDir, SourceDir* sourceDir);
+		void saveFile(QDir& fileSystemDir, SourceFile* sourceFile);
+
+		void readPreviousExports();
+		void deleteObsoletePreviousExports();
+		void saveCurrentExports();
+
+		QDir rootDir_;
+		ExportSpan span_{};
+		FragmentLayouter* layouter_{};
+
+		std::shared_ptr<TextToNodeMap> map_;
+
+		std::set<QString> previousExports_;
+		std::set<QString> currentExports_;
+
+		static const QString previousExportsFileName_;
 };
 
 }

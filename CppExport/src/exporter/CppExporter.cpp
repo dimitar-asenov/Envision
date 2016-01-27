@@ -61,7 +61,7 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 		createFilesFromComposite(directory, codeComposite);
 
 	auto layout = layouter();
-	Export::Exporter::exportToFileSystem("", directory, &layout);
+	Export::Exporter::exportToFileSystem("", directory, &layout, Export::Exporter::ExportSpan::AllFiles);
 
 	return {};
 

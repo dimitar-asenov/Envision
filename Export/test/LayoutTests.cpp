@@ -77,7 +77,7 @@ class CompositeFragmentTest : public Test<ExportPlugin, CompositeFragmentTest> {
 							| FragmentLayouter::NewLineAfterPrefix | FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
 
-	auto map = Exporter::exportToFileSystem(testDir, &root, &layouter);
+	auto map = Exporter::exportToFileSystem(testDir, &root, &layouter, Export::Exporter::ExportSpan::AllFiles);
 
 	//Test the map
 

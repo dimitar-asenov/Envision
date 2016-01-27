@@ -57,7 +57,7 @@ void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 						  Export::FragmentLayouter::NewLineAfterPostfix |
 						  Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n", "}");
 
-	Export::Exporter::exportToFileSystem(path, dir, &layouter);
+	Export::Exporter::exportToFileSystem(path, dir, &layouter, Export::Exporter::ExportSpan::AllFiles);
 }
 
 }

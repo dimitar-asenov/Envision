@@ -60,7 +60,8 @@ QList<Export::ExportError> JavaExporter::exportTree(Model::TreeManager* manager,
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
 
-	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter,
+																	Export::Exporter::ExportSpan::AllFiles);
 	exportMaps().insert(project, map);
 
 	return visitor.errors();
