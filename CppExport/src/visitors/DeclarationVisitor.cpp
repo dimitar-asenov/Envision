@@ -279,15 +279,11 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 		{
 			auto currentNode = workList.takeLast();
 			if (auto reference = DCast<ReferenceExpression>(currentNode))
-			{
 				if (auto target = reference->target())
-				{
 					for (auto other : declarations)
 						if (declaration != other && !DCast<Field>(other))
 							if (other->isAncestorOf(target) || other == target)
 								dependencies.insert(other);
-				}
-			}
 			if (!DCast<StatementItemList>(currentNode))
 				workList << currentNode->children();
 		}
