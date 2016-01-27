@@ -46,7 +46,6 @@ class CPPEXPORT_API CodeComposite
 		void addUnit(CodeUnit* unit);
 
 		void fragments(Export::SourceFragment*& headerFragment, Export::SourceFragment*& sourceFragment);
-
 	private:
 		const QString name_;
 		QList<CodeUnit*> units_;
@@ -60,9 +59,6 @@ class CPPEXPORT_API CodeComposite
 		QString relativePath(CodeComposite* other);
 		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
 
-		template <typename T>
-		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
-													std::function<T*(QList<T*>&)> selector = nullptr);
 		QString pluginName(OOModel::Declaration* declaration);
 		void sortUnits(CodeUnitPart*(CodeUnit::*part)(),
 							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);

@@ -270,7 +270,7 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 		parts.removeOne(result);
 		return result;
 	};
-	for (auto part : topologicalSort(partDependencies, selector)) units_.append(part->parent());
+	for (auto part : ExportHelpers::topologicalSort(partDependencies, selector)) units_.append(part->parent());
 }
 
 void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
@@ -279,72 +279,6 @@ void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFra
 	header = headerFragment();
 	sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->dependenciesWithinFile(units()); });
 	source = sourceFragment();
-}
-
-template <typename T>
-QList<T*> CodeComposite::topologicalSort(QHash<T*, QSet<T*>> dependsOn, std::function<T*(QList<T*>&)> selector)
-{
-	// calculate a list of elements with no dependencies.
-	// calculate a map that maps from an element to all elements that depend on it.
-	QList<T*> noPendingDependencies;
-	QHash<T*, QSet<T*>> neededFor;
-	for (auto it = dependsOn.begin(); it != dependsOn.end(); it++)
-		if (it.value().empty())
-			// this element depends on no other elements
-			noPendingDependencies.append(it.key());
-		else
-		{
-			it.value() = it.value().intersect(dependsOn.keys().toSet());
-
-			// for every other element this element depends on add it to the neededFor map for said other element
-			bool notNeededForAnything = true;
-			for (auto dependency : it.value())
-				if (dependsOn.contains(dependency))
-				{
-					neededFor[dependency].insert(it.key());
-					notNeededForAnything = false;
-				}
-			if (notNeededForAnything) noPendingDependencies.append(it.key());
-		}
-	QList<T*> result;
-	while (!noPendingDependencies.empty())
-	{
-		// take any item form the list of item with no more dependencies and add it to the result
-		auto n = selector ? selector(noPendingDependencies) : noPendingDependencies.takeFirst();
-		result.append(n);
-
-		// check if we are neededFor another node
-		auto it = neededFor.find(n);
-		if (it == neededFor.end()) continue;
-
-		// for every node we are neededFor
-		for (auto m : *it)
-		{
-			// find the nodes the node we are needed for dependsOn
-			auto dIt = dependsOn.find(m);
-			Q_ASSERT(dIt != dependsOn.end());
-
-			// remove us from its dependencies
-			dIt->remove(n);
-
-			// if this node has no more dependencies add it to the list of items with no more dependencies
-
-			bool noPendingDependency = true;
-			for (auto d : *dIt)
-				if (dependsOn.contains(d))
-				{
-					noPendingDependency = false;
-					break;
-				}
-			if (noPendingDependency) noPendingDependencies.append(m);
-		}
-	}
-
-	// test graph for cycles
-	for (auto dependencies : dependsOn.values())
-		Q_ASSERT(dependencies.empty());
-
-	return result;
 }
 
 }
