@@ -26,7 +26,7 @@
 
 #include "MetaDefinition.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 #include "Class.h"
 
 template class Model::TypedList<OOModel::MetaDefinition>;

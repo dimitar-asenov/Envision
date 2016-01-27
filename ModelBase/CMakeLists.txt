@@ -15,7 +15,7 @@ add_library(ModelBase SHARED
 	src/commands/NodeOwningCommand.h
 	src/concurrent/InterruptibleThread.h
 	src/concurrent/NodeReadWriteLock.h
-	src/visitor/VisitorDefinition.h
+	src/visitor/Visitor.hpp
 	src/visitor/Visitor.h
 	src/ModelException.h
 	src/commands/FieldSet.h
@@ -34,7 +34,7 @@ add_library(ModelBase SHARED
 	src/nodes/Reference.h
 	src/nodes/Text.h
 	src/nodes/TypedList.h
-	src/nodes/TypedListDefinition.h
+	src/nodes/TypedList.hpp
 	src/nodes/nodeMacros.h
 	src/persistence/ClipboardStore.h
 	src/persistence/PersistentStore.h

@@ -28,7 +28,7 @@
 
 #include "types/PrimitiveTypeExpression.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::DeleteExpression>;
 
 namespace OOModel {

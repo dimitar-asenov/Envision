@@ -30,7 +30,7 @@
 #include "../src/nodes/List.h"
 #include "../src/nodes/Integer.h"
 #include "../src/nodes/Text.h"
-#include "../src/visitor/VisitorDefinition.h"
+#include "../src/visitor/Visitor.hpp"
 
 namespace Model {
 

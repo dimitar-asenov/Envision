@@ -27,7 +27,7 @@
 #include "FloatLiteral.h"
 #include "../types/PrimitiveType.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::FloatLiteral>;
 
 namespace OOModel {

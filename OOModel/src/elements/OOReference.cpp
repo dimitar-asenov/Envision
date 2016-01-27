@@ -41,7 +41,7 @@
 #include "../types/ErrorType.h"
 #include "../typesystem/TypeSystem.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::OOReference>;
 
 namespace OOModel {

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "ModelBase/src/visitor/VisitorDefinition.h"
+#include "ModelBase/src/visitor/Visitor.hpp"
 #include "VisualizationBase/src/items/Item.h"
 #include "OOInteraction/src/DoxygenCommentsOnlyVisitor.h"
 

@@ -28,7 +28,7 @@
 
 #include "../utils/InfoJavascriptFunctions.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<Visualization::InfoNode>;
 
 namespace Visualization {

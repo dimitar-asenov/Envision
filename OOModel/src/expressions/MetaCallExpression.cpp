@@ -30,7 +30,7 @@
 #include "../types/SymbolProviderType.h"
 #include "../declarations/MetaDefinition.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 
 #include "../CodeGenerationVisitor.h"
 

@@ -29,7 +29,7 @@
 #include "../contractslibrary_api.h"
 
 #if defined(ContractsLibrary_EXPORTS)
-	#include "ModelBase/src/visitor/VisitorDefinition.h"
+	#include "ModelBase/src/visitor/Visitor.hpp"
 #else
 	#include "ModelBase/src/visitor/Visitor.h"
 #endif

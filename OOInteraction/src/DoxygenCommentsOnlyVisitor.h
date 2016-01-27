@@ -28,7 +28,7 @@
 
 #include "oointeraction_api.h"
 
-#include "ModelBase/src/visitor/VisitorDefinition.h"
+#include "ModelBase/src/visitor/Visitor.hpp"
 
 namespace OOInteraction {
 /**

@@ -28,7 +28,7 @@
 #include "EmptyExpression.h"
 #include "../types/ErrorType.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::Expression>;
 
 namespace OOModel {

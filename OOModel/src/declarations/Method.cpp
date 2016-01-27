@@ -27,7 +27,7 @@
 #include "Method.h"
 #include "Class.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 #include "../types/Type.h"
 #include "../expressions/MethodCallExpression.h"
 

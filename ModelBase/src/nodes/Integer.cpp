@@ -28,7 +28,7 @@
 #include "../commands/FieldSet.h"
 #include "../ModelException.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<Model::Integer>;
 
 namespace Model {
