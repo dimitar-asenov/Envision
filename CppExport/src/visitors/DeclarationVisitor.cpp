@@ -264,16 +264,37 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 template<typename Predicate>
 bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment* section, Predicate filter)
 {
-	auto subDeclarations = list(classs->subDeclarations(), this, "sections", filter);
-	auto fields = list(classs->fields(), this, "vertical", filter);
-	auto classes = list(classs->classes(), this, "sections", filter);
-	auto methods = list(classs->methods(), this, "sections", filter);
+	QList<Declaration*> declarations;
+	for (auto declaration : *classs->subDeclarations()) if (filter(declaration)) declarations.append(declaration);
+	for (auto declaration : *classs->fields()) if (filter(declaration)) declarations.append(declaration);
+	for (auto declaration : *classs->classes()) if (filter(declaration)) declarations.append(declaration);
+	for (auto declaration : *classs->methods()) if (filter(declaration)) declarations.append(declaration);
 
-	*section << subDeclarations << fields << classes << methods;
-	return !subDeclarations->fragments().empty() ||
-			 !fields->fragments().empty() ||
-			 !classes->fragments().empty() ||
-			 !methods->fragments().empty();
+	QHash<Declaration*, QSet<Declaration*>> declarationDependencies;
+	for (auto declaration : declarations)
+	{
+		QSet<Declaration*> dependencies;
+		QList<Model::Node*> workList{declaration};
+		while (!workList.empty())
+		{
+			auto currentNode = workList.takeLast();
+			if (auto reference = DCast<ReferenceExpression>(currentNode))
+			{
+				for (auto other : declarations)
+					if (declaration != other && !DCast<Field>(other))
+						if (auto target = reference->target())
+							if (other->isAncestorOf(target) || other == target)
+								dependencies.insert(other);
+			}
+			if (!DCast<StatementItemList>(currentNode))
+				workList << currentNode->children();
+		}
+		declarationDependencies.insert(declaration, dependencies);
+	}
+
+	auto fragment = section->append(new CompositeFragment{classs, "sections"});
+	for (auto node : ExportHelpers::topologicalSort(declarationDependencies)) *fragment << visit(node);
+	return !fragment->fragments().empty();
 }
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
