@@ -108,35 +108,38 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 					SAFE_DELETE(leftType);
 				}
 
-			if (isNameOnlyDependency(reference))
-				softTargets_.insert(target);
-			else
+			if (!parent()->node()->isAncestorOf(target))
 			{
-				auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
-				auto prefixReference = DCast<OOModel::ReferenceExpression>(reference->prefix());
-
-				if (!parentMethodCall || !prefixReference || prefixReference->typeArguments()->isEmpty())
-					hardTargets_.insert(target);
-
-				// member access
-				if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
+				if (isNameOnlyDependency(reference))
+					softTargets_.insert(target);
+				else
 				{
-					const OOModel::Type* baseType{};
-					if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
-						baseType = parentMethodCall->type();
-					else
-						baseType = reference->type();
+					auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
+					auto prefixReference = DCast<OOModel::ReferenceExpression>(reference->prefix());
 
-					auto finalType = baseType;
-					if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(baseType))
-						finalType = pointerType->baseType();
-					else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(baseType))
-						finalType = referenceType->baseType();
+					if (!parentMethodCall || !prefixReference || prefixReference->typeArguments()->isEmpty())
+						hardTargets_.insert(target);
 
-					if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
-						hardTargets_.insert(classType->classDefinition());
+					// member access
+					if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
+					{
+						const OOModel::Type* baseType{};
+						if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
+							baseType = parentMethodCall->type();
+						else
+							baseType = reference->type();
 
-					SAFE_DELETE(baseType);
+						auto finalType = baseType;
+						if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(baseType))
+							finalType = pointerType->baseType();
+						else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(baseType))
+							finalType = referenceType->baseType();
+
+						if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
+							hardTargets_.insert(classType->classDefinition());
+
+						SAFE_DELETE(baseType);
+					}
 				}
 			}
 		}
