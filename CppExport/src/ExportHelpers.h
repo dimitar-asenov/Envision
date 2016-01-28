@@ -58,7 +58,6 @@ class CPPEXPORT_API ExportHelpers
 		static CodeComposite* apiInclude(Model::Node* node);
 
 		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
-		static bool isEnumWithQtFlags(OOModel::Class* candidate);
 
 		template <typename T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,

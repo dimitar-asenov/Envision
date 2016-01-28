@@ -100,15 +100,4 @@ bool ExportHelpers::isSignalingDeclaration(OOModel::Declaration* declaration)
 	return false;
 }
 
-bool ExportHelpers::isEnumWithQtFlags(OOModel::Class* candidate)
-{
-	if (candidate->constructKind() == OOModel::Class::ConstructKind::Enum)
-		for (auto entry : *candidate->metaCalls())
-			if (auto metaCall = DCast<OOModel::MetaCallExpression>(entry))
-				if (auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
-					if (reference->name() == "QT_Flags")
-						return true;
-	return false;
-}
-
 }
