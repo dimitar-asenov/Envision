@@ -44,7 +44,7 @@ class OOMODEL_API ErrorExpression : public Super<Expression> {
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, postfix, setPostfix, QString, const QString&)
 
 	public:
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

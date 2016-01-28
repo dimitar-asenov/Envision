@@ -35,9 +35,9 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NullLiteral)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NullLiteral)
 
-Type* NullLiteral::type()
+std::unique_ptr<Type> NullLiteral::type()
 {
-	return new NullType{};
+	return std::unique_ptr<Type>{new NullType{}};
 }
 
 }

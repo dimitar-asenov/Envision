@@ -50,7 +50,7 @@ class OOMODEL_API LambdaExpression: public Super<Expression>
 	public:
 		enum class DefaultCaptureType : int {None, Value, Reference};
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 
 		DefaultCaptureType defaultCaptureType() const;
 		void setDefaultCaptureType(const DefaultCaptureType& type);

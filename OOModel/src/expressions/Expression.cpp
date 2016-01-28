@@ -36,9 +36,9 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Expression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(Expression, EmptyExpression)
 
-Type* Expression::type()
+std::unique_ptr<Type> Expression::type()
 {
-	return new ErrorType{"Uninitialized expression type"};
+	return std::unique_ptr<Type>{new ErrorType{"Uninitialized expression type"}};
 }
 
 Expression* Expression::topMostExpressionParent() const

@@ -47,9 +47,9 @@ IntegerLiteral::IntegerLiteral(const QString& value) : Super{nullptr, IntegerLit
 	setValue(value);
 }
 
-Type* IntegerLiteral::type()
+std::unique_ptr<Type> IntegerLiteral::type()
 {
-	return new PrimitiveType{PrimitiveType::INT, true};
+	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::INT, true}};
 }
 
 int IntegerLiteral::valueAsInt() const

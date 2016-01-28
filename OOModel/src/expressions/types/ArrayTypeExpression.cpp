@@ -38,9 +38,9 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression)
 REGISTER_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ArrayTypeExpression, fixedSize, Expression, false, true, true)
 
-Type* ArrayTypeExpression::type()
+std::unique_ptr<Type> ArrayTypeExpression::type()
 {
-	return new ArrayType{typeExpression()->type(), false};
+	return std::unique_ptr<Type>{new ArrayType{typeExpression()->type(), false}};
 }
 
 }

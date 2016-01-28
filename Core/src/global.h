@@ -40,6 +40,18 @@ template <typename T> inline void SAFE_DELETE( T* && object)
 	if (object) delete object;
 }
 
+template <typename Base, typename Derived>
+inline void dynamicCastAndAssign(Base& base, Derived& derived)
+{
+	static_assert(std::is_base_of<typename Base::element_type, typename Derived::element_type>::value,
+					  "dynamicCastAndAssign requires two classes that have an inheritance relationship");
+	if (auto cast = dynamic_cast<typename Derived::pointer>(base.get()))
+	{
+		base.release();
+		derived.reset(cast);
+	}
+}
+
 class OnScopeExit
 {
 	public:

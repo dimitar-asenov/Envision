@@ -28,22 +28,18 @@
 
 namespace OOModel {
 
-ThrownExceptionType::ThrownExceptionType(Type* exceptionType) : Type{true}, exceptionType_{exceptionType}
+ThrownExceptionType::ThrownExceptionType(std::unique_ptr<Type> exceptionType)
+	: Type{true}, exceptionType_{std::move(exceptionType)}
 {}
 
 ThrownExceptionType::ThrownExceptionType(const ThrownExceptionType& other)
 	: Type{other}, exceptionType_{other.exceptionType()->clone()}
 {}
 
-ThrownExceptionType::~ThrownExceptionType()
-{
-	SAFE_DELETE(exceptionType_);
-}
-
 bool ThrownExceptionType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const ThrownExceptionType*> (other))
-		return exceptionType_ != nullptr && exceptionType_->equals(at->exceptionType_)
+		return exceptionType_ != nullptr && exceptionType_->equals(at->exceptionType_.get())
 				 && qualifiers() == other->qualifiers();
 
 	return false;

@@ -39,16 +39,16 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(GlobalScopeExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(GlobalScopeExpression)
 
-Type* GlobalScopeExpression::type()
+std::unique_ptr<Type> GlobalScopeExpression::type()
 {
 	auto root = this->root();
 
 	if (auto cl = DCast<Class> (root))
-		return new ClassType{cl, true};
+		return std::unique_ptr<Type>{new ClassType{cl, true}};
 	else if (auto decl = DCast<Declaration> (root))
-		return new SymbolProviderType{decl, true};
+		return std::unique_ptr<Type>{new SymbolProviderType{decl, true}};
 	else
-		return new ErrorType{"Global scope expression used in a tree without a root declaration"};
+		return std::unique_ptr<Type>{new ErrorType{"Global scope expression used in a tree without a root declaration"}};
 }
 
 }

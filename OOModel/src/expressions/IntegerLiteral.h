@@ -47,7 +47,7 @@ class OOMODEL_API IntegerLiteral: public Super<Expression>
 
 		int valueAsInt() const;
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

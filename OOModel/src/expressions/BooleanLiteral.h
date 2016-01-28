@@ -44,7 +44,7 @@ class OOMODEL_API BooleanLiteral: public Super<Expression>
 	public:
 		BooleanLiteral(bool value);
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 

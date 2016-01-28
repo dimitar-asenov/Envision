@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "TypeNameOperator.h"
+#include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::TypeNameOperator>;
@@ -36,7 +37,7 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeNameOperator)
 
 REGISTER_ATTRIBUTE(TypeNameOperator, typeExpression, Expression, false, false, true)
 
-Type* TypeNameOperator::type()
+std::unique_ptr<Type> TypeNameOperator::type()
 {
 	return typeExpression()->type();
 }

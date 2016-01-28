@@ -58,7 +58,7 @@ MetaDefinition* MetaCallExpression::metaDefinition()
 	MetaDefinition* ret = nullptr;
 
 	auto calleeType = callee()->type();
-	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType))
+	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType.get()))
 	{
 		if (auto m = DCast<MetaDefinition>(spt->symbolProvider()))
 			ret = m;

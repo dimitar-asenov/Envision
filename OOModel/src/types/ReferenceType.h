@@ -33,9 +33,8 @@ namespace OOModel {
 
 class OOMODEL_API ReferenceType : public Type {
 	public:
-		ReferenceType(Type* baseType, bool isValueType);
+		ReferenceType(std::unique_ptr<Type> baseType, bool isValueType);
 		ReferenceType(const ReferenceType& other);
-		virtual ~ReferenceType();
 
 		virtual bool equals(const Type* other) const override;
 		virtual ReferenceType* clone() const override;
@@ -43,8 +42,8 @@ class OOMODEL_API ReferenceType : public Type {
 		const Type* baseType() const;
 
 	private:
-		Type* baseType_;
+		std::unique_ptr<Type> baseType_;
 };
 
-inline const Type* ReferenceType::baseType() const { return baseType_; }
+inline const Type* ReferenceType::baseType() const { return baseType_.get(); }
 }

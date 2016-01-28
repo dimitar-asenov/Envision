@@ -25,8 +25,8 @@
  **********************************************************************************************************************/
 
 #include "CommaExpression.h"
-
 #include "EmptyExpression.h"
+#include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::CommaExpression>;
@@ -96,7 +96,7 @@ bool CommaExpression::findSymbols(QSet<Node*>& result, const Model::SymbolMatche
 	return found;
 }
 
-Type* CommaExpression::type()
+std::unique_ptr<Type> CommaExpression::type()
 {
 	return right()->type();
 }

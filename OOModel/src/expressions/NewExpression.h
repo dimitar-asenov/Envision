@@ -45,7 +45,7 @@ class OOMODEL_API NewExpression: public Super<Expression>
 
 		NewExpression(Expression* type, Expression* firstDimension = nullptr);
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

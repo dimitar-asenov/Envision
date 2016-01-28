@@ -41,17 +41,17 @@ REGISTER_ATTRIBUTE(LambdaExpression, captures, TypedListOfExpression, false, fal
 REGISTER_ATTRIBUTE(LambdaExpression, dCaptureType, Integer, false, false, true)
 REGISTER_ATTRIBUTE(LambdaExpression, results, TypedListOfFormalResult, false, false, true)
 
-Type* LambdaExpression::type()
+std::unique_ptr<Type> LambdaExpression::type()
 {
-	QList<const Type*> args;
+	std::vector<std::unique_ptr<Type>> args;
 	for (auto ait = arguments()->begin(); ait != arguments()->end(); ++ait)
-		args.append((*ait)->typeExpression()->type());
+		args.emplace_back((*ait)->typeExpression()->type());
 
-	QList<const Type*> res;
+	std::vector<std::unique_ptr<Type>> res;
 	for (auto rit = results()->begin(); rit != results()->end(); ++rit)
-		res.append( (*rit)->typeExpression()->type());
+		res.emplace_back( (*rit)->typeExpression()->type());
 
-	return new FunctionType{true, args, res};
+	return std::unique_ptr<Type>{new FunctionType{true, std::move(args), std::move(res)}};
 }
 
 }

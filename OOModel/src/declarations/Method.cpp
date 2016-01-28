@@ -162,10 +162,7 @@ bool Method::overrides(Method* other)
 		auto t1 = arguments()->at(i)->typeExpression()->type();
 		auto t2 = other->arguments()->at(i)->typeExpression()->type();
 
-		bool equal = t1->relationTo(t2).testFlag(TypeSystem::Equal);
-
-		SAFE_DELETE(t1);
-		SAFE_DELETE(t2);
+		bool equal = t1->relationTo(t2.get()).testFlag(TypeSystem::Equal);
 
 		if (!equal) return false;
 	}

@@ -61,24 +61,24 @@ ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix
 	if (prefix != nullptr) setPrefix(prefix);
 }
 
-Type* ReferenceExpression::type()
+std::unique_ptr<Type> ReferenceExpression::type()
 {
 	auto resolvedTarget = ref()->target();
 
-	if (!resolvedTarget) return new ErrorType{"Unresolved Reference"};
+	if (!resolvedTarget) return std::unique_ptr<Type>{new ErrorType{"Unresolved Reference"}};
 
 	if ( auto project = DCast<Project>( resolvedTarget ) )
-		return new SymbolProviderType{project, false};
+		return std::unique_ptr<Type>{new SymbolProviderType{project, false}};
 	else if ( auto module = DCast<Module>( resolvedTarget ) )
-		return new SymbolProviderType{module, false};
+		return std::unique_ptr<Type>{new SymbolProviderType{module, false}};
 	else if ( auto cl = DCast<Class>( resolvedTarget ) )
-		return new ClassType{cl, false};
+		return std::unique_ptr<Type>{new ClassType{cl, false}};
 	else if ( auto method = DCast<Method>( resolvedTarget ) )
-		return new SymbolProviderType{method, false};
+		return std::unique_ptr<Type>{new SymbolProviderType{method, false}};
 	else if ( auto metaDefinition = DCast<MetaDefinition> (resolvedTarget ))
-		return new SymbolProviderType{metaDefinition, false};
+		return std::unique_ptr<Type>{new SymbolProviderType{metaDefinition, false}};
 	else if ( auto alias = DCast<TypeAlias>( resolvedTarget ) )
-		return new SymbolProviderType{alias, false};
+		return std::unique_ptr<Type>{new SymbolProviderType{alias, false}};
 	else if ( auto vdecl = DCast<VariableDeclarationExpression>( resolvedTarget ) )
 	{
 		auto t = vdecl->type();
@@ -99,7 +99,7 @@ Type* ReferenceExpression::type()
 			t->setValueType(true);
 			return t;
 		}
-		else return new ErrorType{"Unknown type for target of reference"};
+		else return std::unique_ptr<Type>{new ErrorType{"Unknown type for target of reference"}};
 	}
 	else if ( auto field = DCast<Field>( resolvedTarget ) )
 	{
@@ -125,7 +125,7 @@ Type* ReferenceExpression::type()
 		t->setValueType(true);
 		return t;
 	}
-	else return new ErrorType{"Unknown type for target of reference"};
+	else return std::unique_ptr<Type>{new ErrorType{"Unknown type for target of reference"}};
 }
 
 }

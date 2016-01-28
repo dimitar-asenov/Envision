@@ -46,7 +46,7 @@ class OOMODEL_API ReferenceTypeExpression : public Super<TypeExpression>
 
 		ReferenceTypeExpression(Expression* ref, bool rValue = false);
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

@@ -28,23 +28,18 @@
 
 namespace OOModel {
 
-ReferenceType::ReferenceType(Type* baseType, bool isValueType)
-	: Type{isValueType}, baseType_{baseType}
+ReferenceType::ReferenceType(std::unique_ptr<Type> baseType, bool isValueType)
+	: Type{isValueType}, baseType_{std::move(baseType)}
 {}
 
 ReferenceType::ReferenceType(const ReferenceType& other)
 	: Type{other}, baseType_{other.baseType()->clone()}
 {}
 
-ReferenceType::~ReferenceType()
-{
-	SAFE_DELETE(baseType_);
-}
-
 bool ReferenceType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const ReferenceType*> (other))
-		return baseType_ != nullptr && baseType_->equals(at->baseType_) && qualifiers() == other->qualifiers();
+		return baseType_ != nullptr && baseType_->equals(at->baseType_.get()) && qualifiers() == other->qualifiers();
 
 	return false;
 }

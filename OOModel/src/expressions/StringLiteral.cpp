@@ -43,9 +43,9 @@ StringLiteral::StringLiteral(const QString& value)
 	setValue(value);
 }
 
-Type* StringLiteral::type()
+std::unique_ptr<Type> StringLiteral::type()
 {
-	return new StringType{};
+	return std::unique_ptr<Type>{new StringType{}};
 }
 
 }

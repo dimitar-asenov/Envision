@@ -28,27 +28,23 @@
 
 namespace OOModel {
 
-FunctionType::FunctionType(bool isValueType, QList<const Type*> arguments, QList<const Type*> results)
-: Type{isValueType}, arguments_{arguments}, results_{results}
+FunctionType::FunctionType(bool isValueType, std::vector<std::unique_ptr<Type> > arguments,
+									std::vector<std::unique_ptr<Type> > results)
+	: Type{isValueType}, arguments_{std::move(arguments)}, results_{std::move(results)}
 {}
 
-FunctionType::FunctionType(bool isValueType, QList<const Type*> arguments, Type* result)
-: Type{isValueType}, arguments_{arguments}
+FunctionType::FunctionType(bool isValueType, std::vector<std::unique_ptr<Type> > arguments,
+									std::unique_ptr<Type> result)
+	: Type{isValueType}, arguments_{std::move(arguments)}
 {
-	if (result) results_.append(result);
+	if (result) results_.push_back(std::move(result));
 }
 
 FunctionType::FunctionType(const FunctionType& other)
 : Type{other}
 {
-	for (auto a : other.arguments_) arguments_.append(a->clone());
-	for (auto r : other.results_) results_.append(r->clone());
-}
-
-FunctionType::~FunctionType()
-{
-	for (auto a : arguments_) SAFE_DELETE( a);
-	for (auto r : results_) SAFE_DELETE(r);
+	for (auto & a : other.arguments_) arguments_.emplace_back(a->clone());
+	for (auto & r : other.results_) results_.emplace_back(r->clone());
 }
 
 bool FunctionType::equals(const Type* other) const
@@ -59,11 +55,11 @@ bool FunctionType::equals(const Type* other) const
 	if (arguments_.size() != ft->arguments_.size()) return false;
 	if (results_.size() != ft->results_.size()) return false;
 
-	for (int i = 0; i<arguments_.size(); ++i)
-		if (! arguments_.at(i)->equals(ft->arguments_.at(i))) return false;
+	for (size_t i = 0; i<arguments_.size(); ++i)
+		if (! arguments_[i]->equals(ft->arguments_[i].get())) return false;
 
-	for (int i = 0; i<results_.size(); ++i)
-		if (! results_.at(i)->equals(ft->results_.at(i))) return false;
+	for (size_t i = 0; i<results_.size(); ++i)
+		if (! results_[i]->equals(ft->results_[i].get())) return false;
 
 	return true;
 }

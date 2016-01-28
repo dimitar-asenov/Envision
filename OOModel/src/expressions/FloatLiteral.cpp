@@ -47,9 +47,9 @@ FloatLiteral::FloatLiteral(const QString& value) : Super{nullptr, FloatLiteral::
 	setValue(value);
 }
 
-Type* FloatLiteral::type()
+std::unique_ptr<Type> FloatLiteral::type()
 {
-	return new PrimitiveType{PrimitiveType::DOUBLE, true};
+	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::DOUBLE, true}};
 }
 
 }

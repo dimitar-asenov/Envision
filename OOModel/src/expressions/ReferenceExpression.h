@@ -62,7 +62,7 @@ class OOMODEL_API ReferenceExpression: public Super<Expression>
 		void setMemberKind(MemberKind kind);
 
 		Model::Node* target();
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 
 		void setName(const QString& name);
 		const QString& name();

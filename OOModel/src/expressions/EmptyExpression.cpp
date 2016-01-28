@@ -35,9 +35,9 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(EmptyExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(EmptyExpression)
 
-Type* EmptyExpression::type()
+std::unique_ptr<Type> EmptyExpression::type()
 {
-	return new ErrorType{"Empty expression"};
+	return std::unique_ptr<Type>{new ErrorType{"Empty expression"}};
 }
 
 }

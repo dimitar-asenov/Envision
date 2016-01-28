@@ -33,9 +33,8 @@ namespace OOModel {
 
 class OOMODEL_API PointerType : public Type {
 	public:
-		PointerType(Type* baseType, bool isValueType);
+		PointerType(std::unique_ptr<Type> baseType, bool isValueType);
 		PointerType(const PointerType& other);
-		virtual ~PointerType();
 
 		virtual bool equals(const Type* other) const override;
 		virtual PointerType* clone() const override;
@@ -43,8 +42,8 @@ class OOMODEL_API PointerType : public Type {
 		const Type* baseType() const;
 
 	private:
-		Type* baseType_;
+		std::unique_ptr<Type> baseType_;
 };
 
-inline const Type* PointerType::baseType() const { return baseType_; }
+inline const Type* PointerType::baseType() const { return baseType_.get(); }
 }

@@ -38,9 +38,9 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator)
 REGISTER_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
 REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
 
-Type* UnfinishedOperator::type()
+std::unique_ptr<Type> UnfinishedOperator::type()
 {
-	return new ErrorType{"Unfinished Operator"};
+	return std::unique_ptr<Type>{new ErrorType{"Unfinished Operator"}};
 }
 
 }

@@ -32,9 +32,8 @@ namespace OOModel {
 
 class OOMODEL_API ArrayType : public Type {
 	public:
-		ArrayType(Type* elementType, bool isValueType);
+		ArrayType(std::unique_ptr<Type> elementType, bool isValueType);
 		ArrayType(const ArrayType& other);
-		virtual ~ArrayType();
 
 		// TODO: add constant size support
 
@@ -44,8 +43,8 @@ class OOMODEL_API ArrayType : public Type {
 		const Type* elementType() const;
 
 	private:
-		Type* elementType_;
+		std::unique_ptr<Type> elementType_;
 };
 
-inline const Type* ArrayType::elementType() const { return elementType_; }
+inline const Type* ArrayType::elementType() const { return elementType_.get(); }
 }

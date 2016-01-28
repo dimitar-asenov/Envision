@@ -50,10 +50,8 @@ Model::Node* TypeAlias::target() const
 	Model::Node* ret{};
 
 	auto type = this->typeExpression()->type();
-	if (auto sp = dynamic_cast<SymbolProviderType*>(type))
+	if (auto sp = dynamic_cast<SymbolProviderType*>(type.get()))
 		ret = sp->symbolProvider();
-
-	SAFE_DELETE(type);
 
 	return ret;
 }

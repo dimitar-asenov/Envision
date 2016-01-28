@@ -40,7 +40,7 @@ class OOMODEL_API ThrowExpression: public Super<Expression>
 	ATTRIBUTE(Expression, expr, setExpr)
 
 	public:
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

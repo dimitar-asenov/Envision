@@ -47,24 +47,18 @@ UnaryOperation::UnaryOperation(const OperatorTypes& op, Expression* operand)
 	if (operand) setOperand(operand);
 }
 
-Type* UnaryOperation::type()
+std::unique_ptr<Type> UnaryOperation::type()
 {
 	if (opr() == DEREFERENCE)
 	{
 		auto t = operand()->type();
-		if (PointerType* pt = dynamic_cast<PointerType*>(t))
-		{
-			auto bt = pt->baseType()->clone();
-			SAFE_DELETE(t);
-			return bt;
-		} else
-		{
-			SAFE_DELETE(t);
-			return new ErrorType{"dereferencing a value that is not a pointer"};
-		}
+		if (PointerType* pt = dynamic_cast<PointerType*>(t.get()))
+			return std::unique_ptr<Type>{pt->baseType()->clone()};
+		else
+			return std::unique_ptr<Type>{new ErrorType{"dereferencing a value that is not a pointer"}};
 	}
 	else if (opr() == ADDRESSOF)
-		return new PointerType{operand()->type(), false};
+		return std::unique_ptr<Type>{new PointerType{operand()->type(), false}};
 	else
 		return operand()->type();
 }

@@ -51,7 +51,7 @@ class OOMODEL_API CommaExpression: public Super<Expression>
 		 */
 		QList<Expression*> allSubOperands(bool detachOperands);
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
 				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 

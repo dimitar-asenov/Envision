@@ -47,11 +47,11 @@ TypeTraitExpression::TypeTraitExpression(TypeTraitKind kind, Expression* expr)
 	if (expr) setOperand(expr);
 }
 
-Type* TypeTraitExpression::type()
+std::unique_ptr<Type> TypeTraitExpression::type()
 {
 	if (typeTraitKind() == TypeTraitKind::SizeOf || typeTraitKind() == TypeTraitKind::AlignOf)
-		return new PrimitiveType{PrimitiveType::PrimitiveTypes::INT, true};
-	return new ErrorType{"Typeinfo request but not supported in TypeTraitExpression"};
+		return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::PrimitiveTypes::INT, true}};
+	return std::unique_ptr<Type>{new ErrorType{"Typeinfo request but not supported in TypeTraitExpression"}};
 }
 
 }

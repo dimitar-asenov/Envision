@@ -51,7 +51,7 @@ class OOMODEL_API TypeQualifierExpression : public Super<TypeExpression>
 		Qualifier qualifier() const;
 		void setQualifier(Qualifier q);
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 inline TypeQualifierExpression::Qualifier TypeQualifierExpression::qualifier()

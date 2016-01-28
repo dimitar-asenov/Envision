@@ -50,7 +50,7 @@ class OOMODEL_API TypeTraitExpression : public Super<Expression>
 		TypeTraitKind typeTraitKind() const;
 		void setTypeTraitKind(const TypeTraitKind& kind);
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 inline TypeTraitExpression::TypeTraitKind TypeTraitExpression::typeTraitKind() const

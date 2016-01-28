@@ -46,13 +46,16 @@ NewExpression::NewExpression(Expression* type, Expression* firstDimension)
 	if (firstDimension) dimensions()->append(firstDimension);
 }
 
-Type* NewExpression::type()
+std::unique_ptr<Type> NewExpression::type()
 {
 	auto t = newType()->type();
 	t->setValueType(true);
 
 	for (int i = 0; i< dimensions()->size(); ++i)
-		t = new ArrayType{t, true};
+	{
+		auto wrappedT = std::unique_ptr<Type>{new ArrayType{std::move(t), true}};
+		t = std::move(wrappedT);
+	}
 
 	return t;
 }

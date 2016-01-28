@@ -43,9 +43,9 @@ PointerTypeExpression::PointerTypeExpression(Expression* expr)
 	if (expr) setTypeExpression(expr);
 }
 
-Type* PointerTypeExpression::type()
+std::unique_ptr<Type> PointerTypeExpression::type()
 {
-	return new PointerType{typeExpression()->type(), false};
+	return std::unique_ptr<Type>{new PointerType{typeExpression()->type(), false}};
 }
 
 }

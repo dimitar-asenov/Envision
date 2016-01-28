@@ -38,7 +38,7 @@ class OOMODEL_API EmptyExpression : public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
 
 	public:
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

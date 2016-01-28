@@ -565,7 +565,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	}
 
 
-	SymbolProviderType* scopePrefix = nullptr;
+	std::unique_ptr<SymbolProviderType> scopePrefix;
 	bool afterDot = false;
 
 	if (auto ref = DCast<ReferenceExpression>(target->node()))
@@ -576,8 +576,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 		{
 			afterDot = true;
 			auto t = ref->prefix()->type();
-			scopePrefix = dynamic_cast<SymbolProviderType*>(t);
-			if (!scopePrefix) SAFE_DELETE(t);
+			dynamicCastAndAssign(t, scopePrefix);
 		}
 	}
 	else if (auto unf = DCast<OOModel::UnfinishedOperator>(target->node()))
@@ -588,8 +587,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 		{
 			afterDot = true;
 			auto t = unf->operands()->first()->type();
-			scopePrefix = dynamic_cast<SymbolProviderType*>(t);
-			if (!scopePrefix) SAFE_DELETE(t);
+			dynamicCastAndAssign(t, scopePrefix);
 		}
 	}
 
@@ -624,8 +622,6 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }});
 		}
 	}
-
-	SAFE_DELETE(scopePrefix);
 
 	bool show = true;
 	if (!showIfEmpty && entries.isEmpty()) show = false;

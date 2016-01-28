@@ -39,9 +39,9 @@ REGISTER_ATTRIBUTE(ErrorExpression, prefix, Text, false, false, true)
 REGISTER_ATTRIBUTE(ErrorExpression, arg, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ErrorExpression, postfix, Text, false, false, true)
 
-Type* ErrorExpression::type()
+std::unique_ptr<Type> ErrorExpression::type()
 {
-	return new ErrorType{"Syntax error in expression"};
+	return std::unique_ptr<Type>{new ErrorType{"Syntax error in expression"}};
 }
 
 }

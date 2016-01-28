@@ -43,7 +43,7 @@ class OOMODEL_API StringLiteral: public Super<Expression>
 
 	public:
 		StringLiteral(const QString& value);
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

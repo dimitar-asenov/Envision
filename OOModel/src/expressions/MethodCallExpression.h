@@ -57,13 +57,13 @@ class OOMODEL_API MethodCallExpression: public Super<Expression>
 		 */
 		Method* methodDefinition();
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 
 		MethodCallKind methodCallKind() const;
 		void setMethodCallKind(const MethodCallKind& kind);
 
 	private:
-		Method* methodDefinition(Type*& calleeType);
+		Method* methodDefinition(std::unique_ptr<Type>& calleeType);
 };
 
 inline MethodCallExpression::MethodCallKind MethodCallExpression::methodCallKind() const

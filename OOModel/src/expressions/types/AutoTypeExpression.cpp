@@ -42,7 +42,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(AutoTypeExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 
-Type* AutoTypeExpression::type()
+std::unique_ptr<Type> AutoTypeExpression::type()
 {
 	/**
 	 *	TODO: like this we return the wrong type for auto &&
@@ -65,24 +65,26 @@ Type* AutoTypeExpression::type()
 	if (varDecl)
 	{
 		if (!varDecl->initialValue())
-			return new ErrorType{"No initial value in auto type"};
+			return std::unique_ptr<Type>{new ErrorType{"No initial value in auto type"}};
 		auto initType = varDecl->initialValue()->type();
+		bool isInitValueType = initType->isValueType();
 		if (varDecl == p)
 			return initType;
 		if (DCast<ReferenceTypeExpression>(current))
-			return new ReferenceType{initType, initType->isValueType()};
+			return std::unique_ptr<Type>{new ReferenceType{std::move(initType), isInitValueType}};
 		if (DCast<PointerTypeExpression>(current))
-			return new PointerType{initType, initType->isValueType()};
+			return std::unique_ptr<Type>{new PointerType{std::move(initType), isInitValueType}};
 	}
 
 	if (forEachStatement)
 	{
 		// TODO: Add languge specific rules to infer the correct type
 		// For starters we could also cheat and just take the first tempalte parameter, if any
-		return new ErrorType{"Infering the type of a collection element in a for each loop is not currently supported."};
+		return std::unique_ptr<Type>{
+			new ErrorType{"Infering the type of a collection element in a for each loop is not currently supported."}};
 	}
 
-	return new ErrorType{"Could not find type of auto expression"};
+	return std::unique_ptr<Type>{new ErrorType{"Could not find type of auto expression"}};
 }
 
 }

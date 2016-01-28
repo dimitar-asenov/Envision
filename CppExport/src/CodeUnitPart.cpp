@@ -90,8 +90,8 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 				{
 					if (auto rightType = parentBinaryOperation->right()->type())
 					{
-						auto leftPointerType = dynamic_cast<const OOModel::PointerType*>(leftType);
-						auto rightPointerType = dynamic_cast<const OOModel::PointerType*>(rightType);
+						auto leftPointerType = dynamic_cast<const OOModel::PointerType*>(leftType.get());
+						auto rightPointerType = dynamic_cast<const OOModel::PointerType*>(rightType.get());
 						if (leftPointerType && rightPointerType)
 						{
 							auto leftClassType = dynamic_cast<const OOModel::ClassType*>(leftPointerType->baseType());
@@ -103,9 +103,7 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 									hardTargets_.insert(rightClassType->classDefinition());
 								}
 						}
-						SAFE_DELETE(rightType);
 					}
-					SAFE_DELETE(leftType);
 				}
 
 			if (!parent()->node()->isAncestorOf(target) || !DCast<OOModel::Class>(target))
@@ -125,22 +123,20 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 					// member access
 					if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
 					{
-						const OOModel::Type* baseType{};
+						std::unique_ptr<OOModel::Type> baseType{};
 						if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
 							baseType = parentMethodCall->type();
 						else
 							baseType = reference->type();
 
-						auto finalType = baseType;
-						if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(baseType))
+						const OOModel::Type* finalType = baseType.get();
+						if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(finalType))
 							finalType = pointerType->baseType();
-						else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(baseType))
+						else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(finalType))
 							finalType = referenceType->baseType();
 
 						if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
 							hardTargets_.insert(classType->classDefinition());
-
-						SAFE_DELETE(baseType);
 					}
 				}
 			}

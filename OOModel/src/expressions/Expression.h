@@ -45,7 +45,7 @@ class OOMODEL_API Expression : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Expression)
 
 	public:
-		virtual Type* type();
+		virtual std::unique_ptr<Type> type();
 
 		/**
 		 * Returns the expression node which is the top-most expression ancestor of this expression.

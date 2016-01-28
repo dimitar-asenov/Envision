@@ -55,35 +55,28 @@ FunctionTypeExpression::FunctionTypeExpression(const QList<Expression*>& args,
 	}
 }
 
-Type* FunctionTypeExpression::type()
+std::unique_ptr<Type> FunctionTypeExpression::type()
 {
 	// TODO: be a little more specific about what are allowed arguments and results.
 	// E.g. return an error type if an argumnet is not a variable declaration and it is not
 	// a type name.
-	QList<const Type*> args;
+	std::vector<std::unique_ptr<Type>> args;
 	for (auto a : *arguments())
 	{
-		args.append(a->type());
-		if (args.last()->isError())
-		{
-			for (auto t : args) SAFE_DELETE(t);
-			return new ErrorType{"Invalid argument type for FunctionTypeExpression"};
-		}
+		args.push_back(a->type());
+		if (args.back()->isError())
+			return std::unique_ptr<Type>{new ErrorType{"Invalid argument type for FunctionTypeExpression"}};
 	}
 
-	QList<const Type*> res;
+	std::vector<std::unique_ptr<Type>> res;
 	for (auto r : *results())
 	{
-		res.append(r->type());
-		if (res.last()->isError())
-		{
-			for (auto t : args) SAFE_DELETE(t);
-			for (auto t : res) SAFE_DELETE(t);
-			return new ErrorType{"Invalid result type for FunctionTypeExpression"};
-		}
+		res.push_back(r->type());
+		if (res.back()->isError())
+			return std::unique_ptr<Type>{new ErrorType{"Invalid result type for FunctionTypeExpression"}};
 	}
 
-	return new FunctionType{false, args, res};
+	return std::unique_ptr<Type>{new FunctionType{false, std::move(args), std::move(res)}};
 }
 
 }

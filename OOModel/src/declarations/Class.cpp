@@ -84,14 +84,13 @@ inline bool Class::findInTarget(Expression* target, QSet<Node*>& result, const M
 {
 	bool found = false;
 	auto t = target->type();
-	if (auto sp = dynamic_cast<SymbolProviderType*>(t))
+	if (auto sp = dynamic_cast<SymbolProviderType*>(t.get()))
 	{
 
 		if (sp->symbolProvider() && sp->symbolProvider() != this)
 			found = sp->symbolProvider()->findSymbols(result, matcher, sp->symbolProvider(), SEARCH_DOWN,
 				symbolTypes, exhaustAllScopes);
 	}
-	SAFE_DELETE(t);
 	return found;
 }
 
@@ -186,14 +185,12 @@ QSet<Class*> Class::allBaseClasses()
 	for (auto base : *baseClasses())
 	{
 		auto type = base->type();
-		auto ct = dynamic_cast<ClassType*>(type);
+		auto ct = dynamic_cast<ClassType*>(type.get());
 		if (ct)
 		{
 			bases.insert(ct->classDefinition());
 			bases.unite(ct->classDefinition()->allBaseClasses());
 		}
-
-		SAFE_DELETE(type);
 	}
 
 	if (baseClasses()->isEmpty())

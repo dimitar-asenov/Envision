@@ -39,7 +39,7 @@ REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
 
-Type* CastExpression::type()
+std::unique_ptr<Type> CastExpression::type()
 {
 	auto t = castType()->type();
 	t->setValueType(true);

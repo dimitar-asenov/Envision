@@ -45,9 +45,9 @@ DeleteExpression::DeleteExpression(bool isArrayType)
 	setIsArray(isArrayType);
 }
 
-Type* DeleteExpression::type()
+std::unique_ptr<Type> DeleteExpression::type()
 {
-	return new PrimitiveType{PrimitiveType::VOID, true};
+	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::VOID, true}};
 }
 
 }

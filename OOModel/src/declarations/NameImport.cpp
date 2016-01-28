@@ -56,10 +56,8 @@ Model::Node* NameImport::target() const
 	Model::Node* ret{};
 
 	auto type = this->importedName()->type();
-	if (auto sp = dynamic_cast<SymbolProviderType*>(type))
+	if (auto sp = dynamic_cast<SymbolProviderType*>(type.get()))
 		ret = sp->symbolProvider();
-
-	SAFE_DELETE(type);
 
 	return ret;
 }

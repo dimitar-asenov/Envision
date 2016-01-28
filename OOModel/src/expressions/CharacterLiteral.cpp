@@ -50,9 +50,9 @@ CharacterLiteral::CharacterLiteral(const QString& value)
 	setValue(value);
 }
 
-Type* CharacterLiteral::type()
+std::unique_ptr<Type> CharacterLiteral::type()
 {
-	return new PrimitiveType{PrimitiveType::CHAR, true};
+	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::CHAR, true}};
 }
 
 }

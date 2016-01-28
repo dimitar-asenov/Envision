@@ -37,18 +37,18 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ThisExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThisExpression)
 
-Type* ThisExpression::type()
+std::unique_ptr<Type> ThisExpression::type()
 {
 	auto p = parent();
 
 	while (p)
 	{
 		auto cl = DCast<Class> (p);
-		if (cl) return new ClassType{cl, true};
+		if (cl) return std::unique_ptr<Type>{new ClassType{cl, true}};
 		p = p->parent();
 	}
 
-	return new ErrorType{"Invalid position for 'this' expression. Not within a class."};
+	return std::unique_ptr<Type>{new ErrorType{"Invalid position for 'this' expression. Not within a class."}};
 }
 
 }

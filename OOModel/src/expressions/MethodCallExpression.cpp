@@ -52,13 +52,13 @@ MethodCallExpression::MethodCallExpression(const QString& name, Expression* refe
 	setMethodCallKind(MethodCallKind::Call);
 }
 
-Method* MethodCallExpression::methodDefinition(Type*& calleeType)
+Method* MethodCallExpression::methodDefinition(std::unique_ptr<Type>& calleeType)
 {
 	Method* ret = nullptr;
 
 	// TODO: handle other cases as well (e.g. FunctionType)
 	calleeType = callee()->type();
-	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType))
+	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType.get()))
 	{
 		if (auto m = DCast<Method>(spt->symbolProvider()))
 			ret = m;
@@ -71,38 +71,34 @@ Method* MethodCallExpression::methodDefinition(Type*& calleeType)
 
 Method* MethodCallExpression::methodDefinition()
 {
-	Type* calleeType = nullptr;
-	auto ret = methodDefinition(calleeType);
-	SAFE_DELETE(calleeType);
+	std::unique_ptr<Type> dummy{};
+	auto ret = methodDefinition(dummy);
 	return ret;
 }
 
-Type* MethodCallExpression::type()
+std::unique_ptr<Type> MethodCallExpression::type()
 {
-	Type* calleeType = nullptr;
+	std::unique_ptr<Type> calleeType = nullptr;
 	auto mdef = methodDefinition(calleeType);
-	SAFE_DELETE(calleeType);
 
 	if (!mdef)
 	{
 		// This type does not point to a method. See if it points to a FunctionalType object
-		Type* ret = nullptr;
-		if (auto ft = dynamic_cast<FunctionType*>(calleeType))
+		std::unique_ptr<Type> ret;
+		if (auto ft = dynamic_cast<FunctionType*>(calleeType.get()))
 		{
 			// TODO: handle multiple return values
-			if (ft->results().isEmpty()) ret = new PrimitiveType{PrimitiveType::VOID, true};
-			else ret = ft->results().first()->clone();
+			if (ft->results().empty()) ret = std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::VOID, true}};
+			else ret = std::unique_ptr<Type>{ft->results().front()->clone()};
 		}
 
-		SAFE_DELETE(calleeType);
-
 		if (ret) return ret;
-		else return new ErrorType{"Unresolved reference to a method"};
+		else return std::unique_ptr<Type>{new ErrorType{"Unresolved reference to a method"}};
 	}
 
 
 	if (mdef->results()->size() == 0)
-		return new PrimitiveType{PrimitiveType::VOID, true};
+		return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::VOID, true}};
 	else
 	{
 		// TODO: handle multiple return values

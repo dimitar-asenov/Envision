@@ -37,11 +37,11 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThrowExpression)
 
 REGISTER_ATTRIBUTE(ThrowExpression, expr, Expression, false, false, true)
 
-Type* ThrowExpression::type()
+std::unique_ptr<Type> ThrowExpression::type()
 {
 	auto t = expr()->type();
 	t->setValueType(true);
-	return new ThrownExceptionType{t};
+	return std::unique_ptr<Type>{new ThrownExceptionType{std::move(t)}};
 }
 
 }

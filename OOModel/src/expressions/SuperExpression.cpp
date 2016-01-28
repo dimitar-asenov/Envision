@@ -36,7 +36,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SuperExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SuperExpression)
 
-Type* SuperExpression::type()
+std::unique_ptr<Type> SuperExpression::type()
 {
 	auto p = parent();
 
@@ -48,22 +48,24 @@ Type* SuperExpression::type()
 			if (cl->baseClasses()->isEmpty())
 			{
 				if (auto base = cl->implicitBaseFromProject())
-					return new ClassType{base, true};
+					return std::unique_ptr<Type>{new ClassType{base, true}};
 				else
-					return new ErrorType{"Invalid usage of 'super' expression. Class has no super class."};
+					return std::unique_ptr<Type>{
+						new ErrorType{"Invalid usage of 'super' expression. Class has no super class."}};
 			}
 			else
 			{
 				if (auto base = Class::expressionToClass(cl->baseClasses()->first()))
-					return new ClassType{base, true};
+					return std::unique_ptr<Type>{new ClassType{base, true}};
 				else
-					return new ErrorType{"Invalid usage of 'super' expression. Base class expression is incorrect."};
+					return std::unique_ptr<Type>{
+						new ErrorType{"Invalid usage of 'super' expression. Base class expression is incorrect."}};
 			}
 		}
 		p = p->parent();
 	}
 
-	return new ErrorType{"Invalid position for 'super' expression. Not within a class."};
+	return std::unique_ptr<Type>{new ErrorType{"Invalid position for 'super' expression. Not within a class."}};
 }
 
 }

@@ -75,7 +75,7 @@ VariableDeclarationExpression::SymbolTypes VariableDeclarationExpression::symbol
 	return d ? d->symbolType() : UNSPECIFIED;
 }
 
-Type* VariableDeclarationExpression::type()
+std::unique_ptr<Type> VariableDeclarationExpression::type()
 {
 	auto t = decl()->typeExpression()->type();
 	t->setValueType(true);

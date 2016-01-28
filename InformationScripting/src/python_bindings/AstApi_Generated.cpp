@@ -153,6 +153,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("root", make_function(&Model::Node::root, return_internal_reference<>()))
 		.def("children", &Model::Node::children)
 		.def("definesSymbol", &Model::Node::definesSymbol)
+		.def("isTransparentForNameResolution", &Model::Node::isTransparentForNameResolution)
 		.def("symbolName", make_function((const QString& (Model::Node::*)(
 			))&Model::Node::symbolName, return_value_policy<copy_const_reference>()))
 		.def("symbolType", &Model::Node::symbolType)
@@ -198,20 +199,20 @@ BOOST_PYTHON_MODULE(AstApi) {
 }
 
 {
+	Model::CompositeIndex (*CompositeNode_registerNewAttribute1)(const
+		Model::Attribute&) = &Model::CompositeNode::registerNewAttribute;
 	Model::Node* (Model::CompositeNode::*CompositeNode_get1)(const QString&) const = &Model::CompositeNode::get;
 	Model::Node* (Model::CompositeNode::*CompositeNode_get2)(const
 		Model::CompositeIndex&) const = &Model::CompositeNode::get;
 	void (Model::CompositeNode::*CompositeNode_remove1)(QString) = &Model::CompositeNode::remove;
 	void (Model::CompositeNode::*CompositeNode_remove2)(Model::Node*) = &Model::CompositeNode::remove;
 	void (Model::CompositeNode::*CompositeNode_remove3)(const Model::CompositeIndex&) = &Model::CompositeNode::remove;
+	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf1)(const QString&) const = &Model::CompositeNode::isSubtypeOf;
+	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf2)(int) const = &Model::CompositeNode::isSubtypeOf;
 	Model::CompositeIndex (Model::CompositeNode::*CompositeNode_indexOf1)(
 		const QString&) const = &Model::CompositeNode::indexOf;
 	Model::CompositeIndex (Model::CompositeNode::*CompositeNode_indexOf2)(
 		Model::Node*) const = &Model::CompositeNode::indexOf;
-	Model::CompositeIndex (*CompositeNode_registerNewAttribute1)(const
-		Model::Attribute&) = &Model::CompositeNode::registerNewAttribute;
-	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf1)(const QString&) const = &Model::CompositeNode::isSubtypeOf;
-	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf2)(int) const = &Model::CompositeNode::isSubtypeOf;
 	class_<Model::CompositeNode, bases<Model::Node>>("CompositeNode")
 		.add_property("comment",
 			make_function(&Model::CompositeNode::comment, return_internal_reference<>()),
@@ -244,16 +245,16 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("registerExtensionId")
 		.def("meta", make_function((const Model::AttributeChain& (
 			Model::CompositeNode::*)())&Model::CompositeNode::meta, return_value_policy<copy_const_reference>()))
+		.def("registerNewAttribute", CompositeNode_registerNewAttribute1)
 		.def("get", make_function(CompositeNode_get1, return_internal_reference<>()))
 		.def("get", make_function(CompositeNode_get2, return_internal_reference<>()))
 		.def("remove", CompositeNode_remove1)
 		.def("remove", CompositeNode_remove2)
 		.def("remove", CompositeNode_remove3)
-		.def("indexOf", CompositeNode_indexOf1)
-		.def("indexOf", CompositeNode_indexOf2)
-		.def("registerNewAttribute", CompositeNode_registerNewAttribute1)
 		.def("isSubtypeOf", CompositeNode_isSubtypeOf1)
-		.def("isSubtypeOf", CompositeNode_isSubtypeOf2);
+		.def("isSubtypeOf", CompositeNode_isSubtypeOf2)
+		.def("indexOf", CompositeNode_indexOf1)
+		.def("indexOf", CompositeNode_indexOf2);
 }
 
 {
@@ -292,7 +293,11 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.value("Virtual", OOModel::Modifier::ModifierFlag::Virtual)
 		.value("Override", OOModel::Modifier::ModifierFlag::Override)
 		.value("Inline", OOModel::Modifier::ModifierFlag::Inline)
-		.value("Const", OOModel::Modifier::ModifierFlag::Const);
+		.value("Const", OOModel::Modifier::ModifierFlag::Const)
+		.value("ConstExpr", OOModel::Modifier::ModifierFlag::ConstExpr)
+		.value("Default", OOModel::Modifier::ModifierFlag::Default)
+		.value("Deleted", OOModel::Modifier::ModifierFlag::Deleted)
+		.value("Explicit", OOModel::Modifier::ModifierFlag::Explicit);
 }
 
 {
@@ -372,6 +377,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("clear", &Model::List::clear)
 		.def("nodes", make_function((const QVector<Model::Node*>& (
 			Model::List::*)())&Model::List::nodes, return_value_policy<copy_const_reference>()))
+		.def("isTransparentForNameResolution", &Model::List::isTransparentForNameResolution)
 		.def("findSymbols", &Model::List::findSymbols)
 		.def("replaceChild", &Model::List::replaceChild)
 		.def("createDefaultElement", make_function(&Model::List::createDefaultElement, return_internal_reference<>()))
@@ -535,7 +541,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::Expression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::Expression::type, return_internal_reference<>()))
+		.def("type", &OOModel::Expression::type)
 		.def("topMostExpressionParent", make_function(
 			&OOModel::Expression::topMostExpressionParent, return_internal_reference<>()))
 		.def("registerNewAttribute", Expression_registerNewAttribute1)
@@ -724,13 +730,13 @@ BOOST_PYTHON_MODULE(AstApi) {
 	bool (OOModel::FormalResult::*FormalResult_isSubtypeOf1)(const QString&) const = &OOModel::FormalResult::isSubtypeOf;
 	bool (OOModel::FormalResult::*FormalResult_isSubtypeOf2)(int) const = &OOModel::FormalResult::isSubtypeOf;
 	class_<OOModel::FormalResult, bases<Model::CompositeNode>>("FormalResult")
-		.add_property("typeExpression",
-			make_function(&OOModel::FormalResult::typeExpression, return_internal_reference<>()),
-			&OOModel::FormalResult::setTypeExpression)
 		.add_property("name",
 			make_function((const QString& (OOModel::FormalResult::*)(
 				))&OOModel::FormalResult::name, return_value_policy<copy_const_reference>()),
 			&OOModel::FormalResult::setName)
+		.add_property("typeExpression",
+			make_function(&OOModel::FormalResult::typeExpression, return_internal_reference<>()),
+			&OOModel::FormalResult::setTypeExpression)
 		.def("typeName", make_function((const QString& (OOModel::FormalResult::*)(
 			))&OOModel::FormalResult::typeName, return_value_policy<copy_const_reference>()))
 		.def("typeId", &OOModel::FormalResult::typeId)
@@ -814,6 +820,9 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.add_property("specializationExpression",
 			make_function(&OOModel::FormalTypeArgument::specializationExpression, return_internal_reference<>()),
 			&OOModel::FormalTypeArgument::setSpecializationExpression)
+		.add_property("defaultType",
+			make_function(&OOModel::FormalTypeArgument::defaultType, return_internal_reference<>()),
+			&OOModel::FormalTypeArgument::setDefaultType)
 		.def("typeName", make_function((const QString& (
 		OOModel::FormalTypeArgument::*)())&OOModel::FormalTypeArgument::typeName,
 			 return_value_policy<copy_const_reference>()))
@@ -997,7 +1006,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::CommaExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("allSubOperands", &OOModel::CommaExpression::allSubOperands)
-		.def("type", make_function(&OOModel::CommaExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::CommaExpression::type)
 		.def("findSymbols", &OOModel::CommaExpression::findSymbols)
 		.def("registerNewAttribute", CommaExpression_registerNewAttribute1)
 		.def("registerNewAttribute", CommaExpression_registerNewAttribute2)
@@ -1037,7 +1046,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::UnaryOperation::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::UnaryOperation::type, return_internal_reference<>()))
+		.def("type", &OOModel::UnaryOperation::type)
 		.def("registerNewAttribute", UnaryOperation_registerNewAttribute1)
 		.def("registerNewAttribute", UnaryOperation_registerNewAttribute2)
 		.def("isSubtypeOf", UnaryOperation_isSubtypeOf1)
@@ -1132,7 +1141,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::UnfinishedOperator::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::UnfinishedOperator::type, return_internal_reference<>()))
+		.def("type", &OOModel::UnfinishedOperator::type)
 		.def("isSubtypeOf", UnfinishedOperator_isSubtypeOf1)
 		.def("isSubtypeOf", UnfinishedOperator_isSubtypeOf2)
 		.def("registerNewAttribute", UnfinishedOperator_registerNewAttribute1)
@@ -1164,7 +1173,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::NullLiteral::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::NullLiteral::type, return_internal_reference<>()))
+		.def("type", &OOModel::NullLiteral::type)
 		.def("isSubtypeOf", NullLiteral_isSubtypeOf1)
 		.def("isSubtypeOf", NullLiteral_isSubtypeOf2)
 		.def("registerNewAttribute", NullLiteral_registerNewAttribute1)
@@ -1201,7 +1210,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::FloatLiteral::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("valueNode", make_function(&OOModel::FloatLiteral::valueNode, return_internal_reference<>()))
-		.def("type", make_function(&OOModel::FloatLiteral::type, return_internal_reference<>()))
+		.def("type", &OOModel::FloatLiteral::type)
 		.def("registerNewAttribute", FloatLiteral_registerNewAttribute1)
 		.def("registerNewAttribute", FloatLiteral_registerNewAttribute2)
 		.def("isSubtypeOf", FloatLiteral_isSubtypeOf1)
@@ -1243,7 +1252,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::TypeTraitExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::TypeTraitExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::TypeTraitExpression::type)
 		.def("registerNewAttribute", TypeTraitExpression_registerNewAttribute1)
 		.def("registerNewAttribute", TypeTraitExpression_registerNewAttribute2)
 		.def("isSubtypeOf", TypeTraitExpression_isSubtypeOf1)
@@ -1280,7 +1289,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::SuperExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::SuperExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::SuperExpression::type)
 		.def("isSubtypeOf", SuperExpression_isSubtypeOf1)
 		.def("isSubtypeOf", SuperExpression_isSubtypeOf2)
 		.def("registerNewAttribute", SuperExpression_registerNewAttribute1)
@@ -1324,7 +1333,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::ConditionalExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::ConditionalExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::ConditionalExpression::type)
 		.def("isSubtypeOf", ConditionalExpression_isSubtypeOf1)
 		.def("isSubtypeOf", ConditionalExpression_isSubtypeOf2)
 		.def("registerNewAttribute", ConditionalExpression_registerNewAttribute1)
@@ -1360,7 +1369,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::TypeNameOperator::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::TypeNameOperator::type, return_internal_reference<>()))
+		.def("type", &OOModel::TypeNameOperator::type)
 		.def("isSubtypeOf", TypeNameOperator_isSubtypeOf1)
 		.def("isSubtypeOf", TypeNameOperator_isSubtypeOf2)
 		.def("registerNewAttribute", TypeNameOperator_registerNewAttribute1)
@@ -1393,7 +1402,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::ThisExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::ThisExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::ThisExpression::type)
 		.def("isSubtypeOf", ThisExpression_isSubtypeOf1)
 		.def("isSubtypeOf", ThisExpression_isSubtypeOf2)
 		.def("registerNewAttribute", ThisExpression_registerNewAttribute1)
@@ -1435,7 +1444,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::BinaryOperation::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::BinaryOperation::type, return_internal_reference<>()))
+		.def("type", &OOModel::BinaryOperation::type)
 		.def("registerNewAttribute", BinaryOperation_registerNewAttribute1)
 		.def("registerNewAttribute", BinaryOperation_registerNewAttribute2)
 		.def("isSubtypeOf", BinaryOperation_isSubtypeOf1)
@@ -1491,7 +1500,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::EmptyExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::EmptyExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::EmptyExpression::type)
 		.def("isSubtypeOf", EmptyExpression_isSubtypeOf1)
 		.def("isSubtypeOf", EmptyExpression_isSubtypeOf2)
 		.def("registerNewAttribute", EmptyExpression_registerNewAttribute1)
@@ -1499,8 +1508,6 @@ BOOST_PYTHON_MODULE(AstApi) {
 }
 
 {
-	OOModel::Method* (OOModel::MethodCallExpression::*MethodCallExpression_methodDefinition1)(
-		) = &OOModel::MethodCallExpression::methodDefinition;
 	Model::CompositeIndex (*MethodCallExpression_registerNewAttribute1)(
 		const Model::Attribute&) = &OOModel::MethodCallExpression::registerNewAttribute;
 	Model::CompositeIndex (*MethodCallExpression_registerNewAttribute2)(
@@ -1509,6 +1516,8 @@ BOOST_PYTHON_MODULE(AstApi) {
 		const QString&) const = &OOModel::MethodCallExpression::isSubtypeOf;
 	bool (OOModel::MethodCallExpression::*MethodCallExpression_isSubtypeOf2)(
 		int) const = &OOModel::MethodCallExpression::isSubtypeOf;
+	OOModel::Method* (OOModel::MethodCallExpression::*MethodCallExpression_methodDefinition1)(
+		) = &OOModel::MethodCallExpression::methodDefinition;
 	scope MethodCallExpressionscope = class_<OOModel::MethodCallExpression,
 		 bases<OOModel::Expression>>("MethodCallExpression")
 		.add_property("callee",
@@ -1538,12 +1547,12 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::MethodCallExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::MethodCallExpression::type, return_internal_reference<>()))
-		.def("methodDefinition", make_function(MethodCallExpression_methodDefinition1, return_internal_reference<>()))
+		.def("type", &OOModel::MethodCallExpression::type)
 		.def("registerNewAttribute", MethodCallExpression_registerNewAttribute1)
 		.def("registerNewAttribute", MethodCallExpression_registerNewAttribute2)
 		.def("isSubtypeOf", MethodCallExpression_isSubtypeOf1)
-		.def("isSubtypeOf", MethodCallExpression_isSubtypeOf2);
+		.def("isSubtypeOf", MethodCallExpression_isSubtypeOf2)
+		.def("methodDefinition", make_function(MethodCallExpression_methodDefinition1, return_internal_reference<>()));
 	enum_<OOModel::MethodCallExpression::MethodCallKind>("MethodCallKind")
 		.value("Call", OOModel::MethodCallExpression::MethodCallKind::Call)
 		.value("Construct", OOModel::MethodCallExpression::MethodCallKind::Construct);
@@ -1582,7 +1591,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::DeleteExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("isArrayNode", make_function(&OOModel::DeleteExpression::isArrayNode, return_internal_reference<>()))
-		.def("type", make_function(&OOModel::DeleteExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::DeleteExpression::type)
 		.def("registerNewAttribute", DeleteExpression_registerNewAttribute1)
 		.def("registerNewAttribute", DeleteExpression_registerNewAttribute2)
 		.def("isSubtypeOf", DeleteExpression_isSubtypeOf1)
@@ -1590,23 +1599,29 @@ BOOST_PYTHON_MODULE(AstApi) {
 }
 
 {
-	bool (OOModel::LambdaExpression::*LambdaExpression_isSubtypeOf1)(
-		const QString&) const = &OOModel::LambdaExpression::isSubtypeOf;
-	bool (OOModel::LambdaExpression::*LambdaExpression_isSubtypeOf2)(int) const = &OOModel::LambdaExpression::isSubtypeOf;
 	Model::CompositeIndex (*LambdaExpression_registerNewAttribute1)(
 		const Model::Attribute&) = &OOModel::LambdaExpression::registerNewAttribute;
 	Model::CompositeIndex (*LambdaExpression_registerNewAttribute2)(
 		const QString&, const QString&, bool, bool, bool) = &OOModel::LambdaExpression::registerNewAttribute;
-	class_<OOModel::LambdaExpression, bases<OOModel::Expression>>("LambdaExpression")
+	bool (OOModel::LambdaExpression::*LambdaExpression_isSubtypeOf1)(
+		const QString&) const = &OOModel::LambdaExpression::isSubtypeOf;
+	bool (OOModel::LambdaExpression::*LambdaExpression_isSubtypeOf2)(int) const = &OOModel::LambdaExpression::isSubtypeOf;
+	scope LambdaExpressionscope = class_<OOModel::LambdaExpression, bases<OOModel::Expression>>("LambdaExpression")
 		.add_property("arguments",
 			make_function(&OOModel::LambdaExpression::arguments, return_internal_reference<>()),
 			&OOModel::LambdaExpression::setArguments)
 		.add_property("results",
 			make_function(&OOModel::LambdaExpression::results, return_internal_reference<>()),
 			&OOModel::LambdaExpression::setResults)
+		.add_property("captures",
+			make_function(&OOModel::LambdaExpression::captures, return_internal_reference<>()),
+			&OOModel::LambdaExpression::setCaptures)
 		.add_property("body",
 			make_function(&OOModel::LambdaExpression::body, return_internal_reference<>()),
 			&OOModel::LambdaExpression::setBody)
+		.add_property("defaultCaptureType",
+			&OOModel::LambdaExpression::defaultCaptureType,
+			&OOModel::LambdaExpression::setDefaultCaptureType)
 		.def("typeName", make_function((const QString& (
 			OOModel::LambdaExpression::*)())&OOModel::LambdaExpression::typeName, return_value_policy<copy_const_reference>()))
 		.def("typeId", &OOModel::LambdaExpression::typeId)
@@ -1624,11 +1639,15 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::LambdaExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::LambdaExpression::type, return_internal_reference<>()))
-		.def("isSubtypeOf", LambdaExpression_isSubtypeOf1)
-		.def("isSubtypeOf", LambdaExpression_isSubtypeOf2)
+		.def("type", &OOModel::LambdaExpression::type)
 		.def("registerNewAttribute", LambdaExpression_registerNewAttribute1)
-		.def("registerNewAttribute", LambdaExpression_registerNewAttribute2);
+		.def("registerNewAttribute", LambdaExpression_registerNewAttribute2)
+		.def("isSubtypeOf", LambdaExpression_isSubtypeOf1)
+		.def("isSubtypeOf", LambdaExpression_isSubtypeOf2);
+	enum_<OOModel::LambdaExpression::DefaultCaptureType>("DefaultCaptureType")
+		.value("None", OOModel::LambdaExpression::DefaultCaptureType::None)
+		.value("Value", OOModel::LambdaExpression::DefaultCaptureType::Value)
+		.value("Reference", OOModel::LambdaExpression::DefaultCaptureType::Reference);
 }
 
 {
@@ -1663,7 +1682,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("getMetaData")
 		.def("valueNode", make_function(&OOModel::IntegerLiteral::valueNode, return_internal_reference<>()))
 		.def("valueAsInt", &OOModel::IntegerLiteral::valueAsInt)
-		.def("type", make_function(&OOModel::IntegerLiteral::type, return_internal_reference<>()))
+		.def("type", &OOModel::IntegerLiteral::type)
 		.def("registerNewAttribute", IntegerLiteral_registerNewAttribute1)
 		.def("registerNewAttribute", IntegerLiteral_registerNewAttribute2)
 		.def("isSubtypeOf", IntegerLiteral_isSubtypeOf1)
@@ -1707,7 +1726,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		OOModel::VariableDeclarationExpression::*)(
 			))&OOModel::VariableDeclarationExpression::symbolName, return_value_policy<copy_const_reference>()))
 		.def("symbolType", &OOModel::VariableDeclarationExpression::symbolType)
-		.def("type", make_function(&OOModel::VariableDeclarationExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::VariableDeclarationExpression::type)
 		.def("registerNewAttribute", VariableDeclarationExpression_registerNewAttribute1)
 		.def("registerNewAttribute", VariableDeclarationExpression_registerNewAttribute2)
 		.def("isSubtypeOf", VariableDeclarationExpression_isSubtypeOf1)
@@ -1745,7 +1764,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::StringLiteral::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("valueNode", make_function(&OOModel::StringLiteral::valueNode, return_internal_reference<>()))
-		.def("type", make_function(&OOModel::StringLiteral::type, return_internal_reference<>()))
+		.def("type", &OOModel::StringLiteral::type)
 		.def("registerNewAttribute", StringLiteral_registerNewAttribute1)
 		.def("registerNewAttribute", StringLiteral_registerNewAttribute2)
 		.def("isSubtypeOf", StringLiteral_isSubtypeOf1)
@@ -1786,7 +1805,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::InstanceOfExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::InstanceOfExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::InstanceOfExpression::type)
 		.def("isSubtypeOf", InstanceOfExpression_isSubtypeOf1)
 		.def("isSubtypeOf", InstanceOfExpression_isSubtypeOf2)
 		.def("registerNewAttribute", InstanceOfExpression_registerNewAttribute1)
@@ -1823,7 +1842,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::BooleanLiteral::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("valueNode", make_function(&OOModel::BooleanLiteral::valueNode, return_internal_reference<>()))
-		.def("type", make_function(&OOModel::BooleanLiteral::type, return_internal_reference<>()))
+		.def("type", &OOModel::BooleanLiteral::type)
 		.def("registerNewAttribute", BooleanLiteral_registerNewAttribute1)
 		.def("registerNewAttribute", BooleanLiteral_registerNewAttribute2)
 		.def("isSubtypeOf", BooleanLiteral_isSubtypeOf1)
@@ -1871,7 +1890,8 @@ BOOST_PYTHON_MODULE(AstApi) {
 		const QString&) const = &OOModel::ReferenceExpression::isSubtypeOf;
 	bool (OOModel::ReferenceExpression::*ReferenceExpression_isSubtypeOf2)(
 		int) const = &OOModel::ReferenceExpression::isSubtypeOf;
-	class_<OOModel::ReferenceExpression, bases<OOModel::Expression>>("ReferenceExpression")
+	scope ReferenceExpressionscope = class_<OOModel::ReferenceExpression,
+		 bases<OOModel::Expression>>("ReferenceExpression")
 		.add_property("prefix",
 			make_function(&OOModel::ReferenceExpression::prefix, return_internal_reference<>()),
 			&OOModel::ReferenceExpression::setPrefix)
@@ -1881,6 +1901,9 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.add_property("typeArguments",
 			make_function(&OOModel::ReferenceExpression::typeArguments, return_internal_reference<>()),
 			&OOModel::ReferenceExpression::setTypeArguments)
+		.add_property("memberKind",
+			&OOModel::ReferenceExpression::memberKind,
+			&OOModel::ReferenceExpression::setMemberKind)
 		.add_property("name",
 			make_function((const QString& (OOModel::ReferenceExpression::*)(
 				))&OOModel::ReferenceExpression::name, return_value_policy<copy_const_reference>()),
@@ -1904,11 +1927,16 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::ReferenceExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("target", make_function(&OOModel::ReferenceExpression::target, return_internal_reference<>()))
-		.def("type", make_function(&OOModel::ReferenceExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::ReferenceExpression::type)
 		.def("registerNewAttribute", ReferenceExpression_registerNewAttribute1)
 		.def("registerNewAttribute", ReferenceExpression_registerNewAttribute2)
 		.def("isSubtypeOf", ReferenceExpression_isSubtypeOf1)
 		.def("isSubtypeOf", ReferenceExpression_isSubtypeOf2);
+	enum_<OOModel::ReferenceExpression::MemberKind>("MemberKind")
+		.value("Dot", OOModel::ReferenceExpression::MemberKind::Dot)
+		.value("Pointer", OOModel::ReferenceExpression::MemberKind::Pointer)
+		.value("Static", OOModel::ReferenceExpression::MemberKind::Static)
+		.value("Template", OOModel::ReferenceExpression::MemberKind::Template);
 }
 
 {
@@ -1940,7 +1968,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::ArrayInitializer::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::ArrayInitializer::type, return_internal_reference<>()))
+		.def("type", &OOModel::ArrayInitializer::type)
 		.def("isSubtypeOf", ArrayInitializer_isSubtypeOf1)
 		.def("isSubtypeOf", ArrayInitializer_isSubtypeOf2)
 		.def("registerNewAttribute", ArrayInitializer_registerNewAttribute1)
@@ -1976,7 +2004,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::ThrowExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::ThrowExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::ThrowExpression::type)
 		.def("isSubtypeOf", ThrowExpression_isSubtypeOf1)
 		.def("isSubtypeOf", ThrowExpression_isSubtypeOf2)
 		.def("registerNewAttribute", ThrowExpression_registerNewAttribute1)
@@ -2022,7 +2050,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("getMetaData")
 		.def("prefixNode", make_function(&OOModel::ErrorExpression::prefixNode, return_internal_reference<>()))
 		.def("postfixNode", make_function(&OOModel::ErrorExpression::postfixNode, return_internal_reference<>()))
-		.def("type", make_function(&OOModel::ErrorExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::ErrorExpression::type)
 		.def("registerNewAttribute", ErrorExpression_registerNewAttribute1)
 		.def("registerNewAttribute", ErrorExpression_registerNewAttribute2)
 		.def("isSubtypeOf", ErrorExpression_isSubtypeOf1)
@@ -2067,7 +2095,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::AssignmentExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::AssignmentExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::AssignmentExpression::type)
 		.def("registerNewAttribute", AssignmentExpression_registerNewAttribute1)
 		.def("registerNewAttribute", AssignmentExpression_registerNewAttribute2)
 		.def("isSubtypeOf", AssignmentExpression_isSubtypeOf1)
@@ -2115,7 +2143,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::GlobalScopeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::GlobalScopeExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::GlobalScopeExpression::type)
 		.def("isSubtypeOf", GlobalScopeExpression_isSubtypeOf1)
 		.def("isSubtypeOf", GlobalScopeExpression_isSubtypeOf2)
 		.def("registerNewAttribute", GlobalScopeExpression_registerNewAttribute1)
@@ -2153,7 +2181,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::CharacterLiteral::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("valueNode", make_function(&OOModel::CharacterLiteral::valueNode, return_internal_reference<>()))
-		.def("type", make_function(&OOModel::CharacterLiteral::type, return_internal_reference<>()))
+		.def("type", &OOModel::CharacterLiteral::type)
 		.def("registerNewAttribute", CharacterLiteral_registerNewAttribute1)
 		.def("registerNewAttribute", CharacterLiteral_registerNewAttribute2)
 		.def("isSubtypeOf", CharacterLiteral_isSubtypeOf1)
@@ -2173,7 +2201,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 			make_function(&OOModel::CastExpression::expr, return_internal_reference<>()),
 			&OOModel::CastExpression::setExpr)
 		.add_property("type",
-			make_function(&OOModel::CastExpression::type, return_internal_reference<>()),
+			&OOModel::CastExpression::type,
 			&OOModel::CastExpression::setType)
 		.add_property("castKind",
 			&OOModel::CastExpression::castKind,
@@ -2244,7 +2272,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::NewExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::NewExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::NewExpression::type)
 		.def("isSubtypeOf", NewExpression_isSubtypeOf1)
 		.def("isSubtypeOf", NewExpression_isSubtypeOf2)
 		.def("registerNewAttribute", NewExpression_registerNewAttribute1)
@@ -2301,8 +2329,10 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::Project::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
+		.def("isTransparentForNameResolution", &OOModel::Project::isTransparentForNameResolution)
 		.def("symbolType", &OOModel::Project::symbolType)
 		.def("usedLibraries", &OOModel::Project::usedLibraries)
+		.def("isNewPersistenceUnit", &OOModel::Project::isNewPersistenceUnit)
 		.def("registerNewAttribute", Project_registerNewAttribute1)
 		.def("registerNewAttribute", Project_registerNewAttribute2)
 		.def("isSubtypeOf", Project_isSubtypeOf1)
@@ -2556,6 +2586,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("isOverridenBy", &OOModel::Method::isOverridenBy)
 		.def("callees", &OOModel::Method::callees)
 		.def("callers", &OOModel::Method::callers)
+		.def("isNewPersistenceUnit", &OOModel::Method::isNewPersistenceUnit)
 		.def("registerNewAttribute", Method_registerNewAttribute1)
 		.def("registerNewAttribute", Method_registerNewAttribute2)
 		.def("isSubtypeOf", Method_isSubtypeOf1)
@@ -2564,7 +2595,8 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.value("Default", OOModel::Method::MethodKind::Default)
 		.value("Constructor", OOModel::Method::MethodKind::Constructor)
 		.value("Destructor", OOModel::Method::MethodKind::Destructor)
-		.value("Conversion", OOModel::Method::MethodKind::Conversion);
+		.value("Conversion", OOModel::Method::MethodKind::Conversion)
+		.value("OperatorOverload", OOModel::Method::MethodKind::OperatorOverload);
 }
 
 {
@@ -2574,7 +2606,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		QString&, const QString&, bool, bool, bool) = &OOModel::Module::registerNewAttribute;
 	bool (OOModel::Module::*Module_isSubtypeOf1)(const QString&) const = &OOModel::Module::isSubtypeOf;
 	bool (OOModel::Module::*Module_isSubtypeOf2)(int) const = &OOModel::Module::isSubtypeOf;
-	class_<OOModel::Module, bases<OOModel::Declaration>>("Module")
+	scope Modulescope = class_<OOModel::Module, bases<OOModel::Declaration>>("Module")
 		.add_property("modules",
 			make_function(&OOModel::Module::modules, return_internal_reference<>()),
 			&OOModel::Module::setModules)
@@ -2590,6 +2622,9 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.add_property("libraries",
 			make_function(&OOModel::Module::libraries, return_internal_reference<>()),
 			&OOModel::Module::setLibraries)
+		.add_property("kind",
+			&OOModel::Module::kind,
+			&OOModel::Module::setKind)
 		.def("typeName", make_function((const QString& (OOModel::Module::*)(
 			))&OOModel::Module::typeName, return_value_policy<copy_const_reference>()))
 		.def("typeId", &OOModel::Module::typeId)
@@ -2607,10 +2642,15 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("getMetaData")
 		.def("symbolType", &OOModel::Module::symbolType)
 		.def("usedLibraries", &OOModel::Module::usedLibraries)
+		.def("isNewPersistenceUnit", &OOModel::Module::isNewPersistenceUnit)
+		.def("isTransparentForNameResolution", &OOModel::Module::isTransparentForNameResolution)
 		.def("registerNewAttribute", Module_registerNewAttribute1)
 		.def("registerNewAttribute", Module_registerNewAttribute2)
 		.def("isSubtypeOf", Module_isSubtypeOf1)
 		.def("isSubtypeOf", Module_isSubtypeOf2);
+	enum_<OOModel::Module::ModuleKind>("ModuleKind")
+		.value("Standard", OOModel::Module::ModuleKind::Standard)
+		.value("Folder", OOModel::Module::ModuleKind::Folder);
 }
 
 {
@@ -2669,6 +2709,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("expressionToClass", make_function(&OOModel::Class::expressionToClass, return_internal_reference<>()))
 		.staticmethod("expressionToClass")
 		.def("directSubClasses", &OOModel::Class::directSubClasses)
+		.def("isNewPersistenceUnit", &OOModel::Class::isNewPersistenceUnit)
 		.def("registerNewAttribute", Class_registerNewAttribute1)
 		.def("registerNewAttribute", Class_registerNewAttribute2)
 		.def("isSubtypeOf", Class_isSubtypeOf1)
@@ -2925,7 +2966,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::FunctionTypeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::FunctionTypeExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::FunctionTypeExpression::type)
 		.def("isSubtypeOf", FunctionTypeExpression_isSubtypeOf1)
 		.def("isSubtypeOf", FunctionTypeExpression_isSubtypeOf2)
 		.def("registerNewAttribute", FunctionTypeExpression_registerNewAttribute1)
@@ -2966,7 +3007,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::TypeQualifierExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::TypeQualifierExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::TypeQualifierExpression::type)
 		.def("registerNewAttribute", TypeQualifierExpression_registerNewAttribute1)
 		.def("registerNewAttribute", TypeQualifierExpression_registerNewAttribute2)
 		.def("isSubtypeOf", TypeQualifierExpression_isSubtypeOf1)
@@ -3007,7 +3048,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::ArrayTypeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::ArrayTypeExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::ArrayTypeExpression::type)
 		.def("isSubtypeOf", ArrayTypeExpression_isSubtypeOf1)
 		.def("isSubtypeOf", ArrayTypeExpression_isSubtypeOf2)
 		.def("registerNewAttribute", ArrayTypeExpression_registerNewAttribute1)
@@ -3042,7 +3083,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::AutoTypeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::AutoTypeExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::AutoTypeExpression::type)
 		.def("isSubtypeOf", AutoTypeExpression_isSubtypeOf1)
 		.def("isSubtypeOf", AutoTypeExpression_isSubtypeOf2)
 		.def("registerNewAttribute", AutoTypeExpression_registerNewAttribute1)
@@ -3050,18 +3091,21 @@ BOOST_PYTHON_MODULE(AstApi) {
 }
 
 {
-	bool (OOModel::ReferenceTypeExpression::*ReferenceTypeExpression_isSubtypeOf1)(
-		const QString&) const = &OOModel::ReferenceTypeExpression::isSubtypeOf;
-	bool (OOModel::ReferenceTypeExpression::*ReferenceTypeExpression_isSubtypeOf2)(
-		int) const = &OOModel::ReferenceTypeExpression::isSubtypeOf;
 	Model::CompositeIndex (*ReferenceTypeExpression_registerNewAttribute1)(
 		const Model::Attribute&) = &OOModel::ReferenceTypeExpression::registerNewAttribute;
 	Model::CompositeIndex (*ReferenceTypeExpression_registerNewAttribute2)(
 		const QString&, const QString&, bool, bool, bool) = &OOModel::ReferenceTypeExpression::registerNewAttribute;
+	bool (OOModel::ReferenceTypeExpression::*ReferenceTypeExpression_isSubtypeOf1)(
+		const QString&) const = &OOModel::ReferenceTypeExpression::isSubtypeOf;
+	bool (OOModel::ReferenceTypeExpression::*ReferenceTypeExpression_isSubtypeOf2)(
+		int) const = &OOModel::ReferenceTypeExpression::isSubtypeOf;
 	class_<OOModel::ReferenceTypeExpression, bases<OOModel::TypeExpression>>("ReferenceTypeExpression")
 		.add_property("typeExpression",
 			make_function(&OOModel::ReferenceTypeExpression::typeExpression, return_internal_reference<>()),
 			&OOModel::ReferenceTypeExpression::setTypeExpression)
+		.add_property("isRValueReference",
+			&OOModel::ReferenceTypeExpression::isRValueReference,
+			&OOModel::ReferenceTypeExpression::setIsRValueReference)
 		.def("typeName", make_function((const QString& (
 		OOModel::ReferenceTypeExpression::*)())&OOModel::ReferenceTypeExpression::typeName,
 			 return_value_policy<copy_const_reference>()))
@@ -3080,11 +3124,13 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::ReferenceTypeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::ReferenceTypeExpression::type, return_internal_reference<>()))
-		.def("isSubtypeOf", ReferenceTypeExpression_isSubtypeOf1)
-		.def("isSubtypeOf", ReferenceTypeExpression_isSubtypeOf2)
+		.def("isRValueReferenceNode", make_function(
+			&OOModel::ReferenceTypeExpression::isRValueReferenceNode, return_internal_reference<>()))
+		.def("type", &OOModel::ReferenceTypeExpression::type)
 		.def("registerNewAttribute", ReferenceTypeExpression_registerNewAttribute1)
-		.def("registerNewAttribute", ReferenceTypeExpression_registerNewAttribute2);
+		.def("registerNewAttribute", ReferenceTypeExpression_registerNewAttribute2)
+		.def("isSubtypeOf", ReferenceTypeExpression_isSubtypeOf1)
+		.def("isSubtypeOf", ReferenceTypeExpression_isSubtypeOf2);
 }
 
 {
@@ -3118,7 +3164,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::PrimitiveTypeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::PrimitiveTypeExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::PrimitiveTypeExpression::type)
 		.def("registerNewAttribute", PrimitiveTypeExpression_registerNewAttribute1)
 		.def("registerNewAttribute", PrimitiveTypeExpression_registerNewAttribute2)
 		.def("isSubtypeOf", PrimitiveTypeExpression_isSubtypeOf1)
@@ -3156,7 +3202,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::ClassTypeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::ClassTypeExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::ClassTypeExpression::type)
 		.def("isSubtypeOf", ClassTypeExpression_isSubtypeOf1)
 		.def("isSubtypeOf", ClassTypeExpression_isSubtypeOf2)
 		.def("registerNewAttribute", ClassTypeExpression_registerNewAttribute1)
@@ -3194,7 +3240,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::PointerTypeExpression::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
-		.def("type", make_function(&OOModel::PointerTypeExpression::type, return_internal_reference<>()))
+		.def("type", &OOModel::PointerTypeExpression::type)
 		.def("isSubtypeOf", PointerTypeExpression_isSubtypeOf1)
 		.def("isSubtypeOf", PointerTypeExpression_isSubtypeOf2)
 		.def("registerNewAttribute", PointerTypeExpression_registerNewAttribute1)
@@ -3259,6 +3305,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.staticmethod("createDefaultInstance")
 		.def("getMetaData", make_function(&OOModel::FormalArgument::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
+		.def("isUsedInParentMethod", &OOModel::FormalArgument::isUsedInParentMethod)
 		.def("registerNewAttribute", FormalArgument_registerNewAttribute1)
 		.def("registerNewAttribute", FormalArgument_registerNewAttribute2)
 		.def("isSubtypeOf", FormalArgument_isSubtypeOf1)
@@ -3821,70 +3868,50 @@ BOOST_PYTHON_MODULE(AstApi) {
 }
 
 {
-	using FormalResults = Model::TypedList<OOModel::FormalResult>;
-	class_<Model::TypedList<OOModel::FormalResult>, bases<Model::List>>("FormalResults")
-		.def("__len__", &FormalResults::size)
-		.def("__iter__", iterator<FormalResults, return_internal_reference<>>());
-
-	using MetaBindings = Model::TypedList<OOModel::MetaBinding>;
-	class_<Model::TypedList<OOModel::MetaBinding>, bases<Model::List>>("MetaBindings")
-		.def("__len__", &MetaBindings::size)
-		.def("__iter__", iterator<MetaBindings, return_internal_reference<>>());
-
-	using Projects = Model::TypedList<OOModel::Project>;
-	class_<Model::TypedList<OOModel::Project>, bases<Model::List>>("Projects")
-		.def("__len__", &Projects::size)
-		.def("__iter__", iterator<Projects, return_internal_reference<>>());
-
-	using FormalTypeArguments = Model::TypedList<OOModel::FormalTypeArgument>;
-	class_<Model::TypedList<OOModel::FormalTypeArgument>, bases<Model::List>>("FormalTypeArguments")
-		.def("__len__", &FormalTypeArguments::size)
-		.def("__iter__", iterator<FormalTypeArguments, return_internal_reference<>>());
-
-	using UsedLibrarys = Model::TypedList<Model::UsedLibrary>;
-	class_<Model::TypedList<Model::UsedLibrary>, bases<Model::List>>("UsedLibrarys")
-		.def("__len__", &UsedLibrarys::size)
-		.def("__iter__", iterator<UsedLibrarys, return_internal_reference<>>());
-
 	using Classs = Model::TypedList<OOModel::Class>;
 	class_<Model::TypedList<OOModel::Class>, bases<Model::List>>("Classs")
 		.def("__len__", &Classs::size)
 		.def("__iter__", iterator<Classs, return_internal_reference<>>());
-
-	using Enumerators = Model::TypedList<OOModel::Enumerator>;
-	class_<Model::TypedList<OOModel::Enumerator>, bases<Model::List>>("Enumerators")
-		.def("__len__", &Enumerators::size)
-		.def("__iter__", iterator<Enumerators, return_internal_reference<>>());
-
-	using Declarations = Model::TypedList<OOModel::Declaration>;
-	class_<Model::TypedList<OOModel::Declaration>, bases<Model::List>>("Declarations")
-		.def("__len__", &Declarations::size)
-		.def("__iter__", iterator<Declarations, return_internal_reference<>>());
-
-	using FormalMetaArguments = Model::TypedList<OOModel::FormalMetaArgument>;
-	class_<Model::TypedList<OOModel::FormalMetaArgument>, bases<Model::List>>("FormalMetaArguments")
-		.def("__len__", &FormalMetaArguments::size)
-		.def("__iter__", iterator<FormalMetaArguments, return_internal_reference<>>());
-
-	using CatchClauses = Model::TypedList<OOModel::CatchClause>;
-	class_<Model::TypedList<OOModel::CatchClause>, bases<Model::List>>("CatchClauses")
-		.def("__len__", &CatchClauses::size)
-		.def("__iter__", iterator<CatchClauses, return_internal_reference<>>());
 
 	using Methods = Model::TypedList<OOModel::Method>;
 	class_<Model::TypedList<OOModel::Method>, bases<Model::List>>("Methods")
 		.def("__len__", &Methods::size)
 		.def("__iter__", iterator<Methods, return_internal_reference<>>());
 
+	using FormalMetaArguments = Model::TypedList<OOModel::FormalMetaArgument>;
+	class_<Model::TypedList<OOModel::FormalMetaArgument>, bases<Model::List>>("FormalMetaArguments")
+		.def("__len__", &FormalMetaArguments::size)
+		.def("__iter__", iterator<FormalMetaArguments, return_internal_reference<>>());
+
+	using Enumerators = Model::TypedList<OOModel::Enumerator>;
+	class_<Model::TypedList<OOModel::Enumerator>, bases<Model::List>>("Enumerators")
+		.def("__len__", &Enumerators::size)
+		.def("__iter__", iterator<Enumerators, return_internal_reference<>>());
+
 	using Expressions = Model::TypedList<OOModel::Expression>;
 	class_<Model::TypedList<OOModel::Expression>, bases<Model::List>>("Expressions")
 		.def("__len__", &Expressions::size)
 		.def("__iter__", iterator<Expressions, return_internal_reference<>>());
 
+	using CatchClauses = Model::TypedList<OOModel::CatchClause>;
+	class_<Model::TypedList<OOModel::CatchClause>, bases<Model::List>>("CatchClauses")
+		.def("__len__", &CatchClauses::size)
+		.def("__iter__", iterator<CatchClauses, return_internal_reference<>>());
+
 	using MetaCallMappings = Model::TypedList<OOModel::MetaCallMapping>;
 	class_<Model::TypedList<OOModel::MetaCallMapping>, bases<Model::List>>("MetaCallMappings")
 		.def("__len__", &MetaCallMappings::size)
 		.def("__iter__", iterator<MetaCallMappings, return_internal_reference<>>());
+
+	using Modules = Model::TypedList<OOModel::Module>;
+	class_<Model::TypedList<OOModel::Module>, bases<Model::List>>("Modules")
+		.def("__len__", &Modules::size)
+		.def("__iter__", iterator<Modules, return_internal_reference<>>());
+
+	using FormalResults = Model::TypedList<OOModel::FormalResult>;
+	class_<Model::TypedList<OOModel::FormalResult>, bases<Model::List>>("FormalResults")
+		.def("__len__", &FormalResults::size)
+		.def("__iter__", iterator<FormalResults, return_internal_reference<>>());
 
 	using MemberInitializers = Model::TypedList<OOModel::MemberInitializer>;
 	class_<Model::TypedList<OOModel::MemberInitializer>, bases<Model::List>>("MemberInitializers")
@@ -3901,18 +3928,38 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("__len__", &Texts::size)
 		.def("__iter__", iterator<Texts, return_internal_reference<>>());
 
-	using Modules = Model::TypedList<OOModel::Module>;
-	class_<Model::TypedList<OOModel::Module>, bases<Model::List>>("Modules")
-		.def("__len__", &Modules::size)
-		.def("__iter__", iterator<Modules, return_internal_reference<>>());
+	using MetaBindings = Model::TypedList<OOModel::MetaBinding>;
+	class_<Model::TypedList<OOModel::MetaBinding>, bases<Model::List>>("MetaBindings")
+		.def("__len__", &MetaBindings::size)
+		.def("__iter__", iterator<MetaBindings, return_internal_reference<>>());
+
+	using Projects = Model::TypedList<OOModel::Project>;
+	class_<Model::TypedList<OOModel::Project>, bases<Model::List>>("Projects")
+		.def("__len__", &Projects::size)
+		.def("__iter__", iterator<Projects, return_internal_reference<>>());
+
+	using Declarations = Model::TypedList<OOModel::Declaration>;
+	class_<Model::TypedList<OOModel::Declaration>, bases<Model::List>>("Declarations")
+		.def("__len__", &Declarations::size)
+		.def("__iter__", iterator<Declarations, return_internal_reference<>>());
+
+	using UsedLibrarys = Model::TypedList<Model::UsedLibrary>;
+	class_<Model::TypedList<Model::UsedLibrary>, bases<Model::List>>("UsedLibrarys")
+		.def("__len__", &UsedLibrarys::size)
+		.def("__iter__", iterator<UsedLibrarys, return_internal_reference<>>());
 
 	using Fields = Model::TypedList<OOModel::Field>;
 	class_<Model::TypedList<OOModel::Field>, bases<Model::List>>("Fields")
 		.def("__len__", &Fields::size)
 		.def("__iter__", iterator<Fields, return_internal_reference<>>());
 
-}
+	using FormalTypeArguments = Model::TypedList<OOModel::FormalTypeArgument>;
+	class_<Model::TypedList<OOModel::FormalTypeArgument>, bases<Model::List>>("FormalTypeArguments")
+		.def("__len__", &FormalTypeArguments::size)
+		.def("__iter__", iterator<FormalTypeArguments, return_internal_reference<>>());
 
 }
 
 }
+
+} /* namespace InformationScripting */

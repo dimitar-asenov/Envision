@@ -38,7 +38,7 @@ class OOMODEL_API GlobalScopeExpression : public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(GlobalScopeExpression)
 
 	public:
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

@@ -44,7 +44,7 @@ TypeQualifierExpression::TypeQualifierExpression(Qualifier q, Expression* e)
 	if (e) setTypeExpression(e);
 }
 
-Type* TypeQualifierExpression::type()
+std::unique_ptr<Type> TypeQualifierExpression::type()
 {
 	auto type = typeExpression()->type();
 	type->setQualifiers(qualifier());

@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "AssignmentExpression.h"
+#include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::AssignmentExpression>;
@@ -46,7 +47,7 @@ AssignmentExpression::AssignmentExpression(const AssignmentTypes &op, Expression
 	if (right) setRight(right);
 }
 
-Type* AssignmentExpression::type()
+std::unique_ptr<Type> AssignmentExpression::type()
 {
 	return left()->type();
 }

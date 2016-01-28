@@ -53,7 +53,7 @@ class OOMODEL_API BinaryOperation: public Super<Expression>
 
 		BinaryOperation(OperatorTypes op, Expression* left = nullptr, Expression* right = nullptr);
 
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 inline BinaryOperation::OperatorTypes BinaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }

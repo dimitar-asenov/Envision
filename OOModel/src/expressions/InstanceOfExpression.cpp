@@ -37,9 +37,9 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(InstanceOfExpression)
 REGISTER_ATTRIBUTE(InstanceOfExpression, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(InstanceOfExpression, expr, Expression, false, false, true)
 
-Type* InstanceOfExpression::type()
+std::unique_ptr<Type> InstanceOfExpression::type()
 {
-	return new PrimitiveType{PrimitiveType::BOOLEAN, true};
+	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::BOOLEAN, true}};
 }
 
 }

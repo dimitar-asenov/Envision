@@ -29,22 +29,18 @@
 
 namespace OOModel {
 
-PointerType::PointerType(Type* baseType, bool isValueType) : Type{isValueType}, baseType_{baseType}
+PointerType::PointerType(std::unique_ptr<Type> baseType, bool isValueType)
+	: Type{isValueType}, baseType_{std::move(baseType)}
 {}
 
 PointerType::PointerType(const PointerType &other)
 	: Type{other}, baseType_{other.baseType()->clone()}
 {}
 
-PointerType::~PointerType()
-{
-	SAFE_DELETE(baseType_);
-}
-
 bool PointerType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const PointerType*> (other))
-		return baseType_ != nullptr && baseType_->equals(at->baseType_) && qualifiers() == other->qualifiers();
+		return baseType_ != nullptr && baseType_->equals(at->baseType_.get()) && qualifiers() == other->qualifiers();
 
 	return false;
 }

@@ -43,9 +43,9 @@ BooleanLiteral::BooleanLiteral(bool value)
 	setValue(value);
 }
 
-Type* BooleanLiteral::type()
+std::unique_ptr<Type> BooleanLiteral::type()
 {
-	return new PrimitiveType{PrimitiveType::BOOLEAN, true};
+	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::BOOLEAN, true}};
 }
 
 }

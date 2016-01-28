@@ -37,9 +37,10 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayInitializer)
 
 REGISTER_ATTRIBUTE(ArrayInitializer, values, TypedListOfExpression, false, false, true)
 
-Type* ArrayInitializer::type()
+std::unique_ptr<Type> ArrayInitializer::type()
 {
-	return new ArrayType{values()->size() > 0 ? values()->first()->type(): nullptr, true};
+	return std::unique_ptr<Type>{
+		new ArrayType{ values()->size() > 0 ? values()->first()->type(): nullptr, true}};
 }
 
 }

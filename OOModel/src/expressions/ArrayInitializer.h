@@ -40,7 +40,7 @@ class OOMODEL_API ArrayInitializer: public Super<Expression>
 	ATTRIBUTE(Model::TypedList<Expression>, values, setValues)
 
 	public:
-		virtual Type* type() override;
+		virtual std::unique_ptr<Type> type() override;
 };
 
 }

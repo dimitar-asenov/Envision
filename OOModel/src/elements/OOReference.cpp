@@ -118,14 +118,14 @@ Model::Node* OOReference::computeTarget() const
 	{
 		// Perform a downward search starting from the target of the prefix
 		auto t = parent->prefix()->type();
-		auto sp = dynamic_cast<const SymbolProviderType*>(t);
+		auto sp = dynamic_cast<const SymbolProviderType*>(t.get());
 
 		if (!sp)
-			if (auto pt = dynamic_cast<PointerType*>(t))
+			if (auto pt = dynamic_cast<PointerType*>(t.get()))
 				sp = dynamic_cast<const SymbolProviderType*>(pt->baseType());
 
 		if (!sp)
-			if (auto rt = dynamic_cast<ReferenceType*>(t))
+			if (auto rt = dynamic_cast<ReferenceType*>(t.get()))
 				sp = dynamic_cast<const SymbolProviderType*>(rt->baseType());
 
 		if (sp)
@@ -140,7 +140,6 @@ Model::Node* OOReference::computeTarget() const
 																							// This is important for overloads.
 			}
 		}
-		SAFE_DELETE(t);
 	}
 	else
 	{
@@ -321,16 +320,13 @@ void OOReference::removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& me
 		{
 			auto formalArgType = (*it)->arguments()->at(argId)->typeExpression()->type();
 
-			auto typeRelation = actualArgType->relationTo(formalArgType);
+			auto typeRelation = actualArgType->relationTo(formalArgType.get());
 			if ( typeRelation.testFlag(TypeSystem::Equal) || typeRelation.testFlag(TypeSystem::IsSubtype)
 					|| typeRelation.testFlag(TypeSystem::IsConvertibleTo))
 				++it;
 			else it = methods.erase(it);
-
-			SAFE_DELETE(formalArgType);
 		}
 
-		SAFE_DELETE(actualArgType);
 		++argId;
 	}
 }
@@ -372,8 +368,8 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 		auto m = *methods.begin();
 		methods.remove(m);
 
-		QList<Type*> filteredTypes;
-		for (auto te : *m->arguments()) filteredTypes.append(te->typeExpression()->type());
+		std::vector<std::unique_ptr<Type>> filteredTypes;
+		for (auto te : *m->arguments()) filteredTypes.push_back(te->typeExpression()->type());
 
 		// Compare this method to all the ones that are already most specifc.
 		// Remove any most specific method that is strictly less specific than the current one.
@@ -381,10 +377,10 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 		while (sIt != mostSpecific.end())
 		{
 			Specificity specificity = UNDETERMINED;
-			for (int argId = 0; argId < filteredTypes.size(); ++argId)
+			for (size_t argId = 0; argId < filteredTypes.size(); ++argId)
 			{
 				auto spType = (*sIt)->arguments()->at(argId)->typeExpression()->type();
-				auto relation = filteredTypes.at(argId)->relationTo(spType);
+				auto relation = filteredTypes.at(argId)->relationTo(spType.get());
 
 				if (relation.testFlag(TypeSystem::Equal)); /* Do nothing*/
 				else if (relation.testFlag(TypeSystem::IsSubtype) && specificity == UNDETERMINED) specificity = MORE;
@@ -393,8 +389,6 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 				else if (relation.testFlag(TypeSystem::IsSupertype) && specificity == UNDETERMINED) specificity = LESS;
 				else if (relation.testFlag(TypeSystem::IsSupertype) && specificity == LESS); /* Do nothing*/
 				else if (relation.testFlag(TypeSystem::IsSupertype) && specificity == MORE) specificity = SAME;
-
-				SAFE_DELETE(spType);
 
 				if (specificity == SAME) break;
 			}
@@ -418,8 +412,6 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 				overallSpecificity = SAME;
 			}
 		}
-
-		for (auto t : filteredTypes) SAFE_DELETE(t);
 
 		Q_ASSERT(mostSpecific.isEmpty() || overallSpecificity != UNDETERMINED);
 		if (overallSpecificity != LESS) mostSpecific.insert(m);

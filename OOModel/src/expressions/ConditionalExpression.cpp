@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "ConditionalExpression.h"
+#include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::ConditionalExpression>;
@@ -38,7 +39,7 @@ REGISTER_ATTRIBUTE(ConditionalExpression, condition, Expression, false, false, t
 REGISTER_ATTRIBUTE(ConditionalExpression, trueExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ConditionalExpression, falseExpression, Expression, false, false, true)
 
-Type* ConditionalExpression::type()
+std::unique_ptr<Type> ConditionalExpression::type()
 {
 	return trueExpression()->type();
 }

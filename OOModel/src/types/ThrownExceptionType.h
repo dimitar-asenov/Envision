@@ -32,9 +32,8 @@ namespace OOModel {
 
 class OOMODEL_API ThrownExceptionType : public Type {
 	public:
-		ThrownExceptionType(Type* exceptionType);
+		ThrownExceptionType(std::unique_ptr<Type> exceptionType);
 		ThrownExceptionType(const ThrownExceptionType& other);
-		virtual ~ThrownExceptionType();
 
 		virtual bool equals(const Type* other) const override;
 		virtual ThrownExceptionType* clone() const override;
@@ -42,9 +41,9 @@ class OOMODEL_API ThrownExceptionType : public Type {
 		const Type* exceptionType() const;
 
 	private:
-		Type* exceptionType_;
+		std::unique_ptr<Type> exceptionType_;
 };
 
-inline const Type* ThrownExceptionType::exceptionType() const { return exceptionType_; }
+inline const Type* ThrownExceptionType::exceptionType() const { return exceptionType_.get(); }
 
 }

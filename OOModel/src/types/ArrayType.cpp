@@ -28,22 +28,19 @@
 
 namespace OOModel {
 
-ArrayType::ArrayType(Type* elementType, bool isValueType) : Type{isValueType}, elementType_{elementType}
+ArrayType::ArrayType(std::unique_ptr<Type> elementType, bool isValueType)
+	: Type{isValueType}, elementType_{std::move(elementType)}
 {}
 
 ArrayType::ArrayType(const ArrayType& other)
 	: Type{other}, elementType_{other.elementType()->clone()}
 {}
 
-ArrayType::~ArrayType()
-{
-	SAFE_DELETE(elementType_);
-}
-
 bool ArrayType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const ArrayType*> (other))
-		return elementType_ != nullptr && elementType_->equals(at->elementType_) && qualifiers() == other->qualifiers();
+		return elementType_ != nullptr && elementType_->equals(at->elementType_.get())
+				&& qualifiers() == other->qualifiers();
 
 	return false;
 }
