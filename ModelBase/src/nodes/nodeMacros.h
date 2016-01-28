@@ -29,6 +29,7 @@
 #include "Core/src/reflect/typeIdMacros.h"
 #include "ModelBase/src/nodes/composite/Attribute.h"
 #include "ModelBase/src/nodes/composite/CompositeIndex.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 /**
  * Declares standard constructors and standard static methods for registering the constructors of a class inheriting

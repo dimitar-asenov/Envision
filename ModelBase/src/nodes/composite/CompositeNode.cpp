@@ -31,7 +31,8 @@ namespace Model {
 
 DEFINE_TYPE_ID_DERIVED(CompositeNode, "CompositeNode", )
 
-REGISTER_ATTRIBUTE(CompositeNode, comment, Node, false, true, true)
+CompositeIndex CompositeNode::commentIndex =
+		addAttributeToInitialRegistrationList_(commentIndex, "comment", "Node", false, true, true);
 
 int CompositeNode::nextExtensionId_ = 0;
 
