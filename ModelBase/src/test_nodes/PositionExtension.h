@@ -27,7 +27,6 @@
 #pragma once
 
 #include "../modelbase_api.h"
-#include "../nodes/composite/CompositeNode.h"
 #include "../nodes/Integer.h"
 #include "../nodes/nodeMacros.h"
 

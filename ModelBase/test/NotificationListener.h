@@ -26,10 +26,12 @@
 
 #pragma once
 
-#include "../src/model/TreeManager.h"
-#include "../src/nodes/Node.h"
+#include "../src/modelbase_api.h"
 
 namespace Model {
+
+class TreeManager;
+class Node;
 
 class MODELBASE_API NotificationListener : public QObject
 {

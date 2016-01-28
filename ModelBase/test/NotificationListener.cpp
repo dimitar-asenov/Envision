@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "NotificationListener.h"
+#include "../src/model/TreeManager.h"
 
 namespace Model {
 
