@@ -149,8 +149,8 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 
 void CodeUnitPart::assertForcedDependencyNecessary(OOModel::ReferenceExpression* reference)
 {
-	if (auto parentCast = reference->firstAncestorOfType<OOModel::CastExpression>())
-		if (parentCast->castType()->isAncestorOf(reference))
+	if (auto parentCast = DCast<OOModel::CastExpression>(reference->parent()->parent()))
+		if (parentCast->castType() == reference->parent())
 			if (auto grandParentCast = DCast<OOModel::CastExpression>(parentCast->parent()))
 				if (auto primitveTypeExpression = DCast<OOModel::PrimitiveTypeExpression>(grandParentCast->castType()))
 					if (primitveTypeExpression->typeValue() == OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID)
