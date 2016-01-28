@@ -34,6 +34,8 @@ NotificationListener::NotificationListener(TreeManager& manager) : root_{nullptr
 						  &NotificationListener::setModifiedNodes);
 	QObject::connect(&manager, &TreeManager::rootNodeSet, this, &NotificationListener::rootNodeSet);
 
+	// force a dependency on Node.h required by QObject::connect (needed for self-hosting Envision)
+	(void)(Node*)nullptr;
 }
 
 void NotificationListener::setModifiedNodes( QSet<Node*> modifiedNodes, QSet<Node*> removedNodes)
