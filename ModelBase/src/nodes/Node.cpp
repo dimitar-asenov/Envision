@@ -37,8 +37,6 @@
 
 #include "../commands/NodeOwningCommand.h"
 
-using namespace Logger;
-
 namespace Model {
 
 DEFINE_TYPE_ID_BASE(Node, "Node", )
