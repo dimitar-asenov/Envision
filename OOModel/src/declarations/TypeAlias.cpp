@@ -67,28 +67,36 @@ TypeAlias::SymbolTypes TypeAlias::symbolType() const
 bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
-	// TODO: Search type arguments
+	bool found{};
 
 	if (direction == SEARCH_HERE)
 	{
 		if (symbolMatches(matcher, symbolTypes))
 		{
 			result.insert(const_cast<TypeAlias*>(this));
-			return true;
+			found = true;
 		}
 	}
 	else if (direction == SEARCH_DOWN)
 	{
 		if (auto t = target())
-			return t->findSymbols(result, matcher, t, SEARCH_DOWN, symbolTypes, false);
+			found = t->findSymbols(result, matcher, t, SEARCH_DOWN, symbolTypes, false);
 	}
 	else if (direction == SEARCH_UP)
 	{
-		if (parent())
-			return parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
+		auto ignore = childToSubnode(source);
+		Q_ASSERT(ignore);
+		if (typeArguments() != ignore)
+		{
+			found = typeArguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			qDebug() << typeArguments()->size() << found << matcher.matchPattern();
+		}
+
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
 	}
 
-	return false;
+	return found;
 }
 
 }
