@@ -27,10 +27,10 @@
 #pragma once
 
 #include "../modelbase_api.h"
-#include "InterruptibleThread.h"
 
 namespace Model {
 
+class InterruptibleThread;
 class Node;
 
 class MODELBASE_API NodeReadWriteLock

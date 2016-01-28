@@ -62,7 +62,7 @@ class EXPORT_API FragmentLayouter {
 			SpaceAtEnd = 0x800,
 			BackslashAfterLines = 0x1000
 		};
-		Q_DECLARE_FLAGS(IndentationFlags, IndentationFlag)
+		using IndentationFlags = QFlags<IndentationFlag>;
 
 		void addRule(const QString& fragmentType, IndentationFlags parameters, const QString& prefix = QString(),
 						 const QString& separator = QString(), const QString& postfix = QString());

@@ -56,7 +56,7 @@ void NoteNodeChange::markNodeAndChildrenAsRemoved(Node* node) const
 	QList<Node*> stack {node};
 	while (!stack.isEmpty())
 	{
-		auto child = stack.takeLast();
+		Node* child = stack.takeLast();
 		removedTargets_.insert(child);
 		stack.append( child->children() );
 	}

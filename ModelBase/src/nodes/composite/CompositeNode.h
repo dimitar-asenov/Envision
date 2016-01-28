@@ -29,7 +29,7 @@
 #include "AttributeChain.h"
 #include "../Node.h"
 #include "../../ModelException.h"
-#include "../nodeMacros.h"
+#include "Core/src/reflect/typeIdMacros.h"
 
 namespace Model {
 
@@ -65,8 +65,6 @@ namespace Model {
 class MODELBASE_API CompositeNode: public Super<Node>
 {
 	DECLARE_TYPE_ID
-
-	ATTRIBUTE(Model::Node, comment, setComment)
 
 	public:
 		CompositeNode(Node *parent, AttributeChain& metaData);
@@ -140,6 +138,17 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		static CompositeIndex registerNewAttribute(const Attribute& attribute);
 
+		/**
+		 * this is part of the expansion of the macro ATTRIBUTE(Model::Node, comment, setComment)
+		 * but we can not include nodeMacros.h
+		 */
+		Node* comment() const { return static_cast<Node*>(get(commentIndex)); }
+		/**
+		 * this is part of the expansion of the macro ATTRIBUTE(Model::Node, comment, setComment)
+		 * but we can not include nodeMacros.h
+		 */
+		void setComment(Node* node) { set(commentIndex, node); }
+
 	protected:
 		static CompositeIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
@@ -168,6 +177,12 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		void checkOrCreateMandatoryAttributes(bool useUndoableAction);
 
 		static int nextExtensionId_;
+
+		/**
+		 * this is part of the expansion of the macro ATTRIBUTE(Model::Node, comment, setComment)
+		 * but we can not include nodeMacros.h
+		 */
+		static CompositeIndex commentIndex;
 };
 
 inline Node* CompositeNode::get(const CompositeIndex &attributeIndex) const

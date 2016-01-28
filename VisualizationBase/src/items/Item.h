@@ -197,7 +197,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 														Otherwise, the move distance is limited to a specific number of pixels,
 														in order to avoid big jumps that disorient the user. */
 		};
-		Q_DECLARE_FLAGS(CursorMoveOptions, CursorMoveOption)
+		using CursorMoveOptions = QFlags<CursorMoveOption>;
 
 		/**
 		 * \brief Moves the position of the current main scene cursor within the item and returns true on success.
@@ -255,7 +255,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 				RightOf = 0x8,
 				Overlap = 0x10
 		};
-		Q_DECLARE_FLAGS(PositionConstraints, PositionConstraint)
+		using PositionConstraints = QFlags<PositionConstraint>;
 
 		/**
 		 * \brief Returns the child item (if any) that has the least distance to the point \a point.

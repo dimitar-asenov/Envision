@@ -27,6 +27,8 @@
 #include "NodeReadWriteLock.h"
 #include "../ModelException.h"
 
+#include "InterruptibleThread.h"
+
 namespace Model {
 
 NodeReadWriteLock::NodeReadWriteLock() :

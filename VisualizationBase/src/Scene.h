@@ -102,7 +102,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 			SelectionItemCategory = 0x4,
 			CursorItemCategory = 0x8
 		};
-		Q_DECLARE_FLAGS(ItemCategories, ItemCategory)
+		using ItemCategories = QFlags<ItemCategory>;
 
 		void setHiddenItemCategories( ItemCategories hidden = NoItemCategory);
 		bool isHiddenCategory(ItemCategory cat);

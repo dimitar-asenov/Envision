@@ -59,7 +59,9 @@ AllTreeManagers::~AllTreeManagers()
 
 TreeManager* AllTreeManagers::find(Node* root) const
 {
-	for (auto m : loadedManagers_)
+	// TODO: use auto in places like this which requires that we can resolve libraries needed for export to detect
+	// a dependency
+	for (TreeManager* m : loadedManagers_)
 		if ( m->root() == root ) return m;
 
 	return nullptr;

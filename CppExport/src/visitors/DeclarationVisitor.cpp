@@ -110,7 +110,6 @@ bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
 {
 	 auto metaCall = DCast<MetaCallExpression>(expression);
 	 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
-	 if (ooReference->name() == "QT_Flags") return false;
 	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
 }
 

@@ -37,15 +37,10 @@
 
 #include "../commands/NodeOwningCommand.h"
 
-using namespace Logger;
-
 namespace Model {
 
 DEFINE_TYPE_ID_BASE(Node, "Node", )
 
-/***********************************************************************************************************************
- * STATIC MEMBERS
- **********************************************************************************************************************/
 QHash<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
 QHash<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
@@ -55,9 +50,6 @@ QSet<const Node*>& Node::partiallyLoadedNodes()
 	return set;
 }
 
-/***********************************************************************************************************************
- * CONSTRUCTORS AND DESTRUCTORS
- **********************************************************************************************************************/
 Node::Node(Node* parent) : parent_{parent}, manager_{parent ? parent->manager_ : nullptr}
 {
 	if (parent && !parent->isModifyable())
@@ -80,9 +72,6 @@ Node* Node::createDefaultInstance(Node*)
 	return nullptr;
 }
 
-/***********************************************************************************************************************
- * MAIN METHODS
- **********************************************************************************************************************/
 void Node::execute(UndoCommand *command)
 {
 	if ( this != command->target() )
@@ -230,16 +219,17 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 		}
 	}
 	else if (direction == SEARCH_DOWN || (direction == SEARCH_HERE && isTransparentForNameResolution()))
-	{
 		for (auto c : childrenInScope())
 			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-	}
 	else if (direction == SEARCH_UP)
 	{
 		auto ignore = childToSubnode(source);
 		for (auto c : childrenInScope())
-			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
+		{
+			// Optimize the search by skipping this scope, since we've already searched there
+			if (c != ignore)
 				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+		}
 
 		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes) && !isTransparentForNameResolution())
 		{
@@ -252,7 +242,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 
 		// Search in libraries. This is only valid for root nodes
 		if ((exhaustAllScopes || !found) && !parent_)
-			for (auto lib : usedLibraries())
+			for (const UsedLibrary* lib : usedLibraries())
 			{
 				auto libRoot = lib->libraryRoot();
 				if (libRoot)
@@ -295,9 +285,7 @@ bool Node::hasPartiallyLoadedChildren() const
 
 	return false;
 }
-/***********************************************************************************************************************
- * GETTERS AND SETTERS
- **********************************************************************************************************************/
+
 void Node::setParent(Node* parent)
 {
 	parent_ = parent;
@@ -404,9 +392,6 @@ QList<const UsedLibrary*> Node::usedLibraries() const
 	return all;
 }
 
-/***********************************************************************************************************************
- * STATIC METHODS
- **********************************************************************************************************************/
 void Node::registerNodeType(const QString &type, const NodeConstructor constructor,
 		const NodePersistenceConstructor persistenceconstructor)
 {
@@ -423,9 +408,7 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 {
 	auto iter = nodeConstructorRegister.find(type);
 	if ( iter != nodeConstructorRegister.end() )
-	{
 		return iter.value()(parent);
-	}
 	else
 	{
 		log.error("Could not create new node. Requested node type '"
@@ -438,9 +421,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &st
 {
 	auto iter = nodePersistenceConstructorRegister.find(type);
 	if ( iter != nodePersistenceConstructorRegister.end() )
-	{
 		return iter.value()(parent, store, partialLoadHint);
-	}
 	else
 	{
 		log.error("Could not create new node from persistence. Requested node type '"

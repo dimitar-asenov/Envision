@@ -43,7 +43,7 @@ QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& node
 
 	if (root) matches.append(findAllMatches(matcher, "", root, suggestable));
 	else
-		for (auto manager : AllTreeManagers::instance().loadedManagers())
+		for (TreeManager* manager : AllTreeManagers::instance().loadedManagers())
 			matches.append(findAllMatches(matcher, "", manager->root(), suggestable));
 
 	//Shorter names usually have less parts to the fully qualified name -> suggest them first

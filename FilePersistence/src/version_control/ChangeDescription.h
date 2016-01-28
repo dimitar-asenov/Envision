@@ -57,7 +57,7 @@ class FILEPERSISTENCE_API ChangeDescription
 			Type = 4,
 			Structure = 8
 		};
-		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
+		using UpdateFlags = QFlags<UpdateType>;
 
 
 		void computeFlags();
