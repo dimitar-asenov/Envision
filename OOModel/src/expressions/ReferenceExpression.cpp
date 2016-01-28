@@ -27,6 +27,7 @@
 #include "ReferenceExpression.h"
 #include "VariableDeclarationExpression.h"
 #include "../statements/ExpressionStatement.h"
+#include "../statements/ForEachStatement.h"
 #include "../declarations/Project.h"
 #include "../declarations/Module.h"
 #include "../declarations/Class.h"
@@ -115,6 +116,12 @@ Type* ReferenceExpression::type()
 	else if ( auto res = DCast<FormalResult>( resolvedTarget ) )
 	{
 		auto t = res->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto forEach = DCast<ForEachStatement>( resolvedTarget ) )
+	{
+		auto t = forEach->varType()->type();
 		t->setValueType(true);
 		return t;
 	}
