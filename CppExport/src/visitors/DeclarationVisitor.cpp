@@ -581,6 +581,11 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 	else
 		*fragment << "template class ";
 
+	// reconstruct potentially eliminated prefix for template instantiation special cases
+	if (explicitTemplateInstantiation->firstAncestorOfType<OOModel::Class>() &&
+		 !explicitTemplateInstantiation->instantiatedClass()->prefix())
+		*fragment << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Module>()->name() << "::";
+
 	*fragment << ExpressionVisitor(data()).visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
 	return fragment;
 }
