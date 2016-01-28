@@ -108,7 +108,7 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 					SAFE_DELETE(leftType);
 				}
 
-			if (!parent()->node()->isAncestorOf(target))
+			if (!parent()->node()->isAncestorOf(target) || !DCast<OOModel::Class>(target))
 			{
 				if (isNameOnlyDependency(reference))
 					softTargets_.insert(target);
