@@ -152,6 +152,9 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 	if (DCast<OOModel::ExplicitTemplateInstantiation>(parent)) return false;
 	else if (reference->firstAncestorOfType<OOModel::ExplicitTemplateInstantiation>()) return true;
 
+	if (auto parentCast = reference->firstAncestorOfType<OOModel::CastExpression>())
+		if (parentCast->castType()->isAncestorOf(reference)) return false;
+
 	auto parentClass = reference->firstAncestorOfType<OOModel::Class>();
 	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>() &&
 		 !reference->typeArguments()->isEmpty() && parentClass && !parentClass->typeArguments()->isEmpty())
