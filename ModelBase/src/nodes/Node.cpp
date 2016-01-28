@@ -41,9 +41,6 @@ namespace Model {
 
 DEFINE_TYPE_ID_BASE(Node, "Node", )
 
-/***********************************************************************************************************************
- * STATIC MEMBERS
- **********************************************************************************************************************/
 QHash<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
 QHash<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
@@ -53,9 +50,6 @@ QSet<const Node*>& Node::partiallyLoadedNodes()
 	return set;
 }
 
-/***********************************************************************************************************************
- * CONSTRUCTORS AND DESTRUCTORS
- **********************************************************************************************************************/
 Node::Node(Node* parent) : parent_{parent}, manager_{parent ? parent->manager_ : nullptr}
 {
 	if (parent && !parent->isModifyable())
@@ -78,9 +72,6 @@ Node* Node::createDefaultInstance(Node*)
 	return nullptr;
 }
 
-/***********************************************************************************************************************
- * MAIN METHODS
- **********************************************************************************************************************/
 void Node::execute(UndoCommand *command)
 {
 	if ( this != command->target() )
@@ -293,9 +284,7 @@ bool Node::hasPartiallyLoadedChildren() const
 
 	return false;
 }
-/***********************************************************************************************************************
- * GETTERS AND SETTERS
- **********************************************************************************************************************/
+
 void Node::setParent(Node* parent)
 {
 	parent_ = parent;
@@ -402,9 +391,6 @@ QList<const UsedLibrary*> Node::usedLibraries() const
 	return all;
 }
 
-/***********************************************************************************************************************
- * STATIC METHODS
- **********************************************************************************************************************/
 void Node::registerNodeType(const QString &type, const NodeConstructor constructor,
 		const NodePersistenceConstructor persistenceconstructor)
 {
