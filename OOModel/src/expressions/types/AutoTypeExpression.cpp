@@ -27,6 +27,7 @@
 #include "AutoTypeExpression.h"
 
 #include "../../declarations/VariableDeclaration.h"
+#include "../../statements/ForEachStatement.h"
 #include "../../types/ErrorType.h"
 #include "../../types/PointerType.h"
 #include "../../types/ReferenceType.h"
@@ -51,21 +52,36 @@ Type* AutoTypeExpression::type()
 	auto p = parent();
 	Model::Node* current = this;
 	VariableDeclaration* varDecl = nullptr;
-	while (!(varDecl = DCast<VariableDeclaration>(p)))
+	ForEachStatement* forEachStatement = nullptr;
+	while (!(varDecl = DCast<VariableDeclaration>(p)) && !(forEachStatement = DCast<ForEachStatement>(p)))
 	{
 		current = p;
 		p = p->parent();
 		Q_ASSERT(p);
 	}
-	if (!varDecl->initialValue())
-		return new ErrorType{"No initial value in auto type"};
-	auto initType = varDecl->initialValue()->type();
-	if (varDecl == p)
-		return initType;
-	if (DCast<ReferenceTypeExpression>(current))
-		return new ReferenceType{initType, initType->isValueType()};
-	if (DCast<PointerTypeExpression>(current))
-		return new PointerType{initType, initType->isValueType()};
+
+	Q_ASSERT(varDecl || forEachStatement);
+
+	if (varDecl)
+	{
+		if (!varDecl->initialValue())
+			return new ErrorType{"No initial value in auto type"};
+		auto initType = varDecl->initialValue()->type();
+		if (varDecl == p)
+			return initType;
+		if (DCast<ReferenceTypeExpression>(current))
+			return new ReferenceType{initType, initType->isValueType()};
+		if (DCast<PointerTypeExpression>(current))
+			return new PointerType{initType, initType->isValueType()};
+	}
+
+	if (forEachStatement)
+	{
+		// TODO: Add languge specific rules to infer the correct type
+		// For starters we could also cheat and just take the first tempalte parameter, if any
+		return new ErrorType{"Infering the type of a collection element in a for each loop is not currently supported."};
+	}
+
 	return new ErrorType{"Could not find type of auto expression"};
 }
 
