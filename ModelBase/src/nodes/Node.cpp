@@ -252,7 +252,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 
 		// Search in libraries. This is only valid for root nodes
 		if ((exhaustAllScopes || !found) && !parent_)
-			for (auto lib : usedLibraries())
+			for (const UsedLibrary* lib : usedLibraries())
 			{
 				auto libRoot = lib->libraryRoot();
 				if (libRoot)

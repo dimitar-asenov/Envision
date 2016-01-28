@@ -220,7 +220,7 @@ void TreeManager::load(PersistentStore* store, const QString& name, bool loadPar
 
 	Core::Profiler::startOnce(name == "jedit", "Loading jEdit", "load.prof");
 	auto root = store->loadTree(this, name, loadPartially);
-	for (auto lib : root->usedLibraries())
+	for (const UsedLibrary* lib : root->usedLibraries())
 		lib->loadLibrary(store->clone());
 	Core::Profiler::stop("Loading jEdit");
 
