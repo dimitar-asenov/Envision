@@ -219,10 +219,8 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 		}
 	}
 	else if (direction == SEARCH_DOWN || (direction == SEARCH_HERE && isTransparentForNameResolution()))
-	{
 		for (auto c : childrenInScope())
 			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-	}
 	else if (direction == SEARCH_UP)
 	{
 		auto ignore = childToSubnode(source);
@@ -407,9 +405,7 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 {
 	auto iter = nodeConstructorRegister.find(type);
 	if ( iter != nodeConstructorRegister.end() )
-	{
 		return iter.value()(parent);
-	}
 	else
 	{
 		log.error("Could not create new node. Requested node type '"
@@ -422,9 +418,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &st
 {
 	auto iter = nodePersistenceConstructorRegister.find(type);
 	if ( iter != nodePersistenceConstructorRegister.end() )
-	{
 		return iter.value()(parent, store, partialLoadHint);
-	}
 	else
 	{
 		log.error("Could not create new node from persistence. Requested node type '"
