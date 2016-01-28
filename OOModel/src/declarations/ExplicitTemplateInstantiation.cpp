@@ -48,4 +48,9 @@ ExplicitTemplateInstantiation::SymbolTypes ExplicitTemplateInstantiation::symbol
 	return CONTAINER;
 }
 
+bool ExplicitTemplateInstantiation::definesSymbol() const
+{
+	return false;
+}
+
 }
