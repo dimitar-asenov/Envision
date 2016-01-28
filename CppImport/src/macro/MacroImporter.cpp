@@ -74,26 +74,10 @@ void MacroImporter::endTranslationUnit()
 			{
 				auto context = NodeHelpers::actualContext(mapping.original(generatedNodes.first()));
 
-				if (macroDefinitions_.definitionName(expansion->definition()) == "Q_DECLARE_FLAGS")
+				if (macroDefinitions_.definitionName(expansion->definition()) == "Q_DECLARE_OPERATORS_FOR_FLAGS")
 				{
-					Q_ASSERT(expansion->metaCall()->arguments()->size() == 2);
-					auto enumReference = DCast<OOModel::ReferenceExpression>(expansion->metaCall()->arguments()->last());
-					Q_ASSERT(enumReference);
-					OOModel::Class* flagsEnumClass{};
-					for (auto potentialEnumClass : Model::Node::childrenOfType<OOModel::Class>(context))
-						if (potentialEnumClass->constructKind() == OOModel::Class::ConstructKind::Enum &&
-							 potentialEnumClass->name() == enumReference->name())
-						{
-							flagsEnumClass = potentialEnumClass;
-							break;
-						}
-					Q_ASSERT(flagsEnumClass);
-					flagsEnumClass->metaCalls()->append(new OOModel::MetaCallExpression("QT_Flags"));
-				}
-				else if (macroDefinitions_.definitionName(expansion->definition()) == "Q_DECLARE_OPERATORS_FOR_FLAGS")
-				{
-					// Q_DECLARE_OPERATORS_FOR_FLAGS is handled by the predefined metacall "QT_Flags"
-					// therefore we must not add it to the tree.
+					// Q_DECLARE_OPERATORS_FOR_FLAGS is added automatically by the export when encountering a
+					// TypeAlias node with type QFlags< ... > so we are not importing the meta call directly.
 				}
 				else
 				{
