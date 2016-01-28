@@ -195,7 +195,7 @@ class MODELBASE_API Node
 
 			ANY_SYMBOL	= 0xffffffff
 		};
-		Q_DECLARE_FLAGS(SymbolTypes, SymbolType)
+		using SymbolTypes = QFlags<SymbolType>;
 
 		/**
 		 * Returns the type of the symbol defined by this node.

@@ -30,24 +30,19 @@
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/TypeAlias.h"
 
 namespace CppExport {
 
 void SpecialCases::handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment)
 {
-	if (ExportHelpers::isEnumWithQtFlags(classs))
-	{
-		auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});
-		*specialCaseFragment << "Q_DECLARE_FLAGS(" << classs->name() << "s, " << classs->name() << ")";
-	}
-	else
-		for (auto potentialEnumWithQtFlags : Model::Node::childrenOfType<OOModel::Class>(classs))
-			if (potentialEnumWithQtFlags != classs && ExportHelpers::isEnumWithQtFlags(potentialEnumWithQtFlags))
-			{
-				auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});
-				*specialCaseFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS(" << classs->name() << "::"
-											<< potentialEnumWithQtFlags->name() << "s)";
-			}
+	auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});
+	for (auto subDeclaration : *classs->subDeclarations())
+		if (auto typeAlias = DCast<OOModel::TypeAlias>(subDeclaration))
+			if (auto reference = DCast<OOModel::ReferenceExpression>(typeAlias->typeExpression()))
+				if (reference->name() == "QFlags")
+					*specialCaseFragment << "Q_DECLARE_OPERATORS_FOR_FLAGS(" << classs->name() << "::"
+												<< typeAlias->name() << ")";
 }
 
 }

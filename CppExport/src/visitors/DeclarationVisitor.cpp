@@ -266,7 +266,6 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 {
 	QList<Declaration*> declarations;
 	for (auto declaration : *classs->subDeclarations()) if (filter(declaration)) declarations.append(declaration);
-	for (auto declaration : *classs->fields()) if (filter(declaration)) declarations.append(declaration);
 	for (auto declaration : *classs->classes()) if (filter(declaration)) declarations.append(declaration);
 	for (auto declaration : *classs->methods()) if (filter(declaration)) declarations.append(declaration);
 
@@ -281,9 +280,10 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 			if (auto reference = DCast<ReferenceExpression>(currentNode))
 				if (auto target = reference->target())
 					for (auto other : declarations)
-						if (declaration != other && !DCast<Field>(other))
+						if (declaration != other)
 							if (other->isAncestorOf(target) || other == target)
 								dependencies.insert(other);
+
 			if (!DCast<StatementItemList>(currentNode))
 				workList << currentNode->children();
 		}
@@ -292,6 +292,8 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 
 	auto fragment = section->append(new CompositeFragment{classs, "sections"});
 	for (auto node : ExportHelpers::topologicalSort(declarationDependencies)) *fragment << visit(node);
+	auto fields = list(classs->fields(), this, "sections", filter);
+	if (!fields->fragments().empty()) *fragment << fields;
 	return !fragment->fragments().empty();
 }
 
@@ -578,6 +580,11 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 					 << ExportHelpers::exportFlag(explicitTemplateInstantiation);
 	else
 		*fragment << "template class ";
+
+	// reconstruct potentially eliminated prefix for template instantiation special cases
+	if (explicitTemplateInstantiation->firstAncestorOfType<OOModel::Class>() &&
+		 !explicitTemplateInstantiation->instantiatedClass()->prefix())
+		*fragment << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Module>()->name() << "::";
 
 	*fragment << ExpressionVisitor(data()).visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
 	return fragment;

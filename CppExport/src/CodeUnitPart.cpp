@@ -108,38 +108,54 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 					SAFE_DELETE(leftType);
 				}
 
-			if (isNameOnlyDependency(reference))
-				softTargets_.insert(target);
-			else
+			if (!parent()->node()->isAncestorOf(target) || !DCast<OOModel::Class>(target))
 			{
-				auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
-				auto prefixReference = DCast<OOModel::ReferenceExpression>(reference->prefix());
+				assertForcedDependencyNecessary(reference);
 
-				if (!parentMethodCall || !prefixReference || prefixReference->typeArguments()->isEmpty())
-					hardTargets_.insert(target);
-
-				// member access
-				if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
+				if (isNameOnlyDependency(reference))
+					softTargets_.insert(target);
+				else
 				{
-					const OOModel::Type* baseType{};
-					if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
-						baseType = parentMethodCall->type();
-					else
-						baseType = reference->type();
+					auto parentMethodCall = DCast<OOModel::MethodCallExpression>(reference->parent());
+					auto prefixReference = DCast<OOModel::ReferenceExpression>(reference->prefix());
 
-					auto finalType = baseType;
-					if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(baseType))
-						finalType = pointerType->baseType();
-					else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(baseType))
-						finalType = referenceType->baseType();
+					if (!parentMethodCall || !prefixReference || prefixReference->typeArguments()->isEmpty())
+						hardTargets_.insert(target);
 
-					if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
-						hardTargets_.insert(classType->classDefinition());
+					// member access
+					if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
+					{
+						const OOModel::Type* baseType{};
+						if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
+							baseType = parentMethodCall->type();
+						else
+							baseType = reference->type();
 
-					SAFE_DELETE(baseType);
+						auto finalType = baseType;
+						if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(baseType))
+							finalType = pointerType->baseType();
+						else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(baseType))
+							finalType = referenceType->baseType();
+
+						if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
+							hardTargets_.insert(classType->classDefinition());
+
+						SAFE_DELETE(baseType);
+					}
 				}
 			}
 		}
+}
+
+void CodeUnitPart::assertForcedDependencyNecessary(OOModel::ReferenceExpression* reference)
+{
+	if (auto parentCast = DCast<OOModel::CastExpression>(reference->parent()->parent()))
+		if (parentCast->castType() == reference->parent())
+			if (auto grandParentCast = DCast<OOModel::CastExpression>(parentCast->parent()))
+				if (auto primitveTypeExpression = DCast<OOModel::PrimitiveTypeExpression>(grandParentCast->castType()))
+					if (primitveTypeExpression->typeValue() == OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID)
+						if (DCast<OOModel::NullLiteral>(parentCast->expr()) && hardTargets_.contains(reference->target()))
+							Q_ASSERT(false && "redundant forced dependency detected");
 }
 
 bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
@@ -148,6 +164,9 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 	Q_ASSERT(parent);
 	if (DCast<OOModel::ExplicitTemplateInstantiation>(parent)) return false;
 	else if (reference->firstAncestorOfType<OOModel::ExplicitTemplateInstantiation>()) return true;
+
+	if (auto parentCast = reference->firstAncestorOfType<OOModel::CastExpression>())
+		if (parentCast->castType()->isAncestorOf(reference)) return false;
 
 	auto parentClass = reference->firstAncestorOfType<OOModel::Class>();
 	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>() &&

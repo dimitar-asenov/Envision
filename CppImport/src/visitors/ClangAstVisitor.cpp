@@ -428,6 +428,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 	if (varDecl->isConstexpr()) ooVarDecl->modifiers()->set(OOModel::Modifier::ConstExpr);
 	ooVarDecl->modifiers()->set(utils_->translateStorageSpecifier(varDecl->getStorageClass()));
+	ooVarDecl->modifiers()->set(utils_->translateAccessSpecifier(varDecl->getAccess()));
 	return true;
 }
 
