@@ -38,7 +38,7 @@ class OOMODEL_API Type {
 			CONST = 0x1,
 			VOLATILE = 0x2
 		};
-		Q_DECLARE_FLAGS(Qualifiers, Qualifier)
+		using Qualifiers = QFlags<Qualifier>;
 
 		Type(bool isValueType);
 		Type(const Type& other);

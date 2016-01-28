@@ -44,7 +44,7 @@ class OOMODEL_API TypeSystem {
 			IsConvertibleTo	= 0x8,
 			IsConvertibleFrom	= 0x10
 		};
-		Q_DECLARE_FLAGS(TypeRelations, TypeRelation)
+		using TypeRelations = QFlags<TypeRelation>;
 		constexpr static auto EQUALTYPES = Equal | IsSubtype | IsSupertype | IsConvertibleTo | IsConvertibleFrom;
 
 		virtual TypeRelations relationFirstToSecond(const Type* first, const Type* second) = 0;

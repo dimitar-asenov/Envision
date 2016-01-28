@@ -46,7 +46,7 @@ class INTERACTIONBASE_API Prompt
 			AutoHint = 0x00000004, /**< If set, the hint option is automatically assumed if the initial text is not
 												 empty. */
 		};
-		Q_DECLARE_FLAGS(PromptOptions, PromptOption)
+		using PromptOptions = QFlags<PromptOption>;
 
 		static void show(const QString& modeName, Visualization::Item* commandReceiver, QString initialCommandText = {},
 							  PromptOptions options = AutoHint);

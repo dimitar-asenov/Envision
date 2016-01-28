@@ -56,7 +56,7 @@ class VISUALIZATIONBASE_API ItemRegion {
 			RightOf = 0x8,
 			Overlap = 0x10
 		};
-		Q_DECLARE_FLAGS(PositionConstraints, PositionConstraint)
+		using PositionConstraints = QFlags<PositionConstraint>;
 
 		/**
 		 * \brief Returns all position constraints with respect to the point \a point satisfied by this region.

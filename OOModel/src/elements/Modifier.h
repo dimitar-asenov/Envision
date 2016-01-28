@@ -64,7 +64,7 @@ class OOMODEL_API Modifier :  public Super<Model::Node>
 			Deleted = 0x00001000,
 			Explicit = 0x00002000
 		};
-		Q_DECLARE_FLAGS(Modifiers, ModifierFlag)
+		using Modifiers = QFlags<ModifierFlag>;
 
 		Modifier(Modifiers modifiers);
 
