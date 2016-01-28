@@ -113,7 +113,7 @@ inline TypedList<T>::TypedIterator::TypedIterator(List::iterator it): it_{it}{}
 template<typename T>
 inline typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator++(int)
 {
-	TypedIterator old(*this);
+	TypedIterator old{*this};
 	++it_;
 	return old;
 }
@@ -121,7 +121,7 @@ inline typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operato
 template<typename T>
 inline typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operator--(int)
 {
-	TypedIterator old(*this);
+	TypedIterator old{*this};
 	--it_;
 	return old;
 }
@@ -173,7 +173,7 @@ inline TypedList<T>::ConstTypedIterator::ConstTypedIterator(TypedIterator& it) :
 template<typename T>
 inline typename TypedList<T>::ConstTypedIterator TypedList<T>::ConstTypedIterator::operator++(int)
 {
-	ConstTypedIterator old(*this);
+	ConstTypedIterator old{*this};
 	++it_;
 	return old;
 }
@@ -181,7 +181,7 @@ inline typename TypedList<T>::ConstTypedIterator TypedList<T>::ConstTypedIterato
 template<typename T>
 inline typename TypedList<T>::ConstTypedIterator TypedList<T>::ConstTypedIterator::operator--(int)
 {
-	ConstTypedIterator old(*this);
+	ConstTypedIterator old{*this};
 	--it_;
 	return old;
 }
