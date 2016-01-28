@@ -110,6 +110,8 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 
 			if (!parent()->node()->isAncestorOf(target) || !DCast<OOModel::Class>(target))
 			{
+				assertForcedDependencyNecessary(reference);
+
 				if (isNameOnlyDependency(reference))
 					softTargets_.insert(target);
 				else
@@ -143,6 +145,17 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 				}
 			}
 		}
+}
+
+void CodeUnitPart::assertForcedDependencyNecessary(OOModel::ReferenceExpression* reference)
+{
+	if (auto parentCast = reference->firstAncestorOfType<OOModel::CastExpression>())
+		if (parentCast->castType()->isAncestorOf(reference))
+			if (auto grandParentCast = DCast<OOModel::CastExpression>(parentCast->parent()))
+				if (auto primitveTypeExpression = DCast<OOModel::PrimitiveTypeExpression>(grandParentCast->castType()))
+					if (primitveTypeExpression->typeValue() == OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID)
+						if (DCast<OOModel::NullLiteral>(parentCast->expr()) && hardTargets_.contains(reference->target()))
+							Q_ASSERT(false && "redundant forced dependency detected");
 }
 
 bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)

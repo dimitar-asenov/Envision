@@ -80,6 +80,14 @@ class CPPEXPORT_API CodeUnitPart
 
 		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
 		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
+
+		/**
+		 * checks whether the provided reference is "Type" in constructs of the form: (void)(Type*)nullptr;
+		 * this construct is used to force dependencies when self-hosting envision.
+		 * if the structure matches the construct it asserts that no hard dependency on it has been found already so in
+		 * case one forced dependency becomes redundant it can be detected more easily.
+		 */
+		void assertForcedDependencyNecessary(OOModel::ReferenceExpression* reference);
 };
 
 inline CodeUnit* CodeUnitPart::parent() const { return parent_; }
