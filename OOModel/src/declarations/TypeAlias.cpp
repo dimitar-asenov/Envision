@@ -87,10 +87,7 @@ bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& mat
 		auto ignore = childToSubnode(source);
 		Q_ASSERT(ignore);
 		if (typeArguments() != ignore)
-		{
 			found = typeArguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-			qDebug() << typeArguments()->size() << found << matcher.matchPattern();
-		}
 
 		if ((exhaustAllScopes || !found) && parent())
 			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
