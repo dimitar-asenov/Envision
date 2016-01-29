@@ -357,7 +357,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << printAnnotationsAndModifiers(method);
 
 	// inline
-	if (!isHeaderVisitor())
+	if (isSourceVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
