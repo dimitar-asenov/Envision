@@ -77,7 +77,8 @@ public class NodeDescriptors {
 		
 		add( new NodeInitializer("Module", true, "-class-level-container", new String[][]{
 				{"TypedListOfModule","modules"},
-				{"TypedListOfUsedLibrary","libraries"}
+				{"TypedListOfUsedLibrary","libraries"},
+				{"Integer","modKind"}
 		}));
 		add( new NodeInitializer("Class", true, "-class-level-container", new String[][]{
 				{"TypedListOfExpression","baseClasses"},
