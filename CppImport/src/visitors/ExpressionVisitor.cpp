@@ -411,7 +411,7 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 		if (!result)
 			result = part;
 		else
-			result = clang_.createNode<OOModel::BinaryOperation>(stringLiteral->getLocStart(),
+			result = clang_.createNode<OOModel::BinaryOperation>(clang::SourceRange(stringLiteral->getLocStart(), *it),
 																				  OOModel::BinaryOperation::PLUS, result, part);
 	}
 
