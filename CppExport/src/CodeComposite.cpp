@@ -224,6 +224,9 @@ Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fra
 {
 	if (!fragment) return nullptr;
 
+	if (auto classs = DCast<OOModel::Class>(fragment->node()))
+		if (ExportHelpers::isTestClass(classs)) return fragment;
+
 	auto compositeFragment = new Export::CompositeFragment{fragment->node()};
 	*compositeFragment << "#pragma once\n\n" << fragment;
 	return compositeFragment;
