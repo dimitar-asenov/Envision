@@ -101,28 +101,12 @@ void BoxStyle::unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int
 		painter->setPen(outline());
 
 	// Set the brush and fix the gradient if needed.
-	if ( background().style() == Qt::LinearGradientPattern
-			&& background().gradient()->coordinateMode() == QGradient::LogicalMode )
-	{
-		QLinearGradient g = *(static_cast<const QLinearGradient*> (background().gradient()));
-		g.setStart(x + g.start().x(), y + g.start().y());
-		g.setFinalStop(x + g.finalStop().x(), y + g.finalStop().y());
-		painter->setBrush(g);
-
-	}
-	else if ( background().style()  == Qt::RadialGradientPattern
-			&& background().gradient()->coordinateMode() == QGradient::LogicalMode )
-	{
-		QRadialGradient g = *(static_cast<const QRadialGradient*> (background().gradient()));
-		g.setCenter(x + g.center().x(), y + g.center().y());
-		g.setFocalPoint(x + g.focalPoint().x(), y + g.focalPoint().y());
-		painter->setBrush(g);
-	}
+	if (customColor.isValid())
+		painter->setBrush(customColor);
+	else if (background().style() == Qt::LinearGradientPattern || background().style()  == Qt::RadialGradientPattern)
+		painter->setBrush(fixGradient(background(), x, y));
 	else
-	{
-		if (customColor.isValid()) painter->setBrush(customColor);
-		else painter->setBrush(background());
-	}
+		painter->setBrush(background());
 
 	painter->drawPath(getRectanglePath(x, y, contentBoxWidth - outlineWidth, contentBoxHeight - outlineWidth));
 }

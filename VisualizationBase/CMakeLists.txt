@@ -250,6 +250,10 @@ add_library(VisualizationBase SHARED
 	src/utils/JsonUtil.cpp
 	src/overlays/ArrowOverlayStyle.cpp
 	src/utils/InfoJavascriptFunctions.cpp
+	src/shapes/Frame.h
+	src/shapes/FrameStyle.h
+	src/shapes/Frame.cpp
+	src/shapes/FrameStyle.cpp
 )
 
 if (WIN32)

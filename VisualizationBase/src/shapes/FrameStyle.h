@@ -28,59 +28,33 @@
 
 #include "../visualizationbase_api.h"
 
-#include "../items/Mipmap.h"
 #include "ShapeStyle.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API BoxStyle : public Super<ShapeStyle>
+class VISUALIZATIONBASE_API FrameStyle : public Super<ShapeStyle>
 {
 	public:
-		enum class CornerType : int {RightAngle, Round, Cut};
+		virtual ~FrameStyle() override;
 
-		virtual ~BoxStyle() override;
-
-		void paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight,
+		void paint(QPainter* painter, int xOffset, int yOffset, int outerWidth, int outerHeight,
 					  QColor customColor) const;
 
-		Property<QBrush> background{this, "backgroundBrush"};
-		Property<CornerType> corner{this, "cornerType"};
-		Property<int> cornerRadius{this, "cornerRadius"};
+		Property<QBrush> contentBrush{this, "contentBrush"};
+		Property<QBrush> topBrush{this, "topBrush"};
+		Property<QBrush> bottomBrush{this, "bottomBrush"};
+		Property<QBrush> leftBrush{this, "leftBrush"};
+		Property<QBrush> rightBrush{this, "rightBrush"};
 
-		static QBrush fixGradient(const QBrush& gradientBrush, int x, int y);
+		Property<int> topWidth{this, "topWidth"};
+		Property<int> bottomWidth{this, "bottomWidth"};
+		Property<int> leftWidth{this, "leftWidth"};
+		Property<int> rightWidth{this, "rightWidth"};
 
-	protected:
-		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height) const;
-
-		void unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-						int contentBoxHeight, QColor customColor) const;
-		void simplifiedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-								int contentBoxHeight, QColor customColor) const;
+		Property<int> topMargin{this, "topMargin"};
+		Property<int> bottomMargin{this, "bottomMargin"};
+		Property<int> leftMargin{this, "leftMargin"};
+		Property<int> rightMargin{this, "rightMargin"};
 };
-
-inline QBrush BoxStyle::fixGradient(const QBrush& gradientBrush, int x, int y)
-{
-	QBrush result;
-	if ( gradientBrush.style() == Qt::LinearGradientPattern
-			&& gradientBrush.gradient()->coordinateMode() == QGradient::LogicalMode )
-	{
-		QLinearGradient g = *(static_cast<const QLinearGradient*> (gradientBrush.gradient()));
-		g.setStart(x + g.start().x(), y + g.start().y());
-		g.setFinalStop(x + g.finalStop().x(), y + g.finalStop().y());
-		result = g;
-
-	}
-	else if ( gradientBrush.style()  == Qt::RadialGradientPattern
-			&& gradientBrush.gradient()->coordinateMode() == QGradient::LogicalMode )
-	{
-		QRadialGradient g = *(static_cast<const QRadialGradient*> (gradientBrush.gradient()));
-		g.setCenter(x + g.center().x(), y + g.center().y());
-		g.setFocalPoint(x + g.focalPoint().x(), y + g.focalPoint().y());
-		result = g;
-	}
-	else result = gradientBrush;
-
-	return result;
-}
 
 }

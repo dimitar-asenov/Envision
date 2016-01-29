@@ -1,0 +1,37 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Shape/default">
+	
+	<contentBrush>
+		<style>1</style>
+		<color>#ffffff</color>
+	</contentBrush>
+	
+	<topBrush>
+		<style>1</style>
+		<color>#aaffcc</color>
+	</topBrush>
+	<topWidth>20</topWidth>
+	<topMargin>2</topMargin>
+	
+	<bottomBrush>
+		<style>1</style>
+		<color>#aaffcc</color>
+	</bottomBrush>
+	<bottomWidth>0</bottomWidth>
+	<bottomMargin>2</bottomMargin>
+	
+	<leftBrush>
+		<style>1</style>
+		<color>#aaffcc</color>
+	</leftBrush>
+	<leftWidth>0</leftWidth>
+	<leftMargin>0</leftMargin>
+	
+	<rightBrush>
+		<style>1</style>
+		<color>#aaffcc</color>
+	</rightBrush>
+	<rightWidth>0</rightWidth>
+	<rightMargin>0</rightMargin>
+	
+</style>
