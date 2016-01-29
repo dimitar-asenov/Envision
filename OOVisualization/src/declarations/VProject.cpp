@@ -90,19 +90,13 @@ void VProject::initializeForms()
 									Visualization::GridLayouter::ColumnMajor);
 						}));
 
-	auto shapeElement = new ShapeFormElement{};
 
 	addForm((new AnchorLayoutFormElement{})
 		// place the top left corner of the content element
 		->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
-		->put(TheTopOf, contentElement, AtBottomOf, headerElement)
+		->put(TheTopOf, contentElement, 20, FromBottomOf, headerElement)
 		// align content and header on their right side
-		->put(TheRightOf, contentElement, AtRightOf, headerElement)
-		// put the shape element at the right place
-		->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
-		->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
-		->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
-		->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
+		->put(TheRightOf, contentElement, AtRightOf, headerElement));
 }
 
 void VProject::updateGeometry(int availableWidth, int availableHeight)

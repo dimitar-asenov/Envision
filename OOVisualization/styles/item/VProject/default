@@ -1,33 +1,23 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<shape prototypes="shape/Box/default">
-		Box
-		<outline>
-			<width>4</width>
-			<color>#3c3c3c</color>
-		</outline>
-		<backgroundBrush>
+	<shape prototypes="shape/Frame/default">
+		Frame
+		
+		<topBrush>
 			<style>1</style>
-			<color>#c8c8c8</color>
-		</backgroundBrush>
-		<cornerRadius>10</cornerRadius>
+			<color>#603030</color>
+		</topBrush>
+		<topWidth>300</topWidth>
+		<topMargin>10</topMargin>
+		
+		<bottomBrush>
+			<style>1</style>
+			<color>#603030</color>
+		</bottomBrush>
+		<bottomWidth>50</bottomWidth>
+		<bottomMargin>50</bottomMargin>
 	</shape>
 	<name prototypes="item/Text/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<backgroundBrush>
-				<gradient>
-					<stopPoints>
-						<e1>
-							<first>1.0</first>
-							<second>#3c3c3c</second>
-						</e1>	
-					</stopPoints>
-				</gradient>
-			</backgroundBrush>
-			<cornerType>1</cornerType>
-			<cornerRadius>10</cornerRadius>
-		</shape>
 		<pen>
 			<width>1.0</width>
 			<style>1</style>
@@ -36,18 +26,18 @@
 			<joinStyle>0</joinStyle>
 		</pen>
 		<font>
-			<size>30</size>
+			<size>250</size>
 			<sizeIsInPixels>true</sizeIsInPixels>
 		</font>
 		<selectionFont>
-			<size>30</size>
+			<size>250</size>
 			<sizeIsInPixels>true</sizeIsInPixels>
 		</selectionFont>
 	</name>
 	<icon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/gurica_tree.svg</filename>
-		<width>60</width>
-		<height>60</height>
+		<width>250</width>
+		<height>250</height>
 	</icon>
 	<declarations prototypes="item/VList/default">
 		<shape/>
