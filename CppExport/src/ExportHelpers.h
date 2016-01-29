@@ -62,6 +62,8 @@ class CPPEXPORT_API ExportHelpers
 		template <typename T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
 													std::function<T*(QList<T*>&)> selector = nullptr);
+
+		static bool isTestClass(OOModel::Class* classs);
 };
 
 template <typename T>

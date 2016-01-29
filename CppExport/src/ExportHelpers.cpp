@@ -100,4 +100,10 @@ bool ExportHelpers::isSignalingDeclaration(OOModel::Declaration* declaration)
 	return false;
 }
 
+bool ExportHelpers::isTestClass(OOModel::Class* classs)
+{
+	return classs->methods()->size() == 1 &&
+			(classs->methods()->first()->name() == "test" || classs->methods()->first()->name() == "init");
+}
+
 }
