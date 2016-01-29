@@ -165,33 +165,51 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<BinaryOperation>(expression))
 	{
-		*fragment << visit(e->left());
-		switch (e->op())
+		bool stringLiteralConcatenation = false;
+		if (e->op() == BinaryOperation::PLUS)
 		{
-			case BinaryOperation::TIMES: *fragment << "*"; break;
-			case BinaryOperation::DIVIDE: *fragment << "/"; break;
-			case BinaryOperation::REMAINDER: *fragment << "%"; break;
-			case BinaryOperation::PLUS: *fragment << "+"; break;
-			case BinaryOperation::MINUS: *fragment << "-"; break;
-			case BinaryOperation::LEFT_SHIFT: *fragment << " << "; break;
-			case BinaryOperation::RIGHT_SHIFT_SIGNED: *fragment << " >> "; break;
-			case BinaryOperation::RIGHT_SHIFT_UNSIGNED: *fragment << " >>> "; break;
-			case BinaryOperation::LESS: *fragment << " < "; break;
-			case BinaryOperation::GREATER: *fragment << " > "; break;
-			case BinaryOperation::LESS_EQUALS: *fragment << " <= "; break;
-			case BinaryOperation::GREATER_EQUALS: *fragment << " >= "; break;
-			case BinaryOperation::EQUALS: *fragment << " == "; break;
-			case BinaryOperation::NOT_EQUALS: *fragment << " != "; break;
-			case BinaryOperation::XOR: *fragment << " ^ "; break;
-			case BinaryOperation::AND: *fragment << " & "; break;
-			case BinaryOperation::OR: *fragment << " | "; break;
-			case BinaryOperation::CONDITIONAL_AND: *fragment << " && "; break;
-			case BinaryOperation::CONDITIONAL_OR: *fragment << " || "; break;
-			case BinaryOperation::ARRAY_INDEX: *fragment << "["; break;
-			default: error(e, "Unknown binary operator type");
+			auto left = e->left();
+			while (auto binaryOperation = DCast<BinaryOperation>(left))
+				left = binaryOperation->right();
+
+			auto right = e->right();
+			while (auto binaryOperation = DCast<BinaryOperation>(right))
+				right = binaryOperation->left();
+
+			if (DCast<OOModel::StringLiteral>(left) && DCast<OOModel::StringLiteral>(right))
+				stringLiteralConcatenation = true;
 		}
-		*fragment << visit(e->right());
-		if (e->op() == BinaryOperation::ARRAY_INDEX) *fragment << "]";
+
+		auto binaryOperationFragment = stringLiteralConcatenation ? fragment->append(new CompositeFragment{e, "sections"})
+																					 :	fragment;
+		*binaryOperationFragment << visit(e->left());
+		if (!stringLiteralConcatenation)
+			switch (e->op())
+			{
+				case BinaryOperation::TIMES: *binaryOperationFragment << "*"; break;
+				case BinaryOperation::DIVIDE: *binaryOperationFragment << "/"; break;
+				case BinaryOperation::REMAINDER: *binaryOperationFragment << "%"; break;
+				case BinaryOperation::PLUS: *binaryOperationFragment << "+"; break;
+				case BinaryOperation::MINUS: *binaryOperationFragment << "-"; break;
+				case BinaryOperation::LEFT_SHIFT: *binaryOperationFragment << " << "; break;
+				case BinaryOperation::RIGHT_SHIFT_SIGNED: *binaryOperationFragment << " >> "; break;
+				case BinaryOperation::RIGHT_SHIFT_UNSIGNED: *binaryOperationFragment << " >>> "; break;
+				case BinaryOperation::LESS: *binaryOperationFragment << " < "; break;
+				case BinaryOperation::GREATER: *binaryOperationFragment << " > "; break;
+				case BinaryOperation::LESS_EQUALS: *binaryOperationFragment << " <= "; break;
+				case BinaryOperation::GREATER_EQUALS: *binaryOperationFragment << " >= "; break;
+				case BinaryOperation::EQUALS: *binaryOperationFragment << " == "; break;
+				case BinaryOperation::NOT_EQUALS: *binaryOperationFragment << " != "; break;
+				case BinaryOperation::XOR: *binaryOperationFragment << " ^ "; break;
+				case BinaryOperation::AND: *binaryOperationFragment << " & "; break;
+				case BinaryOperation::OR: *binaryOperationFragment << " | "; break;
+				case BinaryOperation::CONDITIONAL_AND: *binaryOperationFragment << " && "; break;
+				case BinaryOperation::CONDITIONAL_OR: *binaryOperationFragment << " || "; break;
+				case BinaryOperation::ARRAY_INDEX: *binaryOperationFragment << "["; break;
+				default: error(e, "Unknown binary operator type");
+			}
+		*binaryOperationFragment << visit(e->right());
+		if (e->op() == BinaryOperation::ARRAY_INDEX) *binaryOperationFragment << "]";
 	}
 	else if (auto e = DCast<UnaryOperation>(expression))
 	{
