@@ -28,12 +28,17 @@
 
 #include "cppimport_api.h"
 
+namespace OOModel {
+	class AssertStatement;
+	class MetaCallExpression;
+}
+
 namespace CppImport {
 
 class CPPIMPORT_API SpecialCases
 {
 	public:
-
+		static OOModel::AssertStatement* qAssertMetaCallToAssertStatement(OOModel::MetaCallExpression* metaCall);
 };
 
 }

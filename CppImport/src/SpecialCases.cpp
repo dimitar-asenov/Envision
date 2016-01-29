@@ -26,6 +26,29 @@
 
 #include "SpecialCases.h"
 
+#include "OOModel/src/statements/AssertStatement.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
+
 namespace CppImport {
+
+OOModel::AssertStatement* SpecialCases::qAssertMetaCallToAssertStatement(OOModel::MetaCallExpression* metaCall)
+{
+	auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
+	if (!reference || reference->name() != "Q_ASSERT") return nullptr;
+
+	Q_ASSERT(metaCall->arguments()->size() == 1);
+	auto assertExpression = DCast<OOModel::Expression>(metaCall->arguments()->first());
+	Q_ASSERT(assertExpression);
+
+	// remove assertExpression from qAssertMetaCall
+	metaCall->arguments()->clear();
+
+	// create an assert statement
+	auto assertStatement = new OOModel::AssertStatement{};
+	assertStatement->setExpression(assertExpression);
+	assertStatement->setAssertKind(OOModel::AssertStatement::AssertKind::Runtime);
+	return assertStatement;
+}
 
 }

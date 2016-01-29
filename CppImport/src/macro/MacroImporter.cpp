@@ -33,6 +33,7 @@
 #include "PPCallback.h"
 
 #include "NodeHelpers.h"
+#include "../SpecialCases.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -299,7 +300,15 @@ void MacroImporter::endEntireImport()
 	// insert all top level meta calls
 	for (auto it = finalizationMetaCalls.begin(); it != finalizationMetaCalls.end(); it++)
 		if (DCast<OOModel::Statement>(it.key()))
-			it.key()->parent()->replaceChild(it.key(), new OOModel::ExpressionStatement{it.value()->metaCall()});
+		{
+			if (auto assertStatement = SpecialCases::qAssertMetaCallToAssertStatement(it.value()->metaCall()))
+			{
+				it.key()->parent()->replaceChild(it.key(), assertStatement);
+				SAFE_DELETE(it.value()->metaCall());
+			}
+			else
+				it.key()->parent()->replaceChild(it.key(), new OOModel::ExpressionStatement{it.value()->metaCall()});
+		}
 		else if (DCast<OOModel::Expression>(it.key()))
 			it.key()->parent()->replaceChild(it.key(), it.value()->metaCall());
 		else if (DCast<OOModel::VariableDeclaration>(it.key()) &&
