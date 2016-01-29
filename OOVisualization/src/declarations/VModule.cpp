@@ -85,7 +85,7 @@ void VModule::initializeForms()
 						[](I* v) {return v->node()->metaCalls();},
 						[](I* v){return &v->style()->metaCalls();}))
 				->put(0, 4, item(&I::comment_, [](I* v){return v->node()->comment();}))
-				->put(0, 5, (new DynamicGridFormElement{})->setSpacing(10, 10)->setMargins(10)
+				->put(0, 5, (new DynamicGridFormElement{})->setSpacing(200, 200)->setMargins(200)
 					->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 					->setNodesGetter(
 						[](Item* v)->QVector<QVector<Model::Node*>>{
@@ -96,19 +96,12 @@ void VModule::initializeForms()
 								Visualization::GridLayouter::ColumnMajor);
 					}));
 
-	auto shapeElement = new ShapeFormElement{};
-
 	addForm((new AnchorLayoutFormElement{})
 		// place the top left corner of the content element
 		->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
-		->put(TheTopOf, contentElement, AtBottomOf, headerElement)
+		->put(TheTopOf, contentElement, 10, FromBottomOf, headerElement)
 		// align content and header on their right side
-		->put(TheRightOf, contentElement, AtRightOf, headerElement)
-		// put the shape element at the right place
-		->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
-		->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
-		->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
-		->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
+		->put(TheRightOf, contentElement, AtRightOf, headerElement));
 }
 
 QColor VModule::customShapeColor() const
