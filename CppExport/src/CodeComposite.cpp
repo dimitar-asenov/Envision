@@ -27,6 +27,7 @@
 #include "CodeComposite.h"
 #include "Config.h"
 #include "ExportHelpers.h"
+#include "SpecialCases.h"
 #include "visitors/DeclarationVisitor.h"
 #include "visitors/ElementVisitor.h"
 
@@ -225,7 +226,7 @@ Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fra
 	if (!fragment) return nullptr;
 
 	if (auto classs = DCast<OOModel::Class>(fragment->node()))
-		if (ExportHelpers::isTestClass(classs)) return fragment;
+		if (SpecialCases::isTestClass(classs)) return fragment;
 
 	auto compositeFragment = new Export::CompositeFragment{fragment->node()};
 	*compositeFragment << "#pragma once\n\n" << fragment;

@@ -44,6 +44,8 @@ class CPPEXPORT_API SpecialCases
 {
 	public:
 		static void handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment);
+
+		static bool isTestClass(OOModel::Class* classs);
 };
 
 }

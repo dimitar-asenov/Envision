@@ -29,7 +29,7 @@
 #include "Config.h"
 #include "visitors/DeclarationVisitor.h"
 #include "visitors/ExpressionVisitor.h"
-#include "ExportHelpers.h"
+#include "SpecialCases.h"
 
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/MetaDefinition.h"
@@ -50,7 +50,7 @@ void CodeUnit::calculateSourceFragments()
 {
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
-		if (ExportHelpers::isTestClass(classs))
+		if (SpecialCases::isTestClass(classs))
 		{
 			headerPart()->setFragment(DeclarationVisitor(MACRO_VISITOR).visitTopLevelClass(classs));
 		}
