@@ -652,10 +652,16 @@ bool ClangAstVisitor::TraverseStaticAssertDecl(clang::StaticAssertDecl* staticAs
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
 		auto ooAssert = clang_.createNode<OOModel::AssertStatement>(staticAssertDecl->getSourceRange());
-		auto commaExpression = clang_.createNode<OOModel::CommaExpression>(staticAssertDecl->getSourceRange());
-		commaExpression->setLeft(exprVisitor_->translateExpression(staticAssertDecl->getAssertExpr()));
-		commaExpression->setRight(exprVisitor_->translateExpression(staticAssertDecl->getMessage()));
-		ooAssert->setExpression(commaExpression);
+		auto ooAssertExpression = exprVisitor_->translateExpression(staticAssertDecl->getAssertExpr());
+		if (staticAssertDecl->getMessage())
+		{
+			auto commaExpression = clang_.createNode<OOModel::CommaExpression>(staticAssertDecl->getSourceRange());
+			commaExpression->setLeft(ooAssertExpression);
+			commaExpression->setRight(exprVisitor_->translateExpression(staticAssertDecl->getMessage()));
+			ooAssert->setExpression(commaExpression);
+		}
+		else
+			ooAssert->setExpression(ooAssertExpression);
 		ooAssert->setAssertKind(OOModel::AssertStatement::AssertKind::Static);
 		itemList->append(ooAssert);
 	}
