@@ -29,6 +29,7 @@
 #include "Config.h"
 #include "visitors/DeclarationVisitor.h"
 #include "visitors/ExpressionVisitor.h"
+#include "ExportHelpers.h"
 
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/MetaDefinition.h"
@@ -49,8 +50,15 @@ void CodeUnit::calculateSourceFragments()
 {
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
-		headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visitTopLevelClass(classs));
-		sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visitTopLevelClass(classs));
+		if (ExportHelpers::isTestClass(classs))
+		{
+			headerPart()->setFragment(DeclarationVisitor(MACRO_VISITOR).visitTopLevelClass(classs));
+		}
+		else
+		{
+			headerPart()->setFragment(DeclarationVisitor(HEADER_VISITOR).visitTopLevelClass(classs));
+			sourcePart()->setFragment(DeclarationVisitor(SOURCE_VISITOR).visitTopLevelClass(classs));
+		}
 	}
 	else if (auto module = DCast<OOModel::Module>(node()))
 	{
