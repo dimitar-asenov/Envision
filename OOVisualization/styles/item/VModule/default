@@ -29,6 +29,10 @@
 		<height>70</height>
 	</folderIcon>
 	<name prototypes="item/Text/default">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush><color>#242c40</color></contentBrush>
+		</shape>
 		<pen>
 			<width>1.0</width>
 			<style>1</style>

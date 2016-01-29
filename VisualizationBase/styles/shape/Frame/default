@@ -10,15 +10,15 @@
 		<style>1</style>
 		<color>#aaffcc</color>
 	</topBrush>
-	<topWidth>20</topWidth>
-	<topMargin>2</topMargin>
+	<topWidth>0</topWidth>
+	<topMargin>0</topMargin>
 	
 	<bottomBrush>
 		<style>1</style>
 		<color>#aaffcc</color>
 	</bottomBrush>
 	<bottomWidth>0</bottomWidth>
-	<bottomMargin>2</bottomMargin>
+	<bottomMargin>0</bottomMargin>
 	
 	<leftBrush>
 		<style>1</style>
