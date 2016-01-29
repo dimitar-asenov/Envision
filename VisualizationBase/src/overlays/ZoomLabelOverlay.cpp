@@ -65,15 +65,7 @@ void ZoomLabelOverlay::updateGeometry(int availableWidth, int availableHeight)
 	Super::updateGeometry(availableWidth, availableHeight);
 
 	setPos(associatedItem()->scenePos());
-
-	auto maxScale = 1/mainViewScalingFactor();
-	auto widthScale = associatedItem()->widthInScene() / (double) widthInLocal();
-	auto heightScale = associatedItem()->heightInScene() / (double) heightInLocal();
-	auto scaleToUse = maxScale;
-	if (widthScale < scaleToUse) scaleToUse = widthScale;
-	if (heightScale < scaleToUse) scaleToUse = heightScale;
-
-	setScale(scaleToUse);
+	setScale(computeScaleToUse());
 }
 
 bool ZoomLabelOverlay::isSensitiveToScale() const
@@ -289,22 +281,33 @@ void ZoomLabelOverlay::adjustPositionOrHide()
 	if (availableRect.width() * scalingFactor < OVERLAY_MIN_WIDTH
 			|| availableRect.height() * scalingFactor < OVERLAY_MIN_HEIGHT) visible = false;
 
+	// If the original item's header is actually visible, then don't show this one
+	if (scalingFactor * associatedItemTextStyle()->font().pixelSize() >= SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN)
+		visible = false;
+
 	// If there might be enough space, then try to fit in
 	if (visible)
 	{
 		setPos(availableRect.topLeft());
-
-		auto maxScale = 1/scalingFactor;
-		auto widthScale = availableRect.width() / (double) widthInLocal();
-		auto heightScale = availableRect.height() / (double) heightInLocal();
-		auto scaleToUse = maxScale;
-		if (widthScale < scaleToUse) scaleToUse = widthScale;
-		if (heightScale < scaleToUse) scaleToUse = heightScale;
-
-		setScale(scaleToUse);
+		setScale(computeScaleToUse());
 	}
 
 	if (visible != isVisible()) setVisible(visible);
+}
+
+qreal ZoomLabelOverlay::computeScaleToUse() const
+{
+	auto maxScale = 1/mainViewScalingFactor();
+	auto widthScale = associatedItem()->widthInScene() / (double) widthInLocal();
+	auto heightScale = associatedItem()->heightInScene() / (double) heightInLocal();
+	auto scaleToUse = maxScale;
+	if (widthScale < scaleToUse) scaleToUse = widthScale;
+	if (heightScale < scaleToUse) scaleToUse = heightScale;
+
+	if (scaleToUse * heightInLocal() * mainViewScalingFactor() > OVERLAY_MAX_HEIGHT)
+		scaleToUse = OVERLAY_MAX_HEIGHT / ( mainViewScalingFactor() * heightInLocal() );
+
+	return scaleToUse;
 }
 
 }
