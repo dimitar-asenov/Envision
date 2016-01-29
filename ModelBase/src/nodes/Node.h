@@ -381,9 +381,6 @@ class MODELBASE_API Node
 		virtual void load(PersistentStore &store) = 0;
 
 		/**
-		 * TODO In the comment below the part that explains things about the revision is incorrect. The persistence store
-		 * does not care about this currently. Either change the comment or fix this.
-		 *
 		 * Returns true if this node should be persisted in a new persistence unit. This is typically a per class value.
 		 *
 		 * When the user saves the project normally the entire corresponding application tree is saved. To optimize the
@@ -398,6 +395,9 @@ class MODELBASE_API Node
 		 * persistence unit. Therefore this option should be used with care. Only node types closer to the root are
 		 * suitable for being new persistence units. Nodes closer to the leafs, such as expressions and text values should
 		 * not be new persistence units, as this will greatly increase the memory required by the persistence engine.
+		 *
+		 * TODO In the comment above the part that explains things about the revision is incorrect. The persistence store
+		 * does not care about this currently. Either change the comment or fix this.
 		 */
 		virtual bool isNewPersistenceUnit() const;
 
