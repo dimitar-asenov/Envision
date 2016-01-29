@@ -83,6 +83,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseUsingDecl(clang::UsingDecl* usingDecl);
 		bool TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
 		bool TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingValueDecl* unresolvedUsing);
+		bool TraverseStaticAssertDecl(clang::StaticAssertDecl* staticAssertDecl);
 
 		/**
 		 * Traverses the stmt \a S and if it is an expression dispatches to the expression visitor

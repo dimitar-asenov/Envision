@@ -95,6 +95,7 @@ class CPPEXPORT_API DeclarationVisitor
 
 		bool isHeaderVisitor();
 		bool isSourceVisitor();
+		bool isMacroVisitor();
 
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 
@@ -108,5 +109,6 @@ class CPPEXPORT_API DeclarationVisitor
 
 inline bool DeclarationVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
 inline bool DeclarationVisitor::isSourceVisitor() { return data().get()->modeStack_.last() == SOURCE_VISITOR; }
+inline bool DeclarationVisitor::isMacroVisitor() { return data().get()->modeStack_.last() == MACRO_VISITOR; }
 
 }

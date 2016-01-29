@@ -29,6 +29,7 @@
 #include "Statement.h"
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
+#include "ModelBase/src/nodes/Integer.h"
 
 namespace OOModel { class AssertStatement; }
 extern template class OOMODEL_API Model::TypedList<OOModel::AssertStatement>;
@@ -40,5 +41,17 @@ class OOMODEL_API AssertStatement : public Super<Statement>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(AssertStatement)
 
 	ATTRIBUTE(Expression, expression, setExpression)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, aKind, setAKind, int)
+
+	public:
+		enum class AssertKind : int {Runtime, Static};
+
+		AssertKind assertKind() const;
+		void setAssertKind(const AssertKind& kind);
 };
+
+inline AssertStatement::AssertKind AssertStatement::assertKind() const
+{ return static_cast<AssertKind> (aKind()); }
+inline void AssertStatement::setAssertKind(const AssertKind& kind) { setAKind(static_cast<int> (kind)); }
+
 }

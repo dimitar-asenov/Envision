@@ -357,7 +357,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << printAnnotationsAndModifiers(method);
 
 	// inline
-	if (!isHeaderVisitor())
+	if (isSourceVisitor())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
@@ -424,7 +424,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 			*fragment << new TextFragment{method->modifiers(), " = delete"};
 		if (method->modifiers()->isSet(Modifier::Abstract))
 			*fragment << new TextFragment{method->modifiers(), " = 0"};
-		*fragment << ";";
+		if (!isMacroVisitor() || method->items()->isEmpty()) *fragment << ";";
 	}
 
 	if (!isHeaderVisitor())

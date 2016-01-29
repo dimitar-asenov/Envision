@@ -647,6 +647,29 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 	return true;
 }
 
+bool ClangAstVisitor::TraverseStaticAssertDecl(clang::StaticAssertDecl* staticAssertDecl)
+{
+	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
+	{
+		auto ooAssert = clang_.createNode<OOModel::AssertStatement>(staticAssertDecl->getSourceRange());
+		auto ooAssertExpression = exprVisitor_->translateExpression(staticAssertDecl->getAssertExpr());
+		if (staticAssertDecl->getMessage())
+		{
+			auto commaExpression = clang_.createNode<OOModel::CommaExpression>(staticAssertDecl->getSourceRange());
+			commaExpression->setLeft(ooAssertExpression);
+			commaExpression->setRight(exprVisitor_->translateExpression(staticAssertDecl->getMessage()));
+			ooAssert->setExpression(commaExpression);
+		}
+		else
+			ooAssert->setExpression(ooAssertExpression);
+		ooAssert->setAssertKind(OOModel::AssertStatement::AssertKind::Static);
+		itemList->append(ooAssert);
+	}
+	else
+		log_->writeError(className_, staticAssertDecl, CppImportLogger::Reason::INSERT_PROBLEM);
+	return true;
+}
+
 bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 {
 	if (S && llvm::isa<clang::Expr>(S))

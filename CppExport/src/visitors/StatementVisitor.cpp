@@ -246,7 +246,10 @@ SourceFragment* StatementVisitor::visit(TryCatchFinallyStatement* statement)
 SourceFragment* StatementVisitor::visit(AssertStatement* statement)
 {
 	auto fragment = new CompositeFragment{statement};
-	*fragment << "assert " << expression(statement->expression()) << ";";
+	if (statement->assertKind() == AssertStatement::AssertKind::Runtime) *fragment << "Q_ASSERT(";
+	else if (statement->assertKind() == AssertStatement::AssertKind::Static) *fragment << "static_assert(";
+	else Q_ASSERT(false);
+	*fragment << expression(statement->expression()) << ");";
 	return fragment;
 }
 
