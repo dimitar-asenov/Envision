@@ -55,6 +55,7 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		using ListNodeGetterFunction = std::function<Model::List*(Item* item)>;
 		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>(Item* item)>;
 		using ListOfItemsGetterFunction = std::function<QList<Item*>(Item* item)>;
+		using IntGetterFunction = std::function<int (Item* item)>;
 
 		SequentialLayoutFormElement() = default;
 		SequentialLayoutFormElement(const SequentialLayoutFormElement& other);
@@ -115,11 +116,11 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		/**
 		 * Sets the minimum width to \a minWidth.
 		 */
-		SequentialLayoutFormElement* setMinWidth(int minWidth);
+		SequentialLayoutFormElement* setMinWidthGetter(IntGetterFunction minWidthGetter);
 		/**
 		 * Sets the minimum height to \a minHeight.
 		 */
-		SequentialLayoutFormElement* setMinHeight(int minHeight);
+		SequentialLayoutFormElement* setMinHeightGetter(IntGetterFunction minHeightGetter);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -161,8 +162,8 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		Qt::Orientation orientation_{Qt::Horizontal};
 		LayoutStyle::Alignment alignment_{LayoutStyle::Alignment::Bottom};
 		bool forward_{true};
-		int minWidth_{};
-		int minHeight_{};
+		IntGetterFunction minWidthGetter_{};
+		IntGetterFunction minHeightGetter_{};
 
 		struct ItemData
 		{
@@ -252,14 +253,14 @@ inline SequentialLayoutFormElement* SequentialLayoutFormElement::setForward(bool
 	forward_ = forward;
 	return this;
 }
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinWidth(int minWidth)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinWidthGetter(IntGetterFunction minWidthGetter)
 {
-	minWidth_ = minWidth;
+	minWidthGetter_ = minWidthGetter;
 	return this;
 }
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeight(int minHeight)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeightGetter(IntGetterFunction minHeightGetter)
 {
-	minHeight_ = minHeight;
+	minHeightGetter_ = minHeightGetter;
 	return this;
 }
 

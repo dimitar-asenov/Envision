@@ -86,6 +86,10 @@ void VList::initializeForms()
 							{return static_cast<VList*>(i)->style()->itemsStyle().noBoundaryCursorsInsideShape();};
 	auto noInnerCursorsGetter = [](Item* i)
 							{return static_cast<VList*>(i)->style()->itemsStyle().noInnerCursors();};
+	auto minWidthGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->minWidth();};
+	auto minHeightGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->minHeight();};
 
 	// Form 0: horizontal orientation
 	addForm((new SequentialLayoutFormElement{})
@@ -95,7 +99,8 @@ void VList::initializeForms()
 			->setNoBoundaryCursors(noBoundaryCursorsGetter)
 			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter)
-			->setMinWidth(3)->setMinHeight(10));
+			->setMinWidthGetter(minWidthGetter)
+			->setMinHeightGetter(minHeightGetter));
 	// Form 1: vertical orientation
 	addForm((new SequentialLayoutFormElement{})
 			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
@@ -104,7 +109,8 @@ void VList::initializeForms()
 			->setNoBoundaryCursors(noBoundaryCursorsGetter)
 			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter)
-			->setMinWidth(10)->setMinHeight(3));
+			->setMinWidthGetter(minWidthGetter)
+			->setMinHeightGetter(minHeightGetter));
 	// Form 2: EmptyList with a tip
 	addForm(item<Static>(&I::emptyTip_, [](I* v){ return &v->style()->selectedTip(); }));
 }

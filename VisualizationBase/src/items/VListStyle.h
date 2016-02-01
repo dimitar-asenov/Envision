@@ -45,6 +45,9 @@ class VISUALIZATIONBASE_API VListStyle : public Super<DeclarativeItemBaseStyle>
 
 		Property<bool> showTipWhenSelectedAndEmpty{this, "showTipWhenSelectedAndEmpty"};
 		Property<Visualization::StaticStyle> selectedTip{this, "selectedTip"};
+
+		Property<int> minWidth{this, "minWidth"};
+		Property<int> minHeight{this, "minHeight"};
 };
 
 }

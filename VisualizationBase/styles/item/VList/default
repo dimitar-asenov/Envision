@@ -42,4 +42,7 @@
 			<color>#808080</color>
 		</pen>
 	</selectedTip>
+	
+	<minWidth>10</minWidth>
+	<minHeight>10</minHeight>
 </style>

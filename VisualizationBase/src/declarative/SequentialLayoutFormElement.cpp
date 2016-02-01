@@ -41,7 +41,8 @@ SequentialLayoutFormElement::SequentialLayoutFormElement(const SequentialLayoutF
 :	LayoutFormElement{other}, listNodeGetter_{other.listNodeGetter_}, nodeListGetter_{other.nodeListGetter_},
  	itemListGetter_{other.itemListGetter_}, spaceBetweenElementsGetter_{other.spaceBetweenElementsGetter_},
  	defaultSpaceBetweenElements_{other.defaultSpaceBetweenElements_}, orientation_{other.orientation_},
- 	alignment_{other.alignment_}, forward_{other.forward_}, minWidth_{other.minWidth_}, minHeight_{other.minHeight_}
+	alignment_{other.alignment_}, forward_{other.forward_}, minWidthGetter_{other.minWidthGetter_},
+	minHeightGetter_{other.minHeightGetter_}
 {
 }
 
@@ -70,6 +71,9 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 	int spacing = spaceBetweenElements(item);
 	int size = itemList.size();
 
+	int minWidth = minWidthGetter_ ? minWidthGetter_(item) : (orientation_ == Qt::Horizontal ? 3 : 10);
+	int minHeight = minHeightGetter_ ? minHeightGetter_(item) : (orientation_ == Qt::Horizontal ? 10 : 3);
+
 	QSize finalSize;
 
 	if (forward_)
@@ -97,8 +101,8 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[this](){return bottomMargin();},	// bottomMargin
 				[this](){return leftMargin();},	// leftMargin
 				[this](){return rightMargin();},	// rightMargin
-				[this](){return minWidth_;},	// minWidth
-				[this](){return minHeight_;}	// minHeight
+				[minWidth](){return minWidth;},	// minWidth
+				[minHeight](){return minHeight;}	// minHeight
 			);
 		}
 		else
@@ -124,8 +128,8 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[this](){return bottomMargin();},	// bottomMargin
 				[this](){return leftMargin();},	// leftMargin
 				[this](){return rightMargin();},	// rightMargin
-				[this](){return minWidth_;},	// minWidth
-				[this](){return minHeight_;}	// minHeight
+				[minWidth](){return minWidth;},	// minWidth
+				[minHeight](){return minHeight;}	// minHeight
 			);
 		}
 	}
@@ -155,8 +159,8 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[this](){return bottomMargin();},	// bottomMargin
 				[this](){return leftMargin();},	// leftMargin
 				[this](){return rightMargin();},	// rightMargin
-				[this](){return minWidth_;},	// minWidth
-				[this](){return minHeight_;}	// minHeight
+				[minWidth](){return minWidth;},	// minWidth
+				[minHeight](){return minHeight;}	// minHeight
 			);
 		}
 		else
@@ -182,8 +186,8 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[this](){return bottomMargin();},	// bottomMargin
 				[this](){return leftMargin();},	// leftMargin
 				[this](){return rightMargin();},	// rightMargin
-				[this](){return minWidth_;},	// minWidth
-				[this](){return minHeight_;}	// minHeight
+				[minWidth](){return minWidth;},	// minWidth
+				[minHeight](){return minHeight;}	// minHeight
 			);
 		}
 	}
