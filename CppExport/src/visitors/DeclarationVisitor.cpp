@@ -428,7 +428,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		if (!isMacroVisitor() || method->items()->isEmpty()) *fragment << ";";
 	}
 
-	if (!isHeaderVisitor())
+	if (!isHeaderVisitor() && (!isMacroVisitor() || !method->items()->isEmpty()))
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
 
 	notAllowed(method->subDeclarations());
