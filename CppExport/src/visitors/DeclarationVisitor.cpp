@@ -309,6 +309,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	{
 		*body << list(context->metaCalls(), ExpressionVisitor(data()), "sections");
 		*body << list(context->methods(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
+		*body << list(context->fields(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
 	}
 	*macro << body;
 	*fragment << macro;
@@ -416,6 +417,9 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (!isSourceVisitor())
 	{
+		if (isMacroVisitor())
+			SpecialCases::overrideFlag(method, fragment);
+
 		if (method->modifiers()->isSet(Modifier::Override))
 			*fragment << new TextFragment{method->modifiers(), " override"};
 		if (method->modifiers()->isSet(Modifier::Default))
@@ -427,7 +431,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		if (!isMacroVisitor() || method->items()->isEmpty()) *fragment << ";";
 	}
 
-	if (!isHeaderVisitor())
+	if (!isHeaderVisitor() && (!isMacroVisitor() || !method->items()->isEmpty()))
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
 
 	notAllowed(method->subDeclarations());

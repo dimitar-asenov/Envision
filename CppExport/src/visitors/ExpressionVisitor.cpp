@@ -30,6 +30,7 @@
 #include "ElementVisitor.h"
 
 #include "../CppExportException.h"
+#include "../SpecialCases.h"
 
 #include "OOModel/src/expressions/Expression.h"
 #include "OOModel/src/expressions/types/ArrayTypeExpression.h"
@@ -326,7 +327,10 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		else
 		{
 			*fragment << visit(e->callee());
-			if (!e->arguments()->isEmpty())
+
+			if (auto arguments = SpecialCases::overrideFlagArgumentTransformation(e))
+				*fragment << arguments;
+			else if (!e->arguments()->isEmpty())
 			{
 				auto arguments = new Export::CompositeFragment{e->arguments(), "argsList"};
 				for (auto node : *e->arguments())

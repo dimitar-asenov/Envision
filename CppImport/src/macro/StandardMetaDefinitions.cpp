@@ -33,6 +33,7 @@
 #include "MacroArgumentLocation.h"
 #include "NodeToCloneMap.h"
 #include "NodeHelpers.h"
+#include "../SpecialCases.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -106,15 +107,7 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 			insertArgumentSplices(mapping, childMapping, arguments);
 
 			// handle predefined meta definition: SET_OVERRIDE_FLAG
-			if (metaDef->arguments()->size() == 1)
-				if (metaDef->arguments()->first()->name() == "OVERRIDE")
-					if (auto ooMethod = DCast<OOModel::Method>(cloned))
-						if (ooMethod->modifiers()->isSet(OOModel::Modifier::Virtual))
-						{
-							auto predefinedMetaCall = new OOModel::MetaCallExpression{"SET_OVERRIDE_FLAG"};
-							predefinedMetaCall->arguments()->append(new OOModel::ReferenceExpression{"OVERRIDE"});
-							ooMethod->metaCalls()->append(predefinedMetaCall);
-						}
+			SpecialCases::overrideFlag(metaDef, cloned);
 
 			NodeHelpers::addNodeToDeclaration(cloned, metaDef->context());
 		}

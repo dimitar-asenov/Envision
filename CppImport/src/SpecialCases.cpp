@@ -26,9 +26,15 @@
 
 #include "SpecialCases.h"
 
+#include "macro/MacroExpansion.h"
+#include "ClangHelpers.h"
+
 #include "OOModel/src/statements/AssertStatement.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/expressions/ReferenceExpression.h"
+#include "OOModel/src/expressions/BooleanLiteral.h"
+#include "OOModel/src/declarations/MetaDefinition.h"
+#include "OOModel/src/declarations/Method.h"
 
 namespace CppImport {
 
@@ -49,6 +55,31 @@ OOModel::AssertStatement* SpecialCases::qAssertMetaCallToAssertStatement(OOModel
 	assertStatement->setExpression(assertExpression);
 	assertStatement->setAssertKind(OOModel::AssertStatement::AssertKind::Runtime);
 	return assertStatement;
+}
+
+void SpecialCases::overrideFlagArgumentTransformation(ClangHelpers& clang, MacroExpansion* expansion)
+{
+	if (clang.argumentNames(expansion->definition()).size() == 1)
+		if (clang.argumentNames(expansion->definition()).first() == "OVERRIDE")
+		{
+			auto argument = DCast<OOModel::ReferenceExpression>(expansion->metaCall()->arguments()->first());
+			expansion->metaCall()->arguments()->replaceChild(argument,
+																		new OOModel::BooleanLiteral{argument->name() == "override"});
+			SAFE_DELETE(argument);
+		}
+}
+
+void SpecialCases::overrideFlag(OOModel::MetaDefinition* metaDef, Model::Node* node)
+{
+	if (metaDef->arguments()->size() == 1)
+		if (metaDef->arguments()->first()->name() == "OVERRIDE")
+			if (auto ooMethod = DCast<OOModel::Method>(node))
+				if (ooMethod->modifiers()->isSet(OOModel::Modifier::Virtual))
+				{
+					auto predefinedMetaCall = new OOModel::MetaCallExpression{"SET_OVERRIDE_FLAG"};
+					predefinedMetaCall->arguments()->append(new OOModel::ReferenceExpression{"OVERRIDE"});
+					ooMethod->metaCalls()->append(predefinedMetaCall);
+				}
 }
 
 }
