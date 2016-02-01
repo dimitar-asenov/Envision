@@ -161,7 +161,8 @@ public class NodeDescriptors {
 				{"StatementItemList","body"}
 		}));
 		add( new NodeInitializer("AssertStatement", new String[][]{
-				{"Expression","expression"}
+				{"Expression","expression"},
+				{"Integer","aKind"}
 		}));
 		add( new NodeInitializer("SynchronizedStatement", new String[][]{
 				{"Expression","expression"},
