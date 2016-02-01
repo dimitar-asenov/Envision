@@ -1,7 +1,0 @@
-<!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Text/default">
-	<shape prototypes="default.nameShape">Box</shape>
-	<pen>
-		<color>#c80000</color>
-	</pen>
-</style>

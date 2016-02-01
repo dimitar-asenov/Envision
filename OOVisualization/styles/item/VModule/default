@@ -7,7 +7,7 @@
 			<style>1</style>
 			<color>#242c40</color>
 		</topBrush>
-		<topWidth>100</topWidth>
+		<topWidth>150</topWidth>
 		<topMargin>10</topMargin>
 		
 		<bottomBrush>
@@ -26,8 +26,8 @@
 			</contentBrush>
 		</shape>
 		<filename>styles/icon/module.svg</filename>
-		<width>70</width>
-		<height>70</height>
+		<width>120</width>
+		<height>120</height>
 	</standardIcon>
 	<folderIcon prototypes="icon/SVGIcon/default">
 		<shape prototypes="shape/Frame/default">
@@ -37,8 +37,8 @@
 			</contentBrush>
 		</shape>
 		<filename>styles/icon/folder.svg</filename>
-		<width>70</width>
-		<height>70</height>
+		<width>120</width>
+		<height>120</height>
 	</folderIcon>
 	<name prototypes="item/Text/default">
 		<shape prototypes="shape/Frame/default">
@@ -53,11 +53,11 @@
 			<joinStyle>0</joinStyle>
 		</pen>
 		<font>
-			<size>70</size>
+			<size>120</size>
 			<sizeIsInPixels>true</sizeIsInPixels>
 		</font>
 		<selectionFont>
-			<size>70</size>
+			<size>120</size>
 			<sizeIsInPixels>true</sizeIsInPixels>
 		</selectionFont>
 	</name>

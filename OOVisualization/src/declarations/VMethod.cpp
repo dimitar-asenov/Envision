@@ -33,6 +33,7 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/EmptyItem.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -46,46 +47,34 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : Super{p
 
 void VMethod::initializeForms()
 {
+	auto titleElement = grid({{
+	  item<Static>(&I::icon_, [](I* v) -> const Visualization::StaticStyle* {
+		  switch (v->node()->methodKind())
+		  {
+			  case Method::MethodKind::Default: return &v->style()->defaultIcon();
+			  case Method::MethodKind::Constructor: return &v->style()->constructorIcon();
+			  case Method::MethodKind::Destructor: return &v->style()->destructorIcon();
+			  case Method::MethodKind::Conversion: return &v->style()->conversionIcon();
+			  case Method::MethodKind::OperatorOverload: return &v->style()->operatorOverloadIcon();
+			  default: return &v->style()->defaultIcon();
+		  }
+	}), item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, &StyleType::name)}})
+		->setNoBoundaryCursors([](Item*){return true;})
+		->setNoInnerCursors([](Item*){return true;})
+		->setVerticalAlignment(LayoutStyle::Alignment::Center)
+		->setHorizontalSpacing(5);
+
+	auto titleBackgroundElement = item<EmptyItem>(&I::titleBackground_, &StyleType::titleBackground);
+
 	auto headerElement = (new GridLayoutFormElement{})
-		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
+		->setHorizontalSpacing(5)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(3, 1)
 		->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-		->put(0, 0, item<Static>(&I::icon_, [](I* v)
-				{
-					switch (v->node()->methodKind())
-					{
-						case Method::MethodKind::Default: return &v->style()->defaultIcon();
-						case Method::MethodKind::Constructor: return &v->style()->constructorIcon();
-						case Method::MethodKind::Destructor: return &v->style()->destructorIcon();
-						case Method::MethodKind::Conversion: return &v->style()->conversionIcon();
-						case Method::MethodKind::OperatorOverload: return &v->style()->operatorOverloadIcon();
-						default: return &v->style()->defaultIcon();
-					}
-				}))
-		->put(1, 0, item<VList>(&I::results_, [](I* v){return v->node()->results();},
-											[](I* v){return &v->style()->results();}))
-		->put(2, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
-				{
-					// return the correct name style according to method's modifiers
-					auto modifiers = v->node()->modifiers();
-					if (modifiers->isSet(Modifier::Static))
-					{
-						if (modifiers->isSet(Modifier::Private)) return &v->style()->nameStaticPrivate();
-						else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameStaticProtected();
-						else if (modifiers->isSet(Modifier::Public)) return &v->style()->nameStaticPublic();
-						else return &v->style()->nameStaticDefault();
-					}
-					else
-					{
-						if (modifiers->isSet(Modifier::Private)) return &v->style()->namePrivate();
-						else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameProtected();
-						else if (modifiers->isSet(Modifier::Public)) return &v->style()->namePublic();
-						else return &v->style()->nameDefault();
-					}
-				}))
-		->put(3, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
+		->put(0, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
 											[](I* v){return &v->style()->typeArguments();}))
-		->put(4, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
-											[](I* v){return &v->style()->arguments();}));
+		->put(1, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
+											[](I* v){return &v->style()->arguments();}))
+		->put(2, 0, item<VList>(&I::results_, [](I* v){return v->node()->results();},
+										[](I* v){return &v->style()->results();}));
 
 	auto addonsElement = (new SequentialLayoutFormElement{})
 								->setVertical()
@@ -133,13 +122,23 @@ void VMethod::initializeForms()
 	auto shapeElement = new ShapeFormElement{};
 
 	addForm((new AnchorLayoutFormElement{})
-			->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
-			->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
+			// place the title background
+			->put(TheLeftOf, titleBackgroundElement, 3, FromLeftOf, titleElement)
+			->put(TheRightOf, titleBackgroundElement, 3, FromRightOf, titleElement)
+			->put(TheTopOf, titleBackgroundElement, 3, FromTopOf, titleElement)
+			->put(TheBottomOf, titleBackgroundElement, 3, FromBottomOf, titleElement)
+
+			->put(TheLeftOf, headerElement, 10, FromRightOf, titleBackgroundElement)
+			->put(TheVCenterOf, headerElement, AtVCenterOf, titleBackgroundElement)
+
+			->put(TheLeftOf, shapeElement, AtLeftOf, titleBackgroundElement)
+			->put(TheTopOf, shapeElement, -1, FromVCenterOf, titleBackgroundElement)
 			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
 			->put(TheRightOf, contentElement, AtRightOf, headerElement)
-			->put(TheTopOf, contentElement, 10, FromBottomOf, headerElement)
+			->put(TheTopOf, contentElement, 10, FromBottomOf, titleBackgroundElement)
 			->put(TheRightOf, shapeElement, 10, FromRightOf, contentElement)
 			->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement));
+
 }
 
 }

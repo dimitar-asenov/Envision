@@ -41,14 +41,8 @@ class OOVISUALIZATION_API VMethodStyle : public Super<Visualization::Declarative
 	public:
 		virtual ~VMethodStyle() override;
 
-		Property<Visualization::TextStyle> nameDefault{this, "nameDefault"};
-		Property<Visualization::TextStyle> namePublic{this, "namePublic"};
-		Property<Visualization::TextStyle> namePrivate{this, "namePrivate"};
-		Property<Visualization::TextStyle> nameProtected{this, "nameProtected"};
-		Property<Visualization::TextStyle> nameStaticDefault{this, "nameStaticDefault"};
-		Property<Visualization::TextStyle> nameStaticPublic{this, "nameStaticPublic"};
-		Property<Visualization::TextStyle> nameStaticPrivate{this, "nameStaticPrivate"};
-		Property<Visualization::TextStyle> nameStaticProtected{this, "nameStaticProtected"};
+		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::ItemStyle> titleBackground{this, "titleBackground"};
 		Property<Visualization::StaticStyle> defaultIcon{this, "defaultIcon"};
 		Property<Visualization::StaticStyle> constructorIcon{this, "constructorIcon"};
 		Property<Visualization::StaticStyle> destructorIcon{this, "destructorIcon"};

@@ -39,6 +39,7 @@ namespace Visualization {
 	class VList;
 	class Static;
 	class Line;
+	class EmptyItem;
 }
 
 namespace OOVisualization {
@@ -63,6 +64,8 @@ class OOVISUALIZATION_API VMethod
 	private:
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
+		Visualization::EmptyItem* titleBackground_{};
+
 		Visualization::VList* typeArguments_{};
 		Visualization::VList* arguments_{};
 		Visualization::Line* signatureLine_{};

@@ -1,21 +1,37 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<shape prototypes="shape/Box/default">
-		Box
-		<cornerRadius>10</cornerRadius>
-		<backgroundBrush>
-			<style>1</style>
+	<shape prototypes="shape/Frame/default">
+		Frame
+		<topWidth>2</topWidth>
+		<topBrush><color>#AA6F39</color></topBrush>
+		<bottomWidth>2</bottomWidth>
+		<bottomBrush><color>#AA6F39</color></bottomBrush>
+		<!--<leftWidth>2</leftWidth>
+		<leftBrush><color>#AA6F39</color></leftBrush>
+		<rightWidth>2</rightWidth>
+		<rightBrush><color>#AA6F39</color></rightBrush>-->
+		
+		<contentBrush>
 			<color>#ffffff</color>
-		</backgroundBrush>
+		</contentBrush>
 	</shape>
-	<nameDefault prototypes="default.nameDefault" />
-	<namePublic prototypes="default.namePublic" />
-	<namePrivate prototypes="default.namePrivate" />
-	<nameProtected prototypes="default.nameProtected" />
-	<nameStaticDefault prototypes="default.nameStatic,default.nameDefault" />
-	<nameStaticPublic prototypes="default.nameStatic,default.namePublic" />
-	<nameStaticPrivate prototypes="default.nameStatic,default.namePrivate" />
-	<nameStaticProtected prototypes="default.nameStatic,default.nameProtected" />
+	
+	<titleBackground prototypes="item/Item/default">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush>
+				<color>#AA6F39</color>
+			</contentBrush>
+		</shape>
+	</titleBackground>
+	
+	<name prototypes="item/Text/default">
+		<pen> <color>#ffffff</color> </pen>
+		<font> <size>30</size> </font>
+		<selectionPen> <color>#000000</color> </selectionPen>
+		<selectionBackground>#ffffff</selectionBackground>
+		<selectionFont> <size>30</size> </selectionFont>
+	</name>
 	
 	<defaultIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/gears.svg</filename>
@@ -81,63 +97,17 @@
 			<symbol>add annotation</symbol>
 		</selectedTip>
 	</annotations>
-	<typeArguments prototypes="item/VList/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<cornerRadius>1</cornerRadius>
-			<cornerType>0</cornerType>
-			<backgroundBrush>
-				<style>1</style>
-				<color>#f0f0ff</color>
-			</backgroundBrush>
-			<outline>
-				<width>1</width>
-				<color>#8080ff</color>
-			</outline>
-		</shape>
-		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<direction>0</direction>
-			<spaceBetweenElements>10</spaceBetweenElements>
-			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
-		</itemsStyle>
+	<typeArguments prototypes="argsList">
 		<selectedTip>
 			<symbol>add type argument</symbol>
 		</selectedTip>
 	</typeArguments>
-	<arguments prototypes="item/VList/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<cornerRadius>3</cornerRadius>
-			<cornerType>2</cornerType>
-			<backgroundBrush>
-				<style>1</style>
-				<color>#ffffff</color>
-			</backgroundBrush>
-		</shape>
-		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<direction>0</direction>
-			<spaceBetweenElements>10</spaceBetweenElements>
-			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
-		</itemsStyle>
+	<arguments prototypes="argsList">
 		<selectedTip>
 			<symbol>add argument</symbol>
 		</selectedTip>
 	</arguments>
-	<results prototypes="item/VList/default">
-		<shape prototypes="shape/Box/default">
-				Box
-				<cornerRadius>3</cornerRadius>
-				<cornerType>2</cornerType>
-				<backgroundBrush>
-					<style>1</style>
-					<color>#ffffff</color>
-				</backgroundBrush>
-			</shape>
-		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<direction>2</direction>
-			<alignment>1</alignment>
-			<spaceBetweenElements>5</spaceBetweenElements>
-		</itemsStyle>
+	<results prototypes="argsList">
 		<selectedTip>
 			<symbol>add result</symbol>
 		</selectedTip>
