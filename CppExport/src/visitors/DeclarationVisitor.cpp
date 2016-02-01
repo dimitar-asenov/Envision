@@ -309,6 +309,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	{
 		*body << list(context->metaCalls(), ExpressionVisitor(data()), "sections");
 		*body << list(context->methods(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
+		*body << list(context->fields(), DeclarationVisitor(MACRO_VISITOR, data()), "spacedSections");
 	}
 	*macro << body;
 	*fragment << macro;
