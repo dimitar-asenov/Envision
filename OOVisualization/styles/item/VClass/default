@@ -1,20 +1,38 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<shape prototypes="shape/Box/default">
-		Box
-		<cornerRadius>15</cornerRadius>
-		<backgroundBrush>
-			<style>1</style>
-			<color>#80ffffff</color>
-		</backgroundBrush>
-	</shape>
-	<header prototypes="layout/SequentialLayout/default">
-		<spaceBetweenElements>10</spaceBetweenElements>
-	</header>
-	<nameDefault prototypes="default.nameDefault" />
-	<namePublic prototypes="default.namePublic" />
-	<namePrivate prototypes="default.namePrivate" />
-	<nameProtected prototypes="default.nameProtected" />
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<topWidth>4</topWidth>
+			<topBrush><color>#246068</color></topBrush>
+			<bottomWidth>4</bottomWidth>
+			<bottomBrush><color>#246068</color></bottomBrush>
+			<leftWidth>4</leftWidth>
+			<leftBrush><color>#246068</color></leftBrush>
+			<rightWidth>4</rightWidth>
+			<rightBrush><color>#246068</color></rightBrush>
+			
+			<contentBrush>
+				<color>#80ffffff</color>
+			</contentBrush>
+		</shape>
+	
+	<titleBackground prototypes="item/Item/default">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush>
+				<color>#246068</color>
+			</contentBrush>
+		</shape>
+	</titleBackground>
+	
+	<name prototypes="item/Text/default">
+		<pen> <color>#ffffff</color> </pen>
+		<font> <size>70</size> </font>
+		<selectionPen> <color>#000000</color> </selectionPen>
+		<selectionBackground>#ffffff</selectionBackground>
+		<selectionFont> <size>70</size> </selectionFont>
+	</name>
+
 	<typeArguments prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -49,33 +67,33 @@
 	
 	<classIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/class.svg</filename>
-		<width>32</width>
-		<height>32</height>
+		<width>70</width>
+		<height>70</height>
 	</classIcon>
 	<interfaceIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/interface.svg</filename>
-		<width>32</width>
-		<height>32</height>
+		<width>70</width>
+		<height>70</height>
 	</interfaceIcon>
 	<structIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/struct.svg</filename>
-		<width>32</width>
-		<height>32</height>
+		<width>70</width>
+		<height>70</height>
 	</structIcon>
 	<unionIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/union.svg</filename>
-		<width>32</width>
-		<height>32</height>
+		<width>70</width>
+		<height>70</height>
 	</unionIcon>
 	<enumIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/enum.svg</filename>
-		<width>32</width>
-		<height>32</height>
+		<width>70</width>
+		<height>70</height>
 	</enumIcon>
 	<annotationIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/annotation.svg</filename>
-		<width>32</width>
-		<height>32</height>
+		<width>70</width>
+		<height>70</height>
 	</annotationIcon>
 	
 	<visibility prototypes="item/Text/default" />
@@ -177,22 +195,6 @@
 			</backgroundBrush>
 		</shape>
 	</fieldContainer>
-	<publicFieldArea prototypes="layout/SequentialLayout/default">
-		<direction>2</direction>
-		<alignment>1</alignment>
-	</publicFieldArea>
-	<privateFieldArea prototypes="layout/SequentialLayout/default">
-		<direction>2</direction>
-		<alignment>1</alignment>
-	</privateFieldArea>
-	<protectedFieldArea prototypes="layout/SequentialLayout/default">
-		<direction>2</direction>
-		<alignment>1</alignment>
-	</protectedFieldArea>
-	<defaultFieldArea prototypes="layout/SequentialLayout/default">
-		<direction>2</direction>
-		<alignment>1</alignment>
-	</defaultFieldArea>
 	<metaCalls prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box

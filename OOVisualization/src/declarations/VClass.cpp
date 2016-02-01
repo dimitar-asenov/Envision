@@ -56,34 +56,35 @@ void VClass::determineChildren()
 
 void VClass::initializeForms()
 {
+	auto titleElement = grid({{
+	  item<Static>(&I::icon_, [](I* v) -> const Visualization::StaticStyle* {
+		switch (v->node()->constructKind())
+		{
+			case OOModel::Class::ConstructKind::Class : return &v->style()->classIcon();
+			case OOModel::Class::ConstructKind::Interface : return &v->style()->interfaceIcon();
+			case OOModel::Class::ConstructKind::Struct : return &v->style()->structIcon();
+			case OOModel::Class::ConstructKind::Union : return &v->style()->unionIcon();
+			case OOModel::Class::ConstructKind::Enum : return &v->style()->enumIcon();
+			case OOModel::Class::ConstructKind::Annotation : return &v->style()->annotationIcon();
+			default: return &v->style()->classIcon();
+		}
+	}), item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, &StyleType::name)}})
+		->setNoBoundaryCursors([](Item*){return true;})
+		->setNoInnerCursors([](Item*){return true;})
+		->setVerticalAlignment(LayoutStyle::Alignment::Center)
+		->setHorizontalSpacing(5);
+
+	auto titleBackgroundElement = item<EmptyItem>(&I::titleBackground_, &StyleType::titleBackground);
+	auto stretchAfterTitle = grid({{}})->setColumnStretchFactor(0, 1);
+
 	auto headerElement = (new GridLayoutFormElement{})
-				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
+				->setHorizontalSpacing(15)
+				->setColumnStretchFactor(2, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(0, 0, item<Static>(&I::icon_, [](I* v) -> const Visualization::StaticStyle* {
-						switch (v->node()->constructKind())
-						{
-							case OOModel::Class::ConstructKind::Class : return &v->style()->classIcon();
-							case OOModel::Class::ConstructKind::Interface : return &v->style()->interfaceIcon();
-							case OOModel::Class::ConstructKind::Struct : return &v->style()->structIcon();
-							case OOModel::Class::ConstructKind::Union : return &v->style()->unionIcon();
-							case OOModel::Class::ConstructKind::Enum : return &v->style()->enumIcon();
-							case OOModel::Class::ConstructKind::Annotation : return &v->style()->annotationIcon();
-							default: return &v->style()->classIcon();
-						}
-					}))
-				->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
-						{
-							// return the correct name style, depending on the classes visibility
-							auto modifiers = v->node()->modifiers();
-							if (modifiers->isSet(Modifier::Public)) return &v->style()->namePublic();
-							else if (modifiers->isSet(Modifier::Private)) return &v->style()->namePrivate();
-							else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameProtected();
-							else return &v->style()->nameDefault();
-						}))
-				->put(2, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
+				->put(0, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
 																				[](I* v){return &v->style()->typeArguments();}))
-				->put(3, 0, item<VList>(&I::baseClasses_, [](I* v){return v->node()->baseClasses();},
+				->put(1, 0, item<VList>(&I::baseClasses_, [](I* v){return v->node()->baseClasses();},
 																			[](I* v){return &v->style()->baseClasses();}));
 
 	auto contentElement = (new GridLayoutFormElement{})
@@ -108,7 +109,7 @@ void VClass::initializeForms()
 				->put(1, 5, item<VList>(&I::metaCalls_,
 						[](I* v) {return v->node()->metaCalls();},
 						[](I* v){return &v->style()->metaCalls();}))
-				->put(1, 6, (new DynamicGridFormElement{})->setSpacing(10, 10)->setMargins(10)
+				->put(1, 6, (new DynamicGridFormElement{})->setSpacing(20, 20)->setMargins(10)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 						[](Item* v)->QVector<QVector<Model::Node*>>{
@@ -132,22 +133,41 @@ void VClass::initializeForms()
 
 	auto shapeElement = new ShapeFormElement{};
 	auto backgroundElement = item<EmptyItem>(&I::fieldBackground_, &StyleType::fieldContainer);
+	auto stretchAfterFields = grid({{}})->setColumnStretchFactor(0, 1);
 
 	// Form 0: with field nodes
 	addForm((new AnchorLayoutFormElement{})
-				// place the top left corner of the field container element
-				->put(TheLeftOf, fieldContainerElement, 10, FromLeftOf, headerElement)
-				->put(TheTopOf, fieldContainerElement, 5, FromBottomOf, headerElement)
+				// place the title background
+				->put(TheLeftOf, titleBackgroundElement, 3, FromLeftOf, titleElement)
+				->put(TheRightOf, titleBackgroundElement, 3, FromRightOf, titleElement)
+				->put(TheTopOf, titleBackgroundElement, 3, FromTopOf, titleElement)
+				->put(TheBottomOf, titleBackgroundElement, 3, FromBottomOf, titleElement)
+				->put(TheTopOf, stretchAfterTitle, AtTopOf, titleBackgroundElement)
+				->put(TheLeftOf, stretchAfterTitle, 10, FromRightOf, titleBackgroundElement)
+
+				->put(TheLeftOf, headerElement, -20, FromLeftOf, titleBackgroundElement)
+				->put(TheTopOf, headerElement, 30, FromBottomOf, titleBackgroundElement)
+
+				->put(TheLeftOf, backgroundElement, -20, FromLeftOf, titleBackgroundElement)
+				->put(TheTopOf, backgroundElement, 30, FromBottomOf, headerElement)
+				->put(TheTopOf, stretchAfterFields, AtTopOf, backgroundElement)
+				->put(TheLeftOf, stretchAfterFields, 10, FromRightOf, backgroundElement)
+
 				// place the top left corner of the content element
-				->put(TheLeftOf, contentElement, 10, FromRightOf, fieldContainerElement)
-				->put(TheTopOf, contentElement, AtBottomOf, headerElement)
+				->put(TheLeftOf, contentElement, -20, FromLeftOf, titleBackgroundElement)
+				->put(TheTopOf, contentElement, 10, FromBottomOf, backgroundElement)
+
 				// align content and header on their right side
 				->put(TheRightOf, contentElement, AtRightOf, headerElement)
+				->put(TheRightOf, contentElement, AtRightOf, stretchAfterTitle)
+				->put(TheRightOf, contentElement, AtRightOf, stretchAfterFields)
+
 				// put the shape element at the right place
-				->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
-				->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
+				->put(TheTopOf, shapeElement, -2, FromBottomOf, titleBackgroundElement)
+				->put(TheLeftOf, shapeElement, AtLeftOf, titleBackgroundElement)
 				->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
-				->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement)
+				->put(TheRightOf, shapeElement, 10, FromRightOf, stretchAfterTitle)
+
 				// put the background element around the field container element
 				->put(TheLeftOf, backgroundElement, 3, FromLeftOf, fieldContainerElement)
 				->put(TheRightOf, backgroundElement, 3, FromRightOf, fieldContainerElement)
@@ -156,16 +176,30 @@ void VClass::initializeForms()
 
 	// Form 1: without field nodes
 	addForm((new AnchorLayoutFormElement{})
+				// place the title background
+				->put(TheLeftOf, titleBackgroundElement, 3, FromLeftOf, titleElement)
+				->put(TheRightOf, titleBackgroundElement, 3, FromRightOf, titleElement)
+				->put(TheTopOf, titleBackgroundElement, 3, FromTopOf, titleElement)
+				->put(TheBottomOf, titleBackgroundElement, 3, FromBottomOf, titleElement)
+				->put(TheTopOf, stretchAfterTitle, AtTopOf, titleBackgroundElement)
+
+				->put(TheLeftOf, headerElement, -20, FromLeftOf, titleBackgroundElement)
+				->put(TheTopOf, headerElement, 30, FromBottomOf, titleBackgroundElement)
+
 				// place the top left corner of the content element
-				->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
-				->put(TheTopOf, contentElement, AtBottomOf, headerElement)
+				->put(TheLeftOf, contentElement, -20, FromLeftOf, titleBackgroundElement)
+				->put(TheTopOf, contentElement, 10, FromBottomOf, headerElement)
+
 				// align content and header on their right side
 				->put(TheRightOf, contentElement, AtRightOf, headerElement)
+				->put(TheLeftOf, stretchAfterTitle, 10, FromRightOf, titleBackgroundElement)
+				->put(TheRightOf, contentElement, AtRightOf, stretchAfterTitle)
+
 				// put the shape element at the right place
-				->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
-				->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
+				->put(TheTopOf, shapeElement, -2, FromBottomOf, titleBackgroundElement)
+				->put(TheLeftOf, shapeElement, AtLeftOf, titleBackgroundElement)
 				->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
-				->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
+				->put(TheRightOf, shapeElement, 10, FromRightOf, stretchAfterTitle));
 }
 
 int VClass::determineForm()

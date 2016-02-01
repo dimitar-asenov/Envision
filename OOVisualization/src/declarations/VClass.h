@@ -74,6 +74,7 @@ class OOVISUALIZATION_API VClass
 		Visualization::VList* declarations_{};
 		Visualization::VList* metaCalls_{};
 		Visualization::EmptyItem* fieldBackground_{};
+		Visualization::EmptyItem* titleBackground_{};
 		QList<Model::Node*> publicFields_{};
 		QList<Model::Node*> privateFields_{};
 		QList<Model::Node*> protectedFields_{};
