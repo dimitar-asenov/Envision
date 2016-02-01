@@ -28,17 +28,54 @@
 
 #include "cppimport_api.h"
 
+namespace Model {
+	class Node;
+}
+
 namespace OOModel {
 	class AssertStatement;
 	class MetaCallExpression;
+	class MetaDefinition;
 }
 
 namespace CppImport {
+
+class ClangHelpers;
+class MacroExpansion;
 
 class CPPIMPORT_API SpecialCases
 {
 	public:
 		static OOModel::AssertStatement* qAssertMetaCallToAssertStatement(OOModel::MetaCallExpression* metaCall);
+
+		/*
+		 * Transforms
+		 *
+		 * #define DECLARE_TYPE_ID_COMMON(OVERRIDE)\
+		 * virtual const QString& typeName() const OVERRIDE;\
+		 *
+		 * into
+		 *
+		 * #define DECLARE_TYPE_ID_COMMON(OVERRIDE)\
+		 * virtual const QString& typeName() const
+		 * {
+		 *		SET_OVERRIDE_FLAG(OVERRIDE);
+		 * }
+		 */
+		static void overrideFlag(OOModel::MetaDefinition* metaDef, Model::Node* node);
+
+		/*
+		 * Transforms
+		 *
+		 * #define DECLARE_TYPE_ID()\					#define DECLARE_TYPE_ID_BASE()\
+		 * DECLARE_TYPE_ID_COMMON(override)\		DECLARE_TYPE_ID_COMMON()\
+		 *
+		 * into
+		 *
+		 * #define DECLARE_TYPE_ID()\					#define DECLARE_TYPE_ID_BASE()\
+		 * DECLARE_TYPE_ID_COMMON(true)\				DECLARE_TYPE_ID_COMMON(false)\
+		 */
+		static void overrideFlagArgumentTransformation(ClangHelpers& clang, MacroExpansion* expansion);
 };
 
 }

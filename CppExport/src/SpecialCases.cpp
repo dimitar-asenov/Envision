@@ -31,6 +31,10 @@
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/TypeAlias.h"
+#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/MetaDefinition.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/expressions/BooleanLiteral.h"
 
 namespace CppExport {
 
@@ -49,6 +53,32 @@ bool SpecialCases::isTestClass(OOModel::Class* classs)
 {
 	return classs->methods()->size() == 1 &&
 			(classs->methods()->first()->name() == "test" || classs->methods()->first()->name() == "init");
+}
+
+void SpecialCases::overrideFlag(OOModel::Method* method, Export::CompositeFragment* fragment)
+{
+	for (auto expression : *method->metaCalls())
+		if (auto metaCall = DCast<OOModel::MetaCallExpression>(expression))
+			if (auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee()))
+				if (reference->name() == "SET_OVERRIDE_FLAG")
+				{
+					*fragment << " OVERRIDE";
+					return;
+				}
+}
+
+Export::CompositeFragment* SpecialCases::overrideFlagArgumentTransformation(OOModel::MetaCallExpression* metaCall)
+{
+	Export::CompositeFragment* fragment{};
+	if (auto metaDefinition = metaCall->metaDefinition())
+		if (metaDefinition->arguments()->size() == 1 && metaCall->arguments()->size() == 1)
+			if (metaDefinition->arguments()->first()->name() == "OVERRIDE")
+					if (auto booleanLiteral = DCast<OOModel::BooleanLiteral>(metaCall->arguments()->first()))
+					{
+						fragment = new Export::CompositeFragment{metaCall->arguments(), "argsList"};
+						*fragment << (booleanLiteral->value() ? "override" : "");
+					}
+	return fragment;
 }
 
 }

@@ -31,6 +31,8 @@
 namespace OOModel
 {
 	class Class;
+	class Method;
+	class MetaCallExpression;
 }
 
 namespace Export
@@ -46,6 +48,35 @@ class CPPEXPORT_API SpecialCases
 		static void handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment);
 
 		static bool isTestClass(OOModel::Class* classs);
+
+		/*
+		 * Transforms
+		 *
+		 * #define DECLARE_TYPE_ID_COMMON(OVERRIDE)\
+		 * virtual const QString& typeName() const
+		 * {
+		 *		SET_OVERRIDE_FLAG(OVERRIDE);
+		 * }
+		 *
+		 * into
+		 *
+		 * #define DECLARE_TYPE_ID_COMMON(OVERRIDE)\
+		 * virtual const QString& typeName() const OVERRIDE;\
+		 */
+		static void overrideFlag(OOModel::Method* method, Export::CompositeFragment* fragment);
+
+		/*
+		 * Transforms
+		 *
+		 * #define DECLARE_TYPE_ID()\					#define DECLARE_TYPE_ID_BASE()\
+		 * DECLARE_TYPE_ID_COMMON(true)\				DECLARE_TYPE_ID_COMMON(false)\
+		 *
+		 * into
+		 *
+		 * #define DECLARE_TYPE_ID()\					#define DECLARE_TYPE_ID_BASE()\
+		 * DECLARE_TYPE_ID_COMMON(override)\		DECLARE_TYPE_ID_COMMON()\
+		 */
+		static Export::CompositeFragment* overrideFlagArgumentTransformation(OOModel::MetaCallExpression* metaCall);
 };
 
 }

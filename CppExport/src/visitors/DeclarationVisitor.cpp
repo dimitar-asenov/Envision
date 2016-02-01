@@ -417,6 +417,9 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (!isSourceVisitor())
 	{
+		if (isMacroVisitor())
+			SpecialCases::overrideFlag(method, fragment);
+
 		if (method->modifiers()->isSet(Modifier::Override))
 			*fragment << new TextFragment{method->modifiers(), " override"};
 		if (method->modifiers()->isSet(Modifier::Default))
