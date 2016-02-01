@@ -26,6 +26,10 @@
 	</titleBackground>
 	
 	<name prototypes="item/Text/default">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush> <color>#AA6F39</color> </contentBrush>
+		</shape>
 		<pen> <color>#ffffff</color> </pen>
 		<font> <size>30</size> </font>
 		<selectionPen> <color>#000000</color> </selectionPen>
@@ -33,30 +37,18 @@
 		<selectionFont> <size>30</size> </selectionFont>
 	</name>
 	
-	<defaultIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/gears.svg</filename>
-		<width>30</width>
-		<height>30</height>
-	</defaultIcon>
-	<constructorIcon prototypes="icon/SVGIcon/default">
+	<defaultIcon prototypes="icon"/>
+	<constructorIcon prototypes="icon">
 		<filename>styles/icon/methodConstructor.svg</filename>
-		<width>30</width>
-		<height>30</height>
 	</constructorIcon>
-	<destructorIcon prototypes="icon/SVGIcon/default">
+	<destructorIcon prototypes="icon">
 		<filename>styles/icon/methodDestructor.svg</filename>
-		<width>30</width>
-		<height>30</height>
 	</destructorIcon>
-	<conversionIcon prototypes="icon/SVGIcon/default">
+	<conversionIcon prototypes="icon">
 		<filename>styles/icon/gears.svg</filename>
-		<width>30</width>
-		<height>30</height>
 	</conversionIcon>
-	<operatorOverloadIcon prototypes="icon/SVGIcon/default">
+	<operatorOverloadIcon prototypes="icon">
 		<filename>styles/icon/gears.svg</filename>
-		<width>30</width>
-		<height>30</height>
 	</operatorOverloadIcon>
 	
 	<header prototypes="layout/SequentialLayout/default">

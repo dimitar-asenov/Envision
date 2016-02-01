@@ -1,0 +1,10 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="icon/SVGIcon/default">
+	<shape prototypes="shape/Frame/default">
+		Frame
+		<contentBrush> <color>#246068</color> </contentBrush>
+	</shape>
+	<filename>styles/icon/class.svg</filename>
+	<width>70</width>
+	<height>70</height>
+</style>

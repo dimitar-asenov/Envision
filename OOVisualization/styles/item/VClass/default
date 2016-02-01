@@ -26,6 +26,10 @@
 	</titleBackground>
 	
 	<name prototypes="item/Text/default">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush> <color>#246068</color> </contentBrush>
+		</shape>
 		<pen> <color>#ffffff</color> </pen>
 		<font> <size>70</size> </font>
 		<selectionPen> <color>#000000</color> </selectionPen>
@@ -65,35 +69,21 @@
 		</selectedTip>
 	</baseClasses>
 	
-	<classIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/class.svg</filename>
-		<width>70</width>
-		<height>70</height>
-	</classIcon>
-	<interfaceIcon prototypes="icon/SVGIcon/default">
+	<classIcon prototypes="icon"/>
+	<interfaceIcon prototypes="icon">
 		<filename>styles/icon/interface.svg</filename>
-		<width>70</width>
-		<height>70</height>
 	</interfaceIcon>
-	<structIcon prototypes="icon/SVGIcon/default">
+	<structIcon prototypes="icon">
 		<filename>styles/icon/struct.svg</filename>
-		<width>70</width>
-		<height>70</height>
 	</structIcon>
-	<unionIcon prototypes="icon/SVGIcon/default">
+	<unionIcon prototypes="icon">
 		<filename>styles/icon/union.svg</filename>
-		<width>70</width>
-		<height>70</height>
 	</unionIcon>
-	<enumIcon prototypes="icon/SVGIcon/default">
+	<enumIcon prototypes="icon">
 		<filename>styles/icon/enum.svg</filename>
-		<width>70</width>
-		<height>70</height>
 	</enumIcon>
-	<annotationIcon prototypes="icon/SVGIcon/default">
+	<annotationIcon prototypes="icon">
 		<filename>styles/icon/annotation.svg</filename>
-		<width>70</width>
-		<height>70</height>
 	</annotationIcon>
 	
 	<visibility prototypes="item/Text/default" />
