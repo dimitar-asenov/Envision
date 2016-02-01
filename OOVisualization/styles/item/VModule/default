@@ -19,11 +19,23 @@
 	</shape>
 	
 	<standardIcon prototypes="icon/SVGIcon/default">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush>
+				<color>#242c40</color>
+			</contentBrush>
+		</shape>
 		<filename>styles/icon/module.svg</filename>
 		<width>70</width>
 		<height>70</height>
 	</standardIcon>
 	<folderIcon prototypes="icon/SVGIcon/default">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush>
+				<color>#606030</color>
+			</contentBrush>
+		</shape>
 		<filename>styles/icon/folder.svg</filename>
 		<width>70</width>
 		<height>70</height>
