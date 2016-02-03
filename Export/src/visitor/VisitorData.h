@@ -33,6 +33,7 @@
 
 namespace Export {
 
+template<typename PrintContext>
 struct EXPORT_API VisitorData
 {
 		QList<ExportError> errors_;

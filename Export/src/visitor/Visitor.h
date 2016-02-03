@@ -41,9 +41,9 @@ class Visitor
 {
 	public:
 		Visitor();
-		Visitor(std::shared_ptr<VisitorData> data);
+		Visitor(std::shared_ptr<VisitorData<PrintContext>> data);
 		Visitor(PrintContext printContext);
-		Visitor(PrintContext printContext, std::shared_ptr<VisitorData> data);
+		Visitor(PrintContext printContext, std::shared_ptr<VisitorData<PrintContext>> data);
 		~Visitor();
 
 		QList<ExportError> errors() const;
@@ -51,7 +51,7 @@ class Visitor
 		PrintContext& printContext();
 
 	protected:
-		std::shared_ptr<VisitorData> data();
+		std::shared_ptr<VisitorData<PrintContext>> data();
 
 		void required(Model::Node* parent, Model::Node* node, const QString& childName);
 		void notAllowed(Model::Node* node);
@@ -73,13 +73,13 @@ class Visitor
 		template <typename NodeType> SourceFragment* element(NodeType* node);
 
 	private:
-		std::shared_ptr<VisitorData> data_;
+		std::shared_ptr<VisitorData<PrintContext>> data_;
 };
 
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
-inline std::shared_ptr<VisitorData>
+inline std::shared_ptr<VisitorData<PrintContext>>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>::data() { return data_; }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
@@ -111,12 +111,12 @@ void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVis
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
-::Visitor() : data_{new VisitorData}{}
+::Visitor() : data_{new VisitorData<PrintContext>}{}
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
-::Visitor(std::shared_ptr<VisitorData> data) : data_{data}
+::Visitor(std::shared_ptr<VisitorData<PrintContext>> data) : data_{data}
 { if (!data_.get()->printContextStack_.empty())
 		data_.get()->printContextStack_.append(data_.get()->printContextStack_.last()); }
 
@@ -128,7 +128,7 @@ Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor,
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
-::Visitor(PrintContext printContext, std::shared_ptr<VisitorData> data) : Visitor{data}
+::Visitor(PrintContext printContext, std::shared_ptr<VisitorData<PrintContext>> data) : Visitor{data}
 { data_.get()->printContextStack_.append(printContext); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,

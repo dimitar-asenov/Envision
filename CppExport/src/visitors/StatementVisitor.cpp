@@ -28,6 +28,7 @@
 #include "ExpressionVisitor.h"
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
+#include "CppPrintContext.h"
 
 #include "OOModel/src/statements/Block.h"
 #include "OOModel/src/statements/BreakStatement.h"
