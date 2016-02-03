@@ -509,11 +509,11 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 	return fragment;
 }
 
-Model::Node* ExpressionVisitor::printContext() { return data().get()->printContextStack_.last().context_; }
+PrintContext& ExpressionVisitor::printContext() { return data().get()->printContextStack_.last(); }
 
 bool ExpressionVisitor::isClassPrintContext()
 {
-	return DCast<OOModel::Class>(printContext());
+	return DCast<OOModel::Class>(printContext().context_);
 }
 
 }

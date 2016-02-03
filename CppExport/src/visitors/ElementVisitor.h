@@ -63,7 +63,7 @@ class ElementVisitor
 		Export::SourceFragment* visitTemplateArguments(Model::TypedList<OOModel::FormalTypeArgument>* typeArguments);
 
 	private:
-		Model::Node* printContext();
+		Export::PrintContext& printContext();
 		bool isClassPrintContext();
 };
 

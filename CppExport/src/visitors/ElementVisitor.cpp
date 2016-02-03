@@ -146,11 +146,11 @@ SourceFragment* ElementVisitor::visitTemplateArguments(Model::TypedList<FormalTy
 	return list(typeArguments, this, "templateArgsList");
 }
 
-Model::Node* ElementVisitor::printContext() { return data().get()->printContextStack_.last().context_; }
+PrintContext& ElementVisitor::printContext() { return data().get()->printContextStack_.last(); }
 
 bool ElementVisitor::isClassPrintContext()
 {
-	return DCast<OOModel::Class>(printContext());
+	return DCast<OOModel::Class>(printContext().context_);
 }
 
 }
