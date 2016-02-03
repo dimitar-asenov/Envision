@@ -30,6 +30,7 @@
 #include "SpecialCases.h"
 #include "visitors/DeclarationVisitor.h"
 #include "visitors/ElementVisitor.h"
+#include "visitors/CppPrintContext.h"
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Project.h"
@@ -182,7 +183,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 						}
 
 						if (!classs->typeArguments()->isEmpty())
-							*currentNamespaceFragment << ElementVisitor(HEADER_VISITOR)
+							*currentNamespaceFragment << ElementVisitor(neededNamespace)
 																  .visitTemplateArguments(classs->typeArguments());
 
 						auto softDependencyComposite = currentNamespaceFragment->append(
@@ -263,7 +264,7 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 				result = part;
 				resultPriority = EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY;
 			}
-			else if (!result && DCast<OOModel::MetaCallExpression>(part->parent()->node()) &&
+			else if (DCast<OOModel::MetaCallExpression>(part->parent()->node()) &&
 						resultPriority < META_CALL_EXPRESSION_PRIORITY)
 			{
 				result = part;

@@ -28,7 +28,7 @@
 
 #include "../cppexport_api.h"
 
-#include "Export/src/Visitor.h"
+#include "Export/src/visitor/Visitor.h"
 
 namespace OOModel {
 	class PointerTypeExpression;
@@ -38,12 +38,12 @@ namespace OOModel {
 namespace CppExport {
 
 class DeclarationVisitor;
-class ExpressionVisitor;
 class StatementVisitor;
 class ElementVisitor;
+class CppPrintContext;
 
 class ExpressionVisitor
-:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, CppPrintContext>
 {
 	public:
 		using Visitor::Visitor;
@@ -54,8 +54,6 @@ class ExpressionVisitor
 																	const QString& name = QString());
 	private:
 		template <typename T> Export::SourceFragment* optional(T* node);
-
-		bool isHeaderVisitor();
 };
 
 }

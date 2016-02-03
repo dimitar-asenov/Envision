@@ -28,7 +28,7 @@
 
 #include "../javaexport_api.h"
 
-#include "Export/src/Visitor.h"
+#include "Export/src/visitor/Visitor.h"
 
 namespace OOModel {
 	class Project;
@@ -55,7 +55,7 @@ class StatementVisitor;
 class ElementVisitor;
 
 class JAVAEXPORT_API DeclarationVisitor
-: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, Export::PrintContext>
 {
 	public:
 		using Visitor::Visitor;

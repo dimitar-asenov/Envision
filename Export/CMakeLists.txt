@@ -22,7 +22,9 @@ add_library(Export SHARED
 	src/ExportPlugin.h
 	src/ExportMapContainer.h
 	src/ExportError.h
-	src/Visitor.h
+	src/visitor/Visitor.h
+	src/visitor/VisitorData.h
+	src/visitor/PrintContext.h
 	test/LayoutTests.cpp
 	src/writer/FileWriter.cpp
 	test/GenerationTests.cpp

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,31 +26,38 @@
 
 #pragma once
 
-#include "../javaexport_api.h"
+#include "../cppexport_api.h"
 
-#include "Export/src/visitor/Visitor.h"
+#include "Export/src/visitor/PrintContext.h"
+#include "Core/src/reflect/Reflect.h"
+#include "OOModel/src/declarations/Class.h"
 
-namespace OOModel {
-	class PointerTypeExpression;
-	class Expression;
+namespace Model {
+	class Node;
 }
 
-namespace JavaExport {
+namespace CppExport {
 
-class DeclarationVisitor;
-class StatementVisitor;
-class ElementVisitor;
-
-class ExpressionVisitor
-: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, Export::PrintContext>
+class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 {
 	public:
-		using Visitor::Visitor;
+		enum Option {
+			PrintMethodBody = 0x1,
+			PrintExternKeyword = 0x2
+		};
+		using Options = QFlags<Option>;
 
-		Export::SourceFragment* visit(OOModel::Expression* expression);
+		CppPrintContext(Model::Node* context) : Super{context} {}
+		CppPrintContext(Model::Node* context, Options options) : Super{context}, options_{options} {}
 
-	private:
-		template <typename T> Export::SourceFragment* optional(T* node);
+		bool isClass();
+		bool hasOption(Option option);
+
+		Options options_{};
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(CppPrintContext::Options)
 
-} // namespace JavaExport
+inline bool CppPrintContext::isClass() { return DCast<OOModel::Class>(node()); }
+inline bool CppPrintContext::hasOption(Option option) { return options_.testFlag(option); }
+
+}

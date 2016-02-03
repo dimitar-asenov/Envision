@@ -28,6 +28,7 @@
 #include "ExpressionVisitor.h"
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
+#include "CppPrintContext.h"
 
 #include "../CppExportException.h"
 #include "../SpecialCases.h"
@@ -366,7 +367,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				Q_ASSERT(false);
 		}
 
-		if (!e->prefix() && !isHeaderVisitor() && e->target())
+		if (!e->prefix() && !printContext().isClass() && e->target())
 		{
 			/* export problem
 			 * ==============
@@ -508,7 +509,5 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 				 << list(functionTypeExpression->arguments(), this, "argsList");
 	return fragment;
 }
-
-bool ExpressionVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
 
 }

@@ -28,7 +28,7 @@
 
 #include "../cppexport_api.h"
 
-#include "Export/src/Visitor.h"
+#include "Export/src/visitor/Visitor.h"
 
 namespace OOModel {
 	class Block;
@@ -54,9 +54,10 @@ namespace CppExport {
 class DeclarationVisitor;
 class ExpressionVisitor;
 class ElementVisitor;
+class CppPrintContext;
 
 class StatementVisitor
-:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, CppPrintContext>
 {
 	public:
 		using Visitor::Visitor;

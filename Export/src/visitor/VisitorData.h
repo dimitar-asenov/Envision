@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,31 +26,19 @@
 
 #pragma once
 
-#include "../javaexport_api.h"
+#include "../export_api.h"
 
-#include "Export/src/visitor/Visitor.h"
+#include "../ExportError.h"
+#include "PrintContext.h"
 
-namespace OOModel {
-	class PointerTypeExpression;
-	class Expression;
-}
+namespace Export {
 
-namespace JavaExport {
-
-class DeclarationVisitor;
-class StatementVisitor;
-class ElementVisitor;
-
-class ExpressionVisitor
-: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, Export::PrintContext>
+template<typename PrintContext>
+struct EXPORT_API VisitorData
 {
-	public:
-		using Visitor::Visitor;
-
-		Export::SourceFragment* visit(OOModel::Expression* expression);
-
-	private:
-		template <typename T> Export::SourceFragment* optional(T* node);
+		QList<ExportError> errors_;
+		QStringList directoryStack_;
+		QList<PrintContext> printContextStack_;
 };
 
-} // namespace JavaExport
+}
