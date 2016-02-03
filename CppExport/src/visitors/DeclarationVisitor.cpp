@@ -163,61 +163,40 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		*sections << printFriends(classs);
 
-		auto publicSection = new CompositeFragment{classs, "accessorSections"};
-		bool hasPublicSection = addMemberDeclarations(classs, publicSection, [](Declaration* declaration)
+		auto publicSection = addMemberDeclarations(classs, [](Declaration* declaration)
 		{
 				if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
 				return declaration->modifiers()->isSet(Modifier::Public);
 		});
-		auto signalingSection = new CompositeFragment{classs, "accessorSections"};
-		bool hasSignalingSection = addMemberDeclarations(classs, signalingSection, [](Declaration* declaration)
+		auto signalingSection = addMemberDeclarations(classs, [](Declaration* declaration)
 		{
 				return ExportHelpers::isSignalingDeclaration(declaration);
 		});
-		auto protectedSection = new CompositeFragment{classs, "accessorSections"};
-		bool hasProtectedSection = addMemberDeclarations(classs, protectedSection,  [](Declaration* declaration)
+		auto protectedSection = addMemberDeclarations(classs, [](Declaration* declaration)
 		{
 				if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
 				return declaration->modifiers()->isSet(Modifier::Protected);
 		});
-		auto privateSection = new CompositeFragment{classs, "accessorSections"};
-		bool hasPrivateSection = addMemberDeclarations(classs, privateSection,  [](Declaration* declaration)
+		auto privateSection = addMemberDeclarations(classs, [](Declaration* declaration)
 		{
 				if (DCast<OOModel::ExplicitTemplateInstantiation>(declaration)) return false;
 				if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
 				return !declaration->modifiers()->isSet(Modifier::Public) &&
-				!declaration->modifiers()->isSet(Modifier::Protected);
+						 !declaration->modifiers()->isSet(Modifier::Protected);
 		});
 
-		if (hasPublicSection)
+		if (!publicSection->fragments().empty())
 		{
-			if (hasSignalingSection || hasProtectedSection || hasPrivateSection ||
+			if (!signalingSection->fragments().empty() ||
+				 !protectedSection->fragments().empty() ||
+				 !privateSection->fragments().empty() ||
 				 classs->constructKind() != Class::ConstructKind::Struct)
 				*sections << "public:";
-			sections->append(publicSection);
+			*sections << publicSection;
 		}
-		if (hasSignalingSection)
-		{
-			if (hasPublicSection) *sections << "\n"; // add newline between two accessor sections
-
-			*sections << "Q_SIGNALS:";
-			sections->append(signalingSection);
-		}
-		if (hasProtectedSection)
-		{
-			if (hasSignalingSection || hasSignalingSection) *sections << "\n"; // add newline between two accessor sections
-
-			*sections << "protected:";
-			sections->append(protectedSection);
-		}
-		if (hasPrivateSection)
-		{
-			if (hasPublicSection || hasSignalingSection || hasProtectedSection)
-				*sections << "\n"; // add newline between two accessor sections
-
-			*sections << "private:";
-			sections->append(privateSection);
-		}
+		if (!signalingSection->fragments().empty()) *sections << "Q_SIGNALS:" << signalingSection;
+		if (!protectedSection->fragments().empty()) *sections << "protected:" << protectedSection;
+		if (!privateSection->fragments().empty()) *sections << "private:" << privateSection;
 
 		*classFragment << ";";
 
@@ -248,7 +227,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 }
 
 template<typename Predicate>
-bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment* section, Predicate filter)
+CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Predicate filter)
 {
 	QList<Declaration*> declarations;
 	for (auto declaration : *classs->subDeclarations()) if (filter(declaration)) declarations.append(declaration);
@@ -276,12 +255,12 @@ bool DeclarationVisitor::addMemberDeclarations(Class* classs, CompositeFragment*
 		declarationDependencies.insert(declaration, dependencies);
 	}
 
-	auto fragment = section->append(new CompositeFragment{classs, "sections"});
+	auto fragment = new CompositeFragment{classs, "accessorSections"};
 	for (auto node : ExportHelpers::topologicalSort(declarationDependencies))
 		*fragment << DeclarationVisitor(classs, data()).visit(node);
 	auto fields = list(classs->fields(), this, "sections", filter);
 	if (!fields->fragments().empty()) *fragment << fields;
-	return !fragment->fragments().empty();
+	return fragment;
 }
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)

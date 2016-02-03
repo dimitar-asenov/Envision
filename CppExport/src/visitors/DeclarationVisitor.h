@@ -88,7 +88,7 @@ class CPPEXPORT_API DeclarationVisitor
 
 	private:
 		template<typename Predicate>
-		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
+		Export::CompositeFragment* addMemberDeclarations(OOModel::Class* classs, Predicate filter);
 
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 
