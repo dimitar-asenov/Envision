@@ -264,7 +264,7 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 				result = part;
 				resultPriority = EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY;
 			}
-			else if (!result && DCast<OOModel::MetaCallExpression>(part->parent()->node()) &&
+			else if (DCast<OOModel::MetaCallExpression>(part->parent()->node()) &&
 						resultPriority < META_CALL_EXPRESSION_PRIORITY)
 			{
 				result = part;
