@@ -34,7 +34,7 @@
 
 namespace Model {
 
-class MODELBASE_API VisitorA : public Visitor<VisitorA, QString>{
+class VisitorA : public Visitor<VisitorA, QString>{
 	public:
 		static void init()
 		{
@@ -55,7 +55,7 @@ class MODELBASE_API VisitorA : public Visitor<VisitorA, QString>{
 		}
 };
 
-class MODELBASE_API VisitorB : public ExtendedVisitor<VisitorB, VisitorA>{
+class VisitorB : public ExtendedVisitor<VisitorB, VisitorA>{
 	public:
 		static void init()
 		{
@@ -69,7 +69,7 @@ class MODELBASE_API VisitorB : public ExtendedVisitor<VisitorB, VisitorA>{
 		}
 };
 
-class MODELBASE_API VisitorC : public Visitor<VisitorC>{
+class VisitorC : public Visitor<VisitorC>{
 	public:
 		static void init()
 		{
@@ -85,7 +85,7 @@ class MODELBASE_API VisitorC : public Visitor<VisitorC>{
 		QString text;
 };
 
-class MODELBASE_API VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
+class VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
 {
 	auto root = new List{};
 	TreeManager manager{root};
@@ -119,8 +119,6 @@ class MODELBASE_API VisitorSample : public Test<ModelBasePlugin, VisitorSample> 
 	CHECK_STR_EQUAL("List(hello,42,)", valB);
 	CHECK_STR_EQUAL("hello42", valC);
 	CHECK_CONDITION( true );
-
-	(void) (SelfTest::TestManager<ModelBasePlugin>*) nullptr;
 }};
 
 }
