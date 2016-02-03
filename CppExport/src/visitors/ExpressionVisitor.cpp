@@ -366,7 +366,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				Q_ASSERT(false);
 		}
 
-		if (!e->prefix() && !isClassPrintContext() && e->target())
+		if (!e->prefix() && printContext().isClass() && e->target())
 		{
 			/* export problem
 			 * ==============
@@ -510,10 +510,5 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 }
 
 PrintContext& ExpressionVisitor::printContext() { return data().get()->printContextStack_.last(); }
-
-bool ExpressionVisitor::isClassPrintContext()
-{
-	return DCast<OOModel::Class>(printContext().context_);
-}
 
 }

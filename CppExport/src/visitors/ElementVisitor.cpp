@@ -63,14 +63,14 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 		else
 			*fragment << expression(argument->typeExpression());
 
-		if (isClassPrintContext() || argument->isUsedInParentMethod())
+		if (printContext().isClass() || argument->isUsedInParentMethod())
 			*fragment << " " << argument->nameNode();
 
 		if (DCast<ArrayTypeExpression>(argument->typeExpression()))
 			*fragment << "[]";
 	}
 
-	if (isClassPrintContext() && argument->initialValue())
+	if (printContext().isClass() && argument->initialValue())
 		*fragment << " = " << ExpressionVisitor(data()).visit(argument->initialValue());
 
 	return fragment;
@@ -94,7 +94,7 @@ SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 {
 	auto fragment = new CompositeFragment{typeArgument};
 	*fragment << "typename " << typeArgument->nameNode();
-	if (isClassPrintContext() && typeArgument->defaultType())
+	if (printContext().isClass() && typeArgument->defaultType())
 		*fragment << " = " << expression(typeArgument->defaultType());
 	return fragment;
 }
@@ -147,10 +147,5 @@ SourceFragment* ElementVisitor::visitTemplateArguments(Model::TypedList<FormalTy
 }
 
 PrintContext& ElementVisitor::printContext() { return data().get()->printContextStack_.last(); }
-
-bool ElementVisitor::isClassPrintContext()
-{
-	return DCast<OOModel::Class>(printContext().context_);
-}
 
 }

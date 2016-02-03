@@ -100,7 +100,6 @@ class CPPEXPORT_API DeclarationVisitor
 		Export::SourceFragment* variableDeclarationCommonEnd(OOModel::VariableDeclaration* variableDeclaration);
 
 		Export::PrintContext& printContext();
-		bool isClassPrintContext();
 
 		void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* declaration);
 };

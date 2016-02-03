@@ -24,32 +24,15 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "PrintContext.h"
 
-#include "../export_api.h"
-
-namespace Model {
-	class Node;
-}
+#include "OOModel/src/declarations/Class.h"
 
 namespace Export {
 
-struct EXPORT_API PrintContext
+bool PrintContext::isClass()
 {
-	enum Option {
-		PrintMethodBody = 0x1,
-		PrintExternKeyword = 0x2
-	};
-	using Options = QFlags<Option>;
-
-	PrintContext(Model::Node* context) : context_{context} {}
-	PrintContext(Model::Node* context, Options options) : context_{context}, options_{options} {}
-
-	bool isClass();
-
-	Model::Node* context_{};
-	Options options_{};
-};
-Q_DECLARE_OPERATORS_FOR_FLAGS(PrintContext::Options)
+	return DCast<OOModel::Class>(context_);
+}
 
 }

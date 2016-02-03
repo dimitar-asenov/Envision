@@ -64,7 +64,6 @@ class ElementVisitor
 
 	private:
 		Export::PrintContext& printContext();
-		bool isClassPrintContext();
 };
 
 }

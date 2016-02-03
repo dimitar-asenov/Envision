@@ -56,7 +56,6 @@ class ExpressionVisitor
 		template <typename T> Export::SourceFragment* optional(T* node);
 
 		Export::PrintContext& printContext();
-		bool isClassPrintContext();
 };
 
 }

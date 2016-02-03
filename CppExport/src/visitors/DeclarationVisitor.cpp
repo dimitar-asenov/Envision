@@ -77,7 +77,7 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 
 SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 {
-	if (!isClassPrintContext()) return visit(classs);
+	if (!printContext().isClass()) return visit(classs);
 
 	auto fragment = new CompositeFragment{classs, "spacedSections"};
 	*fragment << visit(classs);
@@ -93,7 +93,7 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 		*fragment << list(currentClass->methods(),
 								DeclarationVisitor(
 									PrintContext{
-										classs->firstAncestorOfType<OOModel::Module>(), PrintContext::OptionsFlag::PrintMethodBody
+										classs->firstAncestorOfType<OOModel::Module>(), PrintContext::PrintMethodBody
 									}, data()),
 								"spacedSections",
 								filter);
@@ -369,7 +369,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->results()->size() > 1)
 		error(method->results(), "Cannot have more than one return value in C++");
 
-	if (!ExportHelpers::shouldExportMethod(method, isClassPrintContext(), !isClassPrintContext())) return nullptr;
+	if (!ExportHelpers::shouldExportMethod(method, printContext().isClass(), !printContext().isClass())) return nullptr;
 
 	QList<Class*> parentClasses;
 	auto parentClass = method->firstAncestorOfType<Class>();
@@ -382,11 +382,11 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto fragment = new CompositeFragment{method};
 
 	// comments
-	if (isClassPrintContext())
+	if (printContext().isClass())
 		*fragment << compositeNodeComments(method, "declarationComment");
 
 	// template<typename ...>
-	if (!isClassPrintContext())
+	if (!printContext().isClass())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			for (auto i = 0; i < parentClasses.size(); i++)
 				if (!parentClasses.at(i)->typeArguments()->isEmpty())
@@ -401,11 +401,11 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 				*fragment << "friend ";
 
 	// private, public, ...
-	if (isClassPrintContext())
+	if (printContext().isClass())
 		*fragment << printAnnotationsAndModifiers(method);
 
 	// inline
-	if (!isClassPrintContext())
+	if (!printContext().isClass())
 		if (method->modifiers()->isSet(Modifier::Inline))
 			*fragment << new TextFragment{method->modifiers(), "inline"} << " ";
 
@@ -426,7 +426,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	if (isClassPrintContext() && DCast<Module>(method->firstAncestorOfType<Declaration>()) &&
+	if (printContext().isClass() && DCast<Module>(method->firstAncestorOfType<Declaration>()) &&
 		 method->typeArguments()->isEmpty())
 		*fragment << ExportHelpers::exportFlag(method);
 
@@ -442,7 +442,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->modifiers()->isSet(Modifier::Const))
 		*fragment << " " << new TextFragment{method->modifiers(), "const"};
 
-	if (!isClassPrintContext())
+	if (!printContext().isClass())
 		if (!method->memberInitializers()->isEmpty())
 			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(data()), "comma");
 
@@ -530,7 +530,7 @@ SourceFragment* DeclarationVisitor::variableDeclarationCommonEnd(VariableDeclara
 
 	// initial value
 	if (variableDeclaration->initialValue() &&
-		 (!variableDeclaration->modifiers()->isSet(Modifier::Static) || !isClassPrintContext()))
+		 (!variableDeclaration->modifiers()->isSet(Modifier::Static) || !printContext().isClass()))
 	{
 		// if auto type then print equals ("=")
 		if (!DCast<ArrayInitializer>(variableDeclaration->initialValue()) ||
@@ -555,7 +555,7 @@ SourceFragment* DeclarationVisitor::visitSourcePart(VariableDeclaration* variabl
 
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
-	if (isClassPrintContext())
+	if (printContext().isClass())
 		return visitHeaderPart(variableDeclaration);
 	else if (auto field = DCast<Field>(variableDeclaration))
 		return visitSourcePart(field);
@@ -628,10 +628,5 @@ SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)
 
 Export::PrintContext& DeclarationVisitor::printContext()
 { return data().get()->printContextStack_.last(); }
-
-bool DeclarationVisitor::isClassPrintContext()
-{
-	return DCast<OOModel::Class>(printContext().context_);
-}
 
 }
