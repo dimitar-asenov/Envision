@@ -45,9 +45,10 @@ namespace CppExport {
 class DeclarationVisitor;
 class ExpressionVisitor;
 class StatementVisitor;
+class CppPrintContext;
 
 class ElementVisitor
-:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, CppPrintContext>
 {
 	public:
 		using Visitor::Visitor;
@@ -61,9 +62,6 @@ class ElementVisitor
 		Export::SourceFragment* visit(OOModel::MemberInitializer* memberInitializer);
 
 		Export::SourceFragment* visitTemplateArguments(Model::TypedList<OOModel::FormalTypeArgument>* typeArguments);
-
-	private:
-		Export::PrintContext& printContext();
 };
 
 }

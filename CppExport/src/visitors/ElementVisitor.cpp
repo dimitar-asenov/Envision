@@ -28,6 +28,7 @@
 #include "ExpressionVisitor.h"
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
+#include "CppPrintContext.h"
 
 #include "OOModel/src/elements/FormalArgument.h"
 #include "OOModel/src/elements/FormalMetaArgument.h"
@@ -145,7 +146,5 @@ SourceFragment* ElementVisitor::visitTemplateArguments(Model::TypedList<FormalTy
 {
 	return list(typeArguments, this, "templateArgsList");
 }
-
-PrintContext& ElementVisitor::printContext() { return data().get()->printContextStack_.last(); }
 
 }

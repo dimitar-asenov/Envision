@@ -28,6 +28,7 @@
 #include "ExpressionVisitor.h"
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
+#include "CppPrintContext.h"
 
 #include "../CppExportException.h"
 #include "../SpecialCases.h"
@@ -508,7 +509,5 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 				 << list(functionTypeExpression->arguments(), this, "argsList");
 	return fragment;
 }
-
-PrintContext& ExpressionVisitor::printContext() { return data().get()->printContextStack_.last(); }
 
 }

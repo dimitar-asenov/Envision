@@ -24,15 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#include "PrintContext.h"
+#include "CppPrintContext.h"
 
 #include "OOModel/src/declarations/Class.h"
 
-namespace Export {
+namespace CppExport {
 
-bool PrintContext::isClass()
+bool CppPrintContext::isClass()
 {
-	return DCast<OOModel::Class>(context_);
+	return DCast<OOModel::Class>(node());
+}
+
+bool CppPrintContext::hasOption(Option option)
+{
+	return options_.testFlag(option);
 }
 
 }

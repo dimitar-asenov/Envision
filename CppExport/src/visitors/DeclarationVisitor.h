@@ -53,7 +53,6 @@ namespace Export {
 	class SourceDir;
 	class SourceFile;
 	class SourceFragment;
-	struct PrintContext;
 }
 
 namespace CppExport {
@@ -61,9 +60,10 @@ namespace CppExport {
 class ExpressionVisitor;
 class StatementVisitor;
 class ElementVisitor;
+class CppPrintContext;
 
 class CPPEXPORT_API DeclarationVisitor
-:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, CppPrintContext>
 {
 	public:
 		using Visitor::Visitor;
@@ -99,7 +99,6 @@ class CPPEXPORT_API DeclarationVisitor
 		Export::SourceFragment* visitSourcePart(OOModel::Field* field);
 		Export::SourceFragment* variableDeclarationCommonEnd(OOModel::VariableDeclaration* variableDeclaration);
 
-		Export::PrintContext& printContext();
 
 		void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* declaration);
 };

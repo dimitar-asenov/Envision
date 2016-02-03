@@ -42,7 +42,7 @@ class StatementVisitor;
 class ElementVisitor;
 
 class ExpressionVisitor
-: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, Export::PrintContext>
 {
 	public:
 		using Visitor::Visitor;

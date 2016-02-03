@@ -38,12 +38,12 @@ namespace OOModel {
 namespace CppExport {
 
 class DeclarationVisitor;
-class ExpressionVisitor;
 class StatementVisitor;
 class ElementVisitor;
+class CppPrintContext;
 
 class ExpressionVisitor
-:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+:public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, CppPrintContext>
 {
 	public:
 		using Visitor::Visitor;
@@ -54,8 +54,6 @@ class ExpressionVisitor
 																	const QString& name = QString());
 	private:
 		template <typename T> Export::SourceFragment* optional(T* node);
-
-		Export::PrintContext& printContext();
 };
 
 }

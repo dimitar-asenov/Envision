@@ -28,6 +28,7 @@
 #include "ExpressionVisitor.h"
 #include "StatementVisitor.h"
 #include "ElementVisitor.h"
+#include "CppPrintContext.h"
 #include "../Config.h"
 #include "../ExportHelpers.h"
 #include "../SpecialCases.h"
@@ -92,8 +93,8 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 		auto currentClass = classes.takeLast();
 		*fragment << list(currentClass->methods(),
 								DeclarationVisitor(
-									PrintContext{
-										classs->firstAncestorOfType<OOModel::Module>(), PrintContext::PrintMethodBody
+									CppPrintContext{
+										classs->firstAncestorOfType<OOModel::Module>(), CppPrintContext::PrintMethodBody
 									}, data()),
 								"spacedSections",
 								filter);
@@ -328,10 +329,10 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 void DeclarationVisitor::printDeclarationQualifier(CompositeFragment* fragment, Declaration* declaration)
 {
 	QList<Declaration*> declarations;
-	if (declaration != printContext().context_)
+	if (declaration != printContext().node())
 	{
 		auto parentDeclaration = declaration->firstAncestorOfType<Declaration>();
-		while (parentDeclaration != printContext().context_)
+		while (parentDeclaration != printContext().node())
 		{
 			if (parentDeclaration->definesSymbol() &&
 				 !parentDeclaration->isTransparentForNameResolution() && !DCast<MetaDefinition>(parentDeclaration->parent()))
@@ -449,7 +450,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (!method->throws()->isEmpty())
 		*fragment << " throw (" << list(method->throws(), ExpressionVisitor(data()), "comma") << ")";
 
-	if (printContext().options_.testFlag(Export::PrintContext::PrintMethodBody))
+	if (printContext().hasOption(CppPrintContext::PrintMethodBody))
 		*fragment << list(method->items(), StatementVisitor(data()), "body");
 	else
 	{
@@ -599,7 +600,7 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 {
 	auto fragment = new CompositeFragment{explicitTemplateInstantiation};
 
-	if (printContext().options_.testFlag(PrintContext::PrintExternKeyword))
+	if (printContext().hasOption(CppPrintContext::PrintExternKeyword))
 		*fragment << "extern template class "
 					 << ExportHelpers::exportFlag(explicitTemplateInstantiation);
 	else
@@ -626,7 +627,5 @@ SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)
 	return fragment;
 }
 
-Export::PrintContext& DeclarationVisitor::printContext()
-{ return data().get()->printContextStack_.last(); }
 
 }

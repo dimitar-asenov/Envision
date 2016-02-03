@@ -14,6 +14,7 @@ add_library(CppExport SHARED
 	src/visitors/ElementVisitor.h
 	src/visitors/ExpressionVisitor.h
 	src/visitors/StatementVisitor.h
+	src/visitors/CppPrintContext.h
 	src/CodeUnit.h
 	src/CodeComposite.h
 	src/CodeUnitPart.h
@@ -28,6 +29,7 @@ add_library(CppExport SHARED
 	src/visitors/ElementVisitor.cpp
 	src/visitors/ExpressionVisitor.cpp
 	src/visitors/StatementVisitor.cpp
+	src/visitors/CppPrintContext.cpp
 	src/CodeUnit.cpp
 	src/CodeComposite.cpp
 	src/CodeUnitPart.cpp

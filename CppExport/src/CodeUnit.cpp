@@ -29,6 +29,7 @@
 #include "Config.h"
 #include "visitors/DeclarationVisitor.h"
 #include "visitors/ExpressionVisitor.h"
+#include "visitors/CppPrintContext.h"
 #include "SpecialCases.h"
 
 #include "OOModel/src/declarations/Class.h"
@@ -56,15 +57,15 @@ void CodeUnit::calculateSourceFragments()
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
 		if (SpecialCases::isTestClass(classs))
-			headerPart()->setFragment(DeclarationVisitor(classs).visitTopLevelClass(classs));
+			headerPart()->setFragment(DeclarationVisitor(CppPrintContext{classs}).visitTopLevelClass(classs));
 		else
 		{
-			headerPart()->setFragment(DeclarationVisitor(classs).visitTopLevelClass(classs));
+			headerPart()->setFragment(DeclarationVisitor(CppPrintContext{classs}).visitTopLevelClass(classs));
 			sourcePart()->setFragment(DeclarationVisitor(
-												  Export::PrintContext
+												  CppPrintContext
 												  {
 													  printContextDeclaration,
-													  Export::PrintContext::PrintMethodBody
+													  CppPrintContext::PrintMethodBody
 												  })
 											  .visitTopLevelClass(classs));
 		}
@@ -86,18 +87,18 @@ void CodeUnit::calculateSourceFragments()
 				 !method->modifiers()->isSet(OOModel::Modifier::Deleted))
 				sourcePart()->setFragment(
 							DeclarationVisitor(
-								Export::PrintContext
+								CppPrintContext
 								{
 									printContextDeclaration,
-									Export::PrintContext::PrintMethodBody
+									CppPrintContext::PrintMethodBody
 								}).visit(method));
 		}
 		else
 			headerPart()->setFragment(DeclarationVisitor(
-												  Export::PrintContext
+												  CppPrintContext
 												  {
 													  printContextDeclaration,
-													  Export::PrintContext::PrintMethodBody
+													  CppPrintContext::PrintMethodBody
 												  }).visit(method));
 	}
 	else if (auto variableDeclaration = DCast<OOModel::VariableDeclaration>(node()))
@@ -135,9 +136,9 @@ void CodeUnit::calculateSourceFragments()
 	else if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(node()))
 	{
 		headerPart()->setFragment(DeclarationVisitor(
-											  Export::PrintContext{
+											  CppPrintContext{
 												  printContextDeclaration,
-												  Export::PrintContext::PrintExternKeyword
+												  CppPrintContext::PrintExternKeyword
 											  }).visit(explicitTemplateInstantiation));
 		sourcePart()->setFragment(DeclarationVisitor(printContextDeclaration).visit(explicitTemplateInstantiation));
 	}

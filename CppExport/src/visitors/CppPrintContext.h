@@ -26,25 +26,36 @@
 
 #pragma once
 
-#include "../export_api.h"
+#include "../cppexport_api.h"
+
+#include "Export/src/visitor/PrintContext.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace Model {
 	class Node;
 }
 
-namespace Export {
+namespace CppExport {
 
-class EXPORT_API PrintContext
+class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 {
 	public:
-		PrintContext(Model::Node* context) : context_{context} {}
+		enum Option {
+			PrintMethodBody = 0x1,
+			PrintExternKeyword = 0x2
+		};
+		using Options = QFlags<Option>;
 
-		Model::Node* node();
+		CppPrintContext(Model::Node* context) : Super{context} {}
+		CppPrintContext(Model::Node* context, Options options) : Super{context}, options_{options} {}
+
+		bool isClass();
+		bool hasOption(Option option);
 
 	private:
-		Model::Node* context_{};
+		Options options_{};
 };
-
-inline Model::Node* PrintContext::node() { return context_; }
+Q_DECLARE_OPERATORS_FOR_FLAGS(CppPrintContext::Options)
 
 }
