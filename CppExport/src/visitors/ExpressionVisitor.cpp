@@ -367,7 +367,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				Q_ASSERT(false);
 		}
 
-		if (!e->prefix() && printContext().isClass() && e->target())
+		if (!e->prefix() && !printContext().isClass() && e->target())
 		{
 			/* export problem
 			 * ==============
