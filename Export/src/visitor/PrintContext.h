@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,31 +26,28 @@
 
 #pragma once
 
-#include "../javaexport_api.h"
+#include "../export_api.h"
 
-#include "Export/src/visitor/Visitor.h"
-
-namespace OOModel {
-	class PointerTypeExpression;
-	class Expression;
+namespace Model {
+	class Node;
 }
 
-namespace JavaExport {
+namespace Export {
 
-class DeclarationVisitor;
-class StatementVisitor;
-class ElementVisitor;
-
-class ExpressionVisitor
-: public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
+struct EXPORT_API PrintContext
 {
-	public:
-		using Visitor::Visitor;
+	enum OptionsFlag {
+		PrintMethodBody = 0x1,
+		PrintExternKeyword = 0x2
+	};
+	using OptionsFlags = QFlags<OptionsFlag>;
 
-		Export::SourceFragment* visit(OOModel::Expression* expression);
+	PrintContext(Model::Node* context) : context_{context} {}
+	PrintContext(Model::Node* context, OptionsFlags options) : context_{context}, options_{options} {}
 
-	private:
-		template <typename T> Export::SourceFragment* optional(T* node);
+	Model::Node* context_{};
+	OptionsFlags options_{};
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(PrintContext::OptionsFlags)
 
-} // namespace JavaExport
+}

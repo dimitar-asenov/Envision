@@ -28,7 +28,7 @@
 
 #include "../cppexport_api.h"
 
-#include "Export/src/Visitor.h"
+#include "Export/src/visitor/Visitor.h"
 
 namespace OOModel {
 	class FormalArgument;
@@ -63,7 +63,8 @@ class ElementVisitor
 		Export::SourceFragment* visitTemplateArguments(Model::TypedList<OOModel::FormalTypeArgument>* typeArguments);
 
 	private:
-		bool isHeaderVisitor();
+		Model::Node* printContext();
+		bool isClassPrintContext();
 };
 
 }

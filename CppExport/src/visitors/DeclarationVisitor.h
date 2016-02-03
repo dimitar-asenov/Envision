@@ -28,7 +28,7 @@
 
 #include "../cppexport_api.h"
 
-#include "Export/src/Visitor.h"
+#include "Export/src/visitor/Visitor.h"
 
 namespace Model {
 	class CompositeNode;
@@ -53,6 +53,7 @@ namespace Export {
 	class SourceDir;
 	class SourceFile;
 	class SourceFragment;
+	struct PrintContext;
 }
 
 namespace CppExport {
@@ -60,10 +61,6 @@ namespace CppExport {
 class ExpressionVisitor;
 class StatementVisitor;
 class ElementVisitor;
-
-const int HEADER_VISITOR = 0;
-const int SOURCE_VISITOR = 1;
-const int MACRO_VISITOR = 2;
 
 class CPPEXPORT_API DeclarationVisitor
 :public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor>
@@ -93,10 +90,6 @@ class CPPEXPORT_API DeclarationVisitor
 		template<typename Predicate>
 		bool addMemberDeclarations(OOModel::Class* classs, Export::CompositeFragment* section, Predicate filter);
 
-		bool isHeaderVisitor();
-		bool isSourceVisitor();
-		bool isMacroVisitor();
-
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 
 		Export::SourceFragment* visitHeaderPart(OOModel::Class* classs);
@@ -105,10 +98,11 @@ class CPPEXPORT_API DeclarationVisitor
 		Export::SourceFragment* visitSourcePart(OOModel::VariableDeclaration* variableDeclaration);
 		Export::SourceFragment* visitSourcePart(OOModel::Field* field);
 		Export::SourceFragment* variableDeclarationCommonEnd(OOModel::VariableDeclaration* variableDeclaration);
-};
 
-inline bool DeclarationVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
-inline bool DeclarationVisitor::isSourceVisitor() { return data().get()->modeStack_.last() == SOURCE_VISITOR; }
-inline bool DeclarationVisitor::isMacroVisitor() { return data().get()->modeStack_.last() == MACRO_VISITOR; }
+		Export::PrintContext& printContext();
+		bool isClassPrintContext();
+
+		void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* declaration);
+};
 
 }

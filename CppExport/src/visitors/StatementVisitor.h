@@ -28,7 +28,7 @@
 
 #include "../cppexport_api.h"
 
-#include "Export/src/Visitor.h"
+#include "Export/src/visitor/Visitor.h"
 
 namespace OOModel {
 	class Block;

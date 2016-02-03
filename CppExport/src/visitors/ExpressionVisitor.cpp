@@ -366,7 +366,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				Q_ASSERT(false);
 		}
 
-		if (!e->prefix() && !isHeaderVisitor() && e->target())
+		if (!e->prefix() && !isClassPrintContext() && e->target())
 		{
 			/* export problem
 			 * ==============
@@ -509,6 +509,11 @@ SourceFragment* ExpressionVisitor::visitFunctionPointer(PointerTypeExpression* f
 	return fragment;
 }
 
-bool ExpressionVisitor::isHeaderVisitor() { return data().get()->modeStack_.last() == HEADER_VISITOR; }
+Model::Node* ExpressionVisitor::printContext() { return data().get()->printContextStack_.last().context_; }
+
+bool ExpressionVisitor::isClassPrintContext()
+{
+	return DCast<OOModel::Class>(printContext());
+}
 
 }
