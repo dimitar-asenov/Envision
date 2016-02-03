@@ -29,8 +29,8 @@
 #include "../cppexport_api.h"
 
 #include "Export/src/visitor/PrintContext.h"
-
 #include "Core/src/reflect/Reflect.h"
+#include "OOModel/src/declarations/Class.h"
 
 namespace Model {
 	class Node;
@@ -53,9 +53,11 @@ class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 		bool isClass();
 		bool hasOption(Option option);
 
-	private:
 		Options options_{};
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppPrintContext::Options)
+
+inline bool CppPrintContext::isClass() { return DCast<OOModel::Class>(node()); }
+inline bool CppPrintContext::hasOption(Option option) { return options_.testFlag(option); }
 
 }
