@@ -461,45 +461,36 @@ SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* 
 	return nullptr;
 }
 
-SourceFragment* DeclarationVisitor::visitHeaderPart(VariableDeclaration* variableDeclaration)
+SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
-	auto fragment = new CompositeFragment{variableDeclaration};
-	*fragment << compositeNodeComments(variableDeclaration, "declarationComment")
-				 << printAnnotationsAndModifiers(variableDeclaration)
-				 << expression(variableDeclaration->typeExpression()) << " "
-				 << variableDeclarationCommonEnd(variableDeclaration);
-	return fragment;
-}
-
-SourceFragment* DeclarationVisitor::visitSourcePart(Field* field)
-{
-	// non-static and not constexpr fields are not printed in the source part
-	if (!field->modifiers()->isSet(Modifier::Static) &&
+	auto field = DCast<Field>(variableDeclaration);
+	// non-static and not constexpr fields are not printed outside of a class
+	if (!printContext().isClass() && field &&
+		 !field->modifiers()->isSet(Modifier::Static) &&
 		 !field->modifiers()->isSet(Modifier::ConstExpr)) return {};
 
-	auto fragment = new CompositeFragment{field};
-
-	// template<typename T...>
-	if (auto parentClass = field->firstAncestorOfType<Class>())
-		if (!parentClass->typeArguments()->isEmpty())
-			*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
-
-	if (field->modifiers()->isSet(Modifier::ConstExpr))
-		*fragment << printAnnotationsAndModifiers(field);
-
-	// field type
-	*fragment << expression(field->typeExpression()) << " ";
-
-	// parent class name qualifier
-	printDeclarationQualifier(fragment, field);
-
-	*fragment << variableDeclarationCommonEnd(field);
-	return fragment;
-}
-
-SourceFragment* DeclarationVisitor::variableDeclarationCommonEnd(VariableDeclaration* variableDeclaration)
-{
 	auto fragment = new CompositeFragment{variableDeclaration};
+	if (printContext().isClass()) *fragment << compositeNodeComments(variableDeclaration, "declarationComment");
+
+	if (field && !printContext().isClass())
+	{
+		// template<typename T...>
+		if (auto parentClass = field->firstAncestorOfType<Class>())
+			if (!parentClass->typeArguments()->isEmpty())
+				*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
+
+		if (field->modifiers()->isSet(Modifier::ConstExpr))
+			*fragment << printAnnotationsAndModifiers(field);
+
+		// field type
+		*fragment << expression(field->typeExpression()) << " ";
+
+		// parent class name qualifier
+		printDeclarationQualifier(fragment, field);
+	}
+	else
+		*fragment << printAnnotationsAndModifiers(variableDeclaration)
+					 << expression(variableDeclaration->typeExpression()) << " ";
 
 	// name
 	*fragment << variableDeclaration->nameNode();
@@ -516,27 +507,6 @@ SourceFragment* DeclarationVisitor::variableDeclarationCommonEnd(VariableDeclara
 
 	if (!DCast<Expression>(variableDeclaration->parent())) *fragment << ";";
 	return fragment;
-}
-
-SourceFragment* DeclarationVisitor::visitSourcePart(VariableDeclaration* variableDeclaration)
-{
-	Q_ASSERT(!DCast<Field>(variableDeclaration));
-
-	auto fragment = new CompositeFragment{variableDeclaration};
-	*fragment << printAnnotationsAndModifiers(variableDeclaration)
-				 << expression(variableDeclaration->typeExpression()) << " "
-				 << variableDeclarationCommonEnd(variableDeclaration);
-	return fragment;
-}
-
-SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
-{
-	if (printContext().isClass())
-		return visitHeaderPart(variableDeclaration);
-	else if (auto field = DCast<Field>(variableDeclaration))
-		return visitSourcePart(field);
-
-	return visitSourcePart(variableDeclaration);
 }
 
 SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* declaration)
