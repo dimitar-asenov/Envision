@@ -57,17 +57,13 @@ void CodeUnit::calculateSourceFragments()
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
 		if (SpecialCases::isTestClass(classs))
-			headerPart()->setFragment(DeclarationVisitor(CppPrintContext{classs}).visitTopLevelClass(classs));
+			headerPart()->setFragment(DeclarationVisitor(classs).visitTopLevelClass(classs));
 		else
 		{
-			headerPart()->setFragment(DeclarationVisitor(CppPrintContext{classs}).visitTopLevelClass(classs));
-			sourcePart()->setFragment(DeclarationVisitor(
-												  CppPrintContext
-												  {
-													  printContextDeclaration,
-													  CppPrintContext::PrintMethodBody
-												  })
-											  .visitTopLevelClass(classs));
+			headerPart()->setFragment(DeclarationVisitor(classs).visitTopLevelClass(classs));
+
+			CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
+			sourcePart()->setFragment(DeclarationVisitor(printContext).visitTopLevelClass(classs));
 		}
 	}
 	else if (auto module = DCast<OOModel::Module>(node()))
@@ -85,21 +81,16 @@ void CodeUnit::calculateSourceFragments()
 
 			if (!method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 				 !method->modifiers()->isSet(OOModel::Modifier::Deleted))
-				sourcePart()->setFragment(
-							DeclarationVisitor(
-								CppPrintContext
-								{
-									printContextDeclaration,
-									CppPrintContext::PrintMethodBody
-								}).visit(method));
+			{
+				CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
+				sourcePart()->setFragment(DeclarationVisitor(printContext).visit(method));
+			}
 		}
 		else
-			headerPart()->setFragment(DeclarationVisitor(
-												  CppPrintContext
-												  {
-													  printContextDeclaration,
-													  CppPrintContext::PrintMethodBody
-												  }).visit(method));
+		{
+			CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
+			headerPart()->setFragment(DeclarationVisitor(printContext).visit(method));
+		}
 	}
 	else if (auto variableDeclaration = DCast<OOModel::VariableDeclaration>(node()))
 	{
@@ -135,11 +126,8 @@ void CodeUnit::calculateSourceFragments()
 	}
 	else if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(node()))
 	{
-		headerPart()->setFragment(DeclarationVisitor(
-											  CppPrintContext{
-												  printContextDeclaration,
-												  CppPrintContext::PrintExternKeyword
-											  }).visit(explicitTemplateInstantiation));
+		CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintExternKeyword};
+		headerPart()->setFragment(DeclarationVisitor(printContext).visit(explicitTemplateInstantiation));
 		sourcePart()->setFragment(DeclarationVisitor(printContextDeclaration).visit(explicitTemplateInstantiation));
 	}
 	else
