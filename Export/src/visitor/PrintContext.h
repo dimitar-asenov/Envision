@@ -36,18 +36,18 @@ namespace Export {
 
 struct EXPORT_API PrintContext
 {
-	enum OptionsFlag {
+	enum Option {
 		PrintMethodBody = 0x1,
 		PrintExternKeyword = 0x2
 	};
-	using OptionsFlags = QFlags<OptionsFlag>;
+	using Options = QFlags<Option>;
 
 	PrintContext(Model::Node* context) : context_{context} {}
-	PrintContext(Model::Node* context, OptionsFlags options) : context_{context}, options_{options} {}
+	PrintContext(Model::Node* context, Options options) : context_{context}, options_{options} {}
 
 	Model::Node* context_{};
-	OptionsFlags options_{};
+	Options options_{};
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(PrintContext::OptionsFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(PrintContext::Options)
 
 }
