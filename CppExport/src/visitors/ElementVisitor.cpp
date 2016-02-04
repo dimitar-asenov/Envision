@@ -71,7 +71,7 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 			*fragment << "[]";
 	}
 
-	if (printContext().isClass() && argument->initialValue())
+	if (printContext().hasOption(CppPrintContext::PrintDefaultArgumentValues) && argument->initialValue())
 		*fragment << " = " << ExpressionVisitor(data()).visit(argument->initialValue());
 
 	return fragment;

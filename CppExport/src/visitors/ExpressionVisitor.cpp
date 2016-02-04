@@ -32,6 +32,7 @@
 
 #include "../CppExportException.h"
 #include "../SpecialCases.h"
+#include "../ExportHelpers.h"
 
 #include "OOModel/src/expressions/Expression.h"
 #include "OOModel/src/expressions/types/ArrayTypeExpression.h"
@@ -367,104 +368,19 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 				Q_ASSERT(false);
 		}
 
-		if (!e->prefix() && !printContext().isClass() && e->target())
+		if (!e->prefix() && e->target())
 		{
-			/* export problem
-			 * ==============
-			 * in case we have a resolved reference without prefix and we are printing the source part we might have
-			 * to qualify the reference depending on the target context.
-			 *
-			 * for example the "AdapterManager::AdapterKey" in AdapterManager.cpp:
-			 * QHash<AdapterManager::AdapterKey, AdapterManager::AdapterCreationFunction>& AdapterManager::adapters()
-			 *
-			 * the imported code would be printed like this:
-			 * QHash<AdapterKey, AdapterCreationFunction>& AdapterManager::adapters()
-			 * because AdapterKey is defined inside AdapterManager and therefore we do not need the qualification in
-			 * the header part or Envision's tree model. However when it appears in the public interface and the is used
-			 * in a method definition outside the declaration of AdapterManager we have to compute this prefix.
-			 */
-
-			/*
-			 * addPrefix is true if the reference occurs inside the results of the parent method or
-			 * in the type of the parent field.
-			 *
-			 * inBodyOfMethod is true if the reference occurs inside the parent method body
-			 */
-			bool addPrefix = false;
-			bool inBodyOfMethod = false;
-			if (auto parentMethod = e->firstAncestorOfType<Method>())
+			auto parentMethod = e->target()->firstAncestorOfType<Method>();
+			if (!parentMethod || !parentMethod->typeArguments()->isAncestorOf(e->target()))
 			{
-				if (parentMethod->results()->isAncestorOf(e))
-					addPrefix = true;
-				if (parentMethod->items()->isAncestorOf(e))
-					inBodyOfMethod = true;
+				bool referenceIsInResult = false;
+				if (auto referenceParentMethod = e->firstAncestorOfType<Method>())
+					referenceIsInResult = referenceParentMethod->results()->isAncestorOf(e);
+
+				ExportHelpers::printDeclarationQualifier(fragment, printContext().declaration(), e->target(),
+																	  referenceIsInResult);
 			}
-			else if (auto parentField = e->firstAncestorOfType<Field>())
-				if (parentField->typeExpression()->isAncestorOf(e))
-					addPrefix = true;
-
-			if (addPrefix)
-				if (auto parentClass = e->firstAncestorOfType<Class>())
-				{
-					/*
-					 * if the target of the reference is inside the parent class and it does not target a friend declaration
-					 * or a formal type argument then add the parent class name as prefix.
-					 */
-					if (parentClass->isAncestorOf(e->target()) &&
-						 !parentClass->friends()->isAncestorOf(e->target()) &&
-						 !DCast<FormalTypeArgument>(e->target()))
-					{
-						// in case the parent class is a template class specifiy it as a typename
-						if (!parentClass->typeArguments()->isEmpty())
-							*fragment << "typename ";
-
-						// prefix with parent class name and type arguments
-						*fragment << parentClass->name();
-						if (!parentClass->typeArguments()->isEmpty())
-						{
-							auto typeArgumentComposite = new CompositeFragment{parentClass->typeArguments(), "typeArgsList"};
-							for (auto typeArgument : *parentClass->typeArguments())
-								*typeArgumentComposite << typeArgument->nameNode();
-							*fragment << typeArgumentComposite;
-						}
-						*fragment << "::";
-					}
-				}
-
-			/*
-			 * in case where the target is the parent class and the reference is not inside the body of a method
-			 * qualify the reference with all ancestor classes.
-			 */
-			if (auto parentClass = e->firstAncestorOfType<Class>())
-				if (e->target() == parentClass && !inBodyOfMethod)
-				{
-					auto currentParent = parentClass->firstAncestorOfType<Class>();
-					while (currentParent)
-					{
-						/*
-						 * if the current ancestor is a template class and the reference is in the results of a method or the
-						 * type of a field add "typename"
-						 */
-						if (!currentParent->typeArguments()->isEmpty() && addPrefix)
-							*fragment << "typename ";
-
-						// prefix with ancestor class name and type arguments
-						*fragment << currentParent->name();
-						if (!currentParent->typeArguments()->isEmpty())
-						{
-							auto typeArgumentComposite =
-									new CompositeFragment{currentParent->typeArguments(), "typeArgsList"};
-							for (auto typeArgument : *currentParent->typeArguments())
-								*typeArgumentComposite << typeArgument->nameNode();
-							*fragment << typeArgumentComposite;
-						}
-						*fragment << "::";
-
-						currentParent = currentParent->firstAncestorOfType<Class>();
-					}
-				}
 		}
-
 		// reference name and type arguments
 		*fragment << e->name();
 		if (!e->typeArguments()->isEmpty()) *fragment << list(e->typeArguments(), this, "typeArgsList");

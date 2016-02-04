@@ -28,7 +28,9 @@
 
 #include "Config.h"
 #include "CodeComposite.h"
+#include "visitors/CppPrintContext.h"
 
+#include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Declaration.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
@@ -98,6 +100,58 @@ bool ExportHelpers::isSignalingDeclaration(OOModel::Declaration* declaration)
 				if (reference->name() == "PREDEF_SIGNAL")
 					return true;
 	return false;
+}
+
+OOModel::Declaration* ExportHelpers::firstValidAncestorPrintContext(Model::Node* node)
+{
+	Q_ASSERT(node);
+
+	auto parent = node->parent();
+	while (parent)
+	{
+		if (CppPrintContext::isValidPrintContext(parent)) break;
+		parent = parent->parent();
+	}
+	return DCast<OOModel::Declaration>(parent);
+}
+
+void ExportHelpers::printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* from,
+															 Model::Node* to, bool printTypename)
+{
+	Q_ASSERT(CppPrintContext::isValidPrintContext(from));
+
+	QList<OOModel::Declaration*> printContexts;
+	auto printContext = firstValidAncestorPrintContext(to);
+	while (!printContext->isAncestorOf(from) && printContext != from)
+	{
+		if (!DCast<OOModel::Method>(printContext)) printContexts.prepend(printContext);
+		if (!printContext) break;
+		printContext = firstValidAncestorPrintContext(printContext);
+	}
+
+	for (auto printContext : printContexts)
+	{
+		if (printContext)
+		{
+			auto classs = DCast<OOModel::Class>(printContext);
+			if (classs && !classs->typeArguments()->isEmpty())
+			{
+				if (printTypename) *fragment << "typename ";
+				*fragment << printContext->nameNode();
+
+				auto typeArgumentComposite = fragment->append(new Export::CompositeFragment
+																			 {
+																				 classs->typeArguments(),
+																				 "typeArgsList"
+																			 });
+				for (auto typeArgument : *classs->typeArguments())
+					*typeArgumentComposite << typeArgument->nameNode();
+			}
+			else
+				*fragment << printContext->nameNode();
+		}
+		*fragment << "::";
+	}
 }
 
 }

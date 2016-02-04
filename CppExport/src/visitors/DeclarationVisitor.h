@@ -92,13 +92,6 @@ class CPPEXPORT_API DeclarationVisitor
 
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 
-		Export::SourceFragment* visitHeaderPart(OOModel::VariableDeclaration* variableDeclaration);
-		Export::SourceFragment* visitSourcePart(OOModel::VariableDeclaration* variableDeclaration);
-		Export::SourceFragment* visitSourcePart(OOModel::Field* field);
-		Export::SourceFragment* variableDeclarationCommonEnd(OOModel::VariableDeclaration* variableDeclaration);
-
-		void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* declaration);
-
 		Export::SourceFragment* printFriends(OOModel::Class* classs);
 };
 
