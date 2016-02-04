@@ -40,6 +40,11 @@ namespace OOModel
 	class Class;
 }
 
+namespace Export
+{
+	class CompositeFragment;
+}
+
 namespace CppExport {
 
 class CodeComposite;
@@ -62,6 +67,10 @@ class CPPEXPORT_API ExportHelpers
 		template <typename T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
 													std::function<T*(QList<T*>&)> selector = nullptr);
+
+		static void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* from,
+														  Model::Node* to, bool printTypename = false);
+		static OOModel::Declaration* firstValidAncestorPrintContext(Model::Node* node);
 };
 
 template <typename T>

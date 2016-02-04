@@ -92,8 +92,6 @@ class CPPEXPORT_API DeclarationVisitor
 
 		static bool metaCallFilter(OOModel::Expression* expression, bool equal);
 
-		void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* declaration);
-
 		Export::SourceFragment* printFriends(OOModel::Class* classs);
 };
 

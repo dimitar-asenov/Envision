@@ -31,6 +31,7 @@
 #include "visitors/ExpressionVisitor.h"
 #include "visitors/CppPrintContext.h"
 #include "SpecialCases.h"
+#include "ExportHelpers.h"
 
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/MetaDefinition.h"
@@ -49,10 +50,7 @@ CodeUnit::CodeUnit(QString name, Model::Node* node)
 
 void CodeUnit::calculateSourceFragments()
 {
-	OOModel::Declaration* printContextDeclaration = node()->firstAncestorOfType<OOModel::Declaration>();
-	while (printContextDeclaration && !printContextDeclaration->definesSymbol() &&
-			 printContextDeclaration->isTransparentForNameResolution())
-		printContextDeclaration = printContextDeclaration->firstAncestorOfType<OOModel::Declaration>();
+	OOModel::Declaration* printContextDeclaration = ExportHelpers::firstValidAncestorPrintContext(node());
 
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
@@ -110,18 +108,18 @@ void CodeUnit::calculateSourceFragments()
 	{
 		auto ooReference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
 		if (Config::instance().metaCallLocationMap().value(ooReference->name()) != "cpp")
-			headerPart()->setFragment(ExpressionVisitor(ooReference).visit(metaCall));
+			headerPart()->setFragment(ExpressionVisitor(printContextDeclaration).visit(metaCall));
 		else
 			sourcePart()->setFragment(ExpressionVisitor(printContextDeclaration).visit(metaCall));
 	}
 	else if (auto metaDefinition = DCast<OOModel::MetaDefinition>(node()))
 	{
 		// TODO: add a similar map to the metaCallLocationMap (maybe even unify them?)
-		headerPart()->setFragment(DeclarationVisitor(metaDefinition).visit(metaDefinition));
+		headerPart()->setFragment(DeclarationVisitor(printContextDeclaration).visit(metaDefinition));
 	}
 	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
 	{
-		headerPart()->setFragment(DeclarationVisitor(nameImport).visit(nameImport));
+		headerPart()->setFragment(DeclarationVisitor(printContextDeclaration).visit(nameImport));
 		sourcePart()->setFragment(DeclarationVisitor(printContextDeclaration).visit(nameImport));
 	}
 	else if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(node()))

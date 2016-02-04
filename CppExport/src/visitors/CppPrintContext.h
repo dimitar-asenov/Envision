@@ -27,10 +27,12 @@
 #pragma once
 
 #include "../cppexport_api.h"
+#include "../ExportHelpers.h"
 
 #include "Export/src/visitor/PrintContext.h"
 #include "Core/src/reflect/Reflect.h"
 #include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/MetaDefinition.h"
 
 namespace Model {
 	class Node;
@@ -42,17 +44,34 @@ class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 {
 	public:
 		enum Option {
+			None = 0,
 			PrintMethodBody = 0x1,
-			PrintExternKeyword = 0x2
+			PrintMethodBodyIfNotEmpty = 0x2,
+			PrintExternKeyword = 0x4,
+			PrintDefaultArgumentValues = 0x8
 		};
 		using Options = QFlags<Option>;
 
-		CppPrintContext(Model::Node* context) : Super{context} {}
-		CppPrintContext(Model::Node* context, Options options) : Super{context}, options_{options} {}
+		CppPrintContext(Model::Node* context) : Super{context}
+		{ Q_ASSERT(isValidPrintContext(context)); }
+		CppPrintContext(Model::Node* context, Options options) : Super{context}, options_{options}
+		{ Q_ASSERT(isValidPrintContext(context)); }
 
 		bool isClass();
 		bool hasOption(Option option);
 
+		OOModel::Declaration* declaration() { return static_cast<OOModel::Declaration*>(node()); }
+
+		static bool isValidPrintContext(Model::Node* context)
+		{
+			if (!context) return true;
+
+			return context->definesSymbol() && !context->isTransparentForNameResolution() &&
+					!DCast<OOModel::MetaDefinition>(context) &&
+					!DCast<OOModel::MetaDefinition>(context->parent());
+		}
+
+	private:
 		Options options_{};
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(CppPrintContext::Options)
