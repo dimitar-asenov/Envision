@@ -34,24 +34,40 @@ FrameStyle::~FrameStyle(){}
 void FrameStyle::paint(QPainter* painter, int xOffset, int yOffset, int outerWidth, int outerHeight,
 							QColor customColor) const
 {
-	int adjustedTopWidth = std::min(topWidth(), outerHeight);
+	auto topWidth = this->topWidth();
+	auto bottomWidth = this->bottomWidth();
+	auto leftWidth = this->leftWidth();
+	auto rightWidth = this->rightWidth();
+
+	// Adjust the widths to expand them at small scales
+	// This makes frames look more discernable
+	qreal scaleFactor = painter->worldTransform().m11();
+	if (scaleFactor < 0.2)
+	{
+		if (topWidth > 0 && topWidth*scaleFactor < 1) topWidth = 1 / scaleFactor;
+		if (bottomWidth > 0 && bottomWidth*scaleFactor < 1) bottomWidth = 1 / scaleFactor;
+		if (leftWidth > 0 && leftWidth*scaleFactor < 1) leftWidth = 1 / scaleFactor;
+		if (rightWidth > 0 && rightWidth*scaleFactor < 1) rightWidth = 1 / scaleFactor;
+	}
+
+	int adjustedTopWidth = std::min(topWidth, outerHeight);
 
 	if (adjustedTopWidth > 0 && outerHeight > 0)
 		painter->fillRect(xOffset, yOffset, outerWidth, adjustedTopWidth,
 							BoxStyle::fixGradient(topBrush(), xOffset, yOffset));
 
-	int adjustedBottomWidth = std::min(bottomWidth(), outerHeight - adjustedTopWidth);
+	int adjustedBottomWidth = std::min(bottomWidth, outerHeight - adjustedTopWidth);
 	int contentHeight = outerHeight - adjustedTopWidth - adjustedBottomWidth;
 	if (adjustedBottomWidth > 0 && outerHeight > 0)
 		painter->fillRect(xOffset, yOffset + adjustedTopWidth + contentHeight, outerWidth, adjustedBottomWidth,
 							BoxStyle::fixGradient(bottomBrush(), xOffset, yOffset + adjustedTopWidth + contentHeight));
 
-	int adjustedLeftWidth = std::min(leftWidth(), outerWidth);
+	int adjustedLeftWidth = std::min(leftWidth, outerWidth);
 	if (adjustedLeftWidth > 0 && contentHeight > 0)
 		painter->fillRect(xOffset, yOffset + adjustedTopWidth, adjustedLeftWidth, contentHeight,
 							BoxStyle::fixGradient(leftBrush(), xOffset, yOffset + adjustedTopWidth));
 
-	int adjustedRightWitdh = std::min(rightWidth(), outerWidth - adjustedLeftWidth);
+	int adjustedRightWitdh = std::min(rightWidth, outerWidth - adjustedLeftWidth);
 	int contentWidth = outerWidth - adjustedLeftWidth - adjustedRightWitdh;
 	if (adjustedRightWitdh > 0 && contentHeight > 0)
 		painter->fillRect(xOffset + adjustedLeftWidth + contentWidth, yOffset + adjustedTopWidth,
