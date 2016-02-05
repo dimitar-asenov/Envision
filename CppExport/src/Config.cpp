@@ -53,8 +53,6 @@ Config::Config()
 	Q_ASSERT(err.error == QJsonParseError::NoError);
 
 	dependencyUnitMergeMap_ = createMap(doc.object(), "DependencyUnitMergeMap");
-	exportFlagMap_ = createMap(doc.object(), "ExportFlagMap");
-	metaCallLocationMap_ = createMap(doc.object(), "MetaCallLocationMap");
 }
 
 }

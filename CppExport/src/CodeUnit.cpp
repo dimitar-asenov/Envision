@@ -107,10 +107,10 @@ void CodeUnit::calculateSourceFragments()
 	else if (auto metaCall = DCast<OOModel::MetaCallExpression>(node()))
 	{
 		auto ooReference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
-		if (Config::instance().metaCallLocationMap().value(ooReference->name()) != "cpp")
-			headerPart()->setFragment(ExpressionVisitor(printContextDeclaration).visit(metaCall));
-		else
+		if (ooReference->name().startsWith("DEFINE_"))
 			sourcePart()->setFragment(ExpressionVisitor(printContextDeclaration).visit(metaCall));
+		else
+			headerPart()->setFragment(ExpressionVisitor(printContextDeclaration).visit(metaCall));
 	}
 	else if (auto metaDefinition = DCast<OOModel::MetaDefinition>(node()))
 	{

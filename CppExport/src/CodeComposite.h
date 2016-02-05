@@ -59,7 +59,6 @@ class CPPEXPORT_API CodeComposite
 		QString relativePath(CodeComposite* other);
 		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
 
-		QString pluginName(OOModel::Declaration* declaration);
 		void sortUnits(CodeUnitPart*(CodeUnit::*part)(),
 							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
 		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,

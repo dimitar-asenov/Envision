@@ -114,7 +114,7 @@ bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
 {
 	 auto metaCall = DCast<MetaCallExpression>(expression);
 	 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
-	 return (Config::instance().metaCallLocationMap().value(ooReference->name()) == "cpp") == equal;
+	 return ooReference->name().startsWith("DEFINE_") == equal;
 }
 
 SourceFragment* DeclarationVisitor::visit(Class* classs)

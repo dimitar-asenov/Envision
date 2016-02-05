@@ -110,15 +110,6 @@ QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> ha
 	return result;
 }
 
-QString CodeComposite::pluginName(OOModel::Declaration* declaration)
-{
-	auto namespaceModule = declaration->firstAncestorOfType<OOModel::Module>();
-	auto moduleName = namespaceModule ? namespaceModule->name() : QString();
-	auto value = Config::instance().exportFlagMap().value(moduleName + "/" + declaration->name());
-	if (!value.isEmpty() || !namespaceModule) return value;
-	return namespaceModule->name();
-}
-
 Export::CompositeFragment* CodeComposite::addNamespaceFragment(Export::CompositeFragment* parentFragment,
 																					OOModel::Module* namespaceNode)
 {

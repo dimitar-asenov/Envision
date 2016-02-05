@@ -149,26 +149,5 @@
 		"DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS_COMMON" : "ModelBase/src/nodes/nodeMacros" ,
 		"DEFINE_TYPED_LIST(Model::Float)" : "ModelBase/src/nodes/Float" ,
 		"Model/ModelException" : "ModelBase/src/ModelException"
-	},
-	"ExportFlagMap": 
-	{
-		"TestNodes/BinaryNode" : "ModelBase",
-		"TestNodes/BinaryNodePersistenceUnit" : "ModelBase",
-		"TestNodes/BinaryNodeAccessUnit" : "ModelBase",
-		"TestNodes/PartialList" : "ModelBase",
-		"TestNodes/PositionExtension" : "ModelBase"
-	},
-	"MetaCallLocationMap": 
-	{
-		"DEFINE_TYPE_ID_DERIVED" : "cpp",
-		"DEFINE_ATTRIBUTE" : "cpp",
-		"DEFINE_TYPED_LIST" : "cpp",
-		"DEFINE_NODE_TYPE_REGISTRATION_METHODS" : "cpp",
-		"DEFINE_NODE_EMPTY_CONSTRUCTORS" : "cpp",
-		"DEFINE_TYPE_ID_BASE" : "cpp",
-		"DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS" : "cpp",
-		"DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS" : "cpp",
-		"DEFINE_EXTENSION" : "cpp",
-		"DEFINE_EXTENSION_ATTRIBUTE" : "cpp"
 	}
 }

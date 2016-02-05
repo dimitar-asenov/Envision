@@ -46,22 +46,16 @@ class CPPEXPORT_API Config
 		 * ConfigKey: "DependencyUnitMergeMap"
 		 */
 		QHash<QString, QString> dependencyUnitMergeMap() const;
-		QHash<QString, QString> exportFlagMap() const;
-		QHash<QString, QString> metaCallLocationMap() const;
 
 	private:
 		Config();
 		QJsonObject config_;
 
 		QHash<QString, QString> dependencyUnitMergeMap_;
-		QHash<QString, QString> exportFlagMap_;
-		QHash<QString, QString> metaCallLocationMap_;
 
 		QHash<QString, QString> createMap(QJsonObject config, const QString& key) const;
 };
 
 inline QHash<QString, QString> Config::dependencyUnitMergeMap() const { return dependencyUnitMergeMap_; }
-inline QHash<QString, QString> Config::exportFlagMap() const { return exportFlagMap_; }
-inline QHash<QString, QString> Config::metaCallLocationMap() const { return metaCallLocationMap_; }
 
 }
