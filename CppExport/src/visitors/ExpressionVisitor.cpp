@@ -179,7 +179,10 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 			while (auto binaryOperation = DCast<BinaryOperation>(right))
 				right = binaryOperation->left();
 
-			if (DCast<OOModel::StringLiteral>(left) && DCast<OOModel::StringLiteral>(right))
+			auto leftReference = DCast<OOModel::ReferenceExpression>(left);
+			auto rightReference = DCast<OOModel::ReferenceExpression>(right);
+			if ((DCast<OOModel::StringLiteral>(left) || (leftReference && leftReference->name().startsWith("#"))) &&
+				 (DCast<OOModel::StringLiteral>(right) || (rightReference && rightReference->name().startsWith("#"))))
 				stringLiteralConcatenation = true;
 		}
 
@@ -370,8 +373,11 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 		if (!e->prefix() && e->target())
 		{
-			auto parentMethod = e->target()->firstAncestorOfType<Method>();
-			if (!parentMethod || !parentMethod->typeArguments()->isAncestorOf(e->target()))
+			auto parentMethod = e->firstAncestorOfType<Method>();
+			bool isMethodResult = parentMethod && parentMethod->results()->isAncestorOf(e);
+			auto parentField = e->firstAncestorOfType<Field>();
+			bool isFieldType = parentField && parentField->typeExpression()->isAncestorOf(e);
+			if (!DCast<FormalTypeArgument>(e->target()) && (isMethodResult || isFieldType))
 			{
 				bool referenceIsInResult = false;
 				if (auto referenceParentMethod = e->firstAncestorOfType<Method>())
@@ -397,8 +403,6 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<UnfinishedOperator>(expression))
 	{
-		QStringList result;
-
 		for (int i=0; i< e->operands()->size(); ++i)
 			*fragment << e->delimiters()->at(i) << visit(e->operands()->at(i));
 

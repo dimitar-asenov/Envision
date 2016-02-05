@@ -38,6 +38,8 @@ namespace OOModel {
 
 namespace CppImport {
 
+class Comment;
+
 /**
  * holds the clang::SourceManager and clang::Preprocessor during macro import.
  * it provides helper methods that only depend on the SourceManager and Preprocessor.
@@ -79,6 +81,8 @@ class CPPIMPORT_API ClangHelpers
 		QString projectNameFromPath(QString path);
 
 		OOModel::Project* rootProject();
+
+		QList<Comment*> comments_;
 
 	private:
 		EnvisionToClangMap envisionToClangMap_;

@@ -265,21 +265,79 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
+	Model::Node* printContextNode{};
+	CppPrintContext::Options printContextOptions = CppPrintContext::None;
+
+	if (metaDefinition->name().startsWith("DEFINE_"))
+	{
+		printContextNode = new OOModel::Module();
+		printContextOptions = CppPrintContext::PrintMethodBody;
+
+		for (auto argument : *metaDefinition->arguments())
+			if (argument->name() == "templatePrefix")
+			{
+				printContextOptions |= CppPrintContext::PrintTemplatePrefix;
+				break;
+			}
+	}
+	else
+	{
+		printContextNode = new OOModel::Class();
+		printContextOptions = CppPrintContext::PrintMethodBodyIfNotEmpty;
+	}
+
+	CppPrintContext printContext{printContextNode, printContextOptions};
 	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
-	auto macro = new CompositeFragment{metaDefinition, "macro"};
+	*fragment << compositeNodeComments(metaDefinition, "declarationComment");
+	auto macro = fragment->append(new CompositeFragment{metaDefinition, "macro"});
 	*macro << "#define " << metaDefinition->nameNode();
-	*macro << list(metaDefinition->arguments(), ElementVisitor{data()}, "argsList");
+	if (!metaDefinition->arguments()->isEmpty())
+		*macro << list(metaDefinition->arguments(), ElementVisitor{data()}, "argsList");
 	auto body = new CompositeFragment{metaDefinition->context(), "macroBody"};
 	if (auto context = DCast<Module>(metaDefinition->context()))
-		*body << list(context->classes(), DeclarationVisitor{data()}, "spacedSections");
+		*body << list(context->classes(), DeclarationVisitor{printContext, data()}, "spacedSections");
+	else if (auto context = DCast<Method>(metaDefinition->context()))
+		*body << list(context->items(), StatementVisitor{printContext, data()}, "sections");
 	else if (auto context = DCast<Class>(metaDefinition->context()))
 	{
 		*body << list(context->metaCalls(), ExpressionVisitor{data()}, "sections");
-		*body << list(context->methods(), DeclarationVisitor{data()}, "spacedSections");
-		*body << list(context->fields(), DeclarationVisitor{data()}, "spacedSections");
+
+		DeclarationVisitor declarationVisitor{printContext, data()};
+		if (!printContext.isClass())
+		{
+			*body << list(context->methods(), declarationVisitor, "spacedSections");
+			*body << list(context->fields(), declarationVisitor, "spacedSections");
+		}
+		else
+		{
+			QList<OOModel::Declaration*> declarations;
+			for (auto declaration : *context->methods()) declarations.append(declaration);
+			for (auto declaration : *context->fields()) declarations.append(declaration);
+
+			auto accessorSection = new CompositeFragment{context, "accessorSections"};
+			for (auto declaration : declarations)
+				if (declaration->modifiers()->isSet(Modifier::Public))
+					*accessorSection << declarationVisitor.visit(declaration);
+			if (!accessorSection->fragments().empty()) *body << "public:" << accessorSection;
+
+			accessorSection = new CompositeFragment{context, "accessorSections"};
+			for (auto declaration : declarations)
+				if (declaration->modifiers()->isSet(Modifier::Protected))
+					*accessorSection << declarationVisitor.visit(declaration);
+			if (!accessorSection->fragments().empty()) *body << "protected:" << accessorSection;
+
+			accessorSection = new CompositeFragment{context, "accessorSections"};
+			for (auto declaration : declarations)
+				if (!declaration->modifiers()->isSet(Modifier::Public) &&
+					 !declaration->modifiers()->isSet(Modifier::Protected))
+					*accessorSection << declarationVisitor.visit(declaration);
+			if (!accessorSection->fragments().empty()) *body << "private:" << accessorSection;
+		}
 	}
 	*macro << body;
-	*fragment << macro;
+
+	// delete dummy print context node
+	SAFE_DELETE(printContextNode);
 	return fragment;
 }
 
@@ -323,6 +381,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	// template<typename ...>
 	if (!printContext().isClass())
+	{
+		if (printContext().hasOption(CppPrintContext::PrintTemplatePrefix))
+			*fragment << "templatePrefix ";
+
 		if (method->modifiers()->isSet(Modifier::Inline))
 		{
 			QList<Class*> parentClasses;
@@ -338,6 +400,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 					*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor{method, data()},
 											"templateArgsList");
 		}
+	}
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor{method, data()}, "templateArgsList");
 
@@ -445,6 +508,8 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 	if (field && !printContext().isClass())
 	{
 		// template<typename T...>
+		if (printContext().hasOption(CppPrintContext::PrintTemplatePrefix))
+			*fragment << "templatePrefix ";
 		if (auto parentClass = field->firstAncestorOfType<Class>())
 			if (!parentClass->typeArguments()->isEmpty())
 				*fragment << list(parentClass->typeArguments(), ElementVisitor{data()}, "templateArgsList");

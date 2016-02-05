@@ -34,6 +34,7 @@
 #include "NodeToCloneMap.h"
 #include "NodeHelpers.h"
 #include "../SpecialCases.h"
+#include "../Comment.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -76,6 +77,14 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 		auto actualContext = NodeHelpers::actualContext(mapping.original(nodes.first()));
 		metaDef->setContext(NodeHelpers::createContext(actualContext));
 
+		// meta definition comment
+		auto macroDefinitionPresumedLocation = clang_.sourceManager()->getPresumedLoc(
+					expansion->definition()->getMacroInfo()->getDefinitionLoc());
+		for (auto comment : clang_.comments_)
+			if (comment->fileName() == macroDefinitionPresumedLocation.getFilename() &&
+				 comment->lineEnd() == macroDefinitionPresumedLocation.getLine() - 1)
+				metaDef->setComment(new Comments::CommentNode{comment->text()});
+
 		// clone and add nodes to the metaDef
 		for (auto n : nodes)
 		{
@@ -96,6 +105,37 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 				else if (auto nameText = DCast<Model::NameText>(current))
 				{
 					auto sourceRanges = clang_.envisionToClangMap().get(childMapping.original(nameText));
+
+					/*
+					 * In cases where the actual context is a class and the name of the context class is specified as a macro
+					 * argument (in the example "className") we change the name of the context class to be equal to the macro
+					 * argument instead of the generic "Context" caption.
+					 *
+					 * Example:
+					 * #define DEFINE_TYPE_ID_BASE(className, nameExpression, templatePrefix)
+					 * templatePrefix void className::initType() {}
+					 */
+					if (DCast<OOModel::Class>(metaDef->context()) && metaDef->context()->name() == "Context")
+						for (auto sourceRange : sourceRanges)
+						{
+							if (clang_.spelling(clang::SourceRange(sourceRange.getBegin().getLocWithOffset(-2),
+																				sourceRange.getBegin().getLocWithOffset(-1))) != "::")
+								continue;
+
+							for (auto argument : *metaDef->arguments())
+							{
+								auto prefixEnd = sourceRange.getBegin().getLocWithOffset(-3);
+								auto prefixSpelling = clang_.spelling(clang::SourceRange(
+																					  prefixEnd.getLocWithOffset(-argument->name().size()+1),
+																					  prefixEnd));
+								if (prefixSpelling == argument->name())
+								{
+									metaDef->context()->setName(argument->name());
+									break;
+								}
+							}
+						}
+
 					if (!sourceRanges.empty())
 						nameText->set(clang_.unexpandedSpelling(sourceRanges.first().getBegin()));
 				}
@@ -140,13 +180,24 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 							clonedReplacementNode->parent()->parent()
 									->replaceChild(clonedReplacementNode->parent(), childExpansion->metaCall());
 						else
-							qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
+							qDebug() << "not inserted metacall to"
+										<< definitionManager_.definitionName(childExpansion->definition())
+										<< "in" << definitionManager_.definitionName(expansion->definition());
 					}
-					else if (!DCast<OOModel::Declaration>(clonedReplacementNode))
+					else if (DCast<OOModel::Expression>(clonedReplacementNode))
 						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode, childExpansion->metaCall());
+					else if (DCast<OOModel::Statement>(clonedReplacementNode))
+						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode,
+																			new OOModel::ExpressionStatement{childExpansion->metaCall()});
+					else
+						qDebug() << "not inserted metacall to"
+									<< definitionManager_.definitionName(childExpansion->definition())
+									<< "in" << definitionManager_.definitionName(expansion->definition());
 				}
 				else
-					qDebug() << "not inserted metacall" << clonedReplacementNode->typeName();
+					qDebug() << "not inserted metacall to"
+								<< definitionManager_.definitionName(childExpansion->definition())
+								<< "in" << definitionManager_.definitionName(expansion->definition());
 			}
 	}
 }
@@ -162,7 +213,9 @@ void StandardMetaDefinitions::childrenUnownedByExpansion(Model::Node* node, Macr
 	if (auto original = mapping.original(node))
 	{
 		if (macroExpansions_.expansions(original).contains(expansion) ||
-			 original->typeName() == "TypedListOfExpression")
+			 original->typeName() == "TypedListOfExpression" ||
+			 original->typeName() == "FormalResult" ||
+			 original->typeName() == "FormalArgument")
 		{
 			for (auto child : node->children())
 				childrenUnownedByExpansion(child, expansion, mapping, result);
@@ -209,6 +262,8 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, Nod
 			// in case the node to replace is not an expression we have to wrap the splice
 			if (DCast<OOModel::FormalResult>(child))
 				newNode = new OOModel::FormalResult{QString{}, DCast<OOModel::Expression>(newNode)};
+			else if (DCast<OOModel::Statement>(child))
+				newNode = new OOModel::ExpressionStatement{DCast<OOModel::Expression>(newNode)};
 
 			// insert the splice into the tree
 			if (child->parent()) child->parent()->replaceChild(child, newNode);

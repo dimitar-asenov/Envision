@@ -1057,7 +1057,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 * only the comments which are in range of this compound statement.
 		 */
 		QList<Comment*> listComments;
-		for (auto comment : comments_)
+		for (auto comment : clang_.comments_)
 				if (presumedLocationStart.getFilename() == comment->fileName() &&
 					 presumedLocationStart.getLine() <= comment->lineStart() &&
 					 comment->lineEnd() <= presumedLocationEnd.getLine())
@@ -1112,7 +1112,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 			firstLine = false;
 			if (llvm::dyn_cast<clang::CompoundStmt>(child))
 			{
-				auto block = new OOModel::Block{};
+				auto block = clang_.createNode<OOModel::Block>(child->getSourceRange());
 				itemList->append(block);
 				ooStack_.push(block->items());
 				TraverseStmt(child);
@@ -1377,7 +1377,7 @@ void ClangAstVisitor::beforeTranslationUnit(clang::ASTContext& astContext)
 {
 	auto comments = astContext.getRawCommentList().getComments();
 	for (auto it = comments.begin(); it != comments.end(); it++)
-		comments_.append(new Comment{*it, *clang_.sourceManager()});
+		clang_.comments_.append(new Comment{*it, *clang_.sourceManager()});
 }
 
 void ClangAstVisitor::endTranslationUnit()
@@ -1392,7 +1392,7 @@ void ClangAstVisitor::endTranslationUnit()
 	{
 		auto nodePresumedLocation = clang_.sourceManager()->getPresumedLoc(it.value().getBegin());
 
-		for (Comment* comment : comments_)
+		for (Comment* comment : clang_.comments_)
 		{
 			if (comment->node() ||
 				 nodePresumedLocation.getFilename() != comment->fileName() ||

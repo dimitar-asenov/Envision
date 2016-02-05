@@ -102,7 +102,7 @@ bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*&
 		classMap_.insert(hash, createdClass);
 		return true;
 	}
-	clang_.envisionToClangMap().mapAst(rDecl, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(rDecl->getSourceRange(), classMap_.value(hash));
 	return false;
 }
 
@@ -115,7 +115,7 @@ bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTempla
 		classMap_.insert(hash, createdClass);
 		return true;
 	}
-	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate->getSourceRange(), classMap_.value(hash));
 	return false;
 }
 
@@ -129,7 +129,7 @@ bool TranslateManager::insertClassTemplateSpec
 		classMap_.insert(hash, createdClass);
 		return true;
 	}
-	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate->getSourceRange(), classMap_.value(hash));
 	return false;
 }
 
@@ -147,7 +147,8 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 		else
 		{
 			method = methodMap_.value(hash);
-			clang_.envisionToClangMap().mapAst(mDecl, method);
+			clang_.envisionToClangMap().mapAst(mDecl->getSourceRange(), method);
+			clang_.envisionToClangMap().mapAst(mDecl->getLocation(), method->nameNode());
 
 			for (int i = 0; i< method->arguments()->size(); i++)
 			{
@@ -177,7 +178,7 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 	else
 	{
 		ooFunction = functionMap_.value(hash);
-		clang_.envisionToClangMap().mapAst(functionDecl, ooFunction);
+		clang_.envisionToClangMap().mapAst(functionDecl->getSourceRange(), ooFunction);
 
 		if (ooFunction->items()->size())
 			return ooFunction;
@@ -212,7 +213,7 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	if (staticFieldMap_.contains(hash))
 	{
 		wasDeclared = true;
-		clang_.envisionToClangMap().mapAst(varDecl, staticFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), staticFieldMap_.value(hash));
 		return staticFieldMap_.value(hash);
 	}
 	wasDeclared = false;
@@ -233,7 +234,7 @@ OOModel::Field* TranslateManager::insertNamespaceField(clang::VarDecl* varDecl, 
 	if (namespaceFieldMap_.contains(hash))
 	{
 		wasDeclared = true;
-		clang_.envisionToClangMap().mapAst(varDecl, namespaceFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), namespaceFieldMap_.value(hash));
 		return namespaceFieldMap_.value(hash);
 	}
 	wasDeclared = false;
@@ -259,7 +260,7 @@ OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplate
 																										explicitTemplateInst->getSourceRange());
 		explicitTemplateInstMap_.insert(hash, ooExplicitTemplateInst);
 	}
-	clang_.envisionToClangMap().mapAst(explicitTemplateInst, explicitTemplateInstMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(explicitTemplateInst->getSourceRange(), explicitTemplateInstMap_.value(hash));
 	return ooExplicitTemplateInst;
 }
 
