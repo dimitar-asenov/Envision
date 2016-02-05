@@ -37,9 +37,9 @@ namespace Visualization {
  * This is an item wrapper element, with a specifiable node to create the item with.
  */
 template <typename ParentType>
-class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
-		FLUENT_ELEMENT_INTERFACE(NodeItemWrapperFormElement);
-
+class NodeItemWrapperFormElement
+		: public SuperFormElement<NodeItemWrapperFormElement<ParentType>, ItemWrapperFormElement<ParentType>>
+{
 	public:
 		using ChildItem = typename ItemWrapperFormElement<ParentType>::ChildItem;
 		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;
@@ -62,7 +62,8 @@ class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
 
 template <typename ParentType>
 NodeItemWrapperFormElement<ParentType>::NodeItemWrapperFormElement(ChildItem item, GetNodeFunction nodeGetter)
-: ItemWrapperFormElement<ParentType>{item}, nodeGetter_{nodeGetter}
+	: SuperFormElement<NodeItemWrapperFormElement<ParentType>, ItemWrapperFormElement<ParentType>>{item},
+	  nodeGetter_{nodeGetter}
 {}
 
 template <typename ParentType>

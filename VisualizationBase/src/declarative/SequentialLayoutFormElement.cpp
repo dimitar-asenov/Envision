@@ -38,7 +38,8 @@
 namespace Visualization {
 
 SequentialLayoutFormElement::SequentialLayoutFormElement(const SequentialLayoutFormElement& other)
-:	LayoutFormElement{other}, listNodeGetter_{other.listNodeGetter_}, nodeListGetter_{other.nodeListGetter_},
+:	SuperLayoutElement<SequentialLayoutFormElement, LayoutFormElement>{other},
+	listNodeGetter_{other.listNodeGetter_}, nodeListGetter_{other.nodeListGetter_},
  	itemListGetter_{other.itemListGetter_}, spaceBetweenElementsGetter_{other.spaceBetweenElementsGetter_},
  	defaultSpaceBetweenElements_{other.defaultSpaceBetweenElements_}, orientation_{other.orientation_},
 	alignment_{other.alignment_}, forward_{other.forward_}, minWidthGetter_{other.minWidthGetter_},

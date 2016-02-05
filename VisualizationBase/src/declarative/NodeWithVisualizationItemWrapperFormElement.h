@@ -34,9 +34,10 @@ namespace Visualization {
  * This is an item wrapper element, with a specifiable style for the wrapped item, and a node to create the item with.
  */
 template <typename ParentType, typename VisualizationType>
-class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElement<ParentType, VisualizationType> {
-		FLUENT_ELEMENT_INTERFACE(NodeWithVisualizationItemWrapperFormElement);
-
+class NodeWithVisualizationItemWrapperFormElement
+		: public SuperFormElement<NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>,
+		ItemWrapperFormElement<ParentType, VisualizationType>>
+{
 	public:
 		using ChildItem = typename ItemWrapperFormElement<ParentType, VisualizationType>::ChildItem;
 		using GetStyleTypeFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
@@ -64,7 +65,8 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 template <typename ParentType, typename VisualizationType>
 NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::NodeWithVisualizationItemWrapperFormElement(
 		ChildItem item, GetNodeTypeFunction nodeGetter, GetStyleTypeFunction styleGetter)
-: ItemWrapperFormElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, styleGetter_{styleGetter}
+: SuperFormElement<NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>,
+  ItemWrapperFormElement<ParentType, VisualizationType>>{item}, nodeGetter_{nodeGetter}, styleGetter_{styleGetter}
 {}
 
 

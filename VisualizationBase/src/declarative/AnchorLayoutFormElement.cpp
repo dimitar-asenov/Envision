@@ -35,7 +35,8 @@ AnchorLayoutFormElement::AnchorLayoutFormElement()
 	: horizontalSolver_{new AnchorLayoutConstraintSolver{}}, verticalSolver_{new AnchorLayoutConstraintSolver{}}
 {}
 
-AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& other) : LayoutFormElement{other},
+AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& other) :
+	SuperLayoutElement<AnchorLayoutFormElement, LayoutFormElement>{other},
 	needsHorizontalSolver_{other.needsHorizontalSolver_},
 	needsVerticalSolver_{other.needsVerticalSolver_},
 	horizontalSolver_{new AnchorLayoutConstraintSolver{}}, verticalSolver_{new AnchorLayoutConstraintSolver{}},

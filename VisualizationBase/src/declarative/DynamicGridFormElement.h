@@ -36,11 +36,9 @@ namespace Model {
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
+class VISUALIZATIONBASE_API DynamicGridFormElement
+		: public SuperLayoutElement<DynamicGridFormElement, LayoutFormElement>
 {
-		FLUENT_ELEMENT_INTERFACE(DynamicGridFormElement);
-		FLUENT_LAYOUT_INTERFACE(DynamicGridFormElement);
-
 	public:
 		using NodesGetterFunction = std::function<QVector<QVector<Model::Node*>>(Item* item)>;
 		using ItemsGetterFunction = std::function<QVector<QVector<Item*>>(Item* item)>;

@@ -34,9 +34,10 @@ namespace Visualization {
  * This is an item wrapper element, with a specifiable style for the wrapped item.
  */
 template <typename ParentType, typename VisualizationType, bool externalSynchronization>
-class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<ParentType, VisualizationType> {
-		FLUENT_ELEMENT_INTERFACE(VisualizationItemWrapperFormElement);
-
+class VisualizationItemWrapperFormElement
+: public SuperFormElement<VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>,
+		ItemWrapperFormElement<ParentType, VisualizationType>>
+{
 	public:
 		using ChildItem = typename ItemWrapperFormElement<ParentType, VisualizationType>::ChildItem;
 		using GetStyleFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
@@ -72,14 +73,16 @@ template <typename ParentType, typename VisualizationType, bool externalSynchron
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
 ::VisualizationItemWrapperFormElement(
 		ChildItem item)
-: ItemWrapperFormElement<ParentType, VisualizationType>{item}
+	: SuperFormElement<VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>,
+		ItemWrapperFormElement<ParentType, VisualizationType>>{item}
 {}
 
 template <typename ParentType, typename VisualizationType, bool externalSynchronization>
 VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
 ::VisualizationItemWrapperFormElement(
 		ChildItem item, GetStyleFunction style)
-: ItemWrapperFormElement<ParentType, VisualizationType>{item}, style_{style}
+	: SuperFormElement<VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>,
+		ItemWrapperFormElement<ParentType, VisualizationType>>{item}, style_{style}
 {}
 
 template <typename ParentType, typename VisualizationType, bool externalSynchronization>

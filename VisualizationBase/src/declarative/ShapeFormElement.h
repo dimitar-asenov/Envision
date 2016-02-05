@@ -35,7 +35,9 @@ namespace Visualization {
  * The shape form element is a placeholder form element, stretching to encompass all the available space. It is used to
  * put the shape at a custom position.
  */
-class VISUALIZATIONBASE_API ShapeFormElement : public Visualization::FormElement {
+class VISUALIZATIONBASE_API ShapeFormElement
+		: public SuperFormElement<ShapeFormElement, FormElement>
+{
 	public:
 
 		ShapeFormElement() = default;

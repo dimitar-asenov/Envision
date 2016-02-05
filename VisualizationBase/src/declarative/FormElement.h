@@ -340,39 +340,58 @@ inline bool FormElement::isFormRoot() const {return isFormRoot_;}
 
 inline const QVector<FormElement*>& FormElement::children() const {return children_;}
 
-}
+template<typename NewFormElement, typename BaseFormElement>
+class SuperFormElement : public BaseFormElement
+{
+	public:
+		using BaseFormElement::BaseFormElement;
 
-#define FLUENT_ELEMENT_INTERFACE(ClassName)																									\
-public:																																					\
-	/**
-	 * Sets the \a left, \a top, \a right and \a bottom margins to the respective values.
-	 * Returns a pointer to this form element.
-	 */																																					\
-	ClassName* setMargins(int left, int top, int right, int bottom) {																	\
-		return static_cast<ClassName*>(FormElement::setMargins(left, top, right, bottom));										\
-	}																																						\
-	/**
-	 * Sets all the margins of this form element to the value specified as \a margin.
-	 * Returns a pointer to this form element.
-	 */																																					\
-	ClassName* setMargins(int margin) {return static_cast<ClassName*>(FormElement::setMargins(margin));}					\
-	/**
-	 * Sets the \a top margin of this form element.
-	 * Returns a pointer to this form element.
-	 */																																					\
-	ClassName* setTopMargin(int top) {return static_cast<ClassName*>(FormElement::setTopMargin(top));}						\
-	/**
-	 * Sets the \a bottom margin of this form element.
-	 * Returns a pointer to this form element.
-	 */																																					\
-	ClassName* setBottomMargin(int bottom) {return static_cast<ClassName*>(FormElement::setBottomMargin(bottom));}		\
-	/**
-	 * Sets the \a left margin of this form element.
-	 * Returns a pointer to this form element.
-	 */																																					\
-	ClassName* setLeftMargin(int left) {return static_cast<ClassName*>(FormElement::setLeftMargin(left));}				\
-	/**
-	 * Sets the \a right margin of this form element.
-	 * Returns a pointer to this form element.
-	 */																																					\
-	ClassName* setRightMargin(int right) {return static_cast<ClassName*>(FormElement::setRightMargin(right));}
+		/**
+		 * Sets the \a left, \a top, \a right and \a bottom margins to the respective values.
+		 * Returns a pointer to this form element.
+		 */
+		NewFormElement* setMargins(int left, int top, int right, int bottom) {
+			return static_cast<NewFormElement*>(BaseFormElement::setMargins(left, top, right, bottom));
+		}
+		/**
+		 * Sets all the margins of this form element to the value specified as \a margin.
+		 * Returns a pointer to this form element.
+		 */
+		NewFormElement* setMargins(int margin) {
+			return static_cast<NewFormElement*>(BaseFormElement::setMargins(margin));
+		}
+		/**
+		 * Sets the \a top margin of this form element.
+		 * Returns a pointer to this form element.
+		 */
+		NewFormElement* setTopMargin(int top)
+		{
+			return static_cast<NewFormElement*>(BaseFormElement::setTopMargin(top));
+		}
+		/**
+		 * Sets the \a bottom margin of this form element.
+		 * Returns a pointer to this form element.
+		 */
+		NewFormElement* setBottomMargin(int bottom)
+		{
+			return static_cast<NewFormElement*>(BaseFormElement::setBottomMargin(bottom));
+		}
+		/**
+		 * Sets the \a left margin of this form element.
+		 * Returns a pointer to this form element.
+		 */
+		NewFormElement* setLeftMargin(int left)
+		{
+			return static_cast<NewFormElement*>(BaseFormElement::setLeftMargin(left));
+		}
+		/**
+		 * Sets the \a right margin of this form element.
+		 * Returns a pointer to this form element.
+		 */
+		NewFormElement* setRightMargin(int right)
+		{
+			return static_cast<NewFormElement*>(BaseFormElement::setRightMargin(right));
+		}
+};
+
+}

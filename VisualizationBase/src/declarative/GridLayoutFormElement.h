@@ -42,10 +42,9 @@ namespace Visualization {
  *  - merging multiple cells into one
  *  - cursors, if the grid consists of exactly one row or column (not compatible with merging cells)
  */
-class VISUALIZATIONBASE_API GridLayoutFormElement : public LayoutFormElement {
-		FLUENT_ELEMENT_INTERFACE(GridLayoutFormElement);
-		FLUENT_LAYOUT_INTERFACE(GridLayoutFormElement);
-
+class VISUALIZATIONBASE_API GridLayoutFormElement
+		: public SuperLayoutElement<GridLayoutFormElement, LayoutFormElement>
+{
 	public:
 		GridLayoutFormElement();
 		GridLayoutFormElement(const GridLayoutFormElement& other);

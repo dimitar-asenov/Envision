@@ -46,11 +46,9 @@ class FormElement;
  * Model::List, out of which the list of items then can be constructed by rendering each node with its default
  * visualization.
  */
-class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormElement
+class VISUALIZATIONBASE_API SequentialLayoutFormElement
+		: public SuperLayoutElement<SequentialLayoutFormElement, LayoutFormElement>
 {
-		FLUENT_ELEMENT_INTERFACE(SequentialLayoutFormElement);
-		FLUENT_LAYOUT_INTERFACE(SequentialLayoutFormElement);
-
 	public:
 		using ListNodeGetterFunction = std::function<Model::List*(Item* item)>;
 		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>(Item* item)>;

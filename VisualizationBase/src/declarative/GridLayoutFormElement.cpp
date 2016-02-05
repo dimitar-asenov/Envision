@@ -56,7 +56,8 @@ GridLayoutFormElement::GridLayoutFormElement()
 }
 
 
-GridLayoutFormElement::GridLayoutFormElement(const GridLayoutFormElement& other) : LayoutFormElement{other},
+GridLayoutFormElement::GridLayoutFormElement(const GridLayoutFormElement& other) :
+	SuperLayoutElement<GridLayoutFormElement, LayoutFormElement>{other},
 	// Copy everything and then clone all child FormElements
 	numColumns_{other.numColumns_},
 	numRows_{other.numRows_},

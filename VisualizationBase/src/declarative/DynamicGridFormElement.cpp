@@ -32,7 +32,8 @@
 namespace Visualization {
 
 
-DynamicGridFormElement::DynamicGridFormElement(const DynamicGridFormElement& other) : LayoutFormElement{other},
+DynamicGridFormElement::DynamicGridFormElement(const DynamicGridFormElement& other) :
+	SuperLayoutElement<DynamicGridFormElement, LayoutFormElement>{other},
 	nodesGetterFunction_{other.nodesGetterFunction_}, itemsGetterFunction_{other.itemsGetterFunction_},
 	spanGetterFunction_{other.spanGetterFunction_},
 	spaceBetweenColumns_{other.spaceBetweenColumns_}, spaceBetweenRows_{other.spaceBetweenRows_},
