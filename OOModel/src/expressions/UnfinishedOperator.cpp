@@ -32,11 +32,11 @@ template class Model::TypedList<OOModel::UnfinishedOperator>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(UnfinishedOperator)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(UnfinishedOperator)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(UnfinishedOperator)
 
-REGISTER_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
-REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
+DEFINE_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
 
 std::unique_ptr<Type> UnfinishedOperator::type()
 {

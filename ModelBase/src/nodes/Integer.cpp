@@ -33,7 +33,7 @@ template class Model::TypedList<Model::Integer>;
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(Integer)
 
 Integer::Integer(Node *parent) : Super{parent}, integer{0}
 {

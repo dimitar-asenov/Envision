@@ -31,8 +31,8 @@ template class Model::TypedList<OOModel::StatementItemList>;
 
 namespace OOModel {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(StatementItemList)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(StatementItemList)
+DEFINE_NODE_EMPTY_CONSTRUCTORS(StatementItemList)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(StatementItemList)
 
 bool StatementItemList::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const

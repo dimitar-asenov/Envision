@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::SynchronizedStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SynchronizedStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SynchronizedStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(SynchronizedStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(SynchronizedStatement)
 
-REGISTER_ATTRIBUTE(SynchronizedStatement, expression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(SynchronizedStatement, body, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(SynchronizedStatement, expression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(SynchronizedStatement, body, StatementItemList, false, false, true)
 
 }

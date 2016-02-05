@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::ArrayInitializer>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayInitializer)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayInitializer)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ArrayInitializer)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ArrayInitializer)
 
-REGISTER_ATTRIBUTE(ArrayInitializer, values, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(ArrayInitializer, values, TypedListOfExpression, false, false, true)
 
 std::unique_ptr<Type> ArrayInitializer::type()
 {

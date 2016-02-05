@@ -34,10 +34,10 @@ template class Model::TypedList<OOModel::ClassTypeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ClassTypeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ClassTypeExpression)
 
-REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
+DEFINE_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
 
 ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
 : Super(nullptr, ClassTypeExpression::getMetaData())

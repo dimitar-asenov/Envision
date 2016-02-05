@@ -36,8 +36,8 @@ template class Model::TypedList<OOModel::GlobalScopeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(GlobalScopeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(GlobalScopeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(GlobalScopeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(GlobalScopeExpression)
 
 std::unique_ptr<Type> GlobalScopeExpression::type()
 {

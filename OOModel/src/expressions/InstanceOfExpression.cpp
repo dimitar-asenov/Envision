@@ -31,11 +31,11 @@ template class Model::TypedList<OOModel::InstanceOfExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(InstanceOfExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(InstanceOfExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(InstanceOfExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(InstanceOfExpression)
 
-REGISTER_ATTRIBUTE(InstanceOfExpression, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(InstanceOfExpression, expr, Expression, false, false, true)
+DEFINE_ATTRIBUTE(InstanceOfExpression, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(InstanceOfExpression, expr, Expression, false, false, true)
 
 std::unique_ptr<Type> InstanceOfExpression::type()
 {

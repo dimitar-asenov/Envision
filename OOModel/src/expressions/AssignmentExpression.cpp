@@ -32,12 +32,12 @@ template class Model::TypedList<OOModel::AssignmentExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(AssignmentExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AssignmentExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(AssignmentExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(AssignmentExpression)
 
-REGISTER_ATTRIBUTE(AssignmentExpression, left, Expression, false, false, true)
-REGISTER_ATTRIBUTE(AssignmentExpression, right, Expression, false, false, true)
-REGISTER_ATTRIBUTE(AssignmentExpression, opr, Integer, false, false, true)
+DEFINE_ATTRIBUTE(AssignmentExpression, left, Expression, false, false, true)
+DEFINE_ATTRIBUTE(AssignmentExpression, right, Expression, false, false, true)
+DEFINE_ATTRIBUTE(AssignmentExpression, opr, Integer, false, false, true)
 
 AssignmentExpression::AssignmentExpression(const AssignmentTypes &op, Expression *left, Expression *right)
 : Super(nullptr, AssignmentExpression::getMetaData())

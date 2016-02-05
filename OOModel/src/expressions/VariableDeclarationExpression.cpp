@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::VariableDeclarationExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclarationExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclarationExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(VariableDeclarationExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(VariableDeclarationExpression)
 
-REGISTER_ATTRIBUTE(VariableDeclarationExpression, decl, VariableDeclaration, false, false, true)
+DEFINE_ATTRIBUTE(VariableDeclarationExpression, decl, VariableDeclaration, false, false, true)
 
 VariableDeclarationExpression::VariableDeclarationExpression(VariableDeclaration* variableDeclaration)
 : Super(nullptr, VariableDeclarationExpression::getMetaData())

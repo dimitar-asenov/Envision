@@ -31,8 +31,8 @@ template class Model::TypedList<TestNodes::BinaryNodePersistenceUnit>;
 
 namespace TestNodes {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodePersistenceUnit)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodePersistenceUnit)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(BinaryNodePersistenceUnit)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(BinaryNodePersistenceUnit)
 
 bool BinaryNodePersistenceUnit::isNewPersistenceUnit() const
 {

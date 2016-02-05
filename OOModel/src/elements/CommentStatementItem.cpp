@@ -31,9 +31,9 @@ template class Model::TypedList<OOModel::CommentStatementItem>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentStatementItem)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentStatementItem)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentStatementItem)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentStatementItem)
 
-REGISTER_ATTRIBUTE(CommentStatementItem, commentNode, CommentNode, false, false, true)
+DEFINE_ATTRIBUTE(CommentStatementItem, commentNode, CommentNode, false, false, true)
 
 }

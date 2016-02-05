@@ -46,8 +46,8 @@ template class Model::TypedList<OOModel::OOReference>;
 
 namespace OOModel {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference)
+DEFINE_NODE_EMPTY_CONSTRUCTORS(OOReference)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(OOReference)
 
 void OOReference::targetChanged(Node*)
 {

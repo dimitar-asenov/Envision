@@ -31,14 +31,14 @@ template class Model::TypedList<OOModel::LoopStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(LoopStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(LoopStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(LoopStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(LoopStatement)
 
-REGISTER_ATTRIBUTE(LoopStatement, condition, Expression, false, true, true)
-REGISTER_ATTRIBUTE(LoopStatement, initStep, Expression, false, true, true)
-REGISTER_ATTRIBUTE(LoopStatement, updateStep, Expression, false, true, true)
-REGISTER_ATTRIBUTE(LoopStatement, body, StatementItemList, false, false, true)
-REGISTER_ATTRIBUTE(LoopStatement, lpKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(LoopStatement, condition, Expression, false, true, true)
+DEFINE_ATTRIBUTE(LoopStatement, initStep, Expression, false, true, true)
+DEFINE_ATTRIBUTE(LoopStatement, updateStep, Expression, false, true, true)
+DEFINE_ATTRIBUTE(LoopStatement, body, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(LoopStatement, lpKind, Integer, false, false, true)
 
 LoopStatement::LoopStatement(LoopKind kind)
 : Super(nullptr, LoopStatement::getMetaData())

@@ -40,12 +40,12 @@ template class Model::TypedList<OOModel::MetaCallExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(MetaCallExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MetaCallExpression)
 
-REGISTER_ATTRIBUTE(MetaCallExpression, callee, Expression, false, false, true)
-REGISTER_ATTRIBUTE(MetaCallExpression, arguments, List, false, false, true)
-REGISTER_ATTRIBUTE(MetaCallExpression, cache, Node, false, true, false)
+DEFINE_ATTRIBUTE(MetaCallExpression, callee, Expression, false, false, true)
+DEFINE_ATTRIBUTE(MetaCallExpression, arguments, List, false, false, true)
+DEFINE_ATTRIBUTE(MetaCallExpression, cache, Node, false, true, false)
 
 MetaCallExpression::MetaCallExpression(const QString& name, Expression* referencePrefix)
 : Super(nullptr, MetaCallExpression::getMetaData())

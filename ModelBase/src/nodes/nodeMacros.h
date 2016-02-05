@@ -57,8 +57,6 @@
 		className* clone() const override;																										\
 		static className* createDefaultInstance(Node* parent = nullptr);																\
 
-/*********************************************************************************************************************/
-
 /**
  * Declares standard constructors and standard static methods for registering the constructors of a class inheriting
  * CompositeNode.
@@ -104,8 +102,6 @@
 				(::Model::CompositeIndex& index, const QString &attributeName, const QString &attributeType, 				\
 					bool canBePartiallyLoaded, bool isOptional, bool isPersistent);													\
 
-/*********************************************************************************************************************/
-
 /**
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
  *
@@ -114,14 +110,13 @@
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define NODE_DEFINE_EMPTY_CONSTRUCTORS(className)																							\
+#define DEFINE_NODE_EMPTY_CONSTRUCTORS(className)																							\
 	className::className(::Model::Node* parent) : Super{parent} {}																		\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
 		: Super {parent, store, loadPartially} {}																								\
 																																							\
 	className* className::clone() const { return new className{*this}; }
-/*********************************************************************************************************************/
 
 /**
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
@@ -132,7 +127,7 @@
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(className)																				\
+#define DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(className)																				\
 	className::className(::Model::Node* parent)																								\
 		: Super (parent, className::getMetaData()) {}																						\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
@@ -147,12 +142,11 @@
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially,						\
 			::Model::AttributeChain& metaData)																									\
 		: Super {parent, store, loadPartially, metaData} {}
-/*********************************************************************************************************************/
 
 /**
  * This is just the common subpart of the two macros below. Do not use it directly.
  */
-#define NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
+#define DEFINE_NODE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
 DEFINE_TYPE_ID_DERIVED(className, #className, )																								\
 																																							\
 void className::initType()																															\
@@ -174,11 +168,10 @@ void className::initType()																															\
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
-NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																					\
+#define DEFINE_NODE_TYPE_REGISTRATION_METHODS(className)																					\
+DEFINE_NODE_TYPE_REGISTRATION_METHODS_COMMON(className)																					\
 className* className::createDefaultInstance( Node* parent) { return new className{parent}; }									\
 
-/*********************************************************************************************************************/
 
 /**
  * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
@@ -194,14 +187,14 @@ className* className::createDefaultInstance( Node* parent) { return new classNam
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define NODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(className, proxyClassName)									\
-NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																					\
+#define DEFINE_NODE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(className, proxyClassName)									\
+DEFINE_NODE_TYPE_REGISTRATION_METHODS_COMMON(className)																					\
 className* className::createDefaultInstance( Node* parent) { return proxyClassName::createDefaultInstance(parent);}	\
 
 /**
  * This is just the common subpart of the two macros below. Do not use it directly.
  */
-#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)															\
+#define DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS_COMMON(className)															\
 DEFINE_TYPE_ID_DERIVED(className, #className, )																								\
 																																							\
 void className::initType()																															\
@@ -265,8 +258,8 @@ QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& className::attribu
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																		\
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
+#define DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(className)																		\
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
 className* className::createDefaultInstance( Node* parent) { return new className{parent}; }									\
 
 /**
@@ -283,11 +276,9 @@ className* className::createDefaultInstance( Node* parent) { return new classNam
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(className, proxyClassName)						\
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
+#define DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(className, proxyClassName)						\
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
 className* className::createDefaultInstance( Node* parent) { return proxyClassName::createDefaultInstance(parent);}	\
-
-/*********************************************************************************************************************/
 
 /**
  * Declares an attribute for a class inheriting from CompositeNode.
@@ -308,8 +299,6 @@ public:																																					\
 		void setMethodName(type* node) { set(name##Index, node); }																		\
 private:																																					\
 
-/*********************************************************************************************************************/
-
 /**
  * Declares a private attribute for a class inheriting from CompositeNode.
  *
@@ -328,8 +317,6 @@ private:																																					\
 		void setMethodName(type* node) { set(name##Index, node); }																		\
 private:																																					\
 
-/*********************************************************************************************************************/
-
 /**
  * INTERNAL
  *
@@ -343,7 +330,6 @@ private:																																					\
 		set(name##Index, node);																														\
 	}																																						\
 	node->set(val);
-/*********************************************************************************************************************/
 
 /**
  * INTERNAL
@@ -358,7 +344,6 @@ private:																																					\
 		self_->set(attr_[name##Index], node);																									\
 	}																																						\
 	node->set(val);
-/*********************************************************************************************************************/
 
 
 /**
@@ -389,7 +374,6 @@ public:																																					\
 		void setMethodName(const valueType& val) { SET_ATTR_VAL(type, name) }														\
 private:																																					\
 
-/*********************************************************************************************************************/
 
 /**
  * Declares a private attribute for a class inheriting from CompositeNode. The attribute must have a get() and a
@@ -418,7 +402,6 @@ private:																																					\
 		void setMethodName(const valueType& val) { SET_ATTR_VAL(type, name) }														\
 private:																																					\
 
-/*********************************************************************************************************************/
 
 /**
  * Declares an attribute for a class inheriting from CompositeNode. The attribute must have a get() and a set()
@@ -450,7 +433,6 @@ public:																																					\
 		void setMethodName(const valueType& val) { SET_ATTR_VAL(type, name) }														\
 private:																																					\
 
-/*********************************************************************************************************************/
 
  /**
   * Registers an attribute that was previously declared using an ATTRIBUTE macro or specified manually.
@@ -468,7 +450,7 @@ private:																																					\
   * @param persistent
   * 				Whether this attribute should be persisted when saving the object to a persistent store.
   */
- #define REGISTER_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)						\
+#define DEFINE_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)						\
 ::Model::CompositeIndex className::attributeName##Index = addAttributeToInitialRegistrationList_(							\
 		attributeName##Index, #attributeName, #attributeType, partial, optional, persistent);
 
@@ -503,7 +485,6 @@ public:																																					\
 	}																																						\
 																																							\
 private:
-/*********************************************************************************************************************/
 
 /**
  * Defines standard attributes and methods needed for each extension class.
@@ -535,8 +516,6 @@ void className::registerExtension()																												\
 	extensionId_ = ::Model::CompositeNode::registerExtensionId();																		\
 }																																							\
 
-/*********************************************************************************************************************/
-
 /**
  * Declares an attribute for a class providing an extension to CompositeNode.
  *
@@ -556,8 +535,6 @@ public:																																					\
 		void setMethodName(type* node) { self_->set(attr_[name##Index], node); }													\
 private:																																					\
 
-/*********************************************************************************************************************/
-
 /**
  * Declares a private attribute for a class providing an extension to CompositeNode.
  *
@@ -576,8 +553,6 @@ private:																																					\
 		type* name() { return static_cast< type* > (self_->get(attr_[name##Index])); }											\
 		void setMethodName(type* node) { self_->set(attr_[name##Index], node); }													\
 private:																																					\
-
-/*********************************************************************************************************************/
 
 /**
  * Declares an attribute for a class providing an extension to CompositeNode. The attribute must have a get() and
@@ -608,8 +583,6 @@ public:																																					\
 		void setMethodName##Node(type* node) { self_->set(attr_[name##Index], node); }											\
 private:																																					\
 
-/*********************************************************************************************************************/
-
 /**
  * Declares a private attribute for a class providing an extension to CompositeNode. The attribute must have a get()
  * and a set() method.
@@ -638,7 +611,6 @@ private:																																					\
 		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
 private:																																					\
 
-/*********************************************************************************************************************/
 /**
  * Declares an attribute for a class providing an extension to CompositeNode. The attribute must have a get() and
  * a set() method.
@@ -669,8 +641,6 @@ public:																																					\
 		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
 private:																																					\
 
-/*********************************************************************************************************************/
-
  /**
   * Registers an attribute for an extension that was previously declared e.g using an EXTENSION_ATTRIBUTE macro.
   *
@@ -687,8 +657,6 @@ private:																																					\
   * @param persistent
   * 				Whether this attribute should be persisted when saving the object to a persistent store.
   */
- #define REGISTER_EXTENSION_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)			\
+#define DEFINE_EXTENSION_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)			\
 int className::attributeName##Index = className::addAttributeToRegister_(															\
-	::Model::Attribute("_ext_" #className "_" #attributeName, #attributeType, optional, partial, persistent));			\
-
-/*********************************************************************************************************************/
+	::Model::Attribute("_ext_" #className "_" #attributeName, #attributeType, optional, partial, persistent));

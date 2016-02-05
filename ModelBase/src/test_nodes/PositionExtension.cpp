@@ -29,7 +29,7 @@
 namespace TestNodes {
 
 DEFINE_EXTENSION(PositionExtension)
-REGISTER_EXTENSION_ATTRIBUTE(PositionExtension, x, Integer, false, false, true)
-REGISTER_EXTENSION_ATTRIBUTE(PositionExtension, y, Integer, false, false, true)
+DEFINE_EXTENSION_ATTRIBUTE(PositionExtension, x, Integer, false, false, true)
+DEFINE_EXTENSION_ATTRIBUTE(PositionExtension, y, Integer, false, false, true)
 
 }

@@ -32,11 +32,11 @@ template class Model::TypedList<OOModel::ArrayTypeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayTypeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ArrayTypeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression)
 
-REGISTER_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(ArrayTypeExpression, fixedSize, Expression, false, true, true)
+DEFINE_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ArrayTypeExpression, fixedSize, Expression, false, true, true)
 
 std::unique_ptr<Type> ArrayTypeExpression::type()
 {

@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::TypeNameOperator>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeNameOperator)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeNameOperator)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(TypeNameOperator)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(TypeNameOperator)
 
-REGISTER_ATTRIBUTE(TypeNameOperator, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(TypeNameOperator, typeExpression, Expression, false, false, true)
 
 std::unique_ptr<Type> TypeNameOperator::type()
 {

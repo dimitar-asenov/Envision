@@ -31,17 +31,17 @@ template class Model::TypedList<Comments::CommentDiagramConnector>;
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
 
 // references for primitive types?
 CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)

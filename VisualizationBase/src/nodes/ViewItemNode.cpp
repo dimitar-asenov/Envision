@@ -36,7 +36,7 @@ template class Model::TypedList<Visualization::ViewItemNode>;
 
 namespace Visualization {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(ViewItemNode)
 
 ViewItemNode::ViewItemNode(Model::Node *)
 	:Super{}

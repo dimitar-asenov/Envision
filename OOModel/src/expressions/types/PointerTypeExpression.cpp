@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::PointerTypeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(PointerTypeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(PointerTypeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(PointerTypeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(PointerTypeExpression)
 
-REGISTER_ATTRIBUTE(PointerTypeExpression, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(PointerTypeExpression, typeExpression, Expression, false, false, true)
 
 PointerTypeExpression::PointerTypeExpression(Expression* expr)
 : Super(nullptr, PointerTypeExpression::getMetaData())

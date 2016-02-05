@@ -33,8 +33,8 @@ template class Model::TypedList<Model::NameText>;
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(NameText)
-NODE_DEFINE_EMPTY_CONSTRUCTORS(NameText)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(NameText)
+DEFINE_NODE_EMPTY_CONSTRUCTORS(NameText)
 
 NameText::NameText(const QString& text) : Super{text}{}
 

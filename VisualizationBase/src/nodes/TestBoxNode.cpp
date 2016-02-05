@@ -31,15 +31,15 @@ template class Model::TypedList<Visualization::TestBoxNode>;
 
 namespace Visualization {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TestBoxNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TestBoxNode)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(TestBoxNode)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(TestBoxNode)
 
-REGISTER_ATTRIBUTE(TestBoxNode, red, Integer, false, false, true)
-REGISTER_ATTRIBUTE(TestBoxNode, green, Integer, false, false, true)
-REGISTER_ATTRIBUTE(TestBoxNode, blue, Integer, false, false, true)
-REGISTER_ATTRIBUTE(TestBoxNode, sizeDependsOnParent, Boolean, false, false, true)
-REGISTER_ATTRIBUTE(TestBoxNode, isHtml, Boolean, false, false, true)
-REGISTER_ATTRIBUTE(TestBoxNode, label, Text, false, false, true)
+DEFINE_ATTRIBUTE(TestBoxNode, red, Integer, false, false, true)
+DEFINE_ATTRIBUTE(TestBoxNode, green, Integer, false, false, true)
+DEFINE_ATTRIBUTE(TestBoxNode, blue, Integer, false, false, true)
+DEFINE_ATTRIBUTE(TestBoxNode, sizeDependsOnParent, Boolean, false, false, true)
+DEFINE_ATTRIBUTE(TestBoxNode, isHtml, Boolean, false, false, true)
+DEFINE_ATTRIBUTE(TestBoxNode, label, Text, false, false, true)
 
 TestBoxNode::TestBoxNode(const QString& label, QColor color, bool sizeDependsOnParent, bool isHtml)
 : Super{nullptr, TestBoxNode::getMetaData()}

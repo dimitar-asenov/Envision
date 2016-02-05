@@ -45,13 +45,13 @@ template class Model::TypedList<OOModel::ReferenceExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ReferenceExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ReferenceExpression)
 
-REGISTER_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
-REGISTER_ATTRIBUTE(ReferenceExpression, typeArguments, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(ReferenceExpression, memKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
+DEFINE_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
+DEFINE_ATTRIBUTE(ReferenceExpression, typeArguments, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(ReferenceExpression, memKind, Integer, false, false, true)
 
 ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix, MemberKind kind)
 : Super(nullptr, ReferenceExpression::getMetaData())

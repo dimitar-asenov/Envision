@@ -31,11 +31,11 @@ template class Model::TypedList<OOModel::Enumerator>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Enumerator)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Enumerator)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Enumerator)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Enumerator)
 
 REGISTER_OONAME_SYMBOL_ATTRIBUTE(Enumerator, VARIABLE)
-REGISTER_ATTRIBUTE(Enumerator, value, Expression, false, true, true)
+DEFINE_ATTRIBUTE(Enumerator, value, Expression, false, true, true)
 
 Enumerator::Enumerator(const QString& name, Expression* value)
 : Super(nullptr, Enumerator::getMetaData())

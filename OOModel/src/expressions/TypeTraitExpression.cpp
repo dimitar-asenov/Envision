@@ -34,11 +34,11 @@ template class Model::TypedList<OOModel::TypeTraitExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeTraitExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeTraitExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(TypeTraitExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(TypeTraitExpression)
 
-REGISTER_ATTRIBUTE(TypeTraitExpression, operand, Expression, false, false, true)
-REGISTER_ATTRIBUTE(TypeTraitExpression, ttKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(TypeTraitExpression, operand, Expression, false, false, true)
+DEFINE_ATTRIBUTE(TypeTraitExpression, ttKind, Integer, false, false, true)
 
 TypeTraitExpression::TypeTraitExpression(TypeTraitKind kind, Expression* expr)
 : Super(nullptr, TypeTraitExpression::getMetaData())

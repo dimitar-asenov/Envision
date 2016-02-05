@@ -33,11 +33,11 @@ template class Model::TypedList<OOModel::NameImport>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NameImport)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NameImport)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(NameImport)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NameImport)
 
-REGISTER_ATTRIBUTE(NameImport, importedName, Expression, false, false, true)
-REGISTER_ATTRIBUTE(NameImport, importAll, Boolean, false, false, true)
+DEFINE_ATTRIBUTE(NameImport, importedName, Expression, false, false, true)
+DEFINE_ATTRIBUTE(NameImport, importAll, Boolean, false, false, true)
 
 NameImport::NameImport(Expression *importedName, bool importAllChildrenInScope)
 : Super(nullptr, NameImport::getMetaData())

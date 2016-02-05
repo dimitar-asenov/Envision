@@ -31,10 +31,10 @@ template class Model::TypedList<InformationScripting::CommandArgument>;
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandArgument)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandArgument)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommandArgument)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommandArgument)
 
-REGISTER_ATTRIBUTE(CommandArgument, argument, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommandArgument, argument, Text, false, false, true)
 
 CommandArgument::CommandArgument(const QString& argument) : Super(nullptr, CommandArgument::getMetaData())
 {

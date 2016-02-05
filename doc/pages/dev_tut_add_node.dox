@@ -56,12 +56,12 @@ Node - \c NODE_DECLARE_STANDARD_METHODS. Each of these macros needs to be comple
 .cpp file:
 
 For \c COMPOSITENODE_DECLARE_STANDARD_METHODS:
-	- \c COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS
-	- \c COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS
+	- \c DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS
+	- \c COMPOSITEDEFINE_NODE_TYPE_REGISTRATION_METHODS
 
 For \c NODE_DECLARE_STANDARD_METHODS:
-	- \c NODE_DEFINE_EMPTY_CONSTRUCTORS
-	- \c NODE_DEFINE_TYPE_REGISTRATION_METHODS
+	- \c DEFINE_NODE_EMPTY_CONSTRUCTORS
+	- \c DEFINE_NODE_TYPE_REGISTRATION_METHODS
 
 Together these macros save us a ton of writing. They declare many methods for the new node type and setup
 required data structures. At some point there was an attempt to translate their functionality to templates

@@ -32,14 +32,14 @@ template class Model::TypedList<OOModel::LambdaExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(LambdaExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(LambdaExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(LambdaExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(LambdaExpression)
 
-REGISTER_ATTRIBUTE(LambdaExpression, body, StatementItemList, false, false, true)
-REGISTER_ATTRIBUTE(LambdaExpression, arguments, TypedListOfFormalArgument, false, false, true)
-REGISTER_ATTRIBUTE(LambdaExpression, captures, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(LambdaExpression, dCaptureType, Integer, false, false, true)
-REGISTER_ATTRIBUTE(LambdaExpression, results, TypedListOfFormalResult, false, false, true)
+DEFINE_ATTRIBUTE(LambdaExpression, body, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(LambdaExpression, arguments, TypedListOfFormalArgument, false, false, true)
+DEFINE_ATTRIBUTE(LambdaExpression, captures, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(LambdaExpression, dCaptureType, Integer, false, false, true)
+DEFINE_ATTRIBUTE(LambdaExpression, results, TypedListOfFormalResult, false, false, true)
 
 std::unique_ptr<Type> LambdaExpression::type()
 {

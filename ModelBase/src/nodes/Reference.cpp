@@ -35,7 +35,7 @@ template class Model::TypedList<Model::Reference>;
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(Reference)
 
 QList<Reference*> Reference::allReferences_;
 QSet<Reference*> Reference::pendingResolution_;

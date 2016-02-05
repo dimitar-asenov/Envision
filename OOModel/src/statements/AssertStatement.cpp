@@ -30,10 +30,10 @@ template class Model::TypedList<OOModel::AssertStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(AssertStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AssertStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(AssertStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(AssertStatement)
 
-REGISTER_ATTRIBUTE(AssertStatement, expression, Expression, false, true, true)
-REGISTER_ATTRIBUTE(AssertStatement, aKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(AssertStatement, expression, Expression, false, true, true)
+DEFINE_ATTRIBUTE(AssertStatement, aKind, Integer, false, false, true)
 
 }

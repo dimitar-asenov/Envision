@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::FloatLiteral>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FloatLiteral)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FloatLiteral)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(FloatLiteral)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FloatLiteral)
 
-REGISTER_ATTRIBUTE(FloatLiteral, value, Text, false, false, true)
+DEFINE_ATTRIBUTE(FloatLiteral, value, Text, false, false, true)
 
 FloatLiteral::FloatLiteral(double value) : Super{nullptr, FloatLiteral::getMetaData()}
 {

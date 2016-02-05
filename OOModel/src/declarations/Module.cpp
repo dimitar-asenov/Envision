@@ -31,15 +31,15 @@ template class Model::TypedList<OOModel::Module>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Module)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Module)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Module)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Module)
 
-REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
-REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
-REGISTER_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
-REGISTER_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
-REGISTER_ATTRIBUTE(Module, libraries, TypedListOfUsedLibrary, false, false, true)
-REGISTER_ATTRIBUTE(Module, modKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
+DEFINE_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
+DEFINE_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
+DEFINE_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
+DEFINE_ATTRIBUTE(Module, libraries, TypedListOfUsedLibrary, false, false, true)
+DEFINE_ATTRIBUTE(Module, modKind, Integer, false, false, true)
 
 Module::Module(const QString& name, ModuleKind kind) : Super(nullptr, Module::getMetaData())
 {

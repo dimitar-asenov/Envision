@@ -47,7 +47,6 @@ public:																																					\
 	static StyleSet<ShapeClass>& itemStyles();																								\
 																																							\
 private:
-/**********************************************************************************************************************/
 
 /**
  * Defines standard methods that every shape should implement. These include class name information and style handling.
@@ -56,7 +55,6 @@ private:
  * 			The name of the class being defined. This class must inherit from from Shape, directly or indirectly.
  */
 #define SHAPE_COMMON( ShapeClass ) SHAPE_COMMON_CUSTOM_STYLENAME(ShapeClass, ShapeClass##Style)
-/**********************************************************************************************************************/
 
 /**
  * Defines standard methods and members that every shape should implement.
@@ -88,4 +86,3 @@ StyleSet<ShapeClass>& ShapeClass::itemStyles()																								\
 	static StyleSet<ShapeClass> styles(QString(classType));																				\
 	return styles;																																		\
 }
-/**********************************************************************************************************************/

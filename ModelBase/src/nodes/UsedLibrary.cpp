@@ -34,10 +34,10 @@ template class Model::TypedList<Model::UsedLibrary>;
 
 namespace Model {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(UsedLibrary)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(UsedLibrary)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(UsedLibrary)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(UsedLibrary)
 
-REGISTER_ATTRIBUTE(UsedLibrary, name, Text, false, false, true)
+DEFINE_ATTRIBUTE(UsedLibrary, name, Text, false, false, true)
 
 UsedLibrary::UsedLibrary(const QString& name) : Super(nullptr, UsedLibrary::getMetaData())
 {

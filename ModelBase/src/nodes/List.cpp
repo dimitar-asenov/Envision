@@ -32,7 +32,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(List)
 
 List::List(Node *parent) : Super{parent}
 {

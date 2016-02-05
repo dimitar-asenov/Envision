@@ -31,9 +31,9 @@ template class Model::TypedList<OOModel::Block>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Block)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Block)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Block)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Block)
 
-REGISTER_ATTRIBUTE(Block, items, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(Block, items, StatementItemList, false, false, true)
 
 }

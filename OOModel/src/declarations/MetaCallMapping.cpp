@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::MetaCallMapping>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallMapping)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallMapping)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(MetaCallMapping)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MetaCallMapping)
 
-REGISTER_ATTRIBUTE(MetaCallMapping, value, ReferenceExpression, false, false, true)
+DEFINE_ATTRIBUTE(MetaCallMapping, value, ReferenceExpression, false, false, true)
 
 MetaCallMapping::MetaCallMapping(const QString& name) : Super(nullptr, MetaCallMapping::getMetaData())
 {

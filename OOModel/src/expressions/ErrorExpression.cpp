@@ -32,12 +32,12 @@ template class Model::TypedList<OOModel::ErrorExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ErrorExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ErrorExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ErrorExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ErrorExpression)
 
-REGISTER_ATTRIBUTE(ErrorExpression, prefix, Text, false, false, true)
-REGISTER_ATTRIBUTE(ErrorExpression, arg, Expression, false, false, true)
-REGISTER_ATTRIBUTE(ErrorExpression, postfix, Text, false, false, true)
+DEFINE_ATTRIBUTE(ErrorExpression, prefix, Text, false, false, true)
+DEFINE_ATTRIBUTE(ErrorExpression, arg, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ErrorExpression, postfix, Text, false, false, true)
 
 std::unique_ptr<Type> ErrorExpression::type()
 {

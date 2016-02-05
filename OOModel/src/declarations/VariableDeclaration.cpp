@@ -31,11 +31,11 @@ template class Model::TypedList<OOModel::VariableDeclaration>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclaration)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(VariableDeclaration)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(VariableDeclaration)
 
-REGISTER_ATTRIBUTE(VariableDeclaration, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, true, true, true)
+DEFINE_ATTRIBUTE(VariableDeclaration, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(VariableDeclaration, initialValue, Expression, true, true, true)
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type)
 : Super(nullptr, VariableDeclaration::getMetaData())

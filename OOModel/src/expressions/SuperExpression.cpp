@@ -33,8 +33,8 @@ template class Model::TypedList<OOModel::SuperExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SuperExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SuperExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(SuperExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(SuperExpression)
 
 std::unique_ptr<Type> SuperExpression::type()
 {

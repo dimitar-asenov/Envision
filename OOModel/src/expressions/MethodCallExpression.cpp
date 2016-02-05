@@ -38,12 +38,12 @@ template class Model::TypedList<OOModel::MethodCallExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(MethodCallExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MethodCallExpression)
 
-REGISTER_ATTRIBUTE(MethodCallExpression, callee, Expression, false, false, true)
-REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(MethodCallExpression, cKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(MethodCallExpression, callee, Expression, false, false, true)
+DEFINE_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(MethodCallExpression, cKind, Integer, false, false, true)
 
 MethodCallExpression::MethodCallExpression(const QString& name, Expression* referencePrefix)
 : Super(nullptr, MethodCallExpression::getMetaData())

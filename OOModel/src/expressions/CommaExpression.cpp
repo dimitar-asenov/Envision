@@ -33,11 +33,11 @@ template class Model::TypedList<OOModel::CommaExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommaExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommaExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommaExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommaExpression)
 
-REGISTER_ATTRIBUTE(CommaExpression, left, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CommaExpression, right, Expression, false, false, true)
+DEFINE_ATTRIBUTE(CommaExpression, left, Expression, false, false, true)
+DEFINE_ATTRIBUTE(CommaExpression, right, Expression, false, false, true)
 
 CommaExpression::CommaExpression(Expression* left, Expression* right)
 : Super(nullptr, CommaExpression::getMetaData())

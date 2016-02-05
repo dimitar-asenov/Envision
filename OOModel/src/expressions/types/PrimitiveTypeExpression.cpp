@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::PrimitiveTypeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(PrimitiveTypeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(PrimitiveTypeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression)
 
-REGISTER_ATTRIBUTE(PrimitiveTypeExpression, val, Integer, false, false, true)
+DEFINE_ATTRIBUTE(PrimitiveTypeExpression, val, Integer, false, false, true)
 
 PrimitiveTypeExpression::PrimitiveTypeExpression(const PrimitiveTypes& type)
 : Super(nullptr, PrimitiveTypeExpression::getMetaData())

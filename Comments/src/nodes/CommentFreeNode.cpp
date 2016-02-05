@@ -32,11 +32,11 @@ template class Model::TypedList<Comments::CommentFreeNode>;
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentFreeNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentFreeNode)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentFreeNode)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentFreeNode)
 
-REGISTER_ATTRIBUTE(CommentFreeNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentFreeNode, node, Node, false, true, true)
+DEFINE_ATTRIBUTE(CommentFreeNode, name, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentFreeNode, node, Node, false, true, true)
 
 CommentFreeNode::CommentFreeNode(Node *parent, QString name) : Super(parent, CommentFreeNode::getMetaData())
 {

@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::SwitchStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SwitchStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(SwitchStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(SwitchStatement)
 
-REGISTER_ATTRIBUTE(SwitchStatement, switchExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(SwitchStatement, body, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(SwitchStatement, switchExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(SwitchStatement, body, StatementItemList, false, false, true)
 
 }

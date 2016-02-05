@@ -39,8 +39,8 @@ template class Model::TypedList<OOModel::AutoTypeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(AutoTypeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(AutoTypeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 
 std::unique_ptr<Type> AutoTypeExpression::type()
 {

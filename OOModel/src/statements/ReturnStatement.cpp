@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::ReturnStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ReturnStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReturnStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ReturnStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ReturnStatement)
 
-REGISTER_ATTRIBUTE(ReturnStatement, values, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(ReturnStatement, values, TypedListOfExpression, false, false, true)
 
 ReturnStatement::ReturnStatement(Expression* firstReturnValue)
 : Super(nullptr, ReturnStatement::getMetaData())

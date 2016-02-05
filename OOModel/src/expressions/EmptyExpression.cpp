@@ -32,8 +32,8 @@ template class Model::TypedList<OOModel::EmptyExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(EmptyExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(EmptyExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(EmptyExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(EmptyExpression)
 
 std::unique_ptr<Type> EmptyExpression::type()
 {

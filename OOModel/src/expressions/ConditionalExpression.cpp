@@ -32,12 +32,12 @@ template class Model::TypedList<OOModel::ConditionalExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ConditionalExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ConditionalExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ConditionalExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ConditionalExpression)
 
-REGISTER_ATTRIBUTE(ConditionalExpression, condition, Expression, false, false, true)
-REGISTER_ATTRIBUTE(ConditionalExpression, trueExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(ConditionalExpression, falseExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ConditionalExpression, condition, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ConditionalExpression, trueExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ConditionalExpression, falseExpression, Expression, false, false, true)
 
 std::unique_ptr<Type> ConditionalExpression::type()
 {

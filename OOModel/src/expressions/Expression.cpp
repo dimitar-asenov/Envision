@@ -33,8 +33,8 @@ template class Model::TypedList<OOModel::Expression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Expression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(Expression, EmptyExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Expression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(Expression, EmptyExpression)
 
 std::unique_ptr<Type> Expression::type()
 {

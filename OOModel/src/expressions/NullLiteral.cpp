@@ -32,8 +32,8 @@ template class Model::TypedList<OOModel::NullLiteral>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NullLiteral)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NullLiteral)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(NullLiteral)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NullLiteral)
 
 std::unique_ptr<Type> NullLiteral::type()
 {

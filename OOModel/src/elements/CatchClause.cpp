@@ -31,11 +31,11 @@ template class Model::TypedList<OOModel::CatchClause>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CatchClause)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CatchClause)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CatchClause)
 
-REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
-REGISTER_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
+DEFINE_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
 
 bool CatchClause::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const

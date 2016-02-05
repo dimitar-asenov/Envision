@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::ExplicitTemplateInstantiation>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ExplicitTemplateInstantiation)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExplicitTemplateInstantiation)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ExplicitTemplateInstantiation)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ExplicitTemplateInstantiation)
 
-REGISTER_ATTRIBUTE(ExplicitTemplateInstantiation, instantiatedClass, ReferenceExpression, false, false, true)
+DEFINE_ATTRIBUTE(ExplicitTemplateInstantiation, instantiatedClass, ReferenceExpression, false, false, true)
 
 ExplicitTemplateInstantiation::ExplicitTemplateInstantiation(ReferenceExpression* instantiatedClass)
 : Super(nullptr, ExplicitTemplateInstantiation::getMetaData())

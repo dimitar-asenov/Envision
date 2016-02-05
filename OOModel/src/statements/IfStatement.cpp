@@ -31,12 +31,12 @@ template class Model::TypedList<OOModel::IfStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(IfStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(IfStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(IfStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(IfStatement)
 
-REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
-REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
-REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
+DEFINE_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
 
 bool IfStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const

@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::StringLiteral>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(StringLiteral)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(StringLiteral)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(StringLiteral)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(StringLiteral)
 
-REGISTER_ATTRIBUTE(StringLiteral, value, Text, false, false, true)
+DEFINE_ATTRIBUTE(StringLiteral, value, Text, false, false, true)
 
 StringLiteral::StringLiteral(const QString& value)
 : Super(nullptr, StringLiteral::getMetaData())

@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::IntegerLiteral>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(IntegerLiteral)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(IntegerLiteral)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(IntegerLiteral)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(IntegerLiteral)
 
-REGISTER_ATTRIBUTE(IntegerLiteral, value, Text, false, false, true)
+DEFINE_ATTRIBUTE(IntegerLiteral, value, Text, false, false, true)
 
 IntegerLiteral::IntegerLiteral(int value) : Super{nullptr, IntegerLiteral::getMetaData()}
 {

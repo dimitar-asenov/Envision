@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::DeclarationStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(DeclarationStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeclarationStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(DeclarationStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(DeclarationStatement)
 
-REGISTER_ATTRIBUTE(DeclarationStatement, declaration, Declaration, false, false, true)
+DEFINE_ATTRIBUTE(DeclarationStatement, declaration, Declaration, false, false, true)
 
 DeclarationStatement::DeclarationStatement(Declaration* d)
 : Super(nullptr, DeclarationStatement::getMetaData())

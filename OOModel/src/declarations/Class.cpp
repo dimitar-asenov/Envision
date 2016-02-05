@@ -35,17 +35,17 @@ template class Model::TypedList<OOModel::Class>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Class)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Class)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Class)
 
-REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(Class, friends, TypedListOfDeclaration, false, false, true)
-REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
-REGISTER_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
-REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
-REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
-REGISTER_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
-REGISTER_ATTRIBUTE(Class, cKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(Class, friends, TypedListOfDeclaration, false, false, true)
+DEFINE_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
+DEFINE_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
+DEFINE_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
+DEFINE_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
+DEFINE_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
+DEFINE_ATTRIBUTE(Class, cKind, Integer, false, false, true)
 
 Class::Class(const QString& name)
 : Super(nullptr, Class::getMetaData())

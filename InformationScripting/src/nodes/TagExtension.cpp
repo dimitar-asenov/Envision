@@ -30,6 +30,6 @@ namespace InformationScripting {
 
 DEFINE_EXTENSION(TagExtension)
 
-REGISTER_EXTENSION_ATTRIBUTE(TagExtension, tags, TypedListOfText, false, true, true)
+DEFINE_EXTENSION_ATTRIBUTE(TagExtension, tags, TypedListOfText, false, true, true)
 
 }

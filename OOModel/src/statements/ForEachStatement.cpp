@@ -31,13 +31,13 @@ template class Model::TypedList<OOModel::ForEachStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ForEachStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ForEachStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ForEachStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ForEachStatement)
 
-REGISTER_ATTRIBUTE(ForEachStatement, varName, NameText, false, false, true)
-REGISTER_ATTRIBUTE(ForEachStatement, varType, Expression, false, true, true)
-REGISTER_ATTRIBUTE(ForEachStatement, collection, Expression, false, false, true)
-REGISTER_ATTRIBUTE(ForEachStatement, body, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(ForEachStatement, varName, NameText, false, false, true)
+DEFINE_ATTRIBUTE(ForEachStatement, varType, Expression, false, true, true)
+DEFINE_ATTRIBUTE(ForEachStatement, collection, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ForEachStatement, body, StatementItemList, false, false, true)
 
 bool ForEachStatement::definesSymbol() const
 {

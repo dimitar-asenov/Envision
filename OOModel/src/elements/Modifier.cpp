@@ -34,7 +34,7 @@ template class Model::TypedList<OOModel::Modifier>;
 
 namespace OOModel {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Modifier)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(Modifier)
 
 Modifier::Modifier(Model::Node *parent)
 : Super{parent}

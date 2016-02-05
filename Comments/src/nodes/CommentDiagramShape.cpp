@@ -32,20 +32,20 @@ template class Model::TypedList<Comments::CommentDiagramShape>;
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramShape)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramShape)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentDiagramShape)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentDiagramShape)
 
-REGISTER_ATTRIBUTE(CommentDiagramShape, label, CommentText, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, x, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, y, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, width, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, height, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, shapeTypePrivate, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, shapeColor, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, textColor, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, backgroundColor, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramShape, outlineSize, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, label, CommentText, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, x, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, y, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, width, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, height, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, shapeTypePrivate, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, shapeColor, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, textColor, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, backgroundColor, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, outlineTypeStore, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagramShape, outlineSize, Integer, false, false, true)
 
 CommentDiagramShape::CommentDiagramShape(int x, int y, int width, int height, ShapeType shapeType)
 	: Super{nullptr, CommentDiagramShape::getMetaData()}

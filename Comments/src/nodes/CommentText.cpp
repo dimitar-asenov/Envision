@@ -31,8 +31,8 @@ template class Model::TypedList<Comments::CommentText>;
 
 namespace Comments {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentText)
-NODE_DEFINE_EMPTY_CONSTRUCTORS(CommentText)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(CommentText)
+DEFINE_NODE_EMPTY_CONSTRUCTORS(CommentText)
 
 CommentText::CommentText(const QString& text) : Super{text}{}
 

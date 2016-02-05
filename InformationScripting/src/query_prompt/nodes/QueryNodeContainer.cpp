@@ -31,9 +31,9 @@ template class Model::TypedList<InformationScripting::QueryNodeContainer>;
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(QueryNodeContainer)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(QueryNodeContainer)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(QueryNodeContainer)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(QueryNodeContainer)
 
-REGISTER_ATTRIBUTE(QueryNodeContainer, query, QueryNode, false, false, true)
+DEFINE_ATTRIBUTE(QueryNodeContainer, query, QueryNode, false, false, true)
 
 }

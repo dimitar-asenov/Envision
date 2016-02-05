@@ -35,10 +35,10 @@ template class Model::TypedList<OOModel::FormalArgument>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalArgument)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(FormalArgument)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FormalArgument)
 
-REGISTER_ATTRIBUTE(FormalArgument, directionInt, Integer, false, false, true)
+DEFINE_ATTRIBUTE(FormalArgument, directionInt, Integer, false, false, true)
 
 FormalArgument::FormalArgument(const QString& name, Expression* type, const Direction& direction)
 : Super(nullptr, FormalArgument::getMetaData())

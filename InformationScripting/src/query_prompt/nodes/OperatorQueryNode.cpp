@@ -31,11 +31,11 @@ template class Model::TypedList<InformationScripting::OperatorQueryNode>;
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(OperatorQueryNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(OperatorQueryNode)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(OperatorQueryNode)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(OperatorQueryNode)
 
-REGISTER_ATTRIBUTE(OperatorQueryNode, left, QueryNode, false, false, true)
-REGISTER_ATTRIBUTE(OperatorQueryNode, right, QueryNode, false, false, true)
-REGISTER_ATTRIBUTE(OperatorQueryNode, opr, Character, false, false, true)
+DEFINE_ATTRIBUTE(OperatorQueryNode, left, QueryNode, false, false, true)
+DEFINE_ATTRIBUTE(OperatorQueryNode, right, QueryNode, false, false, true)
+DEFINE_ATTRIBUTE(OperatorQueryNode, opr, Character, false, false, true)
 
 }

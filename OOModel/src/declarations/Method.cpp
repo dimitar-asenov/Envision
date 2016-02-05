@@ -35,16 +35,16 @@ template class Model::TypedList<OOModel::Method>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Method)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Method)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Method)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Method)
 
-REGISTER_ATTRIBUTE(Method, items, StatementItemList, true, false, true)
-REGISTER_ATTRIBUTE(Method, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
-REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
-REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
-REGISTER_ATTRIBUTE(Method, memberInitializers, TypedListOfMemberInitializer, false, false, true)
-REGISTER_ATTRIBUTE(Method, throws, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(Method, mthKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(Method, items, StatementItemList, true, false, true)
+DEFINE_ATTRIBUTE(Method, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
+DEFINE_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
+DEFINE_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
+DEFINE_ATTRIBUTE(Method, memberInitializers, TypedListOfMemberInitializer, false, false, true)
+DEFINE_ATTRIBUTE(Method, throws, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(Method, mthKind, Integer, false, false, true)
 
 Method::Method(const QString& name) : Super(nullptr, Method::getMetaData())
 {

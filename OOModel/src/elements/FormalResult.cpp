@@ -31,11 +31,11 @@ template class Model::TypedList<OOModel::FormalResult>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalResult)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalResult)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(FormalResult)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FormalResult)
 
 REGISTER_OONAME_NOSYMBOL_ATTRIBUTE(FormalResult)
-REGISTER_ATTRIBUTE(FormalResult, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(FormalResult, typeExpression, Expression, false, false, true)
 
 FormalResult::FormalResult(const QString& name, Expression* type)
 : Super(nullptr, FormalResult::getMetaData())

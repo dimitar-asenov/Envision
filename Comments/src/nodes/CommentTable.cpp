@@ -32,13 +32,13 @@ template class Model::TypedList<Comments::CommentTable>;
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentTable)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentTable)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentTable)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentTable)
 
-REGISTER_ATTRIBUTE(CommentTable, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, rowCount, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, columnCount, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, nodes, TypedListOfCommentFreeNode, false, false, true)
+DEFINE_ATTRIBUTE(CommentTable, name, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentTable, rowCount, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentTable, columnCount, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentTable, nodes, TypedListOfCommentFreeNode, false, false, true)
 
 CommentTable::CommentTable(Node *parent, QString name, int rowCount, int columnCount)
 	: Super(parent, CommentTable::getMetaData())

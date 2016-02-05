@@ -33,11 +33,11 @@ template class Model::TypedList<OOModel::ReferenceTypeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceTypeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceTypeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ReferenceTypeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ReferenceTypeExpression)
 
-REGISTER_ATTRIBUTE(ReferenceTypeExpression, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(ReferenceTypeExpression, isRValueReference, Boolean, false, false, true)
+DEFINE_ATTRIBUTE(ReferenceTypeExpression, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ReferenceTypeExpression, isRValueReference, Boolean, false, false, true)
 
 ReferenceTypeExpression::ReferenceTypeExpression(Expression* ref, bool rValue)
 : Super(nullptr, ReferenceTypeExpression::getMetaData())

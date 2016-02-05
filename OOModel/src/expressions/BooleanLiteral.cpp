@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::BooleanLiteral>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BooleanLiteral)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BooleanLiteral)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(BooleanLiteral)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(BooleanLiteral)
 
-REGISTER_ATTRIBUTE(BooleanLiteral, value, Boolean, false, false, true)
+DEFINE_ATTRIBUTE(BooleanLiteral, value, Boolean, false, false, true)
 
 BooleanLiteral::BooleanLiteral(bool value)
 : Super(nullptr, BooleanLiteral::getMetaData())

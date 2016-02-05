@@ -32,11 +32,11 @@ template class Model::TypedList<OOModel::TypeAlias>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeAlias)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeAlias)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(TypeAlias)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(TypeAlias)
 
-REGISTER_ATTRIBUTE(TypeAlias, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(TypeAlias, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
+DEFINE_ATTRIBUTE(TypeAlias, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(TypeAlias, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 
 TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
 : Super(nullptr, TypeAlias::getMetaData())

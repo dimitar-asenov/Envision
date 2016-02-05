@@ -31,11 +31,11 @@ template class Model::TypedList<OOModel::TypeQualifierExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeQualifierExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeQualifierExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(TypeQualifierExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(TypeQualifierExpression)
 
-REGISTER_ATTRIBUTE(TypeQualifierExpression, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(TypeQualifierExpression, qualifierVal, Integer, false, false, true)
+DEFINE_ATTRIBUTE(TypeQualifierExpression, typeExpression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(TypeQualifierExpression, qualifierVal, Integer, false, false, true)
 
 TypeQualifierExpression::TypeQualifierExpression(Qualifier q, Expression* e)
 : Super(nullptr, TypeQualifierExpression::getMetaData())

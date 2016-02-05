@@ -33,11 +33,11 @@ template class Model::TypedList<OOModel::DeleteExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(DeleteExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeleteExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(DeleteExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(DeleteExpression)
 
-REGISTER_ATTRIBUTE(DeleteExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(DeleteExpression, isArray, Boolean, false, false, true)
+DEFINE_ATTRIBUTE(DeleteExpression, expr, Expression, false, false, true)
+DEFINE_ATTRIBUTE(DeleteExpression, isArray, Boolean, false, false, true)
 
 DeleteExpression::DeleteExpression(bool isArrayType)
 : Super(nullptr, DeleteExpression::getMetaData())

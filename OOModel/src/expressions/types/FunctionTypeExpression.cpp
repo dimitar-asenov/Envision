@@ -33,11 +33,11 @@ template class Model::TypedList<OOModel::FunctionTypeExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FunctionTypeExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FunctionTypeExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(FunctionTypeExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FunctionTypeExpression)
 
-REGISTER_ATTRIBUTE(FunctionTypeExpression, arguments, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(FunctionTypeExpression, results, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(FunctionTypeExpression, arguments, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(FunctionTypeExpression, results, TypedListOfExpression, false, false, true)
 
 FunctionTypeExpression::FunctionTypeExpression(const QList<Expression*>& args,
 		const QList<Expression*>& res)

@@ -34,8 +34,8 @@ template class Model::TypedList<OOModel::ThisExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ThisExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThisExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ThisExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ThisExpression)
 
 std::unique_ptr<Type> ThisExpression::type()
 {

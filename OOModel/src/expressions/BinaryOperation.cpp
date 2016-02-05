@@ -35,12 +35,12 @@ template class Model::TypedList<OOModel::BinaryOperation>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryOperation)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryOperation)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(BinaryOperation)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(BinaryOperation)
 
-REGISTER_ATTRIBUTE(BinaryOperation, left, Expression, false, false, true)
-REGISTER_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)
-REGISTER_ATTRIBUTE(BinaryOperation, opr, Integer, false, false, true)
+DEFINE_ATTRIBUTE(BinaryOperation, left, Expression, false, false, true)
+DEFINE_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)
+DEFINE_ATTRIBUTE(BinaryOperation, opr, Integer, false, false, true)
 
 BinaryOperation::BinaryOperation(OperatorTypes op, Expression* left, Expression* right)
 : Super(nullptr, BinaryOperation::getMetaData())

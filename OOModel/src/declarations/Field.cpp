@@ -31,8 +31,8 @@ template class Model::TypedList<OOModel::Field>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Field)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Field)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Field)
 
 Field::Field(const QString& name, Expression* type)
 : Super(nullptr, Field::getMetaData())

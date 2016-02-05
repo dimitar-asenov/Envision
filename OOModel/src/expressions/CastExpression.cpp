@@ -32,12 +32,12 @@ template class Model::TypedList<OOModel::CastExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CastExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CastExpression)
 
-REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
+DEFINE_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
+DEFINE_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
 
 std::unique_ptr<Type> CastExpression::type()
 {

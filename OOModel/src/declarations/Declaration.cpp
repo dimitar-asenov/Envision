@@ -32,14 +32,14 @@ template class Model::TypedList<OOModel::Declaration>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Declaration)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Declaration)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Declaration)
 
 REGISTER_OONAME_SYMBOL_ATTRIBUTE(Declaration, UNSPECIFIED)
-REGISTER_ATTRIBUTE(Declaration, modifiers, Modifier, false, false, true)
-REGISTER_ATTRIBUTE(Declaration, annotations, StatementItemList, false, false, true)
-REGISTER_ATTRIBUTE(Declaration, subDeclarations, TypedListOfDeclaration, false, false, true)
-REGISTER_ATTRIBUTE(Declaration, metaCalls, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(Declaration, modifiers, Modifier, false, false, true)
+DEFINE_ATTRIBUTE(Declaration, annotations, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(Declaration, subDeclarations, TypedListOfDeclaration, false, false, true)
+DEFINE_ATTRIBUTE(Declaration, metaCalls, TypedListOfExpression, false, false, true)
 
 Declaration::Declaration(const QString& name)
 : Super(nullptr, Declaration::getMetaData())

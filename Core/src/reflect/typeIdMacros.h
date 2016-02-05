@@ -61,8 +61,6 @@
 	private:																																				\
 		static int typeId_;																															\
 
-/**********************************************************************************************************************/
-
 /***********************************************************************************************************************
  * A specialized version of DECLARE_TYPE_ID_COMMON that should be used with classes which inherit from a TYPE_ID enabled
  * class.
@@ -75,7 +73,6 @@
  * 	...
  */
 #define DECLARE_TYPE_ID DECLARE_TYPE_ID_COMMON(override)
-/**********************************************************************************************************************/
 
 /***********************************************************************************************************************
  * A specialized version of DECLARE_TYPE_ID_COMMON that should be used with classes that are at the top of the
@@ -89,7 +86,6 @@
  * 	...
  */
 #define DECLARE_TYPE_ID_BASE DECLARE_TYPE_ID_COMMON()
-/**********************************************************************************************************************/
 
 /***********************************************************************************************************************
  * Defines standard methods for querying a classes's type statically or at run-time.
@@ -140,8 +136,6 @@ templatePrefix const QString& className::typeNameStatic()																				\
 	return typeName_;																																	\
 }																																							\
 
-/**********************************************************************************************************************/
-
 /***********************************************************************************************************************
  * A specialized version of DEFINE_TYPE_ID_COMMON that should be used with classes that are at the top of the hierarchy.
  *
@@ -169,8 +163,6 @@ templatePrefix bool className::isSubtypeOf(const QString& type) const											
 	return typeNameStatic() == type;																												\
 }																																							\
 
-/**********************************************************************************************************************/
-
 /***********************************************************************************************************************
  * A specialized version of DEFINE_TYPE_ID_COMMON that should be used with classes which inherit from a TYPE_ID enabled
  * class.
@@ -197,5 +189,3 @@ templatePrefix bool className::isSubtypeOf(const QString& type) const											
 {																																							\
 	return typeNameStatic() == type || Super::isSubtypeOf(type);																		\
 }																																							\
-
-/**********************************************************************************************************************/

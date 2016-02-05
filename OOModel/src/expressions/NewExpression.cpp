@@ -32,12 +32,12 @@ template class Model::TypedList<OOModel::NewExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NewExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NewExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(NewExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NewExpression)
 
-REGISTER_ATTRIBUTE(NewExpression, newType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(NewExpression, dimensions, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(NewExpression, initializer, Expression, false, true, true)
+DEFINE_ATTRIBUTE(NewExpression, newType, Expression, false, false, true)
+DEFINE_ATTRIBUTE(NewExpression, dimensions, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(NewExpression, initializer, Expression, false, true, true)
 
 NewExpression::NewExpression(Expression* type, Expression* firstDimension)
 : Super{nullptr, NewExpression::getMetaData()}

@@ -31,11 +31,11 @@ template class Model::TypedList<InformationScripting::CommandNode>;
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommandNode)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommandNode)
 
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
+DEFINE_ATTRIBUTE(CommandNode, name, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
 
 CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
 {

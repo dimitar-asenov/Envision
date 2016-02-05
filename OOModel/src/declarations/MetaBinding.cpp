@@ -32,11 +32,11 @@ template class Model::TypedList<OOModel::MetaBinding>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaBinding)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaBinding)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(MetaBinding)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MetaBinding)
 
-REGISTER_ATTRIBUTE(MetaBinding, input, ReferenceExpression, false, false, true)
-REGISTER_ATTRIBUTE(MetaBinding, mappings, TypedListOfMetaCallMapping, false, false, true)
+DEFINE_ATTRIBUTE(MetaBinding, input, ReferenceExpression, false, false, true)
+DEFINE_ATTRIBUTE(MetaBinding, mappings, TypedListOfMetaCallMapping, false, false, true)
 
 MetaBinding::MetaBinding(const QString& name)
 : Super(nullptr, MetaBinding::getMetaData())

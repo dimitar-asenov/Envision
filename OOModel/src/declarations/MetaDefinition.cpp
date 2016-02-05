@@ -33,12 +33,12 @@ template class Model::TypedList<OOModel::MetaDefinition>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaDefinition)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaDefinition)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(MetaDefinition)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MetaDefinition)
 
-REGISTER_ATTRIBUTE(MetaDefinition, arguments, TypedListOfFormalMetaArgument, false, false, true)
-REGISTER_ATTRIBUTE(MetaDefinition, metaBindings, TypedListOfMetaBinding, false, false, true)
-REGISTER_ATTRIBUTE(MetaDefinition, context, Declaration, false, false, true)
+DEFINE_ATTRIBUTE(MetaDefinition, arguments, TypedListOfFormalMetaArgument, false, false, true)
+DEFINE_ATTRIBUTE(MetaDefinition, metaBindings, TypedListOfMetaBinding, false, false, true)
+DEFINE_ATTRIBUTE(MetaDefinition, context, Declaration, false, false, true)
 
 MetaDefinition::MetaDefinition(const QString& name) : Super(nullptr, MetaDefinition::getMetaData())
 {

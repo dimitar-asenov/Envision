@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::CaseStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CaseStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CaseStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CaseStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CaseStatement)
 
-REGISTER_ATTRIBUTE(CaseStatement, caseExpression, Expression, false, true, true)
-REGISTER_ATTRIBUTE(CaseStatement, body, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(CaseStatement, caseExpression, Expression, false, true, true)
+DEFINE_ATTRIBUTE(CaseStatement, body, StatementItemList, false, false, true)
 
 }

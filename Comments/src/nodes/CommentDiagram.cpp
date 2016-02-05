@@ -31,14 +31,14 @@ template class Model::TypedList<Comments::CommentDiagram>;
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagram)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagram)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentDiagram)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentDiagram)
 
-REGISTER_ATTRIBUTE(CommentDiagram, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagram, width, Float, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagram, height, Float, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagram, shapes, TypedListOfCommentDiagramShape, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagram, connectors, TypedListOfCommentDiagramConnector, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagram, name, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagram, width, Float, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagram, height, Float, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagram, shapes, TypedListOfCommentDiagramShape, false, false, true)
+DEFINE_ATTRIBUTE(CommentDiagram, connectors, TypedListOfCommentDiagramConnector, false, false, true)
 
 CommentDiagram::CommentDiagram(Node *parent, QString name)
 : Super(parent, CommentDiagram::getMetaData())

@@ -31,7 +31,7 @@ template class Model::TypedList<OOModel::ContinueStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ContinueStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ContinueStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ContinueStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ContinueStatement)
 
 }

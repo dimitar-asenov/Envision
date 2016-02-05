@@ -31,11 +31,11 @@ template class Model::TypedList<OOModel::MemberInitializer>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MemberInitializer)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MemberInitializer)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(MemberInitializer)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MemberInitializer)
 
-REGISTER_ATTRIBUTE(MemberInitializer, arguments, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(MemberInitializer, memberReference, Expression, false, false, true)
+DEFINE_ATTRIBUTE(MemberInitializer, arguments, TypedListOfExpression, false, false, true)
+DEFINE_ATTRIBUTE(MemberInitializer, memberReference, Expression, false, false, true)
 
 MemberInitializer::MemberInitializer(Expression* memberRef, QList<Expression*> args)
 : Super(nullptr, MemberInitializer::getMetaData())

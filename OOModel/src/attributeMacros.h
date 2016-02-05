@@ -55,7 +55,7 @@
  * Registers a mandatory OOName attribute which does not declare a symbol.
  */
 #define REGISTER_OONAME_NOSYMBOL_ATTRIBUTE(ClassName)																						\
-REGISTER_ATTRIBUTE(ClassName, name, NameText, false, false, true)
+DEFINE_ATTRIBUTE(ClassName, name, NameText, false, false, true)
 
 /**
  * Registers a mandatory OOName attribute which declares a symbol.
@@ -66,8 +66,6 @@ bool ClassName::definesSymbol() const { return true;}																						\
 const QString& ClassName::symbolName() const { return name(); }																		\
 ClassName::SymbolTypes ClassName::symbolType() const { return (symbolTypes);}
 
-/*********************************************************************************************************************/
-
 /**
  * Declares an 'annotations' attribute of type OOModel::StatementItemList.
  *
@@ -76,5 +74,3 @@ ClassName::SymbolTypes ClassName::symbolType() const { return (symbolTypes);}
  */
 #define ATTRIBUTE_OOP_ANNOTATIONS																												\
 	ATTRIBUTE(::OOModel::StatementItemList, annotations, setAnnotations)
-
-/*********************************************************************************************************************/

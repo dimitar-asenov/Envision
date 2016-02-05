@@ -31,8 +31,8 @@ template class Model::TypedList<TestNodes::BinaryNodeAccessUnit>;
 
 namespace TestNodes {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit)
 
 BinaryNodeAccessUnit::BinaryNodeAccessUnit(const BinaryNodeAccessUnit&) : BinaryNodeAccessUnit{nullptr} {}
 

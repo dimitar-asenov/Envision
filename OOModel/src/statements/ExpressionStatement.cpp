@@ -31,10 +31,10 @@ template class Model::TypedList<OOModel::ExpressionStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ExpressionStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExpressionStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ExpressionStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ExpressionStatement)
 
-REGISTER_ATTRIBUTE(ExpressionStatement, expression, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ExpressionStatement, expression, Expression, false, false, true)
 
 ExpressionStatement::ExpressionStatement(Expression* e)
 : Super(nullptr, ExpressionStatement::getMetaData())

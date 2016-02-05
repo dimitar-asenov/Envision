@@ -31,18 +31,18 @@ template class Model::TypedList<OOModel::Project>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Project)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Project)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Project)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Project)
 
-REGISTER_ATTRIBUTE(Project, projects, TypedListOfProject, false, false, true)
-REGISTER_ATTRIBUTE(Project, modules, TypedListOfModule, false, false, true)
-REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
-REGISTER_ATTRIBUTE(Project, methods, TypedListOfMethod, false, false, true)
-REGISTER_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
-REGISTER_ATTRIBUTE(Project, libraries, TypedListOfUsedLibrary, false, false, true)
-REGISTER_ATTRIBUTE(Project, implicitBaseType, Expression, false, true, true)
-REGISTER_ATTRIBUTE(Project, implicitEnumType, Expression, false, true, true)
-REGISTER_ATTRIBUTE(Project, implicitArrayType, Expression, false, true, true)
+DEFINE_ATTRIBUTE(Project, projects, TypedListOfProject, false, false, true)
+DEFINE_ATTRIBUTE(Project, modules, TypedListOfModule, false, false, true)
+DEFINE_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
+DEFINE_ATTRIBUTE(Project, methods, TypedListOfMethod, false, false, true)
+DEFINE_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
+DEFINE_ATTRIBUTE(Project, libraries, TypedListOfUsedLibrary, false, false, true)
+DEFINE_ATTRIBUTE(Project, implicitBaseType, Expression, false, true, true)
+DEFINE_ATTRIBUTE(Project, implicitEnumType, Expression, false, true, true)
+DEFINE_ATTRIBUTE(Project, implicitArrayType, Expression, false, true, true)
 
 Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 {

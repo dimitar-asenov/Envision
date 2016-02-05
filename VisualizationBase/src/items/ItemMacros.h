@@ -56,7 +56,6 @@ public:																																					\
 private:																																					\
 	static Visualization::InteractionHandler* defaultClassHandler_;																	\
 	static QList<Visualization::VisualizationAddOn*>& staticAddOns();
-/**********************************************************************************************************************/
 
 /**
  * Defines standard methods that every item should implement. These include class name information and style handling.
@@ -65,7 +64,6 @@ private:																																					\
  * 			The name of the class being defined. This class must inherit from from Item, directly or indirectly.
  */
 #define ITEM_COMMON( ItemClass ) ITEM_COMMON_CUSTOM_STYLENAME(ItemClass, ItemClass##Style)
-/**********************************************************************************************************************/
 
 /**
  * Defines standard methods and members that every item should implement.
@@ -128,5 +126,3 @@ QList<Visualization::VisualizationAddOn*> ItemClass::addOns()																			
 	list.append(staticAddOns());																													\
 	return list;																																		\
 }																																							\
-
-/**********************************************************************************************************************/

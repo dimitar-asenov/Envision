@@ -31,8 +31,8 @@ template class Model::TypedList<OOModel::FormalMetaArgument>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalMetaArgument)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalMetaArgument)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(FormalMetaArgument)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FormalMetaArgument)
 
 FormalMetaArgument::FormalMetaArgument(const QString& name)
 : Super(nullptr, FormalMetaArgument::getMetaData())

@@ -32,10 +32,10 @@ template class Model::TypedList<OOModel::ThrowExpression>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ThrowExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThrowExpression)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ThrowExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ThrowExpression)
 
-REGISTER_ATTRIBUTE(ThrowExpression, expr, Expression, false, false, true)
+DEFINE_ATTRIBUTE(ThrowExpression, expr, Expression, false, false, true)
 
 std::unique_ptr<Type> ThrowExpression::type()
 {

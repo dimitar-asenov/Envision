@@ -31,12 +31,12 @@ template class Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TryCatchFinallyStatement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TryCatchFinallyStatement)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(TryCatchFinallyStatement)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(TryCatchFinallyStatement)
 
-REGISTER_ATTRIBUTE(TryCatchFinallyStatement, tryBody, StatementItemList, false, false, true)
-REGISTER_ATTRIBUTE(TryCatchFinallyStatement, catchClauses, TypedListOfCatchClause, false, false, true)
-REGISTER_ATTRIBUTE(TryCatchFinallyStatement, finallyBody, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(TryCatchFinallyStatement, tryBody, StatementItemList, false, false, true)
+DEFINE_ATTRIBUTE(TryCatchFinallyStatement, catchClauses, TypedListOfCatchClause, false, false, true)
+DEFINE_ATTRIBUTE(TryCatchFinallyStatement, finallyBody, StatementItemList, false, false, true)
 
 
 }

@@ -33,11 +33,11 @@ template class Model::TypedList<OOModel::UnaryOperation>;
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(UnaryOperation)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnaryOperation)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(UnaryOperation)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(UnaryOperation)
 
-REGISTER_ATTRIBUTE(UnaryOperation, operand, Expression, false, false, true)
-REGISTER_ATTRIBUTE(UnaryOperation, opr, Integer, false, false, true)
+DEFINE_ATTRIBUTE(UnaryOperation, operand, Expression, false, false, true)
+DEFINE_ATTRIBUTE(UnaryOperation, opr, Integer, false, false, true)
 
 
 UnaryOperation::UnaryOperation(const OperatorTypes& op, Expression* operand)
