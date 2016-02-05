@@ -39,6 +39,7 @@ with open(args.inputFile, 'r') as inputFile:
 # Block class used to store and various fragments of the file
 class Block:
 	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?(\s|\n)*{(\s|\n)*$', re.DOTALL)
+	macroCallRegex = re.compile(r'\s*[A-Z_]+\s*(\n|\(.*\)\n)$', re.DOTALL)
 	
 	def __init__(self):
 		self.prefix = ""
@@ -113,11 +114,17 @@ prev = '' # previous character
 current = '' # current character
 prevPeer = None # previous peer node
 
+currentLine = ''
+
 # Loop over all the characters and build the tree of Block structures
 for char in sourceText:
+	if len(currentLine) > 0  and currentLine[-1] == '\n':
+		currentLine = ''
+	
 	prev = current
 	current = char
 	stack[-1].add(char)
+	currentLine += current
 	
 	if inString:
 		assert char != '\n'
@@ -162,7 +169,8 @@ for char in sourceText:
 		stack.append( stack[-1].deepen() )
 		continue
 	
-	if char == '}' or ( char ==';' and not prev == '}') or (char == '\n' and prev == ':'):
+	isMacro = Block.macroCallRegex.match(currentLine) if char == '\n' else False
+	if char == '}' or ( char ==';' and not prev == '}') or (char == '\n' and prev == ':') or (char == '\n' and isMacro):
 		if char == '}':
 			stack[-1].removeLast(char)
 			stack[-2].finalize()
@@ -171,7 +179,7 @@ for char in sourceText:
 		else:
 			stack[-1].finalize()
 			
-		prevPeer = stack[-1] # we need this to handle ; and :
+		prevPeer = stack[-1] # we need this to handle ; and : and isMacro
 		stack = stack[:-1]
 		stack.append( stack[-1].deepen())
 		continue
@@ -181,7 +189,7 @@ for char in sourceText:
 		prevPeer.add(char)
 		continue
 	
-	if prev == ';' and char == '\n':
+	if (prev == ';' or isMacro) and char == '\n':
 		stack[-1].removeLast(char)
 		prevPeer.add(char)
 		continue
