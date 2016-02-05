@@ -2,6 +2,8 @@
 <style prototypes="icon/SVGIcon/default">
 	<shape prototypes="shape/Frame/default">
 		Frame
+		<leftMargin>4</leftMargin>
+		<rightMargin>10</rightMargin>
 		<contentBrush> <color>#246068</color> </contentBrush>
 	</shape>
 	<filename>styles/icon/class.svg</filename>
