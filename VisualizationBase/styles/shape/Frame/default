@@ -34,4 +34,9 @@
 	<rightWidth>0</rightWidth>
 	<rightMargin>0</rightMargin>
 	
+	<shadowStartColor>#80000000</shadowStartColor>
+	<shadowStopColor>#00000000</shadowStopColor>
+	<bottomRightShadowWidth>0</bottomRightShadowWidth>
+	<topLeftShadowWidth>0</topLeftShadowWidth>
+	
 </style>

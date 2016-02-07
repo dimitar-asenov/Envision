@@ -36,6 +36,7 @@ class VISUALIZATIONBASE_API FrameStyle : public Super<ShapeStyle>
 {
 	public:
 		virtual ~FrameStyle() override;
+		virtual void load(StyleLoader& sl) override;
 
 		void paint(QPainter* painter, int xOffset, int yOffset, int outerWidth, int outerHeight,
 					  QColor customColor) const;
@@ -55,6 +56,21 @@ class VISUALIZATIONBASE_API FrameStyle : public Super<ShapeStyle>
 		Property<int> bottomMargin{this, "bottomMargin"};
 		Property<int> leftMargin{this, "leftMargin"};
 		Property<int> rightMargin{this, "rightMargin"};
+
+		Property<QColor> shadowStartColor{this, "shadowStartColor"};
+		Property<QColor> shadowStopColor{this, "shadowStopColor"};
+
+		Property<int> bottomRightShadowWidth{this, "bottomRightShadowWidth"};
+		Property<int> topLeftShadowWidth{this, "topLeftShadowWidth"};
+
+	private:
+		/**
+		 * Colors to use when painting the shadow.
+		 */
+		std::vector<QColor> shadowGradient_;
+
+		QColor shadowColorAt(qreal shadowWidth, qreal pixelswayFromFrame) const;
+		static QColor colorNeededForBlending(QColor destinationColor, QColor desiredColor);
 };
 
 }

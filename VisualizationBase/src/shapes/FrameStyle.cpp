@@ -31,6 +31,59 @@ namespace Visualization {
 
 FrameStyle::~FrameStyle(){}
 
+void FrameStyle::load(StyleLoader& sl)
+{
+	Super::load(sl);
+	// Create the gradient of the shadow
+	int maxShadowSize = std::max(topLeftShadowWidth(), bottomRightShadowWidth());
+	if (maxShadowSize > 0)
+	{
+		std::vector<QColor> linearShadowGradient_;
+		for (int i = maxShadowSize; i >= 0 ; --i)
+			linearShadowGradient_.push_back(shadowColorAt(maxShadowSize, i));
+
+		shadowGradient_.push_back(linearShadowGradient_.front());
+		for (int i = 1; i <= maxShadowSize; ++i)
+		{
+			shadowGradient_.push_back(
+						colorNeededForBlending(linearShadowGradient_[i-1], linearShadowGradient_[i]));
+		}
+	}
+}
+
+QColor FrameStyle::shadowColorAt(qreal shadowWidth, qreal pixelswayFromFrame) const
+{
+	if (pixelswayFromFrame <= 0)
+		return shadowStartColor();
+
+	if (pixelswayFromFrame >= shadowWidth)
+		return shadowStopColor();
+
+	qreal ratio = pixelswayFromFrame / shadowWidth;
+	int red = ratio*shadowStopColor().red() + (1-ratio)*shadowStartColor().red();
+	int green = ratio*shadowStopColor().green() + (1-ratio)*shadowStartColor().green();
+	int blue = ratio*shadowStopColor().blue() + (1-ratio)*shadowStartColor().blue();
+	int alpha  = ratio*shadowStopColor().alpha() + (1-ratio)*shadowStartColor().alpha();
+
+	return {red, green, blue, alpha};
+}
+
+QColor FrameStyle::colorNeededForBlending(QColor destinationColor, QColor desiredColor)
+{
+	qreal alpha = (desiredColor.alphaF() - destinationColor.alphaF() ) / (1 - destinationColor.alphaF());
+	qreal red = (desiredColor.redF()*(alpha*desiredColor.alphaF()*(1-alpha))
+			- destinationColor.redF()*destinationColor.alphaF()*(1-alpha) )
+			/ alpha;
+	qreal green = (desiredColor.greenF()*(alpha*desiredColor.alphaF()*(1-alpha))
+			- destinationColor.greenF()*destinationColor.alphaF()*(1-alpha) )
+			/ alpha;
+	qreal blue = (desiredColor.blueF()*(alpha*desiredColor.alphaF()*(1-alpha))
+			- destinationColor.blueF()*destinationColor.alphaF()*(1-alpha) )
+			/ alpha;
+
+	return QColor::fromRgbF(red, green, blue, alpha);
+}
+
 void FrameStyle::paint(QPainter* painter, int xOffset, int yOffset, int outerWidth, int outerHeight,
 							QColor customColor) const
 {
@@ -50,39 +103,80 @@ void FrameStyle::paint(QPainter* painter, int xOffset, int yOffset, int outerWid
 		if (rightWidth > 0 && rightWidth*scaleFactor < 1) rightWidth = 1 / scaleFactor;
 	}
 
-	int adjustedTopWidth = std::min(topWidth, outerHeight);
+	// Compute size excluding shadow
+	int widthWithoutShadow = outerWidth - topLeftShadowWidth() - bottomRightShadowWidth();
+	int heightWithoutShadow = outerHeight - topLeftShadowWidth() - bottomRightShadowWidth();
 
-	if (adjustedTopWidth > 0 && outerHeight > 0)
-		painter->fillRect(xOffset, yOffset, outerWidth, adjustedTopWidth,
-							BoxStyle::fixGradient(topBrush(), xOffset, yOffset));
+	// Compute offsets excluding shadow
+	int xAfterShadow = xOffset + topLeftShadowWidth();
+	int yAfterShadow = yOffset + topLeftShadowWidth();
 
-	int adjustedBottomWidth = std::min(bottomWidth, outerHeight - adjustedTopWidth);
-	int contentHeight = outerHeight - adjustedTopWidth - adjustedBottomWidth;
-	if (adjustedBottomWidth > 0 && outerHeight > 0)
-		painter->fillRect(xOffset, yOffset + adjustedTopWidth + contentHeight, outerWidth, adjustedBottomWidth,
-							BoxStyle::fixGradient(bottomBrush(), xOffset, yOffset + adjustedTopWidth + contentHeight));
+	// Draw shadows
+	int maxShadowSize = std::max(topLeftShadowWidth(), bottomRightShadowWidth());
+	if (maxShadowSize > 0 && maxShadowSize * scaleFactor >= 0.5)
+	{
+		// The shadow has to be drawn in this way and not using QPainter::fillRect, since fillRect
+		// causes weird artifacts (darker pixels) at the bounderies of the filled rectangles
 
-	int adjustedLeftWidth = std::min(leftWidth, outerWidth);
+		// Clip the middle
+		QPainterPath clipPath;
+		clipPath.addRect(QRect{xOffset, yOffset, outerWidth, outerHeight});
+		QPainterPath innerBox;
+		innerBox.addRect(QRect{xAfterShadow, yAfterShadow, widthWithoutShadow, heightWithoutShadow});
+		clipPath -= innerBox;
+		painter->setClipPath(clipPath);
+
+		painter->setPen(Qt::NoPen);
+		painter->setBrush(QColor(0, 0, 0, 5));
+
+		for (int i = 0; i < maxShadowSize; ++i)
+		{
+			painter->setBrush(shadowGradient_[i]);
+			painter->drawRoundedRect(xOffset + i, yOffset + i, outerWidth - 2*i, outerHeight - 2*i,
+											 maxShadowSize-i, maxShadowSize-i);
+		}
+
+		painter->setClipping(false);
+	}
+
+	// Draw the frame borders
+	int adjustedTopWidth = std::min(topWidth, heightWithoutShadow);
+
+	if (adjustedTopWidth > 0 && heightWithoutShadow > 0)
+		painter->fillRect(xAfterShadow, yAfterShadow, widthWithoutShadow, adjustedTopWidth,
+								BoxStyle::fixGradient(topBrush(), xAfterShadow, yAfterShadow));
+
+	int adjustedBottomWidth = std::min(bottomWidth, heightWithoutShadow - adjustedTopWidth);
+	int contentHeight = heightWithoutShadow - adjustedTopWidth - adjustedBottomWidth;
+	if (adjustedBottomWidth > 0 && heightWithoutShadow > 0)
+		painter->fillRect(xAfterShadow, yAfterShadow + adjustedTopWidth + contentHeight,
+								widthWithoutShadow, adjustedBottomWidth,
+								BoxStyle::fixGradient(bottomBrush(), xAfterShadow,
+															 yAfterShadow + adjustedTopWidth + contentHeight));
+
+	int adjustedLeftWidth = std::min(leftWidth, widthWithoutShadow);
 	if (adjustedLeftWidth > 0 && contentHeight > 0)
-		painter->fillRect(xOffset, yOffset + adjustedTopWidth, adjustedLeftWidth, contentHeight,
-							BoxStyle::fixGradient(leftBrush(), xOffset, yOffset + adjustedTopWidth));
+		painter->fillRect(xAfterShadow, yAfterShadow + adjustedTopWidth, adjustedLeftWidth, contentHeight,
+								BoxStyle::fixGradient(leftBrush(), xAfterShadow, yAfterShadow + adjustedTopWidth));
 
-	int adjustedRightWitdh = std::min(rightWidth, outerWidth - adjustedLeftWidth);
-	int contentWidth = outerWidth - adjustedLeftWidth - adjustedRightWitdh;
+	int adjustedRightWitdh = std::min(rightWidth, widthWithoutShadow - adjustedLeftWidth);
+	int contentWidth = widthWithoutShadow - adjustedLeftWidth - adjustedRightWitdh;
 	if (adjustedRightWitdh > 0 && contentHeight > 0)
-		painter->fillRect(xOffset + adjustedLeftWidth + contentWidth, yOffset + adjustedTopWidth,
-							adjustedRightWitdh, contentHeight,
-							BoxStyle::fixGradient(rightBrush(), xOffset + adjustedLeftWidth + contentWidth,
-														 yOffset + adjustedTopWidth));
+		painter->fillRect(xAfterShadow + adjustedLeftWidth + contentWidth, yAfterShadow + adjustedTopWidth,
+								adjustedRightWitdh, contentHeight,
+								BoxStyle::fixGradient(rightBrush(), xAfterShadow + adjustedLeftWidth + contentWidth,
+															 yAfterShadow + adjustedTopWidth));
 
 	if (contentWidth > 0 && contentHeight > 0)
 	{
 		if (customColor.isValid())
-			painter->fillRect(xOffset + adjustedLeftWidth, yOffset + adjustedTopWidth, contentWidth, contentHeight,
-									customColor);
+			painter->fillRect(xAfterShadow + adjustedLeftWidth, yAfterShadow + adjustedTopWidth,
+									contentWidth, contentHeight, customColor);
 		else
-			painter->fillRect(xOffset + adjustedLeftWidth, yOffset + adjustedTopWidth, contentWidth, contentHeight,
-							BoxStyle::fixGradient(contentBrush(), xOffset + adjustedLeftWidth, yOffset + adjustedTopWidth));
+			painter->fillRect(xAfterShadow + adjustedLeftWidth, yAfterShadow + adjustedTopWidth,
+									contentWidth, contentHeight,
+									BoxStyle::fixGradient(contentBrush(), xAfterShadow + adjustedLeftWidth,
+																 yAfterShadow + adjustedTopWidth));
 	}
 }
 
