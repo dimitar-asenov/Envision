@@ -14,6 +14,9 @@
 			<contentBrush>
 				<color>#80ffffff</color>
 			</contentBrush>
+			
+			<bottomRightShadowWidth>6</bottomRightShadowWidth>
+			<topLeftShadowWidth>0</topLeftShadowWidth>
 		</shape>
 	
 	<titleBackground prototypes="item/Item/default">

@@ -165,7 +165,7 @@ void VClass::initializeForms()
 				// put the shape element at the right place
 				->put(TheTopOf, shapeElement, -2, FromBottomOf, titleBackgroundElement)
 				->put(TheLeftOf, shapeElement, AtLeftOf, titleBackgroundElement)
-				->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
+				->put(TheBottomOf, shapeElement, 15, FromBottomOf, contentElement)
 				->put(TheRightOf, shapeElement, 10, FromRightOf, stretchAfterTitle)
 
 				// put the background element around the field container element
@@ -198,7 +198,7 @@ void VClass::initializeForms()
 				// put the shape element at the right place
 				->put(TheTopOf, shapeElement, -2, FromBottomOf, titleBackgroundElement)
 				->put(TheLeftOf, shapeElement, AtLeftOf, titleBackgroundElement)
-				->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
+				->put(TheBottomOf, shapeElement, 15, FromBottomOf, contentElement)
 				->put(TheRightOf, shapeElement, 10, FromRightOf, stretchAfterTitle));
 }
 
