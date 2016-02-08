@@ -131,13 +131,13 @@ inline List::const_iterator List::cend() const {return nodes_.constEnd();}
 
 template <typename T> T* List::first() const
 {
-	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
+	if ( nodes_.isEmpty() ) throw ModelException{"Trying to access the first element of an empty list."};
 	return static_cast<T*> (nodes_.first());
 }
 
 template <typename T> T* List::last() const
 {
-	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
+	if ( nodes_.isEmpty() ) throw ModelException{"Trying to access the last element of an empty list."};
 	return static_cast<T*> (nodes_.last());
 }
 

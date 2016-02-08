@@ -116,13 +116,13 @@ void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &n
 		Q_ASSERT(!externalTree_);
 		if ( !baseFolder_.exists(name) )
 			if ( !baseFolder_.mkpath(name) )
-				throw FilePersistenceException("Could not create folder " + baseFolder_.path() + " for tree.");
+				throw FilePersistenceException{"Could not create folder " + baseFolder_.path() + " for tree."};
 
 		treeDirs_.clear();
 		treeDirs_.push(baseFolder_.path() + QDir::toNativeSeparators("/" + name));
 
 		if ( !treeDirs_.top().exists() )
-			throw FilePersistenceException("Error opening tree folder " + treeDirs_.top().path());
+			throw FilePersistenceException{"Error opening tree folder " + treeDirs_.top().path()};
 
 		genericTree_ = new GenericTree{name};
 		saveNewPersistenceUnit(manager->root(), name);
@@ -241,7 +241,7 @@ QList<GenericNode*> SimpleTextFileStore::writeGenericNodeToFile(GenericNode* nod
 {
 	QFile file(destDir + '/' + fileName);
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
-		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
+		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 
 	QTextStream ts(&file);
 	ts.setCodec("UTF-8");
@@ -293,7 +293,7 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager* manager, const QS
 					treeDirs_.clear();
 					treeDirs_.push(baseFolder_.path() + QDir::toNativeSeparators("/" + name));
 					if ( !treeDirs_.top().exists() )
-						throw FilePersistenceException("Can not find root node folder " + treeDirs_.top().path());
+						throw FilePersistenceException{"Can not find root node folder " + treeDirs_.top().path()};
 				}
 
 				genericTree_ = new GenericTree{name};
@@ -305,10 +305,10 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager* manager, const QS
 		for (auto p : uninitializedReferences_)
 		{
 			Model::NodeIdType id = p.second;
-			if (id.isNull()) throw FilePersistenceException("Incorrect id format for reference target " + p.second);
+			if (id.isNull()) throw FilePersistenceException{"Incorrect id format for reference target " + p.second};
 
 			Model::Node* target = const_cast<Model::Node*> (treeManager_->nodeIdMap().node(id));
-			if (!target) throw FilePersistenceException("A reference is pointing to an unloaded node " + p.second);
+			if (!target) throw FilePersistenceException{"A reference is pointing to an unloaded node " + p.second};
 
 			setReferenceTargetr(p.first, target);
 		}
@@ -453,8 +453,8 @@ QString SimpleTextFileStore::loadReferenceValue(Model::Reference* r)
 {
 	checkIsWorking();
 	QStringList ref = genericNode_->valueAsString().split(":");
-	QString target = ref.first() == NULL_STRING ? QString() : ref.first();
-	QString name = ref.last() == NULL_STRING ? QString() : ref.last();
+	QString target = ref.first() == NULL_STRING ? QString{} : ref.first();
+	QString name = ref.last() == NULL_STRING ? QString{} : ref.last();
 
 	if (!target.isNull()) uninitializedReferences_.append(qMakePair(r, target));
 
@@ -463,7 +463,7 @@ QString SimpleTextFileStore::loadReferenceValue(Model::Reference* r)
 
 void SimpleTextFileStore::checkIsWorking() const
 {
-	if ( !working_ ) throw FilePersistenceException("Performing an illegal file persistence operation.");
+	if ( !working_ ) throw FilePersistenceException{"Performing an illegal file persistence operation."};
 }
 
 bool SimpleTextFileStore::isLoadingPartially() const

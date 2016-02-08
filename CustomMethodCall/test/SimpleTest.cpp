@@ -80,7 +80,7 @@ Class* addCollection(Project* parent)
 
 	Method* exists = new Method{};
 	col->methods()->append(exists);
-	exists->setName(QChar(0x2203));
+	exists->setName(QChar{0x2203});
 	exists->extension<Position>()->set(0, 3);
 	FormalArgument* existsArg = new FormalArgument{};
 	exists->arguments()->append(existsArg);
@@ -122,7 +122,7 @@ Class* addCollection(Project* parent)
 	UnaryOperation* negation = new UnaryOperation{};
 	orIf->setRight(negation);
 	negation->setOp(UnaryOperation::NOT);
-	MethodCallExpression* existsCall = new MethodCallExpression{QChar(0x2203)};
+	MethodCallExpression* existsCall = new MethodCallExpression{QChar{0x2203}};
 	negation->setOperand(existsCall);
 	existsCall->arguments()->append( new IntegerLiteral{42});
 

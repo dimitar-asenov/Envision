@@ -161,10 +161,10 @@ void CDumpMethodRenderings::printItem(Visualization::Item* item, int itemNumber,
 	image.fill(Qt::white);
 	QPainter pmapPainter(&image);
 	pmapPainter.setRenderHint(QPainter::Antialiasing);
-	item->scene()->render(&pmapPainter, QRect(0, 0, itemSize.width(), itemSize.height()),
+	item->scene()->render(&pmapPainter, QRect{0, 0, itemSize.width(), itemSize.height()},
 								 item->sceneBoundingRect().toRect());
 
-	auto zeroPadded = QString("%1").arg(itemNumber, 3, 10, QChar('0'));
+	auto zeroPadded = QString{"%1"}.arg(itemNumber, 3, 10, QChar{'0'});
 	if (numPrinted == 1)
 		image.save("item_dump/" + zeroPadded + ".png");
 	else

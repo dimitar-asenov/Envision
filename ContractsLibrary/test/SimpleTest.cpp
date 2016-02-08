@@ -287,7 +287,7 @@ Class* createBaseClass()
 	auto *travel = new Method{"travel", Modifier::Public};
 	car->methods()->append(travel);
 	travel->arguments()->append( new FormalArgument{"numPassengers", new PrimitiveTypeExpression{PrimitiveType::INT}} );
-	travel->results()->append( new FormalResult{QString(), new PrimitiveTypeExpression{PrimitiveType::INT}} );
+	travel->results()->append( new FormalResult{QString{}, new PrimitiveTypeExpression{PrimitiveType::INT}} );
 
 	travel->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression(
 			"Contract.Requires(fuel>0)")});
@@ -313,7 +313,7 @@ Class* createDerivedClass()
 	auto *travel = new Method{"travel", Modifier::Public};
 	car->methods()->append(travel);
 	travel->arguments()->append( new FormalArgument{"numPassengers", new PrimitiveTypeExpression{PrimitiveType::INT}} );
-	travel->results()->append( new FormalResult{QString(), new PrimitiveTypeExpression{PrimitiveType::INT}} );
+	travel->results()->append( new FormalResult{QString{}, new PrimitiveTypeExpression{PrimitiveType::INT}} );
 
 	travel->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression(
 			"Contract.Requires(numPassengers>=0)")});
@@ -330,7 +330,7 @@ Class* createDerivedDerivedClass()
 	auto *travel = new Method{"travel", Modifier::Public};
 	car->methods()->append(travel);
 	travel->arguments()->append( new FormalArgument{"numPassengers", new PrimitiveTypeExpression{PrimitiveType::INT}} );
-	travel->results()->append( new FormalResult{QString(), new PrimitiveTypeExpression{PrimitiveType::INT}} );
+	travel->results()->append( new FormalResult{QString{}, new PrimitiveTypeExpression{PrimitiveType::INT}} );
 
 	return car;
 }
@@ -346,7 +346,7 @@ Class* createInterface()
 	interface->methods()->append(op);
 	op->arguments()->append( new FormalArgument{"x", new PrimitiveTypeExpression{PrimitiveType::INT}} );
 	op->arguments()->append( new FormalArgument{"y", new PrimitiveTypeExpression{PrimitiveType::INT}} );
-	op->results()->append( new FormalResult{QString(), new PrimitiveTypeExpression{PrimitiveType::INT}} );
+	op->results()->append( new FormalResult{QString{}, new PrimitiveTypeExpression{PrimitiveType::INT}} );
 
 	return interface;
 }
@@ -363,7 +363,7 @@ Class* createInterfaceContracts()
 	calcContracts->methods()->append(op);
 	op->arguments()->append( new FormalArgument{"x", new PrimitiveTypeExpression{PrimitiveType::INT}} );
 	op->arguments()->append( new FormalArgument{"y", new PrimitiveTypeExpression{PrimitiveType::INT}} );
-	op->results()->append( new FormalResult{QString(), new PrimitiveTypeExpression{PrimitiveType::INT}} );
+	op->results()->append( new FormalResult{QString{}, new PrimitiveTypeExpression{PrimitiveType::INT}} );
 	op->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression(
 				"Contract.Requires(x!=y)")});
 	op->items()->append(new ReturnStatement{ OOExpressionBuilder::getOOExpression("0")});
@@ -400,7 +400,7 @@ Method* createFactorial()
 {
 	auto *fact = new Method{"factorial", Modifier::Public};
 	fact->arguments()->append( new FormalArgument{"x", new PrimitiveTypeExpression{PrimitiveType::INT}} );
-	fact->results()->append( new FormalResult{QString(), new PrimitiveTypeExpression{PrimitiveType::INT}} );
+	fact->results()->append( new FormalResult{QString{}, new PrimitiveTypeExpression{PrimitiveType::INT}} );
 	fact->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression(
 				"Contract.Requires(x>=0)")});
 	fact->items()->append(new ExpressionStatement{ OOExpressionBuilder::getOOExpression(

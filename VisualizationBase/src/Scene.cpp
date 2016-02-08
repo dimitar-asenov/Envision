@@ -303,7 +303,7 @@ bool Scene::event(QEvent *event)
 		if (event->type() == QEvent::GraphicsSceneMousePress)
 		{
 			auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
-			sceneHandlerItem_->setPos(e->scenePos() - QPointF(1, 1));
+			sceneHandlerItem_->setPos(e->scenePos() - QPointF{1, 1});
 		}
 
 		if (event->type() == QEvent::KeyPress)
@@ -418,7 +418,7 @@ void Scene::computeSceneRect()
 			viewRect = viewRect.united(br);
 	}
 
-	if (viewRect.isNull()) viewRect = QRectF(sceneRect.x(), sceneRect.y(), 1, 1);
+	if (viewRect.isNull()) viewRect = QRectF{sceneRect.x(), sceneRect.y(), 1, 1};
 
 	// TODO: Currently the user is not able to scroll in a way that will make menu items visible, if they are outside
 	// the outter bounding (scene) rectangle of normal items. The code below was meant to fix this, but it caused

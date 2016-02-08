@@ -67,9 +67,9 @@ NamedProperty tuple_getItem(Tuple &t, int index)
 NamedProperty convertTuple(const tuple& t)
 {
 	int len = extract<int>(t.attr("__len__")())();
-	if (len != 2) throw QueryRuntimeException("Tuple can only have 2 values");
+	if (len != 2) throw QueryRuntimeException{"Tuple can only have 2 values"};
 	extract<QString> nameExtract(t.attr("__getitem__")(0));
-	if (!nameExtract.check()) throw QueryRuntimeException("Tuple should have string as key");
+	if (!nameExtract.check()) throw QueryRuntimeException{"Tuple should have string as key"};
 	auto value = t.attr("__getitem__")(1);
 	extract<QString> valueString(value);
 	if (valueString.check()) return {nameExtract(), valueString()};

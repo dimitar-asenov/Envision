@@ -55,7 +55,7 @@ void ChangeMonitor::expressionModified(OOModel::Expression*& exp, int& cursorInd
 {
 	ValueAtReturnVisitor v;
 	v.visit(exp);
-	const int length = QString("Contract.ValueAtReturn(").size();
+	const int length = QString{"Contract.ValueAtReturn("}.size();
 	cursorIndex += (v.numWrapped() - v.numUnwrapped())*length;
 }
 

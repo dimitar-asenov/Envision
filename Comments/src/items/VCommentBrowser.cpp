@@ -33,7 +33,7 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentBrowser, "item")
 
-const QSize VCommentBrowser::defaultSize = QSize(400, 300);
+const QSize VCommentBrowser::defaultSize = QSize{400, 300};
 
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style)
 	: VCommentBrowser{parent, url, defaultSize, style}

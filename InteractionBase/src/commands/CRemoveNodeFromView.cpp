@@ -31,7 +31,7 @@
 namespace Interaction {
 
 CRemoveNodeFromView::CRemoveNodeFromView()
-	:CommandWithDefaultArguments("removeNode", QStringList())
+	:CommandWithDefaultArguments{"removeNode", QStringList{}}
 {
 }
 
@@ -44,7 +44,7 @@ bool CRemoveNodeFromView::canInterpret(Visualization::Item *source, Visualizatio
 	if (!ancestor) return false;
 	else
 		return canInterpret &&
-				ancestor->scene()->currentViewItem()->positionOfItem(ancestor) != QPoint(-1, -1);
+				ancestor->scene()->currentViewItem()->positionOfItem(ancestor) != QPoint{-1, -1};
 }
 
 CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *source, Visualization::Item *,

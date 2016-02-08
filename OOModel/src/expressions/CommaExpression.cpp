@@ -40,7 +40,7 @@ DEFINE_ATTRIBUTE(CommaExpression, left, Expression, false, false, true)
 DEFINE_ATTRIBUTE(CommaExpression, right, Expression, false, false, true)
 
 CommaExpression::CommaExpression(Expression* left, Expression* right)
-: Super(nullptr, CommaExpression::getMetaData())
+: Super{nullptr, CommaExpression::getMetaData()}
 {
 	if (left) setLeft(left);
 	if (right) setRight(right);

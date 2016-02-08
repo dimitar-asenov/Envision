@@ -99,7 +99,7 @@ QString Parser::rawStringToQString(const char* data, int start, int endInclusive
 			res += '\r';
 			escaped = false;
 		}
-		else throw FilePersistenceException("Unrecognized escape character " + QString(c));
+		else throw FilePersistenceException{"Unrecognized escape character " + QString{c}};
 	}
 
 	return res;
@@ -143,7 +143,7 @@ Model::NodeIdType Parser::toId(const char* data, int start, int endInclusive, bo
 	uchar b8 = hexDigitToChar(idStart[35], ok) << 4 | hexDigitToChar(idStart[36], ok);
 
 	if (!ok) return {};
-	return QUuid(low, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
+	return QUuid{low, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8};
 }
 
 uchar Parser::hexDigitToChar(char d, bool& ok)
@@ -275,7 +275,7 @@ QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 			if (node->valueType() == GenericNode::STRING_VALUE) stream << ". "<< PREFIX_STRING << escape(node->rawValue());
 			else if (node->valueType() == GenericNode::INT_VALUE) stream << ". " << PREFIX_INTEGER << node->rawValue();
 			else if (node->valueType() == GenericNode::DOUBLE_VALUE) stream << ". " << PREFIX_DOUBLE << node->rawValue();
-			else throw FilePersistenceException("Unknown value type " + QString::number(node->valueType()));
+			else throw FilePersistenceException{"Unknown value type " + QString::number(node->valueType())};
 		}
 		stream << '\n';
 
@@ -295,7 +295,7 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericPersistentU
 {
 	QFile file(filename);
 	if ( !file.open(QIODevice::ReadOnly) )
-		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
+		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 
 	Q_ASSERT(file.size() < std::numeric_limits<int>::max());
 	int totalFileSize = static_cast<int>(file.size());
@@ -382,16 +382,16 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 		Model::NodeIdType id = toId(line, start, headerPartEnd, isId);
 
 		if ( isId ) node->setId( id );
-		else throw FilePersistenceException("Unknown node header element (should be id) "
-				+ QString::fromLatin1(line+start, headerPartEnd-start+1));
+		else throw FilePersistenceException{"Unknown node header element (should be id) "
+				+ QString::fromLatin1(line+start, headerPartEnd-start+1)};
 
 		// parent ID
 		start = headerPartEnd+1;
 		moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
 		id = toId(line, start, headerPartEnd, isId);
 		if ( isId ) node->setParentId( id );
-		else throw FilePersistenceException("Unknown node header element (should be parent id)"
-				+ QString::fromLatin1(line+start, headerPartEnd-start+1));
+		else throw FilePersistenceException{"Unknown node header element (should be parent id)"
+				+ QString::fromLatin1(line+start, headerPartEnd-start+1)};
 	}
 
 	if (moreHeaderParts)
@@ -425,7 +425,7 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 					&& line[start+1] == (char)0xBB && line[start+2] == (char)0xBF)
 			s = QChar{QChar::ByteOrderMark};
 			else
-				throw FilePersistenceException("Invalid string sequence when reading node id " + node->id().toString());
+				throw FilePersistenceException{"Invalid string sequence when reading node id " + node->id().toString()};
 		}
 
 		node->setValue(GenericNode::STRING_VALUE, s);
@@ -436,8 +436,8 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 	else if (PREFIX_DOUBLE == QString::fromLatin1(line + start, PREFIX_DOUBLE.length()))
 		node->setValue(GenericNode::DOUBLE_VALUE, QString::fromLatin1(line+start+PREFIX_DOUBLE.length(),
 				lineEnd - start - PREFIX_DOUBLE.length() + 1 ));
-	else throw FilePersistenceException("Unknown value prefix" +
-			QString::fromUtf8(line+start, lineEnd-start+1));
+	else throw FilePersistenceException{"Unknown value prefix" +
+			QString::fromUtf8(line+start, lineEnd-start+1)};
 }
 
 }

@@ -53,7 +53,7 @@ QSet<const Node*>& Node::partiallyLoadedNodes()
 Node::Node(Node* parent) : parent_{parent}, manager_{parent ? parent->manager_ : nullptr}
 {
 	if (parent && !parent->isModifyable())
-		throw ModelException("Trying to create a node with a non-modifiable parent.");
+		throw ModelException{"Trying to create a node with a non-modifiable parent."};
 }
 
 Node::Node(const Node&) : Node{nullptr} {}
@@ -75,7 +75,7 @@ Node* Node::createDefaultInstance(Node*)
 void Node::execute(UndoCommand *command)
 {
 	if ( this != command->target() )
-		throw ModelException("Command target differs from current node when executing commands");
+		throw ModelException{"Command target differs from current node when executing commands"};
 
 	TreeManager* m = manager();
 
@@ -98,7 +98,7 @@ void Node::execute(UndoCommand *command)
 
 	if (m)
 	{
-		if (hasOwnTreeManager && !m->canBeModified(this) ) throw ModelException("Can not modify the current node.");
+		if (hasOwnTreeManager && !m->canBeModified(this) ) throw ModelException{"Can not modify the current node."};
 		m->pushCommandOnUndoStack(command);
 	}
 	else
@@ -396,7 +396,7 @@ void Node::registerNodeType(const QString &type, const NodeConstructor construct
 		const NodePersistenceConstructor persistenceconstructor)
 {
 	if ( isTypeRegistered(type) )
-		throw ModelException("Trying to register a node type that has already been registered: " + type);
+		throw ModelException{"Trying to register a node type that has already been registered: " + type};
 
 	nodeConstructorRegister.insert(type, constructor);
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);

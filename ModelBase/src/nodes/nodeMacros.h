@@ -245,8 +245,8 @@ QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& className::attribu
 			 bool isPersistent)																														\
 {																																							\
 	attributesToRegisterAtInitialization_().append(QPair< ::Model::CompositeIndex&, ::Model::Attribute>(index,			\
-			::Model::Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));			\
-	return ::Model::CompositeIndex();																											\
+			::Model::Attribute{attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent}));			\
+	return ::Model::CompositeIndex{};																											\
 }																																							\
 
 /**
@@ -659,4 +659,4 @@ private:																																					\
   */
 #define DEFINE_EXTENSION_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)			\
 int className::attributeName##Index = className::addAttributeToRegister_(															\
-	::Model::Attribute("_ext_" #className "_" #attributeName, #attributeType, optional, partial, persistent));
+	::Model::Attribute{"_ext_" #className "_" #attributeName, #attributeType, optional, partial, persistent});

@@ -301,7 +301,7 @@ class VISUALIZATIONBASE_API GridLayouter
 								}
 							}
 
-							setPosition(x, y, QPoint(xPos, yPos));
+							setPosition(x, y, QPoint{xPos, yPos});
 						}
 
 						top += tallestInRow[y] + spaceBetweenRows();
@@ -326,7 +326,7 @@ class VISUALIZATIONBASE_API GridLayouter
 							else if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Right)
 								xPos += (widestInColumn[x] - width(x, y));
 
-							setPosition(x, y, QPoint(xPos, top));
+							setPosition(x, y, QPoint{xPos, top});
 							top += height(x, y) + spaceBetweenRows();
 						}
 					}
@@ -350,7 +350,7 @@ class VISUALIZATIONBASE_API GridLayouter
 							else if (verticalAlignment(x, y) == LayoutStyle::Alignment::Bottom)
 								yPos += tallestInRow[y] - height(x, y);
 
-							setPosition(x, y, QPoint(left, yPos));
+							setPosition(x, y, QPoint{left, yPos});
 							left += width(x, y) + spaceBetweenColumns();
 						}
 					}
@@ -450,7 +450,7 @@ class VISUALIZATIONBASE_API GridLayouter
 			}
 
 			// Set Child item regions and remember rects
-			QVector< QVector<QRect> > itemAreas(numColumns(), QVector<QRect>(numRows(), QRect()));
+			QVector< QVector<QRect> > itemAreas(numColumns(), QVector<QRect>(numRows(), QRect{}));
 			QVector<int> columnNextTop(numColumns(), numRows() > 0 ?  rowTop[0] : 0);
 			QVector<int> rowNextLeft(numRows(), numColumns() > 0 ? columnLeft[0] : 0);
 			for (int x=0; x<numColumns(); x++)
@@ -489,7 +489,7 @@ class VISUALIZATIONBASE_API GridLayouter
 
 						if (auto child = childItem(x, y))
 						{
-							regs.append( ItemRegion() );
+							regs.append( ItemRegion{} );
 							regs.last().setItem( child );
 							regs.last().setRegion(itemArea);
 						}
@@ -499,8 +499,8 @@ class VISUALIZATIONBASE_API GridLayouter
 						// Add a dummy area rect to make putting cursors easier
 						if (majorAxis == NoMajor)
 						{
-							itemAreas[x][y].setTopLeft( QPoint(columnLeft[x], rowTop[y]) );
-							itemAreas[x][y].setBottomRight( QPoint(columnRight[x], rowBottom[y]) );
+							itemAreas[x][y].setTopLeft( QPoint{columnLeft[x], rowTop[y]} );
+							itemAreas[x][y].setBottomRight( QPoint{columnRight[x], rowBottom[y]} );
 						}
 					}
 
@@ -526,8 +526,8 @@ class VISUALIZATIONBASE_API GridLayouter
 								!extraCursorsAroundParentShape,
 								notLocationEquivalentCursors, !extraCursorsAroundParentShape, true,
 								majorAxis == ColumnMajor
-								? QRect(columnLeft[x], frontCursorTop, columnWidth, topMargin())
-								: QRect(frontCursorLeft, rowTop[y], leftMargin(), rowHeight) ));
+								? QRect{columnLeft[x], frontCursorTop, columnWidth, topMargin()}
+								: QRect{frontCursorLeft, rowTop[y], leftMargin(), rowHeight} ));
 					}
 
 					// Inner major cursor after the current major axis, if requested
@@ -539,8 +539,8 @@ class VISUALIZATIONBASE_API GridLayouter
 							majorAxis == ColumnMajor ? x+1 : -1, majorAxis == ColumnMajor ? -1 : y+1,
 							majorAxis != ColumnMajor, false, true, true, true,
 							majorAxis == ColumnMajor
-							? QRect(columnRight[x]+1, frontCursorTop, leftMargin(), totalHeight)
-							: QRect(frontCursorLeft, rowBottom[y]+1, totalWidth, topMargin()) ));
+							? QRect{columnRight[x]+1, frontCursorTop, leftMargin(), totalHeight}
+							: QRect{frontCursorLeft, rowBottom[y]+1, totalWidth, topMargin()} ));
 					}
 
 					// Inner cursor to next element, if any
@@ -554,8 +554,8 @@ class VISUALIZATIONBASE_API GridLayouter
 								majorAxis == ColumnMajor ? y+1 : y, majorAxis == ColumnMajor, false,
 								notLocationEquivalentCursors, true, true,
 								majorAxis == ColumnMajor
-								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, spaceBetweenRows())
-								: QRect(itemAreas[x][y].right()+1, rowTop[y], spaceBetweenColumns(), rowHeight) ));
+								? QRect{columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, spaceBetweenRows()}
+								: QRect{itemAreas[x][y].right()+1, rowTop[y], spaceBetweenColumns(), rowHeight} ));
 					}
 
 					// Back cursor, if requested, and if there is at least one element
@@ -569,8 +569,8 @@ class VISUALIZATIONBASE_API GridLayouter
 								majorAxis == ColumnMajor ? y+1 : y, majorAxis == ColumnMajor, !extraCursorsAroundParentShape,
 								notLocationEquivalentCursors, true, !extraCursorsAroundParentShape,
 								majorAxis == ColumnMajor
-								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, bottomMargin())
-								: QRect(itemAreas[x][y].right()+1, rowTop[y], rightMargin(), rowHeight) ));
+								? QRect{columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, bottomMargin()}
+								: QRect{itemAreas[x][y].right()+1, rowTop[y], rightMargin(), rowHeight} ));
 					}
 
 				}
@@ -584,16 +584,16 @@ class VISUALIZATIONBASE_API GridLayouter
 						majorAxis == ColumnMajor ? 0 : -1, majorAxis == ColumnMajor ? -1 : 0,
 						majorAxis != ColumnMajor, false, true, false, true,
 						majorAxis == ColumnMajor
-						? QRect(frontCursorLeft, frontCursorTop, leftMargin(), totalHeight)
-						: QRect(frontCursorLeft, frontCursorTop, totalWidth, topMargin()) ));
+						? QRect{frontCursorLeft, frontCursorTop, leftMargin(), totalHeight}
+						: QRect{frontCursorLeft, frontCursorTop, totalWidth, topMargin()} ));
 
 				//Back
 				regs.append( cursorRegion(parent, formElement,
 						majorAxis == ColumnMajor ? numColumns() : -1, majorAxis == ColumnMajor ? -1 : numRows(),
 						majorAxis != ColumnMajor, false, true, true, false,
 						majorAxis == ColumnMajor
-						? QRect(numColumns()>0 ? columnRight[numColumns()-1]+1 : 0, frontCursorTop, leftMargin(), totalHeight)
-						: QRect(frontCursorLeft, numRows()>0 ? rowBottom[numRows()-1]+1 : 0, totalWidth, topMargin()) ));
+						? QRect{numColumns()>0 ? columnRight[numColumns()-1]+1 : 0, frontCursorTop, leftMargin(), totalHeight}
+						: QRect{frontCursorLeft, numRows()>0 ? rowBottom[numRows()-1]+1 : 0, totalWidth, topMargin()} ));
 			}
 
 			// Cursors outside shape
@@ -604,15 +604,15 @@ class VISUALIZATIONBASE_API GridLayouter
 				regs.append(cursorRegion(parent, formElement, -1, -1, majorAxis == ColumnMajor, true,
 								notLocationEquivalentCursors, false, true,
 								majorAxis == ColumnMajor
-								? QRect(0, 0, parent->widthInLocal(), CURSOR_SIZE)
-								: QRect(0, 0, CURSOR_SIZE, parent->heightInLocal()) ));
+								? QRect{0, 0, parent->widthInLocal(), CURSOR_SIZE}
+								: QRect{0, 0, CURSOR_SIZE, parent->heightInLocal()} ));
 
 				// Back
 				regs.append(cursorRegion(parent, formElement, numColumns()+1, numRows()+1, majorAxis == ColumnMajor, true,
 								notLocationEquivalentCursors, true, false,
 								majorAxis == ColumnMajor
-								? QRect(0, parent->heightInLocal() - CURSOR_SIZE - 1, parent->widthInLocal(), CURSOR_SIZE)
-								: QRect(parent->widthInLocal() - CURSOR_SIZE - 1, 0, CURSOR_SIZE, parent->heightInLocal()) ));
+								? QRect{0, parent->heightInLocal() - CURSOR_SIZE - 1, parent->widthInLocal(), CURSOR_SIZE}
+								: QRect{parent->widthInLocal() - CURSOR_SIZE - 1, 0, CURSOR_SIZE, parent->heightInLocal()} ));
 			}
 
 			return regs;

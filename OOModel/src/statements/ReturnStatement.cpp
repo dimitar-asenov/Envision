@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ReturnStatement)
 DEFINE_ATTRIBUTE(ReturnStatement, values, TypedListOfExpression, false, false, true)
 
 ReturnStatement::ReturnStatement(Expression* firstReturnValue)
-: Super(nullptr, ReturnStatement::getMetaData())
+: Super{nullptr, ReturnStatement::getMetaData()}
 {
 	if (firstReturnValue) values()->append(firstReturnValue);
 }

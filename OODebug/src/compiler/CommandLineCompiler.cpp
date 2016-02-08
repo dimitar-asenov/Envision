@@ -36,7 +36,7 @@ CompilerFeedback CommandLineCompiler::compileFile(const QString& workingDirector
 	QProcess compilerProcess;
 	compilerProcess.setWorkingDirectory(workingDirectory);
 	compilerProcess.setProcessChannelMode(QProcess::MergedChannels);
-	compilerProcess.start(command_, QStringList() << args << fileName);
+	compilerProcess.start(command_, QStringList{} << args << fileName);
 	// block until finished
 	compilerProcess.waitForFinished(-1);
 	// check if everything went fine
@@ -47,13 +47,13 @@ CompilerFeedback CommandLineCompiler::compileFile(const QString& workingDirector
 	if (error != QProcess::UnknownError)
 	{
 		if (error == QProcess::FailedToStart)
-			throw new OODebugException{QString("It seems like %1 is not installed on your system!").arg(command_)};
+			throw new OODebugException{QString{"It seems like %1 is not installed on your system!"}.arg(command_)};
 		else
-			throw new OODebugException{QString("Error while executing %1: %2").arg(command_, error)};
+			throw new OODebugException{QString{"Error while executing %1: %2"}.arg(command_, error)};
 	}
 	if (compilerProcess.exitStatus() != QProcess::NormalExit)
-		throw new OODebugException{QString("Compiler crash, command: %1").arg(command_)};
-	return parseFunction_(QString(compilerProcess.readAllStandardOutput()));
+		throw new OODebugException{QString{"Compiler crash, command: %1"}.arg(command_)};
+	return parseFunction_(QString{compilerProcess.readAllStandardOutput()});
 }
 
 }

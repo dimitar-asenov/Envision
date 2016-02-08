@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ExplicitTemplateInstantiation)
 DEFINE_ATTRIBUTE(ExplicitTemplateInstantiation, instantiatedClass, ReferenceExpression, false, false, true)
 
 ExplicitTemplateInstantiation::ExplicitTemplateInstantiation(ReferenceExpression* instantiatedClass)
-: Super(nullptr, ExplicitTemplateInstantiation::getMetaData())
+: Super{nullptr, ExplicitTemplateInstantiation::getMetaData()}
 {
 	if (instantiatedClass)
 		setInstantiatedClass(instantiatedClass);

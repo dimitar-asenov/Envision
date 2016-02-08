@@ -38,7 +38,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentFreeNode)
 DEFINE_ATTRIBUTE(CommentFreeNode, name, Text, false, false, true)
 DEFINE_ATTRIBUTE(CommentFreeNode, node, Node, false, true, true)
 
-CommentFreeNode::CommentFreeNode(Node *parent, QString name) : Super(parent, CommentFreeNode::getMetaData())
+CommentFreeNode::CommentFreeNode(Node *parent, QString name) : Super{parent, CommentFreeNode::getMetaData()}
 {
 	setName(name);
 	setNode(new CommentText{});

@@ -71,7 +71,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		}
 
 		// Determine whether to finalize the current token
-		QChar next = (i == input.size()-1) ? QChar() : input[i+1];
+		QChar next = (i == input.size()-1) ? QChar{} : input[i+1];
 		bool finalizeToken = false;
 		bool stringFinished = false;
 		if (inString)
@@ -114,7 +114,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 			else
 				t = first.isDigit() ? Literal : Identifier;
 
-			result.append(Token(token, t));
+			result.append(Token{token, t});
 
 			token = "";
 			inString = false;
@@ -197,7 +197,7 @@ QVector<Token> Token::createSubExpressions(QVector<Token>::const_iterator start,
 	if (foundSplit)
 	{
 		// Create sub expression
-		result.append(Token(QString(), SubExpression));
+		result.append(Token{QString{}, SubExpression});
 		Token& sub = result.last();
 		sub.subExpressionTokens_ = createSubExpressions(splitStart, splitEnd, openParen, closeParen);
 		for (auto t : sub.subExpressionTokens_) sub.text_ += t.text_;

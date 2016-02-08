@@ -30,25 +30,25 @@ namespace SelfTest {
 
 void TestResults::addPassedTest(const QString& testName)
 {
-	testResults_.append(TestResult(TestResult::TestPassed, testName));
+	testResults_.append(TestResult{TestResult::TestPassed, testName});
 	numPassedTests_++;
 }
 
 void TestResults::addFailedTest(const QString& testName)
 {
-	testResults_.append(TestResult(TestResult::TestFailed, testName));
+	testResults_.append(TestResult{TestResult::TestFailed, testName});
 	numFailedTests_++;
 }
 
 void TestResults::addPassedCheck(const QString& message)
 {
-	checkResults_.append(TestResult(TestResult::TestPassed, message));
+	checkResults_.append(TestResult{TestResult::TestPassed, message});
 	numPassedChecks_++;
 }
 
 void TestResults::addFailedCheck(const QString& message)
 {
-	checkResults_.append(TestResult(TestResult::TestFailed, message));
+	checkResults_.append(TestResult{TestResult::TestFailed, message});
 	numFailedChecks_++;
 }
 

@@ -95,7 +95,7 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 		for (auto match : matches)
 			suggestions.append(new CommandSuggestion{"add " + match.first, "Add node " + match.first + " to the view"});
 	}
-	else if (QString("add ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	else if (QString{"add "}.startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 			suggestions.append(new CommandSuggestion{"add ", "Add nodes to the current view"});
 
 	return suggestions;

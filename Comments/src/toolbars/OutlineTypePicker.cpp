@@ -50,7 +50,7 @@ OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton{parent}
 	QPen aPen;
 	aPen.setColor(Qt::black);
 	aPen.setWidth(4);
-	pixList_.append(QPixmap());
+	pixList_.append(QPixmap{});
 	for (int i = 1; i < 6; i++)
 	{
 		pixmap.fill(Qt::transparent);
@@ -60,9 +60,9 @@ OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton{parent}
 		aPainter->drawLine(2, 13, 94, 13);
 		pixList_.append(pixmap);
 		aButton = new QToolButton;
-		aButton->setIconSize(QSize(96, 24));
+		aButton->setIconSize(QSize{96, 24});
 		aButton->setStyleSheet("border: none;");
-		aButton->setIcon(QIcon(pixmap));
+		aButton->setIcon(QIcon{pixmap});
 		aLayout->addWidget(aButton);
 		signalMapper->setMapping(aButton, i);
 		connect(aButton,  &QToolButton::clicked, signalMapper,

@@ -39,12 +39,12 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar{parent}
 {
 	initCommentsResources();
 
-	this->setIconSize(QSize(96, 24));
+	this->setIconSize(QSize{96, 24});
 	this->setWindowTitle("Diagram Editing Toolbar");
 
 	bSelection_ = new QToolButton;
-	bSelection_->setIcon(QIcon(":/icons/selection.png"));
-	bSelection_->setFixedSize(QSize(36, 36));
+	bSelection_->setIcon(QIcon{":/icons/selection.png"});
+	bSelection_->setFixedSize(QSize{36, 36});
 	bSelection_->setCheckable(true);
 	this->addWidget(bSelection_);
 	bSelection_->setChecked(true);
@@ -53,14 +53,14 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar{parent}
 	this->addSeparator();
 
 	bSelectShape_ = new QToolButton;
-	bSelectShape_->setIcon(QIcon(":/icons/shapes.png"));
-	bSelectShape_->setFixedSize(QSize(42, 36));
+	bSelectShape_->setIcon(QIcon{":/icons/shapes.png"});
+	bSelectShape_->setFixedSize(QSize{42, 36});
 	this->addWidget(bSelectShape_);
 
 	QMenu* menu = new QMenu{};
-	menu->addAction(QIcon(":/icons/rectangle.png"), "Rectangle")->setIconVisibleInMenu(true);
-	menu->addAction(QIcon(":/icons/ellipse.png"), "Ellipse")->setIconVisibleInMenu(true);
-	menu->addAction(QIcon(":/icons/diamond.png"), "Diamond")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon{":/icons/rectangle.png"}, "Rectangle")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon{":/icons/ellipse.png"}, "Ellipse")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon{":/icons/diamond.png"}, "Diamond")->setIconVisibleInMenu(true);
 
 	bSelectShape_->setPopupMode(QToolButton::InstantPopup);
 	bSelectShape_->setMenu(menu);
@@ -69,21 +69,21 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar{parent}
 
 	colorPickerBackground_ = new ColorPicker;
 	colorPickerBackground_->setColorPickerType(ColorPicker::background);
-	colorPickerBackground_->setFixedSize(QSize(42, 36));
+	colorPickerBackground_->setFixedSize(QSize{42, 36});
 	colorPickerBackground_->setEnabled(false);
 	colorPickerBackground_->setColors(VCommentDiagram::itemStyles().get()->getColors(),
 												 VCommentDiagram::itemStyles().get()->getColorsPerRow());
 	this->addWidget(colorPickerBackground_);
 	colorPickerBorder_ = new ColorPicker;
 	colorPickerBorder_->setColorPickerType(ColorPicker::shape);
-	colorPickerBorder_->setFixedSize(QSize(42, 36));
+	colorPickerBorder_->setFixedSize(QSize{42, 36});
 	colorPickerBorder_->setEnabled(false);
 	colorPickerBorder_->setColors(VCommentDiagram::itemStyles().get()->getColors(),
 											VCommentDiagram::itemStyles().get()->getColorsPerRow());
 	this->addWidget(colorPickerBorder_);
 	colorPickerText_ = new ColorPicker;
 	colorPickerText_->setColorPickerType(ColorPicker::text);
-	colorPickerText_->setFixedSize(QSize(42, 36));
+	colorPickerText_->setFixedSize(QSize{42, 36});
 	colorPickerText_->setEnabled(false);
 	colorPickerText_->setEnvisionTextColors();
 	this->addWidget(colorPickerText_);
@@ -106,18 +106,18 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar{parent}
 	this->addSeparator();
 
 	boxStartArrow_ = new QCheckBox;
-	boxStartArrow_->setIcon(QIcon(":/icons/startArrow.png"));
+	boxStartArrow_->setIcon(QIcon{":/icons/startArrow.png"});
 	boxStartArrow_->setEnabled(false);
 	this->addWidget(boxStartArrow_);
 
 	boxEndArrow_ = new QCheckBox;
-	boxEndArrow_->setIcon(QIcon(":/icons/endArrow.png"));
+	boxEndArrow_->setIcon(QIcon{":/icons/endArrow.png"});
 	boxEndArrow_->setEnabled(false);
 	this->addWidget(boxEndArrow_);
 
 	bConnections_ = new QToolButton;
-	bConnections_->setIcon(QIcon(":/icons/connection.png"));
-	bConnections_->setFixedSize(QSize(36, 36));
+	bConnections_->setIcon(QIcon{":/icons/connection.png"});
+	bConnections_->setFixedSize(QSize{36, 36});
 	bConnections_->setCheckable(true);
 	this->addWidget(bConnections_);
 

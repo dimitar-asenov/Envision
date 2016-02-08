@@ -38,7 +38,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(PointerTypeExpression)
 DEFINE_ATTRIBUTE(PointerTypeExpression, typeExpression, Expression, false, false, true)
 
 PointerTypeExpression::PointerTypeExpression(Expression* expr)
-: Super(nullptr, PointerTypeExpression::getMetaData())
+: Super{nullptr, PointerTypeExpression::getMetaData()}
 {
 	if (expr) setTypeExpression(expr);
 }

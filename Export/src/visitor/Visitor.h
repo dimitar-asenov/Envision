@@ -150,13 +150,13 @@ inline PrintContext& Visitor<DeclarationVisitor, ExpressionVisitor, StatementVis
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 inline void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
-::error(const QString& errorMessage) { data_->errors_.append(ExportError(errorMessage)); }
+::error(const QString& errorMessage) { data_->errors_.append(ExportError{errorMessage}); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 inline void Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
 ::error(Model::Node* node, const QString& errorMessage)
-{ data_->errors_.append(ExportError(node, errorMessage)); }
+{ data_->errors_.append(ExportError{node, errorMessage}); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
@@ -185,26 +185,26 @@ template<typename DeclarationVisitor, typename ExpressionVisitor, typename State
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
 ::declaration(NodeType* node)
-{ return DeclarationVisitor(data_).visit(node); }
+{ return DeclarationVisitor{data_}.visit(node); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
 ::statement(NodeType* node)
-{ return StatementVisitor(data_).visit(node); }
+{ return StatementVisitor{data_}.visit(node); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
 ::expression(NodeType* node)
-{ return ExpressionVisitor(data_).visit(node); }
+{ return ExpressionVisitor{data_}.visit(node); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 template <typename NodeType> inline SourceFragment*
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>::element(NodeType* node)
-{ return ElementVisitor(data_).visit(node); }
+{ return ElementVisitor{data_}.visit(node); }
 
 }

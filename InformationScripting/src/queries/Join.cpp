@@ -90,7 +90,7 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 	{
 		auto it = tuple1.find(id1Name);
 		if (it == tuple1.end())
-			return {QString("Tuple %1 does not contain %2 which is required for join").arg(tag1, id1Name)};
+			return {QString{"Tuple %1 does not contain %2 which is required for join"}.arg(tag1, id1Name)};
 		Property id1 = it->second;
 
 		bool attributeNotFound = false;
@@ -106,7 +106,7 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 		});
 
 		if (attributeNotFound)
-			return {QString("Tuple %1 does not contain %2 which is required for join").arg(tag2, id2Name)};
+			return {QString{"Tuple %1 does not contain %2 which is required for join"}.arg(tag2, id2Name)};
 
 
 		if (it2 != tag2Tuples.end())
@@ -116,7 +116,7 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 			if (props1.hasErrors()) return props1.errors()[0];
 			auto props2 = extractProperties(*it2, values);
 			if (props2.hasErrors()) return props2.errors()[0];
-			input.add(Tuple(arguments_.argument(AS_ARGUMENT_NAMES[1]), props1.value() + props2.value()));
+			input.add(Tuple{arguments_.argument(AS_ARGUMENT_NAMES[1]), props1.value() + props2.value()});
 		}
 
 	}
@@ -149,7 +149,7 @@ Optional<QList<NamedProperty>> Join::extractProperties(const Tuple& t, const QLi
 		{
 			auto it = t.find(v.second);
 			if (it == t.end() && v.first.isEmpty()) continue;
-			else if (it == t.end()) return QString("Tuple %1 does not have any value %2").arg(t.tag(), v.second);
+			else if (it == t.end()) return QString{"Tuple %1 does not have any value %2"}.arg(t.tag(), v.second);
 			else result.push_back(*it);
 		}
 	}

@@ -106,7 +106,7 @@ class FILEPERSISTENCE_API GitRepository
 		QString currentBranch() const;
 		bool setReferenceTarget(QString reference, QString  target);
 
-		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
+		void TraverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 
 		const CommitFile* getCommitFileFromWorkdir(QString relativePath) const;
 		const CommitFile* getCommitFileFromIndex(QString relativePath) const;
@@ -149,6 +149,6 @@ class FILEPERSISTENCE_API GitRepository
 };
 
 inline QString GitRepository::workdirPath() const { return path_; }
-inline QString GitRepository::projectName() const { return QFileInfo(path_).fileName(); }
+inline QString GitRepository::projectName() const { return QFileInfo{path_}.fileName(); }
 
 }

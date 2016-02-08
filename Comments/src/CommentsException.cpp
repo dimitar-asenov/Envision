@@ -29,7 +29,7 @@
 namespace Comments {
 
 CommentsException::CommentsException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

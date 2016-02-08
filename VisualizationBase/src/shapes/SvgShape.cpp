@@ -72,10 +72,10 @@ QRect SvgShape::contentRect()
 	int outerHeight = sizeSpecified() == OutterSize ? height() : Super::outterSize(width(), height()).height();
 	int innerWidth = (1.0 - style()->leftContentMarginFraction() - style()->rightContentMarginFraction()) * width();
 	int innerHeight = (1.0 - style()->topContentMarginFraction() - style()->bottomContentMarginFraction()) * height();
-	return QRect( xOffset() + std::ceil(outerWidth*style()->leftContentMarginFraction()),
-					  yOffset() + std::ceil(outerHeight*style()->topContentMarginFraction()),
-					  innerWidth,
-					  innerHeight);
+	return { (int) ( xOffset() + std::ceil(outerWidth*style()->leftContentMarginFraction()) ),
+				(int) ( yOffset() + std::ceil(outerHeight*style()->topContentMarginFraction()) ),
+				innerWidth,
+				innerHeight};
 }
 
 QSize SvgShape::innerSize(QSize outterSize) const
@@ -85,7 +85,7 @@ QSize SvgShape::innerSize(QSize outterSize) const
 	int innerHeight = (1.0 - style()->topContentMarginFraction() - style()->bottomContentMarginFraction())
 			*outterSize.height();
 
-	return QSize(innerWidth, innerHeight);
+	return QSize{innerWidth, innerHeight};
 }
 
 QSize SvgShape::outterSize(QSize innerSize) const
@@ -95,7 +95,7 @@ QSize SvgShape::outterSize(QSize innerSize) const
 	int outterHeight = innerSize.height() /
 			(1.0 - style()->topContentMarginFraction() - style()->bottomContentMarginFraction());
 
-	return QSize(outterWidth, outterHeight);
+	return QSize{outterWidth, outterHeight};
 }
 
 void SvgShape::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)

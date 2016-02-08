@@ -60,7 +60,7 @@ QString TextRenderer::selectedText()
 
 		return staticText_.text().mid(xstart, xend - xstart);
 	}
-	else return QString();
+	else return QString{};
 }
 
 void TextRenderer::determineChildren()
@@ -101,12 +101,12 @@ void TextRenderer::updateGeometry(int, int)
 	if (drawApproximately_ == Approximate)
 	{
 		int approxWidth = currentText().length() * qfm.averageCharWidth();
-		textSize = QSize(approxWidth, qfm.height());
+		textSize = QSize{approxWidth, qfm.height()};
 	}
 	else
 	{
 		// It's important to call this in order to give the static text the correct font. This is used when computing bound.
-		staticText_.prepare(QTransform(), style()->font());
+		staticText_.prepare(QTransform{}, style()->font());
 		textSize = this->staticTextSize(qfm);
 	}
 
@@ -163,15 +163,15 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			// Draw just a filler
 			auto c = style()->pen().color();
 			c.setAlpha(64);
-			painter->fillRect(QRectF(textXOffset_, textYOffset_ + heightInLocal()/4.0,
-											 staticText_.size().width(), staticText_.size().height()/2.0), c);
+			painter->fillRect(QRectF{textXOffset_, textYOffset_ + heightInLocal()/4.0,
+											 staticText_.size().width(), staticText_.size().height()/2.0}, c);
 		}
 		else
 		{
 			// Draw actual text
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawStaticText(QPointF(textXOffset_, textYOffset_), staticText_);
+			painter->drawStaticText(QPointF{textXOffset_, textYOffset_}, staticText_);
 			if (style()->underline())
 				painter->drawLine(QPointF{textXOffset_, textYOffset_ + staticText_.size().height()},
 					QPointF{textXOffset_ + staticText_.size().width(), textYOffset_ + staticText_.size().height()});
@@ -201,7 +201,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		// Draw selected text
 		painter->setPen(style()->selectionPen());
 		painter->setFont(style()->selectionFont());
-		painter->drawText(QPointF(offset.x() + selectionCursor->xBegin(), offset.y()),
+		painter->drawText(QPointF{offset.x() + selectionCursor->xBegin(), offset.y()},
 				staticText_.text().mid(start, end - start));
 
 		auto underlineY = textYOffset_ + staticText_.size().height();
@@ -213,7 +213,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
 		painter->drawText(offset, staticText_.text().left(start));
-		painter->drawText(QPointF(offset.x() + selectionCursor->xEnd(), offset.y()), staticText_.text().mid(end));
+		painter->drawText(QPointF{offset.x() + selectionCursor->xEnd(), offset.y()}, staticText_.text().mid(end));
 
 		if (style()->underline())
 		{

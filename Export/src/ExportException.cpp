@@ -29,7 +29,7 @@
 namespace Export {
 
 ExportException::ExportException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

@@ -82,9 +82,9 @@ void Braces::update()
 
 QSize Braces::getSizeOfBrace(const QString& brace, const QFont& font, int innerHeight, QPointF* offset) const
 {
-	if (innerHeight < 1) return QSize(0, 0);
+	if (innerHeight < 1) return QSize{0, 0};
 
-	if (brace.isEmpty()) return QSize(0, innerHeight);
+	if (brace.isEmpty()) return QSize{0, innerHeight};
 
 	QFont f(font);
 	f.setPixelSize(innerHeight);
@@ -113,8 +113,8 @@ int Braces::contentTop()
 
 QRect Braces::contentRect()
 {
-	return QRect(xOffset() + contentLeft_, yOffset() + contentTop_,
-					 rightBraceLeft_ + rightBraceOffset_.x() - contentLeft_, height() );
+	return QRectF{xOffset() + contentLeft_, yOffset() + contentTop_,
+					 rightBraceLeft_ + rightBraceOffset_.x() - contentLeft_, (qreal) height() }.toRect();
 }
 
 QSize Braces::innerSize(QSize outterSize) const
@@ -130,7 +130,7 @@ QSize Braces::innerSize(QSize outterSize) const
 		rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 	}
 
-	return QSize( outterSize.width() - lb.width() - rb.width(), outterSize.height());
+	return QSize{ outterSize.width() - lb.width() - rb.width(), outterSize.height()};
 }
 
 QSize Braces::outterSize(QSize innerSize) const
@@ -139,7 +139,7 @@ QSize Braces::outterSize(QSize innerSize) const
 	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);
 	QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 
-	return QSize( lb.width() + innerSize.width() + rb.width(), lb.height());
+	return QSize{ lb.width() + innerSize.width() + rb.width(), lb.height()};
 }
 
 void Braces::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -149,14 +149,14 @@ void Braces::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget 
 	QFont fl(style()->leftBraceFont());
 	fl.setPixelSize(textSize_);
 	painter->setFont(fl);
-	painter->drawText(QPointF(xOffset(), yOffset()) + leftBraceOffset_, style()->leftBrace());
+	painter->drawText(QPointF{(qreal) xOffset(), (qreal) yOffset()} + leftBraceOffset_, style()->leftBrace());
 
 	// Draw right brace.
 	painter->setPen(style()->rightBracePen());
 	QFont fr(style()->rightBraceFont());
 	fr.setPixelSize(textSize_);
 	painter->setFont(fr);
-	painter->drawText(QPointF(xOffset()+rightBraceLeft_, yOffset()) + rightBraceOffset_, style()->rightBrace());
+	painter->drawText(QPointF{xOffset()+rightBraceLeft_, (qreal) yOffset()} + rightBraceOffset_, style()->rightBrace());
 }
 
 }

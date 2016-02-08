@@ -86,9 +86,9 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 			for (; actualArgLastToken->isNot(clang::tok::eof); ++actualArgLastToken);
 			if (actualArgFirstToken != actualArgLastToken) --actualArgLastToken;
 
-			auto unexpandedArgument = actualArgFirstToken->is(clang::tok::eof) ? QString() :
-												clang_.unexpandedSpelling(clang::SourceRange(actualArgFirstToken->getLocation(),
-																											actualArgLastToken->getLocation()));
+			auto unexpandedArgument = actualArgFirstToken->is(clang::tok::eof) ? QString{} :
+												clang_.unexpandedSpelling(clang::SourceRange{actualArgFirstToken->getLocation(),
+																											actualArgLastToken->getLocation()});
 
 			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression{unexpandedArgument});
 			entry->argumentLocs().append(actualArgLastToken->getLocation());

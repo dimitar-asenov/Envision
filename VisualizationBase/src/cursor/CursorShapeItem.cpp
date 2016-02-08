@@ -60,7 +60,7 @@ void CursorShapeItem::updateGeometry(int, int)
 	if (hasShape())
 	{
 		getShape()->setInnerSize(size_.width(), size_.height());
-		QPointF ref = useCenter_ ? center_ - QPointF( getShape()->contentLeft(), getShape()->contentTop() ) : topLeft_;
+		QPointF ref = useCenter_ ? center_ - QPoint{ getShape()->contentLeft(), getShape()->contentTop() } : topLeft_;
 		auto scalingFactor = mainViewScalingFactor();
 
 		// Adjust for the scaling if this cursor should ignore transformations

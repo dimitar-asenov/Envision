@@ -190,7 +190,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::suggestionsForHandler(GenericH
 			QList<CommandSuggestion*> suggestions;
 			//If it is a menu command, we must make sure it can be interpreted on the current item in its current state
 			if (!trimmedCommandText.isEmpty() ||
-					(command->appearsInMenus() && command->canInterpret(source, target, QStringList(command->name()), cursor)))
+					(command->appearsInMenus() && command->canInterpret(source, target, QStringList{command->name()}, cursor)))
 				suggestions = command->suggest(source, target, trimmedCommandText, cursor);
 
 			result.append( suggestions );
@@ -248,8 +248,8 @@ QStringList CommandExecutionEngine::tokenize(const QString& string, const QStrin
 			if ( string[i] == quote && !isEscaped(string, i, escapeSymbols) )
 			{
 				result.append(str + quote);
-				quote = QChar();
-				str = QString();
+				quote = QChar{};
+				str = QString{};
 			}
 			else str.append(string[i]);
 		}
@@ -273,7 +273,7 @@ QStringList CommandExecutionEngine::tokenizeNonQuoted(const QString& string)
 		if ( string[i] == ' ' )
 		{
 			if ( !str.isNull() ) result.append(str);
-			str = QString();
+			str = QString{};
 			fractionInitiated = false;
 		}
 		else if ( string[i].isDigit() && fractionInitiated && last == '.' )
@@ -328,7 +328,7 @@ bool CommandExecutionEngine::doQuotesMatch(const QString& string, const QString&
 		}
 		else
 		{
-			if ( string[i] == quote && !isEscaped(string, i, escapeSymbols) ) quote = QChar();
+			if ( string[i] == quote && !isEscaped(string, i, escapeSymbols) ) quote = QChar{};
 		}
 	}
 

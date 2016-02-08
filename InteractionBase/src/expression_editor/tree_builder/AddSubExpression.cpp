@@ -38,7 +38,7 @@ AddSubExpression::AddSubExpression(const QVector<ExpressionTreeBuildInstruction*
 
 void AddSubExpression::perform(ExpressionTreeBuilder& tb)
 {
-	Expression* exp = ExpressionTreeBuilder().build( instructions_ );
+	Expression* exp = ExpressionTreeBuilder{}.build( instructions_ );
 	if (tb.top() ) tb.unfinished().last()->addNext(exp);
 	else	tb.top() = exp;
 

@@ -29,7 +29,7 @@
 namespace Alloy {
 
 AlloyException::AlloyException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

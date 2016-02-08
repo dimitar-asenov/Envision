@@ -193,8 +193,8 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto overlay = new PlotOverlay{target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first};
 		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 		auto observer = std::make_shared<VariableObserver>
-				(VariableObserver(defaultTypeAndHandler.second, {variableDeclaration}, node,
-				{[](QList<double> arg) { return arg[0];}}));
+				(VariableObserver{defaultTypeAndHandler.second, {variableDeclaration}, node,
+				{[](QList<double> arg) { return arg[0];}}});
 		nodeObservedBy_.insertMulti(node, observer);
 		for (auto ref : refFinder.references())
 		{
@@ -249,7 +249,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 
 	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
 	auto observer = std::make_shared<VariableObserver>
-			(VariableObserver(defaultTypeAndHandler.second, vars, observedNode, parsedArgs.first));
+			(VariableObserver{defaultTypeAndHandler.second, vars, observedNode, parsedArgs.first});
 	nodeObservedBy_.insertMulti(observedNode, observer);
 	addBreakpointAt(observedNode);
 
@@ -450,8 +450,8 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 						//                    #JDWP_Method_VariableTable
 						Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
 									currentIndex < variableDetails.codeIndex() + variableDetails.length());
-						varsToGet << StackVariable(variableDetails.slot(), utils_.typeExpressionToTag(
-																variable->typeExpression()));
+						varsToGet << StackVariable{variableDetails.slot(), utils_.typeExpressionToTag(
+																variable->typeExpression())};
 					}
 				}
 			}

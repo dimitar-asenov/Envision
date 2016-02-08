@@ -54,7 +54,7 @@ DEFINE_ATTRIBUTE(ReferenceExpression, typeArguments, TypedListOfExpression, fals
 DEFINE_ATTRIBUTE(ReferenceExpression, memKind, Integer, false, false, true)
 
 ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix, MemberKind kind)
-: Super(nullptr, ReferenceExpression::getMetaData())
+: Super{nullptr, ReferenceExpression::getMetaData()}
 {
 	ref()->setName(name);
 	setMemberKind(kind);

@@ -29,7 +29,7 @@
 namespace OOVisualization {
 
 OOVisualizationException::OOVisualizationException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

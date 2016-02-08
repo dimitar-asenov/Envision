@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
 DEFINE_ATTRIBUTE(Module, libraries, TypedListOfUsedLibrary, false, false, true)
 DEFINE_ATTRIBUTE(Module, modKind, Integer, false, false, true)
 
-Module::Module(const QString& name, ModuleKind kind) : Super(nullptr, Module::getMetaData())
+Module::Module(const QString& name, ModuleKind kind) : Super{nullptr, Module::getMetaData()}
 {
 	setName(name);
 	setKind(kind);

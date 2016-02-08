@@ -132,7 +132,7 @@ void PlotOverlay::drawTextVerticalCenteredAt(QPainter* painter, const QPointF& p
 	// http://stackoverflow.com/questions/24831484/how-to-align-qpainter-drawtext-around-a-point-not-a-rectangle
 	const qreal size = 32767.0;
 	QPointF corner(pos.x(), pos.y() - size / 2.0);
-	QRectF rect(corner, QSizeF(size, size));
+	QRectF rect(corner, QSizeF{size, size});
 	painter->drawText(rect, Qt::AlignVCenter, label, nullptr);
 }
 
@@ -206,7 +206,7 @@ void PlotOverlay::plotBars(QPainter* painter)
 		auto startPoint = toPlotCoordinates({xValues_[i], yValues_[0][i]});
 		QRectF bar(startPoint.x() - barWidth / 2.0, startPoint.y(), barWidth, scaledValue);
 		painter->drawRect(bar);
-		painter->fillRect(bar, QColor((i % 2 ? "red" : "black")));
+		painter->fillRect(bar, QColor{(i % 2 ? "red" : "black")});
 	}
 }
 
@@ -239,8 +239,8 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 		fieldSize /= yValues_[0].size();
 
 		// first draw the array box:
-		painter->drawPolygon(QPolygon({plotRegion_.topLeft(), plotRegion_.topRight(),
-												 plotRegion_.bottomRight(), plotRegion_.bottomLeft()}));
+		painter->drawPolygon(QPolygon{{plotRegion_.topLeft(), plotRegion_.topRight(),
+												 plotRegion_.bottomRight(), plotRegion_.bottomLeft()}});
 	}
 	// draw the separators and contents
 	double plotY = plotRegion_.bottomLeft().y();
@@ -250,8 +250,8 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 	for (int i = 0; i < yValues_[0].size(); ++i)
 	{
 		double plotX = plotRegion_.x() + i * fieldSize;
-		painter->drawLine(QPointF(plotX, plotY - penHalfWidth), {plotX, plotY - plotRegion_.height() + penHalfWidth});
-		painter->drawText(QRectF(QPointF(plotX, plotRegion_.y()), QSize(fieldSize, fieldSize)),
+		painter->drawLine(QPointF{plotX, plotY - penHalfWidth}, {plotX, plotY - plotRegion_.height() + penHalfWidth});
+		painter->drawText(QRectF{QPointF{plotX, (qreal) plotRegion_.y()}, QSizeF{fieldSize, fieldSize}.toSize()},
 								Qt::AlignVCenter | Qt::AlignHCenter, QString::number(yValues_[0][i]));
 	}
 	// draw the pointers into the array
@@ -269,7 +269,7 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 		QPointF midPoint = {plotRegion_.x() + xOffset + fieldSize / 2, topY};
 		QPointF leftPoint = {plotRegion_.x() + xOffset + padding, bottomY};
 		QPointF rightPoint = {plotRegion_.x() + xOffset + padding + bottomWidth, bottomY};
-		return QPolygonF({midPoint, leftPoint, rightPoint});
+		return QPolygonF{{midPoint, leftPoint, rightPoint}};
 	};
 
 	setBrushColor(painter, Qt::red); // Triangle color
@@ -285,7 +285,7 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 			double x = plotRegion_.x() + index * fieldSize;
 			// Text is below arrow and below other text. (We paint with rectangle so we have to specify top y)
 			double y = plotY + ARROW_HEIGHT + 2 * style()->margin() + (valuesAt[index] - 1) * fontHeight;
-			painter->drawText(QRectF(QPointF(x, y), QSize(fieldSize, fontHeight)),
+			painter->drawText(QRectF{QPointF{x, y}, QSize{(int) fieldSize, fontHeight}},
 									Qt::AlignVCenter | Qt::AlignHCenter, variableNames_[i + 1]);
 		}
 	}
@@ -307,9 +307,9 @@ void PlotOverlay::drawLegend(QPainter* painter)
 	if (style()->width() - legendWidth - LEGEND_MARGIN < plotRegion_.right())
 		plotRegion_.setRight(style()->width() - legendWidth - LEGEND_MARGIN);
 
-	setBrushColor(painter, QColor(240, 240, 255)); // Very light gray
+	setBrushColor(painter, QColor{240, 240, 255}); // Very light gray
 
-	QRect legendRegion(QPoint(style()->width() - legendWidth, drawnTextHeight()), QSize(legendWidth, legendHeight));
+	QRect legendRegion(QPoint{style()->width() - legendWidth, drawnTextHeight()}, QSize{legendWidth, legendHeight});
 	painter->setPen(Qt::NoPen);
 	painter->drawRect(legendRegion);
 

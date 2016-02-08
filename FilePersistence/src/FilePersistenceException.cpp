@@ -29,7 +29,7 @@
 namespace FilePersistence {
 
 FilePersistenceException::FilePersistenceException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

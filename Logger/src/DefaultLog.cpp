@@ -56,7 +56,7 @@ void DefaultLog::add(Level level, QString message)
 	if (level == LOGINFO) out<<		"INFO    " << pluginId << ": " << message << endl;
 	if (level == LOGWARNING) out<<	"WARNING " << pluginId << ": " << message << endl;
 
-	loggedEvents.append(LogEntry());
+	loggedEvents.append(LogEntry{});
 	loggedEvents.last().level = level;
 	loggedEvents.last().message = message;
 	loggedEvents.last().pluginId = pluginId;
@@ -75,7 +75,7 @@ Log::LogEntry DefaultLog::getNextEntry()
 {
 	QMutexLocker locker{&logAccess};
 
-	if ( loggedEvents.size() == loggedEntriesSeen ) return LogEntry();
+	if ( loggedEvents.size() == loggedEntriesSeen ) return LogEntry{};
 
 	loggedEntriesSeen++;
 	return loggedEvents[loggedEntriesSeen - 1];

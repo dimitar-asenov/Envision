@@ -47,7 +47,7 @@ int TextRendererStringOffsetProvider::offset(Qt::Key /*key*/)
 
 QString TextRendererStringOffsetProvider::string()
 {
-	if (!vis_) return QString();
+	if (!vis_) return QString{};
 	return vis_->text();
 }
 

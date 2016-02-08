@@ -59,7 +59,7 @@ void Float::save(PersistentStore &store) const
 void Float::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Float node from an incompatible node type " + store.currentNodeType());
+		throw ModelException{"Trying to load a Float node from an incompatible node type " + store.currentNodeType()};
 
 	set(store.loadDoubleValue());
 }

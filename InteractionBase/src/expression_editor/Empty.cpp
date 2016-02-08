@@ -30,13 +30,13 @@
 
 namespace Interaction {
 
-Empty::Empty(Operator* parent) : Expression(type(), parent)
+Empty::Empty(Operator* parent) : Expression{type(), parent}
 {
 }
 
 QString Empty::renderText()
 {
-	return QString("");
+	return QString{""};
 }
 
 void Empty::accept(ExpressionVisitor* visitor)

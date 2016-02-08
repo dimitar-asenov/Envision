@@ -69,12 +69,12 @@ void VCommentImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
 
 	if (image_.isNull())
 	{
-		painter->setPen(QPen(QColor(100, 100, 100)));
-		painter->drawText(QRect{QPoint(xOffset, yOffset), errorSize_}, Qt::AlignCenter | Qt::TextWordWrap,
+		painter->setPen(QPen{QColor{100, 100, 100}});
+		painter->drawText(QRect{QPoint{xOffset, yOffset}, errorSize_}, Qt::AlignCenter | Qt::TextWordWrap,
 								"This image could not be loaded: " + path_);
 	}
 	else
-		painter->drawImage(QRect{QPoint(xOffset, yOffset), size_}, image_);
+		painter->drawImage(QRect{QPoint{xOffset, yOffset}, size_}, image_);
 }
 
 bool VCommentImage::updateSize(QSize size)

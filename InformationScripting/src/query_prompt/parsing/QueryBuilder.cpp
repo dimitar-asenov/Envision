@@ -69,7 +69,7 @@ std::vector<std::unique_ptr<Query>> QueryBuilder::visitCommand(QueryBuilder* sel
 		result.emplace_back(std::move(q));
 		return result;
 	}
-	throw QueryParsingException(QString("%1 is not a valid command").arg(cmd));
+	throw QueryParsingException{QString{"%1 is not a valid command"}.arg(cmd)};
 }
 
 std::vector<std::unique_ptr<Query>> QueryBuilder::visitList(QueryBuilder* self, CompositeQueryNode* list)
@@ -81,7 +81,7 @@ std::vector<std::unique_ptr<Query>> QueryBuilder::visitList(QueryBuilder* self, 
 		// NOTE: subqueries with multiple inputs/outputs are not supported:
 		auto queries = self->visit(list->queries()->at(i));
 		if (queries.size() > 1)
-			throw QueryParsingException("yield in a list is not allowed");
+			throw QueryParsingException{"yield in a list is not allowed"};
 		auto query = composite->addQuery(std::move(queries[0]));
 		composite->connectInput(i, query);
 		composite->connectToOutput(0, query, i);
@@ -136,7 +136,7 @@ std::vector<std::unique_ptr<Query>> QueryBuilder::visitOperator(QueryBuilder* se
 		else
 		{
 			if (rightComposite->inputCount() > 1)
-				throw QueryParsingException("Connecting lists with differing sizes is not allowed.");
+				throw QueryParsingException{"Connecting lists with differing sizes is not allowed."};
 			connectAsUnion(composite.get(), leftComposite, right, op);
 		}
 	}

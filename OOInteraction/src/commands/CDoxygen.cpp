@@ -30,8 +30,7 @@
 
 namespace OOInteraction {
 
-CDoxygen::CDoxygen() : CreateNamedObjectWithAttributes("doxygen",
-		{{}})
+CDoxygen::CDoxygen() : CreateNamedObjectWithAttributes{"doxygen", {{}}}
 {
 }
 
@@ -56,7 +55,7 @@ Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, 
 	aProcess.start("doxygen");
 	aProcess.waitForFinished();
 
-	QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/doxygen/html/index.html"));
+	QDesktopServices::openUrl(QUrl{QDir::currentPath() + "/doxygen/html/index.html"});
 
 	return new Interaction::CommandResult{};
 }

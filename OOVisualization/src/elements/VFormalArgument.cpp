@@ -55,7 +55,7 @@ void VFormalArgument::initializeForms()
 
 	addForm(grid({
 			{nameEl, outIconEl},
-			{Merge(typeEl, 2, 1)}
+			{Merge{typeEl, 2, 1}}
 		})
 		->setHorizontalAlignment(LayoutStyle::Alignment::Center)
 		->setNoInnerCursors([](Item*){return true;})

@@ -47,14 +47,14 @@ StringComponents::~StringComponents()
 
 QStringList StringComponents::components()
 {
-	//if (!node_) return QStringList();
+	//if (!node_) return QStringList{};
 	Q_ASSERT(node_);
 
 	auto iter = componentFunctions().find(node_->typeId());
 	if (iter != componentFunctions().end()) return iter.value()(node_);
 	if (auto listNode = DCast<Model::List>(node_)) return c( list(listNode) );
 
-	throw OOInteractionException("No string component function registered for node of type " + node_->typeName());
+	throw OOInteractionException{"No string component function registered for node of type " + node_->typeName()};
 }
 
 QString StringComponents::stringForNode(Model::Node* node)
@@ -66,8 +66,8 @@ QString StringComponents::stringForNode(Model::Node* node)
 
 QStringList StringComponents::componentsForNode(Model::Node* node)
 {
-	if (!node) return QStringList();
-	else return StringComponents(node).components();
+	if (!node) return QStringList{};
+	else return StringComponents{node}.components();
 }
 
 StringComponents::Optional StringComponents::list(Model::List* listNode)
@@ -85,7 +85,7 @@ StringComponents::Optional StringComponents::list(Model::List* listNode, const Q
 		const QString& separator, const QString& postfix, bool nothingIfEmpty, bool collapse)
 {
 	if (nothingIfEmpty && listNode->size() == 0)
-		return Optional();
+		return Optional{};
 
 	QStringList list;
 	list << prefix;
@@ -104,10 +104,10 @@ using namespace OOModel;
 void StringComponents::initConversions()
 {
 	// Types
-	add<ArrayTypeExpression>([](ArrayTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "[]"); });
-	add<ReferenceTypeExpression>([](ReferenceTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "&"); });
-	add<PointerTypeExpression>([](PointerTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "*"); });
-	add<ClassTypeExpression>([](ClassTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO) ); });
+	add<ArrayTypeExpression>([](ArrayTypeExpression* e){ return c( Optional{e->typeExpression(), AUTO}, "[]"); });
+	add<ReferenceTypeExpression>([](ReferenceTypeExpression* e){ return c( Optional{e->typeExpression(), AUTO}, "&"); });
+	add<PointerTypeExpression>([](PointerTypeExpression* e){ return c( Optional{e->typeExpression(), AUTO}, "*"); });
+	add<ClassTypeExpression>([](ClassTypeExpression* e){ return c( Optional{e->typeExpression(), AUTO} ); });
 	add<PrimitiveTypeExpression>([](PrimitiveTypeExpression* e){ return c(
 		choose(e->typeValue(),
 			PrimitiveTypeExpression::PrimitiveTypes::INT, "int",
@@ -128,13 +128,13 @@ void StringComponents::initConversions()
 	add<AutoTypeExpression>([](AutoTypeExpression* ){ return c( "auto" ); });
 	add<FunctionTypeExpression>([](FunctionTypeExpression* e){ return c( "[]",
 			list(e->arguments(), "(", ",", ")", false, true),
-			Optional("->", e->results()->size() > 0),
+			Optional{"->", e->results()->size() > 0},
 			list(e->results(), "(", ",", ")", true, true)
 	);});
 
 	// Operators
 	add<AssignmentExpression>([](AssignmentExpression* e){ return c(
-		QString(), e->left(), choose(e->op(),
+		QString{}, e->left(), choose(e->op(),
 			AssignmentExpression::ASSIGN, "=",
 			AssignmentExpression::PLUS_ASSIGN, "+=",
 			AssignmentExpression::MINUS_ASSIGN, "-=",
@@ -147,10 +147,10 @@ void StringComponents::initConversions()
 			AssignmentExpression::LEFT_SHIFT_ASSIGN, "<<=",
 			AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN, ">>=",
 			AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN, ">>>="),
-		e->right(), QString()
+		e->right(), QString{}
 	); });
 	add<BinaryOperation>([](BinaryOperation* e){ return c(
-		QString(), e->left(), choose(e->op(),
+		QString{}, e->left(), choose(e->op(),
 			BinaryOperation::TIMES, "*",
 			BinaryOperation::DIVIDE, "/",
 			BinaryOperation::REMAINDER, "%",
@@ -172,14 +172,14 @@ void StringComponents::initConversions()
 			BinaryOperation::CONDITIONAL_OR, "||",
 			BinaryOperation::ARRAY_INDEX, "["),
 		e->right(),
-		e->op() == OOModel::BinaryOperation::ARRAY_INDEX ? "]" : QString()
+		e->op() == OOModel::BinaryOperation::ARRAY_INDEX ? "]" : QString{}
 	); });
 	add<UnaryOperation>([](UnaryOperation* e){ return c(
 		choose(e->op(),
 			UnaryOperation::PREINCREMENT, "++",
 			UnaryOperation::PREDECREMENT, "--",
-			UnaryOperation::POSTINCREMENT, Optional(),
-			UnaryOperation::POSTDECREMENT, Optional(),
+			UnaryOperation::POSTINCREMENT, Optional{},
+			UnaryOperation::POSTDECREMENT, Optional{},
 			UnaryOperation::PLUS, "+",
 			UnaryOperation::MINUS, "-",
 			UnaryOperation::NOT, "!",
@@ -189,17 +189,17 @@ void StringComponents::initConversions()
 			UnaryOperation::ADDRESSOF, "&"),
 		e->operand(),
 		choose(e->op(),
-			UnaryOperation::PREINCREMENT, Optional(),
-			UnaryOperation::PREDECREMENT, Optional(),
+			UnaryOperation::PREINCREMENT, Optional{},
+			UnaryOperation::PREDECREMENT, Optional{},
 			UnaryOperation::POSTINCREMENT, "++",
 			UnaryOperation::POSTDECREMENT, "--",
-			UnaryOperation::PLUS, Optional(),
-			UnaryOperation::MINUS, Optional(),
-			UnaryOperation::NOT, Optional(),
-			UnaryOperation::COMPLEMENT, Optional(),
+			UnaryOperation::PLUS, Optional{},
+			UnaryOperation::MINUS, Optional{},
+			UnaryOperation::NOT, Optional{},
+			UnaryOperation::COMPLEMENT, Optional{},
 			UnaryOperation::PARENTHESIS, ")",
-			UnaryOperation::DEREFERENCE, Optional(),
-			UnaryOperation::ADDRESSOF, Optional())
+			UnaryOperation::DEREFERENCE, Optional{},
+			UnaryOperation::ADDRESSOF, Optional{})
 	); });
 	add<TypeTraitExpression>([](TypeTraitExpression* e){ return c(
 			choose( static_cast<int>(e->typeTraitKind()),
@@ -224,9 +224,9 @@ void StringComponents::initConversions()
 	add<CastExpression>([](CastExpression* e){ return c( "(", e->castType(), ")", e->expr() ); });
 	add<InstanceOfExpression>(
 			[](InstanceOfExpression* e){ return c( e->expr(), " ", "instanceof", " ", e->typeExpression() ); });
-	add<CommaExpression>([](CommaExpression* e){ return c( QString(), e->left(), ",", e->right(), QString() ); });
+	add<CommaExpression>([](CommaExpression* e){ return c( QString{}, e->left(), ",", e->right(), QString{} ); });
 	add<ConditionalExpression>([](ConditionalExpression* e){ return c(
-		QString(), e->condition(), "?", e->trueExpression(), ":", e->falseExpression(), QString() ); });
+		QString{}, e->condition(), "?", e->trueExpression(), ":", e->falseExpression(), QString{} ); });
 	add<SuperExpression>([](SuperExpression* ){ return c( "super" ); });
 	add<ThisExpression>([](ThisExpression* ){ return c( "this" ); });
 	add<GlobalScopeExpression>([](GlobalScopeExpression* ){ return c( "::" ); });
@@ -234,7 +234,7 @@ void StringComponents::initConversions()
 	add<TypeNameOperator>([](TypeNameOperator* e ){ return c( "typename", " ", e->typeExpression() ); });
 	add<DeleteExpression>([](DeleteExpression* e ){ return c( e->isArray() ? "delete[]":"delete", " ", e->expr() ); });
 	add<VariableDeclarationExpression>([](VariableDeclarationExpression* e ){ return c( e->decl()->typeExpression(), " ",
-			e->decl()->name(), Optional("=", e->decl()->initialValue()), Optional(e->decl()->initialValue())); });
+			e->decl()->name(), Optional{"=", e->decl()->initialValue()}, Optional{e->decl()->initialValue()}); });
 
 	add<LambdaExpression>([](LambdaExpression* e ){ return c( CompoundObjectDescriptor::storeExpression(e)); });
 
@@ -247,15 +247,15 @@ void StringComponents::initConversions()
 		e->callee(), list(e->arguments(), "(", ",", ")", false, true) ); });
 
 	add<NewExpression>([](NewExpression* e){ return c( "new", " ",
-			Optional( (e->dimensions()->size() > 0 || !e->initializer()) ? e->newType() : nullptr, AUTO),
-			list(e->dimensions(), "[", ",", "]", true, true), Optional(e->initializer(), AUTO) ); });
+			Optional{ (e->dimensions()->size() > 0 || !e->initializer()) ? e->newType() : nullptr, AUTO},
+			list(e->dimensions(), "[", ",", "]", true, true), Optional{e->initializer(), AUTO} ); });
 
 	add<ReferenceExpression>([](ReferenceExpression* e){ return c(
-		Optional(e->prefix(), AUTO), Optional(
+		Optional{e->prefix(), AUTO}, Optional{
 						(e->memberKind() == ReferenceExpression::MemberKind::Dot ? "." :
 						 e->memberKind() == ReferenceExpression::MemberKind::Pointer ? "->" :
 						 e->memberKind() == ReferenceExpression::MemberKind::Static ? "::" : "::template"),
-						e->prefix()), e->name(),
+						e->prefix()}, e->name(),
 		list(e->typeArguments(), "<", ",", ">", true, true) ); });
 
 	add<OOReference>([](OOReference* e){ return c( e->name() ); });
@@ -263,7 +263,7 @@ void StringComponents::initConversions()
 	// Flexible input expressions
 	add<EmptyExpression>([](EmptyExpression*){ return c( "" ); });
 	add<ErrorExpression>([](ErrorExpression* e){ return c(
-		Optional(e->prefix(), !e->prefix().isEmpty()), e->arg(), Optional(e->postfix(), !e->postfix().isEmpty()) ); });
+		Optional{e->prefix(), !e->prefix().isEmpty()}, e->arg(), Optional{e->postfix(), !e->postfix().isEmpty()} ); });
 	add<UnfinishedOperator>([](UnfinishedOperator* e)
 	{
 		QStringList result;

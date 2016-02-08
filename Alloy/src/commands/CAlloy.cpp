@@ -33,8 +33,7 @@
 
 namespace Alloy {
 
-CAlloy::CAlloy() : CreateNamedObjectWithAttributes("alloy",
-		{{}})
+CAlloy::CAlloy() : CreateNamedObjectWithAttributes{"alloy", {{}}}
 {}
 
 Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Visualization::Item* /*target*/,
@@ -87,14 +86,14 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 
 	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
 	auto aBrowserComment = new Comments::VCommentBrowser{nullptr, anURl};
-	aBrowserComment->updateSize(QSize(720, 540));
+	aBrowserComment->updateSize(QSize{720, 540});
 	aBrowserComment->browser()->settings()->setObjectCacheCapacities(0, 0, 0); //disable the cache
 
 	alloyModelGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay{source,
 		[aBrowserComment](Visualization::BoxOverlay* self){
 		self->content() = aBrowserComment;
 		aBrowserComment->setParentItem(self);
-		return QString("AlloyModels");
+		return QString{"AlloyModels"};
 	}}));
 
 	return new Interaction::CommandResult{};

@@ -68,7 +68,7 @@ void HighlightOverlay::updateGeometry(int availableWidth, int availableHeight)
 	Super::updateGeometry(availableWidth, availableHeight);
 	if (hasShape())
 	{
-		QPointF pos = QPointF(getShape()->contentLeft(), getShape()->contentTop());
+		auto pos = QPointF{(qreal) getShape()->contentLeft(), (qreal) getShape()->contentTop()};
 		setPos(associatedItem()->mapToScene(0, 0) - pos);
 	}
 }

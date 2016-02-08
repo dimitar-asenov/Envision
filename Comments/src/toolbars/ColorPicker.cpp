@@ -62,7 +62,7 @@ void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 			aButton = new QToolButton;
 			aButton->setStyleSheet("border: none;");
 			pixmap.fill(colors.at(i));
-			aButton->setIcon(QIcon(pixmap));
+			aButton->setIcon(QIcon{pixmap});
 			aLayout->addWidget(aButton, i/colorsPerRow, i%colorsPerRow);
 			signalMapper->setMapping(aButton, colors.at(i).name());
 			connect(aButton, &QToolButton::clicked, signalMapper,
@@ -96,7 +96,7 @@ void ColorPicker::setEnvisionTextColors()
 		aButton = new QToolButton;
 		aButton->setStyleSheet("border: none;");
 		pixmap.fill(i.value());
-		aButton->setIcon(QIcon(pixmap));
+		aButton->setIcon(QIcon{pixmap});
 		aLayout->addWidget(aButton, 1, std::distance(mapEnvisionTextColors_.begin(), i));
 		signalMapper->setMapping(aButton, i.key());
 		connect(aButton, &QToolButton::clicked, signalMapper,
@@ -121,11 +121,11 @@ void ColorPicker::handleColorPicked(QString aColor)
 void ColorPicker::setselectedColor(QString aColor)
 {
 	QPixmap pixmap(24, 24);
-	QColor selectedColor = QColor(aColor);
+	QColor selectedColor = QColor{aColor};
 	pixmap.fill(Qt::transparent);
 	QPainter* aPainter = new QPainter{&pixmap};
 	aPainter->setPen(selectedColor);
-	aPainter->setBrush(QBrush(selectedColor));
+	aPainter->setBrush(QBrush{selectedColor});
 	aPainter->drawRect(12, 12, 12, 12);
 
 	aPainter->setPen(Qt::black);
@@ -135,11 +135,11 @@ void ColorPicker::setselectedColor(QString aColor)
 	switch (type_)
 	{
 		case background:
-			aPainter->setBrush(QBrush(Qt::gray));
+			aPainter->setBrush(QBrush{Qt::gray});
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case shape:
-			aPainter->setBrush(QBrush(Qt::transparent));
+			aPainter->setBrush(QBrush{Qt::transparent});
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case text:
@@ -147,7 +147,7 @@ void ColorPicker::setselectedColor(QString aColor)
 		break;
 	}
 	aPainter->end();
-	this->setIcon(QIcon(pixmap));
+	this->setIcon(QIcon{pixmap});
 }
 
 void ColorPicker::setColorPickerType(ColorPickerType type)

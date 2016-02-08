@@ -556,7 +556,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	QStringList autoCompleteCandidates;
 	// Try to match built in keywords and types
 	{
-		auto matcher = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
+		auto matcher = QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard};
 		for (QString str : {"int", "bool", "long", "float", "double", "short", "byte", "char", "for", "if", "while",
 									"do", "switch", "case", "try", "assert", "foreach", "continue", "break", "return",
 									"synchronized"})
@@ -618,7 +618,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 
 		if ( insertionPoint == entries.end() || (*insertionPoint)->text() != candidate)
 		{
-			entries.insert(insertionPoint, new AutoCompleteEntry{candidate, QString(), nullptr,
+			entries.insert(insertionPoint, new AutoCompleteEntry{candidate, QString{}, nullptr,
 				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }});
 		}
 	}

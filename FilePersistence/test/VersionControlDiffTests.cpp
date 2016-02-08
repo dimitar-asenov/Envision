@@ -41,9 +41,9 @@ class addAndRename : public Test<FilePersistencePlugin, addAndRename> { public: 
 {
 	VCTestProject p{"TestProject2"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	auto renameChange = diff.changes().find(QUuid("ec98da71-76d5-4371-a491-18826bce2a35")).value();
-	auto insertChange = diff.changes().find(QUuid("b32af2db-f0d0-4d36-ba00-96f27595248e")).value();
-	auto structChange = diff.changes().find(QUuid("ee53ebac-d6a9-420f-b729-68ca160ee94e")).value();
+	auto renameChange = diff.changes().find(QUuid{"ec98da71-76d5-4371-a491-18826bce2a35"}).value();
+	auto insertChange = diff.changes().find(QUuid{"b32af2db-f0d0-4d36-ba00-96f27595248e"}).value();
+	auto structChange = diff.changes().find(QUuid{"ee53ebac-d6a9-420f-b729-68ca160ee94e"}).value();
 	CHECK_CONDITION(renameChange->hasFlags(ChangeDescription::Value));
 	CHECK_CONDITION(insertChange->type() == ChangeType::Insertion);
 	CHECK_CONDITION(structChange->hasFlags(ChangeDescription::Structure));
@@ -66,8 +66,8 @@ class deletion : public Test<FilePersistencePlugin, deletion> { public: void tes
 {
 	VCTestProject p{"TestDiff_Delete", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000017")).value();
-	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000016")).value();
+	auto change1 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000017"}).value();
+	auto change2 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000016"}).value();
 	CHECK_CONDITION(change1->type() == ChangeType::Deletion);
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Structure));
 	CHECK_CONDITION(diff.changes().size() == 2);
@@ -77,8 +77,8 @@ class insert : public Test<FilePersistencePlugin, insert> { public: void test()
 {
 	VCTestProject p{"TestDiff_Insert", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000020")).value();
-	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000001")).value();
+	auto change1 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000020"}).value();
+	auto change2 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000001"}).value();
 	CHECK_CONDITION(change1->type() == ChangeType::Insertion);
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Structure));
 	CHECK_CONDITION(diff.changes().size() == 2);
@@ -88,7 +88,7 @@ class intValueChange : public Test<FilePersistencePlugin, intValueChange> { publ
 {
 	VCTestProject p{"TestDiff_IntValueChange", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000014")).value();
+	auto change1 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000014"}).value();
 	CHECK_CONDITION(change1->hasFlags(ChangeDescription::Value));
 	CHECK_CONDITION(diff.changes().size() == 1);
 }};
@@ -97,9 +97,9 @@ class listReorder : public Test<FilePersistencePlugin, listReorder> { public: vo
 {
 	VCTestProject p{"TestDiff_ListReorder", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000008")).value();
-	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000009")).value();
-	auto change3 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000002")).value();
+	auto change1 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000008"}).value();
+	auto change2 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000009"}).value();
+	auto change3 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000002"}).value();
 	CHECK_CONDITION(change1->hasFlags(ChangeDescription::Label));
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Label));
 	CHECK_CONDITION(change3->hasFlags(ChangeDescription::Structure));
@@ -117,9 +117,9 @@ class parentChange : public Test<FilePersistencePlugin, parentChange> { public: 
 {
 	VCTestProject p{"TestDiff_ParentChange", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000017")).value();
-	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000016")).value();
-	auto change3 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000018")).value();
+	auto change1 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000017"}).value();
+	auto change2 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000016"}).value();
+	auto change3 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000018"}).value();
 	CHECK_CONDITION(change1->type() == ChangeType::Move);
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Structure));
 	CHECK_CONDITION(change3->hasFlags(ChangeDescription::Structure));
@@ -130,7 +130,7 @@ class typeChange : public Test<FilePersistencePlugin, typeChange> { public: void
 {
 	VCTestProject p{"TestDiff_TypeChange", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000015")).value();
+	auto change1 = diff.changes().find(QUuid{"00000000-0000-0000-0000-000000000015"}).value();
 	CHECK_CONDITION(change1->hasFlags(ChangeDescription::Type));
 	CHECK_CONDITION(diff.changes().size() == 1);
 }};

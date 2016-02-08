@@ -197,7 +197,7 @@ void DoxygenCommentsOnlyVisitor::init()
 				QFile file(path);
 				QString fileName = file.fileName().section("/", -1, -1);
 				file.copy("doxygen/html/images/" + fileName);
-				res += QString("<img src=images/" + fileName + ">");
+				res += QString{"<img src=images/" + fileName + ">"};
 				continue;
 			}
 			res += line->get() + "<br>\n";
@@ -225,7 +225,7 @@ void DoxygenCommentsOnlyVisitor::init()
 			anImage.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
 		}
 
-		return QString("<img src=images/" + imageName + ">");
+		return QString{"<img src=images/" + imageName + ">"};
 	});
 
 	Visitor::addType<CommentFreeNode>( [](DoxygenCommentsOnlyVisitor* v, CommentFreeNode* t) -> QString
@@ -246,7 +246,7 @@ void DoxygenCommentsOnlyVisitor::init()
 				auto anImage = Visualization::ModelRenderer::renderToImage(t);
 				anImage.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
 			}
-			return QString("<img src=images/" + imageName + ">");
+			return QString{"<img src=images/" + imageName + ">"};
 		}
 	});
 
@@ -286,7 +286,7 @@ QString DoxygenCommentsOnlyVisitor::replaceMarkdown(QString str)
 	return str;
 }
 
-const QString DoxygenCommentsOnlyVisitor::DOXY_START = QString("/**\n");
-const QString DoxygenCommentsOnlyVisitor::DOXY_END = QString(" */\n");
+const QString DoxygenCommentsOnlyVisitor::DOXY_START = QString{"/**\n"};
+const QString DoxygenCommentsOnlyVisitor::DOXY_END = QString{" */\n"};
 
 }

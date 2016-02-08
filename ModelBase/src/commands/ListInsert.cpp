@@ -34,7 +34,7 @@ ListInsert::ListInsert(Node *target, QVector<Node*>& nodes, Node* newNode, int p
 		NodeOwningCommand{target, "insert node", nullptr, newNode}, nodes{nodes}, newNode{newNode},
 		insertPosition{position}
 {
-	if (newNode && newNode->parent()) throw ModelException("Inserting a node that already has a parent into a List.");
+	if (newNode && newNode->parent()) throw ModelException{"Inserting a node that already has a parent into a List."};
 }
 
 void ListInsert::redo()

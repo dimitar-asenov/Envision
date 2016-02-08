@@ -88,7 +88,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	pen.setWidth(outlineSize_);
 	pen.setJoinStyle(Qt::RoundJoin);
 	painter->setPen(pen);
-	painter->setBrush(QBrush(fillColor_));
+	painter->setBrush(QBrush{fillColor_});
 
 	switch (node()->shapeType())
 	{
@@ -124,13 +124,13 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			if (last.first == shapeIndex && last.second == i)
 			{
 				painter->setBrush(blackBrush);
-				painter->setPen(QPen(Qt::black));
+				painter->setPen(QPen{Qt::black});
 				painter->drawEllipse(node()->connectorPoint(i), 7, 7);
 			}
 			else
 			{
 				painter->setBrush(redBrush);
-				painter->setPen(QPen(Qt::red));
+				painter->setPen(QPen{Qt::red});
 				painter->drawEllipse(node()->connectorPoint(i), 3, 3);
 			}
 		}

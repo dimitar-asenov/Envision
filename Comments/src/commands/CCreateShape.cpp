@@ -31,8 +31,8 @@
 
 namespace Comments {
 
-CCreateShape::CCreateShape() : Interaction::CreateNamedObjectWithAttributes("shape",
-		{{"ellipse", "diamond", "rectangle"}})
+CCreateShape::CCreateShape() : Interaction::CreateNamedObjectWithAttributes{"shape",
+		{{"ellipse", "diamond", "rectangle"}}}
 {
 }
 

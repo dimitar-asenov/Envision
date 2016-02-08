@@ -29,7 +29,7 @@
 namespace Interaction {
 
 InteractionBaseException::InteractionBaseException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

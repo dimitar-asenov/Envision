@@ -95,8 +95,8 @@ inline void StringComponents::add(QStringList(*f)(T* node))
 template <typename E>
 StringComponents::Optional StringComponents::choose(E value)
 {
-	throw OOInteractionException("No matching choice variable " + QString::number(value)
-		+ " when computing string components.");
+	throw OOInteractionException{"No matching choice variable " + QString::number(value)
+		+ " when computing string components."};
 }
 
 template <typename E, typename ...Args>

@@ -56,7 +56,7 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Decl* d
 		default: return;
 	}
 
-	QString clangType = QString(decl->getDeclKindName()).append("Decl");
+	QString clangType = QString{decl->getDeclKindName()}.append("Decl");
 	clangType.append(reasons_[static_cast<int>(r)]);
 	int newCount = countMap_.value(clangType) + 1;
 	countMap_.insert(clangType, newCount);
@@ -94,7 +94,7 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Stmt* s
 		case WARNING: outStream = warnStream_; break;
 		default: return;
 	}
-	QString clangType = QString(stmt->getStmtClassName());
+	QString clangType = QString{stmt->getStmtClassName()};
 	clangType.append(reasons_[static_cast<int>(r)]);
 	int newCount = countMap_.value(clangType) + 1;
 	countMap_.insert(clangType, newCount);
@@ -138,7 +138,7 @@ void CppImportLogger::primitiveTypeNotSupported(const QString& typeName)
 
 void CppImportLogger::typeNotSupported(const clang::TypeLoc typeLoc, const clang::SourceLocation& location)
 {
-	QString typeName = QString(typeLoc.getTypePtr()->getTypeClassName());
+	QString typeName = QString{typeLoc.getTypePtr()->getTypeClassName()};
 	int newCount = typeCountMap_.value(typeName) + 1;
 	typeCountMap_.insert(typeName, newCount);
 
@@ -264,7 +264,7 @@ const QString CppImportLogger::getReasonString(const CppImportLogger::Reason& r)
 		case Reason::INSERT_PROBLEM:
 			return "Uknown where to put";
 		default:
-			return QString();
+			return QString{};
 	}
 }
 

@@ -51,10 +51,10 @@ StyleNode::StyleNode(StyleNode* parent, const QString& prototypeName, const QStr
 	folder = currentFolder + "/" + prototypeName; // Try relative address
 	if (!QFile::exists(folder))
 		folder = baseFolder_ + "/" + prototypeName; // Try absolute path (rooted at the styles folder)
-	if (!QFile::exists(folder)) throw VisualizationException("Could not find the prototype style " + prototypeName);
+	if (!QFile::exists(folder)) throw VisualizationException{"Could not find the prototype style " + prototypeName};
 
-	QString fileName = QFileInfo(folder).fileName();
-	folder = QFileInfo(folder).path();
+	QString fileName = QFileInfo{folder}.fileName();
+	folder = QFileInfo{folder}.path();
 	doc = openStyleDoc(folder + "/" + fileName);
 	elem_ = doc.documentElement();
 
@@ -81,8 +81,8 @@ StyleNode::StyleNode(const QString& rootStyleNameAndPath, const QString& folderW
 	{
 		elem_ = elem_.firstChildElement(subNodeName);
 		if (elem_.isNull())
-			throw VisualizationException("Could not find the substyle " + subNodeName + " within the style file "
-					+ folder + "/" + styleFileName);
+			throw VisualizationException{"Could not find the substyle " + subNodeName + " within the style file "
+					+ folder + "/" + styleFileName};
 	}
 
 	init();
@@ -101,7 +101,7 @@ void StyleNode::init()
 	// Initialize prototypes
 	if ( elem_.hasAttribute("prototypes") )
 	{
-		QStringList proto = elem_.attribute("prototypes", QString()).split(',');
+		QStringList proto = elem_.attribute("prototypes", QString{}).split(',');
 		for (int i = 0; i < proto.size(); ++i)
 		{
 			prototypes.append(new StyleNode{this, proto[i], getFolder()});
@@ -122,15 +122,15 @@ StyleNode::~StyleNode()
 
 QDomDocument StyleNode::openStyleDoc(const QString& path)
 {
-	QDomDocument doc = QDomDocument(XML_DOM_TYPE);
+	QDomDocument doc = QDomDocument{XML_DOM_TYPE};
 	QFile file(path);
 	if ( !file.open(QIODevice::ReadOnly) )
-		throw VisualizationException("Could not open style file " + file.fileName() + ".");
+		throw VisualizationException{"Could not open style file " + file.fileName() + "."};
 
 	if ( !doc.setContent(&file) || doc.isNull() )
 	{
 		file.close();
-		throw VisualizationException("Reading of the XML structure of file " + file.fileName() + " failed.");
+		throw VisualizationException{"Reading of the XML structure of file " + file.fileName() + " failed."};
 	}
 
 	file.close();
@@ -145,7 +145,7 @@ QString StyleNode::getFolder()
 
 QDomElement StyleNode::getElement(QStringList path)
 {
-	if (path.size() < 1 || path.first() != elem_.tagName() ) return QDomElement();
+	if (path.size() < 1 || path.first() != elem_.tagName() ) return QDomElement{};
 
 	if ( path.size() == 1) return elem_;
 
@@ -176,7 +176,7 @@ QString StyleNode::getProperty(QStringList path)
 {
 	QDomElement e = getElement(path);
 	if (e.isNull())
-		throw VisualizationException("Could not find the style property '"+ path.join("/") + "'.");
+		throw VisualizationException{"Could not find the style property '"+ path.join("/") + "'."};
 	return e.firstChild().nodeValue();
 }
 

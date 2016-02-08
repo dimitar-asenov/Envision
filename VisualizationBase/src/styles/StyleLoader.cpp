@@ -58,7 +58,7 @@ void StyleLoader::load(const QString& propertyName, int& value)
 	bool ok = true;
 
 	value = getProperty(propertyName).toInt(&ok);
-	if ( !ok ) throw VisualizationException("Could not read integer value property '" + propertyName + "'");
+	if ( !ok ) throw VisualizationException{"Could not read integer value property '" + propertyName + "'"};
 }
 
 void StyleLoader::load(const QString& propertyName, bool& value)
@@ -77,7 +77,7 @@ void StyleLoader::load(const QString& propertyName, QColor& value)
 	auto colorName = getProperty(propertyName);
 	value.setNamedColor(colorName);
 	if (!value.isValid())
-		throw VisualizationException("Invalid color ("+ colorName +") of property '" + propertyName + "'");
+		throw VisualizationException{"Invalid color ("+ colorName +") of property '" + propertyName + "'"};
 }
 
 void StyleLoader::load(const QString& propertyName, double& value)
@@ -85,7 +85,7 @@ void StyleLoader::load(const QString& propertyName, double& value)
 	bool ok = true;
 
 	value = getProperty(propertyName).toDouble(&ok);
-	if ( !ok ) throw VisualizationException("Could not read double value property '" + propertyName + "'");
+	if ( !ok ) throw VisualizationException{"Could not read double value property '" + propertyName + "'"};
 }
 
 void StyleLoader::loadComposite(QPointF& value)
@@ -108,7 +108,7 @@ void StyleLoader::loadComposite(QPen& value)
 	load("color", color);
 	load("capStyle", capStyle);
 	load("joinStyle", joinStyle);
-	value = QPen(QBrush(color), width, (Qt::PenStyle) style, (Qt::PenCapStyle) capStyle, (Qt::PenJoinStyle) joinStyle);
+	value = QPen{QBrush{color}, width, (Qt::PenStyle) style, (Qt::PenCapStyle) capStyle, (Qt::PenJoinStyle) joinStyle};
 }
 
 void StyleLoader::loadComposite(QFont& value)
@@ -127,7 +127,7 @@ void StyleLoader::loadComposite(QFont& value)
 	load("style", style);
 	load("underline", underline);
 
-	value = QFont();
+	value = QFont{};
 	if ( !family.isEmpty() ) value.setFamily(family);
 	value.setWeight(weight);
 	if ( pixelSize ) value.setPixelSize(size);
@@ -147,20 +147,20 @@ void StyleLoader::loadComposite(QBrush& value)
 	{
 		QLinearGradient gradient;
 		load("gradient", gradient);
-		value = QBrush(gradient);
+		value = QBrush{gradient};
 	}
 	else if (style == Qt::RadialGradientPattern)
 	{
 		QRadialGradient gradient;
 		load("gradient", gradient);
-		value = QBrush(gradient);
+		value = QBrush{gradient};
 	}
 	else if (style != Qt::NoBrush)
 	{
 		load("color", color);
-		value = QBrush(color, (Qt::BrushStyle) style);
+		value = QBrush{color, (Qt::BrushStyle) style};
 	}
-	else value = QBrush();
+	else value = QBrush{};
 }
 
 void StyleLoader::loadComposite(QLinearGradient& value)
@@ -177,7 +177,7 @@ void StyleLoader::loadComposite(QLinearGradient& value)
 	load("spread", spread);
 	load("stopPoints", stopPoints);
 
-	value = QLinearGradient(start, finish);
+	value = QLinearGradient{start, finish};
 	value.setSpread((QGradient::Spread) spread);
 	value.setCoordinateMode((QGradient::CoordinateMode) coordinateMode);
 	value.setStops(stopPoints);
@@ -199,7 +199,7 @@ void StyleLoader::loadComposite(QRadialGradient& value)
 	load("radius", radius);
 	load("stopPoints", stopPoints);
 
-	value = QRadialGradient(center, radius, focal);
+	value = QRadialGradient{center, radius, focal};
 	value.setSpread((QGradient::Spread) spread);
 	value.setCoordinateMode((QGradient::CoordinateMode) coordinateMode);
 	value.setStops(stopPoints);

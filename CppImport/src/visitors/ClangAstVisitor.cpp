@@ -964,7 +964,7 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 		// save inbody var
 		bool inBody = inBody_;
 		inBody_ = false;
-		// traverse condition
+		// Traverse condition
 		if (auto varDecl = switchStmt->getConditionVariable())
 			TraverseDecl(varDecl);
 		else
@@ -1019,13 +1019,13 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 		log_->writeError(className_, caseStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 		return true;
 	}
-	// traverse condition
+	// Traverse condition
 	inBody_ = false;
 	TraverseStmt(caseStmt->getLHS());
 	if (!ooExprStack_.empty())
 		ooSwitchCase->setCaseExpression(ooExprStack_.pop());
 	inBody_ = true;
-	// traverse statements/body
+	// Traverse statements/body
 	ooStack_.push(ooSwitchCase->body());
 	TraverseStmt(caseStmt->getSubStmt());
 	return true;
@@ -1070,7 +1070,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		auto lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(compoundStmt->getLocStart());
 		bool firstLine = true;
 
-		// traverse children
+		// Traverse children
 		for (auto child : compoundStmt->children())
 		{
 			// calculate the line on which the current child starts
@@ -1144,7 +1144,7 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 		log_->writeError(className_, defaultStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 		return true;
 	}
-	// traverse statements/body
+	// Traverse statements/body
 	ooStack_.push(ooDefaultCase->body());
 	TraverseStmt(defaultStmt->getSubStmt());
 	return true;
@@ -1348,7 +1348,7 @@ void ClangAstVisitor::insertFriendFunction(clang::FriendDecl* friendDecl, OOMode
 																			clang_.spelling(friendFunction->getLocation()));
 		auto functionTypeLoc = friendFunction->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
 		ooMethod->results()->append(
-					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString{},
 																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 		// process arguments
 		for (auto it = friendFunction->param_begin(); it != friendFunction->param_end(); ++it)
@@ -1367,7 +1367,7 @@ bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 {
 	QString fileName;
 	if (auto file = clang_.sourceManager()->getPresumedLoc(location).getFilename())
-		fileName = QString(file);
+		fileName = QString{file};
 	if (clang_.sourceManager()->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
 		return importSysHeader_;
 	return true;

@@ -103,13 +103,13 @@ void SetCursorEvent::execute()
 			case CursorOnCenter: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnCenter); break;
 
 			case CursorAboveOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-					item->pos().toPoint() + QPoint(item->widthInParent() / 2, 0)); break;
+					item->pos().toPoint() + QPoint{item->widthInParent() / 2, 0}); break;
 			case CursorBelowOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-					item->pos().toPoint() + QPoint(item->widthInParent() / 2, item->heightInParent()-1)); break;
+					item->pos().toPoint() + QPoint{item->widthInParent() / 2, item->heightInParent()-1}); break;
 			case CursorLeftOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-					item->pos().toPoint() + QPoint(0, item->heightInParent() / 2)); break;
+					item->pos().toPoint() + QPoint{0, item->heightInParent() / 2}); break;
 			case CursorRightOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-					item->pos().toPoint() + QPoint(item->widthInParent() - 1, item->heightInParent() / 2)); break;
+					item->pos().toPoint() + QPoint{item->widthInParent() - 1, item->heightInParent() / 2}); break;
 			case CursorDefault: item->moveCursor(); break;
 
 			default: item->moveCursor(); break;

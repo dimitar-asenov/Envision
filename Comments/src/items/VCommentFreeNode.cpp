@@ -38,10 +38,10 @@ namespace Comments {
 ITEM_COMMON_DEFINITIONS(VCommentFreeNode, "item")
 
 VCommentFreeNode::VCommentFreeNode(Item* parent, NodeType* node)
-	: Super(parent, node, itemStyles().get()), content_{nullptr}
+	: Super{parent, node, itemStyles().get()}, content_{nullptr}
 {
 	anEffect_ = new QGraphicsColorizeEffect{};
-	anEffect_->setColor(QColor(Qt::white));
+	anEffect_->setColor(QColor{Qt::white});
 	const qreal strength = 0.7;
 	anEffect_->setStrength(strength);
 	Item::setGraphicsEffect(anEffect_);

@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(FunctionTypeExpression, results, TypedListOfExpression, false, 
 
 FunctionTypeExpression::FunctionTypeExpression(const QList<Expression*>& args,
 		const QList<Expression*>& res)
-: Super(nullptr, FunctionTypeExpression::getMetaData())
+: Super{nullptr, FunctionTypeExpression::getMetaData()}
 {
 	for (auto a : args)
 	{

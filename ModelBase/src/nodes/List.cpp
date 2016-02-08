@@ -76,7 +76,7 @@ void List::loadSubNodes(QList<LoadedNode>& nodeList)
 		bool ok = true;
 		int index = ln->name.toInt(&ok);
 
-		if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
+		if ( !ok ) throw ModelException{"Could not read the index of a list item. Index value is: " + ln->name};
 
 		if ( index >= nodes_.size() ) nodes_.resize(index + 1);
 		nodes_[index] = ln->node;
@@ -95,7 +95,7 @@ void List::save(PersistentStore &store) const
 void List::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a List node from an incompatible node type " + store.currentNodeType());
+		throw ModelException{"Trying to load a List node from an incompatible node type " + store.currentNodeType()};
 
 	clear();
 
@@ -105,7 +105,7 @@ void List::load(PersistentStore &store)
 		Q_ASSERT(ln->node->hierarchyTypeIds().contains(lowerTypeBoundForElements()));
 		bool ok = true;
 		int index = ln->name.toInt(&ok);
-		if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
+		if ( !ok ) throw ModelException{"Could not read the index of a list item. Index value is: " + ln->name};
 
 		execute(new ListPut{this, nodes_, ln->node, index});
 	}

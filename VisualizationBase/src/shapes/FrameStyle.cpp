@@ -127,7 +127,7 @@ void FrameStyle::paint(QPainter* painter, int xOffset, int yOffset, int outerWid
 		painter->setClipPath(clipPath);
 
 		painter->setPen(Qt::NoPen);
-		painter->setBrush(QColor(0, 0, 0, 5));
+		painter->setBrush(QColor{0, 0, 0, 5});
 
 		for (int i = 0; i < maxShadowSize; ++i)
 		{

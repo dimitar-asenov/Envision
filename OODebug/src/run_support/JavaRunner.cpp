@@ -80,7 +80,7 @@ Interaction::CommandResult* JavaRunner::runTree(Model::TreeManager* manager,
 	// remove the ending
 	fileName.replace(".java", "");
 	// NOTE: This next line is dependent on export plugin
-	fileName.replace(QString("src") + QDir::separator(), "");
+	fileName.replace(QString{"src"} + QDir::separator(), "");
 
 	auto process = runProcess().replaceProcess();
 

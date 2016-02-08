@@ -97,14 +97,14 @@ void VListCF::updateGeometry(int, int)
 		if ( hasShape() ) getShape()->setInnerSize(style()->pinLength(), style()->pinLength());
 			else setSize(style()->pinLength(), style()->pinLength());
 
-		entrance_ = QPoint(style()->pinLength()/2, 0);
-		exit_ = QPoint(style()->pinLength()/2, style()->pinLength());
+		entrance_ = QPoint{style()->pinLength()/2, 0};
+		exit_ = QPoint{style()->pinLength()/2, style()->pinLength()};
 		addConnector(entrance_, exit_, false);
 		return;
 	}
 
 	QList< QPoint > pos;
-	for (int i = 0; i<items_.size(); ++i) pos.append( QPoint() );
+	for (int i = 0; i<items_.size(); ++i) pos.append( QPoint{} );
 
 	QPoint location;
 	QPoint topLeft;
@@ -116,10 +116,10 @@ void VListCF::updateGeometry(int, int)
 		ControlFlowItem* cfi = DCast<ControlFlowItem> (items_[i]);
 		if (cfi)
 		{
-			pos[i] = QPoint( location.x() - cfi->entrance().x(), location.y());
+			pos[i] = QPoint{ location.x() - cfi->entrance().x(), location.y()};
 			location.ry() += items_[i]->heightInParent();
 
-			if (cfi->exit().isNull()) exit_ = QPoint(0, 0);
+			if (cfi->exit().isNull()) exit_ = QPoint{0, 0};
 			else
 			{
 				location.rx() += cfi->exit().x() - cfi->entrance().x();
@@ -146,7 +146,7 @@ void VListCF::updateGeometry(int, int)
 		else
 		{
 			location.ry() += style()->pinLength(); // There is a pin on top.
-			pos[i] = QPoint( location.x() - items_[i]->widthInParent()/2, location.y());
+			pos[i] = QPoint{ location.x() - items_[i]->widthInParent()/2, location.y()};
 			location.ry() += items_[i]->heightInParent();
 			location.ry() += style()->pinLength(); // There is a pin on the bottom.
 			exit_ = location;
@@ -166,7 +166,7 @@ void VListCF::updateGeometry(int, int)
 
 	// Set entrance and exit
 	entrance_ = -topLeft;
-	if (!exit_.isNull()) exit_ = QPoint( exit_.x() -topLeft.x(), bottomRight.y());
+	if (!exit_.isNull()) exit_ = QPoint{ exit_.x() -topLeft.x(), bottomRight.y()};
 
 	// Set the positions of all elements and create the connectors
 	for (int i = 0; i < items_.size(); ++i)
@@ -182,21 +182,21 @@ void VListCF::updateGeometry(int, int)
 			for (int k = 0; k < cfi->breaks().size(); ++k)
 			{
 				QPoint br( cfi->breaks().at(k) + pos[i] );
-				if ( cfi->breaks().at(k).x() == 0) addConnector(br, QPoint(0, br.y()), false);
+				if ( cfi->breaks().at(k).x() == 0) addConnector(br, QPoint{0, br.y()}, false);
 				else
 				{
 					br.setX(pos[i].x() + items_[i]->widthInParent());
-					addConnector(br, QPoint(widthInLocal(), br.y()), false);
+					addConnector(br, QPoint{widthInLocal(), br.y()}, false);
 				}
 			}
 			for (int k = 0; k < cfi->continues().size(); ++k)
 			{
 				QPoint cont( cfi->continues().at(k) + pos[i] );
-				if ( cfi->continues().at(k).x() == 0) addConnector(cont, QPoint(0, cont.y()), false);
+				if ( cfi->continues().at(k).x() == 0) addConnector(cont, QPoint{0, cont.y()}, false);
 				else
 				{
 					cont.setX(pos[i].x() + items_[i]->widthInParent());
-					addConnector(cont, QPoint(widthInLocal(), cont.y()), false);
+					addConnector(cont, QPoint{widthInLocal(), cont.y()}, false);
 				}
 			}
 		}

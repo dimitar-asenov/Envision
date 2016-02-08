@@ -47,7 +47,7 @@ inline LayoutTypeName* LayoutProvider<LayoutTypeName>::layout()
 
 template <typename LayoutTypeName>
 LayoutProvider<LayoutTypeName>::LayoutProvider(Item* parent, const StyleType *style) :
-LayoutProviderBase(parent, style, new LayoutTypeName{nullptr})
+LayoutProviderBase{parent, style, new LayoutTypeName{nullptr}}
 {
 	layout()->setParentItem(this);
 }

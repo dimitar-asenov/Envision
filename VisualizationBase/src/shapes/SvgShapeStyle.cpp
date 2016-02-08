@@ -36,12 +36,12 @@ void SvgShapeStyle::load(StyleLoader& sl)
 	Super::load(sl);
 
 	if (filename().isEmpty()) return;
-	if (!renderer_.load(filename())) throw VisualizationException("Could not read SVG shape: " + filename());
+	if (!renderer_.load(filename())) throw VisualizationException{"Could not read SVG shape: " + filename()};
 }
 
 void SvgShapeStyle::paint(QPainter* painter, int x, int y, int width, int height) const
 {
-	renderer_.render(painter, QRectF(x, y, width, height));
+	renderer_.render(painter, QRectF{ (qreal) x, (qreal) y, (qreal) width, (qreal) height});
 }
 
 }

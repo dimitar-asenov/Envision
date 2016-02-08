@@ -82,8 +82,8 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 			return;
 		}
 
-	throw OOInteractionException("Creating an unknown GridBasedOffsetProvider for a visualization of type " +
-			vis->typeName());
+	throw OOInteractionException{"Creating an unknown GridBasedOffsetProvider for a visualization of type " +
+			vis->typeName()};
 }
 
 GridBasedOffsetProvider::~GridBasedOffsetProvider()
@@ -101,7 +101,7 @@ void GridBasedOffsetProvider::add(Cell* cell)
 {
 	for (auto c: cells_)
 		if (c->region().contains(cell->region()) || cell->region().contains(c->region()))
-			throw OOInteractionException("Trying to add an overlapping cell to GridOffsetProvider");
+			throw OOInteractionException{"Trying to add an overlapping cell to GridOffsetProvider"};
 
 	cells_.append(cell);
 	if (cell->region().right()+1 > size_.width()) size_.setWidth(cell->region().right()+1);
@@ -308,7 +308,7 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 				target = leftCell;
 				right = true;
 			}
-			else throw OOInteractionException("Can not compute offset of a SequentialLayout");
+			else throw OOInteractionException{"Can not compute offset of a SequentialLayout"};
 		}
 	}
 
@@ -359,7 +359,7 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 			item()->moveCursor( Visualization::Item::MoveOnRight);
 			return;
 		}
-		else throw OOInteractionException("Could not find adjacent cells when setting GridBased offset.");
+		else throw OOInteractionException{"Could not find adjacent cells when setting GridBased offset."};
 	}
 
 	// TODO choose a cell in possibly a smarter way
@@ -389,7 +389,7 @@ QStringList GridBasedOffsetProvider::components()
 					components.removeAt(i);
 		}
 		if (components.size() != length)
-			components.removeAll(QString(""));
+			components.removeAll(QString{""});
 	}
 
 	return components;

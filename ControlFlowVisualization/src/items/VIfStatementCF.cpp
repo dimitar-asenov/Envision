@@ -129,7 +129,7 @@ void VIfStatementCF::updateGeometry(int, int)
 	conditionBackground->setPos(leftHalf - conditionBackground->widthInParent()/2, style()->pinLength());
 	thenBranch->setPos(0, branchesTop);
 	elseBranch->setPos(leftHalf + extraRight + style()->pinLength(), branchesTop);
-	entrance_ = QPoint(leftHalf, 0);
+	entrance_ = QPoint{leftHalf, 0};
 
 	// Put connectors
 	addConnector(leftHalf, 0, leftHalf, style()->pinLength(), true);
@@ -168,14 +168,14 @@ void VIfStatementCF::updateGeometry(int, int)
 	for (int i = 0; i < elseBranch->breaks().size(); ++i)
 	{
 		QPoint p = elseBranch->breaks().at(i);
-		if (p.x() > 0) breaks_.append(QPoint(1, elseBranch->pos().y() + p.y()));
+		if (p.x() > 0) breaks_.append(QPointF{1, elseBranch->pos().y() + p.y()}.toPoint());
 		else if (elseBranch->pos().y() + p.y() < elseBranchInnerBegin)
 			elseBranchInnerBegin = elseBranch->pos().y() + p.y();
 	}
 	for (int i = 0; i < elseBranch->continues().size(); ++i)
 	{
 		QPoint p = elseBranch->continues().at(i);
-		if (p.x() > 0) continues_.append(QPoint(1, elseBranch->pos().y() + p.y()));
+		if (p.x() > 0) continues_.append(QPointF{1, elseBranch->pos().y() + p.y()}.toPoint());
 		else if (elseBranch->pos().y() + p.y() < elseBranchInnerBegin)
 			elseBranchInnerBegin = elseBranch->pos().y() + p.y();
 	}
@@ -187,7 +187,7 @@ void VIfStatementCF::updateGeometry(int, int)
 				height - 3*style()->pinLength(), false);
 		addToLastConnector(widthInParent(), height - 3*style()->pinLength());
 
-		QPoint c = QPoint(1, height - 3*style()->pinLength());
+		QPoint c = QPoint{1, height - 3*style()->pinLength()};
 		if (preferredBreakExit_ == ControlFlowItem::EXIT_RIGHT) breaks_.append(c);
 		else continues_.append(c);
 	}
@@ -198,28 +198,28 @@ void VIfStatementCF::updateGeometry(int, int)
 				height - 2*style()->pinLength(), false);
 		addToLastConnector(0, height - 2*style()->pinLength());
 
-		QPoint c = QPoint(0, height - 2*style()->pinLength());
+		QPoint c = QPoint{0, height - 2*style()->pinLength()};
 		if (preferredBreakExit_ == ControlFlowItem::EXIT_LEFT) breaks_.append(c);
 		else continues_.append(c);
 	}
 
 	// Handle the exit and its connectors
-	if (thenBranch->exit().isNull() && elseBranch->exit().isNull()) exit_ = QPoint(0, 0);
+	if (thenBranch->exit().isNull() && elseBranch->exit().isNull()) exit_ = QPoint{0, 0};
 	else if (thenBranch->exit().isNull())
 	{
-		exit_ = QPoint(elseBranch->pos().x() + elseBranch->exit().x(), height);
+		exit_ = QPoint{(int) (elseBranch->pos().x() + elseBranch->exit().x()), height};
 		addConnector(elseBranch->pos().toPoint() + elseBranch->exit(), exit_, false);
 	}
 	else if (elseBranch->exit().isNull())
 	{
-		exit_ = QPoint(thenBranch->exit().x(), height);
+		exit_ = QPoint{thenBranch->exit().x(), height};
 		addConnector(thenBranch->pos().toPoint() + thenBranch->exit(), exit_, false);
 	}
 	else
 	{
-		exit_ = QPoint(entrance_.x(), height);
+		exit_ = QPoint{entrance_.x(), height};
 		int lineHeight = height - style()->pinLength();
-		addConnector(exit_ - QPoint(0, style()->pinLength()), exit_, false);
+		addConnector(exit_ - QPoint{0, style()->pinLength()}, exit_, false);
 		addConnector(thenBranch->pos().toPoint() + thenBranch->exit(),
 				QPoint(thenBranch->pos().x() + thenBranch->exit().x(), lineHeight), false);
 		addToLastConnector(elseBranch->pos().x() + elseBranch->exit().x(), lineHeight);

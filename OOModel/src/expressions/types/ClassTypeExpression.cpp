@@ -40,7 +40,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ClassTypeExpression)
 DEFINE_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
 
 ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
-: Super(nullptr, ClassTypeExpression::getMetaData())
+: Super{nullptr, ClassTypeExpression::getMetaData()}
 {
 	if (ref) setTypeExpression(ref);
 }

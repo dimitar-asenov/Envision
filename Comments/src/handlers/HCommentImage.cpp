@@ -65,7 +65,7 @@ void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMo
 	if (resizing_ && event->buttons() & Qt::RightButton)
 	{
 		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
-		auto newSize = image->imageSize() + QSize(diff.x(), diff.y());
+		auto newSize = image->imageSize() + QSize{diff.x(), diff.y()};
 		if (image->updateSize(newSize))
 		{
 			auto node = DCast<VComment>(image->parent())->node();

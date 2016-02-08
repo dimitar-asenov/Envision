@@ -108,7 +108,7 @@ void ControlFlowItem::addConnector(QList< QPoint >& points, bool arrowEnding)
 
 void ControlFlowItem::addConnector(int xBegin, int yBegin, int xEnd, int yEnd, bool arrowEnding)
 {
-	addConnector(QPoint(xBegin, yBegin), QPoint(xEnd, yEnd), arrowEnding);
+	addConnector(QPoint{xBegin, yBegin}, QPoint{xEnd, yEnd}, arrowEnding);
 }
 
 void ControlFlowItem::addConnector(const QPoint& begin, const QPoint& end, bool arrowEnding)
@@ -121,7 +121,7 @@ void ControlFlowItem::addConnector(const QPoint& begin, const QPoint& end, bool 
 
 void ControlFlowItem::addToLastConnector(int x, int y)
 {
-	connectors_.last().append(QPoint(x, y));
+	connectors_.last().append(QPoint{x, y});
 }
 
 void ControlFlowItem::addToLastConnector(const QPoint& point)

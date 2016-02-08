@@ -34,7 +34,7 @@ QList<Optional<TupleSet> > LinearQuery::execute(QList<TupleSet> input)
 {
 	QList<Optional<TupleSet>> result;
 	// If we have no input just add one default input such that we execute at least once.
-	if (input.isEmpty()) input << TupleSet();
+	if (input.isEmpty()) input << TupleSet{};
 
 	for (auto ts : input)
 		result.push_back(executeLinear(ts));

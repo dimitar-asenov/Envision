@@ -40,7 +40,7 @@ void SelectionOverlay::updateGeometry(int, int)
 	if (hasShape())
 	{
 		getShape()->setInnerSize(associatedItem()->widthInScene(), associatedItem()->heightInScene());
-		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
+		QPointF pos{ (qreal)getShape()->contentLeft(), (qreal)getShape()->contentTop() };
 
 		setPos(associatedItem()->mapToScene(0, 0) - pos);
 	}

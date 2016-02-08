@@ -52,7 +52,7 @@ Optional<TupleSet> CanReach::executeLinear(TupleSet input)
 	{
 		auto nodes = relation.valuesOfType<Model::Node*>();
 		if (nodes.size() != 2)
-			return {QString("%1 works only on relations between Nodes.").arg(arguments_.queryName())};
+			return {QString{"%1 works only on relations between Nodes."}.arg(arguments_.queryName())};
 		if (matchSelf_ || nameMatcher.matches(nodes[1]->symbolName()))
 			endNodes.push_back(relation);
 	}

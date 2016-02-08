@@ -49,7 +49,7 @@ ItemRegion GridLayouter::cursorRegion(Item* parent, FormElement* formElement, in
 	lc->setIsAtBoundary(atBoundary);
 	lc->setNotLocationEquivalent(notLocationEquivalent);
 
-	auto region = ItemRegion(area);
+	auto region = ItemRegion{area};
 	region.setCursor(lc);
 	return region;
 }

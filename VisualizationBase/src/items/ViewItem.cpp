@@ -121,19 +121,19 @@ QList<Model::Node*> ViewItem::allNodes() const
 
 QPoint ViewItem::positionOfNode(Model::Node *node) const
 {
-	if (!node) return QPoint(-1, -1);
+	if (!node) return QPoint{-1, -1};
 	for (int col = 0; col < nodes_.size(); col++)
 		for (int row = 0; row < nodes_[col].size(); row++)
 			if (nodes_[col][row] == node ||
 					DCast<ViewItemNode>(nodes_[col][row])->reference() == node)
-				return QPoint(col, row);
-	return QPoint(-1, -1);
+				return QPoint{col, row};
+	return QPoint{-1, -1};
 }
 
 QPoint ViewItem::positionOfItem(Item *item) const
 {
 	if (item->node()) return positionOfNode(item->node());
-	else return QPoint(-1, -1);
+	else return QPoint{-1, -1};
 }
 
 Model::Node* ViewItem::nodeAt(int column, int row) const
@@ -344,7 +344,7 @@ QJsonDocument ViewItem::toJson() const
 		for (int row = 0; row < nodes_[col].size(); row++)
 			if (auto node = DCast<ViewItemNode>(nodes_[col][row]))
 			{
-				node->setPosition(QPoint(col, row));
+				node->setPosition(QPoint{col, row});
 				if (node->spacingParent())
 					node->setSpacingParentPosition(positionOfNode(node->spacingParent()));
 				nodes.append(node->toJson());
@@ -426,10 +426,10 @@ void ViewItem::arrowFromJson(QJsonObject json)
 	auto parent2 = DCast<ViewItemNode>(nodeAt(json["parent2col"].toInt(), json["parent2row"].toInt()));
 	Model::Node* node1{}, *node2{};
 	if (json.contains("node1"))
-		node1 = JsonUtil::nodeForId(QUuid(json["node1"].toString()));
+		node1 = JsonUtil::nodeForId(QUuid{json["node1"].toString()});
 	else node1 = parent1;
 	if (json.contains("node2"))
-		node2 = JsonUtil::nodeForId(QUuid(json["node2"].toString()));
+		node2 = JsonUtil::nodeForId(QUuid{json["node2"].toString()});
 	else node2 = parent2;
 	if (node1 && node2)
 		addArrow(node1, node2, json["layer"].toString(), parent1, parent2);

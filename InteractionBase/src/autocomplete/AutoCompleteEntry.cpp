@@ -36,9 +36,9 @@ AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& descrip
 
 AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description,
 		Visualization::Item* visualization, ExecuteFunction execFunction)
-	: AutoCompleteEntry(text, description,
+	: AutoCompleteEntry{text, description,
 			QSharedPointer<Visualization::Item>(visualization),
-			execFunction)
+			execFunction}
 {
 }
 

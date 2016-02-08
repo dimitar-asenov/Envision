@@ -108,7 +108,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 QStringList CMerge::possibleNames(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
 											 const std::unique_ptr<Visualization::Cursor>& /*cursor*/)
 {
-	return QStringList();
+	return QStringList{};
 }
 
 }

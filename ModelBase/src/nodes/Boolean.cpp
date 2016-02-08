@@ -58,7 +58,7 @@ void Boolean::save(PersistentStore &store) const
 void Boolean::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load an Boolean node from an incompatible node type " + store.currentNodeType());
+		throw ModelException{"Trying to load an Boolean node from an incompatible node type " + store.currentNodeType()};
 
 	bool val = store.loadIntValue();
 	set(val);

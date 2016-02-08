@@ -46,25 +46,25 @@ DEFINE_ATTRIBUTE(Method, memberInitializers, TypedListOfMemberInitializer, false
 DEFINE_ATTRIBUTE(Method, throws, TypedListOfExpression, false, false, true)
 DEFINE_ATTRIBUTE(Method, mthKind, Integer, false, false, true)
 
-Method::Method(const QString& name) : Super(nullptr, Method::getMetaData())
+Method::Method(const QString& name) : Super{nullptr, Method::getMetaData()}
 {
 	setName(name);
 }
 
-Method::Method(const QString& name, Modifier::Modifiers mod) : Super(nullptr, Method::getMetaData())
+Method::Method(const QString& name, Modifier::Modifiers mod) : Super{nullptr, Method::getMetaData()}
 {
 	setName(name);
 	modifiers()->set(mod);
 }
 
-Method::Method(const QString& name, MethodKind kind) : Super(nullptr, Method::getMetaData())
+Method::Method(const QString& name, MethodKind kind) : Super{nullptr, Method::getMetaData()}
 {
 	setName(name);
 	setMethodKind(kind);
 }
 
 Method::Method(const QString& name, Modifier::Modifiers mod, MethodKind kind)
-: Super(nullptr, Method::getMetaData())
+: Super{nullptr, Method::getMetaData()}
 {
 	setName(name);
 	modifiers()->set(mod);

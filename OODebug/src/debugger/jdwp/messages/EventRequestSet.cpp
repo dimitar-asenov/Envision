@@ -70,7 +70,7 @@ Modifier Modifier::makeLocation(Location loc)
 Modifier Modifier::makeSingleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
 {
 	Modifier mod(stepOnly);
-	mod.step = StepData(threadId, stepSize, stepDepth);
+	mod.step = StepData{threadId, stepSize, stepDepth};
 	return mod;
 }
 

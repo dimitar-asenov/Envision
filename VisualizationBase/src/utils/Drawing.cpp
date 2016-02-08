@@ -28,18 +28,18 @@
 void Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QPen& arrowPen, const QPen& linePen,
 						bool startArrow, bool endArrow, int outlineSize)
 {
-	painter->setBrush(QBrush(Qt::black));
+	painter->setBrush(QBrush{Qt::black});
 	painter->setPen(arrowPen);
 
-	double angle = -QLineF(begin, end).angle();
+	double angle = -QLineF{begin, end}.angle();
 
 	if (startArrow || endArrow)
 	{
 		QPolygonF anArrowhead;
 		const int arrowTipLength = 10, arrowTipHalfWidth = 2;
-		anArrowhead << QPointF(0, 0)
-						<< QPointF(arrowTipLength+outlineSize, -arrowTipHalfWidth-outlineSize)
-						<< QPointF(arrowTipLength+outlineSize, arrowTipHalfWidth+outlineSize);
+		anArrowhead << QPoint{0, 0}
+						<< QPoint{arrowTipLength+outlineSize, -arrowTipHalfWidth-outlineSize}
+						<< QPoint{arrowTipLength+outlineSize, arrowTipHalfWidth+outlineSize};
 		QMatrix matrix;
 		if (startArrow)
 			begin = drawHead(painter, matrix, anArrowhead, begin, angle);
@@ -60,5 +60,5 @@ QPointF Drawing::drawHead(QPainter *painter, QMatrix matrix, QPolygonF arrowHead
 	auto arrow = matrix.map(arrowHead);
 	arrow.translate(beginOrEnd);
 	painter->drawPolygon(arrow);
-	return QPointF((arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2);
+	return QPointF{(arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2};
 }

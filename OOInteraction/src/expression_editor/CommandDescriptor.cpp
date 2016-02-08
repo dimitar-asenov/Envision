@@ -108,7 +108,7 @@ OOModel::UnfinishedOperator* CommandDescriptor::createUnfinished(const QString& 
 
 		unf->delimiters()->append(new Model::Text{")"});
 	}
-	else unf->delimiters()->append(new Model::Text{QString()}); // append an empty postfix if there are no arguments
+	else unf->delimiters()->append(new Model::Text{QString{}}); // append an empty postfix if there are no arguments
 
 	return unf;
 }

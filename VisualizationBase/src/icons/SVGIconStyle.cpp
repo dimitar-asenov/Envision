@@ -34,7 +34,7 @@ SVGIconStyle::~SVGIconStyle(){}
 void SVGIconStyle::load(StyleLoader& sl)
 {
 	Super::load(sl);
-	if (!renderer_.load(filename())) throw VisualizationException("Could not read SVG icon: " + filename());
+	if (!renderer_.load(filename())) throw VisualizationException{"Could not read SVG icon: " + filename()};
 
 	// Pre-compute the normal and minimal icon sizes
 	drawScaledPixmapInMipmap(1.0);
@@ -51,7 +51,7 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 //	if (paintEngineType == QPaintEngine::SVG || paintEngineType == QPaintEngine::Pdf)
 //	{
 //		//Un-optimized version
-//		renderer_.render(painter, QRectF(x, y, width_, height_));
+//		renderer_.render(painter, QRectF{x, y, width_, height_});
 //	}
 //	else
 //	{
@@ -66,10 +66,10 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 
 bool SVGIconStyle::drawScaledPixmapInMipmap(qreal scaleFactor) const
 {
-	auto size = (QSizeF(width(), height()) * scaleFactor).toSize();
+	auto size = (QSizeF{(qreal) width(), (qreal) height()} * scaleFactor).toSize();
 	if (size.width() > 0 && size.height() > 0)
 	{
-		QImage img = QImage(size, QImage::Format_ARGB32);
+		QImage img = QImage{size, QImage::Format_ARGB32};
 		img.fill(0);
 		QPainter pai{&img};
 		renderer_.render(&pai);

@@ -74,7 +74,7 @@ QList<QString> History::relevantCommitsByTime(const GitRepository* repository, b
 	for (auto commit : relevantCommits_)
 	{
 		CommitMetaData info = repository->getCommitInformation(commit);
-		commitTimeList.append(CommitTime(commit, info.dateTime_));
+		commitTimeList.append(CommitTime{commit, info.dateTime_});
 	}
 
 	if (reverse)
@@ -151,7 +151,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 		if (rootNode)
 			return rootNode->persistentUnit()->name();
 		else
-			return QString();
+			return QString{};
 	}
 
 	// check if rootNode is still in current PU
@@ -193,7 +193,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 
 	// rootNodeId can't be found but was not deleted!
 	Q_ASSERT(false);
-	return QString();
+	return QString{};
 }
 
 QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relativePath, GenericTree* tree,

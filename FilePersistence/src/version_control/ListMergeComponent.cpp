@@ -535,24 +535,24 @@ ListMergeComponent::Position ListMergeComponent::findPosition(const Model::NodeI
 																				  const Chunk* chunk)
 {
 	// position in empty list is unique
-	if (chunk->spanMerged_.isEmpty()) return Position(true, {});
+	if (chunk->spanMerged_.isEmpty()) return Position{true, {}};
 
 	int elemIdx = origin.indexOf(element) - 1; // set index to predecessor
 	while (elemIdx >= 0 && !chunk->spanMerged_.contains(origin.at(elemIdx)))
 		--elemIdx; // go backward until common element is found
-	auto commonPredecessor = (elemIdx >= 0) ? origin.at(elemIdx) : Model::NodeIdType();
+	auto commonPredecessor = (elemIdx >= 0) ? origin.at(elemIdx) : Model::NodeIdType{};
 	elemIdx = origin.indexOf(element) + 1; // set index to successor
 	while (elemIdx < origin.size() && !chunk->spanMerged_.contains(origin.at(elemIdx)))
 		++elemIdx; // go forward until common element is found
-	auto commonSuccessor = (elemIdx < origin.size()) ? origin.at(elemIdx) : Model::NodeIdType();
+	auto commonSuccessor = (elemIdx < origin.size()) ? origin.at(elemIdx) : Model::NodeIdType{};
 	int commonPredIdx = chunk->spanMerged_.indexOf(commonPredecessor);
 	int commonSuccIdx = chunk->spanMerged_.indexOf(commonSuccessor);
 
 	if ((commonPredIdx + 1 == commonSuccIdx) || //below condition is to append at end
 		 (commonPredIdx == chunk->spanMerged_.size() - 1 && commonSuccIdx == -1))
-		return Position(true, commonPredecessor);
+		return Position{true, commonPredecessor};
 	else
-		return Position(false, commonPredecessor);
+		return Position{false, commonPredecessor};
 }
 
 

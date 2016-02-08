@@ -41,7 +41,7 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VComment, "item")
 
-VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
+VComment::VComment(Item* parent, NodeType* node) : Super{parent, node, itemStyles().get()}
 {
 	editing_ = node->lines()->size() == 0 || (node->lines()->size() == 1 && node->lines()->at(0)->get().isEmpty());
 	parseLines();
@@ -247,7 +247,7 @@ void VComment::parseLines()
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
 			QString url = items.at(0).second;
-			auto browser = new VCommentBrowser{nullptr, QUrl(url)};
+			auto browser = new VCommentBrowser{nullptr, QUrl{url}};
 
 			if (items.size() > 1)
 			{
@@ -306,7 +306,7 @@ QSize VComment::parseSize(const QString& str)
 	int height = str.mid(index+1).toInt(&ok);
 	if (index+1 < str.size()-1 && !ok) return QSize{}; // Invalid size
 
-	return QSize(width, height);
+	return QSize{width, height};
 }
 
 QList<QPair<QString, QString> > VComment::parseMarkdownArguments(const QString& argString)
@@ -321,7 +321,7 @@ QList<QPair<QString, QString> > VComment::parseMarkdownArguments(const QString& 
 	for (auto line : lines)
 	{
 		int index = rx.indexIn(line);
-		if (index == -1) pairs.append(qMakePair(QString(), line));
+		if (index == -1) pairs.append(qMakePair(QString{}, line));
 		else pairs.append(qMakePair(line.left(index), line.mid(index+1)));
 	}
 

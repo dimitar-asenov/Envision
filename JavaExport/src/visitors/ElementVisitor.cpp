@@ -81,7 +81,7 @@ SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 	*fragment << "catch (";
 	if (catchClause->exceptionToCatch()) *fragment << expression(catchClause->exceptionToCatch());
 	*fragment << ")";
-	*fragment << list(catchClause->body(), StatementVisitor(data()), "body");
+	*fragment << list(catchClause->body(), StatementVisitor{data()}, "body");
 
 	return fragment;
 }

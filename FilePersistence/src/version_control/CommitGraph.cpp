@@ -34,10 +34,10 @@ CommitGraphItem::CommitGraphItem(QString sha1)
 
 CommitGraph::CommitGraph(QString start, QString end)
 {
-	auto iterator = items_.insert(start, CommitGraphItem(start));
+	auto iterator = items_.insert(start, CommitGraphItem{start});
 	start_ = &iterator.value();
 
-	iterator = items_.insert(end, CommitGraphItem(end));
+	iterator = items_.insert(end, CommitGraphItem{end});
 	end_ = &iterator.value();
 }
 
@@ -48,13 +48,13 @@ void CommitGraph::add(QString fromCommitSHA1, QString toCommitSHA1)
 
 	auto iterator = items_.find(fromCommitSHA1);
 	if (iterator == items_.end())
-		iterator = items_.insert(fromCommitSHA1, CommitGraphItem(fromCommitSHA1));
+		iterator = items_.insert(fromCommitSHA1, CommitGraphItem{fromCommitSHA1});
 	fromItem = &iterator.value();
 
 
 	iterator = items_.find(toCommitSHA1);
 	if (iterator == items_.end())
-		iterator = items_.insert(toCommitSHA1, CommitGraphItem(toCommitSHA1));
+		iterator = items_.insert(toCommitSHA1, CommitGraphItem{toCommitSHA1});
 	toItem = &iterator.value();
 
 	fromItem->children_.append(toItem);

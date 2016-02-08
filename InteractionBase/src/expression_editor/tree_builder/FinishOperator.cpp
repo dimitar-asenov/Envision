@@ -39,7 +39,7 @@ void FinishOperator::perform(ExpressionTreeBuilder& tb)
 	UnfinishedOperator* unf = tb.unfinished().last();
 	tb.unfinished().removeLast();
 
-	if (!unf->isComplete()) throw InteractionBaseException("Invalid try to finish an incomplete operator.");
+	if (!unf->isComplete()) throw InteractionBaseException{"Invalid try to finish an incomplete operator."};
 
 	Operator* finished = unf->createFinished();
 	delete ExpressionTreeUtils::replace(tb.top(), unf, finished );

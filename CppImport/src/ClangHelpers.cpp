@@ -78,7 +78,7 @@ clang::SourceRange ClangHelpers::getUnexpandedRange(clang::SourceRange sourceRan
 		 !sourceManager_->getFileEntryForID(sourceManager_->getFileID(sourceManager_->getSpellingLoc(end)))))
 		end = sourceManager_->getImmediateExpansionRange(end).second;
 
-	return clang::SourceRange(start, end);
+	return clang::SourceRange{start, end};
 }
 
 ClangHelpers::ClangHelpers(OOModel::Project* rootProject, QString rootProjectPath)
@@ -167,7 +167,7 @@ OOModel::Project* ClangHelpers::projectForLocation(clang::SourceLocation locatio
 QString ClangHelpers::projectNameFromPath(QString path)
 {
 	QRegularExpression regex(rootProjectPath_ + "/(\\w+)/");
-	auto m = regex.match(QDir(path).absolutePath());
+	auto m = regex.match(QDir{path}.absolutePath());
 	if (m.hasMatch())
 		return m.captured(1);
 	return {};

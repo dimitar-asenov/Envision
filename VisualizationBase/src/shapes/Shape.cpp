@@ -49,7 +49,7 @@ void Shape::setStyle(const Visualization::ShapeStyle* style)
 
 StyleSet<Shape>& Shape::itemStyles()
 {
-	static StyleSet<Shape> styles(QString("shape"));
+	static StyleSet<Shape> styles(QString{"shape"});
 	return styles;
 }
 
@@ -97,28 +97,28 @@ int Shape::contentTop()
 
 QSize Shape::innerSize(QSize outterSize) const
 {
-	if (style_) return QSize(outterSize.width() - std::ceil(style_->outline().width()),
-									 outterSize.height() - std::ceil(style_->outline().width()) );
-	return QSize(outterSize.width(), outterSize.height());
+	if (style_) return QSize{outterSize.width() - (int) std::ceil(style_->outline().width()),
+									 outterSize.height() - (int) std::ceil(style_->outline().width()) };
+	return QSize{outterSize.width(), outterSize.height()};
 }
 
 QSize Shape::outterSize(QSize innerSize) const
 {
-	if (style_) return QSize(innerSize.width() + std::ceil(style_->outline().width()),
-									 innerSize.height() + std::ceil(style_->outline().width()) );
-	return QSize(innerSize.width(), innerSize.height());
+	if (style_) return QSize{innerSize.width() + (int) std::ceil(style_->outline().width()),
+									 innerSize.height() + (int) std::ceil(style_->outline().width()) };
+	return QSize{innerSize.width(), innerSize.height()};
 }
 
 Shape* Shape::createNewShape(const QString& shapeName, Item* parent)
 {
 	if (shapeConstructors.contains(shapeName)) return shapeConstructors.value(shapeName)(parent);
-	else throw VisualizationException("Trying to create a new shape for an unregistered type " + shapeName);
+	else throw VisualizationException{"Trying to create a new shape for an unregistered type " + shapeName};
 }
 
 ShapeStyle* Shape::createNewShapeStyle(const QString& shapeName)
 {
 	if (shapeStyleConstructors.contains(shapeName)) return shapeStyleConstructors.value(shapeName)();
-	else throw VisualizationException("Trying to create a new shape style for an unregistered shape type " + shapeName);
+	else throw VisualizationException{"Trying to create a new shape style for an unregistered shape type " + shapeName};
 }
 
 void Shape::setParentNeedsUpdate()

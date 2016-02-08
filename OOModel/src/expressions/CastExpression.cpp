@@ -47,7 +47,7 @@ std::unique_ptr<Type> CastExpression::type()
 }
 
 CastExpression::CastExpression(CastKind castKind)
-: Super(nullptr, CastExpression::getMetaData())
+: Super{nullptr, CastExpression::getMetaData()}
 {
 	setCastKind(castKind);
 }

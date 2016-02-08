@@ -46,15 +46,15 @@ XMLModel::XMLModel(const QString& filename) :
 	doc(XML_DOM_TYPE)
 {
 	QFile file(filename);
-	if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException("Could not open file " + file.fileName() + ".");
+	if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException{"Could not open file " + file.fileName() + "."};
 
 	QString error;
 	int line, col;
 	if ( !doc.setContent(&file, &error, &line, &col) )
 	{
 		file.close();
-		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed."
-				+ error + " line: " + QString::number(line) + " col: " + QString::number(col));
+		throw FilePersistenceException{"Reading of the XML structure of file " + file.fileName() + " failed."
+				+ error + " line: " + QString::number(line) + " col: " + QString::number(col)};
 	}
 	file.close();
 }
@@ -95,10 +95,10 @@ void XMLModel::endSaveChildNode()
 	if (!elemStack.isEmpty())
 	{
 		elemStack.removeLast();
-		if (elemStack.isEmpty()) elem = QDomElement();
+		if (elemStack.isEmpty()) elem = QDomElement{};
 		else elem = elemStack.last();
 	}
-	else throw FilePersistenceException("Invalid call to endSaveNode - element stack is empty.");
+	else throw FilePersistenceException{"Invalid call to endSaveNode - element stack is empty."};
 }
 
 void XMLModel::importChildFromXML(QDomElement child)
@@ -128,8 +128,8 @@ int XMLModel::loadIntValue() const
 	bool ok = true;
 
 	int res = elem.firstChild().nodeValue().mid(PREFIX_INTEGER.size()).toInt(&ok);
-	if ( !ok ) throw FilePersistenceException("Could not read integer value " + elem.firstChild().nodeValue()
-			+ " at line: " + QString::number( elem.lineNumber() ));
+	if ( !ok ) throw FilePersistenceException{"Could not read integer value " + elem.firstChild().nodeValue()
+			+ " at line: " + QString::number( elem.lineNumber() )};
 
 	return res;
 }
@@ -144,8 +144,8 @@ double XMLModel::loadDoubleValue() const
 	bool ok = true;
 
 	double res = elem.firstChild().nodeValue().mid(PREFIX_DOUBLE.size()).toDouble(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read real value " + elem.firstChild().nodeValue()
-			+ " at line: " + QString::number( elem.lineNumber() ));
+	if ( !ok ) throw FilePersistenceException{"Could read real value " + elem.firstChild().nodeValue()
+			+ " at line: " + QString::number( elem.lineNumber() )};
 
 	return res;
 }
@@ -178,7 +178,7 @@ void XMLModel::beginLoadChildNode(const QString& nodeName)
 		child = child.nextSiblingElement();
 	}
 
-	if (child.isNull()) throw FilePersistenceException("No child with the name '" + nodeName + "' exists.");
+	if (child.isNull()) throw FilePersistenceException{"No child with the name '" + nodeName + "' exists."};
 
 	elem = child;
 	elemStack.append(elem);
@@ -189,10 +189,10 @@ void XMLModel::endLoadChildNode()
 	if (!elemStack.isEmpty())
 	{
 		elemStack.removeLast();
-		if (elemStack.isEmpty()) elem = QDomElement();
+		if (elemStack.isEmpty()) elem = QDomElement{};
 		else elem = elemStack.last();
 	}
-	else throw FilePersistenceException("Invalid call to endLoadChildNode - element stack is empty.");
+	else throw FilePersistenceException{"Invalid call to endLoadChildNode - element stack is empty."};
 }
 
 QStringList XMLModel::getChildrenNames() const
@@ -202,7 +202,7 @@ QStringList XMLModel::getChildrenNames() const
 	QDomElement child = elem.firstChildElement();
 	while ( !child.isNull() )
 	{
-		QString name = child.attribute("name", QString());
+		QString name = child.attribute("name", QString{});
 		if (!name.isEmpty()) names.append(name);
 
 		child = child.nextSiblingElement();
@@ -219,7 +219,7 @@ bool XMLModel::hasNext() const
 void XMLModel::loadNext()
 {
 	elem = elem.nextSiblingElement();
-	if (elem.isNull()) throw FilePersistenceException("Element does not have a next sibling");
+	if (elem.isNull()) throw FilePersistenceException{"Element does not have a next sibling"};
 	elemStack.removeLast();
 	elemStack.append(elem);
 }
@@ -258,7 +258,7 @@ void XMLModel::goToFirstChild()
 	if (elem.isNull()) elem = doc.firstChildElement();
 	else
 	{
-		if (elem.firstChildElement().isNull()) throw FilePersistenceException("Element does not have child nodes");
+		if (elem.firstChildElement().isNull()) throw FilePersistenceException{"Element does not have child nodes"};
 		elem = elem.firstChildElement();
 	}
 	elemStack.append(elem);
@@ -266,7 +266,7 @@ void XMLModel::goToFirstChild()
 
 void XMLModel::goToParent()
 {
-	if (elemStack.isEmpty()) throw FilePersistenceException("Can not go to parent in XMLModel::goToParent");
+	if (elemStack.isEmpty()) throw FilePersistenceException{"Can not go to parent in XMLModel::goToParent"};
 	elemStack.removeLast();
 	elem = elemStack.last();
 }
@@ -289,16 +289,16 @@ Model::NodeIdType XMLModel::getId() const
 	{
 		Model::NodeIdType id = elem.attribute("id", "error");
 		if (!id.isNull()) return id;
-		else throw FilePersistenceException("Incorrect id '" + elem.attribute("id") + "' for node of type: "
-														+ elem.tagName());
+		else throw FilePersistenceException{"Incorrect id '" + elem.attribute("id") + "' for node of type: "
+														+ elem.tagName()};
 	}
-	else throw FilePersistenceException("Id not found for node of type: " + elem.tagName());
+	else throw FilePersistenceException{"Id not found for node of type: " + elem.tagName()};
 }
 
 QString XMLModel::getName() const
 {
 	if ( elem.hasAttribute("name") ) return elem.attribute("name");
-	else throw FilePersistenceException("Name not found for node of type: " + elem.tagName());
+	else throw FilePersistenceException{"Name not found for node of type: " + elem.tagName()};
 }
 
 QDomElement XMLModel::getCurrentElement() const
@@ -329,7 +329,7 @@ QString XMLModel::documentText() const
 void XMLModel::setDocumentText(const QString& text)
 {
 	if ( !doc.setContent(text) )
-		throw FilePersistenceException("Reading of the XML structure of the specified text failed in XMLModel::setDocument");
+		throw FilePersistenceException{"Reading of the XML structure of the specified text failed in XMLModel::setDocument"};
 
 	elemStack.clear();
 }

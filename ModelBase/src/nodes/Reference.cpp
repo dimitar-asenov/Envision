@@ -124,10 +124,10 @@ void Reference::save(PersistentStore &store) const
 void Reference::load(PersistentStore &store)
 {
 	// TODO: Implement reference loading properly.
-	throw ModelException("Loading references outside a Reference constructor is not properly implemented yet");
+	throw ModelException{"Loading references outside a Reference constructor is not properly implemented yet"};
 
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Reference node from an incompatible node type " + store.currentNodeType());
+		throw ModelException{"Trying to load a Reference node from an incompatible node type " + store.currentNodeType()};
 
 	setName( store.loadReferenceValue(this) );
 }

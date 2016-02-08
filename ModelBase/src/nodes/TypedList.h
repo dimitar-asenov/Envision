@@ -95,17 +95,17 @@ class TypedList: public Super<List>
 };
 
 template <typename T>
-inline typename TypedList<T>::const_iterator TypedList<T>::begin() const { return ConstTypedIterator(List::cbegin()); }
+inline typename TypedList<T>::const_iterator TypedList<T>::begin() const { return ConstTypedIterator{List::cbegin()}; }
 template <typename T>
-inline typename TypedList<T>::const_iterator TypedList<T>::cbegin() const { return ConstTypedIterator(List::cbegin()); }
+inline typename TypedList<T>::const_iterator TypedList<T>::cbegin() const { return ConstTypedIterator{List::cbegin()}; }
 template <typename T>
-inline typename TypedList<T>::const_iterator TypedList<T>::cend() const { return ConstTypedIterator(List::cend()); }
+inline typename TypedList<T>::const_iterator TypedList<T>::cend() const { return ConstTypedIterator{List::cend()}; }
 template <typename T>
-inline typename TypedList<T>::const_iterator TypedList<T>::end() const { return ConstTypedIterator(List::cend()); }
+inline typename TypedList<T>::const_iterator TypedList<T>::end() const { return ConstTypedIterator{List::cend()}; }
 template <typename T>
-inline typename TypedList<T>::iterator TypedList<T>::begin() { return TypedIterator(List::begin()); }
+inline typename TypedList<T>::iterator TypedList<T>::begin() { return TypedIterator{List::begin()}; }
 template <typename T>
-inline typename TypedList<T>::iterator TypedList<T>::end() { return TypedIterator(List::end()); }
+inline typename TypedList<T>::iterator TypedList<T>::end() { return TypedIterator{List::end()}; }
 
 template<typename T>
 inline TypedList<T>::TypedIterator::TypedIterator(List::iterator it): it_{it}{}

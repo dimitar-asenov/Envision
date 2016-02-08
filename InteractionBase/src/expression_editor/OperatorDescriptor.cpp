@@ -43,18 +43,18 @@ OperatorDescriptor::OperatorDescriptor(const QString& prefixText, const QString&
 	if (!prefixText.isEmpty())
 	{
 		signature_.append(prefixText);
-		expectedTokens_ <<  ExpectedToken(ExpectedToken::FIRST_DELIM, prefixText);
+		expectedTokens_ <<  ExpectedToken{ExpectedToken::FIRST_DELIM, prefixText};
 		prefixTokens_.append(prefixText);
 	}
 	signature_.append("expr");
-	expectedTokens_ <<  ExpectedToken(ExpectedToken::VALUE);
+	expectedTokens_ <<  ExpectedToken{ExpectedToken::VALUE};
 	if (!postfixText.isEmpty())
 	{
 		signature_.append(postfixText);
-		expectedTokens_ <<  ExpectedToken(ExpectedToken::FIRST_DELIM, postfixText);
+		expectedTokens_ <<  ExpectedToken{ExpectedToken::FIRST_DELIM, postfixText};
 		postfixTokens_.append(postfixText);
 	}
-	expectedTokens_ << ExpectedToken(ExpectedToken::END);
+	expectedTokens_ << ExpectedToken{ExpectedToken::END};
 }
 
 OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signature, int precedence,
@@ -69,7 +69,7 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 
 	auto addNonDelimiter = [this, &preInPostFixTokens] (ExpectedToken::ExpectedType type)
 	{
-	  expectedTokens_ <<  ExpectedToken(type);
+	  expectedTokens_ <<  ExpectedToken{type};
 	  ++num_operands_;
 	  preInPostFixTokens.append( QStringList{} ); // Begin a new infix/postfix
 	};
@@ -92,9 +92,9 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 				 (expectedTokens_.last().type != ExpectedToken::FIRST_DELIM
 					&& expectedTokens_.last().type != ExpectedToken::FOLLOWING_DELIM))
 			{
-				expectedTokens_ << ExpectedToken(ExpectedToken::FIRST_DELIM, s);
+				expectedTokens_ << ExpectedToken{ExpectedToken::FIRST_DELIM, s};
 			}
-			else expectedTokens_ << ExpectedToken(ExpectedToken::FOLLOWING_DELIM, s);
+			else expectedTokens_ << ExpectedToken{ExpectedToken::FOLLOWING_DELIM, s};
 			QStringList& last = preInPostFixTokens.last();
 			last.append(s);
 
@@ -111,7 +111,7 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 		++sigIndex;
 		lastDelimiter = delimiter;
 	}
-	expectedTokens_ << ExpectedToken(ExpectedToken::END);
+	expectedTokens_ << ExpectedToken{ExpectedToken::END};
 
 	prefixTokens_ = preInPostFixTokens.takeFirst();
 	if (!preInPostFixTokens.isEmpty()) postfixTokens_ = preInPostFixTokens.takeLast();

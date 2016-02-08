@@ -38,23 +38,23 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(VariableDeclarationExpression)
 DEFINE_ATTRIBUTE(VariableDeclarationExpression, decl, VariableDeclaration, false, false, true)
 
 VariableDeclarationExpression::VariableDeclarationExpression(VariableDeclaration* variableDeclaration)
-: Super(nullptr, VariableDeclarationExpression::getMetaData())
+: Super{nullptr, VariableDeclarationExpression::getMetaData()}
 {
 	setDecl(variableDeclaration);
 }
 
 VariableDeclarationExpression::VariableDeclarationExpression(const QString& name, Expression* type)
-: VariableDeclarationExpression(new VariableDeclaration{name, type})
+: VariableDeclarationExpression{new VariableDeclaration{name, type}}
 {}
 
 VariableDeclarationExpression::VariableDeclarationExpression
 		(const QString& name, Expression* type, Expression* initialValue)
-: VariableDeclarationExpression(new VariableDeclaration{name, type, initialValue})
+: VariableDeclarationExpression{new VariableDeclaration{name, type, initialValue}}
 {}
 
 VariableDeclarationExpression::VariableDeclarationExpression
 		(const QString& name, Expression* type, Modifier::Modifiers mod, Expression* initialValue)
-: VariableDeclarationExpression(new VariableDeclaration{name, type, mod, initialValue})
+: VariableDeclarationExpression{new VariableDeclaration{name, type, mod, initialValue}}
 {}
 
 bool VariableDeclarationExpression::definesSymbol() const

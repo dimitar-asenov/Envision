@@ -30,7 +30,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(RootItem, "item")
 
 RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel)
-: Super(nullptr, node, itemStyles().get())
+: Super{nullptr, node, itemStyles().get()}
 {
 	Q_ASSERT(node);
 	setFlag(QGraphicsItem::ItemHasNoContents);

@@ -144,7 +144,7 @@ void AnchorLayoutFormElement::computeSize(Item* item, int /*availableWidth*/, in
 	for (FormElement* element : children())
 	{
 		element->computeSize(item, 0, 0);
-		element->setPos(item, QPoint(0, 0));
+		element->setPos(item, QPoint{0, 0});
 	}
 
 	// place elements horizontally
@@ -161,11 +161,11 @@ void AnchorLayoutFormElement::computeSize(Item* item, int /*availableWidth*/, in
 	int maxY = 0;
 	for (FormElement* element : children())
 	{
-		element->setPos(item, QPoint(element->x(item) + adjustmentX, element->y(item) + adjustmentY));
+		element->setPos(item, QPoint{element->x(item) + adjustmentX, element->y(item) + adjustmentY});
 		if (element->xEnd(item) > maxX) maxX = element->xEnd(item);
 		if (element->yEnd(item) > maxY) maxY = element->yEnd(item);
 	}
-	setSize(item, QSize(maxX + rightMargin(), maxY + bottomMargin()));
+	setSize(item, QSize{maxX + rightMargin(), maxY + bottomMargin()});
 }
 
 bool AnchorLayoutFormElement::sizeDependsOnParent(const Item* /*item*/) const

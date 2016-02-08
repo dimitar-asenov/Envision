@@ -41,7 +41,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FormalArgument)
 DEFINE_ATTRIBUTE(FormalArgument, directionInt, Integer, false, false, true)
 
 FormalArgument::FormalArgument(const QString& name, Expression* type, const Direction& direction)
-: Super(nullptr, FormalArgument::getMetaData())
+: Super{nullptr, FormalArgument::getMetaData()}
 {
 	setName(name);
 	setDirection(direction);
@@ -49,7 +49,7 @@ FormalArgument::FormalArgument(const QString& name, Expression* type, const Dire
 }
 
 FormalArgument::FormalArgument(const QString& name, const Direction& direction)
-: Super(nullptr, FormalArgument::getMetaData())
+: Super{nullptr, FormalArgument::getMetaData()}
 {
 	setName(name);
 	setDirection(direction);

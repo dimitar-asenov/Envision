@@ -190,9 +190,9 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::extractInfo(const 
 		{
 			auto valIt = infoTuple.find(taggedVal.second);
 			if (valIt != infoTuple.end()) tupleValues.push_back(*valIt);
-			else return {QString("info: tuple %1 has no entry named %2").arg(tag, taggedVal.second)};
+			else return {QString{"info: tuple %1 has no entry named %2"}.arg(tag, taggedVal.second)};
 		}
-		infos[astNode].append(Tuple(tupleValues));
+		infos[astNode].append(Tuple{tupleValues});
 	}
 	return convertTuplesToString(infos);
 }

@@ -68,13 +68,13 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 		{
 			if (size > element->size(item).width())
 				element->computeSize(item, size, element->size(item).height());
-			element->setPos(item, QPoint(position, element->pos(item).y()));
+			element->setPos(item, QPoint{position, element->pos(item).y()});
 		}
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
 		{
 			if (size > element->size(item).height())
 				element->computeSize(item, element->size(item).width(), size);
-			element->setPos(item, QPoint(element->pos(item).x(), position));
+			element->setPos(item, QPoint{element->pos(item).x(), position});
 		}
 	}
 }
@@ -197,7 +197,7 @@ QVector<float> AnchorLayoutConstraintSolver::solveConstraints()
 	// Make sure to reset the basis between calls in order to get the correct result
 	default_basis(lp_);
 	int success = solve(lp_);
-	if (success != OPTIMAL) throw VisualizationException("Failed to solve anchor constraints.");
+	if (success != OPTIMAL) throw VisualizationException{"Failed to solve anchor constraints."};
 	get_variables(lp_, rowValues_);
 	QVector<float> result;
 	for (int i=0; i<numVariables_; ++i)

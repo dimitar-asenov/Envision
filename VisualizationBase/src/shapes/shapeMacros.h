@@ -77,12 +77,12 @@ void ShapeClass::setStyle(const Visualization::ShapeStyle* shapeStyle)										
 {																																							\
 	if (shapeStyle == style()) return;																												\
 	const StyleType* s = dynamic_cast<const StyleType*> (shapeStyle);																		\
-	if (!s) throw Visualization::VisualizationException("Invalid style type when calling " #ShapeClass "::setStyle");	\
+	if (!s) throw Visualization::VisualizationException{"Invalid style type when calling " #ShapeClass "::setStyle"};	\
 	Shape::setStyle(s);																																\
 }																																							\
 																																							\
 StyleSet<ShapeClass>& ShapeClass::itemStyles()																								\
 {																																							\
-	static StyleSet<ShapeClass> styles(QString(classType));																				\
+	static StyleSet<ShapeClass> styles(QString{classType});																				\
 	return styles;																																		\
 }

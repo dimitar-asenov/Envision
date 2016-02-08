@@ -38,7 +38,7 @@ CompositeNodeChangeChild::CompositeNodeChangeChild(Node* target, Node* newValue,
 		attributeIndex{attributeIndex}, subnodes{subnodes}
 {
 	if (newValue && newValue->parent())
-		throw ModelException("Set as a child of CompositeNode a node that already has a parent.");
+		throw ModelException{"Set as a child of CompositeNode a node that already has a parent."};
 }
 
 void CompositeNodeChangeChild::redo()

@@ -33,8 +33,8 @@
 namespace Interaction {
 
 ExpressionContext::ExpressionContext()
-	:	left_type_{None}, right_type_{None}, left_{nullptr}, right_{nullptr}, left_text_{QString::Null()},
-	  right_text_{QString::Null()}, left_delim_{-1}, right_delim_{-1}
+	:	left_type_{None}, right_type_{None}, left_{nullptr}, right_{nullptr}, left_text_{QString::Null{}},
+	  right_text_{QString::Null{}}, left_delim_{-1}, right_delim_{-1}
 {
 }
 

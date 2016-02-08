@@ -112,9 +112,9 @@ QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
 
 QHash<int, QPoint> GenericHandler::keyToViewItemIndexMap_
-		{{Qt::Key_1, QPoint(0, 0)}, {Qt::Key_2, QPoint(1, 0)}, {Qt::Key_3, QPoint(2, 0)},
-		 {Qt::Key_4, QPoint(0, 1)}, {Qt::Key_5, QPoint(1, 1)}, {Qt::Key_6, QPoint(2, 1)},
-		 {Qt::Key_7, QPoint(0, 2)}, {Qt::Key_8, QPoint(1, 2)}, {Qt::Key_9, QPoint(2, 2)}};
+		{{Qt::Key_1, QPoint{0, 0}}, {Qt::Key_2, QPoint{1, 0}}, {Qt::Key_3, QPoint{2, 0}},
+		 {Qt::Key_4, QPoint{0, 1}}, {Qt::Key_5, QPoint{1, 1}}, {Qt::Key_6, QPoint{2, 1}},
+		 {Qt::Key_7, QPoint{0, 2}}, {Qt::Key_8, QPoint{1, 2}}, {Qt::Key_9, QPoint{2, 2}}};
 
 QList<QPair<Visualization::Item*, QPoint> > GenericHandler::cursorPositionsForUndo_{};
 int GenericHandler::cursorUndoIndex_{-1};
@@ -156,7 +156,7 @@ void GenericHandler::setCommandExecutionEngine(CommandExecutionEngine *engine)
 
 void GenericHandler::resetCursorOrigin()
 {
-	cursorOriginMidPoint_ = QPoint();
+	cursorOriginMidPoint_ = QPoint{};
 	cursorMoveOrientation_ = NoOrientation;
 }
 
@@ -173,7 +173,7 @@ void GenericHandler::toggleComment(Visualization::Item *itemWithComment, Model::
 	overlayGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay{itemWithComment,
 		[aNode](Visualization::BoxOverlay* self){
 		self->renderer()->sync(self->content(), self, aNode);
-		return QString("comment");
+		return QString{"comment"};
 	}}));
 }
 
@@ -452,7 +452,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			view = target->scene()->viewItems()->viewItems()[col][row];
 		if (!view)
 			view = target->scene()->viewItems()->
-				newViewItem("View" + QString::number(col) + QString::number(row), QPoint(col, row));
+				newViewItem("View" + QString::number(col) + QString::number(row), QPoint{col, row});
 
 		if (view) target->scene()->viewItems()->switchToView(view);
 	}
@@ -532,22 +532,22 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 				case Qt::Key_Up:
 				{
 					int border = current->scenePos().y();
-					reference = QPoint(cursorOriginMidPoint_.x(), border);
+					reference = QPoint{cursorOriginMidPoint_.x(), border};
 				} break;
 				case Qt::Key_Down:
 				{
 					int border = current->scenePos().y() + current->heightInScene()-1;
-					reference = QPoint(cursorOriginMidPoint_.x(), border);
+					reference = QPoint{cursorOriginMidPoint_.x(), border};
 				} break;
 				case Qt::Key_Left:
 				{
 					int border = current->scenePos().x();
-					reference = QPoint(border, cursorOriginMidPoint_.y());
+					reference = QPoint{border, cursorOriginMidPoint_.y()};
 				} break;
 				case Qt::Key_Right:
 				{
 					int border = current->scenePos().x() + current->widthInScene()-1;
-					reference = QPoint(border, cursorOriginMidPoint_.y());
+					reference = QPoint{border, cursorOriginMidPoint_.y()};
 				} break;
 			}
 
@@ -586,7 +586,7 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 	if (event->modifiers() == 0 && !event->buttonDownPos( Qt::LeftButton).isNull() )
 	{
 		QPainterPath path;
-		path.addRect( QRectF(event->buttonDownScenePos(Qt::LeftButton), event->scenePos()) );
+		path.addRect( QRectF{event->buttonDownScenePos(Qt::LeftButton), event->scenePos()} );
 		target->scene()->setSelectionArea(path, Qt::IntersectsItemShape);
 		filterSelectedItems(target, event);
 		target->scene()->scheduleUpdate();

@@ -38,7 +38,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(StringLiteral)
 DEFINE_ATTRIBUTE(StringLiteral, value, Text, false, false, true)
 
 StringLiteral::StringLiteral(const QString& value)
-: Super(nullptr, StringLiteral::getMetaData())
+: Super{nullptr, StringLiteral::getMetaData()}
 {
 	setValue(value);
 }

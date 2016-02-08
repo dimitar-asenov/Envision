@@ -38,7 +38,7 @@ QString InfoMethods::numberOfCallees(Model::Node *node)
 		html += classAndNameTable("calleeTable", method->callees());
 		return html;
 	}
-	else return QString();
+	else return QString{};
 }
 
 QString InfoMethods::numberOfUsages(Model::Node *node)
@@ -68,7 +68,7 @@ QString InfoMethods::numberOfUsages(Model::Node *node)
 		}
 		return "Number of usages: " + QString::number(result.size());
 	}
-	else return QString();
+	else return QString{};
 }
 
 QString InfoMethods::fullName(Model::Node *node)
@@ -77,7 +77,7 @@ QString InfoMethods::fullName(Model::Node *node)
 		return "<b>" + method->fullyQualifiedName() + "</b>";
 	else if (auto clazz = DCast<OOModel::Class>(node))
 		return "<b>" + clazz->name() + "</b>";
-	else return QString();
+	else return QString{};
 }
 
 QString InfoMethods::expandButton(QString functionName, QString expandableId)

@@ -215,7 +215,7 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 
 	if ((diffKind.first == SourceKind::Workdir && diffKind.second == SourceKind::Workdir) ||
 		 (diffKind.first == SourceKind::Index && diffKind.second == SourceKind::Index))
-		return Diff();
+		return Diff{};
 
 	if ((diffKind.first == SourceKind::Index && diffKind.second == SourceKind::Workdir) ||
 		 (diffKind.first == SourceKind::Workdir && diffKind.second == SourceKind::Index))
@@ -283,9 +283,9 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	git_tree_free(gitTreeB);
 	git_diff_free(gitDiff);
 
-	return Diff(carryAlongData.nodesA_, treeA,
+	return Diff{carryAlongData.nodesA_, treeA,
 					carryAlongData.nodesB_, treeB,
-					this);
+					this};
 }
 
 git_tree* GitRepository::getCommitTree(QString revision) const
@@ -309,7 +309,7 @@ CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevisio
 	git_commit* gitEndCommit = parseCommit(endRevision);
 
 	CommitGraph graph(startSHA1, endSHA1);
-	traverseCommitGraph(&graph, gitEndCommit, startOID);
+	TraverseCommitGraph(&graph, gitEndCommit, startOID);
 
 	git_commit_free(gitStartCommit);
 	git_commit_free(gitEndCommit);
@@ -368,7 +368,7 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 
 		// Message
 		const char* msg = git_commit_message(gitCommit);
-		info.message_ = QString(msg);
+		info.message_ = QString{msg};
 
 		// Date and Time
 		git_time_t time = git_commit_time(gitCommit);
@@ -377,15 +377,15 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 		// Committer
 		Signature committer;
 		const git_signature* gitCommitter = git_commit_committer(gitCommit);
-		committer.name_ = QString(gitCommitter->name);
-		committer.eMail_ = QString(gitCommitter->email);
+		committer.name_ = QString{gitCommitter->name};
+		committer.eMail_ = QString{gitCommitter->email};
 		info.committer_ = committer;
 
 		// Author
 		Signature author;
 		const git_signature* gitAuthor = git_commit_author(gitCommit);
-		author.name_ = QString(gitAuthor->name);
-		author.eMail_ = QString(gitAuthor->email);
+		author.name_ = QString{gitAuthor->name};
+		author.eMail_ = QString{gitAuthor->email};
 		info.author_ = author;
 
 		git_commit_free(gitCommit);
@@ -438,7 +438,7 @@ QString GitRepository::currentBranchName() const
 {
 	HEADState state = getHEADState();
 	if (state != HEADState::ATTACHED)
-		return QString();
+		return QString{};
 
 	int errorCode = 0;
 
@@ -493,7 +493,7 @@ QStringList GitRepository::tags() const
 
 	QStringList tagList;
 	for (size_t i = 0; i < tags.count; i++)
-		tagList.append(QString(tags.strings[i]));
+		tagList.append(QString{tags.strings[i]});
 
 	git_strarray_free(&tags);
 
@@ -811,7 +811,7 @@ QString GitRepository::currentBranch() const
 {
 	HEADState state = getHEADState();
 	if (state != HEADState::ATTACHED)
-		return QString();
+		return QString{};
 
 	int errorCode = 0;
 
@@ -856,7 +856,7 @@ bool GitRepository::setReferenceTarget(QString reference, QString target)
 	return true;
 }
 
-void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const
+void GitRepository::TraverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const
 {
 	const git_oid* oid = git_commit_id(current);
 	QString currentSHA1 = oidToQString(oid);
@@ -878,7 +878,7 @@ void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current,
 
 				graph->add(parentSHA1, currentSHA1);
 
-				traverseCommitGraph(graph, parent, target);
+				TraverseCommitGraph(graph, parent, target);
 			}
 			else if (isConnected != 0)
 				checkError(isConnected);
@@ -899,7 +899,7 @@ const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) 
 
 	QFile file(fullRelativePath);
 	if ( !file.open(QIODevice::ReadOnly) )
-		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
+		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 
 	Q_ASSERT(file.size() < std::numeric_limits<int>::max());
 	int totalFileSize = static_cast<int>(file.size());
@@ -959,7 +959,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 
 	QFile file(fullRelativePath);
 	if ( !file.open(QIODevice::ReadOnly) )
-		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
+		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 
 	Q_ASSERT(file.size() < std::numeric_limits<int>::max());
 	int totalFileSize = static_cast<int>(file.size());
@@ -1077,7 +1077,7 @@ QString GitRepository::oidToQString(const git_oid* oid) const
 
 	git_oid_fmt(sha1, oid);
 
-	return QString(sha1);
+	return QString{sha1};
 }
 
 void GitRepository::findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations)
@@ -1154,8 +1154,8 @@ void GitRepository::checkError(int errorCode)
 	if (errorCode < 0)
 	{
 		const git_error* lastError = giterr_last();
-		throw FilePersistenceException(QString("Error %1/%2: %3").arg(errorCode).arg(lastError->klass)
-												 .arg(lastError->message));
+		throw FilePersistenceException{QString{"Error %1/%2: %3"}.arg(errorCode).arg(lastError->klass)
+												 .arg(lastError->message)};
 	}
 }
 

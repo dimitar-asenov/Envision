@@ -92,7 +92,7 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	{
 		auto currentClass = classes.takeLast();
 		CppPrintContext printContext{classs->firstAncestorOfType<OOModel::Module>(), CppPrintContext::PrintMethodBody};
-		*fragment << list(currentClass->methods(), DeclarationVisitor(printContext, data()), "spacedSections", filter);
+		*fragment << list(currentClass->methods(), DeclarationVisitor{printContext, data()}, "spacedSections", filter);
 		*fragment << list(currentClass->fields(),
 								DeclarationVisitor(classs->firstAncestorOfType<OOModel::Module>(), data()),
 								"spacedSections",
@@ -128,7 +128,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*classFragment << compositeNodeComments(classs, "declarationComment");
 
 		if (!classs->typeArguments()->isEmpty())
-			*classFragment << list(classs->typeArguments(), ElementVisitor(data()), "templateArgsList");
+			*classFragment << list(classs->typeArguments(), ElementVisitor{data()}, "templateArgsList");
 
 		*classFragment << printAnnotationsAndModifiers(classs);
 
@@ -157,9 +157,9 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		}
 
 		auto sections = classFragment->append(new CompositeFragment{classs, "bodySections"});
-		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "sections",
+		*sections << list(classs->metaCalls(), ExpressionVisitor{data()}, "sections",
 								[](Expression* expression) { return metaCallFilter(expression, false); });
-		*sections << list(classs->enumerators(), ElementVisitor(data()), "sections");
+		*sections << list(classs->enumerators(), ElementVisitor{data()}, "sections");
 
 		*sections << printFriends(classs);
 
@@ -205,7 +205,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	else
 	{
 		auto sections = fragment->append( new CompositeFragment{classs, "sections"});
-		*sections << list(classs->metaCalls(), ExpressionVisitor(data()), "spacedSections",
+		*sections << list(classs->metaCalls(), ExpressionVisitor{data()}, "spacedSections",
 								[](Expression* expression) { return metaCallFilter(expression, true); });
 		*sections << list(classs->classes(), this, "sections");
 		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
@@ -257,7 +257,7 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 
 	auto fragment = new CompositeFragment{classs, "accessorSections"};
 	for (auto node : ExportHelpers::topologicalSort(declarationDependencies))
-		*fragment << DeclarationVisitor(classs, data()).visit(node);
+		*fragment << DeclarationVisitor{classs, data()}.visit(node);
 	auto fields = list(classs->fields(), this, "sections", filter);
 	if (!fields->fragments().empty()) *fragment << fields;
 	return fragment;
@@ -268,15 +268,15 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
 	auto macro = new CompositeFragment{metaDefinition, "macro"};
 	*macro << "#define " << metaDefinition->nameNode();
-	*macro << list(metaDefinition->arguments(), ElementVisitor(data()), "argsList");
+	*macro << list(metaDefinition->arguments(), ElementVisitor{data()}, "argsList");
 	auto body = new CompositeFragment{metaDefinition->context(), "macroBody"};
 	if (auto context = DCast<Module>(metaDefinition->context()))
-		*body << list(context->classes(), DeclarationVisitor(data()), "spacedSections");
+		*body << list(context->classes(), DeclarationVisitor{data()}, "spacedSections");
 	else if (auto context = DCast<Class>(metaDefinition->context()))
 	{
-		*body << list(context->metaCalls(), ExpressionVisitor(data()), "sections");
-		*body << list(context->methods(), DeclarationVisitor(data()), "spacedSections");
-		*body << list(context->fields(), DeclarationVisitor(data()), "spacedSections");
+		*body << list(context->metaCalls(), ExpressionVisitor{data()}, "sections");
+		*body << list(context->methods(), DeclarationVisitor{data()}, "spacedSections");
+		*body << list(context->fields(), DeclarationVisitor{data()}, "spacedSections");
 	}
 	*macro << body;
 	*fragment << macro;
@@ -335,11 +335,11 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 			for (auto i = 0; i < parentClasses.size(); i++)
 				if (!parentClasses.at(i)->typeArguments()->isEmpty())
-					*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor(method, data()),
+					*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor{method, data()},
 											"templateArgsList");
 		}
 	if (!method->typeArguments()->isEmpty())
-		*fragment << list(method->typeArguments(), ElementVisitor(method, data()), "templateArgsList");
+		*fragment << list(method->typeArguments(), ElementVisitor{method, data()}, "templateArgsList");
 
 	// private, public, ...
 	if (printContext().isClass())
@@ -382,22 +382,22 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	CppPrintContext argumentsPrintContext{method, printContext().isClass() ?
 																							CppPrintContext::PrintDefaultArgumentValues :
 																							CppPrintContext::None};
-	*fragment << list(method->arguments(), ElementVisitor(argumentsPrintContext, data()), "argsList");
+	*fragment << list(method->arguments(), ElementVisitor{argumentsPrintContext, data()}, "argsList");
 	if (method->modifiers()->isSet(Modifier::Const))
 		*fragment << " " << new TextFragment{method->modifiers(), "const"};
 
 	if (!printContext().isClass())
 		if (!method->memberInitializers()->isEmpty())
-			*fragment << " : " << list(method->memberInitializers(), ElementVisitor(method, data()),
+			*fragment << " : " << list(method->memberInitializers(), ElementVisitor{method, data()},
 												"comma");
 
 	if (!method->throws()->isEmpty())
-		*fragment << " throw (" << list(method->throws(), ExpressionVisitor(method, data()),
+		*fragment << " throw (" << list(method->throws(), ExpressionVisitor{method, data()},
 												  "comma") << ")";
 
 	if (printContext().hasOption(CppPrintContext::PrintMethodBody) ||
 		 (printContext().hasOption(CppPrintContext::PrintMethodBodyIfNotEmpty) && !method->items()->isEmpty()))
-		*fragment << list(method->items(), StatementVisitor(method, data()), "body");
+		*fragment << list(method->items(), StatementVisitor{method, data()}, "body");
 	else
 	{
 		SpecialCases::overrideFlag(method, fragment);
@@ -447,7 +447,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		// template<typename T...>
 		if (auto parentClass = field->firstAncestorOfType<Class>())
 			if (!parentClass->typeArguments()->isEmpty())
-				*fragment << list(parentClass->typeArguments(), ElementVisitor(data()), "templateArgsList");
+				*fragment << list(parentClass->typeArguments(), ElementVisitor{data()}, "templateArgsList");
 
 		if (field->modifiers()->isSet(Modifier::ConstExpr))
 			*fragment << printAnnotationsAndModifiers(field);
@@ -483,7 +483,7 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 {
 	auto fragment = new CompositeFragment{declaration, "vertical"};
 	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
-		*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
+		*fragment << list(declaration->annotations(), StatementVisitor{data()}, "vertical");
 	auto header = fragment->append(new CompositeFragment{declaration, "space"});
 
 	if (declaration->modifiers()->isSet(Modifier::ConstExpr))
@@ -526,7 +526,7 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 		 !explicitTemplateInstantiation->instantiatedClass()->prefix())
 		*fragment << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Module>()->name() << "::";
 
-	*fragment << ExpressionVisitor(data()).visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
+	*fragment << ExpressionVisitor{data()}.visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
 	return fragment;
 }
 
@@ -536,7 +536,7 @@ SourceFragment* DeclarationVisitor::visit(TypeAlias* typeAlias)
 	*fragment << compositeNodeComments(typeAlias, "declarationComment");
 
 	if (!typeAlias->typeArguments()->isEmpty())
-		*fragment << list(typeAlias->typeArguments(), ElementVisitor(data()), "templateArgsList");
+		*fragment << list(typeAlias->typeArguments(), ElementVisitor{data()}, "templateArgsList");
 
 	*fragment << "using " << typeAlias->nameNode() << " = " << expression(typeAlias->typeExpression()) << ";";
 	return fragment;

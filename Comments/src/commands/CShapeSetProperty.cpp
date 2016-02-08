@@ -64,11 +64,11 @@ QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization:
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QList<Interaction::CommandSuggestion*> s;
-	if (QString("textcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	if (QString{"textcolor"}.startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion{"textcolor", "Set shape's foreground color"});
-	if (QString("bgcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	if (QString{"bgcolor"}.startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion{"bgcolor", "Set shape's background color"});
-	if (QString("bordercolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	if (QString{"bordercolor"}.startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion{"bordercolor", "Set shape's border color"});
 	return s;
 }

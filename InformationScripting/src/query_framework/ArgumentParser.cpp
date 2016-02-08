@@ -74,12 +74,12 @@ void ArgumentParser::setArgTo(QStringList& args, const QStringList& argNames, co
 	{
 		if (arg.size() > 1 && argNames.contains(arg.mid(1)))
 		{
-			arg.replace(QRegularExpression("=.*"), "=" + type);
+			arg.replace(QRegularExpression{"=.*"}, "=" + type);
 			set = true;
 		}
 	}
 	if (!set)
-		args.append(QString("-%1=%2").arg(argNames[0], type));
+		args.append(QString{"-%1=%2"}.arg(argNames[0], type));
 }
 
 ArgumentParser::Scope ArgumentParser::scope(const Query* of) const
@@ -117,11 +117,11 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 {
 	if (addScopeArguments)
 	{
-		if (!argParser_->addOption(QCommandLineOption(LOCAL_SCOPE_ARGUMENT_NAMES)))
+		if (!argParser_->addOption(QCommandLineOption{LOCAL_SCOPE_ARGUMENT_NAMES}))
 			Q_ASSERT(false);
-		if (!argParser_->addOption(QCommandLineOption(GLOBAL_SCOPE_ARGUMENT_NAMES)))
+		if (!argParser_->addOption(QCommandLineOption{GLOBAL_SCOPE_ARGUMENT_NAMES}))
 			Q_ASSERT(false);
-		if (!argParser_->addOption(QCommandLineOption(INPUT_SCOPE_ARGUMENT_NAMES)))
+		if (!argParser_->addOption(QCommandLineOption{INPUT_SCOPE_ARGUMENT_NAMES}))
 			Q_ASSERT(false);
 	}
 
@@ -129,7 +129,7 @@ void ArgumentParser::initParser(const QStringList& args, bool addScopeArguments)
 	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 
 	if (!argParser_->parse(args))
-		throw QueryParsingException("Query arguments parsing error: " + argParser_->errorText());
+		throw QueryParsingException{"Query arguments parsing error: " + argParser_->errorText()};
 
 	if (addScopeArguments)
 	{

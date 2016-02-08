@@ -80,7 +80,7 @@ inline QSet<Tuple> TupleSet::tuples(Condition condition) const
 	return result;
 }
 
-inline QSet<Tuple> TupleSet::tuples(const char* tag) const { return tuples(QString(tag)); }
+inline QSet<Tuple> TupleSet::tuples(const char* tag) const { return tuples(QString{tag}); }
 
 inline void TupleSet::add(const Tuple& t) { tuples_[t.tag()].insert(t); }
 inline void TupleSet::remove(const Tuple& t) { tuples_[t.tag()].remove(t); }

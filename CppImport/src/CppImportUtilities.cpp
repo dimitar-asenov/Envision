@@ -89,7 +89,7 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOp
 		case clang::BO_Or: return OOModel::BinaryOperation::OR;
 		case clang::BO_LAnd: return OOModel::BinaryOperation::CONDITIONAL_AND;
 		case clang::BO_LOr: return OOModel::BinaryOperation::CONDITIONAL_OR;
-		default: throw CppImportException("Impossible binary operator");
+		default: throw CppImportException{"Impossible binary operator"};
 	}
 }
 
@@ -109,7 +109,7 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::translateAssi
 		case clang::BO_AndAssign: return OOModel::AssignmentExpression::BIT_AND_ASSIGN;
 		case clang::BO_XorAssign: return OOModel::AssignmentExpression::BIT_XOR_ASSIGN;
 		case clang::BO_OrAssign: return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
-		default: throw CppImportException("Impossible assign operator");
+		default: throw CppImportException{"Impossible assign operator"};
 	}
 }
 
@@ -128,7 +128,7 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::translateUnaryOp
 		case clang::UO_Minus: return OOModel::UnaryOperation::MINUS;
 		case clang::UO_Not: return OOModel::UnaryOperation::COMPLEMENT;
 		case clang::UO_LNot: return OOModel::UnaryOperation::NOT;
-		default: throw CppImportException("Unary operation not supported");
+		default: throw CppImportException{"Unary operation not supported"};
 	}
 }
 
@@ -210,7 +210,7 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 			return clang_.createNode<OOModel::GlobalScopeExpression>(nestedNameLoc.getSourceRange());
 		default:
 			// In version 3.6 this is only NestedNameSpecifier::Super, which is a Microsoft specific extension (_super).
-			throw new CppImportException{QString("Unsupported nested name specifier kind: %1")
+			throw new CppImportException{QString{"Unsupported nested name specifier kind: %1"}
 												  .arg(nestedNameLoc.getNestedNameSpecifier()->getKind())};
 	}
 	return setReferencePrefix(currentRef, nestedNameLoc.getPrefix(), base);
@@ -244,7 +244,7 @@ OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::
 			// TODO: add support
 			return createErrorExpression("Unsupported TemplateArgument PACK", sourceRange);
 		default:
-			throw CppImportException("Invalid Template Argument kind");
+			throw CppImportException{"Invalid Template Argument kind"};
 	}
 }
 

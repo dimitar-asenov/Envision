@@ -57,10 +57,10 @@ Optional<TupleSet> Count::executeLinear(TupleSet input)
 				auto propName = byTag.split(".")[1];
 				auto it = tuple.find(propName);
 				if (it == tuple.end())
-					return {QString("Tuple tagged with %1 does not contain value with tag %2").arg(tuple.tag(), propName)};
+					return {QString{"Tuple tagged with %1 does not contain value with tag %2"}.arg(tuple.tag(), propName)};
 				keyTuple.push_back(*it);
 			}
-			++counts[Tuple(keyTuple)];
+			++counts[Tuple{keyTuple}];
 		}
 
 	}
@@ -88,7 +88,7 @@ Count::Count(Model::Node* target, QStringList args)
 	}, args}
 {
 	if (arguments_.numPositionalArguments() < 1)
-		throw QueryParsingException(arguments_.queryName() + " Requires one argument");
+		throw QueryParsingException{arguments_.queryName() + " Requires one argument"};
 }
 
 

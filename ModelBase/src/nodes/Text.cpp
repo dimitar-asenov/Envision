@@ -64,7 +64,7 @@ void Text::save(PersistentStore &store) const
 void Text::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Text node from an incompatible node type " + store.currentNodeType());
+		throw ModelException{"Trying to load a Text node from an incompatible node type " + store.currentNodeType()};
 
 	set(store.loadStringValue());
 }

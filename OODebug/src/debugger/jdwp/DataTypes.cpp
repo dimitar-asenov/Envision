@@ -48,7 +48,7 @@ uint qHash(const Location &location) {
 	QByteArray data;
 	QDataStream stream(&data, QIODevice::ReadWrite);
 	stream << location;
-	return qHash(QString(data));
+	return qHash(QString{data});
 }
 
 Value::~Value() {}

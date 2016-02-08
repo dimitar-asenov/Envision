@@ -62,18 +62,18 @@ void VBreakStatementCF::updateGeometry(int, int)
 
 	if (preferredBreakExit_ == ControlFlowItem::EXIT_LEFT)
 	{
-		breaks_.append( QPoint(0, heightInLocal()/2));
-		addConnector(breaks_.first() + QPoint(style()->pinLength(), 0), breaks_.first(), false);
+		breaks_.append( QPoint{0, heightInLocal()/2});
+		addConnector(breaks_.first() + QPoint{style()->pinLength(), 0}, breaks_.first(), false);
 	}
 	else
 	{
-		breaks_.append( QPoint(widthInLocal(), heightInLocal()/2));
-		addConnector(breaks_.first()- QPoint(style()->pinLength(), 0), breaks_.first(), false);
+		breaks_.append( QPoint{widthInLocal(), heightInLocal()/2});
+		addConnector(breaks_.first()- QPoint{style()->pinLength(), 0}, breaks_.first(), false);
 	}
 
-	entrance_ = QPoint(widthInLocal()/2, 0);
-	exit_ = QPoint(0, 0);
-	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
+	entrance_ = QPoint{widthInLocal()/2, 0};
+	exit_ = QPoint{0, 0};
+	addConnector(entrance_, entrance_ + QPoint{0, style()->pinLength()}, true);
 }
 
 }

@@ -68,7 +68,7 @@ QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualizat
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QList<Interaction::CommandSuggestion*> s;
-	if (QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
+	if (QString{"test"}.startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
 			s.append(new Interaction::CommandSuggestion{"test", "Loads and visualizes a large project"});
 	return s;
 }

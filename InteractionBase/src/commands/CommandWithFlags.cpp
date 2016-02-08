@@ -120,13 +120,13 @@ QList<CommandSuggestion*> CommandWithFlags::suggestNamed(Visualization::Item* so
 void CommandWithFlags::findParts(const QStringList& tokens, QString& name, QStringList& attributes,
 				bool& commandFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute)
 {
-	name = QString();
+	name = QString{};
 	attributes.clear();
 
 	if (useFirstValueAsDefaultAttribute)
 		for (auto attributeValues : attributes_) attributes.append(attributeValues.first());
 	else
-		for (int i = 0; i<attributes_.size(); ++i) attributes.append(QString());
+		for (int i = 0; i<attributes_.size(); ++i) attributes.append(QString{});
 
 	commandFound = false;
 	unknownFormat = false;
@@ -192,7 +192,7 @@ QStringList CommandWithFlags::matchingNames(Visualization::Item* source, Visuali
 	// Use a pattern like this 'a*b*c*' in order to simplify the search. Note that the first letter must match.
 	QString searchPattern = nameToLookFor;
 	for (int i = searchPattern.size(); i>=1; --i) searchPattern.insert(i, "*");
-	auto regExp = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
+	auto regExp = QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard};
 
 	QStringList result;
 	for (auto s : possibleNames(source, target, cursor))

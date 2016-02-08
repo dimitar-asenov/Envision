@@ -40,7 +40,7 @@ Expression* ExpressionEditor::parse(const QString& expression_text)
 
 	auto tokens = Token::tokenize(text_, ops_);
 	tokens = Token::createSubExpressions( tokens );
-	Expression* top = ExpressionTreeBuilder().build( Parser(ops_).parse( tokens ) );
+	Expression* top = ExpressionTreeBuilder{}.build( Parser{ops_}.parse( tokens ) );
 	ExpressionTreeUtils::fixTop(top);
 	return top;
 }

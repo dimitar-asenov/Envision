@@ -201,7 +201,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<FloatLiteral>(expression)) *fragment << e->value();
 	else if (DCast<NullLiteral>(expression)) *fragment << "null";
 	else if (auto e = DCast<StringLiteral>(expression))
-		*fragment << "\"" << QString(e->value()).replace(QRegExp("\\n"), "\\n") << "\""; // TODO: also consider \r
+		*fragment << "\"" << QString{e->value()}.replace(QRegExp{"\\n"}, "\\n") << "\""; // TODO: also consider \r
 	else if (auto e = DCast<CharacterLiteral>(expression)) *fragment << "'" << e->value() << "'";
 
 	// Misc =============================================================================================================
@@ -222,8 +222,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
 	else if (auto e = DCast<LambdaExpression>(expression))
 	{
-		*fragment << list(e->arguments(), ElementVisitor(data()), "argsList") << " -> ";
-		*fragment << list(e->body(), StatementVisitor(data()), "body");
+		*fragment << list(e->arguments(), ElementVisitor{data()}, "argsList") << " -> ";
+		*fragment << list(e->body(), StatementVisitor{data()}, "body");
 
 		if (e->results()->size() > 1) error(e->results(), "Cannot have more than one return value in Java");
 	}
@@ -266,7 +266,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else
 	{
-		throw JavaExportException("Unhandled expression of type " + expression->typeName());
+		throw JavaExportException{"Unhandled expression of type " + expression->typeName()};
 	}
 
 	return fragment;

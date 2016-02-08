@@ -38,7 +38,7 @@ REGISTER_OONAME_NOSYMBOL_ATTRIBUTE(FormalResult)
 DEFINE_ATTRIBUTE(FormalResult, typeExpression, Expression, false, false, true)
 
 FormalResult::FormalResult(const QString& name, Expression* type)
-: Super(nullptr, FormalResult::getMetaData())
+: Super{nullptr, FormalResult::getMetaData()}
 {
 	if (!name.isEmpty()) setName(name);
 	if (type) setTypeExpression(type);

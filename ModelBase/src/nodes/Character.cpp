@@ -41,7 +41,7 @@ Character::Character(Node *parent) : Super{parent}, value{'\0'}
 Character::Character(Node *parent, PersistentStore &store, bool) : Super{parent}
 {
 	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Creating character node failed. Invalid persistent store data: " + t);
+	if (t.size() != 1) throw ModelException{"Creating character node failed. Invalid persistent store data: " + t};
 
 	value = t[0];
 }
@@ -60,16 +60,16 @@ void Character::set(const QChar& newValue)
 
 void Character::save(PersistentStore &store) const
 {
-	store.saveStringValue(QString(value));
+	store.saveStringValue(QString{value});
 }
 
 void Character::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a Character node from an incompatible node type " + store.currentNodeType());
+		throw ModelException{"Trying to load a Character node from an incompatible node type " + store.currentNodeType()};
 
 	QString t = store.loadStringValue();
-	if (t.size() != 1) throw ModelException("Loading character node failed. Invalid persistent store data: " + t);
+	if (t.size() != 1) throw ModelException{"Loading character node failed. Invalid persistent store data: " + t};
 
 	set(t[0]);
 }

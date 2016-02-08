@@ -59,8 +59,8 @@ void VReturnStatementCF::updateGeometry(int, int)
 	vis_->setPos(style()->pinLength(), style()->pinLength());
 	setSize(vis_->widthInParent() + 2*style()->pinLength(), vis_->heightInParent() + 2*style()->pinLength());
 
-	entrance_ = QPoint(widthInLocal()/2, 0);
-	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
+	entrance_ = QPoint{widthInLocal()/2, 0};
+	addConnector(entrance_, entrance_ + QPoint{0, style()->pinLength()}, true);
 }
 
 }

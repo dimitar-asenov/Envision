@@ -75,11 +75,11 @@ int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 	if (newPosition != placeElementPosition)
 	{
 		if (orientation == Orientation::Horizontal)
-			placeElement_->setPos(item, QPoint(newPosition, placeElement_->y(item)));
+			placeElement_->setPos(item, QPoint{newPosition, placeElement_->y(item)});
 		else
 		{
 			// orientation == Orientation::Vertical
-			placeElement_->setPos(item, QPoint(placeElement_->x(item), newPosition));
+			placeElement_->setPos(item, QPoint{placeElement_->x(item), newPosition});
 		}
 	}
 	return newPosition;

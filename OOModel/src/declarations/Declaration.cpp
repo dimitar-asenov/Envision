@@ -42,13 +42,13 @@ DEFINE_ATTRIBUTE(Declaration, subDeclarations, TypedListOfDeclaration, false, fa
 DEFINE_ATTRIBUTE(Declaration, metaCalls, TypedListOfExpression, false, false, true)
 
 Declaration::Declaration(const QString& name)
-: Super(nullptr, Declaration::getMetaData())
+: Super{nullptr, Declaration::getMetaData()}
 {
 	setName(name);
 }
 
 Declaration::Declaration(const QString& name, Modifier::Modifiers modifiers)
-: Super(nullptr, Declaration::getMetaData())
+: Super{nullptr, Declaration::getMetaData()}
 {
 	setName(name);
 	if (modifiers) this->modifiers()->set(modifiers);

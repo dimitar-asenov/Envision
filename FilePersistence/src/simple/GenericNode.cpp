@@ -51,7 +51,7 @@ long GenericNode::valueAsLong() const
 	bool ok = true;
 
 	int res = value_.toInt(&ok);
-	if ( !ok ) throw FilePersistenceException("Could not read integer value " + value_);
+	if ( !ok ) throw FilePersistenceException{"Could not read integer value " + value_};
 
 	return res;
 }
@@ -63,7 +63,7 @@ double GenericNode::valueAsDouble() const
 	bool ok = true;
 
 	double res = value_.toDouble(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read real value " + value_);
+	if ( !ok ) throw FilePersistenceException{"Could read real value " + value_};
 
 	return res;
 }

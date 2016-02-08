@@ -50,11 +50,11 @@ class SingleWriteUnitCheck : public Test<ModelBasePlugin, SingleWriteUnitCheck> 
 	root->left()->setRight(two);
 	manager.endModification();
 
-	CHECK_STR_EQUAL(QString(), root->name()->get());
-	CHECK_STR_EQUAL(QString(), left->name()->get());
-	CHECK_STR_EQUAL(QString(), right->name()->get());
-	CHECK_STR_EQUAL(QString(), one->name()->get());
-	CHECK_STR_EQUAL(QString(), two->name()->get());
+	CHECK_STR_EQUAL(QString{}, root->name()->get());
+	CHECK_STR_EQUAL(QString{}, left->name()->get());
+	CHECK_STR_EQUAL(QString{}, right->name()->get());
+	CHECK_STR_EQUAL(QString{}, one->name()->get());
+	CHECK_STR_EQUAL(QString{}, two->name()->get());
 
 	manager.beginModification(root, "Modify root");
 
@@ -62,7 +62,7 @@ class SingleWriteUnitCheck : public Test<ModelBasePlugin, SingleWriteUnitCheck> 
 	CHECK_STR_EQUAL("This is ok", root->name()->get());
 
 	CHECK_FOR_EXCEPTION(ModelException, one->name()->set("This should fail"));
-	CHECK_STR_EQUAL(QString(), one->name()->get());
+	CHECK_STR_EQUAL(QString{}, one->name()->get());
 
 	manager.changeModificationTarget(one);
 	CHECK_FOR_EXCEPTION(ModelException, root->name()->set("This should fail"));
@@ -77,21 +77,21 @@ class SingleWriteUnitCheck : public Test<ModelBasePlugin, SingleWriteUnitCheck> 
 	manager.undo();
 	manager.endModification();
 
-	CHECK_STR_EQUAL(QString(), root->name()->get());
-	CHECK_STR_EQUAL(QString(), left->name()->get());
-	CHECK_STR_EQUAL(QString(), right->name()->get());
-	CHECK_STR_EQUAL(QString(), one->name()->get());
-	CHECK_STR_EQUAL(QString(), two->name()->get());
+	CHECK_STR_EQUAL(QString{}, root->name()->get());
+	CHECK_STR_EQUAL(QString{}, left->name()->get());
+	CHECK_STR_EQUAL(QString{}, right->name()->get());
+	CHECK_STR_EQUAL(QString{}, one->name()->get());
+	CHECK_STR_EQUAL(QString{}, two->name()->get());
 
 	manager.beginModification(nullptr);
 	manager.redo();
 	manager.endModification();
 
 	CHECK_STR_EQUAL("This is ok", root->name()->get());
-	CHECK_STR_EQUAL(QString(), left->name()->get());
-	CHECK_STR_EQUAL(QString(), right->name()->get());
+	CHECK_STR_EQUAL(QString{}, left->name()->get());
+	CHECK_STR_EQUAL(QString{}, right->name()->get());
 	CHECK_STR_EQUAL("one set", one->name()->get());
-	CHECK_STR_EQUAL(QString(), two->name()->get());
+	CHECK_STR_EQUAL(QString{}, two->name()->get());
 }};
 
 }

@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(CommentDiagram, shapes, TypedListOfCommentDiagramShape, false, 
 DEFINE_ATTRIBUTE(CommentDiagram, connectors, TypedListOfCommentDiagramConnector, false, false, true)
 
 CommentDiagram::CommentDiagram(Node *parent, QString name)
-: Super(parent, CommentDiagram::getMetaData())
+: Super{parent, CommentDiagram::getMetaData()}
 {
 	setName(name);
 	setWidth(0);

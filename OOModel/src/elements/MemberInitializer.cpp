@@ -38,7 +38,7 @@ DEFINE_ATTRIBUTE(MemberInitializer, arguments, TypedListOfExpression, false, fal
 DEFINE_ATTRIBUTE(MemberInitializer, memberReference, Expression, false, false, true)
 
 MemberInitializer::MemberInitializer(Expression* memberRef, QList<Expression*> args)
-: Super(nullptr, MemberInitializer::getMetaData())
+: Super{nullptr, MemberInitializer::getMetaData()}
 {
 	setMemberReference(memberRef);
 	for (auto a : args) arguments()->append(a);

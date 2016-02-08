@@ -35,7 +35,7 @@ DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(FormalMetaArgument)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FormalMetaArgument)
 
 FormalMetaArgument::FormalMetaArgument(const QString& name)
-: Super(nullptr, FormalMetaArgument::getMetaData())
+: Super{nullptr, FormalMetaArgument::getMetaData()}
 {
 	setName(name);
 }

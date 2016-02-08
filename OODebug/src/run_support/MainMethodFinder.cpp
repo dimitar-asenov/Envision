@@ -73,14 +73,14 @@ OOModel::Method* MainMethodFinder::visitChildren(Model::Node* n)
 
 OOModel::Method* MainMethodFinder::visitMethod(MainMethodFinder*, OOModel::Method* m)
 {
-	static auto expectedModifier = OOModel::Modifier(OOModel::Modifier::Public | OOModel::Modifier::Static).get();
+	static auto expectedModifier = OOModel::Modifier{OOModel::Modifier::Public | OOModel::Modifier::Static}.get();
 	Q_ASSERT(m->modifiers());
-	if (!QString("main").compare(m->name()) && m->modifiers()->get() == expectedModifier && m->arguments())
+	if (!QString{"main"}.compare(m->name()) && m->modifiers()->get() == expectedModifier && m->arguments())
 		if (m->arguments()->size() == 1)
 			if (auto firstArgument = m->arguments()->at(0))
 				if (auto arrayType = DCast<OOModel::ArrayTypeExpression>(firstArgument->typeExpression()))
 					if (auto refType = DCast<OOModel::ReferenceExpression>(arrayType->typeExpression()))
-						if (!QString("String").compare(refType->name()) && isVoidReturnType(m))
+						if (!QString{"String"}.compare(refType->name()) && isVoidReturnType(m))
 							return m;
 	return nullptr;
 }

@@ -38,7 +38,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(BooleanLiteral)
 DEFINE_ATTRIBUTE(BooleanLiteral, value, Boolean, false, false, true)
 
 BooleanLiteral::BooleanLiteral(bool value)
-: Super(nullptr, BooleanLiteral::getMetaData())
+: Super{nullptr, BooleanLiteral::getMetaData()}
 {
 	setValue(value);
 }

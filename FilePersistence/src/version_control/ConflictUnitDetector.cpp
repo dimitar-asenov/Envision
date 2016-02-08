@@ -48,8 +48,8 @@ Model::NodeIdType ConflictUnitDetector::findMoveBound(GenericNode *nodeA, Generi
 		pathB.append(nodeB->id());
 		nodeB = nodeB->parent();
 	}
-	pathA.append(QUuid());
-	pathB.append(QUuid());
+	pathA.append(QUuid{});
+	pathB.append(QUuid{});
 	Model::NodeIdType moveBound;
 	while (pathA.last() == pathB.last())
 	{
@@ -114,7 +114,7 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&,
 	affectedCUsB_ = computeAffectedCUs(cdgB);
 	LinkedChangesTransition transition;
 	if (useLinkedChanges_)
-		transition = LinkedChangesTransition(linkedChangesSet, cdgA, cdgB);
+		transition = LinkedChangesTransition{linkedChangesSet, cdgA, cdgB};
 
 	/**
 	 * If change1 is mappend to change2 then change2 depends on change1
@@ -308,7 +308,7 @@ Model::NodeIdType ConflictUnitDetector::findConflictUnit(const GenericNode* node
 	if (node->parentId().isNull())
 	{
 		// no ancestor in base. branch created new root.
-		return Model::NodeIdType();
+		return Model::NodeIdType{};
 	}
 
 	while (!conflictTypes_.contains(node->type()) && !node->parentId().isNull())

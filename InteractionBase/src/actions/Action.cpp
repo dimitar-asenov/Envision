@@ -96,7 +96,7 @@ Action::~Action()
 void Action::execute(Node* node)
 {
 	if (actionOnNode_) actionOnNode_(node);
-	else throw InteractionBaseException("Nothing to execute for action" + name_ + "(" + shortcut_ + ").");
+	else throw InteractionBaseException{"Nothing to execute for action" + name_ + "(" + shortcut_ + ")."};
 }
 
 void Action::execute(Visualization::Item* itemWithNode)
@@ -136,7 +136,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 				// Add create optional, if it is a list, also create an element
 				shortcuts << calculateSuitableShortcut(name, shortcuts);
 				list.append( new Action{shortcuts.last(), "+ " + name,
-						Action::ActionFunctionOnItem([name, isList](Item* item){
+						Action::ActionFunctionOnItem{[name, isList](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
 							Q_ASSERT( cn->get(name) == nullptr);
 
@@ -154,7 +154,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 
 							item->setUpdateNeededForChildItem(Item::StandardUpdate, nodeToSelect);
 							item->scene()->addPostEventAction(new SetCursorEvent{item, nodeToSelect});
-						}),
+						}},
 						[name](Node* node){
 							auto cn = DCast<CompositeNode>(node);
 							return cn && cn->get(name) == nullptr;
@@ -167,7 +167,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 				// Add create list entry
 				shortcuts << calculateSuitableShortcut(name, shortcuts);
 				list.append( new Action{shortcuts.last(), "+ " + name,
-						Action::ActionFunctionOnItem([name](Item* item){
+						Action::ActionFunctionOnItem{[name](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
 							auto listInNode = DCast<List>(cn->get(name));
 							Q_ASSERT(listInNode);
@@ -180,7 +180,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 
 							item->setUpdateNeededForChildItem(Item::StandardUpdate, nodeToSelect);
 							item->scene()->addPostEventAction(new SetCursorEvent{item, nodeToSelect});
-						}),
+						}},
 						[name](Node* node){
 							auto cn = DCast<CompositeNode>(node);
 							return cn && cn->get(name) != nullptr;
@@ -196,7 +196,7 @@ void Action::createStandardRemoveAction(QList<Action*>& list)
 {
 	// Remove optional element or remove an element from a list or reset a mandatory element to its default value.
 	list.append( new Action{"remove", "",
-		Action::ActionFunctionOnItem([](Item* item){
+		Action::ActionFunctionOnItem{[](Item* item){
 
 			item->setUpdateNeeded(Item::StandardUpdate); // Request an update before deleting any nodes.
 
@@ -217,7 +217,7 @@ void Action::createStandardRemoveAction(QList<Action*>& list)
 			}
 
 			scene->addPostEventAction(new SetCursorEvent{scene, parent});
-		}),
+		}},
 		[](Node* node){
 			return DCast<CompositeNode>(node->parent()) || DCast<List>(node->parent());
 		}}
@@ -244,7 +244,7 @@ QString Action::calculateSuitableShortcut(const QString& name, const QStringList
 
 	// We find something
 	Q_ASSERT(false);
-	return QString();
+	return QString{};
 }
 
 }

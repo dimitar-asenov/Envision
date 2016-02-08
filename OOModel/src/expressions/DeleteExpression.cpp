@@ -40,7 +40,7 @@ DEFINE_ATTRIBUTE(DeleteExpression, expr, Expression, false, false, true)
 DEFINE_ATTRIBUTE(DeleteExpression, isArray, Boolean, false, false, true)
 
 DeleteExpression::DeleteExpression(bool isArrayType)
-: Super(nullptr, DeleteExpression::getMetaData())
+: Super{nullptr, DeleteExpression::getMetaData()}
 {
 	setIsArray(isArrayType);
 }

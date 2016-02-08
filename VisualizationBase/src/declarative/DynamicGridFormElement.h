@@ -186,7 +186,7 @@ inline DynamicGridFormElement* DynamicGridFormElement::setVerticalAlignment(Layo
 inline QSize DynamicGridFormElement::gridSize(const Item* item) const
 {
 	auto& data = dataForItem(item);
-	return QSize(data.numColumns_, data.numRows_);
+	return QSize{data.numColumns_, data.numRows_};
 }
 
 inline bool DynamicGridFormElement::isEmpty(const Item* item) const { return gridSize(item).isEmpty(); }

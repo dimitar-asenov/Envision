@@ -46,7 +46,7 @@ DEFINE_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, 
 DEFINE_ATTRIBUTE(MethodCallExpression, cKind, Integer, false, false, true)
 
 MethodCallExpression::MethodCallExpression(const QString& name, Expression* referencePrefix)
-: Super(nullptr, MethodCallExpression::getMetaData())
+: Super{nullptr, MethodCallExpression::getMetaData()}
 {
 	setCallee(new ReferenceExpression{name, referencePrefix});
 	setMethodCallKind(MethodCallKind::Call);

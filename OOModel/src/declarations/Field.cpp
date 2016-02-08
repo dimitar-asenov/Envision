@@ -35,7 +35,7 @@ DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Field)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Field)
 
 Field::Field(const QString& name, Expression* type)
-: Super(nullptr, Field::getMetaData())
+: Super{nullptr, Field::getMetaData()}
 {
 	setName(name);
 	if (type) setTypeExpression(type);
@@ -43,14 +43,14 @@ Field::Field(const QString& name, Expression* type)
 
 
 Field::Field(const QString& name, Modifier::Modifiers mod)
-: Super(nullptr, Field::getMetaData())
+: Super{nullptr, Field::getMetaData()}
 {
 	setName(name);
 	modifiers()->set(mod);
 }
 
 Field::Field(const QString& name, Expression* type, Expression* initialValue)
-: Super(nullptr, Field::getMetaData())
+: Super{nullptr, Field::getMetaData()}
 {
 	setName(name);
 	if (type) setTypeExpression(type);
@@ -58,7 +58,7 @@ Field::Field(const QString& name, Expression* type, Expression* initialValue)
 }
 
 Field::Field(const QString& name, Expression* type, Modifier::Modifiers mod, Expression* initialValue)
-: Super(nullptr, Field::getMetaData())
+: Super{nullptr, Field::getMetaData()}
 {
 	setName(name);
 	if (type) setTypeExpression(type);

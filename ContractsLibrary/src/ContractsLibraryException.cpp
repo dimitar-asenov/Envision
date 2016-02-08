@@ -29,7 +29,7 @@
 namespace ContractsLibrary {
 
 ContractsLibraryException::ContractsLibraryException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

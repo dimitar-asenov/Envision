@@ -193,7 +193,7 @@ bool ExpressionVisitor::TraverseStmt(clang::Stmt* S)
 
 bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr)
 {
-	//first traverse the callee then put each argument on the stack
+	//first Traverse the callee then put each argument on the stack
 	if (auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()->IgnoreImplicit()))
 		TraverseStmt(callee);
 	for (auto argIt = callExpr->arg_begin(); argIt != callExpr->arg_end(); ++argIt)
@@ -286,7 +286,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 		{
 			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
 			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+						clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
 			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
 			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 			for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
@@ -297,7 +297,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 		{
 			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
 			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+						clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
 			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
 			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 			for (auto initExpr : initListExpr->inits())
@@ -321,7 +321,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 		{
 			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
 			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-						clang::SourceRange(allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()));
+						clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
 			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
 			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
@@ -589,7 +589,7 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 		auto functionTypeLoc = lambdaExpr->getCallOperator()->getTypeSourceInfo()->getTypeLoc()
 											.castAs<clang::FunctionTypeLoc>();
 		ooLambda->results()->append(clang_.createNode<OOModel::FormalResult>(
-																	functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+																	functionTypeLoc.getReturnLoc().getSourceRange(), QString{},
 																	utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 	}
 
@@ -620,8 +620,8 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 				{
 					auto reference = clang_.createReference(it->getLocation());
 					if (lambdaExpr->getCaptureDefault() != clang::LambdaCaptureDefault::LCD_ByRef)
-						ooLambda->captures()->append(new OOModel::UnaryOperation(
-																  OOModel::UnaryOperation::OperatorTypes::ADDRESSOF, reference));
+						ooLambda->captures()->append(new OOModel::UnaryOperation{
+																  OOModel::UnaryOperation::OperatorTypes::ADDRESSOF, reference});
 					else
 						ooLambda->captures()->append(reference);
 				}
@@ -652,15 +652,15 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
 {
 	auto ooConditionalExpr = clang_.createNode<OOModel::ConditionalExpression>(conditionalOperator->getSourceRange());
-	// traverse condition
+	// Traverse condition
 	TraverseStmt(conditionalOperator->getCond());
 	if (!ooExprStack_.empty())
 		ooConditionalExpr->setCondition(ooExprStack_.pop());
-	// traverse true part
+	// Traverse true part
 	TraverseStmt(conditionalOperator->getTrueExpr());
 	if (!ooExprStack_.empty())
 		ooConditionalExpr->setTrueExpression(ooExprStack_.pop());
-	// traverse false part
+	// Traverse false part
 	TraverseStmt(conditionalOperator->getFalseExpr());
 	if (!ooExprStack_.empty())
 		ooConditionalExpr->setFalseExpression(ooExprStack_.pop());

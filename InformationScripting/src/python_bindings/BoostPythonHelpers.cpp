@@ -75,7 +75,7 @@ struct QString_from_python_str
 			void* storageBytes = ((python::converter::rvalue_from_python_storage<QString>*) data)->storage.bytes;
 
 			// in-place construct the new QString using the character data extraced from the python object
-			new (storageBytes) QString(PyBytes_AsString(rawBytesHandle.get()));
+			new (storageBytes) QString{PyBytes_AsString(rawBytesHandle.get())};
 			data->convertible = storageBytes;
 		}
 };

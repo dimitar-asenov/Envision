@@ -81,7 +81,7 @@ inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments..
 			[name, forwardArguments...] (Model::Node* target, QStringList args, QueryExecutor*, QString alias) {
 				auto queryName = name;
 				if (!alias.isNull()) queryName = alias;
-				return std::unique_ptr<Query>(new QueryType{target, QStringList(queryName) + args, forwardArguments...});
+				return std::unique_ptr<Query>(new QueryType{target, QStringList{queryName} + args, forwardArguments...});
 	};
 }
 
@@ -99,7 +99,7 @@ inline void QueryRegistry::registerQuery(const QString& name, ForwardArguments..
 					auto queryName = name;
 					if (!alias.isNull()) queryName = alias;
 					return std::unique_ptr<Query>(
-								new QueryType{target, QStringList(queryName) + args, executor, forwardArguments...});
+								new QueryType{target, QStringList{queryName} + args, executor, forwardArguments...});
 		};
 	}
 	else

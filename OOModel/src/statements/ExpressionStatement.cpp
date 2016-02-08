@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ExpressionStatement)
 DEFINE_ATTRIBUTE(ExpressionStatement, expression, Expression, false, false, true)
 
 ExpressionStatement::ExpressionStatement(Expression* e)
-: Super(nullptr, ExpressionStatement::getMetaData())
+: Super{nullptr, ExpressionStatement::getMetaData()}
 {
 	setExpression(e);
 }

@@ -74,8 +74,8 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 
 				// Check if the version of the non-dependent plugin matches the version the current plugin depends on
 				if ( !idToMetaDataMap.value(dep->id)->version.startsWith(dep->majorVersion + ".", Qt::CaseSensitive) )
-					throw EnvisionException("Plugin " + plugins.at(i) + " depends on version " + dep->majorVersion
-							+ " of " + dep->id + " but a different version is installed.");
+					throw EnvisionException{"Plugin " + plugins.at(i) + " depends on version " + dep->majorVersion
+							+ " of " + dep->id + " but a different version is installed."};
 			}
 
 			if ( allDependenciesLoaded )
@@ -88,7 +88,7 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 				plugin->load();
 
 				if ( plugin->isLoaded() == false )
-					throw EnvisionException("Could not load plugin: " + plugin->errorString());
+					throw EnvisionException{"Could not load plugin: " + plugin->errorString()};
 
 				EnvisionPlugin* p = qobject_cast<EnvisionPlugin*> (plugin->instance());
 				p->initialize(envisionManager);
@@ -125,7 +125,7 @@ void PluginManager::unloadAllPlugins()
 		EnvisionPlugin* p = qobject_cast<EnvisionPlugin*> (plugin->instance());
 		p->unload();
 
-		if (!plugin->unload()) throw EnvisionException("Could not unload plugin: " + plugin->errorString());
+		if (!plugin->unload()) throw EnvisionException{"Could not unload plugin: " + plugin->errorString()};
 		delete plugin;
 
 		out << "OK" << endl;
@@ -176,13 +176,13 @@ void PluginManager::scanSharedLibraries()
 
 void PluginManager::scanAllPluginsMetaData()
 {
-	QStringList meta = pluginsDir.entryList(QStringList() << "*.plugin", QDir::Files);
+	QStringList meta = pluginsDir.entryList(QStringList{} << "*.plugin", QDir::Files);
 
 	for (QStringList::iterator plugin = meta.begin(); plugin != meta.end(); plugin++)
 	{
 		PluginInfo info = readPluginMetaData(pluginsDir.absoluteFilePath(*plugin));
 
-		if ( idToMetaDataMap.contains(info.id) ) throw EnvisionException("Plugin id is not unique: " + info.id);
+		if ( idToMetaDataMap.contains(info.id) ) throw EnvisionException{"Plugin id is not unique: " + info.id};
 
 		pluginMetaData.append(info);
 		idToMetaDataMap.insert(info.id, &pluginMetaData.last());
@@ -195,27 +195,27 @@ PluginInfo PluginManager::readPluginMetaData(const QString fileName)
 	QFile file{fileName};
 
 	if ( !file.open(QIODevice::ReadOnly) )
-		throw EnvisionException("Can not open file for reading: " + fileName);
+		throw EnvisionException{"Can not open file for reading: " + fileName};
 	if ( !pluginDoc.setContent(&file) )
-		throw EnvisionException("File is not a valid Envision Plugin descriptor: " + fileName);
+		throw EnvisionException{"File is not a valid Envision Plugin descriptor: " + fileName};
 
 	QDomElement root{pluginDoc.documentElement()};
 	if ( root.tagName() != "plugin" )
-		throw EnvisionException("File is not a valid Envision Plugin descriptor - Root element is invalid: " + fileName);
+		throw EnvisionException{"File is not a valid Envision Plugin descriptor - Root element is invalid: " + fileName};
 
 	PluginInfo pinfo;
 
 	pinfo.id = root.attribute("id");
 	if ( pinfo.id == QString::null )
-		throw EnvisionException("File is not a valid Envision Plugin descriptor - ID is invalid: " + fileName);
+		throw EnvisionException{"File is not a valid Envision Plugin descriptor - ID is invalid: " + fileName};
 
 	pinfo.fullName = root.attribute("name");
 	if ( pinfo.fullName == QString::null )
-		throw EnvisionException("File is not a valid Envision Plugin descriptor - Name is invalid: " + fileName);
+		throw EnvisionException{"File is not a valid Envision Plugin descriptor - Name is invalid: " + fileName};
 
 	pinfo.version = root.attribute("version");
 	if ( pinfo.version == QString::null )
-		throw EnvisionException("File is not a valid Envision Plugin descriptor - Version is invalid: " + fileName);
+		throw EnvisionException{"File is not a valid Envision Plugin descriptor - Version is invalid: " + fileName};
 
 	QDomNode node{root.firstChild()};
 	while ( !node.isNull() )
@@ -233,11 +233,11 @@ PluginInfo PluginManager::readPluginMetaData(const QString fileName)
 
 					pd.id = depElem.attribute("pluginid");
 					if ( pd.id == QString::null )
-						throw EnvisionException("Invalid plugin dependency id in file: " + fileName);
+						throw EnvisionException{"Invalid plugin dependency id in file: " + fileName};
 
 					pd.majorVersion = depElem.attribute("version");
 					if ( pd.majorVersion == QString::null )
-						throw EnvisionException("Invalid plugin dependency version in file: " + fileName);
+						throw EnvisionException{"Invalid plugin dependency version in file: " + fileName};
 
 					pinfo.dependencies.append(pd);
 				}

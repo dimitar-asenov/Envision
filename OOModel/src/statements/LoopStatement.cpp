@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(LoopStatement, body, StatementItemList, false, false, true)
 DEFINE_ATTRIBUTE(LoopStatement, lpKind, Integer, false, false, true)
 
 LoopStatement::LoopStatement(LoopKind kind)
-: Super(nullptr, LoopStatement::getMetaData())
+: Super{nullptr, LoopStatement::getMetaData()}
 {
 	setLoopKind(kind);
 }

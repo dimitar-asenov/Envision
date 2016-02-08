@@ -30,8 +30,8 @@
 namespace OOInteraction {
 
 CAddCallersToView::CAddCallersToView()
-	:AddReferencedToViewCommand("addCallers", QStringList(), 0, "callees",
-								AddReferencedToViewCommand::ArrowFromReference)
+	:AddReferencedToViewCommand{"addCallers", QStringList{}, 0, "callees",
+								AddReferencedToViewCommand::ArrowFromReference}
 {
 }
 

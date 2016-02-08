@@ -46,7 +46,7 @@ QList<FormElement*> ShapeFormElement::shapeElements()
 
 void ShapeFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
-	setSize(item, QSize(availableWidth, availableHeight));
+	setSize(item, QSize{availableWidth, availableHeight});
 }
 
 bool ShapeFormElement::sizeDependsOnParent(const Item* /*item*/) const

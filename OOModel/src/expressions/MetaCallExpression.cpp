@@ -48,7 +48,7 @@ DEFINE_ATTRIBUTE(MetaCallExpression, arguments, List, false, false, true)
 DEFINE_ATTRIBUTE(MetaCallExpression, cache, Node, false, true, false)
 
 MetaCallExpression::MetaCallExpression(const QString& name, Expression* referencePrefix)
-: Super(nullptr, MetaCallExpression::getMetaData())
+: Super{nullptr, MetaCallExpression::getMetaData()}
 {
 	setCallee(new ReferenceExpression{name, referencePrefix});
 }

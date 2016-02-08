@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(FormalTypeArgument, specializationExpression, Expression, false
 DEFINE_ATTRIBUTE(FormalTypeArgument, defaultType, Expression, false, true, true)
 
 FormalTypeArgument::FormalTypeArgument(const QString& name, Expression* subtype, Expression* supertype)
-: Super(nullptr, FormalTypeArgument::getMetaData())
+: Super{nullptr, FormalTypeArgument::getMetaData()}
 {
 	setName(name);
 	if (subtype) setSubTypeOfExpression(subtype);

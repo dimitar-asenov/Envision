@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(CommentTable, columnCount, Integer, false, false, true)
 DEFINE_ATTRIBUTE(CommentTable, nodes, TypedListOfCommentFreeNode, false, false, true)
 
 CommentTable::CommentTable(Node *parent, QString name, int rowCount, int columnCount)
-	: Super(parent, CommentTable::getMetaData())
+	: Super{parent, CommentTable::getMetaData()}
 {
 	setName(name);
 	setRowCount(0);

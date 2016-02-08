@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(TypeTraitExpression, operand, Expression, false, false, true)
 DEFINE_ATTRIBUTE(TypeTraitExpression, ttKind, Integer, false, false, true)
 
 TypeTraitExpression::TypeTraitExpression(TypeTraitKind kind, Expression* expr)
-: Super(nullptr, TypeTraitExpression::getMetaData())
+: Super{nullptr, TypeTraitExpression::getMetaData()}
 {
 	setTypeTraitKind(kind);
 	if (expr) setOperand(expr);

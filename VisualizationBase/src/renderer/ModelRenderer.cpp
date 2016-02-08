@@ -157,15 +157,15 @@ ModelRenderer::basicStrategy(Item* parent, Model::Node* node, int purpose, int s
 	int finalPurpose = purpose >= 0 ? purpose : (parent ? parent->childNodePurpose(node) : 0);
 
 	if (finalPurpose >= purposes_.size())
-		throw VisualizationException("Trying to render a node with an unregistered purpose id: "
-											  + QString::number(finalPurpose));
+		throw VisualizationException{"Trying to render a node with an unregistered purpose id: "
+											  + QString::number(finalPurpose)};
 
 	int finalSemanticZoomLevel = semanticZoomLevel >= 0 ? semanticZoomLevel :
 																			(parent ? parent->childNodeSemanticZoomLevel(node) : 0);
 
 	if (finalSemanticZoomLevel >= semanticZoomLevels_.size())
-		throw VisualizationException("Trying to render a node with an unregistered semantic zoom level id: "
-											  + QString::number(finalSemanticZoomLevel));
+		throw VisualizationException{"Trying to render a node with an unregistered semantic zoom level id: "
+											  + QString::number(finalSemanticZoomLevel)};
 
 	for (int id : typeIds)
 	{
@@ -210,16 +210,16 @@ ModelRenderer::basicStrategy(Item* parent, Model::Node* node, int purpose, int s
 		}
 	}
 
-	throw VisualizationException("Trying to render a node type that has no registered appropriate visualization. "
+	throw VisualizationException{"Trying to render a node type that has no registered appropriate visualization. "
 			 "The Node type is: " + node->typeName() + " The desired purpose is: " + purposes_[finalPurpose] +
-			 "The desired semantic zoom level is: " + semanticZoomLevels_[finalSemanticZoomLevel]);
+			 "The desired semantic zoom level is: " + semanticZoomLevels_[finalSemanticZoomLevel]};
 }
 
 int ModelRenderer::registerVisualizationPurpose(const QString& name)
 {
 	if (purposes_.contains(name))
-		throw VisualizationException("Trying to register a visualization purpose with a name that's already registered:"
-						+ name);
+		throw VisualizationException{"Trying to register a visualization purpose with a name that's already registered:"
+						+ name};
 
 	purposes_.append(name);
 	return purposes_.size()-1;
@@ -228,11 +228,11 @@ int ModelRenderer::registerVisualizationPurpose(const QString& name)
 int ModelRenderer::registerSemanticZoomLevel(const QString& name, int orderingNumber)
 {
 	if (semanticZoomLevels_.contains(name))
-		throw VisualizationException("Trying to register a semantic zoom level with a name that's already registered:"
-						+ name);
+		throw VisualizationException{"Trying to register a semantic zoom level with a name that's already registered:"
+						+ name};
 
 	if (szLevelOrderingManager_.hasOrderingNumber(orderingNumber))
-		throw VisualizationException("Ordering number already in use: " + QString::number(orderingNumber));
+		throw VisualizationException{"Ordering number already in use: " + QString::number(orderingNumber)};
 
 
 	semanticZoomLevels_.append(name);
@@ -280,7 +280,7 @@ QImage ModelRenderer::renderToImage(Model::Node* aNode)
 	image.fill(Qt::transparent);
 	QPainter pmapPainter(&image);
 	pmapPainter.setRenderHint(QPainter::Antialiasing);
-	aScene->render(&pmapPainter, QRectF(), anItem->sceneBoundingRect());
+	aScene->render(&pmapPainter, QRectF{}, anItem->sceneBoundingRect());
 
 	return image;
 }
@@ -298,7 +298,7 @@ void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
 	svggen->setSize(aScene->sceneRect().size().toSize());
 	QPainter svgPainter(svggen);
 	svgPainter.setRenderHint(QPainter::Antialiasing);
-	aScene->render(&svgPainter, QRectF(), anItem->sceneBoundingRect());
+	aScene->render(&svgPainter, QRectF{}, anItem->sceneBoundingRect());
 }
 
 }

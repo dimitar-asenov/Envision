@@ -40,7 +40,7 @@ DEFINE_ATTRIBUTE(MetaDefinition, arguments, TypedListOfFormalMetaArgument, false
 DEFINE_ATTRIBUTE(MetaDefinition, metaBindings, TypedListOfMetaBinding, false, false, true)
 DEFINE_ATTRIBUTE(MetaDefinition, context, Declaration, false, false, true)
 
-MetaDefinition::MetaDefinition(const QString& name) : Super(nullptr, MetaDefinition::getMetaData())
+MetaDefinition::MetaDefinition(const QString& name) : Super{nullptr, MetaDefinition::getMetaData()}
 {
 	setName(name);
 	setContext(new OOModel::Class{"Context"});

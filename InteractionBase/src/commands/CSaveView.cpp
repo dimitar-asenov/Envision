@@ -36,7 +36,7 @@ CSaveView::CSaveView() : Command{"saveView"}{}
 bool CSaveView::canInterpret(Item*, Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
-	return (commandTokens.size() <= 2) && QString("saveView").startsWith(commandTokens.first());
+	return (commandTokens.size() <= 2) && QString{"saveView"}.startsWith(commandTokens.first());
 }
 
 CommandResult* CSaveView::execute(Item* source, Item*, const QStringList&,

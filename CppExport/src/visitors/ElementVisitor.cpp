@@ -56,7 +56,7 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 
 	auto pointerTypeExpression = DCast<PointerTypeExpression>(argument->typeExpression());
 	if (pointerTypeExpression && DCast<FunctionTypeExpression>(pointerTypeExpression->typeExpression()))
-		*fragment << ExpressionVisitor(data()).visitFunctionPointer(pointerTypeExpression, argument->name());
+		*fragment << ExpressionVisitor{data()}.visitFunctionPointer(pointerTypeExpression, argument->name());
 	else
 	{
 		if (auto arrayTypeExpression = DCast<ArrayTypeExpression>(argument->typeExpression()))
@@ -72,7 +72,7 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 	}
 
 	if (printContext().hasOption(CppPrintContext::PrintDefaultArgumentValues) && argument->initialValue())
-		*fragment << " = " << ExpressionVisitor(data()).visit(argument->initialValue());
+		*fragment << " = " << ExpressionVisitor{data()}.visit(argument->initialValue());
 
 	return fragment;
 }
@@ -112,7 +112,7 @@ SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 	else
 		*fragment << "...";
 	*fragment << ")";
-	*fragment << list(catchClause->body(), StatementVisitor(data()), "body");
+	*fragment << list(catchClause->body(), StatementVisitor{data()}, "body");
 
 	return fragment;
 }
@@ -138,7 +138,7 @@ SourceFragment* ElementVisitor::visit(MemberInitializer* memberInitializer)
 {
 	auto fragment = new CompositeFragment{memberInitializer};
 	*fragment << expression(memberInitializer->memberReference())
-				 << list(memberInitializer->arguments(), ExpressionVisitor(data()), "initializerList");
+				 << list(memberInitializer->arguments(), ExpressionVisitor{data()}, "initializerList");
 	return fragment;
 }
 

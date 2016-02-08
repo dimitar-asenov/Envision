@@ -134,7 +134,7 @@ inline bool ClangHelpers::isMacroRange(clang::SourceRange range) const
 { return range.getBegin().isMacroID() && range.getEnd().isMacroID(); }
 
 inline QString ClangHelpers::unexpandedSpelling(clang::SourceLocation start, clang::SourceLocation end) const
-{ return unexpandedSpelling(clang::SourceRange(start, end)); }
+{ return unexpandedSpelling(clang::SourceRange{start, end}); }
 
 inline EnvisionToClangMap& ClangHelpers::envisionToClangMap() { return envisionToClangMap_; }
 

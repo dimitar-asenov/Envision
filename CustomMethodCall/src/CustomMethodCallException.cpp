@@ -29,7 +29,7 @@
 namespace CustomMethodCall {
 
 CustomMethodCallException::CustomMethodCallException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

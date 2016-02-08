@@ -90,7 +90,7 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 				form->computeSize(this, 0, 0);
 				getShape()->setInnerSize(form->width(this), form->height(this));
 			}
-			form->setPos(this, QPoint(getShape()->contentLeft(), getShape()->contentTop()));
+			form->setPos(this, QPoint{getShape()->contentLeft(), getShape()->contentTop()});
 		}
 		else
 		{
@@ -102,7 +102,7 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 			getShape()->setOffset(currentShape->x(this), currentShape->y(this));
 			getShape()->setOutterSize(currentShape->width(this), currentShape->height(this));
 
-			form->setPos(this, QPoint(0, 0));
+			form->setPos(this, QPoint{0, 0});
 			setSize(form->size(this));
 		}
 		form->setItemPositions(this);

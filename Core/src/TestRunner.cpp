@@ -49,7 +49,7 @@ TestRunner::TestRunner()
 		{
 			QStringList parts{arg->split(":")};
 
-			if ( parts.length() > 2 ) throw EnvisionException("Incorrectly specified test target and/or test id.");
+			if ( parts.length() > 2 ) throw EnvisionException{"Incorrectly specified test target and/or test id."};
 
 			QString target{parts[0]};
 			QString id{QString::null};
@@ -67,7 +67,7 @@ void TestRunner::enqueueSelfTests(PluginManager& pm)
 	{
 
 		if (pm.isPluginLoaded(t->target()) ) qApp->postEvent(this, const_cast<TestEvent*>(t));
-		else throw EnvisionException("A test was requested for a plugin which is not loaded: " + t->target());
+		else throw EnvisionException{"A test was requested for a plugin which is not loaded: " + t->target()};
 	}
 	requestedTests_.clear();
 }

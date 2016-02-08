@@ -165,7 +165,7 @@ QList<ItemRegion> VList::regions()
 		return Super::regions();
 
 	//Otherwise return a whole item region
-	auto ir = ItemRegion(boundingRect().toRect());
+	auto ir = ItemRegion{boundingRect().toRect()};
 
 	Cursor* cur = new Cursor{this, Cursor::BoxCursor};
 	cur->setRegion( ir.region() );

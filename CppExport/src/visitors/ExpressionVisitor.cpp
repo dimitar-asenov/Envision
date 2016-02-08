@@ -249,7 +249,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<FloatLiteral>(expression)) *fragment << e->value();
 	else if (DCast<NullLiteral>(expression)) *fragment << "nullptr";
 	else if (auto e = DCast<StringLiteral>(expression))
-		*fragment << "\"" << QString(e->value()).replace(QRegExp("\\n"), "\\n") << "\""; // TODO: also consider \r
+		*fragment << "\"" << QString{e->value()}.replace(QRegExp{"\\n"}, "\\n") << "\""; // TODO: also consider \r
 	else if (auto e = DCast<CharacterLiteral>(expression)) *fragment << "'" << e->value() << "'";
 
 	// Misc =============================================================================================================
@@ -301,12 +301,12 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		if (!e->captures()->isEmpty())
 		{
 			if (e->defaultCaptureType() != LambdaExpression::DefaultCaptureType::None) *fragment << ", ";
-			*fragment << list(e->captures(), ExpressionVisitor(data()), "comma");
+			*fragment << list(e->captures(), ExpressionVisitor{data()}, "comma");
 		}
-		*fragment << "]" << list(e->arguments(), ElementVisitor(data()), "argsList");
+		*fragment << "]" << list(e->arguments(), ElementVisitor{data()}, "argsList");
 		if (e->results()->size() > 1) error(e->results(), "Cannot have more than one return value in Cpp");
 		if (e->results()->size() == 1) *fragment << " -> " << visit(e->results()->first()->typeExpression());
-		*fragment << list(e->body(), StatementVisitor(data()), "body");
+		*fragment << list(e->body(), StatementVisitor{data()}, "body");
 	}
 	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
 	else if (auto e = DCast<MethodCallExpression>(expression))
@@ -407,7 +407,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else
 	{
-		throw CppExportException("Unhandled expression of type " + expression->typeName());
+		throw CppExportException{"Unhandled expression of type " + expression->typeName()};
 	}
 
 	return fragment;

@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MetaCallMapping)
 
 DEFINE_ATTRIBUTE(MetaCallMapping, value, ReferenceExpression, false, false, true)
 
-MetaCallMapping::MetaCallMapping(const QString& name) : Super(nullptr, MetaCallMapping::getMetaData())
+MetaCallMapping::MetaCallMapping(const QString& name) : Super{nullptr, MetaCallMapping::getMetaData()}
 {
 	setName(name);
 }

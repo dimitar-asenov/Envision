@@ -57,7 +57,7 @@ QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens, Pa
 	endTokens_ = tokens.end();
 
 	QList<ExpectedToken> expected;
-	expected << ExpectedToken();
+	expected << ExpectedToken{};
 
 	QVector<ExpressionTreeBuildInstruction*> instructions = QVector<ExpressionTreeBuildInstruction*>();
 
@@ -70,7 +70,7 @@ QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens, Pa
 	{
 		ParseResult worst;
 		worst.errors = INT_MAX;
-		parseResult = parse(tokens.begin(), ParseResult(), expected, false, instructions, worst);
+		parseResult = parse(tokens.begin(), ParseResult{}, expected, false, instructions, worst);
 		return parseResult.instructions;
 	}
 }
@@ -170,7 +170,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 			++result.errors;
 		instructions.append( new AddErrorOperator{token->text()} );
 
-		if (!hasLeft) expected.insert(1, ExpectedToken(ExpectedToken::END));
+		if (!hasLeft) expected.insert(1, ExpectedToken{ExpectedToken::END});
 	}
 
 	++token;

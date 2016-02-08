@@ -101,7 +101,7 @@ void MiniMap::paintEvent(QPaintEvent *event)
 		if (rect.width() < SMALL_RECT && rect.height() < SMALL_RECT)
 			painter.setPen(Qt::red);
 		else
-			painter.setPen(QPen(Qt::red, 1, Qt::DashLine));
+			painter.setPen(QPen{Qt::red, 1, Qt::DashLine});
 		painter.drawRect(rect);
 	}
 
@@ -117,13 +117,13 @@ void MiniMap::mouseMoveEvent(QMouseEvent *event)
 	//   mouse tracking is disabled.
 	if (event->buttons() == Qt::NoButton) return;
 	View::mouseMoveEvent(event);
-	parent_->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
+	parent_->centerOn(mapToScene(QRect{event->pos(), QSize{2, 2}}).boundingRect().center());
 }
 
 void MiniMap::mousePressEvent(QMouseEvent *event)
 {
 	View::mousePressEvent(event);
-	parent_->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
+	parent_->centerOn(mapToScene(QRect{event->pos(), QSize{2, 2}}).boundingRect().center());
 }
 
 void MiniMap::updateMap()

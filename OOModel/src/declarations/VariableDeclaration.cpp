@@ -38,14 +38,14 @@ DEFINE_ATTRIBUTE(VariableDeclaration, typeExpression, Expression, false, false, 
 DEFINE_ATTRIBUTE(VariableDeclaration, initialValue, Expression, true, true, true)
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type)
-: Super(nullptr, VariableDeclaration::getMetaData())
+: Super{nullptr, VariableDeclaration::getMetaData()}
 {
 	setName(name);
 	if (type) setTypeExpression(type);
 }
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, Expression* initialValue)
-: Super(nullptr, VariableDeclaration::getMetaData())
+: Super{nullptr, VariableDeclaration::getMetaData()}
 {
 	setName(name);
 	if (type) setTypeExpression(type);
@@ -54,7 +54,7 @@ VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, 
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, Modifier::Modifiers mod,
 		Expression* initialValue)
-: Super(nullptr, VariableDeclaration::getMetaData())
+: Super{nullptr, VariableDeclaration::getMetaData()}
 {
 	setName(name);
 	if (type) setTypeExpression(type);

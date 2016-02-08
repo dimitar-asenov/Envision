@@ -113,9 +113,9 @@ inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
 inline Item* Shape::parentItem() const { return parent_; }
 
 inline QSize Shape::innerSize(int outterWidth, int outterHeight) const
-{ return innerSize(QSize(outterWidth, outterHeight)); }
+{ return innerSize(QSize{outterWidth, outterHeight}); }
 inline QSize Shape::outterSize(int innerWidth, int innerHeight) const
-{ return outterSize(QSize(innerWidth, innerHeight)); }
+{ return outterSize(QSize{innerWidth, innerHeight}); }
 
 template <typename Base, typename Actual> inline Base* Shape::makeDefaultStyle() { return new Actual{}; }
 template <typename Base, typename Actual> inline Base* Shape::makeDefaultShape(Item* parent)
@@ -124,8 +124,8 @@ template <typename Base, typename Actual> inline Base* Shape::makeDefaultShape(I
 template <typename ShapeClass> inline void Shape::registerShape()
 {
 	if (shapeConstructors.contains(ShapeClass::typeNameStatic()))
-		throw VisualizationException("Trying to register an already registered shape type "
-				+ ShapeClass::typeNameStatic());
+		throw VisualizationException{"Trying to register an already registered shape type "
+				+ ShapeClass::typeNameStatic()};
 
 	shapeConstructors.insert(ShapeClass::typeNameStatic(),
 			makeDefaultShape<Shape, ShapeClass>);

@@ -40,7 +40,7 @@ DEFINE_ATTRIBUTE(NameImport, importedName, Expression, false, false, true)
 DEFINE_ATTRIBUTE(NameImport, importAll, Boolean, false, false, true)
 
 NameImport::NameImport(Expression *importedName, bool importAllChildrenInScope)
-: Super(nullptr, NameImport::getMetaData())
+: Super{nullptr, NameImport::getMetaData()}
 {
 	if (importedName) setImportedName(importedName);
 	if (importAllChildrenInScope) setImportAll(true);

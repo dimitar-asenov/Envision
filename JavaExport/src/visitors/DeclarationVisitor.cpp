@@ -137,7 +137,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		notAllowed(classs);
 
 	if (!classs->typeArguments()->isEmpty())
-		*fragment << list(classs->typeArguments(), ElementVisitor(data()), "typeArgsList");
+		*fragment << list(classs->typeArguments(), ElementVisitor{data()}, "typeArgsList");
 
 	if (!classs->baseClasses()->isEmpty())
 	{
@@ -145,12 +145,12 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			 Class::ConstructKind::Annotation == classs->constructKind())
 		{
 			*fragment << " extends ";
-			*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
+			*fragment << list(classs->baseClasses(), ExpressionVisitor{data()}, "comma");
 		}
 		else if (Class::ConstructKind::Enum == classs->constructKind())
 		{
 			*fragment << " implements ";
-			*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
+			*fragment << list(classs->baseClasses(), ExpressionVisitor{data()}, "comma");
 		}
 		else
 		{
@@ -173,7 +173,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 	//TODO
 	auto sections = fragment->append( new CompositeFragment{classs, "bodySections"});
-	*sections << list(classs->enumerators(), ElementVisitor(data()), "enumerators");
+	*sections << list(classs->enumerators(), ElementVisitor{data()}, "enumerators");
 	*sections << list(classs->classes(), this, "declarations");
 	*sections << list(classs->methods(), this, "sections");
 	*sections << list(classs->fields(), this, "vertical");
@@ -200,17 +200,17 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	*fragment << method->nameNode();
 
 	if (!method->typeArguments()->isEmpty())
-		*fragment << list(method->typeArguments(), ElementVisitor(data()), "typeArgsList");
+		*fragment << list(method->typeArguments(), ElementVisitor{data()}, "typeArgsList");
 
-	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
+	*fragment << list(method->arguments(), ElementVisitor{data()}, "argsList");
 
 	if (!method->throws()->isEmpty())
 	{
 		*fragment << " throws ";
-		*fragment << list(method->throws(), ExpressionVisitor(data()), "comma");
+		*fragment << list(method->throws(), ExpressionVisitor{data()}, "comma");
 	}
 
-	*fragment << list(method->items(), StatementVisitor(data()), "body");
+	*fragment << list(method->items(), StatementVisitor{data()}, "body");
 
 	notAllowed(method->subDeclarations());
 	notAllowed(method->memberInitializers());
@@ -248,7 +248,7 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 {
 	auto fragment = new CompositeFragment{declaration, "vertical"};
 	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
-		*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
+		*fragment << list(declaration->annotations(), StatementVisitor{data()}, "vertical");
 	auto header = fragment->append(new CompositeFragment{declaration, "space"});
 
 	if (declaration->modifiers()->isSet(Modifier::Public))

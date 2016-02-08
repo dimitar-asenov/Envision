@@ -59,10 +59,10 @@ SystemCommandResult runSystemCommand(const QString& program, const QStringList& 
 	SystemCommandResult result;
 	result.exitCode_ = process.exitCode();
 
-	auto EOLRegex = QRegularExpression("(\\r\\n|\\r|\\n)");
-	result.standardout_ = QString(process.readAllStandardOutput()).split(EOLRegex);
+	auto EOLRegex = QRegularExpression{"(\\r\\n|\\r|\\n)"};
+	result.standardout_ = QString{process.readAllStandardOutput()}.split(EOLRegex);
 	if (!result.standardout_.isEmpty() && result.standardout_.last().isEmpty())  result.standardout_.removeLast();
-	result.standarderr_ = QString(process.readAllStandardError()).split(EOLRegex);
+	result.standarderr_ = QString{process.readAllStandardError()}.split(EOLRegex);
 	if (!result.standarderr_.isEmpty() && result.standarderr_.last().isEmpty())  result.standarderr_.removeLast();
 
 	return result;

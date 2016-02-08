@@ -39,7 +39,7 @@ namespace detail {
 template <typename T>
 inline static QString toString(const T* val)
 {
-	return QString("0x%1").arg((quintptr)val, QT_POINTER_SIZE * 2, 16, QChar('0'));
+	return QString{"0x%1"}.arg((quintptr)val, QT_POINTER_SIZE * 2, 16, QChar{'0'});
 }
 
 inline static QString toString(const QString& val)

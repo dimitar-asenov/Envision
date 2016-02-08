@@ -36,7 +36,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommandArgument)
 
 DEFINE_ATTRIBUTE(CommandArgument, argument, Text, false, false, true)
 
-CommandArgument::CommandArgument(const QString& argument) : Super(nullptr, CommandArgument::getMetaData())
+CommandArgument::CommandArgument(const QString& argument) : Super{nullptr, CommandArgument::getMetaData()}
 {
 	setArgument(argument);
 }

@@ -30,7 +30,7 @@
 namespace Visualization {
 
 TextCursor::TextCursor(TextRenderer* owner)
-	: Cursor(owner, VerticalCursor, new CursorShapeItem{this}),
+	: Cursor{owner, VerticalCursor, new CursorShapeItem{this}},
 	  selectionBegin_{0},  selectionEnd_{0}, xBegin_{0}, xEnd_{0}
 {
 }
@@ -64,9 +64,9 @@ void TextCursor::update(const QFontMetrics& qfm)
 	setX(xstart, xend);
 
 	//TODO: Transform the cursor appropriately if the item is transformed
-	QSize cursorSize = QSize(2, owner()->heightInScene() - 2);
+	QSize cursorSize = QSize{2, owner()->heightInScene() - 2};
 	setVisualizationSize(cursorSize);
-	setRegion(QRect(position(), cursorSize));
+	setRegion(QRect{position(), cursorSize});
 }
 
 void TextCursor::selectAll()
@@ -88,7 +88,7 @@ void TextCursor::setX(int xBegin, int xEnd)
 	xEnd_ = xEnd;
 
 	int caretX = isCursorBeforeSelection() ? xBegin : xEnd;
-	setPosition(QPoint((caretX + owner()->textXOffset()) * owner()->totalScale(), 2));
+	setPosition(QPoint{(int) ((caretX + owner()->textXOffset()) * owner()->totalScale()), 2});
 
 	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
 	ci->setCursorCenter(position());

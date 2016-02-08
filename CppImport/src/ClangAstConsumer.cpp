@@ -29,7 +29,7 @@
 namespace CppImport {
 
 ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-	: clang::ASTConsumer(), astVisitor_{visitor}
+	: clang::ASTConsumer{}, astVisitor_{visitor}
 {}
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)

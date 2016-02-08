@@ -78,7 +78,7 @@ QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::It
 		auto searchText = textSoFar.trimmed().mid(5);
 		s.append(new CommandSuggestion{"find " + searchText, "Search for " + searchText});
 	}
-	else if (QString("find ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
+	else if (QString{"find "}.startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
 			s.append(new CommandSuggestion{"find ", "Search for text"});
 
 	return s;

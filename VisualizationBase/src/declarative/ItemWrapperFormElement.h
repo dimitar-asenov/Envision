@@ -88,9 +88,9 @@ void ItemWrapperFormElement<ParentType, ChildItemType>::computeSize(Item* item, 
 		if (availableHeight > height) height = availableHeight;
 		if (availableWidth > 0 || availableHeight > 0)
 			childItem->changeGeometry(width - leftMargin() - rightMargin(), height - topMargin() - bottomMargin());
-		setSize(item, QSize(width, height));
+		setSize(item, QSize{width, height});
 	}
-	else setSize(item, QSize(0, 0));
+	else setSize(item, QSize{0, 0});
 }
 
 template <typename ParentType, typename ChildItemType>
@@ -114,10 +114,10 @@ QList<ItemRegion> ItemWrapperFormElement<ParentType, ChildItemType>::regions(Dec
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 
 	if (childItem) {
-		QRect rect = QRect(QPoint(0, 0), childItem->sizeInParent().toSize());
+		QRect rect = QRect{QPoint{0, 0}, childItem->sizeInParent().toSize()};
 		rect.translate(childItem->pos().toPoint());
 		QList<ItemRegion> regs;
-		regs.append(ItemRegion(rect));
+		regs.append(ItemRegion{rect});
 		regs.last().setItem(childItem);
 		return regs;
 	}

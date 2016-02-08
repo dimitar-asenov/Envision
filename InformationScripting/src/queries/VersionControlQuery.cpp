@@ -163,7 +163,7 @@ Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringLis
 				return sha1.startsWith(startCommit);
 		});
 		if (startIt == commitIdRange.end())
-			return {QString("%1 is not a commit id that exists in this repository.").arg(startCommit)};
+			return {QString{"%1 is not a commit id that exists in this repository."}.arg(startCommit)};
 
 		QStringList::const_iterator endIt;
 		if (commitRange.size() > 1)
@@ -173,7 +173,7 @@ Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringLis
 					return sha1.startsWith(endCommit);
 			});
 			if (endIt == commitIdRange.end())
-				return {QString("%1 is not a commit id that exists in this repository.").arg(endCommit)};
+				return {QString{"%1 is not a commit id that exists in this repository."}.arg(endCommit)};
 		}
 		else
 		{

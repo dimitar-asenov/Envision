@@ -433,7 +433,7 @@ void Item::removeFromScene()
 ModelRenderer* Item::renderer()
 {
 	if ( (static_cast<Scene*>(scene()))->renderer() ) return (static_cast<Scene*>(scene()))->renderer();
-	throw VisualizationException("The scene of an Item has no renderer.");
+	throw VisualizationException{"The scene of an Item has no renderer."};
 }
 
 int Item::distanceTo(const QPoint& point) const
@@ -517,16 +517,16 @@ QList<ItemRegion> Item::regions()
 			for (auto child : childItems())
 			{
 				hasChildren = true;
-				QRect rect = QRect(QPoint(0, 0), child->sizeInParent().toSize());
+				QRect rect = QRect{QPoint{0, 0}, child->sizeInParent().toSize()};
 				rect.translate(child->pos().toPoint());
-				regs.append(ItemRegion(rect));
+				regs.append(ItemRegion{rect});
 				regs.last().setItem(child);
 			}
 		}
 
 		if (!hasChildren)
 		{
-			regs.append(ItemRegion(boundingRect_.toRect()));
+			regs.append(ItemRegion{boundingRect_.toRect()});
 
 			Cursor* cur = new Cursor{this, Cursor::BoxCursor};
 			cur->setRegion( boundingRect_.toRect() );
@@ -556,7 +556,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptio
 			defaultMoveCursorProxy_->moveCursor(MoveDefault);
 			return true;
 		}
-		reference = QPoint(0, 0);
+		reference = QPoint{0, 0};
 	}
 
 	ItemRegion* current = nullptr;
@@ -572,10 +572,10 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptio
 				current = &r;
 				switch (dir)
 				{
-					case MoveUp: reference = QPoint(reference.x(), r.region().y()); break;
-					case MoveDown: reference = QPoint(reference.x(), r.region().y() + r.region().height()); break;
-					case MoveLeft: reference = QPoint(r.region().x(), reference.y()); break;
-					case MoveRight: reference = QPoint(r.region().x() + r.region().width(), reference.y()); break;
+					case MoveUp: reference = QPoint{reference.x(), r.region().y()}; break;
+					case MoveDown: reference = QPoint{reference.x(), r.region().y() + r.region().height()}; break;
+					case MoveLeft: reference = QPoint{r.region().x(), reference.y()}; break;
+					case MoveRight: reference = QPoint{r.region().x() + r.region().width(), reference.y()}; break;
 					default: Q_ASSERT(false); /* Will never be the case because of the top-level if statement */ break;
 				}
 				break;
@@ -690,7 +690,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptio
 				case MoveLeftOf: childDirection = MoveLeftOf; break;
 				case MoveRightOf: childDirection = MoveRightOf; break;
 				case MoveDefault: childDirection = MoveDefault; break;
-				default: throw VisualizationException("Unknown move direction: " + QString::number(dir));
+				default: throw VisualizationException{"Unknown move direction: " + QString::number(dir)};
 			}
 			if ( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).toPoint()))
 			{
@@ -700,7 +700,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptio
 		}
 		else
 		{
-			throw VisualizationException("Encountered an item region with no cursor or child item.");
+			throw VisualizationException{"Encountered an item region with no cursor or child item."};
 		}
 	}
 
@@ -862,7 +862,7 @@ void Item::setSize(int width, int height)
 	if (width != this->widthInLocal() || height != this->heightInLocal())
 	{
 		prepareGeometryChange();
-		boundingRect_.setSize(QSizeF(width, height));
+		boundingRect_.setSize(QSizeF{(qreal) width, (qreal) height});
 	}
 }
 void Item::setSize(const QSizeF& size)

@@ -39,7 +39,7 @@ DEFINE_ATTRIBUTE(TypeAlias, typeExpression, Expression, false, false, true)
 DEFINE_ATTRIBUTE(TypeAlias, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 
 TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
-: Super(nullptr, TypeAlias::getMetaData())
+: Super{nullptr, TypeAlias::getMetaData()}
 {
 	setName(name);
 	if (typeExpression) setTypeExpression(typeExpression);

@@ -87,7 +87,7 @@ inline void read(QDataStream& stream, QString& read)
 	std::vector<char> data(len + 1);
 	stream.readRawData(&data[0], len);
 	data[len] = '\0';
-	read = QString(&data[0]);
+	read = QString{&data[0]};
 }
 
 template <>

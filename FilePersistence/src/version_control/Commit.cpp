@@ -31,7 +31,7 @@ namespace FilePersistence {
 Signature::Signature()
 {
 	dateTime_ = QDateTime::currentDateTimeUtc();
-	timeZone_ = QTimeZone(QTimeZone::systemTimeZoneId());
+	timeZone_ = QTimeZone{QTimeZone::systemTimeZoneId()};
 }
 
 CommitFile::CommitFile(){}

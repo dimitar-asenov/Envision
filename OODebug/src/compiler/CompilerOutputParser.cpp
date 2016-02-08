@@ -83,7 +83,7 @@ CompilerFeedback CompilerOutputParser::parseJavacErrorFormat(const QString& outp
 			messages.append(std::make_shared<CompilerMessage>(CompilerMessage::Other, file, msg, lineNumber, colNumber));
 		}
 	}
-	return CompilerFeedback(messages);
+	return CompilerFeedback{messages};
 }
 
 }

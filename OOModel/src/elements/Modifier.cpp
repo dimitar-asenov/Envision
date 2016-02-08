@@ -72,8 +72,8 @@ void Modifier::save(Model::PersistentStore &store) const
 void Modifier::load(Model::PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw OOModelException("Trying to load a Modifier node from an incompatible node type "
-				+ store.currentNodeType());
+		throw OOModelException{"Trying to load a Modifier node from an incompatible node type "
+				+ store.currentNodeType()};
 
 	set(fromInt(store.loadIntValue()));
 }

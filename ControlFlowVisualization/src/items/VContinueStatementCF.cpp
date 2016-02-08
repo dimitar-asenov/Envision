@@ -62,18 +62,18 @@ void VContinueStatementCF::updateGeometry(int, int)
 
 	if (preferredContinueExit_ == ControlFlowItem::EXIT_LEFT)
 	{
-		continues_.append( QPoint(0, heightInLocal()/2));
-		addConnector(continues_.first() + QPoint(style()->pinLength(), 0), continues_.first(), false );
+		continues_.append( QPoint{0, heightInLocal()/2});
+		addConnector(continues_.first() + QPoint{style()->pinLength(), 0}, continues_.first(), false );
 	}
 	else
 	{
-		continues_.append( QPoint(widthInLocal(), heightInLocal()/2));
-		addConnector(continues_.first() - QPoint(style()->pinLength(), 0), continues_.first(), false );
+		continues_.append( QPoint{widthInLocal(), heightInLocal()/2});
+		addConnector(continues_.first() - QPoint{style()->pinLength(), 0}, continues_.first(), false );
 	}
 
-	entrance_ = QPoint(widthInLocal()/2, 0);
-	exit_ = QPoint(0, 0);
-	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
+	entrance_ = QPoint{widthInLocal()/2, 0};
+	exit_ = QPoint{0, 0};
+	addConnector(entrance_, entrance_ + QPoint{0, style()->pinLength()}, true);
 }
 
 }

@@ -75,7 +75,7 @@ void TreeManager::beginModification(Node* modificationTarget, const QString &tex
 void TreeManager::changeModificationTarget(Node* modificationTarget)
 {
 	if ( !modificationInProgress )
-		throw ModelException("Switching modification targets without calling TreeManager.beginModification() first");
+		throw ModelException{"Switching modification targets without calling TreeManager.beginModification() first"};
 
 	pushCommandOnUndoStack( new SetModificationTarget{currentModificationTarget, currentModificationLock,
 			modifiedTargets, modificationTarget});
@@ -134,9 +134,9 @@ bool TreeManager::canBeModified(const Node* node) const
 void TreeManager::pushCommandOnUndoStack(UndoCommand* command)
 {
 	if ( !modificationInProgress )
-		throw ModelException("Changing the application tree without calling TreeManager.beginModification() first");
+		throw ModelException{"Changing the application tree without calling TreeManager.beginModification() first"};
 	if ( performedUndoRedo )
-		throw ModelException("Trying to execute new commands after performing an Undo or a Redo operation.");
+		throw ModelException{"Trying to execute new commands after performing an Undo or a Redo operation."};
 
 	if ( pushedNewCommandsOnTheStack == false )
 	{
@@ -151,9 +151,9 @@ void TreeManager::pushCommandOnUndoStack(UndoCommand* command)
 void TreeManager::undo()
 {
 	if ( !modificationInProgress )
-		throw ModelException("Requesting an Undo without calling TreeManager.beginModification() first");
+		throw ModelException{"Requesting an Undo without calling TreeManager.beginModification() first"};
 	if ( pushedNewCommandsOnTheStack )
-		throw ModelException("Requesting an undo in the middle of a modification after executing new commands.");
+		throw ModelException{"Requesting an undo in the middle of a modification after executing new commands."};
 	performedUndoRedo = true;
 
 	commands.undo();
@@ -162,9 +162,9 @@ void TreeManager::undo()
 void TreeManager::redo()
 {
 	if ( !modificationInProgress )
-		throw ModelException("Requesting a Redo without calling TreeManager.beginModification() first");
+		throw ModelException{"Requesting a Redo without calling TreeManager.beginModification() first"};
 	if ( pushedNewCommandsOnTheStack )
-		throw ModelException("Requesting a Redo in the middle of a modification after executing new commands.");
+		throw ModelException{"Requesting a Redo in the middle of a modification after executing new commands."};
 	performedUndoRedo = true;
 
 	commands.redo();
@@ -195,13 +195,13 @@ bool TreeManager::isOwnedByCommand(const Node* node, const UndoCommand* cmd, con
 
 void TreeManager::save(PersistentStore* store)
 {
-	if (name_.isEmpty()) throw ModelException("Saving a tree without a name");
+	if (name_.isEmpty()) throw ModelException{"Saving a tree without a name"};
 
 	if (root_)
 	{
 		if (store) store->saveTree(this, name_);
 		else if (store_) store_->saveTree(this, name_);
-		else throw ModelException("Saving tree '" + name_ + "' without specifying a persistent store");
+		else throw ModelException{"Saving tree '" + name_ + "' without specifying a persistent store"};
 	}
 
 	if (store && !store_) store_ = store;
@@ -211,8 +211,8 @@ void TreeManager::load(PersistentStore* store, const QString& name, bool loadPar
 {
 	Q_ASSERT(!root_);
 
-	if (name.isEmpty()) throw ModelException("Loading a tree without specifying a name");
-	if (!store) throw ModelException("Loading tree '" + name + "' without specifying a persistent store");
+	if (name.isEmpty()) throw ModelException{"Loading a tree without specifying a name"};
+	if (!store) throw ModelException{"Loading tree '" + name + "' without specifying a persistent store"};
 
 	name_ = name;
 	store_ = store;

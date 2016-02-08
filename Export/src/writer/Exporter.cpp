@@ -50,19 +50,19 @@ Exporter::Exporter(QDir projectDirOnFilesystem, SourceDir* exportTree, FragmentL
 	if (!rootDir_.exists(exportTree->name()))
 	{
 		if (span_ == ExportSpan::SomeFiles)
-			throw ExportException("You cannot export only a part of this project. You must export the entire project "
+			throw ExportException{"You cannot export only a part of this project. You must export the entire project "
 										 "in the new directory: "
-										 + rootDir_.absoluteFilePath(exportTree->name()));
+										 + rootDir_.absoluteFilePath(exportTree->name())};
 
 		if ( !rootDir_.mkpath(exportTree->name()) )
-			throw ExportException("Could not create directory: " + rootDir_.absoluteFilePath(exportTree->name()));
+			throw ExportException{"Could not create directory: " + rootDir_.absoluteFilePath(exportTree->name())};
 	}
 
 	Q_ASSERT(rootDir_.exists(exportTree->name()));
 	rootDir_.cd(exportTree->name());
 
 	if (!(QFileInfo{rootDir_.absolutePath()}).isWritable())
-		throw ExportException("Trying to export to a non writable directory : " + rootDir_.absolutePath());
+		throw ExportException{"Trying to export to a non writable directory : " + rootDir_.absolutePath()};
 
 	readPreviousExports();
 	saveDir(rootDir_, exportTree);
@@ -108,20 +108,20 @@ void Exporter::saveFile(QDir& fileSystemDir, SourceFile* sourceFile)
 		{
 			if (fileText == file.readAll()) return;
 		}
-		else throw ExportException("Could not open file " + fileName + " for reading");
+		else throw ExportException{"Could not open file " + fileName + " for reading"};
 
 		// File has changed, remove it
-		if (!file.remove()) throw ExportException("Could not remove file " + fileName);
+		if (!file.remove()) throw ExportException{"Could not remove file " + fileName};
 	}
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-		throw ExportException("Could not open file " + fileName + " for writing");
+		throw ExportException{"Could not open file " + fileName + " for writing"};
 
 	auto data = fileText.toUtf8();
 	auto written = file.write(data);
 	file.close();
 
-	if (written != data.size()) throw ExportException("Error writing to file " + fileName);
+	if (written != data.size()) throw ExportException{"Error writing to file " + fileName};
 }
 
 void Exporter::readPreviousExports()
@@ -130,16 +130,16 @@ void Exporter::readPreviousExports()
 	if (!exportsFile.exists())
 	{
 		if (span_ == ExportSpan::SomeFiles)
-			throw ExportException("No exports file was found in " + rootDir_.absolutePath()
-									 + " Please export the entire project before doing a partial export.");
+			throw ExportException{"No exports file was found in " + rootDir_.absolutePath()
+									 + " Please export the entire project before doing a partial export."};
 
 		// Otherwise simply return, there is no need to read anything.
 		return;
 	}
 
 	if (!exportsFile.open(QIODevice::ReadOnly | QIODevice::Text))
-		throw ExportException("Could not open previous exports file in: "
-									 + rootDir_.absoluteFilePath(previousExportsFileName_));
+		throw ExportException{"Could not open previous exports file in: "
+									 + rootDir_.absoluteFilePath(previousExportsFileName_)};
 
 	QTextStream textStream(&exportsFile);
 	while (true)
@@ -172,8 +172,8 @@ void Exporter::deleteObsoletePreviousExports()
 		if (file.isFile())
 		{
 			log.info("Removing unnecessary file during export: " + file.absoluteFilePath());
-			if (!QFile(*it).remove())
-				throw ExportException("Could not remove previously generated file: " + file.absoluteFilePath());
+			if (!QFile{*it}.remove())
+				throw ExportException{"Could not remove previously generated file: " + file.absoluteFilePath()};
 
 			it = previousExports_.erase(it);
 		}
@@ -189,7 +189,7 @@ void Exporter::deleteObsoletePreviousExports()
 		{
 			log.info("Removing unnecessary directory during export: " + dir.absolutePath());
 			if (!dir.removeRecursively())
-				throw ExportException("Could not remove directory : " + dir.absolutePath());
+				throw ExportException{"Could not remove directory : " + dir.absolutePath()};
 
 			it = previousExports_.erase(it);
 		}
@@ -207,7 +207,7 @@ void Exporter::saveCurrentExports()
 	QFile exportsFile{rootDir_.absoluteFilePath(previousExportsFileName_)};
 
 	if (!exportsFile.open(QIODevice::WriteOnly | QIODevice::Text))
-		throw ExportException("Could not save exports file : " + rootDir_.absoluteFilePath(previousExportsFileName_));
+		throw ExportException{"Could not save exports file : " + rootDir_.absoluteFilePath(previousExportsFileName_)};
 
 	QTextStream textStream(&exportsFile);
 	for (auto exportedFile : currentExports_)

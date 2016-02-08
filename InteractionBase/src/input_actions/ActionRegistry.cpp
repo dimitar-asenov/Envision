@@ -116,7 +116,7 @@ ActionRegistry::ActionRegistry()
 {
 	//Read all JSON keyboard binding files
 	QDir bindingsDir{"key-bindings"};
-	for (auto fileName : bindingsDir.entryList(QStringList() << "*.json", QDir::Files))
+	for (auto fileName : bindingsDir.entryList(QStringList{} << "*.json", QDir::Files))
 	{
 		QFile file{bindingsDir.absoluteFilePath(fileName)};
 		file.open(QIODevice::ReadOnly);
@@ -143,18 +143,18 @@ ActionRegistry::ActionRegistry()
 					{
 						auto sequence = standardKeysMap().find(shortcutString);
 						if (sequence != standardKeysMap().end())
-							handler->keys_.append(QKeySequence(*sequence));
+							handler->keys_.append(QKeySequence{*sequence});
 						else
-							throw InteractionBaseException("Unrecognized standard key sequence name: " + shortcutString);
+							throw InteractionBaseException{"Unrecognized standard key sequence name: " + shortcutString};
 					}
 					else
 					{
-						handler->keys_.append(QKeySequence(shortcutString));
+						handler->keys_.append(QKeySequence{shortcutString});
 						if (handler->keys_.last().isEmpty())
-							throw InteractionBaseException("Unrecognized key: " + shortcutString);
+							throw InteractionBaseException{"Unrecognized key: " + shortcutString};
 					}
 				}
-				else throw InteractionBaseException("Key names in " + fileName + " should be strings.");
+				else throw InteractionBaseException{"Key names in " + fileName + " should be strings."};
 			}
 
 			handlers_.append(handler);
@@ -192,8 +192,8 @@ bool ActionRegistry::handleKeyInput(Visualization::Item* target, QKeySequence ke
 		if (handler->eventName_.startsWith(handlerName))
 			for (auto key : handler->keys_)
 			{
-				auto pattern = QRegExp("*" + key.toString() + "*",
-							Qt::CaseInsensitive, QRegExp::Wildcard);
+				auto pattern = QRegExp{"*" + key.toString() + "*",
+							Qt::CaseInsensitive, QRegExp::Wildcard};
 				if (pattern.exactMatch(keys.toString()) && handler->handler_
 						&& (handler->state_ == state() || handler->state_ == AnyState))
 					handled = handled || handler->handler_(target, keys, state());

@@ -40,7 +40,7 @@ DEFINE_ATTRIBUTE(AssignmentExpression, right, Expression, false, false, true)
 DEFINE_ATTRIBUTE(AssignmentExpression, opr, Integer, false, false, true)
 
 AssignmentExpression::AssignmentExpression(const AssignmentTypes &op, Expression *left, Expression *right)
-: Super(nullptr, AssignmentExpression::getMetaData())
+: Super{nullptr, AssignmentExpression::getMetaData()}
 {
 	setOp(op);
 	if (left) setLeft(left);

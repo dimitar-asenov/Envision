@@ -68,7 +68,7 @@ void Static::updateGeometry(int availableWidth, int availableHeight)
 			getShape()->setOffset(0, 0);
 			getShape()->setInnerSize(0, 0);
 		}
-		else setSize(QSize(0, 0));
+		else setSize(QSize{0, 0});
 	}
 }
 
@@ -84,7 +84,7 @@ void Static::determineChildren()
 		{
 			if (itemClasses_.contains(style()->itemClass()))
 				item_ = itemClasses_.value(style()->itemClass())(this, &style()->itemStyle());
-			else throw VisualizationException("Invalid item class specified for a Static item");
+			else throw VisualizationException{"Invalid item class specified for a Static item"};
 		}
 
 		item_->setStyle( &style()->itemStyle());

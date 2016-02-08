@@ -113,7 +113,7 @@ void TestBox::updateGeometry(int availableWidth, int availableHeight)
 	}
 
 	// Also update the color
-	if (node_) color_ = QColor(node_->red(), node_->green(), node_->blue());
+	if (node_) color_ = QColor{node_->red(), node_->green(), node_->blue()};
 }
 
 void TestBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

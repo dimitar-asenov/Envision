@@ -44,7 +44,7 @@ DEFINE_ATTRIBUTE(Project, implicitBaseType, Expression, false, true, true)
 DEFINE_ATTRIBUTE(Project, implicitEnumType, Expression, false, true, true)
 DEFINE_ATTRIBUTE(Project, implicitArrayType, Expression, false, true, true)
 
-Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
+Project::Project(const QString& name) : Super{nullptr, Project::getMetaData()}
 {
 	setName(name);
 }

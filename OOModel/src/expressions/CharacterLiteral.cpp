@@ -38,14 +38,14 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CharacterLiteral)
 DEFINE_ATTRIBUTE(CharacterLiteral, value, Text, false, false, true)
 
 CharacterLiteral::CharacterLiteral(const QChar& value)
-: Super(nullptr, CharacterLiteral::getMetaData())
+: Super{nullptr, CharacterLiteral::getMetaData()}
 {
 	setValue(value);
 }
 
 
 CharacterLiteral::CharacterLiteral(const QString& value)
-: Super(nullptr, CharacterLiteral::getMetaData())
+: Super{nullptr, CharacterLiteral::getMetaData()}
 {
 	setValue(value);
 }

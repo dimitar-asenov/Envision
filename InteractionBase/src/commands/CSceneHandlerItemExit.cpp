@@ -50,7 +50,7 @@ QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, V
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QList<CommandSuggestion*> s;
-	if (QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
+	if (QString{"exit"}.startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
 			s.append(new CommandSuggestion{"exit", "Closes Envision"});
 	return s;
 }

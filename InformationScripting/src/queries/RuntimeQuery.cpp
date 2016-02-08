@@ -73,7 +73,7 @@ Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 			queryExecutor->execute({result});
 		}
 	);
-	return TupleSet();
+	return TupleSet{};
 }
 
 void RuntimeQuery::registerDefaultQueries()

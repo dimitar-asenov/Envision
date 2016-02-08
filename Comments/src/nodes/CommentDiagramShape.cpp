@@ -84,13 +84,13 @@ void CommentDiagramShape::reCalculateConnectorPoints() const
 				int index = (i + 2) % 16;
 
 				if (index >=  0 && index <  4)
-					connectorPoints_.append(QPoint(index/4.*shapeWidth, 0));
+					connectorPoints_.append(QPointF{index/4.0*shapeWidth, 0}.toPoint());
 				else if (index >=  4 && index <  8)
-					connectorPoints_.append(QPoint(shapeWidth, (index-4)/4.*shapeHeight));
+					connectorPoints_.append(QPointF{(qreal) shapeWidth, (index-4)/4.0*shapeHeight}.toPoint());
 				else if (index >=  8 && index < 12)
-					connectorPoints_.append(QPoint((12-index)/4.*shapeWidth, shapeHeight));
+					connectorPoints_.append(QPointF{(12-index)/4.0*shapeWidth, (qreal) shapeHeight}.toPoint());
 				else if (index >= 12 && index < 16)
-					connectorPoints_.append(QPoint(0, (16-index)/4.*shapeHeight));
+					connectorPoints_.append(QPointF{0, (16-index)/4.0*shapeHeight}.toPoint());
 			}
 			break;
 
@@ -119,7 +119,7 @@ void CommentDiagramShape::reCalculateConnectorPoints() const
 				if (index == 4)  y =  b;
 				if (index == 12) y = -b;
 
-				connectorPoints_.append( QPoint(center.x()+x, center.y()+y));
+				connectorPoints_.append( QPointF{center.x()+x, center.y()+y}.toPoint());
 			}
 			break;
 
@@ -129,13 +129,13 @@ void CommentDiagramShape::reCalculateConnectorPoints() const
 				// index 0 is already in the top center (north)
 				//  => no compass normalization needed!
 				if (i >=  0 && i <  4)
-					connectorPoints_.append(QPoint((i+4)/8.*shapeWidth, i/8.*shapeHeight));
+					connectorPoints_.append(QPointF{(i+4)/8.*shapeWidth, i/8.*shapeHeight}.toPoint());
 				if (i >=  4 && i <  8)
-						connectorPoints_.append(QPoint((8-(i-4))/8.*shapeWidth, (i/8.*shapeHeight)));
+						connectorPoints_.append(QPointF{(8-(i-4))/8.*shapeWidth, (i/8.*shapeHeight)}.toPoint());
 				if (i >=  8 && i < 12)
-					connectorPoints_.append(QPoint((4-(i-8))/8.*shapeWidth, (8-(i-8))/8.*shapeHeight));
+					connectorPoints_.append(QPointF{(4-(i-8))/8.*shapeWidth, (8-(i-8))/8.*shapeHeight}.toPoint());
 				if (i >= 12 && i < 16)
-					connectorPoints_.append(QPoint((i-12)/8.*shapeWidth, (4-(i-12))/8.*shapeHeight));
+					connectorPoints_.append(QPointF{(i-12)/8.*shapeWidth, (4-(i-12))/8.*shapeHeight}.toPoint());
 			}
 			break;
 		default: Q_ASSERT_X(false, "", "Unknown shape type");

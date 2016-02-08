@@ -40,7 +40,7 @@ DEFINE_ATTRIBUTE(ReferenceTypeExpression, typeExpression, Expression, false, fal
 DEFINE_ATTRIBUTE(ReferenceTypeExpression, isRValueReference, Boolean, false, false, true)
 
 ReferenceTypeExpression::ReferenceTypeExpression(Expression* ref, bool rValue)
-: Super(nullptr, ReferenceTypeExpression::getMetaData())
+: Super{nullptr, ReferenceTypeExpression::getMetaData()}
 {
 	if (ref) setTypeExpression(ref);
 	setIsRValueReference(rValue);

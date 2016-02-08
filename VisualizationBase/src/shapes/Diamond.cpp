@@ -98,15 +98,15 @@ QRect Diamond::contentRect()
 {
 	// Note that a precise inner rect can not be computed given just the outter rect. There is a range of possibilities.
 	auto outline = std::ceil(style()->outline().width());
-	return QRect(xOffset() + contentLeft_, yOffset() + contentTop_, width() - outline, height() - outline);
+	return QRectF{xOffset() + contentLeft_, yOffset() + contentTop_, width() - outline, height() - outline}.toRect();
 }
 
 QSize Diamond::innerSize(QSize outterSize) const
 {
 	// Note that a precise inner rect can not be computed given just the outter rect. There is a range of possibilities.
 	QSize inner(outterSize);
-	inner -= QSize(std::ceil(style()->outline().width()), std::ceil(style()->outline().width()));
-	if ( style()->shadow() != Qt::NoBrush ) inner -= QSize(style()->xShadowOffset(), style()->yShadowOffset());
+	inner -= QSize{(int) std::ceil(style()->outline().width()), (int) std::ceil(style()->outline().width())};
+	if ( style()->shadow() != Qt::NoBrush ) inner -= QSize{style()->xShadowOffset(), style()->yShadowOffset()};
 	return inner;
 }
 
@@ -114,7 +114,7 @@ QSize Diamond::outterSize(QSize innerSize) const
 {
 	int side = innerSize.width() + innerSize.height() + std::ceil(style()->outline().width());
 	QSize outter(side, side);
-	if ( style()->shadow() != Qt::NoBrush ) outter += QSize(style()->xShadowOffset(), style()->yShadowOffset());
+	if ( style()->shadow() != Qt::NoBrush ) outter += QSize{style()->xShadowOffset(), style()->yShadowOffset()};
 	return outter;
 }
 

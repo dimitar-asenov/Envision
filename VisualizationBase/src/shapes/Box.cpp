@@ -76,13 +76,13 @@ QRect Box::contentRect()
 QSize Box::innerSize(QSize outterSize) const
 {
 	auto cte = contentToEdgeDistance();
-	return QSize(outterSize.width() - 2*cte, outterSize.height() - 2*cte);
+	return QSize{outterSize.width() - 2*cte, outterSize.height() - 2*cte};
 }
 
 QSize Box::outterSize(QSize innerSize) const
 {
 	auto cte = contentToEdgeDistance();
-	return QSize(innerSize.width() + 2*cte, innerSize.height() + 2*cte);
+	return QSize{innerSize.width() + 2*cte, innerSize.height() + 2*cte};
 }
 
 void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)

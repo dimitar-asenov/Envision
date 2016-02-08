@@ -343,7 +343,7 @@ void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* function
 	{
 		auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
 		method->results()->append(
-					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString(),
+					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString{},
 																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 	}
 	// process arguments
@@ -362,7 +362,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	auto hash = nh_->hashMethod(mDecl);
 	OOModel::Method* method = nullptr;
 	if (kind == OOModel::Method::MethodKind::Conversion)
-		method = clang_.createNode<OOModel::Method>(mDecl->getSourceRange(), QString(),
+		method = clang_.createNode<OOModel::Method>(mDecl->getSourceRange(), QString{},
 																  OOModel::Method::MethodKind::Conversion);
 	else if (mDecl->isOverloadedOperator())
 		method = clang_.createNode<OOModel::Method>(mDecl->getSourceRange(),

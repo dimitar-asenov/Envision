@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommandNode)
 DEFINE_ATTRIBUTE(CommandNode, name, Text, false, false, true)
 DEFINE_ATTRIBUTE(CommandNode, arguments, TypedListOfQueryNode, false, false, true)
 
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+CommandNode::CommandNode(const QString& name) : Super{nullptr, CommandNode::getMetaData()}
 {
 	setName(name);
 }

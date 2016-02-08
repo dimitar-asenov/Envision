@@ -161,7 +161,7 @@ void ActionPrompt::acquireCursor()
 	Q_ASSERT(actionText_);
 
 	// Save the current cursor
-	receiverCursorPosition_ = QPoint(0, 0);
+	receiverCursorPosition_ = QPoint{0, 0};
 	if (originalActionReceiver_->scene()->mainCursor()->owner() == originalActionReceiver_)
 		// Note that the cursor's position is in item local coordinates.
 		receiverCursorPosition_ = originalActionReceiver_->scene()->mainCursor()->position();

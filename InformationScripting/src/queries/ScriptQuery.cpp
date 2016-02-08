@@ -88,7 +88,7 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 		queriesDict["input"] = input;
 		queriesDict["target"] = python::ptr(target());
 		queriesDict["args"] = arguments_;
-		queriesDict["result"] = TupleSet();
+		queriesDict["result"] = TupleSet{};
 
 		// Expose registered queries to the python environment:
 		// Note when calling python scripts from python scripts:
@@ -126,7 +126,7 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 		return python::extract<TupleSet>(queriesDict["result"])();
 
 	} catch (python::error_already_set ) {
-		return {QString("Error in Python: %1").arg(BoostPythonHelpers::parsePythonException())};
+		return {QString{"Error in Python: %1"}.arg(BoostPythonHelpers::parsePythonException())};
 	}
 }
 
@@ -160,7 +160,7 @@ QList<TupleSet> ScriptQuery::buildAndExecuteQueryFromPython(QString queryString,
 	QueryBuilder builder{target(), executor_};
 	auto queries = builder.visit(queryNode.get());
 	if (queries.size() > 1)
-		throw QueryRuntimeException("Yield is not allowed in queries built in python");
+		throw QueryRuntimeException{"Yield is not allowed in queries built in python"};
 	return extractResult(queries[0]->execute(convertInput(input)), "buildQuery");
 }
 
@@ -176,7 +176,7 @@ QList<TupleSet> ScriptQuery::extractResult(QList<Optional<TupleSet>> result, con
 	for (const auto& r : result)
 	{
 		if (r.hasErrors())
-			throw QueryRuntimeException(QString("Query %1 produced error results: %2").arg(name, r.errors().join(",")));
+			throw QueryRuntimeException{QString{"Query %1 produced error results: %2"}.arg(name, r.errors().join(","))};
 		else
 			noErrorResult.push_back(r.value());
 	}

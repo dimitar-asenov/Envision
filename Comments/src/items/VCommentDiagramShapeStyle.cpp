@@ -39,7 +39,7 @@ const QColor VCommentDiagramShapeSequenceStyle::colorFromName(const QString& col
 		if (color.name() == colorName)
 			return color.color();
 	}
-	return QColor(colorName);
+	return QColor{colorName};
 }
 
 }

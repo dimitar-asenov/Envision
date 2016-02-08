@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression)
 DEFINE_ATTRIBUTE(PrimitiveTypeExpression, val, Integer, false, false, true)
 
 PrimitiveTypeExpression::PrimitiveTypeExpression(const PrimitiveTypes& type)
-: Super(nullptr, PrimitiveTypeExpression::getMetaData())
+: Super{nullptr, PrimitiveTypeExpression::getMetaData()}
 {
 	setTypeValue(type);
 }

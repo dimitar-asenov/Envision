@@ -50,6 +50,6 @@ class VISUALIZATIONBASE_API FullDetailSize
 };
 
 inline void FullDetailSize::set(QSize size) { set(size.width(), size.height()); }
-inline QSize FullDetailSize::size() const { return QSize(width(), height()); }
+inline QSize FullDetailSize::size() const { return QSize{(int) width(), (int) height()}; }
 inline bool FullDetailSize::hasSize() const { return widthNode() && heightNode();}
 }

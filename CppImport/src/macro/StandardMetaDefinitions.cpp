@@ -208,7 +208,7 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, Nod
 
 			// in case the node to replace is not an expression we have to wrap the splice
 			if (DCast<OOModel::FormalResult>(child))
-				newNode = new OOModel::FormalResult{QString(), DCast<OOModel::Expression>(newNode)};
+				newNode = new OOModel::FormalResult{QString{}, DCast<OOModel::Expression>(newNode)};
 
 			// insert the splice into the tree
 			if (child->parent()) child->parent()->replaceChild(child, newNode);

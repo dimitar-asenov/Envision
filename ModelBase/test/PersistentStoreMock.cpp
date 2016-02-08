@@ -69,12 +69,12 @@ void PersistentStoreMock::saveNode(const Node *node, const QString &name)
 
 QString PersistentStoreMock::loadReferenceValue(Reference*)
 {
-	throw ModelException("The Persistent store mock does not support references");
+	throw ModelException{"The Persistent store mock does not support references"};
 }
 
 void PersistentStoreMock::saveReferenceValue(const QString &, const Node*)
 {
-	throw ModelException("The Persistent store mock does not support references");
+	throw ModelException{"The Persistent store mock does not support references"};
 }
 
 Node* PersistentStoreMock::loadTree(TreeManager*, const QString &, bool)
@@ -94,7 +94,7 @@ Node* PersistentStoreMock::loadSubNode(Node*, const QString&, bool)
 
 QString PersistentStoreMock::currentNodeType() const
 {
-	return QString();
+	return QString{};
 }
 
 int PersistentStoreMock::loadIntValue()
@@ -104,7 +104,7 @@ int PersistentStoreMock::loadIntValue()
 
 QString PersistentStoreMock::loadStringValue()
 {
-	return QString();
+	return QString{};
 }
 
 double PersistentStoreMock::loadDoubleValue()

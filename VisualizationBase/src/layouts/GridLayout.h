@@ -88,7 +88,7 @@ class VISUALIZATIONBASE_API GridLayout: public Super<Layout>
 		Item* findNext(int dx, int dy);
 };
 
-inline QSize GridLayout::gridSize() const { return QSize(sizeX_, sizeY_); }
+inline QSize GridLayout::gridSize() const { return QSize{sizeX_, sizeY_}; }
 
 template <typename T> inline T* GridLayout::at(int x, int y) { return static_cast<T*> (items_[x][y]); }
 template <typename T> inline T* GridLayout::at(int x, int y) const { return static_cast<T*> (items_[x][y]); }

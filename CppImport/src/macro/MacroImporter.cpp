@@ -355,7 +355,7 @@ bool MacroImporter::insertMetaCall(MacroExpansion* expansion)
 {
 	auto presumedLocation = clang_.sourceManager()->getPresumedLoc(expansion->range().getBegin());
 
-	QString hash = QDir(presumedLocation.getFilename()).absolutePath()
+	QString hash = QDir{presumedLocation.getFilename()}.absolutePath()
 			+ "|" + macroDefinitions_.signature(expansion->definition())
 			+ "|" + QString::number(presumedLocation.getLine())
 			+ "|" + QString::number(presumedLocation.getColumn());

@@ -196,13 +196,13 @@ void DynamicGridFormElement::synchronizeGrids(ItemData& data, const Definition& 
 				{
 					for (int j = 0; j < def[n].size(); ++j)
 						//We must make sure not to visualize one node with the same item twice
-						if (compare(def[n][j], data.itemGrid_[x][y]) && !usedPositions.contains(QPoint(n, j)))
+						if (compare(def[n][j], data.itemGrid_[x][y]) && !usedPositions.contains(QPoint{n, j}))
 						{
 							sync(def[n][j], data.itemGrid_[x][y]);
 							if (!existingItems.contains(def[n][j]))
 								existingItems.insert(def[n][j], {});
 							existingItems[def[n][j]].append(data.itemGrid_[x][y]);
-							usedPositions.append(QPoint(n, j));
+							usedPositions.append(QPoint{n, j});
 							found = true;
 							break;
 						}
@@ -294,9 +294,9 @@ QPoint DynamicGridFormElement::focusedElementIndex(Item* item) const
 
 	for (int x=0; x<data.numColumns_; ++x)
 		for (int y=0; y<data.numRows_; ++y)
-			if ( data.itemGrid_[x][y] && data.itemGrid_[x][y]->itemOrChildHasFocus()) return QPoint(x, y);
+			if ( data.itemGrid_[x][y] && data.itemGrid_[x][y]->itemOrChildHasFocus()) return QPoint{x, y};
 
-	return QPoint(-1, -1);
+	return QPoint{-1, -1};
 }
 
 QPoint DynamicGridFormElement::indexOf(Item* item, Item* child) const

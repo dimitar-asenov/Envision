@@ -39,7 +39,7 @@ CSceneHandlerSave::CSceneHandlerSave() : Command{"save"}{}
 bool CSceneHandlerSave::canInterpret(Item*, Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
-	return (commandTokens.size() <= 2) && QString("save").startsWith(commandTokens.first());
+	return (commandTokens.size() <= 2) && QString{"save"}.startsWith(commandTokens.first());
 }
 
 CommandResult* CSceneHandlerSave::execute(Item* source, Item*, const QStringList& commandTokens,
@@ -80,9 +80,9 @@ QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString
 	auto trimmed = textSoFar.trimmed();
 	auto split = trimmed.split(" ");
 	if (split.size() > 2 ) return {};
-	if (split.size() > 0 && ! QString("save").startsWith(split.first())) return {};
+	if (split.size() > 0 && ! QString{"save"}.startsWith(split.first())) return {};
 
-	auto name = split.size() > 1 ? split[1] : QString();
+	auto name = split.size() > 1 ? split[1] : QString{};
 
 	QString commandString = "save";
 	QString text = "Save the current tree";

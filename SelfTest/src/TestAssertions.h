@@ -77,7 +77,7 @@
 		{																																					\
 			allChecksPassedFlag = false;																											\
 			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";							\
-			message += "Actual value (" + QString(actual) +") is different from expected ("+QString(expected)+")";		\
+			message += "Actual value (" + QString{actual} +") is different from expected ("+QString{expected}+")";		\
 			testResults.addFailedCheck(message);																								\
 		}																																					\
 	} catch (...)																																		\
@@ -109,7 +109,7 @@
 				{																																			\
 					allChecksPassedFlag = false;																									\
 					QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";					\
-					message += "File " + QString(actualFileName) + " differs from the expected output.";						\
+					message += "File " + QString{actualFileName} + " differs from the expected output.";						\
 					testResults.addFailedCheck(message);																						\
 				}																																			\
 			}																																				\
@@ -117,7 +117,7 @@
 			{																																				\
 				allChecksPassedFlag = false;																										\
 				QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";						\
-				message += "Could not open file " + QString(actualFileName) + " for reading.";									\
+				message += "Could not open file " + QString{actualFileName} + " for reading.";									\
 				testResults.addFailedCheck(message);																							\
 			}																																				\
 		}																																					\
@@ -125,7 +125,7 @@
 		{																																					\
 			allChecksPassedFlag = false;																											\
 			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";							\
-			message += "Could not open file " + QString(expectedFileName) + " for reading.";										\
+			message += "Could not open file " + QString{expectedFileName} + " for reading.";										\
 			testResults.addFailedCheck(message);																								\
 		}																																					\
 	} catch (...)																																		\

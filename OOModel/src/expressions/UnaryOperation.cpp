@@ -41,7 +41,7 @@ DEFINE_ATTRIBUTE(UnaryOperation, opr, Integer, false, false, true)
 
 
 UnaryOperation::UnaryOperation(const OperatorTypes& op, Expression* operand)
-: Super(nullptr, UnaryOperation::getMetaData())
+: Super{nullptr, UnaryOperation::getMetaData()}
 {
 	setOp(op);
 	if (operand) setOperand(operand);

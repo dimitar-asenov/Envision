@@ -1017,7 +1017,7 @@ public: void test()
 	Project* java = nullptr;
 	java = addJavaLibrary(prj);
 
-	Module* folder1 = new Module("MainFunctionality", Module::ModuleKind::Folder);
+	Module* folder1 = new Module{"MainFunctionality", Module::ModuleKind::Folder};
 	std::unique_ptr<Position>(folder1->extension<Position>())->set(0, 0);
 	prj->modules()->append(folder1);
 

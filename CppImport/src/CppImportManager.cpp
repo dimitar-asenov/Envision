@@ -50,7 +50,7 @@ void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subPro
 
 	for (auto relativeSourcePath : sourcePaths)
 	{
-		auto sourcePath = QDir(relativeSourcePath).absolutePath();
+		auto sourcePath = QDir{relativeSourcePath}.absolutePath();
 		if (subProjects)
 		{
 			QDirIterator dirIterator(sourcePath, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
@@ -73,7 +73,7 @@ clang::tooling::CompilationDatabase* CppImportManager::findCompilationDatabase(c
 		result = clang::tooling::CompilationDatabase::loadFromDirectory(dir.absolutePath().toLatin1().data(),
 																										Error).release();
 		if (!result && !dir.cdUp())
-			throw CppImportException("No compilation database found: " + QString::fromStdString(Error));
+			throw CppImportException{"No compilation database found: " + QString::fromStdString(Error)};
 	} while (!result);
 
 	return result;
@@ -116,12 +116,12 @@ void CppImportManager::setupTest()
 	// setup the root dir
 	QDir rootDir(QDir::currentPath());
 	rootDir.cdUp();
-	rootDir.cd(QString("CppImport").append(QDir::separator()).append("test"));
+	rootDir.cd(QString{"CppImport"}.append(QDir::separator()).append("test"));
 	QString rootPath = rootDir.canonicalPath();
 	// open testSelector file to read in dir
 	QFile selector(rootPath + QDir::separator() + "testSelector");
 	if (!selector.open(QFile::ReadOnly))
-		throw CppImportException("Could not open testSelector file");
+		throw CppImportException{"Could not open testSelector file"};
 	QTextStream inStream(&selector);
 	QString testDir;
 	while (!inStream.atEnd())
@@ -146,7 +146,7 @@ void CppImportManager::setupTest()
 			return setImportPaths({rootPath});
 		}
 	}
-	throw CppImportException("No test case set in the testSelector file");
+	throw CppImportException{"No test case set in the testSelector file"};
 }
 
 void CppImportManager::initPath(const QString& sourcePath)
@@ -196,7 +196,7 @@ void CppImportManager::setCompilationDbPath(const QString& sourcePath)
 {
 	std::string Error;
 	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toLatin1().data(), Error);
-	if (!compDB) throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
+	if (!compDB) throw CppImportException{"No compilation database found : " + QString::fromStdString(Error)};
 }
 
 void CppImportManager::createCompilationDbForTest(const QString& testPath)
@@ -207,7 +207,7 @@ void CppImportManager::createCompilationDbForTest(const QString& testPath)
 		QString test = testPath.split(QDir::separator()).last();
 		QFile db(testPath + QDir::separator() + "compile_commands.json");
 		if (!db.open(QFile::ReadWrite))
-			throw CppImportException("Cannot create compile_commands file for test: " + test);
+			throw CppImportException{"Cannot create compile_commands file for test: " + test};
 		QTextStream out(&db);
 		out << "[" << endl;
 		out << "{" << "\"directory\":" << "\"" << testPath << "\"," << endl;

@@ -33,7 +33,7 @@
 namespace Interaction {
 
 Operator::Operator(OperatorDescriptor* descriptor, Operator* parent)
-	: Expression(type(), parent), descriptor_{descriptor}, do_not_delete_transient_descriptor_{false}
+	: Expression{type(), parent}, descriptor_{descriptor}, do_not_delete_transient_descriptor_{false}
 {
 }
 
@@ -102,7 +102,7 @@ void Operator::insert(Expression* e, int pos)
 Expression* Operator::replaceOperand(Expression* oldExpr, Expression* newExpr)
 {
 	int i = operands_.indexOf(oldExpr);
-	if (i <0) throw InteractionBaseException("Invalid replacement operation. Could not find expression to replace.");
+	if (i <0) throw InteractionBaseException{"Invalid replacement operation. Could not find expression to replace."};
 
 	newExpr->setParent(this);
 	operands_.replace(i, newExpr);
@@ -223,7 +223,7 @@ ExpressionContext Operator::findContext(int cursor_pos)
 	}
 
 	// This end should not be reached
-	throw InteractionBaseException("No context found");
+	throw InteractionBaseException{"No context found"};
 }
 
 Expression* Operator::smallestRightmostSubExpr()

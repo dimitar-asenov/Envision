@@ -104,7 +104,7 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 		Q_ASSERT(projectDir.exists());
 		Q_ASSERT(projectDir.mkdir(buildFolder));
 	}
-	QStringList args = {"-d", QString("..") + QDir::separator() + buildFolder};
+	QStringList args = {"-d", QString{".."} + QDir::separator() + buildFolder};
 	if (includeDebugSymbols) args << "-g";
 	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
 
@@ -114,7 +114,7 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 	for (auto file : map->files())
 	{
 		// remove the src prefix
-		if (file.startsWith(QString("src") + QDir::separator()))
+		if (file.startsWith(QString{"src"} + QDir::separator()))
 			file.replace(0, 4, "");
 		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + "src",
 														 file, args);
@@ -122,13 +122,13 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 		{
 			// In the map we have the src prefix
 			auto fileName = message->fileName();
-			if (fileName.startsWith(QString(".") + QDir::separator()))
+			if (fileName.startsWith(QString{"."} + QDir::separator()))
 				fileName.replace(0, 1, "src");
 			else
-				fileName.prepend(QString("src") + QDir::separator());
+				fileName.prepend(QString{"src"} + QDir::separator());
 
 			// check if we already mapped this message
-			uint hash = qHash(QString("%1%2%3%4").arg(fileName).
+			uint hash = qHash(QString{"%1%2%3%4"}.arg(fileName).
 									arg(message->lineNumber(), message->columnNumber()).arg(message->message()));
 			if (seenMessages.contains(hash))
 				continue;

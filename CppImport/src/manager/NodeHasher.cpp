@@ -67,7 +67,7 @@ const QString NodeHasher::hashNameSpace(const clang::NamespaceDecl* namespaceDec
 			return hash;
 		else if (auto pn = llvm::dyn_cast<clang::NamespaceDecl>(ctxt))
 			return hash.prepend(hashNameSpace(pn));
-		throw CppImportException("Invalid decl context in namespace");
+		throw CppImportException{"Invalid decl context in namespace"};
 	}
 	return hash;
 }
@@ -148,13 +148,13 @@ const QString NodeHasher::hashParentOfStaticField(const clang::DeclContext* cont
 		return hashClassTemplate(ct);
 	else if (auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
 		return hashRecord(c);
-	throw CppImportException("Invalid parent to hash a static var");
+	throw CppImportException{"Invalid parent to hash a static var"};
 }
 
 const QString NodeHasher::hashUsingParent(const clang::DeclContext* context)
 {
 	if (context->isTranslationUnit())
-		return QString();
+		return QString{};
 	if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(context))
 		return hashNameSpace(ns);
 	else if (auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))
@@ -167,7 +167,7 @@ const QString NodeHasher::hashUsingParent(const clang::DeclContext* context)
 		return hashMethod(m);
 	else if (auto f = llvm::dyn_cast<clang::FunctionDecl>(context))
 		return hashFunction(f);
-	throw CppImportException("Invalid parent for using directive or using decl");
+	throw CppImportException{"Invalid parent for using directive or using decl"};
 }
 
 const QString NodeHasher::hashUsingDirective(const clang::UsingDirectiveDecl* usingDirective)
@@ -235,7 +235,7 @@ const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifi
 	switch (nestedName->getKind())
 	{
 		case clang::NestedNameSpecifier::Identifier:
-			hash = QString(nestedName->getAsIdentifier()->getNameStart());
+			hash = QString{nestedName->getAsIdentifier()->getNameStart()};
 			break;
 		case clang::NestedNameSpecifier::Namespace:
 			hash = QString::fromStdString(nestedName->getAsNamespace()->getNameAsString());
@@ -254,7 +254,7 @@ const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifi
 			break;
 		default:
 			// In version 3.6 this is only NestedNameSpecifier::Super, which is a Microsoft specific extension (_super).
-			throw new CppImportException{QString("Unsupported nested name specifier kind: %1").arg(nestedName->getKind())};
+			throw new CppImportException{QString{"Unsupported nested name specifier kind: %1"}.arg(nestedName->getKind())};
 			break;
 	}
 	if (auto p = nestedName->getPrefix())
@@ -287,8 +287,8 @@ const QString NodeHasher::hashTemplateTypeParm(const clang::NonTypeTemplateParmD
 	QString hash = QString::fromStdString(nonTypeTemplParam->getNameAsString());
 	hash.append("_").append(QString::fromStdString(nonTypeTemplParam->getType().getCanonicalType().getAsString()));
 	if (nonTypeTemplParam->hasDefaultArgument())
-		hash.append("=").append(QString(clang_.sourceManager()->getCharacterData(
-													  nonTypeTemplParam->getDefaultArgumentLoc())));
+		hash.append("=").append(QString{clang_.sourceManager()->getCharacterData(
+													  nonTypeTemplParam->getDefaultArgumentLoc())});
 	return hash;
 }
 
@@ -318,13 +318,13 @@ const QString NodeHasher::hashTemplateArg(const clang::TemplateArgument& templat
 			// TODO: add support
 			hash = "EXPANSION"; break;
 		case clang::TemplateArgument::ArgKind::Expression:
-			hash = QString(clang_.sourceManager()->getCharacterData(templateArg.getAsExpr()->getLocStart()));
+			hash = QString{clang_.sourceManager()->getCharacterData(templateArg.getAsExpr()->getLocStart())};
 			break;
 		case clang::TemplateArgument::ArgKind::Pack:
 			// TODO: add support
 			hash = "PACK"; break;
 		default:
-			throw CppImportException("Invalid Template Argument kind");
+			throw CppImportException{"Invalid Template Argument kind"};
 	}
 	return hash;
 }

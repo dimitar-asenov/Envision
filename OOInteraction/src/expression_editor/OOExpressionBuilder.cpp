@@ -63,7 +63,7 @@ void OOExpressionBuilder::visit(Interaction::Empty*)
 
 void OOExpressionBuilder::visit(Interaction::Value* val)
 {
-	if (val->text().isEmpty()) throw OOInteractionException("Trying to create an expression from an empty Value");
+	if (val->text().isEmpty()) throw OOInteractionException{"Trying to create an expression from an empty Value"};
 
 	if (val->text().startsWith('"'))
 		  expression = new OOModel::StringLiteral{val->text().mid(1, val->text().size()-2)};

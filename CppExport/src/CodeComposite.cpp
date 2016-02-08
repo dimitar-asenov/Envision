@@ -174,7 +174,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 						}
 
 						if (!classs->typeArguments()->isEmpty())
-							*currentNamespaceFragment << ElementVisitor(neededNamespace)
+							*currentNamespaceFragment << ElementVisitor{neededNamespace}
 																  .visitTemplateArguments(classs->typeArguments());
 
 						auto softDependencyComposite = currentNamespaceFragment->append(

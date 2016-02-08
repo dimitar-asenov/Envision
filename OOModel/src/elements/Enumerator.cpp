@@ -38,7 +38,7 @@ REGISTER_OONAME_SYMBOL_ATTRIBUTE(Enumerator, VARIABLE)
 DEFINE_ATTRIBUTE(Enumerator, value, Expression, false, true, true)
 
 Enumerator::Enumerator(const QString& name, Expression* value)
-: Super(nullptr, Enumerator::getMetaData())
+: Super{nullptr, Enumerator::getMetaData()}
 {
 	setName(name);
 	if (value) setValue(value);

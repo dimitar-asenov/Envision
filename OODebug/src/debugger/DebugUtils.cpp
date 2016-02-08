@@ -115,14 +115,14 @@ Location DebugUtils::nodeToLocation(Model::Node* node)
 		if (line == val.lineNumber()) methodIndex = val.lineCodeIndex();
 
 	Q_ASSERT(methodIndex != NO_INDEX);
-	return Location(tagKind, classId, methodId, methodIndex);
+	return Location{tagKind, classId, methodId, methodIndex};
 }
 
 Model::Node* DebugUtils::locationToNode(Location location, bool& isClosingBracket)
 {
 	QString signature = debugConnector_->signatureOf(location.classId());
 	signature = signature.mid(1, signature.size() - 2); // remove symbol at start and ; at end.
-	QString fileName = QString("src/%1.java").arg(signature);
+	QString fileName = QString{"src/%1.java"}.arg(signature);
 
 	int line = -1;
 	auto lineTable = debugConnector_->lineTable(location.classId(), location.methodId());

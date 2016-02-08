@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(DeclarationStatement)
 DEFINE_ATTRIBUTE(DeclarationStatement, declaration, Declaration, false, false, true)
 
 DeclarationStatement::DeclarationStatement(Declaration* d)
-: Super(nullptr, DeclarationStatement::getMetaData())
+: Super{nullptr, DeclarationStatement::getMetaData()}
 {
 	setDeclaration(d);
 }

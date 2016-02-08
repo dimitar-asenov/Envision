@@ -61,13 +61,13 @@ AttributeChain& CompositeNode::topLevelMeta()
 CompositeNode::CompositeNode(Node *parent) :
 	Super{parent}, meta_{CompositeNode::getMetaData()}
 {
-	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
+	throw ModelException{"Constructing an CompositeNode class directly, without specifying meta data"};
 }
 
 CompositeNode::CompositeNode(Node *parent, PersistentStore &, bool) :
 	Super{parent}, meta_{CompositeNode::getMetaData()}
 {
-	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
+	throw ModelException{"Constructing an CompositeNode class directly, without specifying meta data"};
 }
 
 CompositeNode::CompositeNode(const CompositeNode& other)
@@ -124,8 +124,8 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, Attribu
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
 		CompositeIndex index = meta_.indexForAttribute(ln->name);
-		if ( !index.isValid() ) throw ModelException("Node has attribute "
-				+ ln->name + " in persistent store, but this attribute is not registered");
+		if ( !index.isValid() ) throw ModelException{"Node has attribute "
+				+ ln->name + " in persistent store, but this attribute is not registered"};
 
 		auto attribute = meta_.attribute(index);
 		Q_ASSERT(ln->node->isSubtypeOf(attribute.type()));
@@ -157,18 +157,18 @@ AttributeChain& CompositeNode::getMetaData()
 CompositeIndex CompositeNode::registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 		const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)
 {
-	return registerNewAttribute(metaData, Attribute(attributeName, attributeType,
-												isOptional, canBePartiallyLoaded, isPersistent));
+	return registerNewAttribute(metaData, Attribute{attributeName, attributeType,
+												isOptional, canBePartiallyLoaded, isPersistent});
 }
 
 CompositeIndex CompositeNode::registerNewAttribute(AttributeChain& metaData, const Attribute& attribute)
 {
 	if ( metaData.hasAttribute(attribute.name()) )
-		throw ModelException("Trying to register new attribute " + attribute.name() + " but this name already exists");
+		throw ModelException{"Trying to register new attribute " + attribute.name() + " but this name already exists"};
 
 	metaData.append(attribute);
 
-	return CompositeIndex(metaData.numLevels() - 1, metaData.size() - 1);
+	return CompositeIndex{metaData.numLevels() - 1, metaData.size() - 1};
 }
 
 CompositeIndex CompositeNode::registerNewAttribute(const Attribute& attribute)
@@ -182,7 +182,7 @@ CompositeIndex CompositeNode::addAttributeToInitialRegistrationList_ (CompositeI
 {
 	attributesToRegisterAtInitialization_().append(QPair< CompositeIndex&, Attribute>(index,
 			Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));
-	return CompositeIndex();
+	return CompositeIndex{};
 }
 
 QList<QPair< CompositeIndex&, Attribute> >& CompositeNode::attributesToRegisterAtInitialization_()
@@ -215,9 +215,9 @@ CompositeIndex CompositeNode::indexOf(Node* node) const
 		for (int level = 0; level < subnodes_.size(); ++level)
 			for (int i = 0; i < subnodes_[level].size(); ++i)
 				if (subnodes_[level][i] == node)
-					return CompositeIndex(level, i);
+					return CompositeIndex{level, i};
 
-	return CompositeIndex();
+	return CompositeIndex{};
 }
 
 
@@ -283,8 +283,8 @@ void CompositeNode::save(PersistentStore &store) const
 void CompositeNode::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load a CompositeNode from an incompatible node type "
-				+ store.currentNodeType());
+		throw ModelException{"Trying to load a CompositeNode from an incompatible node type "
+				+ store.currentNodeType()};
 
 	removeAllNodes();
 
@@ -303,8 +303,8 @@ void CompositeNode::load(PersistentStore &store)
 	{
 		CompositeIndex index = meta_.indexForAttribute(ln->name);
 		if ( !index.isValid() )
-			throw ModelException("Node has attribute "
-					+ ln->name + " in persistent store, but this attribute is not registered");
+			throw ModelException{"Node has attribute "
+					+ ln->name + " in persistent store, but this attribute is not registered"};
 
 		auto attribute = meta_.attribute(index);
 		Q_ASSERT(ln->node->isSubtypeOf(attribute.type()));
@@ -322,7 +322,7 @@ void CompositeNode::removeAllNodes()
 	for (int level = 0; level < subnodes_.size(); ++level)
 		for (int i = 0; i < subnodes_[level].size(); ++i)
 			if ( subnodes_[level][i] )
-				execute(new CompositeNodeChangeChild{this, nullptr, CompositeIndex(level, i), &subnodes_});
+				execute(new CompositeNodeChangeChild{this, nullptr, CompositeIndex{level, i}, &subnodes_});
 }
 
 void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
@@ -348,9 +348,9 @@ void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
 					}
 				}
 				else
-					throw ModelException("An CompositeNode of type '" + meta_.typeName()
+					throw ModelException{"An CompositeNode of type '" + meta_.typeName()
 						+ "' has an uninitialized mandatory attribute '"
-						+ (*currentLevel)[i].name() +"'");
+						+ (*currentLevel)[i].name() +"'"};
 			}
 	}
 }

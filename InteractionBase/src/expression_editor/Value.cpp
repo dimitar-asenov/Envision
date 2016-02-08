@@ -29,7 +29,7 @@
 
 namespace Interaction {
 
-Value::Value(const QString& text, Operator* parent) : Expression(type(), parent), text_{text}
+Value::Value(const QString& text, Operator* parent) : Expression{type(), parent}, text_{text}
 {
 }
 

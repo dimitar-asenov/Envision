@@ -57,38 +57,38 @@ StringOffsetProvider::~StringOffsetProvider()
 QString StringOffsetProvider::string()
 {
 	QString res = components().join("");
-	return res.isNull() ? QString("") : res;
+	return res.isNull() ? QString{""} : res;
 }
 
 QStringList StringOffsetProvider::components()
 {
-	if (!vis_) return QStringList();
+	if (!vis_) return QStringList{};
 	return components(vis_->node());
 }
 
 QStringList StringOffsetProvider::components(Model::Node* node)
 {
-	if (!node) return QStringList();
-	else return StringComponents(node).components();
+	if (!node) return QStringList{};
+	else return StringComponents{node}.components();
 }
 
 QString StringOffsetProvider::stringFromComponenets(Model::Node* node)
 {
-	if (!node) return QString();
+	if (!node) return QString{};
 
 	QString res = components(node).join("");
-	return res.isNull() ? QString("") : res;
+	return res.isNull() ? QString{""} : res;
 }
 
 QString StringOffsetProvider::stringFromComponenets(Visualization::Item* item)
 {
-	if (!item) return QString();
+	if (!item) return QString{};
 	return stringFromComponenets(item->node());
 }
 
 QString StringOffsetProvider::stringFromStringOffsetProvider(Visualization::Item* item)
 {
-	if (!item) return QString();
+	if (!item) return QString{};
 
 	QString result;
 	StringOffsetProvider* sp = Core::AdapterManager::adapt<StringOffsetProvider>(item);

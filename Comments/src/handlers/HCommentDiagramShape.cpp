@@ -148,18 +148,18 @@ void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphics
 				break;
 			case RECT_TOP_LEFT:
 				moveBy(shape, diff);
-				resizeBy(shape, QSize(-diff.x(), -diff.y()));
+				resizeBy(shape, QSize{-diff.x(), -diff.y()});
 				break;
 			case RECT_TOP_RIGHT:
-				moveBy(shape, QPoint(0, diff.y()));
-				resizeBy(shape, QSize(diff.x(), -diff.y()));
+				moveBy(shape, QPoint{0, diff.y()});
+				resizeBy(shape, QSize{diff.x(), -diff.y()});
 				break;
 			case RECT_BOTTOM_RIGHT:
-				resizeBy(shape, QSize(diff.x(), diff.y()));
+				resizeBy(shape, QSize{diff.x(), diff.y()});
 				break;
 			case RECT_BOTTOM_LEFT:
-				moveBy(shape, QPoint(diff.x(), 0));
-				resizeBy(shape, QSize(-diff.x(), diff.y()));
+				moveBy(shape, QPoint{diff.x(), 0});
+				resizeBy(shape, QSize{-diff.x(), diff.y()});
 				break;
 		}
 

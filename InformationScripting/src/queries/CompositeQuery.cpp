@@ -89,7 +89,7 @@ QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 															  currentNode->calculatedOutputs_[outIndex]);
 					}
 					else
-						receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), TupleSet());
+						receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), TupleSet{});
 
 					// It could be that the receiver expects our output on multiple inputs, thus search on:
 					inputIt = std::find_if(inputIt + 1, receiver->inputMap_.end(),

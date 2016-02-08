@@ -64,7 +64,7 @@ bool DebugConnector::suspend()
 {
 	if (vmAlive_)
 	{
-		auto r = makeReply<Reply>(sendCommand(SuspendCommand()));
+		auto r = makeReply<Reply>(sendCommand(SuspendCommand{}));
 		return Protocol::Error::NONE == r.error();
 	}
 	return false;
@@ -74,7 +74,7 @@ bool DebugConnector::resume()
 {
 	if (vmAlive_)
 	{
-		auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
+		auto r = makeReply<Reply>(sendCommand(ResumeCommand{}));
 		return Protocol::Error::NONE == r.error();
 	}
 	return false;
@@ -94,19 +94,19 @@ void DebugConnector::wantResume(bool resume)
 
 QString DebugConnector::fileNameForReference(qint64 referenceId)
 {
-	auto reply = makeReply<SourceFile>(sendCommand(SourceFileCommand(referenceId)));
+	auto reply = makeReply<SourceFile>(sendCommand(SourceFileCommand{referenceId}));
 	return reply.sourceFile();
 }
 
 QString DebugConnector::signatureOf(qint64 referenceId)
 {
-	auto reply = makeReply<Signature>(sendCommand(SignatureCommand(referenceId)));
+	auto reply = makeReply<Signature>(sendCommand(SignatureCommand{referenceId}));
 	return reply.signature();
 }
 
 qint64 DebugConnector::classIdOf(const QString& signature)
 {
-	auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
+	auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand{signature}));
 	if (classesBySignature.classes().size() < 1)
 		return NO_RESULT;
 	// If we have more than one class id for one signature, we should check what the situation is and
@@ -117,7 +117,7 @@ qint64 DebugConnector::classIdOf(const QString& signature)
 
 qint64 DebugConnector::methodIdOf(qint64 classId, const QString& signature)
 {
-	auto methods = makeReply<Methods>(sendCommand(MethodsCommand(classId)));
+	auto methods = makeReply<Methods>(sendCommand(MethodsCommand{classId}));
 	for (auto method : methods.methods())
 	{
 		// TODO: check for signature
@@ -128,74 +128,74 @@ qint64 DebugConnector::methodIdOf(qint64 classId, const QString& signature)
 
 LineTable DebugConnector::lineTable(qint64 classId, qint64 methodId)
 {
-	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
+	return makeReply<LineTable>(sendCommand(LineTableCommand{classId, methodId}));
 }
 
 QList<qint64> DebugConnector::allThreadIds()
 {
-	auto reply = makeReply<AllThreads>(sendCommand(AllThreadsCommand()));
+	auto reply = makeReply<AllThreads>(sendCommand(AllThreadsCommand{}));
 	return reply.threadIds();
 }
 
 QString DebugConnector::threadName(qint64 threadId)
 {
-	auto reply = makeReply<ThreadName>(sendCommand(ThreadNameCommand(threadId)));
+	auto reply = makeReply<ThreadName>(sendCommand(ThreadNameCommand{threadId}));
 	return reply.threadName();
 }
 
 Frames DebugConnector::frames(qint64 threadId, qint32 numFrames, qint32 startFrame)
 {
-	return makeReply<Frames>(sendCommand(FramesCommand(threadId, startFrame, numFrames)));
+	return makeReply<Frames>(sendCommand(FramesCommand{threadId, startFrame, numFrames}));
 }
 
 VariableTable DebugConnector::variableTableForMethod(qint64 classId, qint64 methodId)
 {
-	return makeReply<VariableTable>(sendCommand(VariableTableCommand(classId, methodId)));
+	return makeReply<VariableTable>(sendCommand(VariableTableCommand{classId, methodId}));
 }
 
 Values DebugConnector::values(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
 {
-	return makeReply<Values>(sendCommand(GetValuesCommand(threadId, frameId, variables)));
+	return makeReply<Values>(sendCommand(GetValuesCommand{threadId, frameId, variables}));
 }
 
 QString DebugConnector::stringFromId(qint64 stringId)
 {
-	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand(stringId)));
+	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand{stringId}));
 	return reply.stringValue();
 }
 
 int DebugConnector::arrayLength(qint64 arrayId)
 {
-	auto r = makeReply<Length>(sendCommand(LengthCommand(arrayId)));
+	auto r = makeReply<Length>(sendCommand(LengthCommand{arrayId}));
 	return r.arrayLength();
 }
 
 ArrayValues DebugConnector::arrayValues(qint64 arrayId, qint32 firstIndex, qint32 length)
 {
-	return makeReply<ArrayValues>(sendCommand(GetArrayValuesCommand(arrayId, firstIndex, length)));
+	return makeReply<ArrayValues>(sendCommand(GetArrayValuesCommand{arrayId, firstIndex, length}));
 }
 
 bool DebugConnector::breakAtClassLoad(QString className)
 {
-	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(className)));
+	auto r = makeReply<Reply>(sendCommand(BreakClassLoad{className}));
 	return Protocol::Error::NONE == r.error();
 }
 
 int DebugConnector::setBreakpoint(Location breakLocation)
 {
-	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));
+	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand{breakLocation}));
 	return r.requestId();
 }
 
 bool DebugConnector::clearBreakpoint(qint32 requestId)
 {
-	auto r = makeReply<Reply>(sendCommand(EventClearCommand(Protocol::EventKind::BREAKPOINT, requestId)));
+	auto r = makeReply<Reply>(sendCommand(EventClearCommand{Protocol::EventKind::BREAKPOINT, requestId}));
 	return r.error() == Protocol::Error::NONE;
 }
 
 int DebugConnector::singleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
 {
-	auto r = makeReply<EventSetReply>(sendCommand(StepCommand(threadId, stepSize, stepDepth)));
+	auto r = makeReply<EventSetReply>(sendCommand(StepCommand{threadId, stepSize, stepDepth}));
 	return r.requestId();
 }
 
@@ -238,7 +238,7 @@ void DebugConnector::readFromSocket()
 	if (!incompleteData_.isEmpty())
 	{
 		dataRead.prepend(incompleteData_);
-		incompleteData_ = QByteArray();
+		incompleteData_ = QByteArray{};
 	}
 	// If we haven't read enough retry later.
 	if (dataRead.size() < int(sizeof(qint32)))
@@ -334,14 +334,14 @@ void DebugConnector::sendHandshake()
 
 void DebugConnector::checkVersion()
 {
-	auto info = makeReply<VersionInfo>(sendCommand(VersionCommand()));
+	auto info = makeReply<VersionInfo>(sendCommand(VersionCommand{}));
 	qDebug() << "VM-INFO: " << info.jdwpMajor() << info.jdwpMinor();
 }
 
 void DebugConnector::checkIdSizes()
 {
 	// Our protocol is only designed for 64 bit machine make sure that this is the case:
-	auto idSizes = makeReply<IDSizes>(sendCommand(IDSizeCommand()));
+	auto idSizes = makeReply<IDSizes>(sendCommand(IDSizeCommand{}));
 	Q_ASSERT(sizeof(qint64) == idSizes.fieldIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.methodIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.objectIDSize());

@@ -38,7 +38,7 @@ DEFINE_ATTRIBUTE(TypeQualifierExpression, typeExpression, Expression, false, fal
 DEFINE_ATTRIBUTE(TypeQualifierExpression, qualifierVal, Integer, false, false, true)
 
 TypeQualifierExpression::TypeQualifierExpression(Qualifier q, Expression* e)
-: Super(nullptr, TypeQualifierExpression::getMetaData())
+: Super{nullptr, TypeQualifierExpression::getMetaData()}
 {
 	setQualifierVal(q);
 	if (e) setTypeExpression(e);

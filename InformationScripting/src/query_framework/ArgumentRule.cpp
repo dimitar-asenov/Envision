@@ -60,7 +60,7 @@ ArgumentRule::ArgumentRule(RuleType rule, std::vector<ArgumentValue> expectedArg
 void ArgumentRule::check(const ArgumentParser& parser) const
 {
 	if (!check_(parser))
-		throw QueryParsingException(parser.queryName() + violationMessage_);
+		throw QueryParsingException{parser.queryName() + violationMessage_};
 }
 
 bool ArgumentRule::requireAll(const ArgumentParser& parser, const std::vector<ArgumentValue>& values)

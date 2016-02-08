@@ -55,7 +55,7 @@ VisualizationGroup::visualizationsForContext(Item* parent, Model::Node* node)
 	if (matchesContext(parent, node))
 	{
 		for (int i = 0; i<visualizations_.size(); ++i)
-			result << qMakePair(VisualizationSuitabilityScore(scorePoints_),
+			result << qMakePair(VisualizationSuitabilityScore{scorePoints_},
 					qMakePair(itemTypeIds_[i], visualizations_[i]));
 
 		for (auto sg : subGroups_)

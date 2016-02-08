@@ -48,21 +48,21 @@ DEFINE_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
 DEFINE_ATTRIBUTE(Class, cKind, Integer, false, false, true)
 
 Class::Class(const QString& name)
-: Super(nullptr, Class::getMetaData())
+: Super{nullptr, Class::getMetaData()}
 {
 	setName(name);
 	setConstructKind(ConstructKind::Class);
 }
 
 Class::Class(const QString& name, ConstructKind kind)
-: Super(nullptr, Class::getMetaData())
+: Super{nullptr, Class::getMetaData()}
 {
 	setName(name);
 	setConstructKind(kind);
 }
 
 Class::Class(const QString& name, Modifier::Modifiers mod, ConstructKind kind)
-: Super(nullptr, Class::getMetaData())
+: Super{nullptr, Class::getMetaData()}
 {
 	setName(name);
 	modifiers()->set(mod);

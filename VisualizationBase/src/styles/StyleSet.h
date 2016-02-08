@@ -68,14 +68,14 @@ template<typename T> typename T::StyleType* StyleSet<T>::get(const QString& styl
 	typename T::StyleType* style = styles_.value(name, nullptr);
 	if (style) return style;
 
-	style = StyleLoader().loadStyle<typename T::StyleType>(classType_ + "/" + T::typeNameStatic(), name);
+	style = StyleLoader{}.loadStyle<typename T::StyleType>(classType_ + "/" + T::typeNameStatic(), name);
 	if (style)
 	{
 		styles_.insert(name, style);
 		return style;
 	}
-	else throw VisualizationException("Could not find the style '" + classType_ + "/" + T::typeNameStatic()
-					+ "/" + styleName + "'");
+	else throw VisualizationException{"Could not find the style '" + classType_ + "/" + T::typeNameStatic()
+					+ "/" + styleName + "'"};
 }
 
 }

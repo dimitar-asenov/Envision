@@ -57,7 +57,7 @@ bool Mipmap::paint(QPainter* painter, int x, int y)
 		auto it = scaleFactorImagesMap_.begin();
 		if (it == scaleFactorImagesMap_.end()) return false;
 
-		auto scaledSize = QSizeF(it.value().size()) * (scaleFactor / it.key());
+		auto scaledSize = QSizeF{it.value().size()} * (scaleFactor / it.key());
 
 		if (scaledSize.width() > 0 && scaledSize.height() > 0)
 		{

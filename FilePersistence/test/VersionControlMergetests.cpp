@@ -44,8 +44,8 @@ class TwoDeletesNoConflict : public Test<FilePersistencePlugin, TwoDeletesNoConf
 	sig.eMail_ = "chuck@mergetest.com";
 	auto tree = merge->mergedTree();
 	merge->commit(sig, sig, "This is the result of merge test \"twodeletesNoConflict\"");
-	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000032}")));
-	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000042}")));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000032}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000042}"}));
 }};
 
 class TwoDeletesInSameListResolvable : public Test<FilePersistencePlugin, TwoDeletesInSameListResolvable> {
@@ -58,10 +58,10 @@ public: void test()
 	sig.eMail_ = "chuck@mergetest.com";
 	auto tree = merge->mergedTree();
 	merge->commit(sig, sig, "This is the result of merge test \"" + this->getName() + "\"");
-	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000013}")));
-	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000042}")));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000013}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000042}"}));
 	// check that the list is continuous.
-	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000002}"));
+	auto listContainer = tree->find(QUuid{"{00000000-0000-0000-0000-000000000002}"});
 	for (int idx = 0; idx < listContainer->children().size(); ++idx)
 		CHECK_CONDITION(listContainer->child(QString::number(idx)));
 }};
@@ -100,24 +100,24 @@ public: void test()
 	merge->commit(sig, sig, "This is the result of merge test \"" + this->getName() + "\"");
 
 	auto tree = merge->mergedTree();
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000021404}")));
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000212}")));
-	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000506}")));
-	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000001507}")));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000021404}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000212}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000506}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000001507}"}));
 
-	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000200}"));
+	auto listContainer = tree->find(QUuid{"{00000000-0000-0000-0000-000000000200}"});
 	for (int idx = 0; idx < listContainer->children().size(); ++idx)
 		CHECK_CONDITION(listContainer->child(QString::number(idx)));
 
 	CHECK_CONDITION(listContainer->child(QString::number(1))->id().toString().endsWith("207}"));
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000203}"))->label().toInt() == 6);
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000204}"))->label().toInt() == 12);
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000205}"))->label().toInt() == 10);
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000206}"))->label().toInt() == 11);
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000207}"))->label().toInt() == 1);
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000211}"))
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"})->label().toInt() == 6);
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"})->label().toInt() == 12);
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"})->label().toInt() == 10);
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"})->label().toInt() == 11);
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000207}"})->label().toInt() == 1);
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000211}"})
 						 ->parent()->id().toString().endsWith("300}"));
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000011507}"))
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000011507}"})
 						 ->parent()->id().toString().endsWith("507}"));
 }};
 
@@ -157,7 +157,7 @@ class EvalMethodInsert : public Test<FilePersistencePlugin, EvalMethodInsert> { 
  */
 class RunMerge : public Test<FilePersistencePlugin, RunMerge> { public: void test()
 {
-	if (!QFile("/tmp/EnvisionVC/TestMerge/.git").exists())
+	if (!QFile{"/tmp/EnvisionVC/TestMerge/.git"}.exists())
 	{
 		CHECK_CONDITION(true);
 		return;

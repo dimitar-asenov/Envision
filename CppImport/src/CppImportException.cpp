@@ -29,7 +29,7 @@
 namespace CppImport {
 
 CppImportException::CppImportException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

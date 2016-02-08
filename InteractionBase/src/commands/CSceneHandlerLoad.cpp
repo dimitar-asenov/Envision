@@ -60,7 +60,7 @@ CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualizati
 
 QStringList CSceneHandlerLoad::availableProjectsOnDisk()
 {
-	auto dir = QDir( "projects/" );
+	auto dir = QDir{ "projects/" };
 	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
 }
 

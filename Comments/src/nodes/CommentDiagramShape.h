@@ -86,8 +86,8 @@ inline CommentDiagramShape::ShapeType CommentDiagramShape::shapeType() const
 inline void CommentDiagramShape::setShapeType(const ShapeType &type)
 { setShapeTypePrivate(static_cast<int> (type)); }
 
-inline QSize CommentDiagramShape::size() const { return QSize(width(), height()); }
-inline QPoint CommentDiagramShape::pos() const { return QPoint(x(), y()); }
+inline QSize CommentDiagramShape::size() const { return QSize{width(), height()}; }
+inline QPoint CommentDiagramShape::pos() const { return QPoint{x(), y()}; }
 inline void CommentDiagramShape::assureConnectorPointsUpToDate() const
 {
 	if (lastRevisionForConnectors_ != revision())

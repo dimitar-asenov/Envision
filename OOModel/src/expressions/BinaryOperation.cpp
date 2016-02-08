@@ -43,7 +43,7 @@ DEFINE_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)
 DEFINE_ATTRIBUTE(BinaryOperation, opr, Integer, false, false, true)
 
 BinaryOperation::BinaryOperation(OperatorTypes op, Expression* left, Expression* right)
-: Super(nullptr, BinaryOperation::getMetaData())
+: Super{nullptr, BinaryOperation::getMetaData()}
 {
 	setOp(op);
 	if (left) setLeft(left);

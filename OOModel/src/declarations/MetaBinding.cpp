@@ -39,7 +39,7 @@ DEFINE_ATTRIBUTE(MetaBinding, input, ReferenceExpression, false, false, true)
 DEFINE_ATTRIBUTE(MetaBinding, mappings, TypedListOfMetaCallMapping, false, false, true)
 
 MetaBinding::MetaBinding(const QString& name)
-: Super(nullptr, MetaBinding::getMetaData())
+: Super{nullptr, MetaBinding::getMetaData()}
 {
 	setName(name);
 }

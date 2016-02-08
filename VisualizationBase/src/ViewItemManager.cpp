@@ -132,7 +132,7 @@ void ViewItemManager::removeAllViewItems()
 void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
 {
 	auto json = view->toJson().toJson();
-	if (!QDir(DIRECTORY_NAME).exists())
+	if (!QDir{DIRECTORY_NAME}.exists())
 		QDir().mkdir(DIRECTORY_NAME);
 	QFile file{fileName(view->name(), manager->name())};
 	file.open(QIODevice::WriteOnly);
@@ -183,13 +183,13 @@ QPoint ViewItemManager::nextEmptyPosition() const
 	//Take the first empty position, if one exists
 	for (int col = 0; col < viewItems_.size(); col++)
 		for (int row = 0; row < viewItems_[col].size(); row++)
-			if (!viewItems_[col][row]) return QPoint(col, row);
+			if (!viewItems_[col][row]) return QPoint{col, row};
 	//Else just use the column with the least rows
 	int colToInsert = 0;
 	for (int col = 1; col < viewItems_.size(); col++)
 		if (viewItems_[col].size() < viewItems_[colToInsert].size())
 			colToInsert = col;
-	return QPoint(colToInsert, viewItems_[colToInsert].size());
+	return QPoint{colToInsert, viewItems_[colToInsert].size()};
 }
 
 QString ViewItemManager::fileName(QString viewName, QString managerName) const

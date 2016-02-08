@@ -104,7 +104,7 @@ void SystemClipboard::saveNode(const Node *node, const QString &name)
 
 Node* SystemClipboard::loadTree(::Model::TreeManager*, const QString &, bool)
 {
-	throw FilePersistenceException("The clipboard does not support the loadTree() method.");
+	throw FilePersistenceException{"The clipboard does not support the loadTree() method."};
 }
 
 QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node*, const QSet<QString>&)
@@ -170,7 +170,7 @@ double SystemClipboard::loadDoubleValue()
 QString SystemClipboard::loadReferenceValue(Reference*)
 {
 	QString name = xml->loadStringValue();
-	if (name == NULL_STRING) name = QString();
+	if (name == NULL_STRING) name = QString{};
 
 	return name;
 }
@@ -252,7 +252,7 @@ bool SystemClipboard::hasNext() const
 void SystemClipboard::next()
 {
 	if (xml->hasNext()) xml->loadNext();
-	else throw FilePersistenceException("Could not find next clipboard element.");
+	else throw FilePersistenceException{"Could not find next clipboard element."};
 }
 
 Node* SystemClipboard::create(::Model::TreeManager*, Node* parent)

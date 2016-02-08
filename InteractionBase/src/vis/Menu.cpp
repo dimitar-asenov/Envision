@@ -112,8 +112,8 @@ QPoint Menu::indexOf(Visualization::Item *item) const
 	for (int col = 0; col < currentItems_.size(); col++)
 		for (int row = 0; row < currentItems_[col].size(); row++)
 			if (currentItems_[col][row] == item)
-				return QPoint(col, row);
-	return QPoint(-1, -1);
+				return QPoint{col, row};
+	return QPoint{-1, -1};
 }
 
 QPoint Menu::correctCoordinates(QPoint point) const

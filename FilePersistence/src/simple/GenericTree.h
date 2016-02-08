@@ -39,7 +39,7 @@ struct NodeData;
 class FILEPERSISTENCE_API GenericTree {
 	public:
 
-		GenericTree(QString name = QString());
+		GenericTree(QString name = QString{});
 		~GenericTree();
 
 		const QString& name() const;

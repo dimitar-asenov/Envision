@@ -38,7 +38,7 @@ namespace Comments {
 ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
 
 VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node)
-	: Super(parent, node, itemStyles().get())
+	: Super{parent, node, itemStyles().get()}
 {
 	// draw connectors below shapes
 	setZValue(0);
@@ -66,8 +66,8 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 
 	startPoint_ = startShape->node()->pos() + startShape->node()->connectorPoint(node()->startPoint());
 	endPoint_ = endShape->node()->pos() + endShape->node()->connectorPoint(node()->endPoint());
-	auto origin = QPoint((std::min(startPoint_.x(), endPoint_.x()))-MAX_ARROW_WIDTH,
-								(std::min(startPoint_.y(), endPoint_.y()))-MAX_ARROW_WIDTH);
+	auto origin = QPoint{(std::min(startPoint_.x(), endPoint_.x()))-MAX_ARROW_WIDTH,
+								(std::min(startPoint_.y(), endPoint_.y()))-MAX_ARROW_WIDTH};
 	startPoint_ -= origin;
 	endPoint_ -= origin;
 

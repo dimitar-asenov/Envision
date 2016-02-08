@@ -68,7 +68,7 @@ std::unique_ptr<Query> QueryRegistry::buildQuery(const QString& command, Model::
 QStringList QueryRegistry::scriptQueries() const
 {
 	QStringList result;
-	for (const auto& scriptName : QDir(scriptLocation_).entryList(QDir::Files | QDir::NoDotAndDotDot))
+	for (const auto& scriptName : QDir{scriptLocation_}.entryList(QDir::Files | QDir::NoDotAndDotDot))
 		if (scriptName.endsWith(".py"))
 			result << scriptName.split(".py").takeFirst();
 	return result;

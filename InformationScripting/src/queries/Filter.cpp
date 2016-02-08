@@ -44,7 +44,7 @@ Optional<TupleSet> Filter::executeLinear(TupleSet input)
 	QString tupleTag = tagParts[0];
 
 	if (tagParts.size() < 2)
-		return TupleSet(input.take(tupleTag).toList());
+		return TupleSet{input.take(tupleTag).toList()};
 
 	bool extractIsSet = arguments_.isArgumentSet(EXTRACT_ARGUMENT_NAMES[1]);
 
@@ -64,7 +64,7 @@ Optional<TupleSet> Filter::executeLinear(TupleSet input)
 	{
 		auto it = candidate.find(tupleValueTag);
 		if (it == candidate.end())
-			return {QString("Tuple %1 does not contain %2").arg(tupleTag, tupleValueTag)};
+			return {QString{"Tuple %1 does not contain %2"}.arg(tupleTag, tupleValueTag)};
 		Property value = it->second;
 		if (!value.isConvertibleTo<QString>())
 			return {"filter only works on string values"};
@@ -91,7 +91,7 @@ Filter::Filter(Model::Node* target, QStringList args)
 	}, args}
 {
 	if (arguments_.numPositionalArguments() < 1)
-		throw QueryParsingException(arguments_.queryName() + " Requires at least one arguments");
+		throw QueryParsingException{arguments_.queryName() + " Requires at least one arguments"};
 }
 
 Optional<TupleSet> Filter::extract(const QString& tag, const QString& value, TupleSet& input)
@@ -103,8 +103,8 @@ Optional<TupleSet> Filter::extract(const QString& tag, const QString& value, Tup
 	{
 		auto it = tuple.find(value);
 		if (it == tuple.end())
-			return {QString("Tuple with tag %1 has no value with name %2").arg(tag, value)};
-		result.add(Tuple({{as, it->second}}));
+			return {QString{"Tuple with tag %1 has no value with name %2"}.arg(tag, value)};
+		result.add(Tuple{{{as, it->second}}});
 	}
 	return result;
 }

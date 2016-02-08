@@ -29,7 +29,7 @@
 namespace JavaExport {
 
 JavaExportException::JavaExportException(const QString& message) :
-	Core::EnvisionException(message)
+	Core::EnvisionException{message}
 {
 }
 

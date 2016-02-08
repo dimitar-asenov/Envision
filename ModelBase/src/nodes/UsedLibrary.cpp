@@ -39,7 +39,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(UsedLibrary)
 
 DEFINE_ATTRIBUTE(UsedLibrary, name, Text, false, false, true)
 
-UsedLibrary::UsedLibrary(const QString& name) : Super(nullptr, UsedLibrary::getMetaData())
+UsedLibrary::UsedLibrary(const QString& name) : Super{nullptr, UsedLibrary::getMetaData()}
 {
 	setName(name);
 }

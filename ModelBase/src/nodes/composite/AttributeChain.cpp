@@ -105,13 +105,13 @@ CompositeIndex AttributeChain::indexForAttribute(const QString &name) const
 	while ( ac )
 	{
 		int index = ac->indexOf(name);
-		if ( index >= 0 ) return CompositeIndex(level, index);
+		if ( index >= 0 ) return CompositeIndex{level, index};
 
 		--level;
 		ac = ac->parent_;
 	}
 
-	return CompositeIndex();
+	return CompositeIndex{};
 }
 
 const Attribute& AttributeChain::attribute(const CompositeIndex &index) const
@@ -149,7 +149,7 @@ bool AttributeChain::hasExtensionInHierarchy(int extensionId) const
 QVector<CompositeIndex>& AttributeChain::addExtension(int extensionId)
 {
 	if (hasExtensionInHierarchy(extensionId))
-		throw ModelException("Adding an extension which has already exists in the type hierarchy");
+		throw ModelException{"Adding an extension which has already exists in the type hierarchy"};
 	extensions_.insert(extensionId, QVector<CompositeIndex>());
 	return extensions_[extensionId];
 }
@@ -166,7 +166,7 @@ const QVector<CompositeIndex>& AttributeChain::extension(int extensionId) const
 		ac = ac->parent_;
 	}
 
-	throw ModelException("Unknown extension requested. Extension Id is: " + QString::number(extensionId));
+	throw ModelException{"Unknown extension requested. Extension Id is: " + QString::number(extensionId)};
 }
 
 }

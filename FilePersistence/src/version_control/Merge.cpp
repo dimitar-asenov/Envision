@@ -219,14 +219,14 @@ void Merge::performTrueMerge()
 	Diff diffA = repository_->diff(baseCommitId_, headCommitId_, treeBase_, treeA_);
 	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_, treeBase_, treeB_);
 
-	auto cdgA = ChangeDependencyGraph(diffA);
-	auto cdgB = ChangeDependencyGraph(diffB);
+	auto cdgA = ChangeDependencyGraph{diffA};
+	auto cdgB = ChangeDependencyGraph{diffB};
 	conflictingChanges_ = {};
 	conflictPairs_ = {};
 
 	LinkedChangesSet linkedChangesSet;
 	if (USE_LINKED_SETS)
-		linkedChangesSet = LinkedChangesSet(cdgA, cdgB);
+		linkedChangesSet = LinkedChangesSet{cdgA, cdgB};
 
 	// ### PIPELINE INITIALIZER ###
 	LinkedChangesTransition transition = pipelineInitializer_->run(treeA_, treeB_, treeBase_,
@@ -237,7 +237,7 @@ void Merge::performTrueMerge()
 	// ### THE PIPLELINE ###
 	for (auto component : conflictPipeline_)
 	{
-		linkedChangesSet = LinkedChangesSet(transition.getNewState()); // deep copy current state
+		linkedChangesSet = LinkedChangesSet{transition.getNewState()}; // deep copy current state
 		transition = component->run(treeA_, treeB_, treeBase_, cdgA, cdgB,
 											 conflictingChanges_, conflictPairs_, linkedChangesSet);
 		// NOTE this is where one would check the transition of a component.
