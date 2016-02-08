@@ -33,9 +33,9 @@ static const char* XML_DOM_TYPE = "EnvisionFilePersistence";
 
 static const int MAX_DOUBLE_PRECISION = 15;
 
-static const QString PREFIX_STRING = QString("S_");
-static const QString PREFIX_INTEGER = QString("I_");
-static const QString PREFIX_DOUBLE = QString("D_");
+static const QString PREFIX_STRING{"S_"};
+static const QString PREFIX_INTEGER{"I_"};
+static const QString PREFIX_DOUBLE{"D_"};
 
 XMLModel::XMLModel() :
 	doc(XML_DOM_TYPE)

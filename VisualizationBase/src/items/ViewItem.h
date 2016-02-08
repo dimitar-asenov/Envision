@@ -45,7 +45,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 	ITEM_COMMON_CUSTOM_STYLENAME(ViewItem, DeclarativeItemBaseStyle)
 
 	public:
-		ViewItem(Item* parent, QString name = QString(), StyleType* style = itemStyles().get());
+		ViewItem(Item* parent, QString name = {}, StyleType* style = itemStyles().get());
 
 		static void initializeForms();
 

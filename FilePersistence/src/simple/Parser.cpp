@@ -29,9 +29,9 @@
 
 namespace FilePersistence {
 
-const QString PREFIX_STRING = QString("S_");
-const QString PREFIX_INTEGER = QString("I_");
-const QString PREFIX_DOUBLE = QString("D_");
+const QString PREFIX_STRING{"S_"};
+const QString PREFIX_INTEGER{"I_"};
+const QString PREFIX_DOUBLE{"D_"};
 /**
  * If true, sort children by label when writing encoding.
  * This is to ensure consistency between all methods used to produce Envision encodings.

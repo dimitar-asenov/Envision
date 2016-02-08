@@ -40,7 +40,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 	ITEM_COMMON_CUSTOM_STYLENAME(TextRenderer, TextStyle)
 
 	public:
-		TextRenderer(Item* parent, const StyleType *style, const QString& text = QString());
+		TextRenderer(Item* parent, const StyleType *style, const QString& text = {});
 
 		/**
 		 * \brief Sets the text of this item to \a newText.
@@ -66,7 +66,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint(),
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = {},
 										CursorMoveOptions options = None) override;
 
 		qreal textXOffset();

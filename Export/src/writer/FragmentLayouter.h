@@ -64,8 +64,8 @@ class EXPORT_API FragmentLayouter {
 		};
 		using IndentationFlags = QFlags<IndentationFlag>;
 
-		void addRule(const QString& fragmentType, IndentationFlags parameters, const QString& prefix = QString(),
-						 const QString& separator = QString(), const QString& postfix = QString());
+		void addRule(const QString& fragmentType, IndentationFlags parameters, const QString& prefix = {},
+						 const QString& separator = {}, const QString& postfix = {});
 
 		QString render(SourceFile* file, TextToNodeMap* map);
 

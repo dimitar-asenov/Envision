@@ -41,7 +41,7 @@ template<typename T> class StyleSet
 		StyleSet(const QString& classType);
 		~StyleSet();
 
-		typename T::StyleType* get(const QString& styleName = QString());
+		typename T::StyleType* get(const QString& styleName = {});
 
 	private:
 		QMap<QString, typename T::StyleType*> styles_;

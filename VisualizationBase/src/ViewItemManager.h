@@ -59,7 +59,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 		 * which is supplied, and positioned at the given position, or at the next free position
 		 * if the default argument (-1, -1) is used.
 		 */
-		ViewItem* newViewItem(const QString name = QString(), QPoint position = QPoint(-1, -1));
+		ViewItem* newViewItem(const QString name = {}, QPoint position = {-1, -1});
 		/**
 		 * Finds the ViewItem with the given name, or nullptr if it doesn't exist.
 		 */
@@ -92,7 +92,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 		 * Loads the given view from persistent disk storage. If it exists,
 		 * it is added to the manager at the given position.
 		 */
-		ViewItem* loadView(QString name, QPoint position = QPoint(-1, -1));
+		ViewItem* loadView(QString name, QPoint position = {-1, -1});
 
 		QVector<QVector<ViewItem*>> viewItems() const;
 
@@ -108,7 +108,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 		const QString DIRECTORY_NAME = "views";
 		QString fileName(QString viewName, QString managerName) const;
 		ViewItem* loadView(QString name, Model::TreeManager* manager);
-		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
+		void addViewItem(ViewItem* view, QPoint position = {-1, -1});
 
 		const int VIEW_ITEM_COLUMNS = 3;
 		QVector<QVector<ViewItem*>> viewItems_;

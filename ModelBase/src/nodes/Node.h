@@ -484,7 +484,7 @@ class MODELBASE_API Node
 		 *
 		 * \sa Model::beginModification()
 		 */
-		void beginModification(const QString &text = QString());
+		void beginModification(const QString &text = {});
 
 		/**
 		 * Ends a modification session.

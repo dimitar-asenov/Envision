@@ -38,7 +38,7 @@ namespace Export {
 
 class EXPORT_API CompositeFragment : public SourceFragment {
 	public:
-		CompositeFragment(Model::Node* node, const QString& type = QString(), const QString& name = QString());
+		CompositeFragment(Model::Node* node, const QString& type = {}, const QString& name = {});
 		virtual ~CompositeFragment();
 
 		const QString& name() const;

@@ -37,8 +37,8 @@ class VISUALIZATIONBASE_API Text : public Super<TextRenderer>
 	ITEM_COMMON(Text)
 
 	public:
-		Text(Item* parent, const QString& text = QString());
-		Text(Item* parent, const StyleType *style, const QString& text = QString());
+		Text(Item* parent, const QString& text = {});
+		Text(Item* parent, const StyleType *style, const QString& text = {});
 
 	protected:
 		virtual QString currentText() override;

@@ -33,7 +33,7 @@ namespace Export {
 
 class EXPORT_API TextFragment : public SourceFragment {
 	public:
-		TextFragment(Model::Node* node, const QString& text = QString());
+		TextFragment(Model::Node* node, const QString& text = {});
 		virtual ~TextFragment();
 
 		void setText(const QString& text);

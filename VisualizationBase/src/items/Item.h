@@ -217,7 +217,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * This method is responsible for creating a corresponding Cursor item and setting it as the main scene cursor.
 		 */
-		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint(),
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = {},
 										CursorMoveOptions options = None);
 		void setDefaultMoveCursorProxy(Item* proxy);
 

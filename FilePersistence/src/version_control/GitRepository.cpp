@@ -802,10 +802,10 @@ git_signature* GitRepository::createGitSignature(Signature& signature)
 	return gitSignature;
 }
 
-const QString PATH_HEADS = QString(QDir::separator()) + "refs" + QString(QDir::separator()) + "heads";
-const QString PATH_REMOTES = QString(QDir::separator()) + "refs" + QString(QDir::separator()) + "remotes";
-const QString PATH_TAGS = QString(QDir::separator()) + "refs" + QString(QDir::separator()) + "tags";
-const QString PATH_NOTES = QString(QDir::separator()) + "refs" + QString(QDir::separator()) + "notes";
+const QString PATH_HEADS{QString{QDir::separator()} + "refs" + QDir::separator() + "heads"};
+const QString PATH_REMOTES{QString{QDir::separator()} + "refs" + QDir::separator() + "remotes"};
+const QString PATH_TAGS{QString{QDir::separator()} + "refs" + QDir::separator() + "tags"};
+const QString PATH_NOTES{QString{QDir::separator()} + "refs" + QDir::separator() + "notes"};
 
 QString GitRepository::currentBranch() const
 {

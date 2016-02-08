@@ -156,8 +156,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		QList<OverlayGroup*> allOverlayGroups() const;
 		void removeOverlayGroup(const QString& name);
 		void removeOverlayGroup(OverlayGroup* group);
-		void removeOverlayOf(Item* itemWithOverlay, const QString& groupName = QString());
-		void removeOverlay(Item* overlay, const QString& groupName = QString());
+		void removeOverlayOf(Item* itemWithOverlay, const QString& groupName = {});
+		void removeOverlay(Item* overlay, const QString& groupName = {});
 
 		void setApproximateUpdate(bool b);
 		bool approximateUpdate();

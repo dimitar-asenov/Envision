@@ -35,7 +35,7 @@ class Cursor;
 
 class VISUALIZATIONBASE_API ItemRegion {
 	public:
-		ItemRegion(const QRect& region = QRect());
+		ItemRegion(const QRect& region = {});
 		virtual ~ItemRegion();
 
 		void setRegion(const QRect& region);

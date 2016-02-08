@@ -38,7 +38,7 @@ class INTERACTIONBASE_API ExpressionEditor {
 		void setText(const QString& expression_text);
 		void setOperatorDescriptors(const OperatorDescriptorList* ops);
 
-		Expression* parse(const QString& expression_text = QString());
+		Expression* parse(const QString& expression_text = {});
 
 	private:
 		QString text_;

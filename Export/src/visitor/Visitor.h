@@ -62,10 +62,10 @@ class Visitor
 
 		template<typename ListElement, typename VisitorClass, typename Predicate = bool (*)(ListElement*)>
 		CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass* v,
-												  const QString& fragmentType = QString(), Predicate filter = nullptr);
+												  const QString& fragmentType = {}, Predicate filter = nullptr);
 		template<typename ListElement, typename VisitorClass, typename Predicate = bool (*)(ListElement*)>
 		CompositeFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
-												  const QString& fragmentType = QString(), Predicate filter = nullptr);
+												  const QString& fragmentType = {}, Predicate filter = nullptr);
 
 		template <typename NodeType> SourceFragment* declaration(NodeType* node);
 		template <typename NodeType> SourceFragment* statement(NodeType* node);

@@ -117,7 +117,7 @@ class MODELBASE_API TreeManager: public QObject
 		 * 				the text that will be associated with this modification and put on the undo stack. This parameter
 		 * 				has no effect if this modification is used to call undo/redo and not to execute new commands.
 		 */
-		void beginModification(Node* modificationTarget, const QString &text = QString());
+		void beginModification(Node* modificationTarget, const QString &text = {});
 
 		/**
 		 * Ends a modification session.

@@ -39,7 +39,7 @@ class INTERACTIONBASE_API AutoCompleteEntry
 	public:
 		typedef std::function<void (AutoCompleteEntry* entry)> ExecuteFunction;
 
-		AutoCompleteEntry(const QString& text = QString(), const QString& description = QString());
+		AutoCompleteEntry(const QString& text = {}, const QString& description = {});
 		AutoCompleteEntry(const QString& text, const QString& description,
 				Visualization::Item* visualization, ExecuteFunction execFunction = nullptr);
 		AutoCompleteEntry(const QString& text, const QString& description,
