@@ -81,8 +81,7 @@ class CPPIMPORT_API ClangHelpers
 		QString projectNameFromPath(QString path);
 
 		OOModel::Project* rootProject();
-
-		QList<Comment*> comments_;
+		QList<Comment*>& comments();
 
 	private:
 		EnvisionToClangMap envisionToClangMap_;
@@ -94,6 +93,8 @@ class CPPIMPORT_API ClangHelpers
 
 		OOModel::Project* rootProject_{};
 		QString rootProjectPath_{};
+
+		QList<Comment*> comments_;
 
 		/**
 		 * given a source range calculates the source range corresponding to the code expanded there.
@@ -141,6 +142,7 @@ inline QString ClangHelpers::unexpandedSpelling(clang::SourceLocation start, cla
 { return unexpandedSpelling(clang::SourceRange{start, end}); }
 
 inline EnvisionToClangMap& ClangHelpers::envisionToClangMap() { return envisionToClangMap_; }
+inline QList<Comment*>& ClangHelpers::comments() { return comments_; }
 
 template<typename NodeType, typename ... ConstructorArgTypes>
 NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs)

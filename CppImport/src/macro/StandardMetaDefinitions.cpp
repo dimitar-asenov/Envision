@@ -80,7 +80,7 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 		// meta definition comment
 		auto macroDefinitionPresumedLocation = clang_.sourceManager()->getPresumedLoc(
 					expansion->definition()->getMacroInfo()->getDefinitionLoc());
-		for (auto comment : clang_.comments_)
+		for (auto comment : clang_.comments())
 			if (comment->fileName() == macroDefinitionPresumedLocation.getFilename() &&
 				 comment->lineEnd() == macroDefinitionPresumedLocation.getLine() - 1)
 				metaDef->setComment(new Comments::CommentNode{comment->text()});
