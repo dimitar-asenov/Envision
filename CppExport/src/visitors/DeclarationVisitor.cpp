@@ -181,8 +181,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		{
 				if (DCast<OOModel::ExplicitTemplateInstantiation>(declaration)) return false;
 				if (ExportHelpers::isSignalingDeclaration(declaration)) return false;
-				return !declaration->modifiers()->isSet(Modifier::Public) &&
-						 !declaration->modifiers()->isSet(Modifier::Protected);
+				return declaration->modifiers()->isSet(Modifier::Private);
 		});
 
 		if (!publicSection->fragments().empty())
@@ -325,8 +324,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 
 			accessorSection = new CompositeFragment{context, "accessorSections"};
 			for (auto declaration : declarations)
-				if (!declaration->modifiers()->isSet(Modifier::Public) &&
-					 !declaration->modifiers()->isSet(Modifier::Protected))
+				if (declaration->modifiers()->isSet(Modifier::Private))
 					*accessorSection << declarationVisitor.visit(declaration);
 			if (!accessorSection->fragments().empty()) *body << "private:" << accessorSection;
 		}
