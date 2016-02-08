@@ -265,12 +265,13 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
-	Model::Node* printContextNode{};
+	std::unique_ptr<Model::Node> printContextNode{};
+
 	CppPrintContext::Options printContextOptions = CppPrintContext::None;
 
 	if (metaDefinition->name().startsWith("DEFINE_"))
 	{
-		printContextNode = new OOModel::Module();
+		printContextNode.reset(new OOModel::Module());
 		printContextOptions = CppPrintContext::PrintMethodBody;
 
 		if (SpecialCases::hasTemplatePrefixArgument(metaDefinition))
@@ -278,13 +279,11 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	}
 	else
 	{
-		printContextNode = new OOModel::Class();
+		printContextNode.reset(new OOModel::Class());
 		printContextOptions = CppPrintContext::PrintMethodBodyIfNotEmpty;
 	}
 
-	std::unique_ptr<Model::Node> pPrintContextNode{printContextNode};
-
-	CppPrintContext printContext{printContextNode, printContextOptions};
+	CppPrintContext printContext{printContextNode.get(), printContextOptions};
 	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
 	*fragment << compositeNodeComments(metaDefinition, "declarationComment");
 	auto macro = fragment->append(new CompositeFragment{metaDefinition, "macro"});
