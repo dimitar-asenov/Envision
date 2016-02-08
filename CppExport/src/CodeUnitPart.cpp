@@ -190,8 +190,6 @@ Model::Node* CodeUnitPart::fixedTarget(OOModel::ReferenceExpression* referenceEx
 
 void CodeUnitPart::calculateDependencies(QList<CodeUnit*>& allUnits)
 {
-	if (DCast<OOModel::MetaDefinition>(parent_->node())) return;
-
 	dependencies_.clear();
 	if (this == parent()->sourcePart())
 		dependencies_.insert(parent()->headerPart());
