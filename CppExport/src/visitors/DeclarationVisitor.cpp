@@ -310,23 +310,29 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 			for (auto declaration : *context->methods()) declarations.append(declaration);
 			for (auto declaration : *context->fields()) declarations.append(declaration);
 
-			auto accessorSection = new CompositeFragment{context, "accessorSections"};
-			for (auto declaration : declarations)
-				if (declaration->modifiers()->isSet(Modifier::Public))
-					*accessorSection << declarationVisitor.visit(declaration);
-			if (!accessorSection->fragments().empty()) *body << "public:" << accessorSection;
+			auto printAccessorFragment = [](CompositeFragment* fragment, DeclarationVisitor& declarationVisitor,
+													  OOModel::Class* context, QList<OOModel::Declaration*> declarations,
+													  OOModel::Modifier::ModifierFlag modifier)
+			{
+				auto accessorSection = new CompositeFragment{context, "accessorSections"};
+				for (auto declaration : declarations)
+					if (declaration->modifiers()->isSet(modifier))
+						*accessorSection << declarationVisitor.visit(declaration);
+				if (!accessorSection->fragments().empty())
+				{
+					if (modifier == Modifier::Public)
+						*fragment << "public:";
+					else if (modifier == Modifier::Protected)
+						*fragment << "protected:";
+					else
+						*fragment << "private:";
+					*fragment << accessorSection;
+				}
+			};
 
-			accessorSection = new CompositeFragment{context, "accessorSections"};
-			for (auto declaration : declarations)
-				if (declaration->modifiers()->isSet(Modifier::Protected))
-					*accessorSection << declarationVisitor.visit(declaration);
-			if (!accessorSection->fragments().empty()) *body << "protected:" << accessorSection;
-
-			accessorSection = new CompositeFragment{context, "accessorSections"};
-			for (auto declaration : declarations)
-				if (declaration->modifiers()->isSet(Modifier::Private))
-					*accessorSection << declarationVisitor.visit(declaration);
-			if (!accessorSection->fragments().empty()) *body << "private:" << accessorSection;
+			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Public);
+			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Protected);
+			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Private);
 		}
 	}
 	*macro << body;
