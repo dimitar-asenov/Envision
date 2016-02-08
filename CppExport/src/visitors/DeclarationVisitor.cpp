@@ -282,6 +282,8 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 		printContextOptions = CppPrintContext::PrintMethodBodyIfNotEmpty;
 	}
 
+	std::unique_ptr<Model::Node> pPrintContextNode{printContextNode};
+
 	CppPrintContext printContext{printContextNode, printContextOptions};
 	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
 	*fragment << compositeNodeComments(metaDefinition, "declarationComment");
@@ -332,8 +334,6 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	}
 	*macro << body;
 
-	// delete dummy print context node
-	SAFE_DELETE(printContextNode);
 	return fragment;
 }
 
