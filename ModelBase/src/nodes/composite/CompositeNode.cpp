@@ -311,8 +311,7 @@ void CompositeNode::load(PersistentStore &store)
 
 		// Skip loading partial optional children.
 		if (!store.isLoadingPartially() || !attribute.optional() || !attribute.partial())
-			execute(new CompositeNodeChangeChild{this, ln->node,
-															 CompositeIndex(index.level(), index.index()), &subnodes_});
+			execute(new CompositeNodeChangeChild{this, ln->node, {index.level(), index.index()}, &subnodes_});
 	}
 
 	checkOrCreateMandatoryAttributes(true);
@@ -341,8 +340,7 @@ void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
 					auto newNode = Node::createNewNode(nodeType);
 					if (useUndoableAction)
 					{
-						execute(new CompositeNodeChangeChild{this, newNode,
-																			CompositeIndex(level, i), &subnodes_});
+						execute(new CompositeNodeChangeChild{this, newNode, {level, i}, &subnodes_});
 					}
 					else {
 						subnodes_[level][i] = newNode;

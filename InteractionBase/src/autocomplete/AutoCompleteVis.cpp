@@ -133,7 +133,7 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 			itemToUseForPosition = root;
 
 		setPos(itemToUseForPosition->scenePos().toPoint() +
-			QPoint(0, itemToUseForPosition->heightInScene() + style()->distanceToCursor()));
+			QPoint{0, itemToUseForPosition->heightInScene() + style()->distanceToCursor()});
 	}
 
 	// Set size

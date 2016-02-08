@@ -103,10 +103,10 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 		case CommentDiagramShape::ShapeType::Diamond:
 			QPointF points[4] = {
-				QPointF(widthInLocal()/2.0, outlineSize_/2.0),
-				QPointF(widthInLocal()-outlineSize_/2.0, heightInLocal()/2.0),
-				QPointF(widthInLocal()/2.0, heightInLocal()-outlineSize_/2.0),
-				QPointF(outlineSize_/2.0, heightInLocal()/2.0)
+				{widthInLocal()/2.0, outlineSize_/2.0},
+				{widthInLocal()-outlineSize_/2.0, heightInLocal()/2.0},
+				{widthInLocal()/2.0, heightInLocal()-outlineSize_/2.0},
+				{outlineSize_/2.0, heightInLocal()/2.0}
 			};
 			painter->drawConvexPolygon(points, 4);
 			break;

@@ -69,7 +69,7 @@ void ConsoleOverlay::appendError(const QString& errorText)
 	Q_ASSERT(output_);
 	QString currentText = output_->text();
 	QString appendText = "<font color=\"#FF0000\">" +
-			QString(errorText).toHtmlEscaped().replace(QRegExp("\\r?\\n"), "<br>") + "</font>";
+			errorText.toHtmlEscaped().replace(QRegExp("\\r?\\n"), "<br>") + "</font>";
 	output_->setText(currentText.append(appendText));
 }
 
