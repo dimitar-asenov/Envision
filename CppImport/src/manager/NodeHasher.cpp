@@ -269,7 +269,7 @@ const QString NodeHasher::hashType(const clang::QualType& type)
 
 const QString NodeHasher::hashTypeSourceInfo(const clang::TypeSourceInfo* info)
 {
-	QString hash(clang_.sourceManager()->getCharacterData(info->getTypeLoc().getBeginLoc()));
+	QString hash{clang_.sourceManager()->getCharacterData(info->getTypeLoc().getBeginLoc())};
 	hash.truncate(hash.indexOf(";"));
 	return hash;
 }

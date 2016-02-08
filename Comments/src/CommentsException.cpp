@@ -35,7 +35,7 @@ CommentsException::CommentsException(const QString& message) :
 
 const QString& CommentsException::name() const
 {
-	static QString ename("CommentsException");
+	static QString ename{"CommentsException"};
 	return ename;
 }
 

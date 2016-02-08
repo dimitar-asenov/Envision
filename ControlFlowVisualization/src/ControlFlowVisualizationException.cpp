@@ -35,7 +35,7 @@ ControlFlowVisualizationException::ControlFlowVisualizationException(const QStri
 
 const QString& ControlFlowVisualizationException::name() const
 {
-	static QString ename("ControlFlowVisualizationException");
+	static QString ename{"ControlFlowVisualizationException"};
 	return ename;
 }
 

@@ -51,7 +51,7 @@ CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualiza
 	QString managerName = headManager->name();
 
 	// get GitRepository
-	QString path("projects/");
+	QString path{"projects/"};
 	path.append(managerName);
 	repository = new GitRepository{path};
 
@@ -88,7 +88,7 @@ QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualizati
 	QString managerName = headManager->name();
 
 	// get GitRepository
-	QString path("projects/");
+	QString path{"projects/"};
 	path.append(managerName);
 
 	QStringList names;

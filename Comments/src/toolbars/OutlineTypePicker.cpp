@@ -37,7 +37,7 @@ OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton{parent}
 	connect(signalMapper,  (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
 			  this, &OutlineTypePicker::handleOutlineTypePicked);
 
-	QPixmap pixmap(96, 24);
+	QPixmap pixmap{96, 24};
 	QWidget* aWidget = new QWidget{this};
 	QVBoxLayout* aLayout = new QVBoxLayout;
 	aLayout->setSpacing(0);

@@ -34,7 +34,7 @@ QueryRuntimeException::QueryRuntimeException(const QString& message)
 
 const QString& QueryRuntimeException::name() const
 {
-	static QString ename("QueryRuntimeException");
+	static QString ename{"QueryRuntimeException"};
 	return ename;
 }
 

@@ -58,11 +58,11 @@ int gitDiffExtractFileCallBack(
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
 
-	QString relativePathA(delta->old_file.path);
+	QString relativePathA{delta->old_file.path};
 	if (!data->treeA_->persistentUnit(relativePathA))
 		data->treeA_->newPersistentUnit(relativePathA);
 
-	QString relativePathB(delta->new_file.path);
+	QString relativePathB{delta->new_file.path};
 	data->treeB_->newPersistentUnit(relativePathB);
 
 	return 0;
@@ -73,7 +73,7 @@ void createNodeAndAppend(const git_diff_line* line, const char* filePath, Generi
 	// lineLength is number of chars on line EXCLUDING '\n'
 	size_t lineLength = line->content_len - 1;
 
-	QString relativePath(filePath);
+	QString relativePath{filePath};
 	GenericPersistentUnit* unit = tree->persistentUnit(relativePath);
 	Q_ASSERT(unit != nullptr);
 	auto pair = unit->newOrExistingNode(line->content, lineLength);
@@ -123,8 +123,8 @@ int treeWalkCommitExtractCallBack(const char* root,
 	{
 		if (git_object_type(obj) == GIT_OBJ_BLOB)
 		{
-			QString rootPath(root);
-			QString fileName(git_tree_entry_name(entry));
+			QString rootPath{root};
+			QString fileName{git_tree_entry_name(entry)};
 			QString relativePath = rootPath.append(fileName);
 
 			git_blob* blob = (git_blob*)obj;
@@ -450,7 +450,7 @@ QString GitRepository::currentBranchName() const
 	errorCode = git_branch_name(&branch, head);
 	checkError(errorCode);
 
-	QString branchName(branch);
+	QString branchName{branch};
 
 	git_reference_free(head);
 
@@ -471,7 +471,7 @@ QStringList GitRepository::localBranches() const
 	git_reference* ref = nullptr;
 	while (git_branch_next(&ref, &type, iter) != GIT_ITEROVER)
 	{
-		QString name(git_reference_name(ref));
+		QString name{git_reference_name(ref)};
 		name.remove("refs/heads/");
 		branches.append(name);
 
@@ -821,7 +821,7 @@ QString GitRepository::currentBranch() const
 
 	const char* fullName = git_reference_name(head);
 
-	QString branch(fullName);
+	QString branch{fullName};
 
 	git_reference_free(head);
 
@@ -897,7 +897,7 @@ const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) 
 	if (!QFile::exists(fullRelativePath))
 		return new CommitFile{};
 
-	QFile file(fullRelativePath);
+	QFile file{fullRelativePath};
 	if ( !file.open(QIODevice::ReadOnly) )
 		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 
@@ -947,7 +947,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	// make a copy of current workdir file
 	QString fullRelativePath = path_;
 	fullRelativePath.append(relativePath);
-	QFile workdirFile(fullRelativePath);
+	QFile workdirFile{fullRelativePath};
 	QString copyName = fullRelativePath;
 	copyName.append("_COPY_FOR_INDEX_CHECKOUT");
 	bool success = workdirFile.copy(copyName);
@@ -957,7 +957,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	errorCode = git_checkout_index(repository_, nullptr, &options);
 	checkError(errorCode);
 
-	QFile file(fullRelativePath);
+	QFile file{fullRelativePath};
 	if ( !file.open(QIODevice::ReadOnly) )
 		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 

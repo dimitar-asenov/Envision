@@ -35,7 +35,7 @@ OOModelException::OOModelException(const QString& message) :
 
 const QString& OOModelException::name() const
 {
-	static QString ename("OOModelException");
+	static QString ename{"OOModelException"};
 	return ename;
 }
 

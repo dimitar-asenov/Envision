@@ -35,7 +35,7 @@ AlloyException::AlloyException(const QString& message) :
 
 const QString& AlloyException::name() const
 {
-	static QString ename("AlloyException");
+	static QString ename{"AlloyException"};
 	return ename;
 }
 

@@ -225,7 +225,7 @@ Optional<QHash<Model::Node*, QString>> QueryResultVisualizer::convertTuplesToStr
 Optional<std::vector<QueryResultVisualizer::TaggedValue>> QueryResultVisualizer::infoArgumentValues()
 {
 	std::vector<QueryResultVisualizer::TaggedValue> values;
-	const QRegularExpression valueMatch("((\\w+)\\.)?(\\w+)");
+	const QRegularExpression valueMatch{"((\\w+)\\.)?(\\w+)"};
 	auto valueMatchIt = valueMatch.globalMatch(arguments_.argument(INFO_ARGUMENT_NAMES[1]));
 	while (valueMatchIt.hasNext())
 	{

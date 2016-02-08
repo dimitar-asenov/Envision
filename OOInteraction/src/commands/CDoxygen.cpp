@@ -37,16 +37,16 @@ CDoxygen::CDoxygen() : CreateNamedObjectWithAttributes{"doxygen", {{}}}
 Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, Visualization::Item* /*target*/,
 	const std::unique_ptr<Visualization::Cursor>&, const QString& /*name*/, const QStringList& /*attributes*/)
 {
-	QDir dir(QDir::currentPath());
+	QDir dir{QDir::currentPath()};
 	dir.mkpath("doxygen/html/images");
 
 	auto aDoxyVisitor = new OOInteraction::DoxygenWholeTreeVisitor{};
 	QString valDoxy = aDoxyVisitor->visit(source->node()->root());
 	delete aDoxyVisitor;
 
-	QFile file(QDir::currentPath() + "/doxygen/doxy.cpp");
+	QFile file{QDir::currentPath() + "/doxygen/doxy.cpp"};
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
-	QTextStream out(&file);
+	QTextStream out{&file};
 	out << valDoxy;
 	file.close();
 

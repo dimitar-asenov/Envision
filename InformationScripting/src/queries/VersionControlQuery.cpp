@@ -52,7 +52,7 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 	Model::TreeManager* treeManager = target()->manager();
 
 	// get GitRepository
-	QString path("projects/" + treeManager->name());
+	QString path{"projects/" + treeManager->name()};
 	if (!GitRepository::repositoryExists(path)) return {"No repository found"};
 
 	GitRepository repository{path};

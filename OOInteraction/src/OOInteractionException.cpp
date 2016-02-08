@@ -35,7 +35,7 @@ OOInteractionException::OOInteractionException(const QString& message) :
 
 const QString& OOInteractionException::name() const
 {
-	static QString ename("OOInteractionException");
+	static QString ename{"OOInteractionException"};
 	return ename;
 }
 

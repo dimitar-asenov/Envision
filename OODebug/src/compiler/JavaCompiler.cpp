@@ -96,11 +96,11 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 		return new Interaction::CommandResult{new Interaction::CommandError{"Export failed, check error messages!"}};
 
 	// Create a build folder and setup the compiler
-	static const QString buildFolder("build");
-	QDir buildDir(pathToProjectContainerDirectory + QDir::separator() + buildFolder);
+	static const QString buildFolder{"build"};
+	QDir buildDir{pathToProjectContainerDirectory + QDir::separator() + buildFolder};
 	if (!buildDir.exists())
 	{
-		QDir projectDir(pathToProjectContainerDirectory);
+		QDir projectDir{pathToProjectContainerDirectory};
 		Q_ASSERT(projectDir.exists());
 		Q_ASSERT(projectDir.mkdir(buildFolder));
 	}

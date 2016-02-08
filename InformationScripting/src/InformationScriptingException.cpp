@@ -34,7 +34,7 @@ InformationScriptingException::InformationScriptingException(const QString& mess
 
 const QString& InformationScriptingException::name() const
 {
-	static QString ename("InformationScriptingException");
+	static QString ename{"InformationScriptingException"};
 	return ename;
 }
 

@@ -35,7 +35,7 @@ InteractionBaseException::InteractionBaseException(const QString& message) :
 
 const QString& InteractionBaseException::name() const
 {
-	static QString ename("InteractionBaseException");
+	static QString ename{"InteractionBaseException"};
 	return ename;
 }
 

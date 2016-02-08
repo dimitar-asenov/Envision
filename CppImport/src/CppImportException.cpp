@@ -35,7 +35,7 @@ CppImportException::CppImportException(const QString& message) :
 
 const QString& CppImportException::name() const
 {
-	static QString ename("CppImportException");
+	static QString ename{"CppImportException"};
 	return ename;
 }
 

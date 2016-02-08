@@ -142,7 +142,7 @@ void VComment::parseLines()
 		//************************************************************************
 		// Lines
 		//************************************************************************
-		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
+		QRegExp rx{"^={3,}|-{3,}|\\.{3,}$"};
 
 		if (rx.exactMatch(line))
 		{
@@ -273,7 +273,7 @@ void VComment::parseLines()
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
 
-			QSize size(0, 0);
+			QSize size{0, 0};
 			if (items.size() > 1)
 				size = parseSize(items.at(1).second);
 
@@ -317,7 +317,7 @@ QList<QPair<QString, QString> > VComment::parseMarkdownArguments(const QString& 
 
 	auto pairs = QList<QPair<QString, QString>>();
 	// read key/value pairs
-	QRegExp rx("^[a-zA-Z]{,15}=");
+	QRegExp rx{"^[a-zA-Z]{,15}="};
 	for (auto line : lines)
 	{
 		int index = rx.indexIn(line);

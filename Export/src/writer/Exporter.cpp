@@ -141,7 +141,7 @@ void Exporter::readPreviousExports()
 		throw ExportException{"Could not open previous exports file in: "
 									 + rootDir_.absoluteFilePath(previousExportsFileName_)};
 
-	QTextStream textStream(&exportsFile);
+	QTextStream textStream{&exportsFile};
 	while (true)
 	{
 		 QString line = textStream.readLine();
@@ -168,7 +168,7 @@ void Exporter::deleteObsoletePreviousExports()
 	auto it = previousExports_.begin();
 	while (it != previousExports_.end())
 	{
-		QFileInfo file(*it);
+		QFileInfo file{*it};
 		if (file.isFile())
 		{
 			log.info("Removing unnecessary file during export: " + file.absoluteFilePath());
@@ -209,7 +209,7 @@ void Exporter::saveCurrentExports()
 	if (!exportsFile.open(QIODevice::WriteOnly | QIODevice::Text))
 		throw ExportException{"Could not save exports file : " + rootDir_.absoluteFilePath(previousExportsFileName_)};
 
-	QTextStream textStream(&exportsFile);
+	QTextStream textStream{&exportsFile};
 	for (auto exportedFile : currentExports_)
 		textStream  << exportedFile << '\n';
 

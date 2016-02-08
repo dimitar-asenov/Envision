@@ -34,7 +34,7 @@ QueryParsingException::QueryParsingException(const QString& message)
 
 const QString& QueryParsingException::name() const
 {
-	static QString ename("ParsingException");
+	static QString ename{"ParsingException"};
 	return ename;
 }
 

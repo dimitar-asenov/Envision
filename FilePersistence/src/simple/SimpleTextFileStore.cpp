@@ -239,11 +239,11 @@ void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, con
 QList<GenericNode*> SimpleTextFileStore::writeGenericNodeToFile(GenericNode* node, const QString& destDir,
 	const QString& fileName, const QStringList& persistentUnitTypes)
 {
-	QFile file(destDir + '/' + fileName);
+	QFile file{destDir + '/' + fileName};
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
 		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 
-	QTextStream ts(&file);
+	QTextStream ts{&file};
 	ts.setCodec("UTF-8");
 	auto persistentUnits = Parser::save(ts, node, persistentUnitTypes);
 	file.close();

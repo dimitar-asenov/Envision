@@ -50,7 +50,7 @@ Optional<TupleSet> Join::executeLinear(TupleSet input)
 		joinOn = {{tag1, onMatches.captured(2)}, {tag2, onMatches.captured(4)}};
 	}
 
-	const QRegularExpression valueMatch("((\\w+)\\.)?(\\w+)");
+	const QRegularExpression valueMatch{"((\\w+)\\.)?(\\w+)"};
 	auto valueMatchIt = valueMatch.globalMatch(arguments_.argument(VALUE_ARGUMENT_NAMES[1]));
 	while (valueMatchIt.hasNext())
 	{

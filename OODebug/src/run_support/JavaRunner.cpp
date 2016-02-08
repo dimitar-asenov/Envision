@@ -119,7 +119,7 @@ void JavaRunner::handleErrorOutput()
 
 void JavaRunner::addConsole(Model::Node* node)
 {
-	static const QString overlayGroupName("Console overlay");
+	static const QString overlayGroupName{"Console overlay"};
 	auto nodeItemMap = Visualization::Item::nodeItemsMap();
 	auto it = nodeItemMap.find(node);
 	Q_ASSERT(it != nodeItemMap.end());

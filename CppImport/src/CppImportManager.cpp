@@ -114,15 +114,15 @@ Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPer
 void CppImportManager::setupTest()
 {
 	// setup the root dir
-	QDir rootDir(QDir::currentPath());
+	QDir rootDir{QDir::currentPath()};
 	rootDir.cdUp();
 	rootDir.cd(QString{"CppImport"}.append(QDir::separator()).append("test"));
 	QString rootPath = rootDir.canonicalPath();
 	// open testSelector file to read in dir
-	QFile selector(rootPath + QDir::separator() + "testSelector");
+	QFile selector{rootPath + QDir::separator() + "testSelector"};
 	if (!selector.open(QFile::ReadOnly))
 		throw CppImportException{"Could not open testSelector file"};
-	QTextStream inStream(&selector);
+	QTextStream inStream{&selector};
 	QString testDir;
 	while (!inStream.atEnd())
 	{
@@ -201,14 +201,14 @@ void CppImportManager::setCompilationDbPath(const QString& sourcePath)
 
 void CppImportManager::createCompilationDbForTest(const QString& testPath)
 {
-	QDir curDir(testPath);
+	QDir curDir{testPath};
 	if (!curDir.exists("compile_commands.json"))
 	{
 		QString test = testPath.split(QDir::separator()).last();
-		QFile db(testPath + QDir::separator() + "compile_commands.json");
+		QFile db{testPath + QDir::separator() + "compile_commands.json"};
 		if (!db.open(QFile::ReadWrite))
 			throw CppImportException{"Cannot create compile_commands file for test: " + test};
-		QTextStream out(&db);
+		QTextStream out{&db};
 		out << "[" << endl;
 		out << "{" << "\"directory\":" << "\"" << testPath << "\"," << endl;
 		// TODO: this is platform dependent

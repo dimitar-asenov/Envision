@@ -123,7 +123,7 @@ StyleNode::~StyleNode()
 QDomDocument StyleNode::openStyleDoc(const QString& path)
 {
 	QDomDocument doc = QDomDocument{XML_DOM_TYPE};
-	QFile file(path);
+	QFile file{path};
 	if ( !file.open(QIODevice::ReadOnly) )
 		throw VisualizationException{"Could not open style file " + file.fileName() + "."};
 

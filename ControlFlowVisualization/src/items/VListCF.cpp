@@ -130,14 +130,14 @@ void VListCF::updateGeometry(int, int)
 			// Process breaks and continues
 			for (int k = 0; k < cfi->breaks().size(); ++k)
 			{
-				QPoint br( cfi->breaks().at(k) + pos[i] );
+				QPoint br{ cfi->breaks().at(k) + pos[i] };
 				if ( cfi->breaks().at(k).x() == 0) br.setX(0);
 				else br.setX(1);
 				breaks_.append( br);
 			}
 			for (int k = 0; k < cfi->continues().size(); ++k)
 			{
-				QPoint cnt( cfi->continues().at(k) + pos[i] );
+				QPoint cnt{ cfi->continues().at(k) + pos[i] };
 				if ( cfi->continues().at(k).x() == 0) cnt.setX(0);
 				else cnt.setX(1);
 				continues_.append( cnt );
@@ -181,7 +181,7 @@ void VListCF::updateGeometry(int, int)
 			// Add connectors for breaks and continues
 			for (int k = 0; k < cfi->breaks().size(); ++k)
 			{
-				QPoint br( cfi->breaks().at(k) + pos[i] );
+				QPoint br{ cfi->breaks().at(k) + pos[i] };
 				if ( cfi->breaks().at(k).x() == 0) addConnector(br, QPoint{0, br.y()}, false);
 				else
 				{
@@ -191,7 +191,7 @@ void VListCF::updateGeometry(int, int)
 			}
 			for (int k = 0; k < cfi->continues().size(); ++k)
 			{
-				QPoint cont( cfi->continues().at(k) + pos[i] );
+				QPoint cont{ cfi->continues().at(k) + pos[i] };
 				if ( cfi->continues().at(k).x() == 0) addConnector(cont, QPoint{0, cont.y()}, false);
 				else
 				{

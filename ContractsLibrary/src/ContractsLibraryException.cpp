@@ -35,7 +35,7 @@ ContractsLibraryException::ContractsLibraryException(const QString& message) :
 
 const QString& ContractsLibraryException::name() const
 {
-	static QString ename("ContractsLibraryException");
+	static QString ename{"ContractsLibraryException"};
 	return ename;
 }
 

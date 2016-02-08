@@ -35,7 +35,7 @@ CustomMethodCallException::CustomMethodCallException(const QString& message) :
 
 const QString& CustomMethodCallException::name() const
 {
-	static QString ename("CustomMethodCallException");
+	static QString ename{"CustomMethodCallException"};
 	return ename;
 }
 

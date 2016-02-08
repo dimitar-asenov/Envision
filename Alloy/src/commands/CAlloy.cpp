@@ -58,7 +58,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 						QString::number(MAX_IMAGES));
 	aProcess.waitForFinished();
 
-	QDir dir(outputDirectory);
+	QDir dir{outputDirectory};
 	QString jsArray = "var pictureArray = new Array();\n";
 	int i = 0;
 	for (auto dirFile: dir.entryList())
@@ -71,9 +71,9 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 		}
 	}
 
-	QFile jsfile(outputDirectory + "pictureArray.js");
+	QFile jsfile{outputDirectory + "pictureArray.js"};
 	jsfile.open(QIODevice::WriteOnly | QIODevice::Text);
-	QTextStream out(&jsfile);
+	QTextStream out{&jsfile};
 	out << jsArray;
 	jsfile.close();
 

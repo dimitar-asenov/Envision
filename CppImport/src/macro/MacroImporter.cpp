@@ -162,7 +162,7 @@ void MacroImporter::handleQSignals(clang::SourceLocation signalsLocation, OOMode
 	}
 	Q_ASSERT(classContextEndLine > 0);
 
-	QRegularExpression regex("^\\s*(private|protected|public):\\s*$");
+	QRegularExpression regex{"^\\s*(private|protected|public):\\s*$"};
 	regex.setPatternOptions(QRegularExpression::MultilineOption);
 	for (auto method : *classContext->methods())
 		for (auto range : clang_.envisionToClangMap().get(method))
@@ -282,7 +282,7 @@ void MacroImporter::insertArguments(QList<MacroArgumentInfo>& allArguments)
 
 		if (auto currentArg = DCast<OOModel::ReferenceExpression>(lastArg))
 		{
-			QRegularExpression regex("^[A-Z]\\w*$");
+			QRegularExpression regex{"^[A-Z]\\w*$"};
 			auto match = regex.match(currentArg->name());
 			if (!match.hasMatch())
 			{

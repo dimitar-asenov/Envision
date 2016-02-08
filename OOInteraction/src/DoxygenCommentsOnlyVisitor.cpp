@@ -194,7 +194,7 @@ void DoxygenCommentsOnlyVisitor::init()
 				else
 					path =  line->get().mid(7, line->get().size()-7-1);
 
-				QFile file(path);
+				QFile file{path};
 				QString fileName = file.fileName().section("/", -1, -1);
 				file.copy("doxygen/html/images/" + fileName);
 				res += QString{"<img src=images/" + fileName + ">"};

@@ -35,7 +35,7 @@ FilePersistenceException::FilePersistenceException(const QString& message) :
 
 const QString& FilePersistenceException::name() const
 {
-	static QString ename("ModelException");
+	static QString ename{"ModelException"};
 	return ename;
 }
 

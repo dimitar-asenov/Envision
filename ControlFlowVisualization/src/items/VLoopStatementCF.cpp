@@ -208,7 +208,7 @@ void VLoopStatementCF::updateGeometry(int, int)
 	addConnector(entrance_ + QPoint{0, y}, entrance_ + QPoint{0, y+style()->pinLength()}, false);
 	y += style()->pinLength();
 
-	QPoint updateConnect(entrance_.x() + style()->pinLength(), y);
+	QPoint updateConnect{entrance_.x() + style()->pinLength(), y};
 
 	if (updateStep)
 	{

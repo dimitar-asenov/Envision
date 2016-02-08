@@ -103,7 +103,7 @@ void CommentDiagramShape::reCalculateConnectorPoints() const
 				// based on mathematical derivation on
 				// http://math.stackexchange.com/questions/22064/calculating-a-point-that-lies-on-an-ellipse-given-an-angle
 				double a = shapeWidth/2., b = shapeHeight/2.;
-				QPointF center(a, b);
+				QPointF center{a, b};
 				// distribute connector points equally over angles (0, pi/8, , ..., 15pi/8)
 				// TODO: Make these equidistant?
 				double angle = index*2*M_PI/16;

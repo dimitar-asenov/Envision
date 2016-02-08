@@ -46,7 +46,7 @@ void HMoveableOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsScen
 	{
 		if (target)
 		{
-			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
+			QPointF diff{(event->scenePos() - event->buttonDownScenePos(Qt::LeftButton))};
 			move(target, diff);
 		}
 	}
@@ -54,7 +54,7 @@ void HMoveableOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsScen
 
 void HMoveableOverlay::move(Visualization::Item* overlay, const QPointF& to)
 {
-	QPointF dest(itemPosition_ + to);
+	QPointF dest{itemPosition_ + to};
 	if (dest.x() < 0) dest.setX(0);
 	if (dest.y() < 0) dest.setY(0);
 

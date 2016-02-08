@@ -52,7 +52,7 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 		if (!methodSpecificationFile.open(QIODevice::ReadOnly | QIODevice::Text))
 			return new CommandResult{ new CommandError{"Could not open file " + name}};
 
-		QTextStream textStream(&methodSpecificationFile);
+		QTextStream textStream{&methodSpecificationFile};
 
 		const int MAX_NUM_METHODS = 500;
 

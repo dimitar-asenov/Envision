@@ -185,7 +185,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		int start = selectionCursor->selectionFirstIndex();
 		int end = selectionCursor->selectionLastIndex();
 
-		QPointF offset(textXOffset_, textYOffset_);
+		QPointF offset{textXOffset_, textYOffset_};
 
 		// Might be a bit slow but that's OK, since we have very little selected text
 		// Here topLeft is the absolute corner of the text if it is drawn at 0, 0.

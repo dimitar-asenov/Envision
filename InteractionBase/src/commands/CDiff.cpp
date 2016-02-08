@@ -43,7 +43,7 @@ using namespace FilePersistence;
 
 namespace Interaction {
 
-static const QString overlayGroupName("DiffHighlights");
+static const QString overlayGroupName{"DiffHighlights"};
 
 CDiff::CDiff() : CommandWithFlags{"diff", {{"project"}}, true, false}
 {}
@@ -61,7 +61,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 	QString managerName = headManager->name();
 
 	// get GitRepository
-	QString path("projects/");
+	QString path{"projects/"};
 	path.append(managerName);
 	std::shared_ptr<FilePersistence::GitRepository> repository(new GitRepository{path});
 
@@ -253,7 +253,7 @@ QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization:
 	QString managerName = headManager->name();
 
 	// get GitRepository
-	QString path("projects/");
+	QString path{"projects/"};
 	path.append(managerName);
 
 	QStringList names;

@@ -35,7 +35,7 @@ CppExportException::CppExportException(const QString& message) :
 
 const QString& CppExportException::name() const
 {
-	static QString ename("CppExportException");
+	static QString ename{"CppExportException"};
 	return ename;
 }
 

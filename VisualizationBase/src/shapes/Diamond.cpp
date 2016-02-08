@@ -104,7 +104,7 @@ QRect Diamond::contentRect()
 QSize Diamond::innerSize(QSize outterSize) const
 {
 	// Note that a precise inner rect can not be computed given just the outter rect. There is a range of possibilities.
-	QSize inner(outterSize);
+	QSize inner{outterSize};
 	inner -= QSize{(int) std::ceil(style()->outline().width()), (int) std::ceil(style()->outline().width())};
 	if ( style()->shadow() != Qt::NoBrush ) inner -= QSize{style()->xShadowOffset(), style()->yShadowOffset()};
 	return inner;
@@ -113,7 +113,7 @@ QSize Diamond::innerSize(QSize outterSize) const
 QSize Diamond::outterSize(QSize innerSize) const
 {
 	int side = innerSize.width() + innerSize.height() + std::ceil(style()->outline().width());
-	QSize outter(side, side);
+	QSize outter{side, side};
 	if ( style()->shadow() != Qt::NoBrush ) outter += QSize{style()->xShadowOffset(), style()->yShadowOffset()};
 	return outter;
 }

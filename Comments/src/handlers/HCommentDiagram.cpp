@@ -108,7 +108,7 @@ void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 	if (resizing_)
 	{
 		QPointF diff = event->pos() - event->buttonDownPos(Qt::RightButton);
-		QSize newSize(originalSize_.width() + diff.x(), originalSize_.height() + diff.y());
+		QSize newSize{(int) (originalSize_.width() + diff.x()), (int) (originalSize_.height() + diff.y())};
 
 		diagram->node()->beginModification("resize diagram");
 		diagram->node()->setSize(newSize);

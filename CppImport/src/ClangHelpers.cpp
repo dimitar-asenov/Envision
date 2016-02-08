@@ -166,7 +166,7 @@ OOModel::Project* ClangHelpers::projectForLocation(clang::SourceLocation locatio
 
 QString ClangHelpers::projectNameFromPath(QString path)
 {
-	QRegularExpression regex(rootProjectPath_ + "/(\\w+)/");
+	QRegularExpression regex{rootProjectPath_ + "/(\\w+)/"};
 	auto m = regex.match(QDir{path}.absolutePath());
 	if (m.hasMatch())
 		return m.captured(1);

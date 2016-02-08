@@ -81,7 +81,8 @@ void VCommentDiagramShape::updateGeometry(int, int)
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	// rectangle to draw the shape in
-	QRectF rect(outlineSize_/2.0, outlineSize_/2.0, widthInLocal()-outlineSize_, heightInLocal()-outlineSize_);
+	QRectF rect{outlineSize_/2.0, outlineSize_/2.0,
+				(qreal) widthInLocal()-outlineSize_, (qreal) heightInLocal()-outlineSize_};
 	QPen pen;
 	pen.setColor(outlineColor_);
 	pen.setStyle(outlineType_);

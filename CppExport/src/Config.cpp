@@ -45,7 +45,7 @@ QHash<QString, QString> Config::createMap(QJsonObject config, const QString& key
 
 Config::Config()
 {
-	QFile configFile("cpp-export-settings/config.json");
+	QFile configFile{"cpp-export-settings/config.json"};
 	bool open = configFile.open(QIODevice::ReadOnly);
 	Q_ASSERT(open);
 	QJsonParseError err;

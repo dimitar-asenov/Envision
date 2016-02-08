@@ -45,7 +45,7 @@ XMLModel::XMLModel() :
 XMLModel::XMLModel(const QString& filename) :
 	doc(XML_DOM_TYPE)
 {
-	QFile file(filename);
+	QFile file{filename};
 	if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException{"Could not open file " + file.fileName() + "."};
 
 	QString error;

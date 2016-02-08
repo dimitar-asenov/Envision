@@ -131,8 +131,8 @@ void PlotOverlay::drawTextVerticalCenteredAt(QPainter* painter, const QPointF& p
 	// The code is adapted from:
 	// http://stackoverflow.com/questions/24831484/how-to-align-qpainter-drawtext-around-a-point-not-a-rectangle
 	const qreal size = 32767.0;
-	QPointF corner(pos.x(), pos.y() - size / 2.0);
-	QRectF rect(corner, QSizeF{size, size});
+	QPointF corner{pos.x(), pos.y() - size / 2.0};
+	QRectF rect{corner, QSizeF{size, size}};
 	painter->drawText(rect, Qt::AlignVCenter, label, nullptr);
 }
 
@@ -204,7 +204,7 @@ void PlotOverlay::plotBars(QPainter* painter)
 	{
 		double scaledValue = heightScale * yValues_[0][i];
 		auto startPoint = toPlotCoordinates({xValues_[i], yValues_[0][i]});
-		QRectF bar(startPoint.x() - barWidth / 2.0, startPoint.y(), barWidth, scaledValue);
+		QRectF bar{startPoint.x() - barWidth / 2.0, startPoint.y(), barWidth, scaledValue};
 		painter->drawRect(bar);
 		painter->fillRect(bar, QColor{(i % 2 ? "red" : "black")});
 	}
@@ -309,7 +309,7 @@ void PlotOverlay::drawLegend(QPainter* painter)
 
 	setBrushColor(painter, QColor{240, 240, 255}); // Very light gray
 
-	QRect legendRegion(QPoint{style()->width() - legendWidth, drawnTextHeight()}, QSize{legendWidth, legendHeight});
+	QRect legendRegion{QPoint{style()->width() - legendWidth, drawnTextHeight()}, QSize{legendWidth, legendHeight}};
 	painter->setPen(Qt::NoPen);
 	painter->drawRect(legendRegion);
 

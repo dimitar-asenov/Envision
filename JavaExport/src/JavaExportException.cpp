@@ -35,7 +35,7 @@ JavaExportException::JavaExportException(const QString& message) :
 
 const QString& JavaExportException::name() const
 {
-	static QString ename("JavaExportException");
+	static QString ename{"JavaExportException"};
 	return ename;
 }
 

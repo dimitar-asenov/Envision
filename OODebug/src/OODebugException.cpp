@@ -35,7 +35,7 @@ OODebugException::OODebugException(const QString& message) :
 
 const QString& OODebugException::name() const
 {
-	static QString ename("OODebugException");
+	static QString ename{"OODebugException"};
 	return ename;
 }
 

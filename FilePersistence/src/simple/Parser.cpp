@@ -293,7 +293,7 @@ QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 
 GenericNode* Parser::load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit)
 {
-	QFile file(filename);
+	QFile file{filename};
 	if ( !file.open(QIODevice::ReadOnly) )
 		throw FilePersistenceException{"Could not open file " + file.fileName() + ". " + file.errorString()};
 

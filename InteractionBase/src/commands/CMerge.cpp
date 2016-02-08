@@ -56,7 +56,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 	QString managerName = headManager->name();
 
 	// get GitRepository
-	QString path("projects/");
+	QString path{"projects/"};
 	path.append(managerName);
 	std::shared_ptr<GitRepository> repository(new GitRepository{path});
 

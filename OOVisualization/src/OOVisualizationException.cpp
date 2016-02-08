@@ -35,7 +35,7 @@ OOVisualizationException::OOVisualizationException(const QString& message) :
 
 const QString& OOVisualizationException::name() const
 {
-	static QString ename("OOVisualizationException");
+	static QString ename{"OOVisualizationException"};
 	return ename;
 }
 
