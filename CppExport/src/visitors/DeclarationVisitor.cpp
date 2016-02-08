@@ -273,12 +273,8 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 		printContextNode = new OOModel::Module();
 		printContextOptions = CppPrintContext::PrintMethodBody;
 
-		for (auto argument : *metaDefinition->arguments())
-			if (argument->name() == "templatePrefix")
-			{
-				printContextOptions |= CppPrintContext::PrintTemplatePrefix;
-				break;
-			}
+		if (SpecialCases::hasTemplatePrefixArgument(metaDefinition))
+			printContextOptions |= CppPrintContext::PrintTemplatePrefix;
 	}
 	else
 	{
