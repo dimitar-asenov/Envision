@@ -94,6 +94,9 @@ class CPPIMPORT_API ClangHelpers
 		OOModel::Project* rootProject_{};
 		QString rootProjectPath_{};
 
+		/*
+		 * holds all comments of the current translation unit.
+		 */
 		QList<Comment*> comments_;
 
 		/**

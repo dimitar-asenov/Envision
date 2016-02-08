@@ -1417,6 +1417,7 @@ void ClangAstVisitor::endTranslationUnit()
 	}
 
 	clang_.envisionToClangMap().clear();
+	clang_.comments().clear();
 }
 
 void ClangAstVisitor::endEntireImport()
