@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-HPositionLayout::HPositionLayout() : originalX{0}, originalY(0), currentItem(nullptr), currentItemPosition(nullptr)
+HPositionLayout::HPositionLayout() : originalX{0}, originalY{0}, currentItem{}, currentItemPosition{}
 {
 }
 

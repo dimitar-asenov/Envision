@@ -58,7 +58,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 	// get GitRepository
 	QString path{"projects/"};
 	path.append(managerName);
-	std::shared_ptr<GitRepository> repository(new GitRepository{path});
+	std::shared_ptr<GitRepository> repository{new GitRepository{path}};
 
 	bool useFastForward = false;
 

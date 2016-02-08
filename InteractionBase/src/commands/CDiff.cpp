@@ -68,7 +68,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 	headManager->setName("HEAD");
 
 	// load name into tree
-	std::unique_ptr<const Commit> commit(repository->getCommit(name));
+	std::unique_ptr<const Commit> commit{repository->getCommit(name)};
 
 	auto fileStore = new SimpleTextFileStore{
 				[this, &commit](QString filename, const char*& data, int& size)

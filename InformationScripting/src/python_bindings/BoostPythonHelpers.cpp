@@ -68,7 +68,7 @@ struct QString_from_python_str
 		static void construct(PyObject* objPtr, python::converter::rvalue_from_python_stage1_data* data)
 		{
 			// Extract the character data from the python string
-			python::handle<> rawBytesHandle(PyUnicode_AsUTF8String(objPtr));
+			python::handle<> rawBytesHandle{PyUnicode_AsUTF8String(objPtr)};
 			Q_ASSERT(rawBytesHandle);
 
 			// Grab pointer to memory into which to construct the new QString
@@ -141,30 +141,30 @@ QString BoostPythonHelpers::parsePythonException()
 	QString errorMessage{"Unfetchable Python error"};
 	if (typePtr != nullptr)
 	{
-		python::handle<> typePtrHandle(typePtr);
-		python::extract<QString> typePtrString(python::str{typePtrHandle});
+		python::handle<> typePtrHandle{typePtr};
+		python::extract<QString> typePtrString{python::str{typePtrHandle}};
 		if (typePtrString.check()) errorMessage = typePtrString();
 		else errorMessage = "Unknown exception type";
 	}
 	if (valuePtr != nullptr)
 	{
-		python::handle<> valuePtrHandle(valuePtr);
-		python::extract<QString> valuePtrString(python::str{valuePtrHandle});
+		python::handle<> valuePtrHandle{valuePtr};
+		python::extract<QString> valuePtrString{python::str{valuePtrHandle}};
 		if (valuePtrString.check()) errorMessage += ":<br>" + valuePtrString();
 		else errorMessage += ":<br>Unparseable Python error: ";
 	}
 	// Parse lines from the traceback using the Python traceback module
 	if (tracebackPtr != nullptr)
 	{
-		python::handle<> tracebackPtrHandle(tracebackPtr);
+		python::handle<> tracebackPtrHandle{tracebackPtr};
 		// Load the traceback module and the format_tb function
-		python::object tb(python::import("traceback"));
-		python::object formatTraceback(tb.attr("format_tb"));
+		python::object tb{python::import("traceback")};
+		python::object formatTraceback{tb.attr("format_tb")};
 		// Call the format_tb function to get the traceback strings.
-		python::object tracebakList(formatTraceback(tracebackPtrHandle));
-		python::object tracebackString(python::str("<br>").join(tracebakList));
+		python::object tracebakList{formatTraceback(tracebackPtrHandle)};
+		python::object tracebackString{python::str("<br>").join(tracebakList)};
 
-		python::extract<QString> tracebackErrorString(tracebackString);
+		python::extract<QString> tracebackErrorString{tracebackString};
 		if (tracebackErrorString.check()) errorMessage += ":<br>" + tracebackErrorString();
 		else errorMessage += ":<br>Unparseable Python traceback";
 	}

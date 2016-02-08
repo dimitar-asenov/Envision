@@ -49,7 +49,7 @@ void Shape::setStyle(const Visualization::ShapeStyle* style)
 
 StyleSet<Shape>& Shape::itemStyles()
 {
-	static StyleSet<Shape> styles(QString{"shape"});
+	static StyleSet<Shape> styles{QString{"shape"}};
 	return styles;
 }
 

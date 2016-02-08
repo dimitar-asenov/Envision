@@ -29,14 +29,14 @@
 namespace Interaction {
 
 ParseResult::ParseResult()
-	: errors{0}, emptyExpressions(0), missingInnerTokens(0), missingTrailingTokens(0), numOperators(0)
+	: errors{0}, emptyExpressions{0}, missingInnerTokens{0}, missingTrailingTokens{0}, numOperators{0}
 {
 }
 
 ParseResult::ParseResult(int errors, int emptyExpressions, int missing_inner_tokens, int missing_trailing_tokens,
 		int numOperators)
-	: errors{errors}, emptyExpressions(emptyExpressions), missingInnerTokens(missing_inner_tokens),
-	  missingTrailingTokens(missing_trailing_tokens), numOperators(numOperators)
+	: errors{errors}, emptyExpressions{emptyExpressions}, missingInnerTokens{missing_inner_tokens},
+	  missingTrailingTokens{missing_trailing_tokens}, numOperators{numOperators}
 {
 }
 

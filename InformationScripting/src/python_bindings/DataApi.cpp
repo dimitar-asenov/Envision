@@ -68,21 +68,22 @@ NamedProperty convertTuple(const tuple& t)
 {
 	int len = extract<int>(t.attr("__len__")())();
 	if (len != 2) throw QueryRuntimeException{"Tuple can only have 2 values"};
-	extract<QString> nameExtract(t.attr("__getitem__")(0));
+	extract<QString> nameExtract{t.attr("__getitem__")(0)};
 	if (!nameExtract.check()) throw QueryRuntimeException{"Tuple should have string as key"};
 	auto value = t.attr("__getitem__")(1);
-	extract<QString> valueString(value);
+	extract<QString> valueString{value};
 	if (valueString.check()) return {nameExtract(), valueString()};
-	extract<Model::Node*> valueNode(value);
+	extract<Model::Node*> valueNode{value};
 	if (valueNode.check()) return {nameExtract(), valueNode()};
-	extract<int> valueInt(value);
+	extract<int> valueInt{value};
 	if (valueInt.check()) return {nameExtract(), valueInt()};
 	Q_ASSERT(false); // implement extraction
 }
 
 std::shared_ptr<Tuple> makeTuple(list args) {
-	stl_input_iterator<tuple> begin(args), end;
-	std::list<tuple> tuples(begin, end);
+	stl_input_iterator<tuple> begin{args};
+	stl_input_iterator<tuple> end;
+	std::list<tuple> tuples{begin, end};
 	QList<NamedProperty> tupleValues;
 	for (const auto& t : tuples)
 		tupleValues.push_back(convertTuple(t));
@@ -90,7 +91,8 @@ std::shared_ptr<Tuple> makeTuple(list args) {
 }
 
 std::shared_ptr<TupleSet> makeTupleSet(list args) {
-	stl_input_iterator<Tuple> begin(args), end;
+	stl_input_iterator<Tuple> begin{args};
+	stl_input_iterator<Tuple> end;
 	return std::make_shared<TupleSet>(QList<Tuple>::fromStdList(std::list<Tuple>(begin, end)));
 }
 

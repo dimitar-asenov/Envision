@@ -94,7 +94,7 @@ void LinkedChangesTransition::insert(Model::NodeIdType oldChangeId, bool oldInBr
 
 const LinkedChangesSet LinkedChangesTransition::getNewState() const
 {
-	std::shared_ptr<GenericTree> tree(new GenericTree{"AllocatorForChanges"});
+	std::shared_ptr<GenericTree> tree{new GenericTree{"AllocatorForChanges"}};
 	LinkedChangesSet set;
 	for (auto linkedChanges : transition_)
 	{

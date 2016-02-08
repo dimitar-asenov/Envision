@@ -36,7 +36,7 @@ ITEM_COMMON_DEFINITIONS(VIfStatementCF, "item")
 
 VIfStatementCF::VIfStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},
-	conditionBackground(), condition(), thenBranch(), elseBranch()
+	conditionBackground{}, condition{}, thenBranch{}, elseBranch{}
 {
 }
 

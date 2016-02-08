@@ -279,7 +279,7 @@ QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 		}
 		stream << '\n';
 
-		QList<GenericNode*> children(node->children());
+		QList<GenericNode*> children{node->children()};
 
 		if (SORT_BY_LABEL)
 			std::sort(children.begin(), children.end(), labelComparator);

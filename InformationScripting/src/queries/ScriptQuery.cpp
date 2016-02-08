@@ -113,7 +113,7 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 																			 python::default_call_policies(), func_sig());
 
 		// Per default exec_file does not set argv, thus we set it here manually.
-		std::unique_ptr<wchar_t []> scriptPathArg(new wchar_t[scriptPath_.length() + 1]);
+		std::unique_ptr<wchar_t []> scriptPathArg{new wchar_t[scriptPath_.length() + 1]};
 		int len = scriptPath_.toWCharArray(scriptPathArg.get());
 		scriptPathArg[len] = '\0';
 		wchar_t* argv[] = {scriptPathArg.get()};
@@ -136,18 +136,20 @@ void ScriptQuery::importStar(boost::python::dict& main_namespace, boost::python:
 	using namespace boost;
 
 	python::dict astApiDict = python::extract<python::dict>(apiObject.attr("__dict__"));
-			python::stl_input_iterator<python::object> keysBegin(astApiDict.keys()), keysEnd;
+	python::stl_input_iterator<python::object> keysBegin{astApiDict.keys()};
+	python::stl_input_iterator<python::object> keysEnd;
 	while (keysBegin != keysEnd)
 	{
-		QString key = python::extract<QString>(*keysBegin++);
+		QString key = python::extract<QString>{*keysBegin++};
 		if (!key.startsWith("_")) main_namespace[key] = astApiDict[key];
 	}
 }
 
 QList<TupleSet> ScriptQuery::executeQueryFromPython(QString name, boost::python::list args, boost::python::list input)
 {
-	boost::python::stl_input_iterator<QString> argsBegin(args), argsEnd;
-	QStringList argsConverted = QStringList::fromStdList(std::list<QString>(argsBegin, argsEnd));
+	boost::python::stl_input_iterator<QString> argsBegin{args};
+	boost::python::stl_input_iterator<QString> argsEnd;
+	QStringList argsConverted = QStringList::fromStdList(std::list<QString>{argsBegin, argsEnd});
 
 	std::unique_ptr<Query> query{QueryRegistry::instance().buildQuery(name, target(), argsConverted, executor_)};
 	return extractResult(query->execute(convertInput(input)), name);
@@ -156,7 +158,7 @@ QList<TupleSet> ScriptQuery::executeQueryFromPython(QString name, boost::python:
 QList<TupleSet> ScriptQuery::buildAndExecuteQueryFromPython(QString queryString, boost::python::list input)
 {
 	// TODO to properly use the parser from python we should probably remove assertions in it.
-	std::unique_ptr<QueryNode> queryNode(QueryParser::parse(queryString));
+	std::unique_ptr<QueryNode> queryNode{QueryParser::parse(queryString)};
 	QueryBuilder builder{target(), executor_};
 	auto queries = builder.visit(queryNode.get());
 	if (queries.size() > 1)
@@ -166,7 +168,8 @@ QList<TupleSet> ScriptQuery::buildAndExecuteQueryFromPython(QString queryString,
 
 QList<TupleSet> ScriptQuery::convertInput(boost::python::list input)
 {
-	boost::python::stl_input_iterator<TupleSet> inputsBegin(input), inputsEnd;
+	boost::python::stl_input_iterator<TupleSet> inputsBegin{input};
+	boost::python::stl_input_iterator<TupleSet> inputsEnd;
 	return QList<TupleSet>::fromStdList(std::list<TupleSet>(inputsBegin, inputsEnd));
 }
 
