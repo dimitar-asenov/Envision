@@ -47,7 +47,7 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 	treeB_ = treeB;
 	treeBase_ = treeBase;
 
-	LinkedChangesTransition transition(linkedChangesSet, cdgA, cdgB);
+	LinkedChangesTransition transition{linkedChangesSet, cdgA, cdgB};
 
 	auto listsToMerge = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
 

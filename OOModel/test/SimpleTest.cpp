@@ -36,7 +36,7 @@ namespace OOModel {
 class SimpleClassTest : public Test<OOModelPlugin, SimpleClassTest> { public: void test()
 {
 	auto root = new Class;
-	Model::TreeManager manager(root);
+	Model::TreeManager manager{root};
 
 	CHECK_CONDITION(root != nullptr);
 	CHECK_CONDITION(root->name().isEmpty());
@@ -49,7 +49,7 @@ class SimpleClassTest : public Test<OOModelPlugin, SimpleClassTest> { public: vo
 class SimpleProjectTest : public Test<OOModelPlugin, SimpleProjectTest> { public: void test()
 {
 	auto root = new Project;
-	Model::TreeManager manager(root);
+	Model::TreeManager manager{root};
 
 	CHECK_CONDITION(root != nullptr);
 	CHECK_CONDITION(root->name().isEmpty());

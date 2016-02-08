@@ -62,7 +62,7 @@ History::History(QString relativePath, Model::NodeIdType rootNodeId,
 	QSet<const CommitGraphItem*> visited;
 	QString end = endItem.commitSHA1_;
 
-	GenericTree initialTree("History");
+	GenericTree initialTree{"History"};
 	QSet<Model::NodeIdType> trackedIDs = trackSubtree(end, relativePath, &initialTree, repository);
 
 	detectRelevantCommits(&endItem, visited, relativePath, trackedIDs, repository);
@@ -115,7 +115,7 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const C
 			if (!subtreeIsAffected)
 				isRelevant = false;
 
-			GenericTree tree("History");
+			GenericTree tree{"History"};
 			QString parentRelativeRootPath =findRootPath(parent->commitSHA1_, relativePathRootNode, &diff,
 																		&tree, repository);
 

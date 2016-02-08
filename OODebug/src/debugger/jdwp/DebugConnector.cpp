@@ -247,7 +247,7 @@ void DebugConnector::readFromSocket()
 		return;
 	}
 	// check if the packet is complete
-	QDataStream inStream(dataRead);
+	QDataStream inStream{dataRead};
 	qint32 packetLen;
 	inStream >> packetLen;
 	if (packetLen > dataRead.length())
@@ -269,12 +269,12 @@ void DebugConnector::readFromSocket()
 QByteArray DebugConnector::sendCommand(const Command& command)
 {
 	QByteArray raw;
-	QDataStream stream(&raw, QIODevice::ReadWrite);
+	QDataStream stream{&raw, QIODevice::ReadWrite};
 	stream << command;
 	// Insert the length, it is always at position 0
 	QByteArray len;
 	qint32 dataLen = raw.length();
-	QDataStream lenStream(&len, QIODevice::ReadWrite);
+	QDataStream lenStream{&len, QIODevice::ReadWrite};
 	lenStream << dataLen;
 	raw.replace(0, len.length(), len);
 	tcpSocket_.write(raw);

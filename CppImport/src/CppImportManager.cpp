@@ -53,7 +53,7 @@ void CppImportManager::setImportPaths(QStringList sourcePaths, const bool subPro
 		auto sourcePath = QDir{relativeSourcePath}.absolutePath();
 		if (subProjects)
 		{
-			QDirIterator dirIterator(sourcePath, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
+			QDirIterator dirIterator{sourcePath, QDir::Dirs | QDir::NoDot | QDir::NoDotDot};
 			while (dirIterator.hasNext())
 				initPath(dirIterator.next());
 		}
@@ -182,7 +182,7 @@ void CppImportManager::readInFiles(const QString& sourcePath)
 {
 	if (!sourcePath.endsWith(".cpp"))
 	{
-		QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
+		QDirIterator dirIterator{sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories};
 		auto sources = new std::vector<std::string>{};
 		while (dirIterator.hasNext())
 			sources->push_back(dirIterator.next().toStdString());

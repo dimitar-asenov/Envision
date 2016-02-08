@@ -106,7 +106,7 @@ Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manage
 	}
 	QStringList args = {"-d", QString{".."} + QDir::separator() + buildFolder};
 	if (includeDebugSymbols) args << "-g";
-	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
+	CommandLineCompiler compiler{"javac", &CompilerOutputParser::parseJavacErrorFormat};
 
 	QSet<uint> seenMessages;
 

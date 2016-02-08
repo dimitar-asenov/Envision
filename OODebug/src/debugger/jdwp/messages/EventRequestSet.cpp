@@ -42,34 +42,34 @@ Modifier::~Modifier() {}
 int Modifier::kind() const { return modKind(); }
 
 Modifier Modifier::makeEventOff(qint32 count) {
-	Modifier off(eventOff);
+	Modifier off{eventOff};
 	off.count = count;
 	return off;
 }
 
 Modifier Modifier::makeMatchClass(QString classPattern) {
-	Modifier match(classMatch);
+	Modifier match{classMatch};
 	match.classPattern = classPattern;
 	return match;
 }
 
 Modifier Modifier::makeClassExclude(QString classPattern)
 {
-	Modifier exclude(classExclude);
+	Modifier exclude{classExclude};
 	exclude.classExcludePatterm = classPattern;
 	return exclude;
 }
 
 Modifier Modifier::makeLocation(Location loc)
 {
-	Modifier mod(locationOnly);
+	Modifier mod{locationOnly};
 	mod.location = loc;
 	return mod;
 }
 
 Modifier Modifier::makeSingleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
 {
-	Modifier mod(stepOnly);
+	Modifier mod{stepOnly};
 	mod.step = StepData{threadId, stepSize, stepDepth};
 	return mod;
 }

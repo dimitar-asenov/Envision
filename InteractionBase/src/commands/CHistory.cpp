@@ -68,7 +68,7 @@ CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualiza
 		targetPath = persistentUnitNodeID.toString();
 	}
 
-	History history(targetPath, targetID, &graph, repository);
+	History history{targetPath, targetID, &graph, repository};
 
 	// Output relevant commits in text form
 	std::cout << "History:" << std::endl;
@@ -94,7 +94,7 @@ QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualizati
 	QStringList names;
 	if (GitRepository::repositoryExists(path))
 	{
-		GitRepository repository(path);
+		GitRepository repository{path};
 
 		names.append(repository.localBranches());
 		names.append(repository.tags());

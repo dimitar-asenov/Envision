@@ -78,7 +78,7 @@ inline QRectF TextRenderer::nonStaticTextBound()
 	Q_ASSERT(!isHtml());
 
 	QRectF bound;
-	QFontMetrics qfm(style()->font());
+	QFontMetrics qfm{style()->font()};
 	if (staticText_.text().isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
 	else
 	{
@@ -92,7 +92,7 @@ inline QRectF TextRenderer::nonStaticTextBound()
 void TextRenderer::updateGeometry(int, int)
 {
 	staticText_.setText(currentText());
-	QFontMetrics qfm(style()->font());
+	QFontMetrics qfm{style()->font()};
 	QSize textSize;
 
 	if (drawApproximately_ == Unknown)

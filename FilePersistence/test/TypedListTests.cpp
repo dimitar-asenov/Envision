@@ -76,7 +76,7 @@ class SavingTypedList : public Test<FilePersistencePlugin, SavingTypedList> { pu
 	store = s;
 
 	auto list = new TypedList<Text>;
-	Model::TreeManager manager(list);
+	Model::TreeManager manager{list};
 
 	manager.beginModification(list, "create");
 	auto one = new Text{};

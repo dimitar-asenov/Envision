@@ -116,7 +116,8 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	if (diagram()->showConnectorPoints())
 	{
 		// Temporarily assume a thicker painter with a different color for drawing the connector points
-		QBrush blackBrush(Qt::black), redBrush(Qt::red);
+		QBrush blackBrush{Qt::black};
+		QBrush redBrush{Qt::red};
 
 		int shapeIndex = node()->index();
 		auto last = diagram()->lastConnector();

@@ -69,7 +69,7 @@ Optional<TupleSet> Count::executeLinear(TupleSet input)
 
 	for (auto it = counts.begin(); it != counts.end(); ++it)
 	{
-		Tuple countTuple({{"count", it.value()}});
+		Tuple countTuple{{{"count", it.value()}}};
 		for (const auto& namedProperty : it.key())
 			countTuple.add(namedProperty);
 		input.add(countTuple);

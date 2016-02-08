@@ -157,9 +157,9 @@ void CDumpMethodRenderings::printItem(Visualization::Item* item, int itemNumber,
 	++numPrinted;
 
 	QSize itemSize = item->sizeInScene().toSize();
-	QImage image(itemSize, QImage::Format_RGB32);
+	QImage image{itemSize, QImage::Format_RGB32};
 	image.fill(Qt::white);
-	QPainter pmapPainter(&image);
+	QPainter pmapPainter{&image};
 	pmapPainter.setRenderHint(QPainter::Antialiasing);
 	item->scene()->render(&pmapPainter, QRect{0, 0, itemSize.width(), itemSize.height()},
 								 item->sceneBoundingRect().toRect());

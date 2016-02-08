@@ -259,7 +259,7 @@ QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization:
 	QStringList names;
 	if (GitRepository::repositoryExists(path))
 	{
-		GitRepository repository(path);
+		GitRepository repository{path};
 
 		names.append(repository.localBranches());
 		names.append(repository.tags());

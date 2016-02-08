@@ -88,7 +88,7 @@ QSize Braces::getSizeOfBrace(const QString& brace, const QFont& font, int innerH
 
 	QFont f(font);
 	f.setPixelSize(innerHeight);
-	QFontMetrics qfm(f);
+	QFontMetrics qfm{f};
 
 	// TODO tightBoundingRect is supposedly very slow on Windows. Test this.
 	QRect bound = qfm.tightBoundingRect(brace);
@@ -146,14 +146,14 @@ void Braces::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget 
 {
 	// Draw left brace.
 	painter->setPen(style()->leftBracePen());
-	QFont fl(style()->leftBraceFont());
+	QFont fl{style()->leftBraceFont()};
 	fl.setPixelSize(textSize_);
 	painter->setFont(fl);
 	painter->drawText(QPointF{(qreal) xOffset(), (qreal) yOffset()} + leftBraceOffset_, style()->leftBrace());
 
 	// Draw right brace.
 	painter->setPen(style()->rightBracePen());
-	QFont fr(style()->rightBraceFont());
+	QFont fr{style()->rightBraceFont()};
 	fr.setPixelSize(textSize_);
 	painter->setFont(fr);
 	painter->drawText(QPointF{xOffset()+rightBraceLeft_, (qreal) yOffset()} + rightBraceOffset_, style()->rightBrace());

@@ -46,7 +46,7 @@ bool Location::operator==(const Location &other) const
 
 uint qHash(const Location &location) {
 	QByteArray data;
-	QDataStream stream(&data, QIODevice::ReadWrite);
+	QDataStream stream{&data, QIODevice::ReadWrite};
 	stream << location;
 	return qHash(QString{data});
 }

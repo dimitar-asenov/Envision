@@ -276,9 +276,9 @@ QImage ModelRenderer::renderToImage(Model::Node* aNode)
 	auto anItem = aScene->currentViewItem()->findVisualizationOf(aNode);
 
 	QRectF r = anItem->boundingRect();
-	QImage image(r.width(), r.height(), QImage::Format_ARGB32);
+	QImage image{(int) r.width(), (int) r.height(), QImage::Format_ARGB32};
 	image.fill(Qt::transparent);
-	QPainter pmapPainter(&image);
+	QPainter pmapPainter{&image};
 	pmapPainter.setRenderHint(QPainter::Antialiasing);
 	aScene->render(&pmapPainter, QRectF{}, anItem->sceneBoundingRect());
 
@@ -296,7 +296,7 @@ void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
 	svggen->setFileName(path);
 	svggen->setResolution(90);
 	svggen->setSize(aScene->sceneRect().size().toSize());
-	QPainter svgPainter(svggen);
+	QPainter svgPainter{svggen};
 	svgPainter.setRenderHint(QPainter::Antialiasing);
 	aScene->render(&svgPainter, QRectF{}, anItem->sceneBoundingRect());
 }

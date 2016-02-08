@@ -165,19 +165,19 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			// Print scene
 			printer.setOutputFileName("screenshot-scene.pdf");
 			printer.setPaperSize(scene()->sceneRect().size().toSize(), QPrinter::Point);
-			QPainter painter(&printer);
+			QPainter painter{&printer};
 			painter.setRenderHint(QPainter::Antialiasing);
 			scene()->render( &painter );
 
 			svggen.setFileName("screenshot-scene.svg");
 			svggen.setSize(scene()->sceneRect().size().toSize());
-			QPainter svgPainter(&svggen);
+			QPainter svgPainter{&svggen};
 			svgPainter.setRenderHint(QPainter::Antialiasing);
 			scene()->render(&svgPainter);
 
-			QImage image(PNG_SCREENSHOT_SCALE * scene()->sceneRect().size().toSize(), QImage::Format_ARGB32);
+			QImage image{PNG_SCREENSHOT_SCALE * scene()->sceneRect().size().toSize(), QImage::Format_ARGB32};
 			image.fill(Qt::transparent);
-			QPainter pmapPainter(&image);
+			QPainter pmapPainter{&image};
 			pmapPainter.setRenderHint(QPainter::Antialiasing);
 			//pmapPainter.scale(2, 2);
 			scene()->render(&pmapPainter);
@@ -188,19 +188,19 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			// Print view
 			printer.setOutputFileName("screenshot-view.pdf");
 			printer.setPaperSize(viewport()->rect().size(), QPrinter::Point);
-			QPainter painter(&printer);
+			QPainter painter{&printer};
 			painter.setRenderHint(QPainter::Antialiasing);
 			render(&painter);
 
 			svggen.setFileName("screenshot-view.svg");
 			svggen.setSize(viewport()->rect().size());
-			QPainter svgPainter(&svggen);
+			QPainter svgPainter{&svggen};
 			svgPainter.setRenderHint(QPainter::Antialiasing);
 			render(&svgPainter);
 
-			QImage image(PNG_SCREENSHOT_SCALE * viewport()->rect().size(), QImage::Format_ARGB32);
+			QImage image{PNG_SCREENSHOT_SCALE * viewport()->rect().size(), QImage::Format_ARGB32};
 			image.fill(Qt::transparent);
-			QPainter pmapPainter(&image);
+			QPainter pmapPainter{&image};
 			pmapPainter.setRenderHint(QPainter::Antialiasing);
 			render(&pmapPainter);
 			image.save("screenshot-view.png");

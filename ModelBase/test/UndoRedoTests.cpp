@@ -35,7 +35,7 @@ namespace Model {
 class UndoRedoTextSet : public Test<ModelBasePlugin, UndoRedoTextSet> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	CHECK_CONDITION(root->name()->get().isNull());
 	CHECK_INT_EQUAL(0, root->name()->revision());
@@ -81,7 +81,7 @@ class UndoRedoTextSet : public Test<ModelBasePlugin, UndoRedoTextSet> { public: 
 class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
@@ -162,7 +162,7 @@ class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes
 class UndoRedoGroupTextSet : public Test<ModelBasePlugin, UndoRedoGroupTextSet> { public: void test()
 {
 	auto root = new Text{};
-	TreeManager manager(root);
+	TreeManager manager{root};
 
 	CHECK_INT_EQUAL(0, root->revision());
 

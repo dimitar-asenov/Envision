@@ -74,7 +74,7 @@ void MiniMap::paintEvent(QPaintEvent *event)
 	View::paintEvent(event);
 
 	// Paint orientation rectangle and circle
-	QPainter painter(viewport());
+	QPainter painter{viewport()};
 	painter.setPen(Qt::red);
 	painter.drawRect(drawnRect);
 	if (drawnRect.width() <= 2 || drawnRect.height() <= 2)

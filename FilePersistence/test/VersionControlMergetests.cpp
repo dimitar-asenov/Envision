@@ -162,7 +162,7 @@ class RunMerge : public Test<FilePersistencePlugin, RunMerge> { public: void tes
 		CHECK_CONDITION(true);
 		return;
 	}
-	GitRepository repo("/tmp/EnvisionVC/TestMerge");
+	GitRepository repo{"/tmp/EnvisionVC/TestMerge"};
 	auto merge = repo.merge("dev");
 	if (!merge->hasConflicts())
 	{

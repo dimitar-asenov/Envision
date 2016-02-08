@@ -147,7 +147,7 @@ class PasteBinaryFromClipboard : public Test<FilePersistencePlugin, PasteBinaryF
 class PasteListFromClipboard : public Test<FilePersistencePlugin, PasteListFromClipboard> { public: void test()
 {
 	auto root = new Model::List;
-	Model::TreeManager manager("test", root);
+	Model::TreeManager manager{"test", root};
 
 	manager.beginModification(root, "elems");
 	Model::Text* first = new Model::Text{};
@@ -178,7 +178,7 @@ class PasteListFromClipboard : public Test<FilePersistencePlugin, PasteListFromC
 class PasteInListFromClipboard : public Test<FilePersistencePlugin, PasteInListFromClipboard> { public: void test()
 {
 	auto root = new Model::List;
-	Model::TreeManager manager("test", root);
+	Model::TreeManager manager{"test", root};
 
 	manager.beginModification(root, "elems");
 	Model::Text* first = new Model::Text{};

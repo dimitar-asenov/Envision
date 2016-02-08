@@ -334,13 +334,13 @@ void PlotOverlay::setBrushColor(QPainter* painter, QColor color)
 
 int PlotOverlay::drawnTextWidth(const QString& text)
 {
-	QFontMetrics qfm(style()->font());
+	QFontMetrics qfm{style()->font()};
 	return qfm.width(text);
 }
 
 int PlotOverlay::drawnTextHeight()
 {
-	QFontMetrics qfm(style()->font());
+	QFontMetrics qfm{style()->font()};
 	return qfm.height();
 }
 

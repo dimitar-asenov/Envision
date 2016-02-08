@@ -36,7 +36,7 @@ namespace OOModel {
 class JavaLibraryAndHelloWorldTest : public Test<OOModelPlugin, JavaLibraryAndHelloWorldTest> { public: void test()
 {
 	auto prj = new Project{"HelloWorld"};
-	Model::TreeManager manager(prj);
+	Model::TreeManager manager{prj};
 
 	manager.beginModification(prj, "build simple java library and a hello world app");
 

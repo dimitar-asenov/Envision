@@ -308,7 +308,7 @@ CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevisio
 
 	git_commit* gitEndCommit = parseCommit(endRevision);
 
-	CommitGraph graph(startSHA1, endSHA1);
+	CommitGraph graph{startSHA1, endSHA1};
 	TraverseCommitGraph(&graph, gitEndCommit, startOID);
 
 	git_commit_free(gitStartCommit);
