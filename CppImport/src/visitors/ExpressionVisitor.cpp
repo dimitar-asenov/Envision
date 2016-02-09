@@ -302,7 +302,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 
 			if (initListExpr->getSyntacticForm()) initListExpr = initListExpr->getSyntacticForm();
-			for (auto initExpr : initListExpr->getSyntacticForm()->inits())
+			for (auto initExpr : initListExpr->inits())
 				methodCallExpr->arguments()->append(translateExpression(initExpr));
 			ooExprStack_.push(methodCallExpr);
 		}
