@@ -214,6 +214,7 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	{
 		wasDeclared = true;
 		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), staticFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getLocation(), staticFieldMap_.value(hash)->nameNode());
 		return staticFieldMap_.value(hash);
 	}
 	wasDeclared = false;
@@ -235,6 +236,7 @@ OOModel::Field* TranslateManager::insertNamespaceField(clang::VarDecl* varDecl, 
 	{
 		wasDeclared = true;
 		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), namespaceFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getLocation(), namespaceFieldMap_.value(hash)->nameNode());
 		return namespaceFieldMap_.value(hash);
 	}
 	wasDeclared = false;
