@@ -802,7 +802,27 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 
 bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind)
 {
-	auto ooCast = clang_.createNode<OOModel::CastExpression>(castExpr->getSourceRange(), (kind));
+	if (kind == OOModel::CastExpression::CastKind::FunctionalCast)
+	{
+		auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(castExpr->getSourceRange());
+		ooMethodCall->setCallee(utils_->translateQualifiedType(castExpr->getTypeInfoAsWritten()->getTypeLoc()));
+		ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+
+		if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(castExpr->getSubExprAsWritten()))
+		{
+			if (initListExpr->getSyntacticForm()) initListExpr = initListExpr->getSyntacticForm();
+			for (auto argument : *initListExpr)
+				ooMethodCall->arguments()->append(translateExpression(argument));
+		}
+		else
+			ooMethodCall->arguments()->append(translateExpression(castExpr->getSubExprAsWritten()));
+
+		ooExprStack_.push(ooMethodCall);
+		return true;
+	}
+
+	auto ooCast = clang_.createNode<OOModel::CastExpression>(castExpr->getSourceRange(), kind);
+
 	// setType to cast to
 	ooCast->setType(utils_->translateQualifiedType(castExpr->getTypeInfoAsWritten()->getTypeLoc()));
 	// visit subexpr
