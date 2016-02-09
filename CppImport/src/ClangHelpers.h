@@ -83,21 +83,6 @@ class CPPIMPORT_API ClangHelpers
 		OOModel::Project* rootProject();
 		QList<Comment*>& comments();
 
-	private:
-		EnvisionToClangMap envisionToClangMap_;
-
-		const clang::SourceManager* sourceManager_{};
-		const clang::Preprocessor* preprocessor_{};
-
-		QHash<QString, OOModel::Project*> projects_;
-
-		OOModel::Project* rootProject_{};
-		QString rootProjectPath_{};
-
-		/*
-		 * holds all comments of the current translation unit.
-		 */
-		QList<Comment*> comments_;
 
 		/**
 		 * given a source range calculates the source range corresponding to the code expanded there.
@@ -129,6 +114,22 @@ class CPPIMPORT_API ClangHelpers
 		 *	                out_start|     |out_end
 		 */
 		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
+
+	private:
+		EnvisionToClangMap envisionToClangMap_;
+
+		const clang::SourceManager* sourceManager_{};
+		const clang::Preprocessor* preprocessor_{};
+
+		QHash<QString, OOModel::Project*> projects_;
+
+		OOModel::Project* rootProject_{};
+		QString rootProjectPath_{};
+
+		/*
+		 * holds all comments of the current translation unit.
+		 */
+		QList<Comment*> comments_;
 };
 
 inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }
