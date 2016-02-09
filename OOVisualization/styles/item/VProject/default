@@ -17,7 +17,7 @@
 		<bottomWidth>50</bottomWidth>
 		<bottomMargin>50</bottomMargin>
 	</shape>
-	<name prototypes="item/Text/default">
+	<name prototypes="item/Text/name">
 		<shape prototypes="shape/Frame/default">
 			Frame
 			<contentBrush><color>#603030</color></contentBrush>

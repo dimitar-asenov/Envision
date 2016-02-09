@@ -11,7 +11,7 @@
 		<joinStyle>0</joinStyle>
 	</pen>
 	<font>
-		<family></family>
+		<family>Ubuntu</family>
 		<size>15</size>
 		<sizeIsInPixels>true</sizeIsInPixels>
 		<weight>1</weight>
@@ -27,7 +27,7 @@
 	</selectionPen>
 	<selectionBackground>#000000</selectionBackground>
 	<selectionFont>
-		<family></family>
+		<family>Ubuntu</family>
 		<size>15</size>
 		<sizeIsInPixels>true</sizeIsInPixels>
 		<weight>1</weight>

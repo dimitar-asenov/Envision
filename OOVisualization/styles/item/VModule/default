@@ -40,7 +40,7 @@
 		<width>120</width>
 		<height>120</height>
 	</folderIcon>
-	<name prototypes="item/Text/default">
+	<name prototypes="item/Text/name">
 		<shape prototypes="shape/Frame/default">
 			Frame
 			<contentBrush><color>#242c40</color></contentBrush>

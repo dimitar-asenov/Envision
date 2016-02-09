@@ -1,0 +1,11 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<font>
+		<family></family>
+		<weight>50</weight>
+	</font>
+	<selectionFont>
+		<family></family>
+		<weight>50</weight>
+	</selectionFont>
+</style>

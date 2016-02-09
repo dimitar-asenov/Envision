@@ -4,7 +4,7 @@
 	<layout prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
 	</layout>
-	<name prototypes="item/Text/default" />
+	<name prototypes="item/Text/name" />
 	<subTypeSymbol prototypes="item/Symbol/default">
 		<font>
 			<weight>75</weight>

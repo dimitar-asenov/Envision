@@ -3,7 +3,7 @@
 	<layout prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</layout>
-	<name prototypes="item/Text/default" />
+	<name prototypes="item/Text/name" />
 	<assignmentSymbol prototypes="item/Symbol/default">
 		<symbol>←</symbol>
 	</assignmentSymbol>

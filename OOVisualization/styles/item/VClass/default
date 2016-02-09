@@ -28,7 +28,7 @@
 		</shape>
 	</titleBackground>
 	
-	<name prototypes="item/Text/default">
+	<name prototypes="item/Text/name">
 		<shape prototypes="shape/Frame/default">
 			Frame
 			<contentBrush> <color>#246068</color> </contentBrush>

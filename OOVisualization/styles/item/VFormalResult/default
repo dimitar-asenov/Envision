@@ -6,5 +6,5 @@
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</layout>
-	<name prototypes="item/Text/default" />
+	<name prototypes="item/Text/name" />
 </style>

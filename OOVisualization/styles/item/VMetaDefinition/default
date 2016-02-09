@@ -12,7 +12,7 @@
 		</backgroundBrush>
 		<cornerRadius>10</cornerRadius>
 	</shape>
-	<name prototypes="item/Text/default">
+	<name prototypes="item/Text/name">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>

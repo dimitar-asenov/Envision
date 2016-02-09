@@ -1,26 +1,26 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
 	<shape />
-	<nameDefault prototypes="item/Text/default" />
-	<namePublic prototypes="item/Text/default" />
-	<namePrivate prototypes="item/Text/default" />
-	<nameProtected prototypes="item/Text/default" />
-	<nameStaticDefault prototypes="item/Text/default">
+	<nameDefault prototypes="item/Text/name" />
+	<namePublic prototypes="item/Text/name" />
+	<namePrivate prototypes="item/Text/name" />
+	<nameProtected prototypes="item/Text/name" />
+	<nameStaticDefault prototypes="item/Text/name">
 		<font>
 			<underline>true</underline>
 		</font>
 	</nameStaticDefault>
-	<nameStaticPublic prototypes="item/Text/default">
+	<nameStaticPublic prototypes="item/Text/name">
 		<font>
 			<underline>true</underline>
 		</font>
 	</nameStaticPublic>
-	<nameStaticPrivate prototypes="item/Text/default">
+	<nameStaticPrivate prototypes="item/Text/name">
 		<font>
 			<underline>true</underline>
 		</font>
 	</nameStaticPrivate>
-	<nameStaticProtected prototypes="item/Text/default">
+	<nameStaticProtected prototypes="item/Text/name">
 		<font>
 			<underline>true</underline>
 		</font>

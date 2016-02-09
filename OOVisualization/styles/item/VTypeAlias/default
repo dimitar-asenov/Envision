@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<name prototypes="item/Text/default" />
+	<name prototypes="item/Text/name" />
 	<icon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/class.svg</filename>
 		<width>18</width>

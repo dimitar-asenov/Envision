@@ -34,7 +34,7 @@
 			<cornerType>2</cornerType>
 		</shape>
 	</varType>
-	<varName prototypes="item/Text/default">
+	<varName prototypes="item/Text/name">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>
