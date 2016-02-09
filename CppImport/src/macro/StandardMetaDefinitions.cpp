@@ -118,16 +118,18 @@ void StandardMetaDefinitions::createMetaDefinitionBody(OOModel::MetaDefinition* 
 					if (DCast<OOModel::Class>(metaDef->context()) && metaDef->context()->name() == "Context")
 						for (auto sourceRange : sourceRanges)
 						{
-							if (clang_.spelling(clang::SourceRange(sourceRange.getBegin().getLocWithOffset(-2),
-																				sourceRange.getBegin().getLocWithOffset(-1))) != "::")
+							auto expandedSourceRange = clang_.getUnexpandedRange(sourceRange);
+							if (clang_.spelling(clang::SourceRange(
+														  expandedSourceRange.getBegin().getLocWithOffset(-2),
+														  expandedSourceRange.getBegin().getLocWithOffset(-1))) != "::")
 								continue;
 
 							for (auto argument : *metaDef->arguments())
 							{
-								auto prefixEnd = sourceRange.getBegin().getLocWithOffset(-3);
+								auto prefixEnd = expandedSourceRange.getBegin().getLocWithOffset(-3);
 								auto prefixSpelling = clang_.spelling(clang::SourceRange(
-																					  prefixEnd.getLocWithOffset(-argument->name().size()+1),
-																					  prefixEnd));
+																					prefixEnd.getLocWithOffset(-argument->name().size() + 1),
+																					prefixEnd));
 								if (prefixSpelling == argument->name())
 								{
 									metaDef->context()->setName(argument->name());
