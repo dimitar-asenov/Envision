@@ -171,7 +171,8 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::Class* createClass(clang::CXXRecordDecl* recordDecl);
 
-		void addMethodResultAndArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method);
+		void addMethodResult(clang::FunctionDecl* functionDecl, OOModel::Method* method);
+		void addMethodArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method);
 };
 
 

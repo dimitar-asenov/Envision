@@ -336,10 +336,8 @@ OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTe
 	return ooAlias;
 }
 
-void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* functionDecl,
-																					OOModel::Method* method)
+void TranslateManager::addMethodResult(clang::FunctionDecl* functionDecl, OOModel::Method* method)
 {
-	// process result type
 	if (!llvm::isa<clang::CXXConstructorDecl>(functionDecl) && !llvm::isa<clang::CXXDestructorDecl>(functionDecl))
 	{
 		auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
@@ -347,7 +345,10 @@ void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* function
 					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString{},
 																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 	}
-	// process arguments
+}
+
+void TranslateManager::addMethodArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method)
+{
 	for (auto it = functionDecl->param_begin(); it != functionDecl->param_end(); ++it)
 	{
 		auto formalArgument = clang_.createNamedNode<OOModel::FormalArgument>(*it,
@@ -371,7 +372,8 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 																  OOModel::Method::MethodKind::OperatorOverload);
 	else
 		method = clang_.createNamedNode<OOModel::Method>(mDecl, kind);
-	addMethodResultAndArguments(mDecl, method);
+	addMethodResult(mDecl, method);
+	addMethodArguments(mDecl, method);
 
 	// find the correct class to add the method
 	if (classMap_.contains(nh_->hashRecord(mDecl->getParent())))
@@ -393,7 +395,8 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 															  utils_->overloadOperatorToString(functionDecl->getOverloadedOperator()),
 															  OOModel::Method::MethodKind::OperatorOverload) :
 				clang_.createNamedNode<OOModel::Method>(functionDecl);
-	addMethodResultAndArguments(functionDecl, ooFunction);
+	addMethodResult(functionDecl, ooFunction);
+	addMethodArguments(functionDecl, ooFunction);
 	functionMap_.insert(nh_->hashFunction(functionDecl), ooFunction);
 	return ooFunction;
 }
