@@ -452,6 +452,8 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			else
 				ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
 
+			ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+
 			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 				ooMethodCall->arguments()->append(argument);
 			ooExprStack_.push(ooMethodCall);
