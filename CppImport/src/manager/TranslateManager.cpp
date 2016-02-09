@@ -150,6 +150,17 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 			clang_.envisionToClangMap().mapAst(mDecl->getSourceRange(), method);
 			clang_.envisionToClangMap().mapAst(mDecl->getLocation(), method->nameNode());
 
+			/*
+			 * We delete and recreate the results when there is a result without source range information in order to
+			 * recompute the source range information needed for reference transformation in meta definitions.
+			 */
+			if (clang_.isMacroRange(mDecl->getSourceRange()) && !method->results()->isEmpty() &&
+				 clang_.envisionToClangMap().get(method->results()->first()).empty())
+			{
+				method->results()->clear();
+				addMethodResult(mDecl, method);
+			}
+
 			for (int i = 0; i< method->arguments()->size(); i++)
 			{
 				auto argName = QString::fromStdString(mDecl->getParamDecl(i)->getNameAsString());
