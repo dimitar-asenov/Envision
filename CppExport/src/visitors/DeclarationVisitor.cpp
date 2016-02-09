@@ -264,13 +264,20 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
-	std::unique_ptr<Model::Node> printContextNode{};
 
 	CppPrintContext::Options printContextOptions = CppPrintContext::None;
-
+	std::unique_ptr<Model::Node> dummyNode{};
+	Model::Node* printContextNode{};
 	if (metaDefinition->name().startsWith("DEFINE_"))
 	{
-		printContextNode.reset(new OOModel::Module());
+		auto context = DCast<OOModel::Module>(metaDefinition->context());
+		if (context && context->name() != "Context")
+			printContextNode = context;
+		else
+		{
+			dummyNode.reset(new OOModel::Module());
+			printContextNode = dummyNode.get();
+		}
 		printContextOptions = CppPrintContext::PrintMethodBody;
 
 		if (SpecialCases::hasTemplatePrefixArgument(metaDefinition))
@@ -278,11 +285,18 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	}
 	else
 	{
-		printContextNode.reset(new OOModel::Class());
+		auto context = DCast<OOModel::Class>(metaDefinition->context());
+		if (context && context->name() != "Context")
+			printContextNode = context;
+		else
+		{
+			dummyNode.reset(new OOModel::Class());
+			printContextNode = dummyNode.get();
+		}
 		printContextOptions = CppPrintContext::PrintMethodBodyIfNotEmpty;
 	}
 
-	CppPrintContext printContext{printContextNode.get(), printContextOptions};
+	CppPrintContext printContext{printContextNode, printContextOptions};
 	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
 	*fragment << compositeNodeComments(metaDefinition, "declarationComment");
 	auto macro = fragment->append(new CompositeFragment{metaDefinition, "macro"});
