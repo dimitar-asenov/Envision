@@ -128,7 +128,7 @@ Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor,
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
 			typename PrintContext>
 Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, PrintContext>
-::Visitor(PrintContext printContext, std::shared_ptr<VisitorData<PrintContext>> data) : Visitor{data}
+::Visitor(PrintContext printContext, std::shared_ptr<VisitorData<PrintContext>> data) : data_{data}
 { data_.get()->printContextStack_.append(printContext); }
 
 template<typename DeclarationVisitor, typename ExpressionVisitor, typename StatementVisitor, typename ElementVisitor,
