@@ -90,7 +90,11 @@ inline QString CodeComposite::sourcePartExtension()
 
 inline Export::SourceFragment* CodeComposite::headerFragment()
 { return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
-inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
+inline Export::SourceFragment* CodeComposite::sourceFragment()
+{
+	if (isSeparateTemplateImplementation()) return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
+	return partFragment(&CodeUnit::sourcePart);
+}
 
 inline bool CodeComposite::isSeparateTemplateImplementation()
 { return Config::instance().separateTemplateImplementationSet().contains(name_); }
