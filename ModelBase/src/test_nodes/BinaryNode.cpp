@@ -26,7 +26,7 @@
 
 #include "BinaryNode.h"
 
-#include "ModelBase/src/nodes/TypedList.hpp"
+#include "../nodes/TypedList.hpp"
 template class Model::TypedList<TestNodes::BinaryNode>;
 
 namespace TestNodes {

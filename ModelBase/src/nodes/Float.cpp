@@ -28,7 +28,7 @@
 #include "../commands/FieldSet.h"
 #include "../ModelException.h"
 
-#include "ModelBase/src/nodes/TypedList.hpp"
+#include "TypedList.hpp"
 template class Model::TypedList<Model::Float>;
 
 namespace Model {
