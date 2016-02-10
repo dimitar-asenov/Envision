@@ -36,6 +36,24 @@ CppImportUtilities::CppImportUtilities(CppImportLogger* logger, ExpressionVisito
 	: log_{logger}, exprVisitor_{visitor}, clang_{clang}
 {}
 
+clang::SourceRange CppImportUtilities::calculateSourceRangeWithQualifier(QString qualifier,
+																								 clang::QualifiedTypeLoc qualifiedTypeLoc)
+{
+	auto sourceRange = clang_.getUnexpandedRange(qualifiedTypeLoc.getSourceRange());
+	auto sourceRangeBegin = sourceRange.getBegin();
+	auto start = clang_.sourceManager()->getCharacterData(sourceRangeBegin);
+	auto qualifierEnd = start - 1;
+	while (isspace(*qualifierEnd)) qualifierEnd--;
+	auto qualifierStart = qualifierEnd - qualifier.size() + 1;
+	if (!isalnum(*(qualifierStart - 1)))
+	{
+		auto potentialQualifierKeyword = QString::fromStdString(std::string(qualifierStart, qualifier.size()));
+		if (potentialQualifierKeyword == qualifier)
+			sourceRangeBegin = sourceRangeBegin.getLocWithOffset(qualifierStart - start);
+	}
+	return clang::SourceRange(sourceRangeBegin, qualifiedTypeLoc.getEndLoc());
+}
+
 OOModel::Expression* CppImportUtilities::translateQualifiedType(clang::TypeLoc typeLoc)
 {
 	if (auto qualifiedTypeLoc = typeLoc.getAs<clang::QualifiedTypeLoc>())
@@ -52,10 +70,14 @@ OOModel::Expression* CppImportUtilities::translateQualifiedType(clang::TypeLoc t
 																						  volatileTypeExpression);
 		}
 		else if (qualifiedType.isConstQualified())
-			return clang_.createNode<OOModel::TypeQualifierExpression>(typeLoc.getSourceRange(), OOModel::Type::CONST,
+			return clang_.createNode<OOModel::TypeQualifierExpression>(calculateSourceRangeWithQualifier("const",
+																																		qualifiedTypeLoc),
+																						  OOModel::Type::CONST,
 																						  translatedTypeExpression);
 		else if (qualifiedType.isVolatileQualified())
-			return clang_.createNode<OOModel::TypeQualifierExpression>(typeLoc.getSourceRange(), OOModel::Type::VOLATILE,
+			return clang_.createNode<OOModel::TypeQualifierExpression>(calculateSourceRangeWithQualifier("volatile",
+																																		qualifiedTypeLoc),
+																						  OOModel::Type::VOLATILE,
 																						  translatedTypeExpression);
 
 		return translatedTypeExpression;

@@ -33,6 +33,7 @@ namespace OOModel
 	class Class;
 	class Method;
 	class MetaCallExpression;
+	class MetaDefinition;
 }
 
 namespace Export
@@ -77,6 +78,8 @@ class CPPEXPORT_API SpecialCases
 		 * DECLARE_TYPE_ID_COMMON(override)\		DECLARE_TYPE_ID_COMMON()\
 		 */
 		static Export::CompositeFragment* overrideFlagArgumentTransformation(OOModel::MetaCallExpression* metaCall);
+
+		static bool hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefinition);
 };
 
 }

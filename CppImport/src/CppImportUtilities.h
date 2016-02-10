@@ -100,5 +100,6 @@ class CPPIMPORT_API CppImportUtilities
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};
 		ClangHelpers& clang_;
+		clang::SourceRange calculateSourceRangeWithQualifier(QString qualifier, clang::QualifiedTypeLoc qualifiedTypeLoc);
 };
 }

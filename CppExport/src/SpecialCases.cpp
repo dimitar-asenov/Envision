@@ -81,4 +81,12 @@ Export::CompositeFragment* SpecialCases::overrideFlagArgumentTransformation(OOMo
 	return fragment;
 }
 
+bool SpecialCases::hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefinition)
+{
+	for (auto argument : *metaDefinition->arguments())
+		if (argument->name() == "templatePrefix")
+			return true;
+	return false;
+}
+
 }

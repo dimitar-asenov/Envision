@@ -370,51 +370,27 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 	if (varDecl->hasInit())
 	{
-		auto initExpr = varDecl->getInit()->IgnoreImplicit();
-		auto initSpelling = clang_.unexpandedSpelling(initExpr->getSourceRange());
-		auto varDeclNameToEndSpelling = clang_.unexpandedSpelling(varDecl->getLocation(),
-																					 varDecl->getSourceRange().getEnd());
-		auto parenthesesIndex = initSpelling.indexOf('(');
-		auto braceIndex = initSpelling.indexOf('{');
-		if (varDeclNameToEndSpelling.contains("=") || parenthesesIndex >= 0 || braceIndex >= 0)
+		if (varDecl->getInitStyle() == clang::VarDecl::InitializationStyle::CInit)
+			ooVarDecl->setInitialValue(exprVisitor_->translateExpression(varDecl->getInit()));
+		else if (varDecl->getInitStyle() == clang::VarDecl::InitializationStyle::ListInit)
 		{
-			if (parenthesesIndex >= 0 && braceIndex >= 0)
-				initSpelling = initSpelling.left(parenthesesIndex < braceIndex ? parenthesesIndex + 1 : braceIndex + 1);
-			else if (parenthesesIndex >= 0)
-				initSpelling = initSpelling.left(parenthesesIndex + 1);
-			else if (braceIndex >= 0)
-				initSpelling = initSpelling.left(braceIndex + 1);
-
-			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(initExpr);
-			if (constructExpr && initSpelling.contains("{"))
+			if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(varDecl->getInit()->IgnoreImplicit()))
 			{
+				Q_ASSERT(constructExpr);
 				auto arguments = exprVisitor_->translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs());
 				if (arguments.size() == 1 && DCast<OOModel::ArrayInitializer>(arguments.first()))
 					ooVarDecl->setInitialValue(arguments.first());
 				else
 				{
-					auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(initExpr->getSourceRange());
+					auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(varDecl->getInit()->IgnoreImplicit()
+																												->getSourceRange());
 					for (auto argument : arguments)
 						arrayInitializer->values()->append(argument);
 					ooVarDecl->setInitialValue(arrayInitializer);
 				}
 			}
 			else
-			{
-				bool inBody = inBody_;
-				inBody_ = false;
-
-				TraverseStmt(initExpr);
-				if (!ooExprStack_.empty())
-				{
-					// make sure we have not ourself as init (if init couldn't be converted)
-					if (ooVarDeclExpr != ooExprStack_.top())
-						ooVarDecl->setInitialValue(ooExprStack_.pop());
-				}
-				else
-					log_->writeError(className_, varDecl->getInit(), CppImportLogger::Reason::NOT_SUPPORTED);
-				inBody_ = inBody;
-			}
+				ooVarDecl->setInitialValue(exprVisitor_->translateExpression(varDecl->getInit()));
 		}
 	}
 
@@ -1057,7 +1033,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 * only the comments which are in range of this compound statement.
 		 */
 		QList<Comment*> listComments;
-		for (auto comment : comments_)
+		for (auto comment : clang_.comments())
 				if (presumedLocationStart.getFilename() == comment->fileName() &&
 					 presumedLocationStart.getLine() <= comment->lineStart() &&
 					 comment->lineEnd() <= presumedLocationEnd.getLine())
@@ -1112,7 +1088,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 			firstLine = false;
 			if (llvm::dyn_cast<clang::CompoundStmt>(child))
 			{
-				auto block = new OOModel::Block{};
+				auto block = clang_.createNode<OOModel::Block>(child->getSourceRange());
 				itemList->append(block);
 				ooStack_.push(block->items());
 				TraverseStmt(child);
@@ -1377,7 +1353,7 @@ void ClangAstVisitor::beforeTranslationUnit(clang::ASTContext& astContext)
 {
 	auto comments = astContext.getRawCommentList().getComments();
 	for (auto it = comments.begin(); it != comments.end(); it++)
-		comments_.append(new Comment{*it, *clang_.sourceManager()});
+		clang_.comments().append(new Comment{*it, *clang_.sourceManager()});
 }
 
 void ClangAstVisitor::endTranslationUnit()
@@ -1392,7 +1368,7 @@ void ClangAstVisitor::endTranslationUnit()
 	{
 		auto nodePresumedLocation = clang_.sourceManager()->getPresumedLoc(it.value().getBegin());
 
-		for (Comment* comment : comments_)
+		for (Comment* comment : clang_.comments())
 		{
 			if (comment->node() ||
 				 nodePresumedLocation.getFilename() != comment->fileName() ||
@@ -1417,6 +1393,7 @@ void ClangAstVisitor::endTranslationUnit()
 	}
 
 	clang_.envisionToClangMap().clear();
+	clang_.comments().clear();
 }
 
 void ClangAstVisitor::endEntireImport()

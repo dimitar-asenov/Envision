@@ -128,7 +128,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
-		QList<Comment*> comments_;
 		ClangHelpers clang_;
 		MacroImporter macroImporter_;
 

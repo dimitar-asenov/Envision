@@ -38,6 +38,8 @@ namespace OOModel {
 
 namespace CppImport {
 
+class Comment;
+
 /**
  * holds the clang::SourceManager and clang::Preprocessor during macro import.
  * it provides helper methods that only depend on the SourceManager and Preprocessor.
@@ -79,17 +81,8 @@ class CPPIMPORT_API ClangHelpers
 		QString projectNameFromPath(QString path);
 
 		OOModel::Project* rootProject();
+		QList<Comment*>& comments();
 
-	private:
-		EnvisionToClangMap envisionToClangMap_;
-
-		const clang::SourceManager* sourceManager_{};
-		const clang::Preprocessor* preprocessor_{};
-
-		QHash<QString, OOModel::Project*> projects_;
-
-		OOModel::Project* rootProject_{};
-		QString rootProjectPath_{};
 
 		/**
 		 * given a source range calculates the source range corresponding to the code expanded there.
@@ -121,6 +114,22 @@ class CPPIMPORT_API ClangHelpers
 		 *	                out_start|     |out_end
 		 */
 		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
+
+	private:
+		EnvisionToClangMap envisionToClangMap_;
+
+		const clang::SourceManager* sourceManager_{};
+		const clang::Preprocessor* preprocessor_{};
+
+		QHash<QString, OOModel::Project*> projects_;
+
+		OOModel::Project* rootProject_{};
+		QString rootProjectPath_{};
+
+		/*
+		 * holds all comments of the current translation unit.
+		 */
+		QList<Comment*> comments_;
 };
 
 inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }
@@ -137,6 +146,7 @@ inline QString ClangHelpers::unexpandedSpelling(clang::SourceLocation start, cla
 { return unexpandedSpelling(clang::SourceRange{start, end}); }
 
 inline EnvisionToClangMap& ClangHelpers::envisionToClangMap() { return envisionToClangMap_; }
+inline QList<Comment*>& ClangHelpers::comments() { return comments_; }
 
 template<typename NodeType, typename ... ConstructorArgTypes>
 NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorArgTypes&&... constructorArgs)

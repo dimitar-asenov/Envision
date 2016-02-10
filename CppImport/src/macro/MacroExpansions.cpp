@@ -86,11 +86,33 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 			for (; actualArgLastToken->isNot(clang::tok::eof); ++actualArgLastToken);
 			if (actualArgFirstToken != actualArgLastToken) --actualArgLastToken;
 
-			auto unexpandedArgument = actualArgFirstToken->is(clang::tok::eof) ? QString{} :
-												clang_.unexpandedSpelling(clang::SourceRange{actualArgFirstToken->getLocation(),
-																											actualArgLastToken->getLocation()});
+			/*
+			 * Every argument should be at least one token but sometimes Clang returns eof even if there is a real
+			 * macro argument provided (Clang bug?).
+			 *
+			 * Example:
+			 *                                           argument we want to reconstruct
+			 *                                                      \/
+			 * DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)
+			 *                                               ^                ^
+			 *                       actualArgFirstToken-1 (eof)             actualArgFirstToken (eof)
+			 *
+			 * We work around this issue by trying to recover the argument spelling between tokens by reading the code
+			 * between: one character to the right of "actualArgFirstToken-1" and
+			 *				one character to the left of "actualArgFirstToken".
+			 */
+			auto unexpandedArgument = actualArgFirstToken->is(clang::tok::eof) ?
+						(i > 0 ? clang_.unexpandedSpelling(clang::SourceRange(
+																	(actualArgFirstToken-1)->getLocation().getLocWithOffset(1),
+																	actualArgFirstToken->getLocation().getLocWithOffset(-1)))
+						  : QString{})
+					 : clang_.unexpandedSpelling(clang::SourceRange(actualArgFirstToken->getLocation(),
+																					actualArgLastToken->getLocation()));
 
-			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression{unexpandedArgument});
+			auto reference = new OOModel::ReferenceExpression{unexpandedArgument};
+
+
+			entry->metaCall()->arguments()->append(reference);
 			entry->argumentLocs().append(actualArgLastToken->getLocation());
 		}
 

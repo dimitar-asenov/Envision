@@ -102,7 +102,7 @@ bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*&
 		classMap_.insert(hash, createdClass);
 		return true;
 	}
-	clang_.envisionToClangMap().mapAst(rDecl, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(rDecl->getSourceRange(), classMap_.value(hash));
 	return false;
 }
 
@@ -115,7 +115,7 @@ bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTempla
 		classMap_.insert(hash, createdClass);
 		return true;
 	}
-	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate->getSourceRange(), classMap_.value(hash));
 	return false;
 }
 
@@ -129,7 +129,7 @@ bool TranslateManager::insertClassTemplateSpec
 		classMap_.insert(hash, createdClass);
 		return true;
 	}
-	clang_.envisionToClangMap().mapAst(classTemplate, classMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(classTemplate->getSourceRange(), classMap_.value(hash));
 	return false;
 }
 
@@ -147,7 +147,19 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 		else
 		{
 			method = methodMap_.value(hash);
-			clang_.envisionToClangMap().mapAst(mDecl, method);
+			clang_.envisionToClangMap().mapAst(mDecl->getSourceRange(), method);
+			clang_.envisionToClangMap().mapAst(mDecl->getLocation(), method->nameNode());
+
+			/*
+			 * We delete and recreate the results when there is a result without source range information in order to
+			 * recompute the source range information needed for reference transformation in meta definitions.
+			 */
+			if (clang_.isMacroRange(mDecl->getSourceRange()) && !method->results()->isEmpty() &&
+				 clang_.envisionToClangMap().get(method->results()->first()).empty())
+			{
+				method->results()->clear();
+				addMethodResult(mDecl, method);
+			}
 
 			for (int i = 0; i< method->arguments()->size(); i++)
 			{
@@ -177,7 +189,7 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 	else
 	{
 		ooFunction = functionMap_.value(hash);
-		clang_.envisionToClangMap().mapAst(functionDecl, ooFunction);
+		clang_.envisionToClangMap().mapAst(functionDecl->getSourceRange(), ooFunction);
 
 		if (ooFunction->items()->size())
 			return ooFunction;
@@ -212,7 +224,8 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	if (staticFieldMap_.contains(hash))
 	{
 		wasDeclared = true;
-		clang_.envisionToClangMap().mapAst(varDecl, staticFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), staticFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getLocation(), staticFieldMap_.value(hash)->nameNode());
 		return staticFieldMap_.value(hash);
 	}
 	wasDeclared = false;
@@ -233,7 +246,8 @@ OOModel::Field* TranslateManager::insertNamespaceField(clang::VarDecl* varDecl, 
 	if (namespaceFieldMap_.contains(hash))
 	{
 		wasDeclared = true;
-		clang_.envisionToClangMap().mapAst(varDecl, namespaceFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), namespaceFieldMap_.value(hash));
+		clang_.envisionToClangMap().mapAst(varDecl->getLocation(), namespaceFieldMap_.value(hash)->nameNode());
 		return namespaceFieldMap_.value(hash);
 	}
 	wasDeclared = false;
@@ -259,7 +273,7 @@ OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplate
 																										explicitTemplateInst->getSourceRange());
 		explicitTemplateInstMap_.insert(hash, ooExplicitTemplateInst);
 	}
-	clang_.envisionToClangMap().mapAst(explicitTemplateInst, explicitTemplateInstMap_.value(hash));
+	clang_.envisionToClangMap().mapAst(explicitTemplateInst->getSourceRange(), explicitTemplateInstMap_.value(hash));
 	return ooExplicitTemplateInst;
 }
 
@@ -335,10 +349,8 @@ OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTe
 	return ooAlias;
 }
 
-void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* functionDecl,
-																					OOModel::Method* method)
+void TranslateManager::addMethodResult(clang::FunctionDecl* functionDecl, OOModel::Method* method)
 {
-	// process result type
 	if (!llvm::isa<clang::CXXConstructorDecl>(functionDecl) && !llvm::isa<clang::CXXDestructorDecl>(functionDecl))
 	{
 		auto functionTypeLoc = functionDecl->getTypeSourceInfo()->getTypeLoc().castAs<clang::FunctionTypeLoc>();
@@ -346,7 +358,10 @@ void TranslateManager::addMethodResultAndArguments(clang::FunctionDecl* function
 					clang_.createNode<OOModel::FormalResult>(functionTypeLoc.getReturnLoc().getSourceRange(), QString{},
 																		 utils_->translateQualifiedType(functionTypeLoc.getReturnLoc())));
 	}
-	// process arguments
+}
+
+void TranslateManager::addMethodArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method)
+{
 	for (auto it = functionDecl->param_begin(); it != functionDecl->param_end(); ++it)
 	{
 		auto formalArgument = clang_.createNamedNode<OOModel::FormalArgument>(*it,
@@ -370,7 +385,8 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 																  OOModel::Method::MethodKind::OperatorOverload);
 	else
 		method = clang_.createNamedNode<OOModel::Method>(mDecl, kind);
-	addMethodResultAndArguments(mDecl, method);
+	addMethodResult(mDecl, method);
+	addMethodArguments(mDecl, method);
 
 	// find the correct class to add the method
 	if (classMap_.contains(nh_->hashRecord(mDecl->getParent())))
@@ -392,7 +408,8 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 															  utils_->overloadOperatorToString(functionDecl->getOverloadedOperator()),
 															  OOModel::Method::MethodKind::OperatorOverload) :
 				clang_.createNamedNode<OOModel::Method>(functionDecl);
-	addMethodResultAndArguments(functionDecl, ooFunction);
+	addMethodResult(functionDecl, ooFunction);
+	addMethodArguments(functionDecl, ooFunction);
 	functionMap_.insert(nh_->hashFunction(functionDecl), ooFunction);
 	return ooFunction;
 }

@@ -39,25 +39,6 @@ Model::Node* EnvisionToClangMap::closestParentWithAstMapping(Model::Node* node) 
 	return closestParentWithAstMapping(node->parent());
 }
 
-void EnvisionToClangMap::mapAst(clang::Stmt* clangAstNode, Model::Node* envisionAstNode)
-{
-	Q_ASSERT(envisionAstNode);
-
-	if (auto bop = clang::dyn_cast<clang::BinaryOperator>(clangAstNode))
-		envisionToClangMap_.insert(envisionAstNode, bop->getOperatorLoc());
-	else if (auto op = clang::dyn_cast<clang::CXXOperatorCallExpr>(clangAstNode))
-		envisionToClangMap_.insert(envisionAstNode, op->getOperatorLoc());
-	else
-		envisionToClangMap_.insert(envisionAstNode, clangAstNode->getSourceRange());
-}
-
-void EnvisionToClangMap::mapAst(clang::Decl* clangAstNode, Model::Node* envisionAstNode)
-{
-	Q_ASSERT(envisionAstNode);
-
-	envisionToClangMap_.insert(envisionAstNode, clangAstNode->getSourceRange());
-}
-
 QList<clang::SourceRange> EnvisionToClangMap::get(Model::Node* node) const
 {
 	return envisionToClangMap_.values(node);

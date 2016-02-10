@@ -125,4 +125,4 @@ QList<Visualization::VisualizationAddOn*> ItemClass::addOns()																			
 	QList<Visualization::VisualizationAddOn*> list(Super::addOns());																	\
 	list.append(staticAddOns());																													\
 	return list;																																		\
-}																																							\
+}

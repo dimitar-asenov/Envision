@@ -64,7 +64,8 @@ SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 		else
 			*fragment << expression(argument->typeExpression());
 
-		if (printContext().isClass() || argument->isUsedInParentMethod())
+		if (printContext().isClass() || argument->isUsedInParentMethod() ||
+			 argument->firstAncestorOfType<OOModel::MetaDefinition>())
 			*fragment << " " << argument->nameNode();
 
 		if (DCast<ArrayTypeExpression>(argument->typeExpression()))
