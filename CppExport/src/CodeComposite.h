@@ -30,6 +30,8 @@
 
 #include "CodeUnit.h"
 #include "SpecialCases.h"
+#include "Config.h"
+
 #include "OOModel/src/declarations/Class.h"
 
 namespace Export {
@@ -51,6 +53,9 @@ class CPPEXPORT_API CodeComposite
 
 		QString headerPartExtension();
 		QString sourcePartExtension();
+
+		bool isSeparateTemplateImplementation();
+
 	private:
 		const QString name_;
 		QList<CodeUnit*> units_;
@@ -85,5 +90,8 @@ inline QString CodeComposite::sourcePartExtension()
 inline Export::SourceFragment* CodeComposite::headerFragment()
 { return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
 inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
+
+inline bool CodeComposite::isSeparateTemplateImplementation()
+{ return Config::instance().separateTemplateImplementationSet().contains(name_); }
 
 }
