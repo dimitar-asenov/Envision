@@ -391,7 +391,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto fragment = new CompositeFragment{method};
 
 	// comments
-	if (!printContext().hasOption(CppPrintContext::PrintMethodBody))
+	if (printContext().hasOption(CppPrintContext::PrintMethodBody) ==
+		 printContext().hasOption(CppPrintContext::PrintDeclarationCommentWithMethodBody))
 		*fragment << compositeNodeComments(method, "declarationComment");
 
 	// template<typename ...>
