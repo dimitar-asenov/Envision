@@ -59,6 +59,7 @@ class OOVISUALIZATION_API VIfStatement
 		VStatementItemList* thenBranch() const;
 		VStatementItemList* elseBranch() const;
 		Visualization::Static* icon() const;
+		Visualization::Static* elseIcon() const;
 
 		static void initializeForms();
 		virtual int determineForm() override;
@@ -72,6 +73,7 @@ class OOVISUALIZATION_API VIfStatement
 		VStatementItemList* thenBranch_{};
 		VStatementItemList* elseBranch_{};
 		Visualization::Static* icon_{};
+		Visualization::Static* elseIcon_{};
 		Visualization::Line* elseLine_{};
 };
 
@@ -79,5 +81,6 @@ inline Visualization::NodeWrapper* VIfStatement::condition() const { return cond
 inline VStatementItemList* VIfStatement::thenBranch() const { return thenBranch_; }
 inline VStatementItemList* VIfStatement::elseBranch() const { return elseBranch_; }
 inline Visualization::Static* VIfStatement::icon() const {return icon_;}
+inline Visualization::Static* VIfStatement::elseIcon() const {return elseIcon_;}
 
 }

@@ -10,7 +10,7 @@
 			<style>1</style>
 			<color>#ffffe0</color>
 		</backgroundBrush>
-		<cornerRadius>4</cornerRadius>
+		<cornerRadius>2</cornerRadius>
 	</shape>
 	
 	<header prototypes="layout/SequentialLayout/default">
@@ -23,6 +23,12 @@
 		<height>22</height>
 	</icon>
 	
+	<elseIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/else.svg</filename>
+		<width>22</width>
+		<height>22</height>
+	</elseIcon>
+	
 	<elificon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/elif.svg</filename>
 		<width>22</width>
@@ -32,64 +38,28 @@
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>#e0e0c8</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
-				<color>#ffff80</color>
+				<color>#ffffe0</color>
 			</backgroundBrush>
-			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
 		</shape>
 	</condition>
 	
-	<contentHorizontal prototypes="layout/SequentialLayout/default">
-		<alignment>3</alignment>
-		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
-		<spaceBetweenElements>1</spaceBetweenElements>
-	</contentHorizontal>
-	
-	<contentVertical prototypes="layout/SequentialLayout/default">
-		<alignment>1</alignment>
-		<direction>2</direction>
-		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
-		<spaceBetweenElements>1</spaceBetweenElements>
-	</contentVertical>
-	
 	<contentWidthSwitchTreshold>600</contentWidthSwitchTreshold>
 	
-	<thenBranch prototypes="item/VStatementItemList/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline><style>0</style></outline>
-			<backgroundBrush>
-				<style>1</style>
-				<color>#c8ffc8</color>
-			</backgroundBrush>
-			<cornerRadius>4</cornerRadius>
-			<cornerType>1</cornerType>
-		</shape>
-	</thenBranch>
-	
-	<elseBranch prototypes="item/VStatementItemList/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline><style>0</style></outline>
-			<backgroundBrush>
-				<style>1</style>
-				<color>#ffe0e0</color>
-			</backgroundBrush>
-			<cornerRadius>4</cornerRadius>
-			<cornerType>1</cornerType>
-		</shape>
-	</elseBranch>
-	
+	<thenBranch prototypes="item/VStatementItemList/default" />
+	<elseBranch prototypes="item/VStatementItemList/default" />
 	<elseIfBranch prototypes="item/VStatementItemList/default" />
 	
 	<elseHorizontalLine prototypes="item/Line/default">
 		<pen>
-			<style>2</style>
-			<color>#808080</color>
+			<color>#e0e0c8</color>
 		</pen>
 	</elseHorizontalLine>
 	
@@ -97,8 +67,7 @@
 		<width>1</width>
 		<height>0</height>
 		<pen>
-			<style>2</style>
-			<color>#808080</color>
+			<color>#e0e0c8</color>
 		</pen>
 	</elseVerticalLine>
 </style>
