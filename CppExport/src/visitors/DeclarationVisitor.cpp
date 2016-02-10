@@ -91,8 +91,11 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	while (!classes.empty())
 	{
 		auto currentClass = classes.takeLast();
-		CppPrintContext printContext{classs->firstAncestorOfType<OOModel::Module>(), CppPrintContext::PrintMethodBody};
-		*fragment << list(currentClass->methods(), DeclarationVisitor{printContext, data()}, "spacedSections", filter);
+		if (!printContext().hasOption(CppPrintContext::PrintMethodBodyInline))
+		{
+			CppPrintContext printContext{classs->firstAncestorOfType<OOModel::Module>(), CppPrintContext::PrintMethodBody};
+			*fragment << list(currentClass->methods(), DeclarationVisitor{printContext, data()}, "spacedSections", filter);
+		}
 		*fragment << list(currentClass->fields(),
 								DeclarationVisitor(classs->firstAncestorOfType<OOModel::Module>(), data()),
 								"spacedSections",
