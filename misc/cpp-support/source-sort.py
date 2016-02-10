@@ -6,29 +6,51 @@ import re
 import sys
 
 # Input filtering
-def initialComment(line):
-	return line.startswith("/***") or line.startswith(" **") or line.startswith("**")
+initialComment = True
+def isInitialComment(line):
+	global initialComment
+	initialComment = initialComment and (line.startswith("/***") or line.startswith(" **") or line.startswith("**"))
+	return initialComment;
 
-def includeOrForwardDeclaration(line):
-	forwardDeclarationRegex = re.compile('^class \w+;$')
-	return line.startswith("#include ") or forwardDeclarationRegex.match(line);
+forwardDeclarationRegex = re.compile('^class \w+;$')
+def isForwardDeclaration(line):
+	global forwardDeclarationRegex
+	return forwardDeclarationRegex.match(line);
+	
+def isInclude(line):
+	return line.startswith("#include ");
+
+includesToPreserve = []
 
 def emptyLine(line):
 	emptyLineRegex = re.compile('^\s*$')
 	return emptyLineRegex.match(line)
 
+def isExcluded(line):
+	global correspondingSource
+	return isInitialComment(line) or emptyLine(line) or (len(includesToPreserve) > 0 and isInclude(line) and not (line in includesToPreserve)) # or isForwardDeclaration(line)
+
 # Argument parsers
 argParser = argparse.ArgumentParser('Sort the declarations in a source file')
 argParser.add_argument('inputFile')
 argParser.add_argument('outputFile')
+argParser.add_argument('correspondingOriginalSource', nargs='?')
 
 args = argParser.parse_args()
 sourceText = ''
 
+# If an original source was provided record all of its includes.
+# These will be preserved in the currently processed file
+if (args.correspondingOriginalSource):
+	with open(args.correspondingOriginalSource, 'r') as correspondingSource:
+		for line in correspondingSource:
+			if isInclude(line):
+				includesToPreserve.append(line)
+
 # Read entire file in a single string
 with open(args.inputFile, 'r') as inputFile:
 	for line in inputFile:
-		if not initialComment(line) and not includeOrForwardDeclaration(line) and not emptyLine(line):
+		if not isExcluded(line):
 			if not sourceText.endswith('\n'):
 				sourceText += '\n'
 			while "\t " in line:
@@ -39,7 +61,7 @@ with open(args.inputFile, 'r') as inputFile:
 # Block class used to store and various fragments of the file
 class Block:
 	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?(\s|\n)*{(\s|\n)*$', re.DOTALL)
-	macroCallRegex = re.compile(r'\s*[A-Z_]+\s*(\n|\(.*\)\n)$', re.DOTALL)
+	macroRegex = re.compile(r'(\s*[A-Z_]+\s*(\n|\(.*\)\n)|\#include.*)$', re.DOTALL)
 	
 	def __init__(self):
 		self.prefix = ""
@@ -169,7 +191,7 @@ for char in sourceText:
 		stack.append( stack[-1].deepen() )
 		continue
 	
-	isMacro = Block.macroCallRegex.match(currentLine) if char == '\n' else False
+	isMacro = Block.macroRegex.match(currentLine) if char == '\n' else False
 	if char == '}' or ( char ==';' and not prev == '}') or (char == '\n' and prev == ':') or (char == '\n' and isMacro):
 		if char == '}':
 			stack[-1].removeLast(char)
