@@ -267,6 +267,11 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 
 	CppPrintContext::Options printContextOptions = CppPrintContext::None;
 	std::unique_ptr<Model::Node> dummyNode{};
+
+	/*
+	 * In case where the print context node is going to be an actual meta definition context we have to store it
+	 * separately from dummyNode to prevent deletion of the meta definition context after dummyNode goes out of scope.
+	 */
 	Model::Node* printContextNode{};
 	if (metaDefinition->name().startsWith("DEFINE_"))
 	{
