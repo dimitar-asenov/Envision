@@ -47,15 +47,23 @@ class CPPEXPORT_API Config
 		 */
 		QHash<QString, QString> dependencyUnitMergeMap() const;
 
+		/**
+		 * Returns a set containing the names of all code composites which contain a separate template implemenation.
+		 */
+		QSet<QString> separateTemplateImplementationSet() const;
+
 	private:
 		Config();
 		QJsonObject config_;
 
 		QHash<QString, QString> dependencyUnitMergeMap_;
+		QSet<QString> separateTemplateImplementationSet_;
 
 		QHash<QString, QString> createMap(QJsonObject config, const QString& key) const;
+		QSet<QString> createSet(QJsonObject config, const QString& key) const;
 };
 
 inline QHash<QString, QString> Config::dependencyUnitMergeMap() const { return dependencyUnitMergeMap_; }
+inline QSet<QString> Config::separateTemplateImplementationSet() const { return separateTemplateImplementationSet_; }
 
 }

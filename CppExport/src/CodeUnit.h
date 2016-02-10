@@ -54,12 +54,15 @@ class CPPEXPORT_API CodeUnit
 
 		OOModel::Module* nameSpace();
 
+		bool hasNoHeaderPart();
+
 	private:
 		QString name_;
 		Model::Node* node_{};
 		CodeComposite* composite_{};
-		CodeUnitPart headerPart_;
-		CodeUnitPart sourcePart_;
+		bool hasNoHeaderPart_{};
+		CodeUnitPart headerPart_{this};
+		CodeUnitPart sourcePart_{this};
 };
 
 inline const QString& CodeUnit::name() const { return name_; }
@@ -69,5 +72,6 @@ inline void CodeUnit::setComposite(CodeComposite* composite) { composite_ = comp
 inline CodeUnitPart* CodeUnit::headerPart() { return &headerPart_; }
 inline CodeUnitPart* CodeUnit::sourcePart() { return &sourcePart_; }
 inline OOModel::Module* CodeUnit::nameSpace() { return node()->firstAncestorOfType<OOModel::Module>(); }
+inline bool CodeUnit::hasNoHeaderPart() { return hasNoHeaderPart_; }
 
 }

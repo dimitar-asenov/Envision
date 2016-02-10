@@ -29,6 +29,10 @@
 #include "cppexport_api.h"
 
 #include "CodeUnit.h"
+#include "SpecialCases.h"
+#include "Config.h"
+
+#include "OOModel/src/declarations/Class.h"
 
 namespace Export {
 	class CompositeFragment;
@@ -46,6 +50,12 @@ class CPPEXPORT_API CodeComposite
 		void addUnit(CodeUnit* unit);
 
 		void fragments(Export::SourceFragment*& headerFragment, Export::SourceFragment*& sourceFragment);
+
+		QString headerPartExtension();
+		QString sourcePartExtension();
+
+		bool isTemplateImplementationSeparateFile();
+
 	private:
 		const QString name_;
 		QList<CodeUnit*> units_;
@@ -67,9 +77,26 @@ class CPPEXPORT_API CodeComposite
 
 inline const QString& CodeComposite::name() const { return name_; }
 inline const QList<CodeUnit*>& CodeComposite::units() const { return units_; }
+inline QString CodeComposite::headerPartExtension()
+{
+	if (!units_.empty() && SpecialCases::isTestClass(DCast<OOModel::Class>(units_.first()->node()))) return ".cpp";
+	return ".h";
+}
+inline QString CodeComposite::sourcePartExtension()
+{
+	if (isTemplateImplementationSeparateFile()) return ".hpp";
+	return ".cpp";
+}
 
 inline Export::SourceFragment* CodeComposite::headerFragment()
 { return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
-inline Export::SourceFragment* CodeComposite::sourceFragment() { return partFragment(&CodeUnit::sourcePart); }
+inline Export::SourceFragment* CodeComposite::sourceFragment()
+{
+	if (isTemplateImplementationSeparateFile()) return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
+	return partFragment(&CodeUnit::sourcePart);
+}
+
+inline bool CodeComposite::isTemplateImplementationSeparateFile()
+{ return Config::instance().separateTemplateImplementationSet().contains(name_); }
 
 }

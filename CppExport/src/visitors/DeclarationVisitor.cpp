@@ -91,8 +91,11 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	while (!classes.empty())
 	{
 		auto currentClass = classes.takeLast();
-		CppPrintContext printContext{classs->firstAncestorOfType<OOModel::Module>(), CppPrintContext::PrintMethodBody};
-		*fragment << list(currentClass->methods(), DeclarationVisitor{printContext, data()}, "spacedSections", filter);
+		if (!printContext().hasOption(CppPrintContext::PrintMethodBodyInline))
+		{
+			CppPrintContext printContext{classs->firstAncestorOfType<OOModel::Module>(), CppPrintContext::PrintMethodBody};
+			*fragment << list(currentClass->methods(), DeclarationVisitor{printContext, data()}, "spacedSections", filter);
+		}
 		*fragment << list(currentClass->fields(),
 								DeclarationVisitor(classs->firstAncestorOfType<OOModel::Module>(), data()),
 								"spacedSections",
@@ -255,8 +258,12 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 	}
 
 	auto fragment = new CompositeFragment{classs, "accessorSections"};
+	CppPrintContext localPrintContext{classs, printContext().hasOption(CppPrintContext::PrintMethodBodyInline) ?
+														CppPrintContext::PrintMethodBody :
+														CppPrintContext::None};
+	DeclarationVisitor visitor{localPrintContext, data()};
 	for (auto node : ExportHelpers::topologicalSort(declarationDependencies))
-		*fragment << DeclarationVisitor{classs, data()}.visit(node);
+		*fragment << visitor.visit(node);
 	auto fields = list(classs->fields(), this, "sections", filter);
 	if (!fields->fragments().empty()) *fragment << fields;
 	return fragment;
@@ -336,7 +343,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 					if (declaration->modifiers()->isSet(modifier))
 						*accessorSection << declarationVisitor.visit(declaration);
 				if (!accessorSection->fragments().empty())
-					*fragment << accessorLabel << accessorSection;
+					*body << accessorLabel << accessorSection;
 			};
 
 			printAccessorFragment(Modifier::Public, "public:");
@@ -384,7 +391,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	auto fragment = new CompositeFragment{method};
 
 	// comments
-	if (printContext().isClass())
+	if (printContext().hasOption(CppPrintContext::PrintMethodBody) ==
+		 printContext().hasOption(CppPrintContext::PrintDeclarationCommentWithMethodBody))
 		*fragment << compositeNodeComments(method, "declarationComment");
 
 	// template<typename ...>
@@ -393,21 +401,18 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		if (printContext().hasOption(CppPrintContext::PrintTemplatePrefix))
 			*fragment << "templatePrefix ";
 
-		if (method->modifiers()->isSet(Modifier::Inline))
+		QList<Class*> parentClasses;
+		auto parentClass = method->firstAncestorOfType<Class>();
+		while (parentClass)
 		{
-			QList<Class*> parentClasses;
-			auto parentClass = method->firstAncestorOfType<Class>();
-			while (parentClass)
-			{
-				parentClasses.prepend(parentClass);
-				parentClass = parentClass->firstAncestorOfType<Class>();
-			}
-
-			for (auto i = 0; i < parentClasses.size(); i++)
-				if (!parentClasses.at(i)->typeArguments()->isEmpty())
-					*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor{method, data()},
-											"templateArgsList");
+			parentClasses.prepend(parentClass);
+			parentClass = parentClass->firstAncestorOfType<Class>();
 		}
+
+		for (auto i = 0; i < parentClasses.size(); i++)
+			if (!parentClasses.at(i)->typeArguments()->isEmpty())
+				*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor{method, data()},
+										"templateArgsList");
 	}
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor{method, data()}, "templateArgsList");

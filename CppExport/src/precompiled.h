@@ -40,6 +40,7 @@
 // and will be included in their precompiled headers
 #include <QtCore/QDir>
 #include <QtCore/QJsonDocument>
+#include <QtCore/QJsonArray>
 #include <QtCore/QJsonParseError>
 
 

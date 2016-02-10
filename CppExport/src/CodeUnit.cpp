@@ -42,10 +42,11 @@
 
 namespace CppExport {
 
-CodeUnit::CodeUnit(QString name, Model::Node* node)
-	: name_{name}, node_{node}, headerPart_{this}, sourcePart_{this}
+CodeUnit::CodeUnit(QString name, Model::Node* node) : name_{name}, node_{node}
 {
 	Q_ASSERT(!name.isEmpty());
+
+	hasNoHeaderPart_ = SpecialCases::isMainMethod(DCast<OOModel::Method>(node));
 }
 
 void CodeUnit::calculateSourceFragments()
@@ -55,7 +56,10 @@ void CodeUnit::calculateSourceFragments()
 	if (auto classs = DCast<OOModel::Class>(node()))
 	{
 		if (SpecialCases::isTestClass(classs))
-			headerPart()->setFragment(DeclarationVisitor{classs}.visitTopLevelClass(classs));
+		{
+			CppPrintContext printContext{classs, CppPrintContext::PrintMethodBodyInline};
+			headerPart()->setFragment(DeclarationVisitor{printContext}.visitTopLevelClass(classs));
+		}
 		else
 		{
 			headerPart()->setFragment(DeclarationVisitor{classs}.visitTopLevelClass(classs));
@@ -75,12 +79,15 @@ void CodeUnit::calculateSourceFragments()
 	{
 		if (method->typeArguments()->isEmpty() && !method->modifiers()->isSet(OOModel::Modifier::Inline))
 		{
-			headerPart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(method));
+			if (!hasNoHeaderPart_) headerPart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(method));
 
 			if (!method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 				 !method->modifiers()->isSet(OOModel::Modifier::Deleted))
 			{
-				CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
+				CppPrintContext::Options printContextOptions = CppPrintContext::PrintMethodBody;
+				if (hasNoHeaderPart_) printContextOptions |= CppPrintContext::PrintDeclarationCommentWithMethodBody;
+
+				CppPrintContext printContext{printContextDeclaration, printContextOptions};
 				sourcePart()->setFragment(DeclarationVisitor{printContext}.visit(method));
 			}
 		}

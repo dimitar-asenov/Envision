@@ -80,6 +80,8 @@ class CPPEXPORT_API SpecialCases
 		static Export::CompositeFragment* overrideFlagArgumentTransformation(OOModel::MetaCallExpression* metaCall);
 
 		static bool hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefinition);
+
+		static bool isMainMethod(OOModel::Method* method);
 };
 
 }

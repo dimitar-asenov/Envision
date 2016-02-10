@@ -389,7 +389,29 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		}
 		// reference name and type arguments
 		*fragment << e->name();
-		if (!e->typeArguments()->isEmpty()) *fragment << list(e->typeArguments(), this, "typeArgsList");
+		if (!e->typeArguments()->isEmpty())
+			*fragment << list(e->typeArguments(), this, "typeArgsList");
+		else if (auto targetClass = DCast<Class>(e->target()))
+		{
+			/*
+			 * If this reference is in the result type of a method that is declared in a macro but manually defined then
+			 * there might be type arguments missing for non-class print contexts. In that case we append the type
+			 * arguments of the target class.
+			 */
+			auto referenceParentMethod = e->firstAncestorOfType<Method>();
+
+			if (!printContext().isClass() && !targetClass->typeArguments()->isEmpty() && referenceParentMethod &&
+				 referenceParentMethod->results()->isAncestorOf(e))
+			{
+				auto typeArgumentComposite = fragment->append(new CompositeFragment
+																			 {
+																				 targetClass->typeArguments(),
+																				 "typeArgsList"
+																			 });
+				for (auto typeArgument : *targetClass->typeArguments())
+					*typeArgumentComposite << typeArgument->nameNode();
+			}
+		}
 	}
 
 	// Flexible input support ===========================================================================================

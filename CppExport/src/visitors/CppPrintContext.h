@@ -47,9 +47,12 @@ class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 			None = 0,
 			PrintMethodBody = 0x1,
 			PrintMethodBodyIfNotEmpty = 0x2,
-			PrintExternKeyword = 0x4,
-			PrintDefaultArgumentValues = 0x8,
-			PrintTemplatePrefix = 0x10
+			PrintMethodBodyInline = 0x4,
+			PrintExternKeyword = 0x8,
+			PrintDefaultArgumentValues = 0x10,
+			PrintTemplatePrefix = 0x20,
+			PrintDeclarationCommentWithMethodBody = 0x40,
+			NoApiInclude = 0x80
 		};
 		using Options = QFlags<Option>;
 
