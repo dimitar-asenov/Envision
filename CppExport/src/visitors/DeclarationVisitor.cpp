@@ -258,8 +258,12 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 	}
 
 	auto fragment = new CompositeFragment{classs, "accessorSections"};
+	CppPrintContext localPrintContext{classs, printContext().hasOption(CppPrintContext::PrintMethodBodyInline) ?
+														CppPrintContext::PrintMethodBody :
+														CppPrintContext::None};
+	DeclarationVisitor visitor{localPrintContext, data()};
 	for (auto node : ExportHelpers::topologicalSort(declarationDependencies))
-		*fragment << DeclarationVisitor{classs, data()}.visit(node);
+		*fragment << visitor.visit(node);
 	auto fields = list(classs->fields(), this, "sections", filter);
 	if (!fields->fragments().empty()) *fragment << fields;
 	return fragment;
