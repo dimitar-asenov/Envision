@@ -61,8 +61,8 @@ class CPPEXPORT_API CodeUnit
 		Model::Node* node_{};
 		CodeComposite* composite_{};
 		bool hasNoHeaderPart_{};
-		CodeUnitPart headerPart_;
-		CodeUnitPart sourcePart_;
+		CodeUnitPart headerPart_{this};
+		CodeUnitPart sourcePart_{this};
 };
 
 inline const QString& CodeUnit::name() const { return name_; }

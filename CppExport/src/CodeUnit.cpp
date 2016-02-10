@@ -42,8 +42,7 @@
 
 namespace CppExport {
 
-CodeUnit::CodeUnit(QString name, Model::Node* node)
-	: name_{name}, node_{node}, hasNoHeaderPart_{false}, headerPart_{this}, sourcePart_{this}
+CodeUnit::CodeUnit(QString name, Model::Node* node) : name_{name}, node_{node}
 {
 	Q_ASSERT(!name.isEmpty());
 
