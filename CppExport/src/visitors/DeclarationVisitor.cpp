@@ -326,27 +326,19 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 
 			auto printAccessorFragment = [](CompositeFragment* fragment, DeclarationVisitor& declarationVisitor,
 													  OOModel::Class* context, QList<OOModel::Declaration*> declarations,
-													  OOModel::Modifier::ModifierFlag modifier)
+													  OOModel::Modifier::ModifierFlag modifier, QString accessorLabel)
 			{
 				auto accessorSection = new CompositeFragment{context, "accessorSections"};
 				for (auto declaration : declarations)
 					if (declaration->modifiers()->isSet(modifier))
 						*accessorSection << declarationVisitor.visit(declaration);
 				if (!accessorSection->fragments().empty())
-				{
-					if (modifier == Modifier::Public)
-						*fragment << "public:";
-					else if (modifier == Modifier::Protected)
-						*fragment << "protected:";
-					else
-						*fragment << "private:";
-					*fragment << accessorSection;
-				}
+					*fragment << accessorLabel << accessorSection;
 			};
 
-			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Public);
-			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Protected);
-			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Private);
+			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Public, "public:");
+			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Protected, "protected:");
+			printAccessorFragment(body, declarationVisitor, context, declarations, Modifier::Private, "private:");
 		}
 	}
 	*macro << body;
