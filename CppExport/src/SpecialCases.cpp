@@ -89,4 +89,9 @@ bool SpecialCases::hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefini
 	return false;
 }
 
+bool SpecialCases::isMainMethod(OOModel::Method* method)
+{
+	return method && method->symbolName() == "main";
+}
+
 }

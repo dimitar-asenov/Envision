@@ -46,8 +46,7 @@ CodeUnit::CodeUnit(QString name, Model::Node* node) : name_{name}, node_{node}
 {
 	Q_ASSERT(!name.isEmpty());
 
-	if (auto method = DCast<OOModel::Method>(node))
-		hasNoHeaderPart_ = method->symbolName() == "main";
+	hasNoHeaderPart_ = SpecialCases::isMainMethod(DCast<OOModel::Method>(node));
 }
 
 void CodeUnit::calculateSourceFragments()
