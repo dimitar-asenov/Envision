@@ -141,7 +141,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	{
 		for (auto compositeDependency : compositeDependencies)
 			if (((units().first()->*part)() != units().first()->headerPart() || headerPartExtension() == ".cpp") &&
-				 compositeDependency->isSeparateTemplateImplementation() && !isSeparateTemplateImplementation())
+				 compositeDependency->isTemplateImplementationSeparateFile() && !isTemplateImplementationSeparateFile())
 				*composite << "#include \"" + relativePath(compositeDependency) + ".hpp\"\n";
 			else if (compositeDependency->name().endsWith("_api") ||
 						!compositeDependency->units().first()->hasNoHeaderPart())

@@ -54,7 +54,7 @@ class CPPEXPORT_API CodeComposite
 		QString headerPartExtension();
 		QString sourcePartExtension();
 
-		bool isSeparateTemplateImplementation();
+		bool isTemplateImplementationSeparateFile();
 
 	private:
 		const QString name_;
@@ -84,7 +84,7 @@ inline QString CodeComposite::headerPartExtension()
 }
 inline QString CodeComposite::sourcePartExtension()
 {
-	if (isSeparateTemplateImplementation()) return ".hpp";
+	if (isTemplateImplementationSeparateFile()) return ".hpp";
 	return ".cpp";
 }
 
@@ -92,11 +92,11 @@ inline Export::SourceFragment* CodeComposite::headerFragment()
 { return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
 inline Export::SourceFragment* CodeComposite::sourceFragment()
 {
-	if (isSeparateTemplateImplementation()) return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
+	if (isTemplateImplementationSeparateFile()) return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
 	return partFragment(&CodeUnit::sourcePart);
 }
 
-inline bool CodeComposite::isSeparateTemplateImplementation()
+inline bool CodeComposite::isTemplateImplementationSeparateFile()
 { return Config::instance().separateTemplateImplementationSet().contains(name_); }
 
 }
