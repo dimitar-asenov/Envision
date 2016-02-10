@@ -400,21 +400,18 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		if (printContext().hasOption(CppPrintContext::PrintTemplatePrefix))
 			*fragment << "templatePrefix ";
 
-		if (method->modifiers()->isSet(Modifier::Inline))
+		QList<Class*> parentClasses;
+		auto parentClass = method->firstAncestorOfType<Class>();
+		while (parentClass)
 		{
-			QList<Class*> parentClasses;
-			auto parentClass = method->firstAncestorOfType<Class>();
-			while (parentClass)
-			{
-				parentClasses.prepend(parentClass);
-				parentClass = parentClass->firstAncestorOfType<Class>();
-			}
-
-			for (auto i = 0; i < parentClasses.size(); i++)
-				if (!parentClasses.at(i)->typeArguments()->isEmpty())
-					*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor{method, data()},
-											"templateArgsList");
+			parentClasses.prepend(parentClass);
+			parentClass = parentClass->firstAncestorOfType<Class>();
 		}
+
+		for (auto i = 0; i < parentClasses.size(); i++)
+			if (!parentClasses.at(i)->typeArguments()->isEmpty())
+				*fragment << list(parentClasses.at(i)->typeArguments(), ElementVisitor{method, data()},
+										"templateArgsList");
 	}
 	if (!method->typeArguments()->isEmpty())
 		*fragment << list(method->typeArguments(), ElementVisitor{method, data()}, "templateArgsList");
