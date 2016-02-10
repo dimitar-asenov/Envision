@@ -51,7 +51,7 @@ if (args.correspondingOriginalSource):
 with open(args.inputFile, 'r') as inputFile:
 	for line in inputFile:
 		if not isExcluded(line):
-			if not sourceText.endswith('\n'):
+			if len(sourceText) > 0 and not sourceText.endswith('\n'):
 				sourceText += '\n'
 			while "\t " in line:
 				line = line.replace("\t ", "\t")
@@ -92,21 +92,21 @@ class Block:
 		assert not self.finalized
 		self.finalized = True
 		
-	def debugPrint(self):
+	def debugPrint(self, indentation = ''):
 		if not self.prefix and not self.suffix and not self.children:
 			return
-		sys.stdout.write('>>>')
-		sys.stdout.write(self.prefix)
+		sys.stdout.write(indentation + '>>>')
+		sys.stdout.write(indentation + self.prefix)
 		match = self.methodRegex.match(self.prefix)
 		if match:
-			sys.stdout.write('METHOD BODY')
+			sys.stdout.write(indentation + 'METHOD BODY')
 		else:
 			for c in self.children:
 				assert c != self
-				c.debugPrint()
+				c.debugPrint(indentation + '\t')
 			
-		sys.stdout.write(self.suffix)
-		sys.stdout.write('<<<')
+		sys.stdout.write(indentation + self.suffix)
+		sys.stdout.write(indentation + '<<<')
 		
 	def sort(self):
 		match = self.methodRegex.match(self.prefix)
@@ -211,7 +211,7 @@ for char in sourceText:
 		prevPeer.add(char)
 		continue
 	
-	if (prev == ';' or isMacro) and char == '\n':
+	if prev == ';' and char == '\n':
 		stack[-1].removeLast(char)
 		prevPeer.add(char)
 		continue
