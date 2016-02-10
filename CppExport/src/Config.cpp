@@ -43,6 +43,15 @@ QHash<QString, QString> Config::createMap(QJsonObject config, const QString& key
 	return result;
 }
 
+QSet<QString> Config::createSet(QJsonObject config, const QString& key) const
+{
+	QSet<QString> result;
+	auto obj = config[key].toArray();
+	for (auto it = obj.begin(); it != obj.end(); ++it)
+		result.insert(it->toString());
+	return result;
+}
+
 Config::Config()
 {
 	QFile configFile{"cpp-export-settings/config.json"};
@@ -53,6 +62,7 @@ Config::Config()
 	Q_ASSERT(err.error == QJsonParseError::NoError);
 
 	dependencyUnitMergeMap_ = createMap(doc.object(), "DependencyUnitMergeMap");
+	separateTemplateImplementationSet_ = createSet(doc.object(), "SeparateTemplateImplementationSet");
 }
 
 }
