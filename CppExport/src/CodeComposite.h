@@ -84,6 +84,7 @@ inline QString CodeComposite::headerPartExtension()
 }
 inline QString CodeComposite::sourcePartExtension()
 {
+	if (isSeparateTemplateImplementation()) return ".hpp";
 	return ".cpp";
 }
 
