@@ -336,7 +336,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 					if (declaration->modifiers()->isSet(modifier))
 						*accessorSection << declarationVisitor.visit(declaration);
 				if (!accessorSection->fragments().empty())
-					*fragment << accessorLabel << accessorSection;
+					*body << accessorLabel << accessorSection;
 			};
 
 			printAccessorFragment(Modifier::Public, "public:");
