@@ -68,9 +68,9 @@ clang-format-3.8 -i -style=file `find $TEMPDIR \( -name "*.h" -o -name "*.cpp" \
 ################################################################################
 echo "Sorting 'declarations'"
 # The original sources are sorted without a 3rd argument: all includes will be kept
-find $SORTED_ORIGINAL \( -name "*.h" -o -name "*.cpp" \) -exec python2 $SOURCE_SORT_SCRIPT {} {} \;
+find $SORTED_ORIGINAL \( -name "*.h" -o -name "*.cpp" \) -exec bash -c 'python2 $0 $1 $2 &' $SOURCE_SORT_SCRIPT {} {} \;
 
 # The exported sources are sorted providing the name of the original source as a third argument.
 # Any includes which only appear in the exported source will be discarded.
 # This is needed since we include all necessary dependencies directly, even if they are already included in other files.
-find $SORTED_EXPORTED \( -name "*.h" -o -name "*.cpp" \) -exec bash -c 'python2 $0 $1 $1 ${1/$2/$3}' $SOURCE_SORT_SCRIPT {} "$SORTED_EXPORTED" "$SORTED_ORIGINAL" \;
+find $SORTED_EXPORTED \( -name "*.h" -o -name "*.cpp" \) -exec bash -c 'python2 $0 $1 $1 ${1/$2/$3} &' $SOURCE_SORT_SCRIPT {} "$SORTED_EXPORTED" "$SORTED_ORIGINAL" \;
