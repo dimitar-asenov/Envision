@@ -171,7 +171,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 					{
 						if (classs == codeUnitPart->parent()->node()) continue;
 
-						auto neededNamespace = classs->firstAncestorOfType<OOModel::Module>();
+						auto neededNamespace = ExportHelpers::parentNamespaceModule(classs);
 						if (neededNamespace != currentNamespace)
 						{
 							currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);
@@ -197,7 +197,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			}
 
 			auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) ? nullptr :
-					unit->node()->firstAncestorOfType<OOModel::Module>();
+					ExportHelpers::parentNamespaceModule(unit->node());
 			if (neededNamespace != currentNamespace)
 			{
 				currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);

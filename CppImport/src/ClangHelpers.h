@@ -33,7 +33,10 @@
 #include "Comments/src/nodes/CommentNode.h"
 
 namespace OOModel {
+	class Declaration;
 	class Project;
+	class Module;
+	class Field;
 }
 
 namespace CppImport {
@@ -115,6 +118,9 @@ class CPPIMPORT_API ClangHelpers
 		 */
 		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
 
+		void insertDeclarationInFolder(OOModel::Declaration* declaration, clang::SourceLocation location,
+												 OOModel::Declaration* parentNonFolderDeclaration);
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 
@@ -130,6 +136,10 @@ class CPPIMPORT_API ClangHelpers
 		 * holds all comments of the current translation unit.
 		 */
 		QList<Comment*> comments_;
+
+		QStringList folderNamesFromPath(QString path);
+		OOModel::Declaration* folderForLocation(clang::SourceLocation location,
+															 OOModel::Declaration* parentNonFolderDeclaration);
 };
 
 inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }

@@ -27,6 +27,7 @@
 #include "ClangHelpers.h"
 
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/MetaDefinition.h"
 
 namespace CppImport {
 
@@ -144,6 +145,80 @@ void ClangHelpers::deleteNode(Model::Node* node)
 	}
 
 	SAFE_DELETE(node);
+}
+
+QStringList ClangHelpers::folderNamesFromPath(QString path)
+{
+	QStringList result;
+	QDir dir{path};
+	while (dir.cdUp())
+	{
+		if (dir.absolutePath() == rootProjectPath_) break;
+		result.append(dir.dirName());
+	}
+	result.removeLast();
+	return result;
+}
+
+void ClangHelpers::insertDeclarationInFolder(OOModel::Declaration* declaration, clang::SourceLocation location,
+															OOModel::Declaration* parentNonFolderDeclaration)
+{
+	auto inserter = [declaration](auto container)
+	{
+		if (auto castedDeclaration = DCast<OOModel::Field>(declaration))
+			container->fields()->append(castedDeclaration);
+		else if (auto castedDeclaration = DCast<OOModel::Class>(declaration))
+			container->classes()->append(castedDeclaration);
+		else if (auto castedDeclaration = DCast<OOModel::Method>(declaration))
+			container->methods()->append(castedDeclaration);
+		else if (auto castedDeclaration = DCast<OOModel::MetaDefinition>(declaration))
+			container->subDeclarations()->append(castedDeclaration);
+	};
+	auto folder = folderForLocation(location, parentNonFolderDeclaration);
+	if (auto container = DCast<OOModel::Project>(folder)) inserter(container);
+	else if (auto container = DCast<OOModel::Module>(folder)) inserter(container);
+	else Q_ASSERT(false);
+}
+
+OOModel::Declaration* ClangHelpers::folderForLocation(clang::SourceLocation location,
+																		OOModel::Declaration* parentNonFolderDeclaration)
+{
+	Q_ASSERT(parentNonFolderDeclaration);
+	Q_ASSERT(DCast<OOModel::Module>(parentNonFolderDeclaration) || DCast<OOModel::Project>(parentNonFolderDeclaration));
+
+	auto currentFolder = parentNonFolderDeclaration;
+	auto presumedLocation = sourceManager()->getPresumedLoc(location);
+	auto folderNames = folderNamesFromPath(presumedLocation.getFilename());
+	while (!folderNames.empty())
+	{
+		auto requestedFolderName = folderNames.takeLast();
+		auto moduleFound = false;
+		Model::TypedList<OOModel::Module>* modules{};
+		if (auto currentProject = DCast<OOModel::Project>(currentFolder))
+			modules = currentProject->modules();
+		else if (auto currentModule = DCast<OOModel::Module>(currentFolder))
+			modules = currentModule->modules();
+
+		for (auto childFolder : *modules)
+			if (childFolder->name() == requestedFolderName)
+			{
+				currentFolder = childFolder;
+				moduleFound = true;
+				break;
+			}
+		if (!moduleFound)
+		{
+			auto newFolder = new OOModel::Module{requestedFolderName, OOModel::Module::ModuleKind::Folder};
+			if (auto currentProject = DCast<OOModel::Project>(currentFolder))
+				currentProject->modules()->append(newFolder);
+			else if (auto currentModule = DCast<OOModel::Module>(currentFolder))
+				currentModule->modules()->append(newFolder);
+			currentFolder = newFolder;
+		}
+	}
+
+	Q_ASSERT(DCast<OOModel::Module>(currentFolder) || DCast<OOModel::Project>(currentFolder));
+	return currentFolder;
 }
 
 OOModel::Project* ClangHelpers::projectForLocation(clang::SourceLocation location)

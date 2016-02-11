@@ -59,6 +59,7 @@ class CPPEXPORT_API CppExporter {
 		static void createFilesFromComposite(Export::SourceDir* directory, CodeComposite* codeComposite);
 
 		static Export::FragmentLayouter layouter();
+		static QString codeUnitNameQualifier(Model::Node* node);
 };
 
 }
