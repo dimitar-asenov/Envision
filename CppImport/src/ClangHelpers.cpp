@@ -27,6 +27,7 @@
 #include "ClangHelpers.h"
 
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/MetaDefinition.h"
 
 namespace CppImport {
 
@@ -159,39 +160,23 @@ QStringList ClangHelpers::folderNamesFromPath(QString path)
 	return result;
 }
 
-void ClangHelpers::insertFieldInFolder(OOModel::Field* field, clang::SourceLocation location,
-													 OOModel::Declaration* parentNonFolderDeclaration)
+void ClangHelpers::insertDeclarationInFolder(OOModel::Declaration* declaration, clang::SourceLocation location,
+															OOModel::Declaration* parentNonFolderDeclaration)
 {
+	auto inserter = [declaration](auto container)
+	{
+		if (auto castedDeclaration = DCast<OOModel::Field>(declaration))
+			container->fields()->append(castedDeclaration);
+		else if (auto castedDeclaration = DCast<OOModel::Class>(declaration))
+			container->classes()->append(castedDeclaration);
+		else if (auto castedDeclaration = DCast<OOModel::Method>(declaration))
+			container->methods()->append(castedDeclaration);
+		else if (auto castedDeclaration = DCast<OOModel::MetaDefinition>(declaration))
+			container->subDeclarations()->append(castedDeclaration);
+	};
 	auto folder = folderForLocation(location, parentNonFolderDeclaration);
-	if (auto container = DCast<OOModel::Project>(folder)) container->fields()->append(field);
-	else if (auto container = DCast<OOModel::Module>(folder)) container->fields()->append(field);
-	else Q_ASSERT(false);
-}
-
-void ClangHelpers::insertClassInFolder(OOModel::Class* classs, clang::SourceLocation location,
-													 OOModel::Declaration* parentNonFolderDeclaration)
-{
-	auto folder = folderForLocation(location, parentNonFolderDeclaration);
-	if (auto container = DCast<OOModel::Project>(folder)) container->classes()->append(classs);
-	else if (auto container = DCast<OOModel::Module>(folder)) container->classes()->append(classs);
-	else Q_ASSERT(false);
-}
-
-void ClangHelpers::insertMethodInFolder(OOModel::Method* method, clang::SourceLocation location,
-													 OOModel::Declaration* parentNonFolderDeclaration)
-{
-	auto folder = folderForLocation(location, parentNonFolderDeclaration);
-	if (auto container = DCast<OOModel::Project>(folder)) container->methods()->append(method);
-	else if (auto container = DCast<OOModel::Module>(folder)) container->methods()->append(method);
-	else Q_ASSERT(false);
-}
-
-void ClangHelpers::insertSubDeclarationInFolder(OOModel::Declaration* subDeclaration, clang::SourceLocation location,
-																OOModel::Declaration* parentNonFolderDeclaration)
-{
-	auto folder = folderForLocation(location, parentNonFolderDeclaration);
-	if (auto container = DCast<OOModel::Project>(folder)) container->subDeclarations()->append(subDeclaration);
-	else if (auto container = DCast<OOModel::Module>(folder)) container->subDeclarations()->append(subDeclaration);
+	if (auto container = DCast<OOModel::Project>(folder)) inserter(container);
+	else if (auto container = DCast<OOModel::Module>(folder)) inserter(container);
 	else Q_ASSERT(false);
 }
 

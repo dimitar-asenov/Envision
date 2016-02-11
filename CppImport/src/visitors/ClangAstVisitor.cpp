@@ -264,9 +264,9 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 		{
 			// insert in tree
 			if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
-				clang_.insertMethodInFolder(ooFunction, functionDecl->getLocation(), curProject);
+				clang_.insertDeclarationInFolder(ooFunction, functionDecl->getLocation(), curProject);
 			else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
-				clang_.insertMethodInFolder(ooFunction, functionDecl->getLocation(), curModule);
+				clang_.insertDeclarationInFolder(ooFunction, functionDecl->getLocation(), curModule);
 			else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 			{
 				// happens in the case of friend functions
@@ -342,12 +342,12 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		else if (auto project = DCast<OOModel::Project>(ooStack_.top()))
 		{
 			ooVarDecl = clang_.createNamedNode<OOModel::Field>(varDecl);
-			clang_.insertFieldInFolder(static_cast<OOModel::Field*>(ooVarDecl), varDecl->getLocation(), project);
+			clang_.insertDeclarationInFolder(static_cast<OOModel::Field*>(ooVarDecl), varDecl->getLocation(), project);
 		}
 		else if (auto module = DCast<OOModel::Module>(ooStack_.top()))
 		{
 			ooVarDecl = clang_.createNamedNode<OOModel::Field>(varDecl);
-			clang_.insertFieldInFolder(static_cast<OOModel::Field*>(ooVarDecl), varDecl->getLocation(), module);
+			clang_.insertDeclarationInFolder(static_cast<OOModel::Field*>(ooVarDecl), varDecl->getLocation(), module);
 		}
 		else if (auto ooClass = DCast<OOModel::Class>(ooStack_.top()))
 		{
@@ -447,9 +447,9 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 
 	// insert in tree
 	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
-		clang_.insertClassInFolder(ooEnumClass, enumDecl->getLocation(), curProject);
+		clang_.insertDeclarationInFolder(ooEnumClass, enumDecl->getLocation(), curProject);
 	else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
-		clang_.insertClassInFolder(ooEnumClass, enumDecl->getLocation(), curModule);
+		clang_.insertDeclarationInFolder(ooEnumClass, enumDecl->getLocation(), curModule);
 	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooEnumClass);
 	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
@@ -1228,9 +1228,9 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 	Q_ASSERT(ooClass);
 	// insert in tree
 	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
-		clang_.insertClassInFolder(ooClass, recordDecl->getLocation(), curProject);
+		clang_.insertDeclarationInFolder(ooClass, recordDecl->getLocation(), curProject);
 	else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
-		clang_.insertClassInFolder(ooClass, recordDecl->getLocation(), curModule);
+		clang_.insertDeclarationInFolder(ooClass, recordDecl->getLocation(), curModule);
 	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooClass);
 	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))

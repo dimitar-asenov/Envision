@@ -55,8 +55,8 @@ void AllMetaDefinitions::createMetaDef(QList<Model::Node*> nodes, MacroExpansion
 		else
 			standardMetaDefinitions_.createMetaDefinitionBody(metaDef, nodes, expansion, mapping, arguments);
 
-		clang_.insertSubDeclarationInFolder(metaDef, expansion->definition()->getMacroInfo()->getDefinitionLoc(),
-														metaDefParent);
+		clang_.insertDeclarationInFolder(metaDef, expansion->definition()->getMacroInfo()->getDefinitionLoc(),
+													metaDefParent);
 	}
 
 	// qualify the meta call

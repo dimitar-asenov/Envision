@@ -118,14 +118,9 @@ class CPPIMPORT_API ClangHelpers
 		 */
 		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
 
-		void insertFieldInFolder(OOModel::Field* field, clang::SourceLocation location,
-										 OOModel::Declaration* parentNonFolderDeclaration);
-		void insertClassInFolder(OOModel::Class* classs, clang::SourceLocation location,
-										 OOModel::Declaration* parentNonFolderDeclaration);
-		void insertMethodInFolder(OOModel::Method* method, clang::SourceLocation location,
-										  OOModel::Declaration* parentNonFolderDeclaration);
-		void insertSubDeclarationInFolder(OOModel::Declaration* subDeclaration, clang::SourceLocation location,
-													 OOModel::Declaration* parentNonFolderDeclaration);
+		void insertDeclarationInFolder(OOModel::Declaration* declaration, clang::SourceLocation location,
+												 OOModel::Declaration* parentNonFolderDeclaration);
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 
