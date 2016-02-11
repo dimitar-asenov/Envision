@@ -29,6 +29,7 @@
 #include "cppexport_api.h"
 
 #include "CodeUnitPart.h"
+#include "ExportHelpers.h"
 
 #include "OOModel/src/declarations/Module.h"
 
@@ -71,7 +72,7 @@ inline CodeComposite* CodeUnit::composite() const { return composite_; }
 inline void CodeUnit::setComposite(CodeComposite* composite) { composite_ = composite; }
 inline CodeUnitPart* CodeUnit::headerPart() { return &headerPart_; }
 inline CodeUnitPart* CodeUnit::sourcePart() { return &sourcePart_; }
-inline OOModel::Module* CodeUnit::nameSpace() { return node()->firstAncestorOfType<OOModel::Module>(); }
+inline OOModel::Module* CodeUnit::nameSpace() { return ExportHelpers::parentNamespaceModule(node()); }
 inline bool CodeUnit::hasNoHeaderPart() { return hasNoHeaderPart_; }
 
 }

@@ -93,11 +93,11 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 		auto currentClass = classes.takeLast();
 		if (!printContext().hasOption(CppPrintContext::PrintMethodBodyInline))
 		{
-			CppPrintContext printContext{classs->firstAncestorOfType<OOModel::Module>(), CppPrintContext::PrintMethodBody};
+			CppPrintContext printContext{ExportHelpers::parentNamespaceModule(classs), CppPrintContext::PrintMethodBody};
 			*fragment << list(currentClass->methods(), DeclarationVisitor{printContext, data()}, "spacedSections", filter);
 		}
 		*fragment << list(currentClass->fields(),
-								DeclarationVisitor(classs->firstAncestorOfType<OOModel::Module>(), data()),
+								DeclarationVisitor(ExportHelpers::parentNamespaceModule(classs), data()),
 								"spacedSections",
 								[](Field* field)
 								{
@@ -602,7 +602,7 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 	// reconstruct potentially eliminated prefix for template instantiation special cases
 	if (explicitTemplateInstantiation->firstAncestorOfType<OOModel::Class>() &&
 		 !explicitTemplateInstantiation->instantiatedClass()->prefix())
-		*fragment << explicitTemplateInstantiation->firstAncestorOfType<OOModel::Module>()->name() << "::";
+		*fragment << ExportHelpers::parentNamespaceModule(explicitTemplateInstantiation)->name() << "::";
 
 	*fragment << ExpressionVisitor{data()}.visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
 	return fragment;

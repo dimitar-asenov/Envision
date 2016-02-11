@@ -154,4 +154,15 @@ void ExportHelpers::printDeclarationQualifier(Export::CompositeFragment* fragmen
 	}
 }
 
+OOModel::Module* ExportHelpers::parentNamespaceModule(Model::Node* node)
+{
+	auto parentModule = node->firstAncestorOfType<OOModel::Module>();
+	while (parentModule)
+	{
+		if (parentModule->kind() == OOModel::Module::ModuleKind::Standard) return parentModule;
+		parentModule = parentModule->firstAncestorOfType<OOModel::Module>();
+	}
+	return nullptr;
+}
+
 }

@@ -38,6 +38,7 @@ namespace OOModel
 	class Declaration;
 	class Method;
 	class Class;
+	class Module;
 }
 
 namespace Export
@@ -71,6 +72,8 @@ class CPPEXPORT_API ExportHelpers
 		static void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* from,
 														  Model::Node* to, bool printTypename = false);
 		static OOModel::Declaration* firstValidAncestorPrintContext(Model::Node* node);
+
+		static OOModel::Module* parentNamespaceModule(Model::Node* node);
 };
 
 template <typename T>
