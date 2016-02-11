@@ -7,69 +7,17 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="48"
    height="48"
-   id="svg2"
+   viewBox="0 0 48 48.000001"
+   id="svg4157"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="if.svg">
   <defs
-     id="defs4">
-    <linearGradient
-       id="linearGradient5224">
-      <stop
-         style="stop-color:#ffff00;stop-opacity:1;"
-         offset="0"
-         id="stop5226" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
-         offset="1"
-         id="stop5228" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3782">
-      <stop
-         style="stop-color:#ffff00;stop-opacity:1;"
-         offset="0"
-         id="stop3784" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
-         offset="1"
-         id="stop3786" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient2990">
-      <stop
-         style="stop-color:#ffff00;stop-opacity:1;"
-         offset="0"
-         id="stop2992" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
-         offset="1"
-         id="stop2994" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient2990"
-       id="linearGradient2996"
-       x1="27.146667"
-       y1="1046.9756"
-       x2="2.0799999"
-       y2="1022.3889"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient2990"
-       id="linearGradient3770"
-       gradientUnits="userSpaceOnUse"
-       x1="20.640001"
-       y1="1039.4556"
-       x2="2.0799999"
-       y2="1022.3889" />
-  </defs>
+     id="defs4159" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -77,19 +25,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="18.75"
-     inkscape:cx="-4.64"
-     inkscape:cy="24"
+     inkscape:zoom="19.857915"
+     inkscape:cx="24.151075"
+     inkscape:cy="27.699073"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
+     units="px"
      inkscape:window-width="2560"
-     inkscape:window-height="1510"
-     inkscape:window-x="-8"
-     inkscape:window-y="31"
+     inkscape:window-height="1541"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
-     id="metadata7">
+     id="metadata4162">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -106,23 +55,24 @@
      id="layer1"
      transform="translate(0,-1004.3622)">
     <rect
-       style="fill:#ffff00;fill-opacity:1;stroke:#c88c00;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect2996"
-       width="31.819805"
-       height="31.819805"
-       x="-726.1012"
-       y="728.22253"
-       transform="matrix(0.70710677,-0.7071068,0.70710677,0.7071068,0,0)" />
+       style="fill:#fdd766;fill-opacity:1;stroke:#fdd766;stroke-width:2.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4162"
+       width="30.941126"
+       height="30.941126"
+       x="-725.66187"
+       y="728.66187"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
     <text
        xml:space="preserve"
-       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#666666;fill-opacity:1;stroke:none;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Medium"
-       x="13.919999"
-       y="1038.9221"
-       id="text2995"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#7f6000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="14.956082"
+       y="1044.755"
+       id="text4164"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan2997"
-         x="13.919999"
-         y="1038.9221">if</tspan></text>
+         id="tspan4166"
+         x="14.956082"
+         y="1044.755"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.75px;font-family:ubuntu;-inkscape-font-specification:ubuntu">?</tspan></text>
   </g>
 </svg>

@@ -69,6 +69,33 @@
        y1="1039.4556"
        x2="2.0799999"
        y2="1022.3889" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4895"
+       id="radialGradient4901"
+       cx="24"
+       cy="1028.3622"
+       fx="24"
+       fy="1028.3622"
+       r="24"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-6.3305664e-7,5.4859375e-6)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4895">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop4897" />
+      <stop
+         id="stop4903"
+         offset="0.59675968"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="1"
+         id="stop4899" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -78,8 +105,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="18.75"
-     inkscape:cx="15.678542"
-     inkscape:cy="23.146666"
+     inkscape:cx="24.16"
+     inkscape:cy="26.986666"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -105,25 +132,23 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1004.3622)">
-    <rect
-       style="fill:#ffa3a3;fill-opacity:1;stroke:#c88c00;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect2996"
-       width="31.819805"
-       height="31.819805"
-       x="-726.1012"
-       y="728.22253"
-       transform="matrix(0.70710677,-0.7071068,0.70710677,0.7071068,0,0)" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:26.98431587px;line-height:125%;font-family:ubuntu;-inkscape-font-specification:'ubuntu Medium';letter-spacing:0px;word-spacing:0px;fill:#666666;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="5.4185863"
-       y="1033.176"
-       id="text4149"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan4151"
-         x="5.4185863"
-         y="1033.176"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:19.18884659px;font-family:ubuntu;-inkscape-font-specification:'ubuntu Medium';fill:#666666;fill-opacity:1">else</tspan></text>
+    <circle
+       style="fill:url(#radialGradient4901);fill-opacity:1;stroke:none;stroke-width:2.68499994;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path4859"
+       cx="24"
+       cy="1028.3622"
+       r="24" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ca0202;stroke-width:6;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 41.173334,1015.1355 c -9.837487,4.1014 -19.108548,8.2684 -30.666667,31.0934"
+       id="path4151"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ca0202;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 12.053333,1016.3622 c 14.524445,9.28 14.062222,17.9734 24,23.0934"
+       id="path4153"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>
