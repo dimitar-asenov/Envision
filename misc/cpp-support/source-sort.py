@@ -58,7 +58,7 @@ with open(args.inputFile, 'r') as inputFile:
 
 # Block class used to store and various fragments of the file
 class Block:
-	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?\s*{(\s*\\)\n$') #Might be inside a macro
+	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?\s*{(\s*\\)?\n$', re.DOTALL) #Might be inside a macro
 	
 	def __init__(self):
 		self.prefix = ""
@@ -67,19 +67,19 @@ class Block:
 		self.finalized = False
 		self.isMethodHeader = False
 	
-	def add(self, char):
+	def add(self, text):
 		if self.finalized:
-			self.suffix += char
+			self.suffix += text
 		else:
-			self.prefix += char
+			self.prefix += text
 			
-	def removeLast(self, char):
+	def removeLast(self, text):
 		if self.finalized:
-			assert self.suffix.endswith(char)
-			self.prefix = self.prefix[:-1]
+			assert self.suffix.endswith(text)
+			self.prefix = self.prefix[:-len(text)]
 		else:
-			assert self.prefix.endswith(char)
-			self.prefix = self.prefix[:-1]
+			assert self.prefix.endswith(text)
+			self.prefix = self.prefix[:-len(text)]
 	
 	def deepen(self):
 		assert not self.finalized
@@ -123,6 +123,14 @@ class Block:
 		if not self.isMethodHeader:
 			for c in self.children:
 				c.addEmptyLines()
+	
+	def removeTrailingSlashes(self):
+		if self.suffix and self.suffix.endswith('\\\n'):
+			self.suffix = self.suffix[:-2].rstrip() + '\n';
+		if self.prefix and self.prefix.endswith('\\\n'):
+			self.prefix = self.prefix[:-2].rstrip() + '\n';
+		for c in self.children:
+			c.removeTrailingSlashes()
 
 # Store current nesting level in a stack
 top = Block() # Here we will collect all blocks
@@ -140,7 +148,7 @@ current = '' # current character
 
 currentLine = ''
 
-closingBraceRegex = re.compile(r'\s*\};?(\s+\\)?$', re.DOTALL)
+closingBraceRegex = re.compile(r'\s*(\};?(?:\s+\\)?\n)$', re.DOTALL)
 doxyComment = re.compile(r'\s*/\*\*[^<].*\*/\s*$', re.DOTALL)
 macroOpenBrace = re.compile(r'.*\{\s*\\$', re.DOTALL)
 
@@ -207,10 +215,11 @@ for char in sourceText:
 		continue
 	
 	# Finish a block at every end of line.
-	if closingBraceRegex.match(currentLine):
-		stack[-1].removeLast(char) # The last } does not belong to the child block ...
+	m = closingBraceRegex.match(currentLine)
+	if m:
+		stack[-1].removeLast(m.group(1)) # The last };\ do not belong to the child block ...
 		stack[-2].finalize()
-		stack[-2].add(char) # ... it belongs to the parent block
+		stack[-2].add(m.group(1)) # ... they belong to the parent block
 		stack = stack[:-1] # pop the stack (child block)
 	else:
 		stack[-1].finalize()
@@ -221,6 +230,7 @@ for char in sourceText:
 
 #top.debugPrint() # Use this to debug things
 
+top.removeTrailingSlashes()
 top.sort()
 top.addEmptyLines()
 with open(args.outputFile, 'w') as outputFile:
