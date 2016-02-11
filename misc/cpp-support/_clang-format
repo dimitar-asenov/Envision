@@ -5,7 +5,7 @@ Standard: Cpp11
 UseTab: Never
 TabWidth: 3
 IndentWidth: 3
-ColumnLimit: 1000000
+ColumnLimit: 400
 
 BreakBeforeBraces: Custom
 

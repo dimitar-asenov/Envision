@@ -58,7 +58,7 @@ with open(args.inputFile, 'r') as inputFile:
 
 # Block class used to store and various fragments of the file
 class Block:
-	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?\s*{\n$', re.DOTALL)
+	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?\s*{(\s*\\)\n$') #Might be inside a macro
 	
 	def __init__(self):
 		self.prefix = ""
@@ -140,8 +140,9 @@ current = '' # current character
 
 currentLine = ''
 
-closingBraceRegex = re.compile(r'\s*\};?$', re.DOTALL)
+closingBraceRegex = re.compile(r'\s*\};?(\s+\\)?$', re.DOTALL)
 doxyComment = re.compile(r'\s*/\*\*[^<].*\*/\s*$', re.DOTALL)
+macroOpenBrace = re.compile(r'.*\{\s*\\$', re.DOTALL)
 
 # Loop over all the characters and build the tree of Block structures
 for char in sourceText:
@@ -201,7 +202,7 @@ for char in sourceText:
 	
 	# This is the end of the line and we are not in a comment/string and the last character is {
 	# Start a new block
-	if prev == '{':
+	if prev == '{' or (prev =='\\' and macroOpenBrace.match(stack[-1].prefix)):
 		stack.append( stack[-1].deepen() )
 		continue
 	
