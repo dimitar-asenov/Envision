@@ -65,6 +65,7 @@ class Block:
 		self.suffix = ""
 		self.children = []
 		self.finalized = False
+		self.isMethodHeader = False
 	
 	def add(self, char):
 		if self.finalized:
@@ -88,14 +89,14 @@ class Block:
 	def finalize(self):
 		assert not self.finalized
 		self.finalized = True
+		self.isMethodHeader = (self.methodRegex.match(self.prefix) != None) # cast to boolean
 		
 	def debugPrint(self, indentation = ''):
 		if not self.prefix and not self.suffix and not self.children:
 			return
 		sys.stdout.write(indentation + '>>>')
 		sys.stdout.write(indentation + self.prefix)
-		match = self.methodRegex.match(self.prefix)
-		if match:
+		if self.isMethodHeader:
 			sys.stdout.write(indentation + 'METHOD BODY')
 		else:
 			for c in self.children:
@@ -106,8 +107,7 @@ class Block:
 		sys.stdout.write(indentation + '<<<')
 		
 	def sort(self):
-		match = self.methodRegex.match(self.prefix)
-		if not match:
+		if not self.isMethodHeader:
 			self.children.sort(key = lambda x : x.sortingString())
 			for c in self.children:
 				c.sort()
@@ -117,6 +117,12 @@ class Block:
 			
 	def text(self):
 		return self.prefix + (''.join(c.text() for c in self.children))  + self.suffix
+	
+	def addEmptyLines(self):
+		self.suffix += '\n'
+		if not self.isMethodHeader:
+			for c in self.children:
+				c.addEmptyLines()
 
 # Store current nesting level in a stack
 top = Block() # Here we will collect all blocks
@@ -135,6 +141,7 @@ current = '' # current character
 currentLine = ''
 
 closingBraceRegex = re.compile(r'\s*\};?$', re.DOTALL)
+doxyComment = re.compile(r'\s*/\*\*[^<].*\*/\s*$', re.DOTALL)
 
 # Loop over all the characters and build the tree of Block structures
 for char in sourceText:
@@ -188,6 +195,10 @@ for char in sourceText:
 	if char != '\n':
 		continue
 	
+	# If this is just the end of a doxy comment, do not make a separate block for it
+	if doxyComment.match(stack[-1].prefix):
+		continue;
+	
 	# This is the end of the line and we are not in a comment/string and the last character is {
 	# Start a new block
 	if prev == '{':
@@ -199,7 +210,6 @@ for char in sourceText:
 		stack[-1].removeLast(char) # The last } does not belong to the child block ...
 		stack[-2].finalize()
 		stack[-2].add(char) # ... it belongs to the parent block
-		stack[-2].add('\n') # Add an empty line to improve the look
 		stack = stack[:-1] # pop the stack (child block)
 	else:
 		stack[-1].finalize()
@@ -211,5 +221,6 @@ for char in sourceText:
 #top.debugPrint() # Use this to debug things
 
 top.sort()
+top.addEmptyLines()
 with open(args.outputFile, 'w') as outputFile:
 	outputFile.write(top.text())
