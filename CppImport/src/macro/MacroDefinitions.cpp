@@ -51,8 +51,6 @@ QString MacroDefinitions::definitionName(const clang::MacroDirective* md) const
 
 QString MacroDefinitions::signature(const clang::MacroDirective* md) const
 {
-	QString namespaceName, fileName;
-
 	auto parentProject = clang_.projectForLocation(md->getLocation());
 	if (parentProject != clang_.rootProject())
 		return parentProject->name() + "/" + definitionName(md);
