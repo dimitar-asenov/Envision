@@ -1,0 +1,26 @@
+---
+Language: Cpp
+Standard: Cpp11
+
+UseTab: Never
+TabWidth: 3
+IndentWidth: 3
+ColumnLimit: 1000000
+
+BreakBeforeBraces: Custom
+
+
+BraceWrapping:
+   AfterClass: false
+   AfterControlStatement: false
+   AfterEnum: false
+   AfterFunction: false
+   AfterNamespace: false
+   AfterObjCDeclaration: false
+   AfterStruct: false
+   AfterUnion: false
+   BeforeCatch: true
+   BeforeElse: true
+   IndentBraces: false
+    
+...

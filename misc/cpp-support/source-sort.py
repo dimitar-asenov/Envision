@@ -53,15 +53,12 @@ with open(args.inputFile, 'r') as inputFile:
 		if not isExcluded(line):
 			if len(sourceText) > 0 and not sourceText.endswith('\n'):
 				sourceText += '\n'
-			while "\t " in line:
-				line = line.replace("\t ", "\t")
-			sourceText += line.lstrip(' ')
+			sourceText += line
 
 
 # Block class used to store and various fragments of the file
 class Block:
-	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?(\s|\n)*{(\s|\n)*$', re.DOTALL)
-	macroRegex = re.compile(r'(\s*[A-Z_]+\s*(\n|\(.*\)\n)|\#include.*)$', re.DOTALL)
+	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?\s*{\n$', re.DOTALL)
 	
 	def __init__(self):
 		self.prefix = ""
@@ -134,9 +131,10 @@ lineComment = False
 
 prev = '' # previous character
 current = '' # current character
-prevPeer = None # previous peer node
 
 currentLine = ''
+
+closingBraceRegex = re.compile(r'\s*\};?$', re.DOTALL)
 
 # Loop over all the characters and build the tree of Block structures
 for char in sourceText:
@@ -187,39 +185,28 @@ for char in sourceText:
 		quote = char
 		continue
 	
-	if char == '{':
+	if char != '\n':
+		continue
+	
+	# This is the end of the line and we are not in a comment/string and the last character is {
+	# Start a new block
+	if prev == '{':
 		stack.append( stack[-1].deepen() )
 		continue
 	
-	isMacro = Block.macroRegex.match(currentLine) if char == '\n' else False
-	if char == '}' or ( char ==';' and not prev == '}') or (char == '\n' and prev == ':') or (char == '\n' and isMacro):
-		if char == '}':
-			stack[-1].removeLast(char)
-			stack[-2].finalize()
-			stack[-2].add(char)
-			stack = stack[:-1]
-		else:
-			stack[-1].finalize()
-			
-		prevPeer = stack[-1] # we need this to handle ; and : and isMacro
-		stack = stack[:-1]
-		stack.append( stack[-1].deepen())
-		continue
-	
-	if prev == '}' and (char == ';' or char == '\n'):
-		stack[-1].removeLast(char)
-		prevPeer.add(char)
-		continue
-	
-	if prev == ';' and char == '\n':
-		stack[-1].removeLast(char)
-		prevPeer.add(char)
-		continue
-	
-	if prev == '{' and char == '\n':
-		stack[-1].removeLast(char)
-		stack[-2].add(char)
-		continue
+	# Finish a block at every end of line.
+	if closingBraceRegex.match(currentLine):
+		stack[-1].removeLast(char) # The last } does not belong to the child block ...
+		stack[-2].finalize()
+		stack[-2].add(char) # ... it belongs to the parent block
+		stack[-2].add('\n') # Add an empty line to improve the look
+		stack = stack[:-1] # pop the stack (child block)
+	else:
+		stack[-1].finalize()
+
+	stack = stack[:-1] # pop the stack (peer block)
+	stack.append( stack[-1].deepen()) # add a new peer
+	continue
 
 #top.debugPrint() # Use this to debug things
 
