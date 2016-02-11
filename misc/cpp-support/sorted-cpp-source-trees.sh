@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ################################################################################
 # Set some variables
@@ -53,7 +54,7 @@ cp $CLANG_FORMAT_STYLE $TEMPDIR/
 cp -r $EXPORTED_SOURCE_DIR/* $SORTED_EXPORTED
 
 # Only copy those original files for which there is an equivalent export file
-find $SORTED_EXPORTED \( -name "*.h" -o -name "*.cpp" \) -exec bash -c 'cp ${0/$1/$3} ${0/$1/$2}' {} "$SORTED_EXPORTED" "$SORTED_ORIGINAL" "$ORIGINAL_SOURCE_DIR" \;
+find $SORTED_EXPORTED \( -name "*.h" -o -name "*.cpp" \) -exec bash -c 'mkdir -p `dirname ${0/$1/$2}`; cp ${0/$1/$3} ${0/$1/$2}' {} "$SORTED_EXPORTED" "$SORTED_ORIGINAL" "$ORIGINAL_SOURCE_DIR" \;
 
 ################################################################################
 # Format everything uniformly. It's important to use the provided
