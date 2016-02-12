@@ -499,8 +499,10 @@ SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* 
 	if (auto commentNode = DCast<Comments::CommentNode>(compositeNode->comment()))
 	{
 		auto commentFragment = new CompositeFragment{commentNode->lines(), style};
+		*commentFragment << "/**";
 		for (auto line : *(commentNode->lines()))
-			*commentFragment << line;
+			*commentFragment << " * " + line->get();
+		*commentFragment << " */";
 		return commentFragment;
 	}
 

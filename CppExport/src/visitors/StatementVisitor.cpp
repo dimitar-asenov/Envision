@@ -264,7 +264,7 @@ SourceFragment* StatementVisitor::visit(OOModel::CommentStatementItem* statement
 {
 	auto fragment = new CompositeFragment{statement, "sections"};
 	for (auto line : *statement->commentNode()->lines())
-		*fragment << line;
+		*fragment << "// " + line->get();
 	return fragment;
 }
 
