@@ -28,6 +28,7 @@
 
 #include "AnchorLayoutConstraintSolver.h"
 #include "../items/ItemRegion.h"
+#include "BorderFormElement.h"
 
 namespace Visualization {
 
@@ -39,6 +40,7 @@ AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& 
 	SuperLayoutElement<AnchorLayoutFormElement, LayoutFormElement>{other},
 	needsHorizontalSolver_{other.needsHorizontalSolver_},
 	needsVerticalSolver_{other.needsVerticalSolver_},
+	borderFormElement_{other.borderFormElement_},
 	horizontalSolver_{new AnchorLayoutConstraintSolver{}}, verticalSolver_{new AnchorLayoutConstraintSolver{}},
 	externalMatches_{} // Will be adjusted later
 {
@@ -51,6 +53,13 @@ AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& 
 		auto newMatch = matching.value(it.value());
 		Q_ASSERT(newMatch);
 		externalMatches_.insert(it.key(), newMatch);
+	}
+
+	// We need to update the BorderFormElement
+	if (borderFormElement_)
+	{
+		borderFormElement_  = dynamic_cast<BorderFormElement*>(matching.value(borderFormElement_));
+		Q_ASSERT(borderFormElement_);
 	}
 }
 
@@ -138,12 +147,15 @@ AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormE
 	return put(orientation, relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
 }
 
-void AnchorLayoutFormElement::computeSize(Item* item, int /*availableWidth*/, int /*availableHeight*/)
+void AnchorLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	// compute size of each sub-element and set their position to (0, 0)
 	for (FormElement* element : children())
 	{
-		element->computeSize(item, 0, 0);
+		if (element == borderFormElement_)
+			borderFormElement_->computeSize(item, availableWidth, availableHeight);
+		else
+			element->computeSize(item, 0, 0);
 		element->setPos(item, QPoint{0, 0});
 	}
 
@@ -170,7 +182,7 @@ void AnchorLayoutFormElement::computeSize(Item* item, int /*availableWidth*/, in
 
 bool AnchorLayoutFormElement::sizeDependsOnParent(const Item* /*item*/) const
 {
-	return false;
+	return borderFormElement_;
 }
 
 AnchorLayoutFormElement* AnchorLayoutFormElement::put(AnchorLayoutAnchor::Orientation orientation,
@@ -178,6 +190,18 @@ AnchorLayoutFormElement* AnchorLayoutFormElement::put(AnchorLayoutAnchor::Orient
 		FormElement* fixedElement)
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
+
+	// Check if this is a border element and record it if so
+	if (auto borderFormElement = dynamic_cast<BorderFormElement*>(placeElement))
+	{
+		Q_ASSERT(!borderFormElement_ || borderFormElement_ == borderFormElement);
+		borderFormElement_ = borderFormElement;
+	}
+	if (auto borderFormElement = dynamic_cast<BorderFormElement*>(fixedElement))
+	{
+		Q_ASSERT(!borderFormElement_ || borderFormElement_ == borderFormElement);
+		borderFormElement_ = borderFormElement;
+	}
 
 	auto placeElementToAdd = findChildMatch(placeElement);
 	auto fixedElementToAdd = findChildMatch(fixedElement);

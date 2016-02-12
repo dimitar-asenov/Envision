@@ -254,6 +254,8 @@ add_library(VisualizationBase SHARED
 	src/shapes/FrameStyle.h
 	src/shapes/Frame.cpp
 	src/shapes/FrameStyle.cpp
+	src/declarative/BorderFormElement.h
+	src/declarative/BorderFormElement.cpp
 )
 
 if (WIN32)

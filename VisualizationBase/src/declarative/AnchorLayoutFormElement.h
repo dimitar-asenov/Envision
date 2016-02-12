@@ -35,6 +35,7 @@ using namespace DeclarativeEnumerations; // This shuold be here to enable client
 namespace Visualization {
 
 class AnchorLayoutConstraintSolver;
+class BorderFormElement;
 
 class VISUALIZATIONBASE_API AnchorLayoutFormElement
 		: public SuperLayoutElement<AnchorLayoutFormElement, LayoutFormElement>
@@ -143,6 +144,9 @@ class VISUALIZATIONBASE_API AnchorLayoutFormElement
 		QList<AnchorLayoutAnchor*> verticalConstraints_{};
 		bool needsHorizontalSolver_{};
 		bool needsVerticalSolver_{};
+
+		// If set, this element makes the layout stretchable. There can be only one border element.
+		BorderFormElement* borderFormElement_{};
 
 		// We use two separate solvers, because each one can cache previous data and speed up the process.
 		AnchorLayoutConstraintSolver* horizontalSolver_{};
