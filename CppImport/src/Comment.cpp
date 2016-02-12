@@ -80,7 +80,7 @@ QString Comment::text()
 	auto lines = text_.split('\n');
 	if (!lines.first().startsWith("/*"))
 	{
-		static QRegularExpression singleLineRegex{"^\\s*//\\s*([^\\s].*)$"};
+		static QRegularExpression singleLineRegex{"^\\s*//\\s?(.*)$"};
 		for (auto i = 0; i < lines.size(); i++)
 		{
 			auto match = singleLineRegex.match(lines[i]);
