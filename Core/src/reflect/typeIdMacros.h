@@ -42,14 +42,16 @@
  * {
  * 	DECLARE_TYPE_ID
  * 	...
+ *
+ * hierarchyTypeIds:
+ *		Returns an ordered list of all ids in the type hierarchy of this class.
+ *		The most derived id appears at the front of the list.
  */
 #define DECLARE_TYPE_ID_COMMON(OVERRIDE)																										\
 	public:																																				\
 		virtual const QString& typeName() const OVERRIDE;																					\
 		virtual int typeId() const OVERRIDE;																									\
 																																							\
-		/*  Returns an ordered list of all ids in the type hierarchy of this class. */											\
-		/* The most derived id appears at the front of the list. */																		\
 		virtual QList<int> hierarchyTypeIds() const OVERRIDE;																				\
 		virtual bool isSubtypeOf(int type) const OVERRIDE;																					\
 		virtual bool isSubtypeOf(const QString& type) const OVERRIDE;																	\
