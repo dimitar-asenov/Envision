@@ -74,6 +74,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 
 	int minWidth = minWidthGetter_ ? minWidthGetter_(item) : (orientation_ == Qt::Horizontal ? 3 : 10);
 	int minHeight = minHeightGetter_ ? minHeightGetter_(item) : (orientation_ == Qt::Horizontal ? 10 : 3);
+	int minorStretchFactor = sizeDependsOnParent(item) ? 1 : 0;
 
 	QSize finalSize;
 
@@ -92,7 +93,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[&itemList](int x, int, int w, int h){itemList[x]->changeGeometry(w, h);},	// changeGeometry
 				[&itemList](int x, int){return itemList[x]->sizeDependsOnParent();},	// isStretchable
 				[&itemPositions](int x, int, QPoint pos){itemPositions[x] = pos;},	// setPosition
-				[](int){return 0;},	// rowStretchFactors
+				[minorStretchFactor](int){return minorStretchFactor;},	// rowStretchFactors
 				[&itemList](int x){return itemList[x]->sizeDependsOnParent() ? 1 : 0;},	// columnStretchFactors
 				[](int, int){return LayoutStyle::Alignment::Left;},	// horizontalAlignment
 				[this](int, int){return alignment_;},	// verticalAlignment
@@ -120,7 +121,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[&itemList](int, int y){return itemList[y]->sizeDependsOnParent();},	// isStretchable
 				[&itemPositions](int, int y, QPoint pos){itemPositions[y] = pos;},	// setPosition
 				[&itemList](int y){return itemList[y]->sizeDependsOnParent() ? 1 : 0;},	// rowStretchFactors
-				[](int){return 0;},	// columnStretchFactors
+				[minorStretchFactor](int){return minorStretchFactor;},	// columnStretchFactors
 				[this](int, int){return alignment_;},	// horizontalAlignment
 				[](int, int){return LayoutStyle::Alignment::Top;},	// verticalAlignment
 				[spacing](){return spacing;},	// spaceBetweenRows
@@ -150,7 +151,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[&itemList, invert](int x, int, int w, int h){itemList[invert(x)]->changeGeometry(w, h);},	// changeGeom.
 				[&itemList, invert](int x, int){return itemList[invert(x)]->sizeDependsOnParent();},	// isStretchable
 				[&itemPositions, invert](int x, int, QPoint pos){itemPositions[invert(x)] = pos;},	// setPosition
-				[](int){return 0;},	// rowStretchFactors
+				[minorStretchFactor](int){return minorStretchFactor;},	// rowStretchFactors
 				[&itemList, invert](int x){return itemList[invert(x)]->sizeDependsOnParent() ? 1 : 0;},	// columnStretchF.
 				[](int, int){return LayoutStyle::Alignment::Left;},	// horizontalAlignment
 				[this](int, int){return alignment_;},	// verticalAlignment
@@ -178,7 +179,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[&itemList, invert](int, int y){return itemList[invert(y)]->sizeDependsOnParent();},	// isStretchable
 				[&itemPositions, invert](int, int y, QPoint pos){itemPositions[invert(y)] = pos;},	// setPosition
 				[&itemList, invert](int y){return itemList[invert(y)]->sizeDependsOnParent() ? 1 : 0;},	// rowStretchF.
-				[](int){return 0;},	// columnStretchFactors
+				[minorStretchFactor](int){return minorStretchFactor;},	// columnStretchFactors
 				[this](int, int){return alignment_;},	// horizontalAlignment
 				[](int, int){return LayoutStyle::Alignment::Top;},	// verticalAlignment
 				[spacing](){return spacing;},	// spaceBetweenRows
