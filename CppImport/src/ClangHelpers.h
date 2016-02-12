@@ -28,6 +28,7 @@
 
 #include "cppimport_api.h"
 #include "EnvisionToClangMap.h"
+#include "Comment.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "Comments/src/nodes/CommentNode.h"
