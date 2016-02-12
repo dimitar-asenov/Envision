@@ -100,7 +100,7 @@ QString Comment::text()
 			if (match.hasMatch()) lines[i] = match.captured(1);
 		}
 
-		static QRegularExpression lastLineRegex{"^(.*)\\*/\\s*$"};
+		static QRegularExpression lastLineRegex{"(.*(^|[^\\*]))\\*+/\\s*$"};
 		match = lastLineRegex.match(lines.last());
 		if (match.hasMatch())
 		{
