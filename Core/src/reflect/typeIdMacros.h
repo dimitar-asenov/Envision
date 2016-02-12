@@ -190,4 +190,4 @@ templatePrefix bool className::isSubtypeOf(int type) const																				\
 templatePrefix bool className::isSubtypeOf(const QString& type) const																\
 {																																							\
 	return typeNameStatic() == type || Super::isSubtypeOf(type);																		\
-}																																							\
+}
