@@ -134,7 +134,7 @@ templatePrefix int className::typeId()	const																									\
 																																							\
 templatePrefix const QString& className::typeNameStatic()																				\
 {																																							\
-	static QString typeName_(nameExpression);																									\
+	static QString typeName_{nameExpression};																									\
 	return typeName_;																																	\
 }																																							\
 
