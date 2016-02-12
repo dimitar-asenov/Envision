@@ -44,6 +44,7 @@ void StaticStyle::load(StyleLoader& sl)
 	Super::load(sl);
 
 	sl.load("itemClass", itemClass_);
+	sl.load("zValue", zValue_);
 
 	if (! itemClass_.isEmpty())
 	{

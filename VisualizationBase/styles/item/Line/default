@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default" >
+<style prototypes="item/Item/default,item/Static/default" >
 	<itemClass>Line</itemClass> <!-- This is only used by 'Static' when a Line is displayed through a static element. -->
 	<drawsOnlyShape>false</drawsOnlyShape>
 	<wholeItemCursor>true</wholeItemCursor>

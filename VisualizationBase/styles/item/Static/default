@@ -1,4 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<itemClass></itemClass>
+	<zValue>0</zValue>
 </style>

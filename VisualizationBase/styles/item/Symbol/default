@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="../Text/default">
+<style prototypes="item/Text/default,item/Static/default">
 	<itemClass>Symbol</itemClass> <!-- This is only used by 'Static' when a symbol is displayed through a static element -->
 	<font>
 		<weight>1</weight>

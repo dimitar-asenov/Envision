@@ -47,6 +47,7 @@ class VISUALIZATIONBASE_API StaticStyle : public Super<ItemStyle>
 
 		const QString& itemClass() const;
 		const ItemStyle& itemStyle() const;
+		int zValue() const;
 
 		bool isEmpty() const;
 
@@ -55,6 +56,7 @@ class VISUALIZATIONBASE_API StaticStyle : public Super<ItemStyle>
 
 	private:
 		QString itemClass_;
+		int zValue_{};
 		QSharedPointer<ItemStyle> itemStyle_;
 
 		mutable ClickHandler clickHandler_{};
@@ -75,6 +77,7 @@ inline const StaticStyle& StaticSequenceStyle::stat(int i) const { return seq_.a
 
 inline const QString& StaticStyle::itemClass() const { return itemClass_; }
 inline const ItemStyle& StaticStyle::itemStyle() const { return *itemStyle_.data(); }
+inline int StaticStyle::zValue() const { return zValue_; }
 
 inline bool StaticStyle::isEmpty() const { return itemClass_.isEmpty(); }
 

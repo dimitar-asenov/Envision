@@ -40,6 +40,7 @@ Static::Static(Item* parent, const StyleType *style) :
 {
 	// The shape should only show for the contained static item.
 	removeShape();
+	if (style->zValue() != 0) setZValue(style->zValue());
 }
 
 Static::~Static()
