@@ -78,8 +78,41 @@ void Comment::removeFromItemList()
 QString Comment::text()
 {
 	auto lines = text_.split('\n');
-	for (auto i = 0; i < lines.length(); i++)
-		lines[i] = lines[i].trimmed();
+	if (!lines.first().startsWith("/*"))
+	{
+		QRegularExpression singleLineRegex{"^\\s*//\\s*([^\\s].*)$", QRegularExpression::DotMatchesEverythingOption};
+		for (auto i = 0; i < lines.size(); i++)
+		{
+			auto match = singleLineRegex.match(lines[i]);
+			if (match.hasMatch()) lines[i] = match.captured(1);
+		}
+	}
+	else
+	{
+		QRegularExpression firstLineRegex{"^/\\*+<?\\s?(.*)$", QRegularExpression::DotMatchesEverythingOption};
+		auto match = firstLineRegex.match(lines.first());
+		if (match.hasMatch()) lines[0] = match.captured(1);
+
+		QRegularExpression middleLineRegex{"^\\s*\\*\\s(.*)$", QRegularExpression::DotMatchesEverythingOption};
+		for (auto i = 1; i < lines.size(); i++)
+		{
+			match = middleLineRegex.match(lines[i]);
+			if (match.hasMatch()) lines[i] = match.captured(1);
+		}
+
+		QRegularExpression lastLineRegex{"^(.*)\\*/\\s*$", QRegularExpression::DotMatchesEverythingOption};
+		match = lastLineRegex.match(lines.last());
+		if (match.hasMatch())
+		{
+			auto captured = match.captured(1);
+			while (captured.endsWith('*')) captured = captured.left(captured.size() - 1);
+			lines[lines.size() - 1] = captured;
+		}
+
+		for (auto i = 1; i < lines.size() - 1; i++) if (lines[i].trimmed() == "*") lines[i] = "";
+		if (lines.first().trimmed().isEmpty()) lines.removeFirst();
+		if (lines.last().trimmed().isEmpty()) lines.removeLast();
+	}
 	return lines.join('\n');
 }
 
