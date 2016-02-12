@@ -153,7 +153,7 @@ DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)																
 templatePrefix void className::initType() {}																									\
 templatePrefix QList<int> className::hierarchyTypeIds() const																			\
 {																																							\
-	static QList<int> h = {typeIdStatic()};																									\
+	static QList<int> h{typeIdStatic()};																									\
 	return h;																																			\
 }																																							\
 templatePrefix bool className::isSubtypeOf(int type) const																				\
