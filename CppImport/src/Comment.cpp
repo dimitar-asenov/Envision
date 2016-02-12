@@ -80,7 +80,7 @@ QString Comment::text()
 	auto lines = text_.split('\n');
 	if (!lines.first().startsWith("/*"))
 	{
-		QRegularExpression singleLineRegex{"^\\s*//\\s*([^\\s].*)$"};
+		static QRegularExpression singleLineRegex{"^\\s*//\\s*([^\\s].*)$"};
 		for (auto i = 0; i < lines.size(); i++)
 		{
 			auto match = singleLineRegex.match(lines[i]);
@@ -89,18 +89,18 @@ QString Comment::text()
 	}
 	else
 	{
-		QRegularExpression firstLineRegex{"^/\\*+<?\\s?(.*)$"};
+		static QRegularExpression firstLineRegex{"^/\\*+<?\\s?(.*)$"};
 		auto match = firstLineRegex.match(lines.first());
 		if (match.hasMatch()) lines[0] = match.captured(1);
 
-		QRegularExpression middleLineRegex{"^\\s*\\*\\s(.*)$"};
+		static QRegularExpression middleLineRegex{"^\\s*\\*\\s(.*)$"};
 		for (auto i = 1; i < lines.size(); i++)
 		{
 			match = middleLineRegex.match(lines[i]);
 			if (match.hasMatch()) lines[i] = match.captured(1);
 		}
 
-		QRegularExpression lastLineRegex{"^(.*)\\*/\\s*$"};
+		static QRegularExpression lastLineRegex{"^(.*)\\*/\\s*$"};
 		match = lastLineRegex.match(lines.last());
 		if (match.hasMatch())
 		{
