@@ -42,14 +42,16 @@
  * {
  * 	DECLARE_TYPE_ID
  * 	...
+ *
+ * hierarchyTypeIds:
+ *		Returns an ordered list of all ids in the type hierarchy of this class.
+ *		The most derived id appears at the front of the list.
  */
 #define DECLARE_TYPE_ID_COMMON(OVERRIDE)																										\
 	public:																																				\
 		virtual const QString& typeName() const OVERRIDE;																					\
 		virtual int typeId() const OVERRIDE;																									\
 																																							\
-		/*  Returns an ordered list of all ids in the type hierarchy of this class. */											\
-		/* The most derived id appears at the front of the list. */																		\
 		virtual QList<int> hierarchyTypeIds() const OVERRIDE;																				\
 		virtual bool isSubtypeOf(int type) const OVERRIDE;																					\
 		virtual bool isSubtypeOf(const QString& type) const OVERRIDE;																	\
@@ -132,7 +134,7 @@ templatePrefix int className::typeId()	const																									\
 																																							\
 templatePrefix const QString& className::typeNameStatic()																				\
 {																																							\
-	static QString typeName_(nameExpression);																									\
+	static QString typeName_{nameExpression};																									\
 	return typeName_;																																	\
 }																																							\
 
@@ -151,7 +153,7 @@ DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)																
 templatePrefix void className::initType() {}																									\
 templatePrefix QList<int> className::hierarchyTypeIds() const																			\
 {																																							\
-	static QList<int> h = {typeIdStatic()};																									\
+	static QList<int> h{typeIdStatic()};																									\
 	return h;																																			\
 }																																							\
 templatePrefix bool className::isSubtypeOf(int type) const																				\
@@ -188,4 +190,4 @@ templatePrefix bool className::isSubtypeOf(int type) const																				\
 templatePrefix bool className::isSubtypeOf(const QString& type) const																\
 {																																							\
 	return typeNameStatic() == type || Super::isSubtypeOf(type);																		\
-}																																							\
+}
