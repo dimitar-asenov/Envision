@@ -121,6 +121,11 @@ SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 {
 	auto fragment = new CompositeFragment{enumerator};
+
+	auto commentNode = DCast<Comments::CommentNode>(enumerator->comment());
+	if (commentNode && commentNode->lines()->size() > 1)
+		*fragment << DeclarationVisitor::compositeNodeComments(enumerator, "declarationComment");
+
 	*fragment << enumerator->name();
 	if (auto value = enumerator->value())
 		*fragment << " = " << expression(value);
@@ -130,7 +135,8 @@ SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 		if (parentList->last() != enumerator)
 			*fragment << ",";
 
-	*fragment << DeclarationVisitor::compositeNodeComments(enumerator, "");
+	if (commentNode && commentNode->lines()->size() == 1)
+		*fragment << "/**< " + commentNode->lines()->first()->get() + " */";
 
 	return fragment;
 }
