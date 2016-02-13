@@ -60,7 +60,8 @@ void VCaseStatement::initializeForms()
 			[](I* v){return &v->style()->statements();});
 
 	// We need something stretchable
-	auto statementsContainer = grid({{statements}})->setColumnStretchFactor(1, 1);
+	auto statementsContainer = grid({{statements}})->setColumnStretchFactor(1, 1)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	auto shapeElement = new ShapeFormElement{};
 	auto borderElement = new BorderFormElement{};
