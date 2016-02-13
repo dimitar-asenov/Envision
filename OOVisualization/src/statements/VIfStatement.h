@@ -71,6 +71,8 @@ class OOVISUALIZATION_API VIfStatement
 		Visualization::Static* icon_{};
 		Visualization::Static* elseIcon_{};
 		Visualization::Line* elseLine_{};
+
+		bool isInsideAnotherIf() const;
 };
 
 inline Visualization::NodeWrapper* VIfStatement::condition() const { return condition_; }

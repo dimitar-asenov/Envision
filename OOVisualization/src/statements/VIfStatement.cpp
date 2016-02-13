@@ -45,11 +45,21 @@ VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style)
 
 int VIfStatement::determineForm()
 {
-	if (node()->elseBranch() && node()->elseBranch()->size() == 0) return 0;
+	// Plain if with no else branch
+	int formId = 0;
+	if (node()->elseBranch() && node()->elseBranch()->size() > 0)
+	{
+		if (node()->elseBranch()->size() == 1 && DCast<IfStatement>(node()->elseBranch()->first()))
+			formId = 2; // else contains only an if
+		else
+			formId = 1; // standard else
+	}
 
-	if (node()->elseBranch() && node()->elseBranch()->size() == 1 && DCast<IfStatement>(node()->elseBranch()->first()))
-		return 2;
-	return 1;
+	if (isInsideAnotherIf())
+		formId += 3; // Make the if stretchable
+
+	qDebug() << formId;
+	return formId;
 }
 
 void VIfStatement::initializeForms()
@@ -91,10 +101,9 @@ void VIfStatement::initializeForms()
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	auto shapeElement = new ShapeFormElement{};
-	auto borderElement = new BorderFormElement{};
 
 	// Form 0: no else branch
-	addForm((new AnchorLayoutFormElement{})
+	auto topLevelIfWithoutElse = (new AnchorLayoutFormElement{})
 			->put(TheTopOf, thenBranch, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
 			->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
@@ -102,38 +111,36 @@ void VIfStatement::initializeForms()
 			->put(TheRightOf, header, AtRightOf, thenBranch)
 			->put(TheRightOf, shapeElement, 3, FromRightOf, header)
 			->put(TheBottomOf, shapeElement, 3, FromBottomOf, thenBranch)
-			->put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch)
-			->put(TheRightOf, shapeElement, AtRightOf, borderElement)
-			->put(TheLeftOf, header, AtLeftOf, borderElement));
+			->put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch);
+
+	addForm(topLevelIfWithoutElse);
 
 	// Form 1: then and else branch arranged vertically
 	auto elseHorizontalLineElement = item<Line>(&I::elseLine_, [](I* v){return &v->style()->elseHorizontalLine();});
-	addForm((new AnchorLayoutFormElement{})
-			  ->put(TheTopOf, thenBranch, 3, FromBottomOf, header)
-			  ->put(TheLeftOf, elseIcon, AtLeftOf, header)
-			  ->put(TheLeftOf, elseBranch, AtLeftOf, thenBranch)
-			  ->put(TheTopOf, shapeElement, AtCenterOf, header)
-			  ->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
-			  ->put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)
-			  ->put(TheTopOf, elseIcon, 3, FromBottomOf, thenBranch)
-			  ->put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch)
-			  ->put(TheRightOf, shapeElement, 3, FromRightOf, elseBranch)
-			  ->put(TheRightOf, shapeElement, 3, FromRightOf, header)
-			  ->put(TheTopOf, elseBranch, 3, FromBottomOf, elseIcon)
-			  ->put(TheBottomOf, shapeElement, 3, FromBottomOf, elseBranch)
+	auto topLevelIfAndStandardElse = (new AnchorLayoutFormElement{})
+			->put(TheTopOf, thenBranch, 3, FromBottomOf, header)
+			->put(TheLeftOf, elseIcon, AtLeftOf, header)
+			->put(TheLeftOf, elseBranch, AtLeftOf, thenBranch)
+			->put(TheTopOf, shapeElement, AtCenterOf, header)
+			->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
+			->put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)
+			->put(TheTopOf, elseIcon, 3, FromBottomOf, thenBranch)
+			->put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch)
+			->put(TheRightOf, shapeElement, 3, FromRightOf, elseBranch)
+			->put(TheRightOf, shapeElement, 3, FromRightOf, header)
+			->put(TheTopOf, elseBranch, 3, FromBottomOf, elseIcon)
+			->put(TheBottomOf, shapeElement, 3, FromBottomOf, elseBranch)
 
-			  ->put(TheVCenterOf, elseHorizontalLineElement, AtVCenterOf, elseIcon)
-			  ->put(TheLeftOf, elseHorizontalLineElement, AtRightOf, elseIcon)
-			  ->put(TheRightOf, elseHorizontalLineElement, AtRightOf, shapeElement)
+			->put(TheVCenterOf, elseHorizontalLineElement, AtVCenterOf, elseIcon)
+			->put(TheLeftOf, elseHorizontalLineElement, AtRightOf, elseIcon)
+			->put(TheRightOf, elseHorizontalLineElement, AtRightOf, shapeElement);
 
-			  ->put(TheRightOf, shapeElement, AtRightOf, borderElement)
-			  ->put(TheLeftOf, header, AtLeftOf, borderElement));
+	addForm(topLevelIfAndStandardElse);
 
 	// Form 2: then branch and then a following if else statement
 	auto elseIfBranch = item<VStatementItemList>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
 																[](I* v){return &v->style()->elseIfBranch();});
-
-	addForm((new AnchorLayoutFormElement{})
+	auto topLevelIfAndElseIf = (new AnchorLayoutFormElement{})
 			->put(TheTopOf, thenBranch, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
 			->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
@@ -143,10 +150,26 @@ void VIfStatement::initializeForms()
 			->put(TheBottomOf, shapeElement, AtBottomOf, elseIfBranch)
 			->put(TheTopOf, elseIfBranch, 2, FromBottomOf, thenBranch)
 			->put(TheLeftOf, elseIfBranch, AtLeftOf, header)
-			->put(TheRightOf, elseIfBranch, AtRightOf, shapeElement)
+			->put(TheRightOf, elseIfBranch, AtRightOf, shapeElement);
 
-			->put(TheRightOf, shapeElement, AtRightOf, borderElement)
-			->put(TheLeftOf, header, AtLeftOf, borderElement));
+	addForm(topLevelIfAndElseIf);
+
+	// The stretch versions of the forms
+	auto borderElement = new BorderFormElement{};
+	addForm(topLevelIfWithoutElse->clone()
+			  ->put(TheRightOf, shapeElement, AtRightOf, borderElement)
+			  ->put(TheLeftOf, header, AtLeftOf, borderElement));
+	addForm(topLevelIfAndStandardElse->clone()
+			  ->put(TheRightOf, shapeElement, AtRightOf, borderElement)
+			  ->put(TheLeftOf, header, AtLeftOf, borderElement));
+	addForm(topLevelIfAndElseIf->clone()
+			  ->put(TheRightOf, shapeElement, AtRightOf, borderElement)
+			  ->put(TheLeftOf, header, AtLeftOf, borderElement));
+}
+
+bool VIfStatement::isInsideAnotherIf() const
+{
+	return parent() && parent()->parent() && parent()->parent()->typeId() == typeIdStatic();
 }
 
 }
