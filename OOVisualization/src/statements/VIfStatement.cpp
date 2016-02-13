@@ -165,6 +165,11 @@ void VIfStatement::initializeForms()
 	addForm(topLevelIfAndElseIf->clone()
 			  ->put(TheRightOf, shapeElement, AtRightOf, borderElement)
 			  ->put(TheLeftOf, header, AtLeftOf, borderElement));
+
+	// Add margins to top-level ifs
+	topLevelIfWithoutElse->setBottomMargin(10);
+	topLevelIfAndStandardElse->setBottomMargin(10);
+	topLevelIfAndElseIf->setBottomMargin(10);
 }
 
 bool VIfStatement::isInsideAnotherIf() const
