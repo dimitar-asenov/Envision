@@ -64,11 +64,7 @@ class OOVISUALIZATION_API VIfStatement
 		static void initializeForms();
 		virtual int determineForm() override;
 
-	protected:
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
 	private:
-		bool horizontal_{};
 		Visualization::NodeWrapper* condition_{};
 		VStatementItemList* thenBranch_{};
 		VStatementItemList* elseBranch_{};

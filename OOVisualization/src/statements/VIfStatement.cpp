@@ -43,27 +43,13 @@ ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
-void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
-{
-	int contentWidth = 0;
-	if (thenBranch_) contentWidth += thenBranch_->widthInParent();
-	if (elseBranch_) contentWidth += elseBranch_->widthInParent();
-	if ( horizontal_ != (contentWidth <= style()->contentWidthSwitchTreshold()))
-	{
-		horizontal_ = !horizontal_;
-		setUpdateNeeded(RepeatUpdate);
-	}
-
-	Super::updateGeometry(availableWidth, availableHeight);
-}
-
 int VIfStatement::determineForm()
 {
 	if (node()->elseBranch() && node()->elseBranch()->size() == 0) return 0;
 
 	if (node()->elseBranch() && node()->elseBranch()->size() == 1 && DCast<IfStatement>(node()->elseBranch()->first()))
-		return 3;
-	return horizontal_ ? 1 : 2;
+		return 2;
+	return 1;
 }
 
 void VIfStatement::initializeForms()
@@ -120,31 +106,7 @@ void VIfStatement::initializeForms()
 			->put(TheRightOf, shapeElement, AtRightOf, borderElement)
 			->put(TheLeftOf, header, AtLeftOf, borderElement));
 
-	// Form 1: then and else branch arranged horizontally
-	auto elseVerticalLineElement = item<Line>(&I::elseLine_, [](I* v){return &v->style()->elseVerticalLine();});
-
-	addForm((new AnchorLayoutFormElement{})
-			->put(TheVCenterOf, elseIcon, AtVCenterOf, header)
-			->put(TheTopOf, thenBranch, 3, FromBottomOf, header)
-			->put(TheTopOf, elseBranch, 3, FromBottomOf, header)
-			->put(TheTopOf, shapeElement, AtCenterOf, header)
-			->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
-			->put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)
-			->put(TheLeftOf, elseBranch, 5, FromHCenterOf, elseIcon)
-			->put(TheLeftOf, elseIcon, 5, FromRightOf, header)
-			->put(TheHCenterOf, elseIcon, 5, FromRightOf, thenBranch)
-			->put(TheRightOf, shapeElement, 3, FromRightOf, elseBranch)
-			->put(TheBottomOf, shapeElement, 3, FromBottomOf, thenBranch)
-			->put(TheBottomOf, shapeElement, 3, FromBottomOf, elseBranch)
-
-			->put(TheHCenterOf, elseVerticalLineElement, AtHCenterOf, elseIcon)
-			->put(TheTopOf, elseVerticalLineElement, AtVCenterOf, elseIcon)
-			->put(TheBottomOf, elseVerticalLineElement, AtBottomOf, shapeElement)
-
-			->put(TheRightOf, shapeElement, AtRightOf, borderElement)
-			->put(TheLeftOf, header, AtLeftOf, borderElement));
-
-	// Form 2: then and else branch arranged vertically
+	// Form 1: then and else branch arranged vertically
 	auto elseHorizontalLineElement = item<Line>(&I::elseLine_, [](I* v){return &v->style()->elseHorizontalLine();});
 	addForm((new AnchorLayoutFormElement{})
 			  ->put(TheTopOf, thenBranch, 3, FromBottomOf, header)
@@ -167,7 +129,7 @@ void VIfStatement::initializeForms()
 			  ->put(TheRightOf, shapeElement, AtRightOf, borderElement)
 			  ->put(TheLeftOf, header, AtLeftOf, borderElement));
 
-	// Form 3: then branch and then a following if else statement
+	// Form 2: then branch and then a following if else statement
 	auto elseIfBranch = item<VStatementItemList>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
 																[](I* v){return &v->style()->elseIfBranch();});
 

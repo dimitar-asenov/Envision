@@ -46,8 +46,6 @@ class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::Declar
 		Property<Visualization::StaticStyle> elificon{this, "elificon"};
 		Property<Visualization::SequentialLayoutStyle> condition{this, "condition"};
 
-		Property<int> contentWidthSwitchTreshold{this, "contentWidthSwitchTreshold"};
-
 		Property<Visualization::VListStyle> thenBranch{this, "thenBranch"};
 		Property<Visualization::VListStyle> elseBranch{this, "elseBranch"};
 		Property<Visualization::VListStyle> elseIfBranch{this, "elseIfBranch"};

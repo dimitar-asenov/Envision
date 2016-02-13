@@ -80,8 +80,6 @@
 		</shape>
 	</condition>
 	
-	<contentWidthSwitchTreshold>600</contentWidthSwitchTreshold>
-	
 	<thenBranch prototypes="item/VStatementItemList/default" />
 	<elseBranch prototypes="item/VStatementItemList/default" />
 	<elseIfBranch prototypes="item/VStatementItemList/default" />
