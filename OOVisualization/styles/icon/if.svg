@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="19.857915"
-     inkscape:cx="24.151075"
-     inkscape:cy="27.699073"
+     inkscape:cx="14.910427"
+     inkscape:cy="27.296211"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -55,13 +55,13 @@
      id="layer1"
      transform="translate(0,-1004.3622)">
     <rect
-       style="fill:#fdd766;fill-opacity:1;stroke:#fdd766;stroke-width:2.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#fdd766;fill-opacity:1;stroke:none;stroke-width:2.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4162"
-       width="30.941126"
-       height="30.941126"
-       x="-725.66187"
-       y="728.66187"
-       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
+       width="33.941124"
+       height="33.941124"
+       x="-727.16187"
+       y="727.16187"
+       transform="matrix(0.70710677,-0.70710679,0.70710677,0.70710679,0,0)" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#7f6000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"

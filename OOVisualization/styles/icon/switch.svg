@@ -14,7 +14,7 @@
    height="48"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="switch.svg">
   <defs
      id="defs4">
@@ -78,15 +78,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="27.125"
-     inkscape:cx="24"
-     inkscape:cy="24"
+     inkscape:cx="17.235023"
+     inkscape:cy="23.705069"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="2560"
-     inkscape:window-height="1511"
-     inkscape:window-x="-8"
-     inkscape:window-y="31"
+     inkscape:window-height="1541"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -105,49 +105,46 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1004.3622)">
-    <path
-       sodipodi:type="star"
-       style="fill:#ffff00;fill-opacity:1;stroke:#c88c00;stroke-width:0.44121211999999999;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path3772"
-       sodipodi:sides="4"
-       sodipodi:cx="17.386667"
-       sodipodi:cy="3.04"
-       sodipodi:r1="4.8559699"
-       sodipodi:r2="2.427985"
-       sodipodi:arg1="1.5378412"
-       sodipodi:arg2="2.3232394"
-       inkscape:flatsided="true"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 17.546667,7.8933332 -5.013333,-4.6933331 4.693333,-5.0133334 5.013334,4.6933331 z"
-       transform="matrix(0,-4.5329671,4.5329671,0,10.21978,1107.1754)" />
     <rect
-       style="fill:#666666;fill-opacity:1;stroke:#666666;stroke-width:1.97464478;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect3005"
-       width="18.025354"
-       height="0.025355242"
-       x="14.987323"
-       y="1020.8495" />
+       style="fill:#fdd766;fill-opacity:1;stroke:none;stroke-width:2.99999976;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4162"
+       width="33.941124"
+       height="33.941124"
+       x="-727.16187"
+       y="727.16187"
+       transform="matrix(0.70710677,-0.70710679,0.70710677,0.70710679,0,0)" />
     <rect
-       style="fill:#666666;fill-opacity:1;stroke:#666666;stroke-width:1.97464478;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#7f6000;fill-opacity:1;stroke:none;stroke-width:1.9746449;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect3005-8"
-       width="18.025354"
-       height="0.025355242"
-       x="14.987322"
-       y="1025.8495" />
+       width="10"
+       height="4"
+       x="35.516132"
+       y="1018.4127" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#7f6000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="14.698011"
+       y="1044.5338"
+       id="text4164"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4166"
+         x="14.698011"
+         y="1044.5338"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:43.75px;font-family:ubuntu;-inkscape-font-specification:ubuntu">?</tspan></text>
     <rect
-       style="fill:#666666;fill-opacity:1;stroke:#666666;stroke-width:1.97464478;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect3005-5"
-       width="18.025354"
-       height="0.025355242"
-       x="14.987324"
-       y="1030.8496" />
+       style="fill:#7f6000;fill-opacity:1;stroke:none;stroke-width:1.9746449;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3005-8-8"
+       width="10"
+       height="4"
+       x="35.516132"
+       y="1026.3623" />
     <rect
-       style="fill:#666666;fill-opacity:1;stroke:#666666;stroke-width:1.97464478;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect3005-8-0"
-       width="18.025354"
-       height="0.025355242"
-       x="14.987323"
-       y="1035.8495" />
+       style="fill:#7f6000;fill-opacity:1;stroke:none;stroke-width:1.9746449;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3005-8-7"
+       width="10"
+       height="4"
+       x="35.516132"
+       y="1034.3118" />
   </g>
 </svg>

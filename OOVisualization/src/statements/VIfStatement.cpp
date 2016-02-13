@@ -58,7 +58,6 @@ int VIfStatement::determineForm()
 	if (isInsideAnotherIf())
 		formId += 3; // Make the if stretchable
 
-	qDebug() << formId;
 	return formId;
 }
 
