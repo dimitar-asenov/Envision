@@ -191,20 +191,22 @@ AnchorLayoutFormElement* AnchorLayoutFormElement::put(AnchorLayoutAnchor::Orient
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
 
-	// Check if this is a border element and record it if so
-	if (auto borderFormElement = dynamic_cast<BorderFormElement*>(placeElement))
-	{
-		Q_ASSERT(!borderFormElement_ || borderFormElement_ == borderFormElement);
-		borderFormElement_ = borderFormElement;
-	}
-	if (auto borderFormElement = dynamic_cast<BorderFormElement*>(fixedElement))
-	{
-		Q_ASSERT(!borderFormElement_ || borderFormElement_ == borderFormElement);
-		borderFormElement_ = borderFormElement;
-	}
-
+	// Compute what is the actual element to add. If the provided elements are part of another layout we make a copy.
+	// Otherwise we keep the originals. A copy might have been made already.
 	auto placeElementToAdd = findChildMatch(placeElement);
 	auto fixedElementToAdd = findChildMatch(fixedElement);
+
+	// Check if this is a border element and record it if so
+	if (auto borderFormElement = dynamic_cast<BorderFormElement*>(placeElementToAdd))
+	{
+		Q_ASSERT(!borderFormElement_ || borderFormElement_ == borderFormElement);
+		borderFormElement_ = borderFormElement;
+	}
+	if (auto borderFormElement = dynamic_cast<BorderFormElement*>(fixedElementToAdd))
+	{
+		Q_ASSERT(!borderFormElement_ || borderFormElement_ == borderFormElement);
+		borderFormElement_ = borderFormElement;
+	}
 
 	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
 		addConstraint(horizontalConstraints_, orientation, relativePlaceEdgePosition, placeElementToAdd, offset,

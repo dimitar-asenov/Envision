@@ -138,7 +138,7 @@ void VIfStatement::initializeForms()
 			->put(TheBottomOf, shapeElement, 3, FromBottomOf, elseBranch)
 
 			->put(TheHCenterOf, elseVerticalLineElement, AtHCenterOf, elseIcon)
-			->put(TheTopOf, elseVerticalLineElement, AtBottomOf, elseIcon)
+			->put(TheTopOf, elseVerticalLineElement, AtVCenterOf, elseIcon)
 			->put(TheBottomOf, elseVerticalLineElement, AtBottomOf, shapeElement)
 
 			->put(TheRightOf, shapeElement, AtRightOf, borderElement)
