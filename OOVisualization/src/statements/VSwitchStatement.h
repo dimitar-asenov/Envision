@@ -58,6 +58,7 @@ class OOVISUALIZATION_API VSwitchStatement
 		VStatementItemList* body() const;
 
 		static void initializeForms();
+		virtual int determineForm() override;
 
 	private:
 		Visualization::Static* icon_{};

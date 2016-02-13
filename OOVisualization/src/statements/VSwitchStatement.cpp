@@ -32,6 +32,8 @@
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
+#include "OOModel/src/statements/CaseStatement.h"
+
 using namespace Visualization;
 using namespace OOModel;
 
@@ -44,29 +46,61 @@ VSwitchStatement::VSwitchStatement(Item* parent, NodeType* node, const StyleType
 
 void VSwitchStatement::initializeForms()
 {
-	auto header = (new GridLayoutFormElement{})
-			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
-			->setHorizontalSpacing(3)
-			->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
-			->put(1, 0, item<NodeWrapper>(&I::condition_,	[](I* v){return v->node()->switchExpression();},
-																			[](I* v){return &v->style()->condition();}));
+	auto icon = item<Static>(&I::icon_, [](I* v){return &v->style()->icon();});
+
+	auto condition = item<NodeWrapper>(&I::condition_,	[](I* v){return v->node()->switchExpression();},
+			[](I* v){return &v->style()->condition();});
+
+	// We need the grid for stretching
+	auto header = grid({{(new AnchorLayoutFormElement{})
+								->put(TheVCenterOf, icon, AtVCenterOf, condition)
+								->put(TheHCenterOf, icon, AtLeftOf, condition)}})
+			->setColumnStretchFactor(1, 1);
 
 	auto cases = item<VStatementItemList>(&I::body_,	[](I* v){return v->node()->body();},
 														[](I* v){return &v->style()->body();});
 
-	// We need something stretchable
-	auto casesContainer = grid({{cases}})->setColumnStretchFactor(1, 1);
-
 	auto shapeElement = new ShapeFormElement{};
 
+	// Form 0: we already have at least one stretchable element
 	addForm((new AnchorLayoutFormElement{})
-			->put(TheLeftOf, header, 10, FromLeftOf, casesContainer)
-			->put(TheLeftOf, shapeElement, 2, FromLeftOf, header)
+			->put(TheLeftOf, header, AtLeftOf, cases)
+			->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
+			->put(TheRightOf, header, AtRightOf, cases)
+			->put(TheRightOf, shapeElement, 2, FromRightOf, header)
+			->put(TheBottomOf, header, 3, FromTopOf, cases)
+			->put(TheTopOf, shapeElement, AtCenterOf, header)
+			->put(TheBottomOf, shapeElement, 2, FromBottomOf, cases)
+			->setBottomMargin(10));
+
+	// Form 1: There might not be any stretchable elements
+	// Make the contain auto stretchable
+	auto casesContainer = grid({{cases}})
+			->setColumnStretchFactor(1, 1)->setHorizontalSpacing(5)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
+
+	addForm((new AnchorLayoutFormElement{})
+			->put(TheLeftOf, header, AtLeftOf, casesContainer)
+			->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
 			->put(TheRightOf, header, AtRightOf, casesContainer)
 			->put(TheRightOf, shapeElement, 2, FromRightOf, header)
 			->put(TheBottomOf, header, 3, FromTopOf, casesContainer)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
-			->put(TheBottomOf, shapeElement, 2, FromBottomOf, casesContainer));
+			->put(TheBottomOf, shapeElement, 2, FromBottomOf, casesContainer)
+			->setBottomMargin(10));
+}
+
+int VSwitchStatement::determineForm()
+{
+	if (node()->body() && node()->body()->size() > 0
+		 && node()->body()->first()->typeId() == OOModel::CaseStatement::typeIdStatic())
+	{
+		// We know that the body will be stretchable
+		return 0;
+	}
+
+	// The body might not be stretchable.
+	return 1;
 }
 
 }

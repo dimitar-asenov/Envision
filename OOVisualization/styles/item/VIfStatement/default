@@ -38,7 +38,7 @@
 		<zValue>1</zValue>
 	</elificon>
 	
-	<condition prototypes="layout/SequentialLayout/default">
+	<condition prototypes="item/Item/default">
 		<shape prototypes="shape/Frame/default">
 			Frame
 			<outline>

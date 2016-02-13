@@ -30,6 +30,7 @@
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
+#include "VisualizationBase/src/declarative/BorderFormElement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -43,22 +44,37 @@ VCaseStatement::VCaseStatement(Item* parent, NodeType* node, const StyleType* st
 
 void VCaseStatement::initializeForms()
 {
-	addForm(grid(
-			{
-				{	item<Static>(&I::icon_, [](I* v){return v->node()->caseExpression() ?
-						&v->style()->icon() : &v->style()->defaultCaseIcon();}),
-					item<NodeWrapper>(&I::caseExpression_,	[](I* v){return v->node()->caseExpression();},
-																		[](I* v){return &v->style()->caseExpression();})
-				},
-				{	nullptr,
-					item<VStatementItemList>(&I::statements_, [](I* v){return v->node()->body();},
-																			[](I* v){return &v->style()->statements();})
-				}
-			}
+	auto icon = item<Static>(&I::icon_, [](I* v){return v->node()->caseExpression() ?
+				&v->style()->icon() : &v->style()->defaultCaseIcon();});
 
-		) ->setHorizontalSpacing(5)
-	);
+	auto caseExpression = item<NodeWrapper>(&I::caseExpression_,	[](I* v){return v->node()->caseExpression();},
+			[](I* v){return &v->style()->caseExpression();});
 
+	// We need the grid for stretching
+	auto header = grid({{(new AnchorLayoutFormElement{})
+								->put(TheVCenterOf, icon, AtVCenterOf, caseExpression)
+								->put(TheHCenterOf, icon, AtLeftOf, caseExpression)}})
+			->setColumnStretchFactor(1, 1);
+
+	auto statements = item<VStatementItemList>(&I::statements_, [](I* v){return v->node()->body();},
+			[](I* v){return &v->style()->statements();});
+
+	// We need something stretchable
+	auto statementsContainer = grid({{statements}})->setColumnStretchFactor(1, 1);
+
+	auto shapeElement = new ShapeFormElement{};
+	auto borderElement = new BorderFormElement{};
+
+	addForm((new AnchorLayoutFormElement{})
+			->put(TheLeftOf, shapeElement, 5, FromLeftOf, statementsContainer)
+			->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
+			->put(TheRightOf, header, AtRightOf, statementsContainer)
+			->put(TheRightOf, shapeElement, 2, FromRightOf, header)
+			->put(TheBottomOf, header, 3, FromTopOf, statementsContainer)
+			->put(TheTopOf, shapeElement, AtCenterOf, header)
+			->put(TheBottomOf, shapeElement, 2, FromBottomOf, statementsContainer)
+			->put(TheRightOf, shapeElement, AtRightOf, borderElement)
+			->put(TheLeftOf, header, AtLeftOf, borderElement));
 }
 
 }

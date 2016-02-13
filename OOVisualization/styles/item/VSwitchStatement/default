@@ -16,16 +16,47 @@
 		<filename>styles/icon/switch.svg</filename>
 		<width>22</width>
 		<height>22</height>
+		<zValue>1</zValue>
 	</icon>
 	<condition prototypes="item/Item/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<backgroundBrush>
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<outline>
+				<width>1</width>
+				<color>#e0e0c8</color>
+			</outline>
+	
+			<contentBrush>
+				<color>#ffffe0</color>
+			</contentBrush>
+			
+			<topBrush>
 				<style>1</style>
-				<color>#ffff80</color>
-			</backgroundBrush>
-			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+				<color>#e0e0c8</color>
+			</topBrush>
+			<topWidth>1</topWidth>
+			<topMargin>1</topMargin>
+			
+			<bottomBrush>
+				<style>1</style>
+				<color>#e0e0c8</color>
+			</bottomBrush>
+			<bottomWidth>1</bottomWidth>
+			<bottomMargin>1</bottomMargin>
+			
+			<leftBrush>
+				<style>1</style>
+				<color>#e0e0c8</color>
+			</leftBrush>
+			<leftWidth>1</leftWidth>
+			<leftMargin>15</leftMargin>
+			
+			<rightBrush>
+				<style>1</style>
+				<color>#e0e0c8</color>
+			</rightBrush>
+			<rightWidth>1</rightWidth>
+			<rightMargin>1</rightMargin>
 		</shape>
 	</condition>
 	<body prototypes="item/VStatementItemList/default" />

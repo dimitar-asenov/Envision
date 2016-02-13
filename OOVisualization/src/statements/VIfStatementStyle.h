@@ -44,7 +44,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::Declar
 		Property<Visualization::StaticStyle> icon{this, "icon"};
 		Property<Visualization::StaticStyle> elseIcon{this, "elseIcon"};
 		Property<Visualization::StaticStyle> elificon{this, "elificon"};
-		Property<Visualization::SequentialLayoutStyle> condition{this, "condition"};
+		Property<Visualization::ItemStyle> condition{this, "condition"};
 
 		Property<Visualization::VListStyle> thenBranch{this, "thenBranch"};
 		Property<Visualization::VListStyle> elseBranch{this, "elseBranch"};
