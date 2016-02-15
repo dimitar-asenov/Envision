@@ -3,7 +3,7 @@ import os, re, shutil
 
 envisionDirectory = os.path.dirname( os.path.dirname( os.path.dirname(os.path.realpath(__file__)))) + '/'
 
-hOrCppRegex = re.compile(r'^.*\.(h|cpp)$', re.DOTALL)
+hOrCppRegex = re.compile(r'^.*\.(h|cpp|hpp)$', re.DOTALL)
 
 def copyFileAndCreateDirIfNotExist(src, dst):
 	if not os.path.exists(os.path.dirname(dst)):
@@ -50,15 +50,14 @@ def createCommonCmake():
 	f.close()
 
 plugin('Core')
-copyIfExists('Core/src/reflect/typeIdMacros.h')
 plugin('Launcher')
 plugin('HelloWorld')
 plugin('APIDepTest')
 plugin('Logger')
 plugin('SelfTest')
-copyIfExists('SelfTest/src/SelfTestSuite.h')
-copyIfExists('SelfTest/src/TestAssertions.h')
+plugin('Logger')
+plugin('ModelBase')
 
-createCMakeLists(['Core', 'Launcher', 'HelloWorld', 'APIDepTest', 'SelfTest'])
+createCMakeLists(['Core', 'Launcher', 'HelloWorld', 'APIDepTest', 'SelfTest', 'Logger', 'ModelBase'])
 createCommonCmake()
 
