@@ -27,12 +27,11 @@
 #pragma once
 
 #include "PluginInfo.h"
-#include "EnvisionPlugin.h"
 
 namespace Core
 {
-
 class EnvisionManager;
+class EnvisionPlugin;
 
 class CORE_API PluginManager
 {
@@ -83,7 +82,9 @@ class CORE_API PluginManager
 		QList<QPluginLoader*> loadedPlugins;
 		QMap<QString, PluginInfo*> idToMetaDataMap;
 		QMap<QString, QPluginLoader*> idToPluginLoaderMap;
-		// lower to mixed case maps.
+		/**
+		 * lower to mixed case maps.
+		 */
 		QMap<QString, QString> _allFoundSharedLibraryFiles;
 
 		QString getLibraryFileName(const QString pluginId);

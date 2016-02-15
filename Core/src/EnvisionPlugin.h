@@ -26,10 +26,11 @@
 
 #pragma once
 
-#include "EnvisionManager.h"
 #include "reflect/TypeRegistry.h" // Convenience include header which is used in places including EnvisionPlugin.h
 
 namespace Core {
+
+class EnvisionManager;
 
 /**
  * This EnvisionPlugin interface is the one that each plug-in must implement.

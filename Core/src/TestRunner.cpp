@@ -27,6 +27,8 @@
 #include "TestRunner.h"
 #include "TestEvent.h"
 #include "EnvisionException.h"
+#include "EnvisionPlugin.h"
+#include "PluginManager.h"
 
 namespace Core {
 
@@ -64,11 +66,8 @@ void TestRunner::enqueueSelfTests(PluginManager& pm)
 	pm_ = &pm;
 
 	for (auto t : requestedTests_)
-	{
-
 		if (pm.isPluginLoaded(t->target()) ) qApp->postEvent(this, const_cast<TestEvent*>(t));
 		else throw EnvisionException{"A test was requested for a plugin which is not loaded: " + t->target()};
-	}
 	requestedTests_.clear();
 }
 

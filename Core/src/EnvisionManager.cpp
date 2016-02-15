@@ -27,6 +27,7 @@
 #include "EnvisionManager.h"
 #include "EnvisionException.h"
 #include "TestRunner.h"
+#include "PluginManager.h"
 
 namespace Core {
 
@@ -49,7 +50,7 @@ QList<EnvisionManager::EventPrePostAction>& EnvisionManager::postEventActions()
 
 QList<PluginInfo> EnvisionManager::getAllLoadedPluginsInfo()
 {
-	if (exitSet_) return QList<PluginInfo>();
+	if (exitSet_) return QList<PluginInfo>{};
 	if (pm_) return pm_->getAllLoadedPluginsInfo();
 	throw EnvisionException{"The Envision Manager has no Plugin Manager set"};
 }

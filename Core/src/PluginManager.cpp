@@ -24,7 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-#include "precompiled.h"
 #include "EnvisionPlugin.h"
 #include "PluginManager.h"
 #include "EnvisionException.h"

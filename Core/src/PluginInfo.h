@@ -46,7 +46,9 @@ struct CORE_API PluginInfo
 {
 	QString id;
 	QString fullName;
-	// FORMAT: Major.Minor.other.version.numbers.or.strings
+	/**
+	 * FORMAT: Major.Minor.other.version.numbers.or.strings
+	 */
 	QString version;
 	QList<PluginDependency> dependencies;
 };
