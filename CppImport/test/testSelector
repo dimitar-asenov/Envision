@@ -10,6 +10,6 @@
 #TypeTraits
 
 #The paths below are relative to the DebugBuild/test directory
-#spath:/Envision
-#path:/Envision/VisualizationBase
-path:/Envision/Core
+path:../Core
+path:../Core:../Launcher:../HelloWorld:../APIDepTest:../SelfTest:../Logger:../ModelBase
+path:../ModelBase/src/nodes/Node.cpp

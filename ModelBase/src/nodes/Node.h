@@ -577,6 +577,8 @@ inline NodeType* Node::firstAncestorOfType()
 template <typename NodeType>
 inline QList<NodeType*> Node::childrenOfType(Node* from)
 {
+	if (!from) return {};
+
 	QList<NodeType*> result;
 	QList<Model::Node*> workStack{from};
 

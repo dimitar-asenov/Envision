@@ -34,7 +34,7 @@
 
 namespace Model {
 
-class VisitorA : public Visitor<VisitorA, QString>{
+class MODELBASE_API VisitorA : public Visitor<VisitorA, QString>{
 	public:
 		static void init()
 		{
@@ -55,7 +55,7 @@ class VisitorA : public Visitor<VisitorA, QString>{
 		}
 };
 
-class VisitorB : public ExtendedVisitor<VisitorB, VisitorA>{
+class MODELBASE_API VisitorB : public ExtendedVisitor<VisitorB, VisitorA>{
 	public:
 		static void init()
 		{
@@ -69,7 +69,7 @@ class VisitorB : public ExtendedVisitor<VisitorB, VisitorA>{
 		}
 };
 
-class VisitorC : public Visitor<VisitorC>{
+class MODELBASE_API VisitorC : public Visitor<VisitorC>{
 	public:
 		static void init()
 		{
@@ -85,7 +85,7 @@ class VisitorC : public Visitor<VisitorC>{
 		QString text;
 };
 
-class VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
+class MODELBASE_API VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
 {
 	auto root = new List{};
 	TreeManager manager{root};

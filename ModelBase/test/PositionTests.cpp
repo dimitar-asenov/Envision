@@ -33,7 +33,7 @@
 
 namespace Model {
 
-class PositionExtension : public Test<ModelBasePlugin, PositionExtension> { public: void test()
+class MODELBASE_API PositionExtension : public Test<ModelBasePlugin, PositionExtension> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};

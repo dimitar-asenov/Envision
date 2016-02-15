@@ -46,7 +46,18 @@ class OOMODEL_API CastExpression: public Super<Expression>
 		virtual std::unique_ptr<Type> type() override;
 
 		enum class CastKind : int
-		{Default, ConstCast, DynamicCast, ReinterpretCast, StaticCast, FunctionalCast};
+		{
+			Default,
+			ConstCast,
+			DynamicCast,
+			ReinterpretCast,
+			StaticCast,
+			/**
+			 * We currently do not use this type of cast when importing C++ code.
+			 * Functional casts are converted to construction method calls instead.
+			 */
+			FunctionalCast
+		};
 
 		CastExpression(CastKind castKind);
 

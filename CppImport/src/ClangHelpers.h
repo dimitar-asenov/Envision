@@ -122,6 +122,8 @@ class CPPIMPORT_API ClangHelpers
 		void insertDeclarationInFolder(OOModel::Declaration* declaration, clang::SourceLocation location,
 												 OOModel::Declaration* parentNonFolderDeclaration);
 
+		const QString& rootProjectPath();
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 
@@ -197,5 +199,6 @@ inline OOModel::ReferenceExpression* ClangHelpers::createReference(clang::Source
 inline OOModel::Project* ClangHelpers::projectByName(const QString& name) { return projects_[name]; }
 
 inline OOModel::Project* ClangHelpers::rootProject() { return rootProject_; }
+inline const QString& ClangHelpers::rootProjectPath() { return rootProjectPath_; }
 
 }

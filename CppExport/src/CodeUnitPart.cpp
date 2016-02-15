@@ -56,6 +56,7 @@ bool CodeUnitPart::isSourceFragmentEmpty() const
 void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 {
 	fragment_ = sourceFragment;
+	if (!fragment_) return;
 
 	// calculate name and reference nodes
 	nameNodes_.clear();

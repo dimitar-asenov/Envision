@@ -44,6 +44,12 @@ MacroExpansions::MacroExpansions(ClangHelpers& clang, const MacroDefinitions& ma
 void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const clang::MacroDirective* macroDirective,
 													  const clang::MacroArgs* macroArguments)
 {
+	auto macroUsageDirectory = QDir(clang_.sourceManager()->getPresumedLoc(
+												  clang_.sourceManager()->getExpansionLoc(
+													  sourceRange.getBegin()))
+											  .getFilename());
+	if (!macroUsageDirectory.absolutePath().startsWith(clang_.rootProjectPath())) return;
+
 	if (macroDefinitions_.isPartialEnd(macroDirective))
 	{
 		/*
@@ -109,10 +115,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 					 : clang_.unexpandedSpelling(clang::SourceRange(actualArgFirstToken->getLocation(),
 																					actualArgLastToken->getLocation()));
 
-			auto reference = new OOModel::ReferenceExpression{unexpandedArgument};
-
-
-			entry->metaCall()->arguments()->append(reference);
+			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression{unexpandedArgument});
 			entry->argumentLocs().append(actualArgLastToken->getLocation());
 		}
 
