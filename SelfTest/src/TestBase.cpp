@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "TestBase.h"
-#include "TestManager.h"
 #include "Core/src/EnvisionException.h"
 #include "TestResults.h"
 

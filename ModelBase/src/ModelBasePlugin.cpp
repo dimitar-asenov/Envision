@@ -32,13 +32,11 @@
 
 #include "SelfTest/src/TestManager.h"
 
-using namespace Logger;
-
 namespace Model {
 
 Logger::Log& log = ModelBasePlugin::log();
 
-Log& ModelBasePlugin::log()
+Logger::Log& ModelBasePlugin::log()
 {
 	static auto log = Logger::Log::getLogger("modelbase");
 	return *log;

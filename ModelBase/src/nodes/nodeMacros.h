@@ -244,8 +244,8 @@ QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& className::attribu
 	const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional,				\
 			 bool isPersistent)																														\
 {																																							\
-	attributesToRegisterAtInitialization_().append(QPair< ::Model::CompositeIndex&, ::Model::Attribute>(index,			\
-			::Model::Attribute{attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent}));			\
+	attributesToRegisterAtInitialization_().append(QPair< ::Model::CompositeIndex&, ::Model::Attribute>{index,			\
+			::Model::Attribute{attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent}});			\
 	return ::Model::CompositeIndex{};																											\
 }																																							\
 
@@ -457,8 +457,8 @@ private:																																					\
 /**
  * Declares standard attributes and methods needed for each extension class.
  *
- *	This macro should appear on the first line of the declaration of a class that is an extension for objects of type
- *	CompositeNode or derived classes.
+ * This macro should appear on the first line of the declaration of a class that is an extension for objects of type
+ * CompositeNode or derived classes.
  *
  * @param className
  * 				The name of the extension lass that is being declared
@@ -489,7 +489,7 @@ private:
 /**
  * Defines standard attributes and methods needed for each extension class.
  *
- *	Use this in the beginning of the source (.cpp) file that belongs to the corresponding class declaration.
+ * Use this in the beginning of the source (.cpp) file that belongs to the corresponding class declaration.
  *
  * @param className
  * 				The name of the extension lass that is being defined

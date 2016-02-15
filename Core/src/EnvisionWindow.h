@@ -28,7 +28,7 @@
 
 #include "core_api.h"
 
-class EnvisionWindow: public QMainWindow
+class CORE_API EnvisionWindow: public QMainWindow
 {
 	Q_OBJECT
 
