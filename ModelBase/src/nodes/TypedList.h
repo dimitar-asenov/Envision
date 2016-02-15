@@ -30,6 +30,8 @@
 
 namespace Model {
 
+class Node;
+
 template <typename T>
 class TypedList: public Super<List>
 {

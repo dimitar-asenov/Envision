@@ -121,6 +121,7 @@
 #include "ModelBase/src/nodes/Node.h"
 
 #include "ModelBase/src/persistence/ClipboardStore.h"
+#include "ModelBase/src/commands/UndoCommand.h"
 
 namespace InformationScripting {
 

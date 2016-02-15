@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "NodeReadWriteLock.h"
-#include "../ModelException.h"
 
 #include "InterruptibleThread.h"
 

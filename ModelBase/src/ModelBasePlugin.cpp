@@ -25,22 +25,12 @@
 ***********************************************************************************************************************/
 
 #include "ModelBasePlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
 
 #include "model/AllTreeManagers.h"
-
-#include "nodes/Integer.h"
-#include "nodes/Float.h"
-#include "nodes/Boolean.h"
-#include "nodes/Character.h"
-#include "nodes/Reference.h"
-#include "nodes/composite/CompositeNode.h"
-#include "nodes/List.h"
-#include "nodes/TypedList.h"
-
 #include "test_nodes/BinaryNode.h"
-#include "test_nodes/BinaryNodeAccessUnit.h"
 #include "test_nodes/PositionExtension.h"
+
+#include "SelfTest/src/TestManager.h"
 
 using namespace Logger;
 

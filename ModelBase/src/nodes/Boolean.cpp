@@ -33,6 +33,8 @@ template class Model::TypedList<Model::Boolean>;
 
 namespace Model {
 
+class Node;
+
 DEFINE_NODE_TYPE_REGISTRATION_METHODS(Boolean)
 
 Boolean::Boolean(Node *parent) : Super{parent}, value{false}

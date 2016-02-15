@@ -29,7 +29,6 @@
 #include "../src/model/TreeManager.h"
 #include "../src/nodes/Text.h"
 #include "../src/nodes/Integer.h"
-#include "../src/nodes/Reference.h"
 #include "../src/nodes/List.h"
 
 namespace Model {

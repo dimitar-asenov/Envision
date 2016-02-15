@@ -34,6 +34,8 @@ extern template class MODELBASE_API Model::TypedList<Model::Character>;
 
 namespace Model {
 
+class PersistentStore;
+
 class MODELBASE_API Character: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Character)

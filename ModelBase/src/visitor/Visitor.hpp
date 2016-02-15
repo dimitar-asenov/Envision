@@ -28,7 +28,6 @@
 
 #include "Visitor.h"
 #include "../nodes/Node.h"
-#include "../ModelException.h"
 
 namespace Model {
 

@@ -31,11 +31,15 @@
 #include "composite/CompositeNode.h"
 #include "Text.h"
 #include "nodeMacros.h"
+#include "../model/TreeManager.h"
 
 namespace Model { class UsedLibrary; }
 extern template class MODELBASE_API Model::TypedList<Model::UsedLibrary>;
 
 namespace Model {
+
+class Node;
+class PersistentStore;
 
 class MODELBASE_API UsedLibrary : public Super<CompositeNode>
 {
