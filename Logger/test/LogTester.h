@@ -26,9 +26,11 @@
 
 #pragma once
 
-#include "../src/Log.h"
+#include "../src/logger_api.h"
 
 namespace Logger {
+
+class Log;
 
 class LOGGER_API LogTester: public QObject
 {

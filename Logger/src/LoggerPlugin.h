@@ -30,6 +30,10 @@
 
 #include "Core/src/EnvisionPlugin.h"
 
+namespace Core {
+class EnvisionManager;
+}
+
 namespace Logger {
 
 class LOGGER_API LoggerPlugin : public QObject, public Core::EnvisionPlugin

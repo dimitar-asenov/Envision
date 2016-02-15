@@ -30,7 +30,7 @@
 
 namespace Logger {
 
-/*
+/**
  * The Log interface includes functionality for recording system events.
  */
 class LOGGER_API Log : public QObject
