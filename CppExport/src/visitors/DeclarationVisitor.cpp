@@ -415,7 +415,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 										"templateArgsList");
 	}
 	if (!method->typeArguments()->isEmpty())
-		*fragment << list(method->typeArguments(), ElementVisitor{method, data()}, "templateArgsList");
+		*fragment << list(method->typeArguments(), ElementVisitor{printContext().node(), data()}, "templateArgsList");
 
 	// private, public, ...
 	if (printContext().isClass())
