@@ -455,7 +455,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->methodKind() == Method::MethodKind::OperatorOverload) *fragment << "operator";
 	*fragment << method->nameNode();
 
-	CppPrintContext argumentsPrintContext{method, printContext().isClass() ?
+	CppPrintContext argumentsPrintContext{printContext().node(), printContext().isClass() ?
 																							CppPrintContext::PrintDefaultArgumentValues :
 																							CppPrintContext::None};
 	*fragment << list(method->arguments(), ElementVisitor{argumentsPrintContext, data()}, "argsList");
