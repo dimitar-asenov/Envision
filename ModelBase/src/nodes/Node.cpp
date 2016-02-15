@@ -318,7 +318,7 @@ void Node::setRootManager(TreeManager* manager)
 
 QList<Node*> Node::children() const
 {
-	return QList<Node*>();
+	return QList<Node*>{};
 }
 
 bool Node::definesSymbol() const

@@ -32,6 +32,9 @@
 
 namespace Model {
 
+class Node;
+class TreeManager;
+
 class MODELBASE_API ClipboardStore: public PersistentStore
 {
 	public:

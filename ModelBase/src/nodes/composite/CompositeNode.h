@@ -33,6 +33,8 @@
 
 namespace Model {
 
+class PersistentStore;
+
 /**
  * The CompositeNode class provides convenient functionality that simplifies the creation of new nodes and allows
  * existing node types to be extended by plug-ins thereby adding new attributes to them.
@@ -142,12 +144,12 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		 * this is part of the expansion of the macro ATTRIBUTE(Model::Node, comment, setComment)
 		 * but we can not include nodeMacros.h
 		 */
-		Node* comment() const { return static_cast<Node*>(get(commentIndex)); }
+		Node* comment() const;
 		/**
 		 * this is part of the expansion of the macro ATTRIBUTE(Model::Node, comment, setComment)
 		 * but we can not include nodeMacros.h
 		 */
-		void setComment(Node* node) { set(commentIndex, node); }
+		void setComment(Node* node);
 
 	protected:
 		static CompositeIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
@@ -184,6 +186,10 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		 */
 		static CompositeIndex commentIndex;
 };
+
+inline Node *CompositeNode::comment() const { return static_cast<Node *>(get(commentIndex)); }
+
+inline void CompositeNode::setComment(Node *node) { set(commentIndex, node); }
 
 inline Node* CompositeNode::get(const CompositeIndex &attributeIndex) const
 {

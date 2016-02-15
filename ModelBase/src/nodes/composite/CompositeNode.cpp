@@ -26,6 +26,7 @@
 
 #include "CompositeNode.h"
 #include "../../commands/CompositeNodeChangeChild.h"
+#include "../../persistence/PersistentStore.h"
 
 namespace Model {
 
@@ -78,7 +79,7 @@ CompositeNode::CompositeNode(const CompositeNode& other)
 	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
 		AttributeChain* currentLevel = meta_.level(level);
-		subnodes_[level] = QVector<Node*> (currentLevel->size(), nullptr);
+		subnodes_[level] = QVector<Node*>{currentLevel->size(), nullptr};
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( auto node = other.subnodes_[level][i] )
@@ -98,7 +99,7 @@ CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
 	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
 		AttributeChain* currentLevel = meta_.level(level);
-		subnodes_[level] = QVector<Node*> (currentLevel->size(), nullptr);
+		subnodes_[level] = QVector<Node*>{currentLevel->size(), nullptr};
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( !(*currentLevel)[i].optional() )
@@ -112,7 +113,7 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, Attribu
 	QSet<QString> partial;
 	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
-		subnodes_[level] = QVector<Node*> (meta_.level(level)->size(), nullptr);
+		subnodes_[level] = QVector<Node*>{meta_.level(level)->size(), nullptr};
 
 		AttributeChain* currentLevel = meta_.level(level);
 		for (int i = 0; i < currentLevel->size(); ++i)
@@ -180,8 +181,8 @@ CompositeIndex CompositeNode::addAttributeToInitialRegistrationList_ (CompositeI
 	const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional,
 			 bool isPersistent)
 {
-	attributesToRegisterAtInitialization_().append(QPair< CompositeIndex&, Attribute>(index,
-			Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));
+	attributesToRegisterAtInitialization_().append(QPair< CompositeIndex&, Attribute>{index,
+			Attribute{attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent}});
 	return CompositeIndex{};
 }
 
@@ -263,7 +264,7 @@ QList< QPair<QString, Node*> > CompositeNode::getAllAttributes(bool includeNullV
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes_[level][i] || includeNullValues )
-				result.append(QPair<QString, Node*>((*currentLevel)[i].name(), subnodes_[level][i]));
+				result.append(QPair<QString, Node*>{(*currentLevel)[i].name(), subnodes_[level][i]});
 	}
 
 	return result;
@@ -339,9 +340,7 @@ void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
 				{
 					auto newNode = Node::createNewNode(nodeType);
 					if (useUndoableAction)
-					{
 						execute(new CompositeNodeChangeChild{this, newNode, {level, i}, &subnodes_});
-					}
 					else {
 						subnodes_[level][i] = newNode;
 						newNode->setParent(this);

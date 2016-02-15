@@ -29,6 +29,7 @@
 #include "../commands/ListRemove.h"
 #include "../commands/ListPut.h"
 #include "nodeMacros.h"
+#include "../persistence/ClipboardStore.h"
 
 namespace Model {
 

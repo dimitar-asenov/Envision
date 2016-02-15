@@ -41,7 +41,7 @@ AttributeChain::AttributeChain(const QString& typeName, AttributeChain* parentCh
 
 	//By uncommenting the following two lines, CompositeNode will not have attributes which saves memory.
 	//if (parentChain == &CompositeNode::getMetaData() )
-	//	return; // a null parent indicates direct inheritance from CompositeNode
+	// 	return; // a null parent indicates direct inheritance from CompositeNode
 
 	parent_ = parentChain;
 
@@ -150,7 +150,7 @@ QVector<CompositeIndex>& AttributeChain::addExtension(int extensionId)
 {
 	if (hasExtensionInHierarchy(extensionId))
 		throw ModelException{"Adding an extension which has already exists in the type hierarchy"};
-	extensions_.insert(extensionId, QVector<CompositeIndex>());
+	extensions_.insert(extensionId, QVector<CompositeIndex>{});
 	return extensions_[extensionId];
 }
 

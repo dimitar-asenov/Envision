@@ -84,7 +84,7 @@ Node* PersistentStoreMock::loadTree(TreeManager*, const QString &, bool)
 
 QList<LoadedNode> PersistentStoreMock::loadAllSubNodes(Node*, const QSet<QString>&)
 {
-	return QList<LoadedNode> ();
+	return QList<LoadedNode>{};
 }
 
 Node* PersistentStoreMock::loadSubNode(Node*, const QString&, bool)
