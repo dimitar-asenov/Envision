@@ -29,6 +29,12 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "cppexport_api.h"
 
+#include "InteractionBase/src/input_actions/ActionRegistry.h"
+
+namespace Visualization {
+	class Item;
+}
+
 namespace CppExport {
 
 /**
@@ -49,6 +55,9 @@ class CppExportPlugin : public QObject, public Core::EnvisionPlugin
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
+
+	private:
+		static bool testExport(Visualization::Item *target, QKeySequence, Interaction::ActionRegistry::InputState);
 };
 
 }

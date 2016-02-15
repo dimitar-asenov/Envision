@@ -25,12 +25,18 @@
  **********************************************************************************************************************/
 
 #include "CppExportPlugin.h"
+#include "exporter/CppExporter.h"
+
+#include "VisualizationBase/src/items/Item.h"
 #include "SelfTest/src/SelfTestSuite.h"
+#include "Core/src/Profiler.h"
 
 namespace CppExport {
 
 bool CppExportPlugin::initialize(Core::EnvisionManager&)
 {
+	Interaction::ActionRegistry::instance()->registerInputHandler("GenericHandler.TestCppExport", testExport);
+
 	return true;
 }
 
@@ -42,6 +48,23 @@ void CppExportPlugin::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<CppExportPlugin>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<CppExportPlugin>::runTest(testid).printResultStatistics();
+}
+
+bool CppExportPlugin::testExport(Visualization::Item *target, QKeySequence, Interaction::ActionRegistry::InputState)
+{
+	auto n = target;
+	while (n && ! n->node()) n = n->parent();
+
+	if (n)
+		if (n->node())
+		{
+			Core::Profiler::start(true, "Cpp Export", "cpp-export.prof");
+			CppExport::CppExporter::exportTree(n->node()->manager(), "cpp_export");
+			Core::Profiler::stop("Cpp Export");
+			return true;
+		}
+
+	return false;
 }
 
 }
