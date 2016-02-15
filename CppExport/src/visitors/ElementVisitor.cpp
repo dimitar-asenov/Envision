@@ -136,7 +136,7 @@ SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 			*fragment << ",";
 
 	if (commentNode && commentNode->lines()->size() == 1)
-		*fragment << "/**< " + commentNode->lines()->first()->get() + " */";
+		*fragment << "/**< " + commentNode->lines()->first()->get() + "*/";
 
 	return fragment;
 }

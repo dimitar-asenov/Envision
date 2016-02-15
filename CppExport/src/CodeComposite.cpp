@@ -165,6 +165,13 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			auto softDependenciesReduced = reduceSoftDependencies(compositeDependencies, codeUnitPart->softDependencies());
 			if (!softDependenciesReduced.empty())
 			{
+				if ((units().first()->*part)() == units().first()->headerPart())
+					for (auto i = 0; i < units().indexOf(unit); i++)
+						softDependenciesReduced.remove(units().at(i)->node());
+				else
+					for (auto codeUnit : units())
+						softDependenciesReduced.subtract(codeUnit->headerPart()->softDependencies());
+
 				for (auto softDependency : softDependenciesReduced)
 				{
 					if (auto classs = DCast<OOModel::Class>(softDependency))
@@ -240,15 +247,36 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 		partDependencies.insert((unit->*part)(), dependencies((unit->*part)()));
 
 	units_.clear();
-	std::function<CodeUnitPart*(QList<CodeUnitPart*>&)> selector = [](QList<CodeUnitPart*>& parts)
+	std::function<CodeUnitPart*(QList<CodeUnitPart*>&, CodeUnitPart*)> selector = [](QList<CodeUnitPart*>& parts,
+																												CodeUnitPart* previous)
 	{
 		CodeUnitPart* result = {};
 		int resultPriority = 0;
-		const int NAME_IMPORT_PRIORITY = 3;
-		const int EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY = 2;
-		const int META_CALL_EXPRESSION_PRIORITY = 1;
+		const int NAME_IMPORT_PRIORITY = 4;
+		const int EXPLICIT_TEMPLATE_INSTANTIATION_PRIORITY = 3;
+		const int META_CALL_EXPRESSION_PRIORITY = 2;
+		const int SAME_NAMESPACE_AS_PREVIOUS_PRIORITY = 1;
 
+		auto previousParentNamespaceModule = previous ? ExportHelpers::parentNamespaceModule(previous->parent()->node())
+																	 : nullptr;
+
+		QList<CodeUnitPart*> softIndependentParts;
 		for (auto part : parts)
+		{
+			bool softIndependent = true;
+			if (!DCast<OOModel::ExplicitTemplateInstantiation>(part->parent()->node()))
+				for (auto other : parts)
+					if (part != other)
+						if (part->softDependencies().contains(other->parent()->node()))
+						{
+							softIndependent = false;
+							break;
+						}
+			if (softIndependent) softIndependentParts.append(part);
+		}
+		if (softIndependentParts.empty()) softIndependentParts = parts;
+
+		for (auto part : softIndependentParts)
 			if (DCast<OOModel::NameImport>(part->parent()->node()) && resultPriority < NAME_IMPORT_PRIORITY)
 			{
 				result = part;
@@ -266,7 +294,13 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 				result = part;
 				resultPriority = META_CALL_EXPRESSION_PRIORITY;
 			}
-		if (!result) result = parts.first();
+			else if (previousParentNamespaceModule &&
+						previousParentNamespaceModule == ExportHelpers::parentNamespaceModule(part->parent()->node()))
+			{
+				result = part;
+				resultPriority = SAME_NAMESPACE_AS_PREVIOUS_PRIORITY;
+			}
+		if (!result) result = softIndependentParts.first();
 
 		parts.removeOne(result);
 		return result;

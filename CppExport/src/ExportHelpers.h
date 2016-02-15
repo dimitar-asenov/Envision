@@ -67,7 +67,7 @@ class CPPEXPORT_API ExportHelpers
 
 		template <typename T>
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
-													std::function<T*(QList<T*>&)> selector = nullptr);
+													std::function<T*(QList<T*>&, T*)> selector = nullptr);
 
 		static void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* from,
 														  Model::Node* to, bool printTypename = false);
@@ -77,7 +77,7 @@ class CPPEXPORT_API ExportHelpers
 };
 
 template <typename T>
-QList<T*> ExportHelpers::topologicalSort(QHash<T*, QSet<T*>> dependsOn, std::function<T*(QList<T*>&)> selector)
+QList<T*> ExportHelpers::topologicalSort(QHash<T*, QSet<T*>> dependsOn, std::function<T*(QList<T*>&, T*)> selector)
 {
 	// calculate a list of elements with no dependencies.
 	// calculate a map that maps from an element to all elements that depend on it.
@@ -105,7 +105,8 @@ QList<T*> ExportHelpers::topologicalSort(QHash<T*, QSet<T*>> dependsOn, std::fun
 	while (!noPendingDependencies.empty())
 	{
 		// take any item form the list of item with no more dependencies and add it to the result
-		auto n = selector ? selector(noPendingDependencies) : noPendingDependencies.takeFirst();
+		auto n = selector ? selector(noPendingDependencies, result.empty() ? nullptr : result.first())
+								: noPendingDependencies.takeFirst();
 		result.append(n);
 
 		// check if we are neededFor another node
