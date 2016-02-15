@@ -28,6 +28,8 @@
 #include "Timer.h"
 #include "../test/LogTester.h"
 
+#include "Core/src/EnvisionManager.h"
+
 namespace Logger {
 
 bool LoggerPlugin::initialize(Core::EnvisionManager& m)

@@ -29,6 +29,10 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "helloworld_api.h"
 
+namespace Core {
+class EnvisionManager;
+}
+
 namespace HelloWorld {
 
 /**

@@ -30,6 +30,10 @@
 
 #include "Core/src/EnvisionPlugin.h"
 
+namespace Core {
+class EnvisionManager;
+}
+
 namespace SelfTest {
 
 class SELFTEST_API SelfTestPlugin : public QObject, public Core::EnvisionPlugin
