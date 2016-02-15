@@ -32,6 +32,7 @@
 #include "Logger/src/precompiled.h"
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
+#include "Core/src/global.h"
 
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one

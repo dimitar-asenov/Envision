@@ -35,6 +35,7 @@
 #include "Logger/src/precompiled.h"
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
+#include "Core/src/global.h"
 
 #include <QtCore/QSignalMapper>
 #include <QtWidgets/QToolBar>

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "precompiled.h"
+#include "global.h"
 
 QString SystemCommandResult::standardoutOneLine() const {
 	Q_ASSERT(standardout_.size() == 1);

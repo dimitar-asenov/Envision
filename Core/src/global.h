@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "core_api.h"
+
 template <typename T> inline void SAFE_DELETE( T* & object)
 {
 	if (object)
@@ -52,7 +54,7 @@ inline void dynamicCastAndAssign(Base& base, Derived& derived)
 	}
 }
 
-class OnScopeExit
+class CORE_API OnScopeExit
 {
 	public:
 		OnScopeExit(const OnScopeExit& other) = delete;
@@ -72,7 +74,7 @@ template <typename T>
 inline OnScopeExit::OnScopeExit(T&& functionToCall) : functionToCall_{std::forward<T>(functionToCall)}{}
 inline OnScopeExit::~OnScopeExit() { functionToCall_(); }
 
-class SystemCommandResult {
+class CORE_API SystemCommandResult {
 	public:
 		int exitCode() const;
 		QStringList standardout() const;
@@ -95,5 +97,5 @@ inline int SystemCommandResult::exitCode() const { return exitCode_; }
 inline QStringList SystemCommandResult::standardout() const { return standardout_; }
 inline QStringList SystemCommandResult::standarderr() const { return standarderr_; }
 
-SystemCommandResult runSystemCommand(const QString& program, const QStringList& arguments = {},
+SystemCommandResult CORE_API runSystemCommand(const QString& program, const QStringList& arguments = {},
 												 const QString& workingDirectory = {});

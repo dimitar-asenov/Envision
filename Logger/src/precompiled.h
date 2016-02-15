@@ -30,6 +30,7 @@
 // Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
 // those headers will be included here
 #include "Core/src/precompiled.h"
+#include "Core/src/global.h"
 #include "SelfTest/src/precompiled.h"
 
 
