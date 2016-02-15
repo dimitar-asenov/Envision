@@ -120,6 +120,8 @@
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/Node.h"
 
+#include "ModelBase/src/persistence/ClipboardStore.h"
+
 namespace InformationScripting {
 
 using namespace boost::python;
