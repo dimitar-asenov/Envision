@@ -21,7 +21,7 @@
 		"ModelBase/test/VisitorC" : "ModelBase/test/VisitorTests" ,
 		"SelfTest/src/CHECK_INT_EQUAL" : "SelfTest/src/TestAssertions" ,
 		"SelfTest/src/CHECK_CONDITION" : "SelfTest/src/TestAssertions" ,
-		"ModelBase/log" : "ModelBase/src/modelbase_api" ,
+		"ModelBase/log" : "ModelBase/src/ModelBasePlugin" ,
 		"ModelBase/src/nodes/DEFINE_EXTENSION" : "ModelBase/src/nodes/nodeMacros" ,
 		"ModelBase/test/ListRemoval" : "ModelBase/test/ListTest" ,
 		"SelfTest/src/CHECK_FOR_EXCEPTION" : "SelfTest/src/TestAssertions" ,
