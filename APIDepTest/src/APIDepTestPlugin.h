@@ -30,6 +30,10 @@
 
 #include "Core/src/EnvisionPlugin.h"
 
+namespace Core {
+class EnvisionManager;
+}
+
 namespace APIDepTest {
 
 /**
@@ -47,7 +51,7 @@ class APIDEPTEST_API APIDepTestPlugin : public QObject, public Core::EnvisionPlu
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual bool initialize(Core::EnvisionManager& em) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };
