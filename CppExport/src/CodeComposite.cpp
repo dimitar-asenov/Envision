@@ -93,15 +93,10 @@ QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> ha
 		if (!processed.contains(hardDependency))
 		{
 			for (auto unit : hardDependency->units())
-			{
-				for (auto transitiveDependencyHeaderPart : unit->headerPart()->dependencies())
-					workList.append(transitiveDependencyHeaderPart->parent()->composite());
-
 				for (auto softDependency : softDependencies)
 					if (result.contains(softDependency))
 						if (unit->node() == softDependency || unit->node()->isAncestorOf(softDependency))
 							result.remove(softDependency);
-			}
 
 			processed.insert(hardDependency);
 		}
@@ -167,7 +162,10 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			{
 				if ((units().first()->*part)() == units().first()->headerPart())
 					for (auto i = 0; i < units().indexOf(unit); i++)
+					{
 						softDependenciesReduced.remove(units().at(i)->node());
+						softDependenciesReduced.subtract(units().at(i)->headerPart()->softDependencies());
+					}
 				else
 					for (auto codeUnit : units())
 						softDependenciesReduced.subtract(codeUnit->headerPart()->softDependencies());

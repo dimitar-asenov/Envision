@@ -485,18 +485,23 @@ bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedC
 {
 	auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(unresolvedConstruct->getSourceRange());
 	ooMethodCall->setCallee(utils_->translateQualifiedType(unresolvedConstruct->getTypeSourceInfo()->getTypeLoc()));
-	// visit arguments
-	for (auto argIt = unresolvedConstruct->arg_begin(); argIt != unresolvedConstruct->arg_end(); ++argIt)
+
+	if (!unresolvedConstruct->getLParenLoc().getPtrEncoding())
+		ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+
+	if (unresolvedConstruct->arg_size() == 1 &&
+		 llvm::dyn_cast<clang::InitListExpr>(unresolvedConstruct->getArg(0)))
 	{
-		if (llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
-			// this is a default arg and is not written in the source code
-			continue;
-		TraverseStmt(*argIt);
-		if (!ooExprStack_.empty())
-			ooMethodCall->arguments()->append(ooExprStack_.pop());
-		else
-			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
+		auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(unresolvedConstruct->getArg(0));
+		Q_ASSERT(initListExpr);
+		if (initListExpr->getSyntacticForm()) initListExpr = initListExpr->getSyntacticForm();
+		for (auto argument : *initListExpr)
+			ooMethodCall->arguments()->append(translateExpression(argument));
 	}
+	else
+		for (auto argument : translateArguments(unresolvedConstruct->arg_begin(), unresolvedConstruct->arg_size()))
+			ooMethodCall->arguments()->append(argument);
+
 	ooExprStack_.push(ooMethodCall);
 	return true;
 }
