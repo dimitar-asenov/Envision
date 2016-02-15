@@ -59,7 +59,7 @@ bool CppExportPlugin::testExport(Visualization::Item *target, QKeySequence, Inte
 		if (n->node())
 		{
 			Core::Profiler::start(true, "Cpp Export", "cpp-export.prof");
-			CppExport::CppExporter::exportTree(n->node()->manager(), "cpp_export");
+			CppExport::CppExporter::exportTree(n->node()->manager(), "exported");
 			Core::Profiler::stop("Cpp Export");
 			return true;
 		}
