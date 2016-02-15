@@ -25,7 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "../src/CustomMethodCallPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "../src/items/FindMethodVis.h"
 #include "../src/items/EmptyMethodVis.h"

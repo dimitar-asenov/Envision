@@ -43,7 +43,7 @@
 #include "items/VCommentText.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 namespace Comments {
 

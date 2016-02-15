@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "OODebugPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 

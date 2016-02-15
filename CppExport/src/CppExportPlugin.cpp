@@ -28,7 +28,7 @@
 #include "exporter/CppExporter.h"
 
 #include "VisualizationBase/src/items/Item.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 #include "Core/src/Profiler.h"
 
 namespace CppExport {

@@ -25,7 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "../src/OOVisualizationPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "MethodAddOn.h"
 #include "../src/declarations/VMethod.h"

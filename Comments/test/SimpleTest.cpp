@@ -27,7 +27,8 @@
 #include "../src/CommentsPlugin.h"
 #include "../src/nodes/CommentNode.h"
 #include "../src/nodes/CommentDiagram.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"

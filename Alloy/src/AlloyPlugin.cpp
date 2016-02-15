@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "AlloyPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 #include "commands/CAlloy.h"
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"

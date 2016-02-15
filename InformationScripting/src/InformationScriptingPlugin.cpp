@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "InformationScriptingPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 #include "nodes/TagExtension.h"
 #include "python_bindings/BoostPythonHelpers.h"

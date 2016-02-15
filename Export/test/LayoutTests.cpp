@@ -25,7 +25,6 @@
  **********************************************************************************************************************/
 
 #include "../src/ExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
 
 #include "../src/writer/Exporter.h"
 #include "../src/writer/FragmentLayouter.h"
@@ -34,6 +33,9 @@
 #include "../src/tree/SourceFile.h"
 #include "../src/tree/TextFragment.h"
 #include "../src/tree/CompositeFragment.h"
+
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 using namespace Model;
 

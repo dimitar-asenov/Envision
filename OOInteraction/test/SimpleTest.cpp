@@ -25,7 +25,8 @@
  **********************************************************************************************************************/
 
 #include "../src/OOInteractionPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "../src/expression_editor/OOExpressionBuilder.h"
 #include "../src/string_offset_providers/StringComponents.h"

@@ -4,7 +4,6 @@ project(SelfTest)
 include(../CMake/common.cmake)
 
 add_library(SelfTest SHARED
-	src/SelfTestSuite.h
 	src/Test.h
 	src/TestAssertions.h
 	src/TestManager.h

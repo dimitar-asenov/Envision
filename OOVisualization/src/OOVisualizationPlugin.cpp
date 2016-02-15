@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "OOVisualizationPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 #include "allOOVisualizations.h"
 

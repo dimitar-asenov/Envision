@@ -27,7 +27,7 @@
 #include "OOModelPlugin.h"
 #include "allOOModelNodes.h"
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 #include "CodeGenerationVisitor.h"
 
 namespace OOModel {

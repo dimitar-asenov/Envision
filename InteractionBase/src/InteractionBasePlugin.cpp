@@ -71,7 +71,7 @@
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 using namespace Logger;
 

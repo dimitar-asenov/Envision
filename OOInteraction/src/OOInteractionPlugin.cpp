@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "OOInteractionPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 #include "handlers/HProject.h"

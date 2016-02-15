@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "ContractsLibraryPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 #include "monitor/ValueAtReturnVisitor.h"
 #include "monitor/ChangeMonitor.h"

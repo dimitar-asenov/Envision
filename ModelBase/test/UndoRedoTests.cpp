@@ -25,7 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "../src/ModelBasePlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 #include "../src/test_nodes/BinaryNode.h"
 #include "../src/model/TreeManager.h"
 #include "../src/nodes/Text.h"

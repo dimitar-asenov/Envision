@@ -25,7 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "../src/OOModelPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "../src/allOOModelNodes.h"
 

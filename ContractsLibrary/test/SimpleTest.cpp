@@ -25,7 +25,8 @@
  **********************************************************************************************************************/
 
 #include "../src/ContractsLibraryPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "../src/items/InterfaceContractsVMethodAddOn.h"
 #include "../src/items/SignatureContractsVMethodAddOn.h"

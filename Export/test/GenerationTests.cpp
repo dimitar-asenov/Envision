@@ -25,7 +25,8 @@
  **********************************************************************************************************************/
 
 #include "../src/ExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "../src/writer/Exporter.h"
 #include "../src/writer/FragmentLayouter.h"

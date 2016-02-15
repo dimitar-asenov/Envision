@@ -25,7 +25,8 @@
  **********************************************************************************************************************/
 
 #include "../src/AlloyPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 

@@ -26,7 +26,8 @@
 
 #include "../src/CppImportPlugin.h"
 #include "../src/CppImportManager.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 

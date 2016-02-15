@@ -50,7 +50,7 @@
 #include "node_extensions/Position.h"
 #include "nodes/TestBoxNode.h"
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 namespace Visualization
 {

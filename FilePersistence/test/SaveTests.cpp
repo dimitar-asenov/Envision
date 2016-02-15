@@ -26,7 +26,8 @@
 
 #include "../src/FilePersistencePlugin.h"
 #include "../src/simple/SimpleTextFileStore.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/test_nodes/BinaryNodePersistenceUnit.h"
 #include "ModelBase/src/model/TreeManager.h"

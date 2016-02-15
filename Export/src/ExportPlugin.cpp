@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "ExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "SelfTest/src/TestManager.h"
 
 namespace Export {
 
