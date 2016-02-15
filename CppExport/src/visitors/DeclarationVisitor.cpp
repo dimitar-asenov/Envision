@@ -604,7 +604,8 @@ SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* explici
 	// reconstruct potentially eliminated prefix for template instantiation special cases
 	if (explicitTemplateInstantiation->firstAncestorOfType<OOModel::Class>() &&
 		 !explicitTemplateInstantiation->instantiatedClass()->prefix())
-		*fragment << ExportHelpers::parentNamespaceModule(explicitTemplateInstantiation)->name() << "::";
+		if (auto namespaceModule = ExportHelpers::parentNamespaceModule(explicitTemplateInstantiation))
+			*fragment << namespaceModule->name() << "::";
 
 	*fragment << ExpressionVisitor{data()}.visit(explicitTemplateInstantiation->instantiatedClass()) << ";";
 	return fragment;
