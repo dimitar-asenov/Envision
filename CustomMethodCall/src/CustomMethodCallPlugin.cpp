@@ -26,6 +26,7 @@
 
 #include "CustomMethodCallPlugin.h"
 #include "SelfTest/src/TestManager.h"
+#include "Core/src/reflect/TypeRegistry.h"
 
 namespace CustomMethodCall {
 

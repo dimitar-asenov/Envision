@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "reflect/TypeRegistry.h" // Convenience include header which is used in places including EnvisionPlugin.h
+#include "core_api.h"
 
 namespace Core {
 
