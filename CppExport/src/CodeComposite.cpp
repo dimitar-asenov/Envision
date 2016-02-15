@@ -165,6 +165,13 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			auto softDependenciesReduced = reduceSoftDependencies(compositeDependencies, codeUnitPart->softDependencies());
 			if (!softDependenciesReduced.empty())
 			{
+				if ((units().first()->*part)() == units().first()->headerPart())
+					for (auto i = 0; i < units().indexOf(unit); i++)
+						softDependenciesReduced.remove(units().at(i)->node());
+				else
+					for (auto codeUnit : units())
+						softDependenciesReduced.subtract(codeUnit->headerPart()->softDependencies());
+
 				for (auto softDependency : softDependenciesReduced)
 				{
 					if (auto classs = DCast<OOModel::Class>(softDependency))
