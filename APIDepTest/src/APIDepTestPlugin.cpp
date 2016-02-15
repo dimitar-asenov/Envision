@@ -25,7 +25,9 @@
 ***********************************************************************************************************************/
 
 #include "APIDepTestPlugin.h"
+
 #include "HelloWorld/src/HelloWorldPrinter.h"
+#include "Core/src/EnvisionManager.h"
 
 namespace APIDepTest {
 

@@ -33,6 +33,6 @@ namespace Core {
  * This function is executed when Envision is started. It shows the main window, loads all plug-ins and starts the event
  * loop.
  */
-int CORE_API coreMain(int argc, char *argv[]);
+int coreMain(int argc, char *argv[]);
 
 }

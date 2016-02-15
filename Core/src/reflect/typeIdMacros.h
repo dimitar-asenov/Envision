@@ -28,7 +28,7 @@
 
 #include "TypeRegistry.h"
 
-/***********************************************************************************************************************
+/**
  * Declares standard methods for querying a classes's type statically or at run-time.
  *
  * DO NOT USE DIRECTLY. Use DECLARE_TYPE_ID or DECLARE_TYPE_ID_BASE defined below
@@ -44,8 +44,8 @@
  * 	...
  *
  * hierarchyTypeIds:
- *		Returns an ordered list of all ids in the type hierarchy of this class.
- *		The most derived id appears at the front of the list.
+ * 		Returns an ordered list of all ids in the type hierarchy of this class.
+ * 		The most derived id appears at the front of the list.
  */
 #define DECLARE_TYPE_ID_COMMON(OVERRIDE)																										\
 	public:																																				\
@@ -63,7 +63,7 @@
 	private:																																				\
 		static int typeId_;																															\
 
-/***********************************************************************************************************************
+/**
  * A specialized version of DECLARE_TYPE_ID_COMMON that should be used with classes which inherit from a TYPE_ID enabled
  * class.
  *
@@ -76,7 +76,7 @@
  */
 #define DECLARE_TYPE_ID DECLARE_TYPE_ID_COMMON(override)
 
-/***********************************************************************************************************************
+/**
  * A specialized version of DECLARE_TYPE_ID_COMMON that should be used with classes that are at the top of the
  * hierarchy.
  *
@@ -89,7 +89,7 @@
  */
 #define DECLARE_TYPE_ID_BASE DECLARE_TYPE_ID_COMMON()
 
-/***********************************************************************************************************************
+/**
  * Defines standard methods for querying a classes's type statically or at run-time.
  *
  * DO NOT USE DIRECTLY. Use DEFINE_TYPE_ID_DERIVED or DEFINE_TYPE_ID_BASE defined below
@@ -138,7 +138,7 @@ templatePrefix const QString& className::typeNameStatic()																				\
 	return typeName_;																																	\
 }																																							\
 
-/***********************************************************************************************************************
+/**
  * A specialized version of DEFINE_TYPE_ID_COMMON that should be used with classes that are at the top of the hierarchy.
  *
  * This macro is typically used within other macros but can also appear directly in the .cpp file defining className.
@@ -165,7 +165,7 @@ templatePrefix bool className::isSubtypeOf(const QString& type) const											
 	return typeNameStatic() == type;																												\
 }																																							\
 
-/***********************************************************************************************************************
+/**
  * A specialized version of DEFINE_TYPE_ID_COMMON that should be used with classes which inherit from a TYPE_ID enabled
  * class.
  *

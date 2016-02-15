@@ -26,10 +26,11 @@
 
 #pragma once
 
-#include "PluginManager.h"
+#include "core_api.h"
 
 namespace Core {
 
+class PluginManager;
 class TestEvent;
 
 class CORE_API TestRunner: public QObject
