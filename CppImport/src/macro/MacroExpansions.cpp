@@ -109,10 +109,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 					 : clang_.unexpandedSpelling(clang::SourceRange(actualArgFirstToken->getLocation(),
 																					actualArgLastToken->getLocation()));
 
-			auto reference = new OOModel::ReferenceExpression{unexpandedArgument};
-
-
-			entry->metaCall()->arguments()->append(reference);
+			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression{unexpandedArgument});
 			entry->argumentLocs().append(actualArgLastToken->getLocation());
 		}
 
