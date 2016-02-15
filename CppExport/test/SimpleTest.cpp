@@ -29,7 +29,7 @@
 
 namespace CppExport {
 
-class SimpleTest : public Test<CppExportPlugin, SimpleTest> { public: void test()
+class SimpleTest : public SelfTest::Test<CppExportPlugin, SimpleTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
 }};

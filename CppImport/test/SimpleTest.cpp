@@ -45,7 +45,7 @@ using namespace Visualization;
 
 namespace CppImport {
 
-class SimpleTest : public Test<CppImportPlugin, SimpleTest> { public: void test()
+class SimpleTest : public SelfTest::Test<CppImportPlugin, SimpleTest> { public: void test()
 {
 	CppImportManager importManager;
 

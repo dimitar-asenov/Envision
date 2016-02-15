@@ -227,7 +227,7 @@ Method* addDivBySix(Class* parent)
 	return divbysix;
 }
 
-class SimpleTest : public Test<ControlFlowVisualizationPlugin, SimpleTest> { public: void test()
+class SimpleTest : public SelfTest::Test<ControlFlowVisualizationPlugin, SimpleTest> { public: void test()
 {
 	auto cl = new Class{"SomeClass"};
 

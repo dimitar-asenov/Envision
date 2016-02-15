@@ -32,7 +32,7 @@
 
 namespace Model {
 
-class MODELBASE_API PersistenceSave : public Test<ModelBasePlugin, PersistenceSave> { public: void test()
+class MODELBASE_API PersistenceSave : public SelfTest::Test<ModelBasePlugin, PersistenceSave> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{"root", root};

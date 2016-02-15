@@ -27,64 +27,46 @@
 #pragma once
 
 #include "selftest_api.h"
-#include "TestResults.h"
-#include "TestBase.h"
-#include "Core/src/reflect/Reflect.h"
-#include "TestManager.h"
 
 namespace SelfTest {
 
-/**
- * The Test template class is used to define a new test.
- *
- * Purposefully outside of the namespace for easy access
- *
- * @param pluginClass
- * 				the name of the class of the current plugin. This is the class that implements the EnvisionPlugin
- * 				interface.
- * @param testName
- * 				the name of this test. This name can be used at the command line to request that this specific test be
- * 				started.
- */
-template <typename PluginClass, typename TestName>
-class Test : public TestBase {
-	public:
-		virtual void runCustom(TestResults& testResults, bool &allChecksPassedFlag) override;
+class TestResults;
 
-	protected:
-		TestResults testResults;
-		bool allChecksPassedFlag{true};
-		static bool initTrigger;
-		Test();
+/**
+ * The Test class is the base class for a single test for the Envision testing framework.
+ */
+class SELFTEST_API TestBase
+{
+	public:
+		using TestConstructor = std::function<TestBase* ()>;
+
+		TestBase(const QString &name);
+		virtual ~TestBase();
+
+		const QString& getName() const;
+
+		/**
+		 * Runs the test and reports any failures to the specified test results.
+		 *
+		 * @param testResults
+		 * 				The outcome of the test is saved in this object.
+		 */
+		void run(TestResults& testResults);
+
+		/**
+		 * Implements custom test behavior.
+		 *
+		 * This function must be implemented for each test.
+		 *
+		 * @param testResults
+		 * 				Test failures are added here.
+		 * @param passed
+		 * 				must be set to false if the test failed.
+		 */
+		virtual void runCustom(TestResults& testResults, bool &passed) = 0;
 
 	private:
-		static bool init();
+		QString name;
 };
-
-template<typename PluginClass, typename TestName>
-inline void Test<PluginClass, TestName>::runCustom(TestResults& testResults, bool& allChecksPassedFlag)
-{
-	this->allChecksPassedFlag = true;
-	this->testResults = {};
-
-	static_cast<TestName*>(this)->test();
-	testResults.merge(this->testResults);
-	allChecksPassedFlag = this->allChecksPassedFlag;
-}
-
-template<typename PluginClass, typename TestName>
-inline Test<PluginClass, TestName>::Test() : TestBase{typeName<TestName>().className_}
-{
-}
-
-template<typename PluginClass, typename TestName>
-inline bool Test<PluginClass, TestName>::init()
-{
-	TestManager<PluginClass>::add([](){return new TestName{};}, typeName<TestName>().className_);
-	return true;
-}
-
-template <typename PluginClass, typename TestName>
-bool Test<PluginClass, TestName>::initTrigger = Test::init();
 
 }

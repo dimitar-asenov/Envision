@@ -32,7 +32,7 @@
 
 namespace Model {
 
-class UndoRedoTextSet : public Test<ModelBasePlugin, UndoRedoTextSet> { public: void test()
+class UndoRedoTextSet : public SelfTest::Test<ModelBasePlugin, UndoRedoTextSet> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
@@ -78,7 +78,7 @@ class UndoRedoTextSet : public Test<ModelBasePlugin, UndoRedoTextSet> { public: 
 	manager.endModification();
 }};
 
-class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes> { public: void test()
+class UndoRedoOptionalNodes : public SelfTest::Test<ModelBasePlugin, UndoRedoOptionalNodes> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
@@ -159,7 +159,7 @@ class UndoRedoOptionalNodes : public Test<ModelBasePlugin, UndoRedoOptionalNodes
 	manager.endModification();
 }};
 
-class UndoRedoGroupTextSet : public Test<ModelBasePlugin, UndoRedoGroupTextSet> { public: void test()
+class UndoRedoGroupTextSet : public SelfTest::Test<ModelBasePlugin, UndoRedoGroupTextSet> { public: void test()
 {
 	auto root = new Text{};
 	TreeManager manager{root};

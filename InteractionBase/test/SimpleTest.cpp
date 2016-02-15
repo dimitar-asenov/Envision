@@ -45,7 +45,7 @@ namespace Interaction {
 
 using namespace Visualization;
 
-class TextSelect : public Test<InteractionBasePlugin, TextSelect> { public: void test()
+class TextSelect : public SelfTest::Test<InteractionBasePlugin, TextSelect> { public: void test()
 {
 	Visualization::VComposite::setDefaultClassHandler(HBinaryNode::instance());
 

@@ -29,7 +29,7 @@
 
 namespace JavaExport {
 
-class SimpleTest : public Test<JavaExportPlugin, SimpleTest> { public: void test()
+class SimpleTest : public SelfTest::Test<JavaExportPlugin, SimpleTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
 }};

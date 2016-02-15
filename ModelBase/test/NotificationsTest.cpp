@@ -33,7 +33,8 @@
 
 namespace Model {
 
-class MODELBASE_API ModificationNotificationTests : public Test<ModelBasePlugin, ModificationNotificationTests> {
+class MODELBASE_API ModificationNotificationTests
+		: public SelfTest::Test<ModelBasePlugin, ModificationNotificationTests> {
 public: void test()
 {
 	TreeManager manager;

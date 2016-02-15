@@ -996,7 +996,7 @@ Method* addExtraMethod(Class* parent)
 	return extra;
 }
 
-class JavaLibraryAndHelloWorldTest : public Test<OOVisualizationPlugin, JavaLibraryAndHelloWorldTest> {
+class JavaLibraryAndHelloWorldTest : public SelfTest::Test<OOVisualizationPlugin, JavaLibraryAndHelloWorldTest> {
 public: void test()
 {
 	// Create project

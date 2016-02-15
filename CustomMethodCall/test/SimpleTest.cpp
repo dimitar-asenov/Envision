@@ -204,7 +204,7 @@ Class* addCollection(Project* parent)
 	return col;
 }
 
-class CustomVisTest : public Test<CustomMethodCallPlugin, CustomVisTest> { public: void test()
+class CustomVisTest : public SelfTest::Test<CustomMethodCallPlugin, CustomVisTest> { public: void test()
 {
 	auto collection = addCollection(nullptr);
 	auto manager = new Model::TreeManager{collection};

@@ -29,7 +29,7 @@
 
 namespace InformationScripting {
 
-class SimpleTest : public Test<InformationScriptingPlugin, SimpleTest> { public: void test()
+class SimpleTest : public SelfTest::Test<InformationScriptingPlugin, SimpleTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
 }};

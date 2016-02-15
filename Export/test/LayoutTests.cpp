@@ -39,7 +39,7 @@ using namespace Model;
 
 namespace Export {
 
-class CompositeFragmentTest : public Test<ExportPlugin, CompositeFragmentTest> { public: void test()
+class CompositeFragmentTest : public SelfTest::Test<ExportPlugin, CompositeFragmentTest> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 

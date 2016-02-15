@@ -37,7 +37,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-class SaveRootOnly : public Test<FilePersistencePlugin, SaveRootOnly> { public: void test()
+class SaveRootOnly : public SelfTest::Test<FilePersistencePlugin, SaveRootOnly> { public: void test()
 {
 	PersistentStore* store{};
 	QString testDir;
@@ -65,7 +65,7 @@ class SaveRootOnly : public Test<FilePersistencePlugin, SaveRootOnly> { public: 
 	SAFE_DELETE(store);
 }};
 
-class SaveModeNodesSingleUnitOnly : public Test<FilePersistencePlugin, SaveModeNodesSingleUnitOnly> {
+class SaveModeNodesSingleUnitOnly : public SelfTest::Test<FilePersistencePlugin, SaveModeNodesSingleUnitOnly> {
 public: void test()
 {
 	PersistentStore* store{};
@@ -106,7 +106,7 @@ public: void test()
 	SAFE_DELETE(store);
 }};
 
-class SaveMultipleUnits : public Test<FilePersistencePlugin, SaveMultipleUnits> { public: void test()
+class SaveMultipleUnits : public SelfTest::Test<FilePersistencePlugin, SaveMultipleUnits> { public: void test()
 {
 	PersistentStore* store{};
 	QString testDir;

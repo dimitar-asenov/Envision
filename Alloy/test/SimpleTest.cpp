@@ -169,7 +169,7 @@ Class* addNode()
 	return aNode;
 }
 
-class AlloyTest : public Test<AlloyPlugin, AlloyTest> { public: void test()
+class AlloyTest : public SelfTest::Test<AlloyPlugin, AlloyTest> { public: void test()
 {
 	CHECK_INT_EQUAL(1, 1);
 	auto aLinkedList = addLinkedList();

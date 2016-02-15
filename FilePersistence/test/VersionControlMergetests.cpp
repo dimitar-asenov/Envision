@@ -35,7 +35,7 @@
 
 namespace FilePersistence {
 
-class TwoDeletesNoConflict : public Test<FilePersistencePlugin, TwoDeletesNoConflict> { public: void test()
+class TwoDeletesNoConflict : public SelfTest::Test<FilePersistencePlugin, TwoDeletesNoConflict> { public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -48,7 +48,7 @@ class TwoDeletesNoConflict : public Test<FilePersistencePlugin, TwoDeletesNoConf
 	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000042}"}));
 }};
 
-class TwoDeletesInSameListResolvable : public Test<FilePersistencePlugin, TwoDeletesInSameListResolvable> {
+class TwoDeletesInSameListResolvable : public SelfTest::Test<FilePersistencePlugin, TwoDeletesInSameListResolvable> {
 public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
@@ -66,7 +66,7 @@ public: void test()
 		CHECK_CONDITION(listContainer->child(QString::number(idx)));
 }};
 
-class UnorderedAndUnitsConflicting : public Test<FilePersistencePlugin, UnorderedAndUnitsConflicting> {
+class UnorderedAndUnitsConflicting : public SelfTest::Test<FilePersistencePlugin, UnorderedAndUnitsConflicting> {
 public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
@@ -88,7 +88,8 @@ public: void test()
 	CHECK_CONDITION(expected.isEmpty());
 }};
 
-class ListsReorderInsertDeleteResolvable : public Test<FilePersistencePlugin, ListsReorderInsertDeleteResolvable> {
+class ListsReorderInsertDeleteResolvable
+		: public SelfTest::Test<FilePersistencePlugin, ListsReorderInsertDeleteResolvable> {
 public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
@@ -121,7 +122,7 @@ public: void test()
 						 ->parent()->id().toString().endsWith("507}"));
 }};
 
-class EvalClassMove : public Test<FilePersistencePlugin, EvalClassMove> { public: void test()
+class EvalClassMove : public SelfTest::Test<FilePersistencePlugin, EvalClassMove> { public: void test()
 {
 	VCTestProject p{"Eval_ClassMove", "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -132,14 +133,14 @@ class EvalClassMove : public Test<FilePersistencePlugin, EvalClassMove> { public
 	merge->commit(sig, sig, "Merged master and dev");
 }};
 
-class EvalLoopFix : public Test<FilePersistencePlugin, EvalLoopFix> { public: void test()
+class EvalLoopFix : public SelfTest::Test<FilePersistencePlugin, EvalLoopFix> { public: void test()
 {
 	VCTestProject p{"Eval_LoopFix", "TestMerge"};
 	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(merge->hasConflicts());
 }};
 
-class EvalMethodInsert : public Test<FilePersistencePlugin, EvalMethodInsert> { public: void test()
+class EvalMethodInsert : public SelfTest::Test<FilePersistencePlugin, EvalMethodInsert> { public: void test()
 {
 	VCTestProject p{"Eval_MethodInsert", "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -155,7 +156,7 @@ class EvalMethodInsert : public Test<FilePersistencePlugin, EvalMethodInsert> { 
  * found in /tmp/EnvisionVC/TestMerge.
  * This test should probably eventually be replaced by a command line interface.
  */
-class RunMerge : public Test<FilePersistencePlugin, RunMerge> { public: void test()
+class RunMerge : public SelfTest::Test<FilePersistencePlugin, RunMerge> { public: void test()
 {
 	if (!QFile{"/tmp/EnvisionVC/TestMerge/.git"}.exists())
 	{

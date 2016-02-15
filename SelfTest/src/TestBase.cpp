@@ -24,27 +24,28 @@
 **
 ***********************************************************************************************************************/
 
-#include "Test.h"
+#include "TestBase.h"
 #include "TestManager.h"
 #include "Core/src/EnvisionException.h"
+#include "TestResults.h"
 
 namespace SelfTest {
 
-Test::Test(const QString& name) :
+TestBase::TestBase(const QString& name) :
 	name{name}
 {
 }
 
-Test::~Test()
+TestBase::~TestBase()
 {
 }
 
-const QString& Test::getName() const
+const QString& TestBase::getName() const
 {
 	return name;
 }
 
-void Test::run(TestResults& testResults)
+void TestBase::run(TestResults& testResults)
 {
 	bool passed = true;
 

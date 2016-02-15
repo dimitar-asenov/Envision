@@ -39,7 +39,7 @@ using namespace Model;
 
 namespace Export {
 
-class ExportJustText : public Test<ExportPlugin, ExportJustText> { public: void test()
+class ExportJustText : public SelfTest::Test<ExportPlugin, ExportJustText> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -53,7 +53,7 @@ class ExportJustText : public Test<ExportPlugin, ExportJustText> { public: void 
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
 }};
 
-class ExportAndModify : public Test<ExportPlugin, ExportAndModify> { public: void test()
+class ExportAndModify : public SelfTest::Test<ExportPlugin, ExportAndModify> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -71,7 +71,7 @@ class ExportAndModify : public Test<ExportPlugin, ExportAndModify> { public: voi
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text_modified", testDir +"/text/text");
 }};
 
-class ExportAndDeleteFile : public Test<ExportPlugin, ExportAndDeleteFile> { public: void test()
+class ExportAndDeleteFile : public SelfTest::Test<ExportPlugin, ExportAndDeleteFile> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -92,7 +92,7 @@ class ExportAndDeleteFile : public Test<ExportPlugin, ExportAndDeleteFile> { pub
 	CHECK_CONDITION(!QFile{testDir +"/text/text"}.exists());
 }};
 
-class ExportAndDeleteDir : public Test<ExportPlugin, ExportAndDeleteDir> { public: void test()
+class ExportAndDeleteDir : public SelfTest::Test<ExportPlugin, ExportAndDeleteDir> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};
@@ -132,7 +132,7 @@ class Sleep
 	 }
 };
 
-class ExportIdentical : public Test<ExportPlugin, ExportIdentical> { public: void test()
+class ExportIdentical : public SelfTest::Test<ExportPlugin, ExportIdentical> { public: void test()
 {
 	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
 	FragmentLayouter layouter{"\t"};

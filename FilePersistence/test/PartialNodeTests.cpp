@@ -36,7 +36,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-class LoadingPartialList : public Test<FilePersistencePlugin, LoadingPartialList> { public: void test()
+class LoadingPartialList : public SelfTest::Test<FilePersistencePlugin, LoadingPartialList> { public: void test()
 {
 	PersistentStore* store{};
 
@@ -59,7 +59,7 @@ class LoadingPartialList : public Test<FilePersistencePlugin, LoadingPartialList
 	SAFE_DELETE(store);
 }};
 
-class LoadingFullList : public Test<FilePersistencePlugin, LoadingFullList> { public: void test()
+class LoadingFullList : public SelfTest::Test<FilePersistencePlugin, LoadingFullList> { public: void test()
 {
 	PersistentStore* store{};
 

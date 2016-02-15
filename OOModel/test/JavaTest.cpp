@@ -33,7 +33,8 @@
 
 namespace OOModel {
 
-class JavaLibraryAndHelloWorldTest : public Test<OOModelPlugin, JavaLibraryAndHelloWorldTest> { public: void test()
+class JavaLibraryAndHelloWorldTest : public SelfTest::Test<OOModelPlugin, JavaLibraryAndHelloWorldTest>
+{ public: void test()
 {
 	auto prj = new Project{"HelloWorld"};
 	Model::TreeManager manager{prj};

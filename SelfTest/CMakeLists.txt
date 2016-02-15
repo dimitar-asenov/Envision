@@ -15,7 +15,8 @@ add_library(SelfTest SHARED
 	src/SelfTestPlugin.h
 	src/TestResult.cpp
 	src/TestResults.cpp
-	src/Test.cpp
+	src/TestBase.cpp
+        src/TestBase.h
 	src/SelfTestPlugin.cpp
 )
 

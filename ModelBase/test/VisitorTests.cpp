@@ -85,7 +85,7 @@ class MODELBASE_API VisitorC : public Visitor<VisitorC>{
 		QString text;
 };
 
-class MODELBASE_API VisitorSample : public Test<ModelBasePlugin, VisitorSample> { public: void test()
+class MODELBASE_API VisitorSample : public SelfTest::Test<ModelBasePlugin, VisitorSample> { public: void test()
 {
 	auto root = new List{};
 	TreeManager manager{root};

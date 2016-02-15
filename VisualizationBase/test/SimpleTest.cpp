@@ -41,7 +41,7 @@
 
 namespace Visualization {
 
-//class CompositeTest : public Test<VisualizationBasePlugin, CompositeTest> { public: void test()
+//class CompositeTest : public SelfTest::Test<VisualizationBasePlugin, CompositeTest> { public: void test()
 //{
 //	Model::TreeManager* manager = new Model::TreeManager{};
 //	Model::List* list = static_cast<Model::List*> (manager->createRoot("List"));
@@ -84,7 +84,7 @@ namespace Visualization {
 //	CHECK_CONDITION(scene);
 //}};
 
-class CompositeTest : public Test<VisualizationBasePlugin, CompositeTest> { public: void test()
+class CompositeTest : public SelfTest::Test<VisualizationBasePlugin, CompositeTest> { public: void test()
 {
 	auto list = new Model::List{};
 	auto manager = new Model::TreeManager{list};

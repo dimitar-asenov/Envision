@@ -33,7 +33,7 @@
 
 namespace OOModel {
 
-class SimpleClassTest : public Test<OOModelPlugin, SimpleClassTest> { public: void test()
+class SimpleClassTest : public SelfTest::Test<OOModelPlugin, SimpleClassTest> { public: void test()
 {
 	auto root = new Class;
 	Model::TreeManager manager{root};
@@ -46,7 +46,7 @@ class SimpleClassTest : public Test<OOModelPlugin, SimpleClassTest> { public: vo
 	CHECK_STR_EQUAL("Test", root->name());
 }};
 
-class SimpleProjectTest : public Test<OOModelPlugin, SimpleProjectTest> { public: void test()
+class SimpleProjectTest : public SelfTest::Test<OOModelPlugin, SimpleProjectTest> { public: void test()
 {
 	auto root = new Project;
 	Model::TreeManager manager{root};

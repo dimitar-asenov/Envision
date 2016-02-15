@@ -36,7 +36,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-class LoadingTypedList : public Test<FilePersistencePlugin, LoadingTypedList> { public: void test()
+class LoadingTypedList : public SelfTest::Test<FilePersistencePlugin, LoadingTypedList> { public: void test()
 {
 	PersistentStore* store{};
 
@@ -65,7 +65,7 @@ class LoadingTypedList : public Test<FilePersistencePlugin, LoadingTypedList> { 
 	SAFE_DELETE(store);
 }};
 
-class SavingTypedList : public Test<FilePersistencePlugin, SavingTypedList> { public: void test()
+class SavingTypedList : public SelfTest::Test<FilePersistencePlugin, SavingTypedList> { public: void test()
 {
 	PersistentStore* store{};
 	QString testDir;

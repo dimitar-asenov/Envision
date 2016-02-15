@@ -33,7 +33,7 @@
 
 namespace Model {
 
-class MODELBASE_API CompositeMetaData : public Test<ModelBasePlugin, CompositeMetaData> { public: void test()
+class MODELBASE_API CompositeMetaData : public SelfTest::Test<ModelBasePlugin, CompositeMetaData> { public: void test()
 {
 	AttributeChain& metaExt = TestNodes::BinaryNode::getMetaData();
 	AttributeChain& metaUnit = TestNodes::BinaryNodeAccessUnit::getMetaData();
@@ -71,7 +71,7 @@ class MODELBASE_API CompositeMetaData : public Test<ModelBasePlugin, CompositeMe
 	CHECK_CONDITION(metaExt[4].partial() == false);
 }};
 
-class MODELBASE_API SimpleTreeManagerCreation : public Test<ModelBasePlugin, SimpleTreeManagerCreation> {
+class MODELBASE_API SimpleTreeManagerCreation : public SelfTest::Test<ModelBasePlugin, SimpleTreeManagerCreation> {
 public: void test()
 {
 	TreeManager manager;
@@ -86,7 +86,7 @@ public: void test()
 	CHECK_CONDITION( root->name()->manager() == &manager );
 }};
 
-class MODELBASE_API RemoveOptional : public Test<ModelBasePlugin, RemoveOptional> { public: void test()
+class MODELBASE_API RemoveOptional : public SelfTest::Test<ModelBasePlugin, RemoveOptional> { public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
@@ -110,7 +110,8 @@ class MODELBASE_API RemoveOptional : public Test<ModelBasePlugin, RemoveOptional
 	CHECK_CONDITION( root->left() != nullptr );
 }};
 
-class MODELBASE_API ChildNodeRetrieval : public Test<ModelBasePlugin, ChildNodeRetrieval> { public: void test()
+class MODELBASE_API ChildNodeRetrieval : public SelfTest::Test<ModelBasePlugin, ChildNodeRetrieval>
+{ public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};
@@ -133,7 +134,8 @@ class MODELBASE_API ChildNodeRetrieval : public Test<ModelBasePlugin, ChildNodeR
 	CHECK_CONDITION(root->get("right") == right);
 }};
 
-class MODELBASE_API ProperRegistration : public Test<ModelBasePlugin, ProperRegistration> { public: void test()
+class MODELBASE_API ProperRegistration : public SelfTest::Test<ModelBasePlugin, ProperRegistration>
+{ public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};

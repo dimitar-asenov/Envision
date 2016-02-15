@@ -275,7 +275,7 @@ Method* addMainMethod()
 	return method;
 }
 
-class SimpleTest : public Test<OOInteractionPlugin, SimpleTest> { public: void test()
+class SimpleTest : public SelfTest::Test<OOInteractionPlugin, SimpleTest> { public: void test()
 {
 	auto pr = new Project{"NewProject"};
 	auto cl = new Class{"SomeClass"};
@@ -292,7 +292,7 @@ class SimpleTest : public Test<OOInteractionPlugin, SimpleTest> { public: void t
 	CHECK_CONDITION(top_level != nullptr);
 }};
 
-//class ExpressionParsingTest : public Test<OOInteractionPlugin, ExpressionParsingTest> { public: void test()
+//class ExpressionParsingTest : public SelfTest::Test<OOInteractionPlugin, ExpressionParsingTest> { public: void test()
 //{
 //	// Try specific strings which have been problematic in the past
 //	QStringList problematicStrings = {"SPACE<(> ", "x<>", "\\x ", "@@@@", "new [", "+=", "\\)", "new# "};

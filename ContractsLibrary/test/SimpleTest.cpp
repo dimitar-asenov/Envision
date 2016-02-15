@@ -470,7 +470,7 @@ Module* createClientModule()
 	return module;
 }
 
-class ContractsLibraryTest : public Test<ContractsLibraryPlugin, ContractsLibraryTest> { public: void test()
+class ContractsLibraryTest : public SelfTest::Test<ContractsLibraryPlugin, ContractsLibraryTest> { public: void test()
 {
 	////////////////////////////////////////////////// Create Manager
 

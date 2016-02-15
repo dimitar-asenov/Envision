@@ -32,7 +32,8 @@
 
 namespace Model {
 
-class MODELBASE_API SingleWriteUnitCheck : public Test<ModelBasePlugin, SingleWriteUnitCheck> { public: void test()
+class MODELBASE_API SingleWriteUnitCheck : public SelfTest::Test<ModelBasePlugin, SingleWriteUnitCheck>
+{ public: void test()
 {
 	auto root = new TestNodes::BinaryNode{};
 	TreeManager manager{root};

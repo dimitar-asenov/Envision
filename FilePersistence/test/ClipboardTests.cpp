@@ -37,7 +37,7 @@
 
 namespace FilePersistence {
 
-class CopyToClipboard : public Test<FilePersistencePlugin, CopyToClipboard> { public: void test()
+class CopyToClipboard : public SelfTest::Test<FilePersistencePlugin, CopyToClipboard> { public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -70,7 +70,8 @@ class CopyToClipboard : public Test<FilePersistencePlugin, CopyToClipboard> { pu
 						 clipboardText);
 }};
 
-class CopyPartialToClipboard : public Test<FilePersistencePlugin, CopyPartialToClipboard> { public: void test()
+class CopyPartialToClipboard : public SelfTest::Test<FilePersistencePlugin, CopyPartialToClipboard>
+{ public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -90,7 +91,8 @@ class CopyPartialToClipboard : public Test<FilePersistencePlugin, CopyPartialToC
 			"<Text name=\"3\">S_four</Text> </List> </PartialList> </clipboard>", clipboardText);
 }};
 
-class PasteTextFromClipboard : public Test<FilePersistencePlugin, PasteTextFromClipboard> { public: void test()
+class PasteTextFromClipboard : public SelfTest::Test<FilePersistencePlugin, PasteTextFromClipboard>
+{ public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -114,7 +116,8 @@ class PasteTextFromClipboard : public Test<FilePersistencePlugin, PasteTextFromC
 	CHECK_STR_EQUAL("RootNode", root->left()->name()->get());
 }};
 
-class PasteBinaryFromClipboard : public Test<FilePersistencePlugin, PasteBinaryFromClipboard> { public: void test()
+class PasteBinaryFromClipboard : public SelfTest::Test<FilePersistencePlugin, PasteBinaryFromClipboard>
+{ public: void test()
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
@@ -144,7 +147,8 @@ class PasteBinaryFromClipboard : public Test<FilePersistencePlugin, PasteBinaryF
 	CHECK_STR_EQUAL("Right child", left->right()->name()->get());
 }};
 
-class PasteListFromClipboard : public Test<FilePersistencePlugin, PasteListFromClipboard> { public: void test()
+class PasteListFromClipboard : public SelfTest::Test<FilePersistencePlugin, PasteListFromClipboard>
+{ public: void test()
 {
 	auto root = new Model::List;
 	Model::TreeManager manager{"test", root};
@@ -175,7 +179,8 @@ class PasteListFromClipboard : public Test<FilePersistencePlugin, PasteListFromC
 	CHECK_STR_EQUAL("third", root->at<Model::Text>(0)->get());
 }};
 
-class PasteInListFromClipboard : public Test<FilePersistencePlugin, PasteInListFromClipboard> { public: void test()
+class PasteInListFromClipboard : public SelfTest::Test<FilePersistencePlugin, PasteInListFromClipboard>
+{ public: void test()
 {
 	auto root = new Model::List;
 	Model::TreeManager manager{"test", root};

@@ -46,7 +46,7 @@ using namespace Visualization;
 
 namespace Comments {
 
-class SimpleTest : public Test<CommentsPlugin, SimpleTest> { public: void test()
+class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: void test()
 {
 	auto list = new Model::List{};
 	auto manager = new Model::TreeManager{list};

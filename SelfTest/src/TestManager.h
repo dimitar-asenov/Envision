@@ -27,7 +27,7 @@
 #pragma once
 
 #include "selftest_api.h"
-#include "Test.h"
+#include "TestBase.h"
 #include "TestResults.h"
 
 namespace SelfTest {
@@ -54,7 +54,7 @@ class TestManager
 		 * @param name
 		 * 				The name of this test.
 		 */
-		static void add(Test::TestConstructor test, const QString &name);
+		static void add(TestBase::TestConstructor test, const QString &name);
 
 		/**
 		 * Runs all tests registered for this plug-in.
@@ -78,13 +78,13 @@ class TestManager
 		/**
 		 * A list of all test constructors. Test classes are not created unless requested.
 		 */
-		static QMap<QString, Test::TestConstructor>* testConstructors;
+		static QMap<QString, TestBase::TestConstructor>* testConstructors;
 };
 
 template<typename T>
-inline void TestManager<T>::add(Test::TestConstructor test, const QString& name)
+inline void TestManager<T>::add(TestBase::TestConstructor test, const QString& name)
 {
-	static QMap<QString, Test::TestConstructor> constructors;
+	static QMap<QString, TestBase::TestConstructor> constructors;
 	testConstructors = &constructors;
 	testConstructors->insert(name, test);
 }
@@ -95,10 +95,10 @@ inline TestResults TestManager<T>::runAllTests()
 	TestResults testRes;
 
 	if (testConstructors)
-		for (QMap<QString, Test::TestConstructor>::iterator testConstructor = testConstructors->begin();
+		for (QMap<QString, TestBase::TestConstructor>::iterator testConstructor = testConstructors->begin();
 			  testConstructor != testConstructors->end(); testConstructor++)
 		{
-			Test* test = (*testConstructor)();
+			TestBase* test = (*testConstructor)();
 			test->run(testRes);
 			SAFE_DELETE(test);
 		}
@@ -112,7 +112,7 @@ inline TestResults TestManager<T>::runTest(const QString& name)
 	TestResults testRes;
 	if (testConstructors->contains(name))
 	{
-		Test* test = testConstructors->value(name)();
+		TestBase* test = testConstructors->value(name)();
 		test->run(testRes);
 		SAFE_DELETE(test);
 	}
@@ -125,6 +125,6 @@ inline TestManager<T>::TestManager()
 {
 }
 
-template<typename T> QMap<QString, Test::TestConstructor>* TestManager<T>::testConstructors = nullptr;
+template<typename T> QMap<QString, TestBase::TestConstructor>* TestManager<T>::testConstructors = nullptr;
 
 }
