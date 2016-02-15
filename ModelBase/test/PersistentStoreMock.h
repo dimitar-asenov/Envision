@@ -30,6 +30,10 @@
 
 namespace Model {
 
+class Node;
+class TreeManager;
+class Reference;
+
 class MODELBASE_API PersistentStoreMock: public PersistentStore
 {
 	private:

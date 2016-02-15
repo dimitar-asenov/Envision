@@ -54,14 +54,12 @@ Result Visitor<ConcreteVisitor, Result>::visitChildren(Node* n)
 	auto children = n->children();
 	auto it = children.begin();
 	if (!children.isEmpty())
-	{
 		while (true)
 		{
 			if (it+1 == children.end()) return visit(*it);
 			else visit(*it);
 			++it;
 		}
-	}
 
 	// Return default value otherwise.
 	return Result ();

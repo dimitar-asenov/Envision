@@ -54,7 +54,7 @@ inline SymbolMatcher::SymbolMatcher(QString stringMatch)
 : stringMatch_{stringMatch}{}
 
 inline SymbolMatcher::SymbolMatcher(QRegExp* regExpMatch)
-: regExpMatch_{QSharedPointer<QRegExp>(regExpMatch)}{}
+: regExpMatch_{QSharedPointer<QRegExp>{regExpMatch}}{}
 
 inline bool SymbolMatcher::matches(const QString& name) const
 { return regExpMatch_ ? regExpMatch_->exactMatch(name) : name == stringMatch_;}

@@ -27,12 +27,12 @@
 #pragma once
 
 #include "../modelbase_api.h"
-#include "../nodes/Node.h"
 #include "../concurrent/NodeReadWriteLock.h"
 #include "../persistence/NodeIdMap.h"
 
 namespace Model {
 
+class Node;
 class UndoCommand;
 class NodeOwningCommand;
 class NameText;
@@ -223,7 +223,7 @@ class MODELBASE_API TreeManager: public QObject
 		 *
 		 * @exception ModelException
 		 * 				if called without calling TreeManager::beginModification() first or if calls to
-		 *					TreeManager::undo() or TreeManager::redo() have already been made.
+		 * 				TreeManager::undo() or TreeManager::redo() have already been made.
 		 */
 		void pushCommandOnUndoStack(UndoCommand* command);
 
@@ -339,8 +339,8 @@ class MODELBASE_API TreeManager: public QObject
 		 *
 		 * @param removedNodes
 		 * 				A set of all nodes that have been removed within this block. These nodes might include nodes in
-		 *					\a modifiedNodes. The set of reported nodes is all nodes that have been removed, including children
-		 *					of removed nodes.
+		 * 				\a modifiedNodes. The set of reported nodes is all nodes that have been removed, including children
+		 * 				of removed nodes.
 		 */
 		void nodesModified(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 
@@ -366,13 +366,19 @@ class MODELBASE_API TreeManager: public QObject
 		 */
 		static bool isOwnedByCommand(const Node* node, const UndoCommand* cmd, const NodeOwningCommand* excludeCommand);
 
-		/** The name of this manager's tree. This name will be used to save the tree in the persistent store. */
+		/**
+		 * The name of this manager's tree. This name will be used to save the tree in the persistent store.
+		 */
 		QString name_;
 
-		/** The root node for this manager's tree */
+		/**
+		 * The root node for this manager's tree
+		 */
 		Node* root_{};
 
-		/** The command stack that holds the undo history */
+		/**
+		 * The command stack that holds the undo history
+		 */
 		QUndoStack commands;
 
 		/**

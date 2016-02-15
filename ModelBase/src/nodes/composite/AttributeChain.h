@@ -37,14 +37,18 @@ class MODELBASE_API AttributeChain: public QVector<Attribute>
 	private:
 		AttributeChain* parent_{};
 
-		// The number of levels of attributes, including this one.
+		/**
+		 * The number of levels of attributes, including this one.
+		 */
 		int numLevels_{1};
 
 		QMap< int, QVector<CompositeIndex> > extensions_;
 
 		QString typeName_;
 
-		//Only for CompositeNode
+		/**
+		 * Only for CompositeNode
+		 */
 		AttributeChain(const QString& typeName);
 
 	public:

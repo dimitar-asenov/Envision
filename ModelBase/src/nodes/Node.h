@@ -27,7 +27,6 @@
 #pragma once
 
 #include "../modelbase_api.h"
-#include "../persistence/PersistentStore.h"
 #include "../util/SymbolMatcher.h"
 
 #include "Core/src/reflect/Reflect.h"
@@ -39,6 +38,7 @@ class TreeManager;
 class UndoCommand;
 class NodeReadWriteLock;
 class UsedLibrary;
+class PersistentStore;
 
 /**
  * The Node class is the foundation element in the tree in Envision. An application in Envision is a collection of
@@ -206,16 +206,25 @@ class MODELBASE_API Node
 		virtual SymbolTypes symbolType() const;
 
 		enum FindSymbolDirection {
-			SEARCH_UP,		/**< Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
-									symbols in the current scope which come after the source will not be considered. This is the
-									case e.g. with searches for local variable declarations in a method: only variables before
-									the source node should be considered. */
-			SEARCH_DOWN,	/**< Looks for symbols inside the specified scope or subscopes. This is used for symbols that
-									are requested in a specific context (typically after a '.') e.g. "list.sort()"*/
-			SEARCH_HERE		/**< Looks for symbols defined by the current node. This happens when findSymbols has been
-									 called on the parent with SEARCH_DOWN and the parent must therefore find a precise match
-									 in its scope. findSymbols() will be called for each potential match from the parents
-									 children with the SEACH_HERE flag */
+			/**
+			 * Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
+			 * symbols in the current scope which come after the source will not be considered. This is the
+			 * case e.g. with searches for local variable declarations in a method: only variables before
+			 * the source node should be considered.
+			 */
+			SEARCH_UP,
+			/**
+			 * Looks for symbols inside the specified scope or subscopes. This is used for symbols that
+			 * are requested in a specific context (typically after a '.') e.g. "list.sort()"
+			 */
+			SEARCH_DOWN,
+			/**
+			 * Looks for symbols defined by the current node. This happens when findSymbols has been
+			 * called on the parent with SEARCH_DOWN and the parent must therefore find a precise match
+			 * in its scope. findSymbols() will be called for each potential match from the parents
+			 * children with the SEACH_HERE flag
+			 */
+			SEARCH_HERE
 		};
 
 		/**

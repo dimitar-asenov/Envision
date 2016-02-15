@@ -33,9 +33,10 @@
 #include "../model/TreeManager.h"
 #include "../commands/ListInsert.h"
 #include "../ModelException.h"
-#include "../persistence/ClipboardStore.h"
 
 namespace Model {
+
+class ClipboardStore;
 
 class MODELBASE_API List: public Super<Node>
 {

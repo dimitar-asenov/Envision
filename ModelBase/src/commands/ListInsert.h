@@ -30,6 +30,8 @@
 
 namespace Model {
 
+class Node;
+
 /**
  * This command is used to insert a list element at a specific position in a list. All elements which are currently
  * at or after the specified position will be shifted once to the right.

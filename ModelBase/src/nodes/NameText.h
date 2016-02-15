@@ -33,6 +33,9 @@ extern template class MODELBASE_API Model::TypedList<Model::NameText>;
 
 namespace Model {
 
+template <typename T>
+class FieldSet;
+
 class MODELBASE_API NameText: public Super<Text>
 {
 	NODE_DECLARE_STANDARD_METHODS(NameText)

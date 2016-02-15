@@ -30,6 +30,7 @@
 
 namespace Model {
 
+class Node;
 class NodeReadWriteLock;
 
 class MODELBASE_API SetModificationTarget: public UndoCommand
@@ -43,7 +44,9 @@ class MODELBASE_API SetModificationTarget: public UndoCommand
 		Node* newTarget;
 
 	public:
-		// In the constrcutor below field and lock are references to the corresponding fields in Model::TreeManager.
+		/**
+		 * In the constructor below field and lock are references to the corresponding fields in Model::TreeManager.
+		 */
 		SetModificationTarget(Node* &field, NodeReadWriteLock* &lock, QSet<Node*>& modifiedTargets, Node* newTarget);
 		virtual void redo();
 		virtual void undo();

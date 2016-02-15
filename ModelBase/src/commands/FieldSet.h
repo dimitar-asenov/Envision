@@ -27,9 +27,10 @@
 #pragma once
 
 #include "UndoCommand.h"
-#include "../model/TreeManager.h"
 
 namespace Model {
+
+class Node;
 
 template<typename T>
 class FieldSet: public UndoCommand

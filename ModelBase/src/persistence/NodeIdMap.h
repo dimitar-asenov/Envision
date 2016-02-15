@@ -30,6 +30,8 @@
 
 namespace Model {
 
+class Node;
+
 class MODELBASE_API NodeIdMap {
 	public:
 		NodeIdType id(const Node* node);

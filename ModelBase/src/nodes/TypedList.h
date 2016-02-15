@@ -45,7 +45,9 @@ class TypedList: public Super<List>
 		virtual Node* createDefaultElement() override;
 		virtual int lowerTypeBoundForElements() const override;
 
-		// Iterator
+		/**
+		 * Iterator
+		 */
 		struct TypedIterator : public std::iterator<std::bidirectional_iterator_tag, T*> {
 			TypedIterator() = default;
 			TypedIterator(const TypedIterator& other) = default;
@@ -127,13 +129,13 @@ inline typename TypedList<T>::TypedIterator TypedList<T>::TypedIterator::operato
 }
 
 template<typename T>
-inline bool TypedList<T>::TypedIterator::operator==(const TypedList<T>::TypedIterator& other) const
+inline bool TypedList<T>::TypedIterator::operator==(const TypedIterator& other) const
 {
 	return it_ == other.it_;
 }
 
 template<typename T>
-inline bool TypedList<T>::TypedIterator::operator!=(const TypedList<T>::TypedIterator& other) const
+inline bool TypedList<T>::TypedIterator::operator!=(const TypedIterator& other) const
 {
 	return it_ != other.it_;
 }
@@ -187,13 +189,13 @@ inline typename TypedList<T>::ConstTypedIterator TypedList<T>::ConstTypedIterato
 }
 
 template<typename T>
-inline bool TypedList<T>::ConstTypedIterator::operator==(const TypedList<T>::ConstTypedIterator& other) const
+inline bool TypedList<T>::ConstTypedIterator::operator==(const ConstTypedIterator& other) const
 {
 	return it_ == other.it_;
 }
 
 template<typename T>
-inline bool TypedList<T>::ConstTypedIterator::operator!=(const TypedList<T>::ConstTypedIterator& other) const
+inline bool TypedList<T>::ConstTypedIterator::operator!=(const ConstTypedIterator& other) const
 {
 	return it_ != other.it_;
 }

@@ -26,6 +26,7 @@
 
 #include "AllTreeManagers.h"
 #include "TreeManager.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

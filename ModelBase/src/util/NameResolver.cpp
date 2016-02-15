@@ -73,7 +73,7 @@ QList<QPair<QString, Node*>> NameResolver::findAllMatches(const SymbolMatcher& m
 		if (matcher.matches(newNameSoFar))
 		{
 			//Get rid of initial "."
-			result.append(QPair<QString, Node*>(newNameSoFar.mid(1), root));
+			result.append(QPair<QString, Node*>{newNameSoFar.mid(1), root});
 		}
 	}
 	return result;

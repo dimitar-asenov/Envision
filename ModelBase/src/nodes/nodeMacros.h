@@ -130,10 +130,10 @@
 #define DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(className)																				\
 	className::className(::Model::Node* parent)																								\
 		: Super (parent, className::getMetaData()) {}																						\
-		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
+																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
 		: Super (parent, store, loadPartially, className::getMetaData()) {}															\
-		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
+																																							\
 	className* className::clone() const { return new className{*this}; }																\
 																																							\
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
@@ -527,12 +527,12 @@ void className::registerExtension()																												\
  * @param setMethodName
  * 				The name of the set method that will set a new node for this attibute.
  */
-#define EXTENSION_ATTRIBUTE(type, name, setMethodName)																					\
+#define EXTENSION_ATTRIBUTE(type, attributeName, setMethodName)																					\
 private:																																					\
-		static int name##Index;																														\
+		static int attributeName##Index;																														\
 public:																																					\
-		type* name() { return static_cast< type* > (self_->get(attr_[name##Index])); }											\
-		void setMethodName(type* node) { self_->set(attr_[name##Index], node); }													\
+		type* attributeName() { return static_cast< type* > (self_->get(attr_[attributeName##Index])); }											\
+		void setMethodName(type* node) { self_->set(attr_[attributeName##Index], node); }													\
 private:																																					\
 
 /**
@@ -573,14 +573,14 @@ private:																																					\
  * @param valueType
  * 				The type of the simple value for this attribute.
  */
-#define EXTENSION_ATTRIBUTE_VALUE(type, name, setMethodName, valueType)																\
+#define EXTENSION_ATTRIBUTE_VALUE(type, attributeName, setMethodName, valueType)												\
 private:																																					\
-		static int name##Index;																														\
+		static int attributeName##Index;																											\
 public:																																					\
-		type* name##Node() const { return static_cast< type* > (self_->get(attr_[name##Index])); }							\
-		valueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }						\
-		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
-		void setMethodName##Node(type* node) { self_->set(attr_[name##Index], node); }											\
+		type* attributeName##Node() const { return static_cast< type* > (self_->get(attr_[attributeName##Index])); }	\
+		valueType attributeName() const { return (static_cast<type*> (self_->get(attr_[attributeName##Index])))->get(); }\
+		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, attributeName) }								\
+		void setMethodName##Node(type* node) { self_->set(attr_[attributeName##Index], node); }							\
 private:																																					\
 
 /**
@@ -602,13 +602,13 @@ private:																																					\
  * @param valueType
  * 				The type of the simple value for this attribute.
  */
-#define EXTENSION_PRIVATE_ATTRIBUTE_VALUE(type, name, setMethodName, valueType)													\
+#define EXTENSION_PRIVATE_ATTRIBUTE_VALUE(type, attributeName, setMethodName, valueType)													\
 private:																																					\
-		static int name##Index;																														\
+		static int attributeName##Index;																														\
 																																							\
-		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
-		valueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }						\
-		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
+		type* attributeName##Node() { return static_cast< type* > (self_->get(attr_[attributeName##Index])); }									\
+		valueType attributeName() const { return (static_cast<type*> (self_->get(attr_[attributeName##Index])))->get(); }\
+		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, attributeName) }											\
 private:																																					\
 
 /**
@@ -632,13 +632,14 @@ private:																																					\
  * @param returnValueType
  * 				The type of the returned value.
  */
-#define EXTENSION_ATTRIBUTE_VALUE_CUSTOM_RETURN(type, name, setMethodName, valueType, returnValueType)					\
+#define EXTENSION_ATTRIBUTE_VALUE_CUSTOM_RETURN(type, attributeName, setMethodName, valueType, returnValueType)					\
 private:																																					\
-		static int name##Index;																														\
+		static int attributeName##Index;																														\
 public:																																					\
-		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
-		returnValueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }				\
-		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
+		type* attributeName##Node() { return static_cast< type* > (self_->get(attr_[attributeName##Index])); }									\
+		returnValueType attributeName() const { return (static_cast<type*> \
+																		(self_->get(attr_[attributeName##Index])))->get(); }				\
+		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, attributeName) }											\
 private:																																					\
 
  /**
