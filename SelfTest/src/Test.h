@@ -61,9 +61,9 @@ class SELFTEST_API Test
 		 * This function must be implemented for each test.
 		 *
 		 * @param testResults
-		 *					Test failures are added here.
-		 *	@param passed
-		 *					must be set to false if the test failed.
+		 * 				Test failures are added here.
+		 * @param passed
+		 * 				must be set to false if the test failed.
 		 */
 		virtual void runCustom(TestResults& testResults, bool &passed) = 0;
 
@@ -81,9 +81,9 @@ class SELFTEST_API Test
  * @param pluginClass
  * 				the name of the class of the current plugin. This is the class that implements the EnvisionPlugin
  * 				interface.
- *	@param testName
- *					the name of this test. This name can be used at the command line to request that this specific test be
- *					started.
+ * @param testName
+ * 				the name of this test. This name can be used at the command line to request that this specific test be
+ * 				started.
  */
 template <typename PluginClass, typename TestName>
 class Test : public SelfTest::Test {
