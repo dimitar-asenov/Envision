@@ -29,6 +29,10 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "export_api.h"
 
+namespace Logger {
+	class Log;
+}
+
 namespace Export {
 
 /**

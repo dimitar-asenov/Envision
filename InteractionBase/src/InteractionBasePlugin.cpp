@@ -72,12 +72,11 @@
 #include "VisualizationBase/src/items/ViewItem.h"
 
 #include "SelfTest/src/TestManager.h"
+#include "Logger/src/Log.h"
 
 using namespace Logger;
 
 namespace Interaction {
-
-Logger::Log& log = InteractionBasePlugin::log();
 
 Log& InteractionBasePlugin::log()
 {

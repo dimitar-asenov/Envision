@@ -27,6 +27,9 @@
 #include "CompilerOutputParser.h"
 
 #include "CompilerMessage.h"
+#include "../OODebugPlugin.h"
+
+#include "Logger/src/Log.h"
 
 namespace OODebug {
 
@@ -79,7 +82,7 @@ CompilerFeedback CompilerOutputParser::parseJavacErrorFormat(const QString& outp
 		}
 		else
 		{
-			log.warning("Not supported feedback type: " + type);
+			OODebugPlugin::log().warning("Not supported feedback type: " + type);
 			messages.append(std::make_shared<CompilerMessage>(CompilerMessage::Other, file, msg, lineNumber, colNumber));
 		}
 	}

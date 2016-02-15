@@ -26,8 +26,15 @@
 
 #include "PLUGINNAMEPlugin.h"
 #include "SelfTest/src/TestManager.h"
+#include "Logger/src/Log.h"
 
 namespace NAMESPACE {
+
+Logger::Log& PLUGINNAMEPlugin::log()
+{
+	static auto log = Logger::Log::getLogger("PLUGIN_NAME_LOWER");
+	return *log;
+}
 
 bool PLUGINNAMEPlugin::initialize(Core::EnvisionManager&)
 {

@@ -29,7 +29,10 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "oodebug_api.h"
 
-#include "Logger/src/Log.h"
+namespace Logger {
+	class Log;
+}
+
 
 namespace OODebug {
 

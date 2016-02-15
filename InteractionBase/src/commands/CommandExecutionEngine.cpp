@@ -36,6 +36,8 @@
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
 #include "VisualizationBase/src/Scene.h"
 
+#include "Logger/src/Log.h"
+
 namespace Interaction {
 
 const char* QUOTE_SYMBOLS = "\"'`";
@@ -135,7 +137,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	{
 		lastCommandResult_ = QSharedPointer<CommandResult>(
 				new CommandResult{new CommandError{"Unknown command '" + command + "' "}});
-		log.warning("Unknown command: " + command);
+		InteractionBasePlugin::log().warning("Unknown command: " + command);
 	}
 }
 

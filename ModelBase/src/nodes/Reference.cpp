@@ -30,6 +30,9 @@
 #include "../ModelException.h"
 #include "NameText.h"
 #include "../persistence/PersistentStore.h"
+#include "../ModelBasePlugin.h"
+
+#include "Logger/src/Log.h"
 
 #include "TypedList.hpp"
 template class Model::TypedList<Model::Reference>;
@@ -244,7 +247,7 @@ void Reference::addUnresolutionSteps(std::function<void (Node* subTree)> step)
 
 void Reference::resolvePending()
 {
-	log.debug("Resolving references");
+	ModelBasePlugin::log().debug("Resolving references");
 
 	int i = 0;
 	int round = 0;
@@ -253,26 +256,26 @@ void Reference::resolvePending()
 
 	while (!pending.isEmpty())
 	{
-		log.debug("resolution round " + QString::number(round) + ", "
+		ModelBasePlugin::log().debug("resolution round " + QString::number(round) + ", "
 					 + QString::number(pendingResolution_.size()) + " references pending.");
 		++round;
 
 		for (auto r : pending)
 		{
 			if ( r->resolve() ) ++resolved;
-			if (++i % 10000 == 0)	log.debug("Processed " + QString::number(i) + " references.");
+			if (++i % 10000 == 0)	ModelBasePlugin::log().debug("Processed " + QString::number(i) + " references.");
 		}
 
 		// As a result of resolution of some references, some other references could have become invalid.
 		pending = pendingResolution_;
 	}
 
-	log.debug(QString::number(resolved) + " resolution" + (resolved == 1 ? "" : "s") + " in "
+	ModelBasePlugin::log().debug(QString::number(resolved) + " resolution" + (resolved == 1 ? "" : "s") + " in "
 				 + QString::number(round) + (round > 1 ? " rounds." : " round."));
 
 	int totalResolvedReferences = 0;
 	for (auto r : allReferences_) if (r->isResolved()) ++totalResolvedReferences;
-	log.debug("Total number of resolved references: " + QString::number(totalResolvedReferences));
+	ModelBasePlugin::log().debug("Total number of resolved references: " + QString::number(totalResolvedReferences));
 }
 
 }

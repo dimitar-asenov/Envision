@@ -35,6 +35,9 @@
 
 #include "../commands/NodeOwningCommand.h"
 
+#include "../ModelBasePlugin.h"
+#include "Logger/src/Log.h"
+
 namespace Model {
 
 DEFINE_TYPE_ID_BASE(Node, "Node", )
@@ -399,7 +402,7 @@ void Node::registerNodeType(const QString &type, const NodeConstructor construct
 	nodeConstructorRegister.insert(type, constructor);
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
 
-	log.info("Registered new node type " + type);
+	ModelBasePlugin::log().info("Registered new node type " + type);
 }
 
 Node* Node::createNewNode(const QString &type, Node* parent)
@@ -409,7 +412,7 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 		return iter.value()(parent);
 	else
 	{
-		log.error("Could not create new node. Requested node type '"
+		ModelBasePlugin::log().error("Could not create new node. Requested node type '"
 				+ type +"' has not been registered.");
 		return nullptr;
 	}
@@ -422,7 +425,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &st
 		return iter.value()(parent, store, partialLoadHint);
 	else
 	{
-		log.error("Could not create new node from persistence. Requested node type '"
+		ModelBasePlugin::log().error("Could not create new node from persistence. Requested node type '"
 				+ type + "' has not been registered.");
 		return nullptr;
 	}

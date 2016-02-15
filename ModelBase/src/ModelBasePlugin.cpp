@@ -31,10 +31,9 @@
 #include "test_nodes/PositionExtension.h"
 
 #include "SelfTest/src/TestManager.h"
+#include "Logger/src/Log.h"
 
 namespace Model {
-
-Logger::Log& log = ModelBasePlugin::log();
 
 Logger::Log& ModelBasePlugin::log()
 {

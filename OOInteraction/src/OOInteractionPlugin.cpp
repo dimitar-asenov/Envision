@@ -87,9 +87,9 @@
 
 #include "Core/src/AdapterManager.h"
 
-namespace OOInteraction {
+#include "Logger/src/Log.h"
 
-Logger::Log& log = OOInteractionPlugin::log();
+namespace OOInteraction {
 
 Logger::Log& OOInteractionPlugin::log()
 {

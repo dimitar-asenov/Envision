@@ -26,10 +26,9 @@
 
 #include "ExportPlugin.h"
 #include "SelfTest/src/TestManager.h"
+#include "Logger/src/Log.h"
 
 namespace Export {
-
-Logger::Log& log = ExportPlugin::log();
 
 Logger::Log& ExportPlugin::log()
 {

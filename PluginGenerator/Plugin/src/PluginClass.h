@@ -29,6 +29,10 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "PLUGINNAME_LOWERCASE_api.h"
 
+namespace Logger {
+class Log;
+}
+
 namespace NAMESPACE {
 
 /**
@@ -49,6 +53,8 @@ class PLUGINNAMEPlugin : public QObject, public Core::EnvisionPlugin
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
+                
+		static Logger::Log& log();
 };
 
 }

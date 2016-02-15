@@ -30,6 +30,7 @@
 #include "../tree/SourceDir.h"
 #include "../ExportException.h"
 
+#include "Logger/src/Log.h"
 
 namespace Export {
 
@@ -171,7 +172,7 @@ void Exporter::deleteObsoletePreviousExports()
 		QFileInfo file{*it};
 		if (file.isFile())
 		{
-			log.info("Removing unnecessary file during export: " + file.absoluteFilePath());
+			ExportPlugin::log().info("Removing unnecessary file during export: " + file.absoluteFilePath());
 			if (!QFile{*it}.remove())
 				throw ExportException{"Could not remove previously generated file: " + file.absoluteFilePath()};
 
@@ -187,7 +188,7 @@ void Exporter::deleteObsoletePreviousExports()
 		QDir dir{*it};
 		if (dir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::AllEntries).isEmpty())
 		{
-			log.info("Removing unnecessary directory during export: " + dir.absolutePath());
+			ExportPlugin::log().info("Removing unnecessary directory during export: " + dir.absolutePath());
 			if (!dir.removeRecursively())
 				throw ExportException{"Could not remove directory : " + dir.absolutePath()};
 

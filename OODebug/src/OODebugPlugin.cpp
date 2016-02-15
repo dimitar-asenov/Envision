@@ -42,9 +42,9 @@
 #include "debugger/JavaDebugger.h"
 #include "debugger/ReferenceFinder.h"
 
-namespace OODebug {
+#include "Logger/src/Log.h"
 
-Logger::Log& log = OODebugPlugin::log();
+namespace OODebug {
 
 Logger::Log& OODebugPlugin::log()
 {

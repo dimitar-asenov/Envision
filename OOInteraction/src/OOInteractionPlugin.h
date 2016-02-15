@@ -34,6 +34,10 @@ namespace Model {
 	class Node;
 }
 
+namespace Logger {
+	class Log;
+}
+
 namespace OOInteraction {
 
 /**
