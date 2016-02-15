@@ -34,6 +34,8 @@ extern template class MODELBASE_API Model::TypedList<Model::Text>;
 
 namespace Model {
 
+class PersistentStore;
+
 template<typename T> class FieldSet;
 
 class MODELBASE_API Text: public Super<Node>

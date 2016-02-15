@@ -28,8 +28,6 @@
 #include "SelfTest/src/SelfTestSuite.h"
 #include "../src/test_nodes/BinaryNode.h"
 #include "../src/model/TreeManager.h"
-#include "../src/nodes/Integer.h"
-#include "../src/nodes/NameText.h"
 #include "PersistentStoreMock.h"
 
 namespace Model {

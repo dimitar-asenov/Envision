@@ -36,6 +36,7 @@ class Node;
 class UndoCommand;
 class NodeOwningCommand;
 class NameText;
+class PersistentStore;
 
 /**
  * The TreeManager class is a management and access entity for a program tree.

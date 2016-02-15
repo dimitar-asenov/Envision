@@ -31,6 +31,7 @@
 #include "OOModel/src/elements/FormalArgument.h"
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/CommandDescriptor.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace ContractsLibrary {
 

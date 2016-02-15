@@ -34,7 +34,6 @@ using NodeIdType = QUuid;
 
 class Node;
 class TreeManager;
-class PersistedNode;
 class Reference;
 
 struct MODELBASE_API LoadedNode

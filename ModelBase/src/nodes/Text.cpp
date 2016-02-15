@@ -33,6 +33,8 @@ template class Model::TypedList<Model::Text>;
 
 namespace Model {
 
+class Node;
+
 DEFINE_NODE_TYPE_REGISTRATION_METHODS(Text)
 
 Text::Text(Node *parent) : Super{parent}

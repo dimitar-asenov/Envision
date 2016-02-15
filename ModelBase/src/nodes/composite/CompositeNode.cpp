@@ -27,6 +27,7 @@
 #include "CompositeNode.h"
 #include "../../commands/CompositeNodeChangeChild.h"
 #include "../../persistence/PersistentStore.h"
+#include "../../ModelException.h"
 
 namespace Model {
 

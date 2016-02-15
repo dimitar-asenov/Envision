@@ -27,6 +27,7 @@
 #include "CShapeSetProperty.h"
 #include "../items/VCommentDiagramShape.h"
 
+#include "ModelBase/src/model/TreeManager.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
 namespace Comments {

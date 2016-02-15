@@ -29,7 +29,7 @@
 
 namespace Model {
 
-DEFINE_TYPE_ID_DERIVED(TypedList<T>, QString("TypedListOf") + T::typeNameStatic(), template<typename T>)
+DEFINE_TYPE_ID_DERIVED(TypedList<T>, QString{"TypedListOf"} + T::typeNameStatic(), template<typename T>)
 
 template<typename T>
 void TypedList<T>::initType()
@@ -47,11 +47,11 @@ TypedList<T>* TypedList<T>::createDefaultInstance(Node* parent)
 }
 
 template<typename T>
-TypedList<T>::TypedList(::Model::Node* parent) : Super{parent}
+TypedList<T>::TypedList(Node* parent) : Super{parent}
 {}
 
 template<typename T>
-TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially) :
+TypedList<T>::TypedList(Node *parent, PersistentStore &store, bool loadPartially) :
 Super{parent, store, loadPartially}
 {
 }

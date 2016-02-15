@@ -29,11 +29,10 @@
 #include "ReferenceExpression.h"
 #include "../types/SymbolProviderType.h"
 #include "../declarations/MetaDefinition.h"
-
-#include "ModelBase/src/nodes/TypedList.hpp"
-
 #include "../CodeGenerationVisitor.h"
 
+#include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/model/TreeManager.h"
 #include "OOModel/src/declarations/Declaration.h"
 
 template class Model::TypedList<OOModel::MetaCallExpression>;

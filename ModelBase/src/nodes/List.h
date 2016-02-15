@@ -30,13 +30,13 @@
 
 #include "Node.h"
 #include "nodeMacros.h"
-#include "../model/TreeManager.h"
-#include "../commands/ListInsert.h"
 #include "../ModelException.h"
+#include "../persistence/PersistentStore.h"
 
 namespace Model {
 
 class ClipboardStore;
+class SymbolMatcher;
 
 class MODELBASE_API List: public Super<Node>
 {

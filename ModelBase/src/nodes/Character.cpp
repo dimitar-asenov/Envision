@@ -33,6 +33,8 @@ template class Model::TypedList<Model::Character>;
 
 namespace Model {
 
+class Node;
+
 DEFINE_NODE_TYPE_REGISTRATION_METHODS(Character)
 
 Character::Character(Node *parent) : Super{parent}, value{'\0'}

@@ -28,9 +28,11 @@
 
 #include "../modelbase_api.h"
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-#include "ModelBase/src/nodes/List.h"
+#include "../nodes/nodeMacros.h"
+#include "../nodes/composite/CompositeNode.h"
+#include "../nodes/List.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace TestNodes {
 

@@ -33,6 +33,8 @@ template class Model::TypedList<Model::Float>;
 
 namespace Model {
 
+class Node;
+
 DEFINE_NODE_TYPE_REGISTRATION_METHODS(Float)
 
 Float::Float(Node *parent) : Super{parent}, value{0.0}

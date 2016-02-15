@@ -28,6 +28,7 @@
 
 #include "../items/VCommentDiagramShape.h"
 #include "../items/VCommentDiagramConnector.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 using namespace Visualization;
 

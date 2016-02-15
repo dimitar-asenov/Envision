@@ -108,9 +108,6 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		Model::LoadedNode loadNode(Model::Node* parent, bool loadPartially);
 		void saveNodeDirectly(const Model::Node *node, const QString &name);
 
-		Model::PersistedNode* loadNodeData();
-		Model::PersistedNode* loadPersistentUnitData();
-
 		/**
 		 * Returns the name of the persistent unit that corresponds to the specified node.
 		 */

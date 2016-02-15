@@ -26,7 +26,6 @@
 
 #include "NameText.h"
 #include "../commands/NameChange.h"
-#include "../ModelException.h"
 
 #include "TypedList.hpp"
 template class Model::TypedList<Model::NameText>;

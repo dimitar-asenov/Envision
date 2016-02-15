@@ -39,6 +39,8 @@
 #include "../VisualizationManager.h"
 #include "../ViewItemManager.h"
 
+#include "ModelBase/src/model/TreeManager.h"
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(ViewItem, "item")

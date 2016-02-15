@@ -28,7 +28,6 @@
 
 #include "AttributeChain.h"
 #include "../Node.h"
-#include "../../ModelException.h"
 #include "Core/src/reflect/typeIdMacros.h"
 
 namespace Model {

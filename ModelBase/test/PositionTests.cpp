@@ -29,7 +29,6 @@
 #include "../src/test_nodes/BinaryNode.h"
 #include "../src/test_nodes/PositionExtension.h"
 #include "../src/model/TreeManager.h"
-#include "../src/nodes/Integer.h"
 
 namespace Model {
 

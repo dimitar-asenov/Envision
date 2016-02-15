@@ -30,6 +30,7 @@
 #include "../commands/ListPut.h"
 #include "nodeMacros.h"
 #include "../persistence/ClipboardStore.h"
+#include "../commands/ListInsert.h"
 
 namespace Model {
 

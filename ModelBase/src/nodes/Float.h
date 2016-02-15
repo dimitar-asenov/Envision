@@ -34,6 +34,8 @@ extern template class MODELBASE_API Model::TypedList<Model::Float>;
 
 namespace Model {
 
+class PersistentStore;
+
 class MODELBASE_API Float: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Float)
