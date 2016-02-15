@@ -162,7 +162,10 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 			{
 				if ((units().first()->*part)() == units().first()->headerPart())
 					for (auto i = 0; i < units().indexOf(unit); i++)
+					{
 						softDependenciesReduced.remove(units().at(i)->node());
+						softDependenciesReduced.subtract(units().at(i)->headerPart()->softDependencies());
+					}
 				else
 					for (auto codeUnit : units())
 						softDependenciesReduced.subtract(codeUnit->headerPart()->softDependencies());
