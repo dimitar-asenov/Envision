@@ -927,9 +927,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	const git_index_entry* entry = git_index_get_bypath(index, path, 0);
 
 	if (entry == nullptr)
-	{
 		return new CommitFile{};
-	}
 
 	git_checkout_options options;
 	git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);

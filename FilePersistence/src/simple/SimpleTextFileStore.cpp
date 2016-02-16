@@ -224,9 +224,7 @@ void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, con
 		stack << writeGenericNodeToFile(rootNode, destDir, name, persistentUnitTypes);
 	}
 	else
-	{
 		stack << writeGenericNodeToFile(rootNode, destDir, name, {});
-	}
 
 	// For each pu write and clean up
 	while (!stack.isEmpty())

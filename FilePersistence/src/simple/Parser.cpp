@@ -249,9 +249,7 @@ QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 	for (int i = 0; i<tabLevel; ++i) stream << '\t';
 	stream << node->label() << ' ' << (isPU ? GenericNode::PERSISTENT_UNIT_TYPE : node->type());
 	if (!node->id().isNull())
-	{
 		stream << ' ' << node->id().toString() << ' ' << node->parentId().toString();
-	}
 
 	if (isPU)
 	{

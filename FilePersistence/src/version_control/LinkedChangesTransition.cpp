@@ -68,14 +68,12 @@ void LinkedChangesTransition::insert(Model::NodeIdType oldChangeId, bool oldInBr
 	LinkedChanges setContainingChange;
 	bool changeIsMappedTo = false;
 	for (auto linkedChanges : transition_.values())
-	{
 		if (linkedChanges->contains(change))
 		{
 			setContainingChange = linkedChanges;
 			changeIsMappedTo = true;
 			break;
 		}
-	}
 
 	if (changeIsMappedTo)
 	{

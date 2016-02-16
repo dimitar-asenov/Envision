@@ -168,10 +168,8 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&,
 		{
 			// CU is not in conflict, just record change links.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
-			{
 				if (useLinkedChanges_)
 					transition.insert(changeA->nodeId(), true, representative);
-			}
 		}
 	}
 
@@ -181,15 +179,12 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&,
 		{
 			auto representative = affectedCUsB_.value(conflictRootId);
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
-			{
 				if (useLinkedChanges_)
 					transition.insert(changeB->nodeId(), false, representative);
-			}
 		}
 
 	// down-propagation of child-structure conflicts
 	for (auto changeA : cdgA.changes())
-	{
 		if (changeA->hasFlags(ChangeDescription::Structure))
 		{
 			auto changeB = cdgB.changes().value(changeA->nodeId());
@@ -219,7 +214,6 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&,
 						conflictPairs.insert(childChangeA, childChangeB);
 			}
 		}
-	}
 
 	checkMoves(cdgA, cdgB, conflictPairs, conflictingChanges);
 	checkMoves(cdgB, cdgA, conflictPairs, conflictingChanges);
@@ -231,10 +225,8 @@ void ConflictUnitDetector::checkMoves(ChangeDependencyGraph& cdgA, ChangeDepende
 		ConflictPairs& conflictPairs, QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges)
 {
 	for (auto changeA : cdgA.changes())
-	{
 		if (changeA->type() == ChangeType::Move)
 			checkMove(changeA, cdgB, conflictPairs, conflictingChanges);
-	}
 }
 
 void ConflictUnitDetector::checkMove(std::shared_ptr<ChangeDescription> changeA, ChangeDependencyGraph& cdgB,

@@ -65,11 +65,9 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 	}
 
 	for (auto preparedListIt = preparedLists_.begin(); preparedListIt != preparedLists_.end(); ++preparedListIt)
-	{
 		for (auto chunk : preparedListIt.value())
 			if (!chunk->stable_)
 				computeMergedChunk(chunk, preparedListIt.key(), cdgA, cdgB);
-	}
 
 	for (auto preparedListIt = preparedLists_.begin(); preparedListIt != preparedLists_.end(); ++preparedListIt)
 	{
@@ -79,7 +77,6 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 		int index = 0;
 		bool allResolved = true;
 		for (auto chunk : preparedListIt.value())
-		{
 			if (chunk->noConflicts_)
 			{
 				mergedList.append(chunk->spanMerged_);
@@ -88,7 +85,6 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 
 				// find deletions and move-outs first
 				for (auto elemId : chunk->spanBase_)
-				{
 					if (!chunk->spanMerged_.contains(elemId))
 					{
 						auto changeA = cdgA.changes().value(elemId);
@@ -102,7 +98,6 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 													 !preparedLists_.contains(changeB->nodeB()->parentId()))))
 							markAsResolved(conflictingChanges, conflictPairs, changeB, cdgB, cdgA);
 					}
-				}
 
 				for (auto elemId : chunk->spanMerged_)
 				{
@@ -162,7 +157,6 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 				mergedList.append(chunk->spanBase_);
 				index += chunk->spanBase_.size();
 			}
-		}
 
 		// assert that each element occurs only once in the merged list.
 		for (int elemIdx = 0; elemIdx < mergedList.size(); ++elemIdx)

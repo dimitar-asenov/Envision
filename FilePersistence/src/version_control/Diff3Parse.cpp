@@ -80,9 +80,7 @@ QList<Chunk*> Diff3Parse::computeChunks(const QList<Model::NodeIdType> idListA,
 				chunk->spanMerged_.append(*iterBase);
 			}
 			else
-			{
 				chunks.append(new Chunk{isStable, *iterA, *iterB, *iterBase});
-			}
 			lastWasEmpty = false;
 		}
 		else
