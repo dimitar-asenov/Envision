@@ -61,78 +61,77 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
 	// TODO: fill those lists correctly
-	const QStringList listTypes = {"StatementItemList",
-					  "TypedListOfResult",
-					  "TypedListOfFormalTypeArgument",
-					  "TypedListOfExpression",
-					  "TypedListOfDeclaration",
-					  "TypedListOfMemberInitializer",
-					  "TypedListOfEnumerator"
-					 };
+	const QStringList listTypes{"StatementItemList",
+										 "TypedListOfResult",
+										 "TypedListOfFormalTypeArgument",
+										 "TypedListOfExpression",
+										 "TypedListOfDeclaration",
+										 "TypedListOfMemberInitializer",
+										 "TypedListOfEnumerator"
+										};
 
-	const QStringList unorderedTypes = {"TypedListOfClass",
-							 "TypedListOfMethod",
-							 "TypedListOfFormalArgument",
-							 "TypedListOfFormalResult",
-							 "TypedListOfField",
-							 "TypedListOfUsedLibrary"
-							};
+	const QStringList unorderedTypes{"TypedListOfClass",
+												"TypedListOfMethod",
+												"TypedListOfFormalArgument",
+												"TypedListOfFormalResult",
+												"TypedListOfField",
+												"TypedListOfUsedLibrary"
+											  };
 
+	const QStringList statements{"Block",
+										  "BreakStatement",
+										  "CaseStatement",
+										  "ContinueStatement",
+										  "DeclarationStatement",
+										  "ExpressionStatement",
+										  "ForEachStatement",
+										  "IfStatement",
+										  "LoopStatement",
+										  "ReturnStatement",
+										  "Statement",
+										  "SwitchStatement",
+										  "TryCatchFinallyStatement"};
 
-	const QStringList statements = {"Block",
-											  "BreakStatement",
-											  "CaseStatement",
-											  "ContinueStatement",
-											  "DeclarationStatement",
-											  "ExpressionStatement",
-											  "ForEachStatement",
-											  "IfStatement",
-											  "LoopStatement",
-											  "ReturnStatement",
-											  "Statement",
-											  "SwitchStatement",
-											  "TryCatchFinallyStatement"};
+	const QStringList declarations{"Class",
+											 "Declaration",
+											 "ExplicitTemplateInstantiation",
+											 "Field",
+											 "Method",
+											 "Module",
+											 "NameImport",
+											 "Project",
+											 "TypeAlias",
+											 "VariableDeclaration"};
 
-	const QStringList declarations = {"Class",
-												 "Declaration",
-												 "ExplicitTemplateInstantiation",
-												 "Field",
-												 "Method",
-												 "Module",
-												 "NameImport",
-												 "Project",
-												 "TypeAlias",
-												 "VariableDeclaration"};
+	const QStringList extraUnitTypes{"CommentStatementItem",
+												"CatchClause",
+												"StatementItemList"};
 
-	const QStringList extraUnitTypes = {"CommentStatementItem",
-													"CatchClause",
-													"StatementItemList"};
+	const QStringList debugAndTestUnitTypes{"TestConflictType",
+														 "TestListType",
+														 "TestUnorderedType",
+														 "ListElement",
+														 "project",
+														 "package",
+														 "class",
+														 "fieldList",
+														 "methodList",
+														 "field",
+														 "method",
+														 "Method",
+														 "loop",
+														 "TypedListOfMethod"};
 
-	const QStringList debugAndTestUnitTypes = {"TestConflictType",
-															 "TestListType",
-															 "TestUnorderedType",
-															 "ListElement",
-															 "project",
-															 "package",
-															 "class",
-															 "fieldList",
-															 "methodList",
-															 "field",
-															 "method",
-															 "Method",
-															 "loop",
-															 "TypedListOfMethod"};
+	const QStringList debugAndTestListTypes{"TestListType",
+														 "TestNoConflictList",
+														 "project",
+														 "package",
+														 "fieldList",
+														 "methodList",
+														 "method"};
 
-	const QStringList debugAndTestListTypes = {"TestListType",
-															 "TestNoConflictList",
-															 "project",
-															 "package",
-															 "fieldList",
-															 "methodList",
-															 "method"};
-
-	const QStringList debugAndTestUnordered = {"TestUnorderedType",
-															 "TypedListOfMethod"};
+	const QStringList debugAndTestUnordered{"TestUnorderedType",
+														 "TypedListOfMethod"};
 
 	listTypes_ = QSet<QString>::fromList(listTypes + debugAndTestListTypes);
 	unorderedTypes_ = QSet<QString>::fromList(unorderedTypes + debugAndTestUnordered);
