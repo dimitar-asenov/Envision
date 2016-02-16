@@ -37,13 +37,11 @@ static const QString PREFIX_STRING{"S_"};
 static const QString PREFIX_INTEGER{"I_"};
 static const QString PREFIX_DOUBLE{"D_"};
 
-XMLModel::XMLModel() :
-	doc(XML_DOM_TYPE)
+XMLModel::XMLModel() : doc{XML_DOM_TYPE}
 {
 }
 
-XMLModel::XMLModel(const QString& filename) :
-	doc(XML_DOM_TYPE)
+XMLModel::XMLModel(const QString& filename) : doc{XML_DOM_TYPE}
 {
 	QFile file{filename};
 	if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException{"Could not open file " + file.fileName() + "."};
