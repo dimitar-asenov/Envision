@@ -37,7 +37,8 @@ ConflictUnitDetector::~ConflictUnitDetector() {}
 
 Model::NodeIdType ConflictUnitDetector::findMoveBound(GenericNode *nodeA, GenericNode *nodeB)
 {
-	QList<Model::NodeIdType> pathA, pathB;
+	QList<Model::NodeIdType> pathA;
+	QList<Model::NodeIdType> pathB;
 	while (nodeA)
 	{
 		pathA.append(nodeA->id());
