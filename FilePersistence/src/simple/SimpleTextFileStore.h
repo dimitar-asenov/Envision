@@ -40,6 +40,10 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 {
 	public:
 		using FileGetterFunction = std::function<bool (QString filename, const char*& data, int& dataLength)>;
+
+		/**
+		 * TODO the Envision folder should be taken from the environment not hardcoded.
+		 */
 		SimpleTextFileStore(const QString& baseDir = QString::null);
 		SimpleTextFileStore(FileGetterFunction fileGetter);
 		SimpleTextFileStore(GenericTree* externalTree);
@@ -50,7 +54,9 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		void setBaseFolder(const QString& baseFolder);
 
-		// Methods from Persistent Store
+		/**
+		 * Methods from Persistent Store
+		 */
 		virtual void saveStringValue(const QString &value) override;
 		virtual void saveIntValue(int value) override;
 		virtual void saveDoubleValue(double value) override;
@@ -77,19 +83,29 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 	private:
 
-		/** If specified, this function will be used to get the data of the files. Only used for loading. */
+		/**
+		 * If specified, this function will be used to get the data of the files. Only used for loading.
+		 */
 		FileGetterFunction fileGetter_{};
 
-		/** The folder where all trees are stored. Each tree is a separate sub folder in the base folder. */
+		/**
+		 * The folder where all trees are stored. Each tree is a separate sub folder in the base folder.
+		 */
 		QDir baseFolder_;
 
-		/** A mutex that assures exclusive tree saving and loading operations. */
+		/**
+		 * A mutex that assures exclusive tree saving and loading operations.
+		 */
 		QMutex storeAccess_;
 
-		/** The manager that requested the last load/save operation. */
+		/**
+		 * The manager that requested the last load/save operation.
+		 */
 		Model::TreeManager* treeManager_{};
 
-		/** A flag that indicates if the store is currently in the middle of saving or loading a tree. */
+		/**
+		 * A flag that indicates if the store is currently in the middle of saving or loading a tree.
+		 */
 		bool working_{};
 		bool partiallyLoadingATree_{};
 
@@ -123,7 +139,9 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		GenericTree* genericTree_{};
 		GenericNode* genericNode_{};
 
-		// If the tree is external, only loading is supported and the tree will not be deleted.
+		/**
+		 * If the tree is external, only loading is supported and the tree will not be deleted.
+		 */
 		GenericTree* externalTree_{};
 
 		/**

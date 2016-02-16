@@ -46,7 +46,6 @@ const QString SimpleTextFileStore::NULL_STRING = "____NULL____";
  */
 const bool GENERATE_PUS = true;
 
-// TODO the Envision folder should be taken from the environment not hardcoded.
 SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
 	baseFolder_{baseDir.isNull() ? QDir::home().path() +
 											 QDir::toNativeSeparators("/Envision/projects")
