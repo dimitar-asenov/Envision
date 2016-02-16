@@ -153,7 +153,8 @@ bool Parser::nextNonEmptyLine(const char* data, int dataSize, int& lineStart, in
 	while (lineStart < dataSize)
 	{
 		auto c = data[lineStart];
-		Q_ASSERT((c & (char)0x80) == 0); // Make sure that this character is an ASCII one and not some UTF-8 codepoint
+		// Make sure that this character is an ASCII one and not some UTF-8 codepoint
+		Q_ASSERT((c & (char)0x80) == 0);
 		Q_ASSERT(c != 0);
 		if (c =='\n' || c== '\r') ++lineStart;
 		else break;
@@ -194,7 +195,11 @@ bool Parser::nextNonEmptyLine(const char* data, int dataSize, int& lineStart, in
 	}
 
 	--lineEnd;
-	if (lineEnd >= dataSize) lineEnd = dataSize - 1; // To compensate for possible unicode issues
+	if (lineEnd >= dataSize)
+	{
+		// To compensate for possible unicode issues
+		lineEnd = dataSize - 1;
+	}
 
 	if (lineEnd >= lineStart)
 	{
@@ -302,7 +307,8 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 	GenericNode* top = nullptr;
 
 	int start = 0;
-	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
+	// This is must be initialized to -1 for the first call to nextLine.
+	int lineEnd = -1;
 
 	// TODO: Do not rely on indentation, instead use the parentID (will this work in the clipboard?)
 	while ( nextNonEmptyLine(dataCopy, dataLength, start, lineEnd) )
@@ -332,7 +338,11 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 		}
 
 		// The top of the stack should now contain the element that we must add now
-		if (!lazy) nodeStack.last()->label(); // This will ensure that all data is read. We don't actually need the name.
+		if (!lazy)
+		{
+			// This will ensure that all data is read. We don't actually need the name.
+			nodeStack.last()->label();
+		}
 	}
 
 	return top;
@@ -341,7 +351,8 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 {
 	int start = 0;
-	int lineEnd = lineLength - 1; // Last character which belongs to the line, excluding new line characters.
+	// Last character which belongs to the line, excluding new line characters.
+	int lineEnd = lineLength - 1;
 
 	auto tabLevel = countTabs(line, start, lineEnd);
 
@@ -397,7 +408,11 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 	// Ignore white spaces
 	++start;
 	while (start <= lineEnd && (line[start] == ' ' || line[start] == '\t')) ++start;
-	if (start > lineEnd) return; // no value
+	if (start > lineEnd)
+	{
+		// no value
+		return;
+	}
 
 	if (PREFIX_STRING == QString::fromLatin1(line + start, PREFIX_STRING.length()))
 	{

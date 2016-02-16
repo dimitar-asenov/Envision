@@ -75,7 +75,8 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 	{
 		// mergedList is only used to check stuff
 		QList<Model::NodeIdType> mergedList;
-		int index = 0; // this is the index of the next element to be inserted
+		// this is the index of the next element to be inserted
+		int index = 0;
 		bool allResolved = true;
 		for (auto chunk : preparedListIt.value())
 		{

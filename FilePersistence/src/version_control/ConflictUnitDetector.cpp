@@ -346,7 +346,8 @@ void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<Chang
 		 change->hasFlags(ChangeDescription::Label))
 	{
 		auto parentId = change->nodeA()->parentId();
-		auto parentChange = cdg.changes().value(parentId); // must exist because structFlag
+		// must exist because structFlag
+		auto parentChange = cdg.changes().value(parentId);
 		if (parentChange->type() != ChangeType::Deletion)
 		{
 			auto oldParentInBranchVersion = parentChange->nodeB();

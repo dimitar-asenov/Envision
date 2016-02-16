@@ -237,7 +237,8 @@ void Merge::performTrueMerge()
 	// ### THE PIPLELINE ###
 	for (auto component : conflictPipeline_)
 	{
-		linkedChangesSet = LinkedChangesSet{transition.getNewState()}; // deep copy current state
+		// deep copy current state
+		linkedChangesSet = LinkedChangesSet{transition.getNewState()};
 		transition = component->run(treeA_, treeB_, treeBase_, cdgA, cdgB,
 											 conflictingChanges_, conflictPairs_, linkedChangesSet);
 		// NOTE this is where one would check the transition of a component.
