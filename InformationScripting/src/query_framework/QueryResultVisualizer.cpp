@@ -26,7 +26,11 @@
 
 #include "QueryResultVisualizer.h"
 
+#include "Comments/src/nodes/CommentNode.h"
+
 #include "ModelBase/src/nodes/Node.h"
+
+#include "OOModel/src/declarations/Declaration.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
@@ -113,11 +117,25 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 		}
 	}
+
+	auto htmlTuples = ts.tuples("html");
+	if (htmlTuples.size()) {
+		QString url = (*htmlTuples.begin())["html"];
+		if (auto targetDecl = DCast<OOModel::Declaration>(target())) {
+			// TODO an overlay or something would probably be better for this:
+			url = QUrl::fromLocalFile(QFileInfo{url}.absoluteFilePath()).toString();
+			targetDecl->beginModification();
+			targetDecl->setComment(new Comments::CommentNode{QString{"[browser#%1]"}.arg(url)});
+			targetDecl->endModification();
+		}
+	}
+
 	return {1};
 }
 
 void QueryResultVisualizer::cleanScene()
 {
+	// TODO remove browser
 	for (auto scene : Visualization::Scene::allScenes())
 	{
 		scene->removeOverlayGroup(HIGHLIGHT_OVERLAY_GROUP);
