@@ -99,10 +99,6 @@ QString SimpleTextFileStore::relativeDirectoryPathForPersistenceUnit(const Model
 	 return "";
 }
 
-//**********************************************************************************************************************
-// Methods from Persistent Store
-//**********************************************************************************************************************
-
 void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &name)
 {
 	storeAccess_.lock();
