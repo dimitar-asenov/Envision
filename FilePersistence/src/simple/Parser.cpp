@@ -38,19 +38,6 @@ const QString PREFIX_DOUBLE{"D_"};
  */
 const bool SORT_BY_LABEL = true;
 
-inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
-{
-	int numTabs = 0;
-
-	for (int i = lineStart; i<=lineEnd; ++i)
-	{
-		if (data[i] == '\t') ++numTabs;
-		else break;
-	}
-
-	return numTabs;
-}
-
 QString Parser::escape(const QString& line)
 {
 	QString res = line;
