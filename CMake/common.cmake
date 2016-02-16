@@ -140,6 +140,11 @@ function(envision_plugin targetName)
 		message("Plugin ${targetName} contains key bindings")
 		install(DIRECTORY key-bindings/ DESTINATION ${BUILD_DIR}/key-bindings)
 	endif()
+
+	if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
+		message("Plugin ${targetName} contains scripts")
+		install(DIRECTORY scripts/ DESTINATION ${BUILD_DIR}/scripts)
+	endif()
 endfunction(envision_plugin)
 
 function(envision_link_libraries targetName)
