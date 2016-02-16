@@ -107,14 +107,12 @@ GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool 
 	node->reset(this, nodeToCopy);
 
 	if (deepCopy)
-	{
 		for (auto childToCopy : nodeToCopy->children())
 		{
 			auto child = newNode(childToCopy, true);
 			child->setParent(node);
 			node->attachChild(child);
 		}
-	}
 
 	return node;
 }
