@@ -411,9 +411,9 @@ QString GitRepository::getSHA1(QString revision) const
 		return revision;
 }
 
-void GitRepository::checkout(QString revesion, bool force)
+void GitRepository::checkout(QString revision, bool force)
 {
-	if (revesion.compare(WORKDIR) != 0)
+	if (revision.compare(WORKDIR) != 0)
 	{
 		git_checkout_options options;
 		git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);
@@ -421,11 +421,11 @@ void GitRepository::checkout(QString revesion, bool force)
 		options.checkout_strategy = force ? GIT_CHECKOUT_FORCE : GIT_CHECKOUT_SAFE;
 
 		int errorCode = 0;
-		if (revesion.compare(INDEX) == 0)
+		if (revision.compare(INDEX) == 0)
 			errorCode = git_checkout_index(repository_, nullptr, &options);
 		else
 		{
-			git_commit* gitCommit = parseCommit(revesion);
+			git_commit* gitCommit = parseCommit(revision);
 			errorCode = git_checkout_tree(repository_, (git_object*)gitCommit, &options);
 
 			git_commit_free(gitCommit);

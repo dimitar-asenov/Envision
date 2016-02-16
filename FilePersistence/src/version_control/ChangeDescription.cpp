@@ -102,7 +102,7 @@ QString ChangeDescription::summary() const
 }
 
 std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
-		Model::NodeIdType id,
+		Model::NodeIdType nodeId,
 		std::shared_ptr<ChangeDescription> causingChange,
 		std::shared_ptr<GenericTree> treeA,
 		std::shared_ptr<GenericTree> treeB)
@@ -111,7 +111,7 @@ std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
 	auto childA = causingChange->nodeA();
 	auto childB = causingChange->nodeB();
 	std::shared_ptr<ChangeDescription> change{new ChangeDescription};
-	change->nodeId_ = id;
+	change->nodeId_ = nodeId;
 	change->type_ = ChangeType::Stationary;
 	change->updateFlags_ = UpdateType::Structure;
 
@@ -123,17 +123,17 @@ std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
 		change->pointsToChildB_ = true;
 	}
 	else if (causingChange->type() == ChangeType::Deletion ||
-				(causingChange->type() == ChangeType::Move && childA->parentId() == id))
+				(causingChange->type() == ChangeType::Move && childA->parentId() == nodeId))
 	{
 		change->nodeA_ = childA;
 		change->pointsToChildA_ = true;
-		change->nodeB_ = treeB->find(id, true);
+		change->nodeB_ = treeB->find(nodeId, true);
 		change->pointsToChildB_ = false;
 	}
 	else if (causingChange->type() == ChangeType::Insertion ||
-			  (causingChange->type() == ChangeType::Move && childB->parentId() == id))
+			  (causingChange->type() == ChangeType::Move && childB->parentId() == nodeId))
 	{
-		change->nodeA_ = treeA->find(id, true);
+		change->nodeA_ = treeA->find(nodeId, true);
 		change->pointsToChildA_ = false;
 		change->nodeB_ = childB;
 		change->pointsToChildB_ = true;

@@ -69,11 +69,11 @@ SimpleTextFileStore* SimpleTextFileStore::clone() const
 	return ss;
 }
 
-void SimpleTextFileStore::setBaseFolder(const QString& path)
+void SimpleTextFileStore::setBaseFolder(const QString& baseFolder)
 {
 	Q_ASSERT(!fileGetter_);
 	Q_ASSERT(!externalTree_);
-	baseFolder_ = path;
+	baseFolder_ = baseFolder;
 }
 
 QString SimpleTextFileStore::getPersistenceUnitName(const Model::Node *node)

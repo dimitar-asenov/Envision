@@ -58,7 +58,7 @@ class FILEPERSISTENCE_API Parser {
 
 	private:
 		static int countTabs(const char* data, int lineStart, int lineEnd);
-		static QString rawStringToQString(const char* data, int startAt, int endInclusive);
+		static QString rawStringToQString(const char* data, int start, int endInclusive);
 		static QString escape(const QString& line);
 
 		static Model::NodeIdType toId(const char* data, int start, int endInclusive, bool& ok);

@@ -57,8 +57,8 @@ class Diff3Parse
 		static QList<Chunk*> computeChunks(const QList<Model::NodeIdType> idListA, const QList<Model::NodeIdType> idListB,
 													const QList<Model::NodeIdType> idListBase);
 
-		static QList<Model::NodeIdType> backtrackLCS(int** data, const QList<Model::NodeIdType> x,
-																	const QList<Model::NodeIdType> y, int posX, int posY);
+		static QList<Model::NodeIdType> backtrackLCS(int** data, const QList<Model::NodeIdType> listA,
+																	const QList<Model::NodeIdType> listB, int posA, int posB);
 
 		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> elementIds,
 																				 const QList<Model::NodeIdType> stableIDs);
