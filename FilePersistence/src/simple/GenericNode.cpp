@@ -75,7 +75,8 @@ GenericNode* GenericNode::parent() const
 		return nullptr;
 	else if (!parent_ && tree()->piecewiseLoader())
 	{
-		tree()->find(parentId_, true); // this should also link this node to the parent.
+		// this should also link this node to the parent.
+		tree()->find(parentId_, true);
 		Q_ASSERT(parent_->id() == parentId_);
 	}
 	return parent_;
