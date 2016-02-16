@@ -57,8 +57,6 @@ std::shared_ptr<GenericTree> Merge::mergedTree()
 	return treeMerged_;
 }
 
-// ======== private ========
-
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
