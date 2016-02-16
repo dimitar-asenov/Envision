@@ -100,8 +100,10 @@ class FILEPERSISTENCE_API ChangeDescription
 		bool pointsToChildA_;
 		bool pointsToChildB_;
 
-		// If pointsToChildA_ is true, this is a pointer to a node with parent whose ID is nodeId_.
-		// Otherwise, this points to a node with ID = nodeId_. This is a lazy loading mechanic.
+		/**
+		 * If pointsToChildA_ is true, this is a pointer to a node with parent whose ID is nodeId_.
+		 * Otherwise, this points to a node with ID = nodeId_. This is a lazy loading mechanic.
+		 */
 		GenericNode* nodeA_{};
 		GenericNode* nodeB_{};
 };
