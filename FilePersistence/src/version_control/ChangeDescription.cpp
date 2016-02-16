@@ -58,17 +58,25 @@ QString ChangeDescription::summary() const
 	switch (type_)
 	{
 		case ChangeType::Deletion:
+		{
 			typeStr = "Deletion";
 			break;
+		}
 		case ChangeType::Insertion:
+		{
 			typeStr = "Insertion";
 			break;
+		}
 		case ChangeType::Move:
+		{
 			typeStr = "Move";
 			break;
+		}
 		case ChangeType::Stationary:
+		{
 			typeStr = "Stationary";
 			break;
+		}
 		default:
 			Q_ASSERT(false);
 	}
@@ -167,25 +175,30 @@ void ChangeDescription::print() const
 	switch (type_)
 	{
 		case ChangeType::Insertion:
+		{
 			qDebug() << "Insertion" << endl;
 			break;
-
+		}
 		case ChangeType::Deletion:
+		{
 			qDebug() << "Deletion" << endl;
 			break;
-
+		}
 		case ChangeType::Move:
+		{
 			qDebug() << "Move" << endl;
 			break;
-
+		}
 		case ChangeType::Stationary:
+		{
 			qDebug() << "Stationary" << endl;
 			break;
-
+		}
 		case ChangeType::Unclassified:
+		{
 			qDebug() << "Unclassified" << endl;
 			break;
-
+		}
 		default:
 			Q_ASSERT(false);
 	}

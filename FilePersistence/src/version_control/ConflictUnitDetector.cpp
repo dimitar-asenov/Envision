@@ -271,20 +271,26 @@ ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph c
 		Model::NodeIdType conflictRootB;
 		switch (change->type()) {
 			case ChangeType::Deletion:
+			{
 				conflictRootA = findConflictUnit(change->nodeA());
 				affectedCUs.insert(conflictRootA, change);
 				break;
+			}
 			case ChangeType::Insertion:
+			{
 				conflictRootB = findConflictUnit(change->nodeB());
 				affectedCUs.insert(conflictRootB, change);
 				break;
+			}
 			case ChangeType::Move:
 			case ChangeType::Stationary:
+			{
 				conflictRootA = findConflictUnit(change->nodeA());
 				conflictRootB = findConflictUnit(change->nodeB());
 				affectedCUs.insert(conflictRootA, change);
 				affectedCUs.insert(conflictRootB, change);
 				break;
+			}
 			default:
 				Q_ASSERT(false);
 		}

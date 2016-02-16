@@ -157,10 +157,12 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	switch (kind)
 	{
 		case Kind::AlreadyUpToDate:
+		{
 			stage_ = Merge::Stage::Committed;
 			break;
-
+		}
 		case Kind::FastForward:
+		{
 			if (fastForward)
 			{
 				QString branch = repository_->currentBranch();
@@ -175,11 +177,12 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 				stage_ = Stage::WroteToIndex;
 			}
 			break;
-
+		}
 		case Kind::TrueMerge:
+		{
 			performTrueMerge();
 			break;
-
+		}
 		default:
 			Q_ASSERT(false);
 	}

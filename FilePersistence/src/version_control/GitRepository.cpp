@@ -1032,16 +1032,20 @@ git_commit* GitRepository::parseCommit(QString revision) const
 	switch (errorCode)
 	{
 		case GIT_ENOTFOUND:
+		{
 			std::cout << "Error: " << revision.toStdString().c_str() << " not found!" << std::endl;
 			break;
-
+		}
 		case GIT_EAMBIGUOUS:
+		{
 			std::cout << "Error: " << revision.toStdString().c_str() << " is ambiguous!" << std::endl;
 			break;
-
+		}
 		case GIT_EINVALIDSPEC:
+		{
 			std::cout << "Error: " << revision.toStdString().c_str() << " is invalid!" << std::endl;
 			break;
+		}
 	}
 	checkError(errorCode);
 
