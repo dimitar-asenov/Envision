@@ -281,7 +281,7 @@ void GenericNode::linkNode(bool recursiveLink)
 	}
 
 	// Add to lookup
-	QList<GenericNode*> stack = {this};
+	QList<GenericNode*> stack{this};
 	while (!stack.isEmpty())
 	{
 		auto currentNode = stack.takeLast();
