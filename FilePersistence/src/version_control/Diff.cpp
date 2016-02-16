@@ -75,7 +75,6 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 	return changesOfType;
 }
 
-// Private methods
 void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB)
 {
 	QSet<Model::NodeIdType> onlyInNodesB = QSet<Model::NodeIdType>::fromList(nodesB.keys());
