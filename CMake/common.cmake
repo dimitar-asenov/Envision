@@ -38,7 +38,7 @@ link_directories(${BUILD_DIR} ${PLUGINS_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -pedantic-errors -Wall -W -Werror -Wextra -O2 -fno-omit-frame-pointer -Woverloaded-virtual -Winvalid-pch")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-private-field")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-private-field -fparse-all-comments")
 endif()
 
 # Enable linking to custom Qt version and libCore from both main executable and plugins
