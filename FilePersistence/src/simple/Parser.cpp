@@ -183,14 +183,12 @@ bool Parser::nextNonEmptyLine(const char* data, int dataSize, int& lineStart, in
 			lineEnd += utf8Bytes;
 			onlyWhiteSpace = false;
 		}
+		else if (c == '\n' || c == '\r')
+			break;
 		else
 		{
-			if (c == '\n' || c == '\r') break;
-			else
-			{
-				++lineEnd;
-				if (c != ' ' && c != '\t') onlyWhiteSpace = false;
-			}
+			++lineEnd;
+			if (c != ' ' && c != '\t') onlyWhiteSpace = false;
 		}
 	}
 
