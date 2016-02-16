@@ -37,6 +37,9 @@ class GenericPersistentUnit;
 class FILEPERSISTENCE_API Parser {
 	public:
 
+		const static QString PREFIX_STRING;
+		const static QString PREFIX_INTEGER;
+		const static QString PREFIX_DOUBLE;
 		static void parseLine(GenericNode* node, const char* line, int lineLength);
 
 		/**
@@ -67,7 +70,6 @@ class FILEPERSISTENCE_API Parser {
 		static bool nextNonEmptyLine(const char* data, int dataSize, int& lineStart, int& lineEnd);
 		static int indexOf(const char c, const char* data, int start, int endInclusive);
 		static bool nextHeaderPart(const char* data, int& start, int&endInclusive, int lineEnd);
-};
 
 inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
 {
@@ -79,6 +81,12 @@ inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
 		else break;
 	}
 
+		/**
+		 * If true, sort children by label when writing encoding.
+		 * This is to ensure consistency between all methods used to produce Envision encodings.
+		 */
+		static constexpr bool SORT_BY_LABEL = true;
+};
 	return numTabs;
 }
 

@@ -26,16 +26,13 @@
 
 #include "XMLModel.h"
 #include "FilePersistenceException.h"
+#include "simple/Parser.h"
 
 namespace FilePersistence {
 
 static const char* XML_DOM_TYPE = "EnvisionFilePersistence";
 
 static const int MAX_DOUBLE_PRECISION = 15;
-
-static const QString PREFIX_STRING{"S_"};
-static const QString PREFIX_INTEGER{"I_"};
-static const QString PREFIX_DOUBLE{"D_"};
 
 XMLModel::XMLModel() : doc{XML_DOM_TYPE}
 {
@@ -64,19 +61,19 @@ XMLModel::~XMLModel()
 
 void XMLModel::saveStringValue(const QString &value)
 {
-	QDomText text = doc.createTextNode(PREFIX_STRING + value);
+	QDomText text = doc.createTextNode(Parser::PREFIX_STRING + value);
 	elem.appendChild(text);
 }
 
 void XMLModel::saveIntValue(int value)
 {
-	QDomText text = doc.createTextNode(PREFIX_INTEGER + QString::number(value));
+	QDomText text = doc.createTextNode(Parser::PREFIX_INTEGER + QString::number(value));
 	elem.appendChild(text);
 }
 
 void XMLModel::saveDoubleValue(double value)
 {
-	QDomText text = doc.createTextNode(PREFIX_DOUBLE + QString::number(value, 'f', MAX_DOUBLE_PRECISION));
+	QDomText text = doc.createTextNode(Parser::PREFIX_DOUBLE + QString::number(value, 'f', MAX_DOUBLE_PRECISION));
 	elem.appendChild(text);
 }
 
@@ -126,7 +123,7 @@ int XMLModel::loadIntValue() const
 {
 	bool ok = true;
 
-	int res = elem.firstChild().nodeValue().mid(PREFIX_INTEGER.size()).toInt(&ok);
+	int res = elem.firstChild().nodeValue().mid(Parser::PREFIX_INTEGER.size()).toInt(&ok);
 	if ( !ok ) throw FilePersistenceException{"Could not read integer value " + elem.firstChild().nodeValue()
 			+ " at line: " + QString::number( elem.lineNumber() )};
 
@@ -135,14 +132,14 @@ int XMLModel::loadIntValue() const
 
 QString XMLModel::loadStringValue() const
 {
-	return elem.firstChild().nodeValue().mid(PREFIX_STRING.size());
+	return elem.firstChild().nodeValue().mid(Parser::PREFIX_STRING.size());
 }
 
 double XMLModel::loadDoubleValue() const
 {
 	bool ok = true;
 
-	double res = elem.firstChild().nodeValue().mid(PREFIX_DOUBLE.size()).toDouble(&ok);
+	double res = elem.firstChild().nodeValue().mid(Parser::PREFIX_DOUBLE.size()).toDouble(&ok);
 	if ( !ok ) throw FilePersistenceException{"Could read real value " + elem.firstChild().nodeValue()
 			+ " at line: " + QString::number( elem.lineNumber() )};
 
@@ -307,17 +304,17 @@ QDomElement XMLModel::getCurrentElement() const
 
 bool XMLModel::isString() const
 {
-	return elem.firstChild().nodeValue().startsWith(PREFIX_STRING);
+	return elem.firstChild().nodeValue().startsWith(Parser::PREFIX_STRING);
 }
 
 bool XMLModel::isInteger() const
 {
-	return elem.firstChild().nodeValue().startsWith(PREFIX_INTEGER);
+	return elem.firstChild().nodeValue().startsWith(Parser::PREFIX_INTEGER);
 }
 
 bool XMLModel::isDouble() const
 {
-	return elem.firstChild().nodeValue().startsWith(PREFIX_DOUBLE);
+	return elem.firstChild().nodeValue().startsWith(Parser::PREFIX_DOUBLE);
 }
 
 QString XMLModel::documentText() const
