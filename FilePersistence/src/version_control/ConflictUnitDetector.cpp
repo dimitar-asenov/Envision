@@ -117,9 +117,7 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&,
 	if (useLinkedChanges_)
 		transition = LinkedChangesTransition{linkedChangesSet, cdgA, cdgB};
 
-	/**
-	 * If change1 is mappend to change2 then change2 depends on change1
-	 */
+	// If change1 is mappend to change2 then change2 depends on change1
 	QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>> moveDependencies;
 
 	auto gatherDependencies = [&moveDependencies, &treeBase](ChangeDependencyGraph& cdg)
