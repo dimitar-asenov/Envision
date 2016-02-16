@@ -38,7 +38,7 @@ static const QString CLIPBOARD_TAG = "clipboard";
 const QString SystemClipboard::NULL_STRING = "____NULL____";
 
 SystemClipboard::SystemClipboard() :
-	xml(nullptr), numNodes_{0}
+	xml{nullptr}, numNodes_{0}
 {
 	readClipboard();
 }
