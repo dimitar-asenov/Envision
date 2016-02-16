@@ -53,7 +53,6 @@ SystemClipboard* SystemClipboard::clone() const
 	return new SystemClipboard{};
 }
 
-// Methods from Persistent Store
 void SystemClipboard::saveTree(::Model::TreeManager* manager, const QString &name)
 {
 	if (manager->root())
@@ -175,7 +174,6 @@ QString SystemClipboard::loadReferenceValue(Reference*)
 	return name;
 }
 
-// Methods from ClipboardStore
 void SystemClipboard::putNode(const Node* node)
 {
 	QList<const Node*> nodes;

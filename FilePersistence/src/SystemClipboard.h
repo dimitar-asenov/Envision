@@ -43,7 +43,9 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		SystemClipboard();
 		virtual ~SystemClipboard();
 
-		// Methods from Persistent Store
+		/**
+		 * Methods from Persistent Store
+		 */
 		virtual SystemClipboard* clone() const override;
 
 		virtual void saveStringValue(const QString &value) override;
@@ -63,7 +65,9 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 
 		virtual bool isLoadingPartially() const override;
 
-		// Methods from ClipboardStore
+		/**
+		 * Methods from ClipboardStore
+		 */
 		virtual void putNode(const Model::Node* node) override;
 		virtual void putNodes(const QList<const Model::Node*>& nodes) override;
 
