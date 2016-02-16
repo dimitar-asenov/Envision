@@ -305,14 +305,12 @@ void Merge::addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
 									 const ChangeDependencyGraph& cdg)
 {
 	for (auto dependency : cdg.getDependencies(change))
-	{
 		if (!queue.contains(dependency))
 		{
 			Q_ASSERT(!conflictingChanges_.contains(dependency));
 			addDependencies(queue, dependency, cdg);
 			queue.append(dependency);
 		}
-	}
 }
 
 
@@ -322,20 +320,17 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 	// sort changes topologically before applying
 	QList<std::shared_ptr<ChangeDescription>> queue;
 	for (auto change : cdg.changes())
-	{
 		if (!conflictingChanges_.contains(change) && !queue.contains(change))
 		{
 			addDependencies(queue, change, cdg);
 			queue.append(change);
 		}
-	}
 
 	// We apply changes in a way that make them indempotent.
 	// This makes it possible for both branches to make the exact same change
 	// e.g. delete the same node.
 
 	for (auto change : queue)
-	{
 		switch (change->type())
 		{
 			case ChangeType::Insertion:
@@ -402,7 +397,6 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 			default:
 				Q_ASSERT(false);
 		}
-	}
 }
 
 }
