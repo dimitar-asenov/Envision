@@ -32,6 +32,10 @@ namespace Interaction {
 	class CommandResult;
 }
 
+namespace Model {
+	class Node;
+}
+
 namespace InformationScripting {
 
 class Query;
@@ -40,6 +44,7 @@ class TupleSet;
 class INFORMATIONSCRIPTING_API QueryExecutor
 {
 	public:
+		QueryExecutor(Model::Node* target);
 		~QueryExecutor();
 		void addQuery(std::unique_ptr<Query>&& query);
 
@@ -50,6 +55,7 @@ class INFORMATIONSCRIPTING_API QueryExecutor
 	private:
 		std::queue<std::unique_ptr<Query>> queries_{};
 		bool defaultVisualize_{true};
+		Model::Node* target_{};
 };
 
 inline void QueryExecutor::setVisualizationExecuted() { defaultVisualize_ = false; }
