@@ -327,10 +327,9 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 		}
 	}
 
-	/* We apply changes in a way that make them indempotent.
-	 * This makes it possible for both branches to make the exact same change
-	 * e.g. delete the same node.
-	 */
+	// We apply changes in a way that make them indempotent.
+	// This makes it possible for both branches to make the exact same change
+	// e.g. delete the same node.
 
 	for (auto change : queue)
 	{

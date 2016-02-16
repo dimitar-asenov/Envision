@@ -52,8 +52,11 @@ class FILEPERSISTENCE_API Merge
 		const QSet<std::shared_ptr<ChangeDescription>> getConflicts() const;
 		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
+
+		/**
+		 * TODO output conflicts
+		 */
 		const bool USE_LINKED_SETS = true;
-		// TOOD output conflicts
 
 	private:
 		friend class GitRepository;
@@ -86,13 +89,17 @@ class FILEPERSISTENCE_API Merge
 
 		Stage stage_ = Stage::NotInitialized;
 
-		// GenericTrees
+		/**
+		 * GenericTrees
+		 */
 		std::shared_ptr<GenericTree> treeA_;
 		std::shared_ptr<GenericTree> treeB_;
 		std::shared_ptr<GenericTree> treeBase_;
 		std::shared_ptr<GenericTree> treeMerged_;
 
-		// Revisions
+		/**
+		 * Revisions
+		 */
 		QString headCommitId_;
 		QString revisionCommitId_;
 		QString baseCommitId_;
