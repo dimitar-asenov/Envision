@@ -96,10 +96,9 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 			onlyInNodesB.remove(iter.key());
 		}
 	}
-	/* Intermediate state 2
-	 * See report for details.
-	 * TODO add link to report
-	 */
+	// Intermediate state 2
+	// See report for details.
+	// TODO add link to report
 	for (auto id : onlyInNodesB)
 	{
 		iter = nodesB.find(id);
