@@ -148,7 +148,17 @@ add_library(InformationScripting SHARED
 	src/query_framework/QueryRuntimeException.cpp
 	src/query_framework/HighlightOverlayStyle.cpp
 	src/queries/Yield.cpp
+	scripts/color.py
+	scripts/filterCasts.py
+	scripts/heatmapDataGen.py
+	scripts/not.py
+	scripts/sink.py
+	scripts/debug.py
+	scripts/filterMultiplications.py
+	scripts/ifToWhile.py
+	scripts/profileSource.py
 )
 
 target_link_libraries(InformationScripting ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
 envision_plugin(InformationScripting OOInteraction OODebug)
+
