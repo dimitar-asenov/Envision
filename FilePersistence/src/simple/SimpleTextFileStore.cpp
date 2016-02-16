@@ -206,7 +206,7 @@ void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, con
 {
 	// Put all existing PersistentUnits (except for the root) on the stack
 	auto rootNode = tree->root();
-	QList<GenericNode*> stack = {};
+	QList<GenericNode*> stack{};
 	for ( auto pu : tree->persistentUnits() )
 	{
 		auto puRoot = pu->unitRootNode();
