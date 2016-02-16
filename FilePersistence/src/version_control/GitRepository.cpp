@@ -53,7 +53,7 @@ struct GitCommitExtract
 
 int gitDiffExtractFileCallBack(
 				 const git_diff_delta *delta,
-				 float /*progress*/,
+				 float,
 				 void* carryAlongData)
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
@@ -85,7 +85,7 @@ void createNodeAndAppend(const git_diff_line* line, const char* filePath, Generi
 
 int gitDiffExtractLineCallBack(
 				 const git_diff_delta* delta,
-				 const git_diff_hunk* /*hunk*/,
+				 const git_diff_hunk*,
 				 const git_diff_line* line,
 				 void* carryAlongData)
 {
