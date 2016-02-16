@@ -450,8 +450,10 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		bool shouldInsert = false;
 
 		if (thisReorders)
-		{	// the node is not new so there might be dependencies
-			auto originChunk = findOriginalChunk(elem, containerId, chunk); // TODO do this better
+		{
+			// the node is not new so there might be dependencies
+			// TODO do this better
+			auto originChunk = findOriginalChunk(elem, containerId, chunk);
 			if (originChunk && originChunk != chunk)
 			{
 				if (!chunkDependencies_.contains(chunk, originChunk))
@@ -484,10 +486,15 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 				conflict = true;
 		}
 		else if (otherReorders)
-			continue; // do nothing
+		{
+			// do nothing
+			continue;
+		}
 		else
-			shouldInsert = true; // this branch or neither branch reorders
-
+		{
+			// this branch or neither branch reorders
+			shouldInsert = true;
+		}
 
 		if (conflict) break;
 
