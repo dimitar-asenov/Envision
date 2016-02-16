@@ -29,6 +29,8 @@
 #include "../filepersistence_api.h"
 #include "GenericPersistentUnit.h"
 
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
 
 class GenericNode;
