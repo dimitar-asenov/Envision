@@ -56,7 +56,7 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
-		void setChildren(QList<GenericNode*>);
+		void setChildren(QList<GenericNode*> children);
 
 		void resetValue(ValueType type, const QString& value);
 
