@@ -28,7 +28,7 @@
 
 namespace FilePersistence {
 
-LinkedChangesSet::LinkedChangesSet() : QSet<LinkedChanges>() {}
+LinkedChangesSet::LinkedChangesSet() : QSet<LinkedChanges>{} {}
 
 LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const ChangeDependencyGraph &cdgB)
 {

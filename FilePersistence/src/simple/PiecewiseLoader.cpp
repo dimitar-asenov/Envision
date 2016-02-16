@@ -30,7 +30,7 @@ namespace FilePersistence {
 
 PiecewiseLoader::PiecewiseLoader(std::shared_ptr<GenericTree>& tree) : tree_{tree}
 {
-    tree_->setPiecewiseLoader(std::shared_ptr<PiecewiseLoader>(this));
+	 tree_->setPiecewiseLoader(std::shared_ptr<PiecewiseLoader>{this});
 }
 
 PiecewiseLoader::~PiecewiseLoader() {}

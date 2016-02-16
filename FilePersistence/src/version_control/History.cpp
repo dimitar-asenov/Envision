@@ -210,7 +210,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 	tree->buildLookupHash();
 	GenericNode* subtreeRoot = tree->find(rootNodeId_);
 	if (!subtreeRoot)
-		return QSet<Model::NodeIdType>();
+		return QSet<Model::NodeIdType>{};
 
 	Q_ASSERT(subtreeRoot != nullptr);
 

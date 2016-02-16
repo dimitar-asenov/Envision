@@ -258,13 +258,13 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	if (!treeA)
 	{
 		QString sha1A = getSHA1(revisionA);
-		treeA = std::shared_ptr<GenericTree>(new GenericTree{projectName()});
+		treeA = std::shared_ptr<GenericTree>{new GenericTree{projectName()}};
 		new GitPiecewiseLoader{treeA, this, sha1A};
 	}
 	if (!treeB)
 	{
 		QString sha1B = getSHA1(revisionB);
-		treeB = std::shared_ptr<GenericTree>(new GenericTree{projectName()});
+		treeB = std::shared_ptr<GenericTree>{new GenericTree{projectName()}};
 		new GitPiecewiseLoader{treeB, this, sha1B};
 	}
 
@@ -968,7 +968,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	char* content = new char[totalFileSize];
 	memcpy(content, mapped, totalFileSize);
 
-	CommitFile* commitFile = new CommitFile{relativePath, totalFileSize, std::unique_ptr<char[]>(content)};
+	CommitFile* commitFile = new CommitFile{relativePath, totalFileSize, std::unique_ptr<char[]>{content}};
 
 	success = file.remove();
 	Q_ASSERT(success);

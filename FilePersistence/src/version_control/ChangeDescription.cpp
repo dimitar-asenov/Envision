@@ -110,7 +110,7 @@ std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
 	Q_ASSERT(causingChange->debugHasNodes());
 	auto childA = causingChange->nodeA();
 	auto childB = causingChange->nodeB();
-	std::shared_ptr<ChangeDescription> change{new ChangeDescription};
+	std::shared_ptr<ChangeDescription> change{new ChangeDescription{}};
 	change->nodeId_ = nodeId;
 	change->type_ = ChangeType::Stationary;
 	change->updateFlags_ = UpdateType::Structure;
@@ -245,7 +245,7 @@ std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<Gener
 		newNodeA = persistentUnit->newNode(nodeB(), force);
 	}
 
-	std::shared_ptr<ChangeDescription> newChange{new ChangeDescription};
+	std::shared_ptr<ChangeDescription> newChange{new ChangeDescription{}};
 	newChange->nodeId_ = nodeId_;
 	newChange->nodeA_ = newNodeA;
 	newChange->nodeB_ = newNodeB;
