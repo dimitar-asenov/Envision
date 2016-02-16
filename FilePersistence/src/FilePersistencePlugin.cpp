@@ -42,10 +42,6 @@ void FilePersistencePlugin::unload()
 {
 }
 
-/**
- * Syntax for tests: pluginName:testName1[>arg1,arg2,...][:testName2[>arg1,arg2,...]:...]
- * Currently arguments don't work but multiple tests do.
- */
 void FilePersistencePlugin::selfTest(QString testArgs)
 {
 	if (testArgs.isEmpty())

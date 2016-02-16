@@ -59,19 +59,21 @@ void LinkedChangesTransition::insert(Model::NodeIdType oldChangeId, bool oldInBr
 {
 	auto keySet = oldLinkedChangesSet_.findLinkedChanges(oldChangeId, oldInBranchA);
 	// NOTE could probably be optimized
-	if (transition_.contains(keySet) && transition_.value(keySet)->contains(change)) return; // already mapped
+	if (transition_.contains(keySet) && transition_.value(keySet)->contains(change))
+	{
+		// already mapped
+		return;
+	}
 
 	LinkedChanges setContainingChange;
 	bool changeIsMappedTo = false;
 	for (auto linkedChanges : transition_.values())
-	{
 		if (linkedChanges->contains(change))
 		{
 			setContainingChange = linkedChanges;
 			changeIsMappedTo = true;
 			break;
 		}
-	}
 
 	if (changeIsMappedTo)
 	{

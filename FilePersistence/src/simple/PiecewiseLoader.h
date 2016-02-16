@@ -33,16 +33,16 @@
 
 namespace FilePersistence {
 
-struct NodeData {
+struct FILEPERSISTENCE_API NodeData {
 	QString persistentUnit_;
 	QString nodeLine_;
 };
 
-class PiecewiseLoader
+class FILEPERSISTENCE_API PiecewiseLoader
 {
 	public:
 		PiecewiseLoader(std::shared_ptr<GenericTree>& tree);
-		virtual ~PiecewiseLoader() = 0;
+		virtual ~PiecewiseLoader();
 
 		GenericNode* loadAndLinkNode(Model::NodeIdType id);
 		void loadAndLinkNodeChildren(Model::NodeIdType id);

@@ -33,7 +33,7 @@ namespace FilePersistence {
 
 using LinkedChanges = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
 
-class LinkedChangesSet : public QSet<LinkedChanges>
+class FILEPERSISTENCE_API LinkedChangesSet : public QSet<LinkedChanges>
 {
 	public:
 		LinkedChangesSet();

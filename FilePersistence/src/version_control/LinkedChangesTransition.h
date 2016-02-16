@@ -32,7 +32,7 @@
 
 namespace FilePersistence {
 
-class LinkedChangesTransition
+class FILEPERSISTENCE_API LinkedChangesTransition
 {
 	public:
 		LinkedChangesTransition();

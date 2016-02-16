@@ -80,9 +80,7 @@ QList<Chunk*> Diff3Parse::computeChunks(const QList<Model::NodeIdType> idListA,
 				chunk->spanMerged_.append(*iterBase);
 			}
 			else
-			{
 				chunks.append(new Chunk{isStable, *iterA, *iterB, *iterBase});
-			}
 			lastWasEmpty = false;
 		}
 		else
@@ -171,7 +169,7 @@ QList<Model::NodeIdType> Diff3Parse::backtrackLCS(int** data, const QList<Model:
 															const QList<Model::NodeIdType> listB, int posA, int posB)
 {
 	if (posA == 0 || posB == 0)
-		return QList<Model::NodeIdType>();
+		return QList<Model::NodeIdType>{};
 	else if (listA.at(posA-1) == listB.at(posB-1))
 		return backtrackLCS(data, listA, listB, posA-1, posB-1)<<listA.at(posA-1);
 	else

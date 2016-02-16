@@ -28,8 +28,6 @@
 
 #include "../filepersistence_api.h"
 
-#include "ModelBase/src/persistence/PersistentStore.h"
-
 namespace FilePersistence {
 
 class GenericTree;

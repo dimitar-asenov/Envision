@@ -104,13 +104,11 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const C
 
 			bool subtreeIsAffected = false;
 			for (auto change : changes.values())
-			{
 				if (trackedIDs.contains(change->nodeId()))
 				{
 					subtreeIsAffected = true;
 					break;
 				}
-			}
 
 			if (!subtreeIsAffected)
 				isRelevant = false;
@@ -172,7 +170,6 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	alreadyChecked.insert(currentPath);
 	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Move);
 	for (auto move : moves)
-	{
 		if (currentPath.compare(move->nodeB()->persistentUnit()->name()) == 0)
 		{
 			QString unitName = move->nodeA()->persistentUnit()->name();
@@ -189,7 +186,6 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 					return unitName;
 			}
 		}
-	}
 
 	// rootNodeId can't be found but was not deleted!
 	Q_ASSERT(false);
@@ -214,7 +210,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 	tree->buildLookupHash();
 	GenericNode* subtreeRoot = tree->find(rootNodeId_);
 	if (!subtreeRoot)
-		return QSet<Model::NodeIdType>();
+		return QSet<Model::NodeIdType>{};
 
 	Q_ASSERT(subtreeRoot != nullptr);
 

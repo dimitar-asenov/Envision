@@ -63,7 +63,7 @@ class FILEPERSISTENCE_API Diff
 		 * If a change for \a id already exists, its \a structFlag is set,
 		 * otherwise a new change with that flag is created.
 		 */
-		void setStructureFlagForId(Model::NodeIdType, std::shared_ptr<ChangeDescription> causingChange);
+		void setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDescription> causingChange);
 
 		/**
 		 * Removes all nodes that are used for persistent unit linking from \a nodes.

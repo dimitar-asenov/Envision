@@ -29,13 +29,17 @@
 #include "../filepersistence_api.h"
 #include "GenericPersistentUnit.h"
 
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
 
 class GenericNode;
 class PiecewiseLoader;
 struct NodeData;
 
-// TODO It might be good to separate trees with piecewise loaders and other "kinds" of trees into subclasses.
+/**
+ * TODO It might be good to separate trees with piecewise loaders and other "kinds" of trees into subclasses.
+ */
 class FILEPERSISTENCE_API GenericTree {
 	public:
 
@@ -86,7 +90,10 @@ class FILEPERSISTENCE_API GenericTree {
 
 		QHash<QString, std::shared_ptr<GenericPersistentUnit>> persistentUnits_;
 
-		constexpr static int ALLOCATION_CHUNK_SIZE = 1000; // num elements to allocate at once
+		/**
+		 * num elements to allocate at once
+		 */
+		constexpr static int ALLOCATION_CHUNK_SIZE = 1000;
 		QList<GenericNode*> emptyChunks_;
 
 		GenericNode* emptyChunk();

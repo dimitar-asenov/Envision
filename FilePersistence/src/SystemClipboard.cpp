@@ -38,7 +38,7 @@ static const QString CLIPBOARD_TAG = "clipboard";
 const QString SystemClipboard::NULL_STRING = "____NULL____";
 
 SystemClipboard::SystemClipboard() :
-	xml(nullptr), numNodes_{0}
+	xml{nullptr}, numNodes_{0}
 {
 	readClipboard();
 }
@@ -53,8 +53,7 @@ SystemClipboard* SystemClipboard::clone() const
 	return new SystemClipboard{};
 }
 
-// Methods from Persistent Store
-void SystemClipboard::saveTree(::Model::TreeManager* manager, const QString &name)
+void SystemClipboard::saveTree(TreeManager* manager, const QString &name)
 {
 	if (manager->root())
 	{
@@ -102,7 +101,7 @@ void SystemClipboard::saveNode(const Node *node, const QString &name)
 	xml->endSaveChildNode();
 }
 
-Node* SystemClipboard::loadTree(::Model::TreeManager*, const QString &, bool)
+Node* SystemClipboard::loadTree(TreeManager*, const QString &, bool)
 {
 	throw FilePersistenceException{"The clipboard does not support the loadTree() method."};
 }
@@ -175,7 +174,6 @@ QString SystemClipboard::loadReferenceValue(Reference*)
 	return name;
 }
 
-// Methods from ClipboardStore
 void SystemClipboard::putNode(const Node* node)
 {
 	QList<const Node*> nodes;
@@ -255,7 +253,7 @@ void SystemClipboard::next()
 	else throw FilePersistenceException{"Could not find next clipboard element."};
 }
 
-Node* SystemClipboard::create(::Model::TreeManager*, Node* parent)
+Node* SystemClipboard::create(TreeManager*, Node* parent)
 {
 	Node* node = Node::createNewNode(xml->getType(), parent, *this, false);
 	return node;

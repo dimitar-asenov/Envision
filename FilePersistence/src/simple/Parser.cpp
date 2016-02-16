@@ -29,27 +29,9 @@
 
 namespace FilePersistence {
 
-const QString PREFIX_STRING{"S_"};
-const QString PREFIX_INTEGER{"I_"};
-const QString PREFIX_DOUBLE{"D_"};
-/**
- * If true, sort children by label when writing encoding.
- * This is to ensure consistency between all methods used to produce Envision encodings.
- */
-const bool SORT_BY_LABEL = true;
-
-inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
-{
-	int numTabs = 0;
-
-	for (int i = lineStart; i<=lineEnd; ++i)
-	{
-		if (data[i] == '\t') ++numTabs;
-		else break;
-	}
-
-	return numTabs;
-}
+const QString Parser::PREFIX_STRING{"S_"};
+const QString Parser::PREFIX_INTEGER{"I_"};
+const QString Parser::PREFIX_DOUBLE{"D_"};
 
 QString Parser::escape(const QString& line)
 {
@@ -159,6 +141,19 @@ uchar Parser::hexDigitToChar(char d, bool& ok)
 	return 0;
 }
 
+inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
+{
+	int numTabs = 0;
+
+	for (int i = lineStart; i<=lineEnd; ++i)
+	{
+		if (data[i] == '\t') ++numTabs;
+		else break;
+	}
+
+	return numTabs;
+}
+
 bool Parser::nextNonEmptyLine(const char* data, int dataSize, int& lineStart, int& lineEnd)
 {
 	lineStart = lineEnd + 1;
@@ -166,7 +161,8 @@ bool Parser::nextNonEmptyLine(const char* data, int dataSize, int& lineStart, in
 	while (lineStart < dataSize)
 	{
 		auto c = data[lineStart];
-		Q_ASSERT((c & (char)0x80) == 0); // Make sure that this character is an ASCII one and not some UTF-8 codepoint
+		// Make sure that this character is an ASCII one and not some UTF-8 codepoint
+		Q_ASSERT((c & (char)0x80) == 0);
 		Q_ASSERT(c != 0);
 		if (c =='\n' || c== '\r') ++lineStart;
 		else break;
@@ -195,19 +191,21 @@ bool Parser::nextNonEmptyLine(const char* data, int dataSize, int& lineStart, in
 			lineEnd += utf8Bytes;
 			onlyWhiteSpace = false;
 		}
+		else if (c == '\n' || c == '\r')
+			break;
 		else
 		{
-			if (c == '\n' || c == '\r') break;
-			else
-			{
-				++lineEnd;
-				if (c != ' ' && c != '\t') onlyWhiteSpace = false;
-			}
+			++lineEnd;
+			if (c != ' ' && c != '\t') onlyWhiteSpace = false;
 		}
 	}
 
 	--lineEnd;
-	if (lineEnd >= dataSize) lineEnd = dataSize - 1; // To compensate for possible unicode issues
+	if (lineEnd >= dataSize)
+	{
+		// To compensate for possible unicode issues
+		lineEnd = dataSize - 1;
+	}
 
 	if (lineEnd >= lineStart)
 	{
@@ -259,9 +257,7 @@ QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 	for (int i = 0; i<tabLevel; ++i) stream << '\t';
 	stream << node->label() << ' ' << (isPU ? GenericNode::PERSISTENT_UNIT_TYPE : node->type());
 	if (!node->id().isNull())
-	{
 		stream << ' ' << node->id().toString() << ' ' << node->parentId().toString();
-	}
 
 	if (isPU)
 	{
@@ -315,7 +311,8 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 	GenericNode* top = nullptr;
 
 	int start = 0;
-	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
+	// This is must be initialized to -1 for the first call to nextLine.
+	int lineEnd = -1;
 
 	// TODO: Do not rely on indentation, instead use the parentID (will this work in the clipboard?)
 	while ( nextNonEmptyLine(dataCopy, dataLength, start, lineEnd) )
@@ -345,7 +342,11 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 		}
 
 		// The top of the stack should now contain the element that we must add now
-		if (!lazy) nodeStack.last()->label(); // This will ensure that all data is read. We don't actually need the name.
+		if (!lazy)
+		{
+			// This will ensure that all data is read. We don't actually need the name.
+			nodeStack.last()->label();
+		}
 	}
 
 	return top;
@@ -354,7 +355,8 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 {
 	int start = 0;
-	int lineEnd = lineLength - 1; // Last character which belongs to the line, excluding new line characters.
+	// Last character which belongs to the line, excluding new line characters.
+	int lineEnd = lineLength - 1;
 
 	auto tabLevel = countTabs(line, start, lineEnd);
 
@@ -410,7 +412,11 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 	// Ignore white spaces
 	++start;
 	while (start <= lineEnd && (line[start] == ' ' || line[start] == '\t')) ++start;
-	if (start > lineEnd) return; // no value
+	if (start > lineEnd)
+	{
+		// no value
+		return;
+	}
 
 	if (PREFIX_STRING == QString::fromLatin1(line + start, PREFIX_STRING.length()))
 	{

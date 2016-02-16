@@ -30,7 +30,7 @@ namespace FilePersistence {
 
 PiecewiseLoader::PiecewiseLoader(std::shared_ptr<GenericTree>& tree) : tree_{tree}
 {
-    tree_->setPiecewiseLoader(std::shared_ptr<PiecewiseLoader>(this));
+	 tree_->setPiecewiseLoader(std::shared_ptr<PiecewiseLoader>{this});
 }
 
 PiecewiseLoader::~PiecewiseLoader() {}
@@ -63,7 +63,8 @@ GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
 	Q_ASSERT(pu);
 
 	auto data = nodeData.nodeLine_.toUtf8();
-	auto pair = pu->newOrExistingNode(data.constData(), data.length()); // Will eagerly load the node's contents
+	// Will eagerly load the node's contents
+	auto pair = pu->newOrExistingNode(data.constData(), data.length());
 	auto node = pair.second;
 	if (pair.first)
 		node->linkNode();

@@ -122,7 +122,7 @@ void GenericTree::buildLookupHash()
 
 		for (auto pu : persistentUnits())
 		{
-			QList<GenericNode*> stack = {pu->unitRootNode()};
+			QList<GenericNode*> stack{pu->unitRootNode()};
 			while (!stack.isEmpty())
 			{
 				auto node = stack.takeLast();

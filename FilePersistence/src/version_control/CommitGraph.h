@@ -30,7 +30,7 @@
 
 namespace FilePersistence {
 
-struct CommitGraphItem
+struct FILEPERSISTENCE_API CommitGraphItem
 {
 	QString commitSHA1_;
 
@@ -46,7 +46,7 @@ class FILEPERSISTENCE_API CommitGraph
 	public:
 		CommitGraph(QString start, QString end);
 
-		void add(QString fromCommitSHA, QString toCommitSHA);
+		void add(QString fromCommitSHA1, QString toCommitSHA1);
 
 		const CommitGraphItem* find(QString commit) const;
 

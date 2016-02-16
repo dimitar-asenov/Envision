@@ -46,10 +46,8 @@ NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 				result.standardout().size() == 2);
 
 	for (auto line : result.standardout())
-	{
 		if (!isPersistenceUnit(line))
 			return parseGrepLine(line);
-	}
 	Q_ASSERT(false);
 }
 
@@ -64,13 +62,11 @@ QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 	QList<NodeData> children;
 
 	for (auto line : result.standardout())
-	{
 		if (!isPersistenceUnit(line))
 		{
 			auto nodeData = parseGrepLine(line);
 			children.append(nodeData);
 		}
-	}
 
 	return children;
 }

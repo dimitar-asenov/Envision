@@ -53,7 +53,7 @@ struct GitCommitExtract
 
 int gitDiffExtractFileCallBack(
 				 const git_diff_delta *delta,
-				 float /*progress*/,
+				 float,
 				 void* carryAlongData)
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
@@ -85,7 +85,7 @@ void createNodeAndAppend(const git_diff_line* line, const char* filePath, Generi
 
 int gitDiffExtractLineCallBack(
 				 const git_diff_delta* delta,
-				 const git_diff_hunk* /*hunk*/,
+				 const git_diff_hunk*,
 				 const git_diff_line* line,
 				 void* carryAlongData)
 {
@@ -258,13 +258,13 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	if (!treeA)
 	{
 		QString sha1A = getSHA1(revisionA);
-		treeA = std::shared_ptr<GenericTree>(new GenericTree{projectName()});
+		treeA = std::shared_ptr<GenericTree>{new GenericTree{projectName()}};
 		new GitPiecewiseLoader{treeA, this, sha1A};
 	}
 	if (!treeB)
 	{
 		QString sha1B = getSHA1(revisionB);
-		treeB = std::shared_ptr<GenericTree>(new GenericTree{projectName()});
+		treeB = std::shared_ptr<GenericTree>{new GenericTree{projectName()}};
 		new GitPiecewiseLoader{treeB, this, sha1B};
 	}
 
@@ -411,9 +411,9 @@ QString GitRepository::getSHA1(QString revision) const
 		return revision;
 }
 
-void GitRepository::checkout(QString revesion, bool force)
+void GitRepository::checkout(QString revision, bool force)
 {
-	if (revesion.compare(WORKDIR) != 0)
+	if (revision.compare(WORKDIR) != 0)
 	{
 		git_checkout_options options;
 		git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);
@@ -421,11 +421,11 @@ void GitRepository::checkout(QString revesion, bool force)
 		options.checkout_strategy = force ? GIT_CHECKOUT_FORCE : GIT_CHECKOUT_SAFE;
 
 		int errorCode = 0;
-		if (revesion.compare(INDEX) == 0)
+		if (revision.compare(INDEX) == 0)
 			errorCode = git_checkout_index(repository_, nullptr, &options);
 		else
 		{
-			git_commit* gitCommit = parseCommit(revesion);
+			git_commit* gitCommit = parseCommit(revision);
 			errorCode = git_checkout_tree(repository_, (git_object*)gitCommit, &options);
 
 			git_commit_free(gitCommit);
@@ -927,9 +927,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	const git_index_entry* entry = git_index_get_bypath(index, path, 0);
 
 	if (entry == nullptr)
-	{
 		return new CommitFile{};
-	}
 
 	git_checkout_options options;
 	git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);
@@ -970,7 +968,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	char* content = new char[totalFileSize];
 	memcpy(content, mapped, totalFileSize);
 
-	CommitFile* commitFile = new CommitFile{relativePath, totalFileSize, std::unique_ptr<char[]>(content)};
+	CommitFile* commitFile = new CommitFile{relativePath, totalFileSize, std::unique_ptr<char[]>{content}};
 
 	success = file.remove();
 	Q_ASSERT(success);
@@ -1034,16 +1032,20 @@ git_commit* GitRepository::parseCommit(QString revision) const
 	switch (errorCode)
 	{
 		case GIT_ENOTFOUND:
+		{
 			std::cout << "Error: " << revision.toStdString().c_str() << " not found!" << std::endl;
 			break;
-
+		}
 		case GIT_EAMBIGUOUS:
+		{
 			std::cout << "Error: " << revision.toStdString().c_str() << " is ambiguous!" << std::endl;
 			break;
-
+		}
 		case GIT_EINVALIDSPEC:
+		{
 			std::cout << "Error: " << revision.toStdString().c_str() << " is invalid!" << std::endl;
 			break;
+		}
 	}
 	checkError(errorCode);
 

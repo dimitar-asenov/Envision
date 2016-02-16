@@ -28,7 +28,7 @@
 
 namespace FilePersistence {
 
-LinkedChangesSet::LinkedChangesSet() : QSet<LinkedChanges>() {}
+LinkedChangesSet::LinkedChangesSet() : QSet<LinkedChanges>{} {}
 
 LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const ChangeDependencyGraph &cdgB)
 {
@@ -52,13 +52,9 @@ LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const Chan
 LinkedChanges LinkedChangesSet::findLinkedChanges(Model::NodeIdType oldChangeId, bool inBranchA)
 {
 	for (auto linkedChanges : *this)
-	{
 		for (auto change : *linkedChanges)
-		{
 			if (change->nodeId() == oldChangeId && (changesOfBranchA_.contains(change) == inBranchA))
 				return linkedChanges;
-		}
-	}
 	Q_ASSERT(false);
 }
 

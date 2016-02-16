@@ -46,7 +46,6 @@ const QString SimpleTextFileStore::NULL_STRING = "____NULL____";
  */
 const bool GENERATE_PUS = true;
 
-// TODO the Envision folder should be taken from the environment not hardcoded.
 SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
 	baseFolder_{baseDir.isNull() ? QDir::home().path() +
 											 QDir::toNativeSeparators("/Envision/projects")
@@ -69,11 +68,11 @@ SimpleTextFileStore* SimpleTextFileStore::clone() const
 	return ss;
 }
 
-void SimpleTextFileStore::setBaseFolder(const QString& path)
+void SimpleTextFileStore::setBaseFolder(const QString& baseFolder)
 {
 	Q_ASSERT(!fileGetter_);
 	Q_ASSERT(!externalTree_);
-	baseFolder_ = path;
+	baseFolder_ = baseFolder;
 }
 
 QString SimpleTextFileStore::getPersistenceUnitName(const Model::Node *node)
@@ -98,10 +97,6 @@ QString SimpleTextFileStore::relativeDirectoryPathForPersistenceUnit(const Model
 
 	 return "";
 }
-
-//**********************************************************************************************************************
-// Methods from Persistent Store
-//**********************************************************************************************************************
 
 void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &name)
 {
@@ -180,7 +175,8 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	QString relativeDirectory = relativeDirectoryPathForPersistenceUnit(node);
 	QString relativeFileName = relativeDirectory + fileName;
 
-	if ( node->parent() ) // If this is not the root node, then we should put a reference to this node
+	// If this is not the root node, then we should put a reference to this node
+	if ( node->parent() )
 	{
 		auto child = genericNode_->attachChild(genericNode_->persistentUnit()->newNode());
 		child->setLabel(name);
@@ -210,7 +206,7 @@ void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, con
 {
 	// Put all existing PersistentUnits (except for the root) on the stack
 	auto rootNode = tree->root();
-	QList<GenericNode*> stack = {};
+	QList<GenericNode*> stack{};
 	for ( auto pu : tree->persistentUnits() )
 	{
 		auto puRoot = pu->unitRootNode();
@@ -223,15 +219,14 @@ void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, con
 		stack << writeGenericNodeToFile(rootNode, destDir, name, persistentUnitTypes);
 	}
 	else
-	{
 		stack << writeGenericNodeToFile(rootNode, destDir, name, {});
-	}
 
 	// For each pu write and clean up
 	while (!stack.isEmpty())
 	{
 		auto pu = stack.takeLast();
-		stack.removeAll(pu); // Make sure to remove all occurences of PUs as soon as we see one of them.
+		// Make sure to remove all occurences of PUs as soon as we see one of them.
+		stack.removeAll(pu);
 		stack << writeGenericNodeToFile(pu, destDir, pu->id().toString(), persistentUnitTypes);
 	}
 }
@@ -401,7 +396,8 @@ Model::LoadedNode SimpleTextFileStore::loadNode(Model::Node* parent, bool loadPa
 	Model::LoadedNode node;
 	node.name = genericNode_->label();
 	node.node = Model::Node::createNewNode(genericNode_->type(), parent, *this, partiallyLoadingATree_ && loadPartially);
-	treeManager_->nodeIdMap().setId( node.node, genericNode_->id() ); // Record id
+	// Record id
+	treeManager_->nodeIdMap().setId( node.node, genericNode_->id() );
 	return node;
 }
 

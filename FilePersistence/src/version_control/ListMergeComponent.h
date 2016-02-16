@@ -122,8 +122,10 @@ class ListMergeComponent : public ConflictPipelineComponent
 		/**
 		 * Marks all chunks that transitively depend on \a chunk as conflicting. \a chunk itself is not explicitly marked but
 		 * implicitly if it transitively depends on itself.
+		 *
+		 * TODO rename to reflect that chunk is also marked
 		 */
-		void markDependingAsConflicting(Chunk* chunk); // TODO rename to reflect that chunk is also marked
+		void markDependingAsConflicting(Chunk* chunk);
 
 
 		static bool elementIsStable(const Model::NodeIdType& elem,

@@ -31,7 +31,7 @@
 
 namespace FilePersistence {
 
-class GitPiecewiseLoader : public PiecewiseLoader
+class FILEPERSISTENCE_API GitPiecewiseLoader : public PiecewiseLoader
 {
 	public:
 		GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree, const GitRepository* repo, QString revision);

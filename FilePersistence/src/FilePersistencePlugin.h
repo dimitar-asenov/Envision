@@ -40,6 +40,11 @@ class FilePersistencePlugin : public QObject, public Core::EnvisionPlugin
 	public:
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
+
+		/**
+		 * Syntax for tests: pluginName:testName1[>arg1,arg2,...][:testName2[>arg1,arg2,...]:...]
+		 * Currently arguments don't work but multiple tests do.
+		 */
 		virtual void selfTest(QString testArgs) override;
 };
 

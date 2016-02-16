@@ -33,7 +33,7 @@
 
 namespace FilePersistence {
 
-class ConflictPipelineComponent
+class FILEPERSISTENCE_API ConflictPipelineComponent
 {
 	public:
 		virtual ~ConflictPipelineComponent() = 0;

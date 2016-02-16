@@ -56,7 +56,7 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
-		void setChildren(QList<GenericNode*>);
+		void setChildren(QList<GenericNode*> children);
 
 		void resetValue(ValueType type, const QString& value);
 
@@ -111,11 +111,11 @@ class FILEPERSISTENCE_API GenericNode {
 		friend class GenericPersistentUnit;
 		friend class PiecewiseLoader;
 
-		// //////////////////////////////////////////////////////////////////////////////////////////
-		// !!!
-		// When adding new members, make sure to reset them in the various reset() methods
-		// !!!
-
+		/**
+		 * !!!
+		 * When adding new members, make sure to reset them in the various reset() methods
+		 * !!!
+		 */
 		QString label_;
 		QString type_;
 		QString value_;
@@ -134,7 +134,6 @@ class FILEPERSISTENCE_API GenericNode {
 		int dataLineLength_{};
 
 		GenericPersistentUnit* persistentUnit_{};
-		// //////////////////////////////////////////////////////////////////////////////////////////
 
 		GenericNode();
 

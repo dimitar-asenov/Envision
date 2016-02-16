@@ -57,84 +57,81 @@ std::shared_ptr<GenericTree> Merge::mergedTree()
 	return treeMerged_;
 }
 
-// ======== private ========
-
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
 	// TODO: fill those lists correctly
-	const QStringList listTypes = {"StatementItemList",
-					  "TypedListOfResult",
-					  "TypedListOfFormalTypeArgument",
-					  "TypedListOfExpression",
-					  "TypedListOfDeclaration",
-					  "TypedListOfMemberInitializer",
-					  "TypedListOfEnumerator"
-					 };
+	const QStringList listTypes{"StatementItemList",
+										 "TypedListOfResult",
+										 "TypedListOfFormalTypeArgument",
+										 "TypedListOfExpression",
+										 "TypedListOfDeclaration",
+										 "TypedListOfMemberInitializer",
+										 "TypedListOfEnumerator"
+										};
 
-	const QStringList unorderedTypes = {"TypedListOfClass",
-							 "TypedListOfMethod",
-							 "TypedListOfFormalArgument",
-							 "TypedListOfFormalResult",
-							 "TypedListOfField",
-							 "TypedListOfUsedLibrary"
-							};
+	const QStringList unorderedTypes{"TypedListOfClass",
+												"TypedListOfMethod",
+												"TypedListOfFormalArgument",
+												"TypedListOfFormalResult",
+												"TypedListOfField",
+												"TypedListOfUsedLibrary"
+											  };
 
+	const QStringList statements{"Block",
+										  "BreakStatement",
+										  "CaseStatement",
+										  "ContinueStatement",
+										  "DeclarationStatement",
+										  "ExpressionStatement",
+										  "ForEachStatement",
+										  "IfStatement",
+										  "LoopStatement",
+										  "ReturnStatement",
+										  "Statement",
+										  "SwitchStatement",
+										  "TryCatchFinallyStatement"};
 
-	const QStringList statements = {"Block",
-											  "BreakStatement",
-											  "CaseStatement",
-											  "ContinueStatement",
-											  "DeclarationStatement",
-											  "ExpressionStatement",
-											  "ForEachStatement",
-											  "IfStatement",
-											  "LoopStatement",
-											  "ReturnStatement",
-											  "Statement",
-											  "SwitchStatement",
-											  "TryCatchFinallyStatement"};
+	const QStringList declarations{"Class",
+											 "Declaration",
+											 "ExplicitTemplateInstantiation",
+											 "Field",
+											 "Method",
+											 "Module",
+											 "NameImport",
+											 "Project",
+											 "TypeAlias",
+											 "VariableDeclaration"};
 
-	const QStringList declarations = {"Class",
-												 "Declaration",
-												 "ExplicitTemplateInstantiation",
-												 "Field",
-												 "Method",
-												 "Module",
-												 "NameImport",
-												 "Project",
-												 "TypeAlias",
-												 "VariableDeclaration"};
+	const QStringList extraUnitTypes{"CommentStatementItem",
+												"CatchClause",
+												"StatementItemList"};
 
-	const QStringList extraUnitTypes = {"CommentStatementItem",
-													"CatchClause",
-													"StatementItemList"};
+	const QStringList debugAndTestUnitTypes{"TestConflictType",
+														 "TestListType",
+														 "TestUnorderedType",
+														 "ListElement",
+														 "project",
+														 "package",
+														 "class",
+														 "fieldList",
+														 "methodList",
+														 "field",
+														 "method",
+														 "Method",
+														 "loop",
+														 "TypedListOfMethod"};
 
-	const QStringList debugAndTestUnitTypes = {"TestConflictType",
-															 "TestListType",
-															 "TestUnorderedType",
-															 "ListElement",
-															 "project",
-															 "package",
-															 "class",
-															 "fieldList",
-															 "methodList",
-															 "field",
-															 "method",
-															 "Method",
-															 "loop",
-															 "TypedListOfMethod"};
+	const QStringList debugAndTestListTypes{"TestListType",
+														 "TestNoConflictList",
+														 "project",
+														 "package",
+														 "fieldList",
+														 "methodList",
+														 "method"};
 
-	const QStringList debugAndTestListTypes = {"TestListType",
-															 "TestNoConflictList",
-															 "project",
-															 "package",
-															 "fieldList",
-															 "methodList",
-															 "method"};
-
-	const QStringList debugAndTestUnordered = {"TestUnorderedType",
-															 "TypedListOfMethod"};
+	const QStringList debugAndTestUnordered{"TestUnorderedType",
+														 "TypedListOfMethod"};
 
 	listTypes_ = QSet<QString>::fromList(listTypes + debugAndTestListTypes);
 	unorderedTypes_ = QSet<QString>::fromList(unorderedTypes + debugAndTestUnordered);
@@ -160,10 +157,12 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	switch (kind)
 	{
 		case Kind::AlreadyUpToDate:
+		{
 			stage_ = Merge::Stage::Committed;
 			break;
-
+		}
 		case Kind::FastForward:
+		{
 			if (fastForward)
 			{
 				QString branch = repository_->currentBranch();
@@ -178,11 +177,12 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 				stage_ = Stage::WroteToIndex;
 			}
 			break;
-
+		}
 		case Kind::TrueMerge:
+		{
 			performTrueMerge();
 			break;
-
+		}
 		default:
 			Q_ASSERT(false);
 	}
@@ -237,7 +237,8 @@ void Merge::performTrueMerge()
 	// ### THE PIPLELINE ###
 	for (auto component : conflictPipeline_)
 	{
-		linkedChangesSet = LinkedChangesSet{transition.getNewState()}; // deep copy current state
+		// deep copy current state
+		linkedChangesSet = LinkedChangesSet{transition.getNewState()};
 		transition = component->run(treeA_, treeB_, treeBase_, cdgA, cdgB,
 											 conflictingChanges_, conflictPairs_, linkedChangesSet);
 		// NOTE this is where one would check the transition of a component.
@@ -304,14 +305,12 @@ void Merge::addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
 									 const ChangeDependencyGraph& cdg)
 {
 	for (auto dependency : cdg.getDependencies(change))
-	{
 		if (!queue.contains(dependency))
 		{
 			Q_ASSERT(!conflictingChanges_.contains(dependency));
 			addDependencies(queue, dependency, cdg);
 			queue.append(dependency);
 		}
-	}
 }
 
 
@@ -321,21 +320,17 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 	// sort changes topologically before applying
 	QList<std::shared_ptr<ChangeDescription>> queue;
 	for (auto change : cdg.changes())
-	{
 		if (!conflictingChanges_.contains(change) && !queue.contains(change))
 		{
 			addDependencies(queue, change, cdg);
 			queue.append(change);
 		}
-	}
 
-	/* We apply changes in a way that make them indempotent.
-	 * This makes it possible for both branches to make the exact same change
-	 * e.g. delete the same node.
-	 */
+	// We apply changes in a way that make them indempotent.
+	// This makes it possible for both branches to make the exact same change
+	// e.g. delete the same node.
 
 	for (auto change : queue)
-	{
 		switch (change->type())
 		{
 			case ChangeType::Insertion:
@@ -402,7 +397,6 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 			default:
 				Q_ASSERT(false);
 		}
-	}
 }
 
 }

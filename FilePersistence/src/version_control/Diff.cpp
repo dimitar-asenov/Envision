@@ -61,10 +61,8 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type) const
 {
 	IdToChangeDescriptionHash changesOfType;
 	for (auto change : changeDescriptions_.values())
-	{
 		if (change->type() == type)
 			changesOfType.insert(change->nodeId(), change);
-	}
 	return changesOfType;
 }
 
@@ -72,14 +70,11 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 {
 	IdToChangeDescriptionHash changesOfType;
 	for (auto change : changeDescriptions_.values())
-	{
 		if (change->type() == type && change->hasFlags(flags))
 			changesOfType.insert(change->nodeId(), change);
-	}
 	return changesOfType;
 }
 
-// Private methods
 void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB)
 {
 	QSet<Model::NodeIdType> onlyInNodesB = QSet<Model::NodeIdType>::fromList(nodesB.keys());
@@ -101,10 +96,9 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 			onlyInNodesB.remove(iter.key());
 		}
 	}
-	/* Intermediate state 2
-	 * See report for details.
-	 * TODO add link to report
-	 */
+	// Intermediate state 2
+	// See report for details.
+	// TODO add link to report
 	for (auto id : onlyInNodesB)
 	{
 		iter = nodesB.find(id);
@@ -137,9 +131,7 @@ void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDes
 		change->setStructureChangeFlag(true);
 	}
 	else
-	{
 		changeDescriptions_.value(id).get()->setStructureChangeFlag(true);
-	}
 
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
 	Q_ASSERT(changeDescriptions_.value(id)->debugHasNodes());
@@ -148,10 +140,8 @@ void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDes
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
 	for (auto node : nodes.values())
-	{
 		if (node->type() == GenericNode::PERSISTENT_UNIT_TYPE)
 			nodes.remove(node->id(), node);
-	}
 }
 
 }
