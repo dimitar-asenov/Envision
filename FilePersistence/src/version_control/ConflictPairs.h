@@ -33,7 +33,7 @@ namespace FilePersistence {
 /**
  * This is a simple wrapper around a MultiHash to ensure consistency.
  */
-class ConflictPairs
+class FILEPERSISTENCE_API ConflictPairs
 {
 	public:
 		ConflictPairs();

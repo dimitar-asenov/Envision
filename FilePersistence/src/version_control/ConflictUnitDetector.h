@@ -32,7 +32,7 @@ namespace FilePersistence {
 
 using ConflictUnitSet = QMultiHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 
-class ConflictUnitDetector : public ConflictPipelineComponent
+class FILEPERSISTENCE_API ConflictUnitDetector : public ConflictPipelineComponent
 {
 	public:
 		ConflictUnitDetector(QSet<QString>& conflictTypes,

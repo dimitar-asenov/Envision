@@ -26,11 +26,13 @@
 
 #pragma once
 
+#include "../filepersistence_api.h"
+
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
-struct Chunk
+struct FILEPERSISTENCE_API Chunk
 {
 		bool stable_{};
 		bool noConflicts_{};
@@ -44,7 +46,7 @@ struct Chunk
 			  QList<Model::NodeIdType> idListBase);
 };
 
-class Diff3Parse
+class FILEPERSISTENCE_API Diff3Parse
 {
 	friend class ListMergeComponent;
 	private:

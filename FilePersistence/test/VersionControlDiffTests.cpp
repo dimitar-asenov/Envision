@@ -38,7 +38,8 @@
 
 namespace FilePersistence {
 
-class addAndRename : public SelfTest::Test<FilePersistencePlugin, addAndRename> { public: void test()
+class FILEPERSISTENCE_API addAndRename
+ : public SelfTest::Test<FilePersistencePlugin, addAndRename> { public: void test()
 {
 	VCTestProject p{"TestProject2"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
@@ -50,7 +51,7 @@ class addAndRename : public SelfTest::Test<FilePersistencePlugin, addAndRename> 
 	CHECK_CONDITION(structChange->hasFlags(ChangeDescription::Structure));
 }};
 
-class stmtEdit : public SelfTest::Test<FilePersistencePlugin, stmtEdit> { public: void test()
+class FILEPERSISTENCE_API stmtEdit : public SelfTest::Test<FilePersistencePlugin, stmtEdit> { public: void test()
 {
 	VCTestProject p{"TestProject1"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
@@ -63,7 +64,7 @@ class stmtEdit : public SelfTest::Test<FilePersistencePlugin, stmtEdit> { public
 	CHECK_CONDITION(diff.changes().size() > 0);
 }};
 
-class deletion : public SelfTest::Test<FilePersistencePlugin, deletion> { public: void test()
+class FILEPERSISTENCE_API deletion : public SelfTest::Test<FilePersistencePlugin, deletion> { public: void test()
 {
 	VCTestProject p{"TestDiff_Delete", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
@@ -74,7 +75,7 @@ class deletion : public SelfTest::Test<FilePersistencePlugin, deletion> { public
 	CHECK_CONDITION(diff.changes().size() == 2);
 }};
 
-class insert : public SelfTest::Test<FilePersistencePlugin, insert> { public: void test()
+class FILEPERSISTENCE_API insert : public SelfTest::Test<FilePersistencePlugin, insert> { public: void test()
 {
 	VCTestProject p{"TestDiff_Insert", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
@@ -85,7 +86,8 @@ class insert : public SelfTest::Test<FilePersistencePlugin, insert> { public: vo
 	CHECK_CONDITION(diff.changes().size() == 2);
 }};
 
-class intValueChange : public SelfTest::Test<FilePersistencePlugin, intValueChange> { public: void test()
+class FILEPERSISTENCE_API intValueChange
+ : public SelfTest::Test<FilePersistencePlugin, intValueChange> { public: void test()
 {
 	VCTestProject p{"TestDiff_IntValueChange", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
@@ -94,7 +96,7 @@ class intValueChange : public SelfTest::Test<FilePersistencePlugin, intValueChan
 	CHECK_CONDITION(diff.changes().size() == 1);
 }};
 
-class listReorder : public SelfTest::Test<FilePersistencePlugin, listReorder> { public: void test()
+class FILEPERSISTENCE_API listReorder : public SelfTest::Test<FilePersistencePlugin, listReorder> { public: void test()
 {
 	VCTestProject p{"TestDiff_ListReorder", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
@@ -107,14 +109,15 @@ class listReorder : public SelfTest::Test<FilePersistencePlugin, listReorder> { 
 	CHECK_CONDITION(diff.changes().size() == 3);
 }};
 
-class noChange : public SelfTest::Test<FilePersistencePlugin, noChange> { public: void test()
+class FILEPERSISTENCE_API noChange : public SelfTest::Test<FilePersistencePlugin, noChange> { public: void test()
 {
 	VCTestProject p{"TestDiff_NoChange", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
 	CHECK_CONDITION(diff.changes().size() == 0);
 }};
 
-class parentChange : public SelfTest::Test<FilePersistencePlugin, parentChange> { public: void test()
+class FILEPERSISTENCE_API parentChange
+ : public SelfTest::Test<FilePersistencePlugin, parentChange> { public: void test()
 {
 	VCTestProject p{"TestDiff_ParentChange", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
@@ -127,7 +130,7 @@ class parentChange : public SelfTest::Test<FilePersistencePlugin, parentChange> 
 	CHECK_CONDITION(diff.changes().size() == 3);
 }};
 
-class typeChange : public SelfTest::Test<FilePersistencePlugin, typeChange> { public: void test()
+class FILEPERSISTENCE_API typeChange : public SelfTest::Test<FilePersistencePlugin, typeChange> { public: void test()
 {
 	VCTestProject p{"TestDiff_TypeChange", "TestDiff"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");

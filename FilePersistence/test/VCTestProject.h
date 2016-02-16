@@ -31,7 +31,7 @@
 
 namespace FilePersistence {
 
-class VCTestProject
+class FILEPERSISTENCE_API VCTestProject
 {
 	public:
 		VCTestProject(const QString& testDir, const QString& projectName = {});

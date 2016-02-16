@@ -30,7 +30,7 @@
 
 namespace FilePersistence {
 
-struct CommitGraphItem
+struct FILEPERSISTENCE_API CommitGraphItem
 {
 	QString commitSHA1_;
 

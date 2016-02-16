@@ -31,7 +31,7 @@
 
 namespace FilePersistence {
 
-class ChangeDependencyGraph
+class FILEPERSISTENCE_API ChangeDependencyGraph
 {
 	public:
 		ChangeDependencyGraph(Diff& diff);
