@@ -445,8 +445,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	if (printContext().isClass() && DCast<Module>(method->firstAncestorOfType<Declaration>()) &&
-		 method->typeArguments()->isEmpty())
+	if (!printContext().isClass() && method->typeArguments()->isEmpty())
 		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
