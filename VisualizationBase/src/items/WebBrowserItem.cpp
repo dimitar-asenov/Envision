@@ -24,34 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentBrowser.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/shapes/Shape.h"
-#include "VisualizationBase/src/VisualizationManager.h"
+#include "WebBrowserItem.h"
+#include "../shapes/Shape.h"
+#include "../VisualizationManager.h"
 
-namespace Comments {
+namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VCommentBrowser, "item")
+ITEM_COMMON_DEFINITIONS(WebBrowserItem, "item")
 
-const QSize VCommentBrowser::defaultSize = QSize{400, 300};
+const QSize WebBrowserItem::defaultSize = QSize{400, 300};
 
-VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style)
-	: VCommentBrowser{parent, url, defaultSize, style}
+WebBrowserItem::WebBrowserItem(Item* parent, const QUrl& url, const StyleType* style)
+	: WebBrowserItem{parent, url, defaultSize, style}
 {}
 
-VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size, const StyleType* style)
+WebBrowserItem::WebBrowserItem(Item* parent, const QUrl& url, QSize size, const StyleType* style)
 	: Super{parent, style}, browser_{new QGraphicsWebView{this}}, size_{size}
 {
 	browser_->setUrl(url);
 }
 
-VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style)
+WebBrowserItem::WebBrowserItem(Item* parent, const QString& content, const StyleType* style)
 	: Super{parent, style}, browser_{new QGraphicsWebView{this}}, size_{defaultSize}
 {
 	setContent(content);
 }
 
-VCommentBrowser::~VCommentBrowser()
+WebBrowserItem::~WebBrowserItem()
 {
 	//TODO: Remove this dirty hack. This looks like a bug in QGraphicsWebView, but more investigation is needed.
 	// This item is originally removed from the scene when SAFE_DELETE_ITEM is called. It should not be necessary to
@@ -60,16 +59,16 @@ VCommentBrowser::~VCommentBrowser()
 	// the scene browser_->scene() returns nullptr. This resutls in a Segmentation Fault.
 	// More debugging is required, preferrably with symbols for the source code that happens when the destructor of
 	// QGraphicsWebView is called.
-	Visualization::VisualizationManager::instance().mainScene()->addItem(this);
+	VisualizationManager::instance().mainScene()->addItem(this);
 	SAFE_DELETE(browser_);
 }
 
-void VCommentBrowser::determineChildren()
+void WebBrowserItem::determineChildren()
 {
 	if (size_.isValid() && !heightResizesWithContent_) browser_->resize(size_);
 }
 
-void VCommentBrowser::updateGeometry(int, int)
+void WebBrowserItem::updateGeometry(int, int)
 {
 	auto size = heightResizesWithContent_ ? QSize{size_.width(), browser_->page()->mainFrame()->contentsSize().height()}
 													  : size_;
@@ -86,25 +85,25 @@ void VCommentBrowser::updateGeometry(int, int)
 	}
 }
 
-QList<Visualization::Item*> VCommentBrowser::childItems() const
+QList<Item*> WebBrowserItem::childItems() const
 {
 	return {};
 }
 
-void VCommentBrowser::updateSize(QSize size)
+void WebBrowserItem::updateSize(QSize size)
 {
 	if (size.width() > 0 && size.height() > 0)
 		size_ = size;
 	setUpdateNeeded(StandardUpdate);
 }
 
-void VCommentBrowser::setContent(const QString &content)
+void WebBrowserItem::setContent(const QString &content)
 {
 	browser_->setHtml(content);
 	if (!heightResizesWithContent_) browser_->resize(size_);
 }
 
-void VCommentBrowser::setHeightResizesWithContent(bool heightResizesWithContent)
+void WebBrowserItem::setHeightResizesWithContent(bool heightResizesWithContent)
 {
 	if (heightResizesWithContent_ != heightResizesWithContent)
 	{
@@ -124,7 +123,7 @@ void VCommentBrowser::setHeightResizesWithContent(bool heightResizesWithContent)
 		setUpdateNeeded(StandardUpdate);
 	}
 
-	auto lambda = [this] { setUpdateNeeded(Visualization::Item::StandardUpdate); };
+	auto lambda = [this] { setUpdateNeeded(Item::StandardUpdate); };
 
 	if (heightResizesWithContent && !connection_)
 		connection_ = QObject::connect(browser_, &QGraphicsWebView::geometryChanged, lambda);
@@ -132,7 +131,7 @@ void VCommentBrowser::setHeightResizesWithContent(bool heightResizesWithContent)
 		QObject::disconnect(connection_);
 }
 
-void VCommentBrowser::addJavascriptObject(const QString& name, QObject *object)
+void WebBrowserItem::addJavascriptObject(const QString& name, QObject *object)
 {
 	browser_->page()->mainFrame()->addToJavaScriptWindowObject(name, object);
 }

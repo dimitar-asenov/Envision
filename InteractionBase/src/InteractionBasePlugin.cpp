@@ -36,6 +36,7 @@
 #include "handlers/HRootItem.h"
 #include "handlers/HInfoNode.h"
 #include "handlers/HViewItem.h"
+#include "handlers/HWebBrowserItem.h"
 
 #include "vis/TextAndDescription.h"
 #include "vis/VViewSwitcherEntry.h"
@@ -70,6 +71,7 @@
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/items/WebBrowserItem.h"
 
 #include "SelfTest/src/TestManager.h"
 #include "Logger/src/Log.h"
@@ -100,6 +102,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::PositionLayout::setDefaultClassHandler(HPositionLayout::instance());
 	Visualization::VInfoNode::setDefaultClassHandler(HInfoNode::instance());
 	Visualization::ViewItem::setDefaultClassHandler(HViewItem::instance());
+	Visualization::WebBrowserItem::setDefaultClassHandler(HWebBrowserItem::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.

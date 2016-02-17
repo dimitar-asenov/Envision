@@ -28,7 +28,7 @@
 #include "VisualizationBase/src/overlays/BoxOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 #include "Comments/src/nodes/CommentNode.h"
-#include "Comments/src/items/VCommentBrowser.h"
+#include "VisualizationBase/src/items/WebBrowserItem.h"
 #include "OOModel/src/declarations/Class.h"
 
 namespace Alloy {
@@ -85,7 +85,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	alloyModelGroup->clear();
 
 	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
-	auto aBrowserComment = new Comments::VCommentBrowser{nullptr, anURl};
+	auto aBrowserComment = new Visualization::WebBrowserItem{nullptr, anURl};
 	aBrowserComment->updateSize(QSize{720, 540});
 	aBrowserComment->browser()->settings()->setObjectCacheCapacities(0, 0, 0); //disable the cache
 

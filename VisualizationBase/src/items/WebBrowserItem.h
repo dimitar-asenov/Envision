@@ -26,27 +26,25 @@
 
 #pragma once
 
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/items/Item.h"
-
-#include "../nodes/CommentNode.h"
+#include "../visualizationbase_api.h"
+#include "Item.h"
+#include "ItemStyle.h"
 
 class QGraphicsWebView;
 
-namespace Comments {
+namespace Visualization {
 
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
+class VISUALIZATIONBASE_API WebBrowserItem : public Super<Item>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(WebBrowserItem, ItemStyle)
 
 	public:
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size,
+		WebBrowserItem(Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
+		WebBrowserItem(Item* parent, const QUrl& url, QSize size,
 				const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
-		virtual QList<Visualization::Item*> childItems() const override;
+		WebBrowserItem(Item* parent, const QString& content, const StyleType* style = itemStyles().get());
+		virtual ~WebBrowserItem();
+		virtual QList<Item*> childItems() const override;
 		void updateSize(QSize size);
 
 		void setContent(const QString& content);
@@ -69,6 +67,6 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		QMetaObject::Connection connection_{};
 };
 
-inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}
+inline QGraphicsWebView* WebBrowserItem::browser() const { return browser_;}
 
 }

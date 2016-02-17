@@ -7,7 +7,6 @@ qt5_add_resources(Resource_Cpp "res.qrc" OPTIONS "--no-compress")
 
 add_library(Comments SHARED
 	${Resource_Cpp}
-	src/handlers/HCommentBrowser.h
 	src/handlers/HCommentImage.h
 	src/items/VCommentStyle.h
 	src/commands/CShapeSetProperty.h
@@ -21,7 +20,6 @@ add_library(Comments SHARED
 	src/nodes/CommentDiagramConnector.h
 	src/nodes/CommentDiagramShape.h
 	src/items/VComment.h
-	src/items/VCommentBrowser.h
 	src/items/VCommentDiagram.h
 	src/items/VCommentDiagramConnector.h
 	src/items/VCommentDiagramShape.h
@@ -44,7 +42,6 @@ add_library(Comments SHARED
 	src/toolbars/ColorPicker.h
 	src/toolbars/CommentDiagramToolbar.h
 	src/toolbars/OutlineTypePicker.h
-	src/handlers/HCommentBrowser.cpp
 	src/handlers/HCommentImage.cpp
 	src/items/VCommentStyle.cpp
 	src/commands/CShapeSetProperty.cpp
@@ -58,7 +55,6 @@ add_library(Comments SHARED
 	src/nodes/CommentDiagramConnector.cpp
 	src/nodes/CommentDiagramShape.cpp
 	src/items/VComment.cpp
-	src/items/VCommentBrowser.cpp
 	src/items/VCommentDiagram.cpp
 	src/items/VCommentDiagramConnector.cpp
 	src/items/VCommentDiagramShape.cpp

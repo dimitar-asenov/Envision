@@ -23,24 +23,24 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "HCommentBrowser.h"
+#include "HWebBrowserItem.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
-namespace Comments {
+namespace Interaction {
 
-HCommentBrowser::HCommentBrowser()
+HWebBrowserItem::HWebBrowserItem()
 {}
 
-HCommentBrowser* HCommentBrowser::instance()
+HWebBrowserItem* HWebBrowserItem::instance()
 {
-	static HCommentBrowser h;
+	static HWebBrowserItem h;
 	return &h;
 }
 
-void HCommentBrowser::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
+void HWebBrowserItem::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F11)
 	{

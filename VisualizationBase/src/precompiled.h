@@ -75,6 +75,9 @@
 #if defined(VisualizationBase_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
+#include <QtWebKitWidgets/QGraphicsWebView>
+#include <QtWebKitWidgets/QWebFrame>
+
 #include <QtSvg/QSvgGenerator>
 
 #include <QtPrintSupport/QPrinter>

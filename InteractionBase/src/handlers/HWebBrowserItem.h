@@ -26,21 +26,21 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "../interactionbase_api.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "GenericHandler.h"
 
-namespace Comments {
+namespace Interaction {
 
-class COMMENTS_API HCommentBrowser : public Interaction::GenericHandler {
+class INTERACTIONBASE_API HWebBrowserItem : public GenericHandler {
 
 	public:
-		static HCommentBrowser* instance();
+		static HWebBrowserItem* instance();
 
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 
 	protected:
-		HCommentBrowser();
+		HWebBrowserItem();
 };
 
 }

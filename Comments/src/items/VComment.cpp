@@ -25,7 +25,6 @@
  **********************************************************************************************************************/
 
 #include "VComment.h"
-#include "VCommentBrowser.h"
 #include "VCommentImage.h"
 #include "VCommentDiagram.h"
 #include "VCommentFreeNode.h"
@@ -33,6 +32,7 @@
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/WebBrowserItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
@@ -129,7 +129,7 @@ void VComment::parseLines()
 			if (line == "</html>")
 			{
 				isHTML = false;
-				auto browser = DCast<VCommentBrowser>(createTextualCommentElement(linesOfCurrentElement, true));
+				auto browser = DCast<WebBrowserItem>(createTextualCommentElement(linesOfCurrentElement, true));
 
 				if (browser != nullptr && htmlSize.isValid())
 					browser->updateSize(htmlSize);
@@ -247,7 +247,7 @@ void VComment::parseLines()
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
 			QString url = items.at(0).second;
-			auto browser = new VCommentBrowser{nullptr, QUrl{url}};
+			auto browser = new WebBrowserItem{nullptr, QUrl{url}};
 
 			if (items.size() > 1)
 			{
@@ -351,7 +351,7 @@ Item* VComment::createTextualCommentElement(QStringList& contents, bool asHtml)
 
 		if (asHtml)
 		{
-			auto browser = new VCommentBrowser{this, joined};
+			auto browser = new WebBrowserItem{this, joined};
 			commentElements_.append(browser);
 			item = browser;
 		}

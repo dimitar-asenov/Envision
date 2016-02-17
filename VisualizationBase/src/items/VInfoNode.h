@@ -30,11 +30,9 @@
 #include "../VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "../VisualizationBase/src/nodes/InfoNode.h"
 
-namespace Comments {
-	class VCommentBrowser;
-}
-
 namespace Visualization {
+
+class WebBrowserItem;
 
 class VISUALIZATIONBASE_API VInfoNode :
 		public Super<ItemWithNode<VInfoNode, DeclarativeItem<VInfoNode>, InfoNode>> {
@@ -49,7 +47,7 @@ class VISUALIZATIONBASE_API VInfoNode :
 		virtual void determineChildren() override;
 
 	private:
-		Comments::VCommentBrowser* browser_{};
+		WebBrowserItem* browser_{};
 
 };
 

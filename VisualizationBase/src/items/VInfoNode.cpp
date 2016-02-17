@@ -27,7 +27,7 @@
 
 #include "../declarative/DeclarativeItemDef.h"
 #include "../nodes/InfoNode.h"
-#include "Comments/src/items/VCommentBrowser.h" //TODO: Get rid of this dependency
+#include "WebBrowserItem.h"
 #include "../utils/InfoJavascriptFunctions.h"
 
 namespace Visualization {
@@ -38,7 +38,7 @@ VInfoNode::VInfoNode(Item* parent, NodeType* node, const StyleType* style) :
 		Super{parent, node, style}
 {
 	node->fullUpdate();
-	browser_ = new Comments::VCommentBrowser{this, QString{}};
+	browser_ = new WebBrowserItem{this, QString{}};
 	browser_->setHeightResizesWithContent(true);
 }
 

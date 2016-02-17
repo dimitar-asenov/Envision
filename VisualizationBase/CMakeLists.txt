@@ -256,6 +256,8 @@ add_library(VisualizationBase SHARED
 	src/shapes/FrameStyle.cpp
 	src/declarative/BorderFormElement.h
 	src/declarative/BorderFormElement.cpp
+	src/items/WebBrowserItem.h
+	src/items/WebBrowserItem.cpp
 )
 
 if (WIN32)
