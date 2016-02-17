@@ -726,6 +726,8 @@ OOModel::ReferenceExpression* ExpressionVisitor::createQualifiedReferenceWithTem
 bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
 	OOModel::Expression* ooLeft = nullptr;
+
+	// WORKAROUND
 	// we check for binary operation directly because as of clang 3.8 tree traversal does not work for <<
 	if (auto lhs = llvm::dyn_cast<clang::BinaryOperator>(binaryOperator->getLHS()))
 	{

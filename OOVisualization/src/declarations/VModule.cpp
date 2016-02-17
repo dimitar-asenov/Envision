@@ -40,6 +40,10 @@ ITEM_COMMON_DEFINITIONS(VModule, "item")
 
 VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
+	// TODO: This is a bit of a hack. We should not change our own style
+	if (node->kind() == OOModel::Module::ModuleKind::Folder
+		 && style != itemStyles().get("folder"))
+		setStyle(itemStyles().get("folder"));
 }
 
 void VModule::determineChildren()
