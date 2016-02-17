@@ -30,7 +30,6 @@
 
 #include "CodeUnit.h"
 #include "SpecialCases.h"
-#include "Config.h"
 
 #include "OOModel/src/declarations/Class.h"
 
@@ -101,6 +100,11 @@ inline Export::SourceFragment* CodeComposite::sourceFragment()
 }
 
 inline bool CodeComposite::isTemplateImplementationSeparateFile()
-{ return Config::instance().separateTemplateImplementationSet().contains(name_); }
+{
+	for (auto unit : units_)
+		if (unit->isTemplateImplementationSeparateFile())
+			return true;
+	return false;
+}
 
 }

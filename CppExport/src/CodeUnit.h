@@ -30,6 +30,7 @@
 
 #include "CodeUnitPart.h"
 #include "ExportHelpers.h"
+#include "Config.h"
 
 #include "OOModel/src/declarations/Module.h"
 
@@ -57,6 +58,8 @@ class CPPEXPORT_API CodeUnit
 
 		bool hasNoHeaderPart();
 
+		bool isTemplateImplementationSeparateFile();
+
 	private:
 		QString name_;
 		Model::Node* node_{};
@@ -74,5 +77,9 @@ inline CodeUnitPart* CodeUnit::headerPart() { return &headerPart_; }
 inline CodeUnitPart* CodeUnit::sourcePart() { return &sourcePart_; }
 inline OOModel::Module* CodeUnit::nameSpace() { return ExportHelpers::parentNamespaceModule(node()); }
 inline bool CodeUnit::hasNoHeaderPart() { return hasNoHeaderPart_; }
+
+inline bool CodeUnit::isTemplateImplementationSeparateFile()
+{ return Config::instance().separateTemplateImplementationSet().contains(name_); }
+
 
 }
