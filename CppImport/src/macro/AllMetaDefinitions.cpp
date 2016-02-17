@@ -58,10 +58,6 @@ void AllMetaDefinitions::createMetaDef(QList<Model::Node*> nodes, MacroExpansion
 		clang_.insertDeclarationInFolder(metaDef, expansion->definition()->getMacroInfo()->getDefinitionLoc(),
 													metaDefParent);
 	}
-
-	// qualify the meta call
-	auto callee = DCast<OOModel::ReferenceExpression>(expansion->metaCall()->callee());
-	callee->setPrefix(macroDefinitions_.expansionQualifier(expansion->definition()));
 }
 
 OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::MacroDirective* md)
@@ -73,7 +69,7 @@ OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::Macr
 
 		if (!result)
 		{
-			result = new OOModel::Module{"ExternalMacro"};
+			result = new OOModel::Module{"ExternalMacro", OOModel::Module::ModuleKind::Folder};
 			root_->modules()->append(result);
 		}
 	}
@@ -178,8 +174,7 @@ void AllMetaDefinitions::handleXMacros()
 					// create the meta call that also contains unbound xMacro children
 					auto merged = new OOModel::MetaCallExpression{};
 					merged->setCallee(new OOModel::ReferenceExpression{
-												macroDefinitions_.definitionName(expansion->definition()),
-												macroDefinitions_.expansionQualifier(expansion->definition())});
+												macroDefinitions_.definitionName(expansion->definition())});
 
 					for (auto arg : *expansion->metaCall()->arguments())
 						merged->arguments()->append(arg->clone());
@@ -219,14 +214,12 @@ void AllMetaDefinitions::handleXMacros()
 						// insert meta bindings for this xMacro child
 						auto mapping1 = new OOModel::MetaCallMapping{unboundName};
 						mapping1->setValue(new OOModel::ReferenceExpression{
-													 macroDefinitions_.definitionName(xMacroChildH->definition()),
-													 macroDefinitions_.expansionQualifier(xMacroChildH->definition())});
+													 macroDefinitions_.definitionName(xMacroChildH->definition())});
 						binding1->mappings()->append(mapping1);
 
 						auto mapping2 = new OOModel::MetaCallMapping{unboundName};
 						mapping2->setValue(new OOModel::ReferenceExpression{
-													 macroDefinitions_.definitionName(xMacroChildCpp->definition()),
-													 macroDefinitions_.expansionQualifier(xMacroChildCpp->definition())});
+													 macroDefinitions_.definitionName(xMacroChildCpp->definition())});
 						binding2->mappings()->append(mapping2);
 					}
 

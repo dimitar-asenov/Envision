@@ -60,11 +60,6 @@ class CPPIMPORT_API MacroDefinitions
 
 		QString signature(const clang::MacroDirective* md) const;
 
-		/**
-		 * return a qualifier expression based on the macroDefinitionLocation of md.
-		 */
-		OOModel::ReferenceExpression* expansionQualifier(const clang::MacroDirective* md) const;
-
 		void clear();
 
 	private:
