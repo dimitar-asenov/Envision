@@ -36,6 +36,7 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
+#include "OOModel/src/declarations/NameImport.h"
 
 namespace CppExport {
 
@@ -156,6 +157,8 @@ void ExportHelpers::printDeclarationQualifier(Export::CompositeFragment* fragmen
 
 OOModel::Module* ExportHelpers::parentNamespaceModule(Model::Node* node)
 {
+	if (DCast<OOModel::NameImport>(node)) return nullptr;
+
 	auto parentModule = node->firstAncestorOfType<OOModel::Module>();
 	while (parentModule)
 	{
