@@ -84,7 +84,8 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	*fragment << visit(classs);
 
 	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
-															(method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+															((method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+															  !method->modifiers()->isSet(OOModel::Modifier::Private)) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
 															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
 	QList<Class*> classes{classs};
@@ -213,7 +214,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
 		{
 			return method->typeArguments()->isEmpty() &&
-						 !method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+						 (!method->modifiers()->isSet(OOModel::Modifier::Inline) ||
+						  method->modifiers()->isSet(OOModel::Modifier::Private)) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Default);
