@@ -151,6 +151,18 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 
 					result.append(new CodeUnit{typedListCodeUnitName, explicitTemplateInstantiation});
 				}
+				else if (auto nameImport = DCast<OOModel::NameImport>(subDeclaration))
+				{
+					auto nameImportCodeUnitName = codeUnitName + "|NameImportInClass";
+
+					auto it = mergeMap.find(codeUnitName);
+					if (it != mergeMap.end())
+						mergeMap.insert(nameImportCodeUnitName, *it);
+					else
+						mergeMap.insert(nameImportCodeUnitName, codeUnitName);
+
+					result.append(new CodeUnit{nameImportCodeUnitName, nameImport});
+				}
 			return;
 		}
 		else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
