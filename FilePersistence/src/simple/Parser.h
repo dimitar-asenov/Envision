@@ -37,9 +37,9 @@ class GenericPersistentUnit;
 class FILEPERSISTENCE_API Parser {
 	public:
 
-		const static QString PREFIX_STRING;
-		const static QString PREFIX_INTEGER;
-		const static QString PREFIX_DOUBLE;
+		static const QString PREFIX_STRING;
+		static const QString PREFIX_INTEGER;
+		static const QString PREFIX_DOUBLE;
 
 		static void parseLine(GenericNode* node, const char* line, int lineLength);
 

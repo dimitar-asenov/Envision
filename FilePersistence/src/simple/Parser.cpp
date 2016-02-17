@@ -146,10 +146,8 @@ inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
 	int numTabs = 0;
 
 	for (int i = lineStart; i<=lineEnd; ++i)
-	{
 		if (data[i] == '\t') ++numTabs;
 		else break;
-	}
 
 	return numTabs;
 }

@@ -110,8 +110,6 @@ inline void GenericTree::removePersistentUnit(const QString& persistentUnitName)
 inline void GenericTree::removePersistentUnit(const GenericPersistentUnit& unit)
 	{ removePersistentUnit(unit.name()); }
 
-inline const std::shared_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() const { return piecewiseLoader_;}
-inline QMultiHash<Model::NodeIdType, GenericNode*>& GenericTree::nodesWithoutParents() { return nodesWithoutParents_;}
 inline QList<std::shared_ptr<GenericPersistentUnit>> GenericTree::persistentUnits() const
 	{return persistentUnits_.values();}
 }
