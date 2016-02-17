@@ -937,21 +937,9 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 			ooStack_.push(ooSwitchStmt->body());
 			// Visit everything before the first case/default statement
 			auto bodyIt = body->body_begin();
-			while (bodyIt != body->body_end() && !llvm::isa<clang::CaseStmt>(*bodyIt) &&
-					!llvm::isa<clang::DefaultStmt>(*bodyIt))
-				TraverseStmt(*bodyIt++);
-
-			// push a dummy itemlist such that at every case/default statement we can first pop the stack
-			auto itemList = clang_.createNode<OOModel::StatementItemList>(body->getSourceRange());
-			ooStack_.push(itemList);
-			// visit the rest
 			while (bodyIt != body->body_end())
 				TraverseStmt(*bodyIt++);
 
-			// pops the body from the last case statement
-			ooStack_.pop();
-			// delete the dummy list
-			clang_.deleteNode(itemList);
 			// pop the body of the switch statement
 			ooStack_.pop();
 		}
@@ -967,10 +955,8 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 
 bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 {
-	// pop the body of the previous case
-	ooStack_.pop();
 	auto ooSwitchCase = clang_.createNode<OOModel::CaseStatement>(caseStmt->getSourceRange());
-	// insert in tree
+
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(ooSwitchCase);
 	else
@@ -978,27 +964,17 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 		log_->writeError(className_, caseStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 		return true;
 	}
-	// Traverse condition
-	inBody_ = false;
-	TraverseStmt(caseStmt->getLHS());
-	if (!ooExprStack_.empty())
-		ooSwitchCase->setCaseExpression(ooExprStack_.pop());
-	inBody_ = true;
 
-	// Traverse statements/body
-	if (auto compoundStatement = llvm::dyn_cast<clang::CompoundStmt>(caseStmt->getSubStmt()))
-	{
-		auto block = clang_.createNode<OOModel::Block>(compoundStatement->getSourceRange());
-		ooSwitchCase->body()->append(block);
-		ooStack_.push(block->items());
-		TraverseStmt(compoundStatement);
-	}
-	else
+	ooSwitchCase->setCaseExpression(exprVisitor_->translateExpression(caseStmt->getLHS()));
+
+	if (!llvm::dyn_cast<clang::CaseStmt>(caseStmt->getSubStmt()))
 	{
 		ooStack_.push(ooSwitchCase->body());
 		TraverseStmt(caseStmt->getSubStmt());
+		ooStack_.pop();
 	}
-
+	else
+		TraverseStmt(caseStmt->getSubStmt());
 	return true;
 }
 
@@ -1104,8 +1080,6 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 
 bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 {
-	// pop the body of the previous case
-	ooStack_.pop();
 	auto ooDefaultCase = clang_.createNode<OOModel::CaseStatement>(defaultStmt->getSourceRange());
 	// insert in tree
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
@@ -1118,6 +1092,7 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 	// Traverse statements/body
 	ooStack_.push(ooDefaultCase->body());
 	TraverseStmt(defaultStmt->getSubStmt());
+	ooStack_.pop();
 	return true;
 }
 
