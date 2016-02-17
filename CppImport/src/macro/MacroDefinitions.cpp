@@ -58,13 +58,4 @@ QString MacroDefinitions::signature(const clang::MacroDirective* md) const
 		return "/ExternalMacro/" + definitionName(md);
 }
 
-OOModel::ReferenceExpression* MacroDefinitions::expansionQualifier(const clang::MacroDirective* md) const
-{
-	auto parentProject = clang_.projectForLocation(md->getLocation());
-	if (parentProject == clang_.rootProject())
-		return new OOModel::ReferenceExpression{"ExternalMacro"};
-
-	return {};
-}
-
 }
