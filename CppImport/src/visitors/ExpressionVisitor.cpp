@@ -726,21 +726,26 @@ OOModel::ReferenceExpression* ExpressionVisitor::createQualifiedReferenceWithTem
 bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
 	OOModel::Expression* ooLeft = nullptr;
+	// we check for binary operation directly because as of clang 3.8 tree traversal does not work for <<
+	if (auto lhs = llvm::dyn_cast<clang::BinaryOperator>(binaryOperator->getLHS()))
+	{
+		TraverseBinaryOp(lhs);
+		ooLeft = ooExprStack_.pop();
+	}
+	else
+		ooLeft = translateExpression(binaryOperator->getLHS());
+
 	OOModel::Expression* ooRight = nullptr;
-	// left
-	TraverseStmt(binaryOperator->getLHS());
-	if (!ooExprStack_.empty()) ooLeft = ooExprStack_.pop();
+	if (auto rhs = llvm::dyn_cast<clang::BinaryOperator>(binaryOperator->getRHS()))
+	{
+		TraverseBinaryOp(rhs);
+		ooRight = ooExprStack_.pop();
+	}
 	else
-		log_->writeError(className_, binaryOperator->getLHS(), CppImportLogger::Reason::NOT_SUPPORTED);
-	// right
-	TraverseStmt(binaryOperator->getRHS());
-	if (!ooExprStack_.empty()) ooRight = ooExprStack_.pop();
-	else
-		log_->writeError(className_, binaryOperator->getRHS(), CppImportLogger::Reason::NOT_SUPPORTED);
+		ooRight = translateExpression(binaryOperator->getRHS());
 
 	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
 	OOModel::Expression* ooBinaryOp = nullptr;
-
 	if (opcode == clang::BO_Comma)
 		ooBinaryOp = clang_.createNode<OOModel::CommaExpression>(binaryOperator->getSourceRange(), ooLeft, ooRight);
 	else
