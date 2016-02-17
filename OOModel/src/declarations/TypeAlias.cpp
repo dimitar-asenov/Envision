@@ -27,6 +27,8 @@
 #include "TypeAlias.h"
 #include "../types/SymbolProviderType.h"
 
+#include "OOModel/src/expressions/ReferenceExpression.h"
+
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::TypeAlias>;
 
@@ -66,6 +68,11 @@ bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& mat
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	bool found{};
+
+	// Without this check reference resolution takes forever
+	if (auto reference = DCast<OOModel::ReferenceExpression>(this->typeExpression()))
+		if (!reference->target())
+			return found;
 
 	if (direction == SEARCH_HERE)
 	{
