@@ -448,7 +448,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	if (!printContext().isClass() && method->typeArguments()->isEmpty())
+	if (printContext().hasOption(CppPrintContext::IsHeaderPart) && !method->firstAncestorOfType<Class>()
+		 && method->typeArguments()->isEmpty())
 		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
@@ -517,15 +518,25 @@ SourceFragment* DeclarationVisitor::compositeNodeComments(Model::CompositeNode* 
 SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclaration)
 {
 	auto field = DCast<Field>(variableDeclaration);
+
+	// A filed might also belong to a Project/Module, representing a global variable.
+	bool isClassField = field && field->firstAncestorOfType<Class>();
+
 	// non-static and not constexpr fields are not printed outside of a class
-	if (!printContext().isClass() && field &&
+	if (isClassField && !printContext().isClass() &&
 		 !field->modifiers()->isSet(Modifier::Static) &&
 		 !field->modifiers()->isSet(Modifier::ConstExpr)) return {};
 
-	auto fragment = new CompositeFragment{variableDeclaration};
-	if (printContext().isClass()) *fragment << compositeNodeComments(variableDeclaration, "declarationComment");
+	bool isStaticGlobal = !isClassField && field && field->modifiers()->isSet(Modifier::Static);
+	// static global variables are not printed inside the .h file
+	if (isStaticGlobal && printContext().hasOption(CppPrintContext::IsHeaderPart) )
+		return {};
 
-	if (field && !printContext().isClass())
+	auto fragment = new CompositeFragment{variableDeclaration};
+	if (printContext().isClass() || isStaticGlobal)
+		*fragment << compositeNodeComments(variableDeclaration, "declarationComment");
+
+	if (isClassField && !printContext().isClass())
 	{
 		// template<typename T...>
 		if (printContext().hasOption(CppPrintContext::PrintTemplatePrefix))
@@ -552,7 +563,11 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 
 	// initial value
 	if (variableDeclaration->initialValue() &&
-		 (!variableDeclaration->modifiers()->isSet(Modifier::Static) || !printContext().isClass()))
+		 (   (isClassField && (!variableDeclaration->modifiers()->isSet(Modifier::Static) || !printContext().isClass()))
+		  || isStaticGlobal
+		  || (!isClassField && !isStaticGlobal && !printContext().hasOption(CppPrintContext::IsHeaderPart))
+		  )
+		 )
 	{
 		// if auto type then print equals ("=")
 		if (!DCast<ArrayInitializer>(variableDeclaration->initialValue()) ||
