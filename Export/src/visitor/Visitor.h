@@ -166,7 +166,7 @@ CompositeFragment* Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisit
 {
 	auto fragment = new CompositeFragment{list, fragmentType};
 	for (auto node : *list)
-		if (!filter || filter(node))
+		if (!isProvided(filter) || filter(node))
 			*fragment << v->visit(node);
 	return fragment;
 }

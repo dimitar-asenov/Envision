@@ -83,11 +83,10 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	auto fragment = new CompositeFragment{classs, "spacedSections"};
 	*fragment << visit(classs);
 
-	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
-															((method->modifiers()->isSet(OOModel::Modifier::Inline) &&
-															  !method->modifiers()->isSet(OOModel::Modifier::Private)) &&
-															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
-															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
+	auto filter = [this](Method* method) { return !method->typeArguments()->isEmpty() ||
+													(ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(method, printContext()) &&
+													 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
+													 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
 	QList<Class*> classes{classs};
 	while (!classes.empty())
 	{
@@ -213,11 +212,11 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->metaCalls(), ExpressionVisitor{data()}, "spacedSections",
 								[](Expression* expression) { return metaCallFilter(expression, true); });
 		*sections << list(classs->classes(), this, "sections");
-		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
+
+		*sections << list(classs->methods(), this, "spacedSections", [this](Method* method)
 		{
 			return method->typeArguments()->isEmpty() &&
-						 (!method->modifiers()->isSet(OOModel::Modifier::Inline) ||
-						  method->modifiers()->isSet(OOModel::Modifier::Private)) &&
+						 !ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(method, printContext()) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Default);
