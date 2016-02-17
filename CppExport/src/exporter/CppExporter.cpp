@@ -50,7 +50,7 @@ QList<Export::ExportError> CppExporter::exportTree(Model::TreeManager* treeManag
 	QHash<QString, QString> mergeMap = Config::instance().dependencyUnitMergeMap();
 
 	QList<CodeUnit*> codeUnits;
-	units(treeManager->root(), "", codeUnits, mergeMap);
+	units(treeManager->root(), codeUnits, mergeMap);
 
 
 	for (auto unit : codeUnits) unit->calculateSourceFragments();
@@ -98,7 +98,7 @@ QString CppExporter::codeUnitNameQualifier(Model::Node* node)
 	return result.join('/') + "/";
 }
 
-void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result,
+void CppExporter::units(Model::Node* current, QList<CodeUnit*>& result,
 								QHash<QString, QString>& mergeMap)
 {
 	if (!DCast<OOModel::Project>(current))
@@ -107,8 +107,6 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 		{
 			// ignore the "ExternalMacro" module
 			if (ooModule->name() == "ExternalMacro") return;
-
-			namespaceName = ooModule->name();
 		}
 		else if (auto ooNameImport = DCast<OOModel::NameImport>(current))
 		{
@@ -181,7 +179,7 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 	}
 
 	for (auto child : current->children())
-		units(child, namespaceName, result, mergeMap);
+		units(child, result, mergeMap);
 }
 
 QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units, QHash<QString, QString>& mergeMap)

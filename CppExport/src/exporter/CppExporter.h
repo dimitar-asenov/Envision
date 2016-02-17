@@ -53,8 +53,7 @@ class CPPEXPORT_API CppExporter {
 		static Export::ExportMapContainer& exportMaps();
 
 	private:
-		static void units(Model::Node* current, QString namespaceName, QList<CodeUnit*>& result,
-								QHash<QString, QString>& mergeMap);
+		static void units(Model::Node* current, QList<CodeUnit*>& result, QHash<QString, QString>& mergeMap);
 		static QList<CodeComposite*> mergeUnits(QList<CodeUnit*>& units, QHash<QString, QString>& mergeMap);
 		static void createFilesFromComposite(Export::SourceDir* directory, CodeComposite* codeComposite);
 
