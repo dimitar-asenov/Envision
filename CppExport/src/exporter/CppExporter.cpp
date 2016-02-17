@@ -132,6 +132,10 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))
 		{
 			auto codeUnitName = codeUnitNameQualifier(ooDeclaration) + ooDeclaration->name();
+			if (auto method = DCast<OOModel::Method>(ooDeclaration))
+				for (auto argument : *method->arguments())
+					codeUnitName += OOInteraction::StringComponents::stringForNode(argument->typeExpression());
+
 			result.append(new CodeUnit{codeUnitName, current});
 
 			for (auto subDeclaration : *ooDeclaration->subDeclarations())
