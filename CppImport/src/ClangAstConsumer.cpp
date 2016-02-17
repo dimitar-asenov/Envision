@@ -26,6 +26,8 @@
 
 #include "ClangAstConsumer.h"
 
+#include "CppImportManager.h"
+
 namespace CppImport {
 
 ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
@@ -34,6 +36,12 @@ ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
 {
+	// show import progress
+	CppImportManager::processedTranslationUnits()++;
+	qDebug() << "[" << (100 * CppImportManager::processedTranslationUnits() / CppImportManager::totalTranslationUnits())
+				<< "% ]" << astContext.getSourceManager().getFileEntryForID(
+																				astContext.getSourceManager().getMainFileID())->getName();
+
 	astVisitor_->beforeTranslationUnit(astContext);
 	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
 	astVisitor_->endTranslationUnit();

@@ -113,6 +113,9 @@ Model::TreeManager* CppImportManager::createTreeManager(const bool statisticsPer
 
 void CppImportManager::setupTest()
 {
+	totalTranslationUnits() = 0;
+	processedTranslationUnits() = 0;
+
 	// setup the root dir
 	QDir rootDir{QDir::currentPath()};
 	rootDir.cdUp();
@@ -147,6 +150,18 @@ void CppImportManager::setupTest()
 		}
 	}
 	throw CppImportException{"No test case set in the testSelector file"};
+}
+
+int& CppImportManager::totalTranslationUnits()
+{
+	static int totalTranslationUnits_;
+	return totalTranslationUnits_;
+}
+
+int& CppImportManager::processedTranslationUnits()
+{
+	static int processedTranslationUnits_;
+	return processedTranslationUnits_;
 }
 
 void CppImportManager::initPath(const QString& sourcePath)
@@ -185,11 +200,17 @@ void CppImportManager::readInFiles(const QString& sourcePath)
 		QDirIterator dirIterator{sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories};
 		auto sources = new std::vector<std::string>{};
 		while (dirIterator.hasNext())
+		{
+			totalTranslationUnits()++;
 			sources->push_back(dirIterator.next().toStdString());
+		}
 		sourcesMap_.insert(sourcePath, sources);
 	}
 	else
+	{
+		totalTranslationUnits()++;
 		sourcesMap_.insert(sourcePath, new std::vector<std::string>{sourcePath.toStdString()});
+	}
 }
 
 void CppImportManager::setCompilationDbPath(const QString& sourcePath)
