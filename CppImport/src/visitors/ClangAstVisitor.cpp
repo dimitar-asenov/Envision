@@ -984,9 +984,21 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 	if (!ooExprStack_.empty())
 		ooSwitchCase->setCaseExpression(ooExprStack_.pop());
 	inBody_ = true;
+
 	// Traverse statements/body
-	ooStack_.push(ooSwitchCase->body());
-	TraverseStmt(caseStmt->getSubStmt());
+	if (auto compoundStatement = llvm::dyn_cast<clang::CompoundStmt>(caseStmt->getSubStmt()))
+	{
+		auto block = clang_.createNode<OOModel::Block>(compoundStatement->getSourceRange());
+		ooSwitchCase->body()->append(block);
+		ooStack_.push(block->items());
+		TraverseStmt(compoundStatement);
+	}
+	else
+	{
+		ooStack_.push(ooSwitchCase->body());
+		TraverseStmt(caseStmt->getSubStmt());
+	}
+
 	return true;
 }
 
