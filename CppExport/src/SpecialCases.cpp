@@ -35,6 +35,7 @@
 #include "OOModel/src/declarations/MetaDefinition.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/expressions/BooleanLiteral.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace CppExport {
 
@@ -93,6 +94,12 @@ bool SpecialCases::hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefini
 bool SpecialCases::isMainMethod(OOModel::Method* method)
 {
 	return method && method->symbolName() == "main";
+}
+
+bool SpecialCases::isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpression* parentReference,
+																		  OOModel::ReferenceExpression*)
+{
+	return parentReference->name() == "unique_ptr" || parentReference->name() == "shared_ptr";
 }
 
 }

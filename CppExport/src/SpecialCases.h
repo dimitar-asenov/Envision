@@ -34,6 +34,7 @@ namespace OOModel
 	class Method;
 	class MetaCallExpression;
 	class MetaDefinition;
+	class ReferenceExpression;
 }
 
 namespace Export
@@ -82,6 +83,9 @@ class CPPEXPORT_API SpecialCases
 		static bool hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefinition);
 
 		static bool isMainMethod(OOModel::Method* method);
+
+		static bool isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpression* parentReference,
+																		 OOModel::ReferenceExpression* argumentReference);
 };
 
 }

@@ -26,6 +26,7 @@
 
 #include "CodeUnitPart.h"
 #include "CodeUnit.h"
+#include "SpecialCases.h"
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/allOOModelNodes.h"
@@ -171,6 +172,12 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 		return true;
 
 	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>()) return false;
+
+	// Only return a name dependency for some special cases of template ussage.
+	if (auto list = reference->firstAncestorOfType<Model::TypedList<OOModel::Expression>>())
+		if (auto parentExpression = DCast<OOModel::ReferenceExpression>(list->parent()))
+			if (SpecialCases::isTemplateArgumentNameOnlyDependency(parentExpression, reference))
+				return true;
 
 	if (DCast<OOModel::TypeQualifierExpression>(parent)) parent = parent->parent();
 	if (!DCast<OOModel::PointerTypeExpression>(parent) && !DCast<OOModel::ReferenceTypeExpression>(parent)) return false;
