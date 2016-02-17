@@ -28,16 +28,19 @@
 
 #include "../interactionbase_api.h"
 
-#include "GenericHandler.h"
+#include "HMovableItem.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API HWebBrowserItem : public GenericHandler {
+class INTERACTIONBASE_API HWebBrowserItem : public HMovableItem {
 
 	public:
 		static HWebBrowserItem* instance();
 
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+
+		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
 	protected:
 		HWebBrowserItem();

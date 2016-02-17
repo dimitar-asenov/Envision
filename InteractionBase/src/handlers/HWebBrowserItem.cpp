@@ -60,4 +60,16 @@ void HWebBrowserItem::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
 	//Propagating at least some events is necessary for updating an InfoNode
 }
 
+void HWebBrowserItem::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (target->parent()) GenericHandler::mousePressEvent(target, event);
+	else HMovableItem::mousePressEvent(target, event);
+}
+
+void HWebBrowserItem::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (target->parent()) GenericHandler::mouseMoveEvent(target, event);
+	else HMovableItem::mouseMoveEvent(target, event);
+}
+
 }
