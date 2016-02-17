@@ -36,6 +36,9 @@
 
 namespace InformationScripting {
 
+QueryExecutor::QueryExecutor(Model::Node* target) : target_{target}
+{}
+
 QueryExecutor::~QueryExecutor()
 {
 	Q_ASSERT(queries_.empty());
@@ -65,7 +68,7 @@ QList<QString> QueryExecutor::execute(const QList<TupleSet>& input)
 		{
 			if (defaultVisualize_)
 			{
-				auto vis = QueryRegistry::instance().buildQuery("show", nullptr, {}, this);
+				auto vis = QueryRegistry::instance().buildQuery("show", target_, {}, this);
 				vis->execute({results[0].value()});
 				results.clear();
 			}
