@@ -576,25 +576,8 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 {
 	if (!shouldImport(usingDirectiveDecl->getLocation()))
 		return true;
-	if (auto ooNameImport = trMngr_->insertUsingDirective(usingDirectiveDecl))
-	{
-		ooNameImport->modifiers()->set(utils_->translateAccessSpecifier(usingDirectiveDecl->getAccess()));
 
-		auto nameRef = utils_->setReferencePrefix(clang_.createReference(usingDirectiveDecl->getIdentLocation()),
-																usingDirectiveDecl->getQualifierLoc());
-		ooNameImport->setImportedName(nameRef);
-		ooNameImport->setImportAll(true);
-		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-			itemList->append(clang_.createNode<OOModel::DeclarationStatement>(usingDirectiveDecl->getSourceRange(),
-																									ooNameImport));
-		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
-			declaration->subDeclarations()->append(ooNameImport);
-		else
-		{
-			clang_.deleteNode(ooNameImport);
-			log_->writeError(className_, usingDirectiveDecl, CppImportLogger::Reason::INSERT_PROBLEM);
-		}
-	}
+	usingDirectiveDeclarations_.append(usingDirectiveDecl);
 	return true;
 }
 
@@ -1392,8 +1375,28 @@ void ClangAstVisitor::endTranslationUnit()
 		}
 	}
 
+	insertUsingDirectiveDeclarations();
+
 	clang_.envisionToClangMap().clear();
 	clang_.comments().clear();
+	usingDirectiveDeclarations_.clear();
+}
+
+void ClangAstVisitor::insertUsingDirectiveDeclarations()
+{
+	for (auto usingDirective : usingDirectiveDeclarations_)
+	{
+		for (auto classs : trMngr_->classesInFile(clang_.presumedFilenameWithoutExtension(usingDirective->getLocation())))
+		{
+			auto ooNameImport = clang_.createNode<OOModel::NameImport>(usingDirective->getSourceRange());
+			auto nameRef = utils_->setReferencePrefix(clang_.createReference(usingDirective->getIdentLocation()),
+																	usingDirective->getQualifierLoc());
+			ooNameImport->setImportedName(nameRef);
+			ooNameImport->setImportAll(true);
+
+			classs->subDeclarations()->append(ooNameImport);
+		}
+	}
 }
 
 void ClangAstVisitor::endEntireImport()

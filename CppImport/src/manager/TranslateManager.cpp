@@ -92,6 +92,21 @@ OOModel::Class* TranslateManager::lookupClass(clang::CXXRecordDecl* rDecl)
 	return {};
 }
 
+QList<OOModel::Class*> TranslateManager::classesInFile(QString fileName)
+{
+	QList<OOModel::Class*> result;
+	for (auto it = classMap_.begin(); it != classMap_.end(); it++)
+	{
+		for (auto sourceRange : clang_.envisionToClangMap().get(it.value()))
+			if (clang_.presumedFilenameWithoutExtension(sourceRange.getBegin()) == fileName)
+			{
+				result.append(it.value());
+				break;
+			}
+	}
+	return result;
+}
+
 bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class*& createdClass)
 {
 	const QString hash = nh_->hashRecord(rDecl);

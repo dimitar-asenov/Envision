@@ -140,6 +140,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool importSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};
+		QList<clang::UsingDirectiveDecl*> usingDirectiveDeclarations_;
+
 		/**
 		 * Abstract function to handle normal member functions, constructors, destructors and conversion functions.
 		 * This method will translate the complete method if \a methodDecl is a definition
@@ -174,6 +176,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool shouldImport(const clang::SourceLocation& location);
 
 		void addFunctionModifiers(clang::FunctionDecl* functionDecl, OOModel::Method* method);
+
+		void insertUsingDirectiveDeclarations();
 };
 
 // method
