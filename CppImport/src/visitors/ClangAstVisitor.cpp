@@ -935,12 +935,8 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 		if (auto body = llvm::dyn_cast<clang::CompoundStmt>(switchStmt->getBody()))
 		{
 			ooStack_.push(ooSwitchStmt->body());
-			// Visit everything before the first case/default statement
-			auto bodyIt = body->body_begin();
-			while (bodyIt != body->body_end())
-				TraverseStmt(*bodyIt++);
-
-			// pop the body of the switch statement
+			for (auto it = body->body_begin(); it != body->body_end(); it++)
+				TraverseStmt(*it);
 			ooStack_.pop();
 		}
 		else
