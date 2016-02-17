@@ -1,0 +1,29 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<shape prototypes="shape/Frame/default">
+		Frame
+		<topWidth>5</topWidth>
+		<topMargin>5</topMargin>
+		<topBrush><color>#808080</color></topBrush>
+		
+		<bottomWidth>5</bottomWidth>
+		<bottomMargin>5</bottomMargin>
+		<bottomBrush><color>#808080</color></bottomBrush>
+		
+		<leftWidth>5</leftWidth>
+		<leftMargin>5</leftMargin>
+		<leftBrush><color>#808080</color></leftBrush>
+		
+		<rightWidth>5</rightWidth>
+		<rightMargin>5</rightMargin>
+		<rightBrush><color>#808080</color></rightBrush>
+		
+		<contentBrush>
+			<color>#ffffff</color>
+		</contentBrush>
+		
+		<bottomRightShadowWidth>5</bottomRightShadowWidth>
+		<topLeftShadowWidth>0</topLeftShadowWidth>
+	</shape>
+	
+</style>
