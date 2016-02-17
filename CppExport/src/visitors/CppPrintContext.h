@@ -52,7 +52,8 @@ class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 			PrintDefaultArgumentValues = 0x10,
 			PrintTemplatePrefix = 0x20,
 			PrintDeclarationCommentWithMethodBody = 0x40,
-			NoApiInclude = 0x80
+			NoApiInclude = 0x80,
+			IsHeaderPart = 0x100
 		};
 		using Options = QFlags<Option>;
 
@@ -77,6 +78,8 @@ class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 					(!parentMetaDefinition || parentMetaDefinition->context()->name() != "Context");
 		}
 
+		Options options();
+
 	private:
 		Options options_{};
 };
@@ -84,5 +87,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CppPrintContext::Options)
 
 inline bool CppPrintContext::isClass() { return DCast<OOModel::Class>(node()); }
 inline bool CppPrintContext::hasOption(Option option) { return options_.testFlag(option); }
+inline CppPrintContext::Options CppPrintContext::options() { return options_; }
 
 }
