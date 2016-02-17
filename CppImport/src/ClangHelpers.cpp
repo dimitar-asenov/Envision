@@ -180,6 +180,14 @@ void ClangHelpers::insertDeclarationInFolder(OOModel::Declaration* declaration, 
 	else Q_ASSERT(false);
 }
 
+QString ClangHelpers::presumedFilenameWithoutExtension(clang::SourceLocation location)
+{
+	auto presumedLocation = sourceManager_->getPresumedLoc(location);
+	QDir dir{presumedLocation.getFilename()};
+	auto fileName = dir.absolutePath();
+	return fileName.left(fileName.lastIndexOf("."));
+}
+
 OOModel::Declaration* ClangHelpers::folderForLocation(clang::SourceLocation location,
 																		OOModel::Declaration* parentNonFolderDeclaration)
 {

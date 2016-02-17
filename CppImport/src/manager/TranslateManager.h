@@ -138,6 +138,8 @@ class CPPIMPORT_API TranslateManager
 
 		OOModel::Class* lookupClass(clang::CXXRecordDecl* rDecl);
 
+		QList<OOModel::Class*> classesInFile(QString fileName);
+
 	private:
 		ClangHelpers& clang_;
 

@@ -124,6 +124,8 @@ class CPPIMPORT_API ClangHelpers
 
 		const QString& rootProjectPath();
 
+		QString presumedFilenameWithoutExtension(clang::SourceLocation location);
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 

@@ -280,53 +280,35 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	auto ooNewExpr = clang_.createNode<OOModel::NewExpression>(newExpr->getSourceRange());
-	if (newExpr->getInitializer())
+	if (newExpr->getInitializer() && !newExpr->isArray())
 	{
+		auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
+
+		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
+					clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
+		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
+		methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+
 		if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
-		{
-			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-						clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
-			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
-			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 			for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
 				methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
-			ooExprStack_.push(methodCallExpr);
-		}
 		else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
 		{
-			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-						clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
-			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
-			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
-
 			if (initListExpr->getSyntacticForm()) initListExpr = initListExpr->getSyntacticForm();
 			for (auto initExpr : initListExpr->inits())
 				methodCallExpr->arguments()->append(translateExpression(initExpr));
-			ooExprStack_.push(methodCallExpr);
 		}
 		else if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(newExpr->getInitializer()))
-		{
-			auto allocatedTypeLoc = newExpr->getAllocatedTypeSourceInfo()->getTypeLoc();
-			auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
-						clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
-			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
-			methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
 			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 				methodCallExpr->arguments()->append(argument);
-			ooExprStack_.push(methodCallExpr);
-		}
 
-		if (!ooExprStack_.empty())
-			ooNewExpr->setNewType(ooExprStack_.pop());
-		if (newExpr->isArray())
-		{
-			TraverseStmt(newExpr->getArraySize());
-			if (!ooExprStack_.empty())
-				ooNewExpr->dimensions()->append(ooExprStack_.pop());
-		}
+		ooNewExpr->setNewType(methodCallExpr);
 	}
+	else
+		ooNewExpr->setNewType(utils_->translateQualifiedType(newExpr->getAllocatedTypeSourceInfo()->getTypeLoc()));
+
+	if (newExpr->isArray())
+		ooNewExpr->dimensions()->append(translateExpression(newExpr->getArraySize()));
 
 	ooExprStack_.push(ooNewExpr);
 	return true;
@@ -744,21 +726,26 @@ OOModel::ReferenceExpression* ExpressionVisitor::createQualifiedReferenceWithTem
 bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
 	OOModel::Expression* ooLeft = nullptr;
+	// we check for binary operation directly because as of clang 3.8 tree traversal does not work for <<
+	if (auto lhs = llvm::dyn_cast<clang::BinaryOperator>(binaryOperator->getLHS()))
+	{
+		TraverseBinaryOp(lhs);
+		ooLeft = ooExprStack_.pop();
+	}
+	else
+		ooLeft = translateExpression(binaryOperator->getLHS());
+
 	OOModel::Expression* ooRight = nullptr;
-	// left
-	TraverseStmt(binaryOperator->getLHS());
-	if (!ooExprStack_.empty()) ooLeft = ooExprStack_.pop();
+	if (auto rhs = llvm::dyn_cast<clang::BinaryOperator>(binaryOperator->getRHS()))
+	{
+		TraverseBinaryOp(rhs);
+		ooRight = ooExprStack_.pop();
+	}
 	else
-		log_->writeError(className_, binaryOperator->getLHS(), CppImportLogger::Reason::NOT_SUPPORTED);
-	// right
-	TraverseStmt(binaryOperator->getRHS());
-	if (!ooExprStack_.empty()) ooRight = ooExprStack_.pop();
-	else
-		log_->writeError(className_, binaryOperator->getRHS(), CppImportLogger::Reason::NOT_SUPPORTED);
+		ooRight = translateExpression(binaryOperator->getRHS());
 
 	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
 	OOModel::Expression* ooBinaryOp = nullptr;
-
 	if (opcode == clang::BO_Comma)
 		ooBinaryOp = clang_.createNode<OOModel::CommaExpression>(binaryOperator->getSourceRange(), ooLeft, ooRight);
 	else

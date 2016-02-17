@@ -132,6 +132,10 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))
 		{
 			auto codeUnitName = codeUnitNameQualifier(ooDeclaration) + ooDeclaration->name();
+			if (auto method = DCast<OOModel::Method>(ooDeclaration))
+				for (auto argument : *method->arguments())
+					codeUnitName += OOInteraction::StringComponents::stringForNode(argument->typeExpression());
+
 			result.append(new CodeUnit{codeUnitName, current});
 
 			for (auto subDeclaration : *ooDeclaration->subDeclarations())
@@ -146,6 +150,18 @@ void CppExporter::units(Model::Node* current, QString namespaceName, QList<CodeU
 						mergeMap.insert(typedListCodeUnitName, codeUnitName);
 
 					result.append(new CodeUnit{typedListCodeUnitName, explicitTemplateInstantiation});
+				}
+				else if (auto nameImport = DCast<OOModel::NameImport>(subDeclaration))
+				{
+					auto nameImportCodeUnitName = codeUnitName + "|NameImportInClass";
+
+					auto it = mergeMap.find(codeUnitName);
+					if (it != mergeMap.end())
+						mergeMap.insert(nameImportCodeUnitName, *it);
+					else
+						mergeMap.insert(nameImportCodeUnitName, codeUnitName);
+
+					result.append(new CodeUnit{nameImportCodeUnitName, nameImport});
 				}
 			return;
 		}
