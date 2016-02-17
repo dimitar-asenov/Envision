@@ -187,9 +187,6 @@ inline bool GenericNode::hasDoubleValue() const { ensureDataRead(); return value
 
 inline GenericPersistentUnit* GenericNode::persistentUnit() const {return persistentUnit_;}
 
-inline GenericTree* GenericNode::tree() const { return persistentUnit_->tree();}
-inline bool GenericNode::sameTree(const GenericNode* other)
-	{return persistentUnit_->tree() == other->persistentUnit_->tree();}
 inline bool GenericNode::equalTo(const GenericNode* other)
 {
 	ensureDataRead();

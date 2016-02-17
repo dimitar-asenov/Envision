@@ -37,6 +37,12 @@ static const int MAX_DOUBLE_PRECISION = 15;
 
 GenericNode::GenericNode(){}
 
+inline GenericTree* GenericNode::tree() const
+{ return persistentUnit_->tree();}
+
+inline bool GenericNode::sameTree(const GenericNode* other)
+{return persistentUnit_->tree() == other->persistentUnit_->tree();}
+
 const QString& GenericNode::valueAsString() const
 {
 	ensureDataRead();

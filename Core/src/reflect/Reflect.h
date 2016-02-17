@@ -56,7 +56,7 @@ inline Derived* DCast(Base* b)
 		return nullptr;
 }
 
-class TypeName {
+class CORE_API TypeName {
 	public:
 		QString className_;
 		QString namespace_;
