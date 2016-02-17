@@ -207,24 +207,34 @@ class MODELBASE_API Node
 
 		enum FindSymbolDirection {
 			/**
-			 * Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
-			 * symbols in the current scope which come after the source will not be considered. This is the
-			 * case e.g. with searches for local variable declarations in a method: only variables before
-			 * the source node should be considered.
+			 * Looks for symbols defined by the current node. This happens when findSymbols has been
+			 * called on the parent with SEARCH_DOWN and the parent must therefore find a precise match
+			 * in its scope. findSymbols() will be called for each potential match from the parents
+			 * children with the SEACH_HERE flag
 			 */
-			SEARCH_UP,
+			SEARCH_HERE,
 			/**
 			 * Looks for symbols inside the specified scope or subscopes. This is used for symbols that
 			 * are requested in a specific context (typically after a '.') e.g. "list.sort()"
 			 */
 			SEARCH_DOWN,
 			/**
-			 * Looks for symbols defined by the current node. This happens when findSymbols has been
-			 * called on the parent with SEARCH_DOWN and the parent must therefore find a precise match
-			 * in its scope. findSymbols() will be called for each potential match from the parents
-			 * children with the SEACH_HERE flag
+			 * Looks for symbols within the specified scope and enclosing scopes. Unless explicitly overriden,
+			 * this mode assumes no ordering of the children within the scope and will searc within all children
+			 * except for the source child. Some scopes override this behavior and only search for symbols that come
+			 * before the source child. This is the case e.g. with searches for local variable declarations in a
+			 * method: only variables before the source node should be considered.
 			 */
-			SEARCH_HERE
+			SEARCH_UP,
+			/**
+			 * This is similar to SEARCH_UP but enforces that the search within the immediate scope is ordered.
+			 *
+			 * While a particular scope node (typically a list type) can choose how to perform a SEARCH_UP operation,
+			 * any scope (list) should respect SEARCH_UP_ORDERED and do an ordered search requested from a child element.
+			 * This is useful for example in case where a list contains both ordered and unordered elements, e.g. a list of
+			 * declarations, where classes are unordered but type aliases or name imports are ordered.
+			 */
+			SEARCH_UP_ORDERED
 		};
 
 		/**

@@ -128,7 +128,7 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 					found = findInTarget(bc, result, matcher, symbolTypes, exhaustAllScopes) || found;
 		}
 	}
-	else if (direction == SEARCH_UP)
+	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
 	{
 		auto ignore = childToSubnode(source);
 		for (auto c : childrenInScope())

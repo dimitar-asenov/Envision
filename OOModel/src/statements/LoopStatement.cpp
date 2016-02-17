@@ -49,7 +49,7 @@ LoopStatement::LoopStatement(LoopKind kind)
 bool LoopStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
-	if (direction == SEARCH_UP)
+	if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
 	{
 		auto ignore = childToSubnode(source);
 		Q_ASSERT(ignore);

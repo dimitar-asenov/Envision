@@ -79,19 +79,21 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 
 	if (direction == SEARCH_HERE)
 	{
+
 		// If this node is part of a list and the source is a name import from the same list, impose an order
-		auto listParent = DCast<Model::List>(parent());
-		if (listParent)
-		{
-			int sourceIndex = listParent->indexToSubnode(source);
-			if (sourceIndex >=0)
-				if (DCast<NameImport> (listParent->at<Model::Node>(sourceIndex)))
-				{
-					int thisIndex = listParent->indexOf(this);
-					if (thisIndex > sourceIndex)
-						return false;
-				}
-		}
+		// The code below wa commented when SEARCH_UP_ORDERED was introduced as it should have made it redundant.
+//		auto listParent = DCast<Model::List>(parent());
+//		if (listParent)
+//		{
+//			int sourceIndex = listParent->indexToSubnode(source);
+//			if (sourceIndex >=0)
+//				if (DCast<NameImport> (listParent->at<Model::Node>(sourceIndex)))
+//				{
+//					int thisIndex = listParent->indexOf(this);
+//					if (thisIndex > sourceIndex)
+//						return false;
+//				}
+//		}
 
 		// If this node defines a shortcut to a single name which is not the one being looked for, then do not resolve
 		// the target
@@ -103,10 +105,10 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 			return t->findSymbols(result, matcher, (importAll() ? t : source),
 					(importAll() ? SEARCH_DOWN : SEARCH_HERE), symbolTypes, false);
 	}
-	else if (direction == SEARCH_UP)
+	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
 	{
 		if (parent())
-			return parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
+			return parent()->findSymbols(result, matcher, source, SEARCH_UP_ORDERED, symbolTypes, exhaustAllScopes);
 	}
 
 	return false;

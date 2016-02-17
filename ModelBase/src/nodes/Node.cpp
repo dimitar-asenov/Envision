@@ -222,7 +222,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 	else if (direction == SEARCH_DOWN || (direction == SEARCH_HERE && isTransparentForNameResolution()))
 		for (auto c : childrenInScope())
 			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-	else if (direction == SEARCH_UP)
+	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
 	{
 		auto ignore = childToSubnode(source);
 		for (auto c : childrenInScope())

@@ -109,7 +109,7 @@ bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matche
 			result.insert(const_cast<Method*>(this));
 		}
 	}
-	else if (direction == SEARCH_UP)
+	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
 	{
 		auto ignore = childToSubnode(source);
 

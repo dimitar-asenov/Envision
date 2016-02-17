@@ -205,10 +205,6 @@ bool List::isTransparentForNameResolution() const
 bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
-	// TODO: The code below is technically unnecessary and we can directly call the implementation in Node.
-	// which does the exact same thing, except that it uses childrenInScope() instead of nodes_ directly
-	// and this will decrease performance as childrenInScope() will convert nodes_ to a QList on every call.
-
 	Q_ASSERT(direction != SEARCH_DOWN);
 
 	bool found{};
@@ -228,6 +224,26 @@ bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 
 		if ((exhaustAllScopes || !found) && parent())
 			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+	}
+	else if (direction == SEARCH_UP_ORDERED)
+	{
+		bool found{};
+
+		auto sourceIndex = indexToSubnode(source); // Only search in items above the current one
+		if (sourceIndex < 0 || sourceIndex > size()) sourceIndex = size();
+
+		auto ignore = childToSubnode(source);
+		for (int i = 0; i<sourceIndex; ++i)
+			if (at(i) != ignore)
+			{
+				// Optimize the search by skipping the scope of the source, since we've already searched there
+				found = at(i)->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			}
+
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+
+		return found;
 	}
 
 	return found;

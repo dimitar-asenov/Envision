@@ -80,7 +80,7 @@ bool CommaExpression::findSymbols(QSet<Node*>& result, const Model::SymbolMatche
 		found = left()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		found = right()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 	}
-	else if (direction == SEARCH_UP)
+	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
 	{
 		auto ignore = childToSubnode(source);
 

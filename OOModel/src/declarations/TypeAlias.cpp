@@ -69,11 +69,6 @@ bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& mat
 {
 	bool found{};
 
-	// Without this check reference resolution takes forever
-	if (auto reference = DCast<OOModel::ReferenceExpression>(this->typeExpression()))
-		if (!reference->target())
-			return found;
-
 	if (direction == SEARCH_HERE)
 	{
 		if (symbolMatches(matcher, symbolTypes))
@@ -87,7 +82,7 @@ bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& mat
 		if (auto t = target())
 			found = t->findSymbols(result, matcher, t, SEARCH_DOWN, symbolTypes, false);
 	}
-	else if (direction == SEARCH_UP)
+	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
 	{
 		auto ignore = childToSubnode(source);
 		Q_ASSERT(ignore);
@@ -95,7 +90,7 @@ bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& mat
 			found = typeArguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 
 		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP_ORDERED, symbolTypes, exhaustAllScopes);
 	}
 
 	return found;

@@ -37,26 +37,8 @@ DEFINE_NODE_TYPE_REGISTRATION_METHODS(StatementItemList)
 bool StatementItemList::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
-	Q_ASSERT(direction != SEARCH_DOWN);
-
 	if (direction == SEARCH_UP)
-	{
-		bool found{};
-
-		auto sourceIndex = indexToSubnode(source); // Only search in items above the current one
-		if (sourceIndex < 0 || sourceIndex > size()) sourceIndex = size();
-
-		auto ignore = childToSubnode(source);
-		for (int i = 0; i<sourceIndex; ++i)
-			if (at(i) != ignore)
-				// Optimize the search by skipping the scope of the source, since we've already searched there
-				found = at(i)->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
-
-		return found;
-	}
+		return Super::findSymbols(result, matcher, source, SEARCH_UP_ORDERED, symbolTypes, exhaustAllScopes);
 	else return Super::findSymbols(result, matcher, source, direction, symbolTypes, exhaustAllScopes);
 }
 
