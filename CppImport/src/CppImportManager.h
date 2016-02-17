@@ -66,6 +66,17 @@ class CPPIMPORT_API CppImportManager
 		 */
 		void setupTest();
 
+		/**
+		 * The amount of translation units to be imported in total.
+		 * Used to display import progress.
+		 */
+		static int& totalTranslationUnits();
+		/**
+		 * The amount of translation units that were imported so far.
+		 * Used to display import progress.
+		 */
+		static int& processedTranslationUnits();
+
 	private:
 		/**
 		 * Prepares everything for the project in \a sourcePath to get imported
