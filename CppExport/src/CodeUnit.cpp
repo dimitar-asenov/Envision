@@ -57,29 +57,36 @@ void CodeUnit::calculateSourceFragments()
 	{
 		if (SpecialCases::isTestClass(classs))
 		{
-			CppPrintContext printContext{classs, CppPrintContext::PrintMethodBodyInline};
-			headerPart()->setFragment(DeclarationVisitor{printContext}.visitTopLevelClass(classs));
+			CppPrintContext headerPartPrintContext{classs, CppPrintContext::IsHeaderPart |
+																			CppPrintContext::PrintMethodBodyInline};
+			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visitTopLevelClass(classs));
 		}
 		else
 		{
-			headerPart()->setFragment(DeclarationVisitor{classs}.visitTopLevelClass(classs));
+			CppPrintContext headerPartPrintContext{classs, CppPrintContext::IsHeaderPart};
+			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visitTopLevelClass(classs));
 
-			CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
-			sourcePart()->setFragment(DeclarationVisitor{printContext}.visitTopLevelClass(classs));
+			CppPrintContext sourcePartPrintContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
+			sourcePart()->setFragment(DeclarationVisitor{sourcePartPrintContext}.visitTopLevelClass(classs));
 		}
 	}
 	else if (auto module = DCast<OOModel::Module>(node()))
 	{
+		CppPrintContext headerPartPrintContext{module, CppPrintContext::IsHeaderPart};
 		auto fragment = new Export::CompositeFragment{node()};
 		for (auto metaDefinition : Model::Node::childrenOfType<OOModel::MetaDefinition>(module))
-			*fragment << DeclarationVisitor{module}.visit(metaDefinition);
+			*fragment << DeclarationVisitor{headerPartPrintContext}.visit(metaDefinition);
 		headerPart()->setFragment(fragment);
 	}
 	else if (auto method = DCast<OOModel::Method>(node()))
 	{
 		if (method->typeArguments()->isEmpty() && !method->modifiers()->isSet(OOModel::Modifier::Inline))
 		{
-			if (!hasNoHeaderPart_) headerPart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(method));
+			if (!hasNoHeaderPart_)
+			{
+				CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
+				headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(method));
+			}
 
 			if (!method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 				 !method->modifiers()->isSet(OOModel::Modifier::Deleted))
@@ -93,15 +100,17 @@ void CodeUnit::calculateSourceFragments()
 		}
 		else
 		{
-			CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
-			headerPart()->setFragment(DeclarationVisitor{printContext}.visit(method));
+			CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart |
+																									CppPrintContext::PrintMethodBody};
+			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(method));
 		}
 	}
 	else if (auto variableDeclaration = DCast<OOModel::VariableDeclaration>(node()))
 	{
 		if (variableDeclaration->firstAncestorOfType<OOModel::Class>())
 		{
-			headerPart()->setFragment(DeclarationVisitor{variableDeclaration}.visit(variableDeclaration));
+			CppPrintContext headerPartPrintContext{variableDeclaration, CppPrintContext::IsHeaderPart};
+			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(variableDeclaration));
 			sourcePart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(variableDeclaration));
 		}
 		else
@@ -109,7 +118,8 @@ void CodeUnit::calculateSourceFragments()
 	}
 	else if (auto typeAlias = DCast<OOModel::TypeAlias>(node()))
 	{
-		headerPart()->setFragment(DeclarationVisitor{typeAlias}.visit(typeAlias));
+		CppPrintContext headerPartPrintContext{typeAlias, CppPrintContext::IsHeaderPart};
+		headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(typeAlias));
 	}
 	else if (auto metaCall = DCast<OOModel::MetaCallExpression>(node()))
 	{
@@ -117,22 +127,28 @@ void CodeUnit::calculateSourceFragments()
 		if (ooReference->name().startsWith("DEFINE_"))
 			sourcePart()->setFragment(ExpressionVisitor{printContextDeclaration}.visit(metaCall));
 		else
-			headerPart()->setFragment(ExpressionVisitor{printContextDeclaration}.visit(metaCall));
+		{
+			CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
+			headerPart()->setFragment(ExpressionVisitor{headerPartPrintContext}.visit(metaCall));
+		}
 	}
 	else if (auto metaDefinition = DCast<OOModel::MetaDefinition>(node()))
 	{
 		// TODO: add a similar map to the metaCallLocationMap (maybe even unify them?)
-		headerPart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(metaDefinition));
+		CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
+		headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(metaDefinition));
 	}
 	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
 	{
-		headerPart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(nameImport));
+		CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
+		headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(nameImport));
 		sourcePart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(nameImport));
 	}
 	else if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(node()))
 	{
-		CppPrintContext printContext{printContextDeclaration, CppPrintContext::PrintExternKeyword};
-		headerPart()->setFragment(DeclarationVisitor{printContext}.visit(explicitTemplateInstantiation));
+		CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart |
+																								CppPrintContext::PrintExternKeyword};
+		headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(explicitTemplateInstantiation));
 		sourcePart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(explicitTemplateInstantiation));
 	}
 	else

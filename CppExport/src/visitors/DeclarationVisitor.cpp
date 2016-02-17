@@ -94,8 +94,10 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 		auto currentClass = classes.takeLast();
 		if (!printContext().hasOption(CppPrintContext::PrintMethodBodyInline))
 		{
-			CppPrintContext printContext{ExportHelpers::parentNamespaceModule(classs), CppPrintContext::PrintMethodBody};
-			*fragment << list(currentClass->methods(), DeclarationVisitor{printContext, data()}, "spacedSections", filter);
+			CppPrintContext methodsPrintContext{ExportHelpers::parentNamespaceModule(classs), printContext().options() |
+																												CppPrintContext::PrintMethodBody};
+			*fragment << list(currentClass->methods(), DeclarationVisitor{methodsPrintContext, data()}, "spacedSections",
+									filter);
 		}
 		*fragment << list(currentClass->fields(),
 								DeclarationVisitor(ExportHelpers::parentNamespaceModule(classs), data()),
@@ -260,9 +262,10 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 	}
 
 	auto fragment = new CompositeFragment{classs, "accessorSections"};
-	CppPrintContext localPrintContext{classs, printContext().hasOption(CppPrintContext::PrintMethodBodyInline) ?
-														CppPrintContext::PrintMethodBody :
-														CppPrintContext::None};
+	CppPrintContext localPrintContext{classs, printContext().options() |
+														(printContext().hasOption(CppPrintContext::PrintMethodBodyInline) ?
+															CppPrintContext::PrintMethodBody :
+															CppPrintContext::None)};
 	DeclarationVisitor visitor{localPrintContext, data()};
 	for (auto node : ExportHelpers::topologicalSort(declarationDependencies))
 		*fragment << visitor.visit(node);
@@ -274,7 +277,7 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
 
-	CppPrintContext::Options printContextOptions = CppPrintContext::None;
+	CppPrintContext::Options printContextOptions = printContext().options();
 	std::unique_ptr<Model::Node> dummyNode{};
 
 	/*
@@ -456,9 +459,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	if (method->methodKind() == Method::MethodKind::OperatorOverload) *fragment << "operator";
 	*fragment << method->nameNode();
 
-	CppPrintContext argumentsPrintContext{printContext().node(), printContext().isClass() ?
+	CppPrintContext argumentsPrintContext{printContext().node(), printContext().options() |
+																						(printContext().isClass() ?
 																							CppPrintContext::PrintDefaultArgumentValues :
-																							CppPrintContext::None};
+																							CppPrintContext::None)};
 	*fragment << list(method->arguments(), ElementVisitor{argumentsPrintContext, data()}, "argsList");
 	if (method->modifiers()->isSet(Modifier::Const))
 		*fragment << " " << new TextFragment{method->modifiers(), "const"};
