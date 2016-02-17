@@ -188,6 +188,8 @@ add_library(InteractionBase SHARED
 	src/input_actions/GenericActions.cpp
 	src/handlers/HWebBrowserItem.h
 	src/handlers/HWebBrowserItem.cpp
+	src/handlers/HMovableItem.h
+	src/handlers/HMovableItem.cpp
 )
 
 envision_plugin(InteractionBase VisualizationBase FilePersistence)

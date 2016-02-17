@@ -43,7 +43,6 @@ add_library(OODebug SHARED
 	src/debugger/jdwp/DataTypes.h
 	src/commands/CProbe.h
 	src/debugger/jdwp/messages/ArrayReferenceSet.h
-	src/handlers/HMoveableOverlay.h
 	src/debugger/Probes.h
 	src/debugger/DebugUtils.h
 	src/OODebugException.cpp
@@ -80,7 +79,6 @@ add_library(OODebug SHARED
 	src/debugger/jdwp/DataTypes.cpp
 	src/commands/CProbe.cpp
 	src/debugger/jdwp/messages/ArrayReferenceSet.cpp
-	src/handlers/HMoveableOverlay.cpp
 	src/debugger/Probes.cpp
 	src/debugger/DebugUtils.cpp
 )

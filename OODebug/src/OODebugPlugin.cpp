@@ -28,6 +28,7 @@
 #include "SelfTest/src/TestManager.h"
 
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "InteractionBase/src/handlers/HMovableItem.h"
 
 #include "OOInteraction/src/handlers/HStatement.h"
 #include "OOInteraction/src/handlers/HStatementItemList.h"
@@ -38,7 +39,6 @@
 #include "commands/CProbe.h"
 #include "run_support/MainMethodFinder.h"
 #include "overlays/ConsoleOverlay.h"
-#include "handlers/HMoveableOverlay.h"
 #include "debugger/JavaDebugger.h"
 #include "debugger/ReferenceFinder.h"
 
@@ -59,8 +59,8 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug{});
 	OOInteraction::HStatementItemList::instance()->addCommand(new CProbe{});
 
-	ConsoleOverlay::setDefaultClassHandler(HMoveableOverlay::instance());
-	PlotOverlay::setDefaultClassHandler(HMoveableOverlay::instance());
+	ConsoleOverlay::setDefaultClassHandler(Interaction::HMovableItem::instance());
+	PlotOverlay::setDefaultClassHandler(Interaction::HMovableItem::instance());
 
 
 	MainMethodFinder::init();
