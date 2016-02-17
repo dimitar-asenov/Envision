@@ -736,8 +736,18 @@ bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& st
 	return changed;
 }
 
-// Do not make this a non-template function since then the reference to pointer won't work as it is not polymorphic.
-// If both this and the function below are made non-template, then always the funcion below will be called.
+/**
+ * Do not make this a non-template function since then the reference to pointer won't work as it is not polymorphic.
+ */
+template <typename T> inline void SAFE_DELETE_ITEM(T* const & item)
+{
+	if (item)
+		item->removeFromScene();
+}
+
+/**
+ * Do not make this a non-template function since then the reference to pointer won't work as it is not polymorphic.
+ */
 template <typename T> inline void SAFE_DELETE_ITEM( T* & item)
 {
 	if (item)
@@ -747,6 +757,9 @@ template <typename T> inline void SAFE_DELETE_ITEM( T* & item)
 	}
 }
 
+/**
+ * Do not make this a non-template function since then the reference to pointer won't work as it is not polymorphic.
+ */
 template <typename T> inline void SAFE_DELETE_ITEM( T* && item)
 {
 	if (item)
