@@ -49,6 +49,7 @@ namespace Export
 namespace CppExport {
 
 class CodeComposite;
+class CppPrintContext;
 
 class CPPEXPORT_API ExportHelpers
 {
@@ -74,6 +75,8 @@ class CPPEXPORT_API ExportHelpers
 		static OOModel::Declaration* firstValidAncestorPrintContext(Model::Node* node);
 
 		static OOModel::Module* parentNamespaceModule(Model::Node* node);
+
+		static bool isInlineNonPrivateOrNonTemplateClassMethod(OOModel::Method* method, CppPrintContext& printContext);
 };
 
 template <typename T>

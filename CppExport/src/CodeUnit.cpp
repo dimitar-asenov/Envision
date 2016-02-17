@@ -58,15 +58,24 @@ void CodeUnit::calculateSourceFragments()
 		if (SpecialCases::isTestClass(classs))
 		{
 			CppPrintContext headerPartPrintContext{classs, CppPrintContext::IsHeaderPart |
-																			CppPrintContext::PrintMethodBodyInline};
+																			CppPrintContext::PrintMethodBodyInline |
+																			(isTemplateImplementationSeparateFile() ?
+																				CppPrintContext::IsTemplateImplementationSeparateFile :
+																				CppPrintContext::None)};
 			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visitTopLevelClass(classs));
 		}
 		else
 		{
-			CppPrintContext headerPartPrintContext{classs, CppPrintContext::IsHeaderPart};
+			CppPrintContext headerPartPrintContext{classs, CppPrintContext::IsHeaderPart |
+																			(isTemplateImplementationSeparateFile() ?
+																				CppPrintContext::IsTemplateImplementationSeparateFile :
+																				CppPrintContext::None)};
 			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visitTopLevelClass(classs));
 
-			CppPrintContext sourcePartPrintContext{printContextDeclaration, CppPrintContext::PrintMethodBody};
+			CppPrintContext sourcePartPrintContext{printContextDeclaration, CppPrintContext::PrintMethodBody |
+																				(isTemplateImplementationSeparateFile() ?
+																					CppPrintContext::IsTemplateImplementationSeparateFile :
+																					CppPrintContext::None)};
 			sourcePart()->setFragment(DeclarationVisitor{sourcePartPrintContext}.visitTopLevelClass(classs));
 		}
 	}

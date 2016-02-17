@@ -83,24 +83,31 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	auto fragment = new CompositeFragment{classs, "spacedSections"};
 	*fragment << visit(classs);
 
-	auto filter = [](Method* method) { return !method->typeArguments()->isEmpty() ||
-															((method->modifiers()->isSet(OOModel::Modifier::Inline) &&
-															  !method->modifiers()->isSet(OOModel::Modifier::Private)) &&
-															 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
-															 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
+	auto filter = [this](Method* method) { return !method->typeArguments()->isEmpty() ||
+													(ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(method, printContext()) &&
+													 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
+													 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
 	QList<Class*> classes{classs};
 	while (!classes.empty())
 	{
 		auto currentClass = classes.takeLast();
 		if (!printContext().hasOption(CppPrintContext::PrintMethodBodyInline))
 		{
-			CppPrintContext methodsPrintContext{ExportHelpers::parentNamespaceModule(classs), printContext().options() |
-																												CppPrintContext::PrintMethodBody};
+			CppPrintContext methodsPrintContext
+			{
+				ExportHelpers::parentNamespaceModule(classs),
+				printContext().options() | CppPrintContext::PrintMethodBody
+			};
 			*fragment << list(currentClass->methods(), DeclarationVisitor{methodsPrintContext, data()}, "spacedSections",
 									filter);
 		}
+		CppPrintContext fieldsPrintContext
+		{
+			ExportHelpers::parentNamespaceModule(classs),
+			printContext().options()
+		};
 		*fragment << list(currentClass->fields(),
-								DeclarationVisitor(ExportHelpers::parentNamespaceModule(classs), data()),
+								DeclarationVisitor{fieldsPrintContext, data()},
 								"spacedSections",
 								[](Field* field)
 								{
@@ -213,11 +220,11 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->metaCalls(), ExpressionVisitor{data()}, "spacedSections",
 								[](Expression* expression) { return metaCallFilter(expression, true); });
 		*sections << list(classs->classes(), this, "sections");
-		*sections << list(classs->methods(), this, "spacedSections", [](Method* method)
+
+		*sections << list(classs->methods(), this, "spacedSections", [this](Method* method)
 		{
 			return method->typeArguments()->isEmpty() &&
-						 (!method->modifiers()->isSet(OOModel::Modifier::Inline) ||
-						  method->modifiers()->isSet(OOModel::Modifier::Private)) &&
+						 !ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(method, printContext()) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Default);
@@ -313,7 +320,7 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 		printContextOptions = CppPrintContext::PrintMethodBodyIfNotEmpty;
 	}
 
-	CppPrintContext printContext{printContextNode, printContextOptions};
+	CppPrintContext metaDefinitionPrintContext{printContextNode, printContextOptions};
 	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
 	*fragment << compositeNodeComments(metaDefinition, "declarationComment");
 	auto macro = fragment->append(new CompositeFragment{metaDefinition, "macro"});
@@ -322,15 +329,15 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 		*macro << list(metaDefinition->arguments(), ElementVisitor{data()}, "argsList");
 	auto body = new CompositeFragment{metaDefinition->context(), "macroBody"};
 	if (auto context = DCast<Module>(metaDefinition->context()))
-		*body << list(context->classes(), DeclarationVisitor{printContext, data()}, "spacedSections");
+		*body << list(context->classes(), DeclarationVisitor{metaDefinitionPrintContext, data()}, "spacedSections");
 	else if (auto context = DCast<Method>(metaDefinition->context()))
-		*body << list(context->items(), StatementVisitor{printContext, data()}, "sections");
+		*body << list(context->items(), StatementVisitor{metaDefinitionPrintContext, data()}, "sections");
 	else if (auto context = DCast<Class>(metaDefinition->context()))
 	{
 		*body << list(context->metaCalls(), ExpressionVisitor{data()}, "sections");
 
-		DeclarationVisitor declarationVisitor{printContext, data()};
-		if (!printContext.isClass())
+		DeclarationVisitor declarationVisitor{metaDefinitionPrintContext, data()};
+		if (!metaDefinitionPrintContext.isClass())
 		{
 			*body << list(context->methods(), declarationVisitor, "spacedSections");
 			*body << list(context->fields(), declarationVisitor, "spacedSections");

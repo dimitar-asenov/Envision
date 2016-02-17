@@ -168,4 +168,14 @@ OOModel::Module* ExportHelpers::parentNamespaceModule(Model::Node* node)
 	return nullptr;
 }
 
+bool ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(OOModel::Method* method,
+																			 CppPrintContext& printContext)
+{
+	auto parentClass = method->firstAncestorOfType<OOModel::Class>();
+	return method->modifiers()->isSet(OOModel::Modifier::Inline) &&
+			 (!method->modifiers()->isSet(OOModel::Modifier::Private) ||
+				(parentClass && !parentClass->typeArguments()->isEmpty()) ||
+				printContext.hasOption(CppPrintContext::IsTemplateImplementationSeparateFile));
+}
+
 }
