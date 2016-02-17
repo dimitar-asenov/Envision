@@ -46,6 +46,7 @@
 #include "OOModel/src/declarations/MetaDefinition.h"
 #include "OOModel/src/expressions/ArrayInitializer.h"
 #include "OOModel/src/expressions/types/AutoTypeExpression.h"
+#include "OOModel/src/types/PrimitiveType.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
@@ -400,6 +401,10 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (!ExportHelpers::shouldExportMethod(method, printContext().isClass(), !printContext().isClass())) return nullptr;
 
+	bool isGlobal = !method->firstAncestorOfType<Class>();
+	bool isGlobalStatic = isGlobal && method->modifiers()->isSet(Modifier::Static);
+	bool isGlobalDeclaration = isGlobal && isGlobalStatic != printContext().hasOption(CppPrintContext::IsHeaderPart);
+
 	auto fragment = new CompositeFragment{method};
 
 	// comments
@@ -408,7 +413,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << compositeNodeComments(method, "declarationComment");
 
 	// template<typename ...>
-	if (!printContext().isClass())
+	if (!printContext().isClass() && !isGlobal)
 	{
 		if (printContext().hasOption(CppPrintContext::PrintTemplatePrefix))
 			*fragment << "templatePrefix ";
@@ -455,8 +460,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	if (printContext().hasOption(CppPrintContext::IsHeaderPart) && !method->firstAncestorOfType<Class>()
-		 && method->typeArguments()->isEmpty())
+	if (printContext().hasOption(CppPrintContext::IsHeaderPart) && isGlobal && method->typeArguments()->isEmpty())
 		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
@@ -468,7 +472,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	*fragment << method->nameNode();
 
 	CppPrintContext argumentsPrintContext{printContext().node(), printContext().options() |
-																						(printContext().isClass() ?
+																						(printContext().isClass() || isGlobalDeclaration ?
 																							CppPrintContext::PrintDefaultArgumentValues :
 																							CppPrintContext::None)};
 	*fragment << list(method->arguments(), ElementVisitor{argumentsPrintContext, data()}, "argsList");
@@ -568,9 +572,16 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 	// name
 	*fragment << variableDeclaration->nameNode();
 
+	auto isPrimitive = [](VariableDeclaration* vd){
+		auto type = vd->typeExpression()->type();
+		return (bool) dynamic_cast<OOModel::PrimitiveType*>(type.get());
+	};
+
 	// initial value
 	if (variableDeclaration->initialValue() &&
 		 (   (isClassField && (!variableDeclaration->modifiers()->isSet(Modifier::Static) || !printContext().isClass()))
+		  || (isClassField && variableDeclaration->modifiers()->isSet(Modifier::Static) && printContext().isClass()
+				&& variableDeclaration->modifiers()->isSet(Modifier::ConstExpr) && isPrimitive(variableDeclaration))
 		  || isStaticGlobal
 		  || (!isClassField && !isStaticGlobal && !printContext().hasOption(CppPrintContext::IsHeaderPart))
 		  )
@@ -593,10 +604,10 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 		*fragment << list(declaration->annotations(), StatementVisitor{data()}, "vertical");
 	auto header = fragment->append(new CompositeFragment{declaration, "space"});
 
-	if (declaration->modifiers()->isSet(Modifier::ConstExpr))
-		*header << new TextFragment{declaration->modifiers(), "constexpr"};
 	if (declaration->modifiers()->isSet(Modifier::Static))
 		*header << new TextFragment{declaration->modifiers(), "static"};
+	if (declaration->modifiers()->isSet(Modifier::ConstExpr))
+		*header << new TextFragment{declaration->modifiers(), "constexpr"};
 	if (declaration->modifiers()->isSet(Modifier::Final) && !DCast<OOModel::Class>(declaration))
 		*header << new TextFragment{declaration->modifiers(), "final"};
 	if (declaration->modifiers()->isSet(Modifier::Virtual))
