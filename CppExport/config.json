@@ -160,7 +160,8 @@
 		"Core/src/reflect/DECLARE_TYPE_ID_BASE" : "Core/src/reflect/typeIdMacros" ,
 		"FilePersistence/test/SaveModeNodesSingleUnitOnly|NameImportInClass" : "FilePersistence/test/SaveTests" ,
 		"FilePersistence/GENERATE_PUS" : "FilePersistence/src/simple/SimpleTextFileStore" ,
-		"Core/DISABLE_TIME_MEASUREMENT" : "Core/src/Profiler"
+		"Core/DISABLE_TIME_MEASUREMENT" : "Core/src/Profiler" ,
+		"Core/src/isProvidedT&" : "Core/src/global"
 	},
 	"SeparateTemplateImplementationSet" : [ "ModelBase/src/visitor/Visitor", "ModelBase/src/nodes/TypedList" ]
 }
