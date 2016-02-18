@@ -38,11 +38,15 @@ GenericTree::~GenericTree()
 	for (auto c : emptyChunks_) delete [] c;
 }
 
-inline const std::shared_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() const
-{ return piecewiseLoader_;}
+const std::shared_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() const
+{
+	return piecewiseLoader_;
+}
 
-inline QMultiHash<Model::NodeIdType, GenericNode*>& GenericTree::nodesWithoutParents()
-{ return nodesWithoutParents_;}
+QMultiHash<Model::NodeIdType, GenericNode*>& GenericTree::nodesWithoutParents()
+{
+	return nodesWithoutParents_;
+}
 
 void GenericTree::setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader)
 {
