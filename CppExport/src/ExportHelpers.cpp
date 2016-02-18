@@ -175,7 +175,8 @@ bool ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(OOModel::Method* 
 	return method->modifiers()->isSet(OOModel::Modifier::Inline) &&
 			 (!method->modifiers()->isSet(OOModel::Modifier::Private) ||
 				(parentClass && !parentClass->typeArguments()->isEmpty()) ||
-				printContext.hasOption(CppPrintContext::IsTemplateImplementationSeparateFile));
+				printContext.hasOption(CppPrintContext::IsTemplateImplementationSeparateFile)) &&
+			 (!parentClass || parentClass->friends()->isEmpty());
 }
 
 }
