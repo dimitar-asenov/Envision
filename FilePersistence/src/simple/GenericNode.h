@@ -30,6 +30,7 @@
 #include "../FilePersistenceException.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
 #include "GenericTree.h"
+#include "GenericPersistentUnit.h"
 
 namespace FilePersistence {
 
@@ -198,5 +199,11 @@ inline bool GenericNode::equalTo(const GenericNode* other)
 			  value_ == other->value_ &&
 			  parentId_ == other->parentId_);
 }
+
+inline GenericTree* GenericNode::tree() const
+{ return persistentUnit_->tree();}
+
+inline bool GenericNode::sameTree(const GenericNode* other)
+{return persistentUnit_->tree() == other->persistentUnit_->tree();}
 
 }
