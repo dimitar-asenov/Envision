@@ -263,7 +263,7 @@ add_library(VisualizationBase SHARED
 if (WIN32)
     add_definitions(-DWIN32) # needed for lpsolve
 endif (WIN32)
-find_package(Qt5 REQUIRED Xml Svg PrintSupport)
-target_link_libraries(VisualizationBase -llpsolve55 Qt5::Xml Qt5::Svg Qt5::PrintSupport)
+find_package(Qt5 REQUIRED Xml Svg PrintSupport WebKitWidgets)
+target_link_libraries(VisualizationBase -llpsolve55 Qt5::Xml Qt5::Svg Qt5::PrintSupport Qt5::WebKitWidgets)
 
 envision_plugin(VisualizationBase ModelBase)
