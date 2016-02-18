@@ -303,9 +303,12 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager* manager, const QS
 			if (id.isNull()) throw FilePersistenceException{"Incorrect id format for reference target " + p.second};
 
 			Model::Node* target = const_cast<Model::Node*> (treeManager_->nodeIdMap().node(id));
-			if (!target) throw FilePersistenceException{"A reference is pointing to an unloaded node " + p.second};
-
-			setReferenceTargetr(p.first, target);
+			if (target)
+			{
+				// A reference might have pointed to a temporary node when saved and will now be invalid
+				// TODO: shouldn't we rather export such references as invlaid?
+				setReferenceTargetr(p.first, target);
+			}
 		}
 
 		SAFE_DELETE(genericTree_);
