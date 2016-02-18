@@ -451,9 +451,17 @@ double SimpleTextFileStore::loadDoubleValue()
 QString SimpleTextFileStore::loadReferenceValue(Model::Reference* r)
 {
 	checkIsWorking();
-	QStringList ref = genericNode_->valueAsString().split(":");
-	QString target = ref.first() == NULL_STRING ? QString{} : ref.first();
-	QString name = ref.last() == NULL_STRING ? QString{} : ref.last();
+	QString string =  genericNode_->valueAsString();
+	int midIndex = string.indexOf(':');
+	Q_ASSERT(midIndex >= 0);
+
+	// id
+	auto part = string.leftRef(midIndex);
+	QString target = part == NULL_STRING ? QString{} : part.toString();
+
+	// name
+	part = string.midRef(midIndex+1);
+	QString name = part == NULL_STRING ? QString{} : part.toString();
 
 	if (!target.isNull()) uninitializedReferences_.append(qMakePair(r, target));
 
