@@ -76,7 +76,7 @@ class CPPEXPORT_API ExportHelpers
 
 		static OOModel::Module* parentNamespaceModule(Model::Node* node);
 
-		static bool isInlineNonPrivateOrNonTemplateClassMethod(OOModel::Method* method, CppPrintContext& printContext);
+		static bool isInHeader(OOModel::Method* method, CppPrintContext& printContext);
 };
 
 template <typename T>

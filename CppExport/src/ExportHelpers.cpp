@@ -168,15 +168,38 @@ OOModel::Module* ExportHelpers::parentNamespaceModule(Model::Node* node)
 	return nullptr;
 }
 
-bool ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(OOModel::Method* method,
-																			 CppPrintContext& printContext)
+bool ExportHelpers::isInHeader(OOModel::Method* method, CppPrintContext& printContext)
 {
+	bool isBodyTrivial = method->modifiers()->isSet(OOModel::Modifier::Default) ||
+	method->modifiers()->isSet(OOModel::Modifier::Deleted) ||
+	method->modifiers()->isSet(OOModel::Modifier::Virtual);
+
+	if (isBodyTrivial) return true;
+
+	bool isInline = method->modifiers()->isSet(OOModel::Modifier::Inline);
+	bool isStatic = method->modifiers()->isSet(OOModel::Modifier::Static);
+	bool isPrivate = method->modifiers()->isSet(OOModel::Modifier::Private);
+
 	auto parentClass = method->firstAncestorOfType<OOModel::Class>();
-	return method->modifiers()->isSet(OOModel::Modifier::Inline) &&
-			 (!method->modifiers()->isSet(OOModel::Modifier::Private) ||
-				(parentClass && !parentClass->typeArguments()->isEmpty()) ||
-				printContext.hasOption(CppPrintContext::IsTemplateImplementationSeparateFile)) &&
-			 (!parentClass || parentClass->friends()->isEmpty());
+	bool hasFriends = parentClass && !parentClass->friends()->isEmpty();
+
+	bool isTemplateMethod = !method->typeArguments()->isEmpty();
+	bool isTemplateClass = parentClass && !parentClass->typeArguments()->isEmpty();
+	bool isSeparateTemplateImplementation =
+			printContext.hasOption(CppPrintContext::IsTemplateImplementationSeparateFile);
+
+	if (isInline && !isTemplateClass && !isTemplateMethod)
+	return !isPrivate || hasFriends;
+
+	if (isTemplateMethod && !parentClass) return !isStatic;
+	if (isTemplateMethod && parentClass) return true;
+
+	if (isTemplateClass && !isSeparateTemplateImplementation) return true;
+	if (isTemplateClass && isSeparateTemplateImplementation)
+		if (isInline) return !isPrivate || hasFriends;
+
+	Q_ASSERT(!isInline && !isTemplateMethod && !isTemplateClass);
+	return false;
 }
 
 }

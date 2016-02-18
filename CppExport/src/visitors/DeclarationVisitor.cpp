@@ -84,10 +84,7 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 	auto fragment = new CompositeFragment{classs, "spacedSections"};
 	*fragment << visit(classs);
 
-	auto filter = [this](Method* method) { return !method->typeArguments()->isEmpty() ||
-													(ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(method, printContext()) &&
-													 !method->modifiers()->isSet(OOModel::Modifier::Default) &&
-													 !method->modifiers()->isSet(OOModel::Modifier::Deleted)); };
+	auto filter = [this](Method* method) { return ExportHelpers::isInHeader(method, printContext());};
 	QList<Class*> classes{classs};
 	while (!classes.empty())
 	{
@@ -225,7 +222,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*sections << list(classs->methods(), this, "spacedSections", [this](Method* method)
 		{
 			return method->typeArguments()->isEmpty() &&
-						 !ExportHelpers::isInlineNonPrivateOrNonTemplateClassMethod(method, printContext()) &&
+						 !ExportHelpers::isInHeader(method, printContext()) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Abstract) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Deleted) &&
 						 !method->modifiers()->isSet(OOModel::Modifier::Default);
