@@ -1125,6 +1125,8 @@ void ClangAstVisitor::addFunctionModifiers(clang::FunctionDecl* functionDecl, OO
 {
 	if (functionDecl->isInlined())
 		method->modifiers()->set(OOModel::Modifier::Inline);
+	if (functionDecl->isConstexpr())
+		method->modifiers()->set(OOModel::Modifier::ConstExpr);
 	if (functionDecl->isVirtualAsWritten())
 		method->modifiers()->set(OOModel::Modifier::Virtual);
 	if (functionDecl->hasAttr<clang::OverrideAttr>())

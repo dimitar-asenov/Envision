@@ -101,11 +101,13 @@ SystemCommandResult CORE_API runSystemCommand(const QString& program, const QStr
 												 const QString& workingDirectory = {});
 
 template<class T>
-typename std::enable_if<
-  std::is_constructible<bool, T>::value, bool>::type
-isProvided(T&&t) { return static_cast<bool>(t); }
+typename std::enable_if<std::is_constructible<bool, T>::value, bool>::type isProvided(T&&t)
+{
+	return static_cast<bool>(t);
+}
 
 template<class T>
-constexpr typename std::enable_if<
-  !std::is_constructible<bool, T>::value, bool>::type
-isProvided(T&&) { return true; }
+constexpr inline typename std::enable_if<!std::is_constructible<bool, T>::value, bool>::type isProvided(T&&)
+{
+	return true;
+}

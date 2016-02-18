@@ -435,7 +435,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << list(method->typeArguments(), ElementVisitor{printContext().node(), data()}, "templateArgsList");
 
 	// private, public, ...
-	if (printContext().isClass())
+	if (printContext().isClass() || method->modifiers()->isSet(Modifier::ConstExpr))
 		*fragment << printAnnotationsAndModifiers(method);
 
 	// inline
