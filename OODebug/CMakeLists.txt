@@ -83,4 +83,6 @@ add_library(OODebug SHARED
 	src/debugger/DebugUtils.cpp
 )
 
+find_package(Qt5 REQUIRED Network)
+target_link_libraries(OODebug Qt5::Network)
 envision_plugin(OODebug JavaExport OOInteraction)
