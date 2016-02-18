@@ -620,9 +620,14 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	auto fragment = new CompositeFragment{nameImport};
 	notAllowed(nameImport->annotations());
 
-	*fragment << "using ";
-	if (nameImport->importAll()) *fragment << "namespace ";
-	*fragment << expression(nameImport->importedName()) << ";";
+	if (nameImport->importAll() && !printContext().hasOption(CppPrintContext::IsHeaderPart))
+		*fragment << "using namespace " << expression(nameImport->importedName()) << ";";
+	else if (!nameImport->importAll() && printContext().isClass()
+				&& printContext().hasOption(CppPrintContext::IsHeaderPart))
+		*fragment << "using " << expression(nameImport->importedName()) << ";";
+	else
+		notAllowed(nameImport);
+
 	return fragment;
 }
 
