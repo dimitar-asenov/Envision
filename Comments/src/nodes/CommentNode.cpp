@@ -42,6 +42,11 @@ DEFINE_ATTRIBUTE(CommentNode, tables, TypedListOfCommentTable, false, false, tru
 CommentNode::CommentNode(const QString& text)
 : Super{nullptr, CommentNode::getMetaData()}
 {
+	appendText(text);
+}
+
+void CommentNode::appendText(const QString& text)
+{
 	QStringList linesList = text.split(QRegExp{"\\r?\\n"});
 	for (auto line : linesList)
 		lines()->append(new Model::Text{line});
