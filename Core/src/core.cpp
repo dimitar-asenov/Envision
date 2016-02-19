@@ -24,6 +24,8 @@
 **
 ***********************************************************************************************************************/
 
+#include "core.h"
+
 #include "EnvisionWindow.h"
 #include "PluginManager.h"
 #include "EnvisionApplication.h"
