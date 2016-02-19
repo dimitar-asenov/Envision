@@ -256,4 +256,28 @@ QString ClangHelpers::projectNameFromPath(QString path)
 	return {};
 }
 
+void ClangHelpers::attachDeclarationComments(clang::NamedDecl* namedDecl, Model::Node* receiver) const
+{
+	if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
+	{
+		auto compositeNode = DCast<Model::CompositeNode>(receiver);
+		Q_ASSERT(compositeNode);
+
+		for (Comment* clangComment : comments_)
+			if (clangComment->rawComment() == commentForDeclaration && !clangComment->node())
+			{
+				clangComment->setNode(compositeNode);
+
+				if (compositeNode->comment())
+				{
+					auto commentNode = DCast<Comments::CommentNode>(compositeNode->comment());
+					Q_ASSERT(commentNode);
+
+					commentNode->appendText(clangComment->text());
+				}
+				else compositeNode->setComment(new Comments::CommentNode{clangComment->text()});
+			}
+	}
+}
+
 }

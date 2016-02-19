@@ -165,10 +165,10 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 			clang_.envisionToClangMap().mapAst(mDecl->getSourceRange(), method);
 			clang_.envisionToClangMap().mapAst(mDecl->getLocation(), method->nameNode());
 
-			/*
-			 * We delete and recreate the results when there is a result without source range information in order to
-			 * recompute the source range information needed for reference transformation in meta definitions.
-			 */
+			clang_.attachDeclarationComments(mDecl, method);
+
+			// We delete and recreate the results when there is a result without source range information in order to
+			// recompute the source range information needed for reference transformation in meta definitions.
 			if (clang_.isMacroRange(mDecl->getSourceRange()) && !method->results()->isEmpty() &&
 				 clang_.envisionToClangMap().get(method->results()->first()).empty())
 			{
@@ -205,18 +205,30 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 	{
 		ooFunction = functionMap_.value(hash);
 		clang_.envisionToClangMap().mapAst(functionDecl->getSourceRange(), ooFunction);
+		clang_.envisionToClangMap().mapAst(functionDecl->getLocation(), ooFunction->nameNode());
 
-		if (ooFunction->items()->size())
-			return ooFunction;
-		// the method which is in the map is just a declaration
-		// therefore it might miss some arguments name which we collect here
+		clang_.attachDeclarationComments(functionDecl, ooFunction);
+
+		// We delete and recreate the results when there is a result without source range information in order to
+		// recompute the source range information needed for reference transformation in meta definitions.
+		if (clang_.isMacroRange(functionDecl->getSourceRange()) && !ooFunction->results()->isEmpty() &&
+			 clang_.envisionToClangMap().get(ooFunction->results()->first()).empty())
+		{
+			ooFunction->results()->clear();
+			addMethodResult(functionDecl, ooFunction);
+		}
+
 		for (int i = 0; i< ooFunction->arguments()->size(); i++)
 		{
-			OOModel::FormalArgument* ooArg = ooFunction->arguments()->at(i);
-			// note that this never should/can be out of range otherwise the hash would be different
-			ooArg->setName(QString::fromStdString(functionDecl->getParamDecl(i)->getNameAsString()));
+			auto argName = QString::fromStdString(functionDecl->getParamDecl(i)->getNameAsString());
+			if (argName.isEmpty()) continue;
+
+			auto ooArg = ooFunction->arguments()->at(i);
+			if (ooArg->name().isEmpty())
+				ooArg->setName(argName);
+			else if (argName != ooArg->name())
+				Q_ASSERT(false && "multiple different argument names for the same argument");
 		}
-		return ooFunction;
 	}
 	return ooFunction;
 }
@@ -241,7 +253,9 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 		wasDeclared = true;
 		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), staticFieldMap_.value(hash));
 		clang_.envisionToClangMap().mapAst(varDecl->getLocation(), staticFieldMap_.value(hash)->nameNode());
-		return staticFieldMap_.value(hash);
+		auto staticField = staticFieldMap_.value(hash);
+		clang_.attachDeclarationComments(varDecl, staticField);
+		return staticField;
 	}
 	wasDeclared = false;
 	const QString parentHash = nh_->hashParentOfStaticField(varDecl->getDeclContext());
@@ -263,7 +277,9 @@ OOModel::Field* TranslateManager::insertNamespaceField(clang::VarDecl* varDecl, 
 		wasDeclared = true;
 		clang_.envisionToClangMap().mapAst(varDecl->getSourceRange(), namespaceFieldMap_.value(hash));
 		clang_.envisionToClangMap().mapAst(varDecl->getLocation(), namespaceFieldMap_.value(hash)->nameNode());
-		return namespaceFieldMap_.value(hash);
+		auto namespaceField = namespaceFieldMap_.value(hash);
+		clang_.attachDeclarationComments(varDecl, namespaceField);
+		return namespaceField;
 	}
 	wasDeclared = false;
 	const QString parentHash = nh_->hashNameSpace(llvm::dyn_cast<clang::NamespaceDecl>(varDecl->getDeclContext()));

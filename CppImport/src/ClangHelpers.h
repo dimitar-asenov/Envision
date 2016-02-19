@@ -126,6 +126,8 @@ class CPPIMPORT_API ClangHelpers
 
 		QString presumedFilenameWithoutExtension(clang::SourceLocation location);
 
+		void attachDeclarationComments(clang::NamedDecl* namedDecl, Model::Node* receiver) const;
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 
@@ -184,14 +186,8 @@ inline NodeType* ClangHelpers::createNamedNode(clang::NamedDecl* namedDecl, Cons
 	 * comments processing 2 of 3.
 	 * process comments which are associated with declarations.
 	 */
-	if (auto compositeNode = DCast<Model::CompositeNode>(namedNode))
-		if (auto commentForDeclaration = namedDecl->getASTContext().getRawCommentForDeclNoCache(namedDecl))
-			for (Comment* comment : comments_)
-				if (comment->rawComment() == commentForDeclaration && !comment->node())
-				{
-					comment->setNode(namedNode);
-					compositeNode->setComment(new Comments::CommentNode{comment->text()});
-				}
+	attachDeclarationComments(namedDecl, namedNode);
+
 	return namedNode;
 }
 
