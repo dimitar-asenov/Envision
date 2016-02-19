@@ -68,7 +68,6 @@ CommentFreeNode* CommentNode::code(const QString& name)
 	return nullptr;
 }
 
-
 CommentTable* CommentNode::table(const QString& name)
 {
 	for (auto table : *tables())

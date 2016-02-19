@@ -270,6 +270,10 @@ void ClangHelpers::attachDeclarationComments(clang::NamedDecl* namedDecl, Model:
 
 				if (compositeNode->comment())
 				{
+					// This code is here for future reference, but we don't actually support this case at the moment.
+					// It would be necessary to check if the lines we are about to attach already exist.
+					return;
+
 					auto commentNode = DCast<Comments::CommentNode>(compositeNode->comment());
 					Q_ASSERT(commentNode);
 
