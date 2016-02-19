@@ -79,12 +79,18 @@ SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
 
 SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 {
+	// Print everything that's inside the class declaration
 	if (!printContext().isClass()) return visit(classs);
 
+	// Print things *after* the class declaration
 	auto fragment = new CompositeFragment{classs, "spacedSections"};
 	*fragment << visit(classs);
 
-	auto filter = [this](Method* method) { return ExportHelpers::isInHeader(method, printContext());};
+	auto filter = [this](Method* method) { return ExportHelpers::isInHeader(method, printContext())
+				&& !method->modifiers()->isSet(OOModel::Modifier::Default)
+				&& !method->modifiers()->isSet(OOModel::Modifier::Deleted)
+				&& !method->modifiers()->isSet(OOModel::Modifier::Abstract);};
+
 	QList<Class*> classes{classs};
 	while (!classes.empty())
 	{

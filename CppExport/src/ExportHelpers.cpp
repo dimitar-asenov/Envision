@@ -172,7 +172,7 @@ bool ExportHelpers::isInHeader(OOModel::Method* method, CppPrintContext& printCo
 {
 	bool isBodyTrivial = method->modifiers()->isSet(OOModel::Modifier::Default) ||
 	method->modifiers()->isSet(OOModel::Modifier::Deleted) ||
-	method->modifiers()->isSet(OOModel::Modifier::Virtual);
+	method->modifiers()->isSet(OOModel::Modifier::Abstract);
 
 	if (isBodyTrivial) return true;
 
@@ -196,7 +196,10 @@ bool ExportHelpers::isInHeader(OOModel::Method* method, CppPrintContext& printCo
 
 	if (isTemplateClass && !isSeparateTemplateImplementation) return true;
 	if (isTemplateClass && isSeparateTemplateImplementation)
+	{
 		if (isInline) return !isPrivate || hasFriends;
+		else return false;
+	}
 
 	Q_ASSERT(!isInline && !isTemplateMethod && !isTemplateClass);
 	return false;
