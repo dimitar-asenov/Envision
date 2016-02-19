@@ -110,7 +110,7 @@ bool ClangAstVisitor::VisitDecl(clang::Decl* decl)
 	if (!shouldImport(decl->getLocation()))
 		return true;
 
-	if (decl && !llvm::isa<clang::AccessSpecDecl>(decl))
+	if (decl && !llvm::isa<clang::AccessSpecDecl>(decl) && !llvm::isa<clang::ParmVarDecl>(decl))
 	{
 		log_->writeError(className_, decl, CppImportLogger::Reason::NOT_SUPPORTED);
 		return true;
@@ -246,8 +246,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 				ooClass->typeArguments()->append(templArgVisitor_->translateTemplateArg(templateParameter));
 		}
 	}
-	else
-		log_->writeError(className_, recordDecl, CppImportLogger::Reason::NOT_SUPPORTED);
+
 	return true;
 }
 
@@ -608,6 +607,9 @@ bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingVal
 
 bool ClangAstVisitor::TraverseStaticAssertDecl(clang::StaticAssertDecl* staticAssertDecl)
 {
+	if (!shouldImport(staticAssertDecl->getLocation()))
+		return true;
+
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 	{
 		auto ooAssert = clang_.createNode<OOModel::AssertStatement>(staticAssertDecl->getSourceRange());
@@ -625,7 +627,11 @@ bool ClangAstVisitor::TraverseStaticAssertDecl(clang::StaticAssertDecl* staticAs
 		itemList->append(ooAssert);
 	}
 	else
+	{
+		// TODO: it is necessary to add an AssertDeclaration to Envision (right now we have only a statement)
+		// in order to support the remaining cases.
 		log_->writeError(className_, staticAssertDecl, CppImportLogger::Reason::INSERT_PROBLEM);
+	}
 	return true;
 }
 

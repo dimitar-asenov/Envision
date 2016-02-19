@@ -50,7 +50,7 @@ OOModel::Expression* ExpressionVisitor::translateExpression(clang::Stmt* s)
 bool ExpressionVisitor::VisitExpr(clang::Expr* e)
 {
 	if (e && !llvm::isa<clang::ImplicitCastExpr>(e) && !llvm::isa<clang::CXXBindTemporaryExpr>(e)
-		 && !llvm::isa<clang::MaterializeTemporaryExpr>(e))
+		 && !llvm::isa<clang::MaterializeTemporaryExpr>(e) && !llvm::isa<clang::ExprWithCleanups>(e))
 	{
 		log_->writeError(className_, e, CppImportLogger::Reason::NOT_SUPPORTED);
 		return true;
