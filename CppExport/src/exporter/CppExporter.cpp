@@ -151,15 +151,18 @@ void CppExporter::units(Model::Node* current, QList<CodeUnit*>& result,
 				}
 				else if (auto nameImport = DCast<OOModel::NameImport>(subDeclaration))
 				{
-					auto nameImportCodeUnitName = codeUnitName + "|NameImportInClass";
+					if (nameImport->importAll())
+					{
+						auto nameImportCodeUnitName = codeUnitName + "|NameImportInClass";
 
-					auto it = mergeMap.find(codeUnitName);
-					if (it != mergeMap.end())
-						mergeMap.insert(nameImportCodeUnitName, *it);
-					else
-						mergeMap.insert(nameImportCodeUnitName, codeUnitName);
+						auto it = mergeMap.find(codeUnitName);
+						if (it != mergeMap.end())
+							mergeMap.insert(nameImportCodeUnitName, *it);
+						else
+							mergeMap.insert(nameImportCodeUnitName, codeUnitName);
 
-					result.append(new CodeUnit{nameImportCodeUnitName, nameImport});
+						result.append(new CodeUnit{nameImportCodeUnitName, nameImport});
+					}
 				}
 			return;
 		}
