@@ -100,13 +100,13 @@ inline QStringList SystemCommandResult::standarderr() const { return standarderr
 SystemCommandResult CORE_API runSystemCommand(const QString& program, const QStringList& arguments = {},
 												 const QString& workingDirectory = {});
 
-template<class T>
+template<typename T>
 typename std::enable_if<std::is_constructible<bool, T>::value, bool>::type isProvided(T&&t)
 {
 	return static_cast<bool>(t);
 }
 
-template<class T>
+template<typename T>
 constexpr inline typename std::enable_if<!std::is_constructible<bool, T>::value, bool>::type isProvided(T&&)
 {
 	return true;
