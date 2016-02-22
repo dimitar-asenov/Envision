@@ -4,6 +4,7 @@ import os
 import argparse
 import re
 import sys
+import functools
 
 # Input filtering
 initialComment = True
@@ -55,7 +56,26 @@ with open(args.inputFile, 'r') as inputFile:
 				sourceText += '\n'
 			sourceText += line
 
-
+# Comparison function for sorting of blocks
+def compareTwoBlocks(a, b):
+	if a.prefix < b.prefix:
+		return -1
+	if a.prefix > b.prefix:
+		return 1
+	if len(a.children) < len(b.children):
+		return -1
+	if len(a.children) > len(b.children):
+		return 1
+	for i in range(0, len(a.children)):
+		res = compareTwoBlocks(a.children[i], b.children[i])
+		if res != 0:
+			return res
+	if a.suffix < b.suffix:
+		return -1
+	if a.suffix > b.suffix:
+		return 1
+	return 0
+	
 # Block class used to store and various fragments of the file
 class Block:
 	methodRegex = re.compile(r'.*\)(\s|const|override)*\s*(=\s*\w+)?\s*{(\s*\\)?\n$', re.DOTALL) #Might be inside a macro
@@ -108,12 +128,9 @@ class Block:
 		
 	def sort(self):
 		if not self.isMethodHeader:
-			self.children.sort(key = lambda x : x.sortingString())
+			self.children.sort(key = functools.cmp_to_key(compareTwoBlocks))
 			for c in self.children:
 				c.sort()
-			
-	def sortingString(self):
-		return self.prefix
 			
 	def text(self):
 		return self.prefix + (''.join(c.text() for c in self.children))  + self.suffix
