@@ -82,13 +82,13 @@ class LOGGER_API Log : public QObject
 		void info(const QString& message);
 
 		/**
-		* A convenience function that adds a new warning message to the log.
-		*/
+		 * A convenience function that adds a new warning message to the log.
+		 */
 		void warning(const QString& message);
 
 		/**
-		* A convenience function that adds a new error message to the log.
-		*/
+		 * A convenience function that adds a new error message to the log.
+		 */
 		void error(const QString& message);
 
 		/**
