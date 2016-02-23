@@ -65,12 +65,12 @@ class OOMODEL_API ReferenceExpression: public Super<Expression>
 		virtual std::unique_ptr<Type> type() override;
 
 		void setName(const QString& name);
-		const QString& name();
+		const QString& name() const;
 };
 
 inline Model::Node* ReferenceExpression::target() { return ref()->target(); }
 inline void ReferenceExpression::setName(const QString& name) {ref()->setName(name);}
-inline const QString& ReferenceExpression::name() {return ref()->name();}
+inline const QString& ReferenceExpression::name() const {return ref()->name();}
 
 inline ReferenceExpression::MemberKind ReferenceExpression::memberKind() const
 { return static_cast<MemberKind> (memKind()); }
