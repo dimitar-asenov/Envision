@@ -10,6 +10,6 @@
 #TypeTraits
 
 #The paths below are relative to the DebugBuild/test directory
-path:../Core
-path:../Core:../Launcher:../HelloWorld:../APIDepTest:../SelfTest:../Logger:../ModelBase
+#path:../Core
+path:../Core:../Launcher:../HelloWorld:../APIDepTest:../SelfTest:../Logger:../ModelBase:../FilePersistence
 path:../ModelBase/src/nodes/Node.cpp
