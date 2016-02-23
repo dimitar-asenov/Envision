@@ -47,6 +47,8 @@ class CPPIMPORT_API NodeHasher
 		const QString hashRecord(const clang::RecordDecl* recordDecl);
 		const QString hashClassTemplate(const clang::ClassTemplateDecl* classTemplate);
 		const QString hashClassTemplateSpec(const clang::ClassTemplateSpecializationDecl* classTemplateSpec);
+		const QString hashEnum(const clang::EnumDecl* enumDecl);
+
 		/**
 		 * Hashes a static field.
 		 * Note that clang treats static fields as VarDecl's.

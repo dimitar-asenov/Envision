@@ -440,40 +440,42 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	if (!shouldImport(enumDecl->getLocation()))
 		return true;
 
-	auto ooEnumClass = clang_.createNamedNode<OOModel::Class>(enumDecl);
-	ooEnumClass->setConstructKind(OOModel::Class::ConstructKind::Enum);
-	ooEnumClass->modifiers()->set(utils_->translateAccessSpecifier(enumDecl->getAccess()));
-
-	// insert in tree
-	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
-		clang_.insertDeclarationInFolder(ooEnumClass, enumDecl->getLocation(), curProject);
-	else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
-		clang_.insertDeclarationInFolder(ooEnumClass, enumDecl->getLocation(), curModule);
-	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
-		curClass->classes()->append(ooEnumClass);
-	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
-		itemList->append(clang_.createNode<OOModel::DeclarationStatement>(enumDecl->getSourceRange(), ooEnumClass));
-	else
+	OOModel::Class* ooEnumClass = nullptr;
+	if (trMngr_->insertEnum(enumDecl, ooEnumClass))
 	{
-		log_->writeWarning(className_, enumDecl, CppImportLogger::Reason::INSERT_PROBLEM);
-		// no need to further process this enum
-		return true;
-	}
+		ooEnumClass->modifiers()->set(utils_->translateAccessSpecifier(enumDecl->getAccess()));
 
-	bool inBody = inBody_;
-	inBody_ = false;
-	for (auto it = enumDecl->enumerator_begin(); it != enumDecl->enumerator_end(); ++it)
-	{
-		auto enumerator = clang_.createNamedNode<OOModel::Enumerator>(*it);
-		// check if there is an initializing expression if so visit it first and then add it to the enum
-		if (auto e = it->getInitExpr())
+		// insert in tree
+		if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
+			clang_.insertDeclarationInFolder(ooEnumClass, enumDecl->getLocation(), curProject);
+		else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
+			clang_.insertDeclarationInFolder(ooEnumClass, enumDecl->getLocation(), curModule);
+		else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
+			curClass->classes()->append(ooEnumClass);
+		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
+			itemList->append(clang_.createNode<OOModel::DeclarationStatement>(enumDecl->getSourceRange(), ooEnumClass));
+		else
 		{
-			TraverseStmt(e);
-			enumerator->setValue(ooExprStack_.pop());
+			log_->writeWarning(className_, enumDecl, CppImportLogger::Reason::INSERT_PROBLEM);
+			// no need to further process this enum
+			return true;
 		}
-		ooEnumClass->enumerators()->append(enumerator);
+
+		bool inBody = inBody_;
+		inBody_ = false;
+		for (auto it = enumDecl->enumerator_begin(); it != enumDecl->enumerator_end(); ++it)
+		{
+			auto enumerator = clang_.createNamedNode<OOModel::Enumerator>(*it);
+			// check if there is an initializing expression if so visit it first and then add it to the enum
+			if (auto e = it->getInitExpr())
+			{
+				TraverseStmt(e);
+				enumerator->setValue(ooExprStack_.pop());
+			}
+			ooEnumClass->enumerators()->append(enumerator);
+		}
+		inBody_ = inBody;
 	}
-	inBody_ = inBody;
 	return true;
 }
 

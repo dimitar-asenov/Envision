@@ -124,6 +124,14 @@ const QString NodeHasher::hashClassTemplateSpec(const clang::ClassTemplateSpecia
 	return hash;
 }
 
+const QString NodeHasher::hashEnum(const clang::EnumDecl* enumDecl)
+{
+	QString hash = QString::fromStdString(enumDecl->getNameAsString());
+	if (auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(enumDecl->getParent()))
+		hash.prepend("_").prepend(QString::fromStdString(parentNamedDecl->getNameAsString()));
+	return hash;
+}
+
 const QString NodeHasher::hashStaticField(const clang::VarDecl* varDecl)
 {
 	QString hash = QString::fromStdString(varDecl->getNameAsString()).prepend("_");

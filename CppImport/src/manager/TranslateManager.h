@@ -64,6 +64,11 @@ class CPPIMPORT_API TranslateManager
 		 */
 		bool insertClassTemplateSpec(clang::ClassTemplateSpecializationDecl* classTemplate,
 											  OOModel::Class*& createdClass);
+		/**
+		 * Inserts the enum \a ooEnum to the managed class if it is not yet managed.
+		 * Returns true if the enum is not yet managed (insert success) else false
+		 */
+		bool insertEnum(clang::EnumDecl* enumDecl, OOModel::Class*& createdEnum);
 		bool containsClass(clang::CXXRecordDecl* recordDecl);
 		/**
 		 * Inserts the method \a mDecl to the manager if not yet managed.
@@ -148,6 +153,7 @@ class CPPIMPORT_API TranslateManager
 
 		QHash<QString, OOModel::Module*> nameSpaceMap_;
 		QHash<QString, OOModel::Class*> classMap_;
+		QHash<QString, OOModel::Class*> enumMap_;
 		QHash<QString, OOModel::Method*> methodMap_;
 		QHash<QString, OOModel::Method*> functionMap_;
 		QHash<QString, OOModel::Field*> staticFieldMap_;

@@ -148,6 +148,22 @@ bool TranslateManager::insertClassTemplateSpec
 	return false;
 }
 
+bool TranslateManager::insertEnum(clang::EnumDecl* enumDecl, OOModel::Class*& createdEnum)
+{
+	const QString hash = nh_->hashEnum(enumDecl);
+	// if enumDecl is not managed yet add it:
+	if (!enumMap_.contains(hash))
+	{
+		createdEnum = clang_.createNamedNode<OOModel::Class>(enumDecl);
+		createdEnum->setConstructKind(OOModel::Class::ConstructKind::Enum);
+
+		enumMap_.insert(hash, createdEnum);
+		return true;
+	}
+	clang_.envisionToClangMap().mapAst(enumDecl->getSourceRange(), enumMap_.value(hash));
+	return false;
+}
+
 OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	OOModel::Method* method = nullptr;
