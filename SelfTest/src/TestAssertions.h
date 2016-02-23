@@ -26,10 +26,15 @@
 
 #pragma once
 
+#include "selftest_api.h"
+
+/**
+ * The Q_ASSERT(initTrigger) is needed to make sure that the test is actually initialized.
+ */
 #define CHECK_GENERIC_EQUAL(expected, actual)																								\
 	try																																					\
 	{																																						\
-		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
+		Q_ASSERT(initTrigger);																														\
 		if ( (expected) == (actual) ) testResults.addPassedCheck();																		\
 		else																																				\
 		{																																					\
@@ -45,10 +50,13 @@
 		throw;																																			\
 	}
 
+/**
+ * The Q_ASSERT(initTrigger) is needed to make sure that the test is actually initialized.
+ */
 #define CHECK_INT_EQUAL(expected, actual)																										\
 	try																																					\
 	{																																						\
-		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
+		Q_ASSERT(initTrigger);																														\
 		if ( (expected) == (actual) ) testResults.addPassedCheck();																		\
 		else																																				\
 		{																																					\
@@ -65,10 +73,13 @@
 		throw;																																			\
 	}
 
+/**
+ * The Q_ASSERT(initTrigger) is needed to make sure that the test is actually initialized.
+ */
 #define CHECK_STR_EQUAL(expected, actual)																										\
 	try																																					\
 	{																																						\
-		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
+		Q_ASSERT(initTrigger);																														\
 		if ( (expected) == (actual) ) testResults.addPassedCheck();																		\
 		else																																				\
 		{																																					\
@@ -84,20 +95,23 @@
 		throw;																																			\
 	}
 
+/**
+ * The Q_ASSERT(initTrigger) is needed to make sure that the test is actually initialized.
+ */
 #define CHECK_TEXT_FILES_EQUAL(expectedFileName, actualFileName)																		\
 	try																																					\
 	{																																						\
-		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
-		QFile exp(expectedFileName);																												\
-		QFile act(actualFileName);																													\
+		Q_ASSERT(initTrigger);																														\
+		QFile exp{expectedFileName};																												\
+		QFile act{actualFileName};																													\
 		if (exp.open(QIODevice::ReadOnly | QIODevice::Text))																				\
 		{																																					\
 			if (act.open(QIODevice::ReadOnly | QIODevice::Text))																			\
 			{																																				\
-				QTextStream inexp(&exp);																											\
+				QTextStream inexp{&exp};																											\
 				QString strexp = inexp.readAll();																								\
 																																							\
-				QTextStream inact(&act);																											\
+				QTextStream inact{&act};																											\
 				QString stract = inact.readAll();																								\
 																																							\
 				if (strexp == stract) testResults.addPassedCheck();																		\
@@ -131,10 +145,13 @@
 		throw;																																			\
 	}
 
+/**
+ * The Q_ASSERT(initTrigger) is needed to make sure that the test is actually initialized.
+ */
 #define CHECK_CONDITION( condition )																											\
 	try																																					\
 	{																																						\
-		Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */								\
+		Q_ASSERT(initTrigger);																														\
 		if ( (condition) ) testResults.addPassedCheck();																					\
 		else																																				\
 		{																																					\
@@ -150,9 +167,12 @@
 		throw;																																			\
 	}
 
+/**
+ * The Q_ASSERT(initTrigger) is needed to make sure that the test is actually initialized.
+ */
 #define CHECK_FOR_EXCEPTION( exception, statement )																						\
 {																																							\
-	Q_ASSERT(initTrigger); /* Needed to make sure that the test is actually initialized. */									\
+	Q_ASSERT(initTrigger);																															\
 	bool oldAssertOnThrow = exception::assertOnThrow();																					\
 	exception::assertOnThrow() = false;																											\
 	try																																					\
