@@ -27,15 +27,18 @@
 #pragma once
 
 #include "filepersistence_api.h"
-#include "XMLModel.h"
 
 #include "ModelBase/src/persistence/ClipboardStore.h"
 
 namespace Model {
 	class Reference;
+	class Node;
+	class TreeManager;
 }
 
 namespace FilePersistence {
+
+class XMLModel;
 
 class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 {

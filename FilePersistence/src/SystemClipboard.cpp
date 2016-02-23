@@ -26,6 +26,7 @@
 
 #include "SystemClipboard.h"
 #include "FilePersistenceException.h"
+#include "XMLModel.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
