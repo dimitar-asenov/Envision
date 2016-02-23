@@ -28,9 +28,14 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
+#include "OOModel/src/declarations/Declaration.h"
+
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/items/WebBrowserItem.h"
 
 #include "HighlightOverlay.h"
 #include "QueryRegistry.h"
@@ -113,6 +118,22 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 		}
 	}
+
+	auto htmlTuples = ts.tuples("html");
+	if (htmlTuples.size()) {
+		QString htmlContent = (*htmlTuples.begin())["html"];
+		// TODO an overlay or something would probably be better for this:
+		// TODO position it a bit better? right now it is just centered.
+		auto browser = new Visualization::WebBrowserItem{nullptr, htmlContent,
+				Visualization::WebBrowserItem::itemStyles().get("frame")};
+		browser->setZValue(Visualization::Item::LAYER_OVERLAY_Z);
+		auto mainScene = Visualization::VisualizationManager::instance().mainScene();
+		for (auto view : mainScene->views())
+			if (auto mainView = dynamic_cast<Visualization::MainView*>(view))
+				browser->setPos(mainView->sceneRect().center());
+		mainScene->addTopLevelItem(browser);
+	}
+
 	return {1};
 }
 
