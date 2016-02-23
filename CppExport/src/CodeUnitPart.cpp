@@ -33,6 +33,7 @@
 #include "OOModel/src/types/ClassType.h"
 #include "OOModel/src/types/PointerType.h"
 #include "OOModel/src/types/ReferenceType.h"
+#include "OOModel/src/types/ErrorType.h"
 
 namespace CppExport {
 
@@ -89,17 +90,25 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 			// Get the type of the prefix
 			std::unique_ptr<OOModel::Type> prefixType = prefix->type();
 
-			// Strip pointers/references
-			const OOModel::Type* finalType = prefixType.get();
-			if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(finalType))
-				finalType = pointerType->baseType();
-			else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(finalType))
-				finalType = referenceType->baseType();
+			const OOModel::Type* finalType = stripPointerOrReference(prefixType.get());
+
+			// Handle some broken types, for now only standard smart pointers
+			// TODO: remove this when reference resolution works better
+			if (reference->memberKind() == OOModel::ReferenceExpression::MemberKind::Pointer)
+				if (auto errorType = dynamic_cast<const OOModel::ErrorType*>(finalType))
+					if (auto unresolved = errorType->unresolvedReference())
+						if ((unresolved->name() == "unique_ptr" || unresolved->name() == "shared_ptr")
+							 && (unresolved->typeArguments()->size() > 0))
+						{
+							// Try "resolving" the reference
+							auto argType = unresolved->typeArguments()->at(0)->type();
+							prefixType.swap(argType);
+							finalType = stripPointerOrReference(prefixType.get());
+						}
 
 			// Add a dependency
 			if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
 				hardTargets_.insert(classType->classDefinition());
-
 		}
 
 		// Additionally, the reference itself might indicate a dependency
@@ -145,6 +154,17 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 			}
 		}
 	}
+}
+
+const OOModel::Type* CodeUnitPart::stripPointerOrReference(const OOModel::Type* type)
+{
+	// Strip pointers/references
+	const OOModel::Type* finalType = type;
+	if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(finalType))
+		finalType = pointerType->baseType();
+	else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(finalType))
+		finalType = referenceType->baseType();
+	return finalType;
 }
 
 void CodeUnitPart::assertForcedDependencyNecessary(OOModel::ReferenceExpression* reference)

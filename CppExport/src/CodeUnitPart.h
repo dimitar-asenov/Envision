@@ -30,6 +30,7 @@
 
 namespace OOModel {
 	class ReferenceExpression;
+	class Type;
 }
 
 namespace Model {
@@ -80,6 +81,7 @@ class CPPEXPORT_API CodeUnitPart
 
 		static bool isNameOnlyDependency(OOModel::ReferenceExpression* reference);
 		static Model::Node* fixedTarget(OOModel::ReferenceExpression* referenceExpression);
+		static const OOModel::Type* stripPointerOrReference(const OOModel::Type* type);
 
 		/**
 		 * checks whether the provided reference is "Type" in constructs of the form: (void)(Type*)nullptr;
