@@ -28,7 +28,8 @@
 
 namespace OOModel {
 
-ErrorType::ErrorType(const QString& message) : Type{false}, message_{message}
+ErrorType::ErrorType(const QString& message, const ReferenceExpression* unresolvedReference)
+	: Type{false}, message_{message}, unresolvedReference_{unresolvedReference}
 {}
 
 bool ErrorType::isError() const

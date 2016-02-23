@@ -30,20 +30,25 @@
 
 namespace OOModel {
 
+class ReferenceExpression;
+
 class OOMODEL_API ErrorType : public Type {
 	public:
-		ErrorType(const QString& message);
+		ErrorType(const QString& message, const ReferenceExpression* unresolvedReference = nullptr);
 
 		virtual bool isError() const override;
 		virtual bool equals(const Type* other) const override;
 		virtual ErrorType* clone() const override;
 
 		const QString& message() const;
+		const ReferenceExpression* unresolvedReference() const;
 
 	private:
 		QString message_;
+		const ReferenceExpression* unresolvedReference_{};
 };
 
 inline const QString& ErrorType::message() const { return message_; }
+inline const ReferenceExpression* ErrorType::unresolvedReference() const { return unresolvedReference_;}
 
 }

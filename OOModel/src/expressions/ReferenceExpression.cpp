@@ -65,7 +65,7 @@ std::unique_ptr<Type> ReferenceExpression::type()
 {
 	auto resolvedTarget = ref()->target();
 
-	if (!resolvedTarget) return std::unique_ptr<Type>{new ErrorType{"Unresolved Reference"}};
+	if (!resolvedTarget) return std::unique_ptr<Type>{new ErrorType{"Unresolved Reference", this}};
 
 	if ( auto project = DCast<Project>( resolvedTarget ) )
 		return std::unique_ptr<Type>{new SymbolProviderType{project, false}};
