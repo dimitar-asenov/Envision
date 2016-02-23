@@ -34,6 +34,8 @@ extern template class MODELBASE_API Model::TypedList<Model::Reference>;
 
 namespace Model {
 
+class PersistentStore;
+
 class MODELBASE_API Reference: public Super<Node>
 {
 	friend class PersistentStore;

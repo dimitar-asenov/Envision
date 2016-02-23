@@ -229,7 +229,8 @@ bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 	{
 		bool found{};
 
-		auto sourceIndex = indexToSubnode(source); // Only search in items above the current one
+		// Only search in items above the current one
+		auto sourceIndex = indexToSubnode(source);
 		if (sourceIndex < 0 || sourceIndex > size()) sourceIndex = size();
 
 		auto ignore = childToSubnode(source);
