@@ -26,6 +26,7 @@
 
 #include "GitRepository.h"
 #include "GitPiecewiseLoader.h"
+#include "../FilePersistenceException.h"
 
 #include "../simple/GenericTree.h"
 #include "../simple/Parser.h"

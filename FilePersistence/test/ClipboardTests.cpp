@@ -32,8 +32,6 @@
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "ModelBase/src/model/TreeManager.h"
-#include "ModelBase/src/nodes/Integer.h"
-#include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/List.h"
 
 namespace FilePersistence {
@@ -153,7 +151,7 @@ class FILEPERSISTENCE_API PasteBinaryFromClipboard
 class FILEPERSISTENCE_API PasteListFromClipboard : public SelfTest::Test<FilePersistencePlugin, PasteListFromClipboard>
 { public: void test()
 {
-	auto root = new Model::List;
+	auto root = new Model::List{};
 	Model::TreeManager manager{"test", root};
 
 	manager.beginModification(root, "elems");
@@ -186,7 +184,7 @@ class FILEPERSISTENCE_API PasteInListFromClipboard
  : public SelfTest::Test<FilePersistencePlugin, PasteInListFromClipboard>
 { public: void test()
 {
-	auto root = new Model::List;
+	auto root = new Model::List{};
 	Model::TreeManager manager{"test", root};
 
 	manager.beginModification(root, "elems");

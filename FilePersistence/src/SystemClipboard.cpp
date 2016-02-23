@@ -28,7 +28,7 @@
 #include "FilePersistenceException.h"
 
 #include "ModelBase/src/model/TreeManager.h"
-#include "ModelBase/src/nodes/Reference.h"
+#include "ModelBase/src/nodes/Node.h"
 
 using namespace Model;
 

@@ -31,8 +31,6 @@
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/test_nodes/BinaryNodePersistenceUnit.h"
 #include "ModelBase/src/model/TreeManager.h"
-#include "ModelBase/src/nodes/Integer.h"
-#include "ModelBase/src/nodes/Text.h"
 
 using namespace Model;
 
@@ -50,7 +48,7 @@ class FILEPERSISTENCE_API SaveRootOnly
 	s->setBaseFolder(testDir);
 	store = s;
 
-	auto root = new TestNodes::BinaryNode;
+	auto root = new TestNodes::BinaryNode{};
 	Model::TreeManager manager{root};
 
 	manager.beginModification(root->name(), "set title");
@@ -79,7 +77,7 @@ public: void test()
 	s->setBaseFolder(testDir);
 	store = s;
 
-	auto root = new TestNodes::BinaryNode;
+	auto root = new TestNodes::BinaryNode{};
 	Model::TreeManager manager{root};
 
 	manager.beginModification(root, "set title");
@@ -120,7 +118,7 @@ class FILEPERSISTENCE_API SaveMultipleUnits
 	s->setBaseFolder(testDir);
 	store = s;
 
-	auto root = new TestNodes::BinaryNode;
+	auto root = new TestNodes::BinaryNode{};
 	Model::TreeManager manager{root};
 
 	manager.beginModification(root, "set title");

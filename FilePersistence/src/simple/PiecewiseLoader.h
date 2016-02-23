@@ -28,10 +28,11 @@
 
 #include "../filepersistence_api.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
-#include "GenericTree.h"
-#include "GenericNode.h"
 
 namespace FilePersistence {
+
+class GenericNode;
+class GenericTree;
 
 struct FILEPERSISTENCE_API NodeData {
 	QString persistentUnit_;

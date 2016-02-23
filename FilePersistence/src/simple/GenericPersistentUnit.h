@@ -32,7 +32,6 @@ namespace FilePersistence {
 
 class GenericTree;
 class GenericNode;
-class PiecewiseLoader;
 
 class FILEPERSISTENCE_API GenericPersistentUnit {
 	public:

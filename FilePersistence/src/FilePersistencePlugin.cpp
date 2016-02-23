@@ -28,7 +28,7 @@
 
 #include "SelfTest/src/TestManager.h"
 
-inline void initFilePersistenceResources() { Q_INIT_RESOURCE(FilePersistence); }
+static void initFilePersistenceResources() { Q_INIT_RESOURCE(FilePersistence); }
 
 namespace FilePersistence {
 
@@ -45,9 +45,7 @@ void FilePersistencePlugin::unload()
 void FilePersistencePlugin::selfTest(QString testArgs)
 {
 	if (testArgs.isEmpty())
-	{
 		SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
-	}
 	else
 	{
 		auto tests = testArgs.split(":", QString::SkipEmptyParts);

@@ -28,8 +28,6 @@
 #include "SelfTest/src/Test.h"
 #include "SelfTest/src/TestAssertions.h"
 
-#include "../src/simple/GenericTree.h"
-
 #include "../src/version_control/ChangeDescription.h"
 #include "../src/version_control/Diff.h"
 #include "../src/version_control/GitRepository.h"
@@ -55,12 +53,12 @@ class FILEPERSISTENCE_API stmtEdit : public SelfTest::Test<FilePersistencePlugin
 {
 	VCTestProject p{"TestProject1"};
 	Diff diff = p.repo().diff("HEAD~1", "HEAD");
-	/*
-	for (auto change : diff.changes())
-	{
-		change->print();
-	}
-	*/
+
+	// for (auto change : diff.changes())
+	// {
+	// 	change->print();
+	// }
+
 	CHECK_CONDITION(diff.changes().size() > 0);
 }};
 

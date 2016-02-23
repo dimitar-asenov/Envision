@@ -36,7 +36,7 @@ NotificationListener::NotificationListener(TreeManager& manager) : root_{nullptr
 						  &NotificationListener::setModifiedNodes);
 	QObject::connect(&manager, &TreeManager::rootNodeSet, this, &NotificationListener::rootNodeSet);
 
-	// force a dependency on Node.h required by QObject::connect (needed for self-hosting Envision)
+	// SELF-HOSTING: force a dependency which Envision's reference resolution can't detect yet
 	(void)(Node*)nullptr;
 }
 

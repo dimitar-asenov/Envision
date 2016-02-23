@@ -27,6 +27,7 @@
 #include "GenericNode.h"
 #include "Parser.h"
 #include "PiecewiseLoader.h"
+#include "../FilePersistenceException.h"
 
 namespace FilePersistence {
 

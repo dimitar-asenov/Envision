@@ -25,6 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "PiecewiseLoader.h"
+#include "GenericTree.h"
+#include "GenericNode.h"
 
 namespace FilePersistence {
 
@@ -68,6 +70,9 @@ GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
 	auto node = pair.second;
 	if (pair.first)
 		node->linkNode();
+
+	// SELF-HOSTING: force a dependency which Envision's reference resolution can't detect yet
+	(void)(GenericNode*)nullptr;
 
 	return node;
 }

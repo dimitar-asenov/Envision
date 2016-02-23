@@ -30,10 +30,15 @@
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
+namespace Model {
+	class Node;
+	class Reference;
+	class TreeManager;
+}
+
 namespace FilePersistence {
 
 class GenericNode;
-class GenericPersistentUnit;
 class GenericTree;
 
 class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
@@ -151,6 +156,11 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		QList<QPair<Model::Reference*, QString>> uninitializedReferences_;
 
 		static const QString NULL_STRING;
+
+		/**
+		 * If false, no additional persistent units will be generated.
+		 */
+		static const bool GENERATE_PUS;
 };
 
 }

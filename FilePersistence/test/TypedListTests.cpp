@@ -26,12 +26,10 @@
 
 #include "../src/FilePersistencePlugin.h"
 #include "../src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/Test.h"
 #include "SelfTest/src/TestAssertions.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/List.h"
 
 using namespace Model;
 
@@ -78,7 +76,7 @@ class FILEPERSISTENCE_API SavingTypedList
 	s->setBaseFolder(testDir);
 	store = s;
 
-	auto list = new TypedList<Text>;
+	auto list = new TypedList<Text>{};
 	Model::TreeManager manager{list};
 
 	manager.beginModification(list, "create");

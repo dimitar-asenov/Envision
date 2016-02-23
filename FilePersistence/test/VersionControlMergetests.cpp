@@ -28,7 +28,6 @@
 #include "SelfTest/src/Test.h"
 #include "SelfTest/src/TestAssertions.h"
 
-#include "../src/version_control/Diff.h"
 #include "../src/version_control/Merge.h"
 #include "../src/version_control/GitRepository.h"
 #include "VCTestProject.h"
@@ -75,7 +74,7 @@ class FILEPERSISTENCE_API UnorderedAndUnitsConflicting
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(merge->hasConflicts());
-	QSet<Model::NodeIdType> expected = {
+	QSet<Model::NodeIdType> expected {
 		{"{00000000-0000-0000-0000-000000000047}"},
 		{"{00000000-0000-0000-0000-000000000048}"},
 		{"{00000000-0000-0000-0000-000000000031}"},

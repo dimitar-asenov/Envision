@@ -27,7 +27,6 @@
 #pragma once
 
 #include "../filepersistence_api.h"
-#include "../FilePersistenceException.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
 #include "GenericTree.h"
 #include "GenericPersistentUnit.h"
@@ -68,6 +67,10 @@ class FILEPERSISTENCE_API GenericNode {
 		GenericNode* attachChild(GenericNode* child);
 		GenericNode* child(const QString& label);
 		const QList<GenericNode*>& children() const;
+
+		/**
+		 * Returns true if the return value of \a this.children() is valid.
+		 */
 		bool areAllChildrenLoaded() const;
 		GenericNode* parent() const;
 
@@ -168,10 +171,6 @@ inline void GenericNode::setParentId(Model::NodeIdType parentId)
 { Q_ASSERT(!parent_ || !tree()->piecewiseLoader()); parentId_ = parentId; }
 inline void GenericNode::setChildren(QList<GenericNode*> children)
 { children_ = children; areAllChildrenLoaded_ = true; }
-
-/**
- * Returns true if the return value of \a this.children() is valid.
- */
 inline bool GenericNode::areAllChildrenLoaded() const { return areAllChildrenLoaded_; }
 
 inline const QString& GenericNode::label() const { ensureDataRead(); return label_; }

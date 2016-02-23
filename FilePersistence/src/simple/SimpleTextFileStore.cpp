@@ -40,11 +40,8 @@
 
 namespace FilePersistence {
 
-const QString SimpleTextFileStore::NULL_STRING = "____NULL____";
-/**
- * If false, no additional persistent units will be generated.
- */
-const bool GENERATE_PUS = true;
+const QString SimpleTextFileStore::NULL_STRING{"____NULL____"};
+const bool SimpleTextFileStore::GENERATE_PUS{true};
 
 SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
 	baseFolder_{baseDir.isNull() ? QDir::home().path() +
