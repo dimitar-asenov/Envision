@@ -17,7 +17,11 @@ link_directories(${clangLibPath_})
 execute_process(COMMAND ${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs cppbackend analysis codegen bitreader option core
 	OUTPUT_VARIABLE clangLibs_)
 string(STRIP "${clangLibs_}" clangLibs_)
-set(clangLibs_ -lclangTooling -lclangFrontendTool -lclangFrontend -lclangDriver -lclangSerialization -lclangParse -lclangSema -lclangAnalysis -lclangEdit -lclangAST -lclangLex -lclangBasic ${clangLibs_} -lz -ldl -lncurses)
+set(clangLibs_ -lclangTooling -lclangFrontendTool -lclangFrontend -lclangDriver -lclangSerialization -lclangParse -lclangSema -lclangAnalysis -lclangEdit -lclangAST -lclangLex -lclangBasic ${clangLibs_})
+
+execute_process(COMMAND ${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --system-libs
+	OUTPUT_VARIABLE clangDependencies_)
+string(STRIP "${clangDependencies_}" clangDependencies_)
 
 add_definitions(-DPythonWrapperGenerator_EXPORTS -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS)
 
@@ -42,7 +46,7 @@ add_executable(PythonWrapperGenerator
 	src/precompiled.h
 )
 
-target_link_libraries(PythonWrapperGenerator Qt5::Core ${clangLibs_} -lpthread)
+target_link_libraries(PythonWrapperGenerator Qt5::Core ${clangLibs_} ${clangDependencies_})
 set_target_properties(PythonWrapperGenerator PROPERTIES AUTOMOC OFF)
 use_precompiled_header(PythonWrapperGenerator)
 
