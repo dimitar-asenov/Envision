@@ -29,6 +29,10 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "filepersistence_api.h"
 
+namespace Core {
+	class EnvisionManager;
+}
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API FilePersistencePlugin : public QObject, public Core::EnvisionPlugin

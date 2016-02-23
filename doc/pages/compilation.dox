@@ -22,7 +22,6 @@ Other dependencies are:
 	- <b>libgit2</b>: https://libgit2.github.com/ <br /> Used for Envision's git-based version control.
 	- <b>Python 3</b>: https://www.python.org/ <br /> Used for various scripts during building, testing and run-time execution (e.g. for information scripting).
 	- <b>Boost python</b>: http://www.boost.org/doc/libs/1_58_0/libs/python/doc/ <br/> Used for information scripting
-	- <b>ncurses</b>: http://www.gnu.org/software/ncurses/ <br/> Needed by the Clang tooling for the python wrapper generator project.
 	- <b>libedit</b>: http://thrysoee.dk/editline/ <br/> Needed by the Clang tooling for the python wrapper generator project.
 	- <b>On Linux: Google Performance Tools</b>: http://code.google.com/p/gperftools/ <br /> Used for profiling.
 	- <b>For development only: Vera ++ </b>: https://bitbucket.org/verateam/vera <br /> Used for checking the code formatting style.
@@ -50,8 +49,6 @@ To install the dependencies on Ubuntu 15.10, do the following:
 		\verbatim sudo apt-get install python3-dev \endverbatim
 	-# Install boost/python:
 		\verbatim sudo apt-get install libboost-python-dev \endverbatim
-	-# Install libncurses:
-		\verbatim sudo apt-get install libncurses5-dev \endverbatim
 	-# Install libedit:
 		\verbatim sudo apt-get install libedit-dev \endverbatim
 

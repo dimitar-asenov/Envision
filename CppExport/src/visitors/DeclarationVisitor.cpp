@@ -406,6 +406,9 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	bool isGlobal = !method->firstAncestorOfType<Class>();
 	bool isGlobalStatic = isGlobal && method->modifiers()->isSet(Modifier::Static);
+	if (isGlobalStatic && printContext().hasOption(CppPrintContext::IsHeaderPart))
+		return nullptr;
+
 	bool isGlobalDeclaration = isGlobal && isGlobalStatic != printContext().hasOption(CppPrintContext::IsHeaderPart);
 
 	auto fragment = new CompositeFragment{method};
@@ -438,7 +441,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << list(method->typeArguments(), ElementVisitor{printContext().node(), data()}, "templateArgsList");
 
 	// private, public, ...
-	if (printContext().isClass() || method->modifiers()->isSet(Modifier::ConstExpr))
+	if (printContext().isClass() || method->modifiers()->isSet(Modifier::ConstExpr) || isGlobalStatic)
 		*fragment << printAnnotationsAndModifiers(method);
 
 	// inline
