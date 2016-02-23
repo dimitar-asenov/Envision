@@ -628,6 +628,9 @@ SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* de
 
 SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 {
+	if (printContext().hasOption(CppPrintContext::IsHeaderPart) && nameImport->importAll())
+		return nullptr;
+
 	auto fragment = new CompositeFragment{nameImport};
 	notAllowed(nameImport->annotations());
 
