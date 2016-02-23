@@ -27,7 +27,7 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "cppimport_api.h"
 
 namespace CppImport {
 
@@ -39,7 +39,7 @@ namespace CppImport {
  *
  * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class CppImportPlugin : public QObject, public Core::EnvisionPlugin
+class CPPIMPORT_API CppImportPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")

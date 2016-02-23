@@ -30,7 +30,7 @@
 
 namespace FilePersistence {
 
-struct Signature {
+struct FILEPERSISTENCE_API Signature {
 		QString name_;
 		QString eMail_;
 		QDateTime dateTime_;
@@ -39,7 +39,7 @@ struct Signature {
 		Signature();
 };
 
-struct CommitMetaData {
+struct FILEPERSISTENCE_API CommitMetaData {
 		QString sha1_;
 		QString message_;
 		QDateTime dateTime_;
@@ -49,7 +49,7 @@ struct CommitMetaData {
 
 using CommitFileContentDeleter = std::function<void (char*)>;
 
-struct CommitFile {
+struct FILEPERSISTENCE_API CommitFile {
 		QString relativePath_;
 		qint64 size_{};
 

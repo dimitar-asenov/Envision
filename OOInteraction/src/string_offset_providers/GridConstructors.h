@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #pragma once
+#include "../oointeraction_api.h"
 
 namespace Visualization {
 	class Item;
@@ -32,7 +33,7 @@ namespace Visualization {
 
 namespace OOInteraction {
 
-class GridConstructors {
+class OOINTERACTION_API GridConstructors {
 	public:
 		static void initializeAll();
 };

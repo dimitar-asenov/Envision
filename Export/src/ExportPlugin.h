@@ -43,7 +43,7 @@ namespace Export {
  *
  * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class ExportPlugin : public QObject, public Core::EnvisionPlugin
+class EXPORT_API ExportPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")

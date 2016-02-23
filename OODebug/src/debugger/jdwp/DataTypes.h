@@ -39,7 +39,7 @@
 
 namespace OODebug {
 
-struct Location : public MessagePart
+struct OODEBUG_API Location : public MessagePart
 {
 		Location() = default;
 		Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex);
@@ -53,7 +53,7 @@ struct Location : public MessagePart
 
 uint qHash(const Location& location);
 
-struct Value : public MessagePart {
+struct OODEBUG_API Value : public MessagePart {
 		virtual ~Value() override;
 		MessageField<Protocol::Tag> type{&Value::type, this};
 		MessageField<qint64, cast(Protocol::Tag::ARRAY)> array{&Value::array, this};
@@ -71,7 +71,7 @@ struct Value : public MessagePart {
 		virtual int kind() const override;
 };
 
-struct TaggedObjectId : public MessagePart {
+struct OODEBUG_API TaggedObjectId : public MessagePart {
 		virtual ~TaggedObjectId() override;
 
 		MessageField<Protocol::Tag> type{&TaggedObjectId::type, this};

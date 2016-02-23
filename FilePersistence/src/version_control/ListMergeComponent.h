@@ -31,7 +31,7 @@
 
 namespace FilePersistence {
 
-class ListMergeComponent : public ConflictPipelineComponent
+class FILEPERSISTENCE_API ListMergeComponent : public ConflictPipelineComponent
 {
 	public:
 		ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes, QSet<QString>& unorderedTypes);

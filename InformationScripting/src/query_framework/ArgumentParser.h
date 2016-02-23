@@ -42,7 +42,7 @@ namespace InformationScripting {
 
 class Query;
 
-struct PositionalArgument
+struct INFORMATIONSCRIPTING_API PositionalArgument
 {
 		QString name_;
 		QString description_{};

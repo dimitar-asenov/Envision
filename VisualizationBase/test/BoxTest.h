@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "../src/visualizationbase_api.h"
 #include "../src/items/Item.h"
 #include "../src/layouts/SequentialLayoutStyle.h"
 #include "../src/layouts/SequentialLayout.h"
@@ -33,7 +34,7 @@
 
 namespace Visualization {
 
-class BoxTest : public Super<Item>
+class VISUALIZATIONBASE_API BoxTest : public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(BoxTest, ItemStyle)
 

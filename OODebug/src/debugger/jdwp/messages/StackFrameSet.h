@@ -37,7 +37,7 @@ namespace OODebug {
 
 // https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_StackFrame
 
-struct StackVariable : public MessagePart {
+struct OODEBUG_API StackVariable : public MessagePart {
 		StackVariable() = default;
 		StackVariable(qint32 slot, Protocol::Tag type);
 		virtual ~StackVariable() override;
@@ -47,7 +47,7 @@ struct StackVariable : public MessagePart {
 		MessageField<Protocol::Tag> sigbyte{&StackVariable::sigbyte, this};
 };
 
-struct GetValuesCommand : public Command {
+struct OODEBUG_API GetValuesCommand : public Command {
 		GetValuesCommand(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
 		virtual ~GetValuesCommand() override;
 		/** The frame's thread. */
@@ -58,7 +58,7 @@ struct GetValuesCommand : public Command {
 		MessageField<QList<StackVariable>> variables{&GetValuesCommand::variables, this};
 };
 
-struct Values : public Reply {
+struct OODEBUG_API Values : public Reply {
 		MessageField<QList<Value>> values{&Values::values, this};
 };
 

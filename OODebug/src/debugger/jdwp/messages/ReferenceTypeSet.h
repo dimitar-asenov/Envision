@@ -33,18 +33,18 @@
 
 namespace OODebug {
 
-struct SignatureCommand : public Command {
+struct OODEBUG_API SignatureCommand : public Command {
 		SignatureCommand(qint64 referenceId);
 		virtual ~SignatureCommand() override;
 		MessageField<qint64> refType{&SignatureCommand::refType, this};
 };
 
-struct Signature : public Reply {
+struct OODEBUG_API Signature : public Reply {
 		virtual ~Signature() override;
 		MessageField<QString> signature{&Signature::signature, this};
 };
 
-struct JVMMethod : public MessagePart {
+struct OODEBUG_API JVMMethod : public MessagePart {
 		virtual ~JVMMethod() override;
 		MessageField<qint64> methodID{&JVMMethod::methodID, this};
 		MessageField<QString> name{&JVMMethod::name, this};
@@ -52,24 +52,24 @@ struct JVMMethod : public MessagePart {
 		MessageField<qint32> modBits{&JVMMethod::modBits, this};
 };
 
-struct MethodsCommand : public Command {
+struct OODEBUG_API MethodsCommand : public Command {
 		MethodsCommand(qint64 classId);
 		virtual ~MethodsCommand() override;
 		MessageField<qint64> refTypeId{&MethodsCommand::refTypeId, this};
 };
 
-struct Methods : public Reply {
+struct OODEBUG_API Methods : public Reply {
 		virtual ~Methods() override;
 		MessageField<QList<JVMMethod>> methods{&Methods::methods, this};
 };
 
-struct SourceFileCommand : public Command {
+struct OODEBUG_API SourceFileCommand : public Command {
 		SourceFileCommand(qint64 referenceId);
 		virtual ~SourceFileCommand() override;
 		MessageField<qint64> refType{&SourceFileCommand::refType, this};
 };
 
-struct SourceFile : public Reply {
+struct OODEBUG_API SourceFile : public Reply {
 		virtual ~SourceFile() override;
 		MessageField<QString> sourceFile{&SourceFile::sourceFile, this};
 };

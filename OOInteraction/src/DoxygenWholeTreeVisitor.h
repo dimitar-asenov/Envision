@@ -33,7 +33,7 @@ namespace OOInteraction {
  * The DoxygenWholeTreeVisitor class generations a dummy C++ file with minimal code (empty function bodies).
  * It is used to generate the input source file for Doxygen.
  */
-class DoxygenWholeTreeVisitor : public Model::Visitor<DoxygenWholeTreeVisitor, QString>{
+class OOINTERACTION_API DoxygenWholeTreeVisitor : public Model::Visitor<DoxygenWholeTreeVisitor, QString>{
 	public:
 		static void init();
 	private:

@@ -39,7 +39,7 @@ namespace InformationScripting {
  *
  * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class InformationScriptingPlugin : public QObject, public Core::EnvisionPlugin
+class INFORMATIONSCRIPTING_API InformationScriptingPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")

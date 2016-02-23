@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "oomodel_api.h"
 #include "ModelBase/src/visitor/Visitor.hpp"
 
 namespace Model {
@@ -38,7 +39,7 @@ namespace OOModel {
 class ReferenceExpression;
 class MetaCallExpression;
 
-class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor> {
+class OOMODEL_API CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor> {
 	public:
 		CodeGenerationVisitor(QMap<QString, Model::Node*> args);
 

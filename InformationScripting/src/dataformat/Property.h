@@ -52,7 +52,7 @@ inline static QString toString(int val)
 	return QString::number(val);
 }
 
-struct PropertyDataConcept {
+struct INFORMATIONSCRIPTING_API PropertyDataConcept {
 		virtual ~PropertyDataConcept() = default;
 		virtual boost::python::object pythonObject() const = 0;
 		virtual Model::Node* node() const { return nullptr; }

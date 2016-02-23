@@ -34,7 +34,7 @@ namespace InformationScripting {
 
 class QueryPromptInput;
 
-class QueryPromptMode : public Interaction::PromptMode
+class INFORMATIONSCRIPTING_API QueryPromptMode : public Interaction::PromptMode
 {
 	public:
 		virtual Visualization::Item* createInputItem(const QString& initialCommandText) override;

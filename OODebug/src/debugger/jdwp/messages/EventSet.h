@@ -37,14 +37,14 @@
 
 namespace OODebug {
 
-struct VMStart : public MessagePart
+struct OODEBUG_API VMStart : public MessagePart
 {
 		virtual ~VMStart() override;
 		MessageField<qint32> requestId{&VMStart::requestId, this};
 		MessageField<qint64> threadId{&VMStart::threadId, this};
 };
 
-struct SingleStepEvent : public MessagePart
+struct OODEBUG_API SingleStepEvent : public MessagePart
 {
 		virtual ~SingleStepEvent() override;
 		MessageField<qint32> requestID{&SingleStepEvent::requestID, this};
@@ -52,7 +52,7 @@ struct SingleStepEvent : public MessagePart
 		MessageField<Location> location{&SingleStepEvent::location, this};
 };
 
-struct ClassPrepare : public MessagePart
+struct OODEBUG_API ClassPrepare : public MessagePart
 {
 		virtual ~ClassPrepare() override;
 		MessageField<qint32> requestId{&ClassPrepare::requestId, this};
@@ -63,7 +63,7 @@ struct ClassPrepare : public MessagePart
 		MessageField<qint32> status{&ClassPrepare::status, this};
 };
 
-struct BreakpointEvent : public MessagePart
+struct OODEBUG_API BreakpointEvent : public MessagePart
 {
 		virtual ~BreakpointEvent() override;
 		MessageField<qint32> requestID{&BreakpointEvent::requestID, this};
@@ -71,7 +71,7 @@ struct BreakpointEvent : public MessagePart
 		MessageField<Location> location{&BreakpointEvent::location, this};
 };
 
-struct Event : public MessagePart
+struct OODEBUG_API Event : public MessagePart
 {
 		virtual ~Event() override;
 		MessageField<Protocol::EventKind> eventKind{&Event::eventKind, this};
@@ -84,7 +84,7 @@ struct Event : public MessagePart
 		virtual int kind() const override;
 };
 
-struct CompositeCommand : public Command {
+struct OODEBUG_API CompositeCommand : public Command {
 		virtual ~CompositeCommand() override;
 		MessageField<Protocol::SuspendPolicy> suspendPolicy{&CompositeCommand::suspendPolicy, this};
 		MessageField<QList<Event>> events{&CompositeCommand::events, this};

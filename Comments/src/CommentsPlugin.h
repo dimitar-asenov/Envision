@@ -41,7 +41,7 @@ namespace Comments {
  * The plug-in can use the supplied EnvisionManager object to find out
  * more about the running environment.
  */
-class CommentsPlugin : public QObject, public Core::EnvisionPlugin
+class COMMENTS_API CommentsPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")

@@ -31,7 +31,7 @@
 
 namespace OOInteraction {
 
-class CompoundObjectStringOffsetProvider : public StringOffsetProvider {
+class OOINTERACTION_API CompoundObjectStringOffsetProvider : public StringOffsetProvider {
 	public:
 		CompoundObjectStringOffsetProvider(Visualization::Item* v);
 		virtual int offset(Qt::Key key);

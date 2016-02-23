@@ -26,11 +26,12 @@
 
 #pragma once
 
+#include "../src/oovisualization_api.h"
 #include "VisualizationBase/src/items/VisualizationAddOn.h"
 
 namespace OOVisualization {
 
-class MethodAddOn : public Visualization::VisualizationAddOn {
+class OOVISUALIZATION_API MethodAddOn : public Visualization::VisualizationAddOn {
 	public:
 
 		MethodAddOn(QString methodName);

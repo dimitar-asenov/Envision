@@ -81,7 +81,7 @@ class INTERACTIONBASE_API Token {
 inline const QString& Token::text() const { return text_; }
 inline Token::Type Token::type() const { return type_; }
 
-struct TokenSplitData {
+struct INTERACTIONBASE_API TokenSplitData {
 	QVector<Token>::const_iterator end;
 	int unmatchedBeforeEnd;
 	int unmatchedAfterEnd;

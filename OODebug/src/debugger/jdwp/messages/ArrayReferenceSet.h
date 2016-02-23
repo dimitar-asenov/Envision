@@ -35,20 +35,20 @@
 
 namespace OODebug {
 
-struct LengthCommand : public Command {
+struct OODEBUG_API LengthCommand : public Command {
 		LengthCommand(qint64 arrayId);
 		virtual ~LengthCommand() override;
 
 		MessageField<qint64> arrayID{&LengthCommand::arrayID, this};
 };
 
-struct Length : public Reply {
+struct OODEBUG_API Length : public Reply {
 		virtual ~Length() override;
 
 		MessageField<qint32> arrayLength{&Length::arrayLength, this};
 };
 
-struct GetArrayValuesCommand : public Command {
+struct OODEBUG_API GetArrayValuesCommand : public Command {
 		GetArrayValuesCommand(qint64 arrayId, qint32 firstIndex, qint32 length);
 		virtual ~GetArrayValuesCommand() override;
 
@@ -60,7 +60,7 @@ struct GetArrayValuesCommand : public Command {
 		MessageField<qint32> length{&GetArrayValuesCommand::length, this};
 };
 
-struct ArrayValues : public Reply {
+struct OODEBUG_API ArrayValues : public Reply {
 		virtual ~ArrayValues() override;
 
 		/* The retrieved values. If the values are objects, they are tagged-values; otherwise, they are untagged-values */

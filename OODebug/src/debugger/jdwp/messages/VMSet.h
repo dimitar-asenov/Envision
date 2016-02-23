@@ -34,7 +34,7 @@
 
 namespace OODebug {
 
-struct VersionCommand : public Command {
+struct OODEBUG_API VersionCommand : public Command {
 	VersionCommand();
 	virtual ~VersionCommand() override;
 };
@@ -51,41 +51,41 @@ struct OODEBUG_API VersionInfo : public Reply {
 		MessageField<QString> vmName{&VersionInfo::vmName, this};
 };
 
-struct ClassesBySignatureCommand : public Command {
+struct OODEBUG_API ClassesBySignatureCommand : public Command {
 		ClassesBySignatureCommand(QString signature);
 		virtual ~ClassesBySignatureCommand() override;
 
 		MessageField<QString> signature{&ClassesBySignatureCommand::signature, this};
 };
 
-struct ClassBySignature : public MessagePart {
+struct OODEBUG_API ClassBySignature : public MessagePart {
 		virtual ~ClassBySignature() override;
 		MessageField<Protocol::TypeTagKind> refTypeTag{&ClassBySignature::refTypeTag, this};
 		MessageField<qint64> typeID{&ClassBySignature::typeID, this};
 		MessageField<Protocol::ClassStatus> status{&ClassBySignature::status, this};
 };
 
-struct ClassesBySignature : public Reply {
+struct OODEBUG_API ClassesBySignature : public Reply {
 		virtual ~ClassesBySignature() override;
 		MessageField<QList<ClassBySignature>> classes{&ClassesBySignature::classes, this};
 };
 
-struct AllThreadsCommand : public Command {
+struct OODEBUG_API AllThreadsCommand : public Command {
 		AllThreadsCommand();
 		virtual ~AllThreadsCommand() override;
 };
 
-struct AllThreads : public Reply {
+struct OODEBUG_API AllThreads : public Reply {
 		virtual ~AllThreads() override;
 		MessageField<QList<qint64>> threadIds{&AllThreads::threadIds, this};
 };
 
-struct IDSizeCommand : public Command {
+struct OODEBUG_API IDSizeCommand : public Command {
 		IDSizeCommand();
 		virtual ~IDSizeCommand() override;
 };
 
-struct IDSizes : public Reply {
+struct OODEBUG_API IDSizes : public Reply {
 		virtual ~IDSizes() override;
 
 		MessageField<int> fieldIDSize{&IDSizes::fieldIDSize, this};
@@ -95,12 +95,12 @@ struct IDSizes : public Reply {
 		MessageField<int> frameIDSize{&IDSizes::frameIDSize, this};
 };
 
-struct SuspendCommand : public Command {
+struct OODEBUG_API SuspendCommand : public Command {
 		SuspendCommand();
 		virtual ~SuspendCommand() override;
 };
 
-struct ResumeCommand : public Command {
+struct OODEBUG_API ResumeCommand : public Command {
 		ResumeCommand();
 		virtual ~ResumeCommand() override;
 };

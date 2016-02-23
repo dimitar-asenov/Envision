@@ -39,7 +39,7 @@ namespace Visualization {
 
 namespace Interaction {
 
-class GenericActions
+class INTERACTIONBASE_API GenericActions
 {
 	public:
 		static bool deleteItem(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);

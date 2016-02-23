@@ -45,7 +45,7 @@ class DeclarationVisitor;
 class ExpressionVisitor;
 class StatementVisitor;
 
-class ElementVisitor
+class JAVAEXPORT_API ElementVisitor
 : public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, Export::PrintContext>
 {
 	public:

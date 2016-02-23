@@ -36,7 +36,7 @@ namespace Visualization {
 
 namespace OOInteraction {
 
-class StaticStringOffsetProvider : public StringOffsetProvider {
+class OOINTERACTION_API StaticStringOffsetProvider : public StringOffsetProvider {
 	public:
 		StaticStringOffsetProvider(Visualization::Static* v);
 		virtual QString string();

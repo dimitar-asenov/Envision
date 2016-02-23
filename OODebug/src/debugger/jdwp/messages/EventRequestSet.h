@@ -37,7 +37,7 @@
 
 namespace OODebug {
 
-struct StepData : public MessagePart {
+struct OODEBUG_API StepData : public MessagePart {
 		StepData() = default;
 		StepData(qint64 threadId, Protocol::StepSize size, Protocol::StepDepth depth);
 		virtual ~StepData() override;
@@ -47,7 +47,7 @@ struct StepData : public MessagePart {
 		MessageField<Protocol::StepDepth> stepDepth{&StepData::stepDepth, this};
 };
 
-class Modifier : public MessagePart
+class OODEBUG_API Modifier : public MessagePart
 {
 	public:
 		static const int eventOff = 1;
@@ -77,7 +77,7 @@ class Modifier : public MessagePart
 		Modifier(int kind);
 };
 
-struct EventSetCommand : public Command {
+struct OODEBUG_API EventSetCommand : public Command {
 		virtual ~EventSetCommand() override;
 		MessageField<Protocol::EventKind> kind{&EventSetCommand::kind, this};
 		MessageField<Protocol::SuspendPolicy> suspendPolicy{&EventSetCommand::suspendPolicy, this};
@@ -88,28 +88,28 @@ struct EventSetCommand : public Command {
 		EventSetCommand(Protocol::EventKind kind);
 };
 
-struct BreakClassLoad : public EventSetCommand
+struct OODEBUG_API BreakClassLoad : public EventSetCommand
 {
 		BreakClassLoad(QString classToBreak);
 		virtual ~BreakClassLoad() override;
 };
 
-struct BreakpointCommand : public EventSetCommand {
+struct OODEBUG_API BreakpointCommand : public EventSetCommand {
 		BreakpointCommand(Location breakLocation);
 		virtual ~BreakpointCommand() override;
 };
 
-struct StepCommand : public EventSetCommand {
+struct OODEBUG_API StepCommand : public EventSetCommand {
 		StepCommand(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth);
 		virtual ~StepCommand() override;
 };
 
-struct EventSetReply : public Reply {
+struct OODEBUG_API EventSetReply : public Reply {
 		virtual ~EventSetReply() override;
 		MessageField<qint32> requestId{&EventSetReply::requestId, this};
 };
 
-struct EventClearCommand : public Command {
+struct OODEBUG_API EventClearCommand : public Command {
 		EventClearCommand(Protocol::EventKind kind, qint32 requestId);
 		virtual ~EventClearCommand();
 		MessageField<Protocol::EventKind> eventKind{&EventClearCommand::eventKind, this};

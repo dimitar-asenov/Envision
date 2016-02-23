@@ -37,7 +37,7 @@
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/declarative/GridLayouter.h"
 
-class CommandHelper
+class OOINTERACTION_API CommandHelper
 {
 	public:
 

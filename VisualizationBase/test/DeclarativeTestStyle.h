@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class DeclarativeTestStyle : public Super<DeclarativeItemBaseStyle>
+class VISUALIZATIONBASE_API DeclarativeTestStyle : public Super<DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~DeclarativeTestStyle() override;

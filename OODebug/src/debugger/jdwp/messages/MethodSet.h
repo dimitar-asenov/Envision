@@ -36,20 +36,20 @@
 
 namespace OODebug {
 
-struct LineTableCommand : public Command {
+struct OODEBUG_API LineTableCommand : public Command {
 		LineTableCommand(qint64 classId, qint64 methodId);
 		virtual ~LineTableCommand() override;
 		MessageField<qint64> refTypeId{&LineTableCommand::refTypeId, this};
 		MessageField<qint64> methodID{&LineTableCommand::methodID, this};
 };
 
-struct CodeIndexLine : public MessagePart {
+struct OODEBUG_API CodeIndexLine : public MessagePart {
 		virtual ~CodeIndexLine() override;
 		MessageField<qint64> lineCodeIndex{&CodeIndexLine::lineCodeIndex, this};
 		MessageField<qint32> lineNumber{&CodeIndexLine::lineNumber, this};
 };
 
-struct LineTable : public Reply {
+struct OODEBUG_API LineTable : public Reply {
 		virtual ~LineTable() override;
 		/** Lowest valid code index for the method, >=0, or -1 if the method is native */
 		MessageField<qint64> start{&LineTable::start, this};
@@ -58,14 +58,14 @@ struct LineTable : public Reply {
 		MessageField<QList<CodeIndexLine>> mappings{&LineTable::mappings, this};
 };
 
-struct VariableTableCommand : public Command {
+struct OODEBUG_API VariableTableCommand : public Command {
 		VariableTableCommand(qint64 classId, qint64 methodId);
 		virtual ~VariableTableCommand() override;
 		MessageField<qint64> refTypeId{&VariableTableCommand::refTypeId, this};
 		MessageField<qint64> methodID{&VariableTableCommand::methodID, this};
 };
 
-struct VariableDetails : public MessagePart {
+struct OODEBUG_API VariableDetails : public MessagePart {
 		virtual ~VariableDetails() override;
 		/** First code index at which the variable is visible (unsigned).
 		 * Used in conjunction with length. The variable can be get or set only when:
@@ -82,7 +82,7 @@ struct VariableDetails : public MessagePart {
 		MessageField<qint32> slot{&VariableDetails::slot, this};
 };
 
-struct VariableTable : public Reply {
+struct OODEBUG_API VariableTable : public Reply {
 		virtual ~VariableTable() override;
 		/** The number of words in the frame used by arguments. Eight-byte arguments use two words; all others use one. */
 		MessageField<qint32> argCnt{&VariableTable::argCnt, this};

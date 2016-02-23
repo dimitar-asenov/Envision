@@ -34,7 +34,7 @@ namespace Visualization {
 
 namespace Interaction {
 
-class ActionRegistry
+class INTERACTIONBASE_API ActionRegistry
 {
 	public:
 		enum InputState {

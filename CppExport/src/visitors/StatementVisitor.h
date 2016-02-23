@@ -56,7 +56,7 @@ class ExpressionVisitor;
 class ElementVisitor;
 class CppPrintContext;
 
-class StatementVisitor
+class CPPEXPORT_API StatementVisitor
 :public Export::Visitor<DeclarationVisitor, ExpressionVisitor, StatementVisitor, ElementVisitor, CppPrintContext>
 {
 	public:

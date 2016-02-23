@@ -36,13 +36,13 @@
 
 namespace OODebug {
 
-struct StringValueCommand : public Command {
+struct OODEBUG_API StringValueCommand : public Command {
 		StringValueCommand(qint64 stringId);
 		virtual ~StringValueCommand() override;
 		MessageField<qint64> objectID{&StringValueCommand::objectID, this};
 };
 
-struct StringValue : public Reply {
+struct OODEBUG_API StringValue : public Reply {
 		virtual ~StringValue() override;
 		MessageField<QString> stringValue{&StringValue::stringValue, this};
 };

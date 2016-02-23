@@ -43,7 +43,7 @@ class Item;
 class Symbol;
 class VComposite;
 
-class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
+class VISUALIZATIONBASE_API DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
 
 	ITEM_COMMON(DeclarativeTest)
 

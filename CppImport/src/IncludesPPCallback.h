@@ -30,7 +30,7 @@
 
 namespace CppImport {
 
-class IncludesPPCallback : public clang::PPCallbacks
+class CPPIMPORT_API IncludesPPCallback : public clang::PPCallbacks
 {
 	public:
 		IncludesPPCallback(QSet<QString>& includes, const clang::SourceManager* sourceManager);

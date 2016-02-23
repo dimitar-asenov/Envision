@@ -36,7 +36,7 @@ namespace Visualization {
 
 namespace OOInteraction {
 
-class TextRendererStringOffsetProvider : public StringOffsetProvider {
+class OOINTERACTION_API TextRendererStringOffsetProvider : public StringOffsetProvider {
 	public:
 		TextRendererStringOffsetProvider(Visualization::TextRenderer* v);
 		virtual QString string();

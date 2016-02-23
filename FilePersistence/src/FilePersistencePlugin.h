@@ -27,11 +27,11 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "filepersistence_api.h"
 
 namespace FilePersistence {
 
-class FilePersistencePlugin : public QObject, public Core::EnvisionPlugin
+class FILEPERSISTENCE_API FilePersistencePlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
