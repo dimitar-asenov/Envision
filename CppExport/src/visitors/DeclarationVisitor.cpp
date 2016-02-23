@@ -536,10 +536,12 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 	// A filed might also belong to a Project/Module, representing a global variable.
 	bool isClassField = field && field->firstAncestorOfType<Class>();
 
-	// non-static and not constexpr fields are not printed outside of a class
-	if (isClassField && !printContext().isClass() &&
-		 !field->modifiers()->isSet(Modifier::Static) &&
-		 !field->modifiers()->isSet(Modifier::ConstExpr)) return {};
+	// non-static fields or constexpr fields are not printed outside of a class
+	if (isClassField && !printContext().isClass() )
+	{
+		if (!field->modifiers()->isSet(Modifier::Static) || field->modifiers()->isSet(Modifier::ConstExpr))
+		return {};
+	}
 
 	bool isStaticGlobal = !isClassField && field && field->modifiers()->isSet(Modifier::Static);
 	// static global variables are not printed inside the .h file
