@@ -402,14 +402,15 @@ QList<MacroArgumentLocation> MacroImporter::argumentHistory(Model::Node* node)
 
 void MacroImporter::allArguments(Model::Node* node, QList<MacroArgumentInfo>& result, NodeToCloneMap& mapping)
 {
-	// consider name texts as inseparable part of a declaration
-	if (DCast<Model::NameText>(node)) return;
-
-	auto argLoc = argumentHistory(mapping.original(node));
-	if (!argLoc.empty())
+	// NameText or StatementExpression can never be splices.
+	if (!DCast<Model::NameText>(node) && !DCast<OOModel::ExpressionStatement>(node))
 	{
-		result.append({argLoc, node});
-		return;
+		auto argLoc = argumentHistory(mapping.original(node));
+		if (!argLoc.empty())
+		{
+			result.append({argLoc, node});
+			return;
+		}
 	}
 
 	for (auto child : node->children())
