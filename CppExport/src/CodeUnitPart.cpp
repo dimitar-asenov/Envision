@@ -81,12 +81,32 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 	softTargets_.clear();
 	hardTargets_.clear();
 	for (auto reference : referenceNodes_)
+	{
+		// member access: if this reference comes after . or -> or ::, include a hard dependency on the prefix
+		// This works regardless of whether the reference itself is resolved or not.
+		if (auto prefix = reference->prefix())
+		{
+			// Get the type of the prefix
+			std::unique_ptr<OOModel::Type> prefixType = prefix->type();
+
+			// Strip pointers/references
+			const OOModel::Type* finalType = prefixType.get();
+			if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(finalType))
+				finalType = pointerType->baseType();
+			else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(finalType))
+				finalType = referenceType->baseType();
+
+			// Add a dependency
+			if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
+				hardTargets_.insert(classType->classDefinition());
+
+		}
+
+		// Additionally, the reference itself might indicate a dependency
 		if (auto target = fixedTarget(reference))
 		{
-			/*
-			 * when comparing two pointers of different types the compiler has to know the full structure of the
-			 * classes in order to compute comparable pointers. we compute these hard dependencies here.
-			 */
+			// when comparing two pointers of different types the compiler has to know the full structure of the
+			// classes in order to compute comparable pointers. we compute these hard dependencies here.
 			if (auto parentBinaryOperation = DCast<OOModel::BinaryOperation>(reference->parent()))
 				if (auto leftType = parentBinaryOperation->left()->type())
 				{
@@ -121,28 +141,10 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 
 					if (!parentMethodCall || !prefixReference || prefixReference->typeArguments()->isEmpty())
 						hardTargets_.insert(target);
-
-					// member access
-					if (parentMethodCall || DCast<OOModel::ReferenceExpression>(reference->parent()))
-					{
-						std::unique_ptr<OOModel::Type> baseType{};
-						if (parentMethodCall && parentMethodCall->callee()->isAncestorOf(reference))
-							baseType = parentMethodCall->type();
-						else
-							baseType = reference->type();
-
-						const OOModel::Type* finalType = baseType.get();
-						if (auto pointerType = dynamic_cast<const OOModel::PointerType*>(finalType))
-							finalType = pointerType->baseType();
-						else if (auto referenceType = dynamic_cast<const OOModel::ReferenceType*>(finalType))
-							finalType = referenceType->baseType();
-
-						if (auto classType = dynamic_cast<const OOModel::ClassType*>(finalType))
-							hardTargets_.insert(classType->classDefinition());
-					}
 				}
 			}
 		}
+	}
 }
 
 void CodeUnitPart::assertForcedDependencyNecessary(OOModel::ReferenceExpression* reference)
@@ -165,11 +167,6 @@ bool CodeUnitPart::isNameOnlyDependency(OOModel::ReferenceExpression* reference)
 
 	if (auto parentCast = reference->firstAncestorOfType<OOModel::CastExpression>())
 		if (parentCast->castType()->isAncestorOf(reference)) return false;
-
-	auto parentClass = reference->firstAncestorOfType<OOModel::Class>();
-	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>() &&
-		 !reference->typeArguments()->isEmpty() && parentClass && !parentClass->typeArguments()->isEmpty())
-		return true;
 
 	if (reference->firstAncestorOfType<OOModel::MethodCallExpression>()) return false;
 
