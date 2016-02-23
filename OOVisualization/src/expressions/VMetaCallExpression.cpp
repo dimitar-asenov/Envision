@@ -68,7 +68,8 @@ void VMetaCallExpression::determineChildren()
 
 	layout()->synchronizeMid(arguments_, node()->arguments(), &style()->arguments(), 2);
 
-	layout()->synchronizeLast(generated_, node()->generatedTree());
+	// At the moment the line below is broken, since generation fails.
+	//layout()->synchronizeLast(generated_, node()->generatedTree());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
