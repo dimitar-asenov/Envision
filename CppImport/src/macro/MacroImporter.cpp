@@ -384,9 +384,15 @@ QList<MacroArgumentLocation> MacroImporter::argumentHistory(clang::SourceRange r
 		// find all expansions with arguments with location equal to an entry in spellingHistory
 		for (auto argumentLoc : spellingHistory)
 			for (auto expansion : macroExpansions_.expansions())
-				for (auto i = 0; i < expansion->argumentLocs().size(); i++)
-					if (expansion->argumentLocs().at(i) == argumentLoc)
+				for (auto i = 0; i < expansion->argumentRanges().size(); i++)
+				{
+					auto argRange = expansion->argumentRanges().at(i);
+					if ((clang_.sourceManager()->isBeforeInSLocAddrSpace(argRange.getBegin(), argumentLoc) ||
+						  argRange.getBegin() == argumentLoc) &&
+						 (clang_.sourceManager()->isBeforeInSLocAddrSpace(argumentLoc, argRange.getEnd()) ||
+						  argumentLoc == argRange.getEnd()))
 						result.append({expansion, i});
+				}
 	}
 
 	return result;

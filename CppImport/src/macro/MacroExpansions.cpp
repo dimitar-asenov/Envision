@@ -116,7 +116,8 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 																					actualArgLastToken->getLocation()));
 
 			entry->metaCall()->arguments()->append(new OOModel::ReferenceExpression{unexpandedArgument});
-			entry->argumentLocs().append(actualArgLastToken->getLocation());
+			entry->argumentRanges().append(clang::SourceRange(actualArgFirstToken->getLocation(),
+																			  actualArgLastToken->getLocation()));
 		}
 
 		// handle predefined meta definition: SET_OVERRIDE_FLAG
