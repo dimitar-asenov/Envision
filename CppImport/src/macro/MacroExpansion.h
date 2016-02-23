@@ -49,7 +49,7 @@ class CPPIMPORT_API MacroExpansion
 		clang::SourceRange range();
 		const clang::MacroDirective* definition();
 		MacroExpansion* parent();
-		QList<clang::SourceLocation>& argumentLocs();
+		QList<clang::SourceRange>& argumentRanges();
 		QList<MacroExpansion*>& children();
 		OOModel::MetaCallExpression* metaCall();
 		MacroExpansion* xMacroParent();
@@ -63,7 +63,7 @@ class CPPIMPORT_API MacroExpansion
 		clang::SourceRange range_;
 		const clang::MacroDirective* definition_;
 		MacroExpansion* parent_{};
-		QList<clang::SourceLocation> argumentLocs_;
+		QList<clang::SourceRange> argumentRanges_;
 		QList<MacroExpansion*> children_;
 		OOModel::MetaCallExpression* metaCall_{};
 		MacroExpansion* xMacroParent_{};
@@ -77,7 +77,7 @@ inline const clang::MacroDirective* MacroExpansion::definition() { return defini
 
 inline MacroExpansion* MacroExpansion::parent() { return parent_; }
 
-inline QList<clang::SourceLocation>& MacroExpansion::argumentLocs() { return argumentLocs_; }
+inline QList<clang::SourceRange>& MacroExpansion::argumentRanges() { return argumentRanges_; }
 
 inline QList<MacroExpansion*>& MacroExpansion::children() { return children_; }
 
