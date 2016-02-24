@@ -39,14 +39,21 @@ namespace OOModel
 
 namespace Export
 {
+	class SourceFragment;
 	class CompositeFragment;
 }
 
 namespace CppExport {
 
+class CodeComposite;
+
 class CPPEXPORT_API SpecialCases
 {
 	public:
+		static const QString XMACRO_DATA_FILENAME;
+		static const QString XMACRO_INSTANTIATION_FILENAME;
+		static const QString XMACRO_END;
+
 		static void handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment);
 
 		static bool isTestClass(OOModel::Class* classs);
@@ -86,6 +93,14 @@ class CPPEXPORT_API SpecialCases
 
 		static bool isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpression* parentReference,
 																		 OOModel::ReferenceExpression* argumentReference);
+		static Export::SourceFragment* printXMacroDataBlock(OOModel::MetaCallExpression* beginPartialMetaCall);
+		static Export::CompositeFragment* printPartialBeginMacroSpecialization(OOModel::MetaDefinition* metaDefinition,
+																									  bool isHeaderFile);
+		static Export::CompositeFragment* printPartialBeginMacroBase(OOModel::MetaDefinition* beginPartialMetaDefinition,
+																						 bool isHeaderFile);
+		static Export::SourceFragment* includeXMacroData(CodeComposite* codeComposite,
+																				  Export::SourceFragment* baseFragment,
+																				  bool isSourceFile);
 };
 
 }

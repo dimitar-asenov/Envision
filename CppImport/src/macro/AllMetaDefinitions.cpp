@@ -32,6 +32,7 @@
 
 #include "NodeHelpers.h"
 #include "../ClangHelpers.h"
+#include "NodeToCloneMap.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -47,16 +48,14 @@ void AllMetaDefinitions::createMetaDef(QList<Model::Node*> nodes, MacroExpansion
 {
 	if (auto metaDef = standardMetaDefinitions_.createMetaDef(expansion->definition()))
 	{
-		auto metaDefParent = metaDefinitionParent(expansion->definition());
-
 		// check whether this expansion is not a potential partial begin macro specialization
 		if (auto beginChild = partialBeginChild(expansion))
-			handlePartialBeginSpecialization(metaDefParent, metaDef, expansion, beginChild);
+			handlePartialBeginSpecialization(metaDef, expansion, beginChild);
 		else
 			standardMetaDefinitions_.createMetaDefinitionBody(metaDef, nodes, expansion, mapping, arguments);
 
 		clang_.insertDeclarationInFolder(metaDef, expansion->definition()->getMacroInfo()->getDefinitionLoc(),
-													metaDefParent);
+													metaDefinitionParent(expansion->definition()));
 	}
 }
 
@@ -78,10 +77,8 @@ OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::Macr
 	return result;
 }
 
-void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent,
-																	  OOModel::MetaDefinition* metaDef,
-																	  MacroExpansion* expansion,
-																	  MacroExpansion* beginChild)
+void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,
+																			 MacroExpansion* beginChild)
 {
 	QList<Model::Node*> statements = macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Direct);
 
@@ -89,26 +86,44 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 	{
 		// create a new list containing all the additional statements defined in expansion (the specialization)
 		auto list = new Model::List{};
-		for (auto stmt : statements) list->append(stmt->clone());
+		for (auto stmt : statements)
+		{
+			NodeToCloneMap childMapping;
+			auto cloned = NodeHelpers::cloneWithMapping(stmt, childMapping);
+
+			// the specialization statements were never part of a standard meta definition so the reference names inside
+			// them were never unexpanded and we have to do it now.
+			// (copied and adapted from StandardMetaDefinitions::createMetaDefinitionBody)
+			QList<Model::Node*> workStack{cloned};
+			while (!workStack.empty())
+			{
+				auto current = workStack.takeLast();
+				if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(current))
+				{
+					auto sourceRanges = clang_.envisionToClangMap().get(childMapping.original(referenceExpression));
+					if (!sourceRanges.empty())
+						referenceExpression->setName(clang_.unexpandedSpelling(sourceRanges.first().getBegin()));
+				}
+				workStack << current->children();
+			}
+			list->append(cloned);
+		}
 
 		auto childDef = standardMetaDefinitions_.metaDefinition(beginChild->definition());
 		Q_ASSERT(childDef);
 
-		if (metaDefParent->name().endsWith("_CPP"))
+		QString cppSpecializationSpliceName = "cppSpecSplice";
+
+		if (!NodeHelpers::findDeclaration(childDef->arguments(), cppSpecializationSpliceName))
 		{
-			QString cppSpecializationSpliceName = "cppSpecSplice";
+			childDef->arguments()->append(new OOModel::FormalMetaArgument{cppSpecializationSpliceName});
 
-			if (!NodeHelpers::findDeclaration(childDef->arguments(), cppSpecializationSpliceName))
-			{
-				childDef->arguments()->append(new OOModel::FormalMetaArgument{cppSpecializationSpliceName});
+			auto classContext = DCast<OOModel::Class>(childDef->context());
+			Q_ASSERT(classContext);
 
-				auto classContext = DCast<OOModel::Class>(childDef->context());
-				Q_ASSERT(classContext);
-
-				if (classContext->methods()->size() > 0)
-					classContext->methods()->last()->items()->append(
-								new OOModel::ExpressionStatement{new OOModel::ReferenceExpression{cppSpecializationSpliceName}});
-			}
+			if (classContext->methods()->size() > 0)
+				classContext->methods()->last()->items()->append(
+							new OOModel::ExpressionStatement{new OOModel::ReferenceExpression{cppSpecializationSpliceName}});
 		}
 
 		beginChild->metaCall()->arguments()->append(list);

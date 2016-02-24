@@ -28,13 +28,13 @@
 
 #include "../cppimport_api.h"
 
+#include "../ClangHelpers.h"
+
 namespace OOModel {
 	class ReferenceExpression;
 }
 
 namespace CppImport {
-
-class ClangHelpers;
 
 /**
  * stores the raw macro definition (not MetaDefinition) information provided by PPCallback for a translation unit.
@@ -72,7 +72,10 @@ class CPPIMPORT_API MacroDefinitions
 
 inline void MacroDefinitions::addMacroDefinition(const QString& name, const clang::MacroDirective* md)
 {
-	definitions_[md] = name;
+	if (clang_.presumedFilenameWithExtension(md->getLocation()).endsWith(".cpp"))
+		definitions_[md] = name + "_CPP";
+	else
+		definitions_[md] = name;
 }
 
 inline bool MacroDefinitions::isPartialBegin(const clang::MacroDirective* md) const

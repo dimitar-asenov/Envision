@@ -121,14 +121,18 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	Q_ASSERT(!units().empty());
 
 	QSet<CodeComposite*> compositeDependencies;
-	for (auto unit : units())
-		for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
-			compositeDependencies.insert(dependency->parent()->composite());
 
-	if ((units().first()->*part)() == units().first()->headerPart())
+	if (!isXMacroData())
 	{
-		if (auto api = ExportHelpers::apiInclude(units().first()->node())) compositeDependencies.insert(api);
-		compositeDependencies.remove(this);
+		for (auto unit : units())
+			for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
+				compositeDependencies.insert(dependency->parent()->composite());
+
+		if ((units().first()->*part)() == units().first()->headerPart())
+		{
+			if (auto api = ExportHelpers::apiInclude(units().first()->node())) compositeDependencies.insert(api);
+			compositeDependencies.remove(this);
+		}
 	}
 
 	auto composite = new Export::CompositeFragment{units().first()->node()};
@@ -201,8 +205,8 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				}
 			}
 
-			auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) ? nullptr :
-					ExportHelpers::parentNamespaceModule(unit->node());
+			auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) || isXMacroData() ?
+						nullptr : ExportHelpers::parentNamespaceModule(unit->node());
 			if (neededNamespace != currentNamespace)
 			{
 				currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);

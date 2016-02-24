@@ -331,7 +331,9 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		}
 		else
 		{
-			*fragment << visit(e->callee());
+			auto calleeReference = DCast<ReferenceExpression>(e->callee());
+			Q_ASSERT(calleeReference);
+			*fragment << new TextFragment{calleeReference, ExportHelpers::strip_CPPFromName(e)};
 
 			if (auto arguments = SpecialCases::overrideFlagArgumentTransformation(e))
 				*fragment << arguments;

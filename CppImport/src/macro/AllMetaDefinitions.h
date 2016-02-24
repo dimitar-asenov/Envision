@@ -78,8 +78,8 @@ class CPPIMPORT_API AllMetaDefinitions
 
 		MacroExpansion* basePartialBegin(MacroExpansion* partialBeginExpansion);
 
-		void handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent, OOModel::MetaDefinition* metaDef,
-														  MacroExpansion* expansion, MacroExpansion* beginChild);
+		void handlePartialBeginSpecialization(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,
+														  MacroExpansion* beginChild);
 
 		MacroExpansion* partialBeginChild(MacroExpansion* expansion);
 

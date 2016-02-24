@@ -94,6 +94,8 @@ class CPPEXPORT_API ExportHelpers
 		static OOModel::Module* parentNamespaceModule(Model::Node* node);
 
 		static bool isInHeader(OOModel::Method* method, CppPrintContext& printContext);
+
+		static QString strip_CPPFromName(Model::Node* node);
 };
 
 template <typename T>

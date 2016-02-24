@@ -133,7 +133,9 @@ void CodeUnit::calculateSourceFragments()
 	else if (auto metaCall = DCast<OOModel::MetaCallExpression>(node()))
 	{
 		auto ooReference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
-		if (ooReference->name().startsWith("DEFINE_"))
+		if (ooReference->name().startsWith("BEGIN_"))
+			headerPart()->setFragment(SpecialCases::printXMacroDataBlock(metaCall));
+		else if (ooReference->name().startsWith("DEFINE_"))
 			sourcePart()->setFragment(ExpressionVisitor{printContextDeclaration}.visit(metaCall));
 		else
 		{
@@ -143,9 +145,23 @@ void CodeUnit::calculateSourceFragments()
 	}
 	else if (auto metaDefinition = DCast<OOModel::MetaDefinition>(node()))
 	{
-		// TODO: add a similar map to the metaCallLocationMap (maybe even unify them?)
-		CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
-		headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(metaDefinition));
+		if (metaDefinition->name().startsWith("BEGIN_") && metaDefinition->metaBindings()->isEmpty())
+		{
+			headerPart()->setFragment(SpecialCases::printPartialBeginMacroSpecialization(metaDefinition, true));
+			sourcePart()->setFragment(SpecialCases::printPartialBeginMacroSpecialization(metaDefinition, false));
+		}
+		else if (metaDefinition->name().startsWith("BEGIN_") && !metaDefinition->metaBindings()->isEmpty())
+		{
+			headerPart()->setFragment(SpecialCases::printPartialBeginMacroBase(metaDefinition, true));
+			sourcePart()->setFragment(SpecialCases::printPartialBeginMacroBase(metaDefinition, false));
+		}
+		else if (metaDefinition->name().endsWith("_CPP"))
+			sourcePart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(metaDefinition));
+		else
+		{
+			CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
+			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(metaDefinition));
+		}
 	}
 	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
 	{
