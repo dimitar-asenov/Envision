@@ -32,6 +32,7 @@
 
 #include "NodeHelpers.h"
 #include "../ClangHelpers.h"
+#include "NodeToCloneMap.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -85,7 +86,26 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::MetaDefinitio
 	{
 		// create a new list containing all the additional statements defined in expansion (the specialization)
 		auto list = new Model::List{};
-		for (auto stmt : statements) list->append(stmt->clone());
+		for (auto stmt : statements)
+		{
+			NodeToCloneMap childMapping;
+			auto cloned = NodeHelpers::cloneWithMapping(stmt, childMapping);
+
+			// use unexpanded spelling for all references
+			QList<Model::Node*> workStack{cloned};
+			while (!workStack.empty())
+			{
+				auto current = workStack.takeLast();
+				if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(current))
+				{
+					auto sourceRanges = clang_.envisionToClangMap().get(childMapping.original(referenceExpression));
+					if (!sourceRanges.empty())
+						referenceExpression->setName(clang_.unexpandedSpelling(sourceRanges.first().getBegin()));
+				}
+				workStack << current->children();
+			}
+			list->append(cloned);
+		}
 
 		auto childDef = standardMetaDefinitions_.metaDefinition(beginChild->definition());
 		Q_ASSERT(childDef);
