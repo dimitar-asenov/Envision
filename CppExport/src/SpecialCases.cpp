@@ -45,6 +45,10 @@
 
 namespace CppExport {
 
+const QString SpecialCases::XMACRO_DATA_FILENAME = "StandardExpressionDefinitions";
+const QString SpecialCases::XMACRO_INSTANTIATION_FILENAME = "StandardExpressionVisualizations";
+const QString SpecialCases::XMACRO_END = "END_STANDARD_EXPRESSION_VISUALIZATION";
+
 void SpecialCases::handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment)
 {
 	auto specialCaseFragment = fragment->append(new Export::CompositeFragment{classs});

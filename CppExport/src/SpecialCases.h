@@ -47,13 +47,13 @@ namespace CppExport {
 
 class CodeComposite;
 
-const QString XMACRO_DATA_FILENAME = "StandardExpressionDefinitions";
-const QString XMACRO_INSTANTIATION_FILENAME = "StandardExpressionVisualizations";
-const QString XMACRO_END = "END_STANDARD_EXPRESSION_VISUALIZATION";
-
 class CPPEXPORT_API SpecialCases
 {
 	public:
+		static const QString XMACRO_DATA_FILENAME;
+		static const QString XMACRO_INSTANTIATION_FILENAME;
+		static const QString XMACRO_END;
+
 		static void handleQT_Flags(OOModel::Class* classs, Export::CompositeFragment* fragment);
 
 		static bool isTestClass(OOModel::Class* classs);
