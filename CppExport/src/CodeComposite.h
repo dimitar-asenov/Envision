@@ -74,7 +74,7 @@ class CPPEXPORT_API CodeComposite
 																		OOModel::Module* namespaceNode);
 
 		bool isXMacroData();
-		bool isXMacroDefinitions();
+		bool isXMacroInstantiation();
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
@@ -98,7 +98,7 @@ inline Export::SourceFragment* CodeComposite::headerFragment()
 {
 	if (isXMacroData())
 		return partFragment(&CodeUnit::headerPart);
-	if (isXMacroDefinitions())
+	if (isXMacroInstantiation())
 		return addPragmaOnce(SpecialCases::addXMacroUsagesInclusion(this, partFragment(&CodeUnit::headerPart), false));
 	return addPragmaOnce(partFragment(&CodeUnit::headerPart));
 }
@@ -106,7 +106,7 @@ inline Export::SourceFragment* CodeComposite::sourceFragment()
 {
 	if (isTemplateImplementationSeparateFile())
 		return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
-	if (isXMacroDefinitions())
+	if (isXMacroInstantiation())
 		return addPragmaOnce(SpecialCases::addXMacroUsagesInclusion(this, partFragment(&CodeUnit::sourcePart), true));
 	return partFragment(&CodeUnit::sourcePart);
 }
@@ -124,7 +124,7 @@ inline bool CodeComposite::isXMacroData()
 	return name_.endsWith("StandardExpressionDefinitions");
 }
 
-inline bool CodeComposite::isXMacroDefinitions()
+inline bool CodeComposite::isXMacroInstantiation()
 {
 	return name_.endsWith("StandardExpressionVisualizations");
 }
