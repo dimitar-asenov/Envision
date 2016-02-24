@@ -219,7 +219,9 @@ Export::SourceFragment* SpecialCases::includeXMacroData(CodeComposite* codeCompo
 								  << "}";
 	auto fragment = new Export::CompositeFragment{baseFragment->node(), "spacedSections"};
 	*fragment << baseFragment
-				 << dataInclusionFragment;
+				 << "#define " + XMACRO_END + " };"
+				 << dataInclusionFragment
+				 << "#undef " + XMACRO_END;
 	for (auto unit : codeComposite->units())
 		if (auto metaDefinition = DCast<OOModel::MetaDefinition>(unit->node()))
 			if (metaDefinition->name().startsWith("BEGIN_") || (metaDefinition->name().endsWith("_CPP") == isSourceFile))
