@@ -72,6 +72,9 @@ class CPPEXPORT_API CodeComposite
 							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
 		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
 																		OOModel::Module* namespaceNode);
+
+		bool isXMacroUsages();
+		bool isXMacroDefinitions();
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
@@ -92,10 +95,19 @@ inline QString CodeComposite::sourcePartExtension()
 }
 
 inline Export::SourceFragment* CodeComposite::headerFragment()
-{ return addPragmaOnce(partFragment(&CodeUnit::headerPart)); }
+{
+	if (isXMacroUsages())
+		return partFragment(&CodeUnit::headerPart);
+	if (isXMacroDefinitions())
+		return addPragmaOnce(SpecialCases::addXMacroUsagesInclusion(this, partFragment(&CodeUnit::headerPart), false));
+	return addPragmaOnce(partFragment(&CodeUnit::headerPart));
+}
 inline Export::SourceFragment* CodeComposite::sourceFragment()
 {
-	if (isTemplateImplementationSeparateFile()) return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
+	if (isTemplateImplementationSeparateFile())
+		return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
+	if (isXMacroDefinitions())
+		return addPragmaOnce(SpecialCases::addXMacroUsagesInclusion(this, partFragment(&CodeUnit::sourcePart), true));
 	return partFragment(&CodeUnit::sourcePart);
 }
 
@@ -105,6 +117,16 @@ inline bool CodeComposite::isTemplateImplementationSeparateFile()
 		if (unit->isTemplateImplementationSeparateFile())
 			return true;
 	return false;
+}
+
+inline bool CodeComposite::isXMacroUsages()
+{
+	return name_.endsWith("StandardExpressionDefinitions");
+}
+
+inline bool CodeComposite::isXMacroDefinitions()
+{
+	return name_.endsWith("StandardExpressionVisualizations");
 }
 
 }

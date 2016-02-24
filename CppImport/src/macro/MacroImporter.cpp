@@ -284,12 +284,12 @@ void MacroImporter::insertArguments(QList<MacroArgumentInfo>& allArguments)
 		{
 			QRegularExpression regex{"^[A-Z]\\w*$"};
 			auto match = regex.match(currentArg->name());
-			if (!match.hasMatch())
+			if (!match.hasMatch() && !currentArg->name().startsWith("#"))
 			{
-				auto newArg = argument.node_->clone();
-
-				if (!currentArg->name().startsWith("#"))
-					lastLoc.expansion_->metaCall()->arguments()->replaceChild(currentArg, newArg);
+				if (argument.nameOnly_)
+					currentArg->setName(DCast<OOModel::ReferenceExpression>(argument.node_)->name());
+				else
+					lastLoc.expansion_->metaCall()->arguments()->replaceChild(currentArg, argument.node_->clone());
 			}
 		}
 	}
@@ -414,7 +414,18 @@ void MacroImporter::allArguments(Model::Node* node, QList<MacroArgumentInfo>& re
 		auto argLoc = argumentHistory(mapping.original(node));
 		if (!argLoc.empty())
 		{
-			result.append({argLoc, node});
+			bool nameOnly{};
+			if (auto rr = DCast<OOModel::ReferenceExpression>(node))
+				if (rr->prefix())
+				{
+					auto k = DCast<OOModel::ReferenceExpression>(rr->prefix());
+					if (rr->name() == "ConditionalExpression")
+						qDebug() << "ha" << k;
+
+					if (argumentHistory(mapping.original(rr->prefix())).empty())
+						nameOnly = true;
+				}
+			result.append({argLoc, node, nameOnly});
 			return;
 		}
 	}

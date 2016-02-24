@@ -242,4 +242,22 @@ bool ExportHelpers::isInHeader(OOModel::Method* method, CppPrintContext& printCo
 	return false;
 }
 
+QString ExportHelpers::strip_CPPFromName(Model::Node* node)
+{
+	QString name;
+	if (auto metaDefinition = DCast<OOModel::MetaDefinition>(node))
+		name = metaDefinition->name();
+	else if (auto metaCall = DCast<OOModel::MetaCallExpression>(node))
+	{
+		auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
+		Q_ASSERT(reference);
+		name = reference->name();
+	}
+	else
+		Q_ASSERT(false);
+
+	if (name.endsWith("_CPP")) return name.left(name.size() - 4);
+	return name;
+}
+
 }

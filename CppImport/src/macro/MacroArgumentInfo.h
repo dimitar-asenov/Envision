@@ -40,6 +40,7 @@ struct CPPIMPORT_API MacroArgumentInfo
 {
 	QList<MacroArgumentLocation> history_;
 	Model::Node* node_{};
+	bool nameOnly_{};
 };
 
 }

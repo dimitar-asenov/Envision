@@ -262,17 +262,22 @@ void StandardMetaDefinitions::insertArgumentSplices(NodeToCloneMap& mapping, Nod
 
 			// the splice name is equal to the formal argument name where the argument is coming from
 			auto argName = clang_.argumentNames(spliceLoc.expansion_->definition()).at(spliceLoc.argumentNumber_);
-			Model::Node* newNode = new OOModel::ReferenceExpression{argName};
+			if (!argument.nameOnly_)
+			{
+				Model::Node* newNode = new OOModel::ReferenceExpression{argName};
 
-			// in case the node to replace is not an expression we have to wrap the splice
-			if (DCast<OOModel::FormalResult>(child))
-				newNode = new OOModel::FormalResult{QString{}, DCast<OOModel::Expression>(newNode)};
-			else if (DCast<OOModel::Statement>(child))
-				newNode = new OOModel::ExpressionStatement{DCast<OOModel::Expression>(newNode)};
+				// in case the node to replace is not an expression we have to wrap the splice
+				if (DCast<OOModel::FormalResult>(child))
+					newNode = new OOModel::FormalResult{QString{}, DCast<OOModel::Expression>(newNode)};
+				else if (DCast<OOModel::Statement>(child))
+					newNode = new OOModel::ExpressionStatement{DCast<OOModel::Expression>(newNode)};
 
-			// insert the splice into the tree
-			if (child->parent()) child->parent()->replaceChild(child, newNode);
-			childMapping.replaceClone(child, newNode);
+				// insert the splice into the tree
+				if (child->parent()) child->parent()->replaceChild(child, newNode);
+				childMapping.replaceClone(child, newNode);
+			}
+			else
+				DCast<OOModel::ReferenceExpression>(child)->setName(argName);
 		}
 	}
 }

@@ -54,7 +54,8 @@ class CPPEXPORT_API CppPrintContext : public Super<Export::PrintContext>
 			PrintDeclarationCommentWithMethodBody = 0x40,
 			NoApiInclude = 0x80,
 			IsHeaderPart = 0x100,
-			IsTemplateImplementationSeparateFile = 0x200
+			IsTemplateImplementationSeparateFile = 0x200,
+			XMacro = 0x400
 		};
 		using Options = QFlags<Option>;
 

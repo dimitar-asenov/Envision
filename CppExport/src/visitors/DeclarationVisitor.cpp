@@ -47,6 +47,7 @@
 #include "OOModel/src/expressions/ArrayInitializer.h"
 #include "OOModel/src/expressions/types/AutoTypeExpression.h"
 #include "OOModel/src/types/PrimitiveType.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "Export/src/tree/SourceDir.h"
 #include "Export/src/tree/SourceFile.h"
@@ -130,6 +131,7 @@ SourceFragment* DeclarationVisitor::visitTopLevelClass(Class* classs)
 bool DeclarationVisitor::metaCallFilter(Expression* expression, bool equal)
 {
 	 auto metaCall = DCast<MetaCallExpression>(expression);
+	 if (!metaCall) return false;
 	 auto ooReference = DCast<ReferenceExpression>(metaCall->callee());
 	 return ooReference->name().startsWith("DEFINE_") == equal;
 }
@@ -154,8 +156,11 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		else if (Class::ConstructKind::Enum == classs->constructKind()) *classFragment << "enum ";
 		else notAllowed(classs);
 
-		if (DCast<Module>(classs->firstAncestorOfType<Declaration>()) && classs->typeArguments()->isEmpty()
-			 && classs->constructKind() != Class::ConstructKind::Enum)
+		// print export flag
+		if (printContext().hasOption(CppPrintContext::XMacro))
+			*classFragment << "apiSpecification ";
+		else if (DCast<Module>(classs->firstAncestorOfType<Declaration>()) && classs->typeArguments()->isEmpty()
+					&& classs->constructKind() != Class::ConstructKind::Enum)
 			*classFragment << ExportHelpers::exportFlag(classs);
 
 		*classFragment << classs->nameNode();
@@ -174,7 +179,9 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			}
 		}
 
-		auto sections = classFragment->append(new CompositeFragment{classs, "bodySections"});
+		auto sections = classFragment->append(new CompositeFragment{classs,
+																						printContext().hasOption(CppPrintContext::XMacro) ?
+																						"xMacroBody" : "body"});
 		*sections << list(classs->metaCalls(), ExpressionVisitor{data()}, "sections",
 								[](Expression* expression) { return metaCallFilter(expression, false); });
 		*sections << list(classs->enumerators(), ElementVisitor{data()}, "sections");
@@ -212,7 +219,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		if (!protectedSection->fragments().empty()) *sections << "protected:" << protectedSection;
 		if (!privateSection->fragments().empty()) *sections << "private:" << privateSection;
 
-		*classFragment << ";";
+		if (!printContext().hasOption(CppPrintContext::XMacro)) *classFragment << ";";
 
 		SpecialCases::handleQT_Flags(classs, fragment);
 	}
@@ -285,7 +292,6 @@ CompositeFragment* DeclarationVisitor::addMemberDeclarations(Class* classs, Pred
 
 SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 {
-
 	CppPrintContext::Options printContextOptions = printContext().options();
 	std::unique_ptr<Model::Node> dummyNode{};
 
@@ -326,18 +332,19 @@ SourceFragment* DeclarationVisitor::visit(MetaDefinition* metaDefinition)
 	auto fragment = new CompositeFragment{metaDefinition, "emptyLineAtEnd"};
 	*fragment << compositeNodeComments(metaDefinition, "declarationComment");
 	auto macro = fragment->append(new CompositeFragment{metaDefinition, "macro"});
-	*macro << "#define " << metaDefinition->nameNode();
+
+	*macro << "#define " << ExportHelpers::strip_CPPFromName(metaDefinition);
 	if (!metaDefinition->arguments()->isEmpty())
 		*macro << list(metaDefinition->arguments(), ElementVisitor{data()}, "argsList");
 	auto body = new CompositeFragment{metaDefinition->context(), "macroBody"};
+	*body << list(metaDefinition->context()->metaCalls(), ExpressionVisitor{data()}, "sections");
+
 	if (auto context = DCast<Module>(metaDefinition->context()))
 		*body << list(context->classes(), DeclarationVisitor{metaDefinitionPrintContext, data()}, "spacedSections");
 	else if (auto context = DCast<Method>(metaDefinition->context()))
 		*body << list(context->items(), StatementVisitor{metaDefinitionPrintContext, data()}, "sections");
 	else if (auto context = DCast<Class>(metaDefinition->context()))
 	{
-		*body << list(context->metaCalls(), ExpressionVisitor{data()}, "sections");
-
 		DeclarationVisitor declarationVisitor{metaDefinitionPrintContext, data()};
 		if (!metaDefinitionPrintContext.isClass())
 		{
@@ -496,7 +503,20 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	if (printContext().hasOption(CppPrintContext::PrintMethodBody) ||
 		 (printContext().hasOption(CppPrintContext::PrintMethodBodyIfNotEmpty) && !method->items()->isEmpty()))
-		*fragment << list(method->items(), StatementVisitor{method, data()}, "body");
+	{
+		bool xMacroBody = false;
+		if (auto list = DCast<Model::TypedList<OOModel::Method>>(method->parent()))
+			xMacroBody = list->last() == method && printContext().hasOption(CppPrintContext::XMacro);
+		*fragment << list(method->items(), StatementVisitor{method, data()},
+								xMacroBody ? "xMacroBody" : "body",
+								[xMacroBody](OOModel::StatementItem* statement)
+								{
+									if (auto expressionStatement = DCast<OOModel::ExpressionStatement>(statement))
+										if (DCast<OOModel::ReferenceExpression>(expressionStatement->expression()))
+											return !xMacroBody;
+									return true;
+								});
+	}
 	else
 	{
 		SpecialCases::overrideFlag(method, fragment);

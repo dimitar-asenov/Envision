@@ -219,9 +219,6 @@ Export::FragmentLayouter CppExporter::layouter()
 							| Export::FragmentLayouter::NewLineAfterPostfix, "", "\n", "");
 	result.addRule("spacedSections", Export::FragmentLayouter::NoIndentation, "", "\n\n", "");
 	result.addRule("accessorSections", Export::FragmentLayouter::IndentChildFragments, "", "\n", "");
-	result.addRule("bodySections", Export::FragmentLayouter::NewLineBefore
-						  | Export::FragmentLayouter::IndentChildFragments | Export::FragmentLayouter::NewLineAfterPrefix
-						  | Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n", "}");
 	result.addRule("space", Export::FragmentLayouter::SpaceAtEnd, "", " ", "");
 	result.addRule("comma", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
 	result.addRule("initializerList", Export::FragmentLayouter::SpaceAfterSeparator, "{", ",", "}");
@@ -236,6 +233,9 @@ Export::FragmentLayouter CppExporter::layouter()
 	result.addRule("bodyNoBraces", Export::FragmentLayouter::IndentChildFragments
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"", "\n", "");
+	result.addRule("xMacroBody", Export::FragmentLayouter::NewLineBefore
+						  | Export::FragmentLayouter::IndentChildFragments | Export::FragmentLayouter::NewLineAfterPrefix
+						  | Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n", "");
 	result.addRule("sameLineIf", Export::FragmentLayouter::NewLineBeforePostfix, " ", "\n", "");
 	result.addRule("macroBody", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,

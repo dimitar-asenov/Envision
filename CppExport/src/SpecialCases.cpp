@@ -27,6 +27,12 @@
 #include "SpecialCases.h"
 
 #include "ExportHelpers.h"
+#include "CodeComposite.h"
+#include "visitors/CppPrintContext.h"
+#include "visitors/DeclarationVisitor.h"
+#include "visitors/ExpressionVisitor.h"
+#include "visitors/ElementVisitor.h"
+#include "visitors/StatementVisitor.h"
 
 #include "Export/src/tree/CompositeFragment.h"
 #include "OOModel/src/declarations/Class.h"
@@ -100,6 +106,124 @@ bool SpecialCases::isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpres
 																		  OOModel::ReferenceExpression*)
 {
 	return parentReference->name() == "unique_ptr" || parentReference->name() == "shared_ptr";
+}
+
+Export::SourceFragment* SpecialCases::printXMacroUsage(OOModel::MetaCallExpression* metaCall)
+{
+	auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
+	Q_ASSERT(reference->name().startsWith("BEGIN_"));
+
+	auto fragment = new Export::CompositeFragment{metaCall, "sections"};
+	auto beginCallFragment = fragment->append(new Export::CompositeFragment{metaCall});
+	*beginCallFragment << reference->name();
+	auto argumentsFragment =
+			beginCallFragment->append(new Export::CompositeFragment{metaCall->arguments(), "argsList"});
+
+	CppPrintContext printContext{nullptr};
+	for (auto i = 0; i < metaCall->arguments()->size() - 1; i++)
+		if (auto expression = DCast<OOModel::Expression>(metaCall->arguments()->at(i)))
+			*argumentsFragment << ExpressionVisitor{printContext}.visit(expression);
+		else
+			Q_ASSERT(false);
+
+	Q_ASSERT(metaCall->arguments()->size() > 0);
+	auto childMetaCallsList = DCast<Model::List>(metaCall->arguments()->last());
+	auto childMetaCallsFragment = fragment->append(new Export::CompositeFragment{childMetaCallsList, "bodyNoBraces"});
+	Q_ASSERT(childMetaCallsList);
+	for (auto childMetaCallCandidate : *childMetaCallsList)
+	{
+		auto childMetaCall = DCast<OOModel::MetaCallExpression>(childMetaCallCandidate);
+		Q_ASSERT(childMetaCall);
+		*childMetaCallsFragment << ExpressionVisitor{printContext}.visit(childMetaCall);
+	}
+
+	*fragment << "END_STANDARD_EXPRESSION_VISUALIZATION";
+
+	return fragment;
+}
+
+Export::CompositeFragment* SpecialCases::printPartialBeginMacroSpecialization(OOModel::MetaDefinition* metaDefinition,
+																										bool isHeaderFile)
+{
+	Q_ASSERT(metaDefinition->name().startsWith("BEGIN_") && metaDefinition->metaBindings()->isEmpty());
+
+	auto macro = new Export::CompositeFragment{metaDefinition, "macro"};
+	auto fragment = macro->append(new Export::CompositeFragment{metaDefinition, "sections"});
+	auto metaDefinitionFragment = fragment->append(new Export::CompositeFragment{metaDefinition});
+	*metaDefinitionFragment << "#define " << metaDefinition->name();
+	auto argumentsFragment = metaDefinitionFragment->append(new Export::CompositeFragment{metaDefinition->arguments(),
+																													  "argsList"});
+	CppPrintContext printContext{nullptr};
+	for (auto i = 0; i < metaDefinition->arguments()->size() - 1; i++)
+		*argumentsFragment << ElementVisitor{printContext}.visit(metaDefinition->arguments()->at(i));
+
+	if (auto metaCall = DCast<OOModel::MetaCallExpression>(metaDefinition->context()->metaCalls()->first()))
+	{
+		auto metaCallFragment = fragment->append(new Export::CompositeFragment{metaCall});
+		*metaCallFragment << ExpressionVisitor{printContext}.visit(metaCall->callee());
+		auto argumentsFragment =
+				metaCallFragment->append(new Export::CompositeFragment{metaCall->arguments(), "argsList"});
+		for (auto i = 0; i < metaCall->arguments()->size() - (isHeaderFile ? 2 : 3); i++)
+			if (auto argument = DCast<OOModel::Expression>(metaCall->arguments()->at(i)))
+				*argumentsFragment << ExpressionVisitor{printContext}.visit(argument);
+
+		if (!isHeaderFile)
+		{
+			Q_ASSERT(metaCall->arguments()->size() > 0);
+			auto statementList = DCast<Model::List>(metaCall->arguments()->at(metaCall->arguments()->size() - 2));
+			Q_ASSERT(statementList);
+			auto statementListFragment = fragment->append(new Export::CompositeFragment{statementList, "bodyNoBraces"});
+			for (auto statementCandidate : *statementList)
+				if (auto statement = DCast<OOModel::StatementItem>(statementCandidate))
+					*statementListFragment << StatementVisitor{printContext}.visit(statement);
+				else
+					Q_ASSERT(false);
+		}
+	}
+	else
+		Q_ASSERT(false);
+
+	return macro;
+}
+
+Export::CompositeFragment* SpecialCases::printPartialBeginMacroBase(OOModel::MetaDefinition* metaDefinition,
+																						  bool isHeaderFile)
+{
+	Q_ASSERT(metaDefinition->name().startsWith("BEGIN_") && !metaDefinition->metaBindings()->isEmpty());
+
+	auto fragment = new Export::CompositeFragment{metaDefinition, "macro"};
+	auto context = DCast<OOModel::Module>(metaDefinition->context());
+	auto classs = context->classes()->first();
+	CppPrintContext printContext{isHeaderFile ? classs : nullptr, isHeaderFile ? CppPrintContext::IsHeaderPart :
+																										  CppPrintContext::None
+																					  | CppPrintContext::XMacro};
+	auto metaDefinitionFragment = fragment->append(new Export::CompositeFragment{metaDefinition});
+	*metaDefinitionFragment << "#define " << metaDefinition->name();
+	auto argumentsFragment = metaDefinitionFragment->append(new Export::CompositeFragment{metaDefinition->arguments(),
+																													  "argsList"});
+	for (auto i = 0; i < metaDefinition->arguments()->size() - (isHeaderFile ? 2 : 3); i++)
+		*argumentsFragment << ElementVisitor{printContext}.visit(metaDefinition->arguments()->at(i));
+	*metaDefinitionFragment << "\n";
+	*fragment << DeclarationVisitor{printContext}.visit(classs);
+
+	return fragment;
+}
+
+Export::SourceFragment* SpecialCases::addXMacroUsagesInclusion(CodeComposite* codeComposite,
+																					Export::SourceFragment* baseFragment,
+																					bool isSourceFile)
+{
+	auto fragment = new Export::CompositeFragment{baseFragment->node(), "sections"};
+	*fragment << baseFragment
+				 << "\n"
+				 << "namespace OOVisualization {"
+				 << "#include \"StandardExpressionDefinitions.h\""
+				 << "}";
+	for (auto unit : codeComposite->units())
+		if (auto metaDefinition = DCast<OOModel::MetaDefinition>(unit->node()))
+			if (metaDefinition->name().startsWith("BEGIN_") || (metaDefinition->name().endsWith("_CPP") == isSourceFile))
+				*fragment << "#undef " + ExportHelpers::strip_CPPFromName(metaDefinition);
+	return fragment;
 }
 
 }

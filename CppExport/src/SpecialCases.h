@@ -39,10 +39,13 @@ namespace OOModel
 
 namespace Export
 {
+	class SourceFragment;
 	class CompositeFragment;
 }
 
 namespace CppExport {
+
+class CodeComposite;
 
 class CPPEXPORT_API SpecialCases
 {
@@ -86,6 +89,14 @@ class CPPEXPORT_API SpecialCases
 
 		static bool isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpression* parentReference,
 																		 OOModel::ReferenceExpression* argumentReference);
+		static Export::SourceFragment* printXMacroUsage(OOModel::MetaCallExpression* beginPartialMetaCall);
+		static Export::CompositeFragment* printPartialBeginMacroSpecialization(OOModel::MetaDefinition* metaDefinition,
+																									  bool isHeaderFile);
+		static Export::CompositeFragment* printPartialBeginMacroBase(OOModel::MetaDefinition* beginPartialMetaDefinition,
+																						 bool isHeaderFile);
+		static Export::SourceFragment* addXMacroUsagesInclusion(CodeComposite* codeComposite,
+																				  Export::SourceFragment* baseFragment,
+																				  bool isSourceFile);
 };
 
 }
