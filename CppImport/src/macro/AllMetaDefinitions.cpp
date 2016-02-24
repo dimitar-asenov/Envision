@@ -94,21 +94,18 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* 
 		auto childDef = standardMetaDefinitions_.metaDefinition(beginChild->definition());
 		Q_ASSERT(childDef);
 
-		if (metaDefParent->name().endsWith("_CPP"))
+		QString cppSpecializationSpliceName = "cppSpecSplice";
+
+		if (!NodeHelpers::findDeclaration(childDef->arguments(), cppSpecializationSpliceName))
 		{
-			QString cppSpecializationSpliceName = "cppSpecSplice";
+			childDef->arguments()->append(new OOModel::FormalMetaArgument{cppSpecializationSpliceName});
 
-			if (!NodeHelpers::findDeclaration(childDef->arguments(), cppSpecializationSpliceName))
-			{
-				childDef->arguments()->append(new OOModel::FormalMetaArgument{cppSpecializationSpliceName});
+			auto classContext = DCast<OOModel::Class>(childDef->context());
+			Q_ASSERT(classContext);
 
-				auto classContext = DCast<OOModel::Class>(childDef->context());
-				Q_ASSERT(classContext);
-
-				if (classContext->methods()->size() > 0)
-					classContext->methods()->last()->items()->append(
-								new OOModel::ExpressionStatement{new OOModel::ReferenceExpression{cppSpecializationSpliceName}});
-			}
+			if (classContext->methods()->size() > 0)
+				classContext->methods()->last()->items()->append(
+							new OOModel::ExpressionStatement{new OOModel::ReferenceExpression{cppSpecializationSpliceName}});
 		}
 
 		beginChild->metaCall()->arguments()->append(list);
