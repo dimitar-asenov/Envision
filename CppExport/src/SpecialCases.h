@@ -49,6 +49,7 @@ class CodeComposite;
 
 const QString XMACRO_DATA_FILENAME = "StandardExpressionDefinitions";
 const QString XMACRO_INSTANTIATION_FILENAME = "StandardExpressionVisualizations";
+const QString XMACRO_END = "END_STANDARD_EXPRESSION_VISUALIZATION";
 
 class CPPEXPORT_API SpecialCases
 {

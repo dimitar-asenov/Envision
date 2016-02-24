@@ -137,7 +137,7 @@ Export::SourceFragment* SpecialCases::printXMacroDataBlock(OOModel::MetaCallExpr
 		*childMetaCallsFragment << ExpressionVisitor{printContext}.visit(childMetaCall);
 	}
 
-	*fragment << "END_STANDARD_EXPRESSION_VISUALIZATION";
+	*fragment << XMACRO_END;
 
 	return fragment;
 }
