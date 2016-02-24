@@ -122,7 +122,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 	QSet<CodeComposite*> compositeDependencies;
 
-	if (!isXMacroUsages())
+	if (!isXMacroData())
 	{
 		for (auto unit : units())
 			for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
@@ -205,7 +205,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				}
 			}
 
-			auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) || isXMacroUsages() ?
+			auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) || isXMacroData() ?
 						nullptr : ExportHelpers::parentNamespaceModule(unit->node());
 			if (neededNamespace != currentNamespace)
 			{

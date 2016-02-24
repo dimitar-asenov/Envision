@@ -73,7 +73,7 @@ class CPPEXPORT_API CodeComposite
 		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
 																		OOModel::Module* namespaceNode);
 
-		bool isXMacroUsages();
+		bool isXMacroData();
 		bool isXMacroDefinitions();
 };
 
@@ -96,7 +96,7 @@ inline QString CodeComposite::sourcePartExtension()
 
 inline Export::SourceFragment* CodeComposite::headerFragment()
 {
-	if (isXMacroUsages())
+	if (isXMacroData())
 		return partFragment(&CodeUnit::headerPart);
 	if (isXMacroDefinitions())
 		return addPragmaOnce(SpecialCases::addXMacroUsagesInclusion(this, partFragment(&CodeUnit::headerPart), false));
@@ -119,7 +119,7 @@ inline bool CodeComposite::isTemplateImplementationSeparateFile()
 	return false;
 }
 
-inline bool CodeComposite::isXMacroUsages()
+inline bool CodeComposite::isXMacroData()
 {
 	return name_.endsWith("StandardExpressionDefinitions");
 }
