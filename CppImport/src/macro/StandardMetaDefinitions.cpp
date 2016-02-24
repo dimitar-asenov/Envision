@@ -191,6 +191,9 @@ void StandardMetaDefinitions::insertChildMetaCalls(MacroExpansion* expansion, No
 					else if (DCast<OOModel::Statement>(clonedReplacementNode))
 						clonedReplacementNode->parent()->replaceChild(clonedReplacementNode,
 																			new OOModel::ExpressionStatement{childExpansion->metaCall()});
+					else if (DCast<OOModel::TypeAlias>(clonedReplacementNode))
+						clonedReplacementNode->firstAncestorOfType<OOModel::Declaration>()->metaCalls()->append(
+									childExpansion->metaCall());
 					else
 						qDebug() << "not inserted metacall to"
 									<< definitionManager_.definitionName(childExpansion->definition())
