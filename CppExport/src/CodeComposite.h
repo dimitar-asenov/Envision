@@ -99,7 +99,7 @@ inline Export::SourceFragment* CodeComposite::headerFragment()
 	if (isXMacroData())
 		return partFragment(&CodeUnit::headerPart);
 	if (isXMacroInstantiation())
-		return addPragmaOnce(SpecialCases::addXMacroUsagesInclusion(this, partFragment(&CodeUnit::headerPart), false));
+		return addPragmaOnce(SpecialCases::includeXMacroData(this, partFragment(&CodeUnit::headerPart), false));
 	return addPragmaOnce(partFragment(&CodeUnit::headerPart));
 }
 inline Export::SourceFragment* CodeComposite::sourceFragment()
@@ -107,7 +107,7 @@ inline Export::SourceFragment* CodeComposite::sourceFragment()
 	if (isTemplateImplementationSeparateFile())
 		return addPragmaOnce(partFragment(&CodeUnit::sourcePart));
 	if (isXMacroInstantiation())
-		return addPragmaOnce(SpecialCases::addXMacroUsagesInclusion(this, partFragment(&CodeUnit::sourcePart), true));
+		return addPragmaOnce(SpecialCases::includeXMacroData(this, partFragment(&CodeUnit::sourcePart), true));
 	return partFragment(&CodeUnit::sourcePart);
 }
 

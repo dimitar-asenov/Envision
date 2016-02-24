@@ -209,7 +209,7 @@ Export::CompositeFragment* SpecialCases::printPartialBeginMacroBase(OOModel::Met
 	return fragment;
 }
 
-Export::SourceFragment* SpecialCases::addXMacroUsagesInclusion(CodeComposite* codeComposite,
+Export::SourceFragment* SpecialCases::includeXMacroData(CodeComposite* codeComposite,
 																					Export::SourceFragment* baseFragment,
 																					bool isSourceFile)
 {

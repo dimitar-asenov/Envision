@@ -94,7 +94,7 @@ class CPPEXPORT_API SpecialCases
 																									  bool isHeaderFile);
 		static Export::CompositeFragment* printPartialBeginMacroBase(OOModel::MetaDefinition* beginPartialMetaDefinition,
 																						 bool isHeaderFile);
-		static Export::SourceFragment* addXMacroUsagesInclusion(CodeComposite* codeComposite,
+		static Export::SourceFragment* includeXMacroData(CodeComposite* codeComposite,
 																				  Export::SourceFragment* baseFragment,
 																				  bool isSourceFile);
 };
