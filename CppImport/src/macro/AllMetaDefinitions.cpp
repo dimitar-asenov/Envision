@@ -91,7 +91,9 @@ void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::MetaDefinitio
 			NodeToCloneMap childMapping;
 			auto cloned = NodeHelpers::cloneWithMapping(stmt, childMapping);
 
-			// use unexpanded spelling for all references
+			// the specialization statements were never part of a standard meta definition so the reference names inside
+			// them were never unexpanded and we have to do it now.
+			// (copied and adapted from StandardMetaDefinitions::createMetaDefinitionBody)
 			QList<Model::Node*> workStack{cloned};
 			while (!workStack.empty())
 			{
