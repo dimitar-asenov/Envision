@@ -30,9 +30,8 @@
 
 namespace FilePersistence {
 
-static const char* XML_DOM_TYPE = "EnvisionFilePersistence";
-
-static const int MAX_DOUBLE_PRECISION = 15;
+const char* XMLModel::XML_DOM_TYPE = "EnvisionFilePersistence";
+const int XMLModel::MAX_DOUBLE_PRECISION = 15;
 
 XMLModel::XMLModel() : doc{XML_DOM_TYPE}
 {

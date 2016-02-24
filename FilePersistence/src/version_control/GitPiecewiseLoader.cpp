@@ -25,12 +25,13 @@
 ***********************************************************************************************************************/
 
 #include "GitPiecewiseLoader.h"
+#include "GitRepository.h"
 
 namespace FilePersistence {
 
 GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
 													const GitRepository* repo, QString revision) :
-	PiecewiseLoader(tree), repo_{repo}, revision_{revision}, workDir_{repo->workdirPath()} {}
+	PiecewiseLoader{tree}, repo_{repo}, revision_{revision}, workDir_{repo->workdirPath()} {}
 
 GitPiecewiseLoader::~GitPiecewiseLoader() {}
 

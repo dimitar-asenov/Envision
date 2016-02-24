@@ -26,10 +26,6 @@
 
 #include "Diff.h"
 
-#include "GitRepository.h"
-
-#include "../simple/Parser.h"
-
 namespace FilePersistence {
 
 Diff::Diff(){}

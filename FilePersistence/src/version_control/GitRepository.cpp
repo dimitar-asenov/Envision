@@ -33,26 +33,10 @@
 
 namespace FilePersistence {
 
-// === Libgit2 call-back functions ===
-
-struct GitDiffExtract
-{
-	GenericTree* treeA_{};
-	GenericTree* treeB_{};
-
-	QList<GenericNode*> nodesA_;
-	QList<GenericNode*> nodesB_;
-
-	bool reverseAB_{};
-};
-
-struct GitCommitExtract
-{
-		git_repository* repository_{};
-		Commit* commit_{};
-};
-
-int gitDiffExtractFileCallBack(
+/**
+ * libgit callback
+ */
+static int gitDiffExtractFileCallBack(
 				 const git_diff_delta *delta,
 				 float,
 				 void* carryAlongData)
@@ -69,7 +53,11 @@ int gitDiffExtractFileCallBack(
 	return 0;
 }
 
-void createNodeAndAppend(const git_diff_line* line, const char* filePath, GenericTree* tree, QList<GenericNode*>& list)
+/**
+ * libgit callback
+ */
+static void createNodeAndAppend(const git_diff_line* line, const char* filePath, GenericTree* tree,
+													 QList<GenericNode*>& list)
 {
 	// lineLength is number of chars on line EXCLUDING '\n'
 	size_t lineLength = line->content_len - 1;
@@ -84,11 +72,11 @@ void createNodeAndAppend(const git_diff_line* line, const char* filePath, Generi
 	list.append(node);
 }
 
-int gitDiffExtractLineCallBack(
-				 const git_diff_delta* delta,
-				 const git_diff_hunk*,
-				 const git_diff_line* line,
-				 void* carryAlongData)
+/**
+ * libgit callback
+ */
+static int gitDiffExtractLineCallBack(const git_diff_delta* delta, const git_diff_hunk*,
+															 const git_diff_line* line, void* carryAlongData)
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
 
@@ -110,8 +98,10 @@ int gitDiffExtractLineCallBack(
 	return 0;
 }
 
-// Tree Walk Callback
-int treeWalkCommitExtractCallBack(const char* root,
+/**
+ * libgit callback: Tree Walk Callback
+ */
+static int treeWalkCommitExtractCallBack(const char* root,
 									 const git_tree_entry* entry,
 									 void* walkData)
 {
@@ -644,8 +634,6 @@ void GitRepository::loadGenericTree(const std::shared_ptr<GenericTree>& tree, co
 
 	SAFE_DELETE(commit);
 }
-
-// Private methods
 
 void GitRepository::writeRevisionIntoIndex(QString revision)
 {

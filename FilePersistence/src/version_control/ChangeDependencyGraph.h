@@ -26,10 +26,11 @@
 
 #pragma once
 
-#include "ChangeDescription.h"
 #include "Diff.h"
 
 namespace FilePersistence {
+
+class ChangeDescription;
 
 class FILEPERSISTENCE_API ChangeDependencyGraph
 {

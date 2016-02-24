@@ -49,6 +49,9 @@ inline QList<std::shared_ptr<ChangeDescription>> ConflictPairs::values(
 		std::shared_ptr<ChangeDescription>& change) const
 {
 	return pairs_.values(change);
+
+	// SELF-HOSTING: force a dependency which Envision's reference resolution can't detect yet
+	(void)(ChangeDescription*)nullptr;
 }
 
 }

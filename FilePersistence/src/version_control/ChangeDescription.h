@@ -138,7 +138,7 @@ inline bool ChangeDescription::onlyLabelChange() const {
 			  updateFlags_ == ChangeDescription::NoFlags));
 }
 
-inline uint qHash(const std::shared_ptr<const ChangeDescription> change, uint seed = 0)
+inline uint FILEPERSISTENCE_API qHash(const std::shared_ptr<const ChangeDescription> change, uint seed = 0)
 {
 	return ::qHash(change.get(), seed);
 }

@@ -42,6 +42,7 @@ add_library(FilePersistence SHARED
 	src/version_control/ConflictUnitDetector.h
 	src/version_control/ListMergeComponent.h
 	src/version_control/ConflictPipelineComponent.h
+	src/version_control/ConflictPipelineComponent.cpp
 	src/version_control/LinkedChangesTransition.h
 	src/version_control/GitPiecewiseLoader.h
 	src/version_control/LinkedChangesSet.h

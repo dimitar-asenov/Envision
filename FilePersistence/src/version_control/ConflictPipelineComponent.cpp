@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,30 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../filepersistence_api.h"
-
-#include "LinkedChangesTransition.h"
+#include "ConflictPipelineComponent.h"
 
 namespace FilePersistence {
 
-class GenericTree;
-class ChangeDependencyGraph;
-class ChangeDescription;
-class ConflictPairs;
-class LinkedChangesSet;
-
-class FILEPERSISTENCE_API ConflictPipelineComponent
-{
-	public:
-		virtual ~ConflictPipelineComponent() = 0;
-		virtual LinkedChangesTransition run(std::shared_ptr<GenericTree>& treeA,
-														std::shared_ptr<GenericTree>& treeB,
-														std::shared_ptr<GenericTree>& treeBase,
-														ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-															  QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
-															  ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet) = 0;
-};
+ConflictPipelineComponent::~ConflictPipelineComponent() {}
 
 }

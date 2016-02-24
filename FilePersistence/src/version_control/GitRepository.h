@@ -39,6 +39,9 @@ struct git_signature;
 
 namespace FilePersistence {
 
+class GenericNode;
+class GenericTree;
+
 class FILEPERSISTENCE_API GitRepository
 {
 	public:
@@ -145,10 +148,26 @@ class FILEPERSISTENCE_API GitRepository
 
 		QString path_;
 		git_repository* repository_{};
-
 };
 
 inline QString GitRepository::workdirPath() const { return path_; }
 inline QString GitRepository::projectName() const { return QFileInfo{path_}.fileName(); }
+
+struct FILEPERSISTENCE_API GitDiffExtract
+{
+	GenericTree* treeA_{};
+	GenericTree* treeB_{};
+
+	QList<GenericNode*> nodesA_;
+	QList<GenericNode*> nodesB_;
+
+	bool reverseAB_{};
+};
+
+struct FILEPERSISTENCE_API GitCommitExtract
+{
+		git_repository* repository_{};
+		Commit* commit_{};
+};
 
 }

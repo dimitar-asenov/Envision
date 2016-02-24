@@ -28,11 +28,11 @@
 
 #include "ChangeDescription.h"
 
-#include "../simple/GenericTree.h"
-
 namespace FilePersistence {
 
 class GitRepository;
+class GenericTree;
+class GenericNode;
 
 using IdToGenericNodeHash = QMultiHash<Model::NodeIdType, GenericNode*>;
 using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;

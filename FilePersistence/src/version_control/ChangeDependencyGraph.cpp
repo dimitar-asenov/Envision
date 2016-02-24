@@ -26,6 +26,7 @@
 
 
 #include "ChangeDependencyGraph.h"
+#include "ChangeDescription.h"
 
 namespace FilePersistence {
 

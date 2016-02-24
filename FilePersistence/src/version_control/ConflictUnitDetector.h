@@ -27,8 +27,15 @@
 #pragma once
 
 #include "ConflictPipelineComponent.h"
+#include "ChangeDependencyGraph.h"
 
 namespace FilePersistence {
+
+class GenericNode;
+class GenericTree;
+class ChangeDescription;
+class LinkedChangesSet;
+class ConflictPairs;
 
 using ConflictUnitSet = QMultiHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 

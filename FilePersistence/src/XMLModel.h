@@ -85,6 +85,9 @@ class FILEPERSISTENCE_API XMLModel
 		QDomDocument doc;
 		QDomElement elem;
 		QList<QDomElement> elemStack;
+
+		static const char* XML_DOM_TYPE;
+		static const int MAX_DOUBLE_PRECISION;
 };
 
 }

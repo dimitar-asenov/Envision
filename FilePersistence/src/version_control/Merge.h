@@ -30,6 +30,7 @@
 #include "Commit.h"
 #include "ConflictPipelineComponent.h"
 #include "ChangeDependencyGraph.h"
+#include "ConflictPairs.h"
 
 namespace FilePersistence {
 
