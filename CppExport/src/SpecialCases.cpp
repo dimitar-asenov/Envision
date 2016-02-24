@@ -195,8 +195,8 @@ Export::CompositeFragment* SpecialCases::printPartialBeginMacroBase(OOModel::Met
 	auto macroFragment = fragment->append(new Export::CompositeFragment{metaDefinition, "sections"});
 	auto context = DCast<OOModel::Module>(metaDefinition->context());
 	auto classs = context->classes()->first();
-	CppPrintContext printContext{isHeaderFile ? classs : nullptr, isHeaderFile ? CppPrintContext::IsHeaderPart :
-																										  CppPrintContext::None
+	CppPrintContext printContext{isHeaderFile ? classs : nullptr, (isHeaderFile ? CppPrintContext::IsHeaderPart :
+																											CppPrintContext::None)
 																					  | CppPrintContext::XMacro};
 	auto metaDefinitionFragment = macroFragment->append(new Export::CompositeFragment{metaDefinition});
 	*metaDefinitionFragment << "#define " << metaDefinition->name();
