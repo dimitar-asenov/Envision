@@ -92,7 +92,7 @@ class CPPEXPORT_API SpecialCases
 
 		static bool isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpression* parentReference,
 																		 OOModel::ReferenceExpression* argumentReference);
-		static Export::SourceFragment* printXMacroUsage(OOModel::MetaCallExpression* beginPartialMetaCall);
+		static Export::SourceFragment* printXMacroDataBlock(OOModel::MetaCallExpression* beginPartialMetaCall);
 		static Export::CompositeFragment* printPartialBeginMacroSpecialization(OOModel::MetaDefinition* metaDefinition,
 																									  bool isHeaderFile);
 		static Export::CompositeFragment* printPartialBeginMacroBase(OOModel::MetaDefinition* beginPartialMetaDefinition,

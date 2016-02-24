@@ -134,7 +134,7 @@ void CodeUnit::calculateSourceFragments()
 	{
 		auto ooReference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
 		if (ooReference->name().startsWith("BEGIN_"))
-			headerPart()->setFragment(SpecialCases::printXMacroUsage(metaCall));
+			headerPart()->setFragment(SpecialCases::printXMacroDataBlock(metaCall));
 		else if (ooReference->name().startsWith("DEFINE_"))
 			sourcePart()->setFragment(ExpressionVisitor{printContextDeclaration}.visit(metaCall));
 		else

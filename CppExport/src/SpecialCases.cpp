@@ -108,7 +108,7 @@ bool SpecialCases::isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpres
 	return parentReference->name() == "unique_ptr" || parentReference->name() == "shared_ptr";
 }
 
-Export::SourceFragment* SpecialCases::printXMacroUsage(OOModel::MetaCallExpression* metaCall)
+Export::SourceFragment* SpecialCases::printXMacroDataBlock(OOModel::MetaCallExpression* metaCall)
 {
 	auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
 	Q_ASSERT(reference->name().startsWith("BEGIN_"));
