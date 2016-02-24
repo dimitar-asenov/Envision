@@ -36,7 +36,7 @@ class LOGGER_API DefaultLog: public Log
 		QString pluginId;
 		int loggedEntriesSeen;
 
-		static QVector<Log::LogEntry> loggedEvents;
+		static QVector<LogEntry> loggedEvents;
 		static QMutex logAccess;
 
 	public:
@@ -47,8 +47,8 @@ class LOGGER_API DefaultLog: public Log
 		void add(Level level, QString message);
 
 		bool hasUnreadEntries();
-		Log::LogEntry getNextEntry();
-		QList<Log::LogEntry> getUnreadEntries();
+		LogEntry getNextEntry();
+		QList<LogEntry> getUnreadEntries();
 };
 
 }
