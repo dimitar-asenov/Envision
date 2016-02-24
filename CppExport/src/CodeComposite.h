@@ -121,12 +121,12 @@ inline bool CodeComposite::isTemplateImplementationSeparateFile()
 
 inline bool CodeComposite::isXMacroData()
 {
-	return name_.endsWith("StandardExpressionDefinitions");
+	return name_.endsWith(XMACRO_DATA_FILENAME);
 }
 
 inline bool CodeComposite::isXMacroInstantiation()
 {
-	return name_.endsWith("StandardExpressionVisualizations");
+	return name_.endsWith(XMACRO_INSTANTIATION_FILENAME);
 }
 
 }

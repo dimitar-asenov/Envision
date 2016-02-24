@@ -47,6 +47,9 @@ namespace CppExport {
 
 class CodeComposite;
 
+const QString XMACRO_DATA_FILENAME = "StandardExpressionDefinitions";
+const QString XMACRO_INSTANTIATION_FILENAME = "StandardExpressionVisualizations";
+
 class CPPEXPORT_API SpecialCases
 {
 	public:

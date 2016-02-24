@@ -217,7 +217,7 @@ Export::SourceFragment* SpecialCases::includeXMacroData(CodeComposite* codeCompo
 	*fragment << baseFragment
 				 << "\n"
 				 << "namespace OOVisualization {"
-				 << "#include \"StandardExpressionDefinitions.h\""
+				 << "#include \"" + XMACRO_DATA_FILENAME + ".h\""
 				 << "}";
 	for (auto unit : codeComposite->units())
 		if (auto metaDefinition = DCast<OOModel::MetaDefinition>(unit->node()))
