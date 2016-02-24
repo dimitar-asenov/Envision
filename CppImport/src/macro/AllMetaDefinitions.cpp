@@ -47,16 +47,14 @@ void AllMetaDefinitions::createMetaDef(QList<Model::Node*> nodes, MacroExpansion
 {
 	if (auto metaDef = standardMetaDefinitions_.createMetaDef(expansion->definition()))
 	{
-		auto metaDefParent = metaDefinitionParent(expansion->definition());
-
 		// check whether this expansion is not a potential partial begin macro specialization
 		if (auto beginChild = partialBeginChild(expansion))
-			handlePartialBeginSpecialization(metaDefParent, metaDef, expansion, beginChild);
+			handlePartialBeginSpecialization(metaDef, expansion, beginChild);
 		else
 			standardMetaDefinitions_.createMetaDefinitionBody(metaDef, nodes, expansion, mapping, arguments);
 
 		clang_.insertDeclarationInFolder(metaDef, expansion->definition()->getMacroInfo()->getDefinitionLoc(),
-													metaDefParent);
+													metaDefinitionParent(expansion->definition()));
 	}
 }
 
@@ -78,10 +76,8 @@ OOModel::Declaration* AllMetaDefinitions::metaDefinitionParent(const clang::Macr
 	return result;
 }
 
-void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::Declaration* metaDefParent,
-																	  OOModel::MetaDefinition* metaDef,
-																	  MacroExpansion* expansion,
-																	  MacroExpansion* beginChild)
+void AllMetaDefinitions::handlePartialBeginSpecialization(OOModel::MetaDefinition* metaDef, MacroExpansion* expansion,
+																			 MacroExpansion* beginChild)
 {
 	QList<Model::Node*> statements = macroExpansions_.topLevelNodes(expansion, MacroExpansions::NodeOriginType::Direct);
 
