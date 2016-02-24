@@ -192,19 +192,19 @@ Export::CompositeFragment* SpecialCases::printPartialBeginMacroBase(OOModel::Met
 	Q_ASSERT(metaDefinition->name().startsWith("BEGIN_") && !metaDefinition->metaBindings()->isEmpty());
 
 	auto fragment = new Export::CompositeFragment{metaDefinition, "macro"};
+	auto macroFragment = fragment->append(new Export::CompositeFragment{metaDefinition, "sections"});
 	auto context = DCast<OOModel::Module>(metaDefinition->context());
 	auto classs = context->classes()->first();
 	CppPrintContext printContext{isHeaderFile ? classs : nullptr, isHeaderFile ? CppPrintContext::IsHeaderPart :
 																										  CppPrintContext::None
 																					  | CppPrintContext::XMacro};
-	auto metaDefinitionFragment = fragment->append(new Export::CompositeFragment{metaDefinition});
+	auto metaDefinitionFragment = macroFragment->append(new Export::CompositeFragment{metaDefinition});
 	*metaDefinitionFragment << "#define " << metaDefinition->name();
 	auto argumentsFragment = metaDefinitionFragment->append(new Export::CompositeFragment{metaDefinition->arguments(),
 																													  "argsList"});
 	for (auto i = 0; i < metaDefinition->arguments()->size() - (isHeaderFile ? 2 : 3); i++)
 		*argumentsFragment << ElementVisitor{printContext}.visit(metaDefinition->arguments()->at(i));
-	*metaDefinitionFragment << "\n";
-	*fragment << DeclarationVisitor{printContext}.visit(classs);
+	*macroFragment << DeclarationVisitor{printContext}.visit(classs);
 
 	return fragment;
 }
@@ -213,12 +213,13 @@ Export::SourceFragment* SpecialCases::includeXMacroData(CodeComposite* codeCompo
 																					Export::SourceFragment* baseFragment,
 																					bool isSourceFile)
 {
-	auto fragment = new Export::CompositeFragment{baseFragment->node(), "sections"};
+	auto dataInclusionFragment = new Export::CompositeFragment{baseFragment->node(), "sections"};
+	*dataInclusionFragment << "namespace OOVisualization {"
+								  << "#include \"" + XMACRO_DATA_FILENAME + ".h\""
+								  << "}";
+	auto fragment = new Export::CompositeFragment{baseFragment->node(), "spacedSections"};
 	*fragment << baseFragment
-				 << "\n"
-				 << "namespace OOVisualization {"
-				 << "#include \"" + XMACRO_DATA_FILENAME + ".h\""
-				 << "}";
+				 << dataInclusionFragment;
 	for (auto unit : codeComposite->units())
 		if (auto metaDefinition = DCast<OOModel::MetaDefinition>(unit->node()))
 			if (metaDefinition->name().startsWith("BEGIN_") || (metaDefinition->name().endsWith("_CPP") == isSourceFile))
