@@ -116,19 +116,54 @@ OOModel::Declaration* ExportHelpers::firstValidAncestorPrintContext(Model::Node*
 	return DCast<OOModel::Declaration>(parent);
 }
 
-void ExportHelpers::printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* from,
+bool ExportHelpers::printDeclarationQualifier(QualificationType qualification, Export::CompositeFragment* fragment,
+															 OOModel::Declaration* from, OOModel::Class* parentClass,
 															 Model::Node* to, bool printTypename)
 {
 	Q_ASSERT(CppPrintContext::isValidPrintContext(from));
 
 	QList<OOModel::Declaration*> printContexts;
 	auto printContext = firstValidAncestorPrintContext(to);
-	while (!printContext->isAncestorOf(from) && printContext != from)
+
+	if (parentClass)
 	{
-		if (!DCast<OOModel::Method>(printContext)) printContexts.prepend(printContext);
-		if (!printContext) break;
-		printContext = firstValidAncestorPrintContext(printContext);
+		// Check if the parent class, or any of its subclasses is a parent of the target
+		// Note that we do this check regardless of whether the qualification is ParentClass or Using so that
+		// we can make sure that in the Using case it does not find false qualifiers
+		QSet<OOModel::Class*> parentClasses = {parentClass};
+		parentClasses.unite(parentClass->allBaseClasses());
+
+		for (auto classs : parentClasses)
+			if (classs->isAncestorOf(to))
+			{
+				printContexts.append(classs);
+				break;
+			}
 	}
+
+	bool hasParentQualifiers = !printContexts.isEmpty();
+
+	if (!hasParentQualifiers)
+	{
+		while (!printContext->isAncestorOf(from) && printContext != from)
+		{
+			if (!DCast<OOModel::Method>(printContext)) printContexts.prepend(printContext);
+			if (!printContext) break;
+			printContext = firstValidAncestorPrintContext(printContext);
+		}
+	}
+
+	bool isInMacro = from && from->name().isEmpty();
+
+	// The empty from->name() case is to handle the case of methods printed inside macro bodies
+	bool isValidParentClassQualification = qualification==QualificationType::ParentClass &&
+			( hasParentQualifiers || printContext == from || isInMacro );
+
+	bool isValidUsingQualification = qualification==QualificationType::Using &&
+			(!hasParentQualifiers && printContext != from && !isInMacro );
+
+	if (!printContexts.isEmpty() && !isValidParentClassQualification && !isValidUsingQualification)
+		printContexts.clear();
 
 	for (auto printContext : printContexts)
 	{
@@ -153,6 +188,8 @@ void ExportHelpers::printDeclarationQualifier(Export::CompositeFragment* fragmen
 		}
 		*fragment << "::";
 	}
+
+	return !printContexts.isEmpty();
 }
 
 OOModel::Module* ExportHelpers::parentNamespaceModule(Model::Node* node)

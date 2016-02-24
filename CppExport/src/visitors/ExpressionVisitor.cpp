@@ -377,15 +377,20 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 			bool isMethodResult = parentMethod && parentMethod->results()->isAncestorOf(e);
 			auto parentField = e->firstAncestorOfType<Field>();
 			bool isFieldType = parentField && parentField->typeExpression()->isAncestorOf(e);
-			if (!DCast<FormalTypeArgument>(e->target()) && (isMethodResult || isFieldType))
-			{
-				bool referenceIsInResult = false;
-				if (auto referenceParentMethod = e->firstAncestorOfType<Method>())
-					referenceIsInResult = referenceParentMethod->results()->isAncestorOf(e);
 
-				ExportHelpers::printDeclarationQualifier(fragment, printContext().declaration(), e->target(),
-																	  referenceIsInResult);
-			}
+			auto parentClass = e->firstAncestorOfType<Class>();
+
+			bool qualifiersAdded{};
+			if (!DCast<FormalTypeArgument>(e->target()) && (isMethodResult || isFieldType) && !printContext().isClass())
+				qualifiersAdded = ExportHelpers::printDeclarationQualifier(ExportHelpers::QualificationType::ParentClass,
+																							  fragment, printContext().declaration(),
+																							  parentClass, e->target(), isMethodResult);
+
+			// Only add additional qualifiers if we're in the header and haven't already found a qualifier for the parent.
+			if (!qualifiersAdded && printContext().hasOption(CppPrintContext::IsHeaderPart))
+				ExportHelpers::printDeclarationQualifier(ExportHelpers::QualificationType::Using, fragment,
+																	  printContext().declaration(), parentClass, e->target(),
+																	  isMethodResult);
 		}
 		// reference name and type arguments
 		*fragment << e->name();

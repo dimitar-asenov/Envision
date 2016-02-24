@@ -70,7 +70,24 @@ class CPPEXPORT_API ExportHelpers
 		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
 													std::function<T*(QList<T*>&, T*)> selector = nullptr);
 
-		static void printDeclarationQualifier(Export::CompositeFragment* fragment, OOModel::Declaration* from,
+		enum class QualificationType { ParentClass, Using};
+		/**
+		 * Adds additional qualifications for references, if needed. Returns true if any qualifications were added.
+		 *
+		 * There are two cases where references need additional qualifications:
+		 * - Printing result types and field types in the cpp file, when these are outside of the scope of the class
+		 *   but refer to class members.
+		 * - Printing types in a header file, when the cpp file has a using namespace declaration.
+		 *
+		 * Note that the type is exclusive, either one or the other qualification is applied.
+		 *
+		 * \a parentClass is the parent class that should be considered for parentClass qualifications. This is needed
+		 * in order to also consider all classes from which parentClass inherits, as their scopes also provide accessible
+		 * symbols.
+		 */
+		static bool printDeclarationQualifier(QualificationType qualification,
+														  Export::CompositeFragment* fragment, OOModel::Declaration* from,
+														  OOModel::Class* parentClass,
 														  Model::Node* to, bool printTypename = false);
 		static OOModel::Declaration* firstValidAncestorPrintContext(Model::Node* node);
 

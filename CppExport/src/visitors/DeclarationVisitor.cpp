@@ -452,7 +452,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	// operator
 	if (method->methodKind() == Method::MethodKind::Conversion)
 	{
-		ExportHelpers::printDeclarationQualifier(fragment, printContext().declaration(), method);
+		ExportHelpers::printDeclarationQualifier(ExportHelpers::QualificationType::ParentClass, fragment,
+															  printContext().declaration(), nullptr, method);
 		*fragment << "operator ";
 	}
 	// return type
@@ -471,7 +472,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 
 	// method name qualifier
 	if (method->methodKind() != Method::MethodKind::Conversion)
-		ExportHelpers::printDeclarationQualifier(fragment, printContext().declaration(), method);
+		ExportHelpers::printDeclarationQualifier(ExportHelpers::QualificationType::ParentClass, fragment,
+															  printContext().declaration(), nullptr, method);
 
 	if (method->methodKind() == Method::MethodKind::Destructor && !method->name().startsWith("~")) *fragment << "~";
 	if (method->methodKind() == Method::MethodKind::OperatorOverload) *fragment << "operator";
@@ -571,7 +573,8 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		*fragment << expression(field->typeExpression()) << " ";
 
 		// parent class name qualifier
-		ExportHelpers::printDeclarationQualifier(fragment, printContext().declaration(), field);
+		ExportHelpers::printDeclarationQualifier(ExportHelpers::QualificationType::ParentClass,
+															  fragment, printContext().declaration(), nullptr, field);
 	}
 	else
 		*fragment << printAnnotationsAndModifiers(variableDeclaration)
