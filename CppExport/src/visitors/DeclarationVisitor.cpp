@@ -154,7 +154,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		else if (Class::ConstructKind::Enum == classs->constructKind()) *classFragment << "enum ";
 		else notAllowed(classs);
 
-		if (DCast<Module>(classs->firstAncestorOfType<Declaration>()) && classs->typeArguments()->isEmpty())
+		if (DCast<Module>(classs->firstAncestorOfType<Declaration>()) && classs->typeArguments()->isEmpty()
+			 && classs->constructKind() != Class::ConstructKind::Enum)
 			*classFragment << ExportHelpers::exportFlag(classs);
 
 		*classFragment << classs->nameNode();
@@ -203,10 +204,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 		if (!publicSection->fragments().empty())
 		{
-			if (!signalingSection->fragments().empty() ||
-				 !protectedSection->fragments().empty() ||
-				 !privateSection->fragments().empty() ||
-				 classs->constructKind() != Class::ConstructKind::Struct)
+			if (classs->constructKind() != Class::ConstructKind::Struct)
 				*sections << "public:";
 			*sections << publicSection;
 		}
