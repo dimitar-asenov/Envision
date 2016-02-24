@@ -155,13 +155,13 @@ void CodeUnit::calculateSourceFragments()
 			headerPart()->setFragment(SpecialCases::printPartialBeginMacroBase(metaDefinition, true));
 			sourcePart()->setFragment(SpecialCases::printPartialBeginMacroBase(metaDefinition, false));
 		}
-		else if (!metaDefinition->name().endsWith("_CPP"))
+		else if (metaDefinition->name().endsWith("_CPP"))
+			sourcePart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(metaDefinition));
+		else
 		{
 			CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
 			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(metaDefinition));
 		}
-		else
-			sourcePart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(metaDefinition));
 	}
 	else if (auto nameImport = DCast<OOModel::NameImport>(node()))
 	{
