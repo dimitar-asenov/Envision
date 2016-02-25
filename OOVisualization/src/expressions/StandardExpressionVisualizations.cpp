@@ -62,10 +62,10 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeTy
 BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType)												\
 																																							\
 	int f = node()->flag();																															\
-	if (!f) throw new ::OOVisualization::OOVisualizationException{""};																	\
+	if (!f) throw new ::OOVisualization::OOVisualizationException{"Visualization does not have a flag set."};			\
 	int i = 0;																																			\
 	while ( !(f&1) ) {++i; f >>= 1;}																												\
-	if (f!=1) throw new ::OOVisualization::OOVisualizationException{""};																\
+	if (f!=1) throw new ::OOVisualization::OOVisualizationException{"Visualization has more than 1 flag set."};			\
 	const ::OOVisualization::OperatorStyle* opStyle = &style()->op( i );																\
 	layout()->setStyle( &opStyle->layout());
 //********************************************************************************************************************
