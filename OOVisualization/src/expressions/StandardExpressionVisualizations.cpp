@@ -26,6 +26,8 @@
 
 #include "StandardExpressionVisualizations.h"
 
+#include "../OOVisualizationException.h"
+
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
@@ -60,10 +62,10 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeTy
 BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType)												\
 																																							\
 	int f = node()->flag();																															\
-	Q_ASSERT(f);																																		\
+	if (!f) throw new ::OOVisualization::OOVisualizationException{""};																	\
 	int i = 0;																																			\
 	while ( !(f&1) ) {++i; f >>= 1;}																												\
-	Q_ASSERT(f==1);																																	\
+	if (f!=1) throw new ::OOVisualization::OOVisualizationException{""};																\
 	const ::OOVisualization::OperatorStyle* opStyle = &style()->op( i );																\
 	layout()->setStyle( &opStyle->layout());
 //********************************************************************************************************************
