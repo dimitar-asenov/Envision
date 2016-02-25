@@ -47,6 +47,14 @@ mkdir -p $SORTED_ORIGINAL
 mkdir -p $SORTED_EXPORTED
 
 ################################################################################
+# Delete the exported clang lib directory
+################################################################################
+if [ -d "$EXPORTED_SOURCE_DIR/lib" ]; then
+  echo "Deleting unnecessary exported 'lib' directory: $EXPORTED_SOURCE_DIR/lib"
+  rm -rf "$EXPORTED_SOURCE_DIR/lib"
+fi
+
+################################################################################
 # Copy necessary files
 ################################################################################
 echo "Copying files"
