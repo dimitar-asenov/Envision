@@ -55,9 +55,15 @@ class CPPEXPORT_API CodeComposite
 
 		bool isTemplateImplementationSeparateFile();
 
+		bool isXMacroData();
+		bool isXMacroInstantiation();
+
+		QList<CodeUnit*>& additionalDependencies();
+
 	private:
 		const QString name_;
 		QList<CodeUnit*> units_;
+		QList<CodeUnit*> additionalUnitsThisDependsOn_;
 
 		Export::SourceFragment* partFragment(CodeUnitPart* (CodeUnit::*part) ());
 		Export::SourceFragment* headerFragment();
@@ -72,9 +78,6 @@ class CPPEXPORT_API CodeComposite
 							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
 		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
 																		OOModel::Module* namespaceNode);
-
-		bool isXMacroData();
-		bool isXMacroInstantiation();
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
@@ -128,5 +131,8 @@ inline bool CodeComposite::isXMacroInstantiation()
 {
 	return name_.endsWith(SpecialCases::XMACRO_INSTANTIATION_FILENAME);
 }
+
+inline QList<CodeUnit*>& CodeComposite::additionalDependencies()
+{ return additionalUnitsThisDependsOn_; }
 
 }
