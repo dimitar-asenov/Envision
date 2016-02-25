@@ -110,8 +110,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		{
 			case PrimitiveTypeExpression::PrimitiveTypes::INT: *fragment << "int"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::LONG: *fragment << "long"; break;
-			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT: notAllowed(e); break;
-			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG: notAllowed(e); break;
+			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT: *fragment << "unsigned int"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG: *fragment << "unsigned long"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::FLOAT: *fragment << "float"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::DOUBLE: *fragment << "double"; break;
 			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: *fragment << "bool"; break;
