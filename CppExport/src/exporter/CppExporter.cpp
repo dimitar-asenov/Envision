@@ -211,7 +211,7 @@ QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units, QHash<QSt
 		if (potentialMacroData->isXMacroData())
 			for (auto potentialMacroInstantiation : result)
 				if (potentialMacroInstantiation->isXMacroInstantiation())
-					potentialMacroInstantiation->additionalUnitsThisDependsOn() << potentialMacroData->units();
+					potentialMacroInstantiation->additionalDependencies() << potentialMacroData->units();
 	return result;
 }
 

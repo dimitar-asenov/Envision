@@ -58,7 +58,7 @@ class CPPEXPORT_API CodeComposite
 		bool isXMacroData();
 		bool isXMacroInstantiation();
 
-		QList<CodeUnit*>& additionalUnitsThisDependsOn();
+		QList<CodeUnit*>& additionalDependencies();
 
 	private:
 		const QString name_;
@@ -132,7 +132,7 @@ inline bool CodeComposite::isXMacroInstantiation()
 	return name_.endsWith(SpecialCases::XMACRO_INSTANTIATION_FILENAME);
 }
 
-inline QList<CodeUnit*>& CodeComposite::additionalUnitsThisDependsOn()
+inline QList<CodeUnit*>& CodeComposite::additionalDependencies()
 { return additionalUnitsThisDependsOn_; }
 
 }

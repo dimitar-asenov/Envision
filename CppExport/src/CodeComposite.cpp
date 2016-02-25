@@ -125,7 +125,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	if (!isXMacroData())
 	{
 		QList<CodeUnit*> unitsThisDependsOn{units()};
-		unitsThisDependsOn << additionalUnitsThisDependsOn();
+		unitsThisDependsOn << additionalDependencies();
 
 		for (auto unit : unitsThisDependsOn)
 			for (CodeUnitPart* dependency : (unit->*part)()->dependencies())
