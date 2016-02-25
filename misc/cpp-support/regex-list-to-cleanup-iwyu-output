@@ -1,0 +1,32 @@
+--------------------------------------------------------------------------------
+1. cleanup the compile_commands.json by replacing this regex with nothing
+--------------------------------------------------------------------------------
+-include /fast/build-with-37/[^\s]*/precompiled\.h
+
+--------------------------------------------------------------------------------
+2. Run the IWYU tool via the provided python script
+--------------------------------------------------------------------------------
+python iwyu_tool.py -p /fast/build-with-37/ 2> ~/output-of-include-analysis
+### This takes quite a wile
+
+--------------------------------------------------------------------------------
+3. Cleanup the IWYU output by replacing these regexes with nothing
+--------------------------------------------------------------------------------
+
+(warning|error): .*\n
+#include <.*\n
+(template <.*> )?(class|struct) Q[A-Z_]\w+;\n
+\n/.* should add these lines:\n\n/.* should remove these lines:\n\nThe full include-list for /.*:\n([^-].*\n)*---\n
+\n\(/fast/.* has correct #includes/fwd-decls\)\n
+\n/fast/build-with-37/.* should add these lines:\n(([^-]|- ).*\n)*---\n
+- #include ".*\.hpp".*\n
+
+--------------------------------------------------------------------------------
+4. Run our python script to normalize paths
+--------------------------------------------------------------------------------
+./iwyu-output-paths-normalizer.py < ~/output-of-include-analysis > ~/output-of-include-analysis-fixed
+
+--------------------------------------------------------------------------------
+5. Apply the results
+--------------------------------------------------------------------------------
+./fix_includes.py --blank_lines --nocomments --nosafe_headers < ~/output-of-include-analysis-fixed
