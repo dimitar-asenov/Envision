@@ -58,7 +58,8 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeTy
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, flag)							\
-BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, flag)
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType,											\
+::OOVisualization::OperatorSequenceStyle)
 //********************************************************************************************************************
 
 #define EXPRESSION_PART(type, name)																												\
