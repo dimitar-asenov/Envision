@@ -30,6 +30,7 @@
 
 #include "../simple/GenericTree.h"
 #include "../simple/Parser.h"
+#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 
@@ -123,7 +124,7 @@ static int treeWalkCommitExtractCallBack(const char* root,
 			qint64 contentSize = git_blob_rawsize(blob);
 
 			std::unique_ptr<char[], CommitFileContentDeleter>
-					content((char*)git_blob_rawcontent(blob), [blob](char*){ git_blob_free(blob); });
+					content{(char*)git_blob_rawcontent(blob), [blob](char*){ git_blob_free(blob); }};
 			data->commit_->addFile(relativePath, contentSize, std::move(content));
 		}
 	}
@@ -171,7 +172,7 @@ std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 {
 	if (merge_.expired())
 	{
-		auto merge = std::shared_ptr<Merge>(new Merge{revision, fastForward, this});
+		auto merge = std::shared_ptr<Merge>{new Merge{revision, fastForward, this}};
 		merge_ = merge;
 		return merge;
 	}
@@ -265,7 +266,7 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	carryAlongData.treeB_ = treeB.get();
 	carryAlongData.reverseAB_ = reverseAB;
 
-	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, NULL, gitDiffExtractLineCallBack, &(carryAlongData));
+	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, nullptr, gitDiffExtractLineCallBack, &(carryAlongData));
 
 	// clean up
 	git_commit_free(gitCommitA);
@@ -670,7 +671,7 @@ void GitRepository::writeWorkdirToIndex()
 	checkError(errorCode);
 
 	// read workdir from disk into in-memory index
-	errorCode = git_index_update_all(index, NULL, NULL, NULL);
+	errorCode = git_index_update_all(index, nullptr, nullptr, nullptr);
 	checkError(errorCode);
 
 	// write index from memory to disk
@@ -791,10 +792,10 @@ git_signature* GitRepository::createGitSignature(Signature& signature)
 	return gitSignature;
 }
 
-const QString PATH_HEADS{QString{QDir::separator()} + "refs" + QDir::separator() + "heads"};
-const QString PATH_REMOTES{QString{QDir::separator()} + "refs" + QDir::separator() + "remotes"};
-const QString PATH_TAGS{QString{QDir::separator()} + "refs" + QDir::separator() + "tags"};
-const QString PATH_NOTES{QString{QDir::separator()} + "refs" + QDir::separator() + "notes"};
+const QString GitRepository::PATH_HEADS{QString{QDir::separator()} + "refs" + QDir::separator() + "heads"};
+const QString GitRepository::PATH_REMOTES{QString{QDir::separator()} + "refs" + QDir::separator() + "remotes"};
+const QString GitRepository::PATH_TAGS{QString{QDir::separator()} + "refs" + QDir::separator() + "tags"};
+const QString GitRepository::PATH_NOTES{QString{QDir::separator()} + "refs" + QDir::separator() + "notes"};
 
 QString GitRepository::currentBranch() const
 {
@@ -899,7 +900,7 @@ const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) 
 	char* content = new char[totalFileSize];
 	memcpy(content, mapped, totalFileSize);
 
-	CommitFile* commitFile = new CommitFile{relativePath, totalFileSize, std::unique_ptr<char[]>(content)};
+	CommitFile* commitFile = new CommitFile{relativePath, totalFileSize, std::unique_ptr<char[]>{content}};
 	file.close();
 
 	return commitFile;
@@ -1001,7 +1002,7 @@ const CommitFile* GitRepository::getCommitFileFromTree(QString revision, QString
 	qint64 contentSize = git_blob_rawsize(blob);
 
 	std::unique_ptr<char[], CommitFileContentDeleter>
-			content((char*)git_blob_rawcontent(blob), [obj](char*){ git_object_free(obj);; });
+			content{(char*)git_blob_rawcontent(blob), [obj](char*){ git_object_free(obj);}};
 	CommitFile* file = new CommitFile{relativePath, contentSize, std::move(content)};
 
 	git_commit_free(gitCommit);
@@ -1064,7 +1065,7 @@ git_commit* GitRepository::parseCommit(QString revision) const
 
 QString GitRepository::oidToQString(const git_oid* oid) const
 {
-	char sha1[GIT_OID_HEXSZ + 1] = {0};
+	char sha1[GIT_OID_HEXSZ + 1]{0};
 
 	git_oid_fmt(sha1, oid);
 

@@ -26,6 +26,7 @@
 
 #include "GitPiecewiseLoader.h"
 #include "GitRepository.h"
+#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 

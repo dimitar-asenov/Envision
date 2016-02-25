@@ -31,6 +31,8 @@
 #include "ConflictUnitDetector.h"
 #include "ListMergeComponent.h"
 #include "../simple/SimpleTextFileStore.h"
+#include "../simple/GenericTree.h"
+#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 

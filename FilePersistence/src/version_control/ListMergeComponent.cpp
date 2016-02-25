@@ -26,6 +26,8 @@
 
 #include "ListMergeComponent.h"
 #include "ConflictPairs.h"
+#include "../simple/GenericTree.h"
+#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 

@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "LinkedChangesTransition.h"
+#include "../simple/GenericTree.h"
 
 namespace FilePersistence {
 

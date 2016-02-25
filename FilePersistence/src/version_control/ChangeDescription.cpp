@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ChangeDescription.h"
+#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 

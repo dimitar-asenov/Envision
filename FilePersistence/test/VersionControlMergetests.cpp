@@ -30,6 +30,8 @@
 
 #include "../src/version_control/Merge.h"
 #include "../src/version_control/GitRepository.h"
+#include "../src/simple/GenericTree.h"
+#include "../src/simple/GenericNode.h"
 #include "VCTestProject.h"
 
 

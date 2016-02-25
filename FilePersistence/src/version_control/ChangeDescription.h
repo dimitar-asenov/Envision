@@ -26,9 +26,13 @@
 
 #pragma once
 
-#include "../simple/GenericNode.h"
+#include "../filepersistence_api.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
+
+class GenericTree;
+class GenericNode;
 
 enum class ChangeType {Unclassified, Insertion, Deletion, Move, Stationary};
 
@@ -36,7 +40,7 @@ class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
 		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
-		~ChangeDescription();
+		~ChangeDescription() = default;
 
 		QString summary() const;
 
@@ -89,7 +93,7 @@ class FILEPERSISTENCE_API ChangeDescription
 		bool onlyLabelChange() const;
 
 	private:
-		ChangeDescription();
+		ChangeDescription() = default;
 
 		Model::NodeIdType nodeId_{};
 
@@ -109,9 +113,6 @@ class FILEPERSISTENCE_API ChangeDescription
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
-
-inline ChangeDescription::ChangeDescription() {}
-inline ChangeDescription::~ChangeDescription() {}
 
 inline Model::NodeIdType ChangeDescription::nodeId() const { return nodeId_; }
 

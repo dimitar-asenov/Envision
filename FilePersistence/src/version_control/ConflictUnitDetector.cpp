@@ -27,6 +27,8 @@
 #include "ConflictUnitDetector.h"
 #include "ConflictPairs.h"
 #include "ChangeDescription.h"
+#include "../simple/GenericNode.h"
+#include "../simple/GenericTree.h"
 
 namespace FilePersistence {
 
