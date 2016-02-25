@@ -165,7 +165,7 @@ current = '' # current character
 
 currentLine = ''
 
-closingBraceRegex = re.compile(r'\s*(\};?(?:\s+\\)?\n)$', re.DOTALL)
+closingBraceRegex = re.compile(r'\s*(\}\)?;?(?:\s+\\)?\n)$', re.DOTALL)
 doxyComment = re.compile(r'\s*/\*\*[^<].*\*/\s*$', re.DOTALL)
 macroOpenBrace = re.compile(r'.*\{\s*\\$', re.DOTALL)
 
