@@ -65,6 +65,7 @@ void VClass::initializeForms()
 			case OOModel::Class::ConstructKind::Struct : return &v->style()->structIcon();
 			case OOModel::Class::ConstructKind::Union : return &v->style()->unionIcon();
 			case OOModel::Class::ConstructKind::Enum : return &v->style()->enumIcon();
+			case OOModel::Class::ConstructKind::EnumClass : return &v->style()->enumIcon();
 			case OOModel::Class::ConstructKind::Annotation : return &v->style()->annotationIcon();
 			default: return &v->style()->classIcon();
 		}

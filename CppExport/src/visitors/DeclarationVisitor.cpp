@@ -154,13 +154,15 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		if (Class::ConstructKind::Class == classs->constructKind()) *classFragment << "class ";
 		else if (Class::ConstructKind::Struct == classs->constructKind()) *classFragment << "struct ";
 		else if (Class::ConstructKind::Enum == classs->constructKind()) *classFragment << "enum ";
+		else if (Class::ConstructKind::EnumClass == classs->constructKind()) *classFragment << "enum class ";
 		else notAllowed(classs);
 
 		// print export flag
 		if (printContext().hasOption(CppPrintContext::XMacro))
 			*classFragment << "apiSpecification ";
 		else if (DCast<Module>(classs->firstAncestorOfType<Declaration>()) && classs->typeArguments()->isEmpty()
-					&& classs->constructKind() != Class::ConstructKind::Enum)
+					&& classs->constructKind() != Class::ConstructKind::Enum
+					&& classs->constructKind() != Class::ConstructKind::EnumClass)
 			*classFragment << ExportHelpers::exportFlag(classs);
 
 		*classFragment << classs->nameNode();

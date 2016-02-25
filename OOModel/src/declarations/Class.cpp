@@ -170,8 +170,9 @@ Expression* Class::defaultImplicitBaseFromProject() const
 	{
 		if (auto proj = DCast<Project>(p))
 		{
-			if (constructKind() != ConstructKind::Enum && proj->implicitBaseType()) return proj->implicitBaseType();
-			if (constructKind() == ConstructKind::Enum && proj->implicitEnumType()) return proj->implicitEnumType();
+			bool isEnum = constructKind() == ConstructKind::Enum || constructKind() == ConstructKind::EnumClass;
+			if (!isEnum && proj->implicitBaseType()) return proj->implicitBaseType();
+			if (isEnum && proj->implicitEnumType()) return proj->implicitEnumType();
 		}
 		p = p->parent();
 	}

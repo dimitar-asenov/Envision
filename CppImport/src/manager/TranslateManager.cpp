@@ -155,7 +155,8 @@ bool TranslateManager::insertEnum(clang::EnumDecl* enumDecl, OOModel::Class*& cr
 	if (!enumMap_.contains(hash))
 	{
 		createdEnum = clang_.createNamedNode<OOModel::Class>(enumDecl);
-		createdEnum->setConstructKind(OOModel::Class::ConstructKind::Enum);
+		createdEnum->setConstructKind(enumDecl->isScoped() ? OOModel::Class::ConstructKind::EnumClass
+																			: OOModel::Class::ConstructKind::Enum);
 
 		enumMap_.insert(hash, createdEnum);
 		return true;

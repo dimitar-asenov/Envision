@@ -131,6 +131,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*fragment << printAnnotationsAndModifiers(classs) << "interface " << classs->nameNode();
 	else if (Class::ConstructKind::Enum == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "enum " << classs->nameNode();
+	else if (Class::ConstructKind::EnumClass == classs->constructKind())
+		*fragment << printAnnotationsAndModifiers(classs) << "enum class " << classs->nameNode();
 	else if (Class::ConstructKind::Annotation == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "@interface " << classs->nameNode();
 	else
@@ -147,7 +149,8 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 			*fragment << " extends ";
 			*fragment << list(classs->baseClasses(), ExpressionVisitor{data()}, "comma");
 		}
-		else if (Class::ConstructKind::Enum == classs->constructKind())
+		else if (Class::ConstructKind::Enum == classs->constructKind() ||
+					Class::ConstructKind::EnumClass == classs->constructKind())
 		{
 			*fragment << " implements ";
 			*fragment << list(classs->baseClasses(), ExpressionVisitor{data()}, "comma");

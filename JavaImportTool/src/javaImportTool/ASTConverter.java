@@ -238,7 +238,7 @@ public class ASTConverter {
 	public void visit(AnnotationTypeDeclaration node) throws ConversionException
 	{
 		Node cl = containers.peek();
-		cl.child("cKind").setLongValue(5); // Make this an annotation
+		cl.child("cKind").setLongValue(6); // Make this an annotation
 		
 		// Body declarations
 		visitClassBody(node.bodyDeclarations());

@@ -199,6 +199,8 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 							*softDependencyComposite << "struct ";
 						else if (OOModel::Class::ConstructKind::Enum == classs->constructKind())
 							*softDependencyComposite << "enum ";
+						else if (OOModel::Class::ConstructKind::EnumClass == classs->constructKind())
+							*softDependencyComposite << "enum class ";
 						else Q_ASSERT(false);
 						*softDependencyComposite << softDependency->symbolName() + ";";
 					}
