@@ -79,8 +79,8 @@ QString CodeComposite::relativePath(CodeComposite* other)
 	}
 }
 
-QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
-																			QSet<Model::Node*> softDependencies)
+QSet<DependencyTarget> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
+																			QSet<DependencyTarget> softDependencies)
 {
 	auto result = softDependencies;
 	auto workList = QList<CodeComposite*>::fromSet(hardDependencies);
@@ -95,7 +95,7 @@ QSet<Model::Node*> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*> ha
 			for (auto unit : hardDependency->units())
 				for (auto softDependency : softDependencies)
 					if (result.contains(softDependency))
-						if (unit->node() == softDependency || unit->node()->isAncestorOf(softDependency))
+						if (unit->node() == softDependency.node_ || unit->node()->isAncestorOf(softDependency.node_))
 							result.remove(softDependency);
 
 			processed.insert(hardDependency);
@@ -167,7 +167,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 				if ((units().first()->*part)() == units().first()->headerPart())
 					for (auto i = 0; i < units().indexOf(unit); i++)
 					{
-						softDependenciesReduced.remove(units().at(i)->node());
+						softDependenciesReduced.remove(DependencyTarget{units().at(i)->node()});
 						softDependenciesReduced.subtract(units().at(i)->headerPart()->softDependencies());
 					}
 				else
@@ -176,7 +176,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 				for (auto softDependency : softDependenciesReduced)
 				{
-					if (auto classs = DCast<OOModel::Class>(softDependency))
+					if (auto classs = DCast<OOModel::Class>(softDependency.node_))
 					{
 						if (classs == codeUnitPart->parent()->node()) continue;
 
@@ -202,7 +202,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 						else if (OOModel::Class::ConstructKind::EnumClass == classs->constructKind())
 							*softDependencyComposite << "enum class ";
 						else Q_ASSERT(false);
-						*softDependencyComposite << softDependency->symbolName() + ";";
+						*softDependencyComposite << softDependency.node_->symbolName() + ";";
 					}
 				}
 			}

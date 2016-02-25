@@ -221,7 +221,7 @@ void CodeUnitPart::calculateDependencies(QList<CodeUnit*>& allUnits)
 
 	for (auto target : hardTargets_)
 		for (auto unit : allUnits)
-			if (unit->headerPart() != this && unit->headerPart()->nameNodes().contains(target))
+			if (unit->headerPart() != this && unit->headerPart()->nameNodes().contains(target.node_))
 				dependencies_.insert(unit->headerPart());
 }
 

@@ -45,6 +45,15 @@ namespace CppExport {
 
 class CodeUnit;
 
+struct DependencyTarget {
+		Model::Node* node_{};
+		QString name_;
+		DependencyTarget(Model::Node* node, QString name = {}) : node_{node}, name_{name}{}
+		bool operator == (const DependencyTarget& other) const {return node_==other.node_ && name_==other.name_;}
+};
+
+inline uint qHash(const DependencyTarget &key, uint seed) { return ::qHash(key.node_, seed);}
+
 class CPPEXPORT_API CodeUnitPart
 {
 	public:
@@ -63,7 +72,7 @@ class CPPEXPORT_API CodeUnitPart
 		const QSet<OOModel::ReferenceExpression*>& referenceNodes() const;
 
 		QSet<CodeUnitPart*> dependencies() const;
-		QSet<Model::Node*> softDependencies() const;
+		QSet<DependencyTarget> softDependencies() const;
 		void calculateDependencies(QList<CodeUnit*>& allUnits);
 
 		QSet<CodeUnitPart*> dependenciesWithinFile(QList<CodeUnit*> units);
@@ -74,8 +83,8 @@ class CPPEXPORT_API CodeUnitPart
 
 		QSet<Model::Node*> nameNodes_;
 		QSet<OOModel::ReferenceExpression*> referenceNodes_;
-		QSet<Model::Node*> softTargets_;
-		QSet<Model::Node*> hardTargets_;
+		QSet<DependencyTarget> softTargets_;
+		QSet<DependencyTarget> hardTargets_;
 
 		QSet<CodeUnitPart*> dependencies_;
 
@@ -101,6 +110,6 @@ inline const QSet<Model::Node*>& CodeUnitPart::nameNodes() const { return nameNo
 inline const QSet<OOModel::ReferenceExpression*>& CodeUnitPart::referenceNodes() const { return referenceNodes_; }
 
 inline QSet<CodeUnitPart*> CodeUnitPart::dependencies() const { return dependencies_; }
-inline QSet<Model::Node*> CodeUnitPart::softDependencies() const { return softTargets_; }
+inline QSet<DependencyTarget> CodeUnitPart::softDependencies() const { return softTargets_; }
 
 }

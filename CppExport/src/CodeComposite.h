@@ -63,8 +63,8 @@ class CPPEXPORT_API CodeComposite
 		Export::SourceFragment* headerFragment();
 		Export::SourceFragment* sourceFragment();
 
-		QSet<Model::Node*> reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
-																QSet<Model::Node*> softDependencies);
+		QSet<DependencyTarget> reduceSoftDependencies(QSet<CodeComposite*> hardDependencies,
+																QSet<DependencyTarget> softDependencies);
 		QString relativePath(CodeComposite* other);
 		static Export::SourceFragment* addPragmaOnce(Export::SourceFragment* fragment);
 
