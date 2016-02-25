@@ -200,7 +200,7 @@ Export::CompositeFragment* SpecialCases::printPartialBeginMacroBase(OOModel::Met
 	auto context = DCast<OOModel::Module>(metaDefinition->context());
 	auto classs = context->classes()->first();
 	CppPrintContext printContext{isHeaderFile ? classs : nullptr, (isHeaderFile ? CppPrintContext::IsHeaderPart :
-																											CppPrintContext::None)
+																											CppPrintContext::PrintMethodBody)
 																					  | CppPrintContext::XMacro};
 	auto metaDefinitionFragment = macroFragment->append(new Export::CompositeFragment{metaDefinition});
 	*metaDefinitionFragment << "#define " << metaDefinition->name();
@@ -223,7 +223,7 @@ Export::SourceFragment* SpecialCases::includeXMacroData(CodeComposite* codeCompo
 								  << "}";
 	auto fragment = new Export::CompositeFragment{baseFragment->node(), "spacedSections"};
 	*fragment << baseFragment
-				 << "#define " + XMACRO_END + " };"
+				 << "#define " + XMACRO_END + (isSourceFile ? " }" : " };")
 				 << dataInclusionFragment
 				 << "#undef " + XMACRO_END;
 	for (auto unit : codeComposite->units())

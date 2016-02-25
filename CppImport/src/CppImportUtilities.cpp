@@ -656,8 +656,12 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 	else if (auto templateSpecialization = type.getAs<clang::TemplateSpecializationTypeLoc>())
 	{
 		auto ooRef = clang_.createReference(type.getSourceRange());
-		for (unsigned i = 0; i < templateSpecialization.getNumArgs(); i++)
-			ooRef->typeArguments()->append(translateTemplateArgument(templateSpecialization.getArgLoc(i)));
+		if (templateSpecialization.getNumArgs() > 0)
+			for (unsigned i = 0; i < templateSpecialization.getNumArgs(); i++)
+				ooRef->typeArguments()->append(translateTemplateArgument(templateSpecialization.getArgLoc(i)));
+		else
+			ooRef->typeArguments()->append(
+						clang_.createNode<OOModel::EmptyExpression>(templateSpecialization.getLAngleLoc()));
 		return ooRef;
 	}
 	else if (auto dependentTypeLoc = type.getAs<clang::DependentNameTypeLoc>())

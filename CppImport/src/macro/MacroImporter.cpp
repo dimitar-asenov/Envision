@@ -415,16 +415,10 @@ void MacroImporter::allArguments(Model::Node* node, QList<MacroArgumentInfo>& re
 		if (!argLoc.empty())
 		{
 			bool nameOnly{};
-			if (auto rr = DCast<OOModel::ReferenceExpression>(node))
-				if (rr->prefix())
-				{
-					auto k = DCast<OOModel::ReferenceExpression>(rr->prefix());
-					if (rr->name() == "ConditionalExpression")
-						qDebug() << "ha" << k;
-
-					if (argumentHistory(mapping.original(rr->prefix())).empty())
+			if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(node))
+				if (referenceExpression->prefix())
+					if (argumentHistory(mapping.original(referenceExpression->prefix())).empty())
 						nameOnly = true;
-				}
 			result.append({argLoc, node, nameOnly});
 			return;
 		}
