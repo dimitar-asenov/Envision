@@ -93,7 +93,16 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 	// Types ============================================================================================================
 	if (auto e = DCast<ArrayTypeExpression>(expression))
-		*fragment << visit(e->typeExpression()) << "[" << optional(e->fixedSize()) << "]";
+	{
+		*fragment << visit(e->typeExpression());
+
+		// If this is a variable declaration also print the name here
+		if (auto varDecl = DCast<VariableDeclaration>(e->parent()))
+			if (varDecl->typeExpression() == e)
+				*fragment << " " << varDecl->nameNode();
+
+		*fragment << "[" << optional(e->fixedSize()) << "]";
+	}
 	else if (auto e = DCast<ReferenceTypeExpression>(expression))
 		*fragment << visit(e->typeExpression()) << (e->isRValueReference() ? "&&" : "&");
 	else if (auto e = DCast<PointerTypeExpression>(expression))

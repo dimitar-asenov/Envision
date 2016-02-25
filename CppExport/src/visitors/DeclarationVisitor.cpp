@@ -46,6 +46,7 @@
 #include "OOModel/src/declarations/MetaDefinition.h"
 #include "OOModel/src/expressions/ArrayInitializer.h"
 #include "OOModel/src/expressions/types/AutoTypeExpression.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 #include "OOModel/src/types/PrimitiveType.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
@@ -600,8 +601,9 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		*fragment << printAnnotationsAndModifiers(variableDeclaration)
 					 << expression(variableDeclaration->typeExpression()) << " ";
 
-	// name
-	*fragment << variableDeclaration->nameNode();
+	// name, but only if the type isn't an array expression, which will print the name itself
+	if (variableDeclaration->typeExpression()->typeId() != ArrayTypeExpression::typeIdStatic())
+		*fragment << variableDeclaration->nameNode();
 
 	auto isPrimitive = [](VariableDeclaration* vd){
 		auto type = vd->typeExpression()->type();
