@@ -206,7 +206,13 @@ QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units, QHash<QSt
 		}
 	}
 
-	return nameToCompositeMap.values();
+	QList<CodeComposite*> result = nameToCompositeMap.values();
+	for (auto potentialMacroData : result)
+		if (potentialMacroData->isXMacroData())
+			for (auto potentialMacroInstantiation : result)
+				if (potentialMacroInstantiation->isXMacroInstantiation())
+					potentialMacroInstantiation->additionalUnitsThisDependsOn() << potentialMacroData->units();
+	return result;
 }
 
 Export::FragmentLayouter CppExporter::layouter()
