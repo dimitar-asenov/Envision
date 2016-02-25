@@ -111,6 +111,9 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 				hardTargets_.insert(classType->classDefinition());
 		}
 
+		if (parent()->headerPart() == this && SpecialCases::isExternalNameOnlyDependency(reference))
+			softTargets_.insert( DependencyTarget{nullptr, reference->name()} );
+
 		// Additionally, the reference itself might indicate a dependency
 		if (auto target = fixedTarget(reference))
 		{

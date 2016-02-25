@@ -149,6 +149,8 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		*composite << "\n";
 	}
 
+	auto externalForwardDeclarations = new Export::CompositeFragment{units().first()->node(), "sections"};
+
 	Export::CompositeFragment* unitsComposite = nullptr;
 	if (!units().isEmpty())
 	{
@@ -204,6 +206,9 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 						else Q_ASSERT(false);
 						*softDependencyComposite << softDependency.node_->symbolName() + ";";
 					}
+					else if (softDependency.node_ == nullptr && !softDependency.name_.isEmpty())
+						*externalForwardDeclarations << "struct " + softDependency.name_ + ";";
+
 				}
 			}
 
@@ -221,9 +226,10 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 	if (unitsComposite && !unitsComposite->fragments().empty())
 	{
-		composite->append(unitsComposite);
+		*composite << externalForwardDeclarations << "\n\n" << unitsComposite;
 		return composite;
 	}
+	SAFE_DELETE(externalForwardDeclarations);
 	SAFE_DELETE(unitsComposite);
 	SAFE_DELETE(composite);
 	return nullptr;

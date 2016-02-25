@@ -233,4 +233,13 @@ Export::SourceFragment* SpecialCases::includeXMacroData(CodeComposite* codeCompo
 	return fragment;
 }
 
+bool SpecialCases::isExternalNameOnlyDependency(OOModel::ReferenceExpression* reference)
+{
+	return !reference->target() && ( reference->name() == "git_commit"
+												|| reference->name() == "git_oid"
+												|| reference->name() == "git_repository"
+												|| reference->name() == "git_signature"
+												|| reference->name() == "git_tree" );
+}
+
 }
