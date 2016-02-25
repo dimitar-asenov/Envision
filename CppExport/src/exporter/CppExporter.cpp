@@ -207,11 +207,14 @@ QList<CodeComposite*> CppExporter::mergeUnits(QList<CodeUnit*>& units, QHash<QSt
 	}
 
 	QList<CodeComposite*> result = nameToCompositeMap.values();
+
+	// x-macro instantiation code composites need to additionally depend on the units of the included x-macro data
 	for (auto potentialMacroData : result)
 		if (potentialMacroData->isXMacroData())
 			for (auto potentialMacroInstantiation : result)
 				if (potentialMacroInstantiation->isXMacroInstantiation())
 					potentialMacroInstantiation->additionalDependencies() << potentialMacroData->units();
+
 	return result;
 }
 
