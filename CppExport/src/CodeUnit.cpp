@@ -46,7 +46,12 @@ CodeUnit::CodeUnit(QString name, Model::Node* node) : name_{name}, node_{node}
 {
 	Q_ASSERT(!name.isEmpty());
 
-	hasNoHeaderPart_ = SpecialCases::isMainMethod(DCast<OOModel::Method>(node));
+	auto method = DCast<OOModel::Method>(node);
+
+	if (method)
+		hasNoHeaderPart_ = SpecialCases::isMainMethod(method)
+				|| ( method->firstAncestorOfType<OOModel::Class>() == nullptr
+					  && method->modifiers()->isSet(OOModel::Modifier::Static) );
 }
 
 void CodeUnit::calculateSourceFragments()
