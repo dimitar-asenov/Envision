@@ -613,9 +613,8 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 	{
 		auto ooArrayType = clang_.createNode<OOModel::ArrayTypeExpression>(type.getSourceRange());
 		ooArrayType->setTypeExpression(translateQualifiedType(constArrayType.getElementLoc()));
-		auto integerLiteral = clang_.createNode<OOModel::IntegerLiteral>(type.getSourceRange(),
-					(int)llvm::dyn_cast<clang::ConstantArrayType>(constArrayType.getTypePtr())->getSize().getLimitedValue());
-		ooArrayType->setFixedSize(integerLiteral);
+		auto sizeExpression = exprVisitor_->translateExpression(constArrayType.getSizeExpr());
+		ooArrayType->setFixedSize(sizeExpression);
 		return ooArrayType;
 	}
 	else if (auto incompleteArrayType = type.getAs<clang::IncompleteArrayTypeLoc>())
