@@ -146,10 +146,10 @@ QSet<CodeComposite*> CodeComposite::calculateDependencies(CodeUnitPart* (CodeUni
 }
 
 Export::CompositeFragment* CodeComposite::printHardDependencies(CodeUnitPart* (CodeUnit::*part) (),
-																					 QSet<CodeComposite*> compositeDependencies)
+																					 QSet<CodeComposite*> hardDependencies)
 {
 	auto fragment = new Export::CompositeFragment{units().first()->node()};
-	for (auto compositeDependency : compositeDependencies)
+	for (auto compositeDependency : hardDependencies)
 		if (((units().first()->*part)() != units().first()->headerPart() || headerPartExtension() == ".cpp") &&
 			 compositeDependency->isTemplateImplementationSeparateFile() && !isTemplateImplementationSeparateFile())
 			*fragment << "#include \"" + relativePath(compositeDependency) + ".hpp\"\n";

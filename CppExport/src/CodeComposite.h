@@ -82,7 +82,7 @@ class CPPEXPORT_API CodeComposite
 		QList<CodeUnit*> nonEmptyUnits(CodeUnitPart*(CodeUnit::*part)());
 		QSet<CodeComposite*> calculateDependencies(CodeUnitPart* (CodeUnit::*part)());
 		Export::CompositeFragment* printHardDependencies(CodeUnitPart* (CodeUnit::*part)(),
-																		 QSet<CodeComposite*> compositeDependencies);
+																		 QSet<CodeComposite*> hardDependencies);
 		QSet<Model::Node*> softDependenciesAlreadyInHeader();
 
 		/**
