@@ -79,7 +79,9 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 		 */
 		currentXMacroParent = entry;
 
-	entry->setMetaCall(new OOModel::MetaCallExpression{macroDefinitions_.definitionName(entry->definition())});
+	auto metaCall = new OOModel::MetaCallExpression{macroDefinitions_.definitionName(entry->definition())};
+	clang_.storeNodeFilename(metaCall, sourceRange.getBegin());
+	entry->setMetaCall(metaCall);
 
 	// only function like macros have braces in their signature to parse
 	if (!macroDirective->getMacroInfo()->isObjectLike())

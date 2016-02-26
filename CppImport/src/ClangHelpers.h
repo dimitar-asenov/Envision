@@ -135,6 +135,19 @@ class CPPIMPORT_API ClangHelpers
 
 		void printMacroDefinitionForDebug(const clang::MacroDirective* macroDirective) const;
 
+		/**
+		 * store the filename at location for node.
+		 */
+		void storeNodeFilename(Model::Node* node, clang::SourceLocation location);
+		/**
+		 * use the stored filename of from and copy it for node.
+		 */
+		void storeNodeFilename(Model::Node* node, Model::Node* from);
+		/**
+		 * dump the node to filename map to a file.
+		 */
+		void dumpMergeMap(QString filename);
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 
@@ -150,6 +163,11 @@ class CPPIMPORT_API ClangHelpers
 		 * holds all comments of the current translation unit.
 		 */
 		QList<Comment*> comments_;
+
+		/**
+		 * used for dumping the merge map
+		 */
+		QHash<Model::Node*, QString> nodeToFilenameMap_;
 
 		QStringList folderNamesFromPath(QString path);
 		OOModel::Declaration* folderForLocation(clang::SourceLocation location,
@@ -177,6 +195,7 @@ NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorAr
 {
 	 auto node = new NodeType{std::forward<ConstructorArgTypes>(constructorArgs)...};
 	 envisionToClangMap_.mapAst(sourceRange, node);
+	 storeNodeFilename(node, sourceRange.getBegin());
 	 return node;
 }
 

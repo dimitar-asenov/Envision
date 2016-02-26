@@ -29,6 +29,9 @@
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/MetaDefinition.h"
 
+#include "CppExport/src/exporter/CppExporter.h"
+#include "CppExport/src/CodeUnit.h"
+
 namespace CppImport {
 
 QString ClangHelpers::spelling(clang::SourceRange sourceRange) const
@@ -295,6 +298,59 @@ void ClangHelpers::printMacroDefinitionForDebug(const clang::MacroDirective* mac
 	qDebug() << "Macro in: " << presumedFilenameWithExtension(macroDirective->getMacroInfo()->getDefinitionLoc());
 	qDebug() << spelling(clang::SourceRange{macroDirective->getMacroInfo()->getDefinitionLoc(),
 																  macroDirective->getMacroInfo()->getDefinitionEndLoc()});
+}
+
+void ClangHelpers::storeNodeFilename(Model::Node* node, clang::SourceLocation location)
+{
+	auto fullPath = presumedFilenameWithoutExtension(location);
+	nodeToFilenameMap_ [node] = fullPath.right(fullPath.size() - rootProjectPath_.size() - 1);
+}
+
+void ClangHelpers::storeNodeFilename(Model::Node* node, Model::Node* from)
+{
+	auto it = nodeToFilenameMap_.find(from);
+	Q_ASSERT(it != nodeToFilenameMap_.end());
+	nodeToFilenameMap_[node] = *it;
+}
+
+void ClangHelpers::dumpMergeMap(QString filename)
+{
+	QHash<QString, QString> dummy;
+	QList<CppExport::CodeUnit*> codeUnits;
+	CppExport::CppExporter::units(rootProject_, codeUnits, dummy);
+
+	QHash<QString, QString> dumpedMergeMap;
+	for (auto unit : codeUnits)
+	{
+		auto nodeFilename = nodeToFilenameMap_[unit->node()];
+
+		if (dumpedMergeMap.contains(unit->name()))
+		{
+			if (dumpedMergeMap.value(unit->name()) != nodeFilename)
+			{
+				qDebug() << unit->name() << "mapped at least twice with different values:";
+				qDebug() << "1:   " << nodeFilename;
+				qDebug() << "2:   " << dumpedMergeMap.value(unit->name());
+				Q_ASSERT(false);
+			}
+		}
+		else
+			dumpedMergeMap.insert(unit->name(), nodeFilename);
+	}
+
+	QFile file{filename};
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out{&file};
+	out << "{\n";
+	out << "\t\"DependencyUnitMergeMap\" :\n";
+	out << "\t{\n";
+	for (auto it = dumpedMergeMap.begin(); it != dumpedMergeMap.end(); it++)
+		if (it.key() != it.value())
+			out << "\t\t\"" << it.key() << "\" : \"" << it.value() << "\",\n";
+	out << "\t},\n";
+	out << "\t\"SeparateTemplateImplementationSet\" : [ ]\n";
+	out << "}";
+	file.close();
 }
 
 }

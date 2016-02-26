@@ -1416,6 +1416,8 @@ void ClangAstVisitor::endEntireImport()
 		else if (!DCast<OOModel::MetaCallExpression>(current))
 			workStack << current->children();
 	}
+
+	clang_.dumpMergeMap("export-config.json");
 }
 
 } // namespace cppimport
