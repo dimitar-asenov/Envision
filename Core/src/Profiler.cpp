@@ -30,9 +30,9 @@ namespace Core {
 ProfileJob* Profiler::currentJob_{nullptr};
 QMap<QString, ProfileJob*> Profiler::jobMap_;
 
-constexpr bool DISABLE_ALL = true;
-constexpr bool DISABLE_CALL_PROFILING = false || DISABLE_ALL;
-constexpr bool DISABLE_TIME_MEASUREMENT = false || DISABLE_ALL;
+static constexpr bool DISABLE_ALL = true;
+static constexpr bool DISABLE_CALL_PROFILING = false || DISABLE_ALL;
+static constexpr bool DISABLE_TIME_MEASUREMENT = false || DISABLE_ALL;
 
 void Profiler::start(bool condition, const QString& jobName, const QString& fileName)
 {
