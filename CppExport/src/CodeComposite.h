@@ -109,11 +109,6 @@ inline const QString& CodeComposite::name() const { return name_; }
 inline const QList<CodeUnit*>& CodeComposite::units() const { return units_; }
 inline QString CodeComposite::headerPartExtension()
 {
-	if (!units_.empty())
-		for (auto unit : units_)
-			if (auto classs = DCast<OOModel::Class>(unit->node()))
-				if (SpecialCases::isTestClass(classs))
-					return ".cpp";
 	return ".h";
 }
 inline QString CodeComposite::sourcePartExtension()

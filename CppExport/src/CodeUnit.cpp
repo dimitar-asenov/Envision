@@ -60,7 +60,7 @@ void CodeUnit::calculateSourceFragments()
 																			(isTemplateImplementationSeparateFile() ?
 																				CppPrintContext::IsTemplateImplementationSeparateFile :
 																				CppPrintContext::None)};
-			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visitTopLevelClass(classs));
+			sourcePart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visitTopLevelClass(classs));
 		}
 		else
 		{

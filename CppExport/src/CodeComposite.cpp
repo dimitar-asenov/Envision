@@ -154,7 +154,7 @@ Export::CompositeFragment* CodeComposite::printHardDependencies(CodeUnitPart* (C
 			 compositeDependency->isTemplateImplementationSeparateFile() && !isTemplateImplementationSeparateFile())
 			*fragment << "#include \"" + relativePath(compositeDependency) + ".hpp\"\n";
 		else if (compositeDependency->name().endsWith("_api") ||
-					compositeDependency->units().first()->headerPart()->fragment())
+					!compositeDependency->nonEmptyUnits(&CodeUnit::headerPart).empty())
 			*fragment << "#include \"" + relativePath(compositeDependency) + ".h\"\n";
 	return fragment;
 }
@@ -333,9 +333,6 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 Export::SourceFragment* CodeComposite::addPragmaOnce(Export::SourceFragment* fragment)
 {
 	if (!fragment) return nullptr;
-
-	if (auto classs = DCast<OOModel::Class>(fragment->node()))
-		if (SpecialCases::isTestClass(classs)) return fragment;
 
 	auto compositeFragment = new Export::CompositeFragment{fragment->node()};
 	*compositeFragment << "#pragma once\n\n" << fragment;
