@@ -30,7 +30,7 @@
 
 namespace OODebug {
 
-ITEM_COMMON_DEFINITIONS(PlotOverlay, "item")
+DEFINE_ITEM_COMMON(PlotOverlay, "item")
 
 
 const QList<Qt::GlobalColor> PlotOverlay::PLOT_COLORS = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};

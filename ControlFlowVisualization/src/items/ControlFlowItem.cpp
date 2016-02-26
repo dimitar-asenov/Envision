@@ -29,7 +29,7 @@
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(ControlFlowItem, "item")
+DEFINE_ITEM_COMMON(ControlFlowItem, "item")
 
 ControlFlowItem::ControlFlowItem(Item* parent,  const StyleType* style) :
 	Super{parent, style},

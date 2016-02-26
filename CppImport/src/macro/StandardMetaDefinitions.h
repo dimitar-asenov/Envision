@@ -56,7 +56,7 @@ class CPPIMPORT_API StandardMetaDefinitions
 {
 	public:
 		StandardMetaDefinitions(ClangHelpers& clang, const MacroDefinitions& definitionManager,
-										MacroExpansions& MacroExpansions);
+										MacroExpansions& macroExpansions);
 
 		OOModel::MetaDefinition* createMetaDef(const clang::MacroDirective* md);
 

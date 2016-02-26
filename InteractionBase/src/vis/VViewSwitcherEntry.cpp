@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(VViewSwitcherEntry, "item")
+DEFINE_ITEM_COMMON(VViewSwitcherEntry, "item")
 
 VViewSwitcherEntry::VViewSwitcherEntry(Visualization::Item* parent, QString viewName, const StyleType* style) :
 		Super{parent, style}

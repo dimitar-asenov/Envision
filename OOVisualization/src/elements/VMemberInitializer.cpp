@@ -31,7 +31,7 @@
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VMemberInitializer, "item")
+DEFINE_ITEM_COMMON(VMemberInitializer, "item")
 
 VMemberInitializer::VMemberInitializer(Item* parent, NodeType* node, const StyleType* style)
 : Super{parent, node, style} {}

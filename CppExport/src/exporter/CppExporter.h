@@ -48,7 +48,7 @@ class CodeComposite;
 
 class CPPEXPORT_API CppExporter {
 	public:
-		static QList<Export::ExportError> exportTree(Model::TreeManager* manager,
+		static QList<Export::ExportError> exportTree(Model::TreeManager* treeManager,
 																	const QString& pathToProjectContainerDirectory);
 		static Export::ExportMapContainer& exportMaps();
 

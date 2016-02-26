@@ -111,7 +111,7 @@ int JavaTypeSystem::primitiveTypeToSubtypingOrder(const PrimitiveType* primitive
 	return -1;
 }
 
-TypeSystem::TypeRelations JavaTypeSystem::relationPrimitiveToOther(const PrimitiveType* p,
+TypeSystem::TypeRelations JavaTypeSystem::relationPrimitiveToOther(const PrimitiveType* primitive,
 		const Type* other)
 {
 	// Have in mind that at this point we know that the two types are not identical.
@@ -119,9 +119,9 @@ TypeSystem::TypeRelations JavaTypeSystem::relationPrimitiveToOther(const Primiti
 
 	if (auto otherP = dynamic_cast<const PrimitiveType*>(other))
 	{
-		if (p->type() == otherP->type()) return TypeRelations{EQUALTYPES};
+		if (primitive->type() == otherP->type()) return TypeRelations{EQUALTYPES};
 
-		if (p->type() == PrimitiveType::BOOLEAN || p->type() == PrimitiveType::VOID)
+		if (primitive->type() == PrimitiveType::BOOLEAN || primitive->type() == PrimitiveType::VOID)
 			return None;
 
 		if (otherP->type() == PrimitiveType::BOOLEAN || otherP->type() == PrimitiveType::VOID)
@@ -131,7 +131,7 @@ TypeSystem::TypeRelations JavaTypeSystem::relationPrimitiveToOther(const Primiti
 		TypeRelations ret{IsConvertibleTo | IsConvertibleFrom};
 
 		// Numeric types also have some subtype relationships
-		auto pOrder = primitiveTypeToSubtypingOrder(p);
+		auto pOrder = primitiveTypeToSubtypingOrder(primitive);
 		auto otherPOrder = primitiveTypeToSubtypingOrder(otherP);
 		if ( pOrder < otherPOrder ) ret |= IsSupertype;
 		else if ( pOrder > otherPOrder ) ret |= IsSubtype;
@@ -143,34 +143,34 @@ TypeSystem::TypeRelations JavaTypeSystem::relationPrimitiveToOther(const Primiti
 	{
 		TypeRelations convertible{IsConvertibleTo | IsConvertibleFrom};
 
-		if (p->type() == PrimitiveType::INT
+		if (primitive->type() == PrimitiveType::INT
 						&& isStandardJavaLangClass("Integer", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::INT
+		if (primitive->type() == PrimitiveType::INT
 						&& isStandardJavaLangClass("Byte", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::INT
+		if (primitive->type() == PrimitiveType::INT
 						&& isStandardJavaLangClass("Short", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::LONG
+		if (primitive->type() == PrimitiveType::LONG
 						&& isStandardJavaLangClass("Long", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::UNSIGNED_INT
+		if (primitive->type() == PrimitiveType::UNSIGNED_INT
 						&& isStandardJavaLangClass("Integer", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::UNSIGNED_LONG
+		if (primitive->type() == PrimitiveType::UNSIGNED_LONG
 						&& isStandardJavaLangClass("Long", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::FLOAT
+		if (primitive->type() == PrimitiveType::FLOAT
 						&& isStandardJavaLangClass("Float", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::DOUBLE
+		if (primitive->type() == PrimitiveType::DOUBLE
 						&& isStandardJavaLangClass("Double", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::BOOLEAN
+		if (primitive->type() == PrimitiveType::BOOLEAN
 						&& isStandardJavaLangClass("Boolean", otherClass->classDefinition()))
 					return convertible;
-		if (p->type() == PrimitiveType::CHAR
+		if (primitive->type() == PrimitiveType::CHAR
 						&& isStandardJavaLangClass("Character", otherClass->classDefinition()))
 					return convertible;
 
@@ -224,9 +224,10 @@ TypeSystem::TypeRelations JavaTypeSystem::relationStringToOther(const StringType
 	return None;
 }
 
-TypeSystem::TypeRelations JavaTypeSystem::relationSymbolProviderToOther(const SymbolProviderType* sp, const Type*)
+TypeSystem::TypeRelations JavaTypeSystem::relationSymbolProviderToOther(const SymbolProviderType* symbolProvider,
+																								const Type*)
 {
-	Q_ASSERT(!DCast<Class>(sp->symbolProvider()));
+	Q_ASSERT(!DCast<Class>(symbolProvider->symbolProvider()));
 
 	// These are things like modules, projects and method. None of these participate in the type system.
 	return None;

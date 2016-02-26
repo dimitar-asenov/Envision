@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(MessageOverlay, "item")
+DEFINE_ITEM_COMMON(MessageOverlay, "item")
 
 MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}
 {

@@ -35,7 +35,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VThisExpression, "item")
+DEFINE_ITEM_COMMON(VThisExpression, "item")
 
 VThisExpression::VThisExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

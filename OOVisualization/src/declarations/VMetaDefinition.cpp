@@ -38,7 +38,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VMetaDefinition, "item")
+DEFINE_ITEM_COMMON(VMetaDefinition, "item")
 
 VMetaDefinition::VMetaDefinition(Item* parent, NodeType* node, const StyleType* style) :Super{parent, node, style}
 {

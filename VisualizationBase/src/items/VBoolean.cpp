@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VBoolean, "item")
+DEFINE_ITEM_COMMON(VBoolean, "item")
 
 VBoolean::VBoolean(Item* parent, NodeType *node, const StyleType *style) : Super{parent, node, style}
 {

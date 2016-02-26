@@ -35,7 +35,7 @@ class OOINTERACTION_API CompoundObjectStringOffsetProvider : public StringOffset
 	public:
 		CompoundObjectStringOffsetProvider(Visualization::Item* v);
 		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
+		virtual void setOffset(int offset);
 
 	private:
 		Visualization::Item* vis_;

@@ -33,7 +33,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VAssertStatement, "item")
+DEFINE_ITEM_COMMON(VAssertStatement, "item")
 
 		VAssertStatement::VAssertStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

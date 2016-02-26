@@ -30,7 +30,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SceneHandlerItem, "item")
+DEFINE_ITEM_COMMON(SceneHandlerItem, "item")
 
 SceneHandlerItem::SceneHandlerItem(Scene* scene) :
 Super{nullptr, itemStyles().get()}

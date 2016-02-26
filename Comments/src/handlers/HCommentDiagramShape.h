@@ -53,7 +53,7 @@ class COMMENTS_API HCommentDiagramShape : public Interaction::GenericHandler {
 		QSize shapeSize_{};
 
 		void moveBy(VCommentDiagramShape* shape, QPoint pos);
-		void resizeBy(VCommentDiagramShape* shape, QSize pos);
+		void resizeBy(VCommentDiagramShape* shape, QSize size);
 };
 
 }

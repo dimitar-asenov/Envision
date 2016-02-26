@@ -37,7 +37,7 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(AutoCompleteVis, "item")
+DEFINE_ITEM_COMMON(AutoCompleteVis, "item")
 
 AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const StyleType* style) :
 Super{nullptr, style}, newEntries_{entries}

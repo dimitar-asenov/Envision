@@ -34,7 +34,7 @@ using namespace Visualization;
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
+DEFINE_ITEM_COMMON(VCommentTable, "item")
 
 VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super{parent, node, itemStyles().get()}
 {

@@ -31,7 +31,7 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(Menu, "item")
+DEFINE_ITEM_COMMON(Menu, "item")
 
 Menu* Menu::instance{};
 

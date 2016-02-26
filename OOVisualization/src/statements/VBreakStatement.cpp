@@ -33,7 +33,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBreakStatement, "item")
+DEFINE_ITEM_COMMON(VBreakStatement, "item")
 
 VBreakStatement::VBreakStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

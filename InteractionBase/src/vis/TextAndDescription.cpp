@@ -28,7 +28,7 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(TextAndDescription, "item")
+DEFINE_ITEM_COMMON(TextAndDescription, "item")
 
 using namespace Visualization;
 

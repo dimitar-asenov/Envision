@@ -35,7 +35,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VTryCatchFinally, "item")
+DEFINE_ITEM_COMMON(VTryCatchFinally, "item")
 
 VTryCatchFinally::VTryCatchFinally(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}{}
 

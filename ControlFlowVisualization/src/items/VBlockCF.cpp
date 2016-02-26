@@ -32,7 +32,7 @@ using namespace Model;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBlockCF, "item")
+DEFINE_ITEM_COMMON(VBlockCF, "item")
 
 VBlockCF::VBlockCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

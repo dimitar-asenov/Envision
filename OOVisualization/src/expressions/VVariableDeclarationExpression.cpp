@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VVariableDeclarationExpression, "item")
+DEFINE_ITEM_COMMON(VVariableDeclarationExpression, "item")
 
 VVariableDeclarationExpression::VVariableDeclarationExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

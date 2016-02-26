@@ -33,7 +33,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VUnfinishedOperator, "item")
+DEFINE_ITEM_COMMON(VUnfinishedOperator, "item")
 
 VUnfinishedOperator::VUnfinishedOperator(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

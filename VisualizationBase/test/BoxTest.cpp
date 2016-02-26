@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(BoxTest, "item")
+DEFINE_ITEM_COMMON(BoxTest, "item")
 
 BoxTest::BoxTest(Item* parent, int sub) :
 Super{parent}, items{this}

@@ -38,7 +38,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VProject, "item")
+DEFINE_ITEM_COMMON(VProject, "item")
 
 VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :Super{parent, node, style}
 {

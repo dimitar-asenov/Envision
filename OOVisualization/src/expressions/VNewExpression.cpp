@@ -33,7 +33,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VNewExpression, "item")
+DEFINE_ITEM_COMMON(VNewExpression, "item")
 
 VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style} {}
 

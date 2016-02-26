@@ -37,7 +37,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VLoopStatement, "item")
+DEFINE_ITEM_COMMON(VLoopStatement, "item")
 
 VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

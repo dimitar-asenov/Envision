@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VText, "item")
+DEFINE_ITEM_COMMON(VText, "item")
 
 VText::VText(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {

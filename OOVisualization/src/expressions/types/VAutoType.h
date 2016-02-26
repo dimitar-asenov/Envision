@@ -40,7 +40,7 @@ OOModel::AutoTypeExpression>>
 	ITEM_COMMON_CUSTOM_STYLENAME(VAutoType, Visualization::StaticStyle)
 
 	public:
-		VAutoType(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
+		VAutoType(Item* parent, NodeType* node, const StyleType *style = itemStyles().get());
 		virtual ~VAutoType();
 
 		Visualization::Static* item() const;

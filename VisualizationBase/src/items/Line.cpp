@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(Line, "item")
+DEFINE_ITEM_COMMON(Line, "item")
 
 Line::Line(Item* parent, const LineStyle* style)
 	: Super{parent, style}

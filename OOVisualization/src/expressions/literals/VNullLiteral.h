@@ -40,7 +40,7 @@ class OOVISUALIZATION_API VNullLiteral
 	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::StaticStyle)
 
 	public:
-		VNullLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
+		VNullLiteral(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VNullLiteral();
 
 		Visualization::Static* item() const;

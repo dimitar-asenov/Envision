@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS( PositionLayout, "layout" )
+DEFINE_ITEM_COMMON( PositionLayout, "layout" )
 
 constexpr bool ENABLE_AUTOMATIC_SEMANTIC_ZOOM = false;
 

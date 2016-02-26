@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VReference, "item")
+DEFINE_ITEM_COMMON(VReference, "item")
 
 VReference::VReference(Item* parent, NodeType *node, const StyleType *style) :
 	Super{parent, node, style}

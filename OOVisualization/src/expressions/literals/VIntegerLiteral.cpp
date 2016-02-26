@@ -31,7 +31,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VIntegerLiteral, "item")
+DEFINE_ITEM_COMMON(VIntegerLiteral, "item")
 
 VIntegerLiteral::VIntegerLiteral(Item* parent, NodeType *literal, const StyleType *style) :
 	Super{parent, literal, style},

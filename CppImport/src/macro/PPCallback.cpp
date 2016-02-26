@@ -32,7 +32,7 @@
 namespace CppImport {
 
 void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDefinition& md,
-													clang::SourceRange sr, const clang::MacroArgs* args)
+													clang::SourceRange range, const clang::MacroArgs* args)
 {
 	auto name = QString::fromStdString(MacroNameTok.getIdentifierInfo()->getName().str());
 
@@ -40,7 +40,7 @@ void PPCallback::MacroExpands(const clang::Token& MacroNameTok, const clang::Mac
 	if (name.endsWith("_API") || name == "Q_DECL_EXPORT" || name == "Q_DECL_IMPORT") return;
 
 	macroDefinitions_.addMacroDefinition(name, md.getLocalDirective());
-	macroExpansions_.addMacroExpansion(sr, md.getLocalDirective(), args);
+	macroExpansions_.addMacroExpansion(range, md.getLocalDirective(), args);
 }
 
 }

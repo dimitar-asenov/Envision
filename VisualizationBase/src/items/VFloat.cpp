@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VFloat, "item")
+DEFINE_ITEM_COMMON(VFloat, "item")
 
 VFloat::VFloat(Item* parent, NodeType *node, const StyleType *style) : Super{parent, node, style}
 {

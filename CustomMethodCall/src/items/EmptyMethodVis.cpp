@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace CustomMethodCall {
 
-ITEM_COMMON_DEFINITIONS(EmptyMethodVis, "item")
+DEFINE_ITEM_COMMON(EmptyMethodVis, "item")
 
 EmptyMethodVis::EmptyMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

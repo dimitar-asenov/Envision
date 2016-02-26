@@ -32,7 +32,7 @@ using namespace Visualization;
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentDiagramShape, "item")
+DEFINE_ITEM_COMMON(VCommentDiagramShape, "item")
 
 VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const StyleType* style)
 	: Super{parent, node, style}, text_{new VCommentText{this, node->label()}}

@@ -40,7 +40,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VMethod, "item")
+DEFINE_ITEM_COMMON(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}

@@ -45,7 +45,7 @@ class NullType;
 class OOMODEL_API JavaTypeSystem : public TypeSystem {
 	public:
 
-		virtual TypeRelations relationFirstToSecond(const Type* first, const Type* other) override;
+		virtual TypeRelations relationFirstToSecond(const Type* first, const Type* second) override;
 
 	private:
 		bool isStandardJavaLangClass(const QString& className, Model::Node* target);

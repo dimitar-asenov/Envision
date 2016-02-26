@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VInfoNode, "item")
+DEFINE_ITEM_COMMON(VInfoNode, "item")
 
 VInfoNode::VInfoNode(Item* parent, NodeType* node, const StyleType* style) :
 		Super{parent, node, style}

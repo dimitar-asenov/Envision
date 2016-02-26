@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace CustomMethodCall {
 
-ITEM_COMMON_DEFINITIONS(SumMethodVis, "item")
+DEFINE_ITEM_COMMON(SumMethodVis, "item")
 
 SumMethodVis::SumMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

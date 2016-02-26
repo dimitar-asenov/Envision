@@ -36,7 +36,7 @@ using namespace Visualization;
 
 namespace InformationScripting {
 
-ITEM_COMMON_DEFINITIONS(HighlightOverlay, "item")
+DEFINE_ITEM_COMMON(HighlightOverlay, "item")
 
 HighlightOverlay::HighlightOverlay(Item* selectedItem, const StyleType* style)
 	: Super{{selectedItem}, style}

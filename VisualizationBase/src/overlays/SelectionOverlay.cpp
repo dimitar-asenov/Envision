@@ -29,7 +29,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SelectionOverlay, "item")
+DEFINE_ITEM_COMMON(SelectionOverlay, "item")
 
 SelectionOverlay::SelectionOverlay(Item* selectedItem, const StyleType* style) : Super{{selectedItem}, style} {}
 

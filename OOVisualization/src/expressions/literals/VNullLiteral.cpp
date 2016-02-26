@@ -35,7 +35,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VNullLiteral, "item")
+DEFINE_ITEM_COMMON(VNullLiteral, "item")
 
 VNullLiteral::VNullLiteral(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

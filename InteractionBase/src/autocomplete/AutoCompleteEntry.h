@@ -52,7 +52,7 @@ class INTERACTIONBASE_API AutoCompleteEntry
 		const QString& description();
 		QSharedPointer<Visualization::Item> visualization();
 
-		void setText(const QString& suggestion);
+		void setText(const QString& text);
 		void setDescription(const QString& description);
 		void setVisualization(QSharedPointer<Visualization::Item> item);
 		void setVisualization(Visualization::Item* item);

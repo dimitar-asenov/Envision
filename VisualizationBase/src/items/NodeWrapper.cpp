@@ -29,7 +29,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(NodeWrapper, "item")
+DEFINE_ITEM_COMMON(NodeWrapper, "item")
 
 NodeWrapper::NodeWrapper(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}

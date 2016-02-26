@@ -43,7 +43,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(ViewItem, "item")
+DEFINE_ITEM_COMMON(ViewItem, "item")
 
 ViewItem::ViewItem(Item* parent, QString name, StyleType* style) :
 		Super{parent, style}, name_{name}

@@ -41,7 +41,7 @@ class OOINTERACTION_API StaticStringOffsetProvider : public StringOffsetProvider
 		StaticStringOffsetProvider(Visualization::Static* v);
 		virtual QString string();
 		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
+		virtual void setOffset(int offset);
 
 		virtual bool isIndivisible();
 

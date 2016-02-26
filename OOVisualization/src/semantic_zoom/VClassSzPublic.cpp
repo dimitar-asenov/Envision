@@ -43,14 +43,13 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VClassSzPublic, "item")
+DEFINE_ITEM_COMMON(VClassSzPublic, "item")
 
 VClassSzPublic::VClassSzPublic(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
 void VClassSzPublic::determineChildren()
 {
-	qDebug() << "here";
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
 }

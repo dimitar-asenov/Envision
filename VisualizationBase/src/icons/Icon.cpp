@@ -29,7 +29,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(Icon, "icon")
+DEFINE_ITEM_COMMON(Icon, "icon")
 
 Icon::Icon(Item* parent, const IconStyle* style) :
 Super{parent, style}

@@ -33,7 +33,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBinaryOperation, "item")
+DEFINE_ITEM_COMMON(VBinaryOperation, "item")
 
 VBinaryOperation::VBinaryOperation(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

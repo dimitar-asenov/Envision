@@ -32,7 +32,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VDeclarationStatement, "item")
+DEFINE_ITEM_COMMON(VDeclarationStatement, "item")
 
 VDeclarationStatement::VDeclarationStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

@@ -30,7 +30,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(WebBrowserItem, "item")
+DEFINE_ITEM_COMMON(WebBrowserItem, "item")
 
 const QSize WebBrowserItem::defaultSize = QSize{400, 300};
 

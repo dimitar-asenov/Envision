@@ -29,7 +29,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(ArrowOverlay, "item")
+DEFINE_ITEM_COMMON(ArrowOverlay, "item")
 
 ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style)
 	: Super{{arrowFrom, arrowTo}, style}

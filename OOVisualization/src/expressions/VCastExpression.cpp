@@ -31,7 +31,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VCastExpression, "item")
+DEFINE_ITEM_COMMON(VCastExpression, "item")
 
 VCastExpression::VCastExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

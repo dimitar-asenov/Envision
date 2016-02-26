@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VEnumerator, "item")
+DEFINE_ITEM_COMMON(VEnumerator, "item")
 
 VEnumerator::VEnumerator(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

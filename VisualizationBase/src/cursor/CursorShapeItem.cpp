@@ -30,7 +30,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(CursorShapeItem, "item")
+DEFINE_ITEM_COMMON(CursorShapeItem, "item")
 
 CursorShapeItem::CursorShapeItem(Cursor* cursor, const StyleType* style) :
 Super{nullptr, style}, cursor_{cursor}, useCenter_{false}

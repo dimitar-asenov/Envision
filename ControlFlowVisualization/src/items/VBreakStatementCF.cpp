@@ -34,7 +34,7 @@ using namespace OOVisualization;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBreakStatementCF, "item")
+DEFINE_ITEM_COMMON(VBreakStatementCF, "item")
 
 VBreakStatementCF::VBreakStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},
