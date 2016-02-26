@@ -475,7 +475,8 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	}
 
 	// export flag
-	if (printContext().hasOption(CppPrintContext::IsHeaderPart) && isGlobal && method->typeArguments()->isEmpty())
+	if (printContext().hasOption(CppPrintContext::IsHeaderPart) && isGlobal && method->typeArguments()->isEmpty()
+		 && !method->modifiers()->isSet(Modifier::Inline))
 		*fragment << ExportHelpers::exportFlag(method);
 
 	// method name qualifier
