@@ -324,7 +324,6 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 	}
 
 	// all the remaining forward declarations must appear at the top of the composite fragment.
-	// we group them by namespace in order to minimize the amount of namespace declarations we have to print.
 	printRemainingSoftDependencies(remainingSoftDependencies, externalForwardDeclarations);
 
 	return composite;

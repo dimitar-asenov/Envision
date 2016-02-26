@@ -84,6 +84,10 @@ class CPPEXPORT_API CodeComposite
 		Export::CompositeFragment* printHardDependencies(CodeUnitPart* (CodeUnit::*part)(),
 																		 QSet<CodeComposite*> compositeDependencies);
 		QSet<Model::Node*> calculateIgnoredSoftDependencies(CodeUnitPart* (CodeUnit::*part)());
+
+		/**
+		 * group forward declarations by namespace and prints them in fragment
+		 */
 		void printRemainingSoftDependencies(QList<OOModel::Class*> remainingSoftDependencies,
 														Export::CompositeFragment* fragment);
 		Export::CompositeFragment* printForwardDeclaration(OOModel::Class* classs);
