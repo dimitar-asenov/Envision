@@ -32,7 +32,7 @@
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 #define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_BASE(apiSpecification, className, nodeType)									\
-ITEM_COMMON_DEFINITIONS(className, "item")																									\
+DEFINE_ITEM_COMMON(className, "item")																									\
 																																							\
 className::className(::Visualization::Item* parent, NodeType* node, const StyleType* style)									\
 	: Super{parent, node, style}{}																												\
