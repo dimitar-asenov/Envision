@@ -79,7 +79,7 @@ class CPPEXPORT_API CodeComposite
 		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
 																		OOModel::Module* namespaceNode);
 
-		bool isEmpty(CodeUnitPart*(CodeUnit::*part)());
+		QList<CodeUnit*> nonEmptyUnits(CodeUnitPart*(CodeUnit::*part)());
 		QSet<CodeComposite*> calculateDependencies(CodeUnitPart* (CodeUnit::*part)());
 		Export::CompositeFragment* printHardDependencies(CodeUnitPart* (CodeUnit::*part)(),
 																		 QSet<CodeComposite*> compositeDependencies);

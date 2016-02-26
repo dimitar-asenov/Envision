@@ -116,12 +116,13 @@ Export::CompositeFragment* CodeComposite::addNamespaceFragment(Export::Composite
 	return namespaceBody;
 }
 
-bool CodeComposite::isEmpty(CodeUnitPart* (CodeUnit::*part) ())
+QList<CodeUnit*> CodeComposite::nonEmptyUnits(CodeUnitPart* (CodeUnit::*part) ())
 {
+	QList<CodeUnit*> result;
 	for (auto unit : units())
 		if (!(unit->*part)()->isSourceFragmentEmpty())
-			return false;
-	return true;
+			result.append(unit);
+	return result;
 }
 
 QSet<CodeComposite*> CodeComposite::calculateDependencies(CodeUnitPart* (CodeUnit::*part) ())
@@ -222,46 +223,37 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 {
 	Q_ASSERT(!units().empty());
 
-	if (isEmpty(part)) return nullptr;
+	auto units = nonEmptyUnits(part);
+	if (units.empty()) return nullptr;
 
 	// calculate hard dependencies
 	auto compositeDependencies = calculateDependencies(part);
 
 	// print hard dependencies
-	auto composite = new Export::CompositeFragment{units().first()->node()};
+	auto composite = new Export::CompositeFragment{units.first()->node()};
 	*composite << printHardDependencies(part, compositeDependencies);
 
-	auto externalForwardDeclarations = new Export::CompositeFragment{units().first()->node(), "sections"};
-	auto unitsComposite = new Export::CompositeFragment{units().first()->node(), "spacedSections"};
+	auto externalForwardDeclarations = new Export::CompositeFragment{units.first()->node(), "sections"};
+	auto unitsComposite = new Export::CompositeFragment{units.first()->node(), "spacedSections"};
 	*composite << externalForwardDeclarations << "\n\n" << unitsComposite;
 
 	auto currentNamespaceFragment = unitsComposite;
-	QHash<CodeUnit*, int> unitToIndexMap;
-	QList<OOModel::Module*> namespaces{nullptr};
-	QList<Export::CompositeFragment*> forwardDeclarationFragments{currentNamespaceFragment->append(
-																new Export::CompositeFragment{units().first()->node(), "sections"})};
+	QList<OOModel::Module*> namespaces;
+	QList<Export::CompositeFragment*> forwardDeclarationFragments;
 
 	// print unit parts
-	for (auto unit : units())
+	for (auto unit : units)
 	{
-		if ((unit->*part)()->isSourceFragmentEmpty()) continue;
-
 		auto neededNamespace = DCast<OOModel::ExplicitTemplateInstantiation>(unit->node()) || isXMacroData() ?
 					nullptr : ExportHelpers::parentNamespaceModule(unit->node());
-		if (neededNamespace != namespaces.last())
-		{
-			// print new namespace
+		if (namespaces.empty() || neededNamespace != namespaces.last())
 			currentNamespaceFragment = addNamespaceFragment(unitsComposite, neededNamespace);
 
-			// update active namespace
-			namespaces.append(neededNamespace);
+		namespaces.append(neededNamespace);
 
-			// insert soft dependency fragment
-			forwardDeclarationFragments.append(
-						currentNamespaceFragment->append(new Export::CompositeFragment{unit->node(), "sections"}));
-		}
-		// associate unit with active soft dependency fragment index
-		unitToIndexMap.insert(unit, forwardDeclarationFragments.size() - 1);
+		// insert soft dependency fragment
+		forwardDeclarationFragments.append(
+					currentNamespaceFragment->append(new Export::CompositeFragment{unit->node(), "sections"}));
 
 		// print unit part
 		*currentNamespaceFragment << (unit->*part)()->fragment();
@@ -273,7 +265,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 	// calculate the latest soft dependency fragment a soft dependency has to be declared
 	QHash<OOModel::Class*, int> softDependencyToIndexMap;
-	for (auto unit : units())
+	for (auto unit : units)
 		for (auto softDependency : reduceSoftDependencies(compositeDependencies,
 																		  (unit->*part)()->softDependencies()))
 			if (auto classs = DCast<OOModel::Class>(softDependency.node_))
@@ -283,11 +275,11 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 					auto it = softDependencyToIndexMap.find(classs);
 					if (it != softDependencyToIndexMap.end())
 					{
-						if (unitToIndexMap[unit] < it.value())
-							it.value() = unitToIndexMap[unit];
+						if (units.indexOf(unit) < it.value())
+							it.value() = units.indexOf(unit);
 					}
 					else
-						softDependencyToIndexMap.insert(classs, unitToIndexMap[unit]);
+						softDependencyToIndexMap.insert(classs, units.indexOf(unit));
 				}
 			}
 			else if (softDependency.node_ == nullptr && !softDependency.name_.isEmpty())
@@ -303,9 +295,9 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		// a forward declaration is unnecessary if there is a unit which declares the class the forward declaration
 		// refers to before the forward declaration is needed the latest.
 		bool forwardDeclarationUnnecessary = false;
-		for (auto unit : units())
+		for (auto unit : units)
 			if (unit->node() == classs)
-				if (unitToIndexMap[unit] <= highestPossibleIndex && highestPossibleIndex > 0)
+				if (units.indexOf(unit) <= highestPossibleIndex)
 				{
 					forwardDeclarationUnnecessary = true;
 					break;
@@ -319,7 +311,9 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 		for (int index = highestPossibleIndex; index >= 0; index--)
 			if (softDependencyNamespace == namespaces.at(index))
 			{
-				*forwardDeclarationFragments.at(index) << printForwardDeclaration(classs);
+				auto bestIndex = index;
+				while (bestIndex > 0 && softDependencyNamespace == namespaces.at(bestIndex - 1)) bestIndex--;
+				*forwardDeclarationFragments.at(bestIndex) << printForwardDeclaration(classs);
 				break;
 			}
 			else if (index == 0)
