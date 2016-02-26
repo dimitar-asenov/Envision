@@ -49,7 +49,7 @@ class FILEPERSISTENCE_API SaveRootOnly
 	store = s;
 
 	auto root = new TestNodes::BinaryNode{};
-	Model::TreeManager manager{root};
+	TreeManager manager{root};
 
 	manager.beginModification(root->name(), "set title");
 	root->name()->set("Title");
@@ -78,7 +78,7 @@ public: void test()
 	store = s;
 
 	auto root = new TestNodes::BinaryNode{};
-	Model::TreeManager manager{root};
+	TreeManager manager{root};
 
 	manager.beginModification(root, "set title");
 	root->name()->set("RootNode");
@@ -119,7 +119,7 @@ class FILEPERSISTENCE_API SaveMultipleUnits
 	store = s;
 
 	auto root = new TestNodes::BinaryNode{};
-	Model::TreeManager manager{root};
+	TreeManager manager{root};
 
 	manager.beginModification(root, "set title");
 	root->name()->set("Root");

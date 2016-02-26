@@ -33,6 +33,10 @@
 
 using namespace Model;
 
+namespace Model {
+	class PersistentStore;
+}
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API LoadingTypedList
@@ -77,7 +81,7 @@ class FILEPERSISTENCE_API SavingTypedList
 	store = s;
 
 	auto list = new TypedList<Text>{};
-	Model::TreeManager manager{list};
+	TreeManager manager{list};
 
 	manager.beginModification(list, "create");
 	auto one = new Text{};
