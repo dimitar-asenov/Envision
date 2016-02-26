@@ -590,50 +590,50 @@ OOModel::Expression* CppImportUtilities::translateBuiltInClangType(const clang::
 	}
 }
 
-OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc type)
+OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc typeLoc)
 {
-	Q_ASSERT(type);
-	if (type.getAs<clang::AutoTypeLoc>())
-		return clang_.createNode<OOModel::AutoTypeExpression>(type.getSourceRange());
-	else if (type.getAs<clang::TypedefTypeLoc>())
-		return clang_.createReference(type.getSourceRange());
-	else if (auto recordTypeLoc = type.getAs<clang::RecordTypeLoc>())
-		return setReferencePrefix(clang_.createReference(type.getSourceRange()),
+	Q_ASSERT(typeLoc);
+	if (typeLoc.getAs<clang::AutoTypeLoc>())
+		return clang_.createNode<OOModel::AutoTypeExpression>(typeLoc.getSourceRange());
+	else if (typeLoc.getAs<clang::TypedefTypeLoc>())
+		return clang_.createReference(typeLoc.getSourceRange());
+	else if (auto recordTypeLoc = typeLoc.getAs<clang::RecordTypeLoc>())
+		return setReferencePrefix(clang_.createReference(typeLoc.getSourceRange()),
 										  recordTypeLoc.getDecl()->getQualifierLoc());
-	else if (auto pointerType = type.getAs<clang::PointerTypeLoc>())
-		return clang_.createNode<OOModel::PointerTypeExpression>(type.getSourceRange(),
+	else if (auto pointerType = typeLoc.getAs<clang::PointerTypeLoc>())
+		return clang_.createNode<OOModel::PointerTypeExpression>(typeLoc.getSourceRange(),
 																					translateQualifiedType(pointerType.getNextTypeLoc()));
-	else if (auto refType = type.getAs<clang::ReferenceTypeLoc>())
-		return clang_.createNode<OOModel::ReferenceTypeExpression>(type.getSourceRange(),
+	else if (auto refType = typeLoc.getAs<clang::ReferenceTypeLoc>())
+		return clang_.createNode<OOModel::ReferenceTypeExpression>(typeLoc.getSourceRange(),
 																					  translateQualifiedType(refType.getNextTypeLoc()),
-																					  !type.getAs<clang::RValueReferenceTypeLoc>().isNull());
-	else if (auto enumType = type.getAs<clang::EnumTypeLoc>())
-		return setReferencePrefix(clang_.createReference(type.getSourceRange()), enumType.getDecl()->getQualifierLoc());
-	else if (auto constArrayType = type.getAs<clang::ConstantArrayTypeLoc>())
+																					  !typeLoc.getAs<clang::RValueReferenceTypeLoc>().isNull());
+	else if (auto enumType = typeLoc.getAs<clang::EnumTypeLoc>())
+		return setReferencePrefix(clang_.createReference(typeLoc.getSourceRange()), enumType.getDecl()->getQualifierLoc());
+	else if (auto constArrayType = typeLoc.getAs<clang::ConstantArrayTypeLoc>())
 	{
-		auto ooArrayType = clang_.createNode<OOModel::ArrayTypeExpression>(type.getSourceRange());
+		auto ooArrayType = clang_.createNode<OOModel::ArrayTypeExpression>(typeLoc.getSourceRange());
 		ooArrayType->setTypeExpression(translateQualifiedType(constArrayType.getElementLoc()));
 		auto sizeExpression = exprVisitor_->translateExpression(constArrayType.getSizeExpr());
 		ooArrayType->setFixedSize(sizeExpression);
 		return ooArrayType;
 	}
-	else if (auto incompleteArrayType = type.getAs<clang::IncompleteArrayTypeLoc>())
+	else if (auto incompleteArrayType = typeLoc.getAs<clang::IncompleteArrayTypeLoc>())
 	{
-		auto ooArrayType = clang_.createNode<OOModel::ArrayTypeExpression>(type.getSourceRange());
+		auto ooArrayType = clang_.createNode<OOModel::ArrayTypeExpression>(typeLoc.getSourceRange());
 		ooArrayType->setTypeExpression(translateQualifiedType(incompleteArrayType.getElementLoc()));
 		return ooArrayType;
 	}
-	else if (auto parenType = type.getAs<clang::ParenTypeLoc>())
+	else if (auto parenType = typeLoc.getAs<clang::ParenTypeLoc>())
 		// TODO: this might not always be a nice solution, to just return the inner type of a parenthesized type.
 		return translateQualifiedType(parenType.getInnerLoc());
-	else if (type.getAs<clang::TypedefTypeLoc>())
-		return clang_.createReference(type.getSourceRange());
-	else if (type.getAs<clang::TemplateTypeParmTypeLoc>())
-		return clang_.createReference(type.getSourceRange());
-	else if (auto functionProtoType = type.getAs<clang::FunctionProtoTypeLoc>())
+	else if (typeLoc.getAs<clang::TypedefTypeLoc>())
+		return clang_.createReference(typeLoc.getSourceRange());
+	else if (typeLoc.getAs<clang::TemplateTypeParmTypeLoc>())
+		return clang_.createReference(typeLoc.getSourceRange());
+	else if (auto functionProtoType = typeLoc.getAs<clang::FunctionProtoTypeLoc>())
 	{
 		// TODO: include templates. (and more?)
-		auto ooFunctionType = clang_.createNode<OOModel::FunctionTypeExpression>(type.getSourceRange());
+		auto ooFunctionType = clang_.createNode<OOModel::FunctionTypeExpression>(typeLoc.getSourceRange());
 		ooFunctionType->results()->append(translateQualifiedType(functionProtoType.getReturnLoc()));
 		for (auto param : functionProtoType.getParams())
 		{
@@ -644,7 +644,7 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 		}
 		return ooFunctionType;
 	}
-	else if (auto elaboratedType = type.getAs<clang::ElaboratedTypeLoc>())
+	else if (auto elaboratedType = typeLoc.getAs<clang::ElaboratedTypeLoc>())
 	{
 		// TODO: this might also have a keyword in front (like e.g. class, typename)
 		auto translatedElaboratedType = translateQualifiedType(elaboratedType.getNamedTypeLoc());
@@ -652,9 +652,9 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 			return setReferencePrefix(ooRef, elaboratedType.getQualifierLoc());
 		return translatedElaboratedType;
 	}
-	else if (auto templateSpecialization = type.getAs<clang::TemplateSpecializationTypeLoc>())
+	else if (auto templateSpecialization = typeLoc.getAs<clang::TemplateSpecializationTypeLoc>())
 	{
-		auto ooRef = clang_.createReference(type.getSourceRange());
+		auto ooRef = clang_.createReference(typeLoc.getSourceRange());
 		if (templateSpecialization.getNumArgs() > 0)
 			for (unsigned i = 0; i < templateSpecialization.getNumArgs(); i++)
 				ooRef->typeArguments()->append(translateTemplateArgument(templateSpecialization.getArgLoc(i)));
@@ -663,26 +663,26 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::TypeLoc t
 						clang_.createNode<OOModel::EmptyExpression>(templateSpecialization.getLAngleLoc()));
 		return ooRef;
 	}
-	else if (auto dependentTypeLoc = type.getAs<clang::DependentNameTypeLoc>())
+	else if (auto dependentTypeLoc = typeLoc.getAs<clang::DependentNameTypeLoc>())
 	{
 		auto ooRef = setReferencePrefix(clang_.createReference(dependentTypeLoc.getNameLoc()),
 												  dependentTypeLoc.getQualifierLoc());
 		if (dependentTypeLoc.getTypePtr()->castAs<clang::DependentNameType>()->getKeyword() == clang::ETK_Typename)
 		{
-			auto ooTypeName = clang_.createNode<OOModel::TypeNameOperator>(type.getSourceRange());
+			auto ooTypeName = clang_.createNode<OOModel::TypeNameOperator>(typeLoc.getSourceRange());
 			ooTypeName->setTypeExpression(ooRef);
 			return ooTypeName;
 		}
 		return ooRef;
 	}
-	else if (type.getAs<clang::InjectedClassNameTypeLoc>())
-		return clang_.createReference(type.getSourceRange());
-	else if (auto substTemplateParm = type.getAs<clang::SubstTemplateTypeParmTypeLoc>())
+	else if (typeLoc.getAs<clang::InjectedClassNameTypeLoc>())
+		return clang_.createReference(typeLoc.getSourceRange());
+	else if (auto substTemplateParm = typeLoc.getAs<clang::SubstTemplateTypeParmTypeLoc>())
 		return translateQualifiedType(substTemplateParm.getNextTypeLoc());
-	else if (auto builtIn = type.getAs<clang::BuiltinTypeLoc>())
+	else if (auto builtIn = typeLoc.getAs<clang::BuiltinTypeLoc>())
 		return translateBuiltInClangType(builtIn);
 
-	return createErrorExpression("Unsupported Type", type.getSourceRange());
+	return createErrorExpression("Unsupported Type", typeLoc.getSourceRange());
 }
 
 }

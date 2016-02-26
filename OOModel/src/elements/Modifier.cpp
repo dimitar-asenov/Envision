@@ -47,8 +47,8 @@ Modifier::Modifier(Model::Node *parent, Model::PersistentStore &store, bool)
 	modifiers_ = fromInt( store.loadIntValue() );
 }
 
-Modifier::Modifier(Modifiers m)
-: Super{nullptr}, modifiers_{m}
+Modifier::Modifier(Modifiers modifiers)
+: Super{nullptr}, modifiers_{modifiers}
 {}
 
 Modifier* Modifier::clone() const { return new Modifier{*this}; }

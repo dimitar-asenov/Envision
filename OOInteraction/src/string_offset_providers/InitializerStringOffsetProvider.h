@@ -40,7 +40,7 @@ class OOINTERACTION_API InitializerStringOffsetProvider : public StringOffsetPro
 		InitializerStringOffsetProvider(OOVisualization::VArrayInitializer* vis);
 
 		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
+		virtual void setOffset(int offset);
 
 	private:
 		OOVisualization::VArrayInitializer* vis_;

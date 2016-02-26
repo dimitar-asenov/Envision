@@ -41,7 +41,7 @@ class OOINTERACTION_API TextRendererStringOffsetProvider : public StringOffsetPr
 		TextRendererStringOffsetProvider(Visualization::TextRenderer* v);
 		virtual QString string();
 		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
+		virtual void setOffset(int offset);
 
 	private:
 		Visualization::TextRenderer* vis_;

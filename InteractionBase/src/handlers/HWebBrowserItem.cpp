@@ -40,22 +40,22 @@ HWebBrowserItem* HWebBrowserItem::instance()
 	return &h;
 }
 
-void HWebBrowserItem::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
+void HWebBrowserItem::keyPressEvent(Visualization::Item* target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F11)
 	{
-		if (auto scene = item->scene())
+		if (auto scene = target->scene())
 			for (auto view : scene->views())
 				if (dynamic_cast<Visualization::MainView*>(view))
-					view->centerOn(item);
+					view->centerOn(target);
 	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape
-				&& (!item->parent() || item->parent()->typeId() == Visualization::ViewItem::typeIdStatic()))
+				&& (!target->parent() || target->parent()->typeId() == Visualization::ViewItem::typeIdStatic()))
 	{
 		auto mainScene = Visualization::VisualizationManager::instance().mainScene();
-		QApplication::postEvent(mainScene, new Visualization::CustomSceneEvent{[=](){SAFE_DELETE_ITEM(item);}});
+		QApplication::postEvent(mainScene, new Visualization::CustomSceneEvent{[=](){SAFE_DELETE_ITEM(target);}});
 	}
-	else GenericHandler::keyPressEvent(item, event);
+	else GenericHandler::keyPressEvent(target, event);
 	// TODO: Is it OK to propagate events to parents or should we just accept all events?
 	//Propagating at least some events is necessary for updating an InfoNode
 }

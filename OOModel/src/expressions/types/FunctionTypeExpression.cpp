@@ -39,19 +39,18 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(FunctionTypeExpression)
 DEFINE_ATTRIBUTE(FunctionTypeExpression, arguments, TypedListOfExpression, false, false, true)
 DEFINE_ATTRIBUTE(FunctionTypeExpression, results, TypedListOfExpression, false, false, true)
 
-FunctionTypeExpression::FunctionTypeExpression(const QList<Expression*>& args,
-		const QList<Expression*>& res)
+FunctionTypeExpression::FunctionTypeExpression(const QList<Expression*>& arguments, const QList<Expression*>& results)
 : Super{nullptr, FunctionTypeExpression::getMetaData()}
 {
-	for (auto a : args)
+	for (auto argument : arguments)
 	{
-		Q_ASSERT(a);
-		arguments()->append(a);
+		Q_ASSERT(argument);
+		this->arguments()->append(argument);
 	}
-	for (auto r : res)
+	for (auto result : results)
 	{
-		Q_ASSERT(r);
-		results()->append(r);
+		Q_ASSERT(result);
+		this->results()->append(result);
 	}
 }
 

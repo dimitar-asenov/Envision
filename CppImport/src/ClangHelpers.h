@@ -60,7 +60,7 @@ class CPPIMPORT_API ClangHelpers
 		void setPreprocessor(const clang::Preprocessor* preprocessor);
 
 		clang::SourceLocation immediateMacroLocation(clang::SourceLocation location) const;
-		void immediateSpellingHistory(clang::SourceLocation loc, QList<clang::SourceLocation>& result) const;
+		void immediateSpellingHistory(clang::SourceLocation location, QList<clang::SourceLocation>& result) const;
 
 		QList<QString> argumentNames(const clang::MacroDirective* definition) const;
 

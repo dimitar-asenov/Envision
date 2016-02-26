@@ -52,7 +52,7 @@ class CPPIMPORT_API CppImportLogger
 							 const Reason& r, const QString& reason = {});
 
 		void primitiveTypeNotSupported(const QString& typeName);
-		void typeNotSupported(const clang::TypeLoc typeloc, const clang::SourceLocation& location);
+		void typeNotSupported(const clang::TypeLoc typeLoc, const clang::SourceLocation& location);
 
 		void unaryOpNotSupported(const clang::UnaryOperatorKind& kind);
 		void storageClassNotSupported(const clang::StorageClass& sc);

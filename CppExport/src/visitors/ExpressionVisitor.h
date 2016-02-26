@@ -50,7 +50,7 @@ class CPPEXPORT_API ExpressionVisitor
 
 		Export::SourceFragment* visit(OOModel::Expression* expression);
 
-		Export::SourceFragment* visitFunctionPointer(OOModel::PointerTypeExpression* expression,
+		Export::SourceFragment* visitFunctionPointer(OOModel::PointerTypeExpression* functionPointer,
 																	const QString& name = {});
 	private:
 		template <typename T> Export::SourceFragment* optional(T* node);

@@ -48,7 +48,7 @@ class CPPEXPORT_API CodeComposite
 		const QList<CodeUnit*>& units() const;
 		void addUnit(CodeUnit* unit);
 
-		void fragments(Export::SourceFragment*& headerFragment, Export::SourceFragment*& sourceFragment);
+		void fragments(Export::SourceFragment*& header, Export::SourceFragment*& source);
 
 		QString headerPartExtension();
 		QString sourcePartExtension();

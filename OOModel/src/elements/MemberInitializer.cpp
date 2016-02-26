@@ -37,11 +37,11 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(MemberInitializer)
 DEFINE_ATTRIBUTE(MemberInitializer, arguments, TypedListOfExpression, false, false, true)
 DEFINE_ATTRIBUTE(MemberInitializer, memberReference, Expression, false, false, true)
 
-MemberInitializer::MemberInitializer(Expression* memberRef, QList<Expression*> args)
+MemberInitializer::MemberInitializer(Expression* memberRef, QList<Expression*> arguments)
 : Super{nullptr, MemberInitializer::getMetaData()}
 {
 	setMemberReference(memberRef);
-	for (auto a : args) arguments()->append(a);
+	for (auto argument : arguments) this->arguments()->append(argument);
 }
 
 }

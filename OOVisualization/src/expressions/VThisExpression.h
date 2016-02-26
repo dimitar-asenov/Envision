@@ -40,7 +40,7 @@ OOModel::ThisExpression>>
 	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::StaticStyle)
 
 	public:
-		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
+		VThisExpression(Item* parent, NodeType* node, const StyleType *style = itemStyles().get());
 		virtual ~VThisExpression();
 
 		Visualization::Static* item() const;

@@ -40,7 +40,7 @@ OOModel::SuperExpression>>
 	ITEM_COMMON_CUSTOM_STYLENAME(VSuperExpression, Visualization::StaticStyle)
 
 	public:
-		VSuperExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
+		VSuperExpression(Item* parent, NodeType* node, const StyleType *style = itemStyles().get());
 		virtual ~VSuperExpression();
 
 		Visualization::Static* item() const;

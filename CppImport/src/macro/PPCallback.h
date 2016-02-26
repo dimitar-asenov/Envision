@@ -42,7 +42,7 @@ class CPPIMPORT_API PPCallback : public clang::PPCallbacks
 		PPCallback(MacroDefinitions& macroDefinitions, MacroExpansions& macroExpansions)
 			: macroDefinitions_{macroDefinitions}, macroExpansions_{macroExpansions} { }
 
-		virtual void MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDefinition& MD,
+		virtual void MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDefinition& md,
 										  clang::SourceRange range, const clang::MacroArgs* args) override;
 
 

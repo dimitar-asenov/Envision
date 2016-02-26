@@ -66,15 +66,15 @@ MetaDefinition* MetaCallExpression::metaDefinition()
 	return ret;
 }
 
-void MetaCallExpression::bindMetaCalls(Model::Node* n, MetaBinding* binding)
+void MetaCallExpression::bindMetaCalls(Model::Node* node, MetaBinding* binding)
 {
-	if (auto metaCall = DCast<MetaCallExpression>(n))
+	if (auto metaCall = DCast<MetaCallExpression>(node))
 		if (auto callee = DCast<ReferenceExpression>(metaCall->callee()))
 			for (auto i = 0; i < binding->mappings()->size(); i++)
 				if (callee->name() == binding->mappings()->at(i)->name())
 					callee->setName(binding->mappings()->at(i)->value()->name());
 
-	for (auto child : n->children()) bindMetaCalls(child, binding);
+	for (auto child : node->children()) bindMetaCalls(child, binding);
 }
 
 Declaration* MetaCallExpression::generatedTree()

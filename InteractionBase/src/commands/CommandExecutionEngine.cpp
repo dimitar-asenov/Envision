@@ -51,7 +51,7 @@ CommandExecutionEngine* CommandExecutionEngine::instance()
 	return &engine;
 }
 
-void CommandExecutionEngine::execute(Visualization::Item *originator, const QString& command,
+void CommandExecutionEngine::execute(Visualization::Item* originator, const QString& command,
 		const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	lastCommandResult_.clear();
@@ -141,7 +141,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	}
 }
 
-QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::Item *originator,
+QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::Item* originator,
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QList<CommandSuggestion*> result;

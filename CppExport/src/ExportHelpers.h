@@ -67,7 +67,7 @@ class CPPEXPORT_API ExportHelpers
 		static bool isSignalingDeclaration(OOModel::Declaration* declaration);
 
 		template <typename T>
-		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependencies,
+		static QList<T*> topologicalSort(QHash<T*, QSet<T*>> dependsOn,
 													std::function<T*(QList<T*>&, T*)> selector = nullptr);
 
 		enum class QualificationType { ParentClass, Using};

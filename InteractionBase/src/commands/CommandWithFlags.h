@@ -60,7 +60,7 @@ class INTERACTIONBASE_API CommandWithFlags : public Command
 
 	private:
 		void findParts(const QStringList& tokens, QString& name, QStringList& attributes,
-			bool& methodFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
+			bool& commandFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
 
 		QStringList matchingNames(Visualization::Item* source, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& nameToLookFor);
