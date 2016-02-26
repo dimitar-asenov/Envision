@@ -27,7 +27,7 @@
 #include "Symbol.h"
 
 namespace Visualization {
-ITEM_COMMON_DEFINITIONS(Symbol, "item")
+DEFINE_ITEM_COMMON(Symbol, "item")
 
 Symbol::Symbol(Item* parent, const StyleType *style) :
 Super{parent, style, style->symbol()}

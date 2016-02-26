@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VInteger, "item")
+DEFINE_ITEM_COMMON(VInteger, "item")
 
 VInteger::VInteger(Item* parent, NodeType *node, const StyleType *style) :
 	Super{parent, node, style}

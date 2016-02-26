@@ -34,7 +34,7 @@ using namespace OOVisualization;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(VReturnStatementCF, "item")
+DEFINE_ITEM_COMMON(VReturnStatementCF, "item")
 
 VReturnStatementCF::VReturnStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

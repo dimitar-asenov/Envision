@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(TextRenderer, "item")
+DEFINE_ITEM_COMMON(TextRenderer, "item")
 
 TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& text) :
 Super{parent, style}, staticText_{text}, editable_(true)

@@ -31,7 +31,7 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(PromptTextInput, "item")
+DEFINE_ITEM_COMMON(PromptTextInput, "item")
 
 PromptTextInput::PromptTextInput(Item* parent, const QString& initialCommandText,
 															  const StyleType* style)

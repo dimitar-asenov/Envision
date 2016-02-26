@@ -33,7 +33,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VFormalResult, "item")
+DEFINE_ITEM_COMMON(VFormalResult, "item")
 
 VFormalResult::VFormalResult(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

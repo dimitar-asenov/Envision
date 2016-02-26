@@ -38,7 +38,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(ZoomLabelOverlay, "item")
+DEFINE_ITEM_COMMON(ZoomLabelOverlay, "item")
 
 QHash<Item*, ZoomLabelOverlay*>& ZoomLabelOverlay::itemToOverlay()
 {

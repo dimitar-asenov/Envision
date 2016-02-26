@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VFunctionType, "item")
+DEFINE_ITEM_COMMON(VFunctionType, "item")
 
 VFunctionType::VFunctionType(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {

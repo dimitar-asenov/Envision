@@ -29,7 +29,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(IconOverlay, "item")
+DEFINE_ITEM_COMMON(IconOverlay, "item")
 
 IconOverlay::IconOverlay(Item* associatedItem, const StyleType* style)
 : Super{{associatedItem}, style}

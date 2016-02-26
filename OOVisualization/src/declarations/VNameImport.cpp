@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VNameImport, "item")
+DEFINE_ITEM_COMMON(VNameImport, "item")
 
 VNameImport::VNameImport(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}

@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(DeclarativeTest, "item")
+DEFINE_ITEM_COMMON(DeclarativeTest, "item")
 
 DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Model::Node* first, Model::Node* second,
 		Model::Node* third, Model::Node* fourth) :

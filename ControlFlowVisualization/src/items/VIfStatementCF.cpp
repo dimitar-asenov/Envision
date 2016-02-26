@@ -32,7 +32,7 @@ using namespace Model;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(VIfStatementCF, "item")
+DEFINE_ITEM_COMMON(VIfStatementCF, "item")
 
 VIfStatementCF::VIfStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

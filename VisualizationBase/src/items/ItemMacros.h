@@ -74,7 +74,7 @@ private:																																					\
  * 			The class type of this item. This determines the folder inside the root 'styles' folder that will be used to
  * 			look for this item's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
-#define ITEM_COMMON_DEFINITIONS( ItemClass, classType )																					\
+#define DEFINE_ITEM_COMMON( ItemClass, classType )																					\
 DEFINE_TYPE_ID_DERIVED(ItemClass, #ItemClass, )																								\
 																																							\
 void ItemClass::initType() { Super::initType(); }																							\

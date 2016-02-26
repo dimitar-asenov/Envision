@@ -49,7 +49,7 @@ constexpr int COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT = 50;
  */
 constexpr int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
-ITEM_COMMON_DEFINITIONS(PromptShell, "item")
+DEFINE_ITEM_COMMON(PromptShell, "item")
 
 PromptShell::PromptShell(const QString& initialCommandText,
 													Prompt::PromptOptions options,

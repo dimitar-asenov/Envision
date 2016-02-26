@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VExplicitTemplateInstantiation, "item")
+DEFINE_ITEM_COMMON(VExplicitTemplateInstantiation, "item")
 
 VExplicitTemplateInstantiation::VExplicitTemplateInstantiation(Item* parent, NodeType* node, const StyleType* style)
 : Super{parent, node, style}

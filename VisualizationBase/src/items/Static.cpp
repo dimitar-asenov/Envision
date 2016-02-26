@@ -30,7 +30,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(Static, "item")
+DEFINE_ITEM_COMMON(Static, "item")
 
 QMap<QString, Static::staticItemConstructorType> Static::itemClasses_;
 QMap<QString, Static::staticItemStyleConstructorType> Static::itemStyles_;

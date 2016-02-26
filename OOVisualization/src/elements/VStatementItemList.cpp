@@ -28,7 +28,7 @@
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStatementItemList, "item")
+DEFINE_ITEM_COMMON(VStatementItemList, "item")
 
 VStatementItemList::VStatementItemList(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

@@ -27,7 +27,7 @@
 #include "RootItem.h"
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(RootItem, "item")
+DEFINE_ITEM_COMMON(RootItem, "item")
 
 RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel)
 : Super{nullptr, node, itemStyles().get()}

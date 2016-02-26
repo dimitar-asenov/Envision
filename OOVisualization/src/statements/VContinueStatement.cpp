@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VContinueStatement, "item")
+DEFINE_ITEM_COMMON(VContinueStatement, "item")
 
 VContinueStatement::VContinueStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

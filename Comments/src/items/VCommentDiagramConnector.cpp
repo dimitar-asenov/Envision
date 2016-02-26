@@ -35,7 +35,7 @@ using namespace Visualization;
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
+DEFINE_ITEM_COMMON(VCommentDiagramConnector, "item")
 
 VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node)
 	: Super{parent, node, itemStyles().get()}

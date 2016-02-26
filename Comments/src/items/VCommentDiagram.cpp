@@ -37,7 +37,7 @@ using namespace Visualization;
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentDiagram, "item")
+DEFINE_ITEM_COMMON(VCommentDiagram, "item")
 
 VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 	: Super{parent, node, itemStyles().get()}

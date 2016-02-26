@@ -36,7 +36,7 @@ using namespace OOModel;
 
 namespace CustomMethodCall {
 
-ITEM_COMMON_DEFINITIONS(FindMethodVis, "item")
+DEFINE_ITEM_COMMON(FindMethodVis, "item")
 
 FindMethodVis::FindMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

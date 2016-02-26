@@ -35,7 +35,7 @@ using namespace OOModel;
 
 namespace CustomMethodCall {
 
-ITEM_COMMON_DEFINITIONS(InsertMethodVis, "item")
+DEFINE_ITEM_COMMON(InsertMethodVis, "item")
 
 InsertMethodVis::InsertMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

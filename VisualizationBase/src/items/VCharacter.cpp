@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VCharacter, "item")
+DEFINE_ITEM_COMMON(VCharacter, "item")
 
 VCharacter::VCharacter(Item* parent, NodeType *node, const StyleType *style) : Super{parent, node, style}
 {

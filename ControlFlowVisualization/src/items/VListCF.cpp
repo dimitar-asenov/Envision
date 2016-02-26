@@ -31,7 +31,7 @@ using namespace Model;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS( VListCF, "item" )
+DEFINE_ITEM_COMMON( VListCF, "item" )
 
 VListCF::VListCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

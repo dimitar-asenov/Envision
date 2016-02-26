@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS( Layout, "layout" )
+DEFINE_ITEM_COMMON( Layout, "layout" )
 
 Layout::Layout(Item* parent, const StyleType* style) :
 Super{parent, style}

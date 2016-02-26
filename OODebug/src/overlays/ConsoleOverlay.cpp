@@ -34,7 +34,7 @@
 
 namespace OODebug {
 
-ITEM_COMMON_DEFINITIONS(ConsoleOverlay, "item")
+DEFINE_ITEM_COMMON(ConsoleOverlay, "item")
 
 ConsoleOverlay::ConsoleOverlay(Visualization::Item* associatedItem, const StyleType* style)
 	: Super{{associatedItem}, style}

@@ -32,7 +32,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VExpressionStatement, "item")
+DEFINE_ITEM_COMMON(VExpressionStatement, "item")
 
 VExpressionStatement::VExpressionStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SVGIcon, "icon")
+DEFINE_ITEM_COMMON(SVGIcon, "icon")
 
 SVGIcon::SVGIcon(Item* parent, const QString& iconStyleName) :
 Super{parent, itemStyles().get(iconStyleName)}

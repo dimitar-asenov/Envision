@@ -28,7 +28,7 @@
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentText, "item")
+DEFINE_ITEM_COMMON(VCommentText, "item")
 
 VCommentText::VCommentText(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {

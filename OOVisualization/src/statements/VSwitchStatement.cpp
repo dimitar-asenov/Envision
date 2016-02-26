@@ -39,7 +39,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VSwitchStatement, "item")
+DEFINE_ITEM_COMMON(VSwitchStatement, "item")
 
 VSwitchStatement::VSwitchStatement(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}

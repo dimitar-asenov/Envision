@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(BoxOverlay, "item")
+DEFINE_ITEM_COMMON(BoxOverlay, "item")
 
 BoxOverlay::BoxOverlay(Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}
 {

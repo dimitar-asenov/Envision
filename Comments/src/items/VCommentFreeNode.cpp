@@ -35,7 +35,7 @@ using namespace Visualization;
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentFreeNode, "item")
+DEFINE_ITEM_COMMON(VCommentFreeNode, "item")
 
 VCommentFreeNode::VCommentFreeNode(Item* parent, NodeType* node)
 	: Super{parent, node, itemStyles().get()}, content_{nullptr}

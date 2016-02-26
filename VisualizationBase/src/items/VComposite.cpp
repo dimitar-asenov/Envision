@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VComposite, "item")
+DEFINE_ITEM_COMMON(VComposite, "item")
 
 VComposite::VComposite(Item* parent, NodeType* node, const StyleType* style)
 	: Super{parent, node, style}, expanded_(style->expanded())

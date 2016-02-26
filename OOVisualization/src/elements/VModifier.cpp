@@ -31,7 +31,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VModifier, "item")
+DEFINE_ITEM_COMMON(VModifier, "item")
 
 VModifier::VModifier(Item* parent, NodeType* vis, const StyleType* style) : Super{parent, vis, style}
 {}

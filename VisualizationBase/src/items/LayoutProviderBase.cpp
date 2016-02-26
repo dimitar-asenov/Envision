@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(LayoutProviderBase, "layout")
+DEFINE_ITEM_COMMON(LayoutProviderBase, "layout")
 
 LayoutProviderBase::LayoutProviderBase(Item* parent, const StyleType *style, Layout* layout) :
 Super{parent, style}, layout_{layout}

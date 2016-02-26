@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VKeywordMethodCall, "item")
+DEFINE_ITEM_COMMON(VKeywordMethodCall, "item")
 
 VKeywordMethodCall::VKeywordMethodCall(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

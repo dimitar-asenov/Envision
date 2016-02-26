@@ -32,7 +32,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VCommentStatementItem, "item")
+DEFINE_ITEM_COMMON(VCommentStatementItem, "item")
 
 VCommentStatementItem::VCommentStatementItem(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

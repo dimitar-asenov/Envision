@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VEmptyExpression, "item")
+DEFINE_ITEM_COMMON(VEmptyExpression, "item")
 
 VEmptyExpression::VEmptyExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

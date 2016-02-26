@@ -43,7 +43,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VDeclarationConstantSz, "item")
+DEFINE_ITEM_COMMON(VDeclarationConstantSz, "item")
 
 VDeclarationConstantSz::VDeclarationConstantSz(Item* parent, NodeType* node, const StyleType* style)
 : Super{parent, node, style}

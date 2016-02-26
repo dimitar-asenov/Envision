@@ -37,7 +37,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VMetaCallExpression, "item")
+DEFINE_ITEM_COMMON(VMetaCallExpression, "item")
 
 VMetaCallExpression::VMetaCallExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style}

@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(TestBox, "item")
+DEFINE_ITEM_COMMON(TestBox, "item")
 
 TestBox::TestBox(Item* parent, NodeType* node): Super{parent, itemStyles().get(), node->label()}, node_{node}
 {}

@@ -33,7 +33,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStringLiteral, "item")
+DEFINE_ITEM_COMMON(VStringLiteral, "item")
 
 VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style)
 : Super{parent, literal, style} {}

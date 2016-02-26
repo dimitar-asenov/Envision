@@ -40,7 +40,7 @@ using namespace Visualization;
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(ActionPrompt, "item")
+DEFINE_ITEM_COMMON(ActionPrompt, "item")
 
 ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const StyleType* style) :
 	Super{nullptr, style},

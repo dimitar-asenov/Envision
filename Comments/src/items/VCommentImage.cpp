@@ -30,7 +30,7 @@
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentImage, "item")
+DEFINE_ITEM_COMMON(VCommentImage, "item")
 
 const QSize VCommentImage::errorSize_{400, 400};
 

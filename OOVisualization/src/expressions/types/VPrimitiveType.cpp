@@ -34,7 +34,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VPrimitiveType, "item")
+DEFINE_ITEM_COMMON(VPrimitiveType, "item")
 
 VPrimitiveType::VPrimitiveType(Item* parent, NodeType* node, const StyleType* style) :
 	Super{parent, node, style},

@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
+DEFINE_ITEM_COMMON(ViewSwitcherMenu, "item")
 
 void ViewSwitcherMenu::show(Visualization::Item* target)
 {

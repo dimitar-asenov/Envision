@@ -33,7 +33,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VCharacterLiteral, "item")
+DEFINE_ITEM_COMMON(VCharacterLiteral, "item")
 
 VCharacterLiteral::VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style)
 : Super{parent, literal, style} {}

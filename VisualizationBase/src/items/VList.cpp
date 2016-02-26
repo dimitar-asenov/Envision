@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VList, "item")
+DEFINE_ITEM_COMMON(VList, "item")
 
 VList::VList(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}

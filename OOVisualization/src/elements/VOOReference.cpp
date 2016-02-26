@@ -27,7 +27,7 @@
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VOOReference, "item")
+DEFINE_ITEM_COMMON(VOOReference, "item")
 
 VOOReference::VOOReference(Item* parent, NodeType* node, const StyleType* style)
 : Super{parent, node, style}

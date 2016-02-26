@@ -40,7 +40,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VForEachStatement, "item")
+DEFINE_ITEM_COMMON(VForEachStatement, "item")
 
 VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleType* style)
 : Super{parent, node, style} {}

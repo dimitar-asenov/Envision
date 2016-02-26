@@ -31,7 +31,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VFloatLiteral, "item")
+DEFINE_ITEM_COMMON(VFloatLiteral, "item")
 
 VFloatLiteral::VFloatLiteral(Item* parent, NodeType *node, const StyleType *style) :
 	Super{parent, node, style},

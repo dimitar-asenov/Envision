@@ -38,7 +38,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
+DEFINE_ITEM_COMMON(VIfStatement, "item")
 
 VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}

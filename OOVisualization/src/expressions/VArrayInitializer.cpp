@@ -35,7 +35,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VArrayInitializer, "item")
+DEFINE_ITEM_COMMON(VArrayInitializer, "item")
 
 VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}

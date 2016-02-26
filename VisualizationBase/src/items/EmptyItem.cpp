@@ -29,7 +29,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(EmptyItem, "item")
+DEFINE_ITEM_COMMON(EmptyItem, "item")
 
 EmptyItem::EmptyItem(Item* parent, const StyleType* style) : Super{parent, style}
 {
