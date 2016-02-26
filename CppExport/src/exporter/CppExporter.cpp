@@ -101,84 +101,86 @@ QString CppExporter::codeUnitNameQualifier(Model::Node* node)
 void CppExporter::units(Model::Node* current, QList<CodeUnit*>& result,
 								QHash<QString, QString>& mergeMap)
 {
-	if (!DCast<OOModel::Project>(current))
+	if (DCast<OOModel::Project>(current))
 	{
-		if (auto ooModule = DCast<OOModel::Module>(current))
-		{
-			// ignore the "ExternalMacro" module
-			if (ooModule->name() == "ExternalMacro") return;
-		}
-		else if (auto ooNameImport = DCast<OOModel::NameImport>(current))
-		{
-			auto referenceExpression = DCast<OOModel::ReferenceExpression>(ooNameImport->importedName());
-			Q_ASSERT(referenceExpression);
+		// Directly explore children of projects
+	}
+	else if (auto ooModule = DCast<OOModel::Module>(current))
+	{
+		// ignore the "ExternalMacro" module but explore children of other modules
+		if (ooModule->name() == "ExternalMacro") return;
+	}
+	else if (auto ooNameImport = DCast<OOModel::NameImport>(current))
+	{
+		auto referenceExpression = DCast<OOModel::ReferenceExpression>(ooNameImport->importedName());
+		Q_ASSERT(referenceExpression);
 
-			if (!referenceExpression->target() || !DCast<OOModel::Project>(referenceExpression->target()))
-				result.append(new CodeUnit{codeUnitNameQualifier(referenceExpression) +
-														referenceExpression->name(),
-													current});
-			return;
-		}
-		else if (auto ooExplicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(current))
-		{
-			result.append(new CodeUnit{
-					codeUnitNameQualifier(ooExplicitTemplateInstantiation) +
-						OOInteraction::StringComponents::stringForNode(ooExplicitTemplateInstantiation->instantiatedClass()),
-					current});
-			return;
-		}
-		else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))
-		{
-			auto codeUnitName = codeUnitNameQualifier(ooDeclaration) + ooDeclaration->name();
-			if (auto method = DCast<OOModel::Method>(ooDeclaration))
-				for (auto argument : *method->arguments())
-					codeUnitName += OOInteraction::StringComponents::stringForNode(argument->typeExpression());
+		if (!referenceExpression->target() || !DCast<OOModel::Project>(referenceExpression->target()))
+			result.append(new CodeUnit{codeUnitNameQualifier(referenceExpression) +
+													referenceExpression->name(),
+												current});
+		return;
+	}
+	else if (auto ooExplicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(current))
+	{
+		result.append(new CodeUnit{
+				codeUnitNameQualifier(ooExplicitTemplateInstantiation) +
+					OOInteraction::StringComponents::stringForNode(ooExplicitTemplateInstantiation->instantiatedClass()),
+				current});
+		return;
+	}
+	else if (auto ooDeclaration = DCast<OOModel::Declaration>(current))
+	{
+		auto codeUnitName = codeUnitNameQualifier(ooDeclaration) + ooDeclaration->name();
+		if (auto method = DCast<OOModel::Method>(ooDeclaration))
+			for (auto argument : *method->arguments())
+				codeUnitName += OOInteraction::StringComponents::stringForNode(argument->typeExpression());
 
-			result.append(new CodeUnit{codeUnitName, current});
+		result.append(new CodeUnit{codeUnitName, current});
 
-			for (auto subDeclaration : *ooDeclaration->subDeclarations())
-				if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(subDeclaration))
+
+		for (auto subDeclaration : *ooDeclaration->subDeclarations())
+		{
+			auto addSubDeclarationAsTopLevel = [&](QString tag, QString name)
+			{
+				// The name this code unit depends on the name of the composite where it should end up.
+				auto compositeName = mergeMap.value(codeUnitName, codeUnitName);
+
+				auto subDeclarationCodeUnitName = compositeName + '|' + tag + ':' + name;
+
+				// Avoid creating multiple code units for the same sub declaration.
+				// This assumes that the config file does not already have these sub declarations specified
+				if (!mergeMap.contains(subDeclarationCodeUnitName))
 				{
-					auto typedListCodeUnitName = codeUnitName + "|ExplicitTemplateInstantiationInClass";
-
-					auto it = mergeMap.find(codeUnitName);
-					if (it != mergeMap.end())
-						mergeMap.insert(typedListCodeUnitName, *it);
-					else
-						mergeMap.insert(typedListCodeUnitName, codeUnitName);
-
-					result.append(new CodeUnit{typedListCodeUnitName, explicitTemplateInstantiation});
+					mergeMap.insert(subDeclarationCodeUnitName, compositeName);
+					result.append(new CodeUnit{subDeclarationCodeUnitName, subDeclaration});
 				}
-				else if (auto nameImport = DCast<OOModel::NameImport>(subDeclaration))
-				{
-					if (nameImport->importAll())
-					{
-						auto nameImportCodeUnitName = codeUnitName + "|NameImportInClass";
+			};
 
-						auto it = mergeMap.find(codeUnitName);
-						if (it != mergeMap.end())
-							mergeMap.insert(nameImportCodeUnitName, *it);
-						else
-							mergeMap.insert(nameImportCodeUnitName, codeUnitName);
-
-						result.append(new CodeUnit{nameImportCodeUnitName, nameImport});
-					}
-				}
-			return;
+			if (auto explicitTemplateInstantiation = DCast<OOModel::ExplicitTemplateInstantiation>(subDeclaration))
+				addSubDeclarationAsTopLevel("explicitInstantiation",
+					OOInteraction::StringComponents::stringForNode(explicitTemplateInstantiation->instantiatedClass()));
+			else if (auto nameImport = DCast<OOModel::NameImport>(subDeclaration))
+			{
+				if (nameImport->importAll())
+					addSubDeclarationAsTopLevel("using",
+							OOInteraction::StringComponents::stringForNode(nameImport->importedName()));
+			}
 		}
-		else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
-		{
-			auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
-			Q_ASSERT(ooCalleeReference);
+		return;
+	}
+	else if (auto ooMetaCall = DCast<OOModel::MetaCallExpression>(current))
+	{
+		auto ooCalleeReference = DCast<OOModel::ReferenceExpression>(ooMetaCall->callee());
+		Q_ASSERT(ooCalleeReference);
 
-			QStringList arguments;
-			for (auto argument : *ooMetaCall->arguments())
-				arguments.append(OOInteraction::StringComponents::stringForNode(argument));
+		QStringList arguments;
+		for (auto argument : *ooMetaCall->arguments())
+			arguments.append(OOInteraction::StringComponents::stringForNode(argument));
 
-			result.append(new CodeUnit{codeUnitNameQualifier(ooCalleeReference) + ooCalleeReference->name() +
-												"(" + arguments.join(",") + ")", current});
-			return;
-		}
+		result.append(new CodeUnit{codeUnitNameQualifier(ooCalleeReference) + ooCalleeReference->name() +
+											"(" + arguments.join(",") + ")", current});
+		return;
 	}
 
 	for (auto child : current->children())
