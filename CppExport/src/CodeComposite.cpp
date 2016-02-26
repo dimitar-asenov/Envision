@@ -159,13 +159,12 @@ Export::CompositeFragment* CodeComposite::printHardDependencies(CodeUnitPart* (C
 	return fragment;
 }
 
-QSet<Model::Node*> CodeComposite::calculateIgnoredSoftDependencies(CodeUnitPart* (CodeUnit::*part) ())
+QSet<Model::Node*> CodeComposite::softDependenciesAlreadyInHeader()
 {
 	QSet<Model::Node*> result;
-	if ((units().first()->*part)() == units().first()->sourcePart())
-		for (auto unit : units())
-			for (auto softDependency : unit->headerPart()->softDependencies())
-				result.insert(softDependency.node_);
+	for (auto unit : units())
+		for (auto softDependency : unit->headerPart()->softDependencies())
+			result.insert(softDependency.node_);
 	return result;
 }
 
@@ -261,7 +260,9 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 
 	// calculate forward declarations which should be ignored
 	// ignore all forward declarations in the source part which also exist in the header part
-	auto ignoredSoftDependencies = calculateIgnoredSoftDependencies(part);
+	QSet<Model::Node*> ignoredSoftDependencies;
+	if ((units.first()->*part)() == units.first()->sourcePart())
+		ignoredSoftDependencies = softDependenciesAlreadyInHeader();
 
 	// calculate the latest soft dependency fragment a soft dependency has to be declared
 	QHash<OOModel::Class*, int> softDependencyToIndexMap;
