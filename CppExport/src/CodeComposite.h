@@ -78,6 +78,31 @@ class CPPEXPORT_API CodeComposite
 							std::function<QSet<CodeUnitPart*>(CodeUnitPart*)> dependencies);
 		Export::CompositeFragment* addNamespaceFragment(Export::CompositeFragment* parentFragment,
 																		OOModel::Module* namespaceNode);
+
+		/**
+		 * calculate code units in this composite which have non empty 'part'
+		 */
+		QList<CodeUnit*> nonEmptyUnits(CodeUnitPart*(CodeUnit::*part)());
+
+		/**
+		 * calculate all hard dependencies of this composite 'part'
+		 */
+		QSet<CodeComposite*> calculateDependencies(CodeUnitPart* (CodeUnit::*part)());
+
+		Export::CompositeFragment* printHardDependencies(CodeUnitPart* (CodeUnit::*part)(),
+																		 QSet<CodeComposite*> hardDependencies);
+
+		/**
+		 * all forward declarations in header parts of this composite's units.
+		 */
+		QSet<Model::Node*> softDependenciesInHeaderParts();
+
+		/**
+		 * group forward declarations by namespace and prints them in fragment
+		 */
+		void printRemainingSoftDependencies(QList<OOModel::Class*> remainingSoftDependencies,
+														Export::CompositeFragment* fragment);
+		Export::CompositeFragment* printForwardDeclaration(OOModel::Class* classs);
 };
 
 inline const QString& CodeComposite::name() const { return name_; }
