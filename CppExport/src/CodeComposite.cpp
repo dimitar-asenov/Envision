@@ -271,7 +271,7 @@ Export::SourceFragment* CodeComposite::partFragment(CodeUnitPart* (CodeUnit::*pa
 																		  (unit->*part)()->softDependencies()))
 			if (auto classs = DCast<OOModel::Class>(softDependency.node_))
 			{
-				if (classs != unit->node() && !ignoredSoftDependencies.contains(classs))
+				if (!ignoredSoftDependencies.contains(classs))
 				{
 					auto it = softDependencyToIndexMap.find(classs);
 					if (it != softDependencyToIndexMap.end())
