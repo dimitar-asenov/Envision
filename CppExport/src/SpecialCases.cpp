@@ -101,11 +101,6 @@ bool SpecialCases::hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefini
 	return false;
 }
 
-bool SpecialCases::isMainMethod(OOModel::Method* method)
-{
-	return method && method->symbolName() == "main";
-}
-
 bool SpecialCases::isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpression* parentReference,
 																		  OOModel::ReferenceExpression*)
 {
@@ -240,6 +235,14 @@ bool SpecialCases::isExternalNameOnlyDependency(OOModel::ReferenceExpression* re
 												|| reference->name() == "git_repository"
 												|| reference->name() == "git_signature"
 												|| reference->name() == "git_tree" );
+}
+
+bool SpecialCases::printInCppOnly(Model::Node* node)
+{
+	if (auto method = DCast<OOModel::Method>(node))
+		return method->symbolName() == "main";
+
+	return false;
 }
 
 }

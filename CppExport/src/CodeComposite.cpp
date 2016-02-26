@@ -154,7 +154,7 @@ Export::CompositeFragment* CodeComposite::printHardDependencies(CodeUnitPart* (C
 			 compositeDependency->isTemplateImplementationSeparateFile() && !isTemplateImplementationSeparateFile())
 			*fragment << "#include \"" + relativePath(compositeDependency) + ".hpp\"\n";
 		else if (compositeDependency->name().endsWith("_api") ||
-					!compositeDependency->units().first()->hasNoHeaderPart())
+					compositeDependency->units().first()->headerPart()->fragment())
 			*fragment << "#include \"" + relativePath(compositeDependency) + ".h\"\n";
 	return fragment;
 }
@@ -415,10 +415,24 @@ void CodeComposite::sortUnits(CodeUnitPart* (CodeUnit::*part) (),
 
 void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFragment*& source)
 {
-	sortUnits(&CodeUnit::headerPart, [](CodeUnitPart* p) { return p->dependencies(); });
-	header = headerFragment();
-	sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->dependenciesWithinFile(units()); });
-	source = sourceFragment();
+	header = {};
+	source = {};
+
+	auto noHeader = nonEmptyUnits(&CodeUnit::headerPart).isEmpty();
+
+	if (noHeader)
+	{
+		sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->dependencies(); });
+		source = sourceFragment();
+	}
+	else
+	{
+		sortUnits(&CodeUnit::headerPart, [](CodeUnitPart* p) { return p->dependencies(); });
+		header = headerFragment();
+		sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->dependenciesWithinFile(units()); });
+		source = sourceFragment();
+	}
+
 }
 
 }

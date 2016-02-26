@@ -34,6 +34,10 @@
 
 #include "OOModel/src/declarations/Module.h"
 
+namespace OOModel {
+	class Declaration;
+}
+
 namespace CppExport {
 
 class CodeComposite;
@@ -56,17 +60,16 @@ class CPPEXPORT_API CodeUnit
 
 		OOModel::Module* nameSpace();
 
-		bool hasNoHeaderPart();
-
 		bool isTemplateImplementationSeparateFile();
 
 	private:
 		QString name_;
 		Model::Node* node_{};
 		CodeComposite* composite_{};
-		bool hasNoHeaderPart_{};
 		CodeUnitPart headerPart_{this};
 		CodeUnitPart sourcePart_{this};
+
+		bool printInCppOnly(OOModel::Declaration* declaration) const;
 };
 
 inline const QString& CodeUnit::name() const { return name_; }
@@ -76,7 +79,6 @@ inline void CodeUnit::setComposite(CodeComposite* composite) { composite_ = comp
 inline CodeUnitPart* CodeUnit::headerPart() { return &headerPart_; }
 inline CodeUnitPart* CodeUnit::sourcePart() { return &sourcePart_; }
 inline OOModel::Module* CodeUnit::nameSpace() { return ExportHelpers::parentNamespaceModule(node()); }
-inline bool CodeUnit::hasNoHeaderPart() { return hasNoHeaderPart_; }
 
 inline bool CodeUnit::isTemplateImplementationSeparateFile()
 { return Config::instance().separateTemplateImplementationSet().contains(name_); }

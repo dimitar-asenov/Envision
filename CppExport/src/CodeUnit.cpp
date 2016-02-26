@@ -45,13 +45,6 @@ namespace CppExport {
 CodeUnit::CodeUnit(QString name, Model::Node* node) : name_{name}, node_{node}
 {
 	Q_ASSERT(!name.isEmpty());
-
-	auto method = DCast<OOModel::Method>(node);
-
-	if (method)
-		hasNoHeaderPart_ = SpecialCases::isMainMethod(method)
-				|| ( method->firstAncestorOfType<OOModel::Class>() == nullptr
-					  && method->modifiers()->isSet(OOModel::Modifier::Static) );
 }
 
 void CodeUnit::calculateSourceFragments()
@@ -96,7 +89,7 @@ void CodeUnit::calculateSourceFragments()
 	{
 		if (method->typeArguments()->isEmpty() && !method->modifiers()->isSet(OOModel::Modifier::Inline))
 		{
-			if (!hasNoHeaderPart_)
+			if (!printInCppOnly(method))
 			{
 				CppPrintContext headerPartPrintContext{printContextDeclaration, CppPrintContext::IsHeaderPart};
 				headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(method));
@@ -106,7 +99,7 @@ void CodeUnit::calculateSourceFragments()
 				 !method->modifiers()->isSet(OOModel::Modifier::Deleted))
 			{
 				CppPrintContext::Options printContextOptions = CppPrintContext::PrintMethodBody;
-				if (hasNoHeaderPart_) printContextOptions |= CppPrintContext::PrintDeclarationCommentWithMethodBody;
+				if (printInCppOnly(method)) printContextOptions |= CppPrintContext::PrintDeclarationCommentWithMethodBody;
 
 				CppPrintContext printContext{printContextDeclaration, printContextOptions};
 				sourcePart()->setFragment(DeclarationVisitor{printContext}.visit(method));
@@ -121,14 +114,14 @@ void CodeUnit::calculateSourceFragments()
 	}
 	else if (auto variableDeclaration = DCast<OOModel::VariableDeclaration>(node()))
 	{
-		if (variableDeclaration->firstAncestorOfType<OOModel::Class>())
+		if (printInCppOnly(variableDeclaration))
+			sourcePart()->setFragment(DeclarationVisitor{variableDeclaration}.visit(variableDeclaration));
+		else
 		{
 			CppPrintContext headerPartPrintContext{variableDeclaration, CppPrintContext::IsHeaderPart};
 			headerPart()->setFragment(DeclarationVisitor{headerPartPrintContext}.visit(variableDeclaration));
 			sourcePart()->setFragment(DeclarationVisitor{printContextDeclaration}.visit(variableDeclaration));
 		}
-		else
-			sourcePart()->setFragment(DeclarationVisitor{variableDeclaration}.visit(variableDeclaration));
 	}
 	else if (auto typeAlias = DCast<OOModel::TypeAlias>(node()))
 	{
@@ -183,6 +176,16 @@ void CodeUnit::calculateSourceFragments()
 	}
 	else
 		Q_ASSERT(false);
+}
+
+bool CodeUnit::printInCppOnly(OOModel::Declaration* declaration) const
+{
+	if (declaration->modifiers()->isSet(OOModel::Modifier::Static) &&
+		 declaration->firstAncestorOfType<OOModel::Class>() == nullptr &&
+		 (DCast<OOModel::Method>(declaration) || DCast<OOModel::Field>(declaration)))
+	return true;
+
+	return SpecialCases::printInCppOnly(declaration);
 }
 
 void CodeUnit::calculateDependencies(QList<CodeUnit*>& allUnits)

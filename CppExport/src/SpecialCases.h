@@ -28,6 +28,10 @@
 
 #include "cppexport_api.h"
 
+namespace Model {
+	class Node;
+}
+
 namespace OOModel
 {
 	class Class;
@@ -89,8 +93,6 @@ class CPPEXPORT_API SpecialCases
 
 		static bool hasTemplatePrefixArgument(OOModel::MetaDefinition* metaDefinition);
 
-		static bool isMainMethod(OOModel::Method* method);
-
 		static bool isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpression* parentReference,
 																		 OOModel::ReferenceExpression* argumentReference);
 
@@ -104,6 +106,8 @@ class CPPEXPORT_API SpecialCases
 																				  bool isSourceFile);
 
 		static bool isExternalNameOnlyDependency(OOModel::ReferenceExpression* reference);
+
+		static bool printInCppOnly(Model::Node* node);
 };
 
 }
