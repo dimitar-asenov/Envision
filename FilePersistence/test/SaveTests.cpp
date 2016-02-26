@@ -34,6 +34,10 @@
 
 using namespace Model;
 
+namespace Model {
+	class PersistentStore;
+}
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API SaveRootOnly

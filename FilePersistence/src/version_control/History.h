@@ -25,15 +25,16 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
-#include "CommitGraph.h"
-
-#include "../simple/GenericNode.h"
+#include "../filepersistence_api.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
 class GitRepository;
 class Diff;
+class CommitGraph;
+class GenericTree;
+struct CommitGraphItem;
 
 class FILEPERSISTENCE_API History
 {

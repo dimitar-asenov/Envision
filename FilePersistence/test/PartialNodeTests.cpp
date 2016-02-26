@@ -35,6 +35,10 @@
 
 using namespace Model;
 
+namespace Model {
+	class PersistentStore;
+}
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API LoadingPartialList
@@ -46,7 +50,7 @@ class FILEPERSISTENCE_API LoadingPartialList
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
-	Model::TreeManager manager;
+	TreeManager manager;
 	manager.load(store, "partial", true);
 	TestNodes::PartialList* root = DCast<TestNodes::PartialList> (manager.root());
 	CHECK_CONDITION(root != nullptr);
@@ -70,7 +74,7 @@ class FILEPERSISTENCE_API LoadingFullList
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
-	Model::TreeManager manager;
+	TreeManager manager;
 	manager.load(store, "partial", false);
 	TestNodes::PartialList* root = DCast<TestNodes::PartialList> (manager.root());
 	CHECK_CONDITION(root != nullptr);

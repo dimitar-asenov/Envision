@@ -27,9 +27,11 @@
 #pragma once
 
 #include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
 
 namespace FilePersistence {
+
+class ChangeDependencyGraph;
+class GenericTree;
 
 using LinkedChanges = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
 
@@ -63,7 +65,7 @@ inline LinkedChanges newLinkedChanges() { return std::make_shared<QSet<std::shar
  * Creates and returns a new LinkedChanges object that is a deep copy of \a changesToCopy.
  * Nodes pointed to by changes in the returned object are allocated in \a tree.
  */
-LinkedChanges copyLinkedChanges(const LinkedChanges& changesToCopy,
+LinkedChanges FILEPERSISTENCE_API copyLinkedChanges(const LinkedChanges& changesToCopy,
 										  const QSet<const std::shared_ptr<const ChangeDescription>>& oldChangesOfA,
 										  QSet<const std::shared_ptr<const ChangeDescription>>& newChangesOfA,
 										  std::shared_ptr<GenericTree>& tree);

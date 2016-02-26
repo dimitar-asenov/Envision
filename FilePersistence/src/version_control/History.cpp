@@ -28,6 +28,9 @@
 
 #include "GitRepository.h"
 #include "ChangeDescription.h"
+#include "CommitGraph.h"
+#include "../simple/GenericTree.h"
+#include "../simple/GenericNode.h"
 
 #include "../simple/Parser.h"
 

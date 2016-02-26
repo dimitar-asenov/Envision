@@ -33,6 +33,10 @@
 
 using namespace Model;
 
+namespace Model {
+	class PersistentStore;
+}
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API LoadRootOnly
@@ -45,7 +49,7 @@ class FILEPERSISTENCE_API LoadRootOnly
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
-	Model::TreeManager manager;
+	TreeManager manager;
 	manager.load(store, "rootOnly", false);
 	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
@@ -68,7 +72,7 @@ class FILEPERSISTENCE_API LoadModeNodesSingleUnitOnly
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
-	Model::TreeManager manager;
+	TreeManager manager;
 	manager.load(store, "2Children", false);
 	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
 
@@ -97,7 +101,7 @@ class FILEPERSISTENCE_API LoadMultipleUnits
 	s->setBaseFolder(":/FilePersistence/test/persisted");
 	store = s;
 
-	Model::TreeManager manager;
+	TreeManager manager;
 
 	manager.load(store, "units", false);
 	TestNodes::BinaryNode* root = DCast<TestNodes::BinaryNode> (manager.root());
