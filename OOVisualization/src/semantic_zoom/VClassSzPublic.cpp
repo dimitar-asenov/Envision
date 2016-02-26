@@ -50,7 +50,6 @@ VClassSzPublic::VClassSzPublic(Item* parent, NodeType* node, const StyleType* st
 
 void VClassSzPublic::determineChildren()
 {
-	qDebug() << "here";
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
 }
