@@ -88,4 +88,4 @@ add_library(CppImport SHARED
 )
 
 target_link_libraries(CppImport ${clangLibs_} ${clangDependencies_})
-envision_plugin(CppImport OOInteraction)
+envision_plugin(CppImport OOInteraction CppExport)
