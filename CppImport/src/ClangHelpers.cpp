@@ -334,7 +334,7 @@ void ClangHelpers::exportMergeMapToJson(QString filename)
 				Q_ASSERT(false);
 			}
 		}
-		else
+		else if (unit->name() != nodeFilename)
 			generatedExportedMap.insert(unit->name(), nodeFilename);
 	}
 
