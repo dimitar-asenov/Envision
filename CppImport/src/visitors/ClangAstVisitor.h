@@ -124,8 +124,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
 
-		QHash<QString, QSet<QString>> projectIncludes_;
-
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
 		ClangHelpers clang_;

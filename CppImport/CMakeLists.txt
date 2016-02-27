@@ -56,7 +56,6 @@ add_library(CppImport SHARED
 	src/EnvisionToClangMap.h
 	src/macro/NodeToCloneMap.h
 	src/Comment.h
-	src/IncludesPPCallback.h
 	src/SpecialCases.h
 	src/CppImportException.cpp
 	test/SimpleTest.cpp
@@ -85,7 +84,6 @@ add_library(CppImport SHARED
 	src/EnvisionToClangMap.cpp
 	src/macro/NodeToCloneMap.cpp
 	src/Comment.cpp
-	src/IncludesPPCallback.cpp
 	src/SpecialCases.cpp
 )
 

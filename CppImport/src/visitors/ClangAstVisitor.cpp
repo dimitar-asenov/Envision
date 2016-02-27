@@ -28,7 +28,6 @@
 #include "ExpressionVisitor.h"
 #include "../CppImportUtilities.h"
 #include "TemplateArgumentVisitor.h"
-#include "../IncludesPPCallback.h"
 
 #include <clang/AST/Comment.h>
 
@@ -65,12 +64,6 @@ void ClangAstVisitor::setSourceManagerAndPreprocessor(const clang::SourceManager
 	clang_.setSourceManager(sourceManager);
 	clang_.setPreprocessor(preprocessor);
 	macroImporter_.startTranslationUnit();
-
-	auto it = projectIncludes_.insert(clang_.projectNameFromPath(
-													clang_.sourceManager()->getFileEntryForID(
-															 clang_.sourceManager()->getMainFileID())->getName()), {});
-	const_cast<clang::Preprocessor*>(clang_.preprocessor())->addPPCallbacks(
-				std::make_unique<IncludesPPCallback>(*it, clang_.sourceManager()));
 }
 
 Model::Node* ClangAstVisitor::ooStackTop()
