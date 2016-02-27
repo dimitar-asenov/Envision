@@ -319,23 +319,23 @@ void ClangHelpers::exportMergeMapToJson(QString filename)
 	QList<CppExport::CodeUnit*> codeUnits;
 	CppExport::CppExporter::units(rootProject_, codeUnits, exportedMap);
 
-	QHash<QString, QString> mergeMap;
+	QHash<QString, QString> generatedExportedMap;
 	for (auto unit : codeUnits)
 	{
 		auto nodeFilename = nodeToFilenameMap_[unit->node()];
 
-		if (mergeMap.contains(unit->name()))
+		if (generatedExportedMap.contains(unit->name()))
 		{
-			if (mergeMap.value(unit->name()) != nodeFilename)
+			if (generatedExportedMap.value(unit->name()) != nodeFilename)
 			{
 				qDebug() << unit->name() << "mapped at least twice with different values:";
 				qDebug() << "1:   " << nodeFilename;
-				qDebug() << "2:   " << mergeMap.value(unit->name());
+				qDebug() << "2:   " << generatedExportedMap.value(unit->name());
 				Q_ASSERT(false);
 			}
 		}
 		else
-			mergeMap.insert(unit->name(), nodeFilename);
+			generatedExportedMap.insert(unit->name(), nodeFilename);
 	}
 
 	QFile file{filename};
@@ -344,7 +344,7 @@ void ClangHelpers::exportMergeMapToJson(QString filename)
 	out << "{\n";
 	out << "\t\"DependencyUnitMergeMap\" :\n";
 	out << "\t{\n";
-	for (auto it = mergeMap.begin(); it != mergeMap.end(); it++)
+	for (auto it = generatedExportedMap.begin(); it != generatedExportedMap.end(); it++)
 		if (it.key() != it.value())
 			out << "\t\t\"" << it.key() << "\" : \"" << it.value() << "\",\n";
 	out << "\t},\n";
