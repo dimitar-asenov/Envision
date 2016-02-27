@@ -191,7 +191,7 @@ bool ExpressionVisitor::TraverseStmt(clang::Stmt* S)
 {
 	// WORKAROUND
 	// we check for binary operation directly because as of clang 3.8 tree traversal does not work for <<
-	auto binOp = llvm::dyn_cast<clang::BinaryOperator>(S);
+	clang::BinaryOperator* binOp = S ? llvm::dyn_cast<clang::BinaryOperator>(S) : nullptr;
 	if (binOp && binOp->isShiftOp())
 		return TraverseBinaryOp(binOp);
 	else
