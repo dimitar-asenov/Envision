@@ -28,6 +28,7 @@
 
 #include "ClangFrontendActionFactory.h"
 #include "CppImportException.h"
+#include "SpecialCases.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 
@@ -201,8 +202,12 @@ void CppImportManager::readInFiles(const QString& sourcePath)
 		auto sources = new std::vector<std::string>{};
 		while (dirIterator.hasNext())
 		{
-			totalTranslationUnits()++;
-			sources->push_back(dirIterator.next().toStdString());
+			auto fileName = dirIterator.next();
+			if (!SpecialCases::shouldIgnoreInputFile(fileName))
+			{
+				totalTranslationUnits()++;
+				sources->push_back(fileName.toStdString());
+			}
 		}
 		sourcesMap_.insert(sourcePath, sources);
 	}

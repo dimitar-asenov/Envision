@@ -1313,8 +1313,6 @@ bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 	QString fileName;
 	if (auto file = clang_.sourceManager()->getPresumedLoc(location).getFilename())
 		fileName = QString{file};
-	if (fileName.endsWith("_Generated.cpp"))
-		return false;
 	if (clang_.sourceManager()->isInSystemHeader(location) || fileName.isEmpty() || fileName.toLower().contains("qt"))
 		return importSysHeader_;
 	return true;

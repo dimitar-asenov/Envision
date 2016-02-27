@@ -76,6 +76,8 @@ class CPPIMPORT_API SpecialCases
 		 * DECLARE_TYPE_ID_COMMON(true)\				DECLARE_TYPE_ID_COMMON(false)\
 		 */
 		static void overrideFlagArgumentTransformation(ClangHelpers& clang, MacroExpansion* expansion);
+
+		static bool shouldIgnoreInputFile(const QString& fileName);
 };
 
 }
