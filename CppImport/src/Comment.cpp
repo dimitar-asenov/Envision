@@ -111,7 +111,7 @@ QString Comment::text()
 
 		for (auto i = 1; i < lines.size() - 1; i++) if (lines[i].trimmed() == "*") lines[i] = "";
 		if (lines.first().trimmed().isEmpty()) lines.removeFirst();
-		if (lines.last().trimmed().isEmpty()) lines.removeLast();
+		if (!lines.isEmpty() && lines.last().trimmed().isEmpty()) lines.removeLast();
 	}
 	return lines.join('\n');
 }
