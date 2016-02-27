@@ -111,7 +111,7 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOp
 		case clang::BO_Or: return OOModel::BinaryOperation::OR;
 		case clang::BO_LAnd: return OOModel::BinaryOperation::CONDITIONAL_AND;
 		case clang::BO_LOr: return OOModel::BinaryOperation::CONDITIONAL_OR;
-		default: throw CppImportException{"Impossible binary operator"};
+		default: throw CppImportException{"Impossible binary operator: " + QString::number(binaryOpKind)};
 	}
 }
 

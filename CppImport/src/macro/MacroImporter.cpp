@@ -323,6 +323,7 @@ void MacroImporter::endEntireImport()
 
 void MacroImporter::startTranslationUnit()
 {
+	// If you want to disable macro importing, don't register PPCallbacks
 	const_cast<clang::Preprocessor*>(clang_.preprocessor())->addPPCallbacks(
 				std::make_unique<PPCallback>(macroDefinitions_, macroExpansions_));
 }
