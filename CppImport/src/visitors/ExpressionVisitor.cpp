@@ -189,7 +189,13 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 
 bool ExpressionVisitor::TraverseStmt(clang::Stmt* S)
 {
-	return Base::TraverseStmt(S);
+	// WORKAROUND
+	// we check for binary operation directly because as of clang 3.8 tree traversal does not work for <<
+	auto binOp = llvm::dyn_cast<clang::BinaryOperator>(S);
+	if (binOp && binOp->isShiftOp())
+		return TraverseBinaryOp(binOp);
+	else
+		return Base::TraverseStmt(S);
 }
 
 bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr)
@@ -493,9 +499,9 @@ bool ExpressionVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 {
 	auto ooParenExpr = clang_.createNode<OOModel::UnaryOperation>(parenthesizedExpr->getSourceRange(),
 																					  OOModel::UnaryOperation::PARENTHESIS);
-	TraverseStmt(parenthesizedExpr->getSubExpr());
-	if (!ooExprStack_.empty())
-		ooParenExpr->setOperand(ooExprStack_.pop());
+
+	ooParenExpr->setOperand(translateExpression(parenthesizedExpr->getSubExpr()));
+
 	ooExprStack_.push(ooParenExpr);
 	return true;
 }
@@ -726,26 +732,8 @@ OOModel::ReferenceExpression* ExpressionVisitor::createQualifiedReferenceWithTem
 
 bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
-	OOModel::Expression* ooLeft = nullptr;
-
-	// WORKAROUND
-	// we check for binary operation directly because as of clang 3.8 tree traversal does not work for <<
-	if (auto lhs = llvm::dyn_cast<clang::BinaryOperator>(binaryOperator->getLHS()))
-	{
-		TraverseBinaryOp(lhs);
-		ooLeft = ooExprStack_.pop();
-	}
-	else
-		ooLeft = translateExpression(binaryOperator->getLHS());
-
-	OOModel::Expression* ooRight = nullptr;
-	if (auto rhs = llvm::dyn_cast<clang::BinaryOperator>(binaryOperator->getRHS()))
-	{
-		TraverseBinaryOp(rhs);
-		ooRight = ooExprStack_.pop();
-	}
-	else
-		ooRight = translateExpression(binaryOperator->getRHS());
+	auto ooLeft = translateExpression(binaryOperator->getLHS());
+	auto ooRight = translateExpression(binaryOperator->getRHS());
 
 	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
 	OOModel::Expression* ooBinaryOp = nullptr;
