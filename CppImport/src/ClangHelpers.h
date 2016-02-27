@@ -33,6 +33,10 @@
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "Comments/src/nodes/CommentNode.h"
 
+namespace clang {
+	class MacroDirective;
+}
+
 namespace OOModel {
 	class Declaration;
 	class Project;
@@ -128,6 +132,8 @@ class CPPIMPORT_API ClangHelpers
 		QString presumedFilenameWithoutExtension(clang::SourceLocation location) const;
 
 		void attachDeclarationComments(clang::NamedDecl* namedDecl, Model::Node* receiver) const;
+
+		void printMacroDefinitionForDebug(const clang::MacroDirective* macroDirective) const;
 
 	private:
 		EnvisionToClangMap envisionToClangMap_;

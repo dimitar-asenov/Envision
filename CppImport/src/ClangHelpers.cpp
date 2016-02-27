@@ -290,4 +290,11 @@ void ClangHelpers::attachDeclarationComments(clang::NamedDecl* namedDecl, Model:
 	}
 }
 
+void ClangHelpers::printMacroDefinitionForDebug(const clang::MacroDirective* macroDirective) const
+{
+	qDebug() << "Macro in: " << presumedFilenameWithExtension(macroDirective->getMacroInfo()->getDefinitionLoc());
+	qDebug() << spelling(clang::SourceRange{macroDirective->getMacroInfo()->getDefinitionLoc(),
+																  macroDirective->getMacroInfo()->getDefinitionEndLoc()});
+}
+
 }
