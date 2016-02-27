@@ -136,15 +136,17 @@ class CPPIMPORT_API ClangHelpers
 		void printMacroDefinitionForDebug(const clang::MacroDirective* macroDirective) const;
 
 		/**
-		 * store the filename at location for node.
+		 * associate node with the presumed filename at location.
+		 * used to automatically generate a merge map.
 		 */
 		void associateNodeWithPresumedFileLocation(Model::Node* node, clang::SourceLocation location);
 		/**
-		 * use the stored filename of from and copy it for node.
+		 * use the stored filename information of from and copy it to be the filename information of node.
+		 * used to automatically generate a merge map.
 		 */
 		void associateNodeWithPresumedFileLocation(Model::Node* node, Model::Node* from);
 		/**
-		 * dump the node to filename map to a file.
+		 * export the node to filename map to a file.
 		 */
 		void exportMergeMapToJson(QString filename);
 
@@ -165,7 +167,7 @@ class CPPIMPORT_API ClangHelpers
 		QList<Comment*> comments_;
 
 		/**
-		 * used for dumping the merge map
+		 * used for exporting an automatically generated merge map
 		 */
 		QHash<Model::Node*, QString> nodeToFilenameMap_;
 
