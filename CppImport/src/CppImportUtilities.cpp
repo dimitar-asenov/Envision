@@ -257,8 +257,7 @@ OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::
 		case clang::TemplateArgument::ArgKind::NullPtr:
 			return clang_.createNode<OOModel::NullLiteral>(sourceRange);
 		case clang::TemplateArgument::ArgKind::Integral:
-			return clang_.createNode<OOModel::IntegerLiteral>(sourceRange,
-																			  (int)templateArg.getAsIntegral().getLimitedValue());
+			return clang_.createNode<OOModel::IntegerLiteral>(sourceRange, clang_.spelling(sourceRange));
 		case clang::TemplateArgument::ArgKind::TemplateExpansion:
 			// TODO: add support
 			return createErrorExpression("Unsupported TemplateArgument EXPANSION", sourceRange);
