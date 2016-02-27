@@ -1417,7 +1417,7 @@ void ClangAstVisitor::endEntireImport()
 			workStack << current->children();
 	}
 
-	clang_.dumpMergeMap("export-config.json");
+	clang_.exportMergeMapToJson("export-config.json");
 }
 
 } // namespace cppimport

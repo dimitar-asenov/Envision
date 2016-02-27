@@ -138,15 +138,15 @@ class CPPIMPORT_API ClangHelpers
 		/**
 		 * store the filename at location for node.
 		 */
-		void storeNodeFilename(Model::Node* node, clang::SourceLocation location);
+		void associateNodeWithPresumedFileLocation(Model::Node* node, clang::SourceLocation location);
 		/**
 		 * use the stored filename of from and copy it for node.
 		 */
-		void storeNodeFilename(Model::Node* node, Model::Node* from);
+		void associateNodeWithPresumedFileLocation(Model::Node* node, Model::Node* from);
 		/**
 		 * dump the node to filename map to a file.
 		 */
-		void dumpMergeMap(QString filename);
+		void exportMergeMapToJson(QString filename);
 
 	private:
 		EnvisionToClangMap envisionToClangMap_;
@@ -195,7 +195,7 @@ NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorAr
 {
 	 auto node = new NodeType{std::forward<ConstructorArgTypes>(constructorArgs)...};
 	 envisionToClangMap_.mapAst(sourceRange, node);
-	 storeNodeFilename(node, sourceRange.getBegin());
+	 associateNodeWithPresumedFileLocation(node, sourceRange.getBegin());
 	 return node;
 }
 

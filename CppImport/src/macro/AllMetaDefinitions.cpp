@@ -188,7 +188,7 @@ void AllMetaDefinitions::handleXMacros()
 
 					// create the meta call that also contains unbound xMacro children
 					auto merged = new OOModel::MetaCallExpression{};
-					clang_.storeNodeFilename(merged, expansion->metaCall());
+					clang_.associateNodeWithPresumedFileLocation(merged, expansion->metaCall());
 					merged->setCallee(new OOModel::ReferenceExpression{
 												macroDefinitions_.definitionName(expansion->definition())});
 

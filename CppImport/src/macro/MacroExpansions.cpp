@@ -80,7 +80,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 		currentXMacroParent = entry;
 
 	auto metaCall = new OOModel::MetaCallExpression{macroDefinitions_.definitionName(entry->definition())};
-	clang_.storeNodeFilename(metaCall, sourceRange.getBegin());
+	clang_.associateNodeWithPresumedFileLocation(metaCall, sourceRange.getBegin());
 	entry->setMetaCall(metaCall);
 
 	// only function like macros have braces in their signature to parse

@@ -300,20 +300,20 @@ void ClangHelpers::printMacroDefinitionForDebug(const clang::MacroDirective* mac
 																  macroDirective->getMacroInfo()->getDefinitionEndLoc()});
 }
 
-void ClangHelpers::storeNodeFilename(Model::Node* node, clang::SourceLocation location)
+void ClangHelpers::associateNodeWithPresumedFileLocation(Model::Node* node, clang::SourceLocation location)
 {
 	auto fullPath = presumedFilenameWithoutExtension(location);
 	nodeToFilenameMap_ [node] = fullPath.right(fullPath.size() - rootProjectPath_.size() - 1);
 }
 
-void ClangHelpers::storeNodeFilename(Model::Node* node, Model::Node* from)
+void ClangHelpers::associateNodeWithPresumedFileLocation(Model::Node* node, Model::Node* from)
 {
 	auto it = nodeToFilenameMap_.find(from);
 	Q_ASSERT(it != nodeToFilenameMap_.end());
 	nodeToFilenameMap_[node] = *it;
 }
 
-void ClangHelpers::dumpMergeMap(QString filename)
+void ClangHelpers::exportMergeMapToJson(QString filename)
 {
 	QHash<QString, QString> dummy;
 	QList<CppExport::CodeUnit*> codeUnits;
