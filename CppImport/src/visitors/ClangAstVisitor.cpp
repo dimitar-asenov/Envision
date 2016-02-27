@@ -756,8 +756,8 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		if (!ooExprStack_.empty())
 		ooLoop->setCondition(ooExprStack_.pop());
 		// update
-		auto dd = exprVisitor_->translateExpression(forStmt->getInc());
-		ooLoop->setUpdateStep(dd);
+		if (forStmt->getInc())
+			ooLoop->setUpdateStep(exprVisitor_->translateExpression(forStmt->getInc()));
 		inBody_ = true;
 		// body
 		ooStack_.push(ooLoop->body());
