@@ -1363,6 +1363,8 @@ void ClangAstVisitor::endTranslationUnit()
 
 	insertUsingDirectiveDeclarations();
 
+	trMngr_->removeEmptyNamespaces();
+
 	clang_.envisionToClangMap().clear();
 	clang_.comments().clear();
 	usingDirectiveDeclarations_.clear();

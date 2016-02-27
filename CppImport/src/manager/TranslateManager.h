@@ -145,6 +145,12 @@ class CPPIMPORT_API TranslateManager
 
 		QList<OOModel::Class*> classesInFile(QString fileName);
 
+		/**
+		 * Called at the end of each translation unit in order to remove empty namespaces that were added because
+		 * of forward declarations.
+		 */
+		void removeEmptyNamespaces();
+
 	private:
 		ClangHelpers& clang_;
 
@@ -181,6 +187,8 @@ class CPPIMPORT_API TranslateManager
 
 		void addMethodResult(clang::FunctionDecl* functionDecl, OOModel::Method* method);
 		void addMethodArguments(clang::FunctionDecl* functionDecl, OOModel::Method* method);
+
+		bool isNameSpaceEmpty(OOModel::Module* nameSpace);
 };
 
 

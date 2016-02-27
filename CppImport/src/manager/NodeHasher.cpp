@@ -63,12 +63,19 @@ const QString NodeHasher::hashNameSpace(const clang::NamespaceDecl* namespaceDec
 	QString hash = QString::fromStdString(namespaceDecl->getNameAsString());
 	if (auto ctxt = namespaceDecl->getDeclContext())
 	{
-		if (ctxt->isTranslationUnit())
-			return hash;
-		else if (auto pn = llvm::dyn_cast<clang::NamespaceDecl>(ctxt))
-			return hash.prepend(hashNameSpace(pn));
-		throw CppImportException{"Invalid decl context in namespace"};
+		if (!ctxt->isTranslationUnit())
+		{
+			if (auto pn = llvm::dyn_cast<clang::NamespaceDecl>(ctxt))
+				hash = hashNameSpace(pn) + hash;
+			else
+				throw CppImportException{"Invalid decl context in namespace"};
+		}
 	}
+
+	// In order to be able to remove namespaces which were introduced because they contained only forward declarations
+	// we need to append the project name to the hash
+	hash = clang_.projectNameFromPath(clang_.presumedFilenameWithExtension(namespaceDecl->getLocStart())) + ":" + hash;
+
 	return hash;
 }
 

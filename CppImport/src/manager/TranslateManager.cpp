@@ -467,4 +467,40 @@ bool TranslateManager::containsClass(clang::CXXRecordDecl* recordDecl)
 	return classMap_.contains(nh_->hashRecord(recordDecl));
 }
 
+void TranslateManager::removeEmptyNamespaces()
+{
+	auto it = nameSpaceMap_.begin();
+	while (it != nameSpaceMap_.end())
+	{
+		if (isNameSpaceEmpty(it.value()))
+		{
+			auto list = DCast<Model::List>(it.value()->parent());
+			Q_ASSERT(list);
+			list->remove(it.value());
+
+			// There are more places where the module is registered but we don't care about those.
+			it = nameSpaceMap_.erase(it);
+		}
+		else
+			++it;
+	}
+}
+
+bool TranslateManager::isNameSpaceEmpty(OOModel::Module* nameSpace)
+{
+	if (nameSpace->classes()->isEmpty() &&
+		 nameSpace->methods()->isEmpty() &&
+		 nameSpace->fields()->isEmpty() &&
+		 nameSpace->subDeclarations()->isEmpty())
+	{
+		for (auto subModule : *nameSpace->modules())
+			if (!isNameSpaceEmpty(subModule))
+				return false;
+
+		return true;
+	}
+
+	return false;
+}
+
 }
