@@ -257,6 +257,7 @@ OOModel::MetaDefinition* AllMetaDefinitions::createXMacroMetaDef(MacroExpansion*
 		auto cppBaseMetaDef = standardMetaDefinitions_.metaDefinition(cppBaseExpansion->definition());
 
 		mergedMetaDef = hBaseMetaDef->clone();
+		clang_.associateNodeWithPresumedFileLocation(mergedMetaDef, hBaseMetaDef);
 		mergedMetaDef->setName(macroDefinitions_.definitionName(hBaseExpansion->definition()));
 		xMacrometaDefinitions_.insert(macroDefinitions_.definitionName(hBaseExpansion->definition()), mergedMetaDef);
 
