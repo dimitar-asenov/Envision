@@ -124,8 +124,8 @@ class CPPIMPORT_API ClangHelpers
 
 		const QString& rootProjectPath();
 
-		QString presumedFilenameWithExtension(clang::SourceLocation location);
-		QString presumedFilenameWithoutExtension(clang::SourceLocation location);
+		QString presumedFilenameWithExtension(clang::SourceLocation location) const;
+		QString presumedFilenameWithoutExtension(clang::SourceLocation location) const;
 
 		void attachDeclarationComments(clang::NamedDecl* namedDecl, Model::Node* receiver) const;
 
