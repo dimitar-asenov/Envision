@@ -40,9 +40,9 @@ QList<Optional<TupleSet> > CompositeQuery::execute(QList<TupleSet> input)
 	for (const auto& ts: input)
 		inNode_->calculatedOutputs_.push_back(ts);
 	// Nodes for which we have all dependencies calculated:
-	QQueue<QueryNode*> justExecutedQueries;
+	QQueue<QueryNodeInCompositeQuery*> justExecutedQueries;
 	justExecutedQueries.enqueue(inNode_);
-	QSet<QueryNode*> fullyProcessedQueries;
+	QSet<QueryNodeInCompositeQuery*> fullyProcessedQueries;
 
 	// Check if we have nodes which take no input:
 	for (auto queryNode : nodes_)
@@ -114,9 +114,10 @@ Query* CompositeQuery::addQuery(std::unique_ptr<Query>&& query)
 {
 	auto rawQ = query.get();
 	// A query should only be added once:
-	Q_ASSERT(std::find_if(nodes_.begin(), nodes_.end(), [rawQ](QueryNode* existing) {return existing->q_.get() == rawQ;})
+	Q_ASSERT(std::find_if(nodes_.begin(), nodes_.end(), [rawQ](QueryNodeInCompositeQuery* existing)
+	{return existing->q_.get() == rawQ;})
 					== nodes_.end());
-	auto newNode = new QueryNode{std::forward<std::unique_ptr<Query>>(query)};
+	auto newNode = new QueryNodeInCompositeQuery{std::forward<std::unique_ptr<Query>>(query)};
 	nodes_.push_back(newNode);
 	return rawQ;
 }
@@ -162,23 +163,24 @@ void CompositeQuery::setHasInput()
 				q->setHasInput();
 }
 
-CompositeQuery::QueryNode* CompositeQuery::nodeForQuery(Query* q)
+QueryNodeInCompositeQuery* CompositeQuery::nodeForQuery(Query* q)
 {
-	auto it = std::find_if(nodes_.begin(), nodes_.end(), [q](QueryNode* existing) {return existing->q_.get() == q;});
+	auto it = std::find_if(nodes_.begin(), nodes_.end(), [q](QueryNodeInCompositeQuery* existing)
+		{return existing->q_.get() == q;});
 	// A query should be added first with addQuery():
 	Q_ASSERT(it != nodes_.end());
 	return *it;
 }
 
-void CompositeQuery::addOutputMapping(CompositeQuery::QueryNode* outNode, int outIndex,
-												  CompositeQuery::QueryNode* inNode)
+void CompositeQuery::addOutputMapping(QueryNodeInCompositeQuery* outNode, int outIndex,
+												  QueryNodeInCompositeQuery* inNode)
 {
 	if (outIndex >= outNode->outputMap_.size()) outNode->outputMap_.resize(outIndex + 1);
 	outNode->outputMap_[outIndex].insert(inNode);
 }
 
-void CompositeQuery::addInputMapping(CompositeQuery::QueryNode* outNode, int outIndex,
-												 CompositeQuery::QueryNode* inNode, int inIndex)
+void CompositeQuery::addInputMapping(QueryNodeInCompositeQuery* outNode, int outIndex,
+												 QueryNodeInCompositeQuery* inNode, int inIndex)
 {
 	if (inIndex >= inNode->inputMap_.size()) inNode->inputMap_.resize(inIndex + 1);
 	auto& existingMapping = inNode->inputMap_[inIndex];
@@ -193,7 +195,7 @@ void CompositeQuery::addInputMapping(CompositeQuery::QueryNode* outNode, int out
 	existingMapping.outputIndex_ = outIndex;
 }
 
-void CompositeQuery::QueryNode::addCalculatedInput(int index, Optional<TupleSet> g)
+void QueryNodeInCompositeQuery::addCalculatedInput(int index, Optional<TupleSet> g)
 {
 	// Fill non determined inputs with nullptrs:
 	while (calculatedInputs_.size() - 1 < index)
@@ -205,12 +207,12 @@ void CompositeQuery::QueryNode::addCalculatedInput(int index, Optional<TupleSet>
 	inputMap_[index].inserted_ = true;
 }
 
-bool CompositeQuery::QueryNode::canExecute() const
+bool QueryNodeInCompositeQuery::canExecute() const
 {
 	return std::all_of(inputMap_.begin(), inputMap_.end(), [](const InputMapping& m) {return m.inserted_;});
 }
 
-void CompositeQuery::QueryNode::execute()
+void QueryNodeInCompositeQuery::execute()
 {
 	if (q_)
 	{

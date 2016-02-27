@@ -32,6 +32,44 @@
 
 namespace InformationScripting {
 
+struct QueryNodeInCompositeQuery;
+class Query;
+
+struct InputMapping {
+		QueryNodeInCompositeQuery* outputFrom_{};
+		int outputIndex_{};
+		// Indicates whether this output has been calculated and set.
+		bool inserted_{};
+};
+
+struct QueryNodeInCompositeQuery {
+		QueryNodeInCompositeQuery(std::unique_ptr<Query>&& q) : q_{std::forward<std::unique_ptr<Query>>(q)} {}
+
+		/**
+		 * Describes an input mapping:
+		 * The output with index \a outputIndex_ from the Query \a outputFrom_
+		 * is mapped to the input with index i in the vector.
+		 *
+		 * Note: 1 Input can only receive a single output.
+		 */
+		QVector<InputMapping> inputMap_;
+
+		/**
+		 * Decribes an output mapping:
+		 * 1 Output can go to multiple receivers.
+		 */
+		QVector<QSet<QueryNodeInCompositeQuery*>> outputMap_;
+
+		QList<Optional<TupleSet>> calculatedInputs_;
+		QList<Optional<TupleSet>> calculatedOutputs_;
+
+		void addCalculatedInput(int index, Optional<TupleSet> g);
+		bool canExecute() const;
+		void execute();
+
+		std::unique_ptr<Query> q_{};
+};
+
 class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 {
 	public:
@@ -64,52 +102,17 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 		virtual void setHasInput() override;
 
 	private:
-		struct QueryNode;
-
-		struct InputMapping {
-				QueryNode* outputFrom_{};
-				int outputIndex_{};
-				// Indicates whether this output has been calculated and set.
-				bool inserted_{};
-		};
-
-		struct QueryNode {
-				QueryNode(std::unique_ptr<Query>&& q) : q_{std::forward<std::unique_ptr<Query>>(q)} {}
-
-				/**
-				 * Describes an input mapping:
-				 * The output with index \a outputIndex_ from the Query \a outputFrom_
-				 * is mapped to the input with index i in the vector.
-				 *
-				 * Note: 1 Input can only receive a single output.
-				 */
-				QVector<InputMapping> inputMap_;
-
-				/**
-				 * Decribes an output mapping:
-				 * 1 Output can go to multiple receivers.
-				 */
-				QVector<QSet<QueryNode*>> outputMap_;
-
-				QList<Optional<TupleSet>> calculatedInputs_;
-				QList<Optional<TupleSet>> calculatedOutputs_;
-
-				void addCalculatedInput(int index, Optional<TupleSet> g);
-				bool canExecute() const;
-				void execute();
-
-				std::unique_ptr<Query> q_{};
-		};
 		// Pseudo node to connect, to get input from execute method
-		QueryNode* inNode_{new QueryNode{nullptr}};
+		QueryNodeInCompositeQuery* inNode_{new QueryNodeInCompositeQuery{nullptr}};
 		// Pseudo node to connect, to map the output
-		QueryNode* outNode_{new QueryNode{nullptr}};
-		QList<QueryNode*> nodes_;
+		QueryNodeInCompositeQuery* outNode_{new QueryNodeInCompositeQuery{nullptr}};
+		QList<QueryNodeInCompositeQuery*> nodes_;
 
-		QueryNode* nodeForQuery(Query* q);
+		QueryNodeInCompositeQuery* nodeForQuery(Query* q);
 
-		void addOutputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode);
-		void addInputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode, int inIndex);
+		void addOutputMapping(QueryNodeInCompositeQuery* outNode, int outIndex, QueryNodeInCompositeQuery* inNode);
+		void addInputMapping(QueryNodeInCompositeQuery* outNode, int outIndex,
+									QueryNodeInCompositeQuery* inNode, int inIndex);
 };
 
 inline int CompositeQuery::inputCount() const { return std::max(1, inNode_->outputMap_.size()); }
