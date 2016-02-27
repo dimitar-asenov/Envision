@@ -322,6 +322,10 @@ void ClangHelpers::exportMergeMapToJson(QString filename)
 	QHash<QString, QString> generatedExportedMap;
 	for (auto unit : codeUnits)
 	{
+		// exportedMap contains only the special created code units (like external template instantiations that were
+		// inside classes). These special code units should not appear in the exported merge map.
+		if (exportedMap.contains(unit->name())) continue;
+
 		auto nodeFilename = nodeToFilenameMap_[unit->node()];
 
 		if (generatedExportedMap.contains(unit->name()))
