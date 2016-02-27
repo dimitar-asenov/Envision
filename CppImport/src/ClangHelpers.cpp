@@ -315,31 +315,31 @@ void ClangHelpers::associateNodeWithPresumedFileLocation(Model::Node* node, Mode
 
 void ClangHelpers::exportMergeMapToJson(QString filename)
 {
-	QHash<QString, QString> exportedMap;
+	QHash<QString, QString> specialUnitsMap;
 	QList<CppExport::CodeUnit*> codeUnits;
-	CppExport::CppExporter::units(rootProject_, codeUnits, exportedMap);
+	CppExport::CppExporter::units(rootProject_, codeUnits, specialUnitsMap);
 
-	QHash<QString, QString> generatedExportedMap;
+	QMap<QString, QString> exportedMap;
 	for (auto unit : codeUnits)
 	{
 		// exportedMap contains only the special created code units (like external template instantiations that were
 		// inside classes). These special code units should not appear in the exported merge map.
-		if (exportedMap.contains(unit->name())) continue;
+		if (specialUnitsMap.contains(unit->name())) continue;
 
 		auto nodeFilename = nodeToFilenameMap_[unit->node()];
 
-		if (generatedExportedMap.contains(unit->name()))
+		if (exportedMap.contains(unit->name()))
 		{
-			if (generatedExportedMap.value(unit->name()) != nodeFilename)
+			if (exportedMap.value(unit->name()) != nodeFilename)
 			{
 				qDebug() << unit->name() << "mapped at least twice with different values:";
 				qDebug() << "1:   " << nodeFilename;
-				qDebug() << "2:   " << generatedExportedMap.value(unit->name());
+				qDebug() << "2:   " << exportedMap.value(unit->name());
 				Q_ASSERT(false);
 			}
 		}
 		else if (unit->name() != nodeFilename)
-			generatedExportedMap.insert(unit->name(), nodeFilename);
+			exportedMap.insert(unit->name(), nodeFilename);
 	}
 
 	QFile file{filename};
@@ -348,7 +348,7 @@ void ClangHelpers::exportMergeMapToJson(QString filename)
 	out << "{\n";
 	out << "\t\"DependencyUnitMergeMap\" :\n";
 	out << "\t{\n";
-	for (auto it = generatedExportedMap.begin(); it != generatedExportedMap.end(); it++)
+	for (auto it = exportedMap.begin(); it != exportedMap.end(); it++)
 		if (it.key() != it.value())
 			out << "\t\t\"" << it.key() << "\" : \"" << it.value() << "\",\n";
 	out << "\t},\n";
