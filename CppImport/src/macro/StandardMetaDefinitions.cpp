@@ -49,6 +49,7 @@ OOModel::MetaDefinition* StandardMetaDefinitions::createMetaDef(const clang::Mac
 	if (metaDefinition(md)) return nullptr;
 
 	auto metaDef = new OOModel::MetaDefinition{definitionManager_.definitionName(md)};
+	clang_.associateNodeWithPresumedFileLocation(metaDef, md->getLocation());
 	standardMetaDefinitions_.insert(definitionManager_.signature(md), metaDef);
 
 	// add formal arguments based on the expansion definition

@@ -40,6 +40,7 @@
 #include "Core/src/precompiled.h"
 #include "Core/src/global.h"
 #include "Comments/src/precompiled.h"
+#include "CppExport/src/precompiled.h"
 
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one

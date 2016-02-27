@@ -135,6 +135,21 @@ class CPPIMPORT_API ClangHelpers
 
 		void printMacroDefinitionForDebug(const clang::MacroDirective* macroDirective) const;
 
+		/**
+		 * associate node with the presumed filename at location.
+		 * used to automatically generate a merge map.
+		 */
+		void associateNodeWithPresumedFileLocation(Model::Node* node, clang::SourceLocation location);
+		/**
+		 * use the stored filename information of from and copy it to be the filename information of node.
+		 * used to automatically generate a merge map.
+		 */
+		void associateNodeWithPresumedFileLocation(Model::Node* node, Model::Node* from);
+		/**
+		 * export the node to filename map to a file.
+		 */
+		void exportMergeMapToJson(QString filename);
+
 	private:
 		EnvisionToClangMap envisionToClangMap_;
 
@@ -150,6 +165,11 @@ class CPPIMPORT_API ClangHelpers
 		 * holds all comments of the current translation unit.
 		 */
 		QList<Comment*> comments_;
+
+		/**
+		 * used for exporting an automatically generated merge map
+		 */
+		QHash<Model::Node*, QString> nodeToFilenameMap_;
 
 		QStringList folderNamesFromPath(QString path);
 		OOModel::Declaration* folderForLocation(clang::SourceLocation location,
@@ -177,6 +197,7 @@ NodeType* ClangHelpers::createNode(clang::SourceRange sourceRange, ConstructorAr
 {
 	 auto node = new NodeType{std::forward<ConstructorArgTypes>(constructorArgs)...};
 	 envisionToClangMap_.mapAst(sourceRange, node);
+	 associateNodeWithPresumedFileLocation(node, sourceRange.getBegin());
 	 return node;
 }
 
