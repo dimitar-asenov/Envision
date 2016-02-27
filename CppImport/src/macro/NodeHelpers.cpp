@@ -173,6 +173,8 @@ void NodeHelpers::addNodeToDeclaration(Model::Node* node, OOModel::Declaration* 
 				context->methods()->append(ooMethod);
 			else if (auto context = DCast<OOModel::Class>(declaration))
 				context->methods()->append(ooMethod);
+			else if (auto context = DCast<OOModel::Method>(declaration))
+				context->subDeclarations()->append(ooMethod);
 			else
 				Q_ASSERT(false);
 		}
