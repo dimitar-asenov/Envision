@@ -315,9 +315,9 @@ void ClangHelpers::associateNodeWithPresumedFileLocation(Model::Node* node, Mode
 
 void ClangHelpers::exportMergeMapToJson(QString filename)
 {
-	QHash<QString, QString> dummy;
+	QHash<QString, QString> exportedMap;
 	QList<CppExport::CodeUnit*> codeUnits;
-	CppExport::CppExporter::units(rootProject_, codeUnits, dummy);
+	CppExport::CppExporter::units(rootProject_, codeUnits, exportedMap);
 
 	QHash<QString, QString> mergeMap;
 	for (auto unit : codeUnits)
