@@ -27,7 +27,15 @@
 #include "CppImportPlugin.h"
 #include "SelfTest/src/TestManager.h"
 
+#include "Logger/src/Log.h"
+
 namespace CppImport {
+
+Logger::Log& CppImportPlugin::log()
+{
+	static auto log = Logger::Log::getLogger("cppimport");
+	return *log;
+}
 
 bool CppImportPlugin::initialize(Core::EnvisionManager&)
 {

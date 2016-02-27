@@ -29,6 +29,10 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "cppimport_api.h"
 
+namespace Logger {
+class Log;
+}
+
 namespace CppImport {
 
 /**
@@ -49,6 +53,8 @@ class CPPIMPORT_API CppImportPlugin : public QObject, public Core::EnvisionPlugi
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
+
+		static Logger::Log& log();
 };
 
 }

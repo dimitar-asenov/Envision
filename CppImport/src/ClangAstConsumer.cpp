@@ -27,6 +27,8 @@
 #include "ClangAstConsumer.h"
 
 #include "CppImportManager.h"
+#include "CppImportPlugin.h"
+#include "Logger/src/Log.h"
 
 namespace CppImport {
 
@@ -38,9 +40,13 @@ void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
 {
 	// show import progress
 	CppImportManager::processedTranslationUnits()++;
-	qDebug() << "[" << (100 * CppImportManager::processedTranslationUnits() / CppImportManager::totalTranslationUnits())
-				<< "% ]" << astContext.getSourceManager().getFileEntryForID(
-																				astContext.getSourceManager().getMainFileID())->getName();
+
+	int percent = 100 * CppImportManager::processedTranslationUnits()
+											/ CppImportManager::totalTranslationUnits();
+	QString fileName = astContext.getSourceManager().getFileEntryForID(
+				astContext.getSourceManager().getMainFileID())->getName();
+
+	CppImportPlugin::log().info("[ " + QString::number(percent) +" %] importing: " + fileName);
 
 	astVisitor_->beforeTranslationUnit(astContext);
 	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
