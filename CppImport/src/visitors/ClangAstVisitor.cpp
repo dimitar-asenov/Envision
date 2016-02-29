@@ -364,25 +364,39 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	{
 		if (varDecl->getInitStyle() == clang::VarDecl::InitializationStyle::CInit)
 			ooVarDecl->setInitialValue(exprVisitor_->translateExpression(varDecl->getInit()));
-		else if (varDecl->getInitStyle() == clang::VarDecl::InitializationStyle::ListInit)
+		else
 		{
-			if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(varDecl->getInit()->IgnoreImplicit()))
-			{
-				Q_ASSERT(constructExpr);
-				auto arguments = exprVisitor_->translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs());
-				if (arguments.size() == 1 && DCast<OOModel::ArrayInitializer>(arguments.first()))
-					ooVarDecl->setInitialValue(arguments.first());
-				else
-				{
-					auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(varDecl->getInit()->IgnoreImplicit()
-																												->getSourceRange());
-					for (auto argument : arguments)
-						arrayInitializer->values()->append(argument);
-					ooVarDecl->setInitialValue(arrayInitializer);
-				}
-			}
+			auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(varDecl->getInit()->IgnoreImplicit());
+
+			bool hasInit = true;
+			if (varDecl->getInitStyle() == clang::VarDecl::InitializationStyle::ListInit)
+				ooVarDecl->setInitializationKind(OOModel::VariableDeclaration::InitializationKind::StandardInitialization);
 			else
-				ooVarDecl->setInitialValue(exprVisitor_->translateExpression(varDecl->getInit()));
+			{
+				ooVarDecl->setInitializationKind(OOModel::VariableDeclaration::InitializationKind::CallInitialization);
+				if (constructExpr) hasInit = constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding();
+			}
+
+			if (hasInit)
+			{
+				if (constructExpr)
+				{
+					auto arguments = exprVisitor_->translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs());
+					if (arguments.size() == 1 && DCast<OOModel::ArrayInitializer>(arguments.first()))
+						ooVarDecl->setInitialValue(arguments.first());
+					else
+					{
+						auto arrayInitializer = clang_.createNode<OOModel::ArrayInitializer>(varDecl->getInit()
+																													->IgnoreImplicit()
+																													->getSourceRange());
+						for (auto argument : arguments)
+							arrayInitializer->values()->append(argument);
+						ooVarDecl->setInitialValue(arrayInitializer);
+					}
+				}
+				else
+					ooVarDecl->setInitialValue(exprVisitor_->translateExpression(varDecl->getInit()));
+			}
 		}
 	}
 
@@ -1006,7 +1020,6 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 					 presumedLocationStart.getLine() <= comment->lineStart() &&
 					 comment->lineEnd() <= presumedLocationEnd.getLine())
 					listComments.append(comment);
-
 		/*
 		 * keep track of the line the last child has ended on.
 		 * initially this location is the beginning of the compound statement itself.

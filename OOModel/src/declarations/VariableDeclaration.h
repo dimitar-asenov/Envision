@@ -29,8 +29,9 @@
 #include "../oomodel_api.h"
 
 #include "Declaration.h"
-
 #include "../expressions/Expression.h"
+
+#include "ModelBase/src/nodes/Integer.h"
 
 namespace OOModel { class VariableDeclaration; }
 extern template class OOMODEL_API Model::TypedList<OOModel::VariableDeclaration>;
@@ -42,14 +43,26 @@ class OOMODEL_API VariableDeclaration : public Super<Declaration>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	ATTRIBUTE(Expression, initialValue, setInitialValue)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, initKind, setInitKind, int)
 
 	public:
+		enum class InitializationKind : int {StandardInitialization, CallInitialization};
+
 		VariableDeclaration(const QString& name, Expression* type = nullptr);
 		VariableDeclaration(const QString& name, Expression* type, Expression* initialValue);
 		VariableDeclaration(const QString& name, Expression* type,  Modifier::Modifiers mod,
 				Expression* initialValue = nullptr);
 
 		virtual SymbolTypes symbolType() const override;
+
+		InitializationKind initializationKind() const;
+		void setInitializationKind(const InitializationKind& kind);
 };
+
+inline VariableDeclaration::InitializationKind VariableDeclaration::initializationKind() const
+{ return static_cast<InitializationKind> (initKind()); }
+inline void VariableDeclaration::setInitializationKind(const InitializationKind& kind)
+{ setInitKind(static_cast<int> (kind)); }
+
 
 }
