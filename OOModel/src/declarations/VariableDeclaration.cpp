@@ -36,6 +36,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(VariableDeclaration)
 
 DEFINE_ATTRIBUTE(VariableDeclaration, typeExpression, Expression, false, false, true)
 DEFINE_ATTRIBUTE(VariableDeclaration, initialValue, Expression, true, true, true)
+DEFINE_ATTRIBUTE(VariableDeclaration, initKind, Integer, false, false, true)
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type)
 : Super{nullptr, VariableDeclaration::getMetaData()}

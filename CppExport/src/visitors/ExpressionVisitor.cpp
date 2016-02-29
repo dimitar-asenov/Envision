@@ -320,13 +320,24 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		if (e->results()->size() == 1) *fragment << " -> " << visit(e->results()->first()->typeExpression());
 		*fragment << list(e->body(), StatementVisitor{data()}, "body");
 	}
-	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
+	else if (auto e = DCast<ArrayInitializer>(expression))
+	{
+		if (auto variableDeclaration = DCast<VariableDeclaration>(e->parent()))
+		{
+			if (variableDeclaration->initializationKind() == VariableDeclaration::InitializationKind::CallInitialization)
+				*fragment << list(e->values(), this, "argsList");
+			else
+				*fragment << list(e->values(), this, "initializerList");
+		}
+		else
+			*fragment << list(e->values(), this, "initializerList");
+	}
 	else if (auto e = DCast<MethodCallExpression>(expression))
 	{
-		if (e->methodCallKind() == MethodCallExpression::MethodCallKind::Call)
-			*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
-		else
+		if (e->methodCallKind() == MethodCallExpression::MethodCallKind::ListConstruction)
 			*fragment << visit(e->callee()) << list(e->arguments(), this, "initializerList");
+		else
+			*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
 	}
 	else if (auto e = DCast<MetaCallExpression>(expression))
 	{
