@@ -32,4 +32,6 @@ namespace InformationScripting {
 
 extern "C" PyObject* PyInit_DataApi();
 
+void initPythonEnvironment();
+
 }

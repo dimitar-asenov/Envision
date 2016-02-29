@@ -26,6 +26,7 @@
 
 #include "InformationScriptingPlugin.h"
 #include "SelfTest/src/TestManager.h"
+#include "python_bindings/DataApi.h"
 
 #include "nodes/TagExtension.h"
 #include "python_bindings/BoostPythonHelpers.h"
@@ -66,7 +67,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	Core::TypeRegistry::initializeNewTypes();
 
 	BoostPythonHelpers::initializeConverters();
-	ScriptQuery::initPythonEnvironment();
+	initPythonEnvironment();
 	AstQuery::registerDefaultQueries();
 	AddASTPropertiesAsTuples::registerDefaultQueries();
 	TagQuery::registerDefaultQueries();

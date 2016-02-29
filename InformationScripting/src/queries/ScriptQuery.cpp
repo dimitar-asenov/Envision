@@ -26,8 +26,6 @@
 
 #include "ScriptQuery.h"
 
-#include "../python_bindings/AstApi.h"
-#include "../python_bindings/DataApi.h"
 #include "../python_bindings/BoostPythonHelpers.h"
 #include "../query_framework/QueryRegistry.h"
 #include "../query_prompt/parsing/QueryBuilder.h"
@@ -44,18 +42,6 @@ ScriptQuery::ScriptQuery(const QString& scriptPath, Model::Node* target,
 								 const QStringList& args, QueryExecutor* executor)
 	: LinearQuery{target}, scriptPath_{scriptPath}, arguments_{args}, executor_{executor}
 {}
-
-// Since we can't create a module in another way, we create an empty one here.
-// We fill it with the methods from the QueryRegistry during execution.
-BOOST_PYTHON_MODULE(Query) {}
-
-void ScriptQuery::initPythonEnvironment()
-{
-	PyImport_AppendInittab("AstApi", PyInit_AstApi);
-	PyImport_AppendInittab("DataApi", PyInit_DataApi);
-	PyImport_AppendInittab("Query", PyInit_Query);
-	Py_Initialize();
-}
 
 void ScriptQuery::unloadPythonEnvironment()
 {
