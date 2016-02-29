@@ -43,7 +43,6 @@ class INFORMATIONSCRIPTING_API ScriptQuery : public LinearQuery
 	public:
 		ScriptQuery(const QString& scriptPath, Model::Node* target, const QStringList& args, QueryExecutor* executor);
 
-		static void initPythonEnvironment();
 		static void unloadPythonEnvironment();
 
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;

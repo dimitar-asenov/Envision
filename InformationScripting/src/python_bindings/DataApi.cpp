@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "DataApi.h"
+#include "AstApi.h"
 
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
@@ -36,9 +37,15 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
+#include "../queries/ScriptQuery.h"
+
 namespace InformationScripting {
 
 using namespace boost::python;
+
+// Since we can't create a module in another way, we create an empty one here.
+// We fill it with the methods from the QueryRegistry during execution.
+BOOST_PYTHON_MODULE(Query) {}
 
 object value(const NamedProperty& self) {
 	return pythonObject(self.second);
@@ -141,6 +148,14 @@ BOOST_PYTHON_MODULE(DataApi) {
 		class_<AstModification>("AstModification")
 				.def("buildExpression", &AstModification::buildExpression, return_internal_reference<>())
 				.staticmethod("buildExpression");
+}
+
+void initPythonEnvironment()
+{
+	PyImport_AppendInittab("AstApi", PyInit_AstApi);
+	PyImport_AppendInittab("DataApi", PyInit_DataApi);
+	PyImport_AppendInittab("Query", PyInit_Query);
+	Py_Initialize();
 }
 
 }

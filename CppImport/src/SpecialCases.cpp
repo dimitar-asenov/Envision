@@ -84,7 +84,7 @@ void SpecialCases::overrideFlag(OOModel::MetaDefinition* metaDef, Model::Node* n
 
 bool SpecialCases::shouldIgnoreInputFile(const QString& fileName)
 {
-	return fileName.endsWith("_Generated.cpp");
+	return fileName.endsWith("_Generated.cpp") || fileName.endsWith("DataApi.cpp");
 }
 
 }
