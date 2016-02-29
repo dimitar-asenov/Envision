@@ -46,7 +46,7 @@ class OOMODEL_API MethodCallExpression: public Super<Expression>
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
 
 	public:
-		enum class MethodCallKind : int {Call, Construct};
+		enum class MethodCallKind : int {Call, ListConstruction, CallConstruction};
 
 		MethodCallExpression(const QString& name, Expression* referencePrefix = nullptr);
 

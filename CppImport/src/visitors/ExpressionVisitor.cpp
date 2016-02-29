@@ -294,20 +294,31 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 		auto methodCallExpr = clang_.createNode<OOModel::MethodCallExpression>(
 					clang::SourceRange{allocatedTypeLoc.getSourceRange().getBegin(), newExpr->getSourceRange().getEnd()});
 		methodCallExpr->setCallee(utils_->translateQualifiedType(allocatedTypeLoc));
-		methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
 
 		if (auto parenListExpr = llvm::dyn_cast<clang::ParenListExpr>(newExpr->getInitializer()))
+		{
+			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::CallConstruction);
 			for (unsigned i = 0; i < parenListExpr->getNumExprs(); i++)
 				methodCallExpr->arguments()->append(translateExpression(parenListExpr->getExpr(i)));
+		}
 		else if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(newExpr->getInitializer()))
 		{
+			methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::ListConstruction);
 			if (initListExpr->getSyntacticForm()) initListExpr = initListExpr->getSyntacticForm();
 			for (auto initExpr : initListExpr->inits())
 				methodCallExpr->arguments()->append(translateExpression(initExpr));
 		}
 		else if (auto constructExpr = llvm::dyn_cast<clang::CXXConstructExpr>(newExpr->getInitializer()))
+		{
+			if (constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding() &&
+				 clang_.spelling(constructExpr->getParenOrBraceRange().getBegin()) == "{")
+				methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::ListConstruction);
+			else
+				methodCallExpr->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::CallConstruction);
+
 			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 				methodCallExpr->arguments()->append(argument);
+		}
 
 		ooNewExpr->setNewType(methodCallExpr);
 	}
@@ -441,7 +452,12 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			else
 				ooMethodCall->setCallee(clang_.createReference(constructExpr->getLocation()));
 
-			ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+			if (constructExpr->getParenOrBraceRange().getBegin().getPtrEncoding() &&
+				 clang_.spelling(constructExpr->getParenOrBraceRange().getBegin()) == "{")
+				ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::ListConstruction);
+			else
+				ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::CallConstruction);
+
 
 			for (auto argument : translateArguments(constructExpr->getArgs(), constructExpr->getNumArgs()))
 				ooMethodCall->arguments()->append(argument);
@@ -475,8 +491,11 @@ bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedC
 	auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(unresolvedConstruct->getSourceRange());
 	ooMethodCall->setCallee(utils_->translateQualifiedType(unresolvedConstruct->getTypeSourceInfo()->getTypeLoc()));
 
-	if (!unresolvedConstruct->getLParenLoc().getPtrEncoding())
-		ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+	if (unresolvedConstruct->getLParenLoc().getPtrEncoding() &&
+		 clang_.spelling(unresolvedConstruct->getLParenLoc()) == "{")
+		ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::ListConstruction);
+	else
+		ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::CallConstruction);
 
 	if (unresolvedConstruct->arg_size() == 1 &&
 		 llvm::dyn_cast<clang::InitListExpr>(unresolvedConstruct->getArg(0)))
@@ -684,7 +703,14 @@ bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 		TraverseStmt(initExpr);
 		if (!ooExprStack_.empty()) ooArrayInit->values()->append(ooExprStack_.pop());
 	}
-	ooExprStack_.push(ooArrayInit);
+	static int counter = 0;
+	counter++;
+
+	if (counter == 56)
+	{
+		qDebug() << "";
+	}
+	ooExprStack_.push(new OOModel::ReferenceExpression{QString::number(counter)});
 	return true;
 }
 
@@ -791,7 +817,14 @@ bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, 
 	{
 		auto ooMethodCall = clang_.createNode<OOModel::MethodCallExpression>(castExpr->getSourceRange());
 		ooMethodCall->setCallee(utils_->translateQualifiedType(castExpr->getTypeInfoAsWritten()->getTypeLoc()));
-		ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::Construct);
+
+		auto functionalCastExpr = llvm::dyn_cast<clang::CXXFunctionalCastExpr>(castExpr);
+		Q_ASSERT(functionalCastExpr);
+		if (functionalCastExpr->getLParenLoc().getPtrEncoding() &&
+			 clang_.spelling(functionalCastExpr->getLParenLoc()) == "{")
+			ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::ListConstruction);
+		else
+			ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::CallConstruction);
 
 		if (auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(castExpr->getSubExprAsWritten()))
 		{

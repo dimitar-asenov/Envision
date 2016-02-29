@@ -334,7 +334,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	}
 	else if (auto e = DCast<MethodCallExpression>(expression))
 	{
-		if (e->methodCallKind() == MethodCallExpression::MethodCallKind::Call)
+		if (e->methodCallKind() != MethodCallExpression::MethodCallKind::ListConstruction)
 			*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
 		else
 			*fragment << visit(e->callee()) << list(e->arguments(), this, "initializerList");
