@@ -235,9 +235,12 @@ QSet<CodeUnitPart*> CodeUnitPart::dependenciesWithinFile(QList<CodeUnit*> units)
 		if (!referenceNode->firstAncestorOfType<OOModel::ExplicitTemplateInstantiation>())
 			if (auto target = referenceNode->target())
 				for (auto unit : units)
+				{
 					if (unit->sourcePart() != this &&
-						 unit->sourcePart()->nameNodes().contains(target))
+						 unit->sourcePart()->nameNodes().contains(target) &&
+						 !unit->headerPart()->nameNodes().contains(target))
 							result.insert(unit->sourcePart());
+				}
 	return result;
 }
 
