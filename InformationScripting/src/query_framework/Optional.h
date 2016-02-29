@@ -39,8 +39,8 @@ class INFORMATIONSCRIPTING_API Optional
 		// Since the error constructor takes a QString we disallow usage with QString.
 		static_assert(!std::is_same<ValueType, QString>(), "QString is not allowed as paremeter for Optional");
 	public:
-		Optional(const ValueType& v, const QString& warnings = {});
-		Optional(ValueType&& v, const QString& warnings = {});
+		Optional(const ValueType& v, const QString& warning = {});
+		Optional(ValueType&& v, const QString& warning = {});
 		Optional(const QString& errorMessage);
 		Optional(QString&& errorMessage);
 
