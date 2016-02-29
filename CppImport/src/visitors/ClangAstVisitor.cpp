@@ -1432,19 +1432,22 @@ void ClangAstVisitor::endEntireImport()
 
 		if (auto reference = DCast<OOModel::ReferenceExpression>(current))
 		{
+			bool isPrefixReferenceWithResolvedTarget = false;
 			if (auto prefix = DCast<OOModel::ReferenceExpression>(reference->prefix()))
-			{
-				if (DCast<OOModel::Module>(prefix->target()))
-				{
-					QSet<Model::Node*> foundSymbols;
-					Model::SymbolMatcher matcher{reference->name()};
-					reference->parent()->findSymbols(foundSymbols, matcher, reference, Model::Node::SEARCH_UP,
-																Model::Node::ANY_SYMBOL, false);
+				isPrefixReferenceWithResolvedTarget = DCast<OOModel::Module>(prefix->target());
 
-					if ((foundSymbols.size() > 1 && !reference->target()) ||
-						 (foundSymbols.size() == 1 && foundSymbols.contains(reference->target())))
-						reference->setPrefix(nullptr);
-				}
+			bool isPrefixGlobalScope = DCast<OOModel::GlobalScopeExpression>(reference->prefix());
+
+			if (isPrefixReferenceWithResolvedTarget || isPrefixGlobalScope)
+			{
+				QSet<Model::Node*> foundSymbols;
+				Model::SymbolMatcher matcher{reference->name()};
+				reference->parent()->findSymbols(foundSymbols, matcher, reference, Model::Node::SEARCH_UP,
+															Model::Node::ANY_SYMBOL, false);
+
+				if ((foundSymbols.size() > 1 && !reference->target()) ||
+					 (foundSymbols.size() == 1 && foundSymbols.contains(reference->target())))
+					reference->setPrefix(nullptr);
 			}
 		}
 		else if (!DCast<OOModel::MetaCallExpression>(current))
