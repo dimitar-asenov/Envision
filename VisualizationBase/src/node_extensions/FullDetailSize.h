@@ -28,7 +28,6 @@
 
 #include "../visualizationbase_api.h"
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Float.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
