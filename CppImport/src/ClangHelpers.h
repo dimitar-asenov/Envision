@@ -174,6 +174,8 @@ class CPPIMPORT_API ClangHelpers
 		QStringList folderNamesFromPath(QString path);
 		OOModel::Declaration* folderForLocation(clang::SourceLocation location,
 															 OOModel::Declaration* parentNonFolderDeclaration);
+
+		static QString jsonEscape(QString string);
 };
 
 inline const clang::SourceManager* ClangHelpers::sourceManager() const { return sourceManager_; }

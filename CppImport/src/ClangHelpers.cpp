@@ -348,13 +348,23 @@ void ClangHelpers::exportMergeMapToJson(QString filename)
 	out << "{\n";
 	out << "\t\"DependencyUnitMergeMap\" :\n";
 	out << "\t{\n";
+	bool first{true};
 	for (auto it = exportedMap.begin(); it != exportedMap.end(); it++)
 		if (it.key() != it.value())
-			out << "\t\t\"" << it.key() << "\" : \"" << it.value() << "\",\n";
-	out << "\t},\n";
+		{
+			if (!first) out << ",\n";
+			out << "\t\t\"" << jsonEscape(it.key()) << "\" : \"" << jsonEscape(it.value()) << '"';
+			first = false;
+		}
+	out << "\n\t},\n";
 	out << "\t\"SeparateTemplateImplementationSet\" : [ ]\n";
 	out << "}";
 	file.close();
+}
+
+QString ClangHelpers::jsonEscape(QString string)
+{
+	return string.replace('\\', "\\\\").replace("\"", "\\\"");
 }
 
 }
