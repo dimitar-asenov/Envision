@@ -59,6 +59,8 @@ Config::Config()
 	Q_ASSERT(open);
 	QJsonParseError err;
 	auto doc = QJsonDocument::fromJson(configFile.readAll(), &err);
+	if (err.error != QJsonParseError::NoError)
+		qDebug() << err.errorString();
 	Q_ASSERT(err.error == QJsonParseError::NoError);
 
 	dependencyUnitMergeMap_ = createMap(doc.object(), "DependencyUnitMergeMap");
