@@ -21,7 +21,7 @@ add_library(VisualizationBase SHARED
 	src/declarative/DeclarativeItemBaseStyle.h
 	src/items/VCompositeStyle.h
 	src/items/VComposite.h
-	src/declarative/DeclarativeItemDef.h
+	src/declarative/DeclarativeItem.hpp
 	src/declarative/VisualizationItemWrapperFormElement.h
 	src/declarative/NodeWithVisualizationItemWrapperFormElement.h
 	src/declarative/NodeItemWrapperFormElement.h

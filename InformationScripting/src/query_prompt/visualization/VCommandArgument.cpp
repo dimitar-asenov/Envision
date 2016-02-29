@@ -26,7 +26,7 @@
 
 #include "VCommandArgument.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
 namespace InformationScripting {
 

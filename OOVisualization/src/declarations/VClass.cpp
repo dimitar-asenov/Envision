@@ -32,7 +32,7 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/items/EmptyItem.h"
 
 #include "ModelBase/src/nodes/Node.h"

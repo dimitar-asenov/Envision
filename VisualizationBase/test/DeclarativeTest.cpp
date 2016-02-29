@@ -30,7 +30,7 @@
 #include "../src/items/TestBox.h"
 #include "../src/items/VComposite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
-#include "../src/declarative/DeclarativeItemDef.h"
+#include "../src/declarative/DeclarativeItem.hpp"
 
 namespace Visualization {
 

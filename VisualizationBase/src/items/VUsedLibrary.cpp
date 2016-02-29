@@ -28,7 +28,7 @@
 
 #include "Static.h"
 #include "VText.h"
-#include "../declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItem.hpp"
 
 namespace Visualization {
 

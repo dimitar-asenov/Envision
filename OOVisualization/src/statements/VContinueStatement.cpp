@@ -27,7 +27,7 @@
 #include "VContinueStatement.h"
 
 #include "OOModel/src/statements/ContinueStatement.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
 using namespace Visualization;
 using namespace OOModel;

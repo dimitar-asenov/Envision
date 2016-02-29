@@ -29,7 +29,7 @@
 #include "VisualizationBase/src/shapes/Shape.h"
 
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/items/EmptyItem.h"
 
 using namespace Visualization;

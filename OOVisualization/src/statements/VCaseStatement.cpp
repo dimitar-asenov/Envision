@@ -28,7 +28,7 @@
 #include "../elements/VStatementItemList.h"
 
 #include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 #include "VisualizationBase/src/declarative/BorderFormElement.h"
 

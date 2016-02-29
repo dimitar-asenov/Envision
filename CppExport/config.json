@@ -381,5 +381,5 @@
 		"VisualizationBase/styleSetMaps_" : "VisualizationBase/src/styles/StyleSet",
 		"VisualizationBase/test/CompositeTest" : "VisualizationBase/test/SimpleTest"
 	},
-	"SeparateTemplateImplementationSet" : [ "ModelBase/src/visitor/Visitor", "ModelBase/src/visitor/ExtendedVisitor", "ModelBase/src/nodes/TypedList" ]
+	"SeparateTemplateImplementationSet" : [ "ModelBase/src/visitor/Visitor", "ModelBase/src/visitor/ExtendedVisitor", "ModelBase/src/nodes/TypedList", "VisualizationBase/src/declarative/DeclarativeItem" ]
 }

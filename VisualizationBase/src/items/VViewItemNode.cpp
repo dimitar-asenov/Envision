@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "VViewItemNode.h"
 
-#include "../declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItem.hpp"
 #include "../nodes/ViewItemNode.h"
 #include "../declarative/GridLayoutFormElement.h"
 #include "../items/ViewItem.h"

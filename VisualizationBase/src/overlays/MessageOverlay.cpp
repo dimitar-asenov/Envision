@@ -30,7 +30,7 @@
 #include "../items/Text.h"
 #include "../items/Static.h"
 #include "../items/TextStyle.h"
-#include "../declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItem.hpp"
 
 namespace Visualization {
 

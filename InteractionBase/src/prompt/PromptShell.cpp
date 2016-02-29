@@ -27,7 +27,7 @@
 #include "PromptShell.h"
 #include "PromptMode.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/items/Static.h"
 

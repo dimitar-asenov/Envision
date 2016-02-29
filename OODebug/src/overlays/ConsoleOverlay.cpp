@@ -30,7 +30,7 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
 namespace OODebug {
 

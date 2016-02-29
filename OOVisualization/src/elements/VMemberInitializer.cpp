@@ -26,7 +26,7 @@
 
 #include "VMemberInitializer.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/items/VList.h"
 
 namespace OOVisualization {

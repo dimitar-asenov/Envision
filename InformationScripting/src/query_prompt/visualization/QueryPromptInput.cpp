@@ -28,7 +28,7 @@
 #include "../nodes/QueryNodeContainer.h"
 #include "../nodes/CommandNode.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/cursor/TextCursor.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 

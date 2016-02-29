@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "ZoomLabelOverlay.h"
 #include "../shapes/Shape.h"
-#include "../declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItem.hpp"
 #include "../icons/Icon.h"
 #include "../icons/IconStyle.h"
 #include "../items/StaticStyle.h"

@@ -33,7 +33,7 @@
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/WebBrowserItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
 using namespace Visualization;
 

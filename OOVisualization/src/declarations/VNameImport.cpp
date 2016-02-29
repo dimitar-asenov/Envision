@@ -27,7 +27,7 @@
 #include "VNameImport.h"
 
 #include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
 using namespace Visualization;
 using namespace OOModel;

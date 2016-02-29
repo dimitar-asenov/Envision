@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "Menu.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
 #include "VisualizationBase/src/items/Item.h"
 

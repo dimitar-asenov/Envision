@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "VInfoNode.h"
 
-#include "../declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItem.hpp"
 #include "../nodes/InfoNode.h"
 #include "WebBrowserItem.h"
 #include "../utils/InfoJavascriptFunctions.h"

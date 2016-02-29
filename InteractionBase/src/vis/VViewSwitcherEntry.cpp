@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "VViewSwitcherEntry.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/ViewItemManager.h"

@@ -31,7 +31,7 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/CustomSceneEvent.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"

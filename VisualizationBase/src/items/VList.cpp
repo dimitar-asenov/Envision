@@ -26,7 +26,7 @@
 
 #include "VList.h"
 #include "Static.h"
-#include "../declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItem.hpp"
 #include "../shapes/Shape.h"
 
 namespace Visualization {
