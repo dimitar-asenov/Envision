@@ -46,7 +46,11 @@ ViewItemManager::~ViewItemManager()
 {
 	for (auto vector : viewItems_)
 		for (auto view : vector)
-			SAFE_DELETE_ITEM(view);
+			if (view)
+			{
+				scene_->removeTopLevelItem(view);
+				SAFE_DELETE_ITEM(view);
+			}
 	currentViewItem_ = nullptr;
 	scene_ = nullptr;
 }
