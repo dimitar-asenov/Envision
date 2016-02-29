@@ -107,7 +107,7 @@ void MacroExpansions::addMacroExpansion(clang::SourceRange sourceRange, const cl
 			 *
 			 * We work around this issue by trying to recover the argument spelling between tokens by reading the code
 			 * between: one character to the right of "actualArgFirstToken-1" and
-			 *				one character to the left of "actualArgFirstToken".
+			 * 			one character to the left of "actualArgFirstToken".
 			 */
 			auto unexpandedArgument = actualArgFirstToken->is(clang::tok::eof) ?
 						(i > 0 ? clang_.unexpandedSpelling(clang::SourceRange(

@@ -28,6 +28,9 @@
 
 namespace OOVisualization {
 
-VCastExpressionStyle::~VCastExpressionStyle(){} // Put the VTable here
+VCastExpressionStyle::~VCastExpressionStyle()
+{
+	// Put the VTable here
+}
 
 }

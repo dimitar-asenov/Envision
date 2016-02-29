@@ -36,7 +36,7 @@ extern template class OOMODEL_API Model::TypedList<OOModel::MemberInitializer>;
 
 namespace OOModel {
 /**
- *	This class represent various forms of member initializers.
+ * This class represent various forms of member initializers.
  * It may be a call to a super constructor then \a memberReference will denote
  * the callee of the super constructor with \a arguemnts.
  * In case of delegating constructors the \a memberRef shuold be a reference to owner class,

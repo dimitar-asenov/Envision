@@ -28,6 +28,9 @@
 
 namespace Comments {
 
-VCommentStyle::~VCommentStyle(){} // Put the VTable here
+VCommentStyle::~VCommentStyle()
+{
+	// Put the VTable here
+}
 
 }

@@ -28,6 +28,9 @@
 
 namespace Interaction {
 
-ActionPromptStyle::~ActionPromptStyle(){} // Put the VTable here
+ActionPromptStyle::~ActionPromptStyle()
+{
+	// Put the VTable here
+}
 
 }

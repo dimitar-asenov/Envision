@@ -84,7 +84,7 @@ class DeclarativeItem : public DeclarativeItemBase
 		 * \a itemStorage should be associated. The node gets visualized with its default style.
 		 *
 		 * NOTE: Introducing the ChildItemVisualizationType template argument will require
-		 *			ChildItemVisualizationType::NodeType, which Item does not have, and thus Item cannot be the default!
+		 * 		ChildItemVisualizationType::NodeType, which Item does not have, and thus Item cannot be the default!
 		 */
 		static NodeItemWrapperFormElement<VisualizationType>*
 			item(Item* VisualizationType::* itemStorage, std::function<Model::Node* (VisualizationType* v)> nodeGetter);

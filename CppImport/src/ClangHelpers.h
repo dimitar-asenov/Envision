@@ -102,7 +102,7 @@ class CPPIMPORT_API ClangHelpers
 		 *                          |        |
 		 *                          |         \
 		 *                           Condition
-		 *	                out_start|         |out_end
+		 *                 out_start|         |out_end
 		 *
 		 *
 		 * Example: Concatenated tokens:
@@ -115,11 +115,11 @@ class CPPIMPORT_API ClangHelpers
 		 *                       |out_start     |out_end
 		 *
 		 *                      start||end            (start == end)
-		 *										Door
+		 * 									Door
 		 *                           /\___
 		 *                          |     \
 		 *                           Do##or
-		 *	                out_start|     |out_end
+		 *                 out_start|     |out_end
 		 */
 		clang::SourceRange getUnexpandedRange(clang::SourceRange sourceRange) const;
 

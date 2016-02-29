@@ -28,9 +28,15 @@
 
 namespace Comments {
 
-VCommentDiagramShapeStyle::~VCommentDiagramShapeStyle(){} // Put the VTable here
+VCommentDiagramShapeStyle::~VCommentDiagramShapeStyle()
+{
+	// Put the VTable here
+}
 
-VCommentDiagramShapeSequenceStyle::~VCommentDiagramShapeSequenceStyle(){} // Put the VTable here
+VCommentDiagramShapeSequenceStyle::~VCommentDiagramShapeSequenceStyle()
+{
+	// Put the VTable here
+}
 
 const QColor VCommentDiagramShapeSequenceStyle::colorFromName(const QString& colorName) const
 {

@@ -28,8 +28,14 @@
 
 namespace Comments {
 
-VCommentDiagramStyle::~VCommentDiagramStyle(){} // Put the VTable here
-VCommentDiagramSequenceStyle::~VCommentDiagramSequenceStyle(){} // Put the VTable here
+VCommentDiagramStyle::~VCommentDiagramStyle()
+{
+	// Put the VTable here
+}
+VCommentDiagramSequenceStyle::~VCommentDiagramSequenceStyle()
+{
+	// Put the VTable here
+}
 
 QVector<QColor> VCommentDiagramSequenceStyle::getColors() const
 {

@@ -1041,11 +1041,11 @@ public: void test()
 	// Add an annotation class
 	addAnnotation(folder1);
 
-//	// Add a second method
+	// Add a second method
 	Method* longMethod = nullptr;
 	longMethod = addLongMethod(hello);
 
-//	// Add a third method
+	// Add a third method
 	Method* factorial = nullptr;
 	factorial = addFactorial(hello);
 

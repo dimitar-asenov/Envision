@@ -37,7 +37,7 @@ namespace CppImport {
 /**
  * This is the core manager of the CppImport plugin.
  * To import C++ code you have to specify a path to import with the \a setImportPath method.
- *	After having set the source path you can translate the code with the \a createTreeManager method.
+ * After having set the source path you can translate the code with the \a createTreeManager method.
  *
  * To experiment/test you may want to use the \a setupTest method.
  */

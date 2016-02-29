@@ -87,12 +87,12 @@ class VISUALIZATIONBASE_API Cursor {
 		 * \brief Returns true if this cursor is equivalent with respect to its location to the cursor \a c.
 		 *
 		 * Here are the conditions for two cursors to be location equivalent:
-		 *	- None of the cursors is set to be not location equivalent.
-		 *	- The type of both cursors is the same. Furthermore the type can not be BoxCursor.
-		 *	- The owners of the two cursors are in a child-parent relationship. Two cursors from peer entities are not
-		 *	  location equivalent. Two cursors from the same owner can not be location equivalent
-		 *	- At least one of the cursors is a boundary cursor.
-		 *	- The inner item's style allows for cursors equivalent through a boundary.
+		 * - None of the cursors is set to be not location equivalent.
+		 * - The type of both cursors is the same. Furthermore the type can not be BoxCursor.
+		 * - The owners of the two cursors are in a child-parent relationship. Two cursors from peer entities are not
+		 *   location equivalent. Two cursors from the same owner can not be location equivalent
+		 * - At least one of the cursors is a boundary cursor.
+		 * - The inner item's style allows for cursors equivalent through a boundary.
 		 */
 		virtual bool isLocationEquivalent(Cursor* c);
 		virtual bool isLocationEquivalent(bool otherNotLocationEquivalent, CursorType otherType, bool otherIsAtBoundary,

@@ -28,5 +28,8 @@
 
 namespace OOVisualization {
 
-VModuleStyle::~VModuleStyle(){} // Put the VTable here
+VModuleStyle::~VModuleStyle()
+{
+	// Put the VTable here
+}
 }

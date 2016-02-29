@@ -42,7 +42,7 @@ class FILEPERSISTENCE_API LinkedChangesTransition
 		LinkedChangesTransition(const LinkedChangesSet& linkedChangesSet);
 
 		/**
-		 *	Creates the identity transition, representing no modifications of the change linking.
+		 * Creates the identity transition, representing no modifications of the change linking.
 		 */
 		LinkedChangesTransition(const LinkedChangesSet& linkedChangesSet,
 										const ChangeDependencyGraph& cdgA,

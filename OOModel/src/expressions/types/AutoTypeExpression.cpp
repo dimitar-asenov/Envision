@@ -45,9 +45,9 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 std::unique_ptr<Type> AutoTypeExpression::type()
 {
 	/**
-	 *	TODO: like this we return the wrong type for auto &&
+	 * TODO: like this we return the wrong type for auto &&
 	 * note however that const and volatile are supported as TypeQualifierExpression
-	 *	adds the qualifier when calling the type() method
+	 * adds the qualifier when calling the type() method
 	 **/
 	auto p = parent();
 	Model::Node* current = this;

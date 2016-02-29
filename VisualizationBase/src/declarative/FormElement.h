@@ -217,7 +217,7 @@ class VISUALIZATIONBASE_API FormElement
 		 * specific \a item.
 		 *
 		 * It is called in two cases:
-		 *		- When the item is being destroyed. In that case all information and child items should be destroyed. The
+		 * 	- When the item is being destroyed. In that case all information and child items should be destroyed. The
 		 * 	second argument is an empty list.
 		 * 	- When the current form is changing. In that case only information pertaining to child items which are
 		 * 	not definitely handled by the new form should be removed. The second argument is a list of all child item

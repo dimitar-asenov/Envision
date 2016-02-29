@@ -28,6 +28,9 @@
 
 namespace OOVisualization {
 
-VDeclarationSzStyle::~VDeclarationSzStyle(){} // Put the VTable here
+VDeclarationSzStyle::~VDeclarationSzStyle()
+{
+	// Put the VTable here
+}
 
 }

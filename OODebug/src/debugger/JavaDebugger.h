@@ -78,8 +78,8 @@ class OODEBUG_API JavaDebugger
 		/**
 		 * Type of a Breakpoint:
 		 * \a Internal means the user will not see the breakpoint.
-		 *			This is useful for breakpoints where one wants to auto resume.
-		 *				(e.g. count how many times a statement is executed)
+		 * 		This is useful for breakpoints where one wants to auto resume.
+		 * 			(e.g. count how many times a statement is executed)
 		 * \a User means there will be an icon notifying the user about the existince of the user.
 		 */
 		enum class BreakpointType : int { Internal, User };
@@ -93,7 +93,7 @@ class OODEBUG_API JavaDebugger
 
 		using ProgramExitSingleShot = std::function<void ()>;
 		/**
-		 *	Register a listener for the next program exit. Once the event happened the listener will be destroyed
+		 * Register a listener for the next program exit. Once the event happened the listener will be destroyed
 		 * and not called in any subsequent event.
 		 */
 		void addProgramExitLister(ProgramExitSingleShot listener);

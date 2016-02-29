@@ -28,6 +28,9 @@
 
 namespace OOVisualization {
 
-VDeclarationConstantSzStyle::~VDeclarationConstantSzStyle(){} // Put the VTable here
+VDeclarationConstantSzStyle::~VDeclarationConstantSzStyle()
+{
+	// Put the VTable here
+}
 
 }

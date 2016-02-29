@@ -28,6 +28,9 @@
 
 namespace OOVisualization {
 
-VMethodStyle::~VMethodStyle(){} // Put the VTable here
+VMethodStyle::~VMethodStyle()
+{
+	// Put the VTable here
+}
 
 }

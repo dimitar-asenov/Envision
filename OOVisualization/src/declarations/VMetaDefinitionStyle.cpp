@@ -28,6 +28,9 @@
 
 namespace OOVisualization {
 
-VMetaDefinitionStyle::~VMetaDefinitionStyle(){} // Put the VTable here
+VMetaDefinitionStyle::~VMetaDefinitionStyle()
+{
+	// Put the VTable here
+}
 
 }

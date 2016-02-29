@@ -28,6 +28,9 @@
 
 namespace OOVisualization {
 
-VProjectStyle::~VProjectStyle(){} // Put the VTable here
+VProjectStyle::~VProjectStyle()
+{
+	// Put the VTable here
+}
 
 }

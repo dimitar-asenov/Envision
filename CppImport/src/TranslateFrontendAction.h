@@ -42,7 +42,7 @@ class CPPIMPORT_API TranslateFrontendAction : public clang::ASTFrontendAction
 
 		/**
 		 * This method creates a new ClangAstConsumer with the visitor_
-		 *	It updates the compile instance (i.e. the source manager) of the visitor_
+		 * It updates the compile instance (i.e. the source manager) of the visitor_
 		 */
 		virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer
 			(clang::CompilerInstance& compilerInstance, llvm::StringRef) override;

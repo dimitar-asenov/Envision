@@ -89,7 +89,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		 * Registers a new method to get information.
 		 * @param name The name of the getter.
 		 * @param getter The getter method itself, taking a node and returning a string. If this
-		 *				 method is not applicable for the node supplied, it should return an empty string.
+		 * 			 method is not applicable for the node supplied, it should return an empty string.
 		 * @param updatesAutomatically Whether this info should always update.
 		 * @param enabledByDefault Whether this info is visible by default.
 		 */
@@ -106,7 +106,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		/**
 		 * Updates the node's stored information.
 		 * @param isAutoUpdate Is this an automatic update, or a forced update?
-		 *					   A forced update will update everything.
+		 * 				   A forced update will update everything.
 		 */
 		virtual void updateInfo(bool isAutoUpdate);
 
