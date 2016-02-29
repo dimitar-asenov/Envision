@@ -184,7 +184,7 @@ SourceFragment* StatementVisitor::visit(LoopStatement* statement)
 
 QString StatementVisitor::blockStyle(Model::List* block)
 {
-	if (block->size() == 1)
+	if (block->size() == 1 && !DCast<Comments::CommentNode>(block->first()))
 	{
 		if (auto parentIf = DCast<OOModel::IfStatement>(block->parent()))
 		{
