@@ -35,7 +35,7 @@
 #include "../Scene.h"
 #include "RootItem.h"
 #include "../renderer/ModelRenderer.h"
-#include "../utils/JsonUtil.h"
+#include "ModelBase/src/model/AllTreeManagers.h"
 #include "../VisualizationManager.h"
 #include "../ViewItemManager.h"
 
@@ -428,10 +428,10 @@ void ViewItem::arrowFromJson(QJsonObject json)
 	auto parent2 = DCast<ViewItemNode>(nodeAt(json["parent2col"].toInt(), json["parent2row"].toInt()));
 	Model::Node* node1{}, *node2{};
 	if (json.contains("node1"))
-		node1 = JsonUtil::nodeForId(QUuid{json["node1"].toString()});
+		node1 = Model::AllTreeManagers::instance().nodeForId(QUuid{json["node1"].toString()});
 	else node1 = parent1;
 	if (json.contains("node2"))
-		node2 = JsonUtil::nodeForId(QUuid{json["node2"].toString()});
+		node2 = Model::AllTreeManagers::instance().nodeForId(QUuid{json["node2"].toString()});
 	else node2 = parent2;
 	if (node1 && node2)
 		addArrow(node1, node2, json["layer"].toString(), parent1, parent2);

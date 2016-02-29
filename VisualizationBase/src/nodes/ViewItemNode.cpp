@@ -29,8 +29,8 @@
 
 #include "../nodes/InfoNode.h"
 #include "../items/ViewItem.h"
-#include "../utils/JsonUtil.h"
 
+#include "ModelBase/src/model/AllTreeManagers.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<Visualization::ViewItemNode>;
@@ -76,12 +76,12 @@ ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *view)
 	result->setPurpose(json["purpose"].toInt());
 	if (json["type"] == "NODE")
 	{
-		if (auto ref = JsonUtil::nodeForId(QUuid{json["reference"].toString()}))
+		if (auto ref = Model::AllTreeManagers::instance().nodeForId(QUuid{json["reference"].toString()}))
 			result->setReference(ref);
 	}
 	else if (json["type"] == "SPACING")
 	{
-		if (auto target = JsonUtil::nodeForId(QUuid{json["target"].toString()}))
+		if (auto target = Model::AllTreeManagers::instance().nodeForId(QUuid{json["target"].toString()}))
 			result->setSpacingTarget(target);
 		if (json["parentRow"].toInt() != -1)
 			result->setSpacingParent(DCast<ViewItemNode>(view->nodeAt(json["parentCol"].toInt(),
@@ -89,7 +89,7 @@ ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *view)
 	}
 	else if (json["type"] == "INFO")
 	{
-		if (auto target = JsonUtil::nodeForId(QUuid{json["target"].toString()}))
+		if (auto target = Model::AllTreeManagers::instance().nodeForId(QUuid{json["target"].toString()}))
 			result->setReference(new InfoNode{target, json["content"].toArray()});
 	}
 	return result;

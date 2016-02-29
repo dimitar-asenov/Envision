@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../modelbase_api.h"
+#include "../persistence/PersistentStore.h"
 
 namespace Model {
 
@@ -68,6 +69,8 @@ class MODELBASE_API AllTreeManagers {
 		const QList<TreeManager*>& loadedManagers() const;
 
 		TreeManager* managerOfOwningUndoStack(Node* node, const NodeOwningCommand* excludeCommand = nullptr) const;
+
+		Node* nodeForId(NodeIdType id) const;
 
 	private:
 		AllTreeManagers();

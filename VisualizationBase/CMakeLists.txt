@@ -132,7 +132,6 @@ add_library(VisualizationBase SHARED
 	src/nodes/InfoNode.h
 	src/items/VInfoNode.h
 	src/ViewItemManager.h
-	src/utils/JsonUtil.h
 	src/overlays/ArrowOverlayStyle.h
 	src/utils/InfoJavascriptFunctions.h
 	src/overlays/IconOverlayStyle.cpp
@@ -247,7 +246,6 @@ add_library(VisualizationBase SHARED
 	src/items/VInfoNode.cpp
 	src/styles/StyleSet.cpp
 	src/ViewItemManager.cpp
-	src/utils/JsonUtil.cpp
 	src/overlays/ArrowOverlayStyle.cpp
 	src/utils/InfoJavascriptFunctions.cpp
 	src/shapes/Frame.h

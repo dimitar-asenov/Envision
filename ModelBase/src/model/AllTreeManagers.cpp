@@ -86,4 +86,12 @@ TreeManager* AllTreeManagers::remove(TreeManager* manager)
 	return manager;
 }
 
+Node* AllTreeManagers::nodeForId(NodeIdType id) const
+{
+	for (auto manager : loadedManagers())
+		if (auto node = manager->nodeIdMap().node(id))
+			return const_cast<Node*>(node);
+	return nullptr;
+}
+
 }
