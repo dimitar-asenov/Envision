@@ -65,7 +65,7 @@ class INFORMATIONSCRIPTING_API TagQuery : public LinearQuery
 		Optional<TupleSet> addTags(TupleSet input);
 		Optional<TupleSet> removeTags(TupleSet input);
 
-		void insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
+		void insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
 };
 
 }

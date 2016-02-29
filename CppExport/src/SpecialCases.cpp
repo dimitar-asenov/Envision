@@ -107,26 +107,26 @@ bool SpecialCases::isTemplateArgumentNameOnlyDependency(OOModel::ReferenceExpres
 	return parentReference->name() == "unique_ptr" || parentReference->name() == "shared_ptr";
 }
 
-Export::SourceFragment* SpecialCases::printXMacroDataBlock(OOModel::MetaCallExpression* metaCall)
+Export::SourceFragment* SpecialCases::printXMacroDataBlock(OOModel::MetaCallExpression* beginPartialMetaCall)
 {
-	auto reference = DCast<OOModel::ReferenceExpression>(metaCall->callee());
+	auto reference = DCast<OOModel::ReferenceExpression>(beginPartialMetaCall->callee());
 	Q_ASSERT(reference->name().startsWith("BEGIN_"));
 
-	auto fragment = new Export::CompositeFragment{metaCall, "sections"};
-	auto beginCallFragment = fragment->append(new Export::CompositeFragment{metaCall});
+	auto fragment = new Export::CompositeFragment{beginPartialMetaCall, "sections"};
+	auto beginCallFragment = fragment->append(new Export::CompositeFragment{beginPartialMetaCall});
 	*beginCallFragment << reference->name();
 	auto argumentsFragment =
-			beginCallFragment->append(new Export::CompositeFragment{metaCall->arguments(), "argsList"});
+			beginCallFragment->append(new Export::CompositeFragment{beginPartialMetaCall->arguments(), "argsList"});
 
 	CppPrintContext printContext{nullptr};
-	for (auto i = 0; i < metaCall->arguments()->size() - 1; i++)
-		if (auto expression = DCast<OOModel::Expression>(metaCall->arguments()->at(i)))
+	for (auto i = 0; i < beginPartialMetaCall->arguments()->size() - 1; i++)
+		if (auto expression = DCast<OOModel::Expression>(beginPartialMetaCall->arguments()->at(i)))
 			*argumentsFragment << ExpressionVisitor{printContext}.visit(expression);
 		else
 			Q_ASSERT(false);
 
-	Q_ASSERT(metaCall->arguments()->size() > 0);
-	auto childMetaCallsList = DCast<Model::List>(metaCall->arguments()->last());
+	Q_ASSERT(beginPartialMetaCall->arguments()->size() > 0);
+	auto childMetaCallsList = DCast<Model::List>(beginPartialMetaCall->arguments()->last());
 	auto childMetaCallsFragment = fragment->append(new Export::CompositeFragment{childMetaCallsList, "bodyNoBraces"});
 	Q_ASSERT(childMetaCallsList);
 	for (auto childMetaCallCandidate : *childMetaCallsList)
@@ -185,24 +185,25 @@ Export::CompositeFragment* SpecialCases::printPartialBeginMacroSpecialization(OO
 	return macro;
 }
 
-Export::CompositeFragment* SpecialCases::printPartialBeginMacroBase(OOModel::MetaDefinition* metaDefinition,
+Export::CompositeFragment* SpecialCases::printPartialBeginMacroBase(OOModel::MetaDefinition* beginPartialMetaDefinition,
 																						  bool isHeaderFile)
 {
-	Q_ASSERT(metaDefinition->name().startsWith("BEGIN_") && !metaDefinition->metaBindings()->isEmpty());
+	Q_ASSERT(beginPartialMetaDefinition->name().startsWith("BEGIN_")
+				&& !beginPartialMetaDefinition->metaBindings()->isEmpty());
 
-	auto fragment = new Export::CompositeFragment{metaDefinition, "macro"};
-	auto macroFragment = fragment->append(new Export::CompositeFragment{metaDefinition, "sections"});
-	auto context = DCast<OOModel::Module>(metaDefinition->context());
+	auto fragment = new Export::CompositeFragment{beginPartialMetaDefinition, "macro"};
+	auto macroFragment = fragment->append(new Export::CompositeFragment{beginPartialMetaDefinition, "sections"});
+	auto context = DCast<OOModel::Module>(beginPartialMetaDefinition->context());
 	auto classs = context->classes()->first();
 	CppPrintContext printContext{isHeaderFile ? classs : nullptr, (isHeaderFile ? CppPrintContext::IsHeaderPart :
 																											CppPrintContext::PrintMethodBody)
 																					  | CppPrintContext::XMacro};
-	auto metaDefinitionFragment = macroFragment->append(new Export::CompositeFragment{metaDefinition});
-	*metaDefinitionFragment << "#define " << metaDefinition->name();
-	auto argumentsFragment = metaDefinitionFragment->append(new Export::CompositeFragment{metaDefinition->arguments(),
-																													  "argsList"});
-	for (auto i = 0; i < metaDefinition->arguments()->size() - (isHeaderFile ? 2 : 3); i++)
-		*argumentsFragment << ElementVisitor{printContext}.visit(metaDefinition->arguments()->at(i));
+	auto metaDefinitionFragment = macroFragment->append(new Export::CompositeFragment{beginPartialMetaDefinition});
+	*metaDefinitionFragment << "#define " << beginPartialMetaDefinition->name();
+	auto argumentsFragment = metaDefinitionFragment->append(
+				new Export::CompositeFragment{beginPartialMetaDefinition->arguments(), "argsList"});
+	for (auto i = 0; i < beginPartialMetaDefinition->arguments()->size() - (isHeaderFile ? 2 : 3); i++)
+		*argumentsFragment << ElementVisitor{printContext}.visit(beginPartialMetaDefinition->arguments()->at(i));
 	*macroFragment << DeclarationVisitor{printContext}.visit(classs);
 
 	return fragment;

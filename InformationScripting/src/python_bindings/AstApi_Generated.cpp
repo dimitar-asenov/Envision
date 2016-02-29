@@ -121,6 +121,7 @@
 #include "ModelBase/src/nodes/Node.h"
 
 #include "ModelBase/src/persistence/ClipboardStore.h"
+
 #include "ModelBase/src/commands/UndoCommand.h"
 
 namespace InformationScripting {
@@ -196,9 +197,10 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.value("VARIABLE", Model::Node::SymbolType::VARIABLE)
 		.value("ANY_SYMBOL", Model::Node::SymbolType::ANY_SYMBOL);
 	enum_<Model::Node::FindSymbolDirection>("FindSymbolDirection")
-		.value("SEARCH_UP", Model::Node::FindSymbolDirection::SEARCH_UP)
+		.value("SEARCH_HERE", Model::Node::FindSymbolDirection::SEARCH_HERE)
 		.value("SEARCH_DOWN", Model::Node::FindSymbolDirection::SEARCH_DOWN)
-		.value("SEARCH_HERE", Model::Node::FindSymbolDirection::SEARCH_HERE);
+		.value("SEARCH_UP", Model::Node::FindSymbolDirection::SEARCH_UP)
+		.value("SEARCH_UP_ORDERED", Model::Node::FindSymbolDirection::SEARCH_UP_ORDERED);
 }
 
 {
@@ -206,16 +208,16 @@ BOOST_PYTHON_MODULE(AstApi) {
 		const QString&) const = &Model::CompositeNode::indexOf;
 	Model::CompositeIndex (Model::CompositeNode::*CompositeNode_indexOf2)(
 		Model::Node*) const = &Model::CompositeNode::indexOf;
-	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf1)(const QString&) const = &Model::CompositeNode::isSubtypeOf;
-	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf2)(int) const = &Model::CompositeNode::isSubtypeOf;
-	void (Model::CompositeNode::*CompositeNode_remove1)(QString) = &Model::CompositeNode::remove;
-	void (Model::CompositeNode::*CompositeNode_remove2)(Model::Node*) = &Model::CompositeNode::remove;
-	void (Model::CompositeNode::*CompositeNode_remove3)(const Model::CompositeIndex&) = &Model::CompositeNode::remove;
 	Model::Node* (Model::CompositeNode::*CompositeNode_get1)(const QString&) const = &Model::CompositeNode::get;
 	Model::Node* (Model::CompositeNode::*CompositeNode_get2)(const
 		Model::CompositeIndex&) const = &Model::CompositeNode::get;
+	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf1)(const QString&) const = &Model::CompositeNode::isSubtypeOf;
+	bool (Model::CompositeNode::*CompositeNode_isSubtypeOf2)(int) const = &Model::CompositeNode::isSubtypeOf;
 	Model::CompositeIndex (*CompositeNode_registerNewAttribute1)(const
 		Model::Attribute&) = &Model::CompositeNode::registerNewAttribute;
+	void (Model::CompositeNode::*CompositeNode_remove1)(QString) = &Model::CompositeNode::remove;
+	void (Model::CompositeNode::*CompositeNode_remove2)(Model::Node*) = &Model::CompositeNode::remove;
+	void (Model::CompositeNode::*CompositeNode_remove3)(const Model::CompositeIndex&) = &Model::CompositeNode::remove;
 	class_<Model::CompositeNode, bases<Model::Node>>("CompositeNode")
 		.add_property("comment",
 			make_function(&Model::CompositeNode::comment, return_internal_reference<>()),
@@ -250,14 +252,14 @@ BOOST_PYTHON_MODULE(AstApi) {
 			Model::CompositeNode::*)())&Model::CompositeNode::meta, return_value_policy<copy_const_reference>()))
 		.def("indexOf", CompositeNode_indexOf1)
 		.def("indexOf", CompositeNode_indexOf2)
-		.def("isSubtypeOf", CompositeNode_isSubtypeOf1)
-		.def("isSubtypeOf", CompositeNode_isSubtypeOf2)
-		.def("remove", CompositeNode_remove1)
-		.def("remove", CompositeNode_remove2)
-		.def("remove", CompositeNode_remove3)
 		.def("get", make_function(CompositeNode_get1, return_internal_reference<>()))
 		.def("get", make_function(CompositeNode_get2, return_internal_reference<>()))
-		.def("registerNewAttribute", CompositeNode_registerNewAttribute1);
+		.def("isSubtypeOf", CompositeNode_isSubtypeOf1)
+		.def("isSubtypeOf", CompositeNode_isSubtypeOf2)
+		.def("registerNewAttribute", CompositeNode_registerNewAttribute1)
+		.def("remove", CompositeNode_remove1)
+		.def("remove", CompositeNode_remove2)
+		.def("remove", CompositeNode_remove3);
 }
 
 {
@@ -1558,7 +1560,8 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("registerNewAttribute", MethodCallExpression_registerNewAttribute2);
 	enum_<OOModel::MethodCallExpression::MethodCallKind>("MethodCallKind")
 		.value("Call", OOModel::MethodCallExpression::MethodCallKind::Call)
-		.value("Construct", OOModel::MethodCallExpression::MethodCallKind::Construct);
+		.value("ListConstruction", OOModel::MethodCallExpression::MethodCallKind::ListConstruction)
+		.value("CallConstruction", OOModel::MethodCallExpression::MethodCallKind::CallConstruction);
 }
 
 {
@@ -2461,21 +2464,25 @@ BOOST_PYTHON_MODULE(AstApi) {
 }
 
 {
-	Model::CompositeIndex (*VariableDeclaration_registerNewAttribute1)(
-		const Model::Attribute&) = &OOModel::VariableDeclaration::registerNewAttribute;
-	Model::CompositeIndex (*VariableDeclaration_registerNewAttribute2)(
-		const QString&, const QString&, bool, bool, bool) = &OOModel::VariableDeclaration::registerNewAttribute;
 	bool (OOModel::VariableDeclaration::*VariableDeclaration_isSubtypeOf1)(
 		const QString&) const = &OOModel::VariableDeclaration::isSubtypeOf;
 	bool (OOModel::VariableDeclaration::*VariableDeclaration_isSubtypeOf2)(
 		int) const = &OOModel::VariableDeclaration::isSubtypeOf;
-	class_<OOModel::VariableDeclaration, bases<OOModel::Declaration>>("VariableDeclaration")
+	Model::CompositeIndex (*VariableDeclaration_registerNewAttribute1)(
+		const Model::Attribute&) = &OOModel::VariableDeclaration::registerNewAttribute;
+	Model::CompositeIndex (*VariableDeclaration_registerNewAttribute2)(
+		const QString&, const QString&, bool, bool, bool) = &OOModel::VariableDeclaration::registerNewAttribute;
+	scope VariableDeclarationscope = class_<OOModel::VariableDeclaration,
+		 bases<OOModel::Declaration>>("VariableDeclaration")
 		.add_property("typeExpression",
 			make_function(&OOModel::VariableDeclaration::typeExpression, return_internal_reference<>()),
 			&OOModel::VariableDeclaration::setTypeExpression)
 		.add_property("initialValue",
 			make_function(&OOModel::VariableDeclaration::initialValue, return_internal_reference<>()),
 			&OOModel::VariableDeclaration::setInitialValue)
+		.add_property("initializationKind",
+			&OOModel::VariableDeclaration::initializationKind,
+			&OOModel::VariableDeclaration::setInitializationKind)
 		.def("typeName", make_function((const QString& (
 		OOModel::VariableDeclaration::*)())&OOModel::VariableDeclaration::typeName,
 			 return_value_policy<copy_const_reference>()))
@@ -2495,10 +2502,13 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("getMetaData", make_function(&OOModel::VariableDeclaration::getMetaData, return_internal_reference<>()))
 		.staticmethod("getMetaData")
 		.def("symbolType", &OOModel::VariableDeclaration::symbolType)
-		.def("registerNewAttribute", VariableDeclaration_registerNewAttribute1)
-		.def("registerNewAttribute", VariableDeclaration_registerNewAttribute2)
 		.def("isSubtypeOf", VariableDeclaration_isSubtypeOf1)
-		.def("isSubtypeOf", VariableDeclaration_isSubtypeOf2);
+		.def("isSubtypeOf", VariableDeclaration_isSubtypeOf2)
+		.def("registerNewAttribute", VariableDeclaration_registerNewAttribute1)
+		.def("registerNewAttribute", VariableDeclaration_registerNewAttribute2);
+	enum_<OOModel::VariableDeclaration::InitializationKind>("InitializationKind")
+		.value("StandardInitialization", OOModel::VariableDeclaration::InitializationKind::StandardInitialization)
+		.value("CallInitialization", OOModel::VariableDeclaration::InitializationKind::CallInitialization);
 }
 
 {
@@ -2724,6 +2734,7 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.value("Struct", OOModel::Class::ConstructKind::Struct)
 		.value("Union", OOModel::Class::ConstructKind::Union)
 		.value("Enum", OOModel::Class::ConstructKind::Enum)
+		.value("EnumClass", OOModel::Class::ConstructKind::EnumClass)
 		.value("Annotation", OOModel::Class::ConstructKind::Annotation);
 }
 
@@ -3878,40 +3889,30 @@ BOOST_PYTHON_MODULE(AstApi) {
 }
 
 {
-	using Texts = Model::TypedList<Model::Text>;
-	class_<Model::TypedList<Model::Text>, bases<Model::List>>("Texts")
-		.def("__len__", &Texts::size)
-		.def("__iter__", iterator<Texts, return_internal_reference<>>());
+	using MemberInitializers = Model::TypedList<OOModel::MemberInitializer>;
+	class_<Model::TypedList<OOModel::MemberInitializer>, bases<Model::List>>("MemberInitializers")
+		.def("__len__", &MemberInitializers::size)
+		.def("__iter__", iterator<MemberInitializers, return_internal_reference<>>());
+
+	using Modules = Model::TypedList<OOModel::Module>;
+	class_<Model::TypedList<OOModel::Module>, bases<Model::List>>("Modules")
+		.def("__len__", &Modules::size)
+		.def("__iter__", iterator<Modules, return_internal_reference<>>());
+
+	using FormalMetaArguments = Model::TypedList<OOModel::FormalMetaArgument>;
+	class_<Model::TypedList<OOModel::FormalMetaArgument>, bases<Model::List>>("FormalMetaArguments")
+		.def("__len__", &FormalMetaArguments::size)
+		.def("__iter__", iterator<FormalMetaArguments, return_internal_reference<>>());
+
+	using Fields = Model::TypedList<OOModel::Field>;
+	class_<Model::TypedList<OOModel::Field>, bases<Model::List>>("Fields")
+		.def("__len__", &Fields::size)
+		.def("__iter__", iterator<Fields, return_internal_reference<>>());
 
 	using Declarations = Model::TypedList<OOModel::Declaration>;
 	class_<Model::TypedList<OOModel::Declaration>, bases<Model::List>>("Declarations")
 		.def("__len__", &Declarations::size)
 		.def("__iter__", iterator<Declarations, return_internal_reference<>>());
-
-	using CatchClauses = Model::TypedList<OOModel::CatchClause>;
-	class_<Model::TypedList<OOModel::CatchClause>, bases<Model::List>>("CatchClauses")
-		.def("__len__", &CatchClauses::size)
-		.def("__iter__", iterator<CatchClauses, return_internal_reference<>>());
-
-	using Classs = Model::TypedList<OOModel::Class>;
-	class_<Model::TypedList<OOModel::Class>, bases<Model::List>>("Classs")
-		.def("__len__", &Classs::size)
-		.def("__iter__", iterator<Classs, return_internal_reference<>>());
-
-	using MetaCallMappings = Model::TypedList<OOModel::MetaCallMapping>;
-	class_<Model::TypedList<OOModel::MetaCallMapping>, bases<Model::List>>("MetaCallMappings")
-		.def("__len__", &MetaCallMappings::size)
-		.def("__iter__", iterator<MetaCallMappings, return_internal_reference<>>());
-
-	using FormalTypeArguments = Model::TypedList<OOModel::FormalTypeArgument>;
-	class_<Model::TypedList<OOModel::FormalTypeArgument>, bases<Model::List>>("FormalTypeArguments")
-		.def("__len__", &FormalTypeArguments::size)
-		.def("__iter__", iterator<FormalTypeArguments, return_internal_reference<>>());
-
-	using Expressions = Model::TypedList<OOModel::Expression>;
-	class_<Model::TypedList<OOModel::Expression>, bases<Model::List>>("Expressions")
-		.def("__len__", &Expressions::size)
-		.def("__iter__", iterator<Expressions, return_internal_reference<>>());
 
 	using Projects = Model::TypedList<OOModel::Project>;
 	class_<Model::TypedList<OOModel::Project>, bases<Model::List>>("Projects")
@@ -3923,6 +3924,51 @@ BOOST_PYTHON_MODULE(AstApi) {
 		.def("__len__", &FormalArguments::size)
 		.def("__iter__", iterator<FormalArguments, return_internal_reference<>>());
 
+	using FormalTypeArguments = Model::TypedList<OOModel::FormalTypeArgument>;
+	class_<Model::TypedList<OOModel::FormalTypeArgument>, bases<Model::List>>("FormalTypeArguments")
+		.def("__len__", &FormalTypeArguments::size)
+		.def("__iter__", iterator<FormalTypeArguments, return_internal_reference<>>());
+
+	using CatchClauses = Model::TypedList<OOModel::CatchClause>;
+	class_<Model::TypedList<OOModel::CatchClause>, bases<Model::List>>("CatchClauses")
+		.def("__len__", &CatchClauses::size)
+		.def("__iter__", iterator<CatchClauses, return_internal_reference<>>());
+
+	using MetaBindings = Model::TypedList<OOModel::MetaBinding>;
+	class_<Model::TypedList<OOModel::MetaBinding>, bases<Model::List>>("MetaBindings")
+		.def("__len__", &MetaBindings::size)
+		.def("__iter__", iterator<MetaBindings, return_internal_reference<>>());
+
+	using UsedLibrarys = Model::TypedList<Model::UsedLibrary>;
+	class_<Model::TypedList<Model::UsedLibrary>, bases<Model::List>>("UsedLibrarys")
+		.def("__len__", &UsedLibrarys::size)
+		.def("__iter__", iterator<UsedLibrarys, return_internal_reference<>>());
+
+	using MetaCallMappings = Model::TypedList<OOModel::MetaCallMapping>;
+	class_<Model::TypedList<OOModel::MetaCallMapping>, bases<Model::List>>("MetaCallMappings")
+		.def("__len__", &MetaCallMappings::size)
+		.def("__iter__", iterator<MetaCallMappings, return_internal_reference<>>());
+
+	using Expressions = Model::TypedList<OOModel::Expression>;
+	class_<Model::TypedList<OOModel::Expression>, bases<Model::List>>("Expressions")
+		.def("__len__", &Expressions::size)
+		.def("__iter__", iterator<Expressions, return_internal_reference<>>());
+
+	using Texts = Model::TypedList<Model::Text>;
+	class_<Model::TypedList<Model::Text>, bases<Model::List>>("Texts")
+		.def("__len__", &Texts::size)
+		.def("__iter__", iterator<Texts, return_internal_reference<>>());
+
+	using Enumerators = Model::TypedList<OOModel::Enumerator>;
+	class_<Model::TypedList<OOModel::Enumerator>, bases<Model::List>>("Enumerators")
+		.def("__len__", &Enumerators::size)
+		.def("__iter__", iterator<Enumerators, return_internal_reference<>>());
+
+	using Classs = Model::TypedList<OOModel::Class>;
+	class_<Model::TypedList<OOModel::Class>, bases<Model::List>>("Classs")
+		.def("__len__", &Classs::size)
+		.def("__iter__", iterator<Classs, return_internal_reference<>>());
+
 	using Methods = Model::TypedList<OOModel::Method>;
 	class_<Model::TypedList<OOModel::Method>, bases<Model::List>>("Methods")
 		.def("__len__", &Methods::size)
@@ -3932,41 +3978,6 @@ BOOST_PYTHON_MODULE(AstApi) {
 	class_<Model::TypedList<OOModel::FormalResult>, bases<Model::List>>("FormalResults")
 		.def("__len__", &FormalResults::size)
 		.def("__iter__", iterator<FormalResults, return_internal_reference<>>());
-
-	using Fields = Model::TypedList<OOModel::Field>;
-	class_<Model::TypedList<OOModel::Field>, bases<Model::List>>("Fields")
-		.def("__len__", &Fields::size)
-		.def("__iter__", iterator<Fields, return_internal_reference<>>());
-
-	using UsedLibrarys = Model::TypedList<Model::UsedLibrary>;
-	class_<Model::TypedList<Model::UsedLibrary>, bases<Model::List>>("UsedLibrarys")
-		.def("__len__", &UsedLibrarys::size)
-		.def("__iter__", iterator<UsedLibrarys, return_internal_reference<>>());
-
-	using FormalMetaArguments = Model::TypedList<OOModel::FormalMetaArgument>;
-	class_<Model::TypedList<OOModel::FormalMetaArgument>, bases<Model::List>>("FormalMetaArguments")
-		.def("__len__", &FormalMetaArguments::size)
-		.def("__iter__", iterator<FormalMetaArguments, return_internal_reference<>>());
-
-	using Enumerators = Model::TypedList<OOModel::Enumerator>;
-	class_<Model::TypedList<OOModel::Enumerator>, bases<Model::List>>("Enumerators")
-		.def("__len__", &Enumerators::size)
-		.def("__iter__", iterator<Enumerators, return_internal_reference<>>());
-
-	using Modules = Model::TypedList<OOModel::Module>;
-	class_<Model::TypedList<OOModel::Module>, bases<Model::List>>("Modules")
-		.def("__len__", &Modules::size)
-		.def("__iter__", iterator<Modules, return_internal_reference<>>());
-
-	using MetaBindings = Model::TypedList<OOModel::MetaBinding>;
-	class_<Model::TypedList<OOModel::MetaBinding>, bases<Model::List>>("MetaBindings")
-		.def("__len__", &MetaBindings::size)
-		.def("__iter__", iterator<MetaBindings, return_internal_reference<>>());
-
-	using MemberInitializers = Model::TypedList<OOModel::MemberInitializer>;
-	class_<Model::TypedList<OOModel::MemberInitializer>, bases<Model::List>>("MemberInitializers")
-		.def("__len__", &MemberInitializers::size)
-		.def("__iter__", iterator<MemberInitializers, return_internal_reference<>>());
 
 }
 
