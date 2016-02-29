@@ -1069,6 +1069,27 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 			lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(child->getLocEnd()) + 1;
 		}
 
+		QList<Comment*> remainingComments;
+		for (auto comment : listComments)
+			if (!comment->node()) remainingComments.append(comment);
+		std::sort(remainingComments.begin(), remainingComments.end(),
+				[](Comment* c1, Comment* c2)
+		{
+			if (c1->lineStart() < c2->lineStart()) return true;
+			Q_ASSERT(c1->lineStart() != c2->lineEnd());
+			Q_ASSERT(c1->lineEnd() != c2->lineStart());
+			return false;
+		});
+		for (auto comment : remainingComments)
+		{
+			if (!firstLine)
+				for (auto currentLine = lastChildEndLine; currentLine < comment->lineStart(); currentLine++)
+					itemList->append(new OOModel::ExpressionStatement{});
+			comment->insertIntoItemList(itemList);
+			lastChildEndLine = comment->lineEnd() + 1;
+			firstLine = false;
+		}
+
 		return true;
 	}
 
