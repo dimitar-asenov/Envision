@@ -67,7 +67,7 @@ Visualization::Item* CRemoveNodeFromView::potentialTopLevelParent(Visualization:
 	//The parent item to be used for an item can be deduced as follows:
 	//Either the item is a spacing node -> then the first ancestor with a node will be a VViewItemNode
 	//Else the item is a real AST node -> then the AST node's visualization will be found,
-	//									  and the potential top level item in the view is its parent
+	// 								  and the potential top level item in the view is its parent
 	auto ancestor = child->findAncestorWithNode();
 	if (DCast<Visualization::VViewItemNode>(ancestor)) return ancestor;
 	else if (ancestor) return ancestor->parent();

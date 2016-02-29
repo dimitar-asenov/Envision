@@ -79,7 +79,7 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 		// Expose registered queries to the python environment:
 		// Note when calling python scripts from python scripts:
 		// 1: All data is shared between the scripts,
-		//		this could possibly be changed by calling Py_Initialize here in the execute method.
+		// 	this could possibly be changed by calling Py_Initialize here in the execute method.
 		// 2: It allows infinite recursion, e.g. in a script called test.py call test()
 		auto allQueries = QueryRegistry::instance().registeredQueries() + QueryRegistry::instance().scriptQueries();
 		for (const auto& query : allQueries)
