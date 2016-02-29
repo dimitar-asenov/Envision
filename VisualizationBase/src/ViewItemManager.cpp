@@ -44,7 +44,9 @@ ViewItemManager::ViewItemManager(Scene* scene)
 
 ViewItemManager::~ViewItemManager()
 {
-	for (auto vector : viewItems_)
+	auto viewItems = viewItems_;
+	viewItems_.clear();
+	for (auto vector : viewItems)
 		for (auto view : vector)
 			if (view)
 			{
