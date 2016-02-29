@@ -703,14 +703,7 @@ bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 		TraverseStmt(initExpr);
 		if (!ooExprStack_.empty()) ooArrayInit->values()->append(ooExprStack_.pop());
 	}
-	static int counter = 0;
-	counter++;
-
-	if (counter == 56)
-	{
-		qDebug() << "";
-	}
-	ooExprStack_.push(new OOModel::ReferenceExpression{QString::number(counter)});
+	ooExprStack_.push(ooArrayInit);
 	return true;
 }
 
