@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../VisualizationBase/src/visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 

@@ -25,10 +25,10 @@
  **********************************************************************************************************************/
 #pragma once
 
-#include "../VisualizationBase/src/visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 #include "ItemWithNode.h"
-#include "../VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "../VisualizationBase/src/nodes/InfoNode.h"
+#include "../declarative/DeclarativeItem.h"
+#include "../nodes/InfoNode.h"
 
 namespace Visualization {
 

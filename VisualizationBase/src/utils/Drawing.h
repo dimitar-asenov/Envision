@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../VisualizationBase/src/visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 class VISUALIZATIONBASE_API Drawing
 {
