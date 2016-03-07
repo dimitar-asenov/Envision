@@ -25,8 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "TestBase.h"
-#include "Core/src/EnvisionException.h"
+
 #include "TestResults.h"
+
+#include "Core/src/EnvisionException.h"
 
 namespace SelfTest {
 

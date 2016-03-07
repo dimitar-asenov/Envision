@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "EnvisionApplication.h"
+
 #include "EnvisionManager.h"
 
 namespace Core {

@@ -26,8 +26,9 @@
 
 #pragma once
 
-#include "Core/src/EnvisionPlugin.h"
 #include "helloworld_api.h"
+
+#include "Core/src/EnvisionPlugin.h"
 
 namespace Core {
 class EnvisionManager;

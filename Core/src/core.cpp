@@ -26,11 +26,11 @@
 
 #include "core.h"
 
-#include "EnvisionWindow.h"
-#include "PluginManager.h"
 #include "EnvisionApplication.h"
 #include "EnvisionException.h"
 #include "EnvisionManager.h"
+#include "EnvisionWindow.h"
+#include "PluginManager.h"
 #include "TestRunner.h"
 
 namespace Core {

@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "HelloWorldPlugin.h"
+
 #include "HelloWorldPrinter.h"
 
 namespace HelloWorld {

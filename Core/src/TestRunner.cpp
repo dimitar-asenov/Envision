@@ -25,10 +25,11 @@
 ***********************************************************************************************************************/
 
 #include "TestRunner.h"
-#include "TestEvent.h"
+
 #include "EnvisionException.h"
 #include "EnvisionPlugin.h"
 #include "PluginManager.h"
+#include "TestEvent.h"
 
 namespace Core {
 

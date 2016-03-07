@@ -27,10 +27,12 @@
 #pragma once
 
 #include "selftest_api.h"
-#include "TestResults.h"
+
 #include "TestBase.h"
-#include "Core/src/reflect/Reflect.h"
 #include "TestManager.h"
+#include "TestResults.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace SelfTest {
 

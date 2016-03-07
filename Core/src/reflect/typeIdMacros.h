@@ -26,6 +26,9 @@
 
 #pragma once
 
+#include "../core_api.h"
+
+#include "Reflect.h"
 #include "TypeRegistry.h"
 
 /**

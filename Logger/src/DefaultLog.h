@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "logger_api.h"
+
 #include "Log.h"
 
 namespace Logger {

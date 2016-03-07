@@ -27,6 +27,7 @@
 #pragma once
 
 #include "selftest_api.h"
+
 #include "TestResult.h"
 
 namespace SelfTest {

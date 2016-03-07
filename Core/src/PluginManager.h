@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "core_api.h"
+
 #include "PluginInfo.h"
 
 namespace Core {

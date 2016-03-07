@@ -24,9 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "EnvisionPlugin.h"
 #include "PluginManager.h"
+
 #include "EnvisionException.h"
+#include "EnvisionPlugin.h"
 
 namespace Core {
 
