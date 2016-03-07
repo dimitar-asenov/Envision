@@ -200,7 +200,7 @@ def compareTwoIncludes(includeA, includeB):
 		return -1 if apiA else 1
 	
 	# Matching header
-	if a == matchingHeaderFile < b.prefix:
+	if a == matchingHeaderFile:
 		return 0 if b == matchingHeaderFile else -1
 	if b == matchingHeaderFile:
 		return 1
