@@ -148,14 +148,24 @@ QSet<CodeComposite*> CodeComposite::calculateDependencies(CodeUnitPart* (CodeUni
 Export::CompositeFragment* CodeComposite::printHardDependencies(CodeUnitPart* (CodeUnit::*part) (),
 																					 QSet<CodeComposite*> hardDependencies)
 {
+	QSet<CodeComposite*> hardDependenciesToExclude{};
+	if ((units().first()->*part)() == units().first()->sourcePart())
+	{
+		// We're in a source part. Exclude all dependencies that are already in the header part
+		hardDependenciesToExclude = calculateDependencies(&CodeUnit::headerPart);
+	}
+
 	auto fragment = new Export::CompositeFragment{units().first()->node()};
 	for (auto compositeDependency : hardDependencies)
-		if (((units().first()->*part)() != units().first()->headerPart() || headerPartExtension() == ".cpp") &&
-			 compositeDependency->isTemplateImplementationSeparateFile() && !isTemplateImplementationSeparateFile())
-			*fragment << "#include \"" + relativePath(compositeDependency) + ".hpp\"\n";
-		else if (compositeDependency->name().endsWith("_api") ||
-					!compositeDependency->nonEmptyUnits(&CodeUnit::headerPart).empty())
-			*fragment << "#include \"" + relativePath(compositeDependency) + ".h\"\n";
+		if (!hardDependenciesToExclude.contains(compositeDependency))
+		{
+			if (((units().first()->*part)() != units().first()->headerPart() || headerPartExtension() == ".cpp") &&
+				 compositeDependency->isTemplateImplementationSeparateFile() && !isTemplateImplementationSeparateFile())
+				*fragment << "#include \"" + relativePath(compositeDependency) + ".hpp\"\n";
+			else if (compositeDependency->name().endsWith("_api") ||
+						!compositeDependency->nonEmptyUnits(&CodeUnit::headerPart).empty())
+				*fragment << "#include \"" + relativePath(compositeDependency) + ".h\"\n";
+		}
 	return fragment;
 }
 
