@@ -26,6 +26,7 @@ includeRegex = re.compile('^(#include ".*".*)$')
 commentedIncludeRegex = re.compile('^//I #include ".*".*$')
 possiblyCommentedIncludeRegex = re.compile('^(?://I )?#include "(.*)".*$')
 forwardDeclarationRegex = re.compile('^(\s*(template<.*>\s*\n?\s*)?(class|struct)\s+\w+;\s*(//.*)?)$')
+possiblyCommentedForwardDeclarationRegex = re.compile('^((?:\s*//FD )?\s*(template<.*>\s*\n?\s*)?(class|struct)\s+\w+;\s*(//.*)?)$')
 templateBeginningRegex = re.compile('^\s*template\s*<.+>$')
 namespaceRegex = re.compile('^namespace\s+(\w+)')
 emptyLineRegex = re.compile('^\s*$')
@@ -55,8 +56,7 @@ with open(args.infoFile, 'r') as info:
 		
 		m = forwardDeclarationRegex.match(line)
 		if m:
-			tab = '\t' if currentNamespace else ''
-			forwardsToMatch.append(currentNamespace + ':' + tab + prevTemplate + (' ' if prevTemplate else '') + line.strip())
+			forwardsToMatch.append(currentNamespace + ':' + prevTemplate + (' ' if prevTemplate else '') + line.strip())
 			prevTemplate = ''
 			continue
 		
@@ -75,16 +75,40 @@ class Part:
 	def __init__(self, namespace):
 		self.namespace = namespace
 		self.lines = []
+		self.forwardDeclarationInsertIndex = -1
+		self.forwardDeclarationIndent = 'unknown'
 	
 	def append(self, line):
 		self.lines.append(line)
+		if self.forwardDeclarationIndent == 'unknown' and len(self.lines) > 1 and line.strip():
+			# This is the first non-empty line after the initial one. Remember its indent
+			if line.startswith('\t'):
+				self.forwardDeclarationIndent = '\t'
+			else:
+				self.forwardDeclarationIndent = ''
 		
-	def prepend(self, line):
+	def addForwardDeclaration(self, line):
+		if self.forwardDeclarationInsertIndex == -1:
+			self.forwardDeclarationInsertIndex = self.findForwardDeclarationInsertIndex()
+			
 		if self.namespace:
 			assert len(self.lines) > 0
-			self.lines.insert(1, line)
+		self.lines.insert(self.forwardDeclarationInsertIndex, self.forwardDeclarationIndent + line)
+		self.forwardDeclarationInsertIndex += 1
+	
+	def findForwardDeclarationInsertIndex(self):
+		for i in range(len(self.lines)-1,-1,-1):
+			m = possiblyCommentedForwardDeclarationRegex.match(self.lines[i])
+			if m:
+				return i + 1
+
+		# There are no other forward declarations
+		if self.namespace:
+			assert len(self.lines) > 0
+			return 1
 		else:
-			self.lines.insert(0, line)
+			return 0
+		
 
 ### Change detection
 fileHasBeenAdjusted = False
@@ -101,9 +125,8 @@ def checkInclude(include):
 		return '//I ' + include
 	
 def checkForwardDeclaration(namespace, forwardDeclaration):
-	tab = '\t' if namespace else ''
 	stripped = forwardDeclaration.strip()
-	name = namespace + ':' + tab + stripped
+	name = namespace + ':' + stripped
 	if name in forwardsToMatch:
 		forwardsToMatch.remove(name)
 		return forwardDeclaration
@@ -182,7 +205,7 @@ for descriptor in forwardsToMatch:
 	for part in reversed(parts[2:]):
 		if part.namespace == namespace:
 			namespaceFound = True
-			part.prepend(forwardDeclaration)
+			part.addForwardDeclaration(forwardDeclaration)
 			break
 		
 	if not namespaceFound:
