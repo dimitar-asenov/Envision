@@ -221,7 +221,6 @@ def compareTwoIncludes(includeA, includeB):
 	return (a > b) - (a < b)
 
 parts[1].lines.sort(key = functools.cmp_to_key(compareTwoIncludes))
-parts[1].lines.append('')
 
 ### Space includes with empty lines
 
@@ -238,6 +237,10 @@ for i in range(firstNonStandardInclude, len(parts[1].lines)):
 			parts[1].lines.insert(i,'')
 
 		break
+	
+# empty line after all includes if that's not already the case
+if not parts[1].lines[-1] == '':
+	parts[1].lines.append('')
 
 ### Write the output file
 with open(args.fileToAdjust, 'w') as outputFile:
