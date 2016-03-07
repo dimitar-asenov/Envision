@@ -28,7 +28,9 @@
 
 #include "Expression.h"
 
-namespace OOModel { class TypeNameOperator; }
+namespace OOModel {
+	class TypeNameOperator;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::TypeNameOperator>;
 
 namespace OOModel {

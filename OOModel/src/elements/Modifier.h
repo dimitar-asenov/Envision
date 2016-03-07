@@ -33,7 +33,9 @@
 #include "ModelBase/src/persistence/PersistentStore.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
-namespace OOModel { class Modifier; }
+namespace OOModel {
+	class Modifier;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::Modifier>;
 
 namespace OOModel {

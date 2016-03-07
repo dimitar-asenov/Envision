@@ -38,7 +38,9 @@
 
 #include "OOModel/src/expressions/Expression.h"
 
-namespace OOModel { class Declaration; }
+namespace OOModel {
+	class Declaration;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::Declaration>;
 
 namespace OOModel {

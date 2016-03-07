@@ -33,7 +33,9 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class LoopStatement; }
+namespace OOModel {
+	class LoopStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::LoopStatement>;
 
 namespace OOModel {

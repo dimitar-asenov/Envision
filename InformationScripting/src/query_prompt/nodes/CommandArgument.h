@@ -33,7 +33,9 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
-namespace InformationScripting { class CommandArgument; }
+namespace InformationScripting {
+	class CommandArgument;
+}
 extern template class INFORMATIONSCRIPTING_API Model::TypedList<InformationScripting::CommandArgument>;
 
 namespace InformationScripting {

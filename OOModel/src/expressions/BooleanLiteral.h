@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Boolean.h"
 
-namespace OOModel { class BooleanLiteral; }
+namespace OOModel {
+	class BooleanLiteral;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::BooleanLiteral>;
 
 namespace OOModel {

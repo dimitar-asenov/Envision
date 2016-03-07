@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class TypeTraitExpression; }
+namespace OOModel {
+	class TypeTraitExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::TypeTraitExpression>;
 
 namespace OOModel {

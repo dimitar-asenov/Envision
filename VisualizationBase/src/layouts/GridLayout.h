@@ -31,7 +31,9 @@
 #include "Layout.h"
 #include "GridLayoutStyle.h"
 
-namespace Model { class Node; }
+namespace Model {
+	class Node;
+}
 
 namespace Visualization {
 

@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class UnaryOperation; }
+namespace OOModel {
+	class UnaryOperation;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::UnaryOperation>;
 
 namespace OOModel {

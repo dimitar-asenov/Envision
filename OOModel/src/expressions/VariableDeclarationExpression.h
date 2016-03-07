@@ -32,7 +32,9 @@
 
 #include "../declarations/VariableDeclaration.h"
 
-namespace OOModel { class VariableDeclarationExpression; }
+namespace OOModel {
+	class VariableDeclarationExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::VariableDeclarationExpression>;
 
 namespace OOModel {

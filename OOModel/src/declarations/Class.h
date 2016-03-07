@@ -32,7 +32,9 @@
 #include "Field.h"
 #include "../elements/Enumerator.h"
 
-namespace OOModel { class Class; }
+namespace OOModel {
+	class Class;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::Class>;
 
 namespace OOModel {

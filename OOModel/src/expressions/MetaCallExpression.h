@@ -29,7 +29,9 @@
 #include "Expression.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
-namespace OOModel { class MetaCallExpression; }
+namespace OOModel {
+	class MetaCallExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::MetaCallExpression>;
 
 namespace OOModel {

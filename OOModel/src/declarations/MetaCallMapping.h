@@ -31,7 +31,9 @@
 #include "Declaration.h"
 #include "../expressions/ReferenceExpression.h"
 
-namespace OOModel { class MetaCallMapping; }
+namespace OOModel {
+	class MetaCallMapping;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::MetaCallMapping>;
 
 namespace OOModel {

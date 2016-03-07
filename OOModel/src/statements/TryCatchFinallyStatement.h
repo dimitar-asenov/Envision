@@ -32,7 +32,9 @@
 #include "../elements/StatementItemList.h"
 #include "../elements/CatchClause.h"
 
-namespace OOModel { class TryCatchFinallyStatement; }
+namespace OOModel {
+	class TryCatchFinallyStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 namespace OOModel {

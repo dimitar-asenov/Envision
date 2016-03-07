@@ -28,7 +28,9 @@
 
 #include "Expression.h"
 
-namespace OOModel { class SuperExpression; }
+namespace OOModel {
+	class SuperExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::SuperExpression>;
 
 namespace OOModel {

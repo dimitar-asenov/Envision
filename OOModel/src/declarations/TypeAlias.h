@@ -32,7 +32,9 @@
 #include "../expressions/Expression.h"
 #include "../elements/FormalTypeArgument.h"
 
-namespace OOModel { class TypeAlias; }
+namespace OOModel {
+	class TypeAlias;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::TypeAlias>;
 
 namespace OOModel {

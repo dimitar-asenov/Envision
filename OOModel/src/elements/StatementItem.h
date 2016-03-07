@@ -32,7 +32,9 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-namespace OOModel { class StatementItem; }
+namespace OOModel {
+	class StatementItem;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::StatementItem>;
 
 namespace OOModel {

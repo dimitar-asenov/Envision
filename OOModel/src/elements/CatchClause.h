@@ -29,7 +29,9 @@
 #include "StatementItemList.h"
 #include "../expressions/Expression.h"
 
-namespace OOModel { class CatchClause; }
+namespace OOModel {
+	class CatchClause;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::CatchClause>;
 
 namespace OOModel {

@@ -29,7 +29,9 @@
 #include "TypedList.h"
 #include "nodeMacros.h"
 
-namespace Model { class Boolean; }
+namespace Model {
+	class Boolean;
+}
 extern template class MODELBASE_API Model::TypedList<Model::Boolean>;
 
 namespace Model {

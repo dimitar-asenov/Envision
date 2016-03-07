@@ -33,7 +33,9 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Node.h"
 
-namespace Comments { class CommentFreeNode; }
+namespace Comments {
+	class CommentFreeNode;
+}
 extern template class COMMENTS_API Model::TypedList<Comments::CommentFreeNode>;
 
 namespace Comments {

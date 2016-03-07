@@ -30,7 +30,9 @@
 
 #include "BinaryNode.h"
 
-namespace TestNodes { class BinaryNodePersistenceUnit; }
+namespace TestNodes {
+	class BinaryNodePersistenceUnit;
+}
 extern template class MODELBASE_API Model::TypedList<TestNodes::BinaryNodePersistenceUnit>;
 
 namespace TestNodes {

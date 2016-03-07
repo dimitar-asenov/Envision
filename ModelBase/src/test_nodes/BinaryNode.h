@@ -32,7 +32,9 @@
 #include "../nodes/nodeMacros.h"
 #include "../nodes/NameText.h"
 
-namespace TestNodes { class BinaryNode; }
+namespace TestNodes {
+	class BinaryNode;
+}
 extern template class MODELBASE_API Model::TypedList<TestNodes::BinaryNode>;
 
 namespace TestNodes {

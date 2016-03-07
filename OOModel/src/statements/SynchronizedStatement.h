@@ -31,7 +31,9 @@
 #include "../expressions/Expression.h"
 #include "../elements/StatementItemList.h"
 
-namespace OOModel { class SynchronizedStatement; }
+namespace OOModel {
+	class SynchronizedStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::SynchronizedStatement>;
 
 namespace OOModel {

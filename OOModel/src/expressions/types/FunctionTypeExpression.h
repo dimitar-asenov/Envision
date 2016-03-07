@@ -28,7 +28,9 @@
 
 #include "TypeExpression.h"
 
-namespace OOModel { class FunctionTypeExpression; }
+namespace OOModel {
+	class FunctionTypeExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::FunctionTypeExpression>;
 
 namespace OOModel {

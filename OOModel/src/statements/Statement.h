@@ -29,7 +29,9 @@
 #include "../oomodel_api.h"
 #include "../elements/StatementItem.h"
 
-namespace OOModel { class Statement; }
+namespace OOModel {
+	class Statement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::Statement>;
 
 namespace OOModel {

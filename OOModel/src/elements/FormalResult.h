@@ -34,7 +34,9 @@
 #include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-namespace OOModel { class FormalResult; }
+namespace OOModel {
+	class FormalResult;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::FormalResult>;
 
 namespace OOModel {

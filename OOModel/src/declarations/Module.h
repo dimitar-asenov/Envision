@@ -31,7 +31,9 @@
 #include "Class.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
 
-namespace OOModel { class Module; }
+namespace OOModel {
+	class Module;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::Module>;
 
 namespace OOModel {

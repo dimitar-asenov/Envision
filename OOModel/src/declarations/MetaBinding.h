@@ -31,7 +31,9 @@
 #include "Declaration.h"
 #include "MetaCallMapping.h"
 
-namespace OOModel { class MetaBinding; }
+namespace OOModel {
+	class MetaBinding;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::MetaBinding>;
 
 namespace OOModel {

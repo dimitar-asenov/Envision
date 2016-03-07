@@ -28,7 +28,9 @@
 
 #include "Expression.h"
 
-namespace OOModel { class NewExpression; }
+namespace OOModel {
+	class NewExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::NewExpression>;
 
 namespace OOModel {

@@ -33,7 +33,9 @@
 
 #include "ModelBase/src/nodes/TypedList.h"
 
-namespace OOModel { class MetaDefinition; }
+namespace OOModel {
+	class MetaDefinition;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::MetaDefinition>;
 
 namespace OOModel {

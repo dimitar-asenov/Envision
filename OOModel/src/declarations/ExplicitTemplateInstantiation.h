@@ -32,7 +32,9 @@
 
 #include "../expressions/ReferenceExpression.h"
 
-namespace OOModel { class ExplicitTemplateInstantiation; }
+namespace OOModel {
+	class ExplicitTemplateInstantiation;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::ExplicitTemplateInstantiation>;
 
 namespace OOModel {

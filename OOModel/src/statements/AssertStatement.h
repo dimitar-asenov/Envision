@@ -31,7 +31,9 @@
 #include "../expressions/Expression.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class AssertStatement; }
+namespace OOModel {
+	class AssertStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::AssertStatement>;
 
 namespace OOModel {

@@ -35,7 +35,9 @@
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class FormalArgument; }
+namespace OOModel {
+	class FormalArgument;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::FormalArgument>;
 
 namespace OOModel {

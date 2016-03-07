@@ -30,7 +30,9 @@
 
 #include "Module.h"
 
-namespace OOModel { class Project; }
+namespace OOModel {
+	class Project;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::Project>;
 
 namespace OOModel {

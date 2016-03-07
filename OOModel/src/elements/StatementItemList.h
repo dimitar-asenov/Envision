@@ -29,7 +29,9 @@
 #include "../elements/StatementItem.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
-namespace OOModel { class StatementItemList; }
+namespace OOModel {
+	class StatementItemList;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::StatementItemList>;
 
 namespace OOModel {

@@ -29,7 +29,9 @@
 #include "Expression.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class CastExpression; }
+namespace OOModel {
+	class CastExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::CastExpression>;
 
 namespace OOModel {

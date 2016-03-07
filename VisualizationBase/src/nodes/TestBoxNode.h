@@ -34,7 +34,9 @@
 #include "ModelBase/src/nodes/Boolean.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-namespace Visualization { class TestBoxNode; }
+namespace Visualization {
+	class TestBoxNode;
+}
 extern template class VISUALIZATIONBASE_API Model::TypedList<Visualization::TestBoxNode>;
 
 namespace Visualization {

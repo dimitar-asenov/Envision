@@ -28,7 +28,9 @@
 
 #include "Statement.h"
 
-namespace OOModel { class ContinueStatement; }
+namespace OOModel {
+	class ContinueStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::ContinueStatement>;
 
 namespace OOModel {

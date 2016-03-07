@@ -35,7 +35,9 @@
 #include "ModelBase/src/nodes/Integer.h"
 #include "CommentFreeNode.h"
 
-namespace Comments { class CommentTable; }
+namespace Comments {
+	class CommentTable;
+}
 extern template class COMMENTS_API Model::TypedList<Comments::CommentTable>;
 
 namespace Comments {

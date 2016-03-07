@@ -29,7 +29,9 @@
 #include "Statement.h"
 #include "../expressions/Expression.h"
 
-namespace OOModel { class ReturnStatement; }
+namespace OOModel {
+	class ReturnStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::ReturnStatement>;
 
 namespace OOModel {

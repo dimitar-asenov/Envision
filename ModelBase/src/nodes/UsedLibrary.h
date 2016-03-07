@@ -33,7 +33,9 @@
 #include "nodeMacros.h"
 #include "../model/TreeManager.h"
 
-namespace Model { class UsedLibrary; }
+namespace Model {
+	class UsedLibrary;
+}
 extern template class MODELBASE_API Model::TypedList<Model::UsedLibrary>;
 
 namespace Model {

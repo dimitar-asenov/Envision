@@ -28,7 +28,9 @@
 
 #include "Expression.h"
 
-namespace OOModel { class NullLiteral; }
+namespace OOModel {
+	class NullLiteral;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::NullLiteral>;
 
 namespace OOModel {

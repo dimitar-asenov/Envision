@@ -30,7 +30,9 @@
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
-namespace OOModel { class CaseStatement; }
+namespace OOModel {
+	class CaseStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::CaseStatement>;
 
 namespace OOModel {

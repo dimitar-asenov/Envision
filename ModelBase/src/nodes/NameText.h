@@ -28,7 +28,9 @@
 
 #include "Text.h"
 
-namespace Model { class NameText; }
+namespace Model {
+	class NameText;
+}
 extern template class MODELBASE_API Model::TypedList<Model::NameText>;
 
 namespace Model {

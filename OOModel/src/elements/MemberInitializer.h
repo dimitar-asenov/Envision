@@ -31,7 +31,9 @@
 #include "../expressions/Expression.h"
 #include "../expressions/ReferenceExpression.h"
 
-namespace OOModel { class MemberInitializer; }
+namespace OOModel {
+	class MemberInitializer;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::MemberInitializer>;
 
 namespace OOModel {

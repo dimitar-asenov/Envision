@@ -34,7 +34,9 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "CommentText.h"
 
-namespace Comments { class CommentDiagramShape; }
+namespace Comments {
+	class CommentDiagramShape;
+}
 extern template class COMMENTS_API Model::TypedList<Comments::CommentDiagramShape>;
 
 namespace Comments {

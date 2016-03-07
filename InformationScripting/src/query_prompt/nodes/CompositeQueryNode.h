@@ -31,7 +31,9 @@
 #include "QueryNode.h"
 
 #include "ModelBase/src/nodes/TypedList.h"
-namespace InformationScripting { class CompositeQueryNode; }
+namespace InformationScripting {
+	class CompositeQueryNode;
+}
 extern template class INFORMATIONSCRIPTING_API Model::TypedList<InformationScripting::CompositeQueryNode>;
 
 namespace InformationScripting {

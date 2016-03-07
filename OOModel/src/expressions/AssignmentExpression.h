@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class AssignmentExpression; }
+namespace OOModel {
+	class AssignmentExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::AssignmentExpression>;
 
 namespace OOModel {

@@ -30,7 +30,9 @@
 
 #include "../ReferenceExpression.h"
 
-namespace OOModel { class ClassTypeExpression; }
+namespace OOModel {
+	class ClassTypeExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::ClassTypeExpression>;
 
 namespace OOModel {

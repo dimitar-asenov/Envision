@@ -31,7 +31,9 @@
 #include "../expressions/Expression.h"
 #include "../elements/StatementItemList.h"
 
-namespace OOModel { class SwitchStatement; }
+namespace OOModel {
+	class SwitchStatement;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::SwitchStatement>;
 
 namespace OOModel {

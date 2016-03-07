@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
-namespace OOModel { class IntegerLiteral; }
+namespace OOModel {
+	class IntegerLiteral;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::IntegerLiteral>;
 
 namespace OOModel {

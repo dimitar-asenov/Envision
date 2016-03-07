@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
-namespace Comments { class CommentText; }
+namespace Comments {
+	class CommentText;
+}
 extern template class COMMENTS_API Model::TypedList<Comments::CommentText>;
 
 namespace Comments {

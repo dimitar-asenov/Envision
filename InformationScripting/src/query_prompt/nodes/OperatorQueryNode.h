@@ -32,7 +32,9 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace InformationScripting { class OperatorQueryNode; }
+namespace InformationScripting {
+	class OperatorQueryNode;
+}
 extern template class INFORMATIONSCRIPTING_API Model::TypedList<InformationScripting::OperatorQueryNode>;
 
 namespace InformationScripting {

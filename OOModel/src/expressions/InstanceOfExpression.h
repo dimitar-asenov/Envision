@@ -28,7 +28,9 @@
 #include "Expression.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class InstanceOfExpression; }
+namespace OOModel {
+	class InstanceOfExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::InstanceOfExpression>;
 
 namespace OOModel {

@@ -33,7 +33,9 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class VariableDeclaration; }
+namespace OOModel {
+	class VariableDeclaration;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::VariableDeclaration>;
 
 namespace OOModel {

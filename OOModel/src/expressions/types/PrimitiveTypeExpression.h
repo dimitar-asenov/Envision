@@ -30,7 +30,9 @@
 #include "../../types/PrimitiveType.h"
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class PrimitiveTypeExpression; }
+namespace OOModel {
+	class PrimitiveTypeExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::PrimitiveTypeExpression>;
 
 namespace OOModel {

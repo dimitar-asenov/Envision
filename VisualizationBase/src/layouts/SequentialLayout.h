@@ -31,7 +31,9 @@
 #include "Layout.h"
 #include "SequentialLayoutStyle.h"
 
-namespace Model { class Node; }
+namespace Model {
+	class Node;
+}
 
 namespace Visualization {
 

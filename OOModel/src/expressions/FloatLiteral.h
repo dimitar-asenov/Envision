@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
-namespace OOModel { class FloatLiteral; }
+namespace OOModel {
+	class FloatLiteral;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::FloatLiteral>;
 
 namespace OOModel {

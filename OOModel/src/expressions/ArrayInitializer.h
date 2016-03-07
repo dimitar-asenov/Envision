@@ -28,7 +28,9 @@
 
 #include "Expression.h"
 
-namespace OOModel { class ArrayInitializer; }
+namespace OOModel {
+	class ArrayInitializer;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::ArrayInitializer>;
 
 namespace OOModel {

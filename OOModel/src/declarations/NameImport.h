@@ -33,7 +33,9 @@
 
 #include "ModelBase/src/nodes/Boolean.h"
 
-namespace OOModel { class NameImport; }
+namespace OOModel {
+	class NameImport;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::NameImport>;
 
 namespace OOModel {

@@ -28,7 +28,9 @@
 
 #include "TypeExpression.h"
 
-namespace OOModel { class PointerTypeExpression; }
+namespace OOModel {
+	class PointerTypeExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::PointerTypeExpression>;
 
 namespace OOModel {

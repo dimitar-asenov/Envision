@@ -30,7 +30,9 @@
 
 #include "ModelBase/src/nodes/Reference.h"
 
-namespace OOModel { class OOReference; }
+namespace OOModel {
+	class OOReference;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::OOReference>;
 
 namespace OOModel {

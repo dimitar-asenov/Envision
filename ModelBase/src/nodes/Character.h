@@ -29,7 +29,9 @@
 #include "TypedList.h"
 #include "nodeMacros.h"
 
-namespace Model { class Character; }
+namespace Model {
+	class Character;
+}
 extern template class MODELBASE_API Model::TypedList<Model::Character>;
 
 namespace Model {

@@ -31,7 +31,9 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
-namespace OOModel { class ReferenceExpression; }
+namespace OOModel {
+	class ReferenceExpression;
+}
 extern template class OOMODEL_API Model::TypedList<OOModel::ReferenceExpression>;
 
 namespace OOModel {
