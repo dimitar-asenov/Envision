@@ -59,4 +59,4 @@ class JAVAEXPORT_API ElementVisitor
 		Export::SourceFragment* visit(OOModel::MemberInitializer* memberInitializer);
 };
 
-} // namespace JavaExport
+}

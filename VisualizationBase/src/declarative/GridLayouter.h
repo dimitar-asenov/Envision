@@ -638,4 +638,4 @@ class VISUALIZATIONBASE_API GridLayouter
 				bool pushAllMajor);
 };
 
-} // namespace Visualization
+}

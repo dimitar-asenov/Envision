@@ -354,4 +354,4 @@ QList<ItemRegion> DynamicGridFormElement::regions(DeclarativeItemBase* item, int
 		);
 }
 
-} // namespace Visualization
+}

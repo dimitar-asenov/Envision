@@ -32,8 +32,7 @@ namespace Model {
 	class Node;
 }
 
-namespace OOModel
-{
+namespace OOModel {
 	class Class;
 	class Method;
 	class MetaCallExpression;
@@ -41,8 +40,7 @@ namespace OOModel
 	class ReferenceExpression;
 }
 
-namespace Export
-{
+namespace Export {
 	class SourceFragment;
 	class CompositeFragment;
 }

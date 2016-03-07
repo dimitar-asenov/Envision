@@ -103,4 +103,4 @@ SourceFragment* ElementVisitor::visit(MemberInitializer* memberInitializer)
 	return new TextFragment{memberInitializer};
 }
 
-} // namespace JavaExport
+}

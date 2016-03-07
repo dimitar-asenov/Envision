@@ -27,8 +27,7 @@
 #pragma once
 #include "Style.h"
 
-namespace Visualization
-{
+namespace Visualization {
 
 template <typename T, typename > // was template <typename T, typename = void> but that is now declard in Style.h
 class StyleProperty

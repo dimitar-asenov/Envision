@@ -78,4 +78,4 @@ class JAVAEXPORT_API StatementVisitor
 		Export::SourceFragment* visit(OOModel::StatementItem* statementItem);
 };
 
-} // namespace JavaExport
+}

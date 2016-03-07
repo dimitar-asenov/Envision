@@ -41,4 +41,4 @@ class OOVISUALIZATION_API VCastExpressionStyle : public Super<Visualization::Ite
 		Property<Visualization::ItemStyle> typeWrapper{this, "typeWrapper"};
 };
 
-} // namespace OOVisualization
+}

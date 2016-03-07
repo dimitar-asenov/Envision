@@ -272,4 +272,4 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	return fragment;
 }
 
-} // namespace JavaExport
+}

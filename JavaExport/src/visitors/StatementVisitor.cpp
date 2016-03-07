@@ -228,4 +228,4 @@ SourceFragment* StatementVisitor::visit(OOModel::SynchronizedStatement* statemen
 	return fragment;
 }
 
-} // namespace JavaExport
+}

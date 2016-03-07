@@ -1457,4 +1457,4 @@ void ClangAstVisitor::endEntireImport()
 	clang_.exportMergeMapToJson("export-config.json");
 }
 
-} // namespace cppimport
+}

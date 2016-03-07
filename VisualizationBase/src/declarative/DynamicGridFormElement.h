@@ -191,4 +191,4 @@ inline QSize DynamicGridFormElement::gridSize(const Item* item) const
 
 inline bool DynamicGridFormElement::isEmpty(const Item* item) const { return gridSize(item).isEmpty(); }
 
-} // namespace Visualization
+}

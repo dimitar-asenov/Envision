@@ -33,8 +33,7 @@
 namespace Visualization { class UINode; }
 extern template class VISUALIZATIONBASE_API Model::TypedList<Visualization::UINode>;
 
-namespace Visualization
-{
+namespace Visualization {
 
 class VISUALIZATIONBASE_API UINode : public Super<Model::Node>
 {

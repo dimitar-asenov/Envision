@@ -52,8 +52,7 @@
 
 #include "SelfTest/src/TestManager.h"
 
-namespace Visualization
-{
+namespace Visualization {
 
 bool VisualizationBasePlugin::initialize(Core::EnvisionManager& manager)
 {

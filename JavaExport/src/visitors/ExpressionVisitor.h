@@ -53,4 +53,4 @@ class JAVAEXPORT_API ExpressionVisitor
 		template <typename T> Export::SourceFragment* optional(T* node);
 };
 
-} // namespace JavaExport
+}

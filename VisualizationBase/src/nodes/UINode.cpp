@@ -29,8 +29,7 @@
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<Visualization::UINode>;
 
-namespace Visualization
-{
+namespace Visualization {
 
 DEFINE_TYPE_ID_DERIVED(UINode, "UINode", )
 

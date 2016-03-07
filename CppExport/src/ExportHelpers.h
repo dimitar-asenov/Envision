@@ -28,21 +28,18 @@
 
 #include "cppexport_api.h"
 
-namespace Model
-{
+namespace Model {
 	class Node;
 }
 
-namespace OOModel
-{
+namespace OOModel {
 	class Declaration;
 	class Method;
 	class Class;
 	class Module;
 }
 
-namespace Export
-{
+namespace Export {
 	class CompositeFragment;
 }
 

@@ -28,8 +28,7 @@
 
 #include "PluginInfo.h"
 
-namespace Core
-{
+namespace Core {
 class EnvisionManager;
 class EnvisionPlugin;
 
