@@ -26,12 +26,14 @@
 
 #include "History.h"
 
-#include "GitRepository.h"
 #include "ChangeDescription.h"
+#include "Commit.h"
 #include "CommitGraph.h"
-#include "../simple/GenericTree.h"
+#include "Diff.h"
+#include "GitRepository.h"
 #include "../simple/GenericNode.h"
-
+#include "../simple/GenericPersistentUnit.h"
+#include "../simple/GenericTree.h"
 #include "../simple/Parser.h"
 
 namespace FilePersistence {

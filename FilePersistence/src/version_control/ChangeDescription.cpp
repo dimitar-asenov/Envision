@@ -25,7 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "ChangeDescription.h"
+
 #include "../simple/GenericNode.h"
+#include "../simple/GenericPersistentUnit.h"
+#include "../simple/GenericTree.h"
 
 namespace FilePersistence {
 

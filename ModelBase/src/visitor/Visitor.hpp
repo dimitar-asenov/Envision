@@ -27,6 +27,7 @@
 #pragma once
 
 #include "Visitor.h"
+
 #include "../nodes/Node.h"
 
 namespace Model {

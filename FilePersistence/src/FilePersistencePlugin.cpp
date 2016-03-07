@@ -27,6 +27,7 @@
 #include "FilePersistencePlugin.h"
 
 #include "SelfTest/src/TestManager.h"
+#include "SelfTest/src/TestResults.h"
 
 static void initFilePersistenceResources() { Q_INIT_RESOURCE(FilePersistence); }
 

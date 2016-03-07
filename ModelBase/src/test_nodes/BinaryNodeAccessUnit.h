@@ -30,6 +30,10 @@
 
 #include "BinaryNode.h"
 #include "../concurrent/NodeReadWriteLock.h"
+#include "../nodes/TypedList.h"
+#include "../nodes/nodeMacros.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace TestNodes {
 	class BinaryNodeAccessUnit;

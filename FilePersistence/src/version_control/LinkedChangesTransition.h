@@ -26,11 +26,15 @@
 
 #pragma once
 
-#include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
+#include "../filepersistence_api.h"
+
 #include "LinkedChangesSet.h"
 
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
+class ChangeDescription;
+class ChangeDependencyGraph;
 
 class FILEPERSISTENCE_API LinkedChangesTransition
 {

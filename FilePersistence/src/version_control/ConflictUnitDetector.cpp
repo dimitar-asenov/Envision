@@ -25,8 +25,9 @@
 ***********************************************************************************************************************/
 
 #include "ConflictUnitDetector.h"
-#include "ConflictPairs.h"
+
 #include "ChangeDescription.h"
+#include "ConflictPairs.h"
 #include "../simple/GenericNode.h"
 #include "../simple/GenericTree.h"
 

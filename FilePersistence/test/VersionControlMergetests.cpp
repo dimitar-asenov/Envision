@@ -24,16 +24,18 @@
 **
 ***********************************************************************************************************************/
 
+#include "VCTestProject.h"
 #include "../src/FilePersistencePlugin.h"
+#include "../src/simple/GenericNode.h"
+#include "../src/simple/GenericTree.h"
+#include "../src/version_control/Commit.h"
+#include "../src/version_control/GitRepository.h"
+#include "../src/version_control/Merge.h"
+
 #include "SelfTest/src/Test.h"
 #include "SelfTest/src/TestAssertions.h"
-
-#include "../src/version_control/Merge.h"
-#include "../src/version_control/GitRepository.h"
-#include "../src/simple/GenericTree.h"
-#include "../src/simple/GenericNode.h"
-#include "VCTestProject.h"
-
+#include "SelfTest/src/TestBase.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 

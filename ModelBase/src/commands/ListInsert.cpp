@@ -25,8 +25,9 @@
 ***********************************************************************************************************************/
 
 #include "ListInsert.h"
-#include "../nodes/Node.h"
+
 #include "../ModelException.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

@@ -25,11 +25,13 @@
 ***********************************************************************************************************************/
 
 #include "SystemClipboard.h"
+
 #include "FilePersistenceException.h"
 #include "XMLModel.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
+#include "Core/src/EnvisionException.h"
 
 using namespace Model;
 
@@ -216,8 +218,8 @@ bool SystemClipboard::readClipboard()
 	bool clipboardContainsEnvisionData = false;
 	if (!QApplication::clipboard()->text().isEmpty())
 	{
-		bool oldAssertOnThrow = FilePersistenceException::assertOnThrow();
-		FilePersistenceException::assertOnThrow() = false;
+		bool oldAssertOnThrow = Core::EnvisionException::assertOnThrow();
+		Core::EnvisionException::assertOnThrow() = false;
 		try
 		{
 			xml = new XMLModel{};
@@ -232,7 +234,7 @@ bool SystemClipboard::readClipboard()
 			SAFE_DELETE(xml);
 			clipboardContainsEnvisionData = false;
 		}
-		FilePersistenceException::assertOnThrow() = oldAssertOnThrow;
+		Core::EnvisionException::assertOnThrow() = oldAssertOnThrow;
 	}
 
 	return clipboardContainsEnvisionData && numNodes_ > 0;

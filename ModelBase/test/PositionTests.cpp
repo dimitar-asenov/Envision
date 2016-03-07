@@ -25,11 +25,12 @@
 ***********************************************************************************************************************/
 
 #include "../src/ModelBasePlugin.h"
-#include "SelfTest/src/Test.h"
-#include "SelfTest/src/TestAssertions.h"
+#include "../src/model/TreeManager.h"
 #include "../src/test_nodes/BinaryNode.h"
 #include "../src/test_nodes/PositionExtension.h"
-#include "../src/model/TreeManager.h"
+
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 namespace Model {
 

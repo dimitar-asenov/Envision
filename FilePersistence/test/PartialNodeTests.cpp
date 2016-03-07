@@ -26,12 +26,14 @@
 
 #include "../src/FilePersistencePlugin.h"
 #include "../src/simple/SimpleTextFileStore.h"
+
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/Test.h"
 #include "SelfTest/src/TestAssertions.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
+#include "Core/src/reflect/Reflect.h"
 
 using namespace Model;
 

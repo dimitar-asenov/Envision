@@ -25,12 +25,13 @@
 ***********************************************************************************************************************/
 
 #include "GitRepository.h"
+
 #include "GitPiecewiseLoader.h"
 #include "../FilePersistenceException.h"
-
+#include "../simple/GenericNode.h"
+#include "../simple/GenericPersistentUnit.h"
 #include "../simple/GenericTree.h"
 #include "../simple/Parser.h"
-#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 

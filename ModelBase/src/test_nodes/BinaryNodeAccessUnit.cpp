@@ -27,6 +27,7 @@
 #include "BinaryNodeAccessUnit.h"
 
 #include "../nodes/TypedList.hpp"
+
 template class Model::TypedList<TestNodes::BinaryNodeAccessUnit>;
 
 namespace TestNodes {

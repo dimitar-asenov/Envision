@@ -25,16 +25,17 @@
 ***********************************************************************************************************************/
 
 #include "Reference.h"
+
+#include "NameText.h"
+#include "TypedList.hpp"
+#include "../ModelBasePlugin.h"
+#include "../ModelException.h"
 #include "../commands/FieldSet.h"
 #include "../model/TreeManager.h"
-#include "../ModelException.h"
-#include "NameText.h"
 #include "../persistence/PersistentStore.h"
-#include "../ModelBasePlugin.h"
 
 #include "Logger/src/Log.h"
 
-#include "TypedList.hpp"
 template class Model::TypedList<Model::Reference>;
 
 namespace Model {

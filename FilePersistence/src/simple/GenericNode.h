@@ -27,9 +27,11 @@
 #pragma once
 
 #include "../filepersistence_api.h"
-#include "ModelBase/src/persistence/PersistentStore.h"
-#include "GenericTree.h"
+
 #include "GenericPersistentUnit.h"
+#include "GenericTree.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 

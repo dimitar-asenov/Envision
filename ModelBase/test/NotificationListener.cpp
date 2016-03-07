@@ -25,8 +25,9 @@
 ***********************************************************************************************************************/
 
 #include "NotificationListener.h"
-#include "../src/nodes/Node.h"
+
 #include "../src/model/TreeManager.h"
+#include "../src/nodes/Node.h"
 
 namespace Model {
 

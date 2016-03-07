@@ -24,8 +24,9 @@
  **
  **********************************************************************************************************************/
 #include "GenericPersistentUnit.h"
-#include "GenericTree.h"
+
 #include "GenericNode.h"
+#include "GenericTree.h"
 
 namespace FilePersistence {
 

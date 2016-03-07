@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../filepersistence_api.h"
+
 #include "GenericPersistentUnit.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"

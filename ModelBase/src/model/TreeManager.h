@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../modelbase_api.h"
+
 #include "../concurrent/NodeReadWriteLock.h"
 #include "../persistence/NodeIdMap.h"
 

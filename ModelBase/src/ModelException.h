@@ -27,6 +27,7 @@
 #pragma once
 
 #include "modelbase_api.h"
+
 #include "Core/src/EnvisionException.h"
 
 namespace Model {

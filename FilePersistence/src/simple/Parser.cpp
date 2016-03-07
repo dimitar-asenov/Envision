@@ -24,6 +24,7 @@
  **
  **********************************************************************************************************************/
 #include "Parser.h"
+
 #include "GenericNode.h"
 #include "GenericPersistentUnit.h"
 #include "../FilePersistenceException.h"

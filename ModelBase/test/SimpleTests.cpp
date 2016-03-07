@@ -25,12 +25,16 @@
 ***********************************************************************************************************************/
 
 #include "../src/ModelBasePlugin.h"
-#include "SelfTest/src/Test.h"
-#include "SelfTest/src/TestAssertions.h"
-#include "../src/test_nodes/BinaryNode.h"
-#include "../src/test_nodes/BinaryNodeAccessUnit.h"
 #include "../src/model/TreeManager.h"
 #include "../src/nodes/Integer.h"
+#include "../src/nodes/Text.h"
+#include "../src/nodes/composite/AttributeChain.h"
+#include "../src/nodes/composite/CompositeNode.h"
+#include "../src/test_nodes/BinaryNode.h"
+#include "../src/test_nodes/BinaryNodeAccessUnit.h"
+
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 namespace Model {
 
@@ -64,7 +68,7 @@ class MODELBASE_API CompositeMetaData : public SelfTest::Test<ModelBasePlugin, C
 	CHECK_CONDITION(metaExt[2].optional() == true);
 	CHECK_CONDITION(metaExt[3].optional() == false);
 	CHECK_CONDITION(metaExt[4].optional() == false);
-	
+
 	CHECK_CONDITION(metaExt[0].partial() == false);
 	CHECK_CONDITION(metaExt[1].partial() == false);
 	CHECK_CONDITION(metaExt[2].partial() == false);

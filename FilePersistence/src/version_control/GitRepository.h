@@ -26,9 +26,11 @@
 
 #pragma once
 
+#include "../filepersistence_api.h"
+
 #include "Commit.h"
-#include "Diff.h"
 #include "CommitGraph.h"
+#include "Diff.h"
 #include "Merge.h"
 
 struct git_repository;

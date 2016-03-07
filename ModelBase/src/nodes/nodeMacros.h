@@ -26,10 +26,17 @@
 
 #pragma once
 
+#include "../modelbase_api.h"
+
+#include "Node.h"
+#include "composite/Attribute.h"
+#include "composite/AttributeChain.h"
+#include "composite/CompositeIndex.h"
+#include "composite/CompositeNode.h"
+#include "../persistence/PersistentStore.h"
+
 #include "Core/src/reflect/typeIdMacros.h"
-#include "ModelBase/src/nodes/composite/Attribute.h"
-#include "ModelBase/src/nodes/composite/CompositeIndex.h"
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "Core/src/reflect/Reflect.h"
 
 /**
  * Declares standard constructors and standard static methods for registering the constructors of a class inheriting

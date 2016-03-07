@@ -24,15 +24,14 @@
 **
 ***********************************************************************************************************************/
 
+#include "VCTestProject.h"
 #include "../src/FilePersistencePlugin.h"
-#include "SelfTest/src/Test.h"
-#include "SelfTest/src/TestAssertions.h"
-
 #include "../src/version_control/ChangeDescription.h"
 #include "../src/version_control/Diff.h"
 #include "../src/version_control/GitRepository.h"
-#include "VCTestProject.h"
 
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
 
 namespace FilePersistence {
 

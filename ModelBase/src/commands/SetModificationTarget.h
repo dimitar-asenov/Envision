@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "../modelbase_api.h"
+
 #include "UndoCommand.h"
 
 namespace Model {

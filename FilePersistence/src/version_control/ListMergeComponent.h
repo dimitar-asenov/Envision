@@ -26,10 +26,21 @@
 
 #pragma once
 
-#include "Diff3Parse.h"
+#include "../filepersistence_api.h"
+
 #include "ConflictPipelineComponent.h"
+#include "LinkedChangesTransition.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
+class LinkedChangesSet;
+class ConflictPairs;
+struct Chunk;
+class ChangeDescription;
+class ChangeDependencyGraph;
+class GenericTree;
+class GenericNode;
 
 class FILEPERSISTENCE_API ListMergeComponent : public ConflictPipelineComponent
 {

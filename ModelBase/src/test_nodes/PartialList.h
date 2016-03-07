@@ -28,9 +28,9 @@
 
 #include "../modelbase_api.h"
 
-#include "../nodes/nodeMacros.h"
-#include "../nodes/composite/CompositeNode.h"
 #include "../nodes/List.h"
+#include "../nodes/composite/CompositeNode.h"
+#include "../nodes/nodeMacros.h"
 
 #include "Core/src/reflect/Reflect.h"
 

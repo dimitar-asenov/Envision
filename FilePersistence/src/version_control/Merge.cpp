@@ -25,14 +25,19 @@
 ***********************************************************************************************************************/
 
 #include "Merge.h"
-#include "GitRepository.h"
-#include "GitPiecewiseLoader.h"
 
+#include "ChangeDependencyGraph.h"
+#include "ChangeDescription.h"
+#include "ConflictPipelineComponent.h"
 #include "ConflictUnitDetector.h"
+#include "Diff.h"
+#include "GitPiecewiseLoader.h"
+#include "GitRepository.h"
+#include "LinkedChangesSet.h"
 #include "ListMergeComponent.h"
-#include "../simple/SimpleTextFileStore.h"
-#include "../simple/GenericTree.h"
 #include "../simple/GenericNode.h"
+#include "../simple/GenericTree.h"
+#include "../simple/SimpleTextFileStore.h"
 
 namespace FilePersistence {
 

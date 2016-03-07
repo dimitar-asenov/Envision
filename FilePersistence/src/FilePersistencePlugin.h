@@ -26,8 +26,9 @@
 
 #pragma once
 
-#include "Core/src/EnvisionPlugin.h"
 #include "filepersistence_api.h"
+
+#include "Core/src/EnvisionPlugin.h"
 
 namespace Core {
 	class EnvisionManager;

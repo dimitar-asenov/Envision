@@ -25,8 +25,9 @@
 ***********************************************************************************************************************/
 
 #include "SetModificationTarget.h"
-#include "../nodes/Node.h"
+
 #include "../concurrent/NodeReadWriteLock.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

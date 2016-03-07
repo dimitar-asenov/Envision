@@ -26,13 +26,17 @@
 
 #pragma once
 
-#include "Diff.h"
-#include "Commit.h"
-#include "ConflictPipelineComponent.h"
-#include "ChangeDependencyGraph.h"
+#include "../filepersistence_api.h"
+
 #include "ConflictPairs.h"
+#include "LinkedChangesTransition.h"
 
 namespace FilePersistence {
+	class ChangeDescription;
+	class ConflictPipelineComponent;
+	class ChangeDependencyGraph;
+	struct Signature;
+	class GenericTree;
 
 using ChangeToChangeHash = QMultiHash<const std::shared_ptr<ChangeDescription>,
 												  const std::shared_ptr<ChangeDescription>>;

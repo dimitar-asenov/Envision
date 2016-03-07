@@ -25,9 +25,13 @@
 ***********************************************************************************************************************/
 
 #include "ListMergeComponent.h"
+
+#include "ChangeDependencyGraph.h"
+#include "ChangeDescription.h"
 #include "ConflictPairs.h"
-#include "../simple/GenericTree.h"
+#include "Diff3Parse.h"
 #include "../simple/GenericNode.h"
+#include "../simple/GenericTree.h"
 
 namespace FilePersistence {
 

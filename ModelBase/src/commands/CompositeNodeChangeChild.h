@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "../modelbase_api.h"
+
 #include "NodeOwningCommand.h"
 #include "../nodes/composite/CompositeIndex.h"
 

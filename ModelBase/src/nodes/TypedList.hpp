@@ -27,6 +27,11 @@
 #pragma once
 #include "TypedList.h"
 
+#include "Node.h"
+#include "../persistence/PersistentStore.h"
+
+#include "Core/src/reflect/typeIdMacros.h"
+
 namespace Model {
 
 DEFINE_TYPE_ID_DERIVED(TypedList<T>, QString{"TypedListOf"} + T::typeNameStatic(), template<typename T>)

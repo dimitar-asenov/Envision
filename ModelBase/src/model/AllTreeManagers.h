@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../modelbase_api.h"
+
 #include "../persistence/PersistentStore.h"
 
 namespace Model {

@@ -27,8 +27,8 @@
 #include "NameResolver.h"
 
 #include "SymbolMatcher.h"
-#include "../model/TreeManager.h"
 #include "../model/AllTreeManagers.h"
+#include "../model/TreeManager.h"
 
 namespace Model {
 

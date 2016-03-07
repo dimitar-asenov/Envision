@@ -28,10 +28,13 @@
 
 #include "../modelbase_api.h"
 
-#include "composite/CompositeNode.h"
 #include "Text.h"
+#include "TypedList.h"
+#include "composite/CompositeNode.h"
 #include "nodeMacros.h"
 #include "../model/TreeManager.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace Model {
 	class UsedLibrary;

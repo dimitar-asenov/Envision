@@ -27,15 +27,16 @@
 #pragma once
 
 #include "filepersistence_api.h"
+
 #include "Core/src/EnvisionException.h"
 
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API FilePersistenceException : public Core::EnvisionException
 {
-		public:
-	FilePersistenceException(const QString& message);
-			const QString& name() const;
+	public:
+		FilePersistenceException(const QString& message);
+		const QString& name() const;
 };
 
 }

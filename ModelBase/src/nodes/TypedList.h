@@ -26,7 +26,12 @@
 
 #pragma once
 
+#include "../modelbase_api.h"
+
 #include "List.h"
+#include "nodeMacros.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace Model {
 

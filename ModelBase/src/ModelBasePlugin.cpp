@@ -32,6 +32,8 @@
 
 #include "SelfTest/src/TestManager.h"
 #include "Logger/src/Log.h"
+#include "SelfTest/src/TestResults.h"
+#include "Core/src/reflect/TypeRegistry.h"
 
 namespace Model {
 

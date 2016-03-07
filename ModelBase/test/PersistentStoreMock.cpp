@@ -25,9 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "PersistentStoreMock.h"
-#include "../src/nodes/Node.h"
-#include "../src/model/TreeManager.h"
+
 #include "../src/ModelException.h"
+#include "../src/model/TreeManager.h"
+#include "../src/nodes/Node.h"
 
 namespace Model {
 

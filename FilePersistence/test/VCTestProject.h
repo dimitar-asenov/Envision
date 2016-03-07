@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../src/filepersistence_api.h"
+
 #include "../src/version_control/GitRepository.h"
 
 namespace FilePersistence {

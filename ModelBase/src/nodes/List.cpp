@@ -25,12 +25,11 @@
 ***********************************************************************************************************************/
 
 #include "List.h"
-#include "../ModelException.h"
-#include "../commands/ListRemove.h"
-#include "../commands/ListPut.h"
-#include "nodeMacros.h"
-#include "../persistence/ClipboardStore.h"
+
 #include "../commands/ListInsert.h"
+#include "../commands/ListPut.h"
+#include "../commands/ListRemove.h"
+#include "../persistence/ClipboardStore.h"
 
 namespace Model {
 

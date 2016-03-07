@@ -25,10 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "NameChange.h"
-#include "FieldSet.h"
+
+#include "../model/TreeManager.h"
 #include "../nodes/NameText.h"
 #include "../nodes/Node.h"
-#include "../model/TreeManager.h"
 
 namespace Model {
 

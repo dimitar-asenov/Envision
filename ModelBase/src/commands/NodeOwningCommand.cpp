@@ -25,9 +25,10 @@
  **********************************************************************************************************************/
 
 #include "NodeOwningCommand.h"
-#include "../nodes/Node.h"
+
 #include "../model/AllTreeManagers.h"
 #include "../model/TreeManager.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

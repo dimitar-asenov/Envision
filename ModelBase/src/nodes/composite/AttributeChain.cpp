@@ -27,7 +27,6 @@
 #include "AttributeChain.h"
 
 #include "../../ModelException.h"
-#include "CompositeIndex.h"
 
 namespace Model {
 

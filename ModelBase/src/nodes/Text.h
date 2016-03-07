@@ -26,8 +26,13 @@
 
 #pragma once
 
+#include "../modelbase_api.h"
+
+#include "Node.h"
 #include "TypedList.h"
 #include "nodeMacros.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace Model {
 	class Text;
@@ -37,7 +42,6 @@ extern template class MODELBASE_API Model::TypedList<Model::Text>;
 namespace Model {
 
 class PersistentStore;
-
 template<typename T> class FieldSet;
 
 class MODELBASE_API Text: public Super<Node>

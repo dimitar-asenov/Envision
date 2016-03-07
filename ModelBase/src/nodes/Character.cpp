@@ -25,10 +25,12 @@
 ***********************************************************************************************************************/
 
 #include "Character.h"
-#include "../commands/FieldSet.h"
-#include "../ModelException.h"
 
 #include "TypedList.hpp"
+#include "../ModelException.h"
+#include "../commands/FieldSet.h"
+#include "../persistence/PersistentStore.h"
+
 template class Model::TypedList<Model::Character>;
 
 namespace Model {

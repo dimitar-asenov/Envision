@@ -25,8 +25,9 @@
 ***********************************************************************************************************************/
 
 #include "LinkedChangesSet.h"
-#include "../simple/GenericTree.h"
+
 #include "ChangeDependencyGraph.h"
+#include "../simple/GenericTree.h"
 
 namespace FilePersistence {
 

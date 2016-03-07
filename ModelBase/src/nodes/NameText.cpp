@@ -25,9 +25,10 @@
  **********************************************************************************************************************/
 
 #include "NameText.h"
-#include "../commands/NameChange.h"
 
 #include "TypedList.hpp"
+#include "../commands/NameChange.h"
+
 template class Model::TypedList<Model::NameText>;
 
 namespace Model {

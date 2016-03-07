@@ -26,8 +26,13 @@
 
 #pragma once
 
-#include "ConflictPipelineComponent.h"
+#include "../filepersistence_api.h"
+
 #include "ChangeDependencyGraph.h"
+#include "ConflictPipelineComponent.h"
+#include "LinkedChangesTransition.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 

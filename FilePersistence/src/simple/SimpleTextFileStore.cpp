@@ -25,13 +25,12 @@
  **********************************************************************************************************************/
 
 #include "SimpleTextFileStore.h"
-#include "../FilePersistenceException.h"
 
 #include "GenericNode.h"
-#include "GenericTree.h"
 #include "GenericPersistentUnit.h"
-
+#include "GenericTree.h"
 #include "Parser.h"
+#include "../FilePersistenceException.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"

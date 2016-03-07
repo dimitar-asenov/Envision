@@ -33,6 +33,8 @@
 #include "../ModelException.h"
 #include "../persistence/PersistentStore.h"
 
+#include "Core/src/reflect/Reflect.h"
+
 namespace Model {
 
 class ClipboardStore;

@@ -26,7 +26,11 @@
 
 #pragma once
 
+#include "../filepersistence_api.h"
+
 #include "ChangeDescription.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 

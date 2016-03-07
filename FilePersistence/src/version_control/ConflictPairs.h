@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "../filepersistence_api.h"
+
 #include "ChangeDescription.h"
 
 namespace FilePersistence {

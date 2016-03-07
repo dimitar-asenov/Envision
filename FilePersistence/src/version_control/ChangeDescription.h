@@ -27,12 +27,14 @@
 #pragma once
 
 #include "../filepersistence_api.h"
+
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
 class GenericTree;
 class GenericNode;
+class ChangeDescription;
 
 enum class ChangeType {Unclassified, Insertion, Deletion, Move, Stationary};
 

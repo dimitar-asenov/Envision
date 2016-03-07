@@ -29,6 +29,7 @@
 #include "filepersistence_api.h"
 
 #include "ModelBase/src/persistence/ClipboardStore.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace Model {
 	class Reference;

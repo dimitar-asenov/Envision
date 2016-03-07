@@ -26,10 +26,13 @@
 
 #include "../src/FilePersistencePlugin.h"
 #include "../src/simple/SimpleTextFileStore.h"
+
 #include "SelfTest/src/Test.h"
 #include "SelfTest/src/TestAssertions.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
+#include "Core/src/reflect/Reflect.h"
 
 using namespace Model;
 

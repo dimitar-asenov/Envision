@@ -26,10 +26,9 @@
 
 #include "UsedLibrary.h"
 
-#include "../model/TreeManager.h"
+#include "TypedList.hpp"
 #include "../model/AllTreeManagers.h"
 
-#include "TypedList.hpp"
 template class Model::TypedList<Model::UsedLibrary>;
 
 namespace Model {

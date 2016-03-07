@@ -25,17 +25,17 @@
 ***********************************************************************************************************************/
 
 #include "Node.h"
-#include "../model/TreeManager.h"
-#include "../model/AllTreeManagers.h"
-#include "../commands/UndoCommand.h"
-#include "../ModelException.h"
+
 #include "Reference.h"
-#include "Core/src/AdapterManager.h"
 #include "UsedLibrary.h"
-
-#include "../commands/NodeOwningCommand.h"
-
 #include "../ModelBasePlugin.h"
+#include "../ModelException.h"
+#include "../commands/NodeOwningCommand.h"
+#include "../commands/UndoCommand.h"
+#include "../model/AllTreeManagers.h"
+#include "../model/TreeManager.h"
+
+#include "Core/src/AdapterManager.h"
 #include "Logger/src/Log.h"
 
 namespace Model {

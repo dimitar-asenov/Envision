@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../modelbase_api.h"
+
 #include "../util/SymbolMatcher.h"
 
 #include "Core/src/reflect/Reflect.h"

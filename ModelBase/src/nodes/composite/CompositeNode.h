@@ -26,9 +26,15 @@
 
 #pragma once
 
+#include "../../modelbase_api.h"
+
+#include "Attribute.h"
 #include "AttributeChain.h"
+#include "CompositeIndex.h"
 #include "../Node.h"
+
 #include "Core/src/reflect/typeIdMacros.h"
+#include "Core/src/reflect/Reflect.h"
 
 namespace Model {
 

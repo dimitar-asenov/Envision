@@ -26,8 +26,13 @@
 
 #pragma once
 
+#include "../modelbase_api.h"
+
+#include "Node.h"
 #include "TypedList.h"
 #include "nodeMacros.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace Model {
 	class Reference;

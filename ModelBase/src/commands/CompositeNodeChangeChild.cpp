@@ -25,9 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "CompositeNodeChangeChild.h"
-#include "../nodes/Node.h"
 
+#include "UndoCommand.h"
 #include "../ModelException.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 

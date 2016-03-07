@@ -28,9 +28,12 @@
 
 #include "../modelbase_api.h"
 
+#include "../nodes/NameText.h"
+#include "../nodes/TypedList.h"
 #include "../nodes/composite/CompositeNode.h"
 #include "../nodes/nodeMacros.h"
-#include "../nodes/NameText.h"
+
+#include "Core/src/reflect/Reflect.h"
 
 namespace TestNodes {
 	class BinaryNode;

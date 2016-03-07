@@ -25,17 +25,20 @@
 ***********************************************************************************************************************/
 
 #include "TreeManager.h"
-#include "../ModelException.h"
-#include "../commands/NodeOwningCommand.h"
-#include "../commands/SetModificationTarget.h"
-#include "../commands/NoteNodeChange.h"
-#include "../nodes/Reference.h"
-#include "../nodes/UsedLibrary.h"
-#include "../nodes/NameText.h"
-
-#include "Core/src/Profiler.h"
 
 #include "AllTreeManagers.h"
+#include "../ModelException.h"
+#include "../commands/NodeOwningCommand.h"
+#include "../commands/NoteNodeChange.h"
+#include "../commands/SetModificationTarget.h"
+#include "../commands/UndoCommand.h"
+#include "../nodes/NameText.h"
+#include "../nodes/Node.h"
+#include "../nodes/Reference.h"
+#include "../nodes/UsedLibrary.h"
+#include "../persistence/PersistentStore.h"
+
+#include "Core/src/Profiler.h"
 
 namespace Model {
 
