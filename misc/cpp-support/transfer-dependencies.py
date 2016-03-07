@@ -23,6 +23,8 @@ if not os.path.isfile(args.infoFile):
 
 ### Global declarations
 includeRegex = re.compile('^(#include ".*".*)$')
+commentedIncludeRegex = re.compile('^//I #include ".*".*$')
+possiblyCommentedIncludeRegex = re.compile('^(?://I )?#include "(.*)".*$')
 forwardDeclarationRegex = re.compile('^(\s*(template<.*>\s*\n?\s*)?(class|struct)\s+\w+;\s*(//.*)?)$')
 templateBeginningRegex = re.compile('^\s*template\s*<.+>$')
 namespaceRegex = re.compile('^namespace\s+(\w+)')
@@ -82,8 +84,11 @@ class Part:
 			assert len(self.lines) > 0
 			self.lines.insert(1, line)
 		else:
-			self.lines.prepend(line)
-			
+			self.lines.insert(0, line)
+
+### Change detection
+fileHasBeenAdjusted = False
+
 ### Helper methods
 def checkInclude(include):
 	if include in includesToMatch:
@@ -92,6 +97,7 @@ def checkInclude(include):
 	elif '.hpp"' in include:
 		return include
 	else:
+		fileHasBeenAdjusted = True
 		return '//I ' + include
 	
 def checkForwardDeclaration(namespace, forwardDeclaration):
@@ -102,10 +108,12 @@ def checkForwardDeclaration(namespace, forwardDeclaration):
 		forwardsToMatch.remove(name)
 		return forwardDeclaration
 	else:
+		fileHasBeenAdjusted = True
 		return '//FD ' + stripped
 		
 ### Process input file
 parts = [Part('')]
+originalIncludes = []
 
 with open(args.fileToAdjust, 'r') as fileToAdjust:
 	for line in fileToAdjust:
@@ -121,14 +129,22 @@ with open(args.fileToAdjust, 'r') as fileToAdjust:
 				continue
 			
 		if (len(parts) == 2):
-			# We are currently processing includes (and empty lines between them)
+			# We are currently processing includes, commented includes and empty lines between them
 			m = includeRegex.match(line)
 			if m:
+				originalIncludes.append(line)
 				parts[-1].append(checkInclude(line))
 				continue
 			
 			m = emptyLineRegex.match(line)
 			if m:
+				originalIncludes.append(line)
+				continue
+			
+			m = commentedIncludeRegex.match(line)
+			if m:
+				originalIncludes.append(line)
+				parts[-1].append(line)
 				continue
 			
 			# We are done with headers
@@ -151,9 +167,11 @@ with open(args.fileToAdjust, 'r') as fileToAdjust:
 			parts[-1].append(line)
 
 ### Append the remaining includes
+fileHasBeenAdjusted = fileHasBeenAdjusted or len(includesToMatch) > 0
 parts[1].lines.extend(includesToMatch)
 
 ### Append the remaining forward declarations
+fileHasBeenAdjusted = fileHasBeenAdjusted or len(forwardsToMatch) > 0
 for descriptor in forwardsToMatch:
 	words = descriptor.split(':')
 	assert len(words) == 2
@@ -178,9 +196,8 @@ for descriptor in forwardsToMatch:
 			parts.insert(3, newPart)
 		else:
 			parts.insert(2, newPart)
-			
+
 ### Sort the includes
-possiblyCommentedIncludeRegex = re.compile('^(?://I )?#include "(.*)".*$')
 matchingHeaderFile = os.path.basename( os.path.splitext(args.fileToAdjust)[0]) + '.h'
 projectNamesRegex = re.compile('^(?:Core|Launcher|HelloWorld|APIDepTest|SelfTest|Logger|ModelBase|FilePersistence|VisualizationBase|InteractionBase|Comments|Export|OOModel|OOVisualization|OOInteraction|JavaExport|OODebug|CppExport|CppImport|PythonWrapperGenerator|InformationScripting|ContractsLibrary|Alloy|CustomMethodCall|ControlFlowVisualization)/.*')
 
@@ -242,8 +259,14 @@ for i in range(firstNonStandardInclude, len(parts[1].lines)):
 if not parts[1].lines[-1] == '':
 	parts[1].lines.append('')
 
+fileHasBeenAdjusted = fileHasBeenAdjusted or originalIncludes != parts[1].lines
+
 ### Write the output file
-with open(args.fileToAdjust, 'w') as outputFile:
-	for part in parts:
-		for line in part.lines:
-			outputFile.write(line + '\n')
+if fileHasBeenAdjusted:
+	print('Adjusting ' + args.fileToAdjust)
+	with open(args.fileToAdjust, 'w') as outputFile:
+		for part in parts:
+			for line in part.lines:
+				outputFile.write(line + '\n')
+else:
+	print('No need for adjustment ' + args.fileToAdjust)
