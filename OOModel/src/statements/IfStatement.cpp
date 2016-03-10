@@ -27,6 +27,7 @@
 #include "IfStatement.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::IfStatement>;
 
 namespace OOModel {
@@ -38,24 +39,23 @@ DEFINE_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
 DEFINE_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
 DEFINE_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
 
-bool IfStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool IfStatement::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
-	if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+	if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 		Q_ASSERT(ignore);
 
 		bool found{};
 
 		if (condition() != ignore)
 			// Optimize the search by skipping the scope of the source, since we've already searched there
-			found = condition()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = condition()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		// Note that a StatementList (the branches) also implements findSymbols and locally declared variables will be
 		// found there.
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
 
 		return found;
 	}

@@ -29,6 +29,7 @@
 #include "../expressions/ReferenceExpression.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::NameImport>;
 
 namespace OOModel {
@@ -62,22 +63,21 @@ Model::Node* NameImport::target() const
 	return ret;
 }
 
-bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool NameImport::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
-	Q_ASSERT(direction != SEARCH_DOWN);
+	Q_ASSERT(request->direction() != SEARCH_DOWN);
 
 	// Name imports only provide shortcuts for objects that are within the entity declaring the import
 	auto p = parent(); // This should be a list of Declarations
 	if (p) p = p->parent(); // This should be the parent entity
-	if (!p || !p->isAncestorOf(source)) return false;
+	if (!p || !p->isAncestorOf(request->source())) return false;
 	// Note above that it is important that we only consider descendants of p and not p itself. This is because when
 	// a NameImport (or the initial part of one) within p, resolves to p itself (e.g. import java.something inside the
 	// java package) we will do a symbol start with p as a source. In that case import should not be further used as
 	// shortcuts.
 
 
-	if (direction == SEARCH_HERE)
+	if (request->direction() == SEARCH_HERE)
 	{
 
 		// If this node is part of a list and the source is a name import from the same list, impose an order
@@ -85,7 +85,7 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 //		auto listParent = DCast<Model::List>(parent());
 //		if (listParent)
 //		{
-//			int sourceIndex = listParent->indexToSubnode(source);
+//			int sourceIndex = listParent->indexToSubnode(request->source());
 //			if (sourceIndex >=0)
 //				if (DCast<NameImport> (listParent->at<Model::Node>(sourceIndex)))
 //				{
@@ -99,16 +99,16 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 		// the target
 		if (!importAll())
 			if (auto ref = DCast<ReferenceExpression>(importedName()))
-				if (!matcher.matches(ref->name())) return false;
+				if (!request->matcher().matches(ref->name())) return false;
 
 		if (auto t = target())
-			return t->findSymbols(result, matcher, (importAll() ? t : source),
-					(importAll() ? SEARCH_DOWN : SEARCH_HERE), symbolTypes, false);
+			return t->findSymbols(request->clone((importAll() ? t : request->source()),
+					(importAll() ? SEARCH_DOWN : SEARCH_HERE), false));
 	}
-	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+	else if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
 		if (parent())
-			return parent()->findSymbols(result, matcher, source, SEARCH_UP_ORDERED, symbolTypes, exhaustAllScopes);
+			return parent()->findSymbols(request->clone(SEARCH_UP_ORDERED));
 	}
 
 	return false;

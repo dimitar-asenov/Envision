@@ -31,6 +31,7 @@
 #include "../types/Type.h"
 #include "../expressions/MethodCallExpression.h"
 
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::Method>;
 
 namespace OOModel {
@@ -95,46 +96,45 @@ Method::SymbolTypes Method::symbolType() const
 	return METHOD;
 }
 
-bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool Method::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
 	bool found{};
 
-	if (direction == SEARCH_DOWN); // Do nothing
-	else if (direction == SEARCH_HERE)
+	if (request->direction() == SEARCH_DOWN); // Do nothing
+	else if (request->direction() == SEARCH_HERE)
 	{
-		if (symbolMatches(matcher, symbolTypes))
+		if (symbolMatches(request->matcher(), request->symbolTypes()))
 		{
 			found = true;
-			result.insert(const_cast<Method*>(this));
+			request->result().insert(const_cast<Method*>(this));
 		}
 	}
-	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+	else if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 
 		Q_ASSERT(ignore);
 
 		// Don't search in scopes we've already searched in
 		if (arguments() != ignore)
-			found = arguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = arguments()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		if (typeArguments() != ignore)
-			found = typeArguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = typeArguments()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		if (results() != ignore)
-			found = results()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = results()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		if (subDeclarations() != ignore)
-			found = subDeclarations()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = subDeclarations()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
 		// found there.
 
-		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
+		if ((request->exhaustAllScopes() || !found) && symbolMatches(request->matcher(), request->symbolTypes()))
 		{
 			found = true;
-			result.insert(const_cast<Method*>(this));
+			request->result().insert(const_cast<Method*>(this));
 		}
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
 	}
 
 	return found;

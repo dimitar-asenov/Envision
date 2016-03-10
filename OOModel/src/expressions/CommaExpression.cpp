@@ -29,6 +29,7 @@
 #include "../types/Type.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::CommaExpression>;
 
 namespace OOModel {
@@ -68,29 +69,28 @@ QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)
 	return operands;
 }
 
-bool CommaExpression::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool CommaExpression::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
-	Q_ASSERT(direction != SEARCH_DOWN);
+	Q_ASSERT(request->direction() != SEARCH_DOWN);
 
 	bool found{};
 
-	if (direction == SEARCH_HERE)
+	if (request->direction() == SEARCH_HERE)
 	{
-		found = left()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-		found = right()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+		found = left()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
+		found = right()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 	}
-	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+	else if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 
 		if (left() != ignore)
-			found = left()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = left()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		if (right() != ignore)
-			found = right()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = right()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
 	}
 
 	return found;

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,37 +24,44 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "ResolutionRequest.h"
 
-#include "../oomodel_api.h"
+namespace Model {
 
-#include "Declaration.h"
-#include "../expressions/Expression.h"
+ResolutionRequest::~ResolutionRequest(){}
 
-#include "ModelBase/src/nodes/Boolean.h"
-
-namespace OOModel {
-	class NameImport;
-}
-extern template class OOMODEL_API Model::TypedList<OOModel::NameImport>;
-
-namespace OOModel {
-
-class OOMODEL_API NameImport : public Super<Declaration>
+std::unique_ptr<ResolutionRequest> ResolutionRequest::clone() const
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(NameImport)
-	ATTRIBUTE(Expression, importedName, setImportedName)
-	ATTRIBUTE_VALUE(Model::Boolean, importAll, setImportAll, bool)
+	return std::make_unique<ResolutionRequest>(this->result_, this->matcher_, this->source_, this->direction_,
+		this->symbolTypes_, this->exhaustAllScopes_);
+}
 
-	public:
-		NameImport(Expression* importedName, bool importAllChildrenInScope = false);
+std::unique_ptr<ResolutionRequest> ResolutionRequest::clone(const Node::FindSymbolDirection direction,
+																 const bool exhaustAllScopes) const
+{
+	return std::make_unique<ResolutionRequest>(this->result_, this->matcher_, this->source_, direction,
+		this->symbolTypes_, exhaustAllScopes);
+}
 
-		virtual bool definesSymbol() const override;
+std::unique_ptr<ResolutionRequest> ResolutionRequest::clone(const Node::FindSymbolDirection direction) const
+{
+	return std::make_unique<ResolutionRequest>(this->result_, this->matcher_, this->source_, direction,
+		this->symbolTypes_, this->exhaustAllScopes_);
+}
 
-		virtual bool findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const override;
+std::unique_ptr<ResolutionRequest> ResolutionRequest::clone(const Node* source,
+																 const Node::FindSymbolDirection direction) const
+{
+	return std::make_unique<ResolutionRequest>(this->result_, this->matcher_, source, direction,
+		this->symbolTypes_, this->exhaustAllScopes_);
+}
 
-	private:
-		Node* target() const;
-};
+std::unique_ptr<ResolutionRequest> ResolutionRequest::clone(const Node* source,
+																 const Node::FindSymbolDirection direction,
+																 const bool exhaustAllScopes) const
+{
+	return std::make_unique<ResolutionRequest>(this->result_, this->matcher_, source, direction,
+		this->symbolTypes_, exhaustAllScopes);
+}
 
 }

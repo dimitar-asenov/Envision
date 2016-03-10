@@ -27,6 +27,7 @@
 #include "StatementItemList.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::StatementItemList>;
 
 namespace OOModel {
@@ -34,12 +35,11 @@ namespace OOModel {
 DEFINE_NODE_EMPTY_CONSTRUCTORS(StatementItemList)
 DEFINE_NODE_TYPE_REGISTRATION_METHODS(StatementItemList)
 
-bool StatementItemList::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool StatementItemList::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
-	if (direction == SEARCH_UP)
-		return Super::findSymbols(result, matcher, source, SEARCH_UP_ORDERED, symbolTypes, exhaustAllScopes);
-	else return Super::findSymbols(result, matcher, source, direction, symbolTypes, exhaustAllScopes);
+	if (request->direction() == SEARCH_UP)
+		return Super::findSymbols(request->clone(SEARCH_UP_ORDERED));
+	else return Super::findSymbols(request->clone());
 }
 
 }

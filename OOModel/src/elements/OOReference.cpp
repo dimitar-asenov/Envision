@@ -43,6 +43,7 @@
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::OOReference>;
 
 namespace OOModel {
@@ -136,8 +137,9 @@ Model::Node* OOReference::computeTarget() const
 				// It's important below that we change the source to sp->symbolProvider() in the call to findSymbols.
 				// See NameImport.cpp for more info.
 
-				sp->symbolProvider()->findSymbols(candidateTargets, name(), sp->symbolProvider(), SEARCH_DOWN,
-						searchForType, searchForType.testFlag(METHOD) ); 	// When search for methods do an exhaustive search.
+				sp->symbolProvider()->findSymbols(std::make_unique<Model::ResolutionRequest>(
+						candidateTargets, name(), sp->symbolProvider(), SEARCH_DOWN,
+						searchForType, searchForType.testFlag(METHOD))); 	// When search for methods do an exhaustive search.
 																							// This is important for overloads.
 			}
 		}
@@ -146,7 +148,8 @@ Model::Node* OOReference::computeTarget() const
 	{
 		// Perform an upward search starting from the current node
 		// When search for methods do an exhaustive search. This is important for overloads.
-		findSymbols(candidateTargets, name(), this, SEARCH_UP,  searchForType, searchForType.testFlag(METHOD));
+		findSymbols(std::make_unique<Model::ResolutionRequest>(candidateTargets, name(), this, SEARCH_UP,
+																				 searchForType, searchForType.testFlag(METHOD)));
 	}
 
 	return resolveAmbiguity(candidateTargets);

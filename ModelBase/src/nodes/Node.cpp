@@ -34,6 +34,7 @@
 #include "../commands/UndoCommand.h"
 #include "../model/AllTreeManagers.h"
 #include "../model/TreeManager.h"
+#include "../util/ResolutionRequest.h"
 
 #include "Core/src/AdapterManager.h"
 #include "Logger/src/Log.h"
@@ -206,49 +207,49 @@ bool Node::replaceChild(Node*, Node*)
 	return false;
 }
 
-bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool Node::findSymbols(std::unique_ptr<ResolutionRequest> request) const
 {
 	bool found{};
 
-	if (direction == SEARCH_HERE && !isTransparentForNameResolution())
+	if (request->direction() == SEARCH_HERE && !isTransparentForNameResolution())
 	{
-		if (symbolMatches(matcher, symbolTypes))
+		if (symbolMatches(request->matcher(), request->symbolTypes()))
 		{
 			found = true;
-			result.insert(const_cast<Node*>(this));
+			request->result().insert(const_cast<Node*>(this));
 		}
 	}
-	else if (direction == SEARCH_DOWN || (direction == SEARCH_HERE && isTransparentForNameResolution()))
+	else if (request->direction() == SEARCH_DOWN
+				|| (request->direction() == SEARCH_HERE && isTransparentForNameResolution()))
 		for (auto c : childrenInScope())
-			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+			found = c->findSymbols(request->clone(SEARCH_HERE, false)) || found;
+	else if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 		for (auto c : childrenInScope())
 		{
 			// Optimize the search by skipping this scope, since we've already searched there
 			if (c != ignore)
-				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+				found = c->findSymbols(request->clone(SEARCH_HERE, false) ) || found;
 		}
 
-		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes) && !isTransparentForNameResolution())
+		if ((request->exhaustAllScopes() || !found)
+			 && symbolMatches(request->matcher(), request->symbolTypes()) && !isTransparentForNameResolution())
 		{
 			found = true;
-			result.insert(const_cast<Node*>(this));
+			request->result().insert(const_cast<Node*>(this));
 		}
 
-		if ((exhaustAllScopes || !found) && parent_)
-			found = parent_->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent_)
+			found = parent_->findSymbols(request->clone(SEARCH_UP)) || found;
 
 		// Search in libraries. This is only valid for root nodes
-		if ((exhaustAllScopes || !found) && !parent_)
+		if ((request->exhaustAllScopes() || !found) && !parent_)
 			for (const UsedLibrary* lib : usedLibraries())
 			{
 				auto libRoot = lib->libraryRoot();
 				if (libRoot)
-					found = libRoot->findSymbols(result, matcher, libRoot, SEARCH_DOWN, symbolTypes, exhaustAllScopes)
-							|| found;
+					found = libRoot->findSymbols(request->clone(libRoot, SEARCH_DOWN)) || found;
 			}
 	}
 

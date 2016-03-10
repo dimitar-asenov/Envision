@@ -28,6 +28,8 @@
 #include "CommandHelper.h"
 #include "OOVisualization/src/declarations/VMethod.h"
 
+#include "ModelBase/src/util/ResolutionRequest.h"
+
 using namespace Interaction;
 using namespace Visualization;
 using namespace Model;
@@ -145,7 +147,8 @@ void CDumpMethodRenderings::printPath(Visualization::Item* item, QStringList pat
 	else
 	{
 		QSet<Node*> nextInPath;
-		item->node()->findSymbols(nextInPath, path.first(), item->node(), Node::SEARCH_DOWN, Node::ANY_SYMBOL, false);
+		item->node()->findSymbols(std::make_unique<Model::ResolutionRequest>
+			(nextInPath, path.first(), item->node(), Node::SEARCH_DOWN, Node::ANY_SYMBOL, false));
 		for (auto next : nextInPath)
 			if (auto itemForNextNode = item->findVisualizationOf(next))
 				printPath(itemForNextNode, path, itemNumber, numPrinted, argumentNames);

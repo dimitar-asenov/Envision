@@ -47,8 +47,7 @@ class OOMODEL_API IfStatement: public Super<Statement>
 	ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)
 
 	public:
-		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
+		virtual bool findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const override;
 };
 
 }

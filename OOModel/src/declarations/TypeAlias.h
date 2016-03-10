@@ -50,8 +50,7 @@ class OOMODEL_API TypeAlias : public Super<Declaration>
 
 		virtual SymbolTypes symbolType() const override;
 
-		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
+		virtual bool findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const override;
 
 	private:
 		Node* target() const;

@@ -31,6 +31,7 @@
 #include "Project.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::Class>;
 
 namespace OOModel {
@@ -79,8 +80,7 @@ bool Class::isGeneric()
 	return typeArguments()->size() > 0;
 }
 
-inline bool Class::findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
-		SymbolTypes symbolTypes, bool exhaustAllScopes) const
+inline bool Class::findInTarget(Expression* target, std::unique_ptr<Model::ResolutionRequest>& request) const
 {
 	bool found = false;
 	auto t = target->type();
@@ -88,76 +88,74 @@ inline bool Class::findInTarget(Expression* target, QSet<Node*>& result, const M
 	{
 
 		if (sp->symbolProvider() && sp->symbolProvider() != this)
-			found = sp->symbolProvider()->findSymbols(result, matcher, sp->symbolProvider(), SEARCH_DOWN,
-				symbolTypes, exhaustAllScopes);
+			found = sp->symbolProvider()->findSymbols(request->clone(sp->symbolProvider(), SEARCH_DOWN));
 	}
 	return found;
 }
 
-bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool Class::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
 	bool found{};
 
-	if (direction == SEARCH_HERE)
+	if (request->direction() == SEARCH_HERE)
 	{
-		if (symbolMatches(matcher, symbolTypes))
+		if (symbolMatches(request->matcher(), request->symbolTypes()))
 		{
 			found = true;
-			result.insert(const_cast<Class*>(this));
+			request->result().insert(const_cast<Class*>(this));
 		}
 	}
-	else if (direction == SEARCH_DOWN)
+	else if (request->direction() == SEARCH_DOWN)
 	{
 		for (auto c : childrenInScope())
 		{
 			if (c != typeArguments() && c != friends())
-				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+				found = c->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		}
 
 		// Look in base classes
-		if (exhaustAllScopes || !found)
+		if (request->exhaustAllScopes() || !found)
 		{
 			if (baseClasses()->size() == 0)
 			{
 				if (auto implicit = defaultImplicitBaseFromProject())
-					found = findInTarget(implicit, result, matcher, symbolTypes, exhaustAllScopes) || found;
+					found = findInTarget(implicit, request) || found;
 			}
 			else
 				for (auto bc : *baseClasses())
-					found = findInTarget(bc, result, matcher, symbolTypes, exhaustAllScopes) || found;
+					found = findInTarget(bc, request) || found;
 		}
 	}
-	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+	else if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 		for (auto c : childrenInScope())
 			if (c != ignore && c != friends())
 				// Optimize the search by skipping this scope, since we've already searched there
-				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+				found = c->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 
 		// Look in base classes, but only if we are not trying to resolve a base class name
-		ignore = baseClasses()->childToSubnode(source);
-		if (!ignore && (exhaustAllScopes || !found))
+		ignore = baseClasses()->childToSubnode(request->source());
+		if (!ignore && (request->exhaustAllScopes() || !found))
 		{
 			if (baseClasses()->size() == 0)
 			{
 				if (auto implicit = defaultImplicitBaseFromProject())
-					found = findInTarget(implicit, result, matcher, symbolTypes, exhaustAllScopes) || found;
+					found = findInTarget(implicit, request) || found;
 			}
 			else
 				for (auto bc : *baseClasses())
-					found = findInTarget(bc, result, matcher, symbolTypes, exhaustAllScopes) || found;
+					found = findInTarget(bc, request) || found;
 		}
 
-		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
+		if ((request->exhaustAllScopes() || !found) && symbolMatches(request->matcher(), request->symbolTypes()))
 		{
 			found = true;
-			result.insert(const_cast<Class*>(this));
+			request->result().insert(const_cast<Class*>(this));
 		}
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
 	}
 
 	return found;

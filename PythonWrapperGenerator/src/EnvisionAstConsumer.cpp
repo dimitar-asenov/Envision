@@ -273,6 +273,9 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 		// Note that they might be hidden behind a typedef type.
 		if (methodName == "registerNodeType") continue;
 
+		// Ignore findSymbols as python doesn't seem to like the unique_ptr.
+		if (methodName == "findSymbols") continue;
+
 		if (method->getAccess() != clang::AccessSpecifier::AS_public ||
 			 (method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate &&
 			  method->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_MemberSpecialization) ||

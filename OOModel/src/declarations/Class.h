@@ -65,8 +65,7 @@ class OOMODEL_API Class : public Super<Declaration>
 		ConstructKind constructKind() const;
 		void setConstructKind(const ConstructKind& kind);
 
-		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
+		virtual bool findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const override;
 
 		virtual SymbolTypes symbolType() const override;
 
@@ -87,8 +86,7 @@ class OOMODEL_API Class : public Super<Declaration>
 
 	private:
 		Expression* defaultImplicitBaseFromProject() const;
-		bool findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
-				SymbolTypes symbolTypes, bool exhaustAllScopes) const;
+		bool findInTarget(Expression* target, std::unique_ptr<Model::ResolutionRequest>& request) const;
 };
 
 inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }

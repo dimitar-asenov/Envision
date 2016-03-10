@@ -40,6 +40,7 @@ class UndoCommand;
 class NodeReadWriteLock;
 class UsedLibrary;
 class PersistentStore;
+class ResolutionRequest;
 
 /**
  * The Node class is the foundation element in the tree in Envision. An application in Envision is a collection of
@@ -239,23 +240,9 @@ class MODELBASE_API Node
 		};
 
 		/**
-		 * Returns in \a result a set of all nodes which define a symbol with a name matching \a matcher in the scope of
-		 * this node.
+		 * Performs a search for a symbol according to the given \a request and returns whether a symbol was found.
 		 *
-		 * The return value is true if a symbol was found and false otherwise.
-		 *
-		 * The \a source Node specifies what node should be used as a reference when determining what symbols are visible.
-		 *
-		 * The \a direction specifies what search to perform.
-		 *
-		 * The \a symbolTypes specifies what symbol types should be returned. If a symbol matches any of the requested
-		 * types it will be returned.
-		 *
-		 * If \a exhaustAllScopes is false, the search will halt as soon as symbols are found within a scope. This is
-		 * useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope.
-		 * If \a exhaustAllScopes is true, the search will explore all scopes in corresponding to the provided mode. This
-		 * is useful when \a symbolExp can match multiple symbols with different names (for example during auto completion
-		 * list build up).
+		 * The symbols which were found are inserted in the set refernced by the \a result of the request.
 		 *
 		 * The default implementation returns a set with only the current node in it, in case the node defines the
 		 * requested symbol. Otherwise if \a mode is FindSymbolMode::SEARCH_UP, the implementation of the parent node is
@@ -264,8 +251,7 @@ class MODELBASE_API Node
 		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
 		 * other than FindSymbolMode::SEARCH_UP
 		 */
-		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const;
+		virtual bool findSymbols(std::unique_ptr<ResolutionRequest> request) const;
 
 
 		/**

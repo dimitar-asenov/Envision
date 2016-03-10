@@ -30,6 +30,7 @@
 #include "OOModel/src/expressions/ReferenceExpression.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::TypeAlias>;
 
 namespace OOModel {
@@ -64,33 +65,32 @@ TypeAlias::SymbolTypes TypeAlias::symbolType() const
 	else return UNSPECIFIED;
 }
 
-bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool TypeAlias::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
 	bool found{};
 
-	if (direction == SEARCH_HERE)
+	if (request->direction() == SEARCH_HERE)
 	{
-		if (symbolMatches(matcher, symbolTypes))
+		if (symbolMatches(request->matcher(), request->symbolTypes()))
 		{
-			result.insert(const_cast<TypeAlias*>(this));
+			request->result().insert(const_cast<TypeAlias*>(this));
 			found = true;
 		}
 	}
-	else if (direction == SEARCH_DOWN)
+	else if (request->direction() == SEARCH_DOWN)
 	{
 		if (auto t = target())
-			found = t->findSymbols(result, matcher, t, SEARCH_DOWN, symbolTypes, false);
+			found = t->findSymbols(request->clone(t, SEARCH_DOWN, false));
 	}
-	else if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+	else if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 		Q_ASSERT(ignore);
 		if (typeArguments() != ignore)
-			found = typeArguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = typeArguments()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP_ORDERED, symbolTypes, exhaustAllScopes);
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP_ORDERED));
 	}
 
 	return found;

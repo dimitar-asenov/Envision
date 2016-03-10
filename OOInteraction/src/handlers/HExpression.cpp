@@ -45,6 +45,8 @@
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
 #include "Core/src/AdapterManager.h"
 
+#include "ModelBase/src/util/ResolutionRequest.h"
+
 using namespace OOModel;
 using namespace Visualization;
 using namespace Interaction;
@@ -597,15 +599,16 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 
 	Model::SymbolMatcher matcher{new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard}};
 	if (afterDot)
-		searchNode->findSymbols(foundSymbols, matcher, searchNode, Model::Node::SEARCH_DOWN,
-										Model::Node::ANY_SYMBOL, true);
+		searchNode->findSymbols(std::make_unique<Model::ResolutionRequest>(foundSymbols, matcher, searchNode,
+										Model::Node::SEARCH_DOWN, Model::Node::ANY_SYMBOL, true));
 	else
-		searchNode->findSymbols(foundSymbols, matcher, target->node(), Model::Node::SEARCH_UP,
-										Model::Node::ANY_SYMBOL, true);
+		searchNode->findSymbols(std::make_unique<Model::ResolutionRequest>(foundSymbols, matcher, target->node(),
+										Model::Node::SEARCH_UP, Model::Node::ANY_SYMBOL, true));
 
-	searchNode->findSymbols(foundSymbols, new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard},
+	searchNode->findSymbols(std::make_unique<Model::ResolutionRequest>(foundSymbols,
+			new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard},
 			target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
-			afterDot == false);
+			afterDot == false));
 
 	for (auto n : foundSymbols) autoCompleteCandidates.append(n->symbolName());
 

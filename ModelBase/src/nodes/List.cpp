@@ -30,6 +30,7 @@
 #include "../commands/ListPut.h"
 #include "../commands/ListRemove.h"
 #include "../persistence/ClipboardStore.h"
+#include "../util/ResolutionRequest.h"
 
 namespace Model {
 
@@ -201,47 +202,46 @@ bool List::isTransparentForNameResolution() const
 	return true;
 }
 
-bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool List::findSymbols(std::unique_ptr<ResolutionRequest> request) const
 {
-	Q_ASSERT(direction != SEARCH_DOWN);
+	Q_ASSERT(request->direction() != SEARCH_DOWN);
 
 	bool found{};
 
-	if (direction == SEARCH_HERE)
+	if (request->direction() == SEARCH_HERE)
 		for (auto c : nodes_)
-			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
-	else if (direction == SEARCH_UP)
+			found = c->findSymbols(request->clone(SEARCH_HERE, false)) || found;
+	else if (request->direction() == SEARCH_UP)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 		for (auto c : nodes_)
 		{
 			// Optimize the search by skipping this scope, since we've already searched there
 			if (c != ignore)
-				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+				found = c->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		}
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
 	}
-	else if (direction == SEARCH_UP_ORDERED)
+	else if (request->direction() == SEARCH_UP_ORDERED)
 	{
 		bool found{};
 
 		// Only search in items above the current one
-		auto sourceIndex = indexToSubnode(source);
+		auto sourceIndex = indexToSubnode(request->source());
 		if (sourceIndex < 0 || sourceIndex > size()) sourceIndex = size();
 
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 		for (int i = 0; i<sourceIndex; ++i)
 			if (at(i) != ignore)
 			{
 				// Optimize the search by skipping the scope of the source, since we've already searched there
-				found = at(i)->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+				found = at(i)->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 			}
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
 
 		return found;
 	}

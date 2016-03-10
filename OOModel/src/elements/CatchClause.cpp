@@ -27,6 +27,7 @@
 #include "CatchClause.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
+#include "ModelBase/src/util/ResolutionRequest.h"
 template class Model::TypedList<OOModel::CatchClause>;
 
 namespace OOModel {
@@ -37,23 +38,22 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CatchClause)
 DEFINE_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
 DEFINE_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
 
-bool CatchClause::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
+bool CatchClause::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
 {
-	if (direction == SEARCH_UP || direction == SEARCH_UP_ORDERED)
+	if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
 	{
-		auto ignore = childToSubnode(source);
+		auto ignore = childToSubnode(request->source());
 		Q_ASSERT(ignore);
 
 		bool found{};
 
 		if (exceptionToCatch() && exceptionToCatch() != ignore)
-			found = exceptionToCatch()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+			found = exceptionToCatch()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
 		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
 		// found there.
 
-		if ((exhaustAllScopes || !found) && parent())
-			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+		if ((request->exhaustAllScopes() || !found) && parent())
+			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
 
 		return found;
 	}

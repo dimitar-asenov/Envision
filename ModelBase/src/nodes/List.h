@@ -39,6 +39,7 @@ namespace Model {
 
 class ClipboardStore;
 class SymbolMatcher;
+class ResolutionRequest;
 
 class MODELBASE_API List: public Super<Node>
 {
@@ -98,8 +99,7 @@ class MODELBASE_API List: public Super<Node>
 
 		bool isTransparentForNameResolution() const override;
 
-		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
+		virtual bool findSymbols(std::unique_ptr<ResolutionRequest> request) const override;
 
 		virtual bool replaceChild(Node* child, Node* replacement) override;
 

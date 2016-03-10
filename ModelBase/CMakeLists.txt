@@ -101,6 +101,8 @@ add_library(ModelBase SHARED
 	src/util/NameResolver.cpp
 	src/util/SymbolMatcher.cpp
 	src/ModelException.cpp
+	src/util/ResolutionRequest.cpp
+	src/util/ResolutionRequest.h
 )
 
 envision_plugin(ModelBase Logger)

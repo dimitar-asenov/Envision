@@ -29,6 +29,8 @@
 #include "../CppImportUtilities.h"
 #include "TemplateArgumentVisitor.h"
 
+#include "ModelBase/src/util/ResolutionRequest.h"
+
 #include <clang/AST/Comment.h>
 
 namespace CppImport {
@@ -1442,8 +1444,9 @@ void ClangAstVisitor::endEntireImport()
 			{
 				QSet<Model::Node*> foundSymbols;
 				Model::SymbolMatcher matcher{reference->name()};
-				reference->parent()->findSymbols(foundSymbols, matcher, reference, Model::Node::SEARCH_UP,
-															Model::Node::ANY_SYMBOL, false);
+				reference->parent()->findSymbols(std::make_unique<Model::ResolutionRequest>
+															(foundSymbols, matcher, reference, Model::Node::SEARCH_UP,
+															Model::Node::ANY_SYMBOL, false));
 
 				if ((foundSymbols.size() > 1 && !reference->target()) ||
 					 (foundSymbols.size() == 1 && foundSymbols.contains(reference->target())))
