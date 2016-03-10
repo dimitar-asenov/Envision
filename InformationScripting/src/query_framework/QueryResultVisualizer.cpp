@@ -127,10 +127,11 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 		auto browser = new Visualization::WebBrowserItem{nullptr, htmlContent,
 				Visualization::WebBrowserItem::itemStyles().get("frame")};
 		browser->setZValue(Visualization::Item::LAYER_OVERLAY_Z);
+		browser->updateSize({800, 600});
 		auto mainScene = Visualization::VisualizationManager::instance().mainScene();
 		for (auto view : mainScene->views())
 			if (auto mainView = dynamic_cast<Visualization::MainView*>(view))
-				browser->setPos(mainView->sceneRect().center());
+				browser->setPos(mainView->sceneRect().center() - QPoint{400, 300});
 		mainScene->addTopLevelItem(browser);
 	}
 
