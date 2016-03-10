@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="file://@path/scripts/vis-graph/vis.js"></script>
+	<link href="file://@path/scripts/vis-graph/vis.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div id="graph"></div>
+
+<script type="text/javascript">
+	var nodes = new vis.DataSet([ @nodes ]);
+	var edges = new vis.DataSet([ @edges ]);
+
+	var container = document.getElementById('graph');
+	var data = { nodes: nodes, edges: edges };
+	var options = {};
+	var network = new vis.Network(container, data, options);
+</script>
+</body>
+</html>
