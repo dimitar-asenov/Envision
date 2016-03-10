@@ -7,7 +7,7 @@
 		<topBrush><color>#808080</color></topBrush>
 		
 		<bottomWidth>5</bottomWidth>
-		<bottomMargin>5</bottomMargin>
+		<bottomMargin>10</bottomMargin>
 		<bottomBrush><color>#808080</color></bottomBrush>
 		
 		<leftWidth>5</leftWidth>
@@ -15,7 +15,7 @@
 		<leftBrush><color>#808080</color></leftBrush>
 		
 		<rightWidth>5</rightWidth>
-		<rightMargin>5</rightMargin>
+		<rightMargin>10</rightMargin>
 		<rightBrush><color>#808080</color></rightBrush>
 		
 		<contentBrush>
