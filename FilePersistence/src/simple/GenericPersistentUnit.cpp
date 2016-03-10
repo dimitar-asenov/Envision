@@ -121,18 +121,26 @@ GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool 
 QPair<bool, GenericNode*> GenericPersistentUnit::newOrExistingNode(const char* data, int dataLength)
 {
 	// NOTE if we could just read the ID from the line, this method could be removed, I think.
-	auto newwNode = newNode(data, dataLength);
-	auto oldNode = tree_->find(newwNode->id());
+	auto newNode = newNode(data, dataLength);
+
+	// Ignore persistence unit nodes
+	if (newNode->type() == GenericNode::PERSISTENT_UNIT_TYPE)
+	{
+		releaseLastNode();
+		return {false, nullptr};
+	}
+
+	auto oldNode = tree_->find(newNode->id());
 	if (oldNode)
 	{
-		Q_ASSERT(oldNode->label() == newwNode->label());
-		Q_ASSERT(oldNode->type() == newwNode->type());
-		Q_ASSERT(oldNode->parentId() == newwNode->parentId());
+		Q_ASSERT(oldNode->label() == newNode->label());
+		Q_ASSERT(oldNode->type() == newNode->type());
+		Q_ASSERT(oldNode->parentId() == newNode->parentId());
 		releaseLastNode();
 		return {false, oldNode};
 	}
 	else
-		return {true, newwNode};
+		return {true, newNode};
 }
 
 const char* GenericPersistentUnit::setData(const char* data, int dataSize)

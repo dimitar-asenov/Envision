@@ -69,9 +69,14 @@ static void createNodeAndAppend(const git_diff_line* line, const char* filePath,
 	Q_ASSERT(unit != nullptr);
 	auto pair = unit->newOrExistingNode(line->content, lineLength);
 	auto node = pair.second;
-	if (pair.first)
-		node->linkNode();
-	list.append(node);
+
+	// pair.second is null if this line is a persistence node indicator
+	if (pair.second)
+	{
+		if (pair.first)
+			node->linkNode();
+		list.append(node);
+	}
 }
 
 /**
@@ -80,6 +85,8 @@ static void createNodeAndAppend(const git_diff_line* line, const char* filePath,
 static int gitDiffExtractLineCallBack(const git_diff_delta* delta, const git_diff_hunk*,
 															 const git_diff_line* line, void* carryAlongData)
 {
+	// TODO: Make sure we only process files which actually belong to the Envision
+	// model!
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
 
 	if ((!data->reverseAB_ && line->origin == GIT_DIFF_LINE_ADDITION) ||
