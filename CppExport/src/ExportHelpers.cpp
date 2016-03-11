@@ -37,6 +37,7 @@
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
 #include "OOModel/src/declarations/NameImport.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 namespace CppExport {
 
@@ -131,7 +132,7 @@ bool ExportHelpers::printDeclarationQualifier(QualificationType qualification, E
 		// Note that we do this check regardless of whether the qualification is ParentClass or Using so that
 		// we can make sure that in the Using case it does not find false qualifiers
 		QSet<OOModel::Class*> parentClasses = {parentClass};
-		parentClasses.unite(parentClass->allBaseClasses());
+		parentClasses.unite(parentClass->allBaseClasses({}));
 
 		for (auto classs : parentClasses)
 			if (classs->isAncestorOf(to))

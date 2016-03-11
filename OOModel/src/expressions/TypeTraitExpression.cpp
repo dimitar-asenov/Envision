@@ -47,7 +47,7 @@ TypeTraitExpression::TypeTraitExpression(TypeTraitKind kind, Expression* expr)
 	if (expr) setOperand(expr);
 }
 
-std::unique_ptr<Type> TypeTraitExpression::type()
+std::unique_ptr<Type> TypeTraitExpression::type(const TypeArgumentBindings&)
 {
 	if (typeTraitKind() == TypeTraitKind::SizeOf || typeTraitKind() == TypeTraitKind::AlignOf)
 		return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::PrimitiveTypes::INT, true}};

@@ -39,14 +39,14 @@ namespace OOModel {
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(GlobalScopeExpression)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(GlobalScopeExpression)
 
-std::unique_ptr<Type> GlobalScopeExpression::type()
+std::unique_ptr<Type> GlobalScopeExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	auto root = this->root();
 
 	if (auto cl = DCast<Class> (root))
-		return std::unique_ptr<Type>{new ClassType{cl, true}};
+		return std::unique_ptr<Type>{new ClassType{cl, typeArgumentBindings, true}};
 	else if (auto decl = DCast<Declaration> (root))
-		return std::unique_ptr<Type>{new SymbolProviderType{decl, true}};
+		return std::unique_ptr<Type>{new SymbolProviderType{decl, typeArgumentBindings, true}};
 	else
 		return std::unique_ptr<Type>{new ErrorType{"Global scope expression used in a tree without a root declaration"}};
 }

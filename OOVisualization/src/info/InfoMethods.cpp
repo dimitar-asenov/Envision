@@ -26,6 +26,7 @@
 #include "InfoMethods.h"
 
 #include "OOModel/src/allOOModelNodes.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 namespace OOVisualization {
 
@@ -34,8 +35,9 @@ QString InfoMethods::numberOfCallees(Model::Node *node)
 	if (auto method = DCast<OOModel::Method>(node))
 	{
 		QString html = expandButton("toggleCalleeTable", "calleeTable");
-		html = "Number of called methods: " + QString::number(method->callees().size()) + "<br>" + html;
-		html += classAndNameTable("calleeTable", method->callees());
+		auto callees = method->callees({});
+		html = "Number of called methods: " + QString::number(callees.size()) + "<br>" + html;
+		html += classAndNameTable("calleeTable", callees);
 		return html;
 	}
 	else return QString{};
@@ -47,7 +49,7 @@ QString InfoMethods::numberOfUsages(Model::Node *node)
 	if (auto method = DCast<OOModel::Method>(node))
 	{
 		QString html = expandButton("toggleCallerTable", "callerTable");
-		auto callers = method->callers();
+		auto callers = method->callers({});
 		html = "Number of callers: " + QString::number(callers.size()) + "<br>" + html;
 		html += classAndNameTable("callerTable", callers);
 		return html;

@@ -45,7 +45,7 @@ class OOMODEL_API ClassTypeExpression : public Super<TypeExpression>
 
 	public:
 		ClassTypeExpression(ReferenceExpression* ref);
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

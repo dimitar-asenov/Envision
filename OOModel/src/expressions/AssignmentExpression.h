@@ -55,7 +55,7 @@ class OOMODEL_API AssignmentExpression: public Super<Expression>
 		AssignmentTypes op() const;
 		void setOp(const AssignmentTypes& oper);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 inline AssignmentExpression::AssignmentTypes AssignmentExpression::op() const

@@ -36,7 +36,7 @@ namespace OOModel {
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(Expression)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(Expression, EmptyExpression)
 
-std::unique_ptr<Type> Expression::type()
+std::unique_ptr<Type> Expression::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new ErrorType{"Uninitialized expression type"}};
 }

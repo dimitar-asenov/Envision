@@ -41,15 +41,15 @@ DEFINE_ATTRIBUTE(LambdaExpression, captures, TypedListOfExpression, false, false
 DEFINE_ATTRIBUTE(LambdaExpression, dCaptureType, Integer, false, false, true)
 DEFINE_ATTRIBUTE(LambdaExpression, results, TypedListOfFormalResult, false, false, true)
 
-std::unique_ptr<Type> LambdaExpression::type()
+std::unique_ptr<Type> LambdaExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	std::vector<std::unique_ptr<Type>> args;
 	for (auto ait = arguments()->begin(); ait != arguments()->end(); ++ait)
-		args.emplace_back((*ait)->typeExpression()->type());
+		args.emplace_back((*ait)->typeExpression()->type(typeArgumentBindings));
 
 	std::vector<std::unique_ptr<Type>> res;
 	for (auto rit = results()->begin(); rit != results()->end(); ++rit)
-		res.emplace_back( (*rit)->typeExpression()->type());
+		res.emplace_back( (*rit)->typeExpression()->type(typeArgumentBindings));
 
 	return std::unique_ptr<Type>{new FunctionType{true, std::move(args), std::move(res)}};
 }

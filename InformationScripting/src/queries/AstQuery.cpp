@@ -37,6 +37,7 @@
 #include "OOModel/src/expressions/types/AutoTypeExpression.h"
 #include "OOModel/src/expressions/types/TypeQualifierExpression.h"
 #include "OOModel/src/expressions/types/FunctionTypeExpression.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
 
@@ -171,14 +172,14 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 		{
 			Q_ASSERT(method);
 			QSet<OOModel::Method*> seenMethods{method};
-			auto callees = method->callees().toList();
+			auto callees = method->callees({}).toList();
 			addCallInformation(result, method, callees);
 			while (!callees.empty())
 			{
 				auto currentMethod = callees.takeLast();
 				if (seenMethods.contains(currentMethod)) continue;
 				seenMethods.insert(currentMethod);
-				auto newCallees = currentMethod->callees().toList();
+				auto newCallees = currentMethod->callees({}).toList();
 				addCallInformation(result, currentMethod, newCallees);
 				callees << newCallees;
 			}
@@ -456,7 +457,7 @@ Optional<TupleSet> AstQuery::usagesQuery(TupleSet input)
 
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
 {
-	auto bases = childClass->directBaseClasses();
+	auto bases = childClass->directBaseClasses({});
 	for (auto base : bases)
 	{
 		NamedProperty baseNode{"baseClass", base};

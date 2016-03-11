@@ -53,7 +53,7 @@ class OOMODEL_API CommaExpression: public Super<Expression>
 		 */
 		QList<Expression*> allSubOperands(bool detachOperands);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 		virtual bool findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const override;
 
 };

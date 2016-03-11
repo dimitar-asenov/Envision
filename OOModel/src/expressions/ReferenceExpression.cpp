@@ -61,8 +61,9 @@ ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix
 	if (prefix != nullptr) setPrefix(prefix);
 }
 
-std::unique_ptr<Type> ReferenceExpression::type()
+std::unique_ptr<Type> ReferenceExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
+	// TODO: it seems really needed to forward the type arguments to the target resolution below
 	auto resolvedTarget = ref()->target();
 
 	if (!resolvedTarget) return std::unique_ptr<Type>{new ErrorType{"Unresolved Reference", this}};

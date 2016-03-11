@@ -54,7 +54,7 @@ FunctionTypeExpression::FunctionTypeExpression(const QList<Expression*>& argumen
 	}
 }
 
-std::unique_ptr<Type> FunctionTypeExpression::type()
+std::unique_ptr<Type> FunctionTypeExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	// TODO: be a little more specific about what are allowed arguments and results.
 	// E.g. return an error type if an argumnet is not a variable declaration and it is not
@@ -62,7 +62,7 @@ std::unique_ptr<Type> FunctionTypeExpression::type()
 	std::vector<std::unique_ptr<Type>> args;
 	for (auto a : *arguments())
 	{
-		args.push_back(a->type());
+		args.push_back(a->type(typeArgumentBindings));
 		if (args.back()->isError())
 			return std::unique_ptr<Type>{new ErrorType{"Invalid argument type for FunctionTypeExpression"}};
 	}
@@ -70,7 +70,7 @@ std::unique_ptr<Type> FunctionTypeExpression::type()
 	std::vector<std::unique_ptr<Type>> res;
 	for (auto r : *results())
 	{
-		res.push_back(r->type());
+		res.push_back(r->type(typeArgumentBindings));
 		if (res.back()->isError())
 			return std::unique_ptr<Type>{new ErrorType{"Invalid result type for FunctionTypeExpression"}};
 	}

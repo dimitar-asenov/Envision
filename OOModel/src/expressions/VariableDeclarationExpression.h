@@ -56,7 +56,7 @@ class OOMODEL_API VariableDeclarationExpression: public Super<Expression>
 		virtual const QString& symbolName() const override;
 		virtual SymbolTypes symbolType() const override;
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

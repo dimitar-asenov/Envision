@@ -44,7 +44,7 @@ class OOMODEL_API ConditionalExpression: public Super<Expression>
 	ATTRIBUTE(Expression, falseExpression, setFalseExpression)
 
 	public:
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

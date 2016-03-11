@@ -37,9 +37,9 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ThrowExpression)
 
 DEFINE_ATTRIBUTE(ThrowExpression, expr, Expression, false, false, true)
 
-std::unique_ptr<Type> ThrowExpression::type()
+std::unique_ptr<Type> ThrowExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	auto t = expr()->type();
+	auto t = expr()->type(typeArgumentBindings);
 	t->setValueType(true);
 	return std::unique_ptr<Type>{new ThrownExceptionType{std::move(t)}};
 }

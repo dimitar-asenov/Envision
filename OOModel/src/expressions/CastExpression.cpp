@@ -39,9 +39,9 @@ DEFINE_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
 DEFINE_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
 DEFINE_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
 
-std::unique_ptr<Type> CastExpression::type()
+std::unique_ptr<Type> CastExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	auto t = castType()->type();
+	auto t = castType()->type(typeArgumentBindings);
 	t->setValueType(true);
 	return t;
 }

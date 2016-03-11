@@ -126,11 +126,13 @@
 
 namespace InformationScripting {
 
+/*
 using namespace boost::python;
 
 BOOST_PYTHON_MODULE(AstApi) {
 
 {
+
 	bool (Model::Node::*Node_isSubtypeOf1)(const QString&) const = &Model::Node::isSubtypeOf;
 	bool (Model::Node::*Node_isSubtypeOf2)(int) const = &Model::Node::isSubtypeOf;
 	Model::Node* (*Node_createNewNode1)(const QString&, Model::Node*,
@@ -3970,6 +3972,6 @@ BOOST_PYTHON_MODULE(AstApi) {
 
 }
 
-}
+}*/
 
 } /* namespace InformationScripting */

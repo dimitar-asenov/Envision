@@ -39,9 +39,9 @@ DEFINE_ATTRIBUTE(ConditionalExpression, condition, Expression, false, false, tru
 DEFINE_ATTRIBUTE(ConditionalExpression, trueExpression, Expression, false, false, true)
 DEFINE_ATTRIBUTE(ConditionalExpression, falseExpression, Expression, false, false, true)
 
-std::unique_ptr<Type> ConditionalExpression::type()
+std::unique_ptr<Type> ConditionalExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	return trueExpression()->type();
+	return trueExpression()->type(typeArgumentBindings);
 }
 
 }

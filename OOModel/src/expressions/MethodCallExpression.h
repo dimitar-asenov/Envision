@@ -57,15 +57,15 @@ class OOMODEL_API MethodCallExpression: public Super<Expression>
 		 *
 		 * If the callee is an expression of type FunctionType the return value is nullptr.
 		 */
-		Method* methodDefinition();
+		Method* methodDefinition(const TypeArgumentBindings& typeArgumentBindings);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 
 		MethodCallKind methodCallKind() const;
 		void setMethodCallKind(const MethodCallKind& kind);
 
 	private:
-		Method* methodDefinition(std::unique_ptr<Type>& calleeType);
+		Method* methodDefinition(std::unique_ptr<Type>& calleeType, const TypeArgumentBindings& typeArgumentBindings);
 };
 
 inline MethodCallExpression::MethodCallKind MethodCallExpression::methodCallKind() const

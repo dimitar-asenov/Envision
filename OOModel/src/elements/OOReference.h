@@ -39,6 +39,7 @@ namespace OOModel {
 
 class MethodCallExpression;
 class Method;
+class TypeArgumentBindings;
 
 class OOMODEL_API OOReference : public Super<Model::Reference>
 {
@@ -57,17 +58,20 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 		enum class ReferenceTargetKind {Unknown, Container, Type, Callable, Assignable, Variable};
 		ReferenceTargetKind referenceTargetKind() const;
 
-		Model::Node* resolveAmbiguity(QSet<Model::Node*>& candidates) const;
+		Model::Node* resolveAmbiguity(QSet<Model::Node*>& candidates,
+												const TypeArgumentBindings& typeArgumentBindings) const;
 
-		Model::Node* resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates, MethodCallExpression* callExpression)
-			const;
+		Model::Node* resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates, MethodCallExpression* callExpression,
+															 const TypeArgumentBindings& typeArgumentBindings) const;
+
 		// The method above consists of the following steps:
-		void removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression)
-			const;
-		void removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression)
-			const;
-		void removeOverridenMethods(QSet<Method*>& methods) const;
-		void removeLessSpecificMethods(QSet<Method*>& methods) const;
+		void removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression,
+																		 const TypeArgumentBindings& typeArgumentBindings) const;
+		void removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression,
+																		  const TypeArgumentBindings& typeArgumentBindings) const;
+
+		void removeOverridenMethods(QSet<Method*>& methods, const TypeArgumentBindings& typeArgumentBindings) const;
+		void removeLessSpecificMethods(QSet<Method*>& methods, const TypeArgumentBindings& typeArgumentBindings) const;
 
 };
 

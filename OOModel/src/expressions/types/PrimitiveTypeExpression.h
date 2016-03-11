@@ -50,7 +50,7 @@ class OOMODEL_API PrimitiveTypeExpression : public Super<TypeExpression>
 		PrimitiveTypes typeValue() const;
 		void setTypeValue(const PrimitiveTypes& type);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 inline PrimitiveTypeExpression::PrimitiveTypes PrimitiveTypeExpression::typeValue()

@@ -42,13 +42,12 @@ namespace OOModel {
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(AutoTypeExpression)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 
-std::unique_ptr<Type> AutoTypeExpression::type()
+std::unique_ptr<Type> AutoTypeExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	/**
-	 * TODO: like this we return the wrong type for auto &&
-	 * note however that const and volatile are supported as TypeQualifierExpression
-	 * adds the qualifier when calling the type() method
-	 **/
+	// TODO: like this we return the wrong type for auto &&
+	// note however that const and volatile are supported as TypeQualifierExpression
+	// adds the qualifier when calling the type() method
+
 	auto p = parent();
 	Model::Node* current = this;
 	VariableDeclaration* varDecl = nullptr;
@@ -66,7 +65,7 @@ std::unique_ptr<Type> AutoTypeExpression::type()
 	{
 		if (!varDecl->initialValue())
 			return std::unique_ptr<Type>{new ErrorType{"No initial value in auto type"}};
-		auto initType = varDecl->initialValue()->type();
+		auto initType = varDecl->initialValue()->type(typeArgumentBindings);
 		bool isInitValueType = initType->isValueType();
 		if (varDecl == p)
 			return initType;

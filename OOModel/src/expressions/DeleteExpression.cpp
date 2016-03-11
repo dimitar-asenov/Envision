@@ -45,7 +45,7 @@ DeleteExpression::DeleteExpression(bool isArrayType)
 	setIsArray(isArrayType);
 }
 
-std::unique_ptr<Type> DeleteExpression::type()
+std::unique_ptr<Type> DeleteExpression::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::VOID, true}};
 }

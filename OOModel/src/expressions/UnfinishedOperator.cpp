@@ -38,7 +38,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(UnfinishedOperator)
 DEFINE_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
 DEFINE_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
 
-std::unique_ptr<Type> UnfinishedOperator::type()
+std::unique_ptr<Type> UnfinishedOperator::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new ErrorType{"Unfinished Operator"}};
 }

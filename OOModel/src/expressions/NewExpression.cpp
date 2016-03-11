@@ -46,9 +46,9 @@ NewExpression::NewExpression(Expression* type, Expression* firstDimension)
 	if (firstDimension) dimensions()->append(firstDimension);
 }
 
-std::unique_ptr<Type> NewExpression::type()
+std::unique_ptr<Type> NewExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	auto t = newType()->type();
+	auto t = newType()->type(typeArgumentBindings);
 	t->setValueType(true);
 
 	for (int i = 0; i< dimensions()->size(); ++i)

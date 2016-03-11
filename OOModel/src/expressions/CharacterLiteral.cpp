@@ -50,7 +50,7 @@ CharacterLiteral::CharacterLiteral(const QString& value)
 	setValue(value);
 }
 
-std::unique_ptr<Type> CharacterLiteral::type()
+std::unique_ptr<Type> CharacterLiteral::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::CHAR, true}};
 }

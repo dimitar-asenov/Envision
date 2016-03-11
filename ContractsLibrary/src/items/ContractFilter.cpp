@@ -38,6 +38,7 @@
 #include "OOModel/src/expressions/ErrorExpression.h"
 #include "OOModel/src/expressions/UnfinishedOperator.h"
 #include "OOModel/src/expressions/ReferenceExpression.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 namespace ContractsLibrary {
 
@@ -89,7 +90,8 @@ bool ContractFilter::isDefinitelyAContractStatement(OOModel::StatementItem* stat
 {
 	if ( auto sti = DCast<OOModel::ExpressionStatement>(statement) )
 		if (auto call = DCast<OOModel::MethodCallExpression>(sti->expression()) )
-			if (call->methodDefinition() && call->methodDefinition()->parent()->parent() == contractClass_)
+			if ( auto methodDef = call->methodDefinition({}))
+				if ( methodDef->parent()->parent() == contractClass_)
 				return true;
 
 	return false;

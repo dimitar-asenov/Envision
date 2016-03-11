@@ -37,9 +37,9 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(TypeNameOperator)
 
 DEFINE_ATTRIBUTE(TypeNameOperator, typeExpression, Expression, false, false, true)
 
-std::unique_ptr<Type> TypeNameOperator::type()
+std::unique_ptr<Type> TypeNameOperator::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	return typeExpression()->type();
+	return typeExpression()->type(typeArgumentBindings);
 }
 
 }

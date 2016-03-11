@@ -29,6 +29,7 @@
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/elements/FormalArgument.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/CommandDescriptor.h"
 #include "ModelBase/src/model/TreeManager.h"
@@ -74,7 +75,7 @@ Model::Node* ValueAtReturnVisitor::visitChildren(Model::Node* n)
 
 Model::Node* ValueAtReturnVisitor::visitMethodCall(ValueAtReturnVisitor* v, OOModel::MethodCallExpression* call)
 {
-	if (ensuresMethod_ && call->methodDefinition() == ensuresMethod_)
+	if (ensuresMethod_ && call->methodDefinition({}) == ensuresMethod_)
 	{
 		v->inEnsuresCall_ = true;
 		v->visitChildren(call);
@@ -83,7 +84,7 @@ Model::Node* ValueAtReturnVisitor::visitMethodCall(ValueAtReturnVisitor* v, OOMo
 	}
 
 	if (v->inEnsuresCall_ &&
-			valueAtReturnMethod_ && call->methodDefinition() == valueAtReturnMethod_ && call->arguments()->size() == 1)
+			valueAtReturnMethod_ && call->methodDefinition({}) == valueAtReturnMethod_ && call->arguments()->size() == 1)
 	{
 		v->inValueAtReturnCall_ = true;
 		v->outReference_ = false;

@@ -75,12 +75,12 @@ class OOMODEL_API Class : public Super<Declaration>
 		 * Returns a set of all direct and transitive base classes of this class. This includes interfaces and implicit
 		 * base classes.
 		 */
-		QSet<Class*> allBaseClasses();
-		QSet<Class*> directBaseClasses();
+		QSet<Class*> allBaseClasses(const TypeArgumentBindings& typeArgumentBindings);
+		QSet<Class*> directBaseClasses(const TypeArgumentBindings& typeArgumentBindings);
 		Class* implicitBaseFromProject() const;
-		static Class* expressionToClass(Expression* expr);
+		static Class* expressionToClass(Expression* expr, const TypeArgumentBindings& typeArgumentBindings);
 
-		QSet<Class*> directSubClasses();
+		QSet<Class*> directSubClasses(const TypeArgumentBindings& typeArgumentBindings);
 
 		virtual bool isNewPersistenceUnit() const override;
 

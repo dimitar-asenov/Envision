@@ -88,7 +88,7 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 		if (auto prefix = reference->prefix())
 		{
 			// Get the type of the prefix
-			std::unique_ptr<OOModel::Type> prefixType = prefix->type();
+			std::unique_ptr<OOModel::Type> prefixType = prefix->type({});
 
 			const OOModel::Type* finalType = stripPointerOrReference(prefixType.get());
 
@@ -101,7 +101,7 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 							 && (unresolved->typeArguments()->size() > 0))
 						{
 							// Try "resolving" the reference
-							auto argType = unresolved->typeArguments()->at(0)->type();
+							auto argType = unresolved->typeArguments()->at(0)->type({});
 							prefixType.swap(argType);
 							finalType = stripPointerOrReference(prefixType.get());
 						}
@@ -120,9 +120,9 @@ void CodeUnitPart::setFragment(Export::SourceFragment* sourceFragment)
 			// when comparing two pointers of different types the compiler has to know the full structure of the
 			// classes in order to compute comparable pointers. we compute these hard dependencies here.
 			if (auto parentBinaryOperation = DCast<OOModel::BinaryOperation>(reference->parent()))
-				if (auto leftType = parentBinaryOperation->left()->type())
+				if (auto leftType = parentBinaryOperation->left()->type({}))
 				{
-					if (auto rightType = parentBinaryOperation->right()->type())
+					if (auto rightType = parentBinaryOperation->right()->type({}))
 					{
 						auto leftPointerType = dynamic_cast<const OOModel::PointerType*>(leftType.get());
 						auto rightPointerType = dynamic_cast<const OOModel::PointerType*>(rightType.get());

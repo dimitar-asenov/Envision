@@ -40,10 +40,11 @@
 #include "../types/ReferenceType.h"
 #include "../types/ErrorType.h"
 #include "../typesystem/TypeSystem.h"
+#include "../typesystem/OOResolutionRequest.h"
+#include "../typesystem/TypeArgumentBindings.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/TypedList.hpp"
-#include "OOModel/src/typesystem/OOResolutionRequest.h"
 template class Model::TypedList<OOModel::OOReference>;
 
 namespace OOModel {
@@ -116,10 +117,14 @@ Model::Node* OOReference::computeTarget() const
 	if ( referenceTargetKind() != ReferenceTargetKind::Callable ) searchForType &= ~METHOD;
 
 	QSet<Node*> candidateTargets;
+	Node* disambiguated = nullptr;
+
 	if (parent->prefix())
 	{
 		// Perform a downward search starting from the target of the prefix
-		auto t = parent->prefix()->type();
+		// TODO: Is it really sufficient to use an empty set of bound type arguments?
+		// also look at calls to resolveAmbiguity
+		auto t = parent->prefix()->type({});
 		auto sp = dynamic_cast<const SymbolProviderType*>(t.get());
 
 		if (!sp)
@@ -137,10 +142,15 @@ Model::Node* OOReference::computeTarget() const
 				// It's important below that we change the source to sp->symbolProvider() in the call to findSymbols.
 				// See NameImport.cpp for more info.
 
+				TypeArgumentBindings bindings {sp->typeArgumentBindings()};
+				bindings.insertFromReference(parent, sp->symbolProvider());
+
 				sp->symbolProvider()->findSymbols(std::make_unique<OOResolutionRequest>(
 						candidateTargets, name(), sp->symbolProvider(), SEARCH_DOWN,
-						searchForType, searchForType.testFlag(METHOD))); 	// When search for methods do an exhaustive search.
-																							// This is important for overloads.
+						searchForType, searchForType.testFlag(METHOD), bindings));
+				// When search for methods do an exhaustive search. This is important for overloads.
+
+				disambiguated = resolveAmbiguity(candidateTargets, bindings);
 			}
 		}
 	}
@@ -150,9 +160,11 @@ Model::Node* OOReference::computeTarget() const
 		// When search for methods do an exhaustive search. This is important for overloads.
 		findSymbols(std::make_unique<OOResolutionRequest>(candidateTargets, name(), this, SEARCH_UP,
 																				 searchForType, searchForType.testFlag(METHOD)));
+
+		disambiguated = resolveAmbiguity(candidateTargets, {});
 	}
 
-	return resolveAmbiguity(candidateTargets);
+	return disambiguated;
 }
 
 OOReference::ReferenceTargetKind OOReference::referenceTargetKind() const
@@ -212,7 +224,8 @@ OOReference::ReferenceTargetKind OOReference::referenceTargetKind() const
 	return ReferenceTargetKind::Unknown;
 }
 
-Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates) const
+Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates,
+														 const TypeArgumentBindings& typeArgumentBindings) const
 {
 	if ( candidates.isEmpty() ) return nullptr;
 	if ( candidates.size() == 1) return *candidates.begin(); // TODO: possibly check this for compliance?
@@ -223,7 +236,7 @@ Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates) const
 	// Looking for Methods
 	if (auto mce = DCast<MethodCallExpression>(construct))
 	{
-		auto methodToCall = resolveAmbiguousMethodCall(candidates, mce);
+		auto methodToCall = resolveAmbiguousMethodCall(candidates, mce, typeArgumentBindings);
 		if (methodToCall) return methodToCall;
 	}
 
@@ -258,7 +271,7 @@ Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates) const
 }
 
 Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates,
-		MethodCallExpression* callExpression) const
+		MethodCallExpression* callExpression, const TypeArgumentBindings& typeArgumentBindings) const
 {
 	// TODO: So far this implements only the simpler cases of Java. Complex cases or other languages need to be
 	// considered.
@@ -272,19 +285,19 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 	if (filtered.size() == 1) return *filtered.begin();
 	if (filtered.isEmpty()) return nullptr;
 
-	removeMethodsWithDifferentNumberOfArguments(filtered, callExpression);
+	removeMethodsWithDifferentNumberOfArguments(filtered, callExpression, typeArgumentBindings);
 	if (filtered.size() == 1) return *filtered.begin();
 	if (filtered.isEmpty()) return nullptr;
 
-	removeMethodsWithIncompatibleTypeOfArguments(filtered, callExpression);
+	removeMethodsWithIncompatibleTypeOfArguments(filtered, callExpression, typeArgumentBindings);
 	if (filtered.size() == 1) return *filtered.begin();
 	if (filtered.isEmpty()) return nullptr;
 
-	removeOverridenMethods(filtered);
+	removeOverridenMethods(filtered, typeArgumentBindings);
 	if (filtered.size() == 1) return *filtered.begin();
 	if (filtered.isEmpty()) return nullptr;
 
-	removeLessSpecificMethods(filtered);
+	removeLessSpecificMethods(filtered, typeArgumentBindings);
 	if (filtered.size() == 1) return *filtered.begin();
 
 	candidates.clear();
@@ -295,7 +308,7 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 }
 
 void OOReference::removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods,
-		MethodCallExpression* callExpression) const
+		MethodCallExpression* callExpression, const TypeArgumentBindings&) const
 {
 	auto callee = static_cast<ReferenceExpression*>(callExpression->callee());
 
@@ -312,17 +325,17 @@ void OOReference::removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& met
 }
 
 void OOReference::removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods,
-		MethodCallExpression* callExpression) const
+		MethodCallExpression* callExpression, const TypeArgumentBindings& typeArgumentBindings) const
 {
 	int argId = 0;
 	for (auto arg: *callExpression->arguments())
 	{
-		auto actualArgType = arg->type();
+		auto actualArgType = arg->type(typeArgumentBindings);
 
 		auto it = methods.begin();
 		while (it != methods.end())
 		{
-			auto formalArgType = (*it)->arguments()->at(argId)->typeExpression()->type();
+			auto formalArgType = (*it)->arguments()->at(argId)->typeExpression()->type(typeArgumentBindings);
 
 			auto typeRelation = actualArgType->relationTo(formalArgType.get());
 			if ( typeRelation.testFlag(TypeSystem::Equal) || typeRelation.testFlag(TypeSystem::IsSubtype)
@@ -335,7 +348,8 @@ void OOReference::removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& me
 	}
 }
 
-void OOReference::removeOverridenMethods(QSet<Method*>& methods) const
+void OOReference::removeOverridenMethods(QSet<Method*>& methods,
+													  const TypeArgumentBindings& typeArgumentBindings) const
 {
 	QSet<Method*> nonOverriden;
 	while (!methods.isEmpty())
@@ -347,13 +361,13 @@ void OOReference::removeOverridenMethods(QSet<Method*>& methods) const
 		auto it = methods.begin();
 		while (it != methods.end())
 		{
-			if ((*it)->overrides(m))
+			if ((*it)->overrides(m, typeArgumentBindings))
 			{
 				overriden = true;
 				break;
 			}
 
-			if (m->overrides((*it))) it = methods.erase(it);
+			if (m->overrides((*it), typeArgumentBindings)) it = methods.erase(it);
 			else ++it;
 		}
 
@@ -362,7 +376,8 @@ void OOReference::removeOverridenMethods(QSet<Method*>& methods) const
 	methods = nonOverriden;
 }
 
-void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
+void OOReference::removeLessSpecificMethods(QSet<Method*>& methods,
+														  const TypeArgumentBindings& typeArgumentBindings) const
 {
 	QSet<Method*> mostSpecific;
 	while (!methods.isEmpty())
@@ -373,7 +388,7 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 		methods.remove(m);
 
 		std::vector<std::unique_ptr<Type>> filteredTypes;
-		for (auto te : *m->arguments()) filteredTypes.push_back(te->typeExpression()->type());
+		for (auto te : *m->arguments()) filteredTypes.push_back(te->typeExpression()->type(typeArgumentBindings));
 
 		// Compare this method to all the ones that are already most specifc.
 		// Remove any most specific method that is strictly less specific than the current one.
@@ -383,7 +398,7 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 			Specificity specificity = UNDETERMINED;
 			for (size_t argId = 0; argId < filteredTypes.size(); ++argId)
 			{
-				auto spType = (*sIt)->arguments()->at(argId)->typeExpression()->type();
+				auto spType = (*sIt)->arguments()->at(argId)->typeExpression()->type(typeArgumentBindings);
 				auto relation = filteredTypes.at(argId)->relationTo(spType.get());
 
 				if (relation.testFlag(TypeSystem::Equal)); /* Do nothing*/

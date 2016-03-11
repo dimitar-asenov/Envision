@@ -54,7 +54,7 @@ class OOMODEL_API NameImport : public Super<Declaration>
 		virtual bool findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const override;
 
 	private:
-		Node* target() const;
+		Node* target(const TypeArgumentBindings& typeArgumentBindings) const;
 };
 
 }

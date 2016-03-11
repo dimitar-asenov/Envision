@@ -47,9 +47,9 @@ AssignmentExpression::AssignmentExpression(const AssignmentTypes &op, Expression
 	if (right) setRight(right);
 }
 
-std::unique_ptr<Type> AssignmentExpression::type()
+std::unique_ptr<Type> AssignmentExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	return left()->type();
+	return left()->type(typeArgumentBindings);
 }
 
 }

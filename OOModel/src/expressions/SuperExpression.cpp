@@ -36,7 +36,7 @@ namespace OOModel {
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(SuperExpression)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(SuperExpression)
 
-std::unique_ptr<Type> SuperExpression::type()
+std::unique_ptr<Type> SuperExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	auto p = parent();
 
@@ -48,15 +48,15 @@ std::unique_ptr<Type> SuperExpression::type()
 			if (cl->baseClasses()->isEmpty())
 			{
 				if (auto base = cl->implicitBaseFromProject())
-					return std::unique_ptr<Type>{new ClassType{base, true}};
+					return std::unique_ptr<Type>{new ClassType{base, {}, true}};
 				else
 					return std::unique_ptr<Type>{
 						new ErrorType{"Invalid usage of 'super' expression. Class has no super class."}};
 			}
 			else
 			{
-				if (auto base = Class::expressionToClass(cl->baseClasses()->first()))
-					return std::unique_ptr<Type>{new ClassType{base, true}};
+				if (auto base = Class::expressionToClass(cl->baseClasses()->first(), typeArgumentBindings))
+					return std::unique_ptr<Type>{new ClassType{base, typeArgumentBindings, true}};
 				else
 					return std::unique_ptr<Type>{
 						new ErrorType{"Invalid usage of 'super' expression. Base class expression is incorrect."}};

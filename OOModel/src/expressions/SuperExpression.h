@@ -40,7 +40,7 @@ class OOMODEL_API SuperExpression: public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(SuperExpression)
 
 	public:
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

@@ -42,7 +42,7 @@ class OOMODEL_API TypeNameOperator : public Super<Expression>
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 

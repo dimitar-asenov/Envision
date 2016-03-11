@@ -35,7 +35,7 @@ namespace OOModel {
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(NullLiteral)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NullLiteral)
 
-std::unique_ptr<Type> NullLiteral::type()
+std::unique_ptr<Type> NullLiteral::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new NullType{}};
 }

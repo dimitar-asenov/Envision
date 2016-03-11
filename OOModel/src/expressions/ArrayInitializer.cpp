@@ -37,10 +37,10 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ArrayInitializer)
 
 DEFINE_ATTRIBUTE(ArrayInitializer, values, TypedListOfExpression, false, false, true)
 
-std::unique_ptr<Type> ArrayInitializer::type()
+std::unique_ptr<Type> ArrayInitializer::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	return std::unique_ptr<Type>{
-		new ArrayType{ values()->size() > 0 ? values()->first()->type(): nullptr, true}};
+		new ArrayType{ values()->size() > 0 ? values()->first()->type(typeArgumentBindings): nullptr, true}};
 }
 
 }

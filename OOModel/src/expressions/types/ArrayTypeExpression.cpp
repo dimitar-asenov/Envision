@@ -38,9 +38,9 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression)
 DEFINE_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
 DEFINE_ATTRIBUTE(ArrayTypeExpression, fixedSize, Expression, false, true, true)
 
-std::unique_ptr<Type> ArrayTypeExpression::type()
+std::unique_ptr<Type> ArrayTypeExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	return std::unique_ptr<Type>{new ArrayType{typeExpression()->type(), false}};
+	return std::unique_ptr<Type>{new ArrayType{typeExpression()->type(typeArgumentBindings), false}};
 }
 
 }

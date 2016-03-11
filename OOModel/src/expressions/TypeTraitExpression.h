@@ -52,7 +52,7 @@ class OOMODEL_API TypeTraitExpression : public Super<Expression>
 		TypeTraitKind typeTraitKind() const;
 		void setTypeTraitKind(const TypeTraitKind& kind);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 inline TypeTraitExpression::TypeTraitKind TypeTraitExpression::typeTraitKind() const

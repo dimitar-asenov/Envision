@@ -27,20 +27,29 @@
 #pragma once
 
 #include "../oomodel_api.h"
+#include "../types/Type.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace OOModel {
 
-class Type;
 class FormalTypeArgument;
+class ReferenceExpression;
 
 class OOMODEL_API TypeArgumentBindings {
 	public:
 		TypeArgumentBindings() = default;
-		~TypeArgumentBindings();
 		TypeArgumentBindings(const TypeArgumentBindings& other);
+		TypeArgumentBindings(const TypeArgumentBindings&& other);
+
 		void insert(FormalTypeArgument* argument, std::unique_ptr<Type> type);
+		void insertFromReference(const ReferenceExpression* ref, Model::Node* genericNode);
 
 		std::unique_ptr<Type> bindingFor(FormalTypeArgument* argument);
+
+		bool operator == (const TypeArgumentBindings& other) const;
 
 	private:
 
@@ -49,5 +58,8 @@ class OOMODEL_API TypeArgumentBindings {
 		 */
 		std::map<FormalTypeArgument*, std::unique_ptr<Type>> bindings_;
 };
+
+inline bool TypeArgumentBindings::operator == (const TypeArgumentBindings& other) const
+{ return bindings_ == other.bindings_; }
 
 }

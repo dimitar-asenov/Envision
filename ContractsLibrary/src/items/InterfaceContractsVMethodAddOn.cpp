@@ -32,6 +32,7 @@
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/Scene.h"
@@ -62,7 +63,7 @@ QList<Visualization::Item*> InterfaceContractsVMethodAddOn::determineItems(Visua
 	{
 		if ( auto sti = DCast<OOModel::ExpressionStatement>(st) )
 			if (auto call = DCast<OOModel::MethodCallExpression>(sti->expression()) )
-				if (call->methodDefinition() == contractClassMethod_ && call->arguments()->size() == 1)
+				if (call->methodDefinition({}) == contractClassMethod_ && call->arguments()->size() == 1)
 					if (auto ref = DCast<OOModel::ReferenceExpression> ( call->arguments()->first()) )
 						if (auto contractClass = DCast<OOModel::Class> (ref->target()) )
 							if (contractClass->baseClasses()->size() == 1)

@@ -45,10 +45,10 @@ ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
 	if (ref) setTypeExpression(ref);
 }
 
-std::unique_ptr<Type> ClassTypeExpression::type()
+std::unique_ptr<Type> ClassTypeExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	auto cl = DCast<Class> (typeExpression()->target());
-	if (cl) return std::unique_ptr<Type>{new ClassType{cl, false}};
+	if (cl) return std::unique_ptr<Type>{new ClassType{cl, typeArgumentBindings, false}};
 	else return std::unique_ptr<Type>{new ErrorType{"Unresolved class reference in a class type expression"}};
 }
 

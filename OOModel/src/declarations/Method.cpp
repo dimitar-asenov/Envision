@@ -145,7 +145,7 @@ bool Method::isGeneric()
 	return typeArguments()->size() > 0;
 }
 
-bool Method::overrides(Method* other)
+bool Method::overrides(Method* other, const TypeArgumentBindings& typeArgumentBindings)
 {
 	Q_ASSERT(other != this);
 	Q_ASSERT(other);
@@ -153,14 +153,15 @@ bool Method::overrides(Method* other)
 	// First check whether the types of arguments match
 
 	if (name() != other->name()) return false;
-	if (isGeneric() || other->isGeneric()) return false;
+
+	// TODO: support variable arguments
 	if (arguments()->size() != other->arguments()->size()) return false;
 
 	// Arguments must be identical
 	for (int i = 0; i< arguments()->size(); ++i)
 	{
-		auto t1 = arguments()->at(i)->typeExpression()->type();
-		auto t2 = other->arguments()->at(i)->typeExpression()->type();
+		auto t1 = arguments()->at(i)->typeExpression()->type(typeArgumentBindings);
+		auto t2 = other->arguments()->at(i)->typeExpression()->type(typeArgumentBindings);
 
 		bool equal = t1->relationTo(t2.get()).testFlag(TypeSystem::Equal);
 
@@ -173,7 +174,7 @@ bool Method::overrides(Method* other)
 	{
 		if (auto cl = DCast<Class>(p))
 		{
-			for (auto baseClass : cl->allBaseClasses())
+			for (auto baseClass : cl->allBaseClasses(typeArgumentBindings))
 				if (baseClass->methods()->contains(other))
 					return true;
 
@@ -186,7 +187,7 @@ bool Method::overrides(Method* other)
 	return false;
 }
 
-QSet<Method*> Method::callees()
+QSet<Method*> Method::callees(const TypeArgumentBindings& typeArgumentBindings)
 {
 	QSet<Method*> result;
 	QList<Model::Node*> toCheck;
@@ -195,14 +196,14 @@ QSet<Method*> Method::callees()
 	{
 		auto current = toCheck.takeLast();
 		if (auto call = DCast<MethodCallExpression>(current))
-			if (call->methodDefinition())
-				result << call->methodDefinition();
+			if (auto c = call->methodDefinition(typeArgumentBindings))
+				result << c;
 		toCheck.append(current->children());
 	}
 	return result;
 }
 
-QSet<Method*> Method::callers()
+QSet<Method*> Method::callers(const TypeArgumentBindings& typeArgumentBindings)
 {
 	auto top = root();
 	//Find all the places where this method is called
@@ -217,7 +218,7 @@ QSet<Method*> Method::callers()
 		if (auto method = DCast<Method>(check))
 			current = method;
 		if (auto call = DCast<MethodCallExpression>(check))
-			if (call->methodDefinition() == this && current)
+			if (call->methodDefinition(typeArgumentBindings) == this && current)
 				result << current;
 		toCheck.append(check->children());
 	}

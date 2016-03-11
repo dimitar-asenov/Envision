@@ -42,7 +42,7 @@ PrimitiveTypeExpression::PrimitiveTypeExpression(const PrimitiveTypes& type)
 	setTypeValue(type);
 }
 
-std::unique_ptr<Type> PrimitiveTypeExpression::type()
+std::unique_ptr<Type> PrimitiveTypeExpression::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new PrimitiveType{typeValue(), false}};
 }

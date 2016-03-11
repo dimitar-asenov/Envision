@@ -50,7 +50,7 @@ BinaryOperation::BinaryOperation(OperatorTypes op, Expression* left, Expression*
 	if (right) setRight(right);
 }
 
-std::unique_ptr<Type> BinaryOperation::type()
+std::unique_ptr<Type> BinaryOperation::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	auto op = this->op();
 
@@ -61,7 +61,7 @@ std::unique_ptr<Type> BinaryOperation::type()
 	{
 		std::unique_ptr<Type> res;
 
-		auto lt = left()->type();
+		auto lt = left()->type(typeArgumentBindings);
 		if ( auto lat = dynamic_cast<ArrayType*>(lt.get()) )
 			res = std::unique_ptr<Type>{lat->elementType()->clone()};
 		else
@@ -70,8 +70,8 @@ std::unique_ptr<Type> BinaryOperation::type()
 		return res;
 	}
 
-	auto lt = left()->type();
-	auto rt = right()->type();
+	auto lt = left()->type(typeArgumentBindings);
+	auto rt = right()->type(typeArgumentBindings);
 
 	auto lts = dynamic_cast<StringType*>(lt.get());
 	auto rts = dynamic_cast<StringType*>(rt.get());
@@ -83,7 +83,9 @@ std::unique_ptr<Type> BinaryOperation::type()
 		res = std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::BOOLEAN, true}};
 	else if (ltp && rtp)
 	{
-		PrimitiveType::PrimitiveTypes primitive = PrimitiveType::resultFromBinaryOperation(ltp->type(), rtp->type());
+		PrimitiveType::PrimitiveTypes primitive = PrimitiveType::resultFromBinaryOperation(
+					ltp->type(typeArgumentBindings),
+					rtp->type(typeArgumentBindings));
 		if (primitive != PrimitiveType::VOID)
 		res = std::unique_ptr<Type>{new PrimitiveType{primitive, ltp->isValueType()}};
 	}

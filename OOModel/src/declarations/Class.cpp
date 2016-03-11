@@ -83,7 +83,7 @@ bool Class::isGeneric()
 inline bool Class::findInTarget(Expression* target, std::unique_ptr<Model::ResolutionRequest>& request) const
 {
 	bool found = false;
-	auto t = target->type();
+	auto t = target->type(static_cast<OOResolutionRequest*>(request.get())->typeArgumentBindings());
 	if (auto sp = dynamic_cast<SymbolProviderType*>(t.get()))
 	{
 
@@ -177,18 +177,18 @@ Expression* Class::defaultImplicitBaseFromProject() const
 	return nullptr;
 }
 
-QSet<Class*> Class::allBaseClasses()
+QSet<Class*> Class::allBaseClasses(const TypeArgumentBindings& typeArgumentBindings)
 {
 	QSet<Class*> bases;
 
 	for (auto base : *baseClasses())
 	{
-		auto type = base->type();
+		auto type = base->type(typeArgumentBindings);
 		auto ct = dynamic_cast<ClassType*>(type.get());
 		if (ct)
 		{
 			bases.insert(ct->classDefinition());
-			bases.unite(ct->classDefinition()->allBaseClasses());
+			bases.unite(ct->classDefinition()->allBaseClasses(typeArgumentBindings));
 		}
 	}
 
@@ -197,18 +197,18 @@ QSet<Class*> Class::allBaseClasses()
 		if (auto classDef = implicitBaseFromProject())
 		{
 				bases.insert(classDef);
-				bases.unite(classDef->allBaseClasses());
+				bases.unite(classDef->allBaseClasses(typeArgumentBindings));
 		}
 	}
 
 	return bases;
 }
 
-QSet<Class*> Class::directBaseClasses()
+QSet<Class*> Class::directBaseClasses(const TypeArgumentBindings& typeArgumentBindings)
 {
 	QSet<Class*> result;
 	for (auto baseClass : *baseClasses())
-		if (auto asClass = expressionToClass(baseClass))
+		if (auto asClass = expressionToClass(baseClass, typeArgumentBindings))
 			result << asClass;
 	if (result.isEmpty() && implicitBaseFromProject())
 		result << implicitBaseFromProject();
@@ -217,7 +217,7 @@ QSet<Class*> Class::directBaseClasses()
 
 Class* Class::implicitBaseFromProject() const
 {
-	if (auto classDef = expressionToClass(defaultImplicitBaseFromProject()))
+	if (auto classDef = expressionToClass(defaultImplicitBaseFromProject(), {}))
 	{
 		if (this != classDef) return classDef;
 	}
@@ -225,18 +225,18 @@ Class* Class::implicitBaseFromProject() const
 	return nullptr;
 }
 
-Class* Class::expressionToClass(Expression* expr)
+Class* Class::expressionToClass(Expression* expr, const TypeArgumentBindings& typeArgumentBindings)
 {
 	if (expr)
 	{
-		auto type = std::unique_ptr<Type>(expr->type());
+		auto type = std::unique_ptr<Type>(expr->type(typeArgumentBindings));
 		if (auto ct = dynamic_cast<ClassType*>(type.get()))
 			return ct->classDefinition();
 	}
 	return nullptr;
 }
 
-QSet<Class*> Class::directSubClasses()
+QSet<Class*> Class::directSubClasses(const TypeArgumentBindings& typeArgumentBindings)
 {
 	auto top = root();
 	//Find all the classes where this method is subclasses
@@ -247,7 +247,7 @@ QSet<Class*> Class::directSubClasses()
 	{
 		auto check = toCheck.takeLast();
 		if (auto someClass = DCast<Class>(check))
-			if (someClass->directBaseClasses().contains(this))
+			if (someClass->directBaseClasses(typeArgumentBindings).contains(this))
 				result << someClass;
 		toCheck.append(check->children());
 	}

@@ -45,7 +45,7 @@ class OOMODEL_API FunctionTypeExpression : public Super<TypeExpression>
 	public:
 		FunctionTypeExpression(const QList<Expression*>& arguments, const QList<Expression*>& results = {});
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

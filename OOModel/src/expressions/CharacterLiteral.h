@@ -47,7 +47,7 @@ class OOMODEL_API CharacterLiteral: public Super<Expression>
 		CharacterLiteral(const QChar& value);
 		CharacterLiteral(const QString& value);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 

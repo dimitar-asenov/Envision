@@ -81,11 +81,11 @@ class OOMODEL_API Method : public Super<Declaration>
 
 		virtual bool findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const override;
 
-		bool overrides(Method* other);
-		bool isOverridenBy(Method* other);
+		bool overrides(Method* other, const TypeArgumentBindings& typeArgumentBindings);
+		bool isOverridenBy(Method* other, const TypeArgumentBindings& typeArgumentBindings);
 
-		QSet<Method*> callees();
-		QSet<Method*> callers();
+		QSet<Method*> callees(const TypeArgumentBindings& typeArgumentBindings);
+		QSet<Method*> callers(const TypeArgumentBindings& typeArgumentBindings);
 
 		virtual bool isNewPersistenceUnit() const override;
 };
@@ -93,6 +93,7 @@ class OOMODEL_API Method : public Super<Declaration>
 inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }
 inline void Method::setMethodKind(const MethodKind &kind) { setMthKind(static_cast<int> (kind)); }
 inline bool Method::isStatic() const { return modifiers()->isSet(Modifier::Static); }
-inline bool Method::isOverridenBy(Method* other) {return other->overrides(this);}
+inline bool Method::isOverridenBy(Method* other, const TypeArgumentBindings& typeArgumentBindings)
+	{return other->overrides(this, typeArgumentBindings);}
 
 }

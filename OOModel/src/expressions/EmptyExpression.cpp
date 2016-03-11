@@ -35,7 +35,7 @@ namespace OOModel {
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(EmptyExpression)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(EmptyExpression)
 
-std::unique_ptr<Type> EmptyExpression::type()
+std::unique_ptr<Type> EmptyExpression::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new ErrorType{"Empty expression"}};
 }

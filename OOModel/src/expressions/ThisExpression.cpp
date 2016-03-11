@@ -37,14 +37,14 @@ namespace OOModel {
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(ThisExpression)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ThisExpression)
 
-std::unique_ptr<Type> ThisExpression::type()
+std::unique_ptr<Type> ThisExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	auto p = parent();
 
 	while (p)
 	{
 		auto cl = DCast<Class> (p);
-		if (cl) return std::unique_ptr<Type>{new ClassType{cl, true}};
+		if (cl) return std::unique_ptr<Type>{new ClassType{cl, typeArgumentBindings, true}};
 		p = p->parent();
 	}
 

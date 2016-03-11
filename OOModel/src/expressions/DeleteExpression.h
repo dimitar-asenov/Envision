@@ -47,7 +47,7 @@ class OOMODEL_API DeleteExpression: public Super<Expression>
 	public:
 		DeleteExpression(bool isArrayType);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

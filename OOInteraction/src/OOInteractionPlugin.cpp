@@ -70,6 +70,7 @@
 #include "OOVisualization/src/allOOVisualizations.h"
 
 #include "OOModel/src/allOOModelNodes.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HList.h"
@@ -163,7 +164,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	customizationGroup->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
 	{
 		auto call = static_cast<OOModel::MethodCallExpression*>(node);
-		if (call->methodDefinition()) return true;
+		if (call->methodDefinition({})) return true;
 		return false;
 	});
 	Visualization::Scene::defaultRenderer()->registerGroup(

@@ -48,6 +48,7 @@
 #include "OOModel/src/expressions/types/AutoTypeExpression.h"
 #include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 #include "OOModel/src/types/PrimitiveType.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "Export/src/tree/SourceDir.h"
@@ -607,7 +608,7 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* variableDeclarati
 		*fragment << variableDeclaration->nameNode();
 
 	auto isPrimitive = [](VariableDeclaration* vd){
-		auto type = vd->typeExpression()->type();
+		auto type = vd->typeExpression()->type({});
 		return (bool) dynamic_cast<OOModel::PrimitiveType*>(type.get());
 	};
 

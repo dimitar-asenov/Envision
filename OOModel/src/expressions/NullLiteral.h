@@ -40,7 +40,7 @@ class OOMODEL_API NullLiteral: public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(NullLiteral)
 
 	public:
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

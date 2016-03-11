@@ -46,9 +46,9 @@ ReferenceTypeExpression::ReferenceTypeExpression(Expression* ref, bool rValue)
 	setIsRValueReference(rValue);
 }
 
-std::unique_ptr<Type> ReferenceTypeExpression::type()
+std::unique_ptr<Type> ReferenceTypeExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	return std::unique_ptr<Type>{new ReferenceType{typeExpression()->type(), false}};
+	return std::unique_ptr<Type>{new ReferenceType{typeExpression()->type(typeArgumentBindings), false}};
 }
 
 }

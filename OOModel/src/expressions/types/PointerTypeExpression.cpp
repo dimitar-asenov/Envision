@@ -43,9 +43,9 @@ PointerTypeExpression::PointerTypeExpression(Expression* expr)
 	if (expr) setTypeExpression(expr);
 }
 
-std::unique_ptr<Type> PointerTypeExpression::type()
+std::unique_ptr<Type> PointerTypeExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	return std::unique_ptr<Type>{new PointerType{typeExpression()->type(), false}};
+	return std::unique_ptr<Type>{new PointerType{typeExpression()->type(typeArgumentBindings), false}};
 }
 
 }

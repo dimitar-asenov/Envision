@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "TypeQualifierExpression.h"
+#include "../../typesystem/TypeArgumentBindings.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
 template class Model::TypedList<OOModel::TypeQualifierExpression>;
@@ -44,9 +45,9 @@ TypeQualifierExpression::TypeQualifierExpression(Qualifier q, Expression* e)
 	if (e) setTypeExpression(e);
 }
 
-std::unique_ptr<Type> TypeQualifierExpression::type()
+std::unique_ptr<Type> TypeQualifierExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	auto type = typeExpression()->type();
+	auto type = typeExpression()->type(typeArgumentBindings);
 	type->setQualifiers(qualifier());
 	return type;
 }

@@ -41,13 +41,14 @@ namespace OOModel {
 
 class Class;
 class Type;
+class TypeArgumentBindings;
 
 class OOMODEL_API Expression : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Expression)
 
 	public:
-		virtual std::unique_ptr<Type> type();
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings);
 
 		/**
 		 * Returns the expression node which is the top-most expression ancestor of this expression.

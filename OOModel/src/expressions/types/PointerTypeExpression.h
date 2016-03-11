@@ -43,7 +43,7 @@ class OOMODEL_API PointerTypeExpression : public Super<TypeExpression>
 
 	public:
 		PointerTypeExpression(Expression* expr);
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

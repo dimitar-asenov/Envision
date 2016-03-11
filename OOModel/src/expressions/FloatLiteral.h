@@ -47,7 +47,7 @@ class OOMODEL_API FloatLiteral: public Super<Expression>
 		FloatLiteral(double value);
 		FloatLiteral(const QString& value);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

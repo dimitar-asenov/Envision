@@ -52,12 +52,13 @@ MethodCallExpression::MethodCallExpression(const QString& name, Expression* refe
 	setMethodCallKind(MethodCallKind::Call);
 }
 
-Method* MethodCallExpression::methodDefinition(std::unique_ptr<Type>& calleeType)
+Method* MethodCallExpression::methodDefinition(std::unique_ptr<Type>& calleeType,
+															  const TypeArgumentBindings& typeArgumentBindings)
 {
 	Method* ret = nullptr;
 
 	// TODO: handle other cases as well (e.g. FunctionType)
-	calleeType = callee()->type();
+	calleeType = callee()->type(typeArgumentBindings);
 	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType.get()))
 	{
 		if (auto m = DCast<Method>(spt->symbolProvider()))
@@ -69,17 +70,17 @@ Method* MethodCallExpression::methodDefinition(std::unique_ptr<Type>& calleeType
 	return ret;
 }
 
-Method* MethodCallExpression::methodDefinition()
+Method* MethodCallExpression::methodDefinition(const TypeArgumentBindings& typeArgumentBindings)
 {
 	std::unique_ptr<Type> dummy{};
-	auto ret = methodDefinition(dummy);
+	auto ret = methodDefinition(dummy, typeArgumentBindings);
 	return ret;
 }
 
-std::unique_ptr<Type> MethodCallExpression::type()
+std::unique_ptr<Type> MethodCallExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
 	std::unique_ptr<Type> calleeType = nullptr;
-	auto mdef = methodDefinition(calleeType);
+	auto mdef = methodDefinition(calleeType, typeArgumentBindings);
 
 	if (!mdef)
 	{
@@ -102,7 +103,7 @@ std::unique_ptr<Type> MethodCallExpression::type()
 	else
 	{
 		// TODO: handle multiple return values
-		auto t = mdef->results()->first()->typeExpression()->type();
+		auto t = mdef->results()->first()->typeExpression()->type(typeArgumentBindings);
 		t->setValueType(true);
 		return t;
 	}

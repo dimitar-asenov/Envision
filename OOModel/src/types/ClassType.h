@@ -34,7 +34,7 @@ class Class;
 
 class OOMODEL_API ClassType : public SymbolProviderType {
 	public:
-		ClassType(Class* classDefinition, bool isValueType);
+		ClassType(Class* classDefinition, TypeArgumentBindings typeArgumentBindings, bool isValueType);
 
 		virtual ClassType* clone() const override;
 

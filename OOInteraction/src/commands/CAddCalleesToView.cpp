@@ -26,6 +26,7 @@
 
 #include "CAddCalleesToView.h"
 #include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 namespace OOInteraction {
 
@@ -44,7 +45,7 @@ QString CAddCalleesToView::description(Visualization::Item*, Visualization::Item
 
 QSet<OOModel::Method*> CAddCalleesToView::references(OOModel::Method *target)
 {
-	return target->callees();
+	return target->callees({});
 }
 
 }

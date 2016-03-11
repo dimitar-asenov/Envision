@@ -43,7 +43,7 @@ StringLiteral::StringLiteral(const QString& value)
 	setValue(value);
 }
 
-std::unique_ptr<Type> StringLiteral::type()
+std::unique_ptr<Type> StringLiteral::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new StringType{}};
 }

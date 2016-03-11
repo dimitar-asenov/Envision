@@ -27,6 +27,7 @@
 #pragma once
 
 #include "Type.h"
+#include "../typesystem/TypeArgumentBindings.h"
 
 namespace Model {
 	class Node;
@@ -36,17 +37,21 @@ namespace OOModel {
 
 class OOMODEL_API SymbolProviderType : public Type {
 	public:
-		SymbolProviderType(Model::Node* symbolProviderNode, bool isValueType);
+		SymbolProviderType(Model::Node* symbolProviderNode, TypeArgumentBindings typeArgumentBindings,
+								 bool isValueType);
 
 		virtual bool equals(const Type* other) const override;
 		virtual SymbolProviderType* clone() const override;
 
 		Model::Node* symbolProvider() const;
 
+		const TypeArgumentBindings& typeArgumentBindings() const;
 	private:
 		Model::Node* symbolProvider_;
+		TypeArgumentBindings typeArgumentBindings_;
 };
 
 inline Model::Node* SymbolProviderType::symbolProvider() const {return symbolProvider_;}
+inline const TypeArgumentBindings& SymbolProviderType::typeArgumentBindings() const { return typeArgumentBindings_; }
 
 }

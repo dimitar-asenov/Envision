@@ -240,14 +240,14 @@ TypeSystem::TypeRelations JavaTypeSystem::relationClassToOther(const ClassType* 
 		if (classType->classDefinition() == otherClass->classDefinition()) return TypeRelations{EQUALTYPES};
 
 		TypeRelations ret{None};
-		for (auto thisBase : classType->classDefinition()->allBaseClasses())
+		for (auto thisBase : classType->classDefinition()->allBaseClasses(classType->typeArgumentBindings()))
 			if (thisBase == otherClass->classDefinition())
 			{
 				ret |= IsSubtype | IsConvertibleTo;
 				break;
 			}
 
-		for (auto otherBase : otherClass->classDefinition()->allBaseClasses())
+		for (auto otherBase : otherClass->classDefinition()->allBaseClasses(otherClass->typeArgumentBindings()))
 			if (otherBase == classType->classDefinition())
 			{
 				ret |= IsSupertype | IsConvertibleFrom;

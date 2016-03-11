@@ -43,7 +43,7 @@ BooleanLiteral::BooleanLiteral(bool value)
 	setValue(value);
 }
 
-std::unique_ptr<Type> BooleanLiteral::type()
+std::unique_ptr<Type> BooleanLiteral::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::BOOLEAN, true}};
 }

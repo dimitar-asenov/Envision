@@ -49,7 +49,7 @@ class OOMODEL_API IntegerLiteral: public Super<Expression>
 
 		int valueAsInt() const;
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 }

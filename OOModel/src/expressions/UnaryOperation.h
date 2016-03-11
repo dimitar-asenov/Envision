@@ -53,7 +53,7 @@ class OOMODEL_API UnaryOperation: public Super<Expression>
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);
 
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 };
 
 inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }

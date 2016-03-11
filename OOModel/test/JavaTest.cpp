@@ -29,6 +29,7 @@
 #include "SelfTest/src/TestAssertions.h"
 
 #include "../src/allOOModelNodes.h"
+#include "../src/typesystem/TypeArgumentBindings.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 
@@ -102,8 +103,8 @@ class JavaLibraryAndHelloWorldTest : public SelfTest::Test<OOModelPlugin, JavaLi
 	auto ref = DCast<ReferenceExpression>(callPrintln->callee());
 	CHECK_CONDITION(ref);
 	CHECK_CONDITION(ref->ref()->isResolved());
-	CHECK_CONDITION(callPrintln->methodDefinition() != nullptr);
-	CHECK_CONDITION(callPrintln->methodDefinition() == println);
+	CHECK_CONDITION(callPrintln->methodDefinition({}) != nullptr);
+	CHECK_CONDITION(callPrintln->methodDefinition({}) == println);
 }};
 
 }

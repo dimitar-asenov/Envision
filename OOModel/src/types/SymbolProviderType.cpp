@@ -28,8 +28,9 @@
 
 namespace OOModel {
 
-SymbolProviderType::SymbolProviderType(Model::Node* symbolProviderNode, bool isValueType)
-: Type{isValueType}, symbolProvider_{symbolProviderNode}
+SymbolProviderType::SymbolProviderType(Model::Node* symbolProviderNode, TypeArgumentBindings typeArgumentBindings,
+													bool isValueType)
+	: Type{isValueType}, symbolProvider_{symbolProviderNode}, typeArgumentBindings_{typeArgumentBindings}
 {
 	Q_ASSERT(symbolProviderNode);
 }
@@ -38,7 +39,7 @@ bool SymbolProviderType::equals(const Type* other) const
 {
 	if (auto ct = dynamic_cast<const SymbolProviderType*>(other))
 		return symbolProvider() != nullptr && symbolProvider() == ct->symbolProvider()
-				&& qualifiers() == other->qualifiers();
+				&& qualifiers() == other->qualifiers() && typeArgumentBindings() == ct->typeArgumentBindings();
 
 	return false;
 }

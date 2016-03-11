@@ -25,6 +25,10 @@
  **********************************************************************************************************************/
 #include "TypeArgumentBindings.h"
 #include "../elements/FormalTypeArgument.h"
+#include "../expressions/ReferenceExpression.h"
+#include "../declarations/Class.h"
+#include "../declarations/Method.h"
+#include "../declarations/TypeAlias.h"
 #include "../types/ErrorType.h"
 #include "../types/Type.h"
 
@@ -36,11 +40,8 @@ TypeArgumentBindings::TypeArgumentBindings(const TypeArgumentBindings& other)
 		bindings_[it->first] = std::unique_ptr<OOModel::Type>{it->second->clone()};
 }
 
-TypeArgumentBindings::~TypeArgumentBindings()
-{
-	// Put the destructor here, instead of automatically generating one in the header file as that would require
-	// the inclusion of Type.h
-}
+TypeArgumentBindings::TypeArgumentBindings(const TypeArgumentBindings&& other)
+	: bindings_{std::move(other.bindings_)}{}
 
 void TypeArgumentBindings::insert(FormalTypeArgument* argument, std::unique_ptr<Type> type)
 {
@@ -59,6 +60,29 @@ std::unique_ptr<Type> TypeArgumentBindings::bindingFor(FormalTypeArgument* argum
 
 	// Otherwise we can't resolve the type
 	return std::unique_ptr<Type>{new ErrorType{"Unbound type argument"}};
+}
+
+void TypeArgumentBindings::insertFromReference(const ReferenceExpression* ref, Model::Node* genericNode)
+{
+	auto addTypeArguments = [this, ref](auto container) {
+		int i = 0;
+		for (auto typeArg : *container->typeArguments())
+		{
+			if (i < ref->typeArguments()->size())
+			{
+				insert(typeArg, ref->typeArguments()->at(i)->type(*this));
+				++i;
+			}
+		}
+
+	};
+
+	if (auto aClass = DCast<Class>(genericNode))
+		addTypeArguments(aClass, ref);
+	else if (auto aMethod = DCast<Method>(genericNode))
+		addTypeArguments(aMethod, ref);
+	else if (auto aTypeAlias = DCast<TypeAlias>(genericNode))
+		addTypeArguments(aTypeAlias, ref);
 }
 
 }

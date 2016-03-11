@@ -45,7 +45,7 @@ class OOMODEL_API UnfinishedOperator : public Super<Expression>
 	ATTRIBUTE(Model::TypedList<Expression>, operands, setOperands)
 
 	public:
-		virtual std::unique_ptr<Type> type() override;
+		virtual std::unique_ptr<Type> type(const TypeArgumentBindings& typeArgumentBindings) override;
 
 };
 

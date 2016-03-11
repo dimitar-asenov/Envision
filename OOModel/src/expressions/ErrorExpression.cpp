@@ -39,7 +39,7 @@ DEFINE_ATTRIBUTE(ErrorExpression, prefix, Text, false, false, true)
 DEFINE_ATTRIBUTE(ErrorExpression, arg, Expression, false, false, true)
 DEFINE_ATTRIBUTE(ErrorExpression, postfix, Text, false, false, true)
 
-std::unique_ptr<Type> ErrorExpression::type()
+std::unique_ptr<Type> ErrorExpression::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new ErrorType{"Syntax error in expression"}};
 }

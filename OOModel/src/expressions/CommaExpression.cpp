@@ -96,9 +96,9 @@ bool CommaExpression::findSymbols(std::unique_ptr<Model::ResolutionRequest> requ
 	return found;
 }
 
-std::unique_ptr<Type> CommaExpression::type()
+std::unique_ptr<Type> CommaExpression::type(const TypeArgumentBindings& typeArgumentBindings)
 {
-	return right()->type();
+	return right()->type(typeArgumentBindings);
 }
 
 }

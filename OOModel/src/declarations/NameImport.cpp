@@ -52,11 +52,11 @@ bool NameImport::definesSymbol() const
 	return false;
 }
 
-Model::Node* NameImport::target() const
+Model::Node* NameImport::target(const TypeArgumentBindings& typeArgumentBindings) const
 {
 	Model::Node* ret{};
 
-	auto type = this->importedName()->type();
+	auto type = this->importedName()->type(typeArgumentBindings);
 	if (auto sp = dynamic_cast<SymbolProviderType*>(type.get()))
 		ret = sp->symbolProvider();
 
@@ -101,7 +101,7 @@ bool NameImport::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) 
 			if (auto ref = DCast<ReferenceExpression>(importedName()))
 				if (!request->matcher().matches(ref->name())) return false;
 
-		if (auto t = target())
+		if (auto t = target(static_cast<OOResolutionRequest*>(request.get())->typeArgumentBindings()))
 			return t->findSymbols(request->clone((importAll() ? t : request->source()),
 					(importAll() ? SEARCH_DOWN : SEARCH_HERE), false));
 	}

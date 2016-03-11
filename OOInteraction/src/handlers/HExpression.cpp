@@ -577,7 +577,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 		if (ref->prefix())
 		{
 			afterDot = true;
-			auto t = ref->prefix()->type();
+			auto t = ref->prefix()->type({});
 			dynamicCastAndAssign(t, scopePrefix);
 		}
 	}
@@ -588,7 +588,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 		if (unf->delimiters()->size() == 2 && unf->delimiters()->at(1)->get() == ".")
 		{
 			afterDot = true;
-			auto t = unf->operands()->first()->type();
+			auto t = unf->operands()->first()->type({});
 			dynamicCastAndAssign(t, scopePrefix);
 		}
 	}

@@ -37,7 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(InstanceOfExpression)
 DEFINE_ATTRIBUTE(InstanceOfExpression, typeExpression, Expression, false, false, true)
 DEFINE_ATTRIBUTE(InstanceOfExpression, expr, Expression, false, false, true)
 
-std::unique_ptr<Type> InstanceOfExpression::type()
+std::unique_ptr<Type> InstanceOfExpression::type(const TypeArgumentBindings&)
 {
 	return std::unique_ptr<Type>{new PrimitiveType{PrimitiveType::BOOLEAN, true}};
 }

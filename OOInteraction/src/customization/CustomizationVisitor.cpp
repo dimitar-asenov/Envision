@@ -35,6 +35,7 @@
 #include "OOModel/src/expressions/StringLiteral.h"
 #include "OOModel/src/expressions/IntegerLiteral.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 #include "VisualizationBase/src/renderer/VisualizationGroup.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/nodes/ViewItemNode.h"
@@ -80,7 +81,7 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 									[=](Visualization::Item*, Model::Node* node) -> bool
 									{
 										auto call = static_cast<OOModel::MethodCallExpression*>(node);
-										return call->methodDefinition() == met;
+										return call->methodDefinition({}) == met;
 									});
 						}
 					}

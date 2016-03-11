@@ -34,6 +34,7 @@
 #include "../src/items/SumMethodVis.h"
 
 #include "OOModel/src/allOOModelNodes.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/Scene.h"
@@ -161,7 +162,7 @@ Class* addCollection(Project* parent)
 	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
 	{
 		auto call = static_cast<OOModel::MethodCallExpression*>(node);
-		if (auto def = call->methodDefinition())
+		if (auto def = call->methodDefinition({}))
 		{
 			auto* p = def->parent();
 			while (p)
@@ -179,25 +180,25 @@ Class* addCollection(Project* parent)
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == find;
+				return call->methodDefinition({}) == find;
 			});
 	g->addVisualization(createVisualization<EmptyMethodVis, MethodCallExpression>, EmptyMethodVis::typeIdStatic(),
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == empty;
+				return call->methodDefinition({}) == empty;
 			});
 	g->addVisualization(createVisualization<InsertMethodVis, MethodCallExpression>, InsertMethodVis::typeIdStatic(),
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == insert;
+				return call->methodDefinition({}) == insert;
 			});
 	g->addVisualization(createVisualization<SumMethodVis, MethodCallExpression>, SumMethodVis::typeIdStatic(),
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == sum;
+				return call->methodDefinition({}) == sum;
 			});
 
 	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);

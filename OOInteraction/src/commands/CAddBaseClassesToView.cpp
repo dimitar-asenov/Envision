@@ -26,6 +26,7 @@
 
 #include "CAddBaseClassesToView.h"
 #include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/typesystem/TypeArgumentBindings.h"
 
 namespace OOInteraction {
 
@@ -44,7 +45,7 @@ QString CAddBaseClassesToView::description(Visualization::Item*, Visualization::
 
 QSet<OOModel::Class*> CAddBaseClassesToView::references(OOModel::Class *target)
 {
-	return target->directBaseClasses();
+	return target->directBaseClasses({});
 }
 
 }
