@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,41 +23,42 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#include "CatchClause.h"
-
-#include "ModelBase/src/nodes/TypedList.hpp"
-#include "OOModel/src/typesystem/OOResolutionRequest.h"
-template class Model::TypedList<OOModel::CatchClause>;
+#include "TypeArgumentBindings.h"
+#include "../elements/FormalTypeArgument.h"
+#include "../types/ErrorType.h"
+#include "../types/Type.h"
 
 namespace OOModel {
 
-DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CatchClause)
-DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CatchClause)
-
-DEFINE_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
-DEFINE_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
-
-bool CatchClause::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
+TypeArgumentBindings::TypeArgumentBindings(const TypeArgumentBindings& other)
 {
-	if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
-	{
-		auto ignore = childToSubnode(request->source());
-		Q_ASSERT(ignore);
+	for (auto it = other.bindings_.cbegin(); it != other.bindings_.cend(); ++it)
+		bindings_[it->first] = std::unique_ptr<OOModel::Type>{it->second->clone()};
+}
 
-		bool found{};
+TypeArgumentBindings::~TypeArgumentBindings()
+{
+	// Put the destructor here, instead of automatically generating one in the header file as that would require
+	// the inclusion of Type.h
+}
 
-		if (exceptionToCatch() && exceptionToCatch() != ignore)
-			found = exceptionToCatch()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
-		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
-		// found there.
+void TypeArgumentBindings::insert(FormalTypeArgument* argument, std::unique_ptr<Type> type)
+{
+	bindings_[argument] = std::move(type);
+}
 
-		if ((request->exhaustAllScopes() || !found) && parent())
-			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
+std::unique_ptr<Type> TypeArgumentBindings::bindingFor(FormalTypeArgument* argument)
+{
+	auto it = bindings_.find(argument);
+	if (it != bindings_.end())
+		return std::unique_ptr<OOModel::Type>{it->second->clone()};
 
-		return found;
-	}
-	else return false;
+	// We do not have a specified binding for this argument, use a default one if present
+	if (argument->defaultType())
+		return argument->defaultType()->type();
+
+	// Otherwise we can't resolve the type
+	return std::unique_ptr<Type>{new ErrorType{"Unbound type argument"}};
 }
 
 }

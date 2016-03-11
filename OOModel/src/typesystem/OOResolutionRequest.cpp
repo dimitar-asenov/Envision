@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,41 +23,45 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#include "CatchClause.h"
-
-#include "ModelBase/src/nodes/TypedList.hpp"
-#include "OOModel/src/typesystem/OOResolutionRequest.h"
-template class Model::TypedList<OOModel::CatchClause>;
+#include "OOResolutionRequest.h"
 
 namespace OOModel {
 
-DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CatchClause)
-DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CatchClause)
+OOResolutionRequest::~OOResolutionRequest(){}
 
-DEFINE_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
-DEFINE_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
-
-bool CatchClause::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
+std::unique_ptr<Model::ResolutionRequest> OOResolutionRequest::clone() const
 {
-	if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
-	{
-		auto ignore = childToSubnode(request->source());
-		Q_ASSERT(ignore);
+	return std::make_unique<OOResolutionRequest>(this->result(), this->matcher(), this->source(), this->direction(),
+		this->symbolTypes(), this->exhaustAllScopes(), this->typeArgumentBindings_);
+}
 
-		bool found{};
+std::unique_ptr<Model::ResolutionRequest> OOResolutionRequest::clone(const Model::Node::FindSymbolDirection direction,
+																 const bool exhaustAllScopes) const
+{
+	return std::make_unique<OOResolutionRequest>(this->result(), this->matcher(), this->source(), direction,
+		this->symbolTypes(), exhaustAllScopes, this->typeArgumentBindings_);
+}
 
-		if (exceptionToCatch() && exceptionToCatch() != ignore)
-			found = exceptionToCatch()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
-		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
-		// found there.
+std::unique_ptr<Model::ResolutionRequest>
+OOResolutionRequest::clone(const Model::Node::FindSymbolDirection direction) const
+{
+	return std::make_unique<OOResolutionRequest>(this->result(), this->matcher(), this->source(), direction,
+		this->symbolTypes(), this->exhaustAllScopes(), this->typeArgumentBindings_);
+}
 
-		if ((request->exhaustAllScopes() || !found) && parent())
-			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
+std::unique_ptr<Model::ResolutionRequest> OOResolutionRequest::clone(const Model::Node* source,
+																 const Model::Node::FindSymbolDirection direction) const
+{
+	return std::make_unique<OOResolutionRequest>(this->result(), this->matcher(), source, direction,
+		this->symbolTypes(), this->exhaustAllScopes(), this->typeArgumentBindings_);
+}
 
-		return found;
-	}
-	else return false;
+std::unique_ptr<Model::ResolutionRequest> OOResolutionRequest::clone(const Model::Node* source,
+																 const Model::Node::FindSymbolDirection direction,
+																 const bool exhaustAllScopes) const
+{
+	return std::make_unique<OOResolutionRequest>(this->result(), this->matcher(), source, direction,
+		this->symbolTypes(), exhaustAllScopes, this->typeArgumentBindings_);
 }
 
 }

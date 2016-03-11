@@ -45,7 +45,7 @@
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
 #include "Core/src/AdapterManager.h"
 
-#include "ModelBase/src/util/ResolutionRequest.h"
+#include "OOModel/src/typesystem/OOResolutionRequest.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -599,13 +599,13 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 
 	Model::SymbolMatcher matcher{new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard}};
 	if (afterDot)
-		searchNode->findSymbols(std::make_unique<Model::ResolutionRequest>(foundSymbols, matcher, searchNode,
+		searchNode->findSymbols(std::make_unique<OOResolutionRequest>(foundSymbols, matcher, searchNode,
 										Model::Node::SEARCH_DOWN, Model::Node::ANY_SYMBOL, true));
 	else
-		searchNode->findSymbols(std::make_unique<Model::ResolutionRequest>(foundSymbols, matcher, target->node(),
+		searchNode->findSymbols(std::make_unique<OOResolutionRequest>(foundSymbols, matcher, target->node(),
 										Model::Node::SEARCH_UP, Model::Node::ANY_SYMBOL, true));
 
-	searchNode->findSymbols(std::make_unique<Model::ResolutionRequest>(foundSymbols,
+	searchNode->findSymbols(std::make_unique<OOResolutionRequest>(foundSymbols,
 			new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard},
 			target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
 			afterDot == false));

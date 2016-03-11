@@ -31,7 +31,7 @@
 #include "Project.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
-#include "ModelBase/src/util/ResolutionRequest.h"
+#include "OOModel/src/typesystem/OOResolutionRequest.h"
 template class Model::TypedList<OOModel::Class>;
 
 namespace OOModel {

@@ -31,7 +31,7 @@
 #include "../types/Type.h"
 #include "../expressions/MethodCallExpression.h"
 
-#include "ModelBase/src/util/ResolutionRequest.h"
+#include "OOModel/src/typesystem/OOResolutionRequest.h"
 template class Model::TypedList<OOModel::Method>;
 
 namespace OOModel {

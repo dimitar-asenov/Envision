@@ -29,7 +29,7 @@
 #include "../CppImportUtilities.h"
 #include "TemplateArgumentVisitor.h"
 
-#include "ModelBase/src/util/ResolutionRequest.h"
+#include "OOModel/src/typesystem/OOResolutionRequest.h"
 
 #include <clang/AST/Comment.h>
 
@@ -1444,7 +1444,7 @@ void ClangAstVisitor::endEntireImport()
 			{
 				QSet<Model::Node*> foundSymbols;
 				Model::SymbolMatcher matcher{reference->name()};
-				reference->parent()->findSymbols(std::make_unique<Model::ResolutionRequest>
+				reference->parent()->findSymbols(std::make_unique<OOModel::OOResolutionRequest>
 															(foundSymbols, matcher, reference, Model::Node::SEARCH_UP,
 															Model::Node::ANY_SYMBOL, false));
 

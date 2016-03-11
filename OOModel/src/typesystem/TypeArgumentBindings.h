@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,40 +24,30 @@
  **
  **********************************************************************************************************************/
 
-#include "CatchClause.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedList.hpp"
-#include "OOModel/src/typesystem/OOResolutionRequest.h"
-template class Model::TypedList<OOModel::CatchClause>;
+#include "../oomodel_api.h"
 
 namespace OOModel {
 
-DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CatchClause)
-DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CatchClause)
+class Type;
+class FormalTypeArgument;
 
-DEFINE_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
-DEFINE_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
+class OOMODEL_API TypeArgumentBindings {
+	public:
+		TypeArgumentBindings() = default;
+		~TypeArgumentBindings();
+		TypeArgumentBindings(const TypeArgumentBindings& other);
+		void insert(FormalTypeArgument* argument, std::unique_ptr<Type> type);
 
-bool CatchClause::findSymbols(std::unique_ptr<Model::ResolutionRequest> request) const
-{
-	if (request->direction() == SEARCH_UP || request->direction() == SEARCH_UP_ORDERED)
-	{
-		auto ignore = childToSubnode(request->source());
-		Q_ASSERT(ignore);
+		std::unique_ptr<Type> bindingFor(FormalTypeArgument* argument);
 
-		bool found{};
+	private:
 
-		if (exceptionToCatch() && exceptionToCatch() != ignore)
-			found = exceptionToCatch()->findSymbols(request->clone(SEARCH_HERE, false)) || found;
-		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
-		// found there.
-
-		if ((request->exhaustAllScopes() || !found) && parent())
-			found = parent()->findSymbols(request->clone(SEARCH_UP)) || found;
-
-		return found;
-	}
-	else return false;
-}
+		/**
+		 * This map is typically going to contain only very few elements, that's why we don't use unordered_map.
+		 */
+		std::map<FormalTypeArgument*, std::unique_ptr<Type>> bindings_;
+};
 
 }

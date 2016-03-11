@@ -204,6 +204,10 @@ add_library(OOModel SHARED
 	src/expressions/MetaCallExpression.cpp
 	src/CodeGenerationVisitor.cpp
 	src/elements/FormalMetaArgument.cpp
+	src/typesystem/OOResolutionRequest.h
+	src/typesystem/OOResolutionRequest.cpp
+	src/typesystem/TypeArgumentBindings.h
+	src/typesystem/TypeArgumentBindings.cpp
 )
 
 envision_plugin(OOModel ModelBase Comments)
