@@ -83,7 +83,7 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 		QString oldCommitId = commitIdRange[i];
 		QString newCommitId = commitIdRange[i - 1];
 
-		Diff diff = repository.diff(newCommitId, oldCommitId);
+		Diff diff = repository.diff(oldCommitId, newCommitId);
 		auto changes = diff.changes();
 
 		if (!outputNodesOnly)
