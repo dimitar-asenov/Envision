@@ -605,8 +605,9 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 		searchNode->findSymbols(std::make_unique<OOResolutionRequest>(foundSymbols, matcher, target->node(),
 										Model::Node::SEARCH_UP, Model::Node::ANY_SYMBOL, true));
 
+	matcher = Model::SymbolMatcher{new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard}};
 	searchNode->findSymbols(std::make_unique<OOResolutionRequest>(foundSymbols,
-			new QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard},
+			matcher,
 			target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
 			afterDot == false));
 

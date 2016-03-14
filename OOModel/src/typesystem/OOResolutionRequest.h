@@ -45,6 +45,11 @@ class OOMODEL_API OOResolutionRequest : public Model::ResolutionRequest {
 			Model::Node::FindSymbolDirection direction, Model::Node::SymbolTypes symbolTypes, bool exhaustAllScopes,
 								  TypeArgumentBindings typeArgumentBindings = {});
 
+		template<typename T = void>
+		OOResolutionRequest(QSet<Model::Node*>& result, const Model::SymbolMatcher&& matcher, const Model::Node* source,
+			Model::Node::FindSymbolDirection direction, Model::Node::SymbolTypes symbolTypes, bool exhaustAllScopes,
+								  TypeArgumentBindings typeArgumentBindings = {});
+
 		virtual ~OOResolutionRequest() override;
 
 		virtual std::unique_ptr<ResolutionRequest> clone() const override;
@@ -71,4 +76,12 @@ inline OOResolutionRequest::OOResolutionRequest(QSet<Model::Node*>& result, cons
 	: ResolutionRequest{result, matcher, source, direction, symbolTypes, exhaustAllScopes},
 	  typeArgumentBindings_{typeArgumentBindings} {}
 
+template<typename T>
+inline OOResolutionRequest::OOResolutionRequest(QSet<Model::Node*>& result, const Model::SymbolMatcher&& matcher,
+																const Model::Node* source, Model::Node::FindSymbolDirection direction,
+																Model::Node::SymbolTypes symbolTypes, bool exhaustAllScopes,
+																TypeArgumentBindings typeArgumentBindings)
+	: ResolutionRequest{result, matcher, source, direction, symbolTypes, exhaustAllScopes},
+	  typeArgumentBindings_{typeArgumentBindings}
+	{static_assert(!std::is_void<T>::value, "The `matcher` argument cannot be a temporary.");}
 }

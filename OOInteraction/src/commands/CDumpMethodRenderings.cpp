@@ -148,8 +148,9 @@ void CDumpMethodRenderings::printPath(Visualization::Item* item, QStringList pat
 	else
 	{
 		QSet<Node*> nextInPath;
+		Model::SymbolMatcher matcher{path.first()};
 		item->node()->findSymbols(std::make_unique<OOModel::OOResolutionRequest>
-			(nextInPath, path.first(), item->node(), Node::SEARCH_DOWN, Node::ANY_SYMBOL, false));
+			(nextInPath, matcher, item->node(), Node::SEARCH_DOWN, Node::ANY_SYMBOL, false));
 		for (auto next : nextInPath)
 			if (auto itemForNextNode = item->findVisualizationOf(next))
 				printPath(itemForNextNode, path, itemNumber, numPrinted, argumentNames);

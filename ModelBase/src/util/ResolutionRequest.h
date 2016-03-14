@@ -58,6 +58,13 @@ class MODELBASE_API ResolutionRequest {
 		ResolutionRequest(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
 			Node::FindSymbolDirection direction, Node::SymbolTypes symbolTypes, bool exhaustAllScopes);
 
+		/**
+		 * This constructor is used to capture an incorrect usage of matcher, which shouldn't be a temporary object.
+		 */
+		template<typename T = void>
+		ResolutionRequest(QSet<Node*>& result, const SymbolMatcher&& matcher, const Node* source,
+			Node::FindSymbolDirection direction, Node::SymbolTypes symbolTypes, bool exhaustAllScopes);
+
 		virtual ~ResolutionRequest();
 
 		virtual std::unique_ptr<ResolutionRequest> clone() const;
@@ -97,5 +104,12 @@ inline ResolutionRequest::ResolutionRequest(QSet<Node*>& result, const SymbolMat
 	Node::FindSymbolDirection direction, Node::SymbolTypes symbolTypes, bool exhaustAllScopes)
 	:result_{result}, matcher_{matcher}, source_{source}, direction_{direction}, symbolTypes_{symbolTypes},
 	  exhaustAllScopes_{exhaustAllScopes}{}
+
+template<typename T>
+inline ResolutionRequest::ResolutionRequest(QSet<Node*>& result, const SymbolMatcher&& matcher, const Node* source,
+	Node::FindSymbolDirection direction, Node::SymbolTypes symbolTypes, bool exhaustAllScopes)
+	:result_{result}, matcher_{matcher}, source_{source}, direction_{direction}, symbolTypes_{symbolTypes},
+	  exhaustAllScopes_{exhaustAllScopes}
+{static_assert(!std::is_void<T>::value, "The `matcher` argument cannot be a temporary.");}
 
 }

@@ -137,8 +137,9 @@ Model::Node* OOReference::computeTarget() const
 				// It's important below that we change the source to sp->symbolProvider() in the call to findSymbols.
 				// See NameImport.cpp for more info.
 
+				Model::SymbolMatcher matcher{name()};
 				sp->symbolProvider()->findSymbols(std::make_unique<OOResolutionRequest>(
-						candidateTargets, name(), sp->symbolProvider(), SEARCH_DOWN,
+						candidateTargets, matcher, sp->symbolProvider(), SEARCH_DOWN,
 						searchForType, searchForType.testFlag(METHOD))); 	// When search for methods do an exhaustive search.
 																							// This is important for overloads.
 			}
@@ -146,9 +147,10 @@ Model::Node* OOReference::computeTarget() const
 	}
 	else
 	{
+		Model::SymbolMatcher matcher{name()};
 		// Perform an upward search starting from the current node
 		// When search for methods do an exhaustive search. This is important for overloads.
-		findSymbols(std::make_unique<OOResolutionRequest>(candidateTargets, name(), this, SEARCH_UP,
+		findSymbols(std::make_unique<OOResolutionRequest>(candidateTargets, matcher, this, SEARCH_UP,
 																				 searchForType, searchForType.testFlag(METHOD)));
 	}
 
