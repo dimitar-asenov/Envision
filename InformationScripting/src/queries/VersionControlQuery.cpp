@@ -114,7 +114,27 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 						changedNode = *ancestorIt;
 
 					if (outputNodesOnly)
+					{
 						result.add({{"ast", changedNode}});
+						switch (change->type())
+						{
+							case ChangeType::Deletion:
+								result.add({"color", {{"ast", changedNode}, {"color", QString{"red"}}}});
+								break;
+							case ChangeType::Insertion:
+								result.add({"color", {{"ast", changedNode}, {"color", QString{"blue"}}}});
+								break;
+							case ChangeType::Move:
+								result.add({"color", {{"ast", changedNode}, {"color", QString{"yellow"}}}});
+								break;
+							case ChangeType::Stationary:
+								result.add({"color", {{"ast", changedNode}, {"color", QString{"black"}}}});
+								break;
+							case ChangeType::Unclassified:
+								result.add({"color", {{"ast", changedNode}, {"color", QString{"white"}}}});
+								break;
+						}
+					}
 					else
 						result.add({"change", {{"id", newCommitId}, {"ast", changedNode}}});
 				}
