@@ -33,6 +33,7 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
+#include "VisualizationBase/src/overlays/MessageOverlay.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/items/WebBrowserItem.h"
@@ -45,6 +46,7 @@ namespace InformationScripting {
 
 const QString QueryResultVisualizer::HIGHLIGHT_OVERLAY_GROUP = {"default graph highlight"};
 const QString QueryResultVisualizer::ARROW_OVERLAY_GROUP = {"default arrow"};
+const QString QueryResultVisualizer::MESSAGE_OVERLAY_GROUP = {"default message overlay"};
 
 const QStringList QueryResultVisualizer::INFO_ARGUMENT_NAMES{"i", "info"};
 const QStringList QueryResultVisualizer::SORT_ARGUMENT_NAMES{"s", "sort"};
@@ -135,6 +137,8 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 		mainScene->addTopLevelItem(browser);
 	}
 
+	visualizeMessages(ts);
+
 	return {1};
 }
 
@@ -144,6 +148,7 @@ void QueryResultVisualizer::cleanScene()
 	{
 		scene->removeOverlayGroup(HIGHLIGHT_OVERLAY_GROUP);
 		scene->removeOverlayGroup(ARROW_OVERLAY_GROUP);
+		scene->removeOverlayGroup(MESSAGE_OVERLAY_GROUP);
 	}
 }
 
@@ -259,6 +264,35 @@ Optional<std::vector<QueryResultVisualizer::TaggedValue>> QueryResultVisualizer:
 		values.push_back({tag, value});
 	}
 	return values;
+}
+
+void QueryResultVisualizer::visualizeMessages(const TupleSet& ts)
+{
+	auto nodeItemMap = Visualization::Item::nodeItemsMap();
+
+	for (auto& messageTuple : ts.tuples("message"))
+	{
+		QString message = messageTuple["message"];
+		auto nodeIt = messageTuple.find("ast");
+		auto typeIt = messageTuple.find("type");
+		if (nodeIt == messageTuple.end() || typeIt == messageTuple.end())
+			continue; /// Ignore this tuple
+		Model::Node* node = nodeIt->second;
+		QString type = typeIt->second;
+
+		auto it = nodeItemMap.find(node);
+		while (it != nodeItemMap.end() && it.key() == node)
+		{
+			auto overlay = new Visualization::MessageOverlay{it.value(),
+				[message](Visualization::MessageOverlay *){
+				return message;
+			}, Visualization::MessageOverlay::itemStyles().get(type)};
+
+			it.value()->addOverlay(overlay, MESSAGE_OVERLAY_GROUP);
+
+			++it;
+		}
+	}
 }
 
 void QueryResultVisualizer::setColor(HighlightOverlay* overlay, QColor color)
