@@ -27,6 +27,7 @@ add_subdirectory("OOVisualization")
 add_subdirectory("OOInteraction")
 
 # Object-Oriented layer - Extras
+add_subdirectory("CodeReview")
 add_subdirectory("JavaExport")
 add_subdirectory("OODebug") # uses JavaExport
 add_subdirectory("CppExport")

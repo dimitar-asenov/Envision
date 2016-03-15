@@ -1,0 +1,8 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="codereview" name="Code Review" version="1.0.0">
+	<dependencies>
+		<dependency pluginid="logger" version="0" />
+		<dependency pluginid="selftest" version="0" />
+		<dependency pluginid="oointeraction" version="1" />
+	</dependencies>
+</plugin>
