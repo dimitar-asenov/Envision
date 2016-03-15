@@ -120,18 +120,28 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 						{
 							case ChangeType::Deletion:
 								result.add({"color", {{"ast", changedNode}, {"color", QString{"red"}}}});
+								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
+															  {"type", QString{"Delete"}}}});
 								break;
 							case ChangeType::Insertion:
 								result.add({"color", {{"ast", changedNode}, {"color", QString{"blue"}}}});
+								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
+															  {"type", QString{"Insertion"}}}});
 								break;
 							case ChangeType::Move:
 								result.add({"color", {{"ast", changedNode}, {"color", QString{"yellow"}}}});
+								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
+															  {"type", QString{"Move"}}}});
 								break;
 							case ChangeType::Stationary:
 								result.add({"color", {{"ast", changedNode}, {"color", QString{"black"}}}});
+								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
+															  {"type", QString{"Stationary"}}}});
 								break;
 							case ChangeType::Unclassified:
 								result.add({"color", {{"ast", changedNode}, {"color", QString{"white"}}}});
+								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
+															  {"type", QString{"Unclassified"}}}});
 								break;
 						}
 					}

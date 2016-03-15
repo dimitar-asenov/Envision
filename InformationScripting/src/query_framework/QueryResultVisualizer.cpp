@@ -121,6 +121,22 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 		}
 	}
 
+	for (auto changeTuple : ts.tuples("change"))
+	{
+		Model::Node* node = changeTuple["ast"];
+		qDebug() << node->typeName();
+		if (node->typeName() != "Class" && node->typeName() != "Method" && node->typeName() != "ExpressionStatement")
+			continue;
+		auto nodeVisualizationIt = Visualization::Item::nodeItemsMap().find(node);
+		while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
+		{
+			auto item = *nodeVisualizationIt++;
+			auto overlay = item->overlay<HighlightOverlay>();
+
+			overlay->setText(changeTuple["type"].toString());
+		};
+	}
+
 	auto htmlTuples = ts.tuples("html");
 	if (htmlTuples.size()) {
 		QString htmlContent = (*htmlTuples.begin())["html"];
