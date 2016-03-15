@@ -20,6 +20,7 @@ add_subdirectory("InteractionBase")
 # Generic Layer - Extras
 add_subdirectory("Comments")
 add_subdirectory("Export")
+add_subdirectory("VersionControlUI")
 
 # Object-Oriented layer - Base
 add_subdirectory("OOModel")
