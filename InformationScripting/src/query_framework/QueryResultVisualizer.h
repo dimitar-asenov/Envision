@@ -54,6 +54,7 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 
 		static const QString HIGHLIGHT_OVERLAY_GROUP;
 		static const QString ARROW_OVERLAY_GROUP;
+		static const QString MESSAGE_OVERLAY_GROUP;
 
 		static const QStringList INFO_ARGUMENT_NAMES;
 		static const QStringList SORT_ARGUMENT_NAMES;
@@ -68,6 +69,8 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 		Optional<QHash<Model::Node*, QString>> convertTuplesToString(const QHash<Model::Node*, QList<Tuple>>& infos);
 		using TaggedValue = std::pair<QString, QString>;
 		Optional<std::vector<TaggedValue>> infoArgumentValues();
+
+		void visualizeMessages(const TupleSet& ts);
 
 		static void setColor(HighlightOverlay* overlay, QColor color);
 };
