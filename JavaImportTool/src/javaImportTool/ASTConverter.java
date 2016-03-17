@@ -25,7 +25,6 @@
  **********************************************************************************************************************/
 package javaImportTool;
 
-import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -308,11 +307,11 @@ public class ASTConverter {
 			result.setChild("typeExpression", addExtraDimensions(type, node.getExtraDimensions()));
 		}
 		
-		if (node.thrownExceptions() != null)
+		if (node.thrownExceptionTypes() != null)
 		{
 			int i = 0;
-			for(Name exception : (List<Name>)node.thrownExceptions())
-				me.child("throws").add(expression(exception, Integer.toString(i++)));
+			for(Type exceptionType : (List<Type>)node.thrownExceptionTypes())
+				me.child("throws").add(typeExpression(exceptionType, Integer.toString(i++)));
 		}
 		
 		if (node.getBody() != null)
@@ -732,8 +731,18 @@ public class ASTConverter {
 		}
 		else if (type.isArrayType())
 		{
+			// The ArrayType has just an element type and a dimension int,
+			// we have for each dimension a type so we have to build this structure.
+			int dim = ((ArrayType) type).getDimensions();
 			t = new Node(null, "ArrayTypeExpression", name);
-			t.setChild("typeExpression", typeExpression(((ArrayType)type).getComponentType(), "typeExpression"));
+			Node parentType = t;
+			while (dim-- > 1) {
+				Node typeExpression = new Node(null, "ArrayTypeExpression", name);
+				typeExpression.setChild("typeExpression", typeExpression(((ArrayType)type).getElementType(), "typeExpression"));
+				parentType.setChild("typeExpression", typeExpression);
+				parentType = typeExpression;
+			}
+			parentType.setChild("typeExpression", typeExpression(((ArrayType)type).getElementType(), "typeExpression"));
 		} else if (type.isQualifiedType())
 		{
 			t = new Node(null, "ReferenceExpression", name);
@@ -843,13 +852,8 @@ public class ASTConverter {
 			node = new Node(null, "NewExpression", name);
 			
 			// Count how many dimensions are found in the the type itself
-			int typeDimensions = 1;
-			Type innerType = ac.getType().getComponentType();
-			while(innerType instanceof ArrayType)
-			{
-				++typeDimensions;
-				innerType = ((ArrayType) innerType).getComponentType();
-			}
+			int typeDimensions = ac.getType().getDimensions();
+			Type innerType = ac.getType().getElementType();
 			
 			// Set the innerType of the new expression
 			node.setChild("newType", typeExpression(innerType,"newType"));

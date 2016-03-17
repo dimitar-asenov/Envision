@@ -139,7 +139,7 @@ public class Main {
 			for(File file : files)
 			{
 				if (!PRINT_METHODS) System.out.print("Processing file: " + file.getPath() + "...");
-				ASTParser parser = ASTParser.newParser(AST.JLS4);
+				ASTParser parser = ASTParser.newParser(AST.JLS8);
 				
 				String source;
 				if (classFiles)
