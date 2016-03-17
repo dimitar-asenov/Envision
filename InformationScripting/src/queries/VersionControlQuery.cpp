@@ -116,34 +116,37 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 					if (outputNodesOnly)
 					{
 						result.add({{"ast", changedNode}});
+						QString color;
+						QString change_type;
 						switch (change->type())
 						{
 							case ChangeType::Deletion:
-								result.add({"color", {{"ast", changedNode}, {"color", QString{"red"}}}});
-								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
-															  {"type", QString{"Delete"}}}});
+								color = "red";
+								change_type = "Delete";
 								break;
 							case ChangeType::Insertion:
-								result.add({"color", {{"ast", changedNode}, {"color", QString{"blue"}}}});
-								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
-															  {"type", QString{"Insertion"}}}});
+								color = "blue";
+								change_type = "Insertion";
 								break;
 							case ChangeType::Move:
-								result.add({"color", {{"ast", changedNode}, {"color", QString{"yellow"}}}});
-								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
-															  {"type", QString{"Move"}}}});
+								color = "yellow";
+								change_type = "Move";
 								break;
 							case ChangeType::Stationary:
-								result.add({"color", {{"ast", changedNode}, {"color", QString{"black"}}}});
-								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
-															  {"type", QString{"Stationary"}}}});
+								color = "black";
+								change_type = "Stationary";
 								break;
 							case ChangeType::Unclassified:
-								result.add({"color", {{"ast", changedNode}, {"color", QString{"white"}}}});
-								result.add({"change", {{"id", newCommitId}, {"ast", changedNode},
-															  {"type", QString{"Unclassified"}}}});
+								color = "white";
+								change_type = "Unclassified";
 								break;
+							default:
+								// TODO throw exception?
+								color = "";
+								change_type = "unhandled_type";
 						}
+						result.add({"color", {{"ast", changedNode}, {"color", color}}});
+						result.add({"change_typed", {{"ast", changedNode}, {"type", change_type}}});
 					}
 					else
 						result.add({"change", {{"id", newCommitId}, {"ast", changedNode}}});

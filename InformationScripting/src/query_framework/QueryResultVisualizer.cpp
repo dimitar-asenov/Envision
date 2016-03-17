@@ -29,6 +29,10 @@
 #include "ModelBase/src/nodes/Node.h"
 
 #include "OOModel/src/declarations/Declaration.h"
+#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Class.h"
+#include	"OOModel/src/statements/Statement.h"
+#include	"OOModel/src/expressions/Expression.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
@@ -121,20 +125,23 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 		}
 	}
 
-	for (auto changeTuple : ts.tuples("change"))
+	for (auto changeTuple : ts.tuples("change_typed"))
 	{
 		Model::Node* node = changeTuple["ast"];
-		qDebug() << node->typeName();
-		if (node->typeName() != "Class" && node->typeName() != "Method" && node->typeName() != "ExpressionStatement")
-			continue;
-		auto nodeVisualizationIt = Visualization::Item::nodeItemsMap().find(node);
-		while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
-		{
-			auto item = *nodeVisualizationIt++;
-			auto overlay = item->overlay<HighlightOverlay>();
 
-			overlay->setText(changeTuple["type"].toString());
-		};
+		// TODO check what is really needed
+		if (DCast<OOModel::Class>(node) || DCast<OOModel::Method>(node) || DCast<OOModel::Expression>(node)
+			 || DCast<OOModel::Statement>(node) || DCast<OOModel::Declaration>(node))
+		{
+			auto nodeVisualizationIt = Visualization::Item::nodeItemsMap().find(node);
+			while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
+			{
+				auto item = *nodeVisualizationIt++;
+				auto overlay = item->overlay<HighlightOverlay>();
+
+				overlay->setText(changeTuple["type"].toString());
+			};
+		}
 	}
 
 	auto htmlTuples = ts.tuples("html");
