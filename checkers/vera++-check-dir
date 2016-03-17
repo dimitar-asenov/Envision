@@ -35,6 +35,7 @@ find "$1" -path "$1"/qt -prune -o -name '*.h' -print -o -name '*.cpp' -print \
 | vera++ $RULES $PARAMS --error 2>&1\
 | grep -v "keyword 'delete' not followed by a single space" \
 | grep -v "/AstApi_Generated\.cpp.*source file is too long" \
+| grep -v "precompiled_cpp\.cpp:.* no copyright notice found" \
 | grep -v "/declarative/AnchorLayoutFormElement\.h.*using namespace not allowed in header file" 1>&2
 
 if (($? > 0)); then
