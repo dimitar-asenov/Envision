@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.2.2)
 
+# Prevent in-source builds
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+    message(FATAL_ERROR "In-source builds can be messy and therefore disabled. Please remove CMakeCache.txt and the CMakeFiles/ directory. Then build out-of-source.")
+endif()
+
 add_subdirectory("Core")
 add_subdirectory("Launcher")
 
