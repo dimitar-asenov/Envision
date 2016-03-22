@@ -31,8 +31,8 @@
 #include "OOModel/src/declarations/Declaration.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
-#include	"OOModel/src/statements/Statement.h"
-#include	"OOModel/src/expressions/Expression.h"
+#include "OOModel/src/statements/Statement.h"
+#include "OOModel/src/expressions/Expression.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
