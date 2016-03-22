@@ -129,7 +129,7 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 	{
 		Model::Node* node = changeTuple["ast"];
 
-		// TODO check what is really needed
+		// TODO check what should be annotated
 		if (DCast<OOModel::Class>(node) || DCast<OOModel::Method>(node) || DCast<OOModel::Expression>(node)
 			 || DCast<OOModel::Statement>(node) || DCast<OOModel::Declaration>(node))
 		{
