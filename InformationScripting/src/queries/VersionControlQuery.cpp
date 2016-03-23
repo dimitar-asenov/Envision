@@ -37,6 +37,8 @@
 
 #include "ModelBase/src/nodes/Node.h"
 #include "OOModel/src/elements/StatementItem.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
 
 using namespace FilePersistence;
 
@@ -111,6 +113,11 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 					changedNode = statement;
 				else // The node is hopefully higher up in the node hierarchy thus we take it as is.
 					changedNode = node;
+
+				// Ignore empty nodes
+				if (auto changedExpr = DCast<OOModel::ExpressionStatement>(changedNode))
+					if (DCast<OOModel::EmptyExpression>(changedExpr->expression()))
+						continue;
 
 				auto ancestorIt = std::find_if(nodesToLookAt.begin(), nodesToLookAt.end(), [changedNode](Model::Node* n) {
 						return n == changedNode || n->isAncestorOf(changedNode);
