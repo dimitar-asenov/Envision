@@ -350,9 +350,11 @@ class MODELBASE_API Node
 		/**
 		 * Returns all children including the node \a from, which fullfill the \a Predicate \a p,
 		 * i.e. \a p(node) returns true.
+		 *
+		 * If \a onlyTopLevel is set only the first matches are returned
 		 */
 		template <typename Predicate>
-		static QList<Node*> childrenWhich(Node* from, Predicate p);
+		static QList<Node*> childrenWhich(Node* from, Predicate p, bool onlyTopLevel = false);
 
 
 		/**
@@ -589,7 +591,7 @@ inline QList<NodeType*> Node::childrenOfType(Node* from)
 }
 
 template <typename Predicate>
-inline QList<Node*> Node::childrenWhich(Node* from, Predicate p)
+inline QList<Node*> Node::childrenWhich(Node* from, Predicate p, bool onlyTopLevel)
 {
 	QList<Model::Node*> result;
 	QList<Model::Node*> workStack{from};
@@ -597,8 +599,14 @@ inline QList<Node*> Node::childrenWhich(Node* from, Predicate p)
 	while (!workStack.empty())
 	{
 		auto node = workStack.takeLast();
-		if (p(node)) result.push_back(node);
-		workStack << node->children();
+		if (p(node))
+		{
+			result.push_back(node);
+			if (!onlyTopLevel)
+				workStack << node->children();
+		}
+		else
+			workStack << node->children();
 	}
 	return result;
 }

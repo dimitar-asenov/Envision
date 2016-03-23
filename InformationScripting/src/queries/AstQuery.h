@@ -62,6 +62,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		static const QStringList NODES_ARGUMENT_NAMES;
 		static const QStringList RELATION_ARGUMENT_NAMES;
 		static const QStringList ATTRIBUTE_NAME_NAMES;
+		static const QStringList TOP_LEVEL_ARGUMENT_NAMES;
 
 		using ExecuteFunction = std::function<Optional<TupleSet> (AstQuery*, TupleSet)>;
 		ExecuteFunction exec_{};
@@ -80,7 +81,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public LinearQuery
 		Optional<TupleSet> usagesQuery(TupleSet input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
+		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr,
+								  bool topLevelNodeOnly = false);
 		template <typename Predicate>
 		void addNodesForWhich(TupleSet& ts, Predicate holds, Model::Node* from = nullptr);
 		static void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
