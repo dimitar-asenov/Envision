@@ -40,7 +40,7 @@ Install github3 (https://github.com/sigmavirus24/github3.py)
 
 In Envision:
 load why
-query: why
+query: cs-why
 
 ################################################################################
 What upstream changes might conflict with mine?
@@ -62,3 +62,10 @@ Refactoring recursive methods
 - Insert in recently changed recursive methods a first line that prints all
   arguments.
 ################################################################################
+
+Clone https://github.com/dimitar-asenov/test-args-print-use-case
+    to Envision/DebugBuild/projects/recursive
+
+In Envision:
+load recursive
+query: cs-args
