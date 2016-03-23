@@ -46,6 +46,8 @@ const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList VersionControlQuery::NODES_ARGUMENTS_NAMES{"nodes"};
 const QStringList VersionControlQuery::IN_ARGUMENT_NAMES{"in"};
+const QStringList VersionControlQuery::TWO_VERSION_ARGUMENT_NAMES{"two"};
+const QStringList VersionControlQuery::TYPED_CHANGES_ARGUMENT_NAMES{"tc", "typed_changes"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 {
@@ -63,6 +65,12 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 	if (!adaptedRangeOptional)
 		return adaptedRangeOptional.errors()[0];
 	commitIdRange = adaptedRangeOptional.value();
+
+	// if argument is set, check that commitIdRange only contains two commitIds
+	if (arguments_.isArgumentSet(TWO_VERSION_ARGUMENT_NAMES[0]) && commitIdRange.size() > 2)
+	{
+		commitIdRange = QStringList{commitIdRange.first(), commitIdRange.last()};
+	}
 
 	QList<Model::Node*> nodesToLookAt;
 
@@ -83,7 +91,7 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 		QString oldCommitId = commitIdRange[i];
 		QString newCommitId = commitIdRange[i - 1];
 
-		Diff diff = repository.diff(newCommitId, oldCommitId);
+		Diff diff = repository.diff(oldCommitId, newCommitId);
 		auto changes = diff.changes();
 
 		if (!outputNodesOnly)
@@ -115,8 +123,44 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 
 					if (outputNodesOnly)
 						result.add({{"ast", changedNode}});
+
 					else
 						result.add({"change", {{"id", newCommitId}, {"ast", changedNode}}});
+
+					if (arguments_.isArgumentSet(TYPED_CHANGES_ARGUMENT_NAMES[0]))
+					{
+						QString color;
+						QString change_type;
+						switch (change->type())
+						{
+							case ChangeType::Deletion:
+								color = "red";
+								change_type = "Delete";
+								break;
+							case ChangeType::Insertion:
+								color = "blue";
+								change_type = "Insertion";
+								break;
+							case ChangeType::Move:
+								color = "yellow";
+								change_type = "Move";
+								break;
+							case ChangeType::Stationary:
+								color = "black";
+								change_type = "Stationary";
+								break;
+							case ChangeType::Unclassified:
+								color = "white";
+								change_type = "Unclassified";
+								break;
+							default:
+								// TODO throw exception?
+								color = "";
+								change_type = "unhandled_type";
+						}
+						result.add({"color", {{"ast", changedNode}, {"color", color}}});
+						result.add({"change_typed", {{"ast", changedNode}, {"type", change_type}}});
+					}
 				}
 			}
 		}
@@ -129,7 +173,9 @@ void VersionControlQuery::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<VersionControlQuery>("changes",
 		std::vector<ArgumentRule>{{ArgumentRule::AtMostOneOf, {{COUNT_ARGUMENT_NAMES[1], ArgumentValue::IsSet},
-												{IN_ARGUMENT_NAMES[0], ArgumentValue::IsSet}}}});
+												{IN_ARGUMENT_NAMES[0], ArgumentValue::IsSet}}},
+										  {ArgumentRule::AtMostOneOf, {{NODES_ARGUMENTS_NAMES[0], ArgumentValue::IsSet},
+												{TYPED_CHANGES_ARGUMENT_NAMES[0], ArgumentValue::IsSet}}}});
 }
 
 VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
@@ -137,7 +183,12 @@ VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args, 
 		{COUNT_ARGUMENT_NAMES, "The amount of revisions to look at", COUNT_ARGUMENT_NAMES[1], "10"},
 		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"},
 		QCommandLineOption{NODES_ARGUMENTS_NAMES},
-		{IN_ARGUMENT_NAMES, "Specific commits to look at, either a single one or a range with ..", IN_ARGUMENT_NAMES[0]}
+		{IN_ARGUMENT_NAMES, "Specific commits to look at, either a single one or a range with ..", IN_ARGUMENT_NAMES[0]},
+		QCommandLineOption{TWO_VERSION_ARGUMENT_NAMES, "Only use the first and last commit to compute the changes"},
+		QCommandLineOption{TYPED_CHANGES_ARGUMENT_NAMES, 	"Add the type (Delete, Insertion, Move, Stationary, "
+																			"Unclassified) of the changes to the result and define a "
+																			"color for the nodes according to the type"}
+
 }, args, true}
 {
 	for (const auto& rule : argumentRules)
