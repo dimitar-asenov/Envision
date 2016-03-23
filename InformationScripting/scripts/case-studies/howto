@@ -44,6 +44,8 @@ Instability metric
 - Show as a table the instability of each package (or should we change this to
   class)?
 ################################################################################
+load instability
+query: cs-ins
 
 
 ################################################################################

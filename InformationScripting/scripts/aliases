@@ -5,3 +5,5 @@ astFilter = ast -input
 addTags = tags -a
 removeTage = tags -r
 info = show -info
+
+cs-ins = ast -t Class -global | case-studies/instability | toHtml
