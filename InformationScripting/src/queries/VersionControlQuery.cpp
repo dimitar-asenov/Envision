@@ -113,7 +113,7 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 					changedNode = node;
 
 				auto ancestorIt = std::find_if(nodesToLookAt.begin(), nodesToLookAt.end(), [changedNode](Model::Node* n) {
-						return n->isAncestorOf(changedNode);
+						return n == changedNode || n->isAncestorOf(changedNode);
 				});
 				if (nodesToLookAt.isEmpty() || ancestorIt != nodesToLookAt.end())
 				{
