@@ -1,0 +1,53 @@
+################################################################################
+Investigating a regression
+- intersect callgraph of a specific method with recent changes
+################################################################################
+
+
+################################################################################
+Heatmap of code execution
+- show as a heatmap profiler data which was saved as a csv file
+################################################################################
+
+
+################################################################################
+Callgraph of selected method
+- as arrows
+- as table (command: table)
+- as nodes
+################################################################################
+
+
+################################################################################
+Interactive HTML of recently changed recursive methods
+- first show as nodes what recursive methods changed recently
+- then show a rendering using html
+################################################################################
+
+
+################################################################################
+Why is this code the way it is?
+- for the statements of a method, get the corresponding commit messages and
+  connect these to an on-line issue tracker. In the end show commit messages
+  and associated bugs directly next to each statement.
+################################################################################
+
+
+################################################################################
+What upstream changes might conflict with mine?
+- In parallel highlight local and remote changes.
+################################################################################
+
+
+################################################################################
+Instability metric
+- Show as a table the instability of each package (or should we change this to
+  class)?
+################################################################################
+
+
+################################################################################
+Refactoring recursive methods
+- Insert in recently changed recursive methods a first line that prints all
+  arguments.
+################################################################################
