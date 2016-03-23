@@ -157,7 +157,7 @@ add_library(InformationScripting SHARED
 	scripts/filterMultiplications.py
 	scripts/ifToWhile.py
 	scripts/profileSource.py
-	scripts/toHtml.py
+	scripts/table.py
 )
 
 target_link_libraries(InformationScripting ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
