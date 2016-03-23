@@ -39,22 +39,25 @@ const QStringList CanReach::SELF_ARGUMENT_NAMES{"s", "self"};
 
 Optional<TupleSet> CanReach::executeLinear(TupleSet input)
 {
-	QString relationName = arguments_.argument(RELATION_ARGUMENT_NAMES[1]);
+	QString relationName;
+		if (arguments_.isArgumentSet(RELATION_ARGUMENT_NAMES[0]) )
+			 relationName = arguments_.argument(RELATION_ARGUMENT_NAMES[1]);
+
 	QString targetName = arguments_.argument(NAME_ARGUMENT_NAMES[1]);
 	auto nameMatcher = Model::SymbolMatcher::guessMatcher(targetName);
 
 	std::vector<Tuple> endNodes;
 
-	relationTuples_ = input.tuples(relationName);
+	relationTuples_ = arguments_.isArgumentSet(RELATION_ARGUMENT_NAMES[0]) ? input.tuples(relationName) :
+																									 input.tuples();
 	// First we search all end points, i.e. relations where the second entry matches the target name.
 	// Then from the endpoints we can do BFS and mark all found nodes as nodes that can reach the target.
 	for (const auto& relation : relationTuples_)
 	{
 		auto nodes = relation.valuesOfType<Model::Node*>();
-		if (nodes.size() != 2)
-			return {QString{"%1 works only on relations between Nodes."}.arg(arguments_.queryName())};
-		if (matchSelf_ || nameMatcher.matches(nodes[1]->symbolName()))
-			endNodes.push_back(relation);
+		if (nodes.size() >= 2)
+			if (matchSelf_ || nameMatcher.matches(nodes[1]->symbolName()))
+				endNodes.push_back(relation);
 	}
 	return reachableNodesFrom(std::move(endNodes));
 }
@@ -62,8 +65,7 @@ Optional<TupleSet> CanReach::executeLinear(TupleSet input)
 void CanReach::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<CanReach>("canReach",
-		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{RELATION_ARGUMENT_NAMES[1]}}},
-											{ArgumentRule::RequireOneOf, {{NAME_ARGUMENT_NAMES[1]},
+		std::vector<ArgumentRule>{{ArgumentRule::RequireOneOf, {{NAME_ARGUMENT_NAMES[1]},
 																					{SELF_ARGUMENT_NAMES[1], ArgumentValue::IsSet}}}});
 }
 
