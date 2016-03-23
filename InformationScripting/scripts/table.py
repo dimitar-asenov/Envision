@@ -1,62 +1,44 @@
 import html
 
-class HtmlElement(object):
-    def __init__(self, tag):
-        self.tag = tag
+from xml.etree import ElementTree
+from xml.etree.ElementTree import Element, SubElement
+from xml.dom import minidom
 
-    def html(self):
-        htmlString = '<{}>'.format(self.tag)
-        htmlString += self.printContent()
-        htmlString += '</{}>'.format(self.tag)
-        return htmlString
-    
-    def printContent(self):
-        pass
-    
-class HtmlDocument(object):
-    def __init__(self, body):
-        self.body = body
-        
-    def html(self):
-        htmlString = '<!DOCTYPE html><html>'
-        htmlString += body.html()
-        htmlString += '</html>'
-        return htmlString
-    
-class HtmlBody(HtmlElement):
-    def __init__(self):
-        super(HtmlBody, self).__init__('body')
-        self.elements = []
-        
-    def table(self, tableContent):
-        self.elements.append(HtmlTable(tableContent))
-        
-    def printContent(self):
-        htmlString = ''
-        for element in self.elements:
-            htmlString += element.html()
-        return htmlString
+def getNames(node):
+    if node:
+        names = getNames(node.parent)
+        if node.symbolName():
+            names.append(node.symbolName())
+        return names
+    else:
+        return []
 
-class HtmlTable(HtmlElement):
+def getLabel(node):
+    if isinstance(node, Node):
+        return '.'.join(getNames(node)[-2:])
+    return str(node)
+
+class HtmlTable(Element):
     header = []
     rows = []
     def __init__(self, tupleList):
-        super(HtmlTable,self).__init__('table')
+        Element.__init__(self, 'table')
+        # Add header
+        if len(tupleList):
+            header = Element('tr')
+            for valueName, value in tupleList[0].items():
+                headerEntry = Element('th')
+                headerEntry.text = valueName
+                header.append(headerEntry)
+            self.append(header)
+        # Add values
         for tupleEntry in tupleList:
-            rowEntry = []
+            row = Element('tr')
             for valueName, value in tupleEntry.items():
-                rowEntry.append(value)
-            self.rows.append(rowEntry)
-    
-    def printContent(self):
-        htmlTable = ''
-        for row in self.rows:
-            htmlTable +='\n\t<tr>'
-            for rowValue in row:
-                htmlTable += '\n\t\t<td>{}</td>'.format(html.escape(str(rowValue)))
-            htmlTable += '\n\t</tr>'
-        return htmlTable
-
+                rowEntry = Element('td')
+                rowEntry.text = getLabel(value)
+                row.append(rowEntry)
+            self.append(row)
 
 tupleDict = {}
 for tuple in Query.input.tuples():
@@ -70,10 +52,37 @@ for tuple in Query.input.tuples():
 
 Query.result = Query.input
 
-body = HtmlBody()
+body = Element('body')
 for tupleName, tupleList in tupleDict.items():
-    body.table(tupleList)
+    paragraph = Element('p')
+    title = Element('h1')
+    title.text = tupleName
+    paragraph.append(title)
+    paragraph.append(HtmlTable(tupleList))
+    body.append(paragraph)
 
-t = Tuple([('html', HtmlDocument(body).html())])
+htmlRoot = Element('html')
+htmlRoot.append(body)
+
+style = Element('style')
+style.text = """
+h1 {margin-bottom: 0; padding-bottom: 0;}
+*{font-family:sans-serif;}
+th, td {
+    border: 1px white;
+    background-color:#efefef;
+}
+th {
+    color: #fce5cd;
+    background-color: #3d78d6;
+}
+"""
+htmlRoot.append(style)
+
+htmlString = ElementTree.tostring(htmlRoot, 'utf-8', 'html').decode('utf-8')
+
+print(htmlString)
+
+t = Tuple([('html', htmlString)])
 Query.result.add(t)
 

@@ -23,7 +23,9 @@ Callgraph of selected method
 - as table (command: table)
 - as nodes
 ################################################################################
-
+query arrows: callgraph
+query table: callgrahph | table
+query nodes: callgraph -nodes
 
 ################################################################################
 Interactive HTML of recently changed recursive methods
