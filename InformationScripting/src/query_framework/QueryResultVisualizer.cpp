@@ -81,7 +81,7 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 	cleanScene();
 	showASTRelation(ts, "calls");
 
-	auto colors = extractColors(ts);
+	auto colorMap = extractColors(ts);
 	auto infoOptional = extractInfo(ts);
 	if (infoOptional.hasErrors())
 		return {infoOptional.errors()[0]};
@@ -91,17 +91,17 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 	// Set default color for non covered ast nodes.
 	for (const auto& astTuple : astTuples)
 	{
-		auto& color = colors[astTuple["ast"]];
-		if (color.isNull()) color = "red";
+		auto& colors = colorMap[astTuple["ast"]];
+		if (colors.isEmpty()) colors.append("red");
 	}
 
 	for (auto it = infos.begin(); it != infos.end(); ++it)
 	{
-		auto& color = colors[it.key()];
-		if (color.isNull()) color = "red";
+		auto& colors = colorMap[it.key()];
+		if (colors.isEmpty()) colors.append("red");
 	}
 
-	for (auto it = colors.begin(); it != colors.end(); ++it)
+	for (auto it = colorMap.begin(); it != colorMap.end(); ++it)
 	{
 		Model::Node* node = it.key();
 		Q_ASSERT(node);
@@ -113,11 +113,15 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 			qWarning() << "no visualization for" << node->typeName();
 		while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
 		{
-			auto item = *nodeVisualizationIt++;
-			auto overlay = new HighlightOverlay{item};
-			overlay->setText(info);
-			setColor(overlay, it.value());
-			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
+			for (const auto& color : it.value())
+			{
+				auto item = *nodeVisualizationIt;
+				auto overlay = new HighlightOverlay{item};
+				overlay->setText(info);
+				setColor(overlay, color);
+				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
+			}
+			++nodeVisualizationIt;
 		}
 	}
 
@@ -176,16 +180,16 @@ void QueryResultVisualizer::showASTRelation(const TupleSet& ts, const QString& r
 	}
 }
 
-QHash<Model::Node*, QString> QueryResultVisualizer::extractColors(const TupleSet& ts)
+QHash<Model::Node*, QStringList> QueryResultVisualizer::extractColors(const TupleSet& ts)
 {
-	QHash<Model::Node*, QString> colors;
+	QHash<Model::Node*, QStringList> colors;
 	for (const auto& colorTuple : ts.tuples("color"))
 	{
 		auto it = colorTuple.find("ast");
 		if (it != colorTuple.end())
 		{
 			QString color = colorTuple["color"];
-			colors[it->second] = color;
+			colors[it->second].append(color);
 		}
 	}
 	return colors;
