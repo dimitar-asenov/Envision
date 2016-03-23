@@ -32,6 +32,15 @@ Why is this code the way it is?
   and associated bugs directly next to each statement.
 ################################################################################
 
+Clone https://github.com/dimitar-asenov/test-why-use-case 
+    to Envision/DebugBuild/projects/why
+    
+Install github3 (https://github.com/sigmavirus24/github3.py)
+    pip install --pre github3.py
+
+In Envision:
+load why
+query: why
 
 ################################################################################
 What upstream changes might conflict with mine?

@@ -204,11 +204,11 @@ VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args, 
 
 void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMetaData& metadata)
 {
-		ts.add({"commit", {{"id", metadata.sha1_},
-				  {"message", metadata.message_},
-				  {"date", metadata.dateTime_.toString("dd.MM.yyyy hh:mm")},
-				  {"commiter", metadata.committer_.name_ + " " + metadata.committer_.eMail_},
-				  {"author", metadata.author_.name_ + " " + metadata.author_.eMail_}}});
+	ts.add({"commit", {{"id", metadata.sha1_},
+			  {"message", metadata.message_},
+			  {"date", metadata.dateTime_.toString("dd.MM.yyyy hh:mm")},
+			  {"commiter", metadata.committer_.name_ + " " + metadata.committer_.eMail_},
+			  {"author", metadata.author_.name_ + " " + metadata.author_.eMail_}}});
 }
 
 Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringList& commitIdRange) const

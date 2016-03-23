@@ -7,3 +7,4 @@ removeTage = tags -r
 info = show -info
 
 cs-ins = ast -t Class -global | case-studies/instability | toHtml
+why = ast -t Statement -tl | changes -c 2 | join -v change.id,commit.message,ast -as astMessage| case-studies/associatedBugs
