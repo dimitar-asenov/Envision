@@ -97,7 +97,8 @@ public class NodeDescriptors {
 				{"Integer","mthKind"}
 		}));
 		add( new NodeInitializer("VariableDeclaration", "Declaration", new String[][]{
-				{"Expression","typeExpression"}
+				{"Expression","typeExpression"},
+				{"Integer", "initKind"}
 		}));
 		add( new NodeInitializer("Field", "VariableDeclaration", null));
 		add( new NodeInitializer("NameImport", "Declaration", new String[][]{
