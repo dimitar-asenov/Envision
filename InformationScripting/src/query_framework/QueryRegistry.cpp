@@ -67,6 +67,31 @@ QStringList QueryRegistry::scriptQueries() const
 	return result;
 }
 
+QStringList QueryRegistry::aliasQueries() const
+{
+	QFile aliasFile("scripts/aliases");
+	if (!aliasFile.open(QIODevice::ReadOnly))
+	{
+		// TODO report error...
+		return {};
+	}
+	QTextStream aliasStream(&aliasFile);
+
+	QStringList result;
+	while (!aliasStream.atEnd())
+	{
+		QString aliasLine = aliasStream.readLine();
+		if (aliasLine.isEmpty() || aliasLine.startsWith("#"))
+			continue;
+
+		QStringList parts = aliasLine.split("=");
+		if (parts.size() > 1)
+			result.append( parts.first().trimmed() );
+	}
+
+	return result;
+}
+
 std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromScript(const QString& name, Model::Node* target,
 																				  QStringList args, QueryExecutor* executor)
 {
@@ -121,7 +146,6 @@ std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromAlias(const QString& name
 			// TODO handle else case properly
 		}
 	}
-	aliasFile.close();
 
 	return result;
 }

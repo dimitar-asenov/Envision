@@ -81,7 +81,9 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 		// 1: All data is shared between the scripts,
 		// 	this could possibly be changed by calling Py_Initialize here in the execute method.
 		// 2: It allows infinite recursion, e.g. in a script called test.py call test()
-		auto allQueries = QueryRegistry::instance().registeredQueries() + QueryRegistry::instance().scriptQueries();
+		auto allQueries = QueryRegistry::instance().registeredQueries()
+				+ QueryRegistry::instance().scriptQueries()
+				+ QueryRegistry::instance().aliasQueries();
 		for (const auto& query : allQueries)
 		{
 			auto queryMethod = std::bind(&ScriptQuery::executeQueryFromPython, this, query, std::placeholders::_1,

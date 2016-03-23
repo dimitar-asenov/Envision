@@ -58,6 +58,7 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 
 		QStringList registeredQueries() const;
 		QStringList scriptQueries() const;
+		QStringList aliasQueries() const;
 
 	private:
 		QueryRegistry() = default;
