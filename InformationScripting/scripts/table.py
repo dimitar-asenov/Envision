@@ -19,8 +19,6 @@ def getLabel(node):
     return str(node)
 
 class HtmlTable(Element):
-    header = []
-    rows = []
     def __init__(self, tupleList):
         Element.__init__(self, 'table')
         # Add header
