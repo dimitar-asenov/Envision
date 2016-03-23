@@ -29,26 +29,16 @@
 #include "../queries/NodePropertyAdder.h"
 #include "../queries/ScriptQuery.h"
 
+#include "../query_prompt/parsing/QueryBuilder.h"
+#include "../query_prompt/parsing/QueryParser.h"
+#include "../query_prompt/nodes/QueryNode.h"
+
 namespace InformationScripting {
 
 QueryRegistry& QueryRegistry::instance()
 {
 	static QueryRegistry instance;
 	return instance;
-}
-
-void QueryRegistry::registerAlias(const QString& alias, const QString& aliasedQuery,
-											 std::function<void (QStringList&)> argAdaption)
-{
-	auto& registry = instance();
-	auto constructorIt = registry.constructors_.find(aliasedQuery);
-	Q_ASSERT(constructorIt != registry.constructors_.end()); // Need to register aliasedQuery first!
-	auto aliasedConstructor = *constructorIt;
-	registry.constructors_[alias] =
-		[argAdaption, aliasedConstructor, alias] (Model::Node* target, QStringList args, QueryExecutor* executor, QString) {
-			if (argAdaption) argAdaption(args);
-			return aliasedConstructor(target, args, executor, alias);
-	};
 }
 
 std::unique_ptr<Query> QueryRegistry::buildQuery(const QString& command, Model::Node* target,
@@ -62,7 +52,10 @@ std::unique_ptr<Query> QueryRegistry::buildQuery(const QString& command, Model::
 		// Or eventually decide that we don't allow condition in the property adder
 		return std::unique_ptr<Query>(new NodePropertyAdder{command, args[1]});
 	}
-	return tryBuildQueryFromScript(command, target, args, executor);
+	auto result = tryBuildQueryFromAlias(command, target, args, executor);
+	if (!result)
+		result = tryBuildQueryFromScript(command, target, args, executor);
+	return result;
 }
 
 QStringList QueryRegistry::scriptQueries() const
@@ -81,6 +74,53 @@ std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromScript(const QString& nam
 	if (QFile::exists(scriptName))
 		return std::unique_ptr<Query>(new ScriptQuery{scriptName, target, args, executor});
 	return nullptr;
+}
+
+std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromAlias(const QString& name, Model::Node* target,
+																				 QStringList args, QueryExecutor* executor)
+{
+	QFile aliasFile("scripts/aliases");
+	if (!aliasFile.open(QIODevice::ReadOnly))
+	{
+		// TODO report error...
+		return {};
+	}
+	QTextStream aliasStream(&aliasFile);
+
+	std::unique_ptr<Query> result{};
+
+	while (!result && !aliasStream.atEnd())
+	{
+		QString aliasLine = aliasStream.readLine();
+		QStringList parts = aliasLine.split("=");
+		if (parts.size() != 2)
+		{
+			qWarning() << "Ignoring alias line because no, or to many = found:" << aliasLine;
+			continue;
+		}
+		QString aliasName = parts[0].trimmed();
+		if (name == aliasName)
+		{
+			QString aliasedQuery = parts[1].trimmed();
+
+			// TODO we can be fancy with the single dollar
+			if (aliasedQuery.contains("$$"))
+				aliasedQuery.replace("$$", args.join(' '));
+			else
+				aliasedQuery.append(' ').append(args.join(' '));
+
+			// TODO to properly use the parser from python we should probably remove assertions in it.
+			std::unique_ptr<QueryNode> queryNode{QueryParser::parse(aliasedQuery)};
+			QueryBuilder builder{target, executor};
+			auto queries = builder.visit(queryNode.get());
+			if (queries.size() == 1)
+				result = std::move(queries[0]);
+			// TODO handle else case properly
+		}
+	}
+	aliasFile.close();
+
+	return result;
 }
 
 }
