@@ -38,6 +38,8 @@ DEFINE_ITEM_COMMON(MessageOverlay, "item")
 
 MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}
 {
+	setAcceptedMouseButtons(Qt::AllButtons);
+
 	if (!style->closeIcon().clickHandler())
 	{
 		style->closeIcon().setClickHandler([](Static* staticParent)

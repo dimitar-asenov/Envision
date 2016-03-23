@@ -122,6 +122,7 @@ void Diff::computeStructChanges()
 
 void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDescription> causingChange)
 {
+	if (id.isNull()) return;
 	if (!changeDescriptions_.contains(id))
 	{
 		auto change = ChangeDescription::newStructChange(id, causingChange, treeA_, treeB_);

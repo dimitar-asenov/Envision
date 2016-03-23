@@ -52,6 +52,7 @@ const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 const QStringList AstQuery::NODES_ARGUMENT_NAMES{"nodes"};
 const QStringList AstQuery::RELATION_ARGUMENT_NAMES{"r", "relation"};
 const QStringList AstQuery::ATTRIBUTE_NAME_NAMES{"at", "attribute"};
+const QStringList AstQuery::TOP_LEVEL_ARGUMENT_NAMES{"tl", "topLevel"};
 
 AstQuery::AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, std::vector<ArgumentRule> argumentRules)
 	: LinearQuery{target}, arguments_{{
@@ -59,7 +60,8 @@ AstQuery::AstQuery(Model::Node* target, QStringList args, ExecuteFunction exec, 
 		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
 		 {ATTRIBUTE_NAME_NAMES, "Attribute to search from", ATTRIBUTE_NAME_NAMES[1]},
 		 QCommandLineOption{NODES_ARGUMENT_NAMES},
-		 QCommandLineOption{RELATION_ARGUMENT_NAMES}
+		 QCommandLineOption{RELATION_ARGUMENT_NAMES},
+		 QCommandLineOption{TOP_LEVEL_ARGUMENT_NAMES}
 		}, args, true}, exec_{exec}
 {
 	for (const auto& rule : argumentRules)
@@ -223,18 +225,20 @@ Optional<TupleSet> AstQuery::typeQuery(TupleSet input, QString type)
 	Q_ASSERT(!type.isEmpty());
 	Model::SymbolMatcher matcher = Model::SymbolMatcher::guessMatcher(type);
 
+	bool onlyAddTopLevelNodes = arguments_.isArgumentSet(TOP_LEVEL_ARGUMENT_NAMES[0]);
+
 	auto scope = arguments_.scope(this);
 	if (scope == ArgumentParser::Scope::Local)
-		addNodesOfType(tuples, matcher, target());
+		addNodesOfType(tuples, matcher, target(), onlyAddTopLevelNodes);
 	else if (scope == ArgumentParser::Scope::Global)
-		addNodesOfType(tuples, matcher);
+		addNodesOfType(tuples, matcher, nullptr, onlyAddTopLevelNodes);
 	else if (scope == ArgumentParser::Scope::Input)
 	{
 		tuples = input;
 
 		// Note here we remove the input nodes.
 		auto tuple = tuples.take("ast");
-		for (const auto& t : tuple) addNodesOfType(tuples, matcher, t["ast"]);
+		for (const auto& t : tuple) addNodesOfType(tuples, matcher, t["ast"], onlyAddTopLevelNodes);
 	}
 	return tuples;
 }
@@ -464,7 +468,8 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 		ts.add({"calls", {{"caller", method}, {"callee", callee}}});
 }
 
-void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
+void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher,
+										Model::Node* from, bool topLevelNodeOnly)
 {
 	if (!from) from = target()->root();
 	auto allNodeOfType =  Model::Node::childrenWhich(from,
@@ -472,7 +477,7 @@ void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher,
 				if (matcher.isFixedString())
 					return node->isSubtypeOf(matcher.matchPattern());
 				return matcher.matches(node->typeName());
-		}
+		}, topLevelNodeOnly
 	);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
