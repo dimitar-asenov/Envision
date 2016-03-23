@@ -92,16 +92,19 @@ std::unique_ptr<Query> QueryRegistry::tryBuildQueryFromAlias(const QString& name
 	while (!result && !aliasStream.atEnd())
 	{
 		QString aliasLine = aliasStream.readLine();
+		if (aliasLine.isEmpty() || aliasLine.startsWith("#"))
+			continue;
+
 		QStringList parts = aliasLine.split("=");
-		if (parts.size() != 2)
+		if (parts.size() <= 1)
 		{
-			qWarning() << "Ignoring alias line because no, or to many = found:" << aliasLine;
+			qWarning() << "Ignoring alias line because no = found:" << aliasLine;
 			continue;
 		}
-		QString aliasName = parts[0].trimmed();
+		QString aliasName = parts.takeFirst().trimmed();
 		if (name == aliasName)
 		{
-			QString aliasedQuery = parts[1].trimmed();
+			QString aliasedQuery = parts.join('=').trimmed();
 
 			// TODO we can be fancy with the single dollar
 			if (aliasedQuery.contains("$$"))
