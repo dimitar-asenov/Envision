@@ -46,7 +46,12 @@ query: cs-why
 What upstream changes might conflict with mine?
 - In parallel highlight local and remote changes.
 ################################################################################
+Clone https://github.com/dimitar-asenov/test-upstream-use-case
+    to Envision/DebugBuild/projects/upstream
 
+In Envision:
+load upstream
+query: cs-upstream
 
 ################################################################################
 Instability metric
