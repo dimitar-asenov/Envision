@@ -53,9 +53,6 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		template <typename QueryType, ExtraArguments extras, class ...ForwardArguments>
 		static void registerQuery(const QString& name, ForwardArguments... forwardArguments);
 
-		static void registerAlias(const QString& alias, const QString& aliasedQuery,
-										  std::function<void (QStringList&)> argAdaption = {});
-
 		std::unique_ptr<Query> buildQuery(const QString& command, Model::Node* target,
 													 QStringList args, QueryExecutor* executor);
 
@@ -67,6 +64,9 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 
 		std::unique_ptr<Query> tryBuildQueryFromScript(const QString& name, Model::Node* target,
 																	  QStringList args, QueryExecutor* executor);
+
+		std::unique_ptr<Query> tryBuildQueryFromAlias(const QString& name, Model::Node* target,
+																	 QStringList args, QueryExecutor* executor);
 
 		using QueryConstructor = std::function<std::unique_ptr<Query> (Model::Node*, QStringList,
 																							QueryExecutor*, QString)>;

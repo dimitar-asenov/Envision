@@ -73,7 +73,6 @@ Optional<TupleSet> QueryResultVisualizer::executeLinear(TupleSet input)
 void QueryResultVisualizer::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<QueryResultVisualizer, QueryRegistry::ExtraArguments::QueryExecutor>("show");
-	QueryRegistry::registerAlias("info", "show", [](QStringList& args) {args.prepend("-info");});
 }
 
 Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)

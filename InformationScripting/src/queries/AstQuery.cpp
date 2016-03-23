@@ -88,13 +88,6 @@ void AstQuery::registerDefaultQueries()
 	QueryRegistry::registerQuery<AstQuery>("attribute", &AstQuery::attribute,
 		std::vector<ArgumentRule>{{ArgumentRule::RequireAll, {{ATTRIBUTE_NAME_NAMES[1]}}}});
 	QueryRegistry::registerQuery<AstQuery>("usages", &AstQuery::usagesQuery);
-	QueryRegistry::registerAlias("classes", "ast", [](QStringList& args) {
-		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Class");});
-	QueryRegistry::registerAlias("methods", "ast", [](QStringList& args) {
-		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Method");});
-	QueryRegistry::registerAlias("toClass", "toParent", [](QStringList& args) {
-		ArgumentParser::setArgTo(args, NODETYPE_ARGUMENT_NAMES, "Class");});
-	QueryRegistry::registerAlias("astFilter", "ast", [](QStringList& args) {args << "-input";});
 }
 
 Optional<TupleSet> AstQuery::baseClassesQuery(TupleSet input)
