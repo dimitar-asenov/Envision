@@ -63,12 +63,13 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 	TupleSet result;
 
 	auto commitIdRange = repository.revisions();
+	// TODO: This only works for linear histories
 	auto adaptedRangeOptional = commitsToConsider(commitIdRange);
 	if (!adaptedRangeOptional)
 		return adaptedRangeOptional.errors()[0];
 	commitIdRange = adaptedRangeOptional.value();
 
-	// if argument is set, check that commitIdRange only contains two commitIds
+	// if argument is set, make sure that commitIdRange only contains two commitIds
 	if (arguments_.isArgumentSet(TWO_VERSION_ARGUMENT_NAMES[0]) && commitIdRange.size() > 2)
 	{
 		commitIdRange = QStringList{commitIdRange.first(), commitIdRange.last()};
@@ -216,6 +217,10 @@ Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringLis
 	if (arguments_.isArgumentSet(IN_ARGUMENT_NAMES[0]))
 	{
 		auto commitRange = arguments_.argument(IN_ARGUMENT_NAMES[0]).split("..");
+
+		if (arguments_.isArgumentSet(TWO_VERSION_ARGUMENT_NAMES[0]))
+			return commitRange;
+
 		QString startCommit = commitRange[0];
 		auto startIt = std::find_if(commitIdRange.begin(), commitIdRange.end(), [startCommit](QString sha1) {
 				return sha1.startsWith(startCommit);
