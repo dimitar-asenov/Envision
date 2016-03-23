@@ -8,7 +8,14 @@ Investigating a regression
 Heatmap of code execution
 - show as a heatmap profiler data which was saved as a csv file
 ################################################################################
+Java code to import is here:
+http://www.eclipse.org/tptp/home/documents/tutorials/profilingtool/profilingexample.html
 
+carmodel.csv is already in the scripts directory
+
+In Envision:
+load carmodel
+query: cs-csv
 
 ################################################################################
 Callgraph of selected method
