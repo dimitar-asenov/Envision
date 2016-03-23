@@ -1,14 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="default">
-	<shape prototypes="shape/Box/default">
-		Box
-		<cornerRadius>2</cornerRadius>
-		<backgroundBrush>
-			<style>1</style>
-			<color>#7dff0000</color>
-		</backgroundBrush>
-	</shape>
-	
 	<messageIcon prototypes="icon/SVGIcon/default">
 		<ignoreMouseEvents>true</ignoreMouseEvents>
 		<filename>styles/icon/info.svg</filename>

@@ -64,6 +64,7 @@ void MessageOverlay::determineChildren()
 	if (syncFunction_) message = syncFunction_(this);
 	Super::determineChildren();
 	Q_ASSERT(message_);
+	message_->setTextFormat(Qt::RichText);
 	message_->setText(message);
 }
 
