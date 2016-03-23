@@ -72,7 +72,11 @@ void MessageOverlay::updateGeometry(int availableWidth, int availableHeight)
 	Super::updateGeometry(availableWidth, availableHeight);
 	// TODO: if there are multiple messages for the same node it migth be better to place it different.
 	// It seems good to have it below, having it on the right side seems weird.
-	setPos(associatedItem()->mapToScene(0, associatedItem()->heightInLocal()));
+	if (!positionSet_)
+	{
+		setPos(associatedItem()->mapToScene(0, associatedItem()->heightInLocal()));
+		positionSet_ = true;
+	}
 }
 
 void MessageOverlay::initializeForms()

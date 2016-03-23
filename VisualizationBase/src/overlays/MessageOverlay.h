@@ -59,6 +59,7 @@ class VISUALIZATIONBASE_API MessageOverlay : public Super<Overlay<DeclarativeIte
 		Text* message_{};
 		Item* content_{};
 		SyncFunction syncFunction_{};
+		bool positionSet_{};
 };
 
 inline Item*& MessageOverlay::content() { return content_; }
