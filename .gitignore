@@ -17,4 +17,7 @@
 /*/Makefile.Release
 /*/Makefile.Debug
 
+# The lib directory is ignored because it is necessary to be a soft link to clang libraries so that C++ import works correctly
+/lib
+
 *.directory
