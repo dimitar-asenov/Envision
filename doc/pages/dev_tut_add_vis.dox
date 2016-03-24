@@ -96,7 +96,7 @@ Items that do not visualize nodes, must declare a similar constructor but omit t
 
 After the constructor we have just a few getter methods for the correspondingly named fields:
 \skip condition()
-\until icon()
+\until elseIcon()
 
 Nothing special, let's go on to the first important method definition:
 \skipline initializeForms()
@@ -109,8 +109,10 @@ This is another method used by Visualization::DeclarativeItem. A declarative ite
 If this is the case, then the \c determineForm() method should be overridden in order to tell the declarative framework
 which form to use. Many items only declare a single layout, in which case there is no need to redefine this method.
 
-We go on to another method:
+Some visualizations have an additional important method here and OOVisualization::VIfStatement used to have it:
+\dontinclude VisualizationBase/src/declarative/DeclarativeItemBase.h
 \skipline updateGeometry(
+\dontinclude OOVisualization/src/statements/VIfStatement.h
 To understand this method we will first explain Envision's visualization mechanism in more detail.
 
 To improve performance the visualization work flow is split into two major parts:
@@ -169,20 +171,28 @@ by the Visualization::Item::updateSubtree() method. This is what happens when an
 	(say 270 pixels). Notice that there is no drawing during these calls, we merely setup the parameters that will be
 	used for drawing later.
 
-Now, let's get back to the \c updateGeometry() method of OOVisualization::VIfStatement. This class inherits from
-Visualization::DeclarativeItem that provides an implementation for both \c detemineChildren() and \c updateGeometry().
-So why do we need to reimplement \c updateGeometry() here? Indeed in most cases, when inheriting from
-Visualization::DeclarativeItem there is no need to reimplement any of these methods. The reason for reimplementing in
-OOVisualization::VIfStatement is to get information. We know that the \c updateGeometry() method will be called after
-all children have been drawn. The reimplementation here just needs to know the size of these child items, that's all.
-It doesn't actually do anything and leaves all the heavy lifting to Visualization::DeclarativeItem. When discussing
-the .cpp file we'll see why we need to know the size of the child items.
+Now, why did OOVisualization::VIfStatement have an \c updateGeometry() method and why isn't it needed any more.
+The simple answer is that the visualization of if statements used to be a little more complex, but isn't anymore.
+Previously an if statement would display its then an else branches either vertically (else under then) or
+horizontally (else to the right of then). This was a nice little trick but we found that people get confused and so
+removed this behavior. To able to achieve this it was necessary to reimplement the \c updateGeometry()  method.
+A frequent reason for reimplementing this method is to get more information. This was also the case for
+OOVisualization::VIfStatement. We know that the \c updateGeometry() method will be called after
+all children have been drawn. The reimplementation here just needed to know the size of these child items, that's all.
+It doesn't actually do anything and calls the overriden implementation to do all the heavy lifting. Based on the
+size of the children we had to make a choice of a horizontal or vertical arrangement and trigger a \c RepeatUpdate
+if the arrangement changed.
 
-Finally we have:
-\skip horizontal_{}
-\until icon_{}
+Afterwards we have the fileds that will hold subitems:
+\skip condition_{}
+\until elseLine_{}
 There are some fields that will hold child items and another one called \c horizontal that will control which
-form will be used to arrange the children. Let's see how it all works in the .cpp file.
+form will be used to arrange the children.
+
+When choosing which form to render we need to know if this if is inside another if:
+\skipline isInsideAnotherIf
+
+Let's see how it all works in the .cpp file.
 
 \section vif_cpp VIfStatement.cpp
 
@@ -190,11 +200,11 @@ Here is \c VIfStatement.cpp :
 \include OOVisualization/src/statements/VIfStatement.cpp
 
 The first thing to notice is this inlcude:
-\skipline DeclarativeItemDef.h"
+\skipline DeclarativeItem.hpp"
 We need to include this additional definitions header pertaining to the Visualization::DeclarativeItem framework.
 
 Next is:
-\skipline ITEM_COMMON_DEFINITIONS
+\skipline DEFINE_ITEM_COMMON
 which complements the \c ITEM_COMMON declaration in the header file. The second argument indicates which subdirectory
 of \c /styles we should look in for the \c /VIfStatement directory that contains all styles for this class.
 Possible choices here are \e "item", \e "icon" and \e "layout" for now.
@@ -203,44 +213,28 @@ The constructor:
 \skipline VIfStatement::VIfStatement
 is typical for items deriving from Visualization::DeclarativeItem, we just forward the arguments.
 
-Here is the implementation of the \c updateGeometry() method:
-\skip VIfStatement::updateGeometry
-\until }
-\until }
-What's happening is this: If we put the \e then and the \e else branch next to each other and the total width is under
-a specified threshold defined in the style, then we'll keep this configuration. Otherwise, we will put the \e then
-branch on top of the \e else branch. We do this in order to improve the readability of if statements and also to
-demonstrate how to use multiple forms with the declarative framework.
-
-If we detect a switch from horizontal to vertical layout we need to perform an extra update so we request that the item
-is updated again. Note that this is a rather specific situation that arises in OOVisualization::VIfStatement and
-normally you wouldn't need to manually request an update in order to change forms.
-
-Finally we call the \c updateGeometry() method of the super class to let it arrange all child items.
-
-Given that we set \c horizontal_ in \c updateGeometry(), the \c determineForm() method is trivial:
+In the \c determineForm() method we choose which form we use to render the if statement.
+There are several choices there depending on whether the if is inside another if or not.
+These are mainly there to make the rendering of longer \c if \c else \c if \c else \c if \c else chains nicer.
 \skip VIfStatement::determineForm()
+\until return formId;
 \until }
-OOVisualization::VIfStatement is a bit special in that you need to work with several methods in order to arrive at a
-decision on which layout form to use. Normally, it is sufficient to perform some checks only in the
-\c determineForm() method to decide which is the most appropriate form. In particular this is the case if the
-decision is based only on the node that is represented, and not on any visual information.
 
 Finally let's see the real work that we need to do in order to use Visualization::DeclarativeItem - defining the 
 \c initializeForms() method:
 \skip VIfStatement::initializeForms
-\until ->put(TheRightOf, elseContentElement, AtRightOf, shapeElement));
+\until topLevelIfAndElseIf->setBottomMargin(10);
 We won't go into detail here, please refer to
 <a href="http://www.pm.inf.ethz.ch/content/dam/ethz/special-interest/infk/chair-program-method/pm/documents/Education/Theses/Andrea_Helfenstein_BA_report.pdf">
 Andrea Helfenstein's Bachelor Thesis Report</a> for the various ways to use Visualization::DeclarativeItem. In short:
-	- We create a \e header consisting of an \e icon an the \e condition. The \e condition is wrapped in a visual item
-	that draws a background.
-	- Both the \e then and the \e else branches are rendered using a statement list visualization.
-	- We use a \e shape \e element that serves as the background of the entire if statement.
-	- There are two forms:
-		- Form \e 0 puts the two branches next to each other
-		- Form \e 1 puts the \e true branch on top of the \e false branch.
-		- Form \e 2 is for nested else if statements. Else branches are put under the then branch and they are no indented.
+	- We create several elements that are reused in multiple forms: \c icon, \c condition, \c header
+	- We wrap some elements in a grid, just so that the elements can be stretched by their parent if needed.
+	  This will not result in any visual stretching since we declare only the last (empty) cell of the grid as stretchable.
+	  This is merely needed to satisfy the constraints of the anchor layout.
+	- Then we define three forms that match different situations for an if-statement
+	- Based on these three forms we make three additional forms which are similar but allow the if statement to visually stretch
+	  to fill all available space on the right.
+	- Finally we add some margins to the original three forms (not their clones)
 
 This is all there is to it - now we have a visualization for if statements that will be automatically used when needed.
 In simpler cases, all you need to do is define the \c initializeForms() method and you can create a visual item in no
@@ -283,7 +277,7 @@ The corresponding \c .cpp file is trivial and the same for most styles:
 
 And here is the corresponding default XML file \c (OOVisualization/styles/item/VIfStatement/default). Things here can
 get a bit clunky, but the important thing to see is that each top-level tag corresponds to a property of the style
-or to a property of a base class. Simple properties like \c contentWidthSwitchTreshold are represented by values.
+or to a property of a base class. Simple properties like \c cornerRadius are represented by values.
 Properties which are themselves styles, follow an XML structure as dictated in their style class. To learn
 more about how styles work see the documentation of the Visualization namespace.
 

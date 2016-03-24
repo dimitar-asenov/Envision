@@ -21,19 +21,16 @@ Here is \c IfStatement.h :
 
 Let's examine it starting from the top. The first noteworthy bit is:
 
-\skipline DECLARE_TYPED_LIST
+\skip namespace OOModel {
+\until extern template class
 In order to be able to put a node into a list of nodes, it is necessary to explicitly instantiate the Model::TypedList
-template. Doing this properly in a cross-platform setting can be a bit involved and we use the
-\c DECLARE_TYPED_LIST macro to help with that. You need to provide:
-	- the API macro which will expand to import/export directives in Windows
-	- the namespace
-	- the class name.
-	.
-This macro should appear in the header and needs to be complemented with the \c DEFINE_TYPED_LIST macro in the \c
-.cpp file.
+template. This is necessary to support Windows as it can't properly handle templates with static fields otherwise.
+With this first part in the \c .h file we prevent implicit instantiation.
+Then the class is explicitly instantiated in the \c .cpp file.
+
 
 Next comes the class declaration:
-\skipline class
+\skipline class OOMODEL_API IfStatement
 The node declaration should use the plug-in's API macro and should inherit directly or indirectly from Node. When
 specifying the base node type you must do so through the \c Super template. This is required by the underlying
 framework. The \c Super template does two things:
@@ -92,7 +89,7 @@ Here is \c IfStatement.cpp :
 \include OOModel/src/statements/IfStatement.cpp
 
 All of the things here are just the corresponding definition macros. The only interesting bit is:
-\skip REGISTER
+\skip DEFINE_ATTRIBUTE
 \until elseBranch
 When defining the registered nodes you need to provide the following information:
 	- The name of the class that you are defining

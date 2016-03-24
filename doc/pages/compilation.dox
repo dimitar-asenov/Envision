@@ -27,30 +27,13 @@ Other dependencies are:
 	- <b>For development only: Vera ++ </b>: https://bitbucket.org/verateam/vera <br /> Used for checking the code formatting style.
 	Boost python is used to provide bindings for the python scripting.
 
-To install the dependencies on Ubuntu 15.10, do the following:
-	-# Install the Qt SDK:
-		\verbatim sudo apt-get install qt-sdk \endverbatim
-		You will also need to install additional packages for SVG compatibility and WebKit:
-		\verbatim sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev \endverbatim
-	-# Install the lp_solve development library version 5.5:
-		-# Install the packages \c lp-solve (for the shared library) and \c liblpsolve55-dev (for the header files):
-		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
-		-# Make the following symbolic link:
+To install the dependencies on Ubuntu 15.10, run the following:
+	-# Install all necessary packages:
+		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-3.8-dev clang-3.8 llvm-3.8 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
+	-# Make the following symbolic link needed to use the shared library of lp solve:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
-	-# Install Clang 3.8:
-		\verbatim sudo apt-get install libclang-3.8-dev clang-3.8 llvm-3.8\endverbatim
-	-# Install libgit2:
-		\verbatim sudo apt-get install libgit2-dev\endverbatim
-	-# Install the Google Performance Tools:
-		\verbatim sudo apt-get install google-perftools libgoogle-perftools-dev \endverbatim
-	-# Install the Vera++ tool which performs style checks for the code:
-		\verbatim sudo apt-get install vera++ \endverbatim
-	-# Install Python 3:
-		\verbatim sudo apt-get install python3-dev \endverbatim
-	-# Install boost/python:
-		\verbatim sudo apt-get install libboost-python-dev \endverbatim
-	-# Install libedit:
-		\verbatim sudo apt-get install libedit-dev \endverbatim
+	-# If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source:
+		\verbatim Envision$ ln -s /usr/lib/llvm-3.8/lib/ lib \endverbatim
 
 Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want
 to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.
