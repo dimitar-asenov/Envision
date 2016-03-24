@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html',1,'FilePersistence']]]
+  ['webbrowseritem',['WebBrowserItem',['../classVisualization_1_1WebBrowserItem.html',1,'Visualization']]]
 ];

@@ -116,8 +116,8 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6f2aed6064e7f39c6e2f026d237abb75"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1LoopStatement.html#a6f2aed6064e7f39c6e2f026d237abb75">LoopStatement</a> (<a class="el" href="classOOModel_1_1LoopStatement.html#a03198c46318ed77a6b14ff3eff10bcc8">LoopKind</a> kind)</td></tr>
 <tr class="separator:a6f2aed6064e7f39c6e2f026d237abb75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64a48d9b4ac637d3689f286e501edd26"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1LoopStatement.html#a64a48d9b4ac637d3689f286e501edd26">findSymbols</a> (QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, const Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override</td></tr>
-<tr class="separator:a64a48d9b4ac637d3689f286e501edd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f430a17245320afa9f58da09ea8dc97"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1LoopStatement.html#a6f430a17245320afa9f58da09ea8dc97">findSymbols</a> (std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt; request) const override</td></tr>
+<tr class="separator:a6f430a17245320afa9f58da09ea8dc97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d8c6cb96fd3272bb1d53e26346651aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1LoopStatement.html#a03198c46318ed77a6b14ff3eff10bcc8">LoopKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1LoopStatement.html#a1d8c6cb96fd3272bb1d53e26346651aa">loopKind</a> () const </td></tr>
 <tr class="separator:a1d8c6cb96fd3272bb1d53e26346651aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1f6316d7c236b8ea4e2b81beeffe33a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1LoopStatement.html#ae1f6316d7c236b8ea4e2b81beeffe33a">setLoopKind</a> (<a class="el" href="classOOModel_1_1LoopStatement.html#a03198c46318ed77a6b14ff3eff10bcc8">LoopKind</a> kind)</td></tr>
@@ -174,7 +174,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a64a48d9b4ac637d3689f286e501edd26"></a>
+<a class="anchor" id="a6f430a17245320afa9f58da09ea8dc97"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -184,43 +184,9 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool OOModel::LoopStatement::findSymbols </td>
           <td>(</td>
-          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Node *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FindSymbolDirection&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt;&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>

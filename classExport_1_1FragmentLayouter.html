@@ -116,13 +116,15 @@ Public Types</h2></td></tr>
 <a class="el" href="classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aa17f75ed68f3eeb8c73b73c1a9f886a1d">BackslashAfterLines</a> = 0x1000
  }</td></tr>
 <tr class="separator:ac2abdbcd67909007ad0edc0101a30d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a928df5b1c71ac767f75aed726e1ecea6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a928df5b1c71ac767f75aed726e1ecea6">IndentationFlags</a> = QFlags&lt; <a class="el" href="classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0a">IndentationFlag</a> &gt;</td></tr>
+<tr class="separator:a928df5b1c71ac767f75aed726e1ecea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6f3244001ced4354badbce5a5d7b18e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a6f3244001ced4354badbce5a5d7b18e6">FragmentLayouter</a> (const QString &amp;indentation)</td></tr>
 <tr class="separator:a6f3244001ced4354badbce5a5d7b18e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cd4560d597d84d51203f66cab766c0e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a7cd4560d597d84d51203f66cab766c0e">addRule</a> (const QString &amp;fragmentType, IndentationFlags parameters, const QString &amp;prefix=QString(), const QString &amp;separator=QString(), const QString &amp;postfix=QString())</td></tr>
-<tr class="separator:a7cd4560d597d84d51203f66cab766c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1976a973ecc59cff17da371047a641d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a1976a973ecc59cff17da371047a641d9">addRule</a> (const QString &amp;fragmentType, <a class="el" href="classExport_1_1FragmentLayouter.html#a928df5b1c71ac767f75aed726e1ecea6">IndentationFlags</a> parameters, const QString &amp;prefix={}, const QString &amp;separator={}, const QString &amp;postfix={})</td></tr>
+<tr class="separator:a1976a973ecc59cff17da371047a641d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85b4908ee8b5891bd361b26e74e32b6f"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a85b4908ee8b5891bd361b26e74e32b6f">render</a> (<a class="el" href="classExport_1_1SourceFile.html">SourceFile</a> *file, <a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> *map)</td></tr>
 <tr class="separator:a85b4908ee8b5891bd361b26e74e32b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -135,11 +137,24 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a56712638eb897151f13d709d3ee32dbc"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a56712638eb897151f13d709d3ee32dbc">indentation_</a></td></tr>
 <tr class="separator:a56712638eb897151f13d709d3ee32dbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a410bdb18f450b79efb513149050bf8ad"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QPair&lt; IndentationFlags, <a class="el" href="structExport_1_1FragmentDecoration.html">FragmentDecoration</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a410bdb18f450b79efb513149050bf8ad">rules_</a></td></tr>
+<tr class="memitem:a410bdb18f450b79efb513149050bf8ad"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QPair&lt; <a class="el" href="classExport_1_1FragmentLayouter.html#a928df5b1c71ac767f75aed726e1ecea6">IndentationFlags</a>, <a class="el" href="structExport_1_1FragmentDecoration.html">FragmentDecoration</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a410bdb18f450b79efb513149050bf8ad">rules_</a></td></tr>
 <tr class="separator:a410bdb18f450b79efb513149050bf8ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77bed748f16b1622a60f079bf1642fcd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classExport_1_1FileWriter.html">FileWriter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1FragmentLayouter.html#a77bed748f16b1622a60f079bf1642fcd">writer_</a> {}</td></tr>
 <tr class="separator:a77bed748f16b1622a60f079bf1642fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a928df5b1c71ac767f75aed726e1ecea6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classExport_1_1FragmentLayouter.html#a928df5b1c71ac767f75aed726e1ecea6">Export::FragmentLayouter::IndentationFlags</a> =  QFlags&lt;<a class="el" href="classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0a">IndentationFlag</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="ac2abdbcd67909007ad0edc0101a30d0a"></a>
 <div class="memitem">
@@ -201,7 +216,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a7cd4560d597d84d51203f66cab766c0e"></a>
+<a class="anchor" id="a1976a973ecc59cff17da371047a641d9"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -214,26 +229,26 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">IndentationFlags&#160;</td>
+          <td class="paramtype"><a class="el" href="classExport_1_1FragmentLayouter.html#a928df5b1c71ac767f75aed726e1ecea6">IndentationFlags</a>&#160;</td>
           <td class="paramname"><em>parameters</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>prefix</em> = <code>QString()</code>, </td>
+          <td class="paramname"><em>prefix</em> = <code>{}</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>separator</em> = <code>QString()</code>, </td>
+          <td class="paramname"><em>separator</em> = <code>{}</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>postfix</em> = <code>QString()</code>&#160;</td>
+          <td class="paramname"><em>postfix</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -334,7 +349,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QHash&lt;QString, QPair&lt;IndentationFlags, <a class="el" href="structExport_1_1FragmentDecoration.html">FragmentDecoration</a>&gt; &gt; Export::FragmentLayouter::rules_</td>
+          <td class="memname">QHash&lt;QString, QPair&lt;<a class="el" href="classExport_1_1FragmentLayouter.html#a928df5b1c71ac767f75aed726e1ecea6">IndentationFlags</a>, <a class="el" href="structExport_1_1FragmentDecoration.html">FragmentDecoration</a>&gt; &gt; Export::FragmentLayouter::rules_</td>
         </tr>
       </table>
   </td>

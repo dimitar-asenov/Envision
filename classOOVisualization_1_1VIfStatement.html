@@ -91,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classOOVisualization_1_1VIfStatement-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">OOVisualization::VIfStatement Class Reference</div>  </div>
@@ -117,6 +117,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aed5ad6f3b87b9c00da358d8b98debb0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2fa324ff18da0a7a27df426b2b86693"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOVisualization_1_1VStatementItemList.html">VStatementItemList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#ae2fa324ff18da0a7a27df426b2b86693">elseBranch</a> () const </td></tr>
 <tr class="separator:ae2fa324ff18da0a7a27df426b2b86693"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa38dcfbf30b7ccc854ca5b57b79f5450"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Static.html">Visualization::Static</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#aa38dcfbf30b7ccc854ca5b57b79f5450">elseIcon</a> () const </td></tr>
+<tr class="separator:aa38dcfbf30b7ccc854ca5b57b79f5450"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40b548ee7f794efb4bd91a96043c42ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Static.html">Visualization::Static</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a40b548ee7f794efb4bd91a96043c42ea">icon</a> () const </td></tr>
 <tr class="separator:a40b548ee7f794efb4bd91a96043c42ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a127220029ae79e11e673b2d638ce02"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOVisualization_1_1VStatementItemList.html">VStatementItemList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a2a127220029ae79e11e673b2d638ce02">thenBranch</a> () const </td></tr>
@@ -127,10 +129,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7a7b8d778d49e0b1fc5357c07c00cb05"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a7a7b8d778d49e0b1fc5357c07c00cb05">initializeForms</a> ()</td></tr>
 <tr class="separator:a7a7b8d778d49e0b1fc5357c07c00cb05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:abaa33438d26db52a506800bdcc8c925b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#abaa33438d26db52a506800bdcc8c925b">updateGeometry</a> (int availableWidth, int availableHeight) override</td></tr>
-<tr class="separator:abaa33438d26db52a506800bdcc8c925b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aa0da9aefa0e99c70dab6882e2bfc02a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#aa0da9aefa0e99c70dab6882e2bfc02a9">isInsideAnotherIf</a> () const </td></tr>
+<tr class="separator:aa0da9aefa0e99c70dab6882e2bfc02a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -138,10 +140,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aef356ffe3060db4cbf7e69d68f2d029e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a386896ed5bb3b0a0a3954da7e3cad110"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOVisualization_1_1VStatementItemList.html">VStatementItemList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a386896ed5bb3b0a0a3954da7e3cad110">elseBranch_</a> {}</td></tr>
 <tr class="separator:a386896ed5bb3b0a0a3954da7e3cad110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85c4d3c3560cd86bc93c97ffc96e2612"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Static.html">Visualization::Static</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a85c4d3c3560cd86bc93c97ffc96e2612">elseIcon_</a> {}</td></tr>
+<tr class="separator:a85c4d3c3560cd86bc93c97ffc96e2612"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f607b6b83b306f9cb37e0e577d96578"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Line.html">Visualization::Line</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a0f607b6b83b306f9cb37e0e577d96578">elseLine_</a> {}</td></tr>
 <tr class="separator:a0f607b6b83b306f9cb37e0e577d96578"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a040e79efb09451de9fef210fc26b06cd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a040e79efb09451de9fef210fc26b06cd">horizontal_</a> {}</td></tr>
-<tr class="separator:a040e79efb09451de9fef210fc26b06cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a730d4e0556468a8b5df8b282b7a4505a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Static.html">Visualization::Static</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a730d4e0556468a8b5df8b282b7a4505a">icon_</a> {}</td></tr>
 <tr class="separator:a730d4e0556468a8b5df8b282b7a4505a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72d3792d8fdcadd52e67b3ef7036426d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOVisualization_1_1VStatementItemList.html">VStatementItemList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VIfStatement.html#a72d3792d8fdcadd52e67b3ef7036426d">thenBranch_</a> {}</td></tr>
@@ -256,6 +258,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa38dcfbf30b7ccc854ca5b57b79f5450"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Static.html">Visualization::Static</a> * OOVisualization::VIfStatement::elseIcon </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a40b548ee7f794efb4bd91a96043c42ea"></a>
 <div class="memitem">
 <div class="memproto">
@@ -302,6 +327,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa0da9aefa0e99c70dab6882e2bfc02a9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool OOVisualization::VIfStatement::isInsideAnotherIf </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a2a127220029ae79e11e673b2d638ce02"></a>
 <div class="memitem">
 <div class="memproto">
@@ -319,40 +367,6 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abaa33438d26db52a506800bdcc8c925b"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void OOVisualization::VIfStatement::updateGeometry </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>availableWidth</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>availableHeight</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -400,7 +414,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0f607b6b83b306f9cb37e0e577d96578"></a>
+<a class="anchor" id="a85c4d3c3560cd86bc93c97ffc96e2612"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -408,7 +422,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1Line.html">Visualization::Line</a>* OOVisualization::VIfStatement::elseLine_ {}</td>
+          <td class="memname"><a class="el" href="classVisualization_1_1Static.html">Visualization::Static</a>* OOVisualization::VIfStatement::elseIcon_ {}</td>
         </tr>
       </table>
   </td>
@@ -420,7 +434,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a040e79efb09451de9fef210fc26b06cd"></a>
+<a class="anchor" id="a0f607b6b83b306f9cb37e0e577d96578"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -428,7 +442,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool OOVisualization::VIfStatement::horizontal_ {}</td>
+          <td class="memname"><a class="el" href="classVisualization_1_1Line.html">Visualization::Line</a>* OOVisualization::VIfStatement::elseLine_ {}</td>
         </tr>
       </table>
   </td>

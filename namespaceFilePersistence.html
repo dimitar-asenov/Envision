@@ -147,6 +147,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO It might be good to separate trees with piecewise loaders and other "kinds" of trees into subclasses.  <a href="classFilePersistence_1_1GenericTree.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFilePersistence_1_1GitCommitExtract.html">GitCommitExtract</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -242,11 +243,11 @@ Typedefs</h2></td></tr>
 <tr class="separator:a92e20d04c5d94ec58eeaa87bccc0bfb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3aeb83afd410ff3f132843218e0e32dd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a3aeb83afd410ff3f132843218e0e32dd">CommitFileContentDeleter</a> = std::function&lt; void(char *)&gt;</td></tr>
 <tr class="separator:a3aeb83afd410ff3f132843218e0e32dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a995f05d4be7dd82c074c46ef1454e414"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a995f05d4be7dd82c074c46ef1454e414">ConflictUnitSet</a> = QMultiHash&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt;</td></tr>
+<tr class="memitem:a995f05d4be7dd82c074c46ef1454e414"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a995f05d4be7dd82c074c46ef1454e414">ConflictUnitSet</a> = QMultiHash&lt; <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt;</td></tr>
 <tr class="separator:a995f05d4be7dd82c074c46ef1454e414"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab62837d3d780ecec99e534bd3cb1fd78"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ab62837d3d780ecec99e534bd3cb1fd78">IdToChangeDescriptionHash</a> = QHash&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt;</td></tr>
+<tr class="memitem:ab62837d3d780ecec99e534bd3cb1fd78"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ab62837d3d780ecec99e534bd3cb1fd78">IdToChangeDescriptionHash</a> = QHash&lt; <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt;</td></tr>
 <tr class="separator:ab62837d3d780ecec99e534bd3cb1fd78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a577679e3ca4b90aca475a5d380b6a3ab"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a577679e3ca4b90aca475a5d380b6a3ab">IdToGenericNodeHash</a> = QMultiHash&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt;</td></tr>
+<tr class="memitem:a577679e3ca4b90aca475a5d380b6a3ab"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a577679e3ca4b90aca475a5d380b6a3ab">IdToGenericNodeHash</a> = QMultiHash&lt; <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt;</td></tr>
 <tr class="separator:a577679e3ca4b90aca475a5d380b6a3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a563fa4242def7175b59cf2f89ac5a74b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> = std::shared_ptr&lt; QSet&lt; std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt;&gt;</td></tr>
 <tr class="separator:a563fa4242def7175b59cf2f89ac5a74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,57 +266,37 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad3bd66e38ac0c2f224a3efbbf19ea38d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ad3bd66e38ac0c2f224a3efbbf19ea38d">copyLinkedChanges</a> (const <a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> &amp;changesToCopy, const QSet&lt; const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt; &amp;oldChangesOfA, QSet&lt; const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt; &amp;newChangesOfA, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; &amp;tree)</td></tr>
-<tr class="memdesc:ad3bd66e38ac0c2f224a3efbbf19ea38d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a new LinkedChanges object that is a deep copy of <em>changesToCopy</em>.  <a href="#ad3bd66e38ac0c2f224a3efbbf19ea38d">More...</a><br /></td></tr>
-<tr class="separator:ad3bd66e38ac0c2f224a3efbbf19ea38d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73958e746cdf3b1db38158ac3db1f27d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a73958e746cdf3b1db38158ac3db1f27d">createNodeAndAppend</a> (const git_diff_line *line, const char *filePath, <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> *tree, QList&lt; <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt; &amp;list)</td></tr>
-<tr class="separator:a73958e746cdf3b1db38158ac3db1f27d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50f281bea9090fb256dbfaaee3f556c3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a50f281bea9090fb256dbfaaee3f556c3">gitDiffExtractFileCallBack</a> (const git_diff_delta *delta, float, void *carryAlongData)</td></tr>
-<tr class="separator:a50f281bea9090fb256dbfaaee3f556c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79a9e4cb4ef614f6ab4aaa220f194eec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a79a9e4cb4ef614f6ab4aaa220f194eec">gitDiffExtractLineCallBack</a> (const git_diff_delta *delta, const git_diff_hunk *, const git_diff_line *line, void *carryAlongData)</td></tr>
-<tr class="separator:a79a9e4cb4ef614f6ab4aaa220f194eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1ea65477126ad23a9989980f68c9495"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> Q_DECL_IMPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ab1ea65477126ad23a9989980f68c9495">copyLinkedChanges</a> (const <a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> &amp;changesToCopy, const QSet&lt; const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt; &amp;oldChangesOfA, QSet&lt; const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt; &amp;newChangesOfA, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; &amp;tree)</td></tr>
+<tr class="memdesc:ab1ea65477126ad23a9989980f68c9495"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a new LinkedChanges object that is a deep copy of <em>changesToCopy</em>.  <a href="#ab1ea65477126ad23a9989980f68c9495">More...</a><br /></td></tr>
+<tr class="separator:ab1ea65477126ad23a9989980f68c9495"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a9744a950aea77853c87c3493bda17d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a7a9744a950aea77853c87c3493bda17d">createNodeAndAppend</a> (const git_diff_line *line, const char *filePath, <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> *tree, QList&lt; <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt; &amp;list)</td></tr>
+<tr class="memdesc:a7a9744a950aea77853c87c3493bda17d"><td class="mdescLeft">&#160;</td><td class="mdescRight">libgit callback  <a href="#a7a9744a950aea77853c87c3493bda17d">More...</a><br /></td></tr>
+<tr class="separator:a7a9744a950aea77853c87c3493bda17d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0c887c93bfc33c463f20c86522fe4e5"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ae0c887c93bfc33c463f20c86522fe4e5">gitDiffExtractFileCallBack</a> (const git_diff_delta *delta, float, void *carryAlongData)</td></tr>
+<tr class="memdesc:ae0c887c93bfc33c463f20c86522fe4e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">libgit callback  <a href="#ae0c887c93bfc33c463f20c86522fe4e5">More...</a><br /></td></tr>
+<tr class="separator:ae0c887c93bfc33c463f20c86522fe4e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb3c592c8779876fadffe08005434291"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#adb3c592c8779876fadffe08005434291">gitDiffExtractLineCallBack</a> (const git_diff_delta *delta, const git_diff_hunk *, const git_diff_line *line, void *carryAlongData)</td></tr>
+<tr class="memdesc:adb3c592c8779876fadffe08005434291"><td class="mdescLeft">&#160;</td><td class="mdescRight">libgit callback  <a href="#adb3c592c8779876fadffe08005434291">More...</a><br /></td></tr>
+<tr class="separator:adb3c592c8779876fadffe08005434291"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f0c3a3c335fc733cfbc7f6944c55061"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a2f0c3a3c335fc733cfbc7f6944c55061">newLinkedChanges</a> ()</td></tr>
 <tr class="memdesc:a2f0c3a3c335fc733cfbc7f6944c55061"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a new empty LinkedChanges object.  <a href="#a2f0c3a3c335fc733cfbc7f6944c55061">More...</a><br /></td></tr>
 <tr class="separator:a2f0c3a3c335fc733cfbc7f6944c55061"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac90720a4c0f8a19ad080d446e0632e2d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ac90720a4c0f8a19ad080d446e0632e2d">onlyConflictsOnLabel</a> (<a class="el" href="classFilePersistence_1_1ConflictPairs.html">ConflictPairs</a> &amp;conflictPairs, QSet&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> &gt; &amp;allElementIds, <a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> &amp;cdgA, <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> containerId)</td></tr>
+<tr class="memitem:ac90720a4c0f8a19ad080d446e0632e2d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ac90720a4c0f8a19ad080d446e0632e2d">onlyConflictsOnLabel</a> (<a class="el" href="classFilePersistence_1_1ConflictPairs.html">ConflictPairs</a> &amp;conflictPairs, QSet&lt; <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> &gt; &amp;allElementIds, <a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> &amp;cdgA, <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> containerId)</td></tr>
 <tr class="separator:ac90720a4c0f8a19ad080d446e0632e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9d1594a69f42ea365b81c2ee8acbd1f"><td class="memItemLeft" align="right" valign="top">uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ac9d1594a69f42ea365b81c2ee8acbd1f">qHash</a> (const <a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> &amp;linkedChanges, uint seed=0)</td></tr>
 <tr class="separator:ac9d1594a69f42ea365b81c2ee8acbd1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab70ca60947785d47a734454261c6ddf4"><td class="memItemLeft" align="right" valign="top">uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ab70ca60947785d47a734454261c6ddf4">qHash</a> (const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; change, uint seed=0)</td></tr>
 <tr class="separator:ab70ca60947785d47a734454261c6ddf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd2f0e4a98bd13eb775af80764555c0d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#abd2f0e4a98bd13eb775af80764555c0d">treeWalkCommitExtractCallBack</a> (const char *root, const git_tree_entry *entry, void *walkData)</td></tr>
-<tr class="separator:abd2f0e4a98bd13eb775af80764555c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae06d36941af90a23899ffa5745a6ec57"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ae06d36941af90a23899ffa5745a6ec57">treeWalkCommitExtractCallBack</a> (const char *root, const git_tree_entry *entry, void *walkData)</td></tr>
+<tr class="memdesc:ae06d36941af90a23899ffa5745a6ec57"><td class="mdescLeft">&#160;</td><td class="mdescRight">libgit callback: Tree Walk Callback  <a href="#ae06d36941af90a23899ffa5745a6ec57">More...</a><br /></td></tr>
+<tr class="separator:ae06d36941af90a23899ffa5745a6ec57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a8c2706f92b6b1608e1fc73100e98de33"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a8c2706f92b6b1608e1fc73100e98de33">CLIPBOARD_TAG</a> = &quot;clipboard&quot;</td></tr>
 <tr class="separator:a8c2706f92b6b1608e1fc73100e98de33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ec622e67f6390da2df2252acd2eeab7"><td class="memItemLeft" align="right" valign="top">const bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a8ec622e67f6390da2df2252acd2eeab7">GENERATE_PUS</a> = true</td></tr>
-<tr class="memdesc:a8ec622e67f6390da2df2252acd2eeab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">If false, no additional persistent units will be generated.  <a href="#a8ec622e67f6390da2df2252acd2eeab7">More...</a><br /></td></tr>
-<tr class="separator:a8ec622e67f6390da2df2252acd2eeab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae30af4b3e5ad1cc83d4c6fa725f3ae27"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ae30af4b3e5ad1cc83d4c6fa725f3ae27">MAX_DOUBLE_PRECISION</a> = 15</td></tr>
 <tr class="separator:ae30af4b3e5ad1cc83d4c6fa725f3ae27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae30af4b3e5ad1cc83d4c6fa725f3ae27"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ae30af4b3e5ad1cc83d4c6fa725f3ae27">MAX_DOUBLE_PRECISION</a> = 15</td></tr>
-<tr class="separator:ae30af4b3e5ad1cc83d4c6fa725f3ae27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add2c73a70b7d9f9a4306b5c33e1acbdc"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#add2c73a70b7d9f9a4306b5c33e1acbdc">PATH_HEADS</a> = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;heads&quot;</td></tr>
-<tr class="separator:add2c73a70b7d9f9a4306b5c33e1acbdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2ad68c12e281f70c531012c3bc4f1de"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ad2ad68c12e281f70c531012c3bc4f1de">PATH_NOTES</a> = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;notes&quot;</td></tr>
-<tr class="separator:ad2ad68c12e281f70c531012c3bc4f1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8c1df5cb3401716062837e4788569b8"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#aa8c1df5cb3401716062837e4788569b8">PATH_REMOTES</a> = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;remotes&quot;</td></tr>
-<tr class="separator:aa8c1df5cb3401716062837e4788569b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6585a45cf160504c20ab16348813a077"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a6585a45cf160504c20ab16348813a077">PATH_TAGS</a> = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;tags&quot;</td></tr>
-<tr class="separator:a6585a45cf160504c20ab16348813a077"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a348828a1b4d22a5402ad1538205d0c8b"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a348828a1b4d22a5402ad1538205d0c8b">PREFIX_DOUBLE</a> = QString(&quot;D_&quot;)</td></tr>
-<tr class="separator:a348828a1b4d22a5402ad1538205d0c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a468eaf6267c9abd89874c838add820"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#a3a468eaf6267c9abd89874c838add820">PREFIX_INTEGER</a> = QString(&quot;I_&quot;)</td></tr>
-<tr class="separator:a3a468eaf6267c9abd89874c838add820"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae40ba0ca72ef43b669f2280c258e4d3b"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#ae40ba0ca72ef43b669f2280c258e4d3b">PREFIX_STRING</a> = QString(&quot;S_&quot;)</td></tr>
-<tr class="separator:ae40ba0ca72ef43b669f2280c258e4d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abffe42eec6cb965a8135393a0312c2dc"><td class="memItemLeft" align="right" valign="top">const bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#abffe42eec6cb965a8135393a0312c2dc">SORT_BY_LABEL</a> = true</td></tr>
-<tr class="memdesc:abffe42eec6cb965a8135393a0312c2dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, sort children by label when writing encoding.  <a href="#abffe42eec6cb965a8135393a0312c2dc">More...</a><br /></td></tr>
-<tr class="separator:abffe42eec6cb965a8135393a0312c2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af973e52ea392ad7c8ebfbfceaade8887"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#af973e52ea392ad7c8ebfbfceaade8887">XML_DOM_TYPE</a> = &quot;EnvisionFilePersistence&quot;</td></tr>
-<tr class="separator:af973e52ea392ad7c8ebfbfceaade8887"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Thes <a class="el" href="namespaceFilePersistence.html" title="Thes FilePersistence plug-in implements a file and a clipboard application tree stores based on XML...">FilePersistence</a> plug-in implements a file and a clipboard application tree stores based on XML. </p>
@@ -392,7 +373,7 @@ A binary node hierarchy with a persistent unit</div></div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespaceFilePersistence.html#a995f05d4be7dd82c074c46ef1454e414">FilePersistence::ConflictUnitSet</a> = typedef QMultiHash&lt;<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, std::shared_ptr&lt;<a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a>&gt;&gt;</td>
+          <td class="memname">using <a class="el" href="namespaceFilePersistence.html#a995f05d4be7dd82c074c46ef1454e414">FilePersistence::ConflictUnitSet</a> = typedef QMultiHash&lt;<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>, std::shared_ptr&lt;<a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a>&gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -404,7 +385,7 @@ A binary node hierarchy with a persistent unit</div></div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespaceFilePersistence.html#ab62837d3d780ecec99e534bd3cb1fd78">FilePersistence::IdToChangeDescriptionHash</a> = typedef QHash&lt;<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, std::shared_ptr&lt;<a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a>&gt;&gt;</td>
+          <td class="memname">using <a class="el" href="namespaceFilePersistence.html#ab62837d3d780ecec99e534bd3cb1fd78">FilePersistence::IdToChangeDescriptionHash</a> = typedef QHash&lt;<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>, std::shared_ptr&lt;<a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a>&gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -416,7 +397,7 @@ A binary node hierarchy with a persistent unit</div></div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespaceFilePersistence.html#a577679e3ca4b90aca475a5d380b6a3ab">FilePersistence::IdToGenericNodeHash</a> = typedef QMultiHash&lt;<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>*&gt;</td>
+          <td class="memname">using <a class="el" href="namespaceFilePersistence.html#a577679e3ca4b90aca475a5d380b6a3ab">FilePersistence::IdToGenericNodeHash</a> = typedef QMultiHash&lt;<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>*&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -481,12 +462,12 @@ A binary node hierarchy with a persistent unit</div></div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ad3bd66e38ac0c2f224a3efbbf19ea38d"></a>
+<a class="anchor" id="ab1ea65477126ad23a9989980f68c9495"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> FilePersistence::copyLinkedChanges </td>
+          <td class="memname"><a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> Q_DECL_IMPORT FilePersistence::copyLinkedChanges </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespaceFilePersistence.html#a563fa4242def7175b59cf2f89ac5a74b">LinkedChanges</a> &amp;&#160;</td>
           <td class="paramname"><em>changesToCopy</em>, </td>
@@ -522,12 +503,15 @@ A binary node hierarchy with a persistent unit</div></div>
 
 </div>
 </div>
-<a class="anchor" id="a73958e746cdf3b1db38158ac3db1f27d"></a>
+<a class="anchor" id="a7a9744a950aea77853c87c3493bda17d"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void FilePersistence::createNodeAndAppend </td>
+          <td class="memname">static void FilePersistence::createNodeAndAppend </td>
           <td>(</td>
           <td class="paramtype">const git_diff_line *&#160;</td>
           <td class="paramname"><em>line</em>, </td>
@@ -556,16 +540,26 @@ A binary node hierarchy with a persistent unit</div></div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>libgit callback </p>
 
 </div>
 </div>
-<a class="anchor" id="a50f281bea9090fb256dbfaaee3f556c3"></a>
+<a class="anchor" id="ae0c887c93bfc33c463f20c86522fe4e5"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int FilePersistence::gitDiffExtractFileCallBack </td>
+          <td class="memname">static int FilePersistence::gitDiffExtractFileCallBack </td>
           <td>(</td>
           <td class="paramtype">const git_diff_delta *&#160;</td>
           <td class="paramname"><em>delta</em>, </td>
@@ -588,16 +582,26 @@ A binary node hierarchy with a persistent unit</div></div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>libgit callback </p>
 
 </div>
 </div>
-<a class="anchor" id="a79a9e4cb4ef614f6ab4aaa220f194eec"></a>
+<a class="anchor" id="adb3c592c8779876fadffe08005434291"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int FilePersistence::gitDiffExtractLineCallBack </td>
+          <td class="memname">static int FilePersistence::gitDiffExtractLineCallBack </td>
           <td>(</td>
           <td class="paramtype">const git_diff_delta *&#160;</td>
           <td class="paramname"><em>delta</em>, </td>
@@ -626,7 +630,14 @@ A binary node hierarchy with a persistent unit</div></div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>libgit callback </p>
 
 </div>
 </div>
@@ -668,7 +679,7 @@ A binary node hierarchy with a persistent unit</div></div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">QSet&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">QSet&lt; <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>allElementIds</em>, </td>
         </tr>
         <tr>
@@ -680,7 +691,7 @@ A binary node hierarchy with a persistent unit</div></div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td>
           <td class="paramname"><em>containerId</em>&#160;</td>
         </tr>
         <tr>
@@ -761,12 +772,15 @@ A binary node hierarchy with a persistent unit</div></div>
 
 </div>
 </div>
-<a class="anchor" id="abd2f0e4a98bd13eb775af80764555c0d"></a>
+<a class="anchor" id="ae06d36941af90a23899ffa5745a6ec57"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int FilePersistence::treeWalkCommitExtractCallBack </td>
+          <td class="memname">static int FilePersistence::treeWalkCommitExtractCallBack </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>root</em>, </td>
@@ -789,7 +803,14 @@ A binary node hierarchy with a persistent unit</div></div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>libgit callback: Tree Walk Callback </p>
 
 </div>
 </div>
@@ -814,20 +835,6 @@ A binary node hierarchy with a persistent unit</div></div>
 
 </div>
 </div>
-<a class="anchor" id="a8ec622e67f6390da2df2252acd2eeab7"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const bool FilePersistence::GENERATE_PUS = true</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>If false, no additional persistent units will be generated. </p>
-
-</div>
-</div>
 <a class="anchor" id="ae30af4b3e5ad1cc83d4c6fa725f3ae27"></a>
 <div class="memitem">
 <div class="memproto">
@@ -837,145 +844,6 @@ A binary node hierarchy with a persistent unit</div></div>
       <table class="memname">
         <tr>
           <td class="memname">const int FilePersistence::MAX_DOUBLE_PRECISION = 15</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae30af4b3e5ad1cc83d4c6fa725f3ae27"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const int FilePersistence::MAX_DOUBLE_PRECISION = 15</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="add2c73a70b7d9f9a4306b5c33e1acbdc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const QString FilePersistence::PATH_HEADS = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;heads&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad2ad68c12e281f70c531012c3bc4f1de"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const QString FilePersistence::PATH_NOTES = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;notes&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa8c1df5cb3401716062837e4788569b8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const QString FilePersistence::PATH_REMOTES = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;remotes&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6585a45cf160504c20ab16348813a077"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const QString FilePersistence::PATH_TAGS = QString(QDir::separator()) + &quot;refs&quot; + QString(QDir::separator()) + &quot;tags&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a348828a1b4d22a5402ad1538205d0c8b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static const QString FilePersistence::PREFIX_DOUBLE = QString(&quot;D_&quot;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3a468eaf6267c9abd89874c838add820"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static const QString FilePersistence::PREFIX_INTEGER = QString(&quot;I_&quot;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae40ba0ca72ef43b669f2280c258e4d3b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">static const QString FilePersistence::PREFIX_STRING = QString(&quot;S_&quot;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abffe42eec6cb965a8135393a0312c2dc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const bool FilePersistence::SORT_BY_LABEL = true</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>If true, sort children by label when writing encoding. </p>
-<p>This is to ensure consistency between all methods used to produce Envision encodings. </p>
-
-</div>
-</div>
-<a class="anchor" id="af973e52ea392ad7c8ebfbfceaade8887"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* FilePersistence::XML_DOM_TYPE = &quot;EnvisionFilePersistence&quot;</td>
         </tr>
       </table>
   </td>

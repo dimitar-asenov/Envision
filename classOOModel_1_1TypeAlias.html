@@ -109,8 +109,8 @@ Inheritance diagram for OOModel::TypeAlias:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acd4f8c203e8c07602192d6262caf4a8c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#acd4f8c203e8c07602192d6262caf4a8c">TypeAlias</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *typeExpression=nullptr)</td></tr>
 <tr class="separator:acd4f8c203e8c07602192d6262caf4a8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d6fef9aad33956d2aa5b644e9259cc0"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a6d6fef9aad33956d2aa5b644e9259cc0">findSymbols</a> (QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, const Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override</td></tr>
-<tr class="separator:a6d6fef9aad33956d2aa5b644e9259cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c47a0bfa01d9842f20766e9c3438840"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a7c47a0bfa01d9842f20766e9c3438840">findSymbols</a> (std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt; request) const override</td></tr>
+<tr class="separator:a7c47a0bfa01d9842f20766e9c3438840"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f010f01228f45d38cd6d3350bd2ffc8"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a1f010f01228f45d38cd6d3350bd2ffc8">symbolType</a> () const override</td></tr>
 <tr class="separator:a1f010f01228f45d38cd6d3350bd2ffc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -153,7 +153,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6d6fef9aad33956d2aa5b644e9259cc0"></a>
+<a class="anchor" id="a7c47a0bfa01d9842f20766e9c3438840"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -163,43 +163,9 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool OOModel::TypeAlias::findSymbols </td>
           <td>(</td>
-          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Node *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FindSymbolDirection&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt;&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>

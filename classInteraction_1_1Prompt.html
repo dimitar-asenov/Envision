@@ -107,6 +107,8 @@ Public Types</h2></td></tr>
 <a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6aefe71883e8f5b5ef76baddc129d53867">AutoHint</a> = 0x00000004
  }</td></tr>
 <tr class="separator:a7c65e8c058789301842a69ab093e25b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24a843d165ecbca5702d889bcc8c545e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#a24a843d165ecbca5702d889bcc8c545e">PromptOptions</a> = QFlags&lt; <a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6">PromptOption</a> &gt;</td></tr>
+<tr class="separator:a24a843d165ecbca5702d889bcc8c545e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1e3c5d413efbcebcbd0dc242fc092e9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#ae1e3c5d413efbcebcbd0dc242fc092e9">PromptShowCall</a> = std::function&lt; void(<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *)&gt;</td></tr>
 <tr class="separator:ae1e3c5d413efbcebcbd0dc242fc092e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -133,9 +135,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a90cb2366f4de37a10174359c200a48c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24cb216abef93f85bc364c18259b6753"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInteraction_1_1PromptShell.html">PromptShell</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#a24cb216abef93f85bc364c18259b6753">shell</a> ()</td></tr>
 <tr class="separator:a24cb216abef93f85bc364c18259b6753"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87057b87a1ab08069e9f16948f835f5b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#a87057b87a1ab08069e9f16948f835f5b">show</a> (const QString &amp;modeName, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *<a class="el" href="classInteraction_1_1Prompt.html#ae3d29d34d656ea02634783e51b4e547b">commandReceiver</a>, QString initialCommandText={}, PromptOptions options=<a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6aefe71883e8f5b5ef76baddc129d53867">AutoHint</a>)</td></tr>
+<tr class="memitem:a87057b87a1ab08069e9f16948f835f5b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#a87057b87a1ab08069e9f16948f835f5b">show</a> (const QString &amp;modeName, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *<a class="el" href="classInteraction_1_1Prompt.html#ae3d29d34d656ea02634783e51b4e547b">commandReceiver</a>, QString initialCommandText={}, <a class="el" href="classInteraction_1_1Prompt.html#a24a843d165ecbca5702d889bcc8c545e">PromptOptions</a> options=<a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6aefe71883e8f5b5ef76baddc129d53867">AutoHint</a>)</td></tr>
 <tr class="separator:a87057b87a1ab08069e9f16948f835f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75e96a7ff5fe06dec1613fac69c889a8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#a75e96a7ff5fe06dec1613fac69c889a8">show</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *<a class="el" href="classInteraction_1_1Prompt.html#ae3d29d34d656ea02634783e51b4e547b">commandReceiver</a>, QString initialCommandText={}, PromptOptions options=<a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6aefe71883e8f5b5ef76baddc129d53867">AutoHint</a>)</td></tr>
+<tr class="memitem:a75e96a7ff5fe06dec1613fac69c889a8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#a75e96a7ff5fe06dec1613fac69c889a8">show</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *<a class="el" href="classInteraction_1_1Prompt.html#ae3d29d34d656ea02634783e51b4e547b">commandReceiver</a>, QString initialCommandText={}, <a class="el" href="classInteraction_1_1Prompt.html#a24a843d165ecbca5702d889bcc8c545e">PromptOptions</a> options=<a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6aefe71883e8f5b5ef76baddc129d53867">AutoHint</a>)</td></tr>
 <tr class="separator:a75e96a7ff5fe06dec1613fac69c889a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0c787f2210ab5ca0fe86e182c237adf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInteraction_1_1Prompt.html#ae1e3c5d413efbcebcbd0dc242fc092e9">PromptShowCall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Prompt.html#ab0c787f2210ab5ca0fe86e182c237adf">showShortcut</a> (Qt::Key key)</td></tr>
 <tr class="separator:ab0c787f2210ab5ca0fe86e182c237adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,6 +182,18 @@ Static Private Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a24a843d165ecbca5702d889bcc8c545e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classInteraction_1_1Prompt.html#a24a843d165ecbca5702d889bcc8c545e">Interaction::Prompt::PromptOptions</a> =  QFlags&lt;<a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6">PromptOption</a>&gt;</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -542,7 +556,7 @@ template&lt;typename ModeType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">PromptOptions&#160;</td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1Prompt.html#a24a843d165ecbca5702d889bcc8c545e">PromptOptions</a>&#160;</td>
           <td class="paramname"><em>options</em> = <code><a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6aefe71883e8f5b5ef76baddc129d53867">AutoHint</a></code>&#160;</td>
         </tr>
         <tr>
@@ -582,7 +596,7 @@ template&lt;typename ModeType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">PromptOptions&#160;</td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1Prompt.html#a24a843d165ecbca5702d889bcc8c545e">PromptOptions</a>&#160;</td>
           <td class="paramname"><em>options</em> = <code><a class="el" href="classInteraction_1_1Prompt.html#a7c65e8c058789301842a69ab093e25b6aefe71883e8f5b5ef76baddc129d53867">AutoHint</a></code>&#160;</td>
         </tr>
         <tr>

@@ -153,8 +153,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a06d1f70b58a6a2d4c271da51040d2727"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9320d1ead0312d0842aaab41fc2cc23d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1List.html#a456965703dfb1eec25f86427c5bf8778">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a9320d1ead0312d0842aaab41fc2cc23d">end</a> () const </td></tr>
 <tr class="separator:a9320d1ead0312d0842aaab41fc2cc23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5c430314bbf27f16f01b232088f09ff"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#ad5c430314bbf27f16f01b232088f09ff">findSymbols</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;matcher, const <a class="el" href="classModel_1_1Node.html">Node</a> *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override</td></tr>
-<tr class="separator:ad5c430314bbf27f16f01b232088f09ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abca39621b653c932ba64edc2664ba6b1"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#abca39621b653c932ba64edc2664ba6b1">findSymbols</a> (std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">ResolutionRequest</a> &gt; request) const override</td></tr>
+<tr class="separator:abca39621b653c932ba64edc2664ba6b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ee484408123926e02147a31b6633d8e"><td class="memTemplParams" colspan="2">template&lt;typename T  = Node&gt; </td></tr>
 <tr class="memitem:a5ee484408123926e02147a31b6633d8e"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a5ee484408123926e02147a31b6633d8e">first</a> () const </td></tr>
 <tr class="separator:a5ee484408123926e02147a31b6633d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -648,7 +648,7 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad5c430314bbf27f16f01b232088f09ff"></a>
+<a class="anchor" id="abca39621b653c932ba64edc2664ba6b1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -658,43 +658,9 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">bool Model::List::findSymbols </td>
           <td>(</td>
-          <td class="paramtype">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FindSymbolDirection&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">ResolutionRequest</a> &gt;&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>

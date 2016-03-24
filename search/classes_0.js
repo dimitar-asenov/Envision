@@ -3,6 +3,7 @@ var searchData=
   ['action',['Action',['../classInteraction_1_1Action.html',1,'Interaction']]],
   ['actionprompt',['ActionPrompt',['../classInteraction_1_1ActionPrompt.html',1,'Interaction']]],
   ['actionpromptstyle',['ActionPromptStyle',['../classInteraction_1_1ActionPromptStyle.html',1,'Interaction']]],
+  ['actionregistry',['ActionRegistry',['../classInteraction_1_1ActionRegistry.html',1,'Interaction']]],
   ['adaptermanager',['AdapterManager',['../classCore_1_1AdapterManager.html',1,'Core']]],
   ['addandrename',['addAndRename',['../classFilePersistence_1_1addAndRename.html',1,'FilePersistence']]],
   ['addastpropertiesastuples',['AddASTPropertiesAsTuples',['../classInformationScripting_1_1AddASTPropertiesAsTuples.html',1,'InformationScripting']]],

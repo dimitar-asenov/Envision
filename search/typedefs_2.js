@@ -8,5 +8,6 @@ var searchData=
   ['conditionfunction',['ConditionFunction',['../classVisualization_1_1VisualizationGroup.html#abc70e9b1e6eacf2e291f5dbe473cb108',1,'Visualization::VisualizationGroup']]],
   ['conflictunitset',['ConflictUnitSet',['../namespaceFilePersistence.html#a995f05d4be7dd82c074c46ef1454e414',1,'FilePersistence']]],
   ['const_5fiterator',['const_iterator',['../classInformationScripting_1_1Tuple.html#a199e401579ba62ebdd25ec20070d5cbf',1,'InformationScripting::Tuple::const_iterator()'],['../classModel_1_1List.html#a456965703dfb1eec25f86427c5bf8778',1,'Model::List::const_iterator()'],['../classModel_1_1TypedList.html#a585e0a1fad7a3897fbc3d547a6ae7fa0',1,'Model::TypedList::const_iterator()']]],
-  ['createfunction',['CreateFunction',['../classOOInteraction_1_1OOOperatorDescriptor.html#a87fc733fca00001b9632e9a0fabe6b4e',1,'OOInteraction::OOOperatorDescriptor']]]
+  ['createfunction',['CreateFunction',['../classOOInteraction_1_1OOOperatorDescriptor.html#a87fc733fca00001b9632e9a0fabe6b4e',1,'OOInteraction::OOOperatorDescriptor']]],
+  ['cursormoveoptions',['CursorMoveOptions',['../classVisualization_1_1Item.html#a02b5a78bab81357ec5e14864fecd1e89',1,'Visualization::Item']]]
 ];

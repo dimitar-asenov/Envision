@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classOOModel_1_1Module-members.html">List of all members</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">OOModel::Module Class Reference</div>  </div>
@@ -104,12 +105,25 @@ Inheritance diagram for OOModel::Module:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0c02fd2705dbdda70d011b9502a3b7e2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">ModuleKind</a> : int { <a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2aeb6d8ae6f20283755b339c0dc273988b">ModuleKind::Standard</a>, 
+<a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2ab0f2b97dc5d2b76b26e040408bb1d8af">ModuleKind::Folder</a>
+ }</td></tr>
+<tr class="separator:a0c02fd2705dbdda70d011b9502a3b7e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6e6895f17033a40c66a66492fe29954b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#a6e6895f17033a40c66a66492fe29954b">Module</a> (const QString &amp;name)</td></tr>
-<tr class="separator:a6e6895f17033a40c66a66492fe29954b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56d6086b40b23b60053b5ac22075b33a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#a56d6086b40b23b60053b5ac22075b33a">Module</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">ModuleKind</a> <a class="el" href="classOOModel_1_1Module.html#ab8ade5d1903772d0212e8a65f170bd74">kind</a>=<a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2aeb6d8ae6f20283755b339c0dc273988b">ModuleKind::Standard</a>)</td></tr>
+<tr class="separator:a56d6086b40b23b60053b5ac22075b33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdbefaecea29a290d0cb4913850843c1"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#afdbefaecea29a290d0cb4913850843c1">isNewPersistenceUnit</a> () const override</td></tr>
 <tr class="separator:afdbefaecea29a290d0cb4913850843c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32260368210fe61e372fb1fcdfaeec71"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#a32260368210fe61e372fb1fcdfaeec71">isTransparentForNameResolution</a> () const override</td></tr>
+<tr class="separator:a32260368210fe61e372fb1fcdfaeec71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8ade5d1903772d0212e8a65f170bd74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">ModuleKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#ab8ade5d1903772d0212e8a65f170bd74">kind</a> () const </td></tr>
+<tr class="separator:ab8ade5d1903772d0212e8a65f170bd74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c4a6ca27f83192291eebfbae8964726"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#a8c4a6ca27f83192291eebfbae8964726">setKind</a> (<a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">ModuleKind</a> <a class="el" href="classOOModel_1_1Module.html#ab8ade5d1903772d0212e8a65f170bd74">kind</a>)</td></tr>
+<tr class="separator:a8c4a6ca27f83192291eebfbae8964726"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2ab109089b8ba35f27885ff757d5ed6"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#ae2ab109089b8ba35f27885ff757d5ed6">symbolType</a> () const override</td></tr>
 <tr class="separator:ae2ab109089b8ba35f27885ff757d5ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd2904683f93e0d6bdb775b3d2f730f9"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; const <a class="el" href="classModel_1_1UsedLibrary.html">Model::UsedLibrary</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Module.html#abd2904683f93e0d6bdb775b3d2f730f9">usedLibraries</a> () const override</td></tr>
@@ -121,8 +135,37 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a0c02fd2705dbdda70d011b9502a3b7e2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">OOModel::Module::ModuleKind</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a0c02fd2705dbdda70d011b9502a3b7e2aeb6d8ae6f20283755b339c0dc273988b"></a>Standard&#160;</td><td class="fielddoc">
+<p>Used for namespaces or packages. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0c02fd2705dbdda70d011b9502a3b7e2ab0f2b97dc5d2b76b26e040408bb1d8af"></a>Folder&#160;</td><td class="fielddoc">
+<p>Used for grouping declarations in sub-directories. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a6e6895f17033a40c66a66492fe29954b"></a>
+<a class="anchor" id="a56d6086b40b23b60053b5ac22075b33a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -130,8 +173,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">OOModel::Module::Module </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">ModuleKind</a>&#160;</td>
+          <td class="paramname"><em>kind</em> = <code><a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2aeb6d8ae6f20283755b339c0dc273988b">ModuleKind::Standard</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -156,6 +209,76 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a32260368210fe61e372fb1fcdfaeec71"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool OOModel::Module::isTransparentForNameResolution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab8ade5d1903772d0212e8a65f170bd74"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">Module::ModuleKind</a> OOModel::Module::kind </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8c4a6ca27f83192291eebfbae8964726"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OOModel::Module::setKind </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2">ModuleKind</a>&#160;</td>
+          <td class="paramname"><em>kind</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

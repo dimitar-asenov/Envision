@@ -101,6 +101,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:ad689fbf3fb4ef8150b34567b6288bb8b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">UpdateFlags</a> = QFlags&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3">UpdateType</a> &gt;</td></tr>
+<tr class="separator:ad689fbf3fb4ef8150b34567b6288bb8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a878ad8e1c7d0491348e07a4021e670a3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3">UpdateType</a> { <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3ad3a4fab6f3815ef389934d8d53e4b769">NoFlags</a> = 0, 
 <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3a845b9c68569a7c65c7d89a4d8ef9c2cf">Label</a> = 1, 
 <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3ad34548562340a03179812fa53dc9fe23">Value</a> = 2, 
@@ -113,8 +115,8 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9ad804ca988590f43fac7740e94ff143"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a9ad804ca988590f43fac7740e94ff143">ChangeDescription</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *<a class="el" href="classFilePersistence_1_1ChangeDescription.html#aa6b38bc102f614812e9381b605120d5c">nodeA</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *<a class="el" href="classFilePersistence_1_1ChangeDescription.html#a641057ed348e548172e90a7ea019ace9">nodeB</a>)</td></tr>
 <tr class="separator:a9ad804ca988590f43fac7740e94ff143"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e9edcd2d0ef8bb71eb82438fb69877a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a4e9edcd2d0ef8bb71eb82438fb69877a">~ChangeDescription</a> ()</td></tr>
-<tr class="separator:a4e9edcd2d0ef8bb71eb82438fb69877a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5883f01a7e272997598e39231e1a0ea6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a5883f01a7e272997598e39231e1a0ea6">~ChangeDescription</a> ()=default</td></tr>
+<tr class="separator:a5883f01a7e272997598e39231e1a0ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98d21ca16c21f33d015e45f39f14919c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a98d21ca16c21f33d015e45f39f14919c">computeFlags</a> ()</td></tr>
 <tr class="separator:a98d21ca16c21f33d015e45f39f14919c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcdc290ae2dc5f34b2cfb0170b611395"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#abcdc290ae2dc5f34b2cfb0170b611395">copy</a> (std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; &amp;tree, bool force=false) const </td></tr>
@@ -123,9 +125,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a44fecb9f18ed97394878f620b72e4501"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a44fecb9f18ed97394878f620b72e4501">debugHasNodes</a> ()</td></tr>
 <tr class="memdesc:a44fecb9f18ed97394878f620b72e4501"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is only used for debugging.  <a href="#a44fecb9f18ed97394878f620b72e4501">More...</a><br /></td></tr>
 <tr class="separator:a44fecb9f18ed97394878f620b72e4501"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60906f1116dd4b750b180b8a1151a2f5"><td class="memItemLeft" align="right" valign="top">const UpdateFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a60906f1116dd4b750b180b8a1151a2f5">flags</a> () const </td></tr>
+<tr class="memitem:a60906f1116dd4b750b180b8a1151a2f5"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">UpdateFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a60906f1116dd4b750b180b8a1151a2f5">flags</a> () const </td></tr>
 <tr class="separator:a60906f1116dd4b750b180b8a1151a2f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cf26d71f7aca1243052f45d33c3f473"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a4cf26d71f7aca1243052f45d33c3f473">hasFlags</a> (const UpdateFlags <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a60906f1116dd4b750b180b8a1151a2f5">flags</a>) const </td></tr>
+<tr class="memitem:a4cf26d71f7aca1243052f45d33c3f473"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a4cf26d71f7aca1243052f45d33c3f473">hasFlags</a> (const <a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">UpdateFlags</a> <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a60906f1116dd4b750b180b8a1151a2f5">flags</a>) const </td></tr>
 <tr class="separator:a4cf26d71f7aca1243052f45d33c3f473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a482fc72834f3e721df856b403623cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a6a482fc72834f3e721df856b403623cc">isFake</a> () const </td></tr>
 <tr class="memdesc:a6a482fc72834f3e721df856b403623cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <em>true</em> for changes that are stationary and have no flags set.  <a href="#a6a482fc72834f3e721df856b403623cc">More...</a><br /></td></tr>
@@ -134,7 +136,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa6b38bc102f614812e9381b605120d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a641057ed348e548172e90a7ea019ace9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a641057ed348e548172e90a7ea019ace9">nodeB</a> () const </td></tr>
 <tr class="separator:a641057ed348e548172e90a7ea019ace9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a300a12b3757ea5029a9e633b2470b2bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a300a12b3757ea5029a9e633b2470b2bc">nodeId</a> () const </td></tr>
+<tr class="memitem:a300a12b3757ea5029a9e633b2470b2bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a300a12b3757ea5029a9e633b2470b2bc">nodeId</a> () const </td></tr>
 <tr class="separator:a300a12b3757ea5029a9e633b2470b2bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a557cded6eb9b52098484302eb8ed74a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a557cded6eb9b52098484302eb8ed74a6">onlyLabelChange</a> () const </td></tr>
 <tr class="separator:a557cded6eb9b52098484302eb8ed74a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,21 +153,22 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aec93411030893ee88ebf0b0fc6a2da5f"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#aec93411030893ee88ebf0b0fc6a2da5f">newStructChange</a> (<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a300a12b3757ea5029a9e633b2470b2bc">nodeId</a>, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; causingChange, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; treeA, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; treeB)</td></tr>
+<tr class="memitem:aec93411030893ee88ebf0b0fc6a2da5f"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#aec93411030893ee88ebf0b0fc6a2da5f">newStructChange</a> (<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a300a12b3757ea5029a9e633b2470b2bc">nodeId</a>, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; causingChange, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; treeA, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; treeB)</td></tr>
 <tr class="separator:aec93411030893ee88ebf0b0fc6a2da5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a3c364623a63cf81094c1a400c0eab118"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a3c364623a63cf81094c1a400c0eab118">ChangeDescription</a> ()</td></tr>
-<tr class="separator:a3c364623a63cf81094c1a400c0eab118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6085d6d11894a4d153101e566f638f14"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a6085d6d11894a4d153101e566f638f14">ChangeDescription</a> ()=default</td></tr>
+<tr class="separator:a6085d6d11894a4d153101e566f638f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a64723f928f20072fedd61264ab44ae3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a64723f928f20072fedd61264ab44ae3d">nodeA_</a> {}</td></tr>
+<tr class="memdesc:a64723f928f20072fedd61264ab44ae3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">If pointsToChildA_ is true, this is a pointer to a node with parent whose ID is nodeId_.  <a href="#a64723f928f20072fedd61264ab44ae3d">More...</a><br /></td></tr>
 <tr class="separator:a64723f928f20072fedd61264ab44ae3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0170c4742152a28c165ca10229d0a78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#ae0170c4742152a28c165ca10229d0a78">nodeB_</a> {}</td></tr>
 <tr class="separator:ae0170c4742152a28c165ca10229d0a78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54bd61514c921420770304991489ef98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a54bd61514c921420770304991489ef98">nodeId_</a> {}</td></tr>
+<tr class="memitem:a54bd61514c921420770304991489ef98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a54bd61514c921420770304991489ef98">nodeId_</a> {}</td></tr>
 <tr class="separator:a54bd61514c921420770304991489ef98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a949614f416c674984cf254062e8bda4d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a949614f416c674984cf254062e8bda4d">pointsToChildA_</a></td></tr>
 <tr class="separator:a949614f416c674984cf254062e8bda4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,9 +176,22 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a325bb841304960dbaa502fa476109e55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b196c46fee3ef88a15f0fd8f6743f50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceFilePersistence.html#a22f599a7e5cc21a83101c6b6a2e1abfe">ChangeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#a6b196c46fee3ef88a15f0fd8f6743f50">type_</a> {}</td></tr>
 <tr class="separator:a6b196c46fee3ef88a15f0fd8f6743f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad246ea78dd326704a612f85da9dbcd96"><td class="memItemLeft" align="right" valign="top">UpdateFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad246ea78dd326704a612f85da9dbcd96">updateFlags_</a> {}</td></tr>
+<tr class="memitem:ad246ea78dd326704a612f85da9dbcd96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">UpdateFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad246ea78dd326704a612f85da9dbcd96">updateFlags_</a> {}</td></tr>
 <tr class="separator:ad246ea78dd326704a612f85da9dbcd96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="ad689fbf3fb4ef8150b34567b6288bb8b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">FilePersistence::ChangeDescription::UpdateFlags</a> =  QFlags&lt;<a class="el" href="classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3">UpdateType</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a878ad8e1c7d0491348e07a4021e670a3"></a>
 <div class="memitem">
@@ -228,7 +244,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4e9edcd2d0ef8bb71eb82438fb69877a"></a>
+<a class="anchor" id="a5883f01a7e272997598e39231e1a0ea6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -244,14 +260,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a3c364623a63cf81094c1a400c0eab118"></a>
+<a class="anchor" id="a6085d6d11894a4d153101e566f638f14"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -267,7 +283,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -352,7 +368,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const ChangeDescription::UpdateFlags FilePersistence::ChangeDescription::flags </td>
+          <td class="memname">const <a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">ChangeDescription::UpdateFlags</a> FilePersistence::ChangeDescription::flags </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -377,7 +393,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">bool FilePersistence::ChangeDescription::hasFlags </td>
           <td>(</td>
-          <td class="paramtype">const UpdateFlags&#160;</td>
+          <td class="paramtype">const <a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">UpdateFlags</a>&#160;</td>
           <td class="paramname"><em>flags</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -426,7 +442,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; FilePersistence::ChangeDescription::newStructChange </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td>
           <td class="paramname"><em>nodeId</em>, </td>
         </tr>
         <tr>
@@ -500,7 +516,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> FilePersistence::ChangeDescription::nodeId </td>
+          <td class="memname"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> FilePersistence::ChangeDescription::nodeId </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -649,6 +665,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>If pointsToChildA_ is true, this is a pointer to a node with parent whose ID is nodeId_. </p>
+<p>Otherwise, this points to a node with ID = nodeId_. This is a lazy loading mechanic. </p>
+
 </div>
 </div>
 <a class="anchor" id="ae0170c4742152a28c165ca10229d0a78"></a>
@@ -679,7 +698,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> FilePersistence::ChangeDescription::nodeId_ {}</td>
+          <td class="memname"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> FilePersistence::ChangeDescription::nodeId_ {}</td>
         </tr>
       </table>
   </td>
@@ -759,7 +778,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">UpdateFlags FilePersistence::ChangeDescription::updateFlags_ {}</td>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1ChangeDescription.html#ad689fbf3fb4ef8150b34567b6288bb8b">UpdateFlags</a> FilePersistence::ChangeDescription::updateFlags_ {}</td>
         </tr>
       </table>
   </td>

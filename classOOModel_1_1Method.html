@@ -119,18 +119,18 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a32dd054e0910583d9d63bb40f732ec07"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a32dd054e0910583d9d63bb40f732ec07">Method</a> (const QString &amp;name)</td></tr>
 <tr class="separator:a32dd054e0910583d9d63bb40f732ec07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a878c8c517e1891a982d80d53f923b2d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a878c8c517e1891a982d80d53f923b2d7">Method</a> (const QString &amp;name, Modifier::Modifiers mod)</td></tr>
+<tr class="memitem:a878c8c517e1891a982d80d53f923b2d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a878c8c517e1891a982d80d53f923b2d7">Method</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Modifier.html#a4f30b6dfb37852c4b834e8b155fac42b">Modifier::Modifiers</a> mod)</td></tr>
 <tr class="separator:a878c8c517e1891a982d80d53f923b2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a425f9976969d5ce25c93b0c9f2b1b7e9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a425f9976969d5ce25c93b0c9f2b1b7e9">Method</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033ee">MethodKind</a> kind)</td></tr>
 <tr class="separator:a425f9976969d5ce25c93b0c9f2b1b7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c4266824c6f7ec5e65a56f8877ec6f7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a7c4266824c6f7ec5e65a56f8877ec6f7">Method</a> (const QString &amp;name, Modifier::Modifiers mod, <a class="el" href="classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033ee">MethodKind</a> kind)</td></tr>
+<tr class="memitem:a7c4266824c6f7ec5e65a56f8877ec6f7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a7c4266824c6f7ec5e65a56f8877ec6f7">Method</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Modifier.html#a4f30b6dfb37852c4b834e8b155fac42b">Modifier::Modifiers</a> mod, <a class="el" href="classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033ee">MethodKind</a> kind)</td></tr>
 <tr class="separator:a7c4266824c6f7ec5e65a56f8877ec6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6d11ea839b3bf01e8fc296e5064545a"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classOOModel_1_1Method.html">Method</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#af6d11ea839b3bf01e8fc296e5064545a">callees</a> ()</td></tr>
 <tr class="separator:af6d11ea839b3bf01e8fc296e5064545a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23acc78fcd5a4a336b1deffbf65a4c60"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classOOModel_1_1Method.html">Method</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a23acc78fcd5a4a336b1deffbf65a4c60">callers</a> ()</td></tr>
 <tr class="separator:a23acc78fcd5a4a336b1deffbf65a4c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a068246a5d182b2e8135c5afada370980"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a068246a5d182b2e8135c5afada370980">findSymbols</a> (QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, const Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override</td></tr>
-<tr class="separator:a068246a5d182b2e8135c5afada370980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae0c5bd621cd8f2db6cb07a62694490c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#aae0c5bd621cd8f2db6cb07a62694490c">findSymbols</a> (std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt; request) const override</td></tr>
+<tr class="separator:aae0c5bd621cd8f2db6cb07a62694490c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38b2951e191c44541988d47ce0d13f56"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a38b2951e191c44541988d47ce0d13f56">fullyQualifiedName</a> () const </td></tr>
 <tr class="separator:a38b2951e191c44541988d47ce0d13f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad53262e5057deab0cea8a8321758816b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#ad53262e5057deab0cea8a8321758816b">isGeneric</a> ()</td></tr>
@@ -219,7 +219,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Modifier::Modifiers&#160;</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Modifier.html#a4f30b6dfb37852c4b834e8b155fac42b">Modifier::Modifiers</a>&#160;</td>
           <td class="paramname"><em>mod</em>&#160;</td>
         </tr>
         <tr>
@@ -271,7 +271,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Modifier::Modifiers&#160;</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Modifier.html#a4f30b6dfb37852c4b834e8b155fac42b">Modifier::Modifiers</a>&#160;</td>
           <td class="paramname"><em>mod</em>, </td>
         </tr>
         <tr>
@@ -321,7 +321,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a068246a5d182b2e8135c5afada370980"></a>
+<a class="anchor" id="aae0c5bd621cd8f2db6cb07a62694490c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -331,43 +331,9 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool OOModel::Method::findSymbols </td>
           <td>(</td>
-          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Node *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FindSymbolDirection&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt;&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>

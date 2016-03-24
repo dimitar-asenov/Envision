@@ -114,6 +114,7 @@ Public Types</h2></td></tr>
 <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1ca886ef5dbd655a6c97726d7091c6b173e">ConstructKind::Struct</a>, 
 <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1caaef12e903e606a4895a16b393bfdec8c">ConstructKind::Union</a>, 
 <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1cacf20423ed48998082c20099488a0917c">ConstructKind::Enum</a>, 
+<a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1ca24545e0984e628cd5ad59ac71ac3f8e1">ConstructKind::EnumClass</a>, 
 <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1ca55f6611cb342565cf0f5002400f53a95">ConstructKind::Annotation</a>
  }</td></tr>
 <tr class="separator:a6588078ab256b317e402527aa5c38f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,7 +125,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a70eeb867d40365285e40146ec0fb6aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f0b406826630e3e14e6f8edf530ff04"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a7f0b406826630e3e14e6f8edf530ff04">Class</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1c">ConstructKind</a> kind)</td></tr>
 <tr class="separator:a7f0b406826630e3e14e6f8edf530ff04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3f2ec84e3de262489e0011bfa819ba2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#ab3f2ec84e3de262489e0011bfa819ba2">Class</a> (const QString &amp;name, Modifier::Modifiers mod, <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1c">ConstructKind</a> kind=ConstructKind::Class)</td></tr>
+<tr class="memitem:ab3f2ec84e3de262489e0011bfa819ba2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#ab3f2ec84e3de262489e0011bfa819ba2">Class</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Modifier.html#a4f30b6dfb37852c4b834e8b155fac42b">Modifier::Modifiers</a> mod, <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1c">ConstructKind</a> kind=ConstructKind::Class)</td></tr>
 <tr class="separator:ab3f2ec84e3de262489e0011bfa819ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a631353475a363917caf8320a99240fcd"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classOOModel_1_1Class.html">Class</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a631353475a363917caf8320a99240fcd">allBaseClasses</a> ()</td></tr>
 <tr class="memdesc:a631353475a363917caf8320a99240fcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a set of all direct and transitive base classes of this class.  <a href="#a631353475a363917caf8320a99240fcd">More...</a><br /></td></tr>
@@ -135,8 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8008cf14047961456db86daba05593d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a097aa4e476bbc9f49c4215ceb2b94a31"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classOOModel_1_1Class.html">Class</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a097aa4e476bbc9f49c4215ceb2b94a31">directSubClasses</a> ()</td></tr>
 <tr class="separator:a097aa4e476bbc9f49c4215ceb2b94a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b0f3ad498fad8f14c34540ac245f1fd"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a8b0f3ad498fad8f14c34540ac245f1fd">findSymbols</a> (QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, const Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override</td></tr>
-<tr class="separator:a8b0f3ad498fad8f14c34540ac245f1fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d61e505ee7bd2c2ab7362f5f741450d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a6d61e505ee7bd2c2ab7362f5f741450d">findSymbols</a> (std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt; request) const override</td></tr>
+<tr class="separator:a6d61e505ee7bd2c2ab7362f5f741450d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a22a36962bdb49eeb1c84dcf18e9966"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Class.html">Class</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a8a22a36962bdb49eeb1c84dcf18e9966">implicitBaseFromProject</a> () const </td></tr>
 <tr class="separator:a8a22a36962bdb49eeb1c84dcf18e9966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addfbe5e8ea24202bd3f2211c5e64ea7d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#addfbe5e8ea24202bd3f2211c5e64ea7d">isGeneric</a> ()</td></tr>
@@ -157,8 +158,8 @@ Static Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ac6dbff55cf4eab7bb14ffae87f932d39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#ac6dbff55cf4eab7bb14ffae87f932d39">defaultImplicitBaseFromProject</a> () const </td></tr>
 <tr class="separator:ac6dbff55cf4eab7bb14ffae87f932d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c9bb78480fa7723e08f101467ce87ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a4c9bb78480fa7723e08f101467ce87ee">findInTarget</a> (<a class="el" href="classOOModel_1_1Expression.html">Expression</a> *target, QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, SymbolTypes symbolTypes, bool exhaustAllScopes) const </td></tr>
-<tr class="separator:a4c9bb78480fa7723e08f101467ce87ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa73b658da02e6d350e29c3c930680eb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#aa73b658da02e6d350e29c3c930680eb0">findInTarget</a> (<a class="el" href="classOOModel_1_1Expression.html">Expression</a> *target, std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt; &amp;request) const </td></tr>
+<tr class="separator:aa73b658da02e6d350e29c3c930680eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -194,6 +195,8 @@ Additional Inherited Members</h2></td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a6588078ab256b317e402527aa5c38f1caaef12e903e606a4895a16b393bfdec8c"></a>Union&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a6588078ab256b317e402527aa5c38f1cacf20423ed48998082c20099488a0917c"></a>Enum&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6588078ab256b317e402527aa5c38f1ca24545e0984e628cd5ad59ac71ac3f8e1"></a>EnumClass&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a6588078ab256b317e402527aa5c38f1ca55f6611cb342565cf0f5002400f53a95"></a>Annotation&#160;</td><td class="fielddoc">
 </td></tr>
@@ -257,7 +260,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Modifier::Modifiers&#160;</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Modifier.html#a4f30b6dfb37852c4b834e8b155fac42b">Modifier::Modifiers</a>&#160;</td>
           <td class="paramname"><em>mod</em>, </td>
         </tr>
         <tr>
@@ -395,7 +398,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4c9bb78480fa7723e08f101467ce87ee"></a>
+<a class="anchor" id="aa73b658da02e6d350e29c3c930680eb0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -411,26 +414,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -447,7 +432,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8b0f3ad498fad8f14c34540ac245f1fd"></a>
+<a class="anchor" id="a6d61e505ee7bd2c2ab7362f5f741450d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -457,43 +442,9 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool OOModel::Class::findSymbols </td>
           <td>(</td>
-          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Node *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FindSymbolDirection&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt;&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>

@@ -137,6 +137,8 @@ Public Types</h2></td></tr>
 <a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976ae15f99d9c10344fbd44a666782270b95">NoLimitDistance</a> = 0x00000001
  }</td></tr>
 <tr class="separator:ac0dad83a3395063a25c7460ce3db5976"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02b5a78bab81357ec5e14864fecd1e89"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a02b5a78bab81357ec5e14864fecd1e89">CursorMoveOptions</a> = QFlags&lt; <a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976">CursorMoveOption</a> &gt;</td></tr>
+<tr class="separator:a02b5a78bab81357ec5e14864fecd1e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf6fb87b5d8abed3670d34089aa70fc4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4">PositionConstraint</a> { <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946">NoConstraints</a> = 0x0, 
 <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4aa2bf5cc04534bb9e7ed8773fe2ab1fb9">Below</a> = 0x1, 
 <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a4d5fb7344caa13ade95c57d49b766d3a">Above</a> = 0x2, 
@@ -145,6 +147,8 @@ Public Types</h2></td></tr>
 <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a2ef644de5c50f29ec978637cb8fd9dc4">Overlap</a> = 0x10
  }</td></tr>
 <tr class="separator:abf6fb87b5d8abed3670d34089aa70fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8102e25fc2d1b1386a49ad0c9a53276e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a8102e25fc2d1b1386a49ad0c9a53276e">PositionConstraints</a> = QFlags&lt; <a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4">PositionConstraint</a> &gt;</td></tr>
+<tr class="separator:a8102e25fc2d1b1386a49ad0c9a53276e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b08d7c411aac65805ef268b89317272"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1ItemStyle.html">ItemStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a2b08d7c411aac65805ef268b89317272">StyleType</a></td></tr>
 <tr class="separator:a2b08d7c411aac65805ef268b89317272"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47de8e8939254fa088668e32a52b2890"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890">UpdateType</a> { <a class="el" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890a053bacc33f41216bc606b7686cb5c42c">NoUpdate</a>, 
@@ -172,7 +176,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a762bd7edbf0db78fd9d78fe3f61b169e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a762bd7edbf0db78fd9d78fe3f61b169e">changeGeometry</a> (int availableWidth=0, int availableHeight=0)</td></tr>
 <tr class="memdesc:a762bd7edbf0db78fd9d78fe3f61b169e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests that the item updates the position of its children and its size.  <a href="#a762bd7edbf0db78fd9d78fe3f61b169e">More...</a><br /></td></tr>
 <tr class="separator:a762bd7edbf0db78fd9d78fe3f61b169e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98d175274738f71ee2474ddecd2b2b26"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a98d175274738f71ee2474ddecd2b2b26">childClosestTo</a> (const QPoint &amp;point, PositionConstraints childConstraint=<a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946">NoConstraints</a>) const </td></tr>
+<tr class="memitem:a98d175274738f71ee2474ddecd2b2b26"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a98d175274738f71ee2474ddecd2b2b26">childClosestTo</a> (const QPoint &amp;point, <a class="el" href="classVisualization_1_1Item.html#a8102e25fc2d1b1386a49ad0c9a53276e">PositionConstraints</a> childConstraint=<a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946">NoConstraints</a>) const </td></tr>
 <tr class="memdesc:a98d175274738f71ee2474ddecd2b2b26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the child item (if any) that has the least distance to the point <em>point</em>.  <a href="#a98d175274738f71ee2474ddecd2b2b26">More...</a><br /></td></tr>
 <tr class="separator:a98d175274738f71ee2474ddecd2b2b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac861da03f6f69c761947f50c49b043de"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ac861da03f6f69c761947f50c49b043de">childItems</a> () const </td></tr>
@@ -256,9 +260,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeb5182b37eac642f8964cc7fae9377d7"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aeb5182b37eac642f8964cc7fae9377d7">mainViewScalingFactor</a> () const </td></tr>
 <tr class="memdesc:aeb5182b37eac642f8964cc7fae9377d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the scaling factor applied by the main view associated of this item's scene.  <a href="#aeb5182b37eac642f8964cc7fae9377d7">More...</a><br /></td></tr>
 <tr class="separator:aeb5182b37eac642f8964cc7fae9377d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2f20ac43f5641c6bc02e5250a59d3ab"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aa2f20ac43f5641c6bc02e5250a59d3ab">moveCursor</a> (<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a> dir=<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a>, QPoint reference=QPoint(), CursorMoveOptions options=<a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976acc148dc697ae02919c72ee1eb4a50f52">None</a>)</td></tr>
-<tr class="memdesc:aa2f20ac43f5641c6bc02e5250a59d3ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the position of the current main scene cursor within the item and returns true on success.  <a href="#aa2f20ac43f5641c6bc02e5250a59d3ab">More...</a><br /></td></tr>
-<tr class="separator:aa2f20ac43f5641c6bc02e5250a59d3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade38dd03f3363e55c3522a54929705a6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ade38dd03f3363e55c3522a54929705a6">moveCursor</a> (<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a> dir=<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a>, QPoint reference={}, <a class="el" href="classVisualization_1_1Item.html#a02b5a78bab81357ec5e14864fecd1e89">CursorMoveOptions</a> options=<a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976acc148dc697ae02919c72ee1eb4a50f52">None</a>)</td></tr>
+<tr class="memdesc:ade38dd03f3363e55c3522a54929705a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the position of the current main scene cursor within the item and returns true on success.  <a href="#ade38dd03f3363e55c3522a54929705a6">More...</a><br /></td></tr>
+<tr class="separator:ade38dd03f3363e55c3522a54929705a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5268cdc19bc27d6e17e6dc1297430f25"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890">UpdateType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a5268cdc19bc27d6e17e6dc1297430f25">needsUpdate</a> ()</td></tr>
 <tr class="separator:a5268cdc19bc27d6e17e6dc1297430f25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad3f7ad185d3a8d1d76eef1942faafdf"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a> () const </td></tr>
@@ -291,7 +295,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a895105ea229f5d02bd3684e8a80bb789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a202352829acd71cbab573889c75bd9dc"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a202352829acd71cbab573889c75bd9dc">revision</a> () const </td></tr>
 <tr class="separator:a202352829acd71cbab573889c75bd9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed53b47250d3a102fc592d18ea2dba07"><td class="memItemLeft" align="right" valign="top">PositionConstraints&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aed53b47250d3a102fc592d18ea2dba07">satisfiedPositionConstraints</a> (const QPoint &amp;point) const </td></tr>
+<tr class="memitem:aed53b47250d3a102fc592d18ea2dba07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html#a8102e25fc2d1b1386a49ad0c9a53276e">PositionConstraints</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aed53b47250d3a102fc592d18ea2dba07">satisfiedPositionConstraints</a> (const QPoint &amp;point) const </td></tr>
 <tr class="memdesc:aed53b47250d3a102fc592d18ea2dba07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all position constraints with respect to the point <em>point</em> satisfied by this item.  <a href="#aed53b47250d3a102fc592d18ea2dba07">More...</a><br /></td></tr>
 <tr class="separator:aed53b47250d3a102fc592d18ea2dba07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeca275c93e5a1a8b49d9cb36d782f112"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a> () const </td></tr>
@@ -555,6 +559,30 @@ Friends</h2></td></tr>
 <tr class="separator:a867b252ca097fc46660723dda713c5ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a02b5a78bab81357ec5e14864fecd1e89"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classVisualization_1_1Item.html#a02b5a78bab81357ec5e14864fecd1e89">Visualization::Item::CursorMoveOptions</a> =  QFlags&lt;<a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976">CursorMoveOption</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8102e25fc2d1b1386a49ad0c9a53276e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classVisualization_1_1Item.html#a8102e25fc2d1b1386a49ad0c9a53276e">Visualization::Item::PositionConstraints</a> =  QFlags&lt;<a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4">PositionConstraint</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a2b08d7c411aac65805ef268b89317272"></a>
 <div class="memitem">
 <div class="memproto">
@@ -944,7 +972,7 @@ template&lt;typename OverlayType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">PositionConstraints&#160;</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html#a8102e25fc2d1b1386a49ad0c9a53276e">PositionConstraints</a>&#160;</td>
           <td class="paramname"><em>childConstraint</em> = <code><a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946">NoConstraints</a></code>&#160;</td>
         </tr>
         <tr>
@@ -2561,7 +2589,7 @@ template&lt;typename ItemType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa2f20ac43f5641c6bc02e5250a59d3ab"></a>
+<a class="anchor" id="ade38dd03f3363e55c3522a54929705a6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -2578,12 +2606,12 @@ template&lt;typename ItemType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">QPoint&#160;</td>
-          <td class="paramname"><em>reference</em> = <code>QPoint()</code>, </td>
+          <td class="paramname"><em>reference</em> = <code>{}</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">CursorMoveOptions&#160;</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html#a02b5a78bab81357ec5e14864fecd1e89">CursorMoveOptions</a>&#160;</td>
           <td class="paramname"><em>options</em> = <code><a class="el" href="classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976acc148dc697ae02919c72ee1eb4a50f52">None</a></code>&#160;</td>
         </tr>
         <tr>
@@ -2972,7 +3000,7 @@ template&lt;typename OverlayType &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Item::PositionConstraints Visualization::Item::satisfiedPositionConstraints </td>
+          <td class="memname"><a class="el" href="classVisualization_1_1Item.html#a8102e25fc2d1b1386a49ad0c9a53276e">Item::PositionConstraints</a> Visualization::Item::satisfiedPositionConstraints </td>
           <td>(</td>
           <td class="paramtype">const QPoint &amp;&#160;</td>
           <td class="paramname"><em>point</em></td><td>)</td>

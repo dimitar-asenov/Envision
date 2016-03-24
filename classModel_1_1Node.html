@@ -107,9 +107,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a0e2e9bad8ff0ccde3c945aa359f81a79"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> { <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79a442bce153404d787512d1392ba9000fa">SEARCH_UP</a>, 
+<tr class="memitem:a0e2e9bad8ff0ccde3c945aa359f81a79"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> { <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ac0232fa9373d329c1b413b8058db0209">SEARCH_HERE</a>, 
 <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97">SEARCH_DOWN</a>, 
-<a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ac0232fa9373d329c1b413b8058db0209">SEARCH_HERE</a>
+<a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79a442bce153404d787512d1392ba9000fa">SEARCH_UP</a>, 
+<a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79aa0b09c8030eb9107e61906728817e1af">SEARCH_UP_ORDERED</a>
  }</td></tr>
 <tr class="separator:a0e2e9bad8ff0ccde3c945aa359f81a79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a0d7f229f7e667e7580017e2fda133f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a1a0d7f229f7e667e7580017e2fda133f">NodeConstructor</a> = <a class="el" href="classModel_1_1Node.html">Node</a> *(*)(<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>)</td></tr>
@@ -125,6 +126,8 @@ Public Types</h2></td></tr>
 <a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a8ecd03bd1aae995d469430e3d033c5ba">ANY_SYMBOL</a> = 0xffffffff
  }</td></tr>
 <tr class="separator:ade9aeda176a34521dc812ecf7a3d4626"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1d3d812bf2b2cf4c897ce6144ae3e84"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ae1d3d812bf2b2cf4c897ce6144ae3e84">SymbolTypes</a> = QFlags&lt; <a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626">SymbolType</a> &gt;</td></tr>
+<tr class="separator:ae1d3d812bf2b2cf4c897ce6144ae3e84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -142,9 +145,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a72c0d0ffbf6398cc48fd6627ddab6cfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a72c0d0ffbf6398cc48fd6627ddab6cfe">addToRevision</a> (int valueToAdd)</td></tr>
 <tr class="memdesc:a72c0d0ffbf6398cc48fd6627ddab6cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increments the revision of this node by the specified amount.  <a href="#a72c0d0ffbf6398cc48fd6627ddab6cfe">More...</a><br /></td></tr>
 <tr class="separator:a72c0d0ffbf6398cc48fd6627ddab6cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6c6fa88579de718cfc16e2a5c22e8e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ae6c6fa88579de718cfc16e2a5c22e8e3">beginModification</a> (const QString &amp;text=QString())</td></tr>
-<tr class="memdesc:ae6c6fa88579de718cfc16e2a5c22e8e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins a modification session with the current node as a modification target.  <a href="#ae6c6fa88579de718cfc16e2a5c22e8e3">More...</a><br /></td></tr>
-<tr class="separator:ae6c6fa88579de718cfc16e2a5c22e8e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaea32a591397c15a670c75db0f736694"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aaea32a591397c15a670c75db0f736694">beginModification</a> (const QString &amp;text={})</td></tr>
+<tr class="memdesc:aaea32a591397c15a670c75db0f736694"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins a modification session with the current node as a modification target.  <a href="#aaea32a591397c15a670c75db0f736694">More...</a><br /></td></tr>
+<tr class="separator:aaea32a591397c15a670c75db0f736694"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8c5add36bb451a75764b01b6cd15680"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aa8c5add36bb451a75764b01b6cd15680">children</a> () const </td></tr>
 <tr class="memdesc:aa8c5add36bb451a75764b01b6cd15680"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all child nodes.  <a href="#aa8c5add36bb451a75764b01b6cd15680">More...</a><br /></td></tr>
 <tr class="separator:aa8c5add36bb451a75764b01b6cd15680"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,9 +168,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9aad10e0ec7b9359f325db5a3c4fbf90">execute</a> (<a class="el" href="classModel_1_1UndoCommand.html">UndoCommand</a> *command)</td></tr>
 <tr class="memdesc:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the specified command and pushes it on the undo stack.  <a href="#a9aad10e0ec7b9359f325db5a3c4fbf90">More...</a><br /></td></tr>
 <tr class="separator:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5949daf00c16bd91d7a5b64441f0fd4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aa5949daf00c16bd91d7a5b64441f0fd4">findSymbols</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;matcher, const <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const </td></tr>
-<tr class="memdesc:aa5949daf00c16bd91d7a5b64441f0fd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns in <em>result</em> a set of all nodes which define a symbol with a name matching <em>matcher</em> in the scope of this node.  <a href="#aa5949daf00c16bd91d7a5b64441f0fd4">More...</a><br /></td></tr>
-<tr class="separator:aa5949daf00c16bd91d7a5b64441f0fd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad58010ee5be8efe9a12fd54c9ebf08c3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ad58010ee5be8efe9a12fd54c9ebf08c3">findSymbols</a> (std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">ResolutionRequest</a> &gt; request) const </td></tr>
+<tr class="memdesc:ad58010ee5be8efe9a12fd54c9ebf08c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a search for a symbol according to the given <em>request</em> and returns whether a symbol was found.  <a href="#ad58010ee5be8efe9a12fd54c9ebf08c3">More...</a><br /></td></tr>
+<tr class="separator:ad58010ee5be8efe9a12fd54c9ebf08c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab783131a246c62272ec2e89fb812834b"><td class="memTemplParams" colspan="2">template&lt;typename NodeType &gt; </td></tr>
 <tr class="memitem:ab783131a246c62272ec2e89fb812834b"><td class="memTemplItemLeft" align="right" valign="top">NodeType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ab783131a246c62272ec2e89fb812834b">firstAncestorOfType</a> ()</td></tr>
 <tr class="memdesc:ab783131a246c62272ec2e89fb812834b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first Ancestor which has the type <em>NodeType</em> if there is one, otherwise null.  <a href="#ab783131a246c62272ec2e89fb812834b">More...</a><br /></td></tr>
@@ -229,13 +232,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa5b3b92f33676eef70c7c7ce525ad97f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aa5b3b92f33676eef70c7c7ce525ad97f">setRootManager</a> (<a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *<a class="el" href="classModel_1_1Node.html#ab0ec6807ca4e9e48845bfd44ca946195">manager</a>)</td></tr>
 <tr class="memdesc:aa5b3b92f33676eef70c7c7ce525ad97f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the manager of this root node to <em>manager</em>.  <a href="#aa5b3b92f33676eef70c7c7ce525ad97f">More...</a><br /></td></tr>
 <tr class="separator:aa5b3b92f33676eef70c7c7ce525ad97f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02456394b3aa6526a11ff61cd4e6fcfe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a02456394b3aa6526a11ff61cd4e6fcfe">symbolMatches</a> (const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;matcher, SymbolTypes symbolTypes) const </td></tr>
+<tr class="memitem:a02456394b3aa6526a11ff61cd4e6fcfe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a02456394b3aa6526a11ff61cd4e6fcfe">symbolMatches</a> (const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;matcher, <a class="el" href="classModel_1_1Node.html#ae1d3d812bf2b2cf4c897ce6144ae3e84">SymbolTypes</a> symbolTypes) const </td></tr>
 <tr class="memdesc:a02456394b3aa6526a11ff61cd4e6fcfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol that has a name matching <em>matcher</em> and types common with <em>symbolTypes</em>.  <a href="#a02456394b3aa6526a11ff61cd4e6fcfe">More...</a><br /></td></tr>
 <tr class="separator:a02456394b3aa6526a11ff61cd4e6fcfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0238f80b3ad5960919e56e959fb8b36"><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36">symbolName</a> () const </td></tr>
 <tr class="memdesc:ac0238f80b3ad5960919e56e959fb8b36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the symbol defined by this node.  <a href="#ac0238f80b3ad5960919e56e959fb8b36">More...</a><br /></td></tr>
 <tr class="separator:ac0238f80b3ad5960919e56e959fb8b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e7c22e6f01f3728581705da5298af16"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a8e7c22e6f01f3728581705da5298af16">symbolType</a> () const </td></tr>
+<tr class="memitem:a8e7c22e6f01f3728581705da5298af16"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html#ae1d3d812bf2b2cf4c897ce6144ae3e84">SymbolTypes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a8e7c22e6f01f3728581705da5298af16">symbolType</a> () const </td></tr>
 <tr class="memdesc:a8e7c22e6f01f3728581705da5298af16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the symbol defined by this node.  <a href="#a8e7c22e6f01f3728581705da5298af16">More...</a><br /></td></tr>
 <tr class="separator:a8e7c22e6f01f3728581705da5298af16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a283efe5bf4f53d649a1ae1b1adf3dc0d"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a283efe5bf4f53d649a1ae1b1adf3dc0d">toDebugString</a> ()</td></tr>
@@ -251,10 +254,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a8570dbce9e9847eb0ebfa4902b7f7a3f"><td class="memTemplItemLeft" align="right" valign="top">static QList&lt; NodeType * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a8570dbce9e9847eb0ebfa4902b7f7a3f">childrenOfType</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *from)</td></tr>
 <tr class="memdesc:a8570dbce9e9847eb0ebfa4902b7f7a3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all children including the node <em>from</em>, which have type <em>NodeType</em>.  <a href="#a8570dbce9e9847eb0ebfa4902b7f7a3f">More...</a><br /></td></tr>
 <tr class="separator:a8570dbce9e9847eb0ebfa4902b7f7a3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9a57d4d9b4c824f43d610113ecabc7f"><td class="memTemplParams" colspan="2">template&lt;typename Predicate &gt; </td></tr>
-<tr class="memitem:ae9a57d4d9b4c824f43d610113ecabc7f"><td class="memTemplItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ae9a57d4d9b4c824f43d610113ecabc7f">childrenWhich</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *from, Predicate p)</td></tr>
-<tr class="memdesc:ae9a57d4d9b4c824f43d610113ecabc7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all children including the node <em>from</em>, which fullfill the <em>Predicate</em> <em>p</em>, i.e.  <a href="#ae9a57d4d9b4c824f43d610113ecabc7f">More...</a><br /></td></tr>
-<tr class="separator:ae9a57d4d9b4c824f43d610113ecabc7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94762205cf2359233b9c7af462945edb"><td class="memTemplParams" colspan="2">template&lt;typename Predicate &gt; </td></tr>
+<tr class="memitem:a94762205cf2359233b9c7af462945edb"><td class="memTemplItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a94762205cf2359233b9c7af462945edb">childrenWhich</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *from, Predicate p, bool onlyTopLevel=false)</td></tr>
+<tr class="memdesc:a94762205cf2359233b9c7af462945edb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all children including the node <em>from</em>, which fullfill the <em>Predicate</em> <em>p</em>, i.e.  <a href="#a94762205cf2359233b9c7af462945edb">More...</a><br /></td></tr>
+<tr class="separator:a94762205cf2359233b9c7af462945edb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6da5da50350c88318893b891940ccf60"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a6da5da50350c88318893b891940ccf60">createDefaultInstance</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>)</td></tr>
 <tr class="memdesc:a6da5da50350c88318893b891940ccf60"><td class="mdescLeft">&#160;</td><td class="mdescRight">As <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> is an abstract class this method always returns nullptr.  <a href="#a6da5da50350c88318893b891940ccf60">More...</a><br /></td></tr>
 <tr class="separator:a6da5da50350c88318893b891940ccf60"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -361,6 +364,18 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae1d3d812bf2b2cf4c897ce6144ae3e84"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classModel_1_1Node.html#ae1d3d812bf2b2cf4c897ce6144ae3e84">Model::Node::SymbolTypes</a> =  QFlags&lt;<a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626">SymbolType</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79"></a>
 <div class="memitem">
@@ -372,17 +387,21 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79a442bce153404d787512d1392ba9000fa"></a>SEARCH_UP&#160;</td><td class="fielddoc">
-<p>Looks for symbols within the specified scope and enclosing scopes. </p>
-<p>Depending on the source, symbols in the current scope which come after the source will not be considered. This is the case e.g. with searches for local variable declarations in a method: only variables before the source node should be considered. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79ac0232fa9373d329c1b413b8058db0209"></a>SEARCH_HERE&#160;</td><td class="fielddoc">
+<p>Looks for symbols defined by the current node. </p>
+<p>This happens when findSymbols has been called on the parent with SEARCH_DOWN and the parent must therefore find a precise match in its scope. <a class="el" href="classModel_1_1Node.html#ad58010ee5be8efe9a12fd54c9ebf08c3" title="Performs a search for a symbol according to the given request and returns whether a symbol was found...">findSymbols()</a> will be called for each potential match from the parents children with the SEACH_HERE flag </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97"></a>SEARCH_DOWN&#160;</td><td class="fielddoc">
 <p>Looks for symbols inside the specified scope or subscopes. </p>
 <p>This is used for symbols that are requested in a specific context (typically after a '.') e.g. "list.sort()" </p>
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79ac0232fa9373d329c1b413b8058db0209"></a>SEARCH_HERE&#160;</td><td class="fielddoc">
-<p>Looks for symbols defined by the current node. </p>
-<p>This happens when findSymbols has been called on the parent with SEARCH_DOWN and the parent must therefore find a precise match in its scope. <a class="el" href="classModel_1_1Node.html#aa5949daf00c16bd91d7a5b64441f0fd4" title="Returns in result a set of all nodes which define a symbol with a name matching matcher in the scope ...">findSymbols()</a> will be called for each potential match from the parents children with the SEACH_HERE flag </p>
+<tr><td class="fieldname"><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79a442bce153404d787512d1392ba9000fa"></a>SEARCH_UP&#160;</td><td class="fielddoc">
+<p>Looks for symbols within the specified scope and enclosing scopes. </p>
+<p>Unless explicitly overriden, this mode assumes no ordering of the children within the scope and will searc within all children except for the source child. Some scopes override this behavior and only search for symbols that come before the source child. This is the case e.g. with searches for local variable declarations in a method: only variables before the source node should be considered. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79aa0b09c8030eb9107e61906728817e1af"></a>SEARCH_UP_ORDERED&#160;</td><td class="fielddoc">
+<p>This is similar to SEARCH_UP but enforces that the search within the immediate scope is ordered. </p>
+<p>While a particular scope node (typically a list type) can choose how to perform a SEARCH_UP operation, any scope (list) should respect SEARCH_UP_ORDERED and do an ordered search requested from a child element. This is useful for example in case where a list contains both ordered and unordered elements, e.g. a list of declarations, where classes are unordered but type aliases or name imports are ordered. </p>
 </td></tr>
 </table>
 
@@ -531,7 +550,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae6c6fa88579de718cfc16e2a5c22e8e3"></a>
+<a class="anchor" id="aaea32a591397c15a670c75db0f736694"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -539,7 +558,7 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void Model::Node::beginModification </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>text</em> = <code>QString()</code></td><td>)</td>
+          <td class="paramname"><em>text</em> = <code>{}</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -632,7 +651,7 @@ template&lt;typename NodeType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ae9a57d4d9b4c824f43d610113ecabc7f"></a>
+<a class="anchor" id="a94762205cf2359233b9c7af462945edb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -651,7 +670,13 @@ template&lt;typename Predicate &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Predicate&#160;</td>
-          <td class="paramname"><em>p</em>&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>onlyTopLevel</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -667,7 +692,8 @@ template&lt;typename Predicate &gt; </div>
 </div><div class="memdoc">
 
 <p>Returns all children including the node <em>from</em>, which fullfill the <em>Predicate</em> <em>p</em>, i.e. </p>
-<p><em>p(node)</em> returns true. </p>
+<p><em>p(node)</em> returns true.</p>
+<p>If <em>onlyTopLevel</em> is set only the first matches are returned </p>
 
 </div>
 </div>
@@ -903,7 +929,7 @@ template&lt;typename Predicate &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa5949daf00c16bd91d7a5b64441f0fd4"></a>
+<a class="anchor" id="ad58010ee5be8efe9a12fd54c9ebf08c3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -913,43 +939,9 @@ template&lt;typename Predicate &gt; </div>
         <tr>
           <td class="memname">bool Model::Node::findSymbols </td>
           <td>(</td>
-          <td class="paramtype">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a>&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">ResolutionRequest</a> &gt;&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -959,12 +951,8 @@ template&lt;typename Predicate &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Returns in <em>result</em> a set of all nodes which define a symbol with a name matching <em>matcher</em> in the scope of this node. </p>
-<p>The return value is true if a symbol was found and false otherwise.</p>
-<p>The <em>source</em> <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> specifies what node should be used as a reference when determining what symbols are visible.</p>
-<p>The <em>direction</em> specifies what search to perform.</p>
-<p>The <em>symbolTypes</em> specifies what symbol types should be returned. If a symbol matches any of the requested types it will be returned.</p>
-<p>If <em>exhaustAllScopes</em> is false, the search will halt as soon as symbols are found within a scope. This is useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope. If <em>exhaustAllScopes</em> is true, the search will explore all scopes in corresponding to the provided mode. This is useful when <em>symbolExp</em> can match multiple symbols with different names (for example during auto completion list build up).</p>
+<p>Performs a search for a symbol according to the given <em>request</em> and returns whether a symbol was found. </p>
+<p>The symbols which were found are inserted in the set refernced by the <em>result</em> of the request.</p>
 <p>The default implementation returns a set with only the current node in it, in case the node defines the requested symbol. Otherwise if <em>mode</em> is FindSymbolMode::SEARCH_UP, the implementation of the parent node is called.</p>
 <p>Reimplement this method in derived classes to specify fine grained behavior and operation for search modes other than FindSymbolMode::SEARCH_UP </p>
 
@@ -1111,7 +1099,8 @@ template&lt;typename NodeType &gt; </div>
 <p>This is typically a per class value.</p>
 <p>When the user saves the project normally the entire corresponding application tree is saved. To optimize the amount of data written to disk, it is possible to indicate new persistence units. Whenever a node in the application is modified only the persistent unit it belongs to, together with all persistence units of its parents are saved.</p>
 <p>For example, to simulate the typical scenario of saving classes in different files, a node which represents a class should return true as the result of this method.</p>
-<p>NOTE: The persistence engine will save the ID and last revision of all objects that which are marked as a new persistence unit. Therefore this option should be used with care. Only node types closer to the root are suitable for being new persistence units. Nodes closer to the leafs, such as expressions and text values should not be new persistence units, as this will greatly increase the memory required by the persistence engine. </p>
+<p>NOTE: The persistence engine will save the ID and last revision of all objects that which are marked as a new persistence unit. Therefore this option should be used with care. Only node types closer to the root are suitable for being new persistence units. Nodes closer to the leafs, such as expressions and text values should not be new persistence units, as this will greatly increase the memory required by the persistence engine.</p>
+<p>TODO In the comment above the part that explains things about the revision is incorrect. The persistence store does not care about this currently. Either change the comment or fix this. </p>
 
 </div>
 </div>
@@ -1608,7 +1597,7 @@ template&lt;typename NodeType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html#ae1d3d812bf2b2cf4c897ce6144ae3e84">SymbolTypes</a>&#160;</td>
           <td class="paramname"><em>symbolTypes</em>&#160;</td>
         </tr>
         <tr>
@@ -1662,7 +1651,7 @@ template&lt;typename NodeType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Node::SymbolTypes Model::Node::symbolType </td>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html#ae1d3d812bf2b2cf4c897ce6144ae3e84">Node::SymbolTypes</a> Model::Node::symbolType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>

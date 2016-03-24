@@ -109,6 +109,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a8c9f26540d76a3facb87f20389feaf51"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#a8c9f26540d76a3facb87f20389feaf51">aliasQueries</a> () const </td></tr>
+<tr class="separator:a8c9f26540d76a3facb87f20389feaf51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29de8259ad761caaec966d4592512df7"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classInformationScripting_1_1Query.html">Query</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#a29de8259ad761caaec966d4592512df7">buildQuery</a> (const QString &amp;command, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *target, QStringList <a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, <a class="el" href="classInformationScripting_1_1QueryExecutor.html">QueryExecutor</a> *executor)</td></tr>
 <tr class="separator:a29de8259ad761caaec966d4592512df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04657ff8f720c5b71ec9a43a996a0564"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#a04657ff8f720c5b71ec9a43a996a0564">registeredQueries</a> () const </td></tr>
@@ -120,8 +122,6 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af32c763bfd8f15b583db6ab71ca5642d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInformationScripting_1_1QueryRegistry.html">QueryRegistry</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#af32c763bfd8f15b583db6ab71ca5642d">instance</a> ()</td></tr>
 <tr class="separator:af32c763bfd8f15b583db6ab71ca5642d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00030b48650d7a8eb22f4bd828a6b975"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#a00030b48650d7a8eb22f4bd828a6b975">registerAlias</a> (const QString &amp;alias, const QString &amp;aliasedQuery, std::function&lt; void(QStringList &amp;)&gt; argAdaption={})</td></tr>
-<tr class="separator:a00030b48650d7a8eb22f4bd828a6b975"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab3c17d58144b08a99c924c2f6cf5724"><td class="memTemplParams" colspan="2">template&lt;typename QueryType , typename... ForwardArguments&gt; </td></tr>
 <tr class="memitem:aab3c17d58144b08a99c924c2f6cf5724"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#aab3c17d58144b08a99c924c2f6cf5724">registerQuery</a> (const QString &amp;name, ForwardArguments...forwardArguments)</td></tr>
 <tr class="separator:aab3c17d58144b08a99c924c2f6cf5724"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,6 +138,8 @@ Private Types</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a7d7c546cdb717460350dccc8700cd26b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#a7d7c546cdb717460350dccc8700cd26b">QueryRegistry</a> ()=default</td></tr>
 <tr class="separator:a7d7c546cdb717460350dccc8700cd26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aad3c9e0624e15d556a72bb5d138639"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classInformationScripting_1_1Query.html">Query</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#a8aad3c9e0624e15d556a72bb5d138639">tryBuildQueryFromAlias</a> (const QString &amp;name, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *target, QStringList <a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, <a class="el" href="classInformationScripting_1_1QueryExecutor.html">QueryExecutor</a> *executor)</td></tr>
+<tr class="separator:a8aad3c9e0624e15d556a72bb5d138639"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a433e7e8693a680e1ddf2c45bb8b2d3f0"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classInformationScripting_1_1Query.html">Query</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1QueryRegistry.html#a433e7e8693a680e1ddf2c45bb8b2d3f0">tryBuildQueryFromScript</a> (const QString &amp;name, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *target, QStringList <a class="el" href="namespaceInformationScripting.html#abb2bb9f9d5a797f14a8242bcf4d34537">args</a>, <a class="el" href="classInformationScripting_1_1QueryExecutor.html">QueryExecutor</a> *executor)</td></tr>
 <tr class="separator:a433e7e8693a680e1ddf2c45bb8b2d3f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -221,6 +223,21 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a8c9f26540d76a3facb87f20389feaf51"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList InformationScripting::QueryRegistry::aliasQueries </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a29de8259ad761caaec966d4592512df7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -271,46 +288,6 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a00030b48650d7a8eb22f4bd828a6b975"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void InformationScripting::QueryRegistry::registerAlias </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>alias</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>aliasedQuery</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::function&lt; void(QStringList &amp;)&gt;&#160;</td>
-          <td class="paramname"><em>argAdaption</em> = <code>{}</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -428,6 +405,52 @@ template&lt;typename QueryType , QueryRegistry::ExtraArguments extras, class... 
           <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8aad3c9e0624e15d556a72bb5d138639"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classInformationScripting_1_1Query.html">Query</a> &gt; InformationScripting::QueryRegistry::tryBuildQueryFromAlias </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QStringList&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInformationScripting_1_1QueryExecutor.html">QueryExecutor</a> *&#160;</td>
+          <td class="paramname"><em>executor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

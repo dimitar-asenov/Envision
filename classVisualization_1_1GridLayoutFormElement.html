@@ -105,8 +105,10 @@ Inheritance diagram for Visualization::GridLayoutFormElement:</div>
  <div class="center">
   <img src="classVisualization_1_1GridLayoutFormElement.png" usemap="#Visualization::GridLayoutFormElement_map" alt=""/>
   <map id="Visualization::GridLayoutFormElement_map" name="Visualization::GridLayoutFormElement_map">
-<area href="classVisualization_1_1LayoutFormElement.html" title="Base class for a layout element. " alt="Visualization::LayoutFormElement" shape="rect" coords="0,56,224,80"/>
-<area href="classVisualization_1_1FormElement.html" title="Base class for all the form elements, that can be added as a form to a DeclarativeItem. " alt="Visualization::FormElement" shape="rect" coords="0,0,224,24"/>
+<area href="classVisualization_1_1SuperLayoutElement.html" alt="Visualization::SuperLayoutElement&lt; GridLayoutFormElement, LayoutFormElement &gt;" shape="rect" coords="0,168,484,192"/>
+<area href="classVisualization_1_1SuperFormElement.html" alt="Visualization::SuperFormElement&lt; GridLayoutFormElement, LayoutFormElement &gt;" shape="rect" coords="0,112,484,136"/>
+<area href="classVisualization_1_1LayoutFormElement.html" title="Base class for a layout element. " alt="Visualization::LayoutFormElement" shape="rect" coords="0,56,484,80"/>
+<area href="classVisualization_1_1FormElement.html" title="Base class for all the form elements, that can be added as a form to a DeclarativeItem. " alt="Visualization::FormElement" shape="rect" coords="0,0,484,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -116,36 +118,34 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8867a5e494b7b9f084a4674000844055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a632502f9e2717abaca0397b035ff3835"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a632502f9e2717abaca0397b035ff3835">GridLayoutFormElement</a> (const <a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> &amp;other)</td></tr>
 <tr class="separator:a632502f9e2717abaca0397b035ff3835"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e467f10516a1cf034875a4a3e3ab387"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a3e467f10516a1cf034875a4a3e3ab387">~GridLayoutFormElement</a> ()</td></tr>
-<tr class="separator:a3e467f10516a1cf034875a4a3e3ab387"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fdb8cee9e16ebee899089ca4a5004f4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a4fdb8cee9e16ebee899089ca4a5004f4">clone</a> () const override</td></tr>
-<tr class="memdesc:a4fdb8cee9e16ebee899089ca4a5004f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy this element and all its children into a new element tree.  <a href="#a4fdb8cee9e16ebee899089ca4a5004f4">More...</a><br /></td></tr>
-<tr class="separator:a4fdb8cee9e16ebee899089ca4a5004f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28207d5d67190c9b6a030619645d0b2d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a28207d5d67190c9b6a030619645d0b2d">computeSize</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int availableWidth, int availableHeight) override</td></tr>
-<tr class="memdesc:a28207d5d67190c9b6a030619645d0b2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets if the element has a cursor if it is empty to <em>cursorWhenEmpty</em>.  <a href="#a28207d5d67190c9b6a030619645d0b2d">More...</a><br /></td></tr>
-<tr class="separator:a28207d5d67190c9b6a030619645d0b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e9a78f9af62ec87d9b80299cfde9d48"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a7e9a78f9af62ec87d9b80299cfde9d48">~GridLayoutFormElement</a> ()</td></tr>
+<tr class="separator:a7e9a78f9af62ec87d9b80299cfde9d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac38031c9db20bb9ff2eb5fb815c94fb1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#ac38031c9db20bb9ff2eb5fb815c94fb1">clone</a> () const override</td></tr>
+<tr class="memdesc:ac38031c9db20bb9ff2eb5fb815c94fb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy this element and all its children into a new element tree.  <a href="#ac38031c9db20bb9ff2eb5fb815c94fb1">More...</a><br /></td></tr>
+<tr class="separator:ac38031c9db20bb9ff2eb5fb815c94fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a144ff1207940af78efe49627639d4291"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a144ff1207940af78efe49627639d4291">computeSize</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int availableWidth, int availableHeight) override</td></tr>
+<tr class="memdesc:a144ff1207940af78efe49627639d4291"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets if the element has a cursor if it is empty to <em>cursorWhenEmpty</em>.  <a href="#a144ff1207940af78efe49627639d4291">More...</a><br /></td></tr>
+<tr class="separator:a144ff1207940af78efe49627639d4291"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae158c25968150d9a4be0871bc0384376"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#ae158c25968150d9a4be0871bc0384376">focusedElement2DIndex</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
 <tr class="memdesc:ae158c25968150d9a4be0871bc0384376"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the 2D index of the focused element for the specified <em>item</em>.  <a href="#ae158c25968150d9a4be0871bc0384376">More...</a><br /></td></tr>
 <tr class="separator:ae158c25968150d9a4be0871bc0384376"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a786e822a80c44e1e4824ecaa8803802e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a786e822a80c44e1e4824ecaa8803802e">focusedElementIndex</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
 <tr class="memdesc:a786e822a80c44e1e4824ecaa8803802e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the focused element for the specified <em>item</em>.  <a href="#a786e822a80c44e1e4824ecaa8803802e">More...</a><br /></td></tr>
 <tr class="separator:a786e822a80c44e1e4824ecaa8803802e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88c8832668f24a9f7369b9ecdcd4d404"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a88c8832668f24a9f7369b9ecdcd4d404">itemAt</a> (<a class="el" href="classVisualization_1_1DeclarativeItemBase.html">DeclarativeItemBase</a> *item, int index) const </td></tr>
-<tr class="memdesc:a88c8832668f24a9f7369b9ecdcd4d404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Asserts that this is a linear grid and returns the item at <em>index</em>.  <a href="#a88c8832668f24a9f7369b9ecdcd4d404">More...</a><br /></td></tr>
-<tr class="separator:a88c8832668f24a9f7369b9ecdcd4d404"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad25fb54cdab40ae2a39d2b96cf0285e1"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#ad25fb54cdab40ae2a39d2b96cf0285e1">itemAt</a> (<a class="el" href="classVisualization_1_1DeclarativeItemBase.html">DeclarativeItemBase</a> *item, int index) const </td></tr>
+<tr class="memdesc:ad25fb54cdab40ae2a39d2b96cf0285e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Asserts that this is a linear grid and returns the item at <em>index</em>.  <a href="#ad25fb54cdab40ae2a39d2b96cf0285e1">More...</a><br /></td></tr>
+<tr class="separator:ad25fb54cdab40ae2a39d2b96cf0285e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc054ad45e7a2f028f0d5a6984f62abb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#acc054ad45e7a2f028f0d5a6984f62abb">length</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
 <tr class="memdesc:acc054ad45e7a2f028f0d5a6984f62abb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Asserts that this is a linear grid and returns the length.  <a href="#acc054ad45e7a2f028f0d5a6984f62abb">More...</a><br /></td></tr>
 <tr class="separator:acc054ad45e7a2f028f0d5a6984f62abb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0c49583ed20b23cacc20b4ea7d4e023"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#aa0c49583ed20b23cacc20b4ea7d4e023">operator=</a> (const <a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> &amp;)=delete</td></tr>
 <tr class="separator:aa0c49583ed20b23cacc20b4ea7d4e023"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7242eb214d2c1abfe2c338ac6804be9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#ad7242eb214d2c1abfe2c338ac6804be9">put</a> (int column, int row, <a class="el" href="classVisualization_1_1FormElement.html">FormElement</a> *element)</td></tr>
-<tr class="memdesc:ad7242eb214d2c1abfe2c338ac6804be9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts the <em>element</em> at <em>column</em> and <em>row</em> in the grid.  <a href="#ad7242eb214d2c1abfe2c338ac6804be9">More...</a><br /></td></tr>
-<tr class="separator:ad7242eb214d2c1abfe2c338ac6804be9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa8f97d5e9f8250f3ca3405ea9274e30"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classVisualization_1_1ItemRegion.html">ItemRegion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#aaa8f97d5e9f8250f3ca3405ea9274e30">regions</a> (<a class="el" href="classVisualization_1_1DeclarativeItemBase.html">DeclarativeItemBase</a> *item, int parentX, int parentY) override</td></tr>
-<tr class="memdesc:aaa8f97d5e9f8250f3ca3405ea9274e30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> regions method and returns cursor and item regions of all contained form elements for this <em>item</em>.  <a href="#aaa8f97d5e9f8250f3ca3405ea9274e30">More...</a><br /></td></tr>
-<tr class="separator:aaa8f97d5e9f8250f3ca3405ea9274e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85c68908dde3a79b616e5866c3901774"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a85c68908dde3a79b616e5866c3901774">setBottomMargin</a> (int bottom)</td></tr>
-<tr class="separator:a85c68908dde3a79b616e5866c3901774"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa0f7bd1f73f40db5c4bb03c96fa8499"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#aaa0f7bd1f73f40db5c4bb03c96fa8499">put</a> (int column, int row, <a class="el" href="classVisualization_1_1FormElement.html">FormElement</a> *element)</td></tr>
+<tr class="memdesc:aaa0f7bd1f73f40db5c4bb03c96fa8499"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts the <em>element</em> at <em>column</em> and <em>row</em> in the grid.  <a href="#aaa0f7bd1f73f40db5c4bb03c96fa8499">More...</a><br /></td></tr>
+<tr class="separator:aaa0f7bd1f73f40db5c4bb03c96fa8499"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adabccdf5e658696972074a1f2b0b3f02"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classVisualization_1_1ItemRegion.html">ItemRegion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#adabccdf5e658696972074a1f2b0b3f02">regions</a> (<a class="el" href="classVisualization_1_1DeclarativeItemBase.html">DeclarativeItemBase</a> *item, int parentX, int parentY) override</td></tr>
+<tr class="memdesc:adabccdf5e658696972074a1f2b0b3f02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> regions method and returns cursor and item regions of all contained form elements for this <em>item</em>.  <a href="#adabccdf5e658696972074a1f2b0b3f02">More...</a><br /></td></tr>
+<tr class="separator:adabccdf5e658696972074a1f2b0b3f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f443f841e3250d20126150f2c101656"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a7f443f841e3250d20126150f2c101656">setCellAlignment</a> (<a class="el" href="classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31">LayoutStyle::Alignment</a> horizontalAlignment, <a class="el" href="classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31">LayoutStyle::Alignment</a> verticalAlignment)</td></tr>
 <tr class="memdesc:a7f443f841e3250d20126150f2c101656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the horizontal and vertical alignment to <em>horizontalAlignment</em> and <em>verticalAlignment</em> respectively for the cell where the last element was added.  <a href="#a7f443f841e3250d20126150f2c101656">More...</a><br /></td></tr>
 <tr class="separator:a7f443f841e3250d20126150f2c101656"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,28 +167,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aafeee00f7bf928da67f6307c2c873ce7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#aafeee00f7bf928da67f6307c2c873ce7">setColumnStretchFactors</a> (float stretchFactor)</td></tr>
 <tr class="memdesc:aafeee00f7bf928da67f6307c2c873ce7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the stretch factor of all columns to <em>stretchFactor</em>.  <a href="#aafeee00f7bf928da67f6307c2c873ce7">More...</a><br /></td></tr>
 <tr class="separator:aafeee00f7bf928da67f6307c2c873ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a852529c31e384a248c4d35e9e3632f4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a852529c31e384a248c4d35e9e3632f4a">setHasCursorWhenEmpty</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; hasCursorWhenEmptyGetter)</td></tr>
-<tr class="separator:a852529c31e384a248c4d35e9e3632f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf859cfc9718b3a85f66a167c4a11c04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#acf859cfc9718b3a85f66a167c4a11c04">setHorizontalAlignment</a> (<a class="el" href="classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31">LayoutStyle::Alignment</a> horizontalAlignment)</td></tr>
 <tr class="memdesc:acf859cfc9718b3a85f66a167c4a11c04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the horizontal alignment to <em>horizontalAlignment</em> for all the cells in the grid.  <a href="#acf859cfc9718b3a85f66a167c4a11c04">More...</a><br /></td></tr>
 <tr class="separator:acf859cfc9718b3a85f66a167c4a11c04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9dfef62224e761bf841f473cd2413dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#af9dfef62224e761bf841f473cd2413dc">setHorizontalSpacing</a> (int spaceBetweenColumns)</td></tr>
 <tr class="memdesc:af9dfef62224e761bf841f473cd2413dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the horizontal spacing to <em>spaceBetweenColumns</em>.  <a href="#af9dfef62224e761bf841f473cd2413dc">More...</a><br /></td></tr>
 <tr class="separator:af9dfef62224e761bf841f473cd2413dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7920b368412d879a2b60c66d1127eea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#aa7920b368412d879a2b60c66d1127eea">setLeftMargin</a> (int left)</td></tr>
-<tr class="separator:aa7920b368412d879a2b60c66d1127eea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e3efe2a22d140eb0653394b88118423"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a5e3efe2a22d140eb0653394b88118423">setMargins</a> (int margin)</td></tr>
-<tr class="separator:a5e3efe2a22d140eb0653394b88118423"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada87775214fdbd69e77138a16e729ad0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#ada87775214fdbd69e77138a16e729ad0">setMargins</a> (int left, int top, int right, int bottom)</td></tr>
-<tr class="separator:ada87775214fdbd69e77138a16e729ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ca9c00185d69520411d74a224a2cc7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a2ca9c00185d69520411d74a224a2cc7e">setNoBoundaryCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; noBoundaryCursorsGetter)</td></tr>
-<tr class="separator:a2ca9c00185d69520411d74a224a2cc7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a396933dd46bdab89155b8c6c9050faaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a396933dd46bdab89155b8c6c9050faaa">setNoInnerCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; noInnerCursorsGetter)</td></tr>
-<tr class="separator:a396933dd46bdab89155b8c6c9050faaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4aa2d6740a1de534dc8676c899cdc48c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a4aa2d6740a1de534dc8676c899cdc48c">setNotLocationEquivalentCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; notLocationEquivalentCursorsGetter)</td></tr>
-<tr class="separator:a4aa2d6740a1de534dc8676c899cdc48c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc5794cb05cab690bbc1b71d9d109c9f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#acc5794cb05cab690bbc1b71d9d109c9f">setRightMargin</a> (int right)</td></tr>
-<tr class="separator:acc5794cb05cab690bbc1b71d9d109c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4f835fe267f0a4457c5c711dff2a058"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#af4f835fe267f0a4457c5c711dff2a058">setRowStretchFactor</a> (int row, float stretchFactor)</td></tr>
 <tr class="memdesc:af4f835fe267f0a4457c5c711dff2a058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the stretch factor of this <em>row</em> to <em>stretchFactor</em>.  <a href="#af4f835fe267f0a4457c5c711dff2a058">More...</a><br /></td></tr>
 <tr class="separator:af4f835fe267f0a4457c5c711dff2a058"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,17 +191,47 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afef3955feae7af54bacc1febb67bc576"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#afef3955feae7af54bacc1febb67bc576">setStretchFactors</a> (float stretchFactor)</td></tr>
 <tr class="memdesc:afef3955feae7af54bacc1febb67bc576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the stretch factor of all columns and rows to <em>stretchFactor</em>.  <a href="#afef3955feae7af54bacc1febb67bc576">More...</a><br /></td></tr>
 <tr class="separator:afef3955feae7af54bacc1febb67bc576"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c976236b93b7208b827d79f6bb3a779"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a0c976236b93b7208b827d79f6bb3a779">setTopMargin</a> (int top)</td></tr>
-<tr class="separator:a0c976236b93b7208b827d79f6bb3a779"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4523929642e60c1a30440b6557580172"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a4523929642e60c1a30440b6557580172">setVerticalAlignment</a> (<a class="el" href="classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31">LayoutStyle::Alignment</a> verticalAlignment)</td></tr>
 <tr class="memdesc:a4523929642e60c1a30440b6557580172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the vertical alignment to <em>verticalAlignment</em> for all the cells in the grid.  <a href="#a4523929642e60c1a30440b6557580172">More...</a><br /></td></tr>
 <tr class="separator:a4523929642e60c1a30440b6557580172"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e946ea026180e851e21fb61ca3c148a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a0e946ea026180e851e21fb61ca3c148a">setVerticalSpacing</a> (int spaceBetweenRows)</td></tr>
 <tr class="memdesc:a0e946ea026180e851e21fb61ca3c148a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the vertical spacing to <em>spaceBetweenRows</em>.  <a href="#a0e946ea026180e851e21fb61ca3c148a">More...</a><br /></td></tr>
 <tr class="separator:a0e946ea026180e851e21fb61ca3c148a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5482b88f8caccf7631b879e62fd13108"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a5482b88f8caccf7631b879e62fd13108">sizeDependsOnParent</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const override</td></tr>
-<tr class="memdesc:a5482b88f8caccf7631b879e62fd13108"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> sizeDependsOnParent method, and by some layout form elements.  <a href="#a5482b88f8caccf7631b879e62fd13108">More...</a><br /></td></tr>
-<tr class="separator:a5482b88f8caccf7631b879e62fd13108"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe0836180b4d43e2b3645864eb480071"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#abe0836180b4d43e2b3645864eb480071">sizeDependsOnParent</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const override</td></tr>
+<tr class="memdesc:abe0836180b4d43e2b3645864eb480071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> sizeDependsOnParent method, and by some layout form elements.  <a href="#abe0836180b4d43e2b3645864eb480071">More...</a><br /></td></tr>
+<tr class="separator:abe0836180b4d43e2b3645864eb480071"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classVisualization_1_1SuperLayoutElement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classVisualization_1_1SuperLayoutElement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classVisualization_1_1SuperLayoutElement.html">Visualization::SuperLayoutElement&lt; GridLayoutFormElement, LayoutFormElement &gt;</a></td></tr>
+<tr class="memitem:a1abaea1653769257eb4eca00a280ed78 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperLayoutElement.html#a1abaea1653769257eb4eca00a280ed78">setHasCursorWhenEmpty</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; hasCursorWhenEmptyGetter)</td></tr>
+<tr class="memdesc:a1abaea1653769257eb4eca00a280ed78 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>cursorWhenEmptyGetter</em>) for checking if the element should have cursors when empty dynamically while rendering.  <a href="#a1abaea1653769257eb4eca00a280ed78">More...</a><br /></td></tr>
+<tr class="separator:a1abaea1653769257eb4eca00a280ed78 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb9fd86afe1a8023e689343998782dc2 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperLayoutElement.html#aeb9fd86afe1a8023e689343998782dc2">setNoBoundaryCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; noBoundaryCursorsGetter)</td></tr>
+<tr class="memdesc:aeb9fd86afe1a8023e689343998782dc2 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>noBoundaryCursorsGetter</em>) for checking if the element should not have any boundary cursors dynamically while rendering.  <a href="#aeb9fd86afe1a8023e689343998782dc2">More...</a><br /></td></tr>
+<tr class="separator:aeb9fd86afe1a8023e689343998782dc2 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfe45238ab1e760f587283ea1bcb95c0 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperLayoutElement.html#abfe45238ab1e760f587283ea1bcb95c0">setNoInnerCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; noInnerCursorsGetter)</td></tr>
+<tr class="memdesc:abfe45238ab1e760f587283ea1bcb95c0 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>noInnerCursorsGetter</em>) for checking if the element should not have any inner cursors dynamically while rendering.  <a href="#abfe45238ab1e760f587283ea1bcb95c0">More...</a><br /></td></tr>
+<tr class="separator:abfe45238ab1e760f587283ea1bcb95c0 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24d4564dfcb11e33af3e06692deb4625 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperLayoutElement.html#a24d4564dfcb11e33af3e06692deb4625">setNotLocationEquivalentCursors</a> (std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt; notLocationEquivalentCursorsGetter)</td></tr>
+<tr class="memdesc:a24d4564dfcb11e33af3e06692deb4625 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a getter (<em>notLocationEquivalentGetter</em>) for checking if the element's cursors are not location equivalent dynamically while rendering.  <a href="#a24d4564dfcb11e33af3e06692deb4625">More...</a><br /></td></tr>
+<tr class="separator:a24d4564dfcb11e33af3e06692deb4625 inherit pub_methods_classVisualization_1_1SuperLayoutElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classVisualization_1_1SuperFormElement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classVisualization_1_1SuperFormElement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classVisualization_1_1SuperFormElement.html">Visualization::SuperFormElement&lt; GridLayoutFormElement, LayoutFormElement &gt;</a></td></tr>
+<tr class="memitem:a346723a22aa1ea9a703eafd23f13207d inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperFormElement.html#a346723a22aa1ea9a703eafd23f13207d">setBottomMargin</a> (int bottom)</td></tr>
+<tr class="memdesc:a346723a22aa1ea9a703eafd23f13207d inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <em>bottom</em> margin of this form element.  <a href="#a346723a22aa1ea9a703eafd23f13207d">More...</a><br /></td></tr>
+<tr class="separator:a346723a22aa1ea9a703eafd23f13207d inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6471e3dc6959a04f3c4f8bb749b8d1b3 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperFormElement.html#a6471e3dc6959a04f3c4f8bb749b8d1b3">setLeftMargin</a> (int left)</td></tr>
+<tr class="memdesc:a6471e3dc6959a04f3c4f8bb749b8d1b3 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <em>left</em> margin of this form element.  <a href="#a6471e3dc6959a04f3c4f8bb749b8d1b3">More...</a><br /></td></tr>
+<tr class="separator:a6471e3dc6959a04f3c4f8bb749b8d1b3 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae544a13cc35946d8a828a9b0edfd3211 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperFormElement.html#ae544a13cc35946d8a828a9b0edfd3211">setMargins</a> (int left, int top, int right, int bottom)</td></tr>
+<tr class="memdesc:ae544a13cc35946d8a828a9b0edfd3211 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <em>left</em>, <em>top</em>, <em>right</em> and <em>bottom</em> margins to the respective values.  <a href="#ae544a13cc35946d8a828a9b0edfd3211">More...</a><br /></td></tr>
+<tr class="separator:ae544a13cc35946d8a828a9b0edfd3211 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a233df24266a638d7f52f071ec67efd2e inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperFormElement.html#a233df24266a638d7f52f071ec67efd2e">setMargins</a> (int margin)</td></tr>
+<tr class="memdesc:a233df24266a638d7f52f071ec67efd2e inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets all the margins of this form element to the value specified as <em>margin</em>.  <a href="#a233df24266a638d7f52f071ec67efd2e">More...</a><br /></td></tr>
+<tr class="separator:a233df24266a638d7f52f071ec67efd2e inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab991c4d6c5aab5276a11e92fd677ba9 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperFormElement.html#aab991c4d6c5aab5276a11e92fd677ba9">setRightMargin</a> (int right)</td></tr>
+<tr class="memdesc:aab991c4d6c5aab5276a11e92fd677ba9 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <em>right</em> margin of this form element.  <a href="#aab991c4d6c5aab5276a11e92fd677ba9">More...</a><br /></td></tr>
+<tr class="separator:aab991c4d6c5aab5276a11e92fd677ba9 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64c94e436c992df744ed8a2fce6c2024 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SuperFormElement.html#a64c94e436c992df744ed8a2fce6c2024">setTopMargin</a> (int top)</td></tr>
+<tr class="memdesc:a64c94e436c992df744ed8a2fce6c2024 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <em>top</em> margin of this form element.  <a href="#a64c94e436c992df744ed8a2fce6c2024">More...</a><br /></td></tr>
+<tr class="separator:a64c94e436c992df744ed8a2fce6c2024 inherit pub_methods_classVisualization_1_1SuperFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classVisualization_1_1LayoutFormElement"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classVisualization_1_1LayoutFormElement')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classVisualization_1_1LayoutFormElement.html">Visualization::LayoutFormElement</a></td></tr>
 <tr class="memitem:a12804d5ed4b6a53c14f7f2e60cc1354e inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutFormElement.html#a12804d5ed4b6a53c14f7f2e60cc1354e">LayoutFormElement</a> ()=default</td></tr>
 <tr class="separator:a12804d5ed4b6a53c14f7f2e60cc1354e inherit pub_methods_classVisualization_1_1LayoutFormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -451,7 +465,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3e467f10516a1cf034875a4a3e3ab387"></a>
+<a class="anchor" id="a7e9a78f9af62ec87d9b80299cfde9d48"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -459,7 +473,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Visualization::GridLayoutFormElement::~GridLayoutFormElement </td>
+          <td class="memname">virtual Visualization::GridLayoutFormElement::~GridLayoutFormElement </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -512,7 +526,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4fdb8cee9e16ebee899089ca4a5004f4"></a>
+<a class="anchor" id="ac38031c9db20bb9ff2eb5fb815c94fb1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -520,7 +534,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> * Visualization::GridLayoutFormElement::clone </td>
+          <td class="memname">virtual <a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::clone </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -564,7 +578,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a28207d5d67190c9b6a030619645d0b2d"></a>
+<a class="anchor" id="a144ff1207940af78efe49627639d4291"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -572,7 +586,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Visualization::GridLayoutFormElement::computeSize </td>
+          <td class="memname">virtual void Visualization::GridLayoutFormElement::computeSize </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
           <td class="paramname"><em>item</em>, </td>
@@ -647,14 +661,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a88c8832668f24a9f7369b9ecdcd4d404"></a>
+<a class="anchor" id="ad25fb54cdab40ae2a39d2b96cf0285e1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> * Visualization::GridLayoutFormElement::itemAt </td>
+          <td class="memname">const <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a>* Visualization::GridLayoutFormElement::itemAt </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1DeclarativeItemBase.html">Visualization::DeclarativeItemBase</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1DeclarativeItemBase.html">DeclarativeItemBase</a> *&#160;</td>
           <td class="paramname"><em>item</em>, </td>
         </tr>
         <tr>
@@ -683,7 +697,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">int Visualization::GridLayoutFormElement::length </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
           <td class="paramname"><em>item</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -718,12 +732,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad7242eb214d2c1abfe2c338ac6804be9"></a>
+<a class="anchor" id="aaa0f7bd1f73f40db5c4bb03c96fa8499"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> * Visualization::GridLayoutFormElement::put </td>
+          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::put </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>column</em>, </td>
@@ -754,7 +768,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aaa8f97d5e9f8250f3ca3405ea9274e30"></a>
+<a class="anchor" id="adabccdf5e658696972074a1f2b0b3f02"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -762,7 +776,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classVisualization_1_1ItemRegion.html">ItemRegion</a> &gt; Visualization::GridLayoutFormElement::regions </td>
+          <td class="memname">virtual QList&lt;<a class="el" href="classVisualization_1_1ItemRegion.html">ItemRegion</a>&gt; Visualization::GridLayoutFormElement::regions </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1DeclarativeItemBase.html">DeclarativeItemBase</a> *&#160;</td>
           <td class="paramname"><em>item</em>, </td>
@@ -796,33 +810,6 @@ Additional Inherited Members</h2></td></tr>
 <p><em>parentX</em> and <em>parentY</em> are the offsets that this element needs to have from the parent <em>item</em> (similar to the setItemPositions method). </p>
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1FormElement.html#a8a2d94559a289bd50d359cdc7fec8242">Visualization::FormElement</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a85c68908dde3a79b616e5866c3901774"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setBottomMargin </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>bottom</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets the <em>bottom</em> margin of this form element. * Returns a pointer to this form element. </li>
-</ul>
 
 </div>
 </div>
@@ -1055,33 +1042,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a852529c31e384a248c4d35e9e3632f4a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setHasCursorWhenEmpty </td>
-          <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td>
-          <td class="paramname"><em>hasCursorWhenEmptyGetter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets a getter (<em>cursorWhenEmptyGetter</em>) for checking if the element should have cursors when empty * dynamically while rendering. </li>
-</ul>
-
-</div>
-</div>
 <a class="anchor" id="acf859cfc9718b3a85f66a167c4a11c04"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1133,217 +1093,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Sets the horizontal spacing to <em>spaceBetweenColumns</em>. </p>
 <p>Returns a pointer to this GridLayoutElement. </p>
-
-</div>
-</div>
-<a class="anchor" id="aa7920b368412d879a2b60c66d1127eea"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setLeftMargin </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>left</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets the <em>left</em> margin of this form element. * Returns a pointer to this form element. </li>
-</ul>
-
-</div>
-</div>
-<a class="anchor" id="a5e3efe2a22d140eb0653394b88118423"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setMargins </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>margin</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets all the margins of this form element to the value specified as <em>margin</em>. * Returns a pointer to this form element. </li>
-</ul>
-
-</div>
-</div>
-<a class="anchor" id="ada87775214fdbd69e77138a16e729ad0"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setMargins </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>left</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>top</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>right</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>bottom</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets the <em>left</em>, <em>top</em>, <em>right</em> and <em>bottom</em> margins to the respective values. * Returns a pointer to this form element. </li>
-</ul>
-
-</div>
-</div>
-<a class="anchor" id="a2ca9c00185d69520411d74a224a2cc7e"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setNoBoundaryCursors </td>
-          <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td>
-          <td class="paramname"><em>noBoundaryCursorsGetter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets a getter (<em>noBoundaryCursorsGetter</em>) for checking if the element should not have any boundary cursors * dynamically while rendering. </li>
-</ul>
-
-</div>
-</div>
-<a class="anchor" id="a396933dd46bdab89155b8c6c9050faaa"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setNoInnerCursors </td>
-          <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td>
-          <td class="paramname"><em>noInnerCursorsGetter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets a getter (<em>noInnerCursorsGetter</em>) for checking if the element should not have any inner cursors * dynamically while rendering. </li>
-</ul>
-
-</div>
-</div>
-<a class="anchor" id="a4aa2d6740a1de534dc8676c899cdc48c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setNotLocationEquivalentCursors </td>
-          <td>(</td>
-          <td class="paramtype">std::function&lt; bool(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;&#160;</td>
-          <td class="paramname"><em>notLocationEquivalentCursorsGetter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets a getter (<em>notLocationEquivalentGetter</em>) for checking if the element's cursors are not location * equivalent dynamically while rendering. </li>
-</ul>
-
-</div>
-</div>
-<a class="anchor" id="acc5794cb05cab690bbc1b71d9d109c9f"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setRightMargin </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>right</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets the <em>right</em> margin of this form element. * Returns a pointer to this form element. </li>
-</ul>
 
 </div>
 </div>
@@ -1539,33 +1288,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0c976236b93b7208b827d79f6bb3a779"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>* Visualization::GridLayoutFormElement::setTopMargin </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>top</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>Sets the <em>top</em> margin of this form element. * Returns a pointer to this form element. </li>
-</ul>
-
-</div>
-</div>
 <a class="anchor" id="a4523929642e60c1a30440b6557580172"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1620,7 +1342,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5482b88f8caccf7631b879e62fd13108"></a>
+<a class="anchor" id="abe0836180b4d43e2b3645864eb480071"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1628,7 +1350,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Visualization::GridLayoutFormElement::sizeDependsOnParent </td>
+          <td class="memname">virtual bool Visualization::GridLayoutFormElement::sizeDependsOnParent </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
           <td class="paramname"><em>item</em></td><td>)</td>

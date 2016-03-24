@@ -5,7 +5,6 @@ var searchData=
   ['hbinarynode',['HBinaryNode',['../classInteraction_1_1HBinaryNode.html',1,'Interaction']]],
   ['hclass',['HClass',['../classOOInteraction_1_1HClass.html',1,'OOInteraction']]],
   ['hcomment',['HComment',['../classComments_1_1HComment.html',1,'Comments']]],
-  ['hcommentbrowser',['HCommentBrowser',['../classComments_1_1HCommentBrowser.html',1,'Comments']]],
   ['hcommentdiagram',['HCommentDiagram',['../classComments_1_1HCommentDiagram.html',1,'Comments']]],
   ['hcommentdiagramconnector',['HCommentDiagramConnector',['../classComments_1_1HCommentDiagramConnector.html',1,'Comments']]],
   ['hcommentdiagramshape',['HCommentDiagramShape',['../classComments_1_1HCommentDiagramShape.html',1,'Comments']]],
@@ -29,7 +28,7 @@ var searchData=
   ['hloop',['HLoop',['../classOOInteraction_1_1HLoop.html',1,'OOInteraction']]],
   ['hmethod',['HMethod',['../classOOInteraction_1_1HMethod.html',1,'OOInteraction']]],
   ['hmodule',['HModule',['../classOOInteraction_1_1HModule.html',1,'OOInteraction']]],
-  ['hmoveableoverlay',['HMoveableOverlay',['../classOODebug_1_1HMoveableOverlay.html',1,'OODebug']]],
+  ['hmovableitem',['HMovableItem',['../classInteraction_1_1HMovableItem.html',1,'Interaction']]],
   ['hpositionlayout',['HPositionLayout',['../classInteraction_1_1HPositionLayout.html',1,'Interaction']]],
   ['hproject',['HProject',['../classOOInteraction_1_1HProject.html',1,'OOInteraction']]],
   ['hpromptshell',['HPromptShell',['../classInteraction_1_1HPromptShell.html',1,'Interaction']]],
@@ -40,5 +39,6 @@ var searchData=
   ['hstatement',['HStatement',['../classOOInteraction_1_1HStatement.html',1,'OOInteraction']]],
   ['hstatementitemlist',['HStatementItemList',['../classOOInteraction_1_1HStatementItemList.html',1,'OOInteraction']]],
   ['htext',['HText',['../classInteraction_1_1HText.html',1,'Interaction']]],
-  ['hviewitem',['HViewItem',['../classInteraction_1_1HViewItem.html',1,'Interaction']]]
+  ['hviewitem',['HViewItem',['../classInteraction_1_1HViewItem.html',1,'Interaction']]],
+  ['hwebbrowseritem',['HWebBrowserItem',['../classInteraction_1_1HWebBrowserItem.html',1,'Interaction']]]
 ];

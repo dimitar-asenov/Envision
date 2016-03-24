@@ -125,11 +125,14 @@ IfStatement.h</h1>
 <div class="line"><span class="preprocessor">#include &quot;../expressions/Expression.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;../elements/StatementItemList.h&quot;</span></div>
 <div class="line"></div>
-<div class="line">DECLARE_TYPED_LIST(OOMODEL_API, <a class="code" href="namespaceOOModel.html">OOModel</a>, IfStatement)</div>
+<div class="line"><span class="keyword">namespace </span><a class="code" href="namespaceOOModel.html">OOModel</a> {</div>
+<div class="line">   <span class="keyword">class </span>IfStatement;</div>
+<div class="line">}</div>
+<div class="line"><span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>OOMODEL_API <a class="code" href="classModel_1_1TypedList.html">Model::TypedList&lt;OOModel::IfStatement&gt;</a>;</div>
 <div class="line"></div>
-<div class="line">namespace <a class="code" href="namespaceOOModel.html">OOModel</a> {</div>
+<div class="line"><span class="keyword">namespace </span><a class="code" href="namespaceOOModel.html">OOModel</a> {</div>
 <div class="line"></div>
-<div class="line"><span class="keyword">class </span>OOMODEL_API IfStatement: <span class="keyword">public</span> <a class="code" href="classCore_1_1Reflect.html">Super</a>&lt;Statement&gt;</div>
+<div class="line"><span class="keyword">class </span>OOMODEL_API IfStatement: <span class="keyword">public</span> <a class="code" href="classCore_1_1Reflect.html">Super&lt;Statement&gt;</a></div>
 <div class="line">{</div>
 <div class="line">   COMPOSITENODE_DECLARE_STANDARD_METHODS(IfStatement)</div>
 <div class="line"></div>
@@ -138,19 +141,16 @@ IfStatement.h</h1>
 <div class="line">   ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)</div>
 <div class="line"></div>
 <div class="line">   public:</div>
-<div class="line">      virtual <span class="keywordtype">bool</span> findSymbols(QSet&lt;Node*&gt;&amp; result, const <a class="code" href="namespaceModel.html">Model</a>::SymbolMatcher&amp; matcher, const Node* source,</div>
-<div class="line">            FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) const override;</div>
+<div class="line">      virtual <span class="keywordtype">bool</span> findSymbols(std::unique_ptr&lt;<a class="code" href="namespaceModel.html">Model</a>::ResolutionRequest&gt; request) const override;</div>
 <div class="line">};</div>
 <div class="line"></div>
 <div class="line">}</div>
 </div><!-- fragment --><p>Let's examine it starting from the top. The first noteworthy bit is:</p>
-<p><div class="fragment"><div class="line">DECLARE_TYPED_LIST(OOMODEL_API, OOModel, IfStatement)</div>
-</div><!-- fragment --> In order to be able to put a node into a list of nodes, it is necessary to explicitly instantiate the <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a> template. Doing this properly in a cross-platform setting can be a bit involved and we use the <code>DECLARE_TYPED_LIST</code> macro to help with that. You need to provide:</p><ul>
-<li>the API macro which will expand to import/export directives in Windows</li>
-<li>the namespace</li>
-<li>the class name.</li>
-</ul>
-<p>This macro should appear in the header and needs to be complemented with the <code>DEFINE_TYPED_LIST</code> macro in the <code></code>.cpp file.</p>
+<p><div class="fragment"><div class="line"><span class="keyword">namespace </span><a class="code" href="namespaceOOModel.html">OOModel</a> {</div>
+<div class="line">   <span class="keyword">class </span>IfStatement;</div>
+<div class="line">}</div>
+<div class="line"><span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>OOMODEL_API Model::TypedList&lt;OOModel::IfStatement&gt;;</div>
+</div><!-- fragment --> In order to be able to put a node into a list of nodes, it is necessary to explicitly instantiate the <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a> template. This is necessary to support Windows as it can't properly handle templates with static fields otherwise. With this first part in the <code></code>.h file we prevent implicit instantiation. Then the class is explicitly instantiated in the <code></code>.cpp file.</p>
 <p>Next comes the class declaration: <div class="fragment"><div class="line"><span class="keyword">class </span>OOMODEL_API IfStatement: <span class="keyword">public</span> <a class="code" href="classCore_1_1Reflect.html">Super</a>&lt;Statement&gt;</div>
 </div><!-- fragment --> The node declaration should use the plug-in's API macro and should inherit directly or indirectly from Node. When specifying the base node type you must do so through the <code>Super</code> template. This is required by the underlying framework. The <code>Super</code> template does two things:</p><ul>
 <li>Define a protected type called <code>Super</code> which represents the base class. This makes it possible to simply use <code>Super</code> anywhere where you need to refer to the base class. This is especially helpful when the base class is a long template instantiation. Inheritance via <code>Super</code> is used very often throughout Envision.</li>
@@ -160,20 +160,19 @@ IfStatement.h</h1>
 <p>Next we notice the first line of the class declaration: <div class="fragment"><div class="line">   COMPOSITENODE_DECLARE_STANDARD_METHODS(IfStatement)</div>
 </div><!-- fragment --> This macro needs to appear as the very first line of the declaration of any node that inherits from <a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a>. There is a similar (also mandatory) macro for nodes which inherit directly from Node - <code>NODE_DECLARE_STANDARD_METHODS</code>. Each of these macros needs to be complemented with a couple of macros in the .cpp file:</p>
 <p>For <code>COMPOSITENODE_DECLARE_STANDARD_METHODS:</code> </p><ul>
-<li><code>COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS</code> </li>
-<li><code>COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS</code> </li>
+<li><code>DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS</code> </li>
+<li><code>COMPOSITEDEFINE_NODE_TYPE_REGISTRATION_METHODS</code> </li>
 </ul>
 <p>For <code>NODE_DECLARE_STANDARD_METHODS:</code> </p><ul>
-<li><code>NODE_DEFINE_EMPTY_CONSTRUCTORS</code> </li>
-<li><code>NODE_DEFINE_TYPE_REGISTRATION_METHODS</code> </li>
+<li><code>DEFINE_NODE_EMPTY_CONSTRUCTORS</code> </li>
+<li><code>DEFINE_NODE_TYPE_REGISTRATION_METHODS</code> </li>
 </ul>
 <p>Together these macros save us a ton of writing. They declare many methods for the new node type and setup required data structures. At some point there was an attempt to translate their functionality to templates but the result was more verbose and less flexible so we stuck with the macros.</p>
 <p>Next we get to the most interesting bit of the node declaration: <div class="fragment"><div class="line">   ATTRIBUTE(Expression, condition, setCondition)</div>
 <div class="line">   ATTRIBUTE(StatementItemList, thenBranch, setThenBranch)</div>
 <div class="line">   ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)</div>
 </div><!-- fragment --> With the help of the various <code>ATTRIBUTE</code> macros you can easily define what nodes your new composite node will consist of. Here you see the simplest way of using the macro. You only need to specify the type of node, its name (which will also be the name of the getter function for this child), and the name of a setter function. Each of these macro declarations need to have complementing definitions in the <code></code>.cpp file which we'll see later.</p>
-<p>Finally we see a method declaration: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> findSymbols(QSet&lt;Node*&gt;&amp; result, <span class="keyword">const</span> <a class="code" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a>&amp; matcher, <span class="keyword">const</span> Node* source,</div>
-<div class="line">            FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) <span class="keyword">const override</span>;</div>
+<p>Finally we see a method declaration: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> findSymbols(std::unique_ptr&lt;Model::ResolutionRequest&gt; request) <span class="keyword">const override</span>;</div>
 </div><!-- fragment --> This is an advanced function for the <a class="el" href="classOOModel_1_1IfStatement.html">OOModel::IfStatement</a> node. For simple nodes you do not need to define this function. The only reason we need it here, is because it is possible to declare a variable inside the condition of an if statement and we need a way to find this variable when resolving references. We won't go into details here as name resolution is a big topic on its own.</p>
 <p>This is it really. The essential thing for any <a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> derivative is to declare what attribute nodes it consists of. The rest of the code is just boilerplate.</p>
 <h1><a class="anchor" id="if_cpp"></a>
@@ -206,36 +205,36 @@ IfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;IfStatement.h&quot;</span></div>
 <div class="line"></div>
-<div class="line"><span class="preprocessor">#include &quot;ModelBase/src/nodes/TypedListDefinition.h&quot;</span></div>
-<div class="line">DEFINE_TYPED_LIST(<a class="code" href="classOOModel_1_1IfStatement.html">OOModel::IfStatement</a>)</div>
+<div class="line"><span class="preprocessor">#include &quot;ModelBase/src/nodes/TypedList.hpp&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;OOModel/src/typesystem/OOResolutionRequest.h&quot;</span></div>
+<div class="line"><span class="keyword">template</span> <span class="keyword">class </span>Model::TypedList&lt;OOModel::IfStatement&gt;;</div>
 <div class="line"></div>
-<div class="line">namespace OOModel {</div>
+<div class="line"><span class="keyword">namespace </span><a class="code" href="namespaceOOModel.html">OOModel</a> {</div>
 <div class="line"></div>
-<div class="line">COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(IfStatement)</div>
-<div class="line">COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(IfStatement)</div>
+<div class="line">DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(IfStatement)</div>
+<div class="line">DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(IfStatement)</div>
 <div class="line"></div>
-<div class="line">REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)</div>
-<div class="line">REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)</div>
-<div class="line">REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)</div>
+<div class="line">DEFINE_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)</div>
+<div class="line">DEFINE_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)</div>
+<div class="line">DEFINE_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)</div>
 <div class="line"></div>
-<div class="line"><span class="keywordtype">bool</span> IfStatement::findSymbols(QSet&lt;Node*&gt;&amp; result, const <a class="code" href="namespaceModel.html">Model</a>::SymbolMatcher&amp; matcher, const <a class="code" href="namespaceModel.html">Model</a>::Node* source,</div>
-<div class="line">      FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes)<span class="keyword"> const</span></div>
+<div class="line"><span class="keywordtype">bool</span> IfStatement::findSymbols(std::unique_ptr&lt;<a class="code" href="namespaceModel.html">Model</a>::ResolutionRequest&gt; request)<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword"></span>{</div>
-<div class="line">   <span class="keywordflow">if</span> (direction == SEARCH_UP)</div>
+<div class="line">   <span class="keywordflow">if</span> (request-&gt;direction() == SEARCH_UP || request-&gt;direction() == SEARCH_UP_ORDERED)</div>
 <div class="line">   {</div>
-<div class="line">      <span class="keyword">auto</span> ignore = childToSubnode(source);</div>
+<div class="line">      <span class="keyword">auto</span> ignore = childToSubnode(request-&gt;source());</div>
 <div class="line">      <a class="code" href="namespaceOODebug.html#aba5db07332c1a33a485238da134990c5">Q_ASSERT</a>(ignore);</div>
 <div class="line"></div>
 <div class="line">      <span class="keywordtype">bool</span> found{};</div>
 <div class="line"></div>
 <div class="line">      <span class="keywordflow">if</span> (condition() != ignore)</div>
 <div class="line">         <span class="comment">// Optimize the search by skipping the scope of the source, since we&#39;ve already searched there</span></div>
-<div class="line">         found = condition()-&gt;findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, <span class="keyword">false</span>) || found;</div>
+<div class="line">         found = condition()-&gt;findSymbols(request-&gt;clone(SEARCH_HERE, <span class="keyword">false</span>)) || found;</div>
 <div class="line">      <span class="comment">// Note that a StatementList (the branches) also implements findSymbols and locally declared variables will be</span></div>
 <div class="line">      <span class="comment">// found there.</span></div>
 <div class="line"></div>
-<div class="line">      <span class="keywordflow">if</span> ((exhaustAllScopes || !found) &amp;&amp; parent())</div>
-<div class="line">         found = parent()-&gt;findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;</div>
+<div class="line">      <span class="keywordflow">if</span> ((request-&gt;exhaustAllScopes() || !found) &amp;&amp; parent())</div>
+<div class="line">         found = parent()-&gt;findSymbols(request-&gt;clone(SEARCH_UP)) || found;</div>
 <div class="line"></div>
 <div class="line">      <span class="keywordflow">return</span> found;</div>
 <div class="line">   }</div>
@@ -243,9 +242,9 @@ IfStatement.cpp</h1>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line">}</div>
-</div><!-- fragment --><p>All of the things here are just the corresponding definition macros. The only interesting bit is: <div class="fragment"><div class="line">REGISTER_ATTRIBUTE(IfStatement, condition, Expression, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">true</span>)</div>
-<div class="line">REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)</div>
-<div class="line">REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)</div>
+</div><!-- fragment --><p>All of the things here are just the corresponding definition macros. The only interesting bit is: <div class="fragment"><div class="line">DEFINE_ATTRIBUTE(IfStatement, condition, Expression, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">true</span>)</div>
+<div class="line">DEFINE_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)</div>
+<div class="line">DEFINE_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)</div>
 </div><!-- fragment --> When defining the registered nodes you need to provide the following information:</p><ul>
 <li>The name of the class that you are defining</li>
 <li>The name of the attribute you are registering</li>

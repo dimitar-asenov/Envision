@@ -12,6 +12,7 @@ var searchData=
   ['unorderedtypes_5f',['unorderedTypes_',['../classFilePersistence_1_1ListMergeComponent.html#a69740e48c3464ecdafc241ac823f1420',1,'FilePersistence::ListMergeComponent::unorderedTypes_()'],['../classFilePersistence_1_1Merge.html#a446355e2e2a170f0d529f33f1012326b',1,'FilePersistence::Merge::unorderedTypes_()']]],
   ['unresolutionsteps_5f',['unresolutionSteps_',['../classModel_1_1Reference.html#a1ba75803b726d89f41ceb1892741bfa1',1,'Model::Reference']]],
   ['unresolvedname',['unresolvedName',['../classOOVisualization_1_1VReferenceExpressionStyle.html#af84010304b9eb0da1b76d0eddb48e5cb',1,'OOVisualization::VReferenceExpressionStyle']]],
+  ['unresolvedreference_5f',['unresolvedReference_',['../classOOModel_1_1ErrorType.html#af06fba98a427d5a4b635c479db3825d7',1,'OOModel::ErrorType']]],
   ['unsetbreakpoints_5f',['unsetBreakpoints_',['../classOODebug_1_1JavaDebugger.html#a027185c0f4fe4eb2bad0cea78286a93c',1,'OODebug::JavaDebugger']]],
   ['updateflags_5f',['updateFlags_',['../classFilePersistence_1_1ChangeDescription.html#ad246ea78dd326704a612f85da9dbcd96',1,'FilePersistence::ChangeDescription']]],
   ['updatesautomatically_5f',['updatesAutomatically_',['../structVisualization_1_1InfoNode_1_1InfoGetterStruct.html#ac00b2bfd2b77e1b7a41b5b9b4d6f97a1',1,'Visualization::InfoNode::InfoGetterStruct']]],
@@ -27,6 +28,7 @@ var searchData=
   ['usepossiblenames_5f',['usePossibleNames_',['../classInteraction_1_1CommandWithFlags.html#a773c64d51c68e812a1b78feb8ff52ec3',1,'Interaction::CommandWithFlags']]],
   ['usingalias_5f',['usingAlias_',['../structClassData.html#a9cdb3a6935aea26290aa9e7d6ca4da03',1,'ClassData']]],
   ['usingdeclmap_5f',['usingDeclMap_',['../classCppImport_1_1TranslateManager.html#a854adc87b80e35f07b49a09fb3b502a9',1,'CppImport::TranslateManager']]],
+  ['usingdirectivedeclarations_5f',['usingDirectiveDeclarations_',['../classCppImport_1_1ClangAstVisitor.html#a500adf3d1eee267e02337de764748858',1,'CppImport::ClangAstVisitor']]],
   ['usingdirectivemap_5f',['usingDirectiveMap_',['../classCppImport_1_1TranslateManager.html#a21094c2609d78a7ded1fecb2c3a3bef3',1,'CppImport::TranslateManager']]],
   ['utils_5f',['utils_',['../classCppImport_1_1TranslateManager.html#abb2339319fb1ffc087fd938a192a57ce',1,'CppImport::TranslateManager::utils_()'],['../classCppImport_1_1ClangAstVisitor.html#a77178486c0a889b4e49fc3e0d4c040a6',1,'CppImport::ClangAstVisitor::utils_()'],['../classCppImport_1_1ExpressionVisitor.html#a85b5efa136157169e4e55e09568edab6',1,'CppImport::ExpressionVisitor::utils_()'],['../classCppImport_1_1TemplateArgumentVisitor.html#a2d30ebf575d9b3621f73174d494bd2eb',1,'CppImport::TemplateArgumentVisitor::utils_()'],['../classOODebug_1_1JavaDebugger.html#ade2afee209a399a3ef4ee449f6585e48',1,'OODebug::JavaDebugger::utils_()']]]
 ];

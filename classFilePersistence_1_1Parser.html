@@ -90,7 +90,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classFilePersistence_1_1Parser-members.html">List of all members</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a>  </div>
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">FilePersistence::Parser Class Reference</div>  </div>
 </div><!--header-->
@@ -111,6 +113,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:affcfa1d494cba036434dccd621b72a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the generic node and its children recursively to a text stream.  <a href="#affcfa1d494cba036434dccd621b72a27">More...</a><br /></td></tr>
 <tr class="separator:affcfa1d494cba036434dccd621b72a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a8d44dcba893534924d2364b4bef67f1c"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a8d44dcba893534924d2364b4bef67f1c">PREFIX_DOUBLE</a> {&quot;D_&quot;}</td></tr>
+<tr class="separator:a8d44dcba893534924d2364b4bef67f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e57acc5d896379cad908ec29a88543e"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a4e57acc5d896379cad908ec29a88543e">PREFIX_INTEGER</a> {&quot;I_&quot;}</td></tr>
+<tr class="separator:a4e57acc5d896379cad908ec29a88543e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f2657737a2a3785b361f05aa567d1b1"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a1f2657737a2a3785b361f05aa567d1b1">PREFIX_STRING</a> {&quot;S_&quot;}</td></tr>
+<tr class="separator:a1f2657737a2a3785b361f05aa567d1b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a8fbfab46d813ac2f5b3bddad92a5bc43"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a8fbfab46d813ac2f5b3bddad92a5bc43">countTabs</a> (const char *data, int lineStart, int lineEnd)</td></tr>
@@ -125,10 +136,16 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a1eba32555f98dcce171fe217b6c20b92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9a4aecfab7765d31ef537af09eff59b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#ae9a4aecfab7765d31ef537af09eff59b">nextNonEmptyLine</a> (const char *data, int dataSize, int &amp;lineStart, int &amp;lineEnd)</td></tr>
 <tr class="separator:ae9a4aecfab7765d31ef537af09eff59b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49d369804c8d6e3bf4321dcdc3dbf8b4"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a49d369804c8d6e3bf4321dcdc3dbf8b4">rawStringToQString</a> (const char *data, int startAt, int endInclusive)</td></tr>
-<tr class="separator:a49d369804c8d6e3bf4321dcdc3dbf8b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad82ed3b14ccd5fde423db7845d911b52"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#ad82ed3b14ccd5fde423db7845d911b52">toId</a> (const char *data, int start, int endInclusive, bool &amp;ok)</td></tr>
+<tr class="memitem:a59642c5c9e86833a02b227db7679d034"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a59642c5c9e86833a02b227db7679d034">rawStringToQString</a> (const char *data, int start, int endInclusive)</td></tr>
+<tr class="separator:a59642c5c9e86833a02b227db7679d034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad82ed3b14ccd5fde423db7845d911b52"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#ad82ed3b14ccd5fde423db7845d911b52">toId</a> (const char *data, int start, int endInclusive, bool &amp;ok)</td></tr>
 <tr class="separator:ad82ed3b14ccd5fde423db7845d911b52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aa9b62f8be96ad62aff4dc17faaef1a93"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#aa9b62f8be96ad62aff4dc17faaef1a93">SORT_BY_LABEL</a> = true</td></tr>
+<tr class="memdesc:aa9b62f8be96ad62aff4dc17faaef1a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, sort children by label when writing encoding.  <a href="#aa9b62f8be96ad62aff4dc17faaef1a93">More...</a><br /></td></tr>
+<tr class="separator:aa9b62f8be96ad62aff4dc17faaef1a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a8fbfab46d813ac2f5b3bddad92a5bc43"></a>
@@ -529,7 +546,7 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a49d369804c8d6e3bf4321dcdc3dbf8b4"></a>
+<a class="anchor" id="a59642c5c9e86833a02b227db7679d034"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -546,7 +563,7 @@ Static Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>startAt</em>, </td>
+          <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -626,7 +643,7 @@ Static Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> FilePersistence::Parser::toId </td>
+          <td class="memname"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> FilePersistence::Parser::toId </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>data</em>, </td>
@@ -661,6 +678,90 @@ Static Private Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a8d44dcba893534924d2364b4bef67f1c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString FilePersistence::Parser::PREFIX_DOUBLE {&quot;D_&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4e57acc5d896379cad908ec29a88543e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString FilePersistence::Parser::PREFIX_INTEGER {&quot;I_&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1f2657737a2a3785b361f05aa567d1b1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString FilePersistence::Parser::PREFIX_STRING {&quot;S_&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa9b62f8be96ad62aff4dc17faaef1a93"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool FilePersistence::Parser::SORT_BY_LABEL = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If true, sort children by label when writing encoding. </p>
+<p>This is to ensure consistency between all methods used to produce Envision encodings. </p>
 
 </div>
 </div>

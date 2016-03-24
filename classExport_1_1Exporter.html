@@ -89,27 +89,166 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classExport_1_1Exporter-members.html">List of all members</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a>  </div>
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Export::Exporter Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a09ddf1e8ba7088ac17a32785ebb2fc5f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">ExportSpan</a> : int { <a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5faad0519f16d9e373c6035e1a30c40e46f">ExportSpan::AllFiles</a>, 
+<a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5fad724de59848b1a60e5065f6200016c4e">ExportSpan::SomeFiles</a>
+ }</td></tr>
+<tr class="separator:a09ddf1e8ba7088ac17a32785ebb2fc5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3a9ba65cd8b34329129f314ca1b8c5df"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a3a9ba65cd8b34329129f314ca1b8c5df">exportToFileSystem</a> (const QString &amp;pathToProjectContainerDir, <a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *projectDir, <a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *layouter)</td></tr>
-<tr class="separator:a3a9ba65cd8b34329129f314ca1b8c5df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8786b337d87cdd8d5eb27dbeb801b94a"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a8786b337d87cdd8d5eb27dbeb801b94a">exportToFileSystem</a> (const QString &amp;pathToProjectContainerDir, <a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *exportTree, <a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *layouter, <a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">ExportSpan</a> span)</td></tr>
+<tr class="separator:a8786b337d87cdd8d5eb27dbeb801b94a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a55836cc45a3a4ffcaac61b7c5cdaf57e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a55836cc45a3a4ffcaac61b7c5cdaf57e">saveDir</a> (QDir &amp;fileSystemDir, <a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *sourceDir, <a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *layouter, <a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> *map)</td></tr>
-<tr class="separator:a55836cc45a3a4ffcaac61b7c5cdaf57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06c32d669720ca71497766a5d52297e5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a06c32d669720ca71497766a5d52297e5">saveFile</a> (QDir &amp;fileSystemDir, <a class="el" href="classExport_1_1SourceFile.html">SourceFile</a> *sourceFile, <a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *layouter, <a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> *map)</td></tr>
-<tr class="separator:a06c32d669720ca71497766a5d52297e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a092efad6795f1cb5c2c33d29e61e7b8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a092efad6795f1cb5c2c33d29e61e7b8a">Exporter</a> (QDir projectDirOnFilesystem, <a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *exportTree, <a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *layouter, <a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">ExportSpan</a> span)</td></tr>
+<tr class="separator:a092efad6795f1cb5c2c33d29e61e7b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a249ac391cd75b9ad01f88b814ea84f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a5a249ac391cd75b9ad01f88b814ea84f">deleteObsoletePreviousExports</a> ()</td></tr>
+<tr class="separator:a5a249ac391cd75b9ad01f88b814ea84f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2facd795c0d22fd7dc15d054d0c457cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a2facd795c0d22fd7dc15d054d0c457cf">readPreviousExports</a> ()</td></tr>
+<tr class="separator:a2facd795c0d22fd7dc15d054d0c457cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fd8903d305f7621fe1b72487d46720c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a0fd8903d305f7621fe1b72487d46720c">saveCurrentExports</a> ()</td></tr>
+<tr class="separator:a0fd8903d305f7621fe1b72487d46720c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0ab3815d352ea2da615a60dbb27e029"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#ae0ab3815d352ea2da615a60dbb27e029">saveDir</a> (QDir &amp;fileSystemDir, <a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *sourceDir)</td></tr>
+<tr class="separator:ae0ab3815d352ea2da615a60dbb27e029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b9650dd254352c3f6247d8c1acf69fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a4b9650dd254352c3f6247d8c1acf69fa">saveFile</a> (QDir &amp;fileSystemDir, <a class="el" href="classExport_1_1SourceFile.html">SourceFile</a> *sourceFile)</td></tr>
+<tr class="separator:a4b9650dd254352c3f6247d8c1acf69fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a4f1ee946086496d8b6071c4425e1f3ab"><td class="memItemLeft" align="right" valign="top">std::set&lt; QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a4f1ee946086496d8b6071c4425e1f3ab">currentExports_</a></td></tr>
+<tr class="separator:a4f1ee946086496d8b6071c4425e1f3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a608cbf39d89ee145c14fa17f31f448"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a0a608cbf39d89ee145c14fa17f31f448">layouter_</a> {}</td></tr>
+<tr class="separator:a0a608cbf39d89ee145c14fa17f31f448"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f0b4a87c629953590b64f7ac519b159"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a6f0b4a87c629953590b64f7ac519b159">map_</a></td></tr>
+<tr class="separator:a6f0b4a87c629953590b64f7ac519b159"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2587270861817b96e0eb0cf430638e85"><td class="memItemLeft" align="right" valign="top">std::set&lt; QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a2587270861817b96e0eb0cf430638e85">previousExports_</a></td></tr>
+<tr class="separator:a2587270861817b96e0eb0cf430638e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa746231f45530c1c1199b3a7dbbf957d"><td class="memItemLeft" align="right" valign="top">QDir&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#aa746231f45530c1c1199b3a7dbbf957d">rootDir_</a></td></tr>
+<tr class="separator:aa746231f45530c1c1199b3a7dbbf957d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b814cc59c9e5f107e26137724fed85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">ExportSpan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#a29b814cc59c9e5f107e26137724fed85">span_</a> {}</td></tr>
+<tr class="separator:a29b814cc59c9e5f107e26137724fed85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aae221158fe53d34de247be413b87b4d6"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1Exporter.html#aae221158fe53d34de247be413b87b4d6">previousExportsFileName_</a> {&quot;envision_exported_files&quot;}</td></tr>
+<tr class="separator:aae221158fe53d34de247be413b87b4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a09ddf1e8ba7088ac17a32785ebb2fc5f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">Export::Exporter::ExportSpan</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a09ddf1e8ba7088ac17a32785ebb2fc5faad0519f16d9e373c6035e1a30c40e46f"></a>AllFiles&#160;</td><td class="fielddoc">
+<p>Use this option to indicate that all files are exported. </p>
+<p>If there is an existing envision_exported_files file, it will be used to match the newly exported file names to the old ones and any obsolete filenames from previous exports will be deleted. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a09ddf1e8ba7088ac17a32785ebb2fc5fad724de59848b1a60e5065f6200016c4e"></a>SomeFiles&#160;</td><td class="fielddoc">
+<p>Use this option to indicate that only some files are exported. </p>
+<p>New files will be added to the list of exported files in the envision_exported_files file but no existing files will be deleted (only overwritten if needed). </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a092efad6795f1cb5c2c33d29e61e7b8a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Export::Exporter::Exporter </td>
+          <td>(</td>
+          <td class="paramtype">QDir&#160;</td>
+          <td class="paramname"><em>projectDirOnFilesystem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *&#160;</td>
+          <td class="paramname"><em>exportTree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *&#160;</td>
+          <td class="paramname"><em>layouter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">ExportSpan</a>&#160;</td>
+          <td class="paramname"><em>span</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a3a9ba65cd8b34329129f314ca1b8c5df"></a>
+<a class="anchor" id="a5a249ac391cd75b9ad01f88b814ea84f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Export::Exporter::deleteObsoletePreviousExports </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8786b337d87cdd8d5eb27dbeb801b94a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -126,13 +265,19 @@ Static Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *&#160;</td>
-          <td class="paramname"><em>projectDir</em>, </td>
+          <td class="paramname"><em>exportTree</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *&#160;</td>
-          <td class="paramname"><em>layouter</em>&#160;</td>
+          <td class="paramname"><em>layouter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">ExportSpan</a>&#160;</td>
+          <td class="paramname"><em>span</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -149,7 +294,53 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a55836cc45a3a4ffcaac61b7c5cdaf57e"></a>
+<a class="anchor" id="a2facd795c0d22fd7dc15d054d0c457cf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Export::Exporter::readPreviousExports </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0fd8903d305f7621fe1b72487d46720c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Export::Exporter::saveCurrentExports </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae0ab3815d352ea2da615a60dbb27e029"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -166,19 +357,7 @@ Static Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classExport_1_1SourceDir.html">SourceDir</a> *&#160;</td>
-          <td class="paramname"><em>sourceDir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *&#160;</td>
-          <td class="paramname"><em>layouter</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> *&#160;</td>
-          <td class="paramname"><em>map</em>&#160;</td>
+          <td class="paramname"><em>sourceDir</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -188,14 +367,14 @@ Static Private Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a06c32d669720ca71497766a5d52297e5"></a>
+<a class="anchor" id="a4b9650dd254352c3f6247d8c1acf69fa"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -212,19 +391,7 @@ Static Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classExport_1_1SourceFile.html">SourceFile</a> *&#160;</td>
-          <td class="paramname"><em>sourceFile</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a> *&#160;</td>
-          <td class="paramname"><em>layouter</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a> *&#160;</td>
-          <td class="paramname"><em>map</em>&#160;</td>
+          <td class="paramname"><em>sourceFile</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -234,7 +401,148 @@ Static Private Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a4f1ee946086496d8b6071c4425e1f3ab"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;QString&gt; Export::Exporter::currentExports_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0a608cbf39d89ee145c14fa17f31f448"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classExport_1_1FragmentLayouter.html">FragmentLayouter</a>* Export::Exporter::layouter_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6f0b4a87c629953590b64f7ac519b159"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classExport_1_1TextToNodeMap.html">TextToNodeMap</a>&gt; Export::Exporter::map_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2587270861817b96e0eb0cf430638e85"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;QString&gt; Export::Exporter::previousExports_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aae221158fe53d34de247be413b87b4d6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString Export::Exporter::previousExportsFileName_ {&quot;envision_exported_files&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa746231f45530c1c1199b3a7dbbf957d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QDir Export::Exporter::rootDir_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a29b814cc59c9e5f107e26137724fed85"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classExport_1_1Exporter.html#a09ddf1e8ba7088ac17a32785ebb2fc5f">ExportSpan</a> Export::Exporter::span_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

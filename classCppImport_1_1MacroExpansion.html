@@ -100,8 +100,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae4a90edded2c8d65f834b0112277149a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#ae4a90edded2c8d65f834b0112277149a">MacroExpansion</a> (clang::SourceRange <a class="el" href="classCppImport_1_1MacroExpansion.html#a0e18b562a0f8f6108c24d86a47bcfb97">range</a>, const clang::MacroDirective *<a class="el" href="classCppImport_1_1MacroExpansion.html#a41ca44d7895593a6ef3b7ec18f121e01">definition</a>, <a class="el" href="classCppImport_1_1MacroExpansion.html">MacroExpansion</a> *<a class="el" href="classCppImport_1_1MacroExpansion.html#acc35224df3a776ac159335c85457f89a">parent</a>, <a class="el" href="classCppImport_1_1MacroExpansion.html">MacroExpansion</a> *<a class="el" href="classCppImport_1_1MacroExpansion.html#a188a4b4e96031801aa2370e99fafde87">xMacroParent</a>)</td></tr>
 <tr class="separator:ae4a90edded2c8d65f834b0112277149a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa71e39ba253beafcfb5b376dcff99142"><td class="memItemLeft" align="right" valign="top">QList&lt; clang::SourceLocation &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#aa71e39ba253beafcfb5b376dcff99142">argumentLocs</a> ()</td></tr>
-<tr class="separator:aa71e39ba253beafcfb5b376dcff99142"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa071916c2787b9f9fc1255ff4ed0724a"><td class="memItemLeft" align="right" valign="top">QList&lt; clang::SourceRange &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#aa071916c2787b9f9fc1255ff4ed0724a">argumentRanges</a> ()</td></tr>
+<tr class="separator:aa071916c2787b9f9fc1255ff4ed0724a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65606b25bd36a14a486129ff96185190"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classCppImport_1_1MacroExpansion.html">MacroExpansion</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#a65606b25bd36a14a486129ff96185190">children</a> ()</td></tr>
 <tr class="separator:a65606b25bd36a14a486129ff96185190"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41ca44d7895593a6ef3b7ec18f121e01"><td class="memItemLeft" align="right" valign="top">const clang::MacroDirective *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#a41ca44d7895593a6ef3b7ec18f121e01">definition</a> ()</td></tr>
@@ -127,8 +127,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a8f5f9e19c4e1bcb0e4ebed582337aadc"><td class="memItemLeft" align="right" valign="top">QList&lt; clang::SourceLocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#a8f5f9e19c4e1bcb0e4ebed582337aadc">argumentLocs_</a></td></tr>
-<tr class="separator:a8f5f9e19c4e1bcb0e4ebed582337aadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30dc2c1e5b0ed5da453c00ee2c9f9592"><td class="memItemLeft" align="right" valign="top">QList&lt; clang::SourceRange &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#a30dc2c1e5b0ed5da453c00ee2c9f9592">argumentRanges_</a></td></tr>
+<tr class="separator:a30dc2c1e5b0ed5da453c00ee2c9f9592"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5633d88482a00646bee971f26c8cae0"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classCppImport_1_1MacroExpansion.html">MacroExpansion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#aa5633d88482a00646bee971f26c8cae0">children_</a></td></tr>
 <tr class="separator:aa5633d88482a00646bee971f26c8cae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8cfc0eccfc09d5f10c8e3c43a30cbc9"><td class="memItemLeft" align="right" valign="top">const clang::MacroDirective *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1MacroExpansion.html#aa8cfc0eccfc09d5f10c8e3c43a30cbc9">definition_</a></td></tr>
@@ -186,7 +186,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa71e39ba253beafcfb5b376dcff99142"></a>
+<a class="anchor" id="aa071916c2787b9f9fc1255ff4ed0724a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -194,7 +194,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; clang::SourceLocation &gt; &amp; CppImport::MacroExpansion::argumentLocs </td>
+          <td class="memname">QList&lt; clang::SourceRange &gt; &amp; CppImport::MacroExpansion::argumentRanges </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -458,7 +458,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a8f5f9e19c4e1bcb0e4ebed582337aadc"></a>
+<a class="anchor" id="a30dc2c1e5b0ed5da453c00ee2c9f9592"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -466,7 +466,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;clang::SourceLocation&gt; CppImport::MacroExpansion::argumentLocs_</td>
+          <td class="memname">QList&lt;clang::SourceRange&gt; CppImport::MacroExpansion::argumentRanges_</td>
         </tr>
       </table>
   </td>

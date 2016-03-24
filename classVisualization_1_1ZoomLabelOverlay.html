@@ -166,6 +166,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8b9047ed2ec39630c0783c5697c1636c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08293a6fb027f9e13844811d543d8d61"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1TextStyle.html">TextStyle</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#a08293a6fb027f9e13844811d543d8d61">associatedItemTextStyle</a> () const </td></tr>
 <tr class="separator:a08293a6fb027f9e13844811d543d8d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ae539a36194756a65e996764b7b9f9e"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#a1ae539a36194756a65e996764b7b9f9e">computeScaleToUse</a> () const </td></tr>
+<tr class="separator:a1ae539a36194756a65e996764b7b9f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad092a2309cb744fdcce98d54e8a442f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#ad092a2309cb744fdcce98d54e8a442f7">postUpdate</a> (int revision)</td></tr>
 <tr class="separator:ad092a2309cb744fdcce98d54e8a442f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -197,10 +199,14 @@ Private Attributes</h2></td></tr>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:ab320563c3017da08275a3b7599368b05"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#ab320563c3017da08275a3b7599368b05">defaultClassHandler_</a> = nullptr</td></tr>
 <tr class="separator:ab320563c3017da08275a3b7599368b05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b21ecf1e028b32fdbdd3d88432f83e0"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#a0b21ecf1e028b32fdbdd3d88432f83e0">OVERLAY_MIN_HEIGHT</a> = 20</td></tr>
+<tr class="memitem:a5e353d014720cb86989f6796c48604e6"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#a5e353d014720cb86989f6796c48604e6">OVERLAY_MAX_HEIGHT</a> = 40</td></tr>
+<tr class="separator:a5e353d014720cb86989f6796c48604e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b21ecf1e028b32fdbdd3d88432f83e0"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#a0b21ecf1e028b32fdbdd3d88432f83e0">OVERLAY_MIN_HEIGHT</a> = 15</td></tr>
 <tr class="separator:a0b21ecf1e028b32fdbdd3d88432f83e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada5db43195c73f14005d6637d5a83049"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#ada5db43195c73f14005d6637d5a83049">OVERLAY_MIN_WIDTH</a> = 50</td></tr>
 <tr class="separator:ada5db43195c73f14005d6637d5a83049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533c8b3aafd95de305f6a6df273a77cc"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ZoomLabelOverlay.html#a533c8b3aafd95de305f6a6df273a77cc">SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN</a> = 6</td></tr>
+<tr class="separator:a533c8b3aafd95de305f6a6df273a77cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -379,6 +385,29 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="classVisualization_1_1TextStyle.html">TextStyle</a> * Visualization::ZoomLabelOverlay::associatedItemTextStyle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1ae539a36194756a65e996764b7b9f9e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">qreal Visualization::ZoomLabelOverlay::computeScaleToUse </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -917,6 +946,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5e353d014720cb86989f6796c48604e6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr double Visualization::ZoomLabelOverlay::OVERLAY_MAX_HEIGHT = 40</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a0b21ecf1e028b32fdbdd3d88432f83e0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -925,7 +974,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr double Visualization::ZoomLabelOverlay::OVERLAY_MIN_HEIGHT = 20</td>
+          <td class="memname">constexpr double Visualization::ZoomLabelOverlay::OVERLAY_MIN_HEIGHT = 15</td>
         </tr>
       </table>
   </td>
@@ -971,6 +1020,26 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a533c8b3aafd95de305f6a6df273a77cc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr double Visualization::ZoomLabelOverlay::SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN = 6</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

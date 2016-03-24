@@ -21,8 +21,10 @@ var searchData=
   ['fragmentdecoration',['FragmentDecoration',['../structExport_1_1FragmentDecoration.html',1,'Export']]],
   ['fragmentlayouter',['FragmentLayouter',['../classExport_1_1FragmentLayouter.html',1,'Export']]],
   ['frame',['Frame',['../structOODebug_1_1Frame.html',1,'OODebug']]],
+  ['frame',['Frame',['../classVisualization_1_1Frame.html',1,'Visualization']]],
   ['frames',['Frames',['../structOODebug_1_1Frames.html',1,'OODebug']]],
   ['framescommand',['FramesCommand',['../structOODebug_1_1FramesCommand.html',1,'OODebug']]],
+  ['framestyle',['FrameStyle',['../classVisualization_1_1FrameStyle.html',1,'Visualization']]],
   ['fulldetailsize',['FullDetailSize',['../classVisualization_1_1FullDetailSize.html',1,'Visualization']]],
   ['functiontype',['FunctionType',['../classOOModel_1_1FunctionType.html',1,'OOModel']]],
   ['functiontypeexpression',['FunctionTypeExpression',['../classOOModel_1_1FunctionTypeExpression.html',1,'OOModel']]]

@@ -102,9 +102,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a302dc1d23866322053ea362f80a4b9b7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestManager.html#a302dc1d23866322053ea362f80a4b9b7">add</a> (<a class="el" href="classSelfTest_1_1Test.html#a41115981a1d715bd0acab7e9da74bcd3">Test::TestConstructor</a> test, const QString &amp;name)</td></tr>
-<tr class="memdesc:a302dc1d23866322053ea362f80a4b9b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new test to the list of tests.  <a href="#a302dc1d23866322053ea362f80a4b9b7">More...</a><br /></td></tr>
-<tr class="separator:a302dc1d23866322053ea362f80a4b9b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a057d780e13009758cd49f7e231a40bb3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestManager.html#a057d780e13009758cd49f7e231a40bb3">add</a> (<a class="el" href="classSelfTest_1_1TestBase.html#a119386909fa45ffede1ba30ac59a3ef2">TestBase::TestConstructor</a> test, const QString &amp;name)</td></tr>
+<tr class="memdesc:a057d780e13009758cd49f7e231a40bb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new test to the list of tests.  <a href="#a057d780e13009758cd49f7e231a40bb3">More...</a><br /></td></tr>
+<tr class="separator:a057d780e13009758cd49f7e231a40bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cf179fd2cc7f0103c4093c9d7ae0062"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestManager.html#a2cf179fd2cc7f0103c4093c9d7ae0062">runAllTests</a> ()</td></tr>
 <tr class="memdesc:a2cf179fd2cc7f0103c4093c9d7ae0062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs all tests registered for this plug-in.  <a href="#a2cf179fd2cc7f0103c4093c9d7ae0062">More...</a><br /></td></tr>
 <tr class="separator:a2cf179fd2cc7f0103c4093c9d7ae0062"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,9 +120,9 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:ac0d09a70ac4b4959388a57e5455c7321"><td class="memItemLeft" align="right" valign="top">static QMap&lt; QString, <a class="el" href="classSelfTest_1_1Test.html#a41115981a1d715bd0acab7e9da74bcd3">Test::TestConstructor</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestManager.html#ac0d09a70ac4b4959388a57e5455c7321">testConstructors</a> = nullptr</td></tr>
-<tr class="memdesc:ac0d09a70ac4b4959388a57e5455c7321"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of all test constructors.  <a href="#ac0d09a70ac4b4959388a57e5455c7321">More...</a><br /></td></tr>
-<tr class="separator:ac0d09a70ac4b4959388a57e5455c7321"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2de4cd145f275941796329fffabf932d"><td class="memItemLeft" align="right" valign="top">static QMap&lt; QString, <a class="el" href="classSelfTest_1_1TestBase.html#a119386909fa45ffede1ba30ac59a3ef2">TestBase::TestConstructor</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestManager.html#a2de4cd145f275941796329fffabf932d">testConstructors</a> = nullptr</td></tr>
+<tr class="memdesc:a2de4cd145f275941796329fffabf932d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of all test constructors.  <a href="#a2de4cd145f275941796329fffabf932d">More...</a><br /></td></tr>
+<tr class="separator:a2de4cd145f275941796329fffabf932d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
@@ -165,7 +165,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a302dc1d23866322053ea362f80a4b9b7"></a>
+<a class="anchor" id="a057d780e13009758cd49f7e231a40bb3"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -177,7 +177,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classSelfTest_1_1TestManager.html">SelfTest::TestManager</a>&lt; T &gt;::add </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classSelfTest_1_1Test.html#a41115981a1d715bd0acab7e9da74bcd3">Test::TestConstructor</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classSelfTest_1_1TestBase.html#a119386909fa45ffede1ba30ac59a3ef2">TestBase::TestConstructor</a>&#160;</td>
           <td class="paramname"><em>test</em>, </td>
         </tr>
         <tr>
@@ -272,7 +272,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ac0d09a70ac4b4959388a57e5455c7321"></a>
+<a class="anchor" id="a2de4cd145f275941796329fffabf932d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -282,7 +282,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QMap&lt; QString, <a class="el" href="classSelfTest_1_1Test.html#a41115981a1d715bd0acab7e9da74bcd3">Test::TestConstructor</a> &gt; * <a class="el" href="classSelfTest_1_1TestManager.html">SelfTest::TestManager</a>&lt; T &gt;::testConstructors = nullptr</td>
+          <td class="memname">QMap&lt; QString, <a class="el" href="classSelfTest_1_1TestBase.html#a119386909fa45ffede1ba30ac59a3ef2">TestBase::TestConstructor</a> &gt; * <a class="el" href="classSelfTest_1_1TestManager.html">SelfTest::TestManager</a>&lt; T &gt;::testConstructors = nullptr</td>
         </tr>
       </table>
   </td>
@@ -293,7 +293,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>A list of all test constructors. </p>
-<p><a class="el" href="classSelfTest_1_1Test.html" title="The Test class is the base class for a single test for the Envision testing framework. ">Test</a> classes are not created unless requested. </p>
+<p><a class="el" href="classSelfTest_1_1Test.html" title="The Test template class is used to define a new test. ">Test</a> classes are not created unless requested. </p>
 
 </div>
 </div>

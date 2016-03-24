@@ -8,5 +8,6 @@ var searchData=
   ['methodcommands',['MethodCommands',['../classOODebug_1_1Protocol.html#a161924aa2d21cbda6719a9bf6a2a2eab',1,'OODebug::Protocol']]],
   ['methodkind',['MethodKind',['../classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033ee',1,'OOModel::Method']]],
   ['mode',['Mode',['../classOOVisualization_1_1AutoLayouter.html#a51c5fd18a8e7459b09be57cf56eeb537',1,'OOVisualization::AutoLayouter']]],
-  ['modifierflag',['ModifierFlag',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494f',1,'OOModel::Modifier']]]
+  ['modifierflag',['ModifierFlag',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494f',1,'OOModel::Modifier']]],
+  ['modulekind',['ModuleKind',['../classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2',1,'OOModel::Module']]]
 ];

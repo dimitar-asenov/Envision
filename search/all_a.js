@@ -18,7 +18,7 @@ var searchData=
   ['jobname',['jobName',['../structCore_1_1ProfileJob.html#a7a6b40a6a649b94008b9feb709f4140f',1,'Core::ProfileJob']]],
   ['join',['Join',['../classInformationScripting_1_1Join.html',1,'InformationScripting']]],
   ['join',['Join',['../classInformationScripting_1_1Join.html#a37c12ca4e41545785e30a2c9ebde04b0',1,'InformationScripting::Join']]],
-  ['jsonutil',['JsonUtil',['../classJsonUtil.html',1,'']]],
+  ['jsonescape',['jsonEscape',['../classCppImport_1_1ClangHelpers.html#a6f06c451112bf1259b532ff838bfb655',1,'CppImport::ClangHelpers']]],
   ['jumptoobject',['jumpToObject',['../classVisualization_1_1InfoJavascriptFunctions.html#ac3a4c0614d60f2556c4e34baa433291a',1,'Visualization::InfoJavascriptFunctions']]],
   ['jvmmethod',['JVMMethod',['../structOODebug_1_1JVMMethod.html',1,'OODebug']]],
   ['jvmsignaturefor',['jvmSignatureFor',['../classOODebug_1_1DebugUtils.html#a3cfb89ff753d4d04e58625ebf033b5a3',1,'OODebug::DebugUtils']]]

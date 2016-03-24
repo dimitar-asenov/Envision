@@ -121,6 +121,8 @@ Public Types</h2></td></tr>
 <a class="el" href="classOOModel_1_1Type.html#a4873e3fb458ac779dd3f9158e53c39dba57cee8746093d3691cc5e3ed41db9d59">VOLATILE</a> = 0x2
  }</td></tr>
 <tr class="separator:a4873e3fb458ac779dd3f9158e53c39db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05837e8df0c2e30879b5ef660eb48c33"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">Qualifiers</a> = QFlags&lt; <a class="el" href="classOOModel_1_1Type.html#a4873e3fb458ac779dd3f9158e53c39db">Qualifier</a> &gt;</td></tr>
+<tr class="separator:a05837e8df0c2e30879b5ef660eb48c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -140,11 +142,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a50437cb76b7612b425525d246d8b4479"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a50437cb76b7612b425525d246d8b4479">isValueType</a> () const </td></tr>
 <tr class="memdesc:a50437cb76b7612b425525d246d8b4479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the this type belongs to an expression representing a value.  <a href="#a50437cb76b7612b425525d246d8b4479">More...</a><br /></td></tr>
 <tr class="separator:a50437cb76b7612b425525d246d8b4479"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4f4041158535550d44c15a267e81e7f"><td class="memItemLeft" align="right" valign="top">Qualifiers&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#ae4f4041158535550d44c15a267e81e7f">qualifiers</a> () const </td></tr>
+<tr class="memitem:ae4f4041158535550d44c15a267e81e7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">Qualifiers</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#ae4f4041158535550d44c15a267e81e7f">qualifiers</a> () const </td></tr>
 <tr class="separator:ae4f4041158535550d44c15a267e81e7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6dcc67bc3d8823876ff98dd1963a9442"><td class="memItemLeft" align="right" valign="top">TypeSystem::TypeRelations&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a6dcc67bc3d8823876ff98dd1963a9442">relationTo</a> (const <a class="el" href="classOOModel_1_1Type.html">Type</a> *other) const </td></tr>
+<tr class="memitem:a6dcc67bc3d8823876ff98dd1963a9442"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeSystem::TypeRelations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a6dcc67bc3d8823876ff98dd1963a9442">relationTo</a> (const <a class="el" href="classOOModel_1_1Type.html">Type</a> *other) const </td></tr>
 <tr class="separator:a6dcc67bc3d8823876ff98dd1963a9442"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9e8917d2640507f9ba6035865660bfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#ab9e8917d2640507f9ba6035865660bfc">setQualifiers</a> (Qualifiers q, bool enable=true)</td></tr>
+<tr class="memitem:ab9e8917d2640507f9ba6035865660bfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#ab9e8917d2640507f9ba6035865660bfc">setQualifiers</a> (<a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">Qualifiers</a> q, bool enable=true)</td></tr>
 <tr class="separator:ab9e8917d2640507f9ba6035865660bfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a990b844b28c4824881f75cf83d92fc67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a990b844b28c4824881f75cf83d92fc67">setValueType</a> (bool <a class="el" href="classOOModel_1_1Type.html#a50437cb76b7612b425525d246d8b4479">isValueType</a>)</td></tr>
 <tr class="separator:a990b844b28c4824881f75cf83d92fc67"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,9 +155,22 @@ Public Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a02fb9ecfb92b7212fc34df6ebd992de7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a02fb9ecfb92b7212fc34df6ebd992de7">isValueType_</a></td></tr>
 <tr class="separator:a02fb9ecfb92b7212fc34df6ebd992de7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f77a1319ebaddfd0983c1845da71aaf"><td class="memItemLeft" align="right" valign="top">Qualifiers&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a9f77a1319ebaddfd0983c1845da71aaf">qualifiers_</a> {0}</td></tr>
+<tr class="memitem:a9f77a1319ebaddfd0983c1845da71aaf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">Qualifiers</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a9f77a1319ebaddfd0983c1845da71aaf">qualifiers_</a> {0}</td></tr>
 <tr class="separator:a9f77a1319ebaddfd0983c1845da71aaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a05837e8df0c2e30879b5ef660eb48c33"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">OOModel::Type::Qualifiers</a> =  QFlags&lt;<a class="el" href="classOOModel_1_1Type.html#a4873e3fb458ac779dd3f9158e53c39db">Qualifier</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a4873e3fb458ac779dd3f9158e53c39db"></a>
 <div class="memitem">
@@ -253,7 +268,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classOOModel_1_1FunctionType.html#a0b53b1b7ded14c21dd0314e8f6c7abae">OOModel::FunctionType</a>, <a class="el" href="classOOModel_1_1ArrayType.html#a6005c2cf5f6c22a31ca7d1b28766d0ff">OOModel::ArrayType</a>, <a class="el" href="classOOModel_1_1SymbolProviderType.html#a908d9586ff755295ae4c0e76b1249196">OOModel::SymbolProviderType</a>, <a class="el" href="classOOModel_1_1PointerType.html#a734200fe4c0581309678740a973ebb57">OOModel::PointerType</a>, <a class="el" href="classOOModel_1_1PrimitiveType.html#a533a417086006ec3dc640dd9516efb40">OOModel::PrimitiveType</a>, <a class="el" href="classOOModel_1_1ReferenceType.html#abdbcb54f1ff01df9d07526ee7ed95862">OOModel::ReferenceType</a>, <a class="el" href="classOOModel_1_1ThrownExceptionType.html#a6c760d947596ed28cfd945ac941e57ad">OOModel::ThrownExceptionType</a>, <a class="el" href="classOOModel_1_1ClassType.html#ab60030471865260539688f34c01d6a0e">OOModel::ClassType</a>, <a class="el" href="classOOModel_1_1ErrorType.html#a122b0c044677a6b862a9f5a0c075853c">OOModel::ErrorType</a>, <a class="el" href="classOOModel_1_1NullType.html#a714f73ca70ac2a49a1f4a49b01c8537a">OOModel::NullType</a>, and <a class="el" href="classOOModel_1_1StringType.html#a67883fdb51e438be23e50bab4a1e3b33">OOModel::StringType</a>.</p>
+<p>Implemented in <a class="el" href="classOOModel_1_1FunctionType.html#a0b53b1b7ded14c21dd0314e8f6c7abae">OOModel::FunctionType</a>, <a class="el" href="classOOModel_1_1SymbolProviderType.html#a908d9586ff755295ae4c0e76b1249196">OOModel::SymbolProviderType</a>, <a class="el" href="classOOModel_1_1ArrayType.html#a6005c2cf5f6c22a31ca7d1b28766d0ff">OOModel::ArrayType</a>, <a class="el" href="classOOModel_1_1ErrorType.html#a122b0c044677a6b862a9f5a0c075853c">OOModel::ErrorType</a>, <a class="el" href="classOOModel_1_1PrimitiveType.html#a533a417086006ec3dc640dd9516efb40">OOModel::PrimitiveType</a>, <a class="el" href="classOOModel_1_1PointerType.html#a734200fe4c0581309678740a973ebb57">OOModel::PointerType</a>, <a class="el" href="classOOModel_1_1ReferenceType.html#abdbcb54f1ff01df9d07526ee7ed95862">OOModel::ReferenceType</a>, <a class="el" href="classOOModel_1_1ClassType.html#ab60030471865260539688f34c01d6a0e">OOModel::ClassType</a>, <a class="el" href="classOOModel_1_1ThrownExceptionType.html#a6c760d947596ed28cfd945ac941e57ad">OOModel::ThrownExceptionType</a>, <a class="el" href="classOOModel_1_1NullType.html#a714f73ca70ac2a49a1f4a49b01c8537a">OOModel::NullType</a>, and <a class="el" href="classOOModel_1_1StringType.html#a67883fdb51e438be23e50bab4a1e3b33">OOModel::StringType</a>.</p>
 
 </div>
 </div>
@@ -279,7 +294,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classOOModel_1_1FunctionType.html#a941a529f9a8cf2c4eb7613f4c2174b84">OOModel::FunctionType</a>, <a class="el" href="classOOModel_1_1ArrayType.html#a476b4e635ca802575e8035823af0a49e">OOModel::ArrayType</a>, <a class="el" href="classOOModel_1_1SymbolProviderType.html#ac7a838bf09ef0f89a8cc50cbcf6fcfe2">OOModel::SymbolProviderType</a>, <a class="el" href="classOOModel_1_1PointerType.html#a836ec311b92bb3745158ea1ebb387ea0">OOModel::PointerType</a>, <a class="el" href="classOOModel_1_1PrimitiveType.html#a3c1695de103b0298d0503606ae4a5838">OOModel::PrimitiveType</a>, <a class="el" href="classOOModel_1_1ReferenceType.html#a9a1d2e3840a0796e269d9fe47a47b2c3">OOModel::ReferenceType</a>, <a class="el" href="classOOModel_1_1ThrownExceptionType.html#ac4aed469132132522c45f8a1e7566855">OOModel::ThrownExceptionType</a>, <a class="el" href="classOOModel_1_1ErrorType.html#a0069d8f0caa779abe3dd5aea8098ab4b">OOModel::ErrorType</a>, <a class="el" href="classOOModel_1_1NullType.html#a0af9c6ed31cf081cff4293707658473e">OOModel::NullType</a>, and <a class="el" href="classOOModel_1_1StringType.html#aa96a4fb3bc28b07f83b833106bf42eef">OOModel::StringType</a>.</p>
+<p>Implemented in <a class="el" href="classOOModel_1_1FunctionType.html#a941a529f9a8cf2c4eb7613f4c2174b84">OOModel::FunctionType</a>, <a class="el" href="classOOModel_1_1SymbolProviderType.html#ac7a838bf09ef0f89a8cc50cbcf6fcfe2">OOModel::SymbolProviderType</a>, <a class="el" href="classOOModel_1_1ArrayType.html#a476b4e635ca802575e8035823af0a49e">OOModel::ArrayType</a>, <a class="el" href="classOOModel_1_1ErrorType.html#a0069d8f0caa779abe3dd5aea8098ab4b">OOModel::ErrorType</a>, <a class="el" href="classOOModel_1_1PrimitiveType.html#a3c1695de103b0298d0503606ae4a5838">OOModel::PrimitiveType</a>, <a class="el" href="classOOModel_1_1PointerType.html#a836ec311b92bb3745158ea1ebb387ea0">OOModel::PointerType</a>, <a class="el" href="classOOModel_1_1ReferenceType.html#a9a1d2e3840a0796e269d9fe47a47b2c3">OOModel::ReferenceType</a>, <a class="el" href="classOOModel_1_1ThrownExceptionType.html#ac4aed469132132522c45f8a1e7566855">OOModel::ThrownExceptionType</a>, <a class="el" href="classOOModel_1_1NullType.html#a0af9c6ed31cf081cff4293707658473e">OOModel::NullType</a>, and <a class="el" href="classOOModel_1_1StringType.html#aa96a4fb3bc28b07f83b833106bf42eef">OOModel::StringType</a>.</p>
 
 </div>
 </div>
@@ -345,7 +360,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Type::Qualifiers OOModel::Type::qualifiers </td>
+          <td class="memname"><a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">Type::Qualifiers</a> OOModel::Type::qualifiers </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -365,7 +380,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TypeSystem::TypeRelations OOModel::Type::relationTo </td>
+          <td class="memname"><a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeSystem::TypeRelations</a> OOModel::Type::relationTo </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classOOModel_1_1Type.html">Type</a> *&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
@@ -386,7 +401,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void OOModel::Type::setQualifiers </td>
           <td>(</td>
-          <td class="paramtype">Qualifiers&#160;</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">Qualifiers</a>&#160;</td>
           <td class="paramname"><em>q</em>, </td>
         </tr>
         <tr>
@@ -463,7 +478,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Qualifiers OOModel::Type::qualifiers_ {0}</td>
+          <td class="memname"><a class="el" href="classOOModel_1_1Type.html#a05837e8df0c2e30879b5ef660eb48c33">Qualifiers</a> OOModel::Type::qualifiers_ {0}</td>
         </tr>
       </table>
   </td>

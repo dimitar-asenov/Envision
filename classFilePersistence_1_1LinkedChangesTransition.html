@@ -109,10 +109,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a382049c887790c65d47b7272c8194949"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classFilePersistence_1_1LinkedChangesSet.html">LinkedChangesSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1LinkedChangesTransition.html#a382049c887790c65d47b7272c8194949">getNewState</a> () const </td></tr>
 <tr class="memdesc:a382049c887790c65d47b7272c8194949"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a new <a class="el" href="classFilePersistence_1_1LinkedChangesSet.html">LinkedChangesSet</a> object that is a deep copy of the state after the transition.  <a href="#a382049c887790c65d47b7272c8194949">More...</a><br /></td></tr>
 <tr class="separator:a382049c887790c65d47b7272c8194949"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad99e3367f14b0656abe811d36842b815"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1LinkedChangesTransition.html#ad99e3367f14b0656abe811d36842b815">insert</a> (<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> oldChangeId, bool oldInBranchA, const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &amp;change, bool newInBranchA)</td></tr>
+<tr class="memitem:ad99e3367f14b0656abe811d36842b815"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1LinkedChangesTransition.html#ad99e3367f14b0656abe811d36842b815">insert</a> (<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> oldChangeId, bool oldInBranchA, const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &amp;change, bool newInBranchA)</td></tr>
 <tr class="memdesc:ad99e3367f14b0656abe811d36842b815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Let <em>keySet</em> be the return value of <em>this.findLinkedChanges(changeId,inBranchA)</em>.  <a href="#ad99e3367f14b0656abe811d36842b815">More...</a><br /></td></tr>
 <tr class="separator:ad99e3367f14b0656abe811d36842b815"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae42f36bccdd69b1a3b3836a617553ce7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1LinkedChangesTransition.html#ae42f36bccdd69b1a3b3836a617553ce7">insert</a> (<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> oldChangeId, bool oldInBranchA, const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &amp;change)</td></tr>
+<tr class="memitem:ae42f36bccdd69b1a3b3836a617553ce7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1LinkedChangesTransition.html#ae42f36bccdd69b1a3b3836a617553ce7">insert</a> (<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> oldChangeId, bool oldInBranchA, const std::shared_ptr&lt; const <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &amp;change)</td></tr>
 <tr class="memdesc:ae42f36bccdd69b1a3b3836a617553ce7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to <em>insert(oldChangeId, oldInBranchA, change, oldInBranchA)</em>.  <a href="#ae42f36bccdd69b1a3b3836a617553ce7">More...</a><br /></td></tr>
 <tr class="separator:ae42f36bccdd69b1a3b3836a617553ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -208,7 +208,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates and returns a new <a class="el" href="classFilePersistence_1_1LinkedChangesSet.html">LinkedChangesSet</a> object that is a deep copy of the state after the transition. </p>
-<p>Nodes pointed to by changes in the returned object are allocated in a new <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a>. </p>
+<p>Nodes pointed to by changes in the returned object are allocated in a new <a class="el" href="classFilePersistence_1_1GenericTree.html" title="TODO It might be good to separate trees with piecewise loaders and other &quot;kinds&quot; of trees into subcla...">GenericTree</a>. </p>
 
 </div>
 </div>
@@ -219,7 +219,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void FilePersistence::LinkedChangesTransition::insert </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td>
           <td class="paramname"><em>oldChangeId</em>, </td>
         </tr>
         <tr>
@@ -264,7 +264,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void FilePersistence::LinkedChangesTransition::insert </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td>
           <td class="paramname"><em>oldChangeId</em>, </td>
         </tr>
         <tr>

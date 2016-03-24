@@ -158,26 +158,27 @@ VIfStatement.h</h1>
 <div class="line">      VStatementItemList* thenBranch() const;</div>
 <div class="line">      VStatementItemList* elseBranch() const;</div>
 <div class="line">      <a class="code" href="namespaceVisualization.html">Visualization</a>::Static* icon() const;</div>
+<div class="line">      <a class="code" href="namespaceVisualization.html">Visualization</a>::Static* elseIcon() const;</div>
 <div class="line"></div>
 <div class="line">      static <span class="keywordtype">void</span> initializeForms();</div>
 <div class="line">      virtual <span class="keywordtype">int</span> determineForm() override;</div>
 <div class="line"></div>
-<div class="line">   protected:</div>
-<div class="line">      virtual <span class="keywordtype">void</span> updateGeometry(<span class="keywordtype">int</span> availableWidth, <span class="keywordtype">int</span> availableHeight) override;</div>
-<div class="line"></div>
 <div class="line">   private:</div>
-<div class="line">      <span class="keywordtype">bool</span> horizontal_{};</div>
-<div class="line">      <a class="code" href="classVisualization_1_1NodeWrapper.html">Visualization::NodeWrapper</a>* condition_{};</div>
+<div class="line">      <a class="code" href="namespaceVisualization.html">Visualization</a>::NodeWrapper* condition_{};</div>
 <div class="line">      VStatementItemList* thenBranch_{};</div>
 <div class="line">      VStatementItemList* elseBranch_{};</div>
 <div class="line">      <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* icon_{};</div>
+<div class="line">      <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* elseIcon_{};</div>
 <div class="line">      <a class="code" href="classVisualization_1_1Line.html">Visualization::Line</a>* elseLine_{};</div>
+<div class="line"></div>
+<div class="line">      <span class="keywordtype">bool</span> isInsideAnotherIf() <span class="keyword">const</span>;</div>
 <div class="line">};</div>
 <div class="line"></div>
 <div class="line"><span class="keyword">inline</span> <a class="code" href="classVisualization_1_1NodeWrapper.html">Visualization::NodeWrapper</a>* <a class="code" href="classOOVisualization_1_1VIfStatement.html#ab70638f50f5d5076f78a49b31ac06168">VIfStatement::condition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classOOVisualization_1_1VIfStatement.html#aef356ffe3060db4cbf7e69d68f2d029e">condition_</a>; }</div>
 <div class="line"><span class="keyword">inline</span> VStatementItemList* <a class="code" href="classOOVisualization_1_1VIfStatement.html#a2a127220029ae79e11e673b2d638ce02">VIfStatement::thenBranch</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classOOVisualization_1_1VIfStatement.html#a72d3792d8fdcadd52e67b3ef7036426d">thenBranch_</a>; }</div>
 <div class="line"><span class="keyword">inline</span> VStatementItemList* <a class="code" href="classOOVisualization_1_1VIfStatement.html#ae2fa324ff18da0a7a27df426b2b86693">VIfStatement::elseBranch</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classOOVisualization_1_1VIfStatement.html#a386896ed5bb3b0a0a3954da7e3cad110">elseBranch_</a>; }</div>
 <div class="line"><span class="keyword">inline</span> <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* <a class="code" href="classOOVisualization_1_1VIfStatement.html#a40b548ee7f794efb4bd91a96043c42ea">VIfStatement::icon</a>()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code" href="classOOVisualization_1_1VIfStatement.html#a730d4e0556468a8b5df8b282b7a4505a">icon_</a>;}</div>
+<div class="line"><span class="keyword">inline</span> <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* <a class="code" href="classOOVisualization_1_1VIfStatement.html#aa38dcfbf30b7ccc854ca5b57b79f5450">VIfStatement::elseIcon</a>()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code" href="classOOVisualization_1_1VIfStatement.html#a85c4d3c3560cd86bc93c97ffc96e2612">elseIcon_</a>;}</div>
 <div class="line"></div>
 <div class="line">}</div>
 </div><!-- fragment --><p>Let's examine it starting from the top. The first interesting bit after the includes is: <div class="fragment"><div class="line"><span class="keyword">class </span>OOVISUALIZATION_API VIfStatement</div>
@@ -208,13 +209,14 @@ VIfStatement.h</h1>
 <div class="line">      VStatementItemList* thenBranch() <span class="keyword">const</span>;</div>
 <div class="line">      VStatementItemList* elseBranch() <span class="keyword">const</span>;</div>
 <div class="line">      <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* icon() <span class="keyword">const</span>;</div>
+<div class="line">      <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* elseIcon() <span class="keyword">const</span>;</div>
 </div><!-- fragment --></p>
 <p>Nothing special, let's go on to the first important method definition: <div class="fragment"><div class="line">      <span class="keyword">static</span> <span class="keywordtype">void</span> initializeForms();</div>
 </div><!-- fragment --> This is a static method required by <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a>. This method defines the layout for all children of the class. We will see how this is done when discussing the <code></code>.cpp file.</p>
 <p>Next comes another related method: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> <span class="keywordtype">int</span> determineForm() <span class="keyword">override</span>;</div>
 </div><!-- fragment --> This is another method used by <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a>. A declarative item may declare multiple forms (layouts). If this is the case, then the <code>determineForm()</code> method should be overridden in order to tell the declarative framework which form to use. Many items only declare a single layout, in which case there is no need to redefine this method.</p>
-<p>We go on to another method: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> <span class="keywordtype">void</span> updateGeometry(<span class="keywordtype">int</span> availableWidth, <span class="keywordtype">int</span> availableHeight) <span class="keyword">override</span>;</div>
-</div><!-- fragment --> To understand this method we will first explain Envision's visualization mechanism in more detail.</p>
+<p>Some visualizations have an additional important method here and <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a> used to have it:  <div class="fragment"><div class="line">      <span class="keyword">virtual</span> <span class="keywordtype">void</span> updateGeometry(<span class="keywordtype">int</span> availableWidth, <span class="keywordtype">int</span> availableHeight) <span class="keyword">override</span>;</div>
+</div><!-- fragment -->  To understand this method we will first explain Envision's visualization mechanism in more detail.</p>
 <p>To improve performance the visualization work flow is split into two major parts:</p><ul>
 <li>Painting on the scene</li>
 <li>Updating the visualizations</li>
@@ -235,13 +237,17 @@ Some items have a variable size depending on where they are put. For example, ho
 </ol>
 The way this works for the line item is that it sets up a default line that is let's say 20 pixels long on the first call to <code>updateGeometry()</code>. Then during the second call the line will expand to take any extra space (say 270 pixels). Notice that there is no drawing during these calls, we merely setup the parameters that will be used for drawing later.</li>
 </ol>
-<p>Now, let's get back to the <code>updateGeometry()</code> method of <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a>. This class inherits from <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a> that provides an implementation for both <code>detemineChildren()</code> and <code>updateGeometry()</code>. So why do we need to reimplement <code>updateGeometry()</code> here? Indeed in most cases, when inheriting from <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a> there is no need to reimplement any of these methods. The reason for reimplementing in <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a> is to get information. We know that the <code>updateGeometry()</code> method will be called after all children have been drawn. The reimplementation here just needs to know the size of these child items, that's all. It doesn't actually do anything and leaves all the heavy lifting to <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a>. When discussing the .cpp file we'll see why we need to know the size of the child items.</p>
-<p>Finally we have: <div class="fragment"><div class="line">      <span class="keywordtype">bool</span> horizontal_{};</div>
-<div class="line">      <a class="code" href="classVisualization_1_1NodeWrapper.html">Visualization::NodeWrapper</a>* condition_{};</div>
+<p>Now, why did <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a> have an <code>updateGeometry()</code> method and why isn't it needed any more. The simple answer is that the visualization of if statements used to be a little more complex, but isn't anymore. Previously an if statement would display its then an else branches either vertically (else under then) or horizontally (else to the right of then). This was a nice little trick but we found that people get confused and so removed this behavior. To able to achieve this it was necessary to reimplement the <code>updateGeometry()</code> method. A frequent reason for reimplementing this method is to get more information. This was also the case for <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a>. We know that the <code>updateGeometry()</code> method will be called after all children have been drawn. The reimplementation here just needed to know the size of these child items, that's all. It doesn't actually do anything and calls the overriden implementation to do all the heavy lifting. Based on the size of the children we had to make a choice of a horizontal or vertical arrangement and trigger a <code>RepeatUpdate</code> if the arrangement changed.</p>
+<p>Afterwards we have the fileds that will hold subitems: <div class="fragment"><div class="line">      <a class="code" href="classVisualization_1_1NodeWrapper.html">Visualization::NodeWrapper</a>* condition_{};</div>
 <div class="line">      VStatementItemList* thenBranch_{};</div>
 <div class="line">      VStatementItemList* elseBranch_{};</div>
 <div class="line">      <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* icon_{};</div>
-</div><!-- fragment --> There are some fields that will hold child items and another one called <code>horizontal</code> that will control which form will be used to arrange the children. Let's see how it all works in the .cpp file.</p>
+<div class="line">      <a class="code" href="classVisualization_1_1Static.html">Visualization::Static</a>* elseIcon_{};</div>
+<div class="line">      <a class="code" href="classVisualization_1_1Line.html">Visualization::Line</a>* elseLine_{};</div>
+</div><!-- fragment --> There are some fields that will hold child items and another one called <code>horizontal</code> that will control which form will be used to arrange the children.</p>
+<p>When choosing which form to render we need to know if this if is inside another if: <div class="fragment"><div class="line">      <span class="keywordtype">bool</span> isInsideAnotherIf() <span class="keyword">const</span>;</div>
+</div><!-- fragment --></p>
+<p>Let's see how it all works in the .cpp file.</p>
 <h1><a class="anchor" id="vif_cpp"></a>
 VIfStatement.cpp</h1>
 <p>Here is <code>VIfStatement.cpp</code> : </p><div class="fragment"><div class="line"><span class="comment">/***********************************************************************************************************************</span></div>
@@ -275,280 +281,292 @@ VIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/items/Static.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/items/Line.h&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/declarative/DeclarativeItemDef.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/declarative/DeclarativeItem.hpp&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/items/NodeWrapper.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/declarative/BorderFormElement.h&quot;</span></div>
 <div class="line"></div>
 <div class="line"><span class="keyword">using namespace </span><a class="code" href="namespaceVisualization.html">Visualization</a>;</div>
-<div class="line"><span class="keyword">using namespace </span>OOModel;</div>
+<div class="line"><span class="keyword">using namespace </span><a class="code" href="namespaceOOModel.html">OOModel</a>;</div>
 <div class="line"></div>
 <div class="line"><span class="keyword">namespace </span><a class="code" href="namespaceOOVisualization.html">OOVisualization</a> {</div>
 <div class="line"></div>
-<div class="line">ITEM_COMMON_DEFINITIONS(VIfStatement, <span class="stringliteral">&quot;item&quot;</span>)</div>
+<div class="line">DEFINE_ITEM_COMMON(VIfStatement, <span class="stringliteral">&quot;item&quot;</span>)</div>
 <div class="line"></div>
 <div class="line">VIfStatement::VIfStatement(<a class="code" href="classVisualization_1_1Item.html">Item</a>* parent, NodeType* node, const StyleType* <a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>) : <a class="code" href="classCore_1_1Reflect.html">Super</a>{parent, node, <a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>}</div>
 <div class="line">{}</div>
 <div class="line"></div>
-<div class="line"><span class="keywordtype">void</span> VIfStatement::updateGeometry(<span class="keywordtype">int</span> availableWidth, <span class="keywordtype">int</span> availableHeight)</div>
-<div class="line">{</div>
-<div class="line">   <span class="keywordtype">int</span> contentWidth = 0;</div>
-<div class="line">   <span class="keywordflow">if</span> (thenBranch_) contentWidth += thenBranch_-&gt;widthInParent();</div>
-<div class="line">   <span class="keywordflow">if</span> (elseBranch_) contentWidth += elseBranch_-&gt;widthInParent();</div>
-<div class="line">   <span class="keywordflow">if</span> ( horizontal_ != (contentWidth &lt;= <a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>()-&gt;contentWidthSwitchTreshold()))</div>
-<div class="line">   {</div>
-<div class="line">      horizontal_ = !horizontal_;</div>
-<div class="line">      setUpdateNeeded(RepeatUpdate);</div>
-<div class="line">   }</div>
-<div class="line"></div>
-<div class="line">   Super::updateGeometry(availableWidth, availableHeight);</div>
-<div class="line">}</div>
-<div class="line"></div>
 <div class="line"><span class="keywordtype">int</span> VIfStatement::determineForm()</div>
 <div class="line">{</div>
-<div class="line">   <span class="keywordflow">if</span> (node()-&gt;elseBranch() &amp;&amp; node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() == 0) <span class="keywordflow">return</span> 0;</div>
+<div class="line">   <span class="comment">// Plain if with no else branch</span></div>
+<div class="line">   <span class="keywordtype">int</span> formId = 0;</div>
+<div class="line">   <span class="keywordflow">if</span> (node()-&gt;elseBranch() &amp;&amp; node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() &gt; 0)</div>
+<div class="line">   {</div>
+<div class="line">      <span class="keywordflow">if</span> (node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() == 1 &amp;&amp; DCast&lt;IfStatement&gt;(node()-&gt;elseBranch()-&gt;first()))</div>
+<div class="line">         formId = 2; <span class="comment">// else contains only an if</span></div>
+<div class="line">      <span class="keywordflow">else</span></div>
+<div class="line">         formId = 1; <span class="comment">// standard else</span></div>
+<div class="line">   }</div>
 <div class="line"></div>
-<div class="line">   <span class="keywordflow">if</span> (node()-&gt;elseBranch() &amp;&amp; node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() == 1 &amp;&amp; DCast&lt;IfStatement&gt;(node()-&gt;elseBranch()-&gt;first()))</div>
-<div class="line">      <span class="keywordflow">return</span> 3;</div>
-<div class="line">   <span class="keywordflow">return</span> horizontal_ ? 1 : 2;</div>
+<div class="line">   <span class="keywordflow">if</span> (isInsideAnotherIf())</div>
+<div class="line">      formId += 3; <span class="comment">// Make the if stretchable</span></div>
+<div class="line"></div>
+<div class="line">   <span class="keywordflow">return</span> formId;</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="keywordtype">void</span> VIfStatement::initializeForms()</div>
 <div class="line">{</div>
-<div class="line">   <span class="keyword">auto</span> header = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>{})</div>
-<div class="line">         -&gt;setColumnStretchFactor(1, 1)-&gt;setVerticalAlignment(<a class="code" href="classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31a4f1f6016fc9f3f2353c0cc7c67b292bd">LayoutStyle::Alignment::Center</a>)</div>
-<div class="line">         -&gt;setHorizontalSpacing(3)</div>
-<div class="line">         -&gt;put(0, 0, item&lt;Static&gt;(&amp;I::icon_, [](I* v){</div>
-<div class="line">                  <span class="keywordflow">if</span> (v-&gt;node()-&gt;parent() &amp;&amp; v-&gt;node()-&gt;parent()-&gt;parent() )</div>
-<div class="line">                  {</div>
-<div class="line">                     <span class="keywordflow">if</span> (<span class="keyword">auto</span> ifs = DCast&lt;IfStatement&gt;(v-&gt;node()-&gt;parent()-&gt;parent()))</div>
-<div class="line">                        <span class="keywordflow">if</span> ( ifs-&gt;elseBranch() == v-&gt;node()-&gt;parent())</div>
-<div class="line">                           <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elificon();</div>
-<div class="line">                  }</div>
-<div class="line">                  <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;icon();</div>
-<div class="line">               }))</div>
-<div class="line">         -&gt;put(1, 0, item&lt;NodeWrapper&gt;(&amp;I::condition_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;condition();},</div>
-<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;condition();}));</div>
+<div class="line">   <span class="keyword">auto</span> icon = item&lt;Static&gt;(&amp;I::icon_, [](I* v){</div>
+<div class="line">         <span class="keywordflow">if</span> (v-&gt;node()-&gt;parent() &amp;&amp; v-&gt;node()-&gt;parent()-&gt;parent() )</div>
+<div class="line">         {</div>
+<div class="line">            <span class="keywordflow">if</span> (<span class="keyword">auto</span> ifs = DCast&lt;IfStatement&gt;(v-&gt;node()-&gt;parent()-&gt;parent()))</div>
+<div class="line">               <span class="keywordflow">if</span> ( ifs-&gt;elseBranch() == v-&gt;node()-&gt;parent())</div>
+<div class="line">                  <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elificon();</div>
+<div class="line">         }</div>
+<div class="line">         <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;icon();</div>
+<div class="line">      });</div>
 <div class="line"></div>
-<div class="line">   <span class="keyword">auto</span> thenBranch = item&lt;VStatementItemList&gt;(&amp;I::thenBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;thenBranch();},</div>
-<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;thenBranch();});</div>
+<div class="line">   <span class="keyword">auto</span> condition = item&lt;NodeWrapper&gt;(&amp;I::condition_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;condition();},</div>
+<div class="line">         [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;condition();});</div>
 <div class="line"></div>
-<div class="line">   <span class="keyword">auto</span> elseBranch = item&lt;VStatementItemList&gt;(&amp;I::elseBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;elseBranch();},</div>
-<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseBranch();});</div>
+<div class="line">   <span class="comment">// We need the grid for stretching</span></div>
+<div class="line">   <span class="keyword">auto</span> header = grid({{(<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
+<div class="line">                        -&gt;put(TheVCenterOf, icon, AtVCenterOf, condition)</div>
+<div class="line">                        -&gt;put(TheHCenterOf, icon, AtLeftOf, condition)}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1);</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The grid is needed to enable strectching</span></div>
+<div class="line">   <span class="keyword">auto</span> elseIcon = grid({{item&lt;Static&gt;(&amp;I::elseIcon_, &amp;StyleType::elseIcon)}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The grid is needed to enable strectching</span></div>
+<div class="line">   <span class="keyword">auto</span> thenBranch = grid({{item&lt;VStatementItemList&gt;(&amp;I::thenBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;thenBranch();},</div>
+<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;thenBranch();})}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)-&gt;setHorizontalSpacing(5)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The grid is needed to enable strectching</span></div>
+<div class="line">   <span class="keyword">auto</span> elseBranch = grid({{item&lt;VStatementItemList&gt;(&amp;I::elseBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;elseBranch();},</div>
+<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseBranch();})}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)-&gt;setHorizontalSpacing(5)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
 <div class="line"></div>
 <div class="line">   <span class="keyword">auto</span> shapeElement = <span class="keyword">new</span> <a class="code" href="classVisualization_1_1ShapeFormElement.html">ShapeFormElement</a>{};</div>
 <div class="line"></div>
 <div class="line">   <span class="comment">// Form 0: no else branch</span></div>
-<div class="line">   <span class="keyword">auto</span> contentElement = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>{})-&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)</div>
-<div class="line">         -&gt;setHorizontalSpacing(5)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
+<div class="line">   <span class="keyword">auto</span> topLevelIfWithoutElse = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
+<div class="line">         -&gt;put(TheTopOf, thenBranch, 3, FromBottomOf, header)</div>
 <div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, -10, FromLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, thenBranch)</div>
 <div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));</div>
+<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch);</div>
 <div class="line"></div>
-<div class="line">   <span class="comment">// Form 1: then and else branch arranged horizontally</span></div>
-<div class="line">   <span class="keyword">auto</span> elseVerticalLineElement = item&lt;Line&gt;(&amp;I::elseLine_, [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseVerticalLine();});</div>
+<div class="line">   addForm(topLevelIfWithoutElse);</div>
 <div class="line"></div>
-<div class="line">   contentElement = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>{})-&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)</div>
-<div class="line">         -&gt;setHorizontalSpacing(5)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(1, 0, elseVerticalLineElement)-&gt;put(2, 0, elseBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
-<div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));</div>
-<div class="line"></div>
-<div class="line">   <span class="comment">// Form 2: then and else branch arranged vertically</span></div>
+<div class="line">   <span class="comment">// Form 1: then and else branch arranged vertically</span></div>
 <div class="line">   <span class="keyword">auto</span> elseHorizontalLineElement = item&lt;Line&gt;(&amp;I::elseLine_, [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseHorizontalLine();});</div>
-<div class="line"></div>
-<div class="line">   contentElement = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>{})-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;setVerticalSpacing(5)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(0, 1, elseHorizontalLineElement)-&gt;put(0, 2, elseBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
+<div class="line">   <span class="keyword">auto</span> topLevelIfAndStandardElse = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
+<div class="line">         -&gt;put(TheTopOf, thenBranch, 3, FromBottomOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseIcon, AtLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseBranch, AtLeftOf, thenBranch)</div>
 <div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, -10, FromLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheTopOf, elseIcon, 3, FromBottomOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, elseBranch)</div>
 <div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));</div>
+<div class="line">         -&gt;put(TheTopOf, elseBranch, 3, FromBottomOf, elseIcon)</div>
+<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, elseBranch)</div>
 <div class="line"></div>
-<div class="line">   <span class="comment">// Form 3: then branch and then a following if else statement</span></div>
-<div class="line">   contentElement = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>{})-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
+<div class="line">         -&gt;put(TheVCenterOf, elseHorizontalLineElement, AtVCenterOf, elseIcon)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseHorizontalLineElement, AtRightOf, elseIcon)</div>
+<div class="line">         -&gt;put(TheRightOf, elseHorizontalLineElement, AtRightOf, shapeElement);</div>
 <div class="line"></div>
+<div class="line">   addForm(topLevelIfAndStandardElse);</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// Form 2: then branch and then a following if else statement</span></div>
 <div class="line">   <span class="keyword">auto</span> elseIfBranch = item&lt;VStatementItemList&gt;(&amp;I::elseBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;elseBranch();},</div>
 <div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseIfBranch();});</div>
-<div class="line"></div>
-<div class="line">   <span class="keyword">auto</span> elseContentElement = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>{})-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;put(0, 0, elseIfBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
+<div class="line">   <span class="keyword">auto</span> topLevelIfAndElseIf = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>{})</div>
+<div class="line">         -&gt;put(TheTopOf, thenBranch, 3, FromBottomOf, header)</div>
 <div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, shapeElement, 10, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, AtBottomOf, elseContentElement)</div>
-<div class="line">         -&gt;put(TheTopOf, elseContentElement, 2, FromBottomOf, contentElement)</div>
-<div class="line">         -&gt;put(TheLeftOf, elseContentElement, AtLeftOf, shapeElement)</div>
-<div class="line">         -&gt;put(TheRightOf, elseContentElement, AtRightOf, shapeElement));</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, -10, FromLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
+<div class="line">         -&gt;put(TheBottomOf, shapeElement, AtBottomOf, elseIfBranch)</div>
+<div class="line">         -&gt;put(TheTopOf, elseIfBranch, 2, FromBottomOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseIfBranch, AtLeftOf, header)</div>
+<div class="line">         -&gt;put(TheRightOf, elseIfBranch, AtRightOf, shapeElement);</div>
+<div class="line"></div>
+<div class="line">   addForm(topLevelIfAndElseIf);</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The stretch versions of the forms</span></div>
+<div class="line">   <span class="keyword">auto</span> borderElement = <span class="keyword">new</span> <a class="code" href="classVisualization_1_1BorderFormElement.html">BorderFormElement</a>{};</div>
+<div class="line">   addForm(topLevelIfWithoutElse-&gt;clone()</div>
+<div class="line">           -&gt;put(TheRightOf, shapeElement, AtRightOf, borderElement)</div>
+<div class="line">           -&gt;put(TheLeftOf, header, AtLeftOf, borderElement));</div>
+<div class="line">   addForm(topLevelIfAndStandardElse-&gt;clone()</div>
+<div class="line">           -&gt;put(TheRightOf, shapeElement, AtRightOf, borderElement)</div>
+<div class="line">           -&gt;put(TheLeftOf, header, AtLeftOf, borderElement));</div>
+<div class="line">   addForm(topLevelIfAndElseIf-&gt;clone()</div>
+<div class="line">           -&gt;put(TheRightOf, shapeElement, AtRightOf, borderElement)</div>
+<div class="line">           -&gt;put(TheLeftOf, header, AtLeftOf, borderElement));</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// Add margins to top-level ifs</span></div>
+<div class="line">   topLevelIfWithoutElse-&gt;<a class="code" href="classVisualization_1_1SuperFormElement.html#a346723a22aa1ea9a703eafd23f13207d">setBottomMargin</a>(10);</div>
+<div class="line">   topLevelIfAndStandardElse-&gt;<a class="code" href="classVisualization_1_1SuperFormElement.html#a346723a22aa1ea9a703eafd23f13207d">setBottomMargin</a>(10);</div>
+<div class="line">   topLevelIfAndElseIf-&gt;<a class="code" href="classVisualization_1_1SuperFormElement.html#a346723a22aa1ea9a703eafd23f13207d">setBottomMargin</a>(10);</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="keywordtype">bool</span> VIfStatement::isInsideAnotherIf()<span class="keyword"> const</span></div>
+<div class="line"><span class="keyword"></span>{</div>
+<div class="line">   <span class="keywordflow">return</span> parent() &amp;&amp; parent()-&gt;<a class="code" href="classVisualization_1_1FormElement.html#a38daf5ea82ae237656bbc5be6c111d13">parent</a>() &amp;&amp; parent()-&gt;<a class="code" href="classVisualization_1_1FormElement.html#a38daf5ea82ae237656bbc5be6c111d13">parent</a>()-&gt;typeId() == typeIdStatic();</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line">}</div>
-</div><!-- fragment --><p>The first thing to notice is this inlcude: <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/declarative/DeclarativeItemDef.h&quot;</span></div>
+</div><!-- fragment --><p>The first thing to notice is this inlcude: <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/declarative/DeclarativeItem.hpp&quot;</span></div>
 </div><!-- fragment --> We need to include this additional definitions header pertaining to the <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a> framework.</p>
-<p>Next is: <div class="fragment"><div class="line">ITEM_COMMON_DEFINITIONS(VIfStatement, <span class="stringliteral">&quot;item&quot;</span>)</div>
+<p>Next is: <div class="fragment"><div class="line">DEFINE_ITEM_COMMON(VIfStatement, <span class="stringliteral">&quot;item&quot;</span>)</div>
 </div><!-- fragment --> which complements the <code>ITEM_COMMON</code> declaration in the header file. The second argument indicates which subdirectory of <code>/styles</code> we should look in for the <code>/VIfStatement</code> directory that contains all styles for this class. Possible choices here are <em>"item"</em>, <em>"icon"</em> and <em>"layout"</em> for now.</p>
 <p>The constructor: <div class="fragment"><div class="line">VIfStatement::VIfStatement(Item* parent, NodeType* node, <span class="keyword">const</span> StyleType* style) : <a class="code" href="classCore_1_1Reflect.html">Super</a>{parent, node, style}</div>
 </div><!-- fragment --> is typical for items deriving from <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a>, we just forward the arguments.</p>
-<p>Here is the implementation of the <code>updateGeometry()</code> method: <div class="fragment"><div class="line"><span class="keywordtype">void</span> VIfStatement::updateGeometry(<span class="keywordtype">int</span> availableWidth, <span class="keywordtype">int</span> availableHeight)</div>
+<p>In the <code>determineForm()</code> method we choose which form we use to render the if statement. There are several choices there depending on whether the if is inside another if or not. These are mainly there to make the rendering of longer <code>if</code> <code>else</code> <code>if</code> <code>else</code> <code>if</code> <code>else</code> chains nicer. <div class="fragment"><div class="line"><span class="keywordtype">int</span> VIfStatement::determineForm()</div>
 <div class="line">{</div>
-<div class="line">   <span class="keywordtype">int</span> contentWidth = 0;</div>
-<div class="line">   <span class="keywordflow">if</span> (thenBranch_) contentWidth += thenBranch_-&gt;widthInParent();</div>
-<div class="line">   <span class="keywordflow">if</span> (elseBranch_) contentWidth += elseBranch_-&gt;widthInParent();</div>
-<div class="line">   <span class="keywordflow">if</span> ( horizontal_ != (contentWidth &lt;= <a class="code" href="namespaceInformationScripting.html#a9c4bf651e9cd0349ca0687aa0022f5f4">style</a>()-&gt;contentWidthSwitchTreshold()))</div>
+<div class="line">   <span class="comment">// Plain if with no else branch</span></div>
+<div class="line">   <span class="keywordtype">int</span> formId = 0;</div>
+<div class="line">   <span class="keywordflow">if</span> (node()-&gt;elseBranch() &amp;&amp; node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() &gt; 0)</div>
 <div class="line">   {</div>
-<div class="line">      horizontal_ = !horizontal_;</div>
-<div class="line">      setUpdateNeeded(RepeatUpdate);</div>
+<div class="line">      <span class="keywordflow">if</span> (node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() == 1 &amp;&amp; DCast&lt;IfStatement&gt;(node()-&gt;elseBranch()-&gt;first()))</div>
+<div class="line">         formId = 2; <span class="comment">// else contains only an if</span></div>
+<div class="line">      <span class="keywordflow">else</span></div>
+<div class="line">         formId = 1; <span class="comment">// standard else</span></div>
 <div class="line">   }</div>
 <div class="line"></div>
-<div class="line">   Super::updateGeometry(availableWidth, availableHeight);</div>
-<div class="line">}</div>
-</div><!-- fragment --> What's happening is this: If we put the <em>then</em> and the <em>else</em> branch next to each other and the total width is under a specified threshold defined in the style, then we'll keep this configuration. Otherwise, we will put the <em>then</em> branch on top of the <em>else</em> branch. We do this in order to improve the readability of if statements and also to demonstrate how to use multiple forms with the declarative framework.</p>
-<p>If we detect a switch from horizontal to vertical layout we need to perform an extra update so we request that the item is updated again. Note that this is a rather specific situation that arises in <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a> and normally you wouldn't need to manually request an update in order to change forms.</p>
-<p>Finally we call the <code>updateGeometry()</code> method of the super class to let it arrange all child items.</p>
-<p>Given that we set <code>horizontal_</code> in <code>updateGeometry()</code>, the <code>determineForm()</code> method is trivial: <div class="fragment"><div class="line"><span class="keywordtype">int</span> VIfStatement::determineForm()</div>
-<div class="line">{</div>
-<div class="line">   <span class="keywordflow">if</span> (node()-&gt;elseBranch() &amp;&amp; node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() == 0) <span class="keywordflow">return</span> 0;</div>
+<div class="line">   <span class="keywordflow">if</span> (isInsideAnotherIf())</div>
+<div class="line">      formId += 3; <span class="comment">// Make the if stretchable</span></div>
 <div class="line"></div>
-<div class="line">   <span class="keywordflow">if</span> (node()-&gt;elseBranch() &amp;&amp; node()-&gt;elseBranch()-&gt;<a class="code" href="namespaceOODebug.html#a2fe2d8d116e797c0f0a92272bc9b0a56">size</a>() == 1 &amp;&amp; DCast&lt;IfStatement&gt;(node()-&gt;elseBranch()-&gt;first()))</div>
-<div class="line">      <span class="keywordflow">return</span> 3;</div>
-<div class="line">   <span class="keywordflow">return</span> horizontal_ ? 1 : 2;</div>
+<div class="line">   <span class="keywordflow">return</span> formId;</div>
 <div class="line">}</div>
-</div><!-- fragment --> <a class="el" href="classOOVisualization_1_1VIfStatement.html">OOVisualization::VIfStatement</a> is a bit special in that you need to work with several methods in order to arrive at a decision on which layout form to use. Normally, it is sufficient to perform some checks only in the <code>determineForm()</code> method to decide which is the most appropriate form. In particular this is the case if the decision is based only on the node that is represented, and not on any visual information.</p>
+</div><!-- fragment --></p>
 <p>Finally let's see the real work that we need to do in order to use <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a> - defining the <code>initializeForms()</code> method: <div class="fragment"><div class="line"><span class="keywordtype">void</span> VIfStatement::initializeForms()</div>
 <div class="line">{</div>
-<div class="line">   <span class="keyword">auto</span> header = (<span class="keyword">new</span> GridLayoutFormElement{})</div>
-<div class="line">         -&gt;setColumnStretchFactor(1, 1)-&gt;setVerticalAlignment(LayoutStyle::Alignment::Center)</div>
-<div class="line">         -&gt;setHorizontalSpacing(3)</div>
-<div class="line">         -&gt;put(0, 0, item&lt;Static&gt;(&amp;I::icon_, [](I* v){</div>
-<div class="line">                  <span class="keywordflow">if</span> (v-&gt;node()-&gt;parent() &amp;&amp; v-&gt;node()-&gt;parent()-&gt;parent() )</div>
-<div class="line">                  {</div>
-<div class="line">                     <span class="keywordflow">if</span> (<span class="keyword">auto</span> ifs = DCast&lt;IfStatement&gt;(v-&gt;node()-&gt;parent()-&gt;parent()))</div>
-<div class="line">                        <span class="keywordflow">if</span> ( ifs-&gt;elseBranch() == v-&gt;node()-&gt;parent())</div>
-<div class="line">                           <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elificon();</div>
-<div class="line">                  }</div>
-<div class="line">                  <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;icon();</div>
-<div class="line">               }))</div>
-<div class="line">         -&gt;put(1, 0, item&lt;NodeWrapper&gt;(&amp;I::condition_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;condition();},</div>
-<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;condition();}));</div>
+<div class="line">   <span class="keyword">auto</span> icon = item&lt;Static&gt;(&amp;I::icon_, [](I* v){</div>
+<div class="line">         <span class="keywordflow">if</span> (v-&gt;node()-&gt;parent() &amp;&amp; v-&gt;node()-&gt;parent()-&gt;parent() )</div>
+<div class="line">         {</div>
+<div class="line">            <span class="keywordflow">if</span> (<span class="keyword">auto</span> ifs = DCast&lt;IfStatement&gt;(v-&gt;node()-&gt;parent()-&gt;parent()))</div>
+<div class="line">               <span class="keywordflow">if</span> ( ifs-&gt;elseBranch() == v-&gt;node()-&gt;parent())</div>
+<div class="line">                  <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elificon();</div>
+<div class="line">         }</div>
+<div class="line">         <span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;icon();</div>
+<div class="line">      });</div>
 <div class="line"></div>
-<div class="line">   <span class="keyword">auto</span> thenBranch = item&lt;VStatementItemList&gt;(&amp;I::thenBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;thenBranch();},</div>
-<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;thenBranch();});</div>
+<div class="line">   <span class="keyword">auto</span> condition = item&lt;NodeWrapper&gt;(&amp;I::condition_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;condition();},</div>
+<div class="line">         [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;condition();});</div>
 <div class="line"></div>
-<div class="line">   <span class="keyword">auto</span> elseBranch = item&lt;VStatementItemList&gt;(&amp;I::elseBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;elseBranch();},</div>
-<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseBranch();});</div>
+<div class="line">   <span class="comment">// We need the grid for stretching</span></div>
+<div class="line">   <span class="keyword">auto</span> header = grid({{(<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
+<div class="line">                        -&gt;put(TheVCenterOf, icon, AtVCenterOf, condition)</div>
+<div class="line">                        -&gt;put(TheHCenterOf, icon, AtLeftOf, condition)}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1);</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The grid is needed to enable strectching</span></div>
+<div class="line">   <span class="keyword">auto</span> elseIcon = grid({{item&lt;Static&gt;(&amp;I::elseIcon_, &amp;StyleType::elseIcon)}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The grid is needed to enable strectching</span></div>
+<div class="line">   <span class="keyword">auto</span> thenBranch = grid({{item&lt;VStatementItemList&gt;(&amp;I::thenBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;thenBranch();},</div>
+<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;thenBranch();})}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)-&gt;setHorizontalSpacing(5)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The grid is needed to enable strectching</span></div>
+<div class="line">   <span class="keyword">auto</span> elseBranch = grid({{item&lt;VStatementItemList&gt;(&amp;I::elseBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;elseBranch();},</div>
+<div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseBranch();})}})</div>
+<div class="line">         -&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)-&gt;setHorizontalSpacing(5)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
 <div class="line"></div>
 <div class="line">   <span class="keyword">auto</span> shapeElement = <span class="keyword">new</span> ShapeFormElement{};</div>
 <div class="line"></div>
 <div class="line">   <span class="comment">// Form 0: no else branch</span></div>
-<div class="line">   <span class="keyword">auto</span> contentElement = (<span class="keyword">new</span> GridLayoutFormElement{})-&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)</div>
-<div class="line">         -&gt;setHorizontalSpacing(5)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
+<div class="line">   <span class="keyword">auto</span> topLevelIfWithoutElse = (<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
+<div class="line">         -&gt;put(TheTopOf, thenBranch, 3, FromBottomOf, header)</div>
 <div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, -10, FromLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, thenBranch)</div>
 <div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));</div>
+<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch);</div>
 <div class="line"></div>
-<div class="line">   <span class="comment">// Form 1: then and else branch arranged horizontally</span></div>
-<div class="line">   <span class="keyword">auto</span> elseVerticalLineElement = item&lt;Line&gt;(&amp;I::elseLine_, [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseVerticalLine();});</div>
+<div class="line">   addForm(topLevelIfWithoutElse);</div>
 <div class="line"></div>
-<div class="line">   contentElement = (<span class="keyword">new</span> GridLayoutFormElement{})-&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)</div>
-<div class="line">         -&gt;setHorizontalSpacing(5)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(1, 0, elseVerticalLineElement)-&gt;put(2, 0, elseBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
-<div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));</div>
-<div class="line"></div>
-<div class="line">   <span class="comment">// Form 2: then and else branch arranged vertically</span></div>
+<div class="line">   <span class="comment">// Form 1: then and else branch arranged vertically</span></div>
 <div class="line">   <span class="keyword">auto</span> elseHorizontalLineElement = item&lt;Line&gt;(&amp;I::elseLine_, [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseHorizontalLine();});</div>
-<div class="line"></div>
-<div class="line">   contentElement = (<span class="keyword">new</span> GridLayoutFormElement{})-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;setVerticalSpacing(5)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(0, 1, elseHorizontalLineElement)-&gt;put(0, 2, elseBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
+<div class="line">   <span class="keyword">auto</span> topLevelIfAndStandardElse = (<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
+<div class="line">         -&gt;put(TheTopOf, thenBranch, 3, FromBottomOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseIcon, AtLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseBranch, AtLeftOf, thenBranch)</div>
 <div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, -10, FromLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheTopOf, elseIcon, 3, FromBottomOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, elseBranch)</div>
 <div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));</div>
+<div class="line">         -&gt;put(TheTopOf, elseBranch, 3, FromBottomOf, elseIcon)</div>
+<div class="line">         -&gt;put(TheBottomOf, shapeElement, 3, FromBottomOf, elseBranch)</div>
 <div class="line"></div>
-<div class="line">   <span class="comment">// Form 3: then branch and then a following if else statement</span></div>
-<div class="line">   contentElement = (<span class="keyword">new</span> GridLayoutFormElement{})-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
+<div class="line">         -&gt;put(TheVCenterOf, elseHorizontalLineElement, AtVCenterOf, elseIcon)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseHorizontalLineElement, AtRightOf, elseIcon)</div>
+<div class="line">         -&gt;put(TheRightOf, elseHorizontalLineElement, AtRightOf, shapeElement);</div>
 <div class="line"></div>
+<div class="line">   addForm(topLevelIfAndStandardElse);</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// Form 2: then branch and then a following if else statement</span></div>
 <div class="line">   <span class="keyword">auto</span> elseIfBranch = item&lt;VStatementItemList&gt;(&amp;I::elseBranch_, [](I* v){<span class="keywordflow">return</span> v-&gt;node()-&gt;elseBranch();},</div>
 <div class="line">                                                [](I* v){<span class="keywordflow">return</span> &amp;v-&gt;style()-&gt;elseIfBranch();});</div>
-<div class="line"></div>
-<div class="line">   <span class="keyword">auto</span> elseContentElement = (<span class="keyword">new</span> GridLayoutFormElement{})-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;put(0, 0, elseIfBranch)</div>
-<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
-<div class="line"></div>
-<div class="line">   addForm((<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
-<div class="line">         -&gt;put(TheTopOf, contentElement, 3, FromBottomOf, header)</div>
+<div class="line">   <span class="keyword">auto</span> topLevelIfAndElseIf = (<span class="keyword">new</span> AnchorLayoutFormElement{})</div>
+<div class="line">         -&gt;put(TheTopOf, thenBranch, 3, FromBottomOf, header)</div>
 <div class="line">         -&gt;put(TheTopOf, shapeElement, AtCenterOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, AtLeftOf, header)</div>
-<div class="line">         -&gt;put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, contentElement)</div>
-<div class="line">         -&gt;put(TheRightOf, shapeElement, 10, FromRightOf, header)</div>
-<div class="line">         -&gt;put(TheBottomOf, shapeElement, AtBottomOf, elseContentElement)</div>
-<div class="line">         -&gt;put(TheTopOf, elseContentElement, 2, FromBottomOf, contentElement)</div>
-<div class="line">         -&gt;put(TheLeftOf, elseContentElement, AtLeftOf, shapeElement)</div>
-<div class="line">         -&gt;put(TheRightOf, elseContentElement, AtRightOf, shapeElement));</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, -10, FromLeftOf, header)</div>
+<div class="line">         -&gt;put(TheLeftOf, shapeElement, 5, FromLeftOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, header, AtRightOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheRightOf, shapeElement, 3, FromRightOf, header)</div>
+<div class="line">         -&gt;put(TheBottomOf, shapeElement, AtBottomOf, elseIfBranch)</div>
+<div class="line">         -&gt;put(TheTopOf, elseIfBranch, 2, FromBottomOf, thenBranch)</div>
+<div class="line">         -&gt;put(TheLeftOf, elseIfBranch, AtLeftOf, header)</div>
+<div class="line">         -&gt;put(TheRightOf, elseIfBranch, AtRightOf, shapeElement);</div>
+<div class="line"></div>
+<div class="line">   addForm(topLevelIfAndElseIf);</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// The stretch versions of the forms</span></div>
+<div class="line">   <span class="keyword">auto</span> borderElement = <span class="keyword">new</span> BorderFormElement{};</div>
+<div class="line">   addForm(topLevelIfWithoutElse-&gt;clone()</div>
+<div class="line">           -&gt;put(TheRightOf, shapeElement, AtRightOf, borderElement)</div>
+<div class="line">           -&gt;put(TheLeftOf, header, AtLeftOf, borderElement));</div>
+<div class="line">   addForm(topLevelIfAndStandardElse-&gt;clone()</div>
+<div class="line">           -&gt;put(TheRightOf, shapeElement, AtRightOf, borderElement)</div>
+<div class="line">           -&gt;put(TheLeftOf, header, AtLeftOf, borderElement));</div>
+<div class="line">   addForm(topLevelIfAndElseIf-&gt;clone()</div>
+<div class="line">           -&gt;put(TheRightOf, shapeElement, AtRightOf, borderElement)</div>
+<div class="line">           -&gt;put(TheLeftOf, header, AtLeftOf, borderElement));</div>
+<div class="line"></div>
+<div class="line">   <span class="comment">// Add margins to top-level ifs</span></div>
+<div class="line">   topLevelIfWithoutElse-&gt;setBottomMargin(10);</div>
+<div class="line">   topLevelIfAndStandardElse-&gt;setBottomMargin(10);</div>
+<div class="line">   topLevelIfAndElseIf-&gt;setBottomMargin(10);</div>
 </div><!-- fragment --> We won't go into detail here, please refer to <a href="http://www.pm.inf.ethz.ch/content/dam/ethz/special-interest/infk/chair-program-method/pm/documents/Education/Theses/Andrea_Helfenstein_BA_report.pdf">Andrea Helfenstein's Bachelor Thesis Report</a> for the various ways to use <a class="el" href="classVisualization_1_1DeclarativeItem.html" title="The DeclarativeItem class is the base class for all items that use the declarative API for visualizat...">Visualization::DeclarativeItem</a>. In short:</p><ul>
-<li>We create a <em>header</em> consisting of an <em>icon</em> an the <em>condition</em>. The <em>condition</em> is wrapped in a visual item that draws a background.</li>
-<li>Both the <em>then</em> and the <em>else</em> branches are rendered using a statement list visualization.</li>
-<li>We use a <em>shape</em> <em>element</em> that serves as the background of the entire if statement.</li>
-<li>There are two forms:<ul>
-<li>Form <em>0</em> puts the two branches next to each other</li>
-<li>Form <em>1</em> puts the <em>true</em> branch on top of the <em>false</em> branch.</li>
-<li>Form <em>2</em> is for nested else if statements. Else branches are put under the then branch and they are no indented.</li>
-</ul>
-</li>
+<li>We create several elements that are reused in multiple forms: <code>icon</code>, <code>condition</code>, <code>header</code> </li>
+<li>We wrap some elements in a grid, just so that the elements can be stretched by their parent if needed. This will not result in any visual stretching since we declare only the last (empty) cell of the grid as stretchable. This is merely needed to satisfy the constraints of the anchor layout.</li>
+<li>Then we define three forms that match different situations for an if-statement</li>
+<li>Based on these three forms we make three additional forms which are similar but allow the if statement to visually stretch to fill all available space on the right.</li>
+<li>Finally we add some margins to the original three forms (not their clones)</li>
 </ul>
 <p>This is all there is to it - now we have a visualization for if statements that will be automatically used when needed. In simpler cases, all you need to do is define the <code>initializeForms()</code> method and you can create a visual item in no time. It is recommended to look at other examples when creating your own items. An example of a very short item is <a class="el" href="classOOVisualization_1_1VTypeAlias.html">OOVisualization::VTypeAlias</a>, and an example of a more complicated one is <a class="el" href="classOOVisualization_1_1VClass.html">OOVisualization::VClass</a>.</p>
 <h1><a class="anchor" id="styles"></a>
@@ -599,12 +617,9 @@ Item styles</h1>
 <div class="line"></div>
 <div class="line">      Property&lt;Visualization::SequentialLayoutStyle&gt; header{<span class="keyword">this</span>, <span class="stringliteral">&quot;header&quot;</span>};</div>
 <div class="line">      Property&lt;Visualization::StaticStyle&gt; icon{<span class="keyword">this</span>, <span class="stringliteral">&quot;icon&quot;</span>};</div>
+<div class="line">      Property&lt;Visualization::StaticStyle&gt; elseIcon{<span class="keyword">this</span>, <span class="stringliteral">&quot;elseIcon&quot;</span>};</div>
 <div class="line">      Property&lt;Visualization::StaticStyle&gt; elificon{<span class="keyword">this</span>, <span class="stringliteral">&quot;elificon&quot;</span>};</div>
-<div class="line">      Property&lt;Visualization::SequentialLayoutStyle&gt; condition{<span class="keyword">this</span>, <span class="stringliteral">&quot;condition&quot;</span>};</div>
-<div class="line"></div>
-<div class="line">      Property&lt;Visualization::SequentialLayoutStyle&gt; contentVertical{<span class="keyword">this</span>, <span class="stringliteral">&quot;contentVertical&quot;</span>};</div>
-<div class="line">      Property&lt;Visualization::SequentialLayoutStyle&gt; contentHorizontal{<span class="keyword">this</span>, <span class="stringliteral">&quot;contentHorizontal&quot;</span>};</div>
-<div class="line">      Property&lt;int&gt; contentWidthSwitchTreshold{<span class="keyword">this</span>, <span class="stringliteral">&quot;contentWidthSwitchTreshold&quot;</span>};</div>
+<div class="line">      Property&lt;Visualization::ItemStyle&gt; condition{<span class="keyword">this</span>, <span class="stringliteral">&quot;condition&quot;</span>};</div>
 <div class="line"></div>
 <div class="line">      Property&lt;Visualization::VListStyle&gt; thenBranch{<span class="keyword">this</span>, <span class="stringliteral">&quot;thenBranch&quot;</span>};</div>
 <div class="line">      Property&lt;Visualization::VListStyle&gt; elseBranch{<span class="keyword">this</span>, <span class="stringliteral">&quot;elseBranch&quot;</span>};</div>
@@ -653,7 +668,7 @@ Item styles</h1>
 <div class="line"><a class="code" href="classOOVisualization_1_1VIfStatementStyle.html#a2e1118f87a49d6efe11d6487ea321fc8">VIfStatementStyle::~VIfStatementStyle</a>(){}</div>
 <div class="line"></div>
 <div class="line">}</div>
-</div><!-- fragment --><p>And here is the corresponding default XML file <code></code>(OOVisualization/styles/item/VIfStatement/default). Things here can get a bit clunky, but the important thing to see is that each top-level tag corresponds to a property of the style or to a property of a base class. Simple properties like <code>contentWidthSwitchTreshold</code> are represented by values. Properties which are themselves styles, follow an XML structure as dictated in their style class. To learn more about how styles work see the documentation of the <a class="el" href="namespaceVisualization.html" title="The VisualizationBase plug-in sets the foundations of the visualization framework in Envision...">Visualization</a> namespace.</p>
+</div><!-- fragment --><p>And here is the corresponding default XML file <code></code>(OOVisualization/styles/item/VIfStatement/default). Things here can get a bit clunky, but the important thing to see is that each top-level tag corresponds to a property of the style or to a property of a base class. Simple properties like <code>cornerRadius</code> are represented by values. Properties which are themselves styles, follow an XML structure as dictated in their style class. To learn more about how styles work see the documentation of the <a class="el" href="namespaceVisualization.html" title="The VisualizationBase plug-in sets the foundations of the visualization framework in Envision...">Visualization</a> namespace.</p>
 <div class="fragment"><div class="line">&lt;!DOCTYPE EnvisionVisualizationStyle&gt;</div>
 <div class="line">&lt;style prototypes=&quot;item/DeclarativeItemBase/default&quot;&gt;</div>
 <div class="line">   &lt;shape prototypes=&quot;shape/Box/default&quot;&gt;</div>
@@ -666,7 +681,7 @@ Item styles</h1>
 <div class="line">         &lt;style&gt;1&lt;/style&gt;</div>
 <div class="line">         &lt;color&gt;#ffffe0&lt;/color&gt;</div>
 <div class="line">      &lt;/backgroundBrush&gt;</div>
-<div class="line">      &lt;cornerRadius&gt;4&lt;/cornerRadius&gt;</div>
+<div class="line">      &lt;cornerRadius&gt;2&lt;/cornerRadius&gt;</div>
 <div class="line">   &lt;/shape&gt;</div>
 <div class="line">   </div>
 <div class="line">   &lt;header prototypes=&quot;layout/SequentialLayout/default&quot;&gt;</div>
@@ -677,75 +692,72 @@ Item styles</h1>
 <div class="line">      &lt;filename&gt;styles/icon/if.svg&lt;/filename&gt;</div>
 <div class="line">      &lt;width&gt;22&lt;/width&gt;</div>
 <div class="line">      &lt;height&gt;22&lt;/height&gt;</div>
+<div class="line">      &lt;zValue&gt;1&lt;/zValue&gt;</div>
 <div class="line">   &lt;/icon&gt;</div>
 <div class="line">   </div>
-<div class="line">   &lt;elificon prototypes=&quot;icon/SVGIcon/default&quot;&gt;</div>
-<div class="line">      &lt;filename&gt;styles/icon/elif.svg&lt;/filename&gt;</div>
+<div class="line">   &lt;elseIcon prototypes=&quot;icon/SVGIcon/default&quot;&gt;</div>
+<div class="line">      &lt;filename&gt;styles/icon/else.svg&lt;/filename&gt;</div>
 <div class="line">      &lt;width&gt;22&lt;/width&gt;</div>
 <div class="line">      &lt;height&gt;22&lt;/height&gt;</div>
+<div class="line">      &lt;zValue&gt;1&lt;/zValue&gt;</div>
+<div class="line">   &lt;/elseIcon&gt;</div>
+<div class="line">   </div>
+<div class="line">   &lt;elificon prototypes=&quot;icon/SVGIcon/default&quot;&gt;</div>
+<div class="line">      &lt;filename&gt;styles/icon/if.svg&lt;/filename&gt;</div>
+<div class="line">      &lt;width&gt;22&lt;/width&gt;</div>
+<div class="line">      &lt;height&gt;22&lt;/height&gt;</div>
+<div class="line">      &lt;zValue&gt;1&lt;/zValue&gt;</div>
 <div class="line">   &lt;/elificon&gt;</div>
 <div class="line">   </div>
-<div class="line">   &lt;condition prototypes=&quot;layout/SequentialLayout/default&quot;&gt;</div>
-<div class="line">      &lt;shape prototypes=&quot;shape/Box/default&quot;&gt;</div>
-<div class="line">         Box</div>
-<div class="line">         &lt;backgroundBrush&gt;</div>
+<div class="line">   &lt;condition prototypes=&quot;item/Item/default&quot;&gt;</div>
+<div class="line">      &lt;shape prototypes=&quot;shape/Frame/default&quot;&gt;</div>
+<div class="line">         Frame</div>
+<div class="line">         &lt;outline&gt;</div>
+<div class="line">            &lt;width&gt;1&lt;/width&gt;</div>
+<div class="line">            &lt;color&gt;#e0e0c8&lt;/color&gt;</div>
+<div class="line">         &lt;/outline&gt;</div>
+<div class="line">   </div>
+<div class="line">         &lt;contentBrush&gt;</div>
+<div class="line">            &lt;color&gt;#ffffe0&lt;/color&gt;</div>
+<div class="line">         &lt;/contentBrush&gt;</div>
+<div class="line">         </div>
+<div class="line">         &lt;topBrush&gt;</div>
 <div class="line">            &lt;style&gt;1&lt;/style&gt;</div>
-<div class="line">            &lt;color&gt;#ffff80&lt;/color&gt;</div>
-<div class="line">         &lt;/backgroundBrush&gt;</div>
-<div class="line">         &lt;cornerRadius&gt;2&lt;/cornerRadius&gt;</div>
-<div class="line">         &lt;cornerType&gt;2&lt;/cornerType&gt;</div>
+<div class="line">            &lt;color&gt;#e0e0c8&lt;/color&gt;</div>
+<div class="line">         &lt;/topBrush&gt;</div>
+<div class="line">         &lt;topWidth&gt;1&lt;/topWidth&gt;</div>
+<div class="line">         &lt;topMargin&gt;1&lt;/topMargin&gt;</div>
+<div class="line">         </div>
+<div class="line">         &lt;bottomBrush&gt;</div>
+<div class="line">            &lt;style&gt;1&lt;/style&gt;</div>
+<div class="line">            &lt;color&gt;#e0e0c8&lt;/color&gt;</div>
+<div class="line">         &lt;/bottomBrush&gt;</div>
+<div class="line">         &lt;bottomWidth&gt;1&lt;/bottomWidth&gt;</div>
+<div class="line">         &lt;bottomMargin&gt;1&lt;/bottomMargin&gt;</div>
+<div class="line">         </div>
+<div class="line">         &lt;leftBrush&gt;</div>
+<div class="line">            &lt;style&gt;1&lt;/style&gt;</div>
+<div class="line">            &lt;color&gt;#e0e0c8&lt;/color&gt;</div>
+<div class="line">         &lt;/leftBrush&gt;</div>
+<div class="line">         &lt;leftWidth&gt;1&lt;/leftWidth&gt;</div>
+<div class="line">         &lt;leftMargin&gt;15&lt;/leftMargin&gt;</div>
+<div class="line">         </div>
+<div class="line">         &lt;rightBrush&gt;</div>
+<div class="line">            &lt;style&gt;1&lt;/style&gt;</div>
+<div class="line">            &lt;color&gt;#e0e0c8&lt;/color&gt;</div>
+<div class="line">         &lt;/rightBrush&gt;</div>
+<div class="line">         &lt;rightWidth&gt;1&lt;/rightWidth&gt;</div>
+<div class="line">         &lt;rightMargin&gt;1&lt;/rightMargin&gt;</div>
 <div class="line">      &lt;/shape&gt;</div>
 <div class="line">   &lt;/condition&gt;</div>
 <div class="line">   </div>
-<div class="line">   &lt;contentHorizontal prototypes=&quot;layout/SequentialLayout/default&quot;&gt;</div>
-<div class="line">      &lt;alignment&gt;3&lt;/alignment&gt;</div>
-<div class="line">      &lt;noInnerCursors&gt;true&lt;/noInnerCursors&gt;</div>
-<div class="line">      &lt;noBoundaryCursorsInsideShape&gt;true&lt;/noBoundaryCursorsInsideShape&gt;</div>
-<div class="line">      &lt;spaceBetweenElements&gt;1&lt;/spaceBetweenElements&gt;</div>
-<div class="line">   &lt;/contentHorizontal&gt;</div>
-<div class="line">   </div>
-<div class="line">   &lt;contentVertical prototypes=&quot;layout/SequentialLayout/default&quot;&gt;</div>
-<div class="line">      &lt;alignment&gt;1&lt;/alignment&gt;</div>
-<div class="line">      &lt;direction&gt;2&lt;/direction&gt;</div>
-<div class="line">      &lt;noInnerCursors&gt;true&lt;/noInnerCursors&gt;</div>
-<div class="line">      &lt;noBoundaryCursorsInsideShape&gt;true&lt;/noBoundaryCursorsInsideShape&gt;</div>
-<div class="line">      &lt;spaceBetweenElements&gt;1&lt;/spaceBetweenElements&gt;</div>
-<div class="line">   &lt;/contentVertical&gt;</div>
-<div class="line">   </div>
-<div class="line">   &lt;contentWidthSwitchTreshold&gt;600&lt;/contentWidthSwitchTreshold&gt;</div>
-<div class="line">   </div>
-<div class="line">   &lt;thenBranch prototypes=&quot;item/VStatementItemList/default&quot;&gt;</div>
-<div class="line">      &lt;shape prototypes=&quot;shape/Box/default&quot;&gt;</div>
-<div class="line">         Box</div>
-<div class="line">         &lt;outline&gt;&lt;style&gt;0&lt;/style&gt;&lt;/outline&gt;</div>
-<div class="line">         &lt;backgroundBrush&gt;</div>
-<div class="line">            &lt;style&gt;1&lt;/style&gt;</div>
-<div class="line">            &lt;color&gt;#c8ffc8&lt;/color&gt;</div>
-<div class="line">         &lt;/backgroundBrush&gt;</div>
-<div class="line">         &lt;cornerRadius&gt;4&lt;/cornerRadius&gt;</div>
-<div class="line">         &lt;cornerType&gt;1&lt;/cornerType&gt;</div>
-<div class="line">      &lt;/shape&gt;</div>
-<div class="line">   &lt;/thenBranch&gt;</div>
-<div class="line">   </div>
-<div class="line">   &lt;elseBranch prototypes=&quot;item/VStatementItemList/default&quot;&gt;</div>
-<div class="line">      &lt;shape prototypes=&quot;shape/Box/default&quot;&gt;</div>
-<div class="line">         Box</div>
-<div class="line">         &lt;outline&gt;&lt;style&gt;0&lt;/style&gt;&lt;/outline&gt;</div>
-<div class="line">         &lt;backgroundBrush&gt;</div>
-<div class="line">            &lt;style&gt;1&lt;/style&gt;</div>
-<div class="line">            &lt;color&gt;#ffe0e0&lt;/color&gt;</div>
-<div class="line">         &lt;/backgroundBrush&gt;</div>
-<div class="line">         &lt;cornerRadius&gt;4&lt;/cornerRadius&gt;</div>
-<div class="line">         &lt;cornerType&gt;1&lt;/cornerType&gt;</div>
-<div class="line">      &lt;/shape&gt;</div>
-<div class="line">   &lt;/elseBranch&gt;</div>
-<div class="line">   </div>
+<div class="line">   &lt;thenBranch prototypes=&quot;item/VStatementItemList/default&quot; /&gt;</div>
+<div class="line">   &lt;elseBranch prototypes=&quot;item/VStatementItemList/default&quot; /&gt;</div>
 <div class="line">   &lt;elseIfBranch prototypes=&quot;item/VStatementItemList/default&quot; /&gt;</div>
 <div class="line">   </div>
 <div class="line">   &lt;elseHorizontalLine prototypes=&quot;item/Line/default&quot;&gt;</div>
 <div class="line">      &lt;pen&gt;</div>
-<div class="line">         &lt;style&gt;2&lt;/style&gt;</div>
-<div class="line">         &lt;color&gt;#808080&lt;/color&gt;</div>
+<div class="line">         &lt;color&gt;#e0e0c8&lt;/color&gt;</div>
 <div class="line">      &lt;/pen&gt;</div>
 <div class="line">   &lt;/elseHorizontalLine&gt;</div>
 <div class="line">   </div>
@@ -753,8 +765,7 @@ Item styles</h1>
 <div class="line">      &lt;width&gt;1&lt;/width&gt;</div>
 <div class="line">      &lt;height&gt;0&lt;/height&gt;</div>
 <div class="line">      &lt;pen&gt;</div>
-<div class="line">         &lt;style&gt;2&lt;/style&gt;</div>
-<div class="line">         &lt;color&gt;#808080&lt;/color&gt;</div>
+<div class="line">         &lt;color&gt;#e0e0c8&lt;/color&gt;</div>
 <div class="line">      &lt;/pen&gt;</div>
 <div class="line">   &lt;/elseVerticalLine&gt;</div>
 <div class="line">&lt;/style&gt;</div>

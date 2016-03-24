@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Envision: SelfTest::Test Class Reference</title>
+<title>Envision: SelfTest::Test&lt; PluginClass, TestName &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -89,164 +89,97 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classSelfTest_1_1Test-members.html">List of all members</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a>  </div>
   <div class="headertitle">
-<div class="title">SelfTest::Test Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">SelfTest::Test&lt; PluginClass, TestName &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="classSelfTest_1_1Test.html" title="The Test class is the base class for a single test for the Envision testing framework. ">Test</a> class is the base class for a single test for the Envision testing framework.  
+<p>The <a class="el" href="classSelfTest_1_1Test.html" title="The Test template class is used to define a new test. ">Test</a> template class is used to define a new test.  
  <a href="classSelfTest_1_1Test.html#details">More...</a></p>
 <div class="dynheader">
-Inheritance diagram for SelfTest::Test:</div>
+Inheritance diagram for SelfTest::Test&lt; PluginClass, TestName &gt;:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="classSelfTest_1_1Test.png" usemap="#SelfTest::Test_map" alt=""/>
-  <map id="SelfTest::Test_map" name="SelfTest::Test_map">
-<area href="classTest.html" title="The Test template class is used to define a new test. " alt="Test&lt; PluginClass, TestName &gt;" shape="rect" coords="400,56,790,80"/>
-<area href="classTest.html" alt="Test&lt; AlloyPlugin, AlloyTest &gt;" shape="rect" coords="400,112,790,136"/>
-<area href="classTest.html" alt="Test&lt; CommentsPlugin, SimpleTest &gt;" shape="rect" coords="400,168,790,192"/>
-<area href="classTest.html" alt="Test&lt; ContractsLibraryPlugin, ContractsLibraryTest &gt;" shape="rect" coords="400,224,790,248"/>
-<area href="classTest.html" alt="Test&lt; ControlFlowVisualizationPlugin, SimpleTest &gt;" shape="rect" coords="400,280,790,304"/>
-<area href="classTest.html" alt="Test&lt; CppExportPlugin, SimpleTest &gt;" shape="rect" coords="400,336,790,360"/>
-<area href="classTest.html" alt="Test&lt; CustomMethodCallPlugin, CustomVisTest &gt;" shape="rect" coords="400,392,790,416"/>
-<area href="classTest.html" alt="Test&lt; ExportPlugin, CompositeFragmentTest &gt;" shape="rect" coords="400,448,790,472"/>
-<area href="classTest.html" alt="Test&lt; ExportPlugin, ExportAndDeleteDir &gt;" shape="rect" coords="400,504,790,528"/>
-<area href="classTest.html" alt="Test&lt; ExportPlugin, ExportAndDeleteFile &gt;" shape="rect" coords="400,560,790,584"/>
-<area href="classTest.html" alt="Test&lt; ExportPlugin, ExportAndModify &gt;" shape="rect" coords="400,616,790,640"/>
-<area href="classTest.html" alt="Test&lt; ExportPlugin, ExportIdentical &gt;" shape="rect" coords="400,672,790,696"/>
-<area href="classTest.html" alt="Test&lt; ExportPlugin, ExportJustText &gt;" shape="rect" coords="400,728,790,752"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, addAndRename &gt;" shape="rect" coords="400,784,790,808"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, CopyPartialToClipboard &gt;" shape="rect" coords="400,840,790,864"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, CopyToClipboard &gt;" shape="rect" coords="400,896,790,920"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, deletion &gt;" shape="rect" coords="400,952,790,976"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, EvalClassMove &gt;" shape="rect" coords="400,1008,790,1032"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, EvalLoopFix &gt;" shape="rect" coords="400,1064,790,1088"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, EvalMethodInsert &gt;" shape="rect" coords="400,1120,790,1144"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, insert &gt;" shape="rect" coords="400,1176,790,1200"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, intValueChange &gt;" shape="rect" coords="400,1232,790,1256"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, listReorder &gt;" shape="rect" coords="400,1288,790,1312"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, ListsReorderInsertDeleteResolvable &gt;" shape="rect" coords="400,1344,790,1368"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, LoadingFullList &gt;" shape="rect" coords="400,1400,790,1424"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, LoadingPartialList &gt;" shape="rect" coords="400,1456,790,1480"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, LoadingTypedList &gt;" shape="rect" coords="400,1512,790,1536"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, LoadModeNodesSingleUnitOnly &gt;" shape="rect" coords="400,1568,790,1592"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, LoadMultipleUnits &gt;" shape="rect" coords="400,1624,790,1648"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, LoadRootOnly &gt;" shape="rect" coords="400,1680,790,1704"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, noChange &gt;" shape="rect" coords="400,1736,790,1760"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, parentChange &gt;" shape="rect" coords="400,1792,790,1816"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, PasteBinaryFromClipboard &gt;" shape="rect" coords="400,1848,790,1872"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, PasteInListFromClipboard &gt;" shape="rect" coords="400,1904,790,1928"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, PasteListFromClipboard &gt;" shape="rect" coords="400,1960,790,1984"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, PasteTextFromClipboard &gt;" shape="rect" coords="400,2016,790,2040"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, RunMerge &gt;" shape="rect" coords="400,2072,790,2096"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, SaveModeNodesSingleUnitOnly &gt;" shape="rect" coords="400,2128,790,2152"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, SaveMultipleUnits &gt;" shape="rect" coords="400,2184,790,2208"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, SaveRootOnly &gt;" shape="rect" coords="400,2240,790,2264"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, SavingTypedList &gt;" shape="rect" coords="400,2296,790,2320"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, stmtEdit &gt;" shape="rect" coords="400,2352,790,2376"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, TwoDeletesInSameListResolvable &gt;" shape="rect" coords="400,2408,790,2432"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, TwoDeletesNoConflict &gt;" shape="rect" coords="400,2464,790,2488"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, typeChange &gt;" shape="rect" coords="400,2520,790,2544"/>
-<area href="classTest.html" alt="Test&lt; FilePersistencePlugin, UnorderedAndUnitsConflicting &gt;" shape="rect" coords="400,2576,790,2600"/>
-<area href="classTest.html" alt="Test&lt; InformationScriptingPlugin, SimpleTest &gt;" shape="rect" coords="400,2632,790,2656"/>
-<area href="classTest.html" alt="Test&lt; InteractionBasePlugin, TextSelect &gt;" shape="rect" coords="400,2688,790,2712"/>
-<area href="classTest.html" alt="Test&lt; JavaExportPlugin, SimpleTest &gt;" shape="rect" coords="400,2744,790,2768"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, ChildNodeRetrieval &gt;" shape="rect" coords="400,2800,790,2824"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, CompositeMetaData &gt;" shape="rect" coords="400,2856,790,2880"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, ListCreation &gt;" shape="rect" coords="400,2912,790,2936"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, ListInsertion &gt;" shape="rect" coords="400,2968,790,2992"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, ListRemoval &gt;" shape="rect" coords="400,3024,790,3048"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, ListUndo &gt;" shape="rect" coords="400,3080,790,3104"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, ModificationNotificationTests &gt;" shape="rect" coords="400,3136,790,3160"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, PersistenceSave &gt;" shape="rect" coords="400,3192,790,3216"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, PositionExtension &gt;" shape="rect" coords="400,3248,790,3272"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, ProperRegistration &gt;" shape="rect" coords="400,3304,790,3328"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, RemoveOptional &gt;" shape="rect" coords="400,3360,790,3384"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, SimpleTreeManagerCreation &gt;" shape="rect" coords="400,3416,790,3440"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, SingleWriteUnitCheck &gt;" shape="rect" coords="400,3472,790,3496"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, UndoRedoGroupTextSet &gt;" shape="rect" coords="400,3528,790,3552"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, UndoRedoOptionalNodes &gt;" shape="rect" coords="400,3584,790,3608"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, UndoRedoTextSet &gt;" shape="rect" coords="400,3640,790,3664"/>
-<area href="classTest.html" alt="Test&lt; ModelBasePlugin, VisitorSample &gt;" shape="rect" coords="400,3696,790,3720"/>
-<area href="classTest.html" alt="Test&lt; OODebugPlugin, SimpleTest &gt;" shape="rect" coords="400,3752,790,3776"/>
-<area href="classTest.html" alt="Test&lt; OOInteractionPlugin, SimpleTest &gt;" shape="rect" coords="400,3808,790,3832"/>
-<area href="classTest.html" alt="Test&lt; OOModelPlugin, JavaLibraryAndHelloWorldTest &gt;" shape="rect" coords="400,3864,790,3888"/>
-<area href="classTest.html" alt="Test&lt; OOModelPlugin, SimpleClassTest &gt;" shape="rect" coords="400,3920,790,3944"/>
-<area href="classTest.html" alt="Test&lt; OOModelPlugin, SimpleProjectTest &gt;" shape="rect" coords="400,3976,790,4000"/>
-<area href="classTest.html" alt="Test&lt; OOVisualizationPlugin, JavaLibraryAndHelloWorldTest &gt;" shape="rect" coords="400,4032,790,4056"/>
-<area href="classTest.html" alt="Test&lt; VisualizationBasePlugin, CompositeTest &gt;" shape="rect" coords="400,4088,790,4112"/>
+  <img src="classSelfTest_1_1Test.png" usemap="#SelfTest::Test&lt; PluginClass, TestName &gt;_map" alt=""/>
+  <map id="SelfTest::Test&lt; PluginClass, TestName &gt;_map" name="SelfTest::Test&lt; PluginClass, TestName &gt;_map">
+<area href="classSelfTest_1_1TestBase.html" title="The Test class is the base class for a single test for the Envision testing framework. " alt="SelfTest::TestBase" shape="rect" coords="0,0,240,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a41115981a1d715bd0acab7e9da74bcd3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a41115981a1d715bd0acab7e9da74bcd3">TestConstructor</a> = std::function&lt; <a class="el" href="classSelfTest_1_1Test.html">Test</a> *()&gt;</td></tr>
-<tr class="separator:a41115981a1d715bd0acab7e9da74bcd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af3c0bb8819bd41e12e44b66bcd6ce34a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#af3c0bb8819bd41e12e44b66bcd6ce34a">Test</a> (const QString &amp;<a class="el" href="classSelfTest_1_1Test.html#a7251a5010b6fde8d8bfa28a73dc0e62f">name</a>)</td></tr>
-<tr class="separator:af3c0bb8819bd41e12e44b66bcd6ce34a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac538f9ca8df54279b8d7f5e6a7c6d11f"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#ac538f9ca8df54279b8d7f5e6a7c6d11f">~Test</a> ()</td></tr>
-<tr class="separator:ac538f9ca8df54279b8d7f5e6a7c6d11f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8db8d6c225e41e7caac417f735ab415"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#af8db8d6c225e41e7caac417f735ab415">getName</a> () const </td></tr>
-<tr class="separator:af8db8d6c225e41e7caac417f735ab415"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3562a3cf7aeba303eea2d2b907229638"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a3562a3cf7aeba303eea2d2b907229638">run</a> (<a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;testResults)</td></tr>
-<tr class="memdesc:a3562a3cf7aeba303eea2d2b907229638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the test and reports any failures to the specified test results.  <a href="#a3562a3cf7aeba303eea2d2b907229638">More...</a><br /></td></tr>
-<tr class="separator:a3562a3cf7aeba303eea2d2b907229638"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a045ca0c3985c607ebfedceef29ba3aab"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a045ca0c3985c607ebfedceef29ba3aab">runCustom</a> (<a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;testResults, bool &amp;passed)=0</td></tr>
-<tr class="memdesc:a045ca0c3985c607ebfedceef29ba3aab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements custom test behavior.  <a href="#a045ca0c3985c607ebfedceef29ba3aab">More...</a><br /></td></tr>
-<tr class="separator:a045ca0c3985c607ebfedceef29ba3aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80efd45adcda41803ed777b147015a11"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a80efd45adcda41803ed777b147015a11">runCustom</a> (<a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;<a class="el" href="classSelfTest_1_1Test.html#a63d647c9b78c415ec3b71730c2e95a0e">testResults</a>, bool &amp;<a class="el" href="classSelfTest_1_1Test.html#a75955011fffb82e369858d2dc2bc2db9">allChecksPassedFlag</a>) override</td></tr>
+<tr class="memdesc:a80efd45adcda41803ed777b147015a11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements custom test behavior.  <a href="#a80efd45adcda41803ed777b147015a11">More...</a><br /></td></tr>
+<tr class="separator:a80efd45adcda41803ed777b147015a11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classSelfTest_1_1TestBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classSelfTest_1_1TestBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classSelfTest_1_1TestBase.html">SelfTest::TestBase</a></td></tr>
+<tr class="memitem:a76f00a2fe999618dba84036f1aa86d62 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestBase.html#a76f00a2fe999618dba84036f1aa86d62">TestBase</a> (const QString &amp;<a class="el" href="classSelfTest_1_1TestBase.html#ad990e2a680efd162e5b4e9c60a2a23b5">name</a>)</td></tr>
+<tr class="separator:a76f00a2fe999618dba84036f1aa86d62 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a788bfbd9c76cb729ac4a9762e0d46d42 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestBase.html#a788bfbd9c76cb729ac4a9762e0d46d42">~TestBase</a> ()</td></tr>
+<tr class="separator:a788bfbd9c76cb729ac4a9762e0d46d42 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79108747e286425424f4650a6932b184 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestBase.html#a79108747e286425424f4650a6932b184">getName</a> () const </td></tr>
+<tr class="separator:a79108747e286425424f4650a6932b184 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11cfcbd859b79b7429bad42206c4ad53 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestBase.html#a11cfcbd859b79b7429bad42206c4ad53">run</a> (<a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;testResults)</td></tr>
+<tr class="memdesc:a11cfcbd859b79b7429bad42206c4ad53 inherit pub_methods_classSelfTest_1_1TestBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the test and reports any failures to the specified test results.  <a href="#a11cfcbd859b79b7429bad42206c4ad53">More...</a><br /></td></tr>
+<tr class="separator:a11cfcbd859b79b7429bad42206c4ad53 inherit pub_methods_classSelfTest_1_1TestBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a7251a5010b6fde8d8bfa28a73dc0e62f"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a7251a5010b6fde8d8bfa28a73dc0e62f">name</a></td></tr>
-<tr class="separator:a7251a5010b6fde8d8bfa28a73dc0e62f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aa4d514c67f41b41e7fd77bc6f012ca2f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#aa4d514c67f41b41e7fd77bc6f012ca2f">Test</a> ()</td></tr>
+<tr class="separator:aa4d514c67f41b41e7fd77bc6f012ca2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a75955011fffb82e369858d2dc2bc2db9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a75955011fffb82e369858d2dc2bc2db9">allChecksPassedFlag</a> {true}</td></tr>
+<tr class="separator:a75955011fffb82e369858d2dc2bc2db9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63d647c9b78c415ec3b71730c2e95a0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a63d647c9b78c415ec3b71730c2e95a0e">testResults</a></td></tr>
+<tr class="separator:a63d647c9b78c415ec3b71730c2e95a0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:a39c838fba26519cb2d8774a22a48e63a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a39c838fba26519cb2d8774a22a48e63a">initTrigger</a> = <a class="el" href="classSelfTest_1_1Test.html#a20f25fbcd3b0d4980cb900af69c478fe">Test::init</a>()</td></tr>
+<tr class="separator:a39c838fba26519cb2d8774a22a48e63a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a20f25fbcd3b0d4980cb900af69c478fe"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1Test.html#a20f25fbcd3b0d4980cb900af69c478fe">init</a> ()</td></tr>
+<tr class="separator:a20f25fbcd3b0d4980cb900af69c478fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classSelfTest_1_1TestBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classSelfTest_1_1TestBase')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classSelfTest_1_1TestBase.html">SelfTest::TestBase</a></td></tr>
+<tr class="memitem:a119386909fa45ffede1ba30ac59a3ef2 inherit pub_types_classSelfTest_1_1TestBase"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSelfTest_1_1TestBase.html#a119386909fa45ffede1ba30ac59a3ef2">TestConstructor</a> = std::function&lt; <a class="el" href="classSelfTest_1_1TestBase.html">TestBase</a> *()&gt;</td></tr>
+<tr class="separator:a119386909fa45ffede1ba30ac59a3ef2 inherit pub_types_classSelfTest_1_1TestBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="classSelfTest_1_1Test.html" title="The Test class is the base class for a single test for the Envision testing framework. ">Test</a> class is the base class for a single test for the Envision testing framework. </p>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="a41115981a1d715bd0acab7e9da74bcd3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classSelfTest_1_1Test.html#a41115981a1d715bd0acab7e9da74bcd3">SelfTest::Test::TestConstructor</a> =  std::function&lt;<a class="el" href="classSelfTest_1_1Test.html">Test</a>* ()&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<div class="textblock"><h3>template&lt;typename PluginClass, typename TestName&gt;<br />
+class SelfTest::Test&lt; PluginClass, TestName &gt;</h3>
 
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af3c0bb8819bd41e12e44b66bcd6ce34a"></a>
+<p>The <a class="el" href="classSelfTest_1_1Test.html" title="The Test template class is used to define a new test. ">Test</a> template class is used to define a new test. </p>
+<p>Purposefully outside of the namespace for easy access</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pluginClass</td><td>the name of the class of the current plugin. This is the class that implements the EnvisionPlugin interface. </td></tr>
+    <tr><td class="paramname">testName</td><td>the name of this test. This name can be used at the command line to request that this specific test be started. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="aa4d514c67f41b41e7fd77bc6f012ca2f"></a>
 <div class="memitem">
 <div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classSelfTest_1_1Test.html">Test</a>&lt; PluginClass, TestName &gt;::<a class="el" href="classSelfTest_1_1Test.html">Test</a> </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac538f9ca8df54279b8d7f5e6a7c6d11f"></a>
-<div class="memitem">
-<div class="memproto">
+<div class="memtemplate">
+template&lt;typename PluginClass , typename TestName &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classSelfTest_1_1Test.html">Test</a>&lt; PluginClass, TestName &gt;::~<a class="el" href="classSelfTest_1_1Test.html">Test</a> </td>
+          <td class="memname"><a class="el" href="classSelfTest_1_1Test.html">SelfTest::Test</a>&lt; PluginClass, TestName &gt;::<a class="el" href="classSelfTest_1_1Test.html">Test</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -254,7 +187,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -262,54 +195,42 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="af8db8d6c225e41e7caac417f735ab415"></a>
+<a class="anchor" id="a20f25fbcd3b0d4980cb900af69c478fe"></a>
 <div class="memitem">
 <div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const QString &amp; <a class="el" href="classSelfTest_1_1Test.html">Test</a>&lt; PluginClass, TestName &gt;::getName </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3562a3cf7aeba303eea2d2b907229638"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classSelfTest_1_1Test.html">Test</a>&lt; PluginClass, TestName &gt;::run </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;&#160;</td>
-          <td class="paramname"><em>testResults</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Runs the test and reports any failures to the specified test results. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">testResults</td><td>The outcome of the test is saved in this object. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a045ca0c3985c607ebfedceef29ba3aab"></a>
-<div class="memitem">
-<div class="memproto">
+<div class="memtemplate">
+template&lt;typename PluginClass , typename TestName &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void SelfTest::Test::runCustom </td>
+          <td class="memname">bool <a class="el" href="classSelfTest_1_1Test.html">SelfTest::Test</a>&lt; PluginClass, TestName &gt;::init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a80efd45adcda41803ed777b147015a11"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename PluginClass , typename TestName &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classSelfTest_1_1Test.html">SelfTest::Test</a>&lt; PluginClass, TestName &gt;::runCustom </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> &amp;&#160;</td>
           <td class="paramname"><em>testResults</em>, </td>
@@ -328,7 +249,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -337,31 +258,77 @@ Private Attributes</h2></td></tr>
 <p>This function must be implemented for each test.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">testResults</td><td><a class="el" href="classSelfTest_1_1Test.html" title="The Test class is the base class for a single test for the Envision testing framework. ">Test</a> failures are added here. </td></tr>
+    <tr><td class="paramname">testResults</td><td><a class="el" href="classSelfTest_1_1Test.html" title="The Test template class is used to define a new test. ">Test</a> failures are added here. </td></tr>
     <tr><td class="paramname">passed</td><td>must be set to false if the test failed. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; PluginClass, TestName &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; OOModelPlugin, SimpleProjectTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, noChange &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, PasteListFromClipboard &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, RunMerge &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, SaveRootOnly &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, SingleWriteUnitCheck &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; CustomMethodCallPlugin, CustomVisTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, ListUndo &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; InteractionBasePlugin, TextSelect &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; OODebugPlugin, SimpleTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, intValueChange &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ExportPlugin, ExportJustText &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, PasteTextFromClipboard &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, ListInsertion &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, deletion &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, CopyPartialToClipboard &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, ChildNodeRetrieval &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; JavaExportPlugin, SimpleTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, insert &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, LoadingPartialList &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, PasteBinaryFromClipboard &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, CopyToClipboard &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, SaveModeNodesSingleUnitOnly &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, ModificationNotificationTests &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, UndoRedoOptionalNodes &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; InformationScriptingPlugin, SimpleTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, LoadModeNodesSingleUnitOnly &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, SimpleTreeManagerCreation &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ContractsLibraryPlugin, ContractsLibraryTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ExportPlugin, ExportAndDeleteDir &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, UndoRedoTextSet &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; OOModelPlugin, SimpleClassTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; CommentsPlugin, SimpleTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, stmtEdit &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, addAndRename &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, LoadRootOnly &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, LoadMultipleUnits &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, RemoveOptional &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ExportPlugin, ExportAndDeleteFile &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, ListRemoval &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, SavingTypedList &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, ListsReorderInsertDeleteResolvable &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, TwoDeletesInSameListResolvable &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, typeChange &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, CompositeMetaData &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, PersistenceSave &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; OOInteractionPlugin, SimpleTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ControlFlowVisualizationPlugin, SimpleTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ExportPlugin, ExportAndModify &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; OOModelPlugin, JavaLibraryAndHelloWorldTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, parentChange &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, TwoDeletesNoConflict &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, PositionExtension &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, VisitorSample &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, ProperRegistration &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, SaveMultipleUnits &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, EvalClassMove &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, UnorderedAndUnitsConflicting &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; CppExportPlugin, SimpleTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ExportPlugin, ExportIdentical &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, EvalLoopFix &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, EvalMethodInsert &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, UndoRedoGroupTextSet &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ModelBasePlugin, ListCreation &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, LoadingTypedList &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; VisualizationBasePlugin, CompositeTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, LoadingFullList &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; OOVisualizationPlugin, JavaLibraryAndHelloWorldTest &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, listReorder &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; FilePersistencePlugin, PasteInListFromClipboard &gt;</a>, <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; ExportPlugin, CompositeFragmentTest &gt;</a>, and <a class="el" href="classTest.html#aa281d9da27b9a73cc2f8e9472880aac5">Test&lt; AlloyPlugin, AlloyTest &gt;</a>.</p>
+<p>Implements <a class="el" href="classSelfTest_1_1TestBase.html#a642763cef330100b9630df83a62cf94f">SelfTest::TestBase</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a7251a5010b6fde8d8bfa28a73dc0e62f"></a>
+<a class="anchor" id="a75955011fffb82e369858d2dc2bc2db9"></a>
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename PluginClass, typename TestName&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QString SelfTest::Test::name</td>
+          <td class="memname">bool <a class="el" href="classSelfTest_1_1Test.html">SelfTest::Test</a>&lt; PluginClass, TestName &gt;::allChecksPassedFlag {true}</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a39c838fba26519cb2d8774a22a48e63a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename PluginClass, typename TestName&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classSelfTest_1_1Test.html">SelfTest::Test</a>&lt; PluginClass, TestName &gt;::initTrigger = <a class="el" href="classSelfTest_1_1Test.html#a20f25fbcd3b0d4980cb900af69c478fe">Test::init</a>()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a63d647c9b78c415ec3b71730c2e95a0e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename PluginClass, typename TestName&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classSelfTest_1_1TestResults.html">TestResults</a> <a class="el" href="classSelfTest_1_1Test.html">SelfTest::Test</a>&lt; PluginClass, TestName &gt;::testResults</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -10,6 +10,7 @@ var searchData=
   ['final',['Final',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494fa133b79d5bf3aec528085a1051df3e9b5',1,'OOModel::Modifier']]],
   ['first_5fdelim',['FIRST_DELIM',['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5ac9928f61c8b9924b47b474c6489942cf',1,'Interaction::ExpectedToken']]],
   ['float',['FLOAT',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a10a2e54e8b85f728be2dcd4eb23ea790',1,'OOModel::PrimitiveType::FLOAT()'],['../classOODebug_1_1Protocol.html#aae559917558dc3975d095acc7557f051ae738c26bf4ce1037fa81b039a915cbf6',1,'OODebug::Protocol::FLOAT()']]],
+  ['folder',['Folder',['../classOOModel_1_1Module.html#a0c02fd2705dbdda70d011b9502a3b7e2ab0f2b97dc5d2b76b26e040408bb1d8af',1,'OOModel::Module']]],
   ['following_5fdelim',['FOLLOWING_DELIM',['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5ad3119b4b5f8700f5cb419f7a0aa09424',1,'Interaction::ExpectedToken']]],
   ['forceearlyreturn',['ForceEarlyReturn',['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36af0013305353af00456662fcd638b72cb',1,'OODebug::Protocol']]],
   ['foundmergebase',['FoundMergeBase',['../classFilePersistence_1_1Merge.html#a7666204e5f7a1574cd7c379e90ee6976a23bf4997126476275f2a9e0332fd5f19',1,'FilePersistence::Merge']]],

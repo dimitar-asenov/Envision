@@ -124,8 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab5a6435360110d6e77a801bca3964b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ffa8b4e1a8860360c5f810547eb6191"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CastExpression.html#a4ffa8b4e1a8860360c5f810547eb6191">setCastKind</a> (const <a class="el" href="classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905fa">CastKind</a> &amp;<a class="el" href="classOOModel_1_1CastExpression.html#ab5a6435360110d6e77a801bca3964b79">castKind</a>)</td></tr>
 <tr class="separator:a4ffa8b4e1a8860360c5f810547eb6191"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56bc2deb9afc7973bd34e2003267d1a0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classOOModel_1_1Type.html">Type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CastExpression.html#a56bc2deb9afc7973bd34e2003267d1a0">type</a> () override</td></tr>
-<tr class="separator:a56bc2deb9afc7973bd34e2003267d1a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70d6e5dec47c3fb149c7c7357a89f5c0"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classOOModel_1_1Type.html">Type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CastExpression.html#a70d6e5dec47c3fb149c7c7357a89f5c0">type</a> () override</td></tr>
+<tr class="separator:a70d6e5dec47c3fb149c7c7357a89f5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -163,6 +163,8 @@ Additional Inherited Members</h2></td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ada6ab54bf520f629426cd34b8aa905faa5faef872533f3e47ef0fc0185fbb894f"></a>StaticCast&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ada6ab54bf520f629426cd34b8aa905faafc3bf4faa55058c48e55376f16f073ba"></a>FunctionalCast&#160;</td><td class="fielddoc">
+<p>We currently do not use this type of cast when importing C++ code. </p>
+<p>Functional casts are converted to construction method calls instead. </p>
 </td></tr>
 </table>
 
@@ -233,7 +235,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a56bc2deb9afc7973bd34e2003267d1a0"></a>
+<a class="anchor" id="a70d6e5dec47c3fb149c7c7357a89f5c0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -241,7 +243,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classOOModel_1_1Type.html">Type</a> * OOModel::CastExpression::type </td>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classOOModel_1_1Type.html">Type</a> &gt; OOModel::CastExpression::type </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

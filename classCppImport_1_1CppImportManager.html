@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classCppImport_1_1CppImportManager-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -113,6 +114,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac770fb081a05550b1a4affb4b2879eb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#ac770fb081a05550b1a4affb4b2879eb9">setupTest</a> ()</td></tr>
 <tr class="memdesc:ac770fb081a05550b1a4affb4b2879eb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imports code from a test.cpp file in a subdirectory of ENVISION_ROOT/CppImport/test Specify the directory in the testSelector file.  <a href="#ac770fb081a05550b1a4affb4b2879eb9">More...</a><br /></td></tr>
 <tr class="separator:ac770fb081a05550b1a4affb4b2879eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a0b6ef5296729bc6db9f1f37e12da3e1e"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a0b6ef5296729bc6db9f1f37e12da3e1e">processedTranslationUnits</a> ()</td></tr>
+<tr class="memdesc:a0b6ef5296729bc6db9f1f37e12da3e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The amount of translation units that were imported so far.  <a href="#a0b6ef5296729bc6db9f1f37e12da3e1e">More...</a><br /></td></tr>
+<tr class="separator:a0b6ef5296729bc6db9f1f37e12da3e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a268bea52944007342f35fb086eea5cff"><td class="memItemLeft" align="right" valign="top">static int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a268bea52944007342f35fb086eea5cff">totalTranslationUnits</a> ()</td></tr>
+<tr class="memdesc:a268bea52944007342f35fb086eea5cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">The amount of translation units to be imported in total.  <a href="#a268bea52944007342f35fb086eea5cff">More...</a><br /></td></tr>
+<tr class="separator:a268bea52944007342f35fb086eea5cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -289,6 +299,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a0b6ef5296729bc6db9f1f37e12da3e1e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int &amp; CppImport::CppImportManager::processedTranslationUnits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The amount of translation units that were imported so far. </p>
+<p>Used to display import progress. </p>
+
+</div>
+</div>
 <a class="anchor" id="ad2e7eefa3835a30eb07a8539b71a24e1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -385,6 +421,32 @@ Private Attributes</h2></td></tr>
 
 <p>Imports code from a test.cpp file in a subdirectory of ENVISION_ROOT/CppImport/test Specify the directory in the testSelector file. </p>
 <p>For simple tests inside the test directory you do not have to provide a compile_commands file </p>
+
+</div>
+</div>
+<a class="anchor" id="a268bea52944007342f35fb086eea5cff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int &amp; CppImport::CppImportManager::totalTranslationUnits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The amount of translation units to be imported in total. </p>
+<p>Used to display import progress. </p>
 
 </div>
 </div>

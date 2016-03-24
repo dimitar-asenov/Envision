@@ -10,6 +10,5 @@ var searchData=
   ['javarunner',['JavaRunner',['../classOODebug_1_1JavaRunner.html',1,'OODebug']]],
   ['javatypesystem',['JavaTypeSystem',['../classOOModel_1_1JavaTypeSystem.html',1,'OOModel']]],
   ['join',['Join',['../classInformationScripting_1_1Join.html',1,'InformationScripting']]],
-  ['jsonutil',['JsonUtil',['../classJsonUtil.html',1,'']]],
   ['jvmmethod',['JVMMethod',['../structOODebug_1_1JVMMethod.html',1,'OODebug']]]
 ];

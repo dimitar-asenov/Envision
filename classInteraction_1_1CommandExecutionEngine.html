@@ -103,10 +103,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acb3aca2e6a7392c14ec13f2f5954966d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#acb3aca2e6a7392c14ec13f2f5954966d">~CommandExecutionEngine</a> ()</td></tr>
 <tr class="separator:acb3aca2e6a7392c14ec13f2f5954966d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68572085286b70e512a183e8b13dbd13"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#a68572085286b70e512a183e8b13dbd13">autoComplete</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)</td></tr>
-<tr class="separator:a68572085286b70e512a183e8b13dbd13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadbffd2d93fd24b18f3693721124bb96"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#aadbffd2d93fd24b18f3693721124bb96">execute</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;command, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)</td></tr>
-<tr class="separator:aadbffd2d93fd24b18f3693721124bb96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa058776bfc1df3422c6da6c96a2dc236"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#aa058776bfc1df3422c6da6c96a2dc236">autoComplete</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *originator, const QString &amp;textSoFar, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)</td></tr>
+<tr class="separator:aa058776bfc1df3422c6da6c96a2dc236"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab47d5071d35435b88a255a66e53c01c4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#ab47d5071d35435b88a255a66e53c01c4">execute</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *originator, const QString &amp;command, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)</td></tr>
+<tr class="separator:ab47d5071d35435b88a255a66e53c01c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f417f9240859cef5f0d54b00496c7fd"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#a3f417f9240859cef5f0d54b00496c7fd">result</a> ()</td></tr>
 <tr class="separator:a3f417f9240859cef5f0d54b00496c7fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -190,7 +190,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a68572085286b70e512a183e8b13dbd13"></a>
+<a class="anchor" id="aa058776bfc1df3422c6da6c96a2dc236"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -201,7 +201,7 @@ Private Attributes</h2></td></tr>
           <td class="memname">QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt; Interaction::CommandExecutionEngine::autoComplete </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
+          <td class="paramname"><em>originator</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -270,7 +270,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aadbffd2d93fd24b18f3693721124bb96"></a>
+<a class="anchor" id="ab47d5071d35435b88a255a66e53c01c4"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -281,7 +281,7 @@ Private Attributes</h2></td></tr>
           <td class="memname">void Interaction::CommandExecutionEngine::execute </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
+          <td class="paramname"><em>originator</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

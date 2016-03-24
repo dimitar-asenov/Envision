@@ -91,6 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classCppImport_1_1ClangHelpers-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">CppImport::ClangHelpers Class Reference</div>  </div>
@@ -102,10 +103,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3841b27dc8a41550d0f96057a33997d5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a3841b27dc8a41550d0f96057a33997d5">ClangHelpers</a> (<a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *<a class="el" href="classCppImport_1_1ClangHelpers.html#a376a54cbfa479b09d48fc3ef8269fb7e">rootProject</a>, QString rootProjectPath)</td></tr>
+<tr class="memitem:a3841b27dc8a41550d0f96057a33997d5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a3841b27dc8a41550d0f96057a33997d5">ClangHelpers</a> (<a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *<a class="el" href="classCppImport_1_1ClangHelpers.html#a376a54cbfa479b09d48fc3ef8269fb7e">rootProject</a>, QString <a class="el" href="classCppImport_1_1ClangHelpers.html#af1cc853269a6d41c9bbe7a7009158969">rootProjectPath</a>)</td></tr>
 <tr class="separator:a3841b27dc8a41550d0f96057a33997d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25803d0d5dcb6315fa8be8697bd236eb"><td class="memItemLeft" align="right" valign="top">QList&lt; QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a25803d0d5dcb6315fa8be8697bd236eb">argumentNames</a> (const clang::MacroDirective *definition) const </td></tr>
 <tr class="separator:a25803d0d5dcb6315fa8be8697bd236eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8310203d24336571912e6d80648740da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a8310203d24336571912e6d80648740da">associateNodeWithPresumedFileLocation</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, clang::SourceLocation location)</td></tr>
+<tr class="memdesc:a8310203d24336571912e6d80648740da"><td class="mdescLeft">&#160;</td><td class="mdescRight">associate node with the presumed filename at location.  <a href="#a8310203d24336571912e6d80648740da">More...</a><br /></td></tr>
+<tr class="separator:a8310203d24336571912e6d80648740da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93f75027ecc0891c447d42cc184ef12b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a93f75027ecc0891c447d42cc184ef12b">associateNodeWithPresumedFileLocation</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *from)</td></tr>
+<tr class="memdesc:a93f75027ecc0891c447d42cc184ef12b"><td class="mdescLeft">&#160;</td><td class="mdescRight">use the stored filename information of from and copy it to be the filename information of node.  <a href="#a93f75027ecc0891c447d42cc184ef12b">More...</a><br /></td></tr>
+<tr class="separator:a93f75027ecc0891c447d42cc184ef12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d56e394156ef1cf4eadc5beb403fec8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a4d56e394156ef1cf4eadc5beb403fec8">attachDeclarationComments</a> (clang::NamedDecl *namedDecl, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *receiver) const </td></tr>
+<tr class="separator:a4d56e394156ef1cf4eadc5beb403fec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8573c1b9b6ba76adb4140bf12e009787"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classCppImport_1_1Comment.html">Comment</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a8573c1b9b6ba76adb4140bf12e009787">comments</a> ()</td></tr>
+<tr class="separator:a8573c1b9b6ba76adb4140bf12e009787"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf3f77e6e875f9d0d11899da059363f7"><td class="memTemplParams" colspan="2">template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </td></tr>
 <tr class="memitem:abf3f77e6e875f9d0d11899da059363f7"><td class="memTemplItemLeft" align="right" valign="top">NodeType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#abf3f77e6e875f9d0d11899da059363f7">createNamedNode</a> (clang::NamedDecl *namedDecl, ConstructorArgTypes &amp;&amp;...constructorArgs)</td></tr>
 <tr class="separator:abf3f77e6e875f9d0d11899da059363f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,14 +129,28 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5f14cba7783b025d5bf8c2e81702a09a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad0a8026f22e71af63158327a3686996"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1EnvisionToClangMap.html">EnvisionToClangMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#aad0a8026f22e71af63158327a3686996">envisionToClangMap</a> ()</td></tr>
 <tr class="separator:aad0a8026f22e71af63158327a3686996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acee1b82dedb7a7c046b2f3024c4a3617"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#acee1b82dedb7a7c046b2f3024c4a3617">exportMergeMapToJson</a> (QString filename)</td></tr>
+<tr class="memdesc:acee1b82dedb7a7c046b2f3024c4a3617"><td class="mdescLeft">&#160;</td><td class="mdescRight">export the node to filename map to a file.  <a href="#acee1b82dedb7a7c046b2f3024c4a3617">More...</a><br /></td></tr>
+<tr class="separator:acee1b82dedb7a7c046b2f3024c4a3617"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2c1a1c931d78d506e7a584f1b865677"><td class="memItemLeft" align="right" valign="top">clang::SourceRange&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#ad2c1a1c931d78d506e7a584f1b865677">getUnexpandedRange</a> (clang::SourceRange sourceRange) const </td></tr>
+<tr class="memdesc:ad2c1a1c931d78d506e7a584f1b865677"><td class="mdescLeft">&#160;</td><td class="mdescRight">given a source range calculates the source range corresponding to the code expanded there.  <a href="#ad2c1a1c931d78d506e7a584f1b865677">More...</a><br /></td></tr>
+<tr class="separator:ad2c1a1c931d78d506e7a584f1b865677"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae07731cd477db4bf190d6c8a549a9f88"><td class="memItemLeft" align="right" valign="top">clang::SourceLocation&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#ae07731cd477db4bf190d6c8a549a9f88">immediateMacroLocation</a> (clang::SourceLocation location) const </td></tr>
 <tr class="separator:ae07731cd477db4bf190d6c8a549a9f88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a079dc6c618084ad87c9caa49ad4ab7c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a079dc6c618084ad87c9caa49ad4ab7c8">immediateSpellingHistory</a> (clang::SourceLocation loc, QList&lt; clang::SourceLocation &gt; &amp;result) const </td></tr>
-<tr class="separator:a079dc6c618084ad87c9caa49ad4ab7c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13c1608ea5a299dd04910fbf78f9d2d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a13c1608ea5a299dd04910fbf78f9d2d4">immediateSpellingHistory</a> (clang::SourceLocation location, QList&lt; clang::SourceLocation &gt; &amp;result) const </td></tr>
+<tr class="separator:a13c1608ea5a299dd04910fbf78f9d2d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac26bb42e91520877bf84e0a39c57ef15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#ac26bb42e91520877bf84e0a39c57ef15">insertDeclarationInFolder</a> (<a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *declaration, clang::SourceLocation location, <a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *parentNonFolderDeclaration)</td></tr>
+<tr class="separator:ac26bb42e91520877bf84e0a39c57ef15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01c4a53a3d463184c5648672a30d6e4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a01c4a53a3d463184c5648672a30d6e4c">isMacroRange</a> (clang::SourceRange range) const </td></tr>
 <tr class="separator:a01c4a53a3d463184c5648672a30d6e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a936b6135899aefa27e26cbb4ccb821b1"><td class="memItemLeft" align="right" valign="top">const clang::Preprocessor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a936b6135899aefa27e26cbb4ccb821b1">preprocessor</a> () const </td></tr>
 <tr class="separator:a936b6135899aefa27e26cbb4ccb821b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23ac4de47ecb9168ae73e66d410fb2f6"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a23ac4de47ecb9168ae73e66d410fb2f6">presumedFilenameWithExtension</a> (clang::SourceLocation location) const </td></tr>
+<tr class="separator:a23ac4de47ecb9168ae73e66d410fb2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f149899d402fb4e7524b775cba3a00c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a7f149899d402fb4e7524b775cba3a00c">presumedFilenameWithoutExtension</a> (clang::SourceLocation location) const </td></tr>
+<tr class="separator:a7f149899d402fb4e7524b775cba3a00c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf64db8d667756f46eef00faea9e68fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#abf64db8d667756f46eef00faea9e68fc">printMacroDefinitionForDebug</a> (const clang::MacroDirective *macroDirective) const </td></tr>
+<tr class="separator:abf64db8d667756f46eef00faea9e68fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acab966910d53e06b910258b48f38b0fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#acab966910d53e06b910258b48f38b0fe">projectByName</a> (const QString &amp;name)</td></tr>
 <tr class="separator:acab966910d53e06b910258b48f38b0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a291084ed12e8e64dc5cbe38d00d1afa0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a291084ed12e8e64dc5cbe38d00d1afa0">projectForLocation</a> (clang::SourceLocation location)</td></tr>
@@ -134,6 +159,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8d42493d744c41f5579c3ce05d30df13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a376a54cbfa479b09d48fc3ef8269fb7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a376a54cbfa479b09d48fc3ef8269fb7e">rootProject</a> ()</td></tr>
 <tr class="separator:a376a54cbfa479b09d48fc3ef8269fb7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1cc853269a6d41c9bbe7a7009158969"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#af1cc853269a6d41c9bbe7a7009158969">rootProjectPath</a> ()</td></tr>
+<tr class="separator:af1cc853269a6d41c9bbe7a7009158969"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad277508a8e7a4f5983f83d6cfaa9cbb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#ad277508a8e7a4f5983f83d6cfaa9cbb4">setPreprocessor</a> (const clang::Preprocessor *<a class="el" href="classCppImport_1_1ClangHelpers.html#a936b6135899aefa27e26cbb4ccb821b1">preprocessor</a>)</td></tr>
 <tr class="separator:ad277508a8e7a4f5983f83d6cfaa9cbb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5e8f1b3fdd902228e940b8263ef1701"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#aa5e8f1b3fdd902228e940b8263ef1701">setSourceManager</a> (const clang::SourceManager *<a class="el" href="classCppImport_1_1ClangHelpers.html#a2959e529f2ca345bebfede2883a44bba">sourceManager</a>)</td></tr>
@@ -149,14 +176,25 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:ad2c1a1c931d78d506e7a584f1b865677"><td class="memItemLeft" align="right" valign="top">clang::SourceRange&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#ad2c1a1c931d78d506e7a584f1b865677">getUnexpandedRange</a> (clang::SourceRange sourceRange) const </td></tr>
-<tr class="memdesc:ad2c1a1c931d78d506e7a584f1b865677"><td class="mdescLeft">&#160;</td><td class="mdescRight">given a source range calculates the source range corresponding to the code expanded there.  <a href="#ad2c1a1c931d78d506e7a584f1b865677">More...</a><br /></td></tr>
-<tr class="separator:ad2c1a1c931d78d506e7a584f1b865677"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99e75b43903e49464959cf6489db6c4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a99e75b43903e49464959cf6489db6c4f">folderForLocation</a> (clang::SourceLocation location, <a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *parentNonFolderDeclaration)</td></tr>
+<tr class="separator:a99e75b43903e49464959cf6489db6c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08573d6894b2bf225d02d1913e8e6ad8"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a08573d6894b2bf225d02d1913e8e6ad8">folderNamesFromPath</a> (QString path)</td></tr>
+<tr class="separator:a08573d6894b2bf225d02d1913e8e6ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a6f06c451112bf1259b532ff838bfb655"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a6f06c451112bf1259b532ff838bfb655">jsonEscape</a> (QString string)</td></tr>
+<tr class="separator:a6f06c451112bf1259b532ff838bfb655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:abeddd79056789c6888494093fc2b99aa"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classCppImport_1_1Comment.html">Comment</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#abeddd79056789c6888494093fc2b99aa">comments_</a></td></tr>
+<tr class="separator:abeddd79056789c6888494093fc2b99aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ee6d5a0f94176c83b577eff90b1b707"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1EnvisionToClangMap.html">EnvisionToClangMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a4ee6d5a0f94176c83b577eff90b1b707">envisionToClangMap_</a></td></tr>
 <tr class="separator:a4ee6d5a0f94176c83b577eff90b1b707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14480a51d453d335e8b58e7dcdcd9866"><td class="memItemLeft" align="right" valign="top">QHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a14480a51d453d335e8b58e7dcdcd9866">nodeToFilenameMap_</a></td></tr>
+<tr class="memdesc:a14480a51d453d335e8b58e7dcdcd9866"><td class="mdescLeft">&#160;</td><td class="mdescRight">used for exporting an automatically generated merge map  <a href="#a14480a51d453d335e8b58e7dcdcd9866">More...</a><br /></td></tr>
+<tr class="separator:a14480a51d453d335e8b58e7dcdcd9866"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc4ab1de994b6a99cfc94bdb02750576"><td class="memItemLeft" align="right" valign="top">const clang::Preprocessor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#adc4ab1de994b6a99cfc94bdb02750576">preprocessor_</a> {}</td></tr>
 <tr class="separator:adc4ab1de994b6a99cfc94bdb02750576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a494606cf963fb6d80070e7bb218493b5"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangHelpers.html#a494606cf963fb6d80070e7bb218493b5">projects_</a></td></tr>
@@ -211,6 +249,113 @@ Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8310203d24336571912e6d80648740da"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CppImport::ClangHelpers::associateNodeWithPresumedFileLocation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">clang::SourceLocation&#160;</td>
+          <td class="paramname"><em>location</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>associate node with the presumed filename at location. </p>
+<p>used to automatically generate a merge map. </p>
+
+</div>
+</div>
+<a class="anchor" id="a93f75027ecc0891c447d42cc184ef12b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CppImport::ClangHelpers::associateNodeWithPresumedFileLocation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>from</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>use the stored filename information of from and copy it to be the filename information of node. </p>
+<p>used to automatically generate a merge map. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4d56e394156ef1cf4eadc5beb403fec8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CppImport::ClangHelpers::attachDeclarationComments </td>
+          <td>(</td>
+          <td class="paramtype">clang::NamedDecl *&#160;</td>
+          <td class="paramname"><em>namedDecl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>receiver</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8573c1b9b6ba76adb4140bf12e009787"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classCppImport_1_1Comment.html">Comment</a> * &gt; &amp; CppImport::ClangHelpers::comments </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -342,12 +487,85 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad2c1a1c931d78d506e7a584f1b865677"></a>
+<a class="anchor" id="acee1b82dedb7a7c046b2f3024c4a3617"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CppImport::ClangHelpers::exportMergeMapToJson </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>export the node to filename map to a file. </p>
+
+</div>
+</div>
+<a class="anchor" id="a99e75b43903e49464959cf6489db6c4f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> * CppImport::ClangHelpers::folderForLocation </td>
+          <td>(</td>
+          <td class="paramtype">clang::SourceLocation&#160;</td>
+          <td class="paramname"><em>location</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *&#160;</td>
+          <td class="paramname"><em>parentNonFolderDeclaration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a08573d6894b2bf225d02d1913e8e6ad8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList CppImport::ClangHelpers::folderNamesFromPath </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad2c1a1c931d78d506e7a584f1b865677"></a>
+<div class="memitem">
+<div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">clang::SourceRange CppImport::ClangHelpers::getUnexpandedRange </td>
@@ -357,11 +575,6 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>given a source range calculates the source range corresponding to the code expanded there. </p>
@@ -402,7 +615,7 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a079dc6c618084ad87c9caa49ad4ab7c8"></a>
+<a class="anchor" id="a13c1608ea5a299dd04910fbf78f9d2d4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -410,7 +623,7 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
           <td class="memname">void CppImport::ClangHelpers::immediateSpellingHistory </td>
           <td>(</td>
           <td class="paramtype">clang::SourceLocation&#160;</td>
-          <td class="paramname"><em>loc</em>, </td>
+          <td class="paramname"><em>location</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -422,6 +635,38 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
           <td></td>
           <td>)</td>
           <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac26bb42e91520877bf84e0a39c57ef15"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CppImport::ClangHelpers::insertDeclarationInFolder </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *&#160;</td>
+          <td class="paramname"><em>declaration</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">clang::SourceLocation&#160;</td>
+          <td class="paramname"><em>location</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Declaration.html">OOModel::Declaration</a> *&#160;</td>
+          <td class="paramname"><em>parentNonFolderDeclaration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -452,6 +697,30 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a6f06c451112bf1259b532ff838bfb655"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString CppImport::ClangHelpers::jsonEscape </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a936b6135899aefa27e26cbb4ccb821b1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -471,6 +740,54 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a23ac4de47ecb9168ae73e66d410fb2f6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString CppImport::ClangHelpers::presumedFilenameWithExtension </td>
+          <td>(</td>
+          <td class="paramtype">clang::SourceLocation&#160;</td>
+          <td class="paramname"><em>location</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7f149899d402fb4e7524b775cba3a00c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString CppImport::ClangHelpers::presumedFilenameWithoutExtension </td>
+          <td>(</td>
+          <td class="paramtype">clang::SourceLocation&#160;</td>
+          <td class="paramname"><em>location</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abf64db8d667756f46eef00faea9e68fc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CppImport::ClangHelpers::printMacroDefinitionForDebug </td>
+          <td>(</td>
+          <td class="paramtype">const clang::MacroDirective *&#160;</td>
+          <td class="paramname"><em>macroDirective</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -540,6 +857,29 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classOOModel_1_1Project.html">OOModel::Project</a> * CppImport::ClangHelpers::rootProject </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af1cc853269a6d41c9bbe7a7009158969"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString &amp; CppImport::ClangHelpers::rootProjectPath </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -692,6 +1032,26 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="abeddd79056789c6888494093fc2b99aa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt;<a class="el" href="classCppImport_1_1Comment.html">Comment</a>*&gt; CppImport::ClangHelpers::comments_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a4ee6d5a0f94176c83b577eff90b1b707"></a>
 <div class="memitem">
 <div class="memproto">
@@ -709,6 +1069,28 @@ template&lt;typename NodeType , typename... ConstructorArgTypes&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a14480a51d453d335e8b58e7dcdcd9866"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, QString&gt; CppImport::ClangHelpers::nodeToFilenameMap_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>used for exporting an automatically generated merge map </p>
 
 </div>
 </div>

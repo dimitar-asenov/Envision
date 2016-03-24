@@ -117,19 +117,21 @@ Public Types</h2></td></tr>
 <a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a039fdf2452c935b96952318034218c81">IsConvertibleFrom</a> = 0x10
  }</td></tr>
 <tr class="separator:a2b403ace41805a5e0aeb969b5d623106"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6fbadb2e75566ad3732c7f8ca0cb673"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeRelations</a> = QFlags&lt; <a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106">TypeRelation</a> &gt;</td></tr>
+<tr class="separator:ad6fbadb2e75566ad3732c7f8ca0cb673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4d6ac6f1c2ab86817358cd6ef04f6228"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#a4d6ac6f1c2ab86817358cd6ef04f6228">~TypeSystem</a> ()</td></tr>
 <tr class="separator:a4d6ac6f1c2ab86817358cd6ef04f6228"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bc14ce8ed1dc59ba31ea22905d98be5"><td class="memItemLeft" align="right" valign="top">virtual TypeRelations&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#a1bc14ce8ed1dc59ba31ea22905d98be5">relationFirstToSecond</a> (const <a class="el" href="classOOModel_1_1Type.html">Type</a> *first, const <a class="el" href="classOOModel_1_1Type.html">Type</a> *second)=0</td></tr>
+<tr class="memitem:a1bc14ce8ed1dc59ba31ea22905d98be5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeRelations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#a1bc14ce8ed1dc59ba31ea22905d98be5">relationFirstToSecond</a> (const <a class="el" href="classOOModel_1_1Type.html">Type</a> *first, const <a class="el" href="classOOModel_1_1Type.html">Type</a> *second)=0</td></tr>
 <tr class="separator:a1bc14ce8ed1dc59ba31ea22905d98be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7904683ed0d3ba86ebd02577e86d4206"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classOOModel_1_1TypeSystem.html">TypeSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#a7904683ed0d3ba86ebd02577e86d4206">instance</a> ()</td></tr>
 <tr class="separator:a7904683ed0d3ba86ebd02577e86d4206"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f856ce7c7555802fbb7be88b04f96be"><td class="memItemLeft" align="right" valign="top">static TypeRelations&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#a0f856ce7c7555802fbb7be88b04f96be">invert</a> (TypeRelations relation)</td></tr>
+<tr class="memitem:a0f856ce7c7555802fbb7be88b04f96be"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeRelations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#a0f856ce7c7555802fbb7be88b04f96be">invert</a> (<a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeRelations</a> relation)</td></tr>
 <tr class="separator:a0f856ce7c7555802fbb7be88b04f96be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
@@ -137,6 +139,19 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:ace1606205e26acdda13735432c8b24f8"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeSystem.html#ace1606205e26acdda13735432c8b24f8">EQUALTYPES</a> = <a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a5184adf1a10d22bf7dbce6ebdfa750c1">Equal</a> | <a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106aad8d72d42999ff56d0fc1348b7a27484">IsSubtype</a> | <a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a0d335cd14b8bb656b46d30955ec7d5a3">IsSupertype</a> | <a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a36ff652f1156ae8a43a114ae18531b94">IsConvertibleTo</a> | <a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a039fdf2452c935b96952318034218c81">IsConvertibleFrom</a></td></tr>
 <tr class="separator:ace1606205e26acdda13735432c8b24f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="ad6fbadb2e75566ad3732c7f8ca0cb673"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">OOModel::TypeSystem::TypeRelations</a> =  QFlags&lt;<a class="el" href="classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106">TypeRelation</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a2b403ace41805a5e0aeb969b5d623106"></a>
 <div class="memitem">
@@ -220,9 +235,9 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">TypeSystem::TypeRelations OOModel::TypeSystem::invert </td>
+          <td class="memname"><a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeSystem::TypeRelations</a> OOModel::TypeSystem::invert </td>
           <td>(</td>
-          <td class="paramtype">TypeRelations&#160;</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeRelations</a>&#160;</td>
           <td class="paramname"><em>relation</em></td><td>)</td>
           <td></td>
         </tr>
@@ -244,7 +259,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual TypeRelations OOModel::TypeSystem::relationFirstToSecond </td>
+          <td class="memname">virtual <a class="el" href="classOOModel_1_1TypeSystem.html#ad6fbadb2e75566ad3732c7f8ca0cb673">TypeRelations</a> OOModel::TypeSystem::relationFirstToSecond </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classOOModel_1_1Type.html">Type</a> *&#160;</td>
           <td class="paramname"><em>first</em>, </td>
@@ -268,7 +283,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classOOModel_1_1JavaTypeSystem.html#a59dcd0eb3d06ee61367b3b38c7efcdce">OOModel::JavaTypeSystem</a>.</p>
+<p>Implemented in <a class="el" href="classOOModel_1_1JavaTypeSystem.html#a9b07bcaf249187ea192dba3979d7d5ea">OOModel::JavaTypeSystem</a>.</p>
 
 </div>
 </div>

@@ -11,6 +11,7 @@ var searchData=
   ['oooperatordescriptor',['OOOperatorDescriptor',['../classOOInteraction_1_1OOOperatorDescriptor.html',1,'OOInteraction']]],
   ['oooperatordescriptorlist',['OOOperatorDescriptorList',['../classOOInteraction_1_1OOOperatorDescriptorList.html',1,'OOInteraction']]],
   ['ooreference',['OOReference',['../classOOModel_1_1OOReference.html',1,'OOModel']]],
+  ['ooresolutionrequest',['OOResolutionRequest',['../classOOModel_1_1OOResolutionRequest.html',1,'OOModel']]],
   ['oovisualizationexception',['OOVisualizationException',['../classOOVisualization_1_1OOVisualizationException.html',1,'OOVisualization']]],
   ['oovisualizationplugin',['OOVisualizationPlugin',['../classOOVisualization_1_1OOVisualizationPlugin.html',1,'OOVisualization']]],
   ['operator',['Operator',['../classInteraction_1_1Operator.html',1,'Interaction']]],

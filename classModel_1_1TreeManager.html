@@ -135,9 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a26ef85c4beb28c42d8df6523315d00d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a26ef85c4beb28c42d8df6523315d00d2">beginExclusiveRead</a> ()</td></tr>
 <tr class="memdesc:a26ef85c4beb28c42d8df6523315d00d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins an exclusive read.  <a href="#a26ef85c4beb28c42d8df6523315d00d2">More...</a><br /></td></tr>
 <tr class="separator:a26ef85c4beb28c42d8df6523315d00d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2aefa4b91245e7540bf1e79964368564"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564">beginModification</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1TreeManager.html#a1a919ac640517add285e0d787775ebd7">modificationTarget</a>, const QString &amp;text=QString())</td></tr>
-<tr class="memdesc:a2aefa4b91245e7540bf1e79964368564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins a modification session.  <a href="#a2aefa4b91245e7540bf1e79964368564">More...</a><br /></td></tr>
-<tr class="separator:a2aefa4b91245e7540bf1e79964368564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a458431d870fcba27fd04a11e63d643d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4">beginModification</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1TreeManager.html#a1a919ac640517add285e0d787775ebd7">modificationTarget</a>, const QString &amp;text={})</td></tr>
+<tr class="memdesc:a458431d870fcba27fd04a11e63d643d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins a modification session.  <a href="#a458431d870fcba27fd04a11e63d643d4">More...</a><br /></td></tr>
+<tr class="separator:a458431d870fcba27fd04a11e63d643d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8ca7629df3ac48593ad1ac85fcdec48"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#af8ca7629df3ac48593ad1ac85fcdec48">canBeModified</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> *node) const </td></tr>
 <tr class="memdesc:af8ca7629df3ac48593ad1ac85fcdec48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a node can be modified.  <a href="#af8ca7629df3ac48593ad1ac85fcdec48">More...</a><br /></td></tr>
 <tr class="separator:af8ca7629df3ac48593ad1ac85fcdec48"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -366,7 +366,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2aefa4b91245e7540bf1e79964368564"></a>
+<a class="anchor" id="a458431d870fcba27fd04a11e63d643d4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -380,7 +380,7 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>text</em> = <code>QString()</code>&#160;</td>
+          <td class="paramname"><em>text</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -391,7 +391,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Begins a modification session. </p>
-<p>Before calling a method on a tree node that modifies the node, a writer thread must first begin a modification session. Write access to the underlying tree must always occur in a modification block. Call <a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564" title="Begins a modification session. ">TreeManager::beginModification()</a> to begin this block and <a class="el" href="classModel_1_1TreeManager.html#aac8a54eae11dc6186a44245cb7e28080" title="Ends a modification session. ">TreeManager::endModification()</a> to end the block:</p>
+<p>Before calling a method on a tree node that modifies the node, a writer thread must first begin a modification session. Write access to the underlying tree must always occur in a modification block. Call <a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4" title="Begins a modification session. ">TreeManager::beginModification()</a> to begin this block and <a class="el" href="classModel_1_1TreeManager.html#aac8a54eae11dc6186a44245cb7e28080" title="Ends a modification session. ">TreeManager::endModification()</a> to end the block:</p>
 <p><a class="el" href="classModel_1_1TreeManager.html" title="The TreeManager class is a management and access entity for a program tree. ">TreeManager</a> m; ... Node* someNode; ... m.beginModification(someNode, "modification description"); ... Code that makes modification to the subtree rooted at someNode, and within the access unit corresponding ... to someNode m.endModification(); ... Other exclusive readers or other writers can now be granted access</p>
 <p>Only one thread can be in a modification session at a time. Furthermore this thread can only modify nodes which fall within the current access unit.</p>
 <p>Each node has a unique access unit associated with it. An access unit is simply identified by a lock. The Node::getAccessLock() method can be used to get the access lock associated with a node. By default this is the lock of the parent node, or if there is no parent node (this is the root node), the lock of the <a class="el" href="classModel_1_1TreeManager.html" title="The TreeManager class is a management and access entity for a program tree. ">TreeManager</a>. The user can reimplement the Node::getAccessLock() method to return a new access lock therby defining a new access unit.</p>
@@ -422,7 +422,7 @@ Private Attributes</h2></td></tr>
 
 <p>Checks if a node can be modified. </p>
 <p>A node can be modified if the following three conditions are met:</p><ul>
-<li>The manager is in a modification session, started with <a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564" title="Begins a modification session. ">TreeManager::beginModification()</a>.</li>
+<li>The manager is in a modification session, started with <a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4" title="Begins a modification session. ">TreeManager::beginModification()</a>.</li>
 <li>It is, or has as a parent, the current modification target.</li>
 <li>It belongs to the same access unit as the current modification target.</li>
 </ul>
@@ -460,7 +460,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classModel_1_1ModelException.html">ModelException</a></td><td>if this method is called without calling <a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564" title="Begins a modification session. ">TreeManager::beginModification()</a> first. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classModel_1_1ModelException.html">ModelException</a></td><td>if this method is called without calling <a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4" title="Begins a modification session. ">TreeManager::beginModification()</a> first. </td></tr>
   </table>
   </dd>
 </dl>
@@ -535,7 +535,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Ends a modification session. </p>
-<p>This method must always be called after a call <a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564" title="Begins a modification session. ">TreeManager::beginModification()</a>. It concludes the modification session by releasing all acquired locks and emits the Mode::nodesModified signal to notify listeners about the changes.</p>
+<p>This method must always be called after a call <a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4" title="Begins a modification session. ">TreeManager::beginModification()</a>. It concludes the modification session by releasing all acquired locks and emits the Mode::nodesModified signal to notify listeners about the changes.</p>
 <p>This method must be called before the any other thread can gain exclusive access to the tree.</p>
 <p>If <em>tryResolvingReferences</em> is true, then an attempt will be made to resolve all unresolved references. </p>
 
@@ -922,7 +922,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Pushes the specified command on the undo stack and executes it. </p>
-<p>This method can only be called inside a modification block initiated with <a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564" title="Begins a modification session. ">TreeManager::beginModification()</a>. Furthermore no calls to <a class="el" href="classModel_1_1TreeManager.html#a042d082dc20453f6cdb0c3b6ccb6e78b" title="Undoes the commands executed in the previous modification block. ">TreeManager::undo</a> or <a class="el" href="classModel_1_1TreeManager.html#adc63a3c45ca251664a2f52e17c4f74d4" title="Redoes the commands executed in the next modification block. ">TreeManager::redo</a> can be made in the current modification block.</p>
+<p>This method can only be called inside a modification block initiated with <a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4" title="Begins a modification session. ">TreeManager::beginModification()</a>. Furthermore no calls to <a class="el" href="classModel_1_1TreeManager.html#a042d082dc20453f6cdb0c3b6ccb6e78b" title="Undoes the commands executed in the previous modification block. ">TreeManager::undo</a> or <a class="el" href="classModel_1_1TreeManager.html#adc63a3c45ca251664a2f52e17c4f74d4" title="Redoes the commands executed in the next modification block. ">TreeManager::redo</a> can be made in the current modification block.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">command</td><td>The command to add to the stack.</td></tr>
@@ -931,7 +931,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classModel_1_1ModelException.html">ModelException</a></td><td>if called without calling <a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564" title="Begins a modification session. ">TreeManager::beginModification()</a> first or if calls to <a class="el" href="classModel_1_1TreeManager.html#a042d082dc20453f6cdb0c3b6ccb6e78b" title="Undoes the commands executed in the previous modification block. ">TreeManager::undo()</a> or <a class="el" href="classModel_1_1TreeManager.html#adc63a3c45ca251664a2f52e17c4f74d4" title="Redoes the commands executed in the next modification block. ">TreeManager::redo()</a> have already been made. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classModel_1_1ModelException.html">ModelException</a></td><td>if called without calling <a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4" title="Begins a modification session. ">TreeManager::beginModification()</a> first or if calls to <a class="el" href="classModel_1_1TreeManager.html#a042d082dc20453f6cdb0c3b6ccb6e78b" title="Undoes the commands executed in the previous modification block. ">TreeManager::undo()</a> or <a class="el" href="classModel_1_1TreeManager.html#adc63a3c45ca251664a2f52e17c4f74d4" title="Redoes the commands executed in the next modification block. ">TreeManager::redo()</a> have already been made. </td></tr>
   </table>
   </dd>
 </dl>
@@ -954,7 +954,7 @@ Private Attributes</h2></td></tr>
 <p>Redoes the commands executed in the next modification block. </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classModel_1_1ModelException.html">ModelException</a></td><td>if called without calling <a class="el" href="classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564" title="Begins a modification session. ">TreeManager::beginModification()</a> first or if a call to <a class="el" href="classModel_1_1TreeManager.html#a1a383b92bde574517f1b93da8dd5fb82" title="Pushes the specified command on the undo stack and executes it. ">TreeManager::pushCommandOnUndoStack()</a> has already been made within this modification block. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classModel_1_1ModelException.html">ModelException</a></td><td>if called without calling <a class="el" href="classModel_1_1TreeManager.html#a458431d870fcba27fd04a11e63d643d4" title="Begins a modification session. ">TreeManager::beginModification()</a> first or if a call to <a class="el" href="classModel_1_1TreeManager.html#a1a383b92bde574517f1b93da8dd5fb82" title="Pushes the specified command on the undo stack and executes it. ">TreeManager::pushCommandOnUndoStack()</a> has already been made within this modification block. </td></tr>
   </table>
   </dd>
 </dl>

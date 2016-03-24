@@ -221,8 +221,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a4f8d2481c1cb13d5542d722080ad9d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ad30f1793724cab147e57deecba0852"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a0ad30f1793724cab147e57deecba0852">setReferenceTarget</a> (QString reference, QString target)</td></tr>
 <tr class="separator:a0ad30f1793724cab147e57deecba0852"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a817ffdc0f8a88c341c2e88b68af49fbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a817ffdc0f8a88c341c2e88b68af49fbd">traverseCommitGraph</a> (<a class="el" href="classFilePersistence_1_1CommitGraph.html">CommitGraph</a> *graph, git_commit *current, const git_oid *target) const </td></tr>
-<tr class="separator:a817ffdc0f8a88c341c2e88b68af49fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83c6ac59e9bf2572f7fa5838f40342fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a83c6ac59e9bf2572f7fa5838f40342fb">TraverseCommitGraph</a> (<a class="el" href="classFilePersistence_1_1CommitGraph.html">CommitGraph</a> *graph, git_commit *current, const git_oid *target) const </td></tr>
+<tr class="separator:a83c6ac59e9bf2572f7fa5838f40342fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e6f34e49a99a68763ea08e406a78492"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a1e6f34e49a99a68763ea08e406a78492">writeIndexToTree</a> ()</td></tr>
 <tr class="separator:a1e6f34e49a99a68763ea08e406a78492"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ac3096cde9d3e1992ba94e02399a9c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a2ac3096cde9d3e1992ba94e02399a9c3">writeRevisionIntoIndex</a> (QString revision)</td></tr>
@@ -253,13 +253,13 @@ Private Attributes</h2></td></tr>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:ae48c2c8d13267178398715f9bf22adb2"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#ae48c2c8d13267178398715f9bf22adb2">HEAD</a> = &quot;HEAD&quot;</td></tr>
 <tr class="separator:ae48c2c8d13267178398715f9bf22adb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86734f2d8c378893159f3c69df8c3c7d"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a86734f2d8c378893159f3c69df8c3c7d">PATH_HEADS</a></td></tr>
+<tr class="memitem:a86734f2d8c378893159f3c69df8c3c7d"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a86734f2d8c378893159f3c69df8c3c7d">PATH_HEADS</a> {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;heads&quot;}</td></tr>
 <tr class="separator:a86734f2d8c378893159f3c69df8c3c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a7ba033428be4898edcba0664c3157f"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a3a7ba033428be4898edcba0664c3157f">PATH_NOTES</a></td></tr>
+<tr class="memitem:a3a7ba033428be4898edcba0664c3157f"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a3a7ba033428be4898edcba0664c3157f">PATH_NOTES</a> {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;notes&quot;}</td></tr>
 <tr class="separator:a3a7ba033428be4898edcba0664c3157f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f3bf86b020d34a4dd7dcf7cc7a526ef"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a3f3bf86b020d34a4dd7dcf7cc7a526ef">PATH_REMOTES</a></td></tr>
+<tr class="memitem:a3f3bf86b020d34a4dd7dcf7cc7a526ef"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a3f3bf86b020d34a4dd7dcf7cc7a526ef">PATH_REMOTES</a> {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;remotes&quot;}</td></tr>
 <tr class="separator:a3f3bf86b020d34a4dd7dcf7cc7a526ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a993cbf789488ac60e7a60dae02e0f602"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a993cbf789488ac60e7a60dae02e0f602">PATH_TAGS</a></td></tr>
+<tr class="memitem:a993cbf789488ac60e7a60dae02e0f602"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GitRepository.html#a993cbf789488ac60e7a60dae02e0f602">PATH_TAGS</a> {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;tags&quot;}</td></tr>
 <tr class="separator:a993cbf789488ac60e7a60dae02e0f602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -1282,7 +1282,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a817ffdc0f8a88c341c2e88b68af49fbd"></a>
+<a class="anchor" id="a83c6ac59e9bf2572f7fa5838f40342fb"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1290,7 +1290,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void FilePersistence::GitRepository::traverseCommitGraph </td>
+          <td class="memname">void FilePersistence::GitRepository::TraverseCommitGraph </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classFilePersistence_1_1CommitGraph.html">CommitGraph</a> *&#160;</td>
           <td class="paramname"><em>graph</em>, </td>
@@ -1525,7 +1525,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QString FilePersistence::GitRepository::PATH_HEADS</td>
+          <td class="memname">const QString FilePersistence::GitRepository::PATH_HEADS {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;heads&quot;}</td>
         </tr>
       </table>
   </td>
@@ -1545,7 +1545,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QString FilePersistence::GitRepository::PATH_NOTES</td>
+          <td class="memname">const QString FilePersistence::GitRepository::PATH_NOTES {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;notes&quot;}</td>
         </tr>
       </table>
   </td>
@@ -1565,7 +1565,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QString FilePersistence::GitRepository::PATH_REMOTES</td>
+          <td class="memname">const QString FilePersistence::GitRepository::PATH_REMOTES {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;remotes&quot;}</td>
         </tr>
       </table>
   </td>
@@ -1585,7 +1585,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QString FilePersistence::GitRepository::PATH_TAGS</td>
+          <td class="memname">const QString FilePersistence::GitRepository::PATH_TAGS {QString{QDir::separator()} + &quot;refs&quot; + QDir::separator() + &quot;tags&quot;}</td>
         </tr>
       </table>
   </td>

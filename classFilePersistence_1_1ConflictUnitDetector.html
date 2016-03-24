@@ -126,7 +126,7 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a294b44a3cec120bfb4120bfbf2d0a77e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceFilePersistence.html#a995f05d4be7dd82c074c46ef1454e414">ConflictUnitSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#a294b44a3cec120bfb4120bfbf2d0a77e">computeAffectedCUs</a> (<a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> cdg)</td></tr>
 <tr class="memdesc:a294b44a3cec120bfb4120bfbf2d0a77e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a MultiHash where the key set contains an ID if and only if it is the ID of a conflict unit root node and that conflict unit is affected by some change in <em>cdg</em>.  <a href="#a294b44a3cec120bfb4120bfbf2d0a77e">More...</a><br /></td></tr>
 <tr class="separator:a294b44a3cec120bfb4120bfbf2d0a77e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9f811119939d2b02d0459e7d5c8ed98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#ab9f811119939d2b02d0459e7d5c8ed98">findConflictUnit</a> (const <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node)</td></tr>
+<tr class="memitem:ab9f811119939d2b02d0459e7d5c8ed98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#ab9f811119939d2b02d0459e7d5c8ed98">findConflictUnit</a> (const <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node)</td></tr>
 <tr class="memdesc:ab9f811119939d2b02d0459e7d5c8ed98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ID of the root of the conflict unit <em>node</em> belongs to.  <a href="#ab9f811119939d2b02d0459e7d5c8ed98">More...</a><br /></td></tr>
 <tr class="separator:ab9f811119939d2b02d0459e7d5c8ed98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67fe639fd1e0db9d1dab44452fd220ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#a67fe639fd1e0db9d1dab44452fd220ff">markDependingAsConflicting</a> (QSet&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &gt; &amp;conflictingChanges, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; change, <a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> &amp;cdg, QMultiHash&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &gt; &amp;moveDependencies, QList&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &gt; conflictingWithChange, <a class="el" href="classFilePersistence_1_1ConflictPairs.html">ConflictPairs</a> &amp;conflictPairs)</td></tr>
@@ -139,12 +139,12 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:ad9ca71f71e85ed018f814245635c53ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a772d6804c8084f15be16a27e882db3cc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#a772d6804c8084f15be16a27e882db3cc">checkMoves</a> (<a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> &amp;cdgA, <a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> &amp;cdgB, <a class="el" href="classFilePersistence_1_1ConflictPairs.html">ConflictPairs</a> &amp;conflictPairs, QSet&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt;&gt; &amp;conflictingChanges)</td></tr>
 <tr class="separator:a772d6804c8084f15be16a27e882db3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc0fafad97052141229592aa1bdf8cbd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#abc0fafad97052141229592aa1bdf8cbd">findMoveBound</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *nodeA, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *nodeB)</td></tr>
+<tr class="memitem:abc0fafad97052141229592aa1bdf8cbd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#abc0fafad97052141229592aa1bdf8cbd">findMoveBound</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *nodeA, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *nodeB)</td></tr>
 <tr class="separator:abc0fafad97052141229592aa1bdf8cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac934cdd6536f4d2ef9163104089fb20"><td class="memItemLeft" align="right" valign="top">static QList&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#aac934cdd6536f4d2ef9163104089fb20">findMoveDependencies</a> (std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; treeBase, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; change, <a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> &amp;cdg)</td></tr>
 <tr class="memdesc:aac934cdd6536f4d2ef9163104089fb20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all changes <em>change</em> depends on.  <a href="#aac934cdd6536f4d2ef9163104089fb20">More...</a><br /></td></tr>
 <tr class="separator:aac934cdd6536f4d2ef9163104089fb20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addc6eca6198de319e8397a9284e45bbd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#addc6eca6198de319e8397a9284e45bbd">isAncestor</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> ancestorId)</td></tr>
+<tr class="memitem:addc6eca6198de319e8397a9284e45bbd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#addc6eca6198de319e8397a9284e45bbd">isAncestor</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> ancestorId)</td></tr>
 <tr class="separator:addc6eca6198de319e8397a9284e45bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0c7ebeba35af3aa5e76616c051ee796"><td class="memItemLeft" align="right" valign="top">static QSet&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1ConflictUnitDetector.html#af0c7ebeba35af3aa5e76616c051ee796">structureChanges</a> (<a class="el" href="classFilePersistence_1_1ChangeDependencyGraph.html">ChangeDependencyGraph</a> &amp;cdg, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1ChangeDescription.html">ChangeDescription</a> &gt; <a class="el" href="classFilePersistence_1_1parentChange.html">parentChange</a>)</td></tr>
 <tr class="separator:af0c7ebeba35af3aa5e76616c051ee796"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -332,7 +332,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> FilePersistence::ConflictUnitDetector::findConflictUnit </td>
+          <td class="memname"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> FilePersistence::ConflictUnitDetector::findConflictUnit </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td>
           <td class="paramname"><em>node</em></td><td>)</td>
@@ -358,7 +358,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> FilePersistence::ConflictUnitDetector::findMoveBound </td>
+          <td class="memname"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> FilePersistence::ConflictUnitDetector::findMoveBound </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td>
           <td class="paramname"><em>nodeA</em>, </td>
@@ -442,7 +442,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td>
           <td class="paramname"><em>ancestorId</em>&#160;</td>
         </tr>
         <tr>
@@ -579,7 +579,6 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>If change1 is mappend to change2 then change2 depends on change1</p>
 
 </div>
 </div>

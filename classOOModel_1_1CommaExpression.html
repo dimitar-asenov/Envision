@@ -111,10 +111,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a25750d841f04583faffb41ec2bb652af"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classOOModel_1_1Expression.html">Expression</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a25750d841f04583faffb41ec2bb652af">allSubOperands</a> (bool detachOperands)</td></tr>
 <tr class="memdesc:a25750d841f04583faffb41ec2bb652af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns in a single list all expressions of this and nested <a class="el" href="classOOModel_1_1CommaExpression.html">CommaExpression</a> operators.  <a href="#a25750d841f04583faffb41ec2bb652af">More...</a><br /></td></tr>
 <tr class="separator:a25750d841f04583faffb41ec2bb652af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a08d470230b3135e82d726d039c28f3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a2a08d470230b3135e82d726d039c28f3">findSymbols</a> (QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, const Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override</td></tr>
-<tr class="separator:a2a08d470230b3135e82d726d039c28f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20fc0d9610a98a89b856ce4a0e94c981"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classOOModel_1_1Type.html">Type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a20fc0d9610a98a89b856ce4a0e94c981">type</a> () override</td></tr>
-<tr class="separator:a20fc0d9610a98a89b856ce4a0e94c981"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a575394b3910f04d732128f5564b1f43f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a575394b3910f04d732128f5564b1f43f">findSymbols</a> (std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt; request) const override</td></tr>
+<tr class="separator:a575394b3910f04d732128f5564b1f43f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a9e997643080650a15b951b3bdc5f0f"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classOOModel_1_1Type.html">Type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a4a9e997643080650a15b951b3bdc5f0f">type</a> () override</td></tr>
+<tr class="separator:a4a9e997643080650a15b951b3bdc5f0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -169,7 +169,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2a08d470230b3135e82d726d039c28f3"></a>
+<a class="anchor" id="a575394b3910f04d732128f5564b1f43f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -179,43 +179,9 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool OOModel::CommaExpression::findSymbols </td>
           <td>(</td>
-          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>result</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
-          <td class="paramname"><em>matcher</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Node *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FindSymbolDirection&#160;</td>
-          <td class="paramname"><em>direction</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SymbolTypes&#160;</td>
-          <td class="paramname"><em>symbolTypes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classModel_1_1ResolutionRequest.html">Model::ResolutionRequest</a> &gt;&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -227,7 +193,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a20fc0d9610a98a89b856ce4a0e94c981"></a>
+<a class="anchor" id="a4a9e997643080650a15b951b3bdc5f0f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -235,7 +201,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classOOModel_1_1Type.html">Type</a> * OOModel::CommaExpression::type </td>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classOOModel_1_1Type.html">Type</a> &gt; OOModel::CommaExpression::type </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

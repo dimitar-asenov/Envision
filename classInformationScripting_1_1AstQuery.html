@@ -152,8 +152,8 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a94e1e4cae01112f2d17b7d5410824c4f"><td class="memTemplParams" colspan="2">template&lt;typename Predicate &gt; </td></tr>
 <tr class="memitem:a94e1e4cae01112f2d17b7d5410824c4f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1AstQuery.html#a94e1e4cae01112f2d17b7d5410824c4f">addNodesForWhich</a> (<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;ts, Predicate holds, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *from=nullptr)</td></tr>
 <tr class="separator:a94e1e4cae01112f2d17b7d5410824c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2276148050aaafc91f4cfc86557338f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1AstQuery.html#a2276148050aaafc91f4cfc86557338f3">addNodesOfType</a> (<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;ts, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *from=nullptr)</td></tr>
-<tr class="separator:a2276148050aaafc91f4cfc86557338f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe4273cc13468a6f654dbacfeb6a13b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1AstQuery.html#afe4273cc13468a6f654dbacfeb6a13b0">addNodesOfType</a> (<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &amp;ts, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *from=nullptr, bool topLevelNodeOnly=false)</td></tr>
+<tr class="separator:afe4273cc13468a6f654dbacfeb6a13b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b5c4ece5c887557743bf2fd639be22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInformationScripting_1_1Optional.html">Optional</a>&lt; <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1AstQuery.html#a25b5c4ece5c887557743bf2fd639be22">attribute</a> (<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> input)</td></tr>
 <tr class="separator:a25b5c4ece5c887557743bf2fd639be22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85f938d7b359e1d8feca0305399c1057"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInformationScripting_1_1Optional.html">Optional</a>&lt; <a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1AstQuery.html#a85f938d7b359e1d8feca0305399c1057">baseClassesQuery</a> (<a class="el" href="classInformationScripting_1_1TupleSet.html">TupleSet</a> input)</td></tr>
@@ -203,6 +203,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:aa94e0220a671d2e5eeebc6a47e706c53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a933ae9c0c88613aed572585e02c2b47b"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1AstQuery.html#a933ae9c0c88613aed572585e02c2b47b">RELATION_ARGUMENT_NAMES</a> {&quot;r&quot;, &quot;relation&quot;}</td></tr>
 <tr class="separator:a933ae9c0c88613aed572585e02c2b47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4155aa4cbb90ef0bd7edaf11d5fd8462"><td class="memItemLeft" align="right" valign="top">static const QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1AstQuery.html#a4155aa4cbb90ef0bd7edaf11d5fd8462">TOP_LEVEL_ARGUMENT_NAMES</a> {&quot;tl&quot;, &quot;topLevel&quot;}</td></tr>
+<tr class="separator:a4155aa4cbb90ef0bd7edaf11d5fd8462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -400,7 +402,7 @@ template&lt;typename Predicate &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a2276148050aaafc91f4cfc86557338f3"></a>
+<a class="anchor" id="afe4273cc13468a6f654dbacfeb6a13b0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -423,7 +425,13 @@ template&lt;typename Predicate &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>from</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>from</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>topLevelNodeOnly</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -986,6 +994,26 @@ template&lt;typename Predicate &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const QStringList InformationScripting::AstQuery::RELATION_ARGUMENT_NAMES {&quot;r&quot;, &quot;relation&quot;}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4155aa4cbb90ef0bd7edaf11d5fd8462"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QStringList InformationScripting::AstQuery::TOP_LEVEL_ARGUMENT_NAMES {&quot;tl&quot;, &quot;topLevel&quot;}</td>
         </tr>
       </table>
   </td>

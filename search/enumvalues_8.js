@@ -56,8 +56,10 @@ var searchData=
   ['iscollected',['IsCollected',['../classOODebug_1_1Protocol.html#a5bc471e9b93abfea6b8b748d3396734aab8eecfe07a2351a6407140784030273a',1,'OODebug::Protocol']]],
   ['isconvertiblefrom',['IsConvertibleFrom',['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a039fdf2452c935b96952318034218c81',1,'OOModel::TypeSystem']]],
   ['isconvertibleto',['IsConvertibleTo',['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a36ff652f1156ae8a43a114ae18531b94',1,'OOModel::TypeSystem']]],
+  ['isheaderpart',['IsHeaderPart',['../classCppExport_1_1CppPrintContext.html#a9a1969858d46eee0f50684c2e8d5425ba426bf87e59621cc3365778dc16708c81',1,'CppExport::CppPrintContext']]],
   ['isobsolete',['IsObsolete',['../classOODebug_1_1Protocol.html#a161924aa2d21cbda6719a9bf6a2a2eabaaa418c951cddc213c48d4195d1f44446',1,'OODebug::Protocol']]],
   ['isset',['IsSet',['../structInformationScripting_1_1ArgumentValue.html#abe26f8783399f4ed6894236c142eee3ea687f0cfa9be7690c11622b2dcda2f890',1,'InformationScripting::ArgumentValue']]],
   ['issubtype',['IsSubtype',['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106aad8d72d42999ff56d0fc1348b7a27484',1,'OOModel::TypeSystem']]],
-  ['issupertype',['IsSupertype',['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a0d335cd14b8bb656b46d30955ec7d5a3',1,'OOModel::TypeSystem']]]
+  ['issupertype',['IsSupertype',['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a0d335cd14b8bb656b46d30955ec7d5a3',1,'OOModel::TypeSystem']]],
+  ['istemplateimplementationseparatefile',['IsTemplateImplementationSeparateFile',['../classCppExport_1_1CppPrintContext.html#a9a1969858d46eee0f50684c2e8d5425baee53fd88a155f5fc834b712480ed3c4e',1,'CppExport::CppPrintContext']]]
 ];
