@@ -37,7 +37,7 @@ namespace Model {
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API CanReach : public LinearQuery
+class INFORMATIONSCRIPTING_API Reachable : public LinearQuery
 {
 	public:
 		virtual Optional<TupleSet> executeLinear(TupleSet input) override;
@@ -53,7 +53,7 @@ class INFORMATIONSCRIPTING_API CanReach : public LinearQuery
 		static const QStringList RELATION_ARGUMENT_NAMES;
 		static const QStringList SELF_ARGUMENT_NAMES;
 
-		CanReach(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);
+		Reachable(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);
 
 		QSet<Tuple> relationTuples_;
 		bool matchSelf_{};

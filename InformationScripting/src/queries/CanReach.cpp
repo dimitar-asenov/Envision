@@ -33,11 +33,11 @@
 
 namespace InformationScripting {
 
-const QStringList CanReach::NAME_ARGUMENT_NAMES{"n", "name"};
-const QStringList CanReach::RELATION_ARGUMENT_NAMES{"r", "relation"};
-const QStringList CanReach::SELF_ARGUMENT_NAMES{"s", "self"};
+const QStringList Reachable::NAME_ARGUMENT_NAMES{"n", "name"};
+const QStringList Reachable::RELATION_ARGUMENT_NAMES{"r", "relation"};
+const QStringList Reachable::SELF_ARGUMENT_NAMES{"s", "self"};
 
-Optional<TupleSet> CanReach::executeLinear(TupleSet input)
+Optional<TupleSet> Reachable::executeLinear(TupleSet input)
 {
 	QString relationName;
 		if (arguments_.isArgumentSet(RELATION_ARGUMENT_NAMES[0]) )
@@ -62,14 +62,14 @@ Optional<TupleSet> CanReach::executeLinear(TupleSet input)
 	return reachableNodesFrom(std::move(endNodes));
 }
 
-void CanReach::registerDefaultQueries()
+void Reachable::registerDefaultQueries()
 {
-	QueryRegistry::registerQuery<CanReach>("canReach",
+	QueryRegistry::registerQuery<Reachable>("reachable",
 		std::vector<ArgumentRule>{{ArgumentRule::RequireOneOf, {{NAME_ARGUMENT_NAMES[1]},
 																					{SELF_ARGUMENT_NAMES[1], ArgumentValue::IsSet}}}});
 }
 
-CanReach::CanReach(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
+Reachable::Reachable(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
 	: LinearQuery{target}, arguments_{{
 		{NAME_ARGUMENT_NAMES, "Name of the target to reach", NAME_ARGUMENT_NAMES[1]},
 		{RELATION_ARGUMENT_NAMES, "Name of the relation to follow", RELATION_ARGUMENT_NAMES[1]},
@@ -81,7 +81,7 @@ CanReach::CanReach(Model::Node* target, QStringList args, std::vector<ArgumentRu
 	matchSelf_ = arguments_.isArgumentSet(SELF_ARGUMENT_NAMES[1]);
 }
 
-TupleSet CanReach::reachableNodesFrom(std::vector<Tuple> startNodes)
+TupleSet Reachable::reachableNodesFrom(std::vector<Tuple> startNodes)
 {
 	TupleSet result;
 	for (const auto& start : startNodes)
@@ -110,7 +110,7 @@ TupleSet CanReach::reachableNodesFrom(std::vector<Tuple> startNodes)
 	return result;
 }
 
-std::vector<Tuple> CanReach::neighbors(const Tuple& t)
+std::vector<Tuple> Reachable::neighbors(const Tuple& t)
 {
 	std::vector<Tuple> neighbors;
 	for (const auto& relation : relationTuples_)

@@ -78,7 +78,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	Count::registerDefaultQueries();
 	Join::registerDefaultQueries();
 	Filter::registerDefaultQueries();
-	CanReach::registerDefaultQueries();
+	Reachable::registerDefaultQueries();
 	QueryResultVisualizer::registerDefaultQueries();
 	Yield::registerDefaultQueries();
 	TagExtension::registerExtension();

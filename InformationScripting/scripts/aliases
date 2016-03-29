@@ -9,5 +9,5 @@ info = show -info
 cs-csv = profileSource scripts/carmodel.csv | heatmap
 cs-ins = ast -t Class -global | case-studies/instability | table
 cs-why = ast -t Statement -tl | changes -c 2 | join -v change.id,commit.message,ast -as astMessage| case-studies/associatedBugs
-cs-args = callgraph -global | canReach -self -r calls | changes -nodes | case-studies/printArgs
+cs-args = callgraph -global | reachable -self | changes -nodes | case-studies/printArgs
 cs-upstream = ⁅changes -in HEAD..HEAD~1 -two | color blue --tag change•changes -in master..HEAD~1 -two | color red --tag change⁆|
