@@ -18,6 +18,14 @@ load carmodel
 query: cs-csv
 
 ################################################################################
+Select if statements with else branches
+- show as a heatmap profiler data which was saved as a csv file
+################################################################################
+Open OOVisualization
+query: cs-if-with-else
+
+
+################################################################################
 Callgraph of selected method
 - as arrows
 - as table (command: table)

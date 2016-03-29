@@ -6,6 +6,7 @@ addTags = tags -a
 removeTage = tags -r
 info = show -info
 
+cs-if-with-else = ast -global -t Statement | case-studies/if-with-else
 cs-csv = profileSource scripts/carmodel.csv | heatmap
 cs-ins = ast -t Class -global | case-studies/instability | table
 cs-why = ast -t Statement -tl | changes -c 2 | join -v change.id,commit.message,ast -as astMessage| case-studies/associatedBugs
