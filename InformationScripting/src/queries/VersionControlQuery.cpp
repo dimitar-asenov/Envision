@@ -181,7 +181,7 @@ void VersionControlQuery::registerDefaultQueries()
 {
 	QueryRegistry::registerQuery<VersionControlQuery>("changes",
 		std::vector<ArgumentRule>{{ArgumentRule::AtMostOneOf, {{COUNT_ARGUMENT_NAMES[1], ArgumentValue::IsSet},
-												{IN_ARGUMENT_NAMES[0], ArgumentValue::IsSet}}},
+												{IN_ARGUMENT_NAMES[0], ArgumentValue::NotEmpty}}},
 										  {ArgumentRule::AtMostOneOf, {{NODES_ARGUMENTS_NAMES[0], ArgumentValue::IsSet},
 												{TYPED_CHANGES_ARGUMENT_NAMES[0], ArgumentValue::IsSet}}}});
 }
@@ -191,14 +191,13 @@ VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args, 
 		{COUNT_ARGUMENT_NAMES, "The amount of revisions to look at", COUNT_ARGUMENT_NAMES[1], "10"},
 		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"},
 		QCommandLineOption{NODES_ARGUMENTS_NAMES},
-		{IN_ARGUMENT_NAMES, "Specific commits to look at, either a single one or a range with ..", IN_ARGUMENT_NAMES[0]},
 		QCommandLineOption{INCLUDE_INTERMEDIATE_VERSIONS_ARGUMENT_NAMES, "By default, only the first and last commit "
 			" are used to compute changes. Setting this flag will change the behavior to also use intermediate commits."},
 		QCommandLineOption{TYPED_CHANGES_ARGUMENT_NAMES, 	"Add the type (Delete, Insertion, Move, Stationary, "
 																			"Unclassified) of the changes to the result and define a "
 																			"color for the nodes according to the type"}
-
-}, args, true}
+}, {PositionalArgument{IN_ARGUMENT_NAMES[0], "Specific commits to look at, either a single one or a range with .."}},
+args, true}
 {
 	for (const auto& rule : argumentRules)
 		rule.check(arguments_);
@@ -215,9 +214,17 @@ void VersionControlQuery::addCommitMetaInformation(TupleSet& ts, const CommitMet
 
 Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringList& commitIdRange) const
 {
-	if (arguments_.isArgumentSet(IN_ARGUMENT_NAMES[0]))
+	QString userProvidedCommitRange;
+	for (int i = 0; i< arguments_.numPositionalArguments(); ++i)
 	{
-		auto commitRange = arguments_.argument(IN_ARGUMENT_NAMES[0]).split("..");
+		userProvidedCommitRange = arguments_.positionalArgument(i).trimmed();
+		if (!userProvidedCommitRange.isEmpty())
+			break;
+	}
+
+	if (!userProvidedCommitRange.isEmpty())
+	{
+		auto commitRange = userProvidedCommitRange.split("..");
 
 		if (!arguments_.isArgumentSet(INCLUDE_INTERMEDIATE_VERSIONS_ARGUMENT_NAMES[0]))
 			return commitRange;
