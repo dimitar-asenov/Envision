@@ -83,6 +83,7 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		std::unique_ptr<QCommandLineParser> argParser_{};
 		Scope scope_{};
 		QString queryName_;
+		QStringList positionalArgumentNames_;
 
 		void initParser(const QStringList& args, bool addScopeArguments);
 };

@@ -43,12 +43,15 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 	initParser(args, addScopeArguments);
 }
 
-ArgumentParser::ArgumentParser(std::initializer_list<PositionalArgument> options,
+ArgumentParser::ArgumentParser(std::initializer_list<PositionalArgument> positionalArgs,
 										 const QStringList& args, bool addScopeArguments)
 	: argParser_{std::make_unique<QCommandLineParser>()}, queryName_{args[0]}
 {
-	for (const auto& opt : options)
-		argParser_->addPositionalArgument(opt.name_, opt.description_, opt.syntax_);
+	for (const auto& posArg : positionalArgs)
+	{
+		argParser_->addPositionalArgument(posArg.name_, posArg.description_, posArg.syntax_);
+		positionalArgumentNames_.append(posArg.name_);
+	}
 
 	initParser(args, addScopeArguments);
 }
@@ -60,8 +63,11 @@ ArgumentParser::ArgumentParser(std::initializer_list<QCommandLineOption> options
 {
 	if (!argParser_->addOptions(options))
 		Q_ASSERT(false);
-	for (const auto& opt : positionalArgs)
-		argParser_->addPositionalArgument(opt.name_, opt.description_, opt.syntax_);
+	for (const auto& posArg : positionalArgs)
+	{
+		argParser_->addPositionalArgument(posArg.name_, posArg.description_, posArg.syntax_);
+		positionalArgumentNames_.append(posArg.name_);
+	}
 
 	initParser(args, addScopeArguments);
 }
@@ -93,11 +99,19 @@ ArgumentParser::Scope ArgumentParser::scope(const Query* of) const
 
 QString ArgumentParser::argument(const QString& argName) const
 {
+	int posIndex = positionalArgumentNames_.indexOf(argName);
+	if (posIndex >=0 && argParser_)
+		return argParser_->positionalArguments()[posIndex];
+
 	return argParser_->value(argName);
 }
 
 bool ArgumentParser::isArgumentSet(const QString& argName) const
 {
+	int posIndex = positionalArgumentNames_.indexOf(argName);
+	if (posIndex >=0)
+		return argParser_->positionalArguments().size() > posIndex;
+
 	return argParser_->isSet(argName);
 }
 
