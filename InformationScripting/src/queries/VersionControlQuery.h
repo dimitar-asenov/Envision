@@ -58,7 +58,7 @@ class INFORMATIONSCRIPTING_API VersionControlQuery : public LinearQuery
 		static const QStringList NODE_TYPE_ARGUMENT_NAMES;
 		static const QStringList NODES_ARGUMENTS_NAMES;
 		static const QStringList IN_ARGUMENT_NAMES;
-		static const QStringList TWO_VERSION_ARGUMENT_NAMES;
+		static const QStringList INCLUDE_INTERMEDIATE_VERSIONS_ARGUMENT_NAMES;
 		static const QStringList TYPED_CHANGES_ARGUMENT_NAMES;
 
 		VersionControlQuery(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules);

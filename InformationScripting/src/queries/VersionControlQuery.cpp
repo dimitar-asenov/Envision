@@ -48,7 +48,7 @@ const QStringList VersionControlQuery::COUNT_ARGUMENT_NAMES{"c", "count"};
 const QStringList VersionControlQuery::NODE_TYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList VersionControlQuery::NODES_ARGUMENTS_NAMES{"nodes"};
 const QStringList VersionControlQuery::IN_ARGUMENT_NAMES{"in"};
-const QStringList VersionControlQuery::TWO_VERSION_ARGUMENT_NAMES{"two"};
+const QStringList VersionControlQuery::INCLUDE_INTERMEDIATE_VERSIONS_ARGUMENT_NAMES{"intermediate"};
 const QStringList VersionControlQuery::TYPED_CHANGES_ARGUMENT_NAMES{"tc", "typed_changes"};
 
 Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
@@ -69,8 +69,8 @@ Optional<TupleSet> VersionControlQuery::executeLinear(TupleSet input)
 		return adaptedRangeOptional.errors()[0];
 	commitIdRange = adaptedRangeOptional.value();
 
-	// if argument is set, make sure that commitIdRange only contains two commitIds
-	if (arguments_.isArgumentSet(TWO_VERSION_ARGUMENT_NAMES[0]) && commitIdRange.size() > 2)
+	// if argument is not set, make sure that commitIdRange only contains two commitIds
+	if (!arguments_.isArgumentSet(INCLUDE_INTERMEDIATE_VERSIONS_ARGUMENT_NAMES[0]) && commitIdRange.size() > 2)
 	{
 		commitIdRange = QStringList{commitIdRange.first(), commitIdRange.last()};
 	}
@@ -192,7 +192,8 @@ VersionControlQuery::VersionControlQuery(Model::Node* target, QStringList args, 
 		{NODE_TYPE_ARGUMENT_NAMES, "The minimum type of the nodes returned", NODE_TYPE_ARGUMENT_NAMES[1], "StatementItem"},
 		QCommandLineOption{NODES_ARGUMENTS_NAMES},
 		{IN_ARGUMENT_NAMES, "Specific commits to look at, either a single one or a range with ..", IN_ARGUMENT_NAMES[0]},
-		QCommandLineOption{TWO_VERSION_ARGUMENT_NAMES, "Only use the first and last commit to compute the changes"},
+		QCommandLineOption{INCLUDE_INTERMEDIATE_VERSIONS_ARGUMENT_NAMES, "By default, only the first and last commit "
+			" are used to compute changes. Setting this flag will change the behavior to also use intermediate commits."},
 		QCommandLineOption{TYPED_CHANGES_ARGUMENT_NAMES, 	"Add the type (Delete, Insertion, Move, Stationary, "
 																			"Unclassified) of the changes to the result and define a "
 																			"color for the nodes according to the type"}
@@ -218,7 +219,7 @@ Optional<QList<QString>> VersionControlQuery::commitsToConsider(const QStringLis
 	{
 		auto commitRange = arguments_.argument(IN_ARGUMENT_NAMES[0]).split("..");
 
-		if (arguments_.isArgumentSet(TWO_VERSION_ARGUMENT_NAMES[0]))
+		if (!arguments_.isArgumentSet(INCLUDE_INTERMEDIATE_VERSIONS_ARGUMENT_NAMES[0]))
 			return commitRange;
 
 		QString startCommit = commitRange[0];
