@@ -36,6 +36,13 @@ Callgraph of selected method
 - as table (command: table)
 - as nodes
 ################################################################################
+Clone https://github.com/dimitar-asenov/test-callgraph-dreams.git
+    to Envision/DebugBuild/projects/dreams
+
+
+In Envision:
+load dreams
+select the rest() method
 query arrows: callgraph
 query table: callgrahph | table
 query nodes: callgraph -nodes
