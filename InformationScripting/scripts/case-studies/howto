@@ -24,6 +24,11 @@ Select if statements with else branches
 Open OOVisualization
 query: cs-if-with-else
 
+################################################################################
+Just a more complex prompt
+
+⁅⁅foo -arg•bar 1 2⁆|baz -x•foobar y⁆|qux|⁅vis1•vis2⁆
+################################################################################
 
 ################################################################################
 Callgraph of selected method
