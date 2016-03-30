@@ -7,12 +7,9 @@
 		<capStyle>0</capStyle>
 		<joinStyle>0</joinStyle>
 	</linePen>
-	<arrowPen>
-		<width>1.0</width>
+	<arrowBrush>
 		<style>1</style>
 		<color>#000000</color>
-		<capStyle>0</capStyle>
-		<joinStyle>0</joinStyle>
-	</arrowPen>
+	</arrowBrush>
 	<width>1</width>
 </style>

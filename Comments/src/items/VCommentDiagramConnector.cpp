@@ -79,16 +79,12 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
-	QPen arrowPen;
-	arrowPen.setWidth(1);
-	arrowPen.setStyle(Qt::SolidLine);
-
 	QPen linePen;
 	linePen.setColor(Qt::black);
 	linePen.setStyle(outlineType_);
 	linePen.setWidth(outlineSize_);
 
-	Drawing::drawArrow(painter, startPoint_, endPoint_, arrowPen, linePen,
+	Drawing::drawArrow(painter, startPoint_, endPoint_, Qt::black, linePen,
 					   node()->startArrow(), node()->endArrow(), outlineSize_);
 }
 

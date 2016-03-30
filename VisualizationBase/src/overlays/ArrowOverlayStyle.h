@@ -38,7 +38,7 @@ class VISUALIZATIONBASE_API ArrowOverlayStyle : public Super<ItemStyle>
 		virtual ~ArrowOverlayStyle() override;
 
 		Property<QPen> linePen{this, "linePen"};
-		Property<QPen> arrowPen{this, "arrowPen"};
+		Property<QBrush> arrowBrush{this, "arrowBrush"};
 		Property<int> width{this, "width"};
 };
 

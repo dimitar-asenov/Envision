@@ -25,11 +25,11 @@
 ***********************************************************************************************************************/
 #include "Drawing.h"
 
-void Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QPen& arrowPen, const QPen& linePen,
+void Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBrush& arrowBrush, const QPen& linePen,
 						bool startArrow, bool endArrow, int outlineSize)
 {
-	painter->setBrush(QBrush{Qt::black});
-	painter->setPen(arrowPen);
+	painter->setBrush(arrowBrush);
+	painter->setPen(Qt::NoPen);
 
 	double angle = -QLineF{begin, end}.angle();
 

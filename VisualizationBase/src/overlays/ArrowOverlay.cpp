@@ -38,7 +38,7 @@ ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* styl
 
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowPen(), style()->arrowPen(),
+	Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowBrush(), style()->linePen(),
 						invertArrow_, !invertArrow_, style()->width());
 }
 
