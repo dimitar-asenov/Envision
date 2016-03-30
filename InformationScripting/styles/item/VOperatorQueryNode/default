@@ -4,11 +4,13 @@
 		<filename>styles/icon/pipe.svg</filename>
 		<width>15</width>
 		<height>18</height>
+		<stretchable>true</stretchable>
 	</pipeOp>
 	
 	<substractOp prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/pipe-minus.svg</filename>
 		<width>15</width>
 		<height>18</height>
+		<stretchable>true</stretchable>
 	</substractOp>
 </style>
