@@ -11,4 +11,4 @@ cs-csv = profileSource scripts/carmodel.csv | heatmap
 cs-ins = ast -t Class -global | case-studies/instability | table
 cs-why = ast -t Statement -tl | changes -c 2 | join -v change.id,commit.message,ast -as data| case-studies/associatedBugs
 cs-args = callgraph -global | reachable -self | changes -nodes | case-studies/printArgs
-cs-upstream = ⁅changes HEAD..HEAD~1 -nodes|color blue•changes master..HEAD~1 -nodes|color red⁆|
+cs-upstream = ⁅changes HEAD..master -nodes|color blue•changes origin/master..master -nodes|color red⁆|
