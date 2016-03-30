@@ -65,6 +65,8 @@ What upstream changes might conflict with mine?
 ################################################################################
 Clone https://github.com/dimitar-asenov/test-upstream-use-case
     to Envision/DebugBuild/projects/upstream
+    
+in upstream/ : git checkout my-branch
 
 In Envision:
 load upstream
