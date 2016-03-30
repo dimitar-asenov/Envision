@@ -1,5 +1,4 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Symbol/keyword">
+<style prototypes="item/Symbol/prompt-type">
 	<symbol>#</symbol>
-	<pen><color>#FFCC66</color></pen>
 </style>
