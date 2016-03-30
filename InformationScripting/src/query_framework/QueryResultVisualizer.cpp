@@ -196,7 +196,7 @@ void QueryResultVisualizer::showASTRelation(const TupleSet& ts, const QString& r
 			auto fromVisualizationItem = *fromVisualization;
 
 			auto overlay = new Visualization::ArrowOverlay{
-						fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get()};
+						fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get("thick")};
 			fromVisualizationItem->addOverlay(overlay, ARROW_OVERLAY_GROUP);
 		}
 	}
