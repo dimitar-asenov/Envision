@@ -57,7 +57,7 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		ArgumentParser(std::initializer_list<QCommandLineOption> options,
 								  const QStringList& args, bool addScopeArguments = false);
 
-		ArgumentParser(std::initializer_list<PositionalArgument> options,
+		ArgumentParser(std::initializer_list<PositionalArgument> positionalArgs,
 							const QStringList& args, bool addScopeArguments = false);
 
 		ArgumentParser(std::initializer_list<QCommandLineOption> options,
@@ -72,7 +72,7 @@ class INFORMATIONSCRIPTING_API ArgumentParser
 		bool isArgumentSet(const QString& argName) const;
 
 		int numPositionalArguments() const;
-		QString positionalArgument(int index);
+		QString positionalArgument(int index) const;
 
 		QString queryName() const;
 

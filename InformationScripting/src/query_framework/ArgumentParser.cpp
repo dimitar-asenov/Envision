@@ -106,7 +106,7 @@ int ArgumentParser::numPositionalArguments() const
 	return argParser_->positionalArguments().size();
 }
 
-QString ArgumentParser::positionalArgument(int index)
+QString ArgumentParser::positionalArgument(int index) const
 {
 	auto posArgs = argParser_->positionalArguments();
 	Q_ASSERT(index >= 0 && index < posArgs.size());
