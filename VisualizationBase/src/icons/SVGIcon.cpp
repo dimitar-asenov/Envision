@@ -40,9 +40,14 @@ Super{parent, style}
 {
 }
 
-void SVGIcon::updateGeometry(int, int)
+void SVGIcon::updateGeometry(int width, int height)
 {
-	setInnerSize(style()->width(), style()->height());
+	if ( width <=0 || !style()->stretchable())
+		width = style()->width();
+	if ( height <=0 || !style()->stretchable())
+		height = style()->height();
+
+	setInnerSize(width, height);
 }
 
 void SVGIcon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -51,7 +56,15 @@ void SVGIcon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 
 	Icon::paint(painter, option, widget);
 
-	style()->paint(painter, xOffset(), yOffset() );
+	if (style()->stretchable())
+		style()->paint(painter, xOffset(), yOffset(), innerSize() );
+	else
+		style()->paint(painter, xOffset(), yOffset() );
+}
+
+bool SVGIcon::sizeDependsOnParent() const
+{
+	return style()->stretchable();
 }
 
 }

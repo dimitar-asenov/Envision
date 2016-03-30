@@ -4,4 +4,5 @@
 	<filename></filename>
 	<width>30</width>
 	<height>30</height>
+	<stretchable>false</stretchable>
 </style>

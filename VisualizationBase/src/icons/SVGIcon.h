@@ -41,6 +41,8 @@ class VISUALIZATIONBASE_API SVGIcon : public Super<Icon>
 
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+		virtual bool sizeDependsOnParent() const override;
 };
 
 }

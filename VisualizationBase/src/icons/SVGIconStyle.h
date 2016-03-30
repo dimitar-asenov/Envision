@@ -40,10 +40,13 @@ class VISUALIZATIONBASE_API SVGIconStyle : public Super<IconStyle>
 		virtual void load(StyleLoader& sl) override;
 
 		void paint(QPainter* painter, int x, int y) const;
+		void paint(QPainter* painter, int x, int y, QSize size) const;
 
 		Property<QString> filename{this, "filename"};
 		Property<int> width{this, "width"};
 		Property<int> height{this, "height"};
+		Property<bool> stretchable{this, "stretchable"};
+
 
 	private:
 		mutable QSvgRenderer renderer_;

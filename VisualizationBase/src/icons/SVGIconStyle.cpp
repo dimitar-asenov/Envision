@@ -64,6 +64,11 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 //	}
 }
 
+void SVGIconStyle::paint(QPainter* painter, int x, int y, QSize size) const
+{
+	renderer_.render(painter, QRectF{(qreal)x, (qreal)y, (qreal)size.width(), (qreal)size.height()});
+}
+
 bool SVGIconStyle::drawScaledPixmapInMipmap(qreal scaleFactor) const
 {
 	auto size = (QSizeF{(qreal) width(), (qreal) height()} * scaleFactor).toSize();
