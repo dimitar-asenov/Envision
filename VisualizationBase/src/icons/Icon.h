@@ -47,6 +47,7 @@ class VISUALIZATIONBASE_API Icon: public Super<Item>
 		int yOffset() const;
 
 		void setInnerSize(int width, int height);
+		QSize innerSize() const;
 };
 
 }

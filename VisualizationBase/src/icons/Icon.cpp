@@ -58,4 +58,10 @@ void Icon::setInnerSize(int width, int height)
 	else setSize(width, height);
 }
 
+QSize Icon::innerSize() const
+{
+	if (hasShape()) return getShape()->innerSize(widthInLocal(), heightInLocal());
+	else return sizeInLocal().toSize();
+}
+
 }
