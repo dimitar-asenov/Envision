@@ -50,9 +50,16 @@
 #include "node_extensions/Position.h"
 #include "nodes/TestBoxNode.h"
 
+#include "Logger/src/Log.h"
 #include "SelfTest/src/TestManager.h"
 
 namespace Visualization {
+
+Logger::Log& VisualizationBasePlugin::log()
+{
+	static auto log = Logger::Log::getLogger("visualizationbase");
+	return *log;
+}
 
 bool VisualizationBasePlugin::initialize(Core::EnvisionManager& manager)
 {

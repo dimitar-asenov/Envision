@@ -29,6 +29,10 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "visualizationbase_api.h"
 
+namespace Logger {
+class Log;
+}
+
 namespace Visualization {
 
 class VISUALIZATIONBASE_API VisualizationBasePlugin : public QObject, public Core::EnvisionPlugin
@@ -41,6 +45,8 @@ class VISUALIZATIONBASE_API VisualizationBasePlugin : public QObject, public Cor
 		virtual bool initialize(Core::EnvisionManager& manager) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
+
+		static Logger::Log& log();
 };
 
 }

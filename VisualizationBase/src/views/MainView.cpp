@@ -28,8 +28,10 @@
 #include "../Scene.h"
 #include "../cursor/Cursor.h"
 #include "../items/Item.h"
+#include "../VisualizationBasePlugin.h"
 
 #include "Logger/src/Timer.h"
+#include "Logger/src/Log.h"
 
 namespace Visualization {
 
@@ -163,6 +165,8 @@ void MainView::keyPressEvent(QKeyEvent *event)
 		if (event->modifiers() & Qt::ShiftModifier)
 		{
 			// Print scene
+			VisualizationBasePlugin::log().info("Capturing a screenshot of the entire scene.");
+
 			printer.setOutputFileName("screenshot-scene.pdf");
 			printer.setPaperSize(scene()->sceneRect().size().toSize(), QPrinter::Point);
 			QPainter painter{&printer};
@@ -186,6 +190,8 @@ void MainView::keyPressEvent(QKeyEvent *event)
 		else
 		{
 			// Print view
+			VisualizationBasePlugin::log().info("Capturing a screenshot of the current view.");
+
 			printer.setOutputFileName("screenshot-view.pdf");
 			printer.setPaperSize(viewport()->rect().size(), QPrinter::Point);
 			QPainter painter{&printer};
