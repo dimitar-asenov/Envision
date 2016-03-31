@@ -35,12 +35,12 @@ namespace Visualization {
 DynamicGridFormElement::DynamicGridFormElement(const DynamicGridFormElement& other) :
 	SuperLayoutElement<DynamicGridFormElement, LayoutFormElement>{other},
 	nodesGetterFunction_{other.nodesGetterFunction_}, itemsGetterFunction_{other.itemsGetterFunction_},
-	spanGetterFunction_{other.spanGetterFunction_},
+	spanGetterFunction_{other.spanGetterFunction_}, majorAxisGetterFunction_{other.majorAxisGetterFunction_},
 	spaceBetweenColumns_{other.spaceBetweenColumns_}, spaceBetweenRows_{other.spaceBetweenRows_},
 	majorAxis_{other.majorAxis_},
 	horizontalAlignment_{other.horizontalAlignment_}, verticalAlignment_{other.verticalAlignment_}
 {
-	// There are no child memebrs to adjust
+	// There are no child members to adjust
 }
 
 DynamicGridFormElement::~DynamicGridFormElement()
@@ -81,7 +81,7 @@ void DynamicGridFormElement::computeSize(Item* item, int availableWidth, int ava
 	auto& data = dataForItem(item);
 	QSize finalSize;
 
-	if (majorAxis_ == GridLayouter::NoMajor)
+	if (majorAxis(item) == GridLayouter::NoMajor)
 		finalSize = GridLayouter::computeSize<true>(availableWidth, availableHeight, GridLayouter::NoMajor,
 			[&data](){return data.numRows_;},	// numRows
 			[&data](){return data.numColumns_;},	// numColumns
@@ -107,7 +107,7 @@ void DynamicGridFormElement::computeSize(Item* item, int availableWidth, int ava
 			[](){return 0;}	// minHeight
 		);
 	else
-		finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, majorAxis_,
+		finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, majorAxis(item),
 				[&data](){return data.numRows_;},	// numRows
 				[&data](){return data.numColumns_;},	// numColumns
 				[&data](int x, int y){return data.itemGrid_[x][y];},	// has
@@ -138,13 +138,14 @@ void DynamicGridFormElement::computeSize(Item* item, int availableWidth, int ava
 void DynamicGridFormElement::synchronizeWithItem(Item* item)
 {
 	auto& data = dataForItem(item);
+	auto axis = majorAxis(item);
 
 	if (nodesGetterFunction_)
 	{
 		Q_ASSERT(!itemsGetterFunction_);
 
 		auto nodes = nodesGetterFunction_(item);
-		synchronizeGrids(data, nodes,
+		synchronizeGrids(data, nodes, axis,
 								[](Model::Node* def, Item* vis){ return def == vis->node();}, // compare
 								[item](Model::Node* def) {return item->renderer()->render(item, def);}, // create
 								[item](Model::Node* def, Item*& store) {item->synchronizeItem(store, def);} // sync
@@ -155,7 +156,7 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 		Q_ASSERT(itemsGetterFunction_);
 
 		auto items = itemsGetterFunction_(item);
-		synchronizeGrids(data, items,
+		synchronizeGrids(data, items, axis,
 								[](Item* def, Item* vis){ return def == vis;}, // compare
 								[item](Item* def) {def->setParentItem(item); return def;}, // create
 								[item](Item* def, Item*& store) {Q_ASSERT(def->parent() == item); store = def;} // sync
@@ -174,7 +175,7 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 }
 
 template <typename Definition, typename CompareFunction, typename CreateFunction, typename SyncFunction>
-void DynamicGridFormElement::synchronizeGrids(ItemData& data, const Definition& def,
+void DynamicGridFormElement::synchronizeGrids(ItemData& data, const Definition& def, GridLayouter::MajorAxis majorAxis,
 															 CompareFunction compare, CreateFunction create, SyncFunction sync)
 {
 	// Remove all elements from the current grid that do not match an entry
@@ -220,7 +221,7 @@ void DynamicGridFormElement::synchronizeGrids(ItemData& data, const Definition& 
 		sizeMinor = entries.isEmpty() ? 0 : std::max_element(entries.begin(), entries.end(),
 				[](const decltype(def[0]) & a, const decltype(def[0]) & b){return a.size() < b.size();})->size();
 	};
-	if (majorAxis_ == GridLayouter::ColumnMajor) resizeAxes(def, data.numColumns_, data.numRows_);
+	if (majorAxis == GridLayouter::ColumnMajor) resizeAxes(def, data.numColumns_, data.numRows_);
 	else resizeAxes(def, data.numRows_, data.numColumns_);
 
 	// Set new grid size
@@ -245,7 +246,7 @@ void DynamicGridFormElement::synchronizeGrids(ItemData& data, const Definition& 
 				else
 					value = create(def[major][minor]);
 
-				if (majorAxis_ == GridLayouter::ColumnMajor) data.itemGrid_[major][minor] = value;
+				if (majorAxis == GridLayouter::ColumnMajor) data.itemGrid_[major][minor] = value;
 				else data.itemGrid_[minor][major] = value;
 
 				// Note that we don't need to update the position here since it will be overwritten anyway by
@@ -335,7 +336,7 @@ QList<ItemRegion> DynamicGridFormElement::regions(DeclarativeItemBase* item, int
 {
 	auto& data = dataForItem(item);
 
-	return GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), majorAxis_, true, true, true,
+	return GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), majorAxis(item), true, true, true,
 			item->style()->extraCursorsOutsideShape(), true, true,
 			[&data](){return data.numRows_;},	// numRows
 			[&data](){return data.numColumns_;},	// numColumns

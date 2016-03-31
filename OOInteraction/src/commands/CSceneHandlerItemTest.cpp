@@ -27,6 +27,8 @@
 #include "CSceneHandlerItemTest.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/declarative/GridLayouter.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
@@ -126,6 +128,9 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 
 	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(newVersionManager);
 	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(oldVersionManager);
+
+	Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+			->setMajorAxis(Visualization::GridLayouter::NoMajor);
 
 	for (auto id : changedNodesToVisualize)
 	{

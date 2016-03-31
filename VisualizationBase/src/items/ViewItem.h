@@ -27,6 +27,7 @@
 
 #include "../visualizationbase_api.h"
 #include "../declarative/DeclarativeItem.h"
+#include "../declarative/GridLayouter.h"
 
 namespace Visualization {
 
@@ -125,6 +126,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		 */
 		void setName(const QString& name);
 
+		void setMajorAxis(GridLayouter::MajorAxis majorAxis);
+
 		QJsonDocument toJson() const;
 		void fromJson(QJsonDocument json);
 
@@ -140,6 +143,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
+		GridLayouter::MajorAxis majorAxis_{GridLayouter::ColumnMajor};
 
 		struct ArrowToAdd {
 			ViewItemNode* fromParent_{};
@@ -168,7 +172,6 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 };
 
 inline const QString& ViewItem::name() const { return name_; }
-inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
 inline QString ViewItem::fullLayerName(const QString& localLayer) const { return name() + "_" + localLayer; }
 
 }

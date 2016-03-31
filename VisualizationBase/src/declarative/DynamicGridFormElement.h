@@ -43,6 +43,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement
 		using NodesGetterFunction = std::function<QVector<QVector<Model::Node*>>(Item* item)>;
 		using ItemsGetterFunction = std::function<QVector<QVector<Item*>>(Item* item)>;
 		using SpanGetterFunction = std::function<QVector<QVector<QPair<int, int>>>(Item* item)>;
+		using MajorAxisGetterFunction = std::function<GridLayouter::MajorAxis(Item* item)>;
 
 		DynamicGridFormElement() = default;
 		DynamicGridFormElement(const DynamicGridFormElement& other);
@@ -54,6 +55,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement
 		DynamicGridFormElement* setNodesGetter(NodesGetterFunction nodeGetter);
 		DynamicGridFormElement* setItemsGetter(ItemsGetterFunction itemGetter);
 		DynamicGridFormElement* setSpanGetter(SpanGetterFunction spanGetter);
+		DynamicGridFormElement* setMajorAxisGetter(MajorAxisGetterFunction majorAxisGetter);
 
 		// Methods executable on element definition
 		/**
@@ -112,6 +114,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement
 		NodesGetterFunction nodesGetterFunction_{}; // Expects a list of ROWS (result[y][x])
 		ItemsGetterFunction itemsGetterFunction_{}; // Expects a list of ROWS (result[y][x])
 		SpanGetterFunction spanGetterFunction_{}; // Expects a list of ROWS (result[y][x])
+		MajorAxisGetterFunction majorAxisGetterFunction_{};
 
 		int spaceBetweenColumns_{};
 		int spaceBetweenRows_{};
@@ -134,8 +137,10 @@ class VISUALIZATIONBASE_API DynamicGridFormElement
 		ItemData& dataForItem(const Item* item) const;
 
 		template <typename Definition, typename CompareFunction, typename CreateFunction, typename SyncFunction>
-		void synchronizeGrids(ItemData& data, const Definition& def, CompareFunction compare,
-										 CreateFunction create, SyncFunction sync);
+		void synchronizeGrids(ItemData& data, const Definition& def, GridLayouter::MajorAxis majorAxis,
+									 CompareFunction compare, CreateFunction create, SyncFunction sync);
+
+		GridLayouter::MajorAxis majorAxis(Item* item);
 };
 
 inline DynamicGridFormElement* DynamicGridFormElement::setNodesGetter(NodesGetterFunction nodeGetter)
@@ -158,6 +163,12 @@ inline DynamicGridFormElement* DynamicGridFormElement::setSpanGetter(SpanGetterF
 	return this;
 }
 
+inline DynamicGridFormElement* DynamicGridFormElement::setMajorAxisGetter(MajorAxisGetterFunction majorAxisGetter)
+{
+	majorAxisGetterFunction_ = majorAxisGetter;
+	return this;
+}
+
 inline DynamicGridFormElement* DynamicGridFormElement::setSpacing(int spaceBetweenColumns, int spaceBetweenRows)
 {
 	spaceBetweenColumns_ = spaceBetweenColumns;
@@ -169,6 +180,14 @@ inline DynamicGridFormElement* DynamicGridFormElement::setMajorAxis(GridLayouter
 {
 	majorAxis_ = majorAxis;
 	return this;
+}
+
+inline GridLayouter::MajorAxis DynamicGridFormElement::majorAxis(Item* item)
+{
+	if (majorAxisGetterFunction_)
+		return majorAxisGetterFunction_(item);
+	else
+		return majorAxis_;
 }
 
 inline DynamicGridFormElement* DynamicGridFormElement::setHorizontalAlignment(LayoutStyle::Alignment alignment)
