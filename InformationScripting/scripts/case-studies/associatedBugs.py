@@ -12,7 +12,7 @@ for data in Query.input.tuples('data'):
 	text = '<b>Commit</b><br/>{}<br/>'.format(
 				data.message.replace('\n', '<br/>'))
 	for issue in referencedIssues(data.message):
-		text += '<b>Fixes #{}</b><br/>{}<br/>'.format(
+		text += '<b>Issue #{}</b><br/>{}<br/>'.format(
 						issue.number, issue.title)
 
 	t = Tuple([ ('message', text),
