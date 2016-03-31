@@ -55,7 +55,6 @@ void ViewItem::initializeForms()
 {
 	addForm((new DynamicGridFormElement{})
 			->setSpacing(10, 10)->setMargins(10)
-			->setMajorAxis(GridLayouter::ColumnMajor)
 			->setNodesGetter([](Item* v)
 				{ auto self = static_cast<I*>(v);
 				  return self->nodesGetter(); })
@@ -459,7 +458,7 @@ inline QList<NodeType*> ViewItem::referencesOfType() const
 
 QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 {
-	// in this case the nodes need to be re-arranged
+	// in this case the nodes need to be rearranged
 	if (majorAxis_ == GridLayouter::RowMajor || majorAxis_ == GridLayouter::NoMajor)
 	{
 		// no difference if nodes_ empty
@@ -473,9 +472,8 @@ QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 
 		for (int col = 0; col < numCols; ++col)
 			for (int row = 0; row < numRows; ++row)
-			{
 				rowMajorNodes[row][col] = nodes_[col][row];
-			}
+
 		return rowMajorNodes;
 	}
 	else

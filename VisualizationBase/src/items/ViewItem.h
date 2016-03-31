@@ -143,7 +143,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
-		GridLayouter::MajorAxis majorAxis_;
+		GridLayouter::MajorAxis majorAxis_{GridLayouter::ColumnMajor};
 
 		struct ArrowToAdd {
 			ViewItemNode* fromParent_{};
