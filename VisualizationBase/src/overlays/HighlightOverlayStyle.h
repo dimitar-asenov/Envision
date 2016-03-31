@@ -24,10 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "HighlightOverlayStyle.h"
+#pragma once
 
-namespace InformationScripting {
+#include "../visualizationbase_api.h"
 
-HighlightOverlayStyle::~HighlightOverlayStyle() {}
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+
+namespace Visualization {
+
+class VISUALIZATIONBASE_API HighlightOverlayStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+{
+	public:
+		virtual ~HighlightOverlayStyle();
+
+		Property<Visualization::TextStyle> info{this, "info"};
+		Property<Visualization::ItemStyle> background{this, "background"};
+};
 
 }

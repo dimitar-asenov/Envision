@@ -24,53 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "HighlightOverlay.h"
+#include "HighlightOverlayStyle.h"
 
-#include "VisualizationBase/src/shapes/Shape.h"
+namespace Visualization {
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
-#include "VisualizationBase/src/items/EmptyItem.h"
-
-using namespace Visualization;
-
-namespace InformationScripting {
-
-DEFINE_ITEM_COMMON(HighlightOverlay, "item")
-
-HighlightOverlay::HighlightOverlay(Item* selectedItem, const StyleType* style)
-	: Super{{selectedItem}, style}
-{
-	info_ = new Text{this};
-	info_->setTextFormat(Qt::RichText);
-}
-
-void HighlightOverlay::initializeForms()
-{
-	auto backgroundElement = item<EmptyItem>(&I::background_, &StyleType::background);
-	auto textItem = item<Text>(&I::info_, &StyleType::info);
-	addForm(backgroundElement);
-
-	addForm((new AnchorLayoutFormElement{})
-			  ->put(TheVCenterOf, textItem, AtCenterOf, backgroundElement)
-			  ->put(TheHCenterOf, textItem, AtCenterOf, backgroundElement));
-}
-
-int HighlightOverlay::determineForm()
-{
-	return info_->text().size() > 0 ? 1 : 0;
-}
-
-void HighlightOverlay::updateGeometry(int availableWidth, int availableHeight)
-{
-	background_->setAcceptedMouseButtons(Qt::NoButton);
-	background_->setCustomSize(associatedItem()->widthInScene(), associatedItem()->heightInScene());
-	Super::updateGeometry(availableWidth, availableHeight);
-	if (hasShape())
-	{
-		auto pos = QPointF{(qreal) getShape()->contentLeft(), (qreal) getShape()->contentTop()};
-		setPos(associatedItem()->mapToScene(0, 0) - pos);
-	}
-}
+HighlightOverlayStyle::~HighlightOverlayStyle() {}
 
 }

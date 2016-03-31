@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "VisualizationBase/src/overlays/HighlightOverlay.h"
+
 #include "../queries/LinearQuery.h"
 #include "ArgumentParser.h"
 
@@ -72,7 +74,7 @@ class INFORMATIONSCRIPTING_API QueryResultVisualizer : public LinearQuery
 
 		void visualizeMessages(const TupleSet& ts);
 
-		static void setColor(HighlightOverlay* overlay, QColor color);
+		static void setColor(Visualization::HighlightOverlay* overlay, QColor color);
 };
 
 }

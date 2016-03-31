@@ -26,20 +26,47 @@
 
 #pragma once
 
-#include "../informationscripting_api.h"
+#include "../visualizationbase_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "HighlightOverlayStyle.h"
 
-namespace InformationScripting {
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/overlays/SelectionOverlay.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-class INFORMATIONSCRIPTING_API HighlightOverlayStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+namespace Visualization {
+	class EmptyItem;
+}
+
+namespace Visualization {
+
+class VISUALIZATIONBASE_API HighlightOverlay
+		: public Super<Visualization::Overlay<Visualization::DeclarativeItem<HighlightOverlay>>>
 {
-	public:
-		virtual ~HighlightOverlayStyle();
+	ITEM_COMMON(HighlightOverlay)
 
-		Property<Visualization::TextStyle> info{this, "info"};
-		Property<Visualization::ItemStyle> background{this, "background"};
+	public:
+		HighlightOverlay(Item* selectedItem, const StyleType* style = itemStyles().get());
+
+		static void initializeForms();
+		int determineForm() override;
+
+		void setText(const QString& text);
+
+		virtual QColor customShapeColor() const override;
+		void setColor(const QColor& color);
+
+	protected:
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
+	private:
+		QColor color_;
+		Visualization::Text* info_{};
+		Visualization::EmptyItem* background_{};
 };
+
+inline void HighlightOverlay::setText(const QString& text) { info_->setText(text); }
+inline QColor HighlightOverlay::customShapeColor() const { return color_; }
+inline void HighlightOverlay::setColor(const QColor& color) { color_ = color; }
 
 }
