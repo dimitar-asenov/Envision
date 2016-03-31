@@ -58,7 +58,10 @@ void ViewItem::initializeForms()
 			->setMajorAxis(GridLayouter::ColumnMajor)
 			->setNodesGetter([](Item* v)
 				{ auto self = static_cast<I*>(v);
-				  return self->nodesGetter(); }));
+				  return self->nodesGetter(); })
+			->setMajorAxisGetter([](Item* v)
+				{ auto self = static_cast<I*>(v);
+				  return self->majorAxis_; }));
 }
 
 bool ViewItem::isValidName(const QString &name)
@@ -230,6 +233,12 @@ QStringList ViewItem::arrowLayers() const
 		if (!result.contains(name))
 			result.append(name);
 	return result;
+}
+
+void ViewItem::setMajorAxis(GridLayouter::MajorAxis majorAxis)
+{
+	majorAxis_ = majorAxis;
+	setUpdateNeeded(StandardUpdate);
 }
 
 void ViewItem::setName(const QString &name)
@@ -446,6 +455,31 @@ inline QList<NodeType*> ViewItem::referencesOfType() const
 			if (auto reference = DCast<NodeType>(viewNode->reference()))
 				result.append(reference);
 	return result;
+}
+
+QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
+{
+	// in this case the nodes need to be re-arranged
+	if (majorAxis_ == GridLayouter::RowMajor || majorAxis_ == GridLayouter::NoMajor)
+	{
+		// no difference if nodes_ empty
+		if (nodes_.isEmpty())
+			return nodes_;
+
+		int numCols = nodes_.size();
+		int numRows = nodes_.first().size();
+
+		QVector<QVector<Model::Node*>> rowMajorNodes{numRows, QVector<Model::Node*>{numCols}};
+
+		for (int col = 0; col < numCols; ++col)
+			for (int row = 0; row < numRows; ++row)
+			{
+				rowMajorNodes[row][col] = nodes_[col][row];
+			}
+		return rowMajorNodes;
+	}
+	else
+		return nodes_;
 }
 
 }
