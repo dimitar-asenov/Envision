@@ -35,6 +35,7 @@ Callgraph of selected method
 - as arrows
 - as table (command: table)
 - as nodes
+- as visjs graph
 ################################################################################
 Clone https://github.com/dimitar-asenov/test-callgraph-dreams.git
     to Envision/DebugBuild/projects/dreams
@@ -46,12 +47,18 @@ select the rest() method
 query arrows: callgraph
 query table: callgrahph | table
 query nodes: callgraph -nodes
+query nodes: callgraph | toHtmlGraph
 
 ################################################################################
-Interactive HTML of recently changed recursive methods
-- first show as nodes what recursive methods changed recently
-- then show a rendering using html
+Recently changed recursive methods
 ################################################################################
+Clone https://github.com/dimitar-asenov/test-callgraph-dreams.git
+    to Envision/DebugBuild/projects/dreams
+
+
+In Envision:
+load dreams
+query: cs-rec
 
 
 ################################################################################
