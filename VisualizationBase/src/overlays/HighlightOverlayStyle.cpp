@@ -26,7 +26,7 @@
 
 #include "HighlightOverlayStyle.h"
 
-namespace InformationScripting {
+namespace Visualization {
 
 HighlightOverlayStyle::~HighlightOverlayStyle() {}
 

@@ -37,12 +37,12 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
+#include "VisualizationBase/src/overlays/HighlightOverlay.h"
 #include "VisualizationBase/src/overlays/MessageOverlay.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/items/WebBrowserItem.h"
 
-#include "HighlightOverlay.h"
 #include "QueryRegistry.h"
 #include "QueryExecutor.h"
 
@@ -119,7 +119,7 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 			for (const auto& color : it.value())
 			{
 				auto item = *nodeVisualizationIt;
-				auto overlay = new HighlightOverlay{item};
+				auto overlay = new Visualization::HighlightOverlay{item};
 				overlay->setText(info);
 				setColor(overlay, color);
 				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
@@ -140,7 +140,7 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 			while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
 			{
 				auto item = *nodeVisualizationIt++;
-				auto overlay = item->overlay<HighlightOverlay>();
+				auto overlay = item->overlay<Visualization::HighlightOverlay>();
 
 				overlay->setText(changeTuple["type"].toString());
 			};
@@ -321,7 +321,7 @@ void QueryResultVisualizer::visualizeMessages(const TupleSet& ts)
 	}
 }
 
-void QueryResultVisualizer::setColor(HighlightOverlay* overlay, QColor color)
+void QueryResultVisualizer::setColor(Visualization::HighlightOverlay* overlay, QColor color)
 {
 	color.setAlpha(DEFAULT_ALPHA_);
 	overlay->setColor(color);

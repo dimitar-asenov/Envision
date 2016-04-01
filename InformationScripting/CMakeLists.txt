@@ -76,7 +76,6 @@ add_library(InformationScripting SHARED
 	src/query_framework/ArgumentParser.h
 	src/query_framework/ArgumentRule.h
 	src/query_framework/QueryResultVisualizer.h
-	src/query_framework/HighlightOverlay.h
 	src/queries/Heatmap.h
 	src/query_prompt/parsing/QueryParser.h
 	src/query_framework/QueryParsingException.h
@@ -85,7 +84,6 @@ add_library(InformationScripting SHARED
 	src/queries/Filter.h
 	src/queries/CanReach.h
 	src/query_framework/QueryRuntimeException.h
-	src/query_framework/HighlightOverlayStyle.h
 	src/queries/Yield.h
 	src/InformationScriptingException.cpp
 	src/InformationScriptingPlugin.cpp
@@ -138,7 +136,6 @@ add_library(InformationScripting SHARED
 	src/query_framework/ArgumentRule.cpp
 	src/query_framework/QueryResultVisualizer.cpp
 	src/queries/Heatmap.cpp
-	src/query_framework/HighlightOverlay.cpp
 	src/query_prompt/parsing/QueryParser.cpp
 	src/query_framework/QueryParsingException.cpp
 	src/queries/Count.cpp
@@ -146,7 +143,6 @@ add_library(InformationScripting SHARED
 	src/queries/Filter.cpp
 	src/queries/CanReach.cpp
 	src/query_framework/QueryRuntimeException.cpp
-	src/query_framework/HighlightOverlayStyle.cpp
 	src/queries/Yield.cpp
 	scripts/color.py
 	scripts/filterCasts.py

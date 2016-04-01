@@ -24,53 +24,49 @@
 **
 ***********************************************************************************************************************/
 
-#include "HighlightOverlay.h"
+#pragma once
 
-#include "VisualizationBase/src/shapes/Shape.h"
+#include "../visualizationbase_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
-#include "VisualizationBase/src/items/EmptyItem.h"
+#include "HighlightOverlayStyle.h"
 
-using namespace Visualization;
+#include "../items/Text.h"
+#include "../overlays/SelectionOverlay.h"
+#include "../declarative/DeclarativeItem.h"
 
-namespace InformationScripting {
-
-DEFINE_ITEM_COMMON(HighlightOverlay, "item")
-
-HighlightOverlay::HighlightOverlay(Item* selectedItem, const StyleType* style)
-	: Super{{selectedItem}, style}
-{
-	info_ = new Text{this};
-	info_->setTextFormat(Qt::RichText);
+namespace Visualization {
+	class EmptyItem;
 }
 
-void HighlightOverlay::initializeForms()
-{
-	auto backgroundElement = item<EmptyItem>(&I::background_, &StyleType::background);
-	auto textItem = item<Text>(&I::info_, &StyleType::info);
-	addForm(backgroundElement);
+namespace Visualization {
 
-	addForm((new AnchorLayoutFormElement{})
-			  ->put(TheVCenterOf, textItem, AtCenterOf, backgroundElement)
-			  ->put(TheHCenterOf, textItem, AtCenterOf, backgroundElement));
-}
-
-int HighlightOverlay::determineForm()
+class VISUALIZATIONBASE_API HighlightOverlay
+		: public Super<Visualization::Overlay<Visualization::DeclarativeItem<HighlightOverlay>>>
 {
-	return info_->text().size() > 0 ? 1 : 0;
-}
+	ITEM_COMMON(HighlightOverlay)
 
-void HighlightOverlay::updateGeometry(int availableWidth, int availableHeight)
-{
-	background_->setAcceptedMouseButtons(Qt::NoButton);
-	background_->setCustomSize(associatedItem()->widthInScene(), associatedItem()->heightInScene());
-	Super::updateGeometry(availableWidth, availableHeight);
-	if (hasShape())
-	{
-		auto pos = QPointF{(qreal) getShape()->contentLeft(), (qreal) getShape()->contentTop()};
-		setPos(associatedItem()->mapToScene(0, 0) - pos);
-	}
-}
+	public:
+		HighlightOverlay(Item* selectedItem, const StyleType* style = itemStyles().get());
+
+		static void initializeForms();
+		int determineForm() override;
+
+		void setText(const QString& text);
+
+		virtual QColor customShapeColor() const override;
+		void setColor(const QColor& color);
+
+	protected:
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
+	private:
+		QColor color_;
+		Visualization::Text* info_{};
+		Visualization::EmptyItem* background_{};
+};
+
+inline void HighlightOverlay::setText(const QString& text) { info_->setText(text); }
+inline QColor HighlightOverlay::customShapeColor() const { return color_; }
+inline void HighlightOverlay::setColor(const QColor& color) { color_ = color; }
 
 }

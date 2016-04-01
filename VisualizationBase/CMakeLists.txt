@@ -128,11 +128,13 @@ add_library(VisualizationBase SHARED
 	src/nodes/ViewItemNode.h
 	src/items/VViewItemNode.h
 	src/overlays/ArrowOverlay.h
+	src/overlays/HighlightOverlay.h
 	src/utils/Drawing.h
 	src/nodes/InfoNode.h
 	src/items/VInfoNode.h
 	src/ViewItemManager.h
 	src/overlays/ArrowOverlayStyle.h
+	src/overlays/HighlightOverlayStyle.h
 	src/utils/InfoJavascriptFunctions.h
 	src/overlays/IconOverlayStyle.cpp
 	src/overlays/IconOverlay.cpp
@@ -241,12 +243,14 @@ add_library(VisualizationBase SHARED
 	src/nodes/ViewItemNode.cpp
 	src/items/VViewItemNode.cpp
 	src/overlays/ArrowOverlay.cpp
+	src/overlays/HighlightOverlay.cpp
 	src/utils/Drawing.cpp
 	src/nodes/InfoNode.cpp
 	src/items/VInfoNode.cpp
 	src/styles/StyleSet.cpp
 	src/ViewItemManager.cpp
 	src/overlays/ArrowOverlayStyle.cpp
+	src/overlays/HighlightOverlayStyle.cpp
 	src/utils/InfoJavascriptFunctions.cpp
 	src/shapes/Frame.h
 	src/shapes/FrameStyle.h

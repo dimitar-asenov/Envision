@@ -26,14 +26,14 @@
 
 #pragma once
 
-#include "../informationscripting_api.h"
+#include "../visualizationbase_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "../items/TextStyle.h"
+#include "../declarative/DeclarativeItemBaseStyle.h"
 
-namespace InformationScripting {
+namespace Visualization {
 
-class INFORMATIONSCRIPTING_API HighlightOverlayStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class VISUALIZATIONBASE_API HighlightOverlayStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~HighlightOverlayStyle();
