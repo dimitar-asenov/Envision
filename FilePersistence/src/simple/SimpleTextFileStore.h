@@ -161,6 +161,9 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		 * If false, no additional persistent units will be generated.
 		 */
 		static const bool GENERATE_PUS;
+
+		std::set<QString> oldFiles_;
+		std::set<QString> newFiles_;
 };
 
 }

@@ -47,6 +47,7 @@ add_library(FilePersistence SHARED
 	src/version_control/GitPiecewiseLoader.h
 	src/version_control/LinkedChangesSet.h
 	src/version_control/Diff3Parse.h
+	src/utils/FileUtil.h
 	test/VCTestProject.h
 	src/simple/GenericPersistentUnit.cpp
 	src/simple/GenericTree.cpp

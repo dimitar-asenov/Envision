@@ -30,6 +30,8 @@
 #include "../tree/SourceDir.h"
 #include "../ExportException.h"
 
+#include "FilePersistence/src/utils/FileUtil.h"
+
 #include "Logger/src/Log.h"
 
 namespace Export {
@@ -157,45 +159,8 @@ void Exporter::deleteObsoletePreviousExports()
 {
 	if (span_ != ExportSpan::AllFiles) return;
 
-	// Remove from the list all previous exports that are also current exports
-	for (const auto& current : currentExports_)
-		previousExports_.erase(current);
+	FilePersistence::FileUtil::deleteUnnecessaryFiles(previousExports_, currentExports_);
 
-	// Whatever is left needs to be *carefully* deleted:
-	// Delete all files
-	// Delete any remaining *empty* directories
-
-	// Delete all files
-	auto it = previousExports_.begin();
-	while (it != previousExports_.end())
-	{
-		QFileInfo file{*it};
-		if (file.isFile())
-		{
-			ExportPlugin::log().info("Removing unnecessary file during export: " + file.absoluteFilePath());
-			if (!QFile{*it}.remove())
-				throw ExportException{"Could not remove previously generated file: " + file.absoluteFilePath()};
-
-			it = previousExports_.erase(it);
-		}
-		else ++it;
-	}
-
-	// Now, delete empty directories
-	it = previousExports_.begin();
-	while (it != previousExports_.end())
-	{
-		QDir dir{*it};
-		if (dir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::AllEntries).isEmpty())
-		{
-			ExportPlugin::log().info("Removing unnecessary directory during export: " + dir.absolutePath());
-			if (!dir.removeRecursively())
-				throw ExportException{"Could not remove directory : " + dir.absolutePath()};
-
-			it = previousExports_.erase(it);
-		}
-		else ++it;
-	}
 }
 
 void Exporter::saveCurrentExports()

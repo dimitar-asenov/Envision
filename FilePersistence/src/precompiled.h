@@ -52,9 +52,9 @@
 
 #include <QtCore/QFile>
 
+#include <set>
 #include <iostream>
 #include <git2.h>
-
 
 #endif
 

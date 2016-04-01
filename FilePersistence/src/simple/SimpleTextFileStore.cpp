@@ -31,6 +31,7 @@
 #include "GenericTree.h"
 #include "Parser.h"
 #include "../FilePersistenceException.h"
+#include "../utils/FileUtil.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
@@ -118,6 +119,8 @@ void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &n
 		genericTree_ = new GenericTree{name};
 		saveNewPersistenceUnit(manager->root(), name);
 
+		FileUtil::deleteUnnecessaryFiles(oldFiles_, newFiles_);
+
 		SAFE_DELETE(genericTree_);
 	}
 	catch (Model::ModelException& e)
@@ -190,6 +193,8 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	genericNode_ = genericTree_->newPersistentUnit(puName).newNode();
 	saveNodeDirectly(node, name);
 	writeGenericNodeToFile(genericNode_, parentAbsoluteDirectory, relativeFileName, {});
+
+	newFiles_.insert(QString{parentAbsoluteDirectory + '/' + relativeFileName});
 
 	treeDirs_.pop();
 
@@ -350,6 +355,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 	else
 	{
 		QString absoluteFilePath = treeDirs_.top().absoluteFilePath(relativeFilePath);
+		oldFiles_.insert(absoluteFilePath);
 		genericNode_ = Parser::load(absoluteFilePath, true, genericTree_->newPersistentUnit(name));
 		treeDirs_.push(QFileInfo{absoluteFilePath}.absoluteDir());
 	}
