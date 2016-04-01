@@ -26,11 +26,10 @@
 
 #include "HighlightOverlay.h"
 
-#include "VisualizationBase/src/shapes/Shape.h"
-
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
-#include "VisualizationBase/src/items/EmptyItem.h"
+#include "../shapes/Shape.h"
+#include "../items/TextStyle.h"
+#include "../declarative/DeclarativeItem.hpp"
+#include "../items/EmptyItem.h"
 
 using namespace Visualization;
 

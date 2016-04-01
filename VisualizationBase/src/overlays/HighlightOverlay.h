@@ -30,9 +30,9 @@
 
 #include "HighlightOverlayStyle.h"
 
-#include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/overlays/SelectionOverlay.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../items/Text.h"
+#include "../overlays/SelectionOverlay.h"
+#include "../declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class EmptyItem;

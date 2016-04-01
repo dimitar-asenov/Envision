@@ -28,8 +28,8 @@
 
 #include "../visualizationbase_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "../items/TextStyle.h"
+#include "../declarative/DeclarativeItemBaseStyle.h"
 
 namespace Visualization {
 
