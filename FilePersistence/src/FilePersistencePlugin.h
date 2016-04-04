@@ -34,6 +34,10 @@ namespace Core {
 	class EnvisionManager;
 }
 
+namespace Logger {
+	class Log;
+}
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API FilePersistencePlugin : public QObject, public Core::EnvisionPlugin
@@ -51,6 +55,8 @@ class FILEPERSISTENCE_API FilePersistencePlugin : public QObject, public Core::E
 		 * Currently arguments don't work but multiple tests do.
 		 */
 		virtual void selfTest(QString testArgs) override;
+
+		static Logger::Log& log();
 };
 
 }

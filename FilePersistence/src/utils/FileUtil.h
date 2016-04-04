@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,49 +24,65 @@
 **
 ***********************************************************************************************************************/
 
-#include "FilePersistencePlugin.h"
+#pragma once
 
-#include "SelfTest/src/TestManager.h"
-#include "SelfTest/src/TestResults.h"
+#include "../filepersistence_api.h"
+
+#include "Core/src/EnvisionException.h"
+
+#include "../FilePersistencePlugin.h"
 
 #include "Logger/src/Log.h"
 
-static void initFilePersistenceResources() { Q_INIT_RESOURCE(FilePersistence); }
-
 namespace FilePersistence {
 
-Logger::Log& FilePersistencePlugin::log()
+class FILEPERSISTENCE_API FileUtil
 {
-	static auto log = Logger::Log::getLogger("filepersistence");
-	return *log;
-}
+	public:
 
-
-bool FilePersistencePlugin::initialize(Core::EnvisionManager&)
-{
-	initFilePersistenceResources();
-	return true;
-}
-
-void FilePersistencePlugin::unload()
-{
-}
-
-void FilePersistencePlugin::selfTest(QString testArgs)
-{
-	if (testArgs.isEmpty())
-		SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
-	else
-	{
-		auto tests = testArgs.split(":", QString::SkipEmptyParts);
-		for (QString test : tests)
+		/**
+		 * Deletes all files from \a oldFiles which are not contained in \a newFiles.
+		 * The entries in \a oldFiles will be deleted during the process.
+		 */
+		template<typename Container>
+		static void deleteUnnecessaryFiles(Container& oldFiles, Container& newFiles)
 		{
-			auto testIdAndArgs = test.split(">");
-			auto testId = testIdAndArgs[0];
-			//auto args = testIdAndArgs[1].split(",");
-			SelfTest::TestManager<FilePersistencePlugin>::runTest(testId).printResultStatistics();
+
+			// Remove from the list all previous exports that are also current exports
+			for (const auto& current : newFiles)
+				oldFiles.erase(current);
+
+			auto it = oldFiles.begin();
+			while (it != oldFiles.end())
+			{
+				QFileInfo file{*it};
+				if (file.isFile())
+				{
+					FilePersistencePlugin::log().info("Removing unnecessary file: " + file.absoluteFilePath());
+					if (!QFile{*it}.remove())
+						throw Core::EnvisionException{"Could not remove previously generated file: " + file.absoluteFilePath()};
+
+					it = oldFiles.erase(it);
+				}
+				else ++it;
+			}
+
+			// Now, delete empty directories
+			it = oldFiles.begin();
+			while (it != oldFiles.end())
+			{
+				QDir dir{*it};
+				if (dir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::AllEntries).isEmpty())
+				{
+					FilePersistencePlugin::log().info("Removing unnecessary directory: " + dir.absolutePath());
+					if (!dir.removeRecursively())
+						throw Core::EnvisionException{"Could not remove directory : " + dir.absolutePath()};
+
+					it = oldFiles.erase(it);
+				}
+				else ++it;
+			}
 		}
-	}
-}
+};
 
 }

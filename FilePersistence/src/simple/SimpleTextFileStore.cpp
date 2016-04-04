@@ -31,6 +31,7 @@
 #include "GenericTree.h"
 #include "Parser.h"
 #include "../FilePersistenceException.h"
+#include "../utils/FileUtil.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
@@ -118,6 +119,11 @@ void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &n
 		genericTree_ = new GenericTree{name};
 		saveNewPersistenceUnit(manager->root(), name);
 
+		FileUtil::deleteUnnecessaryFiles(oldFiles_, newFiles_);
+
+		oldFiles_ = std::set<QString>{newFiles_};
+		newFiles_ = std::set<QString>{};
+
 		SAFE_DELETE(genericTree_);
 	}
 	catch (Model::ModelException& e)
@@ -190,6 +196,10 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	genericNode_ = genericTree_->newPersistentUnit(puName).newNode();
 	saveNodeDirectly(node, name);
 	writeGenericNodeToFile(genericNode_, parentAbsoluteDirectory, relativeFileName, {});
+
+	QString path = QString{parentAbsoluteDirectory + '/' + relativeFileName};
+	newFiles_.insert(path);
+	newFiles_.insert(QFileInfo{path}.absoluteDir().absolutePath());
 
 	treeDirs_.pop();
 
@@ -350,8 +360,12 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 	else
 	{
 		QString absoluteFilePath = treeDirs_.top().absoluteFilePath(relativeFilePath);
+		oldFiles_.insert(absoluteFilePath);
 		genericNode_ = Parser::load(absoluteFilePath, true, genericTree_->newPersistentUnit(name));
-		treeDirs_.push(QFileInfo{absoluteFilePath}.absoluteDir());
+		QDir dir = QFileInfo{absoluteFilePath}.absoluteDir();
+		// also add directory in case it becomes empty and can be deleted
+		oldFiles_.insert(dir.absolutePath());
+		treeDirs_.push(dir);
 	}
 
 	Q_ASSERT(genericNode_);

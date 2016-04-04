@@ -41,4 +41,4 @@ add_library(Export SHARED
 	src/ExportMapContainer.cpp
 	src/ExportError.cpp
 )
-envision_plugin(Export ModelBase)
+envision_plugin(Export FilePersistence)

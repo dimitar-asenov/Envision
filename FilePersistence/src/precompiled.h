@@ -43,7 +43,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QTimeZone>
 #include <QtCore/QStack>
-
+#include <set>
 
 #if defined(FilePersistence_EXPORTS)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
@@ -54,7 +54,6 @@
 
 #include <iostream>
 #include <git2.h>
-
 
 #endif
 
