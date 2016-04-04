@@ -159,6 +159,9 @@ void Exporter::deleteObsoletePreviousExports()
 {
 	if (span_ != ExportSpan::AllFiles) return;
 
+	// Whatever is left needs to be *carefully* deleted:
+	// Delete all files
+	// Delete any remaining *empty* directories
 	FilePersistence::FileUtil::deleteUnnecessaryFiles(previousExports_, currentExports_);
 
 }
