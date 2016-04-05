@@ -73,35 +73,27 @@ void Commit::addFile(QString relativePath, qint64 size, std::unique_ptr<char[], 
 
 bool Commit::getFileContent(QString fileName, const char*& content, int& contentSize, bool exactFileNameMatching) const
 {
+	QHash<QString, CommitFile*>::const_iterator iter;
+
 	// name of file must match fileName exactly
 	if (exactFileNameMatching)
-	{
-		QHash<QString, CommitFile*>::const_iterator iter = files_.find(fileName);
-		if (iter != files_.constEnd())
-		{
-			contentSize = iter.value()->size_;
-			content = iter.value()->content();
-
-			return true;
-		}
-	}
-	// name of file contains fileName
+		iter = files_.find(fileName);
+	// name of file must contain fileName
 	else
 	{
-		QHash<QString, CommitFile*>::const_iterator iter = files_.constBegin();
-		while (iter != files_.constEnd())
-		{
-			if (iter.key().contains(fileName))
-			{
-				contentSize = iter.value()->size_;
-				content = iter.value()->content();
-
-				return true;
-			}
+		iter = files_.constBegin();
+		while (!iter.key().contains(fileName) && iter != files_.constEnd())
 			iter++;
-		}
 	}
-	return false;
+
+	if (iter != files_.constEnd())
+	{
+		contentSize = iter.value()->size_;
+		content = iter.value()->content();
+		return true;
+	}
+	else
+		return false;
 }
 
 }
