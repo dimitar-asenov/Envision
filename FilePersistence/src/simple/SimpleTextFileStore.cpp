@@ -347,7 +347,6 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 	}
 	else if (fileGetter_)
 	{
-		Q_ASSERT(relativeFilePath.isEmpty());
 		const char* data = nullptr;
 		int dataLength = 0;
 		bool success = fileGetter_(name, data, dataLength);

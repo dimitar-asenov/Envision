@@ -70,9 +70,10 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 	// load name into tree
 	std::unique_ptr<const Commit> commit{repository->getCommit(name)};
 
+	// TODO check which behavior is correct for fileName matching
 	auto fileStore = new SimpleTextFileStore{
 				[this, &commit](QString filename, const char*& data, int& size)
-				{ return commit->getFileContent(filename, data, size); }
+				{ return commit->getFileContent(filename, data, size, true); }
 			};
 
 	auto revisionManager = new Model::TreeManager{};

@@ -70,9 +70,10 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 		// load name into tree
 		const Commit* commit = repository->getCommit(name);
 
+		// TODO check which behavior is correct for fileName matching
 		auto fileStoreRevision = new SimpleTextFileStore{
 					[this, &commit](QString filename, const char*& data, int& size)
-					{ return commit->getFileContent(filename, data, size); }
+					{ return commit->getFileContent(filename, data, size, true); }
 				};
 
 		auto revisionManager = new Model::TreeManager{};
