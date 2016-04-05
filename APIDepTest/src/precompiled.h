@@ -27,7 +27,7 @@
 #ifndef PRECOMPILED_APIDEPTEST_H_
 #define PRECOMPILED_APIDEPTEST_H_
 
-// Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
+// Include here the precompiled headers of other plug-ins that this plug-in uses. Only the "public" part of
 // those headers will be included here
 #include "Core/src/precompiled.h"
 #include "Core/src/global.h"

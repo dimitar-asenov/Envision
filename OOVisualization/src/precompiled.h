@@ -27,7 +27,7 @@
 #ifndef PRECOMPILED_OOVISUALIZATION_H_
 #define PRECOMPILED_OOVISUALIZATION_H_
 
-// Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
+// Include here the precompiled headers of other plug-ins that this plug-in uses. Only the "public" part of
 // those headers will be included here
 #include "VisualizationBase/src/precompiled.h"
 #include "OOModel/src/precompiled.h"

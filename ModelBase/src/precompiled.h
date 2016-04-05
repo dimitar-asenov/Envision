@@ -27,7 +27,7 @@
 #ifndef PRECOMPILED_MODELBASE_H_
 #define PRECOMPILED_MODELBASE_H_
 
-// Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
+// Include here the precompiled headers of other plug-ins that this plug-in uses. Only the "public" part of
 // those headers will be included here
 #include "Logger/src/precompiled.h"
 #include "SelfTest/src/precompiled.h"
