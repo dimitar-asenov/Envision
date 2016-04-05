@@ -78,7 +78,7 @@ class FILEPERSISTENCE_API Commit
 		void addFile(QString relativePath, qint64 size, std::unique_ptr<char[]> content);
 		void addFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content);
 
-		bool getFileContent(QString fileName, const char*& content, int& contentSize) const;
+		bool getFileContent(QString fileName, const char*& content, int& contentSize, bool exactFileNameMatching) const;
 
 	private:
 		CommitMetaData information_;
