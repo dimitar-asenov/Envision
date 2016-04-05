@@ -29,6 +29,7 @@
 
 // Include here the precompiled headers of other plug-ins that this plug-in uses. Only the "public" part of
 // those headers will be included here
+#include "FilePersistence/src/precompiled.h"
 #include "VisualizationBase/src/precompiled.h"
 #include "ModelBase/src/precompiled.h"
 #include "Logger/src/precompiled.h"
