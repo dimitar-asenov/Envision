@@ -466,13 +466,19 @@ QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 			return nodes_;
 
 		int numCols = nodes_.size();
-		int numRows = nodes_.first().size();
 
-		QVector<QVector<Model::Node*>> rowMajorNodes{numRows, QVector<Model::Node*>{numCols}};
+		// find largest col vector
+		auto largestCol = std::max_element(nodes_.begin(), nodes_.end(), [](auto const& lhs, auto const& rhs) {
+				return lhs.size() < rhs.size();
+		});
+
+		int maxColSize = largestCol->size();
+
+		QVector<QVector<Model::Node*>> rowMajorNodes{maxColSize, QVector<Model::Node*>{numCols}};
 
 		for (int col = 0; col < numCols; ++col)
-			for (int row = 0; row < numRows; ++row)
-				rowMajorNodes[row][col] = nodes_[col][row];
+			for (int row = 0; row < maxColSize; ++row)
+				rowMajorNodes[row][col] = row < nodes_[col].size() ? nodes_[col][row] : nullptr;
 
 		return rowMajorNodes;
 	}
