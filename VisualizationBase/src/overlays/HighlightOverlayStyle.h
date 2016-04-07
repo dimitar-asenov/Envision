@@ -40,6 +40,7 @@ class VISUALIZATIONBASE_API HighlightOverlayStyle : public Super<Visualization::
 
 		Property<Visualization::TextStyle> info{this, "info"};
 		Property<Visualization::ItemStyle> background{this, "background"};
+		Property<bool> excludeHighlightedChildren{this, "excludeHighlightedChildren"};
 };
 
 }

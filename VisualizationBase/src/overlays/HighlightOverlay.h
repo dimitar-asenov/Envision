@@ -56,6 +56,8 @@ class VISUALIZATIONBASE_API HighlightOverlay
 		virtual QColor customShapeColor() const override;
 		void setColor(const QColor& color);
 
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
 	protected:
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 

@@ -72,4 +72,48 @@ void HighlightOverlay::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
+void HighlightOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	if (style()->excludeHighlightedChildren())
+	{
+		QRegion clipRegion(boundingRect().toRect());
+
+		bool hasClip = false;
+
+		auto itemStack = associatedItem()->childItems();
+		while (!itemStack.isEmpty())
+		{
+			bool childHasHighlight = false;
+			auto item = itemStack.takeFirst();
+
+			for (auto overlay : item->overlays())
+				if (DCast<HighlightOverlay>(overlay->overlayItem()) || DCast<SelectionOverlay>(overlay->overlayItem()) )
+				{
+					hasClip = true;
+					childHasHighlight = true;
+					clipRegion = clipRegion.subtracted(mapFromItem(item, item->boundingRect()).boundingRect().toRect());
+					break;
+				}
+
+			if (!childHasHighlight)
+				itemStack << item->childItems();
+		}
+
+		if (hasClip)
+		{
+			// This is a workaround. Using directly painter->setClipRegion() does not work when the region contains holes.
+			// This is most likely a bug in QT.
+			QPainterPath clipPath;
+			clipPath.addRegion(clipRegion);
+			painter->setClipPath(clipPath);
+
+			Super::paint(painter, option, widget);
+			painter->setClipping(false);
+			return;
+		}
+	}
+
+	Super::paint(painter, option, widget);
+}
+
 }
