@@ -106,9 +106,6 @@ void APIPrinter::printClass(const ClassData& cData)
 	for (const auto& overload : cData.overloadAliases_)
 		printOverload(overload);
 
-	QString classString = "";
-	if (cData.enums_.size()) // We only need a scope variable if we have enums
-		classString = QString("scope %1scope = ").arg(cData.className_);
 	// print bases:
 	QString basesString = "";
 	if (cData.baseClasses_.size())
@@ -118,7 +115,7 @@ void APIPrinter::printClass(const ClassData& cData)
 
 	QString noInit = "";
 	if (cData.abstract_) noInit = ", no_init";
-	classString += QString("class_<%1%2>(\"%3\"%4)").arg(cData.qualifiedName_.trimmed(),
+	QString classString = QString("auto aClass = class_<%1%2>(\"%3\"%4);").arg(cData.qualifiedName_.trimmed(),
 																		  basesString, cData.className_, noInit);
 
 	printPossiblyLongString(classString);
@@ -128,10 +125,16 @@ void APIPrinter::printClass(const ClassData& cData)
 		printAttribute(attribute);
 	for (const auto& method : cData.methods_)
 		printMethod(method);
-	out_ << ";" << endl;
+	out_ << endl;
 	unIndent();
 
-	printEnumsOfClass(cData);
+	// We only need a scope variable if we have enums
+	if (cData.enums_.size())
+	{
+		printPossiblyLongString( QString("scope %1Scope = aClass;\n").arg(cData.className_) );
+		printEnumsOfClass(cData);
+	}
+
 	// close scope
 	unIndent();
 	out_ << "}" << endl << endl;
@@ -162,20 +165,20 @@ void APIPrinter::printEnum(const EnumData& eData)
 
 void APIPrinter::printAttribute(const ClassAttribute& attr)
 {
-	out_ << endl << indent_ << ".add_property(\"" << attr.name_ << "\"," << endl;
+	out_ << endl << indent_ << "aClass.add_property(\"" << attr.name_ << "\"," << endl;
 	indent();
 	printPossiblyLongString(attr.getterQualified_ + ",");
 	out_ << endl;
-	out_ << indent_ << attr.setterQualified_ << ")";
+	out_ << indent_ << attr.setterQualified_ << ");";
 	unIndent();
 }
 
 void APIPrinter::printMethod(const ClassMethod& method)
 {
 	out_ << endl;
-	printPossiblyLongString(QString(".def(\"%1\", %2)").arg(method.name_, method.wrappedFunctionPointer_));
+	printPossiblyLongString(QString("aClass.def(\"%1\", %2);").arg(method.name_, method.wrappedFunctionPointer_));
 	if (method.static_)
-		out_ << endl << indent_ << ".staticmethod(\"" << method.name_ << "\")";
+		out_ << endl << indent_ << "aClass.staticmethod(\"" << method.name_ << "\");";
 }
 
 void APIPrinter::printTypedListWrappers()
@@ -187,12 +190,14 @@ void APIPrinter::printTypedListWrappers()
 	indent();
 	for (auto it = typedLists.begin(); it != typedLists.end(); ++it)
 	{
+		QString name = it.value() + "Def";
 		out_ << indent_ << "using " << it.value() << " = " << it.key() << ";" << endl;
-		out_ << indent_ << "class_<" << it.key() << ", bases<Model::List>>" << "(\"" << it.value() << "\")" << endl;
+		printPossiblyLongString("auto " + name + " = class_<" + it.key() + ", bases<Model::List>>" + "(\"" + it.value()
+			  + "\");\n");
 		indent();
-		out_ << indent_ << ".def(\"__len__\", &" << it.value() << "::size)" << endl;
-		out_ << indent_ << ".def(\"__iter__\", iterator<" << it.value() << ", return_internal_reference<>>())";
-		out_ << ";" << endl << endl;
+		out_ << indent_ << name << ".def(\"__len__\", &" << it.value() << "::size);" << endl;
+		out_ << indent_ << name << ".def(\"__iter__\", iterator<" << it.value() << ", return_internal_reference<>>());";
+		out_ << endl << endl;
 		unIndent();
 	}
 	unIndent();
