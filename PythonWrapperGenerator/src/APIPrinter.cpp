@@ -51,10 +51,12 @@ void APIPrinter::print()
 	out_ << "#include \"ModelBase/src/commands/UndoCommand.h\"" << endl << endl;
 	out_ << "namespace InformationScripting {" << endl << endl;
 	out_ << "using namespace boost::python;" << endl << endl;
-	out_ << "BOOST_PYTHON_MODULE(AstApi) {" << endl << endl;
 	printClasses();
 	printTypedListWrappers();
-	out_ << endl << "}" << endl;
+	out_ << endl << endl;
+	out_ << "BOOST_PYTHON_MODULE(AstApi) {" << endl << endl;
+	printInitFunctionCalls();
+	out_ << "}" << endl << endl;
 	out_ << endl << "} /* namespace InformationScripting */" << endl;
 }
 
@@ -74,6 +76,20 @@ void APIPrinter::printHeaders()
 	out_ << endl;
 }
 
+void APIPrinter::printInitFunctionCalls()
+{
+	indent();
+
+	// Print classes
+		for (const auto& cData : APIData::instance().classes())
+			out_ << indent_ << "initClass" << cData.className_ << "();" <<endl;
+
+	// TypedListWrappers
+		out_ << indent_ << "initTypedListWrappers();" <<endl;
+
+	unIndent();
+}
+
 void APIPrinter::printClasses()
 {
 	for (const auto& cData : APIData::instance().classes()) printClass(cData);
@@ -82,7 +98,7 @@ void APIPrinter::printClasses()
 void APIPrinter::printClass(const ClassData& cData)
 {
 	// each class gets it's own scope:
-	out_ << "{" << endl;
+	out_ << "void initClass" << cData.className_ <<"() {" << endl;
 	indent();
 	if (!cData.usingAlias_.isNull())
 		out_ << indent_ << "using " << cData.usingAlias_ << " = " << cData.qualifiedName_ << ";" << endl;
@@ -167,7 +183,7 @@ void APIPrinter::printTypedListWrappers()
 	auto typedLists = APIData::instance().typedLists();
 	if (typedLists.empty()) return;
 
-	out_ << "{" << endl;
+	out_ << "void initTypedListWrappers() {" << endl;
 	indent();
 	for (auto it = typedLists.begin(); it != typedLists.end(); ++it)
 	{

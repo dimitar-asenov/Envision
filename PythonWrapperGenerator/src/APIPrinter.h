@@ -46,6 +46,7 @@ class APIPrinter
 
 		void printLicense();
 		void printHeaders();
+		void printInitFunctionCalls();
 		void printClasses();
 		void printClass(const ClassData& cData);
 		void printOverload(const OverloadDescriptor& overload);
