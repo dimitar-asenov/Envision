@@ -192,4 +192,4 @@ add_library(InteractionBase SHARED
 	src/handlers/HMovableItem.cpp
 )
 
-envision_plugin(InteractionBase VisualizationBase FilePersistence)
+envision_plugin(InteractionBase VisualizationBase FilePersistence VersionControlUI)
