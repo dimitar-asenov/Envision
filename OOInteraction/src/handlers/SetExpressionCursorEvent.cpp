@@ -54,22 +54,27 @@ void SetExpressionCursorEvent::execute()
 			parentContainerChain_.at(container)->childItems().contains(parentContainerChain_.at(container+1)))
 		++container;
 
-
 	int mostSpecificContainer = container;
+
 	// Now start from the last found container and go up the chain, until the visualization of the node is found.
 	while (container >=0)
 	{
-		auto nodeVis = parentContainerChain_.at(container)->findVisualizationOf(node_);
-		if (nodeVis)
-		{
-			auto* sp = Core::AdapterManager::adapt<StringOffsetProvider>( nodeVis );
-			if (sp)
-			{
-				sp->setOffset(offset_);
-				SAFE_DELETE(sp);
-			}
+		auto containerItem = parentContainerChain_.at(container);
+
+		// First try directly the container item for performance
+		if (containerItem->node() == node_ && tryToSetOffset(containerItem))
 			return;
-		}
+
+		// Else, look through all children
+		// Don't just look for a single child since there might be multiple visualizations of node_
+		// and some of them might not support StringOffsetProvider
+
+		auto allVisualizations = containerItem->findAllVisualizationsOf(node_);
+		while (!allVisualizations.isEmpty())
+			if (tryToSetOffset(allVisualizations.takeFirst()))
+				return;
+
+		// If we didn't find a visualization in this container, try a parent one.
 		--container;
 	}
 
@@ -82,6 +87,18 @@ void SetExpressionCursorEvent::execute()
 		event->reposted_ = true;
 		qApp->postEvent(parentContainerChain_.first()->scene(), event);
 	}
+}
+
+bool SetExpressionCursorEvent::tryToSetOffset(Visualization::Item* item)
+{
+	auto* sp = Core::AdapterManager::adapt<StringOffsetProvider>( item );
+	if (sp)
+	{
+		sp->setOffset(offset_);
+		SAFE_DELETE(sp);
+		return true;
+	}
+	else return false;
 }
 
 }

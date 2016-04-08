@@ -63,6 +63,8 @@ class OOINTERACTION_API SetExpressionCursorEvent : public Visualization::CustomS
 		Model::Node* node_;
 		int offset_;
 		bool reposted_{};
+
+		bool tryToSetOffset(Visualization::Item* item);
 };
 
 }
