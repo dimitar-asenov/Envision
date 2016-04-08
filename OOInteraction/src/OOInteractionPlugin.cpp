@@ -145,6 +145,10 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, StaticStringOffsetProvider, Visualization::Static>();
 	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
+	Core::AdapterManager::registerAdapter<StringOffsetProvider, Visualization::NodeWrapper>(
+		[](Visualization::NodeWrapper* wrapper){
+			return Core::AdapterManager::adapt<StringOffsetProvider>(wrapper->wrappedItem());
+	});
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject{});
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateModule{});
