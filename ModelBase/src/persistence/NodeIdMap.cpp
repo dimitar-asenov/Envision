@@ -28,10 +28,17 @@
 
 namespace Model {
 
-NodeIdType NodeIdMap::id(const Node* node)
+bool NodeIdMap::containsNode(const Node* node)
 {
 	QHash<const Node*, NodeIdType>::const_iterator iter{nodeToId.find(node)};
-	if ( iter != nodeToId.end() ) return *iter;
+	if ( iter != nodeToId.end() ) return true;
+	return false;
+}
+
+NodeIdType NodeIdMap::id(const Node* node)
+{
+	if (containsNode(node))
+		return *nodeToId.find(node);
 
 	NodeIdType id = generateNewId();
 	nodeToId.insert(node, id);

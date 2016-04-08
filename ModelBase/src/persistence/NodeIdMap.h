@@ -44,6 +44,8 @@ class MODELBASE_API NodeIdMap {
 
 		void remove(const Node* node);
 
+		bool containsNode(const Node* node);
+
 	private:
 		QHash<const Node*, NodeIdType> nodeToId;
 		QHash<NodeIdType, const Node*> idToNode;
