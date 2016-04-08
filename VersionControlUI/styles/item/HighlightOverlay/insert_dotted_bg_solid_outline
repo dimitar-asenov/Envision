@@ -1,0 +1,10 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/HighlightOverlay/insert_no_bg_solid_outline">
+        <shape prototypes="shape/Box/default">
+		Box
+		<backgroundBrush>
+			<style>4</style>
+			<color>#5000ff00</color>
+		</backgroundBrush>
+	</shape>
+</style>

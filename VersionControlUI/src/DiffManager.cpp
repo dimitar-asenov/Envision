@@ -185,7 +185,7 @@ void DiffManager::visualize()
 			for (auto item : items)
 			{
 				auto overlay = new Visualization::HighlightOverlay{item,
-						Visualization::HighlightOverlay::itemStyles().get("move_no_bg_solid")};
+						Visualization::HighlightOverlay::itemStyles().get("move_no_bg_solid_outline")};
 				item->addOverlay(overlay, "move_highlights");
 			}});
 	}
@@ -204,7 +204,7 @@ void DiffManager::visualize()
 			 for (auto item : oldItems)
 			 {
 				 auto overlay = new Visualization::HighlightOverlay{item,
-						 Visualization::HighlightOverlay::itemStyles().get("delete_no_bg_solid")};
+						 Visualization::HighlightOverlay::itemStyles().get("delete_no_bg_solid_outline")};
 				 item->addOverlay(overlay, "delete_highlights");
 			 }});
 
@@ -221,7 +221,7 @@ void DiffManager::visualize()
 			for (auto item : newItems)
 			{
 				auto overlay = new Visualization::HighlightOverlay{item,
-						Visualization::HighlightOverlay::itemStyles().get("insert_no_bg_solid")};
+						Visualization::HighlightOverlay::itemStyles().get("insert_dotted_bg_solid_outline")};
 				item->addOverlay(overlay, "insert_highlights");
 			}});
 	}
@@ -239,7 +239,7 @@ void DiffManager::visualize()
 			for (auto item : items)
 			{
 				auto overlay = new Visualization::HighlightOverlay{item,
-						Visualization::HighlightOverlay::itemStyles().get("modify_no_bg_solid")};
+						Visualization::HighlightOverlay::itemStyles().get("modify_no_bg_solid_outline")};
 				item->addOverlay(overlay, "modify_highlights");
 			}});
 	}
