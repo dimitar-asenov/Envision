@@ -14,4 +14,4 @@ add_library(VersionControlUI SHARED
 	src/DiffManager.cpp
 	test/SimpleTest.cpp
 )
-envision_plugin(VersionControlUI InteractionBase oomodel)
+envision_plugin(VersionControlUI InteractionBase OOModel)
