@@ -28,7 +28,9 @@
 
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/nodes/ViewItemNode.h"
 #include "VisualizationBase/src/declarative/GridLayouter.h"
+#include "VisualizationBase/src/overlays/HighlightOverlay.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
@@ -36,6 +38,7 @@
 
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "FilePersistence/src/version_control/GitRepository.h"
+#include "FilePersistence/src/version_control/History.h"
 
 #include "ModelBase/src/model/AllTreeManagers.h"
 #include "ModelBase/src/model/TreeManager.h"
@@ -53,49 +56,58 @@ bool CSceneHandlerItemTest::canInterpret(Visualization::Item*, Visualization::It
 }
 
 Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*, Visualization::Item*,
-		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
+		const QStringList&, const std::unique_ptr<Visualization::Cursor>&) __attribute__ ((optnone))
 {
 	//Test code goes here
 
-	QString projectsDir = "projects/";
-
-	// versions to compare
-	QString newCommitId = "HEAD";
-	QString oldCommitId = "f1e118bc7e522e2c9404d29d1b21e58956018354";
-
-	// project names
-	QString newVersionProject = "MyTest"+newCommitId;
-	QString oldVersionProject = "MyTest"+oldCommitId;
-
-	FilePersistence::SimpleTextFileStore store;
-	store.setBaseFolder(projectsDir);
-
-	// load newer version
-	Model::TreeManager* newVersionManager = new Model::TreeManager{};
-	newVersionManager->load(&store, newVersionProject, false);
-
-	// load older version
-	Model::TreeManager* oldVersionManager = new Model::TreeManager{};
-	oldVersionManager->load(&store, oldVersionProject, false);
-
-	Model::Reference::resolvePending();
+	QString projectName = "DiffTest";
+	QString projectsDir = "projects/" + projectName;
 
 	// get GitRepository
-	QString path{projectsDir + newVersionProject};
-	if (!FilePersistence::GitRepository::repositoryExists(path))
+	if (!FilePersistence::GitRepository::repositoryExists(projectsDir))
 	{
-		qDebug() << "no repository found at " + path;
+		qDebug() << "no repository found at " + projectsDir;
 		return new Interaction::CommandResult{};
 	}
 
-	FilePersistence::GitRepository repository{path};
+	FilePersistence::GitRepository repository{projectsDir};
+
+	// versions to compare
+	QString newCommitId = "HEAD";
+	QString oldCommitId = "HEAD^^^^";
+
+	// load name into tree
+	std::unique_ptr<const FilePersistence::Commit> oldCommit{repository.getCommit(oldCommitId)};
+	std::unique_ptr<const FilePersistence::Commit> newCommit{repository.getCommit(newCommitId)};
+
+	auto oldFileStore = new FilePersistence::SimpleTextFileStore{
+				[this, &oldCommit](QString filename, const char*& data, int& size)
+				{ return oldCommit->getFileContent(filename, data, size, false); }
+			};
+	auto newFileStore = new FilePersistence::SimpleTextFileStore{
+			[this, &newCommit](QString filename, const char*& data, int& size)
+			{ return newCommit->getFileContent(filename, data, size, false); }
+		};
+
+	// load newer version
+	Model::TreeManager* newVersionManager = new Model::TreeManager{};
+	newVersionManager->load(newFileStore, projectName, false);
+
+	// load older version
+	Model::TreeManager* oldVersionManager = new Model::TreeManager{};
+	oldVersionManager->load(oldFileStore, projectName, false);
+
+	Model::Reference::resolvePending();
 
 	FilePersistence::Diff diff = repository.diff(oldCommitId, newCommitId);
+
 	auto changes = diff.changes();
 
 	QSet<Model::NodeIdType> changedNodesToVisualize;
-
-	auto typeMatcher = Model::SymbolMatcher::guessMatcher("Class");
+	QSet<Model::NodeIdType> movedNodes;
+	QSet<Model::NodeIdType> deletedNodes;
+	QSet<Model::NodeIdType> insertedNodes;
+	QSet<Model::NodeIdType> modifiedNodes;
 
 	for (auto change : changes.values())
 	{
@@ -103,26 +115,74 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 
 		auto id = change->nodeId();
 
-		// search one instance of the changed node
-		if (auto node = const_cast<Model::Node*>(Model::AllTreeManagers::instance().nodeForId(id)))
+		switch (change->type())
+		{
+			case FilePersistence::ChangeType::Deletion:
+				qDebug() << "Deletion";
+				deletedNodes.insert(id);
+				break;
+			case FilePersistence::ChangeType::Insertion:
+				qDebug() << "Insertion";
+				insertedNodes.insert(id);
+				break;
+			case FilePersistence::ChangeType::Move:
+				qDebug() << "Move";
+				movedNodes.insert(id);
+				break;
+			case FilePersistence::ChangeType::Stationary:
+				qDebug() << "Stationary";
+				modifiedNodes.insert(id);
+				break;
+			case FilePersistence::ChangeType::Unclassified:
+				qDebug() << "Unclassified";
+				break;
+		}
+
+
+		// search one instance of the changed node NEW VERSION MANAGER
+		if (auto node = const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id)))
 		{
 
 			Model::Node* changedNode = nullptr;
 
-			if (auto ancestorNode = node->firstAncestorOfType(typeMatcher))
+			if (auto ancestorNode = node->firstAncestorOfType<OOModel::Class>())
 			{
 				changedNode = ancestorNode;
-				id = newVersionManager->nodeIdMap().id(changedNode);
+
+				// Ignore empty nodes
+				if (auto changedExpr = DCast<OOModel::ExpressionStatement>(changedNode))
+					if (DCast<OOModel::EmptyExpression>(changedExpr->expression()))
+						continue;
+
+				if (change->type() != FilePersistence::ChangeType::Deletion)
+				{
+					auto newId = newVersionManager->nodeIdMap().id(changedNode);
+					changedNodesToVisualize.insert(newId);
+				}
 			}
-			else
-				changedNode = node;
+		}
 
-			// Ignore empty nodes
-			if (auto changedExpr = DCast<OOModel::ExpressionStatement>(changedNode))
-				if (DCast<OOModel::EmptyExpression>(changedExpr->expression()))
-					continue;
+		// search one instance of the changed node OLD VERSION MANAGER
+		if (auto node = const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id)))
+		{
 
-			changedNodesToVisualize.insert(id);
+			Model::Node* changedNode = nullptr;
+
+			if (auto ancestorNode = node->firstAncestorOfType<OOModel::Class>())
+			{
+				changedNode = ancestorNode;
+
+				// Ignore empty nodes
+				if (auto changedExpr = DCast<OOModel::ExpressionStatement>(changedNode))
+					if (DCast<OOModel::EmptyExpression>(changedExpr->expression()))
+						continue;
+
+				if (change->type() != FilePersistence::ChangeType::Insertion)
+				{
+					auto newId = oldVersionManager->nodeIdMap().id(changedNode);
+					changedNodesToVisualize.insert(newId);
+				}
+			}
 		}
 	}
 
@@ -147,6 +207,91 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 			newNode = new Model::Text{"node in new version not found"};
 
 		Visualization::VisualizationManager::instance().mainScene()->addTopLevelNode(newNode, 1);
+	}
+
+	for (auto id : movedNodes)
+	{
+		auto oldNode = const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id));
+		auto newNode = const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id));
+
+		Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+				->addArrow(oldNode, newNode, QString{"move_arrows"});
+
+		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+							  [oldNode, newNode](){
+			auto items = Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+							->findAllVisualizationsOf(oldNode);
+			items.append(Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+							 ->findAllVisualizationsOf(newNode));
+			for (auto item : items)
+			{
+				auto overlay = new Visualization::HighlightOverlay{item};
+				QColor blue{"blue"};
+				blue.setAlpha(90);
+				overlay->setColor(blue);
+				item->addOverlay(overlay, "moved_highlights");
+			}});
+	}
+
+	for (auto id : deletedNodes)
+	{
+		auto oldNode = const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id));
+
+		if (!oldNode)
+			continue;
+
+		 Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								[oldNode](){
+			 auto oldItems =  Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+							 ->findAllVisualizationsOf(oldNode);
+			 for (auto item : oldItems)
+			 {
+				 auto overlay = new Visualization::HighlightOverlay{item};
+				 QColor red{"red"};
+				 red.setAlpha(90);
+				 overlay->setColor(red);
+				 item->addOverlay(overlay, "deleted_highlights");
+			 }});
+
+	}
+
+	for (auto id: insertedNodes)
+	{
+		auto newNode = const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id));
+
+		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+							  [newNode](){
+			auto newItems =  Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+							->findAllVisualizationsOf(newNode);
+			for (auto item : newItems)
+			{
+				auto overlay = new Visualization::HighlightOverlay{item};
+				QColor green{"green"};
+				green.setAlpha(90);
+				overlay->setColor(green);
+				item->addOverlay(overlay, "inserted_highlights");
+			}});
+	}
+
+	for (auto id : modifiedNodes)
+	{
+		auto oldNode = const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id));
+		auto newNode = const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id));
+
+		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+							  [oldNode, newNode](){
+			auto items = Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+							->findAllVisualizationsOf(oldNode);
+			items.append(Visualization::VisualizationManager::instance().mainScene()->currentViewItem()
+							 ->findAllVisualizationsOf(newNode));
+			for (auto item : items)
+			{
+				auto overlay = new Visualization::HighlightOverlay{item};
+				QColor yellow{"yellow"};
+				yellow.setAlpha(90);
+				overlay->setColor(yellow);
+				item->addOverlay(overlay, "modified_highlights");
+			}});
 	}
 
 
