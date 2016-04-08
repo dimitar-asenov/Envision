@@ -38,6 +38,8 @@
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "FilePersistence/src/version_control/GitRepository.h"
 
+#include "VersionControlUI/src/DiffManager.h"
+
 using namespace Visualization;
 using namespace FilePersistence;
 
@@ -48,9 +50,9 @@ static const QString overlayGroupName{"DiffHighlights"};
 CDiff::CDiff() : CommandWithFlags{"diff", {{"project"}}, true, false}
 {}
 
-CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-											  const std::unique_ptr<Visualization::Cursor>& /*cursor*/,
-											  const QString& name, const QStringList& /*attributes*/)
+CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* target,
+											  const std::unique_ptr<Visualization::Cursor>&,
+											  const QString&, const QStringList&) __attribute__((optnone))
 {
 	auto scene = target->scene();
 	scene->clearFocus();
@@ -60,195 +62,15 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 	Model::TreeManager* headManager = target->node()->manager();
 	QString managerName = headManager->name();
 
-	// get GitRepository
-	QString path{"projects/"};
-	path.append(managerName);
-	std::shared_ptr<FilePersistence::GitRepository> repository(new GitRepository{path});
-
-	headManager->setName("HEAD");
-
-	// load name into tree
-	std::unique_ptr<const Commit> commit{repository->getCommit(name)};
-
-	// TODO check which behavior is correct for fileName matching
-	auto fileStore = new SimpleTextFileStore{
-				[this, &commit](QString filename, const char*& data, int& size)
-				{ return commit->getFileContent(filename, data, size, true); }
-			};
-
-	auto revisionManager = new Model::TreeManager{};
-	revisionManager->load(fileStore, managerName, false);
-	revisionManager->setName(name);
-
-	headManager->setName(managerName);
-
-	// build visualization
-	Item* headRoot = target;
-	while (headRoot->parent()) headRoot = headRoot->parent();
-
-	Item* revisionRoot = new RootItem{revisionManager->root()};
-	revisionRoot->setPos(-400.f, 0.f);
-
-	VisualizationManager::instance().mainScene()->addTopLevelItem(revisionRoot);
-	VisualizationManager::instance().mainScene()->listenToTreeManager(revisionManager);
-
-	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-		new Visualization::CustomSceneEvent{[headRoot, headManager, revisionRoot, revisionManager,
-														name, target, repository]()
-	{
-			Diff diff = repository->diff(name, GitRepository::WORKDIR);
-			IdToChangeDescriptionHash changes = diff.changes();
-
-			auto scene = VisualizationManager::instance().mainScene();
-			auto overlayGroup = scene->overlayGroup(overlayGroupName);
-			if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
-
-			IdToChangeDescriptionHash::iterator iter;
-
-			QSet<Model::NodeIdType> relevantIDs;
-
-			QSet<Model::NodeIdType> completed;
-			QList<Model::Node*> stack;
-			stack.append(target->node());
-			while (!stack.isEmpty())
-			{
-				// HEAD version
-				Model::Node* current = stack.takeLast();
-
-				stack.append(current->children());
-
-				// check if relevant
-				Model::NodeIdType currentID = headManager->nodeIdMap().id(current);
-				//qDebug() << currentID.toString();
-				iter = changes.find(currentID);
-				if (iter != changes.end())
-					relevantIDs.insert(currentID);
-
-				// REVISION version
-				if (!completed.contains(currentID))
-				{
-					QList<Model::Node*> revisionStack;
-					Model::Node* revisionNode = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(currentID));
-					if (revisionNode != nullptr)
-					{
-						revisionStack.append(revisionNode);
-						while (!revisionStack.isEmpty())
-						{
-							revisionNode = revisionStack.takeLast();
-							Model::NodeIdType revisionNodeID = revisionManager->nodeIdMap().id(revisionNode);
-							completed.insert(revisionNodeID);
-
-							revisionStack.append(revisionNode->children());
-
-							// check if relevant
-							iter = changes.find(revisionNodeID);
-							if (iter != changes.end())
-								relevantIDs.insert(revisionNodeID);
-						}
-					}
-				}
-			}
-
-			Model::Node* node = nullptr;
-			Model::Node* parent = nullptr;
-			Model::NodeIdType parentID;
-			for (auto id : relevantIDs)
-			{
-				iter = changes.find(id);
-				if (iter != changes.end())
-				{
-					auto change = iter.value();
-					switch (change->type())
-					{
-						case ChangeType::Insertion:
-							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
-							parent = node->parent();
-							if (auto item = headRoot->findVisualizationOf(node))
-							{
-								if (parent)
-								{
-									parentID = headManager->nodeIdMap().id(parent);
-									iter = changes.find(parentID);
-									if (iter != changes.end())
-									{
-										auto parentChange = iter.value();
-										if (parentChange->type() != ChangeType::Insertion)
-											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-												Visualization::SelectionOverlay::itemStyles().get("insert")}));
-									}
-									else
-										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-											Visualization::SelectionOverlay::itemStyles().get("insert")}));
-								}
-								else
-									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-										Visualization::SelectionOverlay::itemStyles().get("insert")}));
-							}
-							break;
-
-						case ChangeType::Deletion:
-							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
-							parent = node->parent();
-							if (auto item = revisionRoot->findVisualizationOf(node))
-							{
-								if (parent)
-								{
-									parentID = revisionManager->nodeIdMap().id(parent);
-									iter = changes.find(parentID);
-									if (iter != changes.end())
-									{
-										auto parentChange = iter.value();
-										if (parentChange->type() != ChangeType::Deletion)
-											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-												Visualization::SelectionOverlay::itemStyles().get("delete")}));
-									}
-									else
-										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-											Visualization::SelectionOverlay::itemStyles().get("delete")}));
-								}
-								else
-									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-										Visualization::SelectionOverlay::itemStyles().get("delete")}));
-							}
-							break;
-
-						case ChangeType::Move:
-							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
-							if (auto item = headRoot->findVisualizationOf(node))
-								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-									Visualization::SelectionOverlay::itemStyles().get("move")}));
-
-							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
-							if (auto item = revisionRoot->findVisualizationOf(node))
-								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-									Visualization::SelectionOverlay::itemStyles().get("move")}));
-							break;
-
-						default:
-							break;
-					} // end switch
-
-					// test update flag
-					node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
-					if (auto item = headRoot->findVisualizationOf(node))
-						if (change->flags().testFlag(ChangeDescription::UpdateType::Value))
-							overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay{item,
-								Visualization::SelectionOverlay::itemStyles().get("update")}));
-
-
-				}
-				else
-					Q_ASSERT(false);
-			}
-
-
-	} } );
+	// TODO don't use fixed versions, removed param "name" contains selected version
+	VersionControlUI::DiffManager diffManager{"HEAD^^^^", "HEAD", managerName};
+	diffManager.visualize();
 
 	return new CommandResult{};
 }
 
-QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization::Item* target,
-											const std::unique_ptr<Visualization::Cursor>& /*cursor*/)
+QStringList CDiff::possibleNames(Visualization::Item*, Visualization::Item* target,
+											const std::unique_ptr<Visualization::Cursor>&)
 {
 	Model::TreeManager* headManager = target->node()->manager();
 	QString managerName = headManager->name();
