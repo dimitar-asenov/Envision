@@ -30,9 +30,10 @@
 #include "../commands/CCreateMethod.h"
 #include "../commands/CCreateField.h"
 
-#include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"
 #include "InteractionBase/src/prompt/Prompt.h"
+
+#include "VersionControlUI/src/commands/CDiff.h"
 
 namespace OOInteraction {
 
@@ -43,7 +44,7 @@ HClass::HClass()
 	addCommand(new CCreateMethod{});
 	addCommand(new CCreateField{});
 
-	addCommand(new Interaction::CDiff{});
+	addCommand(new VersionControlUI::CDiff{});
 	addCommand(new Interaction::CHistory{});
 }
 

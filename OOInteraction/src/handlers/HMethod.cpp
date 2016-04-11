@@ -26,7 +26,6 @@
 
 #include "HMethod.h"
 
-#include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"
 
 #include "OOVisualization/src/declarations/VMethod.h"
@@ -40,11 +39,13 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
+#include "VersionControlUI/src/commands/CDiff.h"
+
 namespace OOInteraction {
 
 HMethod::HMethod()
 {
-	addCommand(new Interaction::CDiff{});
+	addCommand(new VersionControlUI::CDiff{});
 	addCommand(new Interaction::CHistory{});
 }
 

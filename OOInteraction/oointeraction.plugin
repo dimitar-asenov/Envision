@@ -8,5 +8,6 @@
 		<dependency pluginid="visualizationbase" version="0" />
 		<dependency pluginid="interactionbase" version="1" />
 		<dependency pluginid="oovisualization" version="1" />
+		<dependency pluginid="versioncontrolui" version="1" />
 	</dependencies>
 </plugin>
