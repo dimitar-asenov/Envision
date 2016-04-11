@@ -40,7 +40,7 @@
 
 namespace Visualization {
 
-static constexpr int MAX_CURSOR_JUMP_DISTANCE = 300;
+static constexpr int MAX_CURSOR_JUMP_DISTANCE = 1500;
 
 DEFINE_TYPE_ID_BASE(Item, "Item", )
 
