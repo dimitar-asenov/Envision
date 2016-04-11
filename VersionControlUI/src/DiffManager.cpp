@@ -49,18 +49,14 @@ namespace VersionControlUI
 {
 
 struct ChangeWithNodes {
-		ChangeWithNodes(Model::Node* oldNode, Model::Node* newNode,
-							 FilePersistence::ChangeType changeType)
-			: oldNode_{oldNode}, newNode_{newNode}, changeType_{changeType}
-		{}
-
-		Model::Node* oldNode_;
-		Model::Node* newNode_;
-		FilePersistence::ChangeType changeType_;
+		Model::Node* oldNode_{};
+		Model::Node* newNode_{};
+		FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
 };
 
-DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project, QString symbol) :
-	oldVersion_{oldVersion}, newVersion_{newVersion}, project_{project}, symbol_{symbol}
+DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project,
+								 Model::SymbolMatcher contextUnitMatcher) :
+	oldVersion_{oldVersion}, newVersion_{newVersion}, project_{project}, contextUnitMatcher_{contextUnitMatcher}
 {}
 
 void DiffManager::visualize()
@@ -101,7 +97,7 @@ void DiffManager::visualize()
 
 		auto id = change->nodeId();
 
-		changesWithNodes.append(ChangeWithNodes{const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id)),
+		changesWithNodes.append({const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id)),
 														 const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id)),
 														 change->type()});
 
@@ -130,7 +126,10 @@ void DiffManager::visualize()
 	visualizeChangedNodes(oldVersionManager, changedNodesToVisualize, newVersionManager, diffViewItem);
 
 	// create visualization for changes
-	createOverlaysForChanges(diffViewItem, changesWithNodes);
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  [diffViewItem, changesWithNodes]() {
+		createOverlaysForChanges(diffViewItem, changesWithNodes);
+	});
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
@@ -182,9 +181,8 @@ bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeId
 	{
 
 		Model::Node* changedNode = nullptr;
-		Model::SymbolMatcher symbolMatcher{symbol_};
 
-		if (auto ancestorNode = node->firstAncestorOfType(symbolMatcher))
+		if (auto ancestorNode = node->firstAncestorOfType(contextUnitMatcher_))
 		{
 			changedNode = ancestorNode;
 
@@ -226,24 +224,23 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 				highlightOverlayStyle = "modify_no_bg_solid_outline";
 				break;
 			case FilePersistence::ChangeType::Unclassified:
-				// TODO check what to do in this case
-				throw VersionControlUIException{"Unclassified change found"};
+				Q_ASSERT(false);
+				break;
 		}
 
-		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-							  [change, highlightOverlayStyle, highlightOverlayName, diffViewItem](){
-			QList<Visualization::Item*> items;
-			if (change.oldNode_)
-				items.append(diffViewItem->findAllVisualizationsOf(change.oldNode_));
-			if (change.newNode_)
-				items.append(diffViewItem->findAllVisualizationsOf(change.newNode_));
+		QList<Visualization::Item*> items;
 
-			for (auto item : items)
-			{
-				auto overlay = new Visualization::HighlightOverlay{item,
-						Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
-				item->addOverlay(overlay, highlightOverlayName);
-			}});
+		if (change.oldNode_)
+			items.append(diffViewItem->findAllVisualizationsOf(change.oldNode_));
+		if (change.newNode_)
+			items.append(diffViewItem->findAllVisualizationsOf(change.newNode_));
+
+		for (auto item : items)
+		{
+			auto overlay = new Visualization::HighlightOverlay{item,
+					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
+			item->addOverlay(overlay, highlightOverlayName);
+		}
 	}
 }
 

@@ -63,7 +63,7 @@ Interaction::CommandResult* CDiff::executeNamed(Visualization::Item*, Visualizat
 	QString managerName = headManager->name();
 
 	// TODO add functionality to specify two versions
-	VersionControlUI::DiffManager diffManager{name, "HEAD", managerName};
+	VersionControlUI::DiffManager diffManager{name, "HEAD", managerName, Model::SymbolMatcher{"Class"}};
 	diffManager.visualize();
 
 	return new Interaction::CommandResult{};

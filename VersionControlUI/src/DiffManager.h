@@ -29,17 +29,19 @@
 #include "versioncontrolui_api.h"
 
 #include "ModelBase/src/model/TreeManager.h"
+#include "ModelBase/src/util/SymbolMatcher.h"
 
 #include "FilePersistence/src/version_control/ChangeDescription.h"
 
+
 namespace FilePersistence
 {
-class GitRepository;
+	class GitRepository;
 }
 
 namespace Visualization
 {
-class ViewItem;
+	class ViewItem;
 }
 
 namespace VersionControlUI {
@@ -49,7 +51,7 @@ struct ChangeWithNodes;
 class VERSIONCONTROLUI_API DiffManager
 {
 	public:
-		DiffManager(QString oldVersion, QString newVersion, QString project, QString symbol="Class");
+		DiffManager(QString oldVersion, QString newVersion, QString project, Model::SymbolMatcher contextUnitMatcher);
 		void visualize();
 
 	private:
@@ -59,7 +61,8 @@ class VERSIONCONTROLUI_API DiffManager
 		 */
 		void removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>* container);
 
-		/** Returns all nodes which have their direct parent present in \a nodes if the change type of the node matches
+		/**
+		 * Returns all nodes which have their direct parent present in \a nodes if the change type of the node matches
 		 * the one of the parent node.
 		 */
 		QSet<Model::Node*> findAllNodesWithDirectParentPresent(QHash<Model::Node*, FilePersistence::ChangeType>& nodes);
@@ -73,7 +76,7 @@ class VERSIONCONTROLUI_API DiffManager
 		/**
 		 * Creates the different overlays according to the change type of the node.
 		 */
-		void createOverlaysForChanges(Visualization::ViewItem* diffViewItem, QList<ChangeWithNodes> changesWithNodes);
+		static void createOverlaysForChanges(Visualization::ViewItem* diffViewItem, QList<ChangeWithNodes> changesWithNodes);
 
 		/**
 		 * Inserts the nodes with id from \a changedNodesToVisualize into the \a diffViewItem.
@@ -91,7 +94,7 @@ class VERSIONCONTROLUI_API DiffManager
 		QString oldVersion_;
 		QString newVersion_;
 		QString project_;
-		QString symbol_;
+		Model::SymbolMatcher contextUnitMatcher_;
 
 
 };
