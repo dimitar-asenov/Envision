@@ -667,18 +667,27 @@ bool Item::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOption
 
 	for (ItemRegion& r : regs)
 	{
-//		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(reference.center());
-		if (	(&r != current)
-//				&& ( (( satisfied & constraints) == constraints)
-//						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
-//						// This happens in 'tight' layouts that do not leave any spacing between the elements and so the
-//						// Cursors are overlapping the normal items. At the borders of such containers the alternative below
-//						// is needed.
-//						|| (r.cursor() && (satisfied & ItemRegion::Overlap)) )
-				&& r.satisfiesConstraint(constraints, reference)
-					// Use a more targeted region for cursor movement. This possibly makes the previous (commented above)
-					// point-based constraint checking irrelevant.
-			)
+		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(reference.center());
+		bool take = false;
+		if (&r != current)
+		{
+			if (style()->linelikeCursorMovement() || options.testFlag(Linelike))
+			{
+				take = ( satisfied & constraints) == constraints
+						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
+						// This happens in 'tight' layouts that do not leave any spacing between the elements and so the
+						// Cursors are overlapping the normal items. At the borders of such containers the alternative below
+						// is needed.
+						|| (r.cursor() && (satisfied & ItemRegion::Overlap));
+			}
+			else
+			{
+				// Use a more targeted region for cursor movement.
+				take = r.satisfiesConstraint(constraints, reference);
+			}
+		}
+
+		if (take)
 		{
 			int distanceKey = r.distanceTo(reference.center())*10;
 			if (r.cursor()) distanceKey -= 5;
@@ -743,7 +752,13 @@ bool Item::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOption
 				case MoveDefault: childDirection = MoveDefault; break;
 				default: throw VisualizationException{"Unknown move direction: " + QString::number(dir)};
 			}
-			if ( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).boundingRect().toRect()))
+
+			CursorMoveOptions childOptions{None};
+			if (style()->linelikeCursorMovement() || options.testFlag(Linelike))
+				childOptions |= Linelike;
+
+			if ( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).boundingRect().toRect(),
+												childOptions) )
 			{
 				canFocus = true;
 				break;

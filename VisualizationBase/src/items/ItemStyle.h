@@ -54,6 +54,15 @@ class VISUALIZATIONBASE_API ItemStyle : public Super<Style>
 		Property<bool> noItemRegions{this, "noItemRegions"};
 		Property<bool> allowEquivalentCursorsThroughBoundary{this, "allowEquivalentCursorsThroughBoundary"};
 
+		/**
+		 * If false, the cursor will move strictly in the direction of the arrow key the user pressed.
+		 * If true, the cursor will move any region that is rougly in the direction the user pressed. This is useful
+		 * for example in lists of Statements, when pressing down at the end of the statement and we want to end up at
+		 * the end of the next line. If that line is shorter than the current and this property is false, we will skip
+		 * that line.
+		 */
+		Property<bool> linelikeCursorMovement{this, "linelikeCursorMovement"};
+
 	private:
 		QString shapeName_;
 		QSharedPointer<ShapeStyle> shapeStyle_;
