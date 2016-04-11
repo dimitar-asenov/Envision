@@ -15,7 +15,9 @@
 		</backgroundBrush>
 	</shape>
 	
-	<layout prototypes="layout/SequentialLayout/default"/>
+	<layout prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</layout>
 	<delimiters prototypes="item/Text/default">
 		<shape prototypes="shape/Box/default">
 			Box
