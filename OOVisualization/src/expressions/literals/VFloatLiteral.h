@@ -45,6 +45,8 @@ class OOVISUALIZATION_API VFloatLiteral
 		VFloatLiteral(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VFloatLiteral();
 
+		Visualization::VText* item() const;
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -52,5 +54,7 @@ class OOVISUALIZATION_API VFloatLiteral
 	private:
 		Visualization::VText* vis_;
 };
+
+inline Visualization::VText* VFloatLiteral::item() const {return vis_;}
 
 }

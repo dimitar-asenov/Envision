@@ -85,6 +85,11 @@ void GridConstructors::initializeAll()
 		grid->add(new Cell{0, vis->item(), 0});
 	});
 
+	GridBasedOffsetProvider::addGridConstructor<VFloatLiteral>(
+	[](GridBasedOffsetProvider* grid, VFloatLiteral* vis){
+		grid->add(new Cell{0, vis->item(), 0});
+	});
+
 	GridBasedOffsetProvider::addGridConstructor<VNullLiteral>(
 	[](GridBasedOffsetProvider* grid, VNullLiteral* vis){
 		grid->add(new Cell{0, vis->item(), 0});
