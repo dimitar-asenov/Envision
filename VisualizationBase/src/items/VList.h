@@ -65,7 +65,7 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		virtual int determineForm() override;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = {},
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QRect reference = {},
 										CursorMoveOptions options = None) override;
 		virtual QList<ItemRegion> regions() override;
 

@@ -172,7 +172,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			MoveLeft, /**< Move the cursor left from its current position within the item. */
 			MoveRight, /**< Move the cursor right from its current position within the item. */
 
-			MoveOnPosition, /**< Move the cursor as close as possible to the specified reference point within the item. */
+			MoveOnPosition, /**< Move the cursor as close as possible to the specified reference rect within the item. */
 			MoveOnTop, /**< Move the cursor to the top of the item*/
 			MoveOnLeft, /**< Move the cursor to the left of the item*/
 			MoveOnBottom, /**< Move the cursor to the bottom of the item*/
@@ -181,10 +181,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			MoveOnBottomRight, /**< Move the cursor to the bottom-right corner of the item*/
 			MoveOnCenter, /**< Move the cursor to the center of the item*/
 
-			MoveUpOf, /**< Move the cursor as close as possible above the specified reference point. */
-			MoveDownOf, /**< Move the cursor as close as possible below the specified reference point. */
-			MoveLeftOf, /**< Move the cursor as close as possible to left of the specified reference point. */
-			MoveRightOf, /**< Move the cursor as close as possible to right of the specified reference point. */
+			MoveUpOf, /**< Move the cursor as close as possible above the specified reference rect. */
+			MoveDownOf, /**< Move the cursor as close as possible below the specified reference rect. */
+			MoveLeftOf, /**< Move the cursor as close as possible to left of the specified reference rect. */
+			MoveRightOf, /**< Move the cursor as close as possible to right of the specified reference rect. */
 			MoveDefault /**< Move the cursor to the default location. This is typically used after the item is created.
 			 	 	 	 	 	  The default behavior is to move the cursor to the top left corner. If a defaultMove cursor
 			 	 	 	 	 	  proxy is set, it will be selected instead. Subclasses might reimplement moveCursor to
@@ -202,7 +202,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		/**
 		 * \brief Moves the position of the current main scene cursor within the item and returns true on success.
 		 *
-		 * The \a dir parameter determines how the cursor will be moved. Some modes of movement require a reference point
+		 * The \a dir parameter determines how the cursor will be moved. Some modes of movement require a reference rect
 		 * provided in \a reference in item local coordinates.
 		 *
 		 * The options parameter specifies additional options to control the move.
@@ -217,8 +217,13 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * This method is responsible for creating a corresponding Cursor item and setting it as the main scene cursor.
 		 */
-		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = {},
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QRect reference = {},
 										CursorMoveOptions options = None);
+
+		/**
+		 * Overloaded version. Uses a QPoint as a \a reference.
+		 */
+		bool moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options = None);
 		void setDefaultMoveCursorProxy(Item* proxy);
 
 		/**
@@ -822,6 +827,11 @@ template <typename ItemType> ItemType* Item::findAncestorOfType()
 	while (result && !DCast<ItemType>(result))
 		result = result->parent();
 	return DCast<ItemType>(result);
+}
+
+inline bool Item::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
+{
+	return this->moveCursor(dir, QRect{reference.x(), reference.y(), 1, 1}, options);
 }
 
 }

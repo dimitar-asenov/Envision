@@ -225,13 +225,15 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	}
 }
 
-bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
+bool TextRenderer::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOptions options)
 {
 	if ( isHtml() ) return Super::moveCursor(dir, reference, options);
 
+	QPoint referenceCenter = reference.center();
+
 	if ( dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf )
 	{
-		PositionConstraints pc = satisfiedPositionConstraints(reference);
+		PositionConstraints pc = satisfiedPositionConstraints(referenceCenter);
 		if ( (dir == MoveUpOf && (pc & Above))
 				|| (dir == MoveDownOf && (pc & Below))
 				|| (dir == MoveLeftOf && (pc & LeftOf))
@@ -239,7 +241,7 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference, CursorM
 				)
 		{
 			TextCursor* tc = new TextCursor{this};
-			tc->setSelectedByDrag(reference.x(), reference.x());
+			tc->setSelectedByDrag(referenceCenter.x(), referenceCenter.x());
 			scene()->setMainCursor(tc);
 			return true;
 		}
@@ -256,7 +258,7 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference, CursorM
 		switch (dir)
 		{
 			case MoveDefault: tc->setCaretPosition(0); break;
-			case MoveOnPosition: tc->setSelectedByDrag(reference.x(), reference.x()); break;
+			case MoveOnPosition: tc->setSelectedByDrag(referenceCenter.x(), referenceCenter.x()); break;
 			case MoveOnTop: tc->setSelectedByDrag(xMid, xMid); break;
 			case MoveOnLeft: tc->setSelectedByDrag(0, 0);  break;
 			case MoveOnBottom: tc->setSelectedByDrag(xMid, xMid); break;

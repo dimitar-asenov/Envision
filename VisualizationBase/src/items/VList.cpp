@@ -130,7 +130,7 @@ int VList::determineForm()
 	else return 1;
 }
 
-bool VList::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
+bool VList::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOptions options)
 {
 	bool startsFocused = hasFocus();
 

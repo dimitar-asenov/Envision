@@ -131,7 +131,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		static CommandExecutionEngine* executionEngine_;
 		static ActionPrompt* actionPrompt_;
 
-		static QPoint cursorOriginMidPoint_;
+		static QRect cursorOrigin_;
 		static CursorMoveOrientation cursorMoveOrientation_;
 
 		static QHash<int, QPoint> keyToViewItemIndexMap_;

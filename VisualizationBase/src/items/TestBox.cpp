@@ -88,7 +88,7 @@ QString TestBox::currentText()
 	else return text();
 }
 
-bool TestBox::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
+bool TestBox::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOptions options)
 {
 	if (dir == MoveDefault) return TextRenderer::moveCursor(MoveOnRight, reference, options);
 	else return TextRenderer::moveCursor(dir, reference, options);

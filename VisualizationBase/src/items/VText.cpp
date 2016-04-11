@@ -48,7 +48,7 @@ QString VText::currentText()
 	return node()->get();
 }
 
-bool VText::moveCursor(CursorMoveDirection dir, QPoint reference, CursorMoveOptions options)
+bool VText::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOptions options)
 {
 	if (dir == MoveDefault) return Super::moveCursor(MoveOnRight, reference, options);
 	else return Super::moveCursor(dir, reference, options);
