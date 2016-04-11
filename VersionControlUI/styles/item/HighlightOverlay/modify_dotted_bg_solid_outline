@@ -1,0 +1,15 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+        <shape prototypes="shape/Box/default">
+		Box
+		<backgroundBrush>
+			<style>7</style>
+			<color>#88ffff00</color>
+		</backgroundBrush>
+		<outline>
+			<width>10.0</width>
+			<style>1</style>
+			<color>#ffe6e600</color>
+		</outline>
+	</shape>
+</style>

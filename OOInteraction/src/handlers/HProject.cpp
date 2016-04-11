@@ -33,7 +33,6 @@
 #include "../commands/CCreateField.h"
 #include "../commands/CDumpMethodRenderings.h"
 
-#include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"
 #include "InteractionBase/src/commands/CMerge.h"
 #include "InteractionBase/src/prompt/Prompt.h"
@@ -41,6 +40,8 @@
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
 #include "FilePersistence/src/SystemClipboard.h"
+
+#include "VersionControlUI/src/commands/CDiff.h"
 
 namespace OOInteraction {
 
@@ -53,7 +54,7 @@ HProject::HProject()
 	addCommand(new CCreateMethod{});
 	addCommand(new CCreateField{});
 
-	addCommand(new Interaction::CDiff{});
+	addCommand(new VersionControlUI::CDiff{});
 	addCommand(new Interaction::CHistory{});
 	addCommand(new Interaction::CMerge{});
 
