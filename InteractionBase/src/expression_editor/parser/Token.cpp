@@ -46,79 +46,18 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 {
 	QVector<Token> result;
 
-	QChar first;
-	QString token;
-	bool escaped = false;
-	bool inString = false;
-	QChar stringStartChar;
-
-	for (int i = 0; i<input.size(); ++i )
+	auto it = input.constBegin();
+	while (it != input.constEnd())
 	{
-		QChar ch = input[i];
+		auto oldIt = it;
 
-		// Add character to current token
-		token.append(ch);
+		if (it->isLetter() || *it == '_') result.append(parseIdentifier(it, input.constEnd(), ops));
+		else if (it->isDigit()) result.append(parseNumberLiteral(it, input.constEnd()));
+		else if (*it == '"' || *it == '\'') result.append(parseStringLiteral(it, input.constEnd()));
+		else result.append(parseOperator(it, input.constEnd(), ops));
 
-		// Set flags when first character is added
-		if (token.size() == 1)
-		{
-			first = ch;
-			if (first == '"' || first == '\'')
-			{
-				inString = true;
-				stringStartChar = ch;
-			}
-		}
-
-		// Determine whether to finalize the current token
-		QChar next = (i == input.size()-1) ? QChar{} : input[i+1];
-		bool finalizeToken = false;
-		bool stringFinished = false;
-		if (inString)
-		{
-			stringFinished = token.size()>1 && !escaped && (ch == stringStartChar);
-			finalizeToken = stringFinished || next.isNull();
-			escaped = !escaped && ch == '\\';
-		}
-		else
-		{
-			finalizeToken = next.isNull();
-			finalizeToken = finalizeToken
-					|| (first.isLetterOrNumber() || first == '_') != (next.isLetterOrNumber() || next == '_');
-
-			static constexpr int LOOK_AHEAD = 8;
-			// Check if any subset of the remaining characters can be matched to a complete token
-			bool nextMatch = false;
-			QString remaining;
-			for (int nextIndex = 1; nextIndex<=LOOK_AHEAD; ++nextIndex)
-			{
-				if (i + nextIndex >= input.size()) break;
-				remaining += input[i+nextIndex];
-				nextMatch = tokenExistsInOperators(token + remaining, ops);
-				if (nextMatch) break;
-			}
-
-			finalizeToken = finalizeToken
-					|| (!next.isLetterOrNumber() && !(next == '_') && !nextMatch);
-		}
-
-		// Finalize the token if it's ready
-		if (finalizeToken)
-		{
-			Type t;
-			if (inString)
-				t = stringFinished ? Literal : PartialLiteral;
-			else if (tokenExistsInOperators(token, ops)
-					|| (token.size() == 1 && !first.isLetterOrNumber() && !(first == '_')))
-				t = OperatorDelimiter;
-			else
-				t = first.isDigit() ? Literal : Identifier;
-
-			result.append(Token{token, t});
-
-			token = "";
-			inString = false;
-		}
+		Q_ASSERT(!result.last().text().isEmpty());
+		Q_ASSERT(it - oldIt == result.last().text().size());
 	}
 
 	// Remove all spaces, except for trailing ones
@@ -144,6 +83,150 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 	}
 
 	return result;
+}
+
+Token Token::parseStringLiteral(QString::const_iterator& it, const QString::const_iterator end)
+{
+	Q_ASSERT( it != end );
+	Q_ASSERT( *it== '"' || *it == '\'');
+
+	QString text = *it;
+	QChar first = *it;
+	bool escaped = false;
+
+	++it;
+	while (it != end)
+	{
+		text.append(*it);
+		if (escaped) escaped = false;
+		else
+		{
+			if (*it == '\\') escaped = true;
+			else if (*it == first)
+			{
+				//finalize the string
+				++it;
+				return Token{text, Literal};
+			}
+		}
+
+		++it;
+	}
+
+	// Return a partial (unfinished) token
+	return Token{text, PartialLiteral};
+}
+
+Token Token::parseNumberLiteral(QString::const_iterator& it, const QString::const_iterator end)
+{
+	Q_ASSERT( it != end );
+	Q_ASSERT( it->isDigit() );
+
+	QString text = *it;
+	++it;
+
+	if (it == end) return Token{text, Literal};
+
+	// Check for bin/hex
+	if (text[0] == '0' && (*it == 'x' || *it == 'X' || *it == 'b' || *it == 'B') )
+	{
+		text.append(*it);
+		++it;
+	}
+
+	auto accumulateDigitsAndSeparators = [&it, &end, &text](){
+		while (it != end && (it->isDigit() || *it == '\'' || *it == '_'))
+		{
+			text.append(*it);
+			++it;
+		}
+	};
+
+	accumulateDigitsAndSeparators();
+
+	if (it == end) return Token{text, Literal};
+
+	if (*it == '.')
+	{
+		text.append(*it);
+		++it;
+
+		accumulateDigitsAndSeparators();
+	}
+	else if (*it == 'e' || *it == 'E')
+	{
+		text.append(*it);
+		++it;
+
+		if (it == end) return Token{text, Literal};
+
+		if (*it == '+' || *it == '-')
+		{
+			text.append(*it);
+			++it;
+		}
+
+		accumulateDigitsAndSeparators();
+	}
+
+	if (it == end) return Token{text, Literal};
+
+	//Accumulate type specifiers
+	while (it != end && (*it == 'l' || *it == 'L' || *it == 'f' || *it == 'F'
+								|| *it == 'd' || *it == 'D' || *it == 'u' || *it == 'U'))
+	{
+		text.append(*it);
+		++it;
+	}
+
+	return Token{text, Literal};
+}
+
+Token Token::parseIdentifier(QString::const_iterator& it, const QString::const_iterator end,
+									  const OperatorDescriptorList* ops)
+{
+	Q_ASSERT( it != end );
+	Q_ASSERT( it->isLetter() || *it == '_' );
+
+	QString text = *it;
+	++it;
+
+	while (it != end && (it->isLetterOrNumber() || *it == '_'))
+	{
+		text.append(*it);
+		++it;
+	}
+
+	// This might look like an identifier, but it could be a reserved keyword that represents an operator (e.g. 'delete')
+	return Token{text, tokenExistsInOperators(text, ops) ? OperatorDelimiter : Identifier};
+}
+
+Token Token::parseOperator(QString::const_iterator& it, const QString::const_iterator end,
+									const OperatorDescriptorList* ops)
+{
+	Q_ASSERT( it != end );
+	Q_ASSERT( !it->isLetterOrNumber() && *it != '_'  && *it != '"' && *it != '\'');
+
+	QString text = *it;
+	++it;
+
+	// See if adding more characters will yield an operator
+	// Keep in mind that in this method we are only concerned with non-textual operators ( so no 'delete' for example).
+	static constexpr int LOOK_AHEAD = 8; // Not quite sure anymore, why this number is 8
+	auto finalLookAheadPos = it + LOOK_AHEAD;
+	QString potentialOperator = text;
+
+	for (auto peekIterator = it; peekIterator != end && peekIterator != finalLookAheadPos; ++peekIterator)
+	{
+		potentialOperator += *peekIterator;
+		if ( tokenExistsInOperators(potentialOperator, ops) )
+		{
+			text = potentialOperator;
+			it = peekIterator+1;
+		}
+	}
+
+	return Token{text, OperatorDelimiter};
 }
 
 bool Token::tokenExistsInOperators(QString token, const OperatorDescriptorList* ops)

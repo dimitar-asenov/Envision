@@ -59,6 +59,14 @@ class INTERACTIONBASE_API Token {
 		QString text_;
 		Type type_;
 
+		// General parsing helpers
+		static Token parseStringLiteral(QString::const_iterator& it, const QString::const_iterator end);
+		static Token parseNumberLiteral(QString::const_iterator& it, const QString::const_iterator end);
+		static Token parseIdentifier(QString::const_iterator& it, const QString::const_iterator end,
+									 const OperatorDescriptorList* ops);
+		static Token parseOperator(QString::const_iterator& it, const QString::const_iterator end,
+								  const OperatorDescriptorList* ops);
+
 		//The members below are only used with SubExpression type literals
 		friend class Parser;
 		QVector<Token> subExpressionTokens_{};
