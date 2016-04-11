@@ -73,6 +73,8 @@ class MODELBASE_API AllTreeManagers {
 
 		Node* nodeForId(NodeIdType id) const;
 
+		NodeIdType idForNode(Node* node) const;
+
 	private:
 		AllTreeManagers();
 

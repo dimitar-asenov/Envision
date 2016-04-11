@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,49 +24,28 @@
  **
  **********************************************************************************************************************/
 
-#include "NodeIdMap.h"
+#pragma once
 
-namespace Model {
+#include "versioncontrolui_api.h"
 
-bool NodeIdMap::containsNode(const Node* node)
+#include "ModelBase/src/model/TreeManager.h"
+
+namespace VersionControlUI {
+
+class VERSIONCONTROLUI_API DiffManager
 {
-	QHash<const Node*, NodeIdType>::const_iterator iter{nodeToId.find(node)};
-	if ( iter != nodeToId.end() ) return true;
-	return false;
-}
+	public:
+		DiffManager(QString oldVersion, QString newVersion, QString project);
+		void visualize();
 
-NodeIdType NodeIdMap::id(const Node* node)
-{
-	if (containsNode(node))
-		return *nodeToId.find(node);
+	private:
+		template<typename Container>
+		void removeDirectChildrenOfNodesInContainer(Container* container);
+		bool findChangedNode(Model::TreeManager* treeManager, Model::NodeIdType id, Model::NodeIdType& resultId);
 
-	NodeIdType id = generateNewId();
-	nodeToId.insert(node, id);
-	idToNode.insert(id, node);
-	return id;
-}
-
-void NodeIdMap::setId(const Node* node, NodeIdType id)
-{
-	QHash<const Node*, NodeIdType>::const_iterator iter = nodeToId.find(node);
-	if (iter != nodeToId.end())
-	{
-		Q_ASSERT(*iter == id);
-		return;
-	}
-
-	nodeToId.insert(node, id);
-	idToNode.insert(id, node);
-}
-
-void NodeIdMap::remove(const Node* node)
-{
-	auto idIter = nodeToId.find(node);
-	if (idIter != nodeToId.end())
-	{
-		idToNode.remove(*idIter);
-		nodeToId.erase(idIter);
-	}
-}
+		QString _newVersion;
+		QString _oldVersion;
+		QString _project;
+};
 
 }

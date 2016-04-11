@@ -95,4 +95,12 @@ Node* AllTreeManagers::nodeForId(NodeIdType id) const
 	return nullptr;
 }
 
+NodeIdType AllTreeManagers::idForNode(Node* node) const
+{
+	for (auto manager : loadedManagers())
+		if (manager->nodeIdMap().containsNode(node))
+			return manager->nodeIdMap().id(node);
+	return nullptr;
+}
+
 }
