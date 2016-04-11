@@ -212,6 +212,14 @@ void GridConstructors::initializeAll()
 			grid->add(new ListCell{3, vis->results(), 3, "(", ",", ")"});
 		}
 	});
+
+	GridBasedOffsetProvider::addGridConstructor<VUnfinishedOperator>(
+	[](GridBasedOffsetProvider* grid, VUnfinishedOperator* vis){
+		grid->setFilterNullAndEmptyComponents();
+
+		for (int i = 0; i < vis->layout()->length(); ++i)
+			grid->add(new Cell{i, vis->layout()->at<Visualization::Item>(i), 2*i});
+	});
 }
 
 }

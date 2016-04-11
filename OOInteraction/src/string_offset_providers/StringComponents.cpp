@@ -281,6 +281,23 @@ void StringComponents::initConversions()
 			result << delim;
 		}
 
+		// Insert spaces on the insdie of the result to make sure they don't stick to each other
+		int i = 0;
+		int lastNonEmpty = -1;
+		while (i<result.size())
+		{
+			if (!result[i].isEmpty())
+			{
+				if (lastNonEmpty >= 0)
+				{
+					result.insert(lastNonEmpty + 1, " ");
+					++i;
+				}
+				lastNonEmpty = i;
+			}
+			++i;
+		}
+
 		return result;
 	});
 }
