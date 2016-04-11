@@ -89,4 +89,23 @@ ItemRegion::PositionConstraints ItemRegion::satisfiedPositionConstraints(const Q
 	return constraints;
 }
 
+bool ItemRegion::satisfiesConstraint(PositionConstraint constraint, QRect rect) const
+{
+	switch (constraint)
+	{
+		case NoConstraints: return true;
+		case Below: return region_.bottom() > rect.bottom()
+					&& region_.left() <= rect.right() && region_.right() >= rect.left();
+		case Above: return region_.top() < rect.top()
+					&& region_.left() <= rect.right() && region_.right() >= rect.left();
+		case LeftOf: return region_.left() < rect.left()
+					&& region_.top() <= rect.bottom() && region_.bottom() >= rect.top();
+		case RightOf: return region_.right() > rect.right()
+					&& region_.top() <= rect.bottom() && region_.bottom() >= rect.top();
+		case Overlap: return region_.left() <= rect.right() && region_.right() >= rect.left()
+					&& region_.top() <= rect.bottom() && region_.bottom() >= rect.top();
+		default: Q_ASSERT(false); return false; // Unknown position constraint
+	}
+}
+
 }

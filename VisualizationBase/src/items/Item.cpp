@@ -667,14 +667,17 @@ bool Item::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOption
 
 	for (ItemRegion& r : regs)
 	{
-		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(reference.center());
+//		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(reference.center());
 		if (	(&r != current)
-				&& ( (( satisfied & constraints) == constraints)
-						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
-						// This happens in 'tight' layouts that do not leave any spacing between the elements and so the
-						// Cursors are overlapping the normal items. At the borders of such containers the alternative below
-						// is needed.
-						|| (r.cursor() && (satisfied & ItemRegion::Overlap)) )
+//				&& ( (( satisfied & constraints) == constraints)
+//						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
+//						// This happens in 'tight' layouts that do not leave any spacing between the elements and so the
+//						// Cursors are overlapping the normal items. At the borders of such containers the alternative below
+//						// is needed.
+//						|| (r.cursor() && (satisfied & ItemRegion::Overlap)) )
+				&& r.satisfiesConstraint(constraints, reference)
+					// Use a more targeted region for cursor movement. This possibly makes the previous (commented above)
+					// point-based constraint checking irrelevant.
 			)
 		{
 			int distanceKey = r.distanceTo(reference.center())*10;

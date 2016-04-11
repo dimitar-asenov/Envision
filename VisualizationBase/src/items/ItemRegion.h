@@ -66,6 +66,11 @@ class VISUALIZATIONBASE_API ItemRegion {
 		 */
 		PositionConstraints satisfiedPositionConstraints(const QPoint& point) const;
 
+		/**
+		 * Returns whether the region occupies a part directly corresponding to the specified constraint.
+		 */
+		bool satisfiesConstraint(PositionConstraint constraint, QRect rect) const;
+
 	private:
 		QRect region_;
 		Item* item_;
