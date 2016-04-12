@@ -2,7 +2,7 @@
 <style prototypes="item/DeclarativeItemBase/default">
 	<shape prototypes="shape/Box/default">Box</shape>
 	<expanded>true</expanded>
-	<headerBackground prototypes="layout/SequentialLayout/default">
+	<headerBackground prototypes="item/EmptyItem/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>

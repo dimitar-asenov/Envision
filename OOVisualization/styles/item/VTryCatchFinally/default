@@ -36,7 +36,7 @@
 		</itemsStyle>
 	</catchClauses>
 
-	<finallyOutline prototypes="item/Item/default">
+	<finallyOutline prototypes="item/EmptyItem/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<outline>

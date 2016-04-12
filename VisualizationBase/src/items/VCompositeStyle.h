@@ -38,7 +38,7 @@ class VISUALIZATIONBASE_API VCompositeStyle : public Super<DeclarativeItemBaseSt
 	public:
 		virtual ~VCompositeStyle() override;
 
-		Property<SequentialLayoutStyle> headerBackground{this, "headerBackground"};
+		Property<ItemStyle> headerBackground{this, "headerBackground"};
 		Property<TextStyle> typeName{this, "typeName"};
 		Property<bool> expanded{this, "expanded"};
 };

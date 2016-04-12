@@ -1,0 +1,4 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<noItemRegions>true</noItemRegions>
+</style>

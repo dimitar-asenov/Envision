@@ -24,7 +24,7 @@
 		<height>32</height>
 	</icon>
 	
-	<stretchItem prototypes="layout/SequentialLayout/default">
+	<stretchItem prototypes="item/EmptyItem/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>

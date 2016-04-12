@@ -17,7 +17,7 @@
 		</outline>
 	</shape>
 	
-	<background prototypes="item/Item/default"/>
+	<background prototypes="item/EmptyItem/default"/>
 	
 	<info prototypes="item/Text/default">
 		<shape prototypes="shape/Box/default">

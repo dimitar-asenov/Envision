@@ -19,7 +19,7 @@
 		<topLeftShadowWidth>0</topLeftShadowWidth>
 	</shape>
 	
-	<titleBackground prototypes="item/Item/default">
+	<titleBackground prototypes="item/EmptyItem/default">
 		<shape prototypes="shape/Frame/default">
 			Frame
 			<contentBrush>
