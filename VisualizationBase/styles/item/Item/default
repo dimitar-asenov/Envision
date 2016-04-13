@@ -6,5 +6,6 @@
 	<wholeItemCursor>false</wholeItemCursor>
 	<noItemRegions>false</noItemRegions>
 	<allowEquivalentCursorsThroughBoundary>true</allowEquivalentCursorsThroughBoundary>
-	<linelikeCursorMovement>false</linelikeCursorMovement>
+	<linelikeCursorMovementAlongX>false</linelikeCursorMovementAlongX>
+	<linelikeCursorMovementAlongY>false</linelikeCursorMovementAlongY>
 </style>

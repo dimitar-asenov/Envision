@@ -61,7 +61,8 @@ class VISUALIZATIONBASE_API ItemStyle : public Super<Style>
 		 * the end of the next line. If that line is shorter than the current and this property is false, we will skip
 		 * that line.
 		 */
-		Property<bool> linelikeCursorMovement{this, "linelikeCursorMovement"};
+		Property<bool> linelikeCursorMovementAlongX{this, "linelikeCursorMovementAlongX"};
+		Property<bool> linelikeCursorMovementAlongY{this, "linelikeCursorMovementAlongY"};
 
 	private:
 		QString shapeName_;

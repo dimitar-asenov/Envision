@@ -665,13 +665,24 @@ bool Item::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOption
 	// so that we can implement minor corrections in order.
 	QMap<int, ItemRegion*> matching;
 
+	bool horizontal = dir == MoveLeft || dir == MoveRight
+			|| dir == MoveOnLeft || dir == MoveOnRight
+			|| dir == MoveLeftOf || dir == MoveRightOf;
+
+	bool vertical = dir == MoveUp || dir == MoveDown
+			|| dir == MoveOnTop || dir == MoveOnBottom
+			|| dir == MoveUpOf || dir == MoveDownOf;
+
+	bool linelikeMove = (horizontal && (style()->linelikeCursorMovementAlongX() || options.testFlag(LinelikeAlongX)))
+							|| ( vertical && (style()->linelikeCursorMovementAlongY() || options.testFlag(LinelikeAlongY)));
+
 	for (ItemRegion& r : regs)
 	{
 		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(reference.center());
 		bool take = false;
 		if (&r != current)
 		{
-			if (style()->linelikeCursorMovement() || options.testFlag(Linelike))
+			if (linelikeMove)
 			{
 				take = ( satisfied & constraints) == constraints
 						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
@@ -754,8 +765,10 @@ bool Item::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOption
 			}
 
 			CursorMoveOptions childOptions{None};
-			if (style()->linelikeCursorMovement() || options.testFlag(Linelike))
-				childOptions |= Linelike;
+			if (style()->linelikeCursorMovementAlongX() || options.testFlag(LinelikeAlongX))
+				childOptions |= LinelikeAlongX;
+			if (style()->linelikeCursorMovementAlongY() || options.testFlag(LinelikeAlongY))
+				childOptions |= LinelikeAlongY;
 
 			if ( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).boundingRect().toRect(),
 												childOptions) )

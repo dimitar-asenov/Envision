@@ -196,7 +196,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			NoLimitDistance = 0x00000001, /**< If set, the cursor can be moved to any other location on the canvas.
 														Otherwise, the move distance is limited to a specific number of pixels,
 														in order to avoid big jumps that disorient the user. */
-			Linelike = 0x00000002 /**< If set, it will override the ItemStyle::linelikeCursorMovement property. */
+			LinelikeAlongX = 0x00000002, /**< If set, overrides the ItemStyle::linelikeCursorMovementAlongX property. */
+			LinelikeAlongY = 0x00000004 /**< If set, overrides the ItemStyle::linelikeCursorMovementAlongY property. */
 		};
 		using CursorMoveOptions = QFlags<CursorMoveOption>;
 
