@@ -46,4 +46,5 @@
 	<minWidth>10</minWidth>
 	<minHeight>10</minHeight>
 	
+	<linelikeMovementAlongListDirection>true</linelikeMovementAlongListDirection>
 </style>

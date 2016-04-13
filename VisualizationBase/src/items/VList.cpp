@@ -140,6 +140,12 @@ bool VList::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOptio
 			&& dir != MoveOnTopLeft && dir != MoveOnBottomRight && dir != MoveOnCenter)
 		return false;
 
+	if (style()->linelikeMovementAlongListDirection())
+	{
+		if (style()->itemsStyle().isHorizontal()) options |= Item::LinelikeAlongX;
+			else options |= Item::LinelikeAlongY;
+	}
+
 	bool res = Super::moveCursor(dir, reference, options);
 
 	if (res && !startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty())
