@@ -183,6 +183,8 @@ void Item::setScale(qreal newScale)
 		if (isSensitiveToScale()) setUpdateNeeded(StandardUpdate);
 		else
 		{
+			if (parent()) parent()->setUpdateNeeded(StandardUpdate);
+
 			QList<Item*> stack = childItems();
 			while (!stack.empty())
 			{
