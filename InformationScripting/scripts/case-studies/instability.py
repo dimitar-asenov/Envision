@@ -8,7 +8,6 @@ def packageOf(node):
 	return package
 
 def dependsOnPackages(aClass):
-	result = []
 	for decl in aClass.subDeclarations:
 		if type(decl) is NameImport:
 			package = ''
@@ -16,8 +15,7 @@ def dependsOnPackages(aClass):
 			while type(name) is ReferenceExpression:
 				package = name.name + '.' + package
 				name = name.prefix
-			result.append(package)
-	return result
+			yield package
 
 allPackages = set()
 efferent = {}
