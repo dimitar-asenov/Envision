@@ -98,6 +98,9 @@ Instability metric
 - Show as a table the instability of each package (or should we change this to
   class)?
 ################################################################################
+Clone https://github.com/dimitar-asenov/test-cs-instability
+    to Envision/DebugBuild/projects/instability
+    
 load instability
 query: cs-ins
 
