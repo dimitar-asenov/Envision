@@ -3,7 +3,7 @@
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default" />
 	<resolvedName prototypes="item/Text/default" />
-	<showUnresolved>true</showUnresolved>
+	<showUnresolved>false</showUnresolved>
 	<unresolvedName prototypes="item/Text/default">
 		<pen>
 			<color>#ff0000</color>
