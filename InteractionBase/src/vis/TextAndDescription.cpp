@@ -76,6 +76,7 @@ void TextAndDescription::determineChildren()
 	{
 		descriptionVis_->setStyle( &style()->description() );
 		descriptionVis_->setText(description_);
+		descriptionVis_->setTextFormat(Qt::RichText);
 	}
 }
 
