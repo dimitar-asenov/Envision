@@ -64,7 +64,7 @@ class INTERACTIONBASE_API CommandExecutionEngine
 		QSharedPointer<CommandResult> lastCommandResult_;
 
 		QList<CommandSuggestion*> suggestionsForHandler(GenericHandler* handler, QSet<std::size_t>& alreadySuggested,
-																		QString commandText, Visualization::Item* source,
+																		QString textSoFar, Visualization::Item* source,
 																		Visualization::Item* target,
 																		const std::unique_ptr<Visualization::Cursor>& cursor);
 };

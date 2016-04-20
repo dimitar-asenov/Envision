@@ -178,7 +178,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 }
 
 QList<CommandSuggestion*> CommandExecutionEngine::suggestionsForHandler(GenericHandler* handler,
-	QSet<std::size_t>& alreadySuggested, QString commandText,  Visualization::Item* source,
+	QSet<std::size_t>& alreadySuggested, QString textSoFar,  Visualization::Item* source,
 	Visualization::Item* target, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QList<CommandSuggestion*> result;
@@ -190,9 +190,9 @@ QList<CommandSuggestion*> CommandExecutionEngine::suggestionsForHandler(GenericH
 
 			QList<CommandSuggestion*> suggestions;
 			//If it is a menu command, we must make sure it can be interpreted on the current item in its current state
-			if (!commandText.isEmpty() ||
+			if (!textSoFar.isEmpty() ||
 					(command->appearsInMenus() && command->canInterpret(source, target, QStringList{command->name()}, cursor)))
-				suggestions = command->suggest(source, target, commandText, cursor);
+				suggestions = command->suggest(source, target, textSoFar, cursor);
 
 			result.append( suggestions );
 			if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
