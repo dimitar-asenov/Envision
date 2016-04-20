@@ -145,8 +145,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QList<CommandSuggestion*> result;
-	QString trimmed = textSoFar.trimmed();
-	QString navigation = extractNavigationString(trimmed);
+	QString navigation = extractNavigationString(const_cast<QString&>(textSoFar));
 
 	// This is the node where we begin trying to process the command
 	Visualization::Item* source = originator;
@@ -164,7 +163,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 	while (target != nullptr)
 	{
 		GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
-		result.append( suggestionsForHandler(handler, alreadySuggested, trimmed, source, target, cursor));
+		result.append( suggestionsForHandler(handler, alreadySuggested, textSoFar, source, target, cursor));
 		target = target->parent();
 	}
 
@@ -172,14 +171,14 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 	if (originator != originator->scene()->sceneHandlerItem())
 	{
 		GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
-		result.append( suggestionsForHandler(handler, alreadySuggested, trimmed, source, target, cursor) );
+		result.append( suggestionsForHandler(handler, alreadySuggested, textSoFar, source, target, cursor) );
 	}
 
 	return result;
 }
 
 QList<CommandSuggestion*> CommandExecutionEngine::suggestionsForHandler(GenericHandler* handler,
-	QSet<std::size_t>& alreadySuggested, QString trimmedCommandText,  Visualization::Item* source,
+	QSet<std::size_t>& alreadySuggested, QString textSoFar,  Visualization::Item* source,
 	Visualization::Item* target, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QList<CommandSuggestion*> result;
@@ -191,9 +190,9 @@ QList<CommandSuggestion*> CommandExecutionEngine::suggestionsForHandler(GenericH
 
 			QList<CommandSuggestion*> suggestions;
 			//If it is a menu command, we must make sure it can be interpreted on the current item in its current state
-			if (!trimmedCommandText.isEmpty() ||
+			if (!textSoFar.isEmpty() ||
 					(command->appearsInMenus() && command->canInterpret(source, target, QStringList{command->name()}, cursor)))
-				suggestions = command->suggest(source, target, trimmedCommandText, cursor);
+				suggestions = command->suggest(source, target, textSoFar, cursor);
 
 			result.append( suggestions );
 			if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
