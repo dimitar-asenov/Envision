@@ -32,19 +32,22 @@
 
 namespace VersionControlUI {
 
-class VERSIONCONTROLUI_API CDiff : public Interaction::CommandWithFlags
+class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 {
 	public:
 		CDiff();
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-	protected:
-		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-				const std::unique_ptr<Visualization::Cursor>& cursor,
-				const QString& name, const QStringList& attributes) override;
+		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-		virtual QStringList possibleNames(Visualization::Item* source, Visualization::Item* target,
-													 const std::unique_ptr<Visualization::Cursor>& cursor) override;
-
+	private:
+		QList<QPair<QString, QString>> commitsWithDescriptions(Visualization::Item* target);
+		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
+																								 Visualization::Item* target);
 };
 
 }
