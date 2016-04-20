@@ -196,6 +196,8 @@ bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeId
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
 														 QList<ChangeWithNodes> changesWithNodes)
 {
+	QString arrowLayer = "move_arrows";
+	diffViewItem->setArrowStyle(arrowLayer, "thick");
 	for (auto change : changesWithNodes)
 	{
 		QString highlightOverlayStyle;
@@ -217,7 +219,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 				// add arrow for the moved node
 				diffViewItem->addArrow(const_cast<Model::Node*>(change.oldNode_),
-											  const_cast<Model::Node*>(change.newNode_), QString{"move_arrows"});
+											  const_cast<Model::Node*>(change.newNode_), arrowLayer);
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
