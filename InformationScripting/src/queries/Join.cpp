@@ -131,10 +131,10 @@ void Join::registerDefaultQueries()
 
 Join::Join(Model::Node* target, QStringList args, std::vector<ArgumentRule> argumentRules)
 	: LinearQuery{target}, arguments_{{
-	{VALUE_ARGUMENT_NAMES, "Name of the attribute(s) that be in the joined tuple",  VALUE_ARGUMENT_NAMES[1]},
 	{AS_ARGUMENT_NAMES, "Name of the joined tuple",  AS_ARGUMENT_NAMES[1]},
 	{ON_ARGUMENT_NAMES, "Name of the attributes to join on",  ON_ARGUMENT_NAMES[1]}
-	}, args}
+	}, {PositionalArgument{VALUE_ARGUMENT_NAMES[1], "Name of the attribute(s) that will be in the joined tuple"}},
+args}
 {
 	for (const auto& rule : argumentRules)
 		rule.check(arguments_);

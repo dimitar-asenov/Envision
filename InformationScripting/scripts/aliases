@@ -6,10 +6,10 @@ addTags = tags -a
 removeTage = tags -r
 info = show -info
 
-cs-if-with-else = ast -global -t Statement | case-studies/if-with-else
+cs-if-with-else = ast -global -type Statement | case-studies/if-with-else
 cs-csv = profileSource scripts/carmodel.csv | heatmap
 cs-rec =  callgraph -global | reachable -self | changes -c 5 -nodes
-cs-ins = ast -t Class -global | case-studies/instability | table
-cs-why = ast -t Statement -tl|changes -c 2 -intermediate|join -v change.id,commit.message,ast -as data|case-studies/associatedBugs
+cs-ins = ast -type Class -global | case-studies/instability | table
+cs-why = ast -type Statement -topLevel|changes -c 2 -intermediate|join change.id,commit.message,ast -as data|case-studies/associatedBugs
 cs-args = callgraph -global | reachable -self | changes -nodes | case-studies/printArgs
 cs-upstream = ⁅changes HEAD..master -nodes|color blue•changes origin/master..master -nodes|color red⁆|
