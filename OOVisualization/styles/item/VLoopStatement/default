@@ -11,7 +11,7 @@
 				<stopPoints>
 					<e1>
 						<first>1.0</first>
-						<second>#e0e0ff</second>
+						<second>#ffffff</second>
 					</e1>
 				</stopPoints>
 			</gradient>
@@ -21,20 +21,32 @@
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/loop.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon prototypes="item/Symbol/keyword">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<style>1</style>
+				<color>#ffffff</color>
+			</backgroundBrush>
+			<cornerRadius>1</cornerRadius>
+			<outline>
+				<color>#D0D0D0</color>
+			</outline>
+		</shape>
+		<symbol>for</symbol>
 	</icon>
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>#ffff80</color>
+				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
+			<outline>
+				<color>#D0D0D0</color>
+			</outline>
 		</shape>
 	</condition>
 	<initStep prototypes="layout/SequentialLayout/default">
@@ -46,6 +58,9 @@
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
+			<outline>
+				<color>#D0D0D0</color>
+			</outline>
 		</shape>
 	</initStep>
 	<updateStep prototypes="layout/SequentialLayout/default">
@@ -53,10 +68,13 @@
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>#c8c8c8</color>
+				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
+			<outline>
+				<color>#D0D0D0</color>
+			</outline>
 		</shape>
 	</updateStep>
 	<body prototypes="item/VStatementItemList/default"/>
