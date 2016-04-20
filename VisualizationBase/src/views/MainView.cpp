@@ -151,6 +151,8 @@ void MainView::keyPressEvent(QKeyEvent *event)
 	{
 		event->accept();
 		scene()->setHiddenItemCategories(0);
+		if (scene()->mainCursor() && scene()->mainCursor()->visualization())
+			scene()->mainCursor()->visualization()->hide();
 
 		QPrinter printer;
 		printer.setOutputFormat(QPrinter::PdfFormat);
