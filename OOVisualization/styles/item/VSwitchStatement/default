@@ -8,7 +8,7 @@
 		</outline>
 		<backgroundBrush>
 			<style>1</style>
-			<color>#ffffe0</color>
+			<color>#ffffff</color>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
@@ -27,7 +27,7 @@
 			</outline>
 	
 			<contentBrush>
-				<color>#ffffe0</color>
+				<color>#ffffff</color>
 			</contentBrush>
 			
 			<topBrush>

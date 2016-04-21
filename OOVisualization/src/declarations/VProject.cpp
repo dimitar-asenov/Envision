@@ -79,7 +79,7 @@ void VProject::initializeForms()
 						[](I* v) {return v->node()->metaCalls();},
 						&StyleType::metaCalls))
 				->put(0, 4, item(&I::comment_, [](I* v){return v->node()->comment();}))
-				->put(0, 5, (new DynamicGridFormElement{})->setSpacing(500, 500)->setMargins(500)
+				->put(0, 5, (new DynamicGridFormElement{})->setSpacing(50, 50)->setMargins(50)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 							[](Item* v)->QVector<QVector<Model::Node*>>{
