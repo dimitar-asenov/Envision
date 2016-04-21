@@ -1,3 +1,4 @@
+# Returns the fully qualified package of a node
 def packageOf(node):
 	package = ''
 	node = node.parent
@@ -7,6 +8,7 @@ def packageOf(node):
 		node = node.parent
 	return package
 
+# Returns a list of all packages a class imports
 def dependsOnPackages(aClass):
 	result = []
 	for decl in aClass.subDeclarations:
@@ -23,6 +25,8 @@ allPackages = set()
 efferent = {}
 afferent = {}
 
+# Loop over input classes to collect
+# package dependencies
 for tuple in Query.input.take('ast'):
 	p = packageOf(tuple.ast)
 	allPackages.add(p)
@@ -32,6 +36,7 @@ for tuple in Query.input.take('ast'):
 		for dep in deps:
 			afferent[dep] = 1 + (afferent[p] if p in afferent else 0)
 
+# Compute the instability of each package
 for p in allPackages:
 	e = efferent[p] if p in efferent else 0
 	a = afferent[p] if p in afferent else 0
