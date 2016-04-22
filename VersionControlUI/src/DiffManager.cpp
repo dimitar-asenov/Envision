@@ -271,6 +271,16 @@ void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
 Model::TreeManager* DiffManager::createTreeManagerFromVersion(FilePersistence::GitRepository& repository,
 																				  QString version)
 {
+	if (version == FilePersistence::GitRepository::WORKDIR)
+	{
+		auto fileStore = new FilePersistence::SimpleTextFileStore {"projects/"};
+		Model::TreeManager* versionTreeManager = new Model::TreeManager{};
+		versionTreeManager->load(fileStore, project_, false);
+
+		return versionTreeManager;
+
+	}
+
 	std::unique_ptr<const FilePersistence::Commit> commit{repository.getCommit(version)};
 
 	auto fileStore = new FilePersistence::SimpleTextFileStore {
