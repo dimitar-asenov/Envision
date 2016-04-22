@@ -318,8 +318,8 @@ CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevisio
 
 const Commit* GitRepository::getCommit(QString revision) const
 {
-	Q_ASSERT(revision.compare(WORKDIR) != 0);
-	Q_ASSERT(revision.compare(INDEX) != 0);
+	Q_ASSERT(revision != WORKDIR);
+	Q_ASSERT(revision != INDEX);
 
 	int errorCode = 0;
 
@@ -346,9 +346,9 @@ const Commit* GitRepository::getCommit(QString revision) const
 
 const CommitFile* GitRepository::getCommitFile(QString revision, QString relativePath) const
 {
-	if (revision.compare(WORKDIR) == 0)
+	if (revision == WORKDIR)
 		return getCommitFileFromWorkdir(relativePath);
-	else if (revision.compare(INDEX) == 0)
+	else if (revision == INDEX)
 		return getCommitFileFromIndex(relativePath);
 	else
 		return getCommitFileFromTree(revision, relativePath);
@@ -358,7 +358,7 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 {
 	CommitMetaData info;
 
-	if (revision.compare(WORKDIR) != 0 && revision.compare(INDEX) != 0)
+	if (revision != WORKDIR && revision != INDEX)
 	{
 		git_commit* gitCommit = parseCommit(revision);
 
@@ -396,7 +396,7 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 
 QString GitRepository::getSHA1(QString revision) const
 {
-	if (revision.compare(WORKDIR) != 0 && revision.compare(INDEX) != 0)
+	if (revision != WORKDIR && revision != INDEX)
 	{
 		git_commit* gitCommit = parseCommit(revision);
 		const git_oid* oid = git_commit_id(gitCommit);
@@ -413,7 +413,7 @@ QString GitRepository::getSHA1(QString revision) const
 
 void GitRepository::checkout(QString revision, bool force)
 {
-	if (revision.compare(WORKDIR) != 0)
+	if (revision != WORKDIR)
 	{
 		git_checkout_options options;
 		git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);
@@ -421,7 +421,7 @@ void GitRepository::checkout(QString revision, bool force)
 		options.checkout_strategy = force ? GIT_CHECKOUT_FORCE : GIT_CHECKOUT_SAFE;
 
 		int errorCode = 0;
-		if (revision.compare(INDEX) == 0)
+		if (revision == INDEX)
 			errorCode = git_checkout_index(repository_, nullptr, &options);
 		else
 		{
@@ -601,8 +601,6 @@ bool GitRepository::isValidRevisionString(QString revision) const
 	if (errorCode == GIT_EAMBIGUOUS)
 		isValid = false;
 
-	checkError(errorCode);
-
 	git_object_free(obj);
 
 	return isValid;
@@ -643,6 +641,8 @@ void GitRepository::loadGenericTree(const std::shared_ptr<GenericTree>& tree, co
 
 	SAFE_DELETE(commit);
 }
+
+int GitRepository::getMinPrefixLength() { return GIT_OID_MINPREFIXLEN; }
 
 void GitRepository::writeRevisionIntoIndex(QString revision)
 {
@@ -980,8 +980,8 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 
 const CommitFile* GitRepository::getCommitFileFromTree(QString revision, QString relativePath) const
 {
-	Q_ASSERT(revision.compare(WORKDIR) != 0);
-	Q_ASSERT(revision.compare(INDEX) != 0);
+	Q_ASSERT(revision != WORKDIR);
+	Q_ASSERT(revision != INDEX);
 
 	int errorCode = 0;
 
@@ -1082,7 +1082,7 @@ QString GitRepository::oidToQString(const git_oid* oid) const
 
 void GitRepository::findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations)
 {
-	if (node->type().compare(GenericNode::PERSISTENT_UNIT_TYPE) == 0)
+	if (node->type() == GenericNode::PERSISTENT_UNIT_TYPE)
 		declarations.insert(node->id(), node);
 	else
 		for (GenericNode* child : node->children())

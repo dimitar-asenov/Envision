@@ -4,12 +4,12 @@
 		Box
 		<backgroundBrush>
 			<style>0</style>
-			<color>#5000ff00</color>
+			<color>#50009900</color>
 		</backgroundBrush>
 		<outline>
 			<width>10.0</width>
 			<style>1</style>
-			<color>#ff00ff00</color>
+			<color>#ff009900</color>
 		</outline>
 	</shape>
 </style>

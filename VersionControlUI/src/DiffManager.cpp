@@ -196,6 +196,8 @@ bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeId
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
 														 QList<ChangeWithNodes> changesWithNodes)
 {
+	static const QString arrowLayer = "move_arrows";
+	diffViewItem->setArrowStyle(arrowLayer, "thick");
 	for (auto change : changesWithNodes)
 	{
 		QString highlightOverlayStyle;
@@ -217,7 +219,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 				// add arrow for the moved node
 				diffViewItem->addArrow(const_cast<Model::Node*>(change.oldNode_),
-											  const_cast<Model::Node*>(change.newNode_), QString{"move_arrows"});
+											  const_cast<Model::Node*>(change.newNode_), arrowLayer);
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
@@ -269,6 +271,16 @@ void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
 Model::TreeManager* DiffManager::createTreeManagerFromVersion(FilePersistence::GitRepository& repository,
 																				  QString version)
 {
+	if (version == FilePersistence::GitRepository::WORKDIR)
+	{
+		auto fileStore = new FilePersistence::SimpleTextFileStore {"projects/"};
+		Model::TreeManager* versionTreeManager = new Model::TreeManager{};
+		versionTreeManager->load(fileStore, project_, false);
+
+		return versionTreeManager;
+
+	}
+
 	std::unique_ptr<const FilePersistence::Commit> commit{repository.getCommit(version)};
 
 	auto fileStore = new FilePersistence::SimpleTextFileStore {

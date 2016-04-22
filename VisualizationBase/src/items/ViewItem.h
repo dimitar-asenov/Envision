@@ -106,6 +106,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		 */
 		void addArrow(Model::Node* from, Model::Node* to, QString layer,
 					  ViewItemNode* fromParent = nullptr, ViewItemNode* toParent = nullptr);
+
+		void setArrowStyle(QString layer, QString styleName);
 		/**
 		 * Returns the items for which an arrow should be drawn in the given arrow layer.
 		 */
@@ -153,6 +155,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 			QString layer_;
 		};
 		QList<ArrowToAdd> arrowsToAdd_;
+		QHash<QString, QString> arrowStyles_;
 		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
 		QStringList disabledArrowLayers_;
 		QJsonObject arrowToJson(QPair<Item*, Item*> arrow, QString layer) const;

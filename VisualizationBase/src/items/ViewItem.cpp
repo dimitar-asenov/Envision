@@ -195,6 +195,11 @@ void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer,
 	setUpdateNeeded(StandardUpdate);
 }
 
+void ViewItem::setArrowStyle(QString layer, QString styleName)
+{
+	arrowStyles_.insert(layer, styleName);
+}
+
 QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 {
 	//First, adds all the pending arrows if any exist
@@ -302,7 +307,11 @@ void ViewItem::addArrowLayer(QString layer, bool enabled)
 	auto layerName = fullLayerName(layer);
 	auto arrowLayer = scene()->overlayGroup(layerName);
 	if (!arrowLayer) arrowLayer = scene()->addOverlayGroup(layerName);
-	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay{from, to});});
+	arrowLayer->setOverlayConstructor2Args([this, layer](Item* from, Item* to){
+		return makeOverlay(
+					new ArrowOverlay{from, to, ArrowOverlay::itemStyles().get(arrowStyles_.value(layer, ""))}
+					);
+	});
 	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
 	if (enabled) arrowLayer->show();
 	else arrowLayer->hide();
@@ -367,6 +376,11 @@ QJsonDocument ViewItem::toJson() const
 		for (auto pair : arrows_[key])
 			arrows.append(arrowToJson(pair, key));
 
+	//Store arrow layer styles
+	QJsonObject arrowLayerStyles;
+	for (QString key : arrowStyles_.keys())
+		arrowLayerStyles.insert(key, arrowStyles_[key]);
+
 	//Remember which arrow layers were disabled
 	QJsonArray disabledLayers;
 	for (auto name : arrows_.keys())
@@ -377,6 +391,7 @@ QJsonDocument ViewItem::toJson() const
 	QJsonObject main;
 	main.insert("nodes", nodes);
 	main.insert("arrows", arrows);
+	main.insert("arrowLayerStyles", arrowLayerStyles);
 	main.insert("disabledLayers", disabledLayers);
 	main.insert("name", name());
 	QJsonDocument result;
@@ -406,6 +421,12 @@ void ViewItem::fromJson(QJsonDocument json)
 	auto arrowArray = obj["arrows"].toArray();
 	for (auto arrow : arrowArray)
 		arrowFromJson(arrow.toObject());
+
+	//Load the arrow layer styles
+	auto arrowLayerStylesObject = obj["arrowLayerStyles"].toObject();
+		for (auto it = arrowLayerStylesObject.begin(); it != arrowLayerStylesObject.end(); it++)
+			arrowStyles_.insert(it.key(), it.value().toString());
+
 	//Load which arrow layers were disabled
 	for (auto name : obj["disabledLayers"].toArray())
 		disabledArrowLayers_.append(name.toString());

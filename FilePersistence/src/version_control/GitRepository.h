@@ -89,6 +89,8 @@ class FILEPERSISTENCE_API GitRepository
 
 		void loadGenericTree(const std::shared_ptr<GenericTree>& tree, const QString version);
 
+		static int getMinPrefixLength();
+
 	private:
 		friend class Merge;
 

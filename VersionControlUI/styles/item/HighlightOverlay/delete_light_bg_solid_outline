@@ -3,13 +3,13 @@
         <shape prototypes="shape/Box/default">
 		Box
 		<backgroundBrush>
-			<style>7</style>
-			<color>#88009900</color>
+			<style>1</style>
+			<color>#20ff0000</color>
 		</backgroundBrush>
 		<outline>
 			<width>10.0</width>
 			<style>1</style>
-			<color>#ff009900</color>
+			<color>#ffff0000</color>
 		</outline>
 	</shape>
 </style>
