@@ -87,12 +87,9 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 
 	QString managerName = target->node()->manager()->name();
 
-
 	// TODO restrict versions to versionA always be older?
-	// TODO diff with no versions should compare HEAD to workingDir if possible
-	// try to get the versions
 	QString versionA = commandTokens.value(1, "HEAD");
-	QString versionB = commandTokens.value(2, "HEAD");
+	QString versionB = commandTokens.value(2, FilePersistence::GitRepository::WORKDIR);
 
 	VersionControlUI::DiffManager diffManager{versionA, versionB, managerName, Model::SymbolMatcher{"Class"}};
 	diffManager.visualize();
@@ -118,49 +115,51 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 		// no additional versions specified
 		if (tokensSoFar.isEmpty())
 		{
-			// TODO implement this behavior
 			suggestions.append(new Interaction::CommandSuggestion{name(), "diff working directory against head"});
 			return suggestions;
 		}
 
 		QString firstVersionToken = tokensSoFar.takeFirst();
-		QString secondVersionToken = "";
+		QString stringToComplete = firstVersionToken;
+		QString suggestCommand = name() + " ";
+		QString suggestDescription = "";
+
+
 		bool secondVersionAvailable = !tokensSoFar.isEmpty();
-		if (secondVersionAvailable) secondVersionToken = tokensSoFar.takeFirst();
-
-
-		for (auto firstTokenEntry : commitsWithDescriptionsStartingWith(firstVersionToken, target))
+		if (secondVersionAvailable)
 		{
-			QString suggestCommand = commandName + " " + firstTokenEntry.first;
-			QString suggestDescription = firstTokenEntry.second;
+			// use the second version token for completion
+			stringToComplete = tokensSoFar.takeFirst();
 
-			if (secondVersionAvailable)
-			{
-				// if firstVersionToken is empty and we are handling the second token we suggest
-				// nothing to avoid too many suggestions
-				if (firstVersionToken.isEmpty()) return {};
+			// add first version token to suggested command
+			suggestCommand += firstVersionToken + " ";
 
-				for (auto secondTokenEntry : commitsWithDescriptionsStartingWith(secondVersionToken, target))
-				{
-					QString suggestCommandTwoVersion = suggestCommand + " " + secondTokenEntry.first;
-					QString suggestDescriptionTwoVersion = suggestDescription + "<br>" + secondTokenEntry.second;
-					suggestions.append(new Interaction::CommandSuggestion{suggestCommandTwoVersion, suggestDescriptionTwoVersion});
-				}
-			}
+			// analyze the first token
+			auto firstTokenSuggestion = commitsWithDescriptionsStartingWith(firstVersionToken, target);
+
+			// if first token is too short throw error
+			if (firstVersionToken.length() < GitRepository::getMinPrefixLength())
+				suggestDescription = "<i>length of first argument must be at least " +
+						QString::number(GitRepository::getMinPrefixLength())+"</i>";
+			else if (firstTokenSuggestion.size() > 1)
+				suggestDescription = "<i>ambiguous</i>";
+			else if (firstTokenSuggestion.size() == 0)
+				suggestDescription = "<i>no match</i>";
 			else
-				suggestions.append(new Interaction::CommandSuggestion{suggestCommand, suggestDescription});
+				// add found description of first token
+				suggestDescription = firstTokenSuggestion.first().second;
+
+			// new line
+			suggestDescription += "<br>";
 		}
+
+		for (auto commitWithDescription : commitsWithDescriptionsStartingWith(stringToComplete, target))
+				suggestions.append(new Interaction::CommandSuggestion{suggestCommand + commitWithDescription.first,
+																						suggestDescription + commitWithDescription.second});
 
 		return suggestions;
 	}
 	else return {};
-}
-
-
-QList<QPair<QString, QString>> CDiff::commitsWithDescriptions(Visualization::Item* target)
-{
-	// every string starts with ""
-	return commitsWithDescriptionsStartingWith("", target);
 }
 
 QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QString partialCommitId,
@@ -176,7 +175,12 @@ QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QStrin
 	{
 		GitRepository repository{path};
 
-		for (auto rev : repository.revisions())
+		// use the bigger of minPrefixLength or length of partialCommit as minimum prefix length
+		auto commitPrefixes = unambiguousShortestPrefixesPerString(repository.revisions(),
+																					  std::max(repository.getMinPrefixLength(),
+																									partialCommitId.length()));
+
+		for (auto rev : commitPrefixes)
 			if (rev.startsWith(partialCommitId))
 				commitsWithDescriptions.append({rev, repository.getCommitInformation(rev).message_});
 
@@ -185,6 +189,22 @@ QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QStrin
 		//commitsWithDescriptions.append(repository.tags());
 	}
 	return commitsWithDescriptions;
+}
+
+QStringList CDiff::unambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength)
+{
+	QStringList shortestPrefixPerString;
+	for (auto str : strings)
+		for (int i = minPrefixLength; i < str.length(); i++)
+		{
+			QString currentPrefix = str.left(i);
+			if (strings.filter(QRegularExpression{"^"+currentPrefix+".*"}).size() == 1)
+			{
+				shortestPrefixPerString.append(currentPrefix);
+				break;
+			}
+		}
+	return shortestPrefixPerString;
 }
 
 

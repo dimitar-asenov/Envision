@@ -45,9 +45,17 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
-		QList<QPair<QString, QString>> commitsWithDescriptions(Visualization::Item* target);
+		/**
+		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
+		 */
 		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
 																								 Visualization::Item* target);
+
+		// TODO maybe move function to an appropriate util class?
+		/**
+		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength
+		 */
+		static QStringList unambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
 };
 
 }
