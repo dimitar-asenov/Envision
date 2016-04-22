@@ -197,7 +197,6 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 														 QList<ChangeWithNodes> changesWithNodes)
 {
 	static const QString arrowLayer = "move_arrows";
-	QString arrowLayer = "move_arrows";
 	diffViewItem->setArrowStyle(arrowLayer, "thick");
 	for (auto change : changesWithNodes)
 	{

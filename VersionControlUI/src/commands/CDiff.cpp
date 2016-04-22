@@ -137,14 +137,14 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 			// analyze the first token
 			auto firstTokenSuggestion = commitsWithDescriptionsStartingWith(firstVersionToken, target);
 
-			// if first token is too short throw error
+			// if first token is too short signal an error
 			if (firstVersionToken.length() < GitRepository::getMinPrefixLength())
 				suggestDescription = "<i>length of first argument must be at least " +
 						QString::number(GitRepository::getMinPrefixLength())+"</i>";
 			else if (firstTokenSuggestion.size() > 1)
 				suggestDescription = "<i>ambiguous</i>";
 			else if (firstTokenSuggestion.size() == 0)
-				suggestDescription = "<i>no match</i>";
+				suggestDescription = "<i>no matching commit id</i>";
 			else
 				// add found description of first token
 				suggestDescription = firstTokenSuggestion.first().second;
