@@ -601,8 +601,6 @@ bool GitRepository::isValidRevisionString(QString revision) const
 	if (errorCode == GIT_EAMBIGUOUS)
 		isValid = false;
 
-	checkError(errorCode);
-
 	git_object_free(obj);
 
 	return isValid;
@@ -1069,6 +1067,11 @@ git_commit* GitRepository::parseCommit(QString revision) const
 
 	// clean up
 	git_object_free(obj);
+}
+
+int GitRepository::getMinPrefixLength()
+{
+	return GIT_OID_MINPREFIXLEN;
 }
 
 QString GitRepository::oidToQString(const git_oid* oid) const
