@@ -48,7 +48,7 @@ class FILEPERSISTENCE_API GitPiecewiseLoader : public PiecewiseLoader
 		QList<NodeData> loadNodeChildrenData(Model::NodeIdType id);
 
 	private:
-		static NodeData parseGrepLine(const QString& line);
+		static NodeData parseGrepLine(const QString& line, bool isWorkDir);
 
 		static bool isPersistenceUnit(const QString& nodeLine);
 
