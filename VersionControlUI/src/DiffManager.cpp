@@ -165,18 +165,18 @@ void DiffManager::removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>*
 QSet<Model::Node*> DiffManager::findAllNodesWithDirectParentPresent(QHash<Model::Node*,
 																						  FilePersistence::ChangeType>& nodes)
 {
-	QSet<Model::Node*> nodesMarkedForRemoval;
+	QSet<Model::Node*> result;
 	for (auto node : nodes.keys())
 		// check that changeType also matches
 		if (nodes.contains(node->parent()) && nodes[node] == nodes[node->parent()])
-				nodesMarkedForRemoval.insert(node);
+				result.insert(node);
 
-	return nodesMarkedForRemoval;
+	return result;
 }
 
-QSet<Visualization::Item*> DiffManager::findAllItemsWithParentPresent(QSet<Visualization::Item*> items)
+QSet<Visualization::Item*> DiffManager::findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items)
 {
-	QSet<Visualization::Item*> itemsMarkedForRemoval;
+	QSet<Visualization::Item*> result;
 	for (auto item : items)
 	{
 		auto parent = item->parent();
@@ -184,14 +184,14 @@ QSet<Visualization::Item*> DiffManager::findAllItemsWithParentPresent(QSet<Visua
 		{
 			if (items.contains(parent))
 			{
-				itemsMarkedForRemoval.insert(item);
+				result.insert(item);
 				break;
 			}
 			parent = parent->parent();
 		}
 	}
 
-	return itemsMarkedForRemoval;
+	return result;
 }
 
 // TODO find good way to return and use Node instead of Id
@@ -268,16 +268,9 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		}
 	}
 
-	QSet<Visualization::Item*> removeItems = findAllItemsWithParentPresent(allItemsToScale);
+	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(allItemsToScale);
 
-	auto it = allItemsToScale.begin();
-	while (it != allItemsToScale.end())
-	{
-		if (removeItems.contains(*it))
-			it = allItemsToScale.erase(it);
-		else
-			it++;
-	}
+	allItemsToScale.subtract(removeItems);
 
 	Visualization::VisualizationManager::instance().mainScene()->
 			addOnZoomHandler([allItemsToScale](qreal factor)

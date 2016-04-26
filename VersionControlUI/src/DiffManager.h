@@ -95,7 +95,7 @@ class VERSIONCONTROLUI_API DiffManager
 		/**
 		 * Returns all items which have any of their parents present in \a items.
 		 */
-		static QSet<Visualization::Item*> findAllItemsWithParentPresent(QSet<Visualization::Item*> items);
+		static QSet<Visualization::Item*> findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items);
 
 		QString oldVersion_;
 		QString newVersion_;
