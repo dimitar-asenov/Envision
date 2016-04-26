@@ -42,6 +42,7 @@ namespace FilePersistence
 namespace Visualization
 {
 	class ViewItem;
+	class Item;
 }
 
 namespace VersionControlUI {
@@ -90,6 +91,11 @@ class VERSIONCONTROLUI_API DiffManager
 		 * Creates a TreeManager from \a version using \a repository.
 		 */
 		Model::TreeManager* createTreeManagerFromVersion(FilePersistence::GitRepository& repository, QString version);
+
+		/**
+		 * Returns all items which have any of their parents present in \a items.
+		 */
+		static QSet<Visualization::Item*> findAllItemsWithParentPresent(QSet<Visualization::Item*> items);
 
 		QString oldVersion_;
 		QString newVersion_;

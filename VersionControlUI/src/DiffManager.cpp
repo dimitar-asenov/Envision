@@ -174,6 +174,26 @@ QSet<Model::Node*> DiffManager::findAllNodesWithDirectParentPresent(QHash<Model:
 	return nodesMarkedForRemoval;
 }
 
+QSet<Visualization::Item*> DiffManager::findAllItemsWithParentPresent(QSet<Visualization::Item*> items)
+{
+	QSet<Visualization::Item*> itemsMarkedForRemoval;
+	for (auto item : items)
+	{
+		auto parent = item->parent();
+		while (parent)
+		{
+			if (items.contains(parent))
+			{
+				itemsMarkedForRemoval.insert(item);
+				break;
+			}
+			parent = parent->parent();
+		}
+	}
+
+	return itemsMarkedForRemoval;
+}
+
 // TODO find good way to return and use Node instead of Id
 bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeIdType id, Model::NodeIdType& resultId)
 {
@@ -198,6 +218,8 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 {
 	static const QString arrowLayer = "move_arrows";
 	diffViewItem->setArrowStyle(arrowLayer, "thick");
+
+	QSet<Visualization::Item*> allItemsToScale;
 	for (auto change : changesWithNodes)
 	{
 		QString highlightOverlayStyle;
@@ -239,11 +261,37 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 		for (auto item : items)
 		{
+			allItemsToScale.insert(item);
 			auto overlay = new Visualization::HighlightOverlay{item,
 					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
 			item->addOverlay(overlay, highlightOverlayName);
 		}
 	}
+
+	QSet<Visualization::Item*> removeItems = findAllItemsWithParentPresent(allItemsToScale);
+
+	auto it = allItemsToScale.begin();
+	while (it != allItemsToScale.end())
+	{
+		if (removeItems.contains(*it))
+			it = allItemsToScale.erase(it);
+		else
+			it++;
+	}
+
+	Visualization::VisualizationManager::instance().mainScene()->
+			addOnZoomHandler([allItemsToScale](qreal factor)
+	{
+		for (auto item : allItemsToScale)
+		{
+			if (factor >= 1.0)
+				item->setScale(1.0);
+			else if (factor >= 0.05)
+				item->setScale((1/factor));
+			else
+				item->setScale((1/factor) * std::pow(0.95, 1/factor));
+		}
+	});
 }
 
 void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,

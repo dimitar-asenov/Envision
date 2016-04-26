@@ -59,6 +59,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 	public:
 
 		using RefreshActionFunction = std::function<void (Scene* scene)>;
+		using OnZoomHandler = std::function<void (qreal factor)>;
 
 		Scene();
 		virtual ~Scene();
@@ -110,6 +111,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		const QList<Item*>& topLevelItems() const;
 
 		void addRefreshActionFunction(RefreshActionFunction func);
+		void addOnZoomHandler(OnZoomHandler onZoomHandler);
 
 		/**
 		 * Returns the focused item if it is an instance of Item* or the closest of its ancestors that is an Item*.
@@ -209,6 +211,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		const int MAX_MILLISECONDS_FOR_A_CLICK = 500;
 
 		QList<RefreshActionFunction> refreshActionFunctions_;
+		QList<OnZoomHandler> onZoomHandlers_;
 
 		QSet<Item*> itemsSensitiveToScale_;
 
@@ -231,6 +234,8 @@ inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return mainCursor_; }
 inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
 inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
+
+inline void Scene::addOnZoomHandler(OnZoomHandler onZoomHandler) {onZoomHandlers_.append(onZoomHandler);}
 
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }
 inline QPointF Scene::lastMouseHoverPosition() const { return lastMouseHoverPosition_; }
