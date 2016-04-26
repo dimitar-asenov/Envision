@@ -165,13 +165,33 @@ void DiffManager::removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>*
 QSet<Model::Node*> DiffManager::findAllNodesWithDirectParentPresent(QHash<Model::Node*,
 																						  FilePersistence::ChangeType>& nodes)
 {
-	QSet<Model::Node*> nodesMarkedForRemoval;
+	QSet<Model::Node*> result;
 	for (auto node : nodes.keys())
 		// check that changeType also matches
 		if (nodes.contains(node->parent()) && nodes[node] == nodes[node->parent()])
-				nodesMarkedForRemoval.insert(node);
+				result.insert(node);
 
-	return nodesMarkedForRemoval;
+	return result;
+}
+
+QSet<Visualization::Item*> DiffManager::findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items)
+{
+	QSet<Visualization::Item*> result;
+	for (auto item : items)
+	{
+		auto parent = item->parent();
+		while (parent)
+		{
+			if (items.contains(parent))
+			{
+				result.insert(item);
+				break;
+			}
+			parent = parent->parent();
+		}
+	}
+
+	return result;
 }
 
 // TODO find good way to return and use Node instead of Id
@@ -198,6 +218,8 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 {
 	static const QString arrowLayer = "move_arrows";
 	diffViewItem->setArrowStyle(arrowLayer, "thick");
+
+	QSet<Visualization::Item*> allItemsToScale;
 	for (auto change : changesWithNodes)
 	{
 		QString highlightOverlayStyle;
@@ -239,11 +261,30 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 		for (auto item : items)
 		{
+			allItemsToScale.insert(item);
 			auto overlay = new Visualization::HighlightOverlay{item,
 					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
 			item->addOverlay(overlay, highlightOverlayName);
 		}
 	}
+
+	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(allItemsToScale);
+
+	allItemsToScale.subtract(removeItems);
+
+	Visualization::VisualizationManager::instance().mainScene()->
+			addOnZoomHandler([allItemsToScale](qreal factor)
+	{
+		for (auto item : allItemsToScale)
+		{
+			if (factor >= 1.0)
+				item->setScale(1.0);
+			else if (factor >= 0.05)
+				item->setScale((1/factor));
+			else
+				item->setScale((1/factor) * std::pow(0.95, 1/factor));
+		}
+	});
 }
 
 void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,

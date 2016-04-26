@@ -65,13 +65,19 @@ bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
 			return false;
 
 		// if there is an additional version specified, check that it is a valid commit
-		if (!commandTokensCopy.isEmpty() && !repository.isValidRevisionString(commandTokensCopy.takeFirst()))
-			return false;
-
+		if (!commandTokensCopy.isEmpty())
+		{
+			auto token = commandTokensCopy.takeFirst();
+			if (!repository.isValidRevisionString(unambigousPrefixPerRevision_.value(token, token)))
+				return false;
+		}
 		// check the same if there is a second version specified
-		if (!commandTokensCopy.isEmpty() && !repository.isValidRevisionString(commandTokensCopy.takeFirst()))
-			return false;
-
+		if (!commandTokensCopy.isEmpty())
+		{
+			auto token = commandTokensCopy.takeFirst();
+			if (!repository.isValidRevisionString(unambigousPrefixPerRevision_.value(token, token)))
+				return false;
+		}
 		return true;
 	}
 	else return false;
@@ -90,6 +96,10 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	// TODO restrict versions to versionA always be older?
 	QString versionA = commandTokens.value(1, "HEAD");
 	QString versionB = commandTokens.value(2, FilePersistence::GitRepository::WORKDIR);
+
+	// try to get complete sha1 if available
+	versionA = unambigousPrefixPerRevision_.value(versionA, versionA);
+	versionB = unambigousPrefixPerRevision_.value(versionB, versionB);
 
 	VersionControlUI::DiffManager diffManager{versionA, versionB, managerName, Model::SymbolMatcher{"Class"}};
 	diffManager.visualize();
@@ -175,14 +185,16 @@ QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QStrin
 	{
 		GitRepository repository{path};
 
-		// use the bigger of minPrefixLength or length of partialCommit as minimum prefix length
-		auto commitPrefixes = unambiguousShortestPrefixesPerString(repository.revisions(),
-																					  std::max(repository.getMinPrefixLength(),
-																									partialCommitId.length()));
+		auto revisions = repository.revisions();
 
-		for (auto rev : commitPrefixes)
-			if (rev.startsWith(partialCommitId))
-				commitsWithDescriptions.append({rev, repository.getCommitInformation(rev).message_});
+		// use the bigger of minPrefixLength or length of partialCommit as minimum prefix length
+		auto prefixes = computeUnambiguousShortestPrefixesPerString(revisions,
+																  std::max(repository.getMinPrefixLength(), partialCommitId.length()));
+
+		for (auto prefix : prefixes)
+			if (prefix.startsWith(partialCommitId))
+				commitsWithDescriptions.append({prefix,
+														  repository.getCommitInformation(unambigousPrefixPerRevision_[prefix]).message_});
 
 		// TODO find clean way to make localBranches and tags also available
 		//commitsWithDescriptions.append(repository.localBranches());
@@ -191,21 +203,23 @@ QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QStrin
 	return commitsWithDescriptions;
 }
 
-QStringList CDiff::unambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength)
+QStringList CDiff::computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength)
 {
-	QStringList shortestPrefixPerString;
+	unambigousPrefixPerRevision_.clear();
+	QStringList prefixes;
 	for (auto str : strings)
 		for (int i = minPrefixLength; i < str.length(); i++)
 		{
 			QString currentPrefix = str.left(i);
 			if (strings.filter(QRegularExpression{"^"+currentPrefix+".*"}).size() == 1)
 			{
-				shortestPrefixPerString.append(currentPrefix);
+				prefixes.append(currentPrefix);
+				unambigousPrefixPerRevision_.insert(currentPrefix, str);
 				break;
 			}
 		}
-	return shortestPrefixPerString;
-}
 
+	return prefixes;
+}
 
 }

@@ -41,8 +41,17 @@ GitPiecewiseLoader::~GitPiecewiseLoader() {}
 
 NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 {
+
 	auto regEx = id.toString() + " {.*}";
-	auto result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
+	SystemCommandResult result;
+
+	bool isWorkDir = (revision_ == GitRepository::WORKDIR);
+	// in case of workdir just use regular grep
+	// TODO is grep called correctly like this?
+	if (isWorkDir)
+		result = runSystemCommand("grep", {"-G", "-r", regEx}, workDir_);
+	else
+		result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
 
 	Q_ASSERT(result.exitCode() == 0);
 	Q_ASSERT(!result.standardout().isEmpty());
@@ -52,14 +61,22 @@ NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 
 	for (auto line : result.standardout())
 		if (!isPersistenceUnit(line))
-			return parseGrepLine(line);
+			return parseGrepLine(line, isWorkDir);
 	Q_ASSERT(false);
 }
 
 QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 {
 	auto regEx = "{.*} " + id.toString();
-	auto result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
+	SystemCommandResult result;
+
+	// in case of workdir just use regular grep
+	// TODO is grep called correctly like this?
+	bool isWorkDir = (revision_ == GitRepository::WORKDIR);
+	if (isWorkDir)
+		result = runSystemCommand("grep", {"-G", "-r", regEx}, workDir_);
+	else
+		result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
 
 	Q_ASSERT(result.exitCode() == 0 || result.exitCode() == 1);
 	Q_ASSERT(result.standarderr().isEmpty());
@@ -69,19 +86,29 @@ QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 	for (auto line : result.standardout())
 		if (!isPersistenceUnit(line))
 		{
-			auto nodeData = parseGrepLine(line);
+			auto nodeData = parseGrepLine(line, isWorkDir);
 			children.append(nodeData);
 		}
 
 	return children;
 }
 
-NodeData GitPiecewiseLoader::parseGrepLine(const QString& line)
+NodeData GitPiecewiseLoader::parseGrepLine(const QString& line, bool isWorkDir)
 {
 	NodeData nodeData;
+
+	// no revision part if regular grep
+	if (isWorkDir)
+	{
+		nodeData.persistentUnit_ = line.section(':', 0, 0);
+		nodeData.nodeLine_ = line.section(':', 1);
+	}
 	// first element is revision
-	nodeData.persistentUnit_ = line.section(':', 1, 1);
-	nodeData.nodeLine_ = line.section(':', 2);
+	else
+	{
+		nodeData.persistentUnit_ = line.section(':', 1, 1);
+		nodeData.nodeLine_ = line.section(':', 2);
+	}
 	return nodeData;
 }
 

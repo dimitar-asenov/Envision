@@ -51,11 +51,12 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
 																								 Visualization::Item* target);
 
-		// TODO maybe move function to an appropriate util class?
 		/**
 		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength
 		 */
-		static QStringList unambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
+		QStringList computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
+
+		QHash<QString, QString> unambigousPrefixPerRevision_;
 };
 
 }
