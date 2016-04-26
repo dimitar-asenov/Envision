@@ -85,7 +85,9 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		while (iter != files_.constEnd())
 		{
 			QFileInfo fileInfo{iter.key()};
-			if ((fileName.startsWith("{") && fileInfo.fileName().contains(fileName))|| fileInfo.fileName() == fileName)
+			if (!fileInfo.isDir() &&
+				 ((fileName.startsWith("{") && fileInfo.fileName().contains(fileName))
+				 || fileInfo.fileName() == fileName))
 				break;
 			iter++;
 		}
