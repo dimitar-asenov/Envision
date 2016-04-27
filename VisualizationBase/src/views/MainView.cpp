@@ -111,11 +111,27 @@ void MainView::wheelEvent(QWheelEvent *event)
 	// Zoom
 	if (event->modifiers() == Qt::ControlModifier)
 	{
-		if ( event->delta() > 0 ) scaleLevel--;
-		else scaleLevel++;
+		if ( event->delta() > 0 ) --scaleLevel;
+		else ++scaleLevel;
 
-		if ( scaleLevel <= 0 ) scaleLevel = 1;
+		if ( scaleLevel <= 0 )
+		{
+			// Nothing changes, we're already at the bottom
+			scaleLevel = 1;
+			return;
+		}
 		qreal factor = scaleFactor();
+
+		// Prevent zooming-out so far that the scrollbars disappear.
+		// This is OK, since the scene's extent is artifically enlarged and it is still possible to see the
+		// entire scene at once, even with scrollbars.
+		if (sceneRect().width()*factor <= viewport()->width() || sceneRect().height()*factor <= viewport()->height())
+		{
+			// Nothing changes, we're already at the largest zoom level.
+			--scaleLevel;
+			return;
+		}
+
 		setTransform(QTransform::fromScale(factor, factor));
 
 		if ( miniMap ) miniMap->visibleRectChanged();
