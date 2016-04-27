@@ -156,6 +156,8 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 	while (!stack.isEmpty())
 	{
 		auto item = stack.takeLast();
+		if (!item->isVisible())
+			continue;
 
 		auto scaledWidth = item->widthInParent() * scalingFactor;
 		auto scaledHeight = item->heightInParent() * scalingFactor;
