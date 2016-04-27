@@ -139,7 +139,7 @@ public class Main {
 			for(File file : files)
 			{
 				if (!PRINT_METHODS) System.out.print("Processing file: " + file.getPath() + "...");
-				ASTParser parser = ASTParser.newParser(AST.JLS4);
+				ASTParser parser = ASTParser.newParser(AST.JLS8);
 				
 				String source;
 				if (classFiles)
@@ -151,7 +151,7 @@ public class Main {
 				
 				// Ensure compliance with the latest java
 				 Map options = JavaCore.getOptions();
-				 JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+				 JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 				 parser.setCompilerOptions(options);
 				 
 				CompilationUnit unit = (CompilationUnit) parser.createAST(null);

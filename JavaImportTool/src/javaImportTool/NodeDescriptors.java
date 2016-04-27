@@ -228,6 +228,13 @@ public class NodeDescriptors {
 				{"Expression","trueExpression"},
 				{"Expression","falseExpression"}
 		}));
+		add( new NodeInitializer("LambdaExpression", new String[][]{
+				{"TypedListOfFormalArgument","arguments"},
+				{"TypedListOfFormalResult","results"},
+				{"TypedListOfExpression","captures"},
+				{"StatementItemList","body"},
+				{"Integer","dCaptureType"}
+		}));
 
 		// Literals
 		add( new NodeInitializer("BooleanLiteral", new String[][]{

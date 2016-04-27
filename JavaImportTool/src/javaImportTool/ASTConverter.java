@@ -25,7 +25,6 @@
  **********************************************************************************************************************/
 package javaImportTool;
 
-import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -308,11 +307,11 @@ public class ASTConverter {
 			result.setChild("typeExpression", addExtraDimensions(type, node.getExtraDimensions()));
 		}
 		
-		if (node.thrownExceptions() != null)
+		if (node.thrownExceptionTypes() != null)
 		{
 			int i = 0;
-			for(Name exception : (List<Name>)node.thrownExceptions())
-				me.child("throws").add(expression(exception, Integer.toString(i++)));
+			for(Type exceptionType : (List<Type>)node.thrownExceptionTypes())
+				me.child("throws").add(typeExpression(exceptionType, Integer.toString(i++)));
 		}
 		
 		if (node.getBody() != null)
@@ -654,17 +653,19 @@ public class ASTConverter {
 		}
 	}
 	
-	public void processParameters(List<SingleVariableDeclaration> params) throws ConversionException
+	public void processParameters(List<VariableDeclaration> params) throws ConversionException
 	{
 		int i = 0;
-		for(SingleVariableDeclaration arg : params)
+		for(VariableDeclaration arg : params)
 		{
 			Node a = containers.peek().child("arguments").add(new Node(null,"FormalArgument", i++));
 			a.setSymbol(arg.getName().getIdentifier());
 			setModifiersAndAnnotations(a, Modifier.PUBLIC, null);
 			
-			Node type = typeExpression(arg.getType(), "typeExpression");
-			a.setChild("typeExpression", addExtraDimensions(type,arg.getExtraDimensions()));
+			if (arg instanceof SingleVariableDeclaration) {
+				Node type = typeExpression(((SingleVariableDeclaration)arg).getType(), "typeExpression");
+				a.setChild("typeExpression", addExtraDimensions(type,arg.getExtraDimensions()));
+			}
 			
 			// TODO: Implement support for modifies and annotations
 			// TODO: Implement support for variable method arity
@@ -732,8 +733,18 @@ public class ASTConverter {
 		}
 		else if (type.isArrayType())
 		{
+			// The ArrayType has just an element type and a dimension int,
+			// we have for each dimension a type so we have to build this structure.
+			int dim = ((ArrayType) type).getDimensions();
 			t = new Node(null, "ArrayTypeExpression", name);
-			t.setChild("typeExpression", typeExpression(((ArrayType)type).getComponentType(), "typeExpression"));
+			Node parentType = t;
+			while (dim-- > 1) {
+				Node typeExpression = new Node(null, "ArrayTypeExpression", name);
+				typeExpression.setChild("typeExpression", typeExpression(((ArrayType)type).getElementType(), "typeExpression"));
+				parentType.setChild("typeExpression", typeExpression);
+				parentType = typeExpression;
+			}
+			parentType.setChild("typeExpression", typeExpression(((ArrayType)type).getElementType(), "typeExpression"));
 		} else if (type.isQualifiedType())
 		{
 			t = new Node(null, "ReferenceExpression", name);
@@ -843,13 +854,8 @@ public class ASTConverter {
 			node = new Node(null, "NewExpression", name);
 			
 			// Count how many dimensions are found in the the type itself
-			int typeDimensions = 1;
-			Type innerType = ac.getType().getComponentType();
-			while(innerType instanceof ArrayType)
-			{
-				++typeDimensions;
-				innerType = ((ArrayType) innerType).getComponentType();
-			}
+			int typeDimensions = ac.getType().getDimensions();
+			Type innerType = ac.getType().getElementType();
 			
 			// Set the innerType of the new expression
 			node.setChild("newType", typeExpression(innerType,"newType"));
@@ -1151,7 +1157,35 @@ public class ASTConverter {
 					(List<IExtendedModifier>) vde.modifiers(), vde.fragments());
 			node = combineNodesWithComma(varDecls, name);
 			
-		} else throw new UnknownFeatureException("Unknown expression type: " + e.getClass().getSimpleName());
+		} else if (e instanceof LambdaExpression) {
+			LambdaExpression lambda = (LambdaExpression) e;
+			node = new Node(null, "LambdaExpression", name);
+			Node dummyMethod = new Node(null, "Method", "dummy");
+			containers.push(dummyMethod);
+			processParameters(lambda.parameters());
+			ASTNode body = lambda.getBody();
+			if (body != null && body instanceof Block) {
+				visitBody(((Block) body).statements(), "items");
+				node.setChild("body", dummyMethod.child("items"));
+			} else if (body != null && body instanceof Expression) {
+				Node statementExpr = new Node(null, "ExpressionStatement", name);
+				statementExpr.setChild("expression", expression((Expression) body, name));
+				node.child("body").add(statementExpr);
+			}
+			containers.pop();
+			node.setChild("arguments", dummyMethod.child("arguments"));
+		} else if (e instanceof ExpressionMethodReference) {
+			ExpressionMethodReference methodRef = (ExpressionMethodReference) e;
+			
+			node = new Node(null, "ReferenceExpression", name);
+			Node prefix = expression(methodRef.getExpression(), "prefix");
+			
+			// TODO handle type arguments
+			
+			node.add(prefix);
+			node.child("ref").setStringValue("____NULL____:" + methodRef.getName().getIdentifier());
+		} else
+			throw new UnknownFeatureException("Unknown expression type: " + e.getClass().getSimpleName());
 		
 		return node;
 	}
