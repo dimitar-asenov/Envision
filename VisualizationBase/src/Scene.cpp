@@ -27,6 +27,7 @@
 #include "Scene.h"
 #include "VisualizationManager.h"
 #include "views/View.h"
+#include "views/MainView.h"
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
 #include "items/RootItem.h"
@@ -454,13 +455,24 @@ void Scene::computeSceneRect()
 //		viewRect.setY(viewRect.y() - bottomExtra + topExtra);
 //	}
 
-	static constexpr int MARGIN = 1000;
-	viewRect.adjust(-MARGIN, -MARGIN, MARGIN, MARGIN); // Add some margin
-	sceneRect.adjust(-MARGIN, -MARGIN, MARGIN, MARGIN); // Add some margin
+
+	// Add some margin
+	static constexpr int STATIC_MARGIN = 1000;
+	auto staticViewRect = viewRect.adjusted(-STATIC_MARGIN, -STATIC_MARGIN, STATIC_MARGIN, STATIC_MARGIN);
+	sceneRect.adjust(-STATIC_MARGIN, -STATIC_MARGIN, STATIC_MARGIN, STATIC_MARGIN);
+
+	// Make the main view represent a much bigger are in order to improve zooming behavior.
+	// This make it possible to use QGraphicsView::AnchorUnderMouse behavior for a larger range of zoom levels.
+	int dynamicMardin = std::max(sceneRect.width(), sceneRect.height()) * 10;
+	viewRect.adjust(-dynamicMardin, -dynamicMardin, dynamicMardin, dynamicMardin);
 
 	//sceneRect = viewRect.united(sceneRect);
 	setSceneRect(sceneRect);
-	for (auto v: views()) v->setSceneRect(viewRect);
+	for (auto v: views())
+		if (dynamic_cast<MainView*>(v))
+			v->setSceneRect(viewRect);
+		else
+			v->setSceneRect(staticViewRect);
 }
 
 void Scene::setItemIsSensitiveToScale(Item* item, bool update)
