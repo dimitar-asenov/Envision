@@ -151,7 +151,7 @@ public class Main {
 				
 				// Ensure compliance with the latest java
 				 Map options = JavaCore.getOptions();
-				 JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+				 JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 				 parser.setCompilerOptions(options);
 				 
 				CompilationUnit unit = (CompilationUnit) parser.createAST(null);

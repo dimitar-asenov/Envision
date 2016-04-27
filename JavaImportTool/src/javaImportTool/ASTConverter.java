@@ -653,17 +653,19 @@ public class ASTConverter {
 		}
 	}
 	
-	public void processParameters(List<SingleVariableDeclaration> params) throws ConversionException
+	public void processParameters(List<VariableDeclaration> params) throws ConversionException
 	{
 		int i = 0;
-		for(SingleVariableDeclaration arg : params)
+		for(VariableDeclaration arg : params)
 		{
 			Node a = containers.peek().child("arguments").add(new Node(null,"FormalArgument", i++));
 			a.setSymbol(arg.getName().getIdentifier());
 			setModifiersAndAnnotations(a, Modifier.PUBLIC, null);
 			
-			Node type = typeExpression(arg.getType(), "typeExpression");
-			a.setChild("typeExpression", addExtraDimensions(type,arg.getExtraDimensions()));
+			if (arg instanceof SingleVariableDeclaration) {
+				Node type = typeExpression(((SingleVariableDeclaration)arg).getType(), "typeExpression");
+				a.setChild("typeExpression", addExtraDimensions(type,arg.getExtraDimensions()));
+			}
 			
 			// TODO: Implement support for modifies and annotations
 			// TODO: Implement support for variable method arity
@@ -1155,7 +1157,35 @@ public class ASTConverter {
 					(List<IExtendedModifier>) vde.modifiers(), vde.fragments());
 			node = combineNodesWithComma(varDecls, name);
 			
-		} else throw new UnknownFeatureException("Unknown expression type: " + e.getClass().getSimpleName());
+		} else if (e instanceof LambdaExpression) {
+			LambdaExpression lambda = (LambdaExpression) e;
+			node = new Node(null, "LambdaExpression", name);
+			Node dummyMethod = new Node(null, "Method", "dummy");
+			containers.push(dummyMethod);
+			processParameters(lambda.parameters());
+			ASTNode body = lambda.getBody();
+			if (body != null && body instanceof Block) {
+				visitBody(((Block) body).statements(), "items");
+				node.setChild("body", dummyMethod.child("items"));
+			} else if (body != null && body instanceof Expression) {
+				Node statementExpr = new Node(null, "ExpressionStatement", name);
+				statementExpr.setChild("expression", expression((Expression) body, name));
+				node.child("body").add(statementExpr);
+			}
+			containers.pop();
+			node.setChild("arguments", dummyMethod.child("arguments"));
+		} else if (e instanceof ExpressionMethodReference) {
+			ExpressionMethodReference methodRef = (ExpressionMethodReference) e;
+			
+			node = new Node(null, "ReferenceExpression", name);
+			Node prefix = expression(methodRef.getExpression(), "prefix");
+			
+			// TODO handle type arguments
+			
+			node.add(prefix);
+			node.child("ref").setStringValue("____NULL____:" + methodRef.getName().getIdentifier());
+		} else
+			throw new UnknownFeatureException("Unknown expression type: " + e.getClass().getSimpleName());
 		
 		return node;
 	}
