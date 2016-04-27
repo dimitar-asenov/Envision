@@ -41,6 +41,9 @@ MainView::MainView(Scene *scene) :
 	setRenderHint(QPainter::Antialiasing);
 	setRenderHint(QPainter::TextAntialiasing);
 
+	// This is needed to resolve artifacts when zooming in/out and there are items sensitive to scale.
+	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
 	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
 	setMiniMapSize(MINIMAP_DEFAULT_WIDTH, MINIMAP_DEFAULT_HEIGHT);
