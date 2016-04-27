@@ -23,56 +23,29 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#include "VDiffComparisonPair.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
-#include "ModelBase/src/nodes/Text.h"
-#include "VisualizationBase/src/items/VText.h"
+#include "DiffComparisonPair.h"
 
 namespace VersionControlUI
 {
-	DEFINE_ITEM_COMMON(VDiffComparisonPair, "item")
 
-	VDiffComparisonPair::VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style)
-		: Super{parent, node, style}
-	{}
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(DiffComparisonPair)
 
-	void VDiffComparisonPair::initializeForms()
-	{
-		auto oldVersion = item(&I::oldVersionNode_, [](I* v) {
-				return v->node()->oldVersionNode();});
+DiffComparisonPair::DiffComparisonPair(Model::Node *)
+	:Super{}
+{
+}
 
-		auto newVersion = item(&I::newVersionNode_, [](I* v) {
-				return v->node()->newVersionNode();});
+DiffComparisonPair::DiffComparisonPair(Model::Node *, Model::PersistentStore &, bool)
+	:Super{}
+{
+	Q_ASSERT(false);
+}
 
-		auto oldVersionObjectPath = item<Visualization::VText>(&I::oldVersionObjectPath_, [](I* v) {
-				return v->node()->oldVersionObjectPath();},
-				[](I* v) {return &v->style()->oldVersionObjectPath();});
+DiffComparisonPair* DiffComparisonPair::clone() const { return new DiffComparisonPair{*this}; }
 
-		auto newVersionObjectPath = item<Visualization::VText>(&I::newVersionObjectPath_, [](I* v) {
-				return v->node()->newVersionObjectPath();},
-				[](I* v) {return &v->style()->newVersionObjectPath();});
-
-		auto container = (new Visualization::GridLayoutFormElement{})
-					->setHorizontalSpacing(30)
-					->setVerticalSpacing(15)
-					->setColumnStretchFactor(0, 0)
-					->setColumnStretchFactor(1, 0)
-					->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-					->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-					->put(0, 0, oldVersionObjectPath)
-					->put(1, 0, newVersionObjectPath)
-					->put(0, 1, oldVersion)
-					->put(1, 1, newVersion);
-
-		addForm(container);
-
-	}
-
-	int VDiffComparisonPair::determineForm()
-	{
-		return 0;
-	}
+QJsonValue DiffComparisonPair::toJson() const
+{
+	return QJsonValue{};
+}
 
 }

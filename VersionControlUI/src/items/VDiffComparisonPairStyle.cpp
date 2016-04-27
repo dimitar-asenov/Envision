@@ -24,40 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "versioncontrolui_api.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VDiffComparisonPairStyle.h"
-
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/VText.h"
-
-#include "DiffComparisonPair.h"
 
 namespace VersionControlUI
 {
 
-class DiffComparisonPair;
-
-class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::ItemWithNode<VDiffComparisonPair,
-		Visualization::DeclarativeItem<VDiffComparisonPair>, DiffComparisonPair>>
-{
-	ITEM_COMMON(VDiffComparisonPair)
-
-	public:
-		VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
-		virtual int determineForm() override;
-
-	private:
-		Visualization::Item* oldVersionNode_{};
-		Visualization::Item* newVersionNode_{};
-		Visualization::VText* oldVersionObjectPath_{};
-		Visualization::VText* newVersionObjectPath_{};
-};
+VDiffComparisonPairStyle::~VDiffComparisonPairStyle(){}
 
 }

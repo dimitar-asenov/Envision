@@ -9,16 +9,16 @@ add_library(VersionControlUI SHARED
 	src/versioncontrolui_api.h
 	src/VersionControlUIPlugin.h
 	src/DiffManager.h
-	src/DiffComparisonPair.h
-	src/VDiffComparisonPair.h
-	src/VDiffComparisonPairStyle.h
+	src/nodes/DiffComparisonPair.h
+	src/items/VDiffComparisonPair.h
+	src/items/VDiffComparisonPairStyle.h
 	src/commands/CDiff.h
 	src/VersionControlUIException.cpp
 	src/VersionControlUIPlugin.cpp
 	src/DiffManager.cpp
-	src/DiffComparisonPair.cpp
-	src/VDiffComparisonPair.cpp
-	src/VDiffComparisonPairStyle.cpp
+	src/nodes/DiffComparisonPair.cpp
+	src/items/VDiffComparisonPair.cpp
+	src/items/VDiffComparisonPairStyle.cpp
 	src/commands/CDiff.cpp
 	test/SimpleTest.cpp
 )

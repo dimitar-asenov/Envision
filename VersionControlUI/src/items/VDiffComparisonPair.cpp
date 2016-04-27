@@ -24,9 +24,54 @@
  **
  **********************************************************************************************************************/
 
-#include "VDiffComparisonPairStyle.h"
+#include "VDiffComparisonPair.h"
 
-namespace VERSIONCONTROLUI_API
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
+#include "ModelBase/src/nodes/Text.h"
+#include "VisualizationBase/src/items/VText.h"
+
+namespace VersionControlUI
 {
-	// TODO is the deconstructor needed like shown in the tutorial?
+
+DEFINE_ITEM_COMMON(VDiffComparisonPair, "item")
+
+VDiffComparisonPair::VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style)
+	: Super{parent, node, style}
+{}
+
+void VDiffComparisonPair::initializeForms()
+{
+	auto oldVersion = item(&I::oldVersionNode_, [](I* v) {
+			return v->node()->oldVersionNode();});
+
+	auto newVersion = item(&I::newVersionNode_, [](I* v) {
+			return v->node()->newVersionNode();});
+
+	auto oldVersionObjectPath = item<Visualization::VText>(&I::oldVersionObjectPath_, [](I* v) {
+			return v->node()->oldVersionObjectPath();},
+			[](I* v) {return &v->style()->oldVersionObjectPath();});
+
+	auto newVersionObjectPath = item<Visualization::VText>(&I::newVersionObjectPath_, [](I* v) {
+			return v->node()->newVersionObjectPath();},
+			[](I* v) {return &v->style()->newVersionObjectPath();});
+
+	auto container = (new Visualization::GridLayoutFormElement{})
+				->setHorizontalSpacing(30)
+				->setVerticalSpacing(15)
+				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+				->put(0, 0, oldVersionObjectPath)
+				->put(1, 0, newVersionObjectPath)
+				->put(0, 1, oldVersion)
+				->put(1, 1, newVersion);
+
+	addForm(container);
+
+}
+
+int VDiffComparisonPair::determineForm()
+{
+	return 0;
+}
+
 }

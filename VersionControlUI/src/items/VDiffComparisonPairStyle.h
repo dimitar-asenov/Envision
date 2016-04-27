@@ -23,33 +23,23 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "DiffComparisonPair.h"
 
+#pragma once
+
+#include "../versioncontrolui_api.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
 
 namespace VersionControlUI
 {
 
-DEFINE_NODE_TYPE_REGISTRATION_METHODS(DiffComparisonPair)
-
-// TODO the four entries below where needed to be able to compile
-// is there a better way to do this?
-
-DiffComparisonPair::DiffComparisonPair(Model::Node *)
-	:Super{}
+class VERSIONCONTROLUI_API VDiffComparisonPairStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-}
+	public:
+		virtual ~VDiffComparisonPairStyle() override;
 
-DiffComparisonPair::DiffComparisonPair(Model::Node *, Model::PersistentStore &, bool)
-	:Super{}
-{
-	Q_ASSERT(false);
-}
-
-DiffComparisonPair* DiffComparisonPair::clone() const { return new DiffComparisonPair{*this}; }
-
-QJsonValue DiffComparisonPair::toJson() const
-{
-	return QJsonValue{};
-}
-
+		Property<Visualization::TextStyle> oldVersionObjectPath{this, "oldVersionObjectPath"};
+		Property<Visualization::TextStyle> newVersionObjectPath{this, "newVersionObjectPath"};
+};
 }

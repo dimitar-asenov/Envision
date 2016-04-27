@@ -45,7 +45,7 @@
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Reference.h"
 
-#include "DiffComparisonPair.h"
+#include "nodes/DiffComparisonPair.h"
 
 namespace VersionControlUI
 {

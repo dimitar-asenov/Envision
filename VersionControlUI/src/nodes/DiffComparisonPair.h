@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #pragma once
 
-#include "versioncontrolui_api.h"
+#include "../versioncontrolui_api.h"
 
 #include "VisualizationBase/src/nodes/UINode.h"
 
