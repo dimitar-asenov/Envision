@@ -51,7 +51,6 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 	public:
 		VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		static void initializeForms();
-		virtual int determineForm() override;
 
 	private:
 		Visualization::Item* oldVersionNode_{};

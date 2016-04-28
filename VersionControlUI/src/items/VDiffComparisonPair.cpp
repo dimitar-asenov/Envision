@@ -69,9 +69,4 @@ void VDiffComparisonPair::initializeForms()
 
 }
 
-int VDiffComparisonPair::determineForm()
-{
-	return 0;
-}
-
 }
