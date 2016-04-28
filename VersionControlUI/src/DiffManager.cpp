@@ -45,6 +45,8 @@
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Reference.h"
 
+#include "nodes/DiffComparisonPair.h"
+
 namespace VersionControlUI
 {
 
@@ -287,6 +289,21 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	});
 }
 
+QString DiffManager::getObjectPath(Model::Node* node)
+{
+	if (!node) return "";
+	auto parent = node->parent();
+	QString objectPath = "";
+	while (parent)
+	{
+		if (parent->definesSymbol())
+			objectPath.prepend(parent->symbolName() + "/");
+		parent = parent->parent();
+	}
+
+	return objectPath;
+}
+
 void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
 													 QSet<Model::NodeIdType> changedNodesToVisualize,
 													 Model::TreeManager* newVersionManager, Visualization::ViewItem* diffViewItem)
@@ -296,16 +313,28 @@ void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
 		auto oldNode = const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id));
 		auto newNode = const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id));
 
+		QString oldVersionObjectPath = getObjectPath(oldNode);
+		QString newVersionObjectPath = getObjectPath(newNode);
+
+		// TODO maybe add seperate field for typeName in visualization
+		oldVersionObjectPath.append(oldNode ? oldNode->typeName() : "");
+		newVersionObjectPath.append(newNode ? newNode->typeName() : "");
+
 		// old version in left column
 		if (!oldNode)
 			oldNode = new Model::Text{"node in old version not found"};
-		diffViewItem->insertNode(oldNode, 0);
 
 		// new version in right column
 		if (!newNode)
 			newNode = new Model::Text{"node in new version not found"};
 
-		diffViewItem->insertNode(newNode, 1);
+		auto diffNode = new DiffComparisonPair{};
+		diffNode->setOldVersionNode(oldNode);
+		diffNode->setNewVersionNode(newNode);
+		diffNode->setOldVersionObjectPath(new Model::Text{oldVersionObjectPath});
+		diffNode->setNewVersionObjectPath(new Model::Text{newVersionObjectPath});
+
+		diffViewItem->insertNode(diffNode);
 	}
 }
 

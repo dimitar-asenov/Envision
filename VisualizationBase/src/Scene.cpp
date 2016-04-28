@@ -490,7 +490,9 @@ void Scene::setMainViewScalingFactor(qreal factor)
 		mainViewScalingFactor_ = factor;
 		mainViewScalingFactorChanged_ = true;
 		for (auto onZoomHandler : onZoomHandlers_) onZoomHandler(factor);
-		scheduleUpdate();
+
+		if (inEventHandler_) scheduleUpdate();
+		else updateNow();
 	}
 }
 

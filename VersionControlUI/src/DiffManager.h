@@ -97,6 +97,8 @@ class VERSIONCONTROLUI_API DiffManager
 		 */
 		static QSet<Visualization::Item*> findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items);
 
+		QString getObjectPath(Model::Node* node);
+
 		QString oldVersion_;
 		QString newVersion_;
 		QString project_;
