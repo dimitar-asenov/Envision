@@ -128,17 +128,18 @@ void MiniMap::mousePressEvent(QMouseEvent *event)
 
 void MiniMap::updateMap()
 {
-	QRectF maxRect;
-	maxRect.setLeft( sceneRect().x() < visibleRect.x() ? sceneRect().x() : visibleRect.x() );
-	maxRect.setTop( sceneRect().y() < visibleRect.y() ? sceneRect().y() : visibleRect.y() );
-	maxRect.setRight( (sceneRect().x() + sceneRect().width()) > (visibleRect.x()+visibleRect.width())
-			? (sceneRect().x() + sceneRect().width()) : (visibleRect.x()+visibleRect.width()));
-	maxRect.setBottom( (sceneRect().y() + sceneRect().height()) > (visibleRect.y()+visibleRect.height())
-			? (sceneRect().y() + sceneRect().height()) : (visibleRect.y()+visibleRect.height()));
+	auto maxRect = sceneRect();
+
+	// It's important to symmetrically enlarge the scene if visibleRect is outside sceneRect so that the minimap is
+	// correctly scaled. This is because the scene is always centered, even if the visible rect is, say, to the far
+	// right off the scene.
+	int excessWidth = std::max(0.0, std::max(maxRect.x() - visibleRect.x(), visibleRect.right() - maxRect.right()));
+	int excessHeight = std::max(0.0, std::max(maxRect.y() - visibleRect.y(), maxRect.top() - visibleRect.top()) );
+	maxRect.adjust(-excessWidth, -excessHeight, excessWidth, excessHeight);
 
 	qreal xScale = (width() - 2*frameWidth() - 2*margin_) / maxRect.width();
 	qreal yScale = (height() - 2*frameWidth() - 2*margin_) / maxRect.height();
-	qreal scale = xScale < yScale ? xScale : yScale;
+	qreal scale = std::min(xScale, yScale);
 
 	qreal rectX = margin_ + (visibleRect.x() - maxRect.x())*scale;
 	qreal rectY = margin_ + (visibleRect.y() - maxRect.y())*scale;
