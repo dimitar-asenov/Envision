@@ -35,7 +35,7 @@ public class ASTConverter {
 	
 	private Node root;
 	private String source;
-	private Stack<Node> containers = new Stack<Node>();
+	private Stack<Node> containers = new Stack<>();
 	private List<ImportDeclaration> imports;
 	
 	ASTConverter(Node root, String source)

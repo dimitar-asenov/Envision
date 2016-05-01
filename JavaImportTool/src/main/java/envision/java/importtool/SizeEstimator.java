@@ -205,7 +205,7 @@ public class SizeEstimator {
 		size.addVertically(mo.childOrNull("subDeclarations"));
 		
 		// Arrange body items
-		List<Node> bodyNodes = new LinkedList<Node>();
+		List<Node> bodyNodes = new LinkedList<>();
 		Node bodyElement = mo.childOrNull("modules");
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
 		bodyElement = mo.childOrNull("classes");
@@ -228,7 +228,7 @@ public class SizeEstimator {
 		size.addVertically(pr.childOrNull("subDeclarations"));
 		
 		// Arrange body items
-		List<Node> bodyNodes = new LinkedList<Node>();
+		List<Node> bodyNodes = new LinkedList<>();
 		Node bodyElement = pr.childOrNull("projects");
 		if (bodyElement != null) bodyNodes.addAll(bodyElement.children());
 		bodyElement = pr.childOrNull("modules");

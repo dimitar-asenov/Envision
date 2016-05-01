@@ -27,9 +27,7 @@ package envision.java.importtool;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
@@ -129,10 +127,7 @@ public class Main {
 			
 			Collection<File> files;
 			if (oneFile)
-			{
-				files = new ArrayList<File>();
-				files.add(dir);
-			}
+				files = Collections.singletonList(dir);
 			else
 				files = FileUtils.listFiles(dir, new SuffixFileFilter(suffix), TrueFileFilter.INSTANCE);
 			
@@ -181,11 +176,7 @@ public class Main {
 
 			System.out.println("Done\n\nFinished");
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ConversionException e) {
-			e.printStackTrace();
-		} catch (ClassFormatException e) {
+		} catch (IOException | ConversionException | ClassFormatException e) {
 			e.printStackTrace();
 		}
 	}
