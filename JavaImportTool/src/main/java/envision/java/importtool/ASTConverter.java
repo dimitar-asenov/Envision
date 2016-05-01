@@ -1181,7 +1181,10 @@ public class ASTConverter {
 			node = new Node(null, "ReferenceExpression", name);
 			Node prefix = expression(methodRef.getExpression(), "prefix");
 			
-			// TODO handle type arguments
+			for (Type typeArgument : (List<Type>)methodRef.typeArguments()) {
+				Node typeNode = typeExpression(typeArgument, name);
+				node.child("typeArguments").add(typeNode);
+			}
 			
 			node.add(prefix);
 			node.child("ref").setStringValue("____NULL____:" + methodRef.getName().getIdentifier());
