@@ -135,6 +135,24 @@ void ViewItemManager::removeAllViewItems()
 	currentViewItem_ = nullptr;
 }
 
+
+void ViewItemManager::removeViewItem(ViewItem* view)
+{
+	for (auto& vector : viewItems_)
+	{
+		auto iter = vector.begin();
+		while (iter != vector.end())
+		{
+			if (*iter == view)
+			{
+				vector.erase(iter);
+				return;
+			}
+			iter++;
+		}
+	}
+}
+
 void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
 {
 	auto json = view->toJson().toJson();

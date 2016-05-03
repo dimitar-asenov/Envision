@@ -120,7 +120,14 @@ void DiffManager::visualize()
 	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(oldVersionManager);
 
 	auto diffViewItem = Visualization::VisualizationManager::instance().mainScene()->
-			viewItems()->newViewItem("DiffView");
+			viewItems()->viewItem("DiffView");
+
+	if (diffViewItem)
+		Visualization::VisualizationManager::instance().mainScene()->
+					viewItems()->removeViewItem(diffViewItem);
+
+	diffViewItem = Visualization::VisualizationManager::instance().mainScene()->
+				viewItems()->newViewItem("DiffView");
 
 	diffViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
 
