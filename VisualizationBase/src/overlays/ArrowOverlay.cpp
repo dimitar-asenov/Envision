@@ -50,15 +50,16 @@ void ArrowOverlay::updateGeometry(int, int)
 	//Find the space the line will occupy in the scene
 	auto first = firstAssociatedItem();
 	auto second = secondAssociatedItem();
+
 	auto leftTopCorner = QPointF{
-				std::min(first->scenePos().x() + first->widthInLocal(),
-							second->scenePos().x() + second->widthInLocal()),
-				std::min(first->scenePos().y() + first->heightInLocal() / 2,
-							second->scenePos().y() + second->heightInLocal() / 2)}.toPoint();
+				std::min(first->scenePos().x() + first->widthInScene(),
+							second->scenePos().x() + second->widthInScene()),
+				std::min(first->scenePos().y() + first->heightInScene() / 2,
+							second->scenePos().y() + second->heightInScene() / 2)}.toPoint();
 	auto rightBottomCorner = QPointF{
 				std::max(first->scenePos().x(), second->scenePos().x()),
-				std::max(first->scenePos().y() + first->heightInLocal() / 2,
-							second->scenePos().y() + second->heightInLocal() / 2)}.toPoint();
+				std::max(first->scenePos().y() + first->heightInScene() / 2,
+							second->scenePos().y() + second->heightInScene() / 2)}.toPoint();
 
 	setPos(leftTopCorner.x(), leftTopCorner.y());
 	setSize(rightBottomCorner.x() - leftTopCorner.x(),
@@ -72,10 +73,10 @@ void ArrowOverlay::updateGeometry(int, int)
 		first = temp;
 		invertArrow_ = true;
 	}
-	lineFrom_ = QPointF{first->scenePos().x() + first->widthInLocal() - leftTopCorner.x(),
-						first->scenePos().y() + first->heightInLocal() / 2 - leftTopCorner.y()}.toPoint();
+	lineFrom_ = QPointF{first->scenePos().x() + first->widthInScene() - leftTopCorner.x(),
+						first->scenePos().y() + first->heightInScene() / 2 - leftTopCorner.y()}.toPoint();
 	lineTo_ = QPointF{second->scenePos().x() - leftTopCorner.x(),
-					 second->scenePos().y() + second->heightInLocal() / 2 - leftTopCorner.y()}.toPoint();
+					 second->scenePos().y() + second->heightInScene() / 2 - leftTopCorner.y()}.toPoint();
 }
 
 }
