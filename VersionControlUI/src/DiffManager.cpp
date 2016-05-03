@@ -218,6 +218,11 @@ bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeId
 			resultId = treeManager->nodeIdMap().id(changedNode);
 			return true;
 		}
+		else
+		{
+			resultId = treeManager->nodeIdMap().id(node);
+		}
+		return true;
 	}
 	return false;
 }
