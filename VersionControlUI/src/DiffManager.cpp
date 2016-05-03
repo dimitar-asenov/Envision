@@ -33,6 +33,7 @@
 #include "VisualizationBase/src/ViewItemManager.h"
 #include "VisualizationBase/src/declarative/GridLayouter.h"
 #include "VisualizationBase/src/overlays/HighlightOverlay.h"
+#include "VisualizationBase/src/overlays/ArrowOverlay.h"
 
 #include "FilePersistence/src/version_control/GitRepository.h"
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
@@ -254,8 +255,6 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 				highlightOverlayStyle = "move_no_bg_solid_outline";
 
 				// add arrow for the moved node
-				diffViewItem->addArrow(const_cast<Model::Node*>(change.oldNode_),
-											  const_cast<Model::Node*>(change.newNode_), arrowLayer);
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
@@ -266,20 +265,24 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 				break;
 		}
 
-		QList<Visualization::Item*> items;
+		Visualization::Item* oldNodeItem = addHighlightAndReturnItem(change.oldNode_, diffViewItem,
+																						highlightOverlayName, highlightOverlayStyle);;
+		Visualization::Item* newNodeItem = addHighlightAndReturnItem(change.newNode_, diffViewItem,
+																						highlightOverlayName, highlightOverlayStyle);;
 
-		if (change.oldNode_)
-			items.append(diffViewItem->findAllVisualizationsOf(change.oldNode_));
-		if (change.newNode_)
-			items.append(diffViewItem->findAllVisualizationsOf(change.newNode_));
+		if (oldNodeItem)
+			allItemsToScale.insert(oldNodeItem);
 
-		for (auto item : items)
+		if (newNodeItem)
+			allItemsToScale.insert(newNodeItem);
+
+		if (change.changeType_== FilePersistence::ChangeType::Move)
 		{
-			allItemsToScale.insert(item);
-			auto overlay = new Visualization::HighlightOverlay{item,
-					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
-			item->addOverlay(overlay, highlightOverlayName);
+			auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
+					  Visualization::ArrowOverlay::itemStyles().get("thick")};
+			diffViewItem->addOverlay(overlay, arrowLayer);
 		}
+
 	}
 
 	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(allItemsToScale);
@@ -303,7 +306,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 QString DiffManager::getObjectPath(Model::Node* node)
 {
-	if (!node) return "";
+	if (!node) return "no node";
 	auto parent = node->parent();
 	QString objectPath = "";
 	while (parent)
@@ -314,6 +317,22 @@ QString DiffManager::getObjectPath(Model::Node* node)
 	}
 
 	return objectPath;
+}
+
+Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
+                                               QString highlightOverlayName, QString highlightOverlayStyle)
+{
+	Visualization::Item* resultItem = nullptr;
+	if (node)
+	{
+		if ((resultItem = viewItem->findVisualizationOf(node)))
+		{
+			auto overlay = new Visualization::HighlightOverlay{resultItem,
+					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
+			resultItem->addOverlay(overlay, highlightOverlayName);
+		}
+	}
+	return resultItem;
 }
 
 void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
@@ -329,8 +348,7 @@ void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
 		QString newVersionObjectPath = getObjectPath(newNode);
 
 		// TODO maybe add seperate field for typeName in visualization
-		oldVersionObjectPath.append(oldNode ? oldNode->typeName() : "");
-		newVersionObjectPath.append(newNode ? newNode->typeName() : "");
+		QString componentType = (oldNode ? oldNode->typeName() : newNode->typeName());
 
 		// old version in left column
 		if (!oldNode)
@@ -345,6 +363,7 @@ void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
 		diffNode->setNewVersionNode(newNode);
 		diffNode->setOldVersionObjectPath(new Model::Text{oldVersionObjectPath});
 		diffNode->setNewVersionObjectPath(new Model::Text{newVersionObjectPath});
+		diffNode->setComponentType(new Model::Text{componentType});
 
 		diffViewItem->insertNode(diffNode);
 	}
