@@ -29,6 +29,10 @@
 #include "../cursor/Cursor.h"
 #include "../items/Item.h"
 #include "../VisualizationBasePlugin.h"
+#include "../VisualizationManager.h"
+#include "../overlays/Overlay.h"
+#include "../overlays/HighlightOverlay.h"
+#include "../overlays/ArrowOverlay.h"
 
 #include "Logger/src/Timer.h"
 #include "Logger/src/Log.h"
@@ -111,6 +115,29 @@ void MainView::wheelEvent(QWheelEvent *event)
 	// Zoom
 	if (event->modifiers() == Qt::ControlModifier)
 	{
+		QPointF eventToViewportMiddleOffset;
+		QGraphicsItem* itemUnderCursor = nullptr;
+		QRectF boundingRectBeforeZoom;
+		QPointF eventPosInItem;
+
+		if (ITEM_STRUCTURE_AWARE_ZOOM_ANCHORING)
+		{
+			// find offset of event pos from middle of viewport
+			eventToViewportMiddleOffset = event->posF() - QPointF(viewport()->width()/2.0, viewport()->height()/2.0);
+			auto scenePos = mapToScene(event->pos());
+			auto itemsAtEvent = items(event->pos());
+			auto iter = itemsAtEvent.begin();
+			// avoid zooming in on Overlays
+			// TODO cast *iter to Item to use DCast or is this fine?
+			while (iter != itemsAtEvent.end() && dynamic_cast<Overlay<Item>*>(*iter)) iter++;
+			if (iter != itemsAtEvent.end())
+			{
+				itemUnderCursor = *iter;
+				boundingRectBeforeZoom = itemUnderCursor->boundingRect();
+				eventPosInItem = itemUnderCursor->mapFromScene(scenePos);
+			}
+		}
+
 		if ( event->delta() > 0 ) --scaleLevel;
 		else ++scaleLevel;
 
@@ -137,6 +164,24 @@ void MainView::wheelEvent(QWheelEvent *event)
 		if ( miniMap ) miniMap->visibleRectChanged();
 
 		scene()->setMainViewScalingFactor(factor);
+
+		if (ITEM_STRUCTURE_AWARE_ZOOM_ANCHORING && itemUnderCursor)
+		{
+			qreal scalingX = 1.0;
+			qreal scalingY = 1.0;
+			// if the item size has changed, compute scaling to update coordinates in item
+			if (itemUnderCursor->boundingRect() != boundingRectBeforeZoom)
+			{
+				scalingX = qreal(itemUnderCursor->boundingRect().width()) / qreal(boundingRectBeforeZoom.width());
+				scalingY = qreal(itemUnderCursor->boundingRect().height()) / qreal(boundingRectBeforeZoom.height());
+			}
+			// center on the item pos using scaling
+			centerOn(itemUnderCursor->mapToScene(QPointF{eventPosInItem.x()*scalingX, eventPosInItem.y()*scalingY}));
+			// scroll view such that the item pos is again under the original event pos
+			horizontalScrollBar()->setValue(horizontalScrollBar()->value() - eventToViewportMiddleOffset.x());
+			verticalScrollBar()->setValue(verticalScrollBar()->value() - eventToViewportMiddleOffset.y());
+		}
+
 	}
 	// Scroll
 	else if (event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)
