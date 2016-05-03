@@ -128,8 +128,7 @@ void MainView::wheelEvent(QWheelEvent *event)
 			auto itemsAtEvent = items(event->pos());
 			auto iter = itemsAtEvent.begin();
 			// avoid zooming in on Overlays
-			// TODO cast *iter to Item to use DCast or is this fine?
-			while (iter != itemsAtEvent.end() && dynamic_cast<Overlay<Item>*>(*iter)) iter++;
+			while (iter != itemsAtEvent.end() && (*iter)->acceptedMouseButtons() == 0) iter++;
 			if (iter != itemsAtEvent.end())
 			{
 				itemUnderCursor = *iter;
