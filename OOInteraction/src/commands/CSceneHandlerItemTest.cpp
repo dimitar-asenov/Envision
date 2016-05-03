@@ -58,8 +58,8 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
 
-	VersionControlUI::DiffManager diffManager{"f02f73470efdd7153b83637ed17d12cb9ad67561",
-															"a4d1df8c996ec791ea84cd6d8d06d496c4d0be53", "DiffTest",
+	VersionControlUI::DiffManager diffManager{"a1f5",
+															"f02f", "DiffTest",
 															Model::SymbolMatcher{"Class"}};
 
 	diffManager.visualize();
