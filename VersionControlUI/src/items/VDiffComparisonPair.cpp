@@ -26,8 +26,11 @@
 
 #include "VDiffComparisonPair.h"
 
+#include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
+
 #include "ModelBase/src/nodes/Text.h"
+
 #include "VisualizationBase/src/items/VText.h"
 
 namespace VersionControlUI
@@ -55,18 +58,67 @@ void VDiffComparisonPair::initializeForms()
 			return v->node()->newVersionObjectPath();},
 			[](I* v) {return &v->style()->newVersionObjectPath();});
 
+	auto componentType = item<Visualization::VText>(&I::componentType_, [](I* v) {
+			return v->node()->componentType();},
+			[](I* v) {return &v->style()->componentType();});
+
+	auto infoGrid = (new Visualization::GridLayoutFormElement{})
+			->setHorizontalSpacing(50)
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->setColumnStretchFactor(1, 1)
+			->put(0, 0, oldVersionObjectPath)
+			->put(1, 0, newVersionObjectPath)
+			->put(0, 1, componentType);
 	auto container = (new Visualization::GridLayoutFormElement{})
 				->setHorizontalSpacing(30)
 				->setVerticalSpacing(15)
 				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(0, 0, oldVersionObjectPath)
-				->put(1, 0, newVersionObjectPath)
+				->setLeftMargin(10)
+				->setRightMargin(10)
+				->setColumnStretchFactor(0, 1)
+				->setColumnStretchFactor(1, 1)
+				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Right)
+				->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Left)
+				->put(0, 0, infoGrid)
+				->setCellSpanning(2, 1)
 				->put(0, 1, oldVersion)
 				->put(1, 1, newVersion);
 
 	addForm(container);
 
+}
+
+bool VDiffComparisonPair::isSensitiveToScale() const
+{
+	return true;
+}
+
+void VDiffComparisonPair::determineChildren()
+{
+	Super::determineChildren();
+	qreal factor = Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor();
+	qreal scale;
+	if (factor >= 1.0)
+		scale = 1.0;
+	else if (factor >= 0.03)
+		scale = 1.0/factor;
+	else
+		scale = 1.0;
+				//item->setScale((1/factor) * std::pow(0.95, 1/factor));
+	if (componentType_)
+		componentType_->setScale(scale);
+	if (oldVersionObjectPath_)
+	{
+		oldVersionObjectPath_->setTextFormat(Qt::RichText);
+		oldVersionObjectPath_->setScale(scale);
+	}
+	if (newVersionObjectPath_)
+		newVersionObjectPath_->setScale(scale);
 }
 
 }
