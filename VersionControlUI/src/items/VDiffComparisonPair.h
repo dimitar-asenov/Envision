@@ -51,12 +51,18 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 	public:
 		VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		static void initializeForms();
+		virtual bool isSensitiveToScale() const override;
+		virtual void determineChildren() override;
 
 	private:
 		Visualization::Item* oldVersionNode_{};
 		Visualization::Item* newVersionNode_{};
+
 		Visualization::VText* oldVersionObjectPath_{};
 		Visualization::VText* newVersionObjectPath_{};
+
+		Visualization::VText* componentType_{};
+		void scaleVisualizations();
 };
 
 }

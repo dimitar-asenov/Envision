@@ -67,6 +67,7 @@ class VISUALIZATIONBASE_API MainView: public View
 		MiniMap* miniMap;
 
 		static const int SCALING_FACTOR = 2;
+		static const bool ITEM_STRUCTURE_AWARE_ZOOM_ANCHORING = true;
 		int scaleLevel;
 
 		bool showTimers_{false};

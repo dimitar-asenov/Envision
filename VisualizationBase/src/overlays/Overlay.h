@@ -70,7 +70,7 @@ inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Supe
 	Q_ASSERT(!associatedItems_.isEmpty());
 
 	Super::setFlags(0);
-	Super::setAcceptedMouseButtons(0);
+	Super::setAcceptedMouseButtons(Qt::NoButton);
 	Super::setZValue(Super::LAYER_OVERLAY_Z);
 	Super::setItemCategory(Scene::SelectionItemCategory);
 }

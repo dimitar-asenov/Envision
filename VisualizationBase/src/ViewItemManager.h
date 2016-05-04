@@ -82,6 +82,10 @@ class VISUALIZATIONBASE_API ViewItemManager
 		 * Removes all existing ViewItems from the manager.
 		 */
 		void removeAllViewItems();
+		/**
+		 * Removes \a view from the manager.
+		 */
+		void removeViewItem(ViewItem* view);
 
 		/**
 		 * Saves the given view persistently on disk, using the given manager.

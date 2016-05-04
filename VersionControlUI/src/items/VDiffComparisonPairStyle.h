@@ -41,5 +41,6 @@ class VERSIONCONTROLUI_API VDiffComparisonPairStyle : public Super<Visualization
 
 		Property<Visualization::TextStyle> oldVersionObjectPath{this, "oldVersionObjectPath"};
 		Property<Visualization::TextStyle> newVersionObjectPath{this, "newVersionObjectPath"};
+		Property<Visualization::TextStyle> componentType{this, "componentType"};
 };
 }

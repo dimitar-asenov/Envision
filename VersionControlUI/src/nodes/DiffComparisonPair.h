@@ -52,6 +52,8 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 			void setNewVersionObjectPath(Model::Text* newVersionObjectPath);
 			void setOldVersionObjectPath(Model::Text* oldVersionObjectPath);
 
+			void setComponentType(Model::Text* componentType);
+
 
 			virtual QJsonValue toJson() const override;
 
@@ -61,27 +63,38 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 			Model::Text* newVersionObjectPath();
 			Model::Text* oldVersionObjectPath();
 
+			Model::Text* componentType();
+
 
 		private:
-			Model::Node* oldVersionNode_;
-			Model::Node* newVersionNode_;
-			Model::Text* newVersionObjectPath_;
-			Model::Text* oldVersionObjectPath_;
+			Model::Node* oldVersionNode_{};
+			Model::Node* newVersionNode_{};
+
+			Model::Text* newVersionObjectPath_{};
+			Model::Text* oldVersionObjectPath_{};
+
+
+			Model::Text* componentType_{};
 
 
 };
 
 inline void DiffComparisonPair::setOldVersionNode(Model::Node* oldVersionNode) {oldVersionNode_ = oldVersionNode;}
 inline void DiffComparisonPair::setNewVersionNode(Model::Node* newVersionNode) {newVersionNode_ = newVersionNode;}
+
 inline void DiffComparisonPair::setNewVersionObjectPath(Model::Text* newVersionObjectPath)
 {newVersionObjectPath_ = newVersionObjectPath;}
 inline void DiffComparisonPair::setOldVersionObjectPath(Model::Text* oldVersionObjectPath)
 {oldVersionObjectPath_ = oldVersionObjectPath;}
 
+inline void DiffComparisonPair::setComponentType(Model::Text* componentType) {componentType_ = componentType; }
 
 inline Model::Node* DiffComparisonPair::newVersionNode() {return newVersionNode_;}
 inline Model::Node* DiffComparisonPair::oldVersionNode() {return oldVersionNode_;}
+
 inline Model::Text* DiffComparisonPair::newVersionObjectPath() {return newVersionObjectPath_;}
 inline Model::Text* DiffComparisonPair::oldVersionObjectPath() {return oldVersionObjectPath_;}
+
+inline Model::Text* DiffComparisonPair::componentType() {return componentType_;}
 
 }
