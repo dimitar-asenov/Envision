@@ -35,6 +35,7 @@
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/Static.h"
 
 #include "../nodes/DiffComparisonPair.h"
 
@@ -53,6 +54,7 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 		static void initializeForms();
 		virtual bool isSensitiveToScale() const override;
 		virtual void determineChildren() override;
+		int determineForm() override;
 
 	private:
 		Visualization::Item* oldVersionNode_{};
@@ -60,8 +62,12 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 
 		Visualization::VText* oldVersionObjectPath_{};
 		Visualization::VText* newVersionObjectPath_{};
+		Visualization::VText* singleObjectPath_{};
+
+		Visualization::Static* nodeNotFoundIcon_{};
 
 		Visualization::VText* componentType_{};
+
 		void scaleVisualizations();
 };
 

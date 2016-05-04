@@ -1,0 +1,12 @@
+<style prototypes="item/Text/default">
+	<pen>
+		<style>1</style>
+		<color>#000000</color>
+	</pen>
+	<font>
+		<size>15</size>
+		<weight>75</weight>
+		<style>0</style>
+		<underline>false</underline>
+	</font>
+</style>
