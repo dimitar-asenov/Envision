@@ -145,6 +145,7 @@ void ViewItemManager::removeViewItem(ViewItem* view)
 		{
 			if (*iter == view)
 			{
+				scene_->removeTopLevelItem(*iter);
 				vector.erase(iter);
 				return;
 			}

@@ -67,13 +67,14 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 
 		private:
-			Model::Node* oldVersionNode_;
-			Model::Node* newVersionNode_;
+			Model::Node* oldVersionNode_{};
+			Model::Node* newVersionNode_{};
 
-			Model::Text* newVersionObjectPath_;
-			Model::Text* oldVersionObjectPath_;
+			Model::Text* newVersionObjectPath_{};
+			Model::Text* oldVersionObjectPath_{};
 
-			Model::Text* componentType_;
+
+			Model::Text* componentType_{};
 
 
 };
