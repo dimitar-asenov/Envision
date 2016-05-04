@@ -12,40 +12,52 @@
 			<color>#e6e6e6</color>
 		</outline>
 	</shape>
-<oldVersionObjectPath prototypes="item/Text/default">
-	<pen>
-		<style>1</style>
-		<color>#000000</color>
-	</pen>
-	<font>
-		<size>15</size>
-		<weight>75</weight>
-		<style>0</style>
-		<underline>false</underline>
-	</font>
-</oldVersionObjectPath>
-<newVersionObjectPath prototypes="item/Text/default">
-	<pen>
-		<style>1</style>
-		<color>#000000</color>
-	</pen>
-	<font>
-		<size>15</size>
-		<weight>30</weight>
-		<style>0</style>
-		<underline>false</underline>
-	</font>
-</newVersionObjectPath>
-<componentType prototypes="item/Text/default">
-	<pen>
-		<style>1</style>
-		<color>#000000</color>
-	</pen>
-	<font>
-		<size>15</size>
-		<weight>30</weight>
-		<style>0</style>
-		<underline>false</underline>
-	</font>
-</componentType>
+	<oldVersionObjectPath prototypes="item/Text/default">
+		<pen>
+			<style>1</style>
+			<color>#000000</color>
+		</pen>
+		<font>
+			<size>15</size>
+			<weight>75</weight>
+			<style>0</style>
+			<underline>false</underline>
+		</font>
+	</oldVersionObjectPath>
+	<newVersionObjectPath prototypes="item/Text/default">
+		<pen>
+			<style>1</style>
+			<color>#000000</color>
+		</pen>
+		<font>
+			<size>15</size>
+			<weight>30</weight>
+			<style>0</style>
+			<underline>false</underline>
+		</font>
+	</newVersionObjectPath>
+	<singleObjectPath prototypes="item/Text/default">
+		<pen>
+			<style>1</style>
+			<color>#000000</color>
+		</pen>
+		<font>
+			<size>15</size>
+			<weight>30</weight>
+			<style>0</style>
+			<underline>false</underline>
+		</font>
+	</singleObjectPath>
+	<componentType prototypes="item/Text/default">
+		<pen>
+			<style>1</style>
+			<color>#000000</color>
+		</pen>
+		<font>
+			<size>15</size>
+			<weight>30</weight>
+			<style>0</style>
+			<underline>false</underline>
+		</font>
+	</componentType>
 </style>

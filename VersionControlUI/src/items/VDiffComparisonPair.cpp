@@ -98,9 +98,8 @@ bool VDiffComparisonPair::isSensitiveToScale() const
 	return true;
 }
 
-void VDiffComparisonPair::determineChildren()
+void VDiffComparisonPair::scaleVisualizations()
 {
-	Super::determineChildren();
 	qreal factor = Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor();
 	qreal scale;
 	if (factor >= 1.0)
@@ -109,16 +108,20 @@ void VDiffComparisonPair::determineChildren()
 		scale = 1.0/factor;
 	else
 		scale = 1.0;
-				//item->setScale((1/factor) * std::pow(0.95, 1/factor));
+
 	if (componentType_)
 		componentType_->setScale(scale);
+
 	if (oldVersionObjectPath_)
-	{
-		oldVersionObjectPath_->setTextFormat(Qt::RichText);
 		oldVersionObjectPath_->setScale(scale);
-	}
+
 	if (newVersionObjectPath_)
 		newVersionObjectPath_->setScale(scale);
 }
 
+void VDiffComparisonPair::determineChildren()
+{
+	Super::determineChildren();
+	scaleVisualizations();
+}
 }

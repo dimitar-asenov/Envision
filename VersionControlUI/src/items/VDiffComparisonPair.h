@@ -62,6 +62,7 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 		Visualization::VText* newVersionObjectPath_{};
 
 		Visualization::VText* componentType_{};
+		void scaleVisualizations();
 };
 
 }

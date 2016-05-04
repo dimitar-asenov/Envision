@@ -30,9 +30,6 @@
 #include "../items/Item.h"
 #include "../VisualizationBasePlugin.h"
 #include "../VisualizationManager.h"
-#include "../overlays/Overlay.h"
-#include "../overlays/HighlightOverlay.h"
-#include "../overlays/ArrowOverlay.h"
 
 #include "Logger/src/Timer.h"
 #include "Logger/src/Log.h"
@@ -128,7 +125,7 @@ void MainView::wheelEvent(QWheelEvent *event)
 			auto itemsAtEvent = items(event->pos());
 			auto iter = itemsAtEvent.begin();
 			// avoid zooming in on Overlays
-			while (iter != itemsAtEvent.end() && (*iter)->acceptedMouseButtons() == 0) iter++;
+			while (iter != itemsAtEvent.end() && (*iter)->acceptedMouseButtons() == Qt::NoButton) iter++;
 			if (iter != itemsAtEvent.end())
 			{
 				itemUnderCursor = *iter;
