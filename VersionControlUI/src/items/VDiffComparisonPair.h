@@ -54,7 +54,7 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 		static void initializeForms();
 		virtual bool isSensitiveToScale() const override;
 		virtual void determineChildren() override;
-		int determineForm() override;
+		virtual int determineForm() override;
 
 	private:
 		Visualization::Item* oldVersionNode_{};

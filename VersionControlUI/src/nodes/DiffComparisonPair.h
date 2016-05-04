@@ -58,13 +58,11 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 			Model::Text* singleObjectPath();
 
-			Model::Text* componentType();
-
 			bool twoObjectPathsDefined();
 
 
 		private:
-			bool twoObjectPathsDefined_;
+			bool twoObjectPathsDefined_{};
 
 			Model::Node* oldVersionNode_{};
 			Model::Node* newVersionNode_{};
@@ -74,12 +72,9 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 			Model::Text* singleObjectPath_{};
 
-			Model::Text* componentType_{};
-
 			QString computeObjectPath(Model::Node* node);
-
-			void setUpComponentType();
-			void setUpObjectPath();
+			QString computeComponentName();
+			void computeObjectPath();
 };
 
 inline Model::Node* DiffComparisonPair::newVersionNode() {return newVersionNode_;}
@@ -89,8 +84,6 @@ inline Model::Text* DiffComparisonPair::newVersionObjectPath() {return newVersio
 inline Model::Text* DiffComparisonPair::oldVersionObjectPath() {return oldVersionObjectPath_;}
 
 inline Model::Text* DiffComparisonPair::singleObjectPath() {return singleObjectPath_;}
-
-inline Model::Text* DiffComparisonPair::componentType() {return componentType_;}
 
 inline bool DiffComparisonPair::twoObjectPathsDefined() {return twoObjectPathsDefined_;}
 
