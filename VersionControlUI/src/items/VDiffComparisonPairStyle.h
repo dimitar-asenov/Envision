@@ -30,6 +30,7 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/Static.h"
 
 namespace VersionControlUI
 {
@@ -41,6 +42,8 @@ class VERSIONCONTROLUI_API VDiffComparisonPairStyle : public Super<Visualization
 
 		Property<Visualization::TextStyle> oldVersionObjectPath{this, "oldVersionObjectPath"};
 		Property<Visualization::TextStyle> newVersionObjectPath{this, "newVersionObjectPath"};
+		Property<Visualization::TextStyle> singleObjectPath{this, "singleObjectPath"};
 		Property<Visualization::TextStyle> componentType{this, "componentType"};
+		Property<Visualization::StaticStyle> nodeNotFoundIcon{this, "nodeNotFoundIcon"};
 };
 }
