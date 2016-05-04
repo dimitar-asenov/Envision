@@ -52,10 +52,6 @@ void VDiffComparisonPair::initializeForms()
 	auto newVersion = item(&I::newVersionNode_, [](I* v) {
 			return v->node()->newVersionNode();});
 
-	auto componentType = item<Visualization::VText>(&I::componentType_, [](I* v) {
-			return v->node()->componentType();},
-			[](I* v) {return &v->style()->componentType();});
-
 	auto noNodeFound = item<Visualization::Static>(&I::nodeNotFoundIcon_, &StyleType::nodeNotFoundIcon);
 
 
@@ -72,8 +68,7 @@ void VDiffComparisonPair::initializeForms()
 			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
-			->put(0, 0, objectPath)
-			->put(0, 1, componentType);
+			->put(0, 0, objectPath);
 
 	auto diffGrid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
@@ -90,19 +85,19 @@ void VDiffComparisonPair::initializeForms()
 			->put(1, 0, newVersion);
 
 	auto container = (new Visualization::GridLayoutFormElement{})
-				->setHorizontalSpacing(30)
-				->setVerticalSpacing(15)
-				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->setLeftMargin(10)
-				->setRightMargin(10)
-				->setColumnStretchFactor(0, 1)
-				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Right)
-				->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Left)
-				->setRowStretchFactor(0, 1)
-				->setRowStretchFactor(1, 1)
-				->put(0, 0, infoGrid->clone())
-				->put(0, 1, diffGrid->clone());
+			->setHorizontalSpacing(30)
+			->setVerticalSpacing(15)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setColumnStretchFactor(0, 1)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Right)
+			->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Left)
+			->setRowStretchFactor(0, 1)
+			->setRowStretchFactor(1, 1)
+			->put(0, 0, infoGrid->clone())
+			->put(0, 1, diffGrid->clone());
 
 
 	addForm(container->clone());
@@ -110,64 +105,64 @@ void VDiffComparisonPair::initializeForms()
 	// form with only new node available
 
 	diffGrid = (new Visualization::GridLayoutFormElement{})
-				->setHorizontalSpacing(50)
-				->setLeftMargin(10)
-				->setRightMargin(10)
-				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->setColumnStretchFactor(0, 1)
-				->setColumnStretchFactor(1, 1)
-				->setRowStretchFactor(0, 1)
-				->setRowVerticalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-				->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Center)
-				->put(0, 0, noNodeFound)
-				->put(1, 0, newVersion);
+			->setHorizontalSpacing(50)
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->setColumnStretchFactor(1, 1)
+			->setRowStretchFactor(0, 1)
+			->setRowVerticalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Center)
+			->put(0, 0, noNodeFound)
+			->put(1, 0, newVersion);
 
 	container = (new Visualization::GridLayoutFormElement{})
-				->setHorizontalSpacing(30)
-				->setVerticalSpacing(15)
-				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->setLeftMargin(10)
-				->setRightMargin(10)
-				->setColumnStretchFactor(0, 1)
-				->setRowStretchFactor(0, 1)
-				->setRowStretchFactor(1, 1)
-				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-				->put(0, 0, infoGrid->clone())
-				->put(0, 1, diffGrid->clone());
+			->setHorizontalSpacing(30)
+			->setVerticalSpacing(15)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setColumnStretchFactor(0, 1)
+			->setRowStretchFactor(0, 1)
+			->setRowStretchFactor(1, 1)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->put(0, 0, infoGrid->clone())
+			->put(0, 1, diffGrid->clone());
 
 	addForm(container->clone());
 
 	// form with only old node available
 
 	diffGrid = (new Visualization::GridLayoutFormElement{})
-				->setHorizontalSpacing(50)
-				->setLeftMargin(10)
-				->setRightMargin(10)
-				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->setColumnStretchFactor(0, 1)
-				->setColumnStretchFactor(1, 1)
-				->setRowStretchFactor(0, 1)
-				->setRowVerticalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-				->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Center)
-				->put(0, 0, oldVersion)
-				->put(1, 0, noNodeFound);
+			->setHorizontalSpacing(50)
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->setColumnStretchFactor(1, 1)
+			->setRowStretchFactor(0, 1)
+			->setRowVerticalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Center)
+			->put(0, 0, oldVersion)
+			->put(1, 0, noNodeFound);
 
 	container = (new Visualization::GridLayoutFormElement{})
-				->setHorizontalSpacing(30)
-				->setVerticalSpacing(15)
-				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->setLeftMargin(10)
-				->setRightMargin(10)
-				->setColumnStretchFactor(0, 1)
-				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-				->put(0, 0, infoGrid->clone())
-				->put(0, 1, diffGrid->clone());
+			->setHorizontalSpacing(30)
+			->setVerticalSpacing(15)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setColumnStretchFactor(0, 1)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->put(0, 0, infoGrid->clone())
+			->put(0, 1, diffGrid->clone());
 
 	addForm(container->clone());
 
@@ -200,36 +195,35 @@ void VDiffComparisonPair::initializeForms()
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
 			->setRowStretchFactor(0, 1)
-			->put(0, 0, infoGrid->clone())
-			->put(0, 1, componentType);
+			->put(0, 0, infoGrid);
 
 	diffGrid = (new Visualization::GridLayoutFormElement{})
-				->setHorizontalSpacing(50)
-				->setLeftMargin(10)
-				->setRightMargin(10)
-				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->setColumnStretchFactor(0, 1)
-				->setColumnStretchFactor(1, 1)
-				->setRowStretchFactor(0, 1)
-				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Right)
-				->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Left)
-				->put(0, 0, oldVersion)
-				->put(1, 0, newVersion);
+			->setHorizontalSpacing(50)
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->setColumnStretchFactor(1, 1)
+			->setRowStretchFactor(0, 1)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Right)
+			->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Left)
+			->put(0, 0, oldVersion)
+			->put(1, 0, newVersion);
 
 	container = (new Visualization::GridLayoutFormElement{})
-				->setHorizontalSpacing(30)
-				->setVerticalSpacing(15)
-				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->setLeftMargin(10)
-				->setRightMargin(10)
-				->setColumnStretchFactor(0, 1)
-				->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-				->put(0, 0, infoWithComponentTypeGrid->clone())
-				->put(0, 1, diffGrid->clone());
+			->setHorizontalSpacing(30)
+			->setVerticalSpacing(15)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setColumnStretchFactor(0, 1)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->put(0, 0, infoWithComponentTypeGrid)
+			->put(0, 1, diffGrid);
 
-	addForm(container->clone());
+	addForm(container);
 
 }
 
@@ -278,13 +272,12 @@ int VDiffComparisonPair::determineForm()
 	static const int FORM_CONTAINING_ONLY_OLD_NODE = 2;
 	static const int FORM_WITH_TWO_OBJECT_PATHS = 3;
 
-	DiffComparisonPair* associatedNode = node();
-	if (associatedNode->twoObjectPathsDefined())
+	if (node()->twoObjectPathsDefined())
 		return FORM_WITH_TWO_OBJECT_PATHS;
 	else
-		if (!associatedNode->oldVersionNode())
+		if (!node()->oldVersionNode())
 			return FORM_CONTAINING_ONLY_NEW_NODE;
-		else if (!associatedNode->newVersionNode())
+		else if (!node()->newVersionNode())
 			return FORM_CONTAINING_ONLY_OLD_NODE;
 		else
 			return FORM_WITH_SINGLE_OBJECT_PATH;

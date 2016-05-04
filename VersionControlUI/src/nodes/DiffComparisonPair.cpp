@@ -37,31 +37,33 @@ DiffComparisonPair::DiffComparisonPair(Model::Node* oldVersionNode, Model::Node*
 	oldVersionNode_ = oldVersionNode;
 	newVersionNode_ = newVersionNode;
 
-	setUpObjectPath();
+	computeObjectPath();
 
-	setUpComponentType();
+	computeComponentName();
 
 }
 
-void DiffComparisonPair::setUpObjectPath()
+void DiffComparisonPair::computeObjectPath()
 {
-	QString oldVersionObjectPath = computeObjectPath(oldVersionNode_);
-	QString newVersionObjectPath = computeObjectPath(newVersionNode_);
+	auto oldVersionObjectPath = computeObjectPath(oldVersionNode_);
+	auto newVersionObjectPath = computeObjectPath(newVersionNode_);
+	auto componentName = computeComponentName();
+
 	if (oldVersionObjectPath == newVersionObjectPath)
 	{
-		singleObjectPath_ = new Model::Text{oldVersionObjectPath};
+		singleObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
 		twoObjectPathsDefined_ = false;
 	}
 	else if (oldVersionObjectPath == "" || newVersionObjectPath == "")
 	{
 		auto objectPath = oldVersionObjectPath == "" ? newVersionObjectPath : oldVersionObjectPath;
-		singleObjectPath_ = new Model::Text{objectPath};
+		singleObjectPath_ = new Model::Text{objectPath+componentName};
 		twoObjectPathsDefined_ = false;
 	}
 	else
 	{
-		oldVersionObjectPath_ = new Model::Text{oldVersionObjectPath};
-		newVersionObjectPath_ = new Model::Text{newVersionObjectPath};
+		oldVersionObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
+		newVersionObjectPath_ = new Model::Text{newVersionObjectPath+componentName};
 		twoObjectPathsDefined_ = true;
 	}
 }
@@ -81,10 +83,10 @@ QString DiffComparisonPair::computeObjectPath(Model::Node* node)
 	return objectPath;
 }
 
-void DiffComparisonPair::setUpComponentType()
+QString DiffComparisonPair::computeComponentName()
 {
 	Model::Node* nodeToComputeComponentType = nullptr;
-	QString componentType = "unknown";
+	QString componentName = "";
 
 	if (oldVersionNode_)
 		nodeToComputeComponentType = oldVersionNode_;
@@ -98,22 +100,16 @@ void DiffComparisonPair::setUpComponentType()
 
 	if (searchCompositeNode)
 	{
-		Model::CompositeNode* compositeNode = DCast<Model::CompositeNode>(searchCompositeNode);
-		if (compositeNode == nodeToComputeComponentType)
-		{
-			componentType = compositeNode->typeName();
-		} else
+		auto compositeNode = DCast<Model::CompositeNode>(searchCompositeNode);
+		if (compositeNode != nodeToComputeComponentType)
 		{
 			auto index = compositeNode->indexOf(nodeToComputeComponentType);
-			componentType = compositeNode->meta().attribute(index).name();
+			componentName = compositeNode->meta().attribute(index).name();
 		}
-
 	}
-	// TODO maybe first char of componentType toUpper?
-	componentType_ = new Model::Text{componentType};
+	return componentName;
 }
 
-// TODO force top constructor, is this right way? or remove macro which introduces the constructor?
 DiffComparisonPair::DiffComparisonPair(Model::Node *)
 	:Super{}
 {
