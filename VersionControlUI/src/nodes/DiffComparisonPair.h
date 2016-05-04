@@ -46,14 +46,7 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		NODE_DECLARE_STANDARD_METHODS(DiffComparisonPair)
 
 		public:
-			void setOldVersionNode(Model::Node* oldVersionNode);
-			void setNewVersionNode(Model::Node* newVersionNode);
-
-			void setNewVersionObjectPath(Model::Text* newVersionObjectPath);
-			void setOldVersionObjectPath(Model::Text* oldVersionObjectPath);
-
-			void setComponentType(Model::Text* componentType);
-
+			DiffComparisonPair(Model::Node* oldVersionNode, Model::Node* newVersionNode);
 
 			virtual QJsonValue toJson() const override;
 
@@ -63,31 +56,26 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 			Model::Text* newVersionObjectPath();
 			Model::Text* oldVersionObjectPath();
 
-			Model::Text* componentType();
+			Model::Text* singleObjectPath();
+
+			bool twoObjectPathsDefined();
 
 
 		private:
+			bool twoObjectPathsDefined_{};
+
 			Model::Node* oldVersionNode_{};
 			Model::Node* newVersionNode_{};
 
 			Model::Text* newVersionObjectPath_{};
 			Model::Text* oldVersionObjectPath_{};
 
+			Model::Text* singleObjectPath_{};
 
-			Model::Text* componentType_{};
-
-
+			QString computeObjectPath(Model::Node* node);
+			QString computeComponentName();
+			void computeObjectPath();
 };
-
-inline void DiffComparisonPair::setOldVersionNode(Model::Node* oldVersionNode) {oldVersionNode_ = oldVersionNode;}
-inline void DiffComparisonPair::setNewVersionNode(Model::Node* newVersionNode) {newVersionNode_ = newVersionNode;}
-
-inline void DiffComparisonPair::setNewVersionObjectPath(Model::Text* newVersionObjectPath)
-{newVersionObjectPath_ = newVersionObjectPath;}
-inline void DiffComparisonPair::setOldVersionObjectPath(Model::Text* oldVersionObjectPath)
-{oldVersionObjectPath_ = oldVersionObjectPath;}
-
-inline void DiffComparisonPair::setComponentType(Model::Text* componentType) {componentType_ = componentType; }
 
 inline Model::Node* DiffComparisonPair::newVersionNode() {return newVersionNode_;}
 inline Model::Node* DiffComparisonPair::oldVersionNode() {return oldVersionNode_;}
@@ -95,6 +83,8 @@ inline Model::Node* DiffComparisonPair::oldVersionNode() {return oldVersionNode_
 inline Model::Text* DiffComparisonPair::newVersionObjectPath() {return newVersionObjectPath_;}
 inline Model::Text* DiffComparisonPair::oldVersionObjectPath() {return oldVersionObjectPath_;}
 
-inline Model::Text* DiffComparisonPair::componentType() {return componentType_;}
+inline Model::Text* DiffComparisonPair::singleObjectPath() {return singleObjectPath_;}
+
+inline bool DiffComparisonPair::twoObjectPathsDefined() {return twoObjectPathsDefined_;}
 
 }

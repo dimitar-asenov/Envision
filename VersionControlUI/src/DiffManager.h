@@ -101,8 +101,6 @@ class VERSIONCONTROLUI_API DiffManager
 		static Visualization::Item* addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
 																QString highlightOverlayName, QString highlightOverlayStyle);
 
-		QString getObjectPath(Model::Node* node);
-
 		QString oldVersion_;
 		QString newVersion_;
 		QString project_;

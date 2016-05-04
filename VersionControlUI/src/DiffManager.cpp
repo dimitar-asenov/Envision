@@ -304,21 +304,6 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	});
 }
 
-QString DiffManager::getObjectPath(Model::Node* node)
-{
-	if (!node) return "no node";
-	auto parent = node->parent();
-	QString objectPath = "";
-	while (parent)
-	{
-		if (parent->definesSymbol())
-			objectPath.prepend(parent->symbolName() + "/");
-		parent = parent->parent();
-	}
-
-	return objectPath;
-}
-
 Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
                                                QString highlightOverlayName, QString highlightOverlayStyle)
 {
@@ -344,26 +329,7 @@ void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
 		auto oldNode = const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id));
 		auto newNode = const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id));
 
-		QString oldVersionObjectPath = getObjectPath(oldNode);
-		QString newVersionObjectPath = getObjectPath(newNode);
-
-		// TODO maybe add seperate field for typeName in visualization
-		QString componentType = (oldNode ? oldNode->typeName() : newNode->typeName());
-
-		// old version in left column
-		if (!oldNode)
-			oldNode = new Model::Text{"node in old version not found"};
-
-		// new version in right column
-		if (!newNode)
-			newNode = new Model::Text{"node in new version not found"};
-
-		auto diffNode = new DiffComparisonPair{};
-		diffNode->setOldVersionNode(oldNode);
-		diffNode->setNewVersionNode(newNode);
-		diffNode->setOldVersionObjectPath(new Model::Text{oldVersionObjectPath});
-		diffNode->setNewVersionObjectPath(new Model::Text{newVersionObjectPath});
-		diffNode->setComponentType(new Model::Text{componentType});
+		auto diffNode = new DiffComparisonPair{oldNode, newNode};
 
 		diffViewItem->insertNode(diffNode);
 	}
