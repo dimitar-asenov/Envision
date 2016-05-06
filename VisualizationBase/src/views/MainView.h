@@ -43,7 +43,7 @@ class VISUALIZATIONBASE_API MainView: public View
 
 		void setMiniMapSize(int width, int height);
 
-		void setScaleLevelAndZoom(int scaleLevel);
+		void zoom(int scaleLevel);
 
 		static const int MINIMAP_DEFAULT_WIDTH = 200;
 		static const int MINIMAP_DEFAULT_HEIGHT = 200;

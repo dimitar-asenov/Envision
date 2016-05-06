@@ -132,6 +132,7 @@ void DiffManager::visualize()
 				viewItems()->newViewItem("DiffView");
 
 	diffViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
+	diffViewItem->setZoomLabelsEnabled(false);
 
 	// add nodes to visualization, if not avaible show text
 	visualizeChangedNodes(oldVersionManager, changedNodesToVisualize, newVersionManager, diffViewItem);
@@ -305,7 +306,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	});
 
 	// set zoom level further out and center the scene
-	Visualization::VisualizationManager::instance().mainView()->setScaleLevelAndZoom(7);
+	Visualization::VisualizationManager::instance().mainView()->zoom(7);
 	Visualization::VisualizationManager::instance().mainView()->
 			centerOn(Visualization::VisualizationManager::instance().mainView()->sceneRect().center());
 }
