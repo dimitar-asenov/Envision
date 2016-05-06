@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,39 +26,20 @@
 
 #pragma once
 
-#include "../visualizationbase_api.h"
-#include "../items/ItemStyle.h"
-#include "../overlays/Overlay.h"
-#include "ArrowOverlayStyle.h"
+#include "../interactionbase_api.h"
 
-namespace Visualization {
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
-/**
- * An overlay to draw an arrow from the first item to the second item.
- */
-class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
+namespace Interaction
 {
-	ITEM_COMMON(ArrowOverlay)
 
+class INTERACTIONBASE_API HArrowHandler : public GenericHandler
+{
 	public:
-		ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style = itemStyles().get());
-		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-		void setSelected(bool selected);
+		static HArrowHandler* instance();
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		virtual QPainterPath shape() const override;
-
-	private:
-		QPoint lineFrom_{};
-		QPoint lineTo_{};
-		bool invertArrow_{};
-		bool selected_{};
-		QPolygonF currentArrowOutline_{};
-
+		virtual void hoverEnterEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
+		virtual void hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
 };
-
-inline void ArrowOverlay::setSelected(bool selected) {selected_ = selected;}
 
 }

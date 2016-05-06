@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,41 +24,31 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HArrowHandler.h"
 
-#include "../visualizationbase_api.h"
-#include "../items/ItemStyle.h"
-#include "../overlays/Overlay.h"
-#include "ArrowOverlayStyle.h"
+#include "VisualizationBase/src/overlays/ArrowOverlay.h"
 
-namespace Visualization {
-
-/**
- * An overlay to draw an arrow from the first item to the second item.
- */
-class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
+namespace Interaction
 {
-	ITEM_COMMON(ArrowOverlay)
 
-	public:
-		ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style = itemStyles().get());
-		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-		void setSelected(bool selected);
+HArrowHandler* HArrowHandler::instance()
+{
+	static HArrowHandler inst;
+	return &inst;
+}
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		virtual QPainterPath shape() const override;
+void HArrowHandler::hoverEnterEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
+{
+	Visualization::ArrowOverlay* arrowOverlay = static_cast<Visualization::ArrowOverlay*> (target);
+	arrowOverlay->setSelected(true);
+	arrowOverlay->setUpdateNeeded(Visualization::Item::StandardUpdate);
+}
 
-	private:
-		QPoint lineFrom_{};
-		QPoint lineTo_{};
-		bool invertArrow_{};
-		bool selected_{};
-		QPolygonF currentArrowOutline_{};
-
-};
-
-inline void ArrowOverlay::setSelected(bool selected) {selected_ = selected;}
+void HArrowHandler::hoverLeaveEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
+{
+	Visualization::ArrowOverlay* arrowOverlay = static_cast<Visualization::ArrowOverlay*> (target);
+	arrowOverlay->setSelected(false);
+	arrowOverlay->setUpdateNeeded(Visualization::Item::StandardUpdate);
+}
 
 }

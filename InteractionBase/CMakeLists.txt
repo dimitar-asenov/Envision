@@ -85,6 +85,7 @@ add_library(InteractionBase SHARED
 	src/commands/CAddNodeToViewByName.h
 	src/commands/CAddNodeToView.h
 	src/handlers/HViewItem.h
+	src/handlers/HArrowHandler.h
 	src/prompt/CommandMode.h
 	src/prompt/HPromptShell.h
 	src/prompt/Prompt.h
@@ -188,6 +189,7 @@ add_library(InteractionBase SHARED
 	src/handlers/HWebBrowserItem.cpp
 	src/handlers/HMovableItem.h
 	src/handlers/HMovableItem.cpp
+	src/handlers/HArrowHandler.cpp
 )
 
 envision_plugin(InteractionBase VisualizationBase FilePersistence)
