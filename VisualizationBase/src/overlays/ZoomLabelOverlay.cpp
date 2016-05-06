@@ -135,9 +135,8 @@ const TextStyle* ZoomLabelOverlay::associatedItemTextStyle() const
 
 QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 {
-	// TODO at the moment only one viewItem is used for diffs, maybe changes in future
-	// disable zoom labels for diff views
-	if (Visualization::VisualizationManager::instance().mainScene()->currentViewItem()->name().contains("DiffView"))
+	// disable zoom labels if wished by view item
+	if (!Visualization::VisualizationManager::instance().mainScene()->currentViewItem()->zoomLabelsEnabled())
 		return {};
 
 	QList<Item*> result;
