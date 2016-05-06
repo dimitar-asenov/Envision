@@ -36,27 +36,19 @@ ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* styl
 	: Super{{arrowFrom, arrowTo}, style}
 {
 	setAcceptHoverEvents(true);
-	activateDefaultArrowStyle();
-}
-
-void ArrowOverlay::activateDefaultArrowStyle()
-{
-	currentArrowBrush_ = this->style()->arrowBrush();
-	currentArrowPen_ = this->style()->linePen();
-	currentArrowWidth_ = this->style()->width();
-}
-
-void ArrowOverlay::activateSelectedArrowStyle()
-{
-	currentArrowBrush_ = this->style()->selectedArrowBrush();
-	currentArrowPen_ = this->style()->selectedLinePen();
-	currentArrowWidth_ = this->style()->selectedWidth();
+	selected_ = false;
 }
 
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, currentArrowBrush_, currentArrowPen_,
-						invertArrow_, !invertArrow_, currentArrowWidth_);
+	if (selected_)
+		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->selectedArrowBrush(),
+																style()->selectedLinePen(), invertArrow_, !invertArrow_,
+																style()->selectedWidth());
+	else
+		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowBrush(),
+																style()->linePen(), invertArrow_, !invertArrow_,
+																style()->width());
 }
 
 void ArrowOverlay::determineChildren(){}
@@ -95,17 +87,6 @@ void ArrowOverlay::updateGeometry(int, int)
 	lineTo_ = QPointF{second->scenePos().x() - leftTopCorner.x(),
 					 second->scenePos().y() + second->heightInScene() / 2 - leftTopCorner.y()}.toPoint();
 }
-
-void ArrowOverlay::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
-	activateSelectedArrowStyle();
-	setUpdateNeeded(StandardUpdate);
-}
-
-void ArrowOverlay::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
-	activateDefaultArrowStyle();
-	setUpdateNeeded(StandardUpdate);
-}
-
 
 QPainterPath ArrowOverlay::shape() const
 {
