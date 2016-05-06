@@ -169,7 +169,7 @@ void MainView::wheelEvent(QWheelEvent *event)
 		View::wheelEvent(event);
 }
 
-void MainView::setScaleLevelAndZoom(int scaleLevel)
+void MainView::zoom(int scaleLevel)
 {
 	scaleLevel_ = scaleLevel;
 	zoomAccordingToScaleLevel();
