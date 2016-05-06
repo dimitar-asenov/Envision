@@ -43,6 +43,8 @@ class VISUALIZATIONBASE_API MainView: public View
 
 		void setMiniMapSize(int width, int height);
 
+		void setScaleLevelAndZoom(int scaleLevel);
+
 		static const int MINIMAP_DEFAULT_WIDTH = 200;
 		static const int MINIMAP_DEFAULT_HEIGHT = 200;
 		static const int PNG_SCREENSHOT_SCALE = 8;
@@ -68,7 +70,7 @@ class VISUALIZATIONBASE_API MainView: public View
 
 		static const int SCALING_FACTOR = 2;
 		static const bool ITEM_STRUCTURE_AWARE_ZOOM_ANCHORING = true;
-		int scaleLevel;
+		int scaleLevel_{};
 
 		bool showTimers_{false};
 		QList<QLabel*> infoLabels_; ///< Information text displayed in the top left corner
@@ -78,6 +80,8 @@ class VISUALIZATIONBASE_API MainView: public View
 
 		void updateInfoLabels();
 		bool setCursorAndOwnerIgnoreScaleForScreenShot(bool ignore, bool modifyOwner);
+
+		void zoomAccordingToScaleLevel();
 };
 
 }
