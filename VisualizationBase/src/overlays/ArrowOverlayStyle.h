@@ -40,6 +40,9 @@ class VISUALIZATIONBASE_API ArrowOverlayStyle : public Super<ItemStyle>
 		Property<QPen> linePen{this, "linePen"};
 		Property<QBrush> arrowBrush{this, "arrowBrush"};
 		Property<int> width{this, "width"};
+		Property<QPen> selectedLinePen{this, "selectedLinePen"};
+		Property<QBrush> selectedArrowBrush{this, "selectedArrowBrush"};
+		Property<int> selectedWidth{this, "selectedWidth"};
 };
 
 }

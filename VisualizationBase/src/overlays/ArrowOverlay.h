@@ -47,11 +47,22 @@ class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+		virtual QPainterPath shape() const override;
 
 	private:
 		QPoint lineFrom_{};
 		QPoint lineTo_{};
 		bool invertArrow_{};
+		QBrush currentArrowBrush_{};
+		QPen currentArrowPen_{};
+		int currentArrowWidth_{};
+		QPolygonF currentArrowOutline_{};
+
+		void activateDefaultArrowStyle();
+		void activateSelectedArrowStyle();
+
 };
 
 }
