@@ -26,6 +26,7 @@
 
 #include "ArrowOverlay.h"
 #include "../utils/Drawing.h"
+#include "../VisualizationManager.h"
 
 namespace Visualization {
 
@@ -34,12 +35,28 @@ DEFINE_ITEM_COMMON(ArrowOverlay, "item")
 ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style)
 	: Super{{arrowFrom, arrowTo}, style}
 {
+	setAcceptHoverEvents(true);
+	activateDefaultArrowStyle();
+}
+
+void ArrowOverlay::activateDefaultArrowStyle()
+{
+	currentArrowBrush_ = this->style()->arrowBrush();
+	currentArrowPen_ = this->style()->linePen();
+	currentArrowWidth_ = this->style()->width();
+}
+
+void ArrowOverlay::activateSelectedArrowStyle()
+{
+	currentArrowBrush_ = this->style()->selectedArrowBrush();
+	currentArrowPen_ = this->style()->selectedLinePen();
+	currentArrowWidth_ = this->style()->selectedWidth();
 }
 
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowBrush(), style()->linePen(),
-						invertArrow_, !invertArrow_, style()->width());
+	currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, currentArrowBrush_, currentArrowPen_,
+						invertArrow_, !invertArrow_, currentArrowWidth_);
 }
 
 void ArrowOverlay::determineChildren(){}
@@ -77,6 +94,24 @@ void ArrowOverlay::updateGeometry(int, int)
 						first->scenePos().y() + first->heightInScene() / 2 - leftTopCorner.y()}.toPoint();
 	lineTo_ = QPointF{second->scenePos().x() - leftTopCorner.x(),
 					 second->scenePos().y() + second->heightInScene() / 2 - leftTopCorner.y()}.toPoint();
+}
+
+void ArrowOverlay::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
+	activateSelectedArrowStyle();
+	setUpdateNeeded(StandardUpdate);
+}
+
+void ArrowOverlay::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
+	activateDefaultArrowStyle();
+	setUpdateNeeded(StandardUpdate);
+}
+
+
+QPainterPath ArrowOverlay::shape() const
+{
+	QPainterPath painterPath;
+	painterPath.addPolygon(currentArrowOutline_);
+	return painterPath;
 }
 
 }
