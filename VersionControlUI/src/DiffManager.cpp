@@ -34,6 +34,7 @@
 #include "VisualizationBase/src/declarative/GridLayouter.h"
 #include "VisualizationBase/src/overlays/HighlightOverlay.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
+#include "VisualizationBase/src/views/MainView.h"
 
 #include "FilePersistence/src/version_control/GitRepository.h"
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
@@ -302,6 +303,11 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 				item->setScale((1/factor) * std::pow(0.95, 1/factor));
 		}
 	});
+
+	// set zoom level further out and center the scene
+	Visualization::VisualizationManager::instance().mainView()->setScaleLevelAndZoom(7);
+	Visualization::VisualizationManager::instance().mainView()->
+			centerOn(Visualization::VisualizationManager::instance().mainView()->sceneRect().center());
 }
 
 Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
