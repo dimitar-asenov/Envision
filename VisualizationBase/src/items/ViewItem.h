@@ -177,7 +177,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		QVector<QVector<Model::Node*>> nodesGetter();
 
-		bool zoomLabelsEnabled_{};
+		bool zoomLabelsEnabled_{true};
 };
 
 inline const QString& ViewItem::name() const { return name_; }
