@@ -43,15 +43,22 @@ class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
 	public:
 		ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style = itemStyles().get());
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+		void setHighlighted(bool highlighted);
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual QPainterPath shape() const override;
 
 	private:
 		QPoint lineFrom_{};
 		QPoint lineTo_{};
 		bool invertArrow_{};
+		bool highlighted_{false};
+		QPolygonF currentArrowOutline_{};
+
 };
+
+inline void ArrowOverlay::setHighlighted(bool highlighted) {highlighted_ = highlighted;}
 
 }

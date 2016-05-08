@@ -37,7 +37,7 @@
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :
-	View(scene, nullptr), miniMap{new MiniMap{scene, this}}, scaleLevel{SCALING_FACTOR}
+	View(scene, nullptr), miniMap{new MiniMap{scene, this}}, scaleLevel_{SCALING_FACTOR}
 {
 	setRenderHint(QPainter::Antialiasing);
 	setRenderHint(QPainter::TextAntialiasing);
@@ -134,32 +134,10 @@ void MainView::wheelEvent(QWheelEvent *event)
 			}
 		}
 
-		if ( event->delta() > 0 ) --scaleLevel;
-		else ++scaleLevel;
+		if ( event->delta() > 0 ) --scaleLevel_;
+		else ++scaleLevel_;
 
-		if ( scaleLevel <= 0 )
-		{
-			// Nothing changes, we're already at the bottom
-			scaleLevel = 1;
-			return;
-		}
-		qreal factor = scaleFactor();
-
-		// Prevent zooming-out so far that the scrollbars disappear.
-		// This is OK, since the scene's extent is artifically enlarged and it is still possible to see the
-		// entire scene at once, even with scrollbars.
-		if (sceneRect().width()*factor <= viewport()->width() || sceneRect().height()*factor <= viewport()->height())
-		{
-			// Nothing changes, we're already at the largest zoom level.
-			--scaleLevel;
-			return;
-		}
-
-		setTransform(QTransform::fromScale(factor, factor));
-
-		if ( miniMap ) miniMap->visibleRectChanged();
-
-		scene()->setMainViewScalingFactor(factor);
+		zoomAccordingToScaleLevel();
 
 		if (ITEM_STRUCTURE_AWARE_ZOOM_ANCHORING && itemUnderCursor)
 		{
@@ -191,11 +169,45 @@ void MainView::wheelEvent(QWheelEvent *event)
 		View::wheelEvent(event);
 }
 
+void MainView::zoom(int scaleLevel)
+{
+	scaleLevel_ = scaleLevel;
+	zoomAccordingToScaleLevel();
+
+}
+
+void MainView::zoomAccordingToScaleLevel()
+{
+	if ( scaleLevel_ <= 0 )
+	{
+		// Nothing changes, we're already at the bottom
+		scaleLevel_ = 1;
+		return;
+	}
+	qreal factor = scaleFactor();
+
+	// Prevent zooming-out so far that the scrollbars disappear.
+	// This is OK, since the scene's extent is artifically enlarged and it is still possible to see the
+	// entire scene at once, even with scrollbars.
+	if (sceneRect().width()*factor <= viewport()->width() || sceneRect().height()*factor <= viewport()->height())
+	{
+		// Nothing changes, we're already at the largest zoom level.
+		--scaleLevel_;
+		return;
+	}
+
+	setTransform(QTransform::fromScale(factor, factor));
+
+	if ( miniMap ) miniMap->visibleRectChanged();
+
+	scene()->setMainViewScalingFactor(factor);
+}
+
 qreal MainView::scaleFactor() const
 {
-	if (scaleLevel < SCALING_FACTOR)
-		return SCALING_FACTOR / (qreal) scaleLevel;
-	else return std::pow(2, SCALING_FACTOR - scaleLevel);
+	if (scaleLevel_ < SCALING_FACTOR)
+		return SCALING_FACTOR / (qreal) scaleLevel_;
+	else return std::pow(2, SCALING_FACTOR - scaleLevel_);
 }
 
 void MainView::scrollContentsBy(int dx, int dy)

@@ -25,8 +25,26 @@
 ***********************************************************************************************************************/
 #include "Drawing.h"
 
-void Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBrush& arrowBrush, const QPen& linePen,
-						bool startArrow, bool endArrow, int outlineSize)
+QPolygonF Drawing::arrowSelectionPolygon(double angle, QPointF begin, QPointF end)
+{
+
+	const int selectionWidth = 20;
+	QPolygonF arrowSeletionOutline;
+	qreal radAngle = angle* M_PI / 180;
+	qreal xDistance = selectionWidth * sin(radAngle);
+	qreal yDistance = selectionWidth * cos(radAngle);
+	QPointF posOffset = QPointF(xDistance, yDistance);
+	QPointF negOffset = QPointF(-xDistance, -yDistance);
+	arrowSeletionOutline << begin + posOffset
+								<< begin + negOffset
+								<< end + negOffset
+								<< end + posOffset;
+
+	return arrowSeletionOutline;
+}
+
+QPolygonF Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBrush& arrowBrush,
+									  const QPen& linePen, bool startArrow, bool endArrow, int outlineSize)
 {
 	painter->setBrush(arrowBrush);
 	painter->setPen(Qt::NoPen);
@@ -52,6 +70,10 @@ void Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBr
 
 	painter->setPen(linePen);
 	painter->drawLine(begin, end);
+
+	QPolygonF arrowSeletionOutline = arrowSelectionPolygon(-angle, end, begin);
+
+	return arrowSeletionOutline;
 }
 
 QPointF Drawing::drawHead(QPainter *painter, QMatrix matrix, QPolygonF arrowHead, QPointF beginOrEnd, double angle)

@@ -135,6 +135,10 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
+		bool zoomLabelsEnabled();
+		void setZoomLabelsEnabled(bool zoomLabelsEnabled);
+
 	private:
 		friend class ViewItemManager;
 		/**
@@ -172,9 +176,12 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void ensureColumnExists(int column);
 
 		QVector<QVector<Model::Node*>> nodesGetter();
+
+		bool zoomLabelsEnabled_{true};
 };
 
 inline const QString& ViewItem::name() const { return name_; }
 inline QString ViewItem::fullLayerName(const QString& localLayer) const { return name() + "_" + localLayer; }
-
+inline bool ViewItem::zoomLabelsEnabled() { return zoomLabelsEnabled_;}
+inline void ViewItem::setZoomLabelsEnabled(bool zoomLabelsEnabled) {zoomLabelsEnabled_ = zoomLabelsEnabled;}
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,64 +24,31 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HArrowHandler.h"
 
-#include "../visualizationbase_api.h"
+#include "VisualizationBase/src/overlays/ArrowOverlay.h"
 
-#include "View.h"
-#include "MiniMap.h"
-
-namespace Visualization {
-
-class Scene;
-
-class VISUALIZATIONBASE_API MainView: public View
+namespace Interaction
 {
-	public:
-		MainView(Scene *scene);
-		virtual ~MainView();
 
-		void setMiniMapSize(int width, int height);
+HArrowHandler* HArrowHandler::instance()
+{
+	static HArrowHandler inst;
+	return &inst;
+}
 
-		void zoom(int scaleLevel);
+void HArrowHandler::hoverEnterEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
+{
+	Visualization::ArrowOverlay* arrowOverlay = static_cast<Visualization::ArrowOverlay*> (target);
+	arrowOverlay->setHighlighted(true);
+	arrowOverlay->setUpdateNeeded(Visualization::Item::StandardUpdate);
+}
 
-		static const int MINIMAP_DEFAULT_WIDTH = 200;
-		static const int MINIMAP_DEFAULT_HEIGHT = 200;
-		static const int PNG_SCREENSHOT_SCALE = 8;
-
-		qreal scaleFactor() const;
-
-	protected:
-		virtual bool event(QEvent* event) override;
-		virtual void resizeEvent(QResizeEvent* event) override;
-		virtual void wheelEvent(QWheelEvent* event) override;
-		virtual void scrollContentsBy(int dx, int dy) override;
-		virtual void keyPressEvent(QKeyEvent* event) override;
-		virtual void paintEvent(QPaintEvent* event) override;
-
-		// Used for panning
-		virtual void mouseMoveEvent(QMouseEvent *event) override;
-		virtual void mousePressEvent(QMouseEvent *event) override;
-		virtual void mouseReleaseEvent(QMouseEvent *event) override;
-
-
-	private:
-		MiniMap* miniMap;
-
-		static const int SCALING_FACTOR = 2;
-		static const bool ITEM_STRUCTURE_AWARE_ZOOM_ANCHORING = true;
-		int scaleLevel_{};
-
-		bool showTimers_{false};
-		QList<QLabel*> infoLabels_; ///< Information text displayed in the top left corner
-
-		bool isPanning_{};
-		QPoint panStartPos_{};
-
-		void updateInfoLabels();
-		bool setCursorAndOwnerIgnoreScaleForScreenShot(bool ignore, bool modifyOwner);
-
-		void zoomAccordingToScaleLevel();
-};
+void HArrowHandler::hoverLeaveEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
+{
+	Visualization::ArrowOverlay* arrowOverlay = static_cast<Visualization::ArrowOverlay*> (target);
+	arrowOverlay->setHighlighted(false);
+	arrowOverlay->setUpdateNeeded(Visualization::Item::StandardUpdate);
+}
 
 }

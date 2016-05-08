@@ -36,6 +36,9 @@
 #include "OverlayAccessor.h"
 #include "../views/MainView.h"
 
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/items/ViewItem.h"
+
 namespace Visualization {
 
 DEFINE_ITEM_COMMON(ZoomLabelOverlay, "item")
@@ -132,6 +135,10 @@ const TextStyle* ZoomLabelOverlay::associatedItemTextStyle() const
 
 QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 {
+	// disable zoom labels if wished by view item
+	if (!Visualization::VisualizationManager::instance().mainScene()->currentViewItem()->zoomLabelsEnabled())
+		return {};
+
 	QList<Item*> result;
 
 	const double OVERLAY_SCALE_TRESHOLD = 0.5;

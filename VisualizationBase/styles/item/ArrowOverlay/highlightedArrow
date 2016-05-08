@@ -1,15 +1,15 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="../Item/default,highlightedArrow">
-	<linePen>
-		<width>1.0</width>
+<style>
+	<highlightedLinePen>
+		<width>50.0</width>
 		<style>1</style>
 		<color>#000000</color>
 		<capStyle>0</capStyle>
 		<joinStyle>0</joinStyle>
-	</linePen>
-	<arrowBrush>
+	</highlightedLinePen>
+	<highlightedArrowBrush>
 		<style>1</style>
 		<color>#000000</color>
-	</arrowBrush>
-	<width>1</width>
+	</highlightedArrowBrush>
+	<highlightedWidth>50</highlightedWidth>
 </style>
