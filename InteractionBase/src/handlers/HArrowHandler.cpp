@@ -40,14 +40,14 @@ HArrowHandler* HArrowHandler::instance()
 void HArrowHandler::hoverEnterEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
 {
 	Visualization::ArrowOverlay* arrowOverlay = static_cast<Visualization::ArrowOverlay*> (target);
-	arrowOverlay->setSelected(true);
+	arrowOverlay->setHighlighted(true);
 	arrowOverlay->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void HArrowHandler::hoverLeaveEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
 {
 	Visualization::ArrowOverlay* arrowOverlay = static_cast<Visualization::ArrowOverlay*> (target);
-	arrowOverlay->setSelected(false);
+	arrowOverlay->setHighlighted(false);
 	arrowOverlay->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 

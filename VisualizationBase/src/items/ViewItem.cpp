@@ -49,7 +49,6 @@ ViewItem::ViewItem(Item* parent, QString name, StyleType* style) :
 		Super{parent, style}, name_{name}
 {
 	Q_ASSERT(isValidName(name));
-	zoomLabelsEnabled_ = true;
 }
 
 void ViewItem::initializeForms()

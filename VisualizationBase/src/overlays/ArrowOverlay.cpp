@@ -36,12 +36,11 @@ ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* styl
 	: Super{{arrowFrom, arrowTo}, style}
 {
 	setAcceptHoverEvents(true);
-	selected_ = false;
 }
 
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	if (selected_)
+	if (highlighted_)
 		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->selectedArrowBrush(),
 																style()->selectedLinePen(), invertArrow_, !invertArrow_,
 																style()->selectedWidth());
