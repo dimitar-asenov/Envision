@@ -41,9 +41,9 @@ ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* styl
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
 	if (highlighted_)
-		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->selectedArrowBrush(),
-																style()->selectedLinePen(), invertArrow_, !invertArrow_,
-																style()->selectedWidth());
+		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->highlightedArrowBrush(),
+																style()->highlightedLinePen(), invertArrow_, !invertArrow_,
+																style()->highlightedWidth());
 	else
 		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowBrush(),
 																style()->linePen(), invertArrow_, !invertArrow_,

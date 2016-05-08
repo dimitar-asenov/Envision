@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="../Item/default,selectedArrow">
+<style prototypes="../Item/default,highlightedArrow">
 	<linePen>
 		<width>1.0</width>
 		<style>1</style>
