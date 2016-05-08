@@ -43,7 +43,7 @@ class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
 	public:
 		ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style = itemStyles().get());
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-		void setHighlighted(bool selected);
+		void setHighlighted(bool highlighted);
 
 	protected:
 		virtual void determineChildren() override;
