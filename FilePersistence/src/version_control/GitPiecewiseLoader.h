@@ -36,6 +36,7 @@ namespace FilePersistence {
 
 class GitRepository;
 class GenericTree;
+class Commit;
 
 class FILEPERSISTENCE_API GitPiecewiseLoader : public PiecewiseLoader
 {
@@ -48,13 +49,15 @@ class FILEPERSISTENCE_API GitPiecewiseLoader : public PiecewiseLoader
 		QList<NodeData> loadNodeChildrenData(Model::NodeIdType id);
 
 	private:
-		static NodeData parseGrepLine(const QString& line, bool isWorkDir);
+		static NodeData parseGrepLine(const QString& line);
 
 		static bool isPersistenceUnit(const QString& nodeLine);
 
 		const GitRepository* repo_;
 		QString revision_;
 		QString workDir_;
+
+		std::unique_ptr<const Commit> commit_;
 };
 
 }

@@ -30,7 +30,6 @@
 #include "../simple/GenericNode.h"
 
 #include "Core/src/global.h"
-
 namespace FilePersistence {
 
 GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
@@ -42,73 +41,80 @@ GitPiecewiseLoader::~GitPiecewiseLoader() {}
 NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 {
 
-	auto regEx = id.toString() + " {.*}";
-	SystemCommandResult result;
-
 	bool isWorkDir = (revision_ == GitRepository::WORKDIR);
-	// in case of workdir just use regular grep
-	// TODO is grep called correctly like this?
+
 	if (isWorkDir)
-		result = runSystemCommand("grep", {"-G", "-r", regEx}, workDir_);
+	{
+		auto regEx = ".*" + id.toString() + " {.*}.*";
+		qDebug() << regEx;
+		SystemCommandResult result = runSystemCommand("grep", {"-G", "-r", regEx}, workDir_);
+		Q_ASSERT(result.exitCode() == 0);
+		Q_ASSERT(!result.standardout().isEmpty());
+
+		Q_ASSERT(result.standardout().size() == 1 ||
+					result.standardout().size() == 2);
+
+		for (auto line : result.standardout())
+			if (!isPersistenceUnit(line))
+				return parseGrepLine(line);
+		Q_ASSERT(false);
+	}
 	else
-		result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
+	{
+		if (!commit_)
+			commit_.reset(repo_->getCommit(revision_));
+		auto s = commit_->nodeLinesFromId(id, 0);
 
-	Q_ASSERT(result.exitCode() == 0);
-	Q_ASSERT(!result.standardout().isEmpty());
-
-	Q_ASSERT(result.standardout().size() == 1 ||
-				result.standardout().size() == 2);
-
-	for (auto line : result.standardout())
-		if (!isPersistenceUnit(line))
-			return parseGrepLine(line, isWorkDir);
-	Q_ASSERT(false);
+		Q_ASSERT(s.size() == 1 || s.size() == 2);
+		for (auto line : s)
+			if (!isPersistenceUnit(line))
+				return parseGrepLine(line);
+		Q_ASSERT(false);
+	}
 }
 
 QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 {
-	auto regEx = "{.*} " + id.toString();
-	SystemCommandResult result;
-
-	// in case of workdir just use regular grep
-	// TODO is grep called correctly like this?
-	bool isWorkDir = (revision_ == GitRepository::WORKDIR);
-	if (isWorkDir)
-		result = runSystemCommand("grep", {"-G", "-r", regEx}, workDir_);
-	else
-		result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
-
-	Q_ASSERT(result.exitCode() == 0 || result.exitCode() == 1);
-	Q_ASSERT(result.standarderr().isEmpty());
-
 	QList<NodeData> children;
+	bool isWorkDir = (revision_ == GitRepository::WORKDIR);
 
-	for (auto line : result.standardout())
-		if (!isPersistenceUnit(line))
-		{
-			auto nodeData = parseGrepLine(line, isWorkDir);
-			children.append(nodeData);
-		}
+	if (isWorkDir)
+	{
+		auto regEx = "{.*} " + id.toString();
+		SystemCommandResult result = runSystemCommand("grep", {"-G", "-r", regEx}, workDir_);
+		Q_ASSERT(result.exitCode() == 0 || result.exitCode() == 1);
+		Q_ASSERT(result.standarderr().isEmpty());
 
+		for (auto line : result.standardout())
+			if (!isPersistenceUnit(line))
+			{
+				auto nodeData = parseGrepLine(line);
+				children.append(nodeData);
+			}
+	}
+	else
+	{
+		if (!commit_)
+			commit_.reset(repo_->getCommit(revision_));
+
+		auto s = commit_->nodeLinesFromId(id, 1);
+		Q_ASSERT(s.size() == 1);
+
+		for (auto line : s)
+			if (!isPersistenceUnit(line))
+			{
+				auto nodeData = parseGrepLine(line);
+				children.append(nodeData);
+			}
+	}
 	return children;
 }
 
-NodeData GitPiecewiseLoader::parseGrepLine(const QString& line, bool isWorkDir)
+NodeData GitPiecewiseLoader::parseGrepLine(const QString& line)
 {
 	NodeData nodeData;
-
-	// no revision part if regular grep
-	if (isWorkDir)
-	{
-		nodeData.persistentUnit_ = line.section(':', 0, 0);
-		nodeData.nodeLine_ = line.section(':', 1);
-	}
-	// first element is revision
-	else
-	{
-		nodeData.persistentUnit_ = line.section(':', 1, 1);
-		nodeData.nodeLine_ = line.section(':', 2);
-	}
+	nodeData.persistentUnit_ = line.section(':', 0, 0);
+	nodeData.nodeLine_ = line.section(':', 1);
 	return nodeData;
 }
 

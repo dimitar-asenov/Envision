@@ -103,4 +103,60 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		return false;
 }
 
+QStringList Commit::nodeLinesFromId(Model::NodeIdType Id, bool findChildrenByParentId) const
+{
+	auto id =  Id.toString();
+	QStringList matches;
+	for (auto file : files())
+	{
+		int indexOfId = 0;
+		auto content = QString::fromUtf8(file->content());
+
+		indexOfId = content.indexOf(id, indexOfId);
+		if (indexOfId != -1)
+		{
+			int invalid = 0;
+			auto start = indexOfId;
+			auto end = indexOfId;
+
+			// start is the first character of the line containing id
+			while (start >= 0 && content[start] != '\n')
+			{
+				// String is of the form {.*} {id}
+				if (findChildrenByParentId == 0)
+					if (content[start] == '}')
+					{
+						invalid = 1;
+						break;
+					}
+				start--;
+			}
+			if (invalid == 1)	continue;
+			start++;
+
+			// end is the character after the line containing id
+			while (end <= content.size() && content[end] != '\n')
+			{
+				// String is of the form {id} {*.}
+				if (findChildrenByParentId == 1)
+					if (content[end] == '{')
+					{
+						invalid = 1;
+						break;
+					}
+				end++;
+			}
+			if (invalid == 1)	continue;
+
+			QString match = file->relativePath_ + ":" + content.mid(start, end-start);
+			matches << match;
+
+			// Find the next match
+			indexOfId = indexOfId + 1;
+		}
+	}
+
+	return matches;
+}
+
 }
