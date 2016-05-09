@@ -46,7 +46,6 @@ NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 	if (isWorkDir)
 	{
 		auto regEx = ".*" + id.toString() + " {.*}.*";
-		qDebug() << regEx;
 		SystemCommandResult result = runSystemCommand("grep", {"-G", "-r", regEx}, workDir_);
 		Q_ASSERT(result.exitCode() == 0);
 		Q_ASSERT(!result.standardout().isEmpty());
