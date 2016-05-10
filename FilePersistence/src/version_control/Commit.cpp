@@ -105,14 +105,14 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 
 QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId) const
 {
-	auto idtext =  id.toString();
+	auto idText =  id.toString();
 	QStringList matches;
 	for (auto file : files())
 	{
 		int indexOfId = 0;
 		auto content = QString::fromUtf8(file->content());
 
-		indexOfId = content.indexOf(idtext, indexOfId);
+		indexOfId = content.indexOf(idText, indexOfId);
 		if (indexOfId != -1)
 		{
 			bool invalid = false;
@@ -131,7 +131,7 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 					}
 				start--;
 			}
-			if (invalid == true)	continue;
+			if (invalid)	continue;
 			start++;
 
 			// end is the character after the line containing id
@@ -146,7 +146,7 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 					}
 				end++;
 			}
-			if (invalid == true)	continue;
+			if (invalid)	continue;
 
 			QString match = file->relativePath_ + ":" + content.mid(start, end-start);
 			matches << match;
