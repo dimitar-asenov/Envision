@@ -342,6 +342,12 @@ Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, V
 					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
 			resultItem->addOverlay(overlay, highlightOverlayName);
 		}
+		else if (auto parent = DCast<Model::CompositeNode>(node->parent()))
+		{
+			auto index = parent->indexOf(node);
+			if (!parent->meta().attribute(index).name().startsWith("_"))
+				return addHighlightAndReturnItem(node->parent(), viewItem, highlightOverlayName, highlightOverlayStyle);
+		}
 	}
 	return resultItem;
 }
