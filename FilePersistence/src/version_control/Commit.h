@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../filepersistence_api.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
@@ -79,6 +80,8 @@ class FILEPERSISTENCE_API Commit
 		void addFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content);
 
 		bool getFileContent(QString fileName, const char*& content, int& contentSize, bool exactFileNameMatching) const;
+		QStringList nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId = 0) const;
+
 
 	private:
 		CommitMetaData information_;
