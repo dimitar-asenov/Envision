@@ -153,3 +153,5 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 }
 
 }
+
+

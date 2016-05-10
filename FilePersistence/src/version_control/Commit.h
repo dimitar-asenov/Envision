@@ -82,6 +82,7 @@ class FILEPERSISTENCE_API Commit
 		bool getFileContent(QString fileName, const char*& content, int& contentSize, bool exactFileNameMatching) const;
 		bool isValidMatch(QString content, int indexOfId, int& start, int& end, bool findChildrenByParentId) const;
 		QStringList nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId = false) const;
+											 bool findChildrenByParentId = 0) const;
 
 
 	private:

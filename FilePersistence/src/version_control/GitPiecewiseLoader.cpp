@@ -30,6 +30,7 @@
 #include "../simple/GenericNode.h"
 
 #include "Core/src/global.h"
+
 namespace FilePersistence {
 
 GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
@@ -37,6 +38,7 @@ GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
 	PiecewiseLoader{tree}, repo_{repo}, revision_{revision}, workDir_{repo->workdirPath()} {}
 
 GitPiecewiseLoader::~GitPiecewiseLoader() {}
+
 
 NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 {
