@@ -53,9 +53,15 @@ namespace VersionControlUI
 {
 
 struct ChangeWithNodes {
-		Model::Node* oldNode_{};
-		Model::Node* newNode_{};
-		FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
+	Model::Node* oldNode_{};
+	Model::Node* newNode_{};
+	FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
+};
+
+struct DiffSetup {
+	Model::TreeManager* newVersionManager_{};
+	Model::TreeManager* oldVersionManager_{};
+	FilePersistence::GitRepository* repository_{};
 };
 
 DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project,
@@ -63,28 +69,63 @@ DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project
 	oldVersion_{oldVersion}, newVersion_{newVersion}, project_{project}, contextUnitMatcher_{contextUnitMatcher}
 {}
 
-void DiffManager::visualize()
+DiffSetup DiffManager::initializeDiffPrerequisites()
 {
+	DiffSetup diffSetup{};
+
 	QString projectsDir = "projects/" + project_;
 
 	// get GitRepository
 	if (!FilePersistence::GitRepository::repositoryExists(projectsDir))
-	{
-		qDebug() << "no repository found at " + projectsDir;
-		return;
-	}
+		throw VersionControlUIException{"Diff setup not possible. No repository found at " + projectsDir};
 
-	FilePersistence::GitRepository repository{projectsDir};
+	diffSetup.repository_ = new FilePersistence::GitRepository{projectsDir};;
 
 	// load newer version
-	Model::TreeManager* newVersionManager = createTreeManagerFromVersion(repository, newVersion_);
+	diffSetup.newVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, newVersion_);
 
 	// load older version
-	Model::TreeManager* oldVersionManager = createTreeManagerFromVersion(repository, oldVersion_);
+	diffSetup.oldVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, oldVersion_);
 
 	Model::Reference::resolvePending();
 
-	FilePersistence::Diff diff = repository.diff(oldVersion_, newVersion_);
+	return diffSetup;
+
+}
+
+void DiffManager::computeChangeNodesAndNodesToVisualize(FilePersistence::IdToChangeDescriptionHash changes,
+		QList<ChangeWithNodes>& changesWithNodes, QSet<Model::NodeIdType>& changedNodesToVisualize, DiffSetup& diffSetup)
+{
+	for (auto change : changes.values())
+	{
+		// TODO check flags
+		if (change->isFake() || change->onlyStructureChange()) continue;
+
+		auto id = change->nodeId();
+
+		changesWithNodes.append({const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id)),
+														 const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id)),
+														 change->type()});
+
+		Model::NodeIdType nodeId;
+
+		// TODO maybe use node instead of id
+		if (change->type() != FilePersistence::ChangeType::Deletion)
+			if (findChangedNode(diffSetup.newVersionManager_, id, nodeId))
+				changedNodesToVisualize.insert(nodeId);
+		if (change->type() != FilePersistence::ChangeType::Insertion)
+			if (findChangedNode(diffSetup.oldVersionManager_, id, nodeId))
+				changedNodesToVisualize.insert(nodeId);
+	}
+
+	removeDirectChildrenOfNodesInContainer(&changesWithNodes);
+}
+
+void DiffManager::visualize()
+{
+	auto diffSetup = initializeDiffPrerequisites();
+
+	FilePersistence::Diff diff = diffSetup.repository_->diff(oldVersion_, newVersion_);
 
 	auto changes = diff.changes();
 
@@ -94,32 +135,12 @@ void DiffManager::visualize()
 	// contains the nodes which will be drawn
 	QSet<Model::NodeIdType> changedNodesToVisualize;
 
-	for (auto change : changes.values())
-	{
-		// TODO check flags
-		if (change->isFake() || change->onlyStructureChange()) continue;
 
-		auto id = change->nodeId();
+	// fill up lists
+	computeChangeNodesAndNodesToVisualize(changes, changesWithNodes, changedNodesToVisualize, diffSetup);
 
-		changesWithNodes.append({const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id)),
-														 const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id)),
-														 change->type()});
-
-		Model::NodeIdType nodeId;
-
-		// TODO maybe use node instead of id
-		if (change->type() != FilePersistence::ChangeType::Deletion)
-			if (findChangedNode(newVersionManager, id, nodeId))
-				changedNodesToVisualize.insert(nodeId);
-		if (change->type() != FilePersistence::ChangeType::Insertion)
-			if (findChangedNode(oldVersionManager, id, nodeId))
-				changedNodesToVisualize.insert(nodeId);
-	}
-
-	removeDirectChildrenOfNodesInContainer(&changesWithNodes);
-
-	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(newVersionManager);
-	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(oldVersionManager);
+	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
+	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
 
 	auto diffViewItem = Visualization::VisualizationManager::instance().mainScene()->
 			viewItems()->viewItem("DiffView");
@@ -134,8 +155,8 @@ void DiffManager::visualize()
 	diffViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
 	diffViewItem->setZoomLabelsEnabled(false);
 
-	// add nodes to visualization, if not avaible show text
-	visualizeChangedNodes(oldVersionManager, changedNodesToVisualize, newVersionManager, diffViewItem);
+	for (auto diffComparisonPair : createDiffComparisonPairs(diffSetup, changedNodesToVisualize))
+		diffViewItem->insertNode(diffComparisonPair);
 
 	// create visualization for changes
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
@@ -255,8 +276,6 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 			case FilePersistence::ChangeType::Move:
 				highlightOverlayName = "move_highlights";
 				highlightOverlayStyle = "move_no_bg_solid_outline";
-
-				// add arrow for the moved node
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
@@ -327,22 +346,24 @@ Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, V
 	return resultItem;
 }
 
-void DiffManager::visualizeChangedNodes(Model::TreeManager* oldVersionManager,
-													 QSet<Model::NodeIdType> changedNodesToVisualize,
-													 Model::TreeManager* newVersionManager, Visualization::ViewItem* diffViewItem)
+
+QList<DiffComparisonPair*> DiffManager::createDiffComparisonPairs(DiffSetup& diffSetup,
+													 QSet<Model::NodeIdType> diffComparisonPairNodeIds)
 {
-	for (auto id : changedNodesToVisualize)
+	QList<DiffComparisonPair*> diffComparisonPairs;
+	for (auto id : diffComparisonPairNodeIds)
 	{
-		auto oldNode = const_cast<Model::Node*>(oldVersionManager->nodeIdMap().node(id));
-		auto newNode = const_cast<Model::Node*>(newVersionManager->nodeIdMap().node(id));
+		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
+		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
 
 		auto diffNode = new DiffComparisonPair{oldNode, newNode};
 
-		diffViewItem->insertNode(diffNode);
+		diffComparisonPairs.append(diffNode);
 	}
+	return diffComparisonPairs;
 }
 
-Model::TreeManager* DiffManager::createTreeManagerFromVersion(FilePersistence::GitRepository& repository,
+Model::TreeManager* DiffManager::createTreeManagerFromVersion(FilePersistence::GitRepository* repository,
 																				  QString version)
 {
 	if (version == FilePersistence::GitRepository::WORKDIR)
@@ -355,7 +376,7 @@ Model::TreeManager* DiffManager::createTreeManagerFromVersion(FilePersistence::G
 
 	}
 
-	std::unique_ptr<const FilePersistence::Commit> commit{repository.getCommit(version)};
+	std::unique_ptr<const FilePersistence::Commit> commit{repository->getCommit(version)};
 
 	auto fileStore = new FilePersistence::SimpleTextFileStore {
 				[this, &commit](QString filename, const char*& data, int& size)

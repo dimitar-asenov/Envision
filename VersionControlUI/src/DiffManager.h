@@ -32,6 +32,7 @@
 #include "ModelBase/src/util/SymbolMatcher.h"
 
 #include "FilePersistence/src/version_control/ChangeDescription.h"
+#include "FilePersistence/src/version_control/Diff.h"
 
 
 namespace FilePersistence
@@ -48,6 +49,8 @@ namespace Visualization
 namespace VersionControlUI {
 
 struct ChangeWithNodes;
+struct DiffSetup;
+class DiffComparisonPair;
 
 class VERSIONCONTROLUI_API DiffManager
 {
@@ -56,6 +59,16 @@ class VERSIONCONTROLUI_API DiffManager
 		void visualize();
 
 	private:
+
+		DiffSetup initializeDiffPrerequisites();
+
+		/**
+		 * Inserts for entries of \a changes a ChangeWithNodes in \a changesWithNodes. Computes id of nodes which
+		 * should be visualized and inserts them in \a changedNodesToVisualize.
+		 */
+		void computeChangeNodesAndNodesToVisualize(FilePersistence::IdToChangeDescriptionHash changes,
+								QList<ChangeWithNodes>& changesWithNodes, QSet<Model::NodeIdType>& changedNodesToVisualize,
+																 DiffSetup& diffSetup);
 
 		/**
 		 * Deletes all nodes in \a container if their direct parent is also in \a container and has the same change type.
@@ -80,17 +93,15 @@ class VERSIONCONTROLUI_API DiffManager
 		static void createOverlaysForChanges(Visualization::ViewItem* diffViewItem, QList<ChangeWithNodes> changesWithNodes);
 
 		/**
-		 * Inserts the nodes with id from \a changedNodesToVisualize into the \a diffViewItem.
-		 * If a node isn't available in \a oldVersionManager or \a newVersionManager, it will add instead a text which
-		 * informs about this fact.
+		 * Returns a list of DiffComparisonPair created from the ids from \a diffComparisonPairNodeIds.
 		 */
-		void visualizeChangedNodes(Model::TreeManager* oldVersionManager, QSet<Model::NodeIdType> changedNodesToVisualize,
-											Model::TreeManager* newVersionManager, Visualization::ViewItem* diffViewItem);
+		QList<DiffComparisonPair*> createDiffComparisonPairs(DiffSetup& diffSetup,
+																			 QSet<Model::NodeIdType> diffComparisonPairNodeIds);
 
 		/**
 		 * Creates a TreeManager from \a version using \a repository.
 		 */
-		Model::TreeManager* createTreeManagerFromVersion(FilePersistence::GitRepository& repository, QString version);
+		Model::TreeManager* createTreeManagerFromVersion(FilePersistence::GitRepository* repository, QString version);
 
 		/**
 		 * Returns all items which have any of their parents present in \a items.
@@ -105,7 +116,6 @@ class VERSIONCONTROLUI_API DiffManager
 		QString newVersion_;
 		QString project_;
 		Model::SymbolMatcher contextUnitMatcher_;
-
 
 };
 
