@@ -103,19 +103,19 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		return false;
 }
 
-QStringList Commit::nodeLinesFromId(Model::NodeIdType Id, bool findChildrenByParentId) const
+QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId) const
 {
-	auto id =  Id.toString();
+	auto idtext =  id.toString();
 	QStringList matches;
 	for (auto file : files())
 	{
 		int indexOfId = 0;
 		auto content = QString::fromUtf8(file->content());
 
-		indexOfId = content.indexOf(id, indexOfId);
+		indexOfId = content.indexOf(idtext, indexOfId);
 		if (indexOfId != -1)
 		{
-			int invalid = 0;
+			bool invalid = false;
 			auto start = indexOfId;
 			auto end = indexOfId;
 
@@ -123,30 +123,30 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType Id, bool findChildrenByPar
 			while (start >= 0 && content[start] != '\n')
 			{
 				// String is of the form {.*} {id}
-				if (findChildrenByParentId == 0)
+				if (!findChildrenByParentId)
 					if (content[start] == '}')
 					{
-						invalid = 1;
+						invalid = true;
 						break;
 					}
 				start--;
 			}
-			if (invalid == 1)	continue;
+			if (invalid == true)	continue;
 			start++;
 
 			// end is the character after the line containing id
 			while (end <= content.size() && content[end] != '\n')
 			{
 				// String is of the form {id} {*.}
-				if (findChildrenByParentId == 1)
+				if (findChildrenByParentId)
 					if (content[end] == '{')
 					{
-						invalid = 1;
+						invalid = true;
 						break;
 					}
 				end++;
 			}
-			if (invalid == 1)	continue;
+			if (invalid == true)	continue;
 
 			QString match = file->relativePath_ + ":" + content.mid(start, end-start);
 			matches << match;
