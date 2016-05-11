@@ -48,7 +48,6 @@ class CODEREVIEW_API CodeReviewCommentOverlay :
 		static void initializeForms();
 
 	protected:
-		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
