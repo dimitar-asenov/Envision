@@ -4,5 +4,6 @@
 		<dependency pluginid="logger" version="0" />
 		<dependency pluginid="selftest" version="0" />
 		<dependency pluginid="oointeraction" version="1" />
+		<dependency pluginid="versioncontrolui" version="1" />
 	</dependencies>
 </plugin>

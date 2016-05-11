@@ -24,9 +24,13 @@
  **
  **********************************************************************************************************************/
 
+#include "handlers/HReviewableItem.h"
+
 #include "CodeReviewPlugin.h"
 #include "SelfTest/src/TestManager.h"
 #include "Logger/src/Log.h"
+
+#include "VersionControlUI/src/items/VDiffComparisonPair.h"
 
 namespace CodeReview {
 
@@ -38,6 +42,7 @@ Logger::Log& CodeReviewPlugin::log()
 
 bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
 {
+	VersionControlUI::VDiffComparisonPair::setDefaultClassHandler(HReviewableItem::instance());
 	return true;
 }
 
