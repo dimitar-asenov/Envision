@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    mavenCentral()
+}
+
+def possiblePluginPaths = [
+    '/opt/eclipse/plugins',
+    '/usr/share/eclipse/plugins',
+    '/usr/lib/eclipse/plugins'
+]
+
+def pluginPath = ''
+possiblePluginPaths.each { it ->
+    if (new File(it).exists()) {
+        pluginPath = it
+    }
+}
+
+if (pluginPath.isEmpty()) {
+    throw new InvalidUserDataException('No eclipse installation found')
+}
+
+def eclipseJars = [
+    'org.eclipse.jdt.core_*.jar',
+    'org.eclipse.core.runtime_*.jar',
+    'org.eclipse.core.jobs_*.jar',
+    'org.eclipse.core.contenttype_*.jar',
+    'org.eclipse.core.resources_*.jar',
+    'org.eclipse.equinox.common_*.jar',
+    'org.eclipse.equinox.preferences_*.jar',
+    'org.eclipse.osgi_*.jar',
+    'org.eclipse.text_*.jar'
+]
+
+dependencies {
+    compile (
+        'commons-io:commons-io:2.5',
+        'org.apache.commons:commons-lang3:3.4',
+        fileTree (dir: pluginPath, includes: eclipseJars)
+    )
+}

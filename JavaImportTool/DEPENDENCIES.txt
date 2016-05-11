@@ -5,10 +5,7 @@ to their License and Copyright Agreements before using them:
 - http://commons.apache.org/proper/commons-lang/
 - http://eclipse.org/
 
-The .classpath file (typically used by Eclipse) lists all dependencies:
-- You will need to manually download the commons-io-2.4.jar and the commons-lang3-3.1.jar into the lib directory. Newer
-versions might work too, as long as they provide the same interface. If you use a different version you need to adjust
-the .classpath file accordingly.
-- The rest of the dependencies come from the Eclipse JDT. You need to adjust the version of each file in
-.classpath in order to match what is currently installed by your Eclipse distribution. Running the adapt_classpath.sh
-script tries to automatically adjust the .classpath file.
+Since we use gradle executing gradle build or gradle eclipse will automatically download the required apache libraries.
+You can find gradle here:
+- http://gradle.org/
+However you still need to download and install eclipse manually.

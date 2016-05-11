@@ -23,17 +23,18 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-package javaImportTool;
+package envision.java.importtool;
 
-public class UnknownFeatureException extends ConversionException {
+public class ConversionException extends Exception
+{
+	private static final long serialVersionUID = 8737019016361917805L;
 
-	private static final long serialVersionUID = -1487628539179326028L;
-
-	public UnknownFeatureException(String message) {
+	public ConversionException(String message) {
 		super(message);
 	}
 
-	public UnknownFeatureException(String message, Throwable throwable) {
+	public ConversionException(String message, Throwable throwable) {
 		super(message, throwable);
 	}
 }
+
