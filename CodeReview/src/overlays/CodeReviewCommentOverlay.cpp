@@ -43,6 +43,8 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 	Super{{associatedItem}, style}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
+	setFlag(QGraphicsItem::ItemIgnoresTransformations);
+
 	// TODO what happens now in initializeForms() because of the item() function which takes commentInput_ as item storage?
 	// Does it not initialize the item if it is already initialized?
 	commentInput_ = new Visualization::Text{this, ""};
@@ -52,11 +54,6 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 void CodeReviewCommentOverlay::determineChildren()
 {
 	Super::determineChildren();
-
-	qreal factor = Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor();
-	qreal scale = 1.0/factor;
-	setScale(scale);
-
 }
 
 void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableHeight)
