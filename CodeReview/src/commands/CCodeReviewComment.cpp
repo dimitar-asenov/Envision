@@ -63,9 +63,7 @@ QList<Interaction::CommandSuggestion*> CCodeReviewComment::suggest(Visualization
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	if (name().startsWith(textSoFar))
-	{
 		return {new Interaction::CommandSuggestion{name()}};
-	}
 	return {};
 }
 
