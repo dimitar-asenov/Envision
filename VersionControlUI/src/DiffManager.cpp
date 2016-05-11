@@ -71,7 +71,7 @@ DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project
 
 DiffSetup DiffManager::initializeDiffPrerequisites()
 {
-	DiffSetup diffSetup{};
+
 
 	QString projectsDir = "projects/" + project_;
 
@@ -79,6 +79,7 @@ DiffSetup DiffManager::initializeDiffPrerequisites()
 	if (!FilePersistence::GitRepository::repositoryExists(projectsDir))
 		throw VersionControlUIException{"Diff setup not possible. No repository found at " + projectsDir};
 
+	DiffSetup diffSetup{};
 	diffSetup.repository_ = new FilePersistence::GitRepository{projectsDir};;
 
 	// load newer version
