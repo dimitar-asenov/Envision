@@ -42,9 +42,11 @@ namespace CodeReview {
 CCodeReviewComment::CCodeReviewComment() : Command{"comment"} {}
 
 bool CCodeReviewComment::canInterpret(Visualization::Item*, Visualization::Item*,
-		const QStringList&, const std::unique_ptr<Visualization::Cursor>& )
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& )
 {
-	return true;
+	if (commandTokens.size() > 0)
+		return name() == commandTokens.first();
+	return false;
 }
 
 Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item*, Visualization::Item*,
