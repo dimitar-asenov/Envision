@@ -43,6 +43,10 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 	Super{{associatedItem}, style}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
+	// TODO what happens now in initializeForms() because of the item() function which takes commentInput_ as item storage?
+	// Does it not initialize the item if it is already initialized?
+	commentInput_ = new Visualization::Text{this, ""};
+	commentInput_->setEditable(true);
 }
 
 void CodeReviewCommentOverlay::determineChildren()
@@ -53,8 +57,6 @@ void CodeReviewCommentOverlay::determineChildren()
 	qreal scale = 1.0/factor;
 	setScale(scale);
 
-	// TODO where should this be done (constructor to early?)
-	commentInput_->setEditable(true);
 }
 
 void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableHeight)
