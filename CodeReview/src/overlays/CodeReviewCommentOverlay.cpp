@@ -45,15 +45,8 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 	setAcceptedMouseButtons(Qt::AllButtons);
 	setFlag(QGraphicsItem::ItemIgnoresTransformations);
 
-	// TODO what happens now in initializeForms() because of the item() function which takes commentInput_ as item storage?
-	// Does it not initialize the item if it is already initialized?
 	commentInput_ = new Visualization::Text{this, ""};
 	commentInput_->setEditable(true);
-}
-
-void CodeReviewCommentOverlay::determineChildren()
-{
-	Super::determineChildren();
 }
 
 void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableHeight)
