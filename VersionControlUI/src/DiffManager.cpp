@@ -71,8 +71,6 @@ DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project
 
 DiffSetup DiffManager::initializeDiffPrerequisites()
 {
-
-
 	QString projectsDir = "projects/" + project_;
 
 	// get GitRepository
@@ -91,7 +89,6 @@ DiffSetup DiffManager::initializeDiffPrerequisites()
 	Model::Reference::resolvePending();
 
 	return diffSetup;
-
 }
 
 void DiffManager::computeChangeNodesAndNodesToVisualize(FilePersistence::IdToChangeDescriptionHash changes,
