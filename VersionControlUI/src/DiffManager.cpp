@@ -265,19 +265,19 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		{
 			case FilePersistence::ChangeType::Deletion:
 				highlightOverlayName = "delete_highlights";
-				highlightOverlayStyle = "delete_no_bg_solid_outline";
+				highlightOverlayStyle = "delete_light_bg_fine_outline";
 				break;
 			case FilePersistence::ChangeType::Insertion:
 				highlightOverlayName = "insert_highlights";
-				highlightOverlayStyle = "insert_no_bg_solid_outline";
+				highlightOverlayStyle = "insert_light_bg_fine_outline";
 				break;
 			case FilePersistence::ChangeType::Move:
 				highlightOverlayName = "move_highlights";
-				highlightOverlayStyle = "move_no_bg_solid_outline";
+				highlightOverlayStyle = "move_light_bg_fine_outline";
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
-				highlightOverlayStyle = "modify_no_bg_solid_outline";
+				highlightOverlayStyle = "modify_light_bg_fine_outline";
 				break;
 			case FilePersistence::ChangeType::Unclassified:
 				Q_ASSERT(false);
