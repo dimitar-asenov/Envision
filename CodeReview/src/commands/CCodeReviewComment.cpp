@@ -58,7 +58,9 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 				const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
 	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-		if (manager->nodeIdMap().contains(source->node()))
+	{
+		auto id = manager->nodeIdMap().idIfExists(source->node());
+		if (!id.isNull())
 		{
 			auto id = manager->nodeIdMap().id(source->node()).toString();
 			auto commentedNode = CodeReviewManager::instance().commentedNode(id);
@@ -72,6 +74,7 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 			}
 			break;
 		}
+	}
 
 	return new Interaction::CommandResult{};
 }
