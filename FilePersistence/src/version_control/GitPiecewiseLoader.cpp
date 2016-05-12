@@ -42,10 +42,9 @@ GitPiecewiseLoader::~GitPiecewiseLoader() {}
 
 NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 {
-	bool isWorkDir = (revision_ == GitRepository::WORKDIR);
 	if (!commit_)
 		commit_.reset(repo_->getCommit(revision_));
-	auto s = commit_->nodeLinesFromId(id, workDir_, isWorkDir, 0);
+	auto s = commit_->nodeLinesFromId(id, false);
 
 	Q_ASSERT(s.size() == 1 || s.size() == 2);
 	for (auto line : s)
@@ -57,11 +56,10 @@ NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 {
 	QList<NodeData> children;
-	bool isWorkDir = (revision_ == GitRepository::WORKDIR);
 	if (!commit_)
 		commit_.reset(repo_->getCommit(revision_));
 
-	auto s = commit_->nodeLinesFromId(id, workDir_, isWorkDir, 1);
+	auto s = commit_->nodeLinesFromId(id, true);
 	Q_ASSERT(s.size() == 1);
 
 	for (auto line : s)

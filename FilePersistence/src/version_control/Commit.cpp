@@ -112,7 +112,7 @@ bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, 
 	while (start >= 0 && content[start] != '\n')
 	{
 		// String is of the form {.*} {id}
-		if (findChildrenByParentId == 0 && content[start] == '}')	return 0;
+		if (!findChildrenByParentId && content[start] == '}')	return false;
 		start--;
 	}
 	start++;
@@ -121,71 +121,34 @@ bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, 
 	while (end <= content.size() && content[end] != '\n')
 	{
 		// String is of the form {id} {*.}
-		if (findChildrenByParentId == 1 && content[end] == '{')	return 0;
+		if (findChildrenByParentId && content[end] == '{')	return false;
 		end++;
 	}
-	return 1;
+	return true;
 }
 
-QStringList Commit::nodeLinesFromId(Model::NodeIdType Id, QString workDir_, bool isWorkingDir,
-												bool findChildrenByParentId) const
+QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId) const
 {
-	auto id =  Id.toString();
+	auto idText =  id.toString();
 	QStringList matches;
-
-	if (isWorkingDir)
+	for (auto file : files())
 	{
-		QDirIterator DirIter(workDir_, QDirIterator::Subdirectories);
-		while (DirIter.hasNext())
+		int indexOfId = 0;
+		auto content = QString::fromUtf8(file->content());
+
+		indexOfId = content.indexOf(idText, indexOfId);
+		if (indexOfId != -1)
 		{
-			DirIter.next();
-			if (DirIter.fileInfo().isFile()){
-				QFile file(DirIter.filePath());
-
-				// Read file line-by-line
-				QTextStream in(&file);
-				while (!in.atEnd())
-				{
-					// Avoid readAll as it consumes large amount of memory for large files
-					QString line = in.readLine();
-					int indexOfId = 0;
-					indexOfId = line.indexOf(id, indexOfId);
-
-					if (indexOfId != -1)
-					{
-						int start, end;
-						if (isValidMatch(line, indexOfId, start, end, findChildrenByParentId))
-						{
-							QString match =  DirIter.filePath() + ":" + line;
-							matches << match;
-						}
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		for (auto file : files())
-		{
-			int indexOfId = 0;
-			auto content = QString::fromUtf8(file->content());
-
-			indexOfId = content.indexOf(id, indexOfId);
-			if (indexOfId != -1)
+			int start, end;
+			if (isValidMatch(content, indexOfId, start, end, findChildrenByParentId))
 			{
-				int start, end;
-				if (isValidMatch(content, indexOfId, start, end, findChildrenByParentId))
-				{
-					QString match = file->relativePath_ + ":" + content.mid(start, end-start);
-					matches << match;
-				}
-				// Find the next match
-				indexOfId = indexOfId + 1;
+				QString match = file->relativePath_ + ":" + content.mid(start, end-start);
+				matches << match;
 			}
+			// Find the next match
+			indexOfId = indexOfId + 1;
 		}
 	}
-
 	return matches;
 }
 

@@ -54,9 +54,9 @@
 
 #include <iostream>
 #include <git2.h>
-#include <QDirIterator>
-#include <QFileInfo>
-#include <QFile>
+#include <QtCore/QDirIterator>
+#include <QtCore/QFileInfo>
+#include <QtCore/QFile>
 #endif
 
 #endif /* PRECOMPILED_FILEPERSISTENCE_H_ */
