@@ -41,9 +41,12 @@ CodeReviewManager& CodeReviewManager::instance()
 
 CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
 {
-	if (!commentedNodes_.contains(nodeId))
-		commentedNodes_.insert(nodeId, new CommentedNode{nodeId});
-	return commentedNodes_.value(nodeId);
+	auto iter = commentedNodes_.constFind(nodeId);
+	if (iter != commentedNodes_.constEnd()) return *iter;
+
+	auto commentedNode = new CommentedNode{nodeId};
+	commentedNodes_.insert(nodeId, commentedNode);
+	return commentedNode;
 }
 
 }
