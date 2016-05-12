@@ -23,3 +23,27 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+
+#include "CodeReviewManager.h"
+
+namespace CodeReview {
+
+// TODO use versions to have a one code review manager for any combination of two versions
+CodeReviewManager::CodeReviewManager(QString, QString)
+{}
+
+CodeReviewManager& CodeReviewManager::instance()
+{
+	// TODO add handling to create instances per version combination
+	static CodeReviewManager manager{"", ""};
+	return manager;
+}
+
+CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
+{
+	if (!commentedNodes_.contains(nodeId))
+		commentedNodes_.insert(nodeId, new CommentedNode{nodeId});
+	return commentedNodes_.value(nodeId);
+}
+
+}

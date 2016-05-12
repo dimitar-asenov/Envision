@@ -26,12 +26,17 @@
 
 #include "CCodeReviewComment.h"
 
+#include "../nodes/CommentedNode.h"
+
 #include "ModelBase/src/model/TreeManager.h"
+#include "ModelBase/src/model/AllTreeManagers.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
+#include "../CodeReviewManager.h"
 
 #include "../overlays/CodeReviewCommentOverlay.h"
 
@@ -49,12 +54,24 @@ bool CCodeReviewComment::canInterpret(Visualization::Item*, Visualization::Item*
 	return false;
 }
 
-Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item*, Visualization::Item*,
-				const QStringList&, const std::unique_ptr<Visualization::Cursor>& cursor)
+Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* source, Visualization::Item*,
+				const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto cursorOwner = cursor->owner();
-	auto overlay = new CodeReviewCommentOverlay{cursorOwner};
-	cursorOwner->addOverlay(overlay, "CodeReviewComment");
+	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+		if (manager->nodeIdMap().contains(source->node()))
+		{
+			auto id = manager->nodeIdMap().id(source->node()).toString();
+			auto commentedNode = CodeReviewManager::instance().commentedNode(id);
+			commentedNode->commentNodes()->append(new Comments::CommentNode{"comment here"});
+
+			// only create highlight if not already existent
+			if (!source->overlay<CodeReviewCommentOverlay>("CodeReviewComment"))
+			{
+				auto overlay = new CodeReviewCommentOverlay{source, commentedNode};
+				source->addOverlay(overlay, "CodeReviewComment");
+			}
+			break;
+		}
 
 	return new Interaction::CommandResult{};
 }

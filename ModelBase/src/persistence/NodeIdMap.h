@@ -44,11 +44,14 @@ class MODELBASE_API NodeIdMap {
 
 		void remove(const Node* node);
 
+		bool contains(const Node* node);
+
 	private:
 		QHash<const Node*, NodeIdType> nodeToId;
 		QHash<NodeIdType, const Node*> idToNode;
 };
 
+inline bool NodeIdMap::contains(const Node* node) { return nodeToId.contains(node);}
 inline NodeIdType NodeIdMap::generateNewId() { return QUuid::createUuid(); }
 inline const Node* NodeIdMap::node(NodeIdType id) { return idToNode.value(id);}
 

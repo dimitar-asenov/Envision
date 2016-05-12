@@ -23,3 +23,24 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+
+#pragma once
+
+#include "codereview_api.h"
+
+#include "nodes/CommentedNode.h"
+
+namespace CodeReview {
+
+class CODEREVIEW_API CodeReviewManager
+{
+	public:
+		CommentedNode* commentedNode(QString nodeId);
+		static CodeReviewManager& instance();
+
+	private:
+		QHash<QString, CommentedNode*> commentedNodes_;
+		CodeReviewManager(QString oldVersion, QString newVersion);
+};
+
+}
