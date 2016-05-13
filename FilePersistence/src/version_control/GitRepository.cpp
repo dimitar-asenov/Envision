@@ -320,28 +320,50 @@ const Commit* GitRepository::getCommit(QString revision) const
 {
 	Q_ASSERT(revision != WORKDIR);
 	Q_ASSERT(revision != INDEX);
+	if (revision == WORKDIR)
+	{
+		auto m = new Commit();
+		QDirIterator DirIter(workdirPath(), QDirIterator::Subdirectories);
+		while (DirIter.hasNext())
+		{
+			DirIter.next();
+			if (DirIter.fileInfo().isFile())
+			{
+				QFile file(DirIter.filePath());	// projects/Testproject
+				if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) continue;
+				QByteArray text = file.readAll();
+				char *content = new char[text.size() + 1];
+				strcpy(content, text.data());
+				std::unique_ptr<char[]> content_ptr{content};
+				m->addFile(DirIter.filePath(), file.size(), std::move(content_ptr));
+			}
+		}
+		return m;
+	}
+	else
+	{
+		int errorCode = 0;
 
-	int errorCode = 0;
+		git_commit* gitCommit = parseCommit(revision);
+		git_tree* tree = nullptr;
+		errorCode = git_commit_tree(&tree, gitCommit);
+		checkError(errorCode);
 
-	git_commit* gitCommit = parseCommit(revision);
-	git_tree* tree = nullptr;
-	errorCode = git_commit_tree(&tree, gitCommit);
-	checkError(errorCode);
+		GitCommitExtract treeWalkData;
+		treeWalkData.repository_ = repository_;
+		treeWalkData.commit_ = new Commit{};
 
-	GitCommitExtract treeWalkData;
-	treeWalkData.repository_ = repository_;
-	treeWalkData.commit_ = new Commit{};
+		CommitMetaData info = getCommitInformation(revision);
+		treeWalkData.commit_->setMetaData(info);
 
-	CommitMetaData info = getCommitInformation(revision);
-	treeWalkData.commit_->setMetaData(info);
+		errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkCommitExtractCallBack, &treeWalkData);
+		checkError(errorCode);
 
-	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkCommitExtractCallBack, &treeWalkData);
-	checkError(errorCode);
+		git_commit_free(gitCommit);
+		git_tree_free(tree);
 
-	git_commit_free(gitCommit);
-	git_tree_free(tree);
-
-	return treeWalkData.commit_;
+		return treeWalkData.commit_;
+	}
 }
 
 const CommitFile* GitRepository::getCommitFile(QString revision, QString relativePath) const

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,64 +24,34 @@
 **
 ***********************************************************************************************************************/
 
-#include "GitPiecewiseLoader.h"
+#include "VCTestProject.h"
+#include "../src/FilePersistencePlugin.h"
+#include "../src/version_control/ChangeDescription.h"
+#include "../src/version_control/Diff.h"
+#include "../src/version_control/GitRepository.h"
 
-#include "GitRepository.h"
-#include "../simple/GenericNode.h"
+#include "SelfTest/src/Test.h"
+#include "SelfTest/src/TestAssertions.h"
+#include <QStringList>
 
-#include "Core/src/global.h"
 namespace FilePersistence {
 
-GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
-													const GitRepository* repo, QString revision) :
-	PiecewiseLoader{tree}, repo_{repo}, revision_{revision}, workDir_{repo->workdirPath()} {}
-
-GitPiecewiseLoader::~GitPiecewiseLoader() {}
-
-NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
+class FILEPERSISTENCE_API RegexSearchInCommit
+ : public SelfTest::Test<FilePersistencePlugin, RegexSearchInCommit> { public: void test()
 {
-	if (!commit_)
-		commit_.reset(repo_->getCommit(revision_));
-	auto s = commit_->nodeLinesFromId(id, false);
+	 qDebug() << "Check filepersistence";
+	 GitRepository gitrepo{"projects/testProject"};
 
-	Q_ASSERT(s.size() == 1 || s.size() == 2);
-	for (auto line : s)
-		if (!isPersistenceUnit(line))
-			return parseGrepLine(line);
-	Q_ASSERT(false);
-}
+//	 QStringList rev = gitrepo.revisions();
 
-QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
-{
-	QList<NodeData> children;
-	if (!commit_)
-		commit_.reset(repo_->getCommit(revision_));
+//	 for (int i = 0; i < rev.size(); ++i)
+//				qDebug() << rev.at(i).toLocal8Bit().constData();
 
-	auto s = commit_->nodeLinesFromId(id, true);
-	Q_ASSERT(s.size() == 1);
+	 const Commit* commit = gitrepo.getCommit("008414441f329f826e3796deab2eb7ad5e865746");
+	 QStringList reg = commit->nodeLinesFromId("ca52af4b-250e-4c03-a1f5-492eca38f9ba", 0);
 
-	for (auto line : s)
-		if (!isPersistenceUnit(line))
-		{
-			auto nodeData = parseGrepLine(line);
-			children.append(nodeData);
-		}
-	return children;
-}
-
-NodeData GitPiecewiseLoader::parseGrepLine(const QString& line)
-{
-	NodeData nodeData;
-	nodeData.persistentUnit_ = line.section(':', 0, 0);
-	nodeData.nodeLine_ = line.section(':', 1);
-	return nodeData;
-}
-
-bool GitPiecewiseLoader::isPersistenceUnit(const QString& nodeLine)
-{
-	auto space = nodeLine.indexOf(' ');
-	Q_ASSERT(space > 0);
-	return nodeLine.midRef(space+1).startsWith(GenericNode::PERSISTENT_UNIT_TYPE);
-}
-
+	 for (int i = 0; i < reg.size(); ++i)
+				qDebug() << i << " " << reg.at(i).toLocal8Bit().constData();
+	 CHECK_CONDITION(3==3);
+}};
 }
