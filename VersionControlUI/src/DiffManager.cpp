@@ -332,6 +332,7 @@ Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, V
                                                QString highlightOverlayName, QString highlightOverlayStyle)
 {
 	Visualization::Item* resultItem = nullptr;
+
 	if (node)
 	{
 		if ((resultItem = viewItem->findVisualizationOf(node)))
@@ -361,9 +362,15 @@ QList<DiffComparisonPair*> DiffManager::createDiffComparisonPairs(DiffSetup& dif
 		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
 
 		auto diffNode = new DiffComparisonPair{oldNode, newNode};
-
 		diffComparisonPairs.append(diffNode);
 	}
+
+	std::sort(diffComparisonPairs.begin(), diffComparisonPairs.end(), [](DiffComparisonPair* a, DiffComparisonPair* b) {
+			auto aObjectPath = a->comparisonName();
+			auto bObjectPath = b->comparisonName();
+			return aObjectPath > bObjectPath;
+		 });
+
 	return diffComparisonPairs;
 }
 
