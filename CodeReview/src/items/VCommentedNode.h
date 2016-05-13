@@ -24,29 +24,37 @@
  **
  **********************************************************************************************************************/
 
-#include "CodeReviewManager.h"
+#pragma once
 
-namespace CodeReview {
+#include "../codereview_api.h"
 
-// TODO use versions to have a one code review manager for any combination of two versions
-CodeReviewManager::CodeReviewManager(QString, QString)
-{}
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VCommentedNodeStyle.h"
 
-CodeReviewManager& CodeReviewManager::instance()
+#include "../nodes/CommentedNode.h"
+
+#include "VisualizationBase/src/items/Item.h"
+
+
+namespace CodeReview
 {
-	// TODO add handling to create instances per version combination
-	static CodeReviewManager manager{"", ""};
-	return manager;
-}
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
+class CommentedNode;
+
+class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<VCommentedNode,
+		Visualization::DeclarativeItem<VCommentedNode>, CommentedNode>>
 {
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
+	ITEM_COMMON(VCommentedNode)
 
-	auto commentedNode = new CommentedNode{nodeId};
-	commentedNodes_.insert(nodeId, commentedNode);
-	return commentedNode;
-}
+	public:
+		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		static void initializeForms();
+
+	private:
+		Visualization::Item* comment_{};
+
+};
 
 }

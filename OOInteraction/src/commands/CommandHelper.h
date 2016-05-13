@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "../oointeraction_api.h"
+
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Class.h"

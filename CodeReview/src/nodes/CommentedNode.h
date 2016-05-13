@@ -23,30 +23,33 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#pragma once
 
-#include "CodeReviewManager.h"
+#include "../codereview_api.h"
+
+#include "ModelBase/src/nodes/nodeMacros.h"
+
+#include "Comments/src/nodes/CommentNode.h"
+
+namespace CodeReview
+{
+class CommentedNode;
+}
+
+extern template class CODEREVIEW_API Model::TypedList<CodeReview::CommentedNode>;
 
 namespace CodeReview {
 
-// TODO use versions to have a one code review manager for any combination of two versions
-CodeReviewManager::CodeReviewManager(QString, QString)
-{}
-
-CodeReviewManager& CodeReviewManager::instance()
+class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
 {
-	// TODO add handling to create instances per version combination
-	static CodeReviewManager manager{"", ""};
-	return manager;
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentedNode)
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
-{
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
+	ATTRIBUTE(Model::Text, nodeId, setNodeId)
+	ATTRIBUTE(Model::TypedList<Comments::CommentNode>, commentNodes, setCommentNodes)
 
-	auto commentedNode = new CommentedNode{nodeId};
-	commentedNodes_.insert(nodeId, commentedNode);
-	return commentedNode;
-}
+	public:
+		CommentedNode(QString associatedNodeId);
+
+};
 
 }

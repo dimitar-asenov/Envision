@@ -23,30 +23,22 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "CommentedNode.h"
 
-#include "CodeReviewManager.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
-namespace CodeReview {
-
-// TODO use versions to have a one code review manager for any combination of two versions
-CodeReviewManager::CodeReviewManager(QString, QString)
-{}
-
-CodeReviewManager& CodeReviewManager::instance()
+namespace CodeReview
 {
-	// TODO add handling to create instances per version combination
-	static CodeReviewManager manager{"", ""};
-	return manager;
-}
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentedNode)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentedNode)
+
+DEFINE_ATTRIBUTE(CommentedNode, nodeId, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentedNode, commentNodes, TypedListOfCommentNode, false, false, true)
+
+CommentedNode::CommentedNode(QString associatedNodeId) : Super{nullptr, CommentedNode::getMetaData()}
 {
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
-
-	auto commentedNode = new CommentedNode{nodeId};
-	commentedNodes_.insert(nodeId, commentedNode);
-	return commentedNode;
+	setNodeId(new Model::Text{associatedNodeId});
 }
 
 }

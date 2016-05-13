@@ -24,29 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#include "CodeReviewManager.h"
+#include "VCommentedNode.h"
 
-namespace CodeReview {
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
-// TODO use versions to have a one code review manager for any combination of two versions
-CodeReviewManager::CodeReviewManager(QString, QString)
-{}
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/model/AllTreeManagers.h"
 
-CodeReviewManager& CodeReviewManager::instance()
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/items/Item.h"
+
+namespace CodeReview
 {
-	// TODO add handling to create instances per version combination
-	static CodeReviewManager manager{"", ""};
-	return manager;
+
+DEFINE_ITEM_COMMON(VCommentedNode, "item")
+
+VCommentedNode::VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style)
+	: Super{parent, node, style}
+{
 }
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
+void VCommentedNode::initializeForms()
 {
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
-
-	auto commentedNode = new CommentedNode{nodeId};
-	commentedNodes_.insert(nodeId, commentedNode);
-	return commentedNode;
+	auto comment = item(&I::comment_, [](I* v) {
+			return v->node()->commentNodes();});
+	addForm(comment);
 }
 
 }

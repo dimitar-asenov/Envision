@@ -43,7 +43,6 @@ class CODEREVIEW_API CCodeReviewComment : public Interaction::Command
 
 		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-
 };
 
 }

@@ -39,25 +39,24 @@ namespace CodeReview
 
 DEFINE_ITEM_COMMON(CodeReviewCommentOverlay, "item")
 
-CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associatedItem, const StyleType* style) :
-	Super{{associatedItem}, style}
+CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associatedItem,
+																	CommentedNode* commentedNode, const StyleType* style) :
+	Super{{associatedItem}, style}, commentedNode_{commentedNode}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 	setFlag(QGraphicsItem::ItemIgnoresTransformations);
-
-	commentInput_ = new Visualization::Text{this, ""};
-	commentInput_->setEditable(true);
 }
 
 void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
-	setPos(associatedItem()->scenePos());
+	qreal height = associatedItem()->heightInScene();
+	setPos(associatedItem()->scenePos() + QPointF{0, height});
 }
 
 void CodeReviewCommentOverlay::initializeForms()
 {
-	addForm(item<Visualization::Text>(&I::commentInput_,  &StyleType::commentInput));
+	addForm(item(&I::commentedNodeItem_, [](I* v) {return v->commentedNode_;}));
 
 }
 

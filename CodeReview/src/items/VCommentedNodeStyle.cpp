@@ -24,29 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#include "CodeReviewManager.h"
+#include "VCommentedNodeStyle.h"
 
-namespace CodeReview {
-
-// TODO use versions to have a one code review manager for any combination of two versions
-CodeReviewManager::CodeReviewManager(QString, QString)
-{}
-
-CodeReviewManager& CodeReviewManager::instance()
+namespace CodeReview
 {
-	// TODO add handling to create instances per version combination
-	static CodeReviewManager manager{"", ""};
-	return manager;
-}
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
-{
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
-
-	auto commentedNode = new CommentedNode{nodeId};
-	commentedNodes_.insert(nodeId, commentedNode);
-	return commentedNode;
-}
+VCommentedNodeStyle::~VCommentedNodeStyle(){}
 
 }

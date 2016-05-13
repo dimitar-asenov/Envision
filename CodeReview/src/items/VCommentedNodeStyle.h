@@ -24,29 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "CodeReviewManager.h"
+#pragma once
 
-namespace CodeReview {
+#include "../codereview_api.h"
 
-// TODO use versions to have a one code review manager for any combination of two versions
-CodeReviewManager::CodeReviewManager(QString, QString)
-{}
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
-CodeReviewManager& CodeReviewManager::instance()
+namespace CodeReview
 {
-	// TODO add handling to create instances per version combination
-	static CodeReviewManager manager{"", ""};
-	return manager;
-}
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
+class CODEREVIEW_API VCommentedNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
+	public:
+		virtual ~VCommentedNodeStyle() override;
 
-	auto commentedNode = new CommentedNode{nodeId};
-	commentedNodes_.insert(nodeId, commentedNode);
-	return commentedNode;
-}
+};
 
 }
