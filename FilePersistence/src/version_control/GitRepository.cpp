@@ -318,7 +318,6 @@ CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevisio
 
 const Commit* GitRepository::getCommit(QString revision) const
 {
-	Q_ASSERT(revision != WORKDIR);
 	Q_ASSERT(revision != INDEX);
 	if (revision == WORKDIR)
 	{
@@ -329,11 +328,11 @@ const Commit* GitRepository::getCommit(QString revision) const
 			DirIter.next();
 			if (DirIter.fileInfo().isFile())
 			{
-				QFile file(DirIter.filePath());	// projects/Testproject
+				QFile file(DirIter.filePath());
 				if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) continue;
 				QByteArray text = file.readAll();
 				char *content = new char[text.size() + 1];
-				strcpy(content, text.data());
+				strncpy(content, text.data(), text.size()+1);
 				std::unique_ptr<char[]> content_ptr{content};
 				m->addFile(DirIter.filePath(), file.size(), std::move(content_ptr));
 			}
