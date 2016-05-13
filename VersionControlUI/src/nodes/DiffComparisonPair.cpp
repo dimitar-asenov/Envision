@@ -43,29 +43,55 @@ DiffComparisonPair::DiffComparisonPair(Model::Node* oldVersionNode, Model::Node*
 
 }
 
+void DiffComparisonPair::setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName)
+{
+	comparisonName_ = nodeObjectPath;
+	if (node->definesSymbol())
+		comparisonName_ += node->symbolName();
+	comparisonName_ += componentName;
+}
+
 void DiffComparisonPair::computeObjectPath()
 {
 	auto oldVersionObjectPath = computeObjectPath(oldVersionNode_);
 	auto newVersionObjectPath = computeObjectPath(newVersionNode_);
 	auto componentName = computeComponentName();
 
+	Model::Node* comparisonNameNode;
+	QString comparisonNameObjectPath;
+
 	if (oldVersionObjectPath == newVersionObjectPath)
 	{
 		singleObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
+		comparisonNameNode = oldVersionNode_;
+		comparisonNameObjectPath = oldVersionObjectPath;
 		twoObjectPathsDefined_ = false;
 	}
 	else if (oldVersionObjectPath == "" || newVersionObjectPath == "")
 	{
-		auto objectPath = oldVersionObjectPath == "" ? newVersionObjectPath : oldVersionObjectPath;
-		singleObjectPath_ = new Model::Text{objectPath+componentName};
+		if (oldVersionObjectPath == "")
+		{
+			comparisonNameObjectPath = newVersionObjectPath;
+			comparisonNameNode = newVersionNode_;
+		}
+		else
+		{
+			comparisonNameObjectPath = oldVersionObjectPath;
+			comparisonNameNode = oldVersionNode_;
+		}
+		singleObjectPath_ = new Model::Text{comparisonNameObjectPath+componentName};
 		twoObjectPathsDefined_ = false;
 	}
 	else
 	{
 		oldVersionObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
 		newVersionObjectPath_ = new Model::Text{newVersionObjectPath+componentName};
+		comparisonNameNode = oldVersionNode_;
+		comparisonNameObjectPath = oldVersionObjectPath;
 		twoObjectPathsDefined_ = true;
 	}
+
+	setComparisonName(comparisonNameNode, comparisonNameObjectPath, componentName);
 }
 
 QString DiffComparisonPair::computeObjectPath(Model::Node* node)
