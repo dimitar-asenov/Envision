@@ -112,7 +112,7 @@ bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, 
 	while (start >= 0 && content[start] != '\n')
 	{
 		// String is of the form {.*} {id}
-		if (!findChildrenByParentId && content[start] == '}')	return false;
+		if (!findChildrenByParentId && content[start] == '}') return false;
 		start--;
 	}
 	start++;
@@ -121,7 +121,7 @@ bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, 
 	while (end <= content.size() && content[end] != '\n')
 	{
 		// String is of the form {id} {*.}
-		if (findChildrenByParentId && content[end] == '{')	return false;
+		if (findChildrenByParentId && content[end] == '{') return false;
 		end++;
 	}
 	return true;

@@ -321,16 +321,19 @@ const Commit* GitRepository::getCommit(QString revision) const
 	Q_ASSERT(revision != INDEX);
 	if (revision == WORKDIR)
 	{
-		Commit* m = nullptr;
+		auto m = new Commit();
 		QDirIterator DirIter(workdirPath(), QDirIterator::Subdirectories);
 		while (DirIter.hasNext())
 		{
 			DirIter.next();
-			if (DirIter.fileInfo().isFile()){
-				QFile file(DirIter.filePath());
-				QByteArray arr = file.readAll();
-				char* content = arr.data();
-				std::unique_ptr<char[], CommitFileContentDeleter> content_ptr{arr.data(), [content](char*){free(content);}};
+			if (DirIter.fileInfo().isFile())
+			{
+				QFile file(DirIter.filePath());	// projects/Testproject
+				if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) continue;
+				QByteArray text = file.readAll();
+				char *content = new char[text.size() + 1];
+				strcpy(content, text.data());
+				std::unique_ptr<char[]> content_ptr{content};
 				m->addFile(DirIter.filePath(), file.size(), std::move(content_ptr));
 			}
 		}
