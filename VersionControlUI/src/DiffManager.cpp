@@ -116,7 +116,28 @@ void DiffManager::computeChangeNodesAndNodesToVisualize(FilePersistence::IdToCha
 				changedNodesToVisualize.insert(nodeId);
 	}
 
-	removeDirectChildrenOfNodesInContainer(&changesWithNodes);
+	removeDirectChildrenOfNodesInContainer(changesWithNodes);
+	removeNodesWithAncestorPresent(changedNodesToVisualize);
+}
+
+void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container)
+{
+	QSet<Model::NodeIdType> nodeIdsToRemove;
+	for (auto outerId : container)
+	{
+		auto outerNode = Model::AllTreeManagers::instance().nodeForId(outerId);
+		if (outerNode)
+			for (auto innerId : container)
+			{
+				auto innerNode = Model::AllTreeManagers::instance().nodeForId(innerId);
+				if (outerNode->isAncestorOf(innerNode))
+					nodeIdsToRemove.insert(innerId);
+			}
+		else
+			nodeIdsToRemove.insert(outerId);
+	}
+
+	container.subtract(nodeIdsToRemove);
 }
 
 void DiffManager::visualize()
@@ -167,12 +188,12 @@ void DiffManager::visualize()
 }
 
 // TODO maybe better implementation for this
-void DiffManager::removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>* container)
+void DiffManager::removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>& container)
 {
 	QHash<Model::Node*, FilePersistence::ChangeType> oldNodes;
 	QHash<Model::Node*, FilePersistence::ChangeType> newNodes;
 
-	for (auto change : *container)
+	for (auto change : container)
 	{
 		if (change.oldNode_)
 			oldNodes.insert(change.oldNode_, change.changeType_);
@@ -183,11 +204,11 @@ void DiffManager::removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>*
 	QSet<Model::Node*> oldNodesMarkedForRemoval = findAllNodesWithDirectParentPresent(oldNodes);
 	QSet<Model::Node*> newNodesMarkedForRemoval = findAllNodesWithDirectParentPresent(newNodes);
 
-	auto it = container->begin();
-	while (it != container->end())
+	auto it = container.begin();
+	while (it != container.end())
 	{
 		if (oldNodesMarkedForRemoval.contains(it->oldNode_) || newNodesMarkedForRemoval.contains(it->newNode_))
-			it = container->erase(it);
+			it = container.erase(it);
 		else
 			it++;
 	}

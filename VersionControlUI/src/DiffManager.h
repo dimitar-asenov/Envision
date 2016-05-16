@@ -73,7 +73,7 @@ class VERSIONCONTROLUI_API DiffManager
 		/**
 		 * Deletes all nodes in \a container if their direct parent is also in \a container and has the same change type.
 		 */
-		void removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>* container);
+		void removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>& container);
 
 		/**
 		 * Returns all nodes which have their direct parent present in \a nodes if the change type of the node matches
@@ -104,13 +104,18 @@ class VERSIONCONTROLUI_API DiffManager
 		Model::TreeManager* createTreeManagerFromVersion(FilePersistence::GitRepository* repository, QString version);
 
 		/**
-		 * Returns all items which have any of their parents present in \a items.
+		 * Returns all items which have an ancestor present in \a items.
 		 */
 		static QSet<Visualization::Item*> findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items);
 
+		/**
+		 * Removes all nodes which have an ancestor present in \a container
+		 */
+		void removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container);
 
 		static Visualization::Item* addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
 																QString highlightOverlayName, QString highlightOverlayStyle);
+
 
 		QString oldVersion_;
 		QString newVersion_;
