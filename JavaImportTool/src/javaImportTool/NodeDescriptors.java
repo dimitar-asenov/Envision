@@ -111,8 +111,7 @@ public class NodeDescriptors {
 				{"NameText","name"}
 		}));
 		add( new NodeInitializer("FormalArgument", "VariableDeclaration", new String[][]{
-				{"Integer","directionInt"},
-				{"Integer","initKind"}
+				{"Integer","directionInt"}
 		}));
 		add( new NodeInitializer("FormalResult", new String[][]{
 				{"NameText","name"},
