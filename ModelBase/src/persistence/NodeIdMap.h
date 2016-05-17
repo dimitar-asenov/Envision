@@ -37,6 +37,7 @@ class Node;
 class MODELBASE_API NodeIdMap {
 	public:
 		NodeIdType id(const Node* node);
+		NodeIdType idIfExists(Node* node);
 		void setId(const Node* node, NodeIdType id);
 
 		static NodeIdType generateNewId();
@@ -44,7 +45,7 @@ class MODELBASE_API NodeIdMap {
 
 		void remove(const Node* node);
 
-		NodeIdType idIfExists(Node* node);
+		int size() const;
 
 	private:
 		QHash<const Node*, NodeIdType> nodeToId;
@@ -54,5 +55,6 @@ class MODELBASE_API NodeIdMap {
 inline NodeIdType NodeIdMap::generateNewId() { return QUuid::createUuid(); }
 inline const Node* NodeIdMap::node(NodeIdType id) { return idToNode.value(id);}
 inline NodeIdType NodeIdMap::idIfExists(Node* node) { return nodeToId.value(node); }
+inline int NodeIdMap::size() const { return nodeToId.size(); }
 
 }
