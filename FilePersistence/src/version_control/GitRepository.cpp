@@ -321,7 +321,7 @@ const Commit* GitRepository::getCommit(QString revision) const
 	Q_ASSERT(revision != INDEX);
 	if (revision == WORKDIR)
 	{
-		auto m = new Commit();
+		auto commit = new Commit();
 		QDirIterator DirIter(workdirPath(), QDirIterator::Subdirectories);
 		while (DirIter.hasNext())
 		{
@@ -334,10 +334,10 @@ const Commit* GitRepository::getCommit(QString revision) const
 				char *content = new char[text.size() + 1];
 				strncpy(content, text.data(), text.size()+1);
 				std::unique_ptr<char[]> content_ptr{content};
-				m->addFile(DirIter.filePath(), file.size(), std::move(content_ptr));
+				commit->addFile(DirIter.filePath(), file.size(), std::move(content_ptr));
 			}
 		}
-		return m;
+		return commit;
 	}
 	else
 	{
