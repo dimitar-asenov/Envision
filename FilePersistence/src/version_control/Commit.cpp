@@ -103,6 +103,30 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		return false;
 }
 
+bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, bool findChildrenByParentId) const
+{
+	start = indexOfId;
+	end = indexOfId;
+
+	// start is the first character of the line containing id
+	while (start >= 0 && content[start] != '\n')
+	{
+		// String is of the form {.*} {id}
+		if (!findChildrenByParentId && content[start] == '}') return false;
+		start--;
+	}
+	start++;
+
+	// end is the character after the line containing id
+	while (end <= content.size() && content[end] != '\n')
+	{
+		// String is of the form {id} {*.}
+		if (findChildrenByParentId && content[end] == '{') return false;
+		end++;
+	}
+	return true;
+}
+
 QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId) const
 {
 	auto idText =  id.toString();
@@ -115,47 +139,16 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 		indexOfId = content.indexOf(idText, indexOfId);
 		if (indexOfId != -1)
 		{
-			bool invalid = false;
-			auto start = indexOfId;
-			auto end = indexOfId;
-
-			// start is the first character of the line containing id
-			while (start >= 0 && content[start] != '\n')
+			int start, end;
+			if (isValidMatch(content, indexOfId, start, end, findChildrenByParentId))
 			{
-				// String is of the form {.*} {id}
-				if (!findChildrenByParentId)
-					if (content[start] == '}')
-					{
-						invalid = true;
-						break;
-					}
-				start--;
+				QString match = file->relativePath_ + ":" + content.mid(start, end-start);
+				matches << match;
 			}
-			if (invalid)	continue;
-			start++;
-
-			// end is the character after the line containing id
-			while (end <= content.size() && content[end] != '\n')
-			{
-				// String is of the form {id} {*.}
-				if (findChildrenByParentId)
-					if (content[end] == '{')
-					{
-						invalid = true;
-						break;
-					}
-				end++;
-			}
-			if (invalid)	continue;
-
-			QString match = file->relativePath_ + ":" + content.mid(start, end-start);
-			matches << match;
-
 			// Find the next match
 			indexOfId = indexOfId + 1;
 		}
 	}
-
 	return matches;
 }
 
