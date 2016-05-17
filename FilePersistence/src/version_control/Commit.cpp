@@ -139,44 +139,12 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 		indexOfId = content.indexOf(idText, indexOfId);
 		if (indexOfId != -1)
 		{
-<<<<<<< HEAD
-			bool invalid = false;
-			auto start = indexOfId;
-			auto end = indexOfId;
-
-			// start is the first character of the line containing id
-			while (start >= 0 && content[start] != '\n')
-			{
-				// String is of the form {.*} {id}
-				if (!findChildrenByParentId)
-					if (content[start] == '}')
-					{
-						invalid = true;
-						break;
-					}
-				start--;
-			}
-			if (invalid)	continue;
-			start++;
-
-			// end is the character after the line containing id
-			while (end <= content.size() && content[end] != '\n')
-=======
 			int start, end;
 			if (isValidMatch(content, indexOfId, start, end, findChildrenByParentId))
->>>>>>> f259db8... Working code for loadNodeData
 			{
 				QString match = file->relativePath_ + ":" + content.mid(start, end-start);
 				matches << match;
 			}
-<<<<<<< HEAD
-			if (invalid)	continue;
-
-			QString match = file->relativePath_ + ":" + content.mid(start, end-start);
-			matches << match;
-
-=======
->>>>>>> f259db8... Working code for loadNodeData
 			// Find the next match
 			indexOfId = indexOfId + 1;
 		}
