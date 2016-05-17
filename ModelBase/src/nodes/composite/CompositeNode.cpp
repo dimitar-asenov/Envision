@@ -136,6 +136,9 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, Attribu
 		// Skip loading partial optional children.
 		if (!store.isLoadingPartially() || !attribute.optional() || !attribute.partial())
 		{
+			// No two child attributes may have the same name.
+			Q_ASSERT(subnodes_[index.level()][index.index()] == nullptr);
+
 			subnodes_[index.level()][index.index()] = ln->node;
 			ln->node->setParent(this);
 		}
