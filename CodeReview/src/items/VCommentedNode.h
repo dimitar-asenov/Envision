@@ -53,7 +53,8 @@ class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<V
 		static void initializeForms();
 
 	private:
-		Visualization::Item* comment_{};
+		Visualization::Item* comments_{};
+		Visualization::Item* dates_{};
 
 };
 
