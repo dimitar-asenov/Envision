@@ -49,9 +49,20 @@ VCommentedNode::VCommentedNode(Visualization::Item* parent, NodeType* node, cons
 
 void VCommentedNode::initializeForms()
 {
-	auto comment = item(&I::comment_, [](I* v) {
+	auto comments = item(&I::comments_, [](I* v) {
 			return v->node()->commentNodes();});
-	addForm(comment);
-}
+	auto dates = item(&I::dates_, [](I* v) {
+			return v->node()->dates();});
+	auto grid = (new Visualization::GridLayoutFormElement{})
+			->setHorizontalSpacing(50)
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->put(0, 0, comments)
+			->put(1, 0, dates);
 
+	addForm(grid);
+}
 }

@@ -100,8 +100,12 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	// try to get complete sha1 if available
 	versionA = unambigousPrefixPerRevision_.value(versionA, versionA);
 	versionB = unambigousPrefixPerRevision_.value(versionB, versionB);
+	QList<Model::SymbolMatcher> symbolMatcherPriorityList;
 
-	VersionControlUI::DiffManager diffManager{versionA, versionB, managerName, Model::SymbolMatcher{"Class"}};
+	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Class"});
+	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Method"});
+
+	VersionControlUI::DiffManager diffManager{versionA, versionB, managerName, symbolMatcherPriorityList};
 	diffManager.visualize();
 
 	return new Interaction::CommandResult{};

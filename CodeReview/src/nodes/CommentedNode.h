@@ -46,6 +46,7 @@ class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
 
 	ATTRIBUTE(Model::Text, nodeId, setNodeId)
 	ATTRIBUTE(Model::TypedList<Comments::CommentNode>, commentNodes, setCommentNodes)
+	ATTRIBUTE(Model::TypedList<Model::Text>, dates, setDates)
 
 	public:
 		CommentedNode(QString associatedNodeId);

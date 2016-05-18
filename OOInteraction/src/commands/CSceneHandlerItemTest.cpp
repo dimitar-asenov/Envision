@@ -60,7 +60,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 
 	VersionControlUI::DiffManager diffManager{"a1f5",
 															"f02f", "DiffTest",
-															Model::SymbolMatcher{"Class"}};
+															{Model::SymbolMatcher{"Class"}, Model::SymbolMatcher{"Method"}}};
 
 	diffManager.visualize();
 

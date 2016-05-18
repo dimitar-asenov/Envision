@@ -65,6 +65,7 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 			auto id = manager->nodeIdMap().id(source->node()).toString();
 			auto commentedNode = CodeReviewManager::instance().commentedNode(id);
 			commentedNode->commentNodes()->append(new Comments::CommentNode{"comment here"});
+			commentedNode->dates()->append(new Model::Text{QDateTime::currentDateTime().toString()});
 
 			// only create highlight if not already existent
 			if (!source->overlay<CodeReviewCommentOverlay>("CodeReviewComment"))
