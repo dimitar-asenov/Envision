@@ -65,8 +65,9 @@ struct DiffSetup {
 };
 
 DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project,
-								 Model::SymbolMatcher contextUnitMatcher) :
-	oldVersion_{oldVersion}, newVersion_{newVersion}, project_{project}, contextUnitMatcher_{contextUnitMatcher}
+								 QList<Model::SymbolMatcher> contextUnitMatcherPriorityList) :
+	oldVersion_{oldVersion}, newVersion_{newVersion}, project_{project},
+	contextUnitMatcherPriorityList_{contextUnitMatcherPriorityList}
 {}
 
 DiffSetup DiffManager::initializeDiffPrerequisites()
@@ -254,17 +255,17 @@ bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeId
 
 		Model::Node* changedNode = nullptr;
 
-		if (auto ancestorNode = node->firstAncestorOfType(contextUnitMatcher_))
-		{
-			changedNode = ancestorNode;
+		for (auto contextUnitMatcher : contextUnitMatcherPriorityList_)
+			if (auto ancestorNode = node->firstAncestorOfType(contextUnitMatcher))
+			{
+				changedNode = ancestorNode;
 
-			resultId = treeManager->nodeIdMap().id(changedNode);
-			return true;
-		}
-		else
-		{
-			resultId = treeManager->nodeIdMap().id(node);
-		}
+				resultId = treeManager->nodeIdMap().id(changedNode);
+				return true;
+			}
+
+		resultId = treeManager->nodeIdMap().id(node);
+
 		return true;
 	}
 	return false;

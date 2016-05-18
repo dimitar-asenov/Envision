@@ -55,7 +55,8 @@ class DiffComparisonPair;
 class VERSIONCONTROLUI_API DiffManager
 {
 	public:
-		DiffManager(QString oldVersion, QString newVersion, QString project, Model::SymbolMatcher contextUnitMatcher);
+		DiffManager(QString oldVersion, QString newVersion, QString project,
+						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList);
 		void visualize();
 
 	private:
@@ -120,7 +121,7 @@ class VERSIONCONTROLUI_API DiffManager
 		QString oldVersion_;
 		QString newVersion_;
 		QString project_;
-		Model::SymbolMatcher contextUnitMatcher_;
+		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
 
 };
 
