@@ -98,7 +98,7 @@ void DiffManager::computeChangeNodesAndNodesToVisualize(FilePersistence::IdToCha
 	for (auto change : changes.values())
 	{
 		// TODO check flags
-		if (change->isFake() || change->onlyStructureChange()) continue;
+		if (change->isFake() || change->onlyStructureChange() || change->onlyLabelChange()) continue;
 
 		auto id = change->nodeId();
 
