@@ -27,6 +27,7 @@
 #include "CCodeReviewComment.h"
 
 #include "../nodes/CommentedNode.h"
+#include "../nodes/CommentWithDateNode.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/model/AllTreeManagers.h"
@@ -64,8 +65,8 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 		{
 			auto id = manager->nodeIdMap().id(source->node()).toString();
 			auto commentedNode = CodeReviewManager::instance().commentedNode(id);
-			commentedNode->commentNodes()->append(new Comments::CommentNode{"comment here"});
-			commentedNode->dates()->append(new Model::Text{QDateTime::currentDateTime().toString()});
+			auto commentWithDateNode = new CommentWithDateNode{};
+			commentedNode->commentWithDateNodes()->append(commentWithDateNode);
 
 			// only create highlight if not already existent
 			if (!source->overlay<CodeReviewCommentOverlay>("CodeReviewComment"))

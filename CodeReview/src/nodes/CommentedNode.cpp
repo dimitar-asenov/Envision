@@ -27,15 +27,15 @@
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 
+#include "CommentWithDateNode.h"
+
 namespace CodeReview
 {
-
 DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentedNode)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentedNode)
 
 DEFINE_ATTRIBUTE(CommentedNode, nodeId, Text, false, false, true)
-DEFINE_ATTRIBUTE(CommentedNode, commentNodes, TypedListOfCommentNode, false, false, true)
-DEFINE_ATTRIBUTE(CommentedNode, dates, TypedListOfText, false, false, true)
+DEFINE_ATTRIBUTE(CommentedNode, commentWithDateNodes, TypedListOfCommentWithDateNode, false, false, true)
 
 CommentedNode::CommentedNode(QString associatedNodeId) : Super{nullptr, CommentedNode::getMetaData()}
 {

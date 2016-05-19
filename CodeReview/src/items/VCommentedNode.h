@@ -54,8 +54,6 @@ class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<V
 
 	private:
 		Visualization::Item* comments_{};
-		Visualization::Item* dates_{};
-
 };
 
 }
