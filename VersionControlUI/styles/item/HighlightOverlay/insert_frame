@@ -1,0 +1,18 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<shape prototypes="shape/Frame/default">
+		Frame
+		<topWidth>1</topWidth>
+		<topBrush><color>#ff009900</color></topBrush>
+		<bottomWidth>1</bottomWidth>
+		<bottomBrush><color>#ff009900</color></bottomBrush>
+		<leftWidth>1</leftWidth>
+		<leftBrush><color>#ff009900</color></leftBrush>
+		<rightWidth>1</rightWidth>
+		<rightBrush><color>#ff009900</color></rightBrush>
+		
+		<contentBrush>
+			<color>#20009900</color>
+		</contentBrush>
+	</shape>
+</style>
