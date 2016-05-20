@@ -133,20 +133,22 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 	QStringList matches;
 	for (auto file : files())
 	{
-		int indexOfId = 0;
-		auto content = QString::fromUtf8(file->content());
-
-		indexOfId = content.indexOf(idText, indexOfId);
-		if (indexOfId != -1)
+		if (strstr(file->content(), idText.toLatin1().constData()))
 		{
-			int start, end;
-			if (isValidMatch(content, indexOfId, start, end, findChildrenByParentId))
+			int indexOfId = 0;
+			auto content = QString::fromUtf8(file->content());
+			indexOfId = content.indexOf(idText, indexOfId);
+			if (indexOfId != -1)
 			{
-				QString match = file->relativePath_ + ":" + content.mid(start, end-start);
-				matches << match;
+				int start, end;
+				if (isValidMatch(content, indexOfId, start, end, findChildrenByParentId))
+				{
+					QString match = file->relativePath_ + ":" + content.mid(start, end-start);
+					matches << match;
+				}
+				// Find the next match
+				indexOfId = indexOfId + 1;
 			}
-			// Find the next match
-			indexOfId = indexOfId + 1;
 		}
 	}
 	return matches;
