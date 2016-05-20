@@ -35,22 +35,22 @@
 
 namespace CodeReview
 {
-class CommentWithDateNode;
+class ReviewComment;
 }
 
-extern template class CODEREVIEW_API Model::TypedList<CodeReview::CommentWithDateNode>;
+extern template class CODEREVIEW_API Model::TypedList<CodeReview::ReviewComment>;
 
 namespace CodeReview {
 
-class CODEREVIEW_API CommentWithDateNode : public Super<Model::CompositeNode>
+class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentWithDateNode)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReviewComment)
 
 	ATTRIBUTE(Model::Text, date, setDate)
 	ATTRIBUTE(Comments::CommentNode, commentNode, setComment)
 
 	public:
-		CommentWithDateNode(Comments::CommentNode* commentNode, Model::Text* date);
+		ReviewComment(Comments::CommentNode* commentNode, Model::Text* date, Model::Node* parent=nullptr);
 
 };
 

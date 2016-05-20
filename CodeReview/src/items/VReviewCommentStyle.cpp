@@ -23,41 +23,12 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "CommentWithDateNode.h"
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-
-#include "ModelBase/src/nodes/TypedList.hpp"
-
-template class Model::TypedList<CodeReview::CommentWithDateNode>;
+#include "VReviewCommentStyle.h"
 
 namespace CodeReview
 {
 
-DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentWithDateNode)
-
-DEFINE_ATTRIBUTE(CommentWithDateNode, date, Text, false, false, true)
-DEFINE_ATTRIBUTE(CommentWithDateNode, commentNode, CommentNode, false, false, true)
-
-CommentWithDateNode::CommentWithDateNode(Comments::CommentNode* commentNode, Model::Text* date) :
-	Super{nullptr, CommentWithDateNode::getMetaData()}
-{
-	setDate(date);
-	setComment(commentNode);
-}
-
-CommentWithDateNode::CommentWithDateNode(Model::Node*) :
-	CommentWithDateNode{new Comments::CommentNode{"comment here"},
-							  new Model::Text{QDateTime::currentDateTime().toString()}}
-{}
-
-CommentWithDateNode::CommentWithDateNode(Model::Node *, Model::PersistentStore &, bool)
-	:Super{}
-{
-	Q_ASSERT(false);
-}
-
-CommentWithDateNode* CommentWithDateNode::clone() const { return new CommentWithDateNode{*this}; }
-
+VReviewCommentStyle::~VReviewCommentStyle(){}
 
 }

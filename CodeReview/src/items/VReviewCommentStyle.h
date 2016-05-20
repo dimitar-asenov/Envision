@@ -33,10 +33,10 @@
 namespace CodeReview
 {
 
-class CODEREVIEW_API VCommentWithDateNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class CODEREVIEW_API VReviewCommentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
-		virtual ~VCommentWithDateNodeStyle() override;
+		virtual ~VReviewCommentStyle() override;
 
 		Property<ItemStyle> headerBackground{this, "headerBackground"};
 

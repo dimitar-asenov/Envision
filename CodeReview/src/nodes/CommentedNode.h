@@ -29,7 +29,7 @@
 
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-#include "CommentWithDateNode.h"
+#include "ReviewComment.h"
 
 namespace CodeReview
 {
@@ -45,7 +45,7 @@ class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentedNode)
 
 	ATTRIBUTE(Model::Text, nodeId, setNodeId)
-	ATTRIBUTE(Model::TypedList<CodeReview::CommentWithDateNode>, commentWithDateNodes, setCommentWithDateNodes)
+	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
 
 	public:
 		CommentedNode(QString associatedNodeId);

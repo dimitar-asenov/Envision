@@ -50,7 +50,7 @@ VCommentedNode::VCommentedNode(Visualization::Item* parent, NodeType* node, cons
 void VCommentedNode::initializeForms()
 {
 	auto comments = item(&I::comments_, [](I* v) {
-			return v->node()->commentWithDateNodes();});
+			return v->node()->reviewComments();});
 	auto grid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
 			->setLeftMargin(10)

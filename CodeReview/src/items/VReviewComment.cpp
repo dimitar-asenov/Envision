@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentWithDateNode.h"
+#include "VReviewComment.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
@@ -34,14 +34,14 @@
 namespace CodeReview
 {
 
-DEFINE_ITEM_COMMON(VCommentWithDateNode, "item")
+DEFINE_ITEM_COMMON(VReviewComment, "item")
 
-VCommentWithDateNode::VCommentWithDateNode(Visualization::Item* parent, NodeType* node, const StyleType* style)
+VReviewComment::VReviewComment(Visualization::Item* parent, NodeType* node, const StyleType* style)
 	: Super{parent, node, style}
 {
 }
 
-void VCommentWithDateNode::initializeForms()
+void VReviewComment::initializeForms()
 {
 	auto headerContent = (new Visualization::GridLayoutFormElement{})
 		->setHorizontalSpacing(3)

@@ -24,11 +24,39 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentWithDateNodeStyle.h"
+#pragma once
+
+#include "../codereview_api.h"
+
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VReviewCommentStyle.h"
+
+#include "../nodes/CommentedNode.h"
+
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/EmptyItem.h"
+
 
 namespace CodeReview
 {
 
-VCommentWithDateNodeStyle::~VCommentWithDateNodeStyle(){}
+class ReviewComment;
+
+class CODEREVIEW_API VReviewComment : public Super<Visualization::ItemWithNode<VReviewComment,
+		Visualization::DeclarativeItem<VReviewComment>, ReviewComment>>
+{
+	ITEM_COMMON(VReviewComment)
+
+	public:
+		VReviewComment(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		static void initializeForms();
+
+	private:
+		Visualization::Item* date_{};
+		Visualization::Item* comment_{};
+		Visualization::EmptyItem* headerBackground_{};
+};
 
 }
