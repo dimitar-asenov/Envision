@@ -86,7 +86,11 @@ void DynamicGridFormElement::computeSize(Item* item, int availableWidth, int ava
 			[&data](){return data.numRows_;},	// numRows
 			[&data](){return data.numColumns_;},	// numColumns
 			[&data](int x, int y){return data.itemGrid_[x][y];},	// has
-			[&data](int x, int y){return data.itemSpan_[x][y];},	// spanGrid
+			[&data](int x, int y){
+				// We only use at() here instead of [] to avoid an internal compiler error with GCC 6.1.1
+				// TODO: GCC: remove when error fixed.
+				return data.itemSpan_.at(x).at(y);
+			},	// spanGrid
 			[&data](int x, int y){return data.itemGrid_[x][y]->widthInParent();},	// width
 			[&data](int x, int y){return data.itemGrid_[x][y]->heightInParent();},	// height
 			[](int, int, int, int){},	// computeElementSize
