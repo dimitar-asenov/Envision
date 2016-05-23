@@ -34,6 +34,8 @@
 
 #include "VisualizationBase/src/VisualizationManager.h"
 
+#include "../handlers/HCodeReviewOverlay.h"
+
 namespace CodeReview
 {
 
@@ -45,19 +47,24 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 	setFlag(QGraphicsItem::ItemIgnoresTransformations);
+	offsetItemLocal_ = QPoint{0, associatedItem->heightInLocal()};
 }
 
 void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
-	qreal height = associatedItem()->heightInScene();
-	setPos(associatedItem()->scenePos() + QPointF{0, height});
+	setPos(associatedItem()->mapToScene(offsetItemLocal_));
 }
 
 void CodeReviewCommentOverlay::initializeForms()
 {
 	addForm(item(&I::commentedNodeItem_, [](I* v) {return v->commentedNode_;}));
 
+}
+
+void CodeReviewCommentOverlay::updateOffsetItemLocal(QPointF scenePos)
+{
+	offsetItemLocal_ = CodeReviewCommentOverlay::associatedItem()->mapFromScene(scenePos);
 }
 
 }

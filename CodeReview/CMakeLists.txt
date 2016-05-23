@@ -13,6 +13,7 @@ add_library(CodeReview SHARED
 	src/overlays/CodeReviewCommentOverlay.h
 	src/overlays/CodeReviewCommentOverlayStyle.h
 	src/handlers/HReviewableItem.h
+	src/handlers/HCodeReviewOverlay.h
 	src/nodes/CommentedNode.h
 	src/nodes/ReviewComment.h
 	src/items/VCommentedNode.h
@@ -26,6 +27,7 @@ add_library(CodeReview SHARED
 	src/overlays/CodeReviewCommentOverlay.cpp
 	src/overlays/CodeReviewCommentOverlayStyle.cpp
 	src/handlers/HReviewableItem.cpp
+	src/handlers/HCodeReviewOverlay.cpp
 	src/nodes/CommentedNode.cpp
 	src/nodes/ReviewComment.cpp
 	src/items/VCommentedNode.cpp
