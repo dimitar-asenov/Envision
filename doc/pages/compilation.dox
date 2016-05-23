@@ -26,6 +26,7 @@ Other dependencies are:
 	- <b>On Linux: Google Performance Tools</b>: http://code.google.com/p/gperftools/ <br /> Used for profiling.
 	- <b>For development only: Vera ++ </b>: https://bitbucket.org/verateam/vera <br /> Used for checking the code formatting style.
 	Boost python is used to provide bindings for the python scripting.
+	- <b>For the Java import tool only: Gradle </b>: http://gradle.org/ <br /> Used as build script for the JavaImportTool.
 
 To install the dependencies on Ubuntu 16.04, run the following:
 	-# Install all necessary packages:
@@ -34,6 +35,8 @@ To install the dependencies on Ubuntu 16.04, run the following:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
 	-# If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source:
 		\verbatim Envision$ ln -s /usr/lib/llvm-3.8/lib/ lib \endverbatim
+	-# If you plan on using the JavaImportTool you will need Gradle:
+		\verbatim sudo apt-get install gradle \endverbatim
 
 Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want
 to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.
