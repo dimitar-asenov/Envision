@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['reachable',['Reachable',['../classInformationScripting_1_1Reachable.html',1,'InformationScripting']]],
   ['reference',['Reference',['../classModel_1_1Reference.html',1,'Model']]],
   ['referenceexpression',['ReferenceExpression',['../classOOModel_1_1ReferenceExpression.html',1,'OOModel']]],
   ['referencefinder',['ReferenceFinder',['../classOODebug_1_1ReferenceFinder.html',1,'OODebug']]],
@@ -13,6 +14,7 @@ var searchData=
   ['resolutionrequest',['ResolutionRequest',['../classModel_1_1ResolutionRequest.html',1,'Model']]],
   ['resumecommand',['ResumeCommand',['../structOODebug_1_1ResumeCommand.html',1,'OODebug']]],
   ['returnstatement',['ReturnStatement',['../classOOModel_1_1ReturnStatement.html',1,'OOModel']]],
+  ['reviewcomment',['ReviewComment',['../classCodeReview_1_1ReviewComment.html',1,'CodeReview']]],
   ['rootitem',['RootItem',['../classVisualization_1_1RootItem.html',1,'Visualization']]],
   ['runmerge',['RunMerge',['../classFilePersistence_1_1RunMerge.html',1,'FilePersistence']]],
   ['runprocess',['RunProcess',['../classOODebug_1_1RunProcess.html',1,'OODebug']]],

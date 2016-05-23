@@ -11,6 +11,8 @@ var searchData=
   ['less',['LESS',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a01eacffc64c48a8940b0ed4ceebc1cdc',1,'OOModel::BinaryOperation']]],
   ['less_5fequals',['LESS_EQUALS',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a590e530793b1290f079161af7f1e1072',1,'OOModel::BinaryOperation']]],
   ['line',['LINE',['../classOODebug_1_1Protocol.html#a4a318061ed9894491ac1bee3983df1ffa17b8ef2c330f1430e00c9de5469fc7e7',1,'OODebug::Protocol']]],
+  ['linelikealongx',['LinelikeAlongX',['../classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976a60cc591b6b345a81bee5aa93bbff1139',1,'Visualization::Item']]],
+  ['linelikealongy',['LinelikeAlongY',['../classVisualization_1_1Item.html#ac0dad83a3395063a25c7460ce3db5976ad1e1784d6b62a1711295a8a0f4d7e002',1,'Visualization::Item']]],
   ['linetable',['LineTable',['../classOODebug_1_1Protocol.html#a161924aa2d21cbda6719a9bf6a2a2eababc471638abe515c98cb21077fe962594',1,'OODebug::Protocol']]],
   ['listconstruction',['ListConstruction',['../classOOModel_1_1MethodCallExpression.html#a94c4e97f99bc9d2672c03cab27fa82dfaccba206faeb58265ccd3878aafbfc51e',1,'OOModel::MethodCallExpression']]],
   ['literal',['Literal',['../classInteraction_1_1Token.html#aa0ae33aa219c648f850edb3d76ba159fade2df1e41e7f8a6d60717bbeb6444c48',1,'Interaction::Token']]],

@@ -44,7 +44,6 @@ var searchData=
   ['prompttextinputstyle',['PromptTextInputStyle',['../classInteraction_1_1PromptTextInputStyle.html',1,'Interaction']]],
   ['properregistration',['ProperRegistration',['../classModel_1_1ProperRegistration.html',1,'Model']]],
   ['property',['Property',['../classInformationScripting_1_1Property.html',1,'InformationScripting']]],
-  ['property_3c_20visualization_3a_3aitemstyle_20_3e',['Property&lt; Visualization::ItemStyle &gt;',['../classInformationScripting_1_1Property.html',1,'InformationScripting']]],
   ['property_3c_20visualization_3a_3astaticstyle_20_3e',['Property&lt; Visualization::StaticStyle &gt;',['../classInformationScripting_1_1Property.html',1,'InformationScripting']]],
   ['property_3c_20visualization_3a_3atextstyle_20_3e',['Property&lt; Visualization::TextStyle &gt;',['../classInformationScripting_1_1Property.html',1,'InformationScripting']]],
   ['property_3c_20visualization_3a_3avliststyle_20_3e',['Property&lt; Visualization::VListStyle &gt;',['../classInformationScripting_1_1Property.html',1,'InformationScripting']]],

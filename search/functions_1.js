@@ -2,7 +2,7 @@ var searchData=
 [
   ['backtracklcs',['backtrackLCS',['../classFilePersistence_1_1Diff3Parse.html#a32a664957cdd9f82ad61fbced2336a86',1,'FilePersistence::Diff3Parse']]],
   ['baseclasses',['baseClasses',['../classEnvisionAstConsumer.html#a96d1949b50c3cb8fd51bb01c7cfd50df',1,'EnvisionAstConsumer']]],
-  ['baseclassesquery',['baseClassesQuery',['../classInformationScripting_1_1AstQuery.html#a85f938d7b359e1d8feca0305399c1057',1,'InformationScripting::AstQuery']]],
+  ['baseclassesquery',['baseClassesQuery',['../classInformationScripting_1_1AstQuery.html#ac6d75b7b60d8cb993268a6c7a667e6cb',1,'InformationScripting::AstQuery']]],
   ['basepartialbegin',['basePartialBegin',['../classCppImport_1_1AllMetaDefinitions.html#ab3d534105b4898b7b933a2bbe0bafb4f',1,'CppImport::AllMetaDefinitions']]],
   ['basetype',['baseType',['../classOOModel_1_1PointerType.html#aa824c42409c9121c46b4780cd6496a13',1,'OOModel::PointerType::baseType()'],['../classOOModel_1_1ReferenceType.html#a5fe1a0c804564a63f9b0d5dc3cc963bb',1,'OOModel::ReferenceType::baseType()']]],
   ['basicstrategy',['basicStrategy',['../classVisualization_1_1ModelRenderer.html#a1194f81d36e8550d3df50be3b57e1c17',1,'Visualization::ModelRenderer']]],

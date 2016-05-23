@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['unambigousprefixperrevision_5f',['unambigousPrefixPerRevision_',['../classVersionControlUI_1_1CDiff.html#a2e9f29a4bdfdbdf430166238d123495e',1,'VersionControlUI::CDiff']]],
   ['unaryopmap_5f',['unaryOpMap_',['../classCppImport_1_1CppImportLogger.html#ab669a2854326afa08b6a26f92ca652dd',1,'CppImport::CppImportLogger']]],
   ['underline_5f',['underline_',['../classVisualization_1_1TextStyle.html#a03473830dadce535576d284efedf7f3f',1,'Visualization::TextStyle']]],
   ['undone',['undone',['../classModel_1_1UndoCommand.html#afbb10978f3371b64aebddd96965a40ee',1,'Model::UndoCommand']]],
