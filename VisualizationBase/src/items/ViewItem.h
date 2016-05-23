@@ -62,14 +62,14 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		static int publicInterfacePurpose();
 
 		/**
-		 * Insert an empty column into the grid of nodes
+		 * Insert an empty major element into the grid of nodes
 		 */
-		void insertColumn(int column);
+		void insertMajor(int major);
 		/**
 		 * Insert the given node into the grid at the given position, rendering
 		 * it with the given purpose.
 		 */
-		ViewItemNode* insertNode(Model::Node* node, int column = 0, int row = 0, int purpose = -1);
+		ViewItemNode* insertNode(Model::Node* node, MajorMinorIndex pos = {}, int purpose = -1);
 		/**
 		 * Remove the given node from the view (this does not delete the node from the model)
 		 */
@@ -81,22 +81,22 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		/**
 		 * Returns the position of the given node in the grid, or (-1, -1) if it doesn't exist.
 		 */
-		QPoint positionOfNode(Model::Node* node) const;
+		MajorMinorIndex positionOfNode(Model::Node* node) const;
 		/**
 		 * Returns the position of the given item's node in the grid, or (-1, -1) if the item
 		 * has no node, or the node is not part of the grid.
 		 */
-		QPoint positionOfItem(Item* item) const;
+		MajorMinorIndex positionOfItem(Item* item) const;
 		/**
 		 * Returns the node at the given position. If the position is invalid, returns nullptr.
 		 */
-		Model::Node* nodeAt(int column, int row) const;
+		Model::Node* nodeAt(MajorMinorIndex index) const;
 
 		/**
 		 * Adds a spacing node at the given position, using the given target and parent
 		 * to determine the spacing.
 		 */
-		void addSpacing(int column, int row, Model::Node* spacingTarget,
+		void addSpacing(MajorMinorIndex index, Model::Node* spacingTarget,
 						ViewItemNode* spacingParent);
 
 		/**
@@ -129,6 +129,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void setName(const QString& name);
 
 		void setMajorAxis(GridLayouter::MajorAxis majorAxis);
+		GridLayouter::MajorAxis majorAxis() const;
 
 		QJsonDocument toJson() const;
 		void fromJson(QJsonDocument json);
@@ -170,10 +171,10 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		template <typename NodeType>
 		QList<NodeType*> referencesOfType() const;
 
-		void insertViewItemNode(ViewItemNode* node, int column, int row);
+		void insertViewItemNode(ViewItemNode* node, MajorMinorIndex index);
 
-		void ensurePositionExists(int column, int row);
-		void ensureColumnExists(int column);
+		void ensurePositionExists(MajorMinorIndex index);
+		void ensureMajorExists(int major);
 
 		QVector<QVector<Model::Node*>> nodesGetter();
 
@@ -184,4 +185,5 @@ inline const QString& ViewItem::name() const { return name_; }
 inline QString ViewItem::fullLayerName(const QString& localLayer) const { return name() + "_" + localLayer; }
 inline bool ViewItem::zoomLabelsEnabled() { return zoomLabelsEnabled_;}
 inline void ViewItem::setZoomLabelsEnabled(bool zoomLabelsEnabled) {zoomLabelsEnabled_ = zoomLabelsEnabled;}
+inline GridLayouter::MajorAxis ViewItem::majorAxis() const { return majorAxis_;}
 }

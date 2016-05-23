@@ -83,9 +83,9 @@ ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *view)
 	{
 		if (auto target = Model::AllTreeManagers::instance().nodeForId(QUuid{json["target"].toString()}))
 			result->setSpacingTarget(target);
-		if (json["parentRow"].toInt() != -1)
-			result->setSpacingParent(DCast<ViewItemNode>(view->nodeAt(json["parentCol"].toInt(),
-																		json["parentRow"].toInt())));
+		if (json["parentMinorIndex"].toInt() != -1)
+			result->setSpacingParent(DCast<ViewItemNode>(view->nodeAt({json["parentMajorIndex"].toInt(),
+																		json["parentMinorIndex"].toInt()})));
 	}
 	else if (json["type"] == "INFO")
 	{
@@ -99,8 +99,8 @@ QJsonValue ViewItemNode::toJson() const
 {
 	QJsonObject result;
 	result.insert("purpose", purpose());
-	result.insert("col", position_.x());
-	result.insert("row", position_.y());
+	result.insert("majorIndex", position_.major_);
+	result.insert("minorIndex", position_.minor_);
 	//If it stores a normal, separately persisted node
 	if (reference() && reference()->manager())
 	{
@@ -113,8 +113,8 @@ QJsonValue ViewItemNode::toJson() const
 	{
 		result.insert("target", spacingTarget()->manager()->
 								nodeIdMap().id(spacingTarget()).toString());
-		result.insert("parentCol", spacingParentPosition_.x());
-		result.insert("parentRow", spacingParentPosition_.y());
+		result.insert("parentMajorIndex", spacingParentPosition_.major_);
+		result.insert("parentMinorIndex", spacingParentPosition_.minor_);
 		result.insert("type", "SPACING");
 	}
 	//If it stores an InfoNode, which is not separately persisted

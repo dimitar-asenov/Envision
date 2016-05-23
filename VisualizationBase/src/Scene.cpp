@@ -117,9 +117,9 @@ ModelRenderer* Scene::defaultRenderer()
 	return &defaultRenderer_;
 }
 
-void Scene::addTopLevelNode(Node *node, int column, int row)
+void Scene::addTopLevelNode(Node *node, MajorMinorIndex index)
 {
-	currentViewItem()->insertNode(node, column, row);
+	currentViewItem()->insertNode(node, index);
 }
 
 void Scene::addTopLevelItem(Item* item, bool show)

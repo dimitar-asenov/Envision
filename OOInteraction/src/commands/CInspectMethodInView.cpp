@@ -61,15 +61,15 @@ Interaction::CommandResult* CInspectMethodInView::executeWithArguments(Visualiza
 	auto view = source->scene()->viewItems()->newViewItem("Inspect_" + method->name());
 	if (!view) return new Interaction::CommandResult{new Interaction::CommandError{"Already inspecting method"}};
 
-	auto methodInView = view->insertNode(method, 1, 0);
+	auto methodInView = view->insertNode(method, {1, 0});
 	for (auto caller : callers)
 	{
-		auto callerInView = view->insertNode(caller, 0, 0);
+		auto callerInView = view->insertNode(caller, {0, 0});
 		view->addArrow(caller, method, "callees", callerInView, methodInView);
 	}
 	for (auto callee : callees)
 	{
-		auto calleeInView = view->insertNode(callee, 2, 0, Visualization::ViewItem::publicInterfacePurpose());
+		auto calleeInView = view->insertNode(callee, {2, 0}, Visualization::ViewItem::publicInterfacePurpose());
 		view->addArrow(method, callee, "callees", methodInView, calleeInView);
 	}
 	source->scene()->viewItems()->switchToView(view);

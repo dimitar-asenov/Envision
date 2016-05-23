@@ -46,7 +46,7 @@ class INTERACTIONBASE_API AddReferencedToViewCommand : public CommandWithDefault
 		};
 
 		AddReferencedToViewCommand(QString name, const QStringList& defaultArguments,
-								   int rightOffset, QString arrowLayer,
+									int majorOffset, QString arrowLayer,
 								   ArrowDirection direction = ArrowToReference, int purpose = -1);
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
@@ -59,7 +59,7 @@ class INTERACTIONBASE_API AddReferencedToViewCommand : public CommandWithDefault
 		virtual QSet<ReferenceResult*> references(ReferenceTarget* target) = 0;
 
 	private:
-		int rightOffset_{};
+		int majorOffset_{};
 		QString arrowLayer_{};
 		ArrowDirection direction_{};
 		int purpose_{};
@@ -68,9 +68,9 @@ class INTERACTIONBASE_API AddReferencedToViewCommand : public CommandWithDefault
 template <typename ReferenceTarget, typename ReferenceResult>
 inline AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	AddReferencedToViewCommand(QString name, const QStringList &defaultArguments,
-							int rightOffset, QString arrowLayer, ArrowDirection direction, int purpose)
+							int majorOffset, QString arrowLayer, ArrowDirection direction, int purpose)
 	: CommandWithDefaultArguments{name, defaultArguments},
-		rightOffset_{rightOffset}, arrowLayer_{arrowLayer}, direction_{direction}, purpose_{purpose} {}
+		majorOffset_{majorOffset}, arrowLayer_{arrowLayer}, direction_{direction}, purpose_{purpose} {}
 
 template <typename ReferenceTarget, typename ReferenceResult>
 inline bool AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
@@ -104,14 +104,14 @@ CommandResult* AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	auto refs = references(referencedNode);
 	if (refs.size() > 0)
 	{
-		auto pos = view->positionOfItem(topLevelAncestor);
-		view->insertColumn(pos.x() + rightOffset_);
-		auto row = 0;
+		auto index = view->positionOfItem(topLevelAncestor);
+		view->insertMajor(index.major_ + majorOffset_);
+		auto minor = 0;
 		//Make the items appear at the same height as the item they reference
-		view->addSpacing(pos.x() + rightOffset_, row++, referencedNode, topLevelAncestor->node());
+		view->addSpacing({index.major_ + majorOffset_, minor++}, referencedNode, topLevelAncestor->node());
 		for (auto ref : refs)
 		{
-			auto actualRef = view->insertNode(ref, pos.x() + rightOffset_, row++, purpose_);
+			auto actualRef = view->insertNode(ref, {index.major_ + majorOffset_, minor++}, purpose_);
 			if (direction_ == ArrowToReference)
 				view->addArrow(referencedNode, actualRef, arrowLayer_, topLevelAncestor->node());
 			else

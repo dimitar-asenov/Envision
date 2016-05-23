@@ -45,6 +45,15 @@ class Cursor;
 class View;
 class ViewItemManager;
 
+struct MajorMinorIndex
+{
+	int major_{0};
+	int minor_{0};
+
+	bool operator==(const MajorMinorIndex& other) const { return major_==other.major_ && minor_==other.minor_; }
+	bool operator!=(const MajorMinorIndex& other) const { return ! (*this == other); }
+};
+
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
 	Q_OBJECT
@@ -68,7 +77,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer();
 		static ModelRenderer* defaultRenderer();
 
-		void addTopLevelNode(Node* node, int column = 0, int row = 0);
+		void addTopLevelNode(Node* node, MajorMinorIndex index = {});
 		void addTopLevelItem(Item* item, bool show = true);
 		void removeTopLevelItem(Item* item);
 		void scheduleUpdate();

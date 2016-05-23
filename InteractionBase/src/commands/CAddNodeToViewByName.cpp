@@ -50,25 +50,25 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 		return new CommandResult{new CommandError{"Please specify a node to add"}};
 
 	auto currentView = target->scene()->currentViewItem();
-	QPoint posToInsert;
+	Visualization::MajorMinorIndex indexToInsert;
 	auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursor.get());
 	if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor)
 	{
-		posToInsert.setX(layoutCursor->x());
-		posToInsert.setY(layoutCursor->y());
+		indexToInsert.major_ = layoutCursor->x();
+		indexToInsert.minor_ = layoutCursor->y();
 	}
 	else if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor)
 	{
-		currentView->insertColumn(layoutCursor->x());
-		posToInsert.setX(layoutCursor->x());
+		currentView->insertMajor(layoutCursor->x());
+		indexToInsert.major_ = layoutCursor->x();
 	}
 	else if (auto grid = dynamic_cast<Visualization::DynamicGridFormElement*>(currentView->currentForm()))
 	{
 		auto focusedIndex = grid->indexOf(currentView, source);
 		if (focusedIndex.x() != -1)
 		{
-			posToInsert.setX(focusedIndex.x());
-			posToInsert.setY(focusedIndex.y());
+			indexToInsert.major_ = focusedIndex.x();
+			indexToInsert.minor_ = focusedIndex.y();
 		}
 	}
 
@@ -78,7 +78,7 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 	auto matches = Model::NameResolver::mostLikelyMatches(name, 10);
 	if (matches.size() > 0)
 	{
-		currentView->insertNode(matches[0].second, posToInsert.x(), posToInsert.y());
+		currentView->insertNode(matches[0].second, indexToInsert);
 		return new CommandResult{};
 	}
 	return new CommandResult{new CommandError{"Could not find node with name " + commandTokens[1]}};

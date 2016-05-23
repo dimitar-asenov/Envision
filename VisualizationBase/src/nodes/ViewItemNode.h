@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 #pragma once
 
+#include "../Scene.h"
 #include "../visualizationbase_api.h"
 #include "../nodes/UINode.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
@@ -81,12 +82,12 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 		/**
 		 * Use setPosition to set the position of this node in the ViewItem's grid before calling toJson.
 		 */
-		void setPosition(QPoint pos);
+		void setPosition(MajorMinorIndex pos);
 		/**
 		 * If a spacing parent exists, use this to set the position of its spacing parent's position
 		 * in the ViewItem's grid before calling toJson.
 		 */
-		void setSpacingParentPosition(QPoint pos);
+		void setSpacingParentPosition(MajorMinorIndex pos);
 		virtual QJsonValue toJson() const override;
 
 	private:
@@ -95,8 +96,8 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 		Model::Node* spacingTarget_{};
 		ViewItemNode* spacingParent_{};
 
-		QPoint position_;
-		QPoint spacingParentPosition_;
+		MajorMinorIndex position_;
+		MajorMinorIndex spacingParentPosition_;
 };
 
 inline void ViewItemNode::setReference(Model::Node *reference) { reference_ = reference; }
@@ -107,7 +108,7 @@ inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacing
 inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
 inline void ViewItemNode::setSpacingParent(ViewItemNode *spacingParent) { spacingParent_ = spacingParent; }
 inline ViewItemNode* ViewItemNode::spacingParent() const { return spacingParent_; }
-inline void ViewItemNode::setPosition(QPoint pos) { position_ = pos; }
-inline void ViewItemNode::setSpacingParentPosition(QPoint pos) { spacingParentPosition_ = pos; }
+inline void ViewItemNode::setPosition(MajorMinorIndex index) { position_ = index; }
+inline void ViewItemNode::setSpacingParentPosition(MajorMinorIndex index) { spacingParentPosition_ = index; }
 
 }

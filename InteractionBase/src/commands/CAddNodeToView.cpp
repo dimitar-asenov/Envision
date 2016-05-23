@@ -53,21 +53,21 @@ CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source,
 {
 	auto ancestor = source->findAncestorWithNode();
 	auto name = arguments.at(0);
-	auto colOk = true;
-	auto rowOk = true;
-	auto column = arguments.at(1).toInt(&colOk);
-	auto row = arguments.at(2).toInt(&rowOk);
+	auto majorOk = true;
+	auto minorOk = true;
+	auto major = arguments.at(1).toInt(&majorOk);
+	auto minor = arguments.at(2).toInt(&minorOk);
 	if (name == "current")
 		name = ancestor->scene()->currentViewItem()->name();
 	auto view = ancestor->scene()->viewItems()->viewItem(name);
-	if (view && rowOk && colOk)
+	if (view && minorOk && majorOk)
 	{
-		view->insertNode(ancestor->node(), column, row);
+		view->insertNode(ancestor->node(), {major, minor});
 		return new CommandResult{};
 	}
 	else if (!view)
 		return new CommandResult{new CommandError{"The view with name " + name + " does not exist"}};
-	else if (!colOk)
+	else if (!majorOk)
 		return new CommandResult{new CommandError{arguments.at(1) + " is not an integer"}};
 	else
 		return new CommandResult{new CommandError{arguments.at(2) + " is not an integer"}};
@@ -79,11 +79,11 @@ QString CAddNodeToView::description(Visualization::Item *, Visualization::Item *
 {
 	auto name = arguments.at(0);
 	if (name == "current")
-		return "Add the current item to the current view at column " +
-				arguments.at(1) + " and row " + arguments.at(2);
+		return "Add the current item to the current view at position {" +
+				arguments.at(1) + "," + arguments.at(2) + "}";
 	else
-		return "Add the current item to the view " + name + " at column " +
-				arguments.at(1) + " and row " + arguments.at(2);
+		return "Add the current item to the view " + name + " at position {" +
+				arguments.at(1) + "," + arguments.at(2) + "}";
 
 }
 }

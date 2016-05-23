@@ -49,7 +49,7 @@ bool CAddInfoNode::canInterpret(Visualization::Item* source, Visualization::Item
 			node = node->parent();
 		if (!node) return false;
 		else
-			return canInterpret && source->scene()->currentViewItem()->positionOfItem(ancestor).x() != -1;
+			return canInterpret && source->scene()->currentViewItem()->positionOfItem(ancestor).major_ != -1;
 	}
 	return false;
 }
@@ -61,10 +61,10 @@ Interaction::CommandResult* CAddInfoNode::executeWithArguments(Visualization::It
 	auto node = ancestor->node();
 	while (node && !node->definesSymbol())
 		node = node->parent();
-	auto pos = source->scene()->currentViewItem()->positionOfItem(
+	auto index = source->scene()->currentViewItem()->positionOfItem(
 				source->findAncestorOfType<Visualization::VViewItemNode>());
 	source->scene()->currentViewItem()->insertNode(
-			new Visualization::InfoNode{node}, pos.x(), pos.y());
+			new Visualization::InfoNode{node}, index);
 	return new Interaction::CommandResult{};
 }
 

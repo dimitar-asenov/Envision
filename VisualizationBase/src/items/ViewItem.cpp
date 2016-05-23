@@ -81,33 +81,35 @@ int ViewItem::publicInterfacePurpose()
 		: Scene::defaultRenderer()->registerVisualizationPurpose("public_interface");
 }
 
-void ViewItem::insertColumn(int column)
+void ViewItem::insertMajor(int major)
 {
-	//Make sure we actually have enough columns
-	ensureColumnExists(column);
-	//Only insert the column, if the current one at index is not empty
+	//Make sure we actually have enough major elements
+	ensureMajorExists(major);
+
+	//Only insert the major element, if the current one at index is not empty
 	auto isEmpty = true;
-	for (auto item : nodes_.at(column))
+	for (auto item : nodes_.at(major))
 		isEmpty = isEmpty && item == nullptr;
-	//If we have elements, insert a new column (else we can use the empty column)
+
+	//If we have minor elements, insert a new major element (else we can use the existing empty major element)
 	if (!isEmpty)
-		nodes_.insert(column, {});
+		nodes_.insert(major, {});
 }
 
-ViewItemNode* ViewItem::insertNode(Model::Node* node, int column, int row, int purpose)
+ViewItemNode* ViewItem::insertNode(Model::Node* node, MajorMinorIndex pos, int purpose)
 {
 	auto ref = ViewItemNode::withReference(node, purpose);
-	insertViewItemNode(ref, column, row);
+	insertViewItemNode(ref, pos);
 	return ref;
 }
 
 void ViewItem::removeNode(Model::Node* node)
 {
-	auto point = positionOfNode(node);
-	if (point.x() != -1)
+	auto index = positionOfNode(node);
+	if (index.major_ != -1)
 	{
-		auto removed = nodes_[point.x()][point.y()];
-		nodes_[point.x()].remove(point.y());
+		auto removed = nodes_[index.major_][index.minor_];
+		nodes_[index.major_].remove(index.minor_);
 		cleanupRemovedNode(removed);
 		setUpdateNeeded(StandardUpdate);
 	}
@@ -116,37 +118,39 @@ void ViewItem::removeNode(Model::Node* node)
 QList<Model::Node*> ViewItem::allNodes() const
 {
 	QList<Model::Node*> result;
-	for (auto column : nodes_)
-		for (auto item : column)
+	for (auto major : nodes_)
+		for (auto item : major)
 			if (item)
 				result.append(item);
 	return result;
 }
 
-QPoint ViewItem::positionOfNode(Model::Node *node) const
+MajorMinorIndex ViewItem::positionOfNode(Model::Node *node) const
 {
-	if (!node) return QPoint{-1, -1};
-	for (int col = 0; col < nodes_.size(); col++)
-		for (int row = 0; row < nodes_[col].size(); row++)
-			if (nodes_[col][row] == node ||
-					DCast<ViewItemNode>(nodes_[col][row])->reference() == node)
-				return QPoint{col, row};
-	return QPoint{-1, -1};
+	if (!node) return {-1, -1};
+
+	for (int major = 0; major < nodes_.size(); major++)
+		for (int minor = 0; minor < nodes_[major].size(); minor++)
+			if (nodes_[major][minor] == node ||
+					DCast<ViewItemNode>(nodes_[major][minor])->reference() == node)
+				return {major, minor};
+
+	return {-1, -1};
 }
 
-QPoint ViewItem::positionOfItem(Item *item) const
+MajorMinorIndex ViewItem::positionOfItem(Item *item) const
 {
 	if (item->node()) return positionOfNode(item->node());
-	else return QPoint{-1, -1};
+	else return {-1, -1};
 }
 
-Model::Node* ViewItem::nodeAt(int column, int row) const
+Model::Node* ViewItem::nodeAt(MajorMinorIndex index) const
 {
-	if (column < 0 || column >= nodes_.size())
+	if (index.major_ < 0 || index.major_ >= nodes_.size())
 		return nullptr;
-	if (row < 0 || row >= nodes_[column].size())
+	if (index.minor_ < 0 || index.minor_ >= nodes_[index.major_].size())
 		return nullptr;
-	return nodes_[column][row];
+	return nodes_[index.major_][index.minor_];
 }
 
 void ViewItem::cleanupRemovedItem(Item *item)
@@ -182,10 +186,10 @@ void ViewItem::cleanupRemovedNode(Model::Node *node)
 			removeNode(infoNode);
 }
 
-void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
+void ViewItem::addSpacing(MajorMinorIndex index, Model::Node* spacingTarget,
 						  ViewItemNode* spacingParent)
 {
-	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget, spacingParent), column, row);
+	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget, spacingParent), index);
 }
 
 void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer,
@@ -330,29 +334,30 @@ void ViewItem::removeArrowsForItem(Item *parent)
 	}
 }
 
-void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)
+void ViewItem::insertViewItemNode(ViewItemNode *node, MajorMinorIndex index)
 {
 	//First, make sure the current grid is big enough to fit the node
-	ensurePositionExists(column, row);
+	ensurePositionExists(index);
+
 	//We can either put the node at a free space if exists, or insert otherwise
-	if (nodes_[column][row] == nullptr)
-		nodes_[column][row] = node;
+	if (nodes_[index.major_][index.minor_] == nullptr)
+		nodes_[index.major_][index.minor_] = node;
 	else
-		nodes_[column].insert(row, node);
+		nodes_[index.major_].insert(index.minor_, node);
 	setUpdateNeeded(StandardUpdate);
 }
 
-void ViewItem::ensurePositionExists(int column, int row)
+void ViewItem::ensurePositionExists(MajorMinorIndex index)
 {
-	ensureColumnExists(column);
-	if (nodes_[column].size() <= row)
-		nodes_[column].resize(row + 1);
+	ensureMajorExists(index.major_);
+	if (nodes_[index.major_].size() <= index.minor_)
+		nodes_[index.major_].resize(index.minor_ + 1);
 }
 
-void ViewItem::ensureColumnExists(int column)
+void ViewItem::ensureMajorExists(int major)
 {
-	if (nodes_.size() <= column)
-		nodes_.resize(column + 1);
+	if (nodes_.size() <= major)
+		nodes_.resize(major + 1);
 }
 
 //JSON storing/loading
@@ -360,11 +365,11 @@ QJsonDocument ViewItem::toJson() const
 {
 	//Store all the nodes
 	QJsonArray nodes;
-	for (int col = 0; col < nodes_.size(); col++)
-		for (int row = 0; row < nodes_[col].size(); row++)
-			if (auto node = DCast<ViewItemNode>(nodes_[col][row]))
+	for (int major = 0; major < nodes_.size(); major++)
+		for (int minor = 0; minor < nodes_[major].size(); minor++)
+			if (auto node = DCast<ViewItemNode>(nodes_[major][minor]))
 			{
-				node->setPosition(QPoint{col, row});
+				node->setPosition({major, minor});
 				if (node->spacingParent())
 					node->setSpacingParentPosition(positionOfNode(node->spacingParent()));
 				nodes.append(node->toJson());
@@ -415,7 +420,7 @@ void ViewItem::fromJson(QJsonDocument json)
 			auto current = objArray[i].toObject();
 			if (current["type"] == steps[step])
 				insertViewItemNode(ViewItemNode::fromJson(current, this),
-								   current["col"].toInt(), current["row"].toInt());
+									{current["majorIndex"].toInt(), current["minorIndex"].toInt()});
 		}
 	//Load the arrows
 	auto arrowArray = obj["arrows"].toArray();
@@ -444,18 +449,18 @@ QJsonObject ViewItem::arrowToJson(QPair<Item*, Item*> arrow, QString layer) cons
 		json.insert("node2", arrow.second->node()->manager()->
 								 nodeIdMap().id(arrow.second->node()).toString());
 	auto parent1 = arrow.first->findAncestorOfType<VViewItemNode>();
-	json.insert("parent1col", positionOfItem(parent1).x());
-	json.insert("parent1row", positionOfItem(parent1).y());
+	json.insert("parent1major", positionOfItem(parent1).major_);
+	json.insert("parent1minor", positionOfItem(parent1).minor_);
 	auto parent2 = arrow.second->findAncestorOfType<VViewItemNode>();
-	json.insert("parent2col", positionOfItem(parent2).x());
-	json.insert("parent2row", positionOfItem(parent2).y());
+	json.insert("parent2major", positionOfItem(parent2).major_);
+	json.insert("parent2minor", positionOfItem(parent2).minor_);
 	return json;
 }
 
 void ViewItem::arrowFromJson(QJsonObject json)
 {
-	auto parent1 = DCast<ViewItemNode>(nodeAt(json["parent1col"].toInt(), json["parent1row"].toInt()));
-	auto parent2 = DCast<ViewItemNode>(nodeAt(json["parent2col"].toInt(), json["parent2row"].toInt()));
+	auto parent1 = DCast<ViewItemNode>(nodeAt({json["parent1major"].toInt(), json["parent1minor"].toInt()}));
+	auto parent2 = DCast<ViewItemNode>(nodeAt({json["parent2major"].toInt(), json["parent2minor"].toInt()}));
 	Model::Node* node1{}, *node2{};
 	if (json.contains("node1"))
 		node1 = Model::AllTreeManagers::instance().nodeForId(QUuid{json["node1"].toString()});
@@ -480,32 +485,7 @@ inline QList<NodeType*> ViewItem::referencesOfType() const
 
 QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 {
-	// in this case the nodes need to be rearranged
-	if (majorAxis_ == GridLayouter::RowMajor || majorAxis_ == GridLayouter::NoMajor)
-	{
-		// no difference if nodes_ empty
-		if (nodes_.isEmpty())
-			return nodes_;
-
-		int numCols = nodes_.size();
-
-		// find largest col vector
-		auto largestCol = std::max_element(nodes_.begin(), nodes_.end(), [](auto const& lhs, auto const& rhs) {
-				return lhs.size() < rhs.size();
-		});
-
-		int maxColSize = largestCol->size();
-
-		QVector<QVector<Model::Node*>> rowMajorNodes{maxColSize, QVector<Model::Node*>{numCols}};
-
-		for (int col = 0; col < numCols; ++col)
-			for (int row = 0; row < maxColSize; ++row)
-				rowMajorNodes[row][col] = row < nodes_[col].size() ? nodes_[col][row] : nullptr;
-
-		return rowMajorNodes;
-	}
-	else
-		return nodes_;
+	return nodes_;
 }
 
 }
