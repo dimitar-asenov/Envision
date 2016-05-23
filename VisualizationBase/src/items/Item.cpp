@@ -80,11 +80,8 @@ Item::Item(Item* parent, const StyleType* style) :
 	if ( !style || style->drawsOnlyShape() ) flags |= ItemHasNoContents;
 
 	flags	|=	ItemIsFocusable
-			| ItemIsSelectable;
-
-#if QT_VERSION >= 0x050400
-	flags |= ItemContainsChildrenInShape;
-#endif
+			| ItemIsSelectable
+			| ItemContainsChildrenInShape;
 
 	// This is an expensive operation, so only do it once.
 	setFlags(flags);

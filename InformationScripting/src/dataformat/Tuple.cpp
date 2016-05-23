@@ -59,13 +59,7 @@ void Tuple::add(const NamedProperty& p)
 
 uint Tuple::hashValue(uint seed) const
 {
-// FIXME remove this workaround after ubuntu has 5.5 in repos
-#if QT_VERSION >= 0x050500
 	return qHashRange(begin(), end(), seed);
-#else
-	Q_UNUSED(seed);
-	return 0;
-#endif
 }
 
 Tuple::const_iterator Tuple::find(const QString& name) const

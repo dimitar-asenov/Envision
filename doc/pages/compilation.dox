@@ -13,7 +13,7 @@ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt-get update && sudo apt-get upgrade
 \endverbatim
 Other dependencies are:
-	- <b>Qt 5.4 or later</b>: http://qt.io <br/> This is the underlying framework that we use to build Envision's
+	- <b>Qt 5.5 or later</b>: http://qt.io <br/> This is the underlying framework that we use to build Envision's
 	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
@@ -27,7 +27,7 @@ Other dependencies are:
 	- <b>For development only: Vera ++ </b>: https://bitbucket.org/verateam/vera <br /> Used for checking the code formatting style.
 	Boost python is used to provide bindings for the python scripting.
 
-To install the dependencies on Ubuntu 15.10, run the following:
+To install the dependencies on Ubuntu 16.04, run the following:
 	-# Install all necessary packages:
 		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-3.8-dev clang-3.8 llvm-3.8 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
 	-# Make the following symbolic link needed to use the shared library of lp solve:
@@ -44,7 +44,7 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	-# Start Qt Creator and configure the version of Qt that you want to use:
 		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.
 			This could be either Qt in PATH, or a Qt version that
-			you compiled yourself. Qt 5.4 or later is required. See below for manual Qt compilation instructions.
+			you compiled yourself. Qt 5.5 or later is required. See below for manual Qt compilation instructions.
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
 	-# Open the top-level \c CMakeLists.txt file with Qt Creator.
@@ -93,10 +93,7 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	files. Reject all requested changes.
 
 \section latestqt Using the latest build of Qt
-
-In order to make Envision's visualizations scale to very large projects (with millions of visual items), we made
-several enhancements to Qt's Graphics View framework. Therefore Envision requires Qt 5.4 or later (released in December 2014).
-Alternatively you could compile the latest Qt development branch yourself.
+To experiment with custom Qt features, you could compile the latest Qt development branch yourself.
 
 If you want to compile and use the latest development version of Qt, you can simply run the \c misc/use-qt5-dev.sh
 script. It is designed for and tested with Ubuntu 14.04. Running the script will:
