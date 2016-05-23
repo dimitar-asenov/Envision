@@ -175,8 +175,9 @@ void DiffManager::visualize()
 	diffViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
 	diffViewItem->setZoomLabelsEnabled(false);
 
+	int row = 0;
 	for (auto diffComparisonPair : createDiffComparisonPairs(diffSetup, changedNodesToVisualize))
-		diffViewItem->insertNode(diffComparisonPair);
+		diffViewItem->insertNode(diffComparisonPair, {row++, 0});
 
 	// create visualization for changes
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
