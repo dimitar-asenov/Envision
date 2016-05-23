@@ -287,19 +287,19 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		{
 			case FilePersistence::ChangeType::Deletion:
 				highlightOverlayName = "delete_highlights";
-				highlightOverlayStyle = "delete_light_bg_fine_outline";
+				highlightOverlayStyle = "delete_frame";
 				break;
 			case FilePersistence::ChangeType::Insertion:
 				highlightOverlayName = "insert_highlights";
-				highlightOverlayStyle = "insert_light_bg_fine_outline";
+				highlightOverlayStyle = "insert_frame";
 				break;
 			case FilePersistence::ChangeType::Move:
 				highlightOverlayName = "move_highlights";
-				highlightOverlayStyle = "move_light_bg_fine_outline";
+				highlightOverlayStyle = "move_frame";
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
-				highlightOverlayStyle = "modify_light_bg_fine_outline";
+				highlightOverlayStyle = "modify_frame";
 				break;
 			case FilePersistence::ChangeType::Unclassified:
 				Q_ASSERT(false);
@@ -346,8 +346,11 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 	// set zoom level further out and center the scene
 	Visualization::VisualizationManager::instance().mainView()->zoom(7);
-	Visualization::VisualizationManager::instance().mainView()->
-			centerOn(Visualization::VisualizationManager::instance().mainView()->sceneRect().center());
+	auto centerTop = Visualization::VisualizationManager::instance().mainScene()->
+			currentViewItem()->boundingRect().center();
+	centerTop.setY(Visualization::VisualizationManager::instance().mainScene()->
+						currentViewItem()->boundingRect().top());
+	Visualization::VisualizationManager::instance().mainView()->centerOn(centerTop);
 }
 
 Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,

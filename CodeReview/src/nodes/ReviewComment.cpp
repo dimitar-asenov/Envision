@@ -23,37 +23,41 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "ReviewComment.h"
 
-#pragma once
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
-#include "../codereview_api.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VCommentedNodeStyle.h"
-
-#include "../nodes/CommentedNode.h"
-
-#include "VisualizationBase/src/items/Item.h"
-
+template class Model::TypedList<CodeReview::ReviewComment>;
 
 namespace CodeReview
 {
 
-class CommentedNode;
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ReviewComment)
 
-class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<VCommentedNode,
-		Visualization::DeclarativeItem<VCommentedNode>, CommentedNode>>
+DEFINE_ATTRIBUTE(ReviewComment, date, Text, false, false, true)
+DEFINE_ATTRIBUTE(ReviewComment, commentNode, CommentNode, false, false, true)
+
+ReviewComment::ReviewComment(Comments::CommentNode* commentNode, Model::Text* date, Model::Node* parent) :
+	Super{parent, ReviewComment::getMetaData()}
 {
-	ITEM_COMMON(VCommentedNode)
+	setDate(date);
+	setComment(commentNode);
+}
 
-	public:
-		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
+ReviewComment::ReviewComment(Model::Node* parent) :
+	ReviewComment{new Comments::CommentNode{"comment here"},
+							  new Model::Text{QDateTime::currentDateTime().toString()}, parent}
+{}
 
-	private:
-		Visualization::Item* comments_{};
-};
+ReviewComment::ReviewComment(Model::Node *, Model::PersistentStore &, bool)
+	:Super{}
+{
+	Q_ASSERT(false);
+}
+
+ReviewComment* ReviewComment::clone() const { return new ReviewComment{*this}; }
+
 
 }

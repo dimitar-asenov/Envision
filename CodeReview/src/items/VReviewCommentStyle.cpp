@@ -24,36 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../codereview_api.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VCommentedNodeStyle.h"
-
-#include "../nodes/CommentedNode.h"
-
-#include "VisualizationBase/src/items/Item.h"
-
+#include "VReviewCommentStyle.h"
 
 namespace CodeReview
 {
 
-class CommentedNode;
-
-class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<VCommentedNode,
-		Visualization::DeclarativeItem<VCommentedNode>, CommentedNode>>
-{
-	ITEM_COMMON(VCommentedNode)
-
-	public:
-		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
-
-	private:
-		Visualization::Item* comments_{};
-};
+VReviewCommentStyle::~VReviewCommentStyle(){}
 
 }

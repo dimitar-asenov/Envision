@@ -23,37 +23,35 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
 #pragma once
 
 #include "../codereview_api.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VCommentedNodeStyle.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
 
-#include "../nodes/CommentedNode.h"
+#include "VersionControlUI/src/nodes/DiffComparisonPair.h"
 
-#include "VisualizationBase/src/items/Item.h"
-
+#include "Comments/src/nodes/CommentNode.h"
 
 namespace CodeReview
 {
+class ReviewComment;
+}
 
-class CommentedNode;
+extern template class CODEREVIEW_API Model::TypedList<CodeReview::ReviewComment>;
 
-class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<VCommentedNode,
-		Visualization::DeclarativeItem<VCommentedNode>, CommentedNode>>
+namespace CodeReview {
+
+class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 {
-	ITEM_COMMON(VCommentedNode)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReviewComment)
+
+	ATTRIBUTE(Model::Text, date, setDate)
+	ATTRIBUTE(Comments::CommentNode, commentNode, setComment)
 
 	public:
-		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
+		ReviewComment(Comments::CommentNode* commentNode, Model::Text* date, Model::Node* parent=nullptr);
 
-	private:
-		Visualization::Item* comments_{};
 };
 
 }

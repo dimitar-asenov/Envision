@@ -28,32 +28,18 @@
 
 #include "../codereview_api.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VCommentedNodeStyle.h"
-
-#include "../nodes/CommentedNode.h"
-
-#include "VisualizationBase/src/items/Item.h"
-
 
 namespace CodeReview
 {
 
-class CommentedNode;
-
-class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<VCommentedNode,
-		Visualization::DeclarativeItem<VCommentedNode>, CommentedNode>>
+class CODEREVIEW_API VReviewCommentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	ITEM_COMMON(VCommentedNode)
-
 	public:
-		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
+		virtual ~VReviewCommentStyle() override;
 
-	private:
-		Visualization::Item* comments_{};
+		Property<ItemStyle> headerBackground{this, "headerBackground"};
+
 };
 
 }
