@@ -52,15 +52,29 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 	auto currentView = target->scene()->currentViewItem();
 	Visualization::MajorMinorIndex indexToInsert;
 	auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursor.get());
-	if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor)
+
+	if (layoutCursor && cursor->owner() == currentView && cursor->type() != Visualization::Cursor::BoxCursor)
 	{
-		indexToInsert.major_ = layoutCursor->x();
-		indexToInsert.minor_ = layoutCursor->y();
-	}
-	else if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor)
-	{
-		currentView->insertMajor(layoutCursor->x());
-		indexToInsert.major_ = layoutCursor->x();
+		if ((cursor->type() == Visualization::Cursor::HorizontalCursor
+			 && currentView->majorAxis() == Visualization::GridLayouter::ColumnMajor) ||
+			 (cursor->type() == Visualization::Cursor::VerticalCursor
+						  && currentView->majorAxis() != Visualization::GridLayouter::ColumnMajor) )
+		{
+			indexToInsert.major_ = layoutCursor->x();
+			indexToInsert.minor_ = layoutCursor->y();
+		}
+		else if (cursor->type() == Visualization::Cursor::VerticalCursor
+					&& currentView->majorAxis() == Visualization::GridLayouter::ColumnMajor)
+		{
+			currentView->insertMajor(layoutCursor->x());
+			indexToInsert.major_ = layoutCursor->x();
+		}
+		else if (cursor->type() == Visualization::Cursor::HorizontalCursor
+					 && currentView->majorAxis() != Visualization::GridLayouter::ColumnMajor)
+		{
+			currentView->insertMajor(layoutCursor->y());
+			indexToInsert.major_ = layoutCursor->y();
+		}
 	}
 	else if (auto grid = dynamic_cast<Visualization::DynamicGridFormElement*>(currentView->currentForm()))
 	{
