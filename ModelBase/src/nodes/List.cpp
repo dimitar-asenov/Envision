@@ -137,16 +137,7 @@ int List::indexToSubnode(const Node* node) const
 void List::insert(int position, Node* node)
 {
 	Q_ASSERT(node);
-
-	bool typeToInsertRespectsLowerBound = false;
-	int lowerBound = lowerTypeBoundForElements();
-	for (auto typeId : node->hierarchyTypeIds())
-		if (typeId == lowerBound)
-		{
-			typeToInsertRespectsLowerBound = true;
-			break;
-		}
-	Q_ASSERT(typeToInsertRespectsLowerBound);
+	Q_ASSERT(node->hierarchyTypeIds().contains(lowerTypeBoundForElements()));
 
 	execute(new ListInsert{this, nodes_, node, position});
 }
@@ -191,7 +182,10 @@ void List::paste(ClipboardStore& clipboard, int position)
 		// We provide a null parent as this will be set in the instruction below.
 		Node* newNode = clipboard.create(manager(), nullptr);
 
-		execute(new ListInsert{this, nodes_, newNode, position+i});
+		if (newNode->hierarchyTypeIds().contains(lowerTypeBoundForElements()))
+			execute(new ListInsert{this, nodes_, newNode, position+i});
+		else
+			SAFE_DELETE(newNode);
 
 		if (clipboard.hasNext() ) clipboard.next();
 	}
