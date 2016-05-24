@@ -103,11 +103,11 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		return false;
 }
 
-bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, bool findChildrenByParentId) const
+bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfId, int& start, int& end,
+								  bool findChildrenByParentId) const
 {
-	start = indexOfId;
-	end = indexOfId;
-
+	start = indexOfId-content;
+	end = start;
 	// start is the first character of the line containing id
 	while (start >= 0 && content[start] != '\n')
 	{
@@ -118,7 +118,7 @@ bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, 
 	start++;
 
 	// end is the character after the line containing id
-	while (end <= content.size() && content[end] != '\n')
+	while (end < size && content[end] != '\n')
 	{
 		// String is of the form {id} {*.}
 		if (findChildrenByParentId && content[end] == '{') return false;
@@ -129,24 +129,26 @@ bool Commit::isValidMatch(QString content, int indexOfId, int& start, int& end, 
 
 QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId) const
 {
-	auto idText =  id.toString();
+	auto idText =  id.toString().toLatin1();
 	QStringList matches;
 	for (auto file : files())
 	{
-		int indexOfId = 0;
-		auto content = QString::fromUtf8(file->content());
-
-		indexOfId = content.indexOf(idText, indexOfId);
-		if (indexOfId != -1)
+		const char *matchingLocation = strstr(file->content(), idText.constData());
+		while (matchingLocation)
 		{
 			int start, end;
-			if (isValidMatch(content, indexOfId, start, end, findChildrenByParentId))
+			if (isValidMatch(file->content(), file->size_, matchingLocation, start, end, findChildrenByParentId))
 			{
-				QString match = file->relativePath_ + ":" + content.mid(start, end-start);
+				char *data = new char[end-start+1];
+				strncpy(data, file->content()+start, end-start);
+				data[end-start]='\0';
+				QString match = file->relativePath_ + ":" + data;
+				delete data;
 				matches << match;
 			}
 			// Find the next match
-			indexOfId = indexOfId + 1;
+			matchingLocation++;
+			matchingLocation = strstr(matchingLocation, idText.constData());
 		}
 	}
 	return matches;
