@@ -103,7 +103,7 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		return false;
 }
 
-bool Commit::isValidMatch(const char* content, const char* indexOfId, int& start, int& end,
+bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfId, int& start, int& end,
 								  bool findChildrenByParentId) const
 {
 	start = indexOfId-content;
@@ -118,7 +118,7 @@ bool Commit::isValidMatch(const char* content, const char* indexOfId, int& start
 	start++;
 
 	// end is the character after the line containing id
-	while (content[end] != '\0' && content[end] != '\n')
+	while (end < size && content[end] != '\n')
 	{
 		// String is of the form {id} {*.}
 		if (findChildrenByParentId && content[end] == '{') return false;
@@ -137,7 +137,7 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 		while (pointer)
 		{
 			int start, end;
-			if (isValidMatch(file->content(), pointer, start, end, findChildrenByParentId))
+			if (isValidMatch(file->content(), file->size_, pointer, start, end, findChildrenByParentId))
 			{
 				char *data = new char[end-start+1];
 				strncpy(data, file->content()+start, end-start);

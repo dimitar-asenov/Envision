@@ -80,7 +80,7 @@ class FILEPERSISTENCE_API Commit
 		void addFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content);
 
 		bool getFileContent(QString fileName, const char*& content, int& contentSize, bool exactFileNameMatching) const;
-		bool isValidMatch(const char* content, const char* indexOfId, int& start, int& end,
+		bool isValidMatch(const char* content, qint64 size, const char* indexOfId, int& start, int& end,
 								bool findChildrenByParentId) const;
 		QStringList nodeLinesFromId(Model::NodeIdType id, bool findChildrenByParentId = false) const;
 
