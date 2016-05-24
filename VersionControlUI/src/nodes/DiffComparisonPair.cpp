@@ -27,6 +27,10 @@
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 
+#include "ModelBase/src/nodes/TypedList.hpp"
+
+template class Model::TypedList<VersionControlUI::DiffComparisonPair>;
+
 namespace VersionControlUI
 {
 

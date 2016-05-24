@@ -29,6 +29,9 @@
 
 #include "ReviewComment.h"
 
+#include "ModelBase/src/nodes/TypedList.hpp"
+
+template class Model::TypedList<CodeReview::CommentedNode>;
 
 namespace CodeReview
 {
