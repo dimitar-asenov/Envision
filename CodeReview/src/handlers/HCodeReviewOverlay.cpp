@@ -39,7 +39,7 @@ HCodeReviewOverlay* HCodeReviewOverlay::instance()
 void HCodeReviewOverlay::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	HMovableItem::mouseMoveEvent(target, event);
-	if (event->buttons() & Qt::LeftButton && target)
+	if (event->buttons() == Qt::LeftButton && target)
 	{
 		auto overlay = static_cast<CodeReviewCommentOverlay*>(target);
 		QPointF diff{(event->scenePos() - event->buttonDownScenePos(Qt::LeftButton))};
