@@ -103,11 +103,11 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 		return false;
 }
 
-bool Commit::isValidMatch(const char* content, int indexOfId, int& start, int& end, bool findChildrenByParentId) const
+bool Commit::isValidMatch(const char* content, const char* indexOfId, int& start, int& end,
+								  bool findChildrenByParentId) const
 {
-	start = indexOfId;
-	end = indexOfId;
-
+	start = indexOfId-content;
+	end = start;
 	// start is the first character of the line containing id
 	while (start >= 0 && content[start] != '\n')
 	{
@@ -133,24 +133,22 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 	QStringList matches;
 	for (auto file : files())
 	{
-		auto *pointer = strstr(file->content(), idText.constData());
-		if (pointer)
+		const char *pointer = strstr(file->content(), idText.constData());
+		while (pointer)
 		{
-			int indexOfId = 0;
-			auto content = QString::fromUtf8(file->content());
-			indexOfId = content.indexOf(idText, indexOfId);
-			while (indexOfId != -1)
+			int start, end;
+			if (isValidMatch(file->content(), pointer, start, end, findChildrenByParentId))
 			{
-				int start, end;
-				if (isValidMatch(file->content(), indexOfId, start, end, findChildrenByParentId))
-				{
-					QString match = file->relativePath_ + ":" + content.mid(start, end-start);
-					matches << match;
-				}
-				// Find the next match
-				indexOfId = indexOfId + 1;
-				indexOfId = content.indexOf(idText, indexOfId);
+				char *data = new char[end-start+1];
+				strncpy(data, file->content()+start, end-start);
+				data[end-start]='\0';
+				QString match = file->relativePath_ + ":" + data;
+				delete data;
+				matches << match;
 			}
+			// Find the next match
+			pointer++;
+			pointer = strstr(pointer, idText.constData());
 		}
 	}
 	return matches;
