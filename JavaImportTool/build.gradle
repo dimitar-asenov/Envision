@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'application'
 
 repositories {
     mavenCentral()
@@ -41,3 +42,5 @@ dependencies {
         fileTree (dir: pluginPath, includes: eclipseJars)
     )
 }
+
+mainClassName = 'envision.java.importtool.Main'
