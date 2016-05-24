@@ -68,7 +68,6 @@ var searchData=
   ['rightindex',['rightIndex',['../classTestNodes_1_1BinaryNode.html#a0932f51e42eb28b481a22888958d17ad',1,'TestNodes::BinaryNode']]],
   ['rightinnermargin',['rightInnerMargin',['../classVisualization_1_1PositionLayoutStyle.html#ad2801555c1361666bddd7ba01e6d333b',1,'Visualization::PositionLayoutStyle']]],
   ['rightmargin',['rightMargin',['../classVisualization_1_1LayoutStyle.html#a5a57399b2578d95dc683a6b695b781b9',1,'Visualization::LayoutStyle::rightMargin()'],['../classVisualization_1_1FrameStyle.html#abf45f3bde994279a7ee40f5a98554a76',1,'Visualization::FrameStyle::rightMargin()']]],
-  ['rightoffset_5f',['rightOffset_',['../classInteraction_1_1AddReferencedToViewCommand.html#a4eba1132921453065bc217a5245f675a',1,'Interaction::AddReferencedToViewCommand']]],
   ['rightwidth',['rightWidth',['../classVisualization_1_1FrameStyle.html#a634364294f80580d08d2e7b74add0381',1,'Visualization::FrameStyle']]],
   ['root_5f',['root_',['../classCppImport_1_1AllMetaDefinitions.html#abef6c7a820905be2b2855dabff036c80',1,'CppImport::AllMetaDefinitions::root_()'],['../classCppImport_1_1MacroImporter.html#a7b0eb43a631864f9a734f239f0d7a07b',1,'CppImport::MacroImporter::root_()'],['../classModel_1_1TreeManager.html#a0d96ba6032a8e12941ba266dd3f4ef97',1,'Model::TreeManager::root_()'],['../classModel_1_1NotificationListener.html#aba63c2a36876deece2766e1053307929',1,'Model::NotificationListener::root_()']]],
   ['rootdir_5f',['rootDir_',['../classExport_1_1Exporter.html#aa746231f45530c1c1199b3a7dbbf957d',1,'Export::Exporter']]],

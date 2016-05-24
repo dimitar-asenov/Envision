@@ -104,11 +104,14 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
  Used for profiling.</li>
 <li><b>For development only: Vera ++ </b>: <a href="https://bitbucket.org/verateam/vera">https://bitbucket.org/verateam/vera</a> <br />
  Used for checking the code formatting style. Boost python is used to provide bindings for the python scripting.</li>
+<li><b>For the Java import tool only: Gradle </b>: <a href="http://gradle.org/">http://gradle.org/</a> <br />
+ Used as build script for the JavaImportTool.</li>
 </ul>
 <p>To install the dependencies on Ubuntu 16.04, run the following:</p><ol type="1">
 <li>Install all necessary packages: <pre class="fragment">sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-3.8-dev clang-3.8 llvm-3.8 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev </pre></li>
 <li>Make the following symbolic link needed to use the shared library of lp solve: <pre class="fragment">sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so </pre></li>
 <li>If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source: <pre class="fragment">Envision$ ln -s /usr/lib/llvm-3.8/lib/ lib </pre></li>
+<li>If you plan on using the JavaImportTool you will need Gradle: <pre class="fragment">sudo apt-get install gradle </pre></li>
 </ol>
 <p>Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.</p>
 <h1><a class="anchor" id="qtcreator"></a>

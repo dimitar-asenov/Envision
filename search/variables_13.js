@@ -91,7 +91,7 @@ var searchData=
   ['spacebetweenrows_5f',['spaceBetweenRows_',['../classVisualization_1_1DynamicGridFormElement.html#a6b9919e64ed23ba1ad314165b2dce88f',1,'Visualization::DynamicGridFormElement::spaceBetweenRows_()'],['../classVisualization_1_1GridLayoutFormElement.html#af7205c9ee99a14847638a368026b04bb',1,'Visualization::GridLayoutFormElement::spaceBetweenRows_()'],['../namespaceVisualization.html#a521286ba68bfb25d183d9f9b94d1208b',1,'Visualization::spaceBetweenRows_()']]],
   ['spacing_5f',['spacing_',['../classVisualization_1_1VViewItemNode.html#a71f25b5234ec3cffcbad89ef6875e8e0',1,'Visualization::VViewItemNode']]],
   ['spacingparent_5f',['spacingParent_',['../classVisualization_1_1ViewItemNode.html#abb793532fb04455fac82ec9eb359ee1e',1,'Visualization::ViewItemNode']]],
-  ['spacingparentposition_5f',['spacingParentPosition_',['../classVisualization_1_1ViewItemNode.html#a638834e7d519e42b0d15aed8e7e5ad47',1,'Visualization::ViewItemNode']]],
+  ['spacingparentposition_5f',['spacingParentPosition_',['../classVisualization_1_1ViewItemNode.html#a37dc80802438237803ddbf6eb51e5b82',1,'Visualization::ViewItemNode']]],
   ['spacingtarget_5f',['spacingTarget_',['../classVisualization_1_1ViewItemNode.html#a5749620311cfb9d1057b170369c5e8a7',1,'Visualization::ViewItemNode']]],
   ['span_5f',['span_',['../classExport_1_1Exporter.html#a29b814cc59c9e5f107e26137724fed85',1,'Export::Exporter::span_()'],['../structExport_1_1SourceLocation.html#a1e890c82098bcef299587cfcc0b67d98',1,'Export::SourceLocation::span_()']]],
   ['spana_5f',['spanA_',['../structFilePersistence_1_1Chunk.html#a2f0dfe7dd6caebdd2fdb57bacd61b7a0',1,'FilePersistence::Chunk']]],

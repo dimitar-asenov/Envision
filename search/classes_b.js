@@ -8,6 +8,7 @@ var searchData=
   ['macroimporter',['MacroImporter',['../classCppImport_1_1MacroImporter.html',1,'CppImport']]],
   ['mainmethodfinder',['MainMethodFinder',['../classOODebug_1_1MainMethodFinder.html',1,'OODebug']]],
   ['mainview',['MainView',['../classVisualization_1_1MainView.html',1,'Visualization']]],
+  ['majorminorindex',['MajorMinorIndex',['../structVisualization_1_1MajorMinorIndex.html',1,'Visualization']]],
   ['memberinitializer',['MemberInitializer',['../classOOModel_1_1MemberInitializer.html',1,'OOModel']]],
   ['menu',['Menu',['../classInteraction_1_1Menu.html',1,'Interaction']]],
   ['menustyle',['MenuStyle',['../classInteraction_1_1MenuStyle.html',1,'Interaction']]],
