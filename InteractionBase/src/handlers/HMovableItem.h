@@ -40,10 +40,13 @@ class INTERACTIONBASE_API HMovableItem : public GenericHandler
 		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
+		QPointF itemPosition();
 	private:
 		QPointF itemPosition_;
 
 		void move(Visualization::Item* item, const QPointF& to);
 };
+
+inline QPointF HMovableItem::itemPosition(){ return itemPosition_;}
 
 }

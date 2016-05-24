@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,41 +24,24 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HReviewableItem.h"
+#pragma once
 
-#include "CodeReviewPlugin.h"
-#include "SelfTest/src/TestManager.h"
-#include "Logger/src/Log.h"
+#include "../codereview_api.h"
 
-#include "overlays/CodeReviewCommentOverlay.h"
+#include "../overlays/CodeReviewCommentOverlay.h"
 
-#include "handlers/HCodeReviewOverlay.h"
-
-#include "VersionControlUI/src/items/VDiffComparisonPair.h"
+#include "InteractionBase/src/handlers/HMovableItem.h"
 
 namespace CodeReview {
 
-Logger::Log& CodeReviewPlugin::log()
-{
-	static auto log = Logger::Log::getLogger("PLUGIN_NAME_LOWER");
-	return *log;
-}
+class CODEREVIEW_API HCodeReviewOverlay : public Interaction::HMovableItem {
 
-bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
-{
-	VersionControlUI::VDiffComparisonPair::setDefaultClassHandler(HReviewableItem::instance());
-	CodeReviewCommentOverlay::setDefaultClassHandler(HCodeReviewOverlay::instance());
-	return true;
-}
+	public:
+		static HCodeReviewOverlay* instance();
 
-void CodeReviewPlugin::unload()
-{
-}
+	private:
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+};
 
-void CodeReviewPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<CodeReviewPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<CodeReviewPlugin>::runTest(testid).printResultStatistics();
-}
 
 }

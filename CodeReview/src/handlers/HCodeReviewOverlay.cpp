@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,41 +24,28 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HReviewableItem.h"
+#include "HCodeReviewOverlay.h"
 
-#include "CodeReviewPlugin.h"
-#include "SelfTest/src/TestManager.h"
-#include "Logger/src/Log.h"
-
-#include "overlays/CodeReviewCommentOverlay.h"
-
-#include "handlers/HCodeReviewOverlay.h"
-
-#include "VersionControlUI/src/items/VDiffComparisonPair.h"
+#include "../commands/CCodeReviewComment.h"
 
 namespace CodeReview {
 
-Logger::Log& CodeReviewPlugin::log()
+HCodeReviewOverlay* HCodeReviewOverlay::instance()
 {
-	static auto log = Logger::Log::getLogger("PLUGIN_NAME_LOWER");
-	return *log;
+	static HCodeReviewOverlay h;
+	return &h;
 }
 
-bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
+void HCodeReviewOverlay::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	VersionControlUI::VDiffComparisonPair::setDefaultClassHandler(HReviewableItem::instance());
-	CodeReviewCommentOverlay::setDefaultClassHandler(HCodeReviewOverlay::instance());
-	return true;
-}
+	HMovableItem::mouseMoveEvent(target, event);
+	if (event->buttons() == Qt::LeftButton && target)
+	{
+		auto overlay = static_cast<CodeReviewCommentOverlay*>(target);
+		QPointF diff{(event->scenePos() - event->buttonDownScenePos(Qt::LeftButton))};
+		overlay->updateOffsetItemLocal(itemPosition() + diff);
+	}
 
-void CodeReviewPlugin::unload()
-{
-}
-
-void CodeReviewPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<CodeReviewPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<CodeReviewPlugin>::runTest(testid).printResultStatistics();
 }
 
 }

@@ -50,12 +50,16 @@ class CODEREVIEW_API CodeReviewCommentOverlay :
 
 		static void initializeForms();
 
+		void updateOffsetItemLocal(QPointF scenePos);
+
 	protected:
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		CommentedNode* commentedNode_{};
 		Visualization::Item* commentedNodeItem_{};
+
+		QPointF offsetItemLocal_;
 
 };
 
