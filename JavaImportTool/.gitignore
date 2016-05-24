@@ -1,4 +1,11 @@
 /lib
 /bin
 /test
+/build
 output.txt
+.gradle
+.idea
+*.iml
+.classpath
+.project
+.settings

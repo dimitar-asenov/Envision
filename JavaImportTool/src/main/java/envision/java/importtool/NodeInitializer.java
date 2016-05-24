@@ -23,7 +23,7 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-package javaImportTool;
+package envision.java.importtool;
 
 public class NodeInitializer {
 

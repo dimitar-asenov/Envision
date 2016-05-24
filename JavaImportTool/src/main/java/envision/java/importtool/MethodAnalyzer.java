@@ -1,4 +1,4 @@
-package javaImportTool;
+package envision.java.importtool;
 
 import java.util.List;
 

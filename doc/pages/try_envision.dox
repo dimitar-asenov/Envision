@@ -42,9 +42,10 @@ and pressing ESC will show the command prompt, where you can type commands for t
 This is a two step process:
 	-# *Convert a Java program into Envision's storage format.* To do this you need to use the JavaImportTool Java
 		project. To compile it you must manually download some of its dependencies. See the DEPENDENCIES.txt file in the
-		project directory. As some of the dependencies are found in a typical Eclipse distribution, it is easier to open
-		and compile the project in Eclipse. Once you compile the project, you can run it on the command line. It takes
-		three arguments
+		project directory. As some of the dependencies are found in a typical Eclipse distribution, it is required to have
+		an Eclipse installation. To compile the project either use \verbatim gradle build\endverbatim or import the 
+		project into Eclipse (\verbatim gradle eclipse\endverbatim) and compile the project in Eclipse.
+		You can run it on the command line. It takes three arguments:
 		- The name of the project. It is recommended that this is just one word, without spaces.
 		- The directory that contains the Java source code of the project you want to import. Recursively, all .java
 			files in this directory will be explored and converted to an Envision format.

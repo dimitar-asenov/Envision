@@ -23,7 +23,7 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-package javaImportTool;
+package envision.java.importtool;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -594,11 +594,12 @@ public class ASTConverter {
 	    {    	
 	    	VariableDeclarationStatement vds = (VariableDeclarationStatement) s;
 	    	
-	    	multipleNodes = new LinkedList<Node>();
-	    	for(Node varDecl: variableDeclarationExpressions(name, vds.getType(), vds.getModifiers(),
-	    			(List<IExtendedModifier>)vds.modifiers(), vds.fragments()))
+	    	multipleNodes = new LinkedList<>();
+			List<Node> varDecls = variableDeclarationExpressions(name, vds.getType(), vds.getModifiers(),
+					(List<IExtendedModifier>)vds.modifiers(), vds.fragments());
+	    	for(Node varDecl : varDecls)
 	    	{
-	    		// It's ok to reuse the same name for all generated variables, since this will be fixed later.   
+	    		// It's ok to reuse the same name for all generated variables, since this will be fixed later.
 	    		Node exprStat = new Node(null,"ExpressionStatement",name);
 	    		varDecl.setName("expression");
 	    		exprStat.setChild("expression", varDecl);
