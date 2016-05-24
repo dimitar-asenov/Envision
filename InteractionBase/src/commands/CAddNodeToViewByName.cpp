@@ -55,13 +55,17 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 
 	if (layoutCursor && cursor->owner() == currentView && cursor->type() != Visualization::Cursor::BoxCursor)
 	{
-		if ((cursor->type() == Visualization::Cursor::HorizontalCursor
-			 && currentView->majorAxis() == Visualization::GridLayouter::ColumnMajor) ||
-			 (cursor->type() == Visualization::Cursor::VerticalCursor
-						  && currentView->majorAxis() != Visualization::GridLayouter::ColumnMajor) )
+		if (cursor->type() == Visualization::Cursor::HorizontalCursor
+			 && currentView->majorAxis() == Visualization::GridLayouter::ColumnMajor)
 		{
 			indexToInsert.major_ = layoutCursor->x();
 			indexToInsert.minor_ = layoutCursor->y();
+		}
+		else if (cursor->type() == Visualization::Cursor::VerticalCursor
+								 && currentView->majorAxis() != Visualization::GridLayouter::ColumnMajor)
+		{
+			indexToInsert.major_ = layoutCursor->y();
+			indexToInsert.minor_ = layoutCursor->x();
 		}
 		else if (cursor->type() == Visualization::Cursor::VerticalCursor
 					&& currentView->majorAxis() == Visualization::GridLayouter::ColumnMajor)
