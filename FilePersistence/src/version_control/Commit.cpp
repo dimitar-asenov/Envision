@@ -133,11 +133,11 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 	QStringList matches;
 	for (auto file : files())
 	{
-		const char *pointer = strstr(file->content(), idText.constData());
-		while (pointer)
+		const char *matchingLocation = strstr(file->content(), idText.constData());
+		while (matchingLocation)
 		{
 			int start, end;
-			if (isValidMatch(file->content(), file->size_, pointer, start, end, findChildrenByParentId))
+			if (isValidMatch(file->content(), file->size_, matchingLocation, start, end, findChildrenByParentId))
 			{
 				char *data = new char[end-start+1];
 				strncpy(data, file->content()+start, end-start);
@@ -147,8 +147,8 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 				matches << match;
 			}
 			// Find the next match
-			pointer++;
-			pointer = strstr(pointer, idText.constData());
+			matchingLocation++;
+			matchingLocation = strstr(matchingLocation, idText.constData());
 		}
 	}
 	return matches;
