@@ -140,8 +140,7 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 			if (isValidMatch(file->content(), file->size_, matchingLocation, start, end, findChildrenByParentId))
 			{
 				QString match{file->relativePath_ + ":"};
-				QByteArray matchingLine{file->content()+start, end-start};
-				match += QString::fromUtf8(matchingLine.data());
+				match += QByteArray{file->content()+start, end-start};
 				matches << match;
 			}
 			// Find the next match
