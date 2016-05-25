@@ -33,6 +33,7 @@
 namespace Model {
 
 class Node;
+class NodeIdMap;
 
 class MODELBASE_API NodeOwningCommand : public UndoCommand {
 	public:
@@ -43,9 +44,14 @@ class MODELBASE_API NodeOwningCommand : public UndoCommand {
 		virtual Node* insertedNode() const override;
 		virtual Node* removedNode() const override;
 
+		virtual void redo() override;
+		virtual void undo() override;
+
 	private:
 		Node* ownedIfDone_{};
 		Node* ownedIfUndone_{};
+
+		void moveNodes(Node* root, NodeIdMap& source, NodeIdMap& target);
 };
 
 }

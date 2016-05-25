@@ -65,7 +65,11 @@ Node::~Node()
 	partiallyLoadedNodes().remove(this);
 
 	for (auto m : AllTreeManagers::instance().loadedManagers())
+	{
 		m->nodeIdMap().remove(this);
+		m->nodeIdMapForUndoStack().remove(this);
+	}
+
 }
 
 Node* Node::createDefaultInstance(Node*)

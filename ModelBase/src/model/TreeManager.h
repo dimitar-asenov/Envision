@@ -323,6 +323,8 @@ class MODELBASE_API TreeManager: public QObject
 
 		const NodeIdMap& nodeIdMap() const;
 		NodeIdMap& nodeIdMap();
+		const NodeIdMap& nodeIdMapForUndoStack() const;
+		NodeIdMap& nodeIdMapForUndoStack();
 
 	Q_SIGNALS:
 		/**
@@ -472,6 +474,10 @@ class MODELBASE_API TreeManager: public QObject
 		bool partiallyLoaded_{};
 
 		NodeIdMap nodeIdMap_;
+		/**
+		 * We need a separate map for the undo stack in order to support cut and move operations.
+		 */
+		NodeIdMap nodeIdMapForUndoStack_;
 };
 
 inline bool TreeManager::isBeingModified() const { return modificationInProgress; }
@@ -487,5 +493,6 @@ inline PersistentStore* TreeManager::store() { return store_; }
 inline bool TreeManager::isPartiallyLoaded() const { return partiallyLoaded_; }
 inline const NodeIdMap& TreeManager::nodeIdMap() const { return nodeIdMap_; }
 inline NodeIdMap& TreeManager::nodeIdMap() { return nodeIdMap_; }
-
+inline const NodeIdMap& TreeManager::nodeIdMapForUndoStack() const { return nodeIdMapForUndoStack_; }
+inline NodeIdMap& TreeManager::nodeIdMapForUndoStack() { return nodeIdMapForUndoStack_; }
 }

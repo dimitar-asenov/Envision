@@ -74,4 +74,45 @@ Node* NodeOwningCommand::removedNode() const
 	return ownedIfDone_;
 }
 
+void NodeOwningCommand::redo()
+{
+	if (auto manager = target()->manager())
+	{
+		moveNodes(ownedIfDone_, manager->nodeIdMap(), manager->nodeIdMapForUndoStack()); // handle deletions
+		moveNodes(ownedIfUndone_, manager->nodeIdMapForUndoStack(), manager->nodeIdMap()); // handle insertions
+	}
+	UndoCommand::redo();
+}
+
+void NodeOwningCommand::undo()
+{
+	if (auto manager = target()->manager())
+	{
+		moveNodes(ownedIfUndone_, manager->nodeIdMap(), manager->nodeIdMapForUndoStack());  // handle insertions
+		moveNodes(ownedIfDone_, manager->nodeIdMapForUndoStack(), manager->nodeIdMap()); // handle deletions
+	}
+	UndoCommand::undo();
+}
+
+void NodeOwningCommand::moveNodes(Node* root, NodeIdMap& source, NodeIdMap& target)
+{
+	if (root)
+	{
+		QList<Node*> stack{root};
+		while (!stack.isEmpty())
+		{
+			auto node = stack.takeFirst();
+
+			auto id = source.idIfExists(node);
+			if (!id.isNull())
+			{
+				target.setId(node, id);
+				source.remove(node);
+			}
+
+			stack.append( node->children() );
+		}
+	}
+}
+
 }
