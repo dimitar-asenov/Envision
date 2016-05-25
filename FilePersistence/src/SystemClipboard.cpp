@@ -64,6 +64,7 @@ void SystemClipboard::saveTree(TreeManager* manager, const QString &name)
 		xml = new XMLModel{};
 
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
+		manager_ = manager;
 		saveNode(manager->root(), name);
 		xml->endSaveChildNode();
 
@@ -100,6 +101,7 @@ void SystemClipboard::saveNode(const Node *node, const QString &name)
 	// Do not require a fully loaded node.
 	xml->beginSaveChildNode(node->typeName());
 	xml->setName(name);
+	xml->setId(manager_->nodeIdMap().id(node));
 	node->save(*this);
 	xml->endSaveChildNode();
 }
@@ -109,12 +111,15 @@ Node* SystemClipboard::loadTree(TreeManager*, const QString &, bool)
 	throw FilePersistenceException{"The clipboard does not support the loadTree() method."};
 }
 
-QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node*, const QSet<QString>&)
+QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node* parent, const QSet<QString>&)
 {
 	QList<LoadedNode> result;
 
 	if ( xml->hasChildren() )
 	{
+		if (auto manager = parent->manager())
+			manager_ = manager;
+
 		xml->goToFirstChild();
 		while ( true )
 		{
@@ -133,6 +138,9 @@ Node* SystemClipboard::loadSubNode(Node* parent, const QString& name, bool)
 {
 	if (!xml->hasChild(name)) return nullptr;
 
+	if (auto manager = parent->manager())
+		manager_ = manager;
+
 	xml->beginLoadChildNode(name);
 	LoadedNode ln = loadNode(parent);
 	xml->endLoadChildNode();
@@ -145,6 +153,8 @@ LoadedNode SystemClipboard::loadNode(Node* parent)
 	LoadedNode node;
 	node.name = xml->getName();
 	node.node = Node::createNewNode(xml->getType(), parent, *this, false);
+	if (!manager_->nodeIdMap().node(xml->getId()))
+		manager_->nodeIdMap().setId(node.node, xml->getId());
 
 	return node;
 }
@@ -153,6 +163,12 @@ QString SystemClipboard::currentNodeType() const
 {
 	return xml->getType();
 }
+
+Model::NodeIdType SystemClipboard::currentNodeID() const
+{
+	return xml->getId();
+}
+
 
 int SystemClipboard::loadIntValue()
 {
@@ -188,6 +204,9 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 {
 	if (nodes.size() > 0)
 	{
+		// Assume that there is only one manager for all these nodes
+		manager_ = nodes.first()->manager();
+
 		SAFE_DELETE(xml);
 		xml = new XMLModel{};
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
@@ -196,6 +215,7 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 		{
 			xml->beginSaveChildNode(nodes[i]->typeName());
 			xml->setName(QString::number(i));
+			xml->setId(manager_->nodeIdMap().id(nodes[i]));
 
 			nodes[i]->save(*this);
 
@@ -256,9 +276,12 @@ void SystemClipboard::next()
 	else throw FilePersistenceException{"Could not find next clipboard element."};
 }
 
-Node* SystemClipboard::create(TreeManager*, Node* parent)
+Node* SystemClipboard::create(TreeManager* manager, Node* parent)
 {
+	manager_ = manager;
 	Node* node = Node::createNewNode(xml->getType(), parent, *this, false);
+	if (manager) manager->nodeIdMap().setId(node, xml->getId());
+
 	return node;
 }
 

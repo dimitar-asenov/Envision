@@ -81,6 +81,8 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual void next() override;
 		virtual Model::Node* create(Model::TreeManager* manager, Model::Node* parent) override;
 
+		Model::NodeIdType currentNodeID() const;
+
 	protected:
 		virtual void saveTree(Model::TreeManager* manager, const QString &name) override;
 		virtual Model::Node* loadTree(Model::TreeManager* manager, const QString &name, bool loadPartially) override;
@@ -88,6 +90,8 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 	private:
 		XMLModel* xml;
 		int numNodes_;
+
+		Model::TreeManager* manager_{};
 
 		Model::LoadedNode loadNode(Model::Node* parent);
 

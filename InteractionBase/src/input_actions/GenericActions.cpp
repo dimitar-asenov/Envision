@@ -158,6 +158,7 @@ bool GenericActions::cut(Visualization::Item *target, QKeySequence keys, ActionR
 
 bool GenericActions::paste(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
 {
+	//TODO: Make this an undoable action!!!
 	auto itemWithNode = target->findAncestorWithNode();
 	if (target->ignoresCopyAndPaste() || !itemWithNode || itemWithNode->ignoresCopyAndPaste()) return false;
 
@@ -167,6 +168,7 @@ bool GenericActions::paste(Visualization::Item *target, QKeySequence, ActionRegi
 		{
 			itemWithNode->node()->manager()->beginModification(itemWithNode->node(), "paste");
 			itemWithNode->node()->load(clipboard);
+			itemWithNode->node()->manager()->nodeIdMap().setId(itemWithNode->node(), clipboard.currentNodeID());
 			itemWithNode->node()->manager()->endModification();
 			itemWithNode->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
