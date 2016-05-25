@@ -119,6 +119,12 @@ bool GenericActions::copy(Visualization::Item *target, QKeySequence, ActionRegis
 	return true;
 }
 
+bool GenericActions::cut(Visualization::Item *target, QKeySequence keys, ActionRegistry::InputState state)
+{
+	if (!copy(target, keys, state)) return false;
+	return deleteItem(target, keys, state);
+}
+
 void GenericActions::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 {
 	if (list.size() > 0)

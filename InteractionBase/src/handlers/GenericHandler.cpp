@@ -140,6 +140,7 @@ GenericHandler* GenericHandler::instance()
 		ActionRegistry::instance()->registerInputHandler("GenericHandler.Delete", GenericActions::deleteItem);
 		ActionRegistry::instance()->registerInputHandler("GenericHandler.ChangePurpose", GenericActions::changePurpose);
 		ActionRegistry::instance()->registerInputHandler("GenericHandler.Copy", GenericActions::copy);
+		ActionRegistry::instance()->registerInputHandler("GenericHandler.Cut", GenericActions::cut);
 	}
 	return &h;
 }
