@@ -139,11 +139,9 @@ QStringList Commit::nodeLinesFromId(Model::NodeIdType id, bool findChildrenByPar
 			int start, end;
 			if (isValidMatch(file->content(), file->size_, matchingLocation, start, end, findChildrenByParentId))
 			{
-				char *data = new char[end-start+1];
-				strncpy(data, file->content()+start, end-start);
-				data[end-start]='\0';
-				QString match = file->relativePath_ + ":" + data;
-				delete data;
+				QString match{file->relativePath_ + ":"};
+				QByteArray matchingLine{file->content()+start, end-start};
+				match += QString::fromUtf8(matchingLine.data());
 				matches << match;
 			}
 			// Find the next match
