@@ -2,5 +2,6 @@
 	"GenericHandler.Delete"				: {"keys":["Del"], "state":"1"},
 	"GenericHandler.ChangePurpose"	: {"keys":["F3"], "state":"1"},
 	"GenericHandler.Copy"				: {"keys":["Standard-Copy"], "state":"1"},
-	"GenericHandler.Cut"					: {"keys":["Standard-Cut"], "state":"1"}
+	"GenericHandler.Cut"					: {"keys":["Standard-Cut"], "state":"1"},
+	"GenericHandler.Paste"				: {"keys":["Standard-Paste"], "state":"1"}
 }

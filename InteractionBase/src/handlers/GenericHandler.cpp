@@ -141,6 +141,7 @@ GenericHandler* GenericHandler::instance()
 		ActionRegistry::instance()->registerInputHandler("GenericHandler.ChangePurpose", GenericActions::changePurpose);
 		ActionRegistry::instance()->registerInputHandler("GenericHandler.Copy", GenericActions::copy);
 		ActionRegistry::instance()->registerInputHandler("GenericHandler.Cut", GenericActions::cut);
+		ActionRegistry::instance()->registerInputHandler("GenericHandler.Paste", GenericActions::paste);
 	}
 	return &h;
 }
@@ -199,25 +200,7 @@ void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->matches(QKeySequence::Paste) && !target->ignoresCopyAndPaste())
-	{
-		event->accept();
-
-		FilePersistence::SystemClipboard clipboard;
-		if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
-		{
-			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
-			{
-				target->node()->manager()->beginModification(target->node(), "paste");
-				target->node()->load(clipboard);
-				target->node()->manager()->endModification();
-				target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			}
-			else InteractionHandler::keyPressEvent(target, event);
-		}
-		else InteractionHandler::keyPressEvent(target, event);
-	}
-	else if (event->matches(QKeySequence::Undo))
+	if (event->matches(QKeySequence::Undo))
 	{
 		if (target->hasNode())
 		{

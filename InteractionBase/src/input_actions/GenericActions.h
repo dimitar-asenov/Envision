@@ -46,6 +46,7 @@ class INTERACTIONBASE_API GenericActions
 		static bool changePurpose(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);
 		static bool copy(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);
 		static bool cut(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);
+		static bool paste(Visualization::Item* target, QKeySequence keys, ActionRegistry::InputState state);
 
 	private:
 		static void arrangeNodesForClipboard(QList<const Model::Node*>& list);

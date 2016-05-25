@@ -27,6 +27,7 @@
 
 #include "VisualizationBase/src/icons/Icon.h"
 #include "ModelBase/src/nodes/List.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "VisualizationBase/src/items/RootItem.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
@@ -119,12 +120,6 @@ bool GenericActions::copy(Visualization::Item *target, QKeySequence, ActionRegis
 	return true;
 }
 
-bool GenericActions::cut(Visualization::Item *target, QKeySequence keys, ActionRegistry::InputState state)
-{
-	if (!copy(target, keys, state)) return false;
-	return deleteItem(target, keys, state);
-}
-
 void GenericActions::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 {
 	if (list.size() > 0)
@@ -153,6 +148,32 @@ void GenericActions::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swap(k, k+1);
 		}
 	}
+}
+
+bool GenericActions::cut(Visualization::Item *target, QKeySequence keys, ActionRegistry::InputState state)
+{
+	if (!copy(target, keys, state)) return false;
+	return deleteItem(target, keys, state);
+}
+
+bool GenericActions::paste(Visualization::Item *target, QKeySequence, ActionRegistry::InputState)
+{
+	auto itemWithNode = target->findAncestorWithNode();
+	if (target->ignoresCopyAndPaste() || !itemWithNode || itemWithNode->ignoresCopyAndPaste()) return false;
+
+	FilePersistence::SystemClipboard clipboard;
+	if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
+		if (itemWithNode->node()->typeName() == clipboard.currentNodeType())
+		{
+			itemWithNode->node()->manager()->beginModification(itemWithNode->node(), "paste");
+			itemWithNode->node()->load(clipboard);
+			itemWithNode->node()->manager()->endModification();
+			itemWithNode->setUpdateNeeded(Visualization::Item::StandardUpdate);
+
+			return true;
+		}
+
+	return false;
 }
 
 }
