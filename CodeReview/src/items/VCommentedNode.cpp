@@ -53,8 +53,6 @@ void VCommentedNode::initializeForms()
 			return v->node()->reviewComments();});
 	auto grid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
-			->setLeftMargin(10)
-			->setRightMargin(10)
 			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)

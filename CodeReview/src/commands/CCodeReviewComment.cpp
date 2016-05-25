@@ -58,13 +58,15 @@ bool CCodeReviewComment::canInterpret(Visualization::Item*, Visualization::Item*
 Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* source, Visualization::Item*,
 				const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
+	auto ancestorWithNodeItem = source->findAncestorWithNode();
+
 	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
 	{
-		auto id = manager->nodeIdMap().idIfExists(source->node());
+		auto id = manager->nodeIdMap().idIfExists(ancestorWithNodeItem->node());
+
 		if (!id.isNull())
 		{
-			auto id = manager->nodeIdMap().id(source->node()).toString();
-			auto commentedNode = CodeReviewManager::instance().commentedNode(id);
+			auto commentedNode = CodeReviewManager::instance().commentedNode(id.toString());
 			commentedNode->reviewComments()->append(new ReviewComment{});
 
 			// only create highlight if not already existent

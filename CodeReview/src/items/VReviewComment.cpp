@@ -44,8 +44,7 @@ VReviewComment::VReviewComment(Visualization::Item* parent, NodeType* node, cons
 void VReviewComment::initializeForms()
 {
 	auto headerContent = (new Visualization::GridLayoutFormElement{})
-		->setHorizontalSpacing(3)
-		->setColumnStretchFactor(3, 1)
+		->setColumnStretchFactor(0, 1)
 		->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
 		->setNoBoundaryCursors([](Item*){return true;})
 		->setNoInnerCursors([](Item*){return true;})
@@ -59,7 +58,7 @@ void VReviewComment::initializeForms()
 			->put(TheTopOf, headerBackground, 2, FromTopOf, headerContent)
 			->put(TheBottomOf, headerBackground, 2, FromBottomOf, headerContent)
 			->put(TheRightOf, headerBackground, 2, FromRightOf, headerContent)}})
-			->setColumnStretchFactor(1, 1);
+			->setColumnStretchFactor(0, 1);
 
 	auto shapeElement = new Visualization::ShapeFormElement{};
 

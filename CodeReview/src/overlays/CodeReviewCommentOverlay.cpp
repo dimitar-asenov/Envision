@@ -47,6 +47,7 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 	setFlag(QGraphicsItem::ItemIgnoresTransformations);
+	setItemCategory(Visualization::Scene::MenuItemCategory);
 	offsetItemLocal_ = QPoint{0, associatedItem->heightInLocal()};
 }
 
@@ -58,7 +59,15 @@ void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableH
 
 void CodeReviewCommentOverlay::initializeForms()
 {
-	addForm(item(&I::commentedNodeItem_, [](I* v) {return v->commentedNode_;}));
+	auto grid = (new Visualization::GridLayoutFormElement{})
+							->setColumnStretchFactor(0, 1)
+							->setMargins(5, 5, 5, 5)
+							->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
+							->setNoBoundaryCursors([](Item*){return true;})
+							->setNoInnerCursors([](Item*){return true;})
+							->put(0, 0, item(&I::commentedNodeItem_, [](I* v) {return v->commentedNode_;}));
+
+	addForm(grid);
 
 }
 
