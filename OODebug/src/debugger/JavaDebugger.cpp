@@ -69,6 +69,22 @@ struct VariableObserver {
 		QList<Probes::ValueCalculator> valueCalculators_;
 };
 
+struct UserVisibleBreakpoint {
+		qint64 breakpointId_;
+		Visualization::IconOverlay* breakpointOverlay_;
+};
+
+struct ProbeVisualization {
+		qint64 breakpointId_;
+		Visualization::IconOverlay* monitorOverlay_;
+		PlotOverlay* plotOverlay_;
+};
+
+struct TrackedVariable {
+		QList<qint64> breakpointIds_;
+		PlotOverlay* plotOverlay_;
+};
+
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
 const QString JavaDebugger::PLOT_OVERLAY_GROUP{"PlotOverlay"};
 const QString JavaDebugger::CURRENT_LINE_OVERLAY_GROUP{"CurrentLine"};
@@ -90,7 +106,7 @@ Interaction::CommandResult* JavaDebugger::debugTree(Model::TreeManager* manager,
 	if (runResult->code() != Interaction::CommandResult::OK) return runResult;
 
 	// All previously set breakpoints have to be unset again.
-	unsetBreakpoints_ << setBreakpoints_.values();
+	unsetBreakpoints_.unite(setBreakpoints_.values().toSet());
 	setBreakpoints_.clear();
 	breakOnLoadClasses_.clear();
 
@@ -115,16 +131,25 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
 	{
+		// Note that we currently store user breakpoints in a QHash, theoretically we could also use a multi hash
+		// so that the user can add multiple breakpoints on a node. (Currently if a script sets a user breakpoint the
+		// user will also remove this one when pressing F8).
 		auto node = target->node();
-		if (auto overlay = target->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
+		auto breakpointIt = userBreakpoints_.find(node);
+		if (breakpointIt != userBreakpoints_.end())
 		{
-			target->scene()->removeOverlay(overlay);
-			removeBreakpointAt(node);
+			target->scene()->removeOverlay(breakpointIt.value().breakpointOverlay_);
+			removeBreakpoint(breakpointIt.value().breakpointId_);
 		}
 		else
 		{
-			addBreakpointOverlay(target);
-			addBreakpointAt(node);
+			qint64 breakpointId = addBreakpoint(node, BreakpointType::User);
+			addBreakpointListener(breakpointId, [this](Model::Node* node, const BreakpointEvent&) {
+				auto visualization = *Visualization::Item::nodeItemsMap().find(node);
+				toggleLineHighlight(visualization, true);
+				return BreakpointAction::Stop;
+			});
+
 		}
 		return true;
 	}
@@ -160,49 +185,39 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto variableDeclaration = utils_.variableDeclarationFromStatement(DCast<OOModel::StatementItem>(node));
 		if (!variableDeclaration) return false;
 
-		// Check if this is tracked and if so remove it.
-		// TODO if there is a probe on the same line this is wrong.
-		auto it = nodeObservedBy_.find(node);
-		if (it != nodeObservedBy_.end())
+		// If existing remove
+		auto trackedIt = trackedVariables_.find(variableDeclaration);
+		if (trackedIt != trackedVariables_.end())
 		{
-			auto ptr = it.value();
-			removeObserverOverlaysAt(node, target);
-			// remove all observers at the references:
-			it = nodeObservedBy_.begin();
-			while (it != nodeObservedBy_.end() && it.key() == node )
-			{
-				if (it.value() == ptr)
-				{
-					removeBreakpointAt(it.key());
-					it = nodeObservedBy_.erase(it);
-				}
-				else
-				{
-					++it;
-				}
-			}
+			for (qint64 breakpointId : trackedIt->breakpointIds_)
+				removeBreakpoint(breakpointId);
+			target->scene()->removeOverlay(trackedIt->plotOverlay_);
 			return true;
 		}
 
+		// Otherwise find all refs and create breakpoints for each.
 		ReferenceFinder refFinder;
 		refFinder.setSearchNode(node);
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
 
 		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({variableDeclaration});
-		auto overlay = new PlotOverlay{target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first};
-		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
+		auto plotOverlay = new PlotOverlay{target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first};
+		target->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
 		auto observer = std::make_shared<VariableObserver>
 				(VariableObserver{defaultTypeAndHandler.second, {variableDeclaration}, node,
 				{[](QList<double> arg) { return arg[0];}}});
-		nodeObservedBy_.insertMulti(node, observer);
+		QList<qint64> breakpointIds;
 		for (auto ref : refFinder.references())
 		{
 			// Breakpoints are always on StatementItems so get the first StatementItem parent node.
 			auto statementNode = ref->firstAncestorOfType<OOModel::StatementItem>();
-			nodeObservedBy_.insertMulti(statementNode, observer);
-			addBreakpointAt(statementNode);
+			breakpointIds << addBreakpoint(statementNode, BreakpointType::Internal);
 		}
+		trackedVariables_.insert(variableDeclaration, {breakpointIds, plotOverlay});
+
+		for (qint64 breakpointId : breakpointIds)
+			addBreakpointListener(breakpointId, createListenerFor(observer, plotOverlay));
 		return true;
 	}
 	return false;
@@ -230,8 +245,21 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 
 	if (arguments[0] == "-")
 	{
-		removeObserverOverlaysAt(observedNode, vItem);
-		removeBreakpointAt(observedNode);
+		qint64 idToRemove = -1;
+		if (arguments.size() > 1)
+			idToRemove = arguments[1].toInt();
+		for (auto it = probes_.find(observedNode); it != probes_.end() && it.key() == observedNode;)
+		{
+			if (idToRemove < 1 || it->breakpointId_ == idToRemove)
+			{
+				removeBreakpoint(it->breakpointId_);
+				vItem->scene()->removeOverlay(it->monitorOverlay_);
+				vItem->scene()->removeOverlay(it->plotOverlay_);
+				it = probes_.erase(it);
+			}
+			else
+				++it;
+		}
 		return new Interaction::CommandResult{};
 	}
 
@@ -250,42 +278,67 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
 	auto observer = std::make_shared<VariableObserver>
 			(VariableObserver{defaultTypeAndHandler.second, vars, observedNode, parsedArgs.first});
-	nodeObservedBy_.insertMulti(observedNode, observer);
-	addBreakpointAt(observedNode);
+	qint64 breakpointId = addBreakpoint(observedNode, BreakpointType::Internal);
 
-	auto overlay = new Visualization::IconOverlay{vItem, Visualization::IconOverlay::itemStyles().get("monitor")};
-	vItem->addOverlay(overlay, MONITOR_OVERLAY_GROUP);
+	auto monitorOverlay = new Visualization::IconOverlay{vItem, Visualization::IconOverlay::itemStyles().get("monitor")};
+	vItem->addOverlay(monitorOverlay, MONITOR_OVERLAY_GROUP);
 
 	auto plotOverlay = new PlotOverlay{vItem, PlotOverlay::itemStyles().get("default"),
 												  defaultTypeAndHandler.first, variableNames};
 	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
+
+	probes_.insertMulti(observedNode, {breakpointId, monitorOverlay, plotOverlay});
+
+	addBreakpointListener(breakpointId, createListenerFor(observer, plotOverlay));
+
+	qDebug() << "Added probe" << breakpointId;
+
 	return new Interaction::CommandResult{};
 }
 
-void JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
+qint64 JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
 {
-	if (BreakpointType::Internal == type)
-		addBreakpointAt(location);
-	else
+	qint64 breakpointId = ++nextBreakpointId_;
+	breakpointIds_.insertMulti(location, breakpointId);
+
+	if (BreakpointType::User == type)
 	{
 		auto visualizationIt = Visualization::Item::nodeItemsMap().find(location);
 		Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
 		auto visualization = *visualizationIt;
-		if (!visualization->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
+		auto breakpointOverlay = visualization->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP);
+		if (!breakpointOverlay)
 		{
-			addBreakpointOverlay(visualization);
-			addBreakpointAt(location);
+			breakpointOverlay = new Visualization::IconOverlay{visualization,
+					Visualization::IconOverlay::itemStyles().get("breakpoint")};
+			visualization->addOverlay(breakpointOverlay, BREAKPOINT_OVERLAY_GROUP);
 		}
+		userBreakpoints_.insert(location, {breakpointId, breakpointOverlay});
 	}
+	addBreakpointAt(location);
+	return breakpointId;
 }
 
-void JavaDebugger::removeBreakpointListener(int id)
+void JavaDebugger::removeBreakpoint(qint64 breakpointId)
 {
-	for (auto it = breakpointListeners_.begin(); it != breakpointListeners_.end();)
+	Model::Node* affectedNode = nullptr;
+	for (auto it = breakpointIds_.begin(); it != breakpointIds_.end(); ++it)
 	{
-		if (it.value().first == id) it = breakpointListeners_.erase(it);
-		else ++it;
+		if (it.value() == breakpointId)
+		{
+			affectedNode = it.key();
+			it = breakpointIds_.erase(it);
+			// A breakpointId should be unique so we can break as soon as we found it.
+			break;
+		}
 	}
+	if (affectedNode != nullptr)
+	{
+		removeBreakpointAt(affectedNode);
+		userBreakpoints_.remove(affectedNode);
+	}
+
+	breakpointListeners_.remove(breakpointId);
 }
 
 JavaDebugger::JavaDebugger()
@@ -330,8 +383,7 @@ void JavaDebugger::trySetBreakpoints()
 	// sent and then decides to track a variable which has a reference at this location we still have a double
 	// breakpoint!
 	QHash<Location, Model::Node*> breakpointLocations;
-	auto it = unsetBreakpoints_.begin();
-	while (it != unsetBreakpoints_.end())
+	for (auto it = unsetBreakpoints_.begin(); it != unsetBreakpoints_.end(); )
 	{
 		if (isParentClassLoaded(*it))
 		{
@@ -353,8 +405,7 @@ void JavaDebugger::trySetBreakpoints()
 
 void JavaDebugger::removeBreakpointAt(Model::Node* node)
 {
-	int index = unsetBreakpoints_.indexOf(node);
-	if (index > 0) unsetBreakpoints_.removeAt(index);
+	unsetBreakpoints_.remove(node);
 
 	for (auto it = setBreakpoints_.begin(); it != setBreakpoints_.end(); ++it)
 	{
@@ -378,13 +429,14 @@ void JavaDebugger::addBreakpointAt(Model::Node* node)
 		}
 		else
 		{
-			unsetBreakpoints_ << node;
+			unsetBreakpoints_.insert(node);
 			breaktAtParentClassLoad(node);
 		}
 	}
 	else
 	{
-		unsetBreakpoints_ << node;
+		qDebug() << "Adding unsetBreakpoint" << node;
+		unsetBreakpoints_.insert(node);
 	}
 }
 
@@ -418,67 +470,31 @@ void JavaDebugger::handleClassPrepare(Event)
 
 void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 {
+	// Get list of breakpoint ids iterate over each id and call the handler, the handler should tell if we should continue.
 	auto it = setBreakpoints_.find(breakpointEvent.requestID());
 	// If we get a event for a breakpoint we don't know we have an implementation error.
 	Q_ASSERT(it != setBreakpoints_.end() && *it);
 
-	auto observersIt = nodeObservedBy_.find(*it);
-	if (observersIt != nodeObservedBy_.end())
+	// TODO replace with find iterator loop
+	BreakpointAction action = BreakpointAction::Resume;
+	for (qint64 breakpointId : breakpointIds_.values(*it))
 	{
-		// Get frames
-		auto frames = debugConnector_.frames(breakpointEvent.thread(), 1);
-		auto location = breakpointEvent.location();
-		auto variableTable = debugConnector_.variableTableForMethod(location.classId(), location.methodId());
-		if (frames.frames().size() == 0)
+		auto listenerIt = breakpointListeners_.find(breakpointId);
+		if (listenerIt != breakpointListeners_.end())
 		{
-			qDebug() << "No frames received, error:" << static_cast<qint8>(frames.error());
-			return;
+			auto currentAction = (*listenerIt)(*it, breakpointEvent);
+			if (BreakpointAction::Stop == currentAction && BreakpointAction::Resume == action)
+				action = currentAction;
 		}
-		auto currentFrame = frames.frames()[0];
-		int currentIndex = currentFrame.location().methodIndex();
+	}
 
-		for (auto observer : nodeObservedBy_.values(*it))
-		{
-			QList<StackVariable> varsToGet;
-			for (auto variable : observer->observedVariables_)
-			{
-				for (auto variableDetails : variableTable.variables())
-				{
-					if (variableDetails.name() == variable->name())
-					{
-						// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
-						//                    #JDWP_Method_VariableTable
-						Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
-									currentIndex < variableDetails.codeIndex() + variableDetails.length());
-						varsToGet << StackVariable{variableDetails.slot(), utils_.typeExpressionToTag(
-																variable->typeExpression())};
-					}
-				}
-			}
-			auto values = debugConnector_.values(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
-			Q_ASSERT(observer->handlerFunc_);
-			observer->handlerFunc_(this, values, observer->valueCalculators_, observer->observerLocation_);
-		}
-	}
-	auto listenerIt = breakpointListeners_.find(*it);
-	while (listenerIt != breakpointListeners_.end() && listenerIt.key() == *it)
-	{
-		listenerIt.value().second(*it, breakpointEvent);
-		++listenerIt;
-	}
+	if (BreakpointAction::Resume == action)
+		debugConnector_.wantResume(true);
+	else
+		currentThreadId_ = breakpointEvent.thread();
 
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
 	currentLineItem_ = visualization;
-	// If we have an overlay, the user wants to stop here, otherwise it is a tracked variable and we can resume.
-	if (visualization->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
-	{
-		currentThreadId_ = breakpointEvent.thread();
-		toggleLineHighlight(visualization, true);
-	}
-	else
-	{
-		debugConnector_.wantResume(true);
-	}
 }
 
 void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
@@ -520,19 +536,20 @@ QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPl
 	Q_ASSERT(false); // We should implement something for this combination
 }
 
-void JavaDebugger::handleValues(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target)
+void JavaDebugger::handleValues(Values values, QList<Probes::ValueCalculator> valueCalculators,
+										  PlotOverlay* plotOverlay)
 {
 	QList<double> doubleValues;
 	for (auto val : values.values()) doubleValues << utils_.doubleFromValue(val);
 	QList<double> plotValues;
 	for (auto extractor : valueCalculators) plotValues << extractor(doubleValues);
 	if (plotValues.size() > 1)
-		plotOverlayOfNode(target)->addValues(plotValues[0], plotValues.mid(1));
+		plotOverlay->addValues(plotValues[0], plotValues.mid(1));
 	else if (plotValues.size() == 1)
-		plotOverlayOfNode(target)->addValue(plotValues[0]);
+		plotOverlay->addValue(plotValues[0]);
 }
 
-void JavaDebugger::handleArray(Values values, QList<Probes::ValueCalculator>, Model::Node* target)
+void JavaDebugger::handleArray(Values values, QList<Probes::ValueCalculator>, PlotOverlay* plotOverlay)
 {
 	auto vals = values.values();
 	QList<int> indices;
@@ -541,21 +558,14 @@ void JavaDebugger::handleArray(Values values, QList<Probes::ValueCalculator>, Mo
 	auto arrayVals = debugConnector_.arrayValues(vals[0].array(), 0, arrayLen);
 	switch (arrayVals.type())
 	{
-		case Protocol::Tag::FLOAT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.floats(), indices);
-		case Protocol::Tag::DOUBLE: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.doubles(), indices);
-		case Protocol::Tag::INT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.ints(), indices);
-		case Protocol::Tag::LONG: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.longs(), indices);
-		case Protocol::Tag::SHORT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.shorts(), indices);
+		case Protocol::Tag::FLOAT: return plotOverlay->updateArrayValues(arrayVals.floats(), indices);
+		case Protocol::Tag::DOUBLE: return plotOverlay->updateArrayValues(arrayVals.doubles(), indices);
+		case Protocol::Tag::INT: return plotOverlay->updateArrayValues(arrayVals.ints(), indices);
+		case Protocol::Tag::LONG: return plotOverlay->updateArrayValues(arrayVals.longs(), indices);
+		case Protocol::Tag::SHORT: return plotOverlay->updateArrayValues(arrayVals.shorts(), indices);
 		default: Q_ASSERT(false); // you shouldn't try to convert any non numeric values to double.
 	}
 }
-
-void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
-{
-	auto overlay = new Visualization::IconOverlay{target, Visualization::IconOverlay::itemStyles().get("breakpoint")};
-	target->addOverlay(overlay, BREAKPOINT_OVERLAY_GROUP);
-}
-
 
 void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight, bool closingBracket)
 {
@@ -586,32 +596,45 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 	}
 }
 
-PlotOverlay* JavaDebugger::plotOverlayOfNode(Model::Node* node)
+JavaDebugger::BreakpointListener JavaDebugger::createListenerFor(std::shared_ptr<VariableObserver> observer,
+																					  PlotOverlay* plotOverlay)
 {
-	auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
-	Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
-	auto overlay = (*nodeVisualization)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
-	Q_ASSERT(overlay);
-	return overlay;
-}
-
-void JavaDebugger::removeObserverOverlaysAt(Model::Node* node, Visualization::Item* nodeVisualization)
-{
-	auto it = nodeObservedBy_.find(node);
-	while (it != nodeObservedBy_.end() && it.key() == node)
+	return [this, observer, plotOverlay](Model::Node*, const BreakpointEvent& breakpointEvent)
 	{
-		// it might be that there is also an observer for a tracked variable, so only remove the correct one.
-		// TODO: this might is wrong if a tracked variable is declared here, but we ignore this for now.
-		if (it.value()->observerLocation_ == node)
+		// Get frames
+		auto frames = debugConnector_.frames(breakpointEvent.thread(), 1);
+		auto location = breakpointEvent.location();
+		auto variableTable = debugConnector_.variableTableForMethod(location.classId(), location.methodId());
+		if (frames.frames().size() == 0)
 		{
-			nodeObservedBy_.erase(it);
-			if (auto plotOverlay = nodeVisualization->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP))
-				nodeVisualization->scene()->removeOverlay(plotOverlay);
-			if (auto monitorOverlay = nodeVisualization->overlay<Visualization::IconOverlay>(MONITOR_OVERLAY_GROUP))
-				nodeVisualization->scene()->removeOverlay(monitorOverlay);
-			break;
+			qDebug() << "No frames received, error:" << static_cast<qint8>(frames.error());
+			return BreakpointAction::Resume;
 		}
-	}
+		auto currentFrame = frames.frames()[0];
+		int currentIndex = currentFrame.location().methodIndex();
+
+
+		QList<StackVariable> varsToGet;
+		for (auto variable : observer->observedVariables_)
+		{
+			for (auto variableDetails : variableTable.variables())
+			{
+				if (variableDetails.name() == variable->name())
+				{
+					// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
+					//                    #JDWP_Method_VariableTable
+					Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
+								currentIndex < variableDetails.codeIndex() + variableDetails.length());
+					varsToGet << StackVariable{variableDetails.slot(), utils_.typeExpressionToTag(
+										 variable->typeExpression())};
+				}
+			}
+		}
+		auto values = debugConnector_.values(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+		Q_ASSERT(observer->handlerFunc_);
+		observer->handlerFunc_(this, values, observer->valueCalculators_, plotOverlay);
+		return BreakpointAction::Resume;
+	};
 }
 
 }

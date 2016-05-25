@@ -54,6 +54,9 @@ namespace OODebug {
 struct BreakpointEvent;
 struct SingleStepEvent;
 struct VariableObserver;
+struct UserVisibleBreakpoint;
+struct ProbeVisualization;
+struct TrackedVariable;
 
 class OODEBUG_API JavaDebugger
 {
@@ -73,7 +76,7 @@ class OODEBUG_API JavaDebugger
 		Interaction::CommandResult* probe(OOVisualization::VStatementItemList* itemList,
 													 const QStringList& arguments, int itemIndex);
 
-		using ValueHandler = std::function<void(JavaDebugger*, Values, QList<Probes::ValueCalculator>, Model::Node*)>;
+		using ValueHandler = std::function<void(JavaDebugger*, Values, QList<Probes::ValueCalculator>, PlotOverlay*)>;
 
 		/**
 		 * Type of a Breakpoint:
@@ -83,13 +86,19 @@ class OODEBUG_API JavaDebugger
 		 * \a User means there will be an icon notifying the user about the existince of the user.
 		 */
 		enum class BreakpointType : int { Internal, User };
-		// TODO in the future it might make sense to assign IDs to breakpoints, so that we can have multiple breakpoints
-		// at a single location and still be able to remove only a single one.
-		void addBreakpoint(Model::Node* location, BreakpointType type);
 
-		using BreakpointListener = std::function<bool (Model::Node*, const BreakpointEvent&)>;
-		int addBreakpointListener(Model::Node* node, BreakpointListener listener);
-		void removeBreakpointListener(int id);
+		qint64 addBreakpoint(Model::Node* location, BreakpointType type);
+		/**
+		 * Removes the breakpoint with the id \a breakpointId and any BreakpointListeners associated with it.
+		 */
+		void removeBreakpoint(qint64 breakpointId);
+
+		/**
+		 * Indicates wether we should resume after the breakpoint or not.
+		 */
+		enum class BreakpointAction : int {Resume, Stop};
+		using BreakpointListener = std::function<BreakpointAction (Model::Node*, const BreakpointEvent&)>;
+		void addBreakpointListener(qint64 breakpointId, BreakpointListener listener);
 
 		using ProgramExitSingleShot = std::function<void ()>;
 		/**
@@ -121,14 +130,13 @@ class OODEBUG_API JavaDebugger
 		// Probe helpers
 		QPair<PlotOverlay::PlotType, ValueHandler> defaultPlotTypeAndValueHandlerFor
 			(QList<OOModel::VariableDeclaration*> variables);
-		void handleValues(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target);
-		void handleArray(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target);
+		void handleValues(Values values, QList<Probes::ValueCalculator> valueCalculators, PlotOverlay* plotOverlay);
+		void handleArray(Values values, QList<Probes::ValueCalculator> valueCalculators, PlotOverlay* plotOverlay);
 
 		// Overlay functions
-		void addBreakpointOverlay(Visualization::Item* target);
 		void toggleLineHighlight(Visualization::Item* item, bool highlight, bool closingBracket = false);
-		PlotOverlay* plotOverlayOfNode(Model::Node* node);
-		void removeObserverOverlaysAt(Model::Node* node, Visualization::Item* nodeVisualization);
+
+		BreakpointListener createListenerFor(std::shared_ptr<VariableObserver> observer, PlotOverlay* plotOverlay);
 
 		DebugConnector debugConnector_;
 		DebugUtils utils_{&debugConnector_};
@@ -136,14 +144,24 @@ class OODEBUG_API JavaDebugger
 		// For each class we should only break at loading once, otherwise we get multiple events.
 		QSet<Model::Node*> breakOnLoadClasses_;
 
-		QList<Model::Node*> unsetBreakpoints_;
+		// unset and set Breakpoint indicates the state of the debugger:
+		// a set breakpoint is set in the vm-debugger and thus we have an id.
+		// an unset breakpoint is not known in the vm-debugger.
+		// Since a breakpoint should only be set once per location in the vm-debugger,
+		// we allow multiple virtual breakpoints through the breakpiotsIds_ map.
+		QSet<Model::Node*> unsetBreakpoints_;
 		QHash<qint32, Model::Node*> setBreakpoints_;
+		// We allow multiple 'virtual' breakpoints on a single node:
+		QMultiHash<Model::Node*, qint64> breakpointIds_;
 		Visualization::Item* currentLineItem_{};
 		qint64 currentThreadId_{};
+		qint64 nextBreakpointId_{0};
 
 		QMultiHash<Model::Node*, std::shared_ptr<VariableObserver>> nodeObservedBy_;
-		QMultiHash<Model::Node*, std::pair<int, BreakpointListener>> breakpointListeners_;
-		int nextBreakpointListenerId_{0};
+		QHash<qint64, BreakpointListener> breakpointListeners_;
+		QHash<Model::Node*, UserVisibleBreakpoint> userBreakpoints_;
+		QMultiHash<Model::Node*, ProbeVisualization> probes_;
+		QHash<Model::Node*, TrackedVariable> trackedVariables_;
 
 		QVector<ProgramExitSingleShot> exitListeners_;
 
@@ -153,10 +171,8 @@ class OODEBUG_API JavaDebugger
 		static const QString MONITOR_OVERLAY_GROUP;
 };
 
-inline int JavaDebugger::addBreakpointListener(Model::Node* node, BreakpointListener listener) {
-	int id = nextBreakpointListenerId_++;
-	breakpointListeners_.insertMulti(node, {id, listener});
-	return id;
+inline void JavaDebugger::addBreakpointListener(qint64 breakpointId, BreakpointListener listener) {
+	breakpointListeners_.insert(breakpointId, listener);
 }
 
 inline void JavaDebugger::addProgramExitLister(JavaDebugger::ProgramExitSingleShot listener)
