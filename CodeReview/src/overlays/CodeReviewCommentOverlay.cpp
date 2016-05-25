@@ -47,6 +47,7 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 	setFlag(QGraphicsItem::ItemIgnoresTransformations);
+	setItemCategory(Visualization::Scene::MenuItemCategory);
 	offsetItemLocal_ = QPoint{0, associatedItem->heightInLocal()};
 }
 
