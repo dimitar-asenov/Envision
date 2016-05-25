@@ -140,7 +140,7 @@ public class MethodMetrics {
 	
 	static List<ASTNode> childrenOfASTNode(ASTNode node)
 	{
-		List<ASTNode> result = new ArrayList<ASTNode>();
+		List<ASTNode> result = new ArrayList<>();
 		for ( Object property : node.structuralPropertiesForType())
 		{
 			if (property instanceof ChildPropertyDescriptor)

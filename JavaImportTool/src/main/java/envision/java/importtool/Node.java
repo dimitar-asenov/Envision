@@ -56,8 +56,8 @@ public class Node {
 	private SizeEstimator.Size estimatedSize_ = null;
 	
 	// These are used when writing the nodes to a stream
-	private static Stack<String> outputDir_ = new Stack<String>();
-	private static Stack<PrintStream> out_ = new Stack<PrintStream>();
+	private static Stack<String> outputDir_ = new Stack<>();
+	private static Stack<PrintStream> out_ = new Stack<>();
 	private static OutputFormat format_ = OutputFormat.XML;
 	private static String suffix = null;
 	
@@ -69,21 +69,17 @@ public class Node {
 	 * This comparator is used to sort children lists by label.
 	 * This is to ensure consistency between all methods used to produce Envision encodings.
 	 */
-	private static Comparator<Node> labelComparator = new Comparator<Node>() {
-
-		@Override
-		public int compare(Node n1, Node n2) {
-			try {
-				int l1 = Integer.parseInt(n1.name_);
-				int l2 = Integer.parseInt(n2.name_);
-				return l1 - l2;
-			} catch (NumberFormatException e) {
-				return n1.name_.compareTo(n2.name_);
-			}
+	private static Comparator<Node> labelComparator = (Node n1, Node n2) -> {
+		try {
+			int l1 = Integer.parseInt(n1.name_);
+			int l2 = Integer.parseInt(n2.name_);
+			return l1 - l2;
+		} catch (NumberFormatException e) {
+			return n1.name_.compareTo(n2.name_);
 		}
 	};
 	
-	private List<Node> children_ = new LinkedList<Node>();
+	private List<Node> children_ = new LinkedList<>();
 	
 	// Getters and setters
 	public Node parent() { return parent_; }
@@ -198,9 +194,7 @@ public class Node {
 		
 		for (Node c : child("modules").children_)
 		{
-			if (c.symbol_ != null)
-			{
-				if (c.symbol_.equals(restOfQualifiedName[0]))
+			if (c.symbol_ != null && c.symbol_.equals(restOfQualifiedName[0])) {
 					return c.getModuleContext(remaining);
 			}
 		}

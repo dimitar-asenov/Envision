@@ -45,10 +45,10 @@ public class NodeDescriptors {
 	public static boolean isPersistenceUnit(Node node)
 	{
 		NodeInitializer ni = initializerMap.get(node.tag());
-		return ni != null ? ni.isPersistenceUnit() : false;
+		return ni != null && ni.isPersistenceUnit();
 	}
 
-	private static Map<String, NodeInitializer> initializerMap = new HashMap<String, NodeInitializer> ();
+	private static Map<String, NodeInitializer> initializerMap = new HashMap<> ();
 	
 	private static void add(NodeInitializer ni)
 	{
