@@ -32,14 +32,15 @@
 #include "../commands/CCreateMethod.h"
 #include "../commands/CCreateField.h"
 #include "../commands/CDumpMethodRenderings.h"
+#include "../actions/OOActions.h"
 
 #include "InteractionBase/src/commands/CHistory.h"
 #include "InteractionBase/src/commands/CMerge.h"
 #include "InteractionBase/src/prompt/Prompt.h"
+#include "InteractionBase/src/input_actions/ActionRegistry.h"
 
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
-#include "FilePersistence/src/SystemClipboard.h"
 
 #include "VersionControlUI/src/commands/CDiff.h"
 
@@ -64,34 +65,26 @@ HProject::HProject()
 HProject* HProject::instance()
 {
 	static HProject h;
+
+	static bool initialized = false;
+	if (!initialized)
+	{
+		initialized = true;
+		Interaction::ActionRegistry::instance()->registerInputHandler("HProject.Paste",
+																						  OOActions::pasteIntoTopLevelContainer);
+	}
+
 	return &h;
 }
 
 void HProject::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->matches(QKeySequence::Paste))
-	{
-		FilePersistence::SystemClipboard clipboard;
-		if (clipboard.numNodes() == 1 && clipboard.currentNodeType() == OOModel::Project::typeNameStatic())
-		{
-			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
-			{
-				auto proj = static_cast<OOVisualization::VProject*>(target);
-				proj->node()->beginModification("paste a project");
-				auto newProj = new OOModel::Project{};
-				proj->node()->projects()->append(newProj);
-				newProj->load(clipboard);
-				proj->node()->endModification();
-				proj->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			}
-			else GenericHandler::keyPressEvent(target, event);
-		}
-		else GenericHandler::keyPressEvent(target, event);
-	}
-	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
 		Interaction::Prompt::show(target);
 	}
+	else if (Interaction::ActionRegistry::instance()
+				->handleKeyInput(target, QKeySequence(event->modifiers()|event->key()), "HProject")){}
 	else GenericHandler::keyPressEvent(target, event);
 }
 

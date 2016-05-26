@@ -45,23 +45,86 @@ bool OOActions::pasteIntoTopLevelContainer(Visualization::Item *target, QKeySequ
 
 	auto cursor = std::unique_ptr<Visualization::Cursor>{target->scene()->mainCursor()->clone()};
 
-	auto theClass = DCast<OOModel::Class>(node);
 	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{
 		// We provide a null parent as this will be set in the instruction below.
 		Model::Node* newNode = clipboard.create(manager, nullptr);
 
-		if (auto newClass = DCast<OOModel::Class>(newNode))
+		if (auto theClass = DCast<OOModel::Class>(node))
 		{
-			CommandHelper::addToParent(theClass, theClass->classes(), newClass,
-												theClass->classes()->nodes() + theClass->methods()->nodes(),
-												target, cursor, false);
+			if (auto newClass = DCast<OOModel::Class>(newNode))
+			{
+				CommandHelper::addToParent(theClass, theClass->classes(), newClass,
+													theClass->classes()->nodes() + theClass->methods()->nodes(),
+													target, cursor, false);
+			}
+			else if (auto newMethod = DCast<OOModel::Method>(newNode))
+			{
+				CommandHelper::addToParent(theClass, theClass->methods(), newMethod,
+													theClass->classes()->nodes() + theClass->methods()->nodes(),
+													target, cursor, false);
+			}
+			else
+				SAFE_DELETE(newNode);
 		}
-		else if (auto newMethod = DCast<OOModel::Method>(newNode))
+		else if (auto theModule = DCast<OOModel::Module>(node))
 		{
-			CommandHelper::addToParent(theClass, theClass->methods(), newMethod,
-												theClass->classes()->nodes() + theClass->methods()->nodes(),
-												target, cursor, false);
+			if (auto newClass = DCast<OOModel::Class>(newNode))
+			{
+				CommandHelper::addToParent(theModule, theModule->classes(), newClass,
+													theModule->modules()->nodes() + theModule->classes()->nodes()
+													+ theModule->methods()->nodes(),
+													target, cursor, false);
+			}
+			else if (auto newMethod = DCast<OOModel::Method>(newNode))
+			{
+				CommandHelper::addToParent(theModule, theModule->methods(), newMethod,
+													theModule->modules()->nodes() + theModule->classes()->nodes()
+													+ theModule->methods()->nodes(),
+													target, cursor, false);
+			}
+			else if (auto newModule = DCast<OOModel::Module>(newNode))
+			{
+				CommandHelper::addToParent(theModule, theModule->methods(), newModule,
+													theModule->modules()->nodes() + theModule->classes()->nodes()
+													+ theModule->methods()->nodes(),
+													target, cursor, false);
+			}
+			else
+				SAFE_DELETE(newNode);
+		}
+		else if (auto theProject = DCast<OOModel::Project>(node))
+		{
+			if (auto newClass = DCast<OOModel::Class>(newNode))
+			{
+				CommandHelper::addToParent(theProject, theProject->classes(), newClass,
+													theProject->projects()->nodes() + theProject->modules()->nodes()
+													+ theProject->classes()->nodes() + theProject->methods()->nodes(),
+													target, cursor, false);
+			}
+			else if (auto newMethod = DCast<OOModel::Method>(newNode))
+			{
+				CommandHelper::addToParent(theProject, theProject->methods(), newMethod,
+													theProject->projects()->nodes() + theProject->modules()->nodes()
+													+ theProject->classes()->nodes() + theProject->methods()->nodes(),
+													target, cursor, false);
+			}
+			else if (auto newModule = DCast<OOModel::Module>(newNode))
+			{
+				CommandHelper::addToParent(theProject, theProject->methods(), newModule,
+													theProject->projects()->nodes() + theProject->modules()->nodes()
+													+ theProject->classes()->nodes() + theProject->methods()->nodes(),
+													target, cursor, false);
+			}
+			else if (auto newProject = DCast<OOModel::Project>(newNode))
+			{
+				CommandHelper::addToParent(theProject, theProject->methods(), newProject,
+													theProject->projects()->nodes() + theProject->modules()->nodes()
+													+ theProject->classes()->nodes() + theProject->methods()->nodes(),
+													target, cursor, false);
+			}
+			else
+				SAFE_DELETE(newNode);
 		}
 		else
 			SAFE_DELETE(newNode);

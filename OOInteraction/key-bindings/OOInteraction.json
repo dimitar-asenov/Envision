@@ -1,3 +1,5 @@
 {
-	"HClass.Paste"	: {"keys":["Standard-Paste"], "state":"1"}
+	"HClass.Paste"		: {"keys":["Standard-Paste"], "state":"1"},
+	"HModule.Paste"	: {"keys":["Standard-Paste"], "state":"1"},
+	"HProject.Paste"	: {"keys":["Standard-Paste"], "state":"1"}
 }

@@ -29,12 +29,13 @@
 #include "../commands/CCreateClass.h"
 #include "../commands/CCreateMethod.h"
 #include "../commands/CCreateField.h"
+#include "../actions/OOActions.h"
 
 #include "OOVisualization/src/declarations/VModule.h"
 #include "OOModel/src/declarations/Module.h"
 
 #include "InteractionBase/src/prompt/Prompt.h"
-#include "FilePersistence/src/SystemClipboard.h"
+#include "InteractionBase/src/input_actions/ActionRegistry.h"
 
 namespace OOInteraction {
 
@@ -49,34 +50,26 @@ HModule::HModule()
 HModule* HModule::instance()
 {
 	static HModule h;
+
+	static bool initialized = false;
+	if (!initialized)
+	{
+		initialized = true;
+		Interaction::ActionRegistry::instance()->registerInputHandler("HModule.Paste",
+																						  OOActions::pasteIntoTopLevelContainer);
+	}
+
 	return &h;
 }
 
 void HModule::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->matches(QKeySequence::Paste))
-	{
-		FilePersistence::SystemClipboard clipboard;
-		if (clipboard.numNodes() == 1 && clipboard.currentNodeType() == OOModel::Module::typeNameStatic())
-		{
-			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
-			{
-				auto module = static_cast<OOVisualization::VModule*>(target);
-				module->node()->beginModification("paste a module");
-				auto newModule = new OOModel::Module{};
-				module->node()->modules()->append(newModule);
-				newModule->load(clipboard);
-				module->node()->endModification();
-				module->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			}
-			else GenericHandler::keyPressEvent(target, event);
-		}
-		else GenericHandler::keyPressEvent(target, event);
-	}
-	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
 		Interaction::Prompt::show(target);
 	}
+	else if (Interaction::ActionRegistry::instance()
+				->handleKeyInput(target, QKeySequence(event->modifiers()|event->key()), "HModule")){}
 	else GenericHandler::keyPressEvent(target, event);
 }
 
