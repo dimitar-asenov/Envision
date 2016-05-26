@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,57 +23,54 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "OOActions.h"
 
-#include "HClass.h"
+#include "../commands/CommandHelper.h"
 
-#include "../commands/CCreateClass.h"
-#include "../commands/CCreateMethod.h"
-#include "../commands/CCreateField.h"
-#include "../actions/OOActions.h"
-
-#include "InteractionBase/src/commands/CHistory.h"
-#include "InteractionBase/src/prompt/Prompt.h"
-#include "InteractionBase/src/input_actions/ActionRegistry.h"
-
-#include "VersionControlUI/src/commands/CDiff.h"
+#include "OOVisualization/src/declarations/VClass.h"
+#include "FilePersistence/src/SystemClipboard.h"
 
 namespace OOInteraction {
 
-HClass::HClass()
+bool OOActions::pasteIntoTopLevelContainer(Visualization::Item *target, QKeySequence,
+														 Interaction::ActionRegistry::InputState)
 {
-	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CCreateClass{});
-	addCommand(new CCreateMethod{});
-	addCommand(new CCreateField{});
+	if (target->ignoresCopyAndPaste()) return false;
 
-	addCommand(new VersionControlUI::CDiff{});
-	addCommand(new Interaction::CHistory{});
-}
+	auto node = target->findAncestorWithNode()->node();
+	if (!node) return false;
 
-HClass* HClass::instance()
-{
-	static HClass h;
+	FilePersistence::SystemClipboard clipboard;
+	auto manager = node->manager();
 
-	static bool initialized = false;
-	if (!initialized)
+	auto cursor = std::unique_ptr<Visualization::Cursor>{target->scene()->mainCursor()->clone()};
+
+	auto theClass = DCast<OOModel::Class>(node);
+	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{
-		initialized = true;
-		Interaction::ActionRegistry::instance()->registerInputHandler("HClass.Paste",
-																						  OOActions::pasteIntoTopLevelContainer);
+		// We provide a null parent as this will be set in the instruction below.
+		Model::Node* newNode = clipboard.create(manager, nullptr);
+
+		if (auto newClass = DCast<OOModel::Class>(newNode))
+		{
+			CommandHelper::addToParent(theClass, theClass->classes(), newClass,
+												theClass->classes()->nodes() + theClass->methods()->nodes(),
+												target, cursor, false);
+		}
+		else if (auto newMethod = DCast<OOModel::Method>(newNode))
+		{
+			CommandHelper::addToParent(theClass, theClass->methods(), newMethod,
+												theClass->classes()->nodes() + theClass->methods()->nodes(),
+												target, cursor, false);
+		}
+		else
+			SAFE_DELETE(newNode);
+
+		if (clipboard.hasNext() ) clipboard.next();
 	}
 
-	return &h;
-}
-
-void HClass::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
-	{
-		Interaction::Prompt::show(target);
-	}
-	else if (Interaction::ActionRegistry::instance()
-				->handleKeyInput(target, QKeySequence(event->modifiers()|event->key()), "HClass")){}
-	else GenericHandler::keyPressEvent(target, event);
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	return true;
 }
 
 }

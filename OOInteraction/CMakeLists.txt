@@ -109,6 +109,8 @@ add_library(OOInteraction SHARED
 	src/commands/CAddCallersToView.cpp
 	src/commands/CAddSubClassesToView.cpp
 	src/commands/CInspectMethodInView.cpp
+	src/actions/OOActions.h
+	src/actions/OOActions.cpp
 )
 
 envision_plugin(OOInteraction OOVisualization VersionControlUI)

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,56 +24,27 @@
  **
  **********************************************************************************************************************/
 
-#include "HClass.h"
+#pragma once
 
-#include "../commands/CCreateClass.h"
-#include "../commands/CCreateMethod.h"
-#include "../commands/CCreateField.h"
-#include "../actions/OOActions.h"
-
-#include "InteractionBase/src/commands/CHistory.h"
-#include "InteractionBase/src/prompt/Prompt.h"
+#include "../oointeraction_api.h"
 #include "InteractionBase/src/input_actions/ActionRegistry.h"
 
-#include "VersionControlUI/src/commands/CDiff.h"
+namespace Model {
+	class Node;
+}
+
+namespace Visualization {
+	class Item;
+}
 
 namespace OOInteraction {
 
-HClass::HClass()
+class OOINTERACTION_API OOActions
 {
-	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CCreateClass{});
-	addCommand(new CCreateMethod{});
-	addCommand(new CCreateField{});
+	public:
 
-	addCommand(new VersionControlUI::CDiff{});
-	addCommand(new Interaction::CHistory{});
-}
-
-HClass* HClass::instance()
-{
-	static HClass h;
-
-	static bool initialized = false;
-	if (!initialized)
-	{
-		initialized = true;
-		Interaction::ActionRegistry::instance()->registerInputHandler("HClass.Paste",
-																						  OOActions::pasteIntoTopLevelContainer);
-	}
-
-	return &h;
-}
-
-void HClass::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
-	{
-		Interaction::Prompt::show(target);
-	}
-	else if (Interaction::ActionRegistry::instance()
-				->handleKeyInput(target, QKeySequence(event->modifiers()|event->key()), "HClass")){}
-	else GenericHandler::keyPressEvent(target, event);
-}
+		static bool pasteIntoTopLevelContainer(Visualization::Item* target, QKeySequence keys,
+															Interaction::ActionRegistry::InputState state);
+};
 
 }
