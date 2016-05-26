@@ -168,6 +168,7 @@ bool GenericActions::paste(Visualization::Item *target, QKeySequence, ActionRegi
 		{
 			itemWithNode->node()->manager()->beginModification(itemWithNode->node(), "paste");
 			itemWithNode->node()->load(clipboard);
+			itemWithNode->node()->manager()->nodeIdMap().remove(itemWithNode->node());
 			itemWithNode->node()->manager()->nodeIdMap().setId(itemWithNode->node(), clipboard.currentNodeID());
 			itemWithNode->node()->manager()->endModification();
 			itemWithNode->setUpdateNeeded(Visualization::Item::StandardUpdate);
