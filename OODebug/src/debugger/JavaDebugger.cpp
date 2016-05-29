@@ -30,6 +30,7 @@
 #include "../run_support/JavaRunner.h"
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/DataTypes.h"
+#include "../OODebugPlugin.h"
 
 #include "JavaExport/src/exporter/JavaExporter.h"
 
@@ -49,6 +50,8 @@
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
 #include "InteractionBase/src/commands/CommandResult.h"
+
+#include "Logger/src/Log.h"
 
 namespace OODebug {
 
@@ -291,7 +294,8 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 
 	addBreakpointListener(breakpointId, createListenerFor(observer, plotOverlay));
 
-	qDebug() << "Added probe" << breakpointId;
+	// TODO optimally we would represent this somehow in the user interface (maybe in the plot overlay).
+	OODebugPlugin::log().info(QString{"Added probe %1"}.arg(breakpointId));
 
 	return new Interaction::CommandResult{};
 }
@@ -328,7 +332,7 @@ void JavaDebugger::removeBreakpoint(BreakpointId breakpointId)
 		{
 			affectedNode = it.key();
 			it = breakpointIds_.erase(it);
-			// A breakpointId should be unique so we can break as soon as we found it.
+			// A breakpointId should be unique so we can break as soon as we find it.
 			break;
 		}
 	}
@@ -435,7 +439,6 @@ void JavaDebugger::addBreakpointAt(Model::Node* node)
 	}
 	else
 	{
-		qDebug() << "Adding unsetBreakpoint" << node;
 		unsetBreakpoints_.insert(node);
 	}
 }
@@ -607,7 +610,7 @@ JavaDebugger::BreakpointListener JavaDebugger::createListenerFor(std::shared_ptr
 		auto variableTable = debugConnector_.variableTableForMethod(location.classId(), location.methodId());
 		if (frames.frames().size() == 0)
 		{
-			qDebug() << "No frames received, error:" << static_cast<qint8>(frames.error());
+			OODebugPlugin::log().error(QString{"No frames received, error: %1"}.arg(static_cast<qint8>(frames.error())));
 			return BreakpointAction::Resume;
 		}
 		auto currentFrame = frames.frames()[0];
