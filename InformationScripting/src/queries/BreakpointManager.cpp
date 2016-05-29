@@ -46,7 +46,7 @@ Optional<TupleSet> BreakpointManager::executeLinear(TupleSet input)
 	{
 		for (auto target : Model::Node::childrenOfType<OOModel::ExpressionStatement>(t["ast"]))
 		{
-			qint64 breakpointId = OODebug::JavaDebugger::instance().addBreakpoint(target, type);
+			auto breakpointId = OODebug::JavaDebugger::instance().addBreakpoint(target, type);
 			tuples.add({{"breakpoint", breakpointId}, {"visible", arguments_.argument(VISIBLE_ARGUMENT_NAMES[0])}});
 		}
 	}

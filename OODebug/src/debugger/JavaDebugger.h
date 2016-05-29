@@ -87,11 +87,20 @@ class OODEBUG_API JavaDebugger
 		 */
 		enum class BreakpointType : int { Internal, User };
 
-		qint64 addBreakpoint(Model::Node* location, BreakpointType type);
+		/**
+		 * The type of a breakpoint id.
+		 */
+		using BreakpointId = int;
+
+		/**
+		 * Adds a new breakpoint at the given \a location and with the given \a type.
+		 * Returns the id of this breakpoint, the id is always greater than 0.
+		 */
+		BreakpointId addBreakpoint(Model::Node* location, BreakpointType type);
 		/**
 		 * Removes the breakpoint with the id \a breakpointId and any BreakpointListeners associated with it.
 		 */
-		void removeBreakpoint(qint64 breakpointId);
+		void removeBreakpoint(BreakpointId breakpointId);
 
 		/**
 		 * Indicates wether we should resume after the breakpoint or not.
@@ -152,10 +161,10 @@ class OODEBUG_API JavaDebugger
 		QSet<Model::Node*> unsetBreakpoints_;
 		QHash<qint32, Model::Node*> setBreakpoints_;
 		// We allow multiple 'virtual' breakpoints on a single node:
-		QMultiHash<Model::Node*, qint64> breakpointIds_;
+		QMultiHash<Model::Node*, BreakpointId> breakpointIds_;
 		Visualization::Item* currentLineItem_{};
 		qint64 currentThreadId_{};
-		qint64 nextBreakpointId_{0};
+		BreakpointId nextBreakpointId_{0};
 
 		QMultiHash<Model::Node*, std::shared_ptr<VariableObserver>> nodeObservedBy_;
 		QHash<qint64, BreakpointListener> breakpointListeners_;

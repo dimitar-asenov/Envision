@@ -70,18 +70,18 @@ struct VariableObserver {
 };
 
 struct UserVisibleBreakpoint {
-		qint64 breakpointId_;
+		JavaDebugger::BreakpointId breakpointId_;
 		Visualization::IconOverlay* breakpointOverlay_;
 };
 
 struct ProbeVisualization {
-		qint64 breakpointId_;
+		JavaDebugger::BreakpointId breakpointId_;
 		Visualization::IconOverlay* monitorOverlay_;
 		PlotOverlay* plotOverlay_;
 };
 
 struct TrackedVariable {
-		QList<qint64> breakpointIds_;
+		QList<JavaDebugger::BreakpointId> breakpointIds_;
 		PlotOverlay* plotOverlay_;
 };
 
@@ -143,7 +143,7 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 		}
 		else
 		{
-			qint64 breakpointId = addBreakpoint(node, BreakpointType::User);
+			BreakpointId breakpointId = addBreakpoint(node, BreakpointType::User);
 			addBreakpointListener(breakpointId, [this](Model::Node* node, const BreakpointEvent&) {
 				auto visualization = *Visualization::Item::nodeItemsMap().find(node);
 				toggleLineHighlight(visualization, true);
@@ -189,7 +189,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto trackedIt = trackedVariables_.find(variableDeclaration);
 		if (trackedIt != trackedVariables_.end())
 		{
-			for (qint64 breakpointId : trackedIt->breakpointIds_)
+			for (BreakpointId breakpointId : trackedIt->breakpointIds_)
 				removeBreakpoint(breakpointId);
 			target->scene()->removeOverlay(trackedIt->plotOverlay_);
 			return true;
@@ -207,7 +207,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto observer = std::make_shared<VariableObserver>
 				(VariableObserver{defaultTypeAndHandler.second, {variableDeclaration}, node,
 				{[](QList<double> arg) { return arg[0];}}});
-		QList<qint64> breakpointIds;
+		QList<BreakpointId> breakpointIds;
 		for (auto ref : refFinder.references())
 		{
 			// Breakpoints are always on StatementItems so get the first StatementItem parent node.
@@ -216,7 +216,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		}
 		trackedVariables_.insert(variableDeclaration, {breakpointIds, plotOverlay});
 
-		for (qint64 breakpointId : breakpointIds)
+		for (BreakpointId breakpointId : breakpointIds)
 			addBreakpointListener(breakpointId, createListenerFor(observer, plotOverlay));
 		return true;
 	}
@@ -245,7 +245,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 
 	if (arguments[0] == "-")
 	{
-		qint64 idToRemove = -1;
+		BreakpointId idToRemove = -1;
 		if (arguments.size() > 1)
 			idToRemove = arguments[1].toInt();
 		for (auto it = probes_.find(observedNode); it != probes_.end() && it.key() == observedNode;)
@@ -278,7 +278,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
 	auto observer = std::make_shared<VariableObserver>
 			(VariableObserver{defaultTypeAndHandler.second, vars, observedNode, parsedArgs.first});
-	qint64 breakpointId = addBreakpoint(observedNode, BreakpointType::Internal);
+	BreakpointId breakpointId = addBreakpoint(observedNode, BreakpointType::Internal);
 
 	auto monitorOverlay = new Visualization::IconOverlay{vItem, Visualization::IconOverlay::itemStyles().get("monitor")};
 	vItem->addOverlay(monitorOverlay, MONITOR_OVERLAY_GROUP);
@@ -296,9 +296,9 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	return new Interaction::CommandResult{};
 }
 
-qint64 JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
+JavaDebugger::BreakpointId JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
 {
-	qint64 breakpointId = ++nextBreakpointId_;
+	auto breakpointId = ++nextBreakpointId_;
 	breakpointIds_.insertMulti(location, breakpointId);
 
 	if (BreakpointType::User == type)
@@ -319,7 +319,7 @@ qint64 JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
 	return breakpointId;
 }
 
-void JavaDebugger::removeBreakpoint(qint64 breakpointId)
+void JavaDebugger::removeBreakpoint(BreakpointId breakpointId)
 {
 	Model::Node* affectedNode = nullptr;
 	for (auto it = breakpointIds_.begin(); it != breakpointIds_.end(); ++it)
@@ -477,7 +477,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 
 	// TODO replace with find iterator loop
 	BreakpointAction action = BreakpointAction::Resume;
-	for (qint64 breakpointId : breakpointIds_.values(*it))
+	for (BreakpointId breakpointId : breakpointIds_.values(*it))
 	{
 		auto listenerIt = breakpointListeners_.find(breakpointId);
 		if (listenerIt != breakpointListeners_.end())
