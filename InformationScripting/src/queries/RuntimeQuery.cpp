@@ -44,13 +44,11 @@ Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 	auto execCount = std::make_shared<std::unordered_map<Model::Node*, int>>();
 	auto listener = [execCount](Model::Node* target, auto...) {
 		++(*execCount)[target];
-		return false;
+		return OODebug::JavaDebugger::BreakpointAction::Resume;
 	};
 
-	auto callbackIds = std::make_shared<std::vector<int>>();
 	for (const auto& breakpointTuple : input.tuples("breakpoint"))
-		callbackIds->push_back(
-					OODebug::JavaDebugger::instance().addBreakpointListener(breakpointTuple["breakpoint"], listener));
+		OODebug::JavaDebugger::instance().addBreakpointListener(breakpointTuple["breakpoint"], listener);
 
 	auto manager = target()->manager();
 	Q_ASSERT(manager);
@@ -61,10 +59,10 @@ Optional<TupleSet> RuntimeQuery::executeLinear(TupleSet input)
 
 	auto queryExecutor = executor_;
 	Q_ASSERT(queryExecutor);
-	OODebug::JavaDebugger::instance().addProgramExitLister([callbackIds, execCount, queryExecutor]()
+	OODebug::JavaDebugger::instance().addProgramExitLister([input, execCount, queryExecutor]()
 		{
-			for (int id : *callbackIds)
-				OODebug::JavaDebugger::instance().removeBreakpointListener(id);
+			for (const auto& breakpointTuple : input.tuples("breakpoint"))
+				OODebug::JavaDebugger::instance().removeBreakpoint(breakpointTuple["breakpoint"]);
 
 			TupleSet result;
 			for (const auto& val : *execCount)
