@@ -49,6 +49,11 @@ void IconOverlay::updateGeometry(int availableWidth, int availableHeight)
 	if (style()->placement() == "left-inside") setPos(associatedItem()->mapToScene(0, 0) - pos);
 	else if (style()->placement() == "left-outside")
 		setPos(associatedItem()->mapToScene(-icon_->widthInParent(), 0) - pos);
+	else if (style()->placement() == "top-left-outside")
+	{
+		QPoint sceneDimensions{widthInScene(), heightInScene()};
+		setPos(associatedItem()->mapToScene(0, 0) - sceneDimensions - pos);
+	}
 }
 
 }
