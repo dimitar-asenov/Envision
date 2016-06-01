@@ -414,7 +414,7 @@ QList<DiffComparisonPair*> DiffManager::createDiffComparisonPairs(DiffSetup& dif
 	std::sort(diffComparisonPairs.begin(), diffComparisonPairs.end(), [](DiffComparisonPair* a, DiffComparisonPair* b) {
 			auto aComparisonName = a->comparisonName();
 			auto bComparisonName = b->comparisonName();
-			return aComparisonName > bComparisonName;
+			return aComparisonName < bComparisonName;
 		 });
 
 	return diffComparisonPairs;
