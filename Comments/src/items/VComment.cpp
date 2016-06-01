@@ -41,7 +41,7 @@ namespace Comments {
 
 DEFINE_ITEM_COMMON(VComment, "item")
 
-VComment::VComment(Item* parent, NodeType* node) : Super{parent, node, itemStyles().get()}
+VComment::VComment(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
 	editing_ = node->lines()->size() == 0 || (node->lines()->size() == 1 && node->lines()->at(0)->get().isEmpty());
 	parseLines();

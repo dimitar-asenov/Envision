@@ -44,7 +44,7 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 	ITEM_COMMON(VComment)
 
 	public:
-		VComment(Visualization::Item* parent, NodeType* node);
+		VComment(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
 		virtual int determineForm() override;
