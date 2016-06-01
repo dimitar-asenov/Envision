@@ -34,6 +34,7 @@
 #include "VisualizationBase/src/declarative/GridLayouter.h"
 #include "VisualizationBase/src/overlays/HighlightOverlay.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
+#include "VisualizationBase/src/overlays/IconOverlay.h"
 #include "VisualizationBase/src/views/MainView.h"
 
 #include "FilePersistence/src/version_control/GitRepository.h"
@@ -283,34 +284,46 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	{
 		QString highlightOverlayStyle;
 		QString highlightOverlayName;
+		QString arrowIconOverlayStyle;
+		QString arrowIconOverlayName;
 
 		switch (change.changeType_)
 		{
 			case FilePersistence::ChangeType::Deletion:
 				highlightOverlayName = "delete_highlights";
 				highlightOverlayStyle = "delete_frame";
+				arrowIconOverlayName = "delete_arrow_icons";
+				arrowIconOverlayStyle = "delete_arrow_icon";
 				break;
 			case FilePersistence::ChangeType::Insertion:
 				highlightOverlayName = "insert_highlights";
 				highlightOverlayStyle = "insert_frame";
+				arrowIconOverlayName = "insert_arrow_icons";
+				arrowIconOverlayStyle = "insert_arrow_icon";
 				break;
 			case FilePersistence::ChangeType::Move:
 				highlightOverlayName = "move_highlights";
 				highlightOverlayStyle = "move_frame";
+				arrowIconOverlayName = "move_arrow_icons";
+				arrowIconOverlayStyle = "move_arrow_icon";
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
 				highlightOverlayStyle = "modify_frame";
+				arrowIconOverlayName = "modify_arrow_icons";
+				arrowIconOverlayStyle = "modify_arrow_icon";
 				break;
 			case FilePersistence::ChangeType::Unclassified:
 				Q_ASSERT(false);
 				break;
 		}
 
-		Visualization::Item* oldNodeItem = addHighlightAndReturnItem(change.oldNode_, diffViewItem,
-																						highlightOverlayName, highlightOverlayStyle);;
-		Visualization::Item* newNodeItem = addHighlightAndReturnItem(change.newNode_, diffViewItem,
-																						highlightOverlayName, highlightOverlayStyle);;
+		Visualization::Item* oldNodeItem = addOverlaysAndReturnItem(change.oldNode_, diffViewItem,
+																						highlightOverlayName, highlightOverlayStyle,
+																						arrowIconOverlayName, arrowIconOverlayStyle);
+		Visualization::Item* newNodeItem = addOverlaysAndReturnItem(change.newNode_, diffViewItem,
+																						highlightOverlayName, highlightOverlayStyle,
+																						arrowIconOverlayName, arrowIconOverlayStyle);
 
 		if (oldNodeItem)
 			allItemsToScale.insert(oldNodeItem);
@@ -354,8 +367,9 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	Visualization::VisualizationManager::instance().mainView()->centerOn(centerTop);
 }
 
-Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
-                                               QString highlightOverlayName, QString highlightOverlayStyle)
+Visualization::Item* DiffManager::addOverlaysAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
+																QString highlightOverlayName, QString highlightOverlayStyle,
+																QString arrowIconOverlayName, QString arrowIconOverlayStyle)
 {
 	Visualization::Item* resultItem = nullptr;
 
@@ -366,12 +380,18 @@ Visualization::Item* DiffManager::addHighlightAndReturnItem(Model::Node* node, V
 			auto overlay = new Visualization::HighlightOverlay{resultItem,
 					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
 			resultItem->addOverlay(overlay, highlightOverlayName);
+
+			auto iconOverlay = new Visualization::IconOverlay{resultItem,
+					Visualization::IconOverlay::itemStyles().get(arrowIconOverlayStyle)};
+			resultItem->addOverlay(iconOverlay, arrowIconOverlayName);
+
 		}
 		else if (auto parent = DCast<Model::CompositeNode>(node->parent()))
 		{
 			auto index = parent->indexOf(node);
 			if (!parent->meta().attribute(index).name().startsWith("_"))
-				return addHighlightAndReturnItem(node->parent(), viewItem, highlightOverlayName, highlightOverlayStyle);
+				return addOverlaysAndReturnItem(node->parent(), viewItem, highlightOverlayName, highlightOverlayStyle,
+														  arrowIconOverlayName, arrowIconOverlayStyle);
 		}
 	}
 	return resultItem;
