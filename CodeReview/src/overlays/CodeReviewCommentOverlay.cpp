@@ -46,7 +46,6 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 	Super{{associatedItem}, style}, commentedNode_{commentedNode}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
-	setFlag(QGraphicsItem::ItemIgnoresTransformations);
 	setItemCategory(Visualization::Scene::MenuItemCategory);
 	offsetItemLocal_ = QPoint{0, associatedItem->heightInLocal()};
 }
@@ -55,6 +54,8 @@ void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableH
 {
 	Super::updateGeometry(availableWidth, availableHeight);
 	setPos(associatedItem()->mapToScene(offsetItemLocal_));
+
+	setScale(1.0/Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor());
 }
 
 void CodeReviewCommentOverlay::initializeForms()
