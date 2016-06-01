@@ -1,11 +1,20 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<shape prototypes="shape/Box/default">
-		Box
-		<cornerRadius>2</cornerRadius>
-		<backgroundBrush>
-			<style>1</style>
-			<color>#ffffff</color>
-		</backgroundBrush>
-	</shape>
+	<shape prototypes="item/EmptyItem/default" />
+	<comments prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0a0</color>
+			</outline>
+			<cornerRadius>5</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>#ffffff</color>
+			</backgroundBrush>
+		</shape>
+		<useBackgroundColors>false</useBackgroundColors>
+	</comments>
 </style>

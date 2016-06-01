@@ -49,10 +49,9 @@ VCommentedNode::VCommentedNode(Visualization::Item* parent, NodeType* node, cons
 
 void VCommentedNode::initializeForms()
 {
-	auto comments = item(&I::comments_, [](I* v) {
-			return v->node()->reviewComments();});
+	auto comments = item<Visualization::VList>(&I::comments_, [](I* v) {
+			return v->node()->reviewComments();}, &StyleType::comments);
 	auto grid = (new Visualization::GridLayoutFormElement{})
-			->setHorizontalSpacing(50)
 			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)

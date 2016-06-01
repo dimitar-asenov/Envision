@@ -29,6 +29,8 @@
 #include "../codereview_api.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VList.h"
+
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VCommentedNodeStyle.h"
@@ -53,7 +55,7 @@ class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<V
 		static void initializeForms();
 
 	private:
-		Visualization::Item* comments_{};
+		Visualization::VList* comments_{};
 };
 
 }
