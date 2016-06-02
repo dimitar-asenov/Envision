@@ -29,6 +29,8 @@
 #include "../codereview_api.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "Comments/src/items/VCommentStyle.h"
 
 namespace CodeReview
 {
@@ -37,8 +39,8 @@ class CODEREVIEW_API VReviewCommentStyle : public Super<Visualization::Declarati
 {
 	public:
 		virtual ~VReviewCommentStyle() override;
-
-		Property<ItemStyle> headerBackground{this, "headerBackground"};
+		Property<Comments::VCommentStyle> comment{this, "comment"};
+		Property<Visualization::TextStyle> date{this, "date"};
 
 };
 

@@ -114,9 +114,9 @@ class VERSIONCONTROLUI_API DiffManager
 		 */
 		void removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container);
 
-		static Visualization::Item* addHighlightAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
-																QString highlightOverlayName, QString highlightOverlayStyle);
-
+		static Visualization::Item* addOverlaysAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
+																QString highlightOverlayName, QString highlightOverlayStyle,
+																QString arrowIconOverlayName, QString arrowIconOverlayStyle);
 
 		QString oldVersion_;
 		QString newVersion_;

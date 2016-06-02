@@ -35,7 +35,10 @@
 
 #include "../nodes/CommentedNode.h"
 
+#include "Comments/src/items/VComment.h"
+
 #include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/EmptyItem.h"
 
 
@@ -54,9 +57,8 @@ class CODEREVIEW_API VReviewComment : public Super<Visualization::ItemWithNode<V
 		static void initializeForms();
 
 	private:
-		Visualization::Item* date_{};
-		Visualization::Item* comment_{};
-		Visualization::EmptyItem* headerBackground_{};
+		Visualization::VText* date_{};
+		Comments::VComment* comment_{};
 };
 
 }

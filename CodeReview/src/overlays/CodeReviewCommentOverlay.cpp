@@ -46,7 +46,6 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 	Super{{associatedItem}, style}, commentedNode_{commentedNode}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
-	setFlag(QGraphicsItem::ItemIgnoresTransformations);
 	setItemCategory(Visualization::Scene::MenuItemCategory);
 	offsetItemLocal_ = QPoint{0, associatedItem->heightInLocal()};
 }
@@ -55,17 +54,29 @@ void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableH
 {
 	Super::updateGeometry(availableWidth, availableHeight);
 	setPos(associatedItem()->mapToScene(offsetItemLocal_));
+
+	setScale(1.0/Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor());
 }
 
 void CodeReviewCommentOverlay::initializeForms()
 {
+	auto headerElement = (new Visualization::GridLayoutFormElement{})
+				->setHorizontalSpacing(10)
+				->setColumnStretchFactor(0, 1)
+				->setColumnStretchFactor(3, 1)
+				->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
+				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+				->put(1, 0, item<Visualization::Static>(&I::icon_, &StyleType::icon))
+				->put(2, 0, item<Visualization::Static>(&I::title_, &StyleType::title));
+
 	auto grid = (new Visualization::GridLayoutFormElement{})
 							->setColumnStretchFactor(0, 1)
 							->setMargins(5, 5, 5, 5)
 							->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
 							->setNoBoundaryCursors([](Item*){return true;})
 							->setNoInnerCursors([](Item*){return true;})
-							->put(0, 0, item(&I::commentedNodeItem_, [](I* v) {return v->commentedNode_;}));
+							->put(0, 0, headerElement)
+							->put(0, 1, item(&I::commentedNodeItem_, [](I* v) {return v->commentedNode_;}));
 
 	addForm(grid);
 

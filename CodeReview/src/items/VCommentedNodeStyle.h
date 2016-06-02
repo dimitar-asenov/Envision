@@ -29,6 +29,7 @@
 #include "../codereview_api.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace CodeReview
 {
@@ -37,6 +38,7 @@ class CODEREVIEW_API VCommentedNodeStyle : public Super<Visualization::Declarati
 {
 	public:
 		virtual ~VCommentedNodeStyle() override;
+		Property<Visualization::VListStyle> comments{this, "comments"};
 
 };
 

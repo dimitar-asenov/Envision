@@ -1,23 +1,39 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<shape prototypes="shape/Box/default">Box</shape>
-	<expanded>true</expanded>
-	<headerBackground prototypes="item/EmptyItem/default">
-		<shape prototypes="shape/Box/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerType>0</cornerType>
+		<cornerRadius>2</cornerRadius>
+		<backgroundBrush>
+			<style>1</style>
+			<color>#ffffff</color>
+		</backgroundBrush>
+		<outline>
+			<style>0</style>
+		</outline>
+	</shape>
+	<date prototypes="item/Text/default" />
+	<comment prototypes="item/VComment/default">
+		<shape>
 			Box
+			<outline>
+				<style>0</style>
+			</outline>
 			<backgroundBrush>
-				<gradient>
-					<stopPoints>
-						<e1>
-							<first>1.0</first>
-							<second>#e0e0e0</second>
-						</e1>	
-					</stopPoints>
-				</gradient>
+				<style>1</style>
+				<color>#ffffff</color>
 			</backgroundBrush>
-			<cornerType>1</cornerType>
-			<cornerRadius>5</cornerRadius>
+			<cornerType>0</cornerType>
+			<cornerRadius>2</cornerRadius>
 		</shape>
-	</headerBackground>
-	<typeName prototypes="item/Text/darkGrey" />
+
+		<editList>
+			<shape>
+				Box
+				<outline>
+					<width>1</width>
+				</outline>
+			</shape>
+		</editList>
+	</comment>
 </style>

@@ -43,40 +43,18 @@ VReviewComment::VReviewComment(Visualization::Item* parent, NodeType* node, cons
 
 void VReviewComment::initializeForms()
 {
-	auto headerContent = (new Visualization::GridLayoutFormElement{})
-		->setColumnStretchFactor(0, 1)
-		->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
-		->setNoBoundaryCursors([](Item*){return true;})
-		->setNoInnerCursors([](Item*){return true;})
-		->put(0, 0, item(&I::date_, [](I* v){return v->node()->date();}));
-
-	auto headerBackground = item<Visualization::EmptyItem>(&I::headerBackground_, [](I* v)
-	{ return &v->style()->headerBackground();});
-
-	auto completeHeader = grid({{(new Visualization::AnchorLayoutFormElement{})
-			->put(TheLeftOf, headerBackground, 2, FromLeftOf, headerContent)
-			->put(TheTopOf, headerBackground, 2, FromTopOf, headerContent)
-			->put(TheBottomOf, headerBackground, 2, FromBottomOf, headerContent)
-			->put(TheRightOf, headerBackground, 2, FromRightOf, headerContent)}})
-			->setColumnStretchFactor(0, 1);
-
-	auto shapeElement = new Visualization::ShapeFormElement{};
 
 	auto attr = (new Visualization::GridLayoutFormElement{})
-							 ->setColumnStretchFactor(0, 1)
-							 ->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
-							 ->setNoBoundaryCursors([](Item*){return true;})
-							 ->setNoInnerCursors([](Item*){return true;})
-							 ->put(0, 0, item(&I::comment_, [](I* v){return v->node()->commentNode();}));
+			->setColumnStretchFactor(0, 1)
+			->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})
+			->setNoInnerCursors([](Item*){return true;})
+			->put(0, 0, item<Visualization::VText>(&I::date_, [](I* v){return v->node()->date();}, &StyleType::date))
+			->put(0, 1, item<Comments::VComment>(&I::comment_, [](I* v)
+				{return v->node()->commentNode();}, &StyleType::comment));
 
-	addForm((new Visualization::AnchorLayoutFormElement{})
-		->put(TheLeftOf, completeHeader, 10, FromLeftOf, attr)
-		->put(TheTopOf, attr, AtBottomOf, completeHeader)
-		->put(TheRightOf, attr, AtRightOf, completeHeader)
-		->put(TheTopOf, shapeElement, AtCenterOf, completeHeader)
-		->put(TheLeftOf, shapeElement, AtLeftOf, completeHeader)
-		->put(TheBottomOf, shapeElement, 10, FromBottomOf, attr)
-		->put(TheRightOf, shapeElement, 10, FromRightOf, completeHeader));
+	addForm((new Visualization::GridLayoutFormElement{})
+			  ->put(0, 0, attr));
 }
 
 }

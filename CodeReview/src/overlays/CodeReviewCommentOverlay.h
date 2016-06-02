@@ -59,6 +59,9 @@ class CODEREVIEW_API CodeReviewCommentOverlay :
 		CommentedNode* commentedNode_{};
 		Visualization::Item* commentedNodeItem_{};
 
+		Visualization::Static* title_{};
+		Visualization::Static* icon_{};
+
 		QPointF offsetItemLocal_;
 
 };
