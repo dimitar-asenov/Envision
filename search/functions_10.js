@@ -7,7 +7,7 @@ var searchData=
   ['qualifiers',['qualifiers',['../classOOModel_1_1Type.html#ae4f4041158535550d44c15a267e81e7f',1,'OOModel::Type']]],
   ['qualtypetostring',['qualTypeToString',['../classTypeUtilities.html#ac870190c9a892e53ad64a3a21a3267c5',1,'TypeUtilities']]],
   ['queries',['queries',['../classInformationScripting_1_1VCompositeQueryNode.html#a874a62eb9447dbc30feb96bbc1c8970b',1,'InformationScripting::VCompositeQueryNode']]],
-  ['query',['Query',['../classInformationScripting_1_1Query.html#a0d6f334ce239a47694ec718f065ec0e1',1,'InformationScripting::Query::Query()'],['../classInformationScripting_1_1QueryPromptInput.html#a2d4478526ce9478f706d0fa4c9b91a49',1,'InformationScripting::QueryPromptInput::query()']]],
+  ['query',['query',['../classInformationScripting_1_1QueryPromptInput.html#a2d4478526ce9478f706d0fa4c9b91a49',1,'InformationScripting::QueryPromptInput::query()'],['../classInformationScripting_1_1Query.html#a0d6f334ce239a47694ec718f065ec0e1',1,'InformationScripting::Query::Query()']]],
   ['querybuilder',['QueryBuilder',['../classInformationScripting_1_1QueryBuilder.html#a0b96169e4a9f3c6f8da6cc24d9f7cfce',1,'InformationScripting::QueryBuilder']]],
   ['queryname',['queryName',['../classInformationScripting_1_1ArgumentParser.html#a98cc2b0bc35cc1e1a9cfa432b2e6f209',1,'InformationScripting::ArgumentParser']]],
   ['querynodeincompositequery',['QueryNodeInCompositeQuery',['../structInformationScripting_1_1QueryNodeInCompositeQuery.html#ae13f8baa73dc5925889f66e516dadf0e',1,'InformationScripting::QueryNodeInCompositeQuery']]],

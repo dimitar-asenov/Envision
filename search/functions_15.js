@@ -77,7 +77,7 @@ var searchData=
   ['vformaltypeargument',['VFormalTypeArgument',['../classOOVisualization_1_1VFormalTypeArgument.html#ab1ecb066425d473fb85ca75672736bd7',1,'OOVisualization::VFormalTypeArgument']]],
   ['vfunctiontype',['VFunctionType',['../classOOVisualization_1_1VFunctionType.html#ae0640b34af6a405c2a36d2ae2c900083',1,'OOVisualization::VFunctionType']]],
   ['view',['View',['../classVisualization_1_1View.html#a6dd4ede9f63e948fa9e0f04ec6bb42fe',1,'Visualization::View']]],
-  ['viewitem',['viewItem',['../classVisualization_1_1ViewItemManager.html#a77de34d3d048228034e8ddcd4cb10bf4',1,'Visualization::ViewItemManager::viewItem()'],['../classVisualization_1_1ViewItem.html#a4460288baf483a711959db763e9ba17b',1,'Visualization::ViewItem::ViewItem()']]],
+  ['viewitem',['ViewItem',['../classVisualization_1_1ViewItem.html#a4460288baf483a711959db763e9ba17b',1,'Visualization::ViewItem::ViewItem()'],['../classVisualization_1_1ViewItemManager.html#a77de34d3d048228034e8ddcd4cb10bf4',1,'Visualization::ViewItemManager::viewItem()']]],
   ['viewitemmanager',['ViewItemManager',['../classVisualization_1_1ViewItemManager.html#ae77295b99a83b344b3c2c5e6fc893ed2',1,'Visualization::ViewItemManager']]],
   ['viewitems',['viewItems',['../classVisualization_1_1Scene.html#a2b12b728aab5659dd225adacad17f32e',1,'Visualization::Scene::viewItems()'],['../classVisualization_1_1ViewItemManager.html#aaaccc3de05b1c22b6638116df22650b8',1,'Visualization::ViewItemManager::viewItems()']]],
   ['viewswitchermenu',['ViewSwitcherMenu',['../classInteraction_1_1ViewSwitcherMenu.html#a4501f2d87ec62a9ccf6007a3001a6419',1,'Interaction::ViewSwitcherMenu']]],

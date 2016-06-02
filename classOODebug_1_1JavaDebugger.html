@@ -102,8 +102,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a3afc49d88308d9bd3fb8e60b469cd27e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">BreakpointListener</a> = std::function&lt; bool(<a class="el" href="classModel_1_1Node.html">Model::Node</a> *, const <a class="el" href="structOODebug_1_1BreakpointEvent.html">BreakpointEvent</a> &amp;)&gt;</td></tr>
-<tr class="separator:a3afc49d88308d9bd3fb8e60b469cd27e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0b21a1b1cc150068e920d23f4e5f397"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397">BreakpointAction</a> : int { <a class="el" href="classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397af1cefec9e2196c672a622347f1fbc325">BreakpointAction::Resume</a>, 
+<a class="el" href="classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397a11a755d598c0c417f9a36758c3da7481">BreakpointAction::Stop</a>
+ }<tr class="memdesc:ae0b21a1b1cc150068e920d23f4e5f397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates wether we should resume after the breakpoint or not.  <a href="classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:ae0b21a1b1cc150068e920d23f4e5f397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f8b3aeb04027c899cb228b67001830c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a> = int</td></tr>
+<tr class="memdesc:a8f8b3aeb04027c899cb228b67001830c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of a breakpoint id.  <a href="#a8f8b3aeb04027c899cb228b67001830c">More...</a><br /></td></tr>
+<tr class="separator:a8f8b3aeb04027c899cb228b67001830c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27d29d3c45ddddb6f9bf6c8fcf13cbb8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">BreakpointListener</a> = std::function&lt; <a class="el" href="classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397">BreakpointAction</a>(<a class="el" href="classModel_1_1Node.html">Model::Node</a> *, const <a class="el" href="structOODebug_1_1BreakpointEvent.html">BreakpointEvent</a> &amp;)&gt;</td></tr>
+<tr class="separator:a27d29d3c45ddddb6f9bf6c8fcf13cbb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaf9159568d33ec27e076a58269df413"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#acaf9159568d33ec27e076a58269df413">BreakpointType</a> : int { <a class="el" href="classOODebug_1_1JavaDebugger.html#acaf9159568d33ec27e076a58269df413aafbf0897a5a83fdd873dfb032ec695d3">BreakpointType::Internal</a>, 
 <a class="el" href="classOODebug_1_1JavaDebugger.html#acaf9159568d33ec27e076a58269df413a8f9bfe9d1345237cb3b2b205864da075">BreakpointType::User</a>
  }<tr class="memdesc:acaf9159568d33ec27e076a58269df413"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of a Breakpoint: <em>Internal</em> means the user will not see the breakpoint.  <a href="classOODebug_1_1JavaDebugger.html#acaf9159568d33ec27e076a58269df413">More...</a><br /></td></tr>
@@ -111,15 +119,16 @@ Public Types</h2></td></tr>
 <tr class="separator:acaf9159568d33ec27e076a58269df413"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a126dbecba8bbe2235ceb0f7a16626709"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">ProgramExitSingleShot</a> = std::function&lt; void()&gt;</td></tr>
 <tr class="separator:a126dbecba8bbe2235ceb0f7a16626709"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6def3ae59fb99d1693186ef17636c9db"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a6def3ae59fb99d1693186ef17636c9db">ValueHandler</a> = std::function&lt; void(<a class="el" href="classOODebug_1_1JavaDebugger.html">JavaDebugger</a> *, <a class="el" href="structOODebug_1_1Values.html">Values</a>, QList&lt; <a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a> &gt;, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *)&gt;</td></tr>
-<tr class="separator:a6def3ae59fb99d1693186ef17636c9db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43af739c7725a6be5186370ae0b61b61"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a43af739c7725a6be5186370ae0b61b61">ValueHandler</a> = std::function&lt; void(<a class="el" href="classOODebug_1_1JavaDebugger.html">JavaDebugger</a> *, <a class="el" href="structOODebug_1_1Values.html">Values</a>, QList&lt; <a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a> &gt;, <a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *)&gt;</td></tr>
+<tr class="separator:a43af739c7725a6be5186370ae0b61b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a163b7fc51ca3221d270d73803da4ba7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a163b7fc51ca3221d270d73803da4ba7d">addBreakpoint</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *location, <a class="el" href="classOODebug_1_1JavaDebugger.html#acaf9159568d33ec27e076a58269df413">BreakpointType</a> type)</td></tr>
-<tr class="separator:a163b7fc51ca3221d270d73803da4ba7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafde2c6bb01d1f71fcfc0cf262029bf2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#aafde2c6bb01d1f71fcfc0cf262029bf2">addBreakpointListener</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">BreakpointListener</a> listener)</td></tr>
-<tr class="separator:aafde2c6bb01d1f71fcfc0cf262029bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeaa05ae240416c73f66a64ef2415e2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#afeaa05ae240416c73f66a64ef2415e2e">addBreakpoint</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *location, <a class="el" href="classOODebug_1_1JavaDebugger.html#acaf9159568d33ec27e076a58269df413">BreakpointType</a> type)</td></tr>
+<tr class="memdesc:afeaa05ae240416c73f66a64ef2415e2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new breakpoint at the given <em>location</em> and with the given <em>type</em>.  <a href="#afeaa05ae240416c73f66a64ef2415e2e">More...</a><br /></td></tr>
+<tr class="separator:afeaa05ae240416c73f66a64ef2415e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a36b2b309ecf209967814b77540cda2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8a36b2b309ecf209967814b77540cda2">addBreakpointListener</a> (qint64 breakpointId, <a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">BreakpointListener</a> listener)</td></tr>
+<tr class="separator:a8a36b2b309ecf209967814b77540cda2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefe7e52cd1d6ab0c3683f3fd0571c9f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#aefe7e52cd1d6ab0c3683f3fd0571c9f4">addProgramExitLister</a> (<a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">ProgramExitSingleShot</a> listener)</td></tr>
 <tr class="memdesc:aefe7e52cd1d6ab0c3683f3fd0571c9f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a listener for the next program exit.  <a href="#aefe7e52cd1d6ab0c3683f3fd0571c9f4">More...</a><br /></td></tr>
 <tr class="separator:aefe7e52cd1d6ab0c3683f3fd0571c9f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,8 +137,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a341ff8371d4825af939e47a6de687bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae95e65c06015dcc6db41b2773a9fe82d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1CommandResult.html">Interaction::CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ae95e65c06015dcc6db41b2773a9fe82d">probe</a> (<a class="el" href="classOOVisualization_1_1VStatementItemList.html">OOVisualization::VStatementItemList</a> *itemList, const QStringList &amp;arguments, int itemIndex)</td></tr>
 <tr class="separator:ae95e65c06015dcc6db41b2773a9fe82d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb25aced3bca92289df1a8bcc430c2c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#afb25aced3bca92289df1a8bcc430c2c4">removeBreakpointListener</a> (int id)</td></tr>
-<tr class="separator:afb25aced3bca92289df1a8bcc430c2c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a282299fa1c25b6b42a7ec4671b324b63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a282299fa1c25b6b42a7ec4671b324b63">removeBreakpoint</a> (<a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a> breakpointId)</td></tr>
+<tr class="memdesc:a282299fa1c25b6b42a7ec4671b324b63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the breakpoint with the id <em>breakpointId</em> and any BreakpointListeners associated with it.  <a href="#a282299fa1c25b6b42a7ec4671b324b63">More...</a><br /></td></tr>
+<tr class="separator:a282299fa1c25b6b42a7ec4671b324b63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90e7295b933fd106585c86540515e778"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a90e7295b933fd106585c86540515e778">resume</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event)</td></tr>
 <tr class="separator:a90e7295b933fd106585c86540515e778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa74b50b90f40541cab751ee0b4b9565c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#aa74b50b90f40541cab751ee0b4b9565c">step</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event)</td></tr>
@@ -152,34 +162,30 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a5976d2d7c94591d4a8874bb54d63d2d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a2fd05c330c5add6a850bfd68249e07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a1a2fd05c330c5add6a850bfd68249e07">addBreakpointAt</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:a1a2fd05c330c5add6a850bfd68249e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac9a5be38a6b2f8277c89ce2b40eb541"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#aac9a5be38a6b2f8277c89ce2b40eb541">addBreakpointOverlay</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target)</td></tr>
-<tr class="separator:aac9a5be38a6b2f8277c89ce2b40eb541"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53402f3c0bde25e61c82371b04107f18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a53402f3c0bde25e61c82371b04107f18">breaktAtParentClassLoad</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:a53402f3c0bde25e61c82371b04107f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a90cd7aa4b6e4ca0119b6021d24158b"><td class="memItemLeft" align="right" valign="top">QPair&lt; <a class="el" href="classOODebug_1_1PlotOverlay.html#a9621a48a550d082eb75ab3289577eb6b">PlotOverlay::PlotType</a>, <a class="el" href="classOODebug_1_1JavaDebugger.html#a6def3ae59fb99d1693186ef17636c9db">ValueHandler</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8a90cd7aa4b6e4ca0119b6021d24158b">defaultPlotTypeAndValueHandlerFor</a> (QList&lt; <a class="el" href="classOOModel_1_1VariableDeclaration.html">OOModel::VariableDeclaration</a> * &gt; variables)</td></tr>
+<tr class="memitem:aac36feccf49e4a08297d48da0eb814b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">BreakpointListener</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#aac36feccf49e4a08297d48da0eb814b3">createListenerFor</a> (std::shared_ptr&lt; <a class="el" href="structOODebug_1_1VariableObserver.html">VariableObserver</a> &gt; observer, <a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *plotOverlay)</td></tr>
+<tr class="separator:aac36feccf49e4a08297d48da0eb814b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a90cd7aa4b6e4ca0119b6021d24158b"><td class="memItemLeft" align="right" valign="top">QPair&lt; <a class="el" href="classOODebug_1_1PlotOverlay.html#a9621a48a550d082eb75ab3289577eb6b">PlotOverlay::PlotType</a>, <a class="el" href="classOODebug_1_1JavaDebugger.html#a43af739c7725a6be5186370ae0b61b61">ValueHandler</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8a90cd7aa4b6e4ca0119b6021d24158b">defaultPlotTypeAndValueHandlerFor</a> (QList&lt; <a class="el" href="classOOModel_1_1VariableDeclaration.html">OOModel::VariableDeclaration</a> * &gt; variables)</td></tr>
 <tr class="separator:a8a90cd7aa4b6e4ca0119b6021d24158b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3f3956c53aa9362455c937d2b1ac27e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ae3f3956c53aa9362455c937d2b1ac27e">handleArray</a> (<a class="el" href="structOODebug_1_1Values.html">Values</a> values, QList&lt; <a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a> &gt; valueCalculators, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *target)</td></tr>
-<tr class="separator:ae3f3956c53aa9362455c937d2b1ac27e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65425bed7202bc602093470c3ead072e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a65425bed7202bc602093470c3ead072e">handleArray</a> (<a class="el" href="structOODebug_1_1Values.html">Values</a> values, QList&lt; <a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a> &gt; valueCalculators, <a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *plotOverlay)</td></tr>
+<tr class="separator:a65425bed7202bc602093470c3ead072e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0fb39d07fcd6f09fa4cd6d1a3e9406f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ad0fb39d07fcd6f09fa4cd6d1a3e9406f">handleBreakpoint</a> (<a class="el" href="structOODebug_1_1BreakpointEvent.html">BreakpointEvent</a> breakpointEvent)</td></tr>
 <tr class="separator:ad0fb39d07fcd6f09fa4cd6d1a3e9406f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a548167fafc6bd9d4b5ca79c12c99e985"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a548167fafc6bd9d4b5ca79c12c99e985">handleClassPrepare</a> (<a class="el" href="structOODebug_1_1Event.html">Event</a>)</td></tr>
 <tr class="separator:a548167fafc6bd9d4b5ca79c12c99e985"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ab1cf0a02176ec10e9349e260fa41b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a2ab1cf0a02176ec10e9349e260fa41b4">handleSingleStep</a> (<a class="el" href="structOODebug_1_1SingleStepEvent.html">SingleStepEvent</a> singleStep)</td></tr>
 <tr class="separator:a2ab1cf0a02176ec10e9349e260fa41b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09647dff4ba83a4616a6260854fbde10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a09647dff4ba83a4616a6260854fbde10">handleValues</a> (<a class="el" href="structOODebug_1_1Values.html">Values</a> values, QList&lt; <a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a> &gt; valueCalculators, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *target)</td></tr>
-<tr class="separator:a09647dff4ba83a4616a6260854fbde10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12532f0a389a05340adaab396aa6c4c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a12532f0a389a05340adaab396aa6c4c3">handleValues</a> (<a class="el" href="structOODebug_1_1Values.html">Values</a> values, QList&lt; <a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a> &gt; valueCalculators, <a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *plotOverlay)</td></tr>
+<tr class="separator:a12532f0a389a05340adaab396aa6c4c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8f8cd8906e19f93f53328b54f83335c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ae8f8cd8906e19f93f53328b54f83335c">handleVMStart</a> (<a class="el" href="structOODebug_1_1Event.html">Event</a>)</td></tr>
 <tr class="separator:ae8f8cd8906e19f93f53328b54f83335c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95b0f28205792834cc21a0e0cbaa561f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a95b0f28205792834cc21a0e0cbaa561f">isParentClassLoaded</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:a95b0f28205792834cc21a0e0cbaa561f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace848da53a911e38b54aa0059426cd42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ace848da53a911e38b54aa0059426cd42">plotOverlayOfNode</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
-<tr class="separator:ace848da53a911e38b54aa0059426cd42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39759db101fa85114a3eec0f72b63425"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a39759db101fa85114a3eec0f72b63425">removeBreakpointAt</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:a39759db101fa85114a3eec0f72b63425"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54016f6e02fb3f8d0a93bc4b9b89f2b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a54016f6e02fb3f8d0a93bc4b9b89f2b5">removeHighlightFromCurrentLine</a> ()</td></tr>
 <tr class="separator:a54016f6e02fb3f8d0a93bc4b9b89f2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cdbb0991149a58c5c3b6fd8f9f13919"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a9cdbb0991149a58c5c3b6fd8f9f13919">removeObserverOverlaysAt</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *nodeVisualization)</td></tr>
-<tr class="separator:a9cdbb0991149a58c5c3b6fd8f9f13919"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01b454a509ddde030afe316b2666741b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a01b454a509ddde030afe316b2666741b">resume</a> ()</td></tr>
 <tr class="separator:a01b454a509ddde030afe316b2666741b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92405a4fb5b02c5b9f46269528e5510f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a92405a4fb5b02c5b9f46269528e5510f">toggleLineHighlight</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *item, bool highlight, bool closingBracket=false)</td></tr>
@@ -191,8 +197,10 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a76f699b4f2819b18f27e891b1d66e95f"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a76f699b4f2819b18f27e891b1d66e95f">breakOnLoadClasses_</a></td></tr>
 <tr class="separator:a76f699b4f2819b18f27e891b1d66e95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cdaabf9bd15f7e69e4b08b29b71100a"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, std::pair&lt; int, <a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">BreakpointListener</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a5cdaabf9bd15f7e69e4b08b29b71100a">breakpointListeners_</a></td></tr>
-<tr class="separator:a5cdaabf9bd15f7e69e4b08b29b71100a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53048477848c937451f2a70a799cc282"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, <a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a53048477848c937451f2a70a799cc282">breakpointIds_</a></td></tr>
+<tr class="separator:a53048477848c937451f2a70a799cc282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe98199ace20ce82748dfc0b6d610216"><td class="memItemLeft" align="right" valign="top">QHash&lt; qint64, <a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">BreakpointListener</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#abe98199ace20ce82748dfc0b6d610216">breakpointListeners_</a></td></tr>
+<tr class="separator:abe98199ace20ce82748dfc0b6d610216"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93f3c080d5cf8187f7db14097d28496b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a93f3c080d5cf8187f7db14097d28496b">currentLineItem_</a> {}</td></tr>
 <tr class="separator:a93f3c080d5cf8187f7db14097d28496b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a6b59eff440f8e5b193e67eebea98a7"><td class="memItemLeft" align="right" valign="top">qint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a6a6b59eff440f8e5b193e67eebea98a7">currentThreadId_</a> {}</td></tr>
@@ -201,14 +209,20 @@ Private Attributes</h2></td></tr>
 <tr class="separator:af129869b0e07d842ee01998e66a0c211"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a9395b3bbfd27dc2857f3a8111466b1"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classOODebug_1_1JavaDebugger.html#a126dbecba8bbe2235ceb0f7a16626709">ProgramExitSingleShot</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a4a9395b3bbfd27dc2857f3a8111466b1">exitListeners_</a></td></tr>
 <tr class="separator:a4a9395b3bbfd27dc2857f3a8111466b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5681d81e00f68af15d2f5f4630fd80e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a5681d81e00f68af15d2f5f4630fd80e4">nextBreakpointListenerId_</a> {0}</td></tr>
-<tr class="separator:a5681d81e00f68af15d2f5f4630fd80e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b448e8fd49ed2283436bac528887739"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a3b448e8fd49ed2283436bac528887739">nextBreakpointId_</a> {0}</td></tr>
+<tr class="separator:a3b448e8fd49ed2283436bac528887739"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8fa84900af24c4551511fad3019c584"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, std::shared_ptr&lt; <a class="el" href="structOODebug_1_1VariableObserver.html">VariableObserver</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ac8fa84900af24c4551511fad3019c584">nodeObservedBy_</a></td></tr>
 <tr class="separator:ac8fa84900af24c4551511fad3019c584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5088eadd3d034f06ae7372375b7023ca"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, <a class="el" href="structOODebug_1_1ProbeVisualization.html">ProbeVisualization</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a5088eadd3d034f06ae7372375b7023ca">probes_</a></td></tr>
+<tr class="separator:a5088eadd3d034f06ae7372375b7023ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a521d877256d91b89a2e90a89011b91ee"><td class="memItemLeft" align="right" valign="top">QHash&lt; qint32, <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a521d877256d91b89a2e90a89011b91ee">setBreakpoints_</a></td></tr>
 <tr class="separator:a521d877256d91b89a2e90a89011b91ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a027185c0f4fe4eb2bad0cea78286a93c"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a027185c0f4fe4eb2bad0cea78286a93c">unsetBreakpoints_</a></td></tr>
-<tr class="separator:a027185c0f4fe4eb2bad0cea78286a93c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fd0756eda77d92c75a37d2e9ff550af"><td class="memItemLeft" align="right" valign="top">QHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, <a class="el" href="structOODebug_1_1TrackedVariable.html">TrackedVariable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#a2fd0756eda77d92c75a37d2e9ff550af">trackedVariables_</a></td></tr>
+<tr class="separator:a2fd0756eda77d92c75a37d2e9ff550af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaa5b329afcbb8096b0a456b7d7d4e22"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#afaa5b329afcbb8096b0a456b7d7d4e22">unsetBreakpoints_</a></td></tr>
+<tr class="separator:afaa5b329afcbb8096b0a456b7d7d4e22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada5788446d44a0e251adfe5c95e0391c"><td class="memItemLeft" align="right" valign="top">QHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *, <a class="el" href="structOODebug_1_1UserVisibleBreakpoint.html">UserVisibleBreakpoint</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ada5788446d44a0e251adfe5c95e0391c">userBreakpoints_</a></td></tr>
+<tr class="separator:ada5788446d44a0e251adfe5c95e0391c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade2afee209a399a3ef4ee449f6585e48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1DebugUtils.html">DebugUtils</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1JavaDebugger.html#ade2afee209a399a3ef4ee449f6585e48">utils_</a> {&amp;<a class="el" href="classOODebug_1_1JavaDebugger.html#af129869b0e07d842ee01998e66a0c211">debugConnector_</a>}</td></tr>
 <tr class="separator:ade2afee209a399a3ef4ee449f6585e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -224,12 +238,26 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:ac50c0603f0299549bf021fb2e89e1451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="a3afc49d88308d9bd3fb8e60b469cd27e"></a>
+<a class="anchor" id="a8f8b3aeb04027c899cb228b67001830c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">OODebug::JavaDebugger::BreakpointListener</a> =  std::function&lt;bool (<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, const <a class="el" href="structOODebug_1_1BreakpointEvent.html">BreakpointEvent</a>&amp;)&gt;</td>
+          <td class="memname">using <a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">OODebug::JavaDebugger::BreakpointId</a> =  int</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type of a breakpoint id. </p>
+
+</div>
+</div>
+<a class="anchor" id="a27d29d3c45ddddb6f9bf6c8fcf13cbb8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">OODebug::JavaDebugger::BreakpointListener</a> =  std::function&lt;<a class="el" href="classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397">BreakpointAction</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, const <a class="el" href="structOODebug_1_1BreakpointEvent.html">BreakpointEvent</a>&amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -248,12 +276,12 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6def3ae59fb99d1693186ef17636c9db"></a>
+<a class="anchor" id="a43af739c7725a6be5186370ae0b61b61"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classOODebug_1_1JavaDebugger.html#a6def3ae59fb99d1693186ef17636c9db">OODebug::JavaDebugger::ValueHandler</a> =  std::function&lt;void(<a class="el" href="classOODebug_1_1JavaDebugger.html">JavaDebugger</a>*, <a class="el" href="structOODebug_1_1Values.html">Values</a>, QList&lt;<a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a>&gt;, <a class="el" href="classModel_1_1Node.html">Model::Node</a>*)&gt;</td>
+          <td class="memname">using <a class="el" href="classOODebug_1_1JavaDebugger.html#a43af739c7725a6be5186370ae0b61b61">OODebug::JavaDebugger::ValueHandler</a> =  std::function&lt;void(<a class="el" href="classOODebug_1_1JavaDebugger.html">JavaDebugger</a>*, <a class="el" href="structOODebug_1_1Values.html">Values</a>, QList&lt;<a class="el" href="classOODebug_1_1Probes.html#a023f7431c79553e9ef36e75a87bbd4a5">Probes::ValueCalculator</a>&gt;, <a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a>*)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -261,6 +289,34 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="ae0b21a1b1cc150068e920d23f4e5f397"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397">OODebug::JavaDebugger::BreakpointAction</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicates wether we should resume after the breakpoint or not. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ae0b21a1b1cc150068e920d23f4e5f397af1cefec9e2196c672a622347f1fbc325"></a>Resume&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ae0b21a1b1cc150068e920d23f4e5f397a11a755d598c0c417f9a36758c3da7481"></a>Stop&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
 <a class="anchor" id="acaf9159568d33ec27e076a58269df413"></a>
 <div class="memitem">
 <div class="memproto">
@@ -315,12 +371,12 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a163b7fc51ca3221d270d73803da4ba7d"></a>
+<a class="anchor" id="afeaa05ae240416c73f66a64ef2415e2e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void OODebug::JavaDebugger::addBreakpoint </td>
+          <td class="memname"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">JavaDebugger::BreakpointId</a> OODebug::JavaDebugger::addBreakpoint </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
           <td class="paramname"><em>location</em>, </td>
@@ -338,6 +394,9 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Adds a new breakpoint at the given <em>location</em> and with the given <em>type</em>. </p>
+<p>Returns the id of this breakpoint, the id is always greater than 0. </p>
 
 </div>
 </div>
@@ -365,7 +424,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aafde2c6bb01d1f71fcfc0cf262029bf2"></a>
+<a class="anchor" id="a8a36b2b309ecf209967814b77540cda2"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -373,15 +432,15 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int OODebug::JavaDebugger::addBreakpointListener </td>
+          <td class="memname">void OODebug::JavaDebugger::addBreakpointListener </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
+          <td class="paramtype">qint64&#160;</td>
+          <td class="paramname"><em>breakpointId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">BreakpointListener</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">BreakpointListener</a>&#160;</td>
           <td class="paramname"><em>listener</em>&#160;</td>
         </tr>
         <tr>
@@ -393,30 +452,6 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aac9a5be38a6b2f8277c89ce2b40eb541"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void OODebug::JavaDebugger::addBreakpointOverlay </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>target</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -474,6 +509,40 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aac36feccf49e4a08297d48da0eb814b3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">JavaDebugger::BreakpointListener</a> OODebug::JavaDebugger::createListenerFor </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structOODebug_1_1VariableObserver.html">VariableObserver</a> &gt;&#160;</td>
+          <td class="paramname"><em>observer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *&#160;</td>
+          <td class="paramname"><em>plotOverlay</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a341ff8371d4825af939e47a6de687bd9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -511,7 +580,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QPair&lt; <a class="el" href="classOODebug_1_1PlotOverlay.html#a9621a48a550d082eb75ab3289577eb6b">PlotOverlay::PlotType</a>, <a class="el" href="classOODebug_1_1JavaDebugger.html#a6def3ae59fb99d1693186ef17636c9db">JavaDebugger::ValueHandler</a> &gt; OODebug::JavaDebugger::defaultPlotTypeAndValueHandlerFor </td>
+          <td class="memname">QPair&lt; <a class="el" href="classOODebug_1_1PlotOverlay.html#a9621a48a550d082eb75ab3289577eb6b">PlotOverlay::PlotType</a>, <a class="el" href="classOODebug_1_1JavaDebugger.html#a43af739c7725a6be5186370ae0b61b61">JavaDebugger::ValueHandler</a> &gt; OODebug::JavaDebugger::defaultPlotTypeAndValueHandlerFor </td>
           <td>(</td>
           <td class="paramtype">QList&lt; <a class="el" href="classOOModel_1_1VariableDeclaration.html">OOModel::VariableDeclaration</a> * &gt;&#160;</td>
           <td class="paramname"><em>variables</em></td><td>)</td>
@@ -527,7 +596,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae3f3956c53aa9362455c937d2b1ac27e"></a>
+<a class="anchor" id="a65425bed7202bc602093470c3ead072e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -549,8 +618,8 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>target</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *&#160;</td>
+          <td class="paramname"><em>plotOverlay</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -639,7 +708,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a09647dff4ba83a4616a6260854fbde10"></a>
+<a class="anchor" id="a12532f0a389a05340adaab396aa6c4c3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -661,8 +730,8 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>target</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> *&#160;</td>
+          <td class="paramname"><em>plotOverlay</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -750,30 +819,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ace848da53a911e38b54aa0059426cd42"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classOODebug_1_1PlotOverlay.html">PlotOverlay</a> * OODebug::JavaDebugger::plotOverlayOfNode </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="ae95e65c06015dcc6db41b2773a9fe82d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -806,6 +851,24 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a282299fa1c25b6b42a7ec4671b324b63"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OODebug::JavaDebugger::removeBreakpoint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a>&#160;</td>
+          <td class="paramname"><em>breakpointId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the breakpoint with the id <em>breakpointId</em> and any BreakpointListeners associated with it. </p>
+
+</div>
+</div>
 <a class="anchor" id="a39759db101fa85114a3eec0f72b63425"></a>
 <div class="memitem">
 <div class="memproto">
@@ -830,22 +893,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afb25aced3bca92289df1a8bcc430c2c4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void OODebug::JavaDebugger::removeBreakpointListener </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a54016f6e02fb3f8d0a93bc4b9b89f2b5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -858,40 +905,6 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a9cdbb0991149a58c5c3b6fd8f9f13919"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void OODebug::JavaDebugger::removeObserverOverlaysAt </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>nodeVisualization</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1160,7 +1173,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5cdaabf9bd15f7e69e4b08b29b71100a"></a>
+<a class="anchor" id="a53048477848c937451f2a70a799cc282"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1168,7 +1181,27 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QMultiHash&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, std::pair&lt;int, <a class="el" href="classOODebug_1_1JavaDebugger.html#a3afc49d88308d9bd3fb8e60b469cd27e">BreakpointListener</a>&gt; &gt; OODebug::JavaDebugger::breakpointListeners_</td>
+          <td class="memname">QMultiHash&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, <a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a>&gt; OODebug::JavaDebugger::breakpointIds_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abe98199ace20ce82748dfc0b6d610216"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;qint64, <a class="el" href="classOODebug_1_1JavaDebugger.html#a27d29d3c45ddddb6f9bf6c8fcf13cbb8">BreakpointListener</a>&gt; OODebug::JavaDebugger::breakpointListeners_</td>
         </tr>
       </table>
   </td>
@@ -1300,7 +1333,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5681d81e00f68af15d2f5f4630fd80e4"></a>
+<a class="anchor" id="a3b448e8fd49ed2283436bac528887739"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1308,7 +1341,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int OODebug::JavaDebugger::nextBreakpointListenerId_ {0}</td>
+          <td class="memname"><a class="el" href="classOODebug_1_1JavaDebugger.html#a8f8b3aeb04027c899cb228b67001830c">BreakpointId</a> OODebug::JavaDebugger::nextBreakpointId_ {0}</td>
         </tr>
       </table>
   </td>
@@ -1360,6 +1393,26 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5088eadd3d034f06ae7372375b7023ca"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMultiHash&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, <a class="el" href="structOODebug_1_1ProbeVisualization.html">ProbeVisualization</a>&gt; OODebug::JavaDebugger::probes_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a521d877256d91b89a2e90a89011b91ee"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1380,7 +1433,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a027185c0f4fe4eb2bad0cea78286a93c"></a>
+<a class="anchor" id="a2fd0756eda77d92c75a37d2e9ff550af"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1388,7 +1441,47 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*&gt; OODebug::JavaDebugger::unsetBreakpoints_</td>
+          <td class="memname">QHash&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, <a class="el" href="structOODebug_1_1TrackedVariable.html">TrackedVariable</a>&gt; OODebug::JavaDebugger::trackedVariables_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afaa5b329afcbb8096b0a456b7d7d4e22"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSet&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*&gt; OODebug::JavaDebugger::unsetBreakpoints_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ada5788446d44a0e251adfe5c95e0391c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*, <a class="el" href="structOODebug_1_1UserVisibleBreakpoint.html">UserVisibleBreakpoint</a>&gt; OODebug::JavaDebugger::userBreakpoints_</td>
         </tr>
       </table>
   </td>

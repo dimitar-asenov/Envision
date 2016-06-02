@@ -5,6 +5,7 @@ var searchData=
   ['harrowhandler',['HArrowHandler',['../classInteraction_1_1HArrowHandler.html',1,'Interaction']]],
   ['hbinarynode',['HBinaryNode',['../classInteraction_1_1HBinaryNode.html',1,'Interaction']]],
   ['hclass',['HClass',['../classOOInteraction_1_1HClass.html',1,'OOInteraction']]],
+  ['hcodereviewoverlay',['HCodeReviewOverlay',['../classCodeReview_1_1HCodeReviewOverlay.html',1,'CodeReview']]],
   ['hcomment',['HComment',['../classComments_1_1HComment.html',1,'Comments']]],
   ['hcommentdiagram',['HCommentDiagram',['../classComments_1_1HCommentDiagram.html',1,'Comments']]],
   ['hcommentdiagramconnector',['HCommentDiagramConnector',['../classComments_1_1HCommentDiagramConnector.html',1,'Comments']]],

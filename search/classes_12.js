@@ -106,6 +106,7 @@ var searchData=
   ['timer',['Timer',['../classLogger_1_1Timer.html',1,'Logger']]],
   ['token',['Token',['../classInteraction_1_1Token.html',1,'Interaction']]],
   ['tokensplitdata',['TokenSplitData',['../structInteraction_1_1TokenSplitData.html',1,'Interaction']]],
+  ['trackedvariable',['TrackedVariable',['../structOODebug_1_1TrackedVariable.html',1,'OODebug']]],
   ['translatefrontendaction',['TranslateFrontendAction',['../classCppImport_1_1TranslateFrontendAction.html',1,'CppImport']]],
   ['translatemanager',['TranslateManager',['../classCppImport_1_1TranslateManager.html',1,'CppImport']]],
   ['treemanager',['TreeManager',['../classModel_1_1TreeManager.html',1,'Model']]],

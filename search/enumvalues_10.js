@@ -33,7 +33,7 @@ var searchData=
   ['staticcast',['StaticCast',['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faa5faef872533f3e47ef0fc0185fbb894f',1,'OOModel::CastExpression']]],
   ['stationary',['Stationary',['../namespaceFilePersistence.html#a22f599a7e5cc21a83101c6b6a2e1abfea5146a957bfa51752bd6020691fda598e',1,'FilePersistence']]],
   ['status',['Status',['../classOODebug_1_1Protocol.html#aa2e27d2dd0cf680d8168ae01bd06ecfcaec53a8c4f07baed5d8825072c89799be',1,'OODebug::Protocol::Status()'],['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36aec53a8c4f07baed5d8825072c89799be',1,'OODebug::Protocol::Status()']]],
-  ['stop',['Stop',['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36a11a755d598c0c417f9a36758c3da7481',1,'OODebug::Protocol']]],
+  ['stop',['Stop',['../classOODebug_1_1JavaDebugger.html#ae0b21a1b1cc150068e920d23f4e5f397a11a755d598c0c417f9a36758c3da7481',1,'OODebug::JavaDebugger::Stop()'],['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36a11a755d598c0c417f9a36758c3da7481',1,'OODebug::Protocol::Stop()']]],
   ['string',['STRING',['../classOODebug_1_1Protocol.html#aae559917558dc3975d095acc7557f051a63b588d5559f64f89a416e656880b949',1,'OODebug::Protocol']]],
   ['string_5fvalue',['STRING_VALUE',['../classFilePersistence_1_1GenericNode.html#abc7da14fae84133c449f8dd12f11f344ae6b9488db74f266e7fa1cc2fb46bbc75',1,'FilePersistence::GenericNode']]],
   ['stringreference',['StringReference',['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622ea5c65ddd5abf45e7bce6264591e3c612c',1,'OODebug::Protocol']]],

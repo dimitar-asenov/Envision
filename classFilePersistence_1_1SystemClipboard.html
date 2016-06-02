@@ -120,6 +120,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a880e1ffb699983e8ff335df0dfed35b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25059dbee763aaec54ab6a478c9187b1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#a25059dbee763aaec54ab6a478c9187b1">create</a> (<a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *manager, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *parent) override</td></tr>
 <tr class="separator:a25059dbee763aaec54ab6a478c9187b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92f0116dfcf0f6f2fa4db538dfdb552d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#a92f0116dfcf0f6f2fa4db538dfdb552d">currentNodeID</a> () const </td></tr>
+<tr class="separator:a92f0116dfcf0f6f2fa4db538dfdb552d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaaba4321c32899fc9775f8a41ff99f69"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#aaaba4321c32899fc9775f8a41ff99f69">currentNodeType</a> () const override</td></tr>
 <tr class="separator:aaaba4321c32899fc9775f8a41ff99f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4279b1634120abe5a8f23d3283f8f3e1"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#a4279b1634120abe5a8f23d3283f8f3e1">hasNext</a> () const override</td></tr>
@@ -184,6 +186,8 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:aebbeed2854278267e95a14d614814ff8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#aebbeed2854278267e95a14d614814ff8">manager_</a> {}</td></tr>
+<tr class="separator:aebbeed2854278267e95a14d614814ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d2b20046eca36491dc1b4ca3be4013f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#a0d2b20046eca36491dc1b4ca3be4013f">numNodes_</a></td></tr>
 <tr class="separator:a0d2b20046eca36491dc1b4ca3be4013f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbdd9d566ee3b92e5446b499978dde64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1XMLModel.html">XMLModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#abbdd9d566ee3b92e5446b499978dde64">xml</a></td></tr>
@@ -294,6 +298,21 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classModel_1_1ClipboardStore.html#a1dc3be7118058924117b93cfda799e17">Model::ClipboardStore</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a92f0116dfcf0f6f2fa4db538dfdb552d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> FilePersistence::SystemClipboard::currentNodeID </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -936,6 +955,26 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aebbeed2854278267e95a14d614814ff8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a>* FilePersistence::SystemClipboard::manager_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a50d06ac0e16fc66e8c92a384d9cbc927"></a>
 <div class="memitem">
 <div class="memproto">

@@ -6,6 +6,7 @@ var searchData=
   ['observerlocation_5f',['observerLocation_',['../structOODebug_1_1VariableObserver.html#a1759cb82638b137486d1d3add88859f4',1,'OODebug::VariableObserver']]],
   ['offset',['offset',['../classInteraction_1_1HRootItem.html#a4cdf7238307acad81409ba3616e05ea4',1,'Interaction::HRootItem']]],
   ['offset_5f',['offset_',['../classOOInteraction_1_1SetExpressionCursorEvent.html#a55f9ca8db5ee056aa93410500222336f',1,'OOInteraction::SetExpressionCursorEvent::offset_()'],['../classVisualization_1_1AnchorLayoutAnchor.html#a0133dc272cbdca56a047569d8063f6be',1,'Visualization::AnchorLayoutAnchor::offset_()']]],
+  ['offsetitemlocal_5f',['offsetItemLocal_',['../classCodeReview_1_1CodeReviewCommentOverlay.html#af84eabba1f40bf689e69be8abe88d1b2',1,'CodeReview::CodeReviewCommentOverlay']]],
   ['oldfiles_5f',['oldFiles_',['../classFilePersistence_1_1SimpleTextFileStore.html#a04cc7cbe0706339d62ac5460de7d3e52',1,'FilePersistence::SimpleTextFileStore']]],
   ['oldlinkedchangesset_5f',['oldLinkedChangesSet_',['../classFilePersistence_1_1LinkedChangesTransition.html#ad6e22fc3bf3f47b27eae8adb86df90ae',1,'FilePersistence::LinkedChangesTransition']]],
   ['oldname_5f',['oldName_',['../classInteraction_1_1VViewSwitcherEntry.html#aebdd232c12a1ae796567fe293096bad8',1,'Interaction::VViewSwitcherEntry']]],

@@ -115,21 +115,22 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
 </ol>
 <p>Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.</p>
 <h1><a class="anchor" id="qtcreator"></a>
-Qt Creator (recommended for C++; does not work with Java)</h1>
+Qt Creator</h1>
 <ol type="1">
 <li>Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process Qt Creator will create additional directories alongside the repository clone (for the out-of-source build).</li>
 <li>Start Qt Creator and configure the version of Qt that you want to use:<ul>
-<li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Qt Versions. Make sure that you are using Qt 5. This could be either Qt in PATH, or a Qt version that you compiled yourself. Qt 5.5 or later is required. See below for manual Qt compilation instructions.</li>
+<li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Qt Versions. Make sure that you are using Qt 5.5 or later. This could be either Qt in PATH, or a Qt version that you compiled yourself. See below for manual Qt compilation instructions.</li>
 <li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Kits. Make sure that the default desktop kit uses the appropriate version of Qt.</li>
 </ul>
 </li>
 <li>Open the top-level <code>CMakeLists.txt</code> file with Qt Creator.</li>
-<li>Use the following arguments for CMake<pre class="fragment">-DCMAKE_BUILD_TYPE=Debug </pre> or alternatively, if you want to compile with clang:<pre class="fragment">-DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-3.8 </pre></li>
+<li>On Qt creator 3.x, use the following arguments for CMake<pre class="fragment">-DCMAKE_BUILD_TYPE=Debug </pre> or alternatively, if you want to compile with clang:<pre class="fragment">-DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-3.8 </pre></li>
 <li>In the Projects view, under <em>build</em> make sure that:<ul>
 <li>The build directory points to a directory that is a peer of Envision's directory. e.g. <pre class="fragment">../build-envision-Desktop-Debug</pre></li>
+<li>(Qt creator 4 or later) the CMAKE_BUILD_TYPE variable is set to <em>Debug</em>.</li>
 </ul>
 </li>
-<li>Also in the Projects view, change the arguments of make to specify parallel compilation and the <em>install</em> target: <pre class="fragment">-j8 install</pre> The <em>install</em> target is needed in order to copy all necessary files to the DebugBuild directory. Substitute 8 for the number of threads your hardware supports.</li>
+<li>Also in the Projects view, change the arguments of cmake/make to specify parallel compilation and the <em>install</em> target: <pre class="fragment">-j8 install</pre> The <em>install</em> target is needed in order to copy all necessary files to the DebugBuild directory. Substitute 8 for the number of threads your hardware supports.</li>
 <li>Add run configurations<ul>
 <li>The executable of all run configurations must be Envision: <pre class="fragment">%{sourceDir}/DebugBuild/Envision</pre></li>
 <li>The working directory of all run configurations must be DebugBuild: <pre class="fragment">%{sourceDir}/DebugBuild</pre></li>

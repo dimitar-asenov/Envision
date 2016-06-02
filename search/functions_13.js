@@ -34,7 +34,7 @@ var searchData=
   ['threadnamecommand',['ThreadNameCommand',['../structOODebug_1_1ThreadNameCommand.html#aa2f4a90d63492343037061edb06104f8',1,'OODebug::ThreadNameCommand']]],
   ['thrownexceptiontype',['ThrownExceptionType',['../classOOModel_1_1ThrownExceptionType.html#a1a6d23b7929300b6b64fad6dd7c3f693',1,'OOModel::ThrownExceptionType::ThrownExceptionType(std::unique_ptr&lt; Type &gt; exceptionType)'],['../classOOModel_1_1ThrownExceptionType.html#a5d1db52fa99888da4c8f0d184d4c8e36',1,'OOModel::ThrownExceptionType::ThrownExceptionType(const ThrownExceptionType &amp;other)']]],
   ['tick',['tick',['../classLogger_1_1Timer.html#afa760af13cb1e83bbc29c7ba9dde6842',1,'Logger::Timer::tick(const QString &amp;timer)'],['../classLogger_1_1Timer.html#a887ff6016bb7a68d52bb589f76ec9205',1,'Logger::Timer::tick()']]],
-  ['timer',['Timer',['../classLogger_1_1Timer.html#a696ed342c3852a0697af935932aba3da',1,'Logger::Timer::Timer()'],['../classLogger_1_1Timer.html#a7e31306971773eca3ffd00e0dde7f284',1,'Logger::Timer::timer(const QString &amp;timer)']]],
+  ['timer',['timer',['../classLogger_1_1Timer.html#a7e31306971773eca3ffd00e0dde7f284',1,'Logger::Timer::timer(const QString &amp;timer)'],['../classLogger_1_1Timer.html#a696ed342c3852a0697af935932aba3da',1,'Logger::Timer::Timer()']]],
   ['timernames',['timerNames',['../classLogger_1_1Timer.html#a170868768e2ae446d580ff6952a0fd9a',1,'Logger::Timer']]],
   ['timers',['timers',['../classLogger_1_1Timer.html#aaeb9941b0076b7a7e4cb5b236d70cac2',1,'Logger::Timer']]],
   ['tochar',['toChar',['../classOOInteraction_1_1OOExpressionBuilder.html#ae2cd8c15eb0f68de0a7435c9cb5087b3',1,'OOInteraction::OOExpressionBuilder']]],

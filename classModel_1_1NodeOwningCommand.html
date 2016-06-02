@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classModel_1_1NodeOwningCommand-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Model::NodeOwningCommand Class Reference</div>  </div>
@@ -121,9 +122,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a192e93f0eceece00235e602789c8bdaf"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1NodeOwningCommand.html#a192e93f0eceece00235e602789c8bdaf">owned</a> () const override</td></tr>
 <tr class="memdesc:a192e93f0eceece00235e602789c8bdaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node owned by this command or nullptr if no node is owned.  <a href="#a192e93f0eceece00235e602789c8bdaf">More...</a><br /></td></tr>
 <tr class="separator:a192e93f0eceece00235e602789c8bdaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ea5dc48edf8fe397bcdc29198753de5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1NodeOwningCommand.html#a9ea5dc48edf8fe397bcdc29198753de5">redo</a> () override</td></tr>
+<tr class="separator:a9ea5dc48edf8fe397bcdc29198753de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace2a165d89e21f780a24f06fd96066b0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1NodeOwningCommand.html#ace2a165d89e21f780a24f06fd96066b0">removedNode</a> () const override</td></tr>
 <tr class="memdesc:ace2a165d89e21f780a24f06fd96066b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node that this command removed from the tree, or nullptr if no node was removed.  <a href="#ace2a165d89e21f780a24f06fd96066b0">More...</a><br /></td></tr>
 <tr class="separator:ace2a165d89e21f780a24f06fd96066b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a536edec833bf7bbefcbde4699c053f6e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1NodeOwningCommand.html#a536edec833bf7bbefcbde4699c053f6e">undo</a> () override</td></tr>
+<tr class="separator:a536edec833bf7bbefcbde4699c053f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classModel_1_1UndoCommand"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classModel_1_1UndoCommand')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classModel_1_1UndoCommand.html">Model::UndoCommand</a></td></tr>
 <tr class="memitem:afab35290499ece7eb6360196c5818b95 inherit pub_methods_classModel_1_1UndoCommand"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#afab35290499ece7eb6360196c5818b95">UndoCommand</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1UndoCommand.html#a1247b5d5ac3933c48422ed9bf403e101">target</a>, const QString &amp;text)</td></tr>
 <tr class="separator:afab35290499ece7eb6360196c5818b95 inherit pub_methods_classModel_1_1UndoCommand"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,12 +137,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7715a64e2cc85296cae10fe0a5926c8d inherit pub_methods_classModel_1_1UndoCommand"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a7715a64e2cc85296cae10fe0a5926c8d">isUndone</a> () const </td></tr>
 <tr class="memdesc:a7715a64e2cc85296cae10fe0a5926c8d inherit pub_methods_classModel_1_1UndoCommand"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the command has been undone since it was applied.  <a href="#a7715a64e2cc85296cae10fe0a5926c8d">More...</a><br /></td></tr>
 <tr class="separator:a7715a64e2cc85296cae10fe0a5926c8d inherit pub_methods_classModel_1_1UndoCommand"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6071571dbb4c416c2525fdcaf0cec426 inherit pub_methods_classModel_1_1UndoCommand"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a6071571dbb4c416c2525fdcaf0cec426">redo</a> ()</td></tr>
-<tr class="separator:a6071571dbb4c416c2525fdcaf0cec426 inherit pub_methods_classModel_1_1UndoCommand"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1247b5d5ac3933c48422ed9bf403e101 inherit pub_methods_classModel_1_1UndoCommand"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a1247b5d5ac3933c48422ed9bf403e101">target</a> () const </td></tr>
 <tr class="separator:a1247b5d5ac3933c48422ed9bf403e101 inherit pub_methods_classModel_1_1UndoCommand"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49fdab5e65ef948f1996a1f1fbb6b69e inherit pub_methods_classModel_1_1UndoCommand"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a49fdab5e65ef948f1996a1f1fbb6b69e">undo</a> ()</td></tr>
-<tr class="separator:a49fdab5e65ef948f1996a1f1fbb6b69e inherit pub_methods_classModel_1_1UndoCommand"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a1909da7e63878d64e15821127849ecd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1NodeOwningCommand.html#a1909da7e63878d64e15821127849ecd5">moveNodes</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *root, <a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp;source, <a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp;<a class="el" href="classModel_1_1UndoCommand.html#a1247b5d5ac3933c48422ed9bf403e101">target</a>)</td></tr>
+<tr class="separator:a1909da7e63878d64e15821127849ecd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -237,6 +243,46 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1909da7e63878d64e15821127849ecd5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::NodeOwningCommand::moveNodes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
+          <td class="paramname"><em>root</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a192e93f0eceece00235e602789c8bdaf"></a>
 <div class="memitem">
 <div class="memproto">
@@ -265,6 +311,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9ea5dc48edf8fe397bcdc29198753de5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::NodeOwningCommand::redo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classModel_1_1UndoCommand.html#a6071571dbb4c416c2525fdcaf0cec426">Model::UndoCommand</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classModel_1_1ListPut.html#ab2c9696f383c4c674341cbfbddb84643">Model::ListPut</a>, <a class="el" href="classModel_1_1ListInsert.html#a65bbbdb96bc1cd50b230d4ebfd2af5eb">Model::ListInsert</a>, <a class="el" href="classModel_1_1CompositeNodeChangeChild.html#a9852721860efab52bedfa0b94a30027f">Model::CompositeNodeChangeChild</a>, and <a class="el" href="classModel_1_1ListRemove.html#ac0d9b3d809c6b38460b4eb4e1dca34cb">Model::ListRemove</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ace2a165d89e21f780a24f06fd96066b0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -290,6 +363,33 @@ Private Attributes</h2></td></tr>
 <p>The default implementaion returns nullptr. Reimplement this in commands that own a node. </p>
 
 <p>Reimplemented from <a class="el" href="classModel_1_1UndoCommand.html#a5b810bd771330138dc651ff29859f871">Model::UndoCommand</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a536edec833bf7bbefcbde4699c053f6e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::NodeOwningCommand::undo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classModel_1_1UndoCommand.html#a49fdab5e65ef948f1996a1f1fbb6b69e">Model::UndoCommand</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classModel_1_1ListPut.html#ab369cd599b14d2e33c3d44a3f863cf63">Model::ListPut</a>, <a class="el" href="classModel_1_1ListInsert.html#ae419fa2308ee89223de35f6bee60699a">Model::ListInsert</a>, <a class="el" href="classModel_1_1CompositeNodeChangeChild.html#a2e0cd06f5452f4cc409e2d71eab23be8">Model::CompositeNodeChangeChild</a>, and <a class="el" href="classModel_1_1ListRemove.html#a686661348678cc3f06512662da6537a0">Model::ListRemove</a>.</p>
 
 </div>
 </div>

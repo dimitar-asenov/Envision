@@ -1,7 +1,7 @@
 var searchData=
 [
   ['hactionprompt',['HActionPrompt',['../classInteraction_1_1HActionPrompt.html#a8d20a46777f42af1e6f3d9f31a7afe6c',1,'Interaction::HActionPrompt']]],
-  ['handlearray',['handleArray',['../classOODebug_1_1JavaDebugger.html#ae3f3956c53aa9362455c937d2b1ac27e',1,'OODebug::JavaDebugger']]],
+  ['handlearray',['handleArray',['../classOODebug_1_1JavaDebugger.html#a65425bed7202bc602093470c3ead072e',1,'OODebug::JavaDebugger']]],
   ['handlebreakpoint',['handleBreakpoint',['../classOODebug_1_1JavaDebugger.html#ad0fb39d07fcd6f09fa4cd6d1a3e9406f',1,'OODebug::JavaDebugger']]],
   ['handleclassdecl',['HandleClassDecl',['../classEnvisionAstConsumer.html#a036b2276bdd62e0bad34efbcfbdb0669',1,'EnvisionAstConsumer']]],
   ['handleclassprepare',['handleClassPrepare',['../classOODebug_1_1JavaDebugger.html#a548167fafc6bd9d4b5ca79c12c99e985',1,'OODebug::JavaDebugger']]],
@@ -24,7 +24,7 @@ var searchData=
   ['handletagdecldefinition',['HandleTagDeclDefinition',['../classEnvisionAstConsumer.html#a137abc46c66499b89ed443ccca7301d6',1,'EnvisionAstConsumer']]],
   ['handletimerevent',['handleTimerEvent',['../classComments_1_1CommentDiagramToolbar.html#a1f04f16cbb9931e0420f5f441137fe45',1,'Comments::CommentDiagramToolbar']]],
   ['handletranslationunit',['HandleTranslationUnit',['../classCppImport_1_1ClangAstConsumer.html#a68a2d97636ccac31c5974ee13963e0e0',1,'CppImport::ClangAstConsumer']]],
-  ['handlevalues',['handleValues',['../classOODebug_1_1JavaDebugger.html#a09647dff4ba83a4616a6260854fbde10',1,'OODebug::JavaDebugger']]],
+  ['handlevalues',['handleValues',['../classOODebug_1_1JavaDebugger.html#a12532f0a389a05340adaab396aa6c4c3',1,'OODebug::JavaDebugger']]],
   ['handlevmstart',['handleVMStart',['../classOODebug_1_1JavaDebugger.html#ae8f8cd8906e19f93f53328b54f83335c',1,'OODebug::JavaDebugger']]],
   ['handlexmacros',['handleXMacros',['../classCppImport_1_1AllMetaDefinitions.html#aaccfdc4cc9fc5566d23fbf690c759b0b',1,'CppImport::AllMetaDefinitions']]],
   ['harrayinitializer',['HArrayInitializer',['../classOOInteraction_1_1HArrayInitializer.html#ae73fd70d115122e010a833ae13be319e',1,'OOInteraction::HArrayInitializer']]],

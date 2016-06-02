@@ -110,8 +110,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af7c174a880df760cea5665227888f26c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ad2748269999457c09640737db8e7cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Commit.html#a9ad2748269999457c09640737db8e7cc">getFileContent</a> (QString fileName, const char *&amp;content, int &amp;contentSize, bool exactFileNameMatching) const </td></tr>
 <tr class="separator:a9ad2748269999457c09640737db8e7cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaa2821ceb9988f53ada1b7ed1da5efd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Commit.html#abaa2821ceb9988f53ada1b7ed1da5efd">isValidMatch</a> (QString content, int indexOfId, int &amp;start, int &amp;end, bool findChildrenByParentId) const </td></tr>
-<tr class="separator:abaa2821ceb9988f53ada1b7ed1da5efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7dde01d33f8a764a093b628207bf268"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Commit.html#ae7dde01d33f8a764a093b628207bf268">isValidMatch</a> (const char *content, qint64 size, const char *indexOfId, int &amp;start, int &amp;end, bool findChildrenByParentId) const </td></tr>
+<tr class="separator:ae7dde01d33f8a764a093b628207bf268"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade8771eca5ca636769c3e74269b3c70c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structFilePersistence_1_1CommitMetaData.html">CommitMetaData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Commit.html#ade8771eca5ca636769c3e74269b3c70c">metaData</a> () const </td></tr>
 <tr class="separator:ade8771eca5ca636769c3e74269b3c70c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e3521c6e752d0b265a21a306b6a6a80"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Commit.html#a8e3521c6e752d0b265a21a306b6a6a80">nodeLinesFromId</a> (<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> id, bool findChildrenByParentId=false) const </td></tr>
@@ -283,20 +283,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abaa2821ceb9988f53ada1b7ed1da5efd"></a>
+<a class="anchor" id="ae7dde01d33f8a764a093b628207bf268"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool FilePersistence::Commit::isValidMatch </td>
           <td>(</td>
-          <td class="paramtype">QString&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>content</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">qint64&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>indexOfId</em>, </td>
         </tr>
         <tr>
