@@ -46,6 +46,15 @@ ReviewComment::ReviewComment(Comments::CommentNode* commentNode, Model::Text* da
 	setComment(commentNode);
 }
 
+QString ReviewComment::getSystemUsername()
+{
+	QString username = qgetenv("USER");
+	if (username.isEmpty())
+		username = qgetenv("USERNAME");
+	return username;
+}
+
+
 ReviewComment::ReviewComment(Model::Node* parent) :
 	ReviewComment{new Comments::CommentNode{"comment here"},
 							  new Model::Text{QDateTime::currentDateTime().toString()}, parent}

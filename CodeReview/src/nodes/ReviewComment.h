@@ -51,6 +51,8 @@ class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 
 	public:
 		ReviewComment(Comments::CommentNode* commentNode, Model::Text* date, Model::Node* parent=nullptr);
+		// TODO move to more fitting place
+		static QString getSystemUsername();
 
 };
 
