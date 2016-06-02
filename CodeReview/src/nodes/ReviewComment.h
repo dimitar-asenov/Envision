@@ -54,7 +54,7 @@ class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 		QString username();
 
 		// TODO move to more fitting place
-		static QString getSystemUsername();
+		static QString systemUsername();
 
 	private:
 		qint64 date_{};

@@ -42,11 +42,11 @@ ReviewComment::ReviewComment(Comments::CommentNode* commentNode, qint64 date, Mo
 	Super{parent, ReviewComment::getMetaData()}
 {
 	date_ = date;
-	username_ = getSystemUsername();
+	username_ = systemUsername();
 	setComment(commentNode);
 }
 
-QString ReviewComment::getSystemUsername()
+QString ReviewComment::systemUsername()
 {
 	QString username = qgetenv("USER");
 	if (username.isEmpty())
