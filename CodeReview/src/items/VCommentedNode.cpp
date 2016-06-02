@@ -47,6 +47,11 @@ VCommentedNode::VCommentedNode(Visualization::Item* parent, NodeType* node, cons
 {
 }
 
+Visualization::Item::UpdateType VCommentedNode::needsUpdate()
+{
+	return Visualization::Item::StandardUpdate;
+}
+
 void VCommentedNode::initializeForms()
 {
 	auto comments = item<Visualization::VList>(&I::comments_, [](I* v) {

@@ -72,6 +72,19 @@ void VReviewComment::initializeForms()
 	addForm(container);
 }
 
+Visualization::Item::UpdateType VReviewComment::needsUpdate()
+{
+	return Visualization::Item::StandardUpdate;
+}
+
+void VReviewComment::determineChildren()
+{
+	Super::determineChildren();
+
+	// TODO implement mechanism for time-based updates to avoid exploiting determineChildren and needsUpdate
+	updateDateText();
+}
+
 void VReviewComment::updateDateText()
 {
 	auto commentDate = QDateTime::fromMSecsSinceEpoch(node()->date());

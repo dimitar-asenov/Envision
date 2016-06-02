@@ -55,6 +55,8 @@ class CODEREVIEW_API VReviewComment : public Super<Visualization::ItemWithNode<V
 	public:
 		VReviewComment(Visualization::Item* parent, NodeType* nodeType, const StyleType* style = itemStyles().get());
 		static void initializeForms();
+		virtual void determineChildren() override;
+		virtual Visualization::Item::UpdateType needsUpdate() override;
 
 	private:
 		void updateDateText();
