@@ -46,14 +46,23 @@ class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReviewComment)
 
-	ATTRIBUTE(Model::Text, date, setDate)
 	ATTRIBUTE(Comments::CommentNode, commentNode, setComment)
 
 	public:
-		ReviewComment(Comments::CommentNode* commentNode, Model::Text* date, Model::Node* parent=nullptr);
+		ReviewComment(Comments::CommentNode* commentNode, qint64 date, Model::Node* parent=nullptr);
+		qint64 date();
+		QString username();
+
 		// TODO move to more fitting place
 		static QString getSystemUsername();
 
+	private:
+		qint64 date_{};
+		QString username_;
+
 };
+
+inline qint64 ReviewComment::date() {return date_;}
+inline QString ReviewComment::username() {return username_;}
 
 }

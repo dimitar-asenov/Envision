@@ -1,0 +1,9 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Text/default">
+	<pen>
+		<color>#757575</color>
+	</pen>
+	<font>
+		<size>13</size>
+	</font>
+</style>

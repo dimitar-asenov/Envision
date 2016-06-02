@@ -5,8 +5,7 @@
 		<shape prototypes="shape/Box/default">
 			Box
 			<outline>
-				<width>1</width>
-				<color>#a0a0a0</color>
+				<style>0</style>
 			</outline>
 			<cornerRadius>5</cornerRadius>
 			<cornerType>0</cornerType>

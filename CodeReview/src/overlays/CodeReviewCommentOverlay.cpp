@@ -66,8 +66,7 @@ void CodeReviewCommentOverlay::initializeForms()
 				->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(1, 0, item<Visualization::Static>(&I::icon_, &StyleType::icon))
-				->put(2, 0, item<Visualization::Static>(&I::title_, &StyleType::title));
+				->put(1, 0, item<Visualization::Static>(&I::icon_, &StyleType::icon));
 
 	auto grid = (new Visualization::GridLayoutFormElement{})
 							->setColumnStretchFactor(0, 1)

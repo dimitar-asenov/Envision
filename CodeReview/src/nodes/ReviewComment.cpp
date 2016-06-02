@@ -36,13 +36,13 @@ namespace CodeReview
 
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ReviewComment)
 
-DEFINE_ATTRIBUTE(ReviewComment, date, Text, false, false, true)
 DEFINE_ATTRIBUTE(ReviewComment, commentNode, CommentNode, false, false, true)
 
-ReviewComment::ReviewComment(Comments::CommentNode* commentNode, Model::Text* date, Model::Node* parent) :
+ReviewComment::ReviewComment(Comments::CommentNode* commentNode, qint64 date, Model::Node* parent) :
 	Super{parent, ReviewComment::getMetaData()}
 {
-	setDate(date);
+	date_ = date;
+	username_ = getSystemUsername();
 	setComment(commentNode);
 }
 
@@ -57,7 +57,7 @@ QString ReviewComment::getSystemUsername()
 
 ReviewComment::ReviewComment(Model::Node* parent) :
 	ReviewComment{new Comments::CommentNode{"comment here"},
-							  new Model::Text{QDateTime::currentDateTime().toString()}, parent}
+							  QDateTime::currentMSecsSinceEpoch(), parent}
 {}
 
 ReviewComment::ReviewComment(Model::Node *, Model::PersistentStore &, bool)

@@ -38,7 +38,7 @@
 #include "Comments/src/items/VComment.h"
 
 #include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/EmptyItem.h"
 
 
@@ -53,11 +53,13 @@ class CODEREVIEW_API VReviewComment : public Super<Visualization::ItemWithNode<V
 	ITEM_COMMON(VReviewComment)
 
 	public:
-		VReviewComment(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		VReviewComment(Visualization::Item* parent, NodeType* nodeType, const StyleType* style = itemStyles().get());
 		static void initializeForms();
 
 	private:
-		Visualization::VText* date_{};
+		void updateDateText();
+		Visualization::Text* date_{};
+		Visualization::Text* username_{};
 		Comments::VComment* comment_{};
 };
 
