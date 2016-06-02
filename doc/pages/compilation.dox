@@ -41,22 +41,23 @@ To install the dependencies on Ubuntu 16.04, run the following:
 Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want
 to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.
 
-\section qtcreator Qt Creator (recommended for C++; does not work with Java)
+\section qtcreator Qt Creator
 	-# Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process
 	Qt Creator will create additional directories alongside the repository clone (for the out-of-source build).
 	-# Start Qt Creator and configure the version of Qt that you want to use:
-		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.
+		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.5 or later.
 			This could be either Qt in PATH, or a Qt version that
-			you compiled yourself. Qt 5.5 or later is required. See below for manual Qt compilation instructions.
+			you compiled yourself. See below for manual Qt compilation instructions.
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
 	-# Open the top-level \c CMakeLists.txt file with Qt Creator.
-	-# Use the following arguments for CMake \verbatim -DCMAKE_BUILD_TYPE=Debug \endverbatim
+	-# On Qt creator 3.x, use the following arguments for CMake \verbatim -DCMAKE_BUILD_TYPE=Debug \endverbatim
 	  or alternatively, if you want to compile with clang:  \verbatim -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-3.8 \endverbatim
 	-# In the Projects view, under *build* make sure that:
 		- The build directory points to a directory that is a peer of Envision's directory. e.g.
 			\verbatim../build-envision-Desktop-Debug\endverbatim
-	-# Also in the Projects view, change the arguments of make to specify parallel compilation and the *install* target:
+		- (Qt creator 4 or later) the CMAKE_BUILD_TYPE variable is set to *Debug*.
+	-# Also in the Projects view, change the arguments of cmake/make to specify parallel compilation and the *install* target:
 		\verbatim-j8 install\endverbatim
 		The *install* target is needed in order to copy all necessary files to the DebugBuild directory.
 		Substitute 8 for the number of threads your hardware supports.
