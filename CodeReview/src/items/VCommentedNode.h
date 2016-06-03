@@ -53,6 +53,7 @@ class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<V
 	public:
 		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		static void initializeForms();
+		virtual Visualization::Item::UpdateType needsUpdate() override;
 
 	private:
 		Visualization::VList* comments_{};

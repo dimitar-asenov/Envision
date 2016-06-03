@@ -1,5 +1,15 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Frame/default">
+		Frame
+
+		<topWidth>1</topWidth>
+		<topBrush><color>#858585</color></topBrush>
+
+		<contentBrush>
+			<color>#ffffff</color>
+		</contentBrush>
+	</shape>
 	<shape prototypes="shape/Box/default">
 		Box
 		<cornerType>0</cornerType>
@@ -12,8 +22,13 @@
 			<style>0</style>
 		</outline>
 	</shape>
-	<date prototypes="item/Text/default" />
+
+	<date prototypes="item/Text/codeReviewHeaderText" />
+
+	<username prototypes="item/Text/codeReviewHeaderText" />
+
 	<comment prototypes="item/VComment/default">
+		<commentText prototypes="item/Text/default"/>
 		<shape>
 			Box
 			<outline>
@@ -26,7 +41,6 @@
 			<cornerType>0</cornerType>
 			<cornerRadius>2</cornerRadius>
 		</shape>
-
 		<editList>
 			<shape>
 				Box

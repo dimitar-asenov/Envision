@@ -30,6 +30,7 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
 
 namespace Comments {
 
@@ -38,6 +39,7 @@ class COMMENTS_API VCommentStyle : public Super<Visualization::DeclarativeItemBa
 		virtual ~VCommentStyle() override;
 
 		Property<Visualization::VListStyle> editList{this, "editList"};
+		Property<Visualization::TextStyle> commentText{this, "commentText"};
 };
 
 }

@@ -43,44 +43,45 @@ namespace VersionControlUI {
 
 class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINode>
 {
-		NODE_DECLARE_STANDARD_METHODS(DiffComparisonPair)
+	NODE_DECLARE_STANDARD_METHODS(DiffComparisonPair)
 
-		public:
-			DiffComparisonPair(Model::Node* oldVersionNode, Model::Node* newVersionNode);
+	public:
+		DiffComparisonPair(Model::Node* oldVersionNode, Model::Node* newVersionNode);
 
-			virtual QJsonValue toJson() const override;
+		virtual QJsonValue toJson() const override;
 
-			Model::Node* oldVersionNode();
-			Model::Node* newVersionNode();
+		Model::Node* oldVersionNode();
+		Model::Node* newVersionNode();
 
-			Model::Text* newVersionObjectPath();
-			Model::Text* oldVersionObjectPath();
+		Model::Text* newVersionObjectPath();
+		Model::Text* oldVersionObjectPath();
 
-			Model::Text* singleObjectPath();
+		Model::Text* singleObjectPath();
 
-			bool twoObjectPathsDefined();
-			QString comparisonName();
+		bool twoObjectPathsDefined();
+		QString comparisonName();
 
 
-		private:
-			bool twoObjectPathsDefined_{};
+	private:
+		bool twoObjectPathsDefined_{};
 
-			Model::Node* oldVersionNode_{};
-			Model::Node* newVersionNode_{};
+		Model::Node* oldVersionNode_{};
+		Model::Node* newVersionNode_{};
 
-			Model::Text* newVersionObjectPath_{};
-			Model::Text* oldVersionObjectPath_{};
+		Model::Text* newVersionObjectPath_{};
+		Model::Text* oldVersionObjectPath_{};
 
-			Model::Text* singleObjectPath_{};
+		Model::Text* singleObjectPath_{};
 
-			QString comparisonName_;
+		QString comparisonName_;
 
-			QString computeObjectPath(Model::Node* node);
-			QString computeComponentName();
+		QString computeObjectPath(Model::Node* node);
+		QString computeComponentName();
 
-			void computeObjectPath();
+		void computeObjectPath();
 
-			void setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName);
+		void setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName);
+
 };
 
 inline Model::Node* DiffComparisonPair::newVersionNode() {return newVersionNode_;}

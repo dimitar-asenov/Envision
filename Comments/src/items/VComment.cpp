@@ -357,7 +357,7 @@ Item* VComment::createTextualCommentElement(QStringList& contents, bool asHtml)
 		}
 		else
 		{
-			auto text = new Text{this, Text::itemStyles().get("comment"), replaceMarkdown(joined)};
+			auto text = new Text{this, &style()->commentText(), replaceMarkdown(joined)};
 			text->setTextFormat(Qt::RichText);
 			commentElements_.append(text);
 			item = text;

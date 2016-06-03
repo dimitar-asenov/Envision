@@ -55,8 +55,6 @@ void HMovableItem::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMou
 void HMovableItem::move(Visualization::Item* item, const QPointF& to)
 {
 	QPointF dest{itemPosition_ + to};
-	if (dest.x() < 0) dest.setX(0);
-	if (dest.y() < 0) dest.setY(0);
 
 	item->setPos(dest);
 }

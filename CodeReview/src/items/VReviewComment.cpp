@@ -39,22 +39,68 @@ DEFINE_ITEM_COMMON(VReviewComment, "item")
 VReviewComment::VReviewComment(Visualization::Item* parent, NodeType* node, const StyleType* style)
 	: Super{parent, node, style}
 {
+	date_ = new Visualization::Text{this,  ""};
 }
 
 void VReviewComment::initializeForms()
 {
 
-	auto attr = (new Visualization::GridLayoutFormElement{})
+	auto header = (new Visualization::GridLayoutFormElement{})
+			->setColumnStretchFactor(1, 1)
+			->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})
+			->setNoInnerCursors([](Item*){return true;})
+			->setHorizontalSpacing(10)
+			->setColumnHorizontalAlignment(3, Visualization::LayoutStyle::Alignment::Right)
+			->put(0, 0, item<Visualization::VText>(&I::username_, [](I* v)
+					{return v->node()->usernameNode();}, &StyleType::username))
+			->put(3, 0, item<Visualization::Text>(&I::date_, &StyleType::date));
+
+
+	auto container = (new Visualization::GridLayoutFormElement{})
 			->setColumnStretchFactor(0, 1)
 			->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
 			->setNoBoundaryCursors([](Item*){return true;})
 			->setNoInnerCursors([](Item*){return true;})
-			->put(0, 0, item<Visualization::VText>(&I::date_, [](I* v){return v->node()->date();}, &StyleType::date))
+			->setVerticalSpacing(5)
+			->setBottomMargin(10)
+			->setTopMargin(5)
+			->put(0, 0, header)
 			->put(0, 1, item<Comments::VComment>(&I::comment_, [](I* v)
 				{return v->node()->commentNode();}, &StyleType::comment));
 
-	addForm((new Visualization::GridLayoutFormElement{})
-			  ->put(0, 0, attr));
+	addForm(container);
+}
+
+Visualization::Item::UpdateType VReviewComment::needsUpdate()
+{
+	return Visualization::Item::StandardUpdate;
+}
+
+void VReviewComment::determineChildren()
+{
+	Super::determineChildren();
+	updateDateText();
+}
+
+void VReviewComment::updateDateText()
+{
+	auto commentDate = QDateTime::fromMSecsSinceEpoch(node()->date());
+	auto currentDate = QDateTime::currentDateTime();
+	auto secsToCurrentDate = commentDate.secsTo(currentDate);
+	if (secsToCurrentDate < 60)
+		date_->setText("Some seconds ago");
+	else if (secsToCurrentDate >= 60 && secsToCurrentDate < 120)
+	{
+				date_->setText("1 minute ago");
+	}
+	else if (secsToCurrentDate < 3600)
+	{
+		int minutes = secsToCurrentDate / 60.0;
+		date_->setText(QString::number(minutes) + " minutes ago");
+	}
+	else
+		date_->setText(commentDate.toString("dd.MM.yyyy hh:mm"));
 }
 
 }

@@ -41,6 +41,7 @@ class CODEREVIEW_API VReviewCommentStyle : public Super<Visualization::Declarati
 		virtual ~VReviewCommentStyle() override;
 		Property<Comments::VCommentStyle> comment{this, "comment"};
 		Property<Visualization::TextStyle> date{this, "date"};
+		Property<Visualization::TextStyle> username{this, "username"};
 
 };
 

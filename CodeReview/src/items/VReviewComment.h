@@ -38,6 +38,7 @@
 #include "Comments/src/items/VComment.h"
 
 #include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/EmptyItem.h"
 
@@ -55,9 +56,13 @@ class CODEREVIEW_API VReviewComment : public Super<Visualization::ItemWithNode<V
 	public:
 		VReviewComment(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		static void initializeForms();
+		virtual void determineChildren() override;
+		virtual Visualization::Item::UpdateType needsUpdate() override;
 
 	private:
-		Visualization::VText* date_{};
+		void updateDateText();
+		Visualization::Text* date_{};
+		Visualization::VText* username_{};
 		Comments::VComment* comment_{};
 };
 
