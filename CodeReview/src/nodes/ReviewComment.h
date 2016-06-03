@@ -33,6 +33,8 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
+#include "ModelBase/src/nodes/Text.h"
+
 namespace CodeReview
 {
 class ReviewComment;
@@ -47,22 +49,19 @@ class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReviewComment)
 
 	ATTRIBUTE(Comments::CommentNode, commentNode, setComment)
+	ATTRIBUTE_VALUE(Model::Text, username, setUsername, QString)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Text, dateString, setDateString, QString)
 
 	public:
 		ReviewComment(Comments::CommentNode* commentNode, qint64 date, Model::Node* parent=nullptr);
 		qint64 date();
-		QString username();
+		void setDate(qint64 date);
 
 		// TODO move to more fitting place
 		static QString systemUsername();
-
-	private:
-		qint64 date_{};
-		QString username_;
-
 };
 
-inline qint64 ReviewComment::date() {return date_;}
-inline QString ReviewComment::username() {return username_;}
+inline qint64 ReviewComment::date() { return dateString().toLongLong(); }
+inline void ReviewComment::setDate(qint64 date) { setDateString(QString::number(date)); }
 
 }

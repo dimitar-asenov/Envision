@@ -37,12 +37,14 @@ namespace CodeReview
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(ReviewComment)
 
 DEFINE_ATTRIBUTE(ReviewComment, commentNode, CommentNode, false, false, true)
+DEFINE_ATTRIBUTE(ReviewComment, username, Text, false, false, true)
+DEFINE_ATTRIBUTE(ReviewComment, dateString, Text, false, false, true)
 
 ReviewComment::ReviewComment(Comments::CommentNode* commentNode, qint64 date, Model::Node* parent) :
 	Super{parent, ReviewComment::getMetaData()}
 {
-	date_ = date;
-	username_ = systemUsername();
+	setUsername(systemUsername());
+	setDate(date);
 	setComment(commentNode);
 }
 
