@@ -53,7 +53,7 @@ class CODEREVIEW_API VReviewComment : public Super<Visualization::ItemWithNode<V
 	ITEM_COMMON(VReviewComment)
 
 	public:
-		VReviewComment(Visualization::Item* parent, NodeType* nodeType, const StyleType* style = itemStyles().get());
+		VReviewComment(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		static void initializeForms();
 		virtual void determineChildren() override;
 		virtual Visualization::Item::UpdateType needsUpdate() override;

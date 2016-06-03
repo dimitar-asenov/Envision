@@ -36,11 +36,11 @@ namespace CodeReview
 
 DEFINE_ITEM_COMMON(VReviewComment, "item")
 
-VReviewComment::VReviewComment(Visualization::Item* parent, NodeType* nodeType, const StyleType* style)
-	: Super{parent, nodeType, style}
+VReviewComment::VReviewComment(Visualization::Item* parent, NodeType* node, const StyleType* style)
+	: Super{parent, node, style}
 {
 	date_ = new Visualization::Text{this,  ""};
-	username_ = new Visualization::Text{this, node()->username()};
+	username_ = new Visualization::Text{this, node->username()};
 }
 
 void VReviewComment::initializeForms()
