@@ -39,6 +39,7 @@
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/EmptyItem.h"
 
 
@@ -61,7 +62,7 @@ class CODEREVIEW_API VReviewComment : public Super<Visualization::ItemWithNode<V
 	private:
 		void updateDateText();
 		Visualization::Text* date_{};
-		Visualization::Text* username_{};
+		Visualization::VText* username_{};
 		Comments::VComment* comment_{};
 };
 

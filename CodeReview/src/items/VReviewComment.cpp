@@ -40,7 +40,6 @@ VReviewComment::VReviewComment(Visualization::Item* parent, NodeType* node, cons
 	: Super{parent, node, style}
 {
 	date_ = new Visualization::Text{this,  ""};
-	username_ = new Visualization::Text{this, node->username()};
 }
 
 void VReviewComment::initializeForms()
@@ -53,7 +52,8 @@ void VReviewComment::initializeForms()
 			->setNoInnerCursors([](Item*){return true;})
 			->setHorizontalSpacing(10)
 			->setColumnHorizontalAlignment(3, Visualization::LayoutStyle::Alignment::Right)
-			->put(0, 0, item<Visualization::Text>(&I::username_, &StyleType::username))
+			->put(0, 0, item<Visualization::VText>(&I::username_, [](I* v)
+					{return v->node()->usernameNode();}, &StyleType::username))
 			->put(3, 0, item<Visualization::Text>(&I::date_, &StyleType::date));
 
 
