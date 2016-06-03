@@ -80,8 +80,6 @@ Visualization::Item::UpdateType VReviewComment::needsUpdate()
 void VReviewComment::determineChildren()
 {
 	Super::determineChildren();
-
-	// TODO implement mechanism for time-based updates to avoid exploiting determineChildren and needsUpdate
 	updateDateText();
 }
 
