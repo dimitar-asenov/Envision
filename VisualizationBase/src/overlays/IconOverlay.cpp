@@ -44,8 +44,8 @@ void IconOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(icon_, availableWidth, availableHeight);
 
-	// match scale of the associated item
-	setScale(associatedItem()->totalScale());
+	if (style()->matchAssociatedItemScale())
+		setScale(associatedItem()->totalScale());
 
 	QPointF pos = hasShape() ? QPoint{getShape()->contentLeft(), getShape()->contentTop()} : QPoint{0, 0};
 

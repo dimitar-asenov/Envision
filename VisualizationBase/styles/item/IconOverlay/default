@@ -5,4 +5,5 @@
 	<icon prototypes="item/Symbol/default">
 		<symbol>someIcon</symbol>
 	</icon>
+	<matchAssociatedItemScale>false</matchAssociatedItemScale>
 </style>
