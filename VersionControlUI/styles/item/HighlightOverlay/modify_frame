@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="default">
+<style prototypes="change">
         <shape prototypes="shape/Frame/default">
 		Frame
 		<topWidth>1</topWidth>

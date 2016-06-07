@@ -50,7 +50,7 @@
      id="layer1"
      transform="translate(0,-1004.3622)">
     <path
-       style="fill:#bf9000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:1;fill-opacity:0.50196081"
+       style="fill:#bf9000;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:1;fill-opacity:0.80196081"
        d="M 9,1041.3622 47.931929,1052.311 39,1015.3622 l -3,16 -24,-27 -12,12 27,22 z"
        id="path8068"
        inkscape:connector-curvature="0"

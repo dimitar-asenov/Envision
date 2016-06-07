@@ -38,6 +38,7 @@ class VISUALIZATIONBASE_API IconOverlayStyle : public Super<ItemStyle> {
 
 		Property<StaticStyle> icon{this, "icon"};
 		Property<QString> placement{this, "placement"};
+		Property<bool> matchAssociatedItemScale{this, "matchAssociatedItemScale"};
 };
 
 }

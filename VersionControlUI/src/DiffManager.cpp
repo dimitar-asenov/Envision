@@ -277,7 +277,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 														 QList<ChangeWithNodes> changesWithNodes)
 {
 	static const QString arrowLayer = "move_arrows";
-	diffViewItem->setArrowStyle(arrowLayer, "thick");
+	diffViewItem->setArrowStyle(arrowLayer, "move_arrow");
 
 	QSet<Visualization::Item*> allItemsToScale;
 	for (auto change : changesWithNodes)
@@ -334,7 +334,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		if (change.changeType_== FilePersistence::ChangeType::Move)
 		{
 			auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
-					  Visualization::ArrowOverlay::itemStyles().get("thick")};
+					  Visualization::ArrowOverlay::itemStyles().get("move_arrow")};
 			diffViewItem->addOverlay(overlay, arrowLayer);
 		}
 

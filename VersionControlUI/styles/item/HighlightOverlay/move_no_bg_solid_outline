@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="default">
+<style prototypes="change">
         <shape prototypes="shape/Box/default">
 		Box
 		<backgroundBrush>

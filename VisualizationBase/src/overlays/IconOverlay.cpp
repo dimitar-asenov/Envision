@@ -44,6 +44,9 @@ void IconOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(icon_, availableWidth, availableHeight);
 
+	if (style()->matchAssociatedItemScale())
+		setScale(associatedItem()->totalScale());
+
 	QPointF pos = hasShape() ? QPoint{getShape()->contentLeft(), getShape()->contentTop()} : QPoint{0, 0};
 
 	if (style()->placement() == "left-inside") setPos(associatedItem()->mapToScene(0, 0) - pos);
