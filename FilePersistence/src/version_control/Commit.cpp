@@ -108,22 +108,23 @@ bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfI
 {
 	start = indexOfId-content;
 	end = start;
+	int precedingClosingBraceCount = 0;
 	// start is the first character of the line containing id
 	while (start >= 0 && content[start] != '\n')
 	{
-		// String is of the form {.*} {id}
-		if (!findChildrenByParentId && content[start] == '}') return false;
+		// Remove fake-ids
+		if (content[start] == '}')
+		{
+			precedingClosingBraceCount++;
+			if (!findChildrenByParentId || precedingClosingBraceCount >1)
+				return false;
+		}
 		start--;
 	}
 	start++;
-
 	// end is the character after the line containing id
-	while (end < size && content[end] != '\n')
-	{
-		// String is of the form {id} {*.}
-		if (findChildrenByParentId && content[end] == '{') return false;
-		end++;
-	}
+	while (end < size && content[end] != '\n')	end++;
+
 	return true;
 }
 
