@@ -108,7 +108,7 @@ bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfI
 {
 	start = indexOfId-content;
 	end = start;
-	int precClosedBracketCnt = 0;
+	int precedingClosingBraceCount = 0;
 	// start is the first character of the line containing id
 	while (start >= 0 && content[start] != '\n')
 	{
@@ -116,8 +116,8 @@ bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfI
 		if (content[start] == '}')
 		{
 			if (!findChildrenByParentId)	return false;
-			precClosedBracketCnt++;
-			if (precClosedBracketCnt==2)	return false;
+			precedingClosingBraceCount++;
+			if (precedingClosingBraceCount==2)	return false;
 		}
 		start--;
 	}
