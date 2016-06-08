@@ -107,7 +107,7 @@ bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfI
 								  bool findChildrenByParentId) const
 {
 	start = indexOfId-content;
-	end = start;
+	end = start+1;
 	// start is the first character of the line containing id
 	while (start >= 0 && content[start] != '\n')
 	{

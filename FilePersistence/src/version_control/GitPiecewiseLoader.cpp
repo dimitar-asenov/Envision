@@ -58,7 +58,6 @@ QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 		commit_.reset(repo_->getCommit(revision_));
 
 	auto s = commit_->nodeLinesFromId(id, true);
-	Q_ASSERT(s.size() == 1);
 
 	for (auto line : s)
 		if (!isPersistenceUnit(line))
