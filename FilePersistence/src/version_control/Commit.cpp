@@ -115,9 +115,10 @@ bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfI
 		// Remove fake-ids
 		if (content[start] == '}')
 		{
-			if (!findChildrenByParentId)	return false;
 			precedingClosingBraceCount++;
-			if (precedingClosingBraceCount==2)	return false;
+			if ((findChildrenByParentId && precedingClosingBraceCount > 1) ||
+				(!findChildrenByParentId && precedingClosingBraceCount > 0))
+				return false;
 		}
 		start--;
 	}
