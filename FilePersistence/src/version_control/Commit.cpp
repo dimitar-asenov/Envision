@@ -116,8 +116,7 @@ bool Commit::isValidMatch(const char* content, qint64 size, const char* indexOfI
 		if (content[start] == '}')
 		{
 			precedingClosingBraceCount++;
-			if ((findChildrenByParentId && precedingClosingBraceCount > 1) ||
-				(!findChildrenByParentId && precedingClosingBraceCount > 0))
+			if (!findChildrenByParentId || precedingClosingBraceCount >1)
 				return false;
 		}
 		start--;
