@@ -28,61 +28,19 @@
 
 #include "../versioncontrolui_api.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VDiffComparisonPairStyle.h"
-
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/Static.h"
-
-#include "../nodes/DiffComparisonPair.h"
-
-#include "ObjectPathCrumb.h"
 
 namespace VersionControlUI
 {
 
-class DiffComparisonPair;
-
-class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::ItemWithNode<VDiffComparisonPair,
-		Visualization::DeclarativeItem<VDiffComparisonPair>, DiffComparisonPair>>
+class VERSIONCONTROLUI_API ObjectPathCrumbStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	ITEM_COMMON(VDiffComparisonPair)
-
 	public:
-		VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
-		virtual bool isSensitiveToScale() const override;
-		virtual void determineChildren() override;
-		virtual int determineForm() override;
+		virtual ~ObjectPathCrumbStyle() override;
 
-		QList<Visualization::Item*> objectPathCrumbsOldNode();
-		QList<Visualization::Item*> objectPathCrumbsNewNode();
-
-	private:
-		Visualization::Item* oldVersionNode_{};
-		Visualization::Item* newVersionNode_{};
-
-		Visualization::VText* oldVersionObjectPath_{};
-		Visualization::VText* newVersionObjectPath_{};
-		Visualization::VText* singleObjectPath_{};
-
-		Visualization::Static* nodeNotFoundIcon_{};
-
-		Visualization::VText* componentType_{};
-
-		QList<Visualization::Item*> objectPathCrumbsOldNode_{};
-		QList<Visualization::Item*> objectPathCrumbsNewNode_{};
-
-		void scaleVisualizations();
-
-		void createObjectPathCrumbsVisualizationList();
+		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::TextStyle> type{this, "type"};
 };
-
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsOldNode() {return objectPathCrumbsOldNode_;}
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsNewNode() {return objectPathCrumbsNewNode_;}
-
-
 }

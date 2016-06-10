@@ -24,65 +24,64 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../versioncontrolui_api.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VDiffComparisonPairStyle.h"
+#include "HObjectPathCrumb.h"
 
 #include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
 
-#include "../nodes/DiffComparisonPair.h"
+#include "ModelBase/src/util/NameResolver.h"
 
-#include "ObjectPathCrumb.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
-namespace VersionControlUI
+#include "VersionControlUI/src/items/VDiffComparisonPair.h"
+
+#include "InteractionBase/src/prompt/Prompt.h"
+
+namespace VersionControlUI {
+
+HObjectPathCrumb* HObjectPathCrumb::instance()
 {
+	static HObjectPathCrumb h;
+	return &h;
+}
 
-class DiffComparisonPair;
-
-class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::ItemWithNode<VDiffComparisonPair,
-		Visualization::DeclarativeItem<VDiffComparisonPair>, DiffComparisonPair>>
+void HObjectPathCrumb::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent* event)
 {
-	ITEM_COMMON(VDiffComparisonPair)
+	GenericHandler::mousePressEvent(target, event);
+	crumbTarget_ = static_cast<ObjectPathCrumb*>(target);
+}
 
-	public:
-		VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
-		virtual bool isSensitiveToScale() const override;
-		virtual void determineChildren() override;
-		virtual int determineForm() override;
+void HObjectPathCrumb::mouseReleaseEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	GenericHandler::mouseReleaseEvent(target, event);
+	if (crumbTarget_)
+	{
+		VersionControlUI::VDiffComparisonPair* vDiffComparisonPair = nullptr;
+		auto parent = crumbTarget_->parent();
 
-		QList<Visualization::Item*> objectPathCrumbsOldNode();
-		QList<Visualization::Item*> objectPathCrumbsNewNode();
+		while (parent && !DCast<VDiffComparisonPair>(parent))
+			parent = parent->parent();
 
-	private:
-		Visualization::Item* oldVersionNode_{};
-		Visualization::Item* newVersionNode_{};
+		vDiffComparisonPair = DCast<VDiffComparisonPair>(parent);
 
-		Visualization::VText* oldVersionObjectPath_{};
-		Visualization::VText* newVersionObjectPath_{};
-		Visualization::VText* singleObjectPath_{};
+		auto currentView = crumbTarget_->scene()->currentViewItem();
 
-		Visualization::Static* nodeNotFoundIcon_{};
+		auto grid = dynamic_cast<Visualization::DynamicGridFormElement*>(currentView->currentForm());
 
-		Visualization::VText* componentType_{};
+		auto focusedIndex = grid->indexOf(currentView, vDiffComparisonPair);
 
-		QList<Visualization::Item*> objectPathCrumbsOldNode_{};
-		QList<Visualization::Item*> objectPathCrumbsNewNode_{};
+		Visualization::MajorMinorIndex indexToInsert;
+		indexToInsert.major_ = focusedIndex.y();
+		indexToInsert.minor_ = focusedIndex.x()+1;
 
-		void scaleVisualizations();
+		auto matches = Model::NameResolver::mostLikelyMatches(crumbTarget_->path()+crumbTarget_->name(), 1);
+		if (matches.size() > 0)
+			currentView->insertNode(matches[0].second, indexToInsert);
+	}
 
-		void createObjectPathCrumbsVisualizationList();
-};
-
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsOldNode() {return objectPathCrumbsOldNode_;}
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsNewNode() {return objectPathCrumbsNewNode_;}
-
+	crumbTarget_ = nullptr;
+}
 
 }

@@ -42,10 +42,36 @@ DEFINE_ITEM_COMMON(VDiffComparisonPair, "item")
 
 VDiffComparisonPair::VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style)
 	: Super{parent, node, style}
-{}
+{
+	createObjectPathCrumbsVisualizationList();
+}
+
+void VDiffComparisonPair::createObjectPathCrumbsVisualizationList()
+{
+	for (auto objectPathCrumbData : node()->objectPathCrumbsDataOldNode())
+		objectPathCrumbsOldNode_.append(new ObjectPathCrumb{objectPathCrumbData, nullptr});
+	for (auto objectPathCrumbData : node()->objectPathCrumbsDataNewNode())
+		objectPathCrumbsNewNode_.append(new ObjectPathCrumb{objectPathCrumbData, nullptr});
+}
 
 void VDiffComparisonPair::initializeForms()
 {
+	auto oldCrumbs = (new Visualization::SequentialLayoutFormElement{})
+					->setHorizontal()
+					->setSpaceBetweenElements(5)
+					->setListOfItems([](Visualization::Item* i) {
+						auto vc = static_cast<VDiffComparisonPair*>(i);
+						return vc->objectPathCrumbsOldNode_;
+					});
+
+	auto newCrumbs = (new Visualization::SequentialLayoutFormElement{})
+					->setHorizontal()
+					->setSpaceBetweenElements(5)
+					->setListOfItems([](Visualization::Item* i) {
+						auto vc = static_cast<VDiffComparisonPair*>(i);
+						return vc->objectPathCrumbsNewNode_;
+					});
+
 	auto oldVersion = item(&I::oldVersionNode_, [](I* v) {
 			return v->node()->oldVersionNode();});
 
@@ -53,11 +79,6 @@ void VDiffComparisonPair::initializeForms()
 			return v->node()->newVersionNode();});
 
 	auto noNodeFound = item<Visualization::Static>(&I::nodeNotFoundIcon_, &StyleType::nodeNotFoundIcon);
-
-
-	auto objectPath = item<Visualization::VText>(&I::singleObjectPath_, [](I* v) {
-			return v->node()->singleObjectPath();},
-			[](I* v) {return &v->style()->singleObjectPath();});
 
 	// form with both nodes and only one object path
 
@@ -68,7 +89,7 @@ void VDiffComparisonPair::initializeForms()
 			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
-			->put(0, 0, objectPath);
+			->put(0, 0, oldCrumbs);
 
 	auto diffGrid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
@@ -96,13 +117,22 @@ void VDiffComparisonPair::initializeForms()
 			->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Left)
 			->setRowStretchFactor(0, 1)
 			->setRowStretchFactor(1, 1)
-			->put(0, 0, infoGrid->clone())
+			->put(0, 0, infoGrid)
 			->put(0, 1, diffGrid->clone());
 
 
 	addForm(container->clone());
 
 	// form with only new node available
+
+	infoGrid = (new Visualization::GridLayoutFormElement{})
+				->setHorizontalSpacing(50)
+				->setLeftMargin(10)
+				->setRightMargin(10)
+				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+				->setColumnStretchFactor(0, 1)
+				->put(0, 0, newCrumbs);
 
 	diffGrid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
@@ -130,12 +160,21 @@ void VDiffComparisonPair::initializeForms()
 			->setRowStretchFactor(0, 1)
 			->setRowStretchFactor(1, 1)
 			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-			->put(0, 0, infoGrid->clone())
+			->put(0, 0, infoGrid)
 			->put(0, 1, diffGrid->clone());
 
 	addForm(container->clone());
 
 	// form with only old node available
+
+	infoGrid = (new Visualization::GridLayoutFormElement{})
+				->setHorizontalSpacing(50)
+				->setLeftMargin(10)
+				->setRightMargin(10)
+				->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+				->setColumnStretchFactor(0, 1)
+				->put(0, 0, oldCrumbs);
 
 	diffGrid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
@@ -161,20 +200,12 @@ void VDiffComparisonPair::initializeForms()
 			->setRightMargin(10)
 			->setColumnStretchFactor(0, 1)
 			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
-			->put(0, 0, infoGrid->clone())
+			->put(0, 0, infoGrid)
 			->put(0, 1, diffGrid->clone());
 
 	addForm(container->clone());
 
 	// form with two object paths and two nodes
-
-	auto oldVersionObjectPath = item<Visualization::VText>(&I::oldVersionObjectPath_, [](I* v) {
-			return v->node()->oldVersionObjectPath();},
-			[](I* v) {return &v->style()->oldVersionObjectPath();});
-
-	auto newVersionObjectPath = item<Visualization::VText>(&I::newVersionObjectPath_, [](I* v) {
-			return v->node()->newVersionObjectPath();},
-			[](I* v) {return &v->style()->newVersionObjectPath();});
 
 	infoGrid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
@@ -184,8 +215,8 @@ void VDiffComparisonPair::initializeForms()
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
 			->setColumnStretchFactor(1, 1)
-			->put(0, 0, oldVersionObjectPath)
-			->put(1, 0, newVersionObjectPath);
+			->put(0, 0, oldCrumbs)
+			->put(1, 0, newCrumbs);
 
 	auto infoWithComponentTypeGrid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalSpacing(50)
@@ -257,6 +288,12 @@ void VDiffComparisonPair::scaleVisualizations()
 
 	if (nodeNotFoundIcon_)
 		nodeNotFoundIcon_->setScale(scale);
+
+	for (auto crumb : objectPathCrumbsNewNode_)
+		crumb->setScale(scale);
+
+	for (auto crumb : objectPathCrumbsOldNode_)
+		crumb->setScale(scale);
 }
 
 void VDiffComparisonPair::determineChildren()

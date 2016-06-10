@@ -41,6 +41,13 @@ extern template class VERSIONCONTROLUI_API Model::TypedList<VersionControlUI::Di
 
 namespace VersionControlUI {
 
+struct ObjectPathCrumbData
+{
+	QString name;
+	QString type;
+	QString path;
+};
+
 class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINode>
 {
 	NODE_DECLARE_STANDARD_METHODS(DiffComparisonPair)
@@ -61,6 +68,9 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		bool twoObjectPathsDefined();
 		QString comparisonName();
 
+		QList<ObjectPathCrumbData*> objectPathCrumbsDataOldNode();
+		QList<ObjectPathCrumbData*> objectPathCrumbsDataNewNode();
+
 
 	private:
 		bool twoObjectPathsDefined_{};
@@ -75,12 +85,21 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 		QString comparisonName_;
 
-		QString computeObjectPath(Model::Node* node);
 		QString computeComponentName();
+
+		QList<ObjectPathCrumbData*> computeObjectPathCrumbData(Model::Node* node, QString& objectPath);
+
+		QString computeObjectPath(Model::Node* node);
+
+		void computeObjectPathCrumbs(Model::Node* oldNode, QString oldNodeObjectPath,
+											  Model::Node* newNode, QString newNodeObjectPath);
 
 		void computeObjectPath();
 
 		void setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName);
+
+		QList<ObjectPathCrumbData*> objectPathCrumbsDataOldNode_;
+		QList<ObjectPathCrumbData*> objectPathCrumbsDataNewNode_;
 
 };
 
@@ -95,5 +114,11 @@ inline Model::Text* DiffComparisonPair::singleObjectPath() {return singleObjectP
 inline bool DiffComparisonPair::twoObjectPathsDefined() {return twoObjectPathsDefined_;}
 
 inline QString DiffComparisonPair::comparisonName() { return comparisonName_; }
+
+inline QList<ObjectPathCrumbData*> DiffComparisonPair::objectPathCrumbsDataOldNode()
+{ return objectPathCrumbsDataOldNode_; }
+
+inline QList<ObjectPathCrumbData*> DiffComparisonPair::objectPathCrumbsDataNewNode()
+{ return objectPathCrumbsDataNewNode_; }
 
 }

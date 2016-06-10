@@ -28,61 +28,22 @@
 
 #include "../versioncontrolui_api.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VDiffComparisonPairStyle.h"
+#include "../items/ObjectPathCrumb.h"
 
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/Static.h"
+#include "InteractionBase/src/handlers/HMovableItem.h"
 
-#include "../nodes/DiffComparisonPair.h"
+namespace VersionControlUI {
 
-#include "ObjectPathCrumb.h"
-
-namespace VersionControlUI
-{
-
-class DiffComparisonPair;
-
-class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::ItemWithNode<VDiffComparisonPair,
-		Visualization::DeclarativeItem<VDiffComparisonPair>, DiffComparisonPair>>
-{
-	ITEM_COMMON(VDiffComparisonPair)
+class VERSIONCONTROLUI_API HObjectPathCrumb : public Interaction::GenericHandler {
 
 	public:
-		VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
-		virtual bool isSensitiveToScale() const override;
-		virtual void determineChildren() override;
-		virtual int determineForm() override;
-
-		QList<Visualization::Item*> objectPathCrumbsOldNode();
-		QList<Visualization::Item*> objectPathCrumbsNewNode();
+		static HObjectPathCrumb* instance();
 
 	private:
-		Visualization::Item* oldVersionNode_{};
-		Visualization::Item* newVersionNode_{};
-
-		Visualization::VText* oldVersionObjectPath_{};
-		Visualization::VText* newVersionObjectPath_{};
-		Visualization::VText* singleObjectPath_{};
-
-		Visualization::Static* nodeNotFoundIcon_{};
-
-		Visualization::VText* componentType_{};
-
-		QList<Visualization::Item*> objectPathCrumbsOldNode_{};
-		QList<Visualization::Item*> objectPathCrumbsNewNode_{};
-
-		void scaleVisualizations();
-
-		void createObjectPathCrumbsVisualizationList();
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		ObjectPathCrumb* crumbTarget_{};
 };
-
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsOldNode() {return objectPathCrumbsOldNode_;}
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsNewNode() {return objectPathCrumbsNewNode_;}
 
 
 }
