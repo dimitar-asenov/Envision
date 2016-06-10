@@ -276,16 +276,19 @@ bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeId
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
 														 QList<ChangeWithNodes> changesWithNodes)
 {
-	static const QString arrowLayer = "move_arrows";
-	diffViewItem->setArrowStyle(arrowLayer, "move_arrow");
+	static const QString moveArrowLayer = "move_arrows";
+	diffViewItem->setArrowStyle(moveArrowLayer, "move_arrow");
+
+	static const QString modifyArrowLayer = "modify_arrows";
+	diffViewItem->setArrowStyle(modifyArrowLayer, "modify_arrow");
 
 	QSet<Visualization::Item*> allItemsToScale;
 	for (auto change : changesWithNodes)
 	{
 		QString highlightOverlayStyle;
 		QString highlightOverlayName;
-		QString arrowIconOverlayStyle;
-		QString arrowIconOverlayName;
+		QString arrowIconOverlayStyle = "";
+		QString arrowIconOverlayName = "";
 
 		switch (change.changeType_)
 		{
@@ -304,14 +307,10 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 			case FilePersistence::ChangeType::Move:
 				highlightOverlayName = "move_highlights";
 				highlightOverlayStyle = "move_frame";
-				arrowIconOverlayName = "move_arrow_icons";
-				arrowIconOverlayStyle = "move_arrow_icon";
 				break;
 			case FilePersistence::ChangeType::Stationary:
 				highlightOverlayName = "modify_highlights";
 				highlightOverlayStyle = "modify_frame";
-				arrowIconOverlayName = "modify_arrow_icons";
-				arrowIconOverlayStyle = "modify_arrow_icon";
 				break;
 			case FilePersistence::ChangeType::Unclassified:
 				Q_ASSERT(false);
@@ -331,11 +330,16 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		if (newNodeItem)
 			allItemsToScale.insert(newNodeItem);
 
-		if (change.changeType_== FilePersistence::ChangeType::Move)
+		if (change.changeType_== FilePersistence::ChangeType::Move && newNodeItem && oldNodeItem)
 		{
 			auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
 					  Visualization::ArrowOverlay::itemStyles().get("move_arrow")};
-			diffViewItem->addOverlay(overlay, arrowLayer);
+			diffViewItem->addOverlay(overlay, moveArrowLayer);
+		} else if (change.changeType_ == FilePersistence::ChangeType::Stationary && newNodeItem && oldNodeItem)
+		{
+			auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
+						Visualization::ArrowOverlay::itemStyles().get("modify_arrow")};
+			diffViewItem->addOverlay(overlay, modifyArrowLayer);
 		}
 
 	}
@@ -381,9 +385,12 @@ Visualization::Item* DiffManager::addOverlaysAndReturnItem(Model::Node* node, Vi
 					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
 			resultItem->addOverlay(overlay, highlightOverlayName);
 
-			auto iconOverlay = new Visualization::IconOverlay{resultItem,
-					Visualization::IconOverlay::itemStyles().get(arrowIconOverlayStyle)};
-			resultItem->addOverlay(iconOverlay, arrowIconOverlayName);
+			if (arrowIconOverlayName != "")
+			{
+				auto iconOverlay = new Visualization::IconOverlay{resultItem,
+						Visualization::IconOverlay::itemStyles().get(arrowIconOverlayStyle)};
+				resultItem->addOverlay(iconOverlay, arrowIconOverlayName);
+			}
 
 		}
 		else if (auto parent = DCast<Model::CompositeNode>(node->parent()))

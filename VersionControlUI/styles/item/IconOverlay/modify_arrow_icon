@@ -1,7 +1,0 @@
-<!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="change_arrow_icon">
-	<shape/>
-	<icon>
-		<filename>styles/icon/modified_node.svg</filename>
-	</icon>
-</style>
