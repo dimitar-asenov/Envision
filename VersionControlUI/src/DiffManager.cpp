@@ -330,16 +330,20 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		if (newNodeItem)
 			allItemsToScale.insert(newNodeItem);
 
-		if (change.changeType_== FilePersistence::ChangeType::Move && newNodeItem && oldNodeItem)
+
+		if (newNodeItem && oldNodeItem)
 		{
-			auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
-					  Visualization::ArrowOverlay::itemStyles().get("move_arrow")};
-			diffViewItem->addOverlay(overlay, moveArrowLayer);
-		} else if (change.changeType_ == FilePersistence::ChangeType::Stationary && newNodeItem && oldNodeItem)
-		{
-			auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
-						Visualization::ArrowOverlay::itemStyles().get("modify_arrow")};
-			diffViewItem->addOverlay(overlay, modifyArrowLayer);
+			if (change.changeType_== FilePersistence::ChangeType::Move)
+			{
+				auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
+						  Visualization::ArrowOverlay::itemStyles().get("move_arrow")};
+				diffViewItem->addOverlay(overlay, moveArrowLayer);
+			} else if (change.changeType_ == FilePersistence::ChangeType::Stationary)
+			{
+				auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
+							Visualization::ArrowOverlay::itemStyles().get("modify_arrow")};
+				diffViewItem->addOverlay(overlay, modifyArrowLayer);
+			}
 		}
 
 	}
