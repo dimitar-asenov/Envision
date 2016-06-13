@@ -65,13 +65,7 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 		Visualization::Item* oldVersionNode_{};
 		Visualization::Item* newVersionNode_{};
 
-		Visualization::VText* oldVersionObjectPath_{};
-		Visualization::VText* newVersionObjectPath_{};
-		Visualization::VText* singleObjectPath_{};
-
 		Visualization::Static* nodeNotFoundIcon_{};
-
-		Visualization::VText* componentType_{};
 
 		QList<Visualization::Item*> objectPathCrumbsOldNode_{};
 		QList<Visualization::Item*> objectPathCrumbsNewNode_{};

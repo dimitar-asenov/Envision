@@ -274,18 +274,6 @@ void VDiffComparisonPair::scaleVisualizations()
 	else
 		scale = 1.0;
 
-	if (componentType_)
-		componentType_->setScale(scale);
-
-	if (singleObjectPath_)
-		singleObjectPath_->setScale(scale);
-
-	if (oldVersionObjectPath_)
-		oldVersionObjectPath_->setScale(scale);
-
-	if (newVersionObjectPath_)
-		newVersionObjectPath_->setScale(scale);
-
 	if (nodeNotFoundIcon_)
 		nodeNotFoundIcon_->setScale(scale);
 

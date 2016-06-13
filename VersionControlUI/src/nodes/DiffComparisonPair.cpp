@@ -64,7 +64,6 @@ void DiffComparisonPair::computeObjectPath()
 
 	if (oldVersionObjectPath == newVersionObjectPath)
 	{
-		singleObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
 		comparisonNameNode = oldVersionNode_;
 		comparisonNameObjectPath = oldVersionObjectPath;
 		twoObjectPathsDefined_ = false;
@@ -81,13 +80,10 @@ void DiffComparisonPair::computeObjectPath()
 			comparisonNameObjectPath = oldVersionObjectPath;
 			comparisonNameNode = oldVersionNode_;
 		}
-		singleObjectPath_ = new Model::Text{comparisonNameObjectPath+componentName};
 		twoObjectPathsDefined_ = false;
 	}
 	else
 	{
-		oldVersionObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
-		newVersionObjectPath_ = new Model::Text{newVersionObjectPath+componentName};
 		comparisonNameNode = oldVersionNode_;
 		comparisonNameObjectPath = oldVersionObjectPath;
 		twoObjectPathsDefined_ = true;
@@ -169,7 +165,7 @@ QString DiffComparisonPair::computeComponentName()
 		if (compositeNode != nodeToComputeComponentType)
 		{
 			auto index = compositeNode->indexOf(nodeToComputeComponentType);
-			componentName = " > " + compositeNode->meta().attribute(index).name();
+			componentName = compositeNode->meta().attribute(index).name();
 		}
 	}
 	return componentName;

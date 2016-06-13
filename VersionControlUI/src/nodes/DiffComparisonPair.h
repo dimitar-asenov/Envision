@@ -78,11 +78,6 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		Model::Node* oldVersionNode_{};
 		Model::Node* newVersionNode_{};
 
-		Model::Text* newVersionObjectPath_{};
-		Model::Text* oldVersionObjectPath_{};
-
-		Model::Text* singleObjectPath_{};
-
 		QString comparisonName_;
 
 		QString computeComponentName();
@@ -105,11 +100,6 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 inline Model::Node* DiffComparisonPair::newVersionNode() {return newVersionNode_;}
 inline Model::Node* DiffComparisonPair::oldVersionNode() {return oldVersionNode_;}
-
-inline Model::Text* DiffComparisonPair::newVersionObjectPath() {return newVersionObjectPath_;}
-inline Model::Text* DiffComparisonPair::oldVersionObjectPath() {return oldVersionObjectPath_;}
-
-inline Model::Text* DiffComparisonPair::singleObjectPath() {return singleObjectPath_;}
 
 inline bool DiffComparisonPair::twoObjectPathsDefined() {return twoObjectPathsDefined_;}
 
