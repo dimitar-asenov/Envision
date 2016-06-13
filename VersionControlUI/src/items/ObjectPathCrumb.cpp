@@ -36,15 +36,15 @@ namespace VersionControlUI
 DEFINE_ITEM_COMMON(ObjectPathCrumb, "item")
 
 
-ObjectPathCrumb::ObjectPathCrumb(ObjectPathCrumbData* objectPathCrumbData, Visualization::Item* parent,
+ObjectPathCrumb::ObjectPathCrumb(ObjectPathCrumbData objectPathCrumbData, Visualization::Item* parent,
 					 const StyleType *style)
 			: Super{parent, style}
 {
-	name_ = new Visualization::Text{this, objectPathCrumbData->name};
+	name_ = new Visualization::Text{this, objectPathCrumbData.name};
 	name_->setAcceptedMouseButtons(Qt::NoButton);
-	type_ = new Visualization::Text{this, objectPathCrumbData->type};
+	type_ = new Visualization::Text{this, objectPathCrumbData.type};
 	type_->setAcceptedMouseButtons(Qt::NoButton);
-	path_ = objectPathCrumbData->path;
+	path_ = objectPathCrumbData.path;
 }
 
 void ObjectPathCrumb::initializeForms()

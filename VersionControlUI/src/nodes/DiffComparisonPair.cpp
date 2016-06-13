@@ -119,22 +119,22 @@ void DiffComparisonPair::computeObjectPathCrumbs(Model::Node* oldNode, QString o
 	objectPathCrumbsDataNewNode_ = computeObjectPathCrumbData(newNode, newNodeObjectPath);
 }
 
-QList<ObjectPathCrumbData*> DiffComparisonPair::computeObjectPathCrumbData(Model::Node* node, QString& objectPath)
+QList<ObjectPathCrumbData> DiffComparisonPair::computeObjectPathCrumbData(Model::Node* node, QString& objectPath)
 {
 	if (!node) return {};
 	auto parent = node->parent();
-	QList<ObjectPathCrumbData*> objectPathCrumbData;
+	QList<ObjectPathCrumbData> objectPathCrumbData;
 	while (parent)
 	{
 		if (auto compositeNode = DCast<Model::CompositeNode>(parent))
 		{
-			auto objectPathCrumb = new ObjectPathCrumbData{};
+			auto objectPathCrumb = ObjectPathCrumbData{};
 			if (parent->definesSymbol())
-				objectPathCrumb->name = parent->symbolName();
+				objectPathCrumb.name = parent->symbolName();
 			auto index = compositeNode->indexOf(node);
-			objectPathCrumb->type = compositeNode->meta().attribute(index).name();
-			objectPathCrumb->path = objectPath.left(objectPath.lastIndexOf(objectPathCrumb->name));
-			objectPath = objectPathCrumb->path;
+			objectPathCrumb.type = compositeNode->meta().attribute(index).name();
+			objectPathCrumb.path = objectPath.left(objectPath.lastIndexOf(objectPathCrumb.name));
+			objectPath = objectPathCrumb.path;
 			objectPathCrumbData.prepend(objectPathCrumb);
 		}
 		node = parent;

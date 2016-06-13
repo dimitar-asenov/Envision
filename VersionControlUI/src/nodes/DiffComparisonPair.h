@@ -68,8 +68,8 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		bool twoObjectPathsDefined();
 		QString comparisonName();
 
-		QList<ObjectPathCrumbData*> objectPathCrumbsDataOldNode();
-		QList<ObjectPathCrumbData*> objectPathCrumbsDataNewNode();
+		QList<ObjectPathCrumbData> objectPathCrumbsDataOldNode();
+		QList<ObjectPathCrumbData> objectPathCrumbsDataNewNode();
 
 
 	private:
@@ -87,7 +87,7 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 		QString computeComponentName();
 
-		QList<ObjectPathCrumbData*> computeObjectPathCrumbData(Model::Node* node, QString& objectPath);
+		QList<ObjectPathCrumbData> computeObjectPathCrumbData(Model::Node* node, QString& objectPath);
 
 		QString computeObjectPath(Model::Node* node);
 
@@ -98,8 +98,8 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 		void setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName);
 
-		QList<ObjectPathCrumbData*> objectPathCrumbsDataOldNode_;
-		QList<ObjectPathCrumbData*> objectPathCrumbsDataNewNode_;
+		QList<ObjectPathCrumbData> objectPathCrumbsDataOldNode_;
+		QList<ObjectPathCrumbData> objectPathCrumbsDataNewNode_;
 
 };
 
@@ -115,10 +115,10 @@ inline bool DiffComparisonPair::twoObjectPathsDefined() {return twoObjectPathsDe
 
 inline QString DiffComparisonPair::comparisonName() { return comparisonName_; }
 
-inline QList<ObjectPathCrumbData*> DiffComparisonPair::objectPathCrumbsDataOldNode()
+inline QList<ObjectPathCrumbData> DiffComparisonPair::objectPathCrumbsDataOldNode()
 { return objectPathCrumbsDataOldNode_; }
 
-inline QList<ObjectPathCrumbData*> DiffComparisonPair::objectPathCrumbsDataNewNode()
+inline QList<ObjectPathCrumbData> DiffComparisonPair::objectPathCrumbsDataNewNode()
 { return objectPathCrumbsDataNewNode_; }
 
 }

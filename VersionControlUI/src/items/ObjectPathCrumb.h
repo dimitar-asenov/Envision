@@ -43,7 +43,7 @@ class VISUALIZATIONBASE_API ObjectPathCrumb : public Super<Visualization::Declar
 	ITEM_COMMON(ObjectPathCrumb)
 
 	public:
-		ObjectPathCrumb(ObjectPathCrumbData* objectPathCrumbData, Visualization::Item* parent,
+		ObjectPathCrumb(ObjectPathCrumbData objectPathCrumbData, Visualization::Item* parent,
 							 const StyleType *style = itemStyles().get());
 		static void initializeForms();
 
