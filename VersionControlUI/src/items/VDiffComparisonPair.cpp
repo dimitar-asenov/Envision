@@ -118,10 +118,10 @@ void VDiffComparisonPair::initializeForms()
 			->setRowStretchFactor(0, 1)
 			->setRowStretchFactor(1, 1)
 			->put(0, 0, infoGrid)
-			->put(0, 1, diffGrid->clone());
+			->put(0, 1, diffGrid);
 
 
-	addForm(container->clone());
+	addForm(container);
 
 	// form with only new node available
 
@@ -161,9 +161,9 @@ void VDiffComparisonPair::initializeForms()
 			->setRowStretchFactor(1, 1)
 			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
 			->put(0, 0, infoGrid)
-			->put(0, 1, diffGrid->clone());
+			->put(0, 1, diffGrid);
 
-	addForm(container->clone());
+	addForm(container);
 
 	// form with only old node available
 
@@ -201,9 +201,9 @@ void VDiffComparisonPair::initializeForms()
 			->setColumnStretchFactor(0, 1)
 			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
 			->put(0, 0, infoGrid)
-			->put(0, 1, diffGrid->clone());
+			->put(0, 1, diffGrid);
 
-	addForm(container->clone());
+	addForm(container);
 
 	// form with two object paths and two nodes
 
