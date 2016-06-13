@@ -1,0 +1,40 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerType>0</cornerType>
+		<backgroundBrush>
+			<style>1</style>
+			<color>#f9cb9c</color>
+		</backgroundBrush>
+		<outline>
+			<style>0</style>
+		</outline>
+	</shape>
+	<name prototypes="item/Text/default">
+		<pen>
+			<style>1</style>
+			<color>#000000</color>
+		</pen>
+		<font>
+			<size>15</size>
+			<weight>75</weight>
+			<style>0</style>
+			<underline>false</underline>
+		</font>
+		<htmlFormat>true</htmlFormat>
+	</name>
+	<type prototypes="item/Text/default">
+		<pen>
+			<style>1</style>
+			<color>#505050</color>
+		</pen>
+		<font>
+			<size>15</size>
+			<weight>50</weight>
+			<style>0</style>
+			<underline>false</underline>
+		</font>
+		<htmlFormat>true</htmlFormat>
+	</type>
+</style>

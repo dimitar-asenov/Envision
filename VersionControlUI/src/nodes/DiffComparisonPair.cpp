@@ -42,9 +42,6 @@ DiffComparisonPair::DiffComparisonPair(Model::Node* oldVersionNode, Model::Node*
 	newVersionNode_ = newVersionNode;
 
 	computeObjectPath();
-
-	computeComponentName();
-
 }
 
 void DiffComparisonPair::setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName)
@@ -59,6 +56,7 @@ void DiffComparisonPair::computeObjectPath()
 {
 	auto oldVersionObjectPath = computeObjectPath(oldVersionNode_);
 	auto newVersionObjectPath = computeObjectPath(newVersionNode_);
+	computeObjectPathCrumbs(oldVersionNode_, oldVersionObjectPath, newVersionNode_, newVersionObjectPath);
 	auto componentName = computeComponentName();
 
 	Model::Node* comparisonNameNode;
@@ -66,7 +64,6 @@ void DiffComparisonPair::computeObjectPath()
 
 	if (oldVersionObjectPath == newVersionObjectPath)
 	{
-		singleObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
 		comparisonNameNode = oldVersionNode_;
 		comparisonNameObjectPath = oldVersionObjectPath;
 		twoObjectPathsDefined_ = false;
@@ -83,13 +80,10 @@ void DiffComparisonPair::computeObjectPath()
 			comparisonNameObjectPath = oldVersionObjectPath;
 			comparisonNameNode = oldVersionNode_;
 		}
-		singleObjectPath_ = new Model::Text{comparisonNameObjectPath+componentName};
 		twoObjectPathsDefined_ = false;
 	}
 	else
 	{
-		oldVersionObjectPath_ = new Model::Text{oldVersionObjectPath+componentName};
-		newVersionObjectPath_ = new Model::Text{newVersionObjectPath+componentName};
 		comparisonNameNode = oldVersionNode_;
 		comparisonNameObjectPath = oldVersionObjectPath;
 		twoObjectPathsDefined_ = true;
@@ -106,11 +100,45 @@ QString DiffComparisonPair::computeObjectPath(Model::Node* node)
 	while (parent)
 	{
 		if (parent->definesSymbol())
-			objectPath.prepend(parent->symbolName() + "/");
+			objectPath.prepend(parent->symbolName() + ".");
 		parent = parent->parent();
 	}
 
 	return objectPath;
+}
+
+void DiffComparisonPair::computeObjectPathCrumbs(Model::Node* oldNode, QString oldNodeObjectPath,
+																 Model::Node* newNode, QString newNodeObjectPath)
+{
+
+	objectPathCrumbsDataOldNode_ = computeObjectPathCrumbData(oldNode, oldNodeObjectPath);
+	objectPathCrumbsDataNewNode_ = computeObjectPathCrumbData(newNode, newNodeObjectPath);
+}
+
+QList<ObjectPathCrumbData> DiffComparisonPair::computeObjectPathCrumbData(Model::Node* node, QString& objectPath)
+{
+	if (!node) return {};
+	auto parent = node->parent();
+	QList<ObjectPathCrumbData> objectPathCrumbData;
+	while (parent)
+	{
+		if (auto compositeNode = DCast<Model::CompositeNode>(parent))
+		{
+			auto objectPathCrumb = ObjectPathCrumbData{};
+			if (parent->definesSymbol())
+				objectPathCrumb.name = parent->symbolName();
+			auto index = compositeNode->indexOf(node);
+			objectPathCrumb.type = compositeNode->meta().attribute(index).name();
+			objectPathCrumb.path = objectPath.left(objectPath.lastIndexOf(objectPathCrumb.name));
+			objectPath = objectPathCrumb.path;
+			objectPathCrumbData.prepend(objectPathCrumb);
+		}
+		node = parent;
+		parent = parent->parent();
+
+	}
+
+	return objectPathCrumbData;
 }
 
 QString DiffComparisonPair::computeComponentName()
@@ -123,10 +151,13 @@ QString DiffComparisonPair::computeComponentName()
 	else
 		nodeToComputeComponentType = newVersionNode_;
 
-	auto searchCompositeNode = nodeToComputeComponentType;
+	auto searchCompositeNode = nodeToComputeComponentType->parent();
 
 	while (searchCompositeNode && !DCast<Model::CompositeNode>(searchCompositeNode))
+	{
+		nodeToComputeComponentType = searchCompositeNode;
 		searchCompositeNode = searchCompositeNode->parent();
+	}
 
 	if (searchCompositeNode)
 	{

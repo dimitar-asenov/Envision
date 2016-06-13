@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,35 +24,64 @@
  **
  **********************************************************************************************************************/
 
-#include "VersionControlUIPlugin.h"
-#include "SelfTest/src/TestManager.h"
-#include "Logger/src/Log.h"
+#include "HObjectPathCrumb.h"
 
-#include "items/ObjectPathCrumb.h"
-#include "handlers/HObjectPathCrumb.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
+
+#include "ModelBase/src/util/NameResolver.h"
+
+#include "VisualizationBase/src/items/ViewItem.h"
+
+#include "VersionControlUI/src/items/VDiffComparisonPair.h"
+
+#include "InteractionBase/src/prompt/Prompt.h"
 
 namespace VersionControlUI {
 
-Logger::Log& VersionControlUIPlugin::log()
+HObjectPathCrumb* HObjectPathCrumb::instance()
 {
-	static auto log = Logger::Log::getLogger("PLUGIN_NAME_LOWER");
-	return *log;
+	static HObjectPathCrumb h;
+	return &h;
 }
 
-bool VersionControlUIPlugin::initialize(Core::EnvisionManager&)
+void HObjectPathCrumb::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent* event)
 {
-	VersionControlUI::ObjectPathCrumb::setDefaultClassHandler(HObjectPathCrumb::instance());
-	return true;
+	GenericHandler::mousePressEvent(target, event);
+	crumbTarget_ = static_cast<ObjectPathCrumb*>(target);
 }
 
-void VersionControlUIPlugin::unload()
+void HObjectPathCrumb::mouseReleaseEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
 {
-}
+	GenericHandler::mouseReleaseEvent(target, event);
+	if (crumbTarget_)
+	{
+		VersionControlUI::VDiffComparisonPair* vDiffComparisonPair = nullptr;
+		auto parent = crumbTarget_->parent();
 
-void VersionControlUIPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<VersionControlUIPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<VersionControlUIPlugin>::runTest(testid).printResultStatistics();
+		while (parent && !DCast<VDiffComparisonPair>(parent))
+			parent = parent->parent();
+
+		vDiffComparisonPair = DCast<VDiffComparisonPair>(parent);
+
+		auto currentView = crumbTarget_->scene()->currentViewItem();
+
+		auto grid = dynamic_cast<Visualization::DynamicGridFormElement*>(currentView->currentForm());
+
+		auto focusedIndex = grid->indexOf(currentView, vDiffComparisonPair);
+
+		Visualization::MajorMinorIndex indexToInsert;
+		indexToInsert.major_ = focusedIndex.y();
+		indexToInsert.minor_ = focusedIndex.x()+1;
+
+		auto matches = Model::NameResolver::mostLikelyMatches(crumbTarget_->path()+crumbTarget_->name(), 1);
+		if (matches.size() > 0)
+			currentView->insertNode(matches[0].second, indexToInsert);
+	}
+
+	crumbTarget_ = nullptr;
 }
 
 }

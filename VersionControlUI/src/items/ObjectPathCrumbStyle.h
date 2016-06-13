@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,35 +24,23 @@
  **
  **********************************************************************************************************************/
 
-#include "VersionControlUIPlugin.h"
-#include "SelfTest/src/TestManager.h"
-#include "Logger/src/Log.h"
+#pragma once
 
-#include "items/ObjectPathCrumb.h"
-#include "handlers/HObjectPathCrumb.h"
+#include "../versioncontrolui_api.h"
 
-namespace VersionControlUI {
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/Static.h"
 
-Logger::Log& VersionControlUIPlugin::log()
+namespace VersionControlUI
 {
-	static auto log = Logger::Log::getLogger("PLUGIN_NAME_LOWER");
-	return *log;
-}
 
-bool VersionControlUIPlugin::initialize(Core::EnvisionManager&)
+class VERSIONCONTROLUI_API ObjectPathCrumbStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	VersionControlUI::ObjectPathCrumb::setDefaultClassHandler(HObjectPathCrumb::instance());
-	return true;
-}
+	public:
+		virtual ~ObjectPathCrumbStyle() override;
 
-void VersionControlUIPlugin::unload()
-{
-}
-
-void VersionControlUIPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<VersionControlUIPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<VersionControlUIPlugin>::runTest(testid).printResultStatistics();
-}
-
+		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::TextStyle> type{this, "type"};
+};
 }

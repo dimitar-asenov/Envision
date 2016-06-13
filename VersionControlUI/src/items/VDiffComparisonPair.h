@@ -39,6 +39,8 @@
 
 #include "../nodes/DiffComparisonPair.h"
 
+#include "ObjectPathCrumb.h"
+
 namespace VersionControlUI
 {
 
@@ -56,19 +58,25 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 		virtual void determineChildren() override;
 		virtual int determineForm() override;
 
+		QList<Visualization::Item*> objectPathCrumbsOldNode();
+		QList<Visualization::Item*> objectPathCrumbsNewNode();
+
 	private:
 		Visualization::Item* oldVersionNode_{};
 		Visualization::Item* newVersionNode_{};
 
-		Visualization::VText* oldVersionObjectPath_{};
-		Visualization::VText* newVersionObjectPath_{};
-		Visualization::VText* singleObjectPath_{};
-
 		Visualization::Static* nodeNotFoundIcon_{};
 
-		Visualization::VText* componentType_{};
+		QList<Visualization::Item*> objectPathCrumbsOldNode_{};
+		QList<Visualization::Item*> objectPathCrumbsNewNode_{};
 
 		void scaleVisualizations();
+
+		void createObjectPathCrumbsVisualizationList();
 };
+
+inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsOldNode() {return objectPathCrumbsOldNode_;}
+inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsNewNode() {return objectPathCrumbsNewNode_;}
+
 
 }

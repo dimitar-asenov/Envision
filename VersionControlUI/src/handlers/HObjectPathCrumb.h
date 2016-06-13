@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2015 ETH Zurich
+ ** Copyright (c) 2011, 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,35 +24,26 @@
  **
  **********************************************************************************************************************/
 
-#include "VersionControlUIPlugin.h"
-#include "SelfTest/src/TestManager.h"
-#include "Logger/src/Log.h"
+#pragma once
 
-#include "items/ObjectPathCrumb.h"
-#include "handlers/HObjectPathCrumb.h"
+#include "../versioncontrolui_api.h"
+
+#include "../items/ObjectPathCrumb.h"
+
+#include "InteractionBase/src/handlers/HMovableItem.h"
 
 namespace VersionControlUI {
 
-Logger::Log& VersionControlUIPlugin::log()
-{
-	static auto log = Logger::Log::getLogger("PLUGIN_NAME_LOWER");
-	return *log;
-}
+class VERSIONCONTROLUI_API HObjectPathCrumb : public Interaction::GenericHandler {
 
-bool VersionControlUIPlugin::initialize(Core::EnvisionManager&)
-{
-	VersionControlUI::ObjectPathCrumb::setDefaultClassHandler(HObjectPathCrumb::instance());
-	return true;
-}
+	public:
+		static HObjectPathCrumb* instance();
 
-void VersionControlUIPlugin::unload()
-{
-}
+	private:
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		ObjectPathCrumb* crumbTarget_{};
+};
 
-void VersionControlUIPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<VersionControlUIPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<VersionControlUIPlugin>::runTest(testid).printResultStatistics();
-}
 
 }

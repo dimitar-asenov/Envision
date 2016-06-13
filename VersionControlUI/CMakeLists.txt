@@ -12,14 +12,20 @@ add_library(VersionControlUI SHARED
 	src/nodes/DiffComparisonPair.h
 	src/items/VDiffComparisonPair.h
 	src/items/VDiffComparisonPairStyle.h
+	src/items/ObjectPathCrumb.h
+	src/items/ObjectPathCrumbStyle.h
 	src/commands/CDiff.h
+	src/handlers/HObjectPathCrumb.h
 	src/VersionControlUIException.cpp
 	src/VersionControlUIPlugin.cpp
 	src/DiffManager.cpp
 	src/nodes/DiffComparisonPair.cpp
 	src/items/VDiffComparisonPair.cpp
 	src/items/VDiffComparisonPairStyle.cpp
+	src/items/ObjectPathCrumb.cpp
+	src/items/ObjectPathCrumbStyle.cpp
 	src/commands/CDiff.cpp
+	src/handlers/HObjectPathCrumb.cpp
 	test/SimpleTest.cpp
 )
 envision_plugin(VersionControlUI InteractionBase)
