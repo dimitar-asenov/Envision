@@ -287,8 +287,8 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	{
 		QString highlightOverlayStyle;
 		QString highlightOverlayName;
-		QString arrowIconOverlayStyle = "";
-		QString arrowIconOverlayName = "";
+		QString arrowIconOverlayStyle;
+		QString arrowIconOverlayName;
 
 		switch (change.changeType_)
 		{
@@ -389,7 +389,7 @@ Visualization::Item* DiffManager::addOverlaysAndReturnItem(Model::Node* node, Vi
 					Visualization::HighlightOverlay::itemStyles().get(highlightOverlayStyle)};
 			resultItem->addOverlay(overlay, highlightOverlayName);
 
-			if (arrowIconOverlayName != "")
+			if (!arrowIconOverlayName.isNull())
 			{
 				auto iconOverlay = new Visualization::IconOverlay{resultItem,
 						Visualization::IconOverlay::itemStyles().get(arrowIconOverlayStyle)};
