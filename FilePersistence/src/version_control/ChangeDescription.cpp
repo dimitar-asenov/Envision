@@ -173,45 +173,46 @@ void ChangeDescription::computeFlags()
 
 void ChangeDescription::print() const
 {
+	QString nodeLine;
 	if (nodeA_ || nodeB_)
-		qDebug() << (nodeA_ ? nodeA_->type() : nodeB_->type()) << "\t";
-	qDebug() << nodeId().toString() << "\t";
+		nodeLine += (nodeA_ ? nodeA_->type() : nodeB_->type()) + " ";
+	nodeLine += nodeId().toString() +" ";
 	switch (type_)
 	{
 		case ChangeType::Insertion:
 		{
-			qDebug() << "Insertion" << endl;
+			nodeLine += "Insertion ";
 			break;
 		}
 		case ChangeType::Deletion:
 		{
-			qDebug() << "Deletion" << endl;
+			nodeLine += "Deletion ";
 			break;
 		}
 		case ChangeType::Move:
 		{
-			qDebug() << "Move" << endl;
+			nodeLine += "Move ";
 			break;
 		}
 		case ChangeType::Stationary:
 		{
-			qDebug() << "Stationary" << endl;
+			nodeLine += "Stationary ";
 			break;
 		}
 		case ChangeType::Unclassified:
 		{
-			qDebug() << "Unclassified" << endl;
+			nodeLine += "Unclassified ";
 			break;
 		}
 		default:
 			Q_ASSERT(false);
 	}
 
-	if (updateFlags_.testFlag(Label)) qDebug() << "\tLabel";
-	if (updateFlags_.testFlag(Type)) qDebug() << "\tType";
-	if (updateFlags_.testFlag(Value)) qDebug() << "\tValue";
-	if (updateFlags_.testFlag(Structure)) qDebug() << "\tStructure";
-	qDebug() << endl;
+	if (updateFlags_.testFlag(Label)) nodeLine += "Label";
+	if (updateFlags_.testFlag(Type)) nodeLine += "Type";
+	if (updateFlags_.testFlag(Value)) nodeLine += "Value";
+	if (updateFlags_.testFlag(Structure)) nodeLine += "Structure";
+	qDebug() << nodeLine;
 }
 
 void ChangeDescription::setStructureChangeFlag(bool value)
