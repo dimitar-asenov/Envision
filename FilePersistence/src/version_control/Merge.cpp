@@ -43,6 +43,11 @@ namespace FilePersistence {
 
 bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
 {
+	if (stage_ == Stage::Committed)
+	{
+		// AlreadyUpToDate:: Not a True Merge
+		return true;
+	}
 	Q_ASSERT(stage_ == Stage::WroteToIndex);
 
 	QString treeSHA1 = repository_->writeIndexToTree();
