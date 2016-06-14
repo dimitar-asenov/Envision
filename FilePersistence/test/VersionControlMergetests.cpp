@@ -174,7 +174,7 @@ class FILEPERSISTENCE_API RunMerge
 	}
 	GitRepository repo{"/tmp/EnvisionVC/TestMerge"};
 	auto merge = repo.merge("dev");
-	if (!merge->hasConflicts())
+	if (!merge->isAlreadyMerged() && !merge->hasConflicts())
 	{
 		Signature sig;
 		sig.name_ = "Chuck TESTa";
