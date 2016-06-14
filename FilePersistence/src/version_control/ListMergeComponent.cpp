@@ -277,10 +277,10 @@ bool onlyConflictsOnLabel(ConflictPairs& conflictPairs, QSet<Model::NodeIdType>&
 		{
 			if (changeA->onlyLabelChange() && changeB->onlyLabelChange())	continue;
 			else return false;
-			qDebug() << containerId;	//	Used for the code described below
-/*			This part of code contains the original code implemented in Balz thesis
- *			Now this condition is relaxed
-
+			(void) containerId;	//	Used for the code described below
+//			This part of code contains the original code implemented in Balz thesis
+//			Now this condition is relaxed
+/*
 			if (!changeB->onlyLabelChange())
 			{
 				if (!changeA->onlyLabelChange())
