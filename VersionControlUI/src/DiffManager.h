@@ -38,6 +38,7 @@
 namespace FilePersistence
 {
 	class GitRepository;
+	struct CommitMetaData;
 }
 
 namespace Visualization
@@ -55,20 +56,26 @@ class DiffComparisonPair;
 class VERSIONCONTROLUI_API DiffManager
 {
 	public:
-		DiffManager(QString oldVersion, QString newVersion, QString project,
-						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList);
-		void visualize();
+		DiffManager(QString project,
+						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
+						Model::NodeIdType targetNodeID=Model::NodeIdType{});
 
-	private:
+		void visualize(QString oldVersion, QString newVersion);
 
-		DiffSetup initializeDiffPrerequisites();
+		void visualizeHistory(Model::NodeIdType targetNodeID, QList<QString> versions);
+
+		static QString createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData);
+
+    private:
+
+		DiffSetup initializeDiffPrerequisites(QString oldVersion, QString newVersion);
 
 		/**
 		 * Inserts for entries of \a changes a ChangeWithNodes in \a changesWithNodes. Computes id of nodes which
 		 * should be visualized and inserts them in \a changedNodesToVisualize.
 		 */
-		void computeChangeNodesAndNodesToVisualize(FilePersistence::IdToChangeDescriptionHash changes,
-								QList<ChangeWithNodes>& changesWithNodes, QSet<Model::NodeIdType>& changedNodesToVisualize,
+		void computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
+							  QSet<Model::NodeIdType>& changedNodesToVisualize,
 																 DiffSetup& diffSetup);
 
 		/**
@@ -118,10 +125,9 @@ class VERSIONCONTROLUI_API DiffManager
 																QString highlightOverlayName, QString highlightOverlayStyle,
 																QString arrowIconOverlayName, QString arrowIconOverlayStyle);
 
-		QString oldVersion_;
-		QString newVersion_;
 		QString project_;
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
+		Model::NodeIdType targetNodeID_;
 
 };
 

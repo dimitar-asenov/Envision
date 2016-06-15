@@ -31,7 +31,7 @@
 #include "../commands/CCreateField.h"
 #include "../actions/OOActions.h"
 
-#include "InteractionBase/src/commands/CHistory.h"
+#include "VersionControlUI/src/commands/CHistory.h"
 #include "InteractionBase/src/prompt/Prompt.h"
 #include "InteractionBase/src/input_actions/ActionRegistry.h"
 
@@ -47,7 +47,7 @@ HClass::HClass()
 	addCommand(new CCreateField{});
 
 	addCommand(new VersionControlUI::CDiff{});
-	addCommand(new Interaction::CHistory{});
+	addCommand(new VersionControlUI::CHistory{});
 }
 
 HClass* HClass::instance()

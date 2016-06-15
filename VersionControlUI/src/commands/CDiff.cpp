@@ -105,8 +105,8 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Class"});
 	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Method"});
 
-	VersionControlUI::DiffManager diffManager{versionA, versionB, managerName, symbolMatcherPriorityList};
-	diffManager.visualize();
+	VersionControlUI::DiffManager diffManager{managerName, symbolMatcherPriorityList};
+	diffManager.visualize(versionA, versionB);
 
 	return new Interaction::CommandResult{};
 }

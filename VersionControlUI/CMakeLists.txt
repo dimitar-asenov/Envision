@@ -15,6 +15,7 @@ add_library(VersionControlUI SHARED
 	src/items/ObjectPathCrumb.h
 	src/items/ObjectPathCrumbStyle.h
 	src/commands/CDiff.h
+	src/commands/CHistory.h
 	src/handlers/HObjectPathCrumb.h
 	src/VersionControlUIException.cpp
 	src/VersionControlUIPlugin.cpp
@@ -25,6 +26,7 @@ add_library(VersionControlUI SHARED
 	src/items/ObjectPathCrumb.cpp
 	src/items/ObjectPathCrumbStyle.cpp
 	src/commands/CDiff.cpp
+	src/commands/CHistory.cpp
 	src/handlers/HObjectPathCrumb.cpp
 	test/SimpleTest.cpp
 )

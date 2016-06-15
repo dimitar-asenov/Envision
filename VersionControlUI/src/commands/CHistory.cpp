@@ -30,23 +30,21 @@
 
 #include "FilePersistence/src/version_control/History.h"
 
+#include "../DiffManager.h"
+
 using namespace Visualization;
 using namespace FilePersistence;
 
-namespace Interaction {
+namespace VersionControlUI {
 
 CHistory::CHistory() : CommandWithFlags{"history", {{"project"}}, true, false}
 {
 }
 
-CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
+Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 												  const std::unique_ptr<Visualization::Cursor>& /*cursor*/,
 												  const QString& name, const QStringList& /*attributes*/)
 {
-	auto scene = target->scene();
-	scene->clearFocus();
-	scene->setMainCursor(nullptr);
-
 	Model::TreeManager* headManager = target->node()->manager();
 	QString managerName = headManager->name();
 
@@ -70,15 +68,10 @@ CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualiza
 
 	History history{targetPath, targetID, &graph, repository};
 
-	// Output relevant commits in text form
-	std::cout << "History:" << std::endl;
-	for (QString sha1 : history.relevantCommitsByTime(repository))
-	{
-		CommitMetaData info = repository->getCommitInformation(sha1);
-		printCommitMetaData(info);
-	}
+	DiffManager diffManager{managerName, {target->node()->typeName()}};
+	diffManager.visualizeHistory(targetID, history.relevantCommitsByTime(repository, false));
 
-	return new CommandResult{};
+	return new Interaction::CommandResult{};
 }
 
 QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualization::Item* target,
@@ -101,15 +94,6 @@ QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualizati
 		names.append(repository.revisions());
 	}
 	return names;
-}
-
-void CHistory::printCommitMetaData(CommitMetaData& data) const
-{
-	std::cout << "commit " << data.sha1_.toStdString().c_str() << std::endl;
-	std::cout << "Author: " << data.committer_.name_.toStdString().c_str() << " "
-				 << data.committer_.eMail_.toStdString().c_str() << std::endl;
-	std::cout << "Date: " << data.dateTime_.toString().toStdString().c_str() << std::endl;
-	std::cout << std::endl;
 }
 
 }
