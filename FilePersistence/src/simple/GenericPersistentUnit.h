@@ -74,6 +74,8 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		 */
 		GenericNode* nodeWithNullParent() const;
 
+		QString extractRootNodeIDFromName() const;
+
 	private:
 		friend class GenericTree;
 		friend class PiecewiseLoader;

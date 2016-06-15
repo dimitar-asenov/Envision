@@ -163,6 +163,11 @@ GenericNode* GenericPersistentUnit::unitRootNode() const
 		return &(chunks_.first()[0]);
 }
 
+QString GenericPersistentUnit::extractRootNodeIDFromName() const
+{
+	return name_.right(name_.length() - name_.lastIndexOf("{"));
+}
+
 GenericNode* GenericPersistentUnit::nodeWithNullParent() const
 {
 	for (auto& chunk : chunks_)
