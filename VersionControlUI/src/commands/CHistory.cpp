@@ -69,7 +69,7 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source
 	History history{targetPath, targetID, &graph, repository};
 
 	DiffManager diffManager{managerName, {target->node()->typeName()}};
-	diffManager.visualizeHistory(targetID, history.relevantCommitsByTime(repository, false));
+	diffManager.showNodeHistory(targetID, history.relevantCommitsByTime(repository, false));
 
 	return new Interaction::CommandResult{};
 }

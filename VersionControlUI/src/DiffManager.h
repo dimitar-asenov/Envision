@@ -60,13 +60,13 @@ class VERSIONCONTROLUI_API DiffManager
 						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
 						Model::NodeIdType targetNodeID=Model::NodeIdType{});
 
-		void visualize(QString oldVersion, QString newVersion);
+		void showDiff(QString oldVersion, QString newVersion);
 
-		void visualizeHistory(Model::NodeIdType targetNodeID, QList<QString> versions);
+		void showNodeHistory(Model::NodeIdType targetNodeID, QList<QString> versions);
 
 		static QString createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData);
 
-    private:
+	private:
 
 		DiffSetup initializeDiffPrerequisites(QString oldVersion, QString newVersion);
 

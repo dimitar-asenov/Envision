@@ -173,7 +173,7 @@ void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& contai
 	container.subtract(nodeIdsToRemove);
 }
 
-void DiffManager::visualize(QString oldVersion, QString newVersion)
+void DiffManager::showDiff(QString oldVersion, QString newVersion)
 {
 	DiffSetup diffSetup;
 
@@ -240,7 +240,7 @@ QString DiffManager::createHTMLCommitInfo(FilePersistence::CommitMetaData commit
 			+ "<font color='gray'>" + commitMetaData.sha1_ + "</font>";
 }
 
-void DiffManager::visualizeHistory(Model::NodeIdType targetNodeID, QList<QString> versions)
+void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString> versions)
 {
 	targetNodeID_ = targetNodeID;
 
