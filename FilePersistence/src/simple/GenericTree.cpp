@@ -70,12 +70,21 @@ GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, 
 		{new GenericPersistentUnit{this, name, data, dataSize}}).value();
 }
 
-GenericPersistentUnit* GenericTree::persistentUnit(const QString& name) const
+GenericPersistentUnit* GenericTree::persistentUnit(const QString& name, bool partial) const
 {
 	Q_ASSERT(!name.isEmpty());
 
-	auto iter = persistentUnits_.find(name);
-	if (iter != persistentUnits_.end())
+	QHash<QString, std::shared_ptr<GenericPersistentUnit>>::const_iterator iter;
+	if (partial)
+	{
+		iter = persistentUnits_.cbegin();
+		while (iter != persistentUnits_.cend() && !iter.key().contains(name))
+			iter++;
+	}
+	else
+		iter = persistentUnits_.find(name);
+
+	if (iter != persistentUnits_.cend())
 		return iter.value().get();
 	else
 		return nullptr;

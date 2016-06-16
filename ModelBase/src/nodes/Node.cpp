@@ -171,6 +171,13 @@ bool Node::isAncestorOf(const Node* other) const
 	return p == this;
 }
 
+bool Node::isSameOrAncestorOf(const Node* other) const
+{
+	if (other == this) return true;
+
+	return isAncestorOf(other);
+}
+
 Node* Node::firstAncestorOfType(const SymbolMatcher& typeMatch) const
 {
 	auto typeOrSubtypeMatches = [typeMatch](Model::Node* node) {

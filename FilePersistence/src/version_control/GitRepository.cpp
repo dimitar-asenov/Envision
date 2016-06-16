@@ -1182,4 +1182,56 @@ void GitRepository::checkError(int errorCode)
 
 const char* GitRepository::HEAD = "HEAD";
 
+static int relativePathTreeWalkCallBack(const char* root,
+									 const git_tree_entry* entry,
+									 void* data)
+{
+	RelativePathData* relativePathData = (RelativePathData*) data;
+
+	git_object* obj = nullptr;
+	int errorCode = git_tree_entry_to_object(&obj, relativePathData->repository_, entry);
+
+	if (errorCode == 0)
+	{
+		if (git_object_type(obj) == GIT_OBJ_BLOB)
+		{
+			git_object_free(obj);
+			QString fileName{git_tree_entry_name(entry)};
+			if (fileName.contains(relativePathData->id))
+			{
+
+			QString rootPath{root};
+
+			relativePathData->relativePath = rootPath.append(fileName);
+			return -1;
+			}
+		}
+	}
+	else
+	 {
+		git_object_free(obj);
+		Q_ASSERT(false);
+	 }
+
+	return 0;
+}
+
+QString GitRepository::relativePathForPersistentUnit(QString persistentUnitId, QString revision) const
+{
+	git_commit* gitCommit = parseCommit(revision);
+	git_tree* tree = nullptr;
+	git_commit_tree(&tree, gitCommit);
+
+	RelativePathData relativePathData;
+	relativePathData.repository_ = repository_;
+	relativePathData.id = persistentUnitId;
+
+	git_tree_walk(tree, GIT_TREEWALK_PRE, relativePathTreeWalkCallBack, &relativePathData);
+
+	git_commit_free(gitCommit);
+	git_tree_free(tree);
+
+	return relativePathData.relativePath;
+}
+
 }

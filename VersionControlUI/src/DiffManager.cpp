@@ -35,6 +35,7 @@
 #include "VisualizationBase/src/overlays/HighlightOverlay.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
 #include "VisualizationBase/src/overlays/IconOverlay.h"
+#include "VisualizationBase/src/overlays/MessageOverlay.h"
 #include "VisualizationBase/src/views/MainView.h"
 
 #include "FilePersistence/src/version_control/GitRepository.h"
@@ -49,6 +50,7 @@
 #include "ModelBase/src/nodes/Reference.h"
 
 #include "nodes/DiffComparisonPair.h"
+#include "items/VDiffComparisonPair.h"
 
 namespace VersionControlUI
 {
@@ -63,15 +65,17 @@ struct DiffSetup {
 	Model::TreeManager* newVersionManager_{};
 	Model::TreeManager* oldVersionManager_{};
 	FilePersistence::GitRepository* repository_{};
+
+	QString oldVersion_;
+	QString newVersion_;
 };
 
-DiffManager::DiffManager(QString oldVersion, QString newVersion, QString project,
-								 QList<Model::SymbolMatcher> contextUnitMatcherPriorityList) :
-	oldVersion_{oldVersion}, newVersion_{newVersion}, project_{project},
-	contextUnitMatcherPriorityList_{contextUnitMatcherPriorityList}
+DiffManager::DiffManager(QString project, QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
+								 Model::NodeIdType targetNodeID) : project_{project},
+	contextUnitMatcherPriorityList_{contextUnitMatcherPriorityList}, targetNodeID_{targetNodeID}
 {}
 
-DiffSetup DiffManager::initializeDiffPrerequisites()
+DiffSetup DiffManager::initializeDiffPrerequisites(QString oldVersion, QString newVersion)
 {
 	QString projectsDir = "projects/" + project_;
 
@@ -80,22 +84,35 @@ DiffSetup DiffManager::initializeDiffPrerequisites()
 		throw VersionControlUIException{"Diff setup not possible. No repository found at " + projectsDir};
 
 	DiffSetup diffSetup{};
+
+	diffSetup.oldVersion_ = oldVersion;
+	diffSetup.newVersion_ = newVersion;
+
 	diffSetup.repository_ = new FilePersistence::GitRepository{projectsDir};;
 
 	// load newer version
-	diffSetup.newVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, newVersion_);
+	diffSetup.newVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, diffSetup.newVersion_);
 
 	// load older version
-	diffSetup.oldVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, oldVersion_);
+	diffSetup.oldVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, diffSetup.oldVersion_);
 
 	Model::Reference::resolvePending();
 
 	return diffSetup;
 }
 
-void DiffManager::computeChangeNodesAndNodesToVisualize(FilePersistence::IdToChangeDescriptionHash changes,
-		QList<ChangeWithNodes>& changesWithNodes, QSet<Model::NodeIdType>& changedNodesToVisualize, DiffSetup& diffSetup)
+void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
+																		  QSet<Model::NodeIdType>& changedNodesToVisualize,
+																		  DiffSetup& diffSetup)
 {
+
+	diffSetup = initializeDiffPrerequisites(oldVersion, newVersion);
+
+	FilePersistence::Diff diff = diffSetup.repository_->diff(diffSetup.oldVersion_, diffSetup.newVersion_);
+
+	auto changes = diff.changes();
+
+
 	for (auto change : changes.values())
 	{
 		// TODO check flags
@@ -103,9 +120,23 @@ void DiffManager::computeChangeNodesAndNodesToVisualize(FilePersistence::IdToCha
 
 		auto id = change->nodeId();
 
-		changesWithNodes.append({const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id)),
-														 const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id)),
-														 change->type()});
+		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
+		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
+
+		if (!targetNodeID_.isNull())
+		{
+			auto targetOldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(targetNodeID_));
+			auto targetNewNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(targetNodeID_));
+			if ((targetOldNode && targetOldNode->isSameOrAncestorOf(oldNode))
+				 || (targetNewNode && targetNewNode->isSameOrAncestorOf(newNode)))
+			{
+				changesWithNodes.append({oldNode, newNode, change->type()});
+			}
+			else
+				continue;
+
+		} else
+			changesWithNodes.append({oldNode, newNode, change->type()});
 
 		Model::NodeIdType nodeId;
 
@@ -142,13 +173,9 @@ void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& contai
 	container.subtract(nodeIdsToRemove);
 }
 
-void DiffManager::visualize()
+void DiffManager::showDiff(QString oldVersion, QString newVersion)
 {
-	auto diffSetup = initializeDiffPrerequisites();
-
-	FilePersistence::Diff diff = diffSetup.repository_->diff(oldVersion_, newVersion_);
-
-	auto changes = diff.changes();
+	DiffSetup diffSetup;
 
 	// detailed changes
 	QList<ChangeWithNodes> changesWithNodes;
@@ -156,9 +183,8 @@ void DiffManager::visualize()
 	// contains the nodes which will be drawn
 	QSet<Model::NodeIdType> changedNodesToVisualize;
 
-
 	// fill up lists
-	computeChangeNodesAndNodesToVisualize(changes, changesWithNodes, changedNodesToVisualize, diffSetup);
+	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
 
 	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
 	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
@@ -182,12 +208,116 @@ void DiffManager::visualize()
 
 	// create visualization for changes
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [diffViewItem, changesWithNodes]() {
+								  [diffViewItem, changesWithNodes, diffSetup]() {
 		createOverlaysForChanges(diffViewItem, changesWithNodes);
+		auto newCommit = diffSetup.repository_->getCommitInformation(diffSetup.newVersion_);
+		QString message = createHTMLCommitInfo(newCommit);
+		auto overlay = new Visualization::MessageOverlay{diffViewItem,
+				[diffViewItem, message](Visualization::MessageOverlay* overlay)
+		{
+			auto diffViewItemPos = diffViewItem->scenePos();
+			overlay->setPos(diffViewItemPos.x(),
+								 diffViewItemPos.y() - overlay->heightInScene());
+			auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(diffViewItem->findVisualizationOf
+																					(diffViewItem->nodeAt(Visualization::MajorMinorIndex{})));
+			overlay->setScale(vDiffComparisonPair->scaleFactor());
+			return message;
+		}};
+
+
+		diffViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
 	});
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
+}
+
+QString DiffManager::createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData)
+{
+	return commitMetaData.message_ + "<br/><br/>"
+			+ "<font color='gray'>" + commitMetaData.author_.name_ + "</font><br/>"
+			+ "<font color='gray'>" + commitMetaData.dateTime_.toString("dd.MM.yyyy hh:mm") + "</font><br/>"
+			+ "<font color='gray'>" + commitMetaData.sha1_ + "</font>";
+}
+
+void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString> versions)
+{
+	targetNodeID_ = targetNodeID;
+
+	auto historyViewItem = Visualization::VisualizationManager::instance().mainScene()->
+			viewItems()->viewItem("HistoryView");
+
+	if (historyViewItem)
+		Visualization::VisualizationManager::instance().mainScene()->
+					viewItems()->removeViewItem(historyViewItem);
+
+	historyViewItem = Visualization::VisualizationManager::instance().mainScene()->
+				viewItems()->newViewItem("HistoryView");
+
+	historyViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
+	historyViewItem->setZoomLabelsEnabled(false);
+
+	int col = 0;
+
+	QList<QPair<Model::Node*, QString>> diffComparisonPairInfo;
+
+	for (int i = 1; i < versions.length(); i++)
+	{
+		DiffSetup diffSetup;
+
+		// detailed changes
+		QList<ChangeWithNodes> changesWithNodes;
+
+		// contains the nodes which will be drawn
+		QSet<Model::NodeIdType> changedNodesToVisualize;
+
+		QString oldVersion = versions[i-1];
+		QString newVersion = versions[i];
+
+		// fill up lists
+		computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
+
+		Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
+		Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
+
+		QString message = createHTMLCommitInfo(diffSetup.repository_->getCommitInformation(diffSetup.newVersion_));
+
+		int row = 0;
+		for (auto diffComparisonPair : createDiffComparisonPairs(diffSetup, changedNodesToVisualize))
+		{
+			historyViewItem->insertNode(diffComparisonPair, {row++, col});
+			diffComparisonPairInfo.append({diffComparisonPair, message});
+		}
+
+		// create visualization for changes
+		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+									  [historyViewItem, changesWithNodes]() {
+			createOverlaysForChanges(historyViewItem, changesWithNodes);
+		});
+		col++;
+	}
+
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  [historyViewItem, diffComparisonPairInfo]() {
+		for (auto info : diffComparisonPairInfo)
+		{
+			auto overlay = new Visualization::MessageOverlay{historyViewItem, [historyViewItem, info]
+					(Visualization::MessageOverlay* overlay)
+			{
+				auto vDiffComparisonPair =
+						DCast<VersionControlUI::VDiffComparisonPair>(historyViewItem->findVisualizationOf(info.first));
+				overlay->setPos(vDiffComparisonPair->scenePos().x(),
+									 vDiffComparisonPair->scenePos().y()+vDiffComparisonPair->heightInScene());
+				overlay->setScale(vDiffComparisonPair->scaleFactor());
+				return info.second;
+			}, Visualization::MessageOverlay::itemStyles().get("info") };
+			historyViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
+		}
+	});
+
+
+	// switch to the newly created view
+	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(historyViewItem);
 }
 
 // TODO maybe better implementation for this

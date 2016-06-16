@@ -323,6 +323,8 @@ class MODELBASE_API Node
 		 */
 		bool isAncestorOf(const Node* other) const;
 
+		bool isSameOrAncestorOf(const Node* other) const;
+
 		/**
 		 * Returns the first Ancestor which has the type \a NodeType if there is one, otherwise null.
 		 */

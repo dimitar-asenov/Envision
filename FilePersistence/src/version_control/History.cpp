@@ -152,14 +152,18 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 		auto change = changes.value(rootNodeId_);
 		const GenericNode* rootNode = change->nodeA();
 		if (rootNode)
-			return rootNode->persistentUnit()->name();
+		{
+			Q_ASSERT(rootNode->persistentUnit());
+			return rootNode->persistentUnit()->extractRootNodeIDFromName();
+		}
 		else
 			return QString{};
 	}
 
 	// check if rootNode is still in current PU
-	if (!tree->persistentUnit(currentPath)) {
-		const CommitFile* file = repository->getCommitFile(revision, currentPath);
+	if (!tree->persistentUnit(currentPath, true)) {
+		const CommitFile* file = repository->getCommitFile(revision,
+																			repository->relativePathForPersistentUnit(currentPath, revision));
 		Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(currentPath));
 		SAFE_DELETE(file);
 	}
@@ -175,14 +179,19 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	alreadyChecked.insert(currentPath);
 	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Move);
 	for (auto move : moves)
-		if (currentPath.compare(move->nodeB()->persistentUnit()->name()) == 0)
+	{
+		Q_ASSERT(move->nodeB()->persistentUnit());
+		QString id = move->nodeB()->persistentUnit()->extractRootNodeIDFromName();
+		if (currentPath == id)
 		{
-			QString unitName = move->nodeA()->persistentUnit()->name();
+			Q_ASSERT(move->nodeA()->persistentUnit());
+			QString unitName = move->nodeA()->persistentUnit()->extractRootNodeIDFromName();
 			if (!alreadyChecked.contains(unitName))
 			{
-				if (!tree->persistentUnit(unitName))
+				if (!tree->persistentUnit(unitName, true))
 				{
-					const CommitFile* file = repository->getCommitFile(revision, unitName);
+					const CommitFile* file = repository->getCommitFile(revision,
+																						repository->relativePathForPersistentUnit(unitName, revision));
 					Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(unitName));
 					SAFE_DELETE(file);
 				}
@@ -191,6 +200,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 					return unitName;
 			}
 		}
+	}
 
 	// rootNodeId can't be found but was not deleted!
 	Q_ASSERT(false);
@@ -204,9 +214,10 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 	QList<const CommitFile*> commitFiles;
 
 
-	if (!tree->persistentUnit(relativePath))
+	if (!tree->persistentUnit(relativePath, true))
 	{
-		const CommitFile* startFile = repository->getCommitFile(revision, relativePath);
+		const CommitFile* startFile = repository->getCommitFile(revision,
+																				  repository->relativePathForPersistentUnit(relativePath, revision));
 		commitFiles.append(startFile);
 
 		Parser::load(startFile->content(), startFile->size_, false, tree->newPersistentUnit(relativePath));
@@ -232,14 +243,16 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 		{
 			QString subUnitrelativePath = current->id().toString();
 
-			if (!tree->persistentUnit(subUnitrelativePath))
+			if (!tree->persistentUnit(subUnitrelativePath, true))
 			{
-				const CommitFile* file = repository->getCommitFile(revision, subUnitrelativePath);
+				const CommitFile* file = repository->getCommitFile(revision,
+																					repository->relativePathForPersistentUnit(current->id().toString(),
+																																revision));
 				commitFiles.append(file);
 
 				Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(subUnitrelativePath));
 			}
-			GenericNode* subUnitRoot = tree->persistentUnit(subUnitrelativePath)->unitRootNode();
+			GenericNode* subUnitRoot = tree->persistentUnit(subUnitrelativePath, true)->unitRootNode();
 			stack.append(subUnitRoot);
 		}
 

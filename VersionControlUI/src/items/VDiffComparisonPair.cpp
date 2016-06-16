@@ -263,7 +263,7 @@ bool VDiffComparisonPair::isSensitiveToScale() const
 	return true;
 }
 
-void VDiffComparisonPair::scaleVisualizations()
+qreal VDiffComparisonPair::scaleFactor()
 {
 	qreal factor = Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor();
 	qreal scale;
@@ -273,6 +273,14 @@ void VDiffComparisonPair::scaleVisualizations()
 		scale = 1.0/factor;
 	else
 		scale = 1.0;
+
+	return scale;
+}
+
+void VDiffComparisonPair::scaleVisualizations()
+{
+
+	auto scale = scaleFactor();
 
 	if (nodeNotFoundIcon_)
 		nodeNotFoundIcon_->setScale(scale);

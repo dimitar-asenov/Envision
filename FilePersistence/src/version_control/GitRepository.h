@@ -91,6 +91,8 @@ class FILEPERSISTENCE_API GitRepository
 
 		static int getMinPrefixLength();
 
+		QString relativePathForPersistentUnit(QString persistentUnitId, QString revision) const;
+
 	private:
 		friend class Merge;
 
@@ -173,5 +175,13 @@ struct FILEPERSISTENCE_API GitCommitExtract
 		git_repository* repository_{};
 		Commit* commit_{};
 };
+
+struct FILEPERSISTENCE_API RelativePathData
+{
+		git_repository* repository_{};
+		QString id;
+		QString relativePath;
+};
+
 
 }

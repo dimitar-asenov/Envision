@@ -29,13 +29,16 @@
 #include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
+#include "VersionControlUI/src/commands/CHistory.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 
 HStatement::HStatement()
-{}
+{
+	addCommand(new VersionControlUI::CHistory{});
+}
 
 HStatement* HStatement::instance()
 {

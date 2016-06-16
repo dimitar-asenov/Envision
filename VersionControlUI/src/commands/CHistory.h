@@ -26,21 +26,21 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
+#include "../versioncontrolui_api.h"
 
-#include "CommandWithFlags.h"
+#include "InteractionBase/src/commands/CommandWithFlags.h"
 
 #include "FilePersistence/src/version_control/GitRepository.h"
 
-namespace Interaction {
+namespace VersionControlUI {
 
-class INTERACTIONBASE_API CHistory : public CommandWithFlags
+class VERSIONCONTROLUI_API CHistory : public Interaction::CommandWithFlags
 {
 	public:
 		CHistory();
 
 	protected:
-		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor,
 				const QString& name, const QStringList& attributes) override;
 
@@ -48,8 +48,6 @@ class INTERACTIONBASE_API CHistory : public CommandWithFlags
 													 const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
-		void printCommitMetaData(FilePersistence::CommitMetaData& data) const;
-
 		FilePersistence::GitRepository* repository;
 };
 

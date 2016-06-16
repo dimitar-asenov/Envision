@@ -67,7 +67,6 @@ add_library(InteractionBase SHARED
 	src/vis/TextAndDescriptionStyle.h
 	src/InteractionBasePlugin.h
 	src/commands/CommandWithDefaultArguments.h
-	src/commands/CHistory.h
 	src/commands/CMerge.h
 	src/commands/CNewView.h
 	src/commands/CSwitchView.h
@@ -156,7 +155,6 @@ add_library(InteractionBase SHARED
 	test/SimpleTest.cpp
 	src/InteractionBasePlugin.cpp
 	src/commands/CommandWithDefaultArguments.cpp
-	src/commands/CHistory.cpp
 	src/commands/CMerge.cpp
 	src/commands/CNewView.cpp
 	src/commands/CSwitchView.cpp

@@ -35,6 +35,7 @@
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Static.h"
 
 #include "../nodes/DiffComparisonPair.h"
@@ -57,6 +58,8 @@ class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::Ite
 		virtual bool isSensitiveToScale() const override;
 		virtual void determineChildren() override;
 		virtual int determineForm() override;
+
+		qreal scaleFactor();
 
 		QList<Visualization::Item*> objectPathCrumbsOldNode();
 		QList<Visualization::Item*> objectPathCrumbsNewNode();

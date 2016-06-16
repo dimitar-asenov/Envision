@@ -52,7 +52,7 @@ class FILEPERSISTENCE_API GenericTree {
 		void removePersistentUnit(const GenericPersistentUnit& unit);
 
 		GenericPersistentUnit& newPersistentUnit(QString name, char* data = nullptr, int dataSize = 0);
-		GenericPersistentUnit* persistentUnit(const QString& name) const;
+		GenericPersistentUnit* persistentUnit(const QString& name, bool partial = false) const;
 		QList<std::shared_ptr<GenericPersistentUnit>> persistentUnits() const;
 
 		/**
