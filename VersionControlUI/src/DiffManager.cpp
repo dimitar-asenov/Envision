@@ -242,7 +242,6 @@ QString DiffManager::createHTMLCommitInfo(FilePersistence::CommitMetaData commit
 
 void DiffManager::visualizeHistory(Model::NodeIdType targetNodeID, QList<QString> versions)
 {
-
 	targetNodeID_ = targetNodeID;
 
 	auto historyViewItem = Visualization::VisualizationManager::instance().mainScene()->
