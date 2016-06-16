@@ -91,7 +91,7 @@ class FILEPERSISTENCE_API GitRepository
 
 		static int getMinPrefixLength();
 
-		QString getRelativePathForID(QString targetID, QString revision) const;
+		QString relativePathForPersistentUnit(QString persistentUnitId, QString revision) const;
 
 	private:
 		friend class Merge;

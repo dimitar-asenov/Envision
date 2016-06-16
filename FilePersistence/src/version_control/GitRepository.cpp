@@ -1212,7 +1212,7 @@ static int relativePathTreeWalkCallBack(const char* root,
 	return 0;
 }
 
-QString GitRepository::getRelativePathForID(QString targetID, QString revision) const
+QString GitRepository::relativePathForPersistentUnit(QString persistentUnitId, QString revision) const
 {
 	git_commit* gitCommit = parseCommit(revision);
 	git_tree* tree = nullptr;
@@ -1220,7 +1220,7 @@ QString GitRepository::getRelativePathForID(QString targetID, QString revision) 
 
 	RelativePathData relativePathData;
 	relativePathData.repository_ = repository_;
-	relativePathData.id = targetID;
+	relativePathData.id = persistentUnitId;
 
 	git_tree_walk(tree, GIT_TREEWALK_PRE, relativePathTreeWalkCallBack, &relativePathData);
 

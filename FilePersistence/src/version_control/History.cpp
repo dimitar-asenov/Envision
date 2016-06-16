@@ -163,7 +163,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	// check if rootNode is still in current PU
 	if (!tree->persistentUnit(currentPath, true)) {
 		const CommitFile* file = repository->getCommitFile(revision,
-																			repository->getRelativePathForID(currentPath, revision));
+																			repository->relativePathForPersistentUnit(currentPath, revision));
 		Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(currentPath));
 		SAFE_DELETE(file);
 	}
@@ -191,7 +191,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 				if (!tree->persistentUnit(unitName, true))
 				{
 					const CommitFile* file = repository->getCommitFile(revision,
-																						repository->getRelativePathForID(unitName, revision));
+																						repository->relativePathForPersistentUnit(unitName, revision));
 					Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(unitName));
 					SAFE_DELETE(file);
 				}
@@ -217,7 +217,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 	if (!tree->persistentUnit(relativePath, true))
 	{
 		const CommitFile* startFile = repository->getCommitFile(revision,
-																				  repository->getRelativePathForID(relativePath, revision));
+																				  repository->relativePathForPersistentUnit(relativePath, revision));
 		commitFiles.append(startFile);
 
 		Parser::load(startFile->content(), startFile->size_, false, tree->newPersistentUnit(relativePath));
@@ -246,7 +246,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 			if (!tree->persistentUnit(subUnitrelativePath, true))
 			{
 				const CommitFile* file = repository->getCommitFile(revision,
-																					repository->getRelativePathForID(current->id().toString(),
+																					repository->relativePathForPersistentUnit(current->id().toString(),
 																																revision));
 				commitFiles.append(file);
 
