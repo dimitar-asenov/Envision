@@ -1195,6 +1195,7 @@ static int relativePathTreeWalkCallBack(const char* root,
 	{
 		if (git_object_type(obj) == GIT_OBJ_BLOB)
 		{
+			git_object_free(obj);
 			QString fileName{git_tree_entry_name(entry)};
 			if (fileName.contains(relativePathData->id))
 			{
@@ -1207,7 +1208,10 @@ static int relativePathTreeWalkCallBack(const char* root,
 		}
 	}
 	else
+	 {
+		git_object_free(obj);
 		Q_ASSERT(false);
+	 }
 
 	return 0;
 }
@@ -1223,6 +1227,9 @@ QString GitRepository::relativePathForPersistentUnit(QString persistentUnitId, Q
 	relativePathData.id = persistentUnitId;
 
 	git_tree_walk(tree, GIT_TREEWALK_PRE, relativePathTreeWalkCallBack, &relativePathData);
+
+	git_commit_free(gitCommit);
+	git_tree_free(tree);
 
 	return relativePathData.relativePath;
 }
