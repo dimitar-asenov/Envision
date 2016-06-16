@@ -165,6 +165,7 @@ GenericNode* GenericPersistentUnit::unitRootNode() const
 
 QString GenericPersistentUnit::extractRootNodeIDFromName() const
 {
+	Q_ASSERT(name_.endsWith("}"));
 	return name_.right(name_.length() - name_.lastIndexOf("{"));
 }
 
