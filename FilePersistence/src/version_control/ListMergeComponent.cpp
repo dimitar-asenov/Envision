@@ -174,7 +174,7 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 					auto oldNode = treeBase->find(elemId);
 					auto newNodeA = treeA->find(elemId);
 					auto newNodeB = treeB->find(elemId);
-					auto adjustChange = [&](GenericNode* newNode,
+					auto adjustChange = [&oldNode, &elemId, &updateChange](GenericNode* newNode,
 							ChangeDependencyGraph& cdgA,
 							ChangeDependencyGraph& cdgB)
 					{
