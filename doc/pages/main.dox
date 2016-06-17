@@ -13,7 +13,7 @@
 	\subsection videos Videos
 
 	\htmlonly 
-	<iframe width="640" height="360" src="http://www.youtube.com/embed/9X9stH2T-7w" frameborder="0" allowfullscreen>
+	<iframe width="640" height="360" src="https://www.youtube.com/embed/9X9stH2T-7w" frameborder="0" allowfullscreen>
 	</iframe>
 	<br/>
 	\endhtmlonly
@@ -22,12 +22,22 @@
 	<br/>
 
 	\htmlonly 
-	<iframe width="640" height="360" src="http://www.youtube.com/embed/GD0W5HEteu8" frameborder="0" allowfullscreen>
+	<iframe width="640" height="360" src="https://www.youtube.com/embed/GD0W5HEteu8" frameborder="0" allowfullscreen>
 	</iframe>
 	<br/>
 	\endhtmlonly
 	A demonstration of how the visualizations and interactions in Envision can be customized for embedded
 	domain-specific languages.
+	
+	<br/>
+	
+	\htmlonly 
+	<iframe width="640" height="360" src="https://www.youtube.com/embed/0j8-Bjhnl4c" frameborder="0" allowfullscreen>
+	</iframe>
+	<br/>
+	\endhtmlonly
+	Our CHI'16 talk presenting the results of a user study which shows that Envision's rich visualizations can
+	substantially improve the understanding of code structure, compared to syntax highlighting.
 
 \section status Development status
 
