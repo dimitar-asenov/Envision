@@ -174,26 +174,27 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 					auto oldNode = treeBase->find(elemId);
 					auto newNodeA = treeA->find(elemId);
 					auto newNodeB = treeB->find(elemId);
-					Q_ASSERT(oldNode);
-					Q_ASSERT(newNodeA || newNodeB);
-					if (newNodeA)	//Add change in cdgA
+					auto adjustChange = [&](GenericNode* oldNode, GenericNode* newNode,
+							ChangeDependencyGraph& cdgA,
+							ChangeDependencyGraph& cdgB)
 					{
-						auto newChange = std::make_shared<ChangeDescription>(oldNode, newNodeA);
+						auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
 						updateChange(newChange, cdgA, cdgB);
 						auto delChange = cdgA.changes().value(elemId);
 						if (delChange)	cdgA.remove(delChange);		// Remove previous change
 						cdgA.insert(newChange);
 						cdgA.recordDependencies(newChange, true);
 						cdgA.recordDependencies(newChange, false);
+					};
+
+					Q_ASSERT(oldNode);
+					Q_ASSERT(newNodeA || newNodeB);
+					if (newNodeA)	//Add change in cdgA
+					{
+						adjustChange(oldNode, newNodeA, cdgA, cdgB);
 					}
 					else{		//Add change in cdgB
-						auto newChange = std::make_shared<ChangeDescription>(oldNode, newNodeB);
-						updateChange(newChange, cdgB, cdgA);
-						auto delChange = cdgB.changes().value(elemId);
-						if (delChange)	cdgB.remove(delChange);		// Remove previous change
-						cdgB.insert(newChange);
-						cdgB.recordDependencies(newChange, true);
-						cdgB.recordDependencies(newChange, false);
+						adjustChange(oldNode, newNodeB, cdgB, cdgA);
 					}
 				}
 			}
