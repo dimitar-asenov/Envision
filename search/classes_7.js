@@ -31,6 +31,7 @@ var searchData=
   ['hmethod',['HMethod',['../classOOInteraction_1_1HMethod.html',1,'OOInteraction']]],
   ['hmodule',['HModule',['../classOOInteraction_1_1HModule.html',1,'OOInteraction']]],
   ['hmovableitem',['HMovableItem',['../classInteraction_1_1HMovableItem.html',1,'Interaction']]],
+  ['hobjectpathcrumb',['HObjectPathCrumb',['../classVersionControlUI_1_1HObjectPathCrumb.html',1,'VersionControlUI']]],
   ['hpositionlayout',['HPositionLayout',['../classInteraction_1_1HPositionLayout.html',1,'Interaction']]],
   ['hproject',['HProject',['../classOOInteraction_1_1HProject.html',1,'OOInteraction']]],
   ['hpromptshell',['HPromptShell',['../classInteraction_1_1HPromptShell.html',1,'Interaction']]],

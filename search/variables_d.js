@@ -29,6 +29,7 @@ var searchData=
   ['marginleft_5f',['marginLeft_',['../classVisualization_1_1FormElement.html#ac1502dd2e939f6577c897028d9df5909',1,'Visualization::FormElement']]],
   ['marginright_5f',['marginRight_',['../classVisualization_1_1FormElement.html#a2caed31b2e6fd191336d28d0518f1e9a',1,'Visualization::FormElement']]],
   ['margintop_5f',['marginTop_',['../classVisualization_1_1FormElement.html#a856f05e34322fe6408e5c188711a4729',1,'Visualization::FormElement']]],
+  ['matchassociateditemscale',['matchAssociatedItemScale',['../classVisualization_1_1IconOverlayStyle.html#a4e7c63cdfd7bbae515404850f1588364',1,'Visualization::IconOverlayStyle']]],
   ['matcher_5f',['matcher_',['../classModel_1_1ResolutionRequest.html#a7780c60d9c3cafe2768bf6969def1ebc',1,'Model::ResolutionRequest']]],
   ['matchself_5f',['matchSelf_',['../classInformationScripting_1_1Reachable.html#aca6ffa13695becfbc8dbd37756c0ab86',1,'InformationScripting::Reachable']]],
   ['max_5farrow_5fwidth',['MAX_ARROW_WIDTH',['../classComments_1_1VCommentDiagramConnector.html#a86a25fc46d0899f0869a057def43ed76',1,'Comments::VCommentDiagramConnector']]],

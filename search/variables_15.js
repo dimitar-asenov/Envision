@@ -28,6 +28,8 @@ var searchData=
   ['uselinkedchanges_5f',['useLinkedChanges_',['../classFilePersistence_1_1ConflictUnitDetector.html#a1067f55fabc0583d9aa1d3ec0d9db270',1,'FilePersistence::ConflictUnitDetector']]],
   ['usepossiblenames_5f',['usePossibleNames_',['../classInteraction_1_1CommandWithFlags.html#a773c64d51c68e812a1b78feb8ff52ec3',1,'Interaction::CommandWithFlags']]],
   ['userbreakpoints_5f',['userBreakpoints_',['../classOODebug_1_1JavaDebugger.html#ada5788446d44a0e251adfe5c95e0391c',1,'OODebug::JavaDebugger']]],
+  ['username',['username',['../classCodeReview_1_1VReviewCommentStyle.html#aedd403390fca93765230d96ede7c2494',1,'CodeReview::VReviewCommentStyle']]],
+  ['username_5f',['username_',['../classCodeReview_1_1VReviewComment.html#a241fba4001b0c11f3c6d0c2bcaad0a18',1,'CodeReview::VReviewComment']]],
   ['usingalias_5f',['usingAlias_',['../structClassData.html#a9cdb3a6935aea26290aa9e7d6ca4da03',1,'ClassData']]],
   ['usingdeclmap_5f',['usingDeclMap_',['../classCppImport_1_1TranslateManager.html#a854adc87b80e35f07b49a09fb3b502a9',1,'CppImport::TranslateManager']]],
   ['usingdirectivedeclarations_5f',['usingDirectiveDeclarations_',['../classCppImport_1_1ClangAstVisitor.html#a500adf3d1eee267e02337de764748858',1,'CppImport::ClangAstVisitor']]],

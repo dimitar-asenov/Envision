@@ -140,6 +140,7 @@ var searchData=
   ['_7enodereadwritelock',['~NodeReadWriteLock',['../classModel_1_1NodeReadWriteLock.html#ad3199644be4a09112ec0f42b494c8f28',1,'Model::NodeReadWriteLock']]],
   ['_7enodewithvisualizationitemwrapperformelement',['~NodeWithVisualizationItemWrapperFormElement',['../classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html#a45f03f26034fe8b7e50cb6cc63a1426f',1,'Visualization::NodeWithVisualizationItemWrapperFormElement']]],
   ['_7enodewrapper',['~NodeWrapper',['../classVisualization_1_1NodeWrapper.html#ac9de68e7c8f5f6ae403d3a4f02079306',1,'Visualization::NodeWrapper']]],
+  ['_7eobjectpathcrumbstyle',['~ObjectPathCrumbStyle',['../classVersionControlUI_1_1ObjectPathCrumbStyle.html#a209b999dd604ac4d3feee5a809db3dbe',1,'VersionControlUI::ObjectPathCrumbStyle']]],
   ['_7eonscopeexit',['~OnScopeExit',['../classOnScopeExit.html#ad05cf415b937321148654d2115cbc4db',1,'OnScopeExit']]],
   ['_7eooresolutionrequest',['~OOResolutionRequest',['../classOOModel_1_1OOResolutionRequest.html#abe39348254ac08a0cceb13864a5aedbd',1,'OOModel::OOResolutionRequest']]],
   ['_7eoperator',['~Operator',['../classInteraction_1_1Operator.html#ad724d47143a322f9256f43c96fe65f47',1,'Interaction::Operator']]],

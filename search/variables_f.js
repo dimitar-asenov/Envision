@@ -2,6 +2,10 @@ var searchData=
 [
   ['objectid',['objectId',['../structOODebug_1_1Value.html#a88847f060bbbe28e3cc9a8f24620613f',1,'OODebug::Value::objectId()'],['../structOODebug_1_1TaggedObjectId.html#ad66ebf9bb4da5ae9426e2d9ff1327139',1,'OODebug::TaggedObjectId::objectId()'],['../structOODebug_1_1StringValueCommand.html#ab63f772b6b353bb495a79f0312f25e3b',1,'OODebug::StringValueCommand::objectID()']]],
   ['objectidsize',['objectIDSize',['../structOODebug_1_1IDSizes.html#a0fa86355f5706a93146b84b436634e40',1,'OODebug::IDSizes']]],
+  ['objectpathcrumbsdatanewnode_5f',['objectPathCrumbsDataNewNode_',['../classVersionControlUI_1_1DiffComparisonPair.html#a9ca89763781fb7a9db87d91e8dca5952',1,'VersionControlUI::DiffComparisonPair']]],
+  ['objectpathcrumbsdataoldnode_5f',['objectPathCrumbsDataOldNode_',['../classVersionControlUI_1_1DiffComparisonPair.html#a8a1b0892a1ed276d508e58b23fdd203b',1,'VersionControlUI::DiffComparisonPair']]],
+  ['objectpathcrumbsnewnode_5f',['objectPathCrumbsNewNode_',['../classVersionControlUI_1_1VDiffComparisonPair.html#a11c6e7506d736bcbc60e925d32a277ab',1,'VersionControlUI::VDiffComparisonPair']]],
+  ['objectpathcrumbsoldnode_5f',['objectPathCrumbsOldNode_',['../classVersionControlUI_1_1VDiffComparisonPair.html#a76932d9cedab0c88f90c40141549db7b',1,'VersionControlUI::VDiffComparisonPair']]],
   ['observedvariables_5f',['observedVariables_',['../structOODebug_1_1VariableObserver.html#a4f38b0fee3ec8ed3db2cc50509b65b02',1,'OODebug::VariableObserver']]],
   ['observerlocation_5f',['observerLocation_',['../structOODebug_1_1VariableObserver.html#a1759cb82638b137486d1d3add88859f4',1,'OODebug::VariableObserver']]],
   ['offset',['offset',['../classInteraction_1_1HRootItem.html#a4cdf7238307acad81409ba3616e05ea4',1,'Interaction::HRootItem']]],
@@ -19,7 +23,6 @@ var searchData=
   ['oldversionmanager_5f',['oldVersionManager_',['../structVersionControlUI_1_1DiffSetup.html#a7b7dd5cd5239f806d812b0a383b43976',1,'VersionControlUI::DiffSetup']]],
   ['oldversionnode_5f',['oldVersionNode_',['../classVersionControlUI_1_1VDiffComparisonPair.html#a41409b14ca56c747dc1d6c7420662af9',1,'VersionControlUI::VDiffComparisonPair::oldVersionNode_()'],['../classVersionControlUI_1_1DiffComparisonPair.html#a13ae2492c539bb4b16f0be503a250e2f',1,'VersionControlUI::DiffComparisonPair::oldVersionNode_()']]],
   ['oldversionobjectpath',['oldVersionObjectPath',['../classVersionControlUI_1_1VDiffComparisonPairStyle.html#ad1a1b17ba32fde466be0a5f24dc33805',1,'VersionControlUI::VDiffComparisonPairStyle']]],
-  ['oldversionobjectpath_5f',['oldVersionObjectPath_',['../classVersionControlUI_1_1VDiffComparisonPair.html#aff19aa8dda6225a396a326c8d31017d3',1,'VersionControlUI::VDiffComparisonPair::oldVersionObjectPath_()'],['../classVersionControlUI_1_1DiffComparisonPair.html#acd95e99c3db72285947d98f5674a88cf',1,'VersionControlUI::DiffComparisonPair::oldVersionObjectPath_()']]],
   ['on_5fargument_5fnames',['ON_ARGUMENT_NAMES',['../classInformationScripting_1_1Join.html#a3fa8591f353a6d976b0bf11917cddc67',1,'InformationScripting::Join']]],
   ['onzoomhandlers_5f',['onZoomHandlers_',['../classVisualization_1_1Scene.html#aec02dc5e9b245f745ea8e58454f8e644',1,'Visualization::Scene']]],
   ['ooexprstack_5f',['ooExprStack_',['../classCppImport_1_1ClangAstVisitor.html#a6ef87633cffaf57c232c089da650d652',1,'CppImport::ClangAstVisitor::ooExprStack_()'],['../classCppImport_1_1ExpressionVisitor.html#a2da2c149ef3edf8b7fa0c4ac72ed41e4',1,'CppImport::ExpressionVisitor::ooExprStack_()']]],

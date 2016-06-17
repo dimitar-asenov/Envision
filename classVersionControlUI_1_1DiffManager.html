@@ -133,8 +133,8 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:ae01ae4eca723a6ded0c3b839338424bd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVersionControlUI_1_1DiffManager.html#ae01ae4eca723a6ded0c3b839338424bd">addHighlightAndReturnItem</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classVisualization_1_1ViewItem.html">Visualization::ViewItem</a> *viewItem, QString highlightOverlayName, QString highlightOverlayStyle)</td></tr>
-<tr class="separator:ae01ae4eca723a6ded0c3b839338424bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a0abdef8d3643ca5efe08b7db33ca0c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVersionControlUI_1_1DiffManager.html#a1a0abdef8d3643ca5efe08b7db33ca0c">addOverlaysAndReturnItem</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classVisualization_1_1ViewItem.html">Visualization::ViewItem</a> *viewItem, QString highlightOverlayName, QString highlightOverlayStyle, QString arrowIconOverlayName, QString arrowIconOverlayStyle)</td></tr>
+<tr class="separator:a1a0abdef8d3643ca5efe08b7db33ca0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f8cbd06d0578ebecf4842826f0ac913"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVersionControlUI_1_1DiffManager.html#a3f8cbd06d0578ebecf4842826f0ac913">createOverlaysForChanges</a> (<a class="el" href="classVisualization_1_1ViewItem.html">Visualization::ViewItem</a> *diffViewItem, QList&lt; <a class="el" href="structVersionControlUI_1_1ChangeWithNodes.html">ChangeWithNodes</a> &gt; changesWithNodes)</td></tr>
 <tr class="memdesc:a3f8cbd06d0578ebecf4842826f0ac913"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the different overlays according to the change type of the node.  <a href="#a3f8cbd06d0578ebecf4842826f0ac913">More...</a><br /></td></tr>
 <tr class="separator:a3f8cbd06d0578ebecf4842826f0ac913"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,7 +193,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ae01ae4eca723a6ded0c3b839338424bd"></a>
+<a class="anchor" id="a1a0abdef8d3643ca5efe08b7db33ca0c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -201,7 +201,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> * VersionControlUI::DiffManager::addHighlightAndReturnItem </td>
+          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> * VersionControlUI::DiffManager::addOverlaysAndReturnItem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
           <td class="paramname"><em>node</em>, </td>
@@ -222,7 +222,19 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>highlightOverlayStyle</em>&#160;</td>
+          <td class="paramname"><em>highlightOverlayStyle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>arrowIconOverlayName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>arrowIconOverlayStyle</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

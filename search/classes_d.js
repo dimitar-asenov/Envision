@@ -1,5 +1,8 @@
 var searchData=
 [
+  ['objectpathcrumb',['ObjectPathCrumb',['../classVersionControlUI_1_1ObjectPathCrumb.html',1,'VersionControlUI']]],
+  ['objectpathcrumbdata',['ObjectPathCrumbData',['../structVersionControlUI_1_1ObjectPathCrumbData.html',1,'VersionControlUI']]],
+  ['objectpathcrumbstyle',['ObjectPathCrumbStyle',['../classVersionControlUI_1_1ObjectPathCrumbStyle.html',1,'VersionControlUI']]],
   ['onscopeexit',['OnScopeExit',['../classOnScopeExit.html',1,'']]],
   ['ooactions',['OOActions',['../classOOInteraction_1_1OOActions.html',1,'OOInteraction']]],
   ['oodebugexception',['OODebugException',['../classOODebug_1_1OODebugException.html',1,'OODebug']]],
