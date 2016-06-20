@@ -1,6 +1,5 @@
 {
-    "ExportFile": "AstApi_Generated.cpp",
-    "ExportPath": "../../InformationScripting/src/python_bindings/",
+    "ExportPath": "../../InformationScripting/src/python_bindings/generated/",
     "EnvisionPath": "../..",
     "MaxLineLength": 120,
     "SubDirs": 

@@ -34,11 +34,10 @@ class APIPrinter
 {
 	public:
 		APIPrinter();
-		~APIPrinter();
 		void print();
 
 	private:
-		QFile outFile_{Config::instance().exportFileName()};
+		QFile outFile_;
 		QTextStream out_;
 		QString indent_;
 
@@ -58,6 +57,8 @@ class APIPrinter
 
 		void printPossiblyLongString(const QString& data, int additionalLength = 0);
 
+		using PrintMethod = std::function<void()>;
+		void printOneFile(const QString& filename, PrintMethod method);
 		void indent();
 		void unIndent();
 };

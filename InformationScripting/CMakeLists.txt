@@ -22,6 +22,8 @@ endif()
 include_directories(SYSTEM ${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
+file(GLOB GENERATED_PYTHON_BINDINGS "src/python_bindings/generated/*.cpp" )
+
 add_library(InformationScripting SHARED
 	src/precompiled.h
 	src/InformationScriptingException.h
@@ -125,7 +127,6 @@ add_library(InformationScripting SHARED
 	src/query_prompt/visualization/VCommandArgument.cpp
 	src/query_prompt/visualization/VCommandNode.cpp
 	src/query_prompt/HQuery.cpp
-	src/python_bindings/AstApi_Generated.cpp
 	src/python_bindings/DataApi.cpp
 	src/python_bindings/BoostPythonHelpers.cpp
 	src/python_bindings/PythonSet.cpp
@@ -154,6 +155,7 @@ add_library(InformationScripting SHARED
 	scripts/ifToWhile.py
 	scripts/profileSource.py
 	scripts/table.py
+	${GENERATED_PYTHON_BINDINGS}
 )
 
 target_link_libraries(InformationScripting ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})

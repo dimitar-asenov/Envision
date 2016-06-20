@@ -29,35 +29,14 @@
 
 APIPrinter::APIPrinter()
 {
-	// Create out file
-	if (!outFile_.open(QIODevice::WriteOnly | QIODevice::Text)) Q_ASSERT(false);
-	out_.setDevice(&outFile_);
-
 	maxLineLength_ = Config::instance().maxLineLength();
-}
-
-APIPrinter::~APIPrinter()
-{
-	outFile_.close();
 }
 
 void APIPrinter::print()
 {
-	printLicense();
-	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl << endl;
-	out_ << "#include \"AstApi.h\"" << endl << endl;
-	printHeaders();
-	out_ << "#include \"ModelBase/src/persistence/ClipboardStore.h\"" << endl << endl;
-	out_ << "#include \"ModelBase/src/commands/UndoCommand.h\"" << endl << endl;
-	out_ << "namespace InformationScripting {" << endl << endl;
-	out_ << "using namespace boost::python;" << endl << endl;
 	printClasses();
-	printTypedListWrappers();
-	out_ << endl << endl;
-	out_ << "BOOST_PYTHON_MODULE(AstApi) {" << endl << endl;
-	printInitFunctionCalls();
-	out_ << "}" << endl << endl;
-	out_ << endl << "} /* namespace InformationScripting */" << endl;
+	printOneFile("TypedListWrappers.cpp", [this](){printTypedListWrappers();});
+	printOneFile("init.cpp", [this](){printInitFunctionCalls();});
 }
 
 void APIPrinter::printLicense()
@@ -78,6 +57,14 @@ void APIPrinter::printHeaders()
 
 void APIPrinter::printInitFunctionCalls()
 {
+	// print all extern forward declarations
+	out_ << "extern void initTypedListWrappers();" << endl << endl;
+	for (const auto& cData : APIData::instance().classes())
+		out_ << indent_ << "extern void initClass" << cData.className_ << "();" << endl;
+
+	out_ << endl << endl;
+	out_ << "BOOST_PYTHON_MODULE(AstApi) {" << endl << endl;
+
 	indent();
 
 	// Print classes
@@ -88,11 +75,14 @@ void APIPrinter::printInitFunctionCalls()
 		out_ << indent_ << "initTypedListWrappers();" <<endl;
 
 	unIndent();
+	out_ << "}" << endl << endl;
 }
 
 void APIPrinter::printClasses()
 {
-	for (const auto& cData : APIData::instance().classes()) printClass(cData);
+	for (const auto& cData : APIData::instance().classes())
+		printOneFile(QString{cData.qualifiedName_}.replace(QRegularExpression{"[:<>]"}, "_")+".cpp",
+						 [this, &cData](){printClass(cData);});
 }
 
 void APIPrinter::printClass(const ClassData& cData)
@@ -201,7 +191,7 @@ void APIPrinter::printTypedListWrappers()
 		unIndent();
 	}
 	unIndent();
-	out_ << "}" << endl;
+	out_ << "}" << endl << endl;
 }
 
 void APIPrinter::printPossiblyLongString(const QString& data, int additionalLength)
@@ -229,6 +219,29 @@ void APIPrinter::printPossiblyLongString(const QString& data, int additionalLeng
 	{
 		out_ << indent_ << data;
 	}
+}
+
+void APIPrinter::printOneFile(const QString& filename, PrintMethod method)
+{
+	// Create out file
+	outFile_.setFileName(Config::instance().exportPath() + filename);
+	if (!outFile_.open(QIODevice::WriteOnly | QIODevice::Text)) Q_ASSERT(false);
+	out_.setDevice(&outFile_);
+	maxLineLength_ = Config::instance().maxLineLength();
+
+	printLicense();
+	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl << endl;
+	out_ << "#include \"../AstApi.h\"" << endl << endl;
+	printHeaders();
+	out_ << "#include \"ModelBase/src/persistence/ClipboardStore.h\"" << endl << endl;
+	out_ << "#include \"ModelBase/src/commands/UndoCommand.h\"" << endl << endl;
+	out_ << "namespace InformationScripting {" << endl << endl;
+	out_ << "using namespace boost::python;" << endl << endl;
+
+	method();
+
+	out_ << endl << "} /* namespace InformationScripting */" << endl;
+	outFile_.close();
 }
 
 void APIPrinter::indent()

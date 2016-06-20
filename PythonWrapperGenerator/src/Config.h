@@ -33,11 +33,11 @@ class Config
 		static const Config& instance();
 
 		/**
-		 * Returns the export file name with full specified path.
+		 * Returns the export file path
 		 *
-		 * ConfigKeys: "ExportFile" and "ExportPath"
+		 * ConfigKeys: "ExportPath"
 		 */
-		QString exportFileName() const;
+		QString exportPath() const;
 
 		/**
 		 * Path to Envision to create a wrapper.

@@ -32,14 +32,13 @@ const Config& Config::instance()
 	return conf;
 }
 
-QString Config::exportFileName() const
+QString Config::exportPath() const
 {
 	auto path = config_["ExportPath"].toString();
 	QDir dir(path);
 	path = dir.absolutePath();
-	auto fileName = config_["ExportFile"].toString();
 	if (!path.endsWith(QDir::separator())) path.append(QDir::separator());
-	return path + fileName;
+	return path;
 }
 
 QString Config::envisionReadPath() const
