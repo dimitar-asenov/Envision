@@ -84,7 +84,7 @@ bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
 		if (!commandTokensCopy.isEmpty())
 		{
 			auto token = commandTokensCopy.takeFirst();
-			if (token != "summary")
+			if (token != SUMMARY_COMMAND)
 				return false;
 		}
 		return true;
