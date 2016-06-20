@@ -56,6 +56,7 @@ namespace VersionControlUI
 {
 
 struct ChangeWithNodes {
+	Model::NodeIdType id_;
 	Model::Node* oldNode_{};
 	Model::Node* newNode_{};
 	FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
@@ -130,13 +131,13 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 			if ((targetOldNode && targetOldNode->isSameOrAncestorOf(oldNode))
 				 || (targetNewNode && targetNewNode->isSameOrAncestorOf(newNode)))
 			{
-				changesWithNodes.append({oldNode, newNode, change->type()});
+				changesWithNodes.append({id, oldNode, newNode, change->type()});
 			}
 			else
 				continue;
 
 		} else
-			changesWithNodes.append({oldNode, newNode, change->type()});
+			changesWithNodes.append({id, oldNode, newNode, change->type()});
 
 		Model::NodeIdType nodeId;
 
