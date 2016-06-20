@@ -121,6 +121,11 @@ class VERSIONCONTROLUI_API DiffManager
 		 */
 		void removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container);
 
+		static void setOverlayInformationAccordingToChangeType(FilePersistence::ChangeType changeType,
+																			QString& highlightOverlayStyle, QString& highlightOverlayName,
+																			QString& arrowIconOverlayStyle, QString& arrowIconOverlayName,
+																			bool iconsForMoveAndModify = false);
+
 		static Visualization::Item* addOverlaysAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
 																QString highlightOverlayName, QString highlightOverlayStyle,
 																QString arrowIconOverlayName, QString arrowIconOverlayStyle);
