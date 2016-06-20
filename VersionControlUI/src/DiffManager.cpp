@@ -283,12 +283,14 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 		QString message = createHTMLCommitInfo(diffSetup.repository_->getCommitInformation(diffSetup.newVersion_));
 
+		auto diffComparisonPairs = createDiffComparisonPairs(diffSetup, changedNodesToVisualize);
+
 		int row = 0;
-		for (auto diffComparisonPair : createDiffComparisonPairs(diffSetup, changedNodesToVisualize))
-		{
+		for (auto diffComparisonPair : diffComparisonPairs)
 			historyViewItem->insertNode(diffComparisonPair, {row++, col});
-			diffComparisonPairInfo.append({diffComparisonPair, message});
-		}
+
+		if (!diffComparisonPairs.isEmpty())
+			diffComparisonPairInfo.append({diffComparisonPairs.last(), message});
 
 		// create visualization for changes
 		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
