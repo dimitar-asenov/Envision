@@ -125,7 +125,7 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	return new Interaction::CommandResult{};
 }
 
-QString CDiff::descriptionForCommits(QString token, QList<QPair<QString, QString>> commits)
+QString CDiff::descriptionForCommits(QString token, const QList<QPair<QString, QString>>& commits)
 {
 	QString suggestDescription;
 
