@@ -56,6 +56,7 @@ namespace VersionControlUI
 {
 
 struct ChangeWithNodes {
+	Model::NodeIdType id_;
 	Model::Node* oldNode_{};
 	Model::Node* newNode_{};
 	FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
@@ -130,13 +131,13 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 			if ((targetOldNode && targetOldNode->isSameOrAncestorOf(oldNode))
 				 || (targetNewNode && targetNewNode->isSameOrAncestorOf(newNode)))
 			{
-				changesWithNodes.append({oldNode, newNode, change->type()});
+				changesWithNodes.append({id, oldNode, newNode, change->type()});
 			}
 			else
 				continue;
 
 		} else
-			changesWithNodes.append({oldNode, newNode, change->type()});
+			changesWithNodes.append({id, oldNode, newNode, change->type()});
 
 		Model::NodeIdType nodeId;
 
@@ -172,6 +173,56 @@ void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& contai
 
 	container.subtract(nodeIdsToRemove);
 }
+
+void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager)
+{
+	const QString SUMMARY_HIGHLIGHT_OVERLAY_NAME = "changeSummaryHighlights";
+	const QString SUMMARY_ICON_OVERLAY_NAME = "changeSummaryIcons";
+
+	DiffSetup diffSetup;
+
+	// detailed changes
+	QList<ChangeWithNodes> changesWithNodes;
+
+	// contains the nodes which will be drawn
+	QSet<Model::NodeIdType> changedNodesToVisualize;
+
+	// fill up lists
+	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
+
+	auto currentViewItem = Visualization::VisualizationManager::instance().
+			mainScene()->currentViewItem();
+
+	// make sure any old overlays are removed first
+	currentViewItem->scene()->removeOverlayGroup(SUMMARY_HIGHLIGHT_OVERLAY_NAME);
+	currentViewItem->scene()->removeOverlayGroup(SUMMARY_ICON_OVERLAY_NAME);
+
+	QString highlightOverlayStyle;
+	QString highlightOverlayName;
+	QString arrowIconOverlayStyle;
+	QString arrowIconOverlayName;
+
+	for (auto changeWithNode : changesWithNodes)
+	{
+		auto node = const_cast<Model::Node*>(manager->nodeIdMap().node(changeWithNode.id_));
+
+		if (node)
+		{
+			setOverlayInformationAccordingToChangeType(changeWithNode.changeType_, highlightOverlayStyle, highlightOverlayName,
+																	 arrowIconOverlayStyle, arrowIconOverlayName, true);
+
+			highlightOverlayName = SUMMARY_HIGHLIGHT_OVERLAY_NAME;
+			arrowIconOverlayName = SUMMARY_ICON_OVERLAY_NAME;
+
+
+			addOverlaysAndReturnItem(node, currentViewItem,
+															 highlightOverlayName, highlightOverlayStyle,
+															 arrowIconOverlayName, arrowIconOverlayStyle);
+		}
+	}
+
+}
+
 
 void DiffManager::showDiff(QString oldVersion, QString newVersion)
 {
@@ -222,7 +273,7 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 																					(diffViewItem->nodeAt(Visualization::MajorMinorIndex{})));
 			overlay->setScale(vDiffComparisonPair->scaleFactor());
 			return message;
-		}};
+		}, Visualization::MessageOverlay::itemStyles().get("info")};
 
 
 		diffViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
@@ -282,12 +333,14 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 		QString message = createHTMLCommitInfo(diffSetup.repository_->getCommitInformation(diffSetup.newVersion_));
 
+		auto diffComparisonPairs = createDiffComparisonPairs(diffSetup, changedNodesToVisualize);
+
 		int row = 0;
-		for (auto diffComparisonPair : createDiffComparisonPairs(diffSetup, changedNodesToVisualize))
-		{
+		for (auto diffComparisonPair : diffComparisonPairs)
 			historyViewItem->insertNode(diffComparisonPair, {row++, col});
-			diffComparisonPairInfo.append({diffComparisonPair, message});
-		}
+
+		if (!diffComparisonPairs.isEmpty())
+			diffComparisonPairInfo.append({diffComparisonPairs.last(), message});
 
 		// create visualization for changes
 		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
@@ -403,6 +456,54 @@ bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeId
 	return false;
 }
 
+void DiffManager::setOverlayInformationAccordingToChangeType(FilePersistence::ChangeType changeType,
+																	QString& highlightOverlayStyle, QString& highlightOverlayName,
+																	QString& arrowIconOverlayStyle, QString& arrowIconOverlayName,
+																	bool iconsForMoveAndModify)
+{
+	highlightOverlayStyle = QString{};
+	highlightOverlayName = QString{};
+	arrowIconOverlayStyle = QString{};
+	arrowIconOverlayName = QString{};
+
+	switch (changeType)
+	{
+		case FilePersistence::ChangeType::Deletion:
+			highlightOverlayName = "delete_highlights";
+			highlightOverlayStyle = "delete_frame";
+			arrowIconOverlayName = "delete_arrow_icons";
+			arrowIconOverlayStyle = "delete_arrow_icon";
+			break;
+		case FilePersistence::ChangeType::Insertion:
+			highlightOverlayName = "insert_highlights";
+			highlightOverlayStyle = "insert_frame";
+			arrowIconOverlayName = "insert_arrow_icons";
+			arrowIconOverlayStyle = "insert_arrow_icon";
+			break;
+		case FilePersistence::ChangeType::Move:
+			highlightOverlayName = "move_highlights";
+			highlightOverlayStyle = "move_frame";
+			if (iconsForMoveAndModify)
+			{
+				arrowIconOverlayName = "move_arrow_icons";
+				arrowIconOverlayStyle = "move_arrow_icon";
+			}
+			break;
+		case FilePersistence::ChangeType::Stationary:
+			highlightOverlayName = "modify_highlights";
+			highlightOverlayStyle = "modify_frame";
+			if (iconsForMoveAndModify)
+			{
+				arrowIconOverlayName = "modify_arrow_icons";
+				arrowIconOverlayStyle = "modify_arrow_icon";
+			}
+			break;
+		case FilePersistence::ChangeType::Unclassified:
+			Q_ASSERT(false);
+			break;
+	}
+}
+
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
 														 QList<ChangeWithNodes> changesWithNodes)
 {
@@ -420,32 +521,9 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		QString arrowIconOverlayStyle;
 		QString arrowIconOverlayName;
 
-		switch (change.changeType_)
-		{
-			case FilePersistence::ChangeType::Deletion:
-				highlightOverlayName = "delete_highlights";
-				highlightOverlayStyle = "delete_frame";
-				arrowIconOverlayName = "delete_arrow_icons";
-				arrowIconOverlayStyle = "delete_arrow_icon";
-				break;
-			case FilePersistence::ChangeType::Insertion:
-				highlightOverlayName = "insert_highlights";
-				highlightOverlayStyle = "insert_frame";
-				arrowIconOverlayName = "insert_arrow_icons";
-				arrowIconOverlayStyle = "insert_arrow_icon";
-				break;
-			case FilePersistence::ChangeType::Move:
-				highlightOverlayName = "move_highlights";
-				highlightOverlayStyle = "move_frame";
-				break;
-			case FilePersistence::ChangeType::Stationary:
-				highlightOverlayName = "modify_highlights";
-				highlightOverlayStyle = "modify_frame";
-				break;
-			case FilePersistence::ChangeType::Unclassified:
-				Q_ASSERT(false);
-				break;
-		}
+		setOverlayInformationAccordingToChangeType(change.changeType_, highlightOverlayStyle, highlightOverlayName,
+												  arrowIconOverlayStyle, arrowIconOverlayName);
+
 
 		Visualization::Item* oldNodeItem = addOverlaysAndReturnItem(change.oldNode_, diffViewItem,
 																						highlightOverlayName, highlightOverlayStyle,

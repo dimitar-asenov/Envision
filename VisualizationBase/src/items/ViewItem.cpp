@@ -132,7 +132,7 @@ MajorMinorIndex ViewItem::positionOfNode(Model::Node *node) const
 	for (int major = 0; major < nodes_.size(); major++)
 		for (int minor = 0; minor < nodes_[major].size(); minor++)
 			if (nodes_[major][minor] == node ||
-					DCast<ViewItemNode>(nodes_[major][minor])->reference() == node)
+					(nodes_[major][minor] && DCast<ViewItemNode>(nodes_[major][minor])->reference() == node))
 				return {major, minor};
 
 	return {-1, -1};

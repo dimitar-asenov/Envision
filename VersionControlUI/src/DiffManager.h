@@ -64,6 +64,8 @@ class VERSIONCONTROLUI_API DiffManager
 
 		void showNodeHistory(Model::NodeIdType targetNodeID, QList<QString> versions);
 
+		void highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager);
+
 		static QString createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData);
 
 	private:
@@ -120,6 +122,11 @@ class VERSIONCONTROLUI_API DiffManager
 		 * Removes all nodes which have an ancestor present in \a container
 		 */
 		void removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container);
+
+		static void setOverlayInformationAccordingToChangeType(FilePersistence::ChangeType changeType,
+																			QString& highlightOverlayStyle, QString& highlightOverlayName,
+																			QString& arrowIconOverlayStyle, QString& arrowIconOverlayName,
+																			bool iconsForMoveAndModify = false);
 
 		static Visualization::Item* addOverlaysAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
 																QString highlightOverlayName, QString highlightOverlayStyle,

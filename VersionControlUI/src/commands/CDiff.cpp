@@ -40,6 +40,8 @@ using namespace FilePersistence;
 
 namespace VersionControlUI {
 
+const QString CDiff::SUMMARY_COMMAND = "summary";
+
 CDiff::CDiff() : Command{"diff"} {}
 
 bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
@@ -78,6 +80,13 @@ bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
 			if (!repository.isValidRevisionString(unambigousPrefixPerRevision_.value(token, token)))
 				return false;
 		}
+
+		if (!commandTokensCopy.isEmpty())
+		{
+			auto token = commandTokensCopy.takeFirst();
+			if (token != SUMMARY_COMMAND)
+				return false;
+		}
 		return true;
 	}
 	else return false;
@@ -96,6 +105,7 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	// TODO restrict versions to versionA always be older?
 	QString versionA = commandTokens.value(1, "HEAD");
 	QString versionB = commandTokens.value(2, FilePersistence::GitRepository::WORKDIR);
+	bool highlightChangedParts = commandTokens.size() > 3;
 
 	// try to get complete sha1 if available
 	versionA = unambigousPrefixPerRevision_.value(versionA, versionA);
@@ -106,9 +116,31 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Method"});
 
 	VersionControlUI::DiffManager diffManager{managerName, symbolMatcherPriorityList};
-	diffManager.showDiff(versionA, versionB);
+
+	if (highlightChangedParts)
+		diffManager.highlightChangedParts(versionA, versionB, target->findAncestorWithNode()->node()->manager());
+	else
+		diffManager.showDiff(versionA, versionB);
 
 	return new Interaction::CommandResult{};
+}
+
+QString CDiff::descriptionForCommits(QString token, const QList<QPair<QString, QString>>& commits)
+{
+	QString suggestDescription;
+
+	if (token.length() < GitRepository::getMinPrefixLength())
+		suggestDescription = "<i>length of first argument must be at least " +
+				QString::number(GitRepository::getMinPrefixLength())+"</i>";
+	else if (commits.size() > 1)
+		suggestDescription = "<i>ambiguous</i>";
+	else if (commits.size() == 0)
+		suggestDescription = "<i>no matching commit id</i>";
+	else
+		// add found description of first token
+		suggestDescription = commits.first().second;
+
+	return suggestDescription;
 }
 
 QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visualization::Item* target,
@@ -117,10 +149,9 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 	QStringList tokensSoFar = textSoFar.split(" ");
 
 	QList<Interaction::CommandSuggestion*> suggestions;
-	QString commandName = name();
 
 	// no suggestions for that many tokens
-	if (tokensSoFar.size() > 3)
+	if (tokensSoFar.size() > 4)
 		return {};
 
 	// check that the command name starts with the characters of the first token
@@ -140,6 +171,7 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 
 
 		bool secondVersionAvailable = !tokensSoFar.isEmpty();
+
 		if (secondVersionAvailable)
 		{
 			// use the second version token for completion
@@ -149,22 +181,32 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 			suggestCommand += firstVersionToken + " ";
 
 			// analyze the first token
-			auto firstTokenSuggestion = commitsWithDescriptionsStartingWith(firstVersionToken, target);
+			auto firstTokenSuggestions = commitsWithDescriptionsStartingWith(firstVersionToken, target);
 
-			// if first token is too short signal an error
-			if (firstVersionToken.length() < GitRepository::getMinPrefixLength())
-				suggestDescription = "<i>length of first argument must be at least " +
-						QString::number(GitRepository::getMinPrefixLength())+"</i>";
-			else if (firstTokenSuggestion.size() > 1)
-				suggestDescription = "<i>ambiguous</i>";
-			else if (firstTokenSuggestion.size() == 0)
-				suggestDescription = "<i>no matching commit id</i>";
-			else
-				// add found description of first token
-				suggestDescription = firstTokenSuggestion.first().second;
+			suggestDescription = descriptionForCommits(firstVersionToken, firstTokenSuggestions);
 
 			// new line
 			suggestDescription += "<br>";
+		}
+
+		// check possible summary command at end
+		if (!tokensSoFar.isEmpty())
+		{
+			auto thirdToken = tokensSoFar.takeFirst();
+
+			if (!SUMMARY_COMMAND.startsWith(thirdToken))
+				return {};
+
+			suggestCommand += stringToComplete + " ";
+			auto secondTokenSuggenstions = commitsWithDescriptionsStartingWith(stringToComplete, target);
+
+			suggestDescription += descriptionForCommits(suggestDescription, secondTokenSuggenstions);
+
+			suggestions.append(new Interaction::CommandSuggestion{suggestCommand + SUMMARY_COMMAND,
+																					suggestDescription +
+									 "<br> highlight changes in current view"});
+			return suggestions;
+
 		}
 
 		for (auto commitWithDescription : commitsWithDescriptionsStartingWith(stringToComplete, target))
