@@ -64,6 +64,7 @@ void VFormalArgument::initializeForms()
 
 	addForm(grid({	{typeEl, nameEl, outIconEl} })
 		->setNoInnerCursors([](Item*){return true;})
+		->setHorizontalSpacing(5)
 		->setNoBoundaryCursors([](Item*){return true;})
 	);
 }

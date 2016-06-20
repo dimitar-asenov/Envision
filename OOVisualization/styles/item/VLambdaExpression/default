@@ -1,6 +1,31 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<shape />
+	<shape prototypes="shape/Frame/default">
+		Frame
+		<topWidth>2</topWidth>
+		<topMargin>2</topMargin>
+		<topBrush><color>#AA6F39</color></topBrush>
+		<bottomWidth>2</bottomWidth>
+		<bottomMargin>6</bottomMargin>
+		<bottomBrush><color>#AA6F39</color></bottomBrush>
+		
+		
+		<rightMargin>4</rightMargin>
+		
+		<!--<leftWidth>2</leftWidth>
+		<leftMargin>2</leftMargin>
+		<leftBrush><color>#AA6F39</color></leftBrush>
+		<rightWidth>2</rightWidth>
+		<rightMargin>2</rightMargin>
+		<rightBrush><color>#AA6F39</color></rightBrush>-->
+		
+		<contentBrush>
+			<color>#ffffff</color>
+		</contentBrush>
+		
+		<bottomRightShadowWidth>4</bottomRightShadowWidth>
+		<topLeftShadowWidth>0</topLeftShadowWidth>
+	</shape>
 	
 	<layout prototypes="layout/SequentialLayout/default" />
 	
@@ -11,14 +36,12 @@
 			<leftBrace>(</leftBrace>
 			<rightBrace>)</rightBrace>
 		</shape>
-		<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
 			<spaceBetweenElements>15</spaceBetweenElements>
-			<noInnerCursors>true</noInnerCursors>
+			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 			<minHeight>15</minHeight>
 			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
-			<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
 		</itemsStyle>
 	</arguments>
 	
