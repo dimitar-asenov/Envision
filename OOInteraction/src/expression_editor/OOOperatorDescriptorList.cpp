@@ -28,6 +28,7 @@
 
 #include "CommandDescriptor.h"
 #include "CompoundObjectDescriptor.h"
+#include "commands/CreateLambda.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -517,6 +518,9 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 
 	add(new CompoundObjectDescriptor{ "compound object",
 			CompoundObjectDescriptor::compoundSignature(), 0, OD::NotAssociative});
+
+	// Commands for Lambda
+	CommandDescriptor::registerCommand(new CreateLambda());
 }
 
 

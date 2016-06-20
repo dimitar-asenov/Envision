@@ -111,6 +111,8 @@ add_library(OOInteraction SHARED
 	src/commands/CInspectMethodInView.cpp
 	src/actions/OOActions.h
 	src/actions/OOActions.cpp
+	src/expression_editor/commands/CreateLambda.h
+	src/expression_editor/commands/CreateLambda.cpp
 )
 
 envision_plugin(OOInteraction OOVisualization VersionControlUI)
