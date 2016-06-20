@@ -223,7 +223,7 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 																					(diffViewItem->nodeAt(Visualization::MajorMinorIndex{})));
 			overlay->setScale(vDiffComparisonPair->scaleFactor());
 			return message;
-		}};
+		}, Visualization::MessageOverlay::itemStyles().get("info")};
 
 
 		diffViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
