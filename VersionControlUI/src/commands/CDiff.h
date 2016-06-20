@@ -57,6 +57,7 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 		QStringList computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
 
 		QHash<QString, QString> unambigousPrefixPerRevision_;
+		QString descriptionForCommits(QString token, QList<QPair<QString, QString>> commits);
 };
 
 }

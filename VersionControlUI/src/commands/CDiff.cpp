@@ -111,6 +111,24 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	return new Interaction::CommandResult{};
 }
 
+QString CDiff::descriptionForCommits(QString token, QList<QPair<QString, QString>> commits)
+{
+	QString suggestDescription;
+
+	if (token.length() < GitRepository::getMinPrefixLength())
+		suggestDescription = "<i>length of first argument must be at least " +
+				QString::number(GitRepository::getMinPrefixLength())+"</i>";
+	else if (commits.size() > 1)
+		suggestDescription = "<i>ambiguous</i>";
+	else if (commits.size() == 0)
+		suggestDescription = "<i>no matching commit id</i>";
+	else
+		// add found description of first token
+		suggestDescription = commits.first().second;
+
+	return suggestDescription;
+}
+
 QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visualization::Item* target,
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
@@ -140,6 +158,7 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 
 
 		bool secondVersionAvailable = !tokensSoFar.isEmpty();
+
 		if (secondVersionAvailable)
 		{
 			// use the second version token for completion
@@ -149,19 +168,9 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 			suggestCommand += firstVersionToken + " ";
 
 			// analyze the first token
-			auto firstTokenSuggestion = commitsWithDescriptionsStartingWith(firstVersionToken, target);
+			auto firstTokenSuggestions = commitsWithDescriptionsStartingWith(firstVersionToken, target);
 
-			// if first token is too short signal an error
-			if (firstVersionToken.length() < GitRepository::getMinPrefixLength())
-				suggestDescription = "<i>length of first argument must be at least " +
-						QString::number(GitRepository::getMinPrefixLength())+"</i>";
-			else if (firstTokenSuggestion.size() > 1)
-				suggestDescription = "<i>ambiguous</i>";
-			else if (firstTokenSuggestion.size() == 0)
-				suggestDescription = "<i>no matching commit id</i>";
-			else
-				// add found description of first token
-				suggestDescription = firstTokenSuggestion.first().second;
+			suggestDescription = descriptionForCommits(firstVersionToken, firstTokenSuggestions);
 
 			// new line
 			suggestDescription += "<br>";
