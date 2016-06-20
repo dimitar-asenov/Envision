@@ -174,6 +174,56 @@ void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& contai
 	container.subtract(nodeIdsToRemove);
 }
 
+void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager)
+{
+	const QString SUMMARY_HIGHLIGHT_OVERLAY_NAME = "changeSummaryHighlights";
+	const QString SUMMARY_ICON_OVERLAY_NAME = "changeSummaryIcons";
+
+	DiffSetup diffSetup;
+
+	// detailed changes
+	QList<ChangeWithNodes> changesWithNodes;
+
+	// contains the nodes which will be drawn
+	QSet<Model::NodeIdType> changedNodesToVisualize;
+
+	// fill up lists
+	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
+
+	auto currentViewItem = Visualization::VisualizationManager::instance().
+			mainScene()->currentViewItem();
+
+	// make sure any old overlays are removed first
+	currentViewItem->scene()->removeOverlayGroup(SUMMARY_HIGHLIGHT_OVERLAY_NAME);
+	currentViewItem->scene()->removeOverlayGroup(SUMMARY_ICON_OVERLAY_NAME);
+
+	QString highlightOverlayStyle;
+	QString highlightOverlayName;
+	QString arrowIconOverlayStyle;
+	QString arrowIconOverlayName;
+
+	for (auto changeWithNode : changesWithNodes)
+	{
+		auto node = const_cast<Model::Node*>(manager->nodeIdMap().node(changeWithNode.id_));
+
+		if (node)
+		{
+			setOverlayInformationAccordingToChangeType(changeWithNode.changeType_, highlightOverlayStyle, highlightOverlayName,
+																	 arrowIconOverlayStyle, arrowIconOverlayName, true);
+
+			highlightOverlayName = SUMMARY_HIGHLIGHT_OVERLAY_NAME;
+			arrowIconOverlayName = SUMMARY_ICON_OVERLAY_NAME;
+
+
+			addOverlaysAndReturnItem(node, currentViewItem,
+															 highlightOverlayName, highlightOverlayStyle,
+															 arrowIconOverlayName, arrowIconOverlayStyle);
+		}
+	}
+
+}
+
+
 void DiffManager::showDiff(QString oldVersion, QString newVersion)
 {
 	DiffSetup diffSetup;

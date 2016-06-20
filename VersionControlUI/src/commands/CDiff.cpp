@@ -40,6 +40,8 @@ using namespace FilePersistence;
 
 namespace VersionControlUI {
 
+const QString CDiff::SUMMARY_COMMAND = "summary";
+
 CDiff::CDiff() : Command{"diff"} {}
 
 bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
@@ -78,6 +80,13 @@ bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
 			if (!repository.isValidRevisionString(unambigousPrefixPerRevision_.value(token, token)))
 				return false;
 		}
+
+		if (!commandTokensCopy.isEmpty())
+		{
+			auto token = commandTokensCopy.takeFirst();
+			if (token != "summary")
+				return false;
+		}
 		return true;
 	}
 	else return false;
@@ -96,6 +105,7 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	// TODO restrict versions to versionA always be older?
 	QString versionA = commandTokens.value(1, "HEAD");
 	QString versionB = commandTokens.value(2, FilePersistence::GitRepository::WORKDIR);
+	bool highlightChangedParts = commandTokens.size() > 3;
 
 	// try to get complete sha1 if available
 	versionA = unambigousPrefixPerRevision_.value(versionA, versionA);
@@ -106,7 +116,11 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Method"});
 
 	VersionControlUI::DiffManager diffManager{managerName, symbolMatcherPriorityList};
-	diffManager.showDiff(versionA, versionB);
+
+	if (highlightChangedParts)
+		diffManager.highlightChangedParts(versionA, versionB, target->findAncestorWithNode()->node()->manager());
+	else
+		diffManager.showDiff(versionA, versionB);
 
 	return new Interaction::CommandResult{};
 }
@@ -138,7 +152,7 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 	QString commandName = name();
 
 	// no suggestions for that many tokens
-	if (tokensSoFar.size() > 3)
+	if (tokensSoFar.size() > 4)
 		return {};
 
 	// check that the command name starts with the characters of the first token
@@ -174,6 +188,26 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 
 			// new line
 			suggestDescription += "<br>";
+		}
+
+		// check possible summary command at end
+		if (!tokensSoFar.isEmpty())
+		{
+			auto thirdToken = tokensSoFar.takeFirst();
+
+			if (!SUMMARY_COMMAND.startsWith(thirdToken))
+				return {};
+
+			suggestCommand += stringToComplete + " ";
+			auto secondTokenSuggenstions = commitsWithDescriptionsStartingWith(stringToComplete, target);
+
+			suggestDescription += descriptionForCommits(suggestDescription, secondTokenSuggenstions);
+
+			suggestions.append(new Interaction::CommandSuggestion{suggestCommand + SUMMARY_COMMAND,
+																					suggestDescription +
+									 "<br> highlight changes in current view"});
+			return suggestions;
+
 		}
 
 		for (auto commitWithDescription : commitsWithDescriptionsStartingWith(stringToComplete, target))

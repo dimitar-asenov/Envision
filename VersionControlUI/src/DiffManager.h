@@ -64,6 +64,8 @@ class VERSIONCONTROLUI_API DiffManager
 
 		void showNodeHistory(Model::NodeIdType targetNodeID, QList<QString> versions);
 
+		void highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager);
+
 		static QString createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData);
 
 	private:

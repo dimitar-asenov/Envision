@@ -45,6 +45,8 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
+
+		static const QString SUMMARY_COMMAND;
 		/**
 		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
 		 */
