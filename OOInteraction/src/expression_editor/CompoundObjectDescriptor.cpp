@@ -45,27 +45,9 @@ OOModel::Expression* CompoundObjectDescriptor::create(const QList<OOModel::Expre
 	SAFE_DELETE(ilit);
 	Q_ASSERT(e);
 
-	if (auto manager = e->manager())
-	{
-		auto beingModified = manager->isBeingModified();
-		auto oldModificationTarget = beingModified ? nullptr : manager->modificationTarget();
-		auto oldParent = e->parent();
-
-		Q_ASSERT(e!=oldModificationTarget && !e->isAncestorOf(oldModificationTarget));
-
-		if (!beingModified) oldParent->beginModification("extract expression");
-		else manager->changeModificationTarget(oldParent);
-		auto replaceSuccessfull = oldParent->replaceChild(e, new OOModel::EmptyExpression{});
-		Q_ASSERT(replaceSuccessfull);
-
-		if (!beingModified) oldParent->endModification();
-		else manager->changeModificationTarget(oldModificationTarget);
-	}
-	else
-	{
-		auto replaceSuccessfull = e->parent()->replaceChild(e, new OOModel::EmptyExpression{});
-		Q_ASSERT(replaceSuccessfull);
-	}
+	Q_ASSERT(e->parent());
+	auto replaceSuccessfull = e->parent()->replaceChild(e, new OOModel::EmptyExpression{});
+	Q_ASSERT(replaceSuccessfull);
 
 	return e;
 }

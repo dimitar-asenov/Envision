@@ -494,10 +494,13 @@ ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Expression*
 void HExpression::setNewExpression(Item* target, Item* topMostItem, const QString& text,
 				int index)
 {
-	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
-
 	Model::Node* containerNode = topMostItem->node()->parent();
 	containerNode->manager()->beginModification(containerNode, "edit expression");
+
+	// The line below must be within the modification block since that enables the reuse of old
+	// compound expressions, which are on the UndoStack
+	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
+
 	containerNode->replaceChild(topMostItem->node(), newExpression);
 	containerNode->manager()->endModification();
 
