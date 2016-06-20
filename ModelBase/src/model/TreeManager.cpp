@@ -263,4 +263,10 @@ void TreeManager::emitNameModified(NameText* node, const QString &oldName)
 	Q_EMIT nameModified(node, oldName);
 }
 
+void TreeManager::cleanupDestroyedNode(Node* node)
+{
+	nodeIdMap().remove(node);
+	nodeIdMapForUndoStack().remove(node);
+}
+
 }

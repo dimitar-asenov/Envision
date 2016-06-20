@@ -326,6 +326,8 @@ class MODELBASE_API TreeManager: public QObject
 		const NodeIdMap& nodeIdMapForUndoStack() const;
 		NodeIdMap& nodeIdMapForUndoStack();
 
+		void cleanupDestroyedNode(Node* node);
+
 	Q_SIGNALS:
 		/**
 		 * Emitted when a new root node was set.
