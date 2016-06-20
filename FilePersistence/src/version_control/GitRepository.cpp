@@ -1085,11 +1085,12 @@ git_commit* GitRepository::parseCommit(QString revision) const
 	else
 	{
 		std::cout << "Error: " << revision.toStdString().c_str() << " is not a commit!" << std::endl;
+
+		// clean up
+		git_object_free(obj);
+
 		Q_ASSERT(false);
 	}
-
-	// clean up
-	git_object_free(obj);
 }
 
 QString GitRepository::oidToQString(const git_oid* oid) const
