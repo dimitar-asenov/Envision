@@ -461,6 +461,11 @@ void DiffManager::setOverlayInformationAccordingToChangeType(FilePersistence::Ch
 																	QString& arrowIconOverlayStyle, QString& arrowIconOverlayName,
 																	bool iconsForMoveAndModify)
 {
+	highlightOverlayStyle = QString{};
+	highlightOverlayName = QString{};
+	arrowIconOverlayStyle = QString{};
+	arrowIconOverlayName = QString{};
+
 	switch (changeType)
 	{
 		case FilePersistence::ChangeType::Deletion:
