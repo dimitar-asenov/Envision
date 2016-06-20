@@ -32,7 +32,8 @@ namespace Model {
 
 NoteNodeChange::NoteNodeChange(QSet<Node*>& modifiedTargets, QSet<Node*>& removedTargets, const UndoCommand* command)
 	: UndoCommand{nullptr, "Note node changes"}, modifiedTargets_{modifiedTargets}, removedTargets_{removedTargets},
-	  target_{command->target()}, insertedNode_{command->insertedNode()}, removedNode_{command->removedNode()}
+		target_{command->target() && command->target()->manager() ? command->target() : nullptr},
+		insertedNode_{command->insertedNode()}, removedNode_{command->removedNode()}
 {
 }
 
