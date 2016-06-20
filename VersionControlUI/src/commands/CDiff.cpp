@@ -149,7 +149,6 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 	QStringList tokensSoFar = textSoFar.split(" ");
 
 	QList<Interaction::CommandSuggestion*> suggestions;
-	QString commandName = name();
 
 	// no suggestions for that many tokens
 	if (tokensSoFar.size() > 4)
