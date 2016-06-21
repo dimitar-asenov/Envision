@@ -55,6 +55,9 @@
 namespace VersionControlUI
 {
 
+const QString DiffManager::OVERVIEW_HIGHLIGHT_OVERLAY_NAME = "changeOverviewHighlights";
+const QString DiffManager::OVERVIEW_ICON_OVERLAY_NAME = "changeOverviewIcons";
+
 struct ChangeWithNodes {
 	Model::NodeIdType id_;
 	Model::Node* oldNode_{};
@@ -102,9 +105,22 @@ DiffSetup DiffManager::initializeDiffPrerequisites(QString oldVersion, QString n
 	return diffSetup;
 }
 
+void DiffManager::clear()
+{
+	auto currentViewItem = Visualization::VisualizationManager::instance().
+			mainScene()->currentViewItem();
+
+	// remove overlays
+	currentViewItem->scene()->removeOverlayGroup(OVERVIEW_HIGHLIGHT_OVERLAY_NAME);
+	currentViewItem->scene()->removeOverlayGroup(OVERVIEW_ICON_OVERLAY_NAME);
+
+	Visualization::VisualizationManager::instance().mainScene()->removeOnZoomHandlers();
+
+}
+
 void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
 																		  QSet<Model::NodeIdType>& changedNodesToVisualize,
-																		  DiffSetup& diffSetup)
+																		  DiffSetup& diffSetup) __attribute__((optnone))
 {
 
 	diffSetup = initializeDiffPrerequisites(oldVersion, newVersion);
@@ -176,9 +192,6 @@ void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& contai
 
 void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager)
 {
-	const QString SUMMARY_HIGHLIGHT_OVERLAY_NAME = "changeSummaryHighlights";
-	const QString SUMMARY_ICON_OVERLAY_NAME = "changeSummaryIcons";
-
 	DiffSetup diffSetup;
 
 	// detailed changes
@@ -190,17 +203,18 @@ void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, 
 	// fill up lists
 	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
 
-	auto currentViewItem = Visualization::VisualizationManager::instance().
-			mainScene()->currentViewItem();
-
 	// make sure any old overlays are removed first
-	currentViewItem->scene()->removeOverlayGroup(SUMMARY_HIGHLIGHT_OVERLAY_NAME);
-	currentViewItem->scene()->removeOverlayGroup(SUMMARY_ICON_OVERLAY_NAME);
+	clear();
 
 	QString highlightOverlayStyle;
 	QString highlightOverlayName;
 	QString arrowIconOverlayStyle;
 	QString arrowIconOverlayName;
+
+	QSet<Visualization::Item*> itemsToScale;
+
+	auto currentViewItem = Visualization::VisualizationManager::instance().
+			mainScene()->currentViewItem();
 
 	for (auto changeWithNode : changesWithNodes)
 	{
@@ -211,15 +225,17 @@ void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, 
 			setOverlayInformationAccordingToChangeType(changeWithNode.changeType_, highlightOverlayStyle, highlightOverlayName,
 																	 arrowIconOverlayStyle, arrowIconOverlayName, true);
 
-			highlightOverlayName = SUMMARY_HIGHLIGHT_OVERLAY_NAME;
-			arrowIconOverlayName = SUMMARY_ICON_OVERLAY_NAME;
+			highlightOverlayName = OVERVIEW_HIGHLIGHT_OVERLAY_NAME;
+			arrowIconOverlayName = OVERVIEW_ICON_OVERLAY_NAME;
 
-
-			addOverlaysAndReturnItem(node, currentViewItem,
+			auto item = addOverlaysAndReturnItem(node, currentViewItem,
 															 highlightOverlayName, highlightOverlayStyle,
 															 arrowIconOverlayName, arrowIconOverlayStyle);
+			if (item) itemsToScale.insert(item);
 		}
 	}
+
+	scaleItems(itemsToScale);
 
 }
 
@@ -509,6 +525,32 @@ void DiffManager::setOverlayInformationAccordingToChangeType(FilePersistence::Ch
 	}
 }
 
+void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale)
+{
+	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(itemsToScale);
+
+	itemsToScale.subtract(removeItems);
+
+	Visualization::VisualizationManager::instance().mainScene()->
+			addOnZoomHandler([itemsToScale](qreal factor)
+	{
+		for (auto item : itemsToScale)
+		{
+			if (factor >= 1.0)
+				item->setScale(1.0);
+			else if (factor >= 0.05)
+				item->setScale((1/factor));
+			else
+				item->setScale((1/factor) * std::pow(0.95, 1/factor));
+		}
+	},
+	[itemsToScale]()
+		{
+			for (auto item : itemsToScale)
+				item->setScale(1.0);
+		});
+}
+
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
 														 QList<ChangeWithNodes> changesWithNodes)
 {
@@ -560,23 +602,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 	}
 
-	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(allItemsToScale);
-
-	allItemsToScale.subtract(removeItems);
-
-	Visualization::VisualizationManager::instance().mainScene()->
-			addOnZoomHandler([allItemsToScale](qreal factor)
-	{
-		for (auto item : allItemsToScale)
-		{
-			if (factor >= 1.0)
-				item->setScale(1.0);
-			else if (factor >= 0.05)
-				item->setScale((1/factor));
-			else
-				item->setScale((1/factor) * std::pow(0.95, 1/factor));
-		}
-	});
+	scaleItems(allItemsToScale);
 
 	// set zoom level further out and center the scene
 	Visualization::VisualizationManager::instance().mainView()->zoom(7);

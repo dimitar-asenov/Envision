@@ -66,6 +66,8 @@ class VERSIONCONTROLUI_API DiffManager
 
 		void highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager);
 
+		static void clear();
+
 		static QString createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision);
 
 	private:
@@ -136,6 +138,10 @@ class VERSIONCONTROLUI_API DiffManager
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
 		Model::NodeIdType targetNodeID_;
 
+		static void scaleItems(QSet<Visualization::Item*> itemsToScale);
+
+		static const QString OVERVIEW_HIGHLIGHT_OVERLAY_NAME;
+		static const QString OVERVIEW_ICON_OVERLAY_NAME;
 };
 
 }

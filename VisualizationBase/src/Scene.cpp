@@ -489,7 +489,7 @@ void Scene::setMainViewScalingFactor(qreal factor)
 		previousMainViewScalingFactor_ = mainViewScalingFactor_;
 		mainViewScalingFactor_ = factor;
 		mainViewScalingFactorChanged_ = true;
-		for (auto onZoomHandler : onZoomHandlers_) onZoomHandler(factor);
+		for (auto onZoomHandler : onZoomHandlers_) onZoomHandler.first(factor);
 
 		if (inEventHandler_) scheduleUpdate();
 		else updateNow();
@@ -580,6 +580,16 @@ void Scene::removeOverlay(Item* overlay, const QString& groupName)
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
 		if (groupName.isEmpty() || it.key() == groupName)
 			it.value()->removeOverlay(overlay);
+}
+
+void Scene::removeOnZoomHandlers()
+{
+	for (auto it = onZoomHandlers_.begin(); it != onZoomHandlers_.end(); ++it)
+	{
+		// call onZoomHandlers remove function
+		it->second();
+		onZoomHandlers_.erase(it);
+	}
 }
 
 }
