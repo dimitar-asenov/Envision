@@ -120,7 +120,7 @@ void DiffManager::clear()
 
 void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
 																		  QSet<Model::NodeIdType>& changedNodesToVisualize,
-																		  DiffSetup& diffSetup) __attribute__((optnone))
+																		  DiffSetup& diffSetup)
 {
 
 	diffSetup = initializeDiffPrerequisites(oldVersion, newVersion);
