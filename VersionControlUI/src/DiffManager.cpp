@@ -261,8 +261,7 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
 								  [diffViewItem, changesWithNodes, diffSetup]() {
 		createOverlaysForChanges(diffViewItem, changesWithNodes);
-		auto newCommit = diffSetup.repository_->getCommitInformation(diffSetup.newVersion_);
-		QString message = createHTMLCommitInfo(newCommit);
+		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		auto overlay = new Visualization::MessageOverlay{diffViewItem,
 				[diffViewItem, message](Visualization::MessageOverlay* overlay)
 		{
@@ -283,9 +282,15 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
 }
 
-QString DiffManager::createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData)
+QString DiffManager::createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision)
 {
-	return commitMetaData.message_ + "<br/><br/>"
+	if (revision == FilePersistence::GitRepository::WORKDIR)
+		return "Comparing against working directory";
+
+	auto commitMetaData = repository->getCommitInformation(revision);
+	bool messageEndsInNewline = commitMetaData.message_.endsWith("\n");
+
+	return commitMetaData.message_.replace("\n", "<br/>") + (messageEndsInNewline ? "<br/>" : "<br/><br/>")
 			+ "<font color='gray'>" + commitMetaData.author_.name_ + "</font><br/>"
 			+ "<font color='gray'>" + commitMetaData.dateTime_.toString("dd.MM.yyyy hh:mm") + "</font><br/>"
 			+ "<font color='gray'>" + commitMetaData.sha1_ + "</font>";
@@ -331,7 +336,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 		Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
 		Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
 
-		QString message = createHTMLCommitInfo(diffSetup.repository_->getCommitInformation(diffSetup.newVersion_));
+		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 
 		auto diffComparisonPairs = createDiffComparisonPairs(diffSetup, changedNodesToVisualize);
 
@@ -531,7 +536,6 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		Visualization::Item* newNodeItem = addOverlaysAndReturnItem(change.newNode_, diffViewItem,
 																						highlightOverlayName, highlightOverlayStyle,
 																						arrowIconOverlayName, arrowIconOverlayStyle);
-
 		if (oldNodeItem)
 			allItemsToScale.insert(oldNodeItem);
 

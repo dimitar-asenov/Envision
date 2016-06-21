@@ -66,7 +66,7 @@ class VERSIONCONTROLUI_API DiffManager
 
 		void highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager);
 
-		static QString createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData);
+		static QString createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision);
 
 	private:
 
