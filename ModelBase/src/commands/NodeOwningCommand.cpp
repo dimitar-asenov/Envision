@@ -38,13 +38,15 @@ NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* o
 	// If the target node is not yet owned, do not assume ownership over its subnodes.
 	if (target->manager() == nullptr)
 	{
-		auto managerOfOwnedIfDone = ownedIfDone_ ?
-			AllTreeManagers::instance().managerOfOwningUndoStack(ownedIfDone_) : nullptr;
-		if (!managerOfOwnedIfDone) ownedIfDone_ = nullptr;
+		// A tree that has once become owned by an undo stack or a manager, should never become owned by another
+		// tree that has no manager. If this were allowed, then the latter tree can be freely deleted, thereby
+		// invalidating the undo command. In general, unless a tree which has once become owned by the undo stack,
+		// always stays within the undo stack, there is no way to guarantee that we can indeed perform an undo.
+		Q_ASSERT(!ownedIfDone_ || !AllTreeManagers::instance().managerOfOwningUndoStack(ownedIfDone_));
+		Q_ASSERT(!ownedIfUndone_ || !AllTreeManagers::instance().managerOfOwningUndoStack(ownedIfUndone_));
 
-		auto managerOfOwnedIfUnDone = ownedIfUndone_ ?
-			AllTreeManagers::instance().managerOfOwningUndoStack(ownedIfUndone_) : nullptr;
-		if (!managerOfOwnedIfUnDone) ownedIfUndone_ = nullptr;
+		ownedIfDone_ = nullptr;
+		ownedIfUndone_ = nullptr;
 	}
 }
 

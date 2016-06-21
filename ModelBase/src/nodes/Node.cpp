@@ -83,19 +83,11 @@ void Node::execute(UndoCommand *command)
 
 	bool hasOwnTreeManager = m;
 
-	// The if below is needed to make it possible to use nodes already attached in the tree, in the set method
-	// of new nodes, which are not yet attached. Without it this command will not be recorded in the undo stack.
-	if (auto owning = dynamic_cast<NodeOwningCommand*>(command))
-	{
-		auto managerOfInserted = owning->insertedNode() ?
-			AllTreeManagers::instance().managerOfOwningUndoStack(owning->insertedNode()) : nullptr;
-		if (!m) m = managerOfInserted;
-		else Q_ASSERT(!managerOfInserted || m == managerOfInserted);
-		auto managerOfRemoved = owning->removedNode() ?
-			AllTreeManagers::instance().managerOfOwningUndoStack(owning->removedNode()) : nullptr;
-		if (!m) m = managerOfRemoved;
-		else Q_ASSERT(!managerOfRemoved || m == managerOfRemoved);
-	}
+	// The if below is needed to make it possible to use nodes which have been previously added to a manager
+	// but have been "deleted" and are now owned by an UndoStack. Without it this command will not be recorded
+	// in the respective undo stack and undo would not work as expected.
+	if (!hasOwnTreeManager)
+		m = AllTreeManagers::instance().managerOfOwningUndoStack(command->target()->root());
 
 
 	if (m)
