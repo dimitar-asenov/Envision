@@ -113,6 +113,8 @@ add_library(OOInteraction SHARED
 	src/actions/OOActions.cpp
 	src/expression_editor/commands/CreateLambda.h
 	src/expression_editor/commands/CreateLambda.cpp
+	src/expression_editor/CompoundObjectPlaceholder.cpp
+	src/expression_editor/CompoundObjectPlaceholder.h
 )
 
 envision_plugin(OOInteraction OOVisualization VersionControlUI)

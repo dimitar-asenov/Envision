@@ -25,8 +25,8 @@
  **********************************************************************************************************************/
 
 #include "CompoundObjectDescriptor.h"
+#include "CompoundObjectPlaceholder.h"
 #include "OOModel/src/expressions/IntegerLiteral.h"
-#include "OOModel/src/expressions/EmptyExpression.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace OOInteraction {
@@ -41,15 +41,11 @@ OOModel::Expression* CompoundObjectDescriptor::create(const QList<OOModel::Expre
 	Q_ASSERT(operands.size() == 1);
 	auto ilit = DCast<OOModel::IntegerLiteral> (operands.first());
 	Q_ASSERT(ilit);
-	auto e = storedExpressions().value(ilit->valueAsInt());
+	auto placeholder = new CompoundObjectPlaceholder{ilit->valueAsInt()};
 	SAFE_DELETE(ilit);
-	Q_ASSERT(e);
+	Q_ASSERT(placeholder);
 
-	Q_ASSERT(e->parent());
-	auto replaceSuccessfull = e->parent()->replaceChild(e, new OOModel::EmptyExpression{});
-	Q_ASSERT(replaceSuccessfull);
-
-	return e;
+	return placeholder;
 }
 
 QMap<int, OOModel::Expression*>& CompoundObjectDescriptor::storedExpressions()

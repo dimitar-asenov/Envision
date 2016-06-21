@@ -28,6 +28,7 @@
 #include "../OOInteractionException.h"
 
 #include "../expression_editor/CompoundObjectDescriptor.h"
+#include "../expression_editor/CompoundObjectPlaceholder.h"
 #include "../string_offset_providers/StringComponents.h"
 #include "../string_offset_providers/StringOffsetProvider.h"
 #include "../string_offset_providers/CompoundObjectStringOffsetProvider.h"
@@ -494,14 +495,24 @@ ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Expression*
 void HExpression::setNewExpression(Item* target, Item* topMostItem, const QString& text,
 				int index)
 {
+	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
+
 	Model::Node* containerNode = topMostItem->node()->parent();
 	containerNode->manager()->beginModification(containerNode, "edit expression");
 
-	// The line below must be within the modification block since that enables the reuse of old
-	// compound expressions, which are on the UndoStack
-	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
-
 	containerNode->replaceChild(topMostItem->node(), newExpression);
+
+	// We need to expand all compound object placeholders to the actual objects
+	QList<Model::Node*> stack{newExpression};
+	while (!stack.isEmpty())
+	{
+		auto top = stack.takeLast();
+		if (auto placeholder = DCast<CompoundObjectPlaceholder>(top))
+			placeholder->replaceWithCompoundObject();
+		else
+			stack.append(top->children());
+	}
+
 	containerNode->manager()->endModification();
 
 	// Compute the new offset. This can change in case the string of the new expression is different.
