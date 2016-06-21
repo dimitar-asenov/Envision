@@ -45,7 +45,6 @@
 #include "VersionControlUI/src/commands/CDiff.h"
 #include "VersionControlUI/src/commands/CClear.h"
 
-
 namespace OOInteraction {
 
 HProject::HProject()
