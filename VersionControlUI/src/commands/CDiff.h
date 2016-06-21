@@ -46,7 +46,7 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 
 	private:
 
-		static const QString SUMMARY_COMMAND;
+		static const QString OVERVIEW_COMMAND;
 		/**
 		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
 		 */
