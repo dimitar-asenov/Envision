@@ -44,17 +44,29 @@ CompositeNodeChangeChild::CompositeNodeChangeChild(Node* target, Node* newValue,
 
 void CompositeNodeChangeChild::redo()
 {
+	Q_ASSERT((*subnodes).size() > attributeIndex.level());
+	Q_ASSERT((*subnodes)[attributeIndex.level()].size() > attributeIndex.index());
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = newVal;
-	if (newVal) newVal->setParent(target());
+	if (newVal)
+	{
+		Q_ASSERT(newVal->parent() == nullptr);
+		newVal->setParent(target());
+	}
 	if (oldVal) oldVal->setParent(nullptr);
 	NodeOwningCommand::redo();
 }
 
 void CompositeNodeChangeChild::undo()
 {
+	Q_ASSERT((*subnodes).size() > attributeIndex.level());
+	Q_ASSERT((*subnodes)[attributeIndex.level()].size() > attributeIndex.index());
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = oldVal;
 	if (newVal) newVal->setParent(nullptr);
-	if (oldVal) oldVal->setParent(target());
+	if (oldVal)
+	{
+		Q_ASSERT(oldVal->parent() == nullptr);
+		oldVal->setParent(target());
+	}
 	NodeOwningCommand::undo();
 }
 
