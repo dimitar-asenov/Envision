@@ -58,8 +58,8 @@ QList<Interaction::CommandSuggestion*> CClear::suggest(Visualization::Item*, Vis
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	if (name().startsWith(textSoFar))
-		return {new Interaction::CommandSuggestion{name(), "Clear current view from higlights "
-																			"and scaling of diffs overview command"}};
+		return {new Interaction::CommandSuggestion{name(), "Clear current view from diffs scaling and "
+																			"overview commands highlights"}};
 
 	return {};
 }
