@@ -187,7 +187,7 @@ QStringList CommandWithFlags::possibleNames(Visualization::Item*, Visualization:
 QStringList CommandWithFlags::matchingNames(Visualization::Item* source, Visualization::Item* target,
 		const std::unique_ptr<Visualization::Cursor>& cursor, const QString& nameToLookFor)
 {
-	if (nameToLookFor.isNull()) return possibleNames(source, target, cursor);
+	if (nameToLookFor.isEmpty()) return possibleNames(source, target, cursor);
 
 	// Use a pattern like this 'a*b*c*' in order to simplify the search. Note that the first letter must match.
 	QString searchPattern = nameToLookFor;
