@@ -99,6 +99,9 @@ class MODELBASE_API Reference: public Super<Node>
 
 		static void resolvePending();
 
+		static void setReferenceResolutionEnabled(bool enable);
+		static bool isReferenceResolutionEnabled();
+
 	private:
 		Node* target_{};
 		QString name_;
@@ -128,6 +131,8 @@ class MODELBASE_API Reference: public Super<Node>
 		static void forAll(Node* subTree, std::function<void (NodeType* node)> function);
 
 		virtual void targetChanged(Node* oldTarget);
+
+		static bool enableGlobalReferenceResolution_;
 };
 
 inline const QString& Reference::name() const { return name_; }
@@ -150,5 +155,7 @@ void Reference::forAll(Node* subTree, std::function<void(NodeType* node)> functi
 		}
 	}
 }
+
+inline bool Reference::isReferenceResolutionEnabled() { return enableGlobalReferenceResolution_; }
 
 }

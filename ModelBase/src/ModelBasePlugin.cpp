@@ -27,6 +27,7 @@
 #include "ModelBasePlugin.h"
 
 #include "model/AllTreeManagers.h"
+#include "nodes/Reference.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/PositionExtension.h"
 
@@ -48,6 +49,9 @@ bool ModelBasePlugin::initialize(Core::EnvisionManager&)
 	AllTreeManagers::init();
 
 	Core::TypeRegistry::initializeNewTypes();
+
+	if (QCoreApplication::arguments().contains("--no-reference-resolution"))
+		Reference::setReferenceResolutionEnabled(false);
 
 	return true;
 }

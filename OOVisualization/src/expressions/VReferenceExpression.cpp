@@ -85,7 +85,9 @@ void VReferenceExpression::determineChildren()
 	auto nameStyle = &style()->resolvedName();
 	if (name_->node()->name() == "this") nameStyle = &style()->thisIdentifier();
 	else if (name_->node()->name() == "class") nameStyle = &style()->classIdentifier();
-	else if (style()->showUnresolved() && !node()->ref()->isResolved()) nameStyle = &style()->unresolvedName();
+	else if (style()->showUnresolved() && !node()->ref()->isResolved()
+				&& Model::Reference::isReferenceResolutionEnabled())
+		nameStyle = &style()->unresolvedName();
 	name_->setStyle( nameStyle );
 	if (prefix_) separator_->setStyle( separatorStyle );
 	if (typeArguments_)

@@ -46,6 +46,13 @@ QList<Reference*> Reference::allReferences_;
 QSet<Reference*> Reference::pendingResolution_;
 QList<std::function<void (Node* subTree)>> Reference::unresolutionSteps_;
 
+bool Reference::enableGlobalReferenceResolution_{true};
+
+void Reference::setReferenceResolutionEnabled(bool enable)
+{
+	enableGlobalReferenceResolution_ = enable;
+}
+
 Reference::Reference(Node *parent) : Super{parent}
 {
 	allReferences_.append(this);
@@ -95,7 +102,7 @@ bool Reference::resolveHelper(bool indirect)
 	if (state_ != ReferenceNeedsToBeResolved) return isResolved();
 	state_ = ReferenceIsBeingResolved;
 
-	Node* newTarget = computeTarget();
+	Node* newTarget = enableGlobalReferenceResolution_ ? computeTarget() : nullptr;
 
 	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
 
