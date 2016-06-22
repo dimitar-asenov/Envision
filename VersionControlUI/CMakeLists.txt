@@ -14,6 +14,7 @@ add_library(VersionControlUI SHARED
 	src/items/VDiffComparisonPairStyle.h
 	src/items/ObjectPathCrumb.h
 	src/items/ObjectPathCrumbStyle.h
+	src/commands/CClear.h
 	src/commands/CDiff.h
 	src/commands/CHistory.h
 	src/handlers/HObjectPathCrumb.h
@@ -25,6 +26,7 @@ add_library(VersionControlUI SHARED
 	src/items/VDiffComparisonPairStyle.cpp
 	src/items/ObjectPathCrumb.cpp
 	src/items/ObjectPathCrumbStyle.cpp
+	src/commands/CClear.cpp
 	src/commands/CDiff.cpp
 	src/commands/CHistory.cpp
 	src/handlers/HObjectPathCrumb.cpp

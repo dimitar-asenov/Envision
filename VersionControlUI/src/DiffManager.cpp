@@ -55,6 +55,11 @@
 namespace VersionControlUI
 {
 
+const QString DiffManager::OVERVIEW_HIGHLIGHT_OVERLAY_NAME = "changeOverviewHighlights";
+const QString DiffManager::OVERVIEW_ICON_OVERLAY_NAME = "changeOverviewIcons";
+
+QHash<Visualization::ViewItem*, int> DiffManager::onZoomHandlerIdPerViewItem_;
+
 struct ChangeWithNodes {
 	Model::NodeIdType id_;
 	Model::Node* oldNode_{};
@@ -100,6 +105,24 @@ DiffSetup DiffManager::initializeDiffPrerequisites(QString oldVersion, QString n
 	Model::Reference::resolvePending();
 
 	return diffSetup;
+}
+
+void DiffManager::clear()
+{
+	auto currentViewItem = Visualization::VisualizationManager::instance().
+			mainScene()->currentViewItem();
+
+	// remove overlays
+	currentViewItem->scene()->removeOverlayGroup(OVERVIEW_HIGHLIGHT_OVERLAY_NAME);
+	currentViewItem->scene()->removeOverlayGroup(OVERVIEW_ICON_OVERLAY_NAME);
+
+	auto iter = onZoomHandlerIdPerViewItem_.find(currentViewItem);
+	if (iter != onZoomHandlerIdPerViewItem_.end())
+	{
+		Visualization::VisualizationManager::instance().mainScene()
+				->removeOnZoomHandler(*iter);
+		onZoomHandlerIdPerViewItem_.erase(iter);
+	}
 }
 
 void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
@@ -176,9 +199,6 @@ void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& contai
 
 void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, Model::TreeManager* manager)
 {
-	const QString SUMMARY_HIGHLIGHT_OVERLAY_NAME = "changeSummaryHighlights";
-	const QString SUMMARY_ICON_OVERLAY_NAME = "changeSummaryIcons";
-
 	DiffSetup diffSetup;
 
 	// detailed changes
@@ -190,17 +210,18 @@ void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, 
 	// fill up lists
 	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
 
-	auto currentViewItem = Visualization::VisualizationManager::instance().
-			mainScene()->currentViewItem();
-
 	// make sure any old overlays are removed first
-	currentViewItem->scene()->removeOverlayGroup(SUMMARY_HIGHLIGHT_OVERLAY_NAME);
-	currentViewItem->scene()->removeOverlayGroup(SUMMARY_ICON_OVERLAY_NAME);
+	clear();
 
 	QString highlightOverlayStyle;
 	QString highlightOverlayName;
 	QString arrowIconOverlayStyle;
 	QString arrowIconOverlayName;
+
+	QSet<Visualization::Item*> itemsToScale;
+
+	auto currentViewItem = Visualization::VisualizationManager::instance().
+			mainScene()->currentViewItem();
 
 	for (auto changeWithNode : changesWithNodes)
 	{
@@ -211,15 +232,17 @@ void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, 
 			setOverlayInformationAccordingToChangeType(changeWithNode.changeType_, highlightOverlayStyle, highlightOverlayName,
 																	 arrowIconOverlayStyle, arrowIconOverlayName, true);
 
-			highlightOverlayName = SUMMARY_HIGHLIGHT_OVERLAY_NAME;
-			arrowIconOverlayName = SUMMARY_ICON_OVERLAY_NAME;
+			highlightOverlayName = OVERVIEW_HIGHLIGHT_OVERLAY_NAME;
+			arrowIconOverlayName = OVERVIEW_ICON_OVERLAY_NAME;
 
-
-			addOverlaysAndReturnItem(node, currentViewItem,
+			auto item = addOverlaysAndReturnItem(node, currentViewItem,
 															 highlightOverlayName, highlightOverlayStyle,
 															 arrowIconOverlayName, arrowIconOverlayStyle);
+			if (item) itemsToScale.insert(item);
 		}
 	}
+
+	scaleItems(itemsToScale, currentViewItem);
 
 }
 
@@ -261,8 +284,7 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
 								  [diffViewItem, changesWithNodes, diffSetup]() {
 		createOverlaysForChanges(diffViewItem, changesWithNodes);
-		auto newCommit = diffSetup.repository_->getCommitInformation(diffSetup.newVersion_);
-		QString message = createHTMLCommitInfo(newCommit);
+		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		auto overlay = new Visualization::MessageOverlay{diffViewItem,
 				[diffViewItem, message](Visualization::MessageOverlay* overlay)
 		{
@@ -283,9 +305,15 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
 }
 
-QString DiffManager::createHTMLCommitInfo(FilePersistence::CommitMetaData commitMetaData)
+QString DiffManager::createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision)
 {
-	return commitMetaData.message_ + "<br/><br/>"
+	if (revision == FilePersistence::GitRepository::WORKDIR)
+		return "Comparing against working directory";
+
+	auto commitMetaData = repository->getCommitInformation(revision);
+	bool messageEndsInNewline = commitMetaData.message_.endsWith("\n");
+
+	return commitMetaData.message_.replace("\n", "<br/>") + (messageEndsInNewline ? "<br/>" : "<br/><br/>")
 			+ "<font color='gray'>" + commitMetaData.author_.name_ + "</font><br/>"
 			+ "<font color='gray'>" + commitMetaData.dateTime_.toString("dd.MM.yyyy hh:mm") + "</font><br/>"
 			+ "<font color='gray'>" + commitMetaData.sha1_ + "</font>";
@@ -331,7 +359,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 		Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
 		Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
 
-		QString message = createHTMLCommitInfo(diffSetup.repository_->getCommitInformation(diffSetup.newVersion_));
+		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 
 		auto diffComparisonPairs = createDiffComparisonPairs(diffSetup, changedNodesToVisualize);
 
@@ -504,6 +532,34 @@ void DiffManager::setOverlayInformationAccordingToChangeType(FilePersistence::Ch
 	}
 }
 
+void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem)
+{
+	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(itemsToScale);
+
+	itemsToScale.subtract(removeItems);
+
+	auto id = Visualization::VisualizationManager::instance().mainScene()->
+			addOnZoomHandler([itemsToScale](qreal factor)
+	{
+		for (auto item : itemsToScale)
+		{
+			if (factor >= 1.0)
+				item->setScale(1.0);
+			else if (factor >= 0.05)
+				item->setScale((1/factor));
+			else
+				item->setScale((1/factor) * std::pow(0.95, 1/factor));
+		}
+	},
+	[itemsToScale]()
+		{
+			for (auto item : itemsToScale)
+				item->setScale(1.0);
+		});
+
+	onZoomHandlerIdPerViewItem_.insert(currentViewItem, id);
+}
+
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
 														 QList<ChangeWithNodes> changesWithNodes)
 {
@@ -531,7 +587,6 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		Visualization::Item* newNodeItem = addOverlaysAndReturnItem(change.newNode_, diffViewItem,
 																						highlightOverlayName, highlightOverlayStyle,
 																						arrowIconOverlayName, arrowIconOverlayStyle);
-
 		if (oldNodeItem)
 			allItemsToScale.insert(oldNodeItem);
 
@@ -556,23 +611,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 	}
 
-	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(allItemsToScale);
-
-	allItemsToScale.subtract(removeItems);
-
-	Visualization::VisualizationManager::instance().mainScene()->
-			addOnZoomHandler([allItemsToScale](qreal factor)
-	{
-		for (auto item : allItemsToScale)
-		{
-			if (factor >= 1.0)
-				item->setScale(1.0);
-			else if (factor >= 0.05)
-				item->setScale((1/factor));
-			else
-				item->setScale((1/factor) * std::pow(0.95, 1/factor));
-		}
-	});
+	scaleItems(allItemsToScale, diffViewItem);
 
 	// set zoom level further out and center the scene
 	Visualization::VisualizationManager::instance().mainView()->zoom(7);

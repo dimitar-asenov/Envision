@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,10 +32,10 @@
 
 namespace VersionControlUI {
 
-class VERSIONCONTROLUI_API CDiff : public Interaction::Command
+class VERSIONCONTROLUI_API CClear : public Interaction::Command
 {
 	public:
-		CDiff();
+		CClear();
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
@@ -43,23 +43,6 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 
 		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-
-	private:
-
-		static const QString OVERVIEW_COMMAND;
-		/**
-		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
-		 */
-		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
-																								 Visualization::Item* target);
-
-		/**
-		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength
-		 */
-		QStringList computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
-
-		QHash<QString, QString> unambigousPrefixPerRevision_;
-		QString descriptionForCommits(QString token, const QList<QPair<QString, QString>>& commits);
 };
 
 }

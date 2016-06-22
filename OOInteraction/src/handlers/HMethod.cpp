@@ -40,12 +40,14 @@
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 #include "VersionControlUI/src/commands/CDiff.h"
+#include "VersionControlUI/src/commands/CClear.h"
 
 namespace OOInteraction {
 
 HMethod::HMethod()
 {
 	addCommand(new VersionControlUI::CDiff{});
+	addCommand(new VersionControlUI::CClear{});
 	addCommand(new VersionControlUI::CHistory{});
 }
 

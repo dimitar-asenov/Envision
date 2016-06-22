@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,42 +24,44 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "CClear.h"
 
-#include "../versioncontrolui_api.h"
+#include "VersionControlUI/src/DiffManager.h"
 
-#include "InteractionBase/src/commands/CommandWithFlags.h"
+using namespace Visualization;
+using namespace FilePersistence;
 
 namespace VersionControlUI {
 
-class VERSIONCONTROLUI_API CDiff : public Interaction::Command
+
+CClear::CClear() : Command{"clear"} {}
+
+bool CClear::canInterpret(Visualization::Item*, Visualization::Item*,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& )
 {
-	public:
-		CDiff();
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		// check that command name starts with the characters of the first token
+		if (commandTokens.isEmpty() || !name().startsWith(commandTokens.first()))
+			return false;
 
-		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+	return true;
+}
 
-	private:
+Interaction::CommandResult* CClear::execute(Visualization::Item*, Visualization::Item*,
+				const QStringList&, const std::unique_ptr<Visualization::Cursor>& )
+{
+	DiffManager::clear();
 
-		static const QString OVERVIEW_COMMAND;
-		/**
-		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
-		 */
-		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
-																								 Visualization::Item* target);
+	return new Interaction::CommandResult{};
+}
 
-		/**
-		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength
-		 */
-		QStringList computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
+QList<Interaction::CommandSuggestion*> CClear::suggest(Visualization::Item*, Visualization::Item*,
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
+{
+	if (name().startsWith(textSoFar))
+		return {new Interaction::CommandSuggestion{name(), "Clear current view from diffs scaling and "
+																			"overview commands highlights"}};
 
-		QHash<QString, QString> unambigousPrefixPerRevision_;
-		QString descriptionForCommits(QString token, const QList<QPair<QString, QString>>& commits);
-};
+	return {};
+}
 
 }

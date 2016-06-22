@@ -40,7 +40,7 @@ using namespace FilePersistence;
 
 namespace VersionControlUI {
 
-const QString CDiff::SUMMARY_COMMAND = "summary";
+const QString CDiff::OVERVIEW_COMMAND = "overview";
 
 CDiff::CDiff() : Command{"diff"} {}
 
@@ -84,7 +84,7 @@ bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
 		if (!commandTokensCopy.isEmpty())
 		{
 			auto token = commandTokensCopy.takeFirst();
-			if (token != SUMMARY_COMMAND)
+			if (token != OVERVIEW_COMMAND)
 				return false;
 		}
 		return true;
@@ -189,12 +189,12 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 			suggestDescription += "<br>";
 		}
 
-		// check possible summary command at end
+		// check possible overview command at end
 		if (!tokensSoFar.isEmpty())
 		{
 			auto thirdToken = tokensSoFar.takeFirst();
 
-			if (!SUMMARY_COMMAND.startsWith(thirdToken))
+			if (!OVERVIEW_COMMAND.startsWith(thirdToken))
 				return {};
 
 			suggestCommand += stringToComplete + " ";
@@ -202,7 +202,7 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 
 			suggestDescription += descriptionForCommits(suggestDescription, secondTokenSuggenstions);
 
-			suggestions.append(new Interaction::CommandSuggestion{suggestCommand + SUMMARY_COMMAND,
+			suggestions.append(new Interaction::CommandSuggestion{suggestCommand + OVERVIEW_COMMAND,
 																					suggestDescription +
 									 "<br> highlight changes in current view"});
 			return suggestions;
