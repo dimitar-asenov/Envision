@@ -58,6 +58,8 @@ namespace VersionControlUI
 const QString DiffManager::OVERVIEW_HIGHLIGHT_OVERLAY_NAME = "changeOverviewHighlights";
 const QString DiffManager::OVERVIEW_ICON_OVERLAY_NAME = "changeOverviewIcons";
 
+QHash<Visualization::ViewItem*, int> DiffManager::onZoomHandlerIdPerViewItem_;
+
 struct ChangeWithNodes {
 	Model::NodeIdType id_;
 	Model::Node* oldNode_{};
@@ -114,8 +116,13 @@ void DiffManager::clear()
 	currentViewItem->scene()->removeOverlayGroup(OVERVIEW_HIGHLIGHT_OVERLAY_NAME);
 	currentViewItem->scene()->removeOverlayGroup(OVERVIEW_ICON_OVERLAY_NAME);
 
-	Visualization::VisualizationManager::instance().mainScene()->removeOnZoomHandlers();
-
+	auto iter = onZoomHandlerIdPerViewItem_.find(currentViewItem);
+	if (iter != onZoomHandlerIdPerViewItem_.end())
+	{
+		Visualization::VisualizationManager::instance().mainScene()
+				->removeOnZoomHandler(*iter);
+		onZoomHandlerIdPerViewItem_.erase(iter);
+	}
 }
 
 void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
@@ -235,7 +242,7 @@ void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, 
 		}
 	}
 
-	scaleItems(itemsToScale);
+	scaleItems(itemsToScale, currentViewItem);
 
 }
 
@@ -525,13 +532,13 @@ void DiffManager::setOverlayInformationAccordingToChangeType(FilePersistence::Ch
 	}
 }
 
-void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale)
+void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem)
 {
 	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(itemsToScale);
 
 	itemsToScale.subtract(removeItems);
 
-	Visualization::VisualizationManager::instance().mainScene()->
+	auto id = Visualization::VisualizationManager::instance().mainScene()->
 			addOnZoomHandler([itemsToScale](qreal factor)
 	{
 		for (auto item : itemsToScale)
@@ -549,6 +556,8 @@ void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale)
 			for (auto item : itemsToScale)
 				item->setScale(1.0);
 		});
+
+	onZoomHandlerIdPerViewItem_.insert(currentViewItem, id);
 }
 
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
@@ -602,7 +611,7 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 
 	}
 
-	scaleItems(allItemsToScale);
+	scaleItems(allItemsToScale, diffViewItem);
 
 	// set zoom level further out and center the scene
 	Visualization::VisualizationManager::instance().mainView()->zoom(7);

@@ -582,7 +582,7 @@ void Scene::removeOverlay(Item* overlay, const QString& groupName)
 			it.value()->removeOverlay(overlay);
 }
 
-void Scene::removeOnZoomHandlers()
+void Scene::removeAllOnZoomHandlers()
 {
 	for (auto it = onZoomHandlers_.begin(); it != onZoomHandlers_.end(); ++it)
 	{
@@ -591,5 +591,19 @@ void Scene::removeOnZoomHandlers()
 		onZoomHandlers_.erase(it);
 	}
 }
+
+int Scene::addOnZoomHandler(OnZoomHandler onZoomHandler, OnZoomHandlerRemove onZoomHandlerRemove)
+{
+	onZoomHandlers_.insert(addOnZoomHandlerId_, {onZoomHandler, onZoomHandlerRemove});
+	return addOnZoomHandlerId_++;
+}
+
+void Scene::removeOnZoomHandler(int onZoomHandlerId)
+{
+	auto onZoomHandler = onZoomHandlers_.take(onZoomHandlerId);
+	onZoomHandler.second();
+}
+
+int Scene::addOnZoomHandlerId_ = 0;
 
 }
