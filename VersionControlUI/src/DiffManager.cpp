@@ -125,6 +125,86 @@ void DiffManager::clear()
 	}
 }
 
+void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup)
+{
+	QString message = "";
+
+	for (auto entry : nameChanges_)
+	{
+		auto id = entry.second;
+
+		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
+		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
+
+		message += DiffComparisonPair::computeObjectPath(oldNode) +
+				// html entity for right arrow
+				"&rarr;"
+				+ DiffComparisonPair::computeObjectPath(newNode) + "<br/>";
+
+	}
+
+	if (!message.isEmpty())
+	{
+		auto overlay = new Visualization::MessageOverlay{currentViewItem,
+				[currentViewItem, message](Visualization::MessageOverlay* overlay)
+		{
+			auto currentViewPos = currentViewItem->scenePos();
+			overlay->setPos(currentViewPos.x(),
+								 currentViewPos.y() + currentViewItem->heightInScene());
+
+			auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(currentViewItem->findVisualizationOf
+																					(currentViewItem->nodeAt(Visualization::MajorMinorIndex{})));
+			overlay->setScale(vDiffComparisonPair->scaleFactor());
+			return message;
+		}, Visualization::MessageOverlay::itemStyles().get("info")};
+
+		currentViewItem->addOverlay(overlay, "NameChangeInfoOverlay");
+	}
+}
+
+// TODO decide what should be highlighted in diff
+bool DiffManager::isNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup)
+{
+	if (!oldNode || !newNode)
+		return false;
+
+	if (DCast<Model::NameText>(oldNode) && DCast<Model::NameText>(newNode))
+	{
+		auto oldNameText = DCast<Model::NameText>(oldNode);
+		auto newNameText = DCast<Model::NameText>(newNode);
+		auto id = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newNameText->parent());
+
+		nameChanges_.insert(oldNameText->get(), {newNameText->get(), id});
+
+		return true;
+	}
+
+	if (DCast<Model::Reference>(oldNode) && DCast<Model::Reference>(newNode))
+	{
+		auto oldReference = DCast<Model::Reference>(oldNode);
+		auto newReference = DCast<Model::Reference>(newNode);
+
+		Model::Reference::resolvePending();
+
+		auto result = nameChanges_.find(oldReference->name());
+		if (result != nameChanges_.end() && result->first == newReference->name())
+		{
+			if (oldReference->target() && newReference->target())
+			{
+				auto oldRefId = diffSetup.oldVersionManager_->nodeIdMap().idIfExists(oldReference->target());
+				auto newRefId = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newReference->target());
+
+				return (oldRefId == newRefId) && (newRefId == result->second);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	return false;
+
+}
+
 void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
 																		  QSet<Model::NodeIdType>& changedNodesToVisualize,
 																		  DiffSetup& diffSetup)
@@ -146,6 +226,9 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 
 		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
 		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
+
+		if (isNameChange(oldNode, newNode, diffSetup))
+			continue;
 
 		if (!targetNodeID_.isNull())
 		{
@@ -300,6 +383,8 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 
 		diffViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
 	});
+
+	showNameChangeInformation(diffViewItem, diffSetup);
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);

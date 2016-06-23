@@ -134,9 +134,14 @@ class VERSIONCONTROLUI_API DiffManager
 																QString highlightOverlayName, QString highlightOverlayStyle,
 																QString arrowIconOverlayName, QString arrowIconOverlayStyle);
 
+		bool isNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup);
+
+		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup);
+
 		QString project_;
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
 		Model::NodeIdType targetNodeID_;
+		QHash<QString, QPair<QString, Model::NodeIdType>> nameChanges_;
 
 		static void scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem);
 
