@@ -96,11 +96,12 @@ QString DiffComparisonPair::computeObjectPath(Model::Node* node)
 {
 	if (!node) return "";
 	auto parent = node->parent();
-	QString objectPath = "";
+	QString objectPath = node->definesSymbol() ? node->symbolName() : "";
 	while (parent)
 	{
 		if (parent->definesSymbol())
 			objectPath.prepend(parent->symbolName() + ".");
+
 		parent = parent->parent();
 	}
 
