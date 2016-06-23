@@ -420,7 +420,7 @@ void Item::removeFromScene()
 		scene()->setItemIsSensitiveToScale(this, false);
 
 		//Notify the view manager about removal of the item
-		scene()->viewItems()->cleanupRemovedItem(this);
+		if (auto viewManager = scene()->viewItems()) viewManager->cleanupRemovedItem(this);
 
 		//Finally remove this item from the scene
 		if (parent()) scene()->removeItem(this);
