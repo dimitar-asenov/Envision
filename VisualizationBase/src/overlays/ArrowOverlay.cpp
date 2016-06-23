@@ -41,13 +41,11 @@ ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* styl
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
 	if (highlighted_)
-		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->highlightedArrowBrush(),
-																style()->highlightedLinePen(), invertArrow_, !invertArrow_,
-																style()->highlightedWidth());
+		Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->highlightedArrowBrush(),
+								 style()->highlightedLinePen(), invertArrow_, !invertArrow_, style()->highlightedWidth());
 	else
-		currentArrowOutline_ = Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowBrush(),
-																style()->linePen(), invertArrow_, !invertArrow_,
-																style()->width());
+		Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowBrush(),
+								 style()->linePen(), invertArrow_, !invertArrow_, style()->width());
 }
 
 void ArrowOverlay::determineChildren(){}
@@ -55,23 +53,10 @@ void ArrowOverlay::determineChildren(){}
 void ArrowOverlay::updateGeometry(int, int)
 {
 	invertArrow_ = false;
+
 	//Find the space the line will occupy in the scene
 	auto first = firstAssociatedItem();
 	auto second = secondAssociatedItem();
-
-	auto leftTopCorner = QPointF{
-				std::min(first->scenePos().x() + first->widthInScene(),
-							second->scenePos().x() + second->widthInScene()),
-				std::min(first->scenePos().y() + first->heightInScene() / 2,
-							second->scenePos().y() + second->heightInScene() / 2)}.toPoint();
-	auto rightBottomCorner = QPointF{
-				std::max(first->scenePos().x(), second->scenePos().x()),
-				std::max(first->scenePos().y() + first->heightInScene() / 2,
-							second->scenePos().y() + second->heightInScene() / 2)}.toPoint();
-
-	setPos(leftTopCorner.x(), leftTopCorner.y());
-	setSize(rightBottomCorner.x() - leftTopCorner.x(),
-			rightBottomCorner.y() - leftTopCorner.y());
 
 	//Find the actual starting and end points of the line in local coordinates
 	if (first->scenePos().x() > second->scenePos().x())
@@ -81,10 +66,23 @@ void ArrowOverlay::updateGeometry(int, int)
 		first = temp;
 		invertArrow_ = true;
 	}
-	lineFrom_ = QPointF{first->scenePos().x() + first->widthInScene() - leftTopCorner.x(),
-						first->scenePos().y() + first->heightInScene() / 2 - leftTopCorner.y()}.toPoint();
-	lineTo_ = QPointF{second->scenePos().x() - leftTopCorner.x(),
-					 second->scenePos().y() + second->heightInScene() / 2 - leftTopCorner.y()}.toPoint();
+
+	lineFrom_ = QPointF{first->scenePos().x() + first->widthInScene(),
+						first->scenePos().y() + first->heightInScene() / 2}.toPoint();
+	lineTo_ = QPointF{second->scenePos().x(),
+					 second->scenePos().y() + second->heightInScene() / 2}.toPoint();
+
+	currentArrowOutline_ = Drawing::arrowRotatedBoundingRect(lineFrom_, lineTo_,
+															 (highlighted_ ? style()->highlightedWidth() : style()->width() ),
+															 invertArrow_, !invertArrow_);
+
+	auto bounding = currentArrowOutline_.boundingRect();
+	currentArrowOutline_.translate(-bounding.topLeft());
+	setPos(bounding.topLeft());
+	setSize(bounding.size());
+
+	lineFrom_ -= bounding.topLeft().toPoint();
+	lineTo_ -= bounding.topLeft().toPoint();
 }
 
 QPainterPath ArrowOverlay::shape() const

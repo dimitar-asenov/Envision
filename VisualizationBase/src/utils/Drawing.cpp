@@ -25,62 +25,51 @@
 ***********************************************************************************************************************/
 #include "Drawing.h"
 
-QPolygonF Drawing::arrowSelectionPolygon(double angle, QPointF begin, QPointF end)
-{
+// These only have a significant effect with thin arrows, making them look better.
+int Drawing::ARROW_TIP_EXTRA_LENGTH_ = 10;
+int Drawing::ARROW_TIP_EXTRA_WIDTH_ = 2;
 
-	const int selectionWidth = 20;
-	QPolygonF arrowSeletionOutline;
-	qreal radAngle = angle* M_PI / 180;
-	qreal xDistance = selectionWidth * sin(radAngle);
-	qreal yDistance = selectionWidth * cos(radAngle);
-	QPointF posOffset = QPointF(xDistance, yDistance);
-	QPointF negOffset = QPointF(-xDistance, -yDistance);
-	arrowSeletionOutline << begin + posOffset
-								<< begin + negOffset
-								<< end + negOffset
-								<< end + posOffset;
-
-	return arrowSeletionOutline;
-}
-
-QPolygonF Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBrush& arrowBrush,
+void Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBrush& arrowBrush,
 									  const QPen& linePen, bool startArrow, bool endArrow, int outlineSize)
 {
-	painter->setBrush(arrowBrush);
-	painter->setPen(Qt::NoPen);
-
-	double angle = -QLineF{begin, end}.angle();
-
 	if (startArrow || endArrow)
 	{
 		QPolygonF anArrowhead;
-		const int arrowTipLength = 10, arrowTipHalfWidth = 2;
 		anArrowhead << QPoint{0, 0}
-						<< QPoint{arrowTipLength+outlineSize, -arrowTipHalfWidth-outlineSize}
-						<< QPoint{arrowTipLength+outlineSize, arrowTipHalfWidth+outlineSize};
-		QMatrix matrix;
-		if (startArrow)
-			begin = drawHead(painter, matrix, anArrowhead, begin, angle);
-		if (endArrow)
-		{
-			matrix.reset();
-			end = drawHead(painter, matrix, anArrowhead, end, angle + 180);
-		}
+						<< QPoint{outlineSize + ARROW_TIP_EXTRA_LENGTH_, -outlineSize-ARROW_TIP_EXTRA_WIDTH_}
+						<< QPoint{outlineSize + ARROW_TIP_EXTRA_LENGTH_, outlineSize+ARROW_TIP_EXTRA_WIDTH_};
+
+		painter->setBrush(arrowBrush);
+		painter->setPen(Qt::NoPen);
+		double angle = -QLineF{begin, end}.angle();
+		if (startArrow) begin = drawHead(painter, anArrowhead, begin, angle);
+		if (endArrow) end = drawHead(painter, anArrowhead, end, angle + 180);
 	}
 
 	painter->setPen(linePen);
 	painter->drawLine(begin, end);
-
-	QPolygonF arrowSeletionOutline = arrowSelectionPolygon(-angle, end, begin);
-
-	return arrowSeletionOutline;
 }
 
-QPointF Drawing::drawHead(QPainter *painter, QMatrix matrix, QPolygonF arrowHead, QPointF beginOrEnd, double angle)
+QPointF Drawing::drawHead(QPainter *painter, QPolygonF arrowHead, QPointF position, double angle)
 {
+	QMatrix matrix;
 	matrix.rotate(angle);
 	auto arrow = matrix.map(arrowHead);
-	arrow.translate(beginOrEnd);
+	arrow.translate(position);
 	painter->drawPolygon(arrow);
 	return QPointF{(arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2};
+}
+
+QPolygonF Drawing::arrowRotatedBoundingRect(QPointF from, QPointF to, int width, bool arrowTipAtStart,
+														  bool arrowTipAtEnd)
+{
+	qreal totalWidth = (arrowTipAtStart || arrowTipAtEnd) ? 2*(width+ARROW_TIP_EXTRA_WIDTH_) : width;
+	QLineF line{from, to};
+	QRectF boundingRect{0, -totalWidth/2.0, line.length(), totalWidth};
+
+	QMatrix matrix;
+	matrix.rotate(-line.angle());
+	auto result = matrix.map(QPolygonF{boundingRect});
+	result.translate(from);
+	return result;
 }

@@ -42,10 +42,14 @@ class VISUALIZATIONBASE_API Drawing
 		 * @param endArrow Is there an arrow to the end point?
 		 * @param outlineSize The size of the arrow head
 		 */
-		static QPolygonF drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBrush& arrowBrush,
+		static void drawArrow(QPainter* painter, QPointF begin, QPointF end, const QBrush& arrowBrush,
 									 const QPen& linePen,  bool startArrow, bool endArrow, int outlineSize);
 
+		static QPolygonF arrowRotatedBoundingRect(QPointF from, QPointF to, int width, bool arrowTipAtStart,
+																bool arrowTipAtEnd);
 	private:
-		static QPointF drawHead(QPainter* painter, QMatrix matrix, QPolygonF arrowHead, QPointF beginOrEnd, double angle);
-		static QPolygonF arrowSelectionPolygon(double angle, QPointF end, QPointF begin);
+		static QPointF drawHead(QPainter* painter, QPolygonF arrowHead, QPointF position, double angle);
+
+		static int ARROW_TIP_EXTRA_LENGTH_;
+		static int ARROW_TIP_EXTRA_WIDTH_;
 };
