@@ -184,8 +184,6 @@ bool DiffManager::isNameChange(Model::Node* oldNode, Model::Node* newNode, const
 		auto oldReference = DCast<Model::Reference>(oldNode);
 		auto newReference = DCast<Model::Reference>(newNode);
 
-		Model::Reference::resolvePending();
-
 		auto result = nameChanges_.find(oldReference->name());
 		if (result != nameChanges_.end() && result->first == newReference->name())
 		{
