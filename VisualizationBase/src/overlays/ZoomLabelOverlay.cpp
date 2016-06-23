@@ -135,13 +135,13 @@ const TextStyle* ZoomLabelOverlay::associatedItemTextStyle() const
 
 QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 {
-	// disable zoom labels if wished by view item
-	if (!Visualization::VisualizationManager::instance().mainScene()->currentViewItem()->zoomLabelsEnabled())
-		return {};
-
 	QList<Item*> result;
 
-	const double OVERLAY_SCALE_TRESHOLD = 0.5;
+	// disable zoom labels if wished by view item
+	if (!Visualization::VisualizationManager::instance().mainScene()->currentViewItem()->zoomLabelsEnabled())
+		return result;
+
+	const double OVERLAY_SCALE_TRESHOLD = 0.25;
 	auto scalingFactor = scene->mainViewScalingFactor();
 
 	if (scalingFactor >= OVERLAY_SCALE_TRESHOLD)
@@ -158,6 +158,7 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 			break;
 		}
 	Q_ASSERT(mainView);
+
 
 	QList<Item*> stack = scene->topLevelItems();
 	while (!stack.isEmpty())
@@ -273,35 +274,70 @@ void ZoomLabelOverlay::adjustPositionOrHide()
 	auto availableRect = associatedItem()->sceneBoundingRect().toRect();
 
 	auto item = associatedItem()->parent();
+	ZoomLabelOverlay* overlayToHideIfWeAreVisible_{};
 	while (item)
 	{
 		auto overlayIt = itemToOverlay().find(item);
 		if (overlayIt != itemToOverlay().end() && overlayIt.value()->isVisible())
-			reduceRect(availableRect, overlayIt.value()->sceneBoundingRect().toRect());
+		{
+			if (overlayIt.value()->mayBeHiddenIfChildrenHaveOverlays_)
+			{
+				overlayToHideIfWeAreVisible_ = overlayIt.value();
+				// Technically we could break here, but we don't so that we exercise the assert below
+			}
+			else
+			{
+				// If there is an overlay to hide, it should have already hidden all of it's parents
+				Q_ASSERT(!overlayToHideIfWeAreVisible_);
+
+				reduceRect(availableRect, overlayIt.value()->sceneBoundingRect().toRect());
+			}
+		}
 
 		item = item->parent();
 	}
 
 	// At this point we know in what amount of space we're supposed to fit.
 
-	// If the space is too small don't bother trying to compute a scale
 	bool visible = true;
+
+	// If the space is too small don't bother trying to compute a scale
 	auto scalingFactor = scene()->mainViewScalingFactor();
 	if (availableRect.width() * scalingFactor < OVERLAY_MIN_WIDTH
 			|| availableRect.height() * scalingFactor < OVERLAY_MIN_HEIGHT) visible = false;
 
 	// If the original item's header is actually visible, then don't show this one
-	if (scalingFactor * associatedItemTextStyle()->font().pixelSize() >= SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN)
-		visible = false;
+	auto scaledFontSize = scalingFactor * associatedItemTextStyle()->font().pixelSize();
+	if ( scaledFontSize >= SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN) visible = false;
 
 	// If there might be enough space, then try to fit in
 	if (visible)
 	{
-		setPos(availableRect.topLeft());
-		setScale(computeScaleToUse());
+		setPos(availableRect.center() - QPointF{sizeInScene().width()/2, sizeInScene().height()/2});
+		auto scaleToUse = computeScaleToUse();
+		setScale(scaleToUse);
+
+		// If this overlay's text will also be too small, don't show it
+		if (scaleToUse * scaledFontSize < SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN)
+			visible = false;
 	}
 
 	if (visible != isVisible()) setVisible(visible);
+
+	if (visible)
+	{
+		// Make parent overlays invisible if they were too big.
+		if (overlayToHideIfWeAreVisible_)
+		{
+			overlayToHideIfWeAreVisible_->setVisible(false);
+			overlayToHideIfWeAreVisible_->mayBeHiddenIfChildrenHaveOverlays_ = false;
+		}
+
+		// If this overlay's associated item is rather big, allow overlays of children to hide this overlay
+		if (availableRect.width() * scalingFactor >= ITEM_MAX_WIDTH
+				&& availableRect.height() * scalingFactor >= ITEM_MAX_HEIGHT)
+			mayBeHiddenIfChildrenHaveOverlays_ = true;
+	}
 }
 
 qreal ZoomLabelOverlay::computeScaleToUse() const

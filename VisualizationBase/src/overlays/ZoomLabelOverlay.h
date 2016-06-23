@@ -62,6 +62,7 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 		Text* text_{};
 		const StaticStyle* iconStyle_{};
 		int postUpdateRevision_{};
+		bool mayBeHiddenIfChildrenHaveOverlays_{};
 		static QHash<Item*, ZoomLabelOverlay*>& itemToOverlay();
 
 		const StaticStyle* associatedItemIconStyle() const;
@@ -76,10 +77,12 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 
 		qreal computeScaleToUse() const;
 
-		static constexpr double OVERLAY_MIN_WIDTH = 50;
+		static constexpr double OVERLAY_MIN_WIDTH = 30;
 		static constexpr double OVERLAY_MIN_HEIGHT = 15;
+		static constexpr double ITEM_MAX_WIDTH = 500;
+		static constexpr double ITEM_MAX_HEIGHT = 500;
 		static constexpr double OVERLAY_MAX_HEIGHT = 40;
-		static constexpr double SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN = 6;
+		static constexpr double SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN = 8;
 };
 
 }
