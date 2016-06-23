@@ -28,6 +28,7 @@
 #include "../Scene.h"
 #include "../cursor/Cursor.h"
 #include "../items/Item.h"
+#include "../items/ViewItem.h"
 #include "../VisualizationBasePlugin.h"
 #include "../VisualizationManager.h"
 
@@ -124,8 +125,30 @@ void MainView::wheelEvent(QWheelEvent *event)
 			auto scenePos = mapToScene(event->pos());
 			auto itemsAtEvent = items(event->pos());
 			auto iter = itemsAtEvent.begin();
-			// avoid zooming in on Overlays
-			while (iter != itemsAtEvent.end() && (*iter)->acceptedMouseButtons() == Qt::NoButton) iter++;
+
+			auto canBeZoomAnchor = [](QGraphicsItem* item) {
+
+				// avoid zooming in on Overlays
+				// This doesn't however catch all overlay cases, and some overlays can be deleted below in the call to
+				// zoomAccordingToScaleLevel().
+				if (item->acceptedMouseButtons() == Qt::NoButton) return false;
+
+				// Only accept items which are part of a ViewItem
+				// TODO: We assume that none of these items will be deleted when zoomAccordingToScaleLevel() is called.
+				// If necessary this can be handled by saving not just the last item but its entire hierarchy and
+				// testing in reverse order, starting from the ViewItem.
+				auto envisionItem = dynamic_cast<Item*>(item);
+				while (envisionItem)
+				{
+					if (DCast<ViewItem>(envisionItem)) return true;
+					envisionItem = envisionItem->parent();
+				}
+
+				return false;
+			};
+
+			while (iter != itemsAtEvent.end() && !canBeZoomAnchor(*iter)) iter++;
+
 			if (iter != itemsAtEvent.end())
 			{
 				itemUnderCursor = *iter;
