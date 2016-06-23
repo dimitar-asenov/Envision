@@ -25,6 +25,8 @@
 			<spaceBetweenElements>5</spaceBetweenElements>
 			<noInnerCursors>true</noInnerCursors>
 			<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+			<hasCursorWhenEmpty>true</hasCursorWhenEmpty>
 		</itemsStyle>
+                <showTipWhenSelectedAndEmpty>false</showTipWhenSelectedAndEmpty>
 	</list>
 </style>

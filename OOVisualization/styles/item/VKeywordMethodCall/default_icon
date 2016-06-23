@@ -22,6 +22,8 @@
 			<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
 			<minHeight>8</minHeight>
 			<minHeight>4</minHeight>
+			<hasCursorWhenEmpty>true</hasCursorWhenEmpty>
 		</itemsStyle>
+		<showTipWhenSelectedAndEmpty>false</showTipWhenSelectedAndEmpty>
 	</arguments>
 </style>

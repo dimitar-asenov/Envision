@@ -575,6 +575,23 @@ class VISUALIZATIONBASE_API GridLayouter
 
 				}
 
+			// If Empty but a cursor is requested add a single fron-back cursor
+			if (isEmpty && showCursorWhenEmpty)
+			{
+				// Assume a symmetric shape
+				auto left = xOffset + leftMargin();
+				auto right = parent->widthInLocal() - left - xOffset - rightMargin();
+				if (right < left) right = left+1;
+				auto top = yOffset + topMargin();
+				auto bottom = parent->heightInLocal() - top - yOffset - bottomMargin();
+				if (bottom < top) bottom = top+1;
+
+				regs.append( cursorRegion(parent, formElement, 0, 0, majorAxis == ColumnMajor,
+						!extraCursorsAroundParentShape,
+						notLocationEquivalentCursors, !extraCursorsAroundParentShape, !extraCursorsAroundParentShape,
+						QRect{QPoint{top, left}, QPoint{bottom, right}} ));
+			}
+
 
 			// Front and back major cursor. Always there if requested.
 			if (showMajorCursors)

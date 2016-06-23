@@ -45,7 +45,9 @@
 			<minHeight>15</minHeight>
 			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
 			<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+			<hasCursorWhenEmpty>true</hasCursorWhenEmpty>
 		</itemsStyle>
+		<showTipWhenSelectedAndEmpty>false</showTipWhenSelectedAndEmpty>
 	</results>
 	
 </style>

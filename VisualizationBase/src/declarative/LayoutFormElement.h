@@ -102,7 +102,7 @@ inline LayoutFormElement* LayoutFormElement::setNoInnerCursors(std::function<boo
 inline bool LayoutFormElement::hasCursorWhenEmpty(Item* item)
 {
 	if (hasCursorWhenEmptyGetter_) return hasCursorWhenEmptyGetter_(item);
-	return true;
+	return false;
 }
 inline bool LayoutFormElement::notLocationEquivalentCursors(Item* item)
 {
