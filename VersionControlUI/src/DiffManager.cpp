@@ -215,6 +215,7 @@ void DiffManager::processNameTextChanges(FilePersistence::IdToChangeDescriptionH
 			if (auto newNameText = DCast<Model::NameText>(versionNodes.newNode_))
 			{
 				auto id = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newNameText->parent());
+				Q_ASSERT(!id.isNull());
 
 				nameChanges_.insert(oldNameText->get(), {newNameText->get(), id});
 
