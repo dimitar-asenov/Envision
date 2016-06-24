@@ -134,7 +134,7 @@ class VERSIONCONTROLUI_API DiffManager
 																QString highlightOverlayName, QString highlightOverlayStyle,
 																QString arrowIconOverlayName, QString arrowIconOverlayStyle);
 
-		bool isNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup);
+		bool processNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup);
 
 		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup);
 

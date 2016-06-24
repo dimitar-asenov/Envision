@@ -163,7 +163,7 @@ void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentView
 }
 
 // TODO decide what should be highlighted in diff
-bool DiffManager::isNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup)
+bool DiffManager::processNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup)
 {
 	if (!oldNode || !newNode)
 		return false;
@@ -225,7 +225,8 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
 		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
 
-		if (isNameChange(oldNode, newNode, diffSetup))
+		// don't process this change further if it is a name change, they will be shown seperately
+		if (processNameChange(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
 			continue;
 
 		if (!targetNodeID_.isNull())
