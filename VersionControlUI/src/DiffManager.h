@@ -49,6 +49,7 @@ namespace Visualization
 
 namespace VersionControlUI {
 
+struct VersionNodes;
 struct ChangeWithNodes;
 struct DiffSetup;
 class DiffComparisonPair;
@@ -124,6 +125,10 @@ class VERSIONCONTROLUI_API DiffManager
 		 * Removes all nodes which have an ancestor present in \a container
 		 */
 		void removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container);
+
+		VersionNodes retrieveVersionNodesForId(const Model::NodeIdType& id, const DiffSetup& diffSetup);
+
+		void processNameTextChanges(FilePersistence::IdToChangeDescriptionHash& changes, const DiffSetup& diffSetup);
 
 		static void setOverlayInformationAccordingToChangeType(FilePersistence::ChangeType changeType,
 																			QString& highlightOverlayStyle, QString& highlightOverlayName,

@@ -60,10 +60,14 @@ const QString DiffManager::OVERVIEW_ICON_OVERLAY_NAME = "changeOverviewIcons";
 
 QHash<Visualization::ViewItem*, int> DiffManager::onZoomHandlerIdPerViewItem_;
 
-struct ChangeWithNodes {
-	Model::NodeIdType id_;
+struct VersionNodes {
 	Model::Node* oldNode_{};
 	Model::Node* newNode_{};
+};
+
+struct ChangeWithNodes {
+	Model::NodeIdType id_;
+	VersionNodes versionNodes_;
 	FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
 };
 
@@ -168,52 +172,72 @@ bool DiffManager::processNameChange(Model::Node* oldNode, Model::Node* newNode, 
 	if (!oldNode || !newNode)
 		return false;
 
-	if (DCast<Model::NameText>(oldNode) && DCast<Model::NameText>(newNode))
-	{
-		auto oldNameText = DCast<Model::NameText>(oldNode);
-		auto newNameText = DCast<Model::NameText>(newNode);
-		auto id = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newNameText->parent());
-
-		nameChanges_.insert(oldNameText->get(), {newNameText->get(), id});
-
-		return true;
-	}
-
-	if (DCast<Model::Reference>(oldNode) && DCast<Model::Reference>(newNode))
-	{
-		auto oldReference = DCast<Model::Reference>(oldNode);
-		auto newReference = DCast<Model::Reference>(newNode);
-
-		auto result = nameChanges_.find(oldReference->name());
-		if (result != nameChanges_.end() && result->first == newReference->name())
+	if (auto oldReference = DCast<Model::Reference>(oldNode))
+		if (auto newReference = DCast<Model::Reference>(newNode))
 		{
-			if (oldReference->target() && newReference->target())
+			auto result = nameChanges_.find(oldReference->name());
+			if (result != nameChanges_.end() && result->first == newReference->name())
 			{
-				auto oldRefId = diffSetup.oldVersionManager_->nodeIdMap().idIfExists(oldReference->target());
-				auto newRefId = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newReference->target());
+				if (oldReference->target() && newReference->target())
+				{
+					auto oldRefId = diffSetup.oldVersionManager_->nodeIdMap().idIfExists(oldReference->target());
+					auto newRefId = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newReference->target());
 
-				return (oldRefId == newRefId) && (newRefId == result->second);
+					return (oldRefId == newRefId) && (newRefId == result->second);
+				}
+				return true;
 			}
-			return true;
+			return false;
 		}
-		return false;
-	}
 
 	return false;
 
+}
+
+VersionNodes DiffManager::retrieveVersionNodesForId(const Model::NodeIdType& id, const DiffSetup& diffSetup)
+{
+	auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
+	auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
+
+	return {oldNode, newNode};
+}
+
+void DiffManager::processNameTextChanges(FilePersistence::IdToChangeDescriptionHash& changes,
+													  const DiffSetup& diffSetup)
+{
+	auto iter = changes.begin();
+	while (iter != changes.end())
+	{
+		auto id = iter->get()->nodeId();
+		auto versionNodes = retrieveVersionNodesForId(id, diffSetup);
+
+		if (!versionNodes.oldNode_ || !versionNodes.newNode_) {iter++; continue;}
+
+		if (auto oldNameText = DCast<Model::NameText>(versionNodes.oldNode_))
+			if (auto newNameText = DCast<Model::NameText>(versionNodes.newNode_))
+			{
+				auto id = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newNameText->parent());
+
+				nameChanges_.insert(oldNameText->get(), {newNameText->get(), id});
+
+				iter = changes.erase(iter);
+				continue;
+			}
+		iter++;
+	}
 }
 
 void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<ChangeWithNodes>& changesWithNodes,
 																		  QSet<Model::NodeIdType>& changedNodesToVisualize,
 																		  DiffSetup& diffSetup)
 {
-
 	diffSetup = initializeDiffPrerequisites(oldVersion, newVersion);
 
 	FilePersistence::Diff diff = diffSetup.repository_->diff(diffSetup.oldVersion_, diffSetup.newVersion_);
 
 	auto changes = diff.changes();
 
+	processNameTextChanges(changes, diffSetup);
 
 	for (auto change : changes.values())
 	{
@@ -222,8 +246,7 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 
 		auto id = change->nodeId();
 
-		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
-		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
+		auto versionNodes = retrieveVersionNodesForId(id, diffSetup);
 
 		// don't process this change further if it is a name change, they will be shown seperately
 		if (processNameChange(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
@@ -233,16 +256,16 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 		{
 			auto targetOldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(targetNodeID_));
 			auto targetNewNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(targetNodeID_));
-			if ((targetOldNode && targetOldNode->isSameOrAncestorOf(oldNode))
-				 || (targetNewNode && targetNewNode->isSameOrAncestorOf(newNode)))
+			if ((targetOldNode && targetOldNode->isSameOrAncestorOf(versionNodes.oldNode_))
+				 || (targetNewNode && targetNewNode->isSameOrAncestorOf(versionNodes.newNode_)))
 			{
-				changesWithNodes.append({id, oldNode, newNode, change->type()});
+				changesWithNodes.append({id, versionNodes, change->type()});
 			}
 			else
 				continue;
 
 		} else
-			changesWithNodes.append({id, oldNode, newNode, change->type()});
+			changesWithNodes.append({id, versionNodes, change->type()});
 
 		Model::NodeIdType nodeId;
 
@@ -493,10 +516,10 @@ void DiffManager::removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>&
 
 	for (auto change : container)
 	{
-		if (change.oldNode_)
-			oldNodes.insert(change.oldNode_, change.changeType_);
-		if (change.newNode_)
-			newNodes.insert(change.newNode_, change.changeType_);
+		if (change.versionNodes_.oldNode_)
+			oldNodes.insert(change.versionNodes_.oldNode_, change.changeType_);
+		if (change.versionNodes_.newNode_)
+			newNodes.insert(change.versionNodes_.newNode_, change.changeType_);
 	}
 
 	QSet<Model::Node*> oldNodesMarkedForRemoval = findAllNodesWithDirectParentPresent(oldNodes);
@@ -505,7 +528,8 @@ void DiffManager::removeDirectChildrenOfNodesInContainer(QList<ChangeWithNodes>&
 	auto it = container.begin();
 	while (it != container.end())
 	{
-		if (oldNodesMarkedForRemoval.contains(it->oldNode_) || newNodesMarkedForRemoval.contains(it->newNode_))
+		if (oldNodesMarkedForRemoval.contains(it->versionNodes_.oldNode_)
+			 || newNodesMarkedForRemoval.contains(it->versionNodes_.newNode_))
 			it = container.erase(it);
 		else
 			it++;
@@ -665,10 +689,10 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 												  arrowIconOverlayStyle, arrowIconOverlayName);
 
 
-		Visualization::Item* oldNodeItem = addOverlaysAndReturnItem(change.oldNode_, diffViewItem,
+		Visualization::Item* oldNodeItem = addOverlaysAndReturnItem(change.versionNodes_.oldNode_, diffViewItem,
 																						highlightOverlayName, highlightOverlayStyle,
 																						arrowIconOverlayName, arrowIconOverlayStyle);
-		Visualization::Item* newNodeItem = addOverlaysAndReturnItem(change.newNode_, diffViewItem,
+		Visualization::Item* newNodeItem = addOverlaysAndReturnItem(change.versionNodes_.newNode_, diffViewItem,
 																						highlightOverlayName, highlightOverlayStyle,
 																						arrowIconOverlayName, arrowIconOverlayStyle);
 		if (oldNodeItem)
