@@ -211,8 +211,6 @@ void DiffManager::processNameTextChanges(FilePersistence::IdToChangeDescriptionH
 		auto id = iter->get()->nodeId();
 		auto versionNodes = retrieveVersionNodesForId(id, diffSetup);
 
-		if (!versionNodes.oldNode_ || !versionNodes.newNode_) {iter++; continue;}
-
 		if (auto oldNameText = DCast<Model::NameText>(versionNodes.oldNode_))
 			if (auto newNameText = DCast<Model::NameText>(versionNodes.newNode_))
 			{
