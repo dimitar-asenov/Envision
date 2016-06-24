@@ -71,6 +71,7 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		QList<ObjectPathCrumbData> objectPathCrumbsDataOldNode();
 		QList<ObjectPathCrumbData> objectPathCrumbsDataNewNode();
 
+		static QString computeObjectPath(Model::Node* node);
 
 	private:
 		bool twoObjectPathsDefined_{};
@@ -83,8 +84,6 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		QString computeComponentName();
 
 		QList<ObjectPathCrumbData> computeObjectPathCrumbData(Model::Node* node, QString& objectPath);
-
-		QString computeObjectPath(Model::Node* node);
 
 		void computeObjectPathCrumbs(Model::Node* oldNode, QString oldNodeObjectPath,
 											  Model::Node* newNode, QString newNodeObjectPath);

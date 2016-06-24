@@ -37,13 +37,13 @@ using namespace FilePersistence;
 
 namespace VersionControlUI {
 
-CHistory::CHistory() : CommandWithFlags{"history", {{"project"}}, true, false}
+CHistory::CHistory() : CommandWithFlags{"history", {{"accumulate"}}, true, false}
 {
 }
 
 Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 												  const std::unique_ptr<Visualization::Cursor>& /*cursor*/,
-												  const QString& name, const QStringList& /*attributes*/)
+												  const QString& name, const QStringList& attributes)
 {
 	Model::TreeManager* headManager = target->node()->manager();
 	QString managerName = headManager->name();
@@ -69,7 +69,12 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source
 	History history{targetPath, targetID, &graph, repository};
 
 	DiffManager diffManager{managerName, {target->node()->typeName()}};
-	diffManager.showNodeHistory(targetID, history.relevantCommitsByTime(repository, false));
+
+	auto relevantCommitsbyTime = history.relevantCommitsByTime(repository, false);
+	if (attributes.first() == "accumulate")
+		relevantCommitsbyTime = {relevantCommitsbyTime.first(), relevantCommitsbyTime.last()};
+
+	diffManager.showNodeHistory(targetID, relevantCommitsbyTime);
 
 	return new Interaction::CommandResult{};
 }

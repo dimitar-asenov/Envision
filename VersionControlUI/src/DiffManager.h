@@ -49,6 +49,7 @@ namespace Visualization
 
 namespace VersionControlUI {
 
+struct VersionNodes;
 struct ChangeWithNodes;
 struct DiffSetup;
 class DiffComparisonPair;
@@ -125,6 +126,10 @@ class VERSIONCONTROLUI_API DiffManager
 		 */
 		void removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container);
 
+		VersionNodes retrieveVersionNodesForId(const Model::NodeIdType& id, const DiffSetup& diffSetup);
+
+		void processNameTextChanges(FilePersistence::IdToChangeDescriptionHash& changes, const DiffSetup& diffSetup);
+
 		static void setOverlayInformationAccordingToChangeType(FilePersistence::ChangeType changeType,
 																			QString& highlightOverlayStyle, QString& highlightOverlayName,
 																			QString& arrowIconOverlayStyle, QString& arrowIconOverlayName,
@@ -134,9 +139,14 @@ class VERSIONCONTROLUI_API DiffManager
 																QString highlightOverlayName, QString highlightOverlayStyle,
 																QString arrowIconOverlayName, QString arrowIconOverlayStyle);
 
+		bool processNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup);
+
+		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup);
+
 		QString project_;
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
 		Model::NodeIdType targetNodeID_;
+		QHash<QString, QPair<QString, Model::NodeIdType>> nameChanges_;
 
 		static void scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem);
 
