@@ -127,7 +127,7 @@ void DiffManager::clear()
 
 void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup)
 {
-	QString message = "";
+	QString message = "The following objects have been renamed:<br/>";
 
 	for (auto entry : nameChanges_)
 	{
