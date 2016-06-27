@@ -61,9 +61,20 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 	}
 
 	// Remove all spaces, except for trailing ones
-	// Only do this if quotes are matched. Otherwise we might end up in a situation where some spaces inside of
-	// strings are accidentally removed while the expression is being modified.
-	if (!result.empty() && result.last().type() != PartialLiteral)
+	//
+	// TODO: Figure out a good way to implement the condition below.
+	//
+	// The commented part of the condition below used to prevent removing of spaces if quotes are mismatched.
+	// Removing spaces with mismatched quotes might end up removing spaces inside of strings while the expression is
+	// being modified. So if the condition is enabled, one could remove the leading quote of a string without bad
+	// consequences for double spaces within the string.
+	//
+	// However, we were forced to disbale the condition in its current form since, it had a negative side effect.
+	// When typing an unmatched quote, spaces would proliferate and multiply on each keystroke, since many expressions
+	// automatically insert spaces after they keyword (throw, new, delete, etc.) and these would be become part of an
+	// error expression since they were not removed. E.g. typing 'new f("xxxxx' would result in a bunch of spaces
+	// after 'new'.
+	if (!result.empty()) // && result.last().type() != PartialLiteral)
 	{
 		bool trailing = true;
 		QRegExp space{" +"};
