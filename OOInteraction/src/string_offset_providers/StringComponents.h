@@ -34,6 +34,10 @@ namespace Model {
 	class List;
 }
 
+namespace OOModel {
+	class UnfinishedOperator;
+}
+
 namespace OOInteraction {
 
 class OOINTERACTION_API StringComponents {
@@ -74,6 +78,17 @@ class OOINTERACTION_API StringComponents {
 		// TODO: Check completeness statically.
 		template <typename E> static Optional choose(E value);
 		template <typename E, typename ...Args> static Optional choose(E value, E option, Optional str, Args... args);
+
+		/**
+		 * Returns the indices of the positions where a space should be inserted in the string representation of this
+		 * unfinished operator so as to prevent fusing of word-like parts.
+		 *
+		 * E.g. 'delete new' will need a space between the words
+		 *
+		 * The returned list is ordered from smallest index to the largest one.
+		 */
+		static QList<int> spaceNeededAfterUnfinishedExpressionParts(OOModel::UnfinishedOperator* e);
+
 	protected:
 		static Optional list(Model::List* listNode);
 

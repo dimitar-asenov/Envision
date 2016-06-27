@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "GridConstructors.h"
+#include "StringComponents.h"
 
 #include "GridBasedOffsetProvider.h"
 #include "Cell.h"
@@ -217,8 +218,14 @@ void GridConstructors::initializeAll()
 	[](GridBasedOffsetProvider* grid, VUnfinishedOperator* vis){
 		grid->setFilterNullAndEmptyComponents();
 
+		auto spaceAfter = StringComponents::spaceNeededAfterUnfinishedExpressionParts(vis->node());
+		int spacesInserted = 0;
 		for (int i = 0; i < vis->layout()->length(); ++i)
-			grid->add(new Cell{i, vis->layout()->at<Visualization::Item>(i), 2*i});
+		{
+			grid->add(new Cell{i, vis->layout()->at<Visualization::Item>(i), i + spacesInserted});
+			if (spaceAfter.contains(i))
+				++spacesInserted;
+		}
 	});
 }
 

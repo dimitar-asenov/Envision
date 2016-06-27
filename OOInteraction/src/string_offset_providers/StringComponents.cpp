@@ -283,24 +283,43 @@ void StringComponents::initConversions()
 
 		// Insert spaces on the insdie of the result to make sure they don't stick to each other
 		// E.g. when typing 'delete new foo'
-		int i = 0;
-		int lastNonEmpty = -1;
-		while (i<result.size())
-		{
-			if (!result[i].isEmpty())
-			{
-				if (lastNonEmpty >= 0)
-				{
-					result.insert(lastNonEmpty + 1, " ");
-					++i;
-				}
-				lastNonEmpty = i;
-			}
-			++i;
-		}
+		auto spacesNeeded = spaceNeededAfterUnfinishedExpressionParts(e);
+		for (int i = spacesNeeded.size()-1; i>=0; --i)
+			result.insert(i+1, " ");
 
 		return result;
 	});
+}
+
+QList<int> StringComponents::spaceNeededAfterUnfinishedExpressionParts(UnfinishedOperator* e)
+{
+	Q_ASSERT(e);
+	QList<int> result;
+
+	bool prevOpEndsInLetterOrNumber = false;
+	for (int i=0; i< e->operands()->size(); ++i)
+	{
+		auto delim = e->delimiters()->at(i)->get();
+		auto op = stringForNode(e->operands()->at(i));
+
+		auto delimBeginsInLetterOrNumber = !delim.isEmpty() && delim[0].isLetterOrNumber();
+		auto delimEndsInLetterOrNumber = !delim.isEmpty() && delim[delim.size()-1].isLetterOrNumber();
+		auto opBeginsInLetterOrNumber = !op.isEmpty() && op[0].isLetterOrNumber();
+		auto opEndsInLetterOrNumber = !op.isEmpty() && op[op.size()-1].isLetterOrNumber();
+
+		if (prevOpEndsInLetterOrNumber && delimBeginsInLetterOrNumber) result << 2*i-1;
+		if (delimEndsInLetterOrNumber && opBeginsInLetterOrNumber) result << 2*i;
+		prevOpEndsInLetterOrNumber = opEndsInLetterOrNumber;
+	}
+
+	if (e->delimiters()->size() > e->operands()->size())
+	{
+		auto delim = e->delimiters()->last()->get();
+		auto delimBeginsInLetterOrNumber = !delim.isEmpty() && delim[0].isLetterOrNumber();
+		if (prevOpEndsInLetterOrNumber && delimBeginsInLetterOrNumber) result << 2*e->operands()->size()-1;
+	}
+
+	return result;
 }
 
 }
