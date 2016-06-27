@@ -79,14 +79,20 @@ void VComment::parseLines()
 		//************************************************************************
 		// Bullet lists
 		//************************************************************************
+
+		// This is a workaround for a Qt bug where bullet characters are not shown on the screen.
+		// However, bullets are still shown in PDFs, so this workaround results in double bullets in PDF screenshots.
+		// Set to empty string when making screenshots.
+		QString bulletCharacter =  "&bull;";
+
 		// is this a new enumeration item?
 		if (line.startsWith(" * "))
 		{
 			listCount++;
 			// does this create a new list?
-			if (listCount == 0) linesOfCurrentElement << "<ul><li>" << line.mid(3);
+			if (listCount == 0) linesOfCurrentElement << "<ul><li>" << bulletCharacter << line.mid(3);
 			// otherwise, just add another list item
-			else linesOfCurrentElement << "</li><li>" << line.mid(3);
+			else linesOfCurrentElement << "</li><li>" << bulletCharacter<< line.mid(3);
 
 			continue;
 		}
