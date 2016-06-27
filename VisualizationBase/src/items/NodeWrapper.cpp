@@ -80,4 +80,10 @@ void NodeWrapper::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
+void NodeWrapper::refreshWrappedItem()
+{
+	SAFE_DELETE(wrappedItem_);
+	setUpdateNeeded(StandardUpdate);
+}
+
 }

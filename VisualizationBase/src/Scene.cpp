@@ -376,7 +376,18 @@ void Scene::keyPressEvent (QKeyEvent *event)
 			while (parent->parent()) parent = parent->parent();
 
 			auto rootItem = dynamic_cast<Visualization::ViewItem*>(parent);
-			if (rootItem) rootItem->setUpdateNeeded(Visualization::Item::FullUpdate);
+			if (rootItem)
+			{
+				rootItem->setUpdateNeeded(Visualization::Item::FullUpdate);
+
+				// The code below is to do a full repaint of RootItems.
+				// It's needed for example for the customization refreshing to work.
+				// TODO: Ideally we don't redraw all these things, but just detect a change of style.
+				for (auto child : rootItem->childItems())
+					if (auto ri = DCast<RootItem>(child))
+					  ri->refreshWrappedItem();
+
+			}
 		}
 	}
 	else QGraphicsScene::keyPressEvent(event);

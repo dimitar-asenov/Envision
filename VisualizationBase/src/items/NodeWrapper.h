@@ -61,6 +61,7 @@ class VISUALIZATIONBASE_API NodeWrapper : public Super<ItemWithNode<NodeWrapper,
 		virtual bool hasNode() const override;
 
 		Item* wrappedItem() const;
+		void refreshWrappedItem();
 
 	protected:
 		virtual void determineChildren() override;
