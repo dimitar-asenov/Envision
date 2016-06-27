@@ -282,6 +282,7 @@ void StringComponents::initConversions()
 		}
 
 		// Insert spaces on the insdie of the result to make sure they don't stick to each other
+		// E.g. when typing 'delete new foo'
 		int i = 0;
 		int lastNonEmpty = -1;
 		while (i<result.size())
