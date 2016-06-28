@@ -559,6 +559,8 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	}
 	++index;
 
+	auto isAtStart = index == 0;
+
 	userWord = userWord.right(userWord.size() - index);
 	if (!userWord.isEmpty() && userWord.at(0).isDigit()) // No auto completion for digits
 	{
@@ -571,6 +573,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 
 	QStringList autoCompleteCandidates;
 	// Try to match built in keywords and types
+	if (isAtStart)
 	{
 		auto matcher = QRegExp{searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard};
 		for (QString str : {"int", "bool", "long", "float", "double", "short", "byte", "char", "for", "if", "while",
