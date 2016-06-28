@@ -30,6 +30,7 @@
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/views/MainView.h"
 
 using namespace Visualization;
 
@@ -48,12 +49,33 @@ CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualizati
 	if (!attributes.contains("library"))
 	{
 
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-	}
+		auto mainScene = VisualizationManager::instance().mainScene();
+		mainScene->addTopLevelNode(manager->root());
+		mainScene->listenToTreeManager(manager);
 
-	if (attributes.contains("quick"))
-		VisualizationManager::instance().mainScene()->setApproximateUpdate(true);
+		if (attributes.contains("quick")) mainScene->setApproximateUpdate(true);
+
+		// Center view and zoom so that the entire project is within the window
+		mainScene->updateNow();
+		for (auto v : mainScene->views())
+			if (auto mainView = dynamic_cast<Visualization::MainView*>(v))
+			{
+				auto size = mainView->viewport()->size();
+
+				double sceneHeight = mainScene->sceneRect().height();
+				double scale = 1;
+				int scaleLevel = 2;
+				while (sceneHeight*scale >= size.height())
+				{
+					scaleLevel++;
+					scale *= 0.5;
+				}
+
+				mainView->zoom(scaleLevel);
+				mainView->centerOn(mainScene->sceneRect().center());
+				break;
+			}
+	}
 
 	return new CommandResult{};
 }
