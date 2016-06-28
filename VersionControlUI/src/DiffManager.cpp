@@ -131,6 +131,10 @@ void DiffManager::clear()
 
 void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup)
 {
+
+	if (nameChanges_.isEmpty())
+		return;
+
 	QString message = "The following objects have been renamed:<br/>";
 
 	for (auto entry : nameChanges_)
@@ -147,23 +151,20 @@ void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentView
 
 	}
 
-	if (!message.isEmpty())
+	auto overlay = new Visualization::MessageOverlay{currentViewItem,
+			[currentViewItem, message](Visualization::MessageOverlay* overlay)
 	{
-		auto overlay = new Visualization::MessageOverlay{currentViewItem,
-				[currentViewItem, message](Visualization::MessageOverlay* overlay)
-		{
-			auto currentViewPos = currentViewItem->scenePos();
-			overlay->setPos(currentViewPos.x(),
-								 currentViewPos.y() + currentViewItem->heightInScene());
+		auto currentViewPos = currentViewItem->scenePos();
+		overlay->setPos(currentViewPos.x(),
+							 currentViewPos.y() + currentViewItem->heightInScene());
 
-			auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(currentViewItem->findVisualizationOf
-																					(currentViewItem->nodeAt(Visualization::MajorMinorIndex{})));
-			overlay->setScale(vDiffComparisonPair->scaleFactor());
-			return message;
-		}, Visualization::MessageOverlay::itemStyles().get("info")};
+		auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(currentViewItem->findVisualizationOf
+																				(currentViewItem->nodeAt(Visualization::MajorMinorIndex{})));
+		overlay->setScale(vDiffComparisonPair->scaleFactor());
+		return message;
+	}, Visualization::MessageOverlay::itemStyles().get("info")};
 
-		currentViewItem->addOverlay(overlay, "NameChangeInfoOverlay");
-	}
+	currentViewItem->addOverlay(overlay, "NameChangeInfoOverlay");
 }
 
 // TODO decide what should be highlighted in diff
