@@ -177,8 +177,29 @@ void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex
 {
 	Q_ASSERT(setCursorNodeIndex >= 0 && setCursorNodeIndex <= list->node()->size());
 
+	// We store these, since the target list might have been deleted
+	QList<Visualization::Item*> parentItems;
+	Visualization::Item* parent = list;
+	while (parent)
+	{
+		parentItems.prepend(parent);
+		parent = parent->parent();
+	}
+
+	auto deepestExistingItem = [parentItems]()
+	{
+		for (int i = 1; i < parentItems.size(); ++i)
+			if (!parentItems[i-1]->childItems().contains(parentItems[i]))
+				return parentItems[i-1];
+
+		return parentItems.last();
+	};
+
 	list->scene()->addPostEventAction(new SetCursorEvent{
 		[=](){
+			auto deepestItem = deepestExistingItem();
+			if (deepestItem != list) return deepestItem;
+
 			int setCursorItemIndex = 0;
 			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
 			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->length();
@@ -188,6 +209,9 @@ void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex
 			else return list->itemAt<Visualization::Item>(setCursorItemIndex-1);
 		},
 		[=](){
+			auto deepestItem = deepestExistingItem();
+			if (deepestItem != list) return SetCursorEvent::CursorDefault;
+
 			int setCursorItemIndex = 0;
 			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
 			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->length();
