@@ -53,7 +53,17 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source
 	path.append(managerName);
 	repository = new GitRepository{path};
 
-	CommitGraph graph = repository->commitGraph(name, "HEAD");
+	QString rev = name;
+
+	if (rev.isEmpty())
+	{
+		if (repository->revisions().size() > 100)
+			rev = repository->revisions().at(100);
+		else
+			rev = repository->revisions().last();
+	}
+
+	CommitGraph graph = repository->commitGraph(rev, "HEAD");
 
 	Model::NodeIdType targetID = headManager->nodeIdMap().id(target->node());
 
