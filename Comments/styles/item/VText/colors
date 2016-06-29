@@ -1,0 +1,91 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style>
+	<Black prototypes="default"><pen><color>#000000</color></pen></Black>
+	<DarkGray3 prototypes="default"><pen><color>#434343</color></pen></DarkGray3>
+	<DarkGray2 prototypes="default"><pen><color>#666666</color></pen></DarkGray2>
+	<DarkGray1 prototypes="default"><pen><color>#999999</color></pen></DarkGray1>
+	<DarkGray0 prototypes="default"><pen><color>#b7b7b7</color></pen></DarkGray0>
+	<Gray prototypes="default"><pen><color>#cccccc</color></pen></Gray>
+	<LightGray prototypes="default"><pen><color>#d9d9d9</color></pen></LightGray>
+	<LightGray1 prototypes="default"><pen><color>#efefef</color></pen></LightGray1>
+	<LightGray2 prototypes="default"><pen><color>#f3f3f3</color></pen></LightGray2>
+	<White prototypes="default"><pen><color>#ffffff</color></pen></White>
+
+	<RedBerry prototypes="default"><pen><color>#980000</color></pen></RedBerry>
+	<Red prototypes="default"><pen><color>#ff0000</color></pen></Red>
+	<Orange prototypes="default"><pen><color>#ff9900</color></pen></Orange>
+	<Yellow prototypes="default"><pen><color>#ffff00</color></pen></Yellow>
+	<Green prototypes="default"><pen><color>#00ff00</color></pen></Green>
+	<Cyan prototypes="default"><pen><color>#00ffff</color></pen></Cyan>
+	<CornflowerBlue prototypes="default"><pen><color>#4a86e8</color></pen></CornflowerBlue>
+	<Blue prototypes="default"><pen><color>#0000ff</color></pen></Blue>
+	<Purple prototypes="default"><pen><color>#9900ff</color></pen></Purple>
+	<Magenta prototypes="default"><pen><color>#ff00ff</color></pen></Magenta>
+
+	<LightRedBerry3 prototypes="default"><pen><color>#e6b8af</color></pen></LightRedBerry3>
+	<LightRed3 prototypes="default"><pen><color>#f4cccc</color></pen></LightRed3>
+	<LightOrange3 prototypes="default"><pen><color>#fce5cd</color></pen></LightOrange3>
+	<LightYellow3 prototypes="default"><pen><color>#fff2cc</color></pen></LightYellow3>
+	<LightGreen3 prototypes="default"><pen><color>#d9ead3</color></pen></LightGreen3>
+	<LightCyan3 prototypes="default"><pen><color>#d0e0e3</color></pen></LightCyan3>
+	<LightCornflowerBlue3 prototypes="default"><pen><color>#c9daf8</color></pen></LightCornflowerBlue3>
+	<LightBlue3 prototypes="default"><pen><color>#cfe2f3</color></pen></LightBlue3>
+	<LightPurple3 prototypes="default"><pen><color>#d9d2e9</color></pen></LightPurple3>
+	<LightMagenta3 prototypes="default"><pen><color>#ead1dc</color></pen></LightMagenta3>
+
+	<LightRedBerry2 prototypes="default"><pen><color>#db7e6b</color></pen></LightRedBerry2>
+	<LightRed2 prototypes="default"><pen><color>#e89898</color></pen></LightRed2>
+	<LightOrange2 prototypes="default"><pen><color>#f7c99b</color></pen></LightOrange2>
+	<LightYellow2 prototypes="default"><pen><color>#fde398</color></pen></LightYellow2>
+	<LightGreen2 prototypes="default"><pen><color>#b5d5a7</color></pen></LightGreen2>
+	<LightCyan2 prototypes="default"><pen><color>#a1c2c7</color></pen></LightCyan2>
+	<LightCornflowerBlue2 prototypes="default"><pen><color>#a3c0f2</color></pen></LightCornflowerBlue2>
+	<LightBlue2 prototypes="default"><pen><color>#9ec3e6</color></pen></LightBlue2>
+	<LightPurple2 prototypes="default"><pen><color>#b3a6d4</color></pen></LightPurple2>
+	<LightMagenta2 prototypes="default"><pen><color>#d3a5bc</color></pen></LightMagenta2>
+
+	<LightRedBerry1 prototypes="default"><pen><color>#ca4126</color></pen></LightRedBerry1>
+	<LightRed1 prototypes="default"><pen><color>#de6666</color></pen></LightRed1>
+	<LightOrange1 prototypes="default"><pen><color>#f4b16b</color></pen></LightOrange1>
+	<LightYellow1 prototypes="default"><pen><color>#fdd766</color></pen></LightYellow1>
+	<LightGreen1 prototypes="default"><pen><color>#92c27d</color></pen></LightGreen1>
+	<LightCyan1 prototypes="default"><pen><color>#76a4ae</color></pen></LightCyan1>
+	<LightCornflowerBlue1 prototypes="default"><pen><color>#6d9de9</color></pen></LightCornflowerBlue1>
+	<LightBlue1 prototypes="default"><pen><color>#6fa7da</color></pen></LightBlue1>
+	<LightPurple1 prototypes="default"><pen><color>#8d7cc1</color></pen></LightPurple1>
+	<LightMagenta1 prototypes="default"><pen><color>#c07b9f</color></pen></LightMagenta1>
+
+	<DarkRedBerry1 prototypes="default"><pen><color>#a51d02</color></pen></DarkRedBerry1>
+	<DarkRed1 prototypes="default"><pen><color>#ca0202</color></pen></DarkRed1>
+	<DarkOrange1 prototypes="default"><pen><color>#e49039</color></pen></DarkOrange1>
+	<DarkYellow1 prototypes="default"><pen><color>#efc033</color></pen></DarkYellow1>
+	<DarkGreen1 prototypes="default"><pen><color>#6aa74f</color></pen></DarkGreen1>
+	<DarkCyan1 prototypes="default"><pen><color>#45808d</color></pen></DarkCyan1>
+	<DarkCornflowerBlue1 prototypes="default"><pen><color>#3d78d6</color></pen></DarkCornflowerBlue1>
+	<DarkBlue1 prototypes="default"><pen><color>#3e84c4</color></pen></DarkBlue1>
+	<DarkPurple1 prototypes="default"><pen><color>#674ea6</color></pen></DarkPurple1>
+	<DarkMagenta1 prototypes="default"><pen><color>#a54d79</color></pen></DarkMagenta1>
+
+	<DarkRedBerry2 prototypes="default"><pen><color>#85200c</color></pen></DarkRedBerry2>
+	<DarkRed2 prototypes="default"><pen><color>#990000</color></pen></DarkRed2>
+	<DarkOrange2 prototypes="default"><pen><color>#b45f06</color></pen></DarkOrange2>
+	<DarkYellow2 prototypes="default"><pen><color>#bf9000</color></pen></DarkYellow2>
+	<DarkGreen2 prototypes="default"><pen><color>#38761d</color></pen></DarkGreen2>
+	<DarkCyan2 prototypes="default"><pen><color>#134f5c</color></pen></DarkCyan2>
+	<DarkCornflowerBlue2 prototypes="default"><pen><color>#1155cc</color></pen></DarkCornflowerBlue2>
+	<DarkBlue2 prototypes="default"><pen><color>#0b5394</color></pen></DarkBlue2>
+	<DarkPurple2 prototypes="default"><pen><color>#351c75</color></pen></DarkPurple2>
+	<DarkMagenta2 prototypes="default"><pen><color>#741b47</color></pen></DarkMagenta2>
+
+	<DarkRedBerry3 prototypes="default"><pen><color>#5b0f00</color></pen></DarkRedBerry3>
+	<DarkRed3 prototypes="default"><pen><color>#660000</color></pen></DarkRed3>
+	<DarkOrange3 prototypes="default"><pen><color>#783f04</color></pen></DarkOrange3>
+	<DarkYellow3 prototypes="default"><pen><color>#7f6000</color></pen></DarkYellow3>
+	<DarkGreen3 prototypes="default"><pen><color>#274e13</color></pen></DarkGreen3>
+	<DarkCyan3 prototypes="default"><pen><color>#0c343d</color></pen></DarkCyan3>
+	<DarkCornflowerBlue3 prototypes="default"><pen><color>#1c4587</color></pen></DarkCornflowerBlue3>
+	<DarkBlue3 prototypes="default"><pen><color>#073763</color></pen></DarkBlue3>
+	<DarkPurple3 prototypes="default"><pen><color>#20124d</color></pen></DarkPurple3>
+	<DarkMagenta3 prototypes="default"><pen><color>#4c1130</color></pen></DarkMagenta3>
+
+</style>

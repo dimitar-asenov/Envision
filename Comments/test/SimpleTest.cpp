@@ -85,25 +85,34 @@ class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: v
 
 	auto diagram = new CommentDiagram{nullptr, "main"};
 
-	auto shape1 = new CommentDiagramShape{0, 50, 200, 50, CommentDiagramShape::ShapeType::Rectangle};
-	shape1->setLabel(new CommentText{"First shape"});
-	shape1->setShapeColor("blue");
-	shape1->setTextColor("red");
+	auto shape1 = new CommentDiagramShape{50, 10, 60, 50, CommentDiagramShape::ShapeType::Rectangle};
+	shape1->setLabel(new CommentText{"Model"});
+	shape1->setOutlineType(Qt::NoPen);
+	shape1->setBackgroundColor("#a3c0f2");
+	shape1->setTextColor("colors/DarkCornflowerBlue3");
 	diagram->shapes()->append(shape1);
 
-	auto shape2 = new CommentDiagramShape{100, 150, 200,  50, CommentDiagramShape::ShapeType::Ellipse};
-	shape2->setLabel(new CommentText{"Another shape"});
-	shape2->setShapeColor("magenta");
-	shape2->setTextColor("yellow");
+	auto shape2 = new CommentDiagramShape{10, 100, 60, 50, CommentDiagramShape::ShapeType::Ellipse};
+	shape2->setLabel(new CommentText{"View"});
+	shape2->setOutlineType(Qt::NoPen);
+	shape2->setBackgroundColor("#f4b16b");
+	shape2->setTextColor("colors/DarkOrange2");
 	diagram->shapes()->append(shape2);
 
-	auto shape3 = new CommentDiagramShape{0, 150, 100, 150, CommentDiagramShape::ShapeType::Diamond};
-	shape3->setLabel(new CommentText{"Diamond"});
+	auto shape3 = new CommentDiagramShape{100, 100, 90,  50, CommentDiagramShape::ShapeType::Ellipse};
+	shape3->setLabel(new CommentText{"Controller"});
+	shape3->setShapeColor("#990000");
+	shape3->setOutlineSize(3);
+	shape3->setOutlineType(Qt::DashLine);
+	shape3->setBackgroundColor("#f4b16b");
+	shape3->setTextColor("colors/DarkOrange2");
 	diagram->shapes()->append(shape3);
 
-	diagram->connectors()->append(new CommentDiagramConnector{0, 6, 1, 0});
-	diagram->connectors()->append(new CommentDiagramConnector{1, 0,  2, 0});
-	diagram->connectors()->append(new CommentDiagramConnector{2, 0,  0, 10});
+	diagram->connectors()->append(new CommentDiagramConnector{0, 8, 1, 0});
+	diagram->connectors()->last()->setEndArrow(true);
+	diagram->connectors()->append(new CommentDiagramConnector{0, 8,  2, 0});
+	diagram->connectors()->last()->setEndArrow(true);
+	diagram->connectors()->append(new CommentDiagramConnector{1, 4,  2, 12});
 
 	diagramComment->diagrams()->append(diagram);
 

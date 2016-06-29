@@ -39,14 +39,13 @@ class COMMENTS_API ColorPicker : public QToolButton
 	public:
 		enum ColorPickerType {background, shape, text};
 
-		ColorPicker(QWidget *parent = 0);
-		void setColors(QVector<QColor> colors, int colorsPerRow);
+		void setColors(QVector<QColor> colors, int colorsPerRow, std::function<QString (QColor)> nameForColor = {});
 		/**
 		 * For text Envision uses some predefined colors.
 		 * This method sets the colors displayed in the grid to these specific colors.
 		 */
 		void setEnvisionTextColors();
-		void setselectedColor(QString aColor);
+		void setselectedColor(QString colorName);
 		/**
 		 * This sets the type of the colorpicker to \a type.
 		 * The possible types are ColorPicker::background, ColorPicker::shape and ColorPicker::text.
@@ -60,7 +59,7 @@ class COMMENTS_API ColorPicker : public QToolButton
 		void colorChanged(QString color);
 
 	private:
-		QMap<QString, QString> mapEnvisionTextColors_;
+		static QList<QPair<QColor, QString>>& envisionTextColorsMap();
 		ColorPickerType type_{};
 
 };
