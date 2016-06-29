@@ -190,6 +190,13 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		 * but we can not include nodeMacros.h
 		 */
 		static CompositeIndex commentIndex;
+
+		/**
+		 * Whether to throw an exception or simply create missing required attributes when loading.
+		 *
+		 * Setting this to false might catch bugs, but will result in new versions being incompatible with old ones
+		 */
+		static bool AUTOMATICALLY_CREATE_MISSING_REQUIRED_ATTRIBUTES_ON_LOAD_;
 };
 
 inline Node *CompositeNode::comment() const { return static_cast<Node *>(get(commentIndex)); }

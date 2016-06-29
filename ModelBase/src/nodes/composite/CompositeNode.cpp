@@ -34,6 +34,8 @@ namespace Model {
 
 DEFINE_TYPE_ID_DERIVED(CompositeNode, "CompositeNode", )
 
+bool CompositeNode::AUTOMATICALLY_CREATE_MISSING_REQUIRED_ATTRIBUTES_ON_LOAD_{true};
+
 CompositeIndex CompositeNode::commentIndex =
 		addAttributeToInitialRegistrationList_(commentIndex, "comment", "Node", false, true, true);
 
@@ -341,7 +343,8 @@ void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
 			if ( subnodes_[level][i] == nullptr && (*currentLevel)[i].optional() == false )
 			{
 				auto nodeType = (*currentLevel)[i].type();
-				if (nodeType.startsWith("TypedListOf") || nodeType.endsWith("List"))
+				if (AUTOMATICALLY_CREATE_MISSING_REQUIRED_ATTRIBUTES_ON_LOAD_ ||
+					 nodeType.startsWith("TypedListOf") || nodeType.endsWith("List"))
 				{
 					auto newNode = Node::createNewNode(nodeType);
 					if (useUndoableAction)
