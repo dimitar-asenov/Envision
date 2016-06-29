@@ -29,12 +29,22 @@
 #include "../items/VCommentDiagramShape.h"
 #include "../nodes/CommentFreeNode.h"
 
-#include "OOModel/src/allOOModelNodes.h"
-
-using namespace OOModel;
 using namespace Visualization;
 
 namespace Comments {
+
+QHash<QString, HCommentText::EmbedFunction>& HCommentText::embedKeywords()
+{
+	static QHash<QString, HCommentText::EmbedFunction> hash
+		{{"comment", []()->Model::Node*{return new CommentNode{};}}};
+	return hash;
+}
+
+void HCommentText::registerEmbedKeyword(const QString& keyword, EmbedFunction function)
+{
+	Q_ASSERT(!embedKeywords().contains(keyword));
+	embedKeywords().insert(keyword, function);
+}
 
 HCommentText::HCommentText()
 {}
@@ -55,16 +65,9 @@ void HCommentText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (aNode)
 		{
 			Model::Node* newNode = nullptr;
-			if (aText->get() == "comment") newNode = new CommentNode{};
-			else if (aText->get() == "class") newNode = new Class{};
-			else if (aText->get() == "method") newNode = new Method{};
-			else if (aText->get() == "statement") newNode = new Statement{};
-			else if (aText->get() == "block") newNode = new Block{};
-			else if (aText->get() == "foreach") newNode = new ForEachStatement{};
-			else if (aText->get() == "if") newNode = new IfStatement{};
-			else if (aText->get() == "loop") newNode = new LoopStatement{};
-			else if (aText->get() == "switch") newNode = new SwitchStatement{};
-			else if (aText->get() == "expression") newNode = new ExpressionStatement{};
+			auto embedding = embedKeywords().find(aText->get());
+			if (embedding != embedKeywords().end())
+				newNode = embedding.value()();
 			else newNode = new CommentText{};
 
 			aNode->beginModification("set node");

@@ -44,8 +44,13 @@ class COMMENTS_API HCommentText : public Interaction::HText
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		static HCommentText* instance();
 
+		using EmbedFunction = std::function<Model::Node* ()>;
+		static void registerEmbedKeyword(const QString& keyword, EmbedFunction function);
+
 	protected:
 		HCommentText();
+
+		static QHash<QString, EmbedFunction>& embedKeywords();
 };
 
 }

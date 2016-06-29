@@ -29,6 +29,7 @@
 
 #include "SelfTest/src/TestManager.h"
 #include "CodeGenerationVisitor.h"
+#include "Comments/src/handlers/HCommentText.h"
 
 namespace OOModel {
 
@@ -39,6 +40,17 @@ bool OOModelPlugin::initialize(Core::EnvisionManager&)
 	Model::Reference::addUnresolutionSteps(OOReference::unresolveOOReferencesAfterSubTree);
 
 	CodeGenerationVisitor::init();
+
+	// Register embeddings for comments
+	Comments::HCommentText::registerEmbedKeyword("class", [](){return new Class{};});
+	Comments::HCommentText::registerEmbedKeyword("method", [](){return new Method{};});
+	Comments::HCommentText::registerEmbedKeyword("statement", [](){return new Statement{};});
+	Comments::HCommentText::registerEmbedKeyword("block", [](){return new Block{};});
+	Comments::HCommentText::registerEmbedKeyword("foreach", [](){return new ForEachStatement{};});
+	Comments::HCommentText::registerEmbedKeyword("if", [](){return new IfStatement{};});
+	Comments::HCommentText::registerEmbedKeyword("loop", [](){return new LoopStatement{};});
+	Comments::HCommentText::registerEmbedKeyword("switch", [](){return new SwitchStatement{};});
+	Comments::HCommentText::registerEmbedKeyword("expression", [](){return new ExpressionStatement{};});
 
 	return true;
 }
