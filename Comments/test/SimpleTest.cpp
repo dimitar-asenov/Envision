@@ -138,9 +138,9 @@ class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: v
 	structuresComment->codes()->append(code);
 
 	auto table = new CommentTable{nullptr, "aTable", 3, 3};
-	table->setNodeAt(0, 0, new CommentNode{"##Column 1"});
-	table->setNodeAt(0, 1, new CommentNode{"##Column 2"});
-	table->setNodeAt(0, 2, new CommentNode{"##Column 3"});
+	table->setNodeAt(0, 0, new CommentNode{"##The code"});
+	table->setNodeAt(0, 1, new CommentNode{"##Details"});
+	table->setNodeAt(0, 2, new CommentNode{"##Notes"});
 	table->setNodeAt(1, 0, new Class{"ClassA"});
 	table->setNodeAt(1, 1, new IfStatement{});
 	table->setNodeAt(2, 0, new CommentText{"some text"});
