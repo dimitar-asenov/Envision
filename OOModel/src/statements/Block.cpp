@@ -36,4 +36,11 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(Block)
 
 DEFINE_ATTRIBUTE(Block, items, StatementItemList, false, false, true)
 
+Block::Block(QList<StatementItem*> items)
+: Super{nullptr, Block::getMetaData()}
+{
+	for (auto item : items)
+		this->items()->append(item);
+}
+
 }

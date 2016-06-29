@@ -41,6 +41,9 @@ class OOMODEL_API Block: public Super<Statement>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Block)
 
 	ATTRIBUTE(StatementItemList, items, setItems)
+
+	public:
+		Block(QList<StatementItem*> items);
 };
 
 }
