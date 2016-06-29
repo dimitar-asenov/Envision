@@ -48,6 +48,10 @@ class COMMENTS_API VCommentFreeNode : public Super<Visualization::ItemWithNode<V
 	public:
 		VCommentFreeNode(Visualization::Item* parent, NodeType* node);
 
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+		void setBlendEffect(bool enable);
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -55,6 +59,7 @@ class COMMENTS_API VCommentFreeNode : public Super<Visualization::ItemWithNode<V
 	private:
 		Visualization::Item* content_{};
 		QGraphicsColorizeEffect* anEffect_{};
+		bool blendEnabled_{true};
 };
 
 }

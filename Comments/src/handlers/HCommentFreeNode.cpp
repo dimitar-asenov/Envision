@@ -28,6 +28,7 @@
 
 #include "../nodes/CommentFreeNode.h"
 #include "../nodes/CommentText.h"
+#include "../items/VCommentFreeNode.h"
 
 using namespace Visualization;
 
@@ -53,6 +54,20 @@ void HCommentFreeNode::keyPressEvent(Visualization::Item *target, QKeyEvent *eve
 	}
 	else
 		GenericHandler::keyPressEvent(target, event);
+}
+
+void HCommentFreeNode::hoverEnterEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
+{
+	auto freeNode = static_cast<VCommentFreeNode*> (target);
+	freeNode->setBlendEffect(false);
+	freeNode->setUpdateNeeded(Visualization::Item::StandardUpdate);
+}
+
+void HCommentFreeNode::hoverLeaveEvent(Visualization::Item* target, QGraphicsSceneHoverEvent*)
+{
+	auto freeNode = static_cast<VCommentFreeNode*> (target);
+	freeNode->setBlendEffect(true);
+	freeNode->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 }

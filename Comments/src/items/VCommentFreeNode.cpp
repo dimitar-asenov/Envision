@@ -42,21 +42,36 @@ VCommentFreeNode::VCommentFreeNode(Item* parent, NodeType* node)
 {
 	anEffect_ = new QGraphicsColorizeEffect{};
 	anEffect_->setColor(QColor{Qt::white});
-	const qreal strength = 0.7;
+	const qreal strength = 0.4;
 	anEffect_->setStrength(strength);
 	Item::setGraphicsEffect(anEffect_);
+
+	setAcceptHoverEvents(true);
+	setFlag(ItemHasNoContents, false); // Needed in order to call paint below
 }
 
 void VCommentFreeNode::determineChildren()
 {
-	anEffect_->setEnabled(!this->itemOrChildHasFocus()
-								 && !(DCast<CommentText>(node()->node()) || DCast<CommentNode>(node()->node())));
 	synchronizeItem(content_, node()->node());
 }
 
 void VCommentFreeNode::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(content_, availableWidth, availableHeight);
+}
+
+void VCommentFreeNode::setBlendEffect(bool enable)
+{
+	blendEnabled_ = enable;
+}
+
+void VCommentFreeNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	// This is the only place to make this call so that it is refreshed often enough
+	anEffect_->setEnabled(blendEnabled_ && !this->itemOrChildHasFocus()
+								 && !(DCast<CommentText>(node()->node()) || DCast<CommentNode>(node()->node())));
+
+	Super::paint(painter, option, widget);
 }
 
 }

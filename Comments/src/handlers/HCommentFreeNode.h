@@ -41,6 +41,9 @@ class COMMENTS_API HCommentFreeNode : public Interaction::GenericHandler
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 		static HCommentFreeNode* instance();
 
+		virtual void hoverEnterEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
+		virtual void hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
+
 	protected:
 		HCommentFreeNode();
 };
