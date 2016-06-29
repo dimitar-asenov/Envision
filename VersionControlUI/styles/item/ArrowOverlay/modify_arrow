@@ -9,4 +9,12 @@
 		<color>#70bfa000</color>
 	</arrowBrush>
 	<width>20</width>
+	<highlightedLinePen>
+		<width>15.0</width>
+		<color>#ffbfa000</color>
+	</highlightedLinePen>
+	<highlightedArrowBrush>
+		<color>#ffbfa000</color>
+	</highlightedArrowBrush>
+	<highlightedWidth>30</highlightedWidth>
 </style>
