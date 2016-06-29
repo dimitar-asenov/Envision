@@ -9,4 +9,16 @@
 		<color>#70bfa000</color>
 	</arrowBrush>
 	<width>20</width>
+	<highlightedLinePen>
+		<width>15.0</width>
+		<style>1</style>
+		<color>#ffbfa000</color>
+		<capStyle>0</capStyle>
+		<joinStyle>0</joinStyle>
+	</highlightedLinePen>
+	<highlightedArrowBrush>
+		<style>1</style>
+		<color>#ffbfa000</color>
+	</highlightedArrowBrush>
+	<highlightedWidth>30</highlightedWidth>
 </style>
