@@ -54,45 +54,34 @@ class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: v
 
 	manager->beginModification(list, "set");
 
-	auto node = new CommentNode{
-		"Comments support *quite* some stuff by **now**. For example...\n"
-
-		"# Diagrams!\n"
-		"[diagram#main]\n"
-		"And again\n"
-		"[diagram#main]\n"
-
-		"# Sourcecode!\n"
-		"[code#aCode]\n"
-
-		"# Tables!\n"
-		"[table#aTable#3#4]\n"
-		"And again\n"
-		"[table#aTable]\n"
-
-		"Also, lists work...\n"
-		" * A first item\n"
-		" * A second item\n"
-		"   This one spans two lines\n"
-		" * And so on, of course...\n"
-
-		"# Images\n"
-		"[image#styles/icon/loop.svg|20x]\n"
-		"...\n"
-
-		"# Browsers\n"
-		"[browser#http://dimitar-asenov.github.io/Envision/|600x400]\n"
-		"...\n"
-
-		"# Inline HTML to Browser\n"
-		"<html>\n"
-		"	<script type=\"text/javascript\">\n"
-		"		function hi() { alert(\"Hello World!\"); } \n"
-		"	</script>\n"
-		"	<button onclick=\"hi()\">Try it</button>\n"
-		"</html>"
-
+	/////////////////////////////////////////////////////////////////////////////
+	/// Rich text, lists
+	/////////////////////////////////////////////////////////////////////////////
+	auto richText = new CommentNode{
+		"Envision's comments support a lot *of features*:\n"
+		" * **Rich** <font color=\"red\">text</font>.\n"
+		" * Markdown syntax\n"
+		" * Lists\n"
+		"   also spanning multiple lines\n"
+		" * And more (see the headings below)"
 	};
+	list->append(richText);
+	list->append(new Model::Text(""));
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Diagrams
+	/////////////////////////////////////////////////////////////////////////////
+	auto diagramComment = new CommentNode{
+		"# Diagrams!\n"
+		"A diagram can be drawn directly in the code\n"
+		"[diagram#main]\n"
+		"The same diagram might be referenced in other locations\n"
+		"in the comment. The two diagrams are backed by the same\n"
+		"model object and updates are synchronized.\n"
+		"[diagram#main]"
+	};
+	list->append(diagramComment);
+	list->append(new Model::Text(""));
 
 	auto diagram = new CommentDiagram{nullptr, "main"};
 
@@ -116,27 +105,67 @@ class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: v
 	diagram->connectors()->append(new CommentDiagramConnector{1, 0,  2, 0});
 	diagram->connectors()->append(new CommentDiagramConnector{2, 0,  0, 10});
 
-	node->diagrams()->append(diagram);
+	diagramComment->diagrams()->append(diagram);
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Tables and embedded source code
+	/////////////////////////////////////////////////////////////////////////////
+	auto structuresComment = new CommentNode{
+		"# Sourcecode!\n"
+		"[code#aCode]\n"
+
+		"# Tables!\n"
+		"[table#aTable#3#4]"
+	};
+	list->append(structuresComment);
+	list->append(new Model::Text(""));
 
 	auto code = new CommentFreeNode{nullptr, "aCode"};
-	auto aClass = new Class{"HelloWorld"};
-	code->setNode(aClass);
-	node->codes()->append(code);
+	auto aBlock = new Block{QList<StatementItem*>{new ExpressionStatement{new VariableDeclarationExpression{"id",
+		new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT},
+		new MethodCallExpression{"getId"}}}}};
 
-	auto table = new CommentTable{nullptr, "aTable", 3, 4};
+	code->setNode(aBlock);
+	structuresComment->codes()->append(code);
+
+	auto table = new CommentTable{nullptr, "aTable", 3, 3};
 	table->setNodeAt(0, 0, new CommentNode{"##Column 1"});
 	table->setNodeAt(0, 1, new CommentNode{"##Column 2"});
 	table->setNodeAt(0, 2, new CommentNode{"##Column 3"});
-	table->setNodeAt(0, 3, new CommentNode{"##Column 4"});
 	table->setNodeAt(1, 0, new Class{"ClassA"});
-	table->setNodeAt(1, 1, new Class{"ClassB"});
-	table->setNodeAt(1, 2, new Class{"ClassC"});
-	table->setNodeAt(1, 3, new Class{"ClassD"});
-	table->setNodeAt(2, 0, new CommentText{"just text"});
-	table->setNodeAt(2, 1, new CommentText{"more text"});
-	node->tables()->append(table);
+	table->setNodeAt(1, 1, new IfStatement{});
+	table->setNodeAt(2, 0, new CommentText{"some text"});
+	structuresComment->tables()->append(table);
 
-	list->append(node);
+	/////////////////////////////////////////////////////////////////////////////
+	/// Images
+	/////////////////////////////////////////////////////////////////////////////
+	auto imageComment = new CommentNode{
+		"# Images\n"
+		"[image#styles/icon/loop.svg|20x]\n"
+		"Images can be resized with Shift + Right click & Drag."
+	};
+	list->append(imageComment);
+	list->append(new Model::Text(""));
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Web Browsers
+	/////////////////////////////////////////////////////////////////////////////
+	auto browserComment = new CommentNode{
+		"# Browsers\n"
+		"[browser#https://en.wikipedia.org/wiki/Quicksort|800x400]\n"
+		"...\n"
+
+		"# Inline HTML to Browser\n"
+		"<html>\n"
+		"	<script type=\"text/javascript\">\n"
+		"		function hi() { alert(\"Hello World!\"); } \n"
+		"	</script>\n"
+		"	<button onclick=\"hi()\">Try it</button>\n"
+		"</html>"
+
+	};
+	list->append(browserComment);
 
 	manager->endModification();
 
