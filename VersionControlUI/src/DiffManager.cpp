@@ -653,7 +653,7 @@ void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualizat
 		{
 			if (factor >= 1.0)
 				item->setScale(1.0);
-			else if (factor >= 0.05)
+			else if (factor >= 0.015)
 				item->setScale((1/factor));
 			else
 				item->setScale((1/factor) * std::pow(0.95, 1/factor));
