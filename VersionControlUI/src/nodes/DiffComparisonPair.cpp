@@ -36,6 +36,10 @@ namespace VersionControlUI
 
 DEFINE_NODE_TYPE_REGISTRATION_METHODS(DiffComparisonPair)
 
+DiffComparisonPair::DiffComparisonPair(Model::Node *)
+	:Super{}, isDummyDiffComparisonPair_{true}
+{}
+
 DiffComparisonPair::DiffComparisonPair(Model::Node* oldVersionNode, Model::Node* newVersionNode) : Super{}
 {
 	oldVersionNode_ = oldVersionNode;
@@ -170,12 +174,6 @@ QString DiffComparisonPair::computeComponentName()
 		}
 	}
 	return componentName;
-}
-
-DiffComparisonPair::DiffComparisonPair(Model::Node *)
-	:Super{}
-{
-	Q_ASSERT(false);
 }
 
 DiffComparisonPair::DiffComparisonPair(Model::Node *, Model::PersistentStore &, bool)

@@ -80,6 +80,8 @@ void VDiffComparisonPair::initializeForms()
 
 	auto noNodeFound = item<Visualization::Static>(&I::nodeNotFoundIcon_, &StyleType::nodeNotFoundIcon);
 
+	auto dummy = item<Visualization::Static>(&I::dummyIcon_, &StyleType::dummyIcon);
+
 	// form with both nodes and only one object path
 
 	auto infoGrid = (new Visualization::GridLayoutFormElement{})
@@ -256,6 +258,32 @@ void VDiffComparisonPair::initializeForms()
 
 	addForm(container);
 
+	diffGrid = (new Visualization::GridLayoutFormElement{})
+			->setHorizontalSpacing(50)
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->setRowStretchFactor(0, 1)
+			->setRowVerticalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->put(0, 0, dummy);
+
+	container = (new Visualization::GridLayoutFormElement{})
+			->setHorizontalSpacing(30)
+			->setVerticalSpacing(15)
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setLeftMargin(10)
+			->setRightMargin(10)
+			->setColumnStretchFactor(0, 1)
+			->setRowStretchFactor(0, 1)
+			->setColumnHorizontalAlignment(0, Visualization::LayoutStyle::Alignment::Center)
+			->put(0, 0, diffGrid);
+
+	addForm(container);
+
 }
 
 bool VDiffComparisonPair::isSensitiveToScale() const
@@ -285,6 +313,9 @@ void VDiffComparisonPair::scaleVisualizations()
 	if (nodeNotFoundIcon_)
 		nodeNotFoundIcon_->setScale(scale);
 
+	if (dummyIcon_)
+		dummyIcon_->setScale(scale);
+
 	for (auto crumb : objectPathCrumbsNewNode_)
 		crumb->setScale(scale);
 
@@ -304,6 +335,10 @@ int VDiffComparisonPair::determineForm()
 	static const int FORM_CONTAINING_ONLY_NEW_NODE = 1;
 	static const int FORM_CONTAINING_ONLY_OLD_NODE = 2;
 	static const int FORM_WITH_TWO_OBJECT_PATHS = 3;
+	static const int FORM_FOR_DUMMY_PAIR = 4;
+
+	if (node()->isDummyDiffComparisonPair())
+		return FORM_FOR_DUMMY_PAIR;
 
 	if (node()->twoObjectPathsDefined())
 		return FORM_WITH_TWO_OBJECT_PATHS;

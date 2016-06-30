@@ -45,5 +45,6 @@ class VERSIONCONTROLUI_API VDiffComparisonPairStyle : public Super<Visualization
 		Property<Visualization::TextStyle> singleObjectPath{this, "singleObjectPath"};
 		Property<Visualization::TextStyle> componentType{this, "componentType"};
 		Property<Visualization::StaticStyle> nodeNotFoundIcon{this, "nodeNotFoundIcon"};
+		Property<Visualization::StaticStyle> dummyIcon{this, "dummyIcon"};
 };
 }
