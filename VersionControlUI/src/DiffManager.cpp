@@ -145,6 +145,7 @@ void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentView
 		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
 		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
 
+		// if targetNode is defined, we only want to know about name changes related to it
 		if (!satisfiesTargetNodeIdConstraint(oldNode, newNode, diffSetup))
 			 continue;
 
@@ -260,7 +261,6 @@ bool DiffManager::satisfiesTargetNodeIdConstraint(Model::Node* oldNode, Model::N
 }
 
 bool DiffManager::satisfiesNameChangeVisualizationConstraints(Model::NodeIdType id)
-__attribute__((optnone))
 {
 	auto iter = nameChangesIdsIsNameText_.find(id);
 
