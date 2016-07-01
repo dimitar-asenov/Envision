@@ -159,7 +159,10 @@ class VERSIONCONTROLUI_API DiffManager
 
 		QString project_;
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
+
+		// if set specifies which node we are interested in, used for history
 		Model::NodeIdType targetNodeId_;
+
 		QHash<QString, QPair<QString, Model::NodeIdType>> nameChanges_;
 		QHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
 		NameChangeVisualizations nameChangeVisualization_{Summary};
