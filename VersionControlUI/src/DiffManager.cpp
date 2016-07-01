@@ -146,7 +146,7 @@ void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentView
 		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
 
 		// if targetNode is defined, we only want to know about name changes related to it
-		if (!satisfiesTargetNodeIdConstraint(oldNode, newNode, diffSetup))
+		if (!areInTargetNodeSubtree(oldNode, newNode, diffSetup))
 			 continue;
 
 		message += DiffComparisonPair::computeObjectPath(oldNode) +
@@ -244,7 +244,7 @@ void DiffManager::processNameTextChanges(FilePersistence::IdToChangeDescriptionH
 	}
 }
 
-bool DiffManager::satisfiesTargetNodeIdConstraint(Model::Node* oldNode, Model::Node* newNode,
+bool DiffManager::areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newNode,
 																  const DiffSetup& diffSetup)
 {
 	if (targetNodeId_.isNull())
@@ -302,7 +302,7 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 		if (processNameChange(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
 			nameChangesIdsIsNameText_.insert(id, false);
 
-		if (satisfiesTargetNodeIdConstraint(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
+		if (areInTargetNodeSubtree(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
 			changesWithNodes.append({id, versionNodes, change->type()});
 		else
 			continue;

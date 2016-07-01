@@ -152,7 +152,7 @@ class VERSIONCONTROLUI_API DiffManager
 		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup,
 												 VersionControlUI::DiffComparisonPair* diffComparisonPair);
 
-		bool satisfiesTargetNodeIdConstraint(Model::Node* oldNode, Model::Node* newNode,
+		bool areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newNode,
 																					const DiffSetup& diffSetup);
 
 		bool satisfiesNameChangeVisualizationConstraints(Model::NodeIdType id);
