@@ -30,6 +30,7 @@
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/items/NodeWrapper.h"
+#include "VisualizationBase/src/declarative/BorderFormElement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -54,15 +55,19 @@ void VCatchClause::initializeForms()
 
 
 	auto shapeElement = new ShapeFormElement{};
+	auto borderElement = new BorderFormElement{};
 
 	addForm((new AnchorLayoutFormElement{})
-			->put(TheLeftOf, header, AtLeftOf, body)
-			->put(TheLeftOf, shapeElement, 2, FromLeftOf, body)
-			->put(TheRightOf, header, AtRightOf, body)
-			->put(TheRightOf, shapeElement, 2, FromRightOf, body)
-			->put(TheBottomOf, header, 3, FromTopOf, body)
-			->put(TheTopOf, shapeElement, AtCenterOf, header)
-			->put(TheBottomOf, shapeElement, 2, FromBottomOf, body));
+	  ->put(TheTopOf, body, 3, FromBottomOf, header)
+	  ->put(TheTopOf, shapeElement, AtCenterOf, header)
+	  ->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
+	  ->put(TheLeftOf, shapeElement, 5, FromLeftOf, body)
+	  ->put(TheRightOf, header, AtRightOf, body)
+	  ->put(TheRightOf, shapeElement, 3, FromRightOf, header)
+	  ->put(TheBottomOf, shapeElement, 3, FromBottomOf, body)
+	  ->put(TheRightOf, shapeElement, 3, FromRightOf, body)
+	  ->put(TheRightOf, shapeElement, AtRightOf, borderElement)
+	  ->put(TheLeftOf, header, AtLeftOf, borderElement));
 }
 
 }

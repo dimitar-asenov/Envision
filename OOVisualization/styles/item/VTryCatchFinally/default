@@ -30,30 +30,27 @@
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<alignment>1</alignment>
 			<direction>2</direction>
-			<spaceBetweenElements>1</spaceBetweenElements>
+			<spaceBetweenElements>3</spaceBetweenElements>
 			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 			<hasCursorWhenEmpty>false</hasCursorWhenEmpty>
 		</itemsStyle>
+		
+		<useBackgroundColors>false</useBackgroundColors>
+		
+		<selectedTip>
+			<symbol>add catch clauses</symbol>
+		</selectedTip>
 	</catchClauses>
 
 	<finallyOutline prototypes="item/EmptyItem/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline>
-				<width>1</width>
-				<color>#a0a0a0</color>
-			</outline>
-			<backgroundBrush>
-				<gradient>
-					<stopPoints>
-						<e1>
-							<first>1.0</first>
-							<second>#e0e0e0</second>
-						</e1>
-					</stopPoints>
-				</gradient>
-			</backgroundBrush>
-			<cornerRadius>4</cornerRadius>
+		<shape  prototypes="shape/Frame/default">
+			Frame
+			<topWidth>1</topWidth>
+			<topBrush><color>#e49339</color></topBrush>
+			
+			<contentBrush>
+				<style>0</style>
+			</contentBrush>
 		</shape>
 	</finallyOutline>
 	

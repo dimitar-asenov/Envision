@@ -1,22 +1,13 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<shape prototypes="shape/Box/default">
-		Box
-		<outline>
-			<width>1</width>
-			<color>#717e35</color>
-		</outline>
-		<backgroundBrush>
-			<gradient>
-				<stopPoints>
-					<e1>
-						<first>1.0</first>
-						<second>#dee4be</second>
-					</e1>
-				</stopPoints>
-			</gradient>
-		</backgroundBrush>
-		<cornerRadius>4</cornerRadius>
+	<shape prototypes="shape/Frame/default">
+		Frame
+		<topWidth>1</topWidth>
+		<topBrush><color>#e49339</color></topBrush>
+		
+		<contentBrush>
+			<style>0</style>
+		</contentBrush>
 	</shape>
 	
 	<icon prototypes="icon/SVGIcon/default">
@@ -30,10 +21,15 @@
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>#ffff80</color>
+				<color>#e0e0e0</color>
 			</backgroundBrush>
+			
+			<outline>
+				<width>1</width>
+				<color>#e49339</color>
+			</outline>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
 		</shape>
 	</expressionToCatch>
 </style>

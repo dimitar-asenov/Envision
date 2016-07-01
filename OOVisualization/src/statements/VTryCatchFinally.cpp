@@ -29,6 +29,7 @@
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
+#include "VisualizationBase/src/declarative/BorderFormElement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -50,23 +51,26 @@ void VTryCatchFinally::initializeForms()
 	auto tryIcon = grid({{item<Static>(&I::tryIcon_, [](I* v){return &v->style()->tryIcon();})}})
 		->setColumnStretchFactor(1, 1);
 
-	auto tryBody = item(&I::tryBody_, [](I* v){return v->node()->tryBody();});
-	auto catchClauses = item<VList>(&I::catchClauses_, [](I* v){return v->node()->catchClauses();},
-			[](I* v){return &v->style()->catchClauses();});
-
-	auto contentElement = grid({{tryBody}, {catchClauses}})
-				->setColumnStretchFactor(1, 1);
+	auto tryBody = grid({{item(&I::tryBody_, [](I* v){return v->node()->tryBody();})}})
+			->setColumnStretchFactor(1, 1);
+	auto catchClauses = grid({{item<VList>(&I::catchClauses_, [](I* v){return v->node()->catchClauses();},
+			[](I* v){return &v->style()->catchClauses();})}})
+			->setColumnStretchFactor(1, 1);
 
 	auto shapeElement = new ShapeFormElement{};
 
 	addForm((new AnchorLayoutFormElement{})
-			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)
-			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
-			->put(TheRightOf, tryIcon, AtRightOf, contentElement)
-			->put(TheRightOf, shapeElement, 10, FromRightOf, contentElement)
-			->put(TheBottomOf, tryIcon, 3, FromTopOf, contentElement)
-			->put(TheTopOf, shapeElement, AtCenterOf, tryIcon)
-			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
+			  ->put(TheTopOf, tryBody, 3, FromBottomOf, tryIcon)
+			  ->put(TheTopOf, shapeElement, AtCenterOf, tryIcon)
+			  ->put(TheLeftOf, shapeElement, -10, FromLeftOf, tryIcon)
+			  ->put(TheLeftOf, shapeElement, 5, FromLeftOf, tryBody)
+			  ->put(TheRightOf, tryIcon, AtRightOf, tryBody)
+			  ->put(TheRightOf, shapeElement, 3, FromRightOf, tryIcon)
+			  ->put(TheRightOf, shapeElement, 3, FromRightOf, tryBody)
+			  ->put(TheLeftOf, catchClauses, AtLeftOf, tryIcon)
+			  ->put(TheRightOf, catchClauses, AtRightOf, shapeElement)
+			  ->put(TheTopOf, catchClauses, 3, FromBottomOf, tryBody)
+			  ->put(TheBottomOf, shapeElement, 3, FromBottomOf, catchClauses));
 
 	auto finallyIcon = grid({{item<Static>(&I::finallyIcon_, [](I* v){return &v->style()->finallyIcon();})}})
 		->setColumnStretchFactor(1, 1);
@@ -74,26 +78,32 @@ void VTryCatchFinally::initializeForms()
 		->setColumnStretchFactor(1, 1);
 	auto finallyOutline = item<EmptyItem>(&I::finallyOutline_, [](I* v){return &v->style()->finallyOutline();});
 
-	auto finallyCombined = (new AnchorLayoutFormElement{})
-		->put(TheLeftOf, finallyIcon, AtLeftOf, finallyBody)
-		->put(TheLeftOf, finallyOutline, 2, FromLeftOf, finallyBody)
-		->put(TheRightOf, finallyIcon, AtRightOf, finallyBody)
-		->put(TheRightOf, finallyOutline, 2, FromRightOf, finallyBody)
-		->put(TheBottomOf, finallyIcon, 3, FromTopOf, finallyBody)
-		->put(TheTopOf, finallyOutline, AtCenterOf, finallyIcon)
-		->put(TheBottomOf, finallyOutline, 2, FromBottomOf, finallyBody);
-
-	contentElement = grid({{tryBody}, {catchClauses}, {finallyCombined}})
-				->setColumnStretchFactor(1, 1)->setVerticalSpacing(3);
 
 	addForm((new AnchorLayoutFormElement{})
-			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)
-			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
-			->put(TheRightOf, tryIcon, AtRightOf, contentElement)
-			->put(TheRightOf, shapeElement, 10, FromRightOf, contentElement)
-			->put(TheBottomOf, tryIcon, 3, FromTopOf, contentElement)
-			->put(TheTopOf, shapeElement, AtCenterOf, tryIcon)
-			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
+	  ->put(TheTopOf, tryBody, 3, FromBottomOf, tryIcon)
+	  ->put(TheTopOf, shapeElement, AtCenterOf, tryIcon)
+	  ->put(TheLeftOf, shapeElement, -10, FromLeftOf, tryIcon)
+	  ->put(TheLeftOf, shapeElement, 5, FromLeftOf, tryBody)
+	  ->put(TheRightOf, tryIcon, AtRightOf, tryBody)
+	  ->put(TheRightOf, shapeElement, 3, FromRightOf, tryIcon)
+	  ->put(TheRightOf, shapeElement, 3, FromRightOf, tryBody)
+	  ->put(TheLeftOf, catchClauses, AtLeftOf, tryIcon)
+	  ->put(TheRightOf, catchClauses, AtRightOf, shapeElement)
+	  ->put(TheTopOf, catchClauses, 3, FromBottomOf, tryBody)
+
+	  ->put(TheTopOf, finallyIcon, 3, FromBottomOf, catchClauses)
+	  ->put(TheLeftOf, finallyIcon, AtLeftOf, tryIcon)
+	  ->put(TheRightOf, finallyOutline, AtRightOf, shapeElement)
+	  ->put(TheBottomOf, finallyOutline, 3, FromBottomOf, shapeElement)
+
+	  ->put(TheTopOf, finallyBody, 3, FromBottomOf, finallyIcon)
+	  ->put(TheTopOf, finallyOutline, AtCenterOf, finallyIcon)
+	  ->put(TheLeftOf, finallyOutline, -10, FromLeftOf, finallyIcon)
+	  ->put(TheLeftOf, finallyOutline, 5, FromLeftOf, finallyBody)
+	  ->put(TheRightOf, finallyIcon, AtRightOf, finallyBody)
+	  ->put(TheRightOf, finallyOutline, 3, FromRightOf, finallyIcon)
+	  ->put(TheBottomOf, finallyOutline, 3, FromBottomOf, finallyBody)
+	  ->put(TheRightOf, finallyOutline, 3, FromRightOf, finallyBody));
 }
 
 }
