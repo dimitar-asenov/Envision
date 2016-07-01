@@ -33,4 +33,7 @@
 	<minWidth>2</minWidth>
 	<minHeight>2</minHeight>
 	<stretchWhenEmpty>false</stretchWhenEmpty>
+	<selectedTip>
+		<alwaysStretchable>false</alwaysStretchable>
+	</selectedTip>
 </style>

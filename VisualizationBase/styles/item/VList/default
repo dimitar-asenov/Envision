@@ -41,6 +41,7 @@
 		<pen>
 			<color>#808080</color>
 		</pen>
+		<alwaysStretchable>true</alwaysStretchable>
 	</selectedTip>
 	
 	<minWidth>10</minWidth>

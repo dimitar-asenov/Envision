@@ -45,6 +45,7 @@ void StaticStyle::load(StyleLoader& sl)
 
 	sl.load("itemClass", itemClass_);
 	sl.load("zValue", zValue_);
+	sl.load("alwaysStretchable", alwaysStretchable_);
 
 	if (! itemClass_.isEmpty())
 	{

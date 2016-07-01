@@ -2,4 +2,5 @@
 <style prototypes="item/Item/default">
 	<itemClass></itemClass>
 	<zValue>0</zValue>
+	<alwaysStretchable>false</alwaysStretchable>
 </style>

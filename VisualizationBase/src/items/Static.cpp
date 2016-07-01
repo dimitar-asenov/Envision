@@ -55,22 +55,32 @@ bool Static::isEmpty() const
 
 bool Static::sizeDependsOnParent() const
 {
-	if (item_) return item_->sizeDependsOnParent();
-	else return false;
+	return style()->alwaysStretchable() || (item_ && item_->sizeDependsOnParent());
 }
 
 void Static::updateGeometry(int availableWidth, int availableHeight)
 {
-	if (item_) Item::updateGeometry(item_, availableWidth, availableHeight);
-	else
+	bool stretchUpdate = (availableWidth > 0 || availableHeight > 0);
+	if (item_ && ( !stretchUpdate || item_->sizeDependsOnParent()) )
 	{
-		if (hasShape())
-		{
-			getShape()->setOffset(0, 0);
-			getShape()->setInnerSize(0, 0);
-		}
-		else setSize(QSize{0, 0});
+		// Only update the item if it's stretchable or if this is the initial draw.
+		Item::updateGeometry(item_, availableWidth, availableHeight);
+		return;
 	}
+
+	// Either there is no item, or there is an item but it's not stretchable
+	int currentWidth = item_ ? widthInLocal() : 0;
+	int currentHeight = item_ ? heightInLocal() : 0;
+
+	QSize newSize{ std::max(availableWidth, currentWidth), std::max(availableHeight, currentHeight)};
+
+	if (hasShape())
+	{
+		getShape()->setOffset(0, 0);
+		if (stretchUpdate) getShape()->setOutterSize(newSize.width(), newSize.height());
+		else getShape()->setInnerSize(0, 0);
+	}
+	else setSize(newSize);
 }
 
 void Static::determineChildren()

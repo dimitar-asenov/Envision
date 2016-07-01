@@ -53,9 +53,8 @@ void VTryCatchFinally::initializeForms()
 
 	auto tryBody = grid({{item(&I::tryBody_, [](I* v){return v->node()->tryBody();})}})
 			->setColumnStretchFactor(1, 1);
-	auto catchClauses = grid({{item<VList>(&I::catchClauses_, [](I* v){return v->node()->catchClauses();},
-			[](I* v){return &v->style()->catchClauses();})}})
-			->setColumnStretchFactor(1, 1);
+	auto catchClauses = item<VList>(&I::catchClauses_, [](I* v){return v->node()->catchClauses();},
+			[](I* v){return &v->style()->catchClauses();});
 
 	auto shapeElement = new ShapeFormElement{};
 
