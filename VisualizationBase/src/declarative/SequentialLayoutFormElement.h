@@ -54,6 +54,7 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement
 		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>(Item* item)>;
 		using ListOfItemsGetterFunction = std::function<QList<Item*>(Item* item)>;
 		using IntGetterFunction = std::function<int (Item* item)>;
+		using StretchableWhenEmptyGetterFunction = std::function<bool (const Item* item)>;
 
 		SequentialLayoutFormElement() = default;
 		SequentialLayoutFormElement(const SequentialLayoutFormElement& other);
@@ -120,6 +121,11 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement
 		 */
 		SequentialLayoutFormElement* setMinHeightGetter(IntGetterFunction minHeightGetter);
 
+		/**
+		 * Sets whether this form should be stretchable if it has no elements.
+		 */
+		SequentialLayoutFormElement* setStretchableWhenEmpty(StretchableWhenEmptyGetterFunction stretchableWhenEmpty);
+
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
@@ -162,6 +168,7 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement
 		bool forward_{true};
 		IntGetterFunction minWidthGetter_{};
 		IntGetterFunction minHeightGetter_{};
+		StretchableWhenEmptyGetterFunction stretchableWhenEmpty_{};
 
 		struct ItemData
 		{
@@ -259,6 +266,13 @@ inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinWidthGett
 inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeightGetter(IntGetterFunction minHeightGetter)
 {
 	minHeightGetter_ = minHeightGetter;
+	return this;
+}
+
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setStretchableWhenEmpty(
+		StretchableWhenEmptyGetterFunction stretchableWhenEmpty)
+{
+	stretchableWhenEmpty_ = stretchableWhenEmpty;
 	return this;
 }
 

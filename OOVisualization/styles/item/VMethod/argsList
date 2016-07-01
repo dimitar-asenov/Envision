@@ -32,4 +32,5 @@
 	
 	<minWidth>2</minWidth>
 	<minHeight>2</minHeight>
+	<stretchWhenEmpty>false</stretchWhenEmpty>
 </style>

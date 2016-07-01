@@ -48,6 +48,7 @@ class VISUALIZATIONBASE_API VListStyle : public Super<DeclarativeItemBaseStyle>
 
 		Property<int> minWidth{this, "minWidth"};
 		Property<int> minHeight{this, "minHeight"};
+		Property<bool> stretchWhenEmpty{this, "stretchWhenEmpty"};
 
 		Property<bool> linelikeMovementAlongListDirection{this, "linelikeMovementAlongListDirection"};
 };

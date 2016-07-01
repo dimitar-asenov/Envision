@@ -86,10 +86,9 @@ void VList::initializeForms()
 							{return static_cast<VList*>(i)->style()->itemsStyle().noBoundaryCursorsInsideShape();};
 	auto noInnerCursorsGetter = [](Item* i)
 							{return static_cast<VList*>(i)->style()->itemsStyle().noInnerCursors();};
-	auto minWidthGetter = [](Item* i)
-							{return static_cast<VList*>(i)->style()->minWidth();};
-	auto minHeightGetter = [](Item* i)
-							{return static_cast<VList*>(i)->style()->minHeight();};
+	auto minWidthGetter = [](Item* i) {return static_cast<VList*>(i)->style()->minWidth();};
+	auto minHeightGetter = [](Item* i) {return static_cast<VList*>(i)->style()->minHeight();};
+	auto stretchableGetter = [](const Item* i) {return static_cast<const VList*>(i)->style()->stretchWhenEmpty();};
 
 	// Form 0: horizontal orientation
 	addForm((new SequentialLayoutFormElement{})
@@ -100,7 +99,8 @@ void VList::initializeForms()
 			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter)
 			->setMinWidthGetter(minWidthGetter)
-			->setMinHeightGetter(minHeightGetter));
+			->setMinHeightGetter(minHeightGetter)
+			->setStretchableWhenEmpty(stretchableGetter));
 	// Form 1: vertical orientation
 	addForm((new SequentialLayoutFormElement{})
 			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
@@ -110,7 +110,8 @@ void VList::initializeForms()
 			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter)
 			->setMinWidthGetter(minWidthGetter)
-			->setMinHeightGetter(minHeightGetter));
+			->setMinHeightGetter(minHeightGetter)
+			->setStretchableWhenEmpty(stretchableGetter));
 	// Form 2: EmptyList with a tip
 	addForm(item<Static>(&I::emptyTip_, [](I* v){ return &v->style()->selectedTip(); }));
 }

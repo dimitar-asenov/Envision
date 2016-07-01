@@ -43,7 +43,7 @@ SequentialLayoutFormElement::SequentialLayoutFormElement(const SequentialLayoutF
  	itemListGetter_{other.itemListGetter_}, spaceBetweenElementsGetter_{other.spaceBetweenElementsGetter_},
  	defaultSpaceBetweenElements_{other.defaultSpaceBetweenElements_}, orientation_{other.orientation_},
 	alignment_{other.alignment_}, forward_{other.forward_}, minWidthGetter_{other.minWidthGetter_},
-	minHeightGetter_{other.minHeightGetter_}
+	minHeightGetter_{other.minHeightGetter_}, stretchableWhenEmpty_{other.stretchableWhenEmpty_}
 {
 }
 
@@ -74,6 +74,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 
 	int minWidth = minWidthGetter_ ? minWidthGetter_(item) : (orientation_ == Qt::Horizontal ? 3 : 10);
 	int minHeight = minHeightGetter_ ? minHeightGetter_(item) : (orientation_ == Qt::Horizontal ? 10 : 3);
+
 	int minorStretchFactor = sizeDependsOnParent(item) ? 1 : 0;
 
 	QSize finalSize;
@@ -235,9 +236,13 @@ void SequentialLayoutFormElement::synchronizeWithItem(Item* item)
 
 bool SequentialLayoutFormElement::sizeDependsOnParent(const Item* item) const
 {
-	for (auto i : dataForItem(item).items_)
+	auto items = dataForItem(item).items_;
+	for (auto i : items)
 		if (i->sizeDependsOnParent())
 			return true;
+
+	if (items.isEmpty() && stretchableWhenEmpty_ && stretchableWhenEmpty_(item))
+		return true;
 	return false;
 }
 
