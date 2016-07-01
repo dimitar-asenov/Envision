@@ -53,7 +53,6 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 	NODE_DECLARE_STANDARD_METHODS(DiffComparisonPair)
 
 	public:
-		DiffComparisonPair(QString);
 		DiffComparisonPair(Model::Node* oldVersionNode, Model::Node* newVersionNode);
 
 		virtual QJsonValue toJson() const override;
