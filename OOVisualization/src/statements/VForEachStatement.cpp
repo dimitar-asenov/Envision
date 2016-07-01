@@ -66,13 +66,14 @@ void VForEachStatement::initializeForms()
 	auto shapeElement = new ShapeFormElement{};
 
 	addForm((new AnchorLayoutFormElement{})
-		->put(TheTopOf, body, 3, FromBottomOf, header)
-		->put(TheTopOf, shapeElement, AtCenterOf, header)
-		->put(TheLeftOf, shapeElement, AtLeftOf, header)
-		->put(TheLeftOf, shapeElement, 10, FromLeftOf, body)
-		->put(TheRightOf, header, AtRightOf, body)
-		->put(TheRightOf, shapeElement, 10, FromRightOf, header)
-		->put(TheBottomOf, shapeElement, 3, FromBottomOf, body));
+	  ->put(TheTopOf, body, 3, FromBottomOf, header)
+	  ->put(TheTopOf, shapeElement, AtCenterOf, header)
+	  ->put(TheLeftOf, shapeElement, -10, FromLeftOf, header)
+	  ->put(TheLeftOf, shapeElement, 5, FromLeftOf, body)
+	  ->put(TheRightOf, header, AtRightOf, body)
+	  ->put(TheRightOf, shapeElement, 3, FromRightOf, header)
+	  ->put(TheBottomOf, shapeElement, 3, FromBottomOf, body)
+	  ->put(TheRightOf, shapeElement, 3, FromRightOf, body));
 }
 
 }
