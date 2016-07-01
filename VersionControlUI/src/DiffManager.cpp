@@ -260,16 +260,19 @@ bool DiffManager::areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newN
 	return false;
 }
 
-bool DiffManager::satisfiesNameChangeVisualizationConstraints(Model::NodeIdType id)
+bool DiffManager::shouldShowChange(Model::NodeIdType id)
 {
 	auto iter = nameChangesIdsIsNameText_.find(id);
 
+	// id is not involved in name change
 	if (iter == nameChangesIdsIsNameText_.end())
 		return true;
 
+	// node for id is NameText, if NameText flag is not set don't show it
 	if (iter.value() && !nameChangeVisualization_.testFlag(NameText))
 		return false;
 
+	// node for id is Reference, if References flag is not set don't show it
 	if (!iter.value() && !nameChangeVisualization_.testFlag(References))
 		return false;
 
@@ -309,7 +312,7 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 
 		Model::NodeIdType nodeId;
 
-		if (satisfiesNameChangeVisualizationConstraints(id))
+		if (shouldShowChange(id))
 		{
 			if (change->type() != FilePersistence::ChangeType::Deletion)
 				if (findChangedNode(diffSetup.newVersionManager_, id, nodeId))

@@ -155,7 +155,7 @@ class VERSIONCONTROLUI_API DiffManager
 		bool areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newNode,
 																					const DiffSetup& diffSetup);
 
-		bool satisfiesNameChangeVisualizationConstraints(Model::NodeIdType id);
+		bool shouldShowChange(Model::NodeIdType id);
 
 		QString project_;
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
