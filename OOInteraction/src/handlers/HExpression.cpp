@@ -251,10 +251,11 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 		ExpressionStatement* replaceStatement = nullptr;
 		auto trimmedText = newText.trimmed();
 		if ( (enterPressed || spacePressed)
-				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if" || trimmedText == "class"
-						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return" ||
-						trimmedText == "do" || trimmedText == "//" || trimmedText == "switch" || trimmedText == "case"
-						|| trimmedText == "try" || trimmedText == "assert"|| trimmedText == "synchronized"))
+				&& (trimmedText == "for" || trimmedText == "while" || trimmedText == "foreach" || trimmedText == "if"
+						|| trimmedText == "class" || trimmedText == "continue" || trimmedText == "break"
+						|| trimmedText == "return" || trimmedText == "do" || trimmedText == "//" || trimmedText == "switch"
+						|| trimmedText == "case" || trimmedText == "try" || trimmedText == "assert"
+						|| trimmedText == "synchronized"))
 			replaceStatement = parentExpressionStatement(DCast<OOModel::Expression>(target->node()));
 
 		if (replaceStatement)
@@ -267,6 +268,14 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				loop->setInitStep(new EmptyExpression{});
 
 				toFocus = loop->initStep();
+				st = loop;
+			}
+			else if (trimmedText == "while")
+			{
+				auto loop =  new LoopStatement{};
+				loop->setCondition(new EmptyExpression{});
+
+				toFocus = loop->condition();
 				st = loop;
 			}
 			else if (trimmedText == "foreach")
