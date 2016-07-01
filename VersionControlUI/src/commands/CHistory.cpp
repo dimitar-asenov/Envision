@@ -81,6 +81,12 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source
 	DiffManager diffManager{managerName, {target->node()->typeName()}};
 
 	auto relevantCommitsbyTime = history.relevantCommitsByTime(repository, false);
+
+	auto firstCommitIndex = repository->revisions().indexOf(relevantCommitsbyTime.first());
+
+	if (firstCommitIndex < repository->revisions().size() - 1)
+			relevantCommitsbyTime.prepend(repository->revisions().at(firstCommitIndex+1));
+
 	if (attributes.first() == "accumulate")
 		relevantCommitsbyTime = {relevantCommitsbyTime.first(), relevantCommitsbyTime.last()};
 

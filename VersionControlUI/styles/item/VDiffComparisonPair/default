@@ -19,4 +19,7 @@
 	<nodeNotFoundIcon prototypes="item/Symbol/keyword">
 		<symbol>no node</symbol>
 	</nodeNotFoundIcon>
+	<dummyIcon prototypes="item/Symbol/keyword">
+		<symbol>no changes to show</symbol>
+	</dummyIcon>
 </style>

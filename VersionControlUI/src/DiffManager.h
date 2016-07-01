@@ -57,9 +57,17 @@ class DiffComparisonPair;
 class VERSIONCONTROLUI_API DiffManager
 {
 	public:
+		enum NameChangeVisualization {
+				Summary = 0x1,
+				NameText = 0x2,
+				References = 0x4
+		};
+		using NameChangeVisualizations = QFlags<NameChangeVisualization>;
+
 		DiffManager(QString project,
 						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
-						Model::NodeIdType targetNodeID=Model::NodeIdType{});
+						Model::NodeIdType targetNodeID={},
+						NameChangeVisualizations nameChangeVisualization = Summary);
 
 		void showDiff(QString oldVersion, QString newVersion);
 
@@ -141,12 +149,23 @@ class VERSIONCONTROLUI_API DiffManager
 
 		bool processNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup);
 
-		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup);
+		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup,
+												 VersionControlUI::DiffComparisonPair* diffComparisonPair);
+
+		bool areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newNode,
+																					const DiffSetup& diffSetup);
+
+		bool shouldShowChange(Model::NodeIdType id);
 
 		QString project_;
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
-		Model::NodeIdType targetNodeID_;
+
+		// if set specifies which node we are interested in, used for history
+		Model::NodeIdType targetNodeId_;
+
 		QHash<QString, QPair<QString, Model::NodeIdType>> nameChanges_;
+		QHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
+		NameChangeVisualizations nameChangeVisualization_{Summary};
 
 		static void scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem);
 
@@ -155,5 +174,7 @@ class VERSIONCONTROLUI_API DiffManager
 
 		static QHash<Visualization::ViewItem*, int> onZoomHandlerIdPerViewItem_;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(DiffManager::NameChangeVisualizations)
 
 }

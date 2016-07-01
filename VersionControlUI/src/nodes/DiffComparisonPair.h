@@ -66,6 +66,7 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		Model::Text* singleObjectPath();
 
 		bool twoObjectPathsDefined();
+		bool isDummyDiffComparisonPair();
 		QString comparisonName();
 
 		QList<ObjectPathCrumbData> objectPathCrumbsDataOldNode();
@@ -74,6 +75,7 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		static QString computeObjectPath(Model::Node* node);
 
 	private:
+		bool isDummyDiffComparisonPair_{false};
 		bool twoObjectPathsDefined_{};
 
 		Model::Node* oldVersionNode_{};
@@ -101,6 +103,7 @@ inline Model::Node* DiffComparisonPair::newVersionNode() {return newVersionNode_
 inline Model::Node* DiffComparisonPair::oldVersionNode() {return oldVersionNode_;}
 
 inline bool DiffComparisonPair::twoObjectPathsDefined() {return twoObjectPathsDefined_;}
+inline bool DiffComparisonPair::isDummyDiffComparisonPair() {return isDummyDiffComparisonPair_;}
 
 inline QString DiffComparisonPair::comparisonName() { return comparisonName_; }
 
