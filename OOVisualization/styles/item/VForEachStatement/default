@@ -26,34 +26,46 @@
 	<varType prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0c8</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
 		</shape>
 	</varType>
 	<varName prototypes="item/Text/name">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0c8</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
 		</shape>
 	</varName>
 	<collection prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0c8</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>#c8c8c8</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
 		</shape>
 	</collection>
 </style>

@@ -27,7 +27,12 @@
 				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
+			
+			<outline>
+				<width>1</width>
+				<color>#990099</color>
+			</outline>
 		</shape>
 	</expression>
 	

@@ -29,34 +29,46 @@
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0c8</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
-				<color>#ffff80</color>
+				<color>#ffffc0</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
 		</shape>
 	</condition>
 	<initStep prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0c8</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
 		</shape>
 	</initStep>
 	<updateStep prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0c8</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>#c8c8c8</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
-			<cornerType>2</cornerType>
+			<cornerType>0</cornerType>
 		</shape>
 	</updateStep>
 	<body prototypes="item/VStatementItemList/default"/>
