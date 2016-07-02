@@ -31,6 +31,7 @@
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/LineStyle.h"
 
 namespace Comments {
 
@@ -40,6 +41,10 @@ class COMMENTS_API VCommentStyle : public Super<Visualization::DeclarativeItemBa
 
 		Property<Visualization::VListStyle> editList{this, "editList"};
 		Property<Visualization::TextStyle> commentText{this, "commentText"};
+		Property<Visualization::LineStyle> thinLineCommentStart{this, "thinLineCommentStart"};
+		Property<Visualization::LineStyle> thickLineCommentStart{this, "thickLineCommentStart"};
+		Property<Visualization::LineStyle> thinLineCommentEnd{this, "thinLineCommentEnd"};
+		Property<Visualization::LineStyle> thickLineCommentEnd{this, "thickLineCommentEnd"};
 };
 
 }

@@ -43,6 +43,8 @@ class OOVISUALIZATION_API VCommentStatementItem
 		VCommentStatementItem(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VCommentStatementItem();
 
+		virtual bool sizeDependsOnParent() const override;
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;

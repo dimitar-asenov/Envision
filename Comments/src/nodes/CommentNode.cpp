@@ -152,4 +152,10 @@ void CommentNode::synchronizeTablesToText()
 		tables()->append(new CommentTable{nullptr, newTable, mapRows.value(newTable), mapColumns.value(newTable)});
 }
 
+bool CommentNode::isLineComment() const
+{
+	return lines()->size() == 1 &&
+			(lines()->first()->get().startsWith("---") || lines()->first()->get().startsWith("==="));
+}
+
 }

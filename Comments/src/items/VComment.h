@@ -33,6 +33,7 @@
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Line.h"
 
 namespace Comments {
 
@@ -54,6 +55,8 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		void toggleEditing();
 		bool editing() const;
 
+		virtual bool sizeDependsOnParent() const override;
+
 	protected:
 		virtual void determineChildren() override;
 
@@ -61,6 +64,8 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		bool editing_{};
 		Visualization::VList* editText_{};
 		QList<Visualization::Item*> commentElements_{};
+		Visualization::Line* lineStart_{};
+		Visualization::Line* lineEnd_{};
 
 		void parseLines();
 		QString replaceMarkdown(QString str);

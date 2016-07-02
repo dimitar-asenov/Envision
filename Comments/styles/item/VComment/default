@@ -19,6 +19,40 @@
 			<color>#646464</color>
 		</pen>
 	</commentText>
+	
+	<thinLineCommentStart prototypes="item/Line/default">
+		<width>20</width>
+		<height>1</height>
+		<pen>
+			<color>#808080</color>
+		</pen>
+	</thinLineCommentStart>
+	
+	<thinLineCommentEnd prototypes="item/Line/default">
+		<width>0</width>
+		<height>1</height>
+		<pen>
+			<color>#808080</color>
+		</pen>
+	</thinLineCommentEnd>
+	
+	<thickLineCommentStart prototypes="item/Line/default">
+		<width>20</width>
+		<height>3</height>
+		<pen>
+			<color>#808080</color>
+			<width>3.0</width>
+		</pen>
+	</thickLineCommentStart>
+	
+	<thickLineCommentEnd prototypes="item/Line/default">
+		<width>0</width>
+		<height>3</height>
+		<pen>
+			<color>#808080</color>
+			<width>3.0</width>
+		</pen>
+	</thickLineCommentEnd>
 
 	<editList prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">

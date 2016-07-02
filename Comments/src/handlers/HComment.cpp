@@ -27,6 +27,8 @@
 #include "HComment.h"
 #include "../items/VComment.h"
 
+#include "InteractionBase/src/events/SetCursorEvent.h"
+
 namespace Comments {
 
 HComment::HComment()
@@ -50,6 +52,8 @@ void HComment::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		vcomment->node()->beginModification("edit node");
 		vcomment->toggleEditing();
 		vcomment->node()->endModification();
+
+		target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target});
 	}
 
 	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);

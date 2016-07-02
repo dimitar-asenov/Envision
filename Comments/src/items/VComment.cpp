@@ -34,6 +34,7 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/WebBrowserItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
+#include "VisualizationBase/src/declarative/BorderFormElement.h"
 
 using namespace Visualization;
 
@@ -43,7 +44,11 @@ DEFINE_ITEM_COMMON(VComment, "item")
 
 VComment::VComment(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {
-	editing_ = node->lines()->size() == 0 || (node->lines()->size() == 1 && node->lines()->at(0)->get().isEmpty());
+	editing_ = node->lines()->size() == 0
+			|| (node->lines()->size() == 1 &&
+					( node->lines()->at(0)->get().isEmpty()
+					 || node->lines()->at(0)->get().startsWith("--- ")
+					 || node->lines()->at(0)->get().startsWith("=== ")));
 	parseLines();
 }
 
@@ -75,6 +80,15 @@ void VComment::parseLines()
 	{
 		QString line = nodeLine->get();
 		++lineNumber;
+
+		//************************************************************************
+		// Single-line comments
+		//************************************************************************
+		if (lineNumber == 0 && node()->isLineComment())
+		{
+			linesOfCurrentElement << line.mid(3).trimmed();
+			break;
+		}
 
 		//************************************************************************
 		// Bullet lists
@@ -146,7 +160,7 @@ void VComment::parseLines()
 		}
 
 		//************************************************************************
-		// Lines
+		// Lines within bigger comment blocks
 		//************************************************************************
 		QRegExp rx{"^={3,}|-{3,}|\\.{3,}$"};
 
@@ -172,7 +186,7 @@ void VComment::parseLines()
 		//************************************************************************
 		// Headers
 		//************************************************************************
-		rx.setPattern("^(#+)([^#].*)");
+		rx.setPattern("^(?:---|===)?(#+)([^#].*)");
 		// allow headers h1 to h6
 		if (rx.exactMatch(line) && rx.cap(1).length() <= 6)
 		{
@@ -393,21 +407,56 @@ void VComment::toggleEditing()
 
 void VComment::initializeForms()
 {
-	addForm((new SequentialLayoutFormElement{})
-				->setVertical()
-				->setListOfItems([](Item* i) {
-					auto vc = static_cast<VComment*>(i);
-					return vc->commentElements_;
-				}
-	));
+	// Standard
+	auto commentItems = (new SequentialLayoutFormElement{})
+		->setVertical()
+		->setListOfItems([](Item* i) {
+			auto vc = static_cast<VComment*>(i);
+			return vc->commentElements_;
+		});
+	addForm(commentItems);
 
+	// Edit
 	addForm(item<Visualization::VList>(&I::editText_, [](I* v){ return v->node()->lines(); },
 			[](I* v){return &v->style()->editList();}));
+
+	// Line Comment with text
+	auto lineStart = item<Line>(&I::lineStart_, [](I* v){
+			return v->node()->lines()->first()->get().startsWith("---") ?
+						  &v->style()->thinLineCommentStart() : &v->style()->thickLineCommentStart();
+	});
+	auto lineEnd = item<Line>(&I::lineEnd_, [](I* v){
+			return v->node()->lines()->first()->get().startsWith("---") ?
+						  &v->style()->thinLineCommentEnd() : &v->style()->thickLineCommentEnd();
+	});
+
+	auto border = new BorderFormElement{};
+	addForm((new AnchorLayoutFormElement{})
+		->put(TheLeftOf, lineStart, AtLeftOf, border)
+		->put(TheRightOf, lineStart, 5, FromLeftOf, commentItems)
+		->put(TheRightOf, commentItems, 5, FromLeftOf, lineEnd)
+		->put(TheRightOf, lineEnd, AtRightOf, border)
+		->put(TheVCenterOf, lineStart, AtVCenterOf, lineEnd)
+		->put(TheVCenterOf, lineStart, AtVCenterOf, commentItems)
+	);
+
+	// Line Comment without text
+	addForm(lineEnd);
 }
 
 int VComment::determineForm()
 {
-	return editing_ ? 1 : 0;
+	auto form = editing_ ? 1 : (node()->isLineComment() ?
+											 (node()->lines()->first()->get().trimmed().size() > 3 ? 2 : 3) : 0);
+	if (form >= 2) removeShape();
+	else useShape();
+
+	return form;
+}
+
+bool VComment::sizeDependsOnParent() const
+{
+	return currentFormIndex() >= 2;
 }
 
 }

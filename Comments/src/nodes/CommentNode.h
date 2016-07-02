@@ -62,6 +62,8 @@ class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
 
 		void appendText(const QString& text);
 
+		bool isLineComment() const;
+
 	private:
 		template <typename T, typename AppendFunction>
 		void synchronizeItem(QString aString, T aList, AppendFunction appendFunction);

@@ -55,4 +55,9 @@ void VCommentStatementItem::updateGeometry(int availableWidth, int availableHeig
 	Item::updateGeometry(comment_, availableWidth, availableHeight);
 }
 
+bool VCommentStatementItem::sizeDependsOnParent() const
+{
+	return comment_ && comment_->sizeDependsOnParent();
+}
+
 }

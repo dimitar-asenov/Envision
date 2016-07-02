@@ -255,13 +255,14 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 						|| trimmedText == "class" || trimmedText == "continue" || trimmedText == "break"
 						|| trimmedText == "return" || trimmedText == "do" || trimmedText == "//" || trimmedText == "switch"
 						|| trimmedText == "case" || trimmedText == "try" || trimmedText == "assert"
-						|| trimmedText == "synchronized"))
+						|| trimmedText == "synchronized" || trimmedText == "---" || trimmedText == "==="))
 			replaceStatement = parentExpressionStatement(DCast<OOModel::Expression>(target->node()));
 
 		if (replaceStatement)
 		{
 			StatementItem* st = nullptr;
 			Model::Node* toFocus = nullptr;
+			SetCursorEvent::CursorPlacement placement = SetCursorEvent::CursorDefault;
 			if (trimmedText == "for")
 			{
 				auto loop =  new LoopStatement{};
@@ -335,6 +336,24 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				toFocus = line;
 				st = comment;
 			}
+			else if (trimmedText == "---")
+			{
+				auto comment = new CommentStatementItem{};
+				auto line = new Model::Text{"--- "};
+				comment->commentNode()->lines()->append(line);
+				toFocus = line;
+				placement = SetCursorEvent::CursorOnRight;
+				st = comment;
+			}
+			else if (trimmedText == "===")
+			{
+				auto comment = new CommentStatementItem{};
+				auto line = new Model::Text{"=== "};
+				comment->commentNode()->lines()->append(line);
+				toFocus = line;
+				placement = SetCursorEvent::CursorOnRight;
+				st = comment;
+			}
 			else if (trimmedText == "switch")
 			{
 				auto switchs =  new SwitchStatement{};
@@ -386,7 +405,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			auto parent = topMostItem->parent();
 			while (! DCast<VList>(parent) && parent->parent()) parent = parent->parent();
 
-			target->scene()->addPostEventAction(new SetCursorEvent{parent, toFocus});
+			target->scene()->addPostEventAction(new SetCursorEvent{parent, toFocus, placement});
 			return;
 		}
 
