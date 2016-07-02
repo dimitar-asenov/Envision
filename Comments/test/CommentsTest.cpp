@@ -24,6 +24,7 @@
  **
  **********************************************************************************************************************/
 
+#include "CommentsTest.h"
 #include "../src/CommentsPlugin.h"
 #include "../src/nodes/CommentNode.h"
 #include "../src/nodes/CommentDiagram.h"
@@ -35,53 +36,36 @@
 #include "VisualizationBase/src/items/VComposite.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/nodes/TestBoxNode.h"
-#include "OOModel/src/allOOModelNodes.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/model/TreeManager.h"
 
-using namespace OOModel;
 using namespace Visualization;
 
 namespace Comments {
 
-class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: void test()
+CommentNode* CommentsTestUtil::createRichTextComment()
 {
-	auto list = new Model::List{};
-	auto manager = new Model::TreeManager{list};
-
-	manager->beginModification(list, "set");
-
-	/////////////////////////////////////////////////////////////////////////////
-	/// Rich text, lists
-	/////////////////////////////////////////////////////////////////////////////
-	auto richText = new CommentNode{
-		"Envision's comments support a lot *of features*:\n"
-		" * **Rich** <font color=\"red\">text</font>.\n"
-		" * Markdown syntax\n"
+	return new CommentNode{
+		"Envision's comments support several useful features:\n"
+		" * Baisc markdown syntax and **rich** <span style=\"font-size:20px\"><i>text</i></span>.\n"
 		" * Lists\n"
-		"   also spanning multiple lines\n"
-		" * And more (see the headings below)"
+		" * Diagrams\n"
+		" * Embeded source code\n"
+		" * Tables\n"
+		" * Embedded HTML/Javascript"
 	};
-	list->append(richText);
-	list->append(new Model::Text(""));
+}
 
-	/////////////////////////////////////////////////////////////////////////////
-	/// Diagrams
-	/////////////////////////////////////////////////////////////////////////////
+CommentNode* CommentsTestUtil::createDiagramComment()
+{
 	auto diagramComment = new CommentNode{
 		"# Diagrams!\n"
 		"A diagram can be drawn directly in the code\n"
-		"[diagram#main]\n"
-		"The same diagram might be referenced in other locations\n"
-		"in the comment. The two diagrams are backed by the same\n"
-		"model object and updates are synchronized.\n"
 		"[diagram#main]"
 	};
-	list->append(diagramComment);
-	list->append(new Model::Text(""));
 
 	auto diagram = new CommentDiagram{nullptr, "main"};
 
@@ -116,9 +100,11 @@ class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: v
 
 	diagramComment->diagrams()->append(diagram);
 
-	/////////////////////////////////////////////////////////////////////////////
-	/// Tables and embedded source code
-	/////////////////////////////////////////////////////////////////////////////
+	return diagramComment;
+}
+
+CommentNode* CommentsTestUtil::createTableComment()
+{
 	auto structuresComment = new CommentNode{
 		"# Sourcecode!\n"
 		"[code#aCode]\n"
@@ -126,41 +112,33 @@ class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: v
 		"# Tables!\n"
 		"[table#aTable#3#4]"
 	};
-	list->append(structuresComment);
-	list->append(new Model::Text(""));
 
 	auto code = new CommentFreeNode{nullptr, "aCode"};
-	auto aBlock = new Block{QList<StatementItem*>{new ExpressionStatement{new VariableDeclarationExpression{"id",
-		new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT},
-		new MethodCallExpression{"getId"}}}}};
-
-	code->setNode(aBlock);
+	code->setNode( new Model::Text{"Code comes here"});
 	structuresComment->codes()->append(code);
 
 	auto table = new CommentTable{nullptr, "aTable", 3, 3};
 	table->setNodeAt(0, 0, new CommentNode{"##The code"});
 	table->setNodeAt(0, 1, new CommentNode{"##Details"});
 	table->setNodeAt(0, 2, new CommentNode{"##Notes"});
-	table->setNodeAt(1, 0, new Class{"ClassA"});
-	table->setNodeAt(1, 1, new IfStatement{});
 	table->setNodeAt(2, 0, new CommentText{"some text"});
 	structuresComment->tables()->append(table);
 
-	/////////////////////////////////////////////////////////////////////////////
-	/// Images
-	/////////////////////////////////////////////////////////////////////////////
-	auto imageComment = new CommentNode{
+	return structuresComment;
+}
+
+CommentNode* CommentsTestUtil::createImageComment()
+{
+	return new CommentNode{
 		"# Images\n"
 		"[image#styles/icon/loop.svg|20x]\n"
 		"Images can be resized with Shift + Right click & Drag."
 	};
-	list->append(imageComment);
-	list->append(new Model::Text(""));
+}
 
-	/////////////////////////////////////////////////////////////////////////////
-	/// Web Browsers
-	/////////////////////////////////////////////////////////////////////////////
-	auto browserComment = new CommentNode{
+CommentNode* CommentsTestUtil::createBrowserComment()
+{
+	return new CommentNode{
 		"# Browsers\n"
 		"[browser#https://en.wikipedia.org/wiki/Quicksort|800x400]\n"
 		"...\n"
@@ -174,7 +152,28 @@ class SimpleTest : public SelfTest::Test<CommentsPlugin, SimpleTest> { public: v
 		"</html>"
 
 	};
-	list->append(browserComment);
+}
+
+class CommentsTest : public SelfTest::Test<CommentsPlugin, CommentsTest> { public: void test()
+{
+	auto list = new Model::List{};
+	auto manager = new Model::TreeManager{list};
+
+	manager->beginModification(list, "set");
+
+	list->append( CommentsTestUtil::createRichTextComment() );
+	list->append(new Model::Text(""));
+
+	list->append( CommentsTestUtil::createDiagramComment());
+	list->append(new Model::Text(""));
+
+	list->append( CommentsTestUtil::createTableComment());
+	list->append(new Model::Text(""));
+
+	list->append( CommentsTestUtil::createImageComment() );
+	list->append(new Model::Text(""));
+
+	list->append(CommentsTestUtil::createBrowserComment());
 
 	manager->endModification();
 

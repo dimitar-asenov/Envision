@@ -61,7 +61,8 @@ add_library(Comments SHARED
 	src/items/VCommentDiagramShapeStyle.cpp
 	src/items/VCommentImage.cpp
 	src/CommentsException.cpp
-	test/SimpleTest.cpp
+	test/CommentsTest.h
+	test/CommentsTest.cpp
 	src/items/VCommentDiagramStyle.cpp
 	src/CommentsPlugin.cpp
 	src/items/VCommentFreeNode.cpp
