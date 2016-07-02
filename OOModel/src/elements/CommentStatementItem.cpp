@@ -36,4 +36,10 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentStatementItem)
 
 DEFINE_ATTRIBUTE(CommentStatementItem, commentNode, CommentNode, false, false, true)
 
+CommentStatementItem::CommentStatementItem(Comments::CommentNode* comment)
+: Super{nullptr, CommentStatementItem::getMetaData()}
+{
+	setCommentNode(comment);
+}
+
 }

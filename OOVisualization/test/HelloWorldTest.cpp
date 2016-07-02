@@ -48,6 +48,8 @@
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
 
+#include "Comments/test/CommentsTest.h"
+
 using namespace OOModel;
 using namespace Visualization;
 using namespace Comments;
@@ -997,6 +999,79 @@ Method* addExtraMethod(Class* parent)
 	return extra;
 }
 
+Method* addMethodWithComments()
+{
+	auto method = new Method{"comment_foo"};
+
+	FormalResult* result  = new FormalResult{};
+	result->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
+	method->results()->append(result);
+
+	FormalArgument* arg1 = new FormalArgument{};
+	arg1->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
+	arg1->setName("foo");
+	method->arguments()->append(arg1);
+	FormalArgument* arg2 = new FormalArgument{};
+	arg2->setTypeExpression(new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT});
+	arg2->setName("bar");
+	method->arguments()->append(arg2);
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Rich text, lists
+	/////////////////////////////////////////////////////////////////////////////
+	method->items()->append(new CommentStatementItem{CommentsTestUtil::createRichTextComment()});
+	method->items()->append(new ExpressionStatement{new EmptyExpression{}});
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Diagrams
+	/////////////////////////////////////////////////////////////////////////////
+	method->items()->append(new CommentStatementItem{CommentsTestUtil::createDiagramComment()});
+	method->items()->append(new ExpressionStatement{new EmptyExpression{}});
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Tables and embedded source code
+	/////////////////////////////////////////////////////////////////////////////
+	auto table = CommentsTestUtil::createTableComment();
+
+	auto aBlock = new Block{QList<StatementItem*>{new ExpressionStatement{new VariableDeclarationExpression{"id",
+		new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT},
+		new MethodCallExpression{"getId"}}}}};
+
+	table->codes()->at(0)->setNode(aBlock);
+	table->tables()->at(0)->setNodeAt(1, 0, addFactorial(nullptr));
+	table->tables()->at(0)->setNodeAt(1, 1, new IfStatement{});
+
+	method->items()->append(new CommentStatementItem{table});
+	method->items()->append(new ExpressionStatement{new EmptyExpression{}});
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Images
+	/////////////////////////////////////////////////////////////////////////////
+	method->items()->append(new CommentStatementItem{CommentsTestUtil::createImageComment()});
+	method->items()->append(new ExpressionStatement{new EmptyExpression{}});
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Web Browsers
+	/////////////////////////////////////////////////////////////////////////////
+	method->items()->append(new CommentStatementItem{CommentsTestUtil::createBrowserComment()});
+	method->items()->append(new ExpressionStatement{new EmptyExpression{}});
+
+	/////////////////////////////////////////////////////////////////////////////
+	/// Return value
+	/////////////////////////////////////////////////////////////////////////////
+	ReturnStatement* ret = new ReturnStatement{};
+	method->items()->append(ret);
+	BinaryOperation* retVal = new BinaryOperation{};
+	retVal->setLeft(new ReferenceExpression{"foo"});
+	retVal->setOp(BinaryOperation::PLUS);
+	retVal->setRight(new ReferenceExpression{"bar"});
+	ret->values()->append(retVal);
+
+	std::unique_ptr<Position>(method->extension<Position>())->set(2, 0);
+
+	return method;
+}
+
 class JavaLibraryAndHelloWorldTest : public SelfTest::Test<OOVisualizationPlugin, JavaLibraryAndHelloWorldTest> {
 public: void test()
 {
@@ -1054,6 +1129,7 @@ public: void test()
 
 	prj->modules()->append(addLambda());
 	folder1->classes()->append(addInner());
+	folder1->methods()->append(addMethodWithComments());
 
 // Add a method Add-on
 	VMethod::addAddOn(new MethodAddOn{"foo"});
