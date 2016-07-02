@@ -61,7 +61,7 @@ CommentFreeNode* CommentTable::nodeAt(int m, int n)
 
 void CommentTable::resize(int m, int n)
 {
-	auto aList = new Model::TypedList<CommentFreeNode>;
+	QList<CommentFreeNode*> newNodes;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
@@ -71,14 +71,17 @@ void CommentTable::resize(int m, int n)
 				CommentFreeNode* aFreeNode = nodeAt(j, i);
 				nodes()->replaceChild(aFreeNode, new CommentFreeNode{nullptr, ""});
 				aFreeNode->setName(name()+"_"+QString::number(j)+"_"+QString::number(i));
-				aList->append(aFreeNode);
+				newNodes.append(aFreeNode);
 			}
 			else
-				aList->append(new CommentFreeNode{nullptr, name()+"_"+QString::number(j)+"_"+QString::number(i)});
+				newNodes.append(new CommentFreeNode{nullptr, name()+"_"+QString::number(j)+"_"+QString::number(i)});
 		}
 	}
 
+	auto aList = new Model::TypedList<CommentFreeNode>;
 	replaceChild(nodes(), aList);
+	for (auto n : newNodes) aList->append(n);
+
 	setRowCount(m);
 	setColumnCount(n);
 }
