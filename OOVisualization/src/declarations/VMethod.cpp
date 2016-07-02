@@ -45,6 +45,12 @@ DEFINE_ITEM_COMMON(VMethod, "item")
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : Super{parent, node, style}
 {}
 
+void VMethod::determineChildren()
+{
+	Super::determineChildren();
+	setDefaultMoveCursorProxy(icon_);
+}
+
 void VMethod::initializeForms()
 {
 	auto titleElement = grid({{

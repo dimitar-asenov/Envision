@@ -61,6 +61,9 @@ class OOVISUALIZATION_API VMethod
 
 		static void initializeForms();
 
+	protected:
+		virtual void determineChildren() override;
+
 	private:
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};

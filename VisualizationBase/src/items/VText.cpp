@@ -50,7 +50,7 @@ QString VText::currentText()
 
 bool VText::moveCursor(CursorMoveDirection dir, QRect reference, CursorMoveOptions options)
 {
-	if (dir == MoveDefault) return Super::moveCursor(MoveOnRight, reference, options);
+	if (dir == MoveDefault) return Super::moveCursor(MoveOnLeft, reference, options);
 	else return Super::moveCursor(dir, reference, options);
 }
 

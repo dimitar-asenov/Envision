@@ -38,6 +38,7 @@
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/declarative/GridLayouter.h"
+#include "VisualizationBase/src/views/MainView.h"
 
 class OOINTERACTION_API CommandHelper
 {
@@ -63,6 +64,9 @@ class OOINTERACTION_API CommandHelper
 			p->endModification();
 
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->addPostEventAction([child](){
+				centerOnItem(Visualization::Item::nodeItemsMap().value(child, nullptr));
+			});
 			target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target, child,
 					Interaction::SetCursorEvent::CursorDefault, showPrompt});
 		}
@@ -77,7 +81,20 @@ class OOINTERACTION_API CommandHelper
 			target->scene()->listenToTreeManager(manager);
 
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->addPostEventAction([child](){
+				centerOnItem(Visualization::Item::nodeItemsMap().value(child, nullptr));
+			});
 			target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target->scene(), child,
 					Interaction::SetCursorEvent::CursorDefault, showPrompt});
 		}
+
+		static void centerOnItem(Visualization::Item* target);
 };
+
+inline void CommandHelper::centerOnItem(Visualization::Item* target)
+{
+	if (target)
+		for (auto view : target->scene()->views())
+			if (auto mainView = dynamic_cast<Visualization::MainView*>(view) )
+				mainView->centerOn(target->mapToScene(target->boundingRect().center()));
+}
