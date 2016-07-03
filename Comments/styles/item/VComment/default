@@ -4,13 +4,14 @@
 		Box
 		<backgroundBrush>
 			<style>1</style>
-			<color>#dcdcc8</color>
+			<color>#efefef</color>
 		</backgroundBrush>
 		<cornerType>0</cornerType>
-		<cornerRadius>3</cornerRadius>
+		<cornerRadius>4</cornerRadius>
 		<outline>
+			<style>2</style>
 			<width>1</width>
-			<color>#a0a0a0</color>
+			<color>#999999</color>
 		</outline>
 	</shape>
 
@@ -55,18 +56,7 @@
 	</thickLineCommentEnd>
 
 	<editList prototypes="item/VList/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<backgroundBrush>
-				<style>1</style>
-				<color>#ffffff</color>
-			</backgroundBrush>
-			<cornerType>0</cornerType>
-			<cornerRadius>2</cornerRadius>
-			<outline>
-				<width>2</width>
-				<color>#000000</color>
-			</outline>
-		</shape>
+		<shape/>
+		<useBackgroundColors>false</useBackgroundColors>
 	</editList>
 </style>
