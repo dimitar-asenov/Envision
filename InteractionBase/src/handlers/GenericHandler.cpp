@@ -40,6 +40,7 @@
 
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/ViewItemManager.h"
+#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
@@ -439,6 +440,13 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				newViewItem("View" + QString::number(col) + QString::number(row), QPoint{col, row});
 
 		if (view) target->scene()->viewItems()->switchToView(view);
+	}
+	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F11)
+	{
+		if (auto scene = target->scene())
+			for (auto view : scene->views())
+				if (dynamic_cast<Visualization::MainView*>(view))
+					view->centerOn(target);
 	}
 	else if (ActionRegistry::instance()->handleKeyInput(target,
 			 QKeySequence(event->modifiers()|event->key()), "GenericHandler"))

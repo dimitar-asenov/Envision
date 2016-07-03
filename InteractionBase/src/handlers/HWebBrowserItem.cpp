@@ -24,7 +24,6 @@
  **
  **********************************************************************************************************************/
 #include "HWebBrowserItem.h"
-#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
 #include "VisualizationBase/src/VisualizationManager.h"
@@ -42,14 +41,7 @@ HWebBrowserItem* HWebBrowserItem::instance()
 
 void HWebBrowserItem::keyPressEvent(Visualization::Item* target, QKeyEvent *event)
 {
-	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F11)
-	{
-		if (auto scene = target->scene())
-			for (auto view : scene->views())
-				if (dynamic_cast<Visualization::MainView*>(view))
-					view->centerOn(target);
-	}
-	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape
+	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape
 				&& (!target->parent() || target->parent()->typeId() == Visualization::ViewItem::typeIdStatic()))
 	{
 		auto mainScene = Visualization::VisualizationManager::instance().mainScene();
