@@ -82,15 +82,6 @@ void VComment::parseLines()
 		++lineNumber;
 
 		//************************************************************************
-		// Single-line comments
-		//************************************************************************
-		if (lineNumber == 0 && node()->isLineComment())
-		{
-			linesOfCurrentElement << line.mid(3).trimmed();
-			break;
-		}
-
-		//************************************************************************
 		// Bullet lists
 		//************************************************************************
 
@@ -164,7 +155,7 @@ void VComment::parseLines()
 		//************************************************************************
 		QRegExp rx{"^={3,}|-{3,}|\\.{3,}$"};
 
-		if (rx.exactMatch(line))
+		if ( (lineNumber > 0 || !node()->isLineComment()) && rx.exactMatch(line))
 		{
 			createTextualCommentElement(linesOfCurrentElement); // Flush current text
 
@@ -193,6 +184,15 @@ void VComment::parseLines()
 			QString len = QString::number(rx.cap(1).length());
 			linesOfCurrentElement << "<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">";
 
+			continue;
+		}
+
+		//************************************************************************
+		// Single-line comments
+		//************************************************************************
+		if (lineNumber == 0 && node()->isLineComment())
+		{
+			linesOfCurrentElement << line.mid(3).trimmed();
 			continue;
 		}
 
