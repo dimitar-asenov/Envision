@@ -82,6 +82,20 @@ add_library(FilePersistence SHARED
 	src/version_control/LinkedChangesSet.cpp
 	src/version_control/Diff3Parse.cpp
 	test/VCTestProject.cpp
+	src/version_control/merge/ChangeGraph.h
+	src/version_control/merge/ChangeGraph.cpp
+	src/version_control/merge/ConflictUnitComponent.cpp
+	src/version_control/merge/ConflictUnitComponent.h
+	src/version_control/merge/ListMergeComponentV2.cpp
+	src/version_control/merge/ListMergeComponentV2.h
+	src/version_control/merge/MergeChange.cpp
+	src/version_control/merge/MergeChange.h
+	src/version_control/merge/MergePipelineComponent.cpp
+	src/version_control/merge/MergePipelineComponent.h
+	src/version_control/merge/MergeV2.cpp
+	src/version_control/merge/MergeV2.h
+	src/version_control/merge/MergeData.cpp
+	src/version_control/merge/MergeData.h
 )
 add_dependencies(FilePersistence FilePersistence_UpdateResources)
 

@@ -95,6 +95,7 @@ class FILEPERSISTENCE_API GitRepository
 
 	private:
 		friend class Merge;
+		friend class MergeV2;
 
 		QString projectName() const;
 

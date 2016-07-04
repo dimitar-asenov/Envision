@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,41 +26,28 @@
 
 #pragma once
 
-#include "../filepersistence_api.h"
+#include "../../filepersistence_api.h"
 
-#include "ConflictPairs.h"
-#include "LinkedChangesTransition.h"
+#include "MergeData.h"
 
 namespace FilePersistence {
 
 class GitRepository;
-class ChangeDescription;
-class ConflictPipelineComponent;
-class ChangeDependencyGraph;
-struct Signature;
+class MergePipelineComponent;
 class GenericTree;
+struct Signature;
 
-using LinkedChangesTransitionTrace = QList<LinkedChangesTransition>;
-
-class FILEPERSISTENCE_API Merge
+class FILEPERSISTENCE_API MergeV2
 {
 	public:
-		~Merge();
-
 		enum class Kind {Unclassified, AlreadyUpToDate, FastForward, TrueMerge};
 		enum class Stage {NotInitialized, FoundMergeBase, Classified, AutoMerged,
 								ManualMerged, BuiltMergedTree, WroteToWorkDir, WroteToIndex, Committed};
 
 		bool isAlreadyMerged() const;
 		bool hasConflicts() const;
-		const QSet<std::shared_ptr<ChangeDescription>> getConflicts() const;
 		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
-
-		/**
-		 * TODO output conflicts
-		 */
-		const bool USE_LINKED_SETS = true;
 
 	private:
 		friend class GitRepository;
@@ -68,38 +55,18 @@ class FILEPERSISTENCE_API Merge
 		/**
 		 * Merges \a revision into current HEAD.
 		 */
-		Merge(QString revision, bool fastForward, GitRepository* repository);
+		MergeV2(QString revision, bool fastForward, GitRepository* repository);
+
+		void initializePipelineComponents();
 
 		/**
-		 * Constructs components and sets special node types. This will eventually be replaced by a mechanism
-		 * that loads these from plugins and the model.
-		 */
-		void initializeComponents();
-
-		/**
-		 * If the merge is non-trivial, this is where the magic starts.
+		 * If the merge is non-trivial, this is where the real merge algorithm and the pipeline is run.
 		 */
 		void performTrueMerge();
 
-		void applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
-										const ChangeDependencyGraph& cdg);
-
-		/**
-		 * Computes transitive closure of dependencies for \a change.
-		 */
-		void addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
-									const std::shared_ptr<ChangeDescription>& change,
-									const ChangeDependencyGraph& cdg);
-
 		Stage stage_ = Stage::NotInitialized;
 
-		/**
-		 * GenericTrees
-		 */
-		std::shared_ptr<GenericTree> treeA_;
-		std::shared_ptr<GenericTree> treeB_;
-		std::shared_ptr<GenericTree> treeBase_;
-		std::shared_ptr<GenericTree> treeMerged_;
+		MergeData mergeData_;
 
 		/**
 		 * Revisions
@@ -111,37 +78,13 @@ class FILEPERSISTENCE_API Merge
 		GitRepository* repository_{};
 
 		/**
-		 * This component is executed first, before any pipeline component.
-		 * It establishes the pipeline invariant but must not depend on it holding beforehand.
-		 */
-		std::shared_ptr<ConflictPipelineComponent> pipelineInitializer_;
-
-		/**
 		 * Components are executed in the order they appear in this list.
 		 */
-		QList<std::shared_ptr<ConflictPipelineComponent>> conflictPipeline_;
+		QList<std::shared_ptr<MergePipelineComponent>> mergePipeline_;
 
-		/**
-		 * Changes in this set cannot be applied safely.
-		 * Every change in the set should either be matched with a conflicting change in \a conflictingChanges_
-		 * or be depending on a change that is in conflict. This is not enforced, however.
-		 */
-		QSet<std::shared_ptr<ChangeDescription>> conflictingChanges_;
-
-		/**
-		 * \a change1 is mapped to \a change2 exactly if \a change1 and \a change2 cannot both be applied safely.
-		 */
-		ConflictPairs conflictPairs_;
-
-
-		QSet<QString> conflictTypes_;
-		QSet<QString> listTypes_;
-		QSet<QString> unorderedTypes_;
 };
 
-inline bool Merge::hasConflicts() const { return !conflictingChanges_.isEmpty(); }
-inline bool Merge::isAlreadyMerged() const { return stage_ == Stage::Committed; }
-
-inline const QSet<std::shared_ptr<ChangeDescription>> Merge::getConflicts() const { return conflictingChanges_; }
+inline bool MergeV2::hasConflicts() const { return mergeData_.cg_.hasConflicts(); }
+inline bool MergeV2::isAlreadyMerged() const { return stage_ == Stage::Committed; }
 
 }
