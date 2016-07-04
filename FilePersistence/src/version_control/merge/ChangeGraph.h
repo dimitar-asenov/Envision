@@ -28,9 +28,13 @@
 
 #include "../../filepersistence_api.h"
 
-#include "../Diff.h"
+#include "MergeChange.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
+
+class Diff;
 
 class FILEPERSISTENCE_API ChangeGraph
 {
@@ -39,6 +43,28 @@ class FILEPERSISTENCE_API ChangeGraph
 		void init(Diff& diffA, Diff& diffB);
 
 		bool hasConflicts() const;
+
+		void insert(MergeChange change);
+		void insert(QList<MergeChange> changes);
+
+	private:
+		// The nodes of the graph
+		QList<MergeChange> changes_;
+
+		// The different edge types of the graph
+		QMultiHash<MergeChange*, MergeChange*> dependencies_;
+		QMultiHash<MergeChange*, MergeChange*> directConflicts_;
+
+		// Helper structures to speed up computation
+		QMultiHash<Model::NodeIdType, MergeChange*> changesForNode_;
+		QMultiHash<Model::NodeIdType, MergeChange*> changesForParent_;
+
+		bool changeAlreadyExists(const MergeChange& change) const;
 };
+
+inline void ChangeGraph::insert(QList<MergeChange> changes)
+{
+	for (auto & change : changes) insert(change);
+}
 
 }

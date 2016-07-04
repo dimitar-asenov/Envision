@@ -28,12 +28,82 @@
 
 #include "../../filepersistence_api.h"
 
+#include "../ChangeDescription.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API MergeChange
 {
+	public:
+		MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateFlags, Model::NodeIdType nodeId,
+			Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
+			QString oldLabel, QString newLabel, QString oldType, QString newType, QString oldValue, QString newValue);
 
+		static QList<MergeChange> changesFromDiffChange(ChangeDescription& changeFromDiff);
+
+		ChangeType type() const;
+		ChangeDescription::UpdateFlags updateFlags() const;
+
+		const Model::NodeIdType& nodeId() const;
+
+		const Model::NodeIdType& oldParentId() const;
+		const Model::NodeIdType& newParentId() const;
+
+		const QString& oldLabel() const;
+		const QString& newLabel() const;
+
+		const QString& oldType() const;
+		const QString& newType() const;
+
+		const QString& oldValue() const;
+		const QString& newValue() const;
+
+		bool operator==(const MergeChange& other) const;
+		bool operator!=(const MergeChange& other) const;
+
+	private:
+		ChangeType type_{};
+		ChangeDescription::UpdateFlags updateFlags_{};
+
+		Model::NodeIdType nodeId_;
+
+		Model::NodeIdType oldParentId_;
+		Model::NodeIdType newParentId_;
+
+		QString oldLabel_;
+		QString newLabel_;
+
+		QString oldType_;
+		QString newType_;
+
+		QString oldValue_;
+		QString newValue_;
 };
 
+inline ChangeType MergeChange::type() const { return type_; }
+inline ChangeDescription::UpdateFlags MergeChange::updateFlags() const { return updateFlags_; }
+
+inline const Model::NodeIdType& MergeChange::nodeId() const { return nodeId_; }
+inline const Model::NodeIdType& MergeChange::oldParentId() const { return oldParentId_; }
+inline const Model::NodeIdType& MergeChange::newParentId() const { return newParentId_; }
+inline const QString& MergeChange::oldLabel() const { return oldLabel_; }
+inline const QString& MergeChange::newLabel() const { return newLabel_; }
+inline const QString& MergeChange::oldType() const { return oldType_; }
+inline const QString& MergeChange::newType() const { return newType_; }
+inline const QString& MergeChange::oldValue() const { return oldValue_; }
+inline const QString& MergeChange::newValue() const { return newValue_; }
+
+inline bool MergeChange::operator==(const MergeChange& other) const
+{
+	return type_ == other.type_ && updateFlags_ == other.updateFlags_ && nodeId_ == other.nodeId_
+			&&	oldParentId_ == other.oldParentId_ && newParentId_ == other.newParentId_
+			&& oldLabel_ == other.oldLabel_ && newLabel_ == other.newLabel_
+			&& oldType_ == other.oldType_ && newType_ == other.newType_
+			&& oldValue_ == other.oldValue_ && newValue_ == other.newValue_;
+}
+
+inline bool MergeChange::operator!=(const MergeChange& other) const { return !(*this == other);}
 
 }

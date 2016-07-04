@@ -26,6 +26,55 @@
 
 #include "MergeChange.h"
 
+#include "../ChangeDescription.h"
+#include "../../simple/GenericNode.h"
+
 namespace FilePersistence {
+
+MergeChange::MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateFlags, Model::NodeIdType nodeId,
+ Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
+ QString oldLabel, QString newLabel, QString oldType, QString newType, QString oldValue, QString newValue)
+	: type_{type}, updateFlags_{updateFlags}, nodeId_{nodeId},
+	 oldParentId_{oldParentId}, newParentId_{newParentId},
+	 oldLabel_{oldLabel}, newLabel_{newLabel},
+	 oldType_{oldType}, newType_{newType},
+	 oldValue_{oldValue}, newValue_{newValue}
+{
+	Q_ASSERT(type_ != ChangeType::Unclassified);
+
+	bool typeOrValueChange = updateFlags_ & (ChangeDescription::Value | ChangeDescription::Type);
+	bool labelOrNonStationaryChange = type != ChangeType::Stationary || (updateFlags & ChangeDescription::Label);
+	Q_ASSERT(typeOrValueChange != labelOrNonStationaryChange);
+}
+
+QList<MergeChange> MergeChange::changesFromDiffChange(ChangeDescription& changeFromDiff)
+{
+	QList<MergeChange> result;
+
+	// Split the changes into Movement related and pure Type/Value update
+	if (changeFromDiff.type() != ChangeType::Stationary || changeFromDiff.hasFlags(ChangeDescription::Label))
+	{
+		auto newFlags = changeFromDiff.flags() &  ChangeDescription::Label;
+		result.append( MergeChange{changeFromDiff.type(), newFlags, changeFromDiff.nodeId(),
+							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->parentId() : Model::NodeIdType{},
+							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->parentId() : Model::NodeIdType{},
+							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->label() : QString{},
+							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->label() : QString{},
+							{}, {}, {}, {}} );
+	}
+
+	if (changeFromDiff.hasFlags(ChangeDescription::Value) || changeFromDiff.hasFlags(ChangeDescription::Type))
+	{
+		auto newFlags = changeFromDiff.flags() & (ChangeDescription::Value | ChangeDescription::Type);
+		result.append( MergeChange{ChangeType::Stationary, newFlags, changeFromDiff.nodeId(),
+							{}, {}, {}, {},
+							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->type() : QString{},
+							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->type() : QString{},
+							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->rawValue() : QString{},
+							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->rawValue() : QString{}} );
+	}
+
+	return result;
+}
 
 }

@@ -26,15 +26,43 @@
 
 #include "ChangeGraph.h"
 
+#include "../Diff.h"
+
 namespace FilePersistence {
 
-void ChangeGraph::init(Diff& /*diffA*/, Diff& /*diffB*/)
+void ChangeGraph::init(Diff& diffA, Diff& diffB)
 {
+	for (auto it = diffA.changes().begin(); it != diffA.changes().end(); ++it)
+		insert(MergeChange::changesFromDiffChange(*(it.value())));
+
+	for (auto it = diffB.changes().begin(); it != diffB.changes().end(); ++it)
+		insert(MergeChange::changesFromDiffChange(*(it.value())));
 }
 
 bool ChangeGraph::hasConflicts() const
 {
 	Q_ASSERT(false);
+}
+
+void ChangeGraph::insert(MergeChange change)
+{
+	// Check if this change is identical to an existing change
+
+	if (changeAlreadyExists(change))
+		return;
+}
+
+bool ChangeGraph::changeAlreadyExists(const MergeChange& change) const
+{
+	auto it = changesForNode_.find(change.nodeId());
+	while (it != changesForNode_.end() && it.key() == change.nodeId())
+	{
+		if (*(static_cast<const MergeChange*>(it.value())) == change)
+			return true;
+		++it;
+	}
+
+	return false;
 }
 
 }
