@@ -47,15 +47,15 @@ MergeChange::MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateF
 	Q_ASSERT(typeOrValueChange != labelOrNonStationaryChange);
 }
 
-QList<MergeChange> MergeChange::changesFromDiffChange(ChangeDescription& changeFromDiff)
+QList<MergeChange*> MergeChange::changesFromDiffChange(ChangeDescription& changeFromDiff)
 {
-	QList<MergeChange> result;
+	QList<MergeChange*> result;
 
 	// Split the changes into Movement related and pure Type/Value update
 	if (changeFromDiff.type() != ChangeType::Stationary || changeFromDiff.hasFlags(ChangeDescription::Label))
 	{
 		auto newFlags = changeFromDiff.flags() &  ChangeDescription::Label;
-		result.append( MergeChange{changeFromDiff.type(), newFlags, changeFromDiff.nodeId(),
+		result.append( new MergeChange{changeFromDiff.type(), newFlags, changeFromDiff.nodeId(),
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->parentId() : Model::NodeIdType{},
 							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->parentId() : Model::NodeIdType{},
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->label() : QString{},
@@ -66,7 +66,7 @@ QList<MergeChange> MergeChange::changesFromDiffChange(ChangeDescription& changeF
 	if (changeFromDiff.hasFlags(ChangeDescription::Value) || changeFromDiff.hasFlags(ChangeDescription::Type))
 	{
 		auto newFlags = changeFromDiff.flags() & (ChangeDescription::Value | ChangeDescription::Type);
-		result.append( MergeChange{ChangeType::Stationary, newFlags, changeFromDiff.nodeId(),
+		result.append( new MergeChange{ChangeType::Stationary, newFlags, changeFromDiff.nodeId(),
 							{}, {}, {}, {},
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->type() : QString{},
 							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->type() : QString{},

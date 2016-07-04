@@ -41,7 +41,7 @@ class FILEPERSISTENCE_API MergeChange
 			Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
 			QString oldLabel, QString newLabel, QString oldType, QString newType, QString oldValue, QString newValue);
 
-		static QList<MergeChange> changesFromDiffChange(ChangeDescription& changeFromDiff);
+		static QList<MergeChange*> changesFromDiffChange(ChangeDescription& changeFromDiff);
 
 		ChangeType type() const;
 		ChangeDescription::UpdateFlags updateFlags() const;
@@ -62,6 +62,8 @@ class FILEPERSISTENCE_API MergeChange
 
 		bool operator==(const MergeChange& other) const;
 		bool operator!=(const MergeChange& other) const;
+
+		bool isValueOrTypeChange() const;
 
 	private:
 		ChangeType type_{};
@@ -105,5 +107,7 @@ inline bool MergeChange::operator==(const MergeChange& other) const
 }
 
 inline bool MergeChange::operator!=(const MergeChange& other) const { return !(*this == other);}
+inline bool MergeChange::isValueOrTypeChange() const { return updateFlags_
+			& (ChangeDescription::Value | ChangeDescription::Type);}
 
 }

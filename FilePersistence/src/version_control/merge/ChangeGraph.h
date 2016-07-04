@@ -40,16 +40,17 @@ class FILEPERSISTENCE_API ChangeGraph
 {
 	public:
 
+		~ChangeGraph();
 		void init(Diff& diffA, Diff& diffB);
 
 		bool hasConflicts() const;
 
-		void insert(MergeChange change);
-		void insert(QList<MergeChange> changes);
+		void insert(MergeChange* change);
+		void insert(QList<MergeChange*> changes);
 
 	private:
 		// The nodes of the graph
-		QList<MergeChange> changes_;
+		QList<MergeChange*> changes_;
 
 		// The different edge types of the graph
 		QMultiHash<MergeChange*, MergeChange*> dependencies_;
@@ -59,10 +60,13 @@ class FILEPERSISTENCE_API ChangeGraph
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForNode_;
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForParent_;
 
-		bool changeAlreadyExists(const MergeChange& change) const;
+		bool changeAlreadyExists(const MergeChange* change) const;
+
+		void addDependencies(MergeChange* change);
+		void addDirectConflicts(MergeChange* change);
 };
 
-inline void ChangeGraph::insert(QList<MergeChange> changes)
+inline void ChangeGraph::insert(QList<MergeChange*> changes)
 {
 	for (auto & change : changes) insert(change);
 }
