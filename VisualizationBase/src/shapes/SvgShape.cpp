@@ -56,20 +56,20 @@ void SvgShape::update()
 
 int SvgShape::contentLeft()
 {
-	int outerWidth = sizeSpecified() == OutterSize ? width() : Super::outterSize(width(), height()).width();
+	int outerWidth = sizeSpecified() == OuterSize ? width() : Super::outerSize(width(), height()).width();
 	return xOffset() + std::ceil(outerWidth*style()->leftContentMarginFraction());
 }
 
 int SvgShape::contentTop()
 {
-	int outerHeight = sizeSpecified() == OutterSize ? height() : Super::outterSize(width(), height()).height();
+	int outerHeight = sizeSpecified() == OuterSize ? height() : Super::outerSize(width(), height()).height();
 	return yOffset() + std::ceil(outerHeight*style()->topContentMarginFraction());
 }
 
 QRect SvgShape::contentRect()
 {
-	int outerWidth = sizeSpecified() == OutterSize ? width() : Super::outterSize(width(), height()).width();
-	int outerHeight = sizeSpecified() == OutterSize ? height() : Super::outterSize(width(), height()).height();
+	int outerWidth = sizeSpecified() == OuterSize ? width() : Super::outerSize(width(), height()).width();
+	int outerHeight = sizeSpecified() == OuterSize ? height() : Super::outerSize(width(), height()).height();
 	int innerWidth = (1.0 - style()->leftContentMarginFraction() - style()->rightContentMarginFraction()) * width();
 	int innerHeight = (1.0 - style()->topContentMarginFraction() - style()->bottomContentMarginFraction()) * height();
 	return { (int) ( xOffset() + std::ceil(outerWidth*style()->leftContentMarginFraction()) ),
@@ -78,24 +78,24 @@ QRect SvgShape::contentRect()
 				innerHeight};
 }
 
-QSize SvgShape::innerSize(QSize outterSize) const
+QSize SvgShape::innerSize(QSize outerSize) const
 {
 	int innerWidth = (1.0 - style()->leftContentMarginFraction() - style()->rightContentMarginFraction())
-			*outterSize.width();
+			*outerSize.width();
 	int innerHeight = (1.0 - style()->topContentMarginFraction() - style()->bottomContentMarginFraction())
-			*outterSize.height();
+			*outerSize.height();
 
 	return QSize{innerWidth, innerHeight};
 }
 
-QSize SvgShape::outterSize(QSize innerSize) const
+QSize SvgShape::outerSize(QSize innerSize) const
 {
-	int outterWidth = innerSize.width() /
+	int outerWidth = innerSize.width() /
 			(1.0 - style()->leftContentMarginFraction() - style()->rightContentMarginFraction());
-	int outterHeight = innerSize.height() /
+	int outerHeight = innerSize.height() /
 			(1.0 - style()->topContentMarginFraction() - style()->bottomContentMarginFraction());
 
-	return QSize{outterWidth, outterHeight};
+	return QSize{outerWidth, outerHeight};
 }
 
 void SvgShape::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)

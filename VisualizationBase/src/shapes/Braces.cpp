@@ -117,23 +117,23 @@ QRect Braces::contentRect()
 					 rightBraceLeft_ + rightBraceOffset_.x() - contentLeft_, (qreal) height() }.toRect();
 }
 
-QSize Braces::innerSize(QSize outterSize) const
+QSize Braces::innerSize(QSize outerSize) const
 {
-	int size = outterSize.height();
+	int size = outerSize.height();
 	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);
 	QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 
-	while (size >= 0 && (lb.width() + rb.width() > outterSize.width() || lb.height() + rb.height() > outterSize.height()))
+	while (size >= 0 && (lb.width() + rb.width() > outerSize.width() || lb.height() + rb.height() > outerSize.height()))
 	{
 		size--;
 		lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);
 		rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 	}
 
-	return QSize{ outterSize.width() - lb.width() - rb.width(), outterSize.height()};
+	return QSize{ outerSize.width() - lb.width() - rb.width(), outerSize.height()};
 }
 
-QSize Braces::outterSize(QSize innerSize) const
+QSize Braces::outerSize(QSize innerSize) const
 {
 	int size = innerSize.height();
 	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);

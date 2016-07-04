@@ -68,11 +68,11 @@ void Shape::setInnerSize(int width, int height)
 	setParentNeedsUpdate();
 }
 
-void Shape::setOutterSize(int width, int height)
+void Shape::setOuterSize(int width, int height)
 {
 	width_ = width;
 	height_ = height;
-	sizeToUse = OutterSize;
+	sizeToUse = OuterSize;
 	update();
 	setParentNeedsUpdate();
 }
@@ -95,14 +95,14 @@ int Shape::contentTop()
 	return yOffset_;
 }
 
-QSize Shape::innerSize(QSize outterSize) const
+QSize Shape::innerSize(QSize outerSize) const
 {
-	if (style_) return QSize{outterSize.width() - (int) std::ceil(style_->outline().width()),
-									 outterSize.height() - (int) std::ceil(style_->outline().width()) };
-	return QSize{outterSize.width(), outterSize.height()};
+	if (style_) return QSize{outerSize.width() - (int) std::ceil(style_->outline().width()),
+									 outerSize.height() - (int) std::ceil(style_->outline().width()) };
+	return QSize{outerSize.width(), outerSize.height()};
 }
 
-QSize Shape::outterSize(QSize innerSize) const
+QSize Shape::outerSize(QSize innerSize) const
 {
 	if (style_) return QSize{innerSize.width() + (int) std::ceil(style_->outline().width()),
 									 innerSize.height() + (int) std::ceil(style_->outline().width()) };

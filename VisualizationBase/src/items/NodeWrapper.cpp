@@ -69,7 +69,7 @@ void NodeWrapper::updateGeometry(int availableWidth, int availableHeight)
 	if (stretchable_ && !node())
 	{
 		getShape()->setOffset(0, 0);
-		getShape()->setOutterSize(availableWidth, availableHeight);
+		getShape()->setOuterSize(availableWidth, availableHeight);
 		setSize(availableWidth, availableHeight);
 		if (zValue() != -1 ) setZValue(-1);
 	}

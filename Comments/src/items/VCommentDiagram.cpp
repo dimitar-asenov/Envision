@@ -87,7 +87,7 @@ void VCommentDiagram::updateGeometry(int, int)
 
 	if (hasShape())
 	{
-		if (editing_) getShape()->setOutterSize(expanded.width(), expanded.height());
+		if (editing_) getShape()->setOuterSize(expanded.width(), expanded.height());
 		else getShape()->setInnerSize(expanded.width(), expanded.height());
 	}
 	else setSize(expanded);

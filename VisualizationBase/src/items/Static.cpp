@@ -77,7 +77,7 @@ void Static::updateGeometry(int availableWidth, int availableHeight)
 	if (hasShape())
 	{
 		getShape()->setOffset(0, 0);
-		if (stretchUpdate) getShape()->setOutterSize(newSize.width(), newSize.height());
+		if (stretchUpdate) getShape()->setOuterSize(newSize.width(), newSize.height());
 		else getShape()->setInnerSize(0, 0);
 	}
 	else setSize(newSize);

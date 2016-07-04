@@ -602,11 +602,11 @@ Method* addLongMethod(Class* parent)
 	ClassTypeExpression* var17ElementType = new ClassTypeExpression{};
 	var17Type->setTypeExpression(var17ElementType);
 	var17ElementType->typeExpression()->ref()->setName("String");
-	ArrayInitializer* outterArrayInit = new ArrayInitializer{};
-	var17->decl()->setInitialValue(outterArrayInit);
-	outterArrayInit->values()->append(new StringLiteral{"this"});
-	outterArrayInit->values()->append(new StringLiteral{"looks"});
-	outterArrayInit->values()->append(new StringLiteral{"good"});
+	ArrayInitializer* outerArrayInit = new ArrayInitializer{};
+	var17->decl()->setInitialValue(outerArrayInit);
+	outerArrayInit->values()->append(new StringLiteral{"this"});
+	outerArrayInit->values()->append(new StringLiteral{"looks"});
+	outerArrayInit->values()->append(new StringLiteral{"good"});
 
 	VariableDeclarationExpression* var18 = new VariableDeclarationExpression{"var18"};
 	longMethod->items()->append(new ExpressionStatement{var18});

@@ -433,7 +433,7 @@ void Scene::computeSceneRect()
 	if (viewRect.isNull()) viewRect = QRectF{sceneRect.x(), sceneRect.y(), 1, 1};
 
 	// TODO: Currently the user is not able to scroll in a way that will make menu items visible, if they are outside
-	// the outter bounding (scene) rectangle of normal items. The code below was meant to fix this, but it caused
+	// the outer bounding (scene) rectangle of normal items. The code below was meant to fix this, but it caused
 	// other issues, with too many scroll bars appearing when they are not necessary. In the future this should be fixed.
 
 	//So far viewRect is strictly inside sceneRect.

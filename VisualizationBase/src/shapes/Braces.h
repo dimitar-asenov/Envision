@@ -45,8 +45,8 @@ class VISUALIZATIONBASE_API Braces: public Super<Shape>
 		virtual int contentTop() override;
 		virtual QRect contentRect() override;
 
-		virtual QSize innerSize(QSize outterSize) const override;
-		virtual QSize outterSize(QSize innerSize) const override;
+		virtual QSize innerSize(QSize outerSize) const override;
+		virtual QSize outerSize(QSize innerSize) const override;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 

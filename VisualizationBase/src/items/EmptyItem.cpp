@@ -43,7 +43,7 @@ void EmptyItem::setCustomSize(int width, int height)
 	auto shape = getShape();
 
 	if (shape)
-		shape->setOutterSize(width, height);
+		shape->setOuterSize(width, height);
 	else
 		setSize(width, height);
 
@@ -69,7 +69,7 @@ void EmptyItem::updateGeometry(int availableWidth, int availableHeight)
 			shape->setInnerSize(2, 2);
 		else
 		{
-			shape->setOutterSize(availableWidth, availableHeight);
+			shape->setOuterSize(availableWidth, availableHeight);
 			setSize(availableWidth, availableHeight);
 		}
 	}

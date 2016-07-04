@@ -100,7 +100,7 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 			else form->computeSize(this, 0, 0);
 
 			getShape()->setOffset(currentShape->x(this), currentShape->y(this));
-			getShape()->setOutterSize(currentShape->width(this), currentShape->height(this));
+			getShape()->setOuterSize(currentShape->width(this), currentShape->height(this));
 
 			form->setPos(this, QPoint{0, 0});
 			setSize(form->size(this));

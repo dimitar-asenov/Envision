@@ -51,7 +51,7 @@ class VISUALIZATIONBASE_API Shape
 		virtual ~Shape();
 
 		void setInnerSize(int width, int height);
-		void setOutterSize(int width, int height);
+		void setOuterSize(int width, int height);
 		void setOffset(int x, int y);
 
 		virtual int contentLeft();
@@ -59,10 +59,10 @@ class VISUALIZATIONBASE_API Shape
 
 		virtual QRect contentRect() = 0;
 
-		virtual QSize innerSize(QSize outterSize) const;
-		virtual QSize outterSize(QSize innerSize) const;
-		QSize innerSize(int outterWidth, int outterHeight) const;
-		QSize outterSize(int innerWidth, int innerHeight) const;
+		virtual QSize innerSize(QSize outerSize) const;
+		virtual QSize outerSize(QSize innerSize) const;
+		QSize innerSize(int outerWidth, int outerHeight) const;
+		QSize outerSize(int innerWidth, int innerHeight) const;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 
@@ -71,7 +71,7 @@ class VISUALIZATIONBASE_API Shape
 		static ShapeStyle* createNewShapeStyle(const QString& shapeName);
 
 	protected:
-		typedef enum {InnerSize, OutterSize} SizeType;
+		typedef enum {InnerSize, OuterSize} SizeType;
 
 		int width() const;
 		int height() const;
@@ -112,10 +112,10 @@ inline int Shape::yOffset() const { return yOffset_; }
 inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
 inline Item* Shape::parentItem() const { return parent_; }
 
-inline QSize Shape::innerSize(int outterWidth, int outterHeight) const
-{ return innerSize(QSize{outterWidth, outterHeight}); }
-inline QSize Shape::outterSize(int innerWidth, int innerHeight) const
-{ return outterSize(QSize{innerWidth, innerHeight}); }
+inline QSize Shape::innerSize(int outerWidth, int outerHeight) const
+{ return innerSize(QSize{outerWidth, outerHeight}); }
+inline QSize Shape::outerSize(int innerWidth, int innerHeight) const
+{ return outerSize(QSize{innerWidth, innerHeight}); }
 
 template <typename Base, typename Actual> inline Base* Shape::makeDefaultStyle() { return new Actual{}; }
 template <typename Base, typename Actual> inline Base* Shape::makeDefaultShape(Item* parent)

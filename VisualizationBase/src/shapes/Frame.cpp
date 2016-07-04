@@ -66,13 +66,13 @@ QRect Frame::contentRect()
 				outerHeight_ - style()->topMargin() - style()->bottomMargin()};
 }
 
-QSize Frame::innerSize(QSize outterSize) const
+QSize Frame::innerSize(QSize outerSize) const
 {
-	return {outterSize.width() - style()->leftMargin() - style()->rightMargin(),
-				outterSize.height() - style()->topMargin() - style()->bottomMargin()};
+	return {outerSize.width() - style()->leftMargin() - style()->rightMargin(),
+				outerSize.height() - style()->topMargin() - style()->bottomMargin()};
 }
 
-QSize Frame::outterSize(QSize innerSize) const
+QSize Frame::outerSize(QSize innerSize) const
 {
 	return {innerSize.width() + style()->leftMargin() + style()->rightMargin(),
 				innerSize.height() + style()->topMargin() + style()->bottomMargin()};
