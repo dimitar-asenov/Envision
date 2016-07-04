@@ -51,6 +51,13 @@ class VISUALIZATIONBASE_API VListStyle : public Super<DeclarativeItemBaseStyle>
 		Property<bool> stretchWhenEmpty{this, "stretchWhenEmpty"};
 
 		Property<bool> linelikeMovementAlongListDirection{this, "linelikeMovementAlongListDirection"};
+
+		/**
+		 * Whther to create a child element, also when a letter is pressed, in addition to when Enter is pressed.
+		 *
+		 * The letter key press will be forwarded to the child element.
+		 */
+		Property<bool> createChildOnLetterPress{this, "createChildOnLetterPress"};
 };
 
 }

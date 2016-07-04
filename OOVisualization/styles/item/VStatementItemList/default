@@ -14,4 +14,6 @@
 	<selectedTip>
 		<symbol>add statement</symbol>
 	</selectedTip>
+	
+	<createChildOnLetterPress>true</createChildOnLetterPress>
 </style>

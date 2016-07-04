@@ -43,4 +43,5 @@
 	<stretchWhenEmpty>true</stretchWhenEmpty>
 	
 	<linelikeMovementAlongListDirection>true</linelikeMovementAlongListDirection>
+	<createChildOnLetterPress>false</createChildOnLetterPress>
 </style>

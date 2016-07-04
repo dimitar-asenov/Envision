@@ -36,4 +36,6 @@
 	<selectedTip>
 		<alwaysStretchable>false</alwaysStretchable>
 	</selectedTip>
+	
+	<createChildOnLetterPress>true</createChildOnLetterPress>
 </style>

@@ -54,24 +54,26 @@ void VFormalTypeArgument::initializeForms()
 					item<Static>(&I::subSymbol_, [](I* v){return &v->style()->subTypeSymbol();})
 							->setEnabled([](I* v){return v->node()->subTypeOfExpression() != nullptr;}),
 							item(&I::subType_, [](I* v){return v->node()->subTypeOfExpression();} )
-				}})
+				}})->setNoInnerCursors([](Item*){return true;})->setNoBoundaryCursors([](Item*){return true;})
 			},
 			{
 				grid({{
 					item<Static>(&I::superSymbol_, [](I* v){return &v->style()->superTypeSymbol();})
 						->setEnabled([](I* v){return v->node()->superTypeOfExpression() != nullptr;}),
 					item(&I::superType_, [](I* v){return v->node()->superTypeOfExpression();} )
-				}})
+				}})->setNoInnerCursors([](Item*){return true;})->setNoBoundaryCursors([](Item*){return true;})
 			},
 			{
 				grid({{
 					item<Static>(&I::specializeSymbol_, [](I* v){return &v->style()->specializeSymbol();})
 						->setEnabled([](I* v){return v->node()->specializationExpression() != nullptr;}),
 					item(&I::specializeType_, [](I* v){return v->node()->specializationExpression();} )
-				}})
+				}})->setNoInnerCursors([](Item*){return true;})->setNoBoundaryCursors([](Item*){return true;})
 			}
-		})->setHorizontalAlignment(LayoutStyle::Alignment::Center)
-		);
+		})	->setHorizontalAlignment(LayoutStyle::Alignment::Center)
+			->setNoInnerCursors([](Item*){return true;})
+			->setNoBoundaryCursors([](Item*){return true;})
+	);
 }
 
 }
