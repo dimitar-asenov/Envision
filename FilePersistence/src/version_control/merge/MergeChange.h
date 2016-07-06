@@ -37,16 +37,22 @@ namespace FilePersistence {
 class FILEPERSISTENCE_API MergeChange
 {
 	public:
+
+		enum Branch { None = 0x0, BranchA = 0x1, BranchB = 0x2};
+		using Branches = QFlags<Branch>;
+
 		MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateFlags, Model::NodeIdType nodeId,
-			Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
+			Branches branches, Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
 			QString oldLabel, QString newLabel, QString oldType, QString newType, QString oldValue, QString newValue);
 
-		static QList<MergeChange*> changesFromDiffChange(ChangeDescription& changeFromDiff);
+		static QList<MergeChange*> changesFromDiffChange(ChangeDescription& changeFromDiff, Branch branch);
 
 		ChangeType type() const;
 		ChangeDescription::UpdateFlags updateFlags() const;
 
 		const Model::NodeIdType& nodeId() const;
+
+		Branches branches() const;
 
 		const Model::NodeIdType& oldParentId() const;
 		const Model::NodeIdType& newParentId() const;
@@ -65,11 +71,15 @@ class FILEPERSISTENCE_API MergeChange
 
 		bool isValueOrTypeChange() const;
 
+		void addBranches(Branches branches);
+
 	private:
 		ChangeType type_{};
 		ChangeDescription::UpdateFlags updateFlags_{};
 
 		Model::NodeIdType nodeId_;
+
+		Branches branches_{};
 
 		Model::NodeIdType oldParentId_;
 		Model::NodeIdType newParentId_;
@@ -83,11 +93,13 @@ class FILEPERSISTENCE_API MergeChange
 		QString oldValue_;
 		QString newValue_;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(MergeChange::Branches)
 
 inline ChangeType MergeChange::type() const { return type_; }
 inline ChangeDescription::UpdateFlags MergeChange::updateFlags() const { return updateFlags_; }
 
 inline const Model::NodeIdType& MergeChange::nodeId() const { return nodeId_; }
+inline MergeChange::Branches MergeChange::branches() const { return branches_;}
 inline const Model::NodeIdType& MergeChange::oldParentId() const { return oldParentId_; }
 inline const Model::NodeIdType& MergeChange::newParentId() const { return newParentId_; }
 inline const QString& MergeChange::oldLabel() const { return oldLabel_; }
@@ -96,6 +108,7 @@ inline const QString& MergeChange::oldType() const { return oldType_; }
 inline const QString& MergeChange::newType() const { return newType_; }
 inline const QString& MergeChange::oldValue() const { return oldValue_; }
 inline const QString& MergeChange::newValue() const { return newValue_; }
+inline void MergeChange::addBranches(Branches branches) { branches_ |= branches; }
 
 inline bool MergeChange::operator==(const MergeChange& other) const
 {

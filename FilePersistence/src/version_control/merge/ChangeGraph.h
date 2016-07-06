@@ -60,7 +60,7 @@ class FILEPERSISTENCE_API ChangeGraph
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForNode_;
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForParent_;
 
-		bool changeAlreadyExists(const MergeChange* change) const;
+		MergeChange* findIdenticalChange(const MergeChange* change) const;
 
 		void addDependencies(MergeChange* change);
 		void addDirectConflicts(MergeChange* change);

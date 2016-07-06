@@ -39,10 +39,10 @@ ChangeGraph::~ChangeGraph()
 void ChangeGraph::init(Diff& diffA, Diff& diffB)
 {
 	for (auto it = diffA.changes().begin(); it != diffA.changes().end(); ++it)
-		insert(MergeChange::changesFromDiffChange(*(it.value())));
+		insert(MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchA));
 
 	for (auto it = diffB.changes().begin(); it != diffB.changes().end(); ++it)
-		insert(MergeChange::changesFromDiffChange(*(it.value())));
+		insert(MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchB));
 }
 
 bool ChangeGraph::hasConflicts() const
@@ -52,7 +52,11 @@ bool ChangeGraph::hasConflicts() const
 
 void ChangeGraph::insert(MergeChange* change)
 {
-	if (changeAlreadyExists(change)) return;
+	if (auto existingChange = findIdenticalChange(change))
+	{
+		existingChange->addBranches(change->branches());
+		return;
+	}
 
 	addDirectConflicts(change);
 	addDependencies(change);
@@ -62,16 +66,16 @@ void ChangeGraph::insert(MergeChange* change)
 	changes_.append(change);
 }
 
-bool ChangeGraph::changeAlreadyExists(const MergeChange* change) const
+MergeChange* ChangeGraph::findIdenticalChange(const MergeChange* change) const
 {
 	auto it = changesForNode_.find(change->nodeId());
 	while (it != changesForNode_.end() && it.key() == change->nodeId())
 	{
-		if (*it.value() == *change) return true;
+		if (*it.value() == *change) return it.value();
 		++it;
 	}
 
-	return false;
+	return nullptr;
 }
 
 void ChangeGraph::addDependencies(MergeChange* /*change*/)

@@ -32,9 +32,9 @@
 namespace FilePersistence {
 
 MergeChange::MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateFlags, Model::NodeIdType nodeId,
- Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
+ Branches branches, Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
  QString oldLabel, QString newLabel, QString oldType, QString newType, QString oldValue, QString newValue)
-	: type_{type}, updateFlags_{updateFlags}, nodeId_{nodeId},
+	: type_{type}, updateFlags_{updateFlags}, nodeId_{nodeId}, branches_{branches},
 	 oldParentId_{oldParentId}, newParentId_{newParentId},
 	 oldLabel_{oldLabel}, newLabel_{newLabel},
 	 oldType_{oldType}, newType_{newType},
@@ -47,7 +47,7 @@ MergeChange::MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateF
 	Q_ASSERT(typeOrValueChange != labelOrNonStationaryChange);
 }
 
-QList<MergeChange*> MergeChange::changesFromDiffChange(ChangeDescription& changeFromDiff)
+QList<MergeChange*> MergeChange::changesFromDiffChange(ChangeDescription& changeFromDiff, Branch branch)
 {
 	QList<MergeChange*> result;
 
@@ -55,7 +55,7 @@ QList<MergeChange*> MergeChange::changesFromDiffChange(ChangeDescription& change
 	if (changeFromDiff.type() != ChangeType::Stationary || changeFromDiff.hasFlags(ChangeDescription::Label))
 	{
 		auto newFlags = changeFromDiff.flags() &  ChangeDescription::Label;
-		result.append( new MergeChange{changeFromDiff.type(), newFlags, changeFromDiff.nodeId(),
+		result.append( new MergeChange{changeFromDiff.type(), newFlags, changeFromDiff.nodeId(), branch,
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->parentId() : Model::NodeIdType{},
 							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->parentId() : Model::NodeIdType{},
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->label() : QString{},
@@ -66,7 +66,7 @@ QList<MergeChange*> MergeChange::changesFromDiffChange(ChangeDescription& change
 	if (changeFromDiff.hasFlags(ChangeDescription::Value) || changeFromDiff.hasFlags(ChangeDescription::Type))
 	{
 		auto newFlags = changeFromDiff.flags() & (ChangeDescription::Value | ChangeDescription::Type);
-		result.append( new MergeChange{ChangeType::Stationary, newFlags, changeFromDiff.nodeId(),
+		result.append( new MergeChange{ChangeType::Stationary, newFlags, changeFromDiff.nodeId(), branch,
 							{}, {}, {}, {},
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->type() : QString{},
 							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->type() : QString{},
