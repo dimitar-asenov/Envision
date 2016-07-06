@@ -2,14 +2,36 @@
 <style prototypes="item/Item/default">
 	<shape prototypes="shape/Box/default">
 		Box
-		<cornerType>2</cornerType>
-		<cornerRadius>2</cornerRadius>
+		<outline>
+			<style>0</style>
+		</outline>
+		<cornerRadius>3</cornerRadius>
+		<cornerType>0</cornerType>
+		<backgroundBrush>
+			<style>1</style>
+			<color>#3B6399</color>
+		</backgroundBrush>
 	</shape>
 	<layout prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
 		<alignment>1</alignment>
 	</layout>
-	<text prototypes="item/Text/default" />
-	<description prototypes="item/Text/darkGrey" />	
+	<text prototypes="item/Text/default">
+		<pen>
+			<color>#FFCA66</color>
+		</pen>
+		<font>
+			<weight>99</weight>
+		</font>
+	</text>
+	<description prototypes="item/Text/default">
+		<pen>
+			<color>#BDD0E9</color>
+		</pen>
+		<font>
+			<size>12</size>
+		</font>
+	</description>
+	
 	<wholeItemCursor>true</wholeItemCursor>
 </style>

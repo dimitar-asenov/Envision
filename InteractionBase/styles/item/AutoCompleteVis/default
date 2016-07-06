@@ -2,21 +2,21 @@
 <style prototypes="item/Item/default">
 	<shape prototypes="shape/Box/default">
 		Box
+		<outline>
+			<width>1</width>
+			<color>white</color>
+		</outline>
+		<cornerRadius>5</cornerRadius>
+		<cornerType>0</cornerType>
 		<backgroundBrush>
-			<gradient>
-				<stopPoints>
-					<e1>
-						<first>1.0</first>
-						<second>#ff9632</second>
-					</e1>	
-				</stopPoints>
-			</gradient>
+			<style>1</style>
+			<color>#204F90</color>
 		</backgroundBrush>
 	</shape>
 	<layout prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
 		<alignment>1</alignment>
-		<spaceBetweenElements>1</spaceBetweenElements>
+		<spaceBetweenElements>2</spaceBetweenElements>
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
