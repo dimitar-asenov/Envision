@@ -479,7 +479,7 @@ QString DiffManager::createHTMLCommitInfo(const FilePersistence::GitRepository* 
 	return commitMetaData.message_.replace("\n", "<br/>") + (messageEndsInNewline ? "<br/>" : "<br/><br/>")
 			+ "<font color='gray'>" + commitMetaData.author_.name_ + "</font><br/>"
 			+ "<font color='gray'>" + commitMetaData.dateTime_.toString("dd.MM.yyyy hh:mm") + "</font><br/>"
-			+ "<font color='gray'>" + commitMetaData.sha1_ + "</font>";
+			+ "<font color='gray'>" + commitMetaData.sha1_.left(15) + "</font>";
 }
 
 void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString> versions)
