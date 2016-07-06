@@ -41,13 +41,20 @@ class VISUALIZATIONBASE_API MessageOverlay : public Super<Overlay<DeclarativeIte
 	ITEM_COMMON(MessageOverlay)
 
 	public:
+		enum Position {TopLeft, TopRight, BottomLeft, BottomRight};
+
 		using SyncFunction = std::function<QString (MessageOverlay* self)>;
-		MessageOverlay(Item* associatedItem, const StyleType* style = itemStyles().get());
-		MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style = itemStyles().get());
+		MessageOverlay(Item* associatedItem, const StyleType* style = itemStyles().get(), bool ignoresScaling = false);
+		MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style = itemStyles().get(),
+							bool ignoresScaling = false);
 
 		static void initializeForms();
 
 		Item*& content();
+
+		void updateOffsetItemLocal(QPointF scenePos);
+
+		void positionRelativeToAssociatedItem(Position position);
 
 	protected:
 		virtual void determineChildren() override;
@@ -59,7 +66,11 @@ class VISUALIZATIONBASE_API MessageOverlay : public Super<Overlay<DeclarativeIte
 		Text* message_{};
 		Item* content_{};
 		SyncFunction syncFunction_{};
-		bool positionSet_{};
+		QPointF offsetItemLocal_;
+		QRectF associatedItemSceneBoundingRect_;
+		bool ignoresScaling_{};
+		bool needsPositioning_{};
+		Position position_{TopLeft};
 };
 
 inline Item*& MessageOverlay::content() { return content_; }

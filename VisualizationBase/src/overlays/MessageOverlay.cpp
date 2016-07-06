@@ -32,11 +32,14 @@
 #include "../items/TextStyle.h"
 #include "../declarative/DeclarativeItem.hpp"
 
+#include "../VisualizationManager.h"
+
 namespace Visualization {
 
 DEFINE_ITEM_COMMON(MessageOverlay, "item")
 
-MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}
+MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style, bool ignoresScaling)
+	: Super{{associatedItem}, style}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 
@@ -50,12 +53,22 @@ MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : S
 			return true;
 		});
 	}
+	offsetItemLocal_ = QPoint{0, associatedItem->heightInLocal()};
+	associatedItemSceneBoundingRect_ = associatedItem->sceneBoundingRect();
+	ignoresScaling_ = ignoresScaling;
 }
 
-MessageOverlay::MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style)
-	: MessageOverlay{associatedItem, style}
+MessageOverlay::MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style,
+										 bool ignoresScaling)
+	: MessageOverlay{associatedItem, style, ignoresScaling}
 {
 	 syncFunction_ = syncFunction;
+}
+
+void MessageOverlay::positionRelativeToAssociatedItem(Position position)
+{
+	needsPositioning_ = true;
+	position_ = position;
 }
 
 void MessageOverlay::determineChildren()
@@ -71,13 +84,49 @@ void MessageOverlay::determineChildren()
 void MessageOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
-	// TODO: if there are multiple messages for the same node it migth be better to place it different.
-	// It seems good to have it below, having it on the right side seems weird.
-	if (!positionSet_)
+
+	if (ignoresScaling_)
+		setScale(1.0/Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor());
+
+	if (needsPositioning_)
 	{
-		setPos(associatedItem()->mapToScene(0, associatedItem()->heightInLocal()));
-		positionSet_ = true;
+		int height = heightInScene();
+
+		switch (position_)
+		{
+			case TopRight:
+				offsetItemLocal_ = QPoint{associatedItem()->widthInScene() - widthInScene(), -height};
+				break;
+			case TopLeft:
+				offsetItemLocal_ = QPoint{0, -height};
+				break;
+			case BottomRight:
+				offsetItemLocal_ = QPoint{associatedItem()->widthInScene() - widthInScene(), associatedItem()->heightInScene()};
+				break;
+			case BottomLeft:
+				offsetItemLocal_ = QPoint{0, associatedItem()->heightInScene()};
+				break;
+		}
+
+		needsPositioning_ = false;
 	}
+
+
+	qreal scalingX = 1.0;
+	qreal scalingY = 1.0;
+
+	QRectF currentBoundingRect = MessageOverlay::associatedItem()->sceneBoundingRect();
+
+	// if the item size has changed, compute scaling to update coordinates in item
+	if (associatedItemSceneBoundingRect_ != currentBoundingRect)
+	{
+		scalingX = qreal(currentBoundingRect.width()) / qreal(associatedItemSceneBoundingRect_.width());
+		scalingY = qreal(currentBoundingRect.height()) / qreal(associatedItemSceneBoundingRect_.height());
+	}
+
+	setPos(associatedItem()->mapToScene({offsetItemLocal_.x() * scalingX, offsetItemLocal_.y() * scalingY}));
+
+
 }
 
 void MessageOverlay::initializeForms()
@@ -94,6 +143,13 @@ void MessageOverlay::initializeForms()
 			->put(0, 1, item<Item>(&I::content_));
 
 	addForm(container);
+}
+
+void MessageOverlay::updateOffsetItemLocal(QPointF scenePos)
+{
+
+	offsetItemLocal_ = MessageOverlay::associatedItem()->mapFromScene(scenePos);
+	associatedItemSceneBoundingRect_ = MessageOverlay::associatedItem()->sceneBoundingRect();
 }
 
 }

@@ -131,7 +131,8 @@ void DiffManager::clear()
 }
 
 void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup,
-														  VersionControlUI::DiffComparisonPair* diffComparisonPair)
+														  VersionControlUI::DiffComparisonPair* diffComparisonPair,
+														  Visualization::MessageOverlay::Position position)
 {
 	if (nameChanges_.isEmpty())
 		return;
@@ -167,34 +168,34 @@ void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentView
 
 	// if there is a message to show add header
 	if (!message.isEmpty())
-		message = message.prepend("The following objects have been renamed:<br/>");
+		message = message.prepend("The following objects <br/> have been renamed:<br/>");
 	else
 		return;
 
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [currentViewItem, message, diffComparisonPair]() {
-		auto overlay = new Visualization::MessageOverlay{currentViewItem,
-				[currentViewItem, message, diffComparisonPair](Visualization::MessageOverlay* overlay)
+								  [currentViewItem, message, diffComparisonPair, position]() {
+		Visualization::Item* targetItem = nullptr;
+
+		if (diffComparisonPair)
 		{
-			if (diffComparisonPair)
-			{
-				auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(currentViewItem->
-																										 findVisualizationOf(diffComparisonPair));
-				overlay->setPos(vDiffComparisonPair->scenePos().x(),
-									 vDiffComparisonPair->scenePos().y() + vDiffComparisonPair->heightInScene());
+			auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(currentViewItem->
+																									 findVisualizationOf(diffComparisonPair));
+			targetItem = vDiffComparisonPair;
+		}
 
-				overlay->setScale(vDiffComparisonPair->scaleFactor());
-			}
-			else
-				overlay->setPos(currentViewItem->scenePos().x(),
-									 currentViewItem->scenePos().y() + currentViewItem->heightInScene());
+		if (!targetItem)
+			targetItem = currentViewItem;
 
-
+		auto overlay = new Visualization::MessageOverlay{targetItem,
+				[message](Visualization::MessageOverlay*)
+		{
 			return message;
-		}, Visualization::MessageOverlay::itemStyles().get("info")};
+		}, Visualization::MessageOverlay::itemStyles().get("info"), true};
 
-		currentViewItem->addOverlay(overlay, "NameChangeInfoOverlay");
+		targetItem->addOverlay(overlay, "NameChangeInfoOverlay");
+		overlay->positionRelativeToAssociatedItem(position);
 	});
+
 
 }
 
@@ -447,22 +448,16 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 		createOverlaysForChanges(diffViewItem, changesWithNodes);
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		auto overlay = new Visualization::MessageOverlay{diffViewItem,
-				[diffViewItem, message](Visualization::MessageOverlay* overlay)
+				[diffViewItem, message](Visualization::MessageOverlay*)
 		{
-			auto diffViewItemPos = diffViewItem->scenePos();
-			overlay->setPos(diffViewItemPos.x(),
-								 diffViewItemPos.y() - overlay->heightInScene());
-			auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(diffViewItem->findVisualizationOf
-																					(diffViewItem->nodeAt(Visualization::MajorMinorIndex{})));
-			overlay->setScale(vDiffComparisonPair->scaleFactor());
 			return message;
-		}, Visualization::MessageOverlay::itemStyles().get("info")};
-
+		}, Visualization::MessageOverlay::itemStyles().get("info"), true};
 
 		diffViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
+		overlay->positionRelativeToAssociatedItem(Visualization::MessageOverlay::TopLeft);
 	});
 
-	showNameChangeInformation(diffViewItem, diffSetup, diffComparisonPairs.last());
+	showNameChangeInformation(diffViewItem, diffSetup);
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
@@ -479,7 +474,7 @@ QString DiffManager::createHTMLCommitInfo(const FilePersistence::GitRepository* 
 	return commitMetaData.message_.replace("\n", "<br/>") + (messageEndsInNewline ? "<br/>" : "<br/><br/>")
 			+ "<font color='gray'>" + commitMetaData.author_.name_ + "</font><br/>"
 			+ "<font color='gray'>" + commitMetaData.dateTime_.toString("dd.MM.yyyy hh:mm") + "</font><br/>"
-			+ "<font color='gray'>" + commitMetaData.sha1_ + "</font>";
+			+ "<font color='gray'>" + commitMetaData.sha1_.left(15) + "</font>";
 }
 
 void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString> versions)
@@ -543,7 +538,8 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 			diffComparisonPairInfo.append({diffComparisonPairs.first(), message});
 
 		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty())
-			showNameChangeInformation(historyViewItem, diffSetup, diffComparisonPairs.last());
+			showNameChangeInformation(historyViewItem, diffSetup, diffComparisonPairs.last(),
+											  Visualization::MessageOverlay::BottomLeft);
 
 		// create visualization for changes
 		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
@@ -557,17 +553,16 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 								  [historyViewItem, diffComparisonPairInfo]() {
 		for (auto info : diffComparisonPairInfo)
 		{
-			auto overlay = new Visualization::MessageOverlay{historyViewItem, [historyViewItem, info]
-					(Visualization::MessageOverlay* overlay)
+			auto vDiffComparisonPair =
+					DCast<VersionControlUI::VDiffComparisonPair>(historyViewItem->findVisualizationOf(info.first));
+
+			auto overlay = new Visualization::MessageOverlay{vDiffComparisonPair, [historyViewItem, info]
+					(Visualization::MessageOverlay*)
 			{
-				auto vDiffComparisonPair =
-						DCast<VersionControlUI::VDiffComparisonPair>(historyViewItem->findVisualizationOf(info.first));
-				overlay->setPos(vDiffComparisonPair->scenePos().x(),
-									 vDiffComparisonPair->scenePos().y()-overlay->heightInScene());
-				overlay->setScale(vDiffComparisonPair->scaleFactor());
 				return info.second;
-			}, Visualization::MessageOverlay::itemStyles().get("info") };
-			historyViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
+			}, Visualization::MessageOverlay::itemStyles().get("info"), true};
+			vDiffComparisonPair->addOverlay(overlay, "DiffInfoMessageOverlay");
+			overlay->positionRelativeToAssociatedItem(Visualization::MessageOverlay::TopLeft);
 		}
 	});
 

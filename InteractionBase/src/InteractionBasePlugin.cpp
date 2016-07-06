@@ -38,6 +38,7 @@
 #include "handlers/HViewItem.h"
 #include "handlers/HWebBrowserItem.h"
 #include "handlers/HArrowHandler.h"
+#include "handlers/HMessageOverlay.h"
 
 #include "vis/TextAndDescription.h"
 #include "vis/VViewSwitcherEntry.h"
@@ -106,7 +107,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::VInfoNode::setDefaultClassHandler(HInfoNode::instance());
 	Visualization::ViewItem::setDefaultClassHandler(HViewItem::instance());
 	Visualization::WebBrowserItem::setDefaultClassHandler(HWebBrowserItem::instance());
-	Visualization::MessageOverlay::setDefaultClassHandler(HMovableItem::instance());
+	Visualization::MessageOverlay::setDefaultClassHandler(HMessageOverlay::instance());
 	Visualization::ArrowOverlay::setDefaultClassHandler(HArrowHandler::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
 
