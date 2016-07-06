@@ -187,6 +187,8 @@ add_library(InteractionBase SHARED
 	src/handlers/HWebBrowserItem.cpp
 	src/handlers/HMovableItem.h
 	src/handlers/HMovableItem.cpp
+	src/handlers/HMessageOverlay.h
+	src/handlers/HMessageOverlay.cpp
 	src/handlers/HArrowHandler.cpp
 )
 

@@ -34,6 +34,8 @@
 #include "FilePersistence/src/version_control/ChangeDescription.h"
 #include "FilePersistence/src/version_control/Diff.h"
 
+#include "VisualizationBase/src/overlays/MessageOverlay.h"
+
 
 namespace FilePersistence
 {
@@ -150,7 +152,9 @@ class VERSIONCONTROLUI_API DiffManager
 		bool processNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup);
 
 		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup,
-												 VersionControlUI::DiffComparisonPair* diffComparisonPair);
+												 VersionControlUI::DiffComparisonPair* diffComparisonPair = nullptr,
+												 Visualization::MessageOverlay::Position position =
+																			Visualization::MessageOverlay::TopRight);
 
 		bool areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newNode,
 																					const DiffSetup& diffSetup);
