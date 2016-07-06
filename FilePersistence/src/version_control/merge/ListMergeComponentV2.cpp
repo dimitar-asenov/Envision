@@ -25,6 +25,13 @@
 ***********************************************************************************************************************/
 
 #include "ListMergeComponentV2.h"
+#include "../../filepersistence_api.h"
+#include "MergeChange.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
+#include "../Diff3Parse.h"
+#include "../../simple/GenericNode.h"
+#include "../../simple/GenericTree.h"
 
 namespace FilePersistence {
 
@@ -50,7 +57,22 @@ bool ListMergeComponentV2::isOrderedList(const QString& type)
 	return !isUnorderedList(type) && isList(type);
 }
 
-void ListMergeComponentV2::run(MergeData& /*mergeData*/)
-{}
+void ListMergeComponentV2::run(MergeData& mergeData)
+{
+	//	applyNonConflictingChanges(mergeData);
+	// Temporarily remove update changes(Conflicts)
+	auto listsToMerge = computeListsToMerge(mergeData);
+	for (auto listContainerId : listsToMerge)
+	{
+		auto map = getAdjustedIndices(listContainerId, mergeData);
+		adjustCG(map, mergeData);
+		//	applyChanges(mergeData);
+		// removeHoles();
+		// Restore Update Changes(Conflicts)
+		// Report Conflicts
+	}
+
+}
+
 
 }

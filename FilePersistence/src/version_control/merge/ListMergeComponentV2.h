@@ -27,10 +27,11 @@
 #pragma once
 
 #include "../../filepersistence_api.h"
-
+#include "ModelBase/src/persistence/PersistentStore.h"
 #include "MergePipelineComponent.h"
 
 namespace FilePersistence {
+class GenericNode;
 
 class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 {
@@ -40,6 +41,13 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		static bool isList(const QString& type);
 		static bool isUnorderedList(const QString& type);
 		static bool isOrderedList(const QString& type);
+
+		QList<Model::NodeIdType> computeListsToMerge(MergeData& mergeData);
+		QMultiHash<Model::NodeIdType, QPair<QString, QString>>
+			getAdjustedIndices(Model::NodeIdType list, MergeData& mergeData);
+		void adjustCG(QMultiHash<Model::NodeIdType, QPair<QString, QString>> map, MergeData& mergeData);
+		QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
+
 };
 
 }
