@@ -149,10 +149,20 @@ void DiffManager::showNameChangeInformation(Visualization::ViewItem* currentView
 		if (!areInTargetNodeSubtree(oldNode, newNode, diffSetup))
 			 continue;
 
-		message += DiffComparisonPair::computeObjectPath(oldNode) +
+		auto oldNodeObjectPathList = DiffComparisonPair::computeObjectPath(oldNode).split(".");
+		auto newNodeObjectPathList = DiffComparisonPair::computeObjectPath(newNode).split(".");
+
+		// remove project name if it didn't change
+		if (oldNodeObjectPathList.first() == newNodeObjectPathList.first())
+		{
+			oldNodeObjectPathList.removeFirst();
+			newNodeObjectPathList.removeFirst();
+		}
+
+		message += oldNodeObjectPathList.join(".") +
 				// html entity for right arrow
 				"&rarr;"
-				+ DiffComparisonPair::computeObjectPath(newNode) + "<br/>";
+				+ newNodeObjectPathList.join(".") + "<br/>";
 	}
 
 	// if there is a message to show add header
