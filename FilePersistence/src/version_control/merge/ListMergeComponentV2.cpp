@@ -60,15 +60,13 @@ bool ListMergeComponentV2::isOrderedList(const QString& type)
 void ListMergeComponentV2::run(MergeData& mergeData)
 {
 	//	applyNonConflictingChanges(mergeData);
-	// Temporarily remove update changes(Conflicts)
 	auto listsToMerge = computeListsToMerge(mergeData);
 	for (auto listContainerId : listsToMerge)
 	{
 		auto map = getAdjustedIndices(listContainerId, mergeData);
 		adjustCG(map, mergeData);
 		//	applyChanges(mergeData);
-		// removeHoles();
-		// Restore Update Changes(Conflicts)
+		// removeHoles(mergeData);
 		// Report Conflicts
 	}
 
