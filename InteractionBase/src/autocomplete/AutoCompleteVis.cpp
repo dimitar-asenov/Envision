@@ -42,6 +42,7 @@ DEFINE_ITEM_COMMON(AutoCompleteVis, "item")
 AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const StyleType* style) :
 Super{nullptr, style}, newEntries_{entries}
 {
+	setFlag(ItemIgnoresTransformations);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 	setZValue(LAYER_AUTOCOMPLETE_Z);
@@ -132,8 +133,12 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 		if (DCast<PromptShell>(root))
 			itemToUseForPosition = root;
 
+		qreal multiplier = 1.0;
+		if (itemToUseForPosition->flags() & QGraphicsItem::ItemIgnoresTransformations)
+			multiplier = 1/itemToUseForPosition->scene()->mainViewScalingFactor();
+
 		setPos(itemToUseForPosition->scenePos().toPoint() +
-			QPoint{0, itemToUseForPosition->heightInScene() + style()->distanceToCursor()});
+			QPoint{0, (int)(itemToUseForPosition->heightInScene()*multiplier) + style()->distanceToCursor()});
 	}
 
 	// Set size
