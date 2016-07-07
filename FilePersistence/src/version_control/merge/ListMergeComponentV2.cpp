@@ -26,6 +26,10 @@
 
 #include "ListMergeComponentV2.h"
 
+#include "../Diff3Parse.h"
+#include "../../simple/GenericNode.h"
+#include "../../simple/GenericTree.h"
+
 namespace FilePersistence {
 
 bool ListMergeComponentV2::isList(const QString& type)
@@ -50,7 +54,20 @@ bool ListMergeComponentV2::isOrderedList(const QString& type)
 	return !isUnorderedList(type) && isList(type);
 }
 
-void ListMergeComponentV2::run(MergeData& /*mergeData*/)
-{}
+void ListMergeComponentV2::run(MergeData& mergeData)
+{
+	// applyNonConflictingChanges(mergeData);
+	auto listsToMerge = computeListsToMerge(mergeData);
+	for (auto listContainerId : listsToMerge)
+	{
+		auto map = computeAdjustedIndices(listContainerId, mergeData);
+		adjustCG(listContainerId, map, mergeData);
+		// applyChanges(mergeData);
+		// removeHoles(mergeData);
+		// Report Conflicts
+	}
+
+}
+
 
 }

@@ -29,8 +29,12 @@
 #include "../../filepersistence_api.h"
 
 #include "MergePipelineComponent.h"
+#include "MergeChange.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
+class GenericNode;
 
 class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 {
@@ -40,6 +44,34 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		static bool isList(const QString& type);
 		static bool isUnorderedList(const QString& type);
 		static bool isOrderedList(const QString& type);
+
+	private:
+
+		using IdToIndexMap = QMultiHash<Model::NodeIdType, QPair<QString, MergeChange::Branches>>;
+		/**
+		 * Finds all the lists that we will process in the merge.
+		 *
+		 * Finds the lists having structure changes
+		 * Assumes Insertion/Deletion of whole list does not happen.
+		 */
+		QList<Model::NodeIdType> computeListsToMerge(MergeData& mergeData);
+
+		/**
+		 * Returns the map of new labels(Integral) of list
+		 * so that all labels are unique
+		 */
+		IdToIndexMap computeAdjustedIndices(Model::NodeIdType list, MergeData& mergeData);
+
+		/**
+		 * Adjusts CG according to the new indices returned by computeAdjustedIndices.
+		 */
+		void adjustCG(Model::NodeIdType list, IdToIndexMap map, MergeData& mergeData);
+
+		/**
+		 * Returns list of nodeIds sorted by labels that is used for computing chunks
+		 */
+		QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
+
 };
 
 }
