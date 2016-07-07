@@ -149,8 +149,7 @@ class VERSIONCONTROLUI_API DiffManager
 
 		bool processNameChange(Model::Node* oldNode, Model::Node* newNode, const DiffSetup& diffSetup);
 
-		void showNameChangeInformation(Visualization::ViewItem* currentViewItem, const DiffSetup& diffSetup,
-												 VersionControlUI::DiffComparisonPair* diffComparisonPair);
+		QString computeNameChangeInformation(const DiffSetup& diffSetup);
 
 		bool areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newNode,
 																					const DiffSetup& diffSetup);

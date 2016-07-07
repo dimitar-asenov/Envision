@@ -42,8 +42,9 @@ class VISUALIZATIONBASE_API MessageOverlay : public Super<Overlay<DeclarativeIte
 
 	public:
 		using SyncFunction = std::function<QString (MessageOverlay* self)>;
-		MessageOverlay(Item* associatedItem, const StyleType* style = itemStyles().get());
-		MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style = itemStyles().get());
+		MessageOverlay(Item* associatedItem, const StyleType* style = itemStyles().get(), bool ignoresScaling = false);
+		MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style = itemStyles().get(),
+							bool ignoresScaling = false);
 
 		static void initializeForms();
 
@@ -60,6 +61,7 @@ class VISUALIZATIONBASE_API MessageOverlay : public Super<Overlay<DeclarativeIte
 		Item* content_{};
 		SyncFunction syncFunction_{};
 		bool positionSet_{};
+		bool ignoresScaling_{};
 };
 
 inline Item*& MessageOverlay::content() { return content_; }
