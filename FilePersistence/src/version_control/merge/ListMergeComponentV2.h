@@ -49,21 +49,28 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 
 		using IdToIndexMap = QMultiHash<Model::NodeIdType, QPair<QString, MergeChange::Branch>>;
 		/**
-		 * computeListsToMerge finds the lists having structure changes &
-		 * assumes Insertion/Deletion of whole list does not happen
+		 * Finds all the lists that we will process in the merge.
+		 *
+		 * Finds the lists having structure changes
+		 * Assumes Insertion/Deletion of whole list does not happen.
 		 */
 		QList<Model::NodeIdType> computeListsToMerge(MergeData& mergeData);
 
 		/**
-		 * getAdjustedIndices returns the map of new labels(Integral) of list
-		 * so that labels do not collide with each other
+		 * Returns the map of new labels(Integral) of list
+		 * so that all labels are unique
 		 */
-		IdToIndexMap getAdjustedIndices(Model::NodeIdType list, MergeData& mergeData);
+		IdToIndexMap computeAdjustedIndices(Model::NodeIdType list, MergeData& mergeData);
 
 		/**
-		 * adjustCG adjusts CG according to the new indices returned by getAdjustedIndices
+		 * Adjusts CG according to the new indices returned by computeAdjustedIndices.
 		 */
 		void adjustCG(Model::NodeIdType list, IdToIndexMap map, MergeData& mergeData);
+
+		/**
+		 * Returns list of nodeIds sorted by labels that is used for computing chunks
+		 */
+		QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
 
 };
 
