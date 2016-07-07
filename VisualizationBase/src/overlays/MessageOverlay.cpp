@@ -31,12 +31,14 @@
 #include "../items/Static.h"
 #include "../items/TextStyle.h"
 #include "../declarative/DeclarativeItem.hpp"
+#include "../VisualizationManager.h"
 
 namespace Visualization {
 
 DEFINE_ITEM_COMMON(MessageOverlay, "item")
 
-MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}
+MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style, bool ignoresScaling) :
+	Super{{associatedItem}, style}, ignoresScaling_{ignoresScaling}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 
@@ -52,8 +54,9 @@ MessageOverlay::MessageOverlay(Item* associatedItem, const StyleType* style) : S
 	}
 }
 
-MessageOverlay::MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style)
-	: MessageOverlay{associatedItem, style}
+MessageOverlay::MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style,
+										 bool ignoresScaling)
+	: MessageOverlay{associatedItem, style, ignoresScaling}
 {
 	 syncFunction_ = syncFunction;
 }
@@ -70,6 +73,9 @@ void MessageOverlay::determineChildren()
 
 void MessageOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
+	if (ignoresScaling_)
+		setScale(1.0/Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor());
+
 	Super::updateGeometry(availableWidth, availableHeight);
 	// TODO: if there are multiple messages for the same node it migth be better to place it different.
 	// It seems good to have it below, having it on the right side seems weird.
