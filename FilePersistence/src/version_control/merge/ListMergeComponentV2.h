@@ -47,7 +47,7 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 
 	private:
 
-		using IdToIndexMap = QMultiHash<Model::NodeIdType, QPair<QString, MergeChange::Branch>>;
+		using IdToIndexMap = QMultiHash<Model::NodeIdType, QPair<QString, MergeChange::Branches>>;
 		/**
 		 * Finds all the lists that we will process in the merge.
 		 *
