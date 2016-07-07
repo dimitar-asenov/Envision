@@ -20,6 +20,6 @@
 		<symbol>no node</symbol>
 	</nodeNotFoundIcon>
 	<dummyIcon prototypes="item/Symbol/keyword">
-		<symbol>no changes to show</symbol>
+		<symbol>all changes have been summarized</symbol>
 	</dummyIcon>
 </style>
