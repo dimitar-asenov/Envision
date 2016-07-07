@@ -25,10 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ListMergeComponentV2.h"
-#include "../../filepersistence_api.h"
-#include "MergeChange.h"
 
-#include "ModelBase/src/persistence/PersistentStore.h"
 #include "../Diff3Parse.h"
 #include "../../simple/GenericNode.h"
 #include "../../simple/GenericTree.h"
@@ -64,7 +61,7 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 	for (auto listContainerId : listsToMerge)
 	{
 		auto map = getAdjustedIndices(listContainerId, mergeData);
-		adjustCG(map, mergeData);
+		adjustCG(listContainerId, map, mergeData);
 		//	applyChanges(mergeData);
 		// removeHoles(mergeData);
 		// Report Conflicts

@@ -27,8 +27,11 @@
 #pragma once
 
 #include "../../filepersistence_api.h"
-#include "ModelBase/src/persistence/PersistentStore.h"
+
 #include "MergePipelineComponent.h"
+#include "MergeChange.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 class GenericNode;
@@ -42,11 +45,25 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		static bool isUnorderedList(const QString& type);
 		static bool isOrderedList(const QString& type);
 
+	private:
+
+		using IdToIndexMap = QMultiHash<Model::NodeIdType, QPair<QString, MergeChange::Branch>>;
+		/**
+		 * computeListsToMerge finds the lists having structure changes &
+		 * assumes Insertion/Deletion of whole list does not happen
+		 */
 		QList<Model::NodeIdType> computeListsToMerge(MergeData& mergeData);
-		QMultiHash<Model::NodeIdType, QPair<QString, QString>>
-			getAdjustedIndices(Model::NodeIdType list, MergeData& mergeData);
-		void adjustCG(QMultiHash<Model::NodeIdType, QPair<QString, QString>> map, MergeData& mergeData);
-		QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
+
+		/**
+		 * getAdjustedIndices returns the map of new labels(Integral) of list
+		 * so that labels do not collide with each other
+		 */
+		IdToIndexMap getAdjustedIndices(Model::NodeIdType list, MergeData& mergeData);
+
+		/**
+		 * adjustCG adjusts CG according to the new indices returned by getAdjustedIndices
+		 */
+		void adjustCG(Model::NodeIdType list, IdToIndexMap map, MergeData& mergeData);
 
 };
 
