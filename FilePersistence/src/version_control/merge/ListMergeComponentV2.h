@@ -31,6 +31,8 @@
 #include "MergePipelineComponent.h"
 #include "MergeChange.h"
 
+#include "../Diff3Parse.h"
+
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
@@ -51,24 +53,29 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		/**
 		 * Finds all the lists that we will process in the merge.
 		 *
-		 * Finds the lists having structure changes
+		 * Finds the lists having structure changes.
 		 * Assumes Insertion/Deletion of whole list does not happen.
 		 */
 		QList<Model::NodeIdType> computeListsToMerge(MergeData& mergeData);
 
 		/**
-		 * Returns the map of new labels(Integral) of list
-		 * so that all labels are unique
+		 * Returns the map of new labels(Integral) of list.
+		 * so that all labels are unique.
 		 */
-		IdToIndexMap computeAdjustedIndices(Model::NodeIdType list, MergeData& mergeData);
+		IdToIndexMap computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData);
 
 		/**
 		 * Adjusts CG according to the new indices returned by computeAdjustedIndices.
 		 */
-		void adjustCG(Model::NodeIdType list, IdToIndexMap map, MergeData& mergeData);
+		void adjustCG(Model::NodeIdType listId, IdToIndexMap map, MergeData& mergeData);
 
 		/**
-		 * Returns list of nodeIds sorted by labels that is used for computing chunks
+		*	Returns chunks for the given list.
+		*/
+		QList<Chunk*> listToChunks(Model::NodeIdType listId, MergeData& mergeData);
+
+		/**
+		 * Returns list of nodeIds sorted by labels that is used for computing chunks.
 		 */
 		QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
 

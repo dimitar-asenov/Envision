@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ListMergeComponentV2.h"
+#include "MergeData.h"
 
 #include "../Diff3Parse.h"
 #include "../../simple/GenericNode.h"
@@ -58,16 +59,58 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 {
 	// applyNonConflictingChanges(mergeData);
 	auto listsToMerge = computeListsToMerge(mergeData);
-	for (auto listContainerId : listsToMerge)
+	for (auto listId : listsToMerge)
 	{
-		auto map = computeAdjustedIndices(listContainerId, mergeData);
-		adjustCG(listContainerId, map, mergeData);
+		auto map = computeAdjustedIndices(listId, mergeData);
+		adjustCG(listId, map, mergeData);
 		// applyChanges(mergeData);
 		// removeHoles(mergeData);
 		// Report Conflicts
 	}
-
 }
 
+ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
+																										  MergeData& mergeData)
+{
+	IdToIndexMap map;
+	auto chunks = listToChunks(listId, mergeData);
+	(void) chunks;
+	return map;
+}
+
+void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/,
+												IdToIndexMap /*map*/, MergeData& /*mergeData*/)
+{}
+
+QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
+{
+	auto idListBase = nodeListToSortedIdList(mergeData.treeBase_->find(listId, true)->children());
+	auto idListA    = nodeListToSortedIdList(mergeData.treeA_->find(listId, true)->children());
+	auto idListB    = nodeListToSortedIdList(mergeData.treeB_->find(listId, true)->children());
+	return Diff3Parse::computeChunks(idListA, idListB, idListBase);
+}
+
+
+QList<Model::NodeIdType> ListMergeComponentV2::nodeListToSortedIdList(const QList<GenericNode*>& list)
+{
+	auto comparator = [](GenericNode* const node1, GenericNode* const node2) -> bool
+	{
+		return node1->label().toInt() < node2->label().toInt();
+	};
+
+	auto localList = list;
+	std::sort(localList.begin(), localList.end(), comparator);
+
+	QList<Model::NodeIdType> idList;
+	int lastIdx = -1;
+	for (auto node : localList)
+	{
+		auto curIdx = node->label().toInt();
+		Q_ASSERT(lastIdx < curIdx);
+		lastIdx = curIdx;
+		idList.append(node->id());
+	}
+	return idList;
+}
 
 }

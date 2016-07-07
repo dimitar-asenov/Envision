@@ -49,6 +49,7 @@ struct FILEPERSISTENCE_API Chunk
 class FILEPERSISTENCE_API Diff3Parse
 {
 	friend class ListMergeComponent;
+	friend class ListMergeComponentV2;
 	private:
 		/**
 		 * Computes stable and unstable chunks. This is what's called a diff3 parse in the paper by Khanna, Kunal,
