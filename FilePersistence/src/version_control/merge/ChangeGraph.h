@@ -58,11 +58,6 @@ class FILEPERSISTENCE_API ChangeGraph
 		 */
 		void insert(QList<MergeChange*> changes, GenericTree* baseTree);
 
-		/**
-		 * Updates the new label of a change, only performing a minimal recomputation of dependencies and conflicts.
-		 */
-		void updateLabel(MergeChange* change, const QString& newLabel);
-
 	private:
 		// The nodes of the graph
 		QList<MergeChange*> changes_;
@@ -92,8 +87,9 @@ class FILEPERSISTENCE_API ChangeGraph
 		void addLabelDependency(MergeChange* change);
 		void addMoveDependency(MergeChange* change, GenericTree* baseTree);
 
-		void removeLabelDependency(MergeChange* change);
-		void removeLabelConflicts(MergeChange* change);
+		void removeLabelOnlyChangesInChildren(Model::NodeIdType parentId);
+		void removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId);
+		void removeLabelConflictsBetweenChildren(Model::NodeIdType parentId);
 };
 
 }

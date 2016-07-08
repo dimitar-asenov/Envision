@@ -344,58 +344,85 @@ void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
 	}
 }
 
-void ChangeGraph::updateLabel(MergeChange* change, const QString& newLabel)
+void ChangeGraph::removeLabelOnlyChangesInChildren(Model::NodeIdType parentId)
 {
-	Q_ASSERT(changes_.contains(change));
-	removeLabelDependency(change);
-	removeLabelConflicts(change);
-
-	change->newLabel_ = newLabel;
-
-	addLabelDependency(change);
-	addLabelConfict(change);
-
-}
-
-void ChangeGraph::removeLabelDependency(MergeChange* change)
-{
-	// remove dependencies on other label change
-	QList<MergeChange*> toRemove;
-	auto it = dependencies_.find(change);
-	while (it != dependencies_.end() && it.key() == change)
+	QList<MergeChange*> labelOnlyChanges;
+	auto it = changesForChildren_.find(parentId);
+	while (it != changesForChildren_.end() && it.key() == parentId)
 	{
-		if (change->nodeId() != it.value()->nodeId() && it.value()->oldParentId() == change->newParentId())
+		if (it.value()->type() == ChangeType::Stationary
+			 && it.value()->updateFlags().testFlag(ChangeDescription::Label))
 		{
-			Q_ASSERT(it.value()->oldLabel() == change->newLabel());
-			toRemove << it.value();
+			Q_ASSERT(!it.value()->updateFlags().testFlag(ChangeDescription::Value));
+			Q_ASSERT(!it.value()->updateFlags().testFlag(ChangeDescription::Type));
+
+			labelOnlyChanges << it.value();
 		}
 		++it;
 	}
 
-	for (auto dependency : toRemove)
+	for (auto changeToRemove : labelOnlyChanges)
 	{
-		auto numRemoved = dependencies_.remove(change, dependency);
-		Q_ASSERT(numRemoved == 1);
+		// Remove this change from the graph
+		changes_.removeOne(changeToRemove);
+		changesForNode_.remove(changeToRemove->nodeId(), changeToRemove);
+		changesForChildren_.remove(changeToRemove->newParentId(), changeToRemove);
+
+		// Remove all conflicts
+		QList<MergeChange*> conflicting = directConflicts_.values(changeToRemove);
+		directConflicts_.remove(changeToRemove);
+		for (auto conflict : conflicting) directConflicts_.remove(conflict, changeToRemove);
+
+		// Remove this change's dependencies
+		dependencies_.remove(changeToRemove);
+
+		// Remove dependencies of other changes on this change
+		// All such changes must have this change's parent as a new parent
+		it = changesForChildren_.find(changeToRemove->newParentId());
+		while (it != changesForChildren_.end() && it.key() == changeToRemove->newParentId())
+		{
+			dependencies_.remove(it.value(), changeToRemove);
+			++it;
+		}
 	}
 }
 
-void ChangeGraph::removeLabelConflicts(MergeChange* change)
+void ChangeGraph::removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId)
 {
-	QList<MergeChange*> toRemove;
-	auto it = directConflicts_.find(change);
-	while (it != directConflicts_.end() && it.key() == change)
+	// Any direct dependencies between children must be label dependencies, so simply remove all of them
+	auto outerIt = changesForChildren_.find(parentId);
+	while (outerIt != changesForChildren_.end() && outerIt.key() == parentId)
 	{
-		if (change->newParentId() == it.value()->newParentId())
-			toRemove.append(it.value());
-		++it;
+		auto innerIt = changesForChildren_.find(parentId);
+		while (innerIt != changesForChildren_.end() && innerIt.key() == parentId)
+		{
+			dependencies_.remove(outerIt.value(), innerIt.value());
+			++innerIt;
+		}
+		++outerIt;
 	}
+}
 
-	for (auto conflict : toRemove)
+void ChangeGraph::removeLabelConflictsBetweenChildren(Model::NodeIdType parentId)
+{
+	// Any direct dependencies between children must be label dependencies, so simply remove all of them
+	auto outerIt = changesForChildren_.find(parentId);
+	while (outerIt != changesForChildren_.end() && outerIt.key() == parentId)
 	{
-		auto numRemoved = directConflicts_.remove(change, conflict);
-		Q_ASSERT(numRemoved == 1);
-		numRemoved = directConflicts_.remove(conflict, change);
-		Q_ASSERT(numRemoved == 1);
+		auto innerIt = changesForChildren_.find(parentId);
+		while (innerIt != changesForChildren_.end() && innerIt.key() == parentId)
+		{
+			if (outerIt.value()->newParentId() == parentId && innerIt.value()->newParentId() == parentId
+				 && outerIt.value()->newLabel() == innerIt.value()->newLabel()
+				 && outerIt.value()->type() != ChangeType::Deletion
+				 && innerIt.value()->type() != ChangeType::Deletion)
+			{
+				directConflicts_.remove(outerIt.value(), innerIt.value());
+				directConflicts_.remove(innerIt.value(), outerIt.value());
+			}
+			++innerIt;
+		}
+		++outerIt;
 	}
 }
 
