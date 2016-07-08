@@ -80,14 +80,14 @@ ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(
 		if (chunk->stable_)
 			for (auto id : chunk->spanBase_)
 			{
-				map.insert(id, qMakePair(QString::number(index), 0));
+				map.insert(id, qMakePair(QString::number(index), MergeChange::None));
 				index++;
 			}
 		else
 		{
 			IdPositionMap temp;	// temp will store the relative positions of elements of unstable chunk
-			fillIndices(chunk->spanBase_, chunk->spanA_, temp, mergeData.treeBase_);
-			fillIndices(chunk->spanBase_, chunk->spanB_, temp, mergeData.treeBase_);
+			fillIndices(chunk->spanBase_, chunk->spanA_, temp, mergeData.treeBase_, MergeChange::BranchA);
+			fillIndices(chunk->spanBase_, chunk->spanB_, temp, mergeData.treeBase_, MergeChange::BranchB);
 			// Sort temp and insert ids to the map
 		}
 	}
@@ -130,7 +130,7 @@ QList<Model::NodeIdType> ListMergeComponentV2::nodeListToSortedIdList(const QLis
 }
 
 void ListMergeComponentV2::fillIndices(const QList<Model::NodeIdType> base, const QList<Model::NodeIdType> version,
-													IdPositionMap& vector, std::shared_ptr<GenericTree> treeBase)
+													IdPositionMap& vector, std::shared_ptr<GenericTree> treeBase, MergeChange::Branches branch)
 {
 	int tempIndex = -1;
 	int pair = 1;
@@ -140,11 +140,11 @@ void ListMergeComponentV2::fillIndices(const QList<Model::NodeIdType> base, cons
 		if (lcs.contains(id))
 		{
 			tempIndex = treeBase->find(id)->label().toInt();
-			vector.append(qMakePair(qMakePair(tempIndex, 0), id));	//Give it index same as base
+			vector.append(qMakePair(qMakePair(tempIndex, 0), qMakePair(id, branch)));	//Give it index same as base
 			pair = 1;
 		}
 		else
-			vector.append(qMakePair(qMakePair(tempIndex, pair++), id));
+			vector.append(qMakePair(qMakePair(tempIndex, pair++), qMakePair(id, branch)));
 	}
 }
 

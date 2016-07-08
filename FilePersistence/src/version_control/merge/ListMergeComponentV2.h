@@ -50,7 +50,7 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 	private:
 
 		using IdToIndexMap = QMultiHash<Model::NodeIdType, QPair<QString, MergeChange::Branches>>;
-		using IdPositionMap = QVector<QPair<QPair<int, int>, Model::NodeIdType>>;
+		using IdPositionMap = QVector<QPair<QPair<int, int>, QPair<Model::NodeIdType, MergeChange::Branches>>>;
 		/**
 		 * Finds all the lists that we will process in the merge.
 		 *
@@ -84,7 +84,7 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		 * Fills the vector with the indices with proper
 		 */
 		void fillIndices(const QList<Model::NodeIdType> base, const QList<Model::NodeIdType> version,
-															IdPositionMap& vector, std::shared_ptr<GenericTree> treeBase);
+								IdPositionMap& vector, std::shared_ptr<GenericTree> treeBase,  MergeChange::Branches branch);
 };
 
 }
