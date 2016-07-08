@@ -88,7 +88,11 @@ ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(
 			QList<IdPosition> idPositions;	// stores the relative positions of elements of unstable chunk
 			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeBase_, MergeChange::BranchA);
 			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeBase_, MergeChange::BranchB);
-			// Sort temp and insert ids to the map
+			std::sort(idPositions.begin(), idPositions.end());	//sort the list according to the labels
+			for (auto idPosition : idPositions){
+				map.insert(idPosition.id, {QString::number(finalIndexInList), idPosition.branch});
+				finalIndexInList++;
+			}
 		}
 	}
 	return map;
