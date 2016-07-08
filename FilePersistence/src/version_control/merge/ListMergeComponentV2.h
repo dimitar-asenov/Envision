@@ -30,13 +30,14 @@
 
 #include "MergePipelineComponent.h"
 #include "MergeChange.h"
-
+#include "ChangeGraph.h"
 #include "../Diff3Parse.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 class GenericNode;
+class ChangeGraph;
 
 class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 {
@@ -49,10 +50,6 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 
 	private:
 
-		struct LabelData{
-				QString label{};
-				MergeChange::Branches branch{};
-		};
 		struct IdPosition{
 				Model::NodeIdType id{};
 				int baseIndex{};
@@ -67,7 +64,6 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 						return baseIndex < other.baseIndex;
 				}
 		};
-		using IdToIndexMap = QMultiHash<Model::NodeIdType, LabelData>;
 		/**
 		 * Finds all the lists that we will process in the merge.
 		 *
@@ -80,12 +76,7 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		 * Returns the map of new labels(Integral) of list.
 		 * so that all labels are unique.
 		 */
-		IdToIndexMap computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData);
-
-		/**
-		 * Adjusts CG according to the new indices returned by computeAdjustedIndices.
-		 */
-		void adjustCG(Model::NodeIdType listId, IdToIndexMap map, MergeData& mergeData);
+		ChangeGraph::IdToLabelMap computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData);
 
 		/**
 		*	Returns chunks for the given list.
