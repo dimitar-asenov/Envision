@@ -41,12 +41,22 @@ class FILEPERSISTENCE_API ChangeGraph
 	public:
 
 		~ChangeGraph();
-		void init(Diff& diffA, Diff& diffB);
+
+		/**
+		 * Adds all changes from both diffs to the change graph.
+		 *
+		 * The \a baseTree tree is the tree which the changes will mutate.
+		 */
+		void init(Diff& diffA, Diff& diffB, GenericTree* baseTree);
 
 		bool hasConflicts() const;
 
-		void insert(MergeChange* change);
-		void insert(QList<MergeChange*> changes);
+		/**
+		 * Inserts the provided changes in the change graph.
+		 *
+		 * This operation will recompute all dependencies. The changes are assumed to modify the \a baseTree.
+		 */
+		void insert(QList<MergeChange*> changes, GenericTree* baseTree);
 
 	private:
 		// The nodes of the graph
@@ -58,17 +68,20 @@ class FILEPERSISTENCE_API ChangeGraph
 
 		// Helper structures to speed up computation
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForNode_;
-		QMultiHash<Model::NodeIdType, MergeChange*> changesForParent_;
+		QMultiHash<Model::NodeIdType, MergeChange*> changesForChildren_;
+
+		void insertSingleChange(MergeChange* change);
 
 		MergeChange* findIdenticalChange(const MergeChange* change) const;
 
-		void addDependencies(MergeChange* change);
 		void addDirectConflicts(MergeChange* change);
-};
 
-inline void ChangeGraph::insert(QList<MergeChange*> changes)
-{
-	for (auto & change : changes) insert(change);
-}
+		void recomputeAllDependencies(GenericTree* baseTree);
+		void recomputeDependenciesForChange(MergeChange* change, GenericTree* baseTree);
+		void addParentPresentDependency(MergeChange* change, GenericTree* baseTree);
+		void addChildrenRemovedDependency(MergeChange* change, GenericTree* baseTree);
+		void addLabelDependency(MergeChange* change, GenericTree* baseTree);
+		void addMoveDependency(MergeChange* change, GenericTree* baseTree);
+};
 
 }

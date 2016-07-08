@@ -27,6 +27,8 @@
 #include "ChangeGraph.h"
 
 #include "../Diff.h"
+#include "../../simple/GenericTree.h"
+#include "../../simple/GenericNode.h"
 
 namespace FilePersistence {
 
@@ -36,13 +38,16 @@ ChangeGraph::~ChangeGraph()
 	changes_.clear();
 }
 
-void ChangeGraph::init(Diff& diffA, Diff& diffB)
+void ChangeGraph::init(Diff& diffA, Diff& diffB, GenericTree* baseTree)
 {
+	QList<MergeChange*> allChanges;
 	for (auto it = diffA.changes().begin(); it != diffA.changes().end(); ++it)
-		insert(MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchA));
+		allChanges << MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchA);
 
 	for (auto it = diffB.changes().begin(); it != diffB.changes().end(); ++it)
-		insert(MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchB));
+		allChanges <<  MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchB);
+
+	insert(allChanges, baseTree);
 }
 
 bool ChangeGraph::hasConflicts() const
@@ -50,19 +55,31 @@ bool ChangeGraph::hasConflicts() const
 	Q_ASSERT(false);
 }
 
-void ChangeGraph::insert(MergeChange* change)
+inline void ChangeGraph::insert(QList<MergeChange*> changes, GenericTree* baseTree)
 {
+	for (auto & change : changes) insertSingleChange(change);
+
+	recomputeAllDependencies(baseTree);
+}
+
+void ChangeGraph::insertSingleChange(MergeChange* change)
+{
+	Q_ASSERT(change);
+
 	if (auto existingChange = findIdenticalChange(change))
 	{
 		existingChange->addBranches(change->branches());
+		delete change;
 		return;
 	}
 
 	addDirectConflicts(change);
-	addDependencies(change);
 
-	// Add changesForNode_ and changesForParent_
-
+	changesForNode_.insert(change->nodeId(), change);
+	if (!change->oldParentId().isNull())
+		changesForChildren_.insert(change->oldParentId(), change);
+	if (!change->newParentId().isNull() && change->newParentId() != change->oldParentId())
+		changesForChildren_.insert(change->newParentId(), change);
 	changes_.append(change);
 }
 
@@ -76,11 +93,6 @@ MergeChange* ChangeGraph::findIdenticalChange(const MergeChange* change) const
 	}
 
 	return nullptr;
-}
-
-void ChangeGraph::addDependencies(MergeChange* /*change*/)
-{
-	Q_ASSERT(false);
 }
 
 
@@ -106,8 +118,8 @@ void ChangeGraph::addDirectConflicts(MergeChange* change)
 	{
 		Q_ASSERT(!change->newParentId().isNull());
 
-		it = changesForParent_.find(change->newParentId());
-		while (it != changesForParent_.end() && it.key() == change->newParentId())
+		it = changesForChildren_.find(change->newParentId());
+		while (it != changesForChildren_.end() && it.key() == change->newParentId())
 		{
 			// If two changes happen to move a node to the same parent, ignore those changes, they were
 			// already covered by the loop above.
@@ -126,8 +138,8 @@ void ChangeGraph::addDirectConflicts(MergeChange* change)
 	// we do not explicitly look for them here.
 	if (change->type() == ChangeType::Deletion)
 	{
-		it = changesForParent_.find(change->nodeId());
-		while (it != changesForParent_.end() && it.key() == change->nodeId())
+		it = changesForChildren_.find(change->nodeId());
+		while (it != changesForChildren_.end() && it.key() == change->nodeId())
 		{
 			if ( (it.value()->type() == ChangeType::Insertion || it.value()->type() == ChangeType::Move)
 				  && it.value()->newParentId() == change->nodeId())
@@ -143,8 +155,8 @@ void ChangeGraph::addDirectConflicts(MergeChange* change)
 	if (change->type() == ChangeType::Move || change->type() == ChangeType::Insertion)
 	{
 		Q_ASSERT(!change->newParentId().isNull());
-		it = changesForParent_.find(change->newParentId());
-		while (it != changesForParent_.end() && it.key() == change->newParentId())
+		it = changesForNode_.find(change->newParentId());
+		while (it != changesForNode_.end() && it.key() == change->newParentId())
 		{
 			if ( it.value()->type() == ChangeType::Deletion)
 			{
@@ -152,6 +164,169 @@ void ChangeGraph::addDirectConflicts(MergeChange* change)
 				directConflicts_.insert(it.value(), change);
 			}
 			++it;
+		}
+	}
+}
+
+void ChangeGraph::recomputeAllDependencies(GenericTree* baseTree)
+{
+	dependencies_.clear();
+
+	for (auto change : changes_)
+		recomputeDependenciesForChange(change, baseTree);
+}
+
+
+void ChangeGraph::recomputeDependenciesForChange(MergeChange* change, GenericTree* baseTree)
+{
+	addParentPresentDependency(change, baseTree);
+	addChildrenRemovedDependency(change, baseTree);
+	addLabelDependency(change, baseTree);
+	addMoveDependency(change, baseTree);
+}
+
+
+void ChangeGraph::addParentPresentDependency(MergeChange* change, GenericTree* baseTree)
+{
+	// Some changes require that the parent node must exist
+	// If it is not already in base, find the change that introduces it and depend on it
+	if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
+	{
+		Q_ASSERT(!change->newParentId().isNull());
+		bool existsInBase = baseTree->find(change->newParentId(), true);
+		if (!existsInBase)
+		{
+			// There must be an insertion change introducing this node. Add a dependency on it.
+			bool parentInsertionChangeFound = false;
+			auto it = changesForNode_.find(change->newParentId());
+			while (it != changesForNode_.end() && it.key() == change->newParentId())
+			{
+				if (it.value()->type() == ChangeType::Insertion)
+				{
+					dependencies_.insert(change, it.value());
+					parentInsertionChangeFound = true;
+				}
+				++it;
+			}
+			Q_ASSERT(parentInsertionChangeFound);
+		}
+	}
+}
+
+void ChangeGraph::addChildrenRemovedDependency(MergeChange* change, GenericTree* baseTree)
+{
+	// A delete change requires that the node has no children left.
+	// Such a change must depend on all changes that delete or move children out.
+	if (change->type() == ChangeType::Deletion)
+	{
+		auto baseNode = baseTree->find(change->nodeId(), true);
+		Q_ASSERT(baseNode);
+		for (auto child : baseNode->children())
+		{
+			bool changeFound = false;
+			auto it = changesForNode_.find(child->id());
+			while (it != changesForNode_.end() && it.key() == child->id())
+			{
+				if (it.value()->type() == ChangeType::Deletion
+					 || (it.value()->type() == ChangeType::Move && it.value()->oldParentId() == change->nodeId()))
+				{
+					dependencies_.insert(change, it.value());
+					changeFound = true;
+				}
+				++it;
+			}
+			Q_ASSERT(changeFound);
+		}
+	}
+}
+
+void ChangeGraph::addLabelDependency(MergeChange* change, GenericTree* baseTree)
+{
+	// Labels must be unique. All changes that introduce new labels must depend on other changes
+	// that change the existing old label.
+	if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move
+		 || change->updateFlags().testFlag(ChangeDescription::Label))
+	{
+		Q_ASSERT(!change->newParentId().isNull());
+		auto baseNode = baseTree->find(change->newParentId(), true);
+		Q_ASSERT(baseNode);
+
+		bool clashingLabelFoundInBase = baseNode->child(change->newLabel());
+
+		bool changeFound = false;
+		auto it = changesForChildren_.find(change->newParentId());
+		while (it != changesForChildren_.end() && it.key() == change->newParentId())
+		{
+			if (it.value()->oldLabel() == change->newLabel() &&
+					(	it.value()->updateFlags().testFlag(ChangeDescription::Label)
+						|| it.value()->type() == ChangeType::Deletion
+						|| (it.value()->type() == ChangeType::Move && it.value()->oldParentId() == change->nodeId())
+					)
+				 )
+			{
+				dependencies_.insert(change, it.value());
+				changeFound = true;
+			}
+			++it;
+		}
+		Q_ASSERT(changeFound == clashingLabelFoundInBase);
+	}
+}
+
+
+void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
+{
+	// In order to detect cycles each move change depends on the first move change that moves an ancestor of it.
+	if (change->type() != ChangeType::Move)
+		return;
+
+	// This change might move some tree into a newly inserted tree. Traverse this newly inserted tree first.
+	auto ancestorId = change->newParentId();
+	bool ancestorIsInserted = true;
+
+	while (ancestorIsInserted)
+	{
+		ancestorIsInserted = false;
+		auto it = changesForNode_.find(ancestorId);
+		while (it != changesForNode_.end() && it.key() == ancestorId)
+		{
+			if (it.value()->type() == ChangeType::Insertion)
+			{
+				ancestorId = it.value()->newParentId();
+				ancestorIsInserted = true;
+				break;
+			}
+			else
+				++it;
+		}
+	}
+
+	// At this point we have an ancestor ID which belongs to a node in the baseTree.
+	// We should traverse the ancestor chain until we reach the root node or until we reach a moved node
+	Q_ASSERT(!ancestorId.isNull());
+	while (!ancestorId.isNull())
+	{
+		bool dependencyFound = false;
+		auto it = changesForNode_.find(ancestorId);
+		while (it != changesForNode_.end() && it.key() == ancestorId)
+		{
+			if (it.value()->type() == ChangeType::Move)
+			{
+				dependencies_.insert(change, it.value());
+				dependencyFound = true;
+				// Keep looking for additional dependencies, perhaps both branches move the same node to different places.
+			}
+
+			++it;
+		}
+
+		// If we found the first move, then we're done.
+		if (dependencyFound) break;
+		else
+		{
+			auto ancestorNode = baseTree->find(ancestorId, true);
+			Q_ASSERT(ancestorNode);
+			ancestorId = ancestorNode->parentId();
 		}
 	}
 }

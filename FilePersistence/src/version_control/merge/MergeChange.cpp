@@ -42,6 +42,11 @@ MergeChange::MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateF
 {
 	Q_ASSERT(type_ != ChangeType::Unclassified);
 
+	Q_ASSERT(type != ChangeType::Move || oldParentId != newParentId);
+	Q_ASSERT(!updateFlags.testFlag(ChangeDescription::Label) || oldLabel != newLabel);
+	Q_ASSERT(!updateFlags.testFlag(ChangeDescription::Type)  || oldType  != newType);
+	Q_ASSERT(!updateFlags.testFlag(ChangeDescription::Value) || oldValue != newValue);
+
 	bool typeOrValueChange = updateFlags_ & (ChangeDescription::Value | ChangeDescription::Type);
 	bool labelOrNonStationaryChange = type != ChangeType::Stationary || (updateFlags & ChangeDescription::Label);
 	Q_ASSERT(typeOrValueChange != labelOrNonStationaryChange);
@@ -65,9 +70,13 @@ QList<MergeChange*> MergeChange::changesFromDiffChange(ChangeDescription& change
 
 	if (changeFromDiff.hasFlags(ChangeDescription::Value) || changeFromDiff.hasFlags(ChangeDescription::Type))
 	{
+		// The changes below must include label and parent information to enable their identification
 		auto newFlags = changeFromDiff.flags() & (ChangeDescription::Value | ChangeDescription::Type);
 		result.append( new MergeChange{ChangeType::Stationary, newFlags, changeFromDiff.nodeId(), branch,
-							{}, {}, {}, {},
+							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->parentId() : Model::NodeIdType{},
+							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->parentId() : Model::NodeIdType{},
+							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->label() : QString{},
+							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->label() : QString{},
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->type() : QString{},
 							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->type() : QString{},
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->rawValue() : QString{},
