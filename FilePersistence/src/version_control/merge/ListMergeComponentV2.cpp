@@ -69,33 +69,32 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 	}
 }
 
-ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
+ListMergeComponentV2::IdtoIndexMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
 																										  MergeData& mergeData)
 {
-	IdToIndexMap map;
+	IdtoIndexMap map;
 	auto chunks = listToChunks(listId, mergeData);
-	int index = 0;	// Final index of elements in the merged tree such that all labels are unique
+	int finalIndexInList = 0;	// Final index of elements in the merged tree such that all labels are unique
 	for (auto chunk : chunks)
 	{
 		if (chunk->stable_)
 			for (auto id : chunk->spanBase_)
 			{
-				map.insert(id, qMakePair(QString::number(index), MergeChange::None));
-				index++;
+				map.insert(id, LabelData{QString::number(finalIndexInList), MergeChange::None});
+				finalIndexInList++;
 			}
 		else
 		{
-			IdPositionMap temp;	// temp will store the relative positions of elements of unstable chunk
-			fillIndices(chunk->spanBase_, chunk->spanA_, temp, mergeData.treeBase_, MergeChange::BranchA);
-			fillIndices(chunk->spanBase_, chunk->spanB_, temp, mergeData.treeBase_, MergeChange::BranchB);
+			QList<IdPosition> idPositions;	// stores the relative positions of elements of unstable chunk
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeBase_, MergeChange::BranchA);
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeBase_, MergeChange::BranchB);
 			// Sort temp and insert ids to the map
 		}
 	}
 	return map;
 }
 
-void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/,
-												IdToIndexMap /*map*/, MergeData& /*mergeData*/)
+void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/, IdtoIndexMap /*map*/, MergeData& /*mergeData*/)
 {}
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
@@ -129,22 +128,23 @@ QList<Model::NodeIdType> ListMergeComponentV2::nodeListToSortedIdList(const QLis
 	return idList;
 }
 
-void ListMergeComponentV2::fillIndices(const QList<Model::NodeIdType> base, const QList<Model::NodeIdType> version,
-													IdPositionMap& vector, std::shared_ptr<GenericTree> treeBase, MergeChange::Branches branch)
+void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType> base,
+																  const QList<Model::NodeIdType> version,	QList<IdPosition>& list,
+																  std::shared_ptr<GenericTree> treeBase, MergeChange::Branches branch)
 {
-	int tempIndex = -1;
-	int pair = 1;
+	int baseIndex = -1;
+	int offset = 1;
 	auto lcs = Diff3Parse::longestCommonSubsequence(base, version);
 	for (auto id : version)
 	{
 		if (lcs.contains(id))
 		{
-			tempIndex = treeBase->find(id)->label().toInt();
-			vector.append(qMakePair(qMakePair(tempIndex, 0), qMakePair(id, branch)));	//Give it index same as base
-			pair = 1;
+			baseIndex = treeBase->find(id)->label().toInt();
+			list.append(IdPosition{id, baseIndex, offset, branch});	//Labelling it same as base
+			offset = 1;
 		}
 		else
-			vector.append(qMakePair(qMakePair(tempIndex, pair++), qMakePair(id, branch)));
+			list.append(IdPosition{id, baseIndex, offset, branch});
 	}
 }
 
