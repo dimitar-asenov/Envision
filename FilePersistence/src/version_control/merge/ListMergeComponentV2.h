@@ -58,6 +58,14 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 				int baseIndex{};
 				int offset{};
 				MergeChange::Branches branch{};
+
+				bool operator<(const IdPosition& other) const
+				{
+					if (baseIndex == other.baseIndex)
+						return offset < other.offset;
+					else
+						return baseIndex < other.baseIndex;
+				}
 		};
 		using IdToIndexMap = QMultiHash<Model::NodeIdType, LabelData>;
 		/**
