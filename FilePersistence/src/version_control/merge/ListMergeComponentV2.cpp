@@ -69,10 +69,10 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 	}
 }
 
-ListMergeComponentV2::IdtoIndexMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
+ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
 																										  MergeData& mergeData)
 {
-	IdtoIndexMap map;
+	IdToIndexMap map;
 	auto chunks = listToChunks(listId, mergeData);
 	int finalIndexInList = 0;	// Final index of elements in the merged tree such that all labels are unique
 	for (auto chunk : chunks)
@@ -80,7 +80,7 @@ ListMergeComponentV2::IdtoIndexMap ListMergeComponentV2::computeAdjustedIndices(
 		if (chunk->stable_)
 			for (auto id : chunk->spanBase_)
 			{
-				map.insert(id, LabelData{QString::number(finalIndexInList), MergeChange::None});
+				map.insert(id, {QString::number(finalIndexInList), MergeChange::None});
 				finalIndexInList++;
 			}
 		else
@@ -94,7 +94,7 @@ ListMergeComponentV2::IdtoIndexMap ListMergeComponentV2::computeAdjustedIndices(
 	return map;
 }
 
-void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/, IdtoIndexMap /*map*/, MergeData& /*mergeData*/)
+void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/, IdToIndexMap /*map*/, MergeData& /*mergeData*/)
 {}
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
@@ -140,11 +140,11 @@ void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType>
 		if (lcs.contains(id))
 		{
 			baseIndex = treeBase->find(id)->label().toInt();
-			list.append(IdPosition{id, baseIndex, offset, branch});	//Labelling it same as base
+			list.append({id, baseIndex, offset, branch});	//Labelling it same as base
 			offset = 1;
 		}
 		else
-			list.append(IdPosition{id, baseIndex, offset, branch});
+			list.append({id, baseIndex, offset++, branch});
 	}
 }
 

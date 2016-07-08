@@ -50,16 +50,16 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 	private:
 
 		struct LabelData{
-				QString label;
-				MergeChange::Branches branch;
+				QString label{};
+				MergeChange::Branches branch{};
 		};
 		struct IdPosition{
-				Model::NodeIdType id;
-				int baseIndex;
-				int offset;
-				MergeChange::Branches branch;
+				Model::NodeIdType id{};
+				int baseIndex{};
+				int offset{};
+				MergeChange::Branches branch{};
 		};
-		using IdtoIndexMap = QMultiHash<Model::NodeIdType, LabelData>;
+		using IdToIndexMap = QMultiHash<Model::NodeIdType, LabelData>;
 		/**
 		 * Finds all the lists that we will process in the merge.
 		 *
@@ -72,12 +72,12 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		 * Returns the map of new labels(Integral) of list.
 		 * so that all labels are unique.
 		 */
-		IdtoIndexMap computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData);
+		IdToIndexMap computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData);
 
 		/**
 		 * Adjusts CG according to the new indices returned by computeAdjustedIndices.
 		 */
-		void adjustCG(Model::NodeIdType listId, IdtoIndexMap map, MergeData& mergeData);
+		void adjustCG(Model::NodeIdType listId, IdToIndexMap map, MergeData& mergeData);
 
 		/**
 		*	Returns chunks for the given list.
