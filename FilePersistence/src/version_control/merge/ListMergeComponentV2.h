@@ -49,7 +49,17 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 
 	private:
 
-		using IdToIndexMap = QMultiHash<Model::NodeIdType, QPair<QString, MergeChange::Branches>>;
+		struct LabelData{
+				QString label{};
+				MergeChange::Branches branch{};
+		};
+		struct IdPosition{
+				Model::NodeIdType id{};
+				int baseIndex{};
+				int offset{};
+				MergeChange::Branches branch{};
+		};
+		using IdToIndexMap = QMultiHash<Model::NodeIdType, LabelData>;
 		/**
 		 * Finds all the lists that we will process in the merge.
 		 *
@@ -79,6 +89,11 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		 */
 		QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
 
+		/**
+		 * Fills the list with the indices mapped to proper positions relative to Base.
+		 */
+		void computeOffsetsInBranch(const QList<Model::NodeIdType> base, const QList<Model::NodeIdType> version,
+										QList<IdPosition>& list, std::shared_ptr<GenericTree> treeBase,  MergeChange::Branches branch);
 };
 
 }

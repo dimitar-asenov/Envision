@@ -74,12 +74,27 @@ ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(
 {
 	IdToIndexMap map;
 	auto chunks = listToChunks(listId, mergeData);
-	(void) chunks;
+	int finalIndexInList = 0;	// Final index of elements in the merged tree such that all labels are unique
+	for (auto chunk : chunks)
+	{
+		if (chunk->stable_)
+			for (auto id : chunk->spanBase_)
+			{
+				map.insert(id, {QString::number(finalIndexInList), MergeChange::None});
+				finalIndexInList++;
+			}
+		else
+		{
+			QList<IdPosition> idPositions;	// stores the relative positions of elements of unstable chunk
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeBase_, MergeChange::BranchA);
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeBase_, MergeChange::BranchB);
+			// Sort temp and insert ids to the map
+		}
+	}
 	return map;
 }
 
-void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/,
-												IdToIndexMap /*map*/, MergeData& /*mergeData*/)
+void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/, IdToIndexMap /*map*/, MergeData& /*mergeData*/)
 {}
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
@@ -111,6 +126,26 @@ QList<Model::NodeIdType> ListMergeComponentV2::nodeListToSortedIdList(const QLis
 		idList.append(node->id());
 	}
 	return idList;
+}
+
+void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType> base,
+																  const QList<Model::NodeIdType> version,	QList<IdPosition>& list,
+																  std::shared_ptr<GenericTree> treeBase, MergeChange::Branches branch)
+{
+	int baseIndex = -1;
+	int offset = 1;
+	auto lcs = Diff3Parse::longestCommonSubsequence(base, version);
+	for (auto id : version)
+	{
+		if (lcs.contains(id))
+		{
+			baseIndex = treeBase->find(id)->label().toInt();
+			list.append({id, baseIndex, offset, branch});	//Labelling it same as base
+			offset = 1;
+		}
+		else
+			list.append({id, baseIndex, offset++, branch});
+	}
 }
 
 }
