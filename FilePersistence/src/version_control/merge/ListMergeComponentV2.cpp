@@ -62,17 +62,17 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 	for (auto listId : listsToMerge)
 	{
 		auto map = computeAdjustedIndices(listId, mergeData);
-		adjustCG(listId, map, mergeData);
+		mergeData.cg_.relabelChildrenUniquely(listId, map, mergeData.treeBase_.get());
 		// applyChanges(mergeData);
 		// removeHoles(mergeData);
 		// Report Conflicts
 	}
 }
 
-ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
+ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
 																										  MergeData& mergeData)
 {
-	IdToIndexMap map;
+	ChangeGraph::IdToLabelMap map;
 	auto chunks = listToChunks(listId, mergeData);
 	int finalIndexInList = 0;	// Final index of elements in the merged tree such that all labels are unique
 	for (auto chunk : chunks)
@@ -93,13 +93,11 @@ ListMergeComponentV2::IdToIndexMap ListMergeComponentV2::computeAdjustedIndices(
 				map.insert(idPosition.id, {QString::number(finalIndexInList), idPosition.branch});
 				finalIndexInList++;
 			}
+			// Report soft-conflict
 		}
 	}
 	return map;
 }
-
-void ListMergeComponentV2::adjustCG(Model::NodeIdType /*listId*/, IdToIndexMap /*map*/, MergeData& /*mergeData*/)
-{}
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
 {
