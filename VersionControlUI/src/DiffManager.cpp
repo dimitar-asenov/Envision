@@ -160,7 +160,7 @@ QString DiffManager::computeNameChangeInformation(const DiffSetup& diffSetup)
 
 		nameChangeInformation += oldNodeObjectPathList.join(".") +
 				// html entity for right arrow
-				"&rarr;"
+				" &rarr; "
 				+ newNodeObjectPathList.join(".") + "<br/>";
 	}
 
