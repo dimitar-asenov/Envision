@@ -344,6 +344,18 @@ void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
 	}
 }
 
+void ChangeGraph::relabelChildrenUniquely(Model::NodeIdType /*parentId*/, IdToLabelMap /*labelMap*/,
+														GenericTree* /*baseTree*/)
+{
+//	void removeLabelOnlyChangesInChildren(Model::NodeIdType parentId);
+//	void removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId);
+//	void removeLabelConflictsBetweenChildren(Model::NodeIdType parentId);
+
+//	void updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree);
+//	void updateIncomingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
+//	void updateOutgoingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
+}
+
 void ChangeGraph::removeLabelOnlyChangesInChildren(Model::NodeIdType parentId)
 {
 	QList<MergeChange*> labelOnlyChanges;
@@ -424,6 +436,22 @@ void ChangeGraph::removeLabelConflictsBetweenChildren(Model::NodeIdType parentId
 		}
 		++outerIt;
 	}
+}
+
+void ChangeGraph::updateIncomingLabels(Model::NodeIdType /*parentId*/, IdToLabelMap /*labelMap*/)
+{
+	Q_ASSERT(false);
+}
+
+void ChangeGraph::updateOutgoingLabels(Model::NodeIdType /*parentId*/, IdToLabelMap /*labelMap*/)
+{
+	Q_ASSERT(false);
+}
+
+void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType /*parentId*/, IdToLabelMap /*labelMap*/,
+													GenericTree* /*baseTree*/)
+{
+	Q_ASSERT(false);
 }
 
 }

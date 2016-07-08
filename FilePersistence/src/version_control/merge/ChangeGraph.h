@@ -58,6 +58,15 @@ class FILEPERSISTENCE_API ChangeGraph
 		 */
 		void insert(QList<MergeChange*> changes, GenericTree* baseTree);
 
+		struct LabelData
+		{
+			QString label{};
+			MergeChange::Branches branch{};
+		};
+		using IdToLabelMap = QMultiHash<Model::NodeIdType, LabelData>;
+
+		void relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree);
+
 	private:
 		// The nodes of the graph
 		QList<MergeChange*> changes_;
@@ -90,6 +99,10 @@ class FILEPERSISTENCE_API ChangeGraph
 		void removeLabelOnlyChangesInChildren(Model::NodeIdType parentId);
 		void removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId);
 		void removeLabelConflictsBetweenChildren(Model::NodeIdType parentId);
+
+		void updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree);
+		void updateIncomingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
+		void updateOutgoingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
 };
 
 }
