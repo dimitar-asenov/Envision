@@ -74,6 +74,8 @@ class FILEPERSISTENCE_API MergeChange
 		void addBranches(Branches branches);
 
 	private:
+		friend class ChangeGraph;
+
 		ChangeType type_{};
 		ChangeDescription::UpdateFlags updateFlags_{};
 
