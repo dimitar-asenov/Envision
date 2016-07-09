@@ -147,7 +147,8 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 				bool changed = parent->renderer()->sync(item, parent, node);
 				ensureItemHasCompositeNode(item);
 				return changed;
-			});
+			},
+		[](Item* item) { SAFE_DELETE_ITEM(item);});
 }
 
 int PositionLayout::toGrid(const int& pos) const

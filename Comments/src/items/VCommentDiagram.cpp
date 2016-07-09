@@ -49,13 +49,15 @@ void VCommentDiagram::determineChildren()
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node)
 			{return new VCommentDiagramShape{parent, static_cast<CommentDiagramShape*>(node)};},
-		[](Item*, Model::Node*, VCommentDiagramShape*&){return false;});
+		[](Item*, Model::Node*, VCommentDiagramShape*&){return false;},
+		[](Item* item) { SAFE_DELETE_ITEM(item); });
 
 	Visualization::Item::synchronizeCollections(this, node()->connectors()->nodes(), connectors_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node)
 			{return new VCommentDiagramConnector{parent, static_cast<CommentDiagramConnector*>(node)};},
-		[](Item*, Model::Node*, VCommentDiagramConnector*&){return false;});
+		[](Item*, Model::Node*, VCommentDiagramConnector*&){return false;},
+		[](Item* item) { SAFE_DELETE_ITEM(item); });
 
 	// Always update children
 	for (auto s : shapes_) s->setUpdateNeeded(StandardUpdate);

@@ -399,9 +399,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
 		 */
 		template <typename Definition, typename Store, typename CompareFunction, typename CreateFunction,
-					 typename SyncFunction>
+					 typename SyncFunction, typename DeleteFunction>
 		static bool synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
-											 CreateFunction create, SyncFunction sync);
+											 CreateFunction create, SyncFunction sync, DeleteFunction deleter);
 
 		/**
 		 * Returns all the overlays of this item for the specified group. If no group is specified returns the overlays
@@ -687,9 +687,11 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 	return changed;
 }
 
-template <typename Definition, typename Store, typename CompareFunction, typename CreateFunction, typename SyncFunction>
+template <typename Definition, typename Store, typename CompareFunction, typename CreateFunction,
+			 typename SyncFunction, typename DeleteFunction>
 bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
-											 CreateFunction create, SyncFunction sync)
+											 CreateFunction create, SyncFunction sync,
+											 DeleteFunction deleter)
 {
 	static_assert(std::is_pointer<decltype(store.value(0))>::value, "the elements of store must be pointers");
 
@@ -735,7 +737,7 @@ bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& st
 	while (store.size() > def.size())
 	{
 		changed = true;
-		SAFE_DELETE_ITEM(store.last());
+		deleter(store.last());
 		store.pop_back();
 	}
 

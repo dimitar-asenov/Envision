@@ -113,7 +113,8 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 	synchronizeCollections(this, nodes, items,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node){return parent->renderer()->render(parent, node);},
-		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);});
+		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);},
+		[](Item* item) { SAFE_DELETE_ITEM(item);});
 }
 
 void SequentialLayout::synchronizeFirst(Item*& item, Model::Node* node)

@@ -169,7 +169,8 @@ void OverlayGroup::update()
 						scene_->addItem(overlay->overlayItem());
 						return overlay;
 					},
-					[](Item*, Item*, OverlayAccessor*) {return false;}
+					[](Item*, Item*, OverlayAccessor*) {return false;},
+					[](OverlayAccessor* accessor) { SAFE_DELETE(accessor); }
 					);
 		}
 
@@ -190,7 +191,8 @@ void OverlayGroup::update()
 						scene_->addItem(overlay->overlayItem());
 						return overlay;
 					},
-					[](Item*, const QPair<Item*, Item*>&, OverlayAccessor*){return false;}
+					[](Item*, const QPair<Item*, Item*>&, OverlayAccessor*){return false;},
+					[](OverlayAccessor* accessor) { SAFE_DELETE(accessor); }
 					);
 		}
 

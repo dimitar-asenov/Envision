@@ -41,10 +41,6 @@ class VISUALIZATIONBASE_API OverlayAccessor {
 		virtual Item* overlayItem() const = 0;
 		virtual const QList<Item*>& associatedItems() const = 0;
 
-		// This is required from SAFE_DELETE_ITEM, called from Item::synchronizeCollections.
-		// Essentially we want this to look like an Item for that call.
-		void removeFromScene() const {};
-
 	protected:
 		OverlayAccessor() = default;
 };
