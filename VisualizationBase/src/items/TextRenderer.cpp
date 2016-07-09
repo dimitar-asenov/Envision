@@ -45,8 +45,11 @@ Super{parent, style}, staticText_{text}, editable_(true)
 
 bool TextRenderer::setText(const QString& newText)
 {
-	staticText_.setText( newText );
-	this->setUpdateNeeded(StandardUpdate);
+	if ( newText != staticText_.text())
+	{
+		staticText_.setText( newText );
+		this->setUpdateNeeded(StandardUpdate);
+	}
 	return true;
 }
 
