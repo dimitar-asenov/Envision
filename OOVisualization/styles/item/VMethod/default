@@ -40,6 +40,24 @@
 		<selectionFont> <size>30</size> </selectionFont>
 	</name>
 	
+	<nameStatic prototypes="item/Text/name">
+		<shape prototypes="shape/Frame/default">
+			Frame
+			<contentBrush> <color>#AA6F39</color> </contentBrush>
+		</shape>
+		<pen> <color>#ffffff</color> </pen>
+		<font>
+			<size>30</size>
+			<underline>true</underline>
+		</font>
+		<selectionPen> <color>#000000</color> </selectionPen>
+		<selectionBackground>#ffffff</selectionBackground>
+		<selectionFont>
+			<size>30</size>
+			<underline>true</underline>
+		</selectionFont>
+	</nameStatic>
+	
 	<defaultIcon prototypes="icon"/>
 	<constructorIcon prototypes="icon">
 		<filename>styles/icon/methodConstructor.svg</filename>

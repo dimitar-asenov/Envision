@@ -64,7 +64,9 @@ void VMethod::initializeForms()
 			  case Method::MethodKind::OperatorOverload: return &v->style()->operatorOverloadIcon();
 			  default: return &v->style()->defaultIcon();
 		  }
-	}), item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, &StyleType::name)}})
+	}), item<VText>(&I::name_, [](I* v){return v->node()->nameNode();},
+										  [](I* v){return v->node()->modifiers()->isSet(Modifier::Static) ?
+														&v->style()->nameStatic() : &v->style()->name(); })}})
 		->setNoBoundaryCursors([](Item*){return true;})
 		->setNoInnerCursors([](Item*){return true;})
 		->setVerticalAlignment(LayoutStyle::Alignment::Center)

@@ -42,6 +42,7 @@ class OOVISUALIZATION_API VMethodStyle : public Super<Visualization::Declarative
 		virtual ~VMethodStyle() override;
 
 		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::TextStyle> nameStatic{this, "nameStatic"};
 		Property<Visualization::ItemStyle> titleBackground{this, "titleBackground"};
 		Property<Visualization::StaticStyle> defaultIcon{this, "defaultIcon"};
 		Property<Visualization::StaticStyle> constructorIcon{this, "constructorIcon"};
