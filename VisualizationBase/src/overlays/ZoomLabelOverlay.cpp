@@ -25,6 +25,8 @@
  **********************************************************************************************************************/
 #include "ZoomLabelOverlay.h"
 #include "../shapes/Shape.h"
+#include "../shapes/Box.h"
+#include "../shapes/Frame.h"
 #include "../declarative/DeclarativeItem.hpp"
 #include "../icons/Icon.h"
 #include "../icons/IconStyle.h"
@@ -35,9 +37,9 @@
 #include "../items/RootItem.h"
 #include "OverlayAccessor.h"
 #include "../views/MainView.h"
+#include "../VisualizationManager.h"
+#include "../items/ViewItem.h"
 
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Visualization {
 
@@ -49,11 +51,14 @@ QHash<Item*, ZoomLabelOverlay*>& ZoomLabelOverlay::itemToOverlay()
 	return map;
 }
 
-ZoomLabelOverlay::ZoomLabelOverlay(Item* itemWithLabel, const StyleType* style) : Super{{itemWithLabel}, style}
+ZoomLabelOverlay::ZoomLabelOverlay(Item* itemWithLabel, const StyleType* style)
+	: Super{{itemWithLabel}, style},
+	  iconStyle_{ associatedItemIconStyle() },
+	  textStyle_{ associatedItemTextStyle() },
+	  backgroundBrush_{ associatedItemLabelBackground() }
 {
 	Q_ASSERT(itemWithLabel->node());
 	Q_ASSERT(itemWithLabel->node()->definesSymbol());
-	iconStyle_ = associatedItemIconStyle();
 	itemToOverlay().insert(itemWithLabel, this);
 }
 
@@ -76,6 +81,15 @@ bool ZoomLabelOverlay::isSensitiveToScale() const
 	return true;
 }
 
+
+void ZoomLabelOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	if (hasShape())
+		Super::paint(painter, option, widget);
+	else
+		painter->fillRect(QRectF{0, 0, (qreal)widthInLocal(), (qreal)heightInLocal()}, backgroundBrush_);
+}
+
 int ZoomLabelOverlay::determineForm()
 {
 	return iconStyle_ ? 1 : 0;
@@ -83,10 +97,10 @@ int ZoomLabelOverlay::determineForm()
 
 void ZoomLabelOverlay::initializeForms()
 {
-	addForm(item<Text>(&I::text_, [](I* v){return v->associatedItemTextStyle();}));
+	addForm(item<Text>(&I::text_, [](I* v){return v->textStyle_;}));
 
 	addForm(grid({{item<Static>(&I::icon_, [](I* v){ return v->iconStyle_;}),
-		item<Text>(&I::text_, [](I* v){return v->associatedItemTextStyle();})}})
+		item<Text>(&I::text_, [](I* v){return v->textStyle_;})}})
 			  ->setVerticalAlignment(LayoutStyle::Alignment::Center));
 }
 
@@ -131,6 +145,34 @@ const TextStyle* ZoomLabelOverlay::associatedItemTextStyle() const
 		}
 
 	return textStyle ? textStyle : Text::itemStyles().get();
+}
+
+QBrush ZoomLabelOverlay::associatedItemLabelBackground() const
+{
+	QBrush brush;
+
+	for (auto child : associatedItem()->childItems())
+		if ( auto textChild = DCast<TextRenderer>(child) )
+		{
+			if (textChild->text() == associatedItemText())
+			{
+				if (brush.style() == Qt::NoBrush)
+				{
+					if (auto boxShape = DCast<Box>(textChild->getShape()))
+						brush = boxShape->style()->background();
+					else if (auto frameShape = DCast<Frame>(textChild->getShape()))
+						brush = frameShape->style()->contentBrush();
+				}
+				else
+				{
+					//we have found more than one text item representing the same string, ambiguous
+					brush = {};
+					break;
+				}
+			}
+		}
+
+	return brush;
 }
 
 QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
@@ -307,7 +349,7 @@ void ZoomLabelOverlay::adjustPositionOrHide()
 			|| availableRect.height() * scalingFactor < OVERLAY_MIN_HEIGHT) visible = false;
 
 	// If the original item's header is actually visible, then don't show this one
-	auto scaledFontSize = scalingFactor * associatedItemTextStyle()->font().pixelSize();
+	auto scaledFontSize = scalingFactor * textStyle_->font().pixelSize();
 	if ( scaledFontSize >= SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN) visible = false;
 
 	// If there might be enough space, then try to fit in

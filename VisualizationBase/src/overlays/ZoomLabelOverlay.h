@@ -51,6 +51,8 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 
 		virtual bool isSensitiveToScale() const override;
 
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -60,14 +62,21 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 
 		Static* icon_{};
 		Text* text_{};
+
 		const StaticStyle* iconStyle_{};
+		const TextStyle* textStyle_{};
+		QBrush backgroundBrush_;
+
 		int postUpdateRevision_{};
 		bool mayBeHiddenIfChildrenHaveOverlays_{};
+
 		static QHash<Item*, ZoomLabelOverlay*>& itemToOverlay();
 
-		const StaticStyle* associatedItemIconStyle() const;
 		const QString& associatedItemText() const;
+
+		const StaticStyle* associatedItemIconStyle() const;
 		const TextStyle* associatedItemTextStyle() const;
+		QBrush associatedItemLabelBackground() const;
 
 		static QList<Item*> itemsThatShouldHaveZoomLabel(Scene* scene);
 		static void setItemPositionsAndHideOverlapped(OverlayGroup& group);
