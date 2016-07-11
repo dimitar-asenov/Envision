@@ -37,14 +37,10 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
-#include "VersionControlUI/src/commands/CDiff.h"
-
 namespace OOInteraction {
 
 HMethod::HMethod()
-{
-	addCommand(new VersionControlUI::CDiff{});
-}
+{}
 
 HMethod* HMethod::instance()
 {

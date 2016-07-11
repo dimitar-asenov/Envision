@@ -34,6 +34,7 @@
 #include "handlers/HObjectPathCrumb.h"
 
 #include "commands/CClear.h"
+#include "commands/CDiff.h"
 #include "commands/CHistory.h"
 
 namespace VersionControlUI {
@@ -49,6 +50,7 @@ bool VersionControlUIPlugin::initialize(Core::EnvisionManager&)
 	VersionControlUI::ObjectPathCrumb::setDefaultClassHandler(HObjectPathCrumb::instance());
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CClear{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CDiff{});
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CHistory{});
 
 	return true;

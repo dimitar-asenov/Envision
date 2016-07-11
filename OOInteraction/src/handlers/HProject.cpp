@@ -41,7 +41,6 @@
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
 
-#include "VersionControlUI/src/commands/CDiff.h"
 
 namespace OOInteraction {
 
@@ -54,7 +53,6 @@ HProject::HProject()
 	addCommand(new CCreateMethod{});
 	addCommand(new CCreateField{});
 
-	addCommand(new VersionControlUI::CDiff{});
 	addCommand(new Interaction::CMerge{});
 
 	addCommand(new CDumpMethodRenderings{});

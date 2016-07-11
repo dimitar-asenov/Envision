@@ -34,7 +34,6 @@
 #include "InteractionBase/src/prompt/Prompt.h"
 #include "InteractionBase/src/input_actions/ActionRegistry.h"
 
-#include "VersionControlUI/src/commands/CDiff.h"
 
 namespace OOInteraction {
 
@@ -44,8 +43,6 @@ HClass::HClass()
 	addCommand(new CCreateClass{});
 	addCommand(new CCreateMethod{});
 	addCommand(new CCreateField{});
-
-	addCommand(new VersionControlUI::CDiff{});
 }
 
 HClass* HClass::instance()

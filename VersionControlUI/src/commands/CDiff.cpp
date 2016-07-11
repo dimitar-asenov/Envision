@@ -44,10 +44,14 @@ const QString CDiff::OVERVIEW_COMMAND = "overview";
 
 CDiff::CDiff() : Command{"diff"} {}
 
-bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
+bool CDiff::canInterpret(Visualization::Item* source, Visualization::Item*,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& )
 {
-	QString managerName = target->node()->manager()->name();
+	auto ancestorWithNode = source->findAncestorWithNode();
+
+	if (!ancestorWithNode) return false;
+
+	QString managerName = ancestorWithNode->node()->manager()->name();
 
 	QStringList commandTokensCopy = commandTokens;
 
@@ -92,15 +96,17 @@ bool CDiff::canInterpret(Visualization::Item*, Visualization::Item* target,
 	else return false;
 }
 
-Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::Item* target,
+Interaction::CommandResult* CDiff::execute(Visualization::Item* source, Visualization::Item*,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& )
 {
-	auto scene = target->scene();
+	auto ancestorWithNode = source->findAncestorWithNode();
+
+	auto scene = ancestorWithNode->scene();
 	scene->clearFocus();
 	scene->clearSelection();
 	scene->setMainCursor(nullptr);
 
-	QString managerName = target->node()->manager()->name();
+	QString managerName = ancestorWithNode->node()->manager()->name();
 
 	// TODO restrict versions to versionA always be older?
 	QString versionA = commandTokens.value(1, "HEAD");
@@ -118,7 +124,7 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item*, Visualization::
 	VersionControlUI::DiffManager diffManager{managerName, symbolMatcherPriorityList};
 
 	if (highlightChangedParts)
-		diffManager.highlightChangedParts(versionA, versionB, target->findAncestorWithNode()->node()->manager());
+		diffManager.highlightChangedParts(versionA, versionB, ancestorWithNode->node()->manager());
 	else
 		diffManager.showDiff(versionA, versionB);
 
@@ -143,9 +149,11 @@ QString CDiff::descriptionForCommits(QString token, const QList<QPair<QString, Q
 	return suggestDescription;
 }
 
-QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visualization::Item* target,
+QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item* source, Visualization::Item*,
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
+	auto ancestorWithNode = source->findAncestorWithNode();
+
 	QStringList tokensSoFar = textSoFar.split(" ");
 
 	QList<Interaction::CommandSuggestion*> suggestions;
@@ -181,7 +189,7 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 			suggestCommand += firstVersionToken + " ";
 
 			// analyze the first token
-			auto firstTokenSuggestions = commitsWithDescriptionsStartingWith(firstVersionToken, target);
+			auto firstTokenSuggestions = commitsWithDescriptionsStartingWith(firstVersionToken, ancestorWithNode);
 
 			suggestDescription = descriptionForCommits(firstVersionToken, firstTokenSuggestions);
 
@@ -198,7 +206,7 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 				return {};
 
 			suggestCommand += stringToComplete + " ";
-			auto secondTokenSuggenstions = commitsWithDescriptionsStartingWith(stringToComplete, target);
+			auto secondTokenSuggenstions = commitsWithDescriptionsStartingWith(stringToComplete, ancestorWithNode);
 
 			suggestDescription += descriptionForCommits(suggestDescription, secondTokenSuggenstions);
 
@@ -209,7 +217,7 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 
 		}
 
-		for (auto commitWithDescription : commitsWithDescriptionsStartingWith(stringToComplete, target))
+		for (auto commitWithDescription : commitsWithDescriptionsStartingWith(stringToComplete, ancestorWithNode))
 				suggestions.append(new Interaction::CommandSuggestion{suggestCommand + commitWithDescription.first,
 																						suggestDescription + commitWithDescription.second});
 
@@ -219,9 +227,9 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item*, Visu
 }
 
 QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QString partialCommitId,
-																								  Visualization::Item* target)
+																								  Visualization::Item* ancestorWithNode)
 {
-	QString managerName = target->node()->manager()->name();
+	QString managerName = ancestorWithNode->node()->manager()->name();
 
 	// get GitRepository
 	QString path{"projects/" + managerName};

@@ -51,7 +51,7 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
 		 */
 		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
-																								 Visualization::Item* target);
+																								 Visualization::Item* ancestorWithNode);
 
 		/**
 		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength
