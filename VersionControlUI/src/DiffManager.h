@@ -186,7 +186,7 @@ class VERSIONCONTROLUI_API DiffManager
 		static QHash<Visualization::ViewItem*, int> onZoomHandlerIdPerViewItem_;
 		void createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes,
 												Visualization::ViewItem* viewItem, DiffSetup diffSetup,
-												Visualization::Item* ankerItem);
+												Visualization::Item* anchorItem);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DiffManager::NameChangeVisualizations)

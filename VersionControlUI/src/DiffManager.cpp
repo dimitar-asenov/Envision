@@ -406,20 +406,20 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 }
 
 void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes, Visualization::ViewItem* viewItem,
-														 DiffSetup diffSetup, Visualization::Item* ankerItem)
+														 DiffSetup diffSetup, Visualization::Item* anchorItem)
 {
 	auto nameChangeInfo = computeNameChangeInformation(diffSetup);
 
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [viewItem, changesWithNodes, diffSetup, nameChangeInfo, ankerItem]() {
+								  [viewItem, changesWithNodes, diffSetup, nameChangeInfo, anchorItem]() {
 		createOverlaysForChanges(viewItem, changesWithNodes);
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		if (!nameChangeInfo.isEmpty()) message += "<br/><br/>" + nameChangeInfo;
 		auto overlay = new Visualization::MessageOverlay{viewItem,
-				[viewItem, message, ankerItem](Visualization::MessageOverlay* overlay)
+				[viewItem, message, anchorItem](Visualization::MessageOverlay* overlay)
 		{
-			overlay->setPos(ankerItem->scenePos().x(),
-								 ankerItem->scenePos().y()-overlay->heightInScene());
+			overlay->setPos(anchorItem->scenePos().x(),
+								 anchorItem->scenePos().y()-overlay->heightInScene());
 			return message;
 		}, Visualization::MessageOverlay::itemStyles().get("info"), true};
 
