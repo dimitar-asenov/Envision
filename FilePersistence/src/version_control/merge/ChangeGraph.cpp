@@ -458,9 +458,11 @@ void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap 
 		auto labelIt = labelMap.find(node->id());
 		while (labelIt != labelMap.end() && labelIt.key() == node->id()) {
 			if (labelIt.value().branch.testFlag(MergeChange::None))	// Base element
+			{
+				node->setLabel(labelIt.value().label);
 				break;
+			}
 		}
-		node->setLabel(labelIt.value().label);
 	}
 }
 
