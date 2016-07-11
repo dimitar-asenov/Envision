@@ -67,12 +67,15 @@ class FILEPERSISTENCE_API ChangeGraph
 
 		void relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree);
 
+		void applyNonConflictingChanges(GenericTree* currentTree);
+
 	private:
 		// The nodes of the graph
 		QList<MergeChange*> changes_;
 
 		// The different edge types of the graph
 		QMultiHash<MergeChange*, MergeChange*> dependencies_;
+		QMultiHash<MergeChange*, MergeChange*> reverseDependencies_; // The opposite direction of the edges above
 		QMultiHash<MergeChange*, MergeChange*> directConflicts_;
 
 		// Helper structures to speed up computation
@@ -107,6 +110,20 @@ class FILEPERSISTENCE_API ChangeGraph
 		void createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QList<LabelData> newLabels,
 										  Model::NodeIdType parentId);
 		void splitMoveChangeForSecondLabel(MergeChange* change, LabelData labelOne, LabelData labelTwo);
+
+		/**
+		 * Applies all non-conflicting changes that are not in an all-or-nothing dependency chain and returns their count.
+		 */
+		int applyIndependentNonConflictingChanges(GenericTree* currentTree);
+
+		/**
+		 * Applies all non-conflicting changes that are part of an all-or-nothing dependency chain and returns their
+		 * count.
+		 */
+		int applyDependentNonConflictingChanges(GenericTree* currentTree);
+
+		void applyChange(GenericTree* currentTree, MergeChange* change);
+		void removeAppliedChange(MergeChange* change);
 };
 
 }

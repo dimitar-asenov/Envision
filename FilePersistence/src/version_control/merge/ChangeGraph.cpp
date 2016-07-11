@@ -191,6 +191,7 @@ void ChangeGraph::addInsertOrMoveToDeletedConflict(MergeChange* change)
 void ChangeGraph::recomputeAllDependencies(GenericTree* baseTree)
 {
 	dependencies_.clear();
+	reverseDependencies_.clear();
 
 	for (auto change : changes_)
 		addDependencies(change, baseTree);
@@ -224,6 +225,7 @@ void ChangeGraph::addParentPresentDependency(MergeChange* change, GenericTree* b
 				if (it.value()->type() == ChangeType::Insertion)
 				{
 					dependencies_.insert(change, it.value());
+					reverseDependencies_.insert(it.value(), change);
 					parentInsertionChangeFound = true;
 				}
 				++it;
@@ -251,6 +253,7 @@ void ChangeGraph::addChildrenRemovedDependency(MergeChange* change, GenericTree*
 					 || (it.value()->type() == ChangeType::Move && it.value()->oldParentId() == change->nodeId()))
 				{
 					dependencies_.insert(change, it.value());
+					reverseDependencies_.insert(it.value(), change);
 					changeFound = true;
 				}
 				++it;
@@ -280,6 +283,7 @@ void ChangeGraph::addLabelDependency(MergeChange* change)
 				 )
 			{
 				dependencies_.insert(change, it.value());
+				reverseDependencies_.insert(it.value(), change);
 			}
 			++it;
 		}
@@ -326,6 +330,7 @@ void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
 			if (it.value()->type() == ChangeType::Move)
 			{
 				dependencies_.insert(change, it.value());
+				reverseDependencies_.insert(it.value(), change);
 				dependencyFound = true;
 				// Keep looking for additional dependencies, perhaps both branches move the same node to different places.
 			}
@@ -386,16 +391,20 @@ void ChangeGraph::removeLabelOnlyChangesInChildren(Model::NodeIdType parentId)
 		for (auto conflict : conflicting) directConflicts_.remove(conflict, changeToRemove);
 
 		// Remove this change's dependencies
+		auto thisDependsOn = dependencies_.values(changeToRemove);
+		auto otherDependOnThis = reverseDependencies_.values(changeToRemove);
 		dependencies_.remove(changeToRemove);
+		reverseDependencies_.remove(changeToRemove);
+		for (auto ourDependency : thisDependsOn)
+			for (auto dependencyToUs : otherDependOnThis)
+			{
+				Q_ASSERT(dependencyToUs->newParentId() == parentId);
+				Q_ASSERT(ourDependency->oldParentId() == parentId);
+				dependencies_.remove(dependencyToUs, changeToRemove);
+				reverseDependencies_.remove(ourDependency, changeToRemove);
+			}
 
-		// Remove dependencies of other changes on this change
-		// All such changes must have this change's parent as a new parent
-		it = changesForChildren_.find(changeToRemove->newParentId());
-		while (it != changesForChildren_.end() && it.key() == changeToRemove->newParentId())
-		{
-			dependencies_.remove(it.value(), changeToRemove);
-			++it;
-		}
+		delete changeToRemove;
 	}
 }
 
@@ -409,6 +418,7 @@ void ChangeGraph::removeLabelDependenciesBetweenChildren(Model::NodeIdType paren
 		while (innerIt != changesForChildren_.end() && innerIt.key() == parentId)
 		{
 			dependencies_.remove(outerIt.value(), innerIt.value());
+			reverseDependencies_.remove(innerIt.value(), outerIt.value());
 			++innerIt;
 		}
 		++outerIt;
@@ -529,26 +539,89 @@ void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData l
 		directConflicts_.insert(conflict, changeB);
 	}
 
+	auto changesADependsOn = dependencies_.values(change);
+	auto changesDependingOnA = reverseDependencies_.values(change);
 
 	// All changes that change A depends on, change B must also depend on
-	QList<QPair<MergeChange*, MergeChange*>> dependenciesToAdd;
-	auto depIt = dependencies_.find(change);
-	while (depIt != dependencies_.end() && depIt.key() == change)
+	for (auto aDependency : changesADependsOn)
 	{
-		dependenciesToAdd.append(qMakePair(changeB, depIt.value()));
-		++depIt;
+		dependencies_.insert(changeB, aDependency);
+		reverseDependencies_.insert(aDependency, changeB);
 	}
 
 	// All changes that depend on change A, must also depend on change B
-	// Iterate through all dependencies
-	for (auto it = dependencies_.begin(); it != dependencies_.end(); ++it)
-		if (it.value() == change)
-			dependenciesToAdd.append( qMakePair(it.key(), changeB) );
+	for (auto dependencyOnA : changesDependingOnA)
+	{
+		dependencies_.insert(dependencyOnA, changeB);
+		reverseDependencies_.insert(changeB, dependencyOnA);
+	}
+}
 
-	// Actually add the changes
-	for (auto& dep : dependenciesToAdd)
-		dependencies_.insert(dep.first, dep.second);
+void ChangeGraph::applyNonConflictingChanges(GenericTree* currentTree)
+{
+	bool tryApplyingMoreChanges = true;
+	while (tryApplyingMoreChanges)
+	{
+		tryApplyingMoreChanges = false;
+		applyIndependentNonConflictingChanges(currentTree);
+		int appliedDependentChanges = applyDependentNonConflictingChanges(currentTree);
+		tryApplyingMoreChanges = appliedDependentChanges > 0;
+	}
 
+}
+
+int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* currentTree)
+{
+	int totalAppliedChanges = 0;
+	bool appliedSomeChangesThisCycle = true;
+
+	while (appliedSomeChangesThisCycle)
+	{
+		appliedSomeChangesThisCycle = false;
+
+		auto changeIt = changes_.begin();
+		while (changeIt != changes_.end())
+		{
+			auto change = *changeIt;
+			if (dependencies_.contains(change) || directConflicts_.contains(change))
+			{
+				// do nothing
+				++changeIt;
+			}
+			else
+			{
+				// This change doesn't depend on anything and has no conflicts, apply it
+				++totalAppliedChanges;
+				appliedSomeChangesThisCycle = true;
+				auto change = *changeIt;
+
+				applyChange(currentTree, change);
+				removeAppliedChange(change);
+			}
+		}
+	}
+
+	return totalAppliedChanges;
+}
+
+int ChangeGraph::applyDependentNonConflictingChanges(GenericTree* currentTree)
+{
+	(void) currentTree;
+	Q_ASSERT(false);
+}
+
+void ChangeGraph::applyChange(GenericTree* currentTree, MergeChange* change)
+{
+	(void) currentTree;
+	(void) change;
+	Q_ASSERT(false);
+}
+
+void ChangeGraph::removeAppliedChange(MergeChange* change)
+{
+	(void) change;
+	Q_ASSERT(false);
+	delete change;
 }
 
 }
