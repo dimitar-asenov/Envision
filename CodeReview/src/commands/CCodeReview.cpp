@@ -85,16 +85,16 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	reviewViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
 	reviewViewItem->setZoomLabelsEnabled(false);
 
-	auto diffPairs = diffManager.computeDiffFramesWithOverlays(oldRev, newRev, reviewViewItem);
+	auto diffFrames = diffManager.computeDiffFramesAndOverlays(oldRev, newRev, reviewViewItem);
 
-	auto orderedDiffPairs = CodeReviewManager::orderDiffFrames(UseAnalysisGroupings::useAnalysisGrouping,
-																							  Orderings::alphabeticalOrdering, diffPairs);
+	auto orderedDiffFrames = CodeReviewManager::orderDiffFrames(UseAnalysisGroupings::useAnalysisGrouping,
+																							  Orderings::alphabeticalOrdering, diffFrames);
 
-	for (int i = 0; i < orderedDiffPairs.size(); i++)
-		for (int j = 0; j < orderedDiffPairs[i].size(); j++)
+	for (int i = 0; i < orderedDiffFrames.size(); i++)
+		for (int j = 0; j < orderedDiffFrames[i].size(); j++)
 		{
 			MajorMinorIndex index = {i, j};
-			reviewViewItem->insertNode(orderedDiffPairs[i][j], index);
+			reviewViewItem->insertNode(orderedDiffFrames[i][j], index);
 		}
 
 	// switch to the newly created view

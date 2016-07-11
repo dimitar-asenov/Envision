@@ -79,7 +79,7 @@ class VERSIONCONTROLUI_API DiffManager
 
 		static QString createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision);
 
-		QList<DiffFrame*> computeDiffFramesWithOverlays(QString oldVersion,
+		QList<DiffFrame*> computeDiffFramesAndOverlays(QString oldVersion,
 																					QString newVersion, Visualization::ViewItem* viewItem);
 
 	private:
@@ -185,8 +185,8 @@ class VERSIONCONTROLUI_API DiffManager
 
 		static QHash<Visualization::ViewItem*, int> onZoomHandlerIdPerViewItem_;
 		void createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes,
-												 Visualization::ViewItem* viewItem, DiffSetup diffSetup,
-												VersionControlUI::DiffFrame* diffFrame);
+												Visualization::ViewItem* viewItem, DiffSetup diffSetup,
+												Visualization::Item* ankerItem);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DiffManager::NameChangeVisualizations)
