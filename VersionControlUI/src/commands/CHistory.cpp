@@ -41,6 +41,14 @@ CHistory::CHistory() : CommandWithFlags{"history", {{"accumulate"}}, true, false
 {
 }
 
+bool CHistory::canInterpret(Visualization::Item* source, Visualization::Item* target,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+{
+	if (!source->findAncestorWithNode()) return false;
+
+	return CommandWithFlags::canInterpret(source, target, commandTokens, cursor);
+}
+
 Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* source, Visualization::Item*,
 												  const std::unique_ptr<Visualization::Cursor>& /*cursor*/,
 												  const QString& name, const QStringList& attributes)
