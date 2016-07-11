@@ -82,48 +82,48 @@ QList<QList<VersionControlUI::DiffFrame*>> UseAnalysisGroupings::useAnalysisGrou
 {
 	QList<QList<VersionControlUI::DiffFrame*>> result;
 
-	QHash<VersionControlUI::DiffFrame*, DiffFrameInfo> diffPairsWithInfo;
+	QHash<VersionControlUI::DiffFrame*, DiffFrameInfo> diffFrameToInfo;
 	QHash<VersionControlUI::DiffFrame*, QList<VersionControlUI::DiffFrame*>*> groupLists;
 
-	for (auto diffCompPair : diffFrame)
+	for (auto diffFrame : diffFrames)
 	{
-		auto info = computeDiffFrameDependenciesAndPresentations(diffCompPair);
+		auto info = computeDiffFrameDependenciesAndPresentations(diffFrame);
 
-		diffPairsWithInfo.insert(diffCompPair, info);
+		diffFrameToInfo.insert(diffFrame, info);
 	}
 
-	for (auto diffPair : diffPairsWithInfo.keys())
+	for (auto diffFrame : diffFrames)
 	{
 		bool dependsOnOther = false;
 
-		for (auto otherDiffPair : diffPairsWithInfo.keys())
+		for (auto otherDiffFrame : diffFrames)
 		{
-			if (diffPair == otherDiffPair) continue;
+			if (diffFrame == otherDiffFrame) continue;
 
-			if (dependsOn(diffPairsWithInfo.value(diffPair), otherDiffPair, diffPairsWithInfo.value(otherDiffPair)))
+			if (dependsOn(diffFrameToInfo.value(diffFrame), otherDiffFrame, diffFrameToInfo.value(otherDiffFrame)))
 			{
 				dependsOnOther = true;
-				auto iter = groupLists.find(otherDiffPair);
+				auto iter = groupLists.find(otherDiffFrame);
 				if (iter != groupLists.end())
 				{
-					(*iter)->append(diffPair);
-					groupLists.insert(diffPair, *iter);
+					iter.value()->append(diffFrame);
+					groupLists.insert(diffFrame, iter.value());
 				} else
 				{
-					result.prepend({});
-					result.first().append(diffPair);
-					result.first().append(otherDiffPair);
-					groupLists.insert(diffPair, &result.first());
-					groupLists.insert(otherDiffPair, &result.first());
+					result.append(QList<VersionControlUI::DiffFrame*>{});
+					result.last().append(diffFrame);
+					result.last().append(otherDiffFrame);
+					groupLists.insert(diffFrame, &result.last());
+					groupLists.insert(otherDiffFrame, &result.last());
 				}
 			}
 		}
 
-		if (!dependsOnOther && !groupLists.contains(diffPair))
+		if (!dependsOnOther && !groupLists.contains(diffFrame))
 		{
-			result.prepend({});
-			result.first().append(diffPair);
-			groupLists.insert(diffPair, &result.first());
+			result.append(QList<VersionControlUI::DiffFrame*>{});
+			result.last().append(diffFrame);
+			groupLists.insert(diffFrame, &result.last());
 		}
 	}
 	return result;
