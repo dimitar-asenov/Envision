@@ -448,10 +448,20 @@ void ChangeGraph::updateOutgoingLabels(Model::NodeIdType /*parentId*/, IdToLabel
 	Q_ASSERT(false);
 }
 
-void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType /*parentId*/, IdToLabelMap /*labelMap*/,
-													GenericTree* /*baseTree*/)
+void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap,	GenericTree* baseTree)
 {
-	Q_ASSERT(false);
+	auto parentNode = baseTree->find(parentId);
+
+	// Update baseTree labels according to base Labels in labelMap
+	for (auto node : parentNode->children())
+	{
+		auto labelIt = labelMap.find(node->id());
+		while (labelIt != labelMap.end() && labelIt.key() == node->id()) {
+			if (labelIt.value().branch.testFlag(MergeChange::None))	// Base element
+				break;
+		}
+		node->setLabel(labelIt.value().label);
+	}
 }
 
 }
