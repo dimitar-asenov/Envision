@@ -35,9 +35,9 @@ namespace CodeReview {
 class CODEREVIEW_API Orderings
 {
 	public:
-		static OrderedDiffFrames noOrdering(DiffFrames diffFrames);
+		static QList<VersionControlUI::DiffFrame*> noOrdering(QList<VersionControlUI::DiffFrame*> diffFrames);
 
-		static OrderedDiffFrames alphabeticalOrdering(DiffFrames diffFrames);
+		static QList<VersionControlUI::DiffFrame*> alphabeticalOrdering(QList<VersionControlUI::DiffFrame*> diffFrames);
 };
 
 }

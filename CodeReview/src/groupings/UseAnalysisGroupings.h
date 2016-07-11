@@ -36,15 +36,16 @@ class CODEREVIEW_API UseAnalysisGroupings
 {
 	public:
 
-		static bool const ONLY_CONSIDER_CHANGES;
+		static QList<QList<VersionControlUI::DiffFrame*>> useAnalysisGrouping(QList<VersionControlUI::DiffFrame*> diffFrames);
 
+	private:
 		struct DiffFrameInfo
 		{
 			QSet<Model::Node*> refersTo_;
 			QSet<Model::Node*> shows_;
 		};
 
-		static GroupedDiffFrames useAnalysisGrouping(DiffFrames diffFrames);
+		static bool const ONLY_CONSIDER_CHANGES;
 
 		static DiffFrameInfo computeDiffFrameDependenciesAndPresentations
 													(VersionControlUI::DiffFrame* diffCompPair);

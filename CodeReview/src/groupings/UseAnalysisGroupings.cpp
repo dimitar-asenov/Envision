@@ -77,7 +77,8 @@ UseAnalysisGroupings::DiffFrameInfo UseAnalysisGroupings::computeDiffFrameDepend
 }
 
 
-GroupedDiffFrames UseAnalysisGroupings::useAnalysisGrouping(DiffFrames diffFrame)
+QList<QList<VersionControlUI::DiffFrame*>> UseAnalysisGroupings::useAnalysisGrouping(QList<VersionControlUI::DiffFrame*>
+																												 diffFrames)
 {
 	QList<QList<VersionControlUI::DiffFrame*>> result;
 

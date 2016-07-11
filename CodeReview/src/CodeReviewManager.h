@@ -34,17 +34,11 @@
 
 namespace CodeReview {
 
-using DiffFrames = QList<VersionControlUI::DiffFrame*>;
-
-using OrderedDiffFrames = QList<VersionControlUI::DiffFrame*>;
-
-using GroupedDiffFrames = QList<QList<VersionControlUI::DiffFrame*>>;
-
 using GroupingFunction =
-		std::function<GroupedDiffFrames (DiffFrames diffFrames)>;
+		std::function<QList<QList<VersionControlUI::DiffFrame*>> (QList<VersionControlUI::DiffFrame*> diffFrames)>;
 
 using OrderingFunction =
-		std::function<OrderedDiffFrames (DiffFrames diffFrames)>;
+		std::function<QList<VersionControlUI::DiffFrame*> (QList<VersionControlUI::DiffFrame*> diffFrames)>;
 
 class CODEREVIEW_API CodeReviewManager
 {

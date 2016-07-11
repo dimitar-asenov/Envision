@@ -29,12 +29,12 @@
 namespace CodeReview
 {
 
-OrderedDiffFrames Orderings::noOrdering(DiffFrames diffFrames)
+QList<VersionControlUI::DiffFrame*> Orderings::noOrdering(QList<VersionControlUI::DiffFrame*> diffFrames)
 {
 	return diffFrames;
 }
 
-OrderedDiffFrames Orderings::alphabeticalOrdering(DiffFrames diffFrames)
+QList<VersionControlUI::DiffFrame*> Orderings::alphabeticalOrdering(QList<VersionControlUI::DiffFrame*> diffFrames)
 {
 
 	std::sort(diffFrames.begin(), diffFrames.end(),
