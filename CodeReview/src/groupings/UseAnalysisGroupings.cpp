@@ -144,7 +144,8 @@ bool UseAnalysisGroupings::dependsOn(DiffFrameInfo infoA,
 					return true;
 		}
 		return false;
-	} else
+	}
+	else
 	{
 		auto refers = infoA.refersTo_;
 		auto shows = infoB.shows_;
