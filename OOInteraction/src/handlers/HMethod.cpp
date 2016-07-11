@@ -26,8 +26,6 @@
 
 #include "HMethod.h"
 
-#include "VersionControlUI/src/commands/CHistory.h"
-
 #include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
@@ -46,7 +44,6 @@ namespace OOInteraction {
 HMethod::HMethod()
 {
 	addCommand(new VersionControlUI::CDiff{});
-	addCommand(new VersionControlUI::CHistory{});
 }
 
 HMethod* HMethod::instance()

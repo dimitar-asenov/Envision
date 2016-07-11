@@ -34,7 +34,6 @@
 #include "../commands/CDumpMethodRenderings.h"
 #include "../actions/OOActions.h"
 
-#include "VersionControlUI/src/commands/CHistory.h"
 #include "InteractionBase/src/commands/CMerge.h"
 #include "InteractionBase/src/prompt/Prompt.h"
 #include "InteractionBase/src/input_actions/ActionRegistry.h"
@@ -56,7 +55,6 @@ HProject::HProject()
 	addCommand(new CCreateField{});
 
 	addCommand(new VersionControlUI::CDiff{});
-	addCommand(new VersionControlUI::CHistory{});
 	addCommand(new Interaction::CMerge{});
 
 	addCommand(new CDumpMethodRenderings{});
