@@ -106,8 +106,8 @@ class FILEPERSISTENCE_API ChangeGraph
 		void removeLabelConflictsBetweenChildren(Model::NodeIdType parentId);
 
 		void updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree);
-		void updateIncomingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
-		void updateOutgoingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
+		void updateListChanges(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* treeBase);
+
 
 		void createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QList<LabelData> newLabels,
 										  Model::NodeIdType parentId);
