@@ -488,6 +488,67 @@ void ChangeGraph::createRelabelChanges(Model::NodeIdType nodeId, QString oldLabe
 		}
 	}
 }
+
+void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData labelOne, LabelData labelTwo)
+{
+	Q_ASSERT(change->branches() == (MergeChange::BranchA | MergeChange::BranchB) );
+	Q_ASSERT(change->type() == ChangeType::Move);
+
+	// Adjust the change for the A branch
+	change->branches_ = MergeChange::BranchA;
+	change->newLabel_ = labelOne.branch == MergeChange::BranchA ? labelOne.label : labelTwo.label;
+	if (change->newLabel() == change->oldLabel()) change->updateFlags_ = ChangeDescription::NoFlags;
+	else change->updateFlags_ = ChangeDescription::Label;
+
+	// Make a new change for label B
+	auto newLabelB = labelOne.branch == MergeChange::BranchB ? labelOne.label : labelTwo.label;
+	auto changeB = new MergeChange{ChangeType::Move,
+			(newLabelB == change->oldLabel() ? ChangeDescription::NoFlags : ChangeDescription::Label),
+			change->nodeId(), MergeChange::BranchB,
+			change->oldParentId(), change->newParentId(), change->oldLabel(), newLabelB, {}, {}, {}, {}};
+
+	changes_.append(changeB);
+	changesForNode_.insert(changeB->nodeId(), changeB);
+	changesForChildren_.insert(changeB->oldParentId(), changeB);
+	changesForChildren_.insert(changeB->newParentId(), changeB);
+
+	// Change A conflicts with Change B
+	QList<MergeChange*> changesToConflictWith {change};
+
+	// All of change A's conflicts will also be change B conflicts
+	auto conflictIt = directConflicts_.find(change);
+	while (conflictIt != directConflicts_.end() && conflictIt.key() == change)
+	{
+		changesToConflictWith.append(conflictIt.value());
+		++conflictIt;
+	}
+	// Actually add the dependencies
+	for (auto & conflict : changesToConflictWith)
+	{
+		directConflicts_.insert(changeB, conflict);
+		directConflicts_.insert(conflict, changeB);
+	}
+
+
+	// All changes that change A depends on, change B must also depend on
+	QList<QPair<MergeChange*, MergeChange*>> dependenciesToAdd;
+	auto depIt = dependencies_.find(change);
+	while (depIt != dependencies_.end() && depIt.key() == change)
+	{
+		dependenciesToAdd.append(qMakePair(changeB, depIt.value()));
+		++depIt;
+	}
+
+	// All changes that depend on change A, must also depend on change B
+	// Iterate through all dependencies
+	for (auto it = dependencies_.begin(); it != dependencies_.end(); ++it)
+		if (it.value() == change)
+			dependenciesToAdd.append( qMakePair(it.key(), changeB) );
+
+	// Actually add the changes
+	for (auto& dep : dependenciesToAdd)
+		dependencies_.insert(dep.first, dep.second);
+
 }
 
 }

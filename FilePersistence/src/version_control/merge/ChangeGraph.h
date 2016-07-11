@@ -106,6 +106,7 @@ class FILEPERSISTENCE_API ChangeGraph
 
 		void createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QList<LabelData> newLabels,
 										  Model::NodeIdType parentId);
+		void splitMoveChangeForSecondLabel(MergeChange* change, LabelData labelOne, LabelData labelTwo);
 };
 
 }
