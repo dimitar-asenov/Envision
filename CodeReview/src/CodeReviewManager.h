@@ -27,10 +27,9 @@
 #pragma once
 
 #include "codereview_api.h"
+#include "nodes/CommentedNode.h"
 
 #include "VersionControlUI/src/nodes/DiffFrame.h"
-
-#include "nodes/CommentedNode.h"
 
 namespace CodeReview {
 

@@ -24,23 +24,21 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HReviewableItem.h"
-
 #include "CodeReviewPlugin.h"
-#include "SelfTest/src/TestManager.h"
+#include "handlers/HReviewableItem.h"
+#include "handlers/HCodeReviewOverlay.h"
+#include "overlays/CodeReviewCommentOverlay.h"
+#include "commands/CCodeReview.h"
+
 #include "Logger/src/Log.h"
 
-#include "overlays/CodeReviewCommentOverlay.h"
-
-#include "handlers/HCodeReviewOverlay.h"
-
 #include "VersionControlUI/src/items/VDiffFrame.h"
-
-#include "commands/CCodeReview.h"
 
 #include "OOVisualization/src/declarations/VClass.h"
 
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+
+#include "SelfTest/src/TestManager.h"
 
 namespace CodeReview {
 

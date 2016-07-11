@@ -27,7 +27,6 @@
 #pragma once
 
 #include "../codereview_api.h"
-
 #include "../CodeReviewManager.h"
 
 namespace CodeReview {

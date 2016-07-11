@@ -26,8 +26,12 @@
 
 #include "CCodeReview.h"
 
+#include "../CodeReviewManager.h"
 #include "../nodes/CommentedNode.h"
 #include "../nodes/ReviewComment.h"
+#include "../orderings/Orderings.h"
+#include "../groupings/UseAnalysisGroupings.h"
+#include "../overlays/CodeReviewCommentOverlay.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/model/AllTreeManagers.h"
@@ -38,16 +42,7 @@
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/ViewItemManager.h"
 
-
 #include "VersionControlUI/src/DiffManager.h"
-
-#include "../CodeReviewManager.h"
-
-#include "../orderings/Orderings.h"
-
-#include "../groupings/UseAnalysisGroupings.h"
-
-#include "../overlays/CodeReviewCommentOverlay.h"
 
 using namespace Visualization;
 
