@@ -52,7 +52,7 @@ namespace VersionControlUI {
 struct VersionNodes;
 struct ChangeWithNodes;
 struct DiffSetup;
-class DiffComparisonPair;
+class DiffFrame;
 
 class VERSIONCONTROLUI_API DiffManager
 {
@@ -114,10 +114,10 @@ class VERSIONCONTROLUI_API DiffManager
 		static void createOverlaysForChanges(Visualization::ViewItem* diffViewItem, QList<ChangeWithNodes> changesWithNodes);
 
 		/**
-		 * Returns a list of DiffComparisonPair created from the ids from \a diffComparisonPairNodeIds.
+		 * Returns a list of DiffFrame created from the ids from \a diffFrameNodeIds.
 		 */
-		QList<DiffComparisonPair*> createDiffComparisonPairs(DiffSetup& diffSetup,
-																			 QSet<Model::NodeIdType> diffComparisonPairNodeIds);
+		QList<DiffFrame*> createDiffFrames(DiffSetup& diffSetup,
+																			 QSet<Model::NodeIdType> diffFrameNodeIds);
 
 		/**
 		 * Creates a TreeManager from \a version using \a repository.

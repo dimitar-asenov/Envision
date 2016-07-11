@@ -34,10 +34,10 @@
 #include "ModelBase/src/nodes/Text.h"
 
 namespace VersionControlUI {
-	class DiffComparisonPair;
+	class DiffFrame;
 }
 
-extern template class VERSIONCONTROLUI_API Model::TypedList<VersionControlUI::DiffComparisonPair>;
+extern template class VERSIONCONTROLUI_API Model::TypedList<VersionControlUI::DiffFrame>;
 
 namespace VersionControlUI {
 
@@ -48,12 +48,12 @@ struct ObjectPathCrumbData
 	QString path;
 };
 
-class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINode>
+class VERSIONCONTROLUI_API DiffFrame : public Super<Visualization::UINode>
 {
-	NODE_DECLARE_STANDARD_METHODS(DiffComparisonPair)
+	NODE_DECLARE_STANDARD_METHODS(DiffFrame)
 
 	public:
-		DiffComparisonPair(Model::Node* oldVersionNode, Model::Node* newVersionNode);
+		DiffFrame(Model::Node* oldVersionNode, Model::Node* newVersionNode);
 
 		virtual QJsonValue toJson() const override;
 
@@ -66,7 +66,7 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 		Model::Text* singleObjectPath();
 
 		bool twoObjectPathsDefined();
-		bool isDummyDiffComparisonPair();
+		bool isDummyDiffFrame();
 		QString comparisonName();
 
 		QList<ObjectPathCrumbData> objectPathCrumbsDataOldNode();
@@ -74,12 +74,21 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 		static QString computeObjectPath(Model::Node* node);
 
+		void addOldChangedNode(Model::Node* oldNode);
+		void addNewChangedNode(Model::Node* newNode);
+
+		QSet<Model::Node*> oldChangedNodes();
+		QSet<Model::Node*> newChangedNodes();
+
 	private:
-		bool isDummyDiffComparisonPair_{false};
+		bool isDummyDiffFrame_{false};
 		bool twoObjectPathsDefined_{};
 
 		Model::Node* oldVersionNode_{};
 		Model::Node* newVersionNode_{};
+
+		QSet<Model::Node*> oldChangedNodes_;
+		QSet<Model::Node*> newChangedNodes_;
 
 		QString comparisonName_;
 
@@ -99,18 +108,24 @@ class VERSIONCONTROLUI_API DiffComparisonPair : public Super<Visualization::UINo
 
 };
 
-inline Model::Node* DiffComparisonPair::newVersionNode() {return newVersionNode_;}
-inline Model::Node* DiffComparisonPair::oldVersionNode() {return oldVersionNode_;}
+inline Model::Node* DiffFrame::newVersionNode() {return newVersionNode_;}
+inline Model::Node* DiffFrame::oldVersionNode() {return oldVersionNode_;}
 
-inline bool DiffComparisonPair::twoObjectPathsDefined() {return twoObjectPathsDefined_;}
-inline bool DiffComparisonPair::isDummyDiffComparisonPair() {return isDummyDiffComparisonPair_;}
+inline bool DiffFrame::twoObjectPathsDefined() {return twoObjectPathsDefined_;}
+inline bool DiffFrame::isDummyDiffFrame() {return isDummyDiffFrame_;}
 
-inline QString DiffComparisonPair::comparisonName() { return comparisonName_; }
+inline QString DiffFrame::comparisonName() { return comparisonName_; }
 
-inline QList<ObjectPathCrumbData> DiffComparisonPair::objectPathCrumbsDataOldNode()
+inline QList<ObjectPathCrumbData> DiffFrame::objectPathCrumbsDataOldNode()
 { return objectPathCrumbsDataOldNode_; }
 
-inline QList<ObjectPathCrumbData> DiffComparisonPair::objectPathCrumbsDataNewNode()
+inline QList<ObjectPathCrumbData> DiffFrame::objectPathCrumbsDataNewNode()
 { return objectPathCrumbsDataNewNode_; }
+
+inline void DiffFrame::addOldChangedNode(Model::Node* oldNode) {oldChangedNodes_.insert(oldNode);}
+inline void DiffFrame::addNewChangedNode(Model::Node* newNode) {newChangedNodes_.insert(newNode);}
+
+inline QSet<Model::Node*> DiffFrame::oldChangedNodes() {return oldChangedNodes_;}
+inline QSet<Model::Node*> DiffFrame::newChangedNodes() {return newChangedNodes_;}
 
 }

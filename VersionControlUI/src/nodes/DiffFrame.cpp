@@ -23,24 +23,24 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "DiffComparisonPair.h"
+#include "DiffFrame.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 #include "ModelBase/src/nodes/TypedList.hpp"
 
-template class Model::TypedList<VersionControlUI::DiffComparisonPair>;
+template class Model::TypedList<VersionControlUI::DiffFrame>;
 
 namespace VersionControlUI
 {
 
-DEFINE_NODE_TYPE_REGISTRATION_METHODS(DiffComparisonPair)
+DEFINE_NODE_TYPE_REGISTRATION_METHODS(DiffFrame)
 
-DiffComparisonPair::DiffComparisonPair(Model::Node *)
-	:Super{}, isDummyDiffComparisonPair_{true}
+DiffFrame::DiffFrame(Model::Node *)
+	:Super{}, isDummyDiffFrame_{true}
 {}
 
-DiffComparisonPair::DiffComparisonPair(Model::Node* oldVersionNode, Model::Node* newVersionNode) : Super{}
+DiffFrame::DiffFrame(Model::Node* oldVersionNode, Model::Node* newVersionNode) : Super{}
 {
 	oldVersionNode_ = oldVersionNode;
 	newVersionNode_ = newVersionNode;
@@ -48,7 +48,7 @@ DiffComparisonPair::DiffComparisonPair(Model::Node* oldVersionNode, Model::Node*
 	computeObjectPath();
 }
 
-void DiffComparisonPair::setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName)
+void DiffFrame::setComparisonName(Model::Node* node, QString nodeObjectPath, QString componentName)
 {
 	comparisonName_ = nodeObjectPath;
 	if (node->definesSymbol())
@@ -56,7 +56,7 @@ void DiffComparisonPair::setComparisonName(Model::Node* node, QString nodeObject
 	comparisonName_ += componentName;
 }
 
-void DiffComparisonPair::computeObjectPath()
+void DiffFrame::computeObjectPath()
 {
 	auto oldVersionObjectPath = computeObjectPath(oldVersionNode_);
 	auto newVersionObjectPath = computeObjectPath(newVersionNode_);
@@ -96,7 +96,7 @@ void DiffComparisonPair::computeObjectPath()
 	setComparisonName(comparisonNameNode, comparisonNameObjectPath, componentName);
 }
 
-QString DiffComparisonPair::computeObjectPath(Model::Node* node)
+QString DiffFrame::computeObjectPath(Model::Node* node)
 {
 	if (!node) return "";
 	auto parent = node->parent();
@@ -112,7 +112,7 @@ QString DiffComparisonPair::computeObjectPath(Model::Node* node)
 	return objectPath;
 }
 
-void DiffComparisonPair::computeObjectPathCrumbs(Model::Node* oldNode, QString oldNodeObjectPath,
+void DiffFrame::computeObjectPathCrumbs(Model::Node* oldNode, QString oldNodeObjectPath,
 																 Model::Node* newNode, QString newNodeObjectPath)
 {
 
@@ -120,7 +120,7 @@ void DiffComparisonPair::computeObjectPathCrumbs(Model::Node* oldNode, QString o
 	objectPathCrumbsDataNewNode_ = computeObjectPathCrumbData(newNode, newNodeObjectPath);
 }
 
-QList<ObjectPathCrumbData> DiffComparisonPair::computeObjectPathCrumbData(Model::Node* node, QString& objectPath)
+QList<ObjectPathCrumbData> DiffFrame::computeObjectPathCrumbData(Model::Node* node, QString& objectPath)
 {
 	if (!node) return {};
 	auto parent = node->parent();
@@ -146,7 +146,7 @@ QList<ObjectPathCrumbData> DiffComparisonPair::computeObjectPathCrumbData(Model:
 	return objectPathCrumbData;
 }
 
-QString DiffComparisonPair::computeComponentName()
+QString DiffFrame::computeComponentName()
 {
 	Model::Node* nodeToComputeComponentType = nullptr;
 	QString componentName = "";
@@ -176,15 +176,15 @@ QString DiffComparisonPair::computeComponentName()
 	return componentName;
 }
 
-DiffComparisonPair::DiffComparisonPair(Model::Node *, Model::PersistentStore &, bool)
+DiffFrame::DiffFrame(Model::Node *, Model::PersistentStore &, bool)
 	:Super{}
 {
 	Q_ASSERT(false);
 }
 
-DiffComparisonPair* DiffComparisonPair::clone() const { return new DiffComparisonPair{*this}; }
+DiffFrame* DiffFrame::clone() const { return new DiffFrame{*this}; }
 
-QJsonValue DiffComparisonPair::toJson() const
+QJsonValue DiffFrame::toJson() const
 {
 	return QJsonValue{};
 }

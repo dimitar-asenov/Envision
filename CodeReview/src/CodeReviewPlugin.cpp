@@ -34,7 +34,7 @@
 
 #include "handlers/HCodeReviewOverlay.h"
 
-#include "VersionControlUI/src/items/VDiffComparisonPair.h"
+#include "VersionControlUI/src/items/VDiffFrame.h"
 
 namespace CodeReview {
 
@@ -46,7 +46,7 @@ Logger::Log& CodeReviewPlugin::log()
 
 bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
 {
-	VersionControlUI::VDiffComparisonPair::setDefaultClassHandler(HReviewableItem::instance());
+	VersionControlUI::VDiffFrame::setDefaultClassHandler(HReviewableItem::instance());
 	CodeReviewCommentOverlay::setDefaultClassHandler(HCodeReviewOverlay::instance());
 	return true;
 }
