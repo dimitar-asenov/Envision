@@ -55,8 +55,6 @@ class CODEREVIEW_API CodeReviewManager
 		QHash<QString, CommentedNode*> commentedNodes_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
 
-		Model::TreeManager* manager_{};
-
 };
 
 }
