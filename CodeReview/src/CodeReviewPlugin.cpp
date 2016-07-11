@@ -36,6 +36,12 @@
 
 #include "VersionControlUI/src/items/VDiffFrame.h"
 
+#include "commands/CCodeReview.h"
+
+#include "OOVisualization/src/declarations/VClass.h"
+
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+
 namespace CodeReview {
 
 Logger::Log& CodeReviewPlugin::log()
@@ -48,6 +54,9 @@ bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
 {
 	VersionControlUI::VDiffFrame::setDefaultClassHandler(HReviewableItem::instance());
 	CodeReviewCommentOverlay::setDefaultClassHandler(HCodeReviewOverlay::instance());
+
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCodeReview{});
+
 	return true;
 }
 

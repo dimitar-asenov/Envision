@@ -49,4 +49,18 @@ CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
 	return commentedNode;
 }
 
+QList<QList<VersionControlUI::DiffFrame*>> CodeReviewManager::orderDiffFrames(
+		GroupingFunction groupingFunction, OrderingFunction orderingFunction,
+		QList<VersionControlUI::DiffFrame*> diffFrames)
+{
+	QList<QList<VersionControlUI::DiffFrame*>> result;
+	auto groupedComparisonPairs = groupingFunction(diffFrames);
+	for (auto group : groupedComparisonPairs)
+	{
+		auto orderedGroup = orderingFunction(group);
+		result.prepend(orderedGroup);
+	}
+	return result;
+}
+
 }

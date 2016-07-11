@@ -10,6 +10,7 @@ add_library(CodeReview SHARED
 	src/CodeReviewPlugin.h
 	src/CodeReviewManager.h
 	src/commands/CCodeReviewComment.h
+	src/commands/CCodeReview.h
 	src/overlays/CodeReviewCommentOverlay.h
 	src/overlays/CodeReviewCommentOverlayStyle.h
 	src/handlers/HReviewableItem.h
@@ -20,10 +21,13 @@ add_library(CodeReview SHARED
 	src/items/VCommentedNodeStyle.h
 	src/items/VReviewComment.h
 	src/items/VReviewCommentStyle.h
+	src/orderings/Orderings.h
+	src/groupings/UseAnalysisGroupings.h
 	src/CodeReviewException.cpp
 	src/CodeReviewPlugin.cpp
 	src/CodeReviewManager.cpp
 	src/commands/CCodeReviewComment.cpp
+	src/commands/CCodeReview.cpp
 	src/overlays/CodeReviewCommentOverlay.cpp
 	src/overlays/CodeReviewCommentOverlayStyle.cpp
 	src/handlers/HReviewableItem.cpp
@@ -34,6 +38,8 @@ add_library(CodeReview SHARED
 	src/items/VCommentedNodeStyle.cpp
 	src/items/VReviewComment.cpp
 	src/items/VReviewCommentStyle.cpp
+	src/orderings/Orderings.cpp
+	src/groupings/UseAnalysisGroupings.cpp
 	test/SimpleTest.cpp
 )
 envision_plugin(CodeReview OOInteraction VersionControlUI)
