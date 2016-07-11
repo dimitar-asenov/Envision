@@ -79,6 +79,9 @@ class VERSIONCONTROLUI_API DiffManager
 
 		static QString createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision);
 
+		QList<DiffFrame*> computeDiffFramesWithOverlays(QString oldVersion,
+																					QString newVersion, Visualization::ViewItem* viewItem);
+
 	private:
 
 		DiffSetup initializeDiffPrerequisites(QString oldVersion, QString newVersion);
@@ -117,7 +120,8 @@ class VERSIONCONTROLUI_API DiffManager
 		 * Returns a list of DiffFrame created from the ids from \a diffFrameNodeIds.
 		 */
 		QList<DiffFrame*> createDiffFrames(DiffSetup& diffSetup,
-																			 QSet<Model::NodeIdType> diffFrameNodeIds);
+																			 QSet<Model::NodeIdType> diffFrameNodeIds,
+																			 const QList<ChangeWithNodes>& changesWithNodes);
 
 		/**
 		 * Creates a TreeManager from \a version using \a repository.
@@ -151,9 +155,17 @@ class VERSIONCONTROLUI_API DiffManager
 
 		QString computeNameChangeInformation(const DiffSetup& diffSetup);
 
+		/**
+		 * Check if at least one of the nodes \a oldNode or \a newNode is in the targetNode subtree. If no targetNode is
+		 * specified returns true.
+		 */
 		bool areInTargetNodeSubtree(Model::Node* oldNode, Model::Node* newNode,
 																					const DiffSetup& diffSetup);
 
+		/**
+		 * Check if change associated with id should be visualized (e.g. if the change is part of a name change, does it
+		 * satisfy the visualization constraint).
+		 */
 		bool shouldShowChange(Model::NodeIdType id);
 
 		QString project_;
@@ -172,6 +184,9 @@ class VERSIONCONTROLUI_API DiffManager
 		static const QString OVERVIEW_ICON_OVERLAY_NAME;
 
 		static QHash<Visualization::ViewItem*, int> onZoomHandlerIdPerViewItem_;
+		void createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes,
+												 Visualization::ViewItem* viewItem, DiffSetup diffSetup,
+												VersionControlUI::DiffFrame* diffFrame);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DiffManager::NameChangeVisualizations)

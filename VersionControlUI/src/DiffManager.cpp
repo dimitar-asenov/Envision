@@ -411,34 +411,63 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	diffViewItem->setZoomLabelsEnabled(false);
 
 	int row = 0;
-	auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize);
+	auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize, changesWithNodes);
 	for (auto diffFrame : diffFrames)
 		diffViewItem->insertNode(diffFrame, {row++, 0});
 
+	createOverlaysForChanges(changesWithNodes, diffViewItem, diffSetup, diffFrames.first());
+
+	// switch to the newly created view
+	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
+}
+
+void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes, Visualization::ViewItem* viewItem,
+														 DiffSetup diffSetup, VersionControlUI::DiffFrame* diffFrame)
+{
 	auto nameChangeInfo = computeNameChangeInformation(diffSetup);
 
-	// create visualization for changes
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [diffViewItem, changesWithNodes, diffSetup, nameChangeInfo, diffFrames]() {
-		createOverlaysForChanges(diffViewItem, changesWithNodes);
+								  [viewItem, changesWithNodes, diffSetup, nameChangeInfo, diffFrame]() {
+		createOverlaysForChanges(viewItem, changesWithNodes);
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		if (!nameChangeInfo.isEmpty()) message += "<br/><br/>" + nameChangeInfo;
-		auto overlay = new Visualization::MessageOverlay{diffViewItem,
-				[diffViewItem, message, diffFrames](Visualization::MessageOverlay* overlay)
+		auto overlay = new Visualization::MessageOverlay{viewItem,
+				[viewItem, message, diffFrame](Visualization::MessageOverlay* overlay)
 		{
-			auto vDiffFrame = DCast<VersionControlUI::VDiffFrame>(diffViewItem->findVisualizationOf
-																					(diffFrames.first()));
+			auto vDiffFrame = DCast<VersionControlUI::VDiffFrame>(viewItem->findVisualizationOf
+																					(diffFrame));
 			overlay->setPos(vDiffFrame->scenePos().x(),
 								 vDiffFrame->scenePos().y()-overlay->heightInScene());
 			return message;
 		}, Visualization::MessageOverlay::itemStyles().get("info"), true};
 
 
-		diffViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
+		viewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
 	});
+}
 
-	// switch to the newly created view
-	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
+QList<DiffFrame*> DiffManager::computeDiffFramesWithOverlays(QString oldVersion, QString newVersion,
+																										Visualization::ViewItem* viewItem)
+{
+	DiffSetup diffSetup;
+
+	// detailed changes
+	QList<ChangeWithNodes> changesWithNodes;
+
+	// contains the nodes which will be drawn
+	QSet<Model::NodeIdType> changedNodesToVisualize;
+
+	// fill up lists
+	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
+
+	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
+	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
+
+	auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize, changesWithNodes);
+
+	createOverlaysForChanges(changesWithNodes, viewItem, diffSetup, diffFrames.first());
+
+	return diffFrames;
 }
 
 QString DiffManager::createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision)
@@ -501,7 +530,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 
-		auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize);
+		auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize, changesWithNodes);
 
 		// if summary activated and no changes to show, insert dummy DiffFrame
 		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty()
@@ -804,7 +833,8 @@ Visualization::Item* DiffManager::addOverlaysAndReturnItem(Model::Node* node, Vi
 
 
 QList<DiffFrame*> DiffManager::createDiffFrames(DiffSetup& diffSetup,
-													 QSet<Model::NodeIdType> diffFrameNodeIds)
+													 QSet<Model::NodeIdType> diffFrameNodeIds,
+													 const QList<ChangeWithNodes>& changesWithNodes)
 {
 	QList<DiffFrame*> diffFrames;
 	for (auto id : diffFrameNodeIds)
@@ -813,6 +843,16 @@ QList<DiffFrame*> DiffManager::createDiffFrames(DiffSetup& diffSetup,
 		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
 
 		auto diffNode = new DiffFrame{oldNode, newNode};
+
+		for (auto changeWithNode : changesWithNodes)
+		{
+			if (changeWithNode.versionNodes_.oldNode_ && oldNode->isSameOrAncestorOf(changeWithNode.versionNodes_.oldNode_))
+				diffNode->addOldChangedNode(changeWithNode.versionNodes_.oldNode_);
+
+			if (changeWithNode.versionNodes_.newNode_ && newNode->isSameOrAncestorOf(changeWithNode.versionNodes_.newNode_))
+				diffNode->addNewChangedNode(changeWithNode.versionNodes_.newNode_);
+		}
+
 		diffFrames.append(diffNode);
 	}
 
