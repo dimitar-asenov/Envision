@@ -69,7 +69,8 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	QString oldRev = commandTokens.at(1);
 	QString newRev = commandTokens.at(2);
 
-	VersionControlUI::DiffManager diffManager{managerName, {ancestorWithNode->node()->typeName()}};
+	VersionControlUI::DiffManager diffManager{managerName, {Model::SymbolMatcher{"Class"},
+																			  Model::SymbolMatcher{"Method"}}};
 
 	auto reviewViewItem = Visualization::VisualizationManager::instance().mainScene()->
 			viewItems()->viewItem("ReviewView");
