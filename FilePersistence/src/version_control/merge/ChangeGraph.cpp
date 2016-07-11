@@ -454,4 +454,23 @@ void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType /*parentId*/, IdToLabel
 	Q_ASSERT(false);
 }
 
+void ChangeGraph::createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QString newLabelA,
+													QString newLabelB, Model::NodeIdType parentId)
+{
+	auto branchAChange = new MergeChange{ChangeType::Stationary, ChangeDescription::Label, nodeId, MergeChange::BranchA,
+										parentId, parentId, oldLabel, newLabelA, {}, {}, {}, {}};
+	auto branchBChange = new MergeChange{ChangeType::Stationary, ChangeDescription::Label, nodeId, MergeChange::BranchB,
+										parentId, parentId, oldLabel, newLabelB, {}, {}, {}, {}};
+
+	changes_.append(branchAChange);
+	changes_.append(branchBChange);
+	changesForNode_.insert(nodeId, branchAChange);
+	changesForNode_.insert(nodeId, branchBChange);
+	changesForChildren_.insert(parentId, branchAChange);
+	changesForChildren_.insert(parentId, branchBChange);
+
+	directConflicts_.insert(branchAChange, branchBChange);
+	directConflicts_.insert(branchBChange, branchAChange);
+}
+
 }

@@ -103,6 +103,9 @@ class FILEPERSISTENCE_API ChangeGraph
 		void updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree);
 		void updateIncomingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
 		void updateOutgoingLabels(Model::NodeIdType parentId, IdToLabelMap labelMap);
+
+		void createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QString newLabelA, QString newLabelB,
+										  Model::NodeIdType parentId);
 };
 
 }
