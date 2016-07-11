@@ -9,9 +9,9 @@ add_library(VersionControlUI SHARED
 	src/versioncontrolui_api.h
 	src/VersionControlUIPlugin.h
 	src/DiffManager.h
-	src/nodes/DiffComparisonPair.h
-	src/items/VDiffComparisonPair.h
-	src/items/VDiffComparisonPairStyle.h
+	src/nodes/DiffFrame.h
+	src/items/VDiffFrame.h
+	src/items/VDiffFrameStyle.h
 	src/items/ObjectPathCrumb.h
 	src/items/ObjectPathCrumbStyle.h
 	src/commands/CClear.h
@@ -21,9 +21,9 @@ add_library(VersionControlUI SHARED
 	src/VersionControlUIException.cpp
 	src/VersionControlUIPlugin.cpp
 	src/DiffManager.cpp
-	src/nodes/DiffComparisonPair.cpp
-	src/items/VDiffComparisonPair.cpp
-	src/items/VDiffComparisonPairStyle.cpp
+	src/nodes/DiffFrame.cpp
+	src/items/VDiffFrame.cpp
+	src/items/VDiffFrameStyle.cpp
 	src/items/ObjectPathCrumb.cpp
 	src/items/ObjectPathCrumbStyle.cpp
 	src/commands/CClear.cpp

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,40 +26,31 @@
 
 #pragma once
 
-#include "../versioncontrolui_api.h"
+#include "../codereview_api.h"
+#include "../CodeReviewManager.h"
 
-#include "InteractionBase/src/commands/CommandWithFlags.h"
+namespace CodeReview {
 
-namespace VersionControlUI {
-
-class VERSIONCONTROLUI_API CDiff : public Interaction::Command
+class CODEREVIEW_API UseAnalysisGroupings
 {
 	public:
-		CDiff();
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		static QList<QList<VersionControlUI::DiffFrame*>> useAnalysisGrouping(QList<VersionControlUI::DiffFrame*> diffFrames);
 
 	private:
+		struct DiffFrameInfo
+		{
+			QSet<Model::Node*> refersTo_;
+			QSet<Model::Node*> shows_;
+		};
 
-		static const QString OVERVIEW_COMMAND;
-		/**
-		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
-		 */
-		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
-																								 Visualization::Item* ancestorWithNode);
+		static bool const ONLY_CONSIDER_CHANGES;
 
-		/**
-		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength
-		 */
-		QStringList computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
+		static DiffFrameInfo computeDiffFrameDependenciesAndPresentations
+													(VersionControlUI::DiffFrame* diffCompPair);
 
-		QHash<QString, QString> unambigousPrefixPerRevision_;
-		QString descriptionForCommits(QString token, const QList<QPair<QString, QString>>& commits);
+		static bool dependsOn(DiffFrameInfo infoA,
+												VersionControlUI::DiffFrame* frameB, DiffFrameInfo infoB);
 };
 
 }

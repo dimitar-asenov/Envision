@@ -28,8 +28,14 @@
 #include "SelfTest/src/TestManager.h"
 #include "Logger/src/Log.h"
 
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+
 #include "items/ObjectPathCrumb.h"
 #include "handlers/HObjectPathCrumb.h"
+
+#include "commands/CClear.h"
+#include "commands/CDiff.h"
+#include "commands/CHistory.h"
 
 namespace VersionControlUI {
 
@@ -42,6 +48,11 @@ Logger::Log& VersionControlUIPlugin::log()
 bool VersionControlUIPlugin::initialize(Core::EnvisionManager&)
 {
 	VersionControlUI::ObjectPathCrumb::setDefaultClassHandler(HObjectPathCrumb::instance());
+
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CClear{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CDiff{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CHistory{});
+
 	return true;
 }
 

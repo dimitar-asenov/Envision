@@ -49,8 +49,8 @@
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Reference.h"
 
-#include "nodes/DiffComparisonPair.h"
-#include "items/VDiffComparisonPair.h"
+#include "nodes/DiffFrame.h"
+#include "items/VDiffFrame.h"
 
 namespace VersionControlUI
 {
@@ -148,8 +148,8 @@ QString DiffManager::computeNameChangeInformation(const DiffSetup& diffSetup)
 		if (!areInTargetNodeSubtree(oldNode, newNode, diffSetup))
 			 continue;
 
-		auto oldNodeObjectPathList = DiffComparisonPair::computeObjectPath(oldNode).split(".");
-		auto newNodeObjectPathList = DiffComparisonPair::computeObjectPath(newNode).split(".");
+		auto oldNodeObjectPathList = DiffFrame::computeObjectPath(oldNode).split(".");
+		auto newNodeObjectPathList = DiffFrame::computeObjectPath(newNode).split(".");
 
 		// remove project name if it didn't change
 		if (oldNodeObjectPathList.first() == newNodeObjectPathList.first())
@@ -383,19 +383,6 @@ void DiffManager::highlightChangedParts(QString oldVersion, QString newVersion, 
 
 void DiffManager::showDiff(QString oldVersion, QString newVersion)
 {
-	DiffSetup diffSetup;
-
-	// detailed changes
-	QList<ChangeWithNodes> changesWithNodes;
-
-	// contains the nodes which will be drawn
-	QSet<Model::NodeIdType> changedNodesToVisualize;
-
-	// fill up lists
-	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
-
-	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
-	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
 
 	auto diffViewItem = Visualization::VisualizationManager::instance().mainScene()->
 			viewItems()->viewItem("DiffView");
@@ -411,34 +398,58 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	diffViewItem->setZoomLabelsEnabled(false);
 
 	int row = 0;
-	auto diffComparisonPairs = createDiffComparisonPairs(diffSetup, changedNodesToVisualize);
-	for (auto diffComparisonPair : diffComparisonPairs)
-		diffViewItem->insertNode(diffComparisonPair, {row++, 0});
+	for (auto diffFrame : computeDiffFramesAndOverlays(oldVersion, newVersion, diffViewItem))
+		diffViewItem->insertNode(diffFrame, {row++, 0});
 
+	// switch to the newly created view
+	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
+}
+
+void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes, Visualization::ViewItem* viewItem,
+														 DiffSetup diffSetup, Visualization::Item* anchorItem)
+{
 	auto nameChangeInfo = computeNameChangeInformation(diffSetup);
 
-	// create visualization for changes
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [diffViewItem, changesWithNodes, diffSetup, nameChangeInfo, diffComparisonPairs]() {
-		createOverlaysForChanges(diffViewItem, changesWithNodes);
+								  [viewItem, changesWithNodes, diffSetup, nameChangeInfo, anchorItem]() {
+		createOverlaysForChanges(viewItem, changesWithNodes);
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		if (!nameChangeInfo.isEmpty()) message += "<br/><br/>" + nameChangeInfo;
-		auto overlay = new Visualization::MessageOverlay{diffViewItem,
-				[diffViewItem, message, diffComparisonPairs](Visualization::MessageOverlay* overlay)
+		auto overlay = new Visualization::MessageOverlay{viewItem,
+				[viewItem, message, anchorItem](Visualization::MessageOverlay* overlay)
 		{
-			auto vDiffComparisonPair = DCast<VersionControlUI::VDiffComparisonPair>(diffViewItem->findVisualizationOf
-																					(diffComparisonPairs.first()));
-			overlay->setPos(vDiffComparisonPair->scenePos().x(),
-								 vDiffComparisonPair->scenePos().y()-overlay->heightInScene());
+			overlay->setPos(anchorItem->scenePos().x(),
+								 anchorItem->scenePos().y()-overlay->heightInScene());
 			return message;
 		}, Visualization::MessageOverlay::itemStyles().get("info"), true};
 
 
-		diffViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
+		viewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
 	});
+}
 
-	// switch to the newly created view
-	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
+QList<DiffFrame*> DiffManager::computeDiffFramesAndOverlays(QString oldVersion, QString newVersion,
+																										Visualization::ViewItem* viewItem)
+{
+	DiffSetup diffSetup;
+
+	// detailed changes
+	QList<ChangeWithNodes> changesWithNodes;
+
+	// contains the nodes which will be drawn
+	QSet<Model::NodeIdType> changedNodesToVisualize;
+
+	// fill up lists
+	computeDiff(oldVersion, newVersion, changesWithNodes, changedNodesToVisualize, diffSetup);
+
+	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.newVersionManager_);
+	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(diffSetup.oldVersionManager_);
+
+	auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize, changesWithNodes);
+
+	createOverlaysForChanges(changesWithNodes, viewItem, diffSetup, viewItem);
+
+	return diffFrames;
 }
 
 QString DiffManager::createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision)
@@ -474,7 +485,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 	int col = 0;
 
-	QList<QPair<Model::Node*, QString>> diffComparisonPairInfo;
+	QList<QPair<Model::Node*, QString>> diffFrameInfo;
 
 	for (int i = 1; i < versions.length(); i++)
 	{
@@ -501,22 +512,22 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 
-		auto diffComparisonPairs = createDiffComparisonPairs(diffSetup, changedNodesToVisualize);
+		auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize, changesWithNodes);
 
-		// if summary activated and no changes to show, insert dummy DiffComparisonPair
+		// if summary activated and no changes to show, insert dummy DiffFrame
 		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty()
-			 && diffComparisonPairs.isEmpty())
-			diffComparisonPairs.append(new DiffComparisonPair{});
+			 && diffFrames.isEmpty())
+			diffFrames.append(new DiffFrame{});
 
 		int row = 0;
-		for (auto diffComparisonPair : diffComparisonPairs)
-			historyViewItem->insertNode(diffComparisonPair, {row++, col});
+		for (auto diffFrame : diffFrames)
+			historyViewItem->insertNode(diffFrame, {row++, col});
 
 		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty())
 			message += "<br/><br/>" + computeNameChangeInformation(diffSetup);
 
-		if (!diffComparisonPairs.isEmpty())
-			diffComparisonPairInfo.append({diffComparisonPairs.first(), message});
+		if (!diffFrames.isEmpty())
+			diffFrameInfo.append({diffFrames.first(), message});
 
 		// create visualization for changes
 		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
@@ -527,16 +538,16 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 	}
 
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [historyViewItem, diffComparisonPairInfo]() {
-		for (auto info : diffComparisonPairInfo)
+								  [historyViewItem, diffFrameInfo]() {
+		for (auto info : diffFrameInfo)
 		{
 			auto overlay = new Visualization::MessageOverlay{historyViewItem, [historyViewItem, info]
 					(Visualization::MessageOverlay* overlay)
 			{
-				auto vDiffComparisonPair =
-						DCast<VersionControlUI::VDiffComparisonPair>(historyViewItem->findVisualizationOf(info.first));
-				overlay->setPos(vDiffComparisonPair->scenePos().x(),
-									 vDiffComparisonPair->scenePos().y()-overlay->heightInScene());
+				auto vDiffFrame =
+						DCast<VersionControlUI::VDiffFrame>(historyViewItem->findVisualizationOf(info.first));
+				overlay->setPos(vDiffFrame->scenePos().x(),
+									 vDiffFrame->scenePos().y()-overlay->heightInScene());
 				return info.second;
 			}, Visualization::MessageOverlay::itemStyles().get("info"), true };
 			historyViewItem->addOverlay(overlay, "DiffInfoMessageOverlay");
@@ -803,26 +814,37 @@ Visualization::Item* DiffManager::addOverlaysAndReturnItem(Model::Node* node, Vi
 }
 
 
-QList<DiffComparisonPair*> DiffManager::createDiffComparisonPairs(DiffSetup& diffSetup,
-													 QSet<Model::NodeIdType> diffComparisonPairNodeIds)
+QList<DiffFrame*> DiffManager::createDiffFrames(DiffSetup& diffSetup,
+													 QSet<Model::NodeIdType> diffFrameNodeIds,
+													 const QList<ChangeWithNodes>& changesWithNodes)
 {
-	QList<DiffComparisonPair*> diffComparisonPairs;
-	for (auto id : diffComparisonPairNodeIds)
+	QList<DiffFrame*> diffFrames;
+	for (auto id : diffFrameNodeIds)
 	{
 		auto oldNode = const_cast<Model::Node*>(diffSetup.oldVersionManager_->nodeIdMap().node(id));
 		auto newNode = const_cast<Model::Node*>(diffSetup.newVersionManager_->nodeIdMap().node(id));
 
-		auto diffNode = new DiffComparisonPair{oldNode, newNode};
-		diffComparisonPairs.append(diffNode);
+		auto diffNode = new DiffFrame{oldNode, newNode};
+
+		for (auto changeWithNode : changesWithNodes)
+		{
+			if (changeWithNode.versionNodes_.oldNode_ && oldNode->isSameOrAncestorOf(changeWithNode.versionNodes_.oldNode_))
+				diffNode->addOldChangedNode(changeWithNode.versionNodes_.oldNode_);
+
+			if (changeWithNode.versionNodes_.newNode_ && newNode->isSameOrAncestorOf(changeWithNode.versionNodes_.newNode_))
+				diffNode->addNewChangedNode(changeWithNode.versionNodes_.newNode_);
+		}
+
+		diffFrames.append(diffNode);
 	}
 
-	std::sort(diffComparisonPairs.begin(), diffComparisonPairs.end(), [](DiffComparisonPair* a, DiffComparisonPair* b) {
+	std::sort(diffFrames.begin(), diffFrames.end(), [](DiffFrame* a, DiffFrame* b) {
 			auto aComparisonName = a->comparisonName();
 			auto bComparisonName = b->comparisonName();
 			return aComparisonName < bComparisonName;
 		 });
 
-	return diffComparisonPairs;
+	return diffFrames;
 }
 
 Model::TreeManager* DiffManager::createTreeManagerFromVersion(FilePersistence::GitRepository* repository,

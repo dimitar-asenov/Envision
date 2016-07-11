@@ -34,7 +34,6 @@
 #include "../commands/CDumpMethodRenderings.h"
 #include "../actions/OOActions.h"
 
-#include "VersionControlUI/src/commands/CHistory.h"
 #include "InteractionBase/src/commands/CMerge.h"
 #include "InteractionBase/src/prompt/Prompt.h"
 #include "InteractionBase/src/input_actions/ActionRegistry.h"
@@ -42,8 +41,6 @@
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
 
-#include "VersionControlUI/src/commands/CDiff.h"
-#include "VersionControlUI/src/commands/CClear.h"
 
 namespace OOInteraction {
 
@@ -56,9 +53,6 @@ HProject::HProject()
 	addCommand(new CCreateMethod{});
 	addCommand(new CCreateField{});
 
-	addCommand(new VersionControlUI::CDiff{});
-	addCommand(new VersionControlUI::CClear{});
-	addCommand(new VersionControlUI::CHistory{});
 	addCommand(new Interaction::CMerge{});
 
 	addCommand(new CDumpMethodRenderings{});

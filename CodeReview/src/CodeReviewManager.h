@@ -27,10 +27,17 @@
 #pragma once
 
 #include "codereview_api.h"
-
 #include "nodes/CommentedNode.h"
 
+#include "VersionControlUI/src/nodes/DiffFrame.h"
+
 namespace CodeReview {
+
+using GroupingFunction =
+		std::function<QList<QList<VersionControlUI::DiffFrame*>> (QList<VersionControlUI::DiffFrame*> diffFrames)>;
+
+using OrderingFunction =
+		std::function<QList<VersionControlUI::DiffFrame*> (QList<VersionControlUI::DiffFrame*> diffFrames)>;
 
 class CODEREVIEW_API CodeReviewManager
 {
@@ -38,9 +45,15 @@ class CODEREVIEW_API CodeReviewManager
 		CommentedNode* commentedNode(QString nodeId);
 		static CodeReviewManager& instance();
 
+		static QList<QList<VersionControlUI::DiffFrame*>> orderDiffFrames(
+				GroupingFunction groupingFunction, OrderingFunction orderingFunction,
+				QList<VersionControlUI::DiffFrame*> diffFrames);
+
+
 	private:
 		QHash<QString, CommentedNode*> commentedNodes_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
+
 };
 
 }

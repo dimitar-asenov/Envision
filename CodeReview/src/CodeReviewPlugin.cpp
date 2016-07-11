@@ -24,17 +24,21 @@
  **
  **********************************************************************************************************************/
 
-#include "handlers/HReviewableItem.h"
-
 #include "CodeReviewPlugin.h"
-#include "SelfTest/src/TestManager.h"
+#include "handlers/HReviewableItem.h"
+#include "handlers/HCodeReviewOverlay.h"
+#include "overlays/CodeReviewCommentOverlay.h"
+#include "commands/CCodeReview.h"
+
 #include "Logger/src/Log.h"
 
-#include "overlays/CodeReviewCommentOverlay.h"
+#include "VersionControlUI/src/items/VDiffFrame.h"
 
-#include "handlers/HCodeReviewOverlay.h"
+#include "OOVisualization/src/declarations/VClass.h"
 
-#include "VersionControlUI/src/items/VDiffComparisonPair.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+
+#include "SelfTest/src/TestManager.h"
 
 namespace CodeReview {
 
@@ -46,8 +50,11 @@ Logger::Log& CodeReviewPlugin::log()
 
 bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
 {
-	VersionControlUI::VDiffComparisonPair::setDefaultClassHandler(HReviewableItem::instance());
+	VersionControlUI::VDiffFrame::setDefaultClassHandler(HReviewableItem::instance());
 	CodeReviewCommentOverlay::setDefaultClassHandler(HCodeReviewOverlay::instance());
+
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCodeReview{});
+
 	return true;
 }
 

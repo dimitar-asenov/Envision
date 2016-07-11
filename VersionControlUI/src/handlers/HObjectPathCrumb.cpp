@@ -35,7 +35,7 @@
 
 #include "VisualizationBase/src/items/ViewItem.h"
 
-#include "VersionControlUI/src/items/VDiffComparisonPair.h"
+#include "VersionControlUI/src/items/VDiffFrame.h"
 
 #include "InteractionBase/src/prompt/Prompt.h"
 
@@ -58,19 +58,19 @@ void HObjectPathCrumb::mouseReleaseEvent(Visualization::Item* target, QGraphicsS
 	GenericHandler::mouseReleaseEvent(target, event);
 	if (crumbTarget_)
 	{
-		VersionControlUI::VDiffComparisonPair* vDiffComparisonPair = nullptr;
+		VersionControlUI::VDiffFrame* vDiffFrame = nullptr;
 		auto parent = crumbTarget_->parent();
 
-		while (parent && !DCast<VDiffComparisonPair>(parent))
+		while (parent && !DCast<VDiffFrame>(parent))
 			parent = parent->parent();
 
-		vDiffComparisonPair = DCast<VDiffComparisonPair>(parent);
+		vDiffFrame = DCast<VDiffFrame>(parent);
 
 		auto currentView = crumbTarget_->scene()->currentViewItem();
 
 		auto grid = dynamic_cast<Visualization::DynamicGridFormElement*>(currentView->currentForm());
 
-		auto focusedIndex = grid->indexOf(currentView, vDiffComparisonPair);
+		auto focusedIndex = grid->indexOf(currentView, vDiffFrame);
 
 		Visualization::MajorMinorIndex indexToInsert;
 		indexToInsert.major_ = focusedIndex.y();

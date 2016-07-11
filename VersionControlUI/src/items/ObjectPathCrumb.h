@@ -32,7 +32,7 @@
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/items/Text.h"
 
-#include "../nodes/DiffComparisonPair.h"
+#include "../nodes/DiffFrame.h"
 
 #include "ObjectPathCrumbStyle.h"
 

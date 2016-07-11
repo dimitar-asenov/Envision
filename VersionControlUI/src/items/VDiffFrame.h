@@ -24,11 +24,63 @@
  **
  **********************************************************************************************************************/
 
-#include "VDiffComparisonPairStyle.h"
+#pragma once
+
+#include "../versioncontrolui_api.h"
+
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VDiffFrameStyle.h"
+
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/Static.h"
+
+#include "../nodes/DiffFrame.h"
+
+#include "ObjectPathCrumb.h"
 
 namespace VersionControlUI
 {
 
-VDiffComparisonPairStyle::~VDiffComparisonPairStyle(){}
+class DiffFrame;
+
+class VERSIONCONTROLUI_API VDiffFrame : public Super<Visualization::ItemWithNode<VDiffFrame,
+		Visualization::DeclarativeItem<VDiffFrame>, DiffFrame>>
+{
+	ITEM_COMMON(VDiffFrame)
+
+	public:
+		VDiffFrame(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		static void initializeForms();
+		virtual bool isSensitiveToScale() const override;
+		virtual void determineChildren() override;
+		virtual int determineForm() override;
+
+		qreal scaleFactor();
+
+		QList<Visualization::Item*> objectPathCrumbsOldNode();
+		QList<Visualization::Item*> objectPathCrumbsNewNode();
+
+	private:
+		Visualization::Item* oldVersionNode_{};
+		Visualization::Item* newVersionNode_{};
+
+		Visualization::Static* nodeNotFoundIcon_{};
+		Visualization::Static* dummyIcon_{};
+
+		QList<Visualization::Item*> objectPathCrumbsOldNode_{};
+		QList<Visualization::Item*> objectPathCrumbsNewNode_{};
+
+		void scaleVisualizations();
+
+		void createObjectPathCrumbsVisualizationList();
+};
+
+inline QList<Visualization::Item*> VDiffFrame::objectPathCrumbsOldNode() {return objectPathCrumbsOldNode_;}
+inline QList<Visualization::Item*> VDiffFrame::objectPathCrumbsNewNode() {return objectPathCrumbsNewNode_;}
+
 
 }

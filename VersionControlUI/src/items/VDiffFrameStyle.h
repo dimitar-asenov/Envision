@@ -28,59 +28,23 @@
 
 #include "../versioncontrolui_api.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VDiffComparisonPairStyle.h"
-
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/Static.h"
-
-#include "../nodes/DiffComparisonPair.h"
-
-#include "ObjectPathCrumb.h"
 
 namespace VersionControlUI
 {
 
-class DiffComparisonPair;
-
-class VERSIONCONTROLUI_API VDiffComparisonPair : public Super<Visualization::ItemWithNode<VDiffComparisonPair,
-		Visualization::DeclarativeItem<VDiffComparisonPair>, DiffComparisonPair>>
+class VERSIONCONTROLUI_API VDiffFrameStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	ITEM_COMMON(VDiffComparisonPair)
-
 	public:
-		VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
-		virtual bool isSensitiveToScale() const override;
-		virtual void determineChildren() override;
-		virtual int determineForm() override;
+		virtual ~VDiffFrameStyle() override;
 
-		qreal scaleFactor();
-
-		QList<Visualization::Item*> objectPathCrumbsOldNode();
-		QList<Visualization::Item*> objectPathCrumbsNewNode();
-
-	private:
-		Visualization::Item* oldVersionNode_{};
-		Visualization::Item* newVersionNode_{};
-
-		Visualization::Static* nodeNotFoundIcon_{};
-		Visualization::Static* dummyIcon_{};
-
-		QList<Visualization::Item*> objectPathCrumbsOldNode_{};
-		QList<Visualization::Item*> objectPathCrumbsNewNode_{};
-
-		void scaleVisualizations();
-
-		void createObjectPathCrumbsVisualizationList();
+		Property<Visualization::TextStyle> oldVersionObjectPath{this, "oldVersionObjectPath"};
+		Property<Visualization::TextStyle> newVersionObjectPath{this, "newVersionObjectPath"};
+		Property<Visualization::TextStyle> singleObjectPath{this, "singleObjectPath"};
+		Property<Visualization::TextStyle> componentType{this, "componentType"};
+		Property<Visualization::StaticStyle> nodeNotFoundIcon{this, "nodeNotFoundIcon"};
+		Property<Visualization::StaticStyle> dummyIcon{this, "dummyIcon"};
 };
-
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsOldNode() {return objectPathCrumbsOldNode_;}
-inline QList<Visualization::Item*> VDiffComparisonPair::objectPathCrumbsNewNode() {return objectPathCrumbsNewNode_;}
-
-
 }

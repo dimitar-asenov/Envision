@@ -31,12 +31,9 @@
 #include "../commands/CCreateField.h"
 #include "../actions/OOActions.h"
 
-#include "VersionControlUI/src/commands/CHistory.h"
 #include "InteractionBase/src/prompt/Prompt.h"
 #include "InteractionBase/src/input_actions/ActionRegistry.h"
 
-#include "VersionControlUI/src/commands/CDiff.h"
-#include "VersionControlUI/src/commands/CClear.h"
 
 namespace OOInteraction {
 
@@ -46,10 +43,6 @@ HClass::HClass()
 	addCommand(new CCreateClass{});
 	addCommand(new CCreateMethod{});
 	addCommand(new CCreateField{});
-
-	addCommand(new VersionControlUI::CDiff{});
-	addCommand(new VersionControlUI::CClear{});
-	addCommand(new VersionControlUI::CHistory{});
 }
 
 HClass* HClass::instance()

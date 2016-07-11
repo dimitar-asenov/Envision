@@ -26,7 +26,7 @@
 
 #include "ObjectPathCrumb.h"
 
-#include "VDiffComparisonPair.h"
+#include "VDiffFrame.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
@@ -65,12 +65,12 @@ void ObjectPathCrumb::initializeForms()
 
 bool ObjectPathCrumb::isLastObjectPathCrumb()
 {
-	auto diffComparisonPairParent = DCast<VDiffComparisonPair>(this->parent());
-	if (!diffComparisonPairParent->objectPathCrumbsOldNode().isEmpty()
-		 && diffComparisonPairParent->objectPathCrumbsOldNode().last() == this)
+	auto diffFrame = DCast<VDiffFrame>(this->parent());
+	if (!diffFrame->objectPathCrumbsOldNode().isEmpty()
+		 && diffFrame->objectPathCrumbsOldNode().last() == this)
 		return true;
-	if (!diffComparisonPairParent->objectPathCrumbsNewNode().isEmpty()
-		 && diffComparisonPairParent->objectPathCrumbsNewNode().last() == this)
+	if (!diffFrame->objectPathCrumbsNewNode().isEmpty()
+		 && diffFrame->objectPathCrumbsNewNode().last() == this)
 		return true;
 	return false;
 }

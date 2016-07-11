@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "VDiffComparisonPair.h"
+#include "VDiffFrame.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
@@ -33,20 +33,20 @@
 
 #include "VisualizationBase/src/items/VText.h"
 
-#include "../nodes/DiffComparisonPair.h"
+#include "../nodes/DiffFrame.h"
 
 namespace VersionControlUI
 {
 
-DEFINE_ITEM_COMMON(VDiffComparisonPair, "item")
+DEFINE_ITEM_COMMON(VDiffFrame, "item")
 
-VDiffComparisonPair::VDiffComparisonPair(Visualization::Item* parent, NodeType* node, const StyleType* style)
+VDiffFrame::VDiffFrame(Visualization::Item* parent, NodeType* node, const StyleType* style)
 	: Super{parent, node, style}
 {
 	createObjectPathCrumbsVisualizationList();
 }
 
-void VDiffComparisonPair::createObjectPathCrumbsVisualizationList()
+void VDiffFrame::createObjectPathCrumbsVisualizationList()
 {
 	for (auto objectPathCrumbData : node()->objectPathCrumbsDataOldNode())
 		objectPathCrumbsOldNode_.append(new ObjectPathCrumb{objectPathCrumbData, nullptr});
@@ -54,13 +54,13 @@ void VDiffComparisonPair::createObjectPathCrumbsVisualizationList()
 		objectPathCrumbsNewNode_.append(new ObjectPathCrumb{objectPathCrumbData, nullptr});
 }
 
-void VDiffComparisonPair::initializeForms()
+void VDiffFrame::initializeForms()
 {
 	auto oldCrumbs = (new Visualization::SequentialLayoutFormElement{})
 					->setHorizontal()
 					->setSpaceBetweenElements(5)
 					->setListOfItems([](Visualization::Item* i) {
-						auto vc = static_cast<VDiffComparisonPair*>(i);
+						auto vc = static_cast<VDiffFrame*>(i);
 						return vc->objectPathCrumbsOldNode_;
 					});
 
@@ -68,7 +68,7 @@ void VDiffComparisonPair::initializeForms()
 					->setHorizontal()
 					->setSpaceBetweenElements(5)
 					->setListOfItems([](Visualization::Item* i) {
-						auto vc = static_cast<VDiffComparisonPair*>(i);
+						auto vc = static_cast<VDiffFrame*>(i);
 						return vc->objectPathCrumbsNewNode_;
 					});
 
@@ -286,18 +286,18 @@ void VDiffComparisonPair::initializeForms()
 
 }
 
-bool VDiffComparisonPair::isSensitiveToScale() const
+bool VDiffFrame::isSensitiveToScale() const
 {
 	return true;
 }
 
-qreal VDiffComparisonPair::scaleFactor()
+qreal VDiffFrame::scaleFactor()
 {
 	qreal factor = Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor();
 	qreal scale;
 	if (factor >= 1.0)
 		scale = 1.0;
-	else if (factor >= 0.03)
+	else if (factor >= 0.007)
 		scale = 1.0/factor;
 	else
 		scale = 1.0;
@@ -305,7 +305,7 @@ qreal VDiffComparisonPair::scaleFactor()
 	return scale;
 }
 
-void VDiffComparisonPair::scaleVisualizations()
+void VDiffFrame::scaleVisualizations()
 {
 
 	auto scale = scaleFactor();
@@ -323,13 +323,13 @@ void VDiffComparisonPair::scaleVisualizations()
 		crumb->setScale(scale);
 }
 
-void VDiffComparisonPair::determineChildren()
+void VDiffFrame::determineChildren()
 {
 	Super::determineChildren();
 	scaleVisualizations();
 }
 
-int VDiffComparisonPair::determineForm()
+int VDiffFrame::determineForm()
 {
 	static const int FORM_WITH_SINGLE_OBJECT_PATH = 0;
 	static const int FORM_CONTAINING_ONLY_NEW_NODE = 1;
@@ -337,7 +337,7 @@ int VDiffComparisonPair::determineForm()
 	static const int FORM_WITH_TWO_OBJECT_PATHS = 3;
 	static const int FORM_FOR_DUMMY_PAIR = 4;
 
-	if (node()->isDummyDiffComparisonPair())
+	if (node()->isDummyDiffFrame())
 		return FORM_FOR_DUMMY_PAIR;
 
 	if (node()->twoObjectPathsDefined())

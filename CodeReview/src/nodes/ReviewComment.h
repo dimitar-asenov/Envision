@@ -29,7 +29,7 @@
 
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-#include "VersionControlUI/src/nodes/DiffComparisonPair.h"
+#include "VersionControlUI/src/nodes/DiffFrame.h"
 
 #include "Comments/src/nodes/CommentNode.h"
 

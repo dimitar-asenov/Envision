@@ -24,27 +24,11 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../versioncontrolui_api.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/Static.h"
+#include "VDiffFrameStyle.h"
 
 namespace VersionControlUI
 {
 
-class VERSIONCONTROLUI_API VDiffComparisonPairStyle : public Super<Visualization::DeclarativeItemBaseStyle>
-{
-	public:
-		virtual ~VDiffComparisonPairStyle() override;
+VDiffFrameStyle::~VDiffFrameStyle(){}
 
-		Property<Visualization::TextStyle> oldVersionObjectPath{this, "oldVersionObjectPath"};
-		Property<Visualization::TextStyle> newVersionObjectPath{this, "newVersionObjectPath"};
-		Property<Visualization::TextStyle> singleObjectPath{this, "singleObjectPath"};
-		Property<Visualization::TextStyle> componentType{this, "componentType"};
-		Property<Visualization::StaticStyle> nodeNotFoundIcon{this, "nodeNotFoundIcon"};
-		Property<Visualization::StaticStyle> dummyIcon{this, "dummyIcon"};
-};
 }

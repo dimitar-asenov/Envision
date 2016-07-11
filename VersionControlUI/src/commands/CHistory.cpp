@@ -41,11 +41,21 @@ CHistory::CHistory() : CommandWithFlags{"history", {{"accumulate"}}, true, false
 {
 }
 
-Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
+bool CHistory::canInterpret(Visualization::Item* source, Visualization::Item* target,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+{
+	if (!source->findAncestorWithNode()) return false;
+
+	return CommandWithFlags::canInterpret(source, target, commandTokens, cursor);
+}
+
+Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* source, Visualization::Item*,
 												  const std::unique_ptr<Visualization::Cursor>& /*cursor*/,
 												  const QString& name, const QStringList& attributes)
 {
-	Model::TreeManager* headManager = target->node()->manager();
+	auto ancestorWithNode = source->findAncestorWithNode();
+
+	Model::TreeManager* headManager = ancestorWithNode->node()->manager();
 	QString managerName = headManager->name();
 
 	// get GitRepository
@@ -65,11 +75,11 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source
 
 	CommitGraph graph = repository->commitGraph(rev, "HEAD");
 
-	Model::NodeIdType targetID = headManager->nodeIdMap().id(target->node());
+	Model::NodeIdType targetID = headManager->nodeIdMap().id(ancestorWithNode->node());
 
 	QString targetPath = managerName;
 	Model::Node* headRoot = headManager->root();
-	Model::Node* persistentUnitNode = target->node()->persistentUnitNode();
+	Model::Node* persistentUnitNode = ancestorWithNode->node()->persistentUnitNode();
 	if (headRoot != persistentUnitNode)
 	{
 		Model::NodeIdType persistentUnitNodeID = headManager->nodeIdMap().id(persistentUnitNode);
@@ -78,7 +88,7 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source
 
 	History history{targetPath, targetID, &graph, repository};
 
-	DiffManager diffManager{managerName, {target->node()->typeName()}};
+	DiffManager diffManager{managerName, {ancestorWithNode->node()->typeName()}};
 
 	auto relevantCommitsbyTime = history.relevantCommitsByTime(repository, false);
 
@@ -95,10 +105,12 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* /*source
 	return new Interaction::CommandResult{};
 }
 
-QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualization::Item* target,
+QStringList CHistory::possibleNames(Visualization::Item* source, Visualization::Item*,
 												const std::unique_ptr<Visualization::Cursor>& /*cursor*/)
 {
-	Model::TreeManager* headManager = target->node()->manager();
+	auto ancestorWithNode = source->findAncestorWithNode();
+
+	Model::TreeManager* headManager = ancestorWithNode->node()->manager();
 	QString managerName = headManager->name();
 
 	// get GitRepository

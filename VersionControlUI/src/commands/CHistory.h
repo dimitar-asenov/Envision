@@ -47,6 +47,8 @@ class VERSIONCONTROLUI_API CHistory : public Interaction::CommandWithFlags
 		virtual QStringList possibleNames(Visualization::Item* source, Visualization::Item* target,
 													 const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 	private:
 		FilePersistence::GitRepository* repository;
 };
