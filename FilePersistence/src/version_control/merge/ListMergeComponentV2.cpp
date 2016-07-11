@@ -88,8 +88,17 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 			QList<IdPosition> idPositions;	// stores the relative positions of elements of unstable chunk
 			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeBase_, MergeChange::BranchA);
 			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeBase_, MergeChange::BranchB);
-			std::sort(idPositions.begin(), idPositions.end());	//sort the list according to the labels
-			for (auto idPosition : idPositions){
+
+			// Add base elements to the list
+			for (auto id : chunk->spanBase_)
+			{
+				idPositions.append({id, mergeData.treeBase_->find(id)->label().toInt(), 0, MergeChange::None});
+			}
+
+			std::sort(idPositions.begin(), idPositions.end());	// sort the list according to the labels
+
+			for (auto idPosition : idPositions)
+			{
 				map.insert(idPosition.id, {QString::number(finalIndexInList), idPosition.branch});
 				finalIndexInList++;
 			}
@@ -142,7 +151,6 @@ void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType>
 		if (lcs.contains(id))
 		{
 			baseIndex = treeBase->find(id)->label().toInt();
-			list.append({id, baseIndex, offset, branch});	//Labelling it same as base
 			offset = 1;
 		}
 		else
