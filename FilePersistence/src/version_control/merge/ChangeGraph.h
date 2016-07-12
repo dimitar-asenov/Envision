@@ -73,6 +73,7 @@ class FILEPERSISTENCE_API ChangeGraph
 		QList<MergeChange*> changesForNode(Model::NodeIdType nodeId) const;
 
 	private:
+		friend class ListMergeComponentV2;
 		// The nodes of the graph
 		QList<MergeChange*> changes_;
 
