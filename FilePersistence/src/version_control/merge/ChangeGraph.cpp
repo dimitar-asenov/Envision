@@ -351,14 +351,14 @@ void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
 	}
 }
 
-void ChangeGraph::relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree)
+void ChangeGraph::relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree)
 {
 	removeLabelOnlyChangesInChildren(parentId);
 	removeLabelDependenciesBetweenChildren(parentId);
 	removeLabelConflictsBetweenChildren(parentId);
 
-	updateBaseTreeLabels(parentId, labelMap, baseTree);	//change the tree directly
-	updateListChanges(parentId, labelMap, baseTree);
+	updateBaseTreeLabels(parentId, labelMap, tree);	//change the tree directly
+	updateLabelsOfChangesTo(parentId, labelMap, tree);
 }
 
 void ChangeGraph::removeLabelOnlyChangesInChildren(Model::NodeIdType parentId)
@@ -422,80 +422,113 @@ void ChangeGraph::removeLabelConflictsBetweenChildren(Model::NodeIdType parentId
 	}
 }
 
-void ChangeGraph::updateListChanges(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* baseTree)
+void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree)
 {
+	auto parentNode = tree->find(parentId);
+	Q_ASSERT(parentNode != NULL);
 	for (auto nodeId : labelMap.keys())
 	{
-		QString labelA, labelB, labelNone;
-		labelA = labelB = labelNone = QString();
+		QString labelA;
+		QString labelB;
+		QString labelNone;
 		auto labels = labelMap.values(nodeId);
 		for (auto label : labels)
 		{
-			if (label.branch.testFlag(MergeChange::BranchA))	labelA = label.label;
-			else if (label.branch.testFlag(MergeChange::BranchB))	labelB = label.label;
-			else labelNone = label.label;
+			if (label.branch_.testFlag(MergeChange::BranchA))	labelA = label.label_;
+			else if (label.branch_.testFlag(MergeChange::BranchB))	labelB = label.label_;
+			else labelNone = label.label_;	//Base
 		}
 
-		if (baseTree->find(parentId)->children().contains(baseTree->find(nodeId)))	// Deletion, Move Out, LabelChange, Stable
+		auto changeIt = changesForNode_.find(nodeId);
+		while (changeIt != changesForNode_.end() && changeIt.key() == nodeId)
 		{
-			auto changesIt = changesForNode_.find(nodeId);
-			while (changesIt != changesForNode_.end() && changesIt.key() == nodeId)
+			switch (changeIt.value()->type())
 			{
-				// Must be DELETION / MOVE OUT CHANGE
-				if (changesIt.value()->branches().testFlag(MergeChange::BranchA))
-				{
-//						updateSourceLabel(labelA);
-					labelA = QString();
+				case ChangeType::Stationary:
+					// Since label changes are already deleted
+					Q_ASSERT(changeIt.value()->isValueOrTypeChange());
+				case ChangeType::Insertion:
+				{	// Update labels according to the versions
+					if (changeIt.value()->branches().testFlag(MergeChange::BranchA))
+					{
+						changeIt.value()->newLabel_ = labelA;
+						labelA.clear();
+					}
+					else if (changeIt.value()->branches().testFlag(MergeChange::BranchB))
+					{
+						changeIt.value()->newLabel_ = labelB;
+						labelB.clear();
+					}
 				}
-				if (changesIt.value()->branches().testFlag(MergeChange::BranchB))
+				case ChangeType::Deletion:	// Update old label in case of deletion
+					changeIt.value()->oldLabel_ = labelNone;
+				case ChangeType::Move:
 				{
-//						updateSourceLabel(labelB);
-					labelB = QString();
+					Q_ASSERT(changeIt.value()->newParentId() == parentId ||
+								changeIt.value()->oldParentId() == parentId);
+					if (changeIt.value()->newParentId() == parentId)	// Move In
+					{
+						// In case both moves are combined into single move, we split and add two moves
+						if (changeIt.value()->branches() == MergeChange::BranchA &&
+							 changeIt.value()->branches() == MergeChange::BranchB)
+						{
+							Q_ASSERT(!labelA.isNull() && !labelB.isNull());
+							// Update flags are handled in the function
+							splitMoveChangeForSecondLabel(changeIt.value(), {labelA, MergeChange::BranchA},
+																							{labelB, MergeChange::BranchB});
+							labelA.clear();
+							labelB.clear();
+							continue;
+						}
+
+						// Update labels according to the versions
+						if (changeIt.value()->branches().testFlag(MergeChange::BranchA))
+						{
+							changeIt.value()->newLabel_ = labelA;
+							labelA.clear();
+						}
+						else if (changeIt.value()->branches().testFlag(MergeChange::BranchB))
+						{
+							changeIt.value()->newLabel_ = labelB;
+							labelB.clear();
+						}
+					}
+					else	changeIt.value()->oldLabel_ = labelNone;	// Update old Label for Move Out
+
+					// Update Flags
+					if (changeIt.value()->newLabel() == changeIt.value()->oldLabel())
+						changeIt.value()->updateFlags_ = ChangeDescription::NoFlags;
+					else changeIt.value()->updateFlags_ = ChangeDescription::Label;
 				}
+				case ChangeType::Unclassified:
+					Q_ASSERT(false);
 			}
-//			if(labelA != QString())
-//				createRelabelChanges(nodeId, labelNone, labelA, parentId);
-//			if(labelB != QString())
-//				createRelabelChanges(nodeId, labelNone, labelA, parentId);
+			++changeIt;
 		}
-		else
-		{	//Must be Insertion, MoveIn
-			auto changesIt = changesForNode_.find(nodeId);
-			while (changesIt != changesForNode_.end() && changesIt.key() == nodeId)
-			{
-				// In case both moves are combined into single move
-//				if (changesIt.value()->branches().testFlag(MergeChange::BranchA | MergeChange::BranchB))
-//				{
-//					splitMoveChangeForSecondLabel(changesIt.value(), labelA, labelB);
-//				}
-				if (changesIt.value()->branches().testFlag(MergeChange::BranchA))
-				{
-//						updateDestinationLabel(labelA);
-					labelA = QString();
-				}
-				if (changesIt.value()->branches().testFlag(MergeChange::BranchB))
-				{
-//						updateDestinationLabel(labelB);
-					labelB = QString();
-				}
-			}
-			// labelA and labelB must be empty
-		}
+
+		// Create additional label changes if labelA or labelB doesn't correspond to any change in CG
+		QList<LabelData> newLabels;
+		if (!labelA.isNull())
+			newLabels.append({labelA, MergeChange::BranchA});
+		if (!labelB.isNull())
+			newLabels.append({labelB, MergeChange::BranchB});
+		if (!newLabels.isEmpty())
+			createRelabelChanges(nodeId, labelNone, newLabels, parentId);
 	}
 }
 
-void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap,	GenericTree* baseTree)
+void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap,	GenericTree* tree)
 {
-	auto parentNode = baseTree->find(parentId);
+	auto parentNode = tree->find(parentId);
 
 	// Update baseTree labels according to base Labels in labelMap
 	for (auto node : parentNode->children())
 	{
 		auto labelIt = labelMap.find(node->id());
 		while (labelIt != labelMap.end() && labelIt.key() == node->id()) {
-			if (labelIt.value().branch.testFlag(MergeChange::None))	// Base element
+			if (labelIt.value().branch_.testFlag(MergeChange::None))	// Base element
 			{
-				node->setLabel(labelIt.value().label);
+				node->setLabel(labelIt.value().label_);
 				break;
 			}
 		}
@@ -509,9 +542,9 @@ void ChangeGraph::createRelabelChanges(Model::NodeIdType nodeId, QString oldLabe
 
 	for (auto & labelData : newLabels)
 	{
-		Q_ASSERT(labelData.branch == MergeChange::BranchA || labelData.branch == MergeChange::BranchB);
-		auto newChange = new MergeChange{ChangeType::Stationary, ChangeDescription::Label, nodeId, labelData.branch,
-											parentId, parentId, oldLabel, labelData.label, {}, {}, {}, {}};
+		Q_ASSERT(labelData.branch_ == MergeChange::BranchA || labelData.branch_ == MergeChange::BranchB);
+		auto newChange = new MergeChange{ChangeType::Stationary, ChangeDescription::Label, nodeId, labelData.branch_,
+											parentId, parentId, oldLabel, labelData.label_, {}, {}, {}, {}};
 
 		changes_.append(newChange);
 		changesForNode_.insert(nodeId, newChange);
@@ -532,12 +565,12 @@ void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData l
 
 	// Adjust the change for the A branch
 	change->branches_ = MergeChange::BranchA;
-	change->newLabel_ = labelOne.branch == MergeChange::BranchA ? labelOne.label : labelTwo.label;
+	change->newLabel_ = labelOne.branch_ == MergeChange::BranchA ? labelOne.label_ : labelTwo.label_;
 	if (change->newLabel() == change->oldLabel()) change->updateFlags_ = ChangeDescription::NoFlags;
 	else change->updateFlags_ = ChangeDescription::Label;
 
 	// Make a new change for label B
-	auto newLabelB = labelOne.branch == MergeChange::BranchB ? labelOne.label : labelTwo.label;
+	auto newLabelB = labelOne.branch_ == MergeChange::BranchB ? labelOne.label_ : labelTwo.label_;
 	auto changeB = new MergeChange{ChangeType::Move,
 			(newLabelB == change->oldLabel() ? ChangeDescription::NoFlags : ChangeDescription::Label),
 			change->nodeId(), MergeChange::BranchB,
