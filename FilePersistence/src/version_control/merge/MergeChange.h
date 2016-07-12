@@ -29,6 +29,7 @@
 #include "../../filepersistence_api.h"
 
 #include "../ChangeDescription.h"
+#include "../../simple/GenericNode.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
@@ -73,6 +74,9 @@ class FILEPERSISTENCE_API MergeChange
 
 		void addBranches(Branches branches);
 
+		QString newValueWithoutPrefix() const;
+		GenericNode::ValueType newValueType() const;
+
 	private:
 		friend class ChangeGraph;
 
@@ -94,6 +98,8 @@ class FILEPERSISTENCE_API MergeChange
 
 		QString oldValue_;
 		QString newValue_;
+
+		static QString nodeValueWithPrefix(GenericNode* node);
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(MergeChange::Branches)
 

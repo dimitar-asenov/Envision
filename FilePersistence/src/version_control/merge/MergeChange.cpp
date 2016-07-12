@@ -28,8 +28,18 @@
 
 #include "../ChangeDescription.h"
 #include "../../simple/GenericNode.h"
+#include "../../simple/Parser.h"
 
 namespace FilePersistence {
+
+QString MergeChange::nodeValueWithPrefix(GenericNode* node)
+{
+	if (!node || node->valueType() == GenericNode::NO_VALUE) return {};
+	else if (node->valueType() == GenericNode::STRING_VALUE) return Parser::PREFIX_STRING + node->rawValue();
+	else if (node->valueType() == GenericNode::INT_VALUE) return Parser::PREFIX_INTEGER + node->rawValue();
+	else if (node->valueType() == GenericNode::DOUBLE_VALUE) return Parser::PREFIX_DOUBLE + node->rawValue();
+	else Q_ASSERT(false);
+}
 
 MergeChange::MergeChange(ChangeType type, ChangeDescription::UpdateFlags updateFlags, Model::NodeIdType nodeId,
  Branches branches, Model::NodeIdType oldParentId, Model::NodeIdType newParentId,
@@ -79,11 +89,27 @@ QList<MergeChange*> MergeChange::changesFromDiffChange(ChangeDescription& change
 							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->label() : QString{},
 							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->type() : QString{},
 							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->type() : QString{},
-							changeFromDiff.nodeA() ? changeFromDiff.nodeA()->rawValue() : QString{},
-							changeFromDiff.nodeB() ? changeFromDiff.nodeB()->rawValue() : QString{}} );
+							nodeValueWithPrefix(changeFromDiff.nodeA()), nodeValueWithPrefix(changeFromDiff.nodeB()) });
 	}
 
 	return result;
+}
+
+QString MergeChange::newValueWithoutPrefix() const
+{
+	if (newValue_.startsWith(Parser::PREFIX_STRING)) return newValue_.mid(Parser::PREFIX_STRING.size());
+	else if (newValue_.startsWith(Parser::PREFIX_INTEGER)) return newValue_.mid(Parser::PREFIX_INTEGER.size());
+	else if (newValue_.startsWith(Parser::PREFIX_DOUBLE)) return newValue_.mid(Parser::PREFIX_DOUBLE.size());
+	else return {};
+}
+
+GenericNode::ValueType MergeChange::newValueType() const
+{
+	if (newValue_.isEmpty()) return GenericNode::NO_VALUE;
+	else if (newValue_.startsWith(Parser::PREFIX_STRING)) return GenericNode::STRING_VALUE;
+	else if (newValue_.startsWith(Parser::PREFIX_INTEGER)) return GenericNode::INT_VALUE;
+	else if (newValue_.startsWith(Parser::PREFIX_DOUBLE)) return GenericNode::DOUBLE_VALUE;
+	else Q_ASSERT(false);
 }
 
 }
