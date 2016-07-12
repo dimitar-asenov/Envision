@@ -425,7 +425,7 @@ void ChangeGraph::removeLabelConflictsBetweenChildren(Model::NodeIdType parentId
 void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree)
 {
 	auto parentNode = tree->find(parentId);
-	Q_ASSERT(parentNode != NULL);
+	Q_ASSERT(parentNode);
 	for (auto nodeId : labelMap.keys())
 	{
 		QString labelA;
@@ -434,6 +434,8 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 		auto labels = labelMap.values(nodeId);
 		for (auto label : labels)
 		{
+			Q_ASSERT(label.branch_ == MergeChange::BranchA || label.branch_ == MergeChange::BranchB ||
+						label.branch_ == MergeChange::None);
 			if (label.branch_.testFlag(MergeChange::BranchA))	labelA = label.label_;
 			else if (label.branch_.testFlag(MergeChange::BranchB))	labelB = label.label_;
 			else labelNone = label.label_;	//Base
@@ -446,7 +448,9 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 			{
 				case ChangeType::Stationary:
 					// Since label changes are already deleted
-					Q_ASSERT(changeIt.value()->isValueOrTypeChange());
+					Q_ASSERT(changeIt.value()->isValueOrTypeChange() &&
+								!changeIt.value()->updateFlags().testFlag(ChangeDescription::Label));
+					break;
 				case ChangeType::Insertion:
 				{	// Update labels according to the versions
 					if (changeIt.value()->branches().testFlag(MergeChange::BranchA))
@@ -459,9 +463,12 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 						changeIt.value()->newLabel_ = labelB;
 						labelB.clear();
 					}
+					break;
 				}
 				case ChangeType::Deletion:	// Update old label in case of deletion
 					changeIt.value()->oldLabel_ = labelNone;
+					// We don't clear labelNone because it is used as oldLabel for the lblChanges added at the end
+					break;
 				case ChangeType::Move:
 				{
 					Q_ASSERT(changeIt.value()->newParentId() == parentId ||
@@ -478,11 +485,10 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 																							{labelB, MergeChange::BranchB});
 							labelA.clear();
 							labelB.clear();
-							continue;
 						}
 
 						// Update labels according to the versions
-						if (changeIt.value()->branches().testFlag(MergeChange::BranchA))
+						else if (changeIt.value()->branches().testFlag(MergeChange::BranchA))
 						{
 							changeIt.value()->newLabel_ = labelA;
 							labelA.clear();
@@ -494,14 +500,17 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 						}
 					}
 					else	changeIt.value()->oldLabel_ = labelNone;	// Update old Label for Move Out
+					// We don't clear labelNone because it is used as oldLabel for the lblChanges added at the end
 
 					// Update Flags
 					if (changeIt.value()->newLabel() == changeIt.value()->oldLabel())
 						changeIt.value()->updateFlags_ = ChangeDescription::NoFlags;
 					else changeIt.value()->updateFlags_ = ChangeDescription::Label;
+					break;
 				}
-				case ChangeType::Unclassified:
+				default:
 					Q_ASSERT(false);
+					break;
 			}
 			++changeIt;
 		}
