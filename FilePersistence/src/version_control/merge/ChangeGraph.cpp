@@ -381,33 +381,7 @@ void ChangeGraph::removeLabelOnlyChangesInChildren(Model::NodeIdType parentId)
 	}
 
 	for (auto changeToRemove : labelOnlyChanges)
-	{
-		// Remove this change from the graph
-		changes_.removeOne(changeToRemove);
-		changesForNode_.remove(changeToRemove->nodeId(), changeToRemove);
-		changesForChildren_.remove(changeToRemove->newParentId(), changeToRemove);
-
-		// Remove all conflicts
-		QList<MergeChange*> conflicting = directConflicts_.values(changeToRemove);
-		directConflicts_.remove(changeToRemove);
-		for (auto conflict : conflicting) directConflicts_.remove(conflict, changeToRemove);
-
-		// Remove this change's dependencies
-		auto thisDependsOn = dependencies_.values(changeToRemove);
-		auto otherDependOnThis = reverseDependencies_.values(changeToRemove);
-		dependencies_.remove(changeToRemove);
-		reverseDependencies_.remove(changeToRemove);
-		for (auto ourDependency : thisDependsOn)
-			for (auto dependencyToUs : otherDependOnThis)
-			{
-				Q_ASSERT(dependencyToUs->newParentId() == parentId);
-				Q_ASSERT(ourDependency->oldParentId() == parentId);
-				dependencies_.remove(dependencyToUs, changeToRemove);
-				reverseDependencies_.remove(ourDependency, changeToRemove);
-			}
-
-		delete changeToRemove;
-	}
+		removeChange(changeToRemove, true);
 }
 
 void ChangeGraph::removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId)
@@ -598,7 +572,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* currentTree)
 				auto change = *changeIt;
 
 				applyChange(currentTree, change);
-				removeAppliedChange(change);
+				removeChange(change, false);
 			}
 		}
 	}
@@ -674,11 +648,42 @@ void ChangeGraph::applyChange(GenericTree* currentTree, MergeChange* change)
 	}
 }
 
-void ChangeGraph::removeAppliedChange(MergeChange* change)
+void ChangeGraph::removeChange(MergeChange* change, bool mayHaveConflicts)
 {
-	(void) change;
-	Q_ASSERT(false);
+	changes_.removeOne(change);
+
+	changesForNode_.remove(change->nodeId(), change);
+	if (!change->oldParentId().isNull()) changesForChildren_.remove(change->oldParentId(), change);
+	if (!change->newParentId().isNull()) changesForChildren_.remove(change->newParentId(), change);
+
+	// Remove all conflicts
+	if (mayHaveConflicts)
+	{
+		QList<MergeChange*> conflicting = directConflicts_.values(change);
+		directConflicts_.remove(change);
+		for (auto conflict : conflicting) directConflicts_.remove(conflict, change);
+	}
+	else
+		Q_ASSERT(!directConflicts_.contains(change));
+
+	removeAllDependencies(change);
+
 	delete change;
+}
+
+void ChangeGraph::removeAllDependencies(MergeChange* change)
+{
+	// Remove this change's dependencies
+	auto thisDependsOn = dependencies_.values(change);
+	auto otherDependOnThis = reverseDependencies_.values(change);
+	dependencies_.remove(change);
+	reverseDependencies_.remove(change);
+	for (auto ourDependency : thisDependsOn)
+		for (auto dependencyToUs : otherDependOnThis)
+		{
+			dependencies_.remove(dependencyToUs, change);
+			reverseDependencies_.remove(ourDependency, change);
+		}
 }
 
 }

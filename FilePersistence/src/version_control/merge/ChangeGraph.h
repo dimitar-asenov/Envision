@@ -125,7 +125,8 @@ class FILEPERSISTENCE_API ChangeGraph
 		int applyDependentNonConflictingChanges(GenericTree* currentTree);
 
 		void applyChange(GenericTree* currentTree, MergeChange* change);
-		void removeAppliedChange(MergeChange* change);
+		void removeChange(MergeChange* change, bool mayHaveConflicts);
+		void removeAllDependencies(MergeChange* change);
 };
 
 }
