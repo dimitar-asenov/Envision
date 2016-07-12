@@ -28,6 +28,8 @@
 
 #include "Parser.h"
 #include "PiecewiseLoader.h"
+#include "GenericTree.h"
+#include "GenericPersistentUnit.h"
 #include "../FilePersistenceException.h"
 
 namespace FilePersistence {
@@ -248,6 +250,20 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode
 	}
 }
 
+void GenericNode::reset(GenericPersistentUnit* persistentUnit, Model::NodeIdType id, Model::NodeIdType parentId,
+			  const QString& label, const QString& type, const QString& value, ValueType valueType)
+{
+	reset(persistentUnit);
+
+	label_ = label;
+	type_ = type;
+	value_ = value;
+	valueType_ = valueType;
+	id_ = id;
+	parentId_ = parentId;
+}
+
+
 void GenericNode::ensureDataRead() const
 {
 	if (dataLine_)
@@ -330,6 +346,22 @@ void GenericNode::detachFromParent()
 	else
 		tree()->nodesWithoutParents().remove(parentId(), this);
 	setParentId({});
+}
+
+GenericTree* GenericNode::tree() const
+{
+	return persistentUnit_->tree();
+}
+
+bool GenericNode::sameTree(const GenericNode* other)
+{
+	return persistentUnit_->tree() == other->persistentUnit_->tree();
+}
+
+void GenericNode::setParentId(Model::NodeIdType parentId)
+{
+	Q_ASSERT(!parent_ || !tree()->piecewiseLoader());
+	parentId_ = parentId;
 }
 
 }

@@ -27,11 +27,13 @@
 #pragma once
 
 #include "../filepersistence_api.h"
+#include "GenericNode.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
 class GenericTree;
-class GenericNode;
 
 class FILEPERSISTENCE_API GenericPersistentUnit {
 	public:
@@ -49,6 +51,15 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		 * If \a force is true then no check for ID uniqueness is performed.
 		 */
 		GenericNode* newNode(const GenericNode* nodeToCopy, bool force = false, bool deepCopy = false);
+
+		/**
+		 * Creates and returns a new node, with the corresponding attributes.
+		 *
+		 * This method checks that a node with the same ID does not already exist.
+		 */
+		GenericNode* newNode(Model::NodeIdType id, Model::NodeIdType parentId, const QString& label, const QString& type,
+									const QString& value, GenericNode::ValueType valueType);
+
 		/**
 		 * Returns the node according to \a data. If the boolean return value is true, the node was newly created
 		 * and needs to be linked; Otherwise such a node already exists in the tree and that node is returned. In this

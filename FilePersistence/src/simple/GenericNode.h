@@ -28,12 +28,12 @@
 
 #include "../filepersistence_api.h"
 
-#include "GenericPersistentUnit.h"
-#include "GenericTree.h"
-
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
+
+class GenericPersistentUnit;
+class GenericTree;
 
 class FILEPERSISTENCE_API GenericNode {
 
@@ -159,6 +159,8 @@ class FILEPERSISTENCE_API GenericNode {
 		void reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy);
 		void reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy);
 		void reset(GenericPersistentUnit* persistentUnit);
+		void reset(GenericPersistentUnit* persistentUnit, Model::NodeIdType id, Model::NodeIdType parentId,
+					  const QString& label, const QString& type, const QString& value, ValueType valueType);
 
 		void ensureDataRead() const;
 
@@ -169,8 +171,6 @@ class FILEPERSISTENCE_API GenericNode {
 inline void GenericNode::setLabel(const QString& label) { label_ = label; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
-inline void GenericNode::setParentId(Model::NodeIdType parentId)
-{ Q_ASSERT(!parent_ || !tree()->piecewiseLoader()); parentId_ = parentId; }
 inline void GenericNode::setChildren(QList<GenericNode*> children)
 { children_ = children; areAllChildrenLoaded_ = true; }
 inline bool GenericNode::areAllChildrenLoaded() const { return areAllChildrenLoaded_; }
@@ -200,11 +200,5 @@ inline bool GenericNode::equalTo(const GenericNode* other)
 			  value_ == other->value_ &&
 			  parentId_ == other->parentId_);
 }
-
-inline GenericTree* GenericNode::tree() const
-{ return persistentUnit_->tree();}
-
-inline bool GenericNode::sameTree(const GenericNode* other)
-{return persistentUnit_->tree() == other->persistentUnit_->tree();}
 
 }

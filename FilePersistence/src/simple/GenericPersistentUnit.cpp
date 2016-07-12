@@ -143,6 +143,17 @@ QPair<bool, GenericNode*> GenericPersistentUnit::newOrExistingNode(const char* d
 		return {true, newlyCreatedNode};
 }
 
+GenericNode* GenericPersistentUnit::newNode(Model::NodeIdType id, Model::NodeIdType parentId, const QString& label,
+														  const QString& type, const QString& value, GenericNode::ValueType valueType)
+{
+	Q_ASSERT(!tree_->find(id));
+
+	auto node = nextNode();
+	node->reset(this, id, parentId, label, type, value, valueType);
+
+	return node;
+}
+
 const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 {
 	Q_ASSERT(!tree_->piecewiseLoader());
