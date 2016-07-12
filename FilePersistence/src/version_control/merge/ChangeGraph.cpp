@@ -32,6 +32,8 @@
 
 namespace FilePersistence {
 
+const QString ChangeGraph::NEW_NODES_PERSISTENT_UNIT_NAME{"ChangeGraphNewNodes"};
+
 ChangeGraph::~ChangeGraph()
 {
 	for (auto c : changes_) delete c;
@@ -612,9 +614,64 @@ int ChangeGraph::applyDependentNonConflictingChanges(GenericTree* currentTree)
 
 void ChangeGraph::applyChange(GenericTree* currentTree, MergeChange* change)
 {
-	(void) currentTree;
-	(void) change;
-	Q_ASSERT(false);
+	switch (change->type())
+	{
+		case ChangeType::Insertion:
+		{
+			auto persistentUnit = currentTree->persistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
+			if (!persistentUnit)
+				persistentUnit = &currentTree->newPersistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
+			auto node = persistentUnit->newNode(change->nodeId(), change->newParentId(), change->newLabel(),
+															change->newType(), change->newValueWithoutPrefix(),
+															change->newValueType());
+			node->linkNode();
+			Q_ASSERT(node->parent()->id() == change->newParentId());
+			Q_ASSERT(currentTree->find(change->nodeId()));
+			break;
+		}
+
+		case ChangeType::Deletion:
+		{
+			auto node = currentTree->find(change->nodeId());
+			Q_ASSERT(node);
+
+			Q_ASSERT(node->children().empty());
+			currentTree->remove(change->nodeId());
+			Q_ASSERT(!currentTree->find(change->nodeId()));
+
+			break;
+		}
+
+		case ChangeType::Move:
+		{
+			auto node = currentTree->find(change->nodeId());
+			Q_ASSERT(node->parentId() == change->oldParentId());
+			node->detachFromParent();
+			node->setParentId(change->newParentId());
+			node->attachToParent();
+			Q_ASSERT(node->parent()->id() == change->newParentId());
+			// no break, need to do the same stuff as for stationary.
+		}
+
+		case ChangeType::Stationary:
+		{
+			auto node = currentTree->find(change->nodeId());
+
+			if (change->updateFlags().testFlag(ChangeDescription::Value))
+				node->resetValue(change->newValueType(), change->newValueWithoutPrefix());
+
+			if (change->updateFlags().testFlag(ChangeDescription::Type))
+				node->setType(change->newType());
+
+			if (change->updateFlags().testFlag(ChangeDescription::Label))
+				node->setLabel(change->newLabel());
+
+			break;
+		}
+
+		default:
+			Q_ASSERT(false);
+	}
 }
 
 void ChangeGraph::removeAppliedChange(MergeChange* change)

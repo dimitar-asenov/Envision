@@ -82,6 +82,8 @@ class FILEPERSISTENCE_API ChangeGraph
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForNode_;
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForChildren_;
 
+		static const QString NEW_NODES_PERSISTENT_UNIT_NAME;
+
 		void insertSingleChange(MergeChange* change);
 
 		MergeChange* findIdenticalChange(const MergeChange* change) const;
