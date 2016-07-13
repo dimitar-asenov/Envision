@@ -70,6 +70,44 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 	}
 }
 
+QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& mergeData)
+{
+	QList<Model::NodeIdType> listsToMerge;
+	auto changes = mergeData.cg_.changes();
+	// Add every list whose child structure changes
+	for (auto change : changes)
+	{
+		// Remove Lists with stationary changes
+		if (change->type()==ChangeType::Stationary && !change->updateFlags().testFlag(ChangeDescription::Label))
+			continue;
+		auto oldParentNode = mergeData.treeMerged_->find(change->oldParentId(), true);
+		auto newParentNode = mergeData.treeMerged_->find(change->newParentId(), true);
+		if (oldParentNode && isList(oldParentNode->type()) && !listsToMerge.contains(change->oldParentId()))
+				listsToMerge.append(change->oldParentId());
+		if (newParentNode && isList(newParentNode->type()) && !listsToMerge.contains(change->newParentId()))
+				listsToMerge.append(change->newParentId());
+	}
+
+	// Remove Lists which are inserted/deleted fully by any version
+	auto listIt = listsToMerge.begin();
+	while (listIt != listsToMerge.end())
+	{
+		auto changeList = mergeData.cg_.changesForNode(*listIt);
+		bool isInsertionOrDeletion = false;
+		for (auto change : changeList)
+		{
+				if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Insertion)
+				{
+					isInsertionOrDeletion = true;
+					break;
+				}
+		}
+		if (isInsertionOrDeletion)	listIt = listsToMerge.erase(listIt);
+		else	++listIt;
+	}
+	return listsToMerge;
+}
+
 ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
 																										  MergeData& mergeData)
 {
