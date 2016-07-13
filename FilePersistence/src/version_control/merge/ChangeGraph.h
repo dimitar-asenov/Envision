@@ -69,6 +69,8 @@ class FILEPERSISTENCE_API ChangeGraph
 
 		void applyNonConflictingChanges(GenericTree* currentTree);
 
+		const QList<MergeChange*>& changes() const;
+
 	private:
 		// The nodes of the graph
 		QList<MergeChange*> changes_;
@@ -127,5 +129,7 @@ class FILEPERSISTENCE_API ChangeGraph
 		void removeChange(MergeChange* change, bool mayHaveConflicts);
 		void removeAllDependencies(MergeChange* change);
 };
+
+inline const QList<MergeChange*>& ChangeGraph::changes() const { return changes_; }
 
 }
