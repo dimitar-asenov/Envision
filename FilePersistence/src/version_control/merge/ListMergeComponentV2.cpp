@@ -62,8 +62,9 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 	for (auto listId : listsToMerge)
 	{
 		auto map = computeAdjustedIndices(listId, mergeData);
-		mergeData.cg_.relabelChildrenUniquely(listId, map, mergeData.treeBase_.get());
-		// applyChanges(mergeData);
+		mergeData.cg_.relabelChildrenUniquely(listId, map, mergeData.treeMerged_.get());
+		mergeData.cg_.applyNonConflictingChanges(mergeData.treeMerged_.get());
+
 		// removeHoles(mergeData);
 		// Report Conflicts
 	}
@@ -86,13 +87,13 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 		else
 		{
 			QList<IdPosition> idPositions;	// stores the relative positions of elements of unstable chunk
-			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeBase_, MergeChange::BranchA);
-			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeBase_, MergeChange::BranchB);
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeMerged_, MergeChange::BranchA);
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeMerged_, MergeChange::BranchB);
 
 			// Add base elements to the list
 			for (auto id : chunk->spanBase_)
 			{
-				idPositions.append({id, mergeData.treeBase_->find(id)->label().toInt(), 0, MergeChange::None});
+				idPositions.append({id, mergeData.treeMerged_->find(id)->label().toInt(), 0, MergeChange::None});
 			}
 
 			std::sort(idPositions.begin(), idPositions.end());	// sort the list according to the labels
@@ -110,7 +111,7 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
 {
-	auto idListBase = nodeListToSortedIdList(mergeData.treeBase_->find(listId, true)->children());
+	auto idListBase = nodeListToSortedIdList(mergeData.treeMerged_->find(listId, true)->children());
 	auto idListA    = nodeListToSortedIdList(mergeData.treeA_->find(listId, true)->children());
 	auto idListB    = nodeListToSortedIdList(mergeData.treeB_->find(listId, true)->children());
 	return Diff3Parse::computeChunks(idListA, idListB, idListBase);
