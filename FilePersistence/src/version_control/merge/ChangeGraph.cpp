@@ -43,10 +43,13 @@ ChangeGraph::~ChangeGraph()
 void ChangeGraph::init(Diff& diffA, Diff& diffB, GenericTree* baseTree)
 {
 	QList<MergeChange*> allChanges;
-	for (auto it = diffA.changes().begin(); it != diffA.changes().end(); ++it)
+
+	auto changesA = diffA.changes();
+	for (auto it = changesA.begin(); it != changesA.end(); ++it)
 		allChanges << MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchA);
 
-	for (auto it = diffB.changes().begin(); it != diffB.changes().end(); ++it)
+	auto changesB = diffB.changes();
+	for (auto it = changesB.begin(); it != changesB.end(); ++it)
 		allChanges <<  MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchB);
 
 	insert(allChanges, baseTree);
