@@ -81,23 +81,6 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 		QList<Model::NodeIdType> mergedList;
 		// this is the index of the next element to be inserted
 		int index = 0;
-		auto updateChange = [&](
-				std::shared_ptr<ChangeDescription>& change,
-				ChangeDependencyGraph& cdgA,
-				ChangeDependencyGraph& cdgB)
-		{
-			auto node = change->nodeB();
-			node->setLabel(QString::number(index++));
-			if (node->parentId() != preparedListIt.key())
-			{
-				node->detachFromParent();
-				node->setParentId(preparedListIt.key());
-				node->attachToParent();
-			}
-			change->computeFlags();
-			markAsResolved(conflictingChanges, conflictPairs, change, cdgA, cdgB);
-		};
-
 		bool allResolved = true;
 		for (auto chunk : preparedListIt.value())
 			if (chunk->noConflicts_)
@@ -126,6 +109,22 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 				{
 					auto changeA = cdgA.changes().value(elemId);
 					auto changeB = cdgB.changes().value(elemId);
+					auto updateChange = [&](
+							std::shared_ptr<ChangeDescription>& change,
+							ChangeDependencyGraph& cdgA,
+							ChangeDependencyGraph& cdgB)
+					{
+						auto node = change->nodeB();
+						node->setLabel(QString::number(index++));
+						if (node->parentId() != preparedListIt.key())
+						{
+							node->detachFromParent();
+							node->setParentId(preparedListIt.key());
+							node->attachToParent();
+						}
+						change->computeFlags();
+						markAsResolved(conflictingChanges, conflictPairs, change, cdgA, cdgB);
+					};
 
 					if (changeA && !changeA->onlyLabelChange())
 					{
@@ -162,36 +161,7 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& tr
 			{
 				allResolved = false;
 				mergedList.append(chunk->spanBase_);
-//				index += chunk->spanBase_.size();
-
-				// TODO: Fix the code below, by rethinking what the output of the list merge should be.
-				// In particular, we should not remove conflicting changes from the CDG, but are
-				// forced to so at the moment since only one change can affect a node, and we need
-				// a change to adjust the position of a conflicting element (non-moved) if some
-				// deletions/insertions were correctly merged infront of it.
-				for (auto elemId : chunk->spanBase_)
-				{
-					auto oldNode = treeBase->find(elemId);
-					auto newNodeA = treeA->find(elemId);
-					auto newNodeB = treeB->find(elemId);
-					auto adjustChange = [&oldNode, &elemId, &updateChange](GenericNode* newNode,
-							ChangeDependencyGraph& cdgA,
-							ChangeDependencyGraph& cdgB)
-					{
-						auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
-						updateChange(newChange, cdgA, cdgB);
-						auto delChange = cdgA.changes().value(elemId);
-						if (delChange)	cdgA.remove(delChange);		// Remove previous change
-						cdgA.insert(newChange);
-						cdgA.recordDependencies(newChange, true);
-						cdgA.recordDependencies(newChange, false);
-					};
-
-					Q_ASSERT(oldNode);
-					Q_ASSERT(newNodeA || newNodeB);
-					if (newNodeA)	adjustChange(newNodeA, cdgA, cdgB);
-					else	adjustChange(newNodeB, cdgB, cdgA);
-				}
+				index += chunk->spanBase_.size();
 			}
 
 		// assert that each element occurs only once in the merged list.
@@ -305,12 +275,6 @@ bool onlyConflictsOnLabel(ConflictPairs& conflictPairs, QSet<Model::NodeIdType>&
 
 		if (changeA && changeB)
 		{
-			if (changeA->onlyLabelChange() && changeB->onlyLabelChange())	continue;
-			else return false;
-			(void) containerId;	//	Used for the code described below
-//			This part of code contains the original code implemented in Balz thesis
-//			Now this condition is relaxed
-/*
 			if (!changeB->onlyLabelChange())
 			{
 				if (!changeA->onlyLabelChange())
@@ -341,7 +305,6 @@ bool onlyConflictsOnLabel(ConflictPairs& conflictPairs, QSet<Model::NodeIdType>&
 					}
 				}
 			}
-*/
 		}
 	}
 	return true;
