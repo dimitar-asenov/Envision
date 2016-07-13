@@ -70,6 +70,7 @@ class FILEPERSISTENCE_API ChangeGraph
 		void applyNonConflictingChanges(GenericTree* currentTree);
 
 		const QList<MergeChange*>& changes() const;
+		QList<MergeChange*> changesForNode(Model::NodeIdType nodeId) const;
 
 	private:
 		// The nodes of the graph
@@ -131,5 +132,7 @@ class FILEPERSISTENCE_API ChangeGraph
 };
 
 inline const QList<MergeChange*>& ChangeGraph::changes() const { return changes_; }
+inline QList<MergeChange*> ChangeGraph::changesForNode(Model::NodeIdType nodeId) const
+{ return changesForNode_.values(nodeId); }
 
 }
