@@ -57,6 +57,7 @@
 #include <QtCore/QDirIterator>
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
+#include <QtCore/QRegularExpression>
 #endif
 
 #endif /* PRECOMPILED_FILEPERSISTENCE_H_ */

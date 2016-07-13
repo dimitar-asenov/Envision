@@ -55,13 +55,17 @@ class FILEPERSISTENCE_API CopyToClipboard
 
 	sc.putNode(root);
 
+	QRegularExpression r{"(id=\"[^\"]+\") (name=\"[^\"]+\")"};
 	QString clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <BinaryNode name=\"0\"> <NameText name=\"name\">"
-			"S_RootNode</NameText>"
-			" <BinaryNode name=\"left\"> <NameText name=\"name\">S_Left child</NameText> </BinaryNode>"
-			" <BinaryNode name=\"right\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode>"
-			" </BinaryNode> </clipboard>",
-			clipboardText);
+	clipboardText.replace(r, "\\2 \\1"); // The order of the id and text attributes is non-deterministic
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <BinaryNode name=\"0\""
+						 " id=\"{00000000-0000-0000-0000-000000000001}\">"
+						 " <NameText name=\"name\" id=\"{00000000-0000-0000-0000-000000000002}\">S_RootNode</NameText>"
+						 " <BinaryNode name=\"left\" id=\"{00000000-0000-0000-0000-000000000003}\">"
+						 " <NameText name=\"name\" id=\"{00000000-0000-0000-0000-000000000004}\">S_Left child</NameText>"
+						 " </BinaryNode> <BinaryNode name=\"right\" id=\"{00000000-0000-0000-0000-000000000005}\">"
+						 " <NameText name=\"name\" id=\"{00000000-0000-0000-0000-000000000006}\">S_Right child</NameText>"
+						 " </BinaryNode> </BinaryNode> </clipboard>", clipboardText);
 
 	QList<const Model::Node*> nodes;
 	nodes.append(root->name());
@@ -69,9 +73,12 @@ class FILEPERSISTENCE_API CopyToClipboard
 	sc.putNodes(nodes);
 
 	clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <NameText name=\"0\">S_RootNode</NameText> "
-			"<BinaryNode name=\"1\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode> </clipboard>",
-						 clipboardText);
+	clipboardText.replace(r, "\\2 \\1"); // The order of the id and text attributes is non-deterministic
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <NameText name=\"0\" id=\""
+						 "{00000000-0000-0000-0000-000000000002}\">S_RootNode</NameText>"
+						 " <BinaryNode name=\"1\" id=\"{00000000-0000-0000-0000-000000000005}\">"
+						 " <NameText name=\"name\" id=\"{00000000-0000-0000-0000-000000000006}\">S_Right child</NameText>"
+						 " </BinaryNode> </clipboard>", clipboardText);
 }};
 
 class FILEPERSISTENCE_API CopyPartialToClipboard : public SelfTest::Test<FilePersistencePlugin, CopyPartialToClipboard>
@@ -90,9 +97,16 @@ class FILEPERSISTENCE_API CopyPartialToClipboard : public SelfTest::Test<FilePer
 	sc.putNode(root);
 
 	QString clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <PartialList name=\"0\"> <List name=\"list\"> "
-			"<Text name=\"0\">S_one</Text> <Text name=\"1\">S_two</Text> <Text name=\"2\">S_three</Text> "
-			"<Text name=\"3\">S_four</Text> </List> </PartialList> </clipboard>", clipboardText);
+	QRegularExpression r{"(id=\"[^\"]+\") (name=\"[^\"]+\")"};
+	clipboardText.replace(r, "\\2 \\1"); // The order of the id and text attributes is non-deterministic
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard>"
+						 " <PartialList name=\"0\" id=\"{00000000-0000-0000-0000-000000000001}\">"
+						 " <List name=\"list\" id=\"{00000000-0000-0000-0000-000000000002}\">"
+						 " <Text name=\"0\" id=\"{00000000-0000-0000-0000-000000000003}\">S_one</Text>"
+						 " <Text name=\"1\" id=\"{00000000-0000-0000-0000-000000000004}\">S_two</Text>"
+						 " <Text name=\"2\" id=\"{00000000-0000-0000-0000-000000000005}\">S_three</Text>"
+						 " <Text name=\"3\" id=\"{00000000-0000-0000-0000-000000000006}\">S_four</Text>"
+						 " </List> </PartialList> </clipboard>", clipboardText);
 }};
 
 class FILEPERSISTENCE_API PasteTextFromClipboard : public SelfTest::Test<FilePersistencePlugin, PasteTextFromClipboard>
