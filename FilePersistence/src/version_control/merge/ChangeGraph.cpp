@@ -767,8 +767,9 @@ void ChangeGraph::removeChange(MergeChange* change, bool mayHaveConflicts)
 
 QList<MergeChange*>::iterator ChangeGraph::removeChange(QList<MergeChange*>::iterator changeIt, bool mayHaveConflicts)
 {
+	auto changeToDelete = *changeIt;
 	auto returnIt = changes_.erase(changeIt);
-	removeChange(*changeIt, mayHaveConflicts);
+	removeChange(changeToDelete, mayHaveConflicts);
 	return returnIt;
 }
 
