@@ -45,18 +45,18 @@ class FILEPERSISTENCE_API ChangeGraph
 		/**
 		 * Adds all changes from both diffs to the change graph.
 		 *
-		 * The \a baseTree tree is the tree which the changes will mutate.
+		 * The \a tree is the tree which the changes will mutate.
 		 */
-		void init(Diff& diffA, Diff& diffB, GenericTree* baseTree);
+		void init(Diff& diffA, Diff& diffB, GenericTree* tree);
 
 		bool hasConflicts() const;
 
 		/**
 		 * Inserts the provided changes in the change graph.
 		 *
-		 * This operation will recompute all dependencies. The changes are assumed to modify the \a baseTree.
+		 * This operation will recompute all dependencies. The changes are assumed to modify the \a tree.
 		 */
-		void insert(QList<MergeChange*> changes, GenericTree* baseTree);
+		void insert(QList<MergeChange*> changes, GenericTree* tree);
 
 		struct LabelData
 		{
@@ -67,7 +67,7 @@ class FILEPERSISTENCE_API ChangeGraph
 
 		void relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree);
 
-		void applyNonConflictingChanges(GenericTree* currentTree);
+		void applyNonConflictingChanges(GenericTree* tree);
 
 		const QList<MergeChange*>& changes() const;
 		QList<MergeChange*> changesForNode(Model::NodeIdType nodeId) const;
@@ -97,18 +97,18 @@ class FILEPERSISTENCE_API ChangeGraph
 		void addDeleteNonEmptyTreeConflict(MergeChange* change);
 		void addInsertOrMoveToDeletedConflict(MergeChange* change);
 
-		void recomputeAllDependencies(GenericTree* baseTree);
-		void addDependencies(MergeChange* change, GenericTree* baseTree);
-		void addParentPresentDependency(MergeChange* change, GenericTree* baseTree);
-		void addChildrenRemovedDependency(MergeChange* change, GenericTree* baseTree);
+		void recomputeAllDependencies(GenericTree* tree);
+		void addDependencies(MergeChange* change, GenericTree* tree);
+		void addParentPresentDependency(MergeChange* change, GenericTree* tree);
+		void addChildrenRemovedDependency(MergeChange* change, GenericTree* tree);
 		void addLabelDependency(MergeChange* change);
-		void addMoveDependency(MergeChange* change, GenericTree* baseTree);
+		void addMoveDependency(MergeChange* change, GenericTree* tree);
 
 		void removeLabelOnlyChangesInChildren(Model::NodeIdType parentId);
 		void removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId);
 		void removeLabelConflictsBetweenChildren(Model::NodeIdType parentId);
 
-		void updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree);
+		void updateTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree);
 		void updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree);
 
 		void createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QList<LabelData> newLabels,
@@ -118,15 +118,15 @@ class FILEPERSISTENCE_API ChangeGraph
 		/**
 		 * Applies all non-conflicting changes that are not in an all-or-nothing dependency chain and returns their count.
 		 */
-		int applyIndependentNonConflictingChanges(GenericTree* currentTree);
+		int applyIndependentNonConflictingChanges(GenericTree* tree);
 
 		/**
 		 * Applies all non-conflicting changes that are part of an all-or-nothing dependency chain and returns their
 		 * count.
 		 */
-		int applyDependentNonConflictingChanges(GenericTree* currentTree);
+		int applyDependentNonConflictingChanges(GenericTree* tree);
 
-		void applyChange(GenericTree* currentTree, MergeChange* change);
+		void applyChange(GenericTree* tree, MergeChange* change);
 		void removeChange(MergeChange* change, bool mayHaveConflicts);
 		void removeAllDependencies(MergeChange* change);
 };

@@ -40,7 +40,7 @@ ChangeGraph::~ChangeGraph()
 	changes_.clear();
 }
 
-void ChangeGraph::init(Diff& diffA, Diff& diffB, GenericTree* baseTree)
+void ChangeGraph::init(Diff& diffA, Diff& diffB, GenericTree* tree)
 {
 	QList<MergeChange*> allChanges;
 
@@ -52,7 +52,7 @@ void ChangeGraph::init(Diff& diffA, Diff& diffB, GenericTree* baseTree)
 	for (auto it = changesB.begin(); it != changesB.end(); ++it)
 		allChanges <<  MergeChange::changesFromDiffChange(*(it.value()), MergeChange::BranchB);
 
-	insert(allChanges, baseTree);
+	insert(allChanges, tree);
 }
 
 bool ChangeGraph::hasConflicts() const
@@ -60,11 +60,11 @@ bool ChangeGraph::hasConflicts() const
 	Q_ASSERT(false);
 }
 
-inline void ChangeGraph::insert(QList<MergeChange*> changes, GenericTree* baseTree)
+inline void ChangeGraph::insert(QList<MergeChange*> changes, GenericTree* tree)
 {
 	for (auto & change : changes) insertSingleChange(change);
 
-	recomputeAllDependencies(baseTree);
+	recomputeAllDependencies(tree);
 }
 
 void ChangeGraph::insertSingleChange(MergeChange* change)
@@ -193,33 +193,33 @@ void ChangeGraph::addInsertOrMoveToDeletedConflict(MergeChange* change)
 	}
 }
 
-void ChangeGraph::recomputeAllDependencies(GenericTree* baseTree)
+void ChangeGraph::recomputeAllDependencies(GenericTree* tree)
 {
 	dependencies_.clear();
 	reverseDependencies_.clear();
 
 	for (auto change : changes_)
-		addDependencies(change, baseTree);
+		addDependencies(change, tree);
 }
 
 
-void ChangeGraph::addDependencies(MergeChange* change, GenericTree* baseTree)
+void ChangeGraph::addDependencies(MergeChange* change, GenericTree* tree)
 {
-	addParentPresentDependency(change, baseTree);
-	addChildrenRemovedDependency(change, baseTree);
+	addParentPresentDependency(change, tree);
+	addChildrenRemovedDependency(change, tree);
 	addLabelDependency(change);
-	addMoveDependency(change, baseTree);
+	addMoveDependency(change, tree);
 }
 
 
-void ChangeGraph::addParentPresentDependency(MergeChange* change, GenericTree* baseTree)
+void ChangeGraph::addParentPresentDependency(MergeChange* change, GenericTree* tree)
 {
 	// Some changes require that the parent node must exist
 	// If it is not already in base, find the change that introduces it and depend on it
 	if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
 	{
 		Q_ASSERT(!change->newParentId().isNull());
-		bool existsInBase = baseTree->find(change->newParentId(), true);
+		bool existsInBase = tree->find(change->newParentId());
 		if (!existsInBase)
 		{
 			// There must be an insertion change introducing this node. Add a dependency on it.
@@ -240,13 +240,13 @@ void ChangeGraph::addParentPresentDependency(MergeChange* change, GenericTree* b
 	}
 }
 
-void ChangeGraph::addChildrenRemovedDependency(MergeChange* change, GenericTree* baseTree)
+void ChangeGraph::addChildrenRemovedDependency(MergeChange* change, GenericTree* tree)
 {
 	// A delete change requires that the node has no children left.
 	// Such a change must depend on all changes that delete or move children out.
 	if (change->type() == ChangeType::Deletion)
 	{
-		auto baseNode = baseTree->find(change->nodeId(), true);
+		auto baseNode = tree->find(change->nodeId());
 		Q_ASSERT(baseNode);
 		for (auto child : baseNode->children())
 		{
@@ -296,7 +296,7 @@ void ChangeGraph::addLabelDependency(MergeChange* change)
 }
 
 
-void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
+void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* tree)
 {
 	// In order to detect cycles each move change depends on the first move change that moves an ancestor of it.
 	if (change->type() != ChangeType::Move)
@@ -323,7 +323,7 @@ void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
 		}
 	}
 
-	// At this point we have an ancestor ID which belongs to a node in the baseTree.
+	// At this point we have an ancestor ID which belongs to a node already in the tree.
 	// We should traverse the ancestor chain until we reach the root node or until we reach a moved node
 	Q_ASSERT(!ancestorId.isNull());
 	while (!ancestorId.isNull())
@@ -347,7 +347,7 @@ void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* baseTree)
 		if (dependencyFound) break;
 		else
 		{
-			auto ancestorNode = baseTree->find(ancestorId, true);
+			auto ancestorNode = tree->find(ancestorId);
 			Q_ASSERT(ancestorNode);
 			ancestorId = ancestorNode->parentId();
 		}
@@ -360,7 +360,7 @@ void ChangeGraph::relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelM
 	removeLabelDependenciesBetweenChildren(parentId);
 	removeLabelConflictsBetweenChildren(parentId);
 
-	updateBaseTreeLabels(parentId, labelMap, tree);	//change the tree directly
+	updateTreeLabels(parentId, labelMap, tree);	//change the tree directly
 	updateLabelsOfChangesTo(parentId, labelMap, tree);
 }
 
@@ -529,11 +529,11 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 	}
 }
 
-void ChangeGraph::updateBaseTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap,	GenericTree* tree)
+void ChangeGraph::updateTreeLabels(Model::NodeIdType parentId, IdToLabelMap labelMap,	GenericTree* tree)
 {
 	auto parentNode = tree->find(parentId);
 
-	// Update baseTree labels according to base Labels in labelMap
+	// Update tree labels according to base Labels in labelMap
 	for (auto node : parentNode->children())
 	{
 		auto labelIt = labelMap.find(node->id());
@@ -628,20 +628,20 @@ void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData l
 	}
 }
 
-void ChangeGraph::applyNonConflictingChanges(GenericTree* currentTree)
+void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
 {
 	bool tryApplyingMoreChanges = true;
 	while (tryApplyingMoreChanges)
 	{
 		tryApplyingMoreChanges = false;
-		applyIndependentNonConflictingChanges(currentTree);
-		int appliedDependentChanges = applyDependentNonConflictingChanges(currentTree);
+		applyIndependentNonConflictingChanges(tree);
+		int appliedDependentChanges = applyDependentNonConflictingChanges(tree);
 		tryApplyingMoreChanges = appliedDependentChanges > 0;
 	}
 
 }
 
-int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* currentTree)
+int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 {
 	int totalAppliedChanges = 0;
 	bool appliedSomeChangesThisCycle = true;
@@ -666,7 +666,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* currentTree)
 				appliedSomeChangesThisCycle = true;
 				auto change = *changeIt;
 
-				applyChange(currentTree, change);
+				applyChange(tree, change);
 				removeChange(change, false);
 			}
 		}
@@ -675,45 +675,45 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* currentTree)
 	return totalAppliedChanges;
 }
 
-int ChangeGraph::applyDependentNonConflictingChanges(GenericTree* currentTree)
+int ChangeGraph::applyDependentNonConflictingChanges(GenericTree* tree)
 {
-	(void) currentTree;
+	(void) tree;
 	Q_ASSERT(false);
 }
 
-void ChangeGraph::applyChange(GenericTree* currentTree, MergeChange* change)
+void ChangeGraph::applyChange(GenericTree* tree, MergeChange* change)
 {
 	switch (change->type())
 	{
 		case ChangeType::Insertion:
 		{
-			auto persistentUnit = currentTree->persistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
+			auto persistentUnit = tree->persistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
 			if (!persistentUnit)
-				persistentUnit = &currentTree->newPersistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
+				persistentUnit = &tree->newPersistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
 			auto node = persistentUnit->newNode(change->nodeId(), change->newParentId(), change->newLabel(),
 															change->newType(), change->newValueWithoutPrefix(),
 															change->newValueType());
 			node->linkNode();
 			Q_ASSERT(node->parent()->id() == change->newParentId());
-			Q_ASSERT(currentTree->find(change->nodeId()));
+			Q_ASSERT(tree->find(change->nodeId()));
 			break;
 		}
 
 		case ChangeType::Deletion:
 		{
-			auto node = currentTree->find(change->nodeId());
+			auto node = tree->find(change->nodeId());
 			Q_ASSERT(node);
 
 			Q_ASSERT(node->children().empty());
-			currentTree->remove(change->nodeId());
-			Q_ASSERT(!currentTree->find(change->nodeId()));
+			tree->remove(change->nodeId());
+			Q_ASSERT(!tree->find(change->nodeId()));
 
 			break;
 		}
 
 		case ChangeType::Move:
 		{
-			auto node = currentTree->find(change->nodeId());
+			auto node = tree->find(change->nodeId());
 			Q_ASSERT(node->parentId() == change->oldParentId());
 			node->detachFromParent();
 			node->setParentId(change->newParentId());
@@ -724,7 +724,7 @@ void ChangeGraph::applyChange(GenericTree* currentTree, MergeChange* change)
 
 		case ChangeType::Stationary:
 		{
-			auto node = currentTree->find(change->nodeId());
+			auto node = tree->find(change->nodeId());
 
 			if (change->updateFlags().testFlag(ChangeDescription::Value))
 				node->resetValue(change->newValueType(), change->newValueWithoutPrefix());
