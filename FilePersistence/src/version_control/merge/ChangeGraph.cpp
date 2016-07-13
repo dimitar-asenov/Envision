@@ -634,7 +634,7 @@ void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
 	while (tryApplyingMoreChanges)
 	{
 		applyIndependentNonConflictingChanges(tree);
-		tryApplyingMoreChanges = removeDependenciesInsideNonConflictingAtomicChangeGroups(tree);
+		tryApplyingMoreChanges = removeDependenciesInsideNonConflictingAtomicChangeGroups();
 	}
 
 }
@@ -673,10 +673,105 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 	return totalAppliedChanges;
 }
 
-bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups(GenericTree* tree)
+bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 {
-	(void) tree;
-	Q_ASSERT(false);
+	// Atomic change groups are essentially cycles of depedent changes with the following properties:
+	// - all changes in the cycle pertain to items with a common parent
+	// - all changes are label changes
+	// - dependency is due to clashing lables
+	// - all changes come from the same branch
+	//
+	// Such changes can be applied, but they need to be applied in an all-or-nothing fashion.
+	//
+	// To make these non-conflicting and suitable for removal (and subsequent application) the following conditions
+	// must also be met
+	// - no change depends on a change outside of the cycle
+	// - no change is in conflict with any other change
+
+	bool removedSomeDependencies = false;
+
+	auto parentsWithChanges = changesForChildren_.keys();
+	for (auto parentWithChanges : parentsWithChanges)
+	{
+		auto changes = changesForChildren_.values(parentWithChanges);
+
+		// For each change, check whether it matches the conditions above
+		QHash<MergeChange*, bool> okToBreakCycle;
+		for (auto change : changes)
+		{
+			// For each change, check if it fulfills the conditions
+
+			// Check Label change
+			if (change->type() != ChangeType::Stationary || change->updateFlags() != ChangeDescription::Label)
+			{
+
+				okToBreakCycle.insert(change, false);
+				continue;
+			}
+
+			// Check no conflicts
+			if ( directConflicts_.contains(change) )
+			{
+				okToBreakCycle.insert(change, false);
+				continue;
+			}
+
+			// Check only one dependency on another label change (implies same parent and no external dependencies)
+			// Check same branches
+			auto dependencies = dependencies_.values(change);
+			if (dependencies.size() != 1
+				 || dependencies.first()->type() != ChangeType::Stationary
+				 || dependencies.first()->updateFlags() != ChangeDescription::Label
+				 || change->branches() != dependencies.first()->branches())
+			{
+				okToBreakCycle.insert(change, false);
+				continue;
+			}
+
+			// This change could potentially be removed if the rest of the changes in this cycle are also OK
+			okToBreakCycle.insert(change, true);
+		}
+
+		//===========================================================================================================
+		// For each change, check if it is part of a cycle with all OKs
+		for (auto change : changes)
+		{
+			if (!okToBreakCycle.value(change)) continue;
+
+			// This change is so far OK and it must have exactly one dependency
+			// Check if it forms a cycle
+			bool okToRemoveDependenciesInCycle = false;
+			QList<MergeChange*> changesInCycle{change};
+			while (true)
+			{
+				auto nextChange = dependencies_.value(changesInCycle.last());
+
+				if (nextChange == changesInCycle.first())
+				{
+					okToRemoveDependenciesInCycle = true;
+					break;
+				}
+
+				if (okToBreakCycle.value(nextChange)) changesInCycle.append(nextChange);
+				else break;
+			}
+
+			Q_ASSERT( ! (okToRemoveDependenciesInCycle && changesInCycle.size() == 1));
+			if (okToRemoveDependenciesInCycle)
+			{
+				// This is a cycle which matches all conditions. Remove the dependencies between the elements.
+				removedSomeDependencies = true;
+				for (auto changeToMakeIndependent : changesInCycle)
+					removeAllDependencies(changeToMakeIndependent);
+			}
+
+			// No matter if this was a good or a bad cycle, label all changes as notOK to avoid further processing
+			for (auto processedChange : changesInCycle)
+				okToBreakCycle.insert(processedChange, false);
+		}
+	}
+
+	return removedSomeDependencies;
 }
 
 void ChangeGraph::applyChange(GenericTree* tree, MergeChange* change)

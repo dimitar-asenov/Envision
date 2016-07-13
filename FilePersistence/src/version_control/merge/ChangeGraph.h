@@ -126,7 +126,7 @@ class FILEPERSISTENCE_API ChangeGraph
 		 *
 		 * Returns true if any dependencies were removed.
 		 */
-		bool removeDependenciesInsideNonConflictingAtomicChangeGroups(GenericTree* tree);
+		bool removeDependenciesInsideNonConflictingAtomicChangeGroups();
 
 		void applyChange(GenericTree* tree, MergeChange* change);
 		void removeChange(MergeChange* change, bool mayHaveConflicts);
