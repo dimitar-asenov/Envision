@@ -73,11 +73,11 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& mergeData)
 {
 	QList<Model::NodeIdType> listsToMerge;
-	auto changes = mergeData.cg_.changes_;
+	auto changes = mergeData.cg_.changes();
 	// Add every list whose child structure changes
 	for (auto change : changes)
 	{
-		// Ignore Lists with stationary changes
+		// Remove Lists with stationary changes
 		if (change->type()==ChangeType::Stationary && !change->updateFlags().testFlag(ChangeDescription::Label))
 			continue;
 		auto oldParentNode = mergeData.treeMerged_->find(change->oldParentId(), true);
@@ -89,19 +89,21 @@ QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& me
 	}
 
 	// Remove Lists which are inserted/deleted fully by any version
-	QMutableListIterator<Model::NodeIdType> listIt(listsToMerge);
-	while (listIt.hasNext())
+	auto listIt = listsToMerge.begin();
+	while (listIt != listsToMerge.end())
 	{
-		auto listId = listIt.next();
-		auto changeIt = mergeData.cg_.changesForNode_.find(listId);
-		while (changeIt != mergeData.cg_.changesForNode_.end() && changeIt.key() == listId)
+		auto changeList = mergeData.cg_.changesForNode(*listIt);
+		bool isInsertionOrDeletion = false;
+		for (auto change : changeList)
 		{
-				if (changeIt.value()->type() == ChangeType::Deletion || changeIt.value()->type() == ChangeType::Insertion)
+				if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Insertion)
 				{
-					listIt.remove();
+					isInsertionOrDeletion = true;
 					break;
 				}
 		}
+		if (isInsertionOrDeletion)	listIt = listsToMerge.erase(listIt);
+		else	++listIt;
 	}
 	return listsToMerge;
 }
