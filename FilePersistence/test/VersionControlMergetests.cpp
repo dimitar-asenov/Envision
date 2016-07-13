@@ -86,12 +86,8 @@ class FILEPERSISTENCE_API UnorderedAndUnitsConflicting
 		{"{00000000-0000-0000-0000-000000000051}"},
 		{"{00000000-0000-0000-0000-000000000052}"}
 	};
-	for (auto change : merge->getConflicts())
-	{
-		CHECK_CONDITION(expected.contains(change->nodeId()));
-		expected.remove(change->nodeId());
-	}
-	CHECK_CONDITION(expected.isEmpty());
+	for (auto mustConflict : expected)
+		CHECK_CONDITION(merge->isNodeInConflict(mustConflict));
 }};
 
 class FILEPERSISTENCE_API ListsReorderInsertDeleteResolvable

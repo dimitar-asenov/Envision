@@ -36,7 +36,7 @@ add_library(FilePersistence SHARED
 	src/version_control/Diff.h
 	src/version_control/GitRepository.h
 	src/version_control/History.h
-	src/version_control/Merge.h
+	src/version_control/MergeV1.h
 	src/version_control/ChangeDependencyGraph.h
 	src/version_control/ConflictPairs.h
 	src/version_control/ConflictUnitDetector.h
@@ -71,7 +71,7 @@ add_library(FilePersistence SHARED
 	src/version_control/CommitGraph.cpp
 	src/version_control/History.cpp
 	src/version_control/Commit.cpp
-	src/version_control/Merge.cpp
+	src/version_control/MergeV1.cpp
 	src/version_control/ChangeDependencyGraph.cpp
 	src/version_control/ConflictPairs.cpp
 	src/version_control/ConflictUnitDetector.cpp
@@ -96,6 +96,7 @@ add_library(FilePersistence SHARED
 	src/version_control/merge/MergeV2.h
 	src/version_control/merge/MergeData.cpp
 	src/version_control/merge/MergeData.h
+	src/version_control/Merge.h
 )
 add_dependencies(FilePersistence FilePersistence_UpdateResources)
 

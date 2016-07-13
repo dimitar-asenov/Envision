@@ -30,6 +30,8 @@
 
 #include "MergeData.h"
 
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
 
 class GitRepository;
@@ -48,6 +50,9 @@ class FILEPERSISTENCE_API MergeV2
 		bool hasConflicts() const;
 		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
+
+		// Used for testing
+		bool isNodeInConflict(Model::NodeIdType nodeId) const;
 
 	private:
 		friend class GitRepository;

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "Merge.h"
+#include "MergeV1.h"
 
 #include "ChangeDependencyGraph.h"
 #include "ChangeDescription.h"
@@ -41,7 +41,7 @@
 
 namespace FilePersistence {
 
-bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
+bool MergeV1::commit(const Signature& author, const Signature& committer, const QString& message)
 {
 	Q_ASSERT(stage_ == Stage::WroteToIndex);
 
@@ -58,13 +58,13 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 	return true;
 }
 
-std::shared_ptr<GenericTree> Merge::mergedTree()
+std::shared_ptr<GenericTree> MergeV1::mergedTree()
 {
 	Q_ASSERT(stage_ >= Stage::BuiltMergedTree);
 	return treeMerged_;
 }
 
-Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
+MergeV1::MergeV1(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
 	// TODO: fill those lists correctly
@@ -165,7 +165,7 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	{
 		case Kind::AlreadyUpToDate:
 		{
-			stage_ = Merge::Stage::Committed;
+			stage_ = Stage::Committed;
 			break;
 		}
 		case Kind::FastForward:
@@ -195,7 +195,7 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	}
 }
 
-Merge::~Merge()
+MergeV1::~MergeV1()
 {
 	treeA_ = nullptr;
 	treeB_ = nullptr;
@@ -203,7 +203,7 @@ Merge::~Merge()
 	treeMerged_ = nullptr;
 }
 
-void Merge::initializeComponents()
+void MergeV1::initializeComponents()
 {
 	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(
 				new ConflictUnitDetector{conflictTypes_, USE_LINKED_SETS});
@@ -212,7 +212,7 @@ void Merge::initializeComponents()
 	conflictPipeline_.append(listMergeComponent);
 }
 
-void Merge::performTrueMerge()
+void MergeV1::performTrueMerge()
 {
 	initializeComponents();
 
@@ -307,7 +307,7 @@ void Merge::performTrueMerge()
 	}
 }
 
-void Merge::addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
+void MergeV1::addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
 									 const std::shared_ptr<ChangeDescription>& change,
 									 const ChangeDependencyGraph& cdg)
 {
@@ -321,7 +321,7 @@ void Merge::addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
 }
 
 
-void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
+void MergeV1::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 										 const ChangeDependencyGraph& cdg)
 {
 	// sort changes topologically before applying

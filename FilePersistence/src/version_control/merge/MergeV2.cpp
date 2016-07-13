@@ -167,4 +167,10 @@ void MergeV2::performTrueMerge()
 	}
 }
 
+bool MergeV2::isNodeInConflict(Model::NodeIdType nodeId) const
+{
+	//TODO : add soft conflicts
+	return !mergeData_.cg_.changesForNode(nodeId).isEmpty();
+}
+
 }

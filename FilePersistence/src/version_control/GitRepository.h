@@ -94,7 +94,7 @@ class FILEPERSISTENCE_API GitRepository
 		QString relativePathForPersistentUnit(QString persistentUnitId, QString revision) const;
 
 	private:
-		friend class Merge;
+		friend class MergeV1;
 		friend class MergeV2;
 
 		QString projectName() const;
