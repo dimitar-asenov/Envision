@@ -89,7 +89,6 @@ class FILEPERSISTENCE_API MergeV2
 
 };
 
-inline bool MergeV2::hasConflicts() const { return mergeData_.cg_.hasConflicts(); }
 inline bool MergeV2::isAlreadyMerged() const { return stage_ == Stage::Committed; }
 
 }

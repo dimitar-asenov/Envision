@@ -57,7 +57,7 @@ bool ListMergeComponentV2::isOrderedList(const QString& type)
 
 void ListMergeComponentV2::run(MergeData& mergeData)
 {
-	// applyNonConflictingChanges(mergeData);
+	mergeData.cg_.applyNonConflictingChanges(mergeData.treeMerged_.get());
 	auto listsToMerge = computeListsToMerge(mergeData);
 	for (auto listId : listsToMerge)
 	{
@@ -80,8 +80,8 @@ QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& me
 		// Remove Lists with stationary changes
 		if (change->type()==ChangeType::Stationary && !change->updateFlags().testFlag(ChangeDescription::Label))
 			continue;
-		auto oldParentNode = mergeData.treeMerged_->find(change->oldParentId(), true);
-		auto newParentNode = mergeData.treeMerged_->find(change->newParentId(), true);
+		auto oldParentNode = mergeData.treeMerged_->find(change->oldParentId());
+		auto newParentNode = mergeData.treeMerged_->find(change->newParentId());
 		if (oldParentNode && isList(oldParentNode->type()) && !listsToMerge.contains(change->oldParentId()))
 				listsToMerge.append(change->oldParentId());
 		if (newParentNode && isList(newParentNode->type()) && !listsToMerge.contains(change->newParentId()))
@@ -149,9 +149,9 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
 {
-	auto idListBase = nodeListToSortedIdList(mergeData.treeMerged_->find(listId, true)->children());
-	auto idListA    = nodeListToSortedIdList(mergeData.treeA_->find(listId, true)->children());
-	auto idListB    = nodeListToSortedIdList(mergeData.treeB_->find(listId, true)->children());
+	auto idListBase = nodeListToSortedIdList(mergeData.treeMerged_->find(listId)->children());
+	auto idListA    = nodeListToSortedIdList(mergeData.treeA_->find(listId)->children());
+	auto idListB    = nodeListToSortedIdList(mergeData.treeB_->find(listId)->children());
 	return Diff3Parse::computeChunks(idListA, idListB, idListBase);
 }
 

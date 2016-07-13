@@ -49,8 +49,6 @@ class FILEPERSISTENCE_API ChangeGraph
 		 */
 		void init(Diff& diffA, Diff& diffB, GenericTree* tree);
 
-		bool hasConflicts() const;
-
 		/**
 		 * Inserts the provided changes in the change graph.
 		 *
