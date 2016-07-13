@@ -130,10 +130,7 @@ void MergeV2::performTrueMerge()
 	new GitPiecewiseLoader{mergeData_.treeBase_, repository_, baseCommitId_};
 
 	mergeData_.treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree{repository_->projectName()});
-	// If we need to piece-wise load nodes in the merge tree, these will necessarily have to come from the base
-	// so we use the base commit bellow
-	new GitPiecewiseLoader{mergeData_.treeMerged_, repository_, baseCommitId_};
-
+	// We will fully load the merge tree. Therefore there is no need to provide a piecewise loader.
 	repository_->loadGenericTree(mergeData_.treeMerged_, baseCommitId_);
 	mergeData_.treeMerged_->buildLookupHash();
 
