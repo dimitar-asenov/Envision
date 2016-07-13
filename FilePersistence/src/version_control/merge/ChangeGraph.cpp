@@ -633,10 +633,8 @@ void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
 	bool tryApplyingMoreChanges = true;
 	while (tryApplyingMoreChanges)
 	{
-		tryApplyingMoreChanges = false;
 		applyIndependentNonConflictingChanges(tree);
-		int appliedDependentChanges = applyDependentNonConflictingChanges(tree);
-		tryApplyingMoreChanges = appliedDependentChanges > 0;
+		tryApplyingMoreChanges = removeDependenciesInsideNonConflictingAtomicChangeGroups(tree);
 	}
 
 }
@@ -667,7 +665,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 				auto change = *changeIt;
 
 				applyChange(tree, change);
-				removeChange(change, false);
+				changeIt = removeChange(changeIt, false);
 			}
 		}
 	}
@@ -675,7 +673,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 	return totalAppliedChanges;
 }
 
-int ChangeGraph::applyDependentNonConflictingChanges(GenericTree* tree)
+bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups(GenericTree* tree)
 {
 	(void) tree;
 	Q_ASSERT(false);
@@ -764,6 +762,14 @@ void ChangeGraph::removeChange(MergeChange* change, bool mayHaveConflicts)
 	removeAllDependencies(change);
 
 	delete change;
+}
+
+
+QList<MergeChange*>::iterator ChangeGraph::removeChange(QList<MergeChange*>::iterator changeIt, bool mayHaveConflicts)
+{
+	auto returnIt = changes_.erase(changeIt);
+	removeChange(*changeIt, mayHaveConflicts);
+	return returnIt;
 }
 
 void ChangeGraph::removeAllDependencies(MergeChange* change)

@@ -121,13 +121,16 @@ class FILEPERSISTENCE_API ChangeGraph
 		int applyIndependentNonConflictingChanges(GenericTree* tree);
 
 		/**
-		 * Applies all non-conflicting changes that are part of an all-or-nothing dependency chain and returns their
-		 * count.
+		 * Scans all changes to detect all-or-nothing dependency chains and removese the depenencies if all
+		 * elements are non-conflicting and if they don't depend on external elements.
+		 *
+		 * Returns true if any dependencies were removed.
 		 */
-		int applyDependentNonConflictingChanges(GenericTree* tree);
+		bool removeDependenciesInsideNonConflictingAtomicChangeGroups(GenericTree* tree);
 
 		void applyChange(GenericTree* tree, MergeChange* change);
 		void removeChange(MergeChange* change, bool mayHaveConflicts);
+		QList<MergeChange*>::iterator removeChange(QList<MergeChange*>::iterator changeIt, bool mayHaveConflicts);
 		void removeAllDependencies(MergeChange* change);
 };
 
