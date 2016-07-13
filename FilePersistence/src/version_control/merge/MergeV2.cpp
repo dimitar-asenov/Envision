@@ -137,7 +137,8 @@ void MergeV2::performTrueMerge()
 	Diff diffA = repository_->diff(baseCommitId_, headCommitId_, mergeData_.treeBase_, mergeData_.treeA_);
 	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_, mergeData_.treeBase_, mergeData_.treeB_);
 
-	mergeData_.cg_.init(diffA, diffB, mergeData_.treeBase_.get());
+	// We need to use the mergedTree below, since it has to be fully loaded (otherwise tree->find(x) won't work).
+	mergeData_.cg_.init(diffA, diffB, mergeData_.treeMerged_.get());
 
 	// Run the pipeline
 	initializePipelineComponents();
