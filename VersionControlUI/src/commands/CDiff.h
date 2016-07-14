@@ -44,22 +44,32 @@ class VERSIONCONTROLUI_API CDiff : public Interaction::Command
 		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-	private:
-
-		static const QString OVERVIEW_COMMAND;
 		/**
 		 * Returns the unambigous prefixes of commits and their description that start with \a partialCommitId.
 		 */
-		QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
-																								 Visualization::Item* ancestorWithNode);
+		static QList<QPair<QString, QString>> commitsWithDescriptionsStartingWith(QString partialCommitId,
+																						QString managerName,
+																						QHash<QString, QString>& unambigousPrefixPerRevision);
 
 		/**
-		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength
+		 * Returns for each entry in \a strings the corresponding unambigous prefix with minimum length \a minPrefixLength.
+		 * Stores original revision string in \a unambigousPrefixPerRevision
 		 */
-		QStringList computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength);
+		static QStringList computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength,
+																				  QHash<QString, QString>& unambigousPrefixPerRevision);
+
+		static QString descriptionForCommits(QString token, const QList<QPair<QString, QString>>& commits);
+		static QList<Interaction::CommandSuggestion*> parseVersions(QStringList tokens,
+																						QString commandName, QString managerName,
+																						QHash<QString, QString>& unambigousPrefixPerRevision);
+
+
+	private:
+		static const QString OVERVIEW_COMMAND;
 
 		QHash<QString, QString> unambigousPrefixPerRevision_;
-		QString descriptionForCommits(QString token, const QList<QPair<QString, QString>>& commits);
+
+
 };
 
 }

@@ -85,6 +85,7 @@ bool CDiff::canInterpret(Visualization::Item* source, Visualization::Item*,
 				return false;
 		}
 
+		// check if next available token is overview command
 		if (!commandTokensCopy.isEmpty())
 		{
 			auto token = commandTokensCopy.takeFirst();
@@ -172,65 +173,75 @@ QList<Interaction::CommandSuggestion*> CDiff::suggest(Visualization::Item* sourc
 			return suggestions;
 		}
 
-		QString firstVersionToken = tokensSoFar.takeFirst();
-		QString stringToComplete = firstVersionToken;
-		QString suggestCommand = name() + " ";
-		QString suggestDescription = "";
-
-
-		bool secondVersionAvailable = !tokensSoFar.isEmpty();
-
-		if (secondVersionAvailable)
-		{
-			// use the second version token for completion
-			stringToComplete = tokensSoFar.takeFirst();
-
-			// add first version token to suggested command
-			suggestCommand += firstVersionToken + " ";
-
-			// analyze the first token
-			auto firstTokenSuggestions = commitsWithDescriptionsStartingWith(firstVersionToken, ancestorWithNode);
-
-			suggestDescription = descriptionForCommits(firstVersionToken, firstTokenSuggestions);
-
-			// new line
-			suggestDescription += "<br>";
-		}
-
-		// check possible overview command at end
-		if (!tokensSoFar.isEmpty())
-		{
-			auto thirdToken = tokensSoFar.takeFirst();
-
-			if (!OVERVIEW_COMMAND.startsWith(thirdToken))
-				return {};
-
-			suggestCommand += stringToComplete + " ";
-			auto secondTokenSuggenstions = commitsWithDescriptionsStartingWith(stringToComplete, ancestorWithNode);
-
-			suggestDescription += descriptionForCommits(suggestDescription, secondTokenSuggenstions);
-
-			suggestions.append(new Interaction::CommandSuggestion{suggestCommand + OVERVIEW_COMMAND,
-																					suggestDescription +
-									 "<br> highlight changes in current view"});
-			return suggestions;
-
-		}
-
-		for (auto commitWithDescription : commitsWithDescriptionsStartingWith(stringToComplete, ancestorWithNode))
-				suggestions.append(new Interaction::CommandSuggestion{suggestCommand + commitWithDescription.first,
-																						suggestDescription + commitWithDescription.second});
-
-		return suggestions;
+		return parseVersions(tokensSoFar, name(), ancestorWithNode->node()->manager()->name(),
+									unambigousPrefixPerRevision_);
 	}
 	else return {};
 }
 
-QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QString partialCommitId,
-																								  Visualization::Item* ancestorWithNode)
+QList<Interaction::CommandSuggestion*> CDiff::parseVersions(QStringList tokens, QString commandName,
+																				QString managerName,
+																				QHash<QString, QString>& unambigousPrefixPerRevision)
 {
-	QString managerName = ancestorWithNode->node()->manager()->name();
+	QList<Interaction::CommandSuggestion*> suggestions;
 
+	QString firstVersionToken = tokens.takeFirst();
+	QString stringToComplete = firstVersionToken;
+	QString suggestCommand = commandName + " ";
+	QString suggestDescription = "";
+
+
+	bool secondVersionAvailable = !tokens.isEmpty();
+
+	if (secondVersionAvailable)
+	{
+		// use the second version token for completion
+		stringToComplete = tokens.takeFirst();
+
+		// add first version token to suggested command
+		suggestCommand += firstVersionToken + " ";
+
+		// analyze the first token
+		auto firstTokenSuggestions = commitsWithDescriptionsStartingWith(firstVersionToken, managerName,
+																							  unambigousPrefixPerRevision);
+
+		suggestDescription = descriptionForCommits(firstVersionToken, firstTokenSuggestions);
+
+		// new line
+		suggestDescription += "<br>";
+	}
+
+	// check possible overview command at end
+	if (!tokens.isEmpty())
+	{
+		auto thirdToken = tokens.takeFirst();
+
+		if (!OVERVIEW_COMMAND.startsWith(thirdToken))
+			return {};
+
+		suggestCommand += stringToComplete + " ";
+		auto secondTokenSuggenstions = commitsWithDescriptionsStartingWith(stringToComplete, managerName,
+																								 unambigousPrefixPerRevision);
+
+		suggestDescription += descriptionForCommits(suggestDescription, secondTokenSuggenstions);
+
+		suggestions.append(new Interaction::CommandSuggestion{suggestCommand + OVERVIEW_COMMAND,
+																				suggestDescription +
+								 "<br> highlight changes in current view"});
+		return suggestions;
+	}
+
+	for (auto commitWithDescription : commitsWithDescriptionsStartingWith(stringToComplete, managerName,
+																								 unambigousPrefixPerRevision))
+			suggestions.append(new Interaction::CommandSuggestion{suggestCommand + commitWithDescription.first,
+																					suggestDescription + commitWithDescription.second});
+	return suggestions;
+}
+
+QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QString partialCommitId,
+																							QString managerName,
+																							QHash<QString, QString>& unambigousPrefixPerRevision)
+{
 	// get GitRepository
 	QString path{"projects/" + managerName};
 
@@ -243,12 +254,13 @@ QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QStrin
 
 		// use the bigger of minPrefixLength or length of partialCommit as minimum prefix length
 		auto prefixes = computeUnambiguousShortestPrefixesPerString(revisions,
-																  std::max(repository.getMinPrefixLength(), partialCommitId.length()));
+																	std::max(repository.getMinPrefixLength(), partialCommitId.length()),
+																	unambigousPrefixPerRevision);
 
 		for (auto prefix : prefixes)
 			if (prefix.startsWith(partialCommitId))
 				commitsWithDescriptions.append({prefix,
-														  repository.getCommitInformation(unambigousPrefixPerRevision_[prefix]).message_});
+														  repository.getCommitInformation(unambigousPrefixPerRevision[prefix]).message_});
 
 		// TODO find clean way to make localBranches and tags also available
 		//commitsWithDescriptions.append(repository.localBranches());
@@ -257,9 +269,10 @@ QList<QPair<QString, QString>> CDiff::commitsWithDescriptionsStartingWith(QStrin
 	return commitsWithDescriptions;
 }
 
-QStringList CDiff::computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength)
+QStringList CDiff::computeUnambiguousShortestPrefixesPerString(const QStringList& strings, const int minPrefixLength,
+																					QHash<QString, QString>& unambigousPrefixPerRevision)
 {
-	unambigousPrefixPerRevision_.clear();
+	unambigousPrefixPerRevision.clear();
 	QStringList prefixes;
 	for (auto str : strings)
 		for (int i = minPrefixLength; i < str.length(); i++)
@@ -268,7 +281,7 @@ QStringList CDiff::computeUnambiguousShortestPrefixesPerString(const QStringList
 			if (strings.filter(QRegularExpression{"^"+currentPrefix+".*"}).size() == 1)
 			{
 				prefixes.append(currentPrefix);
-				unambigousPrefixPerRevision_.insert(currentPrefix, str);
+				unambigousPrefixPerRevision.insert(currentPrefix, str);
 				break;
 			}
 		}
