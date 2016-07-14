@@ -424,7 +424,7 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 {
 	auto parentNode = tree->find(parentId);
 	Q_ASSERT(parentNode);
-	for (auto nodeId : labelMap.keys())
+	for (auto nodeId : labelMap.uniqueKeys())
 	{
 		QString labelA;
 		QString labelB;
