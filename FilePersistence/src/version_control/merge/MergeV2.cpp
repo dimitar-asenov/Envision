@@ -154,7 +154,7 @@ void MergeV2::performTrueMerge()
 	SimpleTextFileStore::saveGenericTree(mergeData_.treeMerged_, repository_->projectName(),
 													 repository_->workdirPath(), {"Project", "Module"});
 
-	if (!mergeData_.cg_.hasConflicts())
+	if (!hasConflicts())
 	{
 		stage_ = Stage::WroteToWorkDir;
 
@@ -173,6 +173,12 @@ bool MergeV2::isNodeInConflict(Model::NodeIdType nodeId) const
 {
 	//TODO : add soft conflicts
 	return !mergeData_.cg_.changesForNode(nodeId).isEmpty();
+}
+
+bool MergeV2::hasConflicts() const
+{
+	// TODO: consider soft conflicts
+	return !mergeData_.cg_.changes().isEmpty();
 }
 
 }

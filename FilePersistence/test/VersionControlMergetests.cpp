@@ -155,6 +155,20 @@ class FILEPERSISTENCE_API EvalMethodInsert
 	merge->commit(sig, sig, "Merged master and dev");
 }};
 
+class FILEPERSISTENCE_API TwoChangesDifferentLists
+ : public SelfTest::Test<FilePersistencePlugin, TwoChangesDifferentLists> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	auto tree = merge->mergedTree();
+	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesDifferentLists\"");
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000210}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000408}"}));
+}};
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.

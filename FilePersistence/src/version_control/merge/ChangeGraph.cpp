@@ -55,11 +55,6 @@ void ChangeGraph::init(Diff& diffA, Diff& diffB, GenericTree* tree)
 	insert(allChanges, tree);
 }
 
-bool ChangeGraph::hasConflicts() const
-{
-	Q_ASSERT(false);
-}
-
 inline void ChangeGraph::insert(QList<MergeChange*> changes, GenericTree* tree)
 {
 	for (auto & change : changes) insertSingleChange(change);
@@ -876,11 +871,10 @@ void ChangeGraph::removeAllDependencies(MergeChange* change)
 	dependencies_.remove(change);
 	reverseDependencies_.remove(change);
 	for (auto ourDependency : thisDependsOn)
-		for (auto dependencyToUs : otherDependOnThis)
-		{
-			dependencies_.remove(dependencyToUs, change);
-			reverseDependencies_.remove(ourDependency, change);
-		}
+		reverseDependencies_.remove(ourDependency, change);
+	for (auto dependencyToUs : otherDependOnThis)
+		dependencies_.remove(dependencyToUs, change);
+
 }
 
 }
