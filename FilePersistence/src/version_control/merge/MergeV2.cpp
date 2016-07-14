@@ -41,11 +41,6 @@ namespace FilePersistence {
 
 bool MergeV2::commit(const Signature& author, const Signature& committer, const QString& message)
 {
-	if (isAlreadyMerged())
-	{
-		qDebug() << "Already committed";
-		return true;
-	}
 	Q_ASSERT(stage_ == Stage::WroteToIndex);
 
 	QString treeSHA1 = repository_->writeIndexToTree();
