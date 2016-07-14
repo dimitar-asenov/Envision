@@ -38,7 +38,7 @@
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
-/*
+
 class FILEPERSISTENCE_API TwoDeletesNoConflict
  : public SelfTest::Test<FilePersistencePlugin, TwoDeletesNoConflict> { public: void test()
 {
@@ -154,14 +154,12 @@ class FILEPERSISTENCE_API EvalMethodInsert
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "Merged master and dev");
 }};
-*/
 
 class FILEPERSISTENCE_API TwoChangesDifferentLists
  : public SelfTest::Test<FilePersistencePlugin, TwoChangesDifferentLists> { public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
-	qDebug() << "Chal gya";
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
@@ -176,25 +174,25 @@ class FILEPERSISTENCE_API TwoChangesDifferentLists
  * found in /tmp/EnvisionVC/TestMerge.
  * This test should probably eventually be replaced by a command line interface.
  */
-//class FILEPERSISTENCE_API RunMerge
-// : public SelfTest::Test<FilePersistencePlugin, RunMerge> { public: void test()
-//{
-//	if (!QFile{"/tmp/EnvisionVC/TestMerge/.git"}.exists())
-//	{
-//		CHECK_CONDITION(true);
-//		return;
-//	}
-//	GitRepository repo{"/tmp/EnvisionVC/TestMerge"};
-//	auto merge = repo.merge("dev");
-//	if (!merge->isAlreadyMerged() && !merge->hasConflicts())
-//	{
-//		Signature sig;
-//		sig.name_ = "Chuck TESTa";
-//		sig.eMail_ = "chuck@mergetest.com";
-//		merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
-//	}
-//	CHECK_CONDITION(true);
-//	exit(0);
-//}};
+class FILEPERSISTENCE_API RunMerge
+ : public SelfTest::Test<FilePersistencePlugin, RunMerge> { public: void test()
+{
+	if (!QFile{"/tmp/EnvisionVC/TestMerge/.git"}.exists())
+	{
+		CHECK_CONDITION(true);
+		return;
+	}
+	GitRepository repo{"/tmp/EnvisionVC/TestMerge"};
+	auto merge = repo.merge("dev");
+	if (!merge->isAlreadyMerged() && !merge->hasConflicts())
+	{
+		Signature sig;
+		sig.name_ = "Chuck TESTa";
+		sig.eMail_ = "chuck@mergetest.com";
+		merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
+	}
+	CHECK_CONDITION(true);
+	exit(0);
+}};
 
 }
