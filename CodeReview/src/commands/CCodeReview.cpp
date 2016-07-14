@@ -43,6 +43,9 @@
 #include "VisualizationBase/src/ViewItemManager.h"
 
 #include "VersionControlUI/src/DiffManager.h"
+#include "VersionControlUI/src/commands/CDiff.h"
+
+#include "FilePersistence/src/version_control/GitRepository.h"
 
 using namespace Visualization;
 
@@ -50,12 +53,50 @@ namespace CodeReview {
 
 CCodeReview::CCodeReview() : Command{"review"} {}
 
-bool CCodeReview::canInterpret(Visualization::Item*, Visualization::Item*,
+bool CCodeReview::canInterpret(Visualization::Item* source, Visualization::Item*,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& )
 {
-	if (commandTokens.size() > 0)
-		return name() == commandTokens.first();
-	return false;
+	auto ancestorWithNode = source->findAncestorWithNode();
+
+	if (!ancestorWithNode) return false;
+
+	QString managerName = ancestorWithNode->node()->manager()->name();
+
+	QStringList commandTokensCopy = commandTokens;
+
+	// get GitRepository
+	QString path{"projects/" + managerName};
+
+	if (FilePersistence::GitRepository::repositoryExists(path))
+	{
+		FilePersistence::GitRepository repository{path};
+
+		// if there are no tokens we are unable to interpret the command
+		if (commandTokensCopy.isEmpty())
+			return false;
+
+		// check that command name starts with the characters of the first token
+		if (!name().startsWith(commandTokensCopy.takeFirst()))
+			return false;
+
+		// if there is an additional version specified, check that it is a valid commit
+		if (!commandTokensCopy.isEmpty())
+		{
+			auto token = commandTokensCopy.takeFirst();
+			if (!repository.isValidRevisionString(unambigousPrefixPerRevision_.value(token, token)))
+				return false;
+		}
+		// check the same if there is a second version specified
+		if (!commandTokensCopy.isEmpty())
+		{
+			auto token = commandTokensCopy.takeFirst();
+			if (!repository.isValidRevisionString(unambigousPrefixPerRevision_.value(token, token)))
+				return false;
+		}
+
+		return true;
+	}
+	else return false;
 }
 
 Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Visualization::Item*,
@@ -68,6 +109,10 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 
 	QString oldRev = commandTokens.at(1);
 	QString newRev = commandTokens.at(2);
+
+	// try to get complete sha1 if available
+	oldRev = unambigousPrefixPerRevision_.value(oldRev, oldRev);
+	newRev = unambigousPrefixPerRevision_.value(newRev, newRev);
 
 	VersionControlUI::DiffManager diffManager{managerName, {Model::SymbolMatcher{"Class"},
 																			  Model::SymbolMatcher{"Method"}}};
@@ -103,12 +148,34 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	return new Interaction::CommandResult{};
 }
 
-QList<Interaction::CommandSuggestion*> CCodeReview::suggest(Visualization::Item*, Visualization::Item*,
+QList<Interaction::CommandSuggestion*> CCodeReview::suggest(Visualization::Item* source, Visualization::Item*,
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
-	if (name().startsWith(textSoFar))
-		return {new Interaction::CommandSuggestion{name()}};
-	return {};
+	auto ancestorWithNode = source->findAncestorWithNode();
+
+	QStringList tokensSoFar = textSoFar.split(" ");
+
+	QList<Interaction::CommandSuggestion*> suggestions;
+
+	// no suggestions for that many tokens
+	if (tokensSoFar.size() > 3)
+		return {};
+
+	// check that the command name starts with the characters of the first token
+	if (name().startsWith(tokensSoFar.takeFirst()))
+	{
+		// no additional versions specified
+		if (tokensSoFar.isEmpty())
+		{
+			suggestions.append(new Interaction::CommandSuggestion{name(), "review the diff of working "
+																					"directory against head"});
+			return suggestions;
+		}
+
+		return VersionControlUI::CDiff::parseVersions(tokensSoFar, name(), ancestorWithNode->node()->manager()->name(),
+									unambigousPrefixPerRevision_);
+	}
+	else return {};
 }
 
 }
