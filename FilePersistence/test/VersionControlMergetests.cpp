@@ -231,6 +231,28 @@ class FILEPERSISTENCE_API TwoChangesSameList_LabelCycleResolvable
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"}));
 }};
 
+class FILEPERSISTENCE_API TwoChangesSameList_DelInsNodes
+ : public SelfTest::Test<FilePersistencePlugin, TwoChangesSameList_DelInsNodes> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesSameList_DelInsNodes\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020f}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020e}"}));
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label(), "1");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020f}"})->label(), "2");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020e}"})->label(), "3");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020d}"})->label(), "4");
+}};
+
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
