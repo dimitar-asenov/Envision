@@ -107,8 +107,8 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	Model::TreeManager* headManager = ancestorWithNode->node()->manager();
 	QString managerName = headManager->name();
 
-	QString oldRev = commandTokens.at(1);
-	QString newRev = commandTokens.at(2);
+	QString oldRev = commandTokens.value(1, "HEAD");
+	QString newRev = commandTokens.value(2, FilePersistence::GitRepository::WORKDIR);
 
 	// try to get complete sha1 if available
 	oldRev = unambigousPrefixPerRevision_.value(oldRev, oldRev);
