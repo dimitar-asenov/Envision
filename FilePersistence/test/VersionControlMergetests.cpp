@@ -215,6 +215,22 @@ class FILEPERSISTENCE_API TwoChangesDifferentLists_LabelCycle
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000406}"}));
 }};
 
+class FILEPERSISTENCE_API TwoChangesSameList_LabelCycleResolvable
+ : public SelfTest::Test<FilePersistencePlugin, TwoChangesSameList_LabelCycleResolvable> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesSameList_LabelCycleResolvable\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"}));
+}};
+
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
