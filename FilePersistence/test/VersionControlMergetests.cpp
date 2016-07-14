@@ -163,12 +163,58 @@ class FILEPERSISTENCE_API TwoChangesDifferentLists
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesSameList\"");
 	auto tree = merge->mergedTree();
-	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesDifferentLists\"");
 	CHECK_CONDITION(!merge->hasConflicts());
 	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000210}"}));
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000408}"}));
 }};
+
+class FILEPERSISTENCE_API SingleVersionChange
+ : public SelfTest::Test<FilePersistencePlugin, SingleVersionChange> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	// Since it is already merged (due to Fast Forward merge)
+	Q_ASSERT(merge->isAlreadyMerged());
+}};
+
+class FILEPERSISTENCE_API TwoChangesSameList
+ : public SelfTest::Test<FilePersistencePlugin, TwoChangesSameList> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesSameList\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-0000000002ab}"}));
+}};
+
+class FILEPERSISTENCE_API TwoChangesDifferentLists_LabelCycle
+ : public SelfTest::Test<FilePersistencePlugin, TwoChangesDifferentLists_LabelCycle> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesSameList\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000406}"}));
+}};
+
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
