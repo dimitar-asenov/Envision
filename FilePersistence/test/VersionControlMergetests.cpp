@@ -182,7 +182,21 @@ class FILEPERSISTENCE_API TwoChangesSameList
 	CHECK_CONDITION(!merge->hasConflicts());
 	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"}));
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-0000000002ab}"}));
-	qDebug() << "Success";
+}};
+
+class FILEPERSISTENCE_API TwoChangesDifferentLists_LabelCycle
+ : public SelfTest::Test<FilePersistencePlugin, TwoChangesDifferentLists_LabelCycle> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	auto tree = merge->mergedTree();
+	merge->commit(sig, sig, "This is the result of merge test \"TwoChangesDifferentLists_LabelCycle\"");
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000406}"}));
 }};
 
 /**
