@@ -685,7 +685,7 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 
 	bool removedSomeDependencies = false;
 
-	auto parentsWithChanges = changesForChildren_.keys();
+	auto parentsWithChanges = changesForChildren_.uniqueKeys();
 	for (auto parentWithChanges : parentsWithChanges)
 	{
 		auto changes = changesForChildren_.values(parentWithChanges);
