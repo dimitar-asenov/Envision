@@ -81,8 +81,38 @@ Scene::Scene()
 	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay{item});});
 	selectionGroup->setDynamic1Item([this](){return itemsThatShouldHaveASelection();});
 
+	// Zoom labels and their cache
+//	auto zoomLabelDeleter = [this](ZoomLabelOverlay* overlay){
+//		unusedZoomLabelOverlaysCache_.prepend(overlay);
+//		overlay->removeFromScene();
+//		if (unusedZoomLabelOverlaysCache_.size() > MaxUnusedZoomLabelOverlaysCacheSize )
+//		{
+//			auto last = unusedZoomLabelOverlaysCache_.takeLast();
+//			SAFE_DELETE_ITEM(last);
+//		}
+//	};
+
+//	auto zoomLabelCreator = [this, zoomLabelDeleter](Item* itemToGetLabel){
+//		for (auto it = unusedZoomLabelOverlaysCache_.begin(); it != unusedZoomLabelOverlaysCache_.end(); ++it)
+//		{
+//			auto currentLabel = static_cast<ZoomLabelOverlay*>(*it);
+//			if (currentLabel->associatedItem() == itemToGetLabel)
+//			{
+//				qDebug() << "hit";
+//				unusedZoomLabelOverlaysCache_.erase(it);
+//				//currentLabel->show();
+//				currentLabel->resetAfterBeingUnused();
+//				return makeOverlay(currentLabel, zoomLabelDeleter);
+//			}
+//		}
+
+//		qDebug() << "SIZE" << unusedZoomLabelOverlaysCache_.size();
+//		return makeOverlay(new ZoomLabelOverlay{itemToGetLabel}, zoomLabelDeleter);
+//	};
+
 	auto zoomLabelGroup = addOverlayGroup("Zoom labels");
 	zoomLabelGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new ZoomLabelOverlay{item});});
+//	zoomLabelGroup->setOverlayConstructor1Arg(zoomLabelCreator);
 	zoomLabelGroup->setDynamic1Item([this](){return ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(this);});
 	zoomLabelGroup->setPostUpdateFunction(ZoomLabelOverlay::setItemPositionsAndHideOverlapped);
 

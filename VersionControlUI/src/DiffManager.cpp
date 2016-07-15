@@ -394,7 +394,8 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	diffViewItem = Visualization::VisualizationManager::instance().mainScene()->
 				viewItems()->newViewItem("DiffView");
 
-	diffViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
+	// Commented out so that the diff intro is horizontal instead of vertical.
+	//diffViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
 	diffViewItem->setZoomLabelsEnabled(false);
 
 	int row = 0;
@@ -703,7 +704,7 @@ void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualizat
 		{
 			if (factor >= 1.0)
 				item->setScale(1.0);
-			else if (factor >= 0.015)
+			else if (factor >= 0.002) // smaller number so that in the map demo, code is initially scaled
 				item->setScale((1/factor));
 			else
 				item->setScale((1/factor) * std::pow(0.95, 1/factor));
@@ -777,6 +778,8 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 			currentViewItem()->boundingRect().center();
 	centerTop.setY(Visualization::VisualizationManager::instance().mainScene()->
 						currentViewItem()->boundingRect().top());
+	//Uncomment to better center the diff intro
+	//centerTop.ry () += 250;
 	Visualization::VisualizationManager::instance().mainView()->centerOn(centerTop);
 }
 

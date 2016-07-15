@@ -177,6 +177,10 @@ QBrush ZoomLabelOverlay::associatedItemLabelBackground() const
 
 QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 {
+	// This buffer greatly speeds up the rendering of zoom labels.
+	// We should come up with a proper way to do this in the scene, using a cache.
+	static constexpr int OldItemsToRemember = 10000;
+	static QList<Item*> buffer;
 	QList<Item*> result;
 
 	// disable zoom labels if wished by view item
@@ -220,7 +224,18 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 		if (definesSymbol) result.append(item);
 	}
 
-	return result;
+	for (auto item : result)
+		buffer.removeOne(item);
+
+	int excess = buffer.size() + result.size() - OldItemsToRemember;
+	if (excess > 0)
+		buffer.erase(buffer.begin(), buffer.begin() + excess);
+
+	buffer << result;
+
+	qDebug() << "XXXXXX" << result.size() << buffer.size();
+
+	return buffer;
 }
 
 void ZoomLabelOverlay::setItemPositionsAndHideOverlapped(OverlayGroup& group)

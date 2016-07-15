@@ -203,6 +203,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		// We use pointers for the value as we need a way to detach groups before deleting them.
 		QHash<QString, OverlayGroup*> overlayGroups_;
+		QList<Item*> unusedZoomLabelOverlaysCache_;
+		static constexpr int MaxUnusedZoomLabelOverlaysCacheSize = 1000;
 
 		ViewItemManager* viewItemManager_{};
 

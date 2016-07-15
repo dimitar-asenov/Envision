@@ -684,7 +684,8 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 			}
 	}
 
-	if (show) AutoComplete::show(entries);
+	// Change to true, so that there is no broken (invisible) auto-selection
+	if (show) AutoComplete::show(entries, true);
 	else AutoComplete::hide();
 }
 

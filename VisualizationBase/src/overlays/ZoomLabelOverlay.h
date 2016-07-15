@@ -86,6 +86,8 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 
 		qreal computeScaleToUse() const;
 
+		void resetAfterBeingUnused();
+
 		static constexpr double OVERLAY_MIN_WIDTH = 30;
 		static constexpr double OVERLAY_MIN_HEIGHT = 15;
 		static constexpr double ITEM_MAX_WIDTH = 500;
@@ -93,5 +95,11 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 		static constexpr double OVERLAY_MAX_HEIGHT = 40;
 		static constexpr double SHOW_OVERLAY_IF_ITEM_TEXT_SMALLER_THAN = 8;
 };
+
+inline void ZoomLabelOverlay::resetAfterBeingUnused()
+{
+	postUpdateRevision_ = 0;
+	mayBeHiddenIfChildrenHaveOverlays_ = false;
+}
 
 }
