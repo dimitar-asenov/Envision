@@ -157,7 +157,7 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
 {
-	auto idListBase = nodeListToSortedIdList(mergeData.treeBase_->find(listId)->children());
+	auto idListBase = nodeListToSortedIdList(mergeData.treeBase_->find(listId, true)->children());
 	auto idListA    = nodeListToSortedIdList(mergeData.treeA_->find(listId, true)->children());
 	auto idListB    = nodeListToSortedIdList(mergeData.treeB_->find(listId, true)->children());
 	return Diff3Parse::computeChunks(idListA, idListB, idListBase);
