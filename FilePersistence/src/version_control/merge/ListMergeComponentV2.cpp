@@ -125,13 +125,19 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 		else
 		{
 			QList<IdPosition> idPositions;	// stores the relative positions of elements of unstable chunk
-			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeMerged_, MergeChange::BranchA);
-			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeMerged_, MergeChange::BranchB);
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanA_, idPositions, mergeData.treeBase_, MergeChange::BranchA);
+			computeOffsetsInBranch(chunk->spanBase_, chunk->spanB_, idPositions, mergeData.treeBase_, MergeChange::BranchB);
 
 			// Add base elements to the list
+			// Only add these elements, if they have not already been deleted or moved out
 			for (auto id : chunk->spanBase_)
 			{
-				idPositions.append({id, mergeData.treeMerged_->find(id)->label().toInt(), 0, MergeChange::None});
+				auto nodeInMergedTree = mergeData.treeMerged_->find(id);
+				if (nodeInMergedTree && nodeInMergedTree->parentId() == listId)
+				{
+					// This node is still in the merged tree and is still under the same parent, so we append it
+					idPositions.append({id, mergeData.treeBase_->find(id)->label().toInt(), 0, MergeChange::None});
+				}
 			}
 
 			std::sort(idPositions.begin(), idPositions.end());	// sort the list according to the labels
@@ -149,7 +155,7 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
 {
-	auto idListBase = nodeListToSortedIdList(mergeData.treeMerged_->find(listId)->children());
+	auto idListBase = nodeListToSortedIdList(mergeData.treeBase_->find(listId)->children());
 	auto idListA    = nodeListToSortedIdList(mergeData.treeA_->find(listId, true)->children());
 	auto idListB    = nodeListToSortedIdList(mergeData.treeB_->find(listId, true)->children());
 	return Diff3Parse::computeChunks(idListA, idListB, idListBase);
