@@ -48,13 +48,10 @@ QList<Chunk*> Diff3Parse::computeChunks(const QList<Model::NodeIdType> idListA,
 	auto lcsA = longestCommonSubsequence(idListBase, idListA);
 	auto lcsB = longestCommonSubsequence(idListBase, idListB);
 
-	// auto stableA = QSet<Model::NodeIdType>::fromList(lcsA);
-	auto stableB = QSet<Model::NodeIdType>::fromList(lcsB);
-
 	// stableIDs are the sable elements of the diff3 parse
 	QList<Model::NodeIdType> stableIDs;
 	for (auto id : lcsA)
-		if (stableB.contains(id)) stableIDs.append(id);
+		if (lcsB.contains(id)) stableIDs.append(id);
 
 	auto sublistsA = computeSublists(idListA, stableIDs);
 	auto sublistsB = computeSublists(idListB, stableIDs);
