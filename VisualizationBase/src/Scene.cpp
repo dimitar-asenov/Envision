@@ -186,8 +186,6 @@ void Scene::updateNow()
 		item->updateSubtree();
 	setApproximateUpdate(false);
 
-	Core::Profiler::stop("Scene ViewItem update " + QString::number(updatesAlreadyProfiled));
-
 	// Update overlay groups (selections are handled as a dynamic group)
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
 			it.value()->update();
@@ -201,6 +199,8 @@ void Scene::updateNow()
 	}
 
 	computeSceneRect();
+
+	Core::Profiler::stop("Scene ViewItem update " + QString::number(updatesAlreadyProfiled));
 
 	updateTimer->tick();
 	needsUpdate_ = false;
