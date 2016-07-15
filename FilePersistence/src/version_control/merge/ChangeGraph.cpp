@@ -546,8 +546,28 @@ void ChangeGraph::updateTreeLabels(Model::NodeIdType parentId, IdToLabelMap labe
 void ChangeGraph::createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QList<LabelData> newLabels,
 													Model::NodeIdType parentId)
 {
-	QList<MergeChange*> createdChanges;
+	QList<MergeChange*> conflictingChangesForThisNode;
 
+	// Get all changes that might conflict with a new relabel change
+	auto it = changesForNode_.find(nodeId);
+	while (it != changesForNode_.end() && it.key() == nodeId)
+	{
+		// There should be no insertion
+		Q_ASSERT(it.value()->type() != ChangeType::Insertion);
+		// There should be no move in
+		Q_ASSERT(it.value()->type() != ChangeType::Move || it.value()->oldParentId() == parentId);
+		// There should be no existing label changes
+		Q_ASSERT(it.value()->type() != ChangeType::Stationary || it.value()->isValueOrTypeChange());
+
+		if (it.value()->type() == ChangeType::Deletion)
+			conflictingChangesForThisNode << it.value();
+		else if (it.value()->type() == ChangeType::Move)
+			conflictingChangesForThisNode << it.value();
+
+		++it;
+	}
+
+	// Create new label changes and corresponding conflicts
 	for (auto & labelData : newLabels)
 	{
 		Q_ASSERT(labelData.branch_ == MergeChange::BranchA || labelData.branch_ == MergeChange::BranchB);
@@ -558,10 +578,10 @@ void ChangeGraph::createRelabelChanges(Model::NodeIdType nodeId, QString oldLabe
 		changesForNode_.insert(nodeId, newChange);
 		changesForChildren_.insert(parentId, newChange);
 
-		for (auto otherNewChange : createdChanges)
+		for (auto otherChange : conflictingChangesForThisNode)
 		{
-			directConflicts_.insert(newChange, otherNewChange);
-			directConflicts_.insert(otherNewChange, newChange);
+			directConflicts_.insert(newChange, otherChange);
+			directConflicts_.insert(otherChange, newChange);
 		}
 	}
 }
