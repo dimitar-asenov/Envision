@@ -538,6 +538,7 @@ void ChangeGraph::updateTreeLabels(Model::NodeIdType parentId, IdToLabelMap labe
 				node->setLabel(labelIt.value().label_);
 				break;
 			}
+			++labelIt;
 		}
 	}
 }
