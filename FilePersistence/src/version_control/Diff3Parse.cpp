@@ -169,18 +169,18 @@ QList<Model::NodeIdType> Diff3Parse::longestCommonSubsequence3(const QList<Model
 	int n = listB.size() + 1;
 	int o = listC.size() + 1;
 
+	// Construct and initialize dynamic programming cube
 	int*** lcsLength = new int**[m];
 	for (int i = 0; i < m; ++i)
 	{
 		lcsLength[i] = new int*[n];
 		for (int j = 0; j < n; ++j)
+		{
 			lcsLength[i][j] = new int[o];
-	}
-
-	for (int i = 0; i < m; ++i)
-		for (int j = 0; j < n; ++j)
 			for (int k = 0; k < o; ++k)
 				lcsLength[i][j][k] = 0;
+		}
+	}
 
 	for (int i = 1; i < m; ++i)
 		for (int j = 1; j < n; ++j)
@@ -192,12 +192,13 @@ QList<Model::NodeIdType> Diff3Parse::longestCommonSubsequence3(const QList<Model
 
 	QList<Model::NodeIdType> lcs = backtrackLCS3(lcsLength, listA, listB, listC, listA.size(), listB.size(), listC.size());
 
+	// Free dynamic programming memory
 	for (int i = 0; i < m; ++i)
+	{
 		for (int j = 0; j < n; ++j)
 			delete[] lcsLength[i][j];
-	for (int i = 0; i < m; ++i)
 		delete[] lcsLength[i];
-
+	}
 	delete[] lcsLength;
 
 	return lcs;
