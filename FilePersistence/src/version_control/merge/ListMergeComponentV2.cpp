@@ -150,6 +150,8 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 			// Report soft-conflict
 		}
 	}
+
+	for (auto chunk : chunks) delete chunk;
 	return map;
 }
 
