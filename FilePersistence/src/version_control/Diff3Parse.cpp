@@ -45,88 +45,87 @@ QList<Chunk*> Diff3Parse::computeChunks(const QList<Model::NodeIdType> idListA,
 																								 const QList<Model::NodeIdType> idListB,
 																								 const QList<Model::NodeIdType> idListBase)
 {
-	auto lcsA = longestCommonSubsequence(idListBase, idListA);
-	auto lcsB = longestCommonSubsequence(idListBase, idListB);
-
-	// stableIDs are the sable elements of the diff3 parse
-	QList<Model::NodeIdType> stableIDs;
-	for (auto id : lcsA)
-		if (lcsB.contains(id)) stableIDs.append(id);
-
-	auto sublistsA = computeSublists(idListA, stableIDs);
-	auto sublistsB = computeSublists(idListB, stableIDs);
-	auto sublistsBase = computeSublists(idListBase, stableIDs);
+	auto stableIDs = longestCommonSubsequence3(idListBase, idListA, idListB);
 
 	QList<Chunk*> chunks;
-
-	auto iterA = sublistsA.constBegin();
-	auto iterB = sublistsB.constBegin();
-
-	bool isStable = false;
-	bool lastWasEmpty = false;
-	for (auto iterBase = sublistsBase.constBegin(); iterBase != sublistsBase.constEnd(); ++iterBase)
+	auto iterLCS = stableIDs.constBegin();
+	auto iterA = idListA.constBegin();
+	auto iterB = idListB.constBegin();
+	auto iterBase = idListBase.constBegin();
+	bool lastWasEmpty = true;
+	QList<Model::NodeIdType> listA;
+	QList<Model::NodeIdType> listB;
+	QList<Model::NodeIdType> listBase;
+	while (iterLCS != stableIDs.constEnd())
 	{
-		if (!iterBase->isEmpty() || !iterA->isEmpty() || !iterB->isEmpty())
+		while (iterLCS != stableIDs.constEnd() && (*iterLCS == *iterA) && (*iterLCS == *iterB) && (*iterLCS == *iterBase))
 		{
-			if (lastWasEmpty && !chunks.isEmpty())
-			{
-				auto chunk = chunks.last();
-				chunk->spanA_.append(*iterA);
-				chunk->spanB_.append(*iterB);
-				chunk->spanBase_.append(*iterBase);
-				chunk->spanMerged_.append(*iterBase);
-			}
-			else
-				chunks.append(new Chunk{isStable, *iterA, *iterB, *iterBase});
+			listA.append(*iterLCS);
+			listB.append(*iterLCS);
+			listBase.append(*iterLCS);
 			lastWasEmpty = false;
+			++iterA;
+			++iterB;
+			++iterBase;
+			++iterLCS;
 		}
-		else
-			lastWasEmpty = true;
-		isStable = !isStable;
-		++iterA;
-		++iterB;
-	}
-	Q_ASSERT(isStable);
-
-	return chunks;
-}
-
-QList<QList<Model::NodeIdType>> Diff3Parse::computeSublists(const QList<Model::NodeIdType> elementIds,
-																						  const QList<Model::NodeIdType> stableIDs)
-{
-	QList<QList<Model::NodeIdType>> chunks;
-	QList<Model::NodeIdType> chunk;
-
-	auto elemId = elementIds.constBegin();
-	auto stableId = stableIDs.constBegin();
-	while (stableId != stableIDs.constEnd())
-	{
-		// iterate until end of unstable chunk
-		while (elemId != elementIds.constEnd() && *elemId != *stableId)
+		// After above loop, all elements of stable chunk are added by this if()
+		// And it goes into next iteration
+		if (!lastWasEmpty)
 		{
-			chunk.append(*elemId);
-			++elemId;
+			// Add elements to the stable chunk
+			chunks.append(new Chunk(true, listA, listB, listBase));
+			listA.clear();
+			listB.clear();
+			listBase.clear();
+			lastWasEmpty = true;
+			continue;
+			// While loop Terminates after this continue
 		}
-		Q_ASSERT(*elemId == *stableId);
-		chunks.append(chunk);
-		// create chunk with one stable element.
-		// We don't know if in other versions there are unstable elements between this stable
-		// element and the next.
-		chunk = {*stableId};
-		++elemId;
-		++stableId;
-		chunks.append(chunk);
-		chunk = {};
-	}
-	// iterate until end of last unstable chunk
-	while (elemId != elementIds.constEnd())
-	{
-		chunk.append(*elemId);
-		++elemId;
-	}
-	chunks.append(chunk);
 
-	Q_ASSERT(chunks.size() == 2*stableIDs.size() + 1);
+		// Add elements to the unstable chunk
+		// We are guaranteed here that there will be some elements in Unstable chunk
+		while (*iterA != *iterLCS)
+		{
+			listA.append(*iterA);
+			iterA++;
+		}
+		while (*iterB != *iterLCS)
+		{
+			listB.append(*iterB);
+			iterB++;
+		}
+		while (*iterBase != *iterLCS)
+		{
+			listBase.append(*iterBase);
+			iterBase++;
+		}
+		chunks.append(new Chunk(false, listA, listB, listBase));
+		listA.clear();
+		listB.clear();
+		listBase.clear();
+	}
+
+	// Add the elements to the last unstable chunk
+	while (iterA != idListA.constEnd())
+	{
+		listA.append(*iterA);
+		lastWasEmpty = false;
+		iterA++;
+	}
+	while (iterB != idListB.constEnd())
+	{
+		listB.append(*iterB);
+		lastWasEmpty = false;
+		iterB++;
+	}
+	while (iterBase != idListBase.constEnd())
+	{
+		listBase.append(*iterBase);
+		lastWasEmpty = false;
+		iterBase++;
+	}
+	if (!lastWasEmpty)	chunks.append(new Chunk(false, listA, listB, listBase));
 
 	return chunks;
 }
@@ -162,6 +161,48 @@ QList<Model::NodeIdType> Diff3Parse::longestCommonSubsequence(const QList<Model:
 	return lcs;
 }
 
+QList<Model::NodeIdType> Diff3Parse::longestCommonSubsequence3(const QList<Model::NodeIdType> listA,
+																				const QList<Model::NodeIdType> listB,
+																				  const  QList<Model::NodeIdType> listC)
+{
+	int m = listA.size() + 1;
+	int n = listB.size() + 1;
+	int o = listC.size() + 1;
+
+	int*** lcsLength = new int**[m];
+	for (int i = 0; i < m; ++i)
+	{
+		lcsLength[i] = new int*[n];
+		for (int j = 0; j < n; ++j)
+			lcsLength[i][j] = new int[o];
+	}
+
+	for (int i = 0; i < m; ++i)
+		for (int j = 0; j < n; ++j)
+			for (int k = 0; k < o; ++k)
+				lcsLength[i][j][k] = 0;
+
+	for (int i = 1; i < m; ++i)
+		for (int j = 1; j < n; ++j)
+			for (int k = 1; k < o; ++k)
+				if ((listA.at(i-1) == listB.at(j-1)) && (listA.at(i-1) == listC.at(k-1)))
+					lcsLength[i][j][k] = lcsLength[i-1][j-1][k-1] + 1;
+				else
+					lcsLength[i][j][k] = std::max(lcsLength[i-1][j][k], std::max(lcsLength[i][j-1][k], lcsLength[i][j][k-1]));
+
+	QList<Model::NodeIdType> lcs = backtrackLCS3(lcsLength, listA, listB, listC, listA.size(), listB.size(), listC.size());
+
+	for (int i = 0; i < m; ++i)
+		for (int j = 0; j < n; ++j)
+			delete[] lcsLength[i][j];
+	for (int i = 0; i < m; ++i)
+		delete[] lcsLength[i];
+
+	delete[] lcsLength;
+
+	return lcs;
+}
+
 QList<Model::NodeIdType> Diff3Parse::backtrackLCS(int** data, const QList<Model::NodeIdType> listA,
 															const QList<Model::NodeIdType> listB, int posA, int posB)
 {
@@ -174,6 +215,24 @@ QList<Model::NodeIdType> Diff3Parse::backtrackLCS(int** data, const QList<Model:
 			return backtrackLCS(data, listA, listB, posA, posB-1);
 		else
 			return backtrackLCS(data, listA, listB, posA-1, posB);
+}
+
+QList<Model::NodeIdType> Diff3Parse::backtrackLCS3(int*** data, const QList<Model::NodeIdType> listA,
+																			const QList<Model::NodeIdType> listB,
+																			const QList<Model::NodeIdType> listC,
+																			int posA, int posB, int posC)
+{
+	if (posA == 0 || posB == 0 || posC == 0)
+		return QList<Model::NodeIdType>{};
+	else if ((listA.at(posA-1) == listB.at(posB-1)) && (listA.at(posA-1) == listC.at(posC-1)))
+		return backtrackLCS3(data, listA, listB, listC, posA-1, posB-1, posC-1) << listA.at(posA-1);
+	else
+		if (data[posA][posB][posC-1] > std::max(data[posA][posB-1][posC], data[posA-1][posB][posC]))
+			return backtrackLCS3(data, listA, listB, listC, posA, posB, posC-1);
+		else if (data[posA][posB-1][posC] > data[posA-1][posB][posC])
+			return backtrackLCS3(data, listA, listB, listC, posA, posB-1, posC);
+		else
+			return backtrackLCS3(data, listA, listB, listC, posA-1, posB, posC);
 }
 
 }

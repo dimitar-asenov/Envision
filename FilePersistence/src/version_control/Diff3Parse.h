@@ -50,7 +50,7 @@ class FILEPERSISTENCE_API Diff3Parse
 {
 	friend class ListMergeComponent;
 	friend class ListMergeComponentV2;
-	private:
+	public:
 		/**
 		 * Computes stable and unstable chunks. This is what's called a diff3 parse in the paper by Khanna, Kunal,
 		 * Pierce: A Formal Investigation of Diff3 available at http://www.cis.upenn.edu/~bcpierce/papers/diff3-short.pdf.
@@ -62,12 +62,16 @@ class FILEPERSISTENCE_API Diff3Parse
 
 		static QList<Model::NodeIdType> backtrackLCS(int** data, const QList<Model::NodeIdType> listA,
 																	const QList<Model::NodeIdType> listB, int posA, int posB);
-
-		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> elementIds,
-																				 const QList<Model::NodeIdType> stableIDs);
+		static QList<Model::NodeIdType> backtrackLCS3(int*** data, const QList<Model::NodeIdType> listA,
+																	const QList<Model::NodeIdType> listB,
+																	const QList<Model::NodeIdType> listC,
+																	int posA, int posB, int posC);
 
 		static QList<Model::NodeIdType> longestCommonSubsequence(const QList<Model::NodeIdType> listA,
 																					const QList<Model::NodeIdType> listB);
+		static QList<Model::NodeIdType> longestCommonSubsequence3(const QList<Model::NodeIdType> listA,
+																					 const QList<Model::NodeIdType> listB,
+																					 const QList<Model::NodeIdType> listC);
 
 };
 
