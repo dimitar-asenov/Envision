@@ -45,25 +45,48 @@ class VISUALIZATIONBASE_API OverlayAccessor {
 		OverlayAccessor() = default;
 };
 
-template <typename T>
+template <typename OverlayType>
 class OverlayAccessorTemplate : public OverlayAccessor
 {
 	public:
-		OverlayAccessorTemplate(T* overlayItem) : overlayItem_{overlayItem}{}
+		OverlayAccessorTemplate(OverlayType* overlayItem) : overlayItem_{overlayItem}{}
 		virtual ~OverlayAccessorTemplate() { SAFE_DELETE_ITEM(overlayItem_); }
 
-		virtual T* overlayItem() const override { return overlayItem_; }
+		virtual OverlayType* overlayItem() const override { return overlayItem_; }
 		virtual const QList<Item*>& associatedItems() const  override { return overlayItem_->associatedItems(); }
 
 	private:
-		T* overlayItem_{};
+		OverlayType* overlayItem_{};
+};
+
+template <typename OverlayType, typename Deleter>
+class OverlayAccessorTemplateWithDeleter : public OverlayAccessor
+{
+	public:
+		OverlayAccessorTemplateWithDeleter(OverlayType* overlayItem, Deleter deleter)
+			: overlayItem_{overlayItem}, deleter_{deleter}{}
+		virtual ~OverlayAccessorTemplateWithDeleter() { deleter_(overlayItem_); }
+
+		virtual OverlayType* overlayItem() const override { return overlayItem_; }
+		virtual const QList<Item*>& associatedItems() const  override { return overlayItem_->associatedItems(); }
+
+	private:
+		OverlayType* overlayItem_{};
+		Deleter deleter_{};
 };
 
 }
 
 // Purposefully outside the namespace for easy creation
-template<typename T>
-inline Visualization::OverlayAccessorTemplate<T>* makeOverlay(T* overlayItem)
+template<typename OverlayType>
+inline Visualization::OverlayAccessorTemplate<OverlayType>* makeOverlay(OverlayType* overlayItem)
 {
-	return new Visualization::OverlayAccessorTemplate<T>{overlayItem};
+	return new Visualization::OverlayAccessorTemplate<OverlayType>{overlayItem};
+}
+
+template<typename OverlayType, typename Deleter>
+inline Visualization::OverlayAccessorTemplateWithDeleter<OverlayType, Deleter>* makeOverlay(OverlayType* overlayItem,
+																								Deleter deleter)
+{
+	return new Visualization::OverlayAccessorTemplateWithDeleter<OverlayType, Deleter>{overlayItem, deleter};
 }
