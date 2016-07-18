@@ -692,9 +692,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 {
 	// Atomic change groups are essentially cycles of depedent changes with the following properties:
-	// - all changes in the cycle pertain to items with a common parent
-	// - all changes are label changes
-	// - dependency is due to clashing lables
+	// - dependency is due to clashing lables, but other changes, like deletions or moves can be in the cycle
 	// - all changes come from the same branch
 	//
 	// Such changes can be applied, but they need to be applied in an all-or-nothing fashion.
@@ -706,85 +704,72 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 
 	bool removedSomeDependencies = false;
 
-	auto parentsWithChanges = changesForChildren_.uniqueKeys();
-	for (auto parentWithChanges : parentsWithChanges)
+	QHash<MergeChange*, bool> okToBreakCycle;
+	for (auto change : changes_)
 	{
-		auto changes = changesForChildren_.values(parentWithChanges);
-
-		// For each change, check whether it matches the conditions above
-		QHash<MergeChange*, bool> okToBreakCycle;
-		for (auto change : changes)
+		if (change->isValueOrTypeChange())
 		{
-			// For each change, check if it fulfills the conditions
-
-			// Check Label change
-			if (change->type() != ChangeType::Stationary || change->updateFlags() != ChangeDescription::Label)
-			{
-
-				okToBreakCycle.insert(change, false);
-				continue;
-			}
-
-			// Check no conflicts
-			if ( directConflicts_.contains(change) )
-			{
-				okToBreakCycle.insert(change, false);
-				continue;
-			}
-
-			// Check only one dependency on another label change (implies same parent and no external dependencies)
-			// Check same branches
-			auto dependencies = dependencies_.values(change);
-			if (dependencies.size() != 1
-				 || dependencies.first()->type() != ChangeType::Stationary
-				 || dependencies.first()->updateFlags() != ChangeDescription::Label
-				 || change->branches() != dependencies.first()->branches())
-			{
-				okToBreakCycle.insert(change, false);
-				continue;
-			}
-
-			// This change could potentially be removed if the rest of the changes in this cycle are also OK
-			okToBreakCycle.insert(change, true);
+			okToBreakCycle.insert(change, false);
+			continue;
 		}
 
-		//===========================================================================================================
-		// For each change, check if it is part of a cycle with all OKs
-		for (auto change : changes)
+		// Check no conflicts
+		if ( directConflicts_.contains(change) )
 		{
-			if (!okToBreakCycle.value(change)) continue;
-
-			// This change is so far OK and it must have exactly one dependency
-			// Check if it forms a cycle
-			bool okToRemoveDependenciesInCycle = false;
-			QList<MergeChange*> changesInCycle{change};
-			while (true)
-			{
-				auto nextChange = dependencies_.value(changesInCycle.last());
-
-				if (nextChange == changesInCycle.first())
-				{
-					okToRemoveDependenciesInCycle = true;
-					break;
-				}
-
-				if (okToBreakCycle.value(nextChange)) changesInCycle.append(nextChange);
-				else break;
-			}
-
-			Q_ASSERT( ! (okToRemoveDependenciesInCycle && changesInCycle.size() == 1));
-			if (okToRemoveDependenciesInCycle)
-			{
-				// This is a cycle which matches all conditions. Remove the dependencies between the elements.
-				removedSomeDependencies = true;
-				for (auto changeToMakeIndependent : changesInCycle)
-					removeAllDependencies(changeToMakeIndependent);
-			}
-
-			// No matter if this was a good or a bad cycle, label all changes as notOK to avoid further processing
-			for (auto processedChange : changesInCycle)
-				okToBreakCycle.insert(processedChange, false);
+			okToBreakCycle.insert(change, false);
+			continue;
 		}
+
+		// Check only one dependency on another change
+		// Check same branches
+		auto dependencies = dependencies_.values(change);
+		if (dependencies.size() != 1
+			 || change->branches() != dependencies.first()->branches())
+		{
+			okToBreakCycle.insert(change, false);
+			continue;
+		}
+
+		// This change could potentially be removed if the rest of the changes in this cycle are also OK
+		okToBreakCycle.insert(change, true);
+	}
+
+	//===========================================================================================================
+	// For each change, check if it is part of a cycle with all OKs
+	for (auto change : changes_)
+	{
+		if (!okToBreakCycle.value(change)) continue;
+
+		// This change is so far OK and it must have exactly one dependency
+		// Check if it forms a cycle
+		bool okToRemoveDependenciesInCycle = false;
+		QList<MergeChange*> changesInCycle{change};
+		while (true)
+		{
+			auto nextChange = dependencies_.value(changesInCycle.last());
+
+			if (nextChange == changesInCycle.first())
+			{
+				okToRemoveDependenciesInCycle = true;
+				break;
+			}
+
+			if (okToBreakCycle.value(nextChange)) changesInCycle.append(nextChange);
+			else break;
+		}
+
+		Q_ASSERT( ! (okToRemoveDependenciesInCycle && changesInCycle.size() == 1));
+		if (okToRemoveDependenciesInCycle)
+		{
+			// This is a cycle which matches all conditions. Remove the dependencies between the elements.
+			removedSomeDependencies = true;
+			for (auto changeToMakeIndependent : changesInCycle)
+				removeAllDependencies(changeToMakeIndependent);
+		}
+
+		// No matter if this was a good or a bad cycle, label all changes as notOK to avoid further processing
+		for (auto processedChange : changesInCycle)
+			okToBreakCycle.insert(processedChange, false);
 	}
 
 	return removedSomeDependencies;
