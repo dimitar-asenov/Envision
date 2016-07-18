@@ -40,10 +40,18 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentedNode)
 
 DEFINE_ATTRIBUTE(CommentedNode, nodeId, Text, false, false, true)
 DEFINE_ATTRIBUTE(CommentedNode, reviewComments, TypedListOfReviewComment, false, false, true)
+DEFINE_ATTRIBUTE(CommentedNode, offsetX, Integer, false, false, true)
+DEFINE_ATTRIBUTE(CommentedNode, offsetY, Integer, false, false, true)
 
-CommentedNode::CommentedNode(QString associatedNodeId) : Super{nullptr, CommentedNode::getMetaData()}
+CommentedNode::CommentedNode(QString associatedNodeId, QPoint offset) : Super{nullptr, CommentedNode::getMetaData()}
 {
 	setNodeId(new Model::Text{associatedNodeId});
+	auto offsetX = new Model::Integer{};
+	offsetX->set(offset.x());
+	setOffsetX(offsetX);
+	auto offsetY = new Model::Integer{};
+	offsetY->set(offset.y());
+	setOffsetY(offsetY);
 }
 
 }

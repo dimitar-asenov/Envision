@@ -26,7 +26,13 @@
 
 #include "CodeReviewManager.h"
 
+#include "ModelBase/src/model/TreeManager.h"
+
+#include "FilePersistence/src/simple/SimpleTextFileStore.h"
+
 namespace CodeReview {
+
+const QString CodeReviewManager::CODE_REVIEW_COMMENTS_PREFIX = "CodeReviewComments_";
 
 // TODO use versions to have a one code review manager for any combination of two versions
 CodeReviewManager::CodeReviewManager(QString, QString)
@@ -39,12 +45,12 @@ CodeReviewManager& CodeReviewManager::instance()
 	return manager;
 }
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
+CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QPoint offset)
 {
 	auto iter = commentedNodes_.constFind(nodeId);
 	if (iter != commentedNodes_.constEnd()) return *iter;
 
-	auto commentedNode = new CommentedNode{nodeId};
+	auto commentedNode = new CommentedNode{nodeId, offset};
 	commentedNodes_.insert(nodeId, commentedNode);
 	return commentedNode;
 }
@@ -63,4 +69,42 @@ QList<QList<VersionControlUI::DiffFrame*>> CodeReviewManager::orderDiffFrames(
 	return result;
 }
 
+void CodeReviewManager::saveReview(QString newVersion)
+{
+	auto store = new FilePersistence::SimpleTextFileStore{"."};
+	auto list = new Model::List{};
+	auto manager = new Model::TreeManager{CODE_REVIEW_COMMENTS_PREFIX+newVersion, list};
+
+	manager->beginModification(list, "set");
+	for (auto nodeID :  commentedNodes_.keys())
+	{
+		auto comment = commentedNodes_[nodeID];
+		// if a parent was set, it was a list from an earlier save
+		comment->setParent(nullptr);
+		list->append(comment);
+	}
+	manager->endModification();
+	manager->save(store);
+
+}
+
+QList<CommentedNode*> CodeReviewManager::loadReview(QString newVersion)
+{
+	// no comments to load
+	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
+
+	auto store = new FilePersistence::SimpleTextFileStore{"."};
+	auto manager = new Model::TreeManager{};
+	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
+	auto list = manager->root();
+	QList<CommentedNode*> result;
+	for (auto listEntry : list->children())
+	{
+		auto comment = DCast<CommentedNode>(listEntry);
+		commentedNodes_.insert(comment->nodeId()->get(), comment);
+		result.append(comment);
+	}
+
+	return result;
+}
 }

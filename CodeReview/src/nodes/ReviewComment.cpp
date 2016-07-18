@@ -62,11 +62,9 @@ ReviewComment::ReviewComment(Model::Node* parent) :
 							  QDateTime::currentMSecsSinceEpoch(), parent}
 {}
 
-ReviewComment::ReviewComment(Model::Node *, Model::PersistentStore &, bool)
-	:Super{}
-{
-	Q_ASSERT(false);
-}
+ReviewComment::ReviewComment(Model::Node* node, Model::PersistentStore& store, bool partial)
+	:Super{node, store, partial, ReviewComment::getMetaData()}
+{}
 
 ReviewComment* ReviewComment::clone() const { return new ReviewComment{*this}; }
 

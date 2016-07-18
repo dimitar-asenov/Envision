@@ -42,17 +42,21 @@ using OrderingFunction =
 class CODEREVIEW_API CodeReviewManager
 {
 	public:
-		CommentedNode* commentedNode(QString nodeId);
+		CommentedNode* commentedNode(QString nodeId, QPoint offset);
 		static CodeReviewManager& instance();
 
 		static QList<QList<VersionControlUI::DiffFrame*>> orderDiffFrames(
 				GroupingFunction groupingFunction, OrderingFunction orderingFunction,
 				QList<VersionControlUI::DiffFrame*> diffFrames);
 
+		void saveReview(QString newVersion);
+		QList<CommentedNode*> loadReview(QString newVersion);
+
 
 	private:
 		QHash<QString, CommentedNode*> commentedNodes_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
+		static const QString CODE_REVIEW_COMMENTS_PREFIX;
 
 };
 
