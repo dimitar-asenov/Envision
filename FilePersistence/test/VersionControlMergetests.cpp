@@ -311,6 +311,24 @@ class FILEPERSISTENCE_API MoveChangeBySingleVersion
 						 QUuid{"00000000-0000-0000-0000-000000001404"});
 }};
 
+class FILEPERSISTENCE_API MoveChangeBetweenListsResolvable
+ : public SelfTest::Test<FilePersistencePlugin, MoveChangeBetweenListsResolvable> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"MoveChangeBetweenListsResolvable\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000404}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000404}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000000500"});
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000050a}"}));
+}};
+
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
