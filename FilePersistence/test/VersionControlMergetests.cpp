@@ -153,6 +153,14 @@ class FILEPERSISTENCE_API EvalMethodInsert
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "Merged master and dev");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(tree->find(QUuid{"{cbafa8f9-7db9-476f-a8d9-07b44e7ab632}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{1f702787-0160-4205-9a1f-eaf653679698}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{cbafa8f9-7db9-476f-a8d9-07b44e7ab632}"})->label().toInt() == 2 ||
+						 tree->find(QUuid{"{cbafa8f9-7db9-476f-a8d9-07b44e7ab632}"})->label().toInt() == 1);
+	CHECK_CONDITION(tree->find(QUuid{"{1f702787-0160-4205-9a1f-eaf653679698}"})->label().toInt() == 1 ||
+						 tree->find(QUuid{"{1f702787-0160-4205-9a1f-eaf653679698}"})->label().toInt() == 1);
+
 }};
 
 class FILEPERSISTENCE_API TwoChangesDifferentLists
