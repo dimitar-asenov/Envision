@@ -253,6 +253,36 @@ class FILEPERSISTENCE_API TwoChangesSameList_DelInsNodes
 	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020d}"})->label(), "4");
 }};
 
+class FILEPERSISTENCE_API BothChangeSameList_Conflicts
+ : public SelfTest::Test<FilePersistencePlugin, BothChangeSameList_Conflicts> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"BothChangeSameList_Conflicts\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(merge->hasConflicts());	//	(Lbl change VS Deletion) of 205
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000201}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000209}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"}));
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000202}"})->label(), "1");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"})->label(), "2");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"})->label(), "3");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"})->label(), "4");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"})->label(), "5");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"})->label(), "6");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000207}"})->label(), "8");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"})->label(), "9");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label(), "10");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label(), "11");
+}};
+
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
