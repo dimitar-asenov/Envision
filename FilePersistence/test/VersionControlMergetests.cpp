@@ -153,6 +153,14 @@ class FILEPERSISTENCE_API EvalMethodInsert
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "Merged master and dev");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(tree->find(QUuid{"{cbafa8f9-7db9-476f-a8d9-07b44e7ab632}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{1f702787-0160-4205-9a1f-eaf653679698}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{cbafa8f9-7db9-476f-a8d9-07b44e7ab632}"})->label().toInt() == 2 ||
+						 tree->find(QUuid{"{cbafa8f9-7db9-476f-a8d9-07b44e7ab632}"})->label().toInt() == 1);
+	CHECK_CONDITION(tree->find(QUuid{"{1f702787-0160-4205-9a1f-eaf653679698}"})->label().toInt() == 1 ||
+						 tree->find(QUuid{"{1f702787-0160-4205-9a1f-eaf653679698}"})->label().toInt() == 1);
+
 }};
 
 class FILEPERSISTENCE_API TwoChangesDifferentLists
@@ -251,6 +259,36 @@ class FILEPERSISTENCE_API TwoChangesSameList_DelInsNodes
 	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020f}"})->label(), "2");
 	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020e}"})->label(), "3");
 	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020d}"})->label(), "4");
+}};
+
+class FILEPERSISTENCE_API BothChangeSameList_Conflicts
+ : public SelfTest::Test<FilePersistencePlugin, BothChangeSameList_Conflicts> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"BothChangeSameList_Conflicts\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(merge->hasConflicts());	//	(Lbl change VS Deletion) of 205
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000201}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000209}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"}));
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000202}"})->label(), "1");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"})->label(), "2");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"})->label(), "3");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"})->label(), "4");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"})->label(), "5");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"})->label(), "6");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000207}"})->label(), "8");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"})->label(), "9");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label(), "10");
+	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label(), "11");
 }};
 
 /**
