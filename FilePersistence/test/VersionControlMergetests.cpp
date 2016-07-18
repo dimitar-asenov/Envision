@@ -291,6 +291,26 @@ class FILEPERSISTENCE_API BothChangeSameList_Conflicts
 	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label(), "11");
 }};
 
+class FILEPERSISTENCE_API MoveChangeBySingleVersion
+ : public SelfTest::Test<FilePersistencePlugin, MoveChangeBySingleVersion> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"MoveChangeBySingleVersion\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001403}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000021404}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001403}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000000599"});
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000021404}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000001404"});
+}};
+
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
