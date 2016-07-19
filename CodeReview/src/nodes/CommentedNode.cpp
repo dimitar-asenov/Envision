@@ -46,12 +46,8 @@ DEFINE_ATTRIBUTE(CommentedNode, offsetY, Integer, false, false, true)
 CommentedNode::CommentedNode(QString associatedNodeId, QPoint offset) : Super{nullptr, CommentedNode::getMetaData()}
 {
 	setNodeId(new Model::Text{associatedNodeId});
-	auto offsetX = new Model::Integer{};
-	offsetX->set(offset.x());
-	setOffsetX(offsetX);
-	auto offsetY = new Model::Integer{};
-	offsetY->set(offset.y());
-	setOffsetY(offsetY);
+	offsetX()->set(offset.x());
+	offsetY()->set(offset.y());
 }
 
 }
