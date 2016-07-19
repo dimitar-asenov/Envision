@@ -81,7 +81,7 @@ void CodeReviewManager::saveReview(QString newVersion)
 
 }
 
-QList<CommentedNode*> CodeReviewManager::loadReview(QString newVersion)
+CommentedNodeList* CodeReviewManager::loadReview(QString newVersion)
 {
 	// no comments to load
 	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
@@ -91,14 +91,8 @@ QList<CommentedNode*> CodeReviewManager::loadReview(QString newVersion)
 	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
 	commentedNodes_ = DCast<CommentedNodeList>(manager->root());
 	Q_ASSERT(commentedNodes_);
-	QList<CommentedNode*> result;
-	for (auto node : *commentedNodes_)
-	{
-		auto comment = DCast<CommentedNode>(node);
-		result.append(comment);
-	}
 
-	return result;
+	return commentedNodes_;
 }
 
 }

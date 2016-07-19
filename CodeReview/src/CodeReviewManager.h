@@ -51,7 +51,7 @@ class CODEREVIEW_API CodeReviewManager
 				QList<VersionControlUI::DiffFrame*> diffFrames);
 
 		void saveReview(QString newVersion);
-		QList<CommentedNode*> loadReview(QString newVersion);
+		CommentedNodeList* loadReview(QString newVersion);
 
 
 	private:

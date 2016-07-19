@@ -164,7 +164,7 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
 								  [comments, source, reviewViewItem, headManager, diffFramesAndSetup]()
 	{
-		for (auto comment : comments)
+		for (auto comment : *comments)
 		{
 			auto node = const_cast<Model::Node*>(diffFramesAndSetup.diffSetup_.newVersionManager_->
 															 nodeIdMap().node(comment->nodeId()->get()));
