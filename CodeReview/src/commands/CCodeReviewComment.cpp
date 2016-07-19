@@ -70,7 +70,6 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 																	ancestorWithNodeItem->mapFromScene(source->scenePos()).toPoint());
 			commentedNode->reviewComments()->append(new ReviewComment{});
 
-			// only create highlight if not already existent
 			auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, commentedNode};
 			ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
 			break;
