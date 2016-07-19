@@ -36,7 +36,9 @@ const QString CodeReviewManager::CODE_REVIEW_COMMENTS_PREFIX = "CodeReviewCommen
 
 // TODO use versions to have a one code review manager for any combination of two versions
 CodeReviewManager::CodeReviewManager(QString, QString)
-{}
+{
+	commentedNodes_ = new CommentedNodeList{};
+}
 
 CodeReviewManager& CodeReviewManager::instance()
 {
@@ -47,11 +49,13 @@ CodeReviewManager& CodeReviewManager::instance()
 
 CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QPoint offset)
 {
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
+	auto commentedNode = commentedNodes_->find(nodeId);
+	if (commentedNode) return commentedNode;
 
-	auto commentedNode = new CommentedNode{nodeId, offset};
-	commentedNodes_.insert(nodeId, commentedNode);
+	commentedNode = new CommentedNode{nodeId, offset};
+	commentedNodes_->beginModification();
+	commentedNodes_->append(commentedNode);
+	commentedNodes_->endModification();
 	return commentedNode;
 }
 
@@ -72,18 +76,7 @@ QList<QList<VersionControlUI::DiffFrame*>> CodeReviewManager::orderDiffFrames(
 void CodeReviewManager::saveReview(QString newVersion)
 {
 	auto store = new FilePersistence::SimpleTextFileStore{"."};
-	auto list = new Model::List{};
-	auto manager = new Model::TreeManager{CODE_REVIEW_COMMENTS_PREFIX+newVersion, list};
-
-	manager->beginModification(list, "set");
-	for (auto nodeID :  commentedNodes_.keys())
-	{
-		auto comment = commentedNodes_[nodeID];
-		// if a parent was set, it was a list from an earlier save
-		comment->setParent(nullptr);
-		list->append(comment);
-	}
-	manager->endModification();
+	auto manager = new Model::TreeManager{CODE_REVIEW_COMMENTS_PREFIX+newVersion, commentedNodes_};
 	manager->save(store);
 
 }
@@ -96,15 +89,16 @@ QList<CommentedNode*> CodeReviewManager::loadReview(QString newVersion)
 	auto store = new FilePersistence::SimpleTextFileStore{"."};
 	auto manager = new Model::TreeManager{};
 	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
-	auto list = manager->root();
+	commentedNodes_ = DCast<CommentedNodeList>(manager->root());
+	Q_ASSERT(commentedNodes_);
 	QList<CommentedNode*> result;
-	for (auto listEntry : list->children())
+	for (auto node : *commentedNodes_)
 	{
-		auto comment = DCast<CommentedNode>(listEntry);
-		commentedNodes_.insert(comment->nodeId()->get(), comment);
+		auto comment = DCast<CommentedNode>(node);
 		result.append(comment);
 	}
 
 	return result;
 }
+
 }
