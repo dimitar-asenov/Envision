@@ -459,6 +459,30 @@ class FILEPERSISTENCE_API MoveAndListChangesResolvable
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000404}"})->parentId() ==
 						 QUuid{"00000000-0000-0000-0000-000000000400"});
 }};
+
+class FILEPERSISTENCE_API MoveInAndListChangesResolvable
+ : public SelfTest::Test<FilePersistencePlugin, MoveInAndListChangesResolvable> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"MoveInAndListChangesResolvable\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001404}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001507}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000011507}"}));
+	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000000501}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001507}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000000407"});
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000011507}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000000507"});
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001404}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000000500"});
+}};
 /**
  * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
  * found in /tmp/EnvisionVC/TestMerge.
