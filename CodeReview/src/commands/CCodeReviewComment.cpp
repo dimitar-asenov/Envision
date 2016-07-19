@@ -68,7 +68,9 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 		{
 			auto commentedNode = CodeReviewManager::instance().commentedNode(id.toString(),
 																	ancestorWithNodeItem->mapFromScene(source->scenePos()).toPoint());
+			commentedNode->beginModification();
 			commentedNode->reviewComments()->append(new ReviewComment{});
+			commentedNode->endModification();
 
 			auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, commentedNode};
 			ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
