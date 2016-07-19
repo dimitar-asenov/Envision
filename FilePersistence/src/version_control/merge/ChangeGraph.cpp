@@ -762,9 +762,50 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 		if (okToRemoveDependenciesInCycle)
 		{
 			// This is a cycle which matches all conditions. Remove the dependencies between the elements.
+			// NOTE: Here we still keep dependencies such as
+			// -In case of Insertion/MoveIn, we need to make sure that its parent exist
+			// -In case of Deletion, we need to make sure that its subtree is Deleted or Moved out
+			// We allow label conflicts in this case, since they will be resolved once all changes are applied
 			removedSomeDependencies = true;
 			for (auto changeToMakeIndependent : changesInCycle)
-				removeAllDependencies(changeToMakeIndependent);
+			{
+				// Nothing will depend on Deletion ( Except Deletion of parentNode )
+				// Deletion will depend on Deletion, MoveOut of children
+				// MoveIn, Insertion of children will depend on Insertion
+				// Insertion will depend on nothing ( Except Insertion of parentNode )
+				if (changeToMakeIndependent->type() != ChangeType::Deletion)
+				{
+					// Remove all forward dependencies if change is not deletion
+					auto thisDependsOn = dependencies_.values(changeToMakeIndependent);
+					for (auto ourDependency : thisDependsOn)
+					{
+						// If change depends on Insertion(ourDependency), then it must be Insert/MoveIn change
+						// in the subtree of element to be Inserted(by ourDependency), so dependency cannot be removed
+						// New Parent must exist for the change to happen
+						if (ourDependency->type() != ChangeType::Insertion)
+						{
+							reverseDependencies_.remove(ourDependency, changeToMakeIndependent);
+							dependencies_.remove(changeToMakeIndependent, ourDependency);
+						}
+					}
+				}
+				if (changeToMakeIndependent->type() != ChangeType::Insertion)
+				{
+					// Remove all reverse dependencies if change is not Insertion
+					auto otherDependOnThis = reverseDependencies_.values(changeToMakeIndependent);
+					for (auto dependencyToUs : otherDependOnThis)
+					{
+						// If Deletion(ourDependency) depends on change, then it must be Delete/MoveOut change
+						// in the subtree of element to be Deleted(by dependencyToUs), so dependency cannot be removed
+						// Subtree must be deleted before deleting Node
+						if (dependencyToUs->type() != ChangeType::Deletion)
+						{
+							dependencies_.remove(dependencyToUs, changeToMakeIndependent);
+							reverseDependencies_.remove(changeToMakeIndependent, dependencyToUs);
+						}
+					}
+				}
+			}
 		}
 
 		// No matter if this was a good or a bad cycle, label all changes as notOK to avoid further processing
