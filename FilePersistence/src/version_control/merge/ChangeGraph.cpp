@@ -764,7 +764,28 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 			// This is a cycle which matches all conditions. Remove the dependencies between the elements.
 			removedSomeDependencies = true;
 			for (auto changeToMakeIndependent : changesInCycle)
-				removeAllDependencies(changeToMakeIndependent);
+			{	// Nothing will depend on Deletion ( Except Deletion of parentNode )
+				// Deletion will depend on Deletion, MoveOut of children
+				// MoveIn, Insertion of children will depend on Insertion
+				// Insertion will depend on nothing ( Except Insertion of parentNode )
+				if (changeToMakeIndependent->type() != ChangeType::Deletion)
+				{
+					auto thisDependsOn = dependencies_.values(changeToMakeIndependent);
+					dependencies_.remove(changeToMakeIndependent);
+					for (auto ourDependency : thisDependsOn)
+						reverseDependencies_.remove(ourDependency, changeToMakeIndependent);
+				}
+				bool allReverseDependenciesRemoved = true;
+				auto otherDependOnThis = reverseDependencies_.values(changeToMakeIndependent);
+				for (auto dependencyToUs : otherDependOnThis)
+				{
+					if (dependencyToUs->type() != ChangeType::Deletion)
+						dependencies_.remove(dependencyToUs, changeToMakeIndependent);
+					else
+						allReverseDependenciesRemoved = false;
+				}
+				if (allReverseDependenciesRemoved)	reverseDependencies_.remove(changeToMakeIndependent);
+			}
 		}
 
 		// No matter if this was a good or a bad cycle, label all changes as notOK to avoid further processing
