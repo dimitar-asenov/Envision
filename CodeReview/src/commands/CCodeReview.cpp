@@ -51,6 +51,9 @@ using namespace Visualization;
 
 namespace CodeReview {
 
+const QString CCodeReview::SAVE_COMMAND = "save";
+const QString CCodeReview::REVIEW_VIEW_PREFIX = "ReviewView";
+
 CCodeReview::CCodeReview() : Command{"review"} {}
 
 bool CCodeReview::canInterpret(Visualization::Item* source, Visualization::Item*,
@@ -83,6 +86,10 @@ bool CCodeReview::canInterpret(Visualization::Item* source, Visualization::Item*
 		if (!commandTokensCopy.isEmpty())
 		{
 			auto token = commandTokensCopy.takeFirst();
+			auto scene = source->scene();
+			if (token == SAVE_COMMAND && scene->currentViewItem()->name().startsWith(REVIEW_VIEW_PREFIX))
+				return true;
+
 			if (!repository.isValidRevisionString(unambigousPrefixPerRevision_.value(token, token)))
 				return false;
 		}
@@ -107,6 +114,11 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	Model::TreeManager* headManager = ancestorWithNode->node()->manager();
 	QString managerName = headManager->name();
 
+	if (commandTokens.value(1) == SAVE_COMMAND)
+	{
+		CodeReviewManager::instance().saveReview(source->scene()->currentViewItem()->name().split("_").value(2));
+		return new Interaction::CommandResult{};
+	}
 	QString oldRev = commandTokens.value(1, "HEAD");
 	QString newRev = commandTokens.value(2, FilePersistence::GitRepository::WORKDIR);
 
@@ -117,20 +129,24 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	VersionControlUI::DiffManager diffManager{managerName, {Model::SymbolMatcher{"Class"},
 																			  Model::SymbolMatcher{"Method"}}};
 
+	auto reviewViewName = REVIEW_VIEW_PREFIX + "_" + oldRev + "_" + newRev;
+
 	auto reviewViewItem = Visualization::VisualizationManager::instance().mainScene()->
-			viewItems()->viewItem("ReviewView");
+			viewItems()->viewItem(reviewViewName);
 
 	if (reviewViewItem)
 		Visualization::VisualizationManager::instance().mainScene()->
 					viewItems()->removeViewItem(reviewViewItem);
 
 	reviewViewItem = Visualization::VisualizationManager::instance().mainScene()->
-				viewItems()->newViewItem("ReviewView");
+				viewItems()->newViewItem(reviewViewName);
 
 	reviewViewItem->setMajorAxis(Visualization::GridLayouter::NoMajor);
 	reviewViewItem->setZoomLabelsEnabled(false);
 
-	auto diffFrames = diffManager.computeDiffFramesAndOverlays(oldRev, newRev, reviewViewItem);
+	auto diffFramesAndSetup = diffManager.computeDiffFramesAndOverlays(oldRev, newRev, reviewViewItem);
+
+	auto diffFrames = diffFramesAndSetup.diffFrames_;
 
 	auto orderedDiffFrames = CodeReviewManager::orderDiffFrames(UseAnalysisGroupings::useAnalysisGrouping,
 																							  Orderings::alphabeticalOrdering, diffFrames);
@@ -141,6 +157,24 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 			MajorMinorIndex index = {i, j};
 			reviewViewItem->insertNode(orderedDiffFrames[i][j], index);
 		}
+
+	auto comments = CodeReviewManager::instance().loadReview(newRev);
+
+	// recreate comment overlays
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  [comments, source, reviewViewItem, headManager, diffFramesAndSetup]()
+	{
+		for (auto comment : *comments)
+		{
+			auto node = const_cast<Model::Node*>(diffFramesAndSetup.diffSetup_.newVersionManager_->
+															 nodeIdMap().node(comment->nodeId()->get()));
+			for (auto item : reviewViewItem->findAllVisualizationsOf(node))
+			{
+				auto overlay = new CodeReviewCommentOverlay{item, comment};
+				item->addOverlay(overlay, "CodeReviewComment");
+			}
+		}
+	});
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(reviewViewItem);
@@ -172,8 +206,13 @@ QList<Interaction::CommandSuggestion*> CCodeReview::suggest(Visualization::Item*
 			return suggestions;
 		}
 
-		return VersionControlUI::CDiff::parseVersions(tokensSoFar, name(), ancestorWithNode->node()->manager()->name(),
-									unambigousPrefixPerRevision_);
+		suggestions = VersionControlUI::CDiff::parseVersions(tokensSoFar, name(), ancestorWithNode->node()->manager()->name(),
+																			  unambigousPrefixPerRevision_);
+
+		if (SAVE_COMMAND.startsWith(tokensSoFar.first()))
+			suggestions.prepend(new Interaction::CommandSuggestion{name() + " " + SAVE_COMMAND, "safe current review comments"});
+
+		return suggestions;
 	}
 	else return {};
 }

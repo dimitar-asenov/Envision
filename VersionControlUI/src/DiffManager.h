@@ -51,8 +51,22 @@ namespace VersionControlUI {
 
 struct VersionNodes;
 struct ChangeWithNodes;
-struct DiffSetup;
 class DiffFrame;
+
+struct DiffSetup {
+	Model::TreeManager* newVersionManager_{};
+	Model::TreeManager* oldVersionManager_{};
+	FilePersistence::GitRepository* repository_{};
+
+	QString oldVersion_;
+	QString newVersion_;
+};
+
+struct DiffFramesAndSetup
+{
+	QList<DiffFrame*> diffFrames_;
+	DiffSetup diffSetup_;
+};
 
 class VERSIONCONTROLUI_API DiffManager
 {
@@ -79,7 +93,7 @@ class VERSIONCONTROLUI_API DiffManager
 
 		static QString createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision);
 
-		QList<DiffFrame*> computeDiffFramesAndOverlays(QString oldVersion,
+		DiffFramesAndSetup computeDiffFramesAndOverlays(QString oldVersion,
 																					QString newVersion, Visualization::ViewItem* viewItem);
 
 	private:

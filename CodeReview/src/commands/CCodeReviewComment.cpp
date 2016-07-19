@@ -66,15 +66,14 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 
 		if (!id.isNull())
 		{
-			auto commentedNode = CodeReviewManager::instance().commentedNode(id.toString());
+			auto commentedNode = CodeReviewManager::instance().commentedNode(id.toString(),
+																	ancestorWithNodeItem->mapFromScene(source->scenePos()).toPoint());
+			commentedNode->beginModification();
 			commentedNode->reviewComments()->append(new ReviewComment{});
+			commentedNode->endModification();
 
-			// only create highlight if not already existent
-			if (!source->overlay<CodeReviewCommentOverlay>("CodeReviewComment"))
-			{
-				auto overlay = new CodeReviewCommentOverlay{source, commentedNode};
-				source->addOverlay(overlay, "CodeReviewComment");
-			}
+			auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, commentedNode};
+			ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
 			break;
 		}
 	}

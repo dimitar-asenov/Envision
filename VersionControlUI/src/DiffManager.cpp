@@ -71,15 +71,6 @@ struct ChangeWithNodes {
 	FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
 };
 
-struct DiffSetup {
-	Model::TreeManager* newVersionManager_{};
-	Model::TreeManager* oldVersionManager_{};
-	FilePersistence::GitRepository* repository_{};
-
-	QString oldVersion_;
-	QString newVersion_;
-};
-
 DiffManager::DiffManager(QString project, QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
 								 Model::NodeIdType targetNodeID, NameChangeVisualizations nameChangeVisualization)
 	: project_{project}, contextUnitMatcherPriorityList_{contextUnitMatcherPriorityList}, targetNodeId_{targetNodeID},
@@ -398,7 +389,9 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	diffViewItem->setZoomLabelsEnabled(false);
 
 	int row = 0;
-	for (auto diffFrame : computeDiffFramesAndOverlays(oldVersion, newVersion, diffViewItem))
+	auto diffFramesAndSetup = computeDiffFramesAndOverlays(oldVersion, newVersion, diffViewItem);
+	auto diffFrames = diffFramesAndSetup.diffFrames_;
+	for (auto diffFrame : diffFrames)
 		diffViewItem->insertNode(diffFrame, {row++, 0});
 
 	// switch to the newly created view
@@ -428,7 +421,7 @@ void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNod
 	});
 }
 
-QList<DiffFrame*> DiffManager::computeDiffFramesAndOverlays(QString oldVersion, QString newVersion,
+DiffFramesAndSetup DiffManager::computeDiffFramesAndOverlays(QString oldVersion, QString newVersion,
 																										Visualization::ViewItem* viewItem)
 {
 	DiffSetup diffSetup;
@@ -449,7 +442,7 @@ QList<DiffFrame*> DiffManager::computeDiffFramesAndOverlays(QString oldVersion, 
 
 	createOverlaysForChanges(changesWithNodes, viewItem, diffSetup, viewItem);
 
-	return diffFrames;
+	return {diffFrames, diffSetup};
 }
 
 QString DiffManager::createHTMLCommitInfo(const FilePersistence::GitRepository* repository, QString revision)

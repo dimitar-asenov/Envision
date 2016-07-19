@@ -26,11 +26,19 @@
 
 #include "CodeReviewManager.h"
 
+#include "ModelBase/src/model/TreeManager.h"
+
+#include "FilePersistence/src/simple/SimpleTextFileStore.h"
+
 namespace CodeReview {
+
+const QString CodeReviewManager::CODE_REVIEW_COMMENTS_PREFIX = "CodeReviewComments_";
 
 // TODO use versions to have a one code review manager for any combination of two versions
 CodeReviewManager::CodeReviewManager(QString, QString)
-{}
+{
+	commentedNodes_ = new CommentedNodeList{};
+}
 
 CodeReviewManager& CodeReviewManager::instance()
 {
@@ -39,13 +47,15 @@ CodeReviewManager& CodeReviewManager::instance()
 	return manager;
 }
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId)
+CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QPoint offset)
 {
-	auto iter = commentedNodes_.constFind(nodeId);
-	if (iter != commentedNodes_.constEnd()) return *iter;
+	auto commentedNode = commentedNodes_->find(nodeId);
+	if (commentedNode) return commentedNode;
 
-	auto commentedNode = new CommentedNode{nodeId};
-	commentedNodes_.insert(nodeId, commentedNode);
+	commentedNode = new CommentedNode{nodeId, offset};
+	commentedNodes_->beginModification();
+	commentedNodes_->append(commentedNode);
+	commentedNodes_->endModification();
 	return commentedNode;
 }
 
@@ -61,6 +71,28 @@ QList<QList<VersionControlUI::DiffFrame*>> CodeReviewManager::orderDiffFrames(
 		result.prepend(orderedGroup);
 	}
 	return result;
+}
+
+void CodeReviewManager::saveReview(QString newVersion)
+{
+	auto store = new FilePersistence::SimpleTextFileStore{"."};
+	auto manager = new Model::TreeManager{CODE_REVIEW_COMMENTS_PREFIX+newVersion, commentedNodes_};
+	manager->save(store);
+
+}
+
+CommentedNodeList* CodeReviewManager::loadReview(QString newVersion)
+{
+	// no comments to load
+	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
+
+	auto store = new FilePersistence::SimpleTextFileStore{"."};
+	auto manager = new Model::TreeManager{};
+	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
+	commentedNodes_ = DCast<CommentedNodeList>(manager->root());
+	Q_ASSERT(commentedNodes_);
+
+	return commentedNodes_;
 }
 
 }

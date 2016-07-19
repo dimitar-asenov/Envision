@@ -46,9 +46,11 @@ class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
 
 	ATTRIBUTE(Model::Text, nodeId, setNodeId)
 	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
+	ATTRIBUTE(Model::Integer, offsetX, setOffsetX)
+	ATTRIBUTE(Model::Integer, offsetY, setOffsetY)
 
 	public:
-		CommentedNode(QString associatedNodeId);
+		CommentedNode(QString associatedNodeId, QPoint offset);
 
 };
 

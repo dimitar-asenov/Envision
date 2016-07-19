@@ -47,7 +47,7 @@ CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associat
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 	setItemCategory(Visualization::Scene::MenuItemCategory);
-	offsetItemLocal_ = QPoint{0, associatedItem->heightInLocal()};
+	offsetItemLocal_ = QPoint{commentedNode->offsetX()->get(), commentedNode->offsetY()->get()};
 }
 
 void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableHeight)
@@ -84,6 +84,10 @@ void CodeReviewCommentOverlay::initializeForms()
 void CodeReviewCommentOverlay::updateOffsetItemLocal(QPointF scenePos)
 {
 	offsetItemLocal_ = CodeReviewCommentOverlay::associatedItem()->mapFromScene(scenePos);
+	commentedNode_->beginModification("edit node");
+	commentedNode_->offsetX()->set(offsetItemLocal_.x());
+	commentedNode_->offsetY()->set(offsetItemLocal_.y());
+	commentedNode_->endModification();
 }
 
 }

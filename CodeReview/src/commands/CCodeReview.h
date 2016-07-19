@@ -46,6 +46,8 @@ class CODEREVIEW_API CCodeReview : public Interaction::Command
 
 	private:
 		QHash<QString, QString> unambigousPrefixPerRevision_;
+		static const QString SAVE_COMMAND;
+		static const QString REVIEW_VIEW_PREFIX;
 };
 
 }
