@@ -764,27 +764,39 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 			// This is a cycle which matches all conditions. Remove the dependencies between the elements.
 			removedSomeDependencies = true;
 			for (auto changeToMakeIndependent : changesInCycle)
-			{	// Nothing will depend on Deletion ( Except Deletion of parentNode )
+			{
+				// Nothing will depend on Deletion ( Except Deletion of parentNode )
 				// Deletion will depend on Deletion, MoveOut of children
 				// MoveIn, Insertion of children will depend on Insertion
 				// Insertion will depend on nothing ( Except Insertion of parentNode )
 				if (changeToMakeIndependent->type() != ChangeType::Deletion)
 				{
+					// Remove all Dependencies if change is not deletion
+					bool allDependenciesRemoved = true;
 					auto thisDependsOn = dependencies_.values(changeToMakeIndependent);
-					dependencies_.remove(changeToMakeIndependent);
 					for (auto ourDependency : thisDependsOn)
-						reverseDependencies_.remove(ourDependency, changeToMakeIndependent);
+					{
+						if (ourDependency->type() != ChangeType::Insertion)
+							reverseDependencies_.remove(ourDependency, changeToMakeIndependent);
+						else
+							allDependenciesRemoved = false;
+					}
+					if (allDependenciesRemoved)	dependencies_.remove(changeToMakeIndependent);
 				}
-				bool allReverseDependenciesRemoved = true;
-				auto otherDependOnThis = reverseDependencies_.values(changeToMakeIndependent);
-				for (auto dependencyToUs : otherDependOnThis)
+				if (changeToMakeIndependent->type() != ChangeType::Insertion)
 				{
-					if (dependencyToUs->type() != ChangeType::Deletion)
-						dependencies_.remove(dependencyToUs, changeToMakeIndependent);
-					else
-						allReverseDependenciesRemoved = false;
+					// Remove all ReverseDependencies if change is not Insertion
+					bool allReverseDependenciesRemoved = true;
+					auto otherDependOnThis = reverseDependencies_.values(changeToMakeIndependent);
+					for (auto dependencyToUs : otherDependOnThis)
+					{
+						if (dependencyToUs->type() != ChangeType::Deletion)
+							dependencies_.remove(dependencyToUs, changeToMakeIndependent);
+						else
+							allReverseDependenciesRemoved = false;
+					}
+					if (allReverseDependenciesRemoved)	reverseDependencies_.remove(changeToMakeIndependent);
 				}
-				if (allReverseDependenciesRemoved)	reverseDependencies_.remove(changeToMakeIndependent);
 			}
 		}
 

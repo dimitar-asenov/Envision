@@ -347,8 +347,8 @@ class FILEPERSISTENCE_API MoveVsInsertConflict
 						 QUuid{"00000000-0000-0000-0000-000000000400"});
 }};
 
-class FILEPERSISTENCE_API AtomicMoveChangeSingleVersion
- : public SelfTest::Test<FilePersistencePlugin, AtomicMoveChangeSingleVersion> { public: void test()
+class FILEPERSISTENCE_API AtomicCycleMoveMove
+ : public SelfTest::Test<FilePersistencePlugin, AtomicCycleMoveMove> { public: void test()
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
@@ -356,7 +356,30 @@ class FILEPERSISTENCE_API AtomicMoveChangeSingleVersion
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	Q_ASSERT(!merge->isAlreadyMerged());
-	merge->commit(sig, sig, "This is the result of merge test \"AtomicMoveChangeSingleVersion\"");
+	merge->commit(sig, sig, "This is the result of merge test \"AtomicCycleMoveMove\"");
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(!merge->hasConflicts());
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001507}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000011507}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000011507}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000000507"});
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000001507}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000011507"});
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000021404}"}));
+	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000021404}"})->parentId() ==
+						 QUuid{"00000000-0000-0000-0000-000000001404"});
+}};
+
+class FILEPERSISTENCE_API AtomicCycleMoveDel
+ : public SelfTest::Test<FilePersistencePlugin, AtomicCycleMoveDel> { public: void test()
+{
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	Q_ASSERT(!merge->isAlreadyMerged());
+	merge->commit(sig, sig, "This is the result of merge test \"AtomicCycleMoveDel\"");
 	auto tree = merge->mergedTree();
 	CHECK_CONDITION(!merge->hasConflicts());
 	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-000000001507}"}));
