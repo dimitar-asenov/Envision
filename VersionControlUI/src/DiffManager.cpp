@@ -94,9 +94,11 @@ DiffSetup DiffManager::initializeDiffPrerequisites(QString oldVersion, QString n
 
 	// load newer version
 	diffSetup.newVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, diffSetup.newVersion_);
+	diffSetup.newVersionManager_->setManagerName(project_+"#newVersion");
 
 	// load older version
 	diffSetup.oldVersionManager_ = createTreeManagerFromVersion(diffSetup.repository_, diffSetup.oldVersion_);
+	diffSetup.oldVersionManager_->setManagerName(project_+"#oldVersion");
 
 	Model::Reference::resolvePending();
 
