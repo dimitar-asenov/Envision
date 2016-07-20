@@ -47,12 +47,12 @@ CodeReviewManager& CodeReviewManager::instance()
 	return manager;
 }
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QPoint offset)
+CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QString nodeManagerName, QPoint offset)
 {
 	auto commentedNode = commentedNodes_->find(nodeId);
 	if (commentedNode) return commentedNode;
 
-	commentedNode = new CommentedNode{nodeId, offset};
+	commentedNode = new CommentedNode{nodeId, nodeManagerName, offset};
 	commentedNodes_->beginModification();
 	commentedNodes_->append(commentedNode);
 	commentedNodes_->endModification();

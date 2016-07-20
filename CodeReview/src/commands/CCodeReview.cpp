@@ -160,21 +160,32 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 
 	auto comments = CodeReviewManager::instance().loadReview(newRev);
 
-	// recreate comment overlays
-	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [comments, source, reviewViewItem, headManager, diffFramesAndSetup]()
+	if (comments)
 	{
-		for (auto comment : *comments)
+		// recreate comment overlays
+		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+									  [comments, source, reviewViewItem, headManager, diffFramesAndSetup]()
 		{
-			auto node = const_cast<Model::Node*>(diffFramesAndSetup.diffSetup_.newVersionManager_->
-															 nodeIdMap().node(comment->nodeId()->get()));
-			for (auto item : reviewViewItem->findAllVisualizationsOf(node))
+			for (auto comment : *comments)
 			{
-				auto overlay = new CodeReviewCommentOverlay{item, comment};
-				item->addOverlay(overlay, "CodeReviewComment");
+				Model::Node* node = nullptr;
+				auto managerName = comment->managerName()->get();
+				if (managerName == diffFramesAndSetup.diffSetup_.newVersionManager_->managerName())
+					node = const_cast<Model::Node*>(diffFramesAndSetup.diffSetup_.newVersionManager_->
+																 nodeIdMap().node(comment->nodeId()->get()));
+				else if (managerName == diffFramesAndSetup.diffSetup_.oldVersionManager_->managerName())
+					node = const_cast<Model::Node*>(diffFramesAndSetup.diffSetup_.oldVersionManager_->
+																 nodeIdMap().node(comment->nodeId()->get()));
+				if (!node) continue;
+
+				for (auto item : reviewViewItem->findAllVisualizationsOf(node))
+				{
+					auto overlay = new CodeReviewCommentOverlay{item, comment};
+					reviewViewItem->addOverlay(overlay, "CodeReviewComment");
+				}
 			}
-		}
-	});
+		});
+	}
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(reviewViewItem);

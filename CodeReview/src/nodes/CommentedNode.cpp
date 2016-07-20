@@ -26,9 +26,6 @@
 #include "CommentedNode.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
-
-#include "ReviewComment.h"
-
 #include "ModelBase/src/nodes/TypedList.hpp"
 
 template class Model::TypedList<CodeReview::CommentedNode>;
@@ -39,13 +36,16 @@ DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentedNode)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentedNode)
 
 DEFINE_ATTRIBUTE(CommentedNode, nodeId, Text, false, false, true)
+DEFINE_ATTRIBUTE(CommentedNode, managerName, Text, false, false, true)
 DEFINE_ATTRIBUTE(CommentedNode, reviewComments, TypedListOfReviewComment, false, false, true)
 DEFINE_ATTRIBUTE(CommentedNode, offsetX, Integer, false, false, true)
 DEFINE_ATTRIBUTE(CommentedNode, offsetY, Integer, false, false, true)
 
-CommentedNode::CommentedNode(QString associatedNodeId, QPoint offset) : Super{nullptr, CommentedNode::getMetaData()}
+CommentedNode::CommentedNode(QString associatedNodeId, QString nodeManagerName, QPoint offset)
+	: Super{nullptr, CommentedNode::getMetaData()}
 {
-	setNodeId(new Model::Text{associatedNodeId});
+	nodeId()->set(associatedNodeId);
+	managerName()->set(nodeManagerName);
 	offsetX()->set(offset.x());
 	offsetY()->set(offset.y());
 }

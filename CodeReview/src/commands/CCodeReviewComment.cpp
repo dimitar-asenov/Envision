@@ -67,13 +67,17 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 		if (!id.isNull())
 		{
 			auto commentedNode = CodeReviewManager::instance().commentedNode(id.toString(),
+																	ancestorWithNodeItem->node()->manager()->managerName(),
 																	ancestorWithNodeItem->mapFromScene(source->scenePos()).toPoint());
 			commentedNode->beginModification();
 			commentedNode->reviewComments()->append(new ReviewComment{});
 			commentedNode->endModification();
 
-			auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, commentedNode};
-			ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
+			if (!ancestorWithNodeItem->overlay<CodeReviewCommentOverlay>("CodeReviewComment"))
+			{
+				auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, commentedNode};
+				ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
+			}
 			break;
 		}
 	}

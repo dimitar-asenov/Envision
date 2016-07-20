@@ -43,7 +43,7 @@ using OrderingFunction =
 class CODEREVIEW_API CodeReviewManager
 {
 	public:
-		CommentedNode* commentedNode(QString nodeId, QPoint offset);
+		CommentedNode* commentedNode(QString nodeId, QString nodeManagerName, QPoint offset);
 		static CodeReviewManager& instance();
 
 		static QList<QList<VersionControlUI::DiffFrame*>> orderDiffFrames(
