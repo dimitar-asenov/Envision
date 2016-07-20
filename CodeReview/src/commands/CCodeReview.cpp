@@ -221,7 +221,7 @@ QList<Interaction::CommandSuggestion*> CCodeReview::suggest(Visualization::Item*
 																			  unambigousPrefixPerRevision_);
 
 		if (SAVE_COMMAND.startsWith(tokensSoFar.first()))
-			suggestions.prepend(new Interaction::CommandSuggestion{name() + " " + SAVE_COMMAND, "safe current review comments"});
+			suggestions.prepend(new Interaction::CommandSuggestion{name() + " " + SAVE_COMMAND, "save current review comments"});
 
 		return suggestions;
 	}
