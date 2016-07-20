@@ -67,8 +67,11 @@ Interaction::CommandResult* CFocus::execute(Visualization::Item*, Visualization:
 
 	if (!focusInformationFound){
 		currentStep_ = 0;
-		CodeReviewManager::instance().focusInformationForStep(currentStep_, focusInformation);
+		focusInformationFound = CodeReviewManager::instance().focusInformationForStep(currentStep_, focusInformation);
 	}
+
+	if (!focusInformationFound)
+		return new Interaction::CommandResult{};
 
 	auto focusItem = CodeReviewManager::instance().overlayForCommentedNode(focusInformation.node_);
 
