@@ -50,4 +50,12 @@ CommentedNode::CommentedNode(QString associatedNodeId, QString nodeManagerName, 
 	offsetY()->set(offset.y());
 }
 
+bool CommentedNode::parseReviewComments(FocusInformation& focusInformation)
+{
+	if (auto firstReviewComment = reviewComments()->first())
+		return firstReviewComment->parseComment(focusInformation);
+
+	return false;
+}
+
 }

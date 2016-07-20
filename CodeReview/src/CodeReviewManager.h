@@ -56,6 +56,12 @@ class CODEREVIEW_API CodeReviewManager
 		void saveReview(QString newVersion);
 		CommentedNodeList* loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
 																		 Visualization::ViewItem* viewItem);
+
+		void parseCommentedNodes();
+
+		void addFocusInformation(FocusInformation focusInformation);
+		bool focusInformationForStep(int step, FocusInformation& focusInformation);
+
 		void registerCommentedNodeWithOverlay(Model::Node* commentedNode, Visualization::Item* overlay);
 		Visualization::Item* overlayForCommentedNode(Model::Node* commentedNode);
 
@@ -63,6 +69,7 @@ class CODEREVIEW_API CodeReviewManager
 	private:
 		CommentedNodeList* commentedNodes_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
+		QHash<int, FocusInformation> focusList_;
 		QHash<Model::Node*, Visualization::Item*> commentedNodeToOverlay_;
 
 		static const QString CODE_REVIEW_COMMENTS_PREFIX;

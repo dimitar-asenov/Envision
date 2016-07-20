@@ -26,7 +26,6 @@
 #include "ReviewComment.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
-
 #include "ModelBase/src/nodes/TypedList.hpp"
 
 template class Model::TypedList<CodeReview::ReviewComment>;
@@ -54,6 +53,42 @@ QString ReviewComment::systemUsername()
 	if (username.isEmpty())
 		username = qgetenv("USERNAME");
 	return username;
+}
+
+bool ReviewComment::parseComment(FocusInformation& focusInformation)
+{
+	auto firstLine = commentNode()->lines()->first();
+	if (!firstLine) return false;
+	auto lineText = firstLine->get();
+	if (lineText.startsWith("[focus"))
+	{
+		auto endOfCommand = lineText.indexOf("]");
+		// subtract one because of starting [
+		auto commandSize = endOfCommand - 1;
+		auto commandText = lineText.mid(1, commandSize);
+		QStringList commandTokens = commandText.split("|");
+
+		// remove first token which is "focus"
+		commandTokens.pop_front();
+
+		if (!commandTokens.isEmpty())
+		{
+			auto token = commandTokens.takeFirst();
+			if (token.startsWith("hi"))
+				focusInformation.type_ = FocusInformation::FocusType::Highlight;
+			else if (token.startsWith("ce"))
+				focusInformation.type_ = FocusInformation::FocusType::Center;
+		}
+
+		if (!commandTokens.isEmpty())
+		{
+			auto stepToken = commandTokens.takeFirst();
+			focusInformation.step_ = stepToken.toInt();
+		}
+		return true;
+	}
+
+	return false;
 }
 
 

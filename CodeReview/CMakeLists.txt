@@ -11,6 +11,7 @@ add_library(CodeReview SHARED
 	src/CodeReviewManager.h
 	src/commands/CCodeReviewComment.h
 	src/commands/CCodeReview.h
+	src/commands/CFocus.h
 	src/overlays/CodeReviewCommentOverlay.h
 	src/overlays/CodeReviewCommentOverlayStyle.h
 	src/handlers/HReviewableItem.h
@@ -29,6 +30,7 @@ add_library(CodeReview SHARED
 	src/CodeReviewManager.cpp
 	src/commands/CCodeReviewComment.cpp
 	src/commands/CCodeReview.cpp
+	src/commands/CFocus.cpp
 	src/overlays/CodeReviewCommentOverlay.cpp
 	src/overlays/CodeReviewCommentOverlayStyle.cpp
 	src/handlers/HReviewableItem.cpp

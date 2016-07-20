@@ -27,22 +27,31 @@
 
 #include "../codereview_api.h"
 
-#include "ModelBase/src/nodes/nodeMacros.h"
-
 #include "VersionControlUI/src/nodes/DiffFrame.h"
 
-#include "Comments/src/nodes/CommentNode.h"
-
+#include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/Text.h"
+
+#include "Comments/src/nodes/CommentNode.h"
 
 namespace CodeReview
 {
 class ReviewComment;
+
 }
 
 extern template class CODEREVIEW_API Model::TypedList<CodeReview::ReviewComment>;
 
 namespace CodeReview {
+
+struct FocusInformation
+{
+	enum FocusType {Center, Highlight};
+
+	int step_{};
+	FocusType type_{};
+	Model::Node* node_{};
+};
 
 class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 {
@@ -53,12 +62,15 @@ class CODEREVIEW_API ReviewComment : public Super<Model::CompositeNode>
 	PRIVATE_ATTRIBUTE_VALUE(Model::Text, dateString, setDateString, QString)
 
 	public:
+
 		ReviewComment(Comments::CommentNode* commentNode, qint64 date, Model::Node* parent=nullptr);
 		qint64 date();
 		void setDate(qint64 date);
 
 		// TODO move to more fitting place
 		static QString systemUsername();
+
+		bool parseComment(FocusInformation& focusInformation);
 };
 
 inline qint64 ReviewComment::date() { return dateString().toLongLong(); }

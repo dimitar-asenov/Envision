@@ -56,6 +56,8 @@ class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
 	public:
 		CommentedNode(QString associatedNodeId, QString nodeManagerName, QPoint offset);
 
+		bool parseReviewComments(FocusInformation& focusInformation);
+
 };
 
 }

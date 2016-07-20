@@ -97,6 +97,8 @@ CommentedNodeList* CodeReviewManager::loadReview(QString newVersion, VersionCont
 	commentedNodes_ = DCast<CommentedNodeList>(manager->root());
 	Q_ASSERT(commentedNodes_);
 
+	parseCommentedNodes();
+
 	// recreate comment overlays
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
 								  [this, viewItem, diffSetup]()
@@ -134,5 +136,34 @@ void CodeReviewManager::registerCommentedNodeWithOverlay(Model::Node* commentedN
 {
 	commentedNodeToOverlay_.insert(commentedNode, overlay);
 }
+
+void CodeReviewManager::parseCommentedNodes()
+{
+	for (CommentedNode* commentedNode : *commentedNodes_)
+	{
+		FocusInformation focusInformation;
+		if (commentedNode->parseReviewComments(focusInformation))
+		{
+			focusInformation.node_ = commentedNode;
+			addFocusInformation(focusInformation);
+		}
+	}
+}
+
+void CodeReviewManager::addFocusInformation(FocusInformation focusInformation)
+{
+	focusList_.insert(focusInformation.step_, focusInformation);
+}
+
+bool CodeReviewManager::focusInformationForStep(int step, FocusInformation& focusInformation)
+{
+	auto iter = focusList_.find(step);
+	if (iter == focusList_.end()) return false;
+
+	focusInformation = *iter;
+
+	return true;
+}
+
 
 }
