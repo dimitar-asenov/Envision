@@ -24,24 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommentedNodeList.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedList.hpp"
-#include "OOModel/src/typesystem/OOResolutionRequest.h"
-template class Model::TypedList<CodeReview::CommentedNodeList>;
+#include "NodeReviews.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+namespace CodeReview {
+	class NodeReviewsList;
+}
+extern template class CODEREVIEW_API Model::TypedList<CodeReview::NodeReviewsList>;
 
 namespace CodeReview {
 
-DEFINE_NODE_EMPTY_CONSTRUCTORS(CommentedNodeList)
-DEFINE_NODE_TYPE_REGISTRATION_METHODS(CommentedNodeList)
-
-CommentedNode* CommentedNodeList::find(QString nodeId)
+class CODEREVIEW_API NodeReviewsList : public Super<Model::TypedList<NodeReviews>>
 {
-	for (auto commentedNode : *this)
-		if (commentedNode->nodeId()->get() == nodeId)
-			return commentedNode;
+	NODE_DECLARE_STANDARD_METHODS(NodeReviewsList)
 
-	return nullptr;
-}
+	public:
+		NodeReviews* find(QString nodeId);
+};
 
 }

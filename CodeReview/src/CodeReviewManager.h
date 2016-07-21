@@ -27,10 +27,13 @@
 #pragma once
 
 #include "codereview_api.h"
-#include "nodes/CommentedNode.h"
-#include "nodes/CommentedNodeList.h"
+#include "nodes/NodeReviews.h"
+#include "nodes/NodeReviewsList.h"
 
 #include "VersionControlUI/src/nodes/DiffFrame.h"
+#include "VersionControlUI/src/DiffManager.h"
+
+#include "VisualizationBase/src/items/Item.h"
 
 namespace CodeReview {
 
@@ -43,22 +46,34 @@ using OrderingFunction =
 class CODEREVIEW_API CodeReviewManager
 {
 	public:
-		CommentedNode* commentedNode(QString nodeId, QPoint offset);
+		NodeReviews* nodeReviews(QString nodeId, QString revisionName, QPoint offset);
 		static CodeReviewManager& instance();
 
 		static QList<QList<VersionControlUI::DiffFrame*>> orderDiffFrames(
 				GroupingFunction groupingFunction, OrderingFunction orderingFunction,
 				QList<VersionControlUI::DiffFrame*> diffFrames);
 
-		void saveReview(QString newVersion);
-		CommentedNodeList* loadReview(QString newVersion);
+		void saveReview(QString managerName, QString newRev);
+		NodeReviewsList* loadReview(const VersionControlUI::DiffSetup& diffSetup,
+																		 Visualization::ViewItem* viewItem);
+
+		void registerNodeReviewsWithOverlay(Model::Node* nodeReviews, Visualization::Item* overlay);
+		Visualization::Item* overlayForNodeReviews(Model::Node* nodeReviews);
+		NodeReviewsList* nodeReviewsList();
 
 
 	private:
-		CommentedNodeList* commentedNodes_;
+		NodeReviewsList* nodeReviews_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
+		QHash<Model::Node*, Visualization::Item*> nodeReviewsToOverlay_;
+
+		static QString createNameForPersistence(QString managerName, QString newRev);
+		static QString createNameForPersistence(const VersionControlUI::DiffSetup& diffSetup);
+
 		static const QString CODE_REVIEW_COMMENTS_PREFIX;
 
 };
+
+inline NodeReviewsList* CodeReviewManager::nodeReviewsList() { return nodeReviews_; }
 
 }

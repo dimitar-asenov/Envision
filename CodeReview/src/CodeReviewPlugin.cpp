@@ -29,6 +29,7 @@
 #include "handlers/HCodeReviewOverlay.h"
 #include "overlays/CodeReviewCommentOverlay.h"
 #include "commands/CCodeReview.h"
+#include "commands/CFocus.h"
 
 #include "Logger/src/Log.h"
 
@@ -54,6 +55,7 @@ bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
 	CodeReviewCommentOverlay::setDefaultClassHandler(HCodeReviewOverlay::instance());
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCodeReview{});
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CFocus{});
 
 	return true;
 }

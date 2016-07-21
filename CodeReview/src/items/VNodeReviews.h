@@ -33,9 +33,9 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VCommentedNodeStyle.h"
+#include "VNodeReviewsStyle.h"
 
-#include "../nodes/CommentedNode.h"
+#include "../nodes/NodeReviews.h"
 
 #include "VisualizationBase/src/items/Item.h"
 
@@ -43,15 +43,15 @@
 namespace CodeReview
 {
 
-class CommentedNode;
+class NodeReviews;
 
-class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<VCommentedNode,
-		Visualization::DeclarativeItem<VCommentedNode>, CommentedNode>>
+class CODEREVIEW_API VNodeReviews : public Super<Visualization::ItemWithNode<VNodeReviews,
+		Visualization::DeclarativeItem<VNodeReviews>, NodeReviews>>
 {
-	ITEM_COMMON(VCommentedNode)
+	ITEM_COMMON(VNodeReviews)
 
 	public:
-		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		VNodeReviews(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		static void initializeForms();
 		virtual Visualization::Item::UpdateType needsUpdate() override;
 

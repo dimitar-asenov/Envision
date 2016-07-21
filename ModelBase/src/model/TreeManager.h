@@ -207,6 +207,16 @@ class MODELBASE_API TreeManager: public QObject
 		void setName(const QString& name);
 
 		/**
+		 * Returns the name of the revision.
+		 */
+		QString revisionName();
+
+		/**
+		 * Sets the name of the revision.
+		 */
+		void setRevisionName(const QString& revisionName);
+
+		/**
 		 * Sets the root node of this manager to \a node.
 		 *
 		 * The TreeManager should not have a root node set. This method must be called outside of a modification block.
@@ -378,6 +388,12 @@ class MODELBASE_API TreeManager: public QObject
 		QString name_;
 
 		/**
+		 * Can be used to name the revision the manager handles. This name will be used in the diff to
+		 * differentiate between the old and new version managers;
+		 */
+		QString revisionName_;
+
+		/**
 		 * The root node for this manager's tree
 		 */
 		Node* root_{};
@@ -489,6 +505,9 @@ inline NodeReadWriteLock* TreeManager::rootLock() { return &rootLock_; }
 inline Node* TreeManager::root(){ return root_; }
 inline QString TreeManager::name() { return name_; }
 inline void TreeManager::setName(const QString& name) { name_ = name; }
+
+inline QString TreeManager::revisionName() { return revisionName_; }
+inline void TreeManager::setRevisionName(const QString& revisionName) { revisionName_ = revisionName; }
 
 inline PersistentStore* TreeManager::store() { return store_; }
 

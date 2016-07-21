@@ -24,44 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentedNode.h"
+#pragma once
 
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
+#include "../codereview_api.h"
 
-#include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/model/AllTreeManagers.h"
-
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/ViewItem.h"
-#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace CodeReview
 {
 
-DEFINE_ITEM_COMMON(VCommentedNode, "item")
-
-VCommentedNode::VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style)
-	: Super{parent, node, style}
+class CODEREVIEW_API VNodeReviewsStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-}
+	public:
+		virtual ~VNodeReviewsStyle() override;
+		Property<Visualization::VListStyle> comments{this, "comments"};
 
-Visualization::Item::UpdateType VCommentedNode::needsUpdate()
-{
-	return Visualization::Item::StandardUpdate;
-}
+};
 
-void VCommentedNode::initializeForms()
-{
-	auto comments = item<Visualization::VList>(&I::comments_, [](I* v) {
-			return v->node()->reviewComments();}, &StyleType::comments);
-	auto grid = (new Visualization::GridLayoutFormElement{})
-			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-			->setColumnStretchFactor(0, 1)
-			->put(0, 0, comments);
-
-	addForm(grid);
-}
 }

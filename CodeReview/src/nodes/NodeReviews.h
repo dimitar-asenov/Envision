@@ -27,30 +27,34 @@
 
 #include "../codereview_api.h"
 
-#include "ModelBase/src/nodes/nodeMacros.h"
-
 #include "ReviewComment.h"
+
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
 namespace CodeReview
 {
-class CommentedNode;
+class NodeReviews;
 }
 
-extern template class CODEREVIEW_API Model::TypedList<CodeReview::CommentedNode>;
+extern template class CODEREVIEW_API Model::TypedList<CodeReview::NodeReviews>;
 
 namespace CodeReview {
 
-class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
+class CODEREVIEW_API NodeReviews : public Super<Model::CompositeNode>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentedNode)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(NodeReviews)
 
-	ATTRIBUTE(Model::Text, nodeId, setNodeId)
+	ATTRIBUTE_VALUE(Model::Text, nodeId, setNodeId, QString)
+	ATTRIBUTE_VALUE(Model::Text, revisionName, setRevisionName, QString)
 	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
-	ATTRIBUTE(Model::Integer, offsetX, setOffsetX)
-	ATTRIBUTE(Model::Integer, offsetY, setOffsetY)
+	ATTRIBUTE_VALUE(Model::Integer, offsetX, setOffsetX, int)
+	ATTRIBUTE_VALUE(Model::Integer, offsetY, setOffsetY, int)
 
 	public:
-		CommentedNode(QString associatedNodeId, QPoint offset);
+		NodeReviews(QString associatedNodeId, QString revisionName, QPoint offset);
 
 };
 

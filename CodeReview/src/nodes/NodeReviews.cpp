@@ -23,12 +23,31 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "NodeReviews.h"
 
-#include "VCommentedNodeStyle.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
+
+template class Model::TypedList<CodeReview::NodeReviews>;
 
 namespace CodeReview
 {
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(NodeReviews)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NodeReviews)
 
-VCommentedNodeStyle::~VCommentedNodeStyle(){}
+DEFINE_ATTRIBUTE(NodeReviews, nodeId, Text, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, revisionName, Text, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, reviewComments, TypedListOfReviewComment, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, offsetX, Integer, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, offsetY, Integer, false, false, true)
+
+NodeReviews::NodeReviews(QString associatedNodeId, QString revisionName, QPoint offset)
+	: Super{nullptr, NodeReviews::getMetaData()}
+{
+	setNodeId(associatedNodeId);
+	setRevisionName(revisionName);
+	setOffsetX(offset.x());
+	setOffsetY(offset.y());
+}
 
 }

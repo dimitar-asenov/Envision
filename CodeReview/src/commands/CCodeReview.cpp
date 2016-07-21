@@ -27,7 +27,7 @@
 #include "CCodeReview.h"
 
 #include "../CodeReviewManager.h"
-#include "../nodes/CommentedNode.h"
+#include "../nodes/NodeReviews.h"
 #include "../nodes/ReviewComment.h"
 #include "../orderings/Orderings.h"
 #include "../groupings/UseAnalysisGroupings.h"
@@ -116,7 +116,10 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 
 	if (commandTokens.value(1) == SAVE_COMMAND)
 	{
-		CodeReviewManager::instance().saveReview(source->scene()->currentViewItem()->name().split("_").value(2));
+		auto viewNameTokens = source->scene()->currentViewItem()->name().split("_");
+		auto name = viewNameTokens.value(1);
+		auto newRev = viewNameTokens.value(3);
+		CodeReviewManager::instance().saveReview(name, newRev);
 		return new Interaction::CommandResult{};
 	}
 	QString oldRev = commandTokens.value(1, "HEAD");
@@ -129,7 +132,8 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	VersionControlUI::DiffManager diffManager{managerName, {Model::SymbolMatcher{"Class"},
 																			  Model::SymbolMatcher{"Method"}}};
 
-	auto reviewViewName = REVIEW_VIEW_PREFIX + "_" + oldRev + "_" + newRev;
+	auto reviewViewName = REVIEW_VIEW_PREFIX + "_" + managerName +
+			"_" + oldRev + "_" + newRev;
 
 	auto reviewViewItem = Visualization::VisualizationManager::instance().mainScene()->
 			viewItems()->viewItem(reviewViewName);
@@ -158,23 +162,7 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 			reviewViewItem->insertNode(orderedDiffFrames[i][j], index);
 		}
 
-	auto comments = CodeReviewManager::instance().loadReview(newRev);
-
-	// recreate comment overlays
-	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [comments, source, reviewViewItem, headManager, diffFramesAndSetup]()
-	{
-		for (auto comment : *comments)
-		{
-			auto node = const_cast<Model::Node*>(diffFramesAndSetup.diffSetup_.newVersionManager_->
-															 nodeIdMap().node(comment->nodeId()->get()));
-			for (auto item : reviewViewItem->findAllVisualizationsOf(node))
-			{
-				auto overlay = new CodeReviewCommentOverlay{item, comment};
-				item->addOverlay(overlay, "CodeReviewComment");
-			}
-		}
-	});
+	CodeReviewManager::instance().loadReview(diffFramesAndSetup.diffSetup_, reviewViewItem);
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(reviewViewItem);
@@ -210,7 +198,7 @@ QList<Interaction::CommandSuggestion*> CCodeReview::suggest(Visualization::Item*
 																			  unambigousPrefixPerRevision_);
 
 		if (SAVE_COMMAND.startsWith(tokensSoFar.first()))
-			suggestions.prepend(new Interaction::CommandSuggestion{name() + " " + SAVE_COMMAND, "safe current review comments"});
+			suggestions.prepend(new Interaction::CommandSuggestion{name() + " " + SAVE_COMMAND, "save current review comments"});
 
 		return suggestions;
 	}
