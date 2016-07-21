@@ -26,6 +26,7 @@
 
 #include "CodeReviewManager.h"
 #include "overlays/CodeReviewCommentOverlay.h"
+#include "commands/CFocus.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 
@@ -88,6 +89,8 @@ void CodeReviewManager::saveReview(QString newVersion)
 NodeReviewsList* CodeReviewManager::loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
 																 Visualization::ViewItem* viewItem)
 {
+	CFocus::clearFocusInformation();
+
 	// no comments to load
 	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
 
@@ -96,6 +99,8 @@ NodeReviewsList* CodeReviewManager::loadReview(QString newVersion, VersionContro
 	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
 	nodeReviews_ = DCast<NodeReviewsList>(manager->root());
 	Q_ASSERT(nodeReviews_);
+
+	CFocus::extractFocusInformation();
 
 	// recreate comment overlays
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
@@ -117,11 +122,23 @@ NodeReviewsList* CodeReviewManager::loadReview(QString newVersion, VersionContro
 			{
 				auto overlay = new CodeReviewCommentOverlay{item, comment};
 				viewItem->addOverlay(overlay, "CodeReviewComment");
+				registerNodeReviewsWithOverlay(comment, overlay);
 			}
 		}
 	});
 
 	return nodeReviews_;
 }
+
+Visualization::Item* CodeReviewManager::overlayForNodeReviews(Model::Node* nodeReviews)
+{
+	return nodeReviewsToOverlay_.value(nodeReviews);
+}
+
+void CodeReviewManager::registerNodeReviewsWithOverlay(Model::Node* nodeReviews, Visualization::Item* overlay)
+{
+	nodeReviewsToOverlay_.insert(nodeReviews, overlay);
+}
+
 
 }

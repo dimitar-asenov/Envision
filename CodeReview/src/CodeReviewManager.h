@@ -57,12 +57,20 @@ class CODEREVIEW_API CodeReviewManager
 		NodeReviewsList* loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
 																		 Visualization::ViewItem* viewItem);
 
+		void registerNodeReviewsWithOverlay(Model::Node* nodeReviews, Visualization::Item* overlay);
+		Visualization::Item* overlayForNodeReviews(Model::Node* nodeReviews);
+		NodeReviewsList* nodeReviewsList();
+
 
 	private:
 		NodeReviewsList* nodeReviews_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
+		QHash<Model::Node*, Visualization::Item*> nodeReviewsToOverlay_;
+
 		static const QString CODE_REVIEW_COMMENTS_PREFIX;
 
 };
+
+inline NodeReviewsList* CodeReviewManager::nodeReviewsList() { return nodeReviews_; }
 
 }
