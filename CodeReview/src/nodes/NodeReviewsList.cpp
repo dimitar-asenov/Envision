@@ -38,7 +38,7 @@ DEFINE_NODE_TYPE_REGISTRATION_METHODS(NodeReviewsList)
 NodeReviews* NodeReviewsList::find(QString nodeId)
 {
 	for (auto nodeReviews : *this)
-		if (nodeReviews->nodeId()->get() == nodeId)
+		if (nodeReviews->nodeId() == nodeId)
 			return nodeReviews;
 
 	return nullptr;

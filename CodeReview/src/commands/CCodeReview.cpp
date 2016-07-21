@@ -158,23 +158,7 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 			reviewViewItem->insertNode(orderedDiffFrames[i][j], index);
 		}
 
-	auto comments = CodeReviewManager::instance().loadReview(newRev);
-
-	// recreate comment overlays
-	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  [comments, source, reviewViewItem, headManager, diffFramesAndSetup]()
-	{
-		for (auto comment : *comments)
-		{
-			auto node = const_cast<Model::Node*>(diffFramesAndSetup.diffSetup_.newVersionManager_->
-															 nodeIdMap().node(comment->nodeId()->get()));
-			for (auto item : reviewViewItem->findAllVisualizationsOf(node))
-			{
-				auto overlay = new CodeReviewCommentOverlay{item, comment};
-				item->addOverlay(overlay, "CodeReviewComment");
-			}
-		}
-	});
+	CodeReviewManager::instance().loadReview(newRev, diffFramesAndSetup.diffSetup_, reviewViewItem);
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(reviewViewItem);

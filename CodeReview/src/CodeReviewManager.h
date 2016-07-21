@@ -31,6 +31,9 @@
 #include "nodes/NodeReviewsList.h"
 
 #include "VersionControlUI/src/nodes/DiffFrame.h"
+#include "VersionControlUI/src/DiffManager.h"
+
+#include "VisualizationBase/src/items/Item.h"
 
 namespace CodeReview {
 
@@ -43,7 +46,7 @@ using OrderingFunction =
 class CODEREVIEW_API CodeReviewManager
 {
 	public:
-		NodeReviews* nodeReviews(QString nodeId, QPoint offset);
+		NodeReviews* nodeReviews(QString nodeId, QString nodeManagerName, QPoint offset);
 		static CodeReviewManager& instance();
 
 		static QList<QList<VersionControlUI::DiffFrame*>> orderDiffFrames(
@@ -51,7 +54,8 @@ class CODEREVIEW_API CodeReviewManager
 				QList<VersionControlUI::DiffFrame*> diffFrames);
 
 		void saveReview(QString newVersion);
-		NodeReviewsList* loadReview(QString newVersion);
+		NodeReviewsList* loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
+																		 Visualization::ViewItem* viewItem);
 
 
 	private:

@@ -25,10 +25,14 @@
  **********************************************************************************************************************/
 
 #include "CodeReviewManager.h"
+#include "overlays/CodeReviewCommentOverlay.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
+
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace CodeReview {
 
@@ -47,12 +51,12 @@ CodeReviewManager& CodeReviewManager::instance()
 	return manager;
 }
 
-NodeReviews* CodeReviewManager::nodeReviews(QString nodeId, QPoint offset)
+NodeReviews* CodeReviewManager::nodeReviews(QString nodeId, QString nodeManagerName, QPoint offset)
 {
 	auto nodeReviews = nodeReviews_->find(nodeId);
 	if (nodeReviews) return nodeReviews;
 
-	nodeReviews = new NodeReviews{nodeId, offset};
+	nodeReviews = new NodeReviews{nodeId, nodeManagerName, offset};
 	nodeReviews_->beginModification();
 	nodeReviews_->append(nodeReviews);
 	nodeReviews_->endModification();
@@ -81,7 +85,8 @@ void CodeReviewManager::saveReview(QString newVersion)
 
 }
 
-NodeReviewsList* CodeReviewManager::loadReview(QString newVersion)
+NodeReviewsList* CodeReviewManager::loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
+																 Visualization::ViewItem* viewItem)
 {
 	// no comments to load
 	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
@@ -91,6 +96,30 @@ NodeReviewsList* CodeReviewManager::loadReview(QString newVersion)
 	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
 	nodeReviews_ = DCast<NodeReviewsList>(manager->root());
 	Q_ASSERT(nodeReviews_);
+
+	// recreate comment overlays
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  [this, viewItem, diffSetup]()
+	{
+		for (auto comment : *nodeReviews_)
+		{
+			Model::Node* node = nullptr;
+			auto managerName = comment->managerName();
+			if (managerName == diffSetup.newVersionManager_->revisionName())
+				node = const_cast<Model::Node*>(diffSetup.newVersionManager_->
+															 nodeIdMap().node(comment->nodeId()));
+			else if (managerName == diffSetup.oldVersionManager_->revisionName())
+				node = const_cast<Model::Node*>(diffSetup.oldVersionManager_->
+															 nodeIdMap().node(comment->nodeId()));
+			if (!node) continue;
+
+			for (auto item : viewItem->findAllVisualizationsOf(node))
+			{
+				auto overlay = new CodeReviewCommentOverlay{item, comment};
+				viewItem->addOverlay(overlay, "CodeReviewComment");
+			}
+		}
+	});
 
 	return nodeReviews_;
 }
