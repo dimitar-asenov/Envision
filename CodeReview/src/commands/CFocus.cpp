@@ -64,15 +64,14 @@ Interaction::CommandResult* CFocus::execute(Visualization::Item*, Visualization:
 
 	Visualization::VisualizationManager::instance().mainScene()->removeOverlayGroup("focusOverlay");
 
-	FocusInformation focusInformation;
-	auto focusInformationFound = focusInformationForStep(currentStep_, focusInformation);
+	auto focusInformation = focusList_.value(currentStep_);
 
-	if (!focusInformationFound){
+	if (focusInformation.type_ == FocusInformation::None){
 		currentStep_ = 0;
-		focusInformationFound = focusInformationForStep(currentStep_, focusInformation);
+		focusInformation = focusList_.value(currentStep_);
 	}
 
-	if (!focusInformationFound)
+	if (focusInformation.type_ == FocusInformation::None)
 		return new Interaction::CommandResult{};
 
 	auto focusItem = CodeReviewManager::instance().overlayForNodeReviews(focusInformation.node_);
@@ -142,7 +141,7 @@ CFocus::FocusInformation CFocus::extractFocusInformation(QString line)
 	return {};
 }
 
-void CFocus::extractFocusInformation()
+void CFocus::loadFocusInformation()
 {
 	for (NodeReviews* nodeReviews : *CodeReviewManager::instance().nodeReviewsList())
 	{
@@ -161,24 +160,9 @@ void CFocus::extractFocusInformation()
 		if (focusInformation.type_ != FocusInformation::None)
 		{
 			focusInformation.node_ = nodeReviews;
-			addFocusInformation(focusInformation);
+			focusList_.insert(focusInformation.step_, focusInformation);
 		}
 	}
-}
-
-void CFocus::addFocusInformation(FocusInformation focusInformation)
-{
-	focusList_.insert(focusInformation.step_, focusInformation);
-}
-
-bool CFocus::focusInformationForStep(int step, FocusInformation& focusInformation)
-{
-	auto iter = focusList_.find(step);
-	if (iter == focusList_.end()) return false;
-
-	focusInformation = *iter;
-
-	return true;
 }
 
 }

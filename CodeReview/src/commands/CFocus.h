@@ -55,12 +55,7 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-		static FocusInformation extractFocusInformation(QString line);
-
-		static void addFocusInformation(FocusInformation focusInformation);
-		static bool focusInformationForStep(int step, FocusInformation& focusInformation);
-
-		static void extractFocusInformation();
+		static void loadFocusInformation();
 
 		static void clearFocusInformation();
 
@@ -68,6 +63,7 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 	private:
 		int currentStep_{0};
 		static QHash<int, FocusInformation> focusList_;
+		static FocusInformation extractFocusInformation(QString line);
 
 };
 

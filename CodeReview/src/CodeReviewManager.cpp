@@ -111,7 +111,7 @@ NodeReviewsList* CodeReviewManager::loadReview(const VersionControlUI::DiffSetup
 	nodeReviews_ = DCast<NodeReviewsList>(manager->root());
 	Q_ASSERT(nodeReviews_);
 
-	CFocus::extractFocusInformation();
+	CFocus::loadFocusInformation();
 
 	// recreate comment overlays
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
