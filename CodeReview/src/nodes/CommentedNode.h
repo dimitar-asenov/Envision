@@ -27,9 +27,12 @@
 
 #include "../codereview_api.h"
 
-#include "ModelBase/src/nodes/nodeMacros.h"
-
 #include "ReviewComment.h"
+
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
 namespace CodeReview
 {
@@ -45,12 +48,15 @@ class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentedNode)
 
 	ATTRIBUTE(Model::Text, nodeId, setNodeId)
+	ATTRIBUTE(Model::Text, managerName, setManagerName)
 	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
 	ATTRIBUTE(Model::Integer, offsetX, setOffsetX)
 	ATTRIBUTE(Model::Integer, offsetY, setOffsetY)
 
 	public:
-		CommentedNode(QString associatedNodeId, QPoint offset);
+		CommentedNode(QString associatedNodeId, QString nodeManagerName, QPoint offset);
+
+		bool parseReviewComments(FocusInformation& focusInformation);
 
 };
 

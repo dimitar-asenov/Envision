@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2016 ETH Zurich
+** Copyright (c) 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "CCodeReviewComment.h"
+#include "CFocus.h"
 
 #include "../nodes/CommentedNode.h"
 #include "../nodes/ReviewComment.h"
@@ -36,6 +36,7 @@
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/overlays/HighlightOverlay.h"
 
 #include "../CodeReviewManager.h"
 
@@ -45,9 +46,9 @@ using namespace Visualization;
 
 namespace CodeReview {
 
-CCodeReviewComment::CCodeReviewComment() : Command{"comment"} {}
+CFocus::CFocus() : Command{"focus"} {}
 
-bool CCodeReviewComment::canInterpret(Visualization::Item*, Visualization::Item*,
+bool CFocus::canInterpret(Visualization::Item*, Visualization::Item*,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& )
 {
 	if (commandTokens.size() > 0)
@@ -55,37 +56,42 @@ bool CCodeReviewComment::canInterpret(Visualization::Item*, Visualization::Item*
 	return false;
 }
 
-Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* source, Visualization::Item*,
+Interaction::CommandResult* CFocus::execute(Visualization::Item*, Visualization::Item*,
 				const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto ancestorWithNodeItem = source->findAncestorWithNode();
 
-	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-	{
-		auto id = manager->nodeIdMap().idIfExists(ancestorWithNodeItem->node());
+	Visualization::VisualizationManager::instance().mainScene()->removeOverlayGroup("focusOverlay");
 
-		if (!id.isNull())
-		{
-			auto commentedNode = CodeReviewManager::instance().commentedNode(id.toString(),
-																	ancestorWithNodeItem->node()->manager()->managerName(),
-																	ancestorWithNodeItem->mapFromScene(source->scenePos()).toPoint());
-			commentedNode->beginModification();
-			commentedNode->reviewComments()->append(new ReviewComment{});
-			commentedNode->endModification();
+	FocusInformation focusInformation;
+	auto focusInformationFound = CodeReviewManager::instance().focusInformationForStep(currentStep_, focusInformation);
 
-			if (!ancestorWithNodeItem->overlay<CodeReviewCommentOverlay>("CodeReviewComment"))
-			{
-				auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, commentedNode};
-				ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
-			}
-			break;
-		}
+	if (!focusInformationFound){
+		currentStep_ = 0;
+		focusInformationFound = CodeReviewManager::instance().focusInformationForStep(currentStep_, focusInformation);
 	}
+
+	if (!focusInformationFound)
+		return new Interaction::CommandResult{};
+
+	auto focusItem = CodeReviewManager::instance().overlayForCommentedNode(focusInformation.node_);
+
+	switch (focusInformation.type_) {
+		case FocusInformation::Center:
+			Visualization::VisualizationManager::instance().mainView()->
+					centerOn(focusItem);
+			break;
+		case FocusInformation::Highlight:
+			auto overlay = new Visualization::HighlightOverlay{focusItem};
+			focusItem->addOverlay(overlay, "focusOverlay");
+			break;
+	}
+
+	currentStep_++;
 
 	return new Interaction::CommandResult{};
 }
 
-QList<Interaction::CommandSuggestion*> CCodeReviewComment::suggest(Visualization::Item*, Visualization::Item*,
+QList<Interaction::CommandSuggestion*> CFocus::suggest(Visualization::Item*, Visualization::Item*,
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	if (name().startsWith(textSoFar))

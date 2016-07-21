@@ -25,10 +25,14 @@
  **********************************************************************************************************************/
 
 #include "CodeReviewManager.h"
+#include "overlays/CodeReviewCommentOverlay.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
+
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace CodeReview {
 
@@ -47,12 +51,12 @@ CodeReviewManager& CodeReviewManager::instance()
 	return manager;
 }
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QPoint offset)
+CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QString nodeManagerName, QPoint offset)
 {
 	auto commentedNode = commentedNodes_->find(nodeId);
 	if (commentedNode) return commentedNode;
 
-	commentedNode = new CommentedNode{nodeId, offset};
+	commentedNode = new CommentedNode{nodeId, nodeManagerName, offset};
 	commentedNodes_->beginModification();
 	commentedNodes_->append(commentedNode);
 	commentedNodes_->endModification();
@@ -81,7 +85,8 @@ void CodeReviewManager::saveReview(QString newVersion)
 
 }
 
-CommentedNodeList* CodeReviewManager::loadReview(QString newVersion)
+CommentedNodeList* CodeReviewManager::loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
+																 Visualization::ViewItem* viewItem)
 {
 	// no comments to load
 	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
@@ -92,7 +97,73 @@ CommentedNodeList* CodeReviewManager::loadReview(QString newVersion)
 	commentedNodes_ = DCast<CommentedNodeList>(manager->root());
 	Q_ASSERT(commentedNodes_);
 
+	parseCommentedNodes();
+
+	// recreate comment overlays
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  [this, viewItem, diffSetup]()
+	{
+		for (auto comment : *commentedNodes_)
+		{
+			Model::Node* node = nullptr;
+			auto managerName = comment->managerName()->get();
+			if (managerName == diffSetup.newVersionManager_->managerName())
+				node = const_cast<Model::Node*>(diffSetup.newVersionManager_->
+															 nodeIdMap().node(comment->nodeId()->get()));
+			else if (managerName == diffSetup.oldVersionManager_->managerName())
+				node = const_cast<Model::Node*>(diffSetup.oldVersionManager_->
+															 nodeIdMap().node(comment->nodeId()->get()));
+			if (!node) continue;
+
+			for (auto item : viewItem->findAllVisualizationsOf(node))
+			{
+				auto overlay = new CodeReviewCommentOverlay{item, comment};
+				viewItem->addOverlay(overlay, "CodeReviewComment");
+				registerCommentedNodeWithOverlay(comment, overlay);
+			}
+		}
+	});
+
 	return commentedNodes_;
 }
+
+Visualization::Item* CodeReviewManager::overlayForCommentedNode(Model::Node* commentedNode)
+{
+	return commentedNodeToOverlay_.value(commentedNode);
+}
+
+void CodeReviewManager::registerCommentedNodeWithOverlay(Model::Node* commentedNode, Visualization::Item* overlay)
+{
+	commentedNodeToOverlay_.insert(commentedNode, overlay);
+}
+
+void CodeReviewManager::parseCommentedNodes()
+{
+	for (CommentedNode* commentedNode : *commentedNodes_)
+	{
+		FocusInformation focusInformation;
+		if (commentedNode->parseReviewComments(focusInformation))
+		{
+			focusInformation.node_ = commentedNode;
+			addFocusInformation(focusInformation);
+		}
+	}
+}
+
+void CodeReviewManager::addFocusInformation(FocusInformation focusInformation)
+{
+	focusList_.insert(focusInformation.step_, focusInformation);
+}
+
+bool CodeReviewManager::focusInformationForStep(int step, FocusInformation& focusInformation)
+{
+	auto iter = focusList_.find(step);
+	if (iter == focusList_.end()) return false;
+
+	focusInformation = *iter;
+
+	return true;
+}
+
 
 }

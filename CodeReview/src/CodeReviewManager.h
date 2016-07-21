@@ -31,6 +31,9 @@
 #include "nodes/CommentedNodeList.h"
 
 #include "VersionControlUI/src/nodes/DiffFrame.h"
+#include "VersionControlUI/src/DiffManager.h"
+
+#include "VisualizationBase/src/items/Item.h"
 
 namespace CodeReview {
 
@@ -43,7 +46,7 @@ using OrderingFunction =
 class CODEREVIEW_API CodeReviewManager
 {
 	public:
-		CommentedNode* commentedNode(QString nodeId, QPoint offset);
+		CommentedNode* commentedNode(QString nodeId, QString nodeManagerName, QPoint offset);
 		static CodeReviewManager& instance();
 
 		static QList<QList<VersionControlUI::DiffFrame*>> orderDiffFrames(
@@ -51,12 +54,24 @@ class CODEREVIEW_API CodeReviewManager
 				QList<VersionControlUI::DiffFrame*> diffFrames);
 
 		void saveReview(QString newVersion);
-		CommentedNodeList* loadReview(QString newVersion);
+		CommentedNodeList* loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
+																		 Visualization::ViewItem* viewItem);
+
+		void parseCommentedNodes();
+
+		void addFocusInformation(FocusInformation focusInformation);
+		bool focusInformationForStep(int step, FocusInformation& focusInformation);
+
+		void registerCommentedNodeWithOverlay(Model::Node* commentedNode, Visualization::Item* overlay);
+		Visualization::Item* overlayForCommentedNode(Model::Node* commentedNode);
 
 
 	private:
 		CommentedNodeList* commentedNodes_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
+		QHash<int, FocusInformation> focusList_;
+		QHash<Model::Node*, Visualization::Item*> commentedNodeToOverlay_;
+
 		static const QString CODE_REVIEW_COMMENTS_PREFIX;
 
 };
