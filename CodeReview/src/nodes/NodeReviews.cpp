@@ -36,16 +36,16 @@ DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(NodeReviews)
 DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NodeReviews)
 
 DEFINE_ATTRIBUTE(NodeReviews, nodeId, Text, false, false, true)
-DEFINE_ATTRIBUTE(NodeReviews, managerName, Text, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, revisionName, Text, false, false, true)
 DEFINE_ATTRIBUTE(NodeReviews, reviewComments, TypedListOfReviewComment, false, false, true)
 DEFINE_ATTRIBUTE(NodeReviews, offsetX, Integer, false, false, true)
 DEFINE_ATTRIBUTE(NodeReviews, offsetY, Integer, false, false, true)
 
-NodeReviews::NodeReviews(QString associatedNodeId, QString nodeManagerName, QPoint offset)
+NodeReviews::NodeReviews(QString associatedNodeId, QString revisionName, QPoint offset)
 	: Super{nullptr, NodeReviews::getMetaData()}
 {
 	setNodeId(associatedNodeId);
-	setManagerName(nodeManagerName);
+	setRevisionName(revisionName);
 	setOffsetX(offset.x());
 	setOffsetY(offset.y());
 }

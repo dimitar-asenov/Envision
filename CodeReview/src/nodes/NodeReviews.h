@@ -48,13 +48,13 @@ class CODEREVIEW_API NodeReviews : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(NodeReviews)
 
 	ATTRIBUTE_VALUE(Model::Text, nodeId, setNodeId, QString)
-	ATTRIBUTE_VALUE(Model::Text, managerName, setManagerName, QString)
+	ATTRIBUTE_VALUE(Model::Text, revisionName, setRevisionName, QString)
 	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
 	ATTRIBUTE_VALUE(Model::Integer, offsetX, setOffsetX, int)
 	ATTRIBUTE_VALUE(Model::Integer, offsetY, setOffsetY, int)
 
 	public:
-		NodeReviews(QString associatedNodeId, QString nodeManagerName, QPoint offset);
+		NodeReviews(QString associatedNodeId, QString revisionName, QPoint offset);
 
 };
 

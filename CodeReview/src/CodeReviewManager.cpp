@@ -52,12 +52,12 @@ CodeReviewManager& CodeReviewManager::instance()
 	return manager;
 }
 
-NodeReviews* CodeReviewManager::nodeReviews(QString nodeId, QString nodeManagerName, QPoint offset)
+NodeReviews* CodeReviewManager::nodeReviews(QString nodeId, QString revisionName, QPoint offset)
 {
 	auto nodeReviews = nodeReviews_->find(nodeId);
 	if (nodeReviews) return nodeReviews;
 
-	nodeReviews = new NodeReviews{nodeId, nodeManagerName, offset};
+	nodeReviews = new NodeReviews{nodeId, revisionName, offset};
 	nodeReviews_->beginModification();
 	nodeReviews_->append(nodeReviews);
 	nodeReviews_->endModification();
@@ -109,11 +109,11 @@ NodeReviewsList* CodeReviewManager::loadReview(QString newVersion, VersionContro
 		for (auto comment : *nodeReviews_)
 		{
 			Model::Node* node = nullptr;
-			auto managerName = comment->managerName();
-			if (managerName == diffSetup.newVersionManager_->revisionName())
+			auto revisionName = comment->revisionName();
+			if (revisionName == diffSetup.newVersionManager_->revisionName())
 				node = const_cast<Model::Node*>(diffSetup.newVersionManager_->
 															 nodeIdMap().node(comment->nodeId()));
-			else if (managerName == diffSetup.oldVersionManager_->revisionName())
+			else if (revisionName == diffSetup.oldVersionManager_->revisionName())
 				node = const_cast<Model::Node*>(diffSetup.oldVersionManager_->
 															 nodeIdMap().node(comment->nodeId()));
 			if (!node) continue;
