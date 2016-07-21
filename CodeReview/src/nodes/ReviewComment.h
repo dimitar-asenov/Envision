@@ -27,13 +27,12 @@
 
 #include "../codereview_api.h"
 
-#include "ModelBase/src/nodes/nodeMacros.h"
-
 #include "VersionControlUI/src/nodes/DiffFrame.h"
 
-#include "Comments/src/nodes/CommentNode.h"
-
+#include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/Text.h"
+
+#include "Comments/src/nodes/CommentNode.h"
 
 namespace CodeReview
 {

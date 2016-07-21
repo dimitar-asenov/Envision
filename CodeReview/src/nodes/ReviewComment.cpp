@@ -26,7 +26,6 @@
 #include "ReviewComment.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
-
 #include "ModelBase/src/nodes/TypedList.hpp"
 
 template class Model::TypedList<CodeReview::ReviewComment>;
@@ -55,7 +54,6 @@ QString ReviewComment::systemUsername()
 		username = qgetenv("USERNAME");
 	return username;
 }
-
 
 ReviewComment::ReviewComment(Model::Node* parent) :
 	ReviewComment{new Comments::CommentNode{"comment here"},
