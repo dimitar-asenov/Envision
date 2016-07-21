@@ -33,7 +33,7 @@
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VReviewCommentStyle.h"
 
-#include "../nodes/CommentedNode.h"
+#include "../nodes/NodeReviews.h"
 
 #include "Comments/src/items/VComment.h"
 

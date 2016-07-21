@@ -27,8 +27,8 @@
 #pragma once
 
 #include "codereview_api.h"
-#include "nodes/CommentedNode.h"
-#include "nodes/CommentedNodeList.h"
+#include "nodes/NodeReviews.h"
+#include "nodes/NodeReviewsList.h"
 
 #include "VersionControlUI/src/nodes/DiffFrame.h"
 
@@ -43,7 +43,7 @@ using OrderingFunction =
 class CODEREVIEW_API CodeReviewManager
 {
 	public:
-		CommentedNode* commentedNode(QString nodeId, QPoint offset);
+		NodeReviews* nodeReviews(QString nodeId, QPoint offset);
 		static CodeReviewManager& instance();
 
 		static QList<QList<VersionControlUI::DiffFrame*>> orderDiffFrames(
@@ -51,11 +51,11 @@ class CODEREVIEW_API CodeReviewManager
 				QList<VersionControlUI::DiffFrame*> diffFrames);
 
 		void saveReview(QString newVersion);
-		CommentedNodeList* loadReview(QString newVersion);
+		NodeReviewsList* loadReview(QString newVersion);
 
 
 	private:
-		CommentedNodeList* commentedNodes_;
+		NodeReviewsList* nodeReviews_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
 		static const QString CODE_REVIEW_COMMENTS_PREFIX;
 

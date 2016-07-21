@@ -23,45 +23,31 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "NodeReviews.h"
 
-#include "VCommentedNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
+#include "ReviewComment.h"
 
-#include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/model/AllTreeManagers.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
 
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/ViewItem.h"
-#include "VisualizationBase/src/items/Item.h"
+template class Model::TypedList<CodeReview::NodeReviews>;
 
 namespace CodeReview
 {
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(NodeReviews)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NodeReviews)
 
-DEFINE_ITEM_COMMON(VCommentedNode, "item")
+DEFINE_ATTRIBUTE(NodeReviews, nodeId, Text, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, reviewComments, TypedListOfReviewComment, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, offsetX, Integer, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, offsetY, Integer, false, false, true)
 
-VCommentedNode::VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style)
-	: Super{parent, node, style}
+NodeReviews::NodeReviews(QString associatedNodeId, QPoint offset) : Super{nullptr, NodeReviews::getMetaData()}
 {
+	setNodeId(new Model::Text{associatedNodeId});
+	offsetX()->set(offset.x());
+	offsetY()->set(offset.y());
 }
 
-Visualization::Item::UpdateType VCommentedNode::needsUpdate()
-{
-	return Visualization::Item::StandardUpdate;
-}
-
-void VCommentedNode::initializeForms()
-{
-	auto comments = item<Visualization::VList>(&I::comments_, [](I* v) {
-			return v->node()->reviewComments();}, &StyleType::comments);
-	auto grid = (new Visualization::GridLayoutFormElement{})
-			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
-			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-			->setColumnStretchFactor(0, 1)
-			->put(0, 0, comments);
-
-	addForm(grid);
-}
 }

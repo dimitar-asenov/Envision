@@ -26,7 +26,7 @@
 
 #include "CCodeReviewComment.h"
 
-#include "../nodes/CommentedNode.h"
+#include "../nodes/NodeReviews.h"
 #include "../nodes/ReviewComment.h"
 
 #include "ModelBase/src/model/TreeManager.h"
@@ -66,13 +66,13 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 
 		if (!id.isNull())
 		{
-			auto commentedNode = CodeReviewManager::instance().commentedNode(id.toString(),
+			auto nodeReviews = CodeReviewManager::instance().nodeReviews(id.toString(),
 																	ancestorWithNodeItem->mapFromScene(source->scenePos()).toPoint());
-			commentedNode->beginModification();
-			commentedNode->reviewComments()->append(new ReviewComment{});
-			commentedNode->endModification();
+			nodeReviews->beginModification();
+			nodeReviews->reviewComments()->append(new ReviewComment{});
+			nodeReviews->endModification();
 
-			auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, commentedNode};
+			auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, nodeReviews};
 			ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
 			break;
 		}

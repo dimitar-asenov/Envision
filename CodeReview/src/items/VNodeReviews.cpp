@@ -24,39 +24,44 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "VNodeReviews.h"
 
-#include "../codereview_api.h"
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/VList.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/model/AllTreeManagers.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VCommentedNodeStyle.h"
-
-#include "../nodes/CommentedNode.h"
-
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/items/Item.h"
-
 
 namespace CodeReview
 {
 
-class CommentedNode;
+DEFINE_ITEM_COMMON(VNodeReviews, "item")
 
-class CODEREVIEW_API VCommentedNode : public Super<Visualization::ItemWithNode<VCommentedNode,
-		Visualization::DeclarativeItem<VCommentedNode>, CommentedNode>>
+VNodeReviews::VNodeReviews(Visualization::Item* parent, NodeType* node, const StyleType* style)
+	: Super{parent, node, style}
 {
-	ITEM_COMMON(VCommentedNode)
+}
 
-	public:
-		VCommentedNode(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		static void initializeForms();
-		virtual Visualization::Item::UpdateType needsUpdate() override;
+Visualization::Item::UpdateType VNodeReviews::needsUpdate()
+{
+	return Visualization::Item::StandardUpdate;
+}
 
-	private:
-		Visualization::VList* comments_{};
-};
+void VNodeReviews::initializeForms()
+{
+	auto comments = item<Visualization::VList>(&I::comments_, [](I* v) {
+			return v->node()->reviewComments();}, &StyleType::comments);
+	auto grid = (new Visualization::GridLayoutFormElement{})
+			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->put(0, 0, comments);
 
+	addForm(grid);
+}
 }

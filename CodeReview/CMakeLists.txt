@@ -15,11 +15,11 @@ add_library(CodeReview SHARED
 	src/overlays/CodeReviewCommentOverlayStyle.h
 	src/handlers/HReviewableItem.h
 	src/handlers/HCodeReviewOverlay.h
-	src/nodes/CommentedNode.h
-	src/nodes/CommentedNodeList.h
+	src/nodes/NodeReviews.h
+	src/nodes/NodeReviewsList.h
 	src/nodes/ReviewComment.h
-	src/items/VCommentedNode.h
-	src/items/VCommentedNodeStyle.h
+	src/items/VNodeReviews.h
+	src/items/VNodeReviewsStyle.h
 	src/items/VReviewComment.h
 	src/items/VReviewCommentStyle.h
 	src/orderings/Orderings.h
@@ -33,11 +33,11 @@ add_library(CodeReview SHARED
 	src/overlays/CodeReviewCommentOverlayStyle.cpp
 	src/handlers/HReviewableItem.cpp
 	src/handlers/HCodeReviewOverlay.cpp
-	src/nodes/CommentedNode.cpp
-	src/nodes/CommentedNodeList.cpp
+	src/nodes/NodeReviews.cpp
+	src/nodes/NodeReviewsList.cpp
 	src/nodes/ReviewComment.cpp
-	src/items/VCommentedNode.cpp
-	src/items/VCommentedNodeStyle.cpp
+	src/items/VNodeReviews.cpp
+	src/items/VNodeReviewsStyle.cpp
 	src/items/VReviewComment.cpp
 	src/items/VReviewCommentStyle.cpp
 	src/orderings/Orderings.cpp

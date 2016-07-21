@@ -23,31 +23,35 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "CommentedNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "../codereview_api.h"
+
+#include "ModelBase/src/nodes/nodeMacros.h"
 
 #include "ReviewComment.h"
 
-#include "ModelBase/src/nodes/TypedList.hpp"
-
-template class Model::TypedList<CodeReview::CommentedNode>;
-
 namespace CodeReview
 {
-DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(CommentedNode)
-DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(CommentedNode)
-
-DEFINE_ATTRIBUTE(CommentedNode, nodeId, Text, false, false, true)
-DEFINE_ATTRIBUTE(CommentedNode, reviewComments, TypedListOfReviewComment, false, false, true)
-DEFINE_ATTRIBUTE(CommentedNode, offsetX, Integer, false, false, true)
-DEFINE_ATTRIBUTE(CommentedNode, offsetY, Integer, false, false, true)
-
-CommentedNode::CommentedNode(QString associatedNodeId, QPoint offset) : Super{nullptr, CommentedNode::getMetaData()}
-{
-	setNodeId(new Model::Text{associatedNodeId});
-	offsetX()->set(offset.x());
-	offsetY()->set(offset.y());
+class NodeReviews;
 }
+
+extern template class CODEREVIEW_API Model::TypedList<CodeReview::NodeReviews>;
+
+namespace CodeReview {
+
+class CODEREVIEW_API NodeReviews : public Super<Model::CompositeNode>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(NodeReviews)
+
+	ATTRIBUTE(Model::Text, nodeId, setNodeId)
+	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
+	ATTRIBUTE(Model::Integer, offsetX, setOffsetX)
+	ATTRIBUTE(Model::Integer, offsetY, setOffsetY)
+
+	public:
+		NodeReviews(QString associatedNodeId, QPoint offset);
+
+};
 
 }

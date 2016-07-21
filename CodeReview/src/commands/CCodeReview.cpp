@@ -27,7 +27,7 @@
 #include "CCodeReview.h"
 
 #include "../CodeReviewManager.h"
-#include "../nodes/CommentedNode.h"
+#include "../nodes/NodeReviews.h"
 #include "../nodes/ReviewComment.h"
 #include "../orderings/Orderings.h"
 #include "../groupings/UseAnalysisGroupings.h"

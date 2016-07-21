@@ -42,12 +42,12 @@ namespace CodeReview
 DEFINE_ITEM_COMMON(CodeReviewCommentOverlay, "item")
 
 CodeReviewCommentOverlay::CodeReviewCommentOverlay(Visualization::Item* associatedItem,
-																	CommentedNode* commentedNode, const StyleType* style) :
-	Super{{associatedItem}, style}, commentedNode_{commentedNode}
+																	NodeReviews* nodeReviews, const StyleType* style) :
+	Super{{associatedItem}, style}, nodeReviews_{nodeReviews}
 {
 	setAcceptedMouseButtons(Qt::AllButtons);
 	setItemCategory(Visualization::Scene::MenuItemCategory);
-	offsetItemLocal_ = QPoint{commentedNode->offsetX()->get(), commentedNode->offsetY()->get()};
+	offsetItemLocal_ = QPoint{nodeReviews->offsetX()->get(), nodeReviews->offsetY()->get()};
 }
 
 void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableHeight)
@@ -75,7 +75,7 @@ void CodeReviewCommentOverlay::initializeForms()
 							->setNoBoundaryCursors([](Item*){return true;})
 							->setNoInnerCursors([](Item*){return true;})
 							->put(0, 0, headerElement)
-							->put(0, 1, item(&I::commentedNodeItem_, [](I* v) {return v->commentedNode_;}));
+							->put(0, 1, item(&I::nodeReviewsItem_, [](I* v) {return v->nodeReviews_;}));
 
 	addForm(grid);
 
@@ -84,10 +84,10 @@ void CodeReviewCommentOverlay::initializeForms()
 void CodeReviewCommentOverlay::updateOffsetItemLocal(QPointF scenePos)
 {
 	offsetItemLocal_ = CodeReviewCommentOverlay::associatedItem()->mapFromScene(scenePos);
-	commentedNode_->beginModification("edit node");
-	commentedNode_->offsetX()->set(offsetItemLocal_.x());
-	commentedNode_->offsetY()->set(offsetItemLocal_.y());
-	commentedNode_->endModification();
+	nodeReviews_->beginModification("edit node");
+	nodeReviews_->offsetX()->set(offsetItemLocal_.x());
+	nodeReviews_->offsetY()->set(offsetItemLocal_.y());;
+	nodeReviews_->endModification();
 }
 
 }

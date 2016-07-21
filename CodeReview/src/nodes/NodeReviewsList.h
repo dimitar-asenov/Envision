@@ -26,22 +26,22 @@
 
 #pragma once
 
-#include "CommentedNode.h"
+#include "NodeReviews.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
 namespace CodeReview {
-	class CommentedNodeList;
+	class NodeReviewsList;
 }
-extern template class CODEREVIEW_API Model::TypedList<CodeReview::CommentedNodeList>;
+extern template class CODEREVIEW_API Model::TypedList<CodeReview::NodeReviewsList>;
 
 namespace CodeReview {
 
-class CODEREVIEW_API CommentedNodeList : public Super<Model::TypedList<CommentedNode>>
+class CODEREVIEW_API NodeReviewsList : public Super<Model::TypedList<NodeReviews>>
 {
-	NODE_DECLARE_STANDARD_METHODS(CommentedNodeList)
+	NODE_DECLARE_STANDARD_METHODS(NodeReviewsList)
 
 	public:
-		CommentedNode* find(QString nodeId);
+		NodeReviews* find(QString nodeId);
 };
 
 }

@@ -37,7 +37,7 @@ const QString CodeReviewManager::CODE_REVIEW_COMMENTS_PREFIX = "CodeReviewCommen
 // TODO use versions to have a one code review manager for any combination of two versions
 CodeReviewManager::CodeReviewManager(QString, QString)
 {
-	commentedNodes_ = new CommentedNodeList{};
+	nodeReviews_ = new NodeReviewsList{};
 }
 
 CodeReviewManager& CodeReviewManager::instance()
@@ -47,16 +47,16 @@ CodeReviewManager& CodeReviewManager::instance()
 	return manager;
 }
 
-CommentedNode* CodeReviewManager::commentedNode(QString nodeId, QPoint offset)
+NodeReviews* CodeReviewManager::nodeReviews(QString nodeId, QPoint offset)
 {
-	auto commentedNode = commentedNodes_->find(nodeId);
-	if (commentedNode) return commentedNode;
+	auto nodeReviews = nodeReviews_->find(nodeId);
+	if (nodeReviews) return nodeReviews;
 
-	commentedNode = new CommentedNode{nodeId, offset};
-	commentedNodes_->beginModification();
-	commentedNodes_->append(commentedNode);
-	commentedNodes_->endModification();
-	return commentedNode;
+	nodeReviews = new NodeReviews{nodeId, offset};
+	nodeReviews_->beginModification();
+	nodeReviews_->append(nodeReviews);
+	nodeReviews_->endModification();
+	return nodeReviews;
 }
 
 QList<QList<VersionControlUI::DiffFrame*>> CodeReviewManager::orderDiffFrames(
@@ -76,12 +76,12 @@ QList<QList<VersionControlUI::DiffFrame*>> CodeReviewManager::orderDiffFrames(
 void CodeReviewManager::saveReview(QString newVersion)
 {
 	auto store = new FilePersistence::SimpleTextFileStore{"."};
-	auto manager = new Model::TreeManager{CODE_REVIEW_COMMENTS_PREFIX+newVersion, commentedNodes_};
+	auto manager = new Model::TreeManager{CODE_REVIEW_COMMENTS_PREFIX+newVersion, nodeReviews_};
 	manager->save(store);
 
 }
 
-CommentedNodeList* CodeReviewManager::loadReview(QString newVersion)
+NodeReviewsList* CodeReviewManager::loadReview(QString newVersion)
 {
 	// no comments to load
 	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
@@ -89,10 +89,10 @@ CommentedNodeList* CodeReviewManager::loadReview(QString newVersion)
 	auto store = new FilePersistence::SimpleTextFileStore{"."};
 	auto manager = new Model::TreeManager{};
 	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
-	commentedNodes_ = DCast<CommentedNodeList>(manager->root());
-	Q_ASSERT(commentedNodes_);
+	nodeReviews_ = DCast<NodeReviewsList>(manager->root());
+	Q_ASSERT(nodeReviews_);
 
-	return commentedNodes_;
+	return nodeReviews_;
 }
 
 }

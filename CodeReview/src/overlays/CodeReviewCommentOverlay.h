@@ -32,7 +32,7 @@
 #include "VisualizationBase/src/overlays/Overlay.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-#include "../nodes/CommentedNode.h"
+#include "../nodes/NodeReviews.h"
 
 #include "CodeReviewCommentOverlayStyle.h"
 
@@ -45,7 +45,7 @@ class CODEREVIEW_API CodeReviewCommentOverlay :
 	ITEM_COMMON(CodeReviewCommentOverlay)
 
 	public:
-		CodeReviewCommentOverlay(Visualization::Item* associatedItem, CommentedNode* commentedNode,
+		CodeReviewCommentOverlay(Visualization::Item* associatedItem, NodeReviews* nodeReviews,
 										 const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
@@ -56,8 +56,8 @@ class CODEREVIEW_API CodeReviewCommentOverlay :
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		CommentedNode* commentedNode_{};
-		Visualization::Item* commentedNodeItem_{};
+		NodeReviews* nodeReviews_{};
+		Visualization::Item* nodeReviewsItem_{};
 
 		Visualization::Static* title_{};
 		Visualization::Static* icon_{};

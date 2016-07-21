@@ -23,35 +23,40 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+
 #pragma once
 
 #include "../codereview_api.h"
 
-#include "ModelBase/src/nodes/nodeMacros.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VList.h"
 
-#include "ReviewComment.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VNodeReviewsStyle.h"
+
+#include "../nodes/NodeReviews.h"
+
+#include "VisualizationBase/src/items/Item.h"
+
 
 namespace CodeReview
 {
-class CommentedNode;
-}
 
-extern template class CODEREVIEW_API Model::TypedList<CodeReview::CommentedNode>;
+class NodeReviews;
 
-namespace CodeReview {
-
-class CODEREVIEW_API CommentedNode : public Super<Model::CompositeNode>
+class CODEREVIEW_API VNodeReviews : public Super<Visualization::ItemWithNode<VNodeReviews,
+		Visualization::DeclarativeItem<VNodeReviews>, NodeReviews>>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentedNode)
-
-	ATTRIBUTE(Model::Text, nodeId, setNodeId)
-	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
-	ATTRIBUTE(Model::Integer, offsetX, setOffsetX)
-	ATTRIBUTE(Model::Integer, offsetY, setOffsetY)
+	ITEM_COMMON(VNodeReviews)
 
 	public:
-		CommentedNode(QString associatedNodeId, QPoint offset);
+		VNodeReviews(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		static void initializeForms();
+		virtual Visualization::Item::UpdateType needsUpdate() override;
 
+	private:
+		Visualization::VList* comments_{};
 };
 
 }

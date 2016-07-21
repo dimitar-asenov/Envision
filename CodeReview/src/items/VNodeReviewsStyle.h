@@ -24,11 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentedNodeStyle.h"
+#pragma once
+
+#include "../codereview_api.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace CodeReview
 {
 
-VCommentedNodeStyle::~VCommentedNodeStyle(){}
+class CODEREVIEW_API VNodeReviewsStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+{
+	public:
+		virtual ~VNodeReviewsStyle() override;
+		Property<Visualization::VListStyle> comments{this, "comments"};
+
+};
 
 }
