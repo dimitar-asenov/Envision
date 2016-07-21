@@ -69,6 +69,7 @@ class FILEPERSISTENCE_API ChangeGraph
 
 		const QList<MergeChange*>& changes() const;
 		QList<MergeChange*> changesForNode(Model::NodeIdType nodeId) const;
+		QList<MergeChange*> changesForChildren(Model::NodeIdType nodeId) const;
 
 	private:
 		// The nodes of the graph
@@ -135,5 +136,7 @@ class FILEPERSISTENCE_API ChangeGraph
 inline const QList<MergeChange*>& ChangeGraph::changes() const { return changes_; }
 inline QList<MergeChange*> ChangeGraph::changesForNode(Model::NodeIdType nodeId) const
 { return changesForNode_.values(nodeId); }
+inline QList<MergeChange*> ChangeGraph::changesForChildren(Model::NodeIdType nodeId) const
+{ return changesForChildren_.values(nodeId); }
 
 }
