@@ -58,6 +58,7 @@ struct DiffSetup {
 	Model::TreeManager* oldVersionManager_{};
 	FilePersistence::GitRepository* repository_{};
 
+	QString managerName_;
 	QString oldVersion_;
 	QString newVersion_;
 };

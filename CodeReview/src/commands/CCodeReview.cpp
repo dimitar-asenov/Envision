@@ -116,7 +116,10 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 
 	if (commandTokens.value(1) == SAVE_COMMAND)
 	{
-		CodeReviewManager::instance().saveReview(source->scene()->currentViewItem()->name().split("_").value(2));
+		auto viewNameTokens = source->scene()->currentViewItem()->name().split("_");
+		auto name = viewNameTokens.value(1);
+		auto newRev = viewNameTokens.value(3);
+		CodeReviewManager::instance().saveReview(name, newRev);
 		return new Interaction::CommandResult{};
 	}
 	QString oldRev = commandTokens.value(1, "HEAD");
@@ -129,7 +132,8 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	VersionControlUI::DiffManager diffManager{managerName, {Model::SymbolMatcher{"Class"},
 																			  Model::SymbolMatcher{"Method"}}};
 
-	auto reviewViewName = REVIEW_VIEW_PREFIX + "_" + oldRev + "_" + newRev;
+	auto reviewViewName = REVIEW_VIEW_PREFIX + "_" + managerName +
+			"_" + oldRev + "_" + newRev;
 
 	auto reviewViewItem = Visualization::VisualizationManager::instance().mainScene()->
 			viewItems()->viewItem(reviewViewName);
@@ -158,7 +162,7 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 			reviewViewItem->insertNode(orderedDiffFrames[i][j], index);
 		}
 
-	CodeReviewManager::instance().loadReview(newRev, diffFramesAndSetup.diffSetup_, reviewViewItem);
+	CodeReviewManager::instance().loadReview(diffFramesAndSetup.diffSetup_, reviewViewItem);
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(reviewViewItem);

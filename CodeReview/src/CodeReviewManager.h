@@ -53,8 +53,8 @@ class CODEREVIEW_API CodeReviewManager
 				GroupingFunction groupingFunction, OrderingFunction orderingFunction,
 				QList<VersionControlUI::DiffFrame*> diffFrames);
 
-		void saveReview(QString newVersion);
-		NodeReviewsList* loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
+		void saveReview(QString managerName, QString newRev);
+		NodeReviewsList* loadReview(const VersionControlUI::DiffSetup& diffSetup,
 																		 Visualization::ViewItem* viewItem);
 
 		void registerNodeReviewsWithOverlay(Model::Node* nodeReviews, Visualization::Item* overlay);
@@ -66,6 +66,9 @@ class CODEREVIEW_API CodeReviewManager
 		NodeReviewsList* nodeReviews_;
 		CodeReviewManager(QString oldVersion, QString newVersion);
 		QHash<Model::Node*, Visualization::Item*> nodeReviewsToOverlay_;
+
+		static QString createNameForPersistence(QString managerName, QString newRev);
+		static QString createNameForPersistence(const VersionControlUI::DiffSetup& diffSetup);
 
 		static const QString CODE_REVIEW_COMMENTS_PREFIX;
 

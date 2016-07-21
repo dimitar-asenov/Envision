@@ -78,25 +78,36 @@ QList<QList<VersionControlUI::DiffFrame*>> CodeReviewManager::orderDiffFrames(
 	return result;
 }
 
-void CodeReviewManager::saveReview(QString newVersion)
+void CodeReviewManager::saveReview(QString managerName, QString newRev)
 {
 	auto store = new FilePersistence::SimpleTextFileStore{"."};
-	auto manager = new Model::TreeManager{CODE_REVIEW_COMMENTS_PREFIX+newVersion, nodeReviews_};
+	auto name = createNameForPersistence(managerName, newRev);
+	auto manager = new Model::TreeManager{name, nodeReviews_};
 	manager->save(store);
-
 }
 
-NodeReviewsList* CodeReviewManager::loadReview(QString newVersion, VersionControlUI::DiffSetup& diffSetup,
+QString CodeReviewManager::createNameForPersistence(QString managerName, QString newRev)
+{
+	return CODE_REVIEW_COMMENTS_PREFIX + managerName + "_" + newRev;
+}
+
+QString CodeReviewManager::createNameForPersistence(const VersionControlUI::DiffSetup& diffSetup)
+{
+	return createNameForPersistence(diffSetup.managerName_, diffSetup.newVersion_);
+}
+
+NodeReviewsList* CodeReviewManager::loadReview(const VersionControlUI::DiffSetup& diffSetup,
 																 Visualization::ViewItem* viewItem)
 {
 	CFocus::clearFocusInformation();
 
 	// no comments to load
-	if (!QDir{CODE_REVIEW_COMMENTS_PREFIX+newVersion}.exists()) return {};
+	if (!QDir{createNameForPersistence(diffSetup)}.exists()) return {};
 
 	auto store = new FilePersistence::SimpleTextFileStore{"."};
 	auto manager = new Model::TreeManager{};
-	manager->load(store, CODE_REVIEW_COMMENTS_PREFIX+newVersion, false);
+	auto name = createNameForPersistence(diffSetup);
+	manager->load(store, name, false);
 	nodeReviews_ = DCast<NodeReviewsList>(manager->root());
 	Q_ASSERT(nodeReviews_);
 

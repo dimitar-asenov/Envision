@@ -87,6 +87,8 @@ DiffSetup DiffManager::initializeDiffPrerequisites(QString oldVersion, QString n
 
 	DiffSetup diffSetup{};
 
+	diffSetup.managerName_ = project_;
+
 	diffSetup.oldVersion_ = oldVersion;
 	diffSetup.newVersion_ = newVersion;
 
