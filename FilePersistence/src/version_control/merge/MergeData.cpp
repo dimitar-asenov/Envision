@@ -30,7 +30,7 @@ namespace FilePersistence {
 
 void MergeData::applyNonConflictingChanges()
 {
-	Q_ASSERT(false);
+	cg_.applyNonConflictingChanges(treeMerged_.get());
 }
 
 }
