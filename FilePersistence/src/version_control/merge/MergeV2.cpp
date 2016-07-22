@@ -164,6 +164,8 @@ void MergeV2::performTrueMerge()
 	}
 	else
 	{
+		// The line below is just added for testing MergeTests
+		stage_ = Stage::WroteToIndex;
 		// TODO prepare for manual merge
 		// TODO write conflicts to file maybe.
 	}

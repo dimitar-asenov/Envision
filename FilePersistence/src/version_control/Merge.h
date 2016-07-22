@@ -33,6 +33,6 @@
 
 namespace FilePersistence {
 
-using Merge = MergeV1;
+using Merge = MergeV2;
 
 }
