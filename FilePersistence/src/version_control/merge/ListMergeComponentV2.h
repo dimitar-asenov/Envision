@@ -100,6 +100,14 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		 */
 		void removeHoles(QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg);
 
+		/**
+		 * For Debugging purpose, prints the list and unapplied changes
+		 * To be callled after removing holes, at the end of ListMerge Component
+		 */
+		void printFinalList(const QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg);
+
+		void printLabelMap(ChangeGraph::IdToLabelMap map);
+
 };
 
 }

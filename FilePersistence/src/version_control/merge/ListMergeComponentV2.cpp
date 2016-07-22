@@ -35,7 +35,8 @@ namespace FilePersistence {
 
 bool ListMergeComponentV2::isList(const QString& type)
 {
-	return type.startsWith("TypedListOf") || type.endsWith("List");
+	// TestListType is for MergeTests
+	return type.startsWith("TypedListOf") || type.endsWith("List") || type.startsWith("TestListType");
 }
 
 bool ListMergeComponentV2::isUnorderedList(const QString& type)
@@ -257,6 +258,39 @@ void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists, Gen
 		}
 
 		cg.relabelChildrenUniquely(listId, map, tree);
+	}
+}
+
+void ListMergeComponentV2::printFinalList(const QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg)
+{
+	qDebug() << "Lists";
+	for (auto listId : lists)
+	{
+		qDebug() << listId.toString();
+		for (int i = 0; i < tree->find(listId, true)->children().size(); i++)
+		{
+			auto node = tree->find(listId, true)->child(QString::number(i));
+			qDebug() << i << node->id().toString();
+		}
+		qDebug() << endl;
+	}
+	qDebug() << "Changes Conflcting";
+	for (auto change : cg.changes())
+	{
+		qDebug() << change->nodeId() << ":" << change->oldLabel() << "-->" << change->newLabel();
+	}
+}
+
+void ListMergeComponentV2::printLabelMap(ChangeGraph::IdToLabelMap map)
+{
+	for (auto id : map.uniqueKeys())
+	{
+		qDebug() << id.toString();
+		auto i = map.find(id);
+		while (i != map.end() && i.key() == id) {
+			qDebug() << i.value().label_;
+			++i;
+		}
 	}
 }
 
