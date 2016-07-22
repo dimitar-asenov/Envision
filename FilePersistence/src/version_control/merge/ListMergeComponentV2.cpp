@@ -65,9 +65,10 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 		mergeData.cg_.relabelChildrenUniquely(listId, map, mergeData.treeMerged_.get());
 		mergeData.cg_.applyNonConflictingChanges(mergeData.treeMerged_.get());
 
-		// removeHoles(mergeData);
 		// Report Conflicts
 	}
+	removeHoles(listsToMerge, mergeData.treeMerged_, mergeData.cg_);
+
 }
 
 QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& mergeData)
@@ -202,6 +203,57 @@ void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType>
 		}
 		else
 			list.append({id, baseIndex, offset++, branch});
+	}
+}
+
+void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists,
+													std::shared_ptr<GenericTree> tree, ChangeGraph& cg)
+{
+	for (auto listId : lists)
+	{
+		// Traverse through children labels
+		ChangeGraph::IdToLabelMap map;
+		int i = 0;
+		int label = 0;
+		int offset = 1;
+		auto listNode = tree->find(listId, true);
+		auto idList = nodeListToSortedIdList(listNode->children());
+		QHash< QString, QPair<int, int>> labelsToBeUpdated;
+		while (i < idList.size())
+		{
+			auto node = listNode->child(QString::number(label));
+			if (node)
+			{
+				map.insert(idList.at(i), {QString::number(i), MergeChange::Branch::None});
+				i++;
+				offset = 1;
+			}
+			else
+				labelsToBeUpdated.insert(QString::number(label), qMakePair(i-1, offset++));
+			label++;
+		}
+
+		auto listChanges = cg.changesForChildren(listId);
+		for (auto change : listChanges)
+		{
+			// No need to update if change is MoveOut/Deletion Or Stationary change(Not Label)
+			if (change->type() == ChangeType::Deletion ||
+				(change->type() == ChangeType::Move && change->oldParentId() == listId) ||
+				 (change->type() == ChangeType::Stationary && !change->updateFlags().testFlag(ChangeDescription::Label)))
+					continue;
+
+			// Insertion Or MoveIn or LabelChange
+			QPair<int, int> fractionalIndex;
+			if (labelsToBeUpdated.constFind(change->newLabel()) == labelsToBeUpdated.constEnd())
+				fractionalIndex = qMakePair(idList.size()-1, offset++);
+			else
+				fractionalIndex = labelsToBeUpdated.constFind(change->newLabel()).value();
+
+			auto newLabel = QString::number(fractionalIndex.first) + "." + QString::number(fractionalIndex.second);
+			map.insert(change->nodeId(), {newLabel, change->branches()});
+		}
+
+		cg.relabelChildrenUniquely(listId, map, tree.get());
 	}
 }
 

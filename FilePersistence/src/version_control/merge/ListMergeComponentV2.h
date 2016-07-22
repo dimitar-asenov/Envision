@@ -93,6 +93,12 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 		 */
 		void computeOffsetsInBranch(const QList<Model::NodeIdType> base, const QList<Model::NodeIdType> version,
 										QList<IdPosition>& list, std::shared_ptr<GenericTree> treeBase,  MergeChange::Branches branch);
+
+		/**
+		 * Removes Holes from the list and returns map of labels corresponding to each node in the list
+		 */
+		void removeHoles(QList<Model::NodeIdType> lists, std::shared_ptr<GenericTree> tree, ChangeGraph& cg);
+
 };
 
 }
