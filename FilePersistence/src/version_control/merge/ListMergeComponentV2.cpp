@@ -67,7 +67,7 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 
 		// Report Conflicts
 	}
-	removeHoles(listsToMerge, mergeData.treeMerged_, mergeData.cg_);
+	removeHoles(listsToMerge, mergeData.treeMerged_.get(), mergeData.cg_);
 
 }
 
@@ -206,8 +206,7 @@ void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType>
 	}
 }
 
-void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists,
-													std::shared_ptr<GenericTree> tree, ChangeGraph& cg)
+void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg)
 {
 	for (auto listId : lists)
 	{
@@ -232,6 +231,7 @@ void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists,
 				labelsToBeUpdated.insert(QString::number(label), qMakePair(i-1, offset++));
 			label++;
 		}
+		// Holes at the end of listy are not added in the lableToBeUpdated
 
 		auto listChanges = cg.changesForChildren(listId);
 		for (auto change : listChanges)
@@ -243,8 +243,11 @@ void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists,
 					continue;
 
 			// Insertion Or MoveIn or LabelChange
+
+			// If change corresponding to the label is not present, then hole must be at the end
 			QPair<int, int> fractionalIndex;
-			if (labelsToBeUpdated.constFind(change->newLabel()) == labelsToBeUpdated.constEnd())
+			auto fractionalIndexIt = labelsToBeUpdated.constFind(change->newLabel());
+			if (fractionalIndexIt == labelsToBeUpdated.constEnd())
 				fractionalIndex = qMakePair(idList.size()-1, offset++);
 			else
 				fractionalIndex = labelsToBeUpdated.constFind(change->newLabel()).value();
@@ -253,7 +256,7 @@ void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists,
 			map.insert(change->nodeId(), {newLabel, change->branches()});
 		}
 
-		cg.relabelChildrenUniquely(listId, map, tree.get());
+		cg.relabelChildrenUniquely(listId, map, tree);
 	}
 }
 
