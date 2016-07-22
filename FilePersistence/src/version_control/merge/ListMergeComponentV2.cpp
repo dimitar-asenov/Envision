@@ -250,7 +250,7 @@ void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists, Gen
 			if (fractionalIndexIt == labelsToBeUpdated.constEnd())
 				fractionalIndex = qMakePair(idList.size()-1, offset++);
 			else
-				fractionalIndex = labelsToBeUpdated.constFind(change->newLabel()).value();
+				fractionalIndex = fractionalIndexIt.value();
 
 			auto newLabel = QString::number(fractionalIndex.first) + "." + QString::number(fractionalIndex.second);
 			map.insert(change->nodeId(), {newLabel, change->branches()});
