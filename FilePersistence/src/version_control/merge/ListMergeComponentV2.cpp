@@ -26,6 +26,7 @@
 
 #include "ListMergeComponentV2.h"
 #include "MergeData.h"
+#include "SoftConflict.h"
 
 #include "../Diff3Parse.h"
 #include "../../simple/GenericNode.h"
@@ -110,9 +111,12 @@ QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& me
 	return listsToMerge;
 }
 
-ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId,
-																										  MergeData& mergeData)
+ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData)
 {
+	auto listNode = mergeData.treeMerged_->find(listId);
+	Q_ASSERT(listNode);
+	auto isOrderedList = ListMergeComponentV2::isOrderedList(listNode->type());
+
 	ChangeGraph::IdToLabelMap map;
 	auto chunks = listToChunks(listId, mergeData);
 	int finalIndexInList = 0;	// Final index of elements in the merged tree such that all labels are unique
@@ -144,12 +148,21 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 
 			std::sort(idPositions.begin(), idPositions.end());	// sort the list according to the labels
 
+			IdPosition previousPosition;
+			previousPosition.baseIndex = -2; // -1 is used for elements before 0, and we need an index that doesn't exist.
 			for (auto idPosition : idPositions)
 			{
 				map.insert(idPosition.id, {QString::number(finalIndexInList), idPosition.branch});
 				finalIndexInList++;
+
+				// Detect soft-conflicts
+				if (isOrderedList &&
+					 (idPosition.baseIndex == previousPosition.baseIndex && idPosition.offset == previousPosition.offset))
+					mergeData.softConflicts_.append(SoftConflict{"List items moved/inserted at the same position",
+															  {previousPosition.id, idPosition.id}});
+
+				previousPosition = idPosition;
 			}
-			// Report soft-conflict
 		}
 	}
 

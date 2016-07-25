@@ -26,25 +26,32 @@
 #pragma once
 
 #include "../../filepersistence_api.h"
-#include "ChangeGraph.h"
-#include "SoftConflict.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
-class GenericTree;
-
-struct FILEPERSISTENCE_API MergeData
+class FILEPERSISTENCE_API SoftConflict
 {
-	std::shared_ptr<GenericTree> treeBase_;
-	std::shared_ptr<GenericTree> treeA_;
-	std::shared_ptr<GenericTree> treeB_;
-	std::shared_ptr<GenericTree> treeMerged_;
+	public:
+		SoftConflict(QString conflictReason, QSet<Model::NodeIdType> nodesInConflict = {});
 
-	ChangeGraph cg_;
+		void add(Model::NodeIdType nodeId);
 
-	QList<SoftConflict> softConflicts_;
+		const QString& reason() const;
+		const QSet<Model::NodeIdType>& nodesInConflict() const;
 
-	void applyNonConflictingChanges();
+	private:
+		QString reason_;
+		QSet<Model::NodeIdType> nodesInConflict_;
 };
+
+inline SoftConflict::SoftConflict(QString reason, QSet<Model::NodeIdType> nodesInConflict)
+	: reason_{reason}, nodesInConflict_{nodesInConflict}{}
+
+inline void SoftConflict::add(Model::NodeIdType nodeId) { nodesInConflict_.insert(nodeId); }
+
+inline const QString& SoftConflict::reason() const { return reason_; }
+inline const QSet<Model::NodeIdType>& SoftConflict::nodesInConflict() const { return nodesInConflict_;}
 
 }

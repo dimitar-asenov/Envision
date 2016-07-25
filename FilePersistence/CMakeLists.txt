@@ -97,6 +97,8 @@ add_library(FilePersistence SHARED
 	src/version_control/merge/MergeData.cpp
 	src/version_control/merge/MergeData.h
 	src/version_control/Merge.h
+	src/version_control/merge/SoftConflict.h
+	src/version_control/merge/SoftConflict.cpp
 )
 add_dependencies(FilePersistence FilePersistence_UpdateResources)
 

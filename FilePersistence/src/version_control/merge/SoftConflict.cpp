@@ -23,28 +23,9 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#pragma once
 
-#include "../../filepersistence_api.h"
-#include "ChangeGraph.h"
 #include "SoftConflict.h"
 
 namespace FilePersistence {
-
-class GenericTree;
-
-struct FILEPERSISTENCE_API MergeData
-{
-	std::shared_ptr<GenericTree> treeBase_;
-	std::shared_ptr<GenericTree> treeA_;
-	std::shared_ptr<GenericTree> treeB_;
-	std::shared_ptr<GenericTree> treeMerged_;
-
-	ChangeGraph cg_;
-
-	QList<SoftConflict> softConflicts_;
-
-	void applyNonConflictingChanges();
-};
 
 }

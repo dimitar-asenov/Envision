@@ -301,6 +301,13 @@ class FILEPERSISTENCE_API BothChangeSameList_Conflicts
 	CHECK_STR_EQUAL("8", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"})->label());
 	CHECK_STR_EQUAL("9", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label());
 	CHECK_STR_EQUAL("10", tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label());
+
+	// Soft conflicts
+	CHECK_INT_EQUAL(1, merge->softConflicts().size());
+	CHECK_CONDITION(merge->softConflicts().first().nodesInConflict().contains(
+							 QUuid{"{00000000-0000-0000-0000-00000000020a}"}));
+	CHECK_CONDITION(merge->softConflicts().first().nodesInConflict().contains(
+							 QUuid{"{00000000-0000-0000-0000-00000000020b}"}));
 }};
 
 class FILEPERSISTENCE_API MoveChangeBySingleVersion

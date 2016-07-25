@@ -48,6 +48,8 @@ class FILEPERSISTENCE_API MergeV2
 
 		bool isAlreadyMerged() const;
 		bool hasConflicts() const;
+		const QList<SoftConflict>& softConflicts() const;
+
 		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
 

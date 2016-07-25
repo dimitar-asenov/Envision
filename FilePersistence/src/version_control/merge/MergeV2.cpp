@@ -62,6 +62,12 @@ std::shared_ptr<GenericTree> MergeV2::mergedTree()
 	return mergeData_.treeMerged_;
 }
 
+const QList<SoftConflict>& MergeV2::softConflicts() const
+{
+	Q_ASSERT(stage_ >= Stage::BuiltMergedTree);
+	return mergeData_.softConflicts_;
+}
+
 MergeV2::MergeV2(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
