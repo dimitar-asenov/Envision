@@ -116,22 +116,22 @@ class FILEPERSISTENCE_API ListsReorderInsertDeleteResolvable
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000212}"})
 						 ->parent()->id().toString().endsWith("200}"));
 	// Label checks are labels before Removing holes from the list
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000299}"})->label().toInt() == 0);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000207}"})->label().toInt() == 1);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000201}"})->label().toInt() == 2);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0001-000000000201}"})->label().toInt() == 3);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0002-000000000201}"})->label().toInt() == 4);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000212}"})->label().toInt() == 5);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"})->label().toInt() == 6);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000202}"})->label().toInt() == 7);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0001-000000000202}"})->label().toInt() == 8);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0002-000000000202}"})->label().toInt() == 9);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"})->label().toInt() == 12);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"})->label().toInt() == 13);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"})->label().toInt() == 14);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label().toInt() == 16);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000209}"})->label().toInt() == 17);
-	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-000000000210}"})->label().toInt() == 18);
+	CHECK_STR_EQUAL("0", tree->find(QUuid{"{00000000-0000-0000-0000-000000000299}"})->label());
+	CHECK_STR_EQUAL("1", tree->find(QUuid{"{00000000-0000-0000-0000-000000000207}"})->label());
+	CHECK_STR_EQUAL("2", tree->find(QUuid{"{00000000-0000-0000-0000-000000000201}"})->label());
+	CHECK_STR_EQUAL("3", tree->find(QUuid{"{00000000-0000-0000-0001-000000000201}"})->label());
+	CHECK_STR_EQUAL("4", tree->find(QUuid{"{00000000-0000-0000-0002-000000000201}"})->label());
+	CHECK_STR_EQUAL("5", tree->find(QUuid{"{00000000-0000-0000-0000-000000000212}"})->label());
+	CHECK_STR_EQUAL("6", tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"})->label());
+	CHECK_STR_EQUAL("7", tree->find(QUuid{"{00000000-0000-0000-0000-000000000202}"})->label());
+	CHECK_STR_EQUAL("8", tree->find(QUuid{"{00000000-0000-0000-0001-000000000202}"})->label());
+	CHECK_STR_EQUAL("9", tree->find(QUuid{"{00000000-0000-0000-0002-000000000202}"})->label());
+	CHECK_STR_EQUAL("10", tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"})->label());
+	CHECK_STR_EQUAL("11", tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"})->label());
+	CHECK_STR_EQUAL("12", tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"})->label());
+	CHECK_STR_EQUAL("13", tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label());
+	CHECK_STR_EQUAL("14", tree->find(QUuid{"{00000000-0000-0000-0000-000000000209}"})->label());
+	CHECK_STR_EQUAL("15", tree->find(QUuid{"{00000000-0000-0000-0000-000000000210}"})->label());
 
 }};
 
@@ -267,10 +267,10 @@ class FILEPERSISTENCE_API TwoChangesSameList_DelInsNodes
 	CHECK_CONDITION(!tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"}));
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020f}"}));
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020e}"}));
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label(), "1");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020f}"})->label(), "2");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020e}"})->label(), "3");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020d}"})->label(), "4");
+	CHECK_STR_EQUAL("1", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label());
+	CHECK_STR_EQUAL("2", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020f}"})->label());
+	CHECK_STR_EQUAL("3", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020e}"})->label());
+	CHECK_STR_EQUAL("4", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020d}"})->label());
 }};
 
 class FILEPERSISTENCE_API BothChangeSameList_Conflicts
@@ -291,16 +291,16 @@ class FILEPERSISTENCE_API BothChangeSameList_Conflicts
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"}));
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"}));
 	CHECK_CONDITION(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"}));
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000202}"})->label(), "1");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"})->label(), "2");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"})->label(), "3");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"})->label(), "4");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"})->label(), "5");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"})->label(), "6");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000207}"})->label(), "8");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"})->label(), "9");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label(), "10");
-	CHECK_STR_EQUAL(tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label(), "11");
+	CHECK_STR_EQUAL("1", tree->find(QUuid{"{00000000-0000-0000-0000-000000000202}"})->label());
+	CHECK_STR_EQUAL("2", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020c}"})->label());
+	CHECK_STR_EQUAL("3", tree->find(QUuid{"{00000000-0000-0000-0000-000000000203}"})->label());
+	CHECK_STR_EQUAL("4", tree->find(QUuid{"{00000000-0000-0000-0000-000000000204}"})->label());
+	CHECK_STR_EQUAL("5", tree->find(QUuid{"{00000000-0000-0000-0000-000000000205}"})->label());
+	CHECK_STR_EQUAL("6", tree->find(QUuid{"{00000000-0000-0000-0000-000000000206}"})->label());
+	CHECK_STR_EQUAL("7", tree->find(QUuid{"{00000000-0000-0000-0000-000000000207}"})->label());
+	CHECK_STR_EQUAL("8", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020b}"})->label());
+	CHECK_STR_EQUAL("9", tree->find(QUuid{"{00000000-0000-0000-0000-00000000020a}"})->label());
+	CHECK_STR_EQUAL("10", tree->find(QUuid{"{00000000-0000-0000-0000-000000000208}"})->label());
 }};
 
 class FILEPERSISTENCE_API MoveChangeBySingleVersion
