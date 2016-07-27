@@ -30,7 +30,13 @@
 
 #include "MergePipelineComponent.h"
 
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
+
+class MergeChange;
+class ChangeGraph;
+class GenericNode;
 
 class FILEPERSISTENCE_API ConflictUnitComponent : public MergePipelineComponent
 {
@@ -38,6 +44,14 @@ class FILEPERSISTENCE_API ConflictUnitComponent : public MergePipelineComponent
 		virtual void run(MergeData& mergeData) override;
 
 		static bool isConflictUnitType(const QString& type);
+
+	private:
+
+		// Maps conflict root ids, to node ids within the respective conflict unit that are in conflict.
+		using NodesInConflictUnit = QMultiHash<Model::NodeIdType, Model::NodeIdType>;
+
+		static QPair<NodesInConflictUnit, NodesInConflictUnit> computeAffectedCUs(MergeData& mergeData);
+		static Model::NodeIdType findConflictUnit(const GenericNode* node);
 };
 
 }

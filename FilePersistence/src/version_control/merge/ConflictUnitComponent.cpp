@@ -27,11 +27,31 @@
 #include "ConflictUnitComponent.h"
 
 #include "ListMergeComponentV2.h"
+#include "ChangeGraph.h"
+#include "MergeChange.h"
+#include "MergeData.h"
+#include "../../simple/GenericTree.h"
+#include "../../simple/GenericNode.h"
 
 namespace FilePersistence {
 
 bool ConflictUnitComponent::isConflictUnitType(const QString& type)
 {
+	static QStringList debugConflictUnitTypes{"TestConflictType",
+															"TestListType",
+															"TestUnorderedType",
+															"ListElement",
+															"project",
+															"package",
+															"class",
+															"fieldList",
+															"methodList",
+															"field",
+															"method",
+															"Method",
+															"loop",
+															"TypedListOfMethod"};
+
 	// TODO: The types below sould be configured by plug-ins, not hardcoded here.
 	static QStringList conflictUnitTypes{"Block",
 													 "BreakStatement",
@@ -58,10 +78,79 @@ bool ConflictUnitComponent::isConflictUnitType(const QString& type)
 													 "VariableDeclaration",
 													 "CommentStatementItem",
 													 "CatchClause"};
-	return conflictUnitTypes.contains(type) || ListMergeComponentV2::isList(type);
+	return conflictUnitTypes.contains(type) || ListMergeComponentV2::isList(type)
+			|| debugConflictUnitTypes.contains(type);
 }
 
-void ConflictUnitComponent::run(MergeData& /*mergeData*/)
-{}
+void ConflictUnitComponent::run(MergeData& mergeData)
+{
+	auto affectedConflictUnits = computeAffectedCUs(mergeData);
+
+	return;
+
+	// For all conflict units...
+	for (auto conflictRootId : affectedConflictUnits.first.keys())
+	{
+		// ...that are modified by both branches...
+		if (affectedConflictUnits.second.keys().contains(conflictRootId))
+		{
+			// ... get all ids of nodes that have changed ...
+			auto conflictingIds = affectedConflictUnits.first.values(conflictRootId);
+			conflictingIds << affectedConflictUnits.second.values(conflictRootId);
+
+			// ... and add a soft conflict
+			mergeData.softConflicts_.append(SoftConflict{"Different branches made changes to the same conflict unit",
+													  conflictingIds.toSet()});
+		}
+	}
+}
+
+QPair<ConflictUnitComponent::NodesInConflictUnit, ConflictUnitComponent::NodesInConflictUnit>
+ConflictUnitComponent::computeAffectedCUs(MergeData& mergeData)
+{
+	NodesInConflictUnit affectedConflictUnitsInBranchA;
+	NodesInConflictUnit affectedConflictUnitsInBranchB;
+
+	auto processChange = [](MergeChange* change, NodesInConflictUnit& affectedConflictUnits,
+			GenericTree* baseTree, GenericTree* branchTree)
+	{
+		Q_ASSERT(change->type() != ChangeType::Unclassified);
+		if (change->type() != ChangeType::Insertion)
+			affectedConflictUnits.insert(findConflictUnit(baseTree->find(change->nodeId())), change->nodeId());
+		if (change->type() != ChangeType::Deletion)
+			affectedConflictUnits.insert(findConflictUnit(branchTree->find(change->nodeId())), change->nodeId());
+
+		// TODO optionally consider structural changes here.
+		// Keep in mind that structural changes are not the in the CG, so we would need here to manually "infer" them.
+	};
+
+	for (auto change : mergeData.cg_.changes())
+	{
+		Q_ASSERT(change->branches() != MergeChange::None);
+		if (change->branches().testFlag(MergeChange::BranchA))
+			processChange(change, affectedConflictUnitsInBranchA, mergeData.treeBase_.get(), mergeData.treeA_.get());
+		if (change->branches().testFlag(MergeChange::BranchB))
+			processChange(change, affectedConflictUnitsInBranchB, mergeData.treeBase_.get(), mergeData.treeB_.get());
+	}
+
+	return qMakePair(affectedConflictUnitsInBranchA, affectedConflictUnitsInBranchB);
+}
+
+Model::NodeIdType ConflictUnitComponent::findConflictUnit(const GenericNode* node)
+{
+	Q_ASSERT(node);
+	if (node->parentId().isNull())
+	{
+		// branch created new root.
+		return Model::NodeIdType{};
+	}
+
+	while (!isConflictUnitType(node->type()) && !node->parentId().isNull())
+	{
+		Q_ASSERT(!node->parentId().isNull());
+		node = node->parent();
+	}
+	return node->id();
+}
 
 }
