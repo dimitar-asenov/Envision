@@ -49,6 +49,7 @@ class CODEREVIEW_API NodeReviews : public Super<Model::CompositeNode>
 
 	ATTRIBUTE_VALUE(Model::Text, nodeId, setNodeId, QString)
 	ATTRIBUTE_VALUE(Model::Text, revisionName, setRevisionName, QString)
+	ATTRIBUTE_VALUE(Model::Text, focusInformation, setFocusInformation, QString)
 	ATTRIBUTE(Model::TypedList<CodeReview::ReviewComment>, reviewComments, setReviewComments)
 	ATTRIBUTE_VALUE(Model::Integer, offsetX, setOffsetX, int)
 	ATTRIBUTE_VALUE(Model::Integer, offsetY, setOffsetY, int)

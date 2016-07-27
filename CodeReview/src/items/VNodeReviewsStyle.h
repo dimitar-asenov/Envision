@@ -30,6 +30,8 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/Static.h"
 
 namespace CodeReview
 {
@@ -39,6 +41,10 @@ class CODEREVIEW_API VNodeReviewsStyle : public Super<Visualization::Declarative
 	public:
 		virtual ~VNodeReviewsStyle() override;
 		Property<Visualization::VListStyle> comments{this, "comments"};
+		Property<Visualization::TextStyle> commentInput{this, "commentInput"};
+		Property<Visualization::TextStyle> focusInformation{this, "focusInformation"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::StaticStyle> title{this, "title"};
 
 };
 

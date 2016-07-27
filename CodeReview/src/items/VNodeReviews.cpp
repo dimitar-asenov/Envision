@@ -54,13 +54,37 @@ Visualization::Item::UpdateType VNodeReviews::needsUpdate()
 
 void VNodeReviews::initializeForms()
 {
+	auto focusInformation = item<Visualization::VText>(&I::focusInformation_, [](I* v) {
+			return v->node()->focusInformationNode();}, &StyleType::focusInformation);
+
+	auto headerElement = (new Visualization::GridLayoutFormElement{})
+				->setMargins(5, 5, 5, 5)
+				->setHorizontalSpacing(10)
+				->setColumnStretchFactor(0, 1)
+				->setColumnStretchFactor(1, 1)
+				->setColumnHorizontalAlignment(1, Visualization::LayoutStyle::Alignment::Right)
+				->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
+				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+				->put(0, 0, item<Visualization::Static>(&I::icon_, &StyleType::icon))
+				->put(1, 0, focusInformation);
+
 	auto comments = item<Visualization::VList>(&I::comments_, [](I* v) {
 			return v->node()->reviewComments();}, &StyleType::comments);
-	auto grid = (new Visualization::GridLayoutFormElement{})
+
+	auto innerGrid = (new Visualization::GridLayoutFormElement{})
 			->setHorizontalAlignment(Visualization::LayoutStyle::Alignment::Center)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
 			->put(0, 0, comments);
+
+	auto grid = (new Visualization::GridLayoutFormElement{})
+							->setColumnStretchFactor(0, 1)
+							->setMargins(5, 5, 5, 5)
+							->setVerticalAlignment(Visualization::LayoutStyle::Alignment::Center)
+							->setNoBoundaryCursors([](Item*){return true;})
+							->setNoInnerCursors([](Item*){return true;})
+							->put(0, 0, headerElement)
+							->put(0, 1, innerGrid);
 
 	addForm(grid);
 }

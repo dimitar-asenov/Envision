@@ -28,17 +28,15 @@
 
 #include "../codereview_api.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/VList.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VNodeReviewsStyle.h"
-
 #include "../nodes/NodeReviews.h"
 
 #include "VisualizationBase/src/items/Item.h"
-
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace CodeReview
 {
@@ -57,6 +55,9 @@ class CODEREVIEW_API VNodeReviews : public Super<Visualization::ItemWithNode<VNo
 
 	private:
 		Visualization::VList* comments_{};
+		Visualization::Static* title_{};
+		Visualization::Static* icon_{};
+		Visualization::VText* focusInformation_{};
 };
 
 }
