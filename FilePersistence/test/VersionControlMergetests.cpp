@@ -152,7 +152,8 @@ class FILEPERSISTENCE_API EvalLoopFix
 {
 	VCTestProject p{"Eval_LoopFix", "TestMerge"};
 	auto merge = p.repo().merge("dev");
-	CHECK_CONDITION(merge->hasConflicts());
+//	CHECK_CONDITION(merge->hasConflicts()); // This was used for the old merge algorithm
+	CHECK_INT_EQUAL(1, merge->softConflicts().size());
 }};
 
 class FILEPERSISTENCE_API EvalMethodInsert
@@ -304,9 +305,9 @@ class FILEPERSISTENCE_API BothChangeSameList_Conflicts
 
 	// Soft conflicts
 	CHECK_INT_EQUAL(1, merge->softConflicts().size());
-	CHECK_CONDITION(merge->softConflicts().first().nodesInConflict().contains(
+	CHECK_CONDITION(merge->softConflicts().last().nodesInConflict().contains(
 							 QUuid{"{00000000-0000-0000-0000-00000000020a}"}));
-	CHECK_CONDITION(merge->softConflicts().first().nodesInConflict().contains(
+	CHECK_CONDITION(merge->softConflicts().last().nodesInConflict().contains(
 							 QUuid{"{00000000-0000-0000-0000-00000000020b}"}));
 }};
 

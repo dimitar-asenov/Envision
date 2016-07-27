@@ -52,6 +52,8 @@ class FILEPERSISTENCE_API ConflictUnitComponent : public MergePipelineComponent
 
 		static QPair<NodesInConflictUnit, NodesInConflictUnit> computeAffectedCUs(MergeData& mergeData);
 		static Model::NodeIdType findConflictUnit(const GenericNode* node);
+
+		static bool ADD_STRUCTURAL_CHANGES;
 };
 
 }

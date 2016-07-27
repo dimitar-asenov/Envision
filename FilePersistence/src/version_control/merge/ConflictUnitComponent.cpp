@@ -35,6 +35,8 @@
 
 namespace FilePersistence {
 
+bool ConflictUnitComponent::ADD_STRUCTURAL_CHANGES = true;
+
 bool ConflictUnitComponent::isConflictUnitType(const QString& type)
 {
 	static QStringList debugConflictUnitTypes{"TestConflictType",
@@ -86,8 +88,6 @@ void ConflictUnitComponent::run(MergeData& mergeData)
 {
 	auto affectedConflictUnits = computeAffectedCUs(mergeData);
 
-	return;
-
 	// For all conflict units...
 	for (auto conflictRootId : affectedConflictUnits.first.keys())
 	{
@@ -95,12 +95,13 @@ void ConflictUnitComponent::run(MergeData& mergeData)
 		if (affectedConflictUnits.second.keys().contains(conflictRootId))
 		{
 			// ... get all ids of nodes that have changed ...
-			auto conflictingIds = affectedConflictUnits.first.values(conflictRootId);
-			conflictingIds << affectedConflictUnits.second.values(conflictRootId);
+			auto conflictingIdsA = affectedConflictUnits.first.values(conflictRootId).toSet();
+			auto conflictingIdsB = affectedConflictUnits.second.values(conflictRootId).toSet();
 
-			// ... and add a soft conflict
-			mergeData.softConflicts_.append(SoftConflict{"Different branches made changes to the same conflict unit",
-													  conflictingIds.toSet()});
+			// ... and add a soft conflict, but only if not all of the nodes are already in a hard conflict
+			if (conflictingIdsA != conflictingIdsB)
+				mergeData.softConflicts_.append(SoftConflict{"Different branches made changes to the same conflict unit",
+														  conflictingIdsA + conflictingIdsB});
 		}
 	}
 }
@@ -111,17 +112,32 @@ ConflictUnitComponent::computeAffectedCUs(MergeData& mergeData)
 	NodesInConflictUnit affectedConflictUnitsInBranchA;
 	NodesInConflictUnit affectedConflictUnitsInBranchB;
 
-	auto processChange = [](MergeChange* change, NodesInConflictUnit& affectedConflictUnits,
+	auto processSingleVersion = [](Model::NodeIdType nodeId, Model::NodeIdType parentId,
+			NodesInConflictUnit& affectedConflictUnits, GenericTree* tree)
+	{
+		auto conflictRoot = findConflictUnit(tree->find(nodeId));
+		affectedConflictUnits.insert(conflictRoot, nodeId);
+
+		if (ADD_STRUCTURAL_CHANGES)
+			// Add structural changes ...
+			if (conflictRoot == nodeId)
+			{
+				// ... only if we're at a conflict unit boundary, otherwise we're already confliciting with conflicts of
+				// our parent.
+				auto parentConflictRoot = findConflictUnit(tree->find(parentId, true));
+				affectedConflictUnits.insert(parentConflictRoot, parentId);
+			}
+	};
+
+	auto processChange = [processSingleVersion](MergeChange* change, NodesInConflictUnit& affectedConflictUnits,
 			GenericTree* baseTree, GenericTree* branchTree)
 	{
 		Q_ASSERT(change->type() != ChangeType::Unclassified);
 		if (change->type() != ChangeType::Insertion)
-			affectedConflictUnits.insert(findConflictUnit(baseTree->find(change->nodeId())), change->nodeId());
-		if (change->type() != ChangeType::Deletion)
-			affectedConflictUnits.insert(findConflictUnit(branchTree->find(change->nodeId())), change->nodeId());
+			processSingleVersion(change->nodeId(), change->oldParentId(), affectedConflictUnits, baseTree);
 
-		// TODO optionally consider structural changes here.
-		// Keep in mind that structural changes are not the in the CG, so we would need here to manually "infer" them.
+		if (change->type() != ChangeType::Deletion)
+			processSingleVersion(change->nodeId(), change->newParentId(), affectedConflictUnits, branchTree);
 	};
 
 	for (auto change : mergeData.cg_.changes())
