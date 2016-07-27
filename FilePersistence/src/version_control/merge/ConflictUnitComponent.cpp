@@ -89,10 +89,10 @@ void ConflictUnitComponent::run(MergeData& mergeData)
 	auto affectedConflictUnits = computeAffectedCUs(mergeData);
 
 	// For all conflict units...
-	for (auto conflictRootId : affectedConflictUnits.first.keys())
+	for (auto conflictRootId : affectedConflictUnits.first.uniqueKeys())
 	{
 		// ...that are modified by both branches...
-		if (affectedConflictUnits.second.keys().contains(conflictRootId))
+		if (affectedConflictUnits.second.contains(conflictRootId))
 		{
 			// ... get all ids of nodes that have changed ...
 			auto conflictingIdsA = affectedConflictUnits.first.values(conflictRootId).toSet();

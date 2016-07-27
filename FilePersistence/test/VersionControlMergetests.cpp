@@ -77,17 +77,17 @@ class FILEPERSISTENCE_API UnorderedAndUnitsConflicting
 {
 	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
 	auto merge = p.repo().merge("dev");
-	CHECK_CONDITION(merge->hasConflicts());
+//	CHECK_CONDITION(merge->hasConflicts());  // This was used for the old merge algorithm
+	CHECK_INT_EQUAL(1, merge->softConflicts().size());
+
 	QSet<Model::NodeIdType> expected {
 		{"{00000000-0000-0000-0000-000000000047}"},
 		{"{00000000-0000-0000-0000-000000000048}"},
 		{"{00000000-0000-0000-0000-000000000031}"},
-		{"{00000000-0000-0000-0000-000000000030}"},
 		{"{00000000-0000-0000-0000-000000000051}"},
 		{"{00000000-0000-0000-0000-000000000052}"}
 	};
-	for (auto mustConflict : expected)
-		CHECK_CONDITION(merge->isNodeInConflict(mustConflict));
+	CHECK_CONDITION(merge->softConflicts().first().nodesInConflict() == expected);
 }};
 
 class FILEPERSISTENCE_API ListsReorderInsertDeleteResolvable
