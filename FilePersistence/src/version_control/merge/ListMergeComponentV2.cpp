@@ -66,8 +66,6 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 		auto map = computeAdjustedIndices(listId, mergeData);
 		mergeData.cg_.relabelChildrenUniquely(listId, map, mergeData.treeMerged_.get());
 		mergeData.cg_.applyNonConflictingChanges(mergeData.treeMerged_.get());
-
-		// Report Conflicts
 	}
 	removeHoles(listsToMerge, mergeData.treeMerged_.get(), mergeData.cg_);
 
