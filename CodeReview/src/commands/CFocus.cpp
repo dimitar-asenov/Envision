@@ -60,16 +60,16 @@ bool CFocus::canInterpret(Visualization::Item*, Visualization::Item*,
 	return false;
 }
 
-Interaction::CommandResult* CFocus::execute(Visualization::Item*, Visualization::Item*,
+Interaction::CommandResult* CFocus::execute(Visualization::Item* source, Visualization::Item*,
 				const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	focusStep({}, {}, {});
+	focusStep(source, {}, {});
 	return new Interaction::CommandResult{};
 }
 
-bool CFocus::focusStep(Visualization::Item *, QKeySequence, Interaction::ActionRegistry::InputState)
+bool CFocus::focusStep(Visualization::Item* target, QKeySequence, Interaction::ActionRegistry::InputState)
 {
-	Visualization::VisualizationManager::instance().mainScene()->removeOverlayGroup("focusOverlay");
+	target->scene()->removeOverlayGroup("focusOverlay");
 
 	auto focusInformations = focusList_.values(currentStep_);
 
