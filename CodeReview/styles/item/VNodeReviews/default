@@ -16,7 +16,6 @@
 		</shape>
 		<useBackgroundColors>false</useBackgroundColors>
 	</comments>
-	<commentInput prototypes="item/Text/default" />
 	<focusInformation prototypes="item/Text/codeReviewHeaderText" />
 	<title prototypes="item/Symbol/keyword">
 		<symbol>Review Comment</symbol>
