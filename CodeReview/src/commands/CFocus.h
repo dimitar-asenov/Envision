@@ -47,9 +47,11 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 
 			using FocusTypes = QFlags<FocusType>;
 
-			int step_{};
+			int step_{-1};
 			FocusTypes type_{};
 			Model::Node* node_{};
+
+			bool isValid() { return (step_ != -1 && !type_.testFlag(None)); }
 		};
 
 		CFocus();

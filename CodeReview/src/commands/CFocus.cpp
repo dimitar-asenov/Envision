@@ -148,7 +148,7 @@ void CFocus::loadFocusInformation()
 	{
 		auto focusInformation = extractFocusInformation(nodeReviews->focusInformation());
 
-		if (!focusInformation.type_.testFlag(FocusInformation::None))
+		if (focusInformation.isValid())
 		{
 			focusInformation.node_ = nodeReviews;
 			focusList_.insertMulti(focusInformation.step_, focusInformation);
