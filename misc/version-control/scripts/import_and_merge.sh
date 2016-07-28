@@ -6,15 +6,15 @@
 # If run manually, this script is intended for the files in Envision/FilePersistence/test/persisted/version-control/manual/
 # The script is also used in the diff_envision_dev.sh script.
 
-jitPath=/fast/Envision/JavaImportTool/bin/
-jit="java -cp "${jitPath}:/opt/eclipse/plugins/*:../lib/*" javaImportTool.Main"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ENVISION_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 
-gumtreePath=~/gumtree/gumtree-all/target
-gumtree="java -cp ${gumtreePath}/gumtree.jar com.github.gumtreediff.client.Run -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -g envision -m gumtree"
+JavaImportTool="$SCRIPT_DIR/../JavaImportToolBin/JavaImportTool/bin/JavaImportTool"
 
-idpatcher=/fast/Envision/misc/version-control/scripts/patch_ids.py
-repoScript=/fast/Envision/FilePersistence/test/persisted/version-control/create-test-git-repo.py
-envision=/fast/Envision/DebugBuild/Envision
+gumtree="$SCRIPT_DIR/../gumtree_bin/gumtree-2.1.0-SNAPSHOT/bin/gumtree -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -g envision -m gumtree"
+
+idpatcher=$SCRIPT_DIR/patch_ids.py
+repoScript=$ENVISION_ROOT/FilePersistence/test/persisted/version-control/create-test-git-repo.py
 
 testdir="/tmp/EnvisionVC"
 base="${testdir}/base"
@@ -47,9 +47,9 @@ cp $3 "${gitRepoSrc}/dev_a_master_a_(dev)_TestMerge"
 
 cd $testdir
 
-$jit TestMerge base base
-$jit TestMerge master master
-$jit TestMerge dev dev
+$JavaImportTool TestMerge base base
+$JavaImportTool TestMerge master master
+$JavaImportTool TestMerge dev dev
 
 # Generate patch files
 $gumtree base/TestMerge/TestMerge master/TestMerge/TestMerge
@@ -78,7 +78,7 @@ git merge dev -m "merge dev"
 # Run test
 # syntax for tests: pluginName:testName1[>arg1,arg2,...][:testName2[>arg1,arg2,...]:...]
 (
-cd ~/Envision/DebugBuild
+cd $ENVISION_ROOT/DebugBuild
 #
 ./Envision -graphicssystem raster --test filepersistence:RunMerge
 )

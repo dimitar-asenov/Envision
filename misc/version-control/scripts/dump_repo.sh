@@ -5,6 +5,8 @@
 # The dumped files represent non-trivial single-file merge situations.
 # The so produced dumps can then be used by the diff_envision_dev.sh and diff_git_dev.sh scripts to evaluate and compare the different merge algorithms.
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 mkdir "/tmp/${2}"
 cd "/tmp/${2}"
 
@@ -14,4 +16,4 @@ fi
 rm -rf merges
 cd repo
 
-git rev-list --merges HEAD | xargs -L 1 ~/Envision/misc/version-control/scripts/dump_merge.sh
+git rev-list --merges HEAD | xargs -L 1 "$SCRIPT_DIR"/dump_merge.sh
