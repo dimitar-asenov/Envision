@@ -58,6 +58,8 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
 #include <QtCore/QRegularExpression>
+#include <chrono>
+#include <thread>
 #endif
 
 #endif /* PRECOMPILED_FILEPERSISTENCE_H_ */

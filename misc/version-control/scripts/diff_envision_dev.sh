@@ -6,6 +6,7 @@
 # The JavaImportTool, Gumtree and patch_ids.py are used to import and match the developer-merged version to the envision-merged version.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ENVISION_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 
 JavaImportTool="$SCRIPT_DIR/../JavaImportToolBin/JavaImportTool/bin/JavaImportTool"
 
@@ -13,7 +14,18 @@ gumtree="$SCRIPT_DIR/../gumtree_bin/gumtree-2.1.0-SNAPSHOT/bin/gumtree -c Client
 
 idpatcher=$SCRIPT_DIR/patch_ids.py
 
-rm "${1}/merges/issues_env"
+scriptReadyFile="/tmp/EnvisionVC/scriptReady"
+rm -rf $scriptReadyFile
+
+rm -rf "${1}/merges/issues_env"
+
+# Launch Envision in merge test mode
+# syntax for tests: pluginName:testName1[>arg1,arg2,...][:testName2[>arg1,arg2,...]:...]
+(
+cd $ENVISION_ROOT/DebugBuild
+#
+./Envision -graphicssystem raster --test filepersistence:RunMerge &
+)
 
 merges="${1}/merges/*"
 for m in $merges; do
@@ -23,7 +35,7 @@ for m in $merges; do
 		if [ -d "${fdir}" ]; then
 			(
 				cd $fdir
-				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ]; then
+				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ] && [ -f devMerged.java ]; then
 					
 					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java
 					mkdir devMerged

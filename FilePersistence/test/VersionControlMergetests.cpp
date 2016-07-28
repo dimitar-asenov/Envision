@@ -36,6 +36,7 @@
 #include "SelfTest/src/TestAssertions.h"
 #include "SelfTest/src/TestBase.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
+#include "ModelBase/src/model/AllTreeManagers.h"
 
 namespace FilePersistence {
 
@@ -511,22 +512,40 @@ class FILEPERSISTENCE_API MoveInAndListChangesResolvable
 class FILEPERSISTENCE_API RunMerge
  : public SelfTest::Test<FilePersistencePlugin, RunMerge> { public: void test()
 {
-	if (!QFile{"/tmp/EnvisionVC/TestMerge/.git"}.exists())
+	if (!qApp->arguments().contains("filepersistence:RunMerge"))
 	{
 		CHECK_CONDITION(true);
 		return;
 	}
-	GitRepository repo{"/tmp/EnvisionVC/TestMerge"};
-	auto merge = repo.merge("dev");
-	if (!merge->isAlreadyMerged() && !merge->hasConflicts())
+
+	QString envisionReadyFile{"/tmp/EnvisionVC/envisionReadyFile"};
+	QString scriptReadyFile{"/tmp/EnvisionVC/scriptReady"};
+
+	while (true)
 	{
-		Signature sig;
-		sig.name_ = "Chuck TESTa";
-		sig.eMail_ = "chuck@mergetest.com";
-		merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
+		while (!QFile{scriptReadyFile}.exists())
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		auto removed = QFile{scriptReadyFile}.remove();
+		Q_ASSERT(removed);
+
+		Q_ASSERT( QFile{"/tmp/EnvisionVC/TestMerge/.git"}.exists() );
+		GitRepository repo{"/tmp/EnvisionVC/TestMerge"};
+
+		auto merge = repo.merge("dev");
+		if (!merge->isAlreadyMerged() && !merge->hasConflicts())
+		{
+			Signature sig;
+			sig.name_ = "Chuck TESTa";
+			sig.eMail_ = "chuck@mergetest.com";
+
+			merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
+		}
+		CHECK_CONDITION(true);
+		Model::AllTreeManagers::cleanup();
+
+		auto opened = QFile{envisionReadyFile}.open(QIODevice::WriteOnly);
+		Q_ASSERT(opened);
 	}
-	CHECK_CONDITION(true);
-	exit(0);
 }};
 
 }

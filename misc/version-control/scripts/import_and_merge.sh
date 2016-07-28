@@ -17,6 +17,8 @@ idpatcher=$SCRIPT_DIR/patch_ids.py
 repoScript=$ENVISION_ROOT/FilePersistence/test/persisted/version-control/create-test-git-repo.py
 
 testdir="/tmp/EnvisionVC"
+scriptReadyFile="/tmp/EnvisionVC/scriptReady"
+envisionReadyFile="/tmp/EnvisionVC/envisionReadyFile"
 base="${testdir}/base"
 master="${testdir}/master"
 dev="${testdir}/dev"
@@ -75,13 +77,12 @@ cd $gitRepo
 git merge dev -m "merge dev"
 )
 
-# Run test
-# syntax for tests: pluginName:testName1[>arg1,arg2,...][:testName2[>arg1,arg2,...]:...]
-(
-cd $ENVISION_ROOT/DebugBuild
-#
-./Envision -graphicssystem raster --test filepersistence:RunMerge
-)
+rm -rf $envisionReadyFile
+touch $scriptReadyFile
+while [ ! -f $envisionReadyFile ] ;
+do
+      sleep 0.1
+done
 
 # Export to Java code
 
