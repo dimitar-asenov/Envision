@@ -16,6 +16,7 @@ idpatcher=$SCRIPT_DIR/patch_ids.py
 
 scriptReadyFile="/tmp/EnvisionVC/scriptReady"
 rm -rf $scriptReadyFile
+rm -rf "/tmp/EnvisionVC"
 
 rm -rf "${1}/merges/issues_env"
 
@@ -36,6 +37,8 @@ for m in $merges; do
 			(
 				cd $fdir
 				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ] && [ -f devMerged.java ]; then
+				
+					echo "====== Processing $m ======"
 					
 					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java
 					mkdir devMerged
