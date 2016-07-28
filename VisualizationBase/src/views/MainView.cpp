@@ -65,7 +65,7 @@ void MainView::setMiniMapSize(int width, int height)
 	}
 }
 
-void MainView::centerAndZoomView()
+void MainView::centerAndZoomViewToFitEntireScene()
 {
 	auto mainScene = VisualizationManager::instance().mainScene();
 	// Center view and zoom so that the entire project is within the window

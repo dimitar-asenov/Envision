@@ -49,7 +49,7 @@ class VISUALIZATIONBASE_API MainView: public View
 		static const int MINIMAP_DEFAULT_HEIGHT = 200;
 		static const int PNG_SCREENSHOT_SCALE = 8;
 
-		static void centerAndZoomView();
+		static void centerAndZoomViewToFitEntireScene();
 
 		qreal scaleFactor() const;
 

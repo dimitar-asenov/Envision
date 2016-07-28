@@ -55,7 +55,7 @@ CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualizati
 
 		if (attributes.contains("quick")) mainScene->setApproximateUpdate(true);
 
-		Visualization::MainView::centerAndZoomView();
+		Visualization::MainView::centerAndZoomViewToFitEntireScene();
 
 	}
 

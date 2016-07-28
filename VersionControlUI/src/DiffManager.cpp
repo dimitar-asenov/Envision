@@ -402,7 +402,7 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
 
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  []() { Visualization::MainView::centerAndZoomView();});
+								  []() { Visualization::MainView::centerAndZoomViewToFitEntireScene();});
 }
 
 void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes, Visualization::ViewItem* viewItem,
@@ -558,7 +558,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(historyViewItem);
 
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-								  []() { Visualization::MainView::centerAndZoomView();});
+								  []() { Visualization::MainView::centerAndZoomViewToFitEntireScene();});
 }
 
 // TODO maybe better implementation for this
