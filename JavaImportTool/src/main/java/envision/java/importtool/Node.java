@@ -65,6 +65,9 @@ public class Node {
 	 * If true, sort children by label when writing encoding.
 	 */
 	private final boolean SORT_BY_LABEL = true;
+	
+	public static boolean FORCE_SINGLE_PERSISTENT_UNIT = false;
+	
 	/**
 	 * This comparator is used to sort children lists by label.
 	 * This is to ensure consistency between all methods used to produce Envision encodings.
@@ -106,7 +109,7 @@ public class Node {
 	
 	public boolean isPersistenceUnit()
 	{
-		return NodeDescriptors.isPersistenceUnit(this);
+		return !FORCE_SINGLE_PERSISTENT_UNIT && NodeDescriptors.isPersistenceUnit(this);
 	}
 	
 	public void setSymbol(String symbol) throws ConversionException

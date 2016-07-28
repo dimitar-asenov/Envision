@@ -26,6 +26,8 @@
 
 #include "FilePersistencePlugin.h"
 
+#include "simple/SimpleTextFileStore.h"
+
 #include "SelfTest/src/TestManager.h"
 #include "SelfTest/src/TestResults.h"
 
@@ -58,6 +60,8 @@ void FilePersistencePlugin::selfTest(QString testArgs)
 		SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
 	else
 	{
+		SimpleTextFileStore::setForceSinglePersistentUnit();
+
 		auto tests = testArgs.split(":", QString::SkipEmptyParts);
 		for (QString test : tests)
 		{

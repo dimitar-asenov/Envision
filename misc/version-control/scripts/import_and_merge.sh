@@ -47,9 +47,9 @@ cp $3 "${gitRepoSrc}/dev_a_master_a_(dev)_TestMerge"
 
 cd $testdir
 
-$JavaImportTool TestMerge base base
-$JavaImportTool TestMerge master master
-$JavaImportTool TestMerge dev dev
+$JavaImportTool TestMerge base base -force-single-pu
+$JavaImportTool TestMerge master master -force-single-pu
+$JavaImportTool TestMerge dev dev -force-single-pu
 
 # Generate patch files
 $gumtree base/TestMerge/TestMerge master/TestMerge/TestMerge

@@ -37,4 +37,3 @@ public class ConversionException extends Exception
 		super(message, throwable);
 	}
 }
-

@@ -41,7 +41,7 @@
 namespace FilePersistence {
 
 const QString SimpleTextFileStore::NULL_STRING{"____NULL____"};
-const bool SimpleTextFileStore::GENERATE_PUS{true};
+bool SimpleTextFileStore::ForceSinglePersistentUnit{false};
 
 SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
 	baseFolder_{baseDir.isNull() ? QDir::home().path() +
@@ -219,13 +219,9 @@ void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, con
 		if (puRoot != rootNode) stack << rootNode;
 	}
 
-	if (GENERATE_PUS)
-	{
-		// Write the root and generate possibly other PUs, that were not in the original structure
-		stack << writeGenericNodeToFile(rootNode, destDir, name, persistentUnitTypes);
-	}
-	else
-		stack << writeGenericNodeToFile(rootNode, destDir, name, {});
+	// Write the root and generate possibly other PUs, that were not in the original structure
+	stack << writeGenericNodeToFile(rootNode, destDir, name,
+											  ForceSinglePersistentUnit ? QStringList{} : persistentUnitTypes);
 
 	// For each pu write and clean up
 	while (!stack.isEmpty())

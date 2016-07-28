@@ -47,7 +47,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		if (args == null || (args.length < 3 || args.length > 5))
+		if (args == null || (args.length < 3))
 		{
 			System.out.println("Invalid number of arguments: " + args.length);
 			System.out.println(usageInfo);
@@ -70,6 +70,7 @@ public class Main {
 		
 		// Remaining arguments
 		boolean classFiles = false;
+		boolean invalidArguments = false;
 		String[] extraLibraries = null;
 		for (int i = 3; i < args.length; ++i)
 		{
@@ -78,11 +79,21 @@ public class Main {
 			{
 				extraLibraries = args[i].substring("-libs:".length()).split(",");
 			}
+			else if (args[i].equals("-force-single-pu"))
+			{
+				Node.FORCE_SINGLE_PERSISTENT_UNIT = true;
+			}
 			else
 			{
+				invalidArguments = true;
 				System.out.println("Argument " + (i + 1) + " is invalid: " + args[i]);
-				System.out.println(usageInfo);
 			}
+		}
+		
+		if (invalidArguments)
+		{
+			System.out.println(usageInfo);
+			return;
 		}
 		
 		try

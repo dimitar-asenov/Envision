@@ -82,6 +82,8 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		static void saveGenericTree(std::shared_ptr<GenericTree> tree, const QString& name, const QString& destDir,
 											 const QStringList& persistentUnitTypes);
 
+		static void setForceSinglePersistentUnit();
+
 	protected:
 		virtual void saveTree(Model::TreeManager* manager, const QString &name) override;
 		virtual Model::Node* loadTree(Model::TreeManager* manager, const QString &name, bool loadPartially) override;
@@ -158,12 +160,14 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		static const QString NULL_STRING;
 
 		/**
-		 * If false, no additional persistent units will be generated.
+		 * If true, only a single persistent unit will be generated.
 		 */
-		static const bool GENERATE_PUS;
+		static bool ForceSinglePersistentUnit;
 
 		std::set<QString> oldFiles_;
 		std::set<QString> newFiles_;
 };
+
+inline void SimpleTextFileStore::setForceSinglePersistentUnit() { ForceSinglePersistentUnit = true; }
 
 }

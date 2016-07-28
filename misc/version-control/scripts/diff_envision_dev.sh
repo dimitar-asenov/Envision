@@ -27,7 +27,7 @@ for m in $merges; do
 					
 					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java
 					mkdir devMerged
-					$JavaImportTool TestMerge devMerged.java devMerged
+					$JavaImportTool TestMerge devMerged.java devMerged -force-single-pu
 					cp /tmp/EnvisionVC/TestMerge/TestMerge envMerged
 					$gumtree envMerged devMerged/TestMerge/TestMerge
 					$idpatcher devMerged/TestMerge/TestMerge
