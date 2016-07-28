@@ -691,7 +691,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 
 bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 {
-	// Atomic change groups are essentially cycles of depedent changes with the following properties:
+	// Atomic change groups are essentially cycles of dependent changes with the following properties:
 	// - dependency is due to clashing lables, but other changes, like deletions or moves can be in the cycle
 	// - all changes come from the same branch
 	//
@@ -742,24 +742,27 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 
 		// This change is so far OK and it must have exactly one dependency
 		// Check if it forms a cycle
-		bool okToRemoveDependenciesInCycle = false;
-		QList<MergeChange*> changesInCycle{change};
+		QList<MergeChange*> changesInChain{change};
+		QList<MergeChange*> changesInCycleWhoseDependeciesToTemove;
 		while (true)
 		{
-			auto nextChange = dependencies_.value(changesInCycle.last());
+			auto nextChange = dependencies_.value(changesInChain.last());
 
-			if (nextChange == changesInCycle.first())
+			auto cycleAt = changesInChain.indexOf(nextChange);
+			if ( cycleAt >= 0 )
 			{
-				okToRemoveDependenciesInCycle = true;
+				// At this point we know that there is a cycle within the changesInCycle
+				// but it doesn't have to be the entire list.
+				changesInCycleWhoseDependeciesToTemove = changesInChain.mid(cycleAt);
 				break;
 			}
 
-			if (okToBreakCycle.value(nextChange)) changesInCycle.append(nextChange);
+			if (okToBreakCycle.value(nextChange)) changesInChain.append(nextChange);
 			else break;
 		}
 
-		Q_ASSERT( ! (okToRemoveDependenciesInCycle && changesInCycle.size() == 1));
-		if (okToRemoveDependenciesInCycle)
+		Q_ASSERT( changesInCycleWhoseDependeciesToTemove.size() != 1 );
+		if (!changesInCycleWhoseDependeciesToTemove.isEmpty())
 		{
 			// This is a cycle which matches all conditions. Remove the dependencies between the elements.
 			// NOTE: Here we still keep dependencies such as
@@ -767,7 +770,7 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 			// -In case of Deletion, we need to make sure that its subtree is Deleted or Moved out
 			// We allow label conflicts in this case, since they will be resolved once all changes are applied
 			removedSomeDependencies = true;
-			for (auto changeToMakeIndependent : changesInCycle)
+			for (auto changeToMakeIndependent : changesInCycleWhoseDependeciesToTemove)
 			{
 				// Nothing will depend on Deletion ( Except Deletion of parentNode )
 				// Deletion will depend on Deletion, MoveOut of children
@@ -808,8 +811,8 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 			}
 		}
 
-		// No matter if this was a good or a bad cycle, label all changes as notOK to avoid further processing
-		for (auto processedChange : changesInCycle)
+		// Regardless if there was a cycle or not, mark all changes in the chain as notOK to avoid further processing
+		for (auto processedChange : changesInChain)
 			okToBreakCycle.insert(processedChange, false);
 	}
 
