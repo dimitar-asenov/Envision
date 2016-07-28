@@ -121,9 +121,9 @@ CFocus::FocusInformation CFocus::extractFocusInformation(QString line)
 	{
 		auto token = commandTokens.takeFirst();
 
-		if (token.startsWith("h"))
+		if (QString{"highlight"}.startsWith(token))
 			focusInformation.type_ |= FocusInformation::FocusType::Highlight;
-		else if (token.startsWith("c"))
+		else if (QString{"center"}.startsWith(token))
 			focusInformation.type_ |= FocusInformation::FocusType::Center;
 		else
 		{
