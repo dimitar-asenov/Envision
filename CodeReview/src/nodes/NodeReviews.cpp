@@ -37,6 +37,7 @@ DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(NodeReviews)
 
 DEFINE_ATTRIBUTE(NodeReviews, nodeId, Text, false, false, true)
 DEFINE_ATTRIBUTE(NodeReviews, revisionName, Text, false, false, true)
+DEFINE_ATTRIBUTE(NodeReviews, focusInformation, Text, false, false, true)
 DEFINE_ATTRIBUTE(NodeReviews, reviewComments, TypedListOfReviewComment, false, false, true)
 DEFINE_ATTRIBUTE(NodeReviews, offsetX, Integer, false, false, true)
 DEFINE_ATTRIBUTE(NodeReviews, offsetY, Integer, false, false, true)

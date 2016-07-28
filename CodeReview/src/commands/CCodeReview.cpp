@@ -167,6 +167,9 @@ Interaction::CommandResult* CCodeReview::execute(Visualization::Item* source, Vi
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(reviewViewItem);
 
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  []() { Visualization::MainView::centerAndZoomViewToFitEntireScene();});
+
 	return new Interaction::CommandResult{};
 }
 

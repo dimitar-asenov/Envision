@@ -29,6 +29,7 @@
 #include "../codereview_api.h"
 
 #include "InteractionBase/src/commands/CommandWithFlags.h"
+#include "InteractionBase/src/input_actions/ActionRegistry.h"
 
 namespace CodeReview {
 
@@ -38,11 +39,19 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 
 		struct FocusInformation
 		{
-			enum FocusType {None, Center, Highlight};
+			enum FocusType {
+				None = 0x0,
+				Center = 0x1,
+				Highlight= 0x2
+			};
 
-			int step_{};
-			FocusType type_{};
+			using FocusTypes = QFlags<FocusType>;
+
+			int step_{-1};
+			FocusTypes type_{};
 			Model::Node* node_{};
+
+			bool isValid() { return (step_ != -1 && !type_.testFlag(None)); }
 		};
 
 		CFocus();
@@ -59,14 +68,18 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 
 		static void clearFocusInformation();
 
+		static bool focusStep(Visualization::Item *, QKeySequence, Interaction::ActionRegistry::InputState);
 
 	private:
-		int currentStep_{0};
+		static int currentStep_;
 		static QHash<int, FocusInformation> focusList_;
 		static FocusInformation extractFocusInformation(QString line);
 
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(CFocus::FocusInformation::FocusTypes)
+
 inline void CFocus::clearFocusInformation() { focusList_.clear(); }
+
 
 }

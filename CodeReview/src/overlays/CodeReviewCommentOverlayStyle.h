@@ -29,8 +29,6 @@
 #include "../codereview_api.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/Static.h"
 
 namespace CodeReview
 {
@@ -39,10 +37,6 @@ class CODEREVIEW_API CodeReviewCommentOverlayStyle : public Super<Visualization:
 {
 	public:
 		virtual ~CodeReviewCommentOverlayStyle() override;
-
-		Property<Visualization::TextStyle> commentInput{this, "commentInput"};
-		Property<Visualization::StaticStyle> icon{this, "icon"};
-		Property<Visualization::StaticStyle> title{this, "title"};
 
 };
 }

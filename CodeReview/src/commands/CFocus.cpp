@@ -46,6 +46,8 @@ using namespace Visualization;
 
 namespace CodeReview {
 
+int CFocus::currentStep_{0};
+
 CFocus::CFocus() : Command{"focus"} {}
 
 QHash<int, CFocus::FocusInformation> CFocus::focusList_;
@@ -58,44 +60,47 @@ bool CFocus::canInterpret(Visualization::Item*, Visualization::Item*,
 	return false;
 }
 
-Interaction::CommandResult* CFocus::execute(Visualization::Item*, Visualization::Item*,
+Interaction::CommandResult* CFocus::execute(Visualization::Item* source, Visualization::Item*,
 				const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
+	focusStep(source, {}, {});
+	return new Interaction::CommandResult{};
+}
 
-	Visualization::VisualizationManager::instance().mainScene()->removeOverlayGroup("focusOverlay");
+bool CFocus::focusStep(Visualization::Item* target, QKeySequence, Interaction::ActionRegistry::InputState)
+{
+	target->scene()->removeOverlayGroup("focusOverlay");
 
-	auto focusInformation = focusList_.value(currentStep_);
+	auto focusInformations = focusList_.values(currentStep_);
 
-	if (focusInformation.type_ == FocusInformation::None){
+	if (focusInformations.isEmpty()){
 		currentStep_ = 0;
-		focusInformation = focusList_.value(currentStep_);
+		focusInformations = focusList_.values(currentStep_);
 	}
 
-	if (focusInformation.type_ == FocusInformation::None)
-		return new Interaction::CommandResult{};
+	if (focusInformations.isEmpty())
+		return false;
 
-	auto focusItem = CodeReviewManager::instance().overlayForNodeReviews(focusInformation.node_);
+	for (auto focusInformation : focusInformations)
+	{
 
-	switch (focusInformation.type_) {
-		case FocusInformation::Center:
-			Visualization::VisualizationManager::instance().mainView()->
-					centerOn(focusItem);
-			break;
-		case FocusInformation::Highlight:
+		auto focusItem = CodeReviewManager::instance().overlayForNodeReviews(focusInformation.node_);
+
+		if (focusInformation.type_.testFlag(FocusInformation::Center))
+		{
+			Visualization::VisualizationManager::instance().mainView()->centerOn(focusItem);
+		}
+
+		if (focusInformation.type_.testFlag(FocusInformation::Highlight))
 		{
 			auto overlay = new Visualization::HighlightOverlay{focusItem,
 					Visualization::HighlightOverlay::itemStyles().get("focus")};
 			focusItem->addOverlay(overlay, "focusOverlay");
-			break;
 		}
-		default:
-			Q_ASSERT(false);
-			break;
 	}
 
 	currentStep_++;
-
-	return new Interaction::CommandResult{};
+	return true;
 }
 
 QList<Interaction::CommandSuggestion*> CFocus::suggest(Visualization::Item*, Visualization::Item*,
@@ -108,59 +113,45 @@ QList<Interaction::CommandSuggestion*> CFocus::suggest(Visualization::Item*, Vis
 
 CFocus::FocusInformation CFocus::extractFocusInformation(QString line)
 {
-	if (line.startsWith("[focus"))
+	QStringList commandTokens = line.split(" ");
+
+	FocusInformation focusInformation;
+
+	while (!commandTokens.isEmpty())
 	{
-		auto endOfCommand = line.indexOf("]");
-		// subtract one because of starting [
-		auto commandSize = endOfCommand - 1;
-		auto commandText = line.mid(1, commandSize);
-		QStringList commandTokens = commandText.split("|");
+		auto token = commandTokens.takeFirst();
 
-		// remove first token which is "focus"
-		commandTokens.pop_front();
-
-		FocusInformation focusInformation;
-
-		if (!commandTokens.isEmpty())
+		if (QString{"highlight"}.startsWith(token))
+			focusInformation.type_ |= FocusInformation::FocusType::Highlight;
+		else if (QString{"center"}.startsWith(token))
+			focusInformation.type_ |= FocusInformation::FocusType::Center;
+		else
 		{
-			auto token = commandTokens.takeFirst();
-			if (token.startsWith("hi"))
-				focusInformation.type_ = FocusInformation::FocusType::Highlight;
-			else if (token.startsWith("ce"))
-				focusInformation.type_ = FocusInformation::FocusType::Center;
+			bool isNumber;
+			auto step = token.toInt(&isNumber);
+
+			if (isNumber)
+			{
+				focusInformation.step_ = step;
+				break;
+			}
 		}
 
-		if (!commandTokens.isEmpty())
-		{
-			auto stepToken = commandTokens.takeFirst();
-			focusInformation.step_ = stepToken.toInt();
-		}
-		return focusInformation;
 	}
 
-	return {};
+	return focusInformation;
 }
 
 void CFocus::loadFocusInformation()
 {
 	for (NodeReviews* nodeReviews : *CodeReviewManager::instance().nodeReviewsList())
 	{
-		if (nodeReviews->reviewComments()->isEmpty())
-			continue;
+		auto focusInformation = extractFocusInformation(nodeReviews->focusInformation());
 
-		auto firstComment = nodeReviews->reviewComments()->first()->commentNode();
-
-		if (firstComment->lines()->isEmpty())
-			continue;
-
-		auto firstLine = firstComment->lines()->first()->get();
-
-		auto focusInformation = extractFocusInformation(firstLine);
-
-		if (focusInformation.type_ != FocusInformation::None)
+		if (focusInformation.isValid())
 		{
 			focusInformation.node_ = nodeReviews;
-			focusList_.insert(focusInformation.step_, focusInformation);
+			focusList_.insertMulti(focusInformation.step_, focusInformation);
 		}
 	}
 }

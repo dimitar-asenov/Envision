@@ -38,6 +38,7 @@
 #include "OOVisualization/src/declarations/VClass.h"
 
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "InteractionBase/src/input_actions/ActionRegistry.h"
 
 #include "SelfTest/src/TestManager.h"
 
@@ -51,6 +52,8 @@ Logger::Log& CodeReviewPlugin::log()
 
 bool CodeReviewPlugin::initialize(Core::EnvisionManager&)
 {
+	Interaction::ActionRegistry::instance()->registerInputHandler("GenericHandler.FocusStep", CFocus::focusStep);
+
 	VersionControlUI::VDiffFrame::setDefaultClassHandler(HReviewableItem::instance());
 	CodeReviewCommentOverlay::setDefaultClassHandler(HCodeReviewOverlay::instance());
 

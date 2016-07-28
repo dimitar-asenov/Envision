@@ -28,7 +28,6 @@
 
 #include "../codereview_api.h"
 
-#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/overlays/Overlay.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
@@ -58,9 +57,6 @@ class CODEREVIEW_API CodeReviewCommentOverlay :
 	private:
 		NodeReviews* nodeReviews_{};
 		Visualization::Item* nodeReviewsItem_{};
-
-		Visualization::Static* title_{};
-		Visualization::Static* icon_{};
 
 		QPointF offsetItemLocal_;
 

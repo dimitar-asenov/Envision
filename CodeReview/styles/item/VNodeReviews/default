@@ -16,4 +16,13 @@
 		</shape>
 		<useBackgroundColors>false</useBackgroundColors>
 	</comments>
+	<focusInformation prototypes="item/Text/codeReviewHeaderText" />
+	<title prototypes="item/Symbol/keyword">
+		<symbol>Review Comment</symbol>
+	</title>
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/speech_bubble.svg</filename>
+		<width>24</width>
+		<height>24</height>
+	</icon>
 </style>

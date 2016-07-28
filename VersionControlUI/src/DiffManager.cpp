@@ -400,6 +400,9 @@ void DiffManager::showDiff(QString oldVersion, QString newVersion)
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(diffViewItem);
+
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  []() { Visualization::MainView::centerAndZoomViewToFitEntireScene();});
 }
 
 void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes, Visualization::ViewItem* viewItem,
@@ -553,6 +556,9 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 	// switch to the newly created view
 	Visualization::VisualizationManager::instance().mainScene()->viewItems()->switchToView(historyViewItem);
+
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  []() { Visualization::MainView::centerAndZoomViewToFitEntireScene();});
 }
 
 // TODO maybe better implementation for this
@@ -767,14 +773,6 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	}
 
 	scaleItems(allItemsToScale, diffViewItem);
-
-	// set zoom level further out and center the scene
-	Visualization::VisualizationManager::instance().mainView()->zoom(7);
-	auto centerTop = Visualization::VisualizationManager::instance().mainScene()->
-			currentViewItem()->boundingRect().center();
-	centerTop.setY(Visualization::VisualizationManager::instance().mainScene()->
-						currentViewItem()->boundingRect().top());
-	Visualization::VisualizationManager::instance().mainView()->centerOn(centerTop);
 }
 
 Visualization::Item* DiffManager::addOverlaysAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
