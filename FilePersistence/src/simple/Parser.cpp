@@ -250,6 +250,9 @@ bool Parser::labelComparator(GenericNode * const node1, GenericNode * const node
 QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 											const QStringList& persistentUnitTypes, int tabLevel)
 {
+	Q_ASSERT(!node->label().isEmpty());
+	Q_ASSERT(!node->type().isEmpty());
+
 	QList<GenericNode*> res;
 
 	bool isPU = tabLevel > 0 && persistentUnitTypes.contains(node->type());
