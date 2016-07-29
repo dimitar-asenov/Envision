@@ -42,11 +42,11 @@ class FILEPERSISTENCE_API GitPiecewiseLoader : public PiecewiseLoader
 {
 	public:
 		GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree, const GitRepository* repo, QString revision);
-		~GitPiecewiseLoader();
+		virtual ~GitPiecewiseLoader() override;
 
 	protected:
-		NodeData loadNodeData(Model::NodeIdType id);
-		QList<NodeData> loadNodeChildrenData(Model::NodeIdType id);
+		virtual NodeData loadNodeData(Model::NodeIdType id, bool mayNotExist) override;
+		virtual QList<NodeData> loadNodeChildrenData(Model::NodeIdType id) override;
 
 	private:
 		static NodeData parseGrepLine(const QString& line);

@@ -38,12 +38,16 @@ PiecewiseLoader::PiecewiseLoader(std::shared_ptr<GenericTree>& tree) : tree_{tre
 
 PiecewiseLoader::~PiecewiseLoader() {}
 
-GenericNode* PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
+GenericNode* PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id, bool mayNotExist)
 {
 	Q_ASSERT(tree_->piecewiseLoader().get() == this);
 	Q_ASSERT(!id.isNull());
 
-	return loadNewNode(loadNodeData(id));
+	auto nodeData = loadNodeData(id, mayNotExist);
+	if (nodeData.isValid())
+		return loadNewNode(nodeData);
+	else
+		return nullptr;
 }
 
 void PiecewiseLoader::loadAndLinkNodeChildren(Model::NodeIdType id)

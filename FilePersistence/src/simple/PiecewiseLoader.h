@@ -38,6 +38,8 @@ class GenericTree;
 struct FILEPERSISTENCE_API NodeData {
 	QString persistentUnit_;
 	QString nodeLine_;
+
+	bool isValid() {return !nodeLine_.isEmpty();}
 };
 
 class FILEPERSISTENCE_API PiecewiseLoader
@@ -46,11 +48,11 @@ class FILEPERSISTENCE_API PiecewiseLoader
 		PiecewiseLoader(std::shared_ptr<GenericTree>& tree);
 		virtual ~PiecewiseLoader();
 
-		GenericNode* loadAndLinkNode(Model::NodeIdType id);
+		GenericNode* loadAndLinkNode(Model::NodeIdType id, bool mayNotExist);
 		void loadAndLinkNodeChildren(Model::NodeIdType id);
 
 	protected:
-		virtual NodeData loadNodeData(Model::NodeIdType id) = 0;
+		virtual NodeData loadNodeData(Model::NodeIdType id, bool mayNotExist) = 0;
 		virtual QList<NodeData> loadNodeChildrenData(Model::NodeIdType id) = 0;
 
 	private:

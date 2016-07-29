@@ -90,13 +90,13 @@ GenericPersistentUnit* GenericTree::persistentUnit(const QString& name, bool par
 		return nullptr;
 }
 
-GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad) const
+GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad, bool mayNotExist) const
 {
 	Q_ASSERT(hasQuickLookupHash_);
 	auto node = quickLookupHash_.value(id);
 
 	if (!node && lazyLoad)
-		node = piecewiseLoader_->loadAndLinkNode(id);
+		node = piecewiseLoader_->loadAndLinkNode(id, mayNotExist);
 
 	return node;
 }

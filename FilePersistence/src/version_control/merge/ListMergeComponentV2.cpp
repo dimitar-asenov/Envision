@@ -73,39 +73,49 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 
 QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& mergeData)
 {
-	QList<Model::NodeIdType> listsToMerge;
-	auto changes = mergeData.cg_.changes();
+	QHash<Model::NodeIdType, MergeChange::Branches> listsWithStructureChanges;
+
 	// Add every list whose child structure changes
-	for (auto change : changes)
+	for (auto change : mergeData.cg_.changes())
 	{
-		// Remove Lists with stationary changes
-		if (change->type()==ChangeType::Stationary && !change->updateFlags().testFlag(ChangeDescription::Label))
-			continue;
+		// Ignore value or type changes
+		if (change->isValueOrTypeChange()) continue;
+
 		auto oldParentNode = mergeData.treeMerged_->find(change->oldParentId());
 		auto newParentNode = mergeData.treeMerged_->find(change->newParentId());
-		if (oldParentNode && isList(oldParentNode->type()) && !listsToMerge.contains(change->oldParentId()))
-				listsToMerge.append(change->oldParentId());
-		if (newParentNode && isList(newParentNode->type()) && !listsToMerge.contains(change->newParentId()))
-				listsToMerge.append(change->newParentId());
+		if (oldParentNode && isList(oldParentNode->type()))
+		{
+			 auto branches = listsWithStructureChanges.value(change->oldParentId());
+			 listsWithStructureChanges.insert(change->oldParentId(), change->branches() | branches);
+		}
+		if (newParentNode && isList(newParentNode->type()))
+		{
+			auto branches = listsWithStructureChanges.value(change->newParentId());
+			listsWithStructureChanges.insert(change->newParentId(), change->branches() | branches);
+		}
 	}
 
-	// Remove Lists which are inserted/deleted fully by any version
-	auto listIt = listsToMerge.begin();
-	while (listIt != listsToMerge.end())
-	{
-		auto changeList = mergeData.cg_.changesForNode(*listIt);
-		bool isInsertionOrDeletion = false;
-		for (auto change : changeList)
-		{
-				if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Insertion)
-				{
-					isInsertionOrDeletion = true;
-					break;
-				}
-		}
-		if (isInsertionOrDeletion)	listIt = listsToMerge.erase(listIt);
-		else	++listIt;
-	}
+	// Keep only lists where both branches makes changes
+	// Note that this also automatically filters lists that have been inserted. If we even want to process lists
+	// only modified by one branch and remove this code, then some code (like the commented one below) will be needed
+	// to filter insertions.
+	QList<Model::NodeIdType> listsToMerge;
+	for (auto it = listsWithStructureChanges.begin(); it != listsWithStructureChanges.end(); ++it)
+		if (it.value() == (MergeChange::BranchA | MergeChange::BranchB))
+			listsToMerge.append(it.key());
+
+	// The code below is commented because the piece above already takes care of this
+	//
+	// Remove Lists which are inserted by any version
+	// Note that we can't simply check what changes there are for the lists, since the change that
+	// inserted a list might have already been applied.
+//	auto listIt = listsToMerge.begin();
+//	while (listIt != listsToMerge.end())
+//	{
+//		if (mergeData.treeBase_->find(*listIt, true, true)) ++listIt;
+//		else listIt = listsToMerge.erase(listIt);
+//	}
+
 	return listsToMerge;
 }
 
@@ -171,8 +181,17 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
 {
 	auto idListBase = nodeListToSortedIdList(mergeData.treeBase_->find(listId, true)->children());
-	auto idListA    = nodeListToSortedIdList(mergeData.treeA_->find(listId, true)->children());
-	auto idListB    = nodeListToSortedIdList(mergeData.treeB_->find(listId, true)->children());
+
+	// Below we an empty list for a branch if that list has been deleted by the branch
+	// This allows us to shuffle elements in the list nevertheless, even if its deletion doesn't fully succeed
+	// in the merged version.
+
+	auto nodeInBranchA = mergeData.treeA_->find(listId, true, true);
+	auto idListA = nodeInBranchA ? nodeListToSortedIdList(nodeInBranchA->children()) : QList<Model::NodeIdType>{};
+
+	auto nodeInBranchB = mergeData.treeB_->find(listId, true, true);
+	auto idListB = nodeInBranchB ? nodeListToSortedIdList(nodeInBranchB->children()) : QList<Model::NodeIdType>{};
+
 	return Diff3Parse::computeChunks(idListA, idListB, idListBase);
 }
 

@@ -62,8 +62,10 @@ class FILEPERSISTENCE_API GenericTree {
 		 * For trees without a piecewise loader, this will perform a depth first search for the node
 		 * from the root recursively in all linked nodes. This means on such trees, this method is slow and
 		 * might not return the node if it's not linked, even if it is loaded in the tree.
+		 *
+		 * If \a mayNotExist is false (the default) the lazy loader will fail if the node is not found.
 		 */
-		GenericNode* find(Model::NodeIdType id, bool lazyLoad = false) const;
+		GenericNode* find(Model::NodeIdType id, bool lazyLoad = false, bool mayNotExist = false) const;
 		bool remove(Model::NodeIdType id, bool recursive = false);
 
 		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);

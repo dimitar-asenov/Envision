@@ -38,16 +38,18 @@ GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
 
 GitPiecewiseLoader::~GitPiecewiseLoader() {}
 
-NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
+NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id, bool mayNotExist)
 {
 	if (!commit_)
 		commit_.reset(repo_->getCommit(revision_));
 	auto s = commit_->nodeLinesFromId(id, false);
 
-	Q_ASSERT(s.size() == 1 || s.size() == 2);
+	Q_ASSERT(mayNotExist || s.size() == 1 || s.size() == 2);
 	for (auto line : s)
 		if (!isPersistenceUnit(line))
 			return parseGrepLine(line);
+
+	if (mayNotExist) return {};
 	Q_ASSERT(false);
 }
 
