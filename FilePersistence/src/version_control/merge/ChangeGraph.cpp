@@ -70,6 +70,7 @@ void ChangeGraph::insertSingleChange(MergeChange* change)
 	{
 		existingChange->addBranches(change->branches());
 		delete change;
+
 		return;
 	}
 
@@ -660,7 +661,8 @@ void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
 	while (tryApplyingMoreChanges)
 	{
 		applyIndependentNonConflictingChanges(tree);
-		tryApplyingMoreChanges = removeDependenciesInsideNonConflictingAtomicChangeGroups();
+		tryApplyingMoreChanges = removeDependenciesForSafeMoveChanges();
+		tryApplyingMoreChanges = removeDependenciesInsideNonConflictingAtomicChangeGroups() || tryApplyingMoreChanges;
 	}
 
 }
@@ -699,11 +701,66 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 	return totalAppliedChanges;
 }
 
+bool ChangeGraph::removeDependenciesForSafeMoveChanges()
+{
+	// If a move change:
+	// - is identical for both branches
+	// - depends on exactly one other change, which is also a move change
+	// - the dependency is for another node (not because of label clashes)
+	// - has no conflicts
+	// then we can remove its dependencies and apply it.
+	// We know it won't cause a cycle, since both branches make it.
+	//
+	// Note that any other moves which depend on this one (not because of labels) must be made to depend on the
+	// this move's dependency
+
+	bool removedSomeDependencies = false;
+
+	for (auto change : changes_)
+	{
+		if (change->type() == ChangeType::Move && !directConflicts_.contains(change))
+		{
+			auto allDependencies = dependencies_.values(change);
+			if (allDependencies.size() == 1)
+			{
+				auto ourDependency = allDependencies.first();
+				if (ourDependency->type() == ChangeType::Move && change->newParentId() != ourDependency->oldParentId()
+					 && change->branches() == (MergeChange::BranchA | MergeChange::BranchB))
+				{
+					removedSomeDependencies = true;
+
+					// Remove our dependency
+					reverseDependencies_.remove(ourDependency, change);
+					dependencies_.remove(change, ourDependency);
+
+					// If other changes depend on this one for cyclicity reasons (not because of label)
+					// then make them depend on our dependency
+					auto otherDependOnThis = reverseDependencies_.values(change);
+					for (auto dependencyToUs : otherDependOnThis)
+					{
+						if (dependencyToUs->type() == ChangeType::Move
+							 && dependencyToUs->newParentId() != change->oldParentId())
+						{
+							dependencies_.remove(dependencyToUs, change);
+							reverseDependencies_.remove(change, dependencyToUs);
+
+							dependencies_.insert(dependencyToUs, ourDependency);
+							reverseDependencies_.insert(ourDependency, dependencyToUs);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return removedSomeDependencies;
+}
+
 bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 {
 	// Atomic change groups are essentially cycles of dependent changes with the following properties:
 	// - dependency is due to clashing lables, but other changes, like deletions or moves can be in the cycle
-	// - all changes come from the same branch
+	// - all changes come from the same branch. Alternatively both branches should make the same changes.
 	//
 	// Such changes can be applied, but they need to be applied in an all-or-nothing fashion.
 	//
@@ -733,6 +790,7 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 		// Check only one dependency on another change
 		// Check same branches
 		auto dependencies = dependencies_.values(change);
+
 		if (dependencies.size() != 1
 			 || change->branches() != dependencies.first()->branches())
 		{

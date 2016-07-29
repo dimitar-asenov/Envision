@@ -120,6 +120,15 @@ class FILEPERSISTENCE_API ChangeGraph
 		int applyIndependentNonConflictingChanges(GenericTree* tree);
 
 		/**
+		 * Removed the dependencies of some move changes, which are safe to apply, despite depending on other moves.
+		 *
+		 * For now these are only move changes that both branches perform.
+		 *
+		 * Returns whether any dependencies were removed
+		 */
+		bool removeDependenciesForSafeMoveChanges();
+
+		/**
 		 * Scans all changes to detect all-or-nothing dependency chains and removese the depenencies if all
 		 * elements are non-conflicting and if they don't depend on external elements.
 		 *
