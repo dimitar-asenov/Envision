@@ -113,7 +113,11 @@ void ChangeGraph::addSameNodeConflict(MergeChange* change)
 	while (it != changesForNode_.end() && it.key() == change->nodeId())
 	{
 		// Make sure not to mark the change as conflicting with itself.
-		if (change != it.value() && change->isValueOrTypeChange() == it.value()->isValueOrTypeChange())
+		// Only changes of the same category (value + type / other) may conflict with each other,
+		// except for deletion, which conflicts with all other changes.
+		if (change != it.value() &&
+				(change->isValueOrTypeChange() == it.value()->isValueOrTypeChange()
+				 || change->type() == ChangeType::Deletion || it.value()->type() == ChangeType::Deletion))
 		{
 			directConflicts_.insert(change, it.value());
 			directConflicts_.insert(it.value(), change);
@@ -825,6 +829,7 @@ void ChangeGraph::applyChange(GenericTree* tree, MergeChange* change)
 	{
 		case ChangeType::Insertion:
 		{
+			Q_ASSERT( ! tree->find(change->nodeId()));
 			auto persistentUnit = tree->persistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
 			if (!persistentUnit)
 				persistentUnit = &tree->newPersistentUnit(NEW_NODES_PERSISTENT_UNIT_NAME);
@@ -852,7 +857,9 @@ void ChangeGraph::applyChange(GenericTree* tree, MergeChange* change)
 		case ChangeType::Move:
 		{
 			auto node = tree->find(change->nodeId());
+			Q_ASSERT(node);
 			Q_ASSERT(node->parentId() == change->oldParentId());
+
 			node->detachFromParent();
 			node->setParentId(change->newParentId());
 			node->attachToParent();
@@ -863,6 +870,7 @@ void ChangeGraph::applyChange(GenericTree* tree, MergeChange* change)
 		case ChangeType::Stationary:
 		{
 			auto node = tree->find(change->nodeId());
+			Q_ASSERT(node);
 
 			if (change->updateFlags().testFlag(ChangeDescription::Value))
 				node->resetValue(change->newValueType(), change->newValueWithoutPrefix());
