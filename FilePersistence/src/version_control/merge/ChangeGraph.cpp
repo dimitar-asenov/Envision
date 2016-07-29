@@ -478,8 +478,7 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 					if (changeIt.value()->newParentId() == parentId)	// Move In
 					{
 						// In case both moves are combined into single move, we split and add two moves
-						if (changeIt.value()->branches() == MergeChange::BranchA &&
-							 changeIt.value()->branches() == MergeChange::BranchB)
+						if (changeIt.value()->branches() == (MergeChange::BranchA | MergeChange::BranchB))
 						{
 							Q_ASSERT(!labelA.isNull() && !labelB.isNull());
 							// Update flags are handled in the function
@@ -596,10 +595,17 @@ void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData l
 	Q_ASSERT(change->type() == ChangeType::Move);
 
 	// Adjust the change for the A branch
-	change->branches_ = MergeChange::BranchA;
 	change->newLabel_ = labelOne.branch_ == MergeChange::BranchA ? labelOne.label_ : labelTwo.label_;
 	if (change->newLabel() == change->oldLabel()) change->updateFlags_ = ChangeDescription::NoFlags;
 	else change->updateFlags_ = ChangeDescription::Label;
+
+	if (labelOne.label_ == labelTwo.label_)
+	{
+		// Both branches move a node and both move it to the same label. Our work here is done
+		return;
+	}
+	else
+		change->branches_ = MergeChange::BranchA;
 
 	// Make a new change for label B
 	auto newLabelB = labelOne.branch_ == MergeChange::BranchB ? labelOne.label_ : labelTwo.label_;
