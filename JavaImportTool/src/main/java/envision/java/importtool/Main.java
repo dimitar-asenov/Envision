@@ -71,6 +71,7 @@ public class Main {
 		// Remaining arguments
 		boolean classFiles = false;
 		boolean invalidArguments = false;
+		boolean estimateSize = true;
 		String[] extraLibraries = null;
 		for (int i = 3; i < args.length; ++i)
 		{
@@ -82,6 +83,10 @@ public class Main {
 			else if (args[i].equals("-force-single-pu"))
 			{
 				Node.FORCE_SINGLE_PERSISTENT_UNIT = true;
+			}
+			else if (args[i].equals("-no-size-estimation"))
+			{
+				estimateSize = false;
 			}
 			else
 			{
@@ -173,9 +178,12 @@ public class Main {
 				if (!PRINT_METHODS) System.out.println("Done");
 			}
 			
-			System.out.print("Estimating size and arrangement...");
-			root.estimatedSize();
-			System.out.println("Done");
+			if (estimateSize)
+			{
+				System.out.print("Estimating size and arrangement...");
+				root.estimatedSize();
+				System.out.println("Done");
+			}
 			
 			String outputDir = outputDirectory + projectName + File.separator;
 			System.out.print("Writing the result to " + outputDir + "...");
