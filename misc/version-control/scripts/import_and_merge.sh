@@ -47,6 +47,8 @@ cp $1 "${gitRepoSrc}/master_a_(base)_TestMerge"
 cp $2 "${gitRepoSrc}/master_b_(master)_TestMerge"
 cp $3 "${gitRepoSrc}/dev_a_master_a_(dev)_TestMerge"
 
+MERGE_AND_FILE_DIR="$( pwd )"
+
 cd $testdir
 
 $JavaImportTool TestMerge base base -force-single-pu -no-size-estimation
@@ -69,7 +71,7 @@ cp dev/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
 
 $repoScript $envRepoSrc $envRepo
 
-# Move Java filesto Git test directory
+# Move Java files to Git test directory
 
 $repoScript $gitRepoSrc $gitRepo
 (
@@ -81,12 +83,25 @@ rm -rf $envisionReadyFile
 touch $scriptReadyFile
 while [ ! -f $envisionReadyFile ] ;
 do
-      sleep 0.1
+	sleep 0.1
 done
 
 # Export to Java code
 
-# Cleanup of unnecessary files
+# Copy envision repo sources and summary
+cp -rf $envRepoSrc $MERGE_AND_FILE_DIR/.
 
+declare -a filesToCopy=("hard_conflicts" "soft_conflicts")
+for f in "${filesToCopy[@]}"
+do
+	if [ -f $f ] ; then
+		cp -f $f $MERGE_AND_FILE_DIR/.
+		rm $f
+	else
+		rm -f $MERGE_AND_FILE_DIR/$f
+	fi
+done
+
+# Cleanup of unnecessary files
 rm -rf $envRepoSrc
 rm -rf $gitRepoSrc
