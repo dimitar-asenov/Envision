@@ -429,6 +429,33 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 {
 	auto parentNode = tree->find(parentId);
 	Q_ASSERT(parentNode);
+
+	auto updateMoveInOrInsert = [this](MergeChange* change, QString& labelA, QString& labelB)
+	{
+		// In case both moves/inserts are combined into single move, we split and add two moves
+		if (change->branches() == (MergeChange::BranchA | MergeChange::BranchB))
+		{
+			Q_ASSERT(!labelA.isNull() && !labelB.isNull());
+			// Update flags are handled in the function
+			splitMoveInOrInsertChangeForSecondLabel(change, {labelA, MergeChange::BranchA},
+																			{labelB, MergeChange::BranchB});
+			labelA.clear();
+			labelB.clear();
+		}
+
+		// Update labels according to the versions
+		else if (change->branches().testFlag(MergeChange::BranchA))
+		{
+			change->newLabel_ = labelA;
+			labelA.clear();
+		}
+		else if (change->branches().testFlag(MergeChange::BranchB))
+		{
+			change->newLabel_ = labelB;
+			labelB.clear();
+		}
+	};
+
 	for (auto nodeId : labelMap.uniqueKeys())
 	{
 		QString labelA;
@@ -454,53 +481,22 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 					Q_ASSERT(changeIt.value()->isValueOrTypeChange() &&
 								!changeIt.value()->updateFlags().testFlag(ChangeDescription::Label));
 					break;
-				case ChangeType::Insertion:
-				{	// Update labels according to the versions
-					if (changeIt.value()->branches().testFlag(MergeChange::BranchA))
-					{
-						changeIt.value()->newLabel_ = labelA;
-						labelA.clear();
-					}
-					else if (changeIt.value()->branches().testFlag(MergeChange::BranchB))
-					{
-						changeIt.value()->newLabel_ = labelB;
-						labelB.clear();
-					}
-					break;
-				}
 				case ChangeType::Deletion:	// Update old label in case of deletion
 					changeIt.value()->oldLabel_ = labelNone;
 					// We don't clear labelNone because it is used as oldLabel for the lblChanges added at the end
 					break;
+				case ChangeType::Insertion:
+				{
+					updateMoveInOrInsert(changeIt.value(), labelA, labelB);
+					break;
+				}
+
 				case ChangeType::Move:
 				{
 					Q_ASSERT(changeIt.value()->newParentId() == parentId ||
 								changeIt.value()->oldParentId() == parentId);
 					if (changeIt.value()->newParentId() == parentId)	// Move In
-					{
-						// In case both moves are combined into single move, we split and add two moves
-						if (changeIt.value()->branches() == (MergeChange::BranchA | MergeChange::BranchB))
-						{
-							Q_ASSERT(!labelA.isNull() && !labelB.isNull());
-							// Update flags are handled in the function
-							splitMoveChangeForSecondLabel(changeIt.value(), {labelA, MergeChange::BranchA},
-																							{labelB, MergeChange::BranchB});
-							labelA.clear();
-							labelB.clear();
-						}
-
-						// Update labels according to the versions
-						else if (changeIt.value()->branches().testFlag(MergeChange::BranchA))
-						{
-							changeIt.value()->newLabel_ = labelA;
-							labelA.clear();
-						}
-						else if (changeIt.value()->branches().testFlag(MergeChange::BranchB))
-						{
-							changeIt.value()->newLabel_ = labelB;
-							labelB.clear();
-						}
-					}
+						updateMoveInOrInsert(changeIt.value(), labelA, labelB);
 					else	changeIt.value()->oldLabel_ = labelNone;	// Update old Label for Move Out
 					// We don't clear labelNone because it is used as oldLabel for the lblChanges added at the end
 
@@ -590,19 +586,23 @@ void ChangeGraph::createRelabelChanges(Model::NodeIdType nodeId, QString oldLabe
 	}
 }
 
-void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData labelOne, LabelData labelTwo)
+void ChangeGraph::splitMoveInOrInsertChangeForSecondLabel(MergeChange* change, LabelData labelOne, LabelData labelTwo)
 {
 	Q_ASSERT(change->branches() == (MergeChange::BranchA | MergeChange::BranchB) );
-	Q_ASSERT(change->type() == ChangeType::Move);
+	Q_ASSERT(change->type() == ChangeType::Move || change->type() == ChangeType::Insertion);
 
 	// Adjust the change for the A branch
 	change->newLabel_ = labelOne.branch_ == MergeChange::BranchA ? labelOne.label_ : labelTwo.label_;
-	if (change->newLabel() == change->oldLabel()) change->updateFlags_ = ChangeDescription::NoFlags;
-	else change->updateFlags_ = ChangeDescription::Label;
+	if (change->type() == ChangeType::Move)
+	{
+		if (change->newLabel() == change->oldLabel()) change->updateFlags_ = ChangeDescription::NoFlags;
+		else change->updateFlags_ = ChangeDescription::Label;
+	}
 
 	if (labelOne.label_ == labelTwo.label_)
 	{
-		// Both branches move a node and both move it to the same label. Our work here is done
+		// Both branches move/insert a node and both move/insert it to the same label, which we already updated.
+		// Our work here is done
 		return;
 	}
 	else
@@ -610,10 +610,12 @@ void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData l
 
 	// Make a new change for label B
 	auto newLabelB = labelOne.branch_ == MergeChange::BranchB ? labelOne.label_ : labelTwo.label_;
-	auto changeB = new MergeChange{ChangeType::Move,
-			(newLabelB == change->oldLabel() ? ChangeDescription::NoFlags : ChangeDescription::Label),
+	auto changeB = new MergeChange{change->type(),
+			(( change->type() == ChangeType::Insertion || newLabelB == change->oldLabel())
+			 ? ChangeDescription::NoFlags : ChangeDescription::Label),
 			change->nodeId(), MergeChange::BranchB,
-			change->oldParentId(), change->newParentId(), change->oldLabel(), newLabelB, {}, {}, {}, {}};
+			change->oldParentId(), change->newParentId(), change->oldLabel(), newLabelB,
+			change->oldType(), change->newType(), change->oldValue(), change->newValue()};
 
 	changes_.append(changeB);
 	changesForNode_.insert(changeB->nodeId(), changeB);
@@ -630,7 +632,7 @@ void ChangeGraph::splitMoveChangeForSecondLabel(MergeChange* change, LabelData l
 		changesToConflictWith.append(conflictIt.value());
 		++conflictIt;
 	}
-	// Actually add the dependencies
+	// Actually add the conflicts
 	for (auto & conflict : changesToConflictWith)
 	{
 		directConflicts_.insert(changeB, conflict);

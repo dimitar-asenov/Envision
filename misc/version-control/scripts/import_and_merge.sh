@@ -51,23 +51,36 @@ MERGE_AND_FILE_DIR="$( pwd )"
 
 cd $testdir
 
+# Import Java to Envision
 $JavaImportTool TestMerge base base -force-single-pu -no-size-estimation
 $JavaImportTool TestMerge master master -force-single-pu -no-size-estimation
-$JavaImportTool TestMerge dev dev -force-single-pu -no-size-estimation
+# For dev, see below
 
 # Generate patch files
 $gumtree base/TestMerge/TestMerge master/TestMerge/TestMerge
-$gumtree base/TestMerge/TestMerge dev/TestMerge/TestMerge
+# For dev, see below
 
 # Apply patches
 $idpatcher master/TestMerge/TestMerge
-$idpatcher dev/TestMerge/TestMerge
+# For dev, see below
 
 # Move to Envision test directory
 mkdir $envRepoSrc
 cp base/TestMerge/TestMerge "${envRepoSrc}/master_a_(base)_TestMerge"
 cp master/TestMerge/TestMerge "${envRepoSrc}/master_b_(master)_TestMerge"
-cp dev/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
+# For dev, see below
+
+# In some cases both the master and dev branch of a file are identical, but they are both different to base
+# In such cases create matching ids and skip unnecessary computation
+DEV_MASTER_DIFF=$(diff dev/dev.java master/master.java)
+if [[ $DEV_MASTER_DIFF  ]]; then
+	$JavaImportTool TestMerge dev dev -force-single-pu -no-size-estimation
+	$gumtree base/TestMerge/TestMerge dev/TestMerge/TestMerge
+	$idpatcher dev/TestMerge/TestMerge
+	cp dev/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
+else
+	cp master/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
+fi
 
 $repoScript $envRepoSrc $envRepo
 

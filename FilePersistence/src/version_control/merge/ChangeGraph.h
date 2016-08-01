@@ -116,7 +116,7 @@ class FILEPERSISTENCE_API ChangeGraph
 
 		void createRelabelChanges(Model::NodeIdType nodeId, QString oldLabel, QList<LabelData> newLabels,
 										  Model::NodeIdType parentId);
-		void splitMoveChangeForSecondLabel(MergeChange* change, LabelData labelOne, LabelData labelTwo);
+		void splitMoveInOrInsertChangeForSecondLabel(MergeChange* change, LabelData labelOne, LabelData labelTwo);
 
 		/**
 		 * Applies all non-conflicting changes that are not in an all-or-nothing dependency chain and returns their count.
