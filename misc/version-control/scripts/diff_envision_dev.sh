@@ -28,19 +28,18 @@ cd $ENVISION_ROOT/DebugBuild
 ./Envision -graphicssystem raster --test filepersistence:RunMerge &
 )
 
-merges="${1}/merges/*"
-for m in $merges; do
-	#echo Revision $m
+merges=(${1}/merges/*)
+counter=1
+for m in "${merges[@]}"; do
 	for fdir in ${m}/*; do
-		#echo File $fdir
+		echo "====== Processing ($counter of ${#merges[@]}) $fdir ======" 
 		if [ -d "${fdir}" ]; then
 			(
 				cd $fdir
 				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ] && [ -f devMerged.java ]; then
-				
-					echo "====== Processing $m ======"
 					
 					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java
+					rm -rf devMerged
 					mkdir devMerged
 					$JavaImportTool TestMerge devMerged.java devMerged -force-single-pu -no-size-estimation
 					cp /tmp/EnvisionVC/TestMerge/TestMerge envMerged
@@ -56,6 +55,7 @@ for m in $merges; do
 			)
 		fi
 	done
+	((counter++))
 done
 
 sort "${1}/merges/issues_env" > "${1}/merges/issues_env2"
