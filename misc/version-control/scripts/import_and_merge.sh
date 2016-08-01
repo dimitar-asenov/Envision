@@ -91,7 +91,7 @@ done
 # Copy envision repo sources and summary
 cp -rf $envRepoSrc $MERGE_AND_FILE_DIR/.
 
-declare -a filesToCopy=("hard_conflicts" "soft_conflicts")
+declare -a filesToCopy=("direct_conflicts" "remaining_changes" "soft_conflicts")
 for f in "${filesToCopy[@]}"
 do
 	if [ -f $f ] ; then

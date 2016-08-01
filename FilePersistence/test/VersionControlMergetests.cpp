@@ -543,6 +543,58 @@ class FILEPERSISTENCE_API RunMerge
 
 		// Save conflict summary.
 
+		// Direct conflicts
+		if (merge->mergeData_.cg_.hasDirectConflicts())
+		{
+			QFile file( "/tmp/EnvisionVC/direct_conflicts" );
+			if ( file.open(QIODevice::WriteOnly) )
+			{
+				QTextStream stream( &file );
+				for (auto change : merge->mergeData_.cg_.changesInDirectConflict())
+				{
+					stream << change->nodeId().toString() << "\n";
+				}
+			}
+			else Q_ASSERT(false);
+		}
+
+		// All remaining changes and their dependencies
+		if (!merge->remainingChanges().isEmpty())
+		{
+			QFile file( "/tmp/EnvisionVC/remaining_changes" );
+			if ( file.open(QIODevice::WriteOnly) )
+			{
+				QTextStream stream( &file );
+				for (auto change : merge->remainingChanges())
+				{
+					stream << change->nodeId().toString() << " "
+						<< (change->branches().testFlag(MergeChange::BranchA) ? "A" : "_")
+						<< (change->branches().testFlag(MergeChange::BranchB) ? "B" : "_")
+						<< " ";
+					switch (change->type()) {
+						case ChangeType::Deletion:
+							stream << "Del";
+							break;
+						case ChangeType::Insertion:
+							stream << "Ins";
+							break;
+						case ChangeType::Move:
+							stream << "Mov";
+							break;
+						case ChangeType::Stationary:
+							stream << "Sta";
+							break;
+						default:
+							Q_ASSERT(false);
+					}
+					for (auto dep : merge->mergeData_.cg_.dependenciesOf(change))
+						stream << " " << dep->nodeId().toString();
+					stream << "\n";
+				}
+			}
+			else Q_ASSERT(false);
+		}
+
 		// Soft conflicts
 		if (!merge->softConflicts().isEmpty())
 		{
@@ -556,21 +608,6 @@ class FILEPERSISTENCE_API RunMerge
 					for (auto node : softConflict.nodesInConflict())
 						stream << " " << node.toString();
 					stream << "\n";
-				}
-			}
-			else Q_ASSERT(false);
-		}
-
-		// Hard conflicts
-		if (!merge->remainingChanges().isEmpty())
-		{
-			QFile file( "/tmp/EnvisionVC/hard_conflicts" );
-			if ( file.open(QIODevice::WriteOnly) )
-			{
-				QTextStream stream( &file );
-				for (auto change : merge->remainingChanges())
-				{
-					stream << change->nodeId().toString() << "\n";
 				}
 			}
 			else Q_ASSERT(false);

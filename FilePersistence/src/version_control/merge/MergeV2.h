@@ -59,6 +59,7 @@ class FILEPERSISTENCE_API MergeV2
 
 	private:
 		friend class GitRepository;
+		friend class RunMerge; // this is a test class
 
 		/**
 		 * Merges \a revision into current HEAD.
