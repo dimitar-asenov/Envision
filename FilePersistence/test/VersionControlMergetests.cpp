@@ -540,6 +540,42 @@ class FILEPERSISTENCE_API RunMerge
 
 			merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
 		}
+
+		// Save conflict summary.
+
+		// Soft conflicts
+		if (!merge->softConflicts().isEmpty())
+		{
+			QFile file( "/tmp/EnvisionVC/soft_conflicts" );
+			if ( file.open(QIODevice::WriteOnly) )
+			{
+				QTextStream stream( &file );
+				for (auto softConflict : merge->softConflicts())
+				{
+					stream << softConflict.reason() << " : " << softConflict.nodesInConflict().size() << " :";
+					for (auto node : softConflict.nodesInConflict())
+						stream << " " << node.toString();
+					stream << "\n";
+				}
+			}
+			else Q_ASSERT(false);
+		}
+
+		// Hard conflicts
+		if (!merge->remainingChanges().isEmpty())
+		{
+			QFile file( "/tmp/EnvisionVC/hard_conflicts" );
+			if ( file.open(QIODevice::WriteOnly) )
+			{
+				QTextStream stream( &file );
+				for (auto change : merge->remainingChanges())
+				{
+					stream << change->nodeId().toString() << "\n";
+				}
+			}
+			else Q_ASSERT(false);
+		}
+
 		CHECK_CONDITION(true);
 		Model::AllTreeManagers::cleanup();
 

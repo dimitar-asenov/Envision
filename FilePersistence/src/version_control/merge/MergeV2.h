@@ -49,6 +49,7 @@ class FILEPERSISTENCE_API MergeV2
 		bool isAlreadyMerged() const;
 		bool hasConflicts() const;
 		const QList<SoftConflict>& softConflicts() const;
+		const QList<MergeChange*> remainingChanges() const;
 
 		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
@@ -92,5 +93,6 @@ class FILEPERSISTENCE_API MergeV2
 };
 
 inline bool MergeV2::isAlreadyMerged() const { return stage_ == Stage::Committed; }
+inline const QList<MergeChange*> MergeV2::remainingChanges() const { return mergeData_.cg_.changes(); }
 
 }
