@@ -759,15 +759,18 @@ bool ChangeGraph::removeDependenciesForSafeMoveChanges()
 bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 {
 	// Atomic change groups are essentially cycles of dependent changes with the following properties:
-	// - dependency is due to clashing lables, but other changes, like deletions or moves can be in the cycle
+	// - dependency is due to clashing lables, but other changes, like deletions, moves, and inserts can be in
+	//   the cycle. It's not necessary to have stand-alone label changes, e.g. a move in/insert can clash with a
+	//   deletion of a node with the same label
 	// - all changes come from the same branch. Alternatively both branches should make the same changes.
 	//
 	// Such changes can be applied, but they need to be applied in an all-or-nothing fashion.
 	//
 	// To make these non-conflicting and suitable for removal (and subsequent application) the following conditions
 	// must also be met
-	// - no change depends on a change outside of the cycle
+	// - no change depends on a change outside of the cycle. However there might be multiple paths through the cycle.
 	// - no change is in conflict with any other change
+	//
 
 	bool removedSomeDependencies = false;
 
@@ -787,16 +790,18 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 			continue;
 		}
 
-		// Check only one dependency on another change
 		// Check same branches
-		auto dependencies = dependencies_.values(change);
-
-		if (dependencies.size() != 1
-			 || change->branches() != dependencies.first()->branches())
+		bool stop = false;
+		for (auto dep : dependencies_.values(change))
 		{
-			okToBreakCycle.insert(change, false);
-			continue;
+			if (dep->branches() != change->branches())
+			{
+				okToBreakCycle.insert(change, false);
+				stop = true;
+				break;
+			}
 		}
+		if (stop) continue;
 
 		// This change could potentially be removed if the rest of the changes in this cycle are also OK
 		okToBreakCycle.insert(change, true);
@@ -808,79 +813,83 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 	{
 		if (!okToBreakCycle.value(change)) continue;
 
-		// This change is so far OK and it must have exactly one dependency
-		// Check if it forms a cycle
-		QList<MergeChange*> changesInChain{change};
-		QList<MergeChange*> changesInCycleWhoseDependeciesToTemove;
-		while (true)
-		{
-			auto nextChange = dependencies_.value(changesInChain.last());
+		// This change is so far OK. Check if it forms a cycle
+		QList<MergeChange*> exploredChanges{change};
+		QList<MergeChange*> changesToExplore{dependencies_.values(change)};
 
-			auto cycleAt = changesInChain.indexOf(nextChange);
-			if ( cycleAt >= 0 )
+		int earliestCycle = -1;
+		bool badCycle = false;
+		while (!changesToExplore.isEmpty())
+		{
+			Q_ASSERT(exploredChanges.size() <= changes_.size());
+
+			auto nextChange = changesToExplore.takeLast();
+
+			auto cycleAt = exploredChanges.indexOf(nextChange);
+			if (cycleAt >= 0)
 			{
-				// At this point we know that there is a cycle within the changesInCycle
-				// but it doesn't have to be the entire list.
-				changesInCycleWhoseDependeciesToTemove = changesInChain.mid(cycleAt);
+				if (earliestCycle < 0 || cycleAt < earliestCycle) earliestCycle = cycleAt;
+				continue;
+			}
+
+			if (okToBreakCycle.value(nextChange))
+			{
+				exploredChanges.append(nextChange);
+				changesToExplore.append(dependencies_.values(nextChange));
+			}
+			else
+			{
+				badCycle = true;
 				break;
 			}
-
-			if (okToBreakCycle.value(nextChange)) changesInChain.append(nextChange);
-			else break;
 		}
 
-		Q_ASSERT( changesInCycleWhoseDependeciesToTemove.size() != 1 );
-		if (!changesInCycleWhoseDependeciesToTemove.isEmpty())
+		if (!badCycle)
 		{
-			// This is a cycle which matches all conditions. Remove the dependencies between the elements.
-			// NOTE: Here we still keep dependencies such as
-			// -In case of Insertion/MoveIn, we need to make sure that its parent exist
-			// -In case of Deletion, we need to make sure that its subtree is Deleted or Moved out
-			// We allow label conflicts in this case, since they will be resolved once all changes are applied
-			removedSomeDependencies = true;
-			for (auto changeToMakeIndependent : changesInCycleWhoseDependeciesToTemove)
+			Q_ASSERT(changesToExplore.isEmpty());
+			QList<MergeChange*> changesWhoseDependenciesToRemove = exploredChanges.mid(earliestCycle);
+			Q_ASSERT( changesWhoseDependenciesToRemove.size() > 1 );
+
+			// This is a cycle which matches all conditions. Remove label clash dependencies between the elements.
+			// We ignore label conflicts in this case, since they will be resolved once all changes are applied.
+			//
+			// Here we still keep non label-clash dependencies, e.g.:
+			// -In case of Insertion/MoveIn, we need to make sure that the parent node parent exist
+			// -In case of Deletion, we need to make sure that the subtree is Deleted or Moved out
+
+			for (auto changeToMakeIndependent : changesWhoseDependenciesToRemove)
 			{
-				// Nothing will depend on Deletion ( Except Deletion of parentNode )
-				// Deletion will depend on Deletion, MoveOut of children
-				// MoveIn, Insertion of children will depend on Insertion
-				// Insertion will depend on nothing ( Except Insertion of parentNode )
+				// Deletion cannot depend on another change because of a label clash, keep all dependencies.
 				if (changeToMakeIndependent->type() != ChangeType::Deletion)
 				{
-					// Remove all forward dependencies if change is not deletion
-					auto thisDependsOn = dependencies_.values(changeToMakeIndependent);
-					for (auto ourDependency : thisDependsOn)
+					for (auto dep : dependencies_.values(changeToMakeIndependent))
 					{
-						// If change depends on Insertion(ourDependency), then it must be Insert/MoveIn change
-						// in the subtree of element to be Inserted(by ourDependency), so dependency cannot be removed
-						// New Parent must exist for the change to happen
-						if (ourDependency->type() != ChangeType::Insertion)
+						// An Insertion cannot resolve a label clash, don't remove this dependency
+						if (dep->type() != ChangeType::Insertion)
 						{
-							reverseDependencies_.remove(ourDependency, changeToMakeIndependent);
-							dependencies_.remove(changeToMakeIndependent, ourDependency);
-						}
-					}
-				}
-				if (changeToMakeIndependent->type() != ChangeType::Insertion)
-				{
-					// Remove all reverse dependencies if change is not Insertion
-					auto otherDependOnThis = reverseDependencies_.values(changeToMakeIndependent);
-					for (auto dependencyToUs : otherDependOnThis)
-					{
-						// If Deletion(ourDependency) depends on change, then it must be Delete/MoveOut change
-						// in the subtree of element to be Deleted(by dependencyToUs), so dependency cannot be removed
-						// Subtree must be deleted before deleting Node
-						if (dependencyToUs->type() != ChangeType::Deletion)
-						{
-							dependencies_.remove(dependencyToUs, changeToMakeIndependent);
-							reverseDependencies_.remove(changeToMakeIndependent, dependencyToUs);
+							// changeToMakeIndependent is Move/Insert/Relabel
+							// dep is Move/Del/Relabel
+							// All but one of the possible dependency combinations are due to label clashes.
+							// A move, may depend on a move, not because of a label, but to avoid cycles, so preserve
+							// such a depenency
+							if (changeToMakeIndependent->type() != ChangeType::Move || dep->type() != ChangeType::Move
+								 || changeToMakeIndependent->newParentId() == dep->oldParentId())
+							{
+								// This must be a label dependency. Remove it.
+								Q_ASSERT(changeToMakeIndependent->newLabel() == dep->oldLabel());
+
+								dependencies_.remove(changeToMakeIndependent, dep);
+								reverseDependencies_.remove(dep, changeToMakeIndependent);
+								removedSomeDependencies = true;
+							}
 						}
 					}
 				}
 			}
 		}
 
-		// Regardless if there was a cycle or not, mark all changes in the chain as notOK to avoid further processing
-		for (auto processedChange : changesInChain)
+		// Regardless if there was a cycle or not, mark all explored changes as notOK to avoid further processing
+		for (auto processedChange : exploredChanges)
 			okToBreakCycle.insert(processedChange, false);
 	}
 
