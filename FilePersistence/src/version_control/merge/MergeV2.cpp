@@ -29,6 +29,7 @@
 #include "MergePipelineComponent.h"
 #include "ConflictUnitComponent.h"
 #include "ListMergeComponentV2.h"
+#include "DiscardConflictingDeletesComponent.h"
 
 #include "../Diff.h"
 #include "../GitPiecewiseLoader.h"
@@ -122,6 +123,7 @@ MergeV2::MergeV2(QString revision, bool fastForward, GitRepository* repository)
 
 void MergeV2::initializePipelineComponents()
 {
+	mergePipeline_.append(std::make_shared<DiscardConflictingDeletesComponent>());
 	mergePipeline_.append(std::make_shared<ConflictUnitComponent>());
 	mergePipeline_.append(std::make_shared<ListMergeComponentV2>());
 }

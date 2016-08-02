@@ -72,8 +72,12 @@ class FILEPERSISTENCE_API ChangeGraph
 		QList<MergeChange*> changesForChildren(Model::NodeIdType nodeId) const;
 
 		QList<MergeChange*> changesInDirectConflict() const;
+		QList<MergeChange*> directConflictsOf(MergeChange* change) const;
 		QList<MergeChange*> dependenciesOf(MergeChange* change) const;
+		QList<MergeChange*> reverseDependenciesOf(MergeChange* change) const;
 		bool hasDirectConflicts() const;
+
+		void removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* rootDeleteChange);
 
 	private:
 		// The nodes of the graph
@@ -152,8 +156,12 @@ inline QList<MergeChange*> ChangeGraph::changesForNode(Model::NodeIdType nodeId)
 inline QList<MergeChange*> ChangeGraph::changesForChildren(Model::NodeIdType nodeId) const
 { return changesForChildren_.values(nodeId); }
 inline QList<MergeChange*> ChangeGraph::changesInDirectConflict() const { return directConflicts_.uniqueKeys(); }
+inline QList<MergeChange*> ChangeGraph::directConflictsOf(MergeChange* change) const
+{ return directConflicts_.values(change); }
 inline QList<MergeChange*> ChangeGraph::dependenciesOf(MergeChange* change) const
 { return dependencies_.values(change); }
+inline QList<MergeChange*> ChangeGraph::reverseDependenciesOf(MergeChange* change) const
+{ return reverseDependencies_.values(change); }
 inline bool ChangeGraph::hasDirectConflicts() const { return !directConflicts_.isEmpty(); }
 
 }

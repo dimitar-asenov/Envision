@@ -666,7 +666,6 @@ void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
 		tryApplyingMoreChanges = removeDependenciesForSafeMoveChanges();
 		tryApplyingMoreChanges = removeDependenciesInsideNonConflictingAtomicChangeGroups() || tryApplyingMoreChanges;
 	}
-
 }
 
 int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
@@ -1008,6 +1007,79 @@ void ChangeGraph::removeAllDependencies(MergeChange* change)
 	for (auto dependencyToUs : otherDependOnThis)
 		dependencies_.remove(dependencyToUs, change);
 
+}
+
+void ChangeGraph::removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* rootDeleteChange)
+{
+	// Note that this method will not work if it is called more than once for overlapping trees.
+	// Once the smaller subtree is removed, there will be a dependency from a Delete change on a move change
+	// from different branches and subsequence calls for removing the super tree will fail.
+	// This is on purpose to keep things in the ChangeGraph as simple as possible.
+	//
+	// Filter subtrees on the outside to only call this method with the super tree.
+
+	// Only one branch should make this change
+	Q_ASSERT(rootDeleteChange->branches() != (MergeChange::BranchA | MergeChange::BranchB));
+	Q_ASSERT(rootDeleteChange->branches() != MergeChange::None);
+	auto deletingBranch = rootDeleteChange->branches().testFlag(MergeChange::BranchA)
+			? MergeChange::BranchA :MergeChange::BranchB;
+
+	// It should conflict with a move or relabel from the other branch
+	MergeChange* suitableConflictingChange{};
+	for (auto conflicting : directConflicts_.values(rootDeleteChange))
+		if (conflicting->branches().testFlag(deletingBranch) == false
+			 && conflicting->nodeId() == rootDeleteChange->nodeId()
+			 && (conflicting->type() == ChangeType::Move
+				  || (conflicting->type() == ChangeType::Stationary
+						&& conflicting->updateFlags().testFlag(ChangeDescription::Label)))
+			 )
+		{
+			suitableConflictingChange = conflicting;
+			break;
+		}
+	Q_ASSERT(suitableConflictingChange);
+
+	auto relabel = suitableConflictingChange->type() == ChangeType::Stationary;
+
+	// Re-route dependencies on the delete change to now point to the move change
+	for (auto dependsOnDel : reverseDependencies_.values(rootDeleteChange))
+	{
+		// A relabel requires this to be a top-level delete. Make sure that there are no dependencies that are deletes.
+		if (relabel) Q_ASSERT(dependsOnDel->type() != ChangeType::Deletion);
+
+		dependencies_.insert(dependsOnDel, suitableConflictingChange);
+		reverseDependencies_.insert(suitableConflictingChange, dependsOnDel);
+	}
+
+	// Remove this delete change and all its dependent changes
+	// In some cases it is necessary to split the change instead
+	// Ignore dependencies from the other branch
+	QList<MergeChange*> changesToRemove{rootDeleteChange};
+	while (!changesToRemove.isEmpty())
+	{
+		auto change = changesToRemove.takeLast();
+
+		if (change->branches() == deletingBranch)
+		{
+			// Remove a deletion if only in this branch
+			Q_ASSERT(change->type() == ChangeType::Deletion);
+			changesToRemove.append( dependencies_.values(change));
+			removeChange(change, true);
+		}
+		else if (change->type() == ChangeType::Deletion)
+		{
+			// Split a deletion in both branches
+			Q_ASSERT(change->branches() == (MergeChange::BranchA | MergeChange::BranchB));
+			changesToRemove.append( dependencies_.values(change));
+			change->branches_ &= ~deletingBranch;
+		}
+		else
+		{
+			// Any other dependency must be only in the other branch
+			// Test this and ignore it
+			Q_ASSERT(change->branches().testFlag(deletingBranch) == false);
+		}
+	}
 }
 
 }
