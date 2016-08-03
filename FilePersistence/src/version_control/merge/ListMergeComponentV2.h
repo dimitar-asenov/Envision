@@ -50,6 +50,10 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 
 	private:
 
+		enum class Phase : int {Initial, RelabelComplete, HolesRemoved};
+		Phase phase_{Phase::Initial};
+		QList<Model::NodeIdType> listsToMerge_{};
+
 		struct IdPosition{
 				Model::NodeIdType id{};
 				int baseIndex{};
@@ -95,10 +99,10 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 										QList<IdPosition>& list, std::shared_ptr<GenericTree> treeBase,  MergeChange::Branches branch);
 
 		/**
-		 * Removes Holes from the list, makes it continuous and adjusts the CG according to it
+		 * Removes Holes from \a listsToMerge_, makes it continuous and adjusts the CG according to it
 		 * It gives fractional indices for the elements that were supposed to move in or inserted in the holes
 		 */
-		void removeHoles(QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg);
+		void removeHoles(GenericTree* tree, ChangeGraph& cg);
 
 		/**
 		 * For Debugging purpose, prints the list and unapplied changes

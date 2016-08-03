@@ -123,9 +123,11 @@ MergeV2::MergeV2(QString revision, bool fastForward, GitRepository* repository)
 
 void MergeV2::initializePipelineComponents()
 {
+	auto listMergeComponent = std::make_shared<ListMergeComponentV2>();
+	mergePipeline_.append(listMergeComponent);
 	mergePipeline_.append(std::make_shared<DiscardConflictingDeletesComponent>());
 	mergePipeline_.append(std::make_shared<ConflictUnitComponent>());
-	mergePipeline_.append(std::make_shared<ListMergeComponentV2>());
+	mergePipeline_.append(listMergeComponent);
 }
 
 void MergeV2::performTrueMerge()

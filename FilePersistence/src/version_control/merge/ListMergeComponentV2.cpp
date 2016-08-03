@@ -59,16 +59,29 @@ bool ListMergeComponentV2::isOrderedList(const QString& type)
 
 void ListMergeComponentV2::run(MergeData& mergeData)
 {
-	mergeData.cg_.applyNonConflictingChanges(mergeData.treeMerged_.get());
-	auto listsToMerge = computeListsToMerge(mergeData);
-	for (auto listId : listsToMerge)
-	{
-		auto map = computeAdjustedIndices(listId, mergeData);
-		mergeData.cg_.relabelChildrenUniquely(listId, map, mergeData.treeMerged_.get());
-		mergeData.cg_.applyNonConflictingChanges(mergeData.treeMerged_.get());
-	}
-	removeHoles(listsToMerge, mergeData.treeMerged_.get(), mergeData.cg_);
+	switch (phase_) {
+		case Phase::Initial:
+		{
+			listsToMerge_ = computeListsToMerge(mergeData);
+			for (auto listId : listsToMerge_)
+			{
+				auto map = computeAdjustedIndices(listId, mergeData);
+				mergeData.cg_.relabelChildrenUniquely(listId, map, mergeData.treeMerged_.get());
+			}
 
+			phase_ = Phase::RelabelComplete;
+		} break;
+		case Phase::RelabelComplete:
+		{
+			mergeData.cg_.applyNonConflictingChanges(mergeData.treeMerged_.get());
+			removeHoles(mergeData.treeMerged_.get(), mergeData.cg_);
+
+			phase_ = Phase::HolesRemoved;
+		} break;
+		default:
+			Q_ASSERT(false);
+			break;
+	}
 }
 
 QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& mergeData)
@@ -96,9 +109,9 @@ QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& me
 	}
 
 	// Keep only lists where both branches makes changes
-	// Note that this also automatically filters lists that have been inserted. If we even want to process lists
-	// only modified by one branch and remove this code, then some code (like the commented one below) will be needed
-	// to filter insertions.
+	// Note that this also automatically filters lists that have been inserted. If we ever want to process lists
+	// only modified by one branch and this code is removed, then some code (like the commented one below) will be
+	// needed to filter insertions.
 	QList<Model::NodeIdType> listsToMerge;
 	for (auto it = listsWithStructureChanges.begin(); it != listsWithStructureChanges.end(); ++it)
 		if (it.value() == (MergeChange::BranchA | MergeChange::BranchB))
@@ -237,16 +250,22 @@ void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType>
 	}
 }
 
-void ListMergeComponentV2::removeHoles(const QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg)
+void ListMergeComponentV2::removeHoles(GenericTree* tree, ChangeGraph& cg)
 {
-	for (auto listId : lists)
+	for (auto listId : listsToMerge_)
 	{
+		auto listNode = tree->find(listId);
+		if (!listNode)
+		{
+			// This list has been removed
+			continue;
+		}
+
 		// Traverse through children labels
 		ChangeGraph::IdToLabelMap map;
 		int i = 0;
 		int label = 0;
 		int offset = 1;
-		auto listNode = tree->find(listId, true);
 		auto idList = nodeListToSortedIdList(listNode->children());
 		QHash< QString, QPair<int, int>> labelsToBeUpdated;
 		while (i < idList.size())
