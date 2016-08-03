@@ -115,8 +115,6 @@ bool DiscardConflictingDeletesComponent::isSubtreeCompletelyDeleted(MergeChange*
 	if (subtreeIsDeleted.contains(deleteChange, deletingBranch)) return true;
 	if (subtreeIsNotDeleted.contains(deleteChange, deletingBranch)) return false;
 
-	auto bothBranchesDelete = deleteChange->branches() == (MergeChange::BranchA | MergeChange::BranchB);
-
 	// Check dependend changes
 	bool subtreeDeleted = true;
 	for (auto dependency : cg.dependenciesOf(deleteChange))
@@ -126,7 +124,6 @@ bool DiscardConflictingDeletesComponent::isSubtreeCompletelyDeleted(MergeChange*
 		if (!dependencyMatchesBranch)
 		{
 			// Ignore dependencies of the other branch
-			Q_ASSERT(bothBranchesDelete);
 			continue;
 		}
 

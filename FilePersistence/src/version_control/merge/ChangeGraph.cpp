@@ -1051,7 +1051,7 @@ void ChangeGraph::removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* r
 
 	auto relabel = suitableConflictingChange->type() == ChangeType::Stationary;
 
-	// Re-route dependencies on the delete change to now point to the move change
+	// Re-route dependencies on the delete change to now point to the move/relabel change
 	for (auto dependsOnDel : reverseDependencies_.values(rootDeleteChange))
 	{
 		// A relabel requires this to be a top-level delete. Make sure that there are no dependencies that are deletes.
