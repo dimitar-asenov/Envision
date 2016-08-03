@@ -280,9 +280,14 @@ void ChangeGraph::addLabelDependency(MergeChange* change)
 		auto it = changesForChildren_.find(change->newParentId());
 		while (it != changesForChildren_.end() && it.key() == change->newParentId())
 		{
+			// In the condition below, keep in mind that a Move change may also change the label. Thus it is not
+			// sufficient to just check if a change changes the label, because if it's a move, perhaps only the old
+			// labels clash and the new ones are fine. This means that the check for Stationary+Label must be like it is,
+			// and not simply Label, like it was originally.
 			if (it.value()->oldLabel() == change->newLabel() &&
-					(	it.value()->updateFlags().testFlag(ChangeDescription::Label)
-						|| it.value()->type() == ChangeType::Deletion
+					(	it.value()->type() == ChangeType::Deletion
+						|| (it.value()->type() == ChangeType::Stationary
+							 && it.value()->updateFlags().testFlag(ChangeDescription::Label))
 						|| (it.value()->type() == ChangeType::Move && it.value()->oldParentId() == change->newParentId())
 					)
 				 )
