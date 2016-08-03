@@ -14,6 +14,7 @@ JavaImportTool="$SCRIPT_DIR/../JavaImportToolBin/JavaImportTool/bin/JavaImportTo
 gumtree="$SCRIPT_DIR/../gumtree_bin/gumtree-2.1.0-SNAPSHOT/bin/gumtree -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -g envision -m gumtree"
 
 idpatcher=$SCRIPT_DIR/patch_ids.py
+idsync=$SCRIPT_DIR/sync_branch_inserted_ids.py
 repoScript=$ENVISION_ROOT/FilePersistence/test/persisted/version-control/create-test-git-repo.py
 
 testdir="/tmp/EnvisionVC"
@@ -77,6 +78,13 @@ if [[ $DEV_MASTER_DIFF  ]]; then
 	$JavaImportTool TestMerge dev dev -force-single-pu -no-size-estimation
 	$gumtree base/TestMerge/TestMerge dev/TestMerge/TestMerge
 	$idpatcher dev/TestMerge/TestMerge
+	
+	# Additionally match some newly introduced IDs
+	$idsync master/TestMerge/TestMerge dev/TestMerge/TestMerge > dev/TestMerge/TestMerge.idpatch.sync
+	mv -f dev/TestMerge/TestMerge.idpatch.sync dev/TestMerge/TestMerge.idpatch
+	$idpatcher dev/TestMerge/TestMerge
+	
+	# Copy
 	cp dev/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
 else
 	cp master/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
