@@ -169,16 +169,26 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 
 			std::sort(idPositions.begin(), idPositions.end());	// sort the list according to the labels
 
+			// Merge all adjacent items for the same ID into one position (lists agree where the item should be)
+			for (int i = 1; i < idPositions.size();)
+			{
+				if (idPositions[i].isSamePositionAndID(idPositions[i-1]))
+				{
+					idPositions[i-1].branches |= idPositions[i].branches;
+					idPositions.removeAt(i);
+				}
+				else ++i;
+			}
+
 			IdPosition previousPosition;
 			previousPosition.baseIndex = -2; // -1 is used for elements before 0, and we need an index that doesn't exist.
 			for (auto idPosition : idPositions)
 			{
-				map.insert(idPosition.id, {QString::number(finalIndexInList), idPosition.branch});
+				map.insert(idPosition.id, {QString::number(finalIndexInList), idPosition.branches});
 				finalIndexInList++;
 
 				// Detect soft-conflicts
-				if (isOrderedList &&
-					 (idPosition.baseIndex == previousPosition.baseIndex && idPosition.offset == previousPosition.offset))
+				if (isOrderedList && idPosition.isSamePosition(previousPosition))
 					mergeData.softConflicts_.append(SoftConflict{"List items moved/inserted at the same position",
 															  {previousPosition.id, idPosition.id}});
 

@@ -59,7 +59,7 @@ class FILEPERSISTENCE_API ChangeGraph
 		struct LabelData
 		{
 			QString label_{};
-			MergeChange::Branches branch_{};
+			MergeChange::Branches branches_{};
 		};
 		using IdToLabelMap = QMultiHash<Model::NodeIdType, LabelData>;
 

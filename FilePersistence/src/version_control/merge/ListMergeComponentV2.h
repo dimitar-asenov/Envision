@@ -58,7 +58,7 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 				Model::NodeIdType id{};
 				int baseIndex{};
 				int offset{};
-				MergeChange::Branches branch{};
+				MergeChange::Branches branches{};
 
 				bool operator<(const IdPosition& other) const
 				{
@@ -66,6 +66,16 @@ class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
 						return offset < other.offset;
 					else
 						return baseIndex < other.baseIndex;
+				}
+
+				bool isSamePosition(const IdPosition& other) const
+				{
+					return baseIndex == other.baseIndex && offset == other.offset;
+				}
+
+				bool isSamePositionAndID(const IdPosition& other) const
+				{
+					return isSamePosition(other) && id == other.id;
 				}
 		};
 		/**
