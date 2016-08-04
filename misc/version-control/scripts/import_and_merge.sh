@@ -68,8 +68,7 @@ $idpatcher master/TestMerge/TestMerge
 # Move to Envision test directory
 mkdir $envRepoSrc
 cp base/TestMerge/TestMerge "${envRepoSrc}/master_a_(base)_TestMerge"
-cp master/TestMerge/TestMerge "${envRepoSrc}/master_b_(master)_TestMerge"
-# For dev, see below
+# For dev and master, see below
 
 # In some cases both the master and dev branch of a file are identical, but they are both different to base
 # In such cases create matching ids and skip unnecessary computation
@@ -80,14 +79,21 @@ if [[ $DEV_MASTER_DIFF  ]]; then
 	$idpatcher dev/TestMerge/TestMerge
 	
 	# Additionally match some newly introduced IDs
-	$idsync master/TestMerge/TestMerge dev/TestMerge/TestMerge > dev/TestMerge/TestMerge.idpatch.sync
+	# Match dev to master
+	$idsync base/TestMerge/TestMerge master/TestMerge/TestMerge dev/TestMerge/TestMerge > dev/TestMerge/TestMerge.idpatch.sync
 	mv -f dev/TestMerge/TestMerge.idpatch.sync dev/TestMerge/TestMerge.idpatch
 	$idpatcher dev/TestMerge/TestMerge
+	# Match master to dev
+	$idsync base/TestMerge/TestMerge dev/TestMerge/TestMerge master/TestMerge/TestMerge > master/TestMerge/TestMerge.idpatch.sync
+	mv -f master/TestMerge/TestMerge.idpatch.sync master/TestMerge/TestMerge.idpatch
+	$idpatcher master/TestMerge/TestMerge
 	
 	# Copy
+	cp master/TestMerge/TestMerge "${envRepoSrc}/master_b_(master)_TestMerge"
 	cp dev/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
 else
 	cp master/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
+	cp master/TestMerge/TestMerge "${envRepoSrc}/master_b_(master)_TestMerge"
 fi
 
 $repoScript $envRepoSrc $envRepo
