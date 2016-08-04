@@ -25,8 +25,17 @@ with open(args.branchAFilename) as f:
 with open(args.branchBFilename) as f:
 	branchBList = f.readlines()
 	
+# Regex for removing list labels
+listLabelRegex = re.compile("^(\t*)\d+ (.*)$")
+def stripListLabel(line):
+	m = listLabelRegex.match(line)
+	if m:
+		return m.group(1) + m.group(2)
+	else:
+		return line
+
 # Record regions identical between base and branchB. These regions should not be adjusted
-matchingBlocksBaseB = difflib.SequenceMatcher(None, a=baseList, b=branchBList, autojunk=False).get_matching_blocks()
+matchingBlocksBaseB = difflib.SequenceMatcher(None, a=list(map(stripListLabel, baseList)), b=list(map(stripListLabel, branchBList)), autojunk=False).get_matching_blocks()
 def rangeFromBMatchesBase( startLineIndexInB, endLineIndexInB ):
 	# endLineIndexInB is *not* included, hence the second <= below
 	assert startLineIndexInB <= endLineIndexInB
