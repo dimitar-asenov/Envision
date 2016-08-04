@@ -133,7 +133,7 @@ void ChangeGraph::addLabelConfict(MergeChange* change)
 	// Do not consider deletions and value/type changes
 	if (!change->isValueOrTypeChange() && change->type() != ChangeType::Deletion)
 	{
-		Q_ASSERT(!change->newParentId().isNull());
+		Q_ASSERT(!change->newParentId().isNull()); // Bad change, or root node ID has changed
 
 		auto it = changesForChildren_.find(change->newParentId());
 		while (it != changesForChildren_.end() && it.key() == change->newParentId())

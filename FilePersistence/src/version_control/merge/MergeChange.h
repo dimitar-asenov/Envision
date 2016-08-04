@@ -130,7 +130,11 @@ inline bool MergeChange::operator==(const MergeChange& other) const
 }
 
 inline bool MergeChange::operator!=(const MergeChange& other) const { return !(*this == other);}
-inline bool MergeChange::isValueOrTypeChange() const { return updateFlags_
-			& (ChangeDescription::Value | ChangeDescription::Type);}
+inline bool MergeChange::isValueOrTypeChange() const
+{
+	bool result = updateFlags_	& (ChangeDescription::Value | ChangeDescription::Type);
+	Q_ASSERT(!result || (type_ == ChangeType::Stationary && !updateFlags().testFlag(ChangeDescription::Label)));
+	return result;
+}
 
 }
