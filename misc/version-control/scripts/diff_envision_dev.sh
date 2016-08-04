@@ -28,29 +28,39 @@ cd $ENVISION_ROOT/DebugBuild
 ./Envision -graphicssystem raster --test filepersistence:RunMerge &
 )
 
+function waitFor () {
+	while kill -0 $1 2> /dev/null; do sleep 0.05; done;
+}
+
 merges=(${1}/merges/*)
 counter=1
 for m in "${merges[@]}"; do
 	for fdir in ${m}/*; do
-		echo "====== Processing ($counter of ${#merges[@]}) $fdir ======" 
+		echo "#################### Processing ($counter of ${#merges[@]}) $fdir ####################" 
 		if [ -d "${fdir}" ]; then
 			(
 				cd $fdir
 				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ] && [ -f devMerged.java ]; then
 					
-					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java
+					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java &
+					importBranchesAndMergePID=$!
+					
 					rm -rf devMerged
 					mkdir devMerged
-					$JavaImportTool TestMerge devMerged.java devMerged -force-single-pu -no-size-estimation
+					$JavaImportTool TestMerge devMerged.java devMerged -force-single-pu -no-size-estimation &
+					importDevPID=$!
+					
+					waitFor $importBranchesAndMergePID
+					waitFor $importDevPID
+					
 					cp /tmp/EnvisionVC/TestMerge/TestMerge envMerged
 					$gumtree envMerged devMerged/TestMerge/TestMerge
 					$idpatcher devMerged/TestMerge/TestMerge
 					
-					diff devMerged/TestMerge/TestMerge envMerged > diff_dev_env
-					if [ -s diff_dev_env ]; then
+					AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)
+					if [[ $AUTO_MANUAL_DIFF  ]]; then
 						echo "${m##*/}/${fdir##*/}" >> ../../issues_env
 					fi
-					rm diff_dev_env
 				fi
 			)
 		fi
