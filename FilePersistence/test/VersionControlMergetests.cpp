@@ -551,9 +551,7 @@ class FILEPERSISTENCE_API RunMerge
 			{
 				QTextStream stream( &file );
 				for (auto change : merge->mergeData_.cg_.changesInDirectConflict())
-				{
-					stream << change->nodeId().toString() << "\n";
-				}
+					stream << change->debugString(merge->mergeData_.cg_.directConflictsOf(change)) << "\n";
 			}
 			else Q_ASSERT(false);
 		}
@@ -566,31 +564,7 @@ class FILEPERSISTENCE_API RunMerge
 			{
 				QTextStream stream( &file );
 				for (auto change : merge->remainingChanges())
-				{
-					stream << change->nodeId().toString() << " "
-						<< (change->branches().testFlag(MergeChange::BranchA) ? "A" : "_")
-						<< (change->branches().testFlag(MergeChange::BranchB) ? "B" : "_")
-						<< " ";
-					switch (change->type()) {
-						case ChangeType::Deletion:
-							stream << "Del";
-							break;
-						case ChangeType::Insertion:
-							stream << "Ins";
-							break;
-						case ChangeType::Move:
-							stream << "Mov";
-							break;
-						case ChangeType::Stationary:
-							stream << "Sta";
-							break;
-						default:
-							Q_ASSERT(false);
-					}
-					for (auto dep : merge->mergeData_.cg_.dependenciesOf(change))
-						stream << " " << dep->nodeId().toString();
-					stream << "\n";
-				}
+					stream << change->debugString(merge->mergeData_.cg_.dependenciesOf(change)) << "\n";
 			}
 			else Q_ASSERT(false);
 		}

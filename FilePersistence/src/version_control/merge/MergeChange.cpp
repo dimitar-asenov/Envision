@@ -112,4 +112,57 @@ GenericNode::ValueType MergeChange::newValueType() const
 	else Q_ASSERT(false);
 }
 
+QString MergeChange::debugString(QList<MergeChange*> changesToAppendAtEnd) const
+{
+	QString result;
+	result += nodeId_.toString() + " ";
+	result += branches_.testFlag(MergeChange::BranchA) ? "A" : "_";
+	result += branches_.testFlag(MergeChange::BranchB) ? "B" : "_";
+	result += " ";
+
+	QString labels;
+
+	switch (type_) {
+		case ChangeType::Deletion:
+			result +=  "Del";
+			labels = oldLabel_.leftJustified(10, ' ', true);
+			break;
+		case ChangeType::Insertion:
+			result +=  "Ins";
+			labels = newLabel_.leftJustified(10, ' ', true);
+			break;
+		case ChangeType::Move:
+			result += "Mov";
+			if (updateFlags_.testFlag(ChangeDescription::Label))
+				labels = oldLabel_.leftJustified(4, ' ', true) + "->" + newLabel_.leftJustified(4, ' ', true);
+			else labels = newLabel_.leftJustified(10, ' ', true);
+			break;
+		case ChangeType::Stationary:
+			if (updateFlags_ == ChangeDescription::Label) result += "Lab";
+			else if (updateFlags_ == ChangeDescription::Value) result += "Val";
+			else if (updateFlags_ == ChangeDescription::Type) result += "Typ";
+			else
+			{
+				// Multiple flags
+				result += updateFlags_.testFlag(ChangeDescription::Label) ? 'L' : '_';
+				result += updateFlags_.testFlag(ChangeDescription::Value) ? 'V' : '_';
+				result += updateFlags_.testFlag(ChangeDescription::Type) ? 'T' : '_';
+			}
+
+			if (updateFlags_.testFlag(ChangeDescription::Label))
+				labels = oldLabel_.leftJustified(4, ' ', true) + "->" + newLabel_.leftJustified(4, ' ', true);
+			else labels = newLabel_.leftJustified(10, ' ', true);
+			break;
+		default:
+			Q_ASSERT(false);
+	}
+
+	result += " " + labels + " : ";
+
+	for (auto tailChange : changesToAppendAtEnd)
+		result += " " + tailChange->nodeId_.toString();
+
+	return result;
+}
+
 }

@@ -77,6 +77,8 @@ class FILEPERSISTENCE_API MergeChange
 		QString newValueWithoutPrefix() const;
 		GenericNode::ValueType newValueType() const;
 
+		QString debugString(QList<MergeChange*> changesToAppendAtEnd = {}) const;
+
 	private:
 		friend class ChangeGraph;
 
