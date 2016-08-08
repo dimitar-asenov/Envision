@@ -105,6 +105,7 @@ function processDevBranch ()
 	if [[ $DEV_MASTER_DIFF  ]]; then
 		$JavaImportTool TestMerge dev dev -force-single-pu -no-size-estimation
 		
+		waitFor $baseImportPID
 		
 		if [ "$QUICK_MATCH_ARG" == "-quick-match" ]; then
 			$quick_match base/TestMerge/TestMerge dev/TestMerge/TestMerge > dev/TestMerge/TestMerge.idpatch
