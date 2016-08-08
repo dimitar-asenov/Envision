@@ -806,18 +806,23 @@ bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
 			continue;
 		}
 
-		// Check same branches
-		bool stop = false;
+		// Check same branches and that dependencies exist
+		bool differentBranches = false;
+		bool hasDependencies = false;
 		for (auto dep : dependencies_.values(change))
 		{
+			hasDependencies = true;
 			if (dep->branches() != change->branches())
 			{
-				okToBreakCycle.insert(change, false);
-				stop = true;
+				differentBranches = true;
 				break;
 			}
 		}
-		if (stop) continue;
+		if (differentBranches || !hasDependencies)
+		{
+			okToBreakCycle.insert(change, false);
+			continue;
+		}
 
 		// This change could potentially be removed if the rest of the changes in this cycle are also OK
 		okToBreakCycle.insert(change, true);
