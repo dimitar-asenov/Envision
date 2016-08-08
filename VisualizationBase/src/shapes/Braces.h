@@ -60,6 +60,8 @@ class VISUALIZATIONBASE_API Braces: public Super<Shape>
 
 	private:
 		QSize getSizeOfBrace(const QString& brace, const QFont& font, int innerHeight, QPointF* offset) const;
+
+		static const int MAX_BRACE_SIZE;
 };
 
 }

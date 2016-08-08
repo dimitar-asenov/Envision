@@ -31,6 +31,10 @@ namespace Visualization {
 
 SHAPE_COMMON_DEFINITIONS(Braces, "shape")
 
+// This is needed to work around an issue where very big brace sizes result in huge braces (much bigger than the size)
+// overlaid on top of the canvas, covering big parts of the project.
+const int Braces::MAX_BRACE_SIZE = 1000;
+
 Braces::Braces(Item *parent, StyleType *style) :
 	Super{parent, style}, contentTop_{0}, contentLeft_{0}, textSize_{2}
 {
@@ -38,14 +42,17 @@ Braces::Braces(Item *parent, StyleType *style) :
 
 void Braces::update()
 {
+	QSize lb;
+	QSize rb;
+
 	if ( sizeSpecified() == InnerSize )
 	{
 		textSize_ = height();
 		if (textSize_ < style()->minHeight()) textSize_ = style()->minHeight();
-		QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
-		QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
+		lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
+		rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
 
-		while (lb.height() < height() && rb.height() < height())
+		while (lb.height() < height() && rb.height() < height() && textSize_ <= MAX_BRACE_SIZE)
 		{
 			textSize_++;
 			lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
@@ -62,8 +69,8 @@ void Braces::update()
 	{
 		textSize_ = height();
 		if (textSize_ < style()->minHeight()) textSize_ = style()->minHeight();
-		QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
-		QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
+		lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
+		rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
 
 		while (textSize_ >= 0 && (lb.width() + rb.width() > width() || lb.height() + rb.height() > height()))
 		{
@@ -77,6 +84,20 @@ void Braces::update()
 		rightBraceLeft_ = width() - rb.width();
 
 		setItemSize(xOffset() + width(), yOffset() + height());
+	}
+
+	if (textSize_ > MAX_BRACE_SIZE)
+	{
+		textSize_ = MAX_BRACE_SIZE;
+		//QPointF leftOffset;
+		//QPointF rightOffset;
+		auto adjustedLb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
+		auto adjustedRb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
+
+		leftBraceOffset_.ry() += (lb.height() - adjustedLb.height()) / 2.0;
+		leftBraceOffset_.rx() += (lb.width() - adjustedLb.width()) / 2.0;
+		rightBraceOffset_.ry() += (rb.height() - adjustedRb.height()) / 2.0;
+		rightBraceOffset_.rx() += (rb.width() - adjustedRb.width()) / 2.0;
 	}
 }
 
