@@ -242,7 +242,7 @@ Class* addInner()
 
 Module* addLambda()
 {
-	auto mod = new Module{"Lambda"};
+	auto mod = new Module{"LambdaAndAnonymous"};
 	mod->fields()->append(new Field{"common",
 			new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 
@@ -288,7 +288,7 @@ Module* addLambda()
 	noRetMet->arguments()->append(new FormalArgument{"x",
 				new PrimitiveTypeExpression{PrimitiveTypeExpression::PrimitiveTypes::INT}});
 
-	auto test = new Class{"LambdaTest", Modifier::Public};
+	auto test = new Class{"TestClass", Modifier::Public};
 	mod->classes()->append(test);
 
 	auto acceptUnary =  new Method{"unary"};
@@ -339,11 +339,22 @@ Module* addLambda()
 	someOpCall->arguments()->append(new ReferenceExpression{"x"});
 	le->body()->append(new ExpressionStatement{someOpCall});
 
+	// Add anonymous class
+	auto anonymousClass = new AnonymousClassExpression{};
+	auto newExpr = new NewExpression{};
+	newExpr->setNewType(anonymousClass);
+	newExpr->setInitializer(new IntegerLiteral{42});
+	testMet->items()->append(new ExpressionStatement{newExpr});
+
+	anonymousClass->classDefinition()->baseClasses()->append(new ReferenceExpression{"IUnary"});
+	anonymousClass->classDefinition()->methods()->append(unMet->clone());
+
 	// Positions
 	mod->extension<Position>()->set(1, 0);
 	iUnary->extension<Position>()->set(0, 0);
 	iBinary->extension<Position>()->set(0, 1);
 	iNoRet->extension<Position>()->set(0, 2);
+	testMet->extension<Position>()->set(1, 0);
 	test->extension<Position>()->set(1, 0);
 	return mod;
 }

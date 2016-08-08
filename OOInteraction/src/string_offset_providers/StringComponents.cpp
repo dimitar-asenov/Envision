@@ -236,7 +236,10 @@ void StringComponents::initConversions()
 	add<VariableDeclarationExpression>([](VariableDeclarationExpression* e ){ return c( e->decl()->typeExpression(), " ",
 			e->decl()->name(), Optional{"=", e->decl()->initialValue()}, Optional{e->decl()->initialValue()}); });
 
-	add<LambdaExpression>([](LambdaExpression* e ){ return c( CompoundObjectDescriptor::storeExpression(e)); });
+	add<LambdaExpression>([](LambdaExpression* e )
+		{ return c( CompoundObjectDescriptor::storeExpression(e)); });
+	add<AnonymousClassExpression>([](AnonymousClassExpression* e )
+		{ return c( CompoundObjectDescriptor::storeExpression(e)); });
 
 	add<ArrayInitializer>([](ArrayInitializer* e){ return c( list(e->values(), "{", ",", "}", false, false) ); });
 

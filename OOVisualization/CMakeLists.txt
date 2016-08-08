@@ -252,6 +252,10 @@ add_library(OOVisualization SHARED
 	src/elements/VFormalMetaArgument.cpp
 	src/elements/VFormalMetaArgumentStyle.cpp
 	src/AutoLayouter.cpp
+	src/expressions/VAnonymousClassExpression.h
+	src/expressions/VAnonymousClassExpression.cpp
+	src/expressions/VAnonymousClassExpressionStyle.h
+	src/expressions/VAnonymousClassExpressionStyle.cpp
 )
 
 envision_plugin(OOVisualization OOModel InteractionBase)

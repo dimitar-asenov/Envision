@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,34 +26,25 @@
 
 #pragma once
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+#include "Expression.h"
+#include "../declarations/Class.h"
 
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
-#include "VAnonymousClassExpression.h"
-#include "VCastExpression.h"
-#include "VMetaCallExpression.h"
+namespace OOModel {
+	class AnonymousClassExpression;
+}
+extern template class OOMODEL_API Model::TypedList<OOModel::AnonymousClassExpression>;
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+namespace OOModel {
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+class OOMODEL_API AnonymousClassExpression: public Super<Expression>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(AnonymousClassExpression)
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+	ATTRIBUTE(Class, classDefinition, setClassDefinition)
+
+	public:
+
+		virtual std::unique_ptr<Type> type() override;
+};
+
+}

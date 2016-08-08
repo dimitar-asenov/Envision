@@ -174,7 +174,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 	notAllowed(classs->friends());
 
-	//TODO
+	//TODO: Add more stuff if needed.
 	auto sections = fragment->append( new CompositeFragment{classs, "bodySections"});
 	*sections << list(classs->enumerators(), ElementVisitor{data()}, "enumerators");
 	*sections << list(classs->classes(), this, "declarations");

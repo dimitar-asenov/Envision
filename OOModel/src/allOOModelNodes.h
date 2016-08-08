@@ -87,6 +87,7 @@
 #include "expressions/TypeNameOperator.h"
 #include "expressions/GlobalScopeExpression.h"
 #include "expressions/MetaCallExpression.h"
+#include "expressions/AnonymousClassExpression.h"
 
 #include "expressions/types/TypeExpression.h"
 #include "expressions/types/PrimitiveTypeExpression.h"

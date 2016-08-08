@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,34 +26,35 @@
 
 #pragma once
 
+#include "../oovisualization_api.h"
+#include "VAnonymousClassExpressionStyle.h"
 #include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
 
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
-#include "VAnonymousClassExpression.h"
-#include "VCastExpression.h"
-#include "VMetaCallExpression.h"
+#include "OOModel/src/expressions/AnonymousClassExpression.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+namespace OOVisualization {
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+class VClass;
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+class OOVISUALIZATION_API VAnonymousClassExpression : public Super<VExpression<VAnonymousClassExpression,
+	Visualization::LayoutProvider<>, OOModel::AnonymousClassExpression>>
+{
+	ITEM_COMMON(VAnonymousClassExpression)
+
+	public:
+		VAnonymousClassExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VAnonymousClassExpression();
+
+		VClass* classDefinition() const;
+
+	protected:
+		void determineChildren() override;
+
+	private:
+		VClass* classDefinition_{};
+};
+
+inline VClass* VAnonymousClassExpression::classDefinition() const { return classDefinition_; }
+
+}

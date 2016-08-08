@@ -234,6 +234,9 @@ public class NodeDescriptors {
 				{"StatementItemList","body"},
 				{"Integer","dCaptureType"}
 		}));
+		add( new NodeInitializer("AnonymousClassExpression", new String[][]{
+			{"Class","classDefinition"}
+		}));
 
 		// Literals
 		add( new NodeInitializer("BooleanLiteral", new String[][]{

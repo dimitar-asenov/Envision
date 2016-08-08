@@ -208,6 +208,8 @@ add_library(OOModel SHARED
 	src/typesystem/OOResolutionRequest.cpp
 	src/typesystem/TypeArgumentBindings.h
 	src/typesystem/TypeArgumentBindings.cpp
+	src/expressions/AnonymousClassExpression.h
+	src/expressions/AnonymousClassExpression.cpp
 )
 
 envision_plugin(OOModel ModelBase Comments)

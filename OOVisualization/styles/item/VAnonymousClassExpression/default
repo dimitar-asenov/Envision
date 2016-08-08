@@ -1,0 +1,6 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />	
+	<layout prototypes="layout/SequentialLayout/default" />	
+	<classDefinition prototypes="item/VClass/default"/>
+</style>

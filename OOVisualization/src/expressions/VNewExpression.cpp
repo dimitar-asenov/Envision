@@ -27,6 +27,7 @@
 
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "OOModel/src/expressions/AnonymousClassExpression.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -49,7 +50,7 @@ VNewExpression::~VNewExpression()
 void VNewExpression::determineChildren()
 {
 	auto hasDimensions = node()->dimensions()->size() > 0;
-	auto showType = hasDimensions || !node()->initializer();
+	auto showType = hasDimensions || !node()->initializer() || DCast<AnonymousClassExpression>(node()->newType());
 
 	layout()->synchronizeFirst(prefix_, true, &style()->prefix());
 	layout()->synchronizeMid(type_, showType ? node()->newType() : nullptr, 1);

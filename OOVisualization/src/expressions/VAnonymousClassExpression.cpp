@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,36 +24,38 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
-
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
+#include "../elements/VStatementItemList.h"
 #include "VAnonymousClassExpression.h"
-#include "VCastExpression.h"
-#include "VMetaCallExpression.h"
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+#include "../declarations/VClass.h"
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+using namespace Visualization;
+using namespace OOModel;
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+namespace OOVisualization {
+
+DEFINE_ITEM_COMMON(VAnonymousClassExpression, "item")
+
+VAnonymousClassExpression::VAnonymousClassExpression(Item* parent, NodeType* node, const StyleType* style) :
+	Super{parent, node, style}
+{
+}
+
+VAnonymousClassExpression::~VAnonymousClassExpression()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	classDefinition_ = nullptr;
+}
+
+void VAnonymousClassExpression::determineChildren()
+{
+	layout()->synchronizeFirst(classDefinition_, node()->classDefinition(), &style()->classDefinition());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	// 		what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	classDefinition()->setStyle( &style()->classDefinition());
+}
+
+}

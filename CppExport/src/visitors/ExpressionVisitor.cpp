@@ -65,6 +65,7 @@
 #include "OOModel/src/expressions/DeleteExpression.h"
 #include "OOModel/src/expressions/VariableDeclarationExpression.h"
 #include "OOModel/src/expressions/LambdaExpression.h"
+#include "OOModel/src/expressions/AnonymousClassExpression.h"
 #include "OOModel/src/expressions/ArrayInitializer.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
@@ -320,6 +321,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		if (e->results()->size() == 1) *fragment << " -> " << visit(e->results()->first()->typeExpression());
 		*fragment << list(e->body(), StatementVisitor{data()}, "body");
 	}
+	else if (auto e = DCast<AnonymousClassExpression>(expression)) notAllowed(e);
 	else if (auto e = DCast<ArrayInitializer>(expression))
 	{
 		if (auto variableDeclaration = DCast<VariableDeclaration>(e->parent()))

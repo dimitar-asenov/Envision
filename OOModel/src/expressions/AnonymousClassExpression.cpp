@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2016 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,36 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "AnonymousClassExpression.h"
+#include "../types/ClassType.h"
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+#include "ModelBase/src/nodes/TypedList.hpp"
+template class Model::TypedList<OOModel::AnonymousClassExpression>;
 
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
-#include "VAnonymousClassExpression.h"
-#include "VCastExpression.h"
-#include "VMetaCallExpression.h"
+namespace OOModel {
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+DEFINE_COMPOSITE_EMPTY_CONSTRUCTORS(AnonymousClassExpression)
+DEFINE_COMPOSITE_TYPE_REGISTRATION_METHODS(AnonymousClassExpression)
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+DEFINE_ATTRIBUTE(AnonymousClassExpression, classDefinition, Class, false, false, true)
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+std::unique_ptr<Type> AnonymousClassExpression::type()
+{
+	return std::unique_ptr<Type>{new ClassType{classDefinition(), true}};
+}
+
+}

@@ -61,6 +61,7 @@
 #include "OOModel/src/expressions/DeleteExpression.h"
 #include "OOModel/src/expressions/VariableDeclarationExpression.h"
 #include "OOModel/src/expressions/LambdaExpression.h"
+#include "OOModel/src/expressions/AnonymousClassExpression.h"
 #include "OOModel/src/expressions/ArrayInitializer.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/MetaCallExpression.h"
@@ -226,6 +227,17 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		*fragment << list(e->body(), StatementVisitor{data()}, "body");
 
 		if (e->results()->size() > 1) error(e->results(), "Cannot have more than one return value in Java");
+	}
+	else if (auto e = DCast<AnonymousClassExpression>(expression))
+	{
+		*fragment << list(e->classDefinition()->baseClasses(), this, "baseClasses");
+
+		//TODO: Is there more that needs to be added?
+		auto sections = fragment->append( new CompositeFragment{e->classDefinition(), "bodySections"});
+		*sections << list(e->classDefinition()->enumerators(), ElementVisitor{data()}, "enumerators");
+		*sections << list(e->classDefinition()->classes(), DeclarationVisitor{data()}, "declarations");
+		*sections << list(e->classDefinition()->methods(), DeclarationVisitor{data()}, "sections");
+		*sections << list(e->classDefinition()->fields(), DeclarationVisitor{data()}, "vertical");
 	}
 	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
 	else if (auto e = DCast<MethodCallExpression>(expression))

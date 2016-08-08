@@ -943,15 +943,35 @@ public class ASTConverter {
 			ClassInstanceCreation cic = (ClassInstanceCreation) e;
 			node = new Node(null, "NewExpression", name);
 			//TODO: support qualified new ( .new)
-			//TODO: support anonymous class creation
 			
-			//TODO: support constructor arguments
-			Node constructorCall = node.setChild("newType", new Node(null, "MethodCallExpression", "newType"));
-			constructorCall.setChild("callee", typeExpression(cic.getType(), "callee"));
+			AnonymousClassDeclaration anon = cic.getAnonymousClassDeclaration();
+			
+			if (anon == null)
+			{
+				//TODO: support constructor arguments
+				Node constructorCall = node.setChild("newType", new Node(null, "MethodCallExpression", "newType"));
+				constructorCall.setChild("callee", typeExpression(cic.getType(), "callee"));
+					
+				for (Expression arg : (List<Expression>) cic.arguments())
+					constructorCall.child("arguments").add(
+							expression(arg, Integer.toString(constructorCall.child("arguments").numChildren())));
+			}
+			else
+			{
+				Node anonExpression = node.setChild("newType", new Node(null, "AnonymousClassExpression", "newType"));
+				Node anonClass = anonExpression.setChild("classDefinition", new Node(null, "Class", "classDefinition"));
+				anonClass.child("baseClasses").add(typeExpression(cic.getType(), "0"));
 				
-			for (Expression arg : (List<Expression>) cic.arguments())
-				constructorCall.child("arguments").add(
-						expression(arg, Integer.toString(constructorCall.child("arguments").numChildren())));
+				containers.push(anonClass);
+				visitClassBody(anon.bodyDeclarations());
+				containers.pop();
+				
+				//TODO: support constructor arguments better
+				Node initializer = node.add(new Node(null, "ArrayInitializer", "initializer"));
+				for (Expression arg : (List<Expression>) cic.arguments())
+					initializer.child("values").add(
+							expression(arg, Integer.toString(initializer.child("values").numChildren())));
+			}
 			
 		} else if (e instanceof ConditionalExpression)
 		{

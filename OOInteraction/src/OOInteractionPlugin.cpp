@@ -145,6 +145,8 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, StaticStringOffsetProvider, Visualization::Static>();
 	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
+	Core::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VAnonymousClassExpression>();
 	Core::AdapterManager::registerAdapter<StringOffsetProvider, Visualization::NodeWrapper>(
 		[](Visualization::NodeWrapper* wrapper){
 			return Core::AdapterManager::adapt<StringOffsetProvider>(wrapper->wrappedItem());
