@@ -18,9 +18,15 @@ for m in $merges; do
 				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ] && [ -f devMerged.java ]; then
 					cp master.java gitMerged.java
 					git merge-file -L master.java --quiet gitMerged.java base.java dev.java
+					gitReturnValue=$?
 					diff devMerged.java gitMerged.java > diff_dev_git
 					if [ -s diff_dev_git ]; then
-						echo "${m##*/}/${fdir##*/}" >> ../../issues_git
+						if (( gitReturnValue > 0 )); then
+							conflictString="RC"
+						else
+							conflictString="__"
+						fi
+						echo $conflictString "${m##*/}/${fdir##*/}" >> ../../issues_git
 					fi
 					echo "${m##*/}/${fdir##*/}" >> ../../all
 					rm diff_dev_git
@@ -30,7 +36,7 @@ for m in $merges; do
 	done
 done
 
-sort "${1}/merges/all" > "${1}/merges/all2"
-mv "${1}/merges/all2" "${1}/merges/all"
-sort "${1}/merges/issues_git" > "${1}/merges/issues_git2"
-mv "${1}/merges/issues_git2" "${1}/merges/issues_git"
+#sort "${1}/merges/all" > "${1}/merges/all2"
+#mv "${1}/merges/all2" "${1}/merges/all"
+#sort "${1}/merges/issues_git" > "${1}/merges/issues_git2"
+#mv "${1}/merges/issues_git2" "${1}/merges/issues_git"

@@ -69,7 +69,17 @@ for m in "${merges[@]}"; do
 					
 					AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)
 					if [[ $AUTO_MANUAL_DIFF  ]]; then
-						echo "${m##*/}/${fdir##*/}" >> ../../issues_env
+						if [ -f "remaining_changes" ] ; then
+							remainingChanges="R"
+						else
+							remainingChanges="_"
+						fi
+						if [ -f "direct_conflicts" ] ; then
+							directConflicts="C"
+						else
+							directConflicts="_"
+						fi
+						echo ${remainingChanges}${directConflicts} "${m##*/}/${fdir##*/}" >> ../../issues_env
 					fi
 				fi
 			)
@@ -78,5 +88,5 @@ for m in "${merges[@]}"; do
 	((counter++))
 done
 
-sort "${1}/merges/issues_env" > "${1}/merges/issues_env2"
-mv "${1}/merges/issues_env2" "${1}/merges/issues_env"
+#sort "${1}/merges/issues_env" > "${1}/merges/issues_env2"
+#mv "${1}/merges/issues_env2" "${1}/merges/issues_env"
