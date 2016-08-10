@@ -81,7 +81,7 @@ void ChangeGraph::insertSingleChange(MergeChange* change)
 		changesForChildren_.insert(change->newParentId(), change);
 	changes_.append(change);
 
-	addDirectConflicts(change);
+	directConflicts_.addDirectConflicts(change);
 }
 
 MergeChange* ChangeGraph::findIdenticalChange(const MergeChange* change) const
@@ -94,103 +94,6 @@ MergeChange* ChangeGraph::findIdenticalChange(const MergeChange* change) const
 	}
 
 	return nullptr;
-}
-
-
-void ChangeGraph::addDirectConflicts(MergeChange* change)
-{
-	addSameNodeConflict(change);
-	addLabelConfict(change);
-	addDeleteNonEmptyTreeConflict(change);
-	addInsertOrMoveToDeletedConflict(change);
-}
-
-void ChangeGraph::addSameNodeConflict(MergeChange* change)
-{
-	// Identical changes have been merged, so remaining changes to the same node either
-	//  - do not conflict if one change is for the Value/Type and the other is for the Label/NonStationary
-	//  - conflict otherwise
-	auto it = changesForNode_.find(change->nodeId());
-	while (it != changesForNode_.end() && it.key() == change->nodeId())
-	{
-		// Make sure not to mark the change as conflicting with itself.
-		// Only changes of the same category (value + type / other) may conflict with each other,
-		// except for deletion, which conflicts with all other changes.
-		if (change != it.value() &&
-				(change->isValueOrTypeChange() == it.value()->isValueOrTypeChange()
-				 || change->type() == ChangeType::Deletion || it.value()->type() == ChangeType::Deletion))
-		{
-			directConflicts_.insert(change, it.value());
-			directConflicts_.insert(it.value(), change);
-		}
-		++it;
-	}
-}
-
-void ChangeGraph::addLabelConfict(MergeChange* change)
-{
-	// A change might conflict with another change of the same parent if the labels clash
-	// Do not consider deletions and value/type changes
-	if (!change->isValueOrTypeChange() && change->type() != ChangeType::Deletion)
-	{
-		Q_ASSERT(!change->newParentId().isNull()); // Bad change, or root node ID has changed
-
-		auto it = changesForChildren_.find(change->newParentId());
-		while (it != changesForChildren_.end() && it.key() == change->newParentId())
-		{
-			// If two changes happen to move a node to the same parent, ignore those changes, they were
-			// already covered by the loop above.
-			if (change->nodeId() != it.value()->nodeId() // implies change != it.value()
-				 && it.value()->type() != ChangeType::Deletion
-				 && change->newLabel() == it.value()->newLabel()
-				 && change->newParentId() == it.value()->newParentId())
-			{
-				directConflicts_.insert(change, it.value());
-				directConflicts_.insert(it.value(), change);
-			}
-			++it;
-		}
-	}
-}
-
-void ChangeGraph::addDeleteNonEmptyTreeConflict(MergeChange* change)
-{
-	// If this change is a deletion, see if some other change moves/inserts a child node, which is a conflict.
-	// Changes of existing labels will anyway be in conflict with the deletion of the corresponding nodes. Thus
-	// we do not explicitly look for them here.
-	if (change->type() == ChangeType::Deletion)
-	{
-		auto it = changesForChildren_.find(change->nodeId());
-		while (it != changesForChildren_.end() && it.key() == change->nodeId())
-		{
-			if ( (it.value()->type() == ChangeType::Insertion || it.value()->type() == ChangeType::Move)
-				  && it.value()->newParentId() == change->nodeId())
-			{
-				directConflicts_.insert(change, it.value());
-				directConflicts_.insert(it.value(), change);
-			}
-			++it;
-		}
-	}
-}
-
-void ChangeGraph::addInsertOrMoveToDeletedConflict(MergeChange* change)
-{
-	// If this change inserts or moves a node into a deleted node this is a conflict.
-	if (change->type() == ChangeType::Move || change->type() == ChangeType::Insertion)
-	{
-		Q_ASSERT(!change->newParentId().isNull());
-		auto it = changesForNode_.find(change->newParentId());
-		while (it != changesForNode_.end() && it.key() == change->newParentId())
-		{
-			if ( it.value()->type() == ChangeType::Deletion)
-			{
-				directConflicts_.insert(change, it.value());
-				directConflicts_.insert(it.value(), change);
-			}
-			++it;
-		}
-	}
 }
 
 void ChangeGraph::relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree)
@@ -255,7 +158,6 @@ void ChangeGraph::removeLabelConflictsBetweenChildren(Model::NodeIdType parentId
 				 && innerIt.value()->type() != ChangeType::Deletion)
 			{
 				directConflicts_.remove(outerIt.value(), innerIt.value());
-				directConflicts_.remove(innerIt.value(), outerIt.value());
 			}
 			++innerIt;
 		}
@@ -423,10 +325,7 @@ void ChangeGraph::createRelabelChanges(Model::NodeIdType nodeId, QString oldLabe
 		changesForChildren_.insert(parentId, newChange);
 
 		for (auto otherChange : conflictingChangesForThisNode)
-		{
 			directConflicts_.insert(newChange, otherChange);
-			directConflicts_.insert(otherChange, newChange);
-		}
 	}
 }
 
@@ -470,23 +369,8 @@ void ChangeGraph::splitMoveInOrInsertChangeForSecondLabel(MergeChange* change, L
 	changesForChildren_.insert(changeB->oldParentId(), changeB);
 	changesForChildren_.insert(changeB->newParentId(), changeB);
 
-	// Change A conflicts with Change B
-	QList<MergeChange*> changesToConflictWith {change};
-
-	// All of change A's conflicts will also be change B conflicts
-	auto conflictIt = directConflicts_.find(change);
-	while (conflictIt != directConflicts_.end() && conflictIt.key() == change)
-	{
-		changesToConflictWith.append(conflictIt.value());
-		++conflictIt;
-	}
-	// Actually add the conflicts
-	for (auto & conflict : changesToConflictWith)
-	{
-		directConflicts_.insert(changeB, conflict);
-		directConflicts_.insert(conflict, changeB);
-	}
-
+	directConflicts_.copyConflicts(change, changeB);
+	directConflicts_.insert(change, changeB); // Don't forget to make the new change also conflicting with the original
 	dependencies_.copyDependencies(change, changeB);
 }
 
@@ -515,7 +399,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 		while (changeIt != changes_.end())
 		{
 			auto change = *changeIt;
-			if (dependencies_.hasDependencies(change) || directConflicts_.contains(change))
+			if (dependencies_.hasDependencies(change) || directConflicts_.hasConflicts(change))
 			{
 				// do nothing
 				++changeIt;
@@ -611,14 +495,8 @@ void ChangeGraph::removeChange(MergeChange* change, bool mayHaveConflicts)
 	if (!change->newParentId().isNull()) changesForChildren_.remove(change->newParentId(), change);
 
 	// Remove all conflicts
-	if (mayHaveConflicts)
-	{
-		QList<MergeChange*> conflicting = directConflicts_.values(change);
-		directConflicts_.remove(change);
-		for (auto conflict : conflicting) directConflicts_.remove(conflict, change);
-	}
-	else
-		Q_ASSERT(!directConflicts_.contains(change));
+	if (mayHaveConflicts) directConflicts_.removeAll(change);
+	else Q_ASSERT(!directConflicts_.hasConflicts(change));
 
 	dependencies_.removeAll(change);
 
@@ -650,7 +528,7 @@ void ChangeGraph::removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* r
 
 	// It should conflict with a move or relabel from the other branch
 	MergeChange* suitableConflictingChange{};
-	for (auto conflicting : directConflicts_.values(rootDeleteChange))
+	for (auto conflicting : directConflicts_.conflictsOf(rootDeleteChange))
 		if (conflicting->branches().testFlag(deletingBranch) == false
 			 && conflicting->nodeId() == rootDeleteChange->nodeId()
 			 && (conflicting->type() == ChangeType::Move

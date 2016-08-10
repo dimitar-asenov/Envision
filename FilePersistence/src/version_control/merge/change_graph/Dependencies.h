@@ -34,6 +34,7 @@ namespace FilePersistence {
 
 class MergeChange;
 class GenericTree;
+class Conflicts;
 
 class FILEPERSISTENCE_API Dependencies
 {
@@ -60,7 +61,7 @@ class FILEPERSISTENCE_API Dependencies
 		 *
 		 * Returns whether any dependencies were removed
 		 */
-		bool removeDependenciesForSafeMoveChanges(const QMultiHash<MergeChange*, MergeChange*>& directConflicts);
+		bool removeDependenciesForSafeMoveChanges(const Conflicts& directConflicts);
 
 		/**
 		 * Scans all changes to detect all-or-nothing dependency chains and removese the depenencies if all
@@ -68,8 +69,7 @@ class FILEPERSISTENCE_API Dependencies
 		 *
 		 * Returns true if any dependencies were removed.
 		 */
-		bool removeDependenciesInsideNonConflictingAtomicCycles(
-				const QMultiHash<MergeChange*, MergeChange*>& directConflicts);
+		bool removeDependenciesInsideNonConflictingAtomicCycles(const Conflicts& directConflicts);
 
 	private:
 		// References from Change Graph

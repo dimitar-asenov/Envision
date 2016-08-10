@@ -88,6 +88,8 @@ add_library(FilePersistence SHARED
 	src/version_control/merge/change_graph/MergeChange.h
 	src/version_control/merge/change_graph/Dependencies.h
 	src/version_control/merge/change_graph/Dependencies.cpp
+	src/version_control/merge/change_graph/Conflicts.h
+	src/version_control/merge/change_graph/Conflicts.cpp
 	src/version_control/merge/pipeline_components/ConflictUnitComponent.cpp
 	src/version_control/merge/pipeline_components/ConflictUnitComponent.h
 	src/version_control/merge/pipeline_components/ListMergeComponentV2.cpp

@@ -90,20 +90,13 @@ class FILEPERSISTENCE_API ChangeGraph
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForChildren_;
 
 		Dependencies dependencies_{changes_, changesForNode_, changesForChildren_};
-
-		QMultiHash<MergeChange*, MergeChange*> directConflicts_;
+		Conflicts directConflicts_{changes_, changesForNode_, changesForChildren_};
 
 		static const QString NEW_NODES_PERSISTENT_UNIT_NAME;
 
 		void insertSingleChange(MergeChange* change);
 
 		MergeChange* findIdenticalChange(const MergeChange* change) const;
-
-		void addDirectConflicts(MergeChange* change);
-		void addSameNodeConflict(MergeChange* change);
-		void addLabelConfict(MergeChange* change);
-		void addDeleteNonEmptyTreeConflict(MergeChange* change);
-		void addInsertOrMoveToDeletedConflict(MergeChange* change);
 
 		void removeLabelOnlyChangesInChildren(Model::NodeIdType parentId);
 		void removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId);
@@ -131,9 +124,10 @@ inline QList<MergeChange*> ChangeGraph::changesForNode(Model::NodeIdType nodeId)
 { return changesForNode_.values(nodeId); }
 inline QList<MergeChange*> ChangeGraph::changesForChildren(Model::NodeIdType nodeId) const
 { return changesForChildren_.values(nodeId); }
-inline QList<MergeChange*> ChangeGraph::changesInDirectConflict() const { return directConflicts_.uniqueKeys(); }
+inline QList<MergeChange*> ChangeGraph::changesInDirectConflict() const
+{ return directConflicts_.allConflictingChanges(); }
 inline QList<MergeChange*> ChangeGraph::directConflictsOf(MergeChange* change) const
-{ return directConflicts_.values(change); }
+{ return directConflicts_.conflictsOf(change); }
 inline QList<MergeChange*> ChangeGraph::dependenciesOf(MergeChange* change) const
 { return dependencies_.dependenciesOf(change); }
 inline QList<MergeChange*> ChangeGraph::changesDependingOn(MergeChange* change) const

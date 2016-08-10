@@ -27,6 +27,7 @@
 #include "Dependencies.h"
 
 #include "MergeChange.h"
+#include "Conflicts.h"
 #include "../../../simple/GenericTree.h"
 
 namespace FilePersistence {
@@ -223,8 +224,7 @@ void Dependencies::addMoveDependency(MergeChange* change, GenericTree* tree)
 	}
 }
 
-bool Dependencies::removeDependenciesForSafeMoveChanges(
-		const QMultiHash<MergeChange*, MergeChange*>& directConflicts)
+bool Dependencies::removeDependenciesForSafeMoveChanges(const Conflicts& directConflicts)
 {
 	// If a move change:
 	// - is identical for both branches
@@ -241,7 +241,7 @@ bool Dependencies::removeDependenciesForSafeMoveChanges(
 
 	for (auto change : changes_)
 	{
-		if (change->type() == ChangeType::Move && !directConflicts.contains(change))
+		if (change->type() == ChangeType::Move && !directConflicts.hasConflicts(change))
 		{
 			auto allDependencies = dependencies_.values(change);
 			if (allDependencies.size() == 1)
@@ -275,8 +275,7 @@ bool Dependencies::removeDependenciesForSafeMoveChanges(
 	return removedSomeDependencies;
 }
 
-bool Dependencies::removeDependenciesInsideNonConflictingAtomicCycles(
-		const QMultiHash<MergeChange*, MergeChange*>& directConflicts)
+bool Dependencies::removeDependenciesInsideNonConflictingAtomicCycles(const Conflicts& directConflicts)
 {
 	// Atomic change groups are essentially cycles of dependent changes with the following properties:
 	// - dependency is due to clashing lables, but other changes, like deletions, moves, and inserts can be in
@@ -304,7 +303,7 @@ bool Dependencies::removeDependenciesInsideNonConflictingAtomicCycles(
 		}
 
 		// Check no conflicts
-		if ( directConflicts.contains(change) )
+		if ( directConflicts.hasConflicts(change) )
 		{
 			okToBreakCycle.insert(change, false);
 			continue;
