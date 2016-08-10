@@ -22,11 +22,11 @@ for m in $merges; do
 					diff devMerged.java gitMerged.java > diff_dev_git
 					if [ -s diff_dev_git ]; then
 						if (( gitReturnValue > 0 )); then
-							conflictString="RC"
+							conflictString=$'\n\t\tconflict'
 						else
-							conflictString="__"
+							conflictString=$'\n\t\tno-conflict'
 						fi
-						echo $conflictString "${m##*/}/${fdir##*/}" >> ../../issues_git
+						echo "${m##*/}/${fdir##*/}" "$conflictString" >> ../../issues_git 
 					fi
 					echo "${m##*/}/${fdir##*/}" >> ../../all
 					rm diff_dev_git

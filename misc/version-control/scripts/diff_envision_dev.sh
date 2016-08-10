@@ -19,11 +19,14 @@ QUICK_MATCH_ARG=$2
 
 idpatcher=$SCRIPT_DIR/patch_ids.py
 
+structural_compare="$SCRIPT_DIR/structural_compare.py"
+
 scriptReadyFile="/tmp/EnvisionVC/scriptReady"
 rm -rf $scriptReadyFile
 rm -rf "/tmp/EnvisionVC"
 
 rm -rf "${1}/merges/issues_env"
+rm -rf "${1}/merges/issues_env_only_order_differences"
 
 # Launch Envision in merge test mode
 # syntax for tests: pluginName:testName1[>arg1,arg2,...][:testName2[>arg1,arg2,...]:...]
@@ -69,17 +72,28 @@ for m in "${merges[@]}"; do
 					
 					AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)
 					if [[ $AUTO_MANUAL_DIFF  ]]; then
-						if [ -f "remaining_changes" ] ; then
-							remainingChanges="R"
-						else
-							remainingChanges="_"
-						fi
 						if [ -f "direct_conflicts" ] ; then
-							directConflicts="C"
+							conflictString=$'\n\t\tconflict'
+							echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
 						else
-							directConflicts="_"
+							if [ -f "remaining_changes" ] ; then
+								conflictString=$'\n\t\tCYCLE'
+								echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
+							else
+								conflictString=$'\n\t\tno-conflict'
+								
+								# The Envision merged file is not identical to the one the developer committed, but there were no conflicts and all changes were applied.
+								# Perhaps there's only a difference in order.
+								# Compare the structure of the two files, ignoring the order of some lists (e.g. methods and import statements)
+								STRUCTURAL_DIFF=$(${structural_compare} devMerged/TestMerge/TestMerge envMerged)
+								if [[ $STRUCTURAL_DIFF  ]]; then
+									echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
+								else
+									# Only difference in order
+									echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env_only_order_differences
+								fi
+							fi
 						fi
-						echo ${remainingChanges}${directConflicts} "${m##*/}/${fdir##*/}" >> ../../issues_env
 					fi
 				fi
 			)
