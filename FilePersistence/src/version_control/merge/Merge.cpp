@@ -24,11 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#include "MergeV2.h"
+#include "Merge.h"
 
 #include "pipeline_components/MergePipelineComponent.h"
 #include "pipeline_components/ConflictUnitComponent.h"
-#include "pipeline_components/ListMergeComponentV2.h"
+#include "pipeline_components/ListMergeComponent.h"
 #include "pipeline_components/DiscardConflictingDeletesComponent.h"
 
 #include "../Diff.h"
@@ -40,7 +40,7 @@
 
 namespace FilePersistence {
 
-bool MergeV2::commit(const Signature& author, const Signature& committer, const QString& message)
+bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
 {
 	Q_ASSERT(stage_ == Stage::WroteToIndex);
 
@@ -57,19 +57,19 @@ bool MergeV2::commit(const Signature& author, const Signature& committer, const 
 	return true;
 }
 
-std::shared_ptr<GenericTree> MergeV2::mergedTree()
+std::shared_ptr<GenericTree> Merge::mergedTree()
 {
 	Q_ASSERT(stage_ >= Stage::BuiltMergedTree);
 	return mergeData_.treeMerged_;
 }
 
-const QList<SoftConflict>& MergeV2::softConflicts() const
+const QList<SoftConflict>& Merge::softConflicts() const
 {
 	Q_ASSERT(stage_ >= Stage::BuiltMergedTree);
 	return mergeData_.softConflicts_;
 }
 
-MergeV2::MergeV2(QString revision, bool fastForward, GitRepository* repository)
+Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
 	headCommitId_ = repository_->getSHA1("HEAD");
@@ -91,7 +91,7 @@ MergeV2::MergeV2(QString revision, bool fastForward, GitRepository* repository)
 	{
 		case Kind::AlreadyUpToDate:
 		{
-			stage_ = MergeV2::Stage::Committed;
+			stage_ = Merge::Stage::Committed;
 			break;
 		}
 		case Kind::FastForward:
@@ -121,16 +121,16 @@ MergeV2::MergeV2(QString revision, bool fastForward, GitRepository* repository)
 	}
 }
 
-void MergeV2::initializePipelineComponents()
+void Merge::initializePipelineComponents()
 {
-	auto listMergeComponent = std::make_shared<ListMergeComponentV2>();
+	auto listMergeComponent = std::make_shared<ListMergeComponent>();
 	mergePipeline_.append(listMergeComponent);
 	mergePipeline_.append(std::make_shared<DiscardConflictingDeletesComponent>());
 	mergePipeline_.append(std::make_shared<ConflictUnitComponent>());
 	mergePipeline_.append(listMergeComponent);
 }
 
-void MergeV2::performTrueMerge()
+void Merge::performTrueMerge()
 {
 	mergeData_.treeA_ = std::shared_ptr<GenericTree>(new GenericTree{repository_->projectName()});
 	new GitPiecewiseLoader{mergeData_.treeA_, repository_, headCommitId_};
@@ -181,13 +181,13 @@ void MergeV2::performTrueMerge()
 	}
 }
 
-bool MergeV2::isNodeInConflict(Model::NodeIdType nodeId) const
+bool Merge::isNodeInConflict(Model::NodeIdType nodeId) const
 {
 	//TODO : add soft conflicts
 	return !mergeData_.cg_.changesForNode(nodeId).isEmpty();
 }
 
-bool MergeV2::hasConflicts() const
+bool Merge::hasConflicts() const
 {
 	// TODO: consider soft conflicts
 	return !mergeData_.cg_.changes().isEmpty();

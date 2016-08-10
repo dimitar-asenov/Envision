@@ -26,57 +26,55 @@
 
 #pragma once
 
-#include "../filepersistence_api.h"
-
-#include "ChangeDescription.h"
+#include "../../../filepersistence_api.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
-class ChangeDependencyGraph;
-class GenericTree;
-
-using LinkedChanges = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
-
-class FILEPERSISTENCE_API LinkedChangesSet : public QSet<LinkedChanges>
+struct FILEPERSISTENCE_API Chunk
 {
-	public:
-		LinkedChangesSet();
+		bool stable_{};
+		bool noConflicts_{};
+		QList<Model::NodeIdType> spanA_;
+		QList<Model::NodeIdType> spanB_;
+		QList<Model::NodeIdType> spanBase_;
+		QList<Model::NodeIdType> spanMerged_;
 
-		/**
-		 * Initialize with single-member sets of changes (no links).
-		 */
-		LinkedChangesSet(const ChangeDependencyGraph& cdgA, const ChangeDependencyGraph& cdgB);
-
-		/**
-		 * This returns the linkedChanges which contains the change with
-		 * \a changeId which is in branch A if and only if \a inBranchA is true.
-		 * NOTE The \a inBranchA argument is necessary because IDs are not unique within LinkedChangesSet objects.
-		 * Pointer comparison does not work because we made a deep copy.
-		 */
-		LinkedChanges findLinkedChanges(Model::NodeIdType oldChangeId, bool inBranchA);
-
-		QSet<const std::shared_ptr<const ChangeDescription>> changesOfBranchA_;
+		Chunk();
+		Chunk(bool stable, QList<Model::NodeIdType> idListA, QList<Model::NodeIdType> idListB,
+			  QList<Model::NodeIdType> idListBase);
 };
 
-/**
- * Creates and returns a new empty LinkedChanges object.
- */
-inline LinkedChanges newLinkedChanges() { return std::make_shared<QSet<std::shared_ptr<const ChangeDescription>>>(); }
-
-/**
- * Creates and returns a new LinkedChanges object that is a deep copy of \a changesToCopy.
- * Nodes pointed to by changes in the returned object are allocated in \a tree.
- */
-LinkedChanges FILEPERSISTENCE_API copyLinkedChanges(const LinkedChanges& changesToCopy,
-										  const QSet<const std::shared_ptr<const ChangeDescription>>& oldChangesOfA,
-										  QSet<const std::shared_ptr<const ChangeDescription>>& newChangesOfA,
-										  std::shared_ptr<GenericTree>& tree);
-
-inline uint qHash(const LinkedChanges& linkedChanges, uint seed = 0)
+class FILEPERSISTENCE_API Diff3Parse
 {
-	return ::qHash(linkedChanges.get(), seed);
-}
+	friend class ListMergeComponent;
+	friend class ListMergeComponentV2;
+	public:
+		/**
+		 * Computes stable and unstable chunks. This is what's called a diff3 parse in the paper by Khanna, Kunal,
+		 * Pierce: A Formal Investigation of Diff3 available at http://www.cis.upenn.edu/~bcpierce/papers/diff3-short.pdf.
+		 *
+		 * The caller is responsible for deleting the returned chunks.
+		 */
+		static QList<Chunk*> computeChunks(const QList<Model::NodeIdType> idListA, const QList<Model::NodeIdType> idListB,
+													const QList<Model::NodeIdType> idListBase);
+
+		static QList<Model::NodeIdType> backtrackLCS(int** data, const QList<Model::NodeIdType> listA,
+																	const QList<Model::NodeIdType> listB, int posA, int posB);
+		static QList<Model::NodeIdType> backtrackLCS3(int*** data, const QList<Model::NodeIdType> listA,
+																	const QList<Model::NodeIdType> listB,
+																	const QList<Model::NodeIdType> listC,
+																	int posA, int posB, int posC);
+
+		static QList<Model::NodeIdType> longestCommonSubsequence(const QList<Model::NodeIdType> listA,
+																					const QList<Model::NodeIdType> listB);
+		static QList<Model::NodeIdType> longestCommonSubsequence3(const QList<Model::NodeIdType> listA,
+																					 const QList<Model::NodeIdType> listB,
+																					 const QList<Model::NodeIdType> listC);
+
+};
+
+inline Chunk::Chunk() : noConflicts_{true} {}
 
 }

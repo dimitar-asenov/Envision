@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2016 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,28 +26,74 @@
 
 #pragma once
 
-#include "../filepersistence_api.h"
+#include "../../filepersistence_api.h"
 
-#include "LinkedChangesTransition.h"
+#include "MergeData.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
+class GitRepository;
+class MergePipelineComponent;
 class GenericTree;
-class ChangeDependencyGraph;
-class ChangeDescription;
-class ConflictPairs;
-class LinkedChangesSet;
+struct Signature;
 
-class FILEPERSISTENCE_API ConflictPipelineComponent
+class FILEPERSISTENCE_API Merge
 {
 	public:
-		virtual ~ConflictPipelineComponent() = 0;
-		virtual LinkedChangesTransition run(std::shared_ptr<GenericTree>& treeA,
-														std::shared_ptr<GenericTree>& treeB,
-														std::shared_ptr<GenericTree>& treeBase,
-														ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-															  QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
-															  ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet) = 0;
+		enum class Kind {Unclassified, AlreadyUpToDate, FastForward, TrueMerge};
+		enum class Stage {NotInitialized, FoundMergeBase, Classified, AutoMerged,
+								ManualMerged, BuiltMergedTree, WroteToWorkDir, WroteToIndex, Committed};
+
+		bool isAlreadyMerged() const;
+		bool hasConflicts() const;
+		const QList<SoftConflict>& softConflicts() const;
+		const QList<MergeChange*> remainingChanges() const;
+
+		std::shared_ptr<GenericTree> mergedTree();
+		bool commit(const Signature& author, const Signature& committer, const QString& message);
+
+		// Used for testing
+		bool isNodeInConflict(Model::NodeIdType nodeId) const;
+
+	private:
+		friend class GitRepository;
+		friend class RunMerge; // this is a test class
+
+		/**
+		 * Merges \a revision into current HEAD.
+		 */
+		Merge(QString revision, bool fastForward, GitRepository* repository);
+
+		void initializePipelineComponents();
+
+		/**
+		 * If the merge is non-trivial, this is where the real merge algorithm and the pipeline is run.
+		 */
+		void performTrueMerge();
+
+		Stage stage_ = Stage::NotInitialized;
+
+		MergeData mergeData_;
+
+		/**
+		 * Revisions
+		 */
+		QString headCommitId_;
+		QString revisionCommitId_;
+		QString baseCommitId_;
+
+		GitRepository* repository_{};
+
+		/**
+		 * Components are executed in the order they appear in this list.
+		 */
+		QList<std::shared_ptr<MergePipelineComponent>> mergePipeline_;
+
 };
+
+inline bool Merge::isAlreadyMerged() const { return stage_ == Stage::Committed; }
+inline const QList<MergeChange*> Merge::remainingChanges() const { return mergeData_.cg_.changes(); }
 
 }

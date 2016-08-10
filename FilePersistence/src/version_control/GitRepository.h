@@ -31,7 +31,7 @@
 #include "Commit.h"
 #include "CommitGraph.h"
 #include "Diff.h"
-#include "Merge.h"
+#include "merge/Merge.h"
 
 struct git_repository;
 struct git_tree;
@@ -94,8 +94,7 @@ class FILEPERSISTENCE_API GitRepository
 		QString relativePathForPersistentUnit(QString persistentUnitId, QString revision) const;
 
 	private:
-		friend class MergeV1;
-		friend class MergeV2;
+		friend class Merge;
 
 		QString projectName() const;
 

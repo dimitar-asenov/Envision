@@ -24,23 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#include "ListMergeComponentV2.h"
+#include "ListMergeComponent.h"
 #include "../MergeData.h"
 #include "../SoftConflict.h"
 
-#include "../../Diff3Parse.h"
+#include "Diff3Parse.h"
 #include "../../../simple/GenericNode.h"
 #include "../../../simple/GenericTree.h"
 
 namespace FilePersistence {
 
-bool ListMergeComponentV2::isList(const QString& type)
+bool ListMergeComponent::isList(const QString& type)
 {
 	// TestListType is for MergeTests
 	return type.startsWith("TypedListOf") || type.endsWith("List") || type.startsWith("TestListType");
 }
 
-bool ListMergeComponentV2::isUnorderedList(const QString& type)
+bool ListMergeComponent::isUnorderedList(const QString& type)
 {
 	// TODO: The types below sould be configured by plug-ins, not hardcoded here.
 	static QStringList unorderedListTypes{"TypedListOfClass",
@@ -52,12 +52,12 @@ bool ListMergeComponentV2::isUnorderedList(const QString& type)
 	return unorderedListTypes.contains(type);
 }
 
-bool ListMergeComponentV2::isOrderedList(const QString& type)
+bool ListMergeComponent::isOrderedList(const QString& type)
 {
 	return !isUnorderedList(type) && isList(type);
 }
 
-void ListMergeComponentV2::run(MergeData& mergeData)
+void ListMergeComponent::run(MergeData& mergeData)
 {
 	switch (phase_) {
 		case Phase::Initial:
@@ -84,7 +84,7 @@ void ListMergeComponentV2::run(MergeData& mergeData)
 	}
 }
 
-QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& mergeData)
+QList<Model::NodeIdType> ListMergeComponent::computeListsToMerge(MergeData& mergeData)
 {
 	QHash<Model::NodeIdType, MergeChange::Branches> listsWithStructureChanges;
 
@@ -132,11 +132,11 @@ QList<Model::NodeIdType> ListMergeComponentV2::computeListsToMerge(MergeData& me
 	return listsToMerge;
 }
 
-ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData)
+ChangeGraph::IdToLabelMap ListMergeComponent::computeAdjustedIndices(Model::NodeIdType listId, MergeData& mergeData)
 {
 	auto listNode = mergeData.treeMerged_->find(listId);
 	Q_ASSERT(listNode);
-	auto isOrderedList = ListMergeComponentV2::isOrderedList(listNode->type());
+	auto isOrderedList = ListMergeComponent::isOrderedList(listNode->type());
 
 	ChangeGraph::IdToLabelMap map;
 	auto chunks = listToChunks(listId, mergeData);
@@ -201,7 +201,7 @@ ChangeGraph::IdToLabelMap ListMergeComponentV2::computeAdjustedIndices(Model::No
 	return map;
 }
 
-QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
+QList<Chunk*> ListMergeComponent::listToChunks(Model::NodeIdType listId, MergeData& mergeData)
 {
 	auto idListBase = nodeListToSortedIdList(mergeData.treeBase_->find(listId, true)->children());
 
@@ -219,7 +219,7 @@ QList<Chunk*> ListMergeComponentV2::listToChunks(Model::NodeIdType listId, Merge
 }
 
 
-QList<Model::NodeIdType> ListMergeComponentV2::nodeListToSortedIdList(const QList<GenericNode*>& list)
+QList<Model::NodeIdType> ListMergeComponent::nodeListToSortedIdList(const QList<GenericNode*>& list)
 {
 	auto comparator = [](GenericNode* const node1, GenericNode* const node2) -> bool
 	{
@@ -241,9 +241,9 @@ QList<Model::NodeIdType> ListMergeComponentV2::nodeListToSortedIdList(const QLis
 	return idList;
 }
 
-void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType> base,
-																  const QList<Model::NodeIdType> version,	QList<IdPosition>& list,
-																  std::shared_ptr<GenericTree> treeBase, MergeChange::Branches branch)
+void ListMergeComponent::computeOffsetsInBranch(const QList<Model::NodeIdType> base,
+																const QList<Model::NodeIdType> version,	QList<IdPosition>& list,
+																std::shared_ptr<GenericTree> treeBase, MergeChange::Branches branch)
 {
 	int baseIndex = -1;
 	int offset = 1;
@@ -260,7 +260,7 @@ void ListMergeComponentV2::computeOffsetsInBranch(const QList<Model::NodeIdType>
 	}
 }
 
-void ListMergeComponentV2::removeHoles(GenericTree* tree, ChangeGraph& cg)
+void ListMergeComponent::removeHoles(GenericTree* tree, ChangeGraph& cg)
 {
 	for (auto listId : listsToMerge_)
 	{
@@ -320,7 +320,7 @@ void ListMergeComponentV2::removeHoles(GenericTree* tree, ChangeGraph& cg)
 	}
 }
 
-void ListMergeComponentV2::printFinalList(const QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg)
+void ListMergeComponent::printFinalList(const QList<Model::NodeIdType> lists, GenericTree* tree, ChangeGraph& cg)
 {
 	qDebug() << "Lists";
 	for (auto listId : lists)
@@ -340,7 +340,7 @@ void ListMergeComponentV2::printFinalList(const QList<Model::NodeIdType> lists, 
 	}
 }
 
-void ListMergeComponentV2::printLabelMap(ChangeGraph::IdToLabelMap map)
+void ListMergeComponent::printLabelMap(ChangeGraph::IdToLabelMap map)
 {
 	for (auto id : map.uniqueKeys())
 	{

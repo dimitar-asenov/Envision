@@ -36,17 +36,7 @@ add_library(FilePersistence SHARED
 	src/version_control/Diff.h
 	src/version_control/GitRepository.h
 	src/version_control/History.h
-	src/version_control/MergeV1.h
-	src/version_control/ChangeDependencyGraph.h
-	src/version_control/ConflictPairs.h
-	src/version_control/ConflictUnitDetector.h
-	src/version_control/ListMergeComponent.h
-	src/version_control/ConflictPipelineComponent.h
-	src/version_control/ConflictPipelineComponent.cpp
-	src/version_control/LinkedChangesTransition.h
 	src/version_control/GitPiecewiseLoader.h
-	src/version_control/LinkedChangesSet.h
-	src/version_control/Diff3Parse.h
 	src/utils/FileUtil.h
 	test/VCTestProject.h
 	src/simple/GenericPersistentUnit.cpp
@@ -71,16 +61,10 @@ add_library(FilePersistence SHARED
 	src/version_control/CommitGraph.cpp
 	src/version_control/History.cpp
 	src/version_control/Commit.cpp
-	src/version_control/MergeV1.cpp
-	src/version_control/ChangeDependencyGraph.cpp
-	src/version_control/ConflictPairs.cpp
-	src/version_control/ConflictUnitDetector.cpp
-	src/version_control/ListMergeComponent.cpp
 	test/VersionControlMergetests.cpp
-	src/version_control/LinkedChangesTransition.cpp
 	src/version_control/GitPiecewiseLoader.cpp
-	src/version_control/LinkedChangesSet.cpp
-	src/version_control/Diff3Parse.cpp
+	src/version_control/merge/pipeline_components/Diff3Parse.h
+	src/version_control/merge/pipeline_components/Diff3Parse.cpp
 	test/VCTestProject.cpp
 	src/version_control/merge/change_graph/ChangeGraph.h
 	src/version_control/merge/change_graph/ChangeGraph.cpp
@@ -92,15 +76,14 @@ add_library(FilePersistence SHARED
 	src/version_control/merge/change_graph/Conflicts.cpp
 	src/version_control/merge/pipeline_components/ConflictUnitComponent.cpp
 	src/version_control/merge/pipeline_components/ConflictUnitComponent.h
-	src/version_control/merge/pipeline_components/ListMergeComponentV2.cpp
-	src/version_control/merge/pipeline_components/ListMergeComponentV2.h
+	src/version_control/merge/pipeline_components/ListMergeComponent.cpp
+	src/version_control/merge/pipeline_components/ListMergeComponent.h
 	src/version_control/merge/pipeline_components/MergePipelineComponent.cpp
 	src/version_control/merge/pipeline_components/MergePipelineComponent.h
-	src/version_control/merge/MergeV2.cpp
-	src/version_control/merge/MergeV2.h
+	src/version_control/merge/Merge.cpp
+	src/version_control/merge/Merge.h
 	src/version_control/merge/MergeData.cpp
 	src/version_control/merge/MergeData.h
-	src/version_control/Merge.h
 	src/version_control/merge/SoftConflict.h
 	src/version_control/merge/SoftConflict.cpp
 	src/version_control/merge/pipeline_components/DiscardConflictingDeletesComponent.h

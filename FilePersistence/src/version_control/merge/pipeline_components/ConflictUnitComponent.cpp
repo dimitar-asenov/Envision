@@ -26,7 +26,7 @@
 
 #include "ConflictUnitComponent.h"
 
-#include "ListMergeComponentV2.h"
+#include "ListMergeComponent.h"
 #include "../change_graph/ChangeGraph.h"
 #include "../change_graph/MergeChange.h"
 #include "../MergeData.h"
@@ -80,7 +80,7 @@ bool ConflictUnitComponent::isConflictUnitType(const QString& type)
 													 "VariableDeclaration",
 													 "CommentStatementItem",
 													 "CatchClause"};
-	return conflictUnitTypes.contains(type) || ListMergeComponentV2::isList(type)
+	return conflictUnitTypes.contains(type) || ListMergeComponent::isList(type)
 			|| debugConflictUnitTypes.contains(type);
 }
 

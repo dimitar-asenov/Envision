@@ -31,15 +31,15 @@
 #include "MergePipelineComponent.h"
 #include "../change_graph/MergeChange.h"
 #include "../change_graph/ChangeGraph.h"
-#include "../../Diff3Parse.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 class GenericNode;
 class ChangeGraph;
+class Chunk;
 
-class FILEPERSISTENCE_API ListMergeComponentV2 : public MergePipelineComponent
+class FILEPERSISTENCE_API ListMergeComponent : public MergePipelineComponent
 {
 	public:
 		virtual void run(MergeData& mergeData) override;

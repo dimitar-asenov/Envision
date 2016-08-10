@@ -30,7 +30,7 @@
 #include "../src/simple/GenericTree.h"
 #include "../src/version_control/Commit.h"
 #include "../src/version_control/GitRepository.h"
-#include "../src/version_control/Merge.h"
+#include "../src/version_control/merge/Merge.h"
 
 #include "SelfTest/src/Test.h"
 #include "SelfTest/src/TestAssertions.h"
