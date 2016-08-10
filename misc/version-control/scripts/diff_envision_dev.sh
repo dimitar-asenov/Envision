@@ -73,20 +73,23 @@ for m in "${merges[@]}"; do
 					AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)
 					if [[ $AUTO_MANUAL_DIFF  ]]; then
 						if [ -f "direct_conflicts" ] ; then
-							conflictString=$'\n\t\tconflict'
+							conflictString='conflict'
+							echo "${m##*/}/${fdir##*/}" >> ../../issues_env
 							echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
 						else
 							if [ -f "remaining_changes" ] ; then
-								conflictString=$'\n\t\tCYCLE'
+								conflictString='CYCLE'
+								echo "${m##*/}/${fdir##*/}" >> ../../issues_env
 								echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
 							else
-								conflictString=$'\n\t\tno-conflict'
+								conflictString='no-conflict'
 								
 								# The Envision merged file is not identical to the one the developer committed, but there were no conflicts and all changes were applied.
 								# Perhaps there's only a difference in order.
 								# Compare the structure of the two files, ignoring the order of some lists (e.g. methods and import statements)
 								STRUCTURAL_DIFF=$(${structural_compare} devMerged/TestMerge/TestMerge envMerged)
 								if [[ $STRUCTURAL_DIFF  ]]; then
+									echo "${m##*/}/${fdir##*/}" >> ../../issues_env
 									echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
 								else
 									# Only difference in order

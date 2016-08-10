@@ -85,12 +85,14 @@ function matchMaster ()
 	waitFor $baseImportPID
 	waitFor $masterImportPID
 	
+	echo "-------------------- Matching Master to Base --------------------"
 	if [ "$QUICK_MATCH_ARG" == "-quick-match" ]; then
 		$quick_match base/TestMerge/TestMerge master/TestMerge/TestMerge > master/TestMerge/TestMerge.idpatch
 	else
 		$gumtree base/TestMerge/TestMerge master/TestMerge/TestMerge
 	fi
 	
+	echo "-------------------- Patching Master IDs --------------------"
 	$idpatcher master/TestMerge/TestMerge
 }
 matchMaster &
@@ -107,12 +109,14 @@ function processDevBranch ()
 		
 		waitFor $baseImportPID
 		
+		echo "-------------------- Matching Dev to Base --------------------"
 		if [ "$QUICK_MATCH_ARG" == "-quick-match" ]; then
 			$quick_match base/TestMerge/TestMerge dev/TestMerge/TestMerge > dev/TestMerge/TestMerge.idpatch
 		else
 			$gumtree base/TestMerge/TestMerge dev/TestMerge/TestMerge
 		fi
 	
+		echo "-------------------- Patching Dev IDs --------------------"
 		$idpatcher dev/TestMerge/TestMerge
 		
 		waitFor $matchMasterPID
