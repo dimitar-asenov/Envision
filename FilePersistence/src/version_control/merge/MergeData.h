@@ -26,7 +26,7 @@
 #pragma once
 
 #include "../../filepersistence_api.h"
-#include "ChangeGraph.h"
+#include "change_graph/ChangeGraph.h"
 #include "SoftConflict.h"
 
 namespace FilePersistence {

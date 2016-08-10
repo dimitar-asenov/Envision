@@ -25,12 +25,12 @@
 ***********************************************************************************************************************/
 
 #include "ListMergeComponentV2.h"
-#include "MergeData.h"
-#include "SoftConflict.h"
+#include "../MergeData.h"
+#include "../SoftConflict.h"
 
-#include "../Diff3Parse.h"
-#include "../../simple/GenericNode.h"
-#include "../../simple/GenericTree.h"
+#include "../../Diff3Parse.h"
+#include "../../../simple/GenericNode.h"
+#include "../../../simple/GenericTree.h"
 
 namespace FilePersistence {
 

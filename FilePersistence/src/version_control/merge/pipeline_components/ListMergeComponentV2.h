@@ -26,12 +26,12 @@
 
 #pragma once
 
-#include "../../filepersistence_api.h"
+#include "../../../filepersistence_api.h"
 
 #include "MergePipelineComponent.h"
-#include "MergeChange.h"
-#include "ChangeGraph.h"
-#include "../Diff3Parse.h"
+#include "../change_graph/MergeChange.h"
+#include "../change_graph/ChangeGraph.h"
+#include "../../Diff3Parse.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 

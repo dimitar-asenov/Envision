@@ -26,10 +26,10 @@
 
 #include "MergeV2.h"
 
-#include "MergePipelineComponent.h"
-#include "ConflictUnitComponent.h"
-#include "ListMergeComponentV2.h"
-#include "DiscardConflictingDeletesComponent.h"
+#include "pipeline_components/MergePipelineComponent.h"
+#include "pipeline_components/ConflictUnitComponent.h"
+#include "pipeline_components/ListMergeComponentV2.h"
+#include "pipeline_components/DiscardConflictingDeletesComponent.h"
 
 #include "../Diff.h"
 #include "../GitPiecewiseLoader.h"

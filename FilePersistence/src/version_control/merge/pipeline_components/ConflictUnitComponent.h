@@ -26,43 +26,34 @@
 
 #pragma once
 
-#include "../../filepersistence_api.h"
+#include "../../../filepersistence_api.h"
 
 #include "MergePipelineComponent.h"
-#include "MergeChange.h"
+
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
+class MergeChange;
 class ChangeGraph;
+class GenericNode;
 
-/**
- * The DiscardConflictingDeletesComponent detects subtrees which one branch removes entirely and another alters.
- *
- * There are two allowed cases:
- * - The other branch moves the subtree.
- *
- * - The other branch relabels the subtree. There should be no deletes dependent on the delete.
- *
- * In all such cases, the delete operations are discarded and only the others are left. It's important to run this
- * component before any changes have been removed. Otherwise it could happen that some nodes are deleted, and then
- * the parent nodes are moved by the other branch which is unaware of the deletions and results in a tree with holes.
- */
-class FILEPERSISTENCE_API DiscardConflictingDeletesComponent : public MergePipelineComponent
+class FILEPERSISTENCE_API ConflictUnitComponent : public MergePipelineComponent
 {
 	public:
 		virtual void run(MergeData& mergeData) override;
 
+		static bool isConflictUnitType(const QString& type);
+
 	private:
-		QList<MergeChange*> deletesConflictingWithMoveOrRelabel(ChangeGraph& cg);
-		void computeDeletedSubtrees(ChangeGraph& cg, QList<MergeChange*> deletesToLookAt);
 
-		bool isSubtreeCompletelyDeleted(MergeChange* deleteChange, MergeChange::Branch deletingBranch, ChangeGraph& cg);
-		void removeSuitableDeletes(ChangeGraph& cg, QList<MergeChange*> deletesToLookAt);
-		bool isAncestorDeleteInList(MergeChange* change, QList<MergeChange*> deletesToLookAt);
+		// Maps conflict root ids, to node ids within the respective conflict unit that are in conflict.
+		using NodesInConflictUnit = QMultiHash<Model::NodeIdType, Model::NodeIdType>;
 
-		QMultiHash<MergeChange*, MergeChange::Branch> subtreeIsNotDeleted;
-		QMultiHash<MergeChange*, MergeChange::Branch> subtreeIsDeleted;
-		QHash<MergeChange*, MergeChange*> parentDelete;
+		static QPair<NodesInConflictUnit, NodesInConflictUnit> computeAffectedCUs(MergeData& mergeData);
+		static Model::NodeIdType findConflictUnit(const GenericNode* node);
+
+		static bool ADD_STRUCTURAL_CHANGES;
 };
 
 }

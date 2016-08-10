@@ -26,9 +26,9 @@
 
 #include "DiscardConflictingDeletesComponent.h"
 
-#include "ChangeGraph.h"
-#include "MergeChange.h"
-#include "MergeData.h"
+#include "../change_graph/ChangeGraph.h"
+#include "../change_graph/MergeChange.h"
+#include "../MergeData.h"
 
 namespace FilePersistence {
 
@@ -70,7 +70,7 @@ QList<MergeChange*> DiscardConflictingDeletesComponent::deletesConflictingWithMo
 				auto topLevelDelete = true;
 				if (relabel)
 				{
-					for (auto changeThatDependsOnUs : cg.reverseDependenciesOf(change))
+					for (auto changeThatDependsOnUs : cg.changesDependingOn(change))
 						if (changeThatDependsOnUs->type() == ChangeType::Deletion)
 						{
 							topLevelDelete = false;

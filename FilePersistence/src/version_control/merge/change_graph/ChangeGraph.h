@@ -26,9 +26,11 @@
 
 #pragma once
 
-#include "../../filepersistence_api.h"
+#include "../../../filepersistence_api.h"
 
 #include "MergeChange.h"
+#include "Dependencies.h"
+#include "Conflicts.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
@@ -74,7 +76,7 @@ class FILEPERSISTENCE_API ChangeGraph
 		QList<MergeChange*> changesInDirectConflict() const;
 		QList<MergeChange*> directConflictsOf(MergeChange* change) const;
 		QList<MergeChange*> dependenciesOf(MergeChange* change) const;
-		QList<MergeChange*> reverseDependenciesOf(MergeChange* change) const;
+		QList<MergeChange*> changesDependingOn(MergeChange* change) const;
 		bool hasDirectConflicts() const;
 
 		void removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* rootDeleteChange);
@@ -83,14 +85,13 @@ class FILEPERSISTENCE_API ChangeGraph
 		// The nodes of the graph
 		QList<MergeChange*> changes_;
 
-		// The different edge types of the graph
-		QMultiHash<MergeChange*, MergeChange*> dependencies_;
-		QMultiHash<MergeChange*, MergeChange*> reverseDependencies_; // The opposite direction of the edges above
-		QMultiHash<MergeChange*, MergeChange*> directConflicts_;
-
 		// Helper structures to speed up computation
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForNode_;
 		QMultiHash<Model::NodeIdType, MergeChange*> changesForChildren_;
+
+		Dependencies dependencies_{changes_, changesForNode_, changesForChildren_};
+
+		QMultiHash<MergeChange*, MergeChange*> directConflicts_;
 
 		static const QString NEW_NODES_PERSISTENT_UNIT_NAME;
 
@@ -103,13 +104,6 @@ class FILEPERSISTENCE_API ChangeGraph
 		void addLabelConfict(MergeChange* change);
 		void addDeleteNonEmptyTreeConflict(MergeChange* change);
 		void addInsertOrMoveToDeletedConflict(MergeChange* change);
-
-		void recomputeAllDependencies(GenericTree* tree);
-		void addDependencies(MergeChange* change, GenericTree* tree);
-		void addParentPresentDependency(MergeChange* change, GenericTree* tree);
-		void addChildrenRemovedDependency(MergeChange* change, GenericTree* tree);
-		void addLabelDependency(MergeChange* change);
-		void addMoveDependency(MergeChange* change, GenericTree* tree);
 
 		void removeLabelOnlyChangesInChildren(Model::NodeIdType parentId);
 		void removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId);
@@ -127,27 +121,9 @@ class FILEPERSISTENCE_API ChangeGraph
 		 */
 		int applyIndependentNonConflictingChanges(GenericTree* tree);
 
-		/**
-		 * Removed the dependencies of some move changes, which are safe to apply, despite depending on other moves.
-		 *
-		 * For now these are only move changes that both branches perform.
-		 *
-		 * Returns whether any dependencies were removed
-		 */
-		bool removeDependenciesForSafeMoveChanges();
-
-		/**
-		 * Scans all changes to detect all-or-nothing dependency chains and removese the depenencies if all
-		 * elements are non-conflicting and if they don't depend on external elements.
-		 *
-		 * Returns true if any dependencies were removed.
-		 */
-		bool removeDependenciesInsideNonConflictingAtomicChangeGroups();
-
 		void applyChange(GenericTree* tree, MergeChange* change);
 		void removeChange(MergeChange* change, bool mayHaveConflicts);
 		QList<MergeChange*>::iterator removeChange(QList<MergeChange*>::iterator changeIt, bool mayHaveConflicts);
-		void removeAllDependencies(MergeChange* change);
 };
 
 inline const QList<MergeChange*>& ChangeGraph::changes() const { return changes_; }
@@ -159,9 +135,9 @@ inline QList<MergeChange*> ChangeGraph::changesInDirectConflict() const { return
 inline QList<MergeChange*> ChangeGraph::directConflictsOf(MergeChange* change) const
 { return directConflicts_.values(change); }
 inline QList<MergeChange*> ChangeGraph::dependenciesOf(MergeChange* change) const
-{ return dependencies_.values(change); }
-inline QList<MergeChange*> ChangeGraph::reverseDependenciesOf(MergeChange* change) const
-{ return reverseDependencies_.values(change); }
+{ return dependencies_.dependenciesOf(change); }
+inline QList<MergeChange*> ChangeGraph::changesDependingOn(MergeChange* change) const
+{ return dependencies_.changesDependingOn(change); }
 inline bool ChangeGraph::hasDirectConflicts() const { return !directConflicts_.isEmpty(); }
 
 }

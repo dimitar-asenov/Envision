@@ -26,10 +26,10 @@
 
 #pragma once
 
-#include "../../filepersistence_api.h"
+#include "../../../filepersistence_api.h"
 
-#include "../ChangeDescription.h"
-#include "../../simple/GenericNode.h"
+#include "../../ChangeDescription.h"
+#include "../../../simple/GenericNode.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 

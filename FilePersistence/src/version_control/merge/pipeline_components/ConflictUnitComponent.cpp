@@ -27,11 +27,11 @@
 #include "ConflictUnitComponent.h"
 
 #include "ListMergeComponentV2.h"
-#include "ChangeGraph.h"
-#include "MergeChange.h"
-#include "MergeData.h"
-#include "../../simple/GenericTree.h"
-#include "../../simple/GenericNode.h"
+#include "../change_graph/ChangeGraph.h"
+#include "../change_graph/MergeChange.h"
+#include "../MergeData.h"
+#include "../../../simple/GenericTree.h"
+#include "../../../simple/GenericNode.h"
 
 namespace FilePersistence {
 

@@ -26,9 +26,9 @@
 
 #include "ChangeGraph.h"
 
-#include "../Diff.h"
-#include "../../simple/GenericTree.h"
-#include "../../simple/GenericNode.h"
+#include "../../Diff.h"
+#include "../../../simple/GenericTree.h"
+#include "../../../simple/GenericNode.h"
 
 namespace FilePersistence {
 
@@ -59,7 +59,7 @@ inline void ChangeGraph::insert(QList<MergeChange*> changes, GenericTree* tree)
 {
 	for (auto & change : changes) insertSingleChange(change);
 
-	recomputeAllDependencies(tree);
+	dependencies_.recomputeAll(tree);
 }
 
 void ChangeGraph::insertSingleChange(MergeChange* change)
@@ -193,172 +193,6 @@ void ChangeGraph::addInsertOrMoveToDeletedConflict(MergeChange* change)
 	}
 }
 
-void ChangeGraph::recomputeAllDependencies(GenericTree* tree)
-{
-	dependencies_.clear();
-	reverseDependencies_.clear();
-
-	for (auto change : changes_)
-		addDependencies(change, tree);
-}
-
-
-void ChangeGraph::addDependencies(MergeChange* change, GenericTree* tree)
-{
-	addParentPresentDependency(change, tree);
-	addChildrenRemovedDependency(change, tree);
-	addLabelDependency(change);
-	addMoveDependency(change, tree);
-}
-
-
-void ChangeGraph::addParentPresentDependency(MergeChange* change, GenericTree* tree)
-{
-	// Some changes require that the parent node must exist
-	// If it is not already in base, find the change that introduces it and depend on it
-	if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
-	{
-		Q_ASSERT(!change->newParentId().isNull());
-		bool existsInBase = tree->find(change->newParentId());
-		if (!existsInBase)
-		{
-			// There must be an insertion change introducing this node. Add a dependency on it.
-			bool parentInsertionChangeFound = false;
-			auto it = changesForNode_.find(change->newParentId());
-			while (it != changesForNode_.end() && it.key() == change->newParentId())
-			{
-				if (it.value()->type() == ChangeType::Insertion)
-				{
-					dependencies_.insert(change, it.value());
-					reverseDependencies_.insert(it.value(), change);
-					parentInsertionChangeFound = true;
-				}
-				++it;
-			}
-			Q_ASSERT(parentInsertionChangeFound);
-		}
-	}
-}
-
-void ChangeGraph::addChildrenRemovedDependency(MergeChange* change, GenericTree* tree)
-{
-	// A delete change requires that the node has no children left.
-	// Such a change must depend on all changes that delete or move children out.
-	if (change->type() == ChangeType::Deletion)
-	{
-		auto baseNode = tree->find(change->nodeId());
-		Q_ASSERT(baseNode);
-		for (auto child : baseNode->children())
-		{
-			bool changeFound = false;
-			auto it = changesForNode_.find(child->id());
-			while (it != changesForNode_.end() && it.key() == child->id())
-			{
-				if (it.value()->type() == ChangeType::Deletion
-					 || (it.value()->type() == ChangeType::Move && it.value()->oldParentId() == change->nodeId()))
-				{
-					dependencies_.insert(change, it.value());
-					reverseDependencies_.insert(it.value(), change);
-					changeFound = true;
-				}
-				++it;
-			}
-			Q_ASSERT(changeFound);
-		}
-	}
-}
-
-void ChangeGraph::addLabelDependency(MergeChange* change)
-{
-	// Labels must be unique. All changes that introduce new labels must depend on other changes
-	// that change the existing old label, if any.
-	if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move
-		 || change->updateFlags().testFlag(ChangeDescription::Label))
-	{
-		Q_ASSERT(!change->newParentId().isNull());
-
-		auto it = changesForChildren_.find(change->newParentId());
-		while (it != changesForChildren_.end() && it.key() == change->newParentId())
-		{
-			// In the condition below, keep in mind that a Move change may also change the label. Thus it is not
-			// sufficient to just check if a change changes the label, because if it's a move, perhaps only the old
-			// labels clash and the new ones are fine. This means that the check for Stationary+Label must be like it is,
-			// and not simply Label, like it was originally.
-			if (it.value()->oldLabel() == change->newLabel() &&
-					(	it.value()->type() == ChangeType::Deletion
-						|| (it.value()->type() == ChangeType::Stationary
-							 && it.value()->updateFlags().testFlag(ChangeDescription::Label))
-						|| (it.value()->type() == ChangeType::Move && it.value()->oldParentId() == change->newParentId())
-					)
-				 )
-			{
-				dependencies_.insert(change, it.value());
-				reverseDependencies_.insert(it.value(), change);
-			}
-			++it;
-		}
-	}
-}
-
-
-void ChangeGraph::addMoveDependency(MergeChange* change, GenericTree* tree)
-{
-	// In order to detect cycles each move change depends on the first move change that moves an ancestor of it.
-	if (change->type() != ChangeType::Move)
-		return;
-
-	// This change might move some tree into a newly inserted tree. Traverse this newly inserted tree first.
-	auto ancestorId = change->newParentId();
-	bool ancestorIsInserted = true;
-
-	while (ancestorIsInserted)
-	{
-		ancestorIsInserted = false;
-		auto it = changesForNode_.find(ancestorId);
-		while (it != changesForNode_.end() && it.key() == ancestorId)
-		{
-			if (it.value()->type() == ChangeType::Insertion)
-			{
-				ancestorId = it.value()->newParentId();
-				ancestorIsInserted = true;
-				break;
-			}
-			else
-				++it;
-		}
-	}
-
-	// At this point we have an ancestor ID which belongs to a node already in the tree.
-	// We should traverse the ancestor chain until we reach the root node or until we reach a moved node
-	Q_ASSERT(!ancestorId.isNull());
-	while (!ancestorId.isNull())
-	{
-		bool dependencyFound = false;
-		auto it = changesForNode_.find(ancestorId);
-		while (it != changesForNode_.end() && it.key() == ancestorId)
-		{
-			if (it.value()->type() == ChangeType::Move)
-			{
-				dependencies_.insert(change, it.value());
-				reverseDependencies_.insert(it.value(), change);
-				dependencyFound = true;
-				// Keep looking for additional dependencies, perhaps both branches move the same node to different places.
-			}
-
-			++it;
-		}
-
-		// If we found the first move, then we're done.
-		if (dependencyFound) break;
-		else
-		{
-			auto ancestorNode = tree->find(ancestorId);
-			Q_ASSERT(ancestorNode);
-			ancestorId = ancestorNode->parentId();
-		}
-	}
-}
-
 void ChangeGraph::relabelChildrenUniquely(Model::NodeIdType parentId, IdToLabelMap labelMap, GenericTree* tree)
 {
 	removeLabelOnlyChangesInChildren(parentId);
@@ -400,7 +234,6 @@ void ChangeGraph::removeLabelDependenciesBetweenChildren(Model::NodeIdType paren
 		while (innerIt != changesForChildren_.end() && innerIt.key() == parentId)
 		{
 			dependencies_.remove(outerIt.value(), innerIt.value());
-			reverseDependencies_.remove(innerIt.value(), outerIt.value());
 			++innerIt;
 		}
 		++outerIt;
@@ -654,22 +487,7 @@ void ChangeGraph::splitMoveInOrInsertChangeForSecondLabel(MergeChange* change, L
 		directConflicts_.insert(conflict, changeB);
 	}
 
-	auto changesADependsOn = dependencies_.values(change);
-	auto changesDependingOnA = reverseDependencies_.values(change);
-
-	// All changes that change A depends on, change B must also depend on
-	for (auto aDependency : changesADependsOn)
-	{
-		dependencies_.insert(changeB, aDependency);
-		reverseDependencies_.insert(aDependency, changeB);
-	}
-
-	// All changes that depend on change A, must also depend on change B
-	for (auto dependencyOnA : changesDependingOnA)
-	{
-		dependencies_.insert(dependencyOnA, changeB);
-		reverseDependencies_.insert(changeB, dependencyOnA);
-	}
+	dependencies_.copyDependencies(change, changeB);
 }
 
 void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
@@ -678,8 +496,9 @@ void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
 	while (tryApplyingMoreChanges)
 	{
 		applyIndependentNonConflictingChanges(tree);
-		tryApplyingMoreChanges = removeDependenciesForSafeMoveChanges();
-		tryApplyingMoreChanges = removeDependenciesInsideNonConflictingAtomicChangeGroups() || tryApplyingMoreChanges;
+		tryApplyingMoreChanges = dependencies_.removeDependenciesForSafeMoveChanges(directConflicts_);
+		tryApplyingMoreChanges = dependencies_.removeDependenciesInsideNonConflictingAtomicCycles(directConflicts_)
+											|| tryApplyingMoreChanges;
 	}
 }
 
@@ -696,7 +515,7 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 		while (changeIt != changes_.end())
 		{
 			auto change = *changeIt;
-			if (dependencies_.contains(change) || directConflicts_.contains(change))
+			if (dependencies_.hasDependencies(change) || directConflicts_.contains(change))
 			{
 				// do nothing
 				++changeIt;
@@ -715,206 +534,6 @@ int ChangeGraph::applyIndependentNonConflictingChanges(GenericTree* tree)
 	}
 
 	return totalAppliedChanges;
-}
-
-bool ChangeGraph::removeDependenciesForSafeMoveChanges()
-{
-	// If a move change:
-	// - is identical for both branches
-	// - depends on exactly one other change, which is also a move change
-	// - the dependency is for another node (not because of label clashes)
-	// - has no conflicts
-	// then we can remove its dependencies and apply it.
-	// We know it won't cause a cycle, since both branches make it.
-	//
-	// Note that any other moves which depend on this one (not because of labels) must be made to depend on the
-	// this move's dependency
-
-	bool removedSomeDependencies = false;
-
-	for (auto change : changes_)
-	{
-		if (change->type() == ChangeType::Move && !directConflicts_.contains(change))
-		{
-			auto allDependencies = dependencies_.values(change);
-			if (allDependencies.size() == 1)
-			{
-				auto ourDependency = allDependencies.first();
-				if (ourDependency->type() == ChangeType::Move && change->newParentId() != ourDependency->oldParentId()
-					 && change->branches() == (MergeChange::BranchA | MergeChange::BranchB))
-				{
-					removedSomeDependencies = true;
-
-					// Remove our dependency
-					reverseDependencies_.remove(ourDependency, change);
-					dependencies_.remove(change, ourDependency);
-
-					// If other changes depend on this one for cyclicity reasons (not because of label)
-					// then make them depend on our dependency
-					auto otherDependOnThis = reverseDependencies_.values(change);
-					for (auto dependencyToUs : otherDependOnThis)
-					{
-						if (dependencyToUs->type() == ChangeType::Move
-							 && dependencyToUs->newParentId() != change->oldParentId())
-						{
-							dependencies_.remove(dependencyToUs, change);
-							reverseDependencies_.remove(change, dependencyToUs);
-
-							dependencies_.insert(dependencyToUs, ourDependency);
-							reverseDependencies_.insert(ourDependency, dependencyToUs);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return removedSomeDependencies;
-}
-
-bool ChangeGraph::removeDependenciesInsideNonConflictingAtomicChangeGroups()
-{
-	// Atomic change groups are essentially cycles of dependent changes with the following properties:
-	// - dependency is due to clashing lables, but other changes, like deletions, moves, and inserts can be in
-	//   the cycle. It's not necessary to have stand-alone label changes, e.g. a move in/insert can clash with a
-	//   deletion of a node with the same label
-	// - all changes come from the same branch. Alternatively both branches should make the same changes.
-	//
-	// Such changes can be applied, but they need to be applied in an all-or-nothing fashion.
-	//
-	// To make these non-conflicting and suitable for removal (and subsequent application) the following conditions
-	// must also be met
-	// - no change depends on a change outside of the cycle. However there might be multiple paths through the cycle.
-	// - no change is in conflict with any other change
-	//
-
-	bool removedSomeDependencies = false;
-
-	QHash<MergeChange*, bool> okToBreakCycle;
-	for (auto change : changes_)
-	{
-		if (change->isValueOrTypeChange())
-		{
-			okToBreakCycle.insert(change, false);
-			continue;
-		}
-
-		// Check no conflicts
-		if ( directConflicts_.contains(change) )
-		{
-			okToBreakCycle.insert(change, false);
-			continue;
-		}
-
-		// Check same branches and that dependencies exist
-		bool differentBranches = false;
-		bool hasDependencies = false;
-		for (auto dep : dependencies_.values(change))
-		{
-			hasDependencies = true;
-			if (dep->branches() != change->branches())
-			{
-				differentBranches = true;
-				break;
-			}
-		}
-		if (differentBranches || !hasDependencies)
-		{
-			okToBreakCycle.insert(change, false);
-			continue;
-		}
-
-		// This change could potentially be removed if the rest of the changes in this cycle are also OK
-		okToBreakCycle.insert(change, true);
-	}
-
-	//===========================================================================================================
-	// For each change, check if it is part of a cycle with all OKs
-	for (auto change : changes_)
-	{
-		if (!okToBreakCycle.value(change)) continue;
-
-		// This change is so far OK. Check if it forms a cycle
-		QList<MergeChange*> exploredChanges{change};
-		QList<MergeChange*> changesToExplore{dependencies_.values(change)};
-
-		int earliestCycle = -1;
-		bool badCycle = false;
-		while (!changesToExplore.isEmpty())
-		{
-			Q_ASSERT(exploredChanges.size() <= changes_.size());
-
-			auto nextChange = changesToExplore.takeLast();
-
-			auto cycleAt = exploredChanges.indexOf(nextChange);
-			if (cycleAt >= 0)
-			{
-				if (earliestCycle < 0 || cycleAt < earliestCycle) earliestCycle = cycleAt;
-				continue;
-			}
-
-			if (okToBreakCycle.value(nextChange))
-			{
-				exploredChanges.append(nextChange);
-				changesToExplore.append(dependencies_.values(nextChange));
-			}
-			else
-			{
-				badCycle = true;
-				break;
-			}
-		}
-
-		if (!badCycle)
-		{
-			Q_ASSERT(changesToExplore.isEmpty());
-			QList<MergeChange*> changesWhoseDependenciesToRemove = exploredChanges.mid(earliestCycle);
-			Q_ASSERT( changesWhoseDependenciesToRemove.size() > 1 );
-
-			// This is a cycle which matches all conditions. Remove label clash dependencies between the elements.
-			// We ignore label conflicts in this case, since they will be resolved once all changes are applied.
-			//
-			// Here we still keep non label-clash dependencies, e.g.:
-			// -In case of Insertion/MoveIn, we need to make sure that the parent node parent exist
-			// -In case of Deletion, we need to make sure that the subtree is Deleted or Moved out
-
-			for (auto changeToMakeIndependent : changesWhoseDependenciesToRemove)
-			{
-				// Deletion cannot depend on another change because of a label clash, keep all dependencies.
-				if (changeToMakeIndependent->type() != ChangeType::Deletion)
-				{
-					for (auto dep : dependencies_.values(changeToMakeIndependent))
-					{
-						// An Insertion cannot resolve a label clash, don't remove this dependency
-						if (dep->type() != ChangeType::Insertion)
-						{
-							// changeToMakeIndependent is Move/Insert/Relabel
-							// dep is Move/Del/Relabel
-							// All but one of the possible dependency combinations are due to label clashes.
-							// A move, may depend on a move, not because of a label, but to avoid cycles, so preserve
-							// such a depenency
-							if (changeToMakeIndependent->type() != ChangeType::Move || dep->type() != ChangeType::Move
-								 || changeToMakeIndependent->newParentId() == dep->oldParentId())
-							{
-								// This must be a label dependency. Remove it.
-								Q_ASSERT(changeToMakeIndependent->newLabel() == dep->oldLabel());
-
-								dependencies_.remove(changeToMakeIndependent, dep);
-								reverseDependencies_.remove(dep, changeToMakeIndependent);
-								removedSomeDependencies = true;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// Regardless if there was a cycle or not, mark all explored changes as notOK to avoid further processing
-		for (auto processedChange : exploredChanges)
-			okToBreakCycle.insert(processedChange, false);
-	}
-
-	return removedSomeDependencies;
 }
 
 void ChangeGraph::applyChange(GenericTree* tree, MergeChange* change)
@@ -1001,11 +620,10 @@ void ChangeGraph::removeChange(MergeChange* change, bool mayHaveConflicts)
 	else
 		Q_ASSERT(!directConflicts_.contains(change));
 
-	removeAllDependencies(change);
+	dependencies_.removeAll(change);
 
 	delete change;
 }
-
 
 QList<MergeChange*>::iterator ChangeGraph::removeChange(QList<MergeChange*>::iterator changeIt, bool mayHaveConflicts)
 {
@@ -1013,20 +631,6 @@ QList<MergeChange*>::iterator ChangeGraph::removeChange(QList<MergeChange*>::ite
 	auto returnIt = changes_.erase(changeIt);
 	removeChange(changeToDelete, mayHaveConflicts);
 	return returnIt;
-}
-
-void ChangeGraph::removeAllDependencies(MergeChange* change)
-{
-	// Remove this change's dependencies
-	auto thisDependsOn = dependencies_.values(change);
-	auto otherDependOnThis = reverseDependencies_.values(change);
-	dependencies_.remove(change);
-	reverseDependencies_.remove(change);
-	for (auto ourDependency : thisDependsOn)
-		reverseDependencies_.remove(ourDependency, change);
-	for (auto dependencyToUs : otherDependOnThis)
-		dependencies_.remove(dependencyToUs, change);
-
 }
 
 void ChangeGraph::removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* rootDeleteChange)
@@ -1062,13 +666,12 @@ void ChangeGraph::removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* r
 	auto relabel = suitableConflictingChange->type() == ChangeType::Stationary;
 
 	// Re-route dependencies on the delete change to now point to the move/relabel change
-	for (auto dependsOnDel : reverseDependencies_.values(rootDeleteChange))
+	for (auto dependsOnDel : dependencies_.changesDependingOn(rootDeleteChange))
 	{
 		// A relabel requires this to be a top-level delete. Make sure that there are no dependencies that are deletes.
 		if (relabel) Q_ASSERT(dependsOnDel->type() != ChangeType::Deletion);
 
 		dependencies_.insert(dependsOnDel, suitableConflictingChange);
-		reverseDependencies_.insert(suitableConflictingChange, dependsOnDel);
 	}
 
 	// Remove this delete change and all its dependent changes
@@ -1083,14 +686,14 @@ void ChangeGraph::removeDeleteChangesConflictingWithMoveOrRelabel(MergeChange* r
 		{
 			// Remove a deletion if only in this branch
 			Q_ASSERT(change->type() == ChangeType::Deletion);
-			changesToRemove.append( dependencies_.values(change));
+			changesToRemove.append( dependencies_.dependenciesOf(change));
 			removeChange(change, true);
 		}
 		else if (change->type() == ChangeType::Deletion)
 		{
 			// Split a deletion in both branches
 			Q_ASSERT(change->branches() == (MergeChange::BranchA | MergeChange::BranchB));
-			changesToRemove.append( dependencies_.values(change));
+			changesToRemove.append( dependencies_.dependenciesOf(change));
 			change->branches_ &= ~deletingBranch;
 		}
 		else
