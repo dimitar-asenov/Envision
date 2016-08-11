@@ -129,14 +129,24 @@ void ChangeGraph::removeLabelOnlyChangesInChildren(Model::NodeIdType parentId)
 
 void ChangeGraph::removeLabelDependenciesBetweenChildren(Model::NodeIdType parentId)
 {
-	// Any direct dependencies between children must be label dependencies, so simply remove all of them
+	// A direct dependency between children, doesn't need to be because of labels. For example
+	// if a direct child is removed, but one of its children is being moved to us, then both appear as children
+	// but the deleted one depends on the move.
 	auto outerIt = changesForChildren_.find(parentId);
 	while (outerIt != changesForChildren_.end() && outerIt.key() == parentId)
 	{
 		auto innerIt = changesForChildren_.find(parentId);
 		while (innerIt != changesForChildren_.end() && innerIt.key() == parentId)
 		{
-			dependencies_.remove(outerIt.value(), innerIt.value());
+			// Remove only label clashes
+			if (innerIt.value() != outerIt.value()
+				 && outerIt.value()->newParentId() == parentId
+				 && innerIt.value()->oldParentId() == parentId
+				 && outerIt.value()->newLabel() == innerIt.value()->oldLabel())
+			{
+				dependencies_.remove(outerIt.value(), innerIt.value());
+			}
+
 			++innerIt;
 		}
 		++outerIt;
