@@ -1208,6 +1208,20 @@ public class ASTConverter {
 			
 			node.add(prefix);
 			node.child("ref").setStringValue("____NULL____:" + methodRef.getName().getIdentifier());
+		} else if (e instanceof CreationReference) {
+			CreationReference creationRef = (CreationReference) e;
+			
+			// TODO: Actually implement this in Envision.
+			node = new Node(null, "ReferenceExpression", name);
+			Node prefix = typeExpression(creationRef.getType(), "prefix");
+			
+			for (Type typeArgument : (List<Type>)creationRef.typeArguments()) {
+				Node typeNode = typeExpression(typeArgument, name);
+				node.child("typeArguments").add(typeNode);
+			}
+			
+			node.add(prefix);
+			node.child("ref").setStringValue("____NULL____:new");
 		} else
 			throw new UnknownFeatureException("Unknown expression type: " + e.getClass().getSimpleName());
 		
