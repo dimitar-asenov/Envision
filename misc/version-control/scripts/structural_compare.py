@@ -2,9 +2,10 @@
 
 # This script loads two envision files and compares them structurally, ignoring the order of certain types of lists.
 # The envision files' IDs must have already been matched since the IDs are used for sorting.
-# The arguments are the two Envision files to compare
+# The arguments are the two Envision files to compare. The first file must be the developer merged version and the second the envision merged version.
 #
-# If there is a difference the script will output some information about the first difference it finds. Otherwise there will be no output.
+# If there is a difference the script will output some information about the first difference it finds. Otherwise it will output either EQUAL if the files are structurally identical
+# or SUBSET if the developer merged file is a subset of the envision merged file.
 
 import re
 import sys
@@ -12,6 +13,11 @@ import argparse
 
 # Regex to parse Envision files
 envisionLineRegex = re.compile("^(\t*)(\S+) (\S+) \{(\S+)\} \{(\S+)\}(.*)$")
+
+# Define some constants
+EQUAL=0
+SUBSET=1
+DIFFERENT=2
 
 # The Node class represents a single Envision node
 class Node:
@@ -38,30 +44,49 @@ class Node:
 			c.sort()
 		if self.shouldSortChildren():
 			self.children.sort(key = lambda c: c.id)
-			childIndex = 0
+			# Erase the label
 			for c in self.children:
-				c.label = str(childIndex)
-				childIndex += 1
+				c.label = ''
 	
-	def isEqual(self, other):
+	def compare(self, other):
+		if other is None:
+			print(self.id + " No Match")
+			return DIFFERENT
+		
 		if ( self.tabs == other.tabs
 			and self.label == other.label
 			and self.type == other.type 
 			and self.id == other.id
 			and self.parentId == other.parentId
 			and self.value == other.value
-			and len(self.children) == len(other.children) ):
+			and len(self.children) <= len(other.children) ):
 			
 			# Everything matches so far, compare the children
-			childrenEqual = True
-			for selfChild, otherChild in zip(self.children, other.children):
-				if not selfChild.isEqual(otherChild):
-					childrenEqual = False
+			childrenEqual = EQUAL
+			for selfChild in self.children:
+				otherChild = other.child(selfChild.id)
+				
+				comparison = selfChild.compare(otherChild)
+				if comparison == DIFFERENT:
+					childrenEqual = DIFFERENT
 					break
+				
+				if comparison == SUBSET:
+					childrenEqual = SUBSET
 			
+			if childrenEqual == EQUAL and len(self.children) < len(other.children):
+				childrenEqual = SUBSET
+				
 			return childrenEqual
+		
 		print(self.id + "   " + other.id)
-		return False
+		return DIFFERENT
+	
+	def child(self, id):
+		for c in self.children:
+			if c.id == id:
+				return c
+		return None
 	
 	def numNodes(self):
 		result = 1
@@ -90,25 +115,31 @@ class Node:
 			
 			
 argParser = argparse.ArgumentParser('Compare two Envision files for equality, ignoring the order of some lists')
-argParser.add_argument('filenameA')
-argParser.add_argument('filenameB')
+argParser.add_argument('devMergedFilename')
+argParser.add_argument('envisionMergedFilename')
 args = argParser.parse_args()
 
 # Read input files
-with open(args.filenameA) as f:
-	linesA = f.readlines()
-with open(args.filenameB) as f:
-	linesB = f.readlines()
+with open(args.devMergedFilename) as f:
+	linesDev = f.readlines()
+with open(args.envisionMergedFilename) as f:
+	linesEnvision = f.readlines()
 
-if len(linesA) != len(linesB):
-	print('Different number of nodes')
+if len(linesDev) > len(linesEnvision):
+	print('The developer version has more lines than the Envision-merged one.')
+	print('DIFFERENT')
 	sys.exit()
 
-treeA = Node.loadTreeFromLines(linesA)
-treeB = Node.loadTreeFromLines(linesB)
+treeDev = Node.loadTreeFromLines(linesDev)
+treeEnvision = Node.loadTreeFromLines(linesEnvision)
 
-treeA.sort()
-treeB.sort()
+treeDev.sort()
+treeEnvision.sort()
 
-if not treeA.isEqual(treeB):
-	print('Nodes')
+comparison = treeDev.compare(treeEnvision)
+if comparison == EQUAL:
+	print('EQUAL')
+if comparison == SUBSET:
+	print('SUBSET')
+if comparison == DIFFERENT:
+	print('DIFFERENT')

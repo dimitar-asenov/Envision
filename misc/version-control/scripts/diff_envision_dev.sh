@@ -71,29 +71,32 @@ for m in "${merges[@]}"; do
 					$idpatcher devMerged/TestMerge/TestMerge
 					
 					AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)
-					if [[ $AUTO_MANUAL_DIFF  ]]; then
+					if [[ $AUTO_MANUAL_DIFF ]]; then
 						if [ -f "direct_conflicts" ] ; then
-							conflictString='conflict'
 							echo "${m##*/}/${fdir##*/}" >> ../../issues_env
-							echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
+							echo "${m##*/}/${fdir##*/}" 'conflict' >> ../../issues_env
 						else
 							if [ -f "remaining_changes" ] ; then
-								conflictString='CYCLE'
 								echo "${m##*/}/${fdir##*/}" >> ../../issues_env
-								echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
+								echo "${m##*/}/${fdir##*/}" 'CYCLE' >> ../../issues_env
 							else
-								conflictString='no-conflict'
-								
 								# The Envision merged file is not identical to the one the developer committed, but there were no conflicts and all changes were applied.
-								# Perhaps there's only a difference in order.
+								# Perhaps there's only a difference in order, or the developer deleted some stuff.
 								# Compare the structure of the two files, ignoring the order of some lists (e.g. methods and import statements)
 								STRUCTURAL_DIFF=$(${structural_compare} devMerged/TestMerge/TestMerge envMerged)
-								if [[ $STRUCTURAL_DIFF  ]]; then
-									echo "${m##*/}/${fdir##*/}" >> ../../issues_env
-									echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env
-								else
+								if [[ $STRUCTURAL_DIFF == "EQUAL" ]]; then
 									# Only difference in order
-									echo "${m##*/}/${fdir##*/}" "${conflictString}" >> ../../issues_env_only_order_differences
+									echo "${m##*/}/${fdir##*/}" 'order only' >> ../../issues_env_only_order_differences
+								else
+									if [[ $STRUCTURAL_DIFF == "SUBSET" ]]; then
+										# The developer version is a subset of the Envision version. Perhaps the developer deleted some methods/imports.
+										echo "${m##*/}/${fdir##*/}" >> ../../issues_env
+										echo "${m##*/}/${fdir##*/}" 'subset' >> ../../issues_env
+									else
+										# The two versions are really different
+										echo "${m##*/}/${fdir##*/}" >> ../../issues_env
+										echo "${m##*/}/${fdir##*/}" 'no-conflict' >> ../../issues_env
+									fi
 								fi
 							fi
 						fi
