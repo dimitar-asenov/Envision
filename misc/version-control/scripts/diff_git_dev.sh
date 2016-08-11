@@ -15,7 +15,7 @@ for m in $merges; do
 		if [ -d "${fdir}" ]; then
 			(
 				cd $fdir
-				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ] && [ -f devMerged.java ]; then
+				if [ -s base.java ] && [ -s dev.java ] && [ -s master.java ] && [ -s devMerged.java ]; then
 					cp master.java gitMerged.java
 					git merge-file -L master.java --quiet gitMerged.java base.java dev.java
 					gitReturnValue=$?

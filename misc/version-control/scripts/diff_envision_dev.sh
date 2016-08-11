@@ -48,7 +48,7 @@ for m in "${merges[@]}"; do
 		if [ -d "${fdir}" ]; then
 			(
 				cd $fdir
-				if [ -f base.java ] && [ -f dev.java ] && [ -f master.java ] && [ -f devMerged.java ]; then
+				if [ -s base.java ] && [ -s dev.java ] && [ -s master.java ] && [ -s devMerged.java ]; then
 					
 					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java $QUICK_MATCH_ARG &
 					importBranchesAndMergePID=$!
