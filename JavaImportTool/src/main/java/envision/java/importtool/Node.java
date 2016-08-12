@@ -340,6 +340,7 @@ public class Node {
 		s = s.replace("\\", "\\\\");
 		s = s.replace("\r", "\\r");
 		s = s.replace("\n", "\\n");
+		s = s.replace("\0", "\\0");
 		return s;
 	}
 }

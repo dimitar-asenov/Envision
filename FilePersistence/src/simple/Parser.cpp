@@ -41,6 +41,7 @@ QString Parser::escape(const QString& line)
 	res.replace('\\', "\\\\");
 	res.replace('\r', "\\r");
 	res.replace('\n', "\\n");
+	res.replace(QChar('\0'), "\\0");
 
 	return res;
 }
@@ -81,6 +82,11 @@ QString Parser::rawStringToQString(const char* data, int start, int endInclusive
 		else if (c== 'r')
 		{
 			res += '\r';
+			escaped = false;
+		}
+		else if (c== '0')
+		{
+			res += QChar('\0');
 			escaped = false;
 		}
 		else throw FilePersistenceException{"Unrecognized escape character " + QString{c}};
