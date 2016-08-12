@@ -155,13 +155,14 @@ void ChangeGraph::removeLabelDependenciesBetweenChildren(Model::NodeIdType paren
 
 void ChangeGraph::removeLabelConflictsBetweenChildren(Model::NodeIdType parentId)
 {
-	// Any direct dependencies between children must be label dependencies, so simply remove all of them
 	auto outerIt = changesForChildren_.find(parentId);
 	while (outerIt != changesForChildren_.end() && outerIt.key() == parentId)
 	{
 		auto innerIt = changesForChildren_.find(parentId);
 		while (innerIt != changesForChildren_.end() && innerIt.key() == parentId)
 		{
+			// Make sure to remove only conflicts which are due to a label clash.
+			// Also make sure that these are the new labels that clash, not something else.
 			if (outerIt.value()->newParentId() == parentId && innerIt.value()->newParentId() == parentId
 				 && outerIt.value()->newLabel() == innerIt.value()->newLabel()
 				 && outerIt.value()->type() != ChangeType::Deletion
