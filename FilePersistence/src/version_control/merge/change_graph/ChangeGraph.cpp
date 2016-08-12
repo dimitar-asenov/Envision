@@ -229,41 +229,48 @@ void ChangeGraph::updateLabelsOfChangesTo(Model::NodeIdType parentId, IdToLabelM
 		auto changeIt = changesForNode_.find(nodeId);
 		while (changeIt != changesForNode_.end() && changeIt.key() == nodeId)
 		{
-			switch (changeIt.value()->type())
+			auto change = changeIt.value();
+
+			// A node mentioned in labelMap may have changes pertaining to the parentId list, but there might also be
+			// other changes for that node, which are completely independent of parentId.
+			//
+			// For example:
+			// If the lists A, B, and C exist in all three versions, and node X moves from A to B in one branch and
+			// from A to C in another branch. We should be careful not to process the move to C when dealing with list B.
+			if (change->newParentId() == parentId || change->oldParentId() == parentId)
 			{
-				case ChangeType::Stationary:
-					// Since label changes are already deleted
-					Q_ASSERT(changeIt.value()->isValueOrTypeChange() &&
-								!changeIt.value()->updateFlags().testFlag(ChangeDescription::Label));
-					break;
-				case ChangeType::Deletion:	// Update old label in case of deletion
-					changeIt.value()->oldLabel_ = labelNone;
-					// We don't clear labelNone because it is used as oldLabel for the lblChanges added at the end
-					break;
-				case ChangeType::Insertion:
+				switch (change->type())
 				{
-					updateMoveInOrInsert(changeIt.value(), labelA, labelB);
-					break;
-				}
+					case ChangeType::Stationary:
+						// Since label changes are already deleted
+						Q_ASSERT(change->isValueOrTypeChange() && !change->updateFlags().testFlag(ChangeDescription::Label));
+						break;
+					case ChangeType::Deletion:	// Update old label in case of deletion
+						change->oldLabel_ = labelNone;
+						// We don't clear labelNone because it is used as oldLabel for the label changes added at the end
+						break;
+					case ChangeType::Insertion:
+					{
+						updateMoveInOrInsert(change, labelA, labelB);
+						break;
+					}
+					case ChangeType::Move:
+					{
+						if (change->newParentId() == parentId)	// Move In
+							updateMoveInOrInsert(change, labelA, labelB);
+						else	change->oldLabel_ = labelNone;	// Update old Label for Move Out
+						// We don't clear labelNone because it is used as oldLabel for the label changes added at the end
 
-				case ChangeType::Move:
-				{
-					Q_ASSERT(changeIt.value()->newParentId() == parentId ||
-								changeIt.value()->oldParentId() == parentId);
-					if (changeIt.value()->newParentId() == parentId)	// Move In
-						updateMoveInOrInsert(changeIt.value(), labelA, labelB);
-					else	changeIt.value()->oldLabel_ = labelNone;	// Update old Label for Move Out
-					// We don't clear labelNone because it is used as oldLabel for the lblChanges added at the end
-
-					// Update Flags
-					if (changeIt.value()->newLabel() == changeIt.value()->oldLabel())
-						changeIt.value()->updateFlags_ = ChangeDescription::NoFlags;
-					else changeIt.value()->updateFlags_ = ChangeDescription::Label;
-					break;
+						// Update Flags
+						if (change->newLabel() == change->oldLabel())
+							change->updateFlags_ = ChangeDescription::NoFlags;
+						else change->updateFlags_ = ChangeDescription::Label;
+						break;
+					}
+					default:
+						Q_ASSERT(false);
+						break;
 				}
-				default:
-					Q_ASSERT(false);
-					break;
 			}
 			++changeIt;
 		}
