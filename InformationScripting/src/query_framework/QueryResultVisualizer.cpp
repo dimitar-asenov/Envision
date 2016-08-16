@@ -159,7 +159,7 @@ Optional<int> QueryResultVisualizer::visualize(const TupleSet& ts)
 		auto mainScene = Visualization::VisualizationManager::instance().mainScene();
 		for (auto view : mainScene->views())
 			if (auto mainView = dynamic_cast<Visualization::MainView*>(view))
-				browser->setPos(mainView->sceneRect().center() - QPoint{400, 300});
+				browser->setPos(mainView->visibleRect().center() - QPoint{400, 300});
 		mainScene->addTopLevelItem(browser);
 	}
 
