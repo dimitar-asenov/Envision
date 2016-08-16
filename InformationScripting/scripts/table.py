@@ -48,7 +48,7 @@ for tuple in Query.input.tuples():
         valueDict[tuple[i].name] = tuple[i].value
     tupleDict[key].append(valueDict)
 
-Query.result = Query.input
+# Query.result = Query.input # Enable this for debugging
 
 body = Element('body')
 for tupleName, tupleList in tupleDict.items():

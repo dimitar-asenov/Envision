@@ -47,8 +47,6 @@ for tuple in Query.input.tuples():
 	if tuple.size() >= 2:
 		edges.append(json.dumps({'from': getId(tuple[0]), 'to': getId(tuple[1]), 'arrows':'to'}))
 
-Query.result = Query.input
-
 nodesText = ','.join(nodes)
 edgesText = ','.join(edges)
 
