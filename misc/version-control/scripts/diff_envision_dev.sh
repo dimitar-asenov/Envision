@@ -63,11 +63,13 @@ for m in "${merges[@]}"; do
 					
 					cp /tmp/EnvisionVC/TestMerge/TestMerge envMerged
 					
+					echo "-------------------- Matching Envision Merged to Dev Merged --------------------"
 					if [ "$QUICK_MATCH_ARG" == "-quick-match" ]; then
 						$quick_match envMerged devMerged/TestMerge/TestMerge > devMerged/TestMerge/TestMerge.idpatch
 					else
 						$gumtree envMerged devMerged/TestMerge/TestMerge
 					fi
+					echo "-------------------- Patching Dev Merged --------------------"
 					$idpatcher devMerged/TestMerge/TestMerge
 					
 					AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)

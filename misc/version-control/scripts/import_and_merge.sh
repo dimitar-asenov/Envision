@@ -181,7 +181,6 @@ do
 	fi
 done
 
-echo "-------------------- Cleaning up --------------------"
 # Cleanup of unnecessary files
 rm -rf $envRepoSrc
 rm -rf $gitRepoSrc
