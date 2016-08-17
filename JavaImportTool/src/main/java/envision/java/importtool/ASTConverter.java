@@ -129,6 +129,24 @@ public class ASTConverter {
 		}
 	}
 	
+	public void addJavaDoc(Node node, Javadoc javadoc) throws ConversionException
+	{
+		if (javadoc == null) return;
+		
+		String[] commentLines = source.substring(javadoc.getStartPosition(),
+			javadoc.getStartPosition()+javadoc.getLength()).split("\\r?\\n");
+		
+		Node commentNode = new Node(node, "CommentNode", "comment");
+		node.add(commentNode);
+		for (String line : commentLines)
+		{
+			Node lineNode = new Node(commentNode, "Text", commentNode.child("lines").numChildren());
+			commentNode.child("lines").add(lineNode);
+			
+			lineNode.setStringValue(line);
+		}
+	}
+	
 	public void visit(CompilationUnit node) throws ConversionException
 	{
 		PackageDeclaration pd = node.getPackage();
@@ -148,7 +166,7 @@ public class ASTConverter {
 		containers.push(cl);
 		
 		setBodyModifiersAndAnnotations(type);
-		//TODO: Handle JavaDoc
+		addJavaDoc(cl, type.getJavadoc());
 		
 		if (topLevel)
 		{
@@ -294,6 +312,7 @@ public class ASTConverter {
 		me.child("mthKind").setLongValue(node.isConstructor() ? 1 : 0);
 		
 		setBodyModifiersAndAnnotations(node);
+		addJavaDoc(me, node.getJavadoc());
 		processTypeParameters(node.typeParameters());
 		processParameters(node.parameters());
 		
@@ -328,6 +347,7 @@ public class ASTConverter {
 			containers.push(field);
 			
 			setBodyModifiersAndAnnotations(node);
+			addJavaDoc(field, node.getJavadoc());
 			Node type = typeExpression(node.getType(), "typeExpression");
 			field.setChild("typeExpression", addExtraDimensions(type, vdf.getExtraDimensions()));
 
@@ -344,6 +364,7 @@ public class ASTConverter {
 		containers.push(field);
 			
 		setBodyModifiersAndAnnotations(node);
+		addJavaDoc(field, node.getJavadoc());
 		field.setChild("typeExpression", typeExpression(node.getType(), "typeExpression"));
 
 		if (node.getDefault() != null)
