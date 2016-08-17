@@ -14,7 +14,7 @@ ENVISION_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 
 JavaImportTool="$SCRIPT_DIR/../JavaImportToolBin/JavaImportTool/bin/JavaImportTool"
 
-gumtree="$SCRIPT_DIR/../gumtree_bin/gumtree-2.1.0-SNAPSHOT/bin/gumtree -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -g envision -m gumtree"
+gumtree="$SCRIPT_DIR/../gumtree_bin/gumtree-2.1.0-SNAPSHOT/bin/gumtree -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.2 envdmp -g envision -m gumtree"
 quick_match="$SCRIPT_DIR/quick-match.py"
 QUICK_MATCH_ARG=$4
 
