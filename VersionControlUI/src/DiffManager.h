@@ -211,11 +211,36 @@ class VERSIONCONTROLUI_API DiffManager
 		// if set specifies which node we are interested in, used for history
 		Model::NodeIdType targetNodeId_;
 
+		/**
+		 * Maps old name to a pair consisting of the new name and the id of the renamed component.
+		 */
 		QHash<QString, QPair<QString, Model::NodeIdType>> nameChangeInformation_;
+
+		/**
+		 * Contains the id of all NameTexts and References related to name changes. The bool value is used to
+		 * decide whether the id is of type NameText (true) or Reference (false).
+		 */
 		static QHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
+
+		/**
+		 * List of all ChangeWithNodes related to name changes.
+		 */
 		static QList<ChangeWithNodes> nameChanges_;
+
+		/**
+		 * Flags used to control the amount of information that should be displayed for name changes.
+		 */
 		static NameChangeVisualizationFlags nameChangeVisualizationFlags_;
+
+		/**
+		 * List of the ids of all OnZoomHandlers associated with name changes.
+		 */
 		static QList<int> nameChangeOnZoomHandlerIds_;
+
+		/**
+		 * All items related to name changes, which do not need special scaling, since one of their ancestors is
+		 * responsible for the scaling.
+		 */
 		static QSet<Visualization::Item*> nameChangesScaledByAncestor_;
 
 		static void scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem,
