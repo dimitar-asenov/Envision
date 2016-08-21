@@ -92,7 +92,7 @@ void VReviewComment::updateDateText()
 		date_->setText("Some seconds ago");
 	else if (secsToCurrentDate >= 60 && secsToCurrentDate < 120)
 	{
-				date_->setText("1 minute ago");
+		date_->setText("1 minute ago");
 	}
 	else if (secsToCurrentDate < 3600)
 	{
