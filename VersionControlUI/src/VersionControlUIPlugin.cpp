@@ -23,6 +23,7 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "VersionControlUIPlugin.h"
 
 #include "DiffManager.h"
 #include "items/ObjectPathCrumb.h"
@@ -30,7 +31,6 @@
 #include "commands/CClear.h"
 #include "commands/CDiff.h"
 #include "commands/CHistory.h"
-#include "VersionControlUIPlugin.h"
 
 #include "Logger/src/Log.h"
 
