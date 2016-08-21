@@ -61,7 +61,7 @@ const QString DiffManager::NAME_CHANGE_OVERLAY_NAME = "nameChange_overlay";
 const QString DiffManager::NAME_CHANGE_ARROW_OVERLAY_NAME = "nameChange_arrow_overlay";
 QHash<Model::NodeIdType, bool> DiffManager::nameChangesIdsIsNameText_;
 QList<ChangeWithNodes> DiffManager::nameChanges_;
-DiffManager::NameChangeVisualizationFlags DiffManager::nameChangeVisualizationFlags_{Summary};
+DiffManager::NameChangeVisualizationFlags DiffManager::nameChangeVisualizationFlags_{Summary | NameText | References};
 QList<int> DiffManager::nameChangeOnZoomHandlerIds_;
 QHash<Visualization::ViewItem*, int> DiffManager::onZoomHandlerIdPerViewItem_;
 QSet<Visualization::Item*> DiffManager::nameChangesScaledByAncestor_;
