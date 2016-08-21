@@ -58,7 +58,7 @@ void VNodeReviews::initializeForms()
 			return v->node()->focusInformationNode();}, &StyleType::focusInformation);
 
 	auto headerElement = (new Visualization::GridLayoutFormElement{})
-				->setMargins(5, 5, 5, 5)
+				->setMargins(5, 0, 5, 5)
 				->setHorizontalSpacing(10)
 				->setColumnStretchFactor(0, 1)
 				->setColumnStretchFactor(1, 1)

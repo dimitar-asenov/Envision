@@ -60,7 +60,10 @@ void CodeReviewCommentOverlay::updateGeometry(int availableWidth, int availableH
 
 void CodeReviewCommentOverlay::initializeForms()
 {
-	addForm(item(&I::nodeReviewsItem_, [](I* v) {return v->nodeReviews_;}));
+	auto container = (new Visualization::GridLayoutFormElement{})
+			->setTopMargin(10)
+			->put(0, 0, item(&I::nodeReviewsItem_, [](I* v) {return v->nodeReviews_;}));
+	addForm(container);
 }
 
 void CodeReviewCommentOverlay::updateOffsetItemLocal(QPointF scenePos)
