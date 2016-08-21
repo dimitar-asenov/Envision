@@ -67,11 +67,9 @@ QHash<Visualization::ViewItem*, int> DiffManager::onZoomHandlerIdPerViewItem_;
 QSet<Visualization::Item*> DiffManager::nameChangesScaledByAncestor_;
 
 DiffManager::DiffManager(QString project, QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
-								 Model::NodeIdType targetNodeID, NameChangeVisualizations nameChangeVisualization)
+								 Model::NodeIdType targetNodeID)
 	: project_{project}, contextUnitMatcherPriorityList_{contextUnitMatcherPriorityList}, targetNodeId_{targetNodeID}
-
 {
-	nameChangeVisualization_ = nameChangeVisualization;
 }
 
 DiffSetup DiffManager::initializeDiffPrerequisites(QString oldVersion, QString newVersion)

@@ -91,8 +91,7 @@ class VERSIONCONTROLUI_API DiffManager
 
 		DiffManager(QString project,
 						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
-						Model::NodeIdType targetNodeID={},
-						NameChangeVisualizations nameChangeVisualization =  {Summary | NameText | References});
+						Model::NodeIdType targetNodeID={});
 
 		void showDiff(QString oldVersion, QString newVersion);
 
