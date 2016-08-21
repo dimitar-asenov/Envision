@@ -34,6 +34,7 @@
 #include "FilePersistence/src/version_control/ChangeDescription.h"
 #include "FilePersistence/src/version_control/Diff.h"
 
+#include "InteractionBase/src/input_actions/ActionRegistry.h"
 
 namespace FilePersistence
 {
@@ -49,9 +50,18 @@ namespace Visualization
 
 namespace VersionControlUI {
 
-struct VersionNodes;
-struct ChangeWithNodes;
 class DiffFrame;
+
+struct VersionNodes {
+	Model::Node* oldNode_{};
+	Model::Node* newNode_{};
+};
+
+struct ChangeWithNodes {
+	Model::NodeIdType id_;
+	VersionNodes versionNodes_;
+	FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
+};
 
 struct DiffSetup {
 	Model::TreeManager* newVersionManager_{};
@@ -82,7 +92,7 @@ class VERSIONCONTROLUI_API DiffManager
 		DiffManager(QString project,
 						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
 						Model::NodeIdType targetNodeID={},
-						NameChangeVisualizations nameChangeVisualization = Summary);
+						NameChangeVisualizations nameChangeVisualization =  {Summary | NameText | References});
 
 		void showDiff(QString oldVersion, QString newVersion);
 
@@ -96,6 +106,10 @@ class VERSIONCONTROLUI_API DiffManager
 
 		DiffFramesAndSetup computeDiffFramesAndOverlays(QString oldVersion,
 																					QString newVersion, Visualization::ViewItem* viewItem);
+
+		static bool toggleNameChangeHighlights(Visualization::Item* target,
+																QKeySequence keySequence,
+																Interaction::ActionRegistry::InputState inputState);
 
 	private:
 
@@ -127,9 +141,12 @@ class VERSIONCONTROLUI_API DiffManager
 		bool findChangedNode(Model::TreeManager* treeManager, Model::NodeIdType id, Model::NodeIdType& resultId);
 
 		/**
-		 * Creates the different overlays according to the change type of the node.
+		 * Creates the different overlays according to the change type of the node. Uses \a nameChangesIds to identify
+		 * changes related to name changes and use special overlay names for them.
 		 */
-		static void createOverlaysForChanges(Visualization::ViewItem* diffViewItem, QList<ChangeWithNodes> changesWithNodes);
+		static void createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
+														 QList<ChangeWithNodes> changesWithNodes,
+														 QList<Model::NodeIdType> nameChangesIds);
 
 		/**
 		 * Returns a list of DiffFrame created from the ids from \a diffFrameNodeIds.
@@ -147,6 +164,12 @@ class VERSIONCONTROLUI_API DiffManager
 		 * Returns all items which have an ancestor present in \a items.
 		 */
 		static QSet<Visualization::Item*> findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items);
+
+		/**
+		 * Returns all items which have an ancestor present in \a possibleAncestors.
+		 */
+		static QSet<Visualization::Item*> findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items,
+																											QSet<Visualization::Item*> possibleAncestors);
 
 		/**
 		 * Removes all nodes which have an ancestor present in \a container
@@ -181,7 +204,7 @@ class VERSIONCONTROLUI_API DiffManager
 		 * Check if change associated with id should be visualized (e.g. if the change is part of a name change, does it
 		 * satisfy the visualization constraint).
 		 */
-		bool shouldShowChange(Model::NodeIdType id);
+		static bool shouldShowChange(Model::NodeIdType id);
 
 		QString project_;
 		QList<Model::SymbolMatcher> contextUnitMatcherPriorityList_;
@@ -189,14 +212,21 @@ class VERSIONCONTROLUI_API DiffManager
 		// if set specifies which node we are interested in, used for history
 		Model::NodeIdType targetNodeId_;
 
-		QHash<QString, QPair<QString, Model::NodeIdType>> nameChanges_;
-		QHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
-		NameChangeVisualizations nameChangeVisualization_{Summary};
+		QHash<QString, QPair<QString, Model::NodeIdType>> nameChangeInformation_;
+		static QHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
+		static QList<ChangeWithNodes> nameChanges_;
+		static NameChangeVisualizations nameChangeVisualization_;
+		static QList<int> nameChangeOnZoomHandlerIds_;
+		static QSet<Visualization::Item*> nameChangesScaledByAncestor_;
 
-		static void scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem);
+		static void scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem,
+									  bool nameChangeRelated = false);
 
 		static const QString OVERVIEW_HIGHLIGHT_OVERLAY_NAME;
 		static const QString OVERVIEW_ICON_OVERLAY_NAME;
+
+		static const QString NAME_CHANGE_OVERLAY_NAME;
+		static const QString NAME_CHANGE_ARROW_OVERLAY_NAME;
 
 		static QHash<Visualization::ViewItem*, int> onZoomHandlerIdPerViewItem_;
 		void createOverlaysForChanges(QList<ChangeWithNodes> changesWithNodes,

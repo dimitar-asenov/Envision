@@ -24,18 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "VersionControlUIPlugin.h"
-#include "SelfTest/src/TestManager.h"
-#include "Logger/src/Log.h"
-
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
-
+#include "DiffManager.h"
 #include "items/ObjectPathCrumb.h"
 #include "handlers/HObjectPathCrumb.h"
-
 #include "commands/CClear.h"
 #include "commands/CDiff.h"
 #include "commands/CHistory.h"
+#include "VersionControlUIPlugin.h"
+
+#include "Logger/src/Log.h"
+
+#include "SelfTest/src/TestManager.h"
+
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "InteractionBase/src/input_actions/ActionRegistry.h"
 
 namespace VersionControlUI {
 
@@ -48,6 +50,9 @@ Logger::Log& VersionControlUIPlugin::log()
 bool VersionControlUIPlugin::initialize(Core::EnvisionManager&)
 {
 	VersionControlUI::ObjectPathCrumb::setDefaultClassHandler(HObjectPathCrumb::instance());
+
+	Interaction::ActionRegistry::instance()->registerInputHandler("GenericHandler.NameChangeFilter",
+																					  DiffManager::toggleNameChangeHighlights);
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CClear{});
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CDiff{});
