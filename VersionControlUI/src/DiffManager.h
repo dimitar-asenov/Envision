@@ -87,7 +87,7 @@ class VERSIONCONTROLUI_API DiffManager
 				NameText = 0x2,
 				References = 0x4
 		};
-		using NameChangeVisualizations = QFlags<NameChangeVisualization>;
+		using NameChangeVisualizationFlags = QFlags<NameChangeVisualization>;
 
 		DiffManager(QString project,
 						QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
@@ -214,7 +214,7 @@ class VERSIONCONTROLUI_API DiffManager
 		QHash<QString, QPair<QString, Model::NodeIdType>> nameChangeInformation_;
 		static QHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
 		static QList<ChangeWithNodes> nameChanges_;
-		static NameChangeVisualizations nameChangeVisualization_;
+		static NameChangeVisualizationFlags nameChangeVisualizationFlags_;
 		static QList<int> nameChangeOnZoomHandlerIds_;
 		static QSet<Visualization::Item*> nameChangesScaledByAncestor_;
 
@@ -233,6 +233,6 @@ class VERSIONCONTROLUI_API DiffManager
 												Visualization::Item* anchorItem);
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(DiffManager::NameChangeVisualizations)
+Q_DECLARE_OPERATORS_FOR_FLAGS(DiffManager::NameChangeVisualizationFlags)
 
 }

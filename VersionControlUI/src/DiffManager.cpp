@@ -61,7 +61,7 @@ const QString DiffManager::NAME_CHANGE_OVERLAY_NAME = "nameChange_overlay";
 const QString DiffManager::NAME_CHANGE_ARROW_OVERLAY_NAME = "nameChange_arrow_overlay";
 QHash<Model::NodeIdType, bool> DiffManager::nameChangesIdsIsNameText_;
 QList<ChangeWithNodes> DiffManager::nameChanges_;
-DiffManager::NameChangeVisualizations DiffManager::nameChangeVisualization_{Summary};
+DiffManager::NameChangeVisualizationFlags DiffManager::nameChangeVisualizationFlags_{Summary};
 QList<int> DiffManager::nameChangeOnZoomHandlerIds_;
 QHash<Visualization::ViewItem*, int> DiffManager::onZoomHandlerIdPerViewItem_;
 QSet<Visualization::Item*> DiffManager::nameChangesScaledByAncestor_;
@@ -122,7 +122,7 @@ void DiffManager::clear()
 
 QString DiffManager::computeNameChangeInformation(const DiffSetup& diffSetup)
 {
-	if (nameChangeInformation_.isEmpty() || !nameChangeVisualization_.testFlag(Summary))
+	if (nameChangeInformation_.isEmpty() || !nameChangeVisualizationFlags_.testFlag(Summary))
 		return "";
 
 	QString nameChangeInformation = "";
@@ -244,11 +244,11 @@ bool DiffManager::shouldShowChange(Model::NodeIdType id)
 		return true;
 
 	// node for id is NameText, if NameText flag is not set don't show it
-	if (iter.value() && !nameChangeVisualization_.testFlag(NameText))
+	if (iter.value() && !nameChangeVisualizationFlags_.testFlag(NameText))
 		return false;
 
 	// node for id is Reference, if References flag is not set don't show it
-	if (!iter.value() && !nameChangeVisualization_.testFlag(References))
+	if (!iter.value() && !nameChangeVisualizationFlags_.testFlag(References))
 		return false;
 
 	return true;
@@ -322,22 +322,22 @@ bool DiffManager::toggleNameChangeHighlights(Visualization::Item* target,
 
 	QList<ChangeWithNodes> nameChangesToShow;
 
-	if (nameChangeVisualization_.testFlag(NameText) && nameChangeVisualization_.testFlag(References))
+	if (nameChangeVisualizationFlags_.testFlag(NameText) && nameChangeVisualizationFlags_.testFlag(References))
 	{
-		nameChangeVisualization_ &= ~NameText;
-		nameChangeVisualization_ &= ~References;
+		nameChangeVisualizationFlags_ &= ~NameText;
+		nameChangeVisualizationFlags_ &= ~References;
 	}
-	else if (!nameChangeVisualization_.testFlag(NameText) && !nameChangeVisualization_.testFlag(References))
+	else if (!nameChangeVisualizationFlags_.testFlag(NameText) && !nameChangeVisualizationFlags_.testFlag(References))
 	{
-		nameChangeVisualization_ |= NameText;
+		nameChangeVisualizationFlags_ |= NameText;
 	}
-	else if (nameChangeVisualization_.testFlag(NameText) && !nameChangeVisualization_.testFlag(References))
+	else if (nameChangeVisualizationFlags_.testFlag(NameText) && !nameChangeVisualizationFlags_.testFlag(References))
 	{
-		nameChangeVisualization_ |= References;
+		nameChangeVisualizationFlags_ |= References;
 	}
-	else if (!nameChangeVisualization_.testFlag(NameText) && nameChangeVisualization_.testFlag(References))
+	else if (!nameChangeVisualizationFlags_.testFlag(NameText) && nameChangeVisualizationFlags_.testFlag(References))
 	{
-		nameChangeVisualization_ |= NameText;
+		nameChangeVisualizationFlags_ |= NameText;
 	}
 
 	for (auto change : nameChanges_)
@@ -561,7 +561,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 		auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize, changesWithNodes);
 
 		// if summary activated and no changes to show, insert dummy DiffFrame
-		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty()
+		if (nameChangeVisualizationFlags_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty()
 			 && diffFrames.isEmpty())
 			diffFrames.append(new DiffFrame{});
 
@@ -569,7 +569,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 		for (auto diffFrame : diffFrames)
 			historyViewItem->insertNode(diffFrame, {row++, col});
 
-		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty())
+		if (nameChangeVisualizationFlags_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty())
 			message += "<br/><br/>" + computeNameChangeInformation(diffSetup);
 
 		if (!diffFrames.isEmpty())
