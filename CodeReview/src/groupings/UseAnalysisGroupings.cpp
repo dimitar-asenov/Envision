@@ -137,10 +137,10 @@ bool UseAnalysisGroupings::dependsOn(DiffFrameInfo infoA,
 		for (auto referal : infoA.refersTo_)
 		{
 			for (auto changesOld : frameB->oldChangedNodes())
-				if (changesOld->isSameOrAncestorOf(referal))
+				if (changesOld->isSameOrAncestorOf(referal) || referal->isSameOrAncestorOf(changesOld))
 					return true;
 			for (auto changesNew : frameB->newChangedNodes())
-				if (changesNew->isSameOrAncestorOf(referal))
+				if (changesNew->isSameOrAncestorOf(referal) || referal->isSameOrAncestorOf(changesNew))
 					return true;
 		}
 		return false;

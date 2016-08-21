@@ -37,7 +37,7 @@
 namespace FilePersistence {
 class GenericNode;
 class ChangeGraph;
-class Chunk;
+struct Chunk;
 
 class FILEPERSISTENCE_API ListMergeComponent : public MergePipelineComponent
 {

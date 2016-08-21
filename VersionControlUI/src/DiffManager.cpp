@@ -57,25 +57,20 @@ namespace VersionControlUI
 
 const QString DiffManager::OVERVIEW_HIGHLIGHT_OVERLAY_NAME = "changeOverviewHighlights";
 const QString DiffManager::OVERVIEW_ICON_OVERLAY_NAME = "changeOverviewIcons";
-
+const QString DiffManager::NAME_CHANGE_OVERLAY_NAME = "nameChange_overlay";
+const QString DiffManager::NAME_CHANGE_ARROW_OVERLAY_NAME = "nameChange_arrow_overlay";
+QHash<Model::NodeIdType, bool> DiffManager::nameChangesIdsIsNameText_;
+QList<ChangeWithNodes> DiffManager::nameChanges_;
+DiffManager::NameChangeVisualizationFlags DiffManager::nameChangeVisualizationFlags_{Summary | NameText | References};
+QList<int> DiffManager::nameChangeOnZoomHandlerIds_;
 QHash<Visualization::ViewItem*, int> DiffManager::onZoomHandlerIdPerViewItem_;
-
-struct VersionNodes {
-	Model::Node* oldNode_{};
-	Model::Node* newNode_{};
-};
-
-struct ChangeWithNodes {
-	Model::NodeIdType id_;
-	VersionNodes versionNodes_;
-	FilePersistence::ChangeType changeType_{FilePersistence::ChangeType::Unclassified};
-};
+QSet<Visualization::Item*> DiffManager::nameChangesScaledByAncestor_;
 
 DiffManager::DiffManager(QString project, QList<Model::SymbolMatcher> contextUnitMatcherPriorityList,
-								 Model::NodeIdType targetNodeID, NameChangeVisualizations nameChangeVisualization)
-	: project_{project}, contextUnitMatcherPriorityList_{contextUnitMatcherPriorityList}, targetNodeId_{targetNodeID},
-	  nameChangeVisualization_{nameChangeVisualization}
-{}
+								 Model::NodeIdType targetNodeID)
+	: project_{project}, contextUnitMatcherPriorityList_{contextUnitMatcherPriorityList}, targetNodeId_{targetNodeID}
+{
+}
 
 DiffSetup DiffManager::initializeDiffPrerequisites(QString oldVersion, QString newVersion)
 {
@@ -127,12 +122,12 @@ void DiffManager::clear()
 
 QString DiffManager::computeNameChangeInformation(const DiffSetup& diffSetup)
 {
-	if (nameChanges_.isEmpty())
+	if (nameChangeInformation_.isEmpty() || !nameChangeVisualizationFlags_.testFlag(Summary))
 		return "";
 
 	QString nameChangeInformation = "";
 
-	for (auto entry : nameChanges_)
+	for (auto entry : nameChangeInformation_)
 	{
 		auto id = entry.second;
 
@@ -174,8 +169,8 @@ bool DiffManager::processNameChange(Model::Node* oldNode, Model::Node* newNode, 
 	if (auto oldReference = DCast<Model::Reference>(oldNode))
 		if (auto newReference = DCast<Model::Reference>(newNode))
 		{
-			auto result = nameChanges_.find(oldReference->name());
-			if (result != nameChanges_.end() && result->first == newReference->name())
+			auto result = nameChangeInformation_.find(oldReference->name());
+			if (result != nameChangeInformation_.end() && result->first == newReference->name())
 			{
 				if (oldReference->target() && newReference->target())
 				{
@@ -216,8 +211,9 @@ void DiffManager::processNameTextChanges(FilePersistence::IdToChangeDescriptionH
 				auto parentId = diffSetup.newVersionManager_->nodeIdMap().idIfExists(newNameText->parent());
 				Q_ASSERT(!parentId.isNull());
 
-				nameChanges_.insert(oldNameText->get(), {newNameText->get(), parentId});
+				nameChangeInformation_.insert(oldNameText->get(), {newNameText->get(), parentId});
 				nameChangesIdsIsNameText_.insert(id, true);
+				nameChanges_.append({id, versionNodes, iter->get()->type()});
 			}
 		iter++;
 	}
@@ -248,11 +244,11 @@ bool DiffManager::shouldShowChange(Model::NodeIdType id)
 		return true;
 
 	// node for id is NameText, if NameText flag is not set don't show it
-	if (iter.value() && !nameChangeVisualization_.testFlag(NameText))
+	if (iter.value() && !nameChangeVisualizationFlags_.testFlag(NameText))
 		return false;
 
 	// node for id is Reference, if References flag is not set don't show it
-	if (!iter.value() && !nameChangeVisualization_.testFlag(References))
+	if (!iter.value() && !nameChangeVisualizationFlags_.testFlag(References))
 		return false;
 
 	return true;
@@ -269,7 +265,7 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 
 	auto changes = diff.changes();
 
-	if (nameChangeVisualization_.testFlag(Summary)) processNameTextChanges(changes, diffSetup);
+	processNameTextChanges(changes, diffSetup);
 
 	for (auto change : changes.values())
 	{
@@ -282,17 +278,20 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 
 		// don't process this change further if it is a name change, they will be shown seperately
 		if (processNameChange(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
+		{
 			nameChangesIdsIsNameText_.insert(id, false);
-
-		if (areInTargetNodeSubtree(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
-			changesWithNodes.append({id, versionNodes, change->type()});
-		else
-			continue;
-
-		Model::NodeIdType nodeId;
+			nameChanges_.append({id, versionNodes, change->type()});
+		}
 
 		if (shouldShowChange(id))
 		{
+			if (areInTargetNodeSubtree(versionNodes.oldNode_, versionNodes.newNode_, diffSetup))
+				changesWithNodes.append({id, versionNodes, change->type()});
+			else
+				continue;
+
+			Model::NodeIdType nodeId;
+
 			if (change->type() != FilePersistence::ChangeType::Deletion)
 				if (findChangedNode(diffSetup.newVersionManager_, id, nodeId))
 					changedNodesToVisualize.insert(nodeId);
@@ -304,6 +303,54 @@ void DiffManager::computeDiff(QString oldVersion, QString newVersion, QList<Chan
 
 	removeDirectChildrenOfNodesInContainer(changesWithNodes);
 	removeNodesWithAncestorPresent(changedNodesToVisualize);
+}
+
+
+bool DiffManager::toggleNameChangeHighlights(Visualization::Item* target,
+																QKeySequence, Interaction::ActionRegistry::InputState)
+{
+
+	auto currentViewItem = target->scene()->currentViewItem();
+
+	for (int id : nameChangeOnZoomHandlerIds_)
+		Visualization::VisualizationManager::instance().mainScene()->removeOnZoomHandler(id);
+
+	nameChangeOnZoomHandlerIds_.clear();
+
+	currentViewItem->scene()->removeOverlayGroup(NAME_CHANGE_OVERLAY_NAME);
+	currentViewItem->scene()->removeOverlayGroup(NAME_CHANGE_ARROW_OVERLAY_NAME);
+
+	QList<ChangeWithNodes> nameChangesToShow;
+
+	if (nameChangeVisualizationFlags_.testFlag(NameText) && nameChangeVisualizationFlags_.testFlag(References))
+	{
+		nameChangeVisualizationFlags_ &= ~NameText;
+		nameChangeVisualizationFlags_ &= ~References;
+	}
+	else if (!nameChangeVisualizationFlags_.testFlag(NameText) && !nameChangeVisualizationFlags_.testFlag(References))
+	{
+		nameChangeVisualizationFlags_ |= NameText;
+	}
+	else if (nameChangeVisualizationFlags_.testFlag(NameText) && !nameChangeVisualizationFlags_.testFlag(References))
+	{
+		nameChangeVisualizationFlags_ |= References;
+	}
+	else if (!nameChangeVisualizationFlags_.testFlag(NameText) && nameChangeVisualizationFlags_.testFlag(References))
+	{
+		nameChangeVisualizationFlags_ |= NameText;
+	}
+
+	for (auto change : nameChanges_)
+		if (shouldShowChange(change.id_))
+			nameChangesToShow.append(change);
+
+	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
+								  [currentViewItem, nameChangesToShow]() {
+		createOverlaysForChanges(currentViewItem, nameChangesToShow, nameChangesIdsIsNameText_.keys());
+	});
+
+	return true;
+
 }
 
 void DiffManager::removeNodesWithAncestorPresent(QSet<Model::NodeIdType>& container)
@@ -412,7 +459,7 @@ void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNod
 
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
 								  [viewItem, changesWithNodes, diffSetup, nameChangeInfo, anchorItem]() {
-		createOverlaysForChanges(viewItem, changesWithNodes);
+		createOverlaysForChanges(viewItem, changesWithNodes, nameChangesIdsIsNameText_.keys());
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		if (!nameChangeInfo.isEmpty()) message += "<br/><br/>" + nameChangeInfo;
 		auto overlay = new Visualization::MessageOverlay{viewItem,
@@ -487,12 +534,11 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 	QList<QPair<Model::Node*, QString>> diffFrameInfo;
 
+	QHash<QString, QPair<QString, Model::NodeIdType>> tempNameChangeInformation = {nameChangeInformation_};
+	QHash<Model::NodeIdType, bool> tempNameChangesIdsIsNameText = {nameChangesIdsIsNameText_};
+
 	for (int i = 1; i < versions.length(); i++)
 	{
-
-		nameChanges_.clear();
-		nameChangesIdsIsNameText_.clear();
-
 		DiffSetup diffSetup;
 
 		// detailed changes
@@ -515,7 +561,7 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 		auto diffFrames = createDiffFrames(diffSetup, changedNodesToVisualize, changesWithNodes);
 
 		// if summary activated and no changes to show, insert dummy DiffFrame
-		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty()
+		if (nameChangeVisualizationFlags_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty()
 			 && diffFrames.isEmpty())
 			diffFrames.append(new DiffFrame{});
 
@@ -523,19 +569,30 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 		for (auto diffFrame : diffFrames)
 			historyViewItem->insertNode(diffFrame, {row++, col});
 
-		if (nameChangeVisualization_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty())
+		if (nameChangeVisualizationFlags_.testFlag(Summary) && !nameChangesIdsIsNameText_.isEmpty())
 			message += "<br/><br/>" + computeNameChangeInformation(diffSetup);
 
 		if (!diffFrames.isEmpty())
 			diffFrameInfo.append({diffFrames.first(), message});
 
+		auto nameChanges = nameChangesIdsIsNameText_.keys();
+
 		// create visualization for changes
 		Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
-									  [historyViewItem, changesWithNodes]() {
-			createOverlaysForChanges(historyViewItem, changesWithNodes);
+									  [historyViewItem, changesWithNodes, nameChanges]() {
+			createOverlaysForChanges(historyViewItem, changesWithNodes, nameChanges);
 		});
 		col++;
+
+		tempNameChangeInformation.unite(nameChangeInformation_);
+		tempNameChangesIdsIsNameText.unite(nameChangesIdsIsNameText_);
+		nameChangeInformation_.clear();
+		nameChangesIdsIsNameText_.clear();
 	}
+
+	// restore all information
+	nameChangeInformation_.unite(tempNameChangeInformation);
+	nameChangesIdsIsNameText_.unite(tempNameChangesIdsIsNameText);
 
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
 								  [historyViewItem, diffFrameInfo]() {
@@ -603,13 +660,20 @@ QSet<Model::Node*> DiffManager::findAllNodesWithDirectParentPresent(QHash<Model:
 
 QSet<Visualization::Item*> DiffManager::findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items)
 {
+	return findAllItemsWithAncestorsIn(items, items);
+}
+
+
+QSet<Visualization::Item*> DiffManager::findAllItemsWithAncestorsIn(QSet<Visualization::Item*> items,
+																						  QSet<Visualization::Item*> possibleAncestors)
+{
 	QSet<Visualization::Item*> result;
 	for (auto item : items)
 	{
 		auto parent = item->parent();
 		while (parent)
 		{
-			if (items.contains(parent))
+			if (possibleAncestors.contains(parent))
 			{
 				result.insert(item);
 				break;
@@ -620,7 +684,6 @@ QSet<Visualization::Item*> DiffManager::findAllItemsWithAncestorsIn(QSet<Visuali
 
 	return result;
 }
-
 // TODO find good way to return and use Node instead of Id
 bool DiffManager::findChangedNode(Model::TreeManager* treeManager, Model::NodeIdType id, Model::NodeIdType& resultId)
 {
@@ -693,7 +756,8 @@ void DiffManager::setOverlayInformationAccordingToChangeType(FilePersistence::Ch
 	}
 }
 
-void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem)
+void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualization::ViewItem* currentViewItem,
+									  bool nameChangeRelated)
 {
 	QSet<Visualization::Item*> removeItems = findAllItemsWithAncestorsIn(itemsToScale);
 
@@ -718,11 +782,16 @@ void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualizat
 				item->setScale(1.0);
 		});
 
-	onZoomHandlerIdPerViewItem_.insert(currentViewItem, id);
+	if (nameChangeRelated)
+		nameChangeOnZoomHandlerIds_.append(id);
+	else
+		onZoomHandlerIdPerViewItem_.insert(currentViewItem, id);
+
 }
 
 void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem,
-														 QList<ChangeWithNodes> changesWithNodes)
+														 QList<ChangeWithNodes> changesWithNodes,
+														 QList<Model::NodeIdType> nameChangesIds)
 {
 	static const QString moveArrowLayer = "move_arrows";
 	diffViewItem->setArrowStyle(moveArrowLayer, "move_arrow");
@@ -730,7 +799,12 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 	static const QString modifyArrowLayer = "modify_arrows";
 	diffViewItem->setArrowStyle(modifyArrowLayer, "modify_arrow");
 
-	QSet<Visualization::Item*> allItemsToScale;
+	static const QString nameChangeArrowLayer = "nameChange_arrows";
+	diffViewItem->setArrowStyle(nameChangeArrowLayer, "modify_arrow");
+
+	QSet<Visualization::Item*> itemsToScale;
+	QSet<Visualization::Item*> nameChangeItemsToScale;
+
 	for (auto change : changesWithNodes)
 	{
 		QString highlightOverlayStyle;
@@ -738,8 +812,13 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 		QString arrowIconOverlayStyle;
 		QString arrowIconOverlayName;
 
+		bool isNameChangeRelated = nameChangesIds.contains(change.id_);
+
 		setOverlayInformationAccordingToChangeType(change.changeType_, highlightOverlayStyle, highlightOverlayName,
 												  arrowIconOverlayStyle, arrowIconOverlayName);
+
+		if (isNameChangeRelated)
+			highlightOverlayName = NAME_CHANGE_OVERLAY_NAME;
 
 
 		Visualization::Item* oldNodeItem = addOverlaysAndReturnItem(change.versionNodes_.oldNode_, diffViewItem,
@@ -749,11 +828,20 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 																						highlightOverlayName, highlightOverlayStyle,
 																						arrowIconOverlayName, arrowIconOverlayStyle);
 		if (oldNodeItem)
-			allItemsToScale.insert(oldNodeItem);
+		{
+			if (isNameChangeRelated)
+				nameChangeItemsToScale.insert(oldNodeItem);
+			else
+				itemsToScale.insert(oldNodeItem);
+		}
 
 		if (newNodeItem)
-			allItemsToScale.insert(newNodeItem);
-
+		{
+			if (isNameChangeRelated)
+				nameChangeItemsToScale.insert(newNodeItem);
+			else
+				itemsToScale.insert(newNodeItem);
+		}
 
 		if (newNodeItem && oldNodeItem)
 		{
@@ -766,13 +854,30 @@ void DiffManager::createOverlaysForChanges(Visualization::ViewItem* diffViewItem
 			{
 				auto overlay = new Visualization::ArrowOverlay{oldNodeItem, newNodeItem,
 							Visualization::ArrowOverlay::itemStyles().get("modify_arrow")};
-				diffViewItem->addOverlay(overlay, modifyArrowLayer);
+				if (isNameChangeRelated)
+					diffViewItem->addOverlay(overlay, NAME_CHANGE_ARROW_OVERLAY_NAME);
+				else
+					diffViewItem->addOverlay(overlay, modifyArrowLayer);
 			}
 		}
 
 	}
 
-	scaleItems(allItemsToScale, diffViewItem);
+	if (!itemsToScale.isEmpty())
+	{
+		scaleItems(itemsToScale, diffViewItem);
+
+		nameChangesScaledByAncestor_ += findAllItemsWithAncestorsIn(nameChangeItemsToScale, itemsToScale);
+
+	}
+
+	if (!nameChangeItemsToScale.isEmpty())
+	{
+		nameChangeItemsToScale.subtract(nameChangesScaledByAncestor_);
+		scaleItems(nameChangeItemsToScale, diffViewItem, true);
+	}
+
+	diffViewItem->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 Visualization::Item* DiffManager::addOverlaysAndReturnItem(Model::Node* node, Visualization::ViewItem* viewItem,
