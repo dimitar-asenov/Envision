@@ -26,6 +26,7 @@
 
 #include "PromptShell.h"
 #include "PromptMode.h"
+#include "Prompt.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItem.hpp"
 #include "VisualizationBase/src/views/MainView.h"
@@ -63,6 +64,7 @@ PromptShell::PromptShell(const QString& initialCommandText,
 
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
+	setScale(Prompt::scale());
 	setZValue(LAYER_COMMAND);
 	setItemCategory(Scene::MenuItemCategory);
 

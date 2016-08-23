@@ -43,6 +43,7 @@
 #include "vis/VViewSwitcherEntry.h"
 #include "vis/Menu.h"
 #include "actions/ActionPrompt.h"
+#include "input_actions/ActionRegistry.h"
 
 #include "events/DetectMainSceneActivated.h"
 
@@ -95,6 +96,8 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Prompt::registerMode<CommandMode>(Prompt::defaultModeName());
 	PromptShell::setDefaultClassHandler(HPromptShell::instance());
 	Prompt::registerPromptShowShortcut(Qt::Key_F, [](Visualization::Item* target){Prompt::show(target, "find ");});
+	// Register prompt scale toggle
+	ActionRegistry::instance()->registerInputHandler("GenericHandler.TogglePromptScale", Prompt::toggleScale);
 
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
 	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());

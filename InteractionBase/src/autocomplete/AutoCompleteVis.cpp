@@ -29,6 +29,7 @@
 #include "AutoCompleteEntry.h"
 #include "../vis/TextAndDescription.h"
 #include "../prompt/PromptShell.h"
+#include "../prompt/Prompt.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
@@ -47,6 +48,7 @@ Super{nullptr, style}, newEntries_{entries}
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 	setZValue(LAYER_AUTOCOMPLETE_Z);
 	setItemCategory(Visualization::Scene::MenuItemCategory);
+	setScale(Prompt::scale());
 }
 
 AutoCompleteVis::~AutoCompleteVis()

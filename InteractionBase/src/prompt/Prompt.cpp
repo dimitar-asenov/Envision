@@ -36,6 +36,7 @@ PromptShell* Prompt::shell_{};
 Visualization::Item* Prompt::commandReceiver_{};
 PromptMode* Prompt::mode_{};
 std::unique_ptr<Visualization::Cursor> Prompt::commandReceiverCursor_{};
+qreal Prompt::scale_{1.0};
 
 QMap<QString, Prompt::ModeConstructor>& Prompt::modeRegistry()
 {
@@ -123,6 +124,14 @@ void Prompt::hide()
 
 		AutoComplete::hide();
 	}
+}
+
+bool Prompt::toggleScale(Visualization::Item*, QKeySequence, ActionRegistry::InputState)
+{
+	if (scale_ == 1.0) scale_ = 2.0;
+	else scale_ = 1.0;
+
+	return true;
 }
 
 }

@@ -27,6 +27,8 @@
 #pragma once
 
 #include "../interactionbase_api.h"
+#include "../input_actions/ActionRegistry.h"
+
 #include "VisualizationBase/src/cursor/Cursor.h"
 
 namespace Interaction {
@@ -69,6 +71,10 @@ class INTERACTIONBASE_API Prompt
 
 		static Visualization::Item* commandReceiver();
 
+		static qreal scale();
+		static bool toggleScale(Visualization::Item* target, QKeySequence keySequence,
+										ActionRegistry::InputState inputState);
+
 		// TODO: change this to return a plain pointer type
 		static const std::unique_ptr<Visualization::Cursor>& commandReceiverCursor();
 		static QPoint commandReceiverCursorPosition();
@@ -80,6 +86,7 @@ class INTERACTIONBASE_API Prompt
 		static Visualization::Item* commandReceiver_;
 		static std::unique_ptr<Visualization::Cursor> commandReceiverCursor_;
 
+		static qreal scale_;
 		using ModeConstructor = std::function<PromptMode* ()>;
 		static QMap<QString, ModeConstructor>& modeRegistry();
 
@@ -102,5 +109,7 @@ inline void Prompt::registerMode(const QString& modeName)
 	Q_ASSERT(!modeRegistry().contains(modeName));
 	modeRegistry().insert(modeName, []()->PromptMode* {return new ModeType{};});
 }
+
+inline qreal Prompt::scale() { return scale_; }
 
 }
