@@ -224,13 +224,14 @@ void Dependencies::addMoveDependency(MergeChange* change, GenericTree* tree)
 	}
 }
 
-bool Dependencies::removeDependenciesForSafeMoveChanges(const Conflicts& directConflicts)
+bool Dependencies::removeDependenciesForSafeMoveChanges(const Conflicts& directConflicts, GenericTree* tree)
 {
 	// If a move change:
 	// - is identical for both branches
 	// - depends on exactly one other change, which is also a move change
 	// - the dependency is for another node (not because of label clashes)
 	// - has no conflicts
+	// - does not move a node into its subtree
 	// then we can remove its dependencies and apply it.
 	// We know it won't cause a cycle, since both branches make it.
 	//
@@ -250,21 +251,39 @@ bool Dependencies::removeDependenciesForSafeMoveChanges(const Conflicts& directC
 				if (ourDependency->type() == ChangeType::Move && change->newParentId() != ourDependency->oldParentId()
 					 && change->branches() == (MergeChange::BranchA | MergeChange::BranchB))
 				{
-					removedSomeDependencies = true;
-
-					// Remove our dependency
-					remove(change, ourDependency);
-
-					// If other changes depend on this one for cyclicity reasons (not because of label)
-					// then make them depend on our dependency
-					auto otherDependOnThis = reverseDependencies_.values(change);
-					for (auto dependencyToUs : otherDependOnThis)
+					// Check if this change moves a node into its subtree and do nothing if that's the case
+					auto parent = tree->find(change->newParentId());
+					Q_ASSERT(parent);
+					bool moveInOwnSubtree = false;
+					while (parent)
 					{
-						if (dependencyToUs->type() == ChangeType::Move
-							 && dependencyToUs->newParentId() != change->oldParentId())
+						if (parent->id() == change->nodeId())
 						{
-							remove(dependencyToUs, change);
-							insert(dependencyToUs, ourDependency);
+							moveInOwnSubtree = true;
+							break;
+						}
+						parent = parent->parent();
+					}
+
+					// If the move does not move the node into its own subtree, the change is safe to make independent.
+					if (!moveInOwnSubtree)
+					{
+						removedSomeDependencies = true;
+
+						// Remove our dependency
+						remove(change, ourDependency);
+
+						// If other changes depend on this one for cyclicity reasons (not because of label)
+						// then make them depend on our dependency
+						auto otherDependOnThis = reverseDependencies_.values(change);
+						for (auto dependencyToUs : otherDependOnThis)
+						{
+							if (dependencyToUs->type() == ChangeType::Move
+								 && dependencyToUs->newParentId() != change->oldParentId())
+							{
+								remove(dependencyToUs, change);
+								insert(dependencyToUs, ourDependency);
+							}
 						}
 					}
 				}

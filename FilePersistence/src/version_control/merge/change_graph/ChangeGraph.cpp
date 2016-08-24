@@ -398,7 +398,7 @@ void ChangeGraph::applyNonConflictingChanges(GenericTree* tree)
 	while (tryApplyingMoreChanges)
 	{
 		applyIndependentNonConflictingChanges(tree);
-		tryApplyingMoreChanges = dependencies_.removeDependenciesForSafeMoveChanges(directConflicts_);
+		tryApplyingMoreChanges = dependencies_.removeDependenciesForSafeMoveChanges(directConflicts_, tree);
 		tryApplyingMoreChanges = dependencies_.removeDependenciesInsideNonConflictingAtomicCycles(directConflicts_)
 											|| tryApplyingMoreChanges;
 	}

@@ -61,7 +61,7 @@ class FILEPERSISTENCE_API Dependencies
 		 *
 		 * Returns whether any dependencies were removed
 		 */
-		bool removeDependenciesForSafeMoveChanges(const Conflicts& directConflicts);
+		bool removeDependenciesForSafeMoveChanges(const Conflicts& directConflicts, GenericTree* tree);
 
 		/**
 		 * Scans all changes to detect all-or-nothing dependency chains and removese the depenencies if all
