@@ -252,6 +252,8 @@ void ListMergeComponent::computeOffsetsInBranch(const QList<Model::NodeIdType> b
 	{
 		if (lcs.contains(id))
 		{
+			// The elements from the base tree are purposefully not added to the result list here.
+			// That is done later, once for both branches just after this method is called.
 			baseIndex = treeBase->find(id)->label().toInt();
 			offset = 1;
 		}
