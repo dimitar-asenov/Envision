@@ -518,6 +518,7 @@ class FILEPERSISTENCE_API RunMerge
 		return;
 	}
 
+	QElapsedTimer timer;
 	QString envisionReadyFile{"/tmp/EnvisionVC/envisionReadyFile"};
 	QString scriptReadyFile{"/tmp/EnvisionVC/scriptReady"};
 
@@ -528,6 +529,7 @@ class FILEPERSISTENCE_API RunMerge
 		auto removed = QFile{scriptReadyFile}.remove();
 		Q_ASSERT(removed);
 
+		timer.start();
 		Q_ASSERT( QFile{"/tmp/EnvisionVC/TestMerge/.git"}.exists() );
 		GitRepository repo{"/tmp/EnvisionVC/TestMerge"};
 
@@ -589,6 +591,14 @@ class FILEPERSISTENCE_API RunMerge
 
 		CHECK_CONDITION(true);
 		Model::AllTreeManagers::cleanup();
+
+		// Compute times
+		qint64 millisElapsed = timer.elapsed();
+		static qint64 totalElapsed = 0;
+		static int totalRuns = 0;
+		totalElapsed += millisElapsed;
+		totalRuns++;
+		qDebug() << "Total time [ms]:" << totalElapsed << " average [ms]:" << (double) totalElapsed / (double) totalRuns;
 
 		auto opened = QFile{envisionReadyFile}.open(QIODevice::WriteOnly);
 		Q_ASSERT(opened);
