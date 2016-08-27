@@ -88,7 +88,13 @@ void QueryPromptMode::onEnterKeyPress(Qt::KeyboardModifiers)
 	else
 		errors = {"Queries only work on nodes"};
 
-	if (errors.isEmpty()) Interaction::Prompt::hide();
+	if (errors.isEmpty())
+	{
+		// Remove the scene cursor so that nothing is selected.
+		Interaction::Prompt::commandReceiver()->scene()->setMainCursor(nullptr);
+
+		Interaction::Prompt::hide();
+	}
 	else showErrors(errors, Qt::RichText);
 }
 
