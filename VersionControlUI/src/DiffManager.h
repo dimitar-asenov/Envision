@@ -110,6 +110,8 @@ class VERSIONCONTROLUI_API DiffManager
 																QKeySequence keySequence,
 																Interaction::ActionRegistry::InputState inputState);
 
+		static void setNameChangeVisualizationFlags(NameChangeVisualizationFlags nameChangeVisualizationFlags);
+
 	private:
 
 		DiffSetup initializeDiffPrerequisites(QString oldVersion, QString newVersion);
@@ -259,5 +261,8 @@ class VERSIONCONTROLUI_API DiffManager
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DiffManager::NameChangeVisualizationFlags)
+
+inline void DiffManager::setNameChangeVisualizationFlags(NameChangeVisualizationFlags nameChangeVisualizationFlags)
+{ nameChangeVisualizationFlags_ = nameChangeVisualizationFlags; }
 
 }
