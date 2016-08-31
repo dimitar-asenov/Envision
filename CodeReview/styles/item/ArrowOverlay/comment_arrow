@@ -1,0 +1,20 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<linePen>
+		<width>3.0</width>
+		<style>1</style>
+		<color>#60000000</color>
+	</linePen>
+	<arrowBrush>
+		<color>#60000000</color>
+	</arrowBrush>
+	<width>6</width>
+	<highlightedLinePen>
+		<width>6.0</width>
+		<color>#ff000000</color>
+	</highlightedLinePen>
+	<highlightedArrowBrush>
+		<color>#ff000000</color>
+	</highlightedArrowBrush>
+	<highlightedWidth>12</highlightedWidth>
+</style>

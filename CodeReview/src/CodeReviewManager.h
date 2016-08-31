@@ -61,6 +61,8 @@ class CODEREVIEW_API CodeReviewManager
 		Visualization::Item* overlayForNodeReviews(Model::Node* nodeReviews);
 		NodeReviewsList* nodeReviewsList();
 
+		void displayAndRegisterCodeReviewComment(Visualization::Item* associatedItem,
+														 NodeReviews* nodeReviews);
 
 	private:
 		NodeReviewsList* nodeReviews_;
