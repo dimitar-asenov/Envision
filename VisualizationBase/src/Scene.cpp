@@ -606,7 +606,6 @@ void Scene::removeAllOnZoomHandlers()
 int Scene::addOnZoomHandler(OnZoomHandler onZoomHandler, OnZoomHandlerRemove onZoomHandlerRemove)
 {
 	onZoomHandlers_.insert(addOnZoomHandlerId_, {onZoomHandler, onZoomHandlerRemove});
-	onZoomHandler(mainViewScalingFactor_);
 	return addOnZoomHandlerId_++;
 }
 
