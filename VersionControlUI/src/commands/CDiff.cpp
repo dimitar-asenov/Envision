@@ -119,8 +119,8 @@ Interaction::CommandResult* CDiff::execute(Visualization::Item* source, Visualiz
 	versionB = unambigousPrefixPerRevision_.value(versionB, versionB);
 	QList<Model::SymbolMatcher> symbolMatcherPriorityList;
 
-	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Class"});
 	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Method"});
+	symbolMatcherPriorityList.append(Model::SymbolMatcher{"Class"});
 
 	VersionControlUI::DiffManager diffManager{managerName, symbolMatcherPriorityList};
 
