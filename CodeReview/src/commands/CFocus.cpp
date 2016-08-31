@@ -69,6 +69,8 @@ Interaction::CommandResult* CFocus::execute(Visualization::Item* source, Visuali
 
 bool CFocus::focusStep(Visualization::Item* target, QKeySequence, Interaction::ActionRegistry::InputState)
 {
+	refreshFocusInformation();
+
 	target->scene()->removeOverlayGroup("focusOverlay");
 
 	auto focusInformations = focusList_.values(currentStep_);
@@ -154,6 +156,12 @@ void CFocus::loadFocusInformation()
 			focusList_.insertMulti(focusInformation.step_, focusInformation);
 		}
 	}
+}
+
+void CFocus::refreshFocusInformation()
+{
+	clearFocusInformation();
+	loadFocusInformation();
 }
 
 }

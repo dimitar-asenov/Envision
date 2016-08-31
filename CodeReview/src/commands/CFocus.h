@@ -68,6 +68,8 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 
 		static void clearFocusInformation();
 
+		static void refreshFocusInformation();
+
 		static bool focusStep(Visualization::Item *, QKeySequence, Interaction::ActionRegistry::InputState);
 
 	private:
@@ -80,6 +82,5 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 Q_DECLARE_OPERATORS_FOR_FLAGS(CFocus::FocusInformation::FocusTypes)
 
 inline void CFocus::clearFocusInformation() { focusList_.clear(); }
-
 
 }
