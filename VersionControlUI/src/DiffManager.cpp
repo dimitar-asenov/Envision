@@ -763,8 +763,7 @@ void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualizat
 
 	itemsToScale.subtract(removeItems);
 
-	auto id = Visualization::VisualizationManager::instance().mainScene()->
-			addOnZoomHandler([itemsToScale](qreal factor)
+	Visualization::Scene::OnZoomHandler onZoomHandler = [itemsToScale](qreal factor)
 	{
 		for (auto item : itemsToScale)
 		{
@@ -775,12 +774,20 @@ void DiffManager::scaleItems(QSet<Visualization::Item*> itemsToScale, Visualizat
 			else
 				item->setScale((1/factor) * std::pow(0.95, 1/factor));
 		}
-	},
-	[itemsToScale]()
-		{
-			for (auto item : itemsToScale)
-				item->setScale(1.0);
-		});
+	};
+
+	Visualization::Scene::OnZoomHandlerRemove onZoomHandlerRemove = [itemsToScale]()
+	{
+		for (auto item : itemsToScale)
+			item->setScale(1.0);
+	};
+
+	auto id = Visualization::VisualizationManager::instance().mainScene()->
+			addOnZoomHandler(onZoomHandler, onZoomHandlerRemove);
+
+	// call onZoomHandler in order to have correct scaling for the current zoom level,
+	// instead of waiting for the next zoom event.
+	onZoomHandler(Visualization::VisualizationManager::instance().mainScene()->mainViewScalingFactor());
 
 	if (nameChangeRelated)
 		nameChangeOnZoomHandlerIds_.append(id);

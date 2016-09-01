@@ -34,6 +34,7 @@
 
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/overlays/ArrowOverlay.h"
 
 namespace CodeReview {
 
@@ -111,8 +112,6 @@ NodeReviewsList* CodeReviewManager::loadReview(const VersionControlUI::DiffSetup
 	nodeReviews_ = DCast<NodeReviewsList>(manager->root());
 	Q_ASSERT(nodeReviews_);
 
-	CFocus::loadFocusInformation();
-
 	// recreate comment overlays
 	Visualization::VisualizationManager::instance().mainScene()->addPostEventAction(
 								  [this, viewItem, diffSetup]()
@@ -130,15 +129,23 @@ NodeReviewsList* CodeReviewManager::loadReview(const VersionControlUI::DiffSetup
 			if (!node) continue;
 
 			for (auto item : viewItem->findAllVisualizationsOf(node))
-			{
-				auto overlay = new CodeReviewCommentOverlay{item, comment};
-				viewItem->addOverlay(overlay, "CodeReviewComment");
-				registerNodeReviewsWithOverlay(comment, overlay);
-			}
+				displayAndRegisterCodeReviewComment(item, comment);
 		}
 	});
 
 	return nodeReviews_;
+}
+
+void CodeReviewManager::displayAndRegisterCodeReviewComment(Visualization::Item* associatedItem,
+																				NodeReviews* nodeReviews)
+{
+	auto overlay = new CodeReviewCommentOverlay{associatedItem, nodeReviews};
+	associatedItem->addOverlay(overlay, "CodeReviewComment");
+	auto arrowOverlay = new Visualization::ArrowOverlay{overlay, associatedItem,
+									Visualization::ArrowOverlay::itemStyles().get("comment_arrow")};
+	overlay->addOverlay(arrowOverlay, "CodeReviewCommentArrow");
+
+	registerNodeReviewsWithOverlay(nodeReviews, overlay);
 }
 
 Visualization::Item* CodeReviewManager::overlayForNodeReviews(Model::Node* nodeReviews)

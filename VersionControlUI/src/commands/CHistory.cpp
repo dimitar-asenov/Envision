@@ -88,6 +88,7 @@ Interaction::CommandResult* CHistory::executeNamed(Visualization::Item* source, 
 
 	History history{targetPath, targetID, &graph, repository};
 
+	DiffManager::setNameChangeVisualizationFlags({DiffManager::Summary});
 	DiffManager diffManager{managerName, {ancestorWithNode->node()->typeName()}};
 
 	auto relevantCommitsbyTime = history.relevantCommitsByTime(repository, false);

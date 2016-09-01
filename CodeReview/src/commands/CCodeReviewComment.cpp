@@ -36,6 +36,7 @@
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/overlays/ArrowOverlay.h"
 
 #include "../CodeReviewManager.h"
 
@@ -74,10 +75,7 @@ Interaction::CommandResult* CCodeReviewComment::execute(Visualization::Item* sou
 			nodeReviews->endModification();
 
 			if (!ancestorWithNodeItem->overlay<CodeReviewCommentOverlay>("CodeReviewComment"))
-			{
-				auto overlay = new CodeReviewCommentOverlay{ancestorWithNodeItem, nodeReviews};
-				ancestorWithNodeItem->addOverlay(overlay, "CodeReviewComment");
-			}
+				CodeReviewManager::instance().displayAndRegisterCodeReviewComment(ancestorWithNodeItem, nodeReviews);
 			break;
 		}
 	}
