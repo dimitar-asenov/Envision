@@ -49,7 +49,8 @@ QList<CommandSuggestion*> CommandWithDefaultArguments::suggest(Visualization::It
 {
 	QList<CommandSuggestion*> result;
 
-	if (textSoFar.trimmed().startsWith(this->name() + " ") || this->name().startsWith(textSoFar.trimmed()))
+	if (!textSoFar.isEmpty() &&
+		 ( textSoFar.trimmed().startsWith(this->name() + " ") || this->name().startsWith(textSoFar.trimmed())))
 	{
 		auto parameters = getParameters(textSoFar.split(" "));
 		parameters.prepend(name());
