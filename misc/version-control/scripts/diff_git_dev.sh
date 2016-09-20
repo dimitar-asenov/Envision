@@ -8,35 +8,37 @@
 rm -rf "${1}/merges/issues_git"
 
 merges="${1}/merges/*"
+numFileMergesAttempted=0
 for m in $merges; do
 	#echo Revision $m
 	for fdir in ${m}/*; do
 		#echo File $fdir
-		if [ -d "${fdir}" ]; then
+		if [ -d "${fdir}" ] && [ -s "${fdir}/base.java" ] && [ -s "${fdir}/dev.java" ] && [ -s "${fdir}/master.java" ] && [ -s "${fdir}/devMerged.java" ]; then
+			((numFileMergesAttempted++))
+			
 			(
 				cd $fdir
-				if [ -s base.java ] && [ -s dev.java ] && [ -s master.java ] && [ -s devMerged.java ]; then
-					cp master.java gitMerged.java
-					git merge-file -L master.java --quiet gitMerged.java base.java dev.java
-					gitReturnValue=$?
-					diff devMerged.java gitMerged.java > diff_dev_git
-					if [ -s diff_dev_git ]; then
-						if (( gitReturnValue > 0 )); then
-							conflictString='conflict'
-						else
-							conflictString='no-conflict'
-						fi
-						echo "${m##*/}/${fdir##*/}" >> ../../issues_git
-						echo "${m##*/}/${fdir##*/}" "$conflictString" >> ../../issues_git 
+				cp master.java gitMerged.java
+				git merge-file -L master.java --quiet gitMerged.java base.java dev.java
+				gitReturnValue=$?
+				diff devMerged.java gitMerged.java > diff_dev_git
+				if [ -s diff_dev_git ]; then
+					if (( gitReturnValue > 0 )); then
+						conflictString='conflict'
+					else
+						conflictString='no-conflict'
 					fi
-					echo "${m##*/}/${fdir##*/}" >> ../../all
-					rm diff_dev_git
+					echo "${m##*/}/${fdir##*/}" >> ../../issues_git
+					echo "${m##*/}/${fdir##*/}" "$conflictString" >> ../../issues_git 
 				fi
+				echo "${m##*/}/${fdir##*/}" >> ../../all
+				rm diff_dev_git
 			)
 		fi
 	done
 done
 
+echo "Attempted to merge a total of $numFileMergesAttempted files using GIT"
 #sort "${1}/merges/all" > "${1}/merges/all2"
 #mv "${1}/merges/all2" "${1}/merges/all"
 #sort "${1}/merges/issues_git" > "${1}/merges/issues_git2"

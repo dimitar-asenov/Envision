@@ -42,63 +42,64 @@ function waitFor () {
 
 merges=(${1}/merges/*)
 counter=1
+numFileMergesAttempted=0
 for m in "${merges[@]}"; do
 	for fdir in ${m}/*; do
 		echo "#################### Processing ($counter of ${#merges[@]}) $fdir ####################" 
-		if [ -d "${fdir}" ]; then
+		if [ -d "${fdir}" ] && [ -s "${fdir}/base.java" ] && [ -s "${fdir}/dev.java" ] && [ -s "${fdir}/master.java" ] && [ -s "${fdir}/devMerged.java" ]; then
+			((numFileMergesAttempted++))
+			
 			(
 				cd $fdir
-				if [ -s base.java ] && [ -s dev.java ] && [ -s master.java ] && [ -s devMerged.java ]; then
-					
-					$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java $QUICK_MATCH_ARG &
-					importBranchesAndMergePID=$!
-					
-					rm -rf devMerged
-					mkdir devMerged
-					$JavaImportTool TestMerge devMerged.java devMerged -force-single-pu -no-size-estimation &
-					importDevPID=$!
-					
-					waitFor $importBranchesAndMergePID
-					waitFor $importDevPID
-					
-					cp /tmp/EnvisionVC/TestMerge/TestMerge envMerged
-					
-					echo "-------------------- Matching Envision Merged to Dev Merged --------------------"
-					if [ "$QUICK_MATCH_ARG" == "-quick-match" ]; then
-						$quick_match envMerged devMerged/TestMerge/TestMerge > devMerged/TestMerge/TestMerge.idpatch
+
+				$SCRIPT_DIR/import_and_merge.sh base.java master.java dev.java $QUICK_MATCH_ARG &
+				importBranchesAndMergePID=$!
+				
+				rm -rf devMerged
+				mkdir devMerged
+				$JavaImportTool TestMerge devMerged.java devMerged -force-single-pu -no-size-estimation &
+				importDevPID=$!
+				
+				waitFor $importBranchesAndMergePID
+				waitFor $importDevPID
+				
+				cp /tmp/EnvisionVC/TestMerge/TestMerge envMerged
+				
+				echo "-------------------- Matching Envision Merged to Dev Merged --------------------"
+				if [ "$QUICK_MATCH_ARG" == "-quick-match" ]; then
+					$quick_match envMerged devMerged/TestMerge/TestMerge > devMerged/TestMerge/TestMerge.idpatch
+				else
+					$gumtree envMerged devMerged/TestMerge/TestMerge
+				fi
+				echo "-------------------- Patching Dev Merged --------------------"
+				$idpatcher devMerged/TestMerge/TestMerge
+				
+				AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)
+				if [[ $AUTO_MANUAL_DIFF ]]; then
+					if [ -f "direct_conflicts" ] ; then
+						echo "${m##*/}/${fdir##*/}" >> ../../issues_env
+						echo "${m##*/}/${fdir##*/}" 'conflict' >> ../../issues_env
 					else
-						$gumtree envMerged devMerged/TestMerge/TestMerge
-					fi
-					echo "-------------------- Patching Dev Merged --------------------"
-					$idpatcher devMerged/TestMerge/TestMerge
-					
-					AUTO_MANUAL_DIFF=$(diff devMerged/TestMerge/TestMerge envMerged)
-					if [[ $AUTO_MANUAL_DIFF ]]; then
-						if [ -f "direct_conflicts" ] ; then
+						if [ -f "remaining_changes" ] ; then
 							echo "${m##*/}/${fdir##*/}" >> ../../issues_env
-							echo "${m##*/}/${fdir##*/}" 'conflict' >> ../../issues_env
+							echo "${m##*/}/${fdir##*/}" 'CYCLE' >> ../../issues_env
 						else
-							if [ -f "remaining_changes" ] ; then
-								echo "${m##*/}/${fdir##*/}" >> ../../issues_env
-								echo "${m##*/}/${fdir##*/}" 'CYCLE' >> ../../issues_env
+							# The Envision merged file is not identical to the one the developer committed, but there were no conflicts and all changes were applied.
+							# Perhaps there's only a difference in order, or the developer deleted some stuff.
+							# Compare the structure of the two files, ignoring the order of some lists (e.g. methods and import statements)
+							STRUCTURAL_DIFF=$(${structural_compare} devMerged/TestMerge/TestMerge envMerged)
+							if [[ $STRUCTURAL_DIFF == "EQUAL" ]]; then
+								# Only difference in order
+								echo "${m##*/}/${fdir##*/}" 'order only' >> ../../issues_env_only_order_differences
 							else
-								# The Envision merged file is not identical to the one the developer committed, but there were no conflicts and all changes were applied.
-								# Perhaps there's only a difference in order, or the developer deleted some stuff.
-								# Compare the structure of the two files, ignoring the order of some lists (e.g. methods and import statements)
-								STRUCTURAL_DIFF=$(${structural_compare} devMerged/TestMerge/TestMerge envMerged)
-								if [[ $STRUCTURAL_DIFF == "EQUAL" ]]; then
-									# Only difference in order
-									echo "${m##*/}/${fdir##*/}" 'order only' >> ../../issues_env_only_order_differences
+								if [[ $STRUCTURAL_DIFF == "SUBSET" ]]; then
+									# The developer version is a subset of the Envision version. Perhaps the developer deleted some methods/imports.
+									echo "${m##*/}/${fdir##*/}" >> ../../issues_env
+									echo "${m##*/}/${fdir##*/}" 'subset' >> ../../issues_env
 								else
-									if [[ $STRUCTURAL_DIFF == "SUBSET" ]]; then
-										# The developer version is a subset of the Envision version. Perhaps the developer deleted some methods/imports.
-										echo "${m##*/}/${fdir##*/}" >> ../../issues_env
-										echo "${m##*/}/${fdir##*/}" 'subset' >> ../../issues_env
-									else
-										# The two versions are really different
-										echo "${m##*/}/${fdir##*/}" >> ../../issues_env
-										echo "${m##*/}/${fdir##*/}" 'no-conflict' >> ../../issues_env
-									fi
+									# The two versions are really different
+									echo "${m##*/}/${fdir##*/}" >> ../../issues_env
+									echo "${m##*/}/${fdir##*/}" 'no-conflict' >> ../../issues_env
 								fi
 							fi
 						fi
@@ -109,6 +110,8 @@ for m in "${merges[@]}"; do
 	done
 	((counter++))
 done
+
+echo "Attempted to merge a total of $numFileMergesAttempted files using Envision"
 
 #sort "${1}/merges/issues_env" > "${1}/merges/issues_env2"
 #mv "${1}/merges/issues_env2" "${1}/merges/issues_env"

@@ -30,3 +30,38 @@ https://github.com/bumptech/glide                                https://github.
 https://github.com/facebook/fresco                               https://github.com/facebook/fresco.git
 https://github.com/zxing/zxing                                   https://github.com/zxing/zxing.git
 https://github.com/spring-projects/spring-framework              https://github.com/spring-projects/spring-framework.git
+
+Of those 19, looking at the default branch:
+
+----------
+Repos that can't be used for the evaluation:
+----------
+https://github.com/facebook/react-native                         https://github.com/facebook/react-native.git
+ - somehow, it doesn't have a single merge commit that merges Java files
+https://github.com/google/iosched                                https://github.com/google/iosched.git
+ -no commits that merge Java files
+https://github.com/google/guava                                  https://github.com/google/guava.git
+ - no merge commits
+https://github.com/futurice/android-best-practices               https://github.com/futurice/android-best-practices.git
+ - no commits that merge Java files - mostly a text project
+https://github.com/facebook/fresco                               https://github.com/facebook/fresco.git
+ - only 3-4 merges, no java files
+https://github.com/zxing/zxing                                   https://github.com/zxing/zxing.git
+ - only very few merges, no java files
+ 
+----------
+Remaining repos used for the evaluation:
+----------
+https://github.com/elastic/elasticsearch                         https://github.com/elastic/elasticsearch.git
+https://github.com/ReactiveX/RxJava                              https://github.com/ReactiveX/RxJava.git
+https://github.com/square/retrofit                               https://github.com/square/retrofit.git
+https://github.com/square/okhttp                                 https://github.com/square/okhttp.git
+https://github.com/nostra13/Android-Universal-Image-Loader       https://github.com/nostra13/Android-Universal-Image-Loader.git
+https://github.com/iluwatar/java-design-patterns                 https://github.com/iluwatar/java-design-patterns.git
+https://github.com/JakeWharton/butterknife                       https://github.com/JakeWharton/butterknife.git
+https://github.com/greenrobot/EventBus                           https://github.com/greenrobot/EventBus.git
+https://github.com/square/picasso                                https://github.com/square/picasso.git
+https://github.com/PhilJay/MPAndroidChart                        https://github.com/PhilJay/MPAndroidChart.git
+https://github.com/square/leakcanary                             https://github.com/square/leakcanary.git
+https://github.com/bumptech/glide                                https://github.com/bumptech/glide.git
+https://github.com/spring-projects/spring-framework              https://github.com/spring-projects/spring-framework.git
