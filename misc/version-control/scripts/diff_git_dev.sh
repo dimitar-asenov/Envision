@@ -40,6 +40,9 @@ for m in $merges; do
 done
 
 echo "Attempted to merge a total of $numFileMergesAttempted files using GIT"
+echo "Divergent merges: $((`wc -l < ${1}/merges/issues_git` / 2))"
+echo "Conflicting merges: `grep -e ' conflict' ${1}/merges/issues_git | wc -l`"
+
 #sort "${1}/merges/all" > "${1}/merges/all2"
 #mv "${1}/merges/all2" "${1}/merges/all"
 #sort "${1}/merges/issues_git" > "${1}/merges/issues_git2"

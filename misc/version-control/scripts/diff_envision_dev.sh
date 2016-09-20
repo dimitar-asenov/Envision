@@ -112,6 +112,9 @@ for m in "${merges[@]}"; do
 done
 
 echo "Attempted to merge a total of $numFileMergesAttempted files using Envision"
+echo "Divergent merges: $((`wc -l < ${1}/merges/issues_env` / 2))"
+echo "Conflicting merges: `grep -e ' conflict' ${1}/merges/issues_env | wc -l`"
+echo "Order differences: `wc -l < ${1}/merges/issues_env_only_order_differences`"
 
 #sort "${1}/merges/issues_env" > "${1}/merges/issues_env2"
 #mv "${1}/merges/issues_env2" "${1}/merges/issues_env"
