@@ -5,6 +5,7 @@
 # If the versions are different, an entry specifying the revision and file is written to merges/issues_git.
 # Additionally, it writes an entry for all encountered files to merges/all which is helpful when using the comm command with these kind of files.
 
+rm -rf "${1}/merges/all"
 rm -rf "${1}/merges/issues_git"
 
 merges="${1}/merges/*"
