@@ -56,7 +56,13 @@ echo merge: $1
 for f in ${changed[@]}; do
 	if [[ $f == *.java ]]; then
 		fileDir="${revDir}/${f##*/}"
+		counter=1
+		while [ -d "${fileDir}" ]; do
+			((counter++))
+			fileDir="${revDir}/${f##*/}-$counter"
+		done
 		mkdir $fileDir
+		
 		git show "${base}:${f}" > "${fileDir}/base.java"
 		git show "${parents[0]}:${f}" > "${fileDir}/master.java"
 		git show "${parents[1]}:${f}" > "${fileDir}/dev.java"

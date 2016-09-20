@@ -6,3 +6,27 @@ https://github.com/search?l=Java&q=stars%3A%3E5000+size%3A%3E10000&ref=searchres
 https://github.com/android/platform_frameworks_base.git platform_frameworks_base
 https://github.com/elastic/elasticsearch.git elasticsearch
 https://github.com/nostra13/Android-Universal-Image-Loader.git UniversalImageLoader
+
+------- For the evaluation -------
+All Java repos on Github, with more than 10000 stars:
+Query: https://github.com/search?utf8=%E2%9C%93&q=language%3AJava+stars%3A%3E10000&type=Repositories
+Results: a total of 19
+https://github.com/facebook/react-native                         https://github.com/facebook/react-native.git
+https://github.com/elastic/elasticsearch                         https://github.com/elastic/elasticsearch.git
+https://github.com/ReactiveX/RxJava                              https://github.com/ReactiveX/RxJava.git
+https://github.com/square/retrofit                               https://github.com/square/retrofit.git
+https://github.com/square/okhttp                                 https://github.com/square/okhttp.git
+https://github.com/nostra13/Android-Universal-Image-Loader       https://github.com/nostra13/Android-Universal-Image-Loader.git
+https://github.com/iluwatar/java-design-patterns                 https://github.com/iluwatar/java-design-patterns.git
+https://github.com/JakeWharton/butterknife                       https://github.com/JakeWharton/butterknife.git
+https://github.com/google/iosched                                https://github.com/google/iosched.git
+https://github.com/google/guava                                  https://github.com/google/guava.git
+https://github.com/futurice/android-best-practices               https://github.com/futurice/android-best-practices.git
+https://github.com/greenrobot/EventBus                           https://github.com/greenrobot/EventBus.git
+https://github.com/square/picasso                                https://github.com/square/picasso.git
+https://github.com/PhilJay/MPAndroidChart                        https://github.com/PhilJay/MPAndroidChart.git
+https://github.com/square/leakcanary                             https://github.com/square/leakcanary.git
+https://github.com/bumptech/glide                                https://github.com/bumptech/glide.git
+https://github.com/facebook/fresco                               https://github.com/facebook/fresco.git
+https://github.com/zxing/zxing                                   https://github.com/zxing/zxing.git
+https://github.com/spring-projects/spring-framework              https://github.com/spring-projects/spring-framework.git
