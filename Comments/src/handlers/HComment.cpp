@@ -55,6 +55,21 @@ void HComment::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target});
 	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Delete)
+	{
+		event->accept();
+
+		auto node = vcomment->node();
+		auto parent = DCast<Model::CompositeNode>(node->parent());
+		if (parent)
+		{
+			target->scene()->addPostEventAction(new Interaction::SetCursorEvent{target->parent()});
+
+			parent->beginModification("remove comment");
+			parent->remove(node);
+			parent->endModification();
+		}
+	}
 
 	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
 }
