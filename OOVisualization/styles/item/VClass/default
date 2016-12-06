@@ -12,7 +12,7 @@
 			<rightBrush><color>#246068</color></rightBrush>
 			
 			<contentBrush>
-				<color>#80ffffff</color>
+				<color>#ffffffff</color>
 			</contentBrush>
 			
 			<bottomRightShadowWidth>6</bottomRightShadowWidth>

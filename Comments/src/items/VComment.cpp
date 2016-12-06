@@ -88,7 +88,7 @@ void VComment::parseLines()
 		// This is a workaround for a Qt bug where bullet characters are not shown on the screen.
 		// However, bullets are still shown in PDFs, so this workaround results in double bullets in PDF screenshots.
 		// Set to empty string when making screenshots.
-		QString bulletCharacter =  "&bull;";
+		QString bulletCharacter =  "";//&bull;";
 
 		// is this a new enumeration item?
 		if (line.startsWith(" * "))

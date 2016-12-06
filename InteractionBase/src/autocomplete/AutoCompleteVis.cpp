@@ -43,7 +43,7 @@ DEFINE_ITEM_COMMON(AutoCompleteVis, "item")
 AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const StyleType* style) :
 Super{nullptr, style}, newEntries_{entries}
 {
-	setFlag(ItemIgnoresTransformations);
+//	setFlag(ItemIgnoresTransformations);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 	setZValue(LAYER_AUTOCOMPLETE_Z);

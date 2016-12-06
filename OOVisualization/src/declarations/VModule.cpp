@@ -111,6 +111,7 @@ void VModule::initializeForms()
 QColor VModule::customShapeColor() const
 {
 	if (!color_.isValid()) color_ = QColor::fromHsl(qrand() % 256, 120, 200);
+	color_ = Qt::white;
 	return color_;
 }
 
