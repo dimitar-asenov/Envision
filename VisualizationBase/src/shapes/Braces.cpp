@@ -109,10 +109,22 @@ QSize Braces::getSizeOfBrace(const QString& brace, const QFont& font, int innerH
 
 	QFont f(font);
 	f.setPixelSize(innerHeight);
-	QFontMetrics qfm{f};
 
-	// TODO tightBoundingRect is supposedly very slow on Windows. Test this.
-	QRect bound = qfm.tightBoundingRect(brace);
+	// The call to tightBoundingRect below can be very slow (originally, supposedly only in Windows, but as of 2017
+	// also in Linux). So we cache it.
+	//
+	// Usually this cache is rather small so we don't need to worry about cleaning it up.
+	// Testing this with the entire jEdit code base generated just 116 entries.
+	// If the size of the cache ever becomes a problem, it might be an option to limit its use just to smaller
+	// items, which should be the vast majority.
+	static QHash<QPair<QFont, QString>, QRect> cache;
+	auto searchPair = qMakePair(f, brace);
+	auto foundIt = cache.find(searchPair);
+
+	QRect bound = foundIt != cache.end() ? (*foundIt) : QFontMetrics{f}.tightBoundingRect(brace);
+	if (foundIt == cache.end())
+		cache.insert(searchPair, bound);
+
 	if (offset)
 	{
 		offset->setX(-bound.left());
