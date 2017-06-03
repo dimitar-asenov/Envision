@@ -479,8 +479,8 @@ void ChangeGraph::applyChange(GenericTree* tree, MergeChange* change)
 			node->setParentId(change->newParentId());
 			node->attachToParent();
 			Q_ASSERT(node->parent()->id() == change->newParentId());
-			// no break, need to do the same stuff as for stationary.
 		}
+		[[fallthrough]];
 
 		case ChangeType::Stationary:
 		{

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2.2)
+cmake_minimum_required(VERSION 3.7.2)
 
 project(JavaExport)
 include(../CMake/common.cmake)

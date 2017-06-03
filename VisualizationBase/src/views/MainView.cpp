@@ -385,7 +385,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F7)
 	{
 		event->accept();
-		showTimers_ = ~showTimers_;
+		showTimers_ = !showTimers_;
 		updateInfoLabels();
 	}
 	else View::keyPressEvent(event);

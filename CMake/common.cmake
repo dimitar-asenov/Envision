@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2.2)
+cmake_minimum_required(VERSION 3.7.2)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 
@@ -18,6 +18,9 @@ find_package(Qt5 REQUIRED Core Gui Widgets)
 add_definitions(-D_REENTRANT -DQT_NO_KEYWORDS)
 add_definitions(-DDEBUG) # -DQT_NO_DEBUG <-- get rid of this
 
+# In order to make CMake not artifically add -std=gnu11, see: https://gitlab.kitware.com/cmake/cmake/issues/16468
+set_property(TARGET Qt5::Core PROPERTY INTERFACE_COMPILE_FEATURES "")
+
 set(ENVISION_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(BUILD_DIR ${ENVISION_ROOT_DIR}/DebugBuild)
@@ -35,7 +38,7 @@ link_directories(${BUILD_DIR} ${PLUGINS_DIR})
 # ???
 # CONFIG(debug, debug|release):DEFINES += DEBUG
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -pedantic-errors -Wall -W -Werror -Wextra -O2 -fno-omit-frame-pointer -Woverloaded-virtual -Winvalid-pch")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -pedantic-errors -Wall -W -Werror -Wextra -O2 -fno-omit-frame-pointer -Woverloaded-virtual -Winvalid-pch")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-private-field -fparse-all-comments")

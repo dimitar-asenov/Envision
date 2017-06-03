@@ -101,13 +101,15 @@ SystemCommandResult CORE_API runSystemCommand(const QString& program, const QStr
 												 const QString& workingDirectory = {});
 
 template<typename T>
-typename std::enable_if<std::is_constructible<bool, T>::value, bool>::type isProvided(T&&t)
+typename std::enable_if<std::is_pointer<typename std::remove_reference<T>::type>::value, bool>::type
+isProvided(T t)
 {
 	return static_cast<bool>(t);
 }
 
 template<typename T>
-constexpr inline typename std::enable_if<!std::is_constructible<bool, T>::value, bool>::type isProvided(T&&)
+constexpr inline typename std::enable_if<!std::is_pointer<typename std::remove_reference<T>::type>::value, bool>::type
+isProvided(T&&)
 {
 	return true;
 }
