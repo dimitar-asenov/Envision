@@ -463,7 +463,7 @@ void DiffManager::createOverlaysForChanges(QList<ChangeWithNodes> changesWithNod
 		auto message = createHTMLCommitInfo(diffSetup.repository_, diffSetup.newVersion_);
 		if (!nameChangeInfo.isEmpty()) message += "<br/><br/>" + nameChangeInfo;
 		auto overlay = new Visualization::MessageOverlay{viewItem,
-				[viewItem, message, anchorItem](Visualization::MessageOverlay* overlay)
+				[message, anchorItem](Visualization::MessageOverlay* overlay)
 		{
 			overlay->setPos(anchorItem->scenePos().x(),
 								 anchorItem->scenePos().y()-overlay->heightInScene());
@@ -970,7 +970,7 @@ Model::TreeManager* DiffManager::createTreeManagerFromVersion(FilePersistence::G
 	std::unique_ptr<const FilePersistence::Commit> commit{repository->getCommit(version)};
 
 	auto fileStore = new FilePersistence::SimpleTextFileStore {
-				[this, &commit](QString filename, const char*& data, int& size)
+				[&commit](QString filename, const char*& data, int& size)
 				{ return commit->getFileContent(filename, data, size, false); }
 			};
 

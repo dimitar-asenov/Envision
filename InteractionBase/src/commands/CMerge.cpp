@@ -72,7 +72,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 
 		// TODO check which behavior is correct for fileName matching
 		auto fileStoreRevision = new SimpleTextFileStore{
-					[this, &commit](QString filename, const char*& data, int& size)
+					[&commit](QString filename, const char*& data, int& size)
 					{ return commit->getFileContent(filename, data, size, true); }
 				};
 

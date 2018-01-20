@@ -429,7 +429,7 @@ void CodeComposite::fragments(Export::SourceFragment*& header, Export::SourceFra
 
 	if (noHeader)
 	{
-		sortUnits(&CodeUnit::sourcePart, [this](CodeUnitPart* p) { return p->dependencies(); });
+		sortUnits(&CodeUnit::sourcePart, [](CodeUnitPart* p) { return p->dependencies(); });
 		source = sourceFragment();
 	}
 	else
