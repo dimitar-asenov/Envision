@@ -5,17 +5,17 @@ include(../CMake/common.cmake)
 
 find_package(PythonLibs 3 REQUIRED)
 
-# Find libboost 3 for Ubuntu
+# Find libboost 3 for Ubuntu/Debian
 if(UNIX)
 	execute_process(COMMAND lsb_release -i OUTPUT_VARIABLE distribution_)
-	if( "${distribution_}" MATCHES ".*Ubuntu.*")
+	if( "${distribution_}" MATCHES ".*(Ubuntu|Debian).*")
 		find_package(Boost REQUIRED python-py35)
-		set(UBUNTU TRUE)
+                set(DEBIAN TRUE)
 	endif()
 endif()
 
-# Find libboost for non-ubuntu
-if(NOT UBUNTU)
+# Find libboost for other distros (e.g., arch)
+if(NOT DEBIAN)
 	find_package(Boost REQUIRED python3)
 endif()
 
