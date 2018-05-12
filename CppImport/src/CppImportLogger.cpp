@@ -75,7 +75,7 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Decl* d
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
 					 << " \n\t in clang node : " << clangType
 					 << " \n\t clang node name : " << (nodeName.isEmpty() ? "not a named decl" : nodeName)
-					 << " \n\t in file : " << sourceManger_->getBufferName(decl->getLocation())
+					 << " \n\t in file : " << sourceManger_->getBufferName(decl->getLocation()).str().c_str()
 					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first, decomposedLoc.second)
 					 << "\n";
 
@@ -108,7 +108,7 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Stmt* s
 	std::pair<clang::FileID, unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(stmt->getLocStart());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
 					 << " \n\t in stmt class node : " << clangType
-					 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getLocStart())
+					 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getLocStart()).str().c_str()
 					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first, decomposedLoc.second)
 					 << "\n";
 
@@ -125,7 +125,7 @@ void CppImportLogger::writeError(const QString& inWhichClass, const clang::Sourc
 
 	std::pair<clang::FileID, unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(loc);
 	(*errStream_) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
-					  << " \n\t in file : " << sourceManger_->getBufferName(loc)
+					  << " \n\t in file : " << sourceManger_->getBufferName(loc).str().c_str()
 					  << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first, decomposedLoc.second)
 					  << "\n";
 }
@@ -145,7 +145,7 @@ void CppImportLogger::typeNotSupported(const clang::TypeLoc typeLoc, const clang
 	std::pair<clang::FileID, unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(location);
 	(*errStream_) << "ERR/WARN: \t reason :  TYPE NOT SUPPORTED : " << typeName.append("Type")
 															// append Type to get the clang node name ^
-					  << " \n\t in file : " << sourceManger_->getBufferName(location)
+					  << " \n\t in file : " << sourceManger_->getBufferName(location).str().c_str()
 					  << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first, decomposedLoc.second)
 					  << "\n";
 

@@ -40,7 +40,7 @@ void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const c
 	{
 		// We only care about ATTRIBUTES in the currentFile:
 		if (sourceManager_.getFilename(range.getBegin()) != fileName_) return;
-		unsigned numArguments = Args->getNumArguments();
+		unsigned numArguments = Args->getNumMacroArguments();
 		Q_ASSERT(numArguments >= 3); // ATTRIBUTE macros have 3 arguments
 
 		auto attributeName = QString::fromStdString(Args->getUnexpArgument(1u)->getIdentifierInfo()->getName().str());

@@ -43,8 +43,8 @@ void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
 
 	int percent = 100 * CppImportManager::processedTranslationUnits()
 											/ CppImportManager::totalTranslationUnits();
-	QString fileName = astContext.getSourceManager().getFileEntryForID(
-				astContext.getSourceManager().getMainFileID())->getName();
+	QString fileName = QString::fromStdString(astContext.getSourceManager().getFileEntryForID(
+				astContext.getSourceManager().getMainFileID())->getName().str());
 
 	CppImportPlugin::log().info("[ " + QString::number(percent) +" %] importing: " + fileName);
 

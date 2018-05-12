@@ -131,7 +131,7 @@ QList<QString> ClangHelpers::argumentNames(const clang::MacroDirective* definiti
 {
 	QList<QString> result;
 
-	for (auto i = definition->getMacroInfo()->arg_begin(); i != definition->getMacroInfo()->arg_end(); i++)
+	for (auto i = definition->getMacroInfo()->param_begin(); i != definition->getMacroInfo()->param_end(); i++)
 		result.append(QString::fromStdString((*i)->getName().str()));
 
 	return result;

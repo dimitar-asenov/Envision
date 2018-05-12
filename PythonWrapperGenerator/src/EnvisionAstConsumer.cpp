@@ -150,7 +150,7 @@ void EnvisionAstConsumer::resolveOverloads(ClassData& cData,
 			QString overloadName = QString("%1_%2%3").arg(cData.className_, key, QString::number(i+1));
 			QString returnType = TypeUtilities::qualTypeToString(method->getReturnType());
 			QStringList argumentTypes;
-			for (auto arg : method->params())
+			for (auto arg : method->parameters())
 				argumentTypes.push_back(TypeUtilities::qualTypeToString(arg->getType()));
 			QString newFunctionName = QString("*%1").arg(overloadName);
 			if (!method->isStatic())

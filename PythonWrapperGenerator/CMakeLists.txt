@@ -14,7 +14,7 @@ string(STRIP "${clangLibPath_}" clangLibPath_)
 string(SUBSTRING "${clangLibPath_}" 2 -1 clangLibPath_) #skip the -L
 link_directories(${clangLibPath_})
 
-execute_process(COMMAND ${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs cppbackend analysis codegen bitreader option core
+execute_process(COMMAND ${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs
 	OUTPUT_VARIABLE clangLibs_)
 string(STRIP "${clangLibs_}" clangLibs_)
 set(clangLibs_ -lclangTooling -lclangFrontendTool -lclangFrontend -lclangDriver -lclangSerialization -lclangParse -lclangSema -lclangAnalysis -lclangEdit -lclangAST -lclangLex -lclangBasic ${clangLibs_})
