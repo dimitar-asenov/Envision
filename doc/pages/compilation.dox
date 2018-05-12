@@ -17,7 +17,7 @@ Other dependencies are:
 	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
-	- <b>Clang 3.8</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
+	- <b>Clang 6.0</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
 	importing C++ is preliminary and incomplete.
 	- <b>libgit2</b>: https://libgit2.github.com/ <br /> Used for Envision's git-based version control.
 	- <b>Python 3</b>: https://www.python.org/ <br /> Used for various scripts during building, testing and run-time execution (e.g. for information scripting).
@@ -28,13 +28,13 @@ Other dependencies are:
 	Boost python is used to provide bindings for the python scripting.
 	- <b>For the Java import tool only: Gradle </b>: http://gradle.org/ <br /> Used as build script for the JavaImportTool.
 
-To install the dependencies on Ubuntu 16.04, run the following:
+To install the dependencies on Ubuntu 18.04, run the following:
 	-# Install all necessary packages:
-		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-3.8-dev clang-3.8 llvm-3.8 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
+		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-6.0-dev clang-6.0 llvm-6.0 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
 	-# Make the following symbolic link needed to use the shared library of lp solve:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
 	-# If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source:
-		\verbatim Envision$ ln -s /usr/lib/llvm-3.8/lib/ lib \endverbatim
+		\verbatim Envision$ ln -s /usr/lib/llvm-6.0/lib/ lib \endverbatim
 	-# If you plan on using the JavaImportTool you will need Gradle:
 		\verbatim sudo apt-get install gradle \endverbatim
 
@@ -51,13 +51,8 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
 	-# Open the top-level \c CMakeLists.txt file with Qt Creator.
-	-# On Qt creator 3.x, use the following arguments for CMake \verbatim -DCMAKE_BUILD_TYPE=Debug \endverbatim
-	  or alternatively, if you want to compile with clang:  \verbatim -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-3.8 \endverbatim
-	-# In the Projects view, under *build* make sure that:
-		- The build directory points to a directory that is a peer of Envision's directory. e.g.
-			\verbatim../build-envision-Desktop-Debug\endverbatim
-		- (Qt creator 4 or later) the CMAKE_BUILD_TYPE variable is set to *Debug*.
-	-# Also in the Projects view, change the arguments of cmake/make to specify parallel compilation and the *install* target:
+	-# On Qt creator 4.x, set the CMake Build type to \verbatim Debug \endverbatim.
+	-# In the Projects view, change the arguments of cmake/make to specify parallel compilation and the *install* target:
 		\verbatim-j8 install\endverbatim
 		The *install* target is needed in order to copy all necessary files to the DebugBuild directory.
 		Substitute 8 for the number of threads your hardware supports.

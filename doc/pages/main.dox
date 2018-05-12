@@ -5,7 +5,7 @@
 	editor and is used for large-scale software development. 
 
 	Envision is an open-source project using the BSD license. The project is based on the
-	<a href="http://qt-project.org/">Qt</a> framework and is cross-platform. <a href="http://www.pm.inf.ethz.ch/research/envision.html">Envision is developed at ETH Zurich</a> in the context of <a href="http://www.pm.inf.ethz.ch/people/person-detail.html?persid=167548">Dimitar Asenov's PhD studies</a>.
+	<a href="http://qt-project.org/">Qt</a> framework and is cross-platform. <a href="http://www.pm.inf.ethz.ch/research/envision.html">Envision was originally developed at ETH Zurich</a> in the context of <a href="http://www.pm.inf.ethz.ch/people/person-detail.html?persid=167548">Dimitar Asenov's PhD studies</a>.
 
 	To read about the motivation for building Envision and find out what are some of the key ideas for the IDE, please
 	see \ref motivation "the motivation page".
@@ -13,7 +13,7 @@
 	\subsection videos Videos
 
 	\htmlonly 
-	<iframe width="640" height="360" src="https://www.youtube.com/embed/9X9stH2T-7w" frameborder="0" allowfullscreen>
+	<iframe width="1280" height="720" src="https://www.youtube.com/embed/5YMaCQEoPe0" frameborder="0" allowfullscreen>
 	</iframe>
 	<br/>
 	\endhtmlonly
@@ -22,17 +22,44 @@
 	<br/>
 
 	\htmlonly 
-	<iframe width="640" height="360" src="https://www.youtube.com/embed/GD0W5HEteu8" frameborder="0" allowfullscreen>
+	<iframe width="1280" height="720" src="https://www.youtube.com/embed/GD0W5HEteu8" frameborder="0" allowfullscreen>
 	</iframe>
 	<br/>
 	\endhtmlonly
-	A demonstration of how the visualizations and interactions in Envision can be customized for embedded
+	A demo of how the visualizations and interactions in Envision can be customized for embedded
 	domain-specific languages.
 	
 	<br/>
 	
 	\htmlonly 
-	<iframe width="640" height="360" src="https://www.youtube.com/embed/0j8-Bjhnl4c" frameborder="0" allowfullscreen>
+	<iframe width="1280" height="720" src="https://www.youtube.com/embed/Cvjgt6nVo1I" frameborder="0" allowfullscreen>
+	</iframe>
+	<br/>
+	\endhtmlonly
+	A demo of useful ways to improve the readability of long methods with styled comments in Envision.
+	
+	<br/>
+	
+	\htmlonly 
+	<iframe width="1280" height="720" src="https://www.youtube.com/embed/ZueXhX0ojs4" frameborder="0" allowfullscreen>
+	</iframe>
+	<br/>
+	\endhtmlonly
+	A demo of Envision's advanced version control features.
+	
+	<br/>
+	
+	\htmlonly 
+	<iframe width="1280" height="720" src="https://www.youtube.com/embed/kYaRKuUy9rA" frameborder="0" allowfullscreen>
+	</iframe>
+	<br/>
+	\endhtmlonly
+	A demo of scripting Envision using its built-in command prompt, e.g. to perform a data-based refactoring.
+	
+	<br/>
+	
+	\htmlonly 
+	<iframe width="1280" height="720" src="https://www.youtube.com/embed/0j8-Bjhnl4c" frameborder="0" allowfullscreen>
 	</iframe>
 	<br/>
 	\endhtmlonly

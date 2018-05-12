@@ -9,7 +9,7 @@
 <stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${workspace_loc:/JavaImportTool}/output.txt"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="envision.java.importtool.Main"/>
 
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="jedit /home/dasenov/Research/experiment1/jedit/source/ ${project_loc}/../DebugBuild/projects/"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="exp1 /home/mitko/experiment1_legend/ ${project_loc}/../DebugBuild/projects/"/>
 
 <!--
 ===== The following are some useful ways to generate projects =====
