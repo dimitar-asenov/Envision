@@ -1,4 +1,10 @@
-How to document:
+One time setup, from within the doc directory:
+1. git clone git@github.com:dimitar-asenov/Envision.git generated
+	(it's already in .gitignore)
+2. cd generated
+3. git checkout gh-pages
+
+How to make and commit document changes:
 1. Make changes to source file comments or .dox files.
 2. Run doxygen inside the doc direcotry to generate the new web site.
 3. Check locally that your changes look as expected, fix and regenerate the html if necessary.
