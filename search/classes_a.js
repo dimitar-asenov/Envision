@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['labeldata',['LabelData',['../structFilePersistence_1_1ChangeGraph_1_1LabelData.html',1,'FilePersistence::ChangeGraph']]],
   ['lambdaexpression',['LambdaExpression',['../classOOModel_1_1LambdaExpression.html',1,'OOModel']]],
   ['layout',['Layout',['../classVisualization_1_1Layout.html',1,'Visualization']]],
   ['layoutcursor',['LayoutCursor',['../classVisualization_1_1LayoutCursor.html',1,'Visualization']]],
@@ -15,8 +16,6 @@ var searchData=
   ['linestyle',['LineStyle',['../classVisualization_1_1LineStyle.html',1,'Visualization']]],
   ['linetable',['LineTable',['../structOODebug_1_1LineTable.html',1,'OODebug']]],
   ['linetablecommand',['LineTableCommand',['../structOODebug_1_1LineTableCommand.html',1,'OODebug']]],
-  ['linkedchangesset',['LinkedChangesSet',['../classFilePersistence_1_1LinkedChangesSet.html',1,'FilePersistence']]],
-  ['linkedchangestransition',['LinkedChangesTransition',['../classFilePersistence_1_1LinkedChangesTransition.html',1,'FilePersistence']]],
   ['list',['List',['../classModel_1_1List.html',1,'Model']]],
   ['listcell',['ListCell',['../classOOInteraction_1_1ListCell.html',1,'OOInteraction']]],
   ['listcreation',['ListCreation',['../classModel_1_1ListCreation.html',1,'Model']]],

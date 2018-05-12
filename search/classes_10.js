@@ -9,6 +9,7 @@ var searchData=
   ['reflect',['Reflect',['../classCore_1_1Reflect.html',1,'Core']]],
   ['register_5fset_5fpytype_5fptr',['register_set_pytype_ptr',['../structInformationScripting_1_1helper_1_1register__set__pytype__ptr.html',1,'InformationScripting::helper']]],
   ['registeredhandler',['RegisteredHandler',['../structInteraction_1_1ActionRegistry_1_1RegisteredHandler.html',1,'Interaction::ActionRegistry']]],
+  ['relativepathdata',['RelativePathData',['../structFilePersistence_1_1RelativePathData.html',1,'FilePersistence']]],
   ['removeoptional',['RemoveOptional',['../classModel_1_1RemoveOptional.html',1,'Model']]],
   ['reply',['Reply',['../classOODebug_1_1Reply.html',1,'OODebug']]],
   ['resolutionrequest',['ResolutionRequest',['../classModel_1_1ResolutionRequest.html',1,'Model']]],

@@ -34,9 +34,10 @@ var searchData=
   ['definition_5f',['definition_',['../classCppImport_1_1MacroExpansion.html#aa8cfc0eccfc09d5f10c8e3c43a30cbc9',1,'CppImport::MacroExpansion']]],
   ['definitionmanager_5f',['definitionManager_',['../classCppImport_1_1StandardMetaDefinitions.html#a657d53ab5cdfea535a18bfb1e46d39ac',1,'CppImport::StandardMetaDefinitions']]],
   ['definitions_5f',['definitions_',['../classCppImport_1_1MacroDefinitions.html#ab1b5dbb3df87bb6075e62cdde4d96e93',1,'CppImport::MacroDefinitions']]],
+  ['deleter_5f',['deleter_',['../classVisualization_1_1OverlayAccessorTemplateWithDeleter.html#aa15f1cb9d8c2979b88d98f51f77443ab',1,'Visualization::OverlayAccessorTemplateWithDeleter']]],
   ['delimiters_5f',['delimiters_',['../classOOVisualization_1_1VUnfinishedOperator.html#aac4672aa89b1f802a438f4103e439c5a',1,'OOVisualization::VUnfinishedOperator::delimiters_()'],['../classOOVisualization_1_1VUnfinishedOperatorStyle.html#ab8154f0cf33c515b87b1fc7e9ad1909d',1,'OOVisualization::VUnfinishedOperatorStyle::delimiters_()']]],
   ['dependencies',['dependencies',['../structCore_1_1PluginInfo.html#a766650c26101667a007b0341029d8b7b',1,'Core::PluginInfo']]],
-  ['dependencies_5f',['dependencies_',['../classCppExport_1_1CodeUnitPart.html#a21461a872b0bf34f7fe0971c571b1c08',1,'CppExport::CodeUnitPart::dependencies_()'],['../classFilePersistence_1_1ChangeDependencyGraph.html#a411171c1b1d7dcc3de6bea8c7de647a8',1,'FilePersistence::ChangeDependencyGraph::dependencies_()']]],
+  ['dependencies_5f',['dependencies_',['../classCppExport_1_1CodeUnitPart.html#a21461a872b0bf34f7fe0971c571b1c08',1,'CppExport::CodeUnitPart::dependencies_()'],['../classFilePersistence_1_1ChangeGraph.html#a09fecf5466aa675bbb9db22927e30546',1,'FilePersistence::ChangeGraph::dependencies_()'],['../classFilePersistence_1_1Dependencies.html#a50eaaa69838cc1f103ab87192ff657cc',1,'FilePersistence::Dependencies::dependencies_()']]],
   ['dependencyunitmergemap_5f',['dependencyUnitMergeMap_',['../classCppExport_1_1Config.html#a862af3c203ea35d805146b9f4d21feda',1,'CppExport::Config']]],
   ['description',['description',['../classInteraction_1_1TextAndDescriptionStyle.html#afcc8f353fa6a291498b77171f3c0434e',1,'Interaction::TextAndDescriptionStyle::description()'],['../structOODebug_1_1VersionInfo.html#a3fe6b5690bb6473659a839097a432c3e',1,'OODebug::VersionInfo::description()']]],
   ['description_5f',['description_',['../structInformationScripting_1_1PositionalArgument.html#a009be9285668f0e2a331087b8a4d9f04',1,'InformationScripting::PositionalArgument::description_()'],['../classInteraction_1_1AutoCompleteEntry.html#aeb4a38091a72cc9916cd2ac7363d74d3',1,'Interaction::AutoCompleteEntry::description_()'],['../classInteraction_1_1TextAndDescription.html#a08a477a4df609bb5a12256b12d41361b',1,'Interaction::TextAndDescription::description_()']]],
@@ -44,8 +45,11 @@ var searchData=
   ['descriptor_5f',['descriptor_',['../classInteraction_1_1Operator.html#afa722b66a98ddacc348db628229e9f3e',1,'Interaction::Operator::descriptor_()'],['../classInteraction_1_1AddOperator.html#af52ec3f7868d752c7a3b264e3130fc60',1,'Interaction::AddOperator::descriptor_()']]],
   ['destructoricon',['destructorIcon',['../classOOVisualization_1_1VMethodStyle.html#a18e2f57998115e5177ce89129a378767',1,'OOVisualization::VMethodStyle::destructorIcon()'],['../classOOVisualization_1_1VMethodSzPublicStyle.html#a4f890331fae9c891e45ac650b5f546fe',1,'OOVisualization::VMethodSzPublicStyle::destructorIcon()']]],
   ['diagram_5f',['diagram_',['../classComments_1_1CommentDiagramToolbar.html#ab7d4a86c94aa6ad35fa59c7d1a248ccf',1,'Comments::CommentDiagramToolbar']]],
+  ['diffframes_5f',['diffFrames_',['../structVersionControlUI_1_1DiffFramesAndSetup.html#a9d40c157fe904aa2bc84b3c54b94fb72',1,'VersionControlUI::DiffFramesAndSetup']]],
+  ['diffsetup_5f',['diffSetup_',['../structVersionControlUI_1_1DiffFramesAndSetup.html#a7db0c6d1d8e429c3ac4d1ac94a9fde6d',1,'VersionControlUI::DiffFramesAndSetup']]],
   ['dimensions',['dimensions',['../classOOVisualization_1_1VNewExpressionStyle.html#a3753139aad8815540a537099962ba34a',1,'OOVisualization::VNewExpressionStyle']]],
   ['dimensions_5f',['dimensions_',['../classOOVisualization_1_1VNewExpression.html#a5cc4e58534fdab14c3cf7d7244d8dc83',1,'OOVisualization::VNewExpression']]],
+  ['directconflicts_5f',['directConflicts_',['../classFilePersistence_1_1ChangeGraph.html#a7f6794bcfd466c77d99bae79d836dbb1',1,'FilePersistence::ChangeGraph::directConflicts_()'],['../classFilePersistence_1_1Conflicts.html#a49269dbf8dcc88d0a17febd0a1902b62',1,'FilePersistence::Conflicts::directConflicts_()']]],
   ['direction',['direction',['../classVisualization_1_1SequentialLayoutStyle.html#ae69cc67f9d14fb02792a05d43db40e6b',1,'Visualization::SequentialLayoutStyle']]],
   ['direction_5f',['direction_',['../classInteraction_1_1AddReferencedToViewCommand.html#a6bcd21fe33e80d82952325c529fb2ee7',1,'Interaction::AddReferencedToViewCommand::direction_()'],['../classModel_1_1ResolutionRequest.html#a5bf32482d035e399b51d76a5f4ac8ad2',1,'Model::ResolutionRequest::direction_()']]],
   ['directories_5f',['directories_',['../classExport_1_1SourceDir.html#ad2dddc93f099d9b29f05e0dbea9a4d16',1,'Export::SourceDir']]],
@@ -73,5 +77,7 @@ var searchData=
   ['drawapproximately_5f',['drawApproximately_',['../classVisualization_1_1TextRenderer.html#a41ae6228e395f2912ce07aa8e206aea4',1,'Visualization::TextRenderer']]],
   ['drawnrect',['drawnRect',['../classVisualization_1_1MiniMap.html#acce650b225684262120b19f81842a70c',1,'Visualization::MiniMap']]],
   ['drawshapewhenempty',['drawShapeWhenEmpty',['../classVisualization_1_1ItemStyle.html#ab979cbe4b5adb0c8cc9d41dc44d14aad',1,'Visualization::ItemStyle']]],
-  ['drawsonlyshape',['drawsOnlyShape',['../classVisualization_1_1ItemStyle.html#a6b81b1372be457382bb3c94d38c7501f',1,'Visualization::ItemStyle']]]
+  ['drawsonlyshape',['drawsOnlyShape',['../classVisualization_1_1ItemStyle.html#a6b81b1372be457382bb3c94d38c7501f',1,'Visualization::ItemStyle']]],
+  ['dummyicon',['dummyIcon',['../classVersionControlUI_1_1VDiffFrameStyle.html#a707764a470ea9c38a21a1d52c98668fd',1,'VersionControlUI::VDiffFrameStyle']]],
+  ['dummyicon_5f',['dummyIcon_',['../classVersionControlUI_1_1VDiffFrame.html#a3710136191f90ae72dd8dee8aabc0ff6',1,'VersionControlUI::VDiffFrame']]]
 ];

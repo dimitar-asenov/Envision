@@ -1,8 +1,7 @@
 var searchData=
 [
   ['parentchange',['parentChange',['../classFilePersistence_1_1parentChange.html',1,'FilePersistence']]],
-  ['parser',['Parser',['../classFilePersistence_1_1Parser.html',1,'FilePersistence']]],
-  ['parser',['Parser',['../classInteraction_1_1Parser.html',1,'Interaction']]],
+  ['parser',['Parser',['../classFilePersistence_1_1Parser.html',1,'FilePersistence::Parser'],['../classInteraction_1_1Parser.html',1,'Interaction::Parser']]],
   ['parseresult',['ParseResult',['../classInteraction_1_1ParseResult.html',1,'Interaction']]],
   ['partiallist',['PartialList',['../classTestNodes_1_1PartialList.html',1,'TestNodes']]],
   ['passthroughquery',['PassthroughQuery',['../classInformationScripting_1_1PassthroughQuery.html',1,'InformationScripting']]],
@@ -21,11 +20,9 @@ var searchData=
   ['pluginmanager',['PluginManager',['../classCore_1_1PluginManager.html',1,'Core']]],
   ['pointertype',['PointerType',['../classOOModel_1_1PointerType.html',1,'OOModel']]],
   ['pointertypeexpression',['PointerTypeExpression',['../classOOModel_1_1PointerTypeExpression.html',1,'OOModel']]],
-  ['position',['Position',['../structFilePersistence_1_1ListMergeComponent_1_1Position.html',1,'FilePersistence::ListMergeComponent']]],
   ['position',['Position',['../classVisualization_1_1Position.html',1,'Visualization']]],
   ['positionalargument',['PositionalArgument',['../structInformationScripting_1_1PositionalArgument.html',1,'InformationScripting']]],
-  ['positionextension',['PositionExtension',['../classModel_1_1PositionExtension.html',1,'Model']]],
-  ['positionextension',['PositionExtension',['../classTestNodes_1_1PositionExtension.html',1,'TestNodes']]],
+  ['positionextension',['PositionExtension',['../classModel_1_1PositionExtension.html',1,'Model::PositionExtension'],['../classTestNodes_1_1PositionExtension.html',1,'TestNodes::PositionExtension']]],
   ['positionlayout',['PositionLayout',['../classVisualization_1_1PositionLayout.html',1,'Visualization']]],
   ['positionlayoutstyle',['PositionLayoutStyle',['../classVisualization_1_1PositionLayoutStyle.html',1,'Visualization']]],
   ['ppcallback',['PPCallback',['../classCppImport_1_1PPCallback.html',1,'CppImport']]],

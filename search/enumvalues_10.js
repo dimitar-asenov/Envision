@@ -41,6 +41,7 @@ var searchData=
   ['structure',['Structure',['../classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3abd465fcf8079ad61a5539b140fa5dd8b',1,'FilePersistence::ChangeDescription']]],
   ['subexpression',['SubExpression',['../classInteraction_1_1Token.html#aa0ae33aa219c648f850edb3d76ba159faa33b181191faeb7f18da4a0e6d4d1e7c',1,'Interaction::Token']]],
   ['substract',['Substract',['../classInformationScripting_1_1OperatorQueryNode.html#ac0aa5949da690e5403dbb346d4e3318ba9a354422d0bbc0bbdc8e6759cef08e9c',1,'InformationScripting::OperatorQueryNode']]],
+  ['summary',['Summary',['../classVersionControlUI_1_1DiffManager.html#a27c8528db6e2868c5f052625d4884053aeba3552c0697b886632ef7543f101f83',1,'VersionControlUI::DiffManager']]],
   ['superclass',['Superclass',['../classOODebug_1_1Protocol.html#aa4369a0ac0114db62826218f0c9af972a4a5a667e6fcfb40f848a966d85ffb5fe',1,'OODebug::Protocol']]],
   ['suspend',['Suspend',['../classOODebug_1_1Protocol.html#a2d4b5a37f7e72646c20b20c16fa57e8aab3834d6f7a63e5e750e0ca5ecf31e3b9',1,'OODebug::Protocol::Suspend()'],['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36ab3834d6f7a63e5e750e0ca5ecf31e3b9',1,'OODebug::Protocol::Suspend()']]],
   ['suspend_5fstatus_5fsuspended',['SUSPEND_STATUS_SUSPENDED',['../classOODebug_1_1Protocol.html#a0873c6024f957cb4663b995922d41234a628dc3e30398b552f8096815b98348f3',1,'OODebug::Protocol']]],

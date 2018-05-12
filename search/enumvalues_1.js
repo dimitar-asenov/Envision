@@ -13,6 +13,8 @@ var searchData=
   ['bottomtotop',['BottomToTop',['../classVisualization_1_1LayoutStyle.html#a1b3aa8687e4ef411466637b201eaef0ba63dc349be51108dcfd197c7ab02b486a',1,'Visualization::LayoutStyle']]],
   ['boxcursor',['BoxCursor',['../classVisualization_1_1Cursor.html#a3ddd666facd79a96de99bbed8c9bd706a121c6ade7d259a5cedb381415331b7e6',1,'Visualization::Cursor']]],
   ['branch',['BRANCH',['../classFilePersistence_1_1GitRepository.html#adf116bbd5920ba3e5d31cc9290932e70a251d2fee497bff48dcf891d205ca7687',1,'FilePersistence::GitRepository']]],
+  ['brancha',['BranchA',['../classFilePersistence_1_1MergeChange.html#a095b0608e5ba6347479d10cbbfd1337fa39fa4544750d677eb3e88b4ed9a9073f',1,'FilePersistence::MergeChange']]],
+  ['branchb',['BranchB',['../classFilePersistence_1_1MergeChange.html#a095b0608e5ba6347479d10cbbfd1337fa6a6f54edba32d173f106fd3e66077286',1,'FilePersistence::MergeChange']]],
   ['breakpoint',['BREAKPOINT',['../classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8afd14a8e38e53a8241e49cfbe48095de3',1,'OODebug::Protocol']]],
   ['builtmergedtree',['BuiltMergedTree',['../classFilePersistence_1_1Merge.html#a7666204e5f7a1574cd7c379e90ee6976a2d1f77ad80af1bcf7a04a18942cb6029',1,'FilePersistence::Merge']]],
   ['byte',['BYTE',['../classOODebug_1_1Protocol.html#aae559917558dc3975d095acc7557f051ae409eb2ba6eb6801f52763ae370c350e',1,'OODebug::Protocol']]],

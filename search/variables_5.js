@@ -30,6 +30,7 @@ var searchData=
   ['enabled_5f',['enabled_',['../classVisualization_1_1VisualizationItemWrapperFormElement.html#aca3ec29def688ef033bf27ad308defaa',1,'Visualization::VisualizationItemWrapperFormElement']]],
   ['enabledbydefault_5f',['enabledByDefault_',['../structVisualization_1_1InfoNode_1_1InfoGetterStruct.html#a60d94ed1475c9b38eb3044d9c76b2e55',1,'Visualization::InfoNode::InfoGetterStruct']]],
   ['enabledinfogetters_5f',['enabledInfoGetters_',['../classVisualization_1_1InfoNode.html#acfea7d1709c20c641b34aeab11340d52',1,'Visualization::InfoNode']]],
+  ['enableglobalreferenceresolution_5f',['enableGlobalReferenceResolution_',['../classModel_1_1Reference.html#aa655299b6903627b2ed0f828ccd8e106',1,'Model::Reference']]],
   ['end',['end',['../structInteraction_1_1TokenSplitData.html#a3b43a4dd26469de6e883c90dbdb48319',1,'Interaction::TokenSplitData::end()'],['../structOODebug_1_1LineTable.html#a6e82ae18e6468085138bc10bd9a8876f',1,'OODebug::LineTable::end()']]],
   ['end_5f',['end_',['../classFilePersistence_1_1CommitGraph.html#a99de2ceb7c523949669dcc019fc98c72',1,'FilePersistence::CommitGraph']]],
   ['endarrow_5f',['endArrow_',['../classComments_1_1VCommentDiagramConnector.html#afaac84383b14a8425524a124922a68eb',1,'Comments::VCommentDiagramConnector']]],

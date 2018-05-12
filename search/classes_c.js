@@ -16,6 +16,8 @@ var searchData=
   ['nodeowningcommand',['NodeOwningCommand',['../classModel_1_1NodeOwningCommand.html',1,'Model']]],
   ['nodepropertyadder',['NodePropertyAdder',['../classInformationScripting_1_1NodePropertyAdder.html',1,'InformationScripting']]],
   ['nodereadwritelock',['NodeReadWriteLock',['../classModel_1_1NodeReadWriteLock.html',1,'Model']]],
+  ['nodereviews',['NodeReviews',['../classCodeReview_1_1NodeReviews.html',1,'CodeReview']]],
+  ['nodereviewslist',['NodeReviewsList',['../classCodeReview_1_1NodeReviewsList.html',1,'CodeReview']]],
   ['nodetoclonemap',['NodeToCloneMap',['../classCppImport_1_1NodeToCloneMap.html',1,'CppImport']]],
   ['nodetodebugstringadapter',['NodeToDebugStringAdapter',['../classModel_1_1NodeToDebugStringAdapter.html',1,'Model']]],
   ['nodewithvisualizationitemwrapperformelement',['NodeWithVisualizationItemWrapperFormElement',['../classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html',1,'Visualization']]],
