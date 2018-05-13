@@ -17,7 +17,6 @@ RULES=\
 ' --rule T008'\
 ' --rule T009'\
 ' --rule T010'\
-' --rule T013'\
 ' --rule T017'\
 ' --rule T018'
 
