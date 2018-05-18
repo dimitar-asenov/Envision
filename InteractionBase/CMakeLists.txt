@@ -188,6 +188,8 @@ add_library(InteractionBase SHARED
 	src/handlers/HMovableItem.h
 	src/handlers/HMovableItem.cpp
 	src/handlers/HArrowHandler.cpp
+	src/commands/COpenDir.h
+	src/commands/COpenDir.cpp
 )
 
 envision_plugin(InteractionBase VisualizationBase FilePersistence)

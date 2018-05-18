@@ -28,6 +28,7 @@
 
 #include "../commands/CSceneHandlerItemExit.h"
 #include "../commands/CFind.h"
+#include "../commands/COpenDir.h"
 #include "../commands/CSceneHandlerLoad.h"
 #include "../commands/CSceneHandlerSave.h"
 #include "../commands/CNewView.h"
@@ -47,6 +48,7 @@ HSceneHandlerItem::HSceneHandlerItem()
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
 	addCommand(new CSceneHandlerItemExit{});
 	addCommand(new CFind{});
+	addCommand(new COpenDir{});
 	addCommand(new CSceneHandlerLoad{});
 	addCommand(new CSceneHandlerSave{});
 	addCommand(new CNewView{});

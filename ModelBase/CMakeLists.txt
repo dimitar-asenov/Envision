@@ -103,6 +103,8 @@ add_library(ModelBase SHARED
 	src/ModelException.cpp
 	src/util/ResolutionRequest.cpp
 	src/util/ResolutionRequest.h
+	src/nodes/FileSystemEntry.h
+	src/nodes/FileSystemEntry.cpp
 )
 
 envision_plugin(ModelBase Logger)
