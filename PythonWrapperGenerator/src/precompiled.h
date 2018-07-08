@@ -43,6 +43,7 @@
 #include <clang/Lex/MacroInfo.h>
 #include <clang/Lex/MacroArgs.h>
 #include <clang/Lex/Preprocessor.h>
+#include <clang/Tooling/CompilationDatabase.h>
 #include <clang/Tooling/Tooling.h>
 
 // Qt includes

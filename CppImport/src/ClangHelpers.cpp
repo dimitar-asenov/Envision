@@ -72,7 +72,7 @@ clang::SourceRange ClangHelpers::getUnexpandedRange(clang::SourceRange sourceRan
 		 (sourceManager_->isMacroArgExpansion(start) ||
 		 // start was expanded from a "virtual" macro i.e. it is not written anywhere (identifier concatentation etc.)
 		 !sourceManager_->getFileEntryForID(sourceManager_->getFileID(sourceManager_->getSpellingLoc(start)))))
-		start = sourceManager_->getImmediateExpansionRange(start).first;
+		start = sourceManager_->getImmediateExpansionRange(start).getBegin();
 
 	if (// end is a macro location and...
 		 end.isMacroID() &&
@@ -80,7 +80,7 @@ clang::SourceRange ClangHelpers::getUnexpandedRange(clang::SourceRange sourceRan
 		 (sourceManager_->isMacroArgExpansion(end) ||
 		 // end was expanded from a "virtual" macro i.e. it is not written anywhere (identifier concatentation etc.)
 		 !sourceManager_->getFileEntryForID(sourceManager_->getFileID(sourceManager_->getSpellingLoc(end)))))
-		end = sourceManager_->getImmediateExpansionRange(end).second;
+		end = sourceManager_->getImmediateExpansionRange(end).getEnd();
 
 	return clang::SourceRange{start, end};
 }
@@ -103,7 +103,7 @@ clang::SourceLocation ClangHelpers::immediateMacroLocation(clang::SourceLocation
 			location = expansion.getExpansionLocStart();
 			if (!expansion.isMacroArgExpansion()) break;
 
-			location = sourceManager_->getImmediateExpansionRange(location).first;
+			location = sourceManager_->getImmediateExpansionRange(location).getBegin();
 			auto spellingLocation = expansion.getSpellingLoc();
 			if (spellingLocation.isFileID())	break;
 

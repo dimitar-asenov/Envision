@@ -156,7 +156,7 @@ MacroExpansion* MacroExpansions::expansion(clang::SourceLocation loc) const
 		do
 		{
 			last = expansion;
-			loc = clang_.sourceManager()->getImmediateExpansionRange(loc).first;
+			loc = clang_.sourceManager()->getImmediateExpansionRange(loc).getBegin();
 			expansion = immediateExpansion(loc);
 		} while (expansion && expansion->isChildOf(last));
 	}

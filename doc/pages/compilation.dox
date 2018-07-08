@@ -17,7 +17,7 @@ Other dependencies are:
 	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
-	- <b>Clang 6.0</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
+	- <b>Clang 7</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
 	importing C++ is preliminary and incomplete.
 	- <b>libgit2</b>: https://libgit2.github.com/ <br /> Used for Envision's git-based version control.
 	- <b>Python 3</b>: https://www.python.org/ <br /> Used for various scripts during building, testing and run-time execution (e.g. for information scripting).
@@ -30,11 +30,11 @@ Other dependencies are:
 
 To install the dependencies on Ubuntu 18.04, run the following:
 	-# Install all necessary packages:
-		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-6.0-dev clang-6.0 llvm-6.0 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
+		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-7-dev clang-7 llvm-7 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
 	-# Make the following symbolic link needed to use the shared library of lp solve:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
 	-# If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source:
-		\verbatim Envision$ ln -s /usr/lib/llvm-6.0/lib/ lib \endverbatim
+		\verbatim Envision$ ln -s /usr/lib/llvm-7/lib/ lib \endverbatim
 	-# If you plan on using the JavaImportTool you will need Gradle:
 		\verbatim sudo apt-get install gradle \endverbatim
 
