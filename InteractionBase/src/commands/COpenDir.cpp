@@ -42,11 +42,6 @@ class PlainTextParser : public COpenDir::Parser {
 
 std::vector<std::unique_ptr<COpenDir::Parser>>& COpenDir::parsers() {
 	static std::vector<std::unique_ptr<Parser>> parsers;
-	static bool initialized = false;
-	if (!initialized) {
-		parsers.emplace_back(std::unique_ptr<Parser>{new PlainTextParser});
-		initialized = true;
-	}
 	return parsers;
 }
 
@@ -78,6 +73,12 @@ FileSystemEntry* COpenDir::parseFile(QString filePath) {
 			return parser->parseFile(filePath);
 		}
 	}
+
+	// Try the text parser, if nothing else worked.
+	PlainTextParser parser;
+	if (parser.canParseFile(filePath))
+		return parser.parseFile(filePath);
+
 	return new FileSystemEntry{QFileInfo{filePath}.fileName()};
 }
 
