@@ -1,8 +1,13 @@
 #include "CppImportLightPlugin.h"
+#include "Parser.h"
+
+#include "InteractionBase/src/commands/COpenDir.h"
 #include "SelfTest/src/TestManager.h"
 #include "Logger/src/Log.h"
 
 namespace CppImportLight {
+
+using Interaction::COpenDir;
 
 Logger::Log& CppImportLightPlugin::log()
 {
@@ -12,6 +17,7 @@ Logger::Log& CppImportLightPlugin::log()
 
 bool CppImportLightPlugin::initialize(Core::EnvisionManager&)
 {
+	COpenDir::registerFileParser(std::make_unique<CppParser>());
 	return true;
 }
 
