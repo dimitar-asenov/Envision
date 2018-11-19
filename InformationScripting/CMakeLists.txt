@@ -5,19 +5,8 @@ include(../CMake/common.cmake)
 
 find_package(PythonLibs 3 REQUIRED)
 
-# Find libboost 3 for Ubuntu/Debian
-if(UNIX)
-	execute_process(COMMAND lsb_release -i OUTPUT_VARIABLE distribution_)
-	if( "${distribution_}" MATCHES ".*(Ubuntu|Debian).*")
-		find_package(Boost REQUIRED python-py36)
-		set(DEBIAN TRUE)
-	endif()
-endif()
-
-# Find libboost for other distros (e.g., arch)
-if(NOT DEBIAN)
-	find_package(Boost REQUIRED python3)
-endif()
+# For Ubuntu 18.04 or older, the package name is python-py36
+find_package(Boost REQUIRED python3)
 
 include_directories(SYSTEM ${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
