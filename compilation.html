@@ -73,7 +73,7 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
  This is the underlying framework that we use to build Envision's visualizations and cross-platform support.</li>
 <li><b>lp_solve 5.5</b>: <a href="http://lpsolve.sourceforge.net/">http://lpsolve.sourceforge.net/</a> <br />
  Lp Solve is used for calculating some of the more complex visualization layouts.</li>
-<li><b>Clang 6.0</b>: <a href="http://clang.llvm.org/">http://clang.llvm.org/</a> <br />
+<li><b>Clang 7</b>: <a href="http://clang.llvm.org/">http://clang.llvm.org/</a> <br />
  Clang is used for importing C++ projects in Envision. Support for importing C++ is preliminary and incomplete.</li>
 <li><b>libgit2</b>: <a href="https://libgit2.github.com/">https://libgit2.github.com/</a> <br />
  Used for Envision's git-based version control.</li>
@@ -90,10 +90,10 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
 <li><b>For the Java import tool only: Gradle </b>: <a href="http://gradle.org/">http://gradle.org/</a> <br />
  Used as build script for the JavaImportTool.</li>
 </ul>
-<p>To install the dependencies on Ubuntu 18.04, run the following:</p><ol type="1">
-<li>Install all necessary packages: <pre class="fragment">sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-6.0-dev clang-6.0 llvm-6.0 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev </pre></li>
+<p>To install the dependencies on Ubuntu 18.10, run the following:</p><ol type="1">
+<li>Install all necessary packages: <pre class="fragment">sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-7-dev clang-7 llvm-7 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev </pre></li>
 <li>Make the following symbolic link needed to use the shared library of lp solve: <pre class="fragment">sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so </pre></li>
-<li>If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source: <pre class="fragment">Envision$ ln -s /usr/lib/llvm-6.0/lib/ lib </pre></li>
+<li>If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source: <pre class="fragment">Envision$ ln -s /usr/lib/llvm-7/lib/ lib </pre></li>
 <li>If you plan on using the JavaImportTool you will need Gradle: <pre class="fragment">sudo apt-get install gradle </pre></li>
 </ol>
 <p>Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.</p>

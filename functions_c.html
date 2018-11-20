@@ -153,6 +153,7 @@ $(function() {
 , <a class="el" href="classInteraction_1_1Command.html#a71699776a4d9872fbc42b4e268d9cc41">Interaction::Command</a>
 , <a class="el" href="classInteraction_1_1CommandWithDefaultArguments.html#a1f8570ccfcf860c490962a981a8e6b85">Interaction::CommandWithDefaultArguments</a>
 , <a class="el" href="classInteraction_1_1CommandWithFlags.html#a732a85367db74869f760c3e4df16549f">Interaction::CommandWithFlags</a>
+, <a class="el" href="classInteraction_1_1COpenDir.html#a4e8f48240131f039beef1a781a9838f6">Interaction::COpenDir</a>
 , <a class="el" href="classInteraction_1_1CRemoveNodeFromView.html#a04aa22060efc69f321de14c53c4ea5ef">Interaction::CRemoveNodeFromView</a>
 , <a class="el" href="classInteraction_1_1CSaveView.html#aa1e08cc7b181d9014d381c1d81f34fda">Interaction::CSaveView</a>
 , <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a38f5c6ec2b9df86963d737de39ad682f">Interaction::CSceneHandlerItemExit</a>
@@ -172,6 +173,11 @@ $(function() {
 </li>
 <li>CanNotInterpret
 : <a class="el" href="classInteraction_1_1CommandResult.html#a3a0031a9567c97241132101924a2d2a4af40c11d6dd47c8ea86e0b096f4c68f02">Interaction::CommandResult</a>
+</li>
+<li>canParseFile()
+: <a class="el" href="classCppImportLight_1_1CppParser.html#ae6101e8f4630cd4a7dbc6f5257e688dc">CppImportLight::CppParser</a>
+, <a class="el" href="classInteraction_1_1COpenDir_1_1Parser.html#a015f18a43b7445d2cf65b0d554aad03b">Interaction::COpenDir::Parser</a>
+, <a class="el" href="classInteraction_1_1PlainTextParser.html#ac9bc42f7075d0bde7695341152efb397">Interaction::PlainTextParser</a>
 </li>
 <li>caption
 : <a class="el" href="classVisualization_1_1BoxOverlayStyle.html#a02c2ac9f5890b2cd1f847e7eb86147fb">Visualization::BoxOverlayStyle</a>
@@ -708,6 +714,7 @@ $(function() {
 , <a class="el" href="classModel_1_1Boolean.html#a1b2f1be88639a73ab89c8d72ab867fa0">Model::Boolean</a>
 , <a class="el" href="classModel_1_1Character.html#a55b0ee2ec23eff86224861170b138581">Model::Character</a>
 , <a class="el" href="classModel_1_1CompositeNode.html#a24e8ce98784566266a7d11b196f099f9">Model::CompositeNode</a>
+, <a class="el" href="classModel_1_1FileSystemEntry.html#ae67ff99ed6a74e14a4dc83792c09feab">Model::FileSystemEntry</a>
 , <a class="el" href="classModel_1_1Float.html#a014b46ed071438190307a3fdfd335e55">Model::Float</a>
 , <a class="el" href="classModel_1_1Integer.html#abe30299dd8bbb058c4f8b5c33bde819e">Model::Integer</a>
 , <a class="el" href="classModel_1_1List.html#a13484b7e478d5d48e0d574be17ee2359">Model::List</a>
@@ -1056,7 +1063,7 @@ $(function() {
 , <a class="el" href="classFilePersistence_1_1GitPiecewiseLoader.html#ab60eb27cbc710d9157dd5a41a206ed70">FilePersistence::GitPiecewiseLoader</a>
 </li>
 <li>CommitFile()
-: <a class="el" href="structFilePersistence_1_1CommitFile.html#a46ca6e2ee1607eccddda14cfc7e246db">FilePersistence::CommitFile</a>
+: <a class="el" href="structFilePersistence_1_1CommitFile.html#a4a96fcd9b9bbde17d6e81c3453c3189e">FilePersistence::CommitFile</a>
 </li>
 <li>CommitGraph()
 : <a class="el" href="classFilePersistence_1_1CommitGraph.html#aa49ad8d1f349ebff0be9cf3c7b644adf">FilePersistence::CommitGraph</a>
@@ -1119,7 +1126,7 @@ $(function() {
 <li>components()
 : <a class="el" href="classOOInteraction_1_1GridBasedOffsetProvider.html#ad7d38590e0da81f403c386432c3537ee">OOInteraction::GridBasedOffsetProvider</a>
 , <a class="el" href="classOOInteraction_1_1StringComponents.html#ac8d76a381aefb66f0464288f9e21a39e">OOInteraction::StringComponents</a>
-, <a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#aab9693a5d7c878e6511283338fe47c66">OOInteraction::StringOffsetProvider</a>
+, <a class="el" href="classOOInteraction_1_1StringOffsetProvider.html#aa7ce0481c499f6814b8874988e765247">OOInteraction::StringOffsetProvider</a>
 </li>
 <li>componentsForNode()
 : <a class="el" href="classOOInteraction_1_1StringComponents.html#a5078d85530d58f219cae3cf6dc655b97">OOInteraction::StringComponents</a>
@@ -1141,7 +1148,7 @@ $(function() {
 </li>
 <li>CompositeNode
 : <a class="el" href="classModel_1_1AttributeChain.html#a358f95749d8f529c141d1aed16f8d7f5">Model::AttributeChain</a>
-, <a class="el" href="classModel_1_1CompositeNode.html#a3f83eb6268b478b9ef169740bbe082d3">Model::CompositeNode</a>
+, <a class="el" href="classModel_1_1CompositeNode.html#a36f7a6ffb96bf3ce3f04f2da6797f660">Model::CompositeNode</a>
 </li>
 <li>CompositeNodeChangeChild()
 : <a class="el" href="classModel_1_1CompositeNodeChangeChild.html#a974cf5ea1fd4ae819bb3223ed5d27a54">Model::CompositeNodeChangeChild</a>
@@ -1378,7 +1385,10 @@ $(function() {
 : <a class="el" href="classVisualization_1_1Static.html#ac6ac1806b030c4a396e151a1e09dd13c">Visualization::Static</a>
 </li>
 <li>ConstTypedIterator()
-: <a class="el" href="structModel_1_1TypedList_1_1ConstTypedIterator.html#a722d02ad1c32caa6414799c77b35f230">Model::TypedList&lt; T &gt;::ConstTypedIterator</a>
+: <a class="el" href="structModel_1_1TypedList_1_1ConstTypedIterator.html#abe12a6fbf881669f147cc9ece13c17fa">Model::TypedList&lt; T &gt;::ConstTypedIterator</a>
+</li>
+<li>consume()
+: <a class="el" href="classCppImportLight_1_1CppParser.html#ac9ecfa49822eca12ed16a1ecf59f12c4">CppImportLight::CppParser</a>
 </li>
 <li>CONTAINER
 : <a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a31efe4c19e97f4901216833fcfa1624a">Model::Node</a>
@@ -1403,6 +1413,7 @@ $(function() {
 </li>
 <li>content()
 : <a class="el" href="structFilePersistence_1_1CommitFile.html#a973999b04d83b5755bcb2babd27e2710">FilePersistence::CommitFile</a>
+, <a class="el" href="classModel_1_1FileSystemEntry.html#ad54fd638928c24089b44f1796c9f1282">Model::FileSystemEntry</a>
 , <a class="el" href="classOODebug_1_1ConsoleOverlay.html#ac6d13c50ea87f0b2c073f8162827a4a2">OODebug::ConsoleOverlay</a>
 , <a class="el" href="classOOVisualization_1_1VClassStyle.html#a4bfe215cf2841a6d38c9aaab01eff2ac">OOVisualization::VClassStyle</a>
 , <a class="el" href="classOOVisualization_1_1VClassSzPublicStyle.html#a8790a90d9f38af9bbcf65d0f5e6e8f9d">OOVisualization::VClassSzPublicStyle</a>
@@ -1419,6 +1430,9 @@ $(function() {
 </li>
 <li>contentBrush
 : <a class="el" href="classVisualization_1_1FrameStyle.html#a8c7a8e24334ffa2af7114047e53fda4f">Visualization::FrameStyle</a>
+</li>
+<li>contentIndex
+: <a class="el" href="classModel_1_1FileSystemEntry.html#a6dfe197fe188d807e5b74e07b2c8bf7b">Model::FileSystemEntry</a>
 </li>
 <li>contentLeft()
 : <a class="el" href="classVisualization_1_1Box.html#a7d19c10c3d2b3be4cb7716adfd875097">Visualization::Box</a>
@@ -1513,6 +1527,9 @@ $(function() {
 <li>convertTuplesToString()
 : <a class="el" href="classInformationScripting_1_1QueryResultVisualizer.html#a3b83de12199d719f1a975969d7b39fbc">InformationScripting::QueryResultVisualizer</a>
 </li>
+<li>COpenDir()
+: <a class="el" href="classInteraction_1_1COpenDir.html#aff389796b6c98c2e776b5f782f0169d0">Interaction::COpenDir</a>
+</li>
 <li>copy()
 : <a class="el" href="classFilePersistence_1_1ChangeDescription.html#afa8e8b88e5c895b85c02293534a61405">FilePersistence::ChangeDescription</a>
 , <a class="el" href="classFilePersistence_1_1GenericNode.html#a537f2b55c39833bb1c0efcc2db9b9362">FilePersistence::GenericNode</a>
@@ -1573,6 +1590,9 @@ $(function() {
 <li>CppImportException()
 : <a class="el" href="classCppImport_1_1CppImportException.html#a609cceca589d10e033daebd84f72a941">CppImport::CppImportException</a>
 </li>
+<li>CppImportLightException()
+: <a class="el" href="classCppImportLight_1_1CppImportLightException.html#aa37506667e5b879f93a3b324bc8d0dc4">CppImportLight::CppImportLightException</a>
+</li>
 <li>CppImportLogger()
 : <a class="el" href="classCppImport_1_1CppImportLogger.html#a4a5b3b283cd7d67aff83cac7621c2134">CppImport::CppImportLogger</a>
 </li>
@@ -1628,6 +1648,7 @@ $(function() {
 : <a class="el" href="classModel_1_1Boolean.html#af5c66dd175b0a70ba3395b499b0078c1">Model::Boolean</a>
 , <a class="el" href="classModel_1_1Character.html#a8767c2cc6c483bcf4c94baf705d45a60">Model::Character</a>
 , <a class="el" href="classModel_1_1CompositeNode.html#a7d19374f2c8647bf0dba045110455694">Model::CompositeNode</a>
+, <a class="el" href="classModel_1_1FileSystemEntry.html#aade49ffecf433f43de49474a175dc1ed">Model::FileSystemEntry</a>
 , <a class="el" href="classModel_1_1Float.html#ac5482f809e969fc2e24e6e33b185d113">Model::Float</a>
 , <a class="el" href="classModel_1_1Integer.html#a9adaa5875baa676418cf5ea465366db0">Model::Integer</a>
 , <a class="el" href="classModel_1_1List.html#afaf46ed18e751d8998befbc06e243ccc">Model::List</a>
@@ -1716,7 +1737,7 @@ $(function() {
 : <a class="el" href="classOOInteraction_1_1HMethod.html#a8366d37d83d5f2d5e0eb140a701cd774">OOInteraction::HMethod</a>
 </li>
 <li>createNewNode()
-: <a class="el" href="classModel_1_1Node.html#a0ca79f2a20d8993eea0e86ca6088da7c">Model::Node</a>
+: <a class="el" href="classModel_1_1Node.html#a12d7cfdf3abf4c1c2bbefc3654678805">Model::Node</a>
 </li>
 <li>createNewShape()
 : <a class="el" href="classVisualization_1_1Shape.html#aedb992a8b3f2129d8fe01d96017aefa5">Visualization::Shape</a>
@@ -1761,7 +1782,7 @@ $(function() {
 : <a class="el" href="classInteraction_1_1Action.html#ac26cd54e0dbc9f1f245935596717f74a">Interaction::Action</a>
 </li>
 <li>createSubExpressions()
-: <a class="el" href="classInteraction_1_1Token.html#a329b642a8c98c47e51169ba182bed10d">Interaction::Token</a>
+: <a class="el" href="classInteraction_1_1Token.html#aa0773399775619bcc595fb91776651ef">Interaction::Token</a>
 </li>
 <li>createTableComment()
 : <a class="el" href="classComments_1_1CommentsTestUtil.html#ad552284561469f20725dbcb69a685d51">Comments::CommentsTestUtil</a>
@@ -1813,6 +1834,9 @@ $(function() {
 </li>
 <li>CToggleInfoEntry()
 : <a class="el" href="classInteraction_1_1CToggleInfoEntry.html#a051c5ee128feac2498796e72d135a8fb">Interaction::CToggleInfoEntry</a>
+</li>
+<li>current()
+: <a class="el" href="classCppImportLight_1_1CppParser.html#ae351e4aaa23efd98f2a0c46ca201d9a2">CppImportLight::CppParser</a>
 </li>
 <li>CURRENT_LINE_OVERLAY_GROUP
 : <a class="el" href="classOODebug_1_1JavaDebugger.html#a38667a92e597d7d2b5fdcd3946605af1">OODebug::JavaDebugger</a>
@@ -2037,7 +2061,7 @@ $(function() {
 : <a class="el" href="classCustomMethodCall_1_1CustomMethodCallException.html#a6546ff895a36a2ba59669785bb500148">CustomMethodCall::CustomMethodCallException</a>
 </li>
 <li>CustomSceneEvent()
-: <a class="el" href="classVisualization_1_1CustomSceneEvent.html#a08de1921755fc63259e0579fa445a8d0">Visualization::CustomSceneEvent</a>
+: <a class="el" href="classVisualization_1_1CustomSceneEvent.html#acb5ff52db582dd9b18411bc0f2f3f819">Visualization::CustomSceneEvent</a>
 </li>
 <li>customShapeColor()
 : <a class="el" href="classOOVisualization_1_1VModule.html#a06a0d4d19005c5662c02b7f74e657d45">OOVisualization::VModule</a>

@@ -11,6 +11,7 @@ var searchData=
   ['test_3c_20contractslibraryplugin_2c_20contractslibrarytest_20_3e',['Test&lt; ContractsLibraryPlugin, ContractsLibraryTest &gt;',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['test_3c_20controlflowvisualizationplugin_2c_20simpletest_20_3e',['Test&lt; ControlFlowVisualizationPlugin, SimpleTest &gt;',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['test_3c_20cppexportplugin_2c_20simpletest_20_3e',['Test&lt; CppExportPlugin, SimpleTest &gt;',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
+  ['test_3c_20cppimportlightplugin_2c_20simpletest_20_3e',['Test&lt; CppImportLightPlugin, SimpleTest &gt;',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['test_3c_20custommethodcallplugin_2c_20customvistest_20_3e',['Test&lt; CustomMethodCallPlugin, CustomVisTest &gt;',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['test_3c_20exportplugin_2c_20compositefragmenttest_20_3e',['Test&lt; ExportPlugin, CompositeFragmentTest &gt;',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['test_3c_20exportplugin_2c_20exportanddeletedir_20_3e',['Test&lt; ExportPlugin, ExportAndDeleteDir &gt;',['../classSelfTest_1_1Test.html',1,'SelfTest']]],

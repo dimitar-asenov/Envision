@@ -39,6 +39,7 @@ var searchData=
   ['max_5fimages',['MAX_IMAGES',['../classAlloy_1_1CAlloy.html#a76febabaaaa725902d22ce366f1d192f',1,'Alloy::CAlloy']]],
   ['max_5fmilliseconds_5ffor_5fa_5fclick',['MAX_MILLISECONDS_FOR_A_CLICK',['../classVisualization_1_1Scene.html#a4d17344617d24f6a3a55fa13807fc017',1,'Visualization::Scene']]],
   ['maxlinelength_5f',['maxLineLength_',['../classAPIPrinter.html#ac889542ea1d0714b9be4e6a47cbb66d5',1,'APIPrinter']]],
+  ['maxtextsize',['MaxTextSize',['../classInteraction_1_1PlainTextParser.html#a83bbeacde65b933fb3c9a06884d1fe4d',1,'Interaction::PlainTextParser']]],
   ['maybehiddenifchildrenhaveoverlays_5f',['mayBeHiddenIfChildrenHaveOverlays_',['../classVisualization_1_1ZoomLabelOverlay.html#afb1f697994c3cfd82711221ddeb7fdf0',1,'Visualization::ZoomLabelOverlay']]],
   ['memberinitializers',['memberInitializers',['../classOOVisualization_1_1VMethodStyle.html#ab31733df18901ebe8bfd3cd2fd84a9c4',1,'OOVisualization::VMethodStyle']]],
   ['memberinitializers_5f',['memberInitializers_',['../classOOVisualization_1_1VMethod.html#a6ced1c9071a6422d355049d4a967a272',1,'OOVisualization::VMethod']]],
