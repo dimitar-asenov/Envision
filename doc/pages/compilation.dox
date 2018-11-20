@@ -28,7 +28,7 @@ Other dependencies are:
 	Boost python is used to provide bindings for the python scripting.
 	- <b>For the Java import tool only: Gradle </b>: http://gradle.org/ <br /> Used as build script for the JavaImportTool.
 
-To install the dependencies on Ubuntu 18.04, run the following:
+To install the dependencies on Ubuntu 18.10, run the following:
 	-# Install all necessary packages:
 		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-7-dev clang-7 llvm-7 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
 	-# Make the following symbolic link needed to use the shared library of lp solve:
