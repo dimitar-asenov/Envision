@@ -49,7 +49,7 @@ void COpenDir::registerFileParser(std::unique_ptr<Parser> parser) {
 	parsers().emplace_back(std::move(parser));
 }
 
-COpenDir::Parser::~Parser() {}; // Emit vtable here.
+COpenDir::Parser::~Parser() {} // Emit vtable here.
 
 
 FileSystemEntry* COpenDir::openDir(QString directoryPath) {

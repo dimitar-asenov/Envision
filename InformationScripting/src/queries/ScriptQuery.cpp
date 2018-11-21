@@ -113,7 +113,7 @@ Optional<TupleSet> ScriptQuery::executeLinear(TupleSet input)
 
 		return python::extract<TupleSet>(queriesDict["result"])();
 
-	} catch (python::error_already_set ) {
+	} catch (python::error_already_set& ) {
 		return {QString{"Error in Python: %1"}.arg(BoostPythonHelpers::parsePythonException())};
 	}
 }

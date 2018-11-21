@@ -145,7 +145,7 @@ QList<OverlayAccessor*> OverlayGroup::overlaysForItem(const Item* item) const
 	Q_ASSERT(item);
 	QList<OverlayAccessor*> result;
 	for (auto accessor: overlays_)
-		if (accessor->associatedItems().contains(const_cast<Item* const>(item))) // TODO: is this really the best way?
+		if (accessor->associatedItems().contains(const_cast<Item*>(item))) // TODO: is this really the best way?
 			result << accessor;
 	return result;
 }
