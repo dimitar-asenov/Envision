@@ -35,23 +35,14 @@ namespace Logger {
 
 bool LoggerPlugin::initialize(Core::EnvisionManager& m)
 {
-	// Add a timer that tracks the total time for processing events
-	static bool processingEvents = false;
-	static auto t = Timer::start("Total event processing time");
+	// Add a timer that tracks the total time for processing a single event.
+	static auto t = Timer::start("Event processing time");
 	m.addPreEventAction([](QObject*, QEvent*){
-		if (!processingEvents)
-		{
-			processingEvents = true;
-			t->start();
-		}
+		t->start();
 	});
 
 	m.addPostEventAction([](QObject*, QEvent*){
-		if (!qApp->hasPendingEvents())
-		{
-			processingEvents = false;
-			t->tick();
-		}
+		t->tick();
 	});
 
 	return true;
@@ -71,9 +62,9 @@ void LoggerPlugin::selfTest(QString)
 	QTextStream out{stdout};
 
 	if (lt.allTestsOK())
-		out << "LOGGER: All tests passed" << endl;
+		out << "LOGGER: All tests passed" << Qt::endl;
 	else
-		out << "LOGGER: Tests failed!" << endl;
+		out << "LOGGER: Tests failed!" << Qt::endl;
 }
 
 }

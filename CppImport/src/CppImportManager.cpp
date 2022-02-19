@@ -235,13 +235,13 @@ void CppImportManager::createCompilationDbForTest(const QString& testPath)
 		if (!db.open(QFile::ReadWrite))
 			throw CppImportException{"Cannot create compile_commands file for test: " + test};
 		QTextStream out{&db};
-		out << "[" << endl;
-		out << "{" << "\"directory\":" << "\"" << testPath << "\"," << endl;
+		out << "[" << Qt::endl;
+		out << "{" << "\"directory\":" << "\"" << testPath << "\"," << Qt::endl;
 		// TODO: this is platform dependent
 		out << "\"command\":" << "\"/usr/bin/clang++ -std=c++0x -Irelative " <<
-				"-I/usr/lib/llvm-3.4/include/clang/ -c -o test.o test.cpp\"," << endl;
-		out << "\"file\":" << "\"test.cpp\"" << endl;
-		out << "}" << endl << "]" << endl;
+				"-I/usr/lib/llvm-3.4/include/clang/ -c -o test.o test.cpp\"," << Qt::endl;
+		out << "\"file\":" << "\"test.cpp\"" << Qt::endl;
+		out << "}" << Qt::endl << "]" << Qt::endl;
 		db.close();
 	}
 }

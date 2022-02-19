@@ -50,7 +50,7 @@ int CFocus::currentStep_{0};
 
 CFocus::CFocus() : Command{"focus"} {}
 
-QHash<int, CFocus::FocusInformation> CFocus::focusList_;
+QMultiHash<int, CFocus::FocusInformation> CFocus::focusList_;
 
 bool CFocus::canInterpret(Visualization::Item*, Visualization::Item*,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& )
@@ -153,7 +153,7 @@ void CFocus::loadFocusInformation()
 		if (focusInformation.isValid())
 		{
 			focusInformation.node_ = nodeReviews;
-			focusList_.insertMulti(focusInformation.step_, focusInformation);
+			focusList_.insert(focusInformation.step_, focusInformation);
 		}
 	}
 }

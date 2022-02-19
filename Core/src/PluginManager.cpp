@@ -80,7 +80,7 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 
 			if ( allDependenciesLoaded )
 			{
-				out << "Loading plug-in " << plugins.at(i) << "... " << endl;
+				out << "Loading plug-in " << plugins.at(i) << "... " << Qt::endl;
 
 				QPluginLoader* plugin = new QPluginLoader{pluginsDir.absoluteFilePath(getLibraryFileName(plugins.at(i)))};
 				plugin->setLoadHints(QLibrary::ExportExternalSymbolsHint);
@@ -93,7 +93,7 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 				EnvisionPlugin* p = qobject_cast<EnvisionPlugin*> (plugin->instance());
 				p->initialize(envisionManager);
 
-				out << plugins.at(i) << " loaded OK" << endl;
+				out << plugins.at(i) << " loaded OK" << Qt::endl;
 
 				loadedPlugins.append(plugin);
 				idToPluginLoaderMap.insert(plugins.at(i), plugin);
@@ -105,10 +105,11 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 	// Check if there are any plug-ins with unmet dependencies
 	if (plugins.size() > 0)
 	{
-		out<< "Warning: The following plug-ins have not been loaded because their dependencies are not satisfied" << endl;
-		for (int i = 0; i< plugins.size(); ++i) out << "  " << plugins.at(i) << endl;
+		out<< "Warning: The following plug-ins have not been loaded because their dependencies are not satisfied"
+		   << Qt::endl;
+		for (int i = 0; i< plugins.size(); ++i) out << "  " << plugins.at(i) << Qt::endl;
 	}
-	else out << "All plug-ins loaded." << endl;
+	else out << "All plug-ins loaded." << Qt::endl;
 }
 
 void PluginManager::unloadAllPlugins()
@@ -128,7 +129,7 @@ void PluginManager::unloadAllPlugins()
 		if (!plugin->unload()) throw EnvisionException{"Could not unload plugin: " + plugin->errorString()};
 		delete plugin;
 
-		out << "OK" << endl;
+		out << "OK" << Qt::endl;
 	}
 }
 
@@ -206,15 +207,15 @@ PluginInfo PluginManager::readPluginMetaData(const QString fileName)
 	PluginInfo pinfo;
 
 	pinfo.id = root.attribute("id");
-	if ( pinfo.id == QString::null )
+	if ( pinfo.id == QString() )
 		throw EnvisionException{"File is not a valid Envision Plugin descriptor - ID is invalid: " + fileName};
 
 	pinfo.fullName = root.attribute("name");
-	if ( pinfo.fullName == QString::null )
+	if ( pinfo.fullName == QString() )
 		throw EnvisionException{"File is not a valid Envision Plugin descriptor - Name is invalid: " + fileName};
 
 	pinfo.version = root.attribute("version");
-	if ( pinfo.version == QString::null )
+	if ( pinfo.version == QString() )
 		throw EnvisionException{"File is not a valid Envision Plugin descriptor - Version is invalid: " + fileName};
 
 	QDomNode node{root.firstChild()};
@@ -232,11 +233,11 @@ PluginInfo PluginManager::readPluginMetaData(const QString fileName)
 					PluginDependency pd;
 
 					pd.id = depElem.attribute("pluginid");
-					if ( pd.id == QString::null )
+					if ( pd.id == QString() )
 						throw EnvisionException{"Invalid plugin dependency id in file: " + fileName};
 
 					pd.majorVersion = depElem.attribute("version");
-					if ( pd.majorVersion == QString::null )
+					if ( pd.majorVersion == QString() )
 						throw EnvisionException{"Invalid plugin dependency version in file: " + fileName};
 
 					pinfo.dependencies.append(pd);

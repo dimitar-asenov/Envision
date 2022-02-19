@@ -81,7 +81,7 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 			continue;
 		}
 
-		QStringList path {reg.capturedTexts()[2].split(".", QString::SkipEmptyParts)};
+		QStringList path {reg.capturedTexts()[2].split(".", Qt::SkipEmptyParts)};
 		path.prepend(target->node()->symbolName());
 		path += reg.capturedTexts()[3];
 

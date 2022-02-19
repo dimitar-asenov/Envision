@@ -45,37 +45,37 @@ void APIPrinter::printLicense()
 	QFile licenseFile(licensePath);
 	bool open = licenseFile.open(QIODevice::ReadOnly);
 	Q_ASSERT(open);
-	out_ << licenseFile.readAll() << endl;
+	out_ << licenseFile.readAll() << Qt::endl;
 }
 
 void APIPrinter::printHeaders()
 {
 	for (const QString& includePath : APIData::instance().includePaths_)
-		out_ << QString("#include \"%1\"").arg(includePath) << endl;
-	out_ << endl;
+		out_ << QString("#include \"%1\"").arg(includePath) << Qt::endl;
+	out_ << Qt::endl;
 }
 
 void APIPrinter::printInitFunctionCalls()
 {
 	// print all extern forward declarations
-	out_ << "extern void initTypedListWrappers();" << endl << endl;
+	out_ << "extern void initTypedListWrappers();" << Qt::endl << Qt::endl;
 	for (const auto& cData : APIData::instance().classes())
-		out_ << indent_ << "extern void initClass" << cData.className_ << "();" << endl;
+		out_ << indent_ << "extern void initClass" << cData.className_ << "();" << Qt::endl;
 
-	out_ << endl << endl;
-	out_ << "BOOST_PYTHON_MODULE(AstApi) {" << endl << endl;
+	out_ << Qt::endl << Qt::endl;
+	out_ << "BOOST_PYTHON_MODULE(AstApi) {" << Qt::endl << Qt::endl;
 
 	indent();
 
 	// Print classes
 		for (const auto& cData : APIData::instance().classes())
-			out_ << indent_ << "initClass" << cData.className_ << "();" <<endl;
+		    out_ << indent_ << "initClass" << cData.className_ << "();" << Qt::endl;
 
 	// TypedListWrappers
-		out_ << indent_ << "initTypedListWrappers();" <<endl;
+		out_ << indent_ << "initTypedListWrappers();" << Qt::endl;
 
 	unIndent();
-	out_ << "}" << endl << endl;
+	out_ << "}" << Qt::endl << Qt::endl;
 }
 
 void APIPrinter::printClasses()
@@ -88,10 +88,10 @@ void APIPrinter::printClasses()
 void APIPrinter::printClass(const ClassData& cData)
 {
 	// each class gets it's own scope:
-	out_ << "void initClass" << cData.className_ <<"() {" << endl;
+	out_ << "void initClass" << cData.className_ <<"() {" << Qt::endl;
 	indent();
 	if (!cData.usingAlias_.isNull())
-		out_ << indent_ << "using " << cData.usingAlias_ << " = " << cData.qualifiedName_ << ";" << endl;
+		out_ << indent_ << "using " << cData.usingAlias_ << " = " << cData.qualifiedName_ << ";" << Qt::endl;
 
 	for (const auto& overload : cData.overloadAliases_)
 		printOverload(overload);
@@ -115,7 +115,7 @@ void APIPrinter::printClass(const ClassData& cData)
 		printAttribute(attribute);
 	for (const auto& method : cData.methods_)
 		printMethod(method);
-	out_ << endl;
+	out_ << Qt::endl;
 	unIndent();
 
 	// We only need a scope variable if we have enums
@@ -127,7 +127,7 @@ void APIPrinter::printClass(const ClassData& cData)
 
 	// close scope
 	unIndent();
-	out_ << "}" << endl << endl;
+	out_ << "}" << Qt::endl << Qt::endl;
 }
 
 void APIPrinter::printOverload(const OverloadDescriptor& overload)
@@ -146,29 +146,29 @@ void APIPrinter::printEnum(const EnumData& eData)
 	indent();
 	for (const auto& enumConstant : eData.values_)
 	{
-		out_ << endl;
+		out_ << Qt::endl;
 		printPossiblyLongString(QString(".value(\"%1\", %2)").arg(enumConstant.first, enumConstant.second));
 	}
-	out_ << ";" << endl;
+	out_ << ";" << Qt::endl;
 	unIndent();
 }
 
 void APIPrinter::printAttribute(const ClassAttribute& attr)
 {
-	out_ << endl << indent_ << "aClass.add_property(\"" << attr.name_ << "\"," << endl;
+	out_ << Qt::endl << indent_ << "aClass.add_property(\"" << attr.name_ << "\"," << Qt::endl;
 	indent();
 	printPossiblyLongString(attr.getterQualified_ + ",");
-	out_ << endl;
+	out_ << Qt::endl;
 	out_ << indent_ << attr.setterQualified_ << ");";
 	unIndent();
 }
 
 void APIPrinter::printMethod(const ClassMethod& method)
 {
-	out_ << endl;
+	out_ << Qt::endl;
 	printPossiblyLongString(QString("aClass.def(\"%1\", %2);").arg(method.name_, method.wrappedFunctionPointer_));
 	if (method.static_)
-		out_ << endl << indent_ << "aClass.staticmethod(\"" << method.name_ << "\");";
+		out_ << Qt::endl << indent_ << "aClass.staticmethod(\"" << method.name_ << "\");";
 }
 
 void APIPrinter::printTypedListWrappers()
@@ -176,22 +176,22 @@ void APIPrinter::printTypedListWrappers()
 	auto typedLists = APIData::instance().typedLists();
 	if (typedLists.empty()) return;
 
-	out_ << "void initTypedListWrappers() {" << endl;
+	out_ << "void initTypedListWrappers() {" << Qt::endl;
 	indent();
 	for (auto it = typedLists.begin(); it != typedLists.end(); ++it)
 	{
 		QString name = it.value() + "Def";
-		out_ << indent_ << "using " << it.value() << " = " << it.key() << ";" << endl;
+		out_ << indent_ << "using " << it.value() << " = " << it.key() << ";" << Qt::endl;
 		printPossiblyLongString("auto " + name + " = class_<" + it.key() + ", bases<Model::List>>" + "(\"" + it.value()
 			  + "\");\n");
 		indent();
-		out_ << indent_ << name << ".def(\"__len__\", &" << it.value() << "::size);" << endl;
+		out_ << indent_ << name << ".def(\"__len__\", &" << it.value() << "::size);" << Qt::endl;
 		out_ << indent_ << name << ".def(\"__iter__\", iterator<" << it.value() << ", return_internal_reference<>>());";
-		out_ << endl << endl;
+		out_ << Qt::endl << Qt::endl;
 		unIndent();
 	}
 	unIndent();
-	out_ << "}" << endl << endl;
+	out_ << "}" << Qt::endl << Qt::endl;
 }
 
 void APIPrinter::printPossiblyLongString(const QString& data, int additionalLength)
@@ -230,17 +230,17 @@ void APIPrinter::printOneFile(const QString& filename, PrintMethod method)
 	maxLineLength_ = Config::instance().maxLineLength();
 
 	printLicense();
-	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl << endl;
-	out_ << "#include \"../AstApi.h\"" << endl << endl;
+	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << Qt::endl << Qt::endl;
+	out_ << "#include \"../AstApi.h\"" << Qt::endl << Qt::endl;
 	printHeaders();
-	out_ << "#include \"ModelBase/src/persistence/ClipboardStore.h\"" << endl << endl;
-	out_ << "#include \"ModelBase/src/commands/UndoCommand.h\"" << endl << endl;
-	out_ << "namespace InformationScripting {" << endl << endl;
-	out_ << "using namespace boost::python;" << endl << endl;
+	out_ << "#include \"ModelBase/src/persistence/ClipboardStore.h\"" << Qt::endl << Qt::endl;
+	out_ << "#include \"ModelBase/src/commands/UndoCommand.h\"" << Qt::endl << Qt::endl;
+	out_ << "namespace InformationScripting {" << Qt::endl << Qt::endl;
+	out_ << "using namespace boost::python;" << Qt::endl << Qt::endl;
 
 	method();
 
-	out_ << endl << "} /* namespace InformationScripting */" << endl;
+	out_ << Qt::endl << "} /* namespace InformationScripting */" << Qt::endl;
 	outFile_.close();
 }
 

@@ -42,11 +42,11 @@ Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 	IdToGenericNodeHash nodesAHash;
 
 	for (auto node : nodesA)
-		nodesAHash.insertMulti(node->id(), node);
+		nodesAHash.insert(node->id(), node);
 
 	IdToGenericNodeHash nodesBHash;
 	for (auto node : nodesB)
-		nodesBHash.insertMulti(node->id(), node);
+		nodesBHash.insert(node->id(), node);
 
 	filterPersistenceUnits(nodesAHash);
 	filterPersistenceUnits(nodesBHash);
@@ -75,7 +75,8 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 
 void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB)
 {
-	QSet<Model::NodeIdType> onlyInNodesB = QSet<Model::NodeIdType>::fromList(nodesB.keys());
+	auto nodesBkeys = nodesB.keys();
+	QSet<Model::NodeIdType> onlyInNodesB(nodesBkeys.begin(), nodesBkeys.end());
 	IdToGenericNodeHash::iterator iter;
 	for (auto nodeA : nodesA.values())
 	{
@@ -103,14 +104,14 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 		auto change = std::make_shared<ChangeDescription>(nullptr, iter.value());
 		changeDescriptions_.insert(id, change);
 	}
-	for (auto change : changeDescriptions_.values())
+	for (const auto& change : changeDescriptions_.values())
 		if (change->isFake())
 			changeDescriptions_.remove(change->nodeId());
 }
 
 void Diff::computeStructChanges()
 {
-	for (auto change : changeDescriptions_.values())
+	for (const auto& change : changeDescriptions_.values())
 	{
 		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
 			setStructureFlagForId(change->nodeB()->parentId(), change);
@@ -138,7 +139,7 @@ void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDes
 
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
-	for (auto node : nodes.values())
+	for (const auto& node : nodes.values())
 		if (node->type() == GenericNode::PERSISTENT_UNIT_TYPE)
 			nodes.remove(node->id(), node);
 }

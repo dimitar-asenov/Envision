@@ -333,7 +333,7 @@ void ListMergeComponent::printFinalList(const QList<Model::NodeIdType> lists, Ge
 			auto node = tree->find(listId, true)->child(QString::number(i));
 			qDebug() << i << node->id().toString();
 		}
-		qDebug() << endl;
+		qDebug() << Qt::endl;
 	}
 	qDebug() << "Changes Conflcting";
 	for (auto change : cg.changes())

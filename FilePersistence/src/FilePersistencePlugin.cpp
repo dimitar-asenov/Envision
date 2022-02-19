@@ -62,8 +62,8 @@ void FilePersistencePlugin::selfTest(QString testArgs)
 	{
 		SimpleTextFileStore::setForceSinglePersistentUnit();
 
-		auto tests = testArgs.split(":", QString::SkipEmptyParts);
-		for (QString test : tests)
+		auto tests = testArgs.split(":", Qt::SkipEmptyParts);
+		for (const QString& test : tests)
 		{
 			auto testIdAndArgs = test.split(">");
 			auto testId = testIdAndArgs[0];

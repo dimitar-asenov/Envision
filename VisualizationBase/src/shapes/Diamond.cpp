@@ -126,7 +126,7 @@ void Diamond::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
 
 	qreal outlineWidth = style()->outline().width();
 	// Move the figure when using antialiasing. The outline will start at a pixel boundary. This makes it sharper.
-	if ( painter->testRenderHint(QPainter::Antialiasing) || painter->testRenderHint(QPainter::HighQualityAntialiasing) )
+	if ( painter->testRenderHint(QPainter::Antialiasing) )
 		if ( style()->outline().style() != Qt::NoPen)
 		{
 			qreal intPart;

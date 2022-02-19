@@ -66,21 +66,21 @@ void TestResults::printResultStatistics() const
 {
 	QTextStream out{stdout};
 	QTextStream err{stderr};
-	out << "--------------------------" << endl;
-	out << "Total executed tests : " << getNumExecutedTests() << "\t(" << getNumExecutedChecks() << ")" << endl;
-	out << "Passed               : " << numPassedTests_ << "\t(" << getNumPassedChecks() << ")" << endl;
-	out << "Failed               : " << numFailedTests_ << "\t(" << getNumFailedChecks() << ")" << endl;
-	out << "--------------------------" << endl;
+	out << "--------------------------" << Qt::endl;
+	out << "Total executed tests : " << getNumExecutedTests() << "\t(" << getNumExecutedChecks() << ")" << Qt::endl;
+	out << "Passed               : " << numPassedTests_ << "\t(" << getNumPassedChecks() << ")" << Qt::endl;
+	out << "Failed               : " << numFailedTests_ << "\t(" << getNumFailedChecks() << ")" << Qt::endl;
+	out << "--------------------------" << Qt::endl;
 	out.flush();
 
 	if ( numFailedChecks_ > 0 || numFailedTests_ > 0)
 	{
-		err << endl << "Error messages" << endl;
+		err << Qt::endl << "Error messages" << Qt::endl;
 		for (QList<TestResult>::const_iterator r = testResults_.begin(); r != testResults_.end(); r++)
-			if ( r->isFailed() ) err << "Test FAILED: " << r->getMessage() << endl;
+			if ( r->isFailed() ) err << "Test FAILED: " << r->getMessage() << Qt::endl;
 
 		for (QList<TestResult>::const_iterator r = checkResults_.begin(); r != checkResults_.end(); r++)
-					if ( r->isFailed() ) err << "Failure:" << r->getMessage() << endl;
+					if ( r->isFailed() ) err << "Failure:" << r->getMessage() << Qt::endl;
 	}
 }
 

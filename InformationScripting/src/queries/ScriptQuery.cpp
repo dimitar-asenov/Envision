@@ -137,7 +137,7 @@ QList<TupleSet> ScriptQuery::executeQueryFromPython(QString name, boost::python:
 {
 	boost::python::stl_input_iterator<QString> argsBegin{args};
 	boost::python::stl_input_iterator<QString> argsEnd;
-	QStringList argsConverted = QStringList::fromStdList(std::list<QString>{argsBegin, argsEnd});
+	QStringList argsConverted{argsBegin, argsEnd};
 
 	std::unique_ptr<Query> query{QueryRegistry::instance().buildQuery(name, target(), argsConverted, executor_)};
 	return extractResult(query->execute(convertInput(input)), name);
@@ -158,7 +158,7 @@ QList<TupleSet> ScriptQuery::convertInput(boost::python::list input)
 {
 	boost::python::stl_input_iterator<TupleSet> inputsBegin{input};
 	boost::python::stl_input_iterator<TupleSet> inputsEnd;
-	return QList<TupleSet>::fromStdList(std::list<TupleSet>(inputsBegin, inputsEnd));
+	return QList<TupleSet>{inputsBegin, inputsEnd};
 }
 
 QList<TupleSet> ScriptQuery::extractResult(QList<Optional<TupleSet>> result, const QString& name)

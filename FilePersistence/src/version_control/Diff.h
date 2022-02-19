@@ -39,7 +39,7 @@ class GenericTree;
 class GenericNode;
 
 using IdToGenericNodeHash = QMultiHash<Model::NodeIdType, GenericNode*>;
-using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
+using IdToChangeDescriptionHash = QMultiHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 
 class FILEPERSISTENCE_API Diff
 {

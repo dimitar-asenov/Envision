@@ -233,8 +233,10 @@ void StringComponents::initConversions()
 	add<ThrowExpression>([](ThrowExpression* e ){ return c( "throw", " ", e->expr() ); });
 	add<TypeNameOperator>([](TypeNameOperator* e ){ return c( "typename", " ", e->typeExpression() ); });
 	add<DeleteExpression>([](DeleteExpression* e ){ return c( e->isArray() ? "delete[]":"delete", " ", e->expr() ); });
-	add<VariableDeclarationExpression>([](VariableDeclarationExpression* e ){ return c( e->decl()->typeExpression(), " ",
-			e->decl()->name(), Optional{"=", e->decl()->initialValue()}, Optional{e->decl()->initialValue()}); });
+	add<VariableDeclarationExpression>([](VariableDeclarationExpression* e )
+		{ return c( e->decl()->typeExpression(), " ", e->decl()->name(),
+						Optional{"=", e->decl()->initialValue() != nullptr},
+						Optional{e->decl()->initialValue()}); });
 
 	add<LambdaExpression>([](LambdaExpression* e )
 		{ return c( CompoundObjectDescriptor::storeExpression(e)); });
@@ -258,7 +260,7 @@ void StringComponents::initConversions()
 						(e->memberKind() == ReferenceExpression::MemberKind::Dot ? "." :
 						 e->memberKind() == ReferenceExpression::MemberKind::Pointer ? "->" :
 						 e->memberKind() == ReferenceExpression::MemberKind::Static ? "::" : "::template"),
-						e->prefix()}, e->name(),
+							 e->prefix() != nullptr}, e->name(),
 		list(e->typeArguments(), "<", ",", ">", true, true) ); });
 
 	add<OOReference>([](OOReference* e){ return c( e->name() ); });

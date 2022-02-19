@@ -166,14 +166,16 @@ Optional<TupleSet> AstQuery::callGraph(TupleSet input)
 		{
 			Q_ASSERT(method);
 			QSet<OOModel::Method*> seenMethods{method};
-			auto callees = method->callees().toList();
+			auto calleesSet = method->callees();
+			QList<OOModel::Method*> callees{calleesSet.begin(), calleesSet.end()};
 			addCallInformation(result, method, callees);
 			while (!callees.empty())
 			{
 				auto currentMethod = callees.takeLast();
 				if (seenMethods.contains(currentMethod)) continue;
 				seenMethods.insert(currentMethod);
-				auto newCallees = currentMethod->callees().toList();
+				auto newCalleesSet = currentMethod->callees();
+				QList<OOModel::Method*> newCallees{newCalleesSet.begin(), newCalleesSet.end()};
 				addCallInformation(result, currentMethod, newCallees);
 				callees << newCallees;
 			}
@@ -345,13 +347,13 @@ Optional<TupleSet> AstQuery::typeFilter(TupleSet input)
 	if (typeArgument.startsWith("\"")) typeArgument = typeArgument.mid(1);
 	if (typeArgument.endsWith("\"")) typeArgument = typeArgument.left(typeArgument.size()-1);
 
-	auto parts = typeArgument.split("(", QString::SkipEmptyParts);
+	auto parts = typeArgument.split("(", Qt::SkipEmptyParts);
 	expectedType = parts[0];
 	if (parts.size() > 1)
 	{
 		expectedSymbolType = SymbolType::METHOD;
 		auto writtenArgs = parts[1].left(parts[1].size() - 1); // Drop the closing parent
-		arguments = writtenArgs.split(",", QString::SkipEmptyParts);
+		arguments = writtenArgs.split(",", Qt::SkipEmptyParts);
 	}
 
 	// Lambda which returns true for all nodes which match the expected type.

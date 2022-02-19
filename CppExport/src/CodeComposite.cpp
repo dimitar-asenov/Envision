@@ -83,7 +83,7 @@ QSet<DependencyTarget> CodeComposite::reduceSoftDependencies(QSet<CodeComposite*
 																			QSet<DependencyTarget> softDependencies)
 {
 	auto result = softDependencies;
-	auto workList = QList<CodeComposite*>::fromSet(hardDependencies);
+	QList<CodeComposite*> workList(hardDependencies.begin(), hardDependencies.end());
 	QSet<CodeComposite*> processed;
 
 	while (!workList.empty())

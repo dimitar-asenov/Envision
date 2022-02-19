@@ -55,7 +55,7 @@ TestRunner::TestRunner()
 			if ( parts.length() > 2 ) throw EnvisionException{"Incorrectly specified test target and/or test id."};
 
 			QString target{parts[0]};
-			QString id{QString::null};
+			QString id{QString()};
 			if ( parts.length() > 1 ) id = parts[1];
 
 			requestedTests_.append(new TestEvent{target, id});
@@ -79,9 +79,9 @@ void TestRunner::customEvent( QEvent * event )
 	{
 		QTextStream out{stdout};
 		if ( ev->id().isEmpty())
-			out << "Running all tests for plug-in " + ev->target() << endl;
+			out << "Running all tests for plug-in " + ev->target() << Qt::endl;
 		else
-			out << "Running test '" << ev->id() << "' for plug-in " << ev->target() << endl;
+			out << "Running test '" << ev->id() << "' for plug-in " << ev->target() << Qt::endl;
 		pm_->getLoadedPluginInterface(ev->target())->selfTest(ev->id());
 	}
 }

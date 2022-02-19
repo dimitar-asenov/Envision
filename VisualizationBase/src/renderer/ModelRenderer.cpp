@@ -205,7 +205,7 @@ ModelRenderer::basicStrategy(Item* parent, Model::Node* node, int purpose, int s
 
 		if (list.size() > 0)
 		{
-			qSort(list);
+			std::sort(list.begin(), list.end());
 			return list.last().second;
 		}
 	}

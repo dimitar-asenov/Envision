@@ -400,7 +400,7 @@ bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLitera
 		if (!result)
 			result = part;
 		else
-			result = clang_.createNode<OOModel::BinaryOperation>(clang::SourceRange(stringLiteral->getLocStart(), *it),
+			result = clang_.createNode<OOModel::BinaryOperation>(clang::SourceRange(stringLiteral->getBeginLoc(), *it),
 																				  OOModel::BinaryOperation::PLUS, result, part);
 	}
 
@@ -497,7 +497,7 @@ bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedC
 	else
 		ooMethodCall->setMethodCallKind(OOModel::MethodCallExpression::MethodCallKind::CallConstruction);
 
-	if (unresolvedConstruct->arg_size() == 1 &&
+	if (unresolvedConstruct->getNumArgs() == 1 &&
 		 llvm::dyn_cast<clang::InitListExpr>(unresolvedConstruct->getArg(0)))
 	{
 		auto initListExpr = llvm::dyn_cast<clang::InitListExpr>(unresolvedConstruct->getArg(0));
@@ -507,7 +507,7 @@ bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedC
 			ooMethodCall->arguments()->append(translateExpression(argument));
 	}
 	else
-		for (auto argument : translateArguments(unresolvedConstruct->arg_begin(), unresolvedConstruct->arg_size()))
+		for (auto argument : translateArguments(unresolvedConstruct->arg_begin(), unresolvedConstruct->getNumArgs()))
 			ooMethodCall->arguments()->append(argument);
 
 	ooExprStack_.push(ooMethodCall);

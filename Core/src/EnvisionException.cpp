@@ -58,7 +58,7 @@ const QString& EnvisionException::message() const
 void EnvisionException::printError() const
 {
 	QTextStream err{stderr};
-	err << "Exception " << qPrintable( name() ) << ": " << qPrintable( message() ) << endl;
+	err << "Exception " << qPrintable( name() ) << ": " << qPrintable( message() ) << Qt::endl;
 }
 
 }

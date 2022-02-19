@@ -70,7 +70,7 @@ class OOMODEL_API Type {
 
 	private:
 		bool isValueType_;
-		Qualifiers qualifiers_{0};
+		Qualifiers qualifiers_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Type::Qualifiers)

@@ -109,7 +109,9 @@ Interaction::CommandResult* JavaDebugger::debugTree(Model::TreeManager* manager,
 	if (runResult->code() != Interaction::CommandResult::OK) return runResult;
 
 	// All previously set breakpoints have to be unset again.
-	unsetBreakpoints_.unite(setBreakpoints_.values().toSet());
+	auto breakpointsList = setBreakpoints_.values();
+	QSet<Model::Node*> breakpoints(breakpointsList.begin(), breakpointsList.end());
+	unsetBreakpoints_.unite(breakpoints);
 	setBreakpoints_.clear();
 	breakOnLoadClasses_.clear();
 
@@ -290,7 +292,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 												  defaultTypeAndHandler.first, variableNames};
 	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
 
-	probes_.insertMulti(observedNode, {breakpointId, monitorOverlay, plotOverlay});
+	probes_.insert(observedNode, {breakpointId, monitorOverlay, plotOverlay});
 
 	addBreakpointListener(breakpointId, createListenerFor(observer, plotOverlay));
 
@@ -303,7 +305,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 JavaDebugger::BreakpointId JavaDebugger::addBreakpoint(Model::Node* location, BreakpointType type)
 {
 	auto breakpointId = ++nextBreakpointId_;
-	breakpointIds_.insertMulti(location, breakpointId);
+	breakpointIds_.insert(location, breakpointId);
 
 	if (BreakpointType::User == type)
 	{

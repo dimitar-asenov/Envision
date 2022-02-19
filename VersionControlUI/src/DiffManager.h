@@ -216,13 +216,13 @@ class VERSIONCONTROLUI_API DiffManager
 		/**
 		 * Maps old name to a pair consisting of the new name and the id of the renamed component.
 		 */
-		QHash<QString, QPair<QString, Model::NodeIdType>> nameChangeInformation_;
+		QMultiHash<QString, QPair<QString, Model::NodeIdType>> nameChangeInformation_;
 
 		/**
 		 * Contains the id of all NameTexts and References related to name changes. The bool value is used to
 		 * decide whether the id is of type NameText (true) or Reference (false).
 		 */
-		static QHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
+		static QMultiHash<Model::NodeIdType, bool> nameChangesIdsIsNameText_;
 
 		/**
 		 * List of all ChangeWithNodes related to name changes.

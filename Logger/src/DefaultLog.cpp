@@ -51,10 +51,10 @@ void DefaultLog::add(Level level, QString message)
 	QTextStream out{stdout};
 	QTextStream err{stderr};
 
-	if (level == LOGERROR) err<<	"ERROR   " << pluginId << ": " << message << endl;
-	if (level == LOGDEBUG) out<<	"DEBUG   " << pluginId << ": " << message << endl;
-	if (level == LOGINFO) out<<		"INFO    " << pluginId << ": " << message << endl;
-	if (level == LOGWARNING) out<<	"WARNING " << pluginId << ": " << message << endl;
+	if (level == LOGERROR) err<<	"ERROR   " << pluginId << ": " << message << Qt::endl;
+	if (level == LOGDEBUG) out<<	"DEBUG   " << pluginId << ": " << message << Qt::endl;
+	if (level == LOGINFO) out<<		"INFO    " << pluginId << ": " << message << Qt::endl;
+	if (level == LOGWARNING) out<<	"WARNING " << pluginId << ": " << message << Qt::endl;
 
 	loggedEvents.append(LogEntry{});
 	loggedEvents.last().level = level;

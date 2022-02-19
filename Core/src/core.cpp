@@ -60,7 +60,7 @@ int coreMain(int argc, char *argv[])
 		testr.enqueueSelfTests(pm);
 
 		QTextStream out{stdout};
-		out << "==============================" << endl;
+		out << "==============================" << Qt::endl;
 
 		retCode = a.exec();
 	}

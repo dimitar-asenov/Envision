@@ -35,8 +35,9 @@ namespace OODebug {
 
 DebugConnector::DebugConnector()
 {
-	QObject::connect(&tcpSocket_, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error),
-						  this, &DebugConnector::handleSocketError);
+	QObject::connect(&tcpSocket_,
+		             static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::errorOccurred),
+		             this, &DebugConnector::handleSocketError);
 }
 
 DebugConnector::~DebugConnector()

@@ -35,9 +35,9 @@ ClangFrontendActionFactory::ClangFrontendActionFactory(ClangAstVisitor* visitor,
 : visitor_{visitor}, log_{log}
 {}
 
-clang::FrontendAction* ClangFrontendActionFactory::create()
+std::unique_ptr<clang::FrontendAction> ClangFrontendActionFactory::create()
 {
-	return new TranslateFrontendAction{visitor_, log_};
+	return std::unique_ptr<clang::FrontendAction>(new TranslateFrontendAction{visitor_, log_});
 }
 
 }

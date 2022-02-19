@@ -35,10 +35,10 @@ CppImport::Comment::Comment(clang::RawComment* rawComment, const clang::SourceMa
 	: rawComment_{rawComment}
 {
 	text_ = QString::fromStdString(rawComment->getRawText(sourceManager).str());
-	auto presumedLocationStart = sourceManager.getPresumedLoc(rawComment->getLocStart());
+	auto presumedLocationStart = sourceManager.getPresumedLoc(rawComment->getBeginLoc());
 	fileName_ = presumedLocationStart.getFilename();
 	lineStart_ = presumedLocationStart.getLine();
-	lineEnd_ = sourceManager.getPresumedLineNumber(rawComment->getLocEnd());
+	lineEnd_ = sourceManager.getPresumedLineNumber(rawComment->getEndLoc());
 }
 
 void CppImport::Comment::setNode(Model::Node* node)

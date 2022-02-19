@@ -42,7 +42,7 @@ void HelloWorldPlugin::unload()
 
 void HelloWorldPlugin::selfTest(QString testId)
 {
-	QString greeting = (testId == QString::null ? "" : ( ". The selected test id was: " + testId ) );
+	QString greeting = (testId == QString() ? "" : ( ". The selected test id was: " + testId ) );
 	HelloWorldPrinter::sayHello("the self test of hello" + greeting);
 }
 

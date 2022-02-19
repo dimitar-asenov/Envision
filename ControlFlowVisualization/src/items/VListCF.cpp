@@ -68,7 +68,7 @@ void VListCF::determineChildren()
 				if ( items[k]->node() == node()->at<Node>(i) )
 				{
 					// We found this node, swap the visualizations
-					items.swap(i, k);
+					items.swapItemsAt(i, k);
 					found = true;
 					break;
 				}

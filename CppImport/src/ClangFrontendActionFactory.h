@@ -43,7 +43,7 @@ class CPPIMPORT_API ClangFrontendActionFactory : public clang::tooling::Frontend
 		 * This function is called for every translationunit
 		 * It creates a new ClangConsumerCreator with the provided visitor.
 		 */
-		virtual clang::FrontendAction* create() override;
+		virtual std::unique_ptr<clang::FrontendAction> create() override;
 
 	private:
 		ClangAstVisitor* visitor_{};

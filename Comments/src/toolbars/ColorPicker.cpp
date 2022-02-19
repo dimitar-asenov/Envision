@@ -130,7 +130,7 @@ void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow, std::funct
 	QWidgetAction* wiAction = new QWidgetAction{this};
 
 	QSignalMapper* signalMapper = new QSignalMapper{this};
-	connect(signalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
+	connect(signalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mappedString,
 			  this, &ColorPicker::handleColorPicked);
 
 	QPixmap pixmap{100, 100};

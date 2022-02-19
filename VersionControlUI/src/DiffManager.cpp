@@ -59,7 +59,7 @@ const QString DiffManager::OVERVIEW_HIGHLIGHT_OVERLAY_NAME = "changeOverviewHigh
 const QString DiffManager::OVERVIEW_ICON_OVERLAY_NAME = "changeOverviewIcons";
 const QString DiffManager::NAME_CHANGE_OVERLAY_NAME = "nameChange_overlay";
 const QString DiffManager::NAME_CHANGE_ARROW_OVERLAY_NAME = "nameChange_arrow_overlay";
-QHash<Model::NodeIdType, bool> DiffManager::nameChangesIdsIsNameText_;
+QMultiHash<Model::NodeIdType, bool> DiffManager::nameChangesIdsIsNameText_;
 QList<ChangeWithNodes> DiffManager::nameChanges_;
 DiffManager::NameChangeVisualizationFlags DiffManager::nameChangeVisualizationFlags_{Summary | NameText | References};
 QList<int> DiffManager::nameChangeOnZoomHandlerIds_;
@@ -534,8 +534,8 @@ void DiffManager::showNodeHistory(Model::NodeIdType targetNodeID, QList<QString>
 
 	QList<QPair<Model::Node*, QString>> diffFrameInfo;
 
-	QHash<QString, QPair<QString, Model::NodeIdType>> tempNameChangeInformation = {nameChangeInformation_};
-	QHash<Model::NodeIdType, bool> tempNameChangesIdsIsNameText = {nameChangesIdsIsNameText_};
+	QMultiHash<QString, QPair<QString, Model::NodeIdType>> tempNameChangeInformation = {nameChangeInformation_};
+	QMultiHash<Model::NodeIdType, bool> tempNameChangesIdsIsNameText = {nameChangesIdsIsNameText_};
 
 	for (int i = 1; i < versions.length(); i++)
 	{

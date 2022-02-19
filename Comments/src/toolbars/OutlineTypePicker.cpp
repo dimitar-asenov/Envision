@@ -34,7 +34,7 @@ OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton{parent}
 	QWidgetAction* wiAction = new QWidgetAction{this};
 
 	QSignalMapper* signalMapper = new QSignalMapper{this};
-	connect(signalMapper,  (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
+	connect(signalMapper,  (void (QSignalMapper::*)(int)) &QSignalMapper::mappedInt,
 			  this, &OutlineTypePicker::handleOutlineTypePicked);
 
 	QPixmap pixmap{96, 24};

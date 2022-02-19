@@ -283,7 +283,7 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 			 methodName == "firstAncestorOfType")
 		{
 			// For wrapping methods we should still consider non public and template methods for overload resolution.
-			overloads.insertMulti(methodName, method);
+			overloads.insert(methodName, method);
 			continue;
 		}
 		if (seenMethods.contains(methodName)) continue;
@@ -310,7 +310,7 @@ ClassData EnvisionAstConsumer::buildClassInfo(clang::CXXRecordDecl* classDecl)
 			// found a free standing method to export.
 			cData.methods_.append({methodName, functionStringFor(methodName, cData.methodAddressPrefix(), method),
 										  method->isStatic()});
-			overloads.insertMulti(methodName, method);
+			overloads.insert(methodName, method);
 		}
 	}
 	resolveOverloads(cData, overloads);

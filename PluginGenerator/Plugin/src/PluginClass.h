@@ -27,7 +27,7 @@ class PLUGINNAMEPlugin : public QObject, public Core::EnvisionPlugin
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
-                
+
 		static Logger::Log& log();
 };
 

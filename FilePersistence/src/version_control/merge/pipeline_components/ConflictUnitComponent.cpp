@@ -95,8 +95,10 @@ void ConflictUnitComponent::run(MergeData& mergeData)
 		if (affectedConflictUnits.second.contains(conflictRootId))
 		{
 			// ... get all ids of nodes that have changed ...
-			auto conflictingIdsA = affectedConflictUnits.first.values(conflictRootId).toSet();
-			auto conflictingIdsB = affectedConflictUnits.second.values(conflictRootId).toSet();
+			auto conflictingIdsAList = affectedConflictUnits.first.values(conflictRootId);
+			QSet<QUuid> conflictingIdsA(conflictingIdsAList.begin(), conflictingIdsAList.end());
+			auto conflictingIdsBList = affectedConflictUnits.second.values(conflictRootId);
+			QSet<QUuid> conflictingIdsB(conflictingIdsBList.begin(), conflictingIdsBList.end());
 
 			// ... and add a soft conflict, but only if not all of the nodes are already in a hard conflict
 			if (conflictingIdsA != conflictingIdsB)

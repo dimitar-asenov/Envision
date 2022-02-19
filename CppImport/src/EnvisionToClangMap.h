@@ -63,7 +63,11 @@ inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap
 inline QMultiHash<Model::Node*, clang::SourceRange>::iterator EnvisionToClangMap::end()
 { return envisionToClangMap_.end(); }
 
-inline const QSet<Model::Node*> EnvisionToClangMap::nodes() const { return envisionToClangMap_.keys().toSet(); }
+inline const QSet<Model::Node*> EnvisionToClangMap::nodes() const
+{
+	auto keys = envisionToClangMap_.keys();
+	return QSet<Model::Node*>(keys.begin(), keys.end());
+}
 
 inline void EnvisionToClangMap::clear() { envisionToClangMap_.clear(); }
 

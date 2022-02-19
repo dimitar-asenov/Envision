@@ -110,7 +110,7 @@ void VModule::initializeForms()
 
 QColor VModule::customShapeColor() const
 {
-	if (!color_.isValid()) color_ = QColor::fromHsl(qrand() % 256, 120, 200);
+	if (!color_.isValid()) color_ = QColor::fromHsl(QRandomGenerator::global()->bounded(256), 120, 200);
 	return color_;
 }
 

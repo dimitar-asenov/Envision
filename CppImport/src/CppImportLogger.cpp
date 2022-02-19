@@ -85,7 +85,7 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Stmt* s
 										 const Reason& r, const QString& reason)
 {
 	// make sure it is a stmt and has a valid location
-	if (!stmt || stmt->getLocStart().isInvalid())
+	if (!stmt || stmt->getBeginLoc().isInvalid())
 		return;
 	QTextStream* outStream;
 	switch (outType)
@@ -105,10 +105,10 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Stmt* s
 	else
 		outMessage = getReasonString(r);
 
-	std::pair<clang::FileID, unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(stmt->getLocStart());
+	std::pair<clang::FileID, unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(stmt->getBeginLoc());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
 					 << " \n\t in stmt class node : " << clangType
-					 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getLocStart()).str().c_str()
+						 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getBeginLoc()).str().c_str()
 					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first, decomposedLoc.second)
 					 << "\n";
 
@@ -219,9 +219,9 @@ void CppImportLogger::initStreams()
 void CppImportLogger::outputStatistics()
 {
 	// intro section
-	(*warnStream_) << endl;
-	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
-						<< "Statistics of warnings and errors" << reset << endl;
+	(*warnStream_) << Qt::endl;
+	(*warnStream_) << qSetFieldWidth(36) << Qt::center << qSetPadChar('=')
+							 << "Statistics of warnings and errors" << Qt::reset << Qt::endl;
 
 	printStatistic("General errors", countMap_);
 	printStatistic("Types not supported by envision", typeCountMap_);
@@ -230,9 +230,9 @@ void CppImportLogger::outputStatistics()
 	printStatistic("Storage class specifiers not supported", storageMap_);
 
 	// end section
-	(*warnStream_) << endl;
-	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
-						<< "Statistics End" << reset << endl;
+	(*warnStream_) << Qt::endl;
+	(*warnStream_) << qSetFieldWidth(36) << Qt::center << qSetPadChar('=')
+							 << "Statistics End" << Qt::reset << Qt::endl;
 
 	// empty all maps
 	countMap_.clear();
@@ -246,10 +246,10 @@ void CppImportLogger::printStatistic(const char* message, const QMap<QString, in
 {
 	if (!map.empty())
 	{
-		(*warnStream_) << endl << message << endl;
+		(*warnStream_) << Qt::endl << message << Qt::endl;
 		for (auto iter = map.constBegin(); iter != map.constEnd(); ++iter)
-			(*warnStream_) << left << qSetFieldWidth(30) << iter.key() + ":"
-								<< right << qSetFieldWidth(6) << iter.value() << endl;
+			 (*warnStream_) << Qt::left << qSetFieldWidth(30) << iter.key() + ":"
+										<< Qt::right << qSetFieldWidth(6) << iter.value() << Qt::endl;
 	}
 }
 

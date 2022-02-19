@@ -83,7 +83,7 @@ void BoxStyle::unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int
 
 	int outlineWidth = outline().style()!=Qt::NoPen ? outline().width() : 0;
 	// Move the figure when using antialiasing. The outline will start at a pixel boundary. This makes it sharper.
-	if ( painter->testRenderHint(QPainter::Antialiasing) || painter->testRenderHint(QPainter::HighQualityAntialiasing) )
+	if ( painter->testRenderHint(QPainter::Antialiasing) )
 		if ( outline().style() != Qt::NoPen)
 		{
 			x = xOffset + outlineWidth/2.0;

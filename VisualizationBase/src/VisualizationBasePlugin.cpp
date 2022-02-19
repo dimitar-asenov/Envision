@@ -84,7 +84,7 @@ bool VisualizationBasePlugin::initialize(Core::EnvisionManager& manager)
 	//vmi.getMainWindow()->resize(1280, 720); // 720p
 	vmi.getMainWindow()->resize(1920, 1080); // 1080p
 
-	QRect desktop{QApplication::desktop()->screenGeometry()};
+	QRect desktop{QApplication::screens().first()->geometry()};
 	int leftPos = desktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
 	int topPos = desktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
 	vmi.getMainWindow()->move(leftPos, topPos);

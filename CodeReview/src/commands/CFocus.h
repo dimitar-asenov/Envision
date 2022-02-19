@@ -74,7 +74,7 @@ class CODEREVIEW_API CFocus : public Interaction::Command
 
 	private:
 		static int currentStep_;
-		static QHash<int, FocusInformation> focusList_;
+		static QMultiHash<int, FocusInformation> focusList_;
 		static FocusInformation extractFocusInformation(QString line);
 
 };

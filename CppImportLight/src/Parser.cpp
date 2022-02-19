@@ -28,17 +28,16 @@ Model::FileSystemEntry* CppParser::parseFile(QString filename) {
 	langOptions.CPlusPlus11 = 1;
 	langOptions.CPlusPlus14 = 1;
 	langOptions.CPlusPlus17 = 1;
-	langOptions.CPlusPlus2a = 1;
+	langOptions.CPlusPlus20 = 1;
 	langOptions.LineComment = 1;
 	langOptions.CXXOperatorNames = 1;
 	langOptions.Bool = 1;
-	langOptions.ObjC1 = 1;
-	langOptions.ObjC2 = 1;
+	langOptions.ObjC = 1;
 	langOptions.MicrosoftExt = 1;
 	langOptions.DeclSpecKeyword = 1;
 	langOptions.CommentOpts.ParseAllComments = true;
 
-	clang::Lexer lex{mainFileID, sourceManager.getBuffer(mainFileID), sourceManager, langOptions};
+	clang::Lexer lex{mainFileID, sourceManager.getBufferOrNone(mainFileID).getValue(), sourceManager, langOptions};
 	lex.SetKeepWhitespaceMode(true);
 
 	auto result = new FileSystemEntry{QFileInfo{filename}.fileName()};

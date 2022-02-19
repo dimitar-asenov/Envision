@@ -318,7 +318,7 @@ void MacroImporter::endEntireImport()
 			qDebug() << "not inserted top level metacall" << it.key()->typeName();
 
 	// remove all top level meta call generated nodes
-	NodeHelpers::removeNodesFromParent(nodesToBeRemoved_.subtract(nodesToBeRetained_).toList());
+	NodeHelpers::removeNodesFromParent(nodesToBeRemoved_.subtract(nodesToBeRetained_).values());
 }
 
 void MacroImporter::startTranslationUnit()

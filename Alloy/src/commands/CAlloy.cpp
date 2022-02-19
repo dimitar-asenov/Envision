@@ -54,14 +54,14 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 
 	QProcess aProcess;
 	aProcess.setWorkingDirectory(QDir::currentPath());
-	aProcess.start("java -jar AlloyIntegrationCLI.jar " + inputFile + " " + outputDirectory + " " +
-						QString::number(MAX_IMAGES));
+	aProcess.start("java", {"-jar", "AlloyIntegrationCLI.jar", inputFile, outputDirectory,
+		                    QString::number(MAX_IMAGES)});
 	aProcess.waitForFinished();
 
 	QDir dir{outputDirectory};
 	QString jsArray = "var pictureArray = new Array();\n";
 	int i = 0;
-	for (auto dirFile: dir.entryList())
+	for (const auto& dirFile: dir.entryList())
 	{
 		if (dirFile.endsWith(".png"))
 		{

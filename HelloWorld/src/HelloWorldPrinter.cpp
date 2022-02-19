@@ -31,7 +31,7 @@ namespace HelloWorld {
 void HelloWorldPrinter::sayHello(QString fromWho)
 {
 	QTextStream out{stdout};
-	out<< "Hello World from " << fromWho << '.' << endl;
+	out<< "Hello World from " << fromWho << '.' << Qt::endl;
 }
 
 }

@@ -52,6 +52,7 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGraphicsScene>
 
+#include <QtGui/QScreen>
 #include <QtGui/QStaticText>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEngine>

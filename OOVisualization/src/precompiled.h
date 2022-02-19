@@ -48,6 +48,7 @@
 #include <QtWidgets/QDesktopWidget>
 #include <QtCore/QDir>
 #include <QtCore/QFileSystemWatcher>
+#include <QtCore/QRandomGenerator>
 
 
 #endif

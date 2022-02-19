@@ -100,7 +100,7 @@ std::shared_ptr<Tuple> makeTuple(list args) {
 std::shared_ptr<TupleSet> makeTupleSet(list args) {
 	stl_input_iterator<Tuple> begin{args};
 	stl_input_iterator<Tuple> end;
-	return std::make_shared<TupleSet>(QList<Tuple>::fromStdList(std::list<Tuple>(begin, end)));
+	return std::make_shared<TupleSet>(QList<Tuple>(begin, end));
 }
 
 BOOST_PYTHON_MODULE(DataApi) {

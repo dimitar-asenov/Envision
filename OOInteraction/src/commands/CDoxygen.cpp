@@ -52,7 +52,7 @@ Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, 
 
 	QProcess aProcess;
 	aProcess.setWorkingDirectory(QDir::currentPath() + "/doxygen");
-	aProcess.start("doxygen");
+	aProcess.start("doxygen", QStringList{});
 	aProcess.waitForFinished();
 
 	QDesktopServices::openUrl(QUrl{QDir::currentPath() + "/doxygen/html/index.html"});

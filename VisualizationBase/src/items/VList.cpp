@@ -194,10 +194,10 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 	auto horizontal = style()->itemsStyle().isHorizontal();
 	// Sort the children so that they appear in the right order
 	if (horizontal)
-		qSort(children.begin(), children.end(), [](const Item* left, const Item* right)
+		std::sort(children.begin(), children.end(), [](const Item* left, const Item* right)
 		{return left->pos().x() < right->pos().x();});
 	else
-		qSort(children.begin(), children.end(), [=](const Item* left, const Item* right)
+		std::sort(children.begin(), children.end(), [=](const Item* left, const Item* right)
 		{return left->pos().y() < right->pos().y();});
 
 	QPoint topLeft{0, 0};

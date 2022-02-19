@@ -409,7 +409,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * All associated overlays are returned, regardless of the position of this item in the association.
 		 */
-		QList<OverlayAccessor*> overlays(QString overlayGroup = QString::null) const;
+		QList<OverlayAccessor*> overlays(QString overlayGroup = QString()) const;
 
 		/**
 		 * Returns the overlay of the specified \a OverlayType that is associated with this item.
@@ -422,7 +422,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * This method will return the first found overlay, in case there are more than one overlays that match
 		 * \a OverlayType and \a overlayGroup.
 		 */
-		template <typename OverlayType> OverlayType* overlay(QString overlayGroup = QString::null);
+		template <typename OverlayType> OverlayType* overlay(QString overlayGroup = QString());
 
 		/**
 		 * Adds \a overlay to this item.

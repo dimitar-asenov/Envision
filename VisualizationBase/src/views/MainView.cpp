@@ -146,9 +146,10 @@ void MainView::wheelEvent(QWheelEvent *event)
 		if (ITEM_STRUCTURE_AWARE_ZOOM_ANCHORING)
 		{
 			// find offset of event pos from middle of viewport
-			eventToViewportMiddleOffset = event->posF() - QPointF(viewport()->width()/2.0, viewport()->height()/2.0);
-			auto scenePos = mapToScene(event->pos());
-			auto itemsAtEvent = items(event->pos());
+			eventToViewportMiddleOffset = event->position() -
+				QPointF(viewport()->width()/2.0, viewport()->height()/2.0);
+			auto scenePos = mapToScene(event->position().toPoint());
+			auto itemsAtEvent = items(event->position().toPoint());
 			auto iter = itemsAtEvent.begin();
 
 			auto canBeZoomAnchor = [](QGraphicsItem* item) {
@@ -182,7 +183,7 @@ void MainView::wheelEvent(QWheelEvent *event)
 			}
 		}
 
-		if ( event->delta() > 0 ) --scaleLevel_;
+		if ( event->angleDelta().y() > 0 ) --scaleLevel_;
 		else ++scaleLevel_;
 
 		zoomAccordingToScaleLevel();
@@ -208,10 +209,10 @@ void MainView::wheelEvent(QWheelEvent *event)
 	// Scroll
 	else if (event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)
 	{
-		auto bar = event->orientation() == Qt::Vertical && event->modifiers() == Qt::NoModifier
+		auto bar = event->angleDelta().y() != 0 && event->modifiers() == Qt::NoModifier
 				? verticalScrollBar() : horizontalScrollBar();
 
-		bar->setValue( bar->value() - event->delta() );
+		bar->setValue( bar->value() - event->angleDelta().y() );
 	}
 	else
 		View::wheelEvent(event);
@@ -270,7 +271,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			&& event->key() == Qt::Key_Print)
 	{
 		event->accept();
-		scene()->setHiddenItemCategories(0);
+		scene()->setHiddenItemCategories(Scene::ItemCategories{});
 		if (scene()->mainCursor() && scene()->mainCursor()->visualization())
 			scene()->mainCursor()->visualization()->hide();
 
@@ -290,7 +291,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			VisualizationBasePlugin::log().info("Capturing a screenshot of the entire scene.");
 
 			printer.setOutputFileName("screenshot-scene.pdf");
-			printer.setPaperSize(scene()->sceneRect().size().toSize(), QPrinter::Point);
+			printer.setPageSize(QPageSize{scene()->sceneRect().size().toSize(), QPageSize::Point});
 			QPainter painter{&printer};
 			painter.setRenderHint(QPainter::Antialiasing);
 			scene()->render( &painter );
@@ -315,7 +316,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			VisualizationBasePlugin::log().info("Capturing a screenshot of the current view.");
 
 			printer.setOutputFileName("screenshot-view.pdf");
-			printer.setPaperSize(viewport()->rect().size(), QPrinter::Point);
+			printer.setPageSize(QPageSize{viewport()->rect().size(), QPageSize::Point});
 			QPainter painter{&printer};
 			painter.setRenderHint(QPainter::Antialiasing);
 			render(&painter);

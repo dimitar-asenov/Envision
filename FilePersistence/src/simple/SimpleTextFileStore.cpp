@@ -69,7 +69,7 @@ void SimpleTextFileStore::setBaseFolder(const QString& baseFolder)
 {
 	Q_ASSERT(!fileGetter_);
 	Q_ASSERT(!externalTree_);
-	baseFolder_ = baseFolder;
+	baseFolder_.setPath(baseFolder);
 }
 
 QString SimpleTextFileStore::getPersistenceUnitName(const Model::Node *node)

@@ -1005,8 +1005,8 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 */
 
 		// calculate the presumed locations for the beginning and end of this compound statement.
-		auto presumedLocationStart = clang_.sourceManager()->getPresumedLoc(compoundStmt->getLocStart());
-		auto presumedLocationEnd = clang_.sourceManager()->getPresumedLoc(compoundStmt->getLocEnd());
+		auto presumedLocationStart = clang_.sourceManager()->getPresumedLoc(compoundStmt->getBeginLoc());
+		auto presumedLocationEnd = clang_.sourceManager()->getPresumedLoc(compoundStmt->getEndLoc());
 
 		// assert clang behaves as expected.
 		Q_ASSERT(presumedLocationStart.getFilename() == presumedLocationEnd.getFilename());
@@ -1026,7 +1026,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 		 * keep track of the line the last child has ended on.
 		 * initially this location is the beginning of the compound statement itself.
 		 */
-		auto lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(compoundStmt->getLocStart());
+		auto lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(compoundStmt->getBeginLoc());
 		bool firstLine = true;
 
 		// Traverse children
@@ -1081,7 +1081,7 @@ bool ClangAstVisitor::TraverseCompoundStmt(clang::CompoundStmt* compoundStmt)
 				TraverseStmt(child);
 
 			// update the location on which the last child ended
-			lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(child->getLocEnd()) + 1;
+			lastChildEndLine = clang_.sourceManager()->getPresumedLineNumber(child->getEndLoc()) + 1;
 		}
 
 		QList<Comment*> remainingComments;

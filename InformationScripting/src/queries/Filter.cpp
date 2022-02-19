@@ -43,8 +43,10 @@ Optional<TupleSet> Filter::executeLinear(TupleSet input)
 	auto tagParts = filterTag.split(".");
 	QString tupleTag = tagParts[0];
 
-	if (tagParts.size() < 2)
-		return TupleSet{input.take(tupleTag).toList()};
+	if (tagParts.size() < 2) {
+		auto outputList = input.take(tupleTag);
+		return TupleSet(QList<Tuple>{outputList.begin(), outputList.end()});
+	}
 
 	bool extractIsSet = arguments_.isArgumentSet(EXTRACT_ARGUMENT_NAMES[1]);
 

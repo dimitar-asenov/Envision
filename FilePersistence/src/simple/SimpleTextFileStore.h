@@ -49,7 +49,7 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		/**
 		 * TODO the Envision folder should be taken from the environment not hardcoded.
 		 */
-		SimpleTextFileStore(const QString& baseDir = QString::null);
+		SimpleTextFileStore(const QString& baseDir = QString());
 		SimpleTextFileStore(FileGetterFunction fileGetter);
 		SimpleTextFileStore(GenericTree* externalTree);
 

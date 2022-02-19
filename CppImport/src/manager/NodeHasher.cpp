@@ -74,7 +74,7 @@ const QString NodeHasher::hashNameSpace(const clang::NamespaceDecl* namespaceDec
 
 	// In order to be able to remove namespaces which were introduced because they contained only forward declarations
 	// we need to append the project name to the hash
-	hash = clang_.projectNameFromPath(clang_.presumedFilenameWithExtension(namespaceDecl->getLocStart())) + ":" + hash;
+	hash = clang_.projectNameFromPath(clang_.presumedFilenameWithExtension(namespaceDecl->getBeginLoc())) + ":" + hash;
 
 	return hash;
 }
@@ -333,7 +333,7 @@ const QString NodeHasher::hashTemplateArg(const clang::TemplateArgument& templat
 			// TODO: add support
 			hash = "EXPANSION"; break;
 		case clang::TemplateArgument::ArgKind::Expression:
-			hash = QString{clang_.sourceManager()->getCharacterData(templateArg.getAsExpr()->getLocStart())};
+			 hash = QString{clang_.sourceManager()->getCharacterData(templateArg.getAsExpr()->getBeginLoc())};
 			break;
 		case clang::TemplateArgument::ArgKind::Pack:
 			// TODO: add support

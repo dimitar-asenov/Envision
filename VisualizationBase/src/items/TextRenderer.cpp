@@ -86,7 +86,8 @@ inline QRectF TextRenderer::nonStaticTextBound()
 	else
 	{
 		bound = qfm.boundingRect(staticText_.text());
-		if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
+		if (bound.width() < qfm.horizontalAdvance(staticText_.text()))
+		    bound.setWidth(qfm.horizontalAdvance(staticText_.text()));
 		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
 	}
 	return bound;

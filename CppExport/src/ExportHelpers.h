@@ -108,7 +108,9 @@ QList<T*> ExportHelpers::topologicalSort(QHash<T*, QSet<T*>> dependsOn, std::fun
 			noPendingDependencies.append(it.key());
 		else
 		{
-			it.value() = it.value().intersect(dependsOn.keys().toSet());
+			auto keysList = dependsOn.keys();
+			QSet<T*> keys(keysList.begin(), keysList.end());
+			it.value() = it.value().intersect(keys);
 
 			// for every other element this element depends on add it to the neededFor map for said other element
 			bool notNeededForAnything = true;

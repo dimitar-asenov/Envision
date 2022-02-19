@@ -145,7 +145,7 @@ void GenericActions::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 			// Bubble sort
 			for (int i = list.size() - 1; i > 0; --i)
 				for (int k = 0; k < i; ++k)
-					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swap(k, k+1);
+					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swapItemsAt(k, k+1);
 		}
 	}
 }

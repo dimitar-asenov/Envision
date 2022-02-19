@@ -35,8 +35,8 @@ DEFINE_ITEM_COMMON(CursorShapeItem, "item")
 CursorShapeItem::CursorShapeItem(Cursor* cursor, const StyleType* style) :
 Super{nullptr, style}, cursor_{cursor}, useCenter_{false}
 {
-	setFlags(0);
-	setAcceptedMouseButtons(0);
+	setFlags(QGraphicsItem::GraphicsItemFlags{});
+	setAcceptedMouseButtons(Qt::MouseButtons{});
 	setZValue(LAYER_CURSOR_Z);
 	setItemCategory(Scene::CursorItemCategory);
 }

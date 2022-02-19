@@ -138,24 +138,4 @@ T MessageField<T, Kind>::operator()() const { return value_; }
 template <typename T, int Kind>
 T MessageField<T, Kind>::operator=(const T rhs) { return value_ = rhs; }
 
-template <typename T>
-typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
-operator>>(QDataStream& stream, T& val)
-{
-	using Type = typename std::underlying_type<T>::type;
-	Type rawValue;
-	stream >> rawValue;
-	val = static_cast<T>(rawValue);
-	return stream;
-}
-
-template <typename T>
-typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
-operator<<(QDataStream& stream, T& val)
-{
-	using Type = typename std::underlying_type<T>::type;
-	Type rawValue = static_cast<Type>(val);
-	return stream << rawValue;
-}
-
 }

@@ -61,7 +61,7 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 		Associativity associativity)
 	: name_{name}, precedence_{precedence}, associativity_{associativity}
 {
-	signature_ = signature.split(" ", QString::SkipEmptyParts);
+	signature_ = signature.split(" ", Qt::SkipEmptyParts);
 	signature_.replaceInStrings("SPACE", " ");
 
 	QList<QStringList> preInPostFixTokens;

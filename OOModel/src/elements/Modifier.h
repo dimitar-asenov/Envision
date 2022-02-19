@@ -79,7 +79,7 @@ class OOMODEL_API Modifier :  public Super<Model::Node>
 		virtual void load(Model::PersistentStore &store) override;
 
 	private:
-		Modifiers modifiers_{0};
+		Modifiers modifiers_{};
 
 		Modifiers fromInt(int val);
 };

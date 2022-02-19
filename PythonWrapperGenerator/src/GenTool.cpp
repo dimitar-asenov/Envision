@@ -34,8 +34,8 @@
 class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 {
 	public:
-		virtual clang::FrontendAction* create() override {
-			return new GeneratorAction{};
+		virtual std::unique_ptr<clang::FrontendAction> create() override {
+		    return std::make_unique<GeneratorAction>();
 		}
 };
 
@@ -53,7 +53,7 @@ void GenTool::run(const QString& envisionPath)
 	for (const auto& project : projects_)
 	{
 		APIData::instance().includePrefix_ = project.split(QDir::separator(),
-																			QString::SplitBehavior::SkipEmptyParts).last();
+		                                                                    Qt::SkipEmptyParts).last();
 		auto it = pathToNamespaceMap.find(APIData::instance().includePrefix_);
 		if (it != pathToNamespaceMap.end())
 		{

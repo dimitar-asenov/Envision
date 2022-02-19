@@ -59,8 +59,8 @@ void TextCursor::setVisualizationSize(const QSize& size)
 
 void TextCursor::update(const QFontMetrics& qfm)
 {
-	int xstart = qfm.width(owner()->text().left(selectionFirstIndex()));
-	int xend = qfm.width(owner()->text().left(selectionLastIndex()));
+	int xstart = qfm.horizontalAdvance(owner()->text().left(selectionFirstIndex()));
+	int xend = qfm.horizontalAdvance(owner()->text().left(selectionLastIndex()));
 	setX(xstart, xend);
 
 	//TODO: Transform the cursor appropriately if the item is transformed
@@ -103,7 +103,7 @@ void TextCursor::setSelectedByDrag(int xBegin, int xEnd)
 	int width = 0;
 	for (int i = 1; i <= owner()->text().length(); ++i)
 	{
-		int new_width = qfm.width(owner()->text().left(i));
+		int new_width = qfm.horizontalAdvance(owner()->text().left(i));
 		if ( xBegin - owner()->textXOffset() > (new_width + width + 1) / 2 ) selectionBegin_++;
 		if ( xEnd - owner()->textXOffset() > (new_width + width + 1) / 2 ) selectionEnd_++;
 		width = new_width;
@@ -132,7 +132,7 @@ int TextCursor::cursorAtX(int x) const
 	int width = 0;
 	for (int i = 1; i <= owner()->text().length(); ++i)
 	{
-		int new_width = qfm.width(owner()->text().left(i));
+		int new_width = qfm.horizontalAdvance(owner()->text().left(i));
 		if ( x - owner()->textXOffset() > (new_width + width + 1) / 2 ) pos++;
 		width = new_width;
 	}
