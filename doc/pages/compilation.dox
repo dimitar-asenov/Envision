@@ -1,26 +1,22 @@
 /*! \page compilation Compiling Envision from source
 
-Envision is written in C++14 and uses the CMake build system.
-You will need GCC version 5.1 or newer and at least CMake 3.2.2 to compile the sources.
+Envision is written in C++20 and uses the CMake build system.
+You will need gcc 11 or newer and at least CMake 3.2.2 to compile the sources.
 You can check your current versions with:
 \verbatim
 g++ --version
 cmake --version
 \endverbatim
-In Ubuntu, you can easily get compiler updates by adding the following PPA:
-\verbatim
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo apt-get update && sudo apt-get upgrade
-\endverbatim
-Other dependencies are:
-	- <b>Qt 5.5 or later</b>: http://qt.io <br/> This is the underlying framework that we use to build Envision's
+
+Here are details about all the dependencies:
+   - <b>Qt 5.15 or later</b>: http://qt.io <br/> This is the underlying framework that we use to build Envision's
 	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
-	- <b>Clang 7</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
+	- <b>Clang 13</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
 	importing C++ is preliminary and incomplete.
 	- <b>libgit2</b>: https://libgit2.github.com/ <br /> Used for Envision's git-based version control.
-	- <b>Python 3</b>: https://www.python.org/ <br /> Used for various scripts during building, testing and run-time execution (e.g. for information scripting).
+	- <b>Python 2 and 3</b>: https://www.python.org/ <br /> Used for various scripts during building, testing and run-time execution (e.g. for information scripting).
 	- <b>Boost python</b>: http://www.boost.org/doc/libs/1_58_0/libs/python/doc/ <br/> Used for information scripting
 	- <b>libedit</b>: http://thrysoee.dk/editline/ <br/> Needed by the Clang tooling for the python wrapper generator project.
 	- <b>On Linux: Google Performance Tools</b>: http://code.google.com/p/gperftools/ <br /> Used for profiling.
@@ -28,15 +24,17 @@ Other dependencies are:
 	Boost python is used to provide bindings for the python scripting.
 	- <b>For the Java import tool only: Gradle </b>: http://gradle.org/ <br /> Used as build script for the JavaImportTool.
 
-To install the dependencies on Ubuntu 18.10, run the following:
+To install the dependencies on Ubuntu 21.10, run the following:
 	-# Install all necessary packages:
-		\verbatim sudo apt-get install qt-sdk libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libclang-7-dev clang-7 llvm-7 libgit2-dev google-perftools libgoogle-perftools-dev vera++ python3-dev libboost-python-dev libedit-dev \endverbatim
+	   \verbatim sudo apt-get install git g++ python cmake libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev lp-solve liblpsolve55-dev libgit2-dev google-perftools libgoogle-perftools-dev libclang-dev clang llvm vera++\endverbatim
 	-# Make the following symbolic link needed to use the shared library of lp solve:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
 	-# If you plan on using the C++ import feature you will also need an additional symbolic link to the clang libraries directly in main directory of Envision's source:
 		\verbatim Envision$ ln -s /usr/lib/llvm-7/lib/ lib \endverbatim
 	-# If you plan on using the JavaImportTool you will need Gradle:
 		\verbatim sudo apt-get install gradle \endverbatim
+	-# If you want to try and compile some of the disabled plug-ins (no longer maintained), you will likely need at least these additional dependencies:
+	   \verbatim sudo apt-get install python3-dev libboost-python-dev libedit-dev \endverbatim
 
 Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want
 to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.
@@ -45,17 +43,17 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	-# Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process
 	Qt Creator will create additional directories alongside the repository clone (for the out-of-source build).
 	-# Start Qt Creator and configure the version of Qt that you want to use:
-		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.5 or later.
+	   - Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.15 or later.
 			This could be either Qt in PATH, or a Qt version that
 			you compiled yourself. See below for manual Qt compilation instructions.
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
 	-# Open the top-level \c CMakeLists.txt file with Qt Creator.
 	-# On Qt creator 4.x, set the CMake Build type to \verbatim Debug \endverbatim.
-	-# In the Projects view, change the arguments of cmake/make to specify parallel compilation and the *install* target:
-		\verbatim-j8 install\endverbatim
+	-# In the Projects view, expand "Build Step", change the target to *install* change and change the tool argument to specify a parallel computation:
+	   \verbatim-j32 install\endverbatim
 		The *install* target is needed in order to copy all necessary files to the DebugBuild directory.
-		Substitute 8 for the number of threads your hardware supports.
+		Substitute 32 for the number of threads your hardware supports.
 	-# Add run configurations
 		- The executable of all run configurations must be Envision:
 		\verbatim%{sourceDir}/DebugBuild/Envision\endverbatim
